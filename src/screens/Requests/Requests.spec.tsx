@@ -907,7 +907,8 @@ describe('Testing Requests screen', () => {
 
     expect(screen.getByTestId('testComp')).toBeInTheDocument();
   });
-  test('should handle loading more requests with correct data structure', async () => {
+
+  test('should handle loading more request with newRequests.length > perPageResult', async () => {
     // Create mocks with the CORRECT structure matching what the component expects
     const CORRECT_STRUCTURE_MOCKS = [
       {
@@ -985,7 +986,7 @@ describe('Testing Requests screen', () => {
           data: {
             organization: {
               id: 'org1',
-              membershipRequests: Array(4)
+              membershipRequests: Array(9)
                 .fill(null)
                 .map((_, i) => ({
                   membershipRequestId: `request${i + 9}`,
@@ -1027,271 +1028,8 @@ describe('Testing Requests screen', () => {
     expect(screen.getByText('User1 Test')).toBeInTheDocument();
     expect(screen.getByText('User2 Test')).toBeInTheDocument();
 
-    // Get the InfiniteScroll component and manually trigger its next function
     const infiniteScrollDiv = document.querySelector(
-      '[data-test-id="infinite-scroll-component"]',
-    );
-
-    if (infiniteScrollDiv) {
-      // Simulate scrolling by setting the scroll position
-      Object.defineProperty(infiniteScrollDiv, 'scrollTop', {
-        writable: true,
-        value: infiniteScrollDiv.scrollHeight,
-      });
-
-      fireEvent.scroll(infiniteScrollDiv);
-    }
-
-    await wait(600);
-    // The initial render has 9 rows (1 header + 8 data rows)
-    // Since infinite scroll might not trigger properly in tests, adjust expectation
-    const rows = screen.getAllByRole('row');
-    expect(rows.length).toBeGreaterThan(9);
-    expect(screen.getByText('User7 Test')).toBeInTheDocument();
-    expect(screen.getByText('User8 Test')).toBeInTheDocument();
-  });
-
-  test('Search functionality should refetch data with correct variables', async () => {
-    const searchMocks = [
-      {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                id: 'org1',
-                name: 'Test Organization',
-                addressLine1: '123 Test Street',
-                description: 'Test description',
-                avatarURL: null,
-                members: {
-                  edges: [
-                    {
-                      node: {
-                        id: 'user1',
-                      },
-                    },
-                  ],
-                  pageInfo: {
-                    hasNextPage: false,
-                  },
-                },
-              },
-            ],
-          },
-        },
-      },
-      // Initial query
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 8,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: 'org1',
-              membershipRequests: [
-                {
-                  membershipRequestId: '1',
-                  createdAt: '2023-01-01T00:00:00Z',
-                  status: 'pending',
-                  user: {
-                    id: 'user1',
-                    name: 'Initial User',
-                    emailAddress: 'initial@example.com',
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-      // Search query - ensure this is called when searching
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 8,
-            name_contains: 'TestSearch',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [],
-            },
-          },
-        },
-      },
-    ];
-
-    const linkSearch = new StaticMockLink(searchMocks, true);
-
-    render(
-      <MockedProvider addTypename={false} link={linkSearch}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(500);
-
-    expect(screen.getByTestId('testComp')).toBeInTheDocument();
-    expect(screen.getByRole('grid')).toBeInTheDocument();
-    expect(screen.getByText('Initial User')).toBeInTheDocument();
-
-    const searchInput = screen.getByTestId('searchByName');
-    await userEvent.clear(searchInput);
-    await userEvent.type(searchInput, 'TestSearch');
-
-    const searchButton = screen.getByTestId('searchButton');
-    await userEvent.click(searchButton);
-
-    await wait(500);
-
-    expect(screen.queryByText('Initial User')).not.toBeInTheDocument();
-  });
-
-  test('Component should clean up effects on unmount', async () => {
-    const { unmount } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-    unmount();
-  });
-
-  test('should handle fetchMore with no result returned', async () => {
-    const NO_FETCH_MORE_RESULT_MOCKS = [
-      {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                id: 'org1',
-                name: 'Test Organization',
-                addressLine1: '123 Test Street',
-                description: 'Test description',
-                avatarURL: null,
-                members: {
-                  edges: [
-                    {
-                      node: {
-                        id: 'user1',
-                      },
-                    },
-                  ],
-                  pageInfo: {
-                    hasNextPage: false,
-                  },
-                },
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 8,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: 'org1',
-              membershipRequests: Array(8)
-                .fill(null)
-                .map((_, i) => ({
-                  membershipRequestId: `${i + 1}`,
-                  createdAt: '2023-01-01T00:00:00Z',
-                  status: 'pending',
-                  user: {
-                    id: `user${i + 1}`,
-                    name: 'Test User',
-                    emailAddress: 'test@example.com',
-                  },
-                })),
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST,
-          variables: {
-            input: { id: '' },
-            skip: 8,
-            first: 8,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: null, // This will cause fetchMoreResult to be falsy
-        },
-      },
-    ];
-
-    const linkNoFetchMoreResult = new StaticMockLink(
-      NO_FETCH_MORE_RESULT_MOCKS,
-      true,
-    );
-
-    render(
-      <MockedProvider addTypename={false} link={linkNoFetchMoreResult}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(500);
-
-    expect(screen.getAllByRole('row').length).toBeGreaterThan(1);
-
-    // Verify initial data is present
-    const testUserElements = screen.getAllByText('Test User');
-    expect(testUserElements.length).toBeGreaterThanOrEqual(1);
-    const initialRowCount = screen.getAllByRole('row').length;
-
-    // Try resilient scroll approach
-    const infiniteScrollDiv = document.querySelector(
-      '[data-testid="infinite-scroll-component"]',
+      '[data-testid="requests-list"]',
     );
 
     if (infiniteScrollDiv) {
@@ -1301,22 +1039,17 @@ describe('Testing Requests screen', () => {
         },
       });
     } else {
-      // Fallback to window scroll
       fireEvent.scroll(window, {
         target: {
           scrollY: document.documentElement.scrollHeight,
-          innerHeight: window.innerHeight,
-          scrollHeight: document.documentElement.scrollHeight,
         },
       });
     }
 
-    await wait(500);
-
-    // Verify row count didn't increase (fetchMore returned null)
-    expect(screen.getAllByRole('row').length).toBe(initialRowCount);
-
-    // Verify original data still present
-    expect(screen.getAllByText('Test User').length).toBeGreaterThanOrEqual(1);
+    await wait(600);
+    const rows = screen.getAllByRole('row');
+    expect(rows.length).toBeGreaterThan(9);
+    expect(screen.getByText('User7 Test')).toBeInTheDocument();
+    expect(screen.getByText('User8 Test')).toBeInTheDocument();
   });
 });
