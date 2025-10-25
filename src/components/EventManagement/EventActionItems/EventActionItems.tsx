@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
 
-import { Circle, WarningAmberRounded } from '@mui/icons-material';
+import { Circle, WarningAmberRounded, Group } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client';
@@ -235,15 +235,17 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
         let displayName = 'No assignment';
         let avatarKey = 'no-assignment';
         let isAssigned = false;
+        let isGroup = false;
 
         if (volunteer?.user) {
           displayName = volunteer.user.name || 'Unknown Volunteer';
           avatarKey = volunteer.id;
           isAssigned = true;
         } else if (volunteerGroup) {
-          displayName = `${volunteerGroup.name} (Group)`;
+          displayName = volunteerGroup.name;
           avatarKey = volunteerGroup.id;
           isAssigned = true;
+          isGroup = true;
         }
 
         return (
@@ -258,6 +260,14 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
             <span className={!isAssigned ? 'text-muted' : ''}>
               {displayName}
             </span>
+            {isGroup && (
+              <Group
+                fontSize="small"
+                className="ms-1"
+                style={{ color: '#6c757d' }}
+                data-testid="groupIcon"
+              />
+            )}
           </div>
         );
       },

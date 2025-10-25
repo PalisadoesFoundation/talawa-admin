@@ -574,11 +574,11 @@ const ItemModal: FC<IItemModalProps> = ({
                     getOptionLabel={(
                       volunteer: InterfaceEventVolunteerInfo,
                     ): string => {
-                      return volunteer.user?.name || 'Unknown Volunteer';
+                      return volunteer.user?.name;
                     }}
                     onChange={(_, newVolunteer): void => {
                       const volunteerId = newVolunteer?.id;
-                      handleFormChange('volunteerId', volunteerId ?? '');
+                      handleFormChange('volunteerId', volunteerId);
                       handleFormChange('volunteerGroupId', '');
                       setSelectedVolunteer(newVolunteer);
                       setSelectedVolunteerGroup(null);
@@ -604,11 +604,11 @@ const ItemModal: FC<IItemModalProps> = ({
                     }
                     filterSelectedOptions={true}
                     getOptionLabel={(group: IEventVolunteerGroup): string => {
-                      return group.name || 'Unknown Group';
+                      return group.name;
                     }}
                     onChange={(_, newGroup): void => {
                       const groupId = newGroup?.id;
-                      handleFormChange('volunteerGroupId', groupId ?? '');
+                      handleFormChange('volunteerGroupId', groupId);
                       handleFormChange('volunteerId', '');
                       setSelectedVolunteerGroup(newGroup);
                       setSelectedVolunteer(null);
