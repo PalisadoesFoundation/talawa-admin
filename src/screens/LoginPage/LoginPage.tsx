@@ -62,9 +62,9 @@ import { Link, useLocation, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import {
-  BACKEND_URL,
   REACT_APP_USE_RECAPTCHA,
   RECAPTCHA_SITE_KEY,
+  BACKEND_URL,
 } from 'Constant/constant';
 import {
   RECAPTCHA_MUTATION,
@@ -94,7 +94,7 @@ const loginPage = (): JSX.Element => {
 
   const navigate = useNavigate();
 
-  const { getItem, setItem } = useLocalStorage();
+  const { getItem, setItem, removeItem } = useLocalStorage();
 
   document.title = t('title');
 
@@ -132,6 +132,9 @@ const loginPage = (): JSX.Element => {
     specialChar: true,
   });
   const [organizations, setOrganizations] = useState([]);
+  const [pendingInvitationToken] = useState(() =>
+    getItem('pendingInvitationToken'),
+  );
   const location = useLocation();
   const passwordValidationRegExp = {
     lowercaseCharRegExp: new RegExp('[a-z]'),
@@ -176,7 +179,6 @@ const loginPage = (): JSX.Element => {
 
   const { data, refetch } = useQuery(GET_COMMUNITY_DATA_PG);
   useEffect(() => {
-    // refetching the data if the pre-login data updates
     refetch();
   }, [data]);
   const [signin, { loading: loginLoading }] = useLazyQuery(SIGNIN_QUERY);
@@ -297,6 +299,20 @@ const loginPage = (): JSX.Element => {
               signOrg: '',
             });
             SignupRecaptchaRef.current?.reset();
+            // If signup returned an authentication token, set session and resume pending invite
+            if (signUpData.signUp && signUpData.signUp.authenticationToken) {
+              const authToken = signUpData.signUp.authenticationToken;
+              setItem('token', authToken);
+              setItem('IsLoggedIn', 'TRUE');
+              setItem('name', signUpData.signUp.user?.name || '');
+              setItem('email', signUpData.signUp.user?.emailAddress || '');
+              if (pendingInvitationToken) {
+                removeItem('pendingInvitationToken');
+                startSession();
+                window.location.href = `/event/invitation/${pendingInvitationToken}`;
+                return;
+              }
+            }
           }
         } catch (error) {
           errorHandler(t, error);
@@ -361,8 +377,18 @@ const loginPage = (): JSX.Element => {
           setItem('userId', loggedInUserId);
         }
 
-        navigate(role === 'admin' ? '/orglist' : '/user/organizations');
+        // If there is a pending invitation token from the public invite flow, resume it
+        // We check the component state (captured on mount) rather than localStorage
+        // because localStorage may have been cleared by session management code.
+        if (pendingInvitationToken) {
+          removeItem('pendingInvitationToken');
+          startSession();
+          // Use a full-page redirect to avoid client-side routing races
+          window.location.href = `/event/invitation/${pendingInvitationToken}`;
+          return;
+        }
         startSession();
+        navigate(role === 'admin' ? '/orglist' : '/user/organizations');
       } else {
         toast.warn(tErrors('notFound') as string);
       }

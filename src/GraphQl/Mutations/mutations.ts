@@ -142,6 +142,66 @@ export const SIGNUP_MUTATION = gql`
   }
 `;
 
+// to send event invitations via email to external users
+export const SEND_EVENT_INVITATIONS = gql`
+  mutation SendEventInvitations($input: SendEventInvitationsInput!) {
+    sendEventInvitations(input: $input) {
+      id
+      eventId
+      recurringEventInstanceId
+      invitedBy
+      userId
+      inviteeEmail
+      inviteeName
+      invitationToken
+      status
+      expiresAt
+      respondedAt
+      metadata
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+// preview/verify an invitation by token (returns metadata but does not accept)
+export const VERIFY_EVENT_INVITATION = gql`
+  mutation VerifyEventInvitation($input: VerifyEventInvitationInput!) {
+    verifyEventInvitation(input: $input) {
+      invitationToken
+      inviteeEmailMasked
+      inviteeName
+      status
+      expiresAt
+      eventId
+      recurringEventInstanceId
+      organizationId
+    }
+  }
+`;
+
+// accept an invitation (finalize and add user as attendee/member)
+export const ACCEPT_EVENT_INVITATION = gql`
+  mutation AcceptEventInvitation($input: AcceptEventInvitationInput!) {
+    acceptEventInvitation(input: $input) {
+      id
+      eventId
+      recurringEventInstanceId
+      invitedBy
+      userId
+      inviteeEmail
+      inviteeName
+      invitationToken
+      status
+      expiresAt
+      respondedAt
+      metadata
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 //to create user by admin
 export const CREATE_MEMBER_PG = gql`
   mutation CreateUser(
