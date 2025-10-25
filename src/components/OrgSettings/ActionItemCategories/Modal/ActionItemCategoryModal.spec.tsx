@@ -159,11 +159,16 @@ describe('Testing Action Item Category Modal', () => {
     });
 
     it('should initialize form with disabled category', () => {
-      // categoryProps[1].category is guaranteed to be non-null by test data definition
+      // Validate test data setup - category should be non-null
+      const category = categoryProps[1].category;
+      if (!category) {
+        throw new Error('Test setup error: category should be defined');
+      }
+
       const propsWithDisabledCategory = {
         ...categoryProps[1],
         category: {
-          ...categoryProps[1].category!,
+          ...category,
           isDisabled: true,
         },
       };
@@ -173,11 +178,16 @@ describe('Testing Action Item Category Modal', () => {
     });
 
     it('should initialize form with empty description category', () => {
-      // categoryProps[1].category is guaranteed to be non-null by test data definition
+      // Validate test data setup - category should be non-null
+      const category = categoryProps[1].category;
+      if (!category) {
+        throw new Error('Test setup error: category should be defined');
+      }
+
       const propsWithEmptyDescription = {
         ...categoryProps[1],
         category: {
-          ...categoryProps[1].category!,
+          ...category,
           description: '',
         },
       };
