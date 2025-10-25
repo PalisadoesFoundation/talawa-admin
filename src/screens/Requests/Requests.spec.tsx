@@ -1231,16 +1231,18 @@ describe('Testing Requests screen', () => {
           data: {
             organization: {
               id: 'org1',
-              membershipRequests: Array(8).fill({
-                membershipRequestId: '1',
-                createdAt: '2023-01-01T00:00:00Z',
-                status: 'pending',
-                user: {
-                  id: 'user1',
-                  name: 'Test User',
-                  emailAddress: 'test@example.com',
-                },
-              }),
+              membershipRequests: Array(8)
+                .fill(null)
+                .map((_, i) => ({
+                  membershipRequestId: `${i + 1}`,
+                  createdAt: '2023-01-01T00:00:00Z',
+                  status: 'pending',
+                  user: {
+                    id: `user${i + 1}`,
+                    name: 'Test User',
+                    emailAddress: 'test@example.com',
+                  },
+                })),
             },
           },
         },
