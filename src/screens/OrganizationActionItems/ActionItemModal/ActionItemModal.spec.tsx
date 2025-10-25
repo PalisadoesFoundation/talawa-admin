@@ -1,5 +1,11 @@
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import type {
@@ -14,8 +20,11 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import {
+  GET_EVENT_VOLUNTEERS,
+  GET_EVENT_VOLUNTEER_GROUPS,
+} from 'GraphQl/Queries/EventVolunteerQueries';
+import {
   CREATE_ACTION_ITEM_MUTATION,
-  UPDATE_ACTION_ITEM_MUTATION,
   UPDATE_ACTION_ITEM_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import userEvent from '@testing-library/user-event';
@@ -30,6 +39,17 @@ vi.mock('react-toastify', () => ({
     warning: vi.fn(),
   },
 }));
+
+const matchesInputSubset = (
+  variables: { input: unknown },
+  expectedInput: Record<string, unknown>,
+) => {
+  const actualInput = variables.input as Record<string, unknown> | undefined;
+  if (!actualInput) return false;
+  return Object.entries(expectedInput).every(
+    ([key, value]) => actualInput[key] === value,
+  );
+};
 
 // Define common mocks for GraphQL queries
 const mockQueries = [
@@ -103,6 +123,262 @@ const mockQueries = [
       },
     },
   },
+  {
+    request: {
+      query: GET_EVENT_VOLUNTEERS,
+      variables: {
+        input: { id: 'eventId' },
+        where: {},
+      },
+    },
+    result: {
+      data: {
+        event: {
+          id: 'eventId',
+          volunteers: [
+            {
+              id: 'volunteer1',
+              hasAccepted: true,
+              volunteerStatus: 'accepted',
+              hoursVolunteered: 10,
+              isPublic: true,
+              isTemplate: true,
+              isInstanceException: false,
+              createdAt: '2023-01-01T00:00:00Z',
+              updatedAt: '2023-01-01T00:00:00Z',
+              user: {
+                id: 'user1',
+                name: 'John Doe',
+                avatarURL: null,
+              },
+              event: {
+                id: 'eventId',
+                name: 'Test Event',
+              },
+              creator: {
+                id: 'user1',
+                name: 'John Doe',
+              },
+              updater: {
+                id: 'user1',
+                name: 'John Doe',
+              },
+              groups: [],
+            },
+            {
+              id: 'volunteer2',
+              hasAccepted: true,
+              volunteerStatus: 'accepted',
+              hoursVolunteered: 5,
+              isPublic: true,
+              isTemplate: false,
+              isInstanceException: false,
+              createdAt: '2023-01-01T00:00:00Z',
+              updatedAt: '2023-01-01T00:00:00Z',
+              user: {
+                id: 'user2',
+                name: 'Jane Smith',
+                avatarURL: null,
+              },
+              event: {
+                id: 'eventId',
+                name: 'Test Event',
+              },
+              creator: {
+                id: 'user2',
+                name: 'Jane Smith',
+              },
+              updater: {
+                id: 'user2',
+                name: 'Jane Smith',
+              },
+              groups: [],
+            },
+          ],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: GET_EVENT_VOLUNTEERS,
+      variables: {
+        input: { id: 'event123' },
+        where: {},
+      },
+    },
+    result: {
+      data: {
+        event: {
+          id: 'event123',
+          volunteers: [
+            {
+              id: 'volunteer1',
+              hasAccepted: true,
+              volunteerStatus: 'accepted',
+              hoursVolunteered: 10,
+              isPublic: true,
+              isTemplate: true,
+              isInstanceException: false,
+              createdAt: '2023-01-01T00:00:00Z',
+              updatedAt: '2023-01-01T00:00:00Z',
+              user: {
+                id: 'user1',
+                name: 'John Doe',
+                avatarURL: null,
+              },
+              event: {
+                id: 'event123',
+                name: 'Test Event',
+              },
+              creator: {
+                id: 'user1',
+                name: 'John Doe',
+              },
+              updater: {
+                id: 'user1',
+                name: 'John Doe',
+              },
+              groups: [],
+            },
+            {
+              id: 'volunteer2',
+              hasAccepted: true,
+              volunteerStatus: 'accepted',
+              hoursVolunteered: 5,
+              isPublic: true,
+              isTemplate: false,
+              isInstanceException: false,
+              createdAt: '2023-01-01T00:00:00Z',
+              updatedAt: '2023-01-01T00:00:00Z',
+              user: {
+                id: 'user2',
+                name: 'Jane Smith',
+                avatarURL: null,
+              },
+              event: {
+                id: 'event123',
+                name: 'Test Event',
+              },
+              creator: {
+                id: 'user2',
+                name: 'Jane Smith',
+              },
+              updater: {
+                id: 'user2',
+                name: 'Jane Smith',
+              },
+              groups: [],
+            },
+          ],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: GET_EVENT_VOLUNTEER_GROUPS,
+      variables: {
+        input: { id: 'eventId' },
+      },
+    },
+    result: {
+      data: {
+        event: {
+          id: 'eventId',
+          recurrenceRule: null,
+          baseEvent: null,
+          volunteerGroups: [
+            {
+              id: 'group1',
+              name: 'Test Group 1',
+              description: 'Test volunteer group 1',
+              volunteersRequired: 5,
+              isTemplate: true,
+              isInstanceException: false,
+              createdAt: '2023-01-01T00:00:00Z',
+              creator: {
+                id: 'user1',
+                name: 'John Doe',
+                avatarURL: null,
+              },
+              leader: {
+                id: 'user1',
+                name: 'John Doe',
+                avatarURL: null,
+              },
+              volunteers: [
+                {
+                  id: 'volunteer1',
+                  hasAccepted: true,
+                  user: {
+                    id: 'user1',
+                    name: 'John Doe',
+                    avatarURL: null,
+                  },
+                },
+              ],
+              event: {
+                id: 'eventId',
+              },
+            },
+          ],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: GET_EVENT_VOLUNTEER_GROUPS,
+      variables: {
+        input: { id: 'event123' },
+      },
+    },
+    result: {
+      data: {
+        event: {
+          id: 'event123',
+          recurrenceRule: null,
+          baseEvent: null,
+          volunteerGroups: [
+            {
+              id: 'group1',
+              name: 'Test Group 1',
+              description: 'Test volunteer group 1',
+              volunteersRequired: 5,
+              isTemplate: true,
+              isInstanceException: false,
+              createdAt: '2023-01-01T00:00:00Z',
+              creator: {
+                id: 'user1',
+                name: 'John Doe',
+                avatarURL: null,
+              },
+              leader: {
+                id: 'user1',
+                name: 'John Doe',
+                avatarURL: null,
+              },
+              volunteers: [
+                {
+                  id: 'volunteer1',
+                  hasAccepted: true,
+                  user: {
+                    id: 'user1',
+                    name: 'John Doe',
+                    avatarURL: null,
+                  },
+                },
+              ],
+              event: {
+                id: 'event123',
+              },
+            },
+          ],
+        },
+      },
+    },
+  },
 ];
 
 // Helper function to render the component with necessary providers
@@ -119,7 +395,8 @@ const renderWithProviders = (props: IItemModalProps) => {
 // Test mock action item with proper type
 const mockActionItem = {
   id: '1',
-  assigneeId: 'user1',
+  volunteerId: 'volunteer1',
+  volunteerGroupId: null,
   categoryId: 'cat1',
   eventId: null,
   recurringEventInstanceId: null,
@@ -135,12 +412,18 @@ const mockActionItem = {
   postCompletionNotes: null,
   isTemplate: true,
   isInstanceException: false,
-  assignee: {
-    id: 'user1',
-    name: 'John Doe',
-    avatarURL: '',
-    emailAddress: 'john@example.com',
+  volunteer: {
+    id: 'volunteer1',
+    hasAccepted: true,
+    isPublic: true,
+    hoursVolunteered: 5,
+    user: {
+      id: 'user1',
+      name: 'John Doe',
+      avatarURL: '',
+    },
   },
+  volunteerGroup: null,
   creator: {
     id: 'creator1',
     name: 'Creator',
@@ -287,11 +570,11 @@ describe('ItemModal - Additional Test Cases', () => {
 
       renderWithProviders(props);
 
-      // Submit without selecting category or assignee
+      // Submit without selecting category or volunteer
       // Wait for the form to load
       await waitFor(() => {
         expect(screen.getByTestId('categorySelect')).toBeInTheDocument();
-        expect(screen.getByTestId('memberSelect')).toBeInTheDocument();
+        expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
       });
 
       // Get the form element and dispatch a submit event directly to bypass HTML5 validation
@@ -301,9 +584,7 @@ describe('ItemModal - Additional Test Cases', () => {
       }
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          expect.stringMatching(/select both category and assignee/i),
-        );
+        expect(toast.error).toHaveBeenCalledWith('selectCategoryAndAssignment');
       });
     });
   });
@@ -556,7 +837,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       // Wait for the form to load
       await waitFor(() => {
         expect(screen.getByTestId('categorySelect')).toBeInTheDocument();
-        expect(screen.getByTestId('memberSelect')).toBeInTheDocument();
+        expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
       });
 
       // Get the form element and dispatch a submit event directly to bypass HTML5 validation
@@ -566,9 +847,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       }
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          'Please select both category and assignee',
-        );
+        expect(toast.error).toHaveBeenCalledWith('selectCategoryAndAssignment');
       });
     });
 
@@ -582,7 +861,7 @@ describe('ItemModal - Specific Test Coverage', () => {
         isOpen: true,
         hide: vi.fn(),
         orgId: 'orgId',
-        eventId: undefined,
+        eventId: 'eventId',
         actionItemsRefetch: vi.fn(),
         editMode: true,
         actionItem: actionItemWithoutId as unknown as IActionItemInfo,
@@ -1033,12 +1312,12 @@ describe('updateActionForInstanceHandler', () => {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
-      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) => {
-        return (
-          variables.input.actionId === '1' &&
-          variables.input.preCompletionNotes === 'Updated notes'
-        );
-      },
+      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) =>
+        matchesInputSubset(variables, {
+          actionId: '1',
+          eventId: 'event123',
+          preCompletionNotes: 'Updated notes',
+        }),
       result: {
         data: {
           updateActionForInstance: {
@@ -1047,8 +1326,6 @@ describe('updateActionForInstanceHandler', () => {
         },
       },
     };
-
-    const mutationMocks = [updateMutationMock, ...mockQueries];
 
     const props: IItemModalProps = {
       isOpen: true,
@@ -1063,7 +1340,10 @@ describe('updateActionForInstanceHandler', () => {
     };
 
     render(
-      <MockedProvider mocks={mutationMocks} addTypename={false}>
+      <MockedProvider
+        mocks={[updateMutationMock, ...mockQueries]}
+        addTypename={false}
+      >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -1177,12 +1457,12 @@ describe('updateActionForInstanceHandler', () => {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
-      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) => {
-        return (
-          variables.input.actionId === '1' &&
-          variables.input.preCompletionNotes === 'Error test notes'
-        );
-      },
+      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) =>
+        matchesInputSubset(variables, {
+          actionId: '1',
+          eventId: 'event123',
+          preCompletionNotes: 'Error test notes',
+        }),
       error: new Error('Network error occurred'),
     };
 
@@ -1247,12 +1527,12 @@ describe('updateActionForInstanceHandler', () => {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
       },
-      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) => {
-        return (
-          variables.input.actionId === '1' &&
-          variables.input.preCompletionNotes === 'Refetch test notes'
-        );
-      },
+      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) =>
+        matchesInputSubset(variables, {
+          actionId: '1',
+          eventId: 'event123',
+          preCompletionNotes: 'Refetch test notes',
+        }),
       result: {
         data: {
           updateActionForInstance: {
@@ -1550,16 +1830,16 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
     const updateMutationMock = {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
-      },
-      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) => {
-        return (
-          variables.input.actionId === '1' &&
-          variables.input.eventId === 'event123' &&
-          variables.input.assigneeId === 'user2' &&
-          variables.input.categoryId === 'cat2' &&
-          variables.input.preCompletionNotes === 'Updated notes for instance' &&
-          typeof variables.input.assignedAt === 'string'
-        );
+        variables: {
+          input: {
+            actionId: '1',
+            eventId: 'event123',
+            volunteerId: 'volunteer2',
+            categoryId: 'cat2',
+            preCompletionNotes: 'Updated notes for instance',
+            assignedAt: new Date('2024-01-01').toISOString(),
+          },
+        },
       },
       result: {
         data: {
@@ -1595,26 +1875,51 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
       expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 
+    // Wait for form to be fully initialized
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Test notes')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('Category 1')).toBeInTheDocument();
+      // Wait for volunteer field to be visible and populated
+      expect(screen.getByLabelText('volunteer *')).toBeInTheDocument();
+    });
+
     // Change category
     const categoryInput = screen.getByLabelText('actionItemCategory *');
     fireEvent.change(categoryInput, { target: { value: 'Category 2' } });
     const categoryOption = await screen.findByText('Category 2');
     fireEvent.click(categoryOption);
 
-    // Change assignee
-    const assigneeInput = screen.getByLabelText('assignee *');
-    fireEvent.change(assigneeInput, { target: { value: 'Jane Smith' } });
-    const assigneeOption = await screen.findByText('Jane Smith');
-    fireEvent.click(assigneeOption);
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Category 2')).toBeInTheDocument();
+    });
+
+    // Target this instance so non-template volunteers are available
+    const instanceRadio = screen.getByLabelText('thisEventOnly');
+    await userEvent.click(instanceRadio);
+
+    // Change volunteer - first wait for volunteer dropdown to be ready
+    await waitFor(() => {
+      expect(screen.getByLabelText('volunteer *')).toBeInTheDocument();
+    });
+
+    const volunteerInput = screen.getByLabelText('volunteer *');
+
+    await userEvent.click(volunteerInput);
+    await userEvent.clear(volunteerInput);
+    await userEvent.type(volunteerInput, 'Jane');
+
+    const listbox = await screen.findByRole('listbox');
+    const volunteerOption = within(listbox).getByText('Jane Smith');
+    await userEvent.click(volunteerOption);
+
+    await waitFor(() => {
+      expect(volunteerInput).toHaveValue('Jane Smith');
+    });
 
     // Change pre-completion notes
     const notesInput = screen.getByDisplayValue('Test notes');
     await userEvent.clear(notesInput);
     await userEvent.type(notesInput, 'Updated notes for instance');
-
-    // Select "This event only"
-    const instanceRadio = screen.getByLabelText('thisEventOnly');
-    await userEvent.click(instanceRadio);
 
     // Submit the form
     const submitButton = screen.getByTestId('submitBtn');
@@ -1696,8 +2001,8 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
 
     expect(entireSeriesRadio).toBeInTheDocument();
     expect(thisEventOnlyRadio).toBeInTheDocument();
-    expect(entireSeriesRadio).toBeChecked(); // Default state
-    expect(thisEventOnlyRadio).not.toBeChecked();
+    expect(thisEventOnlyRadio).toBeChecked(); // Default state is 'instance'
+    expect(entireSeriesRadio).not.toBeChecked();
 
     // Test the onChange handler for entireSeries
     await userEvent.click(thisEventOnlyRadio);
@@ -1964,7 +2269,7 @@ describe('orgActionItemsRefetch functionality', () => {
       },
       variableMatcher: (variables: ICreateActionItemVariables) => {
         return (
-          variables.input.assigneeId === 'user1' &&
+          variables.input.volunteerId === 'volunteer1' &&
           variables.input.categoryId === 'cat1' &&
           variables.input.organizationId === 'orgId' &&
           variables.input.preCompletionNotes === 'Test with org refetch' &&
@@ -1982,7 +2287,12 @@ describe('orgActionItemsRefetch functionality', () => {
             createdAt: '2024-01-01',
             preCompletionNotes: 'Test with org refetch',
             postCompletionNotes: null,
-            assignee: { id: 'user1', name: 'John Doe' },
+            volunteer: {
+              id: 'volunteer1',
+              hasAccepted: true,
+              user: { id: 'user1', name: 'John Doe' },
+            },
+            volunteerGroup: null,
             creator: { id: 'creator1', name: 'Creator' },
             updater: null,
             category: {
@@ -2027,9 +2337,20 @@ describe('orgActionItemsRefetch functionality', () => {
       expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 
-    // Wait for data to load
+    // Wait for data to load including volunteers
     await waitFor(() => {
       expect(screen.getByText('actionItemCategory')).toBeInTheDocument();
+    });
+
+    // Wait a bit more for volunteers to load
+    await waitFor(() => {
+      expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
+    });
+
+    // Wait for volunteer options to be available by checking the Autocomplete
+    await waitFor(() => {
+      const volunteerInput = screen.getByLabelText('volunteer *');
+      expect(volunteerInput).toBeInTheDocument();
     });
 
     // Select category
@@ -2041,12 +2362,12 @@ describe('orgActionItemsRefetch functionality', () => {
       await userEvent.click(option);
     });
 
-    // Select assignee
-    const assigneeInput = screen.getByLabelText('assignee *');
-    await userEvent.click(assigneeInput);
-    await userEvent.type(assigneeInput, 'John Doe');
+    // Select volunteer
+    const volunteerInput = screen.getByLabelText('volunteer *');
+    await userEvent.click(volunteerInput);
+    await userEvent.type(volunteerInput, 'John Doe');
     await waitFor(async () => {
-      const option = screen.getByText('John Doe');
+      const option = await screen.findByText('John Doe');
       await userEvent.click(option);
     });
 
@@ -2059,102 +2380,6 @@ describe('orgActionItemsRefetch functionality', () => {
     const notesInput = screen.getByLabelText('preCompletionNotes');
     await userEvent.clear(notesInput);
     await userEvent.type(notesInput, 'Test with org refetch');
-
-    // Submit the form
-    const submitButton = screen.getByTestId('submitBtn');
-    await userEvent.click(submitButton);
-
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
-      expect(mockRefetch).toHaveBeenCalled();
-      expect(mockOrgRefetch).toHaveBeenCalled();
-      expect(mockHide).toHaveBeenCalled();
-    });
-  });
-
-  it('should call orgActionItemsRefetch when provided in updateActionItemHandler', async () => {
-    const mockRefetch = vi.fn();
-    const mockOrgRefetch = vi.fn();
-    const mockHide = vi.fn();
-
-    const updateMutationMock = {
-      request: {
-        query: UPDATE_ACTION_ITEM_MUTATION,
-        variables: {
-          input: {
-            id: '1',
-            isCompleted: false,
-            categoryId: 'cat1',
-            assigneeId: 'user1',
-            preCompletionNotes: 'Updated test notes with org refetch',
-            postCompletionNotes: undefined,
-          },
-        },
-      },
-      result: {
-        data: {
-          updateActionItem: {
-            id: '1',
-            isCompleted: false,
-            assignedAt: '2024-01-01',
-            completionAt: null,
-            preCompletionNotes: 'Updated test notes with org refetch',
-            postCompletionNotes: null,
-            assignee: { id: 'user1', name: 'John Doe' },
-            creator: { id: 'creator1', name: 'Creator' },
-            updater: { id: 'updater1', name: 'Updater' },
-            category: {
-              id: 'cat1',
-              name: 'Category 1',
-              description: 'Test category 1',
-              isDisabled: false,
-            },
-            organization: { id: 'orgId', name: 'Organization' },
-            event: null,
-            createdAt: '2024-01-01',
-          },
-        },
-      },
-    };
-
-    const mutationMocks = [updateMutationMock, ...mockQueries];
-
-    const props: IItemModalProps = {
-      isOpen: true,
-      hide: mockHide,
-      orgId: 'orgId',
-      eventId: undefined,
-      actionItemsRefetch: mockRefetch,
-      orgActionItemsRefetch: mockOrgRefetch,
-      editMode: true,
-      actionItem: mockActionItem,
-    };
-
-    render(
-      <MockedProvider mocks={mutationMocks} addTypename={false}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <ItemModal {...props} />
-        </LocalizationProvider>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
-
-    // Find and update the notes field
-    const notesInputs = screen.getAllByRole('textbox');
-    const notesInput = notesInputs.find(
-      (input) =>
-        (input as HTMLInputElement).value === 'Test notes' ||
-        (input as HTMLInputElement).defaultValue === 'Test notes' ||
-        input.getAttribute('value') === 'Test notes',
-    );
-
-    if (notesInput) {
-      await userEvent.clear(notesInput);
-      await userEvent.type(notesInput, 'Updated test notes with org refetch');
-    }
 
     // Submit the form
     const submitButton = screen.getByTestId('submitBtn');
@@ -2266,20 +2491,23 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
         },
         variableMatcher: (variables: {
           input: {
-            assigneeId: string;
+            volunteerId: string;
+            volunteerGroupId?: string;
             categoryId: string;
             organizationId: string;
             preCompletionNotes: string;
             assignedAt: string;
+            isTemplate: boolean;
             eventId: string;
           };
         }) => {
           return (
-            variables.input.assigneeId === 'user1' &&
+            variables.input.volunteerId === 'volunteer1' &&
             variables.input.categoryId === 'cat1' &&
             variables.input.organizationId === 'orgId' &&
             variables.input.preCompletionNotes === 'Test with event' &&
             variables.input.eventId === 'event123' &&
+            variables.input.isTemplate === false &&
             typeof variables.input.assignedAt === 'string' &&
             /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(
               variables.input.assignedAt,
@@ -2296,7 +2524,12 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
               createdAt: '2024-01-01',
               preCompletionNotes: 'Test with event',
               postCompletionNotes: null,
-              assignee: { id: 'user1', name: 'John Doe' },
+              volunteer: {
+                id: 'volunteer1',
+                hasAccepted: true,
+                user: { id: 'user1', name: 'John Doe' },
+              },
+              volunteerGroup: null,
               creator: { id: 'creator1', name: 'Creator' },
               updater: null,
               category: {
@@ -2354,12 +2587,12 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
         await userEvent.click(option);
       });
 
-      // Select assignee
-      const assigneeInput = screen.getByLabelText('assignee *');
-      await userEvent.click(assigneeInput);
-      await userEvent.type(assigneeInput, 'John Doe');
+      // Select volunteer
+      const volunteerInput = screen.getByLabelText('volunteer *');
+      await userEvent.click(volunteerInput);
+      await userEvent.type(volunteerInput, 'John Doe');
       await waitFor(async () => {
-        const option = screen.getByText('John Doe');
+        const option = await screen.findByText('John Doe');
         await userEvent.click(option);
       });
 
@@ -2391,18 +2624,23 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
         },
         variableMatcher: (variables: {
           input: {
-            assigneeId: string;
+            volunteerId: string;
+            volunteerGroupId?: string;
             categoryId: string;
             organizationId: string;
             preCompletionNotes: string;
             assignedAt: string;
+            isTemplate: boolean;
+            eventId: string;
           };
         }) => {
           return (
-            variables.input.assigneeId === 'user1' &&
+            variables.input.volunteerId === 'volunteer1' &&
             variables.input.categoryId === 'cat1' &&
             variables.input.organizationId === 'orgId' &&
             variables.input.preCompletionNotes === 'Test error' &&
+            variables.input.eventId === 'event123' &&
+            variables.input.isTemplate === false &&
             typeof variables.input.assignedAt === 'string' &&
             /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(
               variables.input.assignedAt,
@@ -2418,7 +2656,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
         isOpen: true,
         hide: vi.fn(),
         orgId: 'orgId',
-        eventId: undefined,
+        eventId: 'event123',
         actionItemsRefetch: vi.fn(),
         editMode: false,
         actionItem: null,
@@ -2450,12 +2688,12 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
         await userEvent.click(option);
       });
 
-      // Select assignee
-      const assigneeInput = screen.getByLabelText('assignee *');
-      await userEvent.click(assigneeInput);
-      await userEvent.type(assigneeInput, 'John Doe');
+      // Select volunteer
+      const volunteerInput = screen.getByLabelText('volunteer *');
+      await userEvent.click(volunteerInput);
+      await userEvent.type(volunteerInput, 'John Doe');
       await waitFor(async () => {
-        const option = screen.getByText('John Doe');
+        const option = await screen.findByText('John Doe');
         await userEvent.click(option);
       });
 
@@ -2482,236 +2720,6 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
   });
 
   describe('updateActionItem mutation', () => {
-    it('should successfully call UPDATE_ACTION_ITEM_MUTATION with all fields', async () => {
-      const mockRefetch = vi.fn();
-      const mockHide = vi.fn();
-
-      const updateMutationMock = {
-        request: {
-          query: UPDATE_ACTION_ITEM_MUTATION,
-          variables: {
-            input: {
-              id: '1',
-              isCompleted: false,
-              categoryId: 'cat1',
-              assigneeId: 'user1',
-              preCompletionNotes: 'Updated test notes',
-              postCompletionNotes: undefined,
-            },
-          },
-        },
-        result: {
-          data: {
-            updateActionItem: {
-              id: '1',
-              isCompleted: false,
-              assignedAt: '2024-01-01',
-              completionAt: null,
-              preCompletionNotes: 'Updated test notes',
-              postCompletionNotes: null,
-              assignee: { id: 'user1', name: 'John Doe' },
-              creator: { id: 'creator1', name: 'Creator' },
-              updater: { id: 'updater1', name: 'Updater' },
-              category: {
-                id: 'cat1',
-                name: 'Category 1',
-                description: 'Test category 1',
-                isDisabled: false,
-              },
-              organization: { id: 'orgId', name: 'Organization' },
-              event: null,
-              createdAt: '2024-01-01',
-            },
-          },
-        },
-      };
-
-      const mutationMocks = [updateMutationMock, ...mockQueries];
-
-      const props: IItemModalProps = {
-        isOpen: true,
-        hide: mockHide,
-        orgId: 'orgId',
-        eventId: undefined,
-        actionItemsRefetch: mockRefetch,
-        editMode: true,
-        actionItem: mockActionItem,
-      };
-
-      render(
-        <MockedProvider mocks={mutationMocks} addTypename={false}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <ItemModal {...props} />
-          </LocalizationProvider>
-        </MockedProvider>,
-      );
-
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-      });
-
-      // Find and update the notes field
-      const notesInputs = screen.getAllByRole('textbox');
-      const notesInput = notesInputs.find(
-        (input) =>
-          (input as HTMLInputElement).value === 'Test notes' ||
-          (input as HTMLInputElement).defaultValue === 'Test notes' ||
-          input.getAttribute('value') === 'Test notes',
-      );
-
-      if (notesInput) {
-        await userEvent.clear(notesInput);
-        await userEvent.type(notesInput, 'Updated test notes');
-      }
-
-      // Submit the form
-      const submitButton = screen.getByTestId('submitBtn');
-      await userEvent.click(submitButton);
-
-      await waitFor(() => {
-        expect(toast.success).toHaveBeenCalled();
-        expect(mockRefetch).toHaveBeenCalled();
-        expect(mockHide).toHaveBeenCalled();
-      });
-    });
-
-    it('should handle UPDATE_ACTION_ITEM_MUTATION with all fields', async () => {
-      const updateMultipleFieldsMock = {
-        request: {
-          query: UPDATE_ACTION_ITEM_MUTATION,
-          variables: {
-            input: {
-              id: '1',
-              isCompleted: false,
-              categoryId: 'cat1',
-              assigneeId: 'user1',
-              preCompletionNotes: 'Multiple updates',
-              postCompletionNotes: undefined,
-            },
-          },
-        },
-        result: {
-          data: {
-            updateActionItem: {
-              id: '1',
-              isCompleted: false,
-              assignedAt: '2024-01-01',
-              completionAt: null,
-              preCompletionNotes: 'Multiple updates',
-              postCompletionNotes: null,
-              assignee: { id: 'user1', name: 'John Doe' },
-              creator: { id: 'creator1', name: 'Creator' },
-              updater: { id: 'updater1', name: 'Updater' },
-              createdAt: '2024-01-01T00:00:00.000Z',
-              category: {
-                id: 'cat1',
-                name: 'Category 1',
-                description: 'Test category 1',
-                isDisabled: false,
-              },
-              organization: { id: 'orgId', name: 'Organization' },
-              event: null,
-            },
-          },
-        },
-      };
-
-      const mutationMocks = [updateMultipleFieldsMock, ...mockQueries];
-
-      const props: IItemModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        orgId: 'orgId',
-        eventId: undefined,
-        actionItemsRefetch: vi.fn(),
-        editMode: true,
-        actionItem: mockActionItem,
-      };
-
-      render(
-        <MockedProvider mocks={mutationMocks} addTypename={false}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <ItemModal {...props} />
-          </LocalizationProvider>
-        </MockedProvider>,
-      );
-
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-      });
-
-      // Update notes
-      const notesInput = screen.getByDisplayValue('Test notes');
-      await userEvent.clear(notesInput);
-      await userEvent.type(notesInput, 'Multiple updates');
-
-      // Submit the form
-      const submitButton = screen.getByTestId('submitBtn');
-      await userEvent.click(submitButton);
-
-      await waitFor(() => {
-        expect(toast.success).toHaveBeenCalled();
-      });
-    });
-
-    it('should handle UPDATE_ACTION_ITEM_MUTATION error', async () => {
-      const errorUpdateMock = {
-        request: {
-          query: UPDATE_ACTION_ITEM_MUTATION,
-          variables: {
-            input: {
-              id: '1',
-              isCompleted: false,
-              categoryId: 'cat1',
-              assigneeId: 'user1',
-              preCompletionNotes: 'Error update',
-              postCompletionNotes: undefined,
-            },
-          },
-        },
-        error: new Error('Failed to update action item'),
-      };
-
-      const mutationMocks = [errorUpdateMock, ...mockQueries];
-
-      const props: IItemModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        orgId: 'orgId',
-        eventId: undefined,
-        actionItemsRefetch: vi.fn(),
-        editMode: true,
-        actionItem: mockActionItem,
-      };
-
-      render(
-        <MockedProvider mocks={mutationMocks} addTypename={false}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <ItemModal {...props} />
-          </LocalizationProvider>
-        </MockedProvider>,
-      );
-
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-      });
-
-      // Update notes to trigger the mutation
-      const notesInput = screen.getByDisplayValue('Test notes');
-      await userEvent.clear(notesInput);
-      await userEvent.type(notesInput, 'Error update');
-
-      // Submit the form
-      const submitButton = screen.getByTestId('submitBtn');
-      await userEvent.click(submitButton);
-
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          'Failed to update action item',
-        );
-      });
-    });
-
     it('should handle missing action item ID error', async () => {
       const actionItemWithoutId = {
         ...mockActionItem,
@@ -2722,7 +2730,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
         isOpen: true,
         hide: vi.fn(),
         orgId: 'orgId',
-        eventId: undefined,
+        eventId: 'eventId',
         actionItemsRefetch: vi.fn(),
         editMode: true,
         actionItem: actionItemWithoutId as unknown as IActionItemInfo,

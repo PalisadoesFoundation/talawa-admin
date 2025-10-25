@@ -22,12 +22,12 @@ import type {
 interface IUpdateActionForInstanceInput {
   actionId: string;
   eventId?: string;
-  assigneeId?: string;
+  volunteerId?: string;
+  volunteerGroupId?: string;
   categoryId?: string;
   assignedAt?: string;
   preCompletionNotes?: string;
 }
-import type { InterfaceUser } from 'types/User/interface';
 import type {
   IFormStateType,
   IItemModalProps,
@@ -42,8 +42,51 @@ import {
   UPDATE_ACTION_ITEM_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
-import { Autocomplete, FormControl, TextField } from '@mui/material';
-import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
+import {
+  Autocomplete,
+  FormControl,
+  TextField,
+  Chip,
+  Box,
+  Typography,
+} from '@mui/material';
+import {
+  GET_EVENT_VOLUNTEERS,
+  GET_EVENT_VOLUNTEER_GROUPS,
+} from 'GraphQl/Queries/EventVolunteerQueries';
+import type { InterfaceEventVolunteerInfo } from 'types/Volunteer/interface';
+
+interface IEventVolunteerGroup {
+  id: string;
+  name: string;
+  description: string | null;
+  volunteersRequired: number | null;
+  isTemplate: boolean;
+  isInstanceException: boolean;
+  createdAt: string;
+  creator: {
+    id: string;
+    name: string;
+    avatarURL?: string | null;
+  };
+  leader: {
+    id: string;
+    name: string;
+    avatarURL?: string | null;
+  };
+  volunteers: Array<{
+    id: string;
+    hasAccepted: boolean;
+    user: {
+      id: string;
+      name: string;
+      avatarURL?: string | null;
+    };
+  }>;
+  event: {
+    id: string;
+  };
+}
 
 const initializeFormState = (
   actionItem: IActionItemInfo | null,
@@ -52,7 +95,8 @@ const initializeFormState = (
     ? new Date(actionItem.assignedAt)
     : new Date(),
   categoryId: actionItem?.category?.id || '',
-  assigneeId: actionItem?.assignee?.id || '',
+  volunteerId: actionItem?.volunteer?.id || '',
+  volunteerGroupId: actionItem?.volunteerGroup?.id || '',
   eventId: actionItem?.event?.id || undefined,
   preCompletionNotes: actionItem?.preCompletionNotes || '',
   postCompletionNotes: actionItem?.postCompletionNotes || null,
@@ -78,18 +122,25 @@ const ItemModal: FC<IItemModalProps> = ({
   const [actionItemCategory, setActionItemCategory] =
     useState<IActionItemCategoryInfo | null>(null);
 
-  const [assigneeUser, setAssigneeUser] = useState<InterfaceUser | null>(null);
+  const [selectedVolunteer, setSelectedVolunteer] =
+    useState<InterfaceEventVolunteerInfo | null>(null);
+  const [selectedVolunteerGroup, setSelectedVolunteerGroup] =
+    useState<IEventVolunteerGroup | null>(null);
+  const [assignmentType, setAssignmentType] = useState<
+    'volunteer' | 'volunteerGroup'
+  >('volunteer');
 
   const [formState, setFormState] = useState<IFormStateType>(
     initializeFormState(actionItem),
   );
 
-  const [applyTo, setApplyTo] = useState<'series' | 'instance'>('series');
+  const [applyTo, setApplyTo] = useState<'series' | 'instance'>('instance');
 
   const {
     assignedAt,
     categoryId,
-    assigneeId,
+    volunteerId,
+    volunteerGroupId,
     preCompletionNotes,
     postCompletionNotes,
     isCompleted,
@@ -106,14 +157,61 @@ const ItemModal: FC<IItemModalProps> = ({
     },
   );
 
-  const { data: membersData } = useQuery(MEMBERS_LIST, {
-    variables: { organizationId: orgId },
+  const { data: volunteersData } = useQuery(GET_EVENT_VOLUNTEERS, {
+    variables: {
+      input: { id: eventId },
+      where: {},
+    },
+    skip: !eventId,
   });
 
-  const members = useMemo(
-    () => membersData?.usersByOrganizationId || [],
-    [membersData],
-  );
+  const { data: volunteerGroupsData } = useQuery(GET_EVENT_VOLUNTEER_GROUPS, {
+    variables: {
+      input: { id: eventId },
+    },
+    skip: !eventId,
+  });
+
+  const volunteers = useMemo(() => {
+    const allVolunteers = volunteersData?.event?.volunteers || [];
+
+    // Apply filtering based on applyTo selection for both create and edit modes
+    if (applyTo === 'series') {
+      // For entire series, show only template volunteers
+      return allVolunteers.filter(
+        (volunteer: InterfaceEventVolunteerInfo) =>
+          volunteer.isTemplate === true,
+      );
+    } else {
+      // For this event only, show all volunteers (template and non-template)
+      return allVolunteers;
+    }
+  }, [volunteersData, applyTo]);
+
+  const volunteerGroups = useMemo(() => {
+    const allVolunteerGroups =
+      volunteerGroupsData?.event?.volunteerGroups || [];
+
+    // Apply filtering based on applyTo selection for both create and edit modes
+    if (applyTo === 'series') {
+      // For entire series, show only template volunteer groups
+      return allVolunteerGroups.filter(
+        (group: IEventVolunteerGroup) => group.isTemplate === true,
+      );
+    } else {
+      // For this event only, show all volunteer groups (template and non-template)
+      return allVolunteerGroups;
+    }
+  }, [volunteerGroupsData, applyTo]);
+
+  // Determine if assignment type chips should be disabled
+  const isVolunteerChipDisabled = useMemo(() => {
+    return editMode && actionItem?.volunteerGroup?.id;
+  }, [editMode, actionItem]);
+
+  const isVolunteerGroupChipDisabled = useMemo(() => {
+    return editMode && actionItem?.volunteer?.id;
+  }, [editMode, actionItem]);
 
   const actionItemCategories = useMemo(
     () => actionItemCategoriesData?.actionCategoriesByOrganization || [],
@@ -144,13 +242,14 @@ const ItemModal: FC<IItemModalProps> = ({
   const createActionItemHandler = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
     try {
-      if (!categoryId || !assigneeId) {
-        toast.error('Please select both category and assignee');
+      if (!categoryId || (!volunteerId && !volunteerGroupId)) {
+        toast.error(t('selectCategoryAndAssignment'));
         return;
       }
 
       const input: ICreateActionItemInput = {
-        assigneeId: assigneeId,
+        volunteerId: volunteerId || undefined,
+        volunteerGroupId: volunteerGroupId || undefined,
         categoryId: categoryId,
         organizationId: orgId,
         preCompletionNotes: preCompletionNotes || undefined,
@@ -170,7 +269,8 @@ const ItemModal: FC<IItemModalProps> = ({
 
       setFormState(initializeFormState(null));
       setActionItemCategory(null);
-      setAssigneeUser(null);
+      setSelectedVolunteer(null);
+      setSelectedVolunteerGroup(null);
 
       actionItemsRefetch();
       if (orgActionItemsRefetch) {
@@ -195,7 +295,8 @@ const ItemModal: FC<IItemModalProps> = ({
         id: actionItem.id,
         isCompleted: isCompleted,
         categoryId: categoryId,
-        assigneeId: assigneeId,
+        volunteerId: volunteerId || undefined,
+        volunteerGroupId: volunteerGroupId || undefined,
         preCompletionNotes: preCompletionNotes,
         postCompletionNotes: postCompletionNotes || undefined,
       };
@@ -232,7 +333,8 @@ const ItemModal: FC<IItemModalProps> = ({
       };
 
       // Include all fields that might have changed
-      if (assigneeId) input.assigneeId = assigneeId;
+      if (volunteerId) input.volunteerId = volunteerId;
+      if (volunteerGroupId) input.volunteerGroupId = volunteerGroupId;
       if (categoryId) input.categoryId = categoryId;
       if (assignedAt) input.assignedAt = dayjs(assignedAt).toISOString();
       if (preCompletionNotes !== undefined)
@@ -257,13 +359,6 @@ const ItemModal: FC<IItemModalProps> = ({
   useEffect(() => {
     setFormState(initializeFormState(actionItem));
 
-    // If this action item is showing instance exception data, default to 'instance' since 'series' option is hidden
-    if (actionItem?.isInstanceException) {
-      setApplyTo('instance');
-    } else {
-      setApplyTo('series');
-    }
-
     if (actionItem?.category?.id) {
       const foundCategory: IActionItemCategoryInfo | undefined =
         actionItemCategories.find(
@@ -274,17 +369,76 @@ const ItemModal: FC<IItemModalProps> = ({
     } else {
       setActionItemCategory(null);
     }
+  }, [actionItem, actionItemCategories]);
 
-    if (actionItem?.assignee?.id) {
-      const foundUser: InterfaceUser | undefined = members.find(
-        (member: InterfaceUser): boolean =>
-          member.id === actionItem.assignee?.id,
-      );
-      setAssigneeUser(foundUser || null);
-    } else {
-      setAssigneeUser(null);
+  // Separate useEffect for applyTo initialization
+  useEffect(() => {
+    if (actionItem?.isInstanceException) {
+      setApplyTo('instance');
+    } else if (actionItem) {
+      setApplyTo('series');
     }
-  }, [actionItem, actionItemCategories, members]);
+  }, [actionItem]);
+
+  // Separate useEffect for volunteer/volunteer group initialization (only when modal opens)
+  useEffect(() => {
+    if (!isOpen) return; // Only run when modal is open
+
+    // Initialize volunteer/volunteer group selections
+    if (actionItem?.volunteer?.id) {
+      const allVolunteers = volunteersData?.event?.volunteers || [];
+      const foundVolunteer: InterfaceEventVolunteerInfo | undefined =
+        allVolunteers.find(
+          (volunteer: InterfaceEventVolunteerInfo) =>
+            volunteer.id === actionItem.volunteer?.id,
+        );
+      setSelectedVolunteer(foundVolunteer || null);
+      setAssignmentType('volunteer');
+    } else if (actionItem?.volunteerGroup?.id) {
+      const allVolunteerGroups =
+        volunteerGroupsData?.event?.volunteerGroups || [];
+      const foundGroup: IEventVolunteerGroup | undefined =
+        allVolunteerGroups.find(
+          (group: IEventVolunteerGroup) =>
+            group.id === actionItem.volunteerGroup?.id,
+        );
+      setSelectedVolunteerGroup(foundGroup || null);
+      setAssignmentType('volunteerGroup');
+    } else if (!actionItem) {
+      // For new action items, reset selections
+      setSelectedVolunteer(null);
+      setSelectedVolunteerGroup(null);
+      setAssignmentType('volunteer');
+    }
+  }, [actionItem, volunteersData, volunteerGroupsData, isOpen]);
+
+  // Clear volunteer/volunteer group selections when applyTo changes
+  useEffect(() => {
+    // Check if current selections are still valid with the new filter (for both create and edit modes)
+    if (
+      selectedVolunteer &&
+      applyTo === 'series' &&
+      !selectedVolunteer.isTemplate
+    ) {
+      setSelectedVolunteer(null);
+      handleFormChange('volunteerId', '');
+    }
+    if (
+      selectedVolunteerGroup &&
+      applyTo === 'series' &&
+      !selectedVolunteerGroup.isTemplate
+    ) {
+      setSelectedVolunteerGroup(null);
+      handleFormChange('volunteerGroupId', '');
+    }
+  }, [applyTo, selectedVolunteer, selectedVolunteerGroup]);
+
+  // Reset applyTo to default when modal opens for creating a new action item
+  useEffect(() => {
+    if (isOpen && !editMode && !actionItem) {
+      setApplyTo('instance'); // Default to 'instance' for new action items
+    }
+  }, [isOpen, editMode, actionItem]);
 
   return (
     <Modal className={styles.itemModal} show={isOpen} onHide={hide}>
@@ -386,30 +540,132 @@ const ItemModal: FC<IItemModalProps> = ({
 
           {!isCompleted && (
             <>
-              <Form.Group className="mb-3 w-100">
-                <Autocomplete
-                  className={`${styles.noOutline} w-100`}
-                  data-testid="memberSelect"
-                  data-cy="memberSelect"
-                  options={members}
-                  value={assigneeUser}
-                  isOptionEqualToValue={(option, value) =>
-                    option.id === value.id
-                  }
-                  filterSelectedOptions={true}
-                  getOptionLabel={(member: InterfaceUser): string => {
-                    return member.name || 'Unknown User';
-                  }}
-                  onChange={(_, newAssignee): void => {
-                    const userId = newAssignee?.id;
-                    handleFormChange('assigneeId', userId ?? '');
-                    setAssigneeUser(newAssignee);
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} label={t('assignee')} required />
-                  )}
-                />
-              </Form.Group>
+              {/* Assignment Type Selection */}
+              <Box className="mb-3">
+                <Typography variant="subtitle2" className="mb-2">
+                  {t('assignTo')}
+                </Typography>
+                <Box className="d-flex gap-2">
+                  <Chip
+                    label={t('volunteer')}
+                    variant={
+                      assignmentType === 'volunteer' ? 'filled' : 'outlined'
+                    }
+                    color={
+                      assignmentType === 'volunteer' ? 'primary' : 'default'
+                    }
+                    onClick={() => {
+                      if (!isVolunteerChipDisabled) {
+                        setAssignmentType('volunteer');
+                        // Clear volunteer group assignment when switching to volunteer
+                        handleFormChange('volunteerGroupId', '');
+                        setSelectedVolunteerGroup(null);
+                      }
+                    }}
+                    clickable={!isVolunteerChipDisabled}
+                    sx={{
+                      opacity: isVolunteerChipDisabled ? 0.6 : 1,
+                      cursor: isVolunteerChipDisabled
+                        ? 'not-allowed'
+                        : 'pointer',
+                    }}
+                  />
+                  <Chip
+                    label={t('volunteerGroup')}
+                    variant={
+                      assignmentType === 'volunteerGroup'
+                        ? 'filled'
+                        : 'outlined'
+                    }
+                    color={
+                      assignmentType === 'volunteerGroup'
+                        ? 'primary'
+                        : 'default'
+                    }
+                    onClick={() => {
+                      if (!isVolunteerGroupChipDisabled) {
+                        setAssignmentType('volunteerGroup');
+                        // Clear volunteer assignment when switching to volunteer group
+                        handleFormChange('volunteerId', '');
+                        setSelectedVolunteer(null);
+                      }
+                    }}
+                    clickable={!isVolunteerGroupChipDisabled}
+                    sx={{
+                      opacity: isVolunteerGroupChipDisabled ? 0.6 : 1,
+                      cursor: isVolunteerGroupChipDisabled
+                        ? 'not-allowed'
+                        : 'pointer',
+                    }}
+                  />
+                </Box>
+              </Box>
+
+              {/* Volunteer Selection */}
+              {assignmentType === 'volunteer' && (
+                <Form.Group className="mb-3 w-100">
+                  <Autocomplete
+                    className={`${styles.noOutline} w-100`}
+                    data-testid="volunteerSelect"
+                    data-cy="volunteerSelect"
+                    options={volunteers}
+                    value={selectedVolunteer}
+                    isOptionEqualToValue={(option, value) =>
+                      option.id === value?.id
+                    }
+                    filterSelectedOptions={true}
+                    getOptionLabel={(
+                      volunteer: InterfaceEventVolunteerInfo,
+                    ): string => {
+                      return volunteer.user?.name || 'Unknown Volunteer';
+                    }}
+                    onChange={(_, newVolunteer): void => {
+                      const volunteerId = newVolunteer?.id;
+                      handleFormChange('volunteerId', volunteerId ?? '');
+                      handleFormChange('volunteerGroupId', '');
+                      setSelectedVolunteer(newVolunteer);
+                      setSelectedVolunteerGroup(null);
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} label={t('volunteer')} required />
+                    )}
+                  />
+                </Form.Group>
+              )}
+
+              {/* Volunteer Group Selection */}
+              {assignmentType === 'volunteerGroup' && (
+                <Form.Group className="mb-3 w-100">
+                  <Autocomplete
+                    className={`${styles.noOutline} w-100`}
+                    data-testid="volunteerGroupSelect"
+                    data-cy="volunteerGroupSelect"
+                    options={volunteerGroups}
+                    value={selectedVolunteerGroup}
+                    isOptionEqualToValue={(option, value) =>
+                      option.id === value?.id
+                    }
+                    filterSelectedOptions={true}
+                    getOptionLabel={(group: IEventVolunteerGroup): string => {
+                      return group.name || 'Unknown Group';
+                    }}
+                    onChange={(_, newGroup): void => {
+                      const groupId = newGroup?.id;
+                      handleFormChange('volunteerGroupId', groupId ?? '');
+                      handleFormChange('volunteerId', '');
+                      setSelectedVolunteerGroup(newGroup);
+                      setSelectedVolunteer(null);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label={t('volunteerGroup')}
+                        required
+                      />
+                    )}
+                  />
+                </Form.Group>
+              )}
 
               <Form.Group className="d-flex gap-3 mx-auto mb-3">
                 <DatePicker
