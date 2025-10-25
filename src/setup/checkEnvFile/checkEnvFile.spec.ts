@@ -23,10 +23,14 @@ describe('modifyEnvFile', () => {
     const envContent = 'EXISTING_KEY=existing_value\n';
     const envExampleContent =
       'EXISTING_KEY=existing_value\nNEW_KEY=default_value\n';
-    vi.spyOn(fs, 'existsSync').mockImplementation((file) => file === '.env');
+    vi.spyOn(fs, 'existsSync').mockImplementation((file: string) => {
+      return file === '.env';
+    });
     vi.spyOn(fs, 'readFileSync')
-      .mockReturnValueOnce(envContent) // .env
-      .mockReturnValueOnce(envExampleContent); // .env.example
+      // .env
+      .mockReturnValueOnce(envContent)
+      // .env.example
+      .mockReturnValueOnce(envExampleContent);
 
     const writeMock = vi
       .spyOn(fs, 'writeFileSync')
@@ -44,10 +48,14 @@ describe('modifyEnvFile', () => {
   it('should not append anything if all keys are present', () => {
     const envContent = 'EXISTING_KEY=existing_value\n';
     const envExampleContent = 'EXISTING_KEY=existing_value\n';
-    vi.spyOn(fs, 'existsSync').mockImplementation((file) => file === '.env');
+    vi.spyOn(fs, 'existsSync').mockImplementation((file: string) => {
+      return file === '.env';
+    });
     vi.spyOn(fs, 'readFileSync')
-      .mockReturnValueOnce(envContent) // .env
-      .mockReturnValueOnce(envExampleContent); // .env.example
+      // .env
+      .mockReturnValueOnce(envContent)
+      // .env.example
+      .mockReturnValueOnce(envExampleContent);
 
     const writeMock = vi
       .spyOn(fs, 'writeFileSync')
@@ -61,6 +69,42 @@ describe('modifyEnvFile', () => {
     const occurrences = (written.match(/EXISTING_KEY=/g) || []).length;
     expect(occurrences).toBe(1);
   });
+
+  it('should use preferred order and concise descriptions when rebuilding .env', () => {
+    const envContent = 'REACT_APP_TALAWA_URL=https://api.local\n';
+    const envExampleContent = `# Talawa URL
+REACT_APP_TALAWA_URL=
+# Docker URL for internal calls
+REACT_APP_DOCKER_TALAWA_URL=
+    `;
+
+    // existsSync true for .env and .env.example
+    vi.spyOn(fs, 'existsSync').mockImplementation((file: string) => {
+      return file === '.env' || file === '.env.example';
+    });
+
+    // readFileSync called for .env then .env.example
+    vi.spyOn(fs, 'readFileSync')
+      // .env
+      .mockReturnValueOnce(envContent)
+      // .env.example
+      .mockReturnValueOnce(envExampleContent);
+
+    const writeMock = vi
+      .spyOn(fs, 'writeFileSync')
+      .mockImplementation(() => {});
+
+    modifyEnvFile();
+
+    expect(writeMock).toHaveBeenCalled();
+    const written = writeMock.mock.calls[0][1] as string;
+
+    // Preferred key should appear and keep existing value
+    expect(written).toContain('REACT_APP_TALAWA_URL=https://api.local');
+    // Docker key should be present and the concise description from code should be used
+    expect(written).toContain('REACT_APP_DOCKER_TALAWA_URL=');
+    expect(written).toContain('# Talawa API URL to use from inside Docker');
+  });
 });
 
 describe('checkEnvFile', () => {
@@ -69,7 +113,9 @@ describe('checkEnvFile', () => {
   });
 
   it('should return true if .env file already exists', () => {
-    vi.spyOn(fs, 'existsSync').mockImplementation((file) => file === '.env');
+    vi.spyOn(fs, 'existsSync').mockImplementation((file: string) => {
+      return file === '.env';
+    });
 
     const result = checkEnvFile();
 
@@ -77,9 +123,9 @@ describe('checkEnvFile', () => {
   });
 
   it('should create .env if it does not exist but .env.example exists', () => {
-    vi.spyOn(fs, 'existsSync').mockImplementation(
-      (file) => file === '.env.example',
-    );
+    vi.spyOn(fs, 'existsSync').mockImplementation((file: string) => {
+      return file === '.env.example';
+    });
 
     const writeFileSyncMock = vi
       .spyOn(fs, 'writeFileSync')

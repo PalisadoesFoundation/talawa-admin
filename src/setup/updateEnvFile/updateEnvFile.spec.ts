@@ -190,4 +190,36 @@ describe('updateEnvFile', () => {
     // Should not have 3 or more consecutive newlines
     expect(/(\r?\n){3,}/.test(written)).toBeFalsy();
   });
+
+  it('should escape quotes and backslashes in values', () => {
+    const envContent = 'EXISTING_KEY=old_value\n';
+    vi.spyOn(fs, 'readFileSync').mockReturnValueOnce(envContent);
+    const writeMock = vi
+      .spyOn(fs, 'writeFileSync')
+      .mockImplementation(() => {});
+
+    // Value contains a double quote and a backslash which must be escaped
+    updateEnvFile('EXISTING_KEY', 'value"with\\backslash');
+
+    expect(writeMock).toHaveBeenCalled();
+    const written = writeMock.mock.calls[0][1] as string;
+    // The double quote should be escaped and the whole value quoted
+    expect(written).toContain('EXISTING_KEY="value\\"with\\\\backslash"');
+  });
+
+  it('should remove existing commented key lines when updating', () => {
+    const envContent = '# EXISTING_KEY=should_be_removed\nANOTHER=1\n';
+    vi.spyOn(fs, 'readFileSync').mockReturnValueOnce(envContent);
+    const writeMock = vi
+      .spyOn(fs, 'writeFileSync')
+      .mockImplementation(() => {});
+
+    updateEnvFile('EXISTING_KEY', 'newval');
+
+    expect(writeMock).toHaveBeenCalled();
+    const written = writeMock.mock.calls[0][1] as string;
+    expect(written).toContain('EXISTING_KEY=newval');
+    // The commented original line should not be present
+    expect(written).not.toContain('should_be_removed');
+  });
 });
