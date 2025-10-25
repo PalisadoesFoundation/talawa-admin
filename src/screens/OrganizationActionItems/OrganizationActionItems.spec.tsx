@@ -288,10 +288,31 @@ describe('OrganizationActionItems Component', () => {
       // Perform search
       const searchInput = await screen.findByTestId('searchBy');
       await userEvent.type(searchInput, 'John');
-      await debounceWait();
 
+      await debounceWait();
       // Just verify the search input has the value
       expect(searchInput).toHaveValue('John');
+    });
+
+    it('should search action items by volunteer group name', async () => {
+      renderComponent();
+
+      await waitFor(() => {
+        expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      });
+
+      const searchInput = await screen.findByTestId('searchBy');
+      await userEvent.type(searchInput, 'Community Helpers');
+      const searchButton = await screen.findByTestId('searchBtn');
+      await userEvent.click(searchButton);
+      await debounceWait();
+
+      await waitFor(() => {
+        expect(
+          screen.getByText('Community Helpers (Group)'),
+        ).toBeInTheDocument();
+        expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+      });
     });
 
     it('should search action items by category name', async () => {

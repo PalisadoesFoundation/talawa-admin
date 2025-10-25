@@ -18,7 +18,7 @@ import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client';
-import { ACTION_ITEM_LIST } from 'GraphQl/Queries/Queries';
+import { ACTION_ITEM_LIST } from 'GraphQl/Queries/ActionItemQueries';
 
 import type {
   IActionItemInfo,
@@ -139,10 +139,15 @@ function OrganizationActionItems(): JSX.Element {
       if (searchTerm) {
         filteredItems = filteredItems.filter((item) => {
           if (searchBy === 'assignee') {
-            const assigneeName = item.assignee?.name || '';
-            return assigneeName
-              .toLowerCase()
-              .includes(searchTerm.toLowerCase());
+            // Search in volunteer user name or volunteer group name
+            const volunteerName = item.volunteer?.user?.name || '';
+            const volunteerGroupName = item.volunteerGroup?.name || '';
+            const searchLower = searchTerm.toLowerCase();
+
+            return (
+              volunteerName.toLowerCase().includes(searchLower) ||
+              volunteerGroupName.toLowerCase().includes(searchLower)
+            );
           } else {
             const categoryName = item.category?.name || '';
             return categoryName
@@ -187,7 +192,7 @@ function OrganizationActionItems(): JSX.Element {
   const columns: GridColDef[] = [
     {
       field: 'assignee',
-      headerName: 'Assignee',
+      headerName: 'Assigned To',
       flex: 1,
       align: 'left',
       minWidth: 100,
@@ -195,8 +200,23 @@ function OrganizationActionItems(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const assignee = params.row.assignee;
-        const displayName = assignee?.name || 'No assignee';
+        const volunteer = params.row.volunteer;
+        const volunteerGroup = params.row.volunteerGroup;
+
+        let displayName = 'No assignment';
+        let avatarUrl = null;
+        let isAssigned = false;
+
+        if (volunteer?.user) {
+          displayName = volunteer.user.name || 'Unknown Volunteer';
+          avatarUrl = volunteer.user.avatarURL;
+          isAssigned = true;
+        } else if (volunteerGroup) {
+          displayName = `${volunteerGroup.name} (Group)`;
+          avatarUrl = volunteerGroup.leader?.avatarURL;
+          isAssigned = true;
+        }
+
         return (
           <div
             className="d-flex fw-bold align-items-center ms-2"
@@ -209,9 +229,9 @@ function OrganizationActionItems(): JSX.Element {
             }}
           >
             <div className={styles.tableImageWrapper}>
-              {assignee?.avatarURL ? (
+              {avatarUrl ? (
                 <img
-                  src={assignee.avatarURL}
+                  src={avatarUrl}
                   crossOrigin="anonymous"
                   className={styles.TableImage}
                   alt={displayName}
@@ -219,7 +239,7 @@ function OrganizationActionItems(): JSX.Element {
               ) : (
                 <div className={styles.TableImage}>
                   <Avatar
-                    key={assignee?.id || 'no-assignee'}
+                    key={volunteer?.id || volunteerGroup?.id || 'no-assignment'}
                     name={displayName}
                     alt={displayName}
                   />
@@ -227,7 +247,7 @@ function OrganizationActionItems(): JSX.Element {
               )}
             </div>
             <span
-              className={!assignee ? 'text-muted' : ''}
+              className={!isAssigned ? 'text-muted' : ''}
               style={{
                 flex: 1,
                 minWidth: 0,
@@ -394,7 +414,10 @@ function OrganizationActionItems(): JSX.Element {
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         <SearchBar
           placeholder={tCommon('searchBy', {
-            item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
+            item:
+              searchBy === 'assignee'
+                ? 'Assigned To'
+                : searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
           })}
           onSearch={(value) => {
             debouncedSearch(value);
@@ -406,10 +429,12 @@ function OrganizationActionItems(): JSX.Element {
           <SortingButton
             title={tCommon('searchBy')}
             sortingOptions={[
-              { label: t('assignee'), value: 'assignee' },
+              { label: t('assignedTo'), value: 'assignee' },
               { label: t('category'), value: 'category' },
             ]}
-            selectedOption={t(searchBy)}
+            selectedOption={
+              searchBy === 'assignee' ? t('assignedTo') : t('category')
+            }
             onSortChange={(value) =>
               setSearchBy(value as 'assignee' | 'category')
             }

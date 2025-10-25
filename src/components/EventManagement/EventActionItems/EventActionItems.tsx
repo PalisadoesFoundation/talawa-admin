@@ -17,13 +17,7 @@
  *
  * @returns {JSX.Element} A React component that renders the event action items management view.
  */
-import React, {
-  useCallback,
-  useMemo,
-  useState,
-  useEffect,
-  type JSX,
-} from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
@@ -65,12 +59,12 @@ enum ModalState {
   STATUS = 'status',
 }
 
-interface EventActionItemsProps {
+interface InterfaceEventActionItemsProps {
   eventId: string;
   orgActionItemsRefetch?: () => void;
 }
 
-const EventActionItems: React.FC<EventActionItemsProps> = ({
+const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
   eventId,
   orgActionItemsRefetch,
 }) => {
@@ -164,10 +158,15 @@ const EventActionItems: React.FC<EventActionItemsProps> = ({
       if (searchTerm) {
         filteredItems = filteredItems.filter((item: IActionItemInfo) => {
           if (searchBy === 'assignee') {
-            const assigneeName = item.assignee?.name || '';
-            return assigneeName
-              .toLowerCase()
-              .includes(searchTerm.toLowerCase());
+            // Search in volunteer user name or volunteer group name
+            const volunteerName = item.volunteer?.user?.name || '';
+            const volunteerGroupName = item.volunteerGroup?.name || '';
+            const searchLower = searchTerm.toLowerCase();
+
+            return (
+              volunteerName.toLowerCase().includes(searchLower) ||
+              volunteerGroupName.toLowerCase().includes(searchLower)
+            );
           } else {
             const categoryName = item.category?.name || '';
             return categoryName
@@ -222,7 +221,7 @@ const EventActionItems: React.FC<EventActionItemsProps> = ({
   const columns: GridColDef[] = [
     {
       field: 'assignee',
-      headerName: 'Assignee',
+      headerName: 'Assigned To',
       flex: 1,
       align: 'left',
       minWidth: 100,
@@ -230,8 +229,22 @@ const EventActionItems: React.FC<EventActionItemsProps> = ({
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const assignee = params.row.assignee;
-        const displayName = assignee?.name || 'No assignee';
+        const volunteer = params.row.volunteer;
+        const volunteerGroup = params.row.volunteerGroup;
+
+        let displayName = 'No assignment';
+        let avatarKey = 'no-assignment';
+        let isAssigned = false;
+
+        if (volunteer?.user) {
+          displayName = volunteer.user.name || 'Unknown Volunteer';
+          avatarKey = volunteer.id;
+          isAssigned = true;
+        } else if (volunteerGroup) {
+          displayName = `${volunteerGroup.name} (Group)`;
+          avatarKey = volunteerGroup.id;
+          isAssigned = true;
+        }
 
         return (
           <div
@@ -240,13 +253,11 @@ const EventActionItems: React.FC<EventActionItemsProps> = ({
             style={{ height: '100%' }}
           >
             <div className={styles.TableImage}>
-              <Avatar
-                key={assignee?.id || 'no-assignee'}
-                name={displayName}
-                alt={displayName}
-              />
+              <Avatar key={avatarKey} name={displayName} alt={displayName} />
             </div>
-            <span className={!assignee ? 'text-muted' : ''}>{displayName}</span>
+            <span className={!isAssigned ? 'text-muted' : ''}>
+              {displayName}
+            </span>
           </div>
         );
       },
@@ -381,7 +392,10 @@ const EventActionItems: React.FC<EventActionItemsProps> = ({
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         <SearchBar
           placeholder={tCommon('searchBy', {
-            item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
+            item:
+              searchBy === 'assignee'
+                ? 'Assigned To'
+                : searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
           })}
           onSearch={(value) => {
             debouncedSearch(value);
@@ -393,10 +407,12 @@ const EventActionItems: React.FC<EventActionItemsProps> = ({
           <SortingButton
             title={tCommon('searchBy')}
             sortingOptions={[
-              { label: t('assignee'), value: 'assignee' },
+              { label: t('assignedTo'), value: 'assignee' },
               { label: t('category'), value: 'category' },
             ]}
-            selectedOption={t(searchBy)}
+            selectedOption={
+              searchBy === 'assignee' ? t('assignedTo') : t('category')
+            }
             onSortChange={(value) =>
               setSearchBy(value as 'assignee' | 'category')
             }

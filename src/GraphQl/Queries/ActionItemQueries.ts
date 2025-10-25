@@ -17,10 +17,34 @@ export const ACTION_ITEM_LIST = gql`
   ) {
     actionItemsByOrganization(input: $input) {
       id
-      assignee {
+      volunteer {
+        id
+        hasAccepted
+        isPublic
+        hoursVolunteered
+        user {
+          id
+          name
+          avatarURL
+        }
+      }
+      volunteerGroup {
         id
         name
-        avatarURL
+        description
+        volunteersRequired
+        leader {
+          id
+          name
+          avatarURL
+        }
+        volunteers {
+          id
+          user {
+            id
+            name
+          }
+        }
       }
       category {
         id
@@ -90,9 +114,25 @@ export const GET_EVENT_ACTION_ITEMS = gql`
               id
               name
             }
-            assignee {
+            volunteer {
+              id
+              hasAccepted
+              isPublic
+              hoursVolunteered
+              user {
+                id
+                name
+              }
+            }
+            volunteerGroup {
               id
               name
+              description
+              volunteersRequired
+              leader {
+                id
+                name
+              }
             }
             category {
               id
@@ -104,47 +144,6 @@ export const GET_EVENT_ACTION_ITEMS = gql`
           hasNextPage
           endCursor
         }
-      }
-    }
-  }
-`;
-
-export const ACTION_ITEMS_BY_USER = gql`
-  query ActionItemsByUser($input: QueryActionItemsByUserInput!) {
-    actionItemsByUser(input: $input) {
-      id
-      isCompleted
-      assignedAt
-      completionAt
-      preCompletionNotes
-      postCompletionNotes
-      createdAt
-      assignee {
-        id
-        name
-      }
-      creator {
-        id
-        name
-      }
-      updater {
-        id
-        name
-      }
-      category {
-        id
-        name
-        description
-      }
-      event {
-        id
-
-        description
-      }
-      organization {
-        id
-        name
-        description
       }
     }
   }
