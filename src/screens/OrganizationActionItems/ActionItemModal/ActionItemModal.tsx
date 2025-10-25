@@ -17,17 +17,10 @@ import type {
   IActionItemInfo,
   ICreateActionItemInput,
   IUpdateActionItemInput,
+  IUpdateActionForInstanceInput,
+  IEventVolunteerGroup,
 } from 'types/ActionItems/interface';
 
-interface IUpdateActionForInstanceInput {
-  actionId: string;
-  eventId?: string;
-  volunteerId?: string;
-  volunteerGroupId?: string;
-  categoryId?: string;
-  assignedAt?: string;
-  preCompletionNotes?: string;
-}
 import type {
   IFormStateType,
   IItemModalProps,
@@ -55,38 +48,6 @@ import {
   GET_EVENT_VOLUNTEER_GROUPS,
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'types/Volunteer/interface';
-
-interface IEventVolunteerGroup {
-  id: string;
-  name: string;
-  description: string | null;
-  volunteersRequired: number | null;
-  isTemplate: boolean;
-  isInstanceException: boolean;
-  createdAt: string;
-  creator: {
-    id: string;
-    name: string;
-    avatarURL?: string | null;
-  };
-  leader: {
-    id: string;
-    name: string;
-    avatarURL?: string | null;
-  };
-  volunteers: Array<{
-    id: string;
-    hasAccepted: boolean;
-    user: {
-      id: string;
-      name: string;
-      avatarURL?: string | null;
-    };
-  }>;
-  event: {
-    id: string;
-  };
-}
 
 const initializeFormState = (
   actionItem: IActionItemInfo | null,
@@ -232,6 +193,11 @@ const ItemModal: FC<IItemModalProps> = ({
     },
   );
 
+  const runRefetches = (): void => {
+    actionItemsRefetch();
+    orgActionItemsRefetch?.();
+  };
+
   const handleFormChange = (
     field: keyof IFormStateType,
     value: string | boolean | Date | undefined | null,
@@ -272,10 +238,7 @@ const ItemModal: FC<IItemModalProps> = ({
       setSelectedVolunteer(null);
       setSelectedVolunteerGroup(null);
 
-      actionItemsRefetch();
-      if (orgActionItemsRefetch) {
-        orgActionItemsRefetch();
-      }
+      runRefetches();
       hide();
       toast.success(t('successfulCreation'));
     } catch (error: unknown) {
@@ -306,10 +269,7 @@ const ItemModal: FC<IItemModalProps> = ({
       });
 
       setFormState(initializeFormState(null));
-      actionItemsRefetch();
-      if (orgActionItemsRefetch) {
-        orgActionItemsRefetch();
-      }
+      runRefetches();
       hide();
       toast.success(t('successfulUpdation'));
     } catch (error: unknown) {
@@ -345,10 +305,7 @@ const ItemModal: FC<IItemModalProps> = ({
       });
 
       setFormState(initializeFormState(null));
-      actionItemsRefetch();
-      if (orgActionItemsRefetch) {
-        orgActionItemsRefetch();
-      }
+      runRefetches();
       hide();
       toast.success(t('successfulUpdation'));
     } catch (error: unknown) {

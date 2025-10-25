@@ -157,3 +157,45 @@ export interface IUpdateActionItemForInstanceInput {
 export interface IUpdateActionItemForInstanceVariables {
   input: IUpdateActionItemForInstanceInput;
 }
+
+export interface IUpdateActionForInstanceInput {
+  actionId: string;
+  eventId?: string;
+  volunteerId?: string;
+  volunteerGroupId?: string;
+  categoryId?: string;
+  assignedAt?: string;
+  preCompletionNotes?: string;
+}
+
+export interface IEventVolunteerGroup {
+  id: string;
+  name: string;
+  description: string | null;
+  volunteersRequired: number | null;
+  isTemplate: boolean;
+  isInstanceException: boolean;
+  createdAt: string;
+  creator: {
+    id: string;
+    name: string;
+    avatarURL?: string | null;
+  };
+  leader: {
+    id: string;
+    name: string;
+    avatarURL?: string | null;
+  };
+  volunteers: Array<{
+    id: string;
+    hasAccepted: boolean;
+    user: {
+      id: string;
+      name: string;
+      avatarURL?: string | null;
+    };
+  }>;
+  event: {
+    id: string;
+  };
+}
