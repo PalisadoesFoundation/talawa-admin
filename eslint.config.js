@@ -222,4 +222,43 @@ export default [
       'prettier/prettier': 'error',
     },
   },
+  // Docusaurus docs directory
+  {
+    files: ['docs/src/**/*.ts', 'docs/src/**/*.tsx'],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      parser: tsParser,
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+      globals: {
+        window: 'readonly',
+        document: 'readonly',
+        console: 'readonly',
+        require: 'readonly',
+        module: 'readonly',
+      },
+    },
+    plugins: {
+      react,
+      '@typescript-eslint': ts,
+      prettier,
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      ...ts.configs.recommended.rules,
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-unused-vars': 'error',
+      'react/react-in-jsx-scope': 'off',
+      'prettier/prettier': 'error',
+    },
+  },
 ];

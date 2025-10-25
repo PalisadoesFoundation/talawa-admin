@@ -4,6 +4,8 @@ npm run format:fix
 # npm run lint:fix
 npm run lint-staged
 npm run typecheck
+cd docs && npm run typecheck && cd ..
+npx eslint 'docs/src/**/*.{ts,tsx}'
 npm run update:toc
 npm run check:pom
 npx knip --include files,exports

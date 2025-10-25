@@ -107,6 +107,14 @@ jobs:
       - name: Check for unused files and exports in src/ and docs/src
         run: npx knip --include files,exports
 
+      - name: Check TypeScript and ESLint in docs/src
+        run: |
+          cd docs
+          npm ci
+          npm run typecheck
+          cd ..
+          npx eslint 'docs/src/**/*.{ts,tsx}'
+
   Check-Sensitive-Files:
     if: ${{ github.actor != 'dependabot[bot]' }}
     name: Checks if sensitive files have been changed without authorization
