@@ -62,20 +62,6 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
   }
 `;
 
-// fragment for defining the Address input type.
-export const ADDRESS_DETAILS_FRAGMENT = gql`
-  fragment AddressDetails on AddressInput {
-    city: String
-    countryCode: String
-    dependentLocality: String
-    line1: String
-    line2: String
-    postalCode: String
-    sortingCode: String
-    state: String
-  }
-`;
-
 // to update the details of the current user
 export const UPDATE_CURRENT_USER_MUTATION = gql`
   mutation UpdateCurrentUser($input: MutationUpdateCurrentUserInput!) {
@@ -109,39 +95,6 @@ export const UPDATE_CURRENT_USER_MUTATION = gql`
   }
 `;
 
-// to update the details of the user
-
-export const UPDATE_USER_MUTATION = gql`
-  mutation UpdateCurrentUser($input: MutationUpdateCurrentUserInput!) {
-    updateCurrentUser(input: $input) {
-      addressLine1
-      addressLine2
-      avatarMimeType
-      avatarURL
-      birthDate
-      city
-      countryCode
-      createdAt
-      description
-      educationGrade
-      emailAddress
-      employmentStatus
-      homePhoneNumber
-      id
-      isEmailAddressVerified
-      maritalStatus
-      mobilePhoneNumber
-      name
-      natalSex
-      naturalLanguageCode
-      postalCode
-      role
-      state
-      updatedAt
-      workPhoneNumber
-    }
-  }
-`;
 // to update the password of user
 
 export const UPDATE_USER_PASSWORD_MUTATION = gql`
@@ -374,16 +327,6 @@ export const ADD_ADMIN_MUTATION = gql`
   }
 `;
 
-export const ADD_MEMBER_MUTATION = gql`
-  mutation CreateMember($orgid: ID!, $userid: ID!) {
-    createMember(input: { organizationId: $orgid, userId: $userid }) {
-      organization {
-        _id
-      }
-    }
-  }
-`;
-
 export const CREATE_POST_MUTATION = gql`
   mutation CreatePost($input: MutationCreatePostInput!) {
     createPost(input: $input) {
@@ -489,29 +432,6 @@ export const UPDATE_POST_VOTE = gql`
           }
         }
       }
-    }
-  }
-`;
-
-export const LIKE_POST = gql`
-  mutation createPostVote($input: MutationCreatePostVoteInput!) {
-    createPostVote(input: $input) {
-      id
-      upVoters(first: 10) {
-        edges {
-          node {
-            id
-          }
-        }
-      }
-    }
-  }
-`;
-
-export const UNLIKE_POST = gql`
-  mutation deletePostVote($input: MutationDeletePostVoteInput!) {
-    deletePostVote(input: $input) {
-      id
     }
   }
 `;
@@ -626,11 +546,6 @@ export {
 export {
   ADD_EVENT_ATTENDEE,
   MARK_CHECKIN,
-  MARK_CHECKOUT,
-  REGISTER_FOR_EVENT,
-  REGISTER_EVENT_ATTENDEE,
-  INVITE_EVENT_ATTENDEE,
-  UNREGISTER_FOR_EVENT_BY_USER,
   REMOVE_EVENT_ATTENDEE,
 } from './EventAttendeeMutations';
 
