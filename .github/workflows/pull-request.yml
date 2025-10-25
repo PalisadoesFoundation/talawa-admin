@@ -107,6 +107,9 @@ jobs:
       - name: Check for unused files and exports in src/ and docs/src
         run: npx knip --include files,exports
 
+      - name: Check for unused dependencies
+        run: npx knip --config knip.deps.json --include dependencies
+
   Check-Sensitive-Files:
     if: ${{ github.actor != 'dependabot[bot]' }}
     name: Checks if sensitive files have been changed without authorization
