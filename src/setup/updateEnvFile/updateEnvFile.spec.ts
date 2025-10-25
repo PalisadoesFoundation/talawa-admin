@@ -83,10 +83,10 @@ describe('updateEnvFile', () => {
 
     updateEnvFile('EXISTING_KEY', 'value_with=special_characters');
 
-    // Verify that the updated content is written to the file and contains the value
+    // Verify that the updated content is written to the file with proper quoting
     expect(writeMock).toHaveBeenCalled();
     const written = writeMock.mock.calls[0][1] as string;
-    expect(written).toContain('EXISTING_KEY=value_with=special_characters');
+    expect(written).toContain('EXISTING_KEY="value_with=special_characters"');
   });
 
   it('should log an error when file system operations fail', () => {
