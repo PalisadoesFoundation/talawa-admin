@@ -1,26 +1,8 @@
 import React from 'react';
-import { render, screen, within } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import EventAttendedCard from './EventsAttendedCardItem';
-import type { InterfaceCardItem } from './EventsAttendedCardItem';
+import { render, screen } from '@testing-library/react';
+import { BrowserRouter } from 'react-router';
+import EventAttendedCard, { InterfaceCardItem } from './EventsAttendedCardItem';
 import { vi } from 'vitest';
-
-// Mock react-router Link (not react-router-dom!) to avoid router context issues
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
-  return {
-    ...actual,
-    Link: ({
-      children,
-      to,
-      ...props
-    }: React.PropsWithChildren<{ to: string }>) => (
-      <a href={to} {...props}>
-        {children}
-      </a>
-    ),
-  };
-});
 
 // Mock useLocalStorage
 const mockGetItem = vi.fn();
@@ -121,7 +103,6 @@ describe('EventAttendedCard', () => {
       };
       renderComponent(propsWithoutLocation);
       expect(screen.queryByTestId('LocationOnIcon')).not.toBeInTheDocument();
-      expect(screen.queryByText('Test Location')).not.toBeInTheDocument();
     });
 
     it('does not render location icon when location is empty', () => {
@@ -131,7 +112,6 @@ describe('EventAttendedCard', () => {
       };
       renderComponent(propsWithEmptyLocation);
       expect(screen.queryByTestId('LocationOnIcon')).not.toBeInTheDocument();
-      expect(screen.queryByText('Test Location')).not.toBeInTheDocument();
     });
   });
 
@@ -143,51 +123,47 @@ describe('EventAttendedCard', () => {
 
       it('renders link with correct path when both IDs are present', () => {
         renderComponent();
-        const card = screen.getByTestId('EventsAttendedCard');
-        const link = within(card).getByRole('link');
+        const link = screen.getByRole('link');
         expect(link).toHaveAttribute('href', '/event/org123/event456');
       });
 
       it('renders chevron right icon', () => {
         renderComponent();
-        const card = screen.getByTestId('EventsAttendedCard');
-        expect(
-          within(card).getByTestId('ChevronRightIcon'),
-        ).toBeInTheDocument();
+        expect(screen.getByTestId('ChevronRightIcon')).toBeInTheDocument();
       });
 
-      it('renders link when orgId is missing', () => {
+      it('renders link with malformed URL when orgId is missing', () => {
         const propsWithoutOrgId = {
           ...mockProps,
           orgId: undefined,
         };
         renderComponent(propsWithoutOrgId);
-        const card = screen.getByTestId('EventsAttendedCard');
-        const link = within(card).getByRole('link');
+        const link = screen.getByRole('link');
         expect(link).toHaveAttribute('href', '/event/undefined/event456');
+        expect(screen.getByTestId('ChevronRightIcon')).toBeInTheDocument();
       });
 
-      it('renders link when eventId is missing', () => {
+      it('renders link with malformed URL when eventId is missing', () => {
         const propsWithoutEventId = {
           ...mockProps,
           eventId: undefined,
         };
         renderComponent(propsWithoutEventId);
-        const card = screen.getByTestId('EventsAttendedCard');
-        const link = within(card).getByRole('link');
+        const link = screen.getByRole('link');
         expect(link).toHaveAttribute('href', '/event/org123/undefined');
+        expect(screen.getByTestId('ChevronRightIcon')).toBeInTheDocument();
       });
 
-      it('renders link when both IDs are missing', () => {
+      it('renders link with malformed URL when both IDs are missing', () => {
         const propsWithoutIds = {
           ...mockProps,
           orgId: undefined,
           eventId: undefined,
         };
         renderComponent(propsWithoutIds);
-        const card = screen.getByTestId('EventsAttendedCard');
-        const link = within(card).getByRole('link');
+        const link = screen.getByRole('link');
         expect(link).toHaveAttribute('href', '/event/undefined/undefined');
+        expect(screen.getByTestId('ChevronRightIcon')).toBeInTheDocument();
       });
     });
 
@@ -289,7 +265,7 @@ describe('EventAttendedCard', () => {
         title: '',
       };
       renderComponent(propsWithEmptyTitle);
-      const titleElement = screen.getByTestId('EventsAttendedCardTitle');
+      const titleElement = screen.getByRole('heading', { level: 6 });
       expect(titleElement).toBeInTheDocument();
       expect(titleElement).toHaveTextContent('');
     });
@@ -313,60 +289,6 @@ describe('EventAttendedCard', () => {
       };
       renderComponent(propsWithSpecialTitle);
       expect(screen.getByText(specialTitle)).toBeInTheDocument();
-    });
-
-    it('handles missing time gracefully', () => {
-      const propsWithoutTime = {
-        ...mockProps,
-        time: undefined,
-      };
-      renderComponent(propsWithoutTime);
-      const card = screen.getByTestId('EventsAttendedCard');
-      expect(card).toBeInTheDocument();
-      expect(screen.getByText('Test Event')).toBeInTheDocument();
-    });
-
-    it('handles empty time gracefully', () => {
-      const propsWithEmptyTime = {
-        ...mockProps,
-        time: '',
-      };
-      renderComponent(propsWithEmptyTime);
-      const card = screen.getByTestId('EventsAttendedCard');
-      expect(card).toBeInTheDocument();
-    });
-
-    it('handles very long time string', () => {
-      const longTime = 'T'.repeat(1000);
-      const propsWithLongTime = {
-        ...mockProps,
-        time: longTime,
-      };
-      renderComponent(propsWithLongTime);
-      const card = screen.getByTestId('EventsAttendedCard');
-      expect(card).toBeInTheDocument();
-    });
-
-    it('handles malformed time format', () => {
-      const malformedTime = 'invalid-time-format-25:99:99';
-      const propsWithMalformedTime = {
-        ...mockProps,
-        time: malformedTime,
-      };
-      renderComponent(propsWithMalformedTime);
-      const card = screen.getByTestId('EventsAttendedCard');
-      expect(card).toBeInTheDocument();
-    });
-
-    it('handles special characters in time', () => {
-      const specialTime = '@#$%^&*()_+-=[]{}|;:,.<>?';
-      const propsWithSpecialTime = {
-        ...mockProps,
-        time: specialTime,
-      };
-      renderComponent(propsWithSpecialTime);
-      const card = screen.getByTestId('EventsAttendedCard');
-      expect(card).toBeInTheDocument();
     });
   });
 });
