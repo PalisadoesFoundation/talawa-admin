@@ -167,7 +167,7 @@ describe('Talawa Admin Setup', () => {
   });
 
   it('should set reCAPTCHA site key and enable flag when valid key provided', async () => {
-    const mockKey = 'valid-key-123';
+    const mockKey = '1234567890abcdef1234567890abcdef12345678';
 
     vi.mocked(inquirer.prompt)
       .mockResolvedValueOnce({ shouldUseRecaptcha: true })

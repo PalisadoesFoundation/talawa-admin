@@ -61,9 +61,9 @@ export function modifyEnvFile(): void {
       REACT_APP_RECAPTCHA_SITE_KEY: 'Google reCAPTCHA site key',
       REACT_APP_BACKEND_WEBSOCKET_URL:
         'Backend websocket URL for real-time features',
-      ALLOW_LOGS: 'Allow logging of compile-time and runtime errors (YES/)',
+      ALLOW_LOGS: 'Allow logging of compile-time and runtime errors (yes/no)',
       PORT: 'Port for the talawa-admin development server',
-      USE_DOCKER: 'Run the app in Docker (YES/NO)',
+      USE_DOCKER: 'Run the app in Docker (yes/no)',
       DOCKER_PORT: 'Port to expose when running in Docker',
       REACT_APP_DOCKER_TALAWA_URL: 'Talawa API URL to use from inside Docker',
     };

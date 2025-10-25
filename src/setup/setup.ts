@@ -84,12 +84,16 @@ export async function main(): Promise<void> {
 
     // Centralize Docker vs non-Docker env writes
     if (useDocker) {
-      // Clear non-docker API endpoints and set docker-specific url
+      // Clear non-docker API endpoints and set docker-specific urls
       updateEnvFile('REACT_APP_TALAWA_URL', '');
       updateEnvFile('REACT_APP_BACKEND_WEBSOCKET_URL', '');
       updateEnvFile(
         'REACT_APP_DOCKER_TALAWA_URL',
         'http://host.docker.internal:4000/graphql',
+      );
+      updateEnvFile(
+        'REACT_APP_DOCKER_BACKEND_WEBSOCKET_URL',
+        'ws://host.docker.internal:4000/graphql',
       );
     } else {
       // Non-docker path: ensure docker-specific var is empty

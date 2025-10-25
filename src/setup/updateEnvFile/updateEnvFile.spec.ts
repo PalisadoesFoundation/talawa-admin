@@ -18,7 +18,7 @@ describe('updateEnvFile', () => {
     vi.resetAllMocks();
     vi.spyOn(console, 'error').mockImplementation(() => {});
     // Ensure .env is considered present by default in these tests
-    vi.spyOn(fs, 'existsSync').mockReturnValue(true as unknown as boolean);
+    vi.spyOn(fs, 'existsSync').mockReturnValue(true);
   });
 
   it('should update an existing key in the .env file', () => {
