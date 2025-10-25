@@ -163,8 +163,9 @@ const Requests = (): JSX.Element => {
 
   // Check authorization
   useEffect(() => {
-    const isAuthorized = userRole?.toLowerCase() === 'administrator';
-    if (!isAuthorized) {
+    const isSuperAdmin = getItem('SuperAdmin');
+    const isAdmin = userRole?.toLowerCase() === 'administrator';
+    if (!(isAdmin || isSuperAdmin)) {
       window.location.assign('/orglist');
     }
   }, [userRole]);
@@ -313,9 +314,7 @@ const Requests = (): JSX.Element => {
             <InfiniteScroll
               dataLength={displayedRequests.length}
               next={loadMoreRequests}
-              loader={
-                <TableLoader noOfCols={headerTitles.length} noOfRows={2} />
-              }
+              loader={<TableLoader headerTitles={headerTitles} noOfRows={2} />}
               hasMore={hasMore}
               className={styles.listTable}
               data-testid="requests-list"
