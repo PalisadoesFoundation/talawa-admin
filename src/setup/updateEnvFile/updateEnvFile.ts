@@ -10,12 +10,12 @@ function escapeRegExp(str: string): string {
 function escapeEnvValue(value: string): string {
   // If value is empty, return empty string (KEY=)
   if (!value) return '';
-  
+
   // Check if value needs quoting
   const needsQuoting = /[\s#="\\]|^[\s"]|[\s"]$/.test(value);
-  
+
   if (!needsQuoting) return value;
-  
+
   // Escape backslashes and quotes, then wrap in quotes
   return `"${value.replace(/["\\]/g, '\\$&')}"`;
 }
