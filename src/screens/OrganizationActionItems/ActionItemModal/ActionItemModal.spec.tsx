@@ -15,6 +15,7 @@ import type {
 } from 'types/ActionItems/interface.ts';
 import ItemModal from './ActionItemModal';
 import { vi, it, describe, expect } from 'vitest';
+import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
@@ -25,6 +26,7 @@ import {
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import {
   CREATE_ACTION_ITEM_MUTATION,
+  UPDATE_ACTION_ITEM_MUTATION,
   UPDATE_ACTION_ITEM_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import userEvent from '@testing-library/user-event';
@@ -322,6 +324,39 @@ const mockQueries = [
                 id: 'eventId',
               },
             },
+            {
+              id: 'group2',
+              name: 'Test Group 2',
+              description: 'Test volunteer group 2',
+              volunteersRequired: 3,
+              isTemplate: false,
+              isInstanceException: false,
+              createdAt: '2023-02-01T00:00:00Z',
+              creator: {
+                id: 'user2',
+                name: 'Jane Smith',
+                avatarURL: null,
+              },
+              leader: {
+                id: 'user2',
+                name: 'Jane Smith',
+                avatarURL: null,
+              },
+              volunteers: [
+                {
+                  id: 'volunteer2',
+                  hasAccepted: true,
+                  user: {
+                    id: 'user2',
+                    name: 'Jane Smith',
+                    avatarURL: null,
+                  },
+                },
+              ],
+              event: {
+                id: 'eventId',
+              },
+            },
           ],
         },
       },
@@ -366,6 +401,39 @@ const mockQueries = [
                   user: {
                     id: 'user1',
                     name: 'John Doe',
+                    avatarURL: null,
+                  },
+                },
+              ],
+              event: {
+                id: 'event123',
+              },
+            },
+            {
+              id: 'group2',
+              name: 'Test Group 2',
+              description: 'Test volunteer group 2',
+              volunteersRequired: 3,
+              isTemplate: false,
+              isInstanceException: false,
+              createdAt: '2023-02-01T00:00:00Z',
+              creator: {
+                id: 'user2',
+                name: 'Jane Smith',
+                avatarURL: null,
+              },
+              leader: {
+                id: 'user2',
+                name: 'Jane Smith',
+                avatarURL: null,
+              },
+              volunteers: [
+                {
+                  id: 'volunteer2',
+                  hasAccepted: true,
+                  user: {
+                    id: 'user2',
+                    name: 'Jane Smith',
                     avatarURL: null,
                   },
                 },
@@ -447,6 +515,51 @@ const mockActionItem = {
   },
 };
 
+const mockActionItemWithGroup = {
+  ...mockActionItem,
+  volunteerId: null,
+  volunteerGroupId: 'group1',
+  volunteer: null,
+  volunteerGroup: {
+    id: 'group1',
+    name: 'Test Group 1',
+    description: 'Test volunteer group 1',
+    volunteersRequired: 5,
+    isTemplate: true,
+    isInstanceException: false,
+    createdAt: '2023-01-01T00:00:00Z',
+    creator: {
+      id: 'user1',
+      name: 'John Doe',
+      avatarURL: null,
+    },
+    leader: {
+      id: 'user1',
+      name: 'John Doe',
+      avatarURL: null,
+    },
+    volunteers: [
+      {
+        id: 'volunteer1',
+        hasAccepted: true,
+        user: {
+          id: 'user1',
+          name: 'John Doe',
+          avatarURL: null,
+        },
+      },
+    ],
+    event: {
+      id: 'event123',
+      name: 'Test Event',
+    },
+  },
+  event: {
+    id: 'event123',
+    name: 'Test Event',
+  },
+};
+
 // Additional test cases for ItemModal component
 describe('ItemModal - Additional Test Cases', () => {
   // Test modal visibility and basic rendering
@@ -498,6 +611,34 @@ describe('ItemModal - Additional Test Cases', () => {
       const closeButton = screen.getByTestId('modalCloseBtn');
       fireEvent.click(closeButton);
       expect(mockHide).toHaveBeenCalledTimes(1);
+    });
+
+    it('should preselect volunteer group when editing a group assignment', async () => {
+      const props: IItemModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        orgId: 'orgId',
+        eventId: 'eventId',
+        actionItemsRefetch: vi.fn(),
+        editMode: true,
+        actionItem: mockActionItemWithGroup as unknown as IActionItemInfo,
+      };
+
+      renderWithProviders(props);
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
+
+      const volunteerGroupSelect = await screen.findByTestId(
+        'volunteerGroupSelect',
+      );
+      expect(volunteerGroupSelect).toBeInTheDocument();
+
+      const volunteerGroupInput = screen.getByLabelText(/volunteerGroup/i);
+      expect(volunteerGroupInput).toHaveValue('Test Group 1');
+
+      expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument();
     });
   });
 
@@ -609,6 +750,213 @@ describe('ItemModal - Additional Test Cases', () => {
 
       // The modal should be open
       expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+  });
+
+  describe('applyTo dependent selection clearing', () => {
+    it('should clear non-template volunteer when switching applyTo to series', async () => {
+      const props: IItemModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        orgId: 'orgId',
+        eventId: 'eventId',
+        actionItemsRefetch: vi.fn(),
+        editMode: false,
+        actionItem: null,
+        isRecurring: true,
+      };
+
+      renderWithProviders(props);
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
+
+      const volunteerInput = screen.getByLabelText('volunteer *');
+      await userEvent.click(volunteerInput);
+      await userEvent.type(volunteerInput, 'Jane Smith');
+
+      await waitFor(async () => {
+        const option = await screen.findByText('Jane Smith');
+        await userEvent.click(option);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByLabelText('volunteer *')).toHaveValue('Jane Smith');
+      });
+
+      const seriesRadio = screen.getByLabelText('entireSeries');
+      await userEvent.click(seriesRadio);
+
+      await waitFor(() => {
+        expect(screen.getByLabelText('volunteer *')).toHaveValue('');
+      });
+
+      expect(screen.queryByDisplayValue('Jane Smith')).not.toBeInTheDocument();
+    });
+
+    it('should clear non-template volunteer group when switching applyTo to series', async () => {
+      const props: IItemModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        orgId: 'orgId',
+        eventId: 'eventId',
+        actionItemsRefetch: vi.fn(),
+        editMode: false,
+        actionItem: null,
+        isRecurring: true,
+      };
+
+      renderWithProviders(props);
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
+
+      const volunteerGroupChip = screen.getByRole('button', {
+        name: 'volunteerGroup',
+      });
+      await userEvent.click(volunteerGroupChip);
+
+      const volunteerGroupSelect = await screen.findByTestId(
+        'volunteerGroupSelect',
+      );
+      const volunteerGroupInput =
+        within(volunteerGroupSelect).getByRole('combobox');
+      await userEvent.click(volunteerGroupInput);
+      await userEvent.type(volunteerGroupInput, 'Test Group 2');
+
+      await waitFor(async () => {
+        const option = await screen.findByText('Test Group 2');
+        await userEvent.click(option);
+      });
+
+      await waitFor(() => {
+        expect(volunteerGroupInput).toHaveValue('Test Group 2');
+      });
+
+      const seriesRadio = screen.getByLabelText('entireSeries');
+      await userEvent.click(seriesRadio);
+
+      await waitFor(() => {
+        expect(volunteerGroupInput).toHaveValue('');
+      });
+    });
+  });
+
+  describe('Assignment type switching', () => {
+    it('should clear volunteer selection when switching to volunteer group and back', async () => {
+      const props: IItemModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        orgId: 'orgId',
+        eventId: 'eventId',
+        actionItemsRefetch: vi.fn(),
+        editMode: false,
+        actionItem: null,
+      };
+
+      renderWithProviders(props);
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
+
+      const volunteerSelect = await screen.findByTestId('volunteerSelect');
+      const volunteerInput = within(volunteerSelect).getByRole('combobox');
+      await userEvent.click(volunteerInput);
+      await userEvent.type(volunteerInput, 'Jane Smith');
+
+      const volunteerOption = await screen.findByText('Jane Smith');
+      await userEvent.click(volunteerOption);
+
+      await waitFor(() => {
+        expect(volunteerInput).toHaveValue('Jane Smith');
+      });
+
+      const volunteerGroupChip = screen.getByRole('button', {
+        name: 'volunteerGroup',
+      });
+      await userEvent.click(volunteerGroupChip);
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument();
+      });
+
+      const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
+      await userEvent.click(volunteerChip);
+
+      const reopenedVolunteerSelect =
+        await screen.findByTestId('volunteerSelect');
+      const reopenedVolunteerInput = within(reopenedVolunteerSelect).getByRole(
+        'combobox',
+      );
+
+      await waitFor(() => {
+        expect(reopenedVolunteerInput).toHaveValue('');
+      });
+    });
+
+    it('should clear volunteer group selection when switching to volunteer and back', async () => {
+      const props: IItemModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        orgId: 'orgId',
+        eventId: 'eventId',
+        actionItemsRefetch: vi.fn(),
+        editMode: false,
+        actionItem: null,
+      };
+
+      renderWithProviders(props);
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
+
+      const volunteerGroupChip = screen.getByRole('button', {
+        name: 'volunteerGroup',
+      });
+      await userEvent.click(volunteerGroupChip);
+
+      const volunteerGroupSelect = await screen.findByTestId(
+        'volunteerGroupSelect',
+      );
+      const volunteerGroupInput =
+        within(volunteerGroupSelect).getByRole('combobox');
+      await userEvent.click(volunteerGroupInput);
+      await userEvent.type(volunteerGroupInput, 'Test Group 2');
+
+      const groupOption = await screen.findByText('Test Group 2');
+      await userEvent.click(groupOption);
+
+      await waitFor(() => {
+        expect(volunteerGroupInput).toHaveValue('Test Group 2');
+      });
+
+      const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
+      await userEvent.click(volunteerChip);
+
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('volunteerGroupSelect'),
+        ).not.toBeInTheDocument();
+      });
+
+      const volunteerGroupChipAgain = screen.getByRole('button', {
+        name: 'volunteerGroup',
+      });
+      await userEvent.click(volunteerGroupChipAgain);
+
+      const reopenedGroupSelect = await screen.findByTestId(
+        'volunteerGroupSelect',
+      );
+      const reopenedGroupInput =
+        within(reopenedGroupSelect).getByRole('combobox');
+
+      await waitFor(() => {
+        expect(reopenedGroupInput).toHaveValue('');
+      });
     });
   });
 
@@ -1515,6 +1863,83 @@ describe('updateActionForInstanceHandler', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Network error occurred');
+    });
+  });
+
+  it('should include volunteerGroup fields when updating instance assignment for a group', async () => {
+    vi.clearAllMocks();
+
+    const mockRefetch = vi.fn();
+    const mockOrgRefetch = vi.fn();
+    const mockHide = vi.fn();
+
+    const expectedAssignedAt = dayjs(
+      mockActionItemWithGroup.assignedAt,
+    ).toISOString();
+
+    const updateGroupMutationMock = {
+      request: {
+        query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
+      },
+      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) =>
+        matchesInputSubset(variables, {
+          actionId: '1',
+          eventId: 'event123',
+          volunteerGroupId: 'group1',
+          categoryId: 'cat1',
+          assignedAt: expectedAssignedAt,
+          preCompletionNotes: 'Group instance notes',
+        }),
+      result: {
+        data: {
+          updateActionForInstance: {
+            id: '1',
+          },
+        },
+      },
+    };
+
+    const mutationMocks = [updateGroupMutationMock, ...mockQueries];
+
+    const props: IItemModalProps = {
+      isOpen: true,
+      hide: mockHide,
+      orgId: 'orgId',
+      eventId: 'event123',
+      actionItemsRefetch: mockRefetch,
+      orgActionItemsRefetch: mockOrgRefetch,
+      editMode: true,
+      actionItem: mockActionItemWithGroup as unknown as IActionItemInfo,
+      isRecurring: true,
+    };
+
+    render(
+      <MockedProvider mocks={mutationMocks} addTypename={false}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <ItemModal {...props} />
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+    });
+
+    const instanceRadio = screen.getByLabelText('thisEventOnly');
+    await userEvent.click(instanceRadio);
+
+    const notesInput = screen.getByLabelText('preCompletionNotes');
+    await userEvent.clear(notesInput);
+    await userEvent.type(notesInput, 'Group instance notes');
+
+    const submitButton = screen.getByTestId('submitBtn');
+    fireEvent.submit(submitButton);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalled();
+      expect(mockRefetch).toHaveBeenCalledTimes(1);
+      expect(mockOrgRefetch).toHaveBeenCalledTimes(1);
+      expect(mockHide).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -2748,6 +3173,79 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
 
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith('Action item ID is missing');
+      });
+    });
+
+    it('should complete updateActionItem flow and trigger refetches', async () => {
+      vi.clearAllMocks();
+
+      const mockRefetch = vi.fn();
+      const mockOrgRefetch = vi.fn();
+      const mockHide = vi.fn();
+
+      const updateMutationMock = {
+        request: {
+          query: UPDATE_ACTION_ITEM_MUTATION,
+        },
+        variableMatcher: (variables: { input: Record<string, unknown> }) =>
+          matchesInputSubset(variables, {
+            id: '1',
+            categoryId: 'cat1',
+            volunteerId: 'volunteer1',
+            isCompleted: false,
+            preCompletionNotes: 'Updated success notes',
+          }),
+        result: {
+          data: {
+            updateActionItem: {
+              id: '1',
+              isCompleted: false,
+              updatedAt: '2024-01-02T00:00:00Z',
+            },
+          },
+        },
+      };
+
+      render(
+        <MockedProvider
+          mocks={[updateMutationMock, ...mockQueries]}
+          addTypename={false}
+        >
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <ItemModal
+              isOpen={true}
+              hide={mockHide}
+              orgId="orgId"
+              eventId="eventId"
+              actionItemsRefetch={mockRefetch}
+              orgActionItemsRefetch={mockOrgRefetch}
+              editMode={true}
+              actionItem={mockActionItem as unknown as IActionItemInfo}
+            />
+          </LocalizationProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
+
+      const notesInput = await screen.findByLabelText('preCompletionNotes');
+      await userEvent.clear(notesInput);
+      await userEvent.type(notesInput, 'Updated success notes');
+
+      const submitButton = screen.getByTestId('submitBtn');
+      await userEvent.click(submitButton);
+
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith('successfulUpdation');
+        expect(mockRefetch).toHaveBeenCalledTimes(1);
+        expect(mockOrgRefetch).toHaveBeenCalledTimes(1);
+        expect(mockHide).toHaveBeenCalledTimes(1);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByLabelText('preCompletionNotes')).toHaveValue('');
       });
     });
   });
