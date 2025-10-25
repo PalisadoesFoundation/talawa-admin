@@ -135,7 +135,7 @@ const Requests = (): JSX.Element => {
     setDisplayedRequests(pendingRequests);
 
     // Update hasMore based on whether we have a full page of results
-    if (pendingRequests.length < perPageResult) {
+    if (allRequests.length < perPageResult) {
       setHasMore(false);
     } else {
       setHasMore(true);
@@ -314,7 +314,7 @@ const Requests = (): JSX.Element => {
             <InfiniteScroll
               dataLength={displayedRequests.length}
               next={loadMoreRequests}
-              loader={<TableLoader headerTitles={headerTitles} noOfRows={2} />}
+              loader={<TableLoader noOfCols={6} noOfRows={2} />}
               hasMore={hasMore}
               className={styles.listTable}
               data-testid="requests-list"

@@ -24,12 +24,26 @@ import { vi } from 'vitest';
 import { MEMBERSHIP_REQUEST, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 
 // Mock localStorage
-vi.stubGlobal('localStorage', {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  clear: vi.fn(),
-  removeItem: vi.fn(),
-});
+const localStorageMock = (() => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: (key: string) => store[key] || null,
+    setItem: (key: string, value: string) => {
+      store[key] = value;
+    },
+    clear: () => {
+      store = {};
+    },
+    removeItem: (key: string) => {
+      delete store[key];
+    },
+    key: (i: number) => Object.keys(store)[i] || null,
+    get length() {
+      return Object.keys(store).length;
+    },
+  };
+})();
+vi.stubGlobal('localStorage', localStorageMock);
 
 // Mock window.location
 Object.defineProperty(window, 'location', {
@@ -207,6 +221,7 @@ async function wait(ms = 100): Promise<void> {
 beforeEach(() => {
   setItem('id', 'user1');
   setItem('role', 'administrator');
+  setItem('Talawa-admin_role', 'administrator');
   setItem('SuperAdmin', false);
   vi.clearAllMocks();
 });
@@ -240,6 +255,7 @@ describe('Testing Requests screen', () => {
     setItem('id', '');
     removeItem('AdminFor');
     removeItem('SuperAdmin');
+    setItem('role', 'user');
 
     render(
       <MockedProvider addTypename={false} link={link}>
