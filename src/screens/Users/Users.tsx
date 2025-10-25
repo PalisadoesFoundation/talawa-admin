@@ -142,7 +142,7 @@ const Users = (): JSX.Element => {
     variables: {
       first: 10,
       after: null,
-      orgFirst: 6,
+      orgFirst: 32,
     },
     notifyOnNetworkStatusChange: true,
   });
@@ -157,16 +157,10 @@ const Users = (): JSX.Element => {
       setPageInfoState(data.allUsers.pageInfo);
     }
   }, [data]);
-  console.log(edges);
-
-  console.log('GraphQL Query Data:', data);
-  console.log('GraphQL Loading State:', loading);
-  console.log('GraphQL Error:', error);
 
   useEffect(() => {
     if (edges.length > 0) {
       const newUser = edges.map((edge: any) => edge.node);
-      console.log('Setting usersData with:', newUser);
       setUsersData(newUser || []);
       setHasMore(pageInfo?.hasNextPage ?? false);
     }
@@ -177,21 +171,14 @@ const Users = (): JSX.Element => {
     InterfaceQueryUserListItem[]
   >([]);
 
-  console.log('Current usersData:', usersData);
-  console.log('Current displayedUsers:', displayedUsers);
-
   // Manage loading more state
   useEffect(() => {
     if (!usersData || usersData.length === 0) {
-      console.log('No usersData available yet');
       return;
     }
 
-    console.log('Managing loading state for:', usersData.length, 'users');
-
     let newDisplayedUsers = sortUsers(usersData, sortingOption);
     newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
-    console.log('Setting displayedUsers:', newDisplayedUsers);
     setDisplayedUsers(newDisplayedUsers);
   }, [usersData, sortingOption, filteringOption]);
 
@@ -236,7 +223,7 @@ const Users = (): JSX.Element => {
     refetchUsers({
       first: perPageResult,
       after: null,
-      orgFirst: 6,
+      orgFirst: 32,
       name_Icontains: value,
     });
     setHasMore(true);
@@ -246,7 +233,7 @@ const Users = (): JSX.Element => {
     refetchUsers({
       first: perPageResult,
       after: null,
-      orgFirst: 6,
+      orgFirst: 32,
     });
     setHasMore(true);
   };
@@ -259,7 +246,7 @@ const Users = (): JSX.Element => {
       variables: {
         first: perPageResult,
         after: pageInfoState?.endCursor,
-        orgFirst: 6,
+        orgFirst: 32,
       },
     });
 
