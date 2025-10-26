@@ -24,7 +24,10 @@ vi.mock('../GraphQl/Mutations/PluginMutations', () => ({
 }));
 
 interface IMockApolloClient {
-  mutate: ReturnType<typeof vi.fn>;
+  mutate: (options: {
+    mutation: unknown;
+    variables?: Record<string, unknown>;
+  }) => Promise<any>;
 }
 
 const mockJSZip = vi.mocked(JSZip);
