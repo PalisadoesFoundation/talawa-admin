@@ -46,7 +46,13 @@ const localStorageMock = (() => {
     },
   };
 })();
-vi.stubGlobal('localStorage', localStorageMock);
+
+// Ensure window.localStorage reflects the stub in JSDOM
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock,
+  configurable: true,
+  writable: true,
+});
 
 // Mock window.location
 Object.defineProperty(window, 'location', {
@@ -197,6 +203,7 @@ const INFINITE_SCROLL_MOCKS = [
               createdAt: `2023-01-${i + 9}T00:00:00Z`,
               status: 'pending',
               user: {
+                avatarURL: null,
                 id: `user${i + 9}`,
                 name: `User${i + 9} Test`,
                 emailAddress: `user${i + 9}@test.com`,
@@ -532,13 +539,18 @@ describe('Testing Requests screen', () => {
 
     expect(screen.getAllByRole('row').length).toBeGreaterThan(1);
 
-    fireEvent.scroll(window, {
-      target: {
-        scrollY: document.documentElement.scrollHeight,
-        innerHeight: window.innerHeight,
-        scrollHeight: document.documentElement.scrollHeight,
-      },
-    });
+    const requestsContainer = document.querySelector(
+      '[data-testid="requests-list"]',
+    );
+    if (requestsContainer) {
+      fireEvent.scroll(requestsContainer, {
+        target: { scrollTop: (requestsContainer as HTMLElement).scrollHeight },
+      });
+    } else {
+      fireEvent.scroll(window, {
+        target: { scrollY: document.documentElement.scrollHeight },
+      });
+    }
 
     await wait(500);
 
@@ -565,13 +577,18 @@ describe('Testing Requests screen', () => {
     await userEvent.type(searchInput, 'User');
     await wait(200);
 
-    fireEvent.scroll(window, {
-      target: {
-        scrollY: document.documentElement.scrollHeight,
-        innerHeight: window.innerHeight,
-        scrollHeight: document.documentElement.scrollHeight,
-      },
-    });
+    const requestsContainer = document.querySelector(
+      '[data-testid="requests-list"]',
+    );
+    if (requestsContainer) {
+      fireEvent.scroll(requestsContainer, {
+        target: { scrollTop: (requestsContainer as HTMLElement).scrollHeight },
+      });
+    } else {
+      fireEvent.scroll(window, {
+        target: { scrollY: document.documentElement.scrollHeight },
+      });
+    }
 
     await wait(500);
 
@@ -616,13 +633,18 @@ describe('Testing Requests screen', () => {
     const table = screen.getByRole('grid');
     expect(table).toBeInTheDocument();
 
-    fireEvent.scroll(window, {
-      target: {
-        scrollY: 1000,
-        innerHeight: 100,
-        scrollHeight: 1000,
-      },
-    });
+    const requestsContainer = document.querySelector(
+      '[data-testid="requests-list"]',
+    );
+    if (requestsContainer) {
+      fireEvent.scroll(requestsContainer, {
+        target: { scrollTop: (requestsContainer as HTMLElement).scrollHeight },
+      });
+    } else {
+      fireEvent.scroll(window, {
+        target: { scrollY: document.documentElement.scrollHeight },
+      });
+    }
 
     await wait(200);
 
@@ -789,13 +811,18 @@ describe('Testing Requests screen', () => {
 
     await wait(200);
 
-    fireEvent.scroll(window, {
-      target: {
-        scrollY: document.documentElement.scrollHeight,
-        innerHeight: window.innerHeight,
-        scrollHeight: document.documentElement.scrollHeight,
-      },
-    });
+    const requestsContainer = document.querySelector(
+      '[data-testid="requests-list"]',
+    );
+    if (requestsContainer) {
+      fireEvent.scroll(requestsContainer, {
+        target: { scrollTop: (requestsContainer as HTMLElement).scrollHeight },
+      });
+    } else {
+      fireEvent.scroll(window, {
+        target: { scrollY: document.documentElement.scrollHeight },
+      });
+    }
 
     await wait(500);
 
@@ -984,6 +1011,7 @@ describe('Testing Requests screen', () => {
                   createdAt: `2023-01-0${i + 1}T00:00:00Z`,
                   status: 'pending',
                   user: {
+                    avatarURL: null,
                     id: `user${i + 1}`,
                     name: `User${i + 1} Test`,
                     emailAddress: `user${i + 1}@test.com`,
@@ -1011,9 +1039,10 @@ describe('Testing Requests screen', () => {
                 .fill(null)
                 .map((_, i) => ({
                   membershipRequestId: `request${i + 9}`,
-                  createdAt: `2023-01-${i + 9}T00:00:00Z`,
+                  createdAt: `2023-01-${(i + 9).toString().padStart(2, '0')}T00:00:00Z`,
                   status: 'pending',
                   user: {
+                    avatarURL: null,
                     id: `user${i + 9}`,
                     name: `User${i + 9} Test`,
                     emailAddress: `user${i + 9}@test.com`,
@@ -1049,21 +1078,16 @@ describe('Testing Requests screen', () => {
     expect(screen.getByText('User1 Test')).toBeInTheDocument();
     expect(screen.getByText('User2 Test')).toBeInTheDocument();
 
-    const infiniteScrollDiv = document.querySelector(
+    const requestsContainer = document.querySelector(
       '[data-testid="requests-list"]',
     );
-
-    if (infiniteScrollDiv) {
-      fireEvent.scroll(infiniteScrollDiv, {
-        target: {
-          scrollTop: infiniteScrollDiv.scrollHeight,
-        },
+    if (requestsContainer) {
+      fireEvent.scroll(requestsContainer, {
+        target: { scrollTop: (requestsContainer as HTMLElement).scrollHeight },
       });
     } else {
       fireEvent.scroll(window, {
-        target: {
-          scrollY: document.documentElement.scrollHeight,
-        },
+        target: { scrollY: document.documentElement.scrollHeight },
       });
     }
 
@@ -1072,6 +1096,7 @@ describe('Testing Requests screen', () => {
     expect(rows.length).toBeGreaterThan(9);
     expect(screen.getByText('User7 Test')).toBeInTheDocument();
     expect(screen.getByText('User8 Test')).toBeInTheDocument();
+    expect(screen.getByText('User9 Test')).toBeInTheDocument();
   });
 
   test('should handle loadMoreRequests when data is undefined or data.organization is undefined', async () => {
@@ -1116,9 +1141,7 @@ describe('Testing Requests screen', () => {
             name_contains: '',
           },
         },
-        result: {
-          data: undefined,
-        },
+        result: { data: null },
       },
       {
         request: {
@@ -1159,13 +1182,18 @@ describe('Testing Requests screen', () => {
 
     expect(screen.getByTestId('testComp')).toBeInTheDocument();
 
-    fireEvent.scroll(window, {
-      target: {
-        scrollY: document.documentElement.scrollHeight,
-        innerHeight: window.innerHeight,
-        scrollHeight: document.documentElement.scrollHeight,
-      },
-    });
+    const requestsContainer = document.querySelector(
+      '[data-testid="requests-list"]',
+    );
+    if (requestsContainer) {
+      fireEvent.scroll(requestsContainer, {
+        target: { scrollTop: (requestsContainer as HTMLElement).scrollHeight },
+      });
+    } else {
+      fireEvent.scroll(window, {
+        target: { scrollY: document.documentElement.scrollHeight },
+      });
+    }
 
     await wait(500);
 
