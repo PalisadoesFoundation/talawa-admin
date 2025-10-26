@@ -134,7 +134,13 @@ describe('adminPluginInstaller', () => {
       });
       expect(result.success).toBe(true);
       expect(result.installedComponents).toContain('Admin');
-      expect(mockApolloClient.mutate).toHaveBeenCalled();
+      expect(mockApolloClient.mutate).toHaveBeenCalledTimes(1);
+      expect(mockApolloClient.mutate).toHaveBeenCalledWith(
+        expect.objectContaining({ mutation: CREATE_PLUGIN_MUTATION }),
+      );
+      expect(mockApolloClient.mutate).not.toHaveBeenCalledWith(
+        expect.objectContaining({ mutation: UPLOAD_PLUGIN_ZIP_MUTATION }),
+      );
     });
 
     it('handles CREATE_PLUGIN rejecting with a non-Error (string) and surfaces a failure', async () => {
@@ -167,11 +173,9 @@ describe('adminPluginInstaller', () => {
         apolloClient: mockApolloClient,
       });
 
-      // We expect install to fail and that the returned error is the fallback/error message
       expect(result.success).toBe(false);
-      // The implementation will convert this into a thrown Error in the create-plugin catch,
-      // and the outer catch will return the error.message — assert it contains the expected prefix.
       expect(result.error).toMatch(/Failed to create plugin in database/);
+      expect(mockAdminPluginFileService.installPlugin).not.toHaveBeenCalled();
     });
 
     it('throws Unknown error when UPLOAD_PLUGIN_ZIP_MUTATION rejects with non-Error', async () => {
@@ -233,6 +237,8 @@ describe('adminPluginInstaller', () => {
       expect(res.error).toMatch(
         /Failed to install API component: Unknown error/,
       );
+      expect(mockAdminPluginFileService.installPlugin).not.toHaveBeenCalled();
+      expect(res.installedComponents).toEqual([]);
     });
 
     it('returns API-install failure with the original Error message when UPLOAD_PLUGIN_ZIP_MUTATION rejects with Error', async () => {
@@ -293,6 +299,8 @@ describe('adminPluginInstaller', () => {
       expect(res.error).toMatch(
         /Failed to install API component: specific api upload error/,
       );
+      expect(mockAdminPluginFileService.installPlugin).not.toHaveBeenCalled();
+      expect(res.installedComponents).toEqual([]);
     });
 
     // Validation Failures
@@ -340,6 +348,8 @@ describe('adminPluginInstaller', () => {
       expect(result.error).toMatch(
         /Zip file must contain either 'admin' or 'api' folder with valid plugin structure/,
       );
+      expect(mockApolloClient.mutate).not.toHaveBeenCalled();
+      expect(mockAdminPluginFileService.installPlugin).not.toHaveBeenCalled();
     });
 
     it('validateAdminPluginZip skips processing when zip.file(fileName) returns null for admin files', async () => {
