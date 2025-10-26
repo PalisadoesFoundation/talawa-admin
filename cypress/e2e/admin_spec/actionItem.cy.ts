@@ -7,7 +7,11 @@ describe('Admin Action Items Tab', () => {
 
   beforeEach(() => {
     cy.loginByApi('admin');
-    dashboard.visit().verifyOnDashboard().openFirstOrganization();
+    dashboard
+      .visit()
+      .verifyOnDashboard()
+      .waitForOrganizationsToLoad()
+      .openFirstOrganization();
     actionItemPage.visitActionItemsTab();
   });
 
