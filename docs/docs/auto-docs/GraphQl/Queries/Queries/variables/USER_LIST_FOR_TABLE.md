@@ -6,4 +6,4 @@
 
 > `const` **USER\_LIST\_FOR\_TABLE**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/Queries.ts:198](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L198)
+Defined in: [src/GraphQl/Queries/Queries.ts:201](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L201)

@@ -158,24 +158,24 @@ function organizationEvents(): JSX.Element {
   const events: InterfaceEvent[] = (
     eventData?.organization?.events?.edges || []
   ).map((edge: IEventEdge) => ({
-    _id: edge.node.id,
+    id: edge.node.id,
     name: edge.node.name,
     description: edge.node.description || '',
-    startDate: dayjs.utc(edge.node.startAt).format('YYYY-MM-DD'),
-    endDate: dayjs.utc(edge.node.endAt).format('YYYY-MM-DD'),
+    startAt: edge.node.startAt,
+    endAt: edge.node.endAt,
     startTime: edge.node.allDay
-      ? undefined
-      : dayjs.utc(edge.node.startAt).format('HH:mm:ss'),
+      ? null
+      : dayjs(edge.node.startAt).format('HH:mm:ss'),
     endTime: edge.node.allDay
-      ? undefined
-      : dayjs.utc(edge.node.endAt).format('HH:mm:ss'),
+      ? null
+      : dayjs(edge.node.endAt).format('HH:mm:ss'),
     allDay: edge.node.allDay,
     location: edge.node.location || '',
     isPublic: edge.node.isPublic,
     isRegisterable: edge.node.isRegisterable,
     // Add recurring event information
-    isRecurringTemplate: edge.node.isRecurringEventTemplate,
-    baseEventId: edge.node.baseEvent?.id || null,
+    isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
+    baseEvent: edge.node.baseEvent,
     sequenceNumber: edge.node.sequenceNumber,
     totalCount: edge.node.totalCount,
     hasExceptions: edge.node.hasExceptions,
@@ -183,7 +183,7 @@ function organizationEvents(): JSX.Element {
     recurrenceDescription: edge.node.recurrenceDescription,
     recurrenceRule: edge.node.recurrenceRule,
     creator: {
-      _id: edge.node.creator.id,
+      id: edge.node.creator.id,
       name: edge.node.creator.name,
     },
     attendees: [], // Adjust if attendees are added to schema

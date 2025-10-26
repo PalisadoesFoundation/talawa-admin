@@ -79,11 +79,11 @@ const mockMembers = [
 ];
 
 const mockEvent: InterfaceEvent = {
-  _id: 'eventId1',
+  id: 'eventId1',
   name: 'Test Event',
   description: 'Test event description',
-  startDate: '2024-01-01',
-  endDate: '2024-01-02',
+  startAt: '2024-01-01T10:00:00Z',
+  endAt: '2024-01-02T18:00:00Z',
   startTime: '10:00',
   endTime: '18:00',
   location: 'Test Location',
@@ -129,7 +129,8 @@ const createActionItem = (
   overrides: Partial<IActionItemInfo> = {},
 ): IActionItemInfo => ({
   id: 'actionItemId1',
-  assigneeId: 'userId1',
+  volunteerId: 'userId1',
+  volunteerGroupId: null,
   categoryId: 'categoryId1',
   eventId: 'eventId1',
   recurringEventInstanceId: null,
@@ -143,12 +144,19 @@ const createActionItem = (
   isCompleted: true,
   preCompletionNotes: 'Pre-completion notes for testing',
   postCompletionNotes: 'Post-completion notes for testing',
-  assignee: {
-    id: 'userId1',
-    name: 'John Doe',
-    emailAddress: 'john@example.com',
-    avatarURL: 'https://example.com/avatar1.jpg',
+
+  volunteer: {
+    id: 'volunteer1',
+    hasAccepted: true,
+    isPublic: true,
+    hoursVolunteered: 5,
+    user: {
+      id: 'userId1',
+      name: 'John Doe',
+      avatarURL: 'https://example.com/avatar1.jpg',
+    },
   },
+  volunteerGroup: null,
   creator: {
     id: 'userId2',
     name: 'Jane Smith',
@@ -309,16 +317,8 @@ describe('Testing ItemViewModal', () => {
       });
     });
 
-    it('should display fallback assignee name when no GraphQL data', () => {
-      const item = createActionItem({
-        assigneeId: null,
-        assignee: {
-          id: 'userId1',
-          name: 'Fallback Assignee',
-          emailAddress: 'fallback@example.com',
-          avatarURL: 'https://example.com/fallback-avatar.jpg',
-        },
-      });
+    it('should display volunteer name when volunteer data exists', () => {
+      const item = createActionItem({});
 
       renderItemViewModal(link1, {
         isOpen: true,
@@ -328,12 +328,24 @@ describe('Testing ItemViewModal', () => {
 
       const assigneeInput = screen.getByTestId('assignee_input');
       const inputElement = assigneeInput.querySelector('input');
-      expect(inputElement).toHaveValue('Fallback Assignee');
+      expect(inputElement).toHaveValue('John Doe');
     });
 
-    it('should display name from firstName and lastName when name is not available', async () => {
+    it('should display volunteer group name when volunteer group is assigned', async () => {
       const item = createActionItem({
-        assigneeId: 'userId3', // This user has firstName/lastName but no name
+        volunteer: null,
+        volunteerGroup: {
+          id: 'group1',
+          name: 'Test Volunteer Group',
+          description: 'A test group',
+          volunteersRequired: 5,
+          leader: {
+            id: 'userId1',
+            name: 'Leader Name',
+            avatarURL: null,
+          },
+          volunteers: [],
+        },
       });
 
       renderItemViewModal(link1, {
@@ -345,14 +357,14 @@ describe('Testing ItemViewModal', () => {
       await waitFor(() => {
         const assigneeInput = screen.getByTestId('assignee_input');
         const inputElement = assigneeInput.querySelector('input');
-        expect(inputElement).toHaveValue('Bob Johnson');
+        expect(inputElement).toHaveValue('Test Volunteer Group');
       });
     });
 
-    it('should display "Unknown" when assignee is null', () => {
+    it('should display "No assignment" when neither volunteer nor volunteer group is assigned', () => {
       const item = createActionItem({
-        assigneeId: null,
-        assignee: null,
+        volunteer: null,
+        volunteerGroup: null,
       });
 
       renderItemViewModal(link1, {
@@ -363,7 +375,7 @@ describe('Testing ItemViewModal', () => {
 
       const assigneeInput = screen.getByTestId('assignee_input');
       const inputElement = assigneeInput.querySelector('input');
-      expect(inputElement).toHaveValue('Unknown');
+      expect(inputElement).toHaveValue('No assignment');
     });
   });
 
@@ -622,7 +634,7 @@ describe('Testing ItemViewModal', () => {
       });
 
       expect(screen.getByLabelText(t.category)).toBeInTheDocument();
-      expect(screen.getByLabelText(t.assignee)).toBeInTheDocument();
+      expect(screen.getByLabelText(t.assignedTo)).toBeInTheDocument();
       expect(screen.getByLabelText(t.creator)).toBeInTheDocument();
       expect(screen.getByLabelText(t.status)).toBeInTheDocument();
       expect(screen.getByLabelText(t.event)).toBeInTheDocument();

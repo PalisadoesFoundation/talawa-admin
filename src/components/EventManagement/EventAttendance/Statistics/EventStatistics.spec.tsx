@@ -30,39 +30,41 @@ const mocks = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { id: 'event123' },
+      variables: { eventId: 'event123' },
     },
     result: {
       data: {
         event: {
-          _id: 'event123',
-          title: 'Test Event',
+          id: 'event123',
+          name: 'Test Event',
           description: 'Test Description',
-          startDate: '2023-01-01',
-          endDate: '2023-01-02',
-          startTime: '09:00',
-          endTime: '17:00',
-          allDay: false,
           location: 'Test Location',
-          recurring: true,
-          baseRecurringEvent: { _id: 'base123' },
-          organization: {
-            _id: 'org123',
-            members: [
-              { _id: 'user1', firstName: 'John', lastName: 'Doe' },
-              { _id: 'user2', firstName: 'Jane', lastName: 'Smith' },
-            ],
+          allDay: false,
+          isPublic: true,
+          isRegisterable: true,
+          startAt: '2023-01-01T09:00:00Z',
+          endAt: '2023-01-02T17:00:00Z',
+          createdAt: '2023-01-01T00:00:00Z',
+          updatedAt: '2023-01-01T00:00:00Z',
+          isRecurringEventTemplate: false,
+          baseEvent: {
+            id: 'base123',
           },
-          attendees: [
-            {
-              _id: 'user1',
-              gender: 'MALE',
-            },
-            {
-              _id: 'user2',
-              gender: 'FEMALE',
-            },
-          ],
+          recurrenceRule: null,
+          creator: {
+            id: 'creator1',
+            name: 'Creator Name',
+            emailAddress: 'creator@example.com',
+          },
+          updater: {
+            id: 'updater1',
+            name: 'Updater Name',
+            emailAddress: 'updater@example.com',
+          },
+          organization: {
+            id: 'org123',
+            name: 'Test Organization',
+          },
         },
       },
     },
@@ -76,30 +78,30 @@ const mocks = [
       data: {
         getRecurringEvents: [
           {
-            _id: 'event123',
-            startDate: '2023-01-01',
-            title: 'Test Event 1',
+            id: 'event123',
+            startAt: '2023-01-01T09:00:00Z',
+            name: 'Test Event 1',
             attendees: [
-              { _id: 'user1', gender: 'MALE' },
-              { _id: 'user2', gender: 'FEMALE' },
+              { id: 'user1', natalSex: 'male' },
+              { id: 'user2', natalSex: 'female' },
             ],
           },
           {
-            _id: 'event456',
-            startDate: '2023-01-08',
-            title: 'Test Event 2',
+            id: 'event456',
+            startAt: '2023-01-08T09:00:00Z',
+            name: 'Test Event 2',
             attendees: [
-              { _id: 'user1', gender: 'MALE' },
-              { _id: 'user3', gender: 'OTHER' },
+              { id: 'user1', natalSex: 'male' },
+              { id: 'user3', natalSex: 'other' },
             ],
           },
           {
-            _id: 'event789',
-            startDate: '2023-01-15',
-            title: 'Test Event 3',
+            id: 'event789',
+            startAt: '2023-01-15T09:00:00Z',
+            name: 'Test Event 3',
             attendees: [
-              { _id: 'user2', gender: 'FEMALE' },
-              { _id: 'user3', gender: 'OTHER' },
+              { id: 'user2', natalSex: 'female' },
+              { id: 'user3', natalSex: 'other' },
             ],
           },
         ],
@@ -110,27 +112,25 @@ const mocks = [
 
 const mockMemberData = [
   {
-    _id: 'user1',
-    firstName: 'John',
-    lastName: 'Doe',
-    gender: 'MALE',
+    id: 'user1',
+    name: 'John Doe',
+    emailAddress: 'john@example.com' as `${string}@${string}.${string}`,
+    natalSex: 'male',
     birthDate: new Date('1990-01-01'),
-    email: 'john@example.com' as `${string}@${string}.${string}`,
     createdAt: '2023-01-01',
-    __typename: 'User',
+    role: 'MEMBER',
     tagsAssignedWith: {
       edges: [],
     },
   },
   {
-    _id: 'user2',
-    firstName: 'Jane',
-    lastName: 'Smith',
-    gender: 'FEMALE',
+    id: 'user2',
+    name: 'Jane Smith',
+    emailAddress: 'jane@example.com' as `${string}@${string}.${string}`,
+    natalSex: 'female',
     birthDate: new Date('1985-05-05'),
-    email: 'jane@example.com' as `${string}@${string}.${string}`,
     createdAt: '2023-01-01',
-    __typename: 'User',
+    role: 'MEMBER',
     tagsAssignedWith: {
       edges: [],
     },

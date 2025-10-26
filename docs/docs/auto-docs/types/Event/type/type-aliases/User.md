@@ -34,14 +34,6 @@ Defined in: [src/types/Event/type.ts:8](https://github.com/PalisadoesFoundation/
 
 ***
 
-### gender?
-
-> `optional` **gender**: `string`
-
-Defined in: [src/types/Event/type.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L13)
-
-***
-
 ### id
 
 > **id**: `string`
@@ -55,6 +47,14 @@ Defined in: [src/types/Event/type.ts:6](https://github.com/PalisadoesFoundation/
 > **name**: `string`
 
 Defined in: [src/types/Event/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L7)
+
+***
+
+### natalSex?
+
+> `optional` **natalSex**: `string`
+
+Defined in: [src/types/Event/type.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L13)
 
 ***
 

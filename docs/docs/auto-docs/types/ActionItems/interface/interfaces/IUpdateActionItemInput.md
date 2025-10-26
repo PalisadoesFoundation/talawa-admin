@@ -4,23 +4,15 @@
 
 # Interface: IUpdateActionItemInput
 
-Defined in: [src/types/ActionItems/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L69)
+Defined in: [src/types/ActionItems/interface.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L103)
 
 ## Properties
-
-### assigneeId?
-
-> `optional` **assigneeId**: `string`
-
-Defined in: [src/types/ActionItems/interface.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L71)
-
-***
 
 ### categoryId?
 
 > `optional` **categoryId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L72)
+Defined in: [src/types/ActionItems/interface.ts:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L107)
 
 ***
 
@@ -28,7 +20,7 @@ Defined in: [src/types/ActionItems/interface.ts:72](https://github.com/Palisadoe
 
 > **id**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L70)
+Defined in: [src/types/ActionItems/interface.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L104)
 
 ***
 
@@ -36,7 +28,7 @@ Defined in: [src/types/ActionItems/interface.ts:70](https://github.com/Palisadoe
 
 > **isCompleted**: `boolean`
 
-Defined in: [src/types/ActionItems/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L73)
+Defined in: [src/types/ActionItems/interface.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L108)
 
 ***
 
@@ -44,7 +36,7 @@ Defined in: [src/types/ActionItems/interface.ts:73](https://github.com/Palisadoe
 
 > `optional` **postCompletionNotes**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L75)
+Defined in: [src/types/ActionItems/interface.ts:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L110)
 
 ***
 
@@ -52,4 +44,20 @@ Defined in: [src/types/ActionItems/interface.ts:75](https://github.com/Palisadoe
 
 > `optional` **preCompletionNotes**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L74)
+Defined in: [src/types/ActionItems/interface.ts:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L109)
+
+***
+
+### volunteerGroupId?
+
+> `optional` **volunteerGroupId**: `string`
+
+Defined in: [src/types/ActionItems/interface.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L106)
+
+***
+
+### volunteerId?
+
+> `optional` **volunteerId**: `string`
+
+Defined in: [src/types/ActionItems/interface.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L105)

@@ -139,7 +139,8 @@ vi.mock(
 
 const mockActionItem: IActionItemInfo = {
   id: 'actionItemId1',
-  assigneeId: 'userId1',
+  volunteerId: 'userId1',
+  volunteerGroupId: null,
   categoryId: 'categoryId1',
   eventId: 'eventId1',
   recurringEventInstanceId: null,
@@ -154,12 +155,19 @@ const mockActionItem: IActionItemInfo = {
   preCompletionNotes: 'Notes 1',
   postCompletionNotes: 'Post Notes 1',
   isInstanceException: false,
-  assignee: {
-    id: 'userId1',
-    name: 'John Doe',
-    emailAddress: 'john@example.com',
-    avatarURL: '',
+
+  volunteer: {
+    id: 'volunteerId1',
+    hasAccepted: true,
+    isPublic: true,
+    hoursVolunteered: 5,
+    user: {
+      id: 'userId1',
+      name: 'John Doe',
+      avatarURL: '',
+    },
   },
+  volunteerGroup: null,
   creator: {
     id: 'userId2',
     name: 'Jane Smith',
@@ -167,12 +175,12 @@ const mockActionItem: IActionItemInfo = {
     avatarURL: '',
   },
   event: {
-    _id: 'eventId1',
+    id: 'eventId1',
     name: 'Test Event',
     description: 'Test event description',
     location: 'Test Location',
-    startDate: '2024-08-27',
-    endDate: '2024-08-27',
+    startAt: '2024-08-27T09:00:00Z',
+    endAt: '2024-08-27T17:00:00Z',
     startTime: '09:00:00',
     endTime: '17:00:00',
     allDay: false,
@@ -211,11 +219,18 @@ const mockEventData = {
           node: {
             ...mockActionItem,
             id: 'actionItemId2',
+            volunteerId: 'userId3',
             isCompleted: true,
-            assignee: {
-              ...mockActionItem.assignee,
-              id: 'userId3',
-              name: 'Bob Wilson',
+            volunteer: {
+              id: 'volunteerId2',
+              hasAccepted: true,
+              isPublic: true,
+              hoursVolunteered: 3,
+              user: {
+                id: 'userId3',
+                name: 'Bob Wilson',
+                avatarURL: '',
+              },
             },
             category: {
               ...mockActionItem.category,
@@ -347,7 +362,7 @@ describe('EventActionItems', () => {
       renderEventActionItems();
 
       await waitFor(() => {
-        expect(screen.getByText('Assignee')).toBeInTheDocument();
+        expect(screen.getByText('Assigned To')).toBeInTheDocument();
         expect(screen.getByText('Item Category')).toBeInTheDocument();
         expect(screen.getByText('Status')).toBeInTheDocument();
         expect(screen.getByText('Assigned Date')).toBeInTheDocument();
@@ -1013,7 +1028,7 @@ describe('EventActionItems', () => {
       renderEventActionItems();
 
       await waitFor(() => {
-        expect(screen.getByText('Assignee')).toBeInTheDocument();
+        expect(screen.getByText('Assigned To')).toBeInTheDocument();
         expect(screen.getByText('Item Category')).toBeInTheDocument();
         expect(screen.getByText('Status')).toBeInTheDocument();
         expect(screen.getByText('Assigned Date')).toBeInTheDocument();

@@ -4,7 +4,7 @@
 
 # Interface: IDeleteActionItemInput
 
-Defined in: [src/types/ActionItems/interface.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L78)
+Defined in: [src/types/ActionItems/interface.ts:113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L113)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/types/ActionItems/interface.ts:78](https://github.com/Palisadoe
 
 > **id**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L79)
+Defined in: [src/types/ActionItems/interface.ts:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L114)

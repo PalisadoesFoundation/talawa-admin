@@ -220,6 +220,7 @@ export const MOCKS = [
                 id: 'user1',
                 name: 'Pending User 1',
                 emailAddress: 'user1@example.com',
+                avatarURL: 'https://example.com/avatar1.jpg',
               },
             },
             {
@@ -230,6 +231,7 @@ export const MOCKS = [
                 id: 'user2',
                 name: 'Pending User 2',
                 emailAddress: 'user2@example.com',
+                avatarURL: null,
               },
             },
           ],
@@ -431,6 +433,7 @@ export const MIXED_REQUESTS_MOCK = [
                 id: 'user1',
                 name: 'Pending User 1',
                 emailAddress: 'user1@example.com',
+                avatarURL: 'https://example.com/avatar1.jpg',
               },
             },
             {
@@ -441,6 +444,7 @@ export const MIXED_REQUESTS_MOCK = [
                 id: 'user2',
                 name: 'Pending User 2',
                 emailAddress: 'user2@example.com',
+                avatarURL: 'https://example.com/avatar2.jpg',
               },
             },
             {
@@ -451,6 +455,7 @@ export const MIXED_REQUESTS_MOCK = [
                 id: 'user3',
                 name: 'Pending User 3',
                 emailAddress: 'user3@example.com',
+                avatarURL: null,
               },
             },
             {
@@ -461,6 +466,7 @@ export const MIXED_REQUESTS_MOCK = [
                 id: 'user4',
                 name: 'Rejected User',
                 emailAddress: 'rejected@example.com',
+                avatarURL: null,
               },
             },
           ],

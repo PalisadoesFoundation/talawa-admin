@@ -38,6 +38,8 @@ import dayjs from 'dayjs';
 import { Card, Row, Col } from 'react-bootstrap';
 import { MdChevronRight, MdLocationOn } from 'react-icons/md';
 import { Link } from 'react-router';
+import useLocalStorage from 'utils/useLocalstorage';
+import styles from 'style/app-fixed.module.css';
 
 export interface InterfaceCardItem {
   title: string;
@@ -51,50 +53,86 @@ export interface InterfaceCardItem {
 
 const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
   const { title, startdate, location, orgId, eventId } = props;
+  const { getItem } = useLocalStorage();
+
+  // Check if user is administrator - only administrators can navigate to event details
+  const userRole = getItem('role');
+  const isAdministrator = userRole === 'administrator';
 
   return (
-    <Card className="border-0 py-1 rounded-0" data-testid="EventsAttendedCard">
-      <Card.Body className="p-1">
-        <Row className="align-items-center">
-          <Col xs={3} md={2} className="text-center">
-            <div className="text-secondary">
+    <Card
+      className={`border-0 rounded-4 shadow-sm mb-3 overflow-hidden position-relative ${styles.eventsAttendedCard}`}
+      data-testid="EventsAttendedCard"
+    >
+      <Card.Body className="p-3">
+        <Row className="align-items-center g-0">
+          <Col xs={3} md={3} className="text-center">
+            <div
+              className={`rounded-3 d-inline-block p-2 ${styles.eventsAttendedCardDate}`}
+            >
               {startdate && dayjs(startdate).isValid() ? (
                 <>
-                  <div className="fs-6 fw-normal">
+                  <div
+                    className={`fs-7 fw-bold mb-1 ${styles.eventsAttendedCardDateMonth}`}
+                  >
                     {dayjs(startdate).format('MMM').toUpperCase()}
                   </div>
-                  <div className="fs-1 fw-semibold">
+                  <div className="fs-4 fw-bold lh-1">
                     {dayjs(startdate).format('D')}
                   </div>
                 </>
               ) : (
-                <div className="fs-6 fw-normal">Date N/A</div>
+                <div
+                  className={`fs-7 fw-bold ${styles.eventsAttendedCardDateNA}`}
+                >
+                  Date N/A
+                </div>
               )}
             </div>
           </Col>
-          <Col xs={7} md={9} className="mb-3">
-            <h5 className="mb-1">{title}</h5>
-            <p className="text-muted mb-0 small">
-              <MdLocationOn
-                className="text-action"
-                size={20}
-                data-testid="LocationOnIcon"
-              />
-              {location}
-            </p>
+          <Col xs={7} md={8} className="ps-3">
+            <h6
+              className={`mb-2 fw-semibold text-dark ${styles.eventsAttendedCardTitle}`}
+              data-testid="EventsAttendedCardTitle"
+            >
+              {title}
+            </h6>
+            {location && (
+              <div className="d-flex align-items-center text-muted">
+                <MdLocationOn
+                  className="me-1 text-info"
+                  size={16}
+                  data-testid="LocationOnIcon"
+                />
+                <span className={`small ${styles.eventsAttendedCardLocation}`}>
+                  {location}
+                </span>
+              </div>
+            )}
           </Col>
-          <Col xs={2} md={1} className="text-end">
-            <Link to={`/event/${orgId}/${eventId}`} state={{ id: eventId }}>
-              <MdChevronRight
-                className="text-action"
-                size={20}
-                data-testid="ChevronRightIcon"
-              />
-            </Link>
-          </Col>
+          {isAdministrator && (
+            <Col xs={2} md={1} className="text-end">
+              <Link
+                to={`/event/${orgId}/${eventId}`}
+                state={{ id: eventId }}
+                className="text-decoration-none"
+              >
+                <div
+                  className={`rounded-circle d-flex align-items-center justify-content-center ${styles.eventsAttendedCardChevron}`}
+                >
+                  <MdChevronRight
+                    className={`text-primary ${styles.eventsAttendedCardChevronIcon}`}
+                    size={18}
+                    data-testid="ChevronRightIcon"
+                  />
+                </div>
+              </Link>
+            </Col>
+          )}
         </Row>
       </Card.Body>
-      <div className="border-top border-1"></div>
+      {/* Decorative accent bar */}
+      <div className={styles.eventsAttendedCardAccent} />
     </Card>
   );
 };

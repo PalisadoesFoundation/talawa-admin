@@ -4,7 +4,7 @@
 
 # Interface: IUpdateEventModalProps
 
-Defined in: [src/types/Event/interface.ts:184](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L184)
+Defined in: [src/types/Event/interface.ts:176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L176)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:184](https://github.com/PalisadoesFoun
 
 > **eventListCardProps**: `IEventListCard`
 
-Defined in: [src/types/Event/interface.ts:185](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L185)
+Defined in: [src/types/Event/interface.ts:177](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L177)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/interface.ts:185](https://github.com/PalisadoesFoun
 
 > **recurringEventUpdateModalIsOpen**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:186](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L186)
+Defined in: [src/types/Event/interface.ts:178](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L178)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Event/interface.ts:186](https://github.com/PalisadoesFoun
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/types/Event/interface.ts:188](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L188)
+Defined in: [src/types/Event/interface.ts:180](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L180)
 
 #### Parameters
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Event/interface.ts:188](https://github.com/PalisadoesFoun
 
 > **tCommon**: (`key`) => `string`
 
-Defined in: [src/types/Event/interface.ts:189](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L189)
+Defined in: [src/types/Event/interface.ts:181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L181)
 
 #### Parameters
 
@@ -64,7 +64,7 @@ Defined in: [src/types/Event/interface.ts:189](https://github.com/PalisadoesFoun
 
 > **toggleRecurringEventUpdateModal**: () => `void`
 
-Defined in: [src/types/Event/interface.ts:187](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L187)
+Defined in: [src/types/Event/interface.ts:179](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L179)
 
 #### Returns
 
@@ -76,7 +76,7 @@ Defined in: [src/types/Event/interface.ts:187](https://github.com/PalisadoesFoun
 
 > **updateEventHandler**: () => `Promise`\<`void`\>
 
-Defined in: [src/types/Event/interface.ts:190](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L190)
+Defined in: [src/types/Event/interface.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L182)
 
 #### Returns
 

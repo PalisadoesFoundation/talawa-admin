@@ -6,4 +6,4 @@
 
 > `const` **SIGNIN\_QUERY**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/Queries.ts:1117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L1117)
+Defined in: [src/GraphQl/Queries/Queries.ts:1105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L1105)

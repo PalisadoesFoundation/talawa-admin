@@ -4,22 +4,30 @@ export const REGISTRANTS_MOCKS = [
   {
     request: {
       query: EVENT_REGISTRANTS,
-      variables: { eventId: '660fdf7d2c1ef6c7db1649ad' },
+      variables: { eventId: 'event123' },
     },
     result: {
       data: {
         getEventAttendeesByEventId: [
           {
-            _id: '6589386a2caa9d8d69087484',
-            userId: '6589386a2caa9d8d69087484',
+            id: '6589386a2caa9d8d69087484',
+            user: {
+              id: '6589386a2caa9d8d69087484',
+              name: 'Bruce Garza',
+              emailAddress: 'bruce@example.com',
+            },
             isRegistered: true,
-            __typename: 'EventAttendee',
+            isInvited: false,
           },
           {
-            _id: '6589386a2caa9d8d69087485',
-            userId: '6589386a2caa9d8d69087485',
+            id: '6589386a2caa9d8d69087485',
+            user: {
+              id: '6589386a2caa9d8d69087485',
+              name: 'Jane Smith',
+              emailAddress: 'jane@example.com',
+            },
             isRegistered: true,
-            __typename: 'EventAttendee',
+            isInvited: false,
           },
         ],
       },
@@ -28,40 +36,41 @@ export const REGISTRANTS_MOCKS = [
   {
     request: {
       query: EVENT_ATTENDEES,
-      variables: { id: '660fdf7d2c1ef6c7db1649ad' },
+      variables: { eventId: 'event123' },
     },
     result: {
       data: {
         event: {
           attendees: [
             {
-              _id: '6589386a2caa9d8d69087484',
-              firstName: 'Bruce',
-              lastName: 'Garza',
+              id: '6589386a2caa9d8d69087484',
+              name: 'Bruce Garza',
+              emailAddress: 'bruce@example.com',
+              avatarURL: null,
               createdAt: '2030-04-13T10:23:17.742Z',
-              __typename: 'User',
+              role: 'attendee',
+              natalSex: null,
+              birthDate: null,
+              eventsAttended: {
+                id: 'event123',
+              },
             },
             {
-              _id: '6589386a2caa9d8d69087485',
-              firstName: 'Jane',
-              lastName: 'Smith',
+              id: '6589386a2caa9d8d69087485',
+              name: 'Jane Smith',
+              emailAddress: 'jane@example.com',
+              avatarURL: null,
               createdAt: '2030-04-13T10:23:17.742Z',
-              __typename: 'User',
+              role: 'attendee',
+              natalSex: null,
+              birthDate: null,
+              eventsAttended: {
+                id: 'event123',
+              },
             },
           ],
         },
       },
     },
-  },
-];
-
-export const REGISTRANTS_MOCKS_ERROR = [
-  {
-    // Error mock for EVENT_REGISTRANTS query
-    request: {
-      query: EVENT_REGISTRANTS,
-      variables: { eventId: 'event123' },
-    },
-    error: new Error('An error occurred while fetching registrants'),
   },
 ];

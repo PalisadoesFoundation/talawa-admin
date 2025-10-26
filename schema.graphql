@@ -864,6 +864,16 @@ type Event {
   allDay: Boolean
 
   """
+  List of users attending the event.
+  """
+  attendees: [User!]
+
+  """
+  Check-in status for all attendees of the event.
+  """
+  attendeesCheckInStatus: [CheckInStatus!]!
+
+  """
   A list of attachments associated with the event, such as images or documents.
   """
   attachments: [EventAttachment!]
@@ -1012,6 +1022,134 @@ type EventAttachment {
   URL to the attachment.
   """
   url: String
+}
+
+type EventAttendee {
+  """
+  Global identifier of the event attendee.
+  """
+  id: ID!
+
+  """
+  The user attending the event.
+  """
+  user: User!
+
+  """
+  The event the attendee is associated with.
+  """
+  event: Event!
+
+  """
+  The check-in record if the attendee has checked in.
+  """
+  checkIn: CheckIn
+
+  """
+  The check-out record if the attendee has checked out.
+  """
+  checkOut: CheckOut
+
+  """
+  Indicates if the attendee is invited to the event.
+  """
+  isInvited: Boolean!
+
+  """
+  Indicates if the attendee is registered for the event.
+  """
+  isRegistered: Boolean!
+
+  """
+  Indicates if the attendee has checked in to the event.
+  """
+  isCheckedIn: Boolean!
+
+  """
+  Indicates if the attendee has checked out from the event.
+  """
+  isCheckedOut: Boolean!
+
+  """
+  Date time when the event attendee record was created.
+  """
+  createdAt: DateTime!
+
+  """
+  Date time when the event attendee record was last updated.
+  """
+  updatedAt: DateTime
+}
+
+type CheckIn {
+  """
+  Global identifier of the check-in record.
+  """
+  id: ID!
+
+  """
+  The event attendee associated with this check-in.
+  """
+  eventAttendee: EventAttendee!
+
+  """
+  The user who checked in.
+  """
+  user: User!
+
+  """
+  The event associated with this check-in.
+  """
+  event: Event
+
+  """
+  Date and time when the check-in occurred.
+  """
+  time: DateTime!
+
+  """
+  Indicates whether feedback has been submitted for this check-in.
+  """
+  feedbackSubmitted: Boolean!
+}
+
+type CheckOut {
+  """
+  Global identifier of the check-out record.
+  """
+  id: ID!
+
+  """
+  The event attendee associated with this check-out.
+  """
+  eventAttendee: EventAttendee!
+
+  """
+  Date and time when the check-out occurred.
+  """
+  time: DateTime!
+
+  """
+  Date time when the check-out record was created.
+  """
+  createdAt: DateTime!
+}
+
+type CheckInStatus {
+  """
+  Global identifier of the check-in status record.
+  """
+  id: ID!
+
+  """
+  The user associated with this check-in status.
+  """
+  user: User!
+
+  """
+  The check-in record if the user has checked in.
+  """
+  checkIn: CheckIn
 }
 
 """
@@ -3881,10 +4019,11 @@ input MutationUpdateActionItemCategoryInput {
 input MutationUpdateActionItemForInstanceInput {
   actionId: ID!
   assignedAt: String
-  assigneeId: ID
   categoryId: ID
   eventId: ID!
   preCompletionNotes: String
+  volunteerId: ID
+  volunteerGroupId: ID
 }
 
 input MutationUpdateActionItemInput {

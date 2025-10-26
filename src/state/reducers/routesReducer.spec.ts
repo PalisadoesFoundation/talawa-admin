@@ -16,7 +16,6 @@ describe('Testing Routes reducer', () => {
         { name: 'Tags', url: '/orgtags/undefined' },
         { name: 'Events', url: '/orgevents/undefined' },
         { name: 'Venues', url: '/orgvenues/undefined' },
-        { name: 'Action Items', url: '/orgactionitems/undefined' },
         { name: 'Posts', url: '/orgpost/undefined' },
         { name: 'Chat', url: '/orgchat/undefined' },
         {
@@ -59,11 +58,6 @@ describe('Testing Routes reducer', () => {
           name: 'Venues',
           comp_id: 'orgvenues',
           component: 'OrganizationVenues',
-        },
-        {
-          name: 'Action Items',
-          comp_id: 'orgactionitems',
-          component: 'OrganizationActionItems',
         },
         {
           name: 'Posts',
@@ -128,7 +122,6 @@ describe('Testing Routes reducer', () => {
         { name: 'Tags', url: '/orgtags/orgId' },
         { name: 'Events', url: '/orgevents/orgId' },
         { name: 'Venues', url: '/orgvenues/orgId' },
-        { name: 'Action Items', url: '/orgactionitems/orgId' },
         { name: 'Posts', url: '/orgpost/orgId' },
         { name: 'Chat', url: '/orgchat/orgId' },
         { name: 'Block/Unblock', url: '/blockuser/orgId' },
@@ -164,11 +157,6 @@ describe('Testing Routes reducer', () => {
           name: 'Venues',
           comp_id: 'orgvenues',
           component: 'OrganizationVenues',
-        },
-        {
-          name: 'Action Items',
-          comp_id: 'orgactionitems',
-          component: 'OrganizationActionItems',
         },
         { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
         { name: 'Chat', comp_id: 'orgchat', component: 'Chat' },

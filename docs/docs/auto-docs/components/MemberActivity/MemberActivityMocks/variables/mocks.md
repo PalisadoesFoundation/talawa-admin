@@ -6,9 +6,9 @@
 
 > `const` **mocks**: `object`[]
 
-Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/MemberActivityMocks.ts#L34)
+Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/MemberActivityMocks.ts#L51)
 
-## Type declaration
+## Type Declaration
 
 ### request
 
@@ -16,7 +16,7 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:34](https://gi
 
 #### request.query
 
-> **query**: `DocumentNode` = `EVENT_DETAILS`
+> **query**: `DocumentNode` = `EVENT_DETAILS_BASIC`
 
 #### request.variables
 
@@ -32,47 +32,15 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:34](https://gi
 
 #### result.data
 
-> **data**: `object` = `mockEventData`
+> **data**: `object` = `mockEventBasicData`
 
 #### result.data.event
 
 > **event**: `object`
 
-#### result.data.event.\_id
+#### result.data.event.id
 
-> **\_id**: `string` = `'event123'`
-
-#### result.data.event.allDay
-
-> **allDay**: `boolean` = `false`
-
-#### result.data.event.attendees
-
-> **attendees**: `object`[]
-
-#### result.data.event.baseRecurringEvent
-
-> **baseRecurringEvent**: `object`
-
-#### result.data.event.baseRecurringEvent.\_id
-
-> **\_id**: `string` = `'base123'`
-
-#### result.data.event.description
-
-> **description**: `string` = `'Test Description'`
-
-#### result.data.event.endAt
-
-> **endAt**: `string` = `'2030-01-02T17:00:00.000Z'`
-
-#### result.data.event.endDate
-
-> **endDate**: `string` = `'2030-01-02'`
-
-#### result.data.event.endTime
-
-> **endTime**: `string` = `'17:00'`
+> **id**: `string` = `'event123'`
 
 #### result.data.event.location
 
@@ -86,30 +54,14 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:34](https://gi
 
 > **organization**: `object`
 
-#### result.data.event.organization.\_id
+#### result.data.event.organization.id
 
-> **\_id**: `string` = `'org123'`
+> **id**: `string` = `'org123'`
 
-#### result.data.event.organization.members
+#### result.data.event.organization.name
 
-> **members**: `object`[]
-
-#### result.data.event.recurring
-
-> **recurring**: `boolean` = `true`
+> **name**: `string` = `'Test Org'`
 
 #### result.data.event.startAt
 
-> **startAt**: `string` = `'2030-01-01T09:00:00.000Z'`
-
-#### result.data.event.startDate
-
-> **startDate**: `string` = `'2030-01-01'`
-
-#### result.data.event.startTime
-
-> **startTime**: `string` = `'09:00'`
-
-#### result.data.event.title
-
-> **title**: `string` = `'Test Event'`
+> **startAt**: `string` = `'2030-01-01T09:00:00Z'`

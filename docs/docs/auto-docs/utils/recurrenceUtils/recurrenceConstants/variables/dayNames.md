@@ -6,9 +6,9 @@
 
 > `const` **dayNames**: `object`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceConstants.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceConstants.ts#L47)
+Defined in: [src/utils/recurrenceUtils/recurrenceConstants.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceConstants.ts#L42)
 
-## Type declaration
+## Type Declaration
 
 ### FR
 
