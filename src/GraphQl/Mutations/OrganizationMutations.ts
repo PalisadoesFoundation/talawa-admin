@@ -90,13 +90,13 @@ export const CREATE_CHAT_MEMBERSHIP = gql`
   }
 `;
 
-export const ADD_USER_TO_GROUP_CHAT = gql`
-  mutation addUserToGroupChat($userId: ID!, $chatId: ID!) {
-    addUserToGroupChat(userId: $userId, chatId: $chatId) {
-      _id
-    }
-  }
-`;
+// export const ADD_USER_TO_GROUP_CHAT = gql`
+//   mutation addUserToGroupChat($userId: ID!, $chatId: ID!) {
+//     addUserToGroupChat(userId: $userId, chatId: $chatId) {
+//       _id
+//     }
+//   }
+// `;
 
 // TODO: Update this mutation to match the new schema - markChatMessagesAsRead not found in schema
 // export const MARK_CHAT_MESSAGES_AS_READ = gql`

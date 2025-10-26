@@ -190,95 +190,95 @@ export const CHAT_BY_ID = gql`
   }
 `;
 
-export const GROUP_CHAT_LIST = gql`
-  query ChatsByUser {
-    chatsByUser {
-      id
-      name
-      description
-      isGroup
-      avatarMimeType
-      avatarURL
-      createdAt
-      updatedAt
-      organization {
-        id
-        name
-        countryCode
-      }
-      members(first: 10) {
-        edges {
-          node {
-            user {
-              id
-              name
-              avatarMimeType
-              avatarURL
-            }
-            role
-          }
-        }
-      }
-      creator {
-        id
-        name
-        avatarMimeType
-        avatarURL
-      }
-      updater {
-        id
-        name
-        avatarMimeType
-        avatarURL
-      }
-    }
-  }
-`;
+// export const GROUP_CHAT_LIST = gql`
+//   query ChatsByUser {
+//     chatsByUser {
+//       id
+//       name
+//       description
+//       isGroup
+//       avatarMimeType
+//       avatarURL
+//       createdAt
+//       updatedAt
+//       organization {
+//         id
+//         name
+//         countryCode
+//       }
+//       members(first: 10) {
+//         edges {
+//           node {
+//             user {
+//               id
+//               name
+//               avatarMimeType
+//               avatarURL
+//             }
+//             role
+//           }
+//         }
+//       }
+//       creator {
+//         id
+//         name
+//         avatarMimeType
+//         avatarURL
+//       }
+//       updater {
+//         id
+//         name
+//         avatarMimeType
+//         avatarURL
+//       }
+//     }
+//   }
+// `;
 
-export const UNREAD_CHAT_LIST = gql`
-  query ChatsByUser {
-    chatsByUser {
-      id
-      name
-      description
-      isGroup
-      avatarMimeType
-      avatarURL
-      createdAt
-      updatedAt
-      organization {
-        id
-        name
-        countryCode
-      }
-      members(first: 10) {
-        edges {
-          node {
-            user {
-              id
-              name
-              avatarMimeType
-              avatarURL
-            }
-            role
-          }
-        }
-      }
-      creator {
-        id
-        name
-        avatarMimeType
-        avatarURL
-      }
-      updater {
-        id
-        name
-        avatarMimeType
-        avatarURL
-      }
-    }
-  }
-`;
+// export const UNREAD_CHAT_LIST = gql`
+//   query ChatsByUser {
+//     chatsByUser {
+//       id
+//       name
+//       description
+//       isGroup
+//       avatarMimeType
+//       avatarURL
+//       createdAt
+//       updatedAt
+//       organization {
+//         id
+//         name
+//         countryCode
+//       }
+//       members(first: 10) {
+//         edges {
+//           node {
+//             user {
+//               id
+//               name
+//               avatarMimeType
+//               avatarURL
+//             }
+//             role
+//           }
+//         }
+//       }
+//       creator {
+//         id
+//         name
+//         avatarMimeType
+//         avatarURL
+//       }
+//       updater {
+//         id
+//         name
+//         avatarMimeType
+//         avatarURL
+//       }
+//     }
+//   }
+// `;
 
 export const CHATS_LIST = gql`
   query GetUserChats($first: Int, $after: String) {
