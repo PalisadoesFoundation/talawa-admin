@@ -384,7 +384,6 @@ describe('adminPluginInstaller', () => {
       });
       mockZip.loadAsync.mockResolvedValue(mockZipContent);
 
-      // CREATE_PLUGIN ok
       mockApolloClient.mutate.mockImplementation(({ mutation }) => {
         if (mutation === CREATE_PLUGIN_MUTATION) {
           return Promise.resolve({ data: { createPlugin: { success: true } } });
@@ -392,7 +391,6 @@ describe('adminPluginInstaller', () => {
         return Promise.resolve({ data: {} });
       });
 
-      // installPlugin rejects with a string
       mockAdminPluginFileService.installPlugin.mockRejectedValue(
         'some string error',
       );
@@ -403,7 +401,7 @@ describe('adminPluginInstaller', () => {
       });
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('Failed to upload plugin'); // Updated expectation
+      expect(result.error).toBe('Failed to upload plugin');
     });
 
     it('installAdminPluginFromZip uses apiManifest when adminManifest absent (API-only)', async () => {
