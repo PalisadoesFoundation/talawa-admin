@@ -144,71 +144,6 @@ export const ORGANIZATION_POST_LIST_WITH_VOTES = gql`
   }
 `;
 
-export const GET_POSTS_BY_ORG = gql`
-  query GetPostsByOrganization($input: GetPostsByOrgInput!) {
-    postsByOrganization(input: $input) {
-      id
-      createdAt
-      updatedAt
-      caption
-      attachments {
-        url
-      }
-      creator {
-        id
-      }
-    }
-  }
-`;
-
-export const FILTERED_ORGANIZATION_POSTS = gql`
-  query FilteredOrganizationPosts(
-    $input: QueryOrganizationInput!
-    $title_contains: String
-    $text_contains: String
-    $after: String
-    $before: String
-    $first: Int
-    $last: Int
-  ) {
-    organization(input: $input) {
-      id
-      posts(
-        title_contains: $title_contains
-        text_contains: $text_contains
-        after: $after
-        before: $before
-        first: $first
-        last: $last
-      ) {
-        edges {
-          node {
-            id
-            title
-            text
-            imageUrl
-            creator {
-              id
-              name
-            }
-            createdAt
-            updatedAt
-            likeCount
-            commentCount
-            pinned
-          }
-          cursor
-        }
-        pageInfo {
-          startCursor
-          endCursor
-          hasNextPage
-          hasPreviousPage
-        }
-      }
-    }
-  }
-`;
 // GraphQL query to retrieve all the Organizations user is Part of with filter by name
 export const USER_JOINED_ORGANIZATIONS_PG = gql`
   query UserJoinedOrganizations($id: String!, $filter: String, $first: Int) {
@@ -375,42 +310,12 @@ export const USER_CREATED_ORGANIZATIONS = gql`
  * @returns The list of admins associated with the organization.
  */
 
-export const ORGANIZATION_ADMINS_LIST = gql`
-  query Organizations($id: ID!) {
-    organizations(id: $id) {
-      _id
-      admins {
-        _id
-        image
-        firstName
-        lastName
-        email
-      }
-    }
-  }
-`;
-
 /**
  * GraphQL query to retrieve the list of members for a specific organization.
  *
  * @param id - The ID of the organization for which members are being retrieved.
  * @returns The list of members associated with the organization.
  */
-export const ORGANIZATION_FUNDS = gql`
-  query Organizations($id: ID!) {
-    organizations(id: $id) {
-      funds {
-        _id
-        name
-        refrenceNumber
-        taxDeductible
-        isArchived
-        isDefault
-        createdAt
-      }
-    }
-  }
-`;
 
 /**
  * GraphQL query to retrieve the list of venues for a specific organization.
