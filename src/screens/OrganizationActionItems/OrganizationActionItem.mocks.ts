@@ -315,23 +315,6 @@ export const actionItemListQuery = {
     },
   },
 };
-
-export const actionItemListQueryEmpty = {
-  request: {
-    query: ACTION_ITEM_LIST,
-    variables: {
-      input: {
-        organizationId: 'orgId',
-      },
-    },
-  },
-  result: {
-    data: {
-      actionItemsByOrganization: [],
-    },
-  },
-};
-
 export const actionItemListQueryError = {
   request: {
     query: ACTION_ITEM_LIST,
@@ -343,24 +326,6 @@ export const actionItemListQueryError = {
   },
   error: new Error('Failed to fetch action items'),
 };
-
-export const actionItemListQueryLoading = {
-  request: {
-    query: ACTION_ITEM_LIST,
-    variables: {
-      input: {
-        organizationId: 'orgId',
-      },
-    },
-  },
-  delay: 30000, // Long delay to simulate loading
-  result: {
-    data: {
-      actionItemsByOrganization: [],
-    },
-  },
-};
-
 // Add mutation mocks for ItemUpdateStatusModal tests
 export const updateActionItemMutation = {
   request: {
@@ -528,12 +493,6 @@ export const MOCKS = [
   markActionAsPendingForInstanceMutation,
 ];
 
-export const MOCKS_EMPTY = [
-  actionItemListQueryEmpty,
-  memberListQuery,
-  actionItemCategoryListQuery,
-];
-
 export const MOCKS_ERROR = [
   actionItemListQueryError,
   memberListQuery,
@@ -542,10 +501,4 @@ export const MOCKS_ERROR = [
   deleteActionItemMutationError,
   completeActionForInstanceMutationError,
   markActionAsPendingForInstanceMutationError,
-];
-
-export const MOCKS_LOADING = [
-  actionItemListQueryLoading,
-  memberListQuery,
-  actionItemCategoryListQuery,
 ];
