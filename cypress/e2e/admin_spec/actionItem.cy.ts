@@ -6,9 +6,11 @@ describe('Admin Action Items Tab', () => {
   const actionItemPage = new ActionItemPage();
 
   beforeEach(() => {
-    // Mock GraphQL endpoints to isolate UI behavior
-    cy.intercept('POST', 'http://127.0.0.1:4000/graphql', (req) => {
-      if (req.body.operationName === 'getActionItems') {
+    cy.intercept('POST', Cypress.env('GRAPHQL_URL') ?? '**/graphql', (req) => {
+      const op = req.body?.operationName;
+
+      if (op === 'getActionItems') {
+        req.alias = 'getActionItems';
         req.reply({
           data: {
             actionItems: [
@@ -21,8 +23,11 @@ describe('Admin Action Items Tab', () => {
             ],
           },
         });
+        return;
       }
-      if (req.body.operationName === 'createActionItem') {
+
+      if (op === 'createActionItem') {
+        req.alias = 'createActionItem';
         req.reply({
           data: {
             createActionItem: {
@@ -32,8 +37,11 @@ describe('Admin Action Items Tab', () => {
             },
           },
         });
+        return;
       }
-      if (req.body.operationName === 'updateActionItem') {
+
+      if (op === 'updateActionItem') {
+        req.alias = 'updateActionItem';
         req.reply({
           data: {
             updateActionItem: {
@@ -42,17 +50,25 @@ describe('Admin Action Items Tab', () => {
             },
           },
         });
+        return;
       }
-      if (req.body.operationName === 'deleteActionItem') {
+
+      if (op === 'deleteActionItem') {
+        req.alias = 'deleteActionItem';
         req.reply({ data: { deleteActionItem: true } });
+        return;
       }
+
+      req.continue();
     }).as('graphql');
 
-    // Login and navigate
     cy.loginByApi('admin').then(() => {
       cy.log('Visiting Admin Dashboard');
       dashboard.visit().verifyOnDashboard().openFirstOrganization();
       actionItemPage.visitActionItemsTab();
+
+      cy.get('[data-testid="sort"]', { timeout: 20000 }).should('exist');
+      cy.wait('@getActionItems');
       cy.get('[data-testid="sort"]', { timeout: 20000 }).should('exist');
     });
   });
@@ -61,13 +77,16 @@ describe('Admin Action Items Tab', () => {
     cy.get('[data-cy="createActionItemBtn"]', { timeout: 30000 })
       .should('be.visible')
       .click();
-
+    cy.wait('@createActionItem');
     actionItemPage
       .createActionItem('Action Category 3', 'administrator')
       .sortByNewest()
       .editFirstActionItem('Updated notes for this action item');
 
-    cy.get('[data-cy="actionItemTitle"]').should('contain', 'Updated notes');
+    cy.get('[data-cy="actionItemTitle"]').should(
+      'have.text',
+      'Updated notes for this action item',
+    );
   });
 
   it('views action item details and marks it as complete', () => {
@@ -76,7 +95,11 @@ describe('Admin Action Items Tab', () => {
       .viewFirstActionItemAndCloseModal()
       .markFirstActionItemAsComplete('Completion notes for this action item');
 
-    cy.get('[data-cy="actionItemStatus"]').should('contain', 'Completed');
+    cy.get('[data-cy="actionItemStatus"]').should(
+      'have.attr',
+      'data-status',
+      'completed',
+    );
   });
 
   it('deletes the created action item', () => {
