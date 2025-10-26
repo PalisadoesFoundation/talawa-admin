@@ -233,6 +233,9 @@ function volunteers(): JSX.Element {
         (volunteer: InterfaceEventVolunteerInfo) =>
           volunteer.volunteerStatus === 'accepted',
       );
+    } else {
+      // Defensive check: throw error for unexpected status values to prevent security risks
+      throw new Error(`Unexpected volunteer status: ${status}`);
     }
   }, [eventData, status, searchTerm]);
 
