@@ -6,7 +6,7 @@
 
 > `const` **completeActionForInstanceMutation**: `object`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:422](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L422)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:418](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L418)
 
 ## Type Declaration
 
