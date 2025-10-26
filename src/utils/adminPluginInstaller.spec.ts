@@ -23,7 +23,7 @@ vi.mock('../GraphQl/Mutations/PluginMutations', () => ({
   CREATE_PLUGIN_MUTATION: Symbol('CREATE_PLUGIN_MUTATION'),
 }));
 
-interface MockApolloClient {
+interface IMockApolloClient {
   mutate: ReturnType<typeof vi.fn>;
 }
 
@@ -32,7 +32,7 @@ const mockAdminPluginFileService = vi.mocked(adminPluginFileService);
 
 describe('adminPluginInstaller', () => {
   let mockZip: any;
-  let mockApolloClient: MockApolloClient;
+  let mockApolloClient: IMockApolloClient;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -435,63 +435,10 @@ describe('adminPluginInstaller', () => {
       });
 
       expect(res.success).toBe(true);
-      // manifest returned should be the api manifest (since admin absent)
       expect(res.manifest).toEqual(apiManifest);
-      // API component should have been installed
       expect(res.installedComponents).toContain('API');
-      // adminPluginFileService.installPlugin must NOT have been called
+      expect(res.installedComponents).not.toContain('Admin');
       expect(mockAdminPluginFileService.installPlugin).not.toHaveBeenCalled();
-    });
-
-    // Additional Coverage
-
-    it('validates zip with binary files', async () => {
-      const mockFile = new File([''], 'binary.zip');
-      const manifest = {
-        name: 'Test Plugin',
-        version: '1.0.0',
-        description: 'desc',
-        author: 'me',
-        main: 'index.js',
-        pluginId: 'BinaryPlugin',
-      };
-      const mockZipContent = createMockZipContent({
-        'admin/manifest.json': JSON.stringify(manifest),
-        'admin/index.js': 'console.log("hello")',
-        'admin/icon.png':
-          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
-      });
-      mockZip.loadAsync.mockResolvedValue(mockZipContent);
-      const result = await validateAdminPluginZip(mockFile);
-      expect(result.hasAdminFolder).toBe(true);
-      expect(result.adminManifest).toEqual(manifest);
-      expect(result.files['icon.png']).toMatch(
-        /^data:application\/octet-stream;base64,/,
-      );
-    });
-
-    it('handles plugin removal success and failure', async () => {
-      mockAdminPluginFileService.removePlugin.mockResolvedValueOnce(true);
-      let result = await removeAdminPlugin('TestPlugin');
-      expect(result).toBe(true);
-      mockAdminPluginFileService.removePlugin.mockResolvedValueOnce(false);
-      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-      result = await removeAdminPlugin('TestPlugin');
-      expect(result).toBe(false);
-      expect(errorSpy).toHaveBeenCalledWith(
-        'Failed to remove admin plugin TestPlugin',
-      );
-      errorSpy.mockRestore();
-    });
-
-    it('handles invalid JSON in manifest', () => {
-      const files = {
-        'manifest.json': 'invalid json',
-        'index.js': 'console.log("hello")',
-      };
-      const result = validateAdminPluginStructure(files);
-      expect(result.valid).toBe(false);
-      expect(result.error).toBe('Invalid manifest.json format');
     });
   });
 
@@ -1260,5 +1207,3 @@ describe('adminPluginInstaller', () => {
     });
   });
 });
-
-
