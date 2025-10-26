@@ -2,11 +2,11 @@
 
 ***
 
-# Variable: itemWithEmptyAssigneeName
+# Variable: itemWithVolunteerGroup
 
-> `const` **itemWithEmptyAssigneeName**: `object`
+> `const` **itemWithVolunteerGroup**: `object`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:157](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L157)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:184](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L184)
 
 ## Type Declaration
 
@@ -16,11 +16,11 @@ Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts
 
 ### category
 
-> **category**: `object` = `actionItemCategory2`
+> **category**: `object` = `actionItemCategory1`
 
 #### category.createdAt
 
-> **createdAt**: `string` = `'2024-08-25'`
+> **createdAt**: `string` = `'2024-08-26'`
 
 #### category.creatorId
 
@@ -28,7 +28,7 @@ Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts
 
 #### category.id
 
-> **id**: `string` = `'actionItemCategoryId2'`
+> **id**: `string` = `'actionItemCategoryId1'`
 
 #### category.isDisabled
 
@@ -36,7 +36,7 @@ Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts
 
 #### category.name
 
-> **name**: `string` = `'Category 2'`
+> **name**: `string` = `'Category 1'`
 
 #### category.organizationId
 
@@ -44,11 +44,11 @@ Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts
 
 #### category.updatedAt
 
-> **updatedAt**: `string` = `'2024-08-25'`
+> **updatedAt**: `string` = `'2024-08-26'`
 
 ### categoryId
 
-> **categoryId**: `string` = `'actionItemCategoryId2'`
+> **categoryId**: `string` = `'actionItemCategoryId1'`
 
 ### completionAt
 
@@ -92,7 +92,7 @@ Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts
 
 ### id
 
-> **id**: `string` = `'5'`
+> **id**: `string` = `'6'`
 
 ### isCompleted
 
@@ -108,7 +108,7 @@ Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts
 
 ### preCompletionNotes
 
-> **preCompletionNotes**: `string` = `'Notes 5'`
+> **preCompletionNotes**: `string` = `'Group task'`
 
 ### recurringEventInstance
 
@@ -128,48 +128,52 @@ Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts
 
 ### volunteer
 
-> **volunteer**: `object`
-
-#### volunteer.hasAccepted
-
-> **hasAccepted**: `boolean` = `false`
-
-#### volunteer.hoursVolunteered
-
-> **hoursVolunteered**: `number` = `0`
-
-#### volunteer.id
-
-> **id**: `string` = `'volunteerUserId3'`
-
-#### volunteer.isPublic
-
-> **isPublic**: `boolean` = `false`
-
-#### volunteer.user
-
-> **user**: `object`
-
-#### volunteer.user.avatarURL
-
-> **avatarURL**: `any` = `null`
-
-#### volunteer.user.id
-
-> **id**: `string` = `'userId3'`
-
-#### volunteer.user.name
-
-> **name**: `string` = `''`
+> **volunteer**: `any` = `null`
 
 ### volunteerGroup
 
-> **volunteerGroup**: `any` = `null`
+> **volunteerGroup**: `object`
+
+#### volunteerGroup.description
+
+> **description**: `string` = `'Helps with community outreach'`
+
+#### volunteerGroup.id
+
+> **id**: `string` = `'volunteerGroupId1'`
+
+#### volunteerGroup.leader
+
+> **leader**: `object`
+
+#### volunteerGroup.leader.avatarURL
+
+> **avatarURL**: `any` = `null`
+
+#### volunteerGroup.leader.id
+
+> **id**: `string` = `'leaderId1'`
+
+#### volunteerGroup.leader.name
+
+> **name**: `string` = `'Casey GroupLeader'`
+
+#### volunteerGroup.name
+
+> **name**: `string` = `'Community Helpers'`
+
+#### volunteerGroup.volunteers
+
+> **volunteers**: `object`[]
+
+#### volunteerGroup.volunteersRequired
+
+> **volunteersRequired**: `number` = `3`
 
 ### volunteerGroupId
 
-> **volunteerGroupId**: `any` = `null`
+> **volunteerGroupId**: `string` = `'volunteerGroupId1'`
 
 ### volunteerId
 
-> **volunteerId**: `string` = `'volunteerUserId3'`
+> **volunteerId**: `any` = `null`
