@@ -223,7 +223,7 @@ const Requests = (): JSX.Element => {
   const loadMoreRequests = (): void => {
     setIsLoadingMore(true);
 
-    const currentLength = displayedRequests.length;
+    const currentLength = data?.organization?.membershipRequests?.length ?? 0;
 
     fetchMore({
       variables: {

@@ -23,6 +23,9 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 import { MEMBERSHIP_REQUEST, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 
+// Store original localStorage for cleanup
+const originalLocalStorage = global.localStorage;
+
 // Mock localStorage
 const localStorageMock = (() => {
   let store: Record<string, string> = {};
@@ -221,13 +224,15 @@ async function wait(ms = 100): Promise<void> {
 beforeEach(() => {
   setItem('id', 'user1');
   setItem('role', 'administrator');
-  setItem('Talawa-admin_role', 'administrator');
   setItem('SuperAdmin', false);
   vi.clearAllMocks();
 });
 
 afterEach(() => {
   localStorage.clear();
+  // Restore all mocks and original global localStorage
+  vi.restoreAllMocks();
+  global.localStorage = originalLocalStorage;
 });
 
 describe('Testing Requests screen', () => {
@@ -1067,5 +1072,104 @@ describe('Testing Requests screen', () => {
     expect(rows.length).toBeGreaterThan(9);
     expect(screen.getByText('User7 Test')).toBeInTheDocument();
     expect(screen.getByText('User8 Test')).toBeInTheDocument();
+  });
+
+  test('should handle loadMoreRequests when data is undefined or data.organization is undefined', async () => {
+    const NO_DATA_MOCKS = [
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                id: 'org1',
+                name: 'Test Organization',
+                addressLine1: '123 Test Street',
+                description: 'Test description',
+                avatarURL: null,
+                members: {
+                  edges: [
+                    {
+                      node: {
+                        id: 'user1',
+                      },
+                    },
+                  ],
+                  pageInfo: {
+                    hasNextPage: false,
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+      {
+        request: {
+          query: MEMBERSHIP_REQUEST,
+          variables: {
+            input: { id: '' },
+            skip: 0,
+            first: 8,
+            name_contains: '',
+          },
+        },
+        result: {
+          data: undefined,
+        },
+      },
+      {
+        request: {
+          query: MEMBERSHIP_REQUEST,
+          variables: {
+            input: { id: '' },
+            skip: 0,
+            first: 8,
+            name_contains: '',
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              id: 'org1',
+              membershipRequests: [],
+            },
+          },
+        },
+      },
+    ];
+
+    const noDataLink = new StaticMockLink(NO_DATA_MOCKS, true);
+
+    render(
+      <MockedProvider addTypename={false} link={noDataLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(200);
+
+    expect(screen.getByTestId('testComp')).toBeInTheDocument();
+
+    fireEvent.scroll(window, {
+      target: {
+        scrollY: document.documentElement.scrollHeight,
+        innerHeight: window.innerHeight,
+        scrollHeight: document.documentElement.scrollHeight,
+      },
+    });
+
+    await wait(500);
+
+    // Verify component still renders properly
+    expect(screen.getByTestId('testComp')).toBeInTheDocument();
   });
 });
