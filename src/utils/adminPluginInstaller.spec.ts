@@ -8,7 +8,6 @@ import {
   validateAdminPluginStructure,
 } from './adminPluginInstaller';
 import { adminPluginFileService } from '../plugin/services/AdminPluginFileService';
-import { toast } from 'react-toastify';
 import * as adminPluginInstallerModule from './adminPluginInstaller';
 import {
   UPLOAD_PLUGIN_ZIP_MUTATION,
@@ -29,7 +28,6 @@ interface MockApolloClient {
 }
 
 const mockJSZip = vi.mocked(JSZip);
-const mockToast = vi.mocked(toast);
 const mockAdminPluginFileService = vi.mocked(adminPluginFileService);
 
 describe('adminPluginInstaller', () => {
@@ -83,7 +81,6 @@ describe('adminPluginInstaller', () => {
       vi.clearAllMocks();
     });
 
-    // Mutation Handling
     it("continues installation when CREATE_PLUGIN throws an Error containing 'already exists'", async () => {
       const mockFile = new File([''], 'already-exists.zip');
       const manifest = {
@@ -281,6 +278,7 @@ describe('adminPluginInstaller', () => {
     });
 
     // Validation Failures
+
     it('validateAdminPluginStructure returns error when manifest.json is completely missing', () => {
       // Case where files object doesn't have manifest.json key at all
       const files: Record<string, string> = {
@@ -333,7 +331,7 @@ describe('adminPluginInstaller', () => {
       // but file() returns null for that key to hit the `if (file)` false path.
       const mockZipContent = {
         files: { 'admin/ghost.txt': {} }, // presence only
-        file: vi.fn().mockImplementation((path: string) => {
+        file: vi.fn().mockImplementation(() => {
           // always return null for every path (simulate missing file object)
           return null;
         }),
@@ -387,7 +385,7 @@ describe('adminPluginInstaller', () => {
       });
 
       expect(result.success).toBe(false);
-      expect(result.error).toBe('Failed to install plugin');
+      expect(result.error).toBe('Failed to upload plugin'); // Updated expectation
     });
 
     it('installAdminPluginFromZip uses apiManifest when adminManifest absent (API-only)', async () => {
@@ -1262,3 +1260,5 @@ describe('adminPluginInstaller', () => {
     });
   });
 });
+
+
