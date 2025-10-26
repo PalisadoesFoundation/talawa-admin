@@ -45,6 +45,16 @@ vi.mock('components/UserPortal/CreateDirectChat/CreateDirectChat', () => ({
 // Mock hooks
 vi.mock('utils/useLocalstorage');
 
+// Mock react-router-dom
+const mockUseParams = vi.fn();
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useParams: () => mockUseParams(),
+  };
+});
+
 // --- Corrected and Detailed GraphQL Mocks ---
 
 const mockChatsListData = {
@@ -181,17 +191,13 @@ const mockUnreadChatsRefetch = {
   },
 };
 
-// Provide enough CHATS_LIST mocks to cover:
-// 1) initial load, 2) refetch on 'all' filter effect, 3) switching back to 'all'
 const mocks = [
   mockChatsList,
   mockChatsListRefetch,
-  // Third CHATS_LIST mock for switching back to 'all'
   {
     request: { query: CHATS_LIST, variables: { first: 10, after: null } },
     result: { data: mockChatsListData },
   },
-  // Fourth CHATS_LIST mock for group filter test
   {
     request: { query: CHATS_LIST, variables: { first: 10, after: null } },
     result: { data: mockChatsListData },
@@ -211,6 +217,7 @@ describe('Chat Component', () => {
       getItem: getItemMock,
       setItem: setItemMock,
     });
+    mockUseParams.mockReturnValue({}); // Default: no orgId
     vi.clearAllMocks();
   });
 
@@ -264,13 +271,11 @@ describe('Chat Component', () => {
     getItemMock.mockReturnValue('chat-999'); // Stale ID
     renderComponent();
 
-    // Should ignore stale ID and select the first chat from the list
     await waitFor(() => {
       const chatRoom = screen.getByTestId('chat-room');
       expect(chatRoom).toHaveAttribute('data-selected-contact', 'chat-1');
     });
 
-    // Should update local storage with the new valid ID
     expect(setItemMock).toHaveBeenCalledWith('selectedChatId', 'chat-1');
   });
 
@@ -296,10 +301,8 @@ describe('Chat Component', () => {
     fireEvent.click(unreadButton);
 
     await waitFor(() => {
-      // Unread mock has only one chat
       const card = screen.getByTestId('contact-card-chat-1');
       expect(card).toBeInTheDocument();
-      // Check that the lastMessage prop is passed correctly
       expect(card).toHaveAttribute('data-last-message', 'Hello there');
 
       expect(
@@ -313,13 +316,12 @@ describe('Chat Component', () => {
 
   test('should filter for group chats', async () => {
     renderComponent();
-    await screen.findByTestId('contact-card-chat-1'); // Wait for initial load
+    await screen.findByTestId('contact-card-chat-1');
 
     const groupButton = screen.getByTestId('groupChat');
     fireEvent.click(groupButton);
 
     await waitFor(() => {
-      // The main mock has only one group chat
       expect(screen.getByTestId('contact-card-chat-2')).toBeInTheDocument();
       expect(
         screen.queryByTestId('contact-card-chat-1'),
@@ -340,8 +342,8 @@ describe('Chat Component', () => {
               _id: 'legacy-group',
               id: 'legacy-group',
               name: 'Legacy Group',
-              isGroup: false, // Important: isGroup is false
-              users: [{}, {}, {}], // But has 3 users
+              isGroup: false,
+              users: [{}, {}, {}],
               image: '',
               __typename: 'Chat',
             },
@@ -359,12 +361,7 @@ describe('Chat Component', () => {
       },
     };
 
-    // Provide all necessary mocks for this specific test
-    const customMocks = [
-      legacyGroupMock, // For initial CHATS_LIST load
-      legacyGroupMock, // For the CHATS_LIST refetch on group filter click
-      mockUnreadChats, // For the initial UNREAD_CHATS load
-    ];
+    const customMocks = [legacyGroupMock, legacyGroupMock, mockUnreadChats];
 
     renderComponent(customMocks);
 
@@ -387,7 +384,6 @@ describe('Chat Component', () => {
     renderComponent();
     await screen.findByTestId('contact-card-chat-1');
 
-    // Switch to unread
     fireEvent.click(screen.getByTestId('unreadChat'));
     await waitFor(() => {
       expect(
@@ -395,7 +391,6 @@ describe('Chat Component', () => {
       ).not.toBeInTheDocument();
     });
 
-    // Switch back to all
     fireEvent.click(screen.getByTestId('allChat'));
     await waitFor(() => {
       expect(screen.getByTestId('contact-card-chat-1')).toBeInTheDocument();
@@ -419,5 +414,387 @@ describe('Chat Component', () => {
     fireEvent.click(newGroupChat);
 
     expect(screen.getByTestId('create-group-chat-modal')).toBeInTheDocument();
+  });
+
+  test('should filter chats by orgId when provided in route params', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org-1' });
+
+    const mockWithOrgId = {
+      request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+      result: {
+        data: {
+          chatsByUser: [
+            {
+              _id: 'chat-1',
+              id: 'chat-1',
+              name: 'Chat in Org 1',
+              isGroup: false,
+              users: [{}, {}],
+              image: '',
+              organization: { id: 'org-1', _id: 'org-1' },
+              __typename: 'Chat',
+            },
+            {
+              _id: 'chat-2',
+              id: 'chat-2',
+              name: 'Chat in Org 2',
+              isGroup: false,
+              users: [{}, {}],
+              image: '',
+              organization: { id: 'org-2', _id: 'org-2' },
+              __typename: 'Chat',
+            },
+          ],
+        },
+      },
+    };
+
+    renderComponent([mockWithOrgId, mockWithOrgId, mockUnreadChats]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('contact-card-chat-1')).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('contact-card-chat-2'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  test('should filter unread chats by orgId with NewChatType', async () => {
+    const mockUnreadWithOrgId = {
+      request: { query: UNREAD_CHATS, variables: {} },
+      result: {
+        data: {
+          unreadChats: [
+            {
+              __typename: 'Chat',
+              id: 'chat-1',
+              name: 'Unread Chat Org 1',
+              description: 'Description',
+              avatarMimeType: 'image/png',
+              avatarURL: 'http://example.com/avatar.png',
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              organization: {
+                __typename: 'Organization',
+                id: 'org-1',
+                name: 'Test Organization',
+                countryCode: 'US',
+              },
+              creator: {
+                __typename: 'User',
+                id: 'user-2',
+                name: 'Test User 2',
+                avatarMimeType: 'image/png',
+                avatarURL: 'http://example.com/avatar2.png',
+              },
+              updater: {
+                __typename: 'User',
+                id: 'user-2',
+                name: 'Test User 2',
+                avatarMimeType: 'image/png',
+                avatarURL: 'http://example.com/avatar2.png',
+              },
+              unreadMessagesCount: 2,
+              hasUnread: true,
+              firstUnreadMessageId: 'msg-unread-1',
+              lastMessage: {
+                __typename: 'ChatMessage',
+                id: 'msg-last-1',
+                body: 'Hello',
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                creator: {
+                  __typename: 'User',
+                  id: 'user-2',
+                  name: 'Test User 2',
+                  avatarMimeType: 'image/png',
+                  avatarURL: 'http://example.com/avatar2.png',
+                },
+                parentMessage: null,
+              },
+              members: {
+                __typename: 'ChatMemberConnection',
+                edges: [
+                  { __typename: 'ChatMemberEdge' },
+                  { __typename: 'ChatMemberEdge' },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    };
+
+    const mockChatsList = {
+      request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+      result: { data: mockChatsListData },
+    };
+
+    renderComponent([mockChatsList, mockUnreadWithOrgId, mockUnreadWithOrgId]);
+
+    await screen.findByTestId('contact-card-chat-1');
+
+    const unreadButton = screen.getByTestId('unreadChat');
+    fireEvent.click(unreadButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('contact-card-chat-1')).toBeInTheDocument();
+    });
+  });
+
+  test('should filter group chats by orgId with NewChatType', async () => {
+    const mockGroupsWithOrgId = {
+      request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+      result: {
+        data: {
+          chatsByUser: [
+            {
+              _id: 'group-1',
+              id: 'group-1',
+              name: 'Group in Org 1',
+              isGroup: true,
+              description: '',
+              createdAt: '2024-01-01',
+              users: [{}, {}, {}],
+              image: '',
+              organization: { id: 'org-1', _id: 'org-1', name: 'Org 1' },
+              members: {
+                edges: [
+                  {
+                    node: {
+                      _id: 'user1',
+                      firstName: 'A',
+                      lastName: 'B',
+                      email: 'a@b.com',
+                    },
+                  },
+                  {
+                    node: {
+                      _id: 'user2',
+                      firstName: 'C',
+                      lastName: 'D',
+                      email: 'c@d.com',
+                    },
+                  },
+                  {
+                    node: {
+                      _id: 'user3',
+                      firstName: 'E',
+                      lastName: 'F',
+                      email: 'e@f.com',
+                    },
+                  },
+                ],
+                pageInfo: { hasNextPage: false, endCursor: null },
+              },
+              lastMessage: null,
+              unreadMessagesCount: 0,
+              __typename: 'Chat',
+            },
+            {
+              _id: 'group-2',
+              id: 'group-2',
+              name: 'Group in Org 2',
+              isGroup: true,
+              description: '',
+              createdAt: '2024-01-01',
+              users: [{}, {}, {}],
+              image: '',
+              organization: { id: 'org-2', _id: 'org-2', name: 'Org 2' },
+              members: {
+                edges: [
+                  {
+                    node: {
+                      _id: 'user4',
+                      firstName: 'G',
+                      lastName: 'H',
+                      email: 'g@h.com',
+                    },
+                  },
+                  {
+                    node: {
+                      _id: 'user5',
+                      firstName: 'I',
+                      lastName: 'J',
+                      email: 'i@j.com',
+                    },
+                  },
+                  {
+                    node: {
+                      _id: 'user6',
+                      firstName: 'K',
+                      lastName: 'L',
+                      email: 'k@l.com',
+                    },
+                  },
+                ],
+                pageInfo: { hasNextPage: false, endCursor: null },
+              },
+              lastMessage: null,
+              unreadMessagesCount: 0,
+              __typename: 'Chat',
+            },
+          ],
+        },
+      },
+    };
+
+    renderComponent([
+      mockGroupsWithOrgId,
+      mockGroupsWithOrgId,
+      mockGroupsWithOrgId,
+      mockUnreadChats,
+    ]);
+
+    await screen.findByTestId('contact-card-group-1');
+
+    const groupButton = screen.getByTestId('groupChat');
+    fireEvent.click(groupButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('contact-card-group-1')).toBeInTheDocument();
+    });
+  });
+
+  test('should handle NewChatType in second useEffect with orgId filtering', async () => {
+    const mockNewChatTypeWithOrg = {
+      request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+      result: {
+        data: {
+          chatsByUser: [
+            {
+              _id: 'chat-new-1',
+              id: 'chat-new-1',
+              name: 'New Type Chat Org 1',
+              isGroup: false,
+              description: '',
+              createdAt: '2024-01-01',
+              users: [{}, {}],
+              image: '',
+              organization: { id: 'org-1', name: 'Org 1' },
+              members: {
+                edges: [
+                  {
+                    node: {
+                      _id: 'u1',
+                      firstName: 'A',
+                      lastName: 'B',
+                      email: 'a@b.com',
+                    },
+                  },
+                  {
+                    node: {
+                      _id: 'u2',
+                      firstName: 'C',
+                      lastName: 'D',
+                      email: 'c@d.com',
+                    },
+                  },
+                ],
+                pageInfo: { hasNextPage: false, endCursor: null },
+              },
+              lastMessage: null,
+              unreadMessagesCount: 0,
+              __typename: 'Chat',
+            },
+            {
+              _id: 'chat-new-2',
+              id: 'chat-new-2',
+              name: 'New Type Chat Org 2',
+              isGroup: false,
+              description: '',
+              createdAt: '2024-01-01',
+              users: [{}, {}],
+              image: '',
+              organization: { id: 'org-2', name: 'Org 2' },
+              members: {
+                edges: [
+                  {
+                    node: {
+                      _id: 'u3',
+                      firstName: 'E',
+                      lastName: 'F',
+                      email: 'e@f.com',
+                    },
+                  },
+                  {
+                    node: {
+                      _id: 'u4',
+                      firstName: 'G',
+                      lastName: 'H',
+                      email: 'g@h.com',
+                    },
+                  },
+                ],
+                pageInfo: { hasNextPage: false, endCursor: null },
+              },
+              lastMessage: null,
+              unreadMessagesCount: 0,
+              __typename: 'Chat',
+            },
+          ],
+        },
+      },
+    };
+
+    renderComponent([
+      mockNewChatTypeWithOrg,
+      mockNewChatTypeWithOrg,
+      mockUnreadChats,
+    ]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('contact-card-chat-new-1')).toBeInTheDocument();
+    });
+  });
+
+  test('should handle legacy GroupChat type in orgId filtering', async () => {
+    const mockLegacyWithOrgId = {
+      request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+      result: {
+        data: {
+          chatsByUser: [
+            {
+              _id: 'legacy-1',
+              id: 'legacy-1',
+              name: 'Legacy Chat Org 1',
+              isGroup: false,
+              description: '',
+              createdAt: '2024-01-01',
+              users: [{}, {}],
+              image: '',
+              organization: { _id: 'org-1', id: 'org-1', name: 'Org 1' },
+              lastMessage: null,
+              unreadMessagesCount: 0,
+              __typename: 'Chat',
+            },
+            {
+              _id: 'legacy-2',
+              id: 'legacy-2',
+              name: 'Legacy Chat Org 2',
+              isGroup: false,
+              description: '',
+              createdAt: '2024-01-01',
+              users: [{}, {}],
+              image: '',
+              organization: { _id: 'org-2', id: 'org-2', name: 'Org 2' },
+              lastMessage: null,
+              unreadMessagesCount: 0,
+              __typename: 'Chat',
+            },
+          ],
+        },
+      },
+    };
+
+    renderComponent([
+      mockLegacyWithOrgId,
+      mockLegacyWithOrgId,
+      mockUnreadChats,
+    ]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('contact-card-legacy-1')).toBeInTheDocument();
+    });
   });
 });

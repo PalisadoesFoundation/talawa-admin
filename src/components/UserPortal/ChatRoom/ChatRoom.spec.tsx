@@ -1273,4 +1273,193 @@ describe('ChatRoom Component', () => {
 
     await waitFor(() => expect(chatListRefetch).toHaveBeenCalled());
   });
+
+  it('does not load more messages when chat is not loaded', async () => {
+    const { getByText } = renderChatRoom();
+
+    await waitFor(() => {
+      expect(getByText('Test Chat')).toBeInTheDocument();
+    });
+    const messagesContainer = document.getElementById('messages');
+    expect(messagesContainer).toBeTruthy();
+  });
+
+  it('handles error when loading more messages fails', async () => {
+    const ERROR_LOAD_MORE_MOCK = {
+      request: {
+        query: CHAT_BY_ID,
+        variables: {
+          input: { id: 'chat123' },
+          first: 10,
+          after: null,
+          lastMessages: 10,
+          beforeMessages: 'msgCursor1',
+        },
+      },
+      error: new Error('Failed to load more messages'),
+    };
+
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    renderChatRoom([ERROR_LOAD_MORE_MOCK]);
+
+    await waitFor(() => {
+      expect(screen.getByText('Hello World')).toBeInTheDocument();
+    });
+
+    const chatContainer = document.getElementById('messages');
+    if (chatContainer) {
+      fireEvent.scroll(chatContainer, { target: { scrollTop: 0 } });
+    }
+
+    await waitFor(() => {
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error loading more messages:',
+        expect.any(Error),
+      );
+    });
+
+    consoleErrorSpy.mockRestore();
+  });
+
+  it('handles scroll event when messagesContainerRef is null', async () => {
+    renderChatRoom();
+
+    await waitFor(() => {
+      expect(screen.getByText('Test Chat')).toBeInTheDocument();
+    });
+    const chatArea = document.getElementById('chat-area');
+    if (chatArea) {
+      fireEvent.scroll(chatArea, { target: { scrollTop: 50 } });
+    }
+    expect(screen.getByText('Test Chat')).toBeInTheDocument();
+  });
+
+  it('triggers loadMoreMessages when scrollTop is less than 100', async () => {
+    renderChatRoom([LOAD_MORE_MESSAGES_MOCK]);
+
+    await waitFor(() => {
+      expect(screen.getByText('Hello World')).toBeInTheDocument();
+    });
+
+    const messagesContainer = document.getElementById('messages');
+    if (messagesContainer) {
+      Object.defineProperty(messagesContainer, 'scrollTop', {
+        writable: true,
+        value: 50,
+      });
+      fireEvent.scroll(messagesContainer, { target: { scrollTop: 50 } });
+    }
+
+    await waitFor(() => {
+      expect(screen.getByText('Older message')).toBeInTheDocument();
+    });
+  });
+
+  it('sets shouldAutoScrollRef when subscription message is from current user', async () => {
+    const SUBSCRIPTION_FROM_CURRENT_USER_MOCK = {
+      request: {
+        query: MESSAGE_SENT_TO_CHAT,
+        variables: {
+          input: {
+            id: 'chat123',
+          },
+        },
+      },
+      result: {
+        data: {
+          chatMessageCreate: {
+            id: 'subMsgFromMe',
+            body: 'My new message',
+            createdAt: '2023-01-01T00:00:00Z',
+            updatedAt: '2023-01-01T00:00:00Z',
+            chat: {
+              id: 'chat123',
+            },
+            creator: {
+              id: 'user123',
+              name: 'Current User',
+              avatarMimeType: 'image/jpeg',
+              avatarURL: 'https://example.com/user.jpg',
+            },
+            parentMessage: null,
+          },
+        },
+      },
+    };
+
+    const MARK_READ_FOR_OWN_MSG_MOCK = {
+      request: {
+        query: MARK_CHAT_MESSAGES_AS_READ,
+        variables: {
+          input: {
+            chatId: 'chat123',
+            messageId: 'subMsgFromMe',
+          },
+        },
+      },
+      result: {
+        data: {
+          markChatAsRead: true,
+        },
+      },
+    };
+
+    const { chatListRefetch } = renderChatRoom([
+      SUBSCRIPTION_FROM_CURRENT_USER_MOCK,
+      MARK_READ_FOR_OWN_MSG_MOCK,
+    ]);
+
+    await waitFor(() =>
+      expect(screen.getByText('Test Chat')).toBeInTheDocument(),
+    );
+
+    await waitFor(() => {
+      expect(chatListRefetch).toHaveBeenCalled();
+    });
+    await waitFor(() => {
+      expect(screen.getByText('My new message')).toBeInTheDocument();
+    });
+  });
+
+  it('handles subscription message with malformed data gracefully', async () => {
+    const MALFORMED_SUBSCRIPTION_MOCK = {
+      request: {
+        query: MESSAGE_SENT_TO_CHAT,
+        variables: {
+          input: {
+            id: 'chat123',
+          },
+        },
+      },
+      result: {
+        data: {
+          chatMessageCreate: {
+            id: 'malformedMsg',
+            body: 'Malformed message',
+            createdAt: '2023-01-01T00:00:00Z',
+            updatedAt: '2023-01-01T00:00:00Z',
+            chat: {
+              id: 'chat123',
+            },
+            creator: null,
+            parentMessage: null,
+          },
+        },
+      },
+    };
+
+    const { chatListRefetch } = renderChatRoom([MALFORMED_SUBSCRIPTION_MOCK]);
+
+    await waitFor(() =>
+      expect(screen.getByText('Test Chat')).toBeInTheDocument(),
+    );
+
+    // Should handle malformed data without crashing
+    await waitFor(() => {
+      expect(chatListRefetch).toHaveBeenCalled();
+    });
+  });
 });
