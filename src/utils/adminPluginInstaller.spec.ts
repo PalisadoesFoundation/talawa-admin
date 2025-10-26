@@ -31,7 +31,21 @@ const mockJSZip = vi.mocked(JSZip);
 const mockAdminPluginFileService = vi.mocked(adminPluginFileService);
 
 describe('adminPluginInstaller', () => {
-  let mockZip: any;
+  let mockZip: {
+    loadAsync: ReturnType<typeof vi.fn>;
+    file: ReturnType<typeof vi.fn>;
+    files: Record<string, unknown>;
+    folder: ReturnType<typeof vi.fn>;
+    forEach: ReturnType<typeof vi.fn>;
+    filter: ReturnType<typeof vi.fn>;
+    remove: ReturnType<typeof vi.fn>;
+    generateAsync: ReturnType<typeof vi.fn>;
+    generateInternalStream: ReturnType<typeof vi.fn>;
+    generateNodeStream: ReturnType<typeof vi.fn>;
+    clone: ReturnType<typeof vi.fn>;
+    comment: string;
+    root: object;
+  };
   let mockApolloClient: IMockApolloClient;
 
   beforeEach(() => {
@@ -40,8 +54,18 @@ describe('adminPluginInstaller', () => {
       loadAsync: vi.fn(),
       file: vi.fn(),
       files: {},
+      folder: vi.fn(),
+      forEach: vi.fn(),
+      filter: vi.fn(),
+      remove: vi.fn(),
+      generateAsync: vi.fn(),
+      generateInternalStream: vi.fn(),
+      generateNodeStream: vi.fn(),
+      clone: vi.fn(),
+      comment: '',
+      root: {},
     };
-    mockJSZip.mockImplementation(() => mockZip);
+    mockJSZip.mockImplementation(() => mockZip as unknown as JSZip);
     mockApolloClient = {
       mutate: vi.fn(),
     };
@@ -51,8 +75,8 @@ describe('adminPluginInstaller', () => {
   });
 
   // Helper function to create consistent mock zip content
-  const createMockZipContent = (files: Record<string, any>) => {
-    const mockFiles: Record<string, any> = {};
+  const createMockZipContent = (files: Record<string, unknown>) => {
+    const mockFiles: Record<string, unknown> = {};
 
     // Create file objects for each path
     Object.entries(files).forEach(([path, content]) => {
