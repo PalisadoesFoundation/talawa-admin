@@ -160,7 +160,6 @@ const map: InterfaceMapType = {
   orgads: 'advertisement',
   member: 'memberDetail',
   orgevents: 'organizationEvents',
-  orgactionitems: 'organizationActionItems',
   orgagendacategory: 'organizationAgendaCategory',
   orgcontribution: 'orgContribution',
   orgpost: 'orgPost',
