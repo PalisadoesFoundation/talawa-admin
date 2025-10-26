@@ -69,12 +69,6 @@ describe('adminPluginInstaller', () => {
     };
   };
 
-  /**
-   * Replace/append the following describe block to target exact mutation-based branches.
-   * These tests inspect the mutation parameter to the mocked apolloClient.mutate
-   * so we reliably trigger the correct CREATE vs UPLOAD behavior.
-   */
-
   describe('Plugin Installation and Management', () => {
     afterEach(() => {
       vi.restoreAllMocks();
