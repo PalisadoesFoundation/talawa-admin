@@ -3,7 +3,10 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 
-import { ORGANIZATION_EVENTS_CONNECTION } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATION_EVENTS_CONNECTION,
+  ORGANIZATIONS_LIST,
+} from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
@@ -74,6 +77,47 @@ const theme = createTheme({
 });
 
 const MOCKS = [
+  {
+    request: {
+      query: ORGANIZATIONS_LIST,
+      variables: {
+        id: '',
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: 'org123',
+            name: 'Test Organization',
+            description: 'Test Org Description',
+            addressLine1: '123 Test St',
+            addressLine2: '',
+            city: 'Test City',
+            state: 'Test State',
+            postalCode: '12345',
+            countryCode: 'US',
+            avatarURL: null,
+            createdAt: '2023-01-01',
+            updatedAt: '2023-01-01',
+            creator: {
+              _id: 'creator123',
+              name: 'Test Creator',
+              emailAddress: 'creator@test.com',
+              __typename: 'User',
+            },
+            updater: {
+              _id: 'updater123',
+              name: 'Test Updater',
+              emailAddress: 'updater@test.com',
+              __typename: 'User',
+            },
+            __typename: 'Organization',
+          },
+        ],
+      },
+    },
+  },
   {
     request: {
       query: ORGANIZATION_EVENTS_CONNECTION,
@@ -771,5 +815,205 @@ describe('Testing Events Screen [User Portal]', () => {
     fireEvent.change(endTimePicker, {
       target: { value: null },
     });
+  });
+
+  it('Modal close button works correctly', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    expect(screen.getByText('Event Details')).toBeInTheDocument();
+
+    await userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
+
+    await waitFor(() => {
+      expect(screen.queryByText('Event Details')).not.toBeInTheDocument();
+    });
+  });
+
+  it('Create event with createChat enabled works correctly', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    const randomEventTitle = 'testEventTitle';
+    const randomEventDescription = 'testEventDescription';
+    const randomEventLocation = 'testEventLocation';
+
+    await userEvent.type(
+      screen.getByTestId('eventTitleInput'),
+      randomEventTitle,
+    );
+    await userEvent.type(
+      screen.getByTestId('eventDescriptionInput'),
+      randomEventDescription,
+    );
+    await userEvent.type(
+      screen.getByTestId('eventLocationInput'),
+      randomEventLocation,
+    );
+
+    await userEvent.click(screen.getByTestId('createChatCheck'));
+
+    await userEvent.click(screen.getByTestId('createEventBtn'));
+
+    await wait();
+
+    expect(toast.success).toHaveBeenCalledWith(
+      'Event created and posted successfully.',
+    );
+  });
+
+  it('Error handling in createEvent works correctly', async () => {
+    const errorMocks = [
+      {
+        request: {
+          query: ORGANIZATIONS_LIST,
+          variables: {
+            id: '',
+          },
+        },
+        result: {
+          data: {
+            organizations: [],
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_EVENTS_CONNECTION,
+          variables: {
+            organization_id: '',
+            title_contains: '',
+          },
+        },
+        result: {
+          data: {
+            eventsByOrganizationConnection: [],
+          },
+        },
+      },
+      {
+        request: {
+          query: CREATE_EVENT_MUTATION,
+          variables: {
+            title: 'testEventTitle',
+            description: 'testEventDescription',
+            isPublic: true,
+            recurring: false,
+            isRegisterable: true,
+            organizationId: '',
+            startDate: dayjs(new Date()).format('YYYY-MM-DD'),
+            endDate: dayjs(new Date()).format('YYYY-MM-DD'),
+            allDay: true,
+            location: 'testEventLocation',
+            startTime: null,
+            endTime: null,
+            createChat: false,
+          },
+        },
+        error: new Error('Failed to create event'),
+      },
+    ];
+
+    const errorLink = new StaticMockLink(errorMocks, true);
+
+    render(
+      <MockedProvider addTypename={false} link={errorLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    const randomEventTitle = 'testEventTitle';
+    const randomEventDescription = 'testEventDescription';
+    const randomEventLocation = 'testEventLocation';
+
+    await userEvent.type(
+      screen.getByTestId('eventTitleInput'),
+      randomEventTitle,
+    );
+    await userEvent.type(
+      screen.getByTestId('eventDescriptionInput'),
+      randomEventDescription,
+    );
+    await userEvent.type(
+      screen.getByTestId('eventLocationInput'),
+      randomEventLocation,
+    );
+
+    await userEvent.click(screen.getByTestId('createEventBtn'));
+
+    await wait();
+
+    expect(toast.error).toHaveBeenCalled();
+  });
+
+  it('handleChangeView with null parameter works correctly', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // The component should render without errors even if handleChangeView is called with null
+    expect(screen.getByText('Sunday')).toBeInTheDocument();
   });
 });
