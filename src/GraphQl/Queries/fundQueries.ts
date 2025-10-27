@@ -107,7 +107,7 @@ export const USER_FUND_CAMPAIGNS = gql`
     $campaignOrderBy: CampaignOrderByInput
   ) {
     getFundraisingCampaigns(where: $where, campaignOrderBy: $campaignOrderBy) {
-      id
+      _id
       name
       currency
       fundingGoal
