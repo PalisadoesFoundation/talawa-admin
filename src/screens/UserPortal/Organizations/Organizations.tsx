@@ -49,8 +49,6 @@ import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../../style/app-fixed.module.css';
 
-const { getItem } = useLocalStorage();
-
 function useDebounce<T>(fn: (val: T) => void, delay: number) {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -164,7 +162,7 @@ interface IOrgData {
 /**
  * Component for displaying and managing user organizations.
  */
-export default function organizations(): React.JSX.Element {
+export default function Organizations(): React.JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userOrganizations',
   });
