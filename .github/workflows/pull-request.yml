@@ -104,8 +104,8 @@ jobs:
           echo "Error: Close this PR and try again."
           exit 1
 
-      - name: Check for unused files
-        run: npx knip --include files
+      - name: Check for unused files and exports in src/ and docs/src
+        run: npx knip --include files,exports
 
   Check-Sensitive-Files:
     if: ${{ github.actor != 'dependabot[bot]' }}
@@ -408,7 +408,7 @@ jobs:
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
           path: './coverage/vitest/lcov.info'
-          min_coverage: 86.6
+          min_coverage: 87.0
 
   # Graphql-Inspector:
   #   if: ${{ github.actor != 'dependabot[bot]' }}

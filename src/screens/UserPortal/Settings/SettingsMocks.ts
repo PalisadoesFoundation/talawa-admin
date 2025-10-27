@@ -164,19 +164,3 @@ export const UPDATE_MOCK = [
     },
   },
 ];
-
-export const errorMock = [
-  {
-    request: {
-      query: UPDATE_CURRENT_USER_MUTATION,
-      variables: {
-        input: {
-          name: 'Bandhan',
-          mobilePhoneNumber: '1200',
-        },
-      },
-    },
-    error: new Error('Please enter a valid phone number'),
-  },
-  ...MOCKS1,
-];

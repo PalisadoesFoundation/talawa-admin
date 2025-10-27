@@ -42,7 +42,8 @@ const itemProps: IItemUpdateStatusModalProps[] = [
     actionItemsRefetch: vi.fn(),
     actionItem: {
       id: 'actionItemId1',
-      assigneeId: 'userId1',
+      volunteerId: 'userId1',
+      volunteerGroupId: null,
       categoryId: 'actionItemCategoryId1',
       eventId: null,
       recurringEventInstanceId: null,
@@ -58,12 +59,19 @@ const itemProps: IItemUpdateStatusModalProps[] = [
       postCompletionNotes: 'Cmp Notes 1',
 
       // Related entities (populated via GraphQL)
-      assignee: {
-        id: 'userId1',
-        name: 'John Doe',
-        avatarURL: '',
-        emailAddress: 'john.doe@example.com',
+
+      volunteer: {
+        id: 'volunteer1',
+        hasAccepted: true,
+        isPublic: true,
+        hoursVolunteered: 5,
+        user: {
+          id: 'userId1',
+          name: 'John Doe',
+          avatarURL: '',
+        },
       },
+      volunteerGroup: null,
       creator: {
         id: 'userId2',
         name: 'Wilt Shepherd',
@@ -88,7 +96,8 @@ const itemProps: IItemUpdateStatusModalProps[] = [
     actionItemsRefetch: vi.fn(),
     actionItem: {
       id: 'actionItemId1',
-      assigneeId: 'userId1',
+      volunteerId: 'userId1',
+      volunteerGroupId: null,
       categoryId: 'actionItemCategoryId1',
       eventId: null,
       recurringEventInstanceId: null,
@@ -104,12 +113,18 @@ const itemProps: IItemUpdateStatusModalProps[] = [
       postCompletionNotes: null,
 
       // Related entities (populated via GraphQL)
-      assignee: {
-        id: 'userId1',
-        name: 'John Doe',
-        avatarURL: '',
-        emailAddress: 'john.doe@example.com',
+      volunteer: {
+        id: 'volunteer1',
+        hasAccepted: true,
+        isPublic: true,
+        hoursVolunteered: 5,
+        user: {
+          id: 'userId1',
+          name: 'John Doe',
+          avatarURL: '',
+        },
       },
+      volunteerGroup: null,
       creator: {
         id: 'userId2',
         name: 'Wilt Shepherd',
@@ -134,7 +149,8 @@ const itemProps: IItemUpdateStatusModalProps[] = [
     actionItemsRefetch: vi.fn(),
     actionItem: {
       id: 'actionItemId1',
-      assigneeId: 'userId1',
+      volunteerId: 'userId1',
+      volunteerGroupId: null,
       categoryId: 'actionItemCategoryId1',
       eventId: null,
       recurringEventInstanceId: null,
@@ -150,12 +166,18 @@ const itemProps: IItemUpdateStatusModalProps[] = [
       postCompletionNotes: null,
 
       // Related entities (populated via GraphQL)
-      assignee: {
-        id: 'userId1',
-        name: 'John Doe',
-        avatarURL: '',
-        emailAddress: 'john.doe@example.com',
+      volunteer: {
+        id: 'volunteer1',
+        hasAccepted: true,
+        isPublic: true,
+        hoursVolunteered: 5,
+        user: {
+          id: 'userId1',
+          name: 'John Doe',
+          avatarURL: '',
+        },
       },
+      volunteerGroup: null,
       creator: {
         id: 'userId2',
         name: 'Wilt Shepherd',
@@ -289,7 +311,8 @@ describe('Testing ItemUpdateStatusModal', () => {
       actionItemsRefetch: vi.fn(),
       actionItem: {
         id: 'actionItemId1',
-        assigneeId: 'userId1',
+        volunteerId: 'userId1',
+        volunteerGroupId: null,
         categoryId: 'actionItemCategoryId1',
         eventId: 'eventId1',
         recurringEventInstanceId: 'instanceId1',
@@ -304,12 +327,18 @@ describe('Testing ItemUpdateStatusModal', () => {
         preCompletionNotes: 'Notes 1',
         postCompletionNotes: null,
         isTemplate: true,
-        assignee: {
-          id: 'userId1',
-          name: 'John Doe',
-          avatarURL: '',
-          emailAddress: 'john.doe@example.com',
+        volunteer: {
+          id: 'volunteer1',
+          hasAccepted: true,
+          isPublic: true,
+          hoursVolunteered: 5,
+          user: {
+            id: 'userId1',
+            name: 'John Doe',
+            avatarURL: '',
+          },
         },
+        volunteerGroup: null,
         creator: {
           id: 'userId2',
           name: 'Wilt Shepherd',
@@ -396,7 +425,8 @@ describe('Testing ItemUpdateStatusModal', () => {
       actionItemsRefetch: vi.fn(),
       actionItem: {
         id: 'actionItemId1',
-        assigneeId: 'userId1',
+        volunteerId: 'userId1',
+        volunteerGroupId: null,
         categoryId: 'actionItemCategoryId1',
         eventId: 'eventId1',
         recurringEventInstanceId: 'instanceId1',
@@ -411,12 +441,18 @@ describe('Testing ItemUpdateStatusModal', () => {
         preCompletionNotes: 'Notes 1',
         postCompletionNotes: 'Completion notes',
         isTemplate: true,
-        assignee: {
-          id: 'userId1',
-          name: 'John Doe',
-          avatarURL: '',
-          emailAddress: 'john.doe@example.com',
+        volunteer: {
+          id: 'volunteer1',
+          hasAccepted: true,
+          isPublic: true,
+          hoursVolunteered: 5,
+          user: {
+            id: 'userId1',
+            name: 'John Doe',
+            avatarURL: '',
+          },
         },
+        volunteerGroup: null,
         creator: {
           id: 'userId2',
           name: 'Wilt Shepherd',

@@ -4,7 +4,7 @@
 
 # Interface: ICreateActionItemVariables
 
-Defined in: [src/types/ActionItems/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L69)
+Defined in: [src/types/ActionItems/interface.ts:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L99)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/types/ActionItems/interface.ts:69](https://github.com/Palisadoe
 
 > **input**: [`ICreateActionItemInput`](ICreateActionItemInput.md)
 
-Defined in: [src/types/ActionItems/interface.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L70)
+Defined in: [src/types/ActionItems/interface.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L100)
