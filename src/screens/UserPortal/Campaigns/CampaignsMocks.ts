@@ -1,5 +1,5 @@
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
-import { USER_FUND_CAMPAIGNS } from 'GraphQl/Queries/fundQueries';
+import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 
 const userDetailsQuery = {
   request: {
@@ -60,172 +60,53 @@ const userDetailsQuery = {
 export const MOCKS = [
   {
     request: {
-      query: USER_FUND_CAMPAIGNS,
+      query: FUND_LIST,
       variables: {
-        where: {
-          organizationId: 'orgId',
-          name_contains: '',
-        },
-        campaignOrderBy: 'endDate_DESC',
+        input: { id: 'orgId' },
       },
     },
     result: {
       data: {
-        getFundraisingCampaigns: [
-          {
-            _id: 'campaignId1',
-            startDate: '2024-07-28',
-            endDate: '2026-08-31',
-            name: 'School Campaign',
-            fundingGoal: 22000,
-            currency: 'USD',
-            __typename: 'FundraisingCampaign',
+        organization: {
+          funds: {
+            edges: [
+              {
+                node: {
+                  creator: { name: 'John Doe' },
+                  id: 'fundId1',
+                  isTaxDeductible: true,
+                  name: 'General Fund',
+                  organization: { name: 'Test Org' },
+                  updater: { name: 'Jane Doe' },
+                  campaigns: {
+                    edges: [
+                      {
+                        node: {
+                          id: 'campaignId1',
+                          name: 'School Campaign',
+                          startAt: '2024-07-28',
+                          endAt: '2026-08-31',
+                          currencyCode: 'USD',
+                          goalAmount: 22000,
+                        },
+                      },
+                      {
+                        node: {
+                          id: 'campaignId2',
+                          name: 'Hospital Campaign',
+                          startAt: '2024-07-28',
+                          endAt: '2024-08-30',
+                          currencyCode: 'USD',
+                          goalAmount: 9000,
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
           },
-          {
-            _id: 'campaignId2',
-            startDate: '2024-07-28',
-            endDate: '2024-08-30',
-            name: 'Hospital Campaign',
-            fundingGoal: 9000,
-            currency: 'USD',
-            __typename: 'FundraisingCampaign',
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_FUND_CAMPAIGNS,
-      variables: {
-        where: {
-          organizationId: 'orgId',
-          name_contains: '',
         },
-        campaignOrderBy: 'endDate_ASC',
-      },
-    },
-    result: {
-      data: {
-        getFundraisingCampaigns: [
-          {
-            _id: 'campaignId2',
-            startDate: '2024-07-28',
-            endDate: '2024-08-30',
-            name: 'Hospital Campaign',
-            fundingGoal: 9000,
-            currency: 'USD',
-            __typename: 'FundraisingCampaign',
-          },
-          {
-            _id: 'campaignId1',
-            startDate: '2024-07-28',
-            endDate: '2026-08-31',
-            name: 'School Campaign',
-            fundingGoal: 22000,
-            currency: 'USD',
-            __typename: 'FundraisingCampaign',
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_FUND_CAMPAIGNS,
-      variables: {
-        where: {
-          organizationId: 'orgId',
-          name_contains: '',
-        },
-        campaignOrderBy: 'fundingGoal_ASC',
-      },
-    },
-    result: {
-      data: {
-        getFundraisingCampaigns: [
-          {
-            _id: 'campaignId2',
-            startDate: '2024-07-28',
-            endDate: '2024-08-30',
-            name: 'Hospital Campaign',
-            fundingGoal: 9000,
-            currency: 'USD',
-            __typename: 'FundraisingCampaign',
-          },
-          {
-            _id: 'campaignId1',
-            startDate: '2024-07-28',
-            endDate: '2026-08-31',
-            name: 'School Campaign',
-            fundingGoal: 22000,
-            currency: 'USD',
-            __typename: 'FundraisingCampaign',
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_FUND_CAMPAIGNS,
-      variables: {
-        where: {
-          organizationId: 'orgId',
-          name_contains: '',
-        },
-        campaignOrderBy: 'fundingGoal_DESC',
-      },
-    },
-    result: {
-      data: {
-        getFundraisingCampaigns: [
-          {
-            _id: 'campaignId1',
-            startDate: '2024-07-28',
-            endDate: '2026-08-31',
-            name: 'School Campaign',
-            fundingGoal: 22000,
-            currency: 'USD',
-            __typename: 'FundraisingCampaign',
-          },
-          {
-            _id: 'campaignId2',
-            startDate: '2024-07-28',
-            endDate: '2024-08-30',
-            name: 'Hospital Campaign',
-            fundingGoal: 9000,
-            currency: 'USD',
-            __typename: 'FundraisingCampaign',
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_FUND_CAMPAIGNS,
-      variables: {
-        where: {
-          organizationId: 'orgId',
-          name_contains: 'Hospital',
-        },
-        campaignOrderBy: 'endDate_DESC',
-      },
-    },
-    result: {
-      data: {
-        getFundraisingCampaigns: [
-          {
-            _id: 'campaignId2',
-            startDate: '2024-07-28',
-            endDate: '2024-08-30',
-            name: 'Hospital Campaign',
-            fundingGoal: 9000,
-            currency: 'USD',
-            __typename: 'FundraisingCampaign',
-          },
-        ],
       },
     },
   },
@@ -235,18 +116,18 @@ export const MOCKS = [
 export const EMPTY_MOCKS = [
   {
     request: {
-      query: USER_FUND_CAMPAIGNS,
+      query: FUND_LIST,
       variables: {
-        where: {
-          organizationId: 'orgId',
-          name_contains: '',
-        },
-        campaignOrderBy: 'endDate_DESC',
+        input: { id: 'orgId' },
       },
     },
     result: {
       data: {
-        getFundraisingCampaigns: [],
+        organization: {
+          funds: {
+            edges: [],
+          },
+        },
       },
     },
   },
@@ -256,13 +137,9 @@ export const EMPTY_MOCKS = [
 export const USER_FUND_CAMPAIGNS_ERROR = [
   {
     request: {
-      query: USER_FUND_CAMPAIGNS,
+      query: FUND_LIST,
       variables: {
-        where: {
-          organizationId: 'orgId',
-          name_contains: '',
-        },
-        campaignOrderBy: 'endDate_DESC',
+        input: { id: 'orgId' },
       },
     },
     error: new Error('Error fetching campaigns'),

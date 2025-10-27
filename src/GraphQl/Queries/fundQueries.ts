@@ -28,6 +28,18 @@ export const FUND_LIST = gql`
             updater {
               name
             }
+            campaigns(first: 10) {
+              edges {
+                node {
+                  id
+                  name
+                  startAt
+                  endAt
+                  currencyCode
+                  goalAmount
+                }
+              }
+            }
           }
         }
       }
@@ -119,26 +131,22 @@ export const USER_FUND_CAMPAIGNS = gql`
 
 export const USER_PLEDGES = gql`
   query GetPledgesByUserId(
-    $userId: ID!
-    $where: PledgeWhereInput
-    $orderBy: PledgeOrderByInput
+    $userId: QueryUserInput!
+    $where: QueryPledgeWhereInput
+    $orderBy: QueryPledgeOrderByInput
   ) {
     getPledgesByUserId(userId: $userId, where: $where, orderBy: $orderBy) {
       id
       amount
-      startDate
-      endDate
+      note
       campaign {
         id
         name
-        endDate
+        endAt
       }
-      currency
-      users {
+      pledger {
         id
-        firstName
-        lastName
-        image
+        name
       }
     }
   }
