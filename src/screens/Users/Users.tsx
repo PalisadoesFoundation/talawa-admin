@@ -95,7 +95,6 @@ const Users = (): JSX.Element => {
   const [searchByName, setSearchByName] = useState('');
   const [sortingOption, setSortingOption] = useState('newest');
   const [filteringOption, setFilteringOption] = useState('cancel');
-  const [loadUnqUsers, setLoadUnqUsers] = useState(0);
   const loggedInUserId = getItem('id') as string;
   const [usersData, setUsersData] = useState<InterfaceQueryUserListItem[]>([]);
 
@@ -207,12 +206,6 @@ const Users = (): JSX.Element => {
     }
   }, [loading]);
 
-  useEffect(() => {
-    if (loadUnqUsers > 0) {
-      loadMoreUsers();
-    }
-  }, [displayedUsers]);
-
   const handleSearch = (value: string): void => {
     setSearchByName(value);
     if (value === '') {
@@ -238,7 +231,10 @@ const Users = (): JSX.Element => {
   };
 
   const loadMoreUsers = async (): Promise<void> => {
-    if (!pageInfoState?.hasNextPage || isLoadingMore) return;
+    if (!pageInfoState?.hasNextPage || isLoadingMore) {
+      setHasMore(false);
+      return;
+    }
     setIsLoadingMore(true);
 
     const { data: moreData } = await fetchMore({
@@ -262,7 +258,6 @@ const Users = (): JSX.Element => {
     if (option === sortingOption) {
       return;
     }
-    setHasMore(true);
     setSortingOption(option);
   };
 
@@ -307,6 +302,7 @@ const Users = (): JSX.Element => {
     tCommon('name'),
     tCommon('email'),
     t('joined_organizations'),
+    t('blocked_organizations'),
   ];
 
   return (

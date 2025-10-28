@@ -2034,6 +2034,19 @@ export interface InterfaceQueryUserListItem {
         city?: string;
         state?: string;
         countryCode?: string;
+        blockedUsers?: {
+          edges: {
+            node: {
+              id: string;
+              name: string;
+              emailAddress: string;
+              avatarURL?: string;
+              city: string;
+              state: string;
+              createdAt: string;
+            };
+          }[];
+        };
         creator: {
           id: string;
           name: string;

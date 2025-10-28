@@ -7,11 +7,12 @@
 import { useMutation } from '@apollo/client';
 import {
   REMOVE_MEMBER_MUTATION,
+  UNBLOCK_USER_MUTATION_PG,
   UPDATE_USER_ROLE_IN_ORG_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import Avatar from 'components/Avatar/Avatar';
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal, Row, Table } from 'react-bootstrap';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { useTranslation } from 'react-i18next';
@@ -33,21 +34,45 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
   const { user, index, resetAndRefetch } = props;
   const [showJoinedOrganizations, setShowJoinedOrganizations] = useState(false);
+  const [showBlockedOrganizations, setShowBlockedOrganizations] =
+    useState(false);
   const [showRemoveUserModal, setShowRemoveUserModal] = useState(false);
+  const [showBlockedUserModal, setShowBlockedUserModal] = useState(false);
   const [removeUserProps, setremoveUserProps] = useState<{
     orgName: string;
     orgId: string;
-    setShowOnCancel: 'JOINED' | '';
+    setShowOnCancel: 'JOINED' | 'Blocked' | '';
   }>({ orgName: '', orgId: '', setShowOnCancel: '' });
 
   const memberOrgs =
     user.organizationsWhereMember?.edges?.map((e) => e.node) ?? [];
+  const blockedOrgs = user.organizationsWhereMember?.edges?.map((e) => ({
+    name: e.node.name,
+    id: e.node.id,
+    avatarURL: e.node.avatarURL,
+    city: e.node.city,
+    createdAt: e.node.createdAt,
+    creator: e.node.creator,
+    blockedUser: e.node.blockedUsers?.edges?.map((b) => b.node) ?? [],
+  }));
+
+  const usersBlockedByOrgs = blockedOrgs.filter((org) =>
+    org.blockedUser.some((u) => u.id === user.id),
+  );
   const [joinedOrgs, setJoinedOrgs] = useState(memberOrgs);
+  const [blockedUsers, setBlockedUsers] = useState(usersBlockedByOrgs);
   const [searchByNameJoinedOrgs, setSearchByNameJoinedOrgs] = useState('');
+  const [searchByNameBlockedOrgs, setSearchByNameBlockedOrgs] = useState('');
 
   const [removeUser] = useMutation(REMOVE_MEMBER_MUTATION);
+  const [unblockUser] = useMutation(UNBLOCK_USER_MUTATION_PG);
   const [updateUserInOrgType] = useMutation(UPDATE_USER_ROLE_IN_ORG_MUTATION);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setJoinedOrgs(memberOrgs);
+    setBlockedUsers(usersBlockedByOrgs);
+  }, [user]);
 
   const confirmRemoveUser = async (): Promise<void> => {
     try {
@@ -59,6 +84,24 @@ const UsersTableItem = (props: Props): JSX.Element => {
           tCommon('removedSuccessfully', { item: 'User' }) as string,
         );
         resetAndRefetch();
+        setShowRemoveUserModal(false);
+      }
+    } catch (error: unknown) {
+      errorHandler(t, error);
+    }
+  };
+
+  const confirmUnblockUser = async (): Promise<void> => {
+    try {
+      const { data } = await unblockUser({
+        variables: { organizationId: removeUserProps.orgId, userId: user.id },
+      });
+      if (data?.unblockUser) {
+        toast.success(
+          tCommon('unblockedSuccessfully', { item: 'User' }) as string,
+        );
+        resetAndRefetch();
+        setShowBlockedUserModal(false);
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -109,10 +152,61 @@ const UsersTableItem = (props: Props): JSX.Element => {
     }
   };
 
+  const searchBlockedOrgs = (value: string): void => {
+    setSearchByNameBlockedOrgs(value);
+    if (value.trim() === '') {
+      setBlockedUsers(usersBlockedByOrgs);
+    } else {
+      const filteredOrgs = usersBlockedByOrgs.filter((org) =>
+        org.name.toLowerCase().includes(value.toLowerCase()),
+      );
+      setBlockedUsers(filteredOrgs);
+    }
+  };
+
+  const handleSearchJoinedOrgs = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ): void => {
+    if (e.key === 'Enter') {
+      const { value } = e.currentTarget;
+      searchJoinedOrgs(value);
+    }
+  };
+
+  const handleSearchBlockedOrgs = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ): void => {
+    if (e.key === 'Enter') {
+      const { value } = e.currentTarget;
+      searchBlockedOrgs(value);
+    }
+  };
+
+  const handleSearchButtonClickJoinedOrgs = (): void => {
+    const inputValue =
+      (document.getElementById('orgname-joined-orgs') as HTMLInputElement)
+        ?.value || '';
+    searchJoinedOrgs(inputValue);
+  };
+
+  const handleSearchButtonClickBlockedOrgs = (): void => {
+    const inputValue =
+      (document.getElementById('orgname-joined-orgs') as HTMLInputElement)
+        ?.value || '';
+    searchBlockedOrgs(inputValue);
+  };
+
   function onHideRemoveUserModal(): void {
     setShowRemoveUserModal(false);
     if (removeUserProps.setShowOnCancel === 'JOINED') {
       setShowJoinedOrganizations(true);
+    }
+  }
+
+  function onHideBlockUserModal(): void {
+    setShowBlockedUserModal(false);
+    if (removeUserProps.setShowOnCancel === 'Blocked') {
+      setShowBlockedOrganizations(true);
     }
   }
 
@@ -133,6 +227,15 @@ const UsersTableItem = (props: Props): JSX.Element => {
             data-testid={`showJoinedOrgsBtn${user.id}`}
           >
             {t('view')} ({memberOrgs.length})
+          </Button>
+        </td>
+        <td>
+          <Button
+            className={`btn ${styles.removeButton}`}
+            onClick={() => setShowBlockedOrganizations(true)}
+            data-testid={`showJoinedOrgsBtn${user.id}`}
+          >
+            {t('view')} ({blockedUsers.length})
           </Button>
         </td>
       </tr>
@@ -339,6 +442,190 @@ const UsersTableItem = (props: Props): JSX.Element => {
             data-testid={`confirmRemoveUser${user.id}`}
           >
             {tCommon('remove')}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal
+        show={showBlockedOrganizations}
+        key={`modal-blocked-org-${index}`}
+        size="xl"
+        data-testid={`modal-blocked-org-${user.id}`}
+        onHide={() => setShowBlockedOrganizations(false)}
+      >
+        <Modal.Header className={styles.modalHeader} closeButton>
+          <Modal.Title className="text-white">
+            {t('orgThatBlocked')} {user.name} ({blockedUsers.length})
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {memberOrgs.length !== 0 && (
+            <div className={'position-relative mb-4 border rounded'}>
+              <Form.Control
+                id="orgname-blocked-orgs"
+                className={styles.inputField}
+                defaultValue={searchByNameBlockedOrgs}
+                placeholder={t('searchByOrgName')}
+                data-testid="searchByNameBlockedOrgs"
+                autoComplete="off"
+                onKeyUp={handleSearchBlockedOrgs}
+              />
+              <Button
+                tabIndex={-1}
+                className={styles.searchButton}
+                onClick={handleSearchButtonClickBlockedOrgs}
+                data-testid="searchBtnBlockedOrgs"
+              >
+                <Search />
+              </Button>
+            </div>
+          )}
+          <Row>
+            {usersBlockedByOrgs.length === 0 ? (
+              <div className={styles.notJoined}>
+                <h4>
+                  {user.name} {t('isNotBlockedByAnyOrg')}
+                </h4>
+              </div>
+            ) : blockedUsers.length === 0 ? (
+              <div className={styles.notJoined}>
+                <h4>
+                  {tCommon('noResultsFoundFor')} &quot;{searchByNameBlockedOrgs}
+                  &quot;
+                </h4>
+              </div>
+            ) : (
+              <Table className={styles.modalTable} responsive>
+                <thead>
+                  <tr>
+                    <th>{tCommon('name')}</th>
+                    <th>{tCommon('address')}</th>
+                    <th>{tCommon('createdOn')}</th>
+                    <th>{tCommon('createdBy')}</th>
+                    <th>{tCommon('usersRole')}</th>
+                    <th>{tCommon('action')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {blockedUsers.map((org) => {
+                    // Adjust organization/admin mapping as per your data model
+                    let isAdmin = false;
+                    if ((user as any)?.appUserProfile?.adminFor) {
+                      (user as any).appUserProfile.adminFor.map((item: any) => {
+                        if (item._id === org.id) {
+                          isAdmin = true;
+                        }
+                      });
+                    }
+                    return (
+                      <tr key={`org-blocked-${org.id}`}>
+                        <td>
+                          <Button
+                            variant="link"
+                            className="p-0"
+                            onClick={() => goToOrg(org.id)}
+                          >
+                            {org.avatarURL ? (
+                              <img src={org.avatarURL} alt="orgImage" />
+                            ) : (
+                              <Avatar name={org.name} alt="orgImage" />
+                            )}
+                            {org.name}
+                          </Button>
+                        </td>
+                        <td>{org.city ?? ''}</td>
+                        <td>{dayjs(org.createdAt).format('DD-MM-YYYY')}</td>
+                        <td>
+                          <Button
+                            variant="link"
+                            className="p-0"
+                            onClick={() => handleCreator()}
+                            data-testid={`creator${org.id}`}
+                          >
+                            {org.creator.avatarURL ? (
+                              <img src={org.creator.avatarURL} alt="creator" />
+                            ) : (
+                              <Avatar name={org.creator.name} alt="creator" />
+                            )}
+                            {org.creator.name}
+                          </Button>
+                        </td>
+                        <td>
+                          {isSuperAdmin
+                            ? 'SUPERADMIN'
+                            : isAdmin
+                              ? 'ADMIN'
+                              : 'USER'}
+                        </td>
+                        <td>
+                          <Button
+                            className={`btn btn-danger ${styles.removeButton}`}
+                            size="sm"
+                            data-testid={`unblockUserFromOrgBtn${org.id}`}
+                            onClick={() => {
+                              setremoveUserProps({
+                                orgId: org.id,
+                                orgName: org.name,
+                                setShowOnCancel: 'Blocked',
+                              });
+                              setShowBlockedOrganizations(false);
+                              setShowBlockedUserModal(true);
+                            }}
+                          >
+                            {tCommon('Unblock')}
+                          </Button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            )}
+          </Row>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowBlockedOrganizations(false)}
+            data-testid={`closeUnblockOrgsBtn${user.id}`}
+          >
+            {tCommon('close')}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal
+        show={showBlockedUserModal}
+        key={`modal-unblock-user-${index}`}
+        data-testid={`modal-unblock-user-${user.id}`}
+        onHide={() => onHideBlockUserModal()}
+      >
+        <Modal.Header className={styles.modalHeader} closeButton>
+          <Modal.Title className="text-white">
+            {t('unblockUserFrom', { org: removeUserProps.orgName })}
+          </Modal.Title>
+        </Modal.Header>
+        <hr style={{ margin: 0 }} />
+        <Modal.Body>
+          <p>
+            {t('unblockConfirmation', {
+              name: user.name,
+              org: removeUserProps.orgName,
+            })}
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={onHideBlockUserModal}
+            data-testid={`closeUnblockUserModal${user.id}`}
+          >
+            {tCommon('close')}
+          </Button>
+          <Button
+            className={`btn btn-danger ${styles.removeButton}`}
+            onClick={confirmUnblockUser}
+            data-testid={`confirmUnblockUser${user.id}`}
+          >
+            {tCommon('Unblock')}
           </Button>
         </Modal.Footer>
       </Modal>

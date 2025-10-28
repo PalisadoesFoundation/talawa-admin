@@ -215,6 +215,19 @@ export const USER_LIST_FOR_TABLE = gql`
                 city
                 state
                 countryCode
+                blockedUsers(first: 16) {
+                  edges {
+                    node {
+                      id
+                      name
+                      emailAddress
+                      avatarURL
+                      city
+                      state
+                      createdAt
+                    }
+                  }
+                }
                 creator {
                   id
                   name

@@ -9463,7 +9463,6 @@ form {
 }
 
 @media (max-height: 900px) {
-
   .collapseSidebarButton {
     height: 30px;
     width: calc(300px + 1rem);
