@@ -129,13 +129,6 @@ const leftDrawer = ({
           'organizationsBtn',
         )}
 
-        {renderDrawerItem(
-          '/pluginstore',
-          <PluginLogo />,
-          t('plugin store'),
-          'pluginStoreBtn',
-        )}
-
         {superAdmin && (
           <NavLink to="/users" onClick={handleLinkClick}>
             {({ isActive }) => {
@@ -167,6 +160,13 @@ const leftDrawer = ({
               );
             }}
           </NavLink>
+        )}
+
+        {renderDrawerItem(
+          '/pluginstore',
+          <PluginLogo />,
+          t('plugin store'),
+          'pluginStoreBtn',
         )}
 
         {renderDrawerItem(

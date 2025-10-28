@@ -64,6 +64,7 @@
   "Posts": "Posts",
   "Chat": "Chat",
   "Block/Unblock": "Block/Unblock",
+  "unblockedSuccessfully": "{{item}} Unblocked Successfully",
   "Advertisement": "Advertisement",
   "Funds": "Funds",
   "Membership Requests": "Membership Requests",
