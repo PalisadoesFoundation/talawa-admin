@@ -42,9 +42,8 @@ No one should fear voicing their opinion. Respones must be respectful.
 
 If you are ready to start contributing code right away, get ready!
 
-1. Join our Slack and introduce yourself. See details on how to join below in the Community section.
-   1. This repository has its own dedicated channel.
-   1. There are many persons on the various channels who are willing to assist you in getting started.
+1. Join our [community forum](https://community.talawa.io) and introduce yourself. See details on how to join below in the Community section.
+   1. There are many persons on the various forums who are willing to assist you in getting started.
 1. Take a look at our issues (**_after reading our guidelines below_**):
    1. We have a list of [good first issues](https://github.com/PalisadoesFoundation/talawa-admin/labels/good%20first%20issue) that contain challenges with a limited scope for beginners.
    1. There are issues for creating tests for our code base. We need to increase reliablility. Try those issues, or create your own for files that don't already have tests. This is another good strategy for beginners.
@@ -186,5 +185,5 @@ If you are participating in any of the various internship programs we are member
 
 There are many ways to communicate with the community.
 
-1. The Palisadoes Foundation has a Slack channel where members can assist with support and clarification. Visit the [Talawa GitHub repository home page](https://github.com/PalisadoesFoundation/talawa) for the link to join our slack channel.
+1. The Palisadoes Foundation has an [online community](https://community.talawa.io/) where members can assist with support and clarification. 
 1. We also have a technical email list run by [freelists.org](https://www.freelists.org/). Search for "palisadoes" and join. Members on this list are also periodically added to our marketing email list that focuses on less technical aspects of our work.
