@@ -170,7 +170,7 @@ export const MOCKS = [
         updateActionItemCategory: {
           id: 'categoryId',
           name: 'Category 1',
-          description: 'New description only',
+          isDisabled: false,
           updatedAt: '2044-01-01',
         },
       },
@@ -235,7 +235,7 @@ export const MOCKS = [
         updateActionItemCategory: {
           id: 'categoryId',
           name: 'Updated Name',
-          description: 'Updated description',
+          isDisabled: false,
           updatedAt: '2044-01-01',
         },
       },
@@ -279,7 +279,6 @@ export const MOCKS = [
         updateActionItemCategory: {
           id: 'categoryId',
           name: 'Category 1',
-          description: 'Updated description',
           isDisabled: true,
           updatedAt: '2044-01-01',
         },
@@ -303,7 +302,6 @@ export const MOCKS = [
         updateActionItemCategory: {
           id: 'categoryId',
           name: 'Completely New Name',
-          description: 'Completely new description',
           isDisabled: true,
           updatedAt: '2044-01-01',
         },
