@@ -29,8 +29,10 @@ describe('LeaveOrganization Module-Level Exports', () => {
   });
 
   test('userEmail handles localStorage error and returns empty string', async () => {
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
     // Make getItem throw an error
     vi.mocked(getItem).mockImplementation(() => {
       throw new Error('localStorage error');
@@ -38,22 +40,24 @@ describe('LeaveOrganization Module-Level Exports', () => {
 
     // Dynamically import to trigger the IIFE with our mock
     const module = await import('./LeaveOrganization');
-    
+
     // Verify it returned empty string on error
     expect(module.userEmail).toBe('');
-    
+
     // Verify console.error was called
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       'Failed to access localStorage:',
-      expect.any(Error)
+      expect.any(Error),
     );
 
     consoleErrorSpy.mockRestore();
   });
 
   test('userId handles localStorage error and returns empty string', async () => {
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
     // Make getItem throw an error for userId specifically
     vi.mocked(getItem).mockImplementation((prefix: string, key: string) => {
       if (key === 'userId') {
@@ -64,14 +68,14 @@ describe('LeaveOrganization Module-Level Exports', () => {
 
     // Dynamically import to trigger the IIFE with our mock
     const module = await import('./LeaveOrganization');
-    
+
     // Verify it returned empty string on error
     expect(module.userId).toBe('');
-    
+
     // Verify console.error was called
     expect(consoleErrorSpy).toHaveBeenCalledWith(
       'Failed to access localStorage:',
-      expect.any(Error)
+      expect.any(Error),
     );
 
     consoleErrorSpy.mockRestore();
@@ -85,7 +89,7 @@ describe('LeaveOrganization Module-Level Exports', () => {
     });
 
     const module = await import('./LeaveOrganization');
-    
+
     expect(module.userEmail).toBe('user@example.com');
   });
 
@@ -97,7 +101,7 @@ describe('LeaveOrganization Module-Level Exports', () => {
     });
 
     const module = await import('./LeaveOrganization');
-    
+
     expect(module.userId).toBe('12345');
   });
 
@@ -105,7 +109,7 @@ describe('LeaveOrganization Module-Level Exports', () => {
     vi.mocked(getItem).mockImplementation(() => null);
 
     const module = await import('./LeaveOrganization');
-    
+
     expect(module.userEmail).toBe('');
   });
 
@@ -113,7 +117,7 @@ describe('LeaveOrganization Module-Level Exports', () => {
     vi.mocked(getItem).mockImplementation(() => null);
 
     const module = await import('./LeaveOrganization');
-    
+
     expect(module.userId).toBe('');
   });
 });
