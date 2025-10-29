@@ -301,10 +301,12 @@ const Campaigns = (): JSX.Element => {
                     </span>
                     <span>Raised: $0</span>
                     <span>
-                      Start Date: {campaign.startDate as unknown as string}
+                      Start Date:{' '}
+                      {new Date(campaign.startDate).toLocaleDateString()}
                     </span>
                     <span>
-                      End Date: {campaign.endDate as unknown as string}
+                      End Date:{' '}
+                      {new Date(campaign.endDate).toLocaleDateString()}
                     </span>
                   </div>
                 </div>

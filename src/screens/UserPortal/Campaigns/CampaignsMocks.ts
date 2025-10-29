@@ -113,6 +113,7 @@ export const MOCKS = [
         },
       },
     },
+    maxUsageCount: 5,
   },
   userDetailsQuery,
 ];
@@ -134,6 +135,7 @@ export const EMPTY_MOCKS = [
         },
       },
     },
+    maxUsageCount: 5,
   },
   userDetailsQuery,
 ];
@@ -147,6 +149,7 @@ export const USER_FUND_CAMPAIGNS_ERROR = [
       },
     },
     error: new Error('Error fetching campaigns'),
+    maxUsageCount: 5,
   },
   userDetailsQuery,
 ];
