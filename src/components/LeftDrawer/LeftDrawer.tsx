@@ -40,7 +40,8 @@ const leftDrawer = ({
   const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
-  const superAdmin = getItem('role') !== 'regular';
+  const storedRole = (getItem<string>('role') ?? 'regular').toLowerCase();
+  const isAdmin = storedRole === 'administrator';
 
   const handleLinkClick = useCallback((): void => {
     if (window.innerWidth <= 820) {
@@ -129,7 +130,7 @@ const leftDrawer = ({
           'organizationsBtn',
         )}
 
-        {superAdmin && (
+        {isAdmin && (
           <NavLink to="/users" onClick={handleLinkClick}>
             {({ isActive }) => {
               const fillColor = isActive
@@ -206,7 +207,7 @@ const leftDrawer = ({
       renderDrawerItem,
       renderPluginDrawerItem,
       pluginDrawerItems,
-      superAdmin,
+      isAdmin,
       t,
       tCommon,
       hideDrawer,
