@@ -122,50 +122,33 @@ const Campaigns = (): JSX.Element => {
   useEffect(() => {
     if (campaignData?.organization?.funds?.edges) {
       // Flatten the nested structure to get all campaigns
-      const allCampaigns: InterfaceUserCampaign[] = [];
-      campaignData.organization.funds.edges.forEach(
-        (fundEdge: {
-          node: {
-            campaigns?: {
-              edges: {
-                node: {
-                  id: string;
-                  name: string;
-                  currencyCode: string;
-                  goalAmount: number;
-                  startAt: string;
-                  endAt: string;
-                };
-              }[];
-            };
-          };
-        }) => {
-          if (fundEdge.node.campaigns?.edges) {
-            fundEdge.node.campaigns.edges.forEach(
-              (campaignEdge: {
-                node: {
-                  id: string;
-                  name: string;
-                  currencyCode: string;
-                  goalAmount: number;
-                  startAt: string;
-                  endAt: string;
-                };
-              }) => {
-                const campaign = campaignEdge.node;
-                allCampaigns.push({
-                  _id: campaign.id,
-                  name: campaign.name,
-                  fundingGoal: campaign.goalAmount,
-                  startDate: new Date(campaign.startAt),
-                  endDate: new Date(campaign.endAt),
-                  currency: campaign.currencyCode,
-                });
-              },
-            );
-          }
-        },
-      );
+      const allCampaigns: InterfaceUserCampaign[] =
+        campaignData.organization.funds.edges
+          .flatMap(
+            (fundEdge: { node: { campaigns?: { edges: unknown[] } } }) =>
+              fundEdge?.node?.campaigns?.edges ?? [],
+          )
+          .map(
+            ({
+              node: campaign,
+            }: {
+              node: {
+                id: string;
+                name: string;
+                currencyCode: string;
+                goalAmount: number;
+                startAt: string;
+                endAt: string;
+              };
+            }) => ({
+              _id: campaign.id,
+              name: campaign.name,
+              fundingGoal: campaign.goalAmount,
+              startDate: new Date(campaign.startAt),
+              endDate: new Date(campaign.endAt),
+              currency: campaign.currencyCode,
+            }),
+          );
 
       // Apply client-side filtering by search term
       let filteredCampaigns = allCampaigns;
@@ -183,13 +166,9 @@ const Campaigns = (): JSX.Element => {
           case 'fundingGoal_DESC':
             return b.fundingGoal - a.fundingGoal;
           case 'endDate_ASC':
-            return (
-              new Date(a.endDate).getTime() - new Date(b.endDate).getTime()
-            );
+            return a.endDate.getTime() - b.endDate.getTime();
           case 'endDate_DESC':
-            return (
-              new Date(b.endDate).getTime() - new Date(a.endDate).getTime()
-            );
+            return b.endDate.getTime() - a.endDate.getTime();
           default:
             return 0;
         }
