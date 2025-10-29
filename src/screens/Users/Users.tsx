@@ -77,7 +77,9 @@ import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { ApolloError } from '@apollo/client';
-import PageHeader from 'shared-components/Navbar/Navbar';
+import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'subComponents/SearchBar';
+import { WarningAmberRounded } from '@mui/icons-material';
 
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
@@ -103,7 +105,7 @@ const Users = (): JSX.Element => {
     loading,
     fetchMore,
     refetch: refetchUsers,
-    error,
+    error: UsersError,
   }: {
     data?: {
       allUsers: {
@@ -138,14 +140,31 @@ const Users = (): JSX.Element => {
     error?: ApolloError;
   } = useQuery(USER_LIST_FOR_TABLE, {
     variables: {
-      first: 10,
+      first: perPageResult,
       after: null,
       orgFirst: 32,
+      where: undefined,
     },
     notifyOnNetworkStatusChange: true,
   });
 
-  const edges = data?.allUsers?.edges ?? [];
+  if (UsersError) {
+    return (
+      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+        <div className={styles.message} data-testid="errorMsg">
+          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <h6 className="fw-bold text-danger text-center">
+            Error occured while loading Users
+            <br />
+            {UsersError.message}
+          </h6>
+        </div>
+      </div>
+    );
+  }
+
+  type Edge = { cursor: string; node: InterfaceQueryUserListItem };
+  const edges = (data?.allUsers?.edges ?? []) as Edge[];
   const pageInfo = data?.allUsers?.pageInfo;
 
   const [pageInfoState, setPageInfoState] = useState(pageInfo);
@@ -157,11 +176,9 @@ const Users = (): JSX.Element => {
   }, [data]);
 
   useEffect(() => {
-    if (edges.length > 0) {
-      const newUser = edges.map((edge: any) => edge.node);
-      setUsersData(newUser || []);
-      setHasMore(pageInfo?.hasNextPage ?? false);
-    }
+    const newUser = edges.map((edge) => edge.node);
+    setUsersData(newUser || []);
+    setHasMore(pageInfo?.hasNextPage ?? false);
   }, [data]);
 
   const { data: dataOrgs } = useQuery(ORGANIZATION_LIST);
@@ -216,7 +233,7 @@ const Users = (): JSX.Element => {
       first: perPageResult,
       after: null,
       orgFirst: 32,
-      name_Icontains: value,
+      where: { name: value },
     });
     setHasMore(true);
   };
@@ -226,12 +243,14 @@ const Users = (): JSX.Element => {
       first: perPageResult,
       after: null,
       orgFirst: 32,
+      where: undefined,
     });
     setHasMore(true);
   };
 
   const loadMoreUsers = async (): Promise<void> => {
-    if (!pageInfoState?.hasNextPage || isLoadingMore) {
+    if (isLoadingMore) return;
+    if (!pageInfoState?.hasNextPage) {
       setHasMore(false);
       return;
     }
@@ -244,9 +263,9 @@ const Users = (): JSX.Element => {
         orgFirst: 32,
       },
     });
-
-    const moreEdges = moreData?.allUsers?.edges ?? [];
-    const newUsers = moreEdges.map((edge: any) => edge.node);
+    type Edge = { cursor: string; node: InterfaceQueryUserListItem };
+    const moreEdges = (moreData?.allUsers?.edges ?? []) as Edge[];
+    const newUsers = moreEdges.map((edge) => edge.node);
 
     setUsersData((prev) => [...prev, ...newUsers]);
     setPageInfoState(moreData?.allUsers?.pageInfo);

@@ -183,8 +183,13 @@ export const USER_LIST = gql`
 `;
 
 export const USER_LIST_FOR_TABLE = gql`
-  query allUsers($first: Int, $after: String, $orgFirst: Int) {
-    allUsers(first: $first, after: $after) {
+  query allUsers(
+    $first: Int
+    $after: String
+    $orgFirst: Int
+    $where: QueryAllUsersWhereInput
+  ) {
+    allUsers(first: $first, after: $after, where: $where) {
       pageInfo {
         endCursor
         hasPreviousPage

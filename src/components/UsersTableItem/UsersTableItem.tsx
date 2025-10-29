@@ -46,18 +46,19 @@ const UsersTableItem = (props: Props): JSX.Element => {
 
   const memberOrgs =
     user.organizationsWhereMember?.edges?.map((e) => e.node) ?? [];
-  const blockedOrgs = user.organizationsWhereMember?.edges?.map((e) => ({
-    name: e.node.name,
-    id: e.node.id,
-    avatarURL: e.node.avatarURL,
-    city: e.node.city,
-    createdAt: e.node.createdAt,
-    creator: e.node.creator,
-    blockedUser: e.node.blockedUsers?.edges?.map((b) => b.node) ?? [],
-  }));
+  const blockedOrgs =
+    user.organizationsWhereMember?.edges?.map((e) => ({
+      name: e.node.name,
+      id: e.node.id,
+      avatarURL: e.node.avatarURL,
+      city: e.node.city,
+      createdAt: e.node.createdAt,
+      creator: e.node.creator,
+      blockedUsers: e.node.blockedUsers?.edges?.map((b) => b.node) ?? [],
+    })) ?? [];
 
   const usersBlockedByOrgs = blockedOrgs.filter((org) =>
-    org.blockedUser.some((u) => u.id === user.id),
+    org.blockedUsers.some((u) => u.id === user.id),
   );
   const [joinedOrgs, setJoinedOrgs] = useState(memberOrgs);
   const [blockedUsers, setBlockedUsers] = useState(usersBlockedByOrgs);
@@ -102,6 +103,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         );
         resetAndRefetch();
         setShowBlockedUserModal(false);
+        setShowBlockedOrganizations(true);
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -191,7 +193,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
 
   const handleSearchButtonClickBlockedOrgs = (): void => {
     const inputValue =
-      (document.getElementById('orgname-joined-orgs') as HTMLInputElement)
+      (document.getElementById('orgname-blocked-orgs') as HTMLInputElement)
         ?.value || '';
     searchBlockedOrgs(inputValue);
   };
@@ -211,8 +213,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   }
 
   // If there is a super admin notion, adapt this logic to your API.
-  const appUserProfile = user.appUserProfile;
-  const isSuperAdmin = appUserProfile?.isSuperAdmin ?? false;
+  const isAdmin = user.role === 'administrator' ? true : false;
 
   return (
     <>
@@ -233,7 +234,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
           <Button
             className={`btn ${styles.removeButton}`}
             onClick={() => setShowBlockedOrganizations(true)}
-            data-testid={`showJoinedOrgsBtn${user.id}`}
+            data-testid={`showBlockedOrgsBtn${user.id}`}
           >
             {t('view')} ({blockedUsers.length})
           </Button>
@@ -294,11 +295,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
                 </thead>
                 <tbody>
                   {joinedOrgs.map((org) => {
-                    // Adjust organization/admin mapping as per your data model
-                    const isAdmin =
-                      appUserProfile?.adminFor?.some(
-                        (item: { _id: string }) => item._id === org.id,
-                      ) ?? false;
                     return (
                       <tr key={`org-joined-${org.id}`}>
                         <td>
@@ -332,30 +328,19 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             {org.creator.name}
                           </Button>
                         </td>
-                        <td>
-                          {isSuperAdmin
-                            ? 'SUPERADMIN'
-                            : isAdmin
-                              ? 'ADMIN'
-                              : 'USER'}
-                        </td>
+                        <td> {isAdmin ? 'ADMIN' : 'USER'} </td>
                         <td>
                           <Form.Select
                             size="sm"
                             onChange={changeRoleInOrg}
                             data-testid={`changeRoleInOrg${org.id}`}
-                            disabled={isSuperAdmin}
+                            disabled={isAdmin}
                             defaultValue={
-                              isSuperAdmin
-                                ? `SUPERADMIN`
-                                : isAdmin
-                                  ? `ADMIN?${org.id}`
-                                  : `USER?${org.id}`
+                              isAdmin ? `ADMIN?${org.id}` : `USER?${org.id}`
                             }
                           >
-                            {isSuperAdmin ? (
+                            {isAdmin ? (
                               <>
-                                <option value={`SUPERADMIN`}>SUPERADMIN</option>
                                 <option value={`ADMIN?${org.id}`}>ADMIN</option>
                                 <option value={`USER?${org.id}`}>USER</option>
                               </>
@@ -458,7 +443,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {memberOrgs.length !== 0 && (
+          {usersBlockedByOrgs.length !== 0 && (
             <div className={'position-relative mb-4 border rounded'}>
               <Form.Control
                 id="orgname-blocked-orgs"
@@ -507,15 +492,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
                 </thead>
                 <tbody>
                   {blockedUsers.map((org) => {
-                    // Adjust organization/admin mapping as per your data model
-                    let isAdmin = false;
-                    if ((user as any)?.appUserProfile?.adminFor) {
-                      (user as any).appUserProfile.adminFor.map((item: any) => {
-                        if (item._id === org.id) {
-                          isAdmin = true;
-                        }
-                      });
-                    }
                     return (
                       <tr key={`org-blocked-${org.id}`}>
                         <td>
@@ -549,13 +525,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             {org.creator.name}
                           </Button>
                         </td>
-                        <td>
-                          {isSuperAdmin
-                            ? 'SUPERADMIN'
-                            : isAdmin
-                              ? 'ADMIN'
-                              : 'USER'}
-                        </td>
+                        <td> {isAdmin ? 'ADMIN' : 'USER'} </td>
                         <td>
                           <Button
                             className={`btn btn-danger ${styles.removeButton}`}
@@ -571,7 +541,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                               setShowBlockedUserModal(true);
                             }}
                           >
-                            {tCommon('Unblock')}
+                            {tCommon('unblock')}
                           </Button>
                         </td>
                       </tr>
@@ -625,7 +595,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             onClick={confirmUnblockUser}
             data-testid={`confirmUnblockUser${user.id}`}
           >
-            {tCommon('Unblock')}
+            {tCommon('unblock')}
           </Button>
         </Modal.Footer>
       </Modal>
