@@ -10,21 +10,15 @@ import gql from 'graphql-tag';
  */
 
 export const CREATE_USER_TAG = gql`
-  mutation CreateUserTag(
-    $name: String!
-    $tagColor: String
-    $parentTagId: ID
-    $organizationId: ID!
-  ) {
-    createUserTag(
+  mutation CreateUserTag($name: String!, $folderId: ID, $organizationId: ID!) {
+    createTag(
       input: {
         name: $name
         organizationId: $organizationId
-        parentTagId: $parentTagId
-        tagColor: $tagColor
+        folderId: $folderId
       }
     ) {
-      _id
+      id
     }
   }
 `;
@@ -37,9 +31,9 @@ export const CREATE_USER_TAG = gql`
  */
 
 export const UNASSIGN_USER_TAG = gql`
-  mutation UnassignUserTag($tagId: ID!, $userId: ID!) {
-    unassignUserTag(input: { tagId: $tagId, userId: $userId }) {
-      _id
+  mutation UnassignUserTag($tagId: ID!, $assigneeId: ID!) {
+    unassignUserTag(tagId: $tagId, assigneeId: $assigneeId) {
+      id
     }
   }
 `;
@@ -52,9 +46,9 @@ export const UNASSIGN_USER_TAG = gql`
  */
 
 export const UPDATE_USER_TAG = gql`
-  mutation UpdateUserTag($tagId: ID!, $name: String!) {
-    updateUserTag(input: { tagId: $tagId, name: $name }) {
-      _id
+  mutation UpdateUserTag($id: ID!, $name: String!) {
+    updateTag(input: { id: $id, name: $name }) {
+      id
     }
   }
 `;
@@ -67,8 +61,8 @@ export const UPDATE_USER_TAG = gql`
 
 export const REMOVE_USER_TAG = gql`
   mutation RemoveUserTag($id: ID!) {
-    removeUserTag(id: $id) {
-      _id
+    deleteTag(input: { id: $id }) {
+      id
     }
   }
 `;

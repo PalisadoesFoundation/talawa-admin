@@ -177,29 +177,20 @@ export const USER_JOINED_ORGANIZATIONS_PG = gql`
   }
 `;
 
-/**
- * GraphQL query to retrieve the list of user tags belonging to an organization.
- *
- * @param id - ID of the organization.
- * @param first - Number of tags to retrieve "after" (if provided) a certain tag.
- * @param after - Id of the last tag on the current page.
- * @param last - Number of tags to retrieve "before" (if provided) a certain tag.
- * @param before - Id of the first tag on the current page.
- * @returns The list of organizations based on the applied filters.
- */
-
-export const ORGANIZATION_USER_TAGS_LIST = gql`
-  query Organizations(
-    $id: ID!
+export const ORGANIZATION_USER_TAGS_LIST_PG = gql`
+  query OrganizationTags(
+    $input: QueryOrganizationInput!
     $after: String
     $before: String
-    $first: PositiveInt
-    $last: PositiveInt
+    $first: Int
+    $last: Int
     $where: UserTagWhereInput
     $sortedBy: UserTagSortedByInput
   ) {
-    organizations(id: $id) {
-      userTags(
+    organization(input: $input) {
+      id
+      name
+      tags(
         after: $after
         before: $before
         first: $first
@@ -208,11 +199,22 @@ export const ORGANIZATION_USER_TAGS_LIST = gql`
         sortedBy: $sortedBy
       ) {
         edges {
+          cursor
           node {
-            _id
+            _id: id
             name
-            parentTag {
+            createdAt
+            updater {
+              id
+              name
+            }
+            parentTag: folder {
+              _id: id
+              name
+            }
+            ancestorTags {
               _id
+              name
             }
             usersAssignedTo(first: $first, last: $last) {
               totalCount
@@ -220,59 +222,15 @@ export const ORGANIZATION_USER_TAGS_LIST = gql`
             childTags(first: $first, last: $last) {
               totalCount
             }
-            ancestorTags {
-              _id
-              name
-            }
           }
-          cursor
         }
         pageInfo {
-          startCursor
-          endCursor
           hasNextPage
           hasPreviousPage
+          startCursor
+          endCursor
         }
         totalCount
-      }
-    }
-  }
-`;
-
-export const ORGANIZATION_USER_TAGS_LIST_PG = gql`
-  query OrganizationTags(
-    $input: QueryOrganizationInput!
-    $after: String
-    $before: String
-    $first: Int
-    $last: Int
-  ) {
-    organization(input: $input) {
-      id
-      name
-      tags(after: $after, before: $before, first: $first, last: $last) {
-        edges {
-          cursor
-          node {
-            id
-            name
-            createdAt
-            updater {
-              id
-              name
-            }
-            folder {
-              id
-              name
-            }
-          }
-        }
-        pageInfo {
-          hasNextPage
-          hasPreviousPage
-          startCursor
-          endCursor
-        }
       }
     }
   }
