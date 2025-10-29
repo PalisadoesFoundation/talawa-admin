@@ -267,10 +267,18 @@ describe('Testing Action Item Category Modal', () => {
 
     it('should create category with only name filled', async () => {
       renderCategoryModal(link1, categoryProps[0]);
+
+      await waitFor(() => {
+        expect(screen.getByLabelText('Name *')).toBeInTheDocument();
+      });
+
       const nameInput = screen.getByLabelText('Name *');
+      const descriptionInput = screen.getByLabelText('Description');
       const submitBtn = screen.getByTestId('formSubmitButton');
 
-      fireEvent.change(nameInput, { target: { value: 'Minimal Category' } });
+      await userEvent.clear(nameInput);
+      await userEvent.type(nameInput, 'Minimal Category');
+      await userEvent.clear(descriptionInput);
       await userEvent.click(submitBtn);
 
       await waitFor(() => {
@@ -292,63 +300,66 @@ describe('Testing Action Item Category Modal', () => {
     });
   });
 
-  describe('Edit Mode Tests', () => {
-    it.each([
-      {
-        name: 'only name',
-        changes: { name: 'Category 2' },
-      },
-      {
-        name: 'only description',
-        changes: { description: 'New description only' },
-      },
-      {
-        name: 'only isDisabled',
-        changes: { isDisabled: true },
-      },
-      {
-        name: 'empty description',
-        changes: { description: '' },
-      },
-      {
-        name: 'name and description',
-        changes: { name: 'Updated Name', description: 'Updated description' },
-      },
-      {
-        name: 'name and isDisabled',
-        changes: { name: 'Updated Name', isDisabled: true },
-      },
-      {
-        name: 'description and isDisabled',
-        changes: { description: 'Updated description', isDisabled: true },
-      },
-      {
-        name: 'all fields',
-        changes: {
-          name: 'Completely New Name',
-          description: 'Completely new description',
-          isDisabled: true,
-        },
-      },
-    ])('should edit category changing $name', async ({ changes }) => {
+  describe('Edit Mode Tests - Single Field Changes', () => {
+    it('should edit category changing only name', async () => {
       renderCategoryModal(link1, categoryProps[1]);
-
-      if (changes.name !== undefined) {
-        const nameInput = screen.getByLabelText('Name *');
-        fireEvent.change(nameInput, { target: { value: changes.name } });
-      }
-      if (changes.description !== undefined) {
-        const descriptionInput = screen.getByLabelText('Description');
-        fireEvent.change(descriptionInput, {
-          target: { value: changes.description },
-        });
-      }
-      if (changes.isDisabled !== undefined) {
-        const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
-        await userEvent.click(isDisabledSwitch);
-      }
-
+      const nameInput = screen.getByLabelText('Name *');
       const submitBtn = screen.getByTestId('formSubmitButton');
+
+      fireEvent.change(nameInput, { target: { value: 'Category 2' } });
+      await userEvent.click(submitBtn);
+
+      await waitFor(() => {
+        expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
+        expect(categoryProps[1].hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(
+          translations.successfulUpdation,
+        );
+      });
+    });
+
+    it('should edit category changing only description', async () => {
+      renderCategoryModal(link1, categoryProps[1]);
+      const descriptionInput = screen.getByLabelText('Description');
+      const submitBtn = screen.getByTestId('formSubmitButton');
+
+      fireEvent.change(descriptionInput, {
+        target: { value: 'New description only' },
+      });
+      await userEvent.click(submitBtn);
+
+      await waitFor(() => {
+        expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
+        expect(categoryProps[1].hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(
+          translations.successfulUpdation,
+        );
+      });
+    });
+
+    it('should edit category changing only isDisabled', async () => {
+      renderCategoryModal(link1, categoryProps[1]);
+      const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
+      const submitBtn = screen.getByTestId('formSubmitButton');
+
+      await userEvent.click(isDisabledSwitch);
+      await userEvent.click(submitBtn);
+
+      await waitFor(() => {
+        expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
+        expect(categoryProps[1].hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(
+          translations.successfulUpdation,
+        );
+      });
+    });
+
+    it('should handle empty description in edit mode', async () => {
+      renderCategoryModal(link1, categoryProps[1]);
+      const descriptionInput = screen.getByLabelText('Description');
+      const submitBtn = screen.getByTestId('formSubmitButton');
+
+      fireEvent.change(descriptionInput, { target: { value: '' } });
       await userEvent.click(submitBtn);
 
       await waitFor(() => {
@@ -361,6 +372,85 @@ describe('Testing Action Item Category Modal', () => {
     });
   });
 
+  describe('Edit Mode Tests - Multiple Field Changes', () => {
+    it('should edit category changing name and description', async () => {
+      renderCategoryModal(link1, categoryProps[1]);
+      const nameInput = screen.getByLabelText('Name *');
+      const descriptionInput = screen.getByLabelText('Description');
+      const submitBtn = screen.getByTestId('formSubmitButton');
+
+      fireEvent.change(nameInput, { target: { value: 'Updated Name' } });
+      fireEvent.change(descriptionInput, {
+        target: { value: 'Updated description' },
+      });
+      await userEvent.click(submitBtn);
+
+      await waitFor(() => {
+        expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
+        expect(categoryProps[1].hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(
+          translations.successfulUpdation,
+        );
+      });
+    });
+
+    it('should edit category changing name and isDisabled', async () => {
+      renderCategoryModal(link1, categoryProps[1]);
+      const nameInput = screen.getByLabelText('Name *');
+      const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
+      const submitBtn = screen.getByTestId('formSubmitButton');
+
+      fireEvent.change(nameInput, { target: { value: 'Updated Name' } });
+      await userEvent.click(isDisabledSwitch);
+      await userEvent.click(submitBtn);
+
+      await waitFor(() => {
+        expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
+        expect(categoryProps[1].hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(
+          translations.successfulUpdation,
+        );
+      });
+    });
+
+    it('should edit category changing description and isDisabled', async () => {
+      renderCategoryModal(link1, categoryProps[1]);
+      const descriptionInput = screen.getByLabelText('Description');
+      const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
+      const submitBtn = screen.getByTestId('formSubmitButton');
+
+      fireEvent.change(descriptionInput, {
+        target: { value: 'Updated description' },
+      });
+      await userEvent.click(isDisabledSwitch);
+      await userEvent.click(submitBtn);
+
+      await waitFor(() => {
+        expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
+        expect(categoryProps[1].hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(
+          translations.successfulUpdation,
+        );
+      });
+    });
+
+    it('should edit category with all fields changed', async () => {
+      renderCategoryModal(link1, categoryProps[1]);
+      await fillFormAndSubmit(
+        'Completely New Name',
+        'Completely new description',
+        true,
+      );
+
+      await waitFor(() => {
+        expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
+        expect(categoryProps[1].hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(
+          translations.successfulUpdation,
+        );
+      });
+    });
+  });
 
   describe('Edit Mode - Error Handling', () => {
     it('should show error when trying to edit without changing any field', async () => {
@@ -392,6 +482,33 @@ describe('Testing Action Item Category Modal', () => {
 
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalled();
+      });
+    });
+
+    it('should handle category with null id in edit mode', async () => {
+      const propsWithNullId = {
+        ...categoryProps[1],
+        category: {
+          id: null as unknown as string,
+          name: 'Category 1',
+          description: 'This is a test category',
+          isDisabled: false,
+          createdAt: '2044-01-01',
+          updatedAt: '2044-01-01',
+          creatorId: 'userId',
+          organizationId: 'orgId',
+        },
+      };
+      renderCategoryModal(link1, propsWithNullId);
+      const nameInput = screen.getByLabelText('Name *');
+      const submitBtn = screen.getByTestId('formSubmitButton');
+
+      fireEvent.change(nameInput, { target: { value: 'Updated Name' } });
+      await userEvent.click(submitBtn);
+
+      // Should attempt to update even with empty id
+      await waitFor(() => {
+        expect(categoryProps[1].refetchCategories).not.toHaveBeenCalled();
       });
     });
   });
