@@ -1,14 +1,10 @@
 import gql from 'graphql-tag';
 
 /**
- * GraphQL query to retrieve the list of members for a specific organization.
+ * GraphQL query to retrieve funds for an organization (including nested campaigns).
  *
- * @param id - The ID of the organization for which members are being retrieved.
- * @param name - The name of the organization for which members are being retrieved.
- * @param creatorId - The ID of the creator of the organization.
- * @param updaterId - The ID of the user who last updated the organization.
- * @param isTaxDeductible - A boolean value indicating whether the organization is tax deductible.
- * @returns The list of members associated with the organization.
+ * @param id - The ID of the organization to fetch funds for.
+ * @returns The list of funds with their associated campaigns.
  */
 export const FUND_LIST = gql`
   query FundsByOrganization($input: QueryOrganizationInput!) {

@@ -67,10 +67,6 @@ const Campaigns = (): JSX.Element => {
 
   // Extracts organization ID from the URL parameters
   const { orgId } = useParams();
-  if (!orgId || !userId) {
-    // Redirects to the homepage if orgId or userId is missing
-    return <Navigate to={'/'} replace />;
-  }
 
   // Navigation hook to programmatically navigate between routes
   const navigate = useNavigate();
@@ -121,6 +117,7 @@ const Campaigns = (): JSX.Element => {
     variables: {
       input: { id: orgId },
     },
+    skip: !orgId || !userId,
   });
 
   /**
@@ -154,8 +151,8 @@ const Campaigns = (): JSX.Element => {
               _id: campaign.id,
               name: campaign.name,
               fundingGoal: campaign.goalAmount,
-              startDate: campaign.startAt as unknown as Date,
-              endDate: campaign.endAt as unknown as Date,
+              startDate: new Date(campaign.startAt),
+              endDate: new Date(campaign.endAt),
               currency: campaign.currencyCode,
             });
           });
@@ -193,6 +190,11 @@ const Campaigns = (): JSX.Element => {
       setCampaigns(filteredCampaigns);
     }
   }, [campaignData, searchTerm, sortBy]);
+
+  // Redirects to the homepage if orgId or userId is missing
+  if (!orgId || !userId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   // Renders a loader while campaigns are being fetched
   if (campaignLoading) return <Loader size="xl" />;
@@ -267,7 +269,7 @@ const Campaigns = (): JSX.Element => {
         </Stack>
       ) : (
         campaigns.map((campaign: InterfaceUserCampaign, index: number) => (
-          <Accordion className="mt-3 rounded" key={index}>
+          <Accordion className="mt-3 rounded" key={campaign._id}>
             <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
               <div className={styles.accordionSummary}>
                 <div
