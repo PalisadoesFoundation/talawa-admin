@@ -473,13 +473,14 @@ export const MOCKS = [
       variables: {
         name: 'subTag 12',
         organizationId: '123',
-        parentTagId: '1',
+        folderId: '1',
       },
     },
     result: {
       data: {
-        createUserTag: {
-          _id: 'subTag12',
+        createTag: {
+          id: 'subTag12',
+          name: 'subTag 12',
         },
       },
     },
