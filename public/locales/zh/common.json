@@ -101,7 +101,7 @@
   "searchBy": "按{{item}}搜索",
   "plugins": "插件",
   "unblock": "解除封锁",
-  "unblockedSuccessfully": "用户已成功解除封锁",
+  "unblockedSuccessfully": "{{item}} 已成功解除封锁",
   "save": "保存",
   "saving": "保存中..."
 }
