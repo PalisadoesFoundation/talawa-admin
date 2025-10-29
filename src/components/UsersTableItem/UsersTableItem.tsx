@@ -213,7 +213,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   }
 
   // If there is a super admin notion, adapt this logic to your API.
-  const isAdmin = user.role === 'administrator' ? true : false;
+  const isAdmin = user.role === 'administrator';
 
   return (
     <>
