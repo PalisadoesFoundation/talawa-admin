@@ -67,10 +67,6 @@ const Campaigns = (): JSX.Element => {
 
   // Extracts organization ID from the URL parameters
   const { orgId } = useParams();
-  if (!orgId || !userId) {
-    // Redirects to the homepage if orgId or userId is missing
-    return <Navigate to={'/'} replace />;
-  }
 
   // Navigation hook to programmatically navigate between routes
   const navigate = useNavigate();
@@ -93,10 +89,16 @@ const Campaigns = (): JSX.Element => {
     refetch: refetchCampaigns,
   } = useQuery(USER_FUND_CAMPAIGNS, {
     variables: {
-      input: { id: orgId },
+      input: { id: orgId as string },
     },
     fetchPolicy: 'cache-first',
+    skip: !orgId || !userId,
   });
+
+  // Redirects to the homepage if orgId or userId is missing
+  if (!orgId || !userId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   /**
    * Opens the modal for adding a pledge to a selected campaign.
