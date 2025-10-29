@@ -117,23 +117,41 @@ const Campaigns = (): JSX.Element => {
     if (campaignData?.organization?.funds?.edges) {
       // Flatten all campaigns from all funds
       const allCampaigns: InterfaceUserCampaign[] = [];
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      campaignData.organization.funds.edges.forEach((fundEdge: any) => {
-        if (fundEdge.node.campaigns?.edges) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          fundEdge.node.campaigns.edges.forEach((campaignEdge: any) => {
-            const campaign = campaignEdge.node;
-            allCampaigns.push({
-              _id: campaign.id,
-              name: campaign.name,
-              fundingGoal: campaign.goalAmount,
-              startDate: new Date(campaign.startAt),
-              endDate: new Date(campaign.endAt),
-              currency: campaign.currencyCode,
+
+      type FundEdge = {
+        node: {
+          campaigns?: {
+            edges: Array<{
+              node: {
+                id: string;
+                name: string;
+                goalAmount: number;
+                startAt: string;
+                endAt: string;
+                currencyCode: string;
+              };
+            }>;
+          };
+        };
+      };
+
+      (campaignData.organization.funds.edges as FundEdge[]).forEach(
+        (fundEdge) => {
+          if (fundEdge.node.campaigns?.edges) {
+            fundEdge.node.campaigns.edges.forEach((campaignEdge) => {
+              const campaign = campaignEdge.node;
+              allCampaigns.push({
+                _id: campaign.id,
+                name: campaign.name,
+                fundingGoal: campaign.goalAmount,
+                startDate: new Date(campaign.startAt),
+                endDate: new Date(campaign.endAt),
+                currency: campaign.currencyCode,
+              });
             });
-          });
-        }
-      });
+          }
+        },
+      );
 
       // Filter by search term
       let filteredCampaigns = allCampaigns;
