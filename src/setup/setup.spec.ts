@@ -1,214 +1,95 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import type { MockInstance } from 'vitest';
-import dotenv from 'dotenv';
-import fs from 'fs';
-import { main, askAndSetRecaptcha } from './setup';
-import { checkEnvFile, modifyEnvFile } from './checkEnvFile/checkEnvFile';
-import { validateRecaptcha } from './validateRecaptcha/validateRecaptcha';
-import askAndSetDockerOption from './askAndSetDockerOption/askAndSetDockerOption';
-import updateEnvFile from './updateEnvFile/updateEnvFile';
-import askAndUpdatePort from './askAndUpdatePort/askAndUpdatePort';
-import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
+import { main } from './setup';
+import * as utils from './utils';
+import * as checkEnvFile from './checkEnvFile/checkEnvFile';
+import * as backupEnvFile from './backupEnvFile/backupEnvFile';
 import inquirer from 'inquirer';
 
-vi.mock('./backupEnvFile/backupEnvFile', () => ({
-  backupEnvFile: vi.fn().mockResolvedValue(undefined),
-}));
 vi.mock('inquirer');
-vi.mock('dotenv');
-vi.mock('fs');
+vi.mock('./utils');
 vi.mock('./checkEnvFile/checkEnvFile');
-vi.mock('./validateRecaptcha/validateRecaptcha');
-vi.mock('./askAndSetDockerOption/askAndSetDockerOption');
-vi.mock('./updateEnvFile/updateEnvFile');
-vi.mock('./askAndUpdatePort/askAndUpdatePort');
-vi.mock('./askForDocker/askForDocker');
+vi.mock('./backupEnvFile/backupEnvFile');
 
 describe('Talawa Admin Setup', () => {
   let processExitSpy: MockInstance;
   let consoleErrorSpy: MockInstance;
+
   beforeEach(() => {
     vi.clearAllMocks();
-
-    vi.mocked(checkEnvFile).mockReturnValue(true);
-
-    vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=no');
-
-    vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'no' });
-
-    processExitSpy = vi.spyOn(process, 'exit').mockImplementation((code) => {
-      throw new Error(`process.exit called with code ${code}`);
-    });
+    processExitSpy = vi
+      .spyOn(process, 'exit')
+      .mockImplementation((() => {}) as (code?: number) => never);
     consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(checkEnvFile, 'checkEnvFile').mockReturnValue(true);
+    vi.spyOn(backupEnvFile, 'backupEnvFile').mockResolvedValue();
   });
 
   afterEach(() => {
-    vi.resetAllMocks();
-    processExitSpy.mockRestore();
-    consoleErrorSpy.mockRestore();
+    vi.restoreAllMocks();
   });
 
-  it('should successfully complete setup with default options', async () => {
-    vi.mocked(inquirer.prompt)
-      .mockResolvedValueOnce({ shouldUseRecaptcha: false })
-      .mockResolvedValueOnce({ shouldLogErrors: false });
+  it('should setup for non-docker and no recaptcha', async () => {
+    const promptMock = vi.spyOn(inquirer, 'prompt');
+    promptMock.mockResolvedValueOnce({ useDocker: false }); // askForDocker
+    promptMock.mockResolvedValueOnce({ shouldUseRecaptcha: false }); // askForRecaptcha
+    promptMock.mockResolvedValueOnce({ shouldLogErrors: false }); // askForLogErrors
+
+    const updateEnvFileSpy = vi.spyOn(utils, 'updateEnvFile');
 
     await main();
 
-    expect(checkEnvFile).toHaveBeenCalled();
-    expect(modifyEnvFile).toHaveBeenCalled();
-    expect(askAndSetDockerOption).toHaveBeenCalled();
-    expect(askAndUpdatePort).toHaveBeenCalled();
-    expect(askAndUpdateTalawaApiUrl).toHaveBeenCalled();
-  });
-
-  it('should skip port and API URL setup when Docker is used', async () => {
-    vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=yes');
-    vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'yes' });
-
-    vi.mocked(inquirer.prompt)
-      .mockResolvedValueOnce({ shouldUseRecaptcha: false })
-      .mockResolvedValueOnce({ shouldLogErrors: false });
-
-    await main();
-
-    expect(askAndUpdatePort).not.toHaveBeenCalled();
-    expect(askAndUpdateTalawaApiUrl).not.toHaveBeenCalled();
-    // When Docker is used, docker-specific env vars should be written
-    expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_DOCKER_TALAWA_URL',
-      'http://host.docker.internal:4000/graphql',
-    );
-    expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_DOCKER_BACKEND_WEBSOCKET_URL',
-      'ws://host.docker.internal:4000/graphql',
-    );
-  });
-
-  it('should handle error logging setup when user opts in', async () => {
-    vi.mocked(inquirer.prompt)
-      .mockResolvedValueOnce({ shouldUseRecaptcha: false })
-      .mockResolvedValueOnce({ shouldLogErrors: true });
-
-    await main();
-
-    expect(updateEnvFile).toHaveBeenCalledWith('ALLOW_LOGS', 'yes');
-  });
-
-  it('should exit if env file check fails', async () => {
-    vi.mocked(checkEnvFile).mockReturnValue(false);
-    const consoleSpy = vi.spyOn(console, 'error');
-
-    await main();
-
-    expect(modifyEnvFile).not.toHaveBeenCalled();
-    expect(askAndSetDockerOption).not.toHaveBeenCalled();
-    expect(consoleSpy).not.toHaveBeenCalled();
-  });
-
-  it('should handle errors during setup process', async () => {
-    const mockError = new Error('Setup failed');
-
-    vi.mocked(askAndSetDockerOption).mockRejectedValue(mockError);
-
-    const consoleSpy = vi.spyOn(console, 'error');
-
-    const processExitSpy = vi
-      .spyOn(process, 'exit')
-      .mockImplementation(() => undefined as never);
-
-    await main();
-
-    expect(consoleSpy).toHaveBeenCalledWith('\n❌ Setup failed:', mockError);
-    expect(processExitSpy).toHaveBeenCalledWith(1);
-  });
-
-  it('should handle file system operations correctly', async () => {
-    vi.mocked(inquirer.prompt)
-      .mockResolvedValueOnce({ shouldUseRecaptcha: false })
-      .mockResolvedValueOnce({ shouldLogErrors: false });
-
-    const mockEnvContent = 'MOCK_ENV_CONTENT';
-
-    vi.mocked(fs.readFileSync).mockReturnValue(mockEnvContent);
-
-    await main();
-
-    expect(fs.readFileSync).toHaveBeenCalledWith('.env', 'utf8');
-    expect(dotenv.parse).toHaveBeenCalledWith(mockEnvContent);
-  });
-  it('should handle user opting out of reCAPTCHA setup', async () => {
-    vi.mocked(inquirer.prompt).mockResolvedValueOnce({
-      shouldUseRecaptcha: false,
+    expect(updateEnvFileSpy).toHaveBeenCalledWith({
+      USE_DOCKER: 'NO',
+      PORT: '4321',
+      REACT_APP_TALAWA_URL: 'http://localhost:4000/graphql',
+      REACT_APP_BACKEND_WEBSOCKET_URL: 'ws://localhost:4000/graphql',
+      REACT_APP_USE_RECAPTCHA: 'no',
+      ALLOW_LOGS: 'no',
     });
-
-    await askAndSetRecaptcha();
-
-    expect(inquirer.prompt).toHaveBeenCalledTimes(1);
-    // When user opts out, we explicitly write 'no' to REACT_APP_USE_RECAPTCHA
-    expect(updateEnvFile).toHaveBeenCalledWith('REACT_APP_USE_RECAPTCHA', 'no');
-    expect(validateRecaptcha).not.toHaveBeenCalled();
   });
 
-  it('should validate reCAPTCHA key input', async () => {
-    const mockInvalidKey = 'invalid-key';
+  it('should setup for docker and with recaptcha', async () => {
+    const promptMock = vi.spyOn(inquirer, 'prompt');
+    promptMock.mockResolvedValueOnce({ useDocker: true }); // askForDocker
+    promptMock.mockResolvedValueOnce({ dockerPort: '1234' }); // docker port
+    promptMock.mockResolvedValueOnce({ shouldUseRecaptcha: true }); // askForRecaptcha
+    promptMock.mockResolvedValueOnce({ recaptchaSiteKeyInput: 'test-key' }); // recaptcha key
+    promptMock.mockResolvedValueOnce({ shouldLogErrors: true }); // askForLogErrors
 
-    vi.mocked(inquirer.prompt)
-      .mockResolvedValueOnce({ shouldUseRecaptcha: true })
-      .mockImplementationOnce((questions) => {
-        const question = Array.isArray(questions) ? questions[0] : questions;
+    const updateEnvFileSpy = vi.spyOn(utils, 'updateEnvFile');
 
-        const validationResult = question.validate(mockInvalidKey);
+    await main();
 
-        expect(validationResult).toBe(
-          'Invalid reCAPTCHA site key. Please try again.',
-        );
-        return Object.assign(
-          Promise.resolve({ recaptchaSiteKeyInput: mockInvalidKey }),
-        );
-      });
-
-    vi.mocked(validateRecaptcha).mockReturnValue(false);
-
-    await askAndSetRecaptcha();
-
-    expect(validateRecaptcha).toHaveBeenCalledWith(mockInvalidKey);
+    expect(updateEnvFileSpy).toHaveBeenCalledWith({
+      USE_DOCKER: 'YES',
+      DOCKER_PORT: '1234',
+      REACT_APP_DOCKER_TALAWA_URL: 'http://host.docker.internal:4000/graphql',
+      REACT_APP_DOCKER_BACKEND_WEBSOCKET_URL:
+        'ws://host.docker.internal:4000/graphql',
+      REACT_APP_USE_RECAPTCHA: 'yes',
+      REACT_APP_RECAPTCHA_SITE_KEY: 'test-key',
+      ALLOW_LOGS: 'yes',
+    });
   });
 
-  it('should set reCAPTCHA site key and enable flag when valid key provided', async () => {
-    const mockKey = '1234567890abcdef1234567890abcdef12345678';
+  it('should exit if checkEnvFile returns false', async () => {
+    vi.spyOn(checkEnvFile, 'checkEnvFile').mockReturnValue(false);
+    const updateEnvFileSpy = vi.spyOn(utils, 'updateEnvFile');
 
-    vi.mocked(inquirer.prompt)
-      .mockResolvedValueOnce({ shouldUseRecaptcha: true })
-      .mockResolvedValueOnce({ recaptchaSiteKeyInput: mockKey });
+    await main();
 
-    vi.mocked(validateRecaptcha).mockReturnValue(true);
-
-    await askAndSetRecaptcha();
-
-    expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_RECAPTCHA_SITE_KEY',
-      mockKey,
-    );
-    expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_USE_RECAPTCHA',
-      'yes',
-    );
+    expect(updateEnvFileSpy).not.toHaveBeenCalled();
   });
 
-  it('should handle errors during reCAPTCHA setup', async () => {
-    const mockError = new Error('ReCAPTCHA setup failed');
+  it('should handle errors during setup', async () => {
+    const mockError = new Error('Inquirer failed');
+    const promptMock = vi.spyOn(inquirer, 'prompt');
+    promptMock.mockRejectedValue(mockError);
 
-    vi.mocked(inquirer.prompt).mockRejectedValue(mockError);
+    await main();
 
-    await expect(askAndSetRecaptcha()).rejects.toThrow(
-      'Failed to set up reCAPTCHA: ReCAPTCHA setup failed',
-    );
-
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Error setting up reCAPTCHA:',
-      mockError,
-    );
-    expect(updateEnvFile).not.toHaveBeenCalled();
+    expect(consoleErrorSpy).toHaveBeenCalledWith('❌ Setup failed:', mockError);
+    expect(processExitSpy).toHaveBeenCalledWith(1);
   });
 });

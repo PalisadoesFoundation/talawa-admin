@@ -1,56 +1,48 @@
-import dotenv from 'dotenv';
-import fs from 'fs';
 import inquirer from 'inquirer';
-import { checkEnvFile, modifyEnvFile } from './checkEnvFile/checkEnvFile';
+import { checkEnvFile } from './checkEnvFile/checkEnvFile';
 import { validateRecaptcha } from './validateRecaptcha/validateRecaptcha';
-import askAndSetDockerOption from './askAndSetDockerOption/askAndSetDockerOption';
-import updateEnvFile from './updateEnvFile/updateEnvFile';
-import askAndUpdatePort from './askAndUpdatePort/askAndUpdatePort';
-import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
+import * as utils from './utils';
 import { backupEnvFile } from './backupEnvFile/backupEnvFile';
 
 // Ask and set up reCAPTCHA
-export const askAndSetRecaptcha = async (): Promise<void> => {
-  try {
-    const { shouldUseRecaptcha } = await inquirer.prompt([
+export const askForRecaptcha = async (): Promise<{
+  useRecaptcha: 'yes' | 'no';
+  recaptchaSiteKey?: string;
+}> => {
+  const { shouldUseRecaptcha } = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'shouldUseRecaptcha',
+      message: 'Would you like to set up reCAPTCHA?',
+      default: true,
+    },
+  ]);
+
+  if (shouldUseRecaptcha) {
+    const { recaptchaSiteKeyInput } = await inquirer.prompt([
       {
-        type: 'confirm',
-        name: 'shouldUseRecaptcha',
-        message: 'Would you like to set up reCAPTCHA?',
-        default: true,
+        type: 'input',
+        name: 'recaptchaSiteKeyInput',
+        message: 'Enter your reCAPTCHA site key:',
+        validate: (input: string): boolean | string => {
+          return (
+            validateRecaptcha(input) ||
+            'Invalid reCAPTCHA site key. Please try again.'
+          );
+        },
       },
     ]);
-
-    if (shouldUseRecaptcha) {
-      const { recaptchaSiteKeyInput } = await inquirer.prompt([
-        {
-          type: 'input',
-          name: 'recaptchaSiteKeyInput',
-          message: 'Enter your reCAPTCHA site key:',
-          validate: (input: string): boolean | string => {
-            return (
-              validateRecaptcha(input) ||
-              'Invalid reCAPTCHA site key. Please try again.'
-            );
-          },
-        },
-      ]);
-
-      updateEnvFile('REACT_APP_RECAPTCHA_SITE_KEY', recaptchaSiteKeyInput);
-      // mark that reCAPTCHA is enabled
-      updateEnvFile('REACT_APP_USE_RECAPTCHA', 'yes');
-    } else {
-      // explicitly mark reCAPTCHA as disabled
-      updateEnvFile('REACT_APP_USE_RECAPTCHA', 'no');
-    }
-  } catch (error) {
-    console.error('Error setting up reCAPTCHA:', error);
-    throw new Error(`Failed to set up reCAPTCHA: ${(error as Error).message}`);
+    return {
+      useRecaptcha: 'yes',
+      recaptchaSiteKey: recaptchaSiteKeyInput,
+    };
   }
+
+  return { useRecaptcha: 'no' };
 };
 
 // Ask and set up logging errors in the console
-const askAndSetLogErrors = async (): Promise<void> => {
+export const askForLogErrors = async (): Promise<'yes' | 'no'> => {
   const { shouldLogErrors } = await inquirer.prompt({
     type: 'confirm',
     name: 'shouldLogErrors',
@@ -58,10 +50,20 @@ const askAndSetLogErrors = async (): Promise<void> => {
       'Would you like to log Compiletime and Runtime errors in the console?',
     default: true,
   });
+  return shouldLogErrors ? 'yes' : 'no';
+};
 
-  if (shouldLogErrors) {
-    updateEnvFile('ALLOW_LOGS', 'yes');
-  }
+// Ask if using Docker
+export const askForDocker = async (): Promise<boolean> => {
+  const { useDocker } = await inquirer.prompt([
+    {
+      type: 'confirm',
+      name: 'useDocker',
+      message: 'Are you using Docker for development?',
+      default: false,
+    },
+  ]);
+  return useDocker;
 };
 
 // Main function to run the setup process
@@ -75,47 +77,61 @@ export async function main(): Promise<void> {
 
     await backupEnvFile();
 
-    modifyEnvFile();
-    await askAndSetDockerOption();
-    const envConfig = dotenv.parse(fs.readFileSync('.env', 'utf8'));
-    const useDocker =
-      typeof envConfig.USE_DOCKER === 'string' &&
-      String(envConfig.USE_DOCKER).toLowerCase() === 'yes';
+    const config: Record<string, string> = {};
 
-    // Centralize Docker vs non-Docker env writes
+    // ---- Docker Config ----
+    const useDocker = await askForDocker();
+    config.USE_DOCKER = useDocker ? 'YES' : 'NO';
+
     if (useDocker) {
-      // Clear non-docker API endpoints and set docker-specific urls
-      updateEnvFile('REACT_APP_TALAWA_URL', '');
-      updateEnvFile('REACT_APP_BACKEND_WEBSOCKET_URL', '');
-      updateEnvFile(
-        'REACT_APP_DOCKER_TALAWA_URL',
-        'http://host.docker.internal:4000/graphql',
-      );
-      updateEnvFile(
-        'REACT_APP_DOCKER_BACKEND_WEBSOCKET_URL',
-        'ws://host.docker.internal:4000/graphql',
-      );
+      const { dockerPort } = await inquirer.prompt([
+        {
+          type: 'input',
+          name: 'dockerPort',
+          message: 'Enter the port to expose when running in Docker:',
+          default: '4321',
+        },
+      ]);
+      config.DOCKER_PORT = dockerPort;
+      config.REACT_APP_DOCKER_TALAWA_URL =
+        'http://host.docker.internal:4000/graphql';
+      config.REACT_APP_DOCKER_BACKEND_WEBSOCKET_URL =
+        'ws://host.docker.internal:4000/graphql';
     } else {
-      // Non-docker path: ensure docker-specific var is empty
-      updateEnvFile('REACT_APP_DOCKER_TALAWA_URL', '');
-      await askAndUpdatePort();
-      await askAndUpdateTalawaApiUrl();
+      config.PORT = '4321';
+      const talawaApiUrl = 'http://localhost:4000/graphql';
+      config.REACT_APP_TALAWA_URL = talawaApiUrl;
+      config.REACT_APP_BACKEND_WEBSOCKET_URL = talawaApiUrl.replace(
+        'http',
+        'ws',
+      );
     }
 
-    await askAndSetRecaptcha();
-    await askAndSetLogErrors();
+    // ---- reCAPTCHA Config ----
+    const recaptchaSettings = await askForRecaptcha();
+    config.REACT_APP_USE_RECAPTCHA = recaptchaSettings.useRecaptcha;
+    if (recaptchaSettings.useRecaptcha === 'yes') {
+      config.REACT_APP_RECAPTCHA_SITE_KEY =
+        recaptchaSettings.recaptchaSiteKey || '';
+    }
+
+    // ---- Logging Config ----
+    config.ALLOW_LOGS = await askForLogErrors();
+
+    // ---- Save Env ----
+    utils.updateEnvFile(config);
 
     console.log(
-      '\nCongratulations! Talawa Admin has been successfully set up! 🥂🎉',
+      '\n✅ Talawa Admin has been successfully set up! 🎉\nAll configuration parameters have been added to your .env file.',
     );
   } catch (error) {
-    console.error('\n❌ Setup failed:', error);
-    console.log('\nPlease try again or contact support if the issue persists.');
+    console.error('❌ Setup failed:', error);
+    console.log('Please try again or contact support if the issue persists.');
     process.exit(1);
   }
 }
 
-// Run setup only when not in a test environment. This avoids prompting during imports in tests.
+// Run setup only when not in a test environment
 if (process.env.NODE_ENV !== 'test') {
   main();
 }
