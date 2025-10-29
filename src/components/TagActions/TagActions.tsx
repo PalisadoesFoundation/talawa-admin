@@ -99,7 +99,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     orgUserTagsFetchMore({
       variables: {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after: orgUserTagsData?.organizations[0].userTags.pageInfo.endCursor,
+        after: orgUserTagsData?.organizations?.[0]?.userTags.pageInfo.endCursor,
       },
       updateQuery: (
         prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
@@ -133,7 +133,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   };
 
   const userTagsList =
-    orgUserTagsData?.organizations[0]?.userTags.edges.map(
+    orgUserTagsData?.organizations?.[0]?.userTags?.edges?.map(
       (edge) => edge.node,
     ) ?? [];
 
@@ -196,28 +196,37 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
   const selectTag = (tag: InterfaceTagData): void => {
     const newCheckedTags = new Set(checkedTags);
+    const tagId = tag.id || tag._id || '';
 
     setSelectedTags((selectedTags) => [...selectedTags, tag]);
-    newCheckedTags.add(tag._id);
+    newCheckedTags.add(tagId);
 
-    setAddAncestorTagsData(new Set(tag.ancestorTags));
+    setAddAncestorTagsData(new Set(tag.ancestorTags || []));
 
     setCheckedTags(newCheckedTags);
   };
 
   const deSelectTag = (tag: InterfaceTagData): void => {
-    if (!selectedTags.some((selectedTag) => selectedTag._id === tag._id)) {
+    const tagId = tag.id || tag._id || '';
+    const selectedTagId = (selectedTag: InterfaceTagData) =>
+      selectedTag.id || selectedTag._id || '';
+
+    if (
+      !selectedTags.some((selectedTag) => selectedTagId(selectedTag) === tagId)
+    ) {
       return;
     }
 
     const newCheckedTags = new Set(checkedTags);
 
     setSelectedTags(
-      selectedTags.filter((selectedTag) => selectedTag._id !== tag._id),
+      selectedTags.filter(
+        (selectedTag) => selectedTagId(selectedTag) !== tagId,
+      ),
     );
-    newCheckedTags.delete(tag._id);
+    newCheckedTags.delete(tagId);
 
-    setRemoveAncestorTagsData(new Set(tag.ancestorTags));
+    setRemoveAncestorTagsData(new Set(tag.ancestorTags || []));
 
     setCheckedTags(newCheckedTags);
   };
@@ -365,14 +374,17 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                     dataLength={userTagsList?.length ?? 0}
                     next={loadMoreUserTags}
                     hasMore={
-                      orgUserTagsData?.organizations[0].userTags.pageInfo
-                        .hasNextPage ?? false
+                      orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo
+                        ?.hasNextPage ?? false
                     }
                     loader={<InfiniteScrollLoader />}
                     scrollableTarget="scrollableDiv"
                   >
                     {userTagsList?.map((tag) => (
-                      <div key={tag._id} className="position-relative w-100">
+                      <div
+                        key={tag.id || tag._id}
+                        className="position-relative w-100"
+                      >
                         <div
                           className="d-inline-block w-100"
                           data-testid="orgUserTag"

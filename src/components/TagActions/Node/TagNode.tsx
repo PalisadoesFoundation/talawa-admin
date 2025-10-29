@@ -134,13 +134,13 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
   return (
     <div className="my-2">
       <div>
-        {tag.childTags.totalCount ? (
+        {tag.childTags?.totalCount ? (
           <>
             <span
               onClick={handleTagClick}
               className="me-3"
               style={{ cursor: 'pointer' }}
-              data-testid={`expandSubTags${tag._id}`}
+              data-testid={`expandSubTags${tag.id || tag._id}`}
               aria-label={expanded ? t('collapse') : t('expand')}
             >
               {expanded ? '▼' : '▶'}
@@ -148,11 +148,11 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
             <input
               style={{ cursor: 'pointer' }}
               type="checkbox"
-              checked={checkedTags.has(tag._id)}
+              checked={checkedTags.has(tag.id || tag._id || '')}
               className="me-2"
               onChange={handleCheckboxChange}
-              data-testid={`checkTag${tag._id}`}
-              id={`checkbox-${tag._id}`}
+              data-testid={`checkTag${tag.id || tag._id}`}
+              id={`checkbox-${tag.id || tag._id}`}
               aria-label={t('selectTag')}
             />
             <i className="fa fa-folder mx-2" />{' '}
@@ -163,10 +163,10 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
             <input
               style={{ cursor: 'pointer' }}
               type="checkbox"
-              checked={checkedTags.has(tag._id)}
+              checked={checkedTags.has(tag.id || tag._id || '')}
               className="ms-1 me-2"
               onChange={handleCheckboxChange}
-              data-testid={`checkTag${tag._id}`}
+              data-testid={`checkTag${tag.id || tag._id}`}
               aria-label={tag.name}
             />
             <i className="fa fa-tag mx-2" />{' '}
