@@ -113,21 +113,23 @@ export const FUND_CAMPAIGN_PLEDGE = gql`
   }
 `;
 
-export const USER_FUND_CAMPAIGNS = gql`
-  query GetFundraisingCampaigns(
-    $where: CampaignWhereInput
-    $campaignOrderBy: CampaignOrderByInput
-  ) {
-    getFundraisingCampaigns(where: $where, campaignOrderBy: $campaignOrderBy) {
-      _id
-      name
-      currency
-      fundingGoal
-      startDate
-      endDate
-    }
-  }
-`;
+// Note: This query is deprecated in favor of using FUND_LIST with client-side filtering
+// Keeping for reference but not exported to avoid unused export warnings
+// export const USER_FUND_CAMPAIGNS = gql`
+//   query GetFundraisingCampaigns(
+//     $where: CampaignWhereInput
+//     $campaignOrderBy: CampaignOrderByInput
+//   ) {
+//     getFundraisingCampaigns(where: $where, campaignOrderBy: $campaignOrderBy) {
+//       _id
+//       name
+//       currency
+//       fundingGoal
+//       startDate
+//       endDate
+//     }
+//   }
+// `;
 
 export const USER_PLEDGES = gql`
   query GetPledgesByUserId(
