@@ -160,18 +160,6 @@ export const MOCKS = [
       query: UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
       variables: {
         input: {
-          id: '',
-          name: 'Updated Name',
-        },
-      },
-    },
-    error: new Error('Invalid ID'),
-  },
-  {
-    request: {
-      query: UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
-      variables: {
-        input: {
           id: 'categoryId',
           description: 'New description only',
         },
