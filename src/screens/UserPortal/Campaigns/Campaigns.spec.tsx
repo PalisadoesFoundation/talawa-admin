@@ -60,10 +60,6 @@ const cTranslations = JSON.parse(
   ),
 );
 
-const pTranslations = JSON.parse(
-  JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
-);
-
 /*
  * Renders the `Campaigns` component for testing.
  *
@@ -200,13 +196,21 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer2).toBeInTheDocument();
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
-      expect(detailContainer).toHaveTextContent('2024-07-28');
-      expect(detailContainer).toHaveTextContent('2099-12-31');
+      expect(detailContainer).toHaveTextContent(
+        new Date('2024-07-28').toLocaleDateString(),
+      );
+      expect(detailContainer).toHaveTextContent(
+        new Date('2099-12-31').toLocaleDateString(),
+      );
       expect(detailContainer).toHaveTextContent('Active');
       expect(detailContainer2).toHaveTextContent('Hospital Campaign');
       expect(detailContainer2).toHaveTextContent('$9000');
-      expect(detailContainer2).toHaveTextContent('2024-07-28');
-      expect(detailContainer2).toHaveTextContent('2022-08-30');
+      expect(detailContainer2).toHaveTextContent(
+        new Date('2024-07-28').toLocaleDateString(),
+      );
+      expect(detailContainer2).toHaveTextContent(
+        new Date('2022-08-30').toLocaleDateString(),
+      );
       expect(detailContainer2).toHaveTextContent('Ended');
     });
   });
@@ -232,8 +236,12 @@ describe('Testing User Campaigns Screen', () => {
       const detailContainer = screen.getByTestId('detailContainer2');
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
-      expect(detailContainer).toHaveTextContent('2024-07-28');
-      expect(detailContainer).toHaveTextContent('2099-12-31');
+      expect(detailContainer).toHaveTextContent(
+        new Date('2024-07-28').toLocaleDateString(),
+      );
+      expect(detailContainer).toHaveTextContent(
+        new Date('2099-12-31').toLocaleDateString(),
+      );
     });
   });
 
@@ -258,8 +266,12 @@ describe('Testing User Campaigns Screen', () => {
       const detailContainer = screen.getByTestId('detailContainer1');
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
-      expect(detailContainer).toHaveTextContent('2024-07-28');
-      expect(detailContainer).toHaveTextContent('2099-12-31');
+      expect(detailContainer).toHaveTextContent(
+        new Date('2024-07-28').toLocaleDateString(),
+      );
+      expect(detailContainer).toHaveTextContent(
+        new Date('2099-12-31').toLocaleDateString(),
+      );
     });
   });
 
@@ -284,8 +296,12 @@ describe('Testing User Campaigns Screen', () => {
       const detailContainer = screen.getByTestId('detailContainer2');
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
-      expect(detailContainer).toHaveTextContent('2024-07-28');
-      expect(detailContainer).toHaveTextContent('2099-12-31');
+      expect(detailContainer).toHaveTextContent(
+        new Date('2024-07-28').toLocaleDateString(),
+      );
+      expect(detailContainer).toHaveTextContent(
+        new Date('2099-12-31').toLocaleDateString(),
+      );
     });
   });
 
@@ -310,8 +326,12 @@ describe('Testing User Campaigns Screen', () => {
       const detailContainer = screen.getByTestId('detailContainer1');
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
-      expect(detailContainer).toHaveTextContent('2024-07-28');
-      expect(detailContainer).toHaveTextContent('2099-12-31');
+      expect(detailContainer).toHaveTextContent(
+        new Date('2024-07-28').toLocaleDateString(),
+      );
+      expect(detailContainer).toHaveTextContent(
+        new Date('2099-12-31').toLocaleDateString(),
+      );
     });
   });
 

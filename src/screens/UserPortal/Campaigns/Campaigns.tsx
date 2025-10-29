@@ -85,22 +85,17 @@ const Campaigns = (): JSX.Element => {
     'fundingGoal_ASC' | 'fundingGoal_DESC' | 'endDate_ASC' | 'endDate_DESC'
   >('endDate_DESC');
 
-  // Fetches campaigns based on the organization ID, search term, and sorting order
+  // Fetches campaigns based on the organization ID
   const {
     data: campaignData,
     loading: campaignLoading,
     error: campaignError,
     refetch: refetchCampaigns,
-  }: {
-    data?: { getFundraisingCampaigns: InterfaceUserCampaign[] };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
   } = useQuery(USER_FUND_CAMPAIGNS, {
     variables: {
-      where: { organizationId: orgId, name_contains: searchTerm },
-      campaignOrderBy: sortBy,
+      input: { id: orgId },
     },
+    fetchPolicy: 'cache-first',
   });
 
   /**
@@ -123,10 +118,84 @@ const Campaigns = (): JSX.Element => {
 
   // Updates the campaigns state when the fetched campaign data changes
   useEffect(() => {
-    if (campaignData) {
-      setCampaigns(campaignData.getFundraisingCampaigns);
+    if (campaignData?.organization?.funds?.edges) {
+      // Flatten the nested structure to get all campaigns
+      const allCampaigns: InterfaceUserCampaign[] = [];
+      campaignData.organization.funds.edges.forEach(
+        (fundEdge: {
+          node: {
+            campaigns?: {
+              edges: {
+                node: {
+                  id: string;
+                  name: string;
+                  currencyCode: string;
+                  goalAmount: number;
+                  startAt: string;
+                  endAt: string;
+                };
+              }[];
+            };
+          };
+        }) => {
+          if (fundEdge.node.campaigns?.edges) {
+            fundEdge.node.campaigns.edges.forEach(
+              (campaignEdge: {
+                node: {
+                  id: string;
+                  name: string;
+                  currencyCode: string;
+                  goalAmount: number;
+                  startAt: string;
+                  endAt: string;
+                };
+              }) => {
+                const campaign = campaignEdge.node;
+                allCampaigns.push({
+                  _id: campaign.id,
+                  name: campaign.name,
+                  fundingGoal: campaign.goalAmount,
+                  startDate: new Date(campaign.startAt),
+                  endDate: new Date(campaign.endAt),
+                  currency: campaign.currencyCode,
+                });
+              },
+            );
+          }
+        },
+      );
+
+      // Apply client-side filtering by search term
+      let filteredCampaigns = allCampaigns;
+      if (searchTerm) {
+        filteredCampaigns = allCampaigns.filter((campaign) =>
+          campaign.name.toLowerCase().includes(searchTerm.toLowerCase()),
+        );
+      }
+
+      // Apply client-side sorting
+      const sortedCampaigns = [...filteredCampaigns].sort((a, b) => {
+        switch (sortBy) {
+          case 'fundingGoal_ASC':
+            return a.fundingGoal - b.fundingGoal;
+          case 'fundingGoal_DESC':
+            return b.fundingGoal - a.fundingGoal;
+          case 'endDate_ASC':
+            return (
+              new Date(a.endDate).getTime() - new Date(b.endDate).getTime()
+            );
+          case 'endDate_DESC':
+            return (
+              new Date(b.endDate).getTime() - new Date(a.endDate).getTime()
+            );
+          default:
+            return 0;
+        }
+      });
+
+      setCampaigns(sortedCampaigns);
     }
-  }, [campaignData]);
+  }, [campaignData, searchTerm, sortBy]);
 
   // Renders a loader while campaigns are being fetched
   if (campaignLoading) return <Loader size="xl" />;
@@ -240,10 +309,12 @@ const Campaigns = (): JSX.Element => {
                     </span>
                     <span>Raised: $0</span>
                     <span>
-                      Start Date: {campaign.startDate as unknown as string}
+                      Start Date:{' '}
+                      {new Date(campaign.startDate).toLocaleDateString()}
                     </span>
                     <span>
-                      End Date: {campaign.endDate as unknown as string}
+                      End Date:{' '}
+                      {new Date(campaign.endDate).toLocaleDateString()}
                     </span>
                   </div>
                 </div>
