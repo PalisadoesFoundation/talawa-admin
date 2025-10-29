@@ -28,6 +28,18 @@ export const FUND_LIST = gql`
             updater {
               name
             }
+            campaigns(first: 10) {
+              edges {
+                node {
+                  id
+                  name
+                  startAt
+                  endAt
+                  currencyCode
+                  goalAmount
+                }
+              }
+            }
           }
         }
       }
@@ -107,7 +119,7 @@ export const USER_FUND_CAMPAIGNS = gql`
     $campaignOrderBy: CampaignOrderByInput
   ) {
     getFundraisingCampaigns(where: $where, campaignOrderBy: $campaignOrderBy) {
-      id
+      _id
       name
       currency
       fundingGoal

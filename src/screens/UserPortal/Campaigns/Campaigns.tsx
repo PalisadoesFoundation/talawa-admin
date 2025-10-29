@@ -9,7 +9,7 @@
  *
  * @remarks
  * - Redirects to the homepage if `orgId` or `userId` is missing.
- * - Fetches campaigns using the `USER_FUND_CAMPAIGNS` GraphQL query.
+ * - Fetches campaigns using the `FUND_LIST` GraphQL query.
  * - Displays a loader while campaigns are being fetched.
  * - Shows an error message if there is an issue loading campaigns.
  * - Allows users to search campaigns by name and sort them by funding goal or end date.
@@ -26,7 +26,7 @@
  * ```
  *
  * @see {@link PledgeModal} for the modal used to add pledges.
- * @see {@link USER_FUND_CAMPAIGNS} for the GraphQL query fetching campaigns.
+ * @see {@link FUND_LIST} for the GraphQL query fetching campaigns.
  *
  * @function
  * @name Campaigns
@@ -47,7 +47,7 @@ import {
 import { GridExpandMoreIcon } from '@mui/x-data-grid';
 import useLocalStorage from 'utils/useLocalstorage';
 import PledgeModal from './PledgeModal';
-import { USER_FUND_CAMPAIGNS } from 'GraphQl/Queries/fundQueries';
+import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 import { useQuery } from '@apollo/client';
 import type { InterfaceUserCampaign } from 'utils/interfaces';
 import { currencySymbols } from 'utils/currency';
@@ -85,21 +85,41 @@ const Campaigns = (): JSX.Element => {
     'fundingGoal_ASC' | 'fundingGoal_DESC' | 'endDate_ASC' | 'endDate_DESC'
   >('endDate_DESC');
 
-  // Fetches campaigns based on the organization ID, search term, and sorting order
+  // Fetches campaigns based on the organization ID
   const {
     data: campaignData,
     loading: campaignLoading,
     error: campaignError,
     refetch: refetchCampaigns,
   }: {
-    data?: { getFundraisingCampaigns: InterfaceUserCampaign[] };
+    data?: {
+      organization: {
+        funds: {
+          edges: Array<{
+            node: {
+              campaigns: {
+                edges: Array<{
+                  node: {
+                    id: string;
+                    name: string;
+                    goalAmount: number;
+                    startAt: Date;
+                    endAt: Date;
+                    currencyCode: string;
+                  };
+                }>;
+              };
+            };
+          }>;
+        };
+      };
+    };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
-  } = useQuery(USER_FUND_CAMPAIGNS, {
+  } = useQuery(FUND_LIST, {
     variables: {
-      where: { organizationId: orgId, name_contains: searchTerm },
-      campaignOrderBy: sortBy,
+      input: { id: orgId },
     },
   });
 
@@ -123,10 +143,56 @@ const Campaigns = (): JSX.Element => {
 
   // Updates the campaigns state when the fetched campaign data changes
   useEffect(() => {
-    if (campaignData) {
-      setCampaigns(campaignData.getFundraisingCampaigns);
+    if (campaignData?.organization?.funds?.edges) {
+      // Flatten all campaigns from all funds
+      const allCampaigns: InterfaceUserCampaign[] = [];
+      campaignData.organization.funds.edges.forEach((fundEdge) => {
+        if (fundEdge.node.campaigns?.edges) {
+          fundEdge.node.campaigns.edges.forEach((campaignEdge) => {
+            const campaign = campaignEdge.node;
+            allCampaigns.push({
+              _id: campaign.id,
+              name: campaign.name,
+              fundingGoal: campaign.goalAmount,
+              startDate: campaign.startAt as unknown as Date,
+              endDate: campaign.endAt as unknown as Date,
+              currency: campaign.currencyCode,
+            });
+          });
+        }
+      });
+
+      // Filter by search term
+      let filteredCampaigns = allCampaigns;
+      if (searchTerm) {
+        filteredCampaigns = allCampaigns.filter((campaign) =>
+          campaign.name.toLowerCase().includes(searchTerm.toLowerCase()),
+        );
+      }
+
+      // Sort campaigns
+      filteredCampaigns.sort((a, b) => {
+        switch (sortBy) {
+          case 'fundingGoal_ASC':
+            return a.fundingGoal - b.fundingGoal;
+          case 'fundingGoal_DESC':
+            return b.fundingGoal - a.fundingGoal;
+          case 'endDate_ASC':
+            return (
+              new Date(a.endDate).getTime() - new Date(b.endDate).getTime()
+            );
+          case 'endDate_DESC':
+            return (
+              new Date(b.endDate).getTime() - new Date(a.endDate).getTime()
+            );
+          default:
+            return 0;
+        }
+      });
+
+      setCampaigns(filteredCampaigns);
     }
-  }, [campaignData]);
+  }, [campaignData, searchTerm, sortBy]);
 
   // Renders a loader while campaigns are being fetched
   if (campaignLoading) return <Loader size="xl" />;
@@ -197,7 +263,6 @@ const Campaigns = (): JSX.Element => {
       </div>
       {campaigns.length < 1 ? (
         <Stack height="100%" alignItems="center" justifyContent="center">
-          {/* Displayed if no campaigns are found */}
           {t('noCampaigns')}
         </Stack>
       ) : (
