@@ -19,7 +19,9 @@ describe('Talawa Admin Setup', () => {
     vi.clearAllMocks();
     processExitSpy = vi
       .spyOn(process, 'exit')
-      .mockImplementation((() => {}) as (code?: number) => never);
+      .mockImplementation((() => {}) as (
+        code?: number | string | null | undefined,
+      ) => never);
     consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     vi.spyOn(checkEnvFile, 'checkEnvFile').mockReturnValue(true);
     vi.spyOn(backupEnvFile, 'backupEnvFile').mockResolvedValue();
