@@ -7,7 +7,7 @@ vi.mock('utils/useLocalstorage', () => ({
 }));
 
 // Mock React Router
-vi.mock('react-router', () => ({
+vi.mock('react-router-dom', () => ({
   useParams: vi.fn(() => ({ orgId: 'test-org-id' })),
   useNavigate: vi.fn(() => vi.fn()),
 }));
