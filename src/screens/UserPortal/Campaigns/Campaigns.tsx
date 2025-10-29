@@ -87,32 +87,6 @@ const Campaigns = (): JSX.Element => {
     loading: campaignLoading,
     error: campaignError,
     refetch: refetchCampaigns,
-  }: {
-    data?: {
-      organization: {
-        funds: {
-          edges: Array<{
-            node: {
-              campaigns: {
-                edges: Array<{
-                  node: {
-                    id: string;
-                    name: string;
-                    goalAmount: number;
-                    startAt: Date;
-                    endAt: Date;
-                    currencyCode: string;
-                  };
-                }>;
-              };
-            };
-          }>;
-        };
-      };
-    };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
   } = useQuery(FUND_LIST, {
     variables: {
       input: { id: orgId },
@@ -143,9 +117,11 @@ const Campaigns = (): JSX.Element => {
     if (campaignData?.organization?.funds?.edges) {
       // Flatten all campaigns from all funds
       const allCampaigns: InterfaceUserCampaign[] = [];
-      campaignData.organization.funds.edges.forEach((fundEdge) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      campaignData.organization.funds.edges.forEach((fundEdge: any) => {
         if (fundEdge.node.campaigns?.edges) {
-          fundEdge.node.campaigns.edges.forEach((campaignEdge) => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          fundEdge.node.campaigns.edges.forEach((campaignEdge: any) => {
             const campaign = campaignEdge.node;
             allCampaigns.push({
               _id: campaign.id,

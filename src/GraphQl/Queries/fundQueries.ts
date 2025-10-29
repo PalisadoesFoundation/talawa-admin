@@ -35,6 +35,10 @@ export const FUND_LIST = gql`
                   goalAmount
                 }
               }
+              pageInfo {
+                hasNextPage
+                endCursor
+              }
             }
           }
         }
