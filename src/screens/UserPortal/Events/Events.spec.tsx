@@ -172,11 +172,10 @@ const MOCKS = [
       },
     },
   },
-  // Mock for ORGANIZATIONS_LIST
+  // Mock for ORGANIZATIONS_LIST (no variables - fetches all orgs)
   {
     request: {
       query: ORGANIZATIONS_LIST,
-      variables: { id: 'org123' },
     },
     result: {
       data: {
@@ -186,13 +185,23 @@ const MOCKS = [
             name: 'Test Organization',
             description: 'Test Description',
             addressLine1: '123 Test St',
+            addressLine2: '',
             city: 'Test City',
             state: 'Test State',
-            zipCode: '12345',
+            postalCode: '12345',
             countryCode: 'US',
+            avatarURL: '',
+            createdAt: '2024-01-01T00:00:00.000Z',
+            updatedAt: '2024-01-01T00:00:00.000Z',
             creator: {
               id: 'user1',
               name: 'Creator User',
+              emailAddress: 'creator@test.com',
+            },
+            updater: {
+              id: 'user1',
+              name: 'Creator User',
+              emailAddress: 'creator@test.com',
             },
           },
         ],
@@ -250,7 +259,6 @@ const ERROR_MOCKS = [
   {
     request: {
       query: ORGANIZATIONS_LIST,
-      variables: { id: 'org123' },
     },
     result: {
       data: {
@@ -279,7 +287,6 @@ const RATE_LIMIT_MOCKS = [
   {
     request: {
       query: ORGANIZATIONS_LIST,
-      variables: { id: 'org123' },
     },
     result: {
       data: {
