@@ -330,7 +330,10 @@ const CREATE_EVENT_ERROR_MOCKS = [
 const link = new StaticMockLink(MOCKS, false);
 const errorLink = new StaticMockLink(ERROR_MOCKS, false);
 const rateLimitLink = new StaticMockLink(RATE_LIMIT_MOCKS, false);
-const createEventErrorLink = new StaticMockLink(CREATE_EVENT_ERROR_MOCKS, false);
+const createEventErrorLink = new StaticMockLink(
+  CREATE_EVENT_ERROR_MOCKS,
+  false,
+);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
