@@ -128,7 +128,6 @@ jobs:
       - name: Run documentation generation
         run: |
           npm run generate-docs
-          npm run postgenerate-docs
 
       - name: Check for uncommitted doc changes
         run: |
