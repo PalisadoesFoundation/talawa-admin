@@ -172,10 +172,11 @@ const MOCKS = [
       },
     },
   },
-  // Mock for ORGANIZATIONS_LIST (no variables - fetches all orgs)
+  // Mock for ORGANIZATIONS_LIST
   {
     request: {
       query: ORGANIZATIONS_LIST,
+      variables: { id: 'org123' },
     },
     result: {
       data: {
@@ -259,6 +260,7 @@ const ERROR_MOCKS = [
   {
     request: {
       query: ORGANIZATIONS_LIST,
+      variables: { id: 'org123' },
     },
     result: {
       data: {
@@ -287,6 +289,7 @@ const RATE_LIMIT_MOCKS = [
   {
     request: {
       query: ORGANIZATIONS_LIST,
+      variables: { id: 'org123' },
     },
     result: {
       data: {
