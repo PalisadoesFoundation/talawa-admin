@@ -378,9 +378,9 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    expect(screen.getByText('Calendar View')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Calendar View')).toBeInTheDocument();
+    });
   });
 
   it('Should open and close the create event modal', async () => {
@@ -797,11 +797,12 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait(500);
+    await waitFor(() => {
+      expect(screen.getByText('Calendar View')).toBeInTheDocument();
+    });
 
     // Rate limit errors should be suppressed (not logged)
     // The component should still render without crashing
-    expect(screen.getByText('Calendar View')).toBeInTheDocument();
 
     consoleWarnSpy.mockRestore();
   });
@@ -866,10 +867,11 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByText('Calendar View')).toBeInTheDocument();
+    });
 
     // Component should render with administrator role
-    expect(screen.getByText('Calendar View')).toBeInTheDocument();
   });
 
   it('Should test userRole as regular user', async () => {
@@ -891,9 +893,10 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByText('Calendar View')).toBeInTheDocument();
+    });
 
     // Component should render with regular user role
-    expect(screen.getByText('Calendar View')).toBeInTheDocument();
   });
 });
