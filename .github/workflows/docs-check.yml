@@ -1,0 +1,33 @@
+# Create this file at .github/workflows/docs-check.yml
+on:
+  pull_request:
+    paths:
+      - 'docs/**'
+      - '.github/workflows/**'
+jobs:
+  docs-check:
+    name: Docs TypeCheck & Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install docs dependencies
+        run: |
+          cd docs
+          npm ci
+
+      - name: Run TypeScript type check (docs)
+        run: npm --prefix docs run typecheck
+
+      - name: Run ESLint (docs)
+        run: npm --prefix docs run lint:check
+
+      - name: Build docs (optional smoke test)
+        run: npm --prefix docs run build

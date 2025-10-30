@@ -6,4 +6,8 @@ npm run lint-staged
 npm run typecheck
 npm run update:toc
 
+cd docs || exit 1
+npm run lint:check && npm run typecheck
+cd ..
+
 git add .

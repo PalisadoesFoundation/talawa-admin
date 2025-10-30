@@ -12,7 +12,9 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "lint:check": "eslint \"**/*.{ts,tsx,graphql}\" --max-warnings=0 && python ../.github/workflows/scripts/eslint_disable_check.py",
+    "lint:fix": "eslint --fix \"**/*.{ts,tsx,graphql}\""
   },
   "dependencies": {
     "@docusaurus/core": "^3.8.1",
@@ -28,6 +30,9 @@
     "@docusaurus/module-type-aliases": "^3.8.1",
     "@docusaurus/tsconfig": "^3.8.1",
     "@docusaurus/types": "^3.8.1",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.2",
+    "eslint": "^9.38.0",
     "typescript": "~5.6.2"
   },
   "browserslist": {

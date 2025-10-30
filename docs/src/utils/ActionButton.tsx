@@ -1,6 +1,7 @@
 import React from 'react';
 
-interface ActionButtonProps {
+interface ActionButtonProps
+  extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href: string;
   type?: 'primary' | 'secondary';
   target?: string;

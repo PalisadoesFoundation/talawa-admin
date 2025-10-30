@@ -8,6 +8,7 @@ const Index = () => {
 
   return (
     <Layout
+      // @ts-ignore - description is supported at runtime but not typed in v3
       description="Powering Closer Communities"
       wrapperClassName="homepage"
     >
