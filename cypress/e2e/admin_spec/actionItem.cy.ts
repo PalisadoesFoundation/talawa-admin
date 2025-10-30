@@ -1,23 +1,19 @@
 import { AdminDashboardPage } from '../../pageObjects/AdminPortal/AdminDashboard';
 import { ActionItemPage } from '../../pageObjects/AdminPortal/ActionItemPage';
 
-describe('Admin Action Items Tab', () => {
+describe('Admin Event Action Items Tab', () => {
   const dashboard = new AdminDashboardPage();
   const actionItemPage = new ActionItemPage();
 
   beforeEach(() => {
     cy.loginByApi('admin');
-    dashboard
-      .visit()
-      .verifyOnDashboard()
-      .waitForOrganizationsToLoad()
-      .openFirstOrganization();
-    actionItemPage.visitActionItemsTab();
+    dashboard.visit().verifyOnDashboard().openFirstOrganization();
+    actionItemPage.visitEventActionItems();
   });
 
-  it('creates a new action item and updates it', () => {
+  it('creates a new action item with volunteer and updates it', () => {
     actionItemPage
-      .createActionItem('Action Category 3', 'administrator')
+      .createActionItemWithVolunteer('Action Category 3')
       .sortByNewest()
       .editFirstActionItem('Updated notes for this action item');
   });

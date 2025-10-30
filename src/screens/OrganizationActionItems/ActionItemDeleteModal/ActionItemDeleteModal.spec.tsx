@@ -46,7 +46,8 @@ const itemProps: IItemDeleteModalProps = {
   actionItemsRefetch: vi.fn(),
   actionItem: {
     id: 'actionItemId1',
-    assigneeId: null,
+    volunteerId: null,
+    volunteerGroupId: null,
     categoryId: 'categoryId1',
     eventId: null,
     recurringEventInstanceId: null,
@@ -63,7 +64,8 @@ const itemProps: IItemDeleteModalProps = {
     isInstanceException: false,
 
     // Related entities updated according to the new interfaces
-    assignee: null,
+    volunteer: null,
+    volunteerGroup: null,
     creator: {
       id: 'userId2',
       name: 'Wilt Shepherd',

@@ -1,268 +1,199 @@
-import { ACTION_ITEMS_BY_USER } from 'GraphQl/Queries/ActionItemQueries';
+import type { MockedResponse } from '@apollo/react-testing';
+import { ACTION_ITEM_LIST } from 'GraphQl/Queries/ActionItemQueries';
 
 const action1 = {
-  _id: 'actionId1',
-  assignee: {
-    _id: 'volunteerId1',
+  id: 'actionId1',
+  volunteer: {
+    id: 'volunteerId1',
+    hasAccepted: true,
+    isPublic: true,
+    hoursVolunteered: 8,
     user: {
-      _id: 'userId',
-      firstName: 'Teresa',
-      lastName: 'Bradley',
-      image: null,
+      id: 'userId',
+      name: 'Teresa Bradley',
+      avatarURL: null,
     },
   },
-  assigneeGroup: null,
-  assigneeType: 'EventVolunteer',
-  assigner: {
-    _id: 'userId1',
-    firstName: 'Wilt',
-    lastName: 'Shepherd',
-    image: null,
+  volunteerGroup: null,
+  creator: {
+    id: 'userId1',
+    name: 'Wilt Shepherd',
   },
-  actionItemCategory: {
-    _id: 'categoryId1',
+  updater: {
+    id: 'userId1',
+    name: 'Wilt Shepherd',
+  },
+  category: {
+    id: 'categoryId1',
     name: 'Category 1',
+    description: 'Category 1 description',
   },
   preCompletionNotes: '',
   postCompletionNotes: '',
-  assignmentDate: '2024-10-25',
-  dueDate: '2025-10-25',
-  completionDate: '2024-11-01',
+  assignedAt: '2024-08-25',
+  completionAt: '2024-09-01',
+  createdAt: '2024-08-20',
   isCompleted: false,
   event: {
-    _id: 'eventId1',
-    title: 'Event 1',
+    id: 'eventId1',
+    name: 'Event 1',
+    description: 'Event 1 description',
   },
-  creator: {
-    _id: 'userId1',
-    firstName: 'Wilt',
-    lastName: 'Shepherd',
+  recurringEventInstance: null,
+  organization: {
+    id: 'orgId',
+    name: 'Organization 1',
+    description: 'Organization 1 description',
   },
-  allottedHours: 8,
 };
 
 const action2 = {
-  _id: 'actionId2',
-  assignee: null,
-  assigneeGroup: {
-    _id: 'groupId1',
+  id: 'actionId2',
+  volunteer: null,
+  volunteerGroup: {
+    id: 'groupId1',
     name: 'Group 1',
+    description: 'Group 1 description',
+    volunteersRequired: 5,
+    leader: {
+      id: 'userId1',
+      name: 'Wilt Shepherd',
+      avatarURL: null,
+    },
+    volunteers: [
+      {
+        id: 'volunteerGroupMemberId1',
+        user: {
+          id: 'userId',
+          name: 'Teresa Bradley',
+        },
+      },
+    ],
   },
-  assigneeType: 'EventVolunteerGroup',
-  assigner: {
-    _id: 'userId1',
-    firstName: 'Wilt',
-    lastName: 'Shepherd',
-    image: null,
+  creator: {
+    id: 'userId1',
+    name: 'Wilt Shepherd',
   },
-  actionItemCategory: {
-    _id: 'categoryId2',
+  updater: {
+    id: 'userId1',
+    name: 'Wilt Shepherd',
+  },
+  category: {
+    id: 'categoryId2',
     name: 'Category 2',
+    description: 'Category 2 description',
   },
   preCompletionNotes: '',
   postCompletionNotes: '',
-  assignmentDate: '2024-10-25',
-  dueDate: '2025-10-26',
-  completionDate: '2024-11-01',
+  assignedAt: '2024-10-25',
+  completionAt: '2024-11-01',
+  createdAt: '2024-10-20',
   isCompleted: false,
   event: {
-    _id: 'eventId1',
-    title: 'Event 1',
+    id: 'eventId1',
+    name: 'Event 1',
+    description: 'Event 1 description',
   },
-  creator: {
-    _id: 'userId1',
-    firstName: 'Wilt',
-    lastName: 'Shepherd',
+  recurringEventInstance: null,
+  organization: {
+    id: 'orgId',
+    name: 'Organization 1',
+    description: 'Organization 1 description',
   },
-  allottedHours: 8,
 };
 
 const action3 = {
-  _id: 'actionId3',
-  assignee: {
-    _id: 'volunteerId3',
+  id: 'actionId3',
+  volunteer: {
+    id: 'volunteerId2',
+    hasAccepted: true,
+    isPublic: false,
+    hoursVolunteered: 4,
     user: {
-      _id: 'userId',
-      firstName: 'Teresa',
-      lastName: 'Bradley',
-      image: 'img-url',
+      id: 'userId2',
+      name: 'John Doe',
+      avatarURL: null,
     },
   },
-  assigneeGroup: null,
-  assigneeType: 'EventVolunteer',
-  assigner: {
-    _id: 'userId1',
-    firstName: 'Wilt',
-    lastName: 'Shepherd',
-    image: null,
+  volunteerGroup: null,
+  creator: {
+    id: 'userId1',
+    name: 'Wilt Shepherd',
   },
-  actionItemCategory: {
-    _id: 'categoryId3',
+  updater: {
+    id: 'userId1',
+    name: 'Wilt Shepherd',
+  },
+  category: {
+    id: 'categoryId3',
     name: 'Category 3',
+    description: 'Category 3 description',
   },
   preCompletionNotes: '',
   postCompletionNotes: '',
-  assignmentDate: '2024-10-25',
-  dueDate: '2024-10-27',
-  completionDate: '2024-11-01',
+  assignedAt: '2024-07-10',
+  completionAt: '2024-07-20',
+  createdAt: '2024-07-05',
   isCompleted: true,
   event: {
-    _id: 'eventId2',
-    title: 'Event 2',
+    id: 'eventId2',
+    name: 'Event 2',
+    description: 'Event 2 description',
   },
-  creator: {
-    _id: 'userId1',
-    firstName: 'Wilt',
-    lastName: 'Shepherd',
+  recurringEventInstance: null,
+  organization: {
+    id: 'orgId',
+    name: 'Organization 1',
+    description: 'Organization 1 description',
   },
-  allottedHours: null,
 };
 
-export const MOCKS = [
+export const MOCKS: MockedResponse[] = [
   {
     request: {
-      query: ACTION_ITEMS_BY_USER,
+      query: ACTION_ITEM_LIST,
       variables: {
-        userId: 'userId',
-        orderBy: null,
-        where: {
-          orgId: 'orgId',
-          assigneeName: '',
+        input: {
+          organizationId: 'orgId',
         },
       },
     },
     result: {
       data: {
-        actionItemsByUser: [action1, action2, action3],
-      },
-    },
-  },
-  {
-    request: {
-      query: ACTION_ITEMS_BY_USER,
-      variables: {
-        userId: 'userId',
-        orderBy: 'dueDate_DESC',
-        where: {
-          orgId: 'orgId',
-          assigneeName: '',
-        },
-      },
-    },
-    result: {
-      data: {
-        actionItemsByUser: [action2, action1],
-      },
-    },
-  },
-  {
-    request: {
-      query: ACTION_ITEMS_BY_USER,
-      variables: {
-        userId: 'userId',
-        orderBy: 'dueDate_ASC',
-        where: {
-          orgId: 'orgId',
-          assigneeName: '',
-        },
-      },
-    },
-    result: {
-      data: {
-        actionItemsByUser: [action1, action2],
-      },
-    },
-  },
-  {
-    request: {
-      query: ACTION_ITEMS_BY_USER,
-      variables: {
-        userId: 'userId',
-        orderBy: null,
-        where: {
-          orgId: 'orgId',
-          assigneeName: '1',
-        },
-      },
-    },
-    result: {
-      data: {
-        actionItemsByUser: [action2],
-      },
-    },
-  },
-  {
-    request: {
-      query: ACTION_ITEMS_BY_USER,
-      variables: {
-        userId: 'userId',
-        orderBy: null,
-        where: {
-          orgId: 'orgId',
-          categoryName: '',
-        },
-      },
-    },
-    result: {
-      data: {
-        actionItemsByUser: [action1, action2],
-      },
-    },
-  },
-  {
-    request: {
-      query: ACTION_ITEMS_BY_USER,
-      variables: {
-        userId: 'userId',
-        orderBy: null,
-        where: {
-          orgId: 'orgId',
-          categoryName: '1',
-        },
-      },
-    },
-    result: {
-      data: {
-        actionItemsByUser: [action1],
+        actionItemsByOrganization: [action1, action2, action3],
       },
     },
   },
 ];
 
-export const EMPTY_MOCKS = [
+export const EMPTY_MOCKS: MockedResponse[] = [
   {
     request: {
-      query: ACTION_ITEMS_BY_USER,
+      query: ACTION_ITEM_LIST,
       variables: {
-        userId: 'userId',
-        orderBy: null,
-        where: {
-          orgId: 'orgId',
-          assigneeName: '',
+        input: {
+          organizationId: 'orgId',
         },
       },
     },
     result: {
       data: {
-        actionItemsByUser: [],
+        actionItemsByOrganization: [],
       },
     },
   },
 ];
 
-export const ERROR_MOCKS = [
+export const ERROR_MOCKS: MockedResponse[] = [
   {
     request: {
-      query: ACTION_ITEMS_BY_USER,
+      query: ACTION_ITEM_LIST,
       variables: {
-        userId: 'userId',
-        orderBy: null,
-        where: {
-          orgId: 'orgId',
-          assigneeName: '',
+        input: {
+          organizationId: 'orgId',
         },
       },
     },
-    error: new Error('Mock Graphql ACTION_ITEMS_BY_USER Error'),
+    error: new Error('Mock Graphql ACTION_ITEM_LIST Error'),
   },
 ];
