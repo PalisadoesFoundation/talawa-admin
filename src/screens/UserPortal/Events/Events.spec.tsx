@@ -90,8 +90,6 @@ const MOCKS = [
         id: 'org123',
         first: 150,
         after: null,
-        startDate: startAt,
-        endDate: endAt,
         includeRecurring: true,
       },
     },
@@ -250,8 +248,6 @@ const ERROR_MOCKS = [
         id: 'org123',
         first: 150,
         after: null,
-        startDate: startAt,
-        endDate: endAt,
         includeRecurring: true,
       },
     },
@@ -279,8 +275,6 @@ const RATE_LIMIT_MOCKS = [
         id: 'org123',
         first: 150,
         after: null,
-        startDate: startAt,
-        endDate: endAt,
         includeRecurring: true,
       },
     },
@@ -332,7 +326,7 @@ const errorLink = new StaticMockLink(ERROR_MOCKS, true);
 const rateLimitLink = new StaticMockLink(RATE_LIMIT_MOCKS, true);
 const createEventErrorLink = new StaticMockLink(CREATE_EVENT_ERROR_MOCKS, true);
 
-async function wait(ms = 100): Promise<void> {
+async function wait(ms = 500): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -377,6 +371,8 @@ describe('Testing Events Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+
+    await wait();
 
     await waitFor(() => {
       expect(screen.getByText('Calendar View')).toBeInTheDocument();
@@ -797,6 +793,8 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
+    await wait();
+
     await waitFor(() => {
       expect(screen.getByText('Calendar View')).toBeInTheDocument();
     });
@@ -867,6 +865,8 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
+    await wait();
+
     await waitFor(() => {
       expect(screen.getByText('Calendar View')).toBeInTheDocument();
     });
@@ -892,6 +892,8 @@ describe('Testing Events Screen [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+
+    await wait();
 
     await waitFor(() => {
       expect(screen.getByText('Calendar View')).toBeInTheDocument();
