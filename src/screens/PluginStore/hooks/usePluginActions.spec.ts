@@ -55,12 +55,17 @@ describe('usePluginActions', () => {
   };
 
   const mockRefetch = vi.fn();
+  const installPluginMock = vi.fn();
+  const togglePluginStatusMock = vi.fn();
+  const uninstallPluginMock = vi.fn();
+  const loadPluginMock = vi.fn();
+  const unloadPluginMock = vi.fn();
   const mockPluginManager = {
-    installPlugin: vi.fn(),
-    togglePluginStatus: vi.fn(),
-    uninstallPlugin: vi.fn(),
-    loadPlugin: vi.fn(),
-    unloadPlugin: vi.fn(),
+    installPlugin: installPluginMock,
+    togglePluginStatus: togglePluginStatusMock,
+    uninstallPlugin: uninstallPluginMock,
+    loadPlugin: loadPluginMock,
+    unloadPlugin: unloadPluginMock,
   } as unknown as ReturnType<typeof getPluginManager>;
 
   beforeEach(() => {
@@ -71,6 +76,11 @@ describe('usePluginActions', () => {
     mockUpdatePlugin.mockResolvedValue({});
     mockDeletePlugin.mockResolvedValue({});
     mockInstallPlugin.mockResolvedValue({});
+    installPluginMock.mockResolvedValue(true);
+    togglePluginStatusMock.mockResolvedValue(true);
+    uninstallPluginMock.mockResolvedValue(true);
+    loadPluginMock.mockResolvedValue(true);
+    unloadPluginMock.mockResolvedValue(true);
   });
 
   it('should initialize with correct default state', () => {
@@ -93,7 +103,7 @@ describe('usePluginActions', () => {
 
   it('should successfully install a plugin', async () => {
     mockInstallPlugin.mockResolvedValue({});
-    mockPluginManager.installPlugin.mockResolvedValue(true);
+    installPluginMock.mockResolvedValue(true);
 
     const { result } = renderHook(() =>
       usePluginActions({
@@ -121,7 +131,7 @@ describe('usePluginActions', () => {
 
   it('should successfully activate a plugin', async () => {
     mockUpdatePlugin.mockResolvedValue({});
-    mockPluginManager.togglePluginStatus.mockResolvedValue(true);
+    togglePluginStatusMock.mockResolvedValue(true);
 
     const { result } = renderHook(() =>
       usePluginActions({
@@ -227,7 +237,7 @@ describe('usePluginActions', () => {
 
   it('should handle installation failure in plugin manager', async () => {
     mockInstallPlugin.mockResolvedValue({});
-    mockPluginManager.installPlugin.mockResolvedValue(false);
+    installPluginMock.mockResolvedValue(false);
 
     const { result } = renderHook(() =>
       usePluginActions({
@@ -245,7 +255,7 @@ describe('usePluginActions', () => {
 
   it('should handle toggle failure in plugin manager', async () => {
     mockUpdatePlugin.mockResolvedValue({});
-    mockPluginManager.togglePluginStatus.mockResolvedValue(false);
+    togglePluginStatusMock.mockResolvedValue(false);
 
     const { result } = renderHook(() =>
       usePluginActions({
@@ -280,7 +290,7 @@ describe('usePluginActions', () => {
 
   it('should handle plugin not found in GraphQL data during toggle', async () => {
     mockUpdatePlugin.mockResolvedValue({});
-    mockPluginManager.togglePluginStatus.mockResolvedValue(true);
+    togglePluginStatusMock.mockResolvedValue(true);
 
     const { result } = renderHook(() =>
       usePluginActions({
@@ -302,7 +312,7 @@ describe('usePluginActions', () => {
 
   it('should handle plugin not found in GraphQL data during uninstall', async () => {
     mockDeletePlugin.mockResolvedValue({});
-    mockPluginManager.uninstallPlugin.mockResolvedValue(true);
+    uninstallPluginMock.mockResolvedValue(true);
 
     const { result } = renderHook(() =>
       usePluginActions({
@@ -328,7 +338,7 @@ describe('usePluginActions', () => {
 
   it('should handle plugin manager uninstall failure', async () => {
     mockDeletePlugin.mockResolvedValue({});
-    mockPluginManager.uninstallPlugin.mockResolvedValue(false);
+    uninstallPluginMock.mockResolvedValue(false);
 
     const { result } = renderHook(() =>
       usePluginActions({
@@ -377,7 +387,7 @@ describe('usePluginActions', () => {
 
   it('should handle AdminPluginFileService import error', async () => {
     mockDeletePlugin.mockResolvedValue({});
-    mockPluginManager.uninstallPlugin.mockResolvedValue(true);
+    uninstallPluginMock.mockResolvedValue(true);
 
     // Mock the import to throw an error
     const originalImport = vi.fn();
@@ -408,7 +418,7 @@ describe('usePluginActions', () => {
 
   it('should handle AdminPluginFileService.removePlugin failure', async () => {
     mockDeletePlugin.mockResolvedValue({});
-    mockPluginManager.uninstallPlugin.mockResolvedValue(true);
+    uninstallPluginMock.mockResolvedValue(true);
 
     // Mock AdminPluginFileService with failure
     const mockAdminPluginFileService = {
@@ -442,7 +452,7 @@ describe('usePluginActions', () => {
 
   it('should handle deactivate plugin status', async () => {
     mockUpdatePlugin.mockResolvedValue({});
-    mockPluginManager.togglePluginStatus.mockResolvedValue(true);
+    togglePluginStatusMock.mockResolvedValue(true);
 
     const { result } = renderHook(() =>
       usePluginActions({
@@ -473,7 +483,7 @@ describe('usePluginActions', () => {
     mockInstallPlugin.mockImplementation(
       () => new Promise((resolve) => setTimeout(resolve, 100)),
     );
-    mockPluginManager.installPlugin.mockResolvedValue(true);
+    installPluginMock.mockResolvedValue(true);
 
     const { result } = renderHook(() =>
       usePluginActions({

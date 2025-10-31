@@ -71,6 +71,9 @@ export function usePluginFilters({ pluginData }: IUsePluginFiltersProps) {
         (p) => p.manifest.name === pluginName,
       );
       if (loadedPlugin) {
+        // Convert status - ILoadedPlugin allows 'error' but IInstalledPlugin only allows 'active' | 'inactive'
+        const status: 'active' | 'inactive' =
+          loadedPlugin.status === 'error' ? 'inactive' : loadedPlugin.status;
         return {
           id: loadedPlugin.id,
           name: loadedPlugin.manifest.name,
@@ -85,7 +88,7 @@ export function usePluginFilters({ pluginData }: IUsePluginFiltersProps) {
           license: loadedPlugin.manifest.license,
           tags: loadedPlugin.manifest.tags,
           changelog: [],
-          status: loadedPlugin.status,
+          status,
         };
       }
 
