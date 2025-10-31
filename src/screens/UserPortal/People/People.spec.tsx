@@ -46,7 +46,9 @@ const memberEdge = (props: Record<string, unknown> = {}) => ({
     avatarURL: props.avatarURL || null,
     emailAddress: props.emailAddress || 'user1@example.com',
     createdAt: '2023-03-02T03:22:08.101Z',
-    ...props.node,
+    ...(typeof props.node === 'object' && props.node !== null
+      ? (props.node as Record<string, unknown>)
+      : {}),
   },
 });
 
