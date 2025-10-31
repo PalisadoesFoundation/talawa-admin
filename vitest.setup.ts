@@ -1,9 +1,14 @@
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
+import { vi } from 'vitest';
 
-// Basic cleanup after each test
+// Optimized cleanup after each test
 afterEach(() => {
   cleanup();
+  // Clear all timers to prevent memory leaks
+  vi.clearAllTimers();
+  // Clear all mocks to reset state between tests
+  vi.clearAllMocks();
 });
 
 // Simple console error handler for React 18 warnings
@@ -26,3 +31,17 @@ beforeAll(() => {
 afterAll(() => {
   console.error = originalError;
 });
+
+// Aggressive memory cleanup for CI environments with happy-dom
+if (global.gc && typeof global.gc === 'function') {
+  const gcFunction = global.gc;
+  if (process.env.CI) {
+    afterEach(() => {
+      gcFunction();
+    });
+  } else {
+    afterAll(() => {
+      gcFunction();
+    });
+  }
+}
