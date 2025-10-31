@@ -3,14 +3,42 @@ import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
 
+const isCI = !!process.env.CI;
+
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), svgrPlugin()],
+  build: {
+    sourcemap: false, // Disable sourcemaps for faster tests
+  },
+  esbuild: {
+    sourcemap: false, // Disable sourcemaps for faster tests
+  },
   test: {
     include: ['src/**/*.spec.{js,jsx,ts,tsx}'],
     globals: true,
     environment: 'jsdom',
     setupFiles: 'vitest.setup.ts',
     testTimeout: 30000,
+    hookTimeout: 10000,
+    teardownTimeout: 10000,
+    // Use threads for better performance in CI
+    pool: 'threads',
+    poolOptions: {
+      threads: {
+        singleThread: false,
+        minThreads: 1,
+        maxThreads: isCI ? 2 : 4, // Conservative in CI to avoid OOM
+        isolate: true,
+      },
+    },
+    // Lower concurrency in CI to avoid memory issues
+    maxConcurrency: isCI ? 1 : 2,
+    // Enable file parallelism for better performance
+    fileParallelism: true,
+    sequence: {
+      shuffle: false,
+      concurrent: true,
+    },
     coverage: {
       enabled: true,
       provider: 'istanbul',
