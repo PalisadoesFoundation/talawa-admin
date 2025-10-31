@@ -13,8 +13,9 @@ afterEach(() => {
   cleanup();
   // Clear all timers to prevent memory leaks
   vi.clearAllTimers();
-  // Clear all mocks to reset state between tests
-  vi.clearAllMocks();
+  // Reset mock call history but keep implementations
+  // This allows tests to check spy calls while preventing state leakage
+  vi.resetAllMocks();
 });
 
 // Simple console error handler for React 18 warnings
