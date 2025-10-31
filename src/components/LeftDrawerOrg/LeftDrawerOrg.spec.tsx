@@ -1,3 +1,4 @@
+import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
@@ -179,14 +180,14 @@ const mockOrganizationData = {
 const mockOrganizationDataWithoutAvatar = {
   organization: {
     ...mockOrganizationData.organization,
-    avatarURL: null,
+    avatarURL: null as string | null,
   },
 };
 
 const mockOrganizationDataWithoutCity = {
   organization: {
     ...mockOrganizationData.organization,
-    city: null,
+    city: null as string | null,
   },
 };
 
@@ -208,6 +209,9 @@ const loadingMocks = [
       query: GET_ORGANIZATION_DATA_PG,
       variables: { id: 'org-123', first: 10, after: null },
     },
+    result: {
+      data: mockOrganizationData,
+    },
     delay: 30000, // Never resolve to simulate loading
   },
 ];
@@ -224,7 +228,9 @@ const errorMocks = [
 
 describe('LeftDrawerOrg', () => {
   const originalInnerWidth = window.innerWidth;
-  const mockSetHideDrawer = vi.fn();
+  const mockSetHideDrawer = vi.fn() as React.Dispatch<
+    React.SetStateAction<boolean>
+  >;
 
   const defaultProps: ILeftDrawerProps = {
     orgId: 'org-123',
@@ -740,7 +746,9 @@ describe('LeftDrawerOrg', () => {
     it('should handle null setHideDrawer prop', () => {
       const propsWithNullSetter = {
         ...defaultProps,
-        setHideDrawer: null as unknown as (hide: boolean) => void,
+        setHideDrawer: null as unknown as React.Dispatch<
+          React.SetStateAction<boolean>
+        >,
       };
 
       expect(() => renderComponent(propsWithNullSetter)).not.toThrow();
