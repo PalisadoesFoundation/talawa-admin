@@ -114,7 +114,9 @@ describe('PluginStore', () => {
       loadPlugin: vi.fn().mockResolvedValue(true),
       unloadPlugin: vi.fn().mockResolvedValue(true),
       togglePluginStatus: vi.fn().mockResolvedValue(true),
-    } as any;
+      installPlugin: vi.fn().mockResolvedValue(true),
+      uninstallPlugin: vi.fn().mockResolvedValue(true),
+    };
     vi.mocked(pluginManager.getPluginManager).mockReturnValue(
       mockPluginManager,
     );
@@ -125,9 +127,9 @@ describe('PluginStore', () => {
     });
 
     // Mock admin plugin file service
-    (adminPluginFileService.adminPluginFileService.removePlugin as any) = vi
-      .fn()
-      .mockResolvedValue(true);
+    vi.mocked(
+      adminPluginFileService.adminPluginFileService.removePlugin,
+    ).mockResolvedValue(true);
   });
 
   const renderPluginStore = () => {
@@ -662,7 +664,9 @@ describe('PluginStore', () => {
         loadPlugin: vi.fn().mockResolvedValue(true),
         unloadPlugin: vi.fn().mockResolvedValue(true),
         togglePluginStatus: vi.fn().mockResolvedValue(false),
-      } as any;
+        installPlugin: vi.fn().mockResolvedValue(true),
+        uninstallPlugin: vi.fn().mockResolvedValue(true),
+      };
       vi.mocked(pluginManager.getPluginManager).mockReturnValue(
         mockPluginManager,
       );
@@ -700,7 +704,9 @@ describe('PluginStore', () => {
         loadPlugin: vi.fn().mockResolvedValue(true),
         unloadPlugin: vi.fn().mockResolvedValue(false),
         togglePluginStatus: vi.fn().mockResolvedValue(true),
-      } as any;
+        installPlugin: vi.fn().mockResolvedValue(true),
+        uninstallPlugin: vi.fn().mockResolvedValue(true),
+      };
       vi.mocked(pluginManager.getPluginManager).mockReturnValue(
         mockPluginManager,
       );
@@ -742,9 +748,9 @@ describe('PluginStore', () => {
 
     it('should handle admin plugin file service failure', async () => {
       // Mock admin plugin file service to fail
-      (adminPluginFileService.adminPluginFileService.removePlugin as any) = vi
-        .fn()
-        .mockResolvedValue(false);
+      vi.mocked(
+        adminPluginFileService.adminPluginFileService.removePlugin,
+      ).mockResolvedValue(false);
 
       mockDeletePlugin.mockResolvedValue({
         data: { deletePlugin: { id: '1' } },

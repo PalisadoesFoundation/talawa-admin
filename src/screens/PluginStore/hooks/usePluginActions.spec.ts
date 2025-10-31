@@ -60,7 +60,7 @@ describe('usePluginActions', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (getPluginManager as any).mockReturnValue(mockPluginManager);
+    vi.mocked(getPluginManager).mockReturnValue(mockPluginManager);
     mockRefetch.mockResolvedValue({});
     mockCreatePlugin.mockResolvedValue({});
     mockUpdatePlugin.mockResolvedValue({});

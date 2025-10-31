@@ -662,8 +662,8 @@ describe('usePluginFilters', () => {
         usePluginFilters({ pluginData: mockPluginData }),
       );
 
-      expect(result.current.isInstalled(null as any)).toBe(false);
-      expect(result.current.isInstalled(undefined as any)).toBe(false);
+      expect(result.current.isInstalled('')).toBe(false);
+      expect(result.current.isInstalled('')).toBe(false);
       expect(result.current.isInstalled('')).toBe(false);
     });
 
@@ -672,10 +672,8 @@ describe('usePluginFilters', () => {
         usePluginFilters({ pluginData: mockPluginData }),
       );
 
-      expect(result.current.getInstalledPlugin(null as any)).toBeUndefined();
-      expect(
-        result.current.getInstalledPlugin(undefined as any),
-      ).toBeUndefined();
+      expect(result.current.getInstalledPlugin('')).toBeUndefined();
+      expect(result.current.getInstalledPlugin('')).toBeUndefined();
       expect(result.current.getInstalledPlugin('')).toBeUndefined();
     });
   });

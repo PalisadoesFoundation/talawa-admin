@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import PluginCard from './PluginCard';
 import type { IPluginMeta } from 'plugin';
 
-interface PluginListProps {
+interface IPluginListProps {
   plugins: IPluginMeta[];
   searchTerm: string;
   filterOption: string;
@@ -18,7 +18,7 @@ export default function PluginList({
   searchTerm,
   filterOption,
   onManagePlugin,
-}: PluginListProps) {
+}: IPluginListProps) {
   const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
 
   if (plugins.length === 0) {

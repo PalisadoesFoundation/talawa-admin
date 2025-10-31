@@ -15,12 +15,12 @@ import {
   type AdminPluginZipStructure,
 } from '../../utils/adminPluginInstaller';
 
-interface UploadPluginModalProps {
+interface IUploadPluginModalProps {
   show: boolean;
   onHide: () => void;
 }
 
-const UploadPluginModal: React.FC<UploadPluginModalProps> = ({
+const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
   show,
   onHide,
 }) => {
@@ -74,7 +74,7 @@ const UploadPluginModal: React.FC<UploadPluginModalProps> = ({
 
         setPluginFiles(filesList);
         setPluginStructure(structure);
-        setManifest(structure.adminManifest || structure.apiManifest!);
+        setManifest(structure.adminManifest || structure.apiManifest || null);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : 'Failed to parse plugin ZIP',

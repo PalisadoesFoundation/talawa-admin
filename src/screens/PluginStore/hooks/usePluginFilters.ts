@@ -6,12 +6,17 @@ import { useTranslation } from 'react-i18next';
 import { useLoadedPlugins } from 'plugin/hooks';
 import useDebounce from 'components/OrgListCard/useDebounce';
 import type { IPluginMeta } from 'plugin';
+import type { IPlugin } from 'plugin/graphql-service';
 
-interface UsePluginFiltersProps {
-  pluginData: any;
+interface IPluginData {
+  getPlugins?: IPlugin[];
 }
 
-export function usePluginFilters({ pluginData }: UsePluginFiltersProps) {
+interface IUsePluginFiltersProps {
+  pluginData: IPluginData | undefined;
+}
+
+export function usePluginFilters({ pluginData }: IUsePluginFiltersProps) {
   const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
   const loadedPlugins = useLoadedPlugins();
 
@@ -32,7 +37,7 @@ export function usePluginFilters({ pluginData }: UsePluginFiltersProps) {
 
       // Check in GraphQL data
       const graphqlPlugin = pluginData?.getPlugins?.find(
-        (p: any) => p.pluginId === pluginName,
+        (p) => p.pluginId === pluginName,
       );
       return graphqlPlugin?.isInstalled || false;
     },
@@ -40,10 +45,10 @@ export function usePluginFilters({ pluginData }: UsePluginFiltersProps) {
   );
 
   const getInstalledPlugin = useCallback(
-    (pluginName: string): any => {
+    (pluginName: string): IPluginMeta | undefined => {
       // First check GraphQL data (source of truth for status)
       const graphqlPlugin = pluginData?.getPlugins?.find(
-        (p: any) => p.pluginId === pluginName,
+        (p) => p.pluginId === pluginName,
       );
       if (graphqlPlugin) {
         return {
@@ -107,12 +112,12 @@ export function usePluginFilters({ pluginData }: UsePluginFiltersProps) {
       // Add GraphQL plugins that aren't already loaded
       ...graphqlPlugins
         .filter(
-          (gqlPlugin: any) =>
+          (gqlPlugin) =>
             !loadedPlugins.some(
               (loadedPlugin) => loadedPlugin.id === gqlPlugin.pluginId,
             ),
         )
-        .map((gqlPlugin: any) => ({
+        .map((gqlPlugin) => ({
           id: gqlPlugin.pluginId,
           name: gqlPlugin.pluginId,
           description: `Plugin ${gqlPlugin.pluginId}`,

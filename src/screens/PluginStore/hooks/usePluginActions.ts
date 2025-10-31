@@ -9,17 +9,22 @@ import {
   useUpdatePlugin,
   useDeletePlugin,
   useInstallPlugin,
+  type IPlugin,
 } from 'plugin/graphql-service';
 
-interface UsePluginActionsProps {
-  pluginData: any;
-  refetch: () => Promise<any>;
+interface IPluginData {
+  getPlugins?: IPlugin[];
+}
+
+interface IUsePluginActionsProps {
+  pluginData: IPluginData | undefined;
+  refetch: () => Promise<unknown>;
 }
 
 export function usePluginActions({
   pluginData,
   refetch,
-}: UsePluginActionsProps) {
+}: IUsePluginActionsProps) {
   const [loading, setLoading] = useState(false);
   const [showUninstallModal, setShowUninstallModal] = useState(false);
   const [pluginToUninstall, setPluginToUninstall] =
@@ -69,7 +74,7 @@ export function usePluginActions({
       try {
         // Update plugin status in GraphQL
         const existingPlugin = pluginData?.getPlugins?.find(
-          (p: any) => p.pluginId === plugin.id,
+          (p) => p.pluginId === plugin.id,
         );
         if (existingPlugin) {
           await updatePlugin({
@@ -116,7 +121,7 @@ export function usePluginActions({
     setLoading(true);
     try {
       const existingPlugin = pluginData?.getPlugins?.find(
-        (p: any) => p.pluginId === pluginToUninstall.id,
+        (p) => p.pluginId === pluginToUninstall.id,
       );
       if (existingPlugin) {
         // Remove permanently - delete from database

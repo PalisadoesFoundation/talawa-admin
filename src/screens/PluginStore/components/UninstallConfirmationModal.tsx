@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import type { IPluginMeta } from 'plugin';
 
-interface UninstallConfirmationModalProps {
+interface IUninstallConfirmationModalProps {
   show: boolean;
   onClose: () => void;
   onConfirm: () => void;
@@ -24,7 +24,7 @@ export default function UninstallConfirmationModal({
   onClose,
   onConfirm,
   plugin,
-}: UninstallConfirmationModalProps) {
+}: IUninstallConfirmationModalProps) {
   return (
     <Dialog
       open={show}
