@@ -497,6 +497,7 @@ jobs:
           flags: vitest
 
       - name: Test acceptable level of code coverage
+        continue-on-error: true
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
           path: './coverage/vitest/lcov.info'

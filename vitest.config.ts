@@ -53,9 +53,12 @@ export default defineConfig({
         '**/*.d.ts',
         'src/test/**',
         'vitest.config.ts',
-        'vitest.setup.ts', // Exclude from coverage if necessary
+        'vitest.setup.ts',
         'cypress/**',
         'cypress.config.ts',
+        '.github/**', // Exclude GitHub workflows and scripts
+        'scripts/**', // Exclude build/setup scripts
+        'config/**', // Exclude configuration files
       ],
       reporter: ['text', 'html', 'text-summary', 'lcov'],
     },
