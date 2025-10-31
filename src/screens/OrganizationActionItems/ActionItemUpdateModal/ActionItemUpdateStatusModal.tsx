@@ -59,7 +59,7 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
   isOpen,
   actionItemsRefetch,
   actionItem,
-  isRecurring: _isRecurring,
+  isRecurring,
   eventId,
 }) => {
   const { t } = useTranslation('translation', {

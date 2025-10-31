@@ -124,9 +124,8 @@ function App(): React.ReactElement {
   // Get user permissions and admin status (memoized to prevent infinite loops)
   const userPermissions = useMemo(() => {
     return (
-      data?.currentUser?.appUserProfile?.adminFor?.map(
-        (org: { _id: string }) => org._id,
-      ) || []
+      data?.currentUser?.appUserProfile?.adminFor?.map((org: any) => org._id) ||
+      []
     );
   }, [data?.currentUser?.appUserProfile?.adminFor]);
 
