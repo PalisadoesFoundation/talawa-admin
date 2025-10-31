@@ -384,7 +384,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByText('Calendar View')).toBeInTheDocument();
+      expect(screen.getByText('Month View')).toBeInTheDocument();
     });
   });
 
@@ -805,7 +805,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByText('Calendar View')).toBeInTheDocument();
+      expect(screen.getByText('Month View')).toBeInTheDocument();
     });
 
     // Rate limit errors should be suppressed (not logged)
@@ -877,7 +877,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByText('Calendar View')).toBeInTheDocument();
+      expect(screen.getByText('Month View')).toBeInTheDocument();
     });
 
     // Component should render with administrator role
@@ -905,7 +905,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByText('Calendar View')).toBeInTheDocument();
+      expect(screen.getByText('Month View')).toBeInTheDocument();
     });
 
     // Component should render with regular user role
