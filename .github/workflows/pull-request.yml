@@ -141,6 +141,7 @@ jobs:
           else
             echo "Documentation is up to date."
           fi
+
       - name: Check for unused dependencies
         run: npx knip --config knip.deps.json --include dependencies
 
