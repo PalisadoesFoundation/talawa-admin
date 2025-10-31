@@ -77,7 +77,7 @@ const setupUser = (userType: keyof typeof mockUsers) => {
 // Helper function to render component with common providers.
 const renderWithProviders = (link = mockLinks.superAdmin) => {
   return render(
-    <MockedProvider link={link}>
+    <MockedProvider addTypename={false} link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -94,7 +94,7 @@ const renderWithProviders = (link = mockLinks.superAdmin) => {
 // Helper function for rendering with custom mocks
 const renderWithMocks = (mocks: MockedResponse[]) => {
   return render(
-    <MockedProvider mocks={mocks}>
+    <MockedProvider addTypename={false} mocks={mocks}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -783,7 +783,10 @@ describe('Plugin Modal Tests', () => {
     setItem('role', 'administrator');
 
     render(
-      <MockedProvider mocks={mockConfigurations.orgCreationMocks}>
+      <MockedProvider
+        addTypename={false}
+        mocks={mockConfigurations.orgCreationMocks}
+      >
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -868,7 +871,7 @@ describe('Advanced Component Functionality Tests', () => {
     ];
 
     render(
-      <MockedProvider mocks={singleOrgMocks}>
+      <MockedProvider addTypename={false} mocks={singleOrgMocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

@@ -201,7 +201,7 @@ const defaultProps = {
 
 const renderPostCard = (props: Partial<InterfacePostCard> = {}) => {
   return render(
-    <MockedProvider link={link}>
+    <MockedProvider addTypename={false} link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>

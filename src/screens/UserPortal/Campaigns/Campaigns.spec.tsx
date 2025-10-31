@@ -69,7 +69,7 @@ const cTranslations = JSON.parse(
 
 const renderCampaigns = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider link={link}>
+    <MockedProvider addTypename={false} link={link}>
       <MemoryRouter initialEntries={['/user/campaigns/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -151,7 +151,7 @@ describe('Testing User Campaigns Screen', () => {
   it('should redirect to fallback URL if URL params are undefined', async () => {
     vi.unmock('react-router'); // unmocking to get real behavior from useParams
     render(
-      <MockedProvider link={link1}>
+      <MockedProvider addTypename={false} link={link1}>
         <MemoryRouter initialEntries={['/user/campaigns/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

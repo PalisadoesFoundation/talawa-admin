@@ -19,7 +19,7 @@ const mockT = (key: string): string => key;
 describe('AgendaItemsPreviewModal', () => {
   test('check url and attachment links', () => {
     render(
-      <MockedProvider>
+      <MockedProvider addTypename={false}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>

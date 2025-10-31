@@ -35,7 +35,7 @@ describe('Testing CheckIn Wrapper', () => {
 
   it('The button to open and close the modal should work properly', async () => {
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
@@ -74,7 +74,7 @@ describe('CheckInWrapper CSS Tests', () => {
 
   const renderComponent = (): ReturnType<typeof render> => {
     return render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>

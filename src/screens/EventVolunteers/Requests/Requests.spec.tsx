@@ -71,7 +71,7 @@ async function wait(ms = 100): Promise<void> {
 
 const renderRequests = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider link={link}>
+    <MockedProvider addTypename={false} link={link}>
       <MemoryRouter initialEntries={['/event/orgId/eventId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -105,7 +105,7 @@ describe('Testing Requests Screen', () => {
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
     render(
-      <MockedProvider link={link1}>
+      <MockedProvider addTypename={false} link={link1}>
         <MemoryRouter initialEntries={['/event/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -338,7 +338,7 @@ describe('Testing Requests Screen', () => {
 describe('Requests Component CSS Styling', () => {
   const renderComponent = (): RenderResult => {
     return render(
-      <MockedProvider link={link1}>
+      <MockedProvider addTypename={false} link={link1}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

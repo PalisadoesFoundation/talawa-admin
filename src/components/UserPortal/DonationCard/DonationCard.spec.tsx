@@ -46,7 +46,7 @@ const props: InterfaceDonationCardProps = {
 describe('Testing ContactCard Component [User Portal]', () => {
   it('Component should be rendered properly', async () => {
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

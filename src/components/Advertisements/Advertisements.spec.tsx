@@ -94,7 +94,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={getCompletedAdvertisementMocks}>
+              <MockedProvider
+                mocks={getCompletedAdvertisementMocks}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -112,7 +115,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={getCompletedAdvertisementMocks}>
+              <MockedProvider
+                mocks={getCompletedAdvertisementMocks}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -150,7 +156,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={getActiveAdvertisementMocks}>
+              <MockedProvider
+                mocks={getActiveAdvertisementMocks}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -185,7 +194,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={getCompletedAdvertisementMocks}>
+              <MockedProvider
+                mocks={getCompletedAdvertisementMocks}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -220,7 +232,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={initialArchivedData}>
+              <MockedProvider mocks={initialArchivedData} addTypename={false}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -269,7 +281,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={initialActiveData}>
+              <MockedProvider mocks={initialActiveData} addTypename={false}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -322,7 +334,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={getCompletedAdvertisementMocks}>
+              <MockedProvider
+                mocks={getCompletedAdvertisementMocks}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -347,7 +362,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={filterActiveAdvertisementData}>
+              <MockedProvider
+                mocks={filterActiveAdvertisementData}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -382,7 +400,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={filterActiveAdvertisementData}>
+              <MockedProvider
+                mocks={filterActiveAdvertisementData}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -417,7 +438,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={filterCompletedAdvertisementData}>
+              <MockedProvider
+                mocks={filterCompletedAdvertisementData}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -452,7 +476,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={filterCompletedAdvertisementData}>
+              <MockedProvider
+                mocks={filterCompletedAdvertisementData}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -487,7 +514,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={getCompletedAdvertisementMocks}>
+              <MockedProvider
+                mocks={getCompletedAdvertisementMocks}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -519,7 +549,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={createAdvertisement}>
+              <MockedProvider mocks={createAdvertisement} addTypename={false}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -599,7 +629,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={createAdvertisementWithoutName}>
+              <MockedProvider
+                mocks={createAdvertisementWithoutName}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -657,7 +690,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={createAdvertisementWithEndDateBeforeStart}>
+              <MockedProvider
+                mocks={createAdvertisementWithEndDateBeforeStart}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -721,7 +757,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={createAdvertisementError}>
+              <MockedProvider
+                mocks={createAdvertisementError}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -786,7 +825,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={updateAdMocks}>
+              <MockedProvider mocks={updateAdMocks} addTypename={false}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -858,7 +897,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={getActiveAdvertisementMocks}>
+              <MockedProvider
+                mocks={getActiveAdvertisementMocks}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -892,7 +934,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={getActiveAdvertisementMocks}>
+              <MockedProvider
+                mocks={getActiveAdvertisementMocks}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -935,7 +980,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={deleteAdvertisementMocks}>
+              <MockedProvider
+                mocks={deleteAdvertisementMocks}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -973,7 +1021,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={deleteAdvertisementMocks}>
+              <MockedProvider
+                mocks={deleteAdvertisementMocks}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -1011,7 +1062,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={fetchErrorMocks}>
+              <MockedProvider mocks={fetchErrorMocks} addTypename={false}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -1036,7 +1087,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={[]}>
+              <MockedProvider mocks={[]} addTypename={false}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -1059,7 +1110,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={getCompletedAdvertisementMocks}>
+              <MockedProvider
+                mocks={getCompletedAdvertisementMocks}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -1085,7 +1139,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={emptyMocks}>
+              <MockedProvider mocks={emptyMocks} addTypename={false}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -1111,7 +1165,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={getCompletedAdvertisementMocks}>
+              <MockedProvider
+                mocks={getCompletedAdvertisementMocks}
+                addTypename={false}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>

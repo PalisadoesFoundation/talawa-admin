@@ -17,7 +17,7 @@ describe('Testing AttendedEventList', () => {
 
   it('Component renders and displays event details correctly', async () => {
     const { queryByText, queryByTitle } = render(
-      <MockedProvider mocks={MOCKDETAIL}>
+      <MockedProvider mocks={MOCKDETAIL} addTypename={false}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <AttendedEventList {...props} />
@@ -47,7 +47,7 @@ describe('Testing AttendedEventList', () => {
     ];
 
     const { queryByText } = render(
-      <MockedProvider mocks={errorMock}>
+      <MockedProvider mocks={errorMock} addTypename={false}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <AttendedEventList {...props} />
@@ -65,7 +65,7 @@ describe('Testing AttendedEventList', () => {
 
   it('Component renders link with correct URL', async () => {
     const { container } = render(
-      <MockedProvider mocks={MOCKDETAIL}>
+      <MockedProvider mocks={MOCKDETAIL} addTypename={false}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <AttendedEventList {...props} />
@@ -102,7 +102,7 @@ describe('Testing AttendedEventList', () => {
     ];
 
     const { queryByText } = render(
-      <MockedProvider mocks={fallbackMock}>
+      <MockedProvider mocks={fallbackMock} addTypename={false}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <AttendedEventList {...props} />
@@ -135,7 +135,7 @@ describe('Testing AttendedEventList', () => {
     ];
 
     const { queryByText } = render(
-      <MockedProvider mocks={errorDataMock}>
+      <MockedProvider mocks={errorDataMock} addTypename={false}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <AttendedEventList {...props} />

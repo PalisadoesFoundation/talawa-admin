@@ -28,7 +28,7 @@ const mockT = (key: string): string => key;
 
 const renderComponent = (isOpen: boolean): ReturnType<typeof render> => {
   return render(
-    <MockedProvider>
+    <MockedProvider addTypename={false}>
       <Provider store={store}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>

@@ -90,7 +90,7 @@ const renderItemDeleteModal = (
   props: IItemDeleteModalProps,
 ): RenderResult => {
   return render(
-    <MockedProvider link={link}>
+    <MockedProvider link={link} addTypename={false}>
       <Provider store={store}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>

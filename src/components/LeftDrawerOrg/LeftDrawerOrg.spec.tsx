@@ -284,7 +284,7 @@ describe('LeftDrawerOrg', () => {
     initialRoute = '/orgdash/org-123',
   ) => {
     return render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider mocks={mocks} addTypename={false}>
         <MemoryRouter initialEntries={[initialRoute]}>
           <LeftDrawerOrg {...defaultProps} {...props} />
         </MemoryRouter>

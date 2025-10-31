@@ -80,7 +80,7 @@ describe('Testing Agenda Items Components', () => {
 
   it('Component loads correctly', async () => {
     const { getByText } = render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
@@ -97,7 +97,7 @@ describe('Testing Agenda Items Components', () => {
 
   it('render error component on unsuccessful agenda item query', async () => {
     const { queryByText } = render(
-      <MockedProvider link={link2}>
+      <MockedProvider addTypename={false} link={link2}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
@@ -116,7 +116,7 @@ describe('Testing Agenda Items Components', () => {
 
   it('opens and closes the create agenda item modal', async () => {
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -150,7 +150,7 @@ describe('Testing Agenda Items Components', () => {
 
   it('creates new agenda item', async () => {
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>

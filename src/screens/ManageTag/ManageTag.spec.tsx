@@ -114,7 +114,7 @@ vi.mock('../../components/TagActions/TagActions', async () => {
 
 const renderManageTag = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider link={link}>
+    <MockedProvider addTypename={false} link={link}>
       <MemoryRouter initialEntries={['/orgtags/123/manageTag/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
@@ -1121,7 +1121,7 @@ describe('Manage Tag Page', () => {
     ];
 
     render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider mocks={mocks} addTypename={false}>
         <MemoryRouter initialEntries={['/orgtags/org-123/manageTag/tag-123']}>
           <Routes>
             <Route

@@ -90,7 +90,7 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
 
   it('renders the correct title for posts', () => {
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -109,7 +109,7 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
     mockLocation = '/user/people/123';
 
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -128,7 +128,7 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
     mockLocation = '/user/chat/123';
 
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -145,7 +145,7 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
 
   it('toggles LeftDrawer correctly based on window size and user interaction', () => {
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -167,7 +167,7 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
     vi.spyOn({ useNavigate }, 'useNavigate').mockReturnValue(navigate);
 
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

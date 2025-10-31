@@ -50,7 +50,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={mocks} addTypename={false}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -72,7 +72,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={mocks} addTypename={false}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -97,7 +97,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={mocks} addTypename={false}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -122,7 +122,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={mocks} addTypename={false}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -167,7 +167,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={mocks} addTypename={false}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -213,7 +213,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={mocks} addTypename={false}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -262,7 +262,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={mocks} addTypename={false}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -298,7 +298,7 @@ describe('GroupChatDetails', () => {
   it('handling invalid image type', async () => {
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={mocks} addTypename={false}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}

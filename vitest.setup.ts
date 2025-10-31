@@ -8,14 +8,9 @@ Object.defineProperty(window, 'confirm', {
   value: vi.fn(() => true),
 });
 
-// Optimized cleanup after each test
+// Basic cleanup after each test
 afterEach(() => {
   cleanup();
-  // Clear all timers to prevent memory leaks
-  vi.clearAllTimers();
-  // Reset mock call history but keep implementations
-  // This allows tests to check spy calls while preventing state leakage
-  vi.resetAllMocks();
 });
 
 // Simple console error handler for React 18 warnings
@@ -38,17 +33,3 @@ beforeAll(() => {
 afterAll(() => {
   console.error = originalError;
 });
-
-// Aggressive memory cleanup for CI environments
-if (global.gc && typeof global.gc === 'function') {
-  const gcFunction = global.gc;
-  if (process.env.CI) {
-    afterEach(() => {
-      gcFunction();
-    });
-  } else {
-    afterAll(() => {
-      gcFunction();
-    });
-  }
-}

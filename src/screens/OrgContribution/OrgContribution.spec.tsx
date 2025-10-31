@@ -29,7 +29,7 @@ describe('Organisation Contribution Page', () => {
     window.location.assign('/orglist');
 
     const { container } = render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

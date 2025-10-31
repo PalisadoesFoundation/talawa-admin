@@ -63,7 +63,7 @@ describe('Testing Event Registrants Wrapper', () => {
 
   test('The button should work properly', async () => {
     const { queryByText, queryByRole } = render(
-      <MockedProvider mocks={queryMock}>
+      <MockedProvider addTypename={false} mocks={queryMock}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>

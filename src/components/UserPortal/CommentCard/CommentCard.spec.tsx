@@ -112,7 +112,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
   it('Component should be rendered properly if comment is already liked by the user.', async () => {
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -131,7 +131,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
   it('Component should be rendered properly if comment is not already liked by the user.', async () => {
     setItemLocal('userId', '2');
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -159,7 +159,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     };
 
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -190,7 +190,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
   it('Component renders as expected if user unlikes the comment.', async () => {
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -224,7 +224,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     setItemLocal('userId', '2');
 
     render(
-      <MockedProvider link={errorLink}>
+      <MockedProvider addTypename={false} link={errorLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -259,7 +259,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     const errorLink = new StaticMockLink([errorMock], true);
 
     render(
-      <MockedProvider link={errorLink}>
+      <MockedProvider addTypename={false} link={errorLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -302,7 +302,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     setItemLocal('userId', '2');
 
     render(
-      <MockedProvider link={slowLink}>
+      <MockedProvider addTypename={false} link={slowLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -337,7 +337,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     setItemLocal('userId', '2');
 
     const { container } = render(
-      <MockedProvider link={noDataLink}>
+      <MockedProvider addTypename={false} link={noDataLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -378,7 +378,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     const emptyDataLink = new StaticMockLink([emptyDataMock], true);
 
     const { container } = render(
-      <MockedProvider link={emptyDataLink}>
+      <MockedProvider addTypename={false} link={emptyDataLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -420,7 +420,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     setItemLocal('userId', '2');
 
     const { container } = render(
-      <MockedProvider link={emptyDataLink}>
+      <MockedProvider addTypename={false} link={emptyDataLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -445,7 +445,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     setItemLocal('userId', null);
 
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -511,7 +511,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     };
 
     render(
-      <MockedProvider link={forbiddenLink}>
+      <MockedProvider addTypename={false} link={forbiddenLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -557,7 +557,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     const notFoundLink = new StaticMockLink([notFoundErrorMock], true);
 
     render(
-      <MockedProvider link={notFoundLink}>
+      <MockedProvider addTypename={false} link={notFoundLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -587,7 +587,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     };
 
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -633,7 +633,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     };
 
     render(
-      <MockedProvider link={errorLink}>
+      <MockedProvider addTypename={false} link={errorLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -673,7 +673,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     setItemLocal('userId', '1');
 
     render(
-      <MockedProvider link={unlikeLink}>
+      <MockedProvider addTypename={false} link={unlikeLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

@@ -98,7 +98,7 @@ const renderGroupViewModal = (
   props: InterfaceVolunteerGroupViewModal,
 ): RenderResult => {
   return render(
-    <MockedProvider>
+    <MockedProvider addTypename={false}>
       <Provider store={store}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>

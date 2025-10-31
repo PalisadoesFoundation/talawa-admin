@@ -126,7 +126,7 @@ describe('OrgUpdate Component', () => {
 
   it('loads and displays organization data', async () => {
     render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider mocks={mocks} addTypename={true}>
         <I18nextProvider i18n={i18n}>
           <OrgUpdate orgId="1" />
         </I18nextProvider>
@@ -146,7 +146,7 @@ describe('OrgUpdate Component', () => {
 
   it('handles form input changes', async () => {
     render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider mocks={mocks} addTypename={true}>
         <I18nextProvider i18n={i18n}>
           <OrgUpdate orgId="1" />
         </I18nextProvider>
@@ -164,7 +164,7 @@ describe('OrgUpdate Component', () => {
 
   it('handles form submission successfully', async () => {
     render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider mocks={mocks} addTypename={true}>
         <I18nextProvider i18n={i18n}>
           <OrgUpdate orgId="1" />
         </I18nextProvider>
@@ -241,7 +241,7 @@ describe('OrgUpdate Component', () => {
     };
 
     render(
-      <MockedProvider mocks={[queryMock, errorMock]}>
+      <MockedProvider mocks={[queryMock, errorMock]} addTypename={true}>
         <I18nextProvider i18n={i18n}>
           <OrgUpdate orgId="1" />
         </I18nextProvider>
@@ -285,7 +285,7 @@ describe('OrgUpdate Component', () => {
     const file = new File(['test'], 'test.png', { type: 'image/png' });
 
     render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider mocks={mocks} addTypename={true}>
         <I18nextProvider i18n={i18n}>
           <OrgUpdate orgId="1" />
         </I18nextProvider>
@@ -383,7 +383,7 @@ describe('OrgUpdate Component', () => {
       };
 
       render(
-        <MockedProvider mocks={[loadingMock]}>
+        <MockedProvider mocks={[loadingMock]} addTypename={true}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -411,7 +411,7 @@ describe('OrgUpdate Component', () => {
       };
 
       render(
-        <MockedProvider mocks={[errorMock]}>
+        <MockedProvider mocks={[errorMock]} addTypename={true}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -499,7 +499,7 @@ describe('OrgUpdate Component', () => {
       ];
 
       render(
-        <MockedProvider mocks={successMocks}>
+        <MockedProvider mocks={successMocks} addTypename={true}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -524,7 +524,7 @@ describe('OrgUpdate Component', () => {
     });
     it('shows error toast when name or description is missing', async () => {
       render(
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={mocks} addTypename={true}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -595,7 +595,7 @@ describe('OrgUpdate Component', () => {
       ];
 
       render(
-        <MockedProvider mocks={errorMocks}>
+        <MockedProvider mocks={errorMocks} addTypename={true}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -658,7 +658,7 @@ describe('OrgUpdate Component', () => {
 
     it('toggles user registration switch correctly', async () => {
       render(
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={mocks} addTypename={true}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -691,7 +691,7 @@ describe('OrgUpdate Component', () => {
 
     it('toggles visibility switch correctly', async () => {
       render(
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={mocks} addTypename={true}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -791,7 +791,7 @@ describe('OrgUpdate Component', () => {
       ];
 
       render(
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={mocks} addTypename={true}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -825,7 +825,7 @@ describe('OrgUpdate Component', () => {
 
   it('updates address line1 when input changes', async () => {
     render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider mocks={mocks} addTypename={true}>
         <I18nextProvider i18n={i18n}>
           <OrgUpdate orgId="1" />
         </I18nextProvider>

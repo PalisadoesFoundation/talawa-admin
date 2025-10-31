@@ -71,7 +71,7 @@ function renderChatWithMocks(): void {
     ...GROUP_CHAT_BY_USER_ID_QUERY_MOCK,
   ];
   render(
-    <MockedProvider mocks={mocks}>
+    <MockedProvider addTypename={false} mocks={mocks}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>

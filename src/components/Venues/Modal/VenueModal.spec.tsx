@@ -281,7 +281,7 @@ const renderVenueModal = (
   link: ApolloLink,
 ): RenderResult => {
   return render(
-    <MockedProvider link={link}>
+    <MockedProvider addTypename={false} link={link}>
       <MemoryRouter initialEntries={['/']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -301,7 +301,7 @@ describe('VenueModal', () => {
 
   test('creates a new venue successfully', async () => {
     render(
-      <MockedProvider mocks={MOCKS}>
+      <MockedProvider mocks={MOCKS} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...defaultProps} />
         </I18nextProvider>
@@ -372,7 +372,7 @@ describe('VenueModal', () => {
 
   test('clears image input correctly', async () => {
     render(
-      <MockedProvider mocks={MOCKS}>
+      <MockedProvider mocks={MOCKS} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...editProps} />
         </I18nextProvider>
@@ -452,7 +452,7 @@ describe('VenueModal', () => {
 
       // Create a component with the spy link
       const { unmount } = render(
-        <MockedProvider link={mockLink}>
+        <MockedProvider link={mockLink} addTypename={false}>
           <I18nextProvider i18n={i18nForTest}>
             <VenueModal {...defaultProps} />
           </I18nextProvider>
@@ -662,7 +662,7 @@ describe('VenueModal', () => {
         });
 
       render(
-        <MockedProvider mocks={MOCKS}>
+        <MockedProvider mocks={MOCKS} addTypename={false}>
           <I18nextProvider i18n={i18nForTest}>
             <VenueModal
               {...defaultProps}
@@ -689,7 +689,7 @@ describe('VenueModal', () => {
 
     test('shows error toast when an empty file is selected', async () => {
       render(
-        <MockedProvider mocks={MOCKS}>
+        <MockedProvider mocks={MOCKS} addTypename={false}>
           <I18nextProvider i18n={i18nForTest}>
             <VenueModal {...defaultProps} />
           </I18nextProvider>
@@ -819,7 +819,7 @@ describe('VenueModal', () => {
 
       // Use render with cleanup to properly isolate test renders
       const { unmount } = render(
-        <MockedProvider mocks={mockWithoutData}>
+        <MockedProvider mocks={mockWithoutData} addTypename={false}>
           <I18nextProvider i18n={i18nForTest}>
             <VenueModal {...defaultProps} />
           </I18nextProvider>
@@ -848,7 +848,7 @@ describe('VenueModal', () => {
 
       // Now render with proper data
       render(
-        <MockedProvider mocks={MOCKS}>
+        <MockedProvider mocks={MOCKS} addTypename={false}>
           <I18nextProvider i18n={i18nForTest}>
             <VenueModal {...defaultProps} />
           </I18nextProvider>
@@ -1306,7 +1306,10 @@ describe('VenueModal', () => {
       // Completely unmount by setting show to false
       await act(async () => {
         rerender(
-          <MockedProvider link={new StaticMockLink(MOCKS, true)}>
+          <MockedProvider
+            addTypename={false}
+            link={new StaticMockLink(MOCKS, true)}
+          >
             <BrowserRouter>
               <Provider store={store}>
                 <I18nextProvider i18n={i18nForTest}>
@@ -2762,7 +2765,7 @@ describe('VenueModal', () => {
     });
 
     render(
-      <MockedProvider link={flexibleLink}>
+      <MockedProvider link={flexibleLink} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...defaultProps} />
         </I18nextProvider>
@@ -2872,7 +2875,7 @@ describe('VenueModal', () => {
     });
 
     render(
-      <MockedProvider link={flexibleLink}>
+      <MockedProvider link={flexibleLink} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...editProps} />
         </I18nextProvider>
@@ -2933,7 +2936,7 @@ describe('VenueModal', () => {
     });
 
     render(
-      <MockedProvider link={flexibleLink}>
+      <MockedProvider link={flexibleLink} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...defaultProps} />
         </I18nextProvider>
@@ -2976,7 +2979,7 @@ describe('VenueModal', () => {
       .mockReturnValue('blob:http://localhost/test-blob');
 
     const { unmount } = render(
-      <MockedProvider mocks={MOCKS}>
+      <MockedProvider mocks={MOCKS} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...defaultProps} />
         </I18nextProvider>
@@ -3017,7 +3020,7 @@ describe('VenueModal', () => {
       .mockReturnValue('blob:http://localhost/unmount-test');
 
     const { unmount } = render(
-      <MockedProvider mocks={MOCKS}>
+      <MockedProvider mocks={MOCKS} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...defaultProps} />
         </I18nextProvider>
@@ -3134,7 +3137,7 @@ describe('VenueModal', () => {
     };
 
     render(
-      <MockedProvider mocks={[updateMock]}>
+      <MockedProvider mocks={[updateMock]} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...editProps} />
         </I18nextProvider>
@@ -3201,7 +3204,7 @@ describe('VenueModal', () => {
     };
 
     render(
-      <MockedProvider mocks={[createMock]}>
+      <MockedProvider mocks={[createMock]} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...createProps} />
         </I18nextProvider>
@@ -3255,7 +3258,7 @@ describe('VenueModal', () => {
     };
 
     const { unmount } = render(
-      <MockedProvider mocks={[]}>
+      <MockedProvider mocks={[]} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...props} />
         </I18nextProvider>
@@ -3310,7 +3313,7 @@ describe('VenueModal', () => {
     };
 
     const { unmount } = render(
-      <MockedProvider mocks={[]}>
+      <MockedProvider mocks={[]} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...props} />
         </I18nextProvider>

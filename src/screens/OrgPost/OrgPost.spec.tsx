@@ -488,7 +488,7 @@ describe('OrgPost Component', () => {
   const mockOrgId = '123';
   const renderComponent = (): RenderResult => {
     return render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider mocks={mocks} addTypename={false}>
         <I18nextProvider i18n={i18n}>
           <MemoryRouter initialEntries={[`/org/${mockOrgId}`]}>
             <Routes>
@@ -537,7 +537,7 @@ describe('OrgPost Component', () => {
 
   it('creates a post and verifies mutation is called', async () => {
     render(
-      <MockedProvider mocks={[createPostSuccessMock]}>
+      <MockedProvider mocks={[createPostSuccessMock]} addTypename={false}>
         <MemoryRouter>
           <OrgPost />
         </MemoryRouter>
@@ -573,7 +573,7 @@ describe('OrgPost Component', () => {
 
   it('should throw error if post title is empty', async () => {
     render(
-      <MockedProvider mocks={[NoOrgId]}>
+      <MockedProvider mocks={[NoOrgId]} addTypename={false}>
         <MemoryRouter>
           <OrgPost />
         </MemoryRouter>
@@ -610,7 +610,7 @@ describe('OrgPost Component', () => {
 
   it('should throw error if organizationId is missing', async () => {
     render(
-      <MockedProvider mocks={[NoOrgId]}>
+      <MockedProvider mocks={[NoOrgId]} addTypename={false}>
         <MemoryRouter>
           <OrgPost />
         </MemoryRouter>
@@ -637,7 +637,7 @@ describe('OrgPost Component', () => {
 
   it('renders the create post button when orgId is provided', async () => {
     render(
-      <MockedProvider mocks={[]}>
+      <MockedProvider mocks={[]} addTypename={false}>
         <I18nextProvider i18n={i18n}>
           <MemoryRouter initialEntries={['/org/123']}>
             <Routes>
@@ -737,7 +737,7 @@ describe('OrgPost Component', () => {
     const customMocks = [...mocks, fileUploadMock];
 
     render(
-      <MockedProvider mocks={customMocks}>
+      <MockedProvider mocks={customMocks} addTypename={false}>
         <BrowserRouter>
           <OrgPost />
           <ToastContainer />
@@ -923,7 +923,7 @@ describe('OrgPost Component', () => {
   });
   const openModal = async (): Promise<void> => {
     render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider mocks={mocks} addTypename={false}>
         <OrgPost />
       </MockedProvider>,
     );
@@ -1041,7 +1041,7 @@ describe('OrgPost Component', () => {
     const toastErrorSpy = vi.spyOn(toast, 'error').mockImplementation(() => 1);
 
     render(
-      <MockedProvider mocks={minimalMocks}>
+      <MockedProvider mocks={minimalMocks} addTypename={false}>
         <I18nextProvider i18n={i18n}>
           <MemoryRouter initialEntries={['/org/123']}>
             <Routes>
@@ -1077,7 +1077,7 @@ describe('OrgPost Component', () => {
     const toastErrorSpy = vi.spyOn(toast, 'error').mockImplementation(() => 1);
 
     render(
-      <MockedProvider mocks={minimalMocks}>
+      <MockedProvider mocks={minimalMocks} addTypename={false}>
         <I18nextProvider i18n={i18n}>
           <MemoryRouter initialEntries={['/org/123']}>
             <Routes>
@@ -1125,7 +1125,7 @@ describe('Tests for sorting , nextpage , previousPage', () => {
 
   const renderComponent = (): RenderResult =>
     render(
-      <MockedProvider mocks={mocks1}>
+      <MockedProvider mocks={mocks1} addTypename={false}>
         <I18nextProvider i18n={i18n}>
           <MemoryRouter initialEntries={['/org/123']}>
             <Routes>
@@ -1166,7 +1166,7 @@ describe('Tests for sorting , nextpage , previousPage', () => {
     ];
 
     const { unmount } = render(
-      <MockedProvider mocks={emptyMocks}>
+      <MockedProvider mocks={emptyMocks} addTypename={false}>
         <I18nextProvider i18n={i18n}>
           <MemoryRouter initialEntries={['/org/123']}>
             <Routes>
@@ -1196,7 +1196,7 @@ describe('Tests for sorting , nextpage , previousPage', () => {
 
   it('shows Loader when loading (delayed response)', async () => {
     render(
-      <MockedProvider mocks={loadingMocks}>
+      <MockedProvider mocks={loadingMocks} addTypename={false}>
         <I18nextProvider i18n={i18n}>
           <MemoryRouter initialEntries={['/org/123']}>
             <Routes>
@@ -1220,7 +1220,7 @@ describe('OrgPost SearchBar functionality', () => {
   // Helper function to render the component with specified mocks
   const renderWithMocks = (mocks: MockedResponse[]): RenderResult => {
     return render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider mocks={mocks} addTypename={false}>
         <I18nextProvider i18n={i18n}>
           <MemoryRouter initialEntries={['/org/123']}>
             <Routes>
@@ -1499,7 +1499,7 @@ describe('OrgPost component - Post Creation Tests', () => {
     mocks = [getPostsQueryMock, orgPostListMock, createPostMock, refetchMock],
   ): RenderResult => {
     return render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider mocks={mocks} addTypename={false}>
         <I18nextProvider i18n={i18n}>
           <MemoryRouter initialEntries={[`/org/${mockOrgId}`]}>
             <Routes>
@@ -1661,7 +1661,7 @@ describe('OrgPost Edge Cases', () => {
     ];
 
     render(
-      <MockedProvider mocks={undefinedOrgMocks}>
+      <MockedProvider mocks={undefinedOrgMocks} addTypename={false}>
         <I18nextProvider i18n={i18n}>
           <MemoryRouter initialEntries={['/org/123']}>
             <Routes>
@@ -1710,7 +1710,7 @@ describe('OrgPost Edge Cases', () => {
     ];
 
     render(
-      <MockedProvider mocks={emptyPostsMocks}>
+      <MockedProvider mocks={emptyPostsMocks} addTypename={false}>
         <I18nextProvider i18n={i18n}>
           <MemoryRouter initialEntries={['/org/123']}>
             <Routes>
@@ -1744,7 +1744,7 @@ describe('OrgPost Edge Cases', () => {
     ];
 
     render(
-      <MockedProvider mocks={errorMocks}>
+      <MockedProvider mocks={errorMocks} addTypename={false}>
         <I18nextProvider i18n={i18n}>
           <MemoryRouter initialEntries={['/org/123']}>
             <Routes>
@@ -1762,7 +1762,7 @@ describe('OrgPost Edge Cases', () => {
 
   it('handles pagination with sorting enabled', async () => {
     render(
-      <MockedProvider mocks={mocks1}>
+      <MockedProvider mocks={mocks1} addTypename={false}>
         <I18nextProvider i18n={i18n}>
           <MemoryRouter initialEntries={['/org/123']}>
             <Routes>
@@ -1796,7 +1796,7 @@ describe('OrgPost Edge Cases', () => {
 
   it('handles form submission with empty title', async () => {
     render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider mocks={mocks} addTypename={false}>
         <I18nextProvider i18n={i18n}>
           <MemoryRouter initialEntries={['/org/123']}>
             <Routes>
@@ -1820,7 +1820,7 @@ describe('OrgPost Edge Cases', () => {
 
   it('handles file removal from video preview', async () => {
     render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider mocks={mocks} addTypename={false}>
         <I18nextProvider i18n={i18n}>
           <MemoryRouter initialEntries={['/org/123']}>
             <Routes>
@@ -2153,7 +2153,7 @@ describe('pagination handlers', () => {
     const mockOrgId = '123';
     const renderComponent = () =>
       render(
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={mocks} addTypename={false}>
           <I18nextProvider i18n={i18n}>
             <MemoryRouter initialEntries={[`/org/${mockOrgId}`]}>
               <Routes>
@@ -2321,7 +2321,10 @@ describe('OrgPost createPost', () => {
 
   it('submits createPost and handles success', async () => {
     render(
-      <MockedProvider mocks={[getPostsMock2, orgPostListMock, createPostMock]}>
+      <MockedProvider
+        mocks={[getPostsMock2, orgPostListMock, createPostMock]}
+        addTypename={false}
+      >
         <OrgPost />
       </MockedProvider>,
     );
@@ -2349,6 +2352,7 @@ describe('OrgPost createPost', () => {
     render(
       <MockedProvider
         mocks={[getPostsMock2, orgPostListMock, createPostErrorMock]}
+        addTypename={false}
       >
         <OrgPost />
       </MockedProvider>,

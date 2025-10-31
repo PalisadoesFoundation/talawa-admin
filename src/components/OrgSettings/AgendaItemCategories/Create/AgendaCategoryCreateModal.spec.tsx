@@ -36,7 +36,7 @@ const mockT = (key: string): string => key;
 describe('AgendaCategoryCreateModal', () => {
   it('renders modal correctly', () => {
     render(
-      <MockedProvider>
+      <MockedProvider addTypename={false}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -71,7 +71,7 @@ describe('AgendaCategoryCreateModal', () => {
       createdBy: 'Test User',
     };
     render(
-      <MockedProvider>
+      <MockedProvider addTypename={false}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -109,7 +109,7 @@ describe('AgendaCategoryCreateModal', () => {
   });
   it('calls createAgendaCategoryHandler when form is submitted', () => {
     render(
-      <MockedProvider>
+      <MockedProvider addTypename={false}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>

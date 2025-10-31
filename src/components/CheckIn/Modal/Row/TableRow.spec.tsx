@@ -43,7 +43,7 @@ describe('Testing Table Row for CheckIn Table', () => {
     const { findByText } = render(
       <BrowserRouter>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <MockedProvider mocks={checkInMutationSuccess}>
+          <MockedProvider addTypename={false} mocks={checkInMutationSuccess}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <ToastContainer />
@@ -80,7 +80,7 @@ describe('Testing Table Row for CheckIn Table', () => {
     const { findByText } = render(
       <BrowserRouter>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <MockedProvider mocks={checkInMutationSuccess}>
+          <MockedProvider addTypename={false} mocks={checkInMutationSuccess}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <ToastContainer />
@@ -125,7 +125,7 @@ describe('Testing Table Row for CheckIn Table', () => {
     const { findByText } = render(
       <BrowserRouter>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <MockedProvider mocks={checkInMutationUnsuccess}>
+          <MockedProvider addTypename={false} mocks={checkInMutationUnsuccess}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <ToastContainer />
@@ -163,7 +163,7 @@ describe('Testing Table Row for CheckIn Table', () => {
     const { findByText } = render(
       <BrowserRouter>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <MockedProvider mocks={checkInMutationSuccess}>
+          <MockedProvider addTypename={false} mocks={checkInMutationSuccess}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <ToastContainer />

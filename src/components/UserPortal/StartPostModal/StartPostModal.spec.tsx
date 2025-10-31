@@ -105,7 +105,7 @@ const renderStartPostModal = (
   };
 
   return render(
-    <MockedProvider link={customLink}>
+    <MockedProvider addTypename={false} link={customLink}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>

@@ -97,7 +97,7 @@ const mockDefaultProps = {
 const renderComponent = (props = {}) => {
   const finalProps = { ...mockDefaultProps, ...props };
   return render(
-    <MockedProvider>
+    <MockedProvider addTypename={false}>
       <Provider store={store}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>

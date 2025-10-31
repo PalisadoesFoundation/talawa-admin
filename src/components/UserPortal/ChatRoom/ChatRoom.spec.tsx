@@ -5364,7 +5364,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
     ].flat();
     render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider addTypename={false} mocks={mocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5391,7 +5391,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
     ].flat();
     render(
-      <MockedProvider mocks={mocks} link={link}>
+      <MockedProvider addTypename={false} mocks={mocks} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5418,7 +5418,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
     ].flat();
     const link2 = new StaticMockLink(mocks, true);
     render(
-      <MockedProvider link={link2}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5505,7 +5505,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
     const link2 = new StaticMockLink(mocks, true);
 
     render(
-      <MockedProvider link={link2}>
+      <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5587,7 +5587,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
     ].flat();
     render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider addTypename={false} mocks={mocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5612,7 +5612,7 @@ describe('Testing Chatroom Component [User Portal]', () => {
       ...UNREAD_CHAT_LIST_QUERY_MOCK,
     ].flat();
     render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider addTypename={false} mocks={mocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

@@ -16,7 +16,7 @@ vi.mock('react-toastify', () => ({
 describe('CustomTableCell', () => {
   it('renders event details correctly', async () => {
     render(
-      <MockedProvider mocks={mocks}>
+      <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
           <table>
             <tbody>
@@ -49,7 +49,7 @@ describe('CustomTableCell', () => {
 
   it('displays loading state', () => {
     render(
-      <MockedProvider mocks={[]}>
+      <MockedProvider mocks={[]} addTypename={false}>
         <table>
           <tbody>
             <CustomTableCell eventId="event123" />
@@ -73,7 +73,7 @@ describe('CustomTableCell', () => {
     ];
 
     render(
-      <MockedProvider mocks={errorMock}>
+      <MockedProvider mocks={errorMock} addTypename={false}>
         <table>
           <tbody>
             <CustomTableCell eventId="event123" />
@@ -118,7 +118,7 @@ describe('CustomTableCell', () => {
     ];
 
     render(
-      <MockedProvider mocks={noEventMock}>
+      <MockedProvider mocks={noEventMock} addTypename={false}>
         <BrowserRouter>
           <table>
             <tbody>
@@ -163,7 +163,7 @@ describe('CustomTableCell', () => {
     ];
 
     render(
-      <MockedProvider mocks={nonRecurringEventMock}>
+      <MockedProvider mocks={nonRecurringEventMock} addTypename={false}>
         <BrowserRouter>
           <table>
             <tbody>
@@ -207,7 +207,7 @@ describe('CustomTableCell', () => {
     ];
 
     render(
-      <MockedProvider mocks={noAttendeesMock}>
+      <MockedProvider mocks={noAttendeesMock} addTypename={false}>
         <BrowserRouter>
           <table>
             <tbody>
@@ -248,7 +248,7 @@ describe('CustomTableCell', () => {
     ];
 
     render(
-      <MockedProvider mocks={emptyAttendeesMock}>
+      <MockedProvider mocks={emptyAttendeesMock} addTypename={false}>
         <BrowserRouter>
           <table>
             <tbody>
@@ -289,7 +289,7 @@ describe('CustomTableCell', () => {
     ];
 
     render(
-      <MockedProvider mocks={undefinedAttendeesMock}>
+      <MockedProvider mocks={undefinedAttendeesMock} addTypename={false}>
         <BrowserRouter>
           <table>
             <tbody>
@@ -332,7 +332,7 @@ describe('CustomTableCell', () => {
     ];
 
     render(
-      <MockedProvider mocks={dateTestMock}>
+      <MockedProvider mocks={dateTestMock} addTypename={false}>
         <BrowserRouter>
           <table>
             <tbody>
