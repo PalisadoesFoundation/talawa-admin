@@ -133,7 +133,7 @@ jobs:
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             echo "::error::Documentation files are outdated or missing."
-            echo "Please run 'npm run generate-docs && npm run postgenerate-docs' locally and commit the updated files."
+            echo "Please run 'npm run generate-docs' locally and commit the updated files."
             echo ""
             echo "Changed files:"
             git status --porcelain
