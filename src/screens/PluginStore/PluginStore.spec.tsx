@@ -1,5 +1,11 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import PluginStore from './PluginStore';
@@ -48,9 +54,6 @@ vi.mock('react-toastify', () => ({
     warning: vi.fn(),
   },
 }));
-
-// Get the mocked toast for assertions
-const getMockedToast = () => require('react-toastify').toast;
 
 describe('PluginStore', () => {
   const mockLoadedPlugins = [
@@ -240,7 +243,6 @@ describe('PluginStore', () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // Find the dropdown option for installed plugins by data-testid in document.body
-      const { within } = require('@testing-library/react');
       const installedOption = within(document.body).getByTestId('installed');
       fireEvent.click(installedOption);
 
@@ -493,7 +495,6 @@ describe('PluginStore', () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // Find the dropdown option for installed plugins by data-testid in document.body
-      const { within } = require('@testing-library/react');
       const installedOption = within(document.body).getByTestId('installed');
       await userEvent.click(installedOption);
 

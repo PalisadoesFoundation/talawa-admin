@@ -390,7 +390,6 @@ describe('usePluginActions', () => {
     uninstallPluginMock.mockResolvedValue(true);
 
     // Mock the import to throw an error
-    const originalImport = vi.fn();
     vi.doMock('../../../plugin/services/AdminPluginFileService', () => {
       throw new Error('Import failed');
     });

@@ -1,7 +1,6 @@
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import { usePluginFilters } from './usePluginFilters';
-import type { IPluginMeta } from 'plugin';
 
 // Mock the useTranslation hook
 const mockT = vi.fn((key: string) => key);
@@ -48,7 +47,6 @@ vi.mock('plugin/hooks', () => ({
 }));
 
 // Mock the useDebounce hook
-const mockDebouncedCallback = vi.fn();
 vi.mock('components/OrgListCard/useDebounce', () => ({
   default: vi.fn((callback) => ({
     debouncedCallback: (value: string) => {
