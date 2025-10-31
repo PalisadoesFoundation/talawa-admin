@@ -6,13 +6,21 @@
 
 > `const` **itemWithoutAssignee**: `object`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L112)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L94)
 
 ## Type Declaration
 
 ### assignedAt
 
 > **assignedAt**: `Date`
+
+### assignee
+
+> **assignee**: `any` = `null`
+
+### assigneeId
+
+> **assigneeId**: `any` = `null`
 
 ### category
 
@@ -110,14 +118,6 @@ Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts
 
 > **preCompletionNotes**: `string` = `'Notes 3'`
 
-### recurringEventInstance
-
-> **recurringEventInstance**: `any` = `null`
-
-### recurringEventInstanceId
-
-> **recurringEventInstanceId**: `any` = `null`
-
 ### updatedAt
 
 > **updatedAt**: `Date`
@@ -125,19 +125,3 @@ Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts
 ### updaterId
 
 > **updaterId**: `string` = `'userId'`
-
-### volunteer
-
-> **volunteer**: `any` = `null`
-
-### volunteerGroup
-
-> **volunteerGroup**: `any` = `null`
-
-### volunteerGroupId
-
-> **volunteerGroupId**: `any` = `null`
-
-### volunteerId
-
-> **volunteerId**: `any` = `null`
