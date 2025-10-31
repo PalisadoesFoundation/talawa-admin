@@ -57,14 +57,6 @@ export function usePluginFilters({ pluginData }: IUsePluginFiltersProps) {
           description: `Plugin ${pluginName}`,
           author: 'Unknown',
           icon: '/images/logo512.png',
-          version: '1.0.0',
-          cdnUrl: '',
-          readme: '',
-          screenshots: [],
-          homepage: '',
-          license: '',
-          tags: [],
-          status: graphqlPlugin.isActivated ? 'active' : 'inactive',
         };
       }
 
@@ -79,14 +71,6 @@ export function usePluginFilters({ pluginData }: IUsePluginFiltersProps) {
           description: loadedPlugin.manifest.description,
           author: loadedPlugin.manifest.author,
           icon: loadedPlugin.manifest.icon || '/images/logo512.png',
-          version: loadedPlugin.manifest.version,
-          cdnUrl: '',
-          readme: '',
-          screenshots: [],
-          homepage: loadedPlugin.manifest.homepage,
-          license: loadedPlugin.manifest.license,
-          tags: loadedPlugin.manifest.tags,
-          status: loadedPlugin.status,
         };
       }
 

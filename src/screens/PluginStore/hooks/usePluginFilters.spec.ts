@@ -66,18 +66,27 @@ describe('usePluginFilters', () => {
         pluginId: 'graphql-plugin-1',
         isInstalled: true,
         isActivated: true,
+        backup: false,
+        createdAt: '2024-01-01T00:00:00.000Z',
+        updatedAt: '2024-01-01T00:00:00.000Z',
       },
       {
         id: 'db-plugin-2',
         pluginId: 'graphql-plugin-2',
         isInstalled: true,
         isActivated: false,
+        backup: false,
+        createdAt: '2024-01-01T00:00:00.000Z',
+        updatedAt: '2024-01-01T00:00:00.000Z',
       },
       {
         id: 'db-plugin-3',
         pluginId: 'graphql-plugin-3',
         isInstalled: false,
         isActivated: false,
+        backup: false,
+        createdAt: '2024-01-01T00:00:00.000Z',
+        updatedAt: '2024-01-01T00:00:00.000Z',
       },
     ],
   };
@@ -459,14 +468,6 @@ describe('usePluginFilters', () => {
         description: 'Plugin graphql-plugin-1',
         author: 'Unknown',
         icon: '/images/logo512.png',
-        version: '1.0.0',
-        cdnUrl: '',
-        readme: '',
-        screenshots: [],
-        homepage: '',
-        license: '',
-        tags: [],
-        status: 'active',
       });
     });
 
@@ -483,14 +484,6 @@ describe('usePluginFilters', () => {
         description: 'A loaded plugin for testing',
         author: 'Test Author',
         icon: '/test-icon-1.png',
-        version: '1.0.0',
-        cdnUrl: '',
-        readme: '',
-        screenshots: [],
-        homepage: 'https://example.com',
-        license: 'MIT',
-        tags: ['test', 'plugin'],
-        status: 'active',
       });
     });
 
@@ -513,6 +506,9 @@ describe('usePluginFilters', () => {
             pluginId: 'Loaded Plugin 1', // Same name as loaded plugin
             isInstalled: true,
             isActivated: false,
+            backup: false,
+            createdAt: '2024-01-01T00:00:00.000Z',
+            updatedAt: '2024-01-01T00:00:00.000Z',
           },
         ],
       };
@@ -530,14 +526,6 @@ describe('usePluginFilters', () => {
         description: 'Plugin Loaded Plugin 1',
         author: 'Unknown',
         icon: '/images/logo512.png',
-        version: '1.0.0',
-        cdnUrl: '',
-        readme: '',
-        screenshots: [],
-        homepage: '',
-        license: '',
-        tags: [],
-        status: 'inactive',
       });
     });
   });
@@ -579,6 +567,9 @@ describe('usePluginFilters', () => {
             pluginId: 'loaded-plugin-1',
             isInstalled: true,
             isActivated: true,
+            backup: false,
+            createdAt: '2024-01-01T00:00:00.000Z',
+            updatedAt: '2024-01-01T00:00:00.000Z',
           },
         ],
       };
@@ -607,6 +598,9 @@ describe('usePluginFilters', () => {
             pluginId: 'plugin-with-special-chars!@#$%',
             isInstalled: true,
             isActivated: true,
+            backup: false,
+            createdAt: '2024-01-01T00:00:00.000Z',
+            updatedAt: '2024-01-01T00:00:00.000Z',
           },
         ],
       };
@@ -719,6 +713,9 @@ describe('usePluginFilters', () => {
           pluginId: `plugin-${i}`,
           isInstalled: i % 2 === 0,
           isActivated: i % 4 === 0,
+          backup: false,
+          createdAt: '2024-01-01T00:00:00.000Z',
+          updatedAt: '2024-01-01T00:00:00.000Z',
         })),
       };
 
