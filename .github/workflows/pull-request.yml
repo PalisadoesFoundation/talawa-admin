@@ -389,7 +389,7 @@ jobs:
         if: steps.changed-files.outputs.any_changed == 'true'
         env:
           NODE_V8_COVERAGE: './coverage/vitest'
-          NODE_OPTIONS: '--max-old-space-size=6144'
+          NODE_OPTIONS: '--max-old-space-size=6144 --expose-gc'
           SHARD_INDEX: ${{ matrix.shard }}
           SHARD_COUNT: ${{ matrix.shard-total }}
         run: |
@@ -429,10 +429,31 @@ jobs:
 
       - name: Merge coverage reports
         run: |
-          if [ -f "coverage-shards/lcov.info" ]; then
-            mkdir -p ./coverage/vitest
-            cp coverage-shards/lcov.info ./coverage/vitest/lcov.info
+          mkdir -p ./coverage/vitest
+
+          # Find all lcov.info files from shards
+          SHARD_FILES=$(find coverage-shards -name "lcov.info" -type f 2>/dev/null || true)
+
+          if [ -z "$SHARD_FILES" ]; then
+            echo "⚠️  No coverage shard files found, skipping merge"
+            touch ./coverage/vitest/lcov.info
+            exit 0
           fi
+
+          # Count shard files
+          FILE_COUNT=$(echo "$SHARD_FILES" | wc -l | tr -d ' ')
+          echo "📊 Found $FILE_COUNT coverage shard(s) to merge"
+
+          # Convert newline-separated files to space-separated arguments and merge
+          # Use xargs to properly handle file paths with spaces if any
+          echo "$SHARD_FILES" | xargs npx lcov-result-merger -o ./coverage/vitest/lcov.info
+
+          if [ ! -f "./coverage/vitest/lcov.info" ]; then
+            echo "❌ Failed to merge coverage reports"
+            exit 1
+          fi
+
+          echo "✅ Successfully merged $FILE_COUNT coverage shard(s)"
 
       #######################################################################
       # DO NOT DELETE ANY references to env.CODECOV_UNIQUE_NAME in this
