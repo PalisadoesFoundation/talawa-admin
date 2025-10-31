@@ -12,7 +12,7 @@ export default defineConfig({
   test: {
     include: ['src/**/*.spec.{js,jsx,ts,tsx}'],
     globals: true,
-    environment: 'happy-dom',
+    environment: 'jsdom',
     setupFiles: 'vitest.setup.ts',
     testTimeout: 10000,
     hookTimeout: 5000,

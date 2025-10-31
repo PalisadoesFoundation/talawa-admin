@@ -38,7 +38,7 @@ afterAll(() => {
   console.error = originalError;
 });
 
-// Aggressive memory cleanup for CI environments with happy-dom
+// Aggressive memory cleanup for CI environments
 if (global.gc && typeof global.gc === 'function') {
   const gcFunction = global.gc;
   if (process.env.CI) {

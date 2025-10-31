@@ -387,29 +387,39 @@ jobs:
 
       - name: Run Vitest Tests (Shard ${{ matrix.shard }}/${{ matrix.shard-total }})
         if: steps.changed-files.outputs.any_changed == 'true'
+        id: test-shard
         env:
           NODE_V8_COVERAGE: './coverage/vitest'
           NODE_OPTIONS: '--max-old-space-size=6144 --expose-gc'
           SHARD_INDEX: ${{ matrix.shard }}
           SHARD_COUNT: ${{ matrix.shard-total }}
         run: |
-          npm run test:coverage:shard
-          # Verify coverage file was generated
+          # Run tests - exit code will be captured
+          npm run test:coverage:shard; TEST_EXIT_CODE=$?
+
+          # Verify coverage file was generated (even if tests failed)
           if [ -f "./coverage/vitest/lcov.info" ]; then
             echo "✅ Coverage file generated for shard ${{ matrix.shard }}"
             ls -lh ./coverage/vitest/lcov.info
+            echo "coverage_generated=true" >> $GITHUB_OUTPUT
           else
             echo "⚠️  Warning: Coverage file not found for shard ${{ matrix.shard }}"
             ls -la ./coverage/vitest/ || echo "Coverage directory does not exist"
+            echo "coverage_generated=false" >> $GITHUB_OUTPUT
           fi
 
+          # Exit with test exit code (fail job if tests failed)
+          exit $TEST_EXIT_CODE
+
       - name: Upload coverage artifacts
-        if: steps.changed-files.outputs.any_changed == 'true'
+        if: steps.changed-files.outputs.any_changed == 'true' && always()
         uses: actions/upload-artifact@v4
+        continue-on-error: true
         with:
           name: coverage-shard-${{ matrix.shard }}
           path: ./coverage/vitest
           retention-days: 1
+          if-no-files-found: ignore
 
   Merge-Coverage:
     name: Merge Coverage Reports
@@ -455,12 +465,18 @@ jobs:
             SHARD_FILES=$(find coverage-shards -name "lcov.info" -o -path "*/coverage/vitest/lcov.info" 2>/dev/null | head -10 || true)
             
             if [ -z "$SHARD_FILES" ]; then
-              echo "❌ Still no coverage files found. Artifacts may not have been uploaded or tests may have failed."
-              echo "Creating empty coverage file to prevent Codecov upload failure"
+              echo "❌ No coverage files found from any shard. This usually means:"
+              echo "   1. All tests failed before generating coverage"
+              echo "   2. Coverage artifacts were not uploaded"
+              echo "   3. Test jobs were skipped or cancelled"
+              echo ""
+              echo "⚠️  Creating minimal coverage file to prevent Codecov upload failure"
+              echo "⚠️  This will result in 0% coverage, but allows the workflow to complete"
+              mkdir -p ./coverage/vitest
               touch ./coverage/vitest/lcov.info
               echo "SF:src/main.ts" > ./coverage/vitest/lcov.info
               echo "end_of_record" >> ./coverage/vitest/lcov.info
-              exit 0
+              # Don't exit - let it continue so we can see the failure
             fi
           fi
 
