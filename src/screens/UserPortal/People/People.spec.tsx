@@ -37,7 +37,7 @@ const DEFAULT_SEARCH = '';
 const DEFAULT_FIRST = 5;
 
 // Helper for members edges
-const memberEdge = (props: any = {}) => ({
+const memberEdge = (props: Record<string, unknown> = {}) => ({
   cursor: props.cursor || 'cursor1',
   node: {
     id: props.id || 'user-1',
