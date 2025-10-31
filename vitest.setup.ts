@@ -17,7 +17,9 @@ global.URL.revokeObjectURL = vi.fn();
 if (typeof HTMLFormElement.prototype.requestSubmit === 'undefined') {
   HTMLFormElement.prototype.requestSubmit = function () {
     if (this.checkValidity()) {
-      this.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+      this.dispatchEvent(
+        new Event('submit', { cancelable: true, bubbles: true }),
+      );
     }
   };
 }
