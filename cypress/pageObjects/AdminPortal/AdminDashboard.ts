@@ -9,6 +9,7 @@ export class AdminDashboardPage {
     { label: 'Tags', url: '/orgtags/' },
     { label: 'Events', url: '/orgevents/' },
     { label: 'Venues', url: '/orgvenues/' },
+    { label: 'Action Items', url: '/orgactionitems/' },
     { label: 'Posts', url: '/orgpost/' },
     { label: 'Block/Unblock', url: '/blockuser/' },
     { label: 'Advertisement', url: '/orgads/' },

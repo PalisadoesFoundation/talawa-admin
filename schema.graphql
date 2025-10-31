@@ -4019,11 +4019,10 @@ input MutationUpdateActionItemCategoryInput {
 input MutationUpdateActionItemForInstanceInput {
   actionId: ID!
   assignedAt: String
+  assigneeId: ID
   categoryId: ID
   eventId: ID!
   preCompletionNotes: String
-  volunteerId: ID
-  volunteerGroupId: ID
 }
 
 input MutationUpdateActionItemInput {
