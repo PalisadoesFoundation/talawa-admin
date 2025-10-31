@@ -141,6 +141,8 @@ jobs:
           else
             echo "Documentation is up to date."
           fi
+      - name: Check for unused dependencies
+        run: npx knip --config knip.deps.json --include dependencies
 
   Check-Sensitive-Files:
     if: ${{ github.actor != 'dependabot[bot]' }}
@@ -237,6 +239,7 @@ jobs:
             '.nojekyll$'
             'yarn.lock$'
             'knip.json$'
+            'knip.deps.json$'
             '^docs/docusaurus.config.ts$'
             '^docs/sidebar..*'
             'CNAME$'

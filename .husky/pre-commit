@@ -7,5 +7,6 @@ npm run typecheck
 npm run update:toc
 npm run check:pom
 npx knip --include files,exports
+npx knip --config knip.deps.json --include dependencies
 
 git add .
