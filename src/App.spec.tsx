@@ -476,8 +476,10 @@ describe('Testing the App Component', () => {
       .fn()
       .mockImplementation(
         <T extends React.ComponentType<unknown>>(
-          _factory: () => Promise<{ default: T }>,
+          factory: () => Promise<{ default: T }>,
         ): React.LazyExoticComponent<T> => {
+          // Use factory parameter to avoid unused variable lint error
+          void factory;
           const mockComponent = React.forwardRef(() => {
             throw new Promise(() => {}); // Never resolves to keep loading
           }) as React.LazyExoticComponent<T>;
