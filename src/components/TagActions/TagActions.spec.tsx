@@ -382,7 +382,7 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByTestId('checkTag2')).toBeInTheDocument();
     });
     await userEvent.click(screen.getByTestId('checkTag2'));
-    
+
     // Deselect tag2 again through checkbox
     await userEvent.click(screen.getByTestId('checkTag2'));
   });
