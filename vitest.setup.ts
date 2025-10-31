@@ -2,11 +2,9 @@ import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 import { vi } from 'vitest';
 
-// Cleanup after each test to prevent DOM pollution
+// Basic cleanup after each test
 afterEach(() => {
   cleanup();
-  // Clear timers but preserve mocks for assertions
-  vi.clearAllTimers();
 });
 
 // Global mocks for URL API (needed for file upload tests)
