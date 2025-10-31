@@ -154,7 +154,7 @@ describe('usePluginFilters', () => {
 
     it('should handle empty plugin data', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: null }),
+        usePluginFilters({ pluginData: undefined }),
       );
 
       expect(result.current.filteredPlugins).toEqual(
@@ -446,7 +446,7 @@ describe('usePluginFilters', () => {
 
     it('should handle empty plugin data', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: null }),
+        usePluginFilters({ pluginData: undefined }),
       );
 
       expect(result.current.isInstalled('Loaded Plugin 1')).toBe(true);
@@ -468,6 +468,12 @@ describe('usePluginFilters', () => {
         description: 'Plugin graphql-plugin-1',
         author: 'Unknown',
         icon: '/images/logo512.png',
+        version: '1.0.0',
+        cdnUrl: '',
+        readme: '',
+        screenshots: [],
+        changelog: [],
+        status: 'active',
       });
     });
 
@@ -484,6 +490,15 @@ describe('usePluginFilters', () => {
         description: 'A loaded plugin for testing',
         author: 'Test Author',
         icon: '/test-icon-1.png',
+        version: '1.0.0',
+        cdnUrl: '',
+        readme: '',
+        screenshots: [],
+        homepage: 'https://example.com',
+        license: 'MIT',
+        tags: ['test', 'plugin'],
+        changelog: [],
+        status: 'active',
       });
     });
 
@@ -526,6 +541,12 @@ describe('usePluginFilters', () => {
         description: 'Plugin Loaded Plugin 1',
         author: 'Unknown',
         icon: '/images/logo512.png',
+        version: '1.0.0',
+        cdnUrl: '',
+        readme: '',
+        screenshots: [],
+        changelog: [],
+        status: 'inactive',
       });
     });
   });

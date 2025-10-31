@@ -94,12 +94,18 @@ describe('PluginStore', () => {
       pluginId: 'test-plugin-1',
       isInstalled: true,
       isActivated: true,
+      backup: false,
+      createdAt: '2024-01-01T00:00:00.000Z',
+      updatedAt: '2024-01-01T00:00:00.000Z',
     },
     {
       id: '2',
       pluginId: 'test-plugin-2',
       isInstalled: false,
       isActivated: false,
+      backup: false,
+      createdAt: '2024-01-01T00:00:00.000Z',
+      updatedAt: '2024-01-01T00:00:00.000Z',
     },
   ];
 
@@ -109,14 +115,14 @@ describe('PluginStore', () => {
     // Mock plugin hooks
     vi.mocked(pluginHooks.useLoadedPlugins).mockReturnValue(mockLoadedPlugins);
 
-    // Mock plugin manager
+    // Mock plugin manager - use Partial<PluginManager> for type safety
     const mockPluginManager = {
       loadPlugin: vi.fn().mockResolvedValue(true),
       unloadPlugin: vi.fn().mockResolvedValue(true),
       togglePluginStatus: vi.fn().mockResolvedValue(true),
       installPlugin: vi.fn().mockResolvedValue(true),
       uninstallPlugin: vi.fn().mockResolvedValue(true),
-    };
+    } as unknown as ReturnType<typeof pluginManager.getPluginManager>;
     vi.mocked(pluginManager.getPluginManager).mockReturnValue(
       mockPluginManager,
     );
@@ -522,6 +528,9 @@ describe('PluginStore', () => {
           pluginId: 'test-plugin-1',
           isInstalled: true,
           isActivated: true,
+          backup: false,
+          createdAt: '2024-01-01T00:00:00.000Z',
+          updatedAt: '2024-01-01T00:00:00.000Z',
         },
       ];
 
@@ -666,7 +675,7 @@ describe('PluginStore', () => {
         togglePluginStatus: vi.fn().mockResolvedValue(false),
         installPlugin: vi.fn().mockResolvedValue(true),
         uninstallPlugin: vi.fn().mockResolvedValue(true),
-      };
+      } as unknown as ReturnType<typeof pluginManager.getPluginManager>;
       vi.mocked(pluginManager.getPluginManager).mockReturnValue(
         mockPluginManager,
       );
@@ -706,7 +715,7 @@ describe('PluginStore', () => {
         togglePluginStatus: vi.fn().mockResolvedValue(true),
         installPlugin: vi.fn().mockResolvedValue(true),
         uninstallPlugin: vi.fn().mockResolvedValue(true),
-      };
+      } as unknown as ReturnType<typeof pluginManager.getPluginManager>;
       vi.mocked(pluginManager.getPluginManager).mockReturnValue(
         mockPluginManager,
       );

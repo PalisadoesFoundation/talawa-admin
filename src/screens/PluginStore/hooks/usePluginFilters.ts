@@ -5,7 +5,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLoadedPlugins } from 'plugin/hooks';
 import useDebounce from 'components/OrgListCard/useDebounce';
-import type { IPluginMeta } from 'plugin';
+import type { IPluginMeta, IInstalledPlugin } from 'plugin';
 import type { IPlugin } from 'plugin/graphql-service';
 
 interface IPluginData {
@@ -45,7 +45,7 @@ export function usePluginFilters({ pluginData }: IUsePluginFiltersProps) {
   );
 
   const getInstalledPlugin = useCallback(
-    (pluginName: string): IPluginMeta | undefined => {
+    (pluginName: string): IInstalledPlugin | undefined => {
       // First check GraphQL data (source of truth for status)
       const graphqlPlugin = pluginData?.getPlugins?.find(
         (p) => p.pluginId === pluginName,
@@ -57,6 +57,12 @@ export function usePluginFilters({ pluginData }: IUsePluginFiltersProps) {
           description: `Plugin ${pluginName}`,
           author: 'Unknown',
           icon: '/images/logo512.png',
+          version: '1.0.0',
+          cdnUrl: '',
+          readme: '',
+          screenshots: [],
+          changelog: [],
+          status: graphqlPlugin.isActivated ? 'active' : 'inactive',
         };
       }
 
@@ -71,6 +77,15 @@ export function usePluginFilters({ pluginData }: IUsePluginFiltersProps) {
           description: loadedPlugin.manifest.description,
           author: loadedPlugin.manifest.author,
           icon: loadedPlugin.manifest.icon || '/images/logo512.png',
+          version: loadedPlugin.manifest.version,
+          cdnUrl: '',
+          readme: '',
+          screenshots: [],
+          homepage: loadedPlugin.manifest.homepage,
+          license: loadedPlugin.manifest.license,
+          tags: loadedPlugin.manifest.tags,
+          changelog: [],
+          status: loadedPlugin.status,
         };
       }
 

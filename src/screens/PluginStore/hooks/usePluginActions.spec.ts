@@ -47,6 +47,9 @@ describe('usePluginActions', () => {
         pluginId: 'test-plugin',
         isInstalled: true,
         isActivated: true,
+        backup: false,
+        createdAt: '2024-01-01T00:00:00.000Z',
+        updatedAt: '2024-01-01T00:00:00.000Z',
       },
     ],
   };
@@ -56,7 +59,9 @@ describe('usePluginActions', () => {
     installPlugin: vi.fn(),
     togglePluginStatus: vi.fn(),
     uninstallPlugin: vi.fn(),
-  };
+    loadPlugin: vi.fn(),
+    unloadPlugin: vi.fn(),
+  } as unknown as ReturnType<typeof getPluginManager>;
 
   beforeEach(() => {
     vi.clearAllMocks();
