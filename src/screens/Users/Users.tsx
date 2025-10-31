@@ -148,21 +148,6 @@ const Users = (): JSX.Element => {
     notifyOnNetworkStatusChange: true,
   });
 
-  if (UsersError) {
-    return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
-        <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
-          <h6 className="fw-bold text-danger text-center">
-            Error occured while loading Users
-            <br />
-            {UsersError.message}
-          </h6>
-        </div>
-      </div>
-    );
-  }
-
   type Edge = { cursor: string; node: InterfaceQueryUserListItem };
   const edges = (data?.allUsers?.edges ?? []) as Edge[];
   const pageInfo = data?.allUsers?.pageInfo;
@@ -315,6 +300,21 @@ const Users = (): JSX.Element => {
       return allUsers.filter((u) => u.role === 'administrator');
     return allUsers;
   };
+
+  if (UsersError) {
+    return (
+      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+        <div className={styles.message} data-testid="errorMsg">
+          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <h6 className="fw-bold text-danger text-center">
+            Error occured while loading Users
+            <br />
+            {UsersError.message}
+          </h6>
+        </div>
+      </div>
+    );
+  }
 
   const headerTitles: string[] = [
     '#',
