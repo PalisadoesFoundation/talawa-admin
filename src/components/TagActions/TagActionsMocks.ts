@@ -289,6 +289,7 @@ export const MOCKS_ERROR_ORGANIZATION_TAGS_QUERY = [
 ];
 
 export const MOCKS_ERROR_SUBTAGS_QUERY = [
+  ...MOCKS.slice(0, 3),
   {
     request: {
       query: ORGANIZATION_USER_TAGS_LIST_PG,
@@ -369,4 +370,24 @@ export const MOCKS_ERROR_ASSIGN_OR_REMOVAL_TAGS = [
     },
     error: new Error('Mock Graphql Error While assigning/removing tags'),
   },
+];
+
+export const MOCKS_WITH_NULL_FETCH_MORE = [
+  MOCKS[0], // Initial query with hasNextPage: true
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
+      variables: {
+        input: { id: '123' },
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: '10',
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: null, // Simulate null response to test the null check in updateQuery
+    },
+  },
+  ...MOCKS.slice(2),
 ];

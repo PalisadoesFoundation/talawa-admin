@@ -96,16 +96,11 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   const loadMoreUserTags = (): void => {
     orgUserTagsFetchMore({
       variables: {
-        input: { id: orgId },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after: orgUserTagsData?.organization?.tags?.pageInfo?.endCursor ?? null,
-        where: { name: { starts_with: tagSearchName } },
-        sortedBy: { id: 'DESCENDING' },
-      } as Parameters<typeof orgUserTagsFetchMore>[0]['variables'],
+        after: orgUserTagsData?.organization?.tags?.pageInfo?.endCursor,
+      },
       updateQuery: (prevResult, { fetchMoreResult }) => {
-        if (!fetchMoreResult?.organization || !prevResult.organization) {
-          return prevResult;
-        }
+        if (!fetchMoreResult) return prevResult;
 
         return {
           organization: {

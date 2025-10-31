@@ -177,6 +177,18 @@ export const USER_JOINED_ORGANIZATIONS_PG = gql`
   }
 `;
 
+/**
+ * GraphQL query to retrieve paginated organization user tags.
+ *
+ * @param input - Object containing organization ID.
+ * @param first - Number of tags to retrieve "after" (if provided) a certain tag.
+ * @param after - Id of the last tag on the current page.
+ * @param last - Number of tags to retrieve "before" (if provided) a certain tag.
+ * @param before - Id of the first tag on the current page.
+ * @param where - Filter criteria for tags.
+ * @param sortedBy - Sort criteria for tags.
+ * @returns Connection object with edges, pageInfo, and totalCount.
+ */
 export const ORGANIZATION_USER_TAGS_LIST_PG = gql`
   query OrganizationTags(
     $input: QueryOrganizationInput!
@@ -213,7 +225,7 @@ export const ORGANIZATION_USER_TAGS_LIST_PG = gql`
               name
             }
             ancestorTags {
-              _id
+              _id: id
               name
             }
             usersAssignedTo(first: $first, last: $last) {
