@@ -150,7 +150,7 @@ const loadingLink = new StaticMockLink(LOADING_MOCKS, true);
 
 const renderApp = (mockLink = link, initialRoute = '/') => {
   return render(
-    <MockedProvider addTypename={false} link={mockLink}>
+    <MockedProvider link={mockLink}>
       <MemoryRouter initialEntries={[initialRoute]}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>

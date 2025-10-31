@@ -32,7 +32,7 @@ describe('TagNode', () => {
   // Existing tests
   it('renders the tag name', () => {
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <TagNode
           tag={mockTag}
           checkedTags={mockCheckedTags}
@@ -47,7 +47,7 @@ describe('TagNode', () => {
 
   it('calls toggleTagSelection when the checkbox is clicked', () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <TagNode
           tag={mockTag}
           checkedTags={mockCheckedTags}
@@ -65,7 +65,7 @@ describe('TagNode', () => {
   // Existing subtag tests
   it('expands and fetches subtags when expand icon is clicked', async () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <TagNode
           tag={mockTag}
           checkedTags={mockCheckedTags}
@@ -86,7 +86,7 @@ describe('TagNode', () => {
 
   it('displays an error message if fetching subtags fails', async () => {
     render(
-      <MockedProvider mocks={MOCKS_ERROR_SUBTAGS_QUERY} addTypename={false}>
+      <MockedProvider mocks={MOCKS_ERROR_SUBTAGS_QUERY}>
         <TagNode
           tag={mockTag}
           checkedTags={mockCheckedTags}
@@ -108,7 +108,7 @@ describe('TagNode', () => {
 
   it('loads more subtags on scroll', async () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <TagNode
           tag={mockTag}
           checkedTags={mockCheckedTags}
@@ -138,7 +138,7 @@ describe('TagNode', () => {
 describe('TagNode with Mocks', () => {
   it('renders parent tag name', () => {
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <TagNode
           tag={mockTag}
           checkedTags={mockCheckedTags}
@@ -153,7 +153,7 @@ describe('TagNode with Mocks', () => {
 
   it('fetches and displays child tags from MOCKS', async () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <TagNode
           tag={mockTag}
           checkedTags={mockCheckedTags}
@@ -174,7 +174,7 @@ describe('TagNode with Mocks', () => {
 
   it('handles pagination correctly with second MOCKS item', async () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <TagNode
           tag={mockTag}
           checkedTags={mockCheckedTags}
@@ -207,7 +207,7 @@ describe('TagNode with Mocks', () => {
 
   it('displays error message with MOCKS_ERROR_SUBTAGS_QUERY', async () => {
     render(
-      <MockedProvider mocks={MOCKS_ERROR_SUBTAGS_QUERY} addTypename={false}>
+      <MockedProvider mocks={MOCKS_ERROR_SUBTAGS_QUERY}>
         <TagNode
           tag={mockTag}
           checkedTags={mockCheckedTags}
@@ -278,7 +278,7 @@ describe('Edge Cases and Coverage Improvements', () => {
     };
 
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <TagNode
           tag={leafTag}
           checkedTags={mockCheckedTags}
@@ -345,7 +345,7 @@ describe('Edge Cases and Coverage Improvements', () => {
     ];
 
     render(
-      <MockedProvider mocks={mockWithValidData} addTypename={false}>
+      <MockedProvider mocks={mockWithValidData}>
         <TagNode
           tag={mockTag}
           checkedTags={mockCheckedTags}
@@ -400,7 +400,7 @@ describe('Edge Cases and Coverage Improvements', () => {
     ];
 
     render(
-      <MockedProvider mocks={mockWithEmptySubTags} addTypename={false}>
+      <MockedProvider mocks={mockWithEmptySubTags}>
         <TagNode
           tag={mockTag}
           checkedTags={mockCheckedTags}
@@ -477,7 +477,7 @@ describe('Edge Cases and Coverage Improvements', () => {
     ];
 
     render(
-      <MockedProvider mocks={mockWithFetchMoreUndefined} addTypename={false}>
+      <MockedProvider mocks={mockWithFetchMoreUndefined}>
         <TagNode
           tag={mockTag}
           checkedTags={mockCheckedTags}
@@ -528,7 +528,7 @@ describe('Edge Cases and Coverage Improvements', () => {
     ];
 
     render(
-      <MockedProvider mocks={mockWithNullData} addTypename={false}>
+      <MockedProvider mocks={mockWithNullData}>
         <TagNode
           tag={mockTag}
           checkedTags={mockCheckedTags}
@@ -595,7 +595,7 @@ describe('Edge Cases and Coverage Improvements', () => {
     ];
 
     render(
-      <MockedProvider mocks={mockWithUndefinedHasNextPage} addTypename={false}>
+      <MockedProvider mocks={mockWithUndefinedHasNextPage}>
         <TagNode
           tag={mockTag}
           checkedTags={mockCheckedTags}

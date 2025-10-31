@@ -190,7 +190,7 @@ describe('AddMember Component', () => {
     const mocks = [createOrganizationsMock(orgId)];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
           <I18nextProvider i18n={i18nForTest}>
             <Routes>
@@ -220,7 +220,7 @@ describe('AddMember Component', () => {
     const mocks = [orgMock, createOrganizationsMock(orgId), ...userListMock];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
           <I18nextProvider i18n={i18nForTest}>
             <AddMember />
@@ -312,7 +312,7 @@ describe('AddMember Component', () => {
     ];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
           <I18nextProvider i18n={i18nForTest}>
             <AddMember />
@@ -379,7 +379,7 @@ describe('AddMember Component', () => {
     const mocks = [createOrganizationsMock(orgId), userListMock, addMemberMock];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
           <I18nextProvider i18n={i18nForTest}>
             <AddMember />
@@ -440,7 +440,7 @@ describe('AddMember Component', () => {
     const mocks = [createOrganizationsMock(orgId), userListMock, addMemberMock];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
           <I18nextProvider i18n={i18nForTest}>
             <AddMember />
@@ -532,7 +532,7 @@ describe('AddMember Component', () => {
     const link = new StaticMockLink(mocks, true);
 
     render(
-      <MockedProvider link={link} addTypename={false}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
           <I18nextProvider i18n={i18nForTest}>
             <AddMember />
@@ -613,7 +613,7 @@ describe('AddMember Component', () => {
     const mocks = [createOrganizationsMock(orgId)];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
           <I18nextProvider i18n={i18nForTest}>
             <AddMember />
@@ -646,7 +646,7 @@ describe('AddMember Component', () => {
     const mocks = [createOrganizationsMock(orgId)];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
           <I18nextProvider i18n={i18nForTest}>
             <AddMember />
@@ -705,7 +705,7 @@ describe('AddMember Component', () => {
     const mocks = [createOrganizationsMock(orgId), registerMock, addMemberMock];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
           <I18nextProvider i18n={i18nForTest}>
             <AddMember />
@@ -764,7 +764,7 @@ describe('AddMember Component', () => {
     const mocks = [createOrganizationsMock(orgId), registerMock, addMemberMock];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
           <I18nextProvider i18n={i18nForTest}>
             <AddMember />
@@ -818,7 +818,7 @@ describe('AddMember Component', () => {
     const mocks = [createOrganizationsMock(orgId), registerMock, addMemberMock];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
           <I18nextProvider i18n={i18nForTest}>
             <AddMember />
@@ -872,7 +872,7 @@ describe('AddMember Component', () => {
     const mocks = [createOrganizationsMock(orgId), registerMock, addMemberMock];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
           <I18nextProvider i18n={i18nForTest}>
             <AddMember />
@@ -943,7 +943,7 @@ describe('AddMember Component', () => {
     const link = new StaticMockLink(mocks, true);
 
     render(
-      <MockedProvider link={link} addTypename={false}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
           <I18nextProvider i18n={i18nForTest}>
             <AddMember />

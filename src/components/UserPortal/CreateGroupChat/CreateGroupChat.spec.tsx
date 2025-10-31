@@ -5171,7 +5171,7 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
     ];
 
     render(
-      <MockedProvider addTypename={false} mocks={mock}>
+      <MockedProvider mocks={mock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5216,7 +5216,7 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
     ];
 
     render(
-      <MockedProvider addTypename={false} mocks={mock}>
+      <MockedProvider mocks={mock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5263,7 +5263,7 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
     ];
 
     render(
-      <MockedProvider addTypename={false} mocks={mock}>
+      <MockedProvider mocks={mock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5305,7 +5305,7 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
     const refetchMock = vi.fn();
 
     render(
-      <MockedProvider mocks={[...USER_JOINED_ORG_MOCK]} addTypename={false}>
+      <MockedProvider mocks={[...USER_JOINED_ORG_MOCK]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5341,7 +5341,7 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
     const refetchMock = vi.fn();
 
     render(
-      <MockedProvider mocks={[...USER_JOINED_ORG_MOCK]} addTypename={false}>
+      <MockedProvider mocks={[...USER_JOINED_ORG_MOCK]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5381,7 +5381,7 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
     const refetchMock = vi.fn();
 
     render(
-      <MockedProvider mocks={[...USER_JOINED_ORG_MOCK]} addTypename={false}>
+      <MockedProvider mocks={[...USER_JOINED_ORG_MOCK]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5421,7 +5421,6 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
     render(
       <MockedProvider
         mocks={[...USER_JOINED_ORG_MOCK, ...UserConnectionListMock]}
-        addTypename={false}
       >
         <BrowserRouter>
           <Provider store={store}>
@@ -5463,7 +5462,6 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
     render(
       <MockedProvider
         mocks={[...USER_JOINED_ORG_MOCK, ...UserConnectionListMock]}
-        addTypename={false}
       >
         <BrowserRouter>
           <Provider store={store}>
@@ -5517,7 +5515,7 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
       ...GROUP_CHAT_LIST_QUERY_MOCK,
     ];
     render(
-      <MockedProvider addTypename={false} mocks={mock}>
+      <MockedProvider mocks={mock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5558,7 +5556,7 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
       ...GROUP_CHAT_LIST_QUERY_MOCK,
     ];
     render(
-      <MockedProvider addTypename={false} mocks={mock}>
+      <MockedProvider mocks={mock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5633,7 +5631,7 @@ describe('Testing Create Group Chat Modal [User Portal]', () => {
       ...GROUP_CHAT_LIST_QUERY_MOCK,
     ];
     render(
-      <MockedProvider addTypename={false} mocks={mock}>
+      <MockedProvider mocks={mock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5718,7 +5716,7 @@ describe('CreateGroupChat Additional Tests', () => {
 
   it('handles invalid file upload', async () => {
     render(
-      <MockedProvider mocks={[...USER_JOINED_ORG_MOCK]} addTypename={false}>
+      <MockedProvider mocks={[...USER_JOINED_ORG_MOCK]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5753,10 +5751,7 @@ describe('CreateGroupChat Additional Tests', () => {
     };
 
     render(
-      <MockedProvider
-        mocks={[loadingMock, ...USER_JOINED_ORG_MOCK]}
-        addTypename={false}
-      >
+      <MockedProvider mocks={[loadingMock, ...USER_JOINED_ORG_MOCK]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5792,10 +5787,7 @@ describe('CreateGroupChat Additional Tests', () => {
     };
 
     render(
-      <MockedProvider
-        mocks={[emptyResultsMock, ...USER_JOINED_ORG_MOCK]}
-        addTypename={false}
-      >
+      <MockedProvider mocks={[emptyResultsMock, ...USER_JOINED_ORG_MOCK]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5826,7 +5818,7 @@ describe('CreateGroupChat Additional Tests', () => {
 
   it('handles form validation', async () => {
     render(
-      <MockedProvider mocks={[...USER_JOINED_ORG_MOCK]} addTypename={false}>
+      <MockedProvider mocks={[...USER_JOINED_ORG_MOCK]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5852,7 +5844,7 @@ describe('CreateGroupChat Additional Tests', () => {
 
   it('handles image edit button click', async () => {
     render(
-      <MockedProvider mocks={[...USER_JOINED_ORG_MOCK]} addTypename={false}>
+      <MockedProvider mocks={[...USER_JOINED_ORG_MOCK]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -5922,7 +5914,7 @@ describe('CreateGroupChat - handleImageChange', () => {
     });
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={['/organizations/test-org-id']}>
           <Routes>
             <Route
@@ -5990,7 +5982,7 @@ describe('CreateGroupChat - handleImageChange', () => {
     });
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={['/organizations/test-org-id']}>
           <Routes>
             <Route
@@ -6057,7 +6049,7 @@ describe('CreateGroupChat - handleImageChange', () => {
     });
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={['/organizations/test-org-id']}>
           <Routes>
             <Route
@@ -6098,7 +6090,7 @@ describe('CreateGroupChat - handleImageChange', () => {
     });
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={['/organizations/test-org-id']}>
           <Routes>
             <Route

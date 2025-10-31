@@ -57,7 +57,7 @@ const debounceWait = async (ms = 300): Promise<void> => {
 
 const renderLeaderboard = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/leaderboard/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -99,7 +99,7 @@ describe('Testing Leaderboard Screen', () => {
   it('should redirect to fallback URL if URL params are undefined', async () => {
     vi.mocked(useParams).mockReturnValue({ orgId: '' });
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/leaderboard/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>

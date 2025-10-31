@@ -298,7 +298,7 @@ describe('Testing Community Profile Screen', () => {
     window.location.assign('/communityProfile');
 
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -329,7 +329,7 @@ describe('Testing Community Profile Screen', () => {
 
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={link1}>
+        <MockedProvider link={link1}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
               <CommunityProfile />
@@ -388,7 +388,7 @@ describe('Testing Community Profile Screen', () => {
 
   test('If the queried data has some fields null then the input field should be empty', async () => {
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <I18nextProvider i18n={i18n}>
           <CommunityProfile />
         </I18nextProvider>
@@ -410,7 +410,7 @@ describe('Testing Community Profile Screen', () => {
 
   test('Should clear out all the input field when click on Reset Changes button', async () => {
     render(
-      <MockedProvider addTypename={false} link={link3}>
+      <MockedProvider link={link3}>
         <I18nextProvider i18n={i18n}>
           <CommunityProfile />
         </I18nextProvider>
@@ -437,7 +437,7 @@ describe('Testing Community Profile Screen', () => {
 
   test('Should have empty input fields when queried result is null', async () => {
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <I18nextProvider i18n={i18n}>
           <CommunityProfile />
         </I18nextProvider>
@@ -458,7 +458,7 @@ describe('Testing Community Profile Screen', () => {
 
   test('should show loader while data is being fetched', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={LOADING_MOCK}>
+      <MockedProvider mocks={LOADING_MOCK}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -473,7 +473,7 @@ describe('Testing Community Profile Screen', () => {
 
   test('should handle mutation error correctly', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={ERROR_MOCK}>
+      <MockedProvider mocks={ERROR_MOCK}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -506,7 +506,7 @@ describe('Testing Community Profile Screen', () => {
 
   test('should handle null base64 conversion when updating logo', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={BASE64_MOCKS}>
+      <MockedProvider mocks={BASE64_MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -535,7 +535,7 @@ describe('Testing Community Profile Screen', () => {
 
   test('should show success toast when profile is updated successfully', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={UPDATE_SUCCESS_MOCKS}>
+      <MockedProvider mocks={UPDATE_SUCCESS_MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />

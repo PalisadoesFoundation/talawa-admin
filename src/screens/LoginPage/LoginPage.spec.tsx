@@ -241,7 +241,7 @@ describe('Testing Login Page Screen', () => {
       },
     });
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -259,7 +259,7 @@ describe('Testing Login Page Screen', () => {
 
   it('There should be default values of pre-login data when queried result is null', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -301,7 +301,7 @@ describe('Testing Login Page Screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -358,7 +358,7 @@ describe('Testing Login Page Screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -414,7 +414,7 @@ describe('Testing Login Page Screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -470,7 +470,7 @@ describe('Testing Login Page Screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -526,7 +526,7 @@ describe('Testing Login Page Screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -587,7 +587,7 @@ describe('Testing Login Page Screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -640,7 +640,7 @@ describe('Testing Login Page Screen', () => {
     });
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -670,7 +670,7 @@ describe('Testing Login Page Screen', () => {
     const formData = { email: 'johndoe@gmail.com', password: 'johndoe' };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -698,7 +698,7 @@ describe('Testing Login Page Screen', () => {
     const formData = { email: 'johndoe@gmail.com', password: 'johndoe1' };
 
     render(
-      <MockedProvider addTypename={false} link={link4}>
+      <MockedProvider link={link4}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -724,7 +724,7 @@ describe('Testing Login Page Screen', () => {
 
   it('Testing password preview feature for login', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -764,7 +764,7 @@ describe('Testing Login Page Screen', () => {
     });
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -810,7 +810,7 @@ describe('Testing Login Page Screen', () => {
     });
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -845,7 +845,7 @@ describe('Testing Login Page Screen', () => {
 
   it('Testing for the password error warning when user firsts lands on a page', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -875,7 +875,7 @@ describe('Testing Login Page Screen', () => {
     const password = { password: '7' };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -920,7 +920,7 @@ describe('Testing Login Page Screen', () => {
     const password = { password: '12345678' };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -965,7 +965,7 @@ describe('Testing Login Page Screen', () => {
     const password = { password: '1234567' };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1008,7 +1008,7 @@ describe('Testing Login Page Screen', () => {
     const password = { password: '12345678' };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1049,7 +1049,7 @@ describe('Testing Login Page Screen', () => {
       },
     });
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1076,7 +1076,7 @@ describe('Testing Login Page Screen', () => {
       },
     });
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1099,7 +1099,7 @@ describe('Testing redirect if already logged in', () => {
     setItem('IsLoggedIn', 'TRUE');
     setItem('userId', 'id');
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1117,7 +1117,7 @@ describe('Testing redirect if already logged in', () => {
     setItem('IsLoggedIn', 'TRUE');
     setItem('userId', null);
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1145,7 +1145,7 @@ it('Render the Select Organization list and change the option', async () => {
   });
 
   render(
-    <MockedProvider addTypename={false} link={link3}>
+    <MockedProvider link={link3}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -1184,7 +1184,7 @@ describe('Talawa-API server fetch check', () => {
 
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -1205,7 +1205,7 @@ describe('Talawa-API server fetch check', () => {
 
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>

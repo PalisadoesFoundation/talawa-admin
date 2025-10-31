@@ -61,7 +61,7 @@ afterEach(() => {
 describe('ProfileDropdown Component', () => {
   test('renders with user information', () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileDropdown />
@@ -79,7 +79,7 @@ describe('ProfileDropdown Component', () => {
   test('renders Super admin', () => {
     setItem('role', 'API Administrator');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <ProfileDropdown />
         </BrowserRouter>
@@ -90,7 +90,7 @@ describe('ProfileDropdown Component', () => {
   test('renders Admin', () => {
     setItem('role', 'administrator');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <ProfileDropdown />
         </BrowserRouter>
@@ -101,7 +101,7 @@ describe('ProfileDropdown Component', () => {
 
   test('logout functionality clears local storage and redirects to home', async () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <ProfileDropdown />
         </BrowserRouter>
@@ -122,7 +122,7 @@ describe('ProfileDropdown Component', () => {
       setItem('role', 'regular');
 
       render(
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
               <ProfileDropdown />
@@ -147,7 +147,7 @@ describe('ProfileDropdown Component', () => {
     setItem('role', 'regular');
 
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileDropdown />
@@ -173,7 +173,7 @@ describe('ProfileDropdown Component', () => {
     setItem('id', '123');
 
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <Routes>
@@ -201,7 +201,7 @@ describe('ProfileDropdown Component', () => {
     setItem('id', '123');
 
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <Routes>

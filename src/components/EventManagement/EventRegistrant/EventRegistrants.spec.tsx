@@ -27,7 +27,7 @@ async function wait(): Promise<void> {
 
 const renderEventRegistrants = (): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
@@ -98,7 +98,7 @@ describe('Event Registrants Component', () => {
 
     const customLink = new StaticMockLink(emptyMocks, true);
     render(
-      <MockedProvider addTypename={false} link={customLink}>
+      <MockedProvider link={customLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -162,7 +162,7 @@ describe('Event Registrants Component', () => {
 
     const customLink = new StaticMockLink(mockData, true);
     render(
-      <MockedProvider addTypename={false} link={customLink}>
+      <MockedProvider link={customLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -231,7 +231,7 @@ describe('Event Registrants Component', () => {
 
     const customLink = new StaticMockLink(mocksWithMissingFields, true);
     render(
-      <MockedProvider addTypename={false} link={customLink}>
+      <MockedProvider link={customLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -257,7 +257,7 @@ describe('Event Registrants Component', () => {
 describe('EventRegistrants CSS Tests', () => {
   const renderEventRegistrants = (): RenderResult => {
     return render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>

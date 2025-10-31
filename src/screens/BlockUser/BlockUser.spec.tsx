@@ -205,7 +205,7 @@ describe('BlockUser Component', () => {
   describe('Initial Loading and Error States', () => {
     it('shows loading state when fetching data', async () => {
       render(
-        <MockedProvider mocks={createMocks()} addTypename={false}>
+        <MockedProvider mocks={createMocks()}>
           <BrowserRouter>
             <BlockUser />
           </BrowserRouter>
@@ -223,10 +223,7 @@ describe('BlockUser Component', () => {
 
     it('handles members query error', async () => {
       render(
-        <MockedProvider
-          mocks={createMocks({ membersQueryError: true })}
-          addTypename={false}
-        >
+        <MockedProvider mocks={createMocks({ membersQueryError: true })}>
           <BrowserRouter>
             <BlockUser />
             <ToastContainer />
@@ -241,10 +238,7 @@ describe('BlockUser Component', () => {
 
     it('handles blocked users query error', async () => {
       render(
-        <MockedProvider
-          mocks={createMocks({ blockedUsersQueryError: true })}
-          addTypename={false}
-        >
+        <MockedProvider mocks={createMocks({ blockedUsersQueryError: true })}>
           <BrowserRouter>
             <BlockUser />
             <ToastContainer />
@@ -261,10 +255,7 @@ describe('BlockUser Component', () => {
 
     it('handles null organization data gracefully', async () => {
       render(
-        <MockedProvider
-          mocks={createMocks({ nullData: true })}
-          addTypename={false}
-        >
+        <MockedProvider mocks={createMocks({ nullData: true })}>
           <BrowserRouter>
             <BlockUser />
           </BrowserRouter>
@@ -306,7 +297,7 @@ describe('BlockUser Component', () => {
       ];
 
       render(
-        <MockedProvider mocks={customMocks} addTypename={false}>
+        <MockedProvider mocks={customMocks}>
           <BrowserRouter>
             <BlockUser />
           </BrowserRouter>
@@ -344,7 +335,7 @@ describe('BlockUser Component', () => {
   describe('View Switching', () => {
     it('displays all members initially', async () => {
       render(
-        <MockedProvider mocks={createMocks()} addTypename={false}>
+        <MockedProvider mocks={createMocks()}>
           <BrowserRouter>
             <BlockUser />
           </BrowserRouter>
@@ -366,7 +357,7 @@ describe('BlockUser Component', () => {
 
     it('switches to blocked users view', async () => {
       render(
-        <MockedProvider mocks={createMocks()} addTypename={false}>
+        <MockedProvider mocks={createMocks()}>
           <BrowserRouter>
             <BlockUser />
           </BrowserRouter>
@@ -396,10 +387,7 @@ describe('BlockUser Component', () => {
 
     it('displays empty state when no members are available', async () => {
       render(
-        <MockedProvider
-          mocks={createMocks({ emptyMembers: true })}
-          addTypename={false}
-        >
+        <MockedProvider mocks={createMocks({ emptyMembers: true })}>
           <BrowserRouter>
             <BlockUser />
           </BrowserRouter>
@@ -417,10 +405,7 @@ describe('BlockUser Component', () => {
 
     it('displays empty state when no blocked users are available', async () => {
       render(
-        <MockedProvider
-          mocks={createMocks({ emptyBlockedUsers: true })}
-          addTypename={false}
-        >
+        <MockedProvider mocks={createMocks({ emptyBlockedUsers: true })}>
           <BrowserRouter>
             <BlockUser />
           </BrowserRouter>
@@ -450,7 +435,7 @@ describe('BlockUser Component', () => {
   describe('Search Functionality', () => {
     it('searches members by name', async () => {
       render(
-        <MockedProvider mocks={createMocks()} addTypename={false}>
+        <MockedProvider mocks={createMocks()}>
           <BrowserRouter>
             <BlockUser />
           </BrowserRouter>
@@ -483,7 +468,7 @@ describe('BlockUser Component', () => {
 
     it('searches members by email address', async () => {
       render(
-        <MockedProvider mocks={createMocks()} addTypename={false}>
+        <MockedProvider mocks={createMocks()}>
           <BrowserRouter>
             <BlockUser />
           </BrowserRouter>
@@ -518,7 +503,7 @@ describe('BlockUser Component', () => {
 
     it('searches blocked users by name', async () => {
       render(
-        <MockedProvider mocks={createMocks()} addTypename={false}>
+        <MockedProvider mocks={createMocks()}>
           <BrowserRouter>
             <BlockUser />
           </BrowserRouter>
@@ -560,7 +545,7 @@ describe('BlockUser Component', () => {
 
     it('searches blocked users by email address', async () => {
       render(
-        <MockedProvider mocks={createMocks()} addTypename={false}>
+        <MockedProvider mocks={createMocks()}>
           <BrowserRouter>
             <BlockUser />
           </BrowserRouter>
@@ -602,7 +587,7 @@ describe('BlockUser Component', () => {
 
     it('handles search with no results for members', async () => {
       render(
-        <MockedProvider mocks={createMocks()} addTypename={false}>
+        <MockedProvider mocks={createMocks()}>
           <BrowserRouter>
             <BlockUser />
           </BrowserRouter>
@@ -634,7 +619,7 @@ describe('BlockUser Component', () => {
 
     it('handles search with no results for blocked users', async () => {
       render(
-        <MockedProvider mocks={createMocks()} addTypename={false}>
+        <MockedProvider mocks={createMocks()}>
           <BrowserRouter>
             <BlockUser />
           </BrowserRouter>
@@ -676,7 +661,7 @@ describe('BlockUser Component', () => {
 
     it('clears search results when search term is empty', async () => {
       render(
-        <MockedProvider mocks={createMocks()} addTypename={false}>
+        <MockedProvider mocks={createMocks()}>
           <BrowserRouter>
             <BlockUser />
           </BrowserRouter>
@@ -727,7 +712,7 @@ describe('BlockUser Component', () => {
   describe('Block/Unblock Actions', () => {
     it('blocks a user successfully', async () => {
       render(
-        <MockedProvider mocks={createMocks()} addTypename={false}>
+        <MockedProvider mocks={createMocks()}>
           <BrowserRouter>
             <BlockUser />
             <ToastContainer />
@@ -755,7 +740,7 @@ describe('BlockUser Component', () => {
 
     it('unblocks a user successfully', async () => {
       render(
-        <MockedProvider mocks={createMocks()} addTypename={false}>
+        <MockedProvider mocks={createMocks()}>
           <BrowserRouter>
             <BlockUser />
             <ToastContainer />
@@ -793,10 +778,7 @@ describe('BlockUser Component', () => {
 
     it('handles block user error', async () => {
       render(
-        <MockedProvider
-          mocks={createMocks({ blockUserError: true })}
-          addTypename={false}
-        >
+        <MockedProvider mocks={createMocks({ blockUserError: true })}>
           <BrowserRouter>
             <BlockUser />
           </BrowserRouter>
@@ -823,10 +805,7 @@ describe('BlockUser Component', () => {
 
     it('handles unblock user error', async () => {
       render(
-        <MockedProvider
-          mocks={createMocks({ unblockUserError: true })}
-          addTypename={false}
-        >
+        <MockedProvider mocks={createMocks({ unblockUserError: true })}>
           <BrowserRouter>
             <BlockUser />
           </BrowserRouter>
@@ -863,7 +842,7 @@ describe('BlockUser Component', () => {
 
     it('can block multiple users', async () => {
       render(
-        <MockedProvider mocks={createMocks()} addTypename={false}>
+        <MockedProvider mocks={createMocks()}>
           <BrowserRouter>
             <BlockUser />
             <ToastContainer />
@@ -910,7 +889,7 @@ describe('BlockUser Component', () => {
 
     it('shows blocked user in blocked users list after blocking', async () => {
       render(
-        <MockedProvider mocks={createMocks()} addTypename={false}>
+        <MockedProvider mocks={createMocks()}>
           <BrowserRouter>
             <BlockUser />
             <ToastContainer />
@@ -1015,7 +994,7 @@ describe('BlockUser Component', () => {
       ];
 
       render(
-        <MockedProvider mocks={customMocks} addTypename={false}>
+        <MockedProvider mocks={customMocks}>
           <BrowserRouter>
             <BlockUser />
             <ToastContainer />
@@ -1095,7 +1074,7 @@ describe('BlockUser Component', () => {
       ];
 
       render(
-        <MockedProvider mocks={customMocks} addTypename={false}>
+        <MockedProvider mocks={customMocks}>
           <BrowserRouter>
             <BlockUser />
             <ToastContainer />
@@ -1142,7 +1121,7 @@ describe('BlockUser Component', () => {
   describe('Component Behavior', () => {
     it('updates document title on mount', async () => {
       render(
-        <MockedProvider mocks={createMocks()} addTypename={false}>
+        <MockedProvider mocks={createMocks()}>
           <BrowserRouter>
             <BlockUser />
           </BrowserRouter>
@@ -1154,7 +1133,7 @@ describe('BlockUser Component', () => {
 
     it('renders table headers correctly', async () => {
       render(
-        <MockedProvider mocks={createMocks()} addTypename={false}>
+        <MockedProvider mocks={createMocks()}>
           <BrowserRouter>
             <BlockUser />
           </BrowserRouter>

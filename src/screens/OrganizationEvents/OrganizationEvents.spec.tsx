@@ -115,7 +115,7 @@ describe('Organisation Events Page', () => {
     window.location.assign('/orglist');
 
     const { container } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -162,7 +162,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing toggling of Create event modal', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -202,7 +202,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing Create event modal', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -299,7 +299,7 @@ describe('Organisation Events Page', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -380,7 +380,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing create event if the event is not for all day', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -467,7 +467,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing recurrence option selection from dropdown', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -518,7 +518,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing custom recurrence modal render when recurrence is set', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -580,7 +580,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing recurrence dropdown interaction', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -627,7 +627,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing enhanced form validation for empty fields', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -668,7 +668,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing CustomRecurrenceModal setRecurrenceRuleState with function callback', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -732,7 +732,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing recurrence validation error path coverage', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -811,7 +811,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing recurrence validation with actual validation logic', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -888,7 +888,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing handleChangeView function with valid ViewType', async () => {
     const { container } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -926,7 +926,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing handleChangeView function with null item', async () => {
     const { container } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -955,7 +955,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing handleMonthChange function - month and year state updates with debouncing', async () => {
     const { container } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1005,7 +1005,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing events mapping - description fallback to empty string', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1038,7 +1038,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing events mapping - location fallback to empty string', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1071,7 +1071,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing events mapping - startTime/endTime conditional logic based on allDay', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1107,7 +1107,7 @@ describe('Organisation Events Page', () => {
 
   test('Testing events mapping - edge.node mapping structure', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1171,7 +1171,7 @@ describe('Organisation Events Page', () => {
     const linkWithRateLimit = new StaticMockLink([rateLimitErrorMock], true);
 
     render(
-      <MockedProvider addTypename={false} link={linkWithRateLimit}>
+      <MockedProvider link={linkWithRateLimit}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1205,7 +1205,7 @@ describe('Organisation Events Page', () => {
     const mockClearTimeout = vi.spyOn(global, 'clearTimeout');
 
     const { unmount } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>

@@ -57,7 +57,7 @@ describe('Testing Settings Screen [User Portal]', () => {
   it('Screen should be rendered properly', async () => {
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -77,7 +77,7 @@ describe('Testing Settings Screen [User Portal]', () => {
   it('sidebar', async () => {
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={link2}>
+        <MockedProvider link={link2}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -100,7 +100,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     resizeWindow(800);
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={link2}>
+        <MockedProvider link={link2}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -123,7 +123,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     const toastSpy = vi.spyOn(toast, 'error');
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={link1}>
+        <MockedProvider link={link1}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -159,7 +159,7 @@ describe('Testing Settings Screen [User Portal]', () => {
   it('validates birth date correctly', async () => {
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={link1}>
+        <MockedProvider link={link1}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -186,7 +186,7 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={link1}>
+        <MockedProvider link={link1}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>

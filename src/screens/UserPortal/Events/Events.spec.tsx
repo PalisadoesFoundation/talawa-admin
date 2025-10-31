@@ -502,7 +502,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Screen should be rendered properly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -521,7 +521,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Create event works as expected when event is not an all day event.', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -581,7 +581,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Create event works as expected when event is an all day event.', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -623,7 +623,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Switch to calendar view works as expected.', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -647,7 +647,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Testing DatePicker and TimePicker', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -717,7 +717,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('EndDate null', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>

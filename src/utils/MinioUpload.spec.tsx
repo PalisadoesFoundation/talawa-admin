@@ -99,7 +99,7 @@ describe('Minio Upload Integration', (): void => {
     const handleComplete = vi.fn();
 
     render(
-      <MockedProvider mocks={successMocks} addTypename={false}>
+      <MockedProvider mocks={successMocks}>
         <TestComponent onUploadComplete={handleComplete} />
       </MockedProvider>,
     );
@@ -156,7 +156,7 @@ describe('Minio Upload Integration', (): void => {
     const handleComplete = vi.fn();
 
     render(
-      <MockedProvider mocks={missingUrlMocks} addTypename={false}>
+      <MockedProvider mocks={missingUrlMocks}>
         <TestComponent onUploadComplete={handleComplete} />
       </MockedProvider>,
     );
@@ -203,7 +203,7 @@ describe('Minio Upload Integration', (): void => {
     const handleComplete = vi.fn();
 
     render(
-      <MockedProvider mocks={errorMock} addTypename={false}>
+      <MockedProvider mocks={errorMock}>
         <TestComponent onUploadComplete={handleComplete} />
       </MockedProvider>,
     );
@@ -232,7 +232,7 @@ describe('Minio Upload Integration', (): void => {
     const handleComplete = vi.fn();
 
     render(
-      <MockedProvider mocks={successMocks} addTypename={false}>
+      <MockedProvider mocks={successMocks}>
         <TestComponent onUploadComplete={handleComplete} />
       </MockedProvider>,
     );
@@ -255,7 +255,7 @@ describe('Minio Upload Integration', (): void => {
   it('should log error "File upload failed" when file upload returns not ok', async () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     render(
-      <MockedProvider mocks={successMocks} addTypename={false}>
+      <MockedProvider mocks={successMocks}>
         <TestComponent onUploadComplete={vi.fn()} />
       </MockedProvider>,
     );

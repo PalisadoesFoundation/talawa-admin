@@ -75,7 +75,7 @@ const props = {
 
 const renderMemberDetailScreen = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/orgtags/123']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -233,7 +233,7 @@ describe('MemberDetail', () => {
     const dicebearUrl = 'mocked-data-uri';
 
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <BrowserRouter>
           <MemberDetail id="123" />
         </BrowserRouter>
@@ -276,7 +276,7 @@ describe('MemberDetail', () => {
 
   test('should be redirected to / if member id is undefined', async () => {
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

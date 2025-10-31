@@ -77,7 +77,7 @@ describe('Testing OrganizationScreen', () => {
 
   const renderComponent = (): void => {
     render(
-      <MockedProvider addTypename={false} link={link} mocks={MOCKS}>
+      <MockedProvider link={link} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

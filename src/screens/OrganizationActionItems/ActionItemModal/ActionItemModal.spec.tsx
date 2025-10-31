@@ -452,7 +452,7 @@ const mockQueries = [
 // Helper function to render the component with necessary providers
 const renderWithProviders = (props: IItemModalProps) => {
   return render(
-    <MockedProvider mocks={mockQueries} addTypename={false}>
+    <MockedProvider mocks={mockQueries}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <ItemModal {...props} />
       </LocalizationProvider>
@@ -1123,7 +1123,7 @@ describe('ItemModal - Additional Test Cases', () => {
 
       // Re-render with same props
       rerender(
-        <MockedProvider mocks={mockQueries} addTypename={false}>
+        <MockedProvider mocks={mockQueries}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <ItemModal {...props} />
           </LocalizationProvider>
@@ -1405,7 +1405,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       };
 
       rerender(
-        <MockedProvider mocks={mockQueries} addTypename={false}>
+        <MockedProvider mocks={mockQueries}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <ItemModal {...editProps} />
           </LocalizationProvider>
@@ -1530,7 +1530,7 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
     };
 
     const { rerender } = render(
-      <MockedProvider mocks={updatedMockQueries} addTypename={false}>
+      <MockedProvider mocks={updatedMockQueries}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -1543,7 +1543,7 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
 
     // Re-render with updated data should work without issues
     rerender(
-      <MockedProvider mocks={updatedMockQueries} addTypename={false}>
+      <MockedProvider mocks={updatedMockQueries}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -1584,7 +1584,7 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
     };
 
     render(
-      <MockedProvider mocks={emptyDataMockQueries} addTypename={false}>
+      <MockedProvider mocks={emptyDataMockQueries}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -1630,7 +1630,7 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
     };
 
     render(
-      <MockedProvider mocks={nullDataMockQueries} addTypename={false}>
+      <MockedProvider mocks={nullDataMockQueries}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -1688,10 +1688,7 @@ describe('updateActionForInstanceHandler', () => {
     };
 
     render(
-      <MockedProvider
-        mocks={[updateMutationMock, ...mockQueries]}
-        addTypename={false}
-      >
+      <MockedProvider mocks={[updateMutationMock, ...mockQueries]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -1828,7 +1825,7 @@ describe('updateActionForInstanceHandler', () => {
     };
 
     render(
-      <MockedProvider mocks={mutationMocks} addTypename={false}>
+      <MockedProvider mocks={mutationMocks}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -1914,7 +1911,7 @@ describe('updateActionForInstanceHandler', () => {
     };
 
     render(
-      <MockedProvider mocks={mutationMocks} addTypename={false}>
+      <MockedProvider mocks={mutationMocks}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -1982,7 +1979,7 @@ describe('updateActionForInstanceHandler', () => {
     };
 
     render(
-      <MockedProvider mocks={mutationMocks} addTypename={false}>
+      <MockedProvider mocks={mutationMocks}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -2058,7 +2055,7 @@ describe('updateActionForInstanceHandler', () => {
     };
 
     render(
-      <MockedProvider mocks={mutationMocks} addTypename={false}>
+      <MockedProvider mocks={mutationMocks}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -2133,7 +2130,7 @@ describe('updateActionForInstanceHandler', () => {
     };
 
     render(
-      <MockedProvider mocks={mutationMocks} addTypename={false}>
+      <MockedProvider mocks={mutationMocks}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -2208,7 +2205,7 @@ describe('updateActionForInstanceHandler', () => {
     };
 
     render(
-      <MockedProvider mocks={mutationMocks} addTypename={false}>
+      <MockedProvider mocks={mutationMocks}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -2289,7 +2286,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
     };
 
     render(
-      <MockedProvider mocks={mutationMocks} addTypename={false}>
+      <MockedProvider mocks={mutationMocks}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -2751,7 +2748,7 @@ describe('orgActionItemsRefetch functionality', () => {
     };
 
     render(
-      <MockedProvider mocks={mutationMocks} addTypename={false}>
+      <MockedProvider mocks={mutationMocks}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -2859,7 +2856,7 @@ describe('orgActionItemsRefetch functionality', () => {
     };
 
     render(
-      <MockedProvider mocks={mutationMocks} addTypename={false}>
+      <MockedProvider mocks={mutationMocks}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -2987,7 +2984,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       };
 
       render(
-        <MockedProvider mocks={mutationMocks} addTypename={false}>
+        <MockedProvider mocks={mutationMocks}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <ItemModal {...props} />
           </LocalizationProvider>
@@ -3088,7 +3085,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       };
 
       render(
-        <MockedProvider mocks={mutationMocks} addTypename={false}>
+        <MockedProvider mocks={mutationMocks}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <ItemModal {...props} />
           </LocalizationProvider>
@@ -3207,10 +3204,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       };
 
       render(
-        <MockedProvider
-          mocks={[updateMutationMock, ...mockQueries]}
-          addTypename={false}
-        >
+        <MockedProvider mocks={[updateMutationMock, ...mockQueries]}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <ItemModal
               isOpen={true}
@@ -3605,7 +3599,7 @@ describe('Modal Structure - className={styles.itemModal} show={isOpen} onHide={h
     };
 
     rerender(
-      <MockedProvider mocks={mockQueries} addTypename={false}>
+      <MockedProvider mocks={mockQueries}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...editProps} />
         </LocalizationProvider>
@@ -3861,7 +3855,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       };
 
       render(
-        <MockedProvider mocks={mutationMocks} addTypename={false}>
+        <MockedProvider mocks={mutationMocks}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <ItemModal {...props} />
           </LocalizationProvider>

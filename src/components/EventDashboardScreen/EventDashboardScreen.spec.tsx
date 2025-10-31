@@ -59,7 +59,7 @@ describe('EventDashboardScreen Component', () => {
     setItem('IsLoggedIn', 'true');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgdash/undefined']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -79,7 +79,7 @@ describe('EventDashboardScreen Component', () => {
     setItem('IsLoggedIn', 'false');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgdash/123']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -98,7 +98,7 @@ describe('EventDashboardScreen Component', () => {
     setItem('AdminFor', null);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgdash/123']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -118,7 +118,7 @@ describe('EventDashboardScreen Component', () => {
     setItem('sidebar', false);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgdash/123']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

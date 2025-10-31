@@ -121,7 +121,7 @@ describe('Testing Forgot Password screen', () => {
     window.history.pushState({}, 'Test page', '/orglist');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -145,7 +145,7 @@ describe('Testing Forgot Password screen', () => {
     setItem('IsLoggedIn', 'TRUE');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -165,7 +165,7 @@ describe('Testing Forgot Password screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -198,7 +198,7 @@ describe('Testing Forgot Password screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -245,7 +245,7 @@ describe('Testing Forgot Password screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -292,7 +292,7 @@ describe('Testing Forgot Password screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -335,7 +335,7 @@ describe('Testing Forgot Password screen', () => {
     };
     // setItem('otpToken', '');
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -364,7 +364,7 @@ describe('Testing Forgot Password screen', () => {
       email: 'testuser@test.com',
     };
     render(
-      <MockedProvider addTypename={false} link={notWorkingLink}>
+      <MockedProvider link={notWorkingLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -391,7 +391,7 @@ describe('Testing Forgot Password screen', () => {
       email: 'johndoe@gmail.com',
     };
     render(
-      <MockedProvider addTypename={false} link={talawaApiUnavailableLink}>
+      <MockedProvider link={talawaApiUnavailableLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -427,7 +427,7 @@ describe('Testing Forgot Password screen', () => {
     setItem('otpToken', '');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
