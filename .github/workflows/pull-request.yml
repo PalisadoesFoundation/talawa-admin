@@ -337,8 +337,8 @@ jobs:
         run: |
           python .github/workflows/scripts/code_coverage_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
-  Test-Application-Parallel:
-    name: Test Application (Parallel-Safe Tests)
+  Test-Application:
+    name: Test Application (Sharded)
     runs-on: ubuntu-latest
     needs:
       [Code-Quality-Checks, Check-ESlint-Disable, Check-Code-Coverage-Disable]
@@ -346,7 +346,6 @@ jobs:
       fail-fast: false
       matrix:
         shard: [1, 2, 3, 4]
-        shard-total: [4]
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
@@ -375,130 +374,51 @@ jobs:
             echo "any_changed=false" >> $GITHUB_OUTPUT
           fi
 
-          # Get all changed files
-          ALL_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
-          echo "all_files=$ALL_FILES" >> $GITHUB_OUTPUT
-
-          # Get TypeScript files specifically
-          TS_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | grep -E '\.tsx?$' | tr '\n' ' ')
-          echo "ts_files=$TS_FILES" >> $GITHUB_OUTPUT
-
       - name: TypeScript compilation
         run: |
           npx tsc --noEmit
 
-      - name: Run Parallel Tests (Shard ${{ matrix.shard }}/${{ matrix.shard-total }})
+      - name: Run Tests (Shard ${{ matrix.shard }}/4)
         if: steps.changed-files.outputs.any_changed == 'true'
-        id: test-shard-parallel
+        id: test-shard
         env:
-          NODE_V8_COVERAGE: './coverage/vitest-parallel'
+          NODE_V8_COVERAGE: './coverage/vitest'
           NODE_OPTIONS: '--max-old-space-size=6144 --expose-gc'
           SHARD_INDEX: ${{ matrix.shard }}
-          SHARD_COUNT: ${{ matrix.shard-total }}
+          SHARD_COUNT: 4
         run: |
-          # Run parallel-safe tests - exit code will be captured
-          npm run test:coverage:shard:parallel; TEST_EXIT_CODE=$?
+          # Run tests with sharding - exit code will be captured
+          npx vitest run --coverage --shard=${SHARD_INDEX}/${SHARD_COUNT}; TEST_EXIT_CODE=$?
 
           # Verify coverage file was generated (even if tests failed)
-          if [ -f "./coverage/vitest-parallel/lcov.info" ]; then
-            echo "✅ Coverage file generated for parallel shard ${{ matrix.shard }}"
-            ls -lh ./coverage/vitest-parallel/lcov.info
+          if [ -f "./coverage/vitest/lcov.info" ]; then
+            echo "✅ Coverage file generated for shard ${{ matrix.shard }}"
+            ls -lh ./coverage/vitest/lcov.info
             echo "coverage_generated=true" >> $GITHUB_OUTPUT
           else
-            echo "⚠️  Warning: Coverage file not found for parallel shard ${{ matrix.shard }}"
-            ls -la ./coverage/vitest-parallel/ || echo "Coverage directory does not exist"
+            echo "⚠️  Warning: Coverage file not found for shard ${{ matrix.shard }}"
+            ls -la ./coverage/vitest/ || echo "Coverage directory does not exist"
             echo "coverage_generated=false" >> $GITHUB_OUTPUT
           fi
 
           # Exit with test exit code (fail job if tests failed)
           exit $TEST_EXIT_CODE
 
-      - name: Upload parallel coverage artifacts
+      - name: Upload coverage artifacts
         if: steps.changed-files.outputs.any_changed == 'true' && always()
         uses: actions/upload-artifact@v4
         continue-on-error: true
         with:
-          name: coverage-parallel-shard-${{ matrix.shard }}
-          path: ./coverage/vitest-parallel
-          retention-days: 1
-          if-no-files-found: ignore
-
-  Test-Application-Sequential:
-    name: Test Application (Sequential - Pre-existing Tests)
-    runs-on: ubuntu-latest
-    needs:
-      [Code-Quality-Checks, Check-ESlint-Disable, Check-Code-Coverage-Disable]
-    steps:
-      - name: Checkout the Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24.x'
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Get changed TypeScript files
-        id: changed-files
-        run: |
-          # Get the base branch ref
-          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
-
-          # Check if any files changed
-          ANY_CHANGED=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | wc -l)
-          if [ "$ANY_CHANGED" -gt 0 ]; then
-            echo "any_changed=true" >> $GITHUB_OUTPUT
-          else
-            echo "any_changed=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: TypeScript compilation
-        run: |
-          npx tsc --noEmit
-
-      - name: Run Sequential Tests (Pre-existing with isolation issues)
-        if: steps.changed-files.outputs.any_changed == 'true'
-        id: test-sequential
-        env:
-          NODE_V8_COVERAGE: './coverage/vitest-sequential'
-          NODE_OPTIONS: '--max-old-space-size=6144 --expose-gc'
-        run: |
-          # Run sequential tests - exit code will be captured
-          npm run test:coverage:sequential; TEST_EXIT_CODE=$?
-
-          # Verify coverage file was generated (even if tests failed)
-          if [ -f "./coverage/vitest-sequential/lcov.info" ]; then
-            echo "✅ Coverage file generated for sequential tests"
-            ls -lh ./coverage/vitest-sequential/lcov.info
-            echo "coverage_generated=true" >> $GITHUB_OUTPUT
-          else
-            echo "⚠️  Warning: Coverage file not found for sequential tests"
-            ls -la ./coverage/vitest-sequential/ || echo "Coverage directory does not exist"
-            echo "coverage_generated=false" >> $GITHUB_OUTPUT
-          fi
-
-          # Exit with test exit code (fail job if tests failed)
-          exit $TEST_EXIT_CODE
-
-      - name: Upload sequential coverage artifacts
-        if: steps.changed-files.outputs.any_changed == 'true' && always()
-        uses: actions/upload-artifact@v4
-        continue-on-error: true
-        with:
-          name: coverage-sequential
-          path: ./coverage/vitest-sequential
+          name: coverage-shard-${{ matrix.shard }}
+          path: ./coverage/vitest
           retention-days: 1
           if-no-files-found: ignore
 
   Merge-Coverage:
     name: Merge Coverage Reports
     runs-on: ubuntu-latest
-    needs: [Test-Application-Parallel, Test-Application-Sequential]
-    if: always() && (needs.Test-Application-Parallel.result != 'skipped' && needs.Test-Application-Parallel.result != 'cancelled') || (needs.Test-Application-Sequential.result != 'skipped' && needs.Test-Application-Sequential.result != 'cancelled')
+    needs: [Test-Application]
+    if: always() && needs.Test-Application.result != 'skipped' && needs.Test-Application.result != 'cancelled'
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
@@ -529,13 +449,13 @@ jobs:
           echo "📦 All files in coverage-shards:"
           find coverage-shards -type f 2>/dev/null | head -20 || echo "No files found"
 
-          # Find all lcov.info files from shards (both parallel and sequential)
+          # Find all lcov.info files from shards
           SHARD_FILES=$(find coverage-shards -name "lcov.info" -type f 2>/dev/null || true)
 
           if [ -z "$SHARD_FILES" ]; then
             echo "⚠️  No coverage shard files found, checking alternative locations..."
-            # Try finding coverage files in subdirectories (both parallel and sequential)
-            SHARD_FILES=$(find coverage-shards -name "lcov.info" -o -path "*/coverage/vitest-parallel/lcov.info" -o -path "*/coverage/vitest-sequential/lcov.info" 2>/dev/null | head -20 || true)
+            # Try finding coverage files in subdirectories
+            SHARD_FILES=$(find coverage-shards -name "lcov.info" -o -path "*/coverage/vitest/lcov.info" 2>/dev/null | head -20 || true)
             
             if [ -z "$SHARD_FILES" ]; then
               echo "❌ No coverage files found from any shard. This usually means:"

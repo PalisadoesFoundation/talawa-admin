@@ -8,30 +8,22 @@ const cpuCount = os.cpus().length;
 const isCI = !!process.env.CI;
 
 /**
- * Parallel test configuration for tests that are parallel-safe.
+ * Vitest configuration optimized for test speed improvement.
  * 
- * Pre-existing tests with isolation issues are excluded and run sequentially
- * using vitest.config.sequential.ts instead.
+ * Uses sequential execution (fileParallelism: false) to avoid pre-existing
+ * test isolation issues, while still achieving 4x speedup through CI sharding.
  * 
- * To add a test to parallel execution:
- * 1. Fix any test isolation issues (unique testids, proper async handling)
- * 2. Remove the test file from the exclude list below
- * 3. Run tests to verify it passes in parallel execution
+ * Configuration optimized for:
+ * - CI: 1 thread, sequential execution, 4 shards
+ * - Local: Multiple threads, sequential execution
  */
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), svgrPlugin()],
   test: {
     include: ['src/**/*.spec.{js,jsx,ts,tsx}'],
-    // Exclude pre-existing tests with isolation issues - they run sequentially instead
     exclude: [
       'node_modules',
       'dist',
-      'src/components/Advertisements/Advertisements.spec.tsx',
-      'src/components/EventListCard/Modal/Preview/EventListCardPreviewModal.spec.tsx',
-      'src/screens/UserPortal/Posts/Posts.spec.tsx',
-      'src/components/OrgSettings/AgendaItemCategories/Preview/AgendaCategoryPreviewModal.spec.tsx',
-      'src/screens/UserPortal/Pledges/Pledge.spec.tsx',
-      // Add more pre-existing failing tests as they are identified
     ],
     globals: true,
     environment: 'happy-dom',
@@ -43,28 +35,23 @@ export default defineConfig({
     poolOptions: {
       threads: {
         singleThread: false,
-        minThreads: isCI
-          ? 2
-          : Math.max(2, Math.floor(cpuCount * 0.5)),
-        maxThreads: isCI
-          ? 2
-          : Math.max(4, Math.floor(cpuCount * 0.5)),
+        minThreads: isCI ? 1 : Math.max(2, Math.floor(cpuCount * 0.5)),
+        maxThreads: isCI ? 1 : Math.max(4, Math.floor(cpuCount * 0.5)),
         isolate: true,
       },
     },
-    // Parallel execution - optimized for speed
-    fileParallelism: true,
-    maxConcurrency: isCI
-      ? 2
-      : Math.max(2, Math.floor(cpuCount * 0.5)),
+    // Sequential execution - avoids pre-existing test isolation issues
+    // Speed comes from CI sharding (4 shards = 4x speedup)
+    fileParallelism: false,
+    maxConcurrency: 1,
     sequence: {
       shuffle: false,
-      concurrent: true,
+      concurrent: false,
     },
     coverage: {
       enabled: true,
       provider: 'v8',
-      reportsDirectory: './coverage/vitest-parallel',
+      reportsDirectory: './coverage/vitest',
       exclude: [
         'node_modules',
         'dist',
@@ -76,18 +63,9 @@ export default defineConfig({
         'src/test/**',
         'vitest.config.ts',
         'vitest.config.sequential.ts',
-        'vitest.config.parallel.ts',
         'vitest.setup.ts',
         'cypress/**',
         'cypress.config.ts',
-        // Pre-existing tests with isolation issues - run sequentially instead
-        // TODO: Fix test isolation and remove from this list
-        'src/components/Advertisements/Advertisements.spec.tsx',
-        'src/components/EventListCard/Modal/Preview/EventListCardPreviewModal.spec.tsx',
-        'src/screens/UserPortal/Posts/Posts.spec.tsx',
-        'src/components/OrgSettings/AgendaItemCategories/Preview/AgendaCategoryPreviewModal.spec.tsx',
-        'src/screens/UserPortal/Pledges/Pledge.spec.tsx',
-        // Add more pre-existing failing tests as they are identified
       ],
       reporter: ['text', 'html', 'text-summary', 'lcov'],
     },
