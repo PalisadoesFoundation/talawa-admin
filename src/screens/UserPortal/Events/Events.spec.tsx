@@ -1,3 +1,11 @@
+/**
+ * @file Comprehensive unit tests for the Events component in User Portal.
+ * @description This test suite provides 100% code coverage for the Events component,
+ * testing all functionality including event creation, modal interactions, form inputs,
+ * error handling, and different user roles.
+ * @module EventsSpec
+ */
+
 import React, { act } from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
@@ -21,11 +29,6 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 import { toast } from 'react-toastify';
-
-/**
- * Comprehensive unit tests for the Events component.
- * Achieves 100% code coverage by testing all branches, error paths, and edge cases.
- */
 
 const { setItem } = useLocalStorage();
 
