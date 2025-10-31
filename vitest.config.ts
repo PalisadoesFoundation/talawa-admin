@@ -25,7 +25,7 @@ export default defineConfig({
         '**/*.d.ts',
         'src/test/**',
         'vitest.config.ts',
-        'vitest.setup.ts',
+        'vitest.setup.ts', // Exclude from coverage if necessary
         'cypress/**',
         'cypress.config.ts',
       ],

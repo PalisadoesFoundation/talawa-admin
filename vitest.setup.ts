@@ -1,12 +1,5 @@
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
-import { vi } from 'vitest';
-
-// Mock window.confirm for tests that use it
-Object.defineProperty(window, 'confirm', {
-  writable: true,
-  value: vi.fn(() => true),
-});
 
 // Basic cleanup after each test
 afterEach(() => {
