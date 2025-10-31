@@ -1,5 +1,5 @@
 import { ORGANIZATION_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
-import { MOCK_USERS, MOCK_USERS2 } from './Organization.mocks';
+import { MOCK_USERS } from './Organization.mocks';
 
 // Add pagination and sorting variables to all USER_LIST mocks
 const paginationVariables = {
