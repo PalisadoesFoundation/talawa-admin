@@ -22,17 +22,17 @@ export default defineConfig({
       threads: {
         singleThread: false,
         minThreads: isCI
-          ? 1
+          ? 2
           : Math.max(2, Math.floor(cpuCount * 0.5)),
         maxThreads: isCI
-          ? 1
+          ? 2
           : Math.max(4, Math.floor(cpuCount * 0.5)),
         isolate: true,
       },
     },
     fileParallelism: true,
     maxConcurrency: isCI
-      ? 1
+      ? 2
       : Math.max(2, Math.floor(cpuCount * 0.5)),
     sequence: {
       shuffle: false,
