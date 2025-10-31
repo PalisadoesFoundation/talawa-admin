@@ -21,7 +21,7 @@ const mockT = vi.fn((key: string) => {
   return translations[key] || key;
 });
 
-const mockTErrors = vi.fn((key: string, options?: any) => {
+const mockTErrors = vi.fn((key: string, options?: Record<string, unknown>) => {
   if (key === 'errorLoading' && options?.entity) {
     return `Error loading ${options.entity}`;
   }
@@ -273,7 +273,7 @@ describe('LeftDrawerOrg', () => {
 
   const renderComponent = (
     props: Partial<ILeftDrawerProps> = {},
-    mocks: any[] = successMocks,
+    mocks: typeof successMocks = successMocks,
     initialRoute = '/orgdash/org-123',
   ) => {
     return render(
@@ -731,7 +731,7 @@ describe('LeftDrawerOrg', () => {
 
   describe('Edge Cases', () => {
     it('should handle undefined plugin items gracefully', () => {
-      mockUsePluginDrawerItems.mockReturnValue(undefined as any);
+      mockUsePluginDrawerItems.mockReturnValue(undefined);
 
       expect(() => renderComponent()).not.toThrow();
       expect(screen.queryByText('Plugins')).not.toBeInTheDocument();
@@ -740,7 +740,7 @@ describe('LeftDrawerOrg', () => {
     it('should handle null setHideDrawer prop', () => {
       const propsWithNullSetter = {
         ...defaultProps,
-        setHideDrawer: null as any,
+        setHideDrawer: null as unknown as (hide: boolean) => void,
       };
 
       expect(() => renderComponent(propsWithNullSetter)).not.toThrow();
