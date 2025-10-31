@@ -376,6 +376,15 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByTestId('clearSelectedTag2')).toBeInTheDocument();
     });
     await userEvent.click(screen.getByTestId('clearSelectedTag2'));
+
+    // Click tag2 checkbox again to deselect (when already unselected)
+    await waitFor(() => {
+      expect(screen.getByTestId('checkTag2')).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getByTestId('checkTag2'));
+    
+    // Deselect tag2 again through checkbox
+    await userEvent.click(screen.getByTestId('checkTag2'));
   });
 
   test('fetches and lists the child tags and then selects and deselects them', async () => {
@@ -420,6 +429,7 @@ describe('Organisation Tags Page', () => {
     });
     await userEvent.click(screen.getByTestId('checkTagsubTag2'));
 
+    // Try to uncheck the ancestor tag (tag1) directly - this should hit early return
     await waitFor(() => {
       expect(screen.getByTestId('checkTag1')).toBeInTheDocument();
     });
