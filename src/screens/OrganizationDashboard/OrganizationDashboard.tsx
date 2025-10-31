@@ -452,7 +452,7 @@ function OrganizationDashboard(): JSX.Element {
         </Col>
         <Col xl={4}>
           <Row className="mb-4">
-            <Card border="0" className="rounded-4">
+            <Card border="0" className="rounded-4" style={{ height: '220px' }}>
               <div className={styles.cardHeader}>
                 <div className={styles.cardTitle}>
                   {t('membershipRequests')}
@@ -468,7 +468,10 @@ function OrganizationDashboard(): JSX.Element {
                   {t('viewAll')}
                 </Button>
               </div>
-              <Card.Body className={styles.containerBody}>
+              <Card.Body
+                className={styles.containerBody}
+                style={{ height: '150px' }}
+              >
                 {loadingMembershipRequests ? (
                   [...Array(4)].map((_, index) => (
                     <CardItemLoading key={`requestsLoading_${index}`} />
@@ -494,13 +497,12 @@ function OrganizationDashboard(): JSX.Element {
                       (request: {
                         status: string;
                         membershipRequestId: string;
-                        user: { name: string; avatarURL?: string };
+                        user: { name: string };
                       }) => (
                         <CardItem
                           type="MembershipRequest"
                           key={request.membershipRequestId}
                           title={request.user.name}
-                          image={request.user.avatarURL}
                         />
                       ),
                     )

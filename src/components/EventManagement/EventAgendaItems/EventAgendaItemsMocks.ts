@@ -94,4 +94,40 @@ export const MOCKS = [
   },
 ];
 
+export const MOCKS_ERROR_MUTATION = [
+  {
+    request: {
+      query: CREATE_AGENDA_ITEM_MUTATION,
+      variables: {
+        input: {
+          title: 'AgendaItem 1',
+          description: 'AgendaItem 1 Description',
+          duration: '30',
+          relatedEventId: '123',
+          organizationId: '111',
+          sequence: 1,
+          categories: ['agendaItemCategory1'],
+          attachments: [],
+          urls: [],
+        },
+      },
+    },
+    error: new Error('Mock Graphql Error'),
+  },
+  {
+    request: {
+      query: AgendaItemByEvent,
+      variables: { relatedEventId: '123' },
+    },
+    error: new Error('Mock Graphql Error'),
+  },
+  {
+    request: {
+      query: AGENDA_ITEM_CATEGORY_LIST,
+      variables: { organizationId: '111' },
+    },
+    error: new Error('Mock Graphql Error'),
+  },
+];
+
 export const MOCKS_ERROR_QUERY = [];

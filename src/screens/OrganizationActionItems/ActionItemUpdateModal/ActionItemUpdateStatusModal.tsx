@@ -59,6 +59,7 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
   isOpen,
   actionItemsRefetch,
   actionItem,
+  isRecurring,
   eventId,
 }) => {
   const { t } = useTranslation('translation', {
@@ -276,7 +277,11 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
                   </Button>
                   {/* Only show 'complete for series' if this action item is not showing instance exception data */}
                   {!actionItem.isInstanceException && (
-                    <Button type="submit" className={styles.addButton}>
+                    <Button
+                      type="submit"
+                      className={styles.addButton}
+                      data-cy="markCompletionForSeries"
+                    >
                       {t('completeForSeries')}
                     </Button>
                   )}
@@ -286,7 +291,6 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
                   type="submit"
                   className={`${styles.addButton}`}
                   data-testid="createBtn"
-                  data-cy="markCompletionForSeries"
                 >
                   {t('markCompletion')}
                 </Button>

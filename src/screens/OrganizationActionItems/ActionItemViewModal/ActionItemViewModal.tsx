@@ -32,7 +32,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
 
   const {
     categoryId,
-
+    assigneeId,
     creatorId,
     completionAt,
     assignedAt,
@@ -40,8 +40,6 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
     postCompletionNotes,
     preCompletionNotes,
     event,
-    volunteer,
-    volunteerGroup,
     organizationId,
   } = item;
 
@@ -60,29 +58,12 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
 
   const members = membersData?.usersByOrganizationId || [];
 
-  // Get assigned person/group information
-  const getAssignedInfo = () => {
-    if (volunteer?.user) {
-      return {
-        type: 'volunteer',
-        name: volunteer.user.name || 'Unknown Volunteer',
-        details: `Hours Volunteered: ${volunteer.hoursVolunteered || 0}`,
-      };
-    } else if (volunteerGroup) {
-      return {
-        type: 'group',
-        name: volunteerGroup.name || 'Unknown Group',
-        details: `Required Volunteers: ${volunteerGroup.volunteersRequired || 'Not specified'}`,
-      };
-    }
-    return {
-      type: 'none',
-      name: 'No assignment',
-      details: '',
-    };
-  };
-
-  const assignedInfo = getAssignedInfo();
+  const assignee = assigneeId
+    ? members.find(
+        (member: InterfaceUser) =>
+          member.id === assigneeId || member.id === assigneeId,
+      )
+    : item.assignee;
 
   const creator = creatorId
     ? members.find(
@@ -143,12 +124,11 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
           <Form.Group className="d-flex gap-3 mb-3">
             <FormControl fullWidth>
               <TextField
-                label={t('assignedTo')}
+                label={t('assignee')}
                 variant="outlined"
                 className={styles.noOutline}
                 data-testid="assignee_input"
-                value={assignedInfo.name}
-                helperText={assignedInfo.details}
+                value={getUserDisplayName(assignee)}
                 disabled
               />
             </FormControl>

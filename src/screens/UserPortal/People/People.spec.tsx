@@ -37,7 +37,7 @@ const DEFAULT_SEARCH = '';
 const DEFAULT_FIRST = 5;
 
 // Helper for members edges
-const memberEdge = (props: Record<string, unknown> = {}) => ({
+const memberEdge = (props: any = {}) => ({
   cursor: props.cursor || 'cursor1',
   node: {
     id: props.id || 'user-1',
@@ -46,9 +46,7 @@ const memberEdge = (props: Record<string, unknown> = {}) => ({
     avatarURL: props.avatarURL || null,
     emailAddress: props.emailAddress || 'user1@example.com',
     createdAt: '2023-03-02T03:22:08.101Z',
-    ...(typeof props.node === 'object' && props.node !== null
-      ? (props.node as Record<string, unknown>)
-      : {}),
+    ...props.node,
   },
 });
 

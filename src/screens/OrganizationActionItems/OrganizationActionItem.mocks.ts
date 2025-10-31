@@ -32,9 +32,6 @@ export const baseActionItem = {
   organizationId: 'orgId',
   creatorId: 'userId',
   updaterId: 'userId',
-  volunteerId: null,
-  volunteerGroupId: null,
-  recurringEventInstanceId: null,
   createdAt: new Date('2024-08-27'),
   updatedAt: new Date('2024-08-27'),
   creator: {
@@ -43,16 +40,11 @@ export const baseActionItem = {
     emailAddress: 'wilt@example.com',
     avatarURL: null,
   },
-  recurringEventInstance: null,
-  volunteer: null,
-  volunteerGroup: null,
 };
 
 export const itemWithUser1 = {
-  ...baseActionItem,
-  volunteerId: 'volunteerUserId1',
-  volunteerGroupId: null,
   id: '1',
+  assigneeId: 'userId1',
   categoryId: 'actionItemCategoryId1',
   eventId: 'eventId',
   assignedAt: new Date('2024-08-27'),
@@ -60,16 +52,11 @@ export const itemWithUser1 = {
   preCompletionNotes: 'Notes 1',
   postCompletionNotes: 'Cmp Notes 1',
   isCompleted: true,
-  volunteer: {
-    id: 'volunteerUserId1',
-    hasAccepted: true,
-    isPublic: true,
-    hoursVolunteered: 8,
-    user: {
-      id: 'userId1',
-      name: 'John Doe',
-      avatarURL: 'user-image',
-    },
+  assignee: {
+    id: 'userId1',
+    name: 'John Doe',
+    emailAddress: 'john@example.com',
+    avatarURL: 'user-image',
   },
   category: actionItemCategory1,
   event: {
@@ -79,13 +66,12 @@ export const itemWithUser1 = {
     startAt: new Date('2024-08-27'),
     endAt: new Date('2024-08-30'),
   },
+  ...baseActionItem,
 };
 
 export const itemWithUser2 = {
-  ...baseActionItem,
-  volunteerId: 'volunteerUserId2',
-  volunteerGroupId: null,
   id: '2',
+  assigneeId: 'userId2',
   categoryId: 'actionItemCategoryId2',
   eventId: null,
   assignedAt: new Date('2024-08-28'),
@@ -93,27 +79,21 @@ export const itemWithUser2 = {
   preCompletionNotes: 'Notes 2',
   postCompletionNotes: null,
   isCompleted: false,
-  volunteer: {
-    id: 'volunteerUserId2',
-    hasAccepted: true,
-    isPublic: true,
-    hoursVolunteered: 5,
-    user: {
-      id: 'userId2',
-      name: 'Jane Doe',
-      avatarURL: null,
-    },
+  assignee: {
+    id: 'userId2',
+    name: 'Jane Doe',
+    emailAddress: 'jane@example.com',
+    avatarURL: null,
   },
   category: actionItemCategory2,
   event: null,
+  ...baseActionItem,
 };
 
 // Additional test items for edge cases
 export const itemWithoutAssignee = {
-  ...baseActionItem,
-  volunteerId: null,
-  volunteerGroupId: null,
   id: '3',
+  assigneeId: null,
   categoryId: 'actionItemCategoryId1',
   eventId: null,
   assignedAt: new Date('2024-08-29'),
@@ -121,17 +101,15 @@ export const itemWithoutAssignee = {
   preCompletionNotes: 'Notes 3',
   postCompletionNotes: null,
   isCompleted: false,
-  volunteer: null,
-  volunteerGroup: null,
+  assignee: null,
   category: actionItemCategory1,
   event: null,
+  ...baseActionItem,
 };
 
 export const itemWithoutCategory = {
-  ...baseActionItem,
-  volunteerId: 'volunteerUserId1',
-  volunteerGroupId: null,
   id: '4',
+  assigneeId: 'userId1',
   categoryId: null,
   eventId: null,
   assignedAt: new Date('2024-08-30'),
@@ -139,26 +117,20 @@ export const itemWithoutCategory = {
   preCompletionNotes: 'Notes 4',
   postCompletionNotes: null,
   isCompleted: false,
-  volunteer: {
-    id: 'volunteerUserId1',
-    hasAccepted: true,
-    isPublic: true,
-    hoursVolunteered: 8,
-    user: {
-      id: 'userId1',
-      name: 'John Doe',
-      avatarURL: 'user-image',
-    },
+  assignee: {
+    id: 'userId1',
+    name: 'John Doe',
+    emailAddress: 'john@example.com',
+    avatarURL: 'user-image',
   },
   category: null,
   event: null,
+  ...baseActionItem,
 };
 
 export const itemWithEmptyAssigneeName = {
-  ...baseActionItem,
-  volunteerId: 'volunteerUserId3',
-  volunteerGroupId: null,
   id: '5',
+  assigneeId: 'userId3',
   categoryId: 'actionItemCategoryId2',
   eventId: null,
   assignedAt: new Date('2024-08-31'),
@@ -166,56 +138,15 @@ export const itemWithEmptyAssigneeName = {
   preCompletionNotes: 'Notes 5',
   postCompletionNotes: null,
   isCompleted: false,
-  volunteer: {
-    id: 'volunteerUserId3',
-    hasAccepted: false,
-    isPublic: false,
-    hoursVolunteered: 0,
-    user: {
-      id: 'userId3',
-      name: '',
-      avatarURL: null,
-    },
+  assignee: {
+    id: 'userId3',
+    name: '',
+    emailAddress: 'empty@example.com',
+    avatarURL: null,
   },
   category: actionItemCategory2,
   event: null,
-};
-
-export const itemWithVolunteerGroup = {
   ...baseActionItem,
-  id: '6',
-  volunteerId: null,
-  volunteerGroupId: 'volunteerGroupId1',
-  categoryId: 'actionItemCategoryId1',
-  eventId: null,
-  assignedAt: new Date('2024-09-01'),
-  completionAt: null,
-  preCompletionNotes: 'Group task',
-  postCompletionNotes: null,
-  isCompleted: false,
-  volunteer: null,
-  volunteerGroup: {
-    id: 'volunteerGroupId1',
-    name: 'Community Helpers',
-    description: 'Helps with community outreach',
-    volunteersRequired: 3,
-    leader: {
-      id: 'leaderId1',
-      name: 'Casey GroupLeader',
-      avatarURL: null,
-    },
-    volunteers: [
-      {
-        id: 'member1',
-        user: {
-          id: 'userId4',
-          name: 'Group Member One',
-        },
-      },
-    ],
-  },
-  category: actionItemCategory1,
-  event: null,
 };
 
 export const memberListQuery = {
@@ -310,11 +241,27 @@ export const actionItemListQuery = {
         itemWithoutAssignee,
         itemWithoutCategory,
         itemWithEmptyAssigneeName,
-        itemWithVolunteerGroup,
       ],
     },
   },
 };
+
+export const actionItemListQueryEmpty = {
+  request: {
+    query: ACTION_ITEM_LIST,
+    variables: {
+      input: {
+        organizationId: 'orgId',
+      },
+    },
+  },
+  result: {
+    data: {
+      actionItemsByOrganization: [],
+    },
+  },
+};
+
 export const actionItemListQueryError = {
   request: {
     query: ACTION_ITEM_LIST,
@@ -326,6 +273,24 @@ export const actionItemListQueryError = {
   },
   error: new Error('Failed to fetch action items'),
 };
+
+export const actionItemListQueryLoading = {
+  request: {
+    query: ACTION_ITEM_LIST,
+    variables: {
+      input: {
+        organizationId: 'orgId',
+      },
+    },
+  },
+  delay: 30000, // Long delay to simulate loading
+  result: {
+    data: {
+      actionItemsByOrganization: [],
+    },
+  },
+};
+
 // Add mutation mocks for ItemUpdateStatusModal tests
 export const updateActionItemMutation = {
   request: {
@@ -493,6 +458,12 @@ export const MOCKS = [
   markActionAsPendingForInstanceMutation,
 ];
 
+export const MOCKS_EMPTY = [
+  actionItemListQueryEmpty,
+  memberListQuery,
+  actionItemCategoryListQuery,
+];
+
 export const MOCKS_ERROR = [
   actionItemListQueryError,
   memberListQuery,
@@ -501,4 +472,10 @@ export const MOCKS_ERROR = [
   deleteActionItemMutationError,
   completeActionForInstanceMutationError,
   markActionAsPendingForInstanceMutationError,
+];
+
+export const MOCKS_LOADING = [
+  actionItemListQueryLoading,
+  memberListQuery,
+  actionItemCategoryListQuery,
 ];

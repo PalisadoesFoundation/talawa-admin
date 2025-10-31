@@ -25,12 +25,45 @@ export const GET_ALL_PLUGINS = gql`
  * @param id - The ID of the plugin to retrieve.
  * @returns The plugin object with details such as id, pluginId, isActivated, isInstalled, createdAt, and updatedAt.
  */
+export const GET_PLUGIN_BY_ID = gql`
+  query GetPluginById($input: QueryPluginInput!) {
+    getPluginById(input: $input) {
+      id
+      pluginId
+      isActivated
+      isInstalled
+      backup
+      createdAt
+      updatedAt
+    }
+  }
+`;
 
 /**
  * GraphQL query to retrieve a list of advertisements.
  *
  * @returns The list of advertisements with details such as ID, name, type, organization ID, link, start date, and end date.
  */
+
+export const ADVERTISEMENTS_GET = gql`
+  query getAdvertisements {
+    advertisementsConnection {
+      edges {
+        node {
+          _id
+          name
+          type
+          organization {
+            _id
+          }
+          mediaUrl
+          endDate
+          startDate
+        }
+      }
+    }
+  }
+`;
 
 /**
  * GraphQL query to retrieve a list of events based on organization connection.

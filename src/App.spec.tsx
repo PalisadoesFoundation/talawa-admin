@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
-import { MemoryRouter } from 'react-router';
+import { BrowserRouter, MemoryRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import App from './App';
@@ -124,11 +124,29 @@ const ERROR_MOCKS = [
   },
 ];
 
+const LOADING_MOCKS = [
+  {
+    request: { query: CURRENT_USER },
+    delay: 1000, // Delay response to show loading state
+    result: {
+      data: {
+        currentUser: {
+          id: '123',
+          name: 'John Doe',
+          userType: 'USER',
+          appUserProfile: { adminFor: [] },
+        },
+      },
+    },
+  },
+];
+
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink([], true);
 const adminLink = new StaticMockLink(ADMIN_MOCKS, true);
 const superAdminLink = new StaticMockLink(SUPER_ADMIN_MOCKS, true);
 const errorLink = new StaticMockLink(ERROR_MOCKS, true);
+const loadingLink = new StaticMockLink(LOADING_MOCKS, true);
 
 const renderApp = (mockLink = link, initialRoute = '/') => {
   return render(
@@ -475,11 +493,9 @@ describe('Testing the App Component', () => {
     React.lazy = vi
       .fn()
       .mockImplementation(
-        <T extends React.ComponentType<unknown>>(
-          factory: () => Promise<{ default: T }>,
+        <T extends React.ComponentType<any>>(
+          _factory: () => Promise<{ default: T }>,
         ): React.LazyExoticComponent<T> => {
-          // Use factory parameter to avoid unused variable lint error
-          void factory;
           const mockComponent = React.forwardRef(() => {
             throw new Promise(() => {}); // Never resolves to keep loading
           }) as React.LazyExoticComponent<T>;

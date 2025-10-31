@@ -24,8 +24,7 @@ interface IActionUserInfo {
 
 export interface IActionItemInfo {
   id: string;
-  volunteerId: string | null;
-  volunteerGroupId: string | null;
+  assigneeId: string | null;
   avatarURL?: string;
   categoryId: string | null;
   eventId: string | null;
@@ -45,35 +44,7 @@ export interface IActionItemInfo {
   isTemplate?: boolean;
 
   // Related entities (populated via GraphQL)
-  volunteer: {
-    id: string;
-    hasAccepted: boolean;
-    isPublic: boolean;
-    hoursVolunteered: number;
-    user: {
-      id: string;
-      name: string;
-      avatarURL?: string | null;
-    };
-  } | null;
-  volunteerGroup: {
-    id: string;
-    name: string;
-    description: string | null;
-    volunteersRequired: number | null;
-    leader: {
-      id: string;
-      name: string;
-      avatarURL?: string | null;
-    };
-    volunteers?: {
-      id: string;
-      user: {
-        id: string;
-        name: string;
-      };
-    }[];
-  } | null;
+  assignee: IActionUserInfo | null;
   creator: IActionUserInfo | null;
   event: InterfaceEvent | null;
   recurringEventInstance: InterfaceEvent | null;
@@ -85,8 +56,7 @@ export interface IActionItemList {
 }
 
 export interface ICreateActionItemInput {
-  volunteerId?: string;
-  volunteerGroupId?: string;
+  assigneeId: string;
   categoryId: string;
   eventId?: string;
   recurringEventInstanceId?: string;
@@ -102,8 +72,7 @@ export interface ICreateActionItemVariables {
 
 export interface IUpdateActionItemInput {
   id: string;
-  volunteerId?: string;
-  volunteerGroupId?: string;
+  assigneeId?: string;
   categoryId?: string;
   isCompleted: boolean;
   preCompletionNotes?: string;
@@ -121,8 +90,7 @@ export interface IMarkActionItemAsPendingInput {
 export interface IFormStateType {
   assignedAt: Date;
   categoryId: string;
-  volunteerId: string;
-  volunteerGroupId: string;
+  assigneeId: string;
   eventId?: string;
   preCompletionNotes: string;
   postCompletionNotes: string | null;
@@ -148,54 +116,11 @@ export interface IUpdateActionItemForInstanceInput {
   postCompletionNotes?: string;
   isCompleted?: boolean;
   eventId?: string;
-  volunteerId?: string;
-  volunteerGroupId?: string;
+  assigneeId?: string;
   categoryId?: string;
   assignedAt?: string;
 }
 
 export interface IUpdateActionItemForInstanceVariables {
   input: IUpdateActionItemForInstanceInput;
-}
-
-export interface IUpdateActionForInstanceInput {
-  actionId: string;
-  eventId?: string;
-  volunteerId?: string;
-  volunteerGroupId?: string;
-  categoryId?: string;
-  assignedAt?: string;
-  preCompletionNotes?: string;
-}
-
-export interface IEventVolunteerGroup {
-  id: string;
-  name: string;
-  description: string | null;
-  volunteersRequired: number | null;
-  isTemplate: boolean;
-  isInstanceException: boolean;
-  createdAt: string;
-  creator: {
-    id: string;
-    name: string;
-    avatarURL?: string | null;
-  };
-  leader: {
-    id: string;
-    name: string;
-    avatarURL?: string | null;
-  };
-  volunteers: Array<{
-    id: string;
-    hasAccepted: boolean;
-    user: {
-      id: string;
-      name: string;
-      avatarURL?: string | null;
-    };
-  }>;
-  event: {
-    id: string;
-  };
 }

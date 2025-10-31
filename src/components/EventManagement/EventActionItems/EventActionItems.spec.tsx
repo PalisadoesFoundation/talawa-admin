@@ -139,8 +139,7 @@ vi.mock(
 
 const mockActionItem: IActionItemInfo = {
   id: 'actionItemId1',
-  volunteerId: 'userId1',
-  volunteerGroupId: null,
+  assigneeId: 'userId1',
   categoryId: 'categoryId1',
   eventId: 'eventId1',
   recurringEventInstanceId: null,
@@ -155,19 +154,12 @@ const mockActionItem: IActionItemInfo = {
   preCompletionNotes: 'Notes 1',
   postCompletionNotes: 'Post Notes 1',
   isInstanceException: false,
-
-  volunteer: {
-    id: 'volunteerId1',
-    hasAccepted: true,
-    isPublic: true,
-    hoursVolunteered: 5,
-    user: {
-      id: 'userId1',
-      name: 'John Doe',
-      avatarURL: '',
-    },
+  assignee: {
+    id: 'userId1',
+    name: 'John Doe',
+    emailAddress: 'john@example.com',
+    avatarURL: '',
   },
-  volunteerGroup: null,
   creator: {
     id: 'userId2',
     name: 'Jane Smith',
@@ -219,18 +211,11 @@ const mockEventData = {
           node: {
             ...mockActionItem,
             id: 'actionItemId2',
-            volunteerId: 'userId3',
             isCompleted: true,
-            volunteer: {
-              id: 'volunteerId2',
-              hasAccepted: true,
-              isPublic: true,
-              hoursVolunteered: 3,
-              user: {
-                id: 'userId3',
-                name: 'Bob Wilson',
-                avatarURL: '',
-              },
+            assignee: {
+              ...mockActionItem.assignee,
+              id: 'userId3',
+              name: 'Bob Wilson',
             },
             category: {
               ...mockActionItem.category,
@@ -362,7 +347,7 @@ describe('EventActionItems', () => {
       renderEventActionItems();
 
       await waitFor(() => {
-        expect(screen.getByText('Assigned To')).toBeInTheDocument();
+        expect(screen.getByText('Assignee')).toBeInTheDocument();
         expect(screen.getByText('Item Category')).toBeInTheDocument();
         expect(screen.getByText('Status')).toBeInTheDocument();
         expect(screen.getByText('Assigned Date')).toBeInTheDocument();
@@ -1028,7 +1013,7 @@ describe('EventActionItems', () => {
       renderEventActionItems();
 
       await waitFor(() => {
-        expect(screen.getByText('Assigned To')).toBeInTheDocument();
+        expect(screen.getByText('Assignee')).toBeInTheDocument();
         expect(screen.getByText('Item Category')).toBeInTheDocument();
         expect(screen.getByText('Status')).toBeInTheDocument();
         expect(screen.getByText('Assigned Date')).toBeInTheDocument();

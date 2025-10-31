@@ -4,6 +4,12 @@ import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTy
 
 import type { User, Feedback } from 'types/Event/type';
 
+export const Role = {
+  USER: 'USER',
+  SUPERADMIN: 'SUPERADMIN',
+  ADMIN: 'ADMIN',
+};
+
 export enum UserRole {
   ADMINISTRATOR = 'ADMINISTRATOR',
   REGULAR = 'REGULAR',

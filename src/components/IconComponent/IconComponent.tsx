@@ -35,7 +35,6 @@ import {
   NewspaperOutlined,
 } from '@mui/icons-material';
 import ActionItemIcon from 'assets/svgs/actionItem.svg?react';
-import React from 'react';
 import BlockUserIcon from 'assets/svgs/blockUser.svg?react';
 import CheckInRegistrantsIcon from 'assets/svgs/checkInRegistrants.svg?react';
 import DashboardIcon from 'assets/svgs/dashboard.svg?react';
@@ -54,6 +53,7 @@ import RequestsIcon from 'assets/svgs/requests.svg?react';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { MdOutlineVolunteerActivism } from 'react-icons/md';
 
+import React from 'react';
 import type { JSX } from 'react';
 
 export interface IIconComponent {
@@ -65,13 +65,6 @@ export interface IIconComponent {
 
 const iconComponent = (props: IIconComponent): JSX.Element => {
   switch (props.name) {
-    case 'ActionItem':
-      return (
-        <ActionItemIcon
-          stroke={props.fill}
-          data-testid="Icon-Component-ActionItemIcon"
-        />
-      );
     case 'My Organizations':
       return (
         <OrganizationsIcon
@@ -97,7 +90,13 @@ const iconComponent = (props: IIconComponent): JSX.Element => {
       );
     case 'Events':
       return <EventsIcon {...props} data-testid="Icon-Component-EventsIcon" />;
-
+    case 'Action Items':
+      return (
+        <ActionItemIcon
+          {...props}
+          data-testid="Icon-Component-ActionItemIcon"
+        />
+      );
     case 'Posts':
       return <PostsIcon {...props} data-testid="Icon-Component-PostsIcon" />;
     case 'Block/Unblock':

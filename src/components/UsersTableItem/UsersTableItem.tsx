@@ -133,9 +133,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   }
 
   // If there is a super admin notion, adapt this logic to your API.
-  const isSuperAdmin =
-    (user as unknown as { appUserProfile?: { isSuperAdmin?: boolean } })
-      ?.appUserProfile?.isSuperAdmin ?? false;
+  const isSuperAdmin = (user as any)?.appUserProfile?.isSuperAdmin ?? false;
 
   return (
     <>
@@ -218,19 +216,12 @@ const UsersTableItem = (props: Props): JSX.Element => {
                   {joinedOrgs.map((org) => {
                     // Adjust organization/admin mapping as per your data model
                     let isAdmin = false;
-                    const userWithProfile = user as unknown as {
-                      appUserProfile?: {
-                        adminFor?: Array<{ _id: string }>;
-                      };
-                    };
-                    if (userWithProfile?.appUserProfile?.adminFor) {
-                      userWithProfile.appUserProfile.adminFor.forEach(
-                        (item) => {
-                          if (item._id === org.id) {
-                            isAdmin = true;
-                          }
-                        },
-                      );
+                    if ((user as any)?.appUserProfile?.adminFor) {
+                      (user as any).appUserProfile.adminFor.map((item: any) => {
+                        if (item._id === org.id) {
+                          isAdmin = true;
+                        }
+                      });
                     }
                     return (
                       <tr key={`org-joined-${org.id}`}>

@@ -33,7 +33,7 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
     testId: 'Icon-Component-EventsIcon',
   },
   ActionItems: {
-    name: 'ActionItem',
+    name: 'Action Items',
     testId: 'Icon-Component-ActionItemIcon',
   },
   Posts: {

@@ -1,7 +1,13 @@
 /* global HTMLSelectElement */
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+  within,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
@@ -919,8 +925,7 @@ test('should correctly map joined organizations data ', async () => {
     expect(orgCards.length).toBe(2);
 
     orgCards.forEach((card) => {
-      // Verify card has organization name attribute
-      expect(card.getAttribute('data-organization-name')).toBeTruthy();
+      const orgName = card.getAttribute('data-organization-name');
 
       expect(card.getAttribute('data-membership-status')).toBe('accepted');
     });

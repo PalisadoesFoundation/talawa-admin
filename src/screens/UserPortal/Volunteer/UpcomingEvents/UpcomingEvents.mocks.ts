@@ -143,6 +143,21 @@ const baseRecurringEvent = {
   recurrenceRule: { frequency: 'WEEKLY' },
 };
 
+// Event without baseEventId for testing edge cases
+const recurringEventWithoutBase = {
+  id: 'eventWithoutBaseId',
+  name: 'Recurring Event Without Base',
+  startAt: '2044-11-02T10:00:00.000Z',
+  endAt: '2044-11-02T12:00:00.000Z',
+  location: 'Delhi',
+  description: 'Recurring event without baseEvent',
+  isRecurringEventTemplate: true, // This makes it a recurring template
+  baseEvent: null,
+  volunteerGroups: [],
+  volunteers: [],
+  recurrenceRule: { frequency: 'DAILY' },
+};
+
 // Common queries
 const eventsQuery = {
   request: {
@@ -329,6 +344,77 @@ export const RECURRING_MODAL_MOCKS = [
           '6',
           'baseEventId1',
           'recurringGroupId1',
+        ),
+      },
+    },
+  },
+];
+
+// Mocks for testing edge cases with events without baseEventId
+export const EDGE_CASE_MOCKS = [
+  {
+    ...eventsQuery,
+    result: {
+      data: {
+        organization: {
+          events: {
+            edges: [
+              { node: recurringInstanceEvent },
+              { node: baseRecurringEvent },
+              { node: recurringEventWithoutBase },
+            ],
+          },
+        },
+      },
+    },
+  },
+  {
+    ...membershipQuery,
+    result: { data: { getVolunteerMembership: [] } },
+  },
+  // Mock for events without baseEventId - series scope
+  {
+    request: {
+      query: CREATE_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        data: {
+          event: 'eventWithoutBaseId',
+          group: null,
+          status: 'requested',
+          userId: 'userId',
+          scope: 'ENTIRE_SERIES',
+        },
+      },
+    },
+    result: {
+      data: {
+        createVolunteerMembership: createMembershipResponse(
+          '7',
+          'eventWithoutBaseId',
+        ),
+      },
+    },
+  },
+  // Mock for events without baseEventId - instance scope
+  {
+    request: {
+      query: CREATE_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        data: {
+          event: 'eventWithoutBaseId',
+          group: null,
+          status: 'requested',
+          userId: 'userId',
+          scope: 'THIS_INSTANCE_ONLY',
+          recurringEventInstanceId: 'eventWithoutBaseId',
+        },
+      },
+    },
+    result: {
+      data: {
+        createVolunteerMembership: createMembershipResponse(
+          '8',
+          'eventWithoutBaseId',
         ),
       },
     },

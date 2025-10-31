@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  within,
-} from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import PluginStore from './PluginStore';
@@ -55,6 +49,9 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+// Get the mocked toast for assertions
+const getMockedToast = () => require('react-toastify').toast;
+
 describe('PluginStore', () => {
   const mockLoadedPlugins = [
     {
@@ -97,18 +94,12 @@ describe('PluginStore', () => {
       pluginId: 'test-plugin-1',
       isInstalled: true,
       isActivated: true,
-      backup: false,
-      createdAt: '2024-01-01T00:00:00.000Z',
-      updatedAt: '2024-01-01T00:00:00.000Z',
     },
     {
       id: '2',
       pluginId: 'test-plugin-2',
       isInstalled: false,
       isActivated: false,
-      backup: false,
-      createdAt: '2024-01-01T00:00:00.000Z',
-      updatedAt: '2024-01-01T00:00:00.000Z',
     },
   ];
 
@@ -118,14 +109,12 @@ describe('PluginStore', () => {
     // Mock plugin hooks
     vi.mocked(pluginHooks.useLoadedPlugins).mockReturnValue(mockLoadedPlugins);
 
-    // Mock plugin manager - use Partial<PluginManager> for type safety
+    // Mock plugin manager
     const mockPluginManager = {
       loadPlugin: vi.fn().mockResolvedValue(true),
       unloadPlugin: vi.fn().mockResolvedValue(true),
       togglePluginStatus: vi.fn().mockResolvedValue(true),
-      installPlugin: vi.fn().mockResolvedValue(true),
-      uninstallPlugin: vi.fn().mockResolvedValue(true),
-    } as unknown as ReturnType<typeof pluginManager.getPluginManager>;
+    } as any;
     vi.mocked(pluginManager.getPluginManager).mockReturnValue(
       mockPluginManager,
     );
@@ -136,9 +125,9 @@ describe('PluginStore', () => {
     });
 
     // Mock admin plugin file service
-    vi.mocked(
-      adminPluginFileService.adminPluginFileService.removePlugin,
-    ).mockResolvedValue(true);
+    (adminPluginFileService.adminPluginFileService.removePlugin as any) = vi
+      .fn()
+      .mockResolvedValue(true);
   });
 
   const renderPluginStore = () => {
@@ -243,6 +232,7 @@ describe('PluginStore', () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // Find the dropdown option for installed plugins by data-testid in document.body
+      const { within } = require('@testing-library/react');
       const installedOption = within(document.body).getByTestId('installed');
       fireEvent.click(installedOption);
 
@@ -495,6 +485,7 @@ describe('PluginStore', () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // Find the dropdown option for installed plugins by data-testid in document.body
+      const { within } = require('@testing-library/react');
       const installedOption = within(document.body).getByTestId('installed');
       await userEvent.click(installedOption);
 
@@ -529,9 +520,6 @@ describe('PluginStore', () => {
           pluginId: 'test-plugin-1',
           isInstalled: true,
           isActivated: true,
-          backup: false,
-          createdAt: '2024-01-01T00:00:00.000Z',
-          updatedAt: '2024-01-01T00:00:00.000Z',
         },
       ];
 
@@ -674,9 +662,7 @@ describe('PluginStore', () => {
         loadPlugin: vi.fn().mockResolvedValue(true),
         unloadPlugin: vi.fn().mockResolvedValue(true),
         togglePluginStatus: vi.fn().mockResolvedValue(false),
-        installPlugin: vi.fn().mockResolvedValue(true),
-        uninstallPlugin: vi.fn().mockResolvedValue(true),
-      } as unknown as ReturnType<typeof pluginManager.getPluginManager>;
+      } as any;
       vi.mocked(pluginManager.getPluginManager).mockReturnValue(
         mockPluginManager,
       );
@@ -714,9 +700,7 @@ describe('PluginStore', () => {
         loadPlugin: vi.fn().mockResolvedValue(true),
         unloadPlugin: vi.fn().mockResolvedValue(false),
         togglePluginStatus: vi.fn().mockResolvedValue(true),
-        installPlugin: vi.fn().mockResolvedValue(true),
-        uninstallPlugin: vi.fn().mockResolvedValue(true),
-      } as unknown as ReturnType<typeof pluginManager.getPluginManager>;
+      } as any;
       vi.mocked(pluginManager.getPluginManager).mockReturnValue(
         mockPluginManager,
       );
@@ -758,9 +742,9 @@ describe('PluginStore', () => {
 
     it('should handle admin plugin file service failure', async () => {
       // Mock admin plugin file service to fail
-      vi.mocked(
-        adminPluginFileService.adminPluginFileService.removePlugin,
-      ).mockResolvedValue(false);
+      (adminPluginFileService.adminPluginFileService.removePlugin as any) = vi
+        .fn()
+        .mockResolvedValue(false);
 
       mockDeletePlugin.mockResolvedValue({
         data: { deletePlugin: { id: '1' } },

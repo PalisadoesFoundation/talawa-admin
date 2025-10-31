@@ -1,21 +1,7 @@
 /**
- * @file EventActionItems.tsx
- * @summary This component renders a comprehensive management interface for action items associated with a specific event.
- *
- * @description
- * The EventActionItems component is responsible for fetching, displaying, and managing all action items linked to a given event ID.
- * It provides a user interface that includes:
- * - A data grid to display the list of action items with details like assignee, category, status, and assigned date.
- * - Functionality to create, view, edit, and delete action items through various modal windows.
- * - Controls for searching by assignee or category, sorting by assignment date, and filtering by completion status.
- * - Logic to differentiate between recurring and non-recurring events to handle template action items and instance-specific exceptions correctly.
- *
- * @component
- * @param {object} props - The component props.
- * @param {string} props.eventId - The unique identifier for the event whose action items are to be displayed.
- * @param {Function} [props.orgActionItemsRefetch] - An optional callback function to trigger a refetch of action items at the organization level, ensuring data consistency across different views.
- *
- * @returns {JSX.Element} A React component that renders the event action items management view.
+ * @file This file contains the OrganizationActionItems component, which displays a list of action items for an organization.
+ * It includes features for searching, sorting, and filtering action items.
+ * The component also provides modals for creating, viewing, updating, and deleting action items.
  */
 import React, {
   useCallback,
@@ -32,11 +18,14 @@ import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client';
-import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
+import { ACTION_ITEM_LIST } from 'GraphQl/Queries/Queries';
 
-import type { IActionItemInfo } from 'types/ActionItems/interface';
+import type {
+  IActionItemInfo,
+  IActionItemList,
+} from 'types/ActionItems/interface';
 
-import styles from 'style/app-fixed.module.css';
+import styles from '../../style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
@@ -44,11 +33,11 @@ import {
   type GridColDef,
 } from '@mui/x-data-grid';
 import { Chip, debounce, Stack } from '@mui/material';
-import ItemViewModal from 'screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal';
-import ItemModal from 'screens/OrganizationActionItems/ActionItemModal/ActionItemModal';
-import ItemDeleteModal from 'screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal';
+import ItemViewModal from './ActionItemViewModal/ActionItemViewModal';
+import ItemModal from './ActionItemModal/ActionItemModal';
+import ItemDeleteModal from './ActionItemDeleteModal/ActionItemDeleteModal';
 import Avatar from 'components/Avatar/Avatar';
-import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
+import ItemUpdateStatusModal from './ActionItemUpdateModal/ActionItemUpdateStatusModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
 
@@ -65,22 +54,14 @@ enum ModalState {
   STATUS = 'status',
 }
 
-interface EventActionItemsProps {
-  eventId: string;
-  orgActionItemsRefetch?: () => void;
-}
-
-const EventActionItems: React.FC<EventActionItemsProps> = ({
-  eventId,
-  orgActionItemsRefetch,
-}) => {
+function OrganizationActionItems(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
-  const { orgId } = useParams();
+  const { orgId, eventId } = useParams();
 
   if (!orgId) {
     return <Navigate to={'/'} replace />;
@@ -95,8 +76,6 @@ const EventActionItems: React.FC<EventActionItemsProps> = ({
   const [status, setStatus] = useState<ItemStatus | null>(null);
   const [searchBy, setSearchBy] = useState<'assignee' | 'category'>('assignee');
   const [actionItems, setActionItems] = useState<IActionItemInfo[]>([]);
-  const [isRecurring, setIsRecurring] = useState<boolean>(false);
-  const [baseEvent, setBaseEvent] = useState<{ id: string } | null>(null);
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
   }>({
@@ -124,22 +103,21 @@ const EventActionItems: React.FC<EventActionItemsProps> = ({
   );
 
   const {
-    data: eventData,
-    loading: eventInfoLoading,
-    error: eventInfoError,
-    refetch: eventActionItemsRefetch,
-  } = useQuery(GET_EVENT_ACTION_ITEMS, {
+    data: actionItemsData,
+    loading: actionItemsLoading,
+    error: actionItemsError,
+    refetch: actionItemsRefetch,
+  }: {
+    data: IActionItemList | undefined;
+    loading: boolean;
+    error?: Error | undefined;
+    refetch: () => void;
+  } = useQuery(ACTION_ITEM_LIST, {
     variables: {
       input: {
-        id: eventId,
+        organizationId: orgId,
       },
     },
-    // Use cache-first but ensure fresh data for recurring event instances
-    // This prevents cached action items from showing template data instead of instance exception data
-    fetchPolicy: 'cache-first',
-    notifyOnNetworkStatusChange: true,
-    // Force refetch when eventId changes to ensure exception logic is applied
-    nextFetchPolicy: 'cache-and-network',
   });
 
   const debouncedSearch = useMemo(
@@ -148,21 +126,18 @@ const EventActionItems: React.FC<EventActionItemsProps> = ({
   );
 
   useEffect(() => {
-    if (eventData && eventData.event) {
-      const items = eventData.event.actionItems.edges.map(
-        (edge: { node: IActionItemInfo }) => edge.node,
-      );
-      let filteredItems = items;
+    if (actionItemsData && actionItemsData.actionItemsByOrganization) {
+      let filteredItems = actionItemsData.actionItemsByOrganization;
 
       if (status !== null) {
         const isCompleted = status === ItemStatus.Completed;
         filteredItems = filteredItems.filter(
-          (item: IActionItemInfo) => item.isCompleted === isCompleted,
+          (item) => item.isCompleted === isCompleted,
         );
       }
 
       if (searchTerm) {
-        filteredItems = filteredItems.filter((item: IActionItemInfo) => {
+        filteredItems = filteredItems.filter((item) => {
           if (searchBy === 'assignee') {
             const assigneeName = item.assignee?.name || '';
             return assigneeName
@@ -178,37 +153,27 @@ const EventActionItems: React.FC<EventActionItemsProps> = ({
       }
 
       if (sortBy) {
-        filteredItems = [...filteredItems].sort(
-          (a: IActionItemInfo, b: IActionItemInfo) => {
-            const dateA = new Date(a.assignedAt);
-            const dateB = new Date(b.assignedAt);
+        filteredItems = [...filteredItems].sort((a, b) => {
+          const dateA = new Date(a.assignedAt);
+          const dateB = new Date(b.assignedAt);
 
-            if (sortBy === 'assignedAt_DESC') {
-              return dateB.getTime() - dateA.getTime();
-            } else {
-              return dateA.getTime() - dateB.getTime();
-            }
-          },
-        );
+          if (sortBy === 'assignedAt_DESC') {
+            return dateB.getTime() - dateA.getTime();
+          } else {
+            return dateA.getTime() - dateB.getTime();
+          }
+        });
       }
 
       setActionItems(filteredItems);
-      setIsRecurring(!!eventData.event.recurrenceRule);
-      setBaseEvent(eventData.event.baseEvent);
     }
-  }, [eventData, status, searchTerm, searchBy, sortBy]);
+  }, [actionItemsData, eventId, status, searchTerm, searchBy, sortBy]);
 
-  // Force refetch when eventId changes to ensure exception logic is applied
-  // This fixes the caching issue where template data is shown instead of exception data
-  useEffect(() => {
-    eventActionItemsRefetch();
-  }, [eventId, eventActionItemsRefetch]);
-
-  if (eventInfoLoading) {
+  if (actionItemsLoading) {
     return <Loader size="xl" />;
   }
 
-  if (eventInfoError) {
+  if (actionItemsError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={styles.icon} fontSize="large" />
@@ -232,21 +197,47 @@ const EventActionItems: React.FC<EventActionItemsProps> = ({
       renderCell: (params: GridCellParams) => {
         const assignee = params.row.assignee;
         const displayName = assignee?.name || 'No assignee';
-
         return (
           <div
             className="d-flex fw-bold align-items-center ms-2"
             data-testid="assigneeName"
-            style={{ height: '100%' }}
+            style={{
+              height: '100%',
+              width: '100%',
+              maxWidth: '100%',
+              overflow: 'hidden',
+            }}
           >
-            <div className={styles.TableImage}>
-              <Avatar
-                key={assignee?.id || 'no-assignee'}
-                name={displayName}
-                alt={displayName}
-              />
+            <div className={styles.tableImageWrapper}>
+              {assignee?.avatarURL ? (
+                <img
+                  src={assignee.avatarURL}
+                  crossOrigin="anonymous"
+                  className={styles.TableImage}
+                  alt={displayName}
+                />
+              ) : (
+                <div className={styles.TableImage}>
+                  <Avatar
+                    key={assignee?.id || 'no-assignee'}
+                    name={displayName}
+                    alt={displayName}
+                  />
+                </div>
+              )}
             </div>
-            <span className={!assignee ? 'text-muted' : ''}>{displayName}</span>
+            <span
+              className={!assignee ? 'text-muted' : ''}
+              style={{
+                flex: 1,
+                minWidth: 0,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {displayName}
+            </span>
           </div>
         );
       },
@@ -267,6 +258,28 @@ const EventActionItems: React.FC<EventActionItemsProps> = ({
             data-testid="categoryName"
           >
             {params.row.category?.name || 'No category'}
+          </div>
+        );
+      },
+    },
+    {
+      field: 'event',
+      headerName: 'Event',
+      flex: 1,
+      align: 'center',
+      minWidth: 100,
+      headerAlign: 'center',
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <div
+            className="d-flex justify-content-center fw-bold"
+            data-testid="eventName"
+          >
+            {params.row.recurringEventInstance?.name ||
+              params.row.event?.name ||
+              'No event'}
           </div>
         );
       },
@@ -450,6 +463,7 @@ const EventActionItems: React.FC<EventActionItemsProps> = ({
             onClick={() => handleModalClick(null, ModalState.SAME)}
             className={styles.createButton}
             data-testid="createActionItemBtn"
+            data-cy="createActionItemBtn"
           >
             <i className={'fa fa-plus me-2'} />
             {tCommon('create')}
@@ -493,12 +507,10 @@ const EventActionItems: React.FC<EventActionItemsProps> = ({
         hide={() => closeModal(ModalState.SAME)}
         orgId={orgId}
         eventId={eventId}
-        actionItemsRefetch={eventActionItemsRefetch}
-        orgActionItemsRefetch={orgActionItemsRefetch}
+        actionItemsRefetch={actionItemsRefetch}
+        orgActionItemsRefetch={actionItemsRefetch}
         actionItem={actionItem}
         editMode={modalMode === 'edit'}
-        isRecurring={isRecurring}
-        baseEvent={baseEvent}
       />
 
       {actionItem && (
@@ -513,23 +525,19 @@ const EventActionItems: React.FC<EventActionItemsProps> = ({
             actionItem={actionItem}
             isOpen={modalState[ModalState.STATUS]}
             hide={() => closeModal(ModalState.STATUS)}
-            actionItemsRefetch={eventActionItemsRefetch}
-            isRecurring={isRecurring}
-            eventId={eventId}
+            actionItemsRefetch={actionItemsRefetch}
           />
 
           <ItemDeleteModal
             isOpen={modalState[ModalState.DELETE]}
             hide={() => closeModal(ModalState.DELETE)}
             actionItem={actionItem}
-            actionItemsRefetch={eventActionItemsRefetch}
-            eventId={eventId}
-            isRecurring={isRecurring}
+            actionItemsRefetch={actionItemsRefetch}
           />
         </>
       )}
     </div>
   );
-};
+}
 
-export default EventActionItems;
+export default OrganizationActionItems;

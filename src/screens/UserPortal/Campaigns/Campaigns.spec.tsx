@@ -60,6 +60,10 @@ const cTranslations = JSON.parse(
   ),
 );
 
+const pTranslations = JSON.parse(
+  JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
+);
+
 /*
  * Renders the `Campaigns` component for testing.
  *

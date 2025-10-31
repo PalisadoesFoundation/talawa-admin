@@ -75,7 +75,6 @@ interface InterfaceRequestsListItem {
   createdAt: string;
   status: string;
   user: {
-    avatarURL?: string;
     id: string;
     name: string;
     emailAddress: string;
@@ -114,42 +113,40 @@ const Requests = (): JSX.Element => {
     },
     notifyOnNetworkStatusChange: true,
   });
-
+  console.log(data);
+  // Query to fetch the list of organizations
   const { data: orgsData } = useQuery(ORGANIZATION_LIST);
   const [displayedRequests, setDisplayedRequests] = useState<
     InterfaceRequestsListItem[]
   >([]);
 
-  // Update displayed requests when data changes
+  // Manage loading more state
   useEffect(() => {
-    if (!data?.organization?.membershipRequests) {
+    if (!data) {
       return;
     }
 
-    const allRequests = data.organization.membershipRequests;
+    const allRequests = data.organization?.membershipRequests || [];
+    // Filter to only show pending requests
     const pendingRequests = allRequests.filter(
       (req: { status: string }) => req.status === 'pending',
     );
-    setIsLoading(false);
-    setIsLoadingMore(false);
-    setDisplayedRequests(pendingRequests);
 
-    // Update hasMore based on whether we have a full page of results
-    if (allRequests.length < perPageResult) {
+    if (pendingRequests.length < perPageResult) {
       setHasMore(false);
-    } else {
-      setHasMore(true);
     }
-  }, [data, perPageResult]);
 
-  // Clear search on unmount
+    setDisplayedRequests(pendingRequests);
+  }, [data]);
+
+  // Clear the search field when the component is unmounted
   useEffect(() => {
     return () => {
       setSearchByName('');
     };
   }, []);
 
-  // Check for organizations
+  // Show a warning if there are no organizations
   useEffect(() => {
     if (!orgsData) {
       return;
@@ -161,18 +158,17 @@ const Requests = (): JSX.Element => {
     }
   }, [orgsData, t]);
 
-  // Check authorization
+  // new useEffect to check if user is authorized
   useEffect(() => {
-    const isSuperAdmin = getItem('SuperAdmin');
-    const isAdmin = userRole?.toLowerCase() === 'administrator';
-    if (!(isAdmin || isSuperAdmin)) {
+    const isAuthorized = userRole?.toLowerCase() === 'administrator';
+    if (!isAuthorized) {
       window.location.assign('/orglist');
     }
-  }, [userRole]);
+  }, []);
 
-  // Manage loading state
+  // Manage the loading state
   useEffect(() => {
-    if (loading && !isLoadingMore) {
+    if (loading && isLoadingMore == false) {
       setIsLoading(true);
     } else {
       setIsLoading(false);
@@ -191,11 +187,7 @@ const Requests = (): JSX.Element => {
       return;
     }
     refetch({
-      input: {
-        id: organizationId,
-      },
-      first: perPageResult,
-      skip: 0,
+      id: organizationId,
       name_contains: value,
       // Later on we can add several search and filter options
     });
@@ -206,9 +198,6 @@ const Requests = (): JSX.Element => {
    */
   const resetAndRefetch = (): void => {
     refetch({
-      input: {
-        id: organizationId,
-      },
       first: perPageResult,
       skip: 0,
       name_contains: '',
@@ -222,37 +211,26 @@ const Requests = (): JSX.Element => {
 
   const loadMoreRequests = (): void => {
     setIsLoadingMore(true);
-
-    const currentLength = data?.organization?.membershipRequests?.length ?? 0;
-
     fetchMore({
       variables: {
         input: { id: organizationId },
-        first: perPageResult,
-        skip: currentLength,
+        skip: data?.organization?.membershipRequests?.length || 0,
         name_contains: searchByName,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         setIsLoadingMore(false);
-
-        if (!fetchMoreResult?.organization?.membershipRequests) {
-          setHasMore(false);
-          return prev;
-        }
-
-        const newRequests = fetchMoreResult.organization.membershipRequests;
-
-        // If we got fewer results than requested, we've reached the end
-        if (newRequests.length < perPageResult) {
+        if (!fetchMoreResult) return prev;
+        const newMembershipRequests =
+          fetchMoreResult.organization?.membershipRequests || [];
+        if (newMembershipRequests.length < perPageResult) {
           setHasMore(false);
         }
         return {
           organization: {
-            ...prev.organization,
             id: organizationId,
             membershipRequests: [
-              ...prev.organization.membershipRequests,
-              ...newRequests,
+              ...(prev?.organization?.membershipRequests || []),
+              ...newMembershipRequests,
             ],
           },
         };
@@ -263,7 +241,6 @@ const Requests = (): JSX.Element => {
   // Header titles for the table
   const headerTitles: string[] = [
     t('sl_no'),
-    t('profile'),
     tCommon('name'),
     tCommon('email'),
     t('accept'),
@@ -277,7 +254,12 @@ const Requests = (): JSX.Element => {
         className={`${styles.btnsContainer} gap-4 flex-wrap`}
         data-testid="testComp"
       >
-        <div className={`${styles.input}`}>
+        <div
+          className={`${styles.input}`}
+          style={{
+            display: userRole === 'administrator' ? 'block' : 'none',
+          }}
+        >
           <SearchBar
             placeholder={t('searchRequests')}
             onSearch={handleSearch}
@@ -312,20 +294,21 @@ const Requests = (): JSX.Element => {
             <TableLoader headerTitles={headerTitles} noOfRows={perPageResult} />
           ) : (
             <InfiniteScroll
-              dataLength={displayedRequests.length}
+              dataLength={displayedRequests.length ?? 0}
               next={loadMoreRequests}
-              loader={<TableLoader noOfCols={6} noOfRows={2} />}
+              loader={
+                <TableLoader
+                  noOfCols={headerTitles.length}
+                  noOfRows={perPageResult}
+                />
+              }
               hasMore={hasMore}
               className={styles.listTable}
               data-testid="requests-list"
-              scrollThreshold={0.9}
-              style={{ overflow: 'visible' }}
               endMessage={
-                displayedRequests.length > 0 ? (
-                  <div className={'w-100 text-center my-4'}>
-                    <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
-                  </div>
-                ) : null
+                <div className={'w-100 text-center my-4'}>
+                  <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
+                </div>
               }
             >
               <TableContainer
@@ -353,18 +336,19 @@ const Requests = (): JSX.Element => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {displayedRequests.map(
-                      (request: InterfaceRequestsListItem, index: number) => {
-                        return (
-                          <RequestsTableItem
-                            key={request?.membershipRequestId}
-                            index={index}
-                            resetAndRefetch={resetAndRefetch}
-                            request={request}
-                          />
-                        );
-                      },
-                    )}
+                    {data &&
+                      displayedRequests.map(
+                        (request: InterfaceRequestsListItem, index: number) => {
+                          return (
+                            <RequestsTableItem
+                              key={request?.membershipRequestId}
+                              index={index}
+                              resetAndRefetch={resetAndRefetch}
+                              request={request}
+                            />
+                          );
+                        },
+                      )}
                   </TableBody>
                 </Table>
               </TableContainer>

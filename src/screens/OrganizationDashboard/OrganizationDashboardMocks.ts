@@ -22,29 +22,7 @@ export const MOCKS = [
               { node: { id: '1', role: 'administrator' }, cursor: 'cursor1' },
               { node: { id: '2', role: 'member' }, cursor: 'cursor2' },
             ],
-            pageInfo: { hasNextPage: true, endCursor: 'cursor2' },
-          },
-        },
-      },
-      loading: false,
-    },
-  },
-
-  // Pagination mock for GET_ORGANIZATION_MEMBERS_PG with after: 'cursor2'
-  {
-    request: {
-      query: GET_ORGANIZATION_MEMBERS_PG,
-      variables: { id: 'orgId', first: 32, after: 'cursor2' },
-    },
-    result: {
-      data: {
-        organization: {
-          members: {
-            edges: [
-              { node: { id: '3', role: 'member' }, cursor: 'cursor3' },
-              { node: { id: '4', role: 'member' }, cursor: 'cursor4' },
-            ],
-            pageInfo: { hasNextPage: false, endCursor: 'cursor4' },
+            pageInfo: { hasNextPage: false, endCursor: null },
           },
         },
       },
@@ -106,55 +84,7 @@ export const MOCKS = [
                 cursor: 'cursor1',
               },
             ],
-            pageInfo: { hasNextPage: true, endCursor: 'cursor2' },
-          },
-        },
-      },
-      loading: false,
-    },
-  },
-
-  // Pagination mock for GET_ORGANIZATION_EVENTS_PG with after: 'cursor2'
-  {
-    request: {
-      query: GET_ORGANIZATION_EVENTS_PG,
-      variables: { id: 'orgId', first: 50, after: 'cursor2' },
-    },
-    result: {
-      data: {
-        organization: {
-          events: {
-            edges: [
-              {
-                node: {
-                  id: 'event2',
-                  name: 'Event Two',
-                  description: 'Description for Event Two',
-                  startAt: '2025-11-01T00:00:00.000Z',
-                  endAt: '2025-11-02T00:00:00.000Z',
-                  allDay: false,
-                  location: 'Secondary Location',
-                  isPublic: true,
-                  isRegisterable: true,
-                  isMaterialized: true,
-                  isRecurringTemplate: false,
-                  recurringEventId: null,
-                  instanceStartTime: null,
-                  baseEventId: null,
-                  sequenceNumber: null,
-                  totalCount: 1,
-                  hasExceptions: false,
-                  progressLabel: null,
-                  attachments: [],
-                  creator: { id: 'creator2', name: 'Jane Smith' },
-                  organization: { id: 'orgId', name: 'Test Organization' },
-                  createdAt: '2025-10-29T00:00:00.000Z',
-                  updatedAt: '2025-10-29T00:00:00.000Z',
-                },
-                cursor: 'cursor3',
-              },
-            ],
-            pageInfo: { hasNextPage: false, endCursor: 'cursor3' },
+            pageInfo: { hasNextPage: false, endCursor: null },
           },
         },
       },
@@ -290,7 +220,6 @@ export const MOCKS = [
                 id: 'user1',
                 name: 'Pending User 1',
                 emailAddress: 'user1@example.com',
-                avatarURL: 'https://example.com/avatar1.jpg',
               },
             },
             {
@@ -301,7 +230,6 @@ export const MOCKS = [
                 id: 'user2',
                 name: 'Pending User 2',
                 emailAddress: 'user2@example.com',
-                avatarURL: null,
               },
             },
           ],
@@ -503,7 +431,6 @@ export const MIXED_REQUESTS_MOCK = [
                 id: 'user1',
                 name: 'Pending User 1',
                 emailAddress: 'user1@example.com',
-                avatarURL: 'https://example.com/avatar1.jpg',
               },
             },
             {
@@ -514,7 +441,6 @@ export const MIXED_REQUESTS_MOCK = [
                 id: 'user2',
                 name: 'Pending User 2',
                 emailAddress: 'user2@example.com',
-                avatarURL: 'https://example.com/avatar2.jpg',
               },
             },
             {
@@ -525,7 +451,6 @@ export const MIXED_REQUESTS_MOCK = [
                 id: 'user3',
                 name: 'Pending User 3',
                 emailAddress: 'user3@example.com',
-                avatarURL: null,
               },
             },
             {
@@ -536,7 +461,6 @@ export const MIXED_REQUESTS_MOCK = [
                 id: 'user4',
                 name: 'Rejected User',
                 emailAddress: 'rejected@example.com',
-                avatarURL: null,
               },
             },
           ],

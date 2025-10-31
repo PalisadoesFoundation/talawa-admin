@@ -37,7 +37,7 @@ import PluginLogo from 'assets/svgs/plugins.svg?react';
 import styles from '../../../style/app-fixed.module.css';
 import { usePluginDrawerItems } from 'plugin';
 import type { IDrawerExtension } from 'plugin';
-import useLocalStorage from 'utils/useLocalstorage';
+import useLocalStorage, { setItem } from 'utils/useLocalstorage';
 import { FaBars } from 'react-icons/fa';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';

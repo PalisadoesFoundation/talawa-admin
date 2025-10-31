@@ -1,3 +1,4 @@
+/* global HTMLElement */
 /**
  * This file contains unit tests for the UserScreen component.
  *
@@ -10,7 +11,7 @@
  */
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, vi, beforeEach, expect } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -80,6 +81,15 @@ const MOCKS = [
   },
 ];
 const link = new StaticMockLink(MOCKS, true);
+
+const resizeWindow = (width: number): void => {
+  window.innerWidth = width;
+  fireEvent(window, new window.Event('resize'));
+};
+
+const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
+  fireEvent.click(toggleButton);
+};
 
 describe('UserScreen tests with LeftDrawer functionality', () => {
   beforeEach(() => {

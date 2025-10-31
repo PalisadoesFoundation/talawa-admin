@@ -65,12 +65,48 @@ export const REMOVE_EVENT_ATTENDEE = gql`
  * @returns The check-out record.
  */
 
+export const MARK_CHECKOUT = gql`
+  mutation checkOut($userId: ID!, $eventId: ID, $recurringEventInstanceId: ID) {
+    checkOut(
+      data: {
+        userId: $userId
+        eventId: $eventId
+        recurringEventInstanceId: $recurringEventInstanceId
+      }
+    ) {
+      id
+      user {
+        id
+      }
+      checkinTime
+      checkoutTime
+      isCheckedIn
+      isCheckedOut
+      feedbackSubmitted
+    }
+  }
+`;
+
 /**
  * GraphQL mutation to register current user for an event.
  *
  * @param id - The ID of the event or recurring event instance to register for.
  * @returns The event attendee record.
  */
+
+export const REGISTER_FOR_EVENT = gql`
+  mutation registerForEvent($id: ID!) {
+    registerForEvent(id: $id) {
+      id
+      user {
+        id
+        name
+        emailAddress
+      }
+      isRegistered
+    }
+  }
+`;
 
 /**
  * GraphQL mutation to register a user for an event (admin operation).
@@ -81,6 +117,30 @@ export const REMOVE_EVENT_ATTENDEE = gql`
  * @returns The event attendee record.
  */
 
+export const REGISTER_EVENT_ATTENDEE = gql`
+  mutation registerEventAttendee(
+    $userId: ID!
+    $eventId: ID
+    $recurringEventInstanceId: ID
+  ) {
+    registerEventAttendee(
+      data: {
+        userId: $userId
+        eventId: $eventId
+        recurringEventInstanceId: $recurringEventInstanceId
+      }
+    ) {
+      id
+      user {
+        id
+        name
+        emailAddress
+      }
+      isRegistered
+    }
+  }
+`;
+
 /**
  * GraphQL mutation to invite a user to an event.
  *
@@ -90,12 +150,42 @@ export const REMOVE_EVENT_ATTENDEE = gql`
  * @returns The event attendee record.
  */
 
+export const INVITE_EVENT_ATTENDEE = gql`
+  mutation inviteEventAttendee(
+    $userId: ID!
+    $eventId: ID
+    $recurringEventInstanceId: ID
+  ) {
+    inviteEventAttendee(
+      data: {
+        userId: $userId
+        eventId: $eventId
+        recurringEventInstanceId: $recurringEventInstanceId
+      }
+    ) {
+      id
+      user {
+        id
+        name
+        emailAddress
+      }
+      isInvited
+    }
+  }
+`;
+
 /**
  * GraphQL mutation to unregister current user from an event.
  *
  * @param id - The ID of the event or recurring event instance to unregister from.
  * @returns Success indicator.
  */
+
+export const UNREGISTER_FOR_EVENT_BY_USER = gql`
+  mutation unregisterForEventByUser($id: ID!) {
+    unregisterForEventByUser(id: $id)
+  }
+`;
 
 /**
  * GraphQL mutation to mark a user's check-in at an event.

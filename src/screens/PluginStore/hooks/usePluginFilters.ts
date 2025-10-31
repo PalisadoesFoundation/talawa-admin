@@ -5,18 +5,13 @@ import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLoadedPlugins } from 'plugin/hooks';
 import useDebounce from 'components/OrgListCard/useDebounce';
-import type { IPluginMeta, IInstalledPlugin } from 'plugin';
-import type { IPlugin } from 'plugin/graphql-service';
+import type { IPluginMeta } from 'plugin';
 
-interface IPluginData {
-  getPlugins?: IPlugin[];
+interface UsePluginFiltersProps {
+  pluginData: any;
 }
 
-interface IUsePluginFiltersProps {
-  pluginData: IPluginData | undefined;
-}
-
-export function usePluginFilters({ pluginData }: IUsePluginFiltersProps) {
+export function usePluginFilters({ pluginData }: UsePluginFiltersProps) {
   const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
   const loadedPlugins = useLoadedPlugins();
 
@@ -37,7 +32,7 @@ export function usePluginFilters({ pluginData }: IUsePluginFiltersProps) {
 
       // Check in GraphQL data
       const graphqlPlugin = pluginData?.getPlugins?.find(
-        (p) => p.pluginId === pluginName,
+        (p: any) => p.pluginId === pluginName,
       );
       return graphqlPlugin?.isInstalled || false;
     },
@@ -45,10 +40,10 @@ export function usePluginFilters({ pluginData }: IUsePluginFiltersProps) {
   );
 
   const getInstalledPlugin = useCallback(
-    (pluginName: string): IInstalledPlugin | undefined => {
+    (pluginName: string): any => {
       // First check GraphQL data (source of truth for status)
       const graphqlPlugin = pluginData?.getPlugins?.find(
-        (p) => p.pluginId === pluginName,
+        (p: any) => p.pluginId === pluginName,
       );
       if (graphqlPlugin) {
         return {
@@ -61,7 +56,9 @@ export function usePluginFilters({ pluginData }: IUsePluginFiltersProps) {
           cdnUrl: '',
           readme: '',
           screenshots: [],
-          changelog: [],
+          homepage: '',
+          license: '',
+          tags: [],
           status: graphqlPlugin.isActivated ? 'active' : 'inactive',
         };
       }
@@ -71,9 +68,6 @@ export function usePluginFilters({ pluginData }: IUsePluginFiltersProps) {
         (p) => p.manifest.name === pluginName,
       );
       if (loadedPlugin) {
-        // Convert status - ILoadedPlugin allows 'error' but IInstalledPlugin only allows 'active' | 'inactive'
-        const status: 'active' | 'inactive' =
-          loadedPlugin.status === 'error' ? 'inactive' : loadedPlugin.status;
         return {
           id: loadedPlugin.id,
           name: loadedPlugin.manifest.name,
@@ -87,8 +81,7 @@ export function usePluginFilters({ pluginData }: IUsePluginFiltersProps) {
           homepage: loadedPlugin.manifest.homepage,
           license: loadedPlugin.manifest.license,
           tags: loadedPlugin.manifest.tags,
-          changelog: [],
-          status,
+          status: loadedPlugin.status,
         };
       }
 
@@ -114,12 +107,12 @@ export function usePluginFilters({ pluginData }: IUsePluginFiltersProps) {
       // Add GraphQL plugins that aren't already loaded
       ...graphqlPlugins
         .filter(
-          (gqlPlugin) =>
+          (gqlPlugin: any) =>
             !loadedPlugins.some(
               (loadedPlugin) => loadedPlugin.id === gqlPlugin.pluginId,
             ),
         )
-        .map((gqlPlugin) => ({
+        .map((gqlPlugin: any) => ({
           id: gqlPlugin.pluginId,
           name: gqlPlugin.pluginId,
           description: `Plugin ${gqlPlugin.pluginId}`,

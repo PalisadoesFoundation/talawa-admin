@@ -94,3 +94,13 @@ export const MOCKS = [
     },
   },
 ];
+
+export const MOCKS_ERROR = [
+  {
+    request: {
+      query: EVENT_ATTENDEES,
+      variables: { eventId: 'event123' },
+    },
+    error: new Error('An error occurred'),
+  },
+];

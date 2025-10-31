@@ -1,8 +1,6 @@
-import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
-import type { MockedResponse } from '@apollo/client/testing';
 import { MemoryRouter } from 'react-router';
 import LeftDrawerOrg from './LeftDrawerOrg';
 import type { ILeftDrawerProps } from './LeftDrawerOrg';
@@ -23,7 +21,7 @@ const mockT = vi.fn((key: string) => {
   return translations[key] || key;
 });
 
-const mockTErrors = vi.fn((key: string, options?: Record<string, unknown>) => {
+const mockTErrors = vi.fn((key: string, options?: any) => {
   if (key === 'errorLoading' && options?.entity) {
     return `Error loading ${options.entity}`;
   }
@@ -181,14 +179,14 @@ const mockOrganizationData = {
 const mockOrganizationDataWithoutAvatar = {
   organization: {
     ...mockOrganizationData.organization,
-    avatarURL: null as string | null,
+    avatarURL: null,
   },
 };
 
 const mockOrganizationDataWithoutCity = {
   organization: {
     ...mockOrganizationData.organization,
-    city: null as string | null,
+    city: null,
   },
 };
 
@@ -210,9 +208,6 @@ const loadingMocks = [
       query: GET_ORGANIZATION_DATA_PG,
       variables: { id: 'org-123', first: 10, after: null },
     },
-    result: {
-      data: mockOrganizationData,
-    },
     delay: 30000, // Never resolve to simulate loading
   },
 ];
@@ -229,9 +224,7 @@ const errorMocks = [
 
 describe('LeftDrawerOrg', () => {
   const originalInnerWidth = window.innerWidth;
-  const mockSetHideDrawer = vi.fn() as React.Dispatch<
-    React.SetStateAction<boolean>
-  >;
+  const mockSetHideDrawer = vi.fn();
 
   const defaultProps: ILeftDrawerProps = {
     orgId: 'org-123',
@@ -280,7 +273,7 @@ describe('LeftDrawerOrg', () => {
 
   const renderComponent = (
     props: Partial<ILeftDrawerProps> = {},
-    mocks: readonly MockedResponse[] = successMocks,
+    mocks: any[] = successMocks,
     initialRoute = '/orgdash/org-123',
   ) => {
     return render(
@@ -738,7 +731,7 @@ describe('LeftDrawerOrg', () => {
 
   describe('Edge Cases', () => {
     it('should handle undefined plugin items gracefully', () => {
-      mockUsePluginDrawerItems.mockReturnValue([]);
+      mockUsePluginDrawerItems.mockReturnValue(undefined as any);
 
       expect(() => renderComponent()).not.toThrow();
       expect(screen.queryByText('Plugins')).not.toBeInTheDocument();
@@ -747,9 +740,7 @@ describe('LeftDrawerOrg', () => {
     it('should handle null setHideDrawer prop', () => {
       const propsWithNullSetter = {
         ...defaultProps,
-        setHideDrawer: null as unknown as React.Dispatch<
-          React.SetStateAction<boolean>
-        >,
+        setHideDrawer: null as any,
       };
 
       expect(() => renderComponent(propsWithNullSetter)).not.toThrow();
