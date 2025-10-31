@@ -2,6 +2,7 @@ import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
+import type { MockedResponse } from '@apollo/client/testing';
 import { MemoryRouter } from 'react-router';
 import LeftDrawerOrg from './LeftDrawerOrg';
 import type { ILeftDrawerProps } from './LeftDrawerOrg';
@@ -279,7 +280,7 @@ describe('LeftDrawerOrg', () => {
 
   const renderComponent = (
     props: Partial<ILeftDrawerProps> = {},
-    mocks: typeof successMocks = successMocks,
+    mocks: readonly MockedResponse[] = successMocks,
     initialRoute = '/orgdash/org-123',
   ) => {
     return render(
@@ -737,7 +738,7 @@ describe('LeftDrawerOrg', () => {
 
   describe('Edge Cases', () => {
     it('should handle undefined plugin items gracefully', () => {
-      mockUsePluginDrawerItems.mockReturnValue(undefined);
+      mockUsePluginDrawerItems.mockReturnValue([]);
 
       expect(() => renderComponent()).not.toThrow();
       expect(screen.queryByText('Plugins')).not.toBeInTheDocument();
