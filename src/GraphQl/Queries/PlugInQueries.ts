@@ -44,49 +44,6 @@ export const GET_ALL_PLUGINS = gql`
  * @returns The list of events associated with the organization based on the applied filters.
  */
 
-export const ORGANIZATION_EVENTS_CONNECTION = gql`
-  query EventsByOrganizationConnection(
-    $organization_id: ID!
-    $title_contains: String
-    $description_contains: String
-    $location_contains: String
-    $first: Int
-    $skip: Int
-  ) {
-    eventsByOrganizationConnection(
-      where: {
-        organization_id: $organization_id
-        title_contains: $title_contains
-        description_contains: $description_contains
-        location_contains: $location_contains
-      }
-      first: $first
-      skip: $skip
-    ) {
-      _id
-      title
-      description
-      startDate
-      endDate
-      location
-      startTime
-      endTime
-      allDay
-      recurring
-      isPublic
-      isRegisterable
-      creator {
-        _id
-        firstName
-        lastName
-      }
-      attendees {
-        _id
-      }
-    }
-  }
-`;
-
 /**
  * GraphQL query to retrieve a list of chats based on user ID.
  *
