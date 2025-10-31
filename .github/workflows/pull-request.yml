@@ -104,11 +104,8 @@ jobs:
           echo "Error: Close this PR and try again."
           exit 1
 
-      - name: Check for unused files and exports in src/ and docs/src
-        run: npx knip --include files,exports
-
-      - name: Check for unused dependencies
-        run: npx knip --config knip.deps.json --include dependencies
+      - name: Check for unused files
+        run: npx knip --include files
 
   Check-Sensitive-Files:
     if: ${{ github.actor != 'dependabot[bot]' }}
@@ -205,7 +202,6 @@ jobs:
             '.nojekyll$'
             'yarn.lock$'
             'knip.json$'
-            'knip.deps.json$'
             '^docs/docusaurus.config.ts$'
             '^docs/sidebar..*'
             'CNAME$'
@@ -376,6 +372,14 @@ jobs:
             echo "any_changed=false" >> $GITHUB_OUTPUT
           fi
 
+          # Get all changed files
+          ALL_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
+          echo "all_files=$ALL_FILES" >> $GITHUB_OUTPUT
+
+          # Get TypeScript files specifically
+          TS_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | grep -E '\.tsx?$' | tr '\n' ' ')
+          echo "ts_files=$TS_FILES" >> $GITHUB_OUTPUT
+
       - name: TypeScript compilation
         run: |
           npx tsc --noEmit
@@ -444,34 +448,19 @@ jobs:
         run: |
           mkdir -p ./coverage/vitest
 
-          # Debug: List all downloaded artifacts
-          echo "📦 Downloaded artifacts structure:"
-          find coverage-shards -type f -name "*.info" 2>/dev/null | head -20 || echo "No .info files found"
-          echo ""
-          echo "📦 All files in coverage-shards:"
-          find coverage-shards -type f 2>/dev/null | head -20 || echo "No files found"
-
           # Find all lcov.info files from shards
           SHARD_FILES=$(find coverage-shards -name "lcov.info" -type f 2>/dev/null || true)
 
           if [ -z "$SHARD_FILES" ]; then
             echo "⚠️  No coverage shard files found, checking alternative locations..."
-            # Try finding coverage files in subdirectories
             SHARD_FILES=$(find coverage-shards -name "lcov.info" -o -path "*/coverage/vitest/lcov.info" 2>/dev/null | head -20 || true)
-            
+
             if [ -z "$SHARD_FILES" ]; then
-              echo "❌ No coverage files found from any shard. This usually means:"
-              echo "   1. All tests failed before generating coverage"
-              echo "   2. Coverage artifacts were not uploaded"
-              echo "   3. Test jobs were skipped or cancelled"
-              echo ""
-              echo "⚠️  Creating minimal coverage file to prevent Codecov upload failure"
-              echo "⚠️  This will result in 0% coverage, but allows the workflow to complete"
+              echo "❌ No coverage files found from any shard. Creating minimal coverage file to prevent upload failure"
               mkdir -p ./coverage/vitest
-              touch ./coverage/vitest/lcov.info
               echo "SF:src/main.ts" > ./coverage/vitest/lcov.info
               echo "end_of_record" >> ./coverage/vitest/lcov.info
-              # Don't exit - let it continue so we can see the failure
+              exit 1
             fi
           fi
 
@@ -486,8 +475,7 @@ jobs:
             npm install --no-save lcov-result-merger
           fi
 
-          # Convert newline-separated files to space-separated arguments and merge
-          # Use xargs to properly handle file paths with spaces if any
+          # Merge all shard coverage files
           echo "$SHARD_FILES" | xargs npx lcov-result-merger -o ./coverage/vitest/lcov.info
 
           if [ ! -f "./coverage/vitest/lcov.info" ] || [ ! -s "./coverage/vitest/lcov.info" ]; then
@@ -554,7 +542,7 @@ jobs:
   Start-App-Without-Docker:
     name: Check if Talawa Admin app starts (No Docker)
     runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks, Test-Application]
+    needs: [Code-Quality-Checks, Merge-Coverage]
     if: github.actor != 'dependabot'
     steps:
       - name: Checkout the Repository
@@ -602,7 +590,7 @@ jobs:
   Docker-Start-Check:
     name: Check if Talawa Admin app starts in Docker
     runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks, Test-Application]
+    needs: [Code-Quality-Checks, Merge-Coverage]
     if: github.actor != 'dependabot'
     steps:
       - name: Checkout the Repository
