@@ -1165,10 +1165,7 @@ export { AgendaItemByEvent } from './AgendaItemQueries';
 
 export { AGENDA_ITEM_CATEGORY_LIST } from './AgendaCategoryQueries';
 // to take the list of the blocked users
-export {
-  IS_SAMPLE_ORGANIZATION_QUERY,
-  ORGANIZATION_EVENTS_CONNECTION,
-} from './PlugInQueries';
+export { IS_SAMPLE_ORGANIZATION_QUERY } from './PlugInQueries';
 
 // display posts
 export { ORGANIZATION_POST_LIST } from './OrganizationQueries';
