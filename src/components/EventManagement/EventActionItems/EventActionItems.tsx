@@ -17,13 +17,7 @@
  *
  * @returns {JSX.Element} A React component that renders the event action items management view.
  */
-import React, {
-  useCallback,
-  useMemo,
-  useState,
-  useEffect,
-  type JSX,
-} from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
@@ -65,12 +59,12 @@ enum ModalState {
   STATUS = 'status',
 }
 
-interface EventActionItemsProps {
+interface IEventActionItemsProps {
   eventId: string;
   orgActionItemsRefetch?: () => void;
 }
 
-const EventActionItems: React.FC<EventActionItemsProps> = ({
+const EventActionItems: React.FC<IEventActionItemsProps> = ({
   eventId,
   orgActionItemsRefetch,
 }) => {
