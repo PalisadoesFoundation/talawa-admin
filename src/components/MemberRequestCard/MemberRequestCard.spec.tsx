@@ -11,10 +11,6 @@ import { MOCKS, MOCKS2, MOCKS3 } from './MemberRequestMocks';
 
 // Optimized mock links - reused for performance
 const link = new StaticMockLink(MOCKS, true);
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const link2 = new StaticMockLink(MOCKS2, true); // Unused, kept for potential future use
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const link3 = new StaticMockLink(MOCKS3, true); // Unused, kept for potential future use
 
 // Performance-optimized wait function
 async function wait(ms = 100): Promise<void> {
