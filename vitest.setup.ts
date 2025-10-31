@@ -1,10 +1,26 @@
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
+import { vi } from 'vitest';
 
 // Basic cleanup after each test
 afterEach(() => {
   cleanup();
 });
+
+// Global mocks for URL API (needed for file upload tests)
+// TODO: Remove once test isolation is properly fixed in individual test files
+global.URL.createObjectURL = vi.fn(() => 'mock-object-url');
+global.URL.revokeObjectURL = vi.fn();
+
+// Mock HTMLFormElement.prototype.requestSubmit for jsdom
+// TODO: Remove once jsdom adds native support
+if (typeof HTMLFormElement.prototype.requestSubmit === 'undefined') {
+  HTMLFormElement.prototype.requestSubmit = function () {
+    if (this.checkValidity()) {
+      this.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+    }
+  };
+}
 
 // Simple console error handler for React 18 warnings
 const originalError = console.error;
