@@ -32,7 +32,7 @@ export default defineConfig({
       },
     },
     // Lower concurrency in CI to avoid memory issues
-    maxConcurrency: isCI ? 1 : 2,
+    maxConcurrency: 2,
     // Enable file parallelism for better performance
     fileParallelism: true,
     sequence: {
