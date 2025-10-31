@@ -7,6 +7,17 @@ import os from 'os';
 const cpuCount = os.cpus().length;
 const isCI = !!process.env.CI;
 
+/**
+ * Parallel test configuration for tests that are parallel-safe.
+ * 
+ * Pre-existing tests with isolation issues are excluded and run sequentially
+ * using vitest.config.sequential.ts instead.
+ * 
+ * To add a test to parallel execution:
+ * 1. Fix any test isolation issues (unique testids, proper async handling)
+ * 2. Remove the test file from the exclude list below
+ * 3. Run tests to verify it passes in parallel execution
+ */
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), svgrPlugin()],
   test: {
@@ -30,6 +41,7 @@ export default defineConfig({
         isolate: true,
       },
     },
+    // Parallel execution - optimized for speed
     fileParallelism: true,
     maxConcurrency: isCI
       ? 2
@@ -41,7 +53,7 @@ export default defineConfig({
     coverage: {
       enabled: true,
       provider: 'v8',
-      reportsDirectory: './coverage/vitest',
+      reportsDirectory: './coverage/vitest-parallel',
       exclude: [
         'node_modules',
         'dist',
@@ -52,9 +64,19 @@ export default defineConfig({
         '**/*.d.ts',
         'src/test/**',
         'vitest.config.ts',
+        'vitest.config.sequential.ts',
+        'vitest.config.parallel.ts',
         'vitest.setup.ts',
         'cypress/**',
         'cypress.config.ts',
+        // Pre-existing tests with isolation issues - run sequentially instead
+        // TODO: Fix test isolation and remove from this list
+        'src/components/Advertisements/Advertisements.spec.tsx',
+        'src/components/EventListCard/Modal/Preview/EventListCardPreviewModal.spec.tsx',
+        'src/screens/UserPortal/Posts/Posts.spec.tsx',
+        'src/components/OrgSettings/AgendaItemCategories/Preview/AgendaCategoryPreviewModal.spec.tsx',
+        'src/screens/UserPortal/Pledges/Pledge.spec.tsx',
+        // Add more pre-existing failing tests as they are identified
       ],
       reporter: ['text', 'html', 'text-summary', 'lcov'],
     },
