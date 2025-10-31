@@ -372,17 +372,19 @@ jobs:
             echo "any_changed=false" >> $GITHUB_OUTPUT
           fi
 
-          # Get all changed files
-          ALL_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
-          echo "all_files=$ALL_FILES" >> $GITHUB_OUTPUT
-
           # Get TypeScript files specifically
           TS_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | grep -E '\.tsx?$' | tr '\n' ' ')
           echo "ts_files=$TS_FILES" >> $GITHUB_OUTPUT
 
       - name: TypeScript compilation
+        if: steps.changed-files.outputs.any_changed == 'true'
         run: |
-          npx tsc --noEmit
+          TS_FILES="${{ steps.changed-files.outputs.ts_files }}"
+          if [ -n "$TS_FILES" ]; then
+            npx tsc --noEmit $TS_FILES
+          else
+            echo "No TypeScript files changed, skipping type check"
+          fi
 
       - name: Run Tests (Shard ${{ matrix.shard }}/4)
         if: steps.changed-files.outputs.any_changed == 'true'
