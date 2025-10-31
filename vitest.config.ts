@@ -37,7 +37,7 @@ export default defineConfig({
     fileParallelism: true,
     sequence: {
       shuffle: false,
-      concurrent: true,
+      concurrent: false, // Disabled for test stability - files still run in parallel across shards
     },
     coverage: {
       enabled: true,
