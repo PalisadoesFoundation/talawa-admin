@@ -8,7 +8,7 @@
 
 Defined in: [src/components/CheckIn/CheckInMocks.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/CheckInMocks.ts#L63)
 
-## Type declaration
+## Type Declaration
 
 ### request
 

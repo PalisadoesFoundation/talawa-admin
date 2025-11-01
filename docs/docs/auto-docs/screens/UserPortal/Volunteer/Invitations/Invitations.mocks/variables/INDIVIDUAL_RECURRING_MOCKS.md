@@ -8,7 +8,7 @@
 
 Defined in: [src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts:382](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts#L382)
 
-## Type declaration
+## Type Declaration
 
 ### request
 

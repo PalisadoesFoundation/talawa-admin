@@ -10,7 +10,7 @@ Defined in: [src/types/Event/interface.ts:123](https://github.com/PalisadoesFoun
 
 ### deleteEventHandler()
 
-> **deleteEventHandler**: (`deleteOption`?) => `Promise`\<`void`\>
+> **deleteEventHandler**: (`deleteOption?`) => `Promise`\<`void`\>
 
 Defined in: [src/types/Event/interface.ts:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L129)
 

@@ -8,7 +8,7 @@
 
 Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:336](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L336)
 
-## Type declaration
+## Type Declaration
 
 ### request
 
