@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceCreator
 
-Defined in: [src/types/Post/interface.ts:75](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Post/interface.ts#L75)
+Defined in: [src/types/Post/interface.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L75)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/interface.ts:75](https://github.com/iamanishx/talawa
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/Post/interface.ts:79](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Post/interface.ts#L79)
+Defined in: [src/types/Post/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L79)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Post/interface.ts:79](https://github.com/iamanishx/talawa
 
 > **email**: `string`
 
-Defined in: [src/types/Post/interface.ts:78](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Post/interface.ts#L78)
+Defined in: [src/types/Post/interface.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L78)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Post/interface.ts:78](https://github.com/iamanishx/talawa
 
 > **id**: `string`
 
-Defined in: [src/types/Post/interface.ts:76](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Post/interface.ts#L76)
+Defined in: [src/types/Post/interface.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L76)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/types/Post/interface.ts:76](https://github.com/iamanishx/talawa
 
 > **name**: `string`
 
-Defined in: [src/types/Post/interface.ts:77](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Post/interface.ts#L77)
+Defined in: [src/types/Post/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L77)

@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **UpdateActionItemInput** = `object`
 
-Defined in: [src/types/actionItem.ts:39](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/actionItem.ts#L39)
+Defined in: [src/types/actionItem.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L39)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/actionItem.ts:39](https://github.com/iamanishx/talawa-adm
 
 > `optional` **assigneeId**: `string`
 
-Defined in: [src/types/actionItem.ts:40](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/actionItem.ts#L40)
+Defined in: [src/types/actionItem.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L40)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/actionItem.ts:40](https://github.com/iamanishx/talawa-adm
 
 > `optional` **completionDate**: `Date`
 
-Defined in: [src/types/actionItem.ts:41](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/actionItem.ts#L41)
+Defined in: [src/types/actionItem.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L41)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/actionItem.ts:41](https://github.com/iamanishx/talawa-adm
 
 > `optional` **dueDate**: `Date`
 
-Defined in: [src/types/actionItem.ts:42](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/actionItem.ts#L42)
+Defined in: [src/types/actionItem.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L42)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/actionItem.ts:42](https://github.com/iamanishx/talawa-adm
 
 > `optional` **isCompleted**: `boolean`
 
-Defined in: [src/types/actionItem.ts:43](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/actionItem.ts#L43)
+Defined in: [src/types/actionItem.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L43)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/actionItem.ts:43](https://github.com/iamanishx/talawa-adm
 
 > `optional` **postCompletionNotes**: `string`
 
-Defined in: [src/types/actionItem.ts:44](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/actionItem.ts#L44)
+Defined in: [src/types/actionItem.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L44)
 
 ***
 
@@ -54,4 +54,4 @@ Defined in: [src/types/actionItem.ts:44](https://github.com/iamanishx/talawa-adm
 
 > `optional` **preCompletionNotes**: `string`
 
-Defined in: [src/types/actionItem.ts:45](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/actionItem.ts#L45)
+Defined in: [src/types/actionItem.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L45)

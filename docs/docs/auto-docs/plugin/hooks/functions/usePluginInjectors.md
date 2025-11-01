@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **usePluginInjectors**(`injectorType`): [`IInjectorExtension`](../../types/interfaces/IInjectorExtension.md)[]
 
-Defined in: [src/plugin/hooks.ts:155](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/plugin/hooks.ts#L155)
+Defined in: [src/plugin/hooks.ts:155](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/hooks.ts#L155)
 
 Hook to get plugin injector extensions
 

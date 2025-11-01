@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **I18nextProvider**(`__namedParameters`): `Element`
 
-Defined in: [src/components/test-utils/I18nextProviderMock.tsx:14](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/components/test-utils/I18nextProviderMock.tsx#L14)
+Defined in: [src/components/test-utils/I18nextProviderMock.tsx:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/test-utils/I18nextProviderMock.tsx#L14)
 
 ## Parameters
 

@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **AdvertisementSkeleton**(): `Element`[]
 
-Defined in: [src/components/Advertisements/skeleton/AdvertisementSkeleton.tsx:22](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/components/Advertisements/skeleton/AdvertisementSkeleton.tsx#L22)
+Defined in: [src/components/Advertisements/skeleton/AdvertisementSkeleton.tsx:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/skeleton/AdvertisementSkeleton.tsx#L22)
 
 AdvertisementSkeleton Component
 

@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceAttendeeQueryResponse
 
-Defined in: [src/types/CheckIn/interface.ts:16](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/CheckIn/interface.ts#L16)
+Defined in: [src/types/CheckIn/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L16)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/CheckIn/interface.ts:16](https://github.com/iamanishx/tal
 
 > **event**: `object`
 
-Defined in: [src/types/CheckIn/interface.ts:17](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/CheckIn/interface.ts#L17)
+Defined in: [src/types/CheckIn/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L17)
 
 #### attendeesCheckInStatus
 

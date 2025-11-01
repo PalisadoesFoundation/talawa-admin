@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **getActiveAdvertisementMocks**: `IAdvertisementListMock`[]
 
-Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:301](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/components/Advertisements/AdvertisementsMocks.ts#L301)
+Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:301](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L301)

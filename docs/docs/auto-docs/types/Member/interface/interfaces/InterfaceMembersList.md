@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceMembersList
 
-Defined in: [src/types/Member/interface.ts:30](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Member/interface.ts#L30)
+Defined in: [src/types/Member/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L30)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Member/interface.ts:30](https://github.com/iamanishx/tala
 
 > **organizations**: `object`[]
 
-Defined in: [src/types/Member/interface.ts:31](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Member/interface.ts#L31)
+Defined in: [src/types/Member/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L31)
 
 #### id
 

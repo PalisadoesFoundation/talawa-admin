@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **TargetsType** = `object`
 
-Defined in: [src/state/reducers/routesReducer.ts:3](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/state/reducers/routesReducer.ts#L3)
+Defined in: [src/state/reducers/routesReducer.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L3)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/state/reducers/routesReducer.ts:3](https://github.com/iamanishx
 
 > **name**: `string`
 
-Defined in: [src/state/reducers/routesReducer.ts:4](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/state/reducers/routesReducer.ts#L4)
+Defined in: [src/state/reducers/routesReducer.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L4)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/state/reducers/routesReducer.ts:4](https://github.com/iamanishx
 
 > `optional` **subTargets**: [`SubTargetType`](SubTargetType.md)[]
 
-Defined in: [src/state/reducers/routesReducer.ts:6](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/state/reducers/routesReducer.ts#L6)
+Defined in: [src/state/reducers/routesReducer.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L6)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/state/reducers/routesReducer.ts:6](https://github.com/iamanishx
 
 > `optional` **url**: `string`
 
-Defined in: [src/state/reducers/routesReducer.ts:5](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/state/reducers/routesReducer.ts#L5)
+Defined in: [src/state/reducers/routesReducer.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L5)

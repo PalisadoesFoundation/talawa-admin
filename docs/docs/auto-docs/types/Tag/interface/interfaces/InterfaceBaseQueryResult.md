@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceBaseQueryResult
 
-Defined in: [src/types/Tag/interface.ts:39](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Tag/interface.ts#L39)
+Defined in: [src/types/Tag/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L39)
 
 ## Extended by
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Tag/interface.ts:39](https://github.com/iamanishx/talawa-
 
 > `optional` **error**: `ApolloError`
 
-Defined in: [src/types/Tag/interface.ts:41](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Tag/interface.ts#L41)
+Defined in: [src/types/Tag/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L41)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Tag/interface.ts:41](https://github.com/iamanishx/talawa-
 
 > **loading**: `boolean`
 
-Defined in: [src/types/Tag/interface.ts:40](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Tag/interface.ts#L40)
+Defined in: [src/types/Tag/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L40)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Tag/interface.ts:40](https://github.com/iamanishx/talawa-
 
 > `optional` **refetch**: () => `void`
 
-Defined in: [src/types/Tag/interface.ts:42](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Tag/interface.ts#L42)
+Defined in: [src/types/Tag/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L42)
 
 #### Returns
 

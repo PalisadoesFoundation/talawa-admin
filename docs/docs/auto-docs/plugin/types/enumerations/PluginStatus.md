@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Enumeration: PluginStatus
 
-Defined in: [src/plugin/types.ts:150](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/plugin/types.ts#L150)
+Defined in: [src/plugin/types.ts:150](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L150)
 
 ## Enumeration Members
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:150](https://github.com/iamanishx/talawa-admin/
 
 > **ACTIVE**: `"active"`
 
-Defined in: [src/plugin/types.ts:151](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/plugin/types.ts#L151)
+Defined in: [src/plugin/types.ts:151](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L151)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/types.ts:151](https://github.com/iamanishx/talawa-admin/
 
 > **ERROR**: `"error"`
 
-Defined in: [src/plugin/types.ts:153](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/plugin/types.ts#L153)
+Defined in: [src/plugin/types.ts:153](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L153)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/plugin/types.ts:153](https://github.com/iamanishx/talawa-admin/
 
 > **INACTIVE**: `"inactive"`
 
-Defined in: [src/plugin/types.ts:152](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/plugin/types.ts#L152)
+Defined in: [src/plugin/types.ts:152](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L152)

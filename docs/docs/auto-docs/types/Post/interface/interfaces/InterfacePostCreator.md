@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfacePostCreator
 
-Defined in: [src/types/Post/interface.ts:17](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Post/interface.ts#L17)
+Defined in: [src/types/Post/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L17)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/interface.ts:17](https://github.com/iamanishx/talawa
 
 > `optional` **firstName**: `string`
 
-Defined in: [src/types/Post/interface.ts:19](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Post/interface.ts#L19)
+Defined in: [src/types/Post/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L19)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Post/interface.ts:19](https://github.com/iamanishx/talawa
 
 > **id**: `string`
 
-Defined in: [src/types/Post/interface.ts:18](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Post/interface.ts#L18)
+Defined in: [src/types/Post/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L18)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/types/Post/interface.ts:18](https://github.com/iamanishx/talawa
 
 > `optional` **lastName**: `string`
 
-Defined in: [src/types/Post/interface.ts:20](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Post/interface.ts#L20)
+Defined in: [src/types/Post/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L20)

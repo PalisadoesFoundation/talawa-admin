@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceAction\<T\>
 
-Defined in: [src/state/helpers/Action.ts:1](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/state/helpers/Action.ts#L1)
+Defined in: [src/state/helpers/Action.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/helpers/Action.ts#L1)
 
 ## Type Parameters
 
@@ -18,7 +18,7 @@ Defined in: [src/state/helpers/Action.ts:1](https://github.com/iamanishx/talawa-
 
 > **payload**: `T`
 
-Defined in: [src/state/helpers/Action.ts:3](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/state/helpers/Action.ts#L3)
+Defined in: [src/state/helpers/Action.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/helpers/Action.ts#L3)
 
 ***
 
@@ -26,4 +26,4 @@ Defined in: [src/state/helpers/Action.ts:3](https://github.com/iamanishx/talawa-
 
 > **type**: `string`
 
-Defined in: [src/state/helpers/Action.ts:2](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/state/helpers/Action.ts#L2)
+Defined in: [src/state/helpers/Action.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/helpers/Action.ts#L2)

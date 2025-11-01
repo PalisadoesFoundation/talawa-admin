@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: IPluginRouterProps
 
-Defined in: [src/plugin/types.ts:192](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/plugin/types.ts#L192)
+Defined in: [src/plugin/types.ts:192](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L192)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:192](https://github.com/iamanishx/talawa-admin/
 
 > `optional` **isAdmin**: `boolean`
 
-Defined in: [src/plugin/types.ts:194](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/plugin/types.ts#L194)
+Defined in: [src/plugin/types.ts:194](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L194)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/plugin/types.ts:194](https://github.com/iamanishx/talawa-admin/
 
 > `optional` **userPermissions**: `string`[]
 
-Defined in: [src/plugin/types.ts:193](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/plugin/types.ts#L193)
+Defined in: [src/plugin/types.ts:193](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L193)

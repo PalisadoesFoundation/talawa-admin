@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **USER\_EVENTS\_VOLUNTEER**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/EventVolunteerQueries.ts:193](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/GraphQl/Queries/EventVolunteerQueries.ts#L193)
+Defined in: [src/GraphQl/Queries/EventVolunteerQueries.ts:193](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/EventVolunteerQueries.ts#L193)

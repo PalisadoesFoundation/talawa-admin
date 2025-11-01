@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceContriStatsProps
 
-Defined in: [src/types/Contribution/interface.ts:1](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Contribution/interface.ts#L1)
+Defined in: [src/types/Contribution/interface.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L1)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Contribution/interface.ts:1](https://github.com/iamanishx
 
 > **highestAmount**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:4](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Contribution/interface.ts#L4)
+Defined in: [src/types/Contribution/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L4)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Contribution/interface.ts:4](https://github.com/iamanishx
 
 > **id**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:2](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Contribution/interface.ts#L2)
+Defined in: [src/types/Contribution/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L2)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Contribution/interface.ts:2](https://github.com/iamanishx
 
 > **recentAmount**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:3](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Contribution/interface.ts#L3)
+Defined in: [src/types/Contribution/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L3)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/types/Contribution/interface.ts:3](https://github.com/iamanishx
 
 > **totalAmount**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:5](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Contribution/interface.ts#L5)
+Defined in: [src/types/Contribution/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L5)

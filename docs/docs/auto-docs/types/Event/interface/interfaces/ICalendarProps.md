@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: ICalendarProps
 
-Defined in: [src/types/Event/interface.ts:101](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L101)
+Defined in: [src/types/Event/interface.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L101)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:101](https://github.com/iamanishx/tala
 
 > `optional` **currentMonth**: `number`
 
-Defined in: [src/types/Event/interface.ts:109](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L109)
+Defined in: [src/types/Event/interface.ts:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L109)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/interface.ts:109](https://github.com/iamanishx/tala
 
 > `optional` **currentYear**: `number`
 
-Defined in: [src/types/Event/interface.ts:110](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L110)
+Defined in: [src/types/Event/interface.ts:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L110)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Event/interface.ts:110](https://github.com/iamanishx/tala
 
 > **eventData**: [`IEvent`](IEvent.md)[]
 
-Defined in: [src/types/Event/interface.ts:102](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L102)
+Defined in: [src/types/Event/interface.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L102)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Event/interface.ts:102](https://github.com/iamanishx/tala
 
 > `optional` **onMonthChange**: (`month`, `year`) => `void`
 
-Defined in: [src/types/Event/interface.ts:108](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L108)
+Defined in: [src/types/Event/interface.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L108)
 
 #### Parameters
 
@@ -58,7 +58,7 @@ Defined in: [src/types/Event/interface.ts:108](https://github.com/iamanishx/tala
 
 > `optional` **orgData**: [`IOrgList`](IOrgList.md)
 
-Defined in: [src/types/Event/interface.ts:104](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L104)
+Defined in: [src/types/Event/interface.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L104)
 
 ***
 
@@ -66,7 +66,7 @@ Defined in: [src/types/Event/interface.ts:104](https://github.com/iamanishx/tala
 
 > `optional` **refetchEvents**: () => `void`
 
-Defined in: [src/types/Event/interface.ts:103](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L103)
+Defined in: [src/types/Event/interface.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L103)
 
 #### Returns
 
@@ -78,7 +78,7 @@ Defined in: [src/types/Event/interface.ts:103](https://github.com/iamanishx/tala
 
 > `optional` **userId**: `string`
 
-Defined in: [src/types/Event/interface.ts:106](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L106)
+Defined in: [src/types/Event/interface.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L106)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [src/types/Event/interface.ts:106](https://github.com/iamanishx/tala
 
 > `optional` **userRole**: `string`
 
-Defined in: [src/types/Event/interface.ts:105](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L105)
+Defined in: [src/types/Event/interface.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L105)
 
 ***
 
@@ -94,4 +94,4 @@ Defined in: [src/types/Event/interface.ts:105](https://github.com/iamanishx/tala
 
 > `optional` **viewType**: [`ViewType`](../../../../screens/OrganizationEvents/OrganizationEvents/enumerations/ViewType.md)
 
-Defined in: [src/types/Event/interface.ts:107](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L107)
+Defined in: [src/types/Event/interface.ts:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L107)

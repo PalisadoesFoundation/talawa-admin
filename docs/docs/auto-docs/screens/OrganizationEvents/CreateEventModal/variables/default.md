@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<`ICreateEventModalProps`\>
 
-Defined in: [src/screens/OrganizationEvents/CreateEventModal.tsx:62](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/screens/OrganizationEvents/CreateEventModal.tsx#L62)
+Defined in: [src/screens/OrganizationEvents/CreateEventModal.tsx:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationEvents/CreateEventModal.tsx#L62)
 
 Modal component for creating new events in an organization
 

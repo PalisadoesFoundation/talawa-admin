@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_ADVERTISEMENT\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/AdvertisementMutations.ts:50](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/GraphQl/Mutations/AdvertisementMutations.ts#L50)
+Defined in: [src/GraphQl/Mutations/AdvertisementMutations.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/AdvertisementMutations.ts#L50)
 
 GraphQL mutation to update an advertisement.
 

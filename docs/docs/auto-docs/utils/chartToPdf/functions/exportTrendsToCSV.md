@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **exportTrendsToCSV**(`eventLabels`, `attendeeCounts`, `maleCounts`, `femaleCounts`, `otherCounts`): `void`
 
-Defined in: [src/utils/chartToPdf.ts:50](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/utils/chartToPdf.ts#L50)
+Defined in: [src/utils/chartToPdf.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/chartToPdf.ts#L50)
 
 ## Parameters
 

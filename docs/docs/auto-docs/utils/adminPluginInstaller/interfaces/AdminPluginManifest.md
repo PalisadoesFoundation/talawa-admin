@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: AdminPluginManifest
 
-Defined in: [src/utils/adminPluginInstaller.ts:9](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/utils/adminPluginInstaller.ts#L9)
+Defined in: [src/utils/adminPluginInstaller.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L9)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:9](https://github.com/iamanishx/t
 
 > **author**: `string`
 
-Defined in: [src/utils/adminPluginInstaller.ts:13](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/utils/adminPluginInstaller.ts#L13)
+Defined in: [src/utils/adminPluginInstaller.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L13)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:13](https://github.com/iamanishx/
 
 > **description**: `string`
 
-Defined in: [src/utils/adminPluginInstaller.ts:12](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/utils/adminPluginInstaller.ts#L12)
+Defined in: [src/utils/adminPluginInstaller.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L12)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:12](https://github.com/iamanishx/
 
 > `optional` **extensionPoints**: `object`
 
-Defined in: [src/utils/adminPluginInstaller.ts:16](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/utils/adminPluginInstaller.ts#L16)
+Defined in: [src/utils/adminPluginInstaller.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L16)
 
 #### routes?
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:16](https://github.com/iamanishx/
 
 > **main**: `string`
 
-Defined in: [src/utils/adminPluginInstaller.ts:14](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/utils/adminPluginInstaller.ts#L14)
+Defined in: [src/utils/adminPluginInstaller.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L14)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:14](https://github.com/iamanishx/
 
 > **name**: `string`
 
-Defined in: [src/utils/adminPluginInstaller.ts:10](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/utils/adminPluginInstaller.ts#L10)
+Defined in: [src/utils/adminPluginInstaller.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L10)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:10](https://github.com/iamanishx/
 
 > **pluginId**: `string`
 
-Defined in: [src/utils/adminPluginInstaller.ts:15](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/utils/adminPluginInstaller.ts#L15)
+Defined in: [src/utils/adminPluginInstaller.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L15)
 
 ***
 
@@ -64,4 +64,4 @@ Defined in: [src/utils/adminPluginInstaller.ts:15](https://github.com/iamanishx/
 
 > **version**: `string`
 
-Defined in: [src/utils/adminPluginInstaller.ts:11](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/utils/adminPluginInstaller.ts#L11)
+Defined in: [src/utils/adminPluginInstaller.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L11)

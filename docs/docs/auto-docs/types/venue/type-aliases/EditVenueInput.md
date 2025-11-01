@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **EditVenueInput** = `object`
 
-Defined in: [src/types/venue.ts:20](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/venue.ts#L20)
+Defined in: [src/types/venue.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/venue.ts#L20)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/venue.ts:20](https://github.com/iamanishx/talawa-admin/bl
 
 > `optional` **capacity**: `number`
 
-Defined in: [src/types/venue.ts:21](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/venue.ts#L21)
+Defined in: [src/types/venue.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/venue.ts#L21)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/venue.ts:21](https://github.com/iamanishx/talawa-admin/bl
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/venue.ts:22](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/venue.ts#L22)
+Defined in: [src/types/venue.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/venue.ts#L22)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/venue.ts:22](https://github.com/iamanishx/talawa-admin/bl
 
 > `optional` **file**: `string`
 
-Defined in: [src/types/venue.ts:23](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/venue.ts#L23)
+Defined in: [src/types/venue.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/venue.ts#L23)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/venue.ts:23](https://github.com/iamanishx/talawa-admin/bl
 
 > **id**: `string`
 
-Defined in: [src/types/venue.ts:24](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/venue.ts#L24)
+Defined in: [src/types/venue.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/venue.ts#L24)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/types/venue.ts:24](https://github.com/iamanishx/talawa-admin/bl
 
 > `optional` **name**: `string`
 
-Defined in: [src/types/venue.ts:25](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/venue.ts#L25)
+Defined in: [src/types/venue.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/venue.ts#L25)

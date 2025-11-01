@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/Public/Invitation/AcceptInvitation.tsx:17](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/screens/Public/Invitation/AcceptInvitation.tsx#L17)
+Defined in: [src/screens/Public/Invitation/AcceptInvitation.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Public/Invitation/AcceptInvitation.tsx#L21)
 
 ## Returns
 

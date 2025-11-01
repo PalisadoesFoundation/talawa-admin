@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InstallPluginInput
 
-Defined in: [src/plugin/graphql-service.ts:28](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/plugin/graphql-service.ts#L28)
+Defined in: [src/plugin/graphql-service.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L28)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/plugin/graphql-service.ts:28](https://github.com/iamanishx/tala
 
 > **pluginId**: `string`
 
-Defined in: [src/plugin/graphql-service.ts:29](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/plugin/graphql-service.ts#L29)
+Defined in: [src/plugin/graphql-service.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L29)

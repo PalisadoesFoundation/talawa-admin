@@ -1,4 +1,4 @@
-[**talawa-admin**](../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfacePledgeModal`](../interfaces/InterfacePledgeModal-1.md)\>
 
-Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:79](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L79)
+Defined in: [src/screens/FundCampaignPledge/modal/PledgeModal.tsx:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/FundCampaignPledge/modal/PledgeModal.tsx#L89)
