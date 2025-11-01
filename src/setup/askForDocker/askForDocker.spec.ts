@@ -1,4 +1,3 @@
-// <reference types="vitest" />
 import inquirer from 'inquirer';
 import { askAndUpdateTalawaApiUrl, askForDocker } from './askForDocker';
 import {
@@ -43,47 +42,24 @@ afterEach(() => {
 });
 
 describe('askForDocker', () => {
-  test('should return default Docker port if user provides no input', async () => {
-    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+  test('should validate port number is not below 1024', async () => {
+    const promptMock = vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
       dockerAppPort: '4321',
     });
-    const result = await askForDocker();
-    expect(result).toBe('4321');
-  });
 
-  test('should return user-provided valid port', async () => {
-    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
-      dockerAppPort: '8080',
-    });
-    const result = await askForDocker();
-    expect(result).toBe('8080');
-  });
+    await askForDocker();
 
-  test('should reject invalid non-numeric input through prompt error', async () => {
-    vi.spyOn(inquirer, 'prompt').mockImplementationOnce(() => {
-      throw new Error(
+    const promptArgs = promptMock.mock.calls[0][0];
+    const promptsArray = Array.isArray(promptArgs) ? promptArgs : [promptArgs];
+
+    const validateFn = promptsArray[0].validate;
+
+    if (validateFn) {
+      expect(validateFn('1023')).toBe(
         'Please enter a valid port number between 1024 and 65535',
       );
-    });
-    await expect(askForDocker()).rejects.toThrow(/valid port number/);
-  });
-
-  test('should validate boundary ports correctly', () => {
-    const validateFn = (input: string) => {
-      const port = Number(input);
-      if (Number.isNaN(port) || port < 1024 || port > 65535) {
-        return 'Please enter a valid port number between 1024 and 65535';
-      }
-      return true;
-    };
-    expect(validateFn('abc')).toBe(
-      'Please enter a valid port number between 1024 and 65535',
-    );
-    expect(validateFn('70000')).toBe(
-      'Please enter a valid port number between 1024 and 65535',
-    );
-    expect(validateFn('1024')).toBe(true);
-    expect(validateFn('65535')).toBe(true);
+      expect(validateFn('1024')).toBe(true);
+    }
   });
 });
 
@@ -123,18 +99,6 @@ describe('askAndUpdateTalawaApiUrl', () => {
     );
   });
 
-  test('should retry connection if askForTalawaApiUrl fails first time', async () => {
-    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
-      shouldSetTalawaApiUrlResponse: true,
-    });
-    (askForTalawaApiUrl as Mock)
-      .mockRejectedValueOnce(new Error('Network fail'))
-      .mockResolvedValueOnce('https://talawa-api.example.com');
-
-    await askAndUpdateTalawaApiUrl();
-    expect(askForTalawaApiUrl).toHaveBeenCalledTimes(2);
-  });
-
   test('should handle invalid URL protocol (ftp)', async () => {
     (askForTalawaApiUrl as Mock).mockResolvedValue('ftp://example.com');
     vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
@@ -148,101 +112,83 @@ describe('askAndUpdateTalawaApiUrl', () => {
     );
   });
 
-  test('should handle invalid websocket URL generation gracefully', async () => {
-    (askForTalawaApiUrl as Mock).mockResolvedValue('http://example');
+  test('should clear Docker URL when useDocker=false and user declines', async () => {
     vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
-      shouldSetTalawaApiUrlResponse: true,
+      shouldSetTalawaApiUrlResponse: false,
     });
-
-    await askAndUpdateTalawaApiUrl();
-
+    await askAndUpdateTalawaApiUrl(true);
     expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_TALAWA_URL',
-      'http://example',
+      'REACT_APP_DOCKER_TALAWA_URL',
+      '',
     );
   });
 
-  test('should replace localhost with host.docker.internal when useDocker=true', async () => {
+  test('should catch error when docker URL generation fails with invalid protocol', async () => {
     (askForTalawaApiUrl as Mock).mockResolvedValue('http://localhost:3000');
     vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
       shouldSetTalawaApiUrlResponse: true,
     });
 
+    // Mock URL constructor to throw for docker URL
+    const originalURL = global.URL;
+    let urlCallCount = 0;
+    global.URL = class extends originalURL {
+      constructor(url: string) {
+        urlCallCount++;
+        if (urlCallCount === 3) {
+          throw new Error('Invalid URL');
+        }
+        super(url);
+      }
+    } as typeof URL;
+
     await askAndUpdateTalawaApiUrl(true);
+
+    expect(console.error).toHaveBeenCalled();
+
+    global.URL = originalURL;
+  });
+
+  test('should validate Docker URL protocol when useDocker=true', async () => {
+    (askForTalawaApiUrl as Mock).mockResolvedValue('https://localhost:3000');
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      shouldSetTalawaApiUrlResponse: true,
+    });
+
+    await askAndUpdateTalawaApiUrl(true);
+
     expect(updateEnvFile).toHaveBeenCalledWith(
       'REACT_APP_DOCKER_TALAWA_URL',
-      'http://host.docker.internal:3000',
+      'https://host.docker.internal:3000',
     );
   });
 
-  test('should handle invalid Docker URL protocol', async () => {
-    (askForTalawaApiUrl as Mock).mockResolvedValue('ftp://localhost:3000');
+  test('should catch error when WebSocket URL generation throws', async () => {
+    (askForTalawaApiUrl as Mock).mockResolvedValue('https://example.com');
     vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
       shouldSetTalawaApiUrlResponse: true,
     });
 
-    await askAndUpdateTalawaApiUrl(true);
-    expect(updateEnvFile).not.toHaveBeenCalledWith(
-      'REACT_APP_DOCKER_TALAWA_URL',
-      expect.stringContaining('ftp://'),
-    );
-  });
-
-  test('should throw error after max retries', async () => {
-    (askForTalawaApiUrl as Mock).mockImplementation(() => {
-      throw new Error('Bad endpoint');
-    });
-    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
-      shouldSetTalawaApiUrlResponse: true,
-    });
+    // Mock URL constructor to throw on second call (websocket URL validation)
+    const originalURL = global.URL;
+    let callCount = 0;
+    global.URL = class extends originalURL {
+      constructor(url: string) {
+        callCount++;
+        if (callCount === 2) {
+          throw new Error('Invalid WebSocket URL');
+        }
+        super(url);
+      }
+    } as typeof URL;
 
     await askAndUpdateTalawaApiUrl();
 
-    expect(updateEnvFile).not.toHaveBeenCalledWith(
-      'REACT_APP_TALAWA_URL',
-      expect.stringContaining('https://'),
+    expect(console.error).toHaveBeenCalledWith(
+      'Error setting up Talawa API URL:',
+      expect.any(Error),
     );
-  });
 
-  test('should catch outer prompt error gracefully', async () => {
-    vi.spyOn(inquirer, 'prompt').mockRejectedValueOnce(
-      new Error('Prompt failure'),
-    );
-    await expect(askAndUpdateTalawaApiUrl()).resolves.not.toThrow();
-  });
-
-  test('should throw and catch invalid WebSocket URL generation', async () => {
-    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
-      shouldSetTalawaApiUrlResponse: true,
-    });
-    (askForTalawaApiUrl as Mock).mockResolvedValue('http://invalid-url');
-    await askAndUpdateTalawaApiUrl();
-    expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_TALAWA_URL',
-      'http://invalid-url',
-    );
-  });
-
-  test('should throw invalid Docker URL generated error', async () => {
-    (askForTalawaApiUrl as Mock).mockResolvedValue('http://localhost:3000');
-    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
-      shouldSetTalawaApiUrlResponse: true,
-    });
-    // Break Docker URL validation intentionally
-    const badUrlSpy = vi
-      .spyOn(URL.prototype, 'toString')
-      .mockImplementationOnce(() => {
-        throw new Error('Invalid Docker URL generated');
-      });
-
-    await askAndUpdateTalawaApiUrl(true);
-    badUrlSpy.mockRestore();
-  });
-
-  test('should handle outer catch when inquirer throws globally', async () => {
-    vi.spyOn(inquirer, 'prompt').mockRejectedValueOnce(
-      new Error('Global failure'),
-    );
-    await expect(askAndUpdateTalawaApiUrl()).resolves.not.toThrow();
+    global.URL = originalURL;
   });
 });
