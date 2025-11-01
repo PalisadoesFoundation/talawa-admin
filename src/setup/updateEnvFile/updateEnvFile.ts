@@ -5,15 +5,15 @@ const ENV_PATH = path.resolve(process.cwd(), '.env');
 
 const PARAM_DESCRIPTIONS: Record<string, string> = {
   PORT: 'Frontend port number to run the app on.',
+  USE_DOCKER: 'Indicates whether Docker is being used.',
+  DOCKER_PORT: 'Docker container port mapping for frontend.',
   REACT_APP_TALAWA_URL: 'GraphQL endpoint for the Talawa backend.',
+  REACT_APP_BACKEND_WEBSOCKET_URL: 'WebSocket endpoint for real-time updates.',
+  REACT_APP_DOCKER_TALAWA_URL: 'GraphQL endpoint inside Docker container.',
   REACT_APP_USE_RECAPTCHA: 'Enable or disable reCAPTCHA protection.',
   REACT_APP_RECAPTCHA_SITE_KEY:
     'Google reCAPTCHA site key used for verification.',
-  REACT_APP_BACKEND_WEBSOCKET_URL: 'WebSocket endpoint for real-time updates.',
   ALLOW_LOGS: 'Whether logs are allowed in the console.',
-  USE_DOCKER: 'Indicates whether Docker is being used.',
-  DOCKER_PORT: 'Docker container port mapping for frontend.',
-  REACT_APP_DOCKER_TALAWA_URL: 'GraphQL endpoint inside Docker container.',
 };
 
 export const updateEnvFile = (key: string, value: string): void => {
@@ -26,17 +26,20 @@ export const updateEnvFile = (key: string, value: string): void => {
 
     let envContent = fs.readFileSync(ENV_PATH, 'utf8');
 
-    // Remove ALL occurrences of this key (even commented)
-    const regex = new RegExp(`^\\s*#?\\s*${key}\\s*=.*$`, 'gm');
-    envContent = envContent.replace(regex, '').trim();
+    // Remove existing key and its comment (and any surrounding blank lines)
+    const regex = new RegExp(
+      String.raw`(^|\n)\s*(#.*\n)?\s*#?\s*${key}\s*=.*(\r?\n)?`,
+      'gm',
+    );
+    envContent = envContent.replace(regex, '\n');
+    envContent = envContent.replace(/\n{3,}/g, '\n\n').trim();
 
-    // Append new formatted block (always non-commented)
-    const formattedBlock = `\n# ${description}\n${key}=${value ?? ''}`;
-    envContent = envContent
-      ? `${envContent}\n${formattedBlock}\n`
-      : `${formattedBlock}\n`;
+    // Prepare new variable block
+    const newBlock = `# ${description}\n${key}=${value ?? ''}`;
 
-    fs.writeFileSync(ENV_PATH, envContent, 'utf8');
+    // Append block with exactly one blank line separation if not empty
+    envContent = envContent ? `${envContent}\n\n${newBlock}` : newBlock;
+    fs.writeFileSync(ENV_PATH, envContent.trim() + '\n\n', 'utf8');
   } catch (error) {
     console.error('Error updating the .env file:', error);
   }

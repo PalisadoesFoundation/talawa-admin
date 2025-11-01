@@ -77,7 +77,6 @@ export async function main(): Promise<void> {
     const envConfig = dotenv.parse(fs.readFileSync('.env', 'utf8'));
     const useDocker = envConfig.USE_DOCKER === 'YES';
 
-    // Only run these commands if Docker is NOT used
     if (useDocker) {
       await askAndUpdateTalawaApiUrl(useDocker);
     } else {

@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import fs from 'fs';
+import updateEnvFile from 'setup/updateEnvFile/updateEnvFile';
 
 dotenv.config();
 
@@ -21,8 +22,6 @@ export function modifyEnvFile(): void {
   const misplaced = Object.keys(envSample).filter((key) => !(key in env));
   if (misplaced.length > 0) {
     const config = dotenv.parse(fs.readFileSync('.env.example'));
-    misplaced.map((key) =>
-      fs.appendFileSync('.env', `${key}=${config[key]}\n`),
-    );
+    misplaced.map((key) => updateEnvFile(key, config[key]));
   }
 }

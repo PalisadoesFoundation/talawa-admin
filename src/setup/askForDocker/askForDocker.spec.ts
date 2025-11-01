@@ -192,3 +192,71 @@ describe('askAndUpdateTalawaApiUrl', () => {
     global.URL = originalURL;
   });
 });
+
+describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
+  test('should handle WebSocket URL with invalid protocol', async () => {
+    (askForTalawaApiUrl as Mock).mockResolvedValue('https://example.com');
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      shouldSetTalawaApiUrlResponse: true,
+    });
+
+    const originalURL = global.URL;
+    let callCount = 0;
+    global.URL = class extends originalURL {
+      constructor(url: string) {
+        super(url);
+        callCount++;
+        if (callCount === 2 && url.startsWith('ws')) {
+          Object.defineProperty(this, 'protocol', {
+            get: () => 'invalid:',
+            configurable: true,
+          });
+        }
+      }
+    } as typeof URL;
+
+    await askAndUpdateTalawaApiUrl();
+
+    expect(console.error).toHaveBeenCalledWith(
+      'Error setting up Talawa API URL:',
+      expect.objectContaining({
+        message: 'Invalid WebSocket URL generated: ',
+      }),
+    );
+
+    global.URL = originalURL;
+  });
+
+  test('should handle Docker URL with invalid protocol after construction', async () => {
+    (askForTalawaApiUrl as Mock).mockResolvedValue('https://localhost:3000');
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      shouldSetTalawaApiUrlResponse: true,
+    });
+
+    const originalURL = global.URL;
+    let callCount = 0;
+    global.URL = class extends originalURL {
+      constructor(url: string) {
+        super(url);
+        callCount++;
+        if (callCount === 3 && url.includes('host.docker.internal')) {
+          Object.defineProperty(this, 'protocol', {
+            get: () => 'ftp:',
+            configurable: true,
+          });
+        }
+      }
+    } as typeof URL;
+
+    await askAndUpdateTalawaApiUrl(true);
+
+    expect(console.error).toHaveBeenCalledWith(
+      'Error setting up Talawa API URL:',
+      expect.objectContaining({
+        message: 'Invalid Docker URL generated',
+      }),
+    );
+
+    global.URL = originalURL;
+  });
+});
