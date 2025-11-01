@@ -84,10 +84,9 @@ const UpcomingEvents = (): JSX.Element => {
 
   // Extracts organization ID from the URL parameters
   const { orgId } = useParams();
-  if (!orgId || !userId) {
-    // Redirects to the homepage if orgId or userId is missing
-    return <Navigate to={'/'} replace />;
-  }
+  // Redirects to the homepage if orgId or userId is missing
+  if (!orgId || !userId) return <Navigate to={'/'} replace />;
+
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchBy, setSearchBy] = useState<'title' | 'location'>('title');
 
@@ -189,16 +188,12 @@ const UpcomingEvents = (): JSX.Element => {
 
     if (scope === 'ENTIRE_SERIES') {
       // For series volunteering, use the base event ID (template)
-      if (eventData?.baseEventId) {
-        targetEventId = eventData.baseEventId;
-      }
+      if (eventData?.baseEventId) targetEventId = eventData.baseEventId;
     } else {
       // For instance-only volunteering, use current event ID and pass instanceId
       recurringEventInstanceId = eventId;
       // The target event should be the base event for the backend logic
-      if (eventData?.baseEventId) {
-        targetEventId = eventData.baseEventId;
-      }
+      if (eventData?.baseEventId) targetEventId = eventData.baseEventId;
     }
 
     await handleVolunteer(
