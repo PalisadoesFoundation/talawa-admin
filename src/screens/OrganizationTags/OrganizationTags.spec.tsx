@@ -305,6 +305,39 @@ describe('Organisation Tags Page', () => {
       );
     });
   });
+  test('shows error when creating tag with empty name', async () => {
+    renderOrganizationTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
+    });
+
+    // Open create tag modal
+    await userEvent.click(screen.getByTestId('createTagBtn'));
+
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.tagNamePlaceholder),
+      ).toBeInTheDocument();
+    });
+
+    const tagNameInput = screen.getByPlaceholderText(
+      translations.tagNamePlaceholder,
+    );
+
+    // Try with only whitespace - this should trigger validation
+    await userEvent.clear(tagNameInput);
+    await userEvent.type(tagNameInput, '   ');
+
+    await userEvent.click(screen.getByTestId('createTagSubmitBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(translations.enterTagName);
+    });
+  });
+
   test('creates a new user tag with error', async () => {
     renderOrganizationTags(link3);
 
