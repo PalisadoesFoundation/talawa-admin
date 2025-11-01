@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserSidebarOrgProps
 
-Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:63](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L63)
+Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:63](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L63)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:63](htt
 
 > **hideDrawer**: `boolean`
 
-Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:66](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L66)
+Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:66](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L66)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:66](htt
 
 > **orgId**: `string`
 
-Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:64](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L64)
+Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:64](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L64)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:64](htt
 
 > **setHideDrawer**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:67](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L67)
+Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:67](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L67)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:67](htt
 
 > **targets**: [`TargetsType`](../../../../../state/reducers/routesReducer/type-aliases/TargetsType.md)[]
 
-Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:65](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L65)
+Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:65](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L65)

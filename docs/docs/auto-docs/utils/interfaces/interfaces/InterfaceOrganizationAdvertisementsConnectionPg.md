@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationAdvertisementsConnectionPg
 
-Defined in: [src/utils/interfaces.ts:752](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L752)
+Defined in: [src/utils/interfaces.ts:752](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L752)
 
 InterfaceOrganizationAdvertisementsConnectionPg
 
@@ -18,7 +18,7 @@ Defines the structure for a connection of organization advertisements with Postg
 
 > **edges**: [`InterfaceOrganizationAdvertisementsConnectionEdgePg`](InterfaceOrganizationAdvertisementsConnectionEdgePg.md)[]
 
-Defined in: [src/utils/interfaces.ts:753](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L753)
+Defined in: [src/utils/interfaces.ts:753](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L753)
 
 An array of edges, where each edge contains a cursor and an advertisement node.
 
@@ -28,6 +28,6 @@ An array of edges, where each edge contains a cursor and an advertisement node.
 
 > **pageInfo**: [`InterfacePageInfoPg`](InterfacePageInfoPg.md)
 
-Defined in: [src/utils/interfaces.ts:754](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L754)
+Defined in: [src/utils/interfaces.ts:754](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L754)
 
 Pagination information.

@@ -4,7 +4,7 @@
 
 # Interface: IOrgList
 
-Defined in: [src/types/Event/interface.ts:72](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L72)
+Defined in: [src/types/Event/interface.ts:72](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L72)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:72](https://github.com/iamanishx/talaw
 
 > **id**: `string`
 
-Defined in: [src/types/Event/interface.ts:73](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L73)
+Defined in: [src/types/Event/interface.ts:73](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L73)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/interface.ts:73](https://github.com/iamanishx/talaw
 
 > **members**: `object`
 
-Defined in: [src/types/Event/interface.ts:74](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L74)
+Defined in: [src/types/Event/interface.ts:74](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L74)
 
 #### edges
 

@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/components/OrganizationDashCards/CardItem/Loader/CardItemLoading.tsx:37](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/OrganizationDashCards/CardItem/Loader/CardItemLoading.tsx#L37)
+Defined in: [src/components/OrganizationDashCards/CardItem/Loader/CardItemLoading.tsx:37](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/components/OrganizationDashCards/CardItem/Loader/CardItemLoading.tsx#L37)
 
 ## Returns
 

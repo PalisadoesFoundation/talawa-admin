@@ -4,7 +4,7 @@
 
 # Interface: InterfaceDonationCardProps
 
-Defined in: [src/types/Donation/interface.ts:10](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Donation/interface.ts#L10)
+Defined in: [src/types/Donation/interface.ts:10](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Donation/interface.ts#L10)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Donation/interface.ts:10](https://github.com/iamanishx/ta
 
 > **amount**: `string`
 
-Defined in: [src/types/Donation/interface.ts:13](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Donation/interface.ts#L13)
+Defined in: [src/types/Donation/interface.ts:13](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Donation/interface.ts#L13)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Donation/interface.ts:13](https://github.com/iamanishx/ta
 
 > **id**: `string`
 
-Defined in: [src/types/Donation/interface.ts:11](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Donation/interface.ts#L11)
+Defined in: [src/types/Donation/interface.ts:11](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Donation/interface.ts#L11)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Donation/interface.ts:11](https://github.com/iamanishx/ta
 
 > **name**: `string`
 
-Defined in: [src/types/Donation/interface.ts:12](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Donation/interface.ts#L12)
+Defined in: [src/types/Donation/interface.ts:12](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Donation/interface.ts#L12)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Donation/interface.ts:12](https://github.com/iamanishx/ta
 
 > **payPalId**: `string`
 
-Defined in: [src/types/Donation/interface.ts:15](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Donation/interface.ts#L15)
+Defined in: [src/types/Donation/interface.ts:15](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Donation/interface.ts#L15)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Donation/interface.ts:15](https://github.com/iamanishx/ta
 
 > **updatedAt**: `string`
 
-Defined in: [src/types/Donation/interface.ts:16](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Donation/interface.ts#L16)
+Defined in: [src/types/Donation/interface.ts:16](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Donation/interface.ts#L16)
 
 ***
 
@@ -52,4 +52,4 @@ Defined in: [src/types/Donation/interface.ts:16](https://github.com/iamanishx/ta
 
 > **userId**: `string`
 
-Defined in: [src/types/Donation/interface.ts:14](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Donation/interface.ts#L14)
+Defined in: [src/types/Donation/interface.ts:14](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Donation/interface.ts#L14)

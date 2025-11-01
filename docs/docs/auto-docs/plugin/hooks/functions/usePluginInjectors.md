@@ -6,7 +6,7 @@
 
 > **usePluginInjectors**(`injectorType`): [`IInjectorExtension`](../../types/interfaces/IInjectorExtension.md)[]
 
-Defined in: [src/plugin/hooks.ts:155](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/hooks.ts#L155)
+Defined in: [src/plugin/hooks.ts:155](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/hooks.ts#L155)
 
 Hook to get plugin injector extensions
 

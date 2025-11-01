@@ -6,7 +6,7 @@
 
 > **createDefaultRecurrenceRule**(`startDate`, `frequency`): [`InterfaceRecurrenceRule`](../../recurrenceTypes/interfaces/InterfaceRecurrenceRule.md)
 
-Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:223](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L223)
+Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:223](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L223)
 
 Creates a default recurrence rule based on the event start date
 

@@ -6,7 +6,7 @@
 
 > **handleCreateDirectChat**(`id`, `userName`, `chats`, `t`, `createChat`, `createChatMembership`, `organizationId`, `userId`, `currentUserName`, `chatsListRefetch`, `toggleCreateDirectChatModal`): `Promise`\<`void`\>
 
-Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:98](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx#L98)
+Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:98](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx#L98)
 
 ## Parameters
 

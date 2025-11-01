@@ -4,7 +4,7 @@
 
 # Class: ExtensionRegistryManager
 
-Defined in: [src/plugin/managers/extension-registry.ts:12](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/managers/extension-registry.ts#L12)
+Defined in: [src/plugin/managers/extension-registry.ts:12](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/managers/extension-registry.ts#L12)
 
 ## Constructors
 
@@ -22,7 +22,7 @@ Defined in: [src/plugin/managers/extension-registry.ts:12](https://github.com/ia
 
 > **getExtensionPoints**\<`T`\>(`type`): [`IExtensionRegistry`](../../../types/interfaces/IExtensionRegistry.md)\[`T`\]
 
-Defined in: [src/plugin/managers/extension-registry.ts:245](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/managers/extension-registry.ts#L245)
+Defined in: [src/plugin/managers/extension-registry.ts:245](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/managers/extension-registry.ts#L245)
 
 #### Type Parameters
 
@@ -46,7 +46,7 @@ Defined in: [src/plugin/managers/extension-registry.ts:245](https://github.com/i
 
 > **getExtensionRegistry**(): [`IExtensionRegistry`](../../../types/interfaces/IExtensionRegistry.md)
 
-Defined in: [src/plugin/managers/extension-registry.ts:30](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/managers/extension-registry.ts#L30)
+Defined in: [src/plugin/managers/extension-registry.ts:30](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/managers/extension-registry.ts#L30)
 
 #### Returns
 
@@ -58,7 +58,7 @@ Defined in: [src/plugin/managers/extension-registry.ts:30](https://github.com/ia
 
 > **registerExtensionPoints**(`pluginId`, `manifest`): `void`
 
-Defined in: [src/plugin/managers/extension-registry.ts:34](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/managers/extension-registry.ts#L34)
+Defined in: [src/plugin/managers/extension-registry.ts:34](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/managers/extension-registry.ts#L34)
 
 #### Parameters
 
@@ -80,7 +80,7 @@ Defined in: [src/plugin/managers/extension-registry.ts:34](https://github.com/ia
 
 > **unregisterExtensionPoints**(`pluginId`): `void`
 
-Defined in: [src/plugin/managers/extension-registry.ts:239](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/managers/extension-registry.ts#L239)
+Defined in: [src/plugin/managers/extension-registry.ts:239](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/managers/extension-registry.ts#L239)
 
 #### Parameters
 

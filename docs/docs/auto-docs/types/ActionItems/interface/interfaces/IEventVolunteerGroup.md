@@ -4,7 +4,7 @@
 
 # Interface: IEventVolunteerGroup
 
-Defined in: [src/types/ActionItems/interface.ts:171](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L171)
+Defined in: [src/types/ActionItems/interface.ts:171](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L171)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/ActionItems/interface.ts:171](https://github.com/iamanish
 
 > **createdAt**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:178](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L178)
+Defined in: [src/types/ActionItems/interface.ts:178](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L178)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/ActionItems/interface.ts:178](https://github.com/iamanish
 
 > **creator**: `object`
 
-Defined in: [src/types/ActionItems/interface.ts:179](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L179)
+Defined in: [src/types/ActionItems/interface.ts:179](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L179)
 
 #### avatarURL?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/ActionItems/interface.ts:179](https://github.com/iamanish
 
 > **description**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:174](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L174)
+Defined in: [src/types/ActionItems/interface.ts:174](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L174)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/types/ActionItems/interface.ts:174](https://github.com/iamanish
 
 > **event**: `object`
 
-Defined in: [src/types/ActionItems/interface.ts:198](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L198)
+Defined in: [src/types/ActionItems/interface.ts:198](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L198)
 
 #### id
 
@@ -60,7 +60,7 @@ Defined in: [src/types/ActionItems/interface.ts:198](https://github.com/iamanish
 
 > **id**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:172](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L172)
+Defined in: [src/types/ActionItems/interface.ts:172](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L172)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/types/ActionItems/interface.ts:172](https://github.com/iamanish
 
 > **isInstanceException**: `boolean`
 
-Defined in: [src/types/ActionItems/interface.ts:177](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L177)
+Defined in: [src/types/ActionItems/interface.ts:177](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L177)
 
 ***
 
@@ -76,7 +76,7 @@ Defined in: [src/types/ActionItems/interface.ts:177](https://github.com/iamanish
 
 > **isTemplate**: `boolean`
 
-Defined in: [src/types/ActionItems/interface.ts:176](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L176)
+Defined in: [src/types/ActionItems/interface.ts:176](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L176)
 
 ***
 
@@ -84,7 +84,7 @@ Defined in: [src/types/ActionItems/interface.ts:176](https://github.com/iamanish
 
 > **leader**: `object`
 
-Defined in: [src/types/ActionItems/interface.ts:184](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L184)
+Defined in: [src/types/ActionItems/interface.ts:184](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L184)
 
 #### avatarURL?
 
@@ -104,7 +104,7 @@ Defined in: [src/types/ActionItems/interface.ts:184](https://github.com/iamanish
 
 > **name**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:173](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L173)
+Defined in: [src/types/ActionItems/interface.ts:173](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L173)
 
 ***
 
@@ -112,7 +112,7 @@ Defined in: [src/types/ActionItems/interface.ts:173](https://github.com/iamanish
 
 > **volunteers**: `object`[]
 
-Defined in: [src/types/ActionItems/interface.ts:189](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L189)
+Defined in: [src/types/ActionItems/interface.ts:189](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L189)
 
 #### hasAccepted
 
@@ -144,4 +144,4 @@ Defined in: [src/types/ActionItems/interface.ts:189](https://github.com/iamanish
 
 > **volunteersRequired**: `number`
 
-Defined in: [src/types/ActionItems/interface.ts:175](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L175)
+Defined in: [src/types/ActionItems/interface.ts:175](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L175)

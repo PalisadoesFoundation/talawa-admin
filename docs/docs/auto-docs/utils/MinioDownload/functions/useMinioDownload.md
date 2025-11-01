@@ -6,7 +6,7 @@
 
 > **useMinioDownload**(): `InterfaceMinioDownload`
 
-Defined in: [src/utils/MinioDownload.ts:11](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/MinioDownload.ts#L11)
+Defined in: [src/utils/MinioDownload.ts:11](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/MinioDownload.ts#L11)
 
 ## Returns
 

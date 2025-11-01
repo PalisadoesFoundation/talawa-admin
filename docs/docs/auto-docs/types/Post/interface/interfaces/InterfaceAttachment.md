@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAttachment
 
-Defined in: [src/types/Post/interface.ts:71](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/interface.ts#L71)
+Defined in: [src/types/Post/interface.ts:71](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/interface.ts#L71)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/types/Post/interface.ts:71](https://github.com/iamanishx/talawa
 
 > **url**: `string`
 
-Defined in: [src/types/Post/interface.ts:72](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/interface.ts#L72)
+Defined in: [src/types/Post/interface.ts:72](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/interface.ts#L72)

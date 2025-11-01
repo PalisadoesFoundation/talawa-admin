@@ -4,7 +4,7 @@
 
 # Interface: InterfaceFormStateType
 
-Defined in: [src/types/Agenda/interface.ts:23](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Agenda/interface.ts#L23)
+Defined in: [src/types/Agenda/interface.ts:23](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Agenda/interface.ts#L23)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Agenda/interface.ts:23](https://github.com/iamanishx/tala
 
 > **agendaItemCategoryIds**: `string`[]
 
-Defined in: [src/types/Agenda/interface.ts:24](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Agenda/interface.ts#L24)
+Defined in: [src/types/Agenda/interface.ts:24](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Agenda/interface.ts#L24)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Agenda/interface.ts:24](https://github.com/iamanishx/tala
 
 > **agendaItemCategoryNames**: `string`[]
 
-Defined in: [src/types/Agenda/interface.ts:25](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Agenda/interface.ts#L25)
+Defined in: [src/types/Agenda/interface.ts:25](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Agenda/interface.ts#L25)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Agenda/interface.ts:25](https://github.com/iamanishx/tala
 
 > **attachments**: `string`[]
 
-Defined in: [src/types/Agenda/interface.ts:29](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Agenda/interface.ts#L29)
+Defined in: [src/types/Agenda/interface.ts:29](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Agenda/interface.ts#L29)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Agenda/interface.ts:29](https://github.com/iamanishx/tala
 
 > **createdBy**: `object`
 
-Defined in: [src/types/Agenda/interface.ts:31](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Agenda/interface.ts#L31)
+Defined in: [src/types/Agenda/interface.ts:31](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Agenda/interface.ts#L31)
 
 #### firstName
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Agenda/interface.ts:31](https://github.com/iamanishx/tala
 
 > **description**: `string`
 
-Defined in: [src/types/Agenda/interface.ts:27](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Agenda/interface.ts#L27)
+Defined in: [src/types/Agenda/interface.ts:27](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Agenda/interface.ts#L27)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Agenda/interface.ts:27](https://github.com/iamanishx/tala
 
 > **duration**: `string`
 
-Defined in: [src/types/Agenda/interface.ts:28](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Agenda/interface.ts#L28)
+Defined in: [src/types/Agenda/interface.ts:28](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Agenda/interface.ts#L28)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/types/Agenda/interface.ts:28](https://github.com/iamanishx/tala
 
 > **title**: `string`
 
-Defined in: [src/types/Agenda/interface.ts:26](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Agenda/interface.ts#L26)
+Defined in: [src/types/Agenda/interface.ts:26](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Agenda/interface.ts#L26)
 
 ***
 
@@ -76,4 +76,4 @@ Defined in: [src/types/Agenda/interface.ts:26](https://github.com/iamanishx/tala
 
 > **urls**: `string`[]
 
-Defined in: [src/types/Agenda/interface.ts:30](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Agenda/interface.ts#L30)
+Defined in: [src/types/Agenda/interface.ts:30](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Agenda/interface.ts#L30)

@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/UserPortal/PeopleCard/PeopleCard.tsx:44](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/UserPortal/PeopleCard/PeopleCard.tsx#L44)
+Defined in: [src/components/UserPortal/PeopleCard/PeopleCard.tsx:44](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/components/UserPortal/PeopleCard/PeopleCard.tsx#L44)
 
 ## Parameters
 

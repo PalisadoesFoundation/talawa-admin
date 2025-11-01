@@ -4,7 +4,7 @@
 
 # Interface: InterfacePaginationVariables
 
-Defined in: [src/types/Tag/interface.ts:35](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Tag/interface.ts#L35)
+Defined in: [src/types/Tag/interface.ts:35](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Tag/interface.ts#L35)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Tag/interface.ts:35](https://github.com/iamanishx/talawa-
 
 > `optional` **after**: `string`
 
-Defined in: [src/types/Tag/interface.ts:36](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Tag/interface.ts#L36)
+Defined in: [src/types/Tag/interface.ts:36](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Tag/interface.ts#L36)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/types/Tag/interface.ts:36](https://github.com/iamanishx/talawa-
 
 > `optional` **first**: `number`
 
-Defined in: [src/types/Tag/interface.ts:37](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Tag/interface.ts#L37)
+Defined in: [src/types/Tag/interface.ts:37](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Tag/interface.ts#L37)

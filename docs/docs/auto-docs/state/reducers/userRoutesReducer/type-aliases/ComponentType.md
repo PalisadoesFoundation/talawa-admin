@@ -6,7 +6,7 @@
 
 > **ComponentType** = `object`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:32](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/state/reducers/userRoutesReducer.ts#L32)
+Defined in: [src/state/reducers/userRoutesReducer.ts:32](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/state/reducers/userRoutesReducer.ts#L32)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:32](https://github.com/iama
 
 > **comp\_id**: `string` \| `null`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:34](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/state/reducers/userRoutesReducer.ts#L34)
+Defined in: [src/state/reducers/userRoutesReducer.ts:34](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/state/reducers/userRoutesReducer.ts#L34)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:34](https://github.com/iama
 
 > **component**: `string` \| `null`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:35](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/state/reducers/userRoutesReducer.ts#L35)
+Defined in: [src/state/reducers/userRoutesReducer.ts:35](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/state/reducers/userRoutesReducer.ts#L35)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:35](https://github.com/iama
 
 > **name**: `string`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:33](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/state/reducers/userRoutesReducer.ts#L33)
+Defined in: [src/state/reducers/userRoutesReducer.ts:33](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/state/reducers/userRoutesReducer.ts#L33)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:33](https://github.com/iama
 
 > `optional` **subTargets**: `object`[]
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:36](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/state/reducers/userRoutesReducer.ts#L36)
+Defined in: [src/state/reducers/userRoutesReducer.ts:36](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/state/reducers/userRoutesReducer.ts#L36)
 
 #### comp\_id
 

@@ -4,7 +4,7 @@
 
 # Interface: IMember
 
-Defined in: [src/types/Event/interface.ts:18](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L18)
+Defined in: [src/types/Event/interface.ts:18](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L18)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:18](https://github.com/iamanishx/talaw
 
 > **birthDate**: `Date`
 
-Defined in: [src/types/Event/interface.ts:26](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L26)
+Defined in: [src/types/Event/interface.ts:26](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L26)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/interface.ts:26](https://github.com/iamanishx/talaw
 
 > **createdAt**: `string`
 
-Defined in: [src/types/Event/interface.ts:19](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L19)
+Defined in: [src/types/Event/interface.ts:19](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L19)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Event/interface.ts:19](https://github.com/iamanishx/talaw
 
 > **emailAddress**: `` `${string}@${string}.${string}` ``
 
-Defined in: [src/types/Event/interface.ts:21](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L21)
+Defined in: [src/types/Event/interface.ts:21](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L21)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Event/interface.ts:21](https://github.com/iamanishx/talaw
 
 > `optional` **eventsAttended**: `object`[]
 
-Defined in: [src/types/Event/interface.ts:23](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L23)
+Defined in: [src/types/Event/interface.ts:23](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L23)
 
 #### id
 
@@ -48,7 +48,7 @@ Defined in: [src/types/Event/interface.ts:23](https://github.com/iamanishx/talaw
 
 > **id**: `string`
 
-Defined in: [src/types/Event/interface.ts:28](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L28)
+Defined in: [src/types/Event/interface.ts:28](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L28)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/types/Event/interface.ts:28](https://github.com/iamanishx/talaw
 
 > **name**: `string`
 
-Defined in: [src/types/Event/interface.ts:20](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L20)
+Defined in: [src/types/Event/interface.ts:20](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L20)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [src/types/Event/interface.ts:20](https://github.com/iamanishx/talaw
 
 > **natalSex**: `string`
 
-Defined in: [src/types/Event/interface.ts:22](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L22)
+Defined in: [src/types/Event/interface.ts:22](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L22)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [src/types/Event/interface.ts:22](https://github.com/iamanishx/talaw
 
 > **role**: `string`
 
-Defined in: [src/types/Event/interface.ts:27](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L27)
+Defined in: [src/types/Event/interface.ts:27](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L27)
 
 ***
 
@@ -80,7 +80,7 @@ Defined in: [src/types/Event/interface.ts:27](https://github.com/iamanishx/talaw
 
 > **tagsAssignedWith**: `object`
 
-Defined in: [src/types/Event/interface.ts:29](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L29)
+Defined in: [src/types/Event/interface.ts:29](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L29)
 
 #### edges
 

@@ -6,7 +6,7 @@
 
 > **checkEnvFile**(): `boolean`
 
-Defined in: [src/setup/checkEnvFile/checkEnvFile.ts:6](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/setup/checkEnvFile/checkEnvFile.ts#L6)
+Defined in: [src/setup/checkEnvFile/checkEnvFile.ts:6](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/setup/checkEnvFile/checkEnvFile.ts#L6)
 
 ## Returns
 

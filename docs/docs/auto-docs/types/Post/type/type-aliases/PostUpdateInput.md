@@ -6,7 +6,7 @@
 
 > **PostUpdateInput** = `object`
 
-Defined in: [src/types/Post/type.ts:54](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/type.ts#L54)
+Defined in: [src/types/Post/type.ts:54](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/type.ts#L54)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Post/type.ts:54](https://github.com/iamanishx/talawa-admi
 
 > `optional` **imageUrl**: `string`
 
-Defined in: [src/types/Post/type.ts:55](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/type.ts#L55)
+Defined in: [src/types/Post/type.ts:55](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/type.ts#L55)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Post/type.ts:55](https://github.com/iamanishx/talawa-admi
 
 > `optional` **text**: `string`
 
-Defined in: [src/types/Post/type.ts:56](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/type.ts#L56)
+Defined in: [src/types/Post/type.ts:56](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/type.ts#L56)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Post/type.ts:56](https://github.com/iamanishx/talawa-admi
 
 > `optional` **title**: `string`
 
-Defined in: [src/types/Post/type.ts:57](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/type.ts#L57)
+Defined in: [src/types/Post/type.ts:57](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/type.ts#L57)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/types/Post/type.ts:57](https://github.com/iamanishx/talawa-admi
 
 > `optional` **videoUrl**: `string`
 
-Defined in: [src/types/Post/type.ts:58](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/type.ts#L58)
+Defined in: [src/types/Post/type.ts:58](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/type.ts#L58)

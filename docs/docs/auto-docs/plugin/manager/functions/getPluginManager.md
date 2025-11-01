@@ -6,7 +6,7 @@
 
 > **getPluginManager**(`apolloClient?`): [`PluginManager`](../classes/PluginManager.md)
 
-Defined in: [src/plugin/manager.ts:181](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/manager.ts#L181)
+Defined in: [src/plugin/manager.ts:181](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/manager.ts#L181)
 
 ## Parameters
 

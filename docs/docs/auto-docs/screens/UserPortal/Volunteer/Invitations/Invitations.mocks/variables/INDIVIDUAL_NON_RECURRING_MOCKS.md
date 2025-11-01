@@ -6,7 +6,7 @@
 
 > `const` **INDIVIDUAL\_NON\_RECURRING\_MOCKS**: `object`[]
 
-Defined in: [src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts:401](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts#L401)
+Defined in: [src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts:401](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts#L401)
 
 ## Type Declaration
 

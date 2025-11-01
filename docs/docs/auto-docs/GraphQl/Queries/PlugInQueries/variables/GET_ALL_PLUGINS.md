@@ -6,7 +6,7 @@
 
 > `const` **GET\_ALL\_PLUGINS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/PlugInQueries.ts:8](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/GraphQl/Queries/PlugInQueries.ts#L8)
+Defined in: [src/GraphQl/Queries/PlugInQueries.ts:8](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/GraphQl/Queries/PlugInQueries.ts#L8)
 
 GraphQL query to retrieve all plugins.
 

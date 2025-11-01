@@ -4,7 +4,7 @@
 
 # Interface: IItemModalProps
 
-Defined in: [src/types/ActionItems/interface.ts:132](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L132)
+Defined in: [src/types/ActionItems/interface.ts:132](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L132)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/ActionItems/interface.ts:132](https://github.com/iamanish
 
 > **actionItem**: [`IActionItemInfo`](IActionItemInfo.md)
 
-Defined in: [src/types/ActionItems/interface.ts:139](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L139)
+Defined in: [src/types/ActionItems/interface.ts:139](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L139)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/ActionItems/interface.ts:139](https://github.com/iamanish
 
 > **actionItemsRefetch**: () => `void`
 
-Defined in: [src/types/ActionItems/interface.ts:137](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L137)
+Defined in: [src/types/ActionItems/interface.ts:137](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L137)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/types/ActionItems/interface.ts:137](https://github.com/iamanish
 
 > `optional` **baseEvent**: `object`
 
-Defined in: [src/types/ActionItems/interface.ts:142](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L142)
+Defined in: [src/types/ActionItems/interface.ts:142](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L142)
 
 #### id
 
@@ -44,7 +44,7 @@ Defined in: [src/types/ActionItems/interface.ts:142](https://github.com/iamanish
 
 > **editMode**: `boolean`
 
-Defined in: [src/types/ActionItems/interface.ts:140](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L140)
+Defined in: [src/types/ActionItems/interface.ts:140](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L140)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/ActionItems/interface.ts:140](https://github.com/iamanish
 
 > **eventId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:136](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L136)
+Defined in: [src/types/ActionItems/interface.ts:136](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L136)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/ActionItems/interface.ts:136](https://github.com/iamanish
 
 > **hide**: () => `void`
 
-Defined in: [src/types/ActionItems/interface.ts:134](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L134)
+Defined in: [src/types/ActionItems/interface.ts:134](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L134)
 
 #### Returns
 
@@ -72,7 +72,7 @@ Defined in: [src/types/ActionItems/interface.ts:134](https://github.com/iamanish
 
 > **isOpen**: `boolean`
 
-Defined in: [src/types/ActionItems/interface.ts:133](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L133)
+Defined in: [src/types/ActionItems/interface.ts:133](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L133)
 
 ***
 
@@ -80,7 +80,7 @@ Defined in: [src/types/ActionItems/interface.ts:133](https://github.com/iamanish
 
 > `optional` **isRecurring**: `boolean`
 
-Defined in: [src/types/ActionItems/interface.ts:141](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L141)
+Defined in: [src/types/ActionItems/interface.ts:141](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L141)
 
 ***
 
@@ -88,7 +88,7 @@ Defined in: [src/types/ActionItems/interface.ts:141](https://github.com/iamanish
 
 > `optional` **orgActionItemsRefetch**: () => `void`
 
-Defined in: [src/types/ActionItems/interface.ts:138](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L138)
+Defined in: [src/types/ActionItems/interface.ts:138](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L138)
 
 #### Returns
 
@@ -100,4 +100,4 @@ Defined in: [src/types/ActionItems/interface.ts:138](https://github.com/iamanish
 
 > **orgId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:135](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L135)
+Defined in: [src/types/ActionItems/interface.ts:135](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L135)

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganization
 
-Defined in: [src/types/Post/interface.ts:50](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/interface.ts#L50)
+Defined in: [src/types/Post/interface.ts:50](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/interface.ts#L50)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/interface.ts:50](https://github.com/iamanishx/talawa
 
 > **id**: `string`
 
-Defined in: [src/types/Post/interface.ts:51](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/interface.ts#L51)
+Defined in: [src/types/Post/interface.ts:51](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/interface.ts#L51)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Post/interface.ts:51](https://github.com/iamanishx/talawa
 
 > **posts**: `object`
 
-Defined in: [src/types/Post/interface.ts:52](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/interface.ts#L52)
+Defined in: [src/types/Post/interface.ts:52](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/interface.ts#L52)
 
 #### edges
 

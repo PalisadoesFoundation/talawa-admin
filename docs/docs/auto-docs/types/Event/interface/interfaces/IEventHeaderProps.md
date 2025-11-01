@@ -4,7 +4,7 @@
 
 # Interface: IEventHeaderProps
 
-Defined in: [src/types/Event/interface.ts:113](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L113)
+Defined in: [src/types/Event/interface.ts:113](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L113)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:113](https://github.com/iamanishx/tala
 
 > **handleChangeView**: (`item`) => `void`
 
-Defined in: [src/types/Event/interface.ts:115](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L115)
+Defined in: [src/types/Event/interface.ts:115](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L115)
 
 #### Parameters
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Event/interface.ts:115](https://github.com/iamanishx/tala
 
 > **showInviteModal**: () => `void`
 
-Defined in: [src/types/Event/interface.ts:116](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L116)
+Defined in: [src/types/Event/interface.ts:116](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L116)
 
 #### Returns
 
@@ -42,4 +42,4 @@ Defined in: [src/types/Event/interface.ts:116](https://github.com/iamanishx/tala
 
 > **viewType**: [`ViewType`](../../../../screens/OrganizationEvents/OrganizationEvents/enumerations/ViewType.md)
 
-Defined in: [src/types/Event/interface.ts:114](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L114)
+Defined in: [src/types/Event/interface.ts:114](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L114)

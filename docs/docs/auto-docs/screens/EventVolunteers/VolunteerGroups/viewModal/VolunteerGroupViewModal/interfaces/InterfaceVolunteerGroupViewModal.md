@@ -4,7 +4,7 @@
 
 # Interface: InterfaceVolunteerGroupViewModal
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx:57](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx#L57)
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx:57](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx#L57)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGrou
 
 > **group**: [`InterfaceVolunteerGroupInfo`](../../../../../../utils/interfaces/interfaces/InterfaceVolunteerGroupInfo.md)
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx:60](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx#L60)
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx:60](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx#L60)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGrou
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx:59](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx#L59)
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx:59](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx#L59)
 
 #### Returns
 
@@ -32,4 +32,4 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGrou
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx:58](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx#L58)
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx:58](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx#L58)

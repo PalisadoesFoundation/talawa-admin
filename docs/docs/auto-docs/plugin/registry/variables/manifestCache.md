@@ -6,4 +6,4 @@
 
 > `const` **manifestCache**: `Record`\<`string`, [`IPluginManifest`](../../types/interfaces/IPluginManifest.md)\> = `{}`
 
-Defined in: [src/plugin/registry.tsx:27](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/registry.tsx#L27)
+Defined in: [src/plugin/registry.tsx:27](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/registry.tsx#L27)

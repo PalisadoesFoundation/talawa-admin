@@ -4,7 +4,7 @@
 
 # Interface: InterfaceVolunteerMembership
 
-Defined in: [src/utils/interfaces.ts:2511](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2511)
+Defined in: [src/utils/interfaces.ts:2511](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2511)
 
 InterfaceVolunteerMembership
 
@@ -18,7 +18,7 @@ Defines the structure for volunteer membership information.
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:2514](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2514)
+Defined in: [src/utils/interfaces.ts:2514](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2514)
 
 The creation date of the volunteer membership record.
 
@@ -28,7 +28,7 @@ The creation date of the volunteer membership record.
 
 > **createdBy**: `object`
 
-Defined in: [src/utils/interfaces.ts:2540](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2540)
+Defined in: [src/utils/interfaces.ts:2540](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2540)
 
 #### id
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/interfaces.ts:2540](https://github.com/iamanishx/talawa-a
 
 > **event**: `object`
 
-Defined in: [src/utils/interfaces.ts:2516](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2516)
+Defined in: [src/utils/interfaces.ts:2516](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2516)
 
 The event associated with the volunteer membership.
 
@@ -78,7 +78,7 @@ The event associated with the volunteer membership.
 
 > `optional` **group**: `object`
 
-Defined in: [src/utils/interfaces.ts:2536](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2536)
+Defined in: [src/utils/interfaces.ts:2536](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2536)
 
 The group associated with the membership.
 
@@ -96,7 +96,7 @@ The group associated with the membership.
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:2512](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2512)
+Defined in: [src/utils/interfaces.ts:2512](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2512)
 
 ***
 
@@ -104,7 +104,7 @@ Defined in: [src/utils/interfaces.ts:2512](https://github.com/iamanishx/talawa-a
 
 > **status**: `string`
 
-Defined in: [src/utils/interfaces.ts:2513](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2513)
+Defined in: [src/utils/interfaces.ts:2513](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2513)
 
 The status of the volunteer membership.
 
@@ -114,7 +114,7 @@ The status of the volunteer membership.
 
 > **updatedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:2515](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2515)
+Defined in: [src/utils/interfaces.ts:2515](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2515)
 
 ***
 
@@ -122,7 +122,7 @@ Defined in: [src/utils/interfaces.ts:2515](https://github.com/iamanishx/talawa-a
 
 > **updatedBy**: `object`
 
-Defined in: [src/utils/interfaces.ts:2544](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2544)
+Defined in: [src/utils/interfaces.ts:2544](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2544)
 
 #### id
 
@@ -138,7 +138,7 @@ Defined in: [src/utils/interfaces.ts:2544](https://github.com/iamanishx/talawa-a
 
 > **volunteer**: `object`
 
-Defined in: [src/utils/interfaces.ts:2525](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2525)
+Defined in: [src/utils/interfaces.ts:2525](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2525)
 
 The volunteer associated with the membership.
 

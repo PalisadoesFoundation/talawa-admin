@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<`InterfacePinnedPostsStoryProps`\>
 
-Defined in: [src/screens/OrgPost/PinnedPostsStory.tsx:40](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/screens/OrgPost/PinnedPostsStory.tsx#L40)
+Defined in: [src/screens/OrgPost/PinnedPostsStory.tsx:40](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/screens/OrgPost/PinnedPostsStory.tsx#L40)

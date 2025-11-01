@@ -4,7 +4,7 @@
 
 # Interface: IRouteExtension
 
-Defined in: [src/plugin/types.ts:64](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/types.ts#L64)
+Defined in: [src/plugin/types.ts:64](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/types.ts#L64)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:64](https://github.com/iamanishx/talawa-admin/b
 
 > **component**: `string`
 
-Defined in: [src/plugin/types.ts:67](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/types.ts#L67)
+Defined in: [src/plugin/types.ts:67](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/types.ts#L67)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/types.ts:67](https://github.com/iamanishx/talawa-admin/b
 
 > `optional` **exact**: `boolean`
 
-Defined in: [src/plugin/types.ts:68](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/types.ts#L68)
+Defined in: [src/plugin/types.ts:68](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/types.ts#L68)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/plugin/types.ts:68](https://github.com/iamanishx/talawa-admin/b
 
 > **path**: `string`
 
-Defined in: [src/plugin/types.ts:66](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/types.ts#L66)
+Defined in: [src/plugin/types.ts:66](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/types.ts#L66)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/plugin/types.ts:66](https://github.com/iamanishx/talawa-admin/b
 
 > `optional` **permissions**: `string`[]
 
-Defined in: [src/plugin/types.ts:69](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/types.ts#L69)
+Defined in: [src/plugin/types.ts:69](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/types.ts#L69)
 
 ***
 
@@ -44,4 +44,4 @@ Defined in: [src/plugin/types.ts:69](https://github.com/iamanishx/talawa-admin/b
 
 > `optional` **pluginId**: `string`
 
-Defined in: [src/plugin/types.ts:65](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/types.ts#L65)
+Defined in: [src/plugin/types.ts:65](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/types.ts#L65)

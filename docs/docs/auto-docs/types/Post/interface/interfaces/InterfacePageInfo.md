@@ -4,7 +4,7 @@
 
 # Interface: InterfacePageInfo
 
-Defined in: [src/types/Post/interface.ts:38](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/interface.ts#L38)
+Defined in: [src/types/Post/interface.ts:38](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/interface.ts#L38)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/interface.ts:38](https://github.com/iamanishx/talawa
 
 > **endCursor**: `string`
 
-Defined in: [src/types/Post/interface.ts:40](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/interface.ts#L40)
+Defined in: [src/types/Post/interface.ts:40](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/interface.ts#L40)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Post/interface.ts:40](https://github.com/iamanishx/talawa
 
 > **hasNextPage**: `boolean`
 
-Defined in: [src/types/Post/interface.ts:41](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/interface.ts#L41)
+Defined in: [src/types/Post/interface.ts:41](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/interface.ts#L41)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Post/interface.ts:41](https://github.com/iamanishx/talawa
 
 > **hasPreviousPage**: `boolean`
 
-Defined in: [src/types/Post/interface.ts:42](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/interface.ts#L42)
+Defined in: [src/types/Post/interface.ts:42](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/interface.ts#L42)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/types/Post/interface.ts:42](https://github.com/iamanishx/talawa
 
 > **startCursor**: `string`
 
-Defined in: [src/types/Post/interface.ts:39](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/interface.ts#L39)
+Defined in: [src/types/Post/interface.ts:39](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/interface.ts#L39)

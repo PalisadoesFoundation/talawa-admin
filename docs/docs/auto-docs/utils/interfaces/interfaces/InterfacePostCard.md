@@ -4,7 +4,7 @@
 
 # Interface: InterfacePostCard
 
-Defined in: [src/utils/interfaces.ts:2134](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2134)
+Defined in: [src/utils/interfaces.ts:2134](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2134)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:2134](https://github.com/iamanishx/talawa-a
 
 > **commentCount**: `number`
 
-Defined in: [src/utils/interfaces.ts:2149](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2149)
+Defined in: [src/utils/interfaces.ts:2149](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2149)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:2149](https://github.com/iamanishx/talawa-a
 
 > **comments**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:2152](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2152)
+Defined in: [src/utils/interfaces.ts:2152](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2152)
 
 #### body
 
@@ -68,7 +68,7 @@ Defined in: [src/utils/interfaces.ts:2152](https://github.com/iamanishx/talawa-a
 
 > **creator**: `object`
 
-Defined in: [src/utils/interfaces.ts:2137](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2137)
+Defined in: [src/utils/interfaces.ts:2137](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2137)
 
 #### avatarURL?
 
@@ -88,7 +88,7 @@ Defined in: [src/utils/interfaces.ts:2137](https://github.com/iamanishx/talawa-a
 
 > **downVoteCount**: `number`
 
-Defined in: [src/utils/interfaces.ts:2151](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2151)
+Defined in: [src/utils/interfaces.ts:2151](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2151)
 
 ***
 
@@ -96,7 +96,7 @@ Defined in: [src/utils/interfaces.ts:2151](https://github.com/iamanishx/talawa-a
 
 > **fetchPosts**: () => `void`
 
-Defined in: [src/utils/interfaces.ts:2165](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2165)
+Defined in: [src/utils/interfaces.ts:2165](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2165)
 
 #### Returns
 
@@ -108,7 +108,7 @@ Defined in: [src/utils/interfaces.ts:2165](https://github.com/iamanishx/talawa-a
 
 > **hasUserVoted**: [`VoteState`](../type-aliases/VoteState.md)
 
-Defined in: [src/utils/interfaces.ts:2142](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2142)
+Defined in: [src/utils/interfaces.ts:2142](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2142)
 
 ***
 
@@ -116,7 +116,7 @@ Defined in: [src/utils/interfaces.ts:2142](https://github.com/iamanishx/talawa-a
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:2135](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2135)
+Defined in: [src/utils/interfaces.ts:2135](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2135)
 
 ***
 
@@ -124,7 +124,7 @@ Defined in: [src/utils/interfaces.ts:2135](https://github.com/iamanishx/talawa-a
 
 > **image**: `string`
 
-Defined in: [src/utils/interfaces.ts:2145](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2145)
+Defined in: [src/utils/interfaces.ts:2145](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2145)
 
 ***
 
@@ -132,7 +132,7 @@ Defined in: [src/utils/interfaces.ts:2145](https://github.com/iamanishx/talawa-a
 
 > `optional` **isModalView**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:2136](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2136)
+Defined in: [src/utils/interfaces.ts:2136](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2136)
 
 ***
 
@@ -140,7 +140,7 @@ Defined in: [src/utils/interfaces.ts:2136](https://github.com/iamanishx/talawa-a
 
 > `optional` **pinnedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:2144](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2144)
+Defined in: [src/utils/interfaces.ts:2144](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2144)
 
 ***
 
@@ -148,7 +148,7 @@ Defined in: [src/utils/interfaces.ts:2144](https://github.com/iamanishx/talawa-a
 
 > **postedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:2143](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2143)
+Defined in: [src/utils/interfaces.ts:2143](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2143)
 
 ***
 
@@ -156,7 +156,7 @@ Defined in: [src/utils/interfaces.ts:2143](https://github.com/iamanishx/talawa-a
 
 > **text**: `string`
 
-Defined in: [src/utils/interfaces.ts:2148](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2148)
+Defined in: [src/utils/interfaces.ts:2148](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2148)
 
 ***
 
@@ -164,7 +164,7 @@ Defined in: [src/utils/interfaces.ts:2148](https://github.com/iamanishx/talawa-a
 
 > **title**: `string`
 
-Defined in: [src/utils/interfaces.ts:2147](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2147)
+Defined in: [src/utils/interfaces.ts:2147](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2147)
 
 ***
 
@@ -172,7 +172,7 @@ Defined in: [src/utils/interfaces.ts:2147](https://github.com/iamanishx/talawa-a
 
 > **upVoteCount**: `number`
 
-Defined in: [src/utils/interfaces.ts:2150](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2150)
+Defined in: [src/utils/interfaces.ts:2150](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2150)
 
 ***
 
@@ -180,4 +180,4 @@ Defined in: [src/utils/interfaces.ts:2150](https://github.com/iamanishx/talawa-a
 
 > **video**: `string`
 
-Defined in: [src/utils/interfaces.ts:2146](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2146)
+Defined in: [src/utils/interfaces.ts:2146](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2146)

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryBlockPageMemberListItem
 
-Defined in: [src/utils/interfaces.ts:1925](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1925)
+Defined in: [src/utils/interfaces.ts:1925](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1925)
 
 InterfaceQueryBlockPageMemberListItem
 
@@ -18,7 +18,7 @@ Defines the structure for a blocked page member list item returned from a query.
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1926](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1926)
+Defined in: [src/utils/interfaces.ts:1926](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1926)
 
 The unique identifier of the member.
 
@@ -28,7 +28,7 @@ The unique identifier of the member.
 
 > **email**: `string`
 
-Defined in: [src/utils/interfaces.ts:1929](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1929)
+Defined in: [src/utils/interfaces.ts:1929](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1929)
 
 The email address of the member.
 
@@ -38,7 +38,7 @@ The email address of the member.
 
 > **firstName**: `string`
 
-Defined in: [src/utils/interfaces.ts:1927](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1927)
+Defined in: [src/utils/interfaces.ts:1927](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1927)
 
 The first name of the member.
 
@@ -48,7 +48,7 @@ The first name of the member.
 
 > **lastName**: `string`
 
-Defined in: [src/utils/interfaces.ts:1928](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1928)
+Defined in: [src/utils/interfaces.ts:1928](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1928)
 
 The last name of the member.
 
@@ -58,7 +58,7 @@ The last name of the member.
 
 > **organizationsBlockedBy**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:1930](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1930)
+Defined in: [src/utils/interfaces.ts:1930](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1930)
 
 An array of organizations that have blocked this member.
 

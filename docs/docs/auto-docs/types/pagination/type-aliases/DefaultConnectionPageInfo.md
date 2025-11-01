@@ -6,7 +6,7 @@
 
 > **DefaultConnectionPageInfo** = `object`
 
-Defined in: [src/types/pagination.ts:1](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/pagination.ts#L1)
+Defined in: [src/types/pagination.ts:1](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/pagination.ts#L1)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/pagination.ts:1](https://github.com/iamanishx/talawa-admi
 
 > `optional` **endCursor**: `string`
 
-Defined in: [src/types/pagination.ts:5](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/pagination.ts#L5)
+Defined in: [src/types/pagination.ts:5](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/pagination.ts#L5)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/pagination.ts:5](https://github.com/iamanishx/talawa-admi
 
 > **hasNextPage**: `boolean`
 
-Defined in: [src/types/pagination.ts:2](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/pagination.ts#L2)
+Defined in: [src/types/pagination.ts:2](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/pagination.ts#L2)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/pagination.ts:2](https://github.com/iamanishx/talawa-admi
 
 > **hasPreviousPage**: `boolean`
 
-Defined in: [src/types/pagination.ts:3](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/pagination.ts#L3)
+Defined in: [src/types/pagination.ts:3](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/pagination.ts#L3)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/types/pagination.ts:3](https://github.com/iamanishx/talawa-admi
 
 > `optional` **startCursor**: `string`
 
-Defined in: [src/types/pagination.ts:4](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/pagination.ts#L4)
+Defined in: [src/types/pagination.ts:4](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/pagination.ts#L4)

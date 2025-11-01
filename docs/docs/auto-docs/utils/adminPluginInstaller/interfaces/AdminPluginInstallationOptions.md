@@ -4,7 +4,7 @@
 
 # Interface: AdminPluginInstallationOptions
 
-Defined in: [src/utils/adminPluginInstaller.ts:44](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/adminPluginInstaller.ts#L44)
+Defined in: [src/utils/adminPluginInstaller.ts:44](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/adminPluginInstaller.ts#L44)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:44](https://github.com/iamanishx/
 
 > `optional` **apolloClient**: `any`
 
-Defined in: [src/utils/adminPluginInstaller.ts:47](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/adminPluginInstaller.ts#L47)
+Defined in: [src/utils/adminPluginInstaller.ts:47](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/adminPluginInstaller.ts#L47)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:47](https://github.com/iamanishx/
 
 > `optional` **backup**: `boolean`
 
-Defined in: [src/utils/adminPluginInstaller.ts:46](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/adminPluginInstaller.ts#L46)
+Defined in: [src/utils/adminPluginInstaller.ts:46](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/adminPluginInstaller.ts#L46)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/utils/adminPluginInstaller.ts:46](https://github.com/iamanishx/
 
 > **zipFile**: `File`
 
-Defined in: [src/utils/adminPluginInstaller.ts:45](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/adminPluginInstaller.ts#L45)
+Defined in: [src/utils/adminPluginInstaller.ts:45](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/adminPluginInstaller.ts#L45)

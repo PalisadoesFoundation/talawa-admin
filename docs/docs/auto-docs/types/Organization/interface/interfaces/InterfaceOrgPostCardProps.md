@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrgPostCardProps
 
-Defined in: [src/types/Organization/interface.ts:40](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L40)
+Defined in: [src/types/Organization/interface.ts:40](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L40)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Organization/interface.ts:40](https://github.com/iamanish
 
 > **id**: `string`
 
-Defined in: [src/types/Organization/interface.ts:42](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L42)
+Defined in: [src/types/Organization/interface.ts:42](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L42)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Organization/interface.ts:42](https://github.com/iamanish
 
 > **pinned**: `boolean`
 
-Defined in: [src/types/Organization/interface.ts:48](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L48)
+Defined in: [src/types/Organization/interface.ts:48](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L48)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Organization/interface.ts:48](https://github.com/iamanish
 
 > **postAuthor**: `string`
 
-Defined in: [src/types/Organization/interface.ts:45](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L45)
+Defined in: [src/types/Organization/interface.ts:45](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L45)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Organization/interface.ts:45](https://github.com/iamanish
 
 > **postID**: `string`
 
-Defined in: [src/types/Organization/interface.ts:41](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L41)
+Defined in: [src/types/Organization/interface.ts:41](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L41)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Organization/interface.ts:41](https://github.com/iamanish
 
 > **postInfo**: `string`
 
-Defined in: [src/types/Organization/interface.ts:44](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L44)
+Defined in: [src/types/Organization/interface.ts:44](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L44)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Organization/interface.ts:44](https://github.com/iamanish
 
 > **postPhoto**: `string`
 
-Defined in: [src/types/Organization/interface.ts:46](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L46)
+Defined in: [src/types/Organization/interface.ts:46](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L46)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Organization/interface.ts:46](https://github.com/iamanish
 
 > **postTitle**: `string`
 
-Defined in: [src/types/Organization/interface.ts:43](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L43)
+Defined in: [src/types/Organization/interface.ts:43](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L43)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/types/Organization/interface.ts:43](https://github.com/iamanish
 
 > **postVideo**: `string`
 
-Defined in: [src/types/Organization/interface.ts:47](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L47)
+Defined in: [src/types/Organization/interface.ts:47](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L47)

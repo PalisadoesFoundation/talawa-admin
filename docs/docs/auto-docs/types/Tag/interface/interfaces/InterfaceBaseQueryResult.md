@@ -4,7 +4,7 @@
 
 # Interface: InterfaceBaseQueryResult
 
-Defined in: [src/types/Tag/interface.ts:39](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Tag/interface.ts#L39)
+Defined in: [src/types/Tag/interface.ts:39](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Tag/interface.ts#L39)
 
 ## Extended by
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Tag/interface.ts:39](https://github.com/iamanishx/talawa-
 
 > `optional` **error**: `ApolloError`
 
-Defined in: [src/types/Tag/interface.ts:41](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Tag/interface.ts#L41)
+Defined in: [src/types/Tag/interface.ts:41](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Tag/interface.ts#L41)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Tag/interface.ts:41](https://github.com/iamanishx/talawa-
 
 > **loading**: `boolean`
 
-Defined in: [src/types/Tag/interface.ts:40](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Tag/interface.ts#L40)
+Defined in: [src/types/Tag/interface.ts:40](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Tag/interface.ts#L40)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Tag/interface.ts:40](https://github.com/iamanishx/talawa-
 
 > `optional` **refetch**: () => `void`
 
-Defined in: [src/types/Tag/interface.ts:42](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Tag/interface.ts#L42)
+Defined in: [src/types/Tag/interface.ts:42](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Tag/interface.ts#L42)
 
 #### Returns
 

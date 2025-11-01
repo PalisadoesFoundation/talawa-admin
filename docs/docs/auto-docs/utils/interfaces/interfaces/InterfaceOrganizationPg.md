@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationPg
 
-Defined in: [src/utils/interfaces.ts:1314](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1314)
+Defined in: [src/utils/interfaces.ts:1314](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1314)
 
 InterfaceOrganizationPg
 
@@ -18,7 +18,7 @@ Defines the structure for an organization with PostgreSQL-specific fields.
 
 > **organization**: `object`
 
-Defined in: [src/utils/interfaces.ts:1315](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1315)
+Defined in: [src/utils/interfaces.ts:1315](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1315)
 
 The organization object.
 

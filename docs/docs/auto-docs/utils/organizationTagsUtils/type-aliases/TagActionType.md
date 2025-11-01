@@ -6,4 +6,4 @@
 
 > **TagActionType** = `"assignToTags"` \| `"removeFromTags"`
 
-Defined in: [src/utils/organizationTagsUtils.ts:51](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/organizationTagsUtils.ts#L51)
+Defined in: [src/utils/organizationTagsUtils.ts:51](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/organizationTagsUtils.ts#L51)

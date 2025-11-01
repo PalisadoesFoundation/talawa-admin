@@ -4,7 +4,7 @@
 
 # Interface: InterfaceVolunteerViewModal
 
-Defined in: [src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx:62](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx#L62)
+Defined in: [src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx:62](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx#L62)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx:64](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx#L64)
+Defined in: [src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx:64](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx#L64)
 
 #### Returns
 
@@ -24,7 +24,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx:63](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx#L63)
+Defined in: [src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx:63](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx#L63)
 
 ***
 
@@ -32,4 +32,4 @@ Defined in: [src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal
 
 > **volunteer**: [`InterfaceEventVolunteerInfo`](../../../../../../utils/interfaces/interfaces/InterfaceEventVolunteerInfo.md)
 
-Defined in: [src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx:65](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx#L65)
+Defined in: [src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx:65](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/screens/EventVolunteers/Volunteers/viewModal/VolunteerViewModal.tsx#L65)

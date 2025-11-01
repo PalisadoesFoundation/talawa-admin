@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAgendaItemCategoryInfo
 
-Defined in: [src/utils/interfaces.ts:2224](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2224)
+Defined in: [src/utils/interfaces.ts:2224](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2224)
 
 InterfaceAgendaItemCategoryInfo
 
@@ -18,7 +18,7 @@ Defines the structure for agenda item category information.
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:2225](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2225)
+Defined in: [src/utils/interfaces.ts:2225](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2225)
 
 The unique identifier of the agenda item category.
 
@@ -28,7 +28,7 @@ The unique identifier of the agenda item category.
 
 > **createdBy**: `object`
 
-Defined in: [src/utils/interfaces.ts:2228](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2228)
+Defined in: [src/utils/interfaces.ts:2228](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2228)
 
 The user who created this agenda item category.
 
@@ -50,7 +50,7 @@ The user who created this agenda item category.
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:2227](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2227)
+Defined in: [src/utils/interfaces.ts:2227](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2227)
 
 The description of the agenda item category.
 
@@ -60,6 +60,6 @@ The description of the agenda item category.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:2226](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2226)
+Defined in: [src/utils/interfaces.ts:2226](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2226)
 
 The name of the agenda item category.

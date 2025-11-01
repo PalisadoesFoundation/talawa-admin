@@ -4,7 +4,7 @@
 
 # Interface: DeletePluginInput
 
-Defined in: [src/plugin/graphql-service.ts:39](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/graphql-service.ts#L39)
+Defined in: [src/plugin/graphql-service.ts:39](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/graphql-service.ts#L39)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/plugin/graphql-service.ts:39](https://github.com/iamanishx/tala
 
 > **id**: `string`
 
-Defined in: [src/plugin/graphql-service.ts:40](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/graphql-service.ts#L40)
+Defined in: [src/plugin/graphql-service.ts:40](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/graphql-service.ts#L40)

@@ -6,7 +6,7 @@
 
 > **VoteState** = `object`
 
-Defined in: [src/utils/interfaces.ts:2132](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2132)
+Defined in: [src/utils/interfaces.ts:2132](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2132)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/interfaces.ts:2132](https://github.com/iamanishx/talawa-a
 
 > **hasVoted**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:2132](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2132)
+Defined in: [src/utils/interfaces.ts:2132](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2132)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/utils/interfaces.ts:2132](https://github.com/iamanishx/talawa-a
 
 > **voteType**: [`VoteType`](../interfaces/VoteType.md)
 
-Defined in: [src/utils/interfaces.ts:2132](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L2132)
+Defined in: [src/utils/interfaces.ts:2132](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L2132)

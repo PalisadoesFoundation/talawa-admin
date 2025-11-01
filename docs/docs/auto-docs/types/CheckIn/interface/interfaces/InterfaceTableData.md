@@ -4,7 +4,7 @@
 
 # Interface: InterfaceTableData
 
-Defined in: [src/types/CheckIn/interface.ts:42](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/CheckIn/interface.ts#L42)
+Defined in: [src/types/CheckIn/interface.ts:42](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/CheckIn/interface.ts#L42)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/CheckIn/interface.ts:42](https://github.com/iamanishx/tal
 
 > **checkInData**: [`InterfaceTableCheckIn`](InterfaceTableCheckIn.md)
 
-Defined in: [src/types/CheckIn/interface.ts:45](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/CheckIn/interface.ts#L45)
+Defined in: [src/types/CheckIn/interface.ts:45](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/CheckIn/interface.ts#L45)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/CheckIn/interface.ts:45](https://github.com/iamanishx/tal
 
 > **id**: `string`
 
-Defined in: [src/types/CheckIn/interface.ts:44](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/CheckIn/interface.ts#L44)
+Defined in: [src/types/CheckIn/interface.ts:44](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/CheckIn/interface.ts#L44)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/types/CheckIn/interface.ts:44](https://github.com/iamanishx/tal
 
 > **userName**: `string`
 
-Defined in: [src/types/CheckIn/interface.ts:43](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/CheckIn/interface.ts#L43)
+Defined in: [src/types/CheckIn/interface.ts:43](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/CheckIn/interface.ts#L43)

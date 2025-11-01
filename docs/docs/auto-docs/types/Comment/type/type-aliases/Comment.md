@@ -6,7 +6,7 @@
 
 > **Comment** = `object`
 
-Defined in: [src/types/Comment/type.ts:4](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Comment/type.ts#L4)
+Defined in: [src/types/Comment/type.ts:4](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Comment/type.ts#L4)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Comment/type.ts:4](https://github.com/iamanishx/talawa-ad
 
 > **createdAt**: `Date`
 
-Defined in: [src/types/Comment/type.ts:6](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Comment/type.ts#L6)
+Defined in: [src/types/Comment/type.ts:6](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Comment/type.ts#L6)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Comment/type.ts:6](https://github.com/iamanishx/talawa-ad
 
 > **creator**: `Partial`\<[`User`](../../../User/type/type-aliases/User.md)\>
 
-Defined in: [src/types/Comment/type.ts:7](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Comment/type.ts#L7)
+Defined in: [src/types/Comment/type.ts:7](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Comment/type.ts#L7)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Comment/type.ts:7](https://github.com/iamanishx/talawa-ad
 
 > **id**: `string`
 
-Defined in: [src/types/Comment/type.ts:5](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Comment/type.ts#L5)
+Defined in: [src/types/Comment/type.ts:5](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Comment/type.ts#L5)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Comment/type.ts:5](https://github.com/iamanishx/talawa-ad
 
 > `optional` **likeCount**: `number`
 
-Defined in: [src/types/Comment/type.ts:8](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Comment/type.ts#L8)
+Defined in: [src/types/Comment/type.ts:8](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Comment/type.ts#L8)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Comment/type.ts:8](https://github.com/iamanishx/talawa-ad
 
 > **post**: [`Post`](../../../Post/type/type-aliases/Post.md)
 
-Defined in: [src/types/Comment/type.ts:9](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Comment/type.ts#L9)
+Defined in: [src/types/Comment/type.ts:9](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Comment/type.ts#L9)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Comment/type.ts:9](https://github.com/iamanishx/talawa-ad
 
 > **text**: `string`
 
-Defined in: [src/types/Comment/type.ts:10](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Comment/type.ts#L10)
+Defined in: [src/types/Comment/type.ts:10](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Comment/type.ts#L10)
 
 ***
 
@@ -62,4 +62,4 @@ Defined in: [src/types/Comment/type.ts:10](https://github.com/iamanishx/talawa-a
 
 > **updatedAt**: `Date`
 
-Defined in: [src/types/Comment/type.ts:11](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Comment/type.ts#L11)
+Defined in: [src/types/Comment/type.ts:11](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Comment/type.ts#L11)

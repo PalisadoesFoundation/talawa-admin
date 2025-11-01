@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationFundsConnectionEdgePg
 
-Defined in: [src/utils/interfaces.ts:1007](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1007)
+Defined in: [src/utils/interfaces.ts:1007](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1007)
 
 InterfaceOrganizationFundsConnectionEdgePg
 
@@ -18,7 +18,7 @@ Defines the structure for an edge in the organization funds connection with Post
 
 > **cursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:1008](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1008)
+Defined in: [src/utils/interfaces.ts:1008](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1008)
 
 The cursor for this edge.
 
@@ -28,6 +28,6 @@ The cursor for this edge.
 
 > **node**: [`InterfaceFundPg`](InterfaceFundPg.md)
 
-Defined in: [src/utils/interfaces.ts:1009](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1009)
+Defined in: [src/utils/interfaces.ts:1009](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1009)
 
 The fund node.

@@ -4,7 +4,7 @@
 
 # Interface: IPreviewEventModalProps
 
-Defined in: [src/types/Event/interface.ts:134](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L134)
+Defined in: [src/types/Event/interface.ts:134](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L134)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:134](https://github.com/iamanishx/tala
 
 > **alldaychecked**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:147](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L147)
+Defined in: [src/types/Event/interface.ts:147](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L147)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/interface.ts:147](https://github.com/iamanishx/tala
 
 > **customRecurrenceModalIsOpen**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:172](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L172)
+Defined in: [src/types/Event/interface.ts:172](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L172)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Event/interface.ts:172](https://github.com/iamanishx/tala
 
 > **eventEndDate**: `Date`
 
-Defined in: [src/types/Event/interface.ts:144](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L144)
+Defined in: [src/types/Event/interface.ts:144](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L144)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Event/interface.ts:144](https://github.com/iamanishx/tala
 
 > **eventListCardProps**: `IEventListCard`
 
-Defined in: [src/types/Event/interface.ts:135](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L135)
+Defined in: [src/types/Event/interface.ts:135](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L135)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Event/interface.ts:135](https://github.com/iamanishx/tala
 
 > **eventModalIsOpen**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:136](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L136)
+Defined in: [src/types/Event/interface.ts:136](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L136)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Event/interface.ts:136](https://github.com/iamanishx/tala
 
 > **eventStartDate**: `Date`
 
-Defined in: [src/types/Event/interface.ts:143](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L143)
+Defined in: [src/types/Event/interface.ts:143](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L143)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Event/interface.ts:143](https://github.com/iamanishx/tala
 
 > **formState**: `object`
 
-Defined in: [src/types/Event/interface.ts:153](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L153)
+Defined in: [src/types/Event/interface.ts:153](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L153)
 
 #### endTime
 
@@ -88,7 +88,7 @@ Defined in: [src/types/Event/interface.ts:153](https://github.com/iamanishx/tala
 
 > **handleEventUpdate**: () => `Promise`\<`void`\>
 
-Defined in: [src/types/Event/interface.ts:168](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L168)
+Defined in: [src/types/Event/interface.ts:168](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L168)
 
 #### Returns
 
@@ -100,7 +100,7 @@ Defined in: [src/types/Event/interface.ts:168](https://github.com/iamanishx/tala
 
 > **hideViewModal**: () => `void`
 
-Defined in: [src/types/Event/interface.ts:137](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L137)
+Defined in: [src/types/Event/interface.ts:137](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L137)
 
 #### Returns
 
@@ -112,7 +112,7 @@ Defined in: [src/types/Event/interface.ts:137](https://github.com/iamanishx/tala
 
 > `optional` **isRegistered**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:141](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L141)
+Defined in: [src/types/Event/interface.ts:141](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L141)
 
 ***
 
@@ -120,7 +120,7 @@ Defined in: [src/types/Event/interface.ts:141](https://github.com/iamanishx/tala
 
 > **openEventDashboard**: () => `void`
 
-Defined in: [src/types/Event/interface.ts:169](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L169)
+Defined in: [src/types/Event/interface.ts:169](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L169)
 
 #### Returns
 
@@ -132,7 +132,7 @@ Defined in: [src/types/Event/interface.ts:169](https://github.com/iamanishx/tala
 
 > **publicchecked**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:149](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L149)
+Defined in: [src/types/Event/interface.ts:149](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L149)
 
 ***
 
@@ -140,7 +140,7 @@ Defined in: [src/types/Event/interface.ts:149](https://github.com/iamanishx/tala
 
 > **recurrence**: [`InterfaceRecurrenceRule`](../../../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md)
 
-Defined in: [src/types/Event/interface.ts:170](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L170)
+Defined in: [src/types/Event/interface.ts:170](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L170)
 
 ***
 
@@ -148,7 +148,7 @@ Defined in: [src/types/Event/interface.ts:170](https://github.com/iamanishx/tala
 
 > **registerEventHandler**: () => `Promise`\<`void`\>
 
-Defined in: [src/types/Event/interface.ts:167](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L167)
+Defined in: [src/types/Event/interface.ts:167](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L167)
 
 #### Returns
 
@@ -160,7 +160,7 @@ Defined in: [src/types/Event/interface.ts:167](https://github.com/iamanishx/tala
 
 > **registrablechecked**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:151](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L151)
+Defined in: [src/types/Event/interface.ts:151](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L151)
 
 ***
 
@@ -168,7 +168,7 @@ Defined in: [src/types/Event/interface.ts:151](https://github.com/iamanishx/tala
 
 > **setAllDayChecked**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/types/Event/interface.ts:148](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L148)
+Defined in: [src/types/Event/interface.ts:148](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L148)
 
 ***
 
@@ -176,7 +176,7 @@ Defined in: [src/types/Event/interface.ts:148](https://github.com/iamanishx/tala
 
 > **setCustomRecurrenceModalIsOpen**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/types/Event/interface.ts:173](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L173)
+Defined in: [src/types/Event/interface.ts:173](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L173)
 
 ***
 
@@ -184,7 +184,7 @@ Defined in: [src/types/Event/interface.ts:173](https://github.com/iamanishx/tala
 
 > **setEventEndDate**: `Dispatch`\<`SetStateAction`\<`Date`\>\>
 
-Defined in: [src/types/Event/interface.ts:146](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L146)
+Defined in: [src/types/Event/interface.ts:146](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L146)
 
 ***
 
@@ -192,7 +192,7 @@ Defined in: [src/types/Event/interface.ts:146](https://github.com/iamanishx/tala
 
 > **setEventStartDate**: `Dispatch`\<`SetStateAction`\<`Date`\>\>
 
-Defined in: [src/types/Event/interface.ts:145](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L145)
+Defined in: [src/types/Event/interface.ts:145](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L145)
 
 ***
 
@@ -200,7 +200,7 @@ Defined in: [src/types/Event/interface.ts:145](https://github.com/iamanishx/tala
 
 > **setFormState**: (`state`) => `void`
 
-Defined in: [src/types/Event/interface.ts:160](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L160)
+Defined in: [src/types/Event/interface.ts:160](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L160)
 
 #### Parameters
 
@@ -236,7 +236,7 @@ Defined in: [src/types/Event/interface.ts:160](https://github.com/iamanishx/tala
 
 > **setPublicChecked**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/types/Event/interface.ts:150](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L150)
+Defined in: [src/types/Event/interface.ts:150](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L150)
 
 ***
 
@@ -244,7 +244,7 @@ Defined in: [src/types/Event/interface.ts:150](https://github.com/iamanishx/tala
 
 > **setRecurrence**: `Dispatch`\<`SetStateAction`\<[`InterfaceRecurrenceRule`](../../../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md)\>\>
 
-Defined in: [src/types/Event/interface.ts:171](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L171)
+Defined in: [src/types/Event/interface.ts:171](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L171)
 
 ***
 
@@ -252,7 +252,7 @@ Defined in: [src/types/Event/interface.ts:171](https://github.com/iamanishx/tala
 
 > **setRegistrableChecked**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/types/Event/interface.ts:152](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L152)
+Defined in: [src/types/Event/interface.ts:152](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L152)
 
 ***
 
@@ -260,7 +260,7 @@ Defined in: [src/types/Event/interface.ts:152](https://github.com/iamanishx/tala
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/types/Event/interface.ts:139](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L139)
+Defined in: [src/types/Event/interface.ts:139](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L139)
 
 #### Parameters
 
@@ -278,7 +278,7 @@ Defined in: [src/types/Event/interface.ts:139](https://github.com/iamanishx/tala
 
 > **tCommon**: (`key`) => `string`
 
-Defined in: [src/types/Event/interface.ts:140](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L140)
+Defined in: [src/types/Event/interface.ts:140](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L140)
 
 #### Parameters
 
@@ -296,7 +296,7 @@ Defined in: [src/types/Event/interface.ts:140](https://github.com/iamanishx/tala
 
 > **toggleDeleteModal**: () => `void`
 
-Defined in: [src/types/Event/interface.ts:138](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L138)
+Defined in: [src/types/Event/interface.ts:138](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L138)
 
 #### Returns
 
@@ -308,4 +308,4 @@ Defined in: [src/types/Event/interface.ts:138](https://github.com/iamanishx/tala
 
 > **userId**: `string`
 
-Defined in: [src/types/Event/interface.ts:142](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L142)
+Defined in: [src/types/Event/interface.ts:142](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Event/interface.ts#L142)

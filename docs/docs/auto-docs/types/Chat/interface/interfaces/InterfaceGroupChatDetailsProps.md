@@ -4,7 +4,7 @@
 
 # Interface: InterfaceGroupChatDetailsProps
 
-Defined in: [src/types/Chat/interface.ts:100](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Chat/interface.ts#L100)
+Defined in: [src/types/Chat/interface.ts:100](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Chat/interface.ts#L100)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Chat/interface.ts:100](https://github.com/iamanishx/talaw
 
 > **chat**: [`NewChatType`](../type-aliases/NewChatType.md)
 
-Defined in: [src/types/Chat/interface.ts:103](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Chat/interface.ts#L103)
+Defined in: [src/types/Chat/interface.ts:103](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Chat/interface.ts#L103)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Chat/interface.ts:103](https://github.com/iamanishx/talaw
 
 > **chatRefetch**: (`variables?`) => `Promise`\<`ApolloQueryResult`\<\{ `chat`: [`NewChatType`](../type-aliases/NewChatType.md); \}\>\>
 
-Defined in: [src/types/Chat/interface.ts:104](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Chat/interface.ts#L104)
+Defined in: [src/types/Chat/interface.ts:104](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Chat/interface.ts#L104)
 
 #### Parameters
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Chat/interface.ts:104](https://github.com/iamanishx/talaw
 
 > **groupChatDetailsModalisOpen**: `boolean`
 
-Defined in: [src/types/Chat/interface.ts:102](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Chat/interface.ts#L102)
+Defined in: [src/types/Chat/interface.ts:102](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Chat/interface.ts#L102)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Chat/interface.ts:102](https://github.com/iamanishx/talaw
 
 > **toggleGroupChatDetailsModal**: () => `void`
 
-Defined in: [src/types/Chat/interface.ts:101](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Chat/interface.ts#L101)
+Defined in: [src/types/Chat/interface.ts:101](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Chat/interface.ts#L101)
 
 #### Returns
 

@@ -6,7 +6,7 @@
 
 > **PostNode** = `object`
 
-Defined in: [src/types/Post/type.ts:101](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/type.ts#L101)
+Defined in: [src/types/Post/type.ts:101](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/type.ts#L101)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Post/type.ts:101](https://github.com/iamanishx/talawa-adm
 
 > **attachments**: `object`[]
 
-Defined in: [src/types/Post/type.ts:127](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/type.ts#L127)
+Defined in: [src/types/Post/type.ts:127](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/type.ts#L127)
 
 #### fileHash
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Post/type.ts:127](https://github.com/iamanishx/talawa-adm
 
 > **caption**: `string` \| `null`
 
-Defined in: [src/types/Post/type.ts:103](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/type.ts#L103)
+Defined in: [src/types/Post/type.ts:103](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/type.ts#L103)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Post/type.ts:103](https://github.com/iamanishx/talawa-adm
 
 > **commentCount**: `number`
 
-Defined in: [src/types/Post/type.ts:105](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/type.ts#L105)
+Defined in: [src/types/Post/type.ts:105](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/type.ts#L105)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Post/type.ts:105](https://github.com/iamanishx/talawa-adm
 
 > `optional` **comments**: `object`
 
-Defined in: [src/types/Post/type.ts:136](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/type.ts#L136)
+Defined in: [src/types/Post/type.ts:136](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/type.ts#L136)
 
 #### edges
 
@@ -66,7 +66,7 @@ Defined in: [src/types/Post/type.ts:136](https://github.com/iamanishx/talawa-adm
 
 > **commentsCount**: `number`
 
-Defined in: [src/types/Post/type.ts:134](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/type.ts#L134)
+Defined in: [src/types/Post/type.ts:134](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/type.ts#L134)
 
 ***
 
@@ -74,7 +74,7 @@ Defined in: [src/types/Post/type.ts:134](https://github.com/iamanishx/talawa-adm
 
 > **createdAt**: `string`
 
-Defined in: [src/types/Post/type.ts:104](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/type.ts#L104)
+Defined in: [src/types/Post/type.ts:104](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/type.ts#L104)
 
 ***
 
@@ -82,7 +82,7 @@ Defined in: [src/types/Post/type.ts:104](https://github.com/iamanishx/talawa-adm
 
 > **creator**: `object`
 
-Defined in: [src/types/Post/type.ts:106](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/type.ts#L106)
+Defined in: [src/types/Post/type.ts:106](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/type.ts#L106)
 
 #### avatarURL?
 
@@ -106,7 +106,7 @@ Defined in: [src/types/Post/type.ts:106](https://github.com/iamanishx/talawa-adm
 
 > **downVoters**: `object`
 
-Defined in: [src/types/Post/type.ts:116](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/type.ts#L116)
+Defined in: [src/types/Post/type.ts:116](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/type.ts#L116)
 
 #### edges
 
@@ -118,7 +118,7 @@ Defined in: [src/types/Post/type.ts:116](https://github.com/iamanishx/talawa-adm
 
 > **downVotesCount**: `number`
 
-Defined in: [src/types/Post/type.ts:114](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/type.ts#L114)
+Defined in: [src/types/Post/type.ts:114](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/type.ts#L114)
 
 ***
 
@@ -126,7 +126,7 @@ Defined in: [src/types/Post/type.ts:114](https://github.com/iamanishx/talawa-adm
 
 > **hasUserVoted**: [`VoteState`](../../../../utils/interfaces/type-aliases/VoteState.md)
 
-Defined in: [src/types/Post/type.ts:112](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/type.ts#L112)
+Defined in: [src/types/Post/type.ts:112](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/type.ts#L112)
 
 ***
 
@@ -134,7 +134,7 @@ Defined in: [src/types/Post/type.ts:112](https://github.com/iamanishx/talawa-adm
 
 > **id**: `string`
 
-Defined in: [src/types/Post/type.ts:102](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/type.ts#L102)
+Defined in: [src/types/Post/type.ts:102](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/type.ts#L102)
 
 ***
 
@@ -142,7 +142,7 @@ Defined in: [src/types/Post/type.ts:102](https://github.com/iamanishx/talawa-adm
 
 > **pinnedAt**: `string` \| `null`
 
-Defined in: [src/types/Post/type.ts:115](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/type.ts#L115)
+Defined in: [src/types/Post/type.ts:115](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/type.ts#L115)
 
 ***
 
@@ -150,4 +150,4 @@ Defined in: [src/types/Post/type.ts:115](https://github.com/iamanishx/talawa-adm
 
 > **upVotesCount**: `number`
 
-Defined in: [src/types/Post/type.ts:113](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/type.ts#L113)
+Defined in: [src/types/Post/type.ts:113](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/type.ts#L113)

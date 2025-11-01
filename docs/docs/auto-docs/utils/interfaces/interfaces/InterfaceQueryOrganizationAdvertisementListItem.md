@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationAdvertisementListItem
 
-Defined in: [src/utils/interfaces.ts:1603](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1603)
+Defined in: [src/utils/interfaces.ts:1603](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1603)
 
 InterfaceQueryOrganizationAdvertisementListItem
 
@@ -18,7 +18,7 @@ Defines the structure for an organization advertisement list item returned from 
 
 > **advertisements**: `object`
 
-Defined in: [src/utils/interfaces.ts:1604](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1604)
+Defined in: [src/utils/interfaces.ts:1604](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1604)
 
 The advertisements connection object.
 

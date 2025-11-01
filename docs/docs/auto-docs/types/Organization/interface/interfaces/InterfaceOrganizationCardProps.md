@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationCardProps
 
-Defined in: [src/types/Organization/interface.ts:1](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L1)
+Defined in: [src/types/Organization/interface.ts:1](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L1)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Organization/interface.ts:1](https://github.com/iamanishx
 
 > **address**: `object`
 
-Defined in: [src/types/Organization/interface.ts:9](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L9)
+Defined in: [src/types/Organization/interface.ts:9](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L9)
 
 #### city
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Organization/interface.ts:9](https://github.com/iamanishx
 
 > **adminsCount**: `number`
 
-Defined in: [src/types/Organization/interface.ts:17](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L17)
+Defined in: [src/types/Organization/interface.ts:17](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L17)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/types/Organization/interface.ts:17](https://github.com/iamanish
 
 > **description**: `string`
 
-Defined in: [src/types/Organization/interface.ts:5](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L5)
+Defined in: [src/types/Organization/interface.ts:5](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L5)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/types/Organization/interface.ts:5](https://github.com/iamanishx
 
 > **id**: `string`
 
-Defined in: [src/types/Organization/interface.ts:2](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L2)
+Defined in: [src/types/Organization/interface.ts:2](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L2)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [src/types/Organization/interface.ts:2](https://github.com/iamanishx
 
 > **image**: `string`
 
-Defined in: [src/types/Organization/interface.ts:4](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L4)
+Defined in: [src/types/Organization/interface.ts:4](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L4)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [src/types/Organization/interface.ts:4](https://github.com/iamanishx
 
 > `optional` **isJoined**: `boolean`
 
-Defined in: [src/types/Organization/interface.ts:26](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L26)
+Defined in: [src/types/Organization/interface.ts:26](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L26)
 
 ***
 
@@ -80,7 +80,7 @@ Defined in: [src/types/Organization/interface.ts:26](https://github.com/iamanish
 
 > `optional` **members**: `object`[]
 
-Defined in: [src/types/Organization/interface.ts:6](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L6)
+Defined in: [src/types/Organization/interface.ts:6](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L6)
 
 #### id
 
@@ -92,7 +92,7 @@ Defined in: [src/types/Organization/interface.ts:6](https://github.com/iamanishx
 
 > **membersCount**: `number`
 
-Defined in: [src/types/Organization/interface.ts:16](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L16)
+Defined in: [src/types/Organization/interface.ts:16](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L16)
 
 ***
 
@@ -100,7 +100,7 @@ Defined in: [src/types/Organization/interface.ts:16](https://github.com/iamanish
 
 > **membershipRequests**: `object`[]
 
-Defined in: [src/types/Organization/interface.ts:20](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L20)
+Defined in: [src/types/Organization/interface.ts:20](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L20)
 
 #### id
 
@@ -120,7 +120,7 @@ Defined in: [src/types/Organization/interface.ts:20](https://github.com/iamanish
 
 > **membershipRequestStatus**: `string`
 
-Defined in: [src/types/Organization/interface.ts:18](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L18)
+Defined in: [src/types/Organization/interface.ts:18](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L18)
 
 ***
 
@@ -128,7 +128,7 @@ Defined in: [src/types/Organization/interface.ts:18](https://github.com/iamanish
 
 > **name**: `string`
 
-Defined in: [src/types/Organization/interface.ts:3](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L3)
+Defined in: [src/types/Organization/interface.ts:3](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L3)
 
 ***
 
@@ -136,4 +136,4 @@ Defined in: [src/types/Organization/interface.ts:3](https://github.com/iamanishx
 
 > **userRegistrationRequired**: `boolean`
 
-Defined in: [src/types/Organization/interface.ts:19](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Organization/interface.ts#L19)
+Defined in: [src/types/Organization/interface.ts:19](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Organization/interface.ts#L19)

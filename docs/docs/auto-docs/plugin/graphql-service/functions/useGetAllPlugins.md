@@ -6,7 +6,7 @@
 
 > **useGetAllPlugins**(): `InteropQueryResult`\<\{ `getPlugins`: [`IPlugin`](../interfaces/IPlugin.md)[]; \}, `OperationVariables`\>
 
-Defined in: [src/plugin/graphql-service.ts:43](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/graphql-service.ts#L43)
+Defined in: [src/plugin/graphql-service.ts:43](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/graphql-service.ts#L43)
 
 ## Returns
 

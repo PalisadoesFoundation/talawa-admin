@@ -4,7 +4,7 @@
 
 # Interface: InterfacePostNode
 
-Defined in: [src/types/Post/interface.ts:23](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/interface.ts#L23)
+Defined in: [src/types/Post/interface.ts:23](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/interface.ts#L23)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/interface.ts:23](https://github.com/iamanishx/talawa
 
 > **caption**: `string`
 
-Defined in: [src/types/Post/interface.ts:25](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/interface.ts#L25)
+Defined in: [src/types/Post/interface.ts:25](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/interface.ts#L25)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Post/interface.ts:25](https://github.com/iamanishx/talawa
 
 > **createdAt**: `string`
 
-Defined in: [src/types/Post/interface.ts:31](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/interface.ts#L31)
+Defined in: [src/types/Post/interface.ts:31](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/interface.ts#L31)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Post/interface.ts:31](https://github.com/iamanishx/talawa
 
 > `optional` **creator**: [`InterfacePostCreator`](InterfacePostCreator.md)
 
-Defined in: [src/types/Post/interface.ts:29](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/interface.ts#L29)
+Defined in: [src/types/Post/interface.ts:29](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/interface.ts#L29)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Post/interface.ts:29](https://github.com/iamanishx/talawa
 
 > **id**: `string`
 
-Defined in: [src/types/Post/interface.ts:24](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/interface.ts#L24)
+Defined in: [src/types/Post/interface.ts:24](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/interface.ts#L24)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Post/interface.ts:24](https://github.com/iamanishx/talawa
 
 > `optional` **imageUrl**: `string`
 
-Defined in: [src/types/Post/interface.ts:27](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/interface.ts#L27)
+Defined in: [src/types/Post/interface.ts:27](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/interface.ts#L27)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Post/interface.ts:27](https://github.com/iamanishx/talawa
 
 > `optional` **pinned**: `boolean`
 
-Defined in: [src/types/Post/interface.ts:30](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/interface.ts#L30)
+Defined in: [src/types/Post/interface.ts:30](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/interface.ts#L30)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Post/interface.ts:30](https://github.com/iamanishx/talawa
 
 > `optional` **text**: `string`
 
-Defined in: [src/types/Post/interface.ts:26](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/interface.ts#L26)
+Defined in: [src/types/Post/interface.ts:26](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/interface.ts#L26)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/types/Post/interface.ts:26](https://github.com/iamanishx/talawa
 
 > `optional` **videoUrl**: `string`
 
-Defined in: [src/types/Post/interface.ts:28](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/interface.ts#L28)
+Defined in: [src/types/Post/interface.ts:28](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Post/interface.ts#L28)

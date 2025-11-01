@@ -4,7 +4,7 @@
 
 # Interface: InterfaceContriStatsProps
 
-Defined in: [src/types/Contribution/interface.ts:1](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Contribution/interface.ts#L1)
+Defined in: [src/types/Contribution/interface.ts:1](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Contribution/interface.ts#L1)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Contribution/interface.ts:1](https://github.com/iamanishx
 
 > **highestAmount**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:4](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Contribution/interface.ts#L4)
+Defined in: [src/types/Contribution/interface.ts:4](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Contribution/interface.ts#L4)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Contribution/interface.ts:4](https://github.com/iamanishx
 
 > **id**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:2](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Contribution/interface.ts#L2)
+Defined in: [src/types/Contribution/interface.ts:2](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Contribution/interface.ts#L2)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Contribution/interface.ts:2](https://github.com/iamanishx
 
 > **recentAmount**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:3](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Contribution/interface.ts#L3)
+Defined in: [src/types/Contribution/interface.ts:3](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Contribution/interface.ts#L3)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/types/Contribution/interface.ts:3](https://github.com/iamanishx
 
 > **totalAmount**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:5](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Contribution/interface.ts#L5)
+Defined in: [src/types/Contribution/interface.ts:5](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Contribution/interface.ts#L5)

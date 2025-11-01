@@ -6,7 +6,7 @@
 
 > **VenueInput** = `object`
 
-Defined in: [src/types/venue.ts:12](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/venue.ts#L12)
+Defined in: [src/types/venue.ts:12](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/venue.ts#L12)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/venue.ts:12](https://github.com/iamanishx/talawa-admin/bl
 
 > **capacity**: `number`
 
-Defined in: [src/types/venue.ts:13](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/venue.ts#L13)
+Defined in: [src/types/venue.ts:13](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/venue.ts#L13)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/venue.ts:13](https://github.com/iamanishx/talawa-admin/bl
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/venue.ts:14](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/venue.ts#L14)
+Defined in: [src/types/venue.ts:14](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/venue.ts#L14)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/venue.ts:14](https://github.com/iamanishx/talawa-admin/bl
 
 > `optional` **file**: `string`
 
-Defined in: [src/types/venue.ts:15](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/venue.ts#L15)
+Defined in: [src/types/venue.ts:15](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/venue.ts#L15)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/venue.ts:15](https://github.com/iamanishx/talawa-admin/bl
 
 > **name**: `string`
 
-Defined in: [src/types/venue.ts:16](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/venue.ts#L16)
+Defined in: [src/types/venue.ts:16](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/venue.ts#L16)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/types/venue.ts:16](https://github.com/iamanishx/talawa-admin/bl
 
 > **organizationId**: `string`
 
-Defined in: [src/types/venue.ts:17](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/venue.ts#L17)
+Defined in: [src/types/venue.ts:17](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/venue.ts#L17)

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCampaignInfo
 
-Defined in: [src/utils/interfaces.ts:1815](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1815)
+Defined in: [src/utils/interfaces.ts:1815](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1815)
 
 InterfaceCampaignInfo
 
@@ -18,7 +18,7 @@ Defines the structure for campaign information.
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1821](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1821)
+Defined in: [src/utils/interfaces.ts:1821](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1821)
 
 The creation date of the campaign record.
 
@@ -28,7 +28,7 @@ The creation date of the campaign record.
 
 > **currencyCode**: `string`
 
-Defined in: [src/utils/interfaces.ts:1822](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1822)
+Defined in: [src/utils/interfaces.ts:1822](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1822)
 
 The currency code of the campaign.
 
@@ -38,7 +38,7 @@ The currency code of the campaign.
 
 > **endAt**: `Date`
 
-Defined in: [src/utils/interfaces.ts:1820](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1820)
+Defined in: [src/utils/interfaces.ts:1820](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1820)
 
 The end date and time of the campaign.
 
@@ -48,7 +48,7 @@ The end date and time of the campaign.
 
 > **goalAmount**: `number`
 
-Defined in: [src/utils/interfaces.ts:1818](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1818)
+Defined in: [src/utils/interfaces.ts:1818](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1818)
 
 The goal amount of the campaign.
 
@@ -58,7 +58,7 @@ The goal amount of the campaign.
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1816](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1816)
+Defined in: [src/utils/interfaces.ts:1816](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1816)
 
 The unique identifier of the campaign.
 
@@ -68,7 +68,7 @@ The unique identifier of the campaign.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1817](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1817)
+Defined in: [src/utils/interfaces.ts:1817](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1817)
 
 The name of the campaign.
 
@@ -78,6 +78,6 @@ The name of the campaign.
 
 > **startAt**: `Date`
 
-Defined in: [src/utils/interfaces.ts:1819](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L1819)
+Defined in: [src/utils/interfaces.ts:1819](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L1819)
 
 The start date and time of the campaign.

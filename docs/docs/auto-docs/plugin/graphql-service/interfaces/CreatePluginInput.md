@@ -4,7 +4,7 @@
 
 # Interface: CreatePluginInput
 
-Defined in: [src/plugin/graphql-service.ts:24](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/graphql-service.ts#L24)
+Defined in: [src/plugin/graphql-service.ts:24](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/graphql-service.ts#L24)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/plugin/graphql-service.ts:24](https://github.com/iamanishx/tala
 
 > **pluginId**: `string`
 
-Defined in: [src/plugin/graphql-service.ts:25](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/graphql-service.ts#L25)
+Defined in: [src/plugin/graphql-service.ts:25](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/graphql-service.ts#L25)

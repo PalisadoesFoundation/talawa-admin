@@ -4,7 +4,7 @@
 
 # Enumeration: RecurrenceEndOption
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:39](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/recurrenceUtils/recurrenceTypes.ts#L39)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:39](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/recurrenceUtils/recurrenceTypes.ts#L39)
 
 ## Enumeration Members
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:39](https://github.com
 
 > **after**: `"after"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:42](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/recurrenceUtils/recurrenceTypes.ts#L42)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:42](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/recurrenceUtils/recurrenceTypes.ts#L42)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:42](https://github.com
 
 > **never**: `"never"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:40](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/recurrenceUtils/recurrenceTypes.ts#L40)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:40](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/recurrenceUtils/recurrenceTypes.ts#L40)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:40](https://github.com
 
 > **on**: `"on"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:41](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/recurrenceUtils/recurrenceTypes.ts#L41)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:41](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/recurrenceUtils/recurrenceTypes.ts#L41)

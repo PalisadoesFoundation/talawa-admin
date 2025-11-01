@@ -6,7 +6,7 @@
 
 > **AddressInput** = `object`
 
-Defined in: [src/types/address.ts:12](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/address.ts#L12)
+Defined in: [src/types/address.ts:12](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/address.ts#L12)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/address.ts:12](https://github.com/iamanishx/talawa-admin/
 
 > `optional` **city**: `string`
 
-Defined in: [src/types/address.ts:13](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/address.ts#L13)
+Defined in: [src/types/address.ts:13](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/address.ts#L13)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/address.ts:13](https://github.com/iamanishx/talawa-admin/
 
 > `optional` **countryCode**: `string`
 
-Defined in: [src/types/address.ts:14](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/address.ts#L14)
+Defined in: [src/types/address.ts:14](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/address.ts#L14)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/address.ts:14](https://github.com/iamanishx/talawa-admin/
 
 > `optional` **dependentLocality**: `string`
 
-Defined in: [src/types/address.ts:15](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/address.ts#L15)
+Defined in: [src/types/address.ts:15](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/address.ts#L15)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/address.ts:15](https://github.com/iamanishx/talawa-admin/
 
 > `optional` **line1**: `string`
 
-Defined in: [src/types/address.ts:16](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/address.ts#L16)
+Defined in: [src/types/address.ts:16](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/address.ts#L16)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/address.ts:16](https://github.com/iamanishx/talawa-admin/
 
 > `optional` **line2**: `string`
 
-Defined in: [src/types/address.ts:17](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/address.ts#L17)
+Defined in: [src/types/address.ts:17](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/address.ts#L17)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/address.ts:17](https://github.com/iamanishx/talawa-admin/
 
 > `optional` **postalCode**: `string`
 
-Defined in: [src/types/address.ts:18](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/address.ts#L18)
+Defined in: [src/types/address.ts:18](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/address.ts#L18)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/address.ts:18](https://github.com/iamanishx/talawa-admin/
 
 > `optional` **sortingCode**: `string`
 
-Defined in: [src/types/address.ts:19](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/address.ts#L19)
+Defined in: [src/types/address.ts:19](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/address.ts#L19)
 
 ***
 
@@ -70,4 +70,4 @@ Defined in: [src/types/address.ts:19](https://github.com/iamanishx/talawa-admin/
 
 > `optional` **state**: `string`
 
-Defined in: [src/types/address.ts:20](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/address.ts#L20)
+Defined in: [src/types/address.ts:20](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/address.ts#L20)

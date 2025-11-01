@@ -4,7 +4,7 @@
 
 # Interface: AdminPluginZipStructure
 
-Defined in: [src/utils/adminPluginInstaller.ts:26](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/adminPluginInstaller.ts#L26)
+Defined in: [src/utils/adminPluginInstaller.ts:26](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/adminPluginInstaller.ts#L26)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:26](https://github.com/iamanishx/
 
 > `optional` **adminManifest**: [`AdminPluginManifest`](AdminPluginManifest.md)
 
-Defined in: [src/utils/adminPluginInstaller.ts:29](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/adminPluginInstaller.ts#L29)
+Defined in: [src/utils/adminPluginInstaller.ts:29](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/adminPluginInstaller.ts#L29)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:29](https://github.com/iamanishx/
 
 > `optional` **apiFiles**: `string`[]
 
-Defined in: [src/utils/adminPluginInstaller.ts:33](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/adminPluginInstaller.ts#L33)
+Defined in: [src/utils/adminPluginInstaller.ts:33](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/adminPluginInstaller.ts#L33)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:33](https://github.com/iamanishx/
 
 > `optional` **apiManifest**: [`AdminPluginManifest`](AdminPluginManifest.md)
 
-Defined in: [src/utils/adminPluginInstaller.ts:30](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/adminPluginInstaller.ts#L30)
+Defined in: [src/utils/adminPluginInstaller.ts:30](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/adminPluginInstaller.ts#L30)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:30](https://github.com/iamanishx/
 
 > **files**: `Record`\<`string`, `string`\>
 
-Defined in: [src/utils/adminPluginInstaller.ts:32](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/adminPluginInstaller.ts#L32)
+Defined in: [src/utils/adminPluginInstaller.ts:32](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/adminPluginInstaller.ts#L32)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:32](https://github.com/iamanishx/
 
 > **hasAdminFolder**: `boolean`
 
-Defined in: [src/utils/adminPluginInstaller.ts:27](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/adminPluginInstaller.ts#L27)
+Defined in: [src/utils/adminPluginInstaller.ts:27](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/adminPluginInstaller.ts#L27)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:27](https://github.com/iamanishx/
 
 > **hasApiFolder**: `boolean`
 
-Defined in: [src/utils/adminPluginInstaller.ts:28](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/adminPluginInstaller.ts#L28)
+Defined in: [src/utils/adminPluginInstaller.ts:28](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/adminPluginInstaller.ts#L28)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/utils/adminPluginInstaller.ts:28](https://github.com/iamanishx/
 
 > `optional` **pluginId**: `string`
 
-Defined in: [src/utils/adminPluginInstaller.ts:31](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/adminPluginInstaller.ts#L31)
+Defined in: [src/utils/adminPluginInstaller.ts:31](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/adminPluginInstaller.ts#L31)

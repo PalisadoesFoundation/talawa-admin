@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserTypePG
 
-Defined in: [src/utils/interfaces.ts:365](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L365)
+Defined in: [src/utils/interfaces.ts:365](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L365)
 
 InterfaceUserTypePG
 
@@ -18,7 +18,7 @@ Defines the structure for a user type with PostgreSQL-specific fields.
 
 > **user**: `object`
 
-Defined in: [src/utils/interfaces.ts:366](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/interfaces.ts#L366)
+Defined in: [src/utils/interfaces.ts:366](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L366)
 
 The user object.
 

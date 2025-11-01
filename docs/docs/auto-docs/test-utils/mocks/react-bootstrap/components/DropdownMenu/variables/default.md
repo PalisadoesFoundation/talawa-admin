@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`DivProps`](../type-aliases/DivProps.md)\>
 
-Defined in: [src/test-utils/mocks/react-bootstrap/components/DropdownMenu.tsx:11](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/test-utils/mocks/react-bootstrap/components/DropdownMenu.tsx#L11)
+Defined in: [src/test-utils/mocks/react-bootstrap/components/DropdownMenu.tsx:11](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/test-utils/mocks/react-bootstrap/components/DropdownMenu.tsx#L11)

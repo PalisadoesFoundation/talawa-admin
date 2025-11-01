@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAvatarProps
 
-Defined in: [src/types/Avatar/interface.ts:1](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Avatar/interface.ts#L1)
+Defined in: [src/types/Avatar/interface.ts:1](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Avatar/interface.ts#L1)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Avatar/interface.ts:1](https://github.com/iamanishx/talaw
 
 > `optional` **alt**: `string`
 
-Defined in: [src/types/Avatar/interface.ts:3](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Avatar/interface.ts#L3)
+Defined in: [src/types/Avatar/interface.ts:3](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Avatar/interface.ts#L3)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Avatar/interface.ts:3](https://github.com/iamanishx/talaw
 
 > `optional` **avatarStyle**: `string`
 
-Defined in: [src/types/Avatar/interface.ts:6](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Avatar/interface.ts#L6)
+Defined in: [src/types/Avatar/interface.ts:6](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Avatar/interface.ts#L6)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Avatar/interface.ts:6](https://github.com/iamanishx/talaw
 
 > `optional` **containerStyle**: `string`
 
-Defined in: [src/types/Avatar/interface.ts:5](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Avatar/interface.ts#L5)
+Defined in: [src/types/Avatar/interface.ts:5](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Avatar/interface.ts#L5)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Avatar/interface.ts:5](https://github.com/iamanishx/talaw
 
 > `optional` **dataTestId**: `string`
 
-Defined in: [src/types/Avatar/interface.ts:7](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Avatar/interface.ts#L7)
+Defined in: [src/types/Avatar/interface.ts:7](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Avatar/interface.ts#L7)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Avatar/interface.ts:7](https://github.com/iamanishx/talaw
 
 > `optional` **name**: `string`
 
-Defined in: [src/types/Avatar/interface.ts:2](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Avatar/interface.ts#L2)
+Defined in: [src/types/Avatar/interface.ts:2](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Avatar/interface.ts#L2)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Avatar/interface.ts:2](https://github.com/iamanishx/talaw
 
 > `optional` **radius**: `number`
 
-Defined in: [src/types/Avatar/interface.ts:8](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Avatar/interface.ts#L8)
+Defined in: [src/types/Avatar/interface.ts:8](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Avatar/interface.ts#L8)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/types/Avatar/interface.ts:8](https://github.com/iamanishx/talaw
 
 > `optional` **size**: `number`
 
-Defined in: [src/types/Avatar/interface.ts:4](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Avatar/interface.ts#L4)
+Defined in: [src/types/Avatar/interface.ts:4](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Avatar/interface.ts#L4)
