@@ -54,12 +54,12 @@ describe('askForDocker', () => {
 
     const validateFn = promptsArray[0].validate;
 
-    if (validateFn) {
-      expect(validateFn('1023')).toBe(
-        'Please enter a valid port number between 1024 and 65535',
-      );
-      expect(validateFn('1024')).toBe(true);
-    }
+    expect(typeof validateFn).toBe('function');
+    const validate = validateFn as (input: string) => string | boolean;
+    expect(validate('1023')).toBe(
+      'Please enter a valid port number between 1024 and 65535',
+    );
+    expect(validate('1024')).toBe(true);
   });
 });
 

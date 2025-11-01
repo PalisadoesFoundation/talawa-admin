@@ -27,10 +27,12 @@ export const updateEnvFile = (key: string, value: string): void => {
     let envContent = fs.readFileSync(ENV_PATH, 'utf8');
 
     // Remove existing key and its comment (and any surrounding blank lines)
+    const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regex = new RegExp(
-      String.raw`(^|\n)\s*(#.*\n)?\s*#?\s*${key}\s*=.*(\r?\n)?`,
+      String.raw`(^|\r?\n)\s*(#.*\r?\n)?\s*#?\s*${escapedKey}\s*=.*(\r?\n)?`,
       'gm',
     );
+
     envContent = envContent.replace(regex, '\n');
     envContent = envContent.replace(/\n{3,}/g, '\n\n').trim();
 
