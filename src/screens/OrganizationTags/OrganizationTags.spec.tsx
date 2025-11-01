@@ -27,6 +27,7 @@ import {
   MOCKS_UNDEFINED_USER_TAGS,
   MOCKS_NULL_END_CURSOR,
   MOCKS_NO_MORE_PAGES,
+  MOCKS_WITH_NULL_FETCH_MORE_RESULT,
 } from './OrganizationTagsMocks';
 import type { ApolloLink } from '@apollo/client';
 
@@ -47,6 +48,7 @@ const link4 = new StaticMockLink(MOCKS_EMPTY, true);
 const link5 = new StaticMockLink(MOCKS_UNDEFINED_USER_TAGS, true);
 const link6 = new StaticMockLink(MOCKS_NULL_END_CURSOR, true);
 const link7 = new StaticMockLink(MOCKS_NO_MORE_PAGES, true);
+const link8 = new StaticMockLink(MOCKS_WITH_NULL_FETCH_MORE_RESULT, true);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -392,7 +394,7 @@ describe('Organisation Tags Page', () => {
   });
 
   test('should handle null fetchMoreResult in updateQuery', async () => {
-    renderOrganizationTags(link5);
+    renderOrganizationTags(link8);
 
     await wait();
 
@@ -400,13 +402,18 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
 
-    // Find scrollable div and trigger scroll event
+    // Verify initial tags are loaded by checking for tag names
+    await waitFor(() => {
+      expect(screen.getByText('userTag 1')).toBeInTheDocument();
+    });
+
+    // Find scrollable div and trigger scroll event to call fetchMore
     const orgUserTagsScrollableDiv = screen.getByTestId(
       'orgUserTagsScrollableDiv',
     );
     expect(orgUserTagsScrollableDiv).toBeInTheDocument();
 
-    // Scroll to trigger fetchMore (which will return null/undefined)
+    // Scroll to bottom to trigger fetchMore (which will return null/undefined)
     fireEvent.scroll(orgUserTagsScrollableDiv, {
       target: { scrollY: orgUserTagsScrollableDiv.scrollHeight },
     });
@@ -414,7 +421,9 @@ describe('Organisation Tags Page', () => {
     await wait();
 
     // Component should still render after null fetchMoreResult
+    // Original tags should still be visible (no crash/error)
     await waitFor(() => {
+      expect(screen.getByText('userTag 1')).toBeInTheDocument();
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
   });
