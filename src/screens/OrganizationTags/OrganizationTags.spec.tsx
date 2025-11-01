@@ -390,4 +390,32 @@ describe('Organisation Tags Page', () => {
       expect(toast.error).toHaveBeenCalledWith('Tag creation failed');
     });
   });
+
+  test('should handle null fetchMoreResult in updateQuery', async () => {
+    renderOrganizationTags(link5);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
+    });
+
+    // Find scrollable div and trigger scroll event
+    const orgUserTagsScrollableDiv = screen.getByTestId(
+      'orgUserTagsScrollableDiv',
+    );
+    expect(orgUserTagsScrollableDiv).toBeInTheDocument();
+
+    // Scroll to trigger fetchMore (which will return null/undefined)
+    fireEvent.scroll(orgUserTagsScrollableDiv, {
+      target: { scrollY: orgUserTagsScrollableDiv.scrollHeight },
+    });
+
+    await wait();
+
+    // Component should still render after null fetchMoreResult
+    await waitFor(() => {
+      expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
+    });
+  });
 });
