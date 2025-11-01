@@ -30,6 +30,14 @@ import { vi, beforeEach, expect, it, describe } from 'vitest';
 
 vi.mock('utils/useLocalstorage');
 
+// Define the interface locally since it's not exported from the module
+interface InterfaceStorageHelper {
+  getItem: <T>(key: string) => T | null | string;
+  setItem: (key: string, value: unknown) => void;
+  removeItem: (key: string) => void;
+  getStorageKey: (key: string) => string;
+}
+
 const MOCKS = [
   {
     request: {
@@ -1085,11 +1093,14 @@ const mockUseLocalStorage = {
   getItem: vi.fn(),
   setItem: vi.fn(),
   removeItem: vi.fn(),
+  getStorageKey: vi.fn(),
 };
 
 beforeEach(() => {
   vi.clearAllMocks();
-  (useLocalStorage as any).mockReturnValue(mockUseLocalStorage);
+  (useLocalStorage as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+    mockUseLocalStorage as InterfaceStorageHelper,
+  );
 });
 
 describe('Testing redirect if already logged in', () => {
@@ -1332,8 +1343,7 @@ it('Render the Select Organization list and change the option', async () => {
     const autocomplete = screen.getByTestId('selectOrg');
     const input = within(autocomplete).getByRole('combobox');
     autocomplete.focus();
-    // the value here can be any string you want, so you may also consider to
-    // wrapper it as a function and pass in inputValue as parameter
+
     fireEvent.change(input, { target: { value: 'a' } });
     fireEvent.keyDown(autocomplete, { key: 'ArrowDown' });
     fireEvent.keyDown(autocomplete, { key: 'Enter' });

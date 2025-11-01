@@ -1,3 +1,7 @@
+/**
+ * Modal component to invite users to an event by email.
+ * Allows entering multiple recipient emails/names and an optional message, then sends invites.
+ */
 import React, { useState } from 'react';
 import { Modal, Button, Form, Spinner } from 'react-bootstrap';
 import TextField from '@mui/material/TextField';
