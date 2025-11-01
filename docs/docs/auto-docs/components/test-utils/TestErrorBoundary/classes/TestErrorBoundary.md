@@ -12,7 +12,7 @@ Defined in: [src/components/test-utils/TestErrorBoundary.tsx:22](https://github.
 
 ## Constructors
 
-### Constructor
+### new TestErrorBoundary()
 
 > **new TestErrorBoundary**(`props`): `TestErrorBoundary`
 

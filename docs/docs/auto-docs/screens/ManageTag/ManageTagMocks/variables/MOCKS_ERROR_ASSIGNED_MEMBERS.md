@@ -8,7 +8,7 @@
 
 Defined in: [src/screens/ManageTag/ManageTagMocks.ts:391](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/ManageTagMocks.ts#L391)
 
-## Type Declaration
+## Type declaration
 
 ### error
 

@@ -8,7 +8,7 @@
 
 Defined in: [src/screens/ManageTag/ManageTagNonErrorMocks.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/ManageTagNonErrorMocks.ts#L126)
 
-## Type Declaration
+## Type declaration
 
 ### request
 

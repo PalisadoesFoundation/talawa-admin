@@ -8,7 +8,7 @@
 
 Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts:458](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts#L458)
 
-## Type Declaration
+## Type declaration
 
 ### error
 

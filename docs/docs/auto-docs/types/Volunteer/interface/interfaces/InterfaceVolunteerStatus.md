@@ -46,7 +46,7 @@ Whether the button should be disabled.
 
 ### icon
 
-> **icon**: `ComponentType`\<\{ `className?`: `string`; `size?`: `number`; \}\>
+> **icon**: `ComponentType`\<\{ `className`: `string`; `size`: `number`; \}\>
 
 Defined in: [src/types/Volunteer/interface.ts:173](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L173)
 

@@ -8,7 +8,7 @@
 
 Defined in: [src/screens/ManageTag/ManageTagNullFalsyMocks.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/ManageTagNullFalsyMocks.ts#L70)
 
-## Type Declaration
+## Type declaration
 
 ### request
 

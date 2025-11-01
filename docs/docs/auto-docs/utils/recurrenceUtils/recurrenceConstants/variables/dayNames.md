@@ -8,7 +8,7 @@
 
 Defined in: [src/utils/recurrenceUtils/recurrenceConstants.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceConstants.ts#L42)
 
-## Type Declaration
+## Type declaration
 
 ### FR
 

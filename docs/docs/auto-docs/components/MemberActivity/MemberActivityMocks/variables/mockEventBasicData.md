@@ -8,7 +8,7 @@
 
 Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/MemberActivityMocks.ts#L41)
 
-## Type Declaration
+## Type declaration
 
 ### event
 
