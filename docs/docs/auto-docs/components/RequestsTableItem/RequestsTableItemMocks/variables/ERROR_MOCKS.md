@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **ERROR\_MOCKS**: `object`[]
 
-Defined in: [src/components/RequestsTableItem/RequestsTableItemMocks.ts:45](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/components/RequestsTableItem/RequestsTableItemMocks.ts#L45)
+Defined in: [src/components/RequestsTableItem/RequestsTableItemMocks.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/RequestsTableItem/RequestsTableItemMocks.ts#L45)
 
 ## Type Declaration
 

@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceOrganizationBlockedUsersConnectionEdgePg
 
-Defined in: [src/utils/interfaces.ts:774](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L774)
+Defined in: [src/utils/interfaces.ts:774](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L774)
 
 InterfaceOrganizationBlockedUsersConnectionEdgePg
 
@@ -18,7 +18,7 @@ Defines the structure for an edge in the organization blocked users connection w
 
 > **cursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:775](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L775)
+Defined in: [src/utils/interfaces.ts:775](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L775)
 
 The cursor for this edge.
 
@@ -28,6 +28,6 @@ The cursor for this edge.
 
 > **node**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:776](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L776)
+Defined in: [src/utils/interfaces.ts:776](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L776)
 
 The user node.

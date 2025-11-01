@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceCurrentUserTypePG
 
-Defined in: [src/utils/interfaces.ts:383](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L383)
+Defined in: [src/utils/interfaces.ts:383](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L383)
 
 InterfaceCurrentUserTypePG
 
@@ -18,7 +18,7 @@ Defines the structure for the current user type with PostgreSQL-specific fields.
 
 > **currentUser**: `object`
 
-Defined in: [src/utils/interfaces.ts:384](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L384)
+Defined in: [src/utils/interfaces.ts:384](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L384)
 
 The current user object.
 

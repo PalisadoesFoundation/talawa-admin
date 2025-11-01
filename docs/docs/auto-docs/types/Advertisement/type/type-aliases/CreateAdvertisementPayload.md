@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **CreateAdvertisementPayload** = `object`
 
-Defined in: [src/types/Advertisement/type.ts:56](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Advertisement/type.ts#L56)
+Defined in: [src/types/Advertisement/type.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L56)
 
 ## Properties
 
@@ -14,4 +14,4 @@ Defined in: [src/types/Advertisement/type.ts:56](https://github.com/iamanishx/ta
 
 > `optional` **advertisement**: [`Advertisement`](Advertisement.md)
 
-Defined in: [src/types/Advertisement/type.ts:57](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Advertisement/type.ts#L57)
+Defined in: [src/types/Advertisement/type.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L57)

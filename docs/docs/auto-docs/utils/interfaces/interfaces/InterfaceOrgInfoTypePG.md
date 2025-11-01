@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceOrgInfoTypePG
 
-Defined in: [src/utils/interfaces.ts:537](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L537)
+Defined in: [src/utils/interfaces.ts:537](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L537)
 
 InterfaceOrgInfoTypePG
 
@@ -18,7 +18,7 @@ Defines the structure for organization information with PostgreSQL-specific fiel
 
 > **addressLine1**: `string`
 
-Defined in: [src/utils/interfaces.ts:540](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L540)
+Defined in: [src/utils/interfaces.ts:540](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L540)
 
 The first line of the organization's address.
 
@@ -28,7 +28,7 @@ The first line of the organization's address.
 
 > **avatarURL**: `string`
 
-Defined in: [src/utils/interfaces.ts:542](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L542)
+Defined in: [src/utils/interfaces.ts:542](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L542)
 
 The URL of the organization's avatar, or null.
 
@@ -38,7 +38,7 @@ The URL of the organization's avatar, or null.
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:541](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L541)
+Defined in: [src/utils/interfaces.ts:541](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L541)
 
 The description of the organization.
 
@@ -48,7 +48,7 @@ The description of the organization.
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:538](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L538)
+Defined in: [src/utils/interfaces.ts:538](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L538)
 
 The unique identifier of the organization.
 
@@ -58,7 +58,7 @@ The unique identifier of the organization.
 
 > **members**: `object`
 
-Defined in: [src/utils/interfaces.ts:543](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L543)
+Defined in: [src/utils/interfaces.ts:543](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L543)
 
 The members connection object.
 
@@ -72,6 +72,6 @@ The members connection object.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:539](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L539)
+Defined in: [src/utils/interfaces.ts:539](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L539)
 
 The name of the organization.

@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_ERROR\_ASSIGNED\_MEMBERS**: `object`[]
 
-Defined in: [src/screens/ManageTag/ManageTagMocks.ts:391](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/screens/ManageTag/ManageTagMocks.ts#L391)
+Defined in: [src/screens/ManageTag/ManageTagMocks.ts:391](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/ManageTagMocks.ts#L391)
 
 ## Type Declaration
 

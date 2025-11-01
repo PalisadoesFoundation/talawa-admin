@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_EMPTY**: `object`[]
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroups.mocks.ts:283](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroups.mocks.ts#L283)
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroups.mocks.ts:283](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroups.mocks.ts#L283)
 
 ## Type Declaration
 

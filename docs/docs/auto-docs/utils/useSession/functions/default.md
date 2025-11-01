@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(): `UseSessionReturnType`
 
-Defined in: [src/utils/useSession.tsx:30](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/useSession.tsx#L30)
+Defined in: [src/utils/useSession.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useSession.tsx#L30)
 
 Custom hook for managing user session timeouts in a React application.
 

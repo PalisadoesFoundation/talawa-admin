@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **removeAdminPlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/utils/adminPluginInstaller.ts:398](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/adminPluginInstaller.ts#L398)
+Defined in: [src/utils/adminPluginInstaller.ts:398](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L398)
 
 Removes an admin plugin from the file system via server API
 

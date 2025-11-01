@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: IInjectorExtension
 
-Defined in: [src/plugin/types.ts:81](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/types.ts#L81)
+Defined in: [src/plugin/types.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L81)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:81](https://github.com/iamanishx/talawa-admin/b
 
 > `optional` **description**: `string`
 
-Defined in: [src/plugin/types.ts:84](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/types.ts#L84)
+Defined in: [src/plugin/types.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L84)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/types.ts:84](https://github.com/iamanishx/talawa-admin/b
 
 > **injector**: `string`
 
-Defined in: [src/plugin/types.ts:83](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/types.ts#L83)
+Defined in: [src/plugin/types.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L83)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/plugin/types.ts:83](https://github.com/iamanishx/talawa-admin/b
 
 > `optional` **order**: `number`
 
-Defined in: [src/plugin/types.ts:86](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/types.ts#L86)
+Defined in: [src/plugin/types.ts:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L86)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/plugin/types.ts:86](https://github.com/iamanishx/talawa-admin/b
 
 > `optional` **pluginId**: `string`
 
-Defined in: [src/plugin/types.ts:82](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/types.ts#L82)
+Defined in: [src/plugin/types.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L82)
 
 ***
 
@@ -44,4 +44,4 @@ Defined in: [src/plugin/types.ts:82](https://github.com/iamanishx/talawa-admin/b
 
 > `optional` **target**: `string`
 
-Defined in: [src/plugin/types.ts:85](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/types.ts#L85)
+Defined in: [src/plugin/types.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L85)

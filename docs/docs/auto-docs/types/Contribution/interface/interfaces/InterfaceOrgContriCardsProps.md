@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceOrgContriCardsProps
 
-Defined in: [src/types/Contribution/interface.ts:8](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Contribution/interface.ts#L8)
+Defined in: [src/types/Contribution/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L8)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Contribution/interface.ts:8](https://github.com/iamanishx
 
 > **contriAmount**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:13](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Contribution/interface.ts#L13)
+Defined in: [src/types/Contribution/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L13)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Contribution/interface.ts:13](https://github.com/iamanish
 
 > **contriDate**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:12](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Contribution/interface.ts#L12)
+Defined in: [src/types/Contribution/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L12)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Contribution/interface.ts:12](https://github.com/iamanish
 
 > **contriTransactionId**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:14](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Contribution/interface.ts#L14)
+Defined in: [src/types/Contribution/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L14)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Contribution/interface.ts:14](https://github.com/iamanish
 
 > **id**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:10](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Contribution/interface.ts#L10)
+Defined in: [src/types/Contribution/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L10)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Contribution/interface.ts:10](https://github.com/iamanish
 
 > **key**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:9](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Contribution/interface.ts#L9)
+Defined in: [src/types/Contribution/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L9)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Contribution/interface.ts:9](https://github.com/iamanishx
 
 > **userEmail**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:15](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Contribution/interface.ts#L15)
+Defined in: [src/types/Contribution/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L15)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/types/Contribution/interface.ts:15](https://github.com/iamanish
 
 > **userName**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:11](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Contribution/interface.ts#L11)
+Defined in: [src/types/Contribution/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L11)

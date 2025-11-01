@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **updateTargets**(`orgId`): (`dispatch`) => `void`
 
-Defined in: [src/state/action-creators/index.ts:3](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/state/action-creators/index.ts#L3)
+Defined in: [src/state/action-creators/index.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/action-creators/index.ts#L3)
 
 ## Parameters
 

@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **ADD\_EVENT\_ATTENDEE**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/EventAttendeeMutations.ts:11](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/GraphQl/Mutations/EventAttendeeMutations.ts#L11)
+Defined in: [src/GraphQl/Mutations/EventAttendeeMutations.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventAttendeeMutations.ts#L11)
 
 GraphQL mutation to add an attendee to an event.
 

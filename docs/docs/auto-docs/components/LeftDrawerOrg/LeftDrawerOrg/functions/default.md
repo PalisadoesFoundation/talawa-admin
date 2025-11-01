@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`orgId`): `Element`
 
-Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:95](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L95)
+Defined in: [src/components/LeftDrawerOrg/LeftDrawerOrg.tsx:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawerOrg/LeftDrawerOrg.tsx#L95)
 
 LeftDrawerOrg component for displaying organization details and options.
 

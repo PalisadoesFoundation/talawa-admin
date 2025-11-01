@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **FeedbackStats**(`__namedParameters`): `Element`
 
-Defined in: [src/components/EventStats/Statistics/Feedback/Feedback.tsx:44](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/components/EventStats/Statistics/Feedback/Feedback.tsx#L44)
+Defined in: [src/components/EventStats/Statistics/Feedback/Feedback.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/Statistics/Feedback/Feedback.tsx#L44)
 
 ## Parameters
 

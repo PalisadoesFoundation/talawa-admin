@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceAgendaItemCategoryInfo
 
-Defined in: [src/types/Agenda/interface.ts:3](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Agenda/interface.ts#L3)
+Defined in: [src/types/Agenda/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L3)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Agenda/interface.ts:3](https://github.com/iamanishx/talaw
 
 > **\_id**: `string`
 
-Defined in: [src/types/Agenda/interface.ts:4](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Agenda/interface.ts#L4)
+Defined in: [src/types/Agenda/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L4)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Agenda/interface.ts:4](https://github.com/iamanishx/talaw
 
 > **createdBy**: `object`
 
-Defined in: [src/types/Agenda/interface.ts:7](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Agenda/interface.ts#L7)
+Defined in: [src/types/Agenda/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L7)
 
 #### \_id
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Agenda/interface.ts:7](https://github.com/iamanishx/talaw
 
 > **description**: `string`
 
-Defined in: [src/types/Agenda/interface.ts:6](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Agenda/interface.ts#L6)
+Defined in: [src/types/Agenda/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L6)
 
 ***
 
@@ -48,4 +48,4 @@ Defined in: [src/types/Agenda/interface.ts:6](https://github.com/iamanishx/talaw
 
 > **name**: `string`
 
-Defined in: [src/types/Agenda/interface.ts:5](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Agenda/interface.ts#L5)
+Defined in: [src/types/Agenda/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L5)

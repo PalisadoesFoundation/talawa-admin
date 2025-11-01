@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/Avatar/Avatar.tsx:41](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/components/Avatar/Avatar.tsx#L41)
+Defined in: [src/components/Avatar/Avatar.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Avatar/Avatar.tsx#L41)
 
 ## Parameters
 

@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **TOGGLE\_PINNED\_POST**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:217](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/GraphQl/Mutations/OrganizationMutations.ts#L217)
+Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:217](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L217)
 
 GraphQL mutation to toggle the pinned status of a post.
 

@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > **ElementAttributesProperty** = `ReactJSX.ElementAttributesProperty`
 
-Defined in: [src/types/jsx.d.ts:7](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/jsx.d.ts#L7)
+Defined in: [src/types/jsx.d.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/jsx.d.ts#L7)

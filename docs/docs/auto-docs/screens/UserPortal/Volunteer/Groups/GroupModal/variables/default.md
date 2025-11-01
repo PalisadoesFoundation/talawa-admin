@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceGroupModal`](../interfaces/InterfaceGroupModal.md)\>
 
-Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:70](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L70)
+Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L70)

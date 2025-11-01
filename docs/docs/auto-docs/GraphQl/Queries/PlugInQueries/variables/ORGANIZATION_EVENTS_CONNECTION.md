@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **ORGANIZATION\_EVENTS\_CONNECTION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/PlugInQueries.ts:47](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/GraphQl/Queries/PlugInQueries.ts#L47)
+Defined in: [src/GraphQl/Queries/PlugInQueries.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L47)
 
 GraphQL query to retrieve a list of events based on organization connection.
 

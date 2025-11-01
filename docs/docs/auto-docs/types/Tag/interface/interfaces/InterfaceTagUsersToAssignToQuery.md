@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceTagUsersToAssignToQuery
 
-Defined in: [src/types/Tag/interface.ts:55](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Tag/interface.ts#L55)
+Defined in: [src/types/Tag/interface.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L55)
 
 ## Extends
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Tag/interface.ts:55](https://github.com/iamanishx/talawa-
 
 > `optional` **data**: `object`
 
-Defined in: [src/types/Tag/interface.ts:57](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Tag/interface.ts#L57)
+Defined in: [src/types/Tag/interface.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L57)
 
 #### getUsersToAssignTo
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Tag/interface.ts:57](https://github.com/iamanishx/talawa-
 
 > `optional` **error**: `ApolloError`
 
-Defined in: [src/types/Tag/interface.ts:41](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Tag/interface.ts#L41)
+Defined in: [src/types/Tag/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L41)
 
 #### Inherited from
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Tag/interface.ts:41](https://github.com/iamanishx/talawa-
 
 > **fetchMore**: (`options`) => `void`
 
-Defined in: [src/types/Tag/interface.ts:60](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Tag/interface.ts#L60)
+Defined in: [src/types/Tag/interface.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L60)
 
 #### Parameters
 
@@ -58,7 +58,7 @@ Defined in: [src/types/Tag/interface.ts:60](https://github.com/iamanishx/talawa-
 
 > **loading**: `boolean`
 
-Defined in: [src/types/Tag/interface.ts:40](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Tag/interface.ts#L40)
+Defined in: [src/types/Tag/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L40)
 
 #### Inherited from
 
@@ -70,7 +70,7 @@ Defined in: [src/types/Tag/interface.ts:40](https://github.com/iamanishx/talawa-
 
 > `optional` **refetch**: () => `void`
 
-Defined in: [src/types/Tag/interface.ts:42](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/Tag/interface.ts#L42)
+Defined in: [src/types/Tag/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L42)
 
 #### Returns
 

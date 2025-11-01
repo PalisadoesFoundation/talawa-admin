@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **validateAdminPluginZip**(`zipFile`): `Promise`\<[`AdminPluginZipStructure`](../interfaces/AdminPluginZipStructure.md)\>
 
-Defined in: [src/utils/adminPluginInstaller.ts:53](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/adminPluginInstaller.ts#L53)
+Defined in: [src/utils/adminPluginInstaller.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L53)
 
 Validates the structure of a plugin zip file (supports both admin and API)
 

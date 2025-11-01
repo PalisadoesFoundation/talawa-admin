@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Class: LifecycleManager
 
-Defined in: [src/plugin/managers/lifecycle.ts:12](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/managers/lifecycle.ts#L12)
+Defined in: [src/plugin/managers/lifecycle.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L12)
 
 ## Constructors
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:12](https://github.com/iamanishx/t
 
 > **new LifecycleManager**(`discoveryManager`, `extensionRegistry`, `eventManager`): `LifecycleManager`
 
-Defined in: [src/plugin/managers/lifecycle.ts:15](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/managers/lifecycle.ts#L15)
+Defined in: [src/plugin/managers/lifecycle.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L15)
 
 #### Parameters
 
@@ -38,7 +38,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:15](https://github.com/iamanishx/t
 
 > **activatePlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/managers/lifecycle.ts:141](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/managers/lifecycle.ts#L141)
+Defined in: [src/plugin/managers/lifecycle.ts:141](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L141)
 
 #### Parameters
 
@@ -56,7 +56,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:141](https://github.com/iamanishx/
 
 > **deactivatePlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/managers/lifecycle.ts:177](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/managers/lifecycle.ts#L177)
+Defined in: [src/plugin/managers/lifecycle.ts:177](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L177)
 
 #### Parameters
 
@@ -74,7 +74,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:177](https://github.com/iamanishx/
 
 > **getActivePluginCount**(): `number`
 
-Defined in: [src/plugin/managers/lifecycle.ts:52](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/managers/lifecycle.ts#L52)
+Defined in: [src/plugin/managers/lifecycle.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L52)
 
 #### Returns
 
@@ -86,7 +86,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:52](https://github.com/iamanishx/t
 
 > **getLoadedPlugin**(`pluginId`): [`ILoadedPlugin`](../../../types/interfaces/ILoadedPlugin.md)
 
-Defined in: [src/plugin/managers/lifecycle.ts:25](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/managers/lifecycle.ts#L25)
+Defined in: [src/plugin/managers/lifecycle.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L25)
 
 #### Parameters
 
@@ -104,7 +104,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:25](https://github.com/iamanishx/t
 
 > **getLoadedPlugins**(): [`ILoadedPlugin`](../../../types/interfaces/ILoadedPlugin.md)[]
 
-Defined in: [src/plugin/managers/lifecycle.ts:21](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/managers/lifecycle.ts#L21)
+Defined in: [src/plugin/managers/lifecycle.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L21)
 
 #### Returns
 
@@ -116,7 +116,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:21](https://github.com/iamanishx/t
 
 > **getPluginComponent**(`pluginId`, `componentName`): `ComponentType`\<\{ \}\>
 
-Defined in: [src/plugin/managers/lifecycle.ts:32](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/managers/lifecycle.ts#L32)
+Defined in: [src/plugin/managers/lifecycle.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L32)
 
 #### Parameters
 
@@ -138,7 +138,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:32](https://github.com/iamanishx/t
 
 > **getPluginCount**(): `number`
 
-Defined in: [src/plugin/managers/lifecycle.ts:48](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/managers/lifecycle.ts#L48)
+Defined in: [src/plugin/managers/lifecycle.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L48)
 
 #### Returns
 
@@ -150,7 +150,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:48](https://github.com/iamanishx/t
 
 > **installPlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/managers/lifecycle.ts:213](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/managers/lifecycle.ts#L213)
+Defined in: [src/plugin/managers/lifecycle.ts:213](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L213)
 
 #### Parameters
 
@@ -168,7 +168,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:213](https://github.com/iamanishx/
 
 > **loadPlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/managers/lifecycle.ts:58](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/managers/lifecycle.ts#L58)
+Defined in: [src/plugin/managers/lifecycle.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L58)
 
 #### Parameters
 
@@ -186,7 +186,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:58](https://github.com/iamanishx/t
 
 > **togglePluginStatus**(`pluginId`, `status`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/managers/lifecycle.ts:130](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/managers/lifecycle.ts#L130)
+Defined in: [src/plugin/managers/lifecycle.ts:130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L130)
 
 #### Parameters
 
@@ -208,7 +208,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:130](https://github.com/iamanishx/
 
 > **uninstallPlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/managers/lifecycle.ts:267](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/managers/lifecycle.ts#L267)
+Defined in: [src/plugin/managers/lifecycle.ts:267](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L267)
 
 #### Parameters
 
@@ -226,7 +226,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:267](https://github.com/iamanishx/
 
 > **unloadPlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/managers/lifecycle.ts:102](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/plugin/managers/lifecycle.ts#L102)
+Defined in: [src/plugin/managers/lifecycle.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L102)
 
 #### Parameters
 

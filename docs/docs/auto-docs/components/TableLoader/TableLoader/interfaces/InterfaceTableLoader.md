@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceTableLoader
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:35](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/components/TableLoader/TableLoader.tsx#L35)
+Defined in: [src/components/TableLoader/TableLoader.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L35)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:35](https://github.com/i
 
 > `optional` **data-testid**: `string`
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:39](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/components/TableLoader/TableLoader.tsx#L39)
+Defined in: [src/components/TableLoader/TableLoader.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L39)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:39](https://github.com/i
 
 > `optional` **headerTitles**: `string`[]
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:37](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/components/TableLoader/TableLoader.tsx#L37)
+Defined in: [src/components/TableLoader/TableLoader.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L37)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:37](https://github.com/i
 
 > `optional` **noOfCols**: `number`
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:38](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/components/TableLoader/TableLoader.tsx#L38)
+Defined in: [src/components/TableLoader/TableLoader.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L38)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:38](https://github.com/i
 
 > **noOfRows**: `number`
 
-Defined in: [src/components/TableLoader/TableLoader.tsx:36](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/components/TableLoader/TableLoader.tsx#L36)
+Defined in: [src/components/TableLoader/TableLoader.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L36)

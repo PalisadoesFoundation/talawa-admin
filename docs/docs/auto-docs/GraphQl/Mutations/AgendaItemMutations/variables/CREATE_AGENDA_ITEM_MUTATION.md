@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **CREATE\_AGENDA\_ITEM\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/AgendaItemMutations.ts:3](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/GraphQl/Mutations/AgendaItemMutations.ts#L3)
+Defined in: [src/GraphQl/Mutations/AgendaItemMutations.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/AgendaItemMutations.ts#L3)

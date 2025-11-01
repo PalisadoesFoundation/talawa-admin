@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceTagAssignedMembersQuery
 
-Defined in: [src/utils/organizationTagsUtils.ts:101](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/organizationTagsUtils.ts#L101)
+Defined in: [src/utils/organizationTagsUtils.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L101)
 
 ## Extends
 
@@ -16,7 +16,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:101](https://github.com/iamanish
 
 > `optional` **data**: `object`
 
-Defined in: [src/utils/organizationTagsUtils.ts:103](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/organizationTagsUtils.ts#L103)
+Defined in: [src/utils/organizationTagsUtils.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L103)
 
 #### getAssignedUsers
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:103](https://github.com/iamanish
 
 > `optional` **error**: `ApolloError`
 
-Defined in: [src/utils/organizationTagsUtils.ts:60](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/organizationTagsUtils.ts#L60)
+Defined in: [src/utils/organizationTagsUtils.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L60)
 
 #### Inherited from
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:60](https://github.com/iamanishx
 
 > **fetchMore**: (`options`) => `void`
 
-Defined in: [src/utils/organizationTagsUtils.ts:106](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/organizationTagsUtils.ts#L106)
+Defined in: [src/utils/organizationTagsUtils.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L106)
 
 #### Parameters
 
@@ -58,7 +58,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:106](https://github.com/iamanish
 
 > **loading**: `boolean`
 
-Defined in: [src/utils/organizationTagsUtils.ts:59](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/organizationTagsUtils.ts#L59)
+Defined in: [src/utils/organizationTagsUtils.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L59)
 
 #### Inherited from
 
@@ -70,7 +70,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:59](https://github.com/iamanishx
 
 > `optional` **refetch**: () => `void`
 
-Defined in: [src/utils/organizationTagsUtils.ts:61](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/organizationTagsUtils.ts#L61)
+Defined in: [src/utils/organizationTagsUtils.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L61)
 
 #### Returns
 

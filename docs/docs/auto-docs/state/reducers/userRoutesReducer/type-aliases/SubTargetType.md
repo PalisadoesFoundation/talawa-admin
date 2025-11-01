@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **SubTargetType** = `object`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:9](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/state/reducers/userRoutesReducer.ts#L9)
+Defined in: [src/state/reducers/userRoutesReducer.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L9)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:9](https://github.com/iaman
 
 > `optional` **comp\_id**: `string`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:13](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/state/reducers/userRoutesReducer.ts#L13)
+Defined in: [src/state/reducers/userRoutesReducer.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L13)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:13](https://github.com/iama
 
 > `optional` **icon**: `string`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:12](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/state/reducers/userRoutesReducer.ts#L12)
+Defined in: [src/state/reducers/userRoutesReducer.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L12)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:12](https://github.com/iama
 
 > `optional` **name**: `string`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:10](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/state/reducers/userRoutesReducer.ts#L10)
+Defined in: [src/state/reducers/userRoutesReducer.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L10)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:10](https://github.com/iama
 
 > **url**: `string`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:11](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/state/reducers/userRoutesReducer.ts#L11)
+Defined in: [src/state/reducers/userRoutesReducer.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/userRoutesReducer.ts#L11)

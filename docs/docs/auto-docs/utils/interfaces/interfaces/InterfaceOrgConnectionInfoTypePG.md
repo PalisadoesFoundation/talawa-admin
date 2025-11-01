@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceOrgConnectionInfoTypePG
 
-Defined in: [src/utils/interfaces.ts:520](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L520)
+Defined in: [src/utils/interfaces.ts:520](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L520)
 
 InterfaceOrgConnectionInfoTypePG
 
@@ -18,6 +18,6 @@ Defines the structure for organization connection information with PostgreSQL-sp
 
 > **organizations**: [`InterfaceOrgInfoTypePG`](InterfaceOrgInfoTypePG.md)[]
 
-Defined in: [src/utils/interfaces.ts:521](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/interfaces.ts#L521)
+Defined in: [src/utils/interfaces.ts:521](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L521)
 
 An array of organization information.

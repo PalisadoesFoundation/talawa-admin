@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_EMPTY\_EDGES\_ARRAY**: `object`[] = `MOCKS_EMPTY_ASSIGNED_MEMBERS_ARRAY`
 
-Defined in: [src/screens/ManageTag/ManageTagNullFalsyMocks.ts:70](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/screens/ManageTag/ManageTagNullFalsyMocks.ts#L70)
+Defined in: [src/screens/ManageTag/ManageTagNullFalsyMocks.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/ManageTagNullFalsyMocks.ts#L70)
 
 ## Type Declaration
 

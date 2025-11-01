@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: ICreateActionItemInput
 
-Defined in: [src/types/ActionItems/interface.ts:87](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L87)
+Defined in: [src/types/ActionItems/interface.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L87)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/ActionItems/interface.ts:87](https://github.com/iamanishx
 
 > `optional` **assignedAt**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:95](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L95)
+Defined in: [src/types/ActionItems/interface.ts:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L95)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/ActionItems/interface.ts:95](https://github.com/iamanishx
 
 > **categoryId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:90](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L90)
+Defined in: [src/types/ActionItems/interface.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L90)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/ActionItems/interface.ts:90](https://github.com/iamanishx
 
 > `optional` **eventId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:91](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L91)
+Defined in: [src/types/ActionItems/interface.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L91)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/ActionItems/interface.ts:91](https://github.com/iamanishx
 
 > `optional` **isTemplate**: `boolean`
 
-Defined in: [src/types/ActionItems/interface.ts:96](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L96)
+Defined in: [src/types/ActionItems/interface.ts:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L96)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/ActionItems/interface.ts:96](https://github.com/iamanishx
 
 > **organizationId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:93](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L93)
+Defined in: [src/types/ActionItems/interface.ts:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L93)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/ActionItems/interface.ts:93](https://github.com/iamanishx
 
 > `optional` **preCompletionNotes**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:94](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L94)
+Defined in: [src/types/ActionItems/interface.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L94)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/ActionItems/interface.ts:94](https://github.com/iamanishx
 
 > `optional` **recurringEventInstanceId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:92](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L92)
+Defined in: [src/types/ActionItems/interface.ts:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L92)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/types/ActionItems/interface.ts:92](https://github.com/iamanishx
 
 > `optional` **volunteerGroupId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:89](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L89)
+Defined in: [src/types/ActionItems/interface.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L89)
 
 ***
 
@@ -76,4 +76,4 @@ Defined in: [src/types/ActionItems/interface.ts:89](https://github.com/iamanishx
 
 > `optional` **volunteerId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:88](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/types/ActionItems/interface.ts#L88)
+Defined in: [src/types/ActionItems/interface.ts:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L88)

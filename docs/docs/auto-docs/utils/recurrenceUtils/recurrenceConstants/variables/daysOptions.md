@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **daysOptions**: `string`[]
 
-Defined in: [src/utils/recurrenceUtils/recurrenceConstants.ts:16](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/recurrenceUtils/recurrenceConstants.ts#L16)
+Defined in: [src/utils/recurrenceUtils/recurrenceConstants.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceConstants.ts#L16)

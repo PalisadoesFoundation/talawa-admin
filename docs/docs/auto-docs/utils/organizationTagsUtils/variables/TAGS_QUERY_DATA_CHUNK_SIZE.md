@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **TAGS\_QUERY\_DATA\_CHUNK\_SIZE**: `10` = `10`
 
-Defined in: [src/utils/organizationTagsUtils.ts:48](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/organizationTagsUtils.ts#L48)
+Defined in: [src/utils/organizationTagsUtils.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L48)

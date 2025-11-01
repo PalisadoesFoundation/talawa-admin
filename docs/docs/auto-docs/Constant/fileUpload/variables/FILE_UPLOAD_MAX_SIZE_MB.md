@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **FILE\_UPLOAD\_MAX\_SIZE\_MB**: `number`
 
-Defined in: [src/Constant/fileUpload.ts:4](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/Constant/fileUpload.ts#L4)
+Defined in: [src/Constant/fileUpload.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/fileUpload.ts#L4)

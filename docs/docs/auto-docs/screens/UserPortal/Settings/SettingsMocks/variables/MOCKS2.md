@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **MOCKS2**: `object`[]
 
-Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:84](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/screens/UserPortal/Settings/SettingsMocks.ts#L84)
+Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Settings/SettingsMocks.ts#L84)
 
 ## Type Declaration
 

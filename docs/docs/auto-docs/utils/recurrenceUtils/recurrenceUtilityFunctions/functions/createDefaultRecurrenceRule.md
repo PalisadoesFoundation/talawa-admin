@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **createDefaultRecurrenceRule**(`startDate`, `frequency`): [`InterfaceRecurrenceRule`](../../recurrenceTypes/interfaces/InterfaceRecurrenceRule.md)
 
-Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:223](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L223)
+Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:223](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L223)
 
 Creates a default recurrence rule based on the event start date
 

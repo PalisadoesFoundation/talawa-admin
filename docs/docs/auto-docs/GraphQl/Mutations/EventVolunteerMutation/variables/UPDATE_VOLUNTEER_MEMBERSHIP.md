@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_VOLUNTEER\_MEMBERSHIP**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/EventVolunteerMutation.ts:198](https://github.com/iamanishx/talawa-admin/blob/298365ee22a86aaef2b666c60099ffc41d2bbce7/src/GraphQl/Mutations/EventVolunteerMutation.ts#L198)
+Defined in: [src/GraphQl/Mutations/EventVolunteerMutation.ts:198](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventVolunteerMutation.ts#L198)
 
 GraphQL mutation to update an event volunteer group.
 
