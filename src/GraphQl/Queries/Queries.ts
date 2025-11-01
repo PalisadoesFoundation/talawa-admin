@@ -92,6 +92,17 @@ export const ORGANIZATION_LIST_NO_MEMBERS = gql`
   }
   ${ORG_FIELDS}
 `;
+
+export const ORGANIZATION_MEMBER_ADMIN_COUNT = gql`
+  query OrganizationMemberAdminCounts($id: String!) {
+    organization(input: { id: $id }) {
+      id
+      membersCount
+      adminsCount
+    }
+  }
+`;
+
 export const USER_JOINED_ORGANIZATIONS_NO_MEMBERS = gql`
   query UserJoinedOrganizations($id: String!, $first: Int!, $filter: String) {
     user(input: { id: $id }) {
@@ -462,6 +473,24 @@ export const GET_ORGANIZATION_BLOCKED_USERS_PG = gql`
   }
 `;
 
+export const GET_ORGANIZATION_BLOCKED_USERS_COUNT = gql`
+  query GetBlockedUsersCount($id: String!) {
+    organization(input: { id: $id }) {
+      id
+      blockedUsersCount
+    }
+  }
+`;
+
+export const GET_ORGANIZATION_VENUES_COUNT = gql`
+  query GetVenuesCount($id: String!) {
+    organization(input: { id: $id }) {
+      id
+      venuesCount
+    }
+  }
+`;
+
 export const GET_ORGANIZATION_EVENTS_PG = gql`
   query GetOrganizationEvents(
     $id: String!
@@ -472,6 +501,7 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
     $includeRecurring: Boolean
   ) {
     organization(input: { id: $id }) {
+      eventsCount
       events(
         first: $first
         after: $after
@@ -971,6 +1001,7 @@ export const MEMBERSHIP_REQUEST = gql`
   ) {
     organization(input: $input) {
       id
+      membershipRequestsCount
       membershipRequests(
         skip: $skip
         first: $first

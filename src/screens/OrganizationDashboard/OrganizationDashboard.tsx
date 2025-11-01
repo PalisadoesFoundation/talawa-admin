@@ -38,6 +38,9 @@ import {
   GET_ORGANIZATION_BLOCKED_USERS_PG,
   GET_ORGANIZATION_VENUES_PG,
   MEMBERSHIP_REQUEST,
+  ORGANIZATION_MEMBER_ADMIN_COUNT,
+  GET_ORGANIZATION_BLOCKED_USERS_COUNT,
+  GET_ORGANIZATION_VENUES_COUNT,
 } from 'GraphQl/Queries/Queries';
 import UsersIcon from 'assets/svgs/users.svg?react';
 import CardItem from 'components/OrganizationDashCards/CardItem/CardItem';
@@ -103,51 +106,20 @@ function OrganizationDashboard(): JSX.Element {
       },
     });
 
-  const hasFetchedAllMembers = useRef(false);
-  const hasFetchedAllEvents = useRef(false);
-  const hasFetchedAllBlockedUsers = useRef(false);
-  const hasFetchedAllVenues = useRef(false);
-
   const {
     data: orgMemberData,
     loading: orgMemberLoading,
     error: orgMemberError,
-    fetchMore,
-  } = useQuery<InterfaceOrganizationPg>(GET_ORGANIZATION_MEMBERS_PG, {
-    variables: { id: orgId, first: 32, after: null },
-    notifyOnNetworkStatusChange: true,
+  } = useQuery<InterfaceOrganizationPg>(ORGANIZATION_MEMBER_ADMIN_COUNT, {
+    variables: { id: orgId },
   });
 
   useEffect(() => {
-    if (orgMemberData && !hasFetchedAllMembers.current) {
-      let newAdminCount = 0;
-      let newMemberCount = 0;
-
-      orgMemberData.organization.members.edges.forEach(
-        (member: InterfaceOrganizationMembersConnectionEdgePg) => {
-          if (member.node.role === 'administrator') {
-            newAdminCount += 1;
-          }
-          newMemberCount += 1;
-        },
-      );
-
-      setAdminCount(newAdminCount);
-      setMemberCount(newMemberCount);
-
-      if (orgMemberData.organization.members.pageInfo.hasNextPage) {
-        fetchMore({
-          variables: {
-            id: orgId,
-            first: 32,
-            after: orgMemberData.organization.members.pageInfo.endCursor,
-          },
-        });
-      } else {
-        hasFetchedAllMembers.current = true;
-      }
+    if (orgMemberData) {
+      setAdminCount(orgMemberData.organization.adminsCount);
+      setMemberCount(orgMemberData.organization.membersCount);
     }
-  }, [orgMemberData, fetchMore, orgId]);
+  }, [orgMemberData, orgId]);
 
   const {
     data: orgPostsData,
@@ -160,16 +132,15 @@ function OrganizationDashboard(): JSX.Element {
     loading: orgEventsLoading,
     error: orgEventsError,
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
-    variables: { id: orgId, first: 50, after: null },
+    variables: { id: orgId, first: 8, after: null },
   });
 
   const {
     data: orgBlockedUsersData,
     loading: orgBlockedUsersLoading,
     error: orgBlockedUsersError,
-    fetchMore: fetchMoreBlockedUsers,
-  } = useQuery(GET_ORGANIZATION_BLOCKED_USERS_PG, {
-    variables: { id: orgId, first: 32, after: null },
+  } = useQuery(GET_ORGANIZATION_BLOCKED_USERS_COUNT, {
+    variables: { id: orgId },
     notifyOnNetworkStatusChange: true,
   });
 
@@ -177,19 +148,16 @@ function OrganizationDashboard(): JSX.Element {
     data: orgVenuesData,
     loading: orgVenuesLoading,
     error: orgVenuesError,
-    fetchMore: fetchMoreVenues,
-  } = useQuery(GET_ORGANIZATION_VENUES_PG, {
-    variables: { id: orgId, first: 32, after: null },
+  } = useQuery(GET_ORGANIZATION_VENUES_COUNT, {
+    variables: { id: orgId },
     notifyOnNetworkStatusChange: true,
   });
 
   useEffect(() => {
-    if (orgEventsData && !hasFetchedAllEvents.current) {
+    if (orgEventsData) {
       const now = new Date();
 
       const allEvents = orgEventsData.organization.events.edges;
-
-      const currentTotalEventCount = allEvents.length;
 
       const upcomingEvents = allEvents.filter((event: IEvent) => {
         // Filter events that start after the current date
@@ -197,68 +165,26 @@ function OrganizationDashboard(): JSX.Element {
       });
 
       // Set to actual total count since fetchMore accumulates results
-      setEventCount(currentTotalEventCount);
+      setEventCount(orgEventsData.organization.eventsCount);
 
       // For upcoming events, we need to replace with new filtered results
       setUpcomingEvents(upcomingEvents);
-
-      if (orgEventsData.organization.events.pageInfo.hasNextPage) {
-        fetchMore({
-          variables: {
-            id: orgId,
-            first: 32,
-            after: orgEventsData.organization.events.pageInfo.endCursor,
-          },
-        });
-      } else {
-        hasFetchedAllEvents.current = true;
-      }
     }
-  }, [orgEventsData, fetchMore, orgId]);
+  }, [orgEventsData, orgId]);
 
   useEffect(() => {
-    if (orgBlockedUsersData && !hasFetchedAllBlockedUsers.current) {
-      const currentBlockedUserCount =
-        orgBlockedUsersData.organization.blockedUsers.edges.length;
-
+    if (orgBlockedUsersData) {
       // Set to actual total count since fetchMore accumulates results
-      setBlockedCount(currentBlockedUserCount);
-
-      if (orgBlockedUsersData.organization.blockedUsers.pageInfo.hasNextPage) {
-        fetchMoreBlockedUsers({
-          variables: {
-            id: orgId,
-            first: 32,
-            after:
-              orgBlockedUsersData.organization.blockedUsers.pageInfo.endCursor,
-          },
-        });
-      } else {
-        hasFetchedAllBlockedUsers.current = true;
-      }
+      setBlockedCount(orgBlockedUsersData.organization.blockedUsersCount);
     }
-  }, [orgBlockedUsersData, fetchMoreBlockedUsers, orgId]);
+  }, [orgBlockedUsersData, orgId]);
 
   useEffect(() => {
-    if (orgVenuesData && !hasFetchedAllVenues.current) {
-      const currentVenueCount = orgVenuesData.organization.venues.edges.length;
-
+    if (orgVenuesData) {
       // Set to actual total count since fetchMore accumulates results
-      setVenueCount(currentVenueCount);
-
-      if (orgVenuesData.organization.venues.pageInfo.hasNextPage) {
-        fetchMoreVenues({
-          variables: {
-            id: orgId,
-            first: 32,
-            after: orgVenuesData.organization.venues.pageInfo.endCursor,
-          },
-        });
-      } else {
-        hasFetchedAllVenues.current = true;
-      }
+      setVenueCount(orgVenuesData.organization.venuesCount);
     }
-  }, [orgVenuesData, fetchMoreVenues, orgId]);
+  }, [orgVenuesData]);
 
   /**
    * Query to fetch vvolunteer rankings.
@@ -362,9 +288,8 @@ function OrganizationDashboard(): JSX.Element {
             }}
           />
           {membershipRequestData?.organization &&
-            membershipRequestData?.organization?.membershipRequests.filter(
-              (request: { status: string }) => request.status === 'pending',
-            ).length > 0 && (
+            membershipRequestData?.organization?.membershipRequestsCount >
+              0 && (
               <Row>
                 <Col xs={6} sm={4} className="mb-4">
                   <button
@@ -377,10 +302,8 @@ function OrganizationDashboard(): JSX.Element {
                   >
                     <DashBoardCard
                       count={
-                        membershipRequestData?.organization?.membershipRequests?.filter(
-                          (request: { status: string }) =>
-                            request.status === 'pending',
-                        )?.length
+                        membershipRequestData?.organization
+                          ?.membershipRequestsCount
                       }
                       title={tCommon('requests')}
                       icon={<UsersIcon fill="#555555" />}
