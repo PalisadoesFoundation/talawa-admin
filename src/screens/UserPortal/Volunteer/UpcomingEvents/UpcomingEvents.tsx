@@ -188,12 +188,16 @@ const UpcomingEvents = (): JSX.Element => {
 
     if (scope === 'ENTIRE_SERIES') {
       // For series volunteering, use the base event ID (template)
-      if (eventData?.baseEventId) targetEventId = eventData.baseEventId;
-    } else {
+      if (eventData?.baseEventId) {
+        targetEventId = eventData.baseEventId;
+      }
+    } else if (scope === 'THIS_INSTANCE_ONLY') {
       // For instance-only volunteering, use current event ID and pass instanceId
       recurringEventInstanceId = eventId;
       // The target event should be the base event for the backend logic
-      if (eventData?.baseEventId) targetEventId = eventData.baseEventId;
+      if (eventData?.baseEventId) {
+        targetEventId = eventData.baseEventId;
+      }
     }
 
     await handleVolunteer(
@@ -407,9 +411,7 @@ const UpcomingEvents = (): JSX.Element => {
             : relatedEvent._id;
 
           // Only add if we don't already have a specific membership for this instance
-          if (!lookup[instanceKey]) {
-            lookup[instanceKey] = membership;
-          }
+          if (!lookup[instanceKey]) lookup[instanceKey] = membership;
         });
       });
     }
@@ -419,8 +421,8 @@ const UpcomingEvents = (): JSX.Element => {
 
   // Renders a loader while events or membership data are being fetched
   if (eventsLoading || membershipLoading) return <Loader size="xl" />;
-  if (eventsError) {
-    // Displays an error message if there is an issue loading the events
+  // Displays an error message if there is an issue loading the events
+  if (eventsError)
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
@@ -431,7 +433,6 @@ const UpcomingEvents = (): JSX.Element => {
         </div>
       </div>
     );
-  }
 
   // Renders the upcoming events list and UI elements for searching, sorting, and adding pledges
   return (

@@ -47,13 +47,11 @@ const createMembershipWithStatus = (
     createdBy: { id: 'userId' },
     updatedBy: { id: 'userId' },
   },
-  ...(groupId && {
-    group: {
-      id: groupId,
-      name: 'Test Group',
-      description: 'Test Description',
-    },
-  }),
+  group: {
+    id: groupId,
+    name: 'Test Group',
+    description: 'Test Description',
+  },
 });
 
 // Base events
