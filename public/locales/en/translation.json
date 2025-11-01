@@ -192,6 +192,7 @@
     "all": "All"
   },
   "requests": {
+    "profile": "Profile",
     "title": "Membership Requests",
     "sl_no": "Sl. No.",
     "accept": "Accept",

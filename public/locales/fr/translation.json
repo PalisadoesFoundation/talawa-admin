@@ -192,6 +192,7 @@
     "all": "Tous"
   },
   "requests": {
+    "profile": "Profil",
     "title": "Demandes d'adhésion",
     "sl_no": "Sl. ",
     "accept": "Accepter",
