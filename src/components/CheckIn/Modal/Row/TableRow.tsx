@@ -43,6 +43,7 @@ import { toast } from 'react-toastify';
 import { generate } from '@pdfme/generator';
 import { tagTemplate } from '../../tagTemplate';
 import { useTranslation } from 'react-i18next';
+import { GenerateProps } from '@pdfme/common';
 
 export const TableRow = ({
   data,
@@ -99,7 +100,10 @@ export const TableRow = ({
         throw new Error('Invalid or empty name provided');
       }
       inputs.push({ name: data.name.trim() });
-      const pdf = await generate({ template: tagTemplate, inputs });
+      const pdf = await generate({
+        template: tagTemplate as unknown as GenerateProps['template'],
+        inputs,
+      });
       const blob = new Blob([pdf.buffer as ArrayBuffer], {
         type: 'application/pdf',
       });

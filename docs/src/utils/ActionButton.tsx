@@ -1,12 +1,13 @@
 import React from 'react';
 
-interface ActionButtonProps {
+interface IActionButtonProps {
   href: string;
   type?: 'primary' | 'secondary';
   target?: string;
   children: React.ReactNode;
   buttonClassName?: string;
   ariaLabel: string;
+  rel?: string;
 }
 
 function ActionButton({
@@ -16,7 +17,7 @@ function ActionButton({
   children,
   buttonClassName,
   ariaLabel,
-}: ActionButtonProps) {
+}: IActionButtonProps) {
   return (
     <a
       className={`ActionButton ${type}${buttonClassName ? ` ${buttonClassName}` : ''}`}

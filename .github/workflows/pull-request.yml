@@ -107,6 +107,17 @@ jobs:
       - name: Check for unused files and exports in src/ and docs/src
         run: npx knip --include files,exports
 
+      - name: Lint Docs directory
+        run: |
+          cd docs
+          npm install
+          npm run lint:check
+
+      - name: Typecheck Docs directory
+        run: |
+          cd docs
+          npm run typecheck
+
   Check-AutoDocs:
     name: Generate and Validate Documentation
     runs-on: ubuntu-latest

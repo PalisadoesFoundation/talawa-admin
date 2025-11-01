@@ -12,7 +12,8 @@
     "serve": "docusaurus serve",
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "lint:check": "eslint \"src/**/*.{ts,tsx,graphql}\" --max-warnings=0 && python3 ../.github/workflows/scripts/eslint_disable_check.py"
   },
   "dependencies": {
     "@docusaurus/core": "^3.9.2",
