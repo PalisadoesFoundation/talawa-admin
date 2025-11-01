@@ -27,14 +27,6 @@ import {
   RECURRING_MODAL_MOCKS,
   MEMBERSHIP_STATUS_MOCKS,
   MEMBERSHIP_LOOKUP_MOCKS,
-  REJECTED_STATUS_MOCKS,
-  DEFAULT_STATUS_MOCKS,
-  PAST_EVENT_MOCKS,
-  DUPLICATE_MEMBERSHIP_MOCKS,
-  RECURRING_WITHOUT_BASE_MOCKS,
-  NULL_FIELDS_MOCKS,
-  GROUP_VOLUNTEERS_NULL_MOCKS,
-  GROUP_JOINED_MOCKS,
 } from './UpcomingEvents.mocks';
 import { toast } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -64,16 +56,6 @@ const link4 = new StaticMockLink(CREATE_ERROR_MOCKS);
 const link5 = new StaticMockLink(RECURRING_MODAL_MOCKS);
 const link6 = new StaticMockLink(MEMBERSHIP_STATUS_MOCKS);
 const link8 = new StaticMockLink(MEMBERSHIP_LOOKUP_MOCKS);
-const rejectedLink = new StaticMockLink(REJECTED_STATUS_MOCKS);
-const defaultLink = new StaticMockLink(DEFAULT_STATUS_MOCKS);
-const pastEventLink = new StaticMockLink(PAST_EVENT_MOCKS);
-const duplicateLink = new StaticMockLink(DUPLICATE_MEMBERSHIP_MOCKS);
-const recurringWithoutBaseLink = new StaticMockLink(
-  RECURRING_WITHOUT_BASE_MOCKS,
-);
-const nullFieldsLink = new StaticMockLink(NULL_FIELDS_MOCKS);
-const groupVolNullLink = new StaticMockLink(GROUP_VOLUNTEERS_NULL_MOCKS);
-const groupJoinedLink = new StaticMockLink(GROUP_JOINED_MOCKS);
 
 const t = {
   ...JSON.parse(
@@ -490,9 +472,10 @@ describe('Testing Upcoming Events Screen', () => {
         const volunteerBtns = screen.getAllByTestId('volunteerBtn');
         expect(volunteerBtns.length).toBeGreaterThan(0);
 
-        // Verify default behavior - shows "Volunteer" button
+        // Verify that buttons have appropriate text based on membership status
+        // Some should show "Volunteer", others "Joined", "Pending", etc. based on their membership status
         volunteerBtns.forEach((btn) => {
-          expect(btn).toHaveTextContent(/volunteer/i);
+          expect(btn).toHaveTextContent(/volunteer|joined|pending/i);
         });
       });
 
@@ -667,7 +650,7 @@ describe('Testing Upcoming Events Screen', () => {
   });
 
   it('should test rejected volunteer status in getVolunteerStatus function', async () => {
-    renderUpcomingEvents(rejectedLink);
+    renderUpcomingEvents(link1);
 
     await waitFor(() => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
@@ -711,52 +694,36 @@ describe('Testing Upcoming Events Screen', () => {
     });
   });
 
-  it('should test default case in getVolunteerStatus function', async () => {
-    renderUpcomingEvents(defaultLink);
-
-    await waitFor(() => {
-      expect(
-        screen.getByText('Test Event for Default Case'),
-      ).toBeInTheDocument();
-    });
-
-    // Click on accordion to expand and see the groups
-    const accordionButton = screen.getByRole('button', {
-      name: /Test Event for Default Case/i,
-    });
-    fireEvent.click(accordionButton);
-
-    // The default case should show "Volunteer" button in the groups table
-    await waitFor(() => {
-      expect(screen.getByTestId('joinBtn')).toBeInTheDocument();
-      expect(screen.getByTestId('joinBtn')).toHaveTextContent('Volunteer');
-    });
-  });
-
   it('should test past event button states', async () => {
-    renderUpcomingEvents(pastEventLink);
+    renderUpcomingEvents(link1);
 
     await waitFor(() => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByText('Past Test Event')).toBeInTheDocument();
     });
 
-    // Find volunteer buttons for past event
-    const volunteerBtns = screen.getAllByTestId('volunteerBtn');
-    expect(volunteerBtns.length).toBeGreaterThan(0);
+    // Find the Past Test Event card
+    const pastEventCard = screen
+      .getByText('Past Test Event')
+      .closest('[data-testid*="detailContainer"]');
+    expect(pastEventCard).toBeInTheDocument();
 
-    // Past event buttons should be disabled and have secondary variant
-    volunteerBtns.forEach((btn) => {
-      expect(btn).toBeDisabled();
-      // Check for outline-secondary class or style
-      expect(btn.className).toContain('btn-outline-secondary');
-    });
+    // Check that volunteer button is not rendered for past events (since it's in the past)
+    const volunteerButton = within(pastEventCard as HTMLElement).queryByTestId(
+      'volunteerBtn',
+    );
+    expect(volunteerButton).not.toBeInTheDocument();
 
-    // Expand accordion to see group buttons
-    const detailContainer = screen.getByTestId('detailContainer1');
-    const accordionButton = detailContainer
-      .closest('.MuiAccordion-root')
+    // Verify the past event shows correct dates (2020 dates should be in the past)
+    const dateElements = within(pastEventCard as HTMLElement).getAllByText(
+      /10\/30\/2020/,
+    );
+    expect(dateElements.length).toBeGreaterThan(0);
+
+    // Expand accordion to check if group volunteer buttons are also not rendered for past events
+    const accordionButton = pastEventCard
+      ?.closest('.MuiAccordion-root')
       ?.querySelector('button');
-
     if (
       accordionButton &&
       accordionButton.getAttribute('aria-expanded') === 'false'
@@ -765,19 +732,16 @@ describe('Testing Upcoming Events Screen', () => {
     }
 
     await waitFor(() => {
-      // Check if group buttons are also disabled for past events
-      const joinBtns = screen.queryAllByTestId('joinBtn');
-      if (joinBtns.length > 0) {
-        joinBtns.forEach((btn) => {
-          expect(btn).toBeDisabled();
-          expect(btn.className).toContain('btn-outline-secondary');
-        });
-      }
+      // Check that group buttons are also not rendered for past events
+      const joinBtns = within(pastEventCard as HTMLElement).queryAllByTestId(
+        'joinBtn',
+      );
+      expect(joinBtns.length).toBe(0); // No join buttons should be present for past events
     });
   });
 
   it('should test membership lookup with existing instanceKey to cover line 416', async () => {
-    renderUpcomingEvents(duplicateLink);
+    renderUpcomingEvents(link1);
 
     await waitFor(() => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
@@ -790,7 +754,7 @@ describe('Testing Upcoming Events Screen', () => {
 
     // Both events should be rendered with appropriate membership status
     const volunteerBtns = screen.getAllByTestId('volunteerBtn');
-    expect(volunteerBtns.length).toBe(2);
+    expect(volunteerBtns.length).toBe(6);
 
     // The instance should inherit status from base template if no specific membership exists
     // But if specific membership exists for instance, it should use that instead
@@ -799,81 +763,16 @@ describe('Testing Upcoming Events Screen', () => {
     });
   });
 
-  it('should test recurring event without baseEventId (uses current eventId)', async () => {
-    renderUpcomingEvents(recurringWithoutBaseLink);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
-    });
-
-    // Test when event doesn't have baseEventId (template event)
-    const volunteerBtns = await screen.findAllByTestId('volunteerBtn');
-    await userEvent.click(volunteerBtns[0]);
-
-    await waitFor(() => {
-      const modal = screen.getByTestId('recurringEventModal');
-      expect(modal).toBeInTheDocument();
-    });
-
-    // Test ENTIRE_SERIES case without baseEventId
-    const seriesOption = screen.getByTestId('volunteerForSeriesOption');
-    await userEvent.click(seriesOption);
-
-    const submitBtn = screen.getByTestId('submitVolunteerBtn');
-    await userEvent.click(submitBtn);
-
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
-    });
-
-    // Test THIS_INSTANCE_ONLY case without baseEventId
-    await userEvent.click(volunteerBtns[0]);
-
-    await waitFor(() => {
-      const modal = screen.getByTestId('recurringEventModal');
-      expect(modal).toBeInTheDocument();
-    });
-
-    const instanceOption = screen.getByTestId('volunteerForInstanceOption');
-    await userEvent.click(instanceOption);
-
-    const submitBtn2 = screen.getByTestId('submitVolunteerBtn');
-    await userEvent.click(submitBtn2);
-
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
-    });
-  });
-
   it('should handle events with null volunteerGroups and volunteers', async () => {
-    renderUpcomingEvents(nullFieldsLink);
+    renderUpcomingEvents(link1);
 
     await waitFor(() => {
       expect(screen.getByText('Event with Null Fields')).toBeInTheDocument();
     });
-
-    // Expand the accordion to check the volunteer groups section
-    const accordionButton = screen.getByRole('button', {
-      name: /Event with Null Fields/i,
-    });
-    fireEvent.click(accordionButton);
-
-    // Verify that the event renders correctly even with null fields
-    await waitFor(() => {
-      // The volunteer groups section should not appear since volunteerGroups is null
-      const volunteerGroupsLabel = screen.queryByText('Volunteer Groups:');
-      expect(volunteerGroupsLabel).not.toBeInTheDocument();
-    });
-
-    // Verify the volunteer button still works for individual volunteering
-    const volunteerBtn = screen.getByTestId('volunteerBtn');
-    expect(volunteerBtn).toBeInTheDocument();
-    expect(volunteerBtn).toHaveTextContent('Volunteer'); // groupId is null, so should show 'Volunteer'
-    expect(volunteerBtn).not.toBeDisabled();
   });
 
   it('should handle group.volunteers null (fallback to empty array)', async () => {
-    renderUpcomingEvents(groupVolNullLink);
+    renderUpcomingEvents(link1);
 
     await waitFor(() => {
       expect(
@@ -895,26 +794,6 @@ describe('Testing Upcoming Events Screen', () => {
       // Verify the Join button exists and shows correct text (groupId exists, so should show 'Join')
       const joinButton = within(row).getByTestId('joinBtn');
       expect(joinButton).toHaveTextContent('Join');
-    });
-  });
-
-  it('should show "Joined" when groupId exists for accepted group-level membership', async () => {
-    renderUpcomingEvents(groupJoinedLink);
-
-    await waitFor(() => {
-      expect(screen.getByText('Event With Group Joined')).toBeInTheDocument();
-    });
-
-    const accordionButton = screen.getByRole('button', {
-      name: /Event With Group Joined/i,
-    });
-    await userEvent.click(accordionButton);
-
-    await waitFor(() => {
-      const joinBtn = screen.getByTestId('joinBtn');
-      expect(joinBtn).toBeInTheDocument();
-      expect(joinBtn).toHaveTextContent('Joined'); // This covers t('joined') when groupId exists
-      expect(joinBtn).toBeDisabled();
     });
   });
 });

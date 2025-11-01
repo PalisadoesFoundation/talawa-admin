@@ -85,10 +85,10 @@ const UpcomingEvents = (): JSX.Element => {
   // Extracts organization ID from the URL parameters
   const { orgId } = useParams();
   // Redirects to the homepage if orgId or userId is missing
-  if (!orgId || !userId) return <Navigate to={'/'} replace />;
-
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchBy, setSearchBy] = useState<'title' | 'location'>('title');
+
+  if (!orgId || !userId) return <Navigate to={'/'} replace />;
 
   // Modal state for recurring event volunteering
   const [showRecurringModal, setShowRecurringModal] = useState(false);
@@ -373,9 +373,9 @@ const UpcomingEvents = (): JSX.Element => {
           const searchValue = searchTerm.toLowerCase();
           if (searchBy === 'title') {
             return event.title.toLowerCase().includes(searchValue);
-          } else {
-            return event.location?.toLowerCase().includes(searchValue);
           }
+          const location = event.location?.toLowerCase() ?? '';
+          return location.includes(searchValue);
         });
       }
 

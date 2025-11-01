@@ -4,7 +4,7 @@ import {
   USER_VOLUNTEER_MEMBERSHIP,
 } from 'GraphQl/Queries/EventVolunteerQueries';
 
-// Helper functions
+// Helper function to create common volunteer membership response
 const createMembershipResponse = (
   id: string,
   eventId: string,
@@ -56,24 +56,17 @@ const createMembershipWithStatus = (
   }),
 });
 
-// Base event template
-const baseEventTemplate = {
-  startTime: null,
-  endTime: null,
-  allDay: true,
-  description: 'desc',
-  volunteers: [{ _id: 'volunteerId1', user: { _id: 'userId1' } }],
-};
-
 // Base events
 const event1 = {
-  ...baseEventTemplate,
   _id: 'eventId1',
   title: 'Event 1',
   name: 'Event 1',
   startDate: '2044-10-30',
   endDate: '2044-10-30',
   location: 'Mumbai',
+  startTime: null,
+  endTime: null,
+  allDay: true,
   recurring: true,
   volunteerGroups: [
     {
@@ -91,17 +84,19 @@ const event1 = {
 };
 
 const event2 = {
-  ...baseEventTemplate,
-  _id: 'eventId2',
+  id: 'eventId2',
   title: 'Event 2',
   name: 'Event 2',
   startDate: '2044-10-31',
   endDate: '2044-10-31',
-  location: 'Pune',
+  location: null,
+  startTime: null,
+  endTime: null,
+  allDay: true,
   recurring: false,
   volunteerGroups: [
     {
-      _id: 'groupId2',
+      id: 'groupId2',
       name: 'Group 2',
       volunteersRequired: null,
       description: 'desc',
@@ -112,39 +107,72 @@ const event2 = {
 };
 
 const event3 = {
-  ...baseEventTemplate,
   _id: 'eventId3',
   title: 'Event 3',
-  name: 'Event 3',
+  name: 'Event with Group Volunteers Null',
   startDate: '2044-10-31',
   endDate: '2022-10-31',
   location: 'Delhi',
+  startTime: null,
+  endTime: null,
+  description: 'desc',
+  allDay: true,
   recurring: true,
   volunteerGroups: [
     {
-      _id: 'groupId3',
-      name: 'Group 3',
-      volunteersRequired: null,
+      id: 'groupIdNull',
+      name: 'Group NullVols',
       description: 'desc',
-      volunteers: [{ _id: 'userId' }],
+      volunteersRequired: null,
+      volunteers: null, // Explicitly set to null
     },
   ],
-  volunteers: [{ _id: 'volunteerId', user: { _id: 'userId' } }],
+  volunteers: null,
 };
-
-// Recurring event templates
-export const baseRecurringEvent = {
-  id: 'baseEventId1',
-  name: 'Base Template Event',
+const nullVolunteerGroups = {
+  id: 'nullEventId',
+  name: 'Event with Null Fields',
   startAt: '2044-10-30T10:00:00.000Z',
   endAt: '2044-10-30T12:00:00.000Z',
   location: 'Test Location',
   description: 'Test Description',
-  isRecurringEventTemplate: true,
-  baseEvent: null,
-  recurrenceRule: { frequency: 'WEEKLY' },
-  volunteerGroups: [],
+  isRecurringEventTemplate: false,
+  volunteerGroups: null, // This will test the null case
+  volunteers: null, // This will test the null case
+};
+
+// Create past event based on existing event structure
+const pastEvent = {
+  ...event1,
+  id: 'eventId1',
+  name: 'Past Test Event',
+  startAt: '2020-10-30T10:00:00.000Z',
+  endAt: '2020-10-30T12:00:00.000Z', // Past date
+};
+
+// Create instance event for duplicate membership testing
+const duplicateInstanceEvent = {
+  id: 'instanceEventId1',
+  name: 'Instance Event 1',
+  startDate: '2044-11-06',
+  endDate: '2044-11-06',
+  startAt: '2044-11-06T10:00:00.000Z',
+  endAt: '2044-11-06T12:00:00.000Z',
+  allDay: false,
+  recurring: true,
+  isRecurringEventTemplate: false,
+  baseEvent: { id: 'baseEventId1', isRecurringEventTemplate: true },
+  volunteerGroups: [
+    {
+      id: 'recurringGroupId1',
+      name: 'Recurring Group 1',
+      description: 'desc',
+      volunteersRequired: 5,
+      volunteers: [],
+    },
+  ],
   volunteers: [],
+  recurrenceRule: { frequency: 'WEEKLY' },
 };
 
 const recurringInstanceEvent = {
@@ -169,22 +197,18 @@ const recurringInstanceEvent = {
   recurrenceRule: { frequency: 'WEEKLY' },
 };
 
-// Common query objects
-const eventsQuery = {
-  request: {
-    query: USER_EVENTS_VOLUNTEER,
-    variables: { organizationId: 'orgId', upcomingOnly: true, first: 30 },
-  },
+export const baseRecurringEvent = {
+  startAt: '2044-10-30T10:00:00.000Z',
+  endAt: '2044-10-30T12:00:00.000Z',
+  location: 'Test Location',
+  description: 'Test Description',
+  isRecurringEventTemplate: true,
+  baseEvent: null,
+  recurrenceRule: { frequency: 'WEEKLY' },
+  volunteerGroups: [],
+  volunteers: [],
 };
 
-const membershipQuery = {
-  request: {
-    query: USER_VOLUNTEER_MEMBERSHIP,
-    variables: { where: { userId: 'userId' } },
-  },
-};
-
-// Additional exports for tests
 export const baseEvent = {
   startAt: '2044-10-30T10:00:00.000Z',
   endAt: '2044-10-30T12:00:00.000Z',
@@ -205,146 +229,316 @@ export const baseEvent = {
   volunteers: [],
 };
 
-// Base mock definitions
-const createVolunteerMutation = (
-  eventId: string,
-  groupId?: string,
-  scope?: string,
-  instanceId?: string,
-) => ({
+// Common queries
+const eventsQuery = {
   request: {
-    query: CREATE_VOLUNTEER_MEMBERSHIP,
-    variables: {
-      data: {
-        event: eventId,
-        group: groupId || null,
-        status: 'requested',
-        userId: 'userId',
-        ...(scope && { scope }),
-        ...(instanceId && { recurringEventInstanceId: instanceId }),
-      },
-    },
-  },
-  result: {
-    data: {
-      createVolunteerMembership: createMembershipResponse(
-        '1',
-        eventId,
-        groupId,
-      ),
-    },
-  },
-});
-
-const basicEventsResult = {
-  ...eventsQuery,
-  result: {
-    data: {
-      organization: {
-        events: {
-          edges: [{ node: event1 }, { node: event2 }, { node: event3 }],
-        },
-      },
-    },
+    query: USER_EVENTS_VOLUNTEER,
+    variables: { organizationId: 'orgId', upcomingOnly: true, first: 30 },
   },
 };
 
-const emptyMembershipResult = {
-  ...membershipQuery,
-  result: { data: { getVolunteerMembership: [] } },
+const membershipQuery = {
+  request: {
+    query: USER_VOLUNTEER_MEMBERSHIP,
+    variables: { where: { userId: 'userId' } },
+  },
 };
 
-// Consolidated exports
 export const MOCKS = [
-  basicEventsResult,
-  emptyMembershipResult,
-  createVolunteerMutation('eventId1'),
-  createVolunteerMutation('eventId1', 'groupId1'),
-];
-
-// Create recurring events result
-const createRecurringEventsResult = (additionalNodes: any[] = []) => ({
-  ...eventsQuery,
-  result: {
-    data: {
-      organization: {
-        events: {
-          edges: [
-            { node: recurringInstanceEvent },
-            { node: baseRecurringEvent },
-            ...additionalNodes,
-          ],
+  {
+    ...eventsQuery,
+    result: {
+      data: {
+        organization: {
+          events: {
+            edges: [
+              { node: event1 },
+              { node: event2 },
+              { node: event3 },
+              { node: nullVolunteerGroups },
+              { node: pastEvent },
+              { node: duplicateInstanceEvent },
+            ],
+          },
         },
       },
     },
   },
-});
-
-// Create membership result with various statuses
-const createMembershipResult = (memberships: any[]) => ({
-  ...membershipQuery,
-  result: { data: { getVolunteerMembership: memberships } },
-});
-
-export const RECURRING_MODAL_MOCKS = [
-  createRecurringEventsResult(),
-  emptyMembershipResult,
-  createVolunteerMutation('baseEventId1', undefined, 'ENTIRE_SERIES'),
-  createVolunteerMutation(
-    'baseEventId1',
-    undefined,
-    'THIS_INSTANCE_ONLY',
-    'eventInstanceId1',
-  ),
-  createVolunteerMutation('baseEventId1', 'recurringGroupId1', 'ENTIRE_SERIES'),
-  createVolunteerMutation(
-    'baseEventId1',
-    'recurringGroupId1',
-    'THIS_INSTANCE_ONLY',
-    'eventInstanceId1',
-  ),
-];
-
-export const MEMBERSHIP_LOOKUP_MOCKS = [
-  createRecurringEventsResult([
-    {
-      node: {
-        id: 'eventInstanceId2',
-        name: 'Recurring Event Instance 2',
-        startAt: '2044-11-08T10:00:00.000Z',
-        endAt: '2044-11-08T12:00:00.000Z',
-        location: 'Mumbai',
-        description: 'Another instance of recurring event',
-        isRecurringEventTemplate: false,
-        baseEvent: { id: 'baseEventId1', isRecurringEventTemplate: true },
-        volunteerGroups: [
+  {
+    ...membershipQuery,
+    result: {
+      data: {
+        getVolunteerMembership: [
           {
-            id: 'recurringGroupId1',
-            name: 'Recurring Group 1',
-            description: 'desc',
-            volunteersRequired: 5,
-            volunteers: [],
+            id: 'membership1',
+            status: 'accepted',
+            event: {
+              id: 'eventId2',
+              name: 'Event With Group Joined',
+            },
+            group: {
+              id: 'groupId2',
+              name: 'Test Group',
+              description: 'Test Description',
+            }, // ← This is the key part - group membership
+          },
+          createMembershipWithStatus('1', 'eventId1', 'unknown_status'),
+          // Base event membership (should cascade to instances)
+          {
+            ...createMembershipWithStatus('3', 'baseEventId1', 'accepted'),
+            event: {
+              ...createMembershipWithStatus('3', 'baseEventId1', 'accepted')
+                .event,
+              name: 'Base Template Event',
+              recurrenceRule: { frequency: 'WEEKLY' },
+            },
+          },
+          // Instance event membership
+          {
+            ...createMembershipWithStatus('4', 'instanceEventId1', 'requested'),
+            createdAt: '2024-11-01T10:00:00.000Z',
+            updatedAt: '2024-11-01T10:00:00.000Z',
+            event: {
+              ...createMembershipWithStatus(
+                '4',
+                'instanceEventId1',
+                'requested',
+              ).event,
+              name: 'Instance Event 1',
+              startAt: '2044-11-06T10:00:00.000Z',
+              endAt: '2044-11-06T12:00:00.000Z',
+            },
           },
         ],
-        volunteers: [],
-        recurrenceRule: { frequency: 'WEEKLY' },
       },
     },
-  ]),
-  createMembershipResult([
-    {
-      id: 'baseMembership1',
-      status: 'accepted',
-      event: { id: 'baseEventId1' },
-      group: null,
+  },
+  {
+    request: {
+      query: CREATE_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        data: {
+          event: 'eventId1',
+          status: 'requested',
+          userId: 'userId',
+        },
+      },
     },
-    {
-      id: 'baseMembership2',
-      status: 'requested',
-      event: { id: 'baseEventId1' },
-      group: { id: 'recurringGroupId1' },
+    result: {
+      data: {
+        createVolunteerMembership: createMembershipResponse('1', 'eventId1'),
+      },
     },
-  ]),
+  },
+  {
+    request: {
+      query: CREATE_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        data: {
+          event: 'eventId1',
+          group: 'groupId1',
+          status: 'requested',
+          userId: 'userId',
+        },
+      },
+    },
+    result: {
+      data: {
+        createVolunteerMembership: createMembershipResponse(
+          '2',
+          'eventId1',
+          'groupId1',
+        ),
+      },
+    },
+  },
+];
+
+export const RECURRING_MODAL_MOCKS = [
+  {
+    ...eventsQuery,
+    result: {
+      data: {
+        organization: {
+          events: {
+            edges: [
+              { node: recurringInstanceEvent },
+              { node: baseRecurringEvent },
+            ],
+          },
+        },
+      },
+    },
+  },
+  {
+    ...membershipQuery,
+    result: { data: { getVolunteerMembership: [] } },
+  },
+  // Series volunteering
+  {
+    request: {
+      query: CREATE_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        data: {
+          event: 'baseEventId1',
+          group: null,
+          status: 'requested',
+          userId: 'userId',
+          scope: 'ENTIRE_SERIES',
+        },
+      },
+    },
+    result: {
+      data: {
+        createVolunteerMembership: createMembershipResponse(
+          '3',
+          'baseEventId1',
+        ),
+      },
+    },
+  },
+  // Instance volunteering
+  {
+    request: {
+      query: CREATE_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        data: {
+          event: 'baseEventId1',
+          group: null,
+          status: 'requested',
+          userId: 'userId',
+          scope: 'THIS_INSTANCE_ONLY',
+          recurringEventInstanceId: 'eventInstanceId1',
+        },
+      },
+    },
+    result: {
+      data: {
+        createVolunteerMembership: createMembershipResponse(
+          '4',
+          'baseEventId1',
+        ),
+      },
+    },
+  },
+  // Group series volunteering
+  {
+    request: {
+      query: CREATE_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        data: {
+          event: 'baseEventId1',
+          group: 'recurringGroupId1',
+          status: 'requested',
+          userId: 'userId',
+          scope: 'ENTIRE_SERIES',
+        },
+      },
+    },
+    result: {
+      data: {
+        createVolunteerMembership: createMembershipResponse(
+          '5',
+          'baseEventId1',
+          'recurringGroupId1',
+        ),
+      },
+    },
+  },
+  // Group instance volunteering
+  {
+    request: {
+      query: CREATE_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        data: {
+          event: 'baseEventId1',
+          group: 'recurringGroupId1',
+          status: 'requested',
+          userId: 'userId',
+          scope: 'THIS_INSTANCE_ONLY',
+          recurringEventInstanceId: 'eventInstanceId1',
+        },
+      },
+    },
+    result: {
+      data: {
+        createVolunteerMembership: createMembershipResponse(
+          '6',
+          'baseEventId1',
+          'recurringGroupId1',
+        ),
+      },
+    },
+  },
+];
+
+// Mocks for testing membership lookup enhancement with recurring events
+export const MEMBERSHIP_LOOKUP_MOCKS = [
+  {
+    ...eventsQuery,
+    result: {
+      data: {
+        organization: {
+          events: {
+            edges: [
+              { node: recurringInstanceEvent },
+              { node: baseRecurringEvent },
+              // Add another instance that references the same base
+              {
+                node: {
+                  id: 'eventInstanceId2',
+                  name: 'Recurring Event Instance 2',
+                  startAt: '2044-11-08T10:00:00.000Z',
+                  endAt: '2044-11-08T12:00:00.000Z',
+                  location: 'Mumbai',
+                  description: 'Another instance of recurring event',
+                  isRecurringEventTemplate: false,
+                  baseEvent: {
+                    id: 'baseEventId1',
+                    isRecurringEventTemplate: true,
+                  },
+                  volunteerGroups: [
+                    {
+                      id: 'recurringGroupId1',
+                      name: 'Recurring Group 1',
+                      description: 'desc',
+                      volunteersRequired: 5,
+                      volunteers: [],
+                    },
+                  ],
+                  volunteers: [],
+                  recurrenceRule: { frequency: 'WEEKLY' },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  {
+    ...membershipQuery,
+    result: {
+      data: {
+        getVolunteerMembership: [
+          // Base event membership (should cascade to instances)
+          {
+            id: 'baseMembership1',
+            status: 'accepted',
+            event: { id: 'baseEventId1' },
+            group: null,
+          },
+          // Base event group membership (should cascade to instances)
+          {
+            id: 'baseMembership2',
+            status: 'requested',
+            event: { id: 'baseEventId1' },
+            group: { id: 'recurringGroupId1' },
+          },
+        ],
+      },
+    },
+  },
 ];
 
 export const MEMBERSHIP_STATUS_MOCKS = [
@@ -353,51 +547,48 @@ export const MEMBERSHIP_STATUS_MOCKS = [
     result: {
       data: {
         organization: {
-          events: { edges: [{ node: event1 }, { node: event2 }] },
+          events: {
+            edges: [{ node: event1 }, { node: event2 }],
+          },
         },
       },
     },
   },
-  createMembershipResult([
-    {
-      id: 'membership1',
-      status: 'accepted',
-      event: { id: 'eventId1' },
-      group: null,
+  {
+    ...membershipQuery,
+    result: {
+      data: {
+        getVolunteerMembership: [
+          {
+            id: 'membership1',
+            status: 'accepted',
+            event: { id: 'eventId1' },
+            group: null,
+          },
+          {
+            id: 'membership2',
+            status: 'rejected',
+            event: { id: 'eventId2' },
+            group: { id: 'groupId2' },
+          },
+          {
+            id: 'membership3',
+            status: 'requested',
+            event: { id: 'eventId1' },
+            group: { id: 'groupId1' },
+          },
+        ],
+      },
     },
-    {
-      id: 'membership2',
-      status: 'rejected',
-      event: { id: 'eventId2' },
-      group: { id: 'groupId2' },
-    },
-    {
-      id: 'membership3',
-      status: 'requested',
-      event: { id: 'eventId1' },
-      group: { id: 'groupId1' },
-    },
-  ]),
+  },
 ];
-
-// Create simple event result
-const createSingleEventResult = (eventOverrides: any) => ({
-  ...eventsQuery,
-  result: {
-    data: {
-      organization: {
-        events: {
-          edges: [{ node: { ...event1, ...eventOverrides } }],
-        },
-      },
-    },
-  },
-});
 
 export const EMPTY_MOCKS = [
   {
     ...eventsQuery,
-    result: { data: { organization: { events: { edges: [] } } } },
+    result: {
+      data: { organization: { events: { edges: [] } } },
+    },
   },
 ];
 
@@ -409,8 +600,22 @@ export const ERROR_MOCKS = [
 ];
 
 export const CREATE_ERROR_MOCKS = [
-  basicEventsResult,
-  emptyMembershipResult,
+  {
+    ...eventsQuery,
+    result: {
+      data: {
+        organization: {
+          events: {
+            edges: [{ node: event1 }, { node: event2 }, { node: event3 }],
+          },
+        },
+      },
+    },
+  },
+  {
+    ...membershipQuery,
+    result: { data: { getVolunteerMembership: [] } },
+  },
   {
     request: {
       query: CREATE_VOLUNTEER_MEMBERSHIP,
@@ -425,199 +630,4 @@ export const CREATE_ERROR_MOCKS = [
     },
     error: new Error('Mock Graphql CREATE_VOLUNTEER_MEMBERSHIP Error'),
   },
-];
-
-export const REJECTED_STATUS_MOCKS = [
-  createSingleEventResult({ id: 'eventId1' }),
-  createMembershipResult([
-    createMembershipWithStatus('1', 'eventId1', 'rejected'),
-    createMembershipWithStatus('2', 'eventId1', 'rejected', 'groupId1'),
-  ]),
-];
-
-export const DEFAULT_STATUS_MOCKS = [
-  createSingleEventResult({
-    id: 'eventId1',
-    name: 'Test Event for Default Case',
-  }),
-  createMembershipResult([
-    createMembershipWithStatus('1', 'eventId1', 'unknown_status'),
-  ]),
-];
-
-export const PAST_EVENT_MOCKS = [
-  createSingleEventResult({
-    id: 'eventId1',
-    name: 'Past Test Event',
-    startAt: '2020-10-30T10:00:00.000Z',
-    endAt: '2020-10-30T12:00:00.000Z',
-  }),
-  emptyMembershipResult,
-];
-
-export const DUPLICATE_MEMBERSHIP_MOCKS = [
-  {
-    ...eventsQuery,
-    result: {
-      data: {
-        organization: {
-          events: {
-            edges: [
-              { node: baseRecurringEvent },
-              {
-                node: {
-                  ...recurringInstanceEvent,
-                  id: 'instanceEventId1',
-                  name: 'Instance Event 1',
-                  startAt: '2044-11-06T10:00:00.000Z',
-                  endAt: '2044-11-06T12:00:00.000Z',
-                },
-              },
-            ],
-          },
-        },
-      },
-    },
-  },
-  createMembershipResult([
-    {
-      ...createMembershipWithStatus('1', 'baseEventId1', 'accepted'),
-      event: {
-        ...createMembershipWithStatus('1', 'baseEventId1', 'accepted').event,
-        name: 'Base Template Event',
-        recurrenceRule: { frequency: 'WEEKLY' },
-      },
-    },
-    {
-      ...createMembershipWithStatus('2', 'instanceEventId1', 'requested'),
-      createdAt: '2024-11-01T10:00:00.000Z',
-      updatedAt: '2024-11-01T10:00:00.000Z',
-      event: {
-        ...createMembershipWithStatus('2', 'instanceEventId1', 'requested')
-          .event,
-        name: 'Instance Event 1',
-        startAt: '2044-11-06T10:00:00.000Z',
-        endAt: '2044-11-06T12:00:00.000Z',
-      },
-    },
-  ]),
-];
-
-// Simple mutation response
-const simpleMembershipResponse = (id: string) => ({
-  result: { data: { createVolunteerMembership: { id, status: 'requested' } } },
-});
-
-export const RECURRING_WITHOUT_BASE_MOCKS = [
-  createSingleEventResult({
-    ...baseRecurringEvent,
-    id: 'templateEventId1',
-    name: 'Template Event',
-  }),
-  emptyMembershipResult,
-  {
-    request: {
-      query: CREATE_VOLUNTEER_MEMBERSHIP,
-      variables: {
-        data: {
-          event: 'templateEventId1',
-          group: null,
-          status: 'requested',
-          userId: 'userId',
-          scope: 'ENTIRE_SERIES',
-          recurringEventInstanceId: undefined,
-        },
-      },
-    },
-    ...simpleMembershipResponse('membership1'),
-  },
-  {
-    request: {
-      query: CREATE_VOLUNTEER_MEMBERSHIP,
-      variables: {
-        data: {
-          event: 'templateEventId1',
-          group: null,
-          status: 'requested',
-          userId: 'userId',
-          scope: 'THIS_INSTANCE_ONLY',
-          recurringEventInstanceId: 'templateEventId1',
-        },
-      },
-    },
-    ...simpleMembershipResponse('membership2'),
-  },
-];
-
-// Create event with base template
-const createEventWithTemplate = (overrides: any) => ({
-  id: 'eventId1',
-  startAt: '2044-10-30T10:00:00.000Z',
-  endAt: '2044-10-30T12:00:00.000Z',
-  location: 'Test Location',
-  description: 'Test Description',
-  isRecurringEventTemplate: false,
-  baseEvent: null,
-  recurrenceRule: null,
-  volunteers: null,
-  ...overrides,
-});
-
-export const NULL_FIELDS_MOCKS = [
-  createSingleEventResult(
-    createEventWithTemplate({
-      name: 'Event with Null Fields',
-      volunteerGroups: null,
-    }),
-  ),
-  emptyMembershipResult,
-];
-
-export const GROUP_VOLUNTEERS_NULL_MOCKS = [
-  createSingleEventResult(
-    createEventWithTemplate({
-      id: 'eventGroupVolsNull',
-      name: 'Event with Group Volunteers Null',
-      volunteerGroups: [
-        {
-          id: 'groupIdNull',
-          name: 'Group NullVols',
-          description: 'desc',
-          volunteersRequired: null,
-          volunteers: null,
-        },
-      ],
-    }),
-  ),
-  emptyMembershipResult,
-];
-
-export const GROUP_JOINED_MOCKS = [
-  createSingleEventResult(
-    createEventWithTemplate({
-      name: 'Event With Group Joined',
-      volunteerGroups: [
-        {
-          id: 'groupId1',
-          name: 'Test Group',
-          description: 'Test Description',
-          volunteersRequired: 5,
-          volunteers: [],
-        },
-      ],
-      volunteers: [],
-    }),
-  ),
-  createMembershipResult([
-    {
-      id: 'membership1',
-      status: 'accepted',
-      event: { id: 'eventId1', name: 'Event With Group Joined' },
-      group: {
-        id: 'groupId1',
-        name: 'Test Group',
-        description: 'Test Description',
-      },
-    },
-  ]),
 ];
