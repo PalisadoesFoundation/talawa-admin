@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/OrgSettings/General/OrgUpdate/OrgUpdate.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/General/OrgUpdate/OrgUpdate.tsx#L45)
+Defined in: [src/components/OrgSettings/General/OrgUpdate/OrgUpdate.tsx:45](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/components/OrgSettings/General/OrgUpdate/OrgUpdate.tsx#L45)
 
 Component for updating organization details.
 

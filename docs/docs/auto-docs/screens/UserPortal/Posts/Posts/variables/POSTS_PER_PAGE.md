@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **POSTS\_PER\_PAGE**: `5` = `5`
 
-Defined in: [src/screens/UserPortal/Posts/Posts.tsx:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Posts/Posts.tsx#L79)
+Defined in: [src/screens/UserPortal/Posts/Posts.tsx:79](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/screens/UserPortal/Posts/Posts.tsx#L79)

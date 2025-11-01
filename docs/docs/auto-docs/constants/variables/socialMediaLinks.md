@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **socialMediaLinks**: `object`[]
 
-Defined in: [src/constants.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/constants.ts#L12)
+Defined in: [src/constants.ts:12](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/constants.ts#L12)
 
 ## Type Declaration
 

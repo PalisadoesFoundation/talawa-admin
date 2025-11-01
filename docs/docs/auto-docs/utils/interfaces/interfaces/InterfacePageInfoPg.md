@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
 # Interface: InterfacePageInfoPg
 
-Defined in: [src/utils/interfaces.ts:639](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L639)
+Defined in: [src/utils/interfaces.ts:639](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/utils/interfaces.ts#L639)
 
 InterfacePageInfoPg
 
@@ -18,7 +18,7 @@ Defines the structure for pagination information in PostgreSQL-backed connection
 
 > **endCursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:640](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L640)
+Defined in: [src/utils/interfaces.ts:640](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/utils/interfaces.ts#L640)
 
 The cursor for the last item in the current page.
 
@@ -28,7 +28,7 @@ The cursor for the last item in the current page.
 
 > **hasNextPage**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:641](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L641)
+Defined in: [src/utils/interfaces.ts:641](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/utils/interfaces.ts#L641)
 
 Indicates if there is a next page.
 
@@ -38,7 +38,7 @@ Indicates if there is a next page.
 
 > **hasPreviousPage**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:642](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L642)
+Defined in: [src/utils/interfaces.ts:642](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/utils/interfaces.ts#L642)
 
 Indicates if there is a previous page.
 
@@ -48,6 +48,6 @@ Indicates if there is a previous page.
 
 > **startCursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:643](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L643)
+Defined in: [src/utils/interfaces.ts:643](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/utils/interfaces.ts#L643)
 
 The cursor for the first item in the current page.

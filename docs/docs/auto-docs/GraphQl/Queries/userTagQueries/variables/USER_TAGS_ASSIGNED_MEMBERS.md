@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **USER\_TAGS\_ASSIGNED\_MEMBERS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/userTagQueries.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/userTagQueries.ts#L10)
+Defined in: [src/GraphQl/Queries/userTagQueries.ts:10](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/GraphQl/Queries/userTagQueries.ts#L10)
 
 GraphQL query to retrieve organization members assigned a certain tag.
 

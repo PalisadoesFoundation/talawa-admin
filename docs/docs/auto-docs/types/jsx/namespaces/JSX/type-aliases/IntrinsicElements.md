@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > **IntrinsicElements** = `ReactJSX.IntrinsicElements`
 
-Defined in: [src/types/jsx.d.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/jsx.d.ts#L11)
+Defined in: [src/types/jsx.d.ts:11](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/jsx.d.ts#L11)

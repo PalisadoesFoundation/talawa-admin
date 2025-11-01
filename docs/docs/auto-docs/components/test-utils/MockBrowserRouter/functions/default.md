@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/test-utils/MockBrowserRouter.tsx:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/test-utils/MockBrowserRouter.tsx#L12)
+Defined in: [src/components/test-utils/MockBrowserRouter.tsx:12](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/components/test-utils/MockBrowserRouter.tsx#L12)
 
 ## Parameters
 

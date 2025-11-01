@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: IPreviewEventModalProps
 
-Defined in: [src/types/Event/interface.ts:134](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L134)
+Defined in: [src/types/Event/interface.ts:134](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L134)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:134](https://github.com/PalisadoesFoun
 
 > **alldaychecked**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:147](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L147)
+Defined in: [src/types/Event/interface.ts:147](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L147)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/interface.ts:147](https://github.com/PalisadoesFoun
 
 > **customRecurrenceModalIsOpen**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:172](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L172)
+Defined in: [src/types/Event/interface.ts:172](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L172)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Event/interface.ts:172](https://github.com/PalisadoesFoun
 
 > **eventEndDate**: `Date`
 
-Defined in: [src/types/Event/interface.ts:144](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L144)
+Defined in: [src/types/Event/interface.ts:144](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L144)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Event/interface.ts:144](https://github.com/PalisadoesFoun
 
 > **eventListCardProps**: `IEventListCard`
 
-Defined in: [src/types/Event/interface.ts:135](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L135)
+Defined in: [src/types/Event/interface.ts:135](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L135)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Event/interface.ts:135](https://github.com/PalisadoesFoun
 
 > **eventModalIsOpen**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:136](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L136)
+Defined in: [src/types/Event/interface.ts:136](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L136)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Event/interface.ts:136](https://github.com/PalisadoesFoun
 
 > **eventStartDate**: `Date`
 
-Defined in: [src/types/Event/interface.ts:143](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L143)
+Defined in: [src/types/Event/interface.ts:143](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L143)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Event/interface.ts:143](https://github.com/PalisadoesFoun
 
 > **formState**: `object`
 
-Defined in: [src/types/Event/interface.ts:153](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L153)
+Defined in: [src/types/Event/interface.ts:153](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L153)
 
 #### endTime
 
@@ -88,7 +88,7 @@ Defined in: [src/types/Event/interface.ts:153](https://github.com/PalisadoesFoun
 
 > **handleEventUpdate**: () => `Promise`\<`void`\>
 
-Defined in: [src/types/Event/interface.ts:168](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L168)
+Defined in: [src/types/Event/interface.ts:168](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L168)
 
 #### Returns
 
@@ -100,7 +100,7 @@ Defined in: [src/types/Event/interface.ts:168](https://github.com/PalisadoesFoun
 
 > **hideViewModal**: () => `void`
 
-Defined in: [src/types/Event/interface.ts:137](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L137)
+Defined in: [src/types/Event/interface.ts:137](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L137)
 
 #### Returns
 
@@ -112,7 +112,7 @@ Defined in: [src/types/Event/interface.ts:137](https://github.com/PalisadoesFoun
 
 > `optional` **isRegistered**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:141](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L141)
+Defined in: [src/types/Event/interface.ts:141](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L141)
 
 ***
 
@@ -120,7 +120,7 @@ Defined in: [src/types/Event/interface.ts:141](https://github.com/PalisadoesFoun
 
 > **openEventDashboard**: () => `void`
 
-Defined in: [src/types/Event/interface.ts:169](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L169)
+Defined in: [src/types/Event/interface.ts:169](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L169)
 
 #### Returns
 
@@ -132,7 +132,7 @@ Defined in: [src/types/Event/interface.ts:169](https://github.com/PalisadoesFoun
 
 > **publicchecked**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:149](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L149)
+Defined in: [src/types/Event/interface.ts:149](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L149)
 
 ***
 
@@ -140,7 +140,7 @@ Defined in: [src/types/Event/interface.ts:149](https://github.com/PalisadoesFoun
 
 > **recurrence**: [`InterfaceRecurrenceRule`](../../../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md)
 
-Defined in: [src/types/Event/interface.ts:170](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L170)
+Defined in: [src/types/Event/interface.ts:170](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L170)
 
 ***
 
@@ -148,7 +148,7 @@ Defined in: [src/types/Event/interface.ts:170](https://github.com/PalisadoesFoun
 
 > **registerEventHandler**: () => `Promise`\<`void`\>
 
-Defined in: [src/types/Event/interface.ts:167](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L167)
+Defined in: [src/types/Event/interface.ts:167](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L167)
 
 #### Returns
 
@@ -160,7 +160,7 @@ Defined in: [src/types/Event/interface.ts:167](https://github.com/PalisadoesFoun
 
 > **registrablechecked**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:151](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L151)
+Defined in: [src/types/Event/interface.ts:151](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L151)
 
 ***
 
@@ -168,7 +168,7 @@ Defined in: [src/types/Event/interface.ts:151](https://github.com/PalisadoesFoun
 
 > **setAllDayChecked**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/types/Event/interface.ts:148](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L148)
+Defined in: [src/types/Event/interface.ts:148](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L148)
 
 ***
 
@@ -176,7 +176,7 @@ Defined in: [src/types/Event/interface.ts:148](https://github.com/PalisadoesFoun
 
 > **setCustomRecurrenceModalIsOpen**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/types/Event/interface.ts:173](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L173)
+Defined in: [src/types/Event/interface.ts:173](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L173)
 
 ***
 
@@ -184,7 +184,7 @@ Defined in: [src/types/Event/interface.ts:173](https://github.com/PalisadoesFoun
 
 > **setEventEndDate**: `Dispatch`\<`SetStateAction`\<`Date`\>\>
 
-Defined in: [src/types/Event/interface.ts:146](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L146)
+Defined in: [src/types/Event/interface.ts:146](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L146)
 
 ***
 
@@ -192,7 +192,7 @@ Defined in: [src/types/Event/interface.ts:146](https://github.com/PalisadoesFoun
 
 > **setEventStartDate**: `Dispatch`\<`SetStateAction`\<`Date`\>\>
 
-Defined in: [src/types/Event/interface.ts:145](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L145)
+Defined in: [src/types/Event/interface.ts:145](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L145)
 
 ***
 
@@ -200,7 +200,7 @@ Defined in: [src/types/Event/interface.ts:145](https://github.com/PalisadoesFoun
 
 > **setFormState**: (`state`) => `void`
 
-Defined in: [src/types/Event/interface.ts:160](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L160)
+Defined in: [src/types/Event/interface.ts:160](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L160)
 
 #### Parameters
 
@@ -236,7 +236,7 @@ Defined in: [src/types/Event/interface.ts:160](https://github.com/PalisadoesFoun
 
 > **setPublicChecked**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/types/Event/interface.ts:150](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L150)
+Defined in: [src/types/Event/interface.ts:150](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L150)
 
 ***
 
@@ -244,7 +244,7 @@ Defined in: [src/types/Event/interface.ts:150](https://github.com/PalisadoesFoun
 
 > **setRecurrence**: `Dispatch`\<`SetStateAction`\<[`InterfaceRecurrenceRule`](../../../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md)\>\>
 
-Defined in: [src/types/Event/interface.ts:171](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L171)
+Defined in: [src/types/Event/interface.ts:171](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L171)
 
 ***
 
@@ -252,7 +252,7 @@ Defined in: [src/types/Event/interface.ts:171](https://github.com/PalisadoesFoun
 
 > **setRegistrableChecked**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/types/Event/interface.ts:152](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L152)
+Defined in: [src/types/Event/interface.ts:152](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L152)
 
 ***
 
@@ -260,7 +260,7 @@ Defined in: [src/types/Event/interface.ts:152](https://github.com/PalisadoesFoun
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/types/Event/interface.ts:139](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L139)
+Defined in: [src/types/Event/interface.ts:139](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L139)
 
 #### Parameters
 
@@ -278,7 +278,7 @@ Defined in: [src/types/Event/interface.ts:139](https://github.com/PalisadoesFoun
 
 > **tCommon**: (`key`) => `string`
 
-Defined in: [src/types/Event/interface.ts:140](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L140)
+Defined in: [src/types/Event/interface.ts:140](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L140)
 
 #### Parameters
 
@@ -296,7 +296,7 @@ Defined in: [src/types/Event/interface.ts:140](https://github.com/PalisadoesFoun
 
 > **toggleDeleteModal**: () => `void`
 
-Defined in: [src/types/Event/interface.ts:138](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L138)
+Defined in: [src/types/Event/interface.ts:138](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L138)
 
 #### Returns
 
@@ -308,4 +308,4 @@ Defined in: [src/types/Event/interface.ts:138](https://github.com/PalisadoesFoun
 
 > **userId**: `string`
 
-Defined in: [src/types/Event/interface.ts:142](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L142)
+Defined in: [src/types/Event/interface.ts:142](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Event/interface.ts#L142)

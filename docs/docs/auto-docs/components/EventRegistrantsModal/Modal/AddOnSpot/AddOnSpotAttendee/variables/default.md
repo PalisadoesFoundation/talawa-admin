@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceAddOnSpotAttendeeProps`](../../../../../../utils/interfaces/interfaces/InterfaceAddOnSpotAttendeeProps.md)\>
 
-Defined in: [src/components/EventRegistrantsModal/Modal/AddOnSpot/AddOnSpotAttendee.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventRegistrantsModal/Modal/AddOnSpot/AddOnSpotAttendee.tsx#L52)
+Defined in: [src/components/EventRegistrantsModal/Modal/AddOnSpot/AddOnSpotAttendee.tsx:52](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/components/EventRegistrantsModal/Modal/AddOnSpot/AddOnSpotAttendee.tsx#L52)

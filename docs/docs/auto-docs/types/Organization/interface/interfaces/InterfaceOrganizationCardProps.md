@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceOrganizationCardProps
 
-Defined in: [src/types/Organization/interface.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L1)
+Defined in: [src/types/Organization/interface.ts:1](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Organization/interface.ts#L1)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Organization/interface.ts:1](https://github.com/Palisadoe
 
 > **address**: `object`
 
-Defined in: [src/types/Organization/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L9)
+Defined in: [src/types/Organization/interface.ts:9](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Organization/interface.ts#L9)
 
 #### city
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Organization/interface.ts:9](https://github.com/Palisadoe
 
 > **adminsCount**: `number`
 
-Defined in: [src/types/Organization/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L17)
+Defined in: [src/types/Organization/interface.ts:17](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Organization/interface.ts#L17)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/types/Organization/interface.ts:17](https://github.com/Palisado
 
 > **description**: `string`
 
-Defined in: [src/types/Organization/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L5)
+Defined in: [src/types/Organization/interface.ts:5](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Organization/interface.ts#L5)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/types/Organization/interface.ts:5](https://github.com/Palisadoe
 
 > **id**: `string`
 
-Defined in: [src/types/Organization/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L2)
+Defined in: [src/types/Organization/interface.ts:2](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Organization/interface.ts#L2)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [src/types/Organization/interface.ts:2](https://github.com/Palisadoe
 
 > **image**: `string`
 
-Defined in: [src/types/Organization/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L4)
+Defined in: [src/types/Organization/interface.ts:4](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Organization/interface.ts#L4)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [src/types/Organization/interface.ts:4](https://github.com/Palisadoe
 
 > `optional` **isJoined**: `boolean`
 
-Defined in: [src/types/Organization/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L26)
+Defined in: [src/types/Organization/interface.ts:26](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Organization/interface.ts#L26)
 
 ***
 
@@ -80,7 +80,7 @@ Defined in: [src/types/Organization/interface.ts:26](https://github.com/Palisado
 
 > `optional` **members**: `object`[]
 
-Defined in: [src/types/Organization/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L6)
+Defined in: [src/types/Organization/interface.ts:6](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Organization/interface.ts#L6)
 
 #### id
 
@@ -92,7 +92,7 @@ Defined in: [src/types/Organization/interface.ts:6](https://github.com/Palisadoe
 
 > **membersCount**: `number`
 
-Defined in: [src/types/Organization/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L16)
+Defined in: [src/types/Organization/interface.ts:16](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Organization/interface.ts#L16)
 
 ***
 
@@ -100,7 +100,7 @@ Defined in: [src/types/Organization/interface.ts:16](https://github.com/Palisado
 
 > **membershipRequests**: `object`[]
 
-Defined in: [src/types/Organization/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L20)
+Defined in: [src/types/Organization/interface.ts:20](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Organization/interface.ts#L20)
 
 #### id
 
@@ -120,7 +120,7 @@ Defined in: [src/types/Organization/interface.ts:20](https://github.com/Palisado
 
 > **membershipRequestStatus**: `string`
 
-Defined in: [src/types/Organization/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L18)
+Defined in: [src/types/Organization/interface.ts:18](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Organization/interface.ts#L18)
 
 ***
 
@@ -128,7 +128,7 @@ Defined in: [src/types/Organization/interface.ts:18](https://github.com/Palisado
 
 > **name**: `string`
 
-Defined in: [src/types/Organization/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L3)
+Defined in: [src/types/Organization/interface.ts:3](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Organization/interface.ts#L3)
 
 ***
 
@@ -136,4 +136,4 @@ Defined in: [src/types/Organization/interface.ts:3](https://github.com/Palisadoe
 
 > **userRegistrationRequired**: `boolean`
 
-Defined in: [src/types/Organization/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L19)
+Defined in: [src/types/Organization/interface.ts:19](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/types/Organization/interface.ts#L19)

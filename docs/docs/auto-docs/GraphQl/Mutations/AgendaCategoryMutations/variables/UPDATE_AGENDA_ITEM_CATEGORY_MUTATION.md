@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_AGENDA\_ITEM\_CATEGORY\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/AgendaCategoryMutations.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/AgendaCategoryMutations.ts#L36)
+Defined in: [src/GraphQl/Mutations/AgendaCategoryMutations.ts:36](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/GraphQl/Mutations/AgendaCategoryMutations.ts#L36)
 
 GraphQL mutation to update an agenda category.
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_PLEDGE**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/PledgeMutation.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/PledgeMutation.ts#L49)
+Defined in: [src/GraphQl/Mutations/PledgeMutation.ts:49](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/GraphQl/Mutations/PledgeMutation.ts#L49)
 
 GraphQL mutation to update a pledge.
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/EventManagement/Dashboard/EventDashboard.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.tsx#L41)
+Defined in: [src/components/EventManagement/Dashboard/EventDashboard.tsx:41](https://github.com/iamanishx/talawa-admin/blob/7201593995ccfacf6f05849e614f59bf2c15323f/src/components/EventManagement/Dashboard/EventDashboard.tsx#L41)
 
 ## Parameters
 
