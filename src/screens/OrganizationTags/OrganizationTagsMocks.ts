@@ -493,3 +493,22 @@ export const MOCKS_WITH_NULL_FETCH_MORE_RESULT = [
     },
   },
 ];
+
+export const MOCKS_WITH_UNDEFINED_ORGANIZATION = [
+  MOCKS[0], // Initial query returns valid data with hasNextPage: true
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
+      variables: {
+        input: { id: 'orgId' },
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: '10',
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: { organization: undefined }, // Simulate undefined organization in fetchMoreResult
+    },
+  },
+];

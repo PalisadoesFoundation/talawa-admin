@@ -28,6 +28,7 @@ import {
   MOCKS_NULL_END_CURSOR,
   MOCKS_NO_MORE_PAGES,
   MOCKS_WITH_NULL_FETCH_MORE_RESULT,
+  MOCKS_WITH_UNDEFINED_ORGANIZATION,
 } from './OrganizationTagsMocks';
 import type { ApolloLink } from '@apollo/client';
 
@@ -49,6 +50,7 @@ const link5 = new StaticMockLink(MOCKS_UNDEFINED_USER_TAGS, true);
 const link6 = new StaticMockLink(MOCKS_NULL_END_CURSOR, true);
 const link7 = new StaticMockLink(MOCKS_NO_MORE_PAGES, true);
 const link8 = new StaticMockLink(MOCKS_WITH_NULL_FETCH_MORE_RESULT, true);
+const link9 = new StaticMockLink(MOCKS_WITH_UNDEFINED_ORGANIZATION, true);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -422,6 +424,40 @@ describe('Organisation Tags Page', () => {
 
     // Component should still render after null fetchMoreResult
     // Original tags should still be visible (no crash/error)
+    await waitFor(() => {
+      expect(screen.getByText('userTag 1')).toBeInTheDocument();
+      expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
+    });
+  });
+
+  test('should handle undefined organization in fetchMoreResult', async () => {
+    renderOrganizationTags(link9);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
+    });
+
+    // Verify initial tags are loaded
+    await waitFor(() => {
+      expect(screen.getByText('userTag 1')).toBeInTheDocument();
+    });
+
+    // Find scrollable div and trigger scroll event to call fetchMore
+    const orgUserTagsScrollableDiv = screen.getByTestId(
+      'orgUserTagsScrollableDiv',
+    );
+    expect(orgUserTagsScrollableDiv).toBeInTheDocument();
+
+    // Scroll to bottom to trigger fetchMore (which will return undefined organization)
+    fireEvent.scroll(orgUserTagsScrollableDiv, {
+      target: { scrollY: orgUserTagsScrollableDiv.scrollHeight },
+    });
+
+    await wait();
+
+    // Component should still render after undefined organization in fetchMoreResult
     await waitFor(() => {
       expect(screen.getByText('userTag 1')).toBeInTheDocument();
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
