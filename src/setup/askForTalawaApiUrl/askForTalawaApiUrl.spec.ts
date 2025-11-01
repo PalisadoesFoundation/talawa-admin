@@ -71,4 +71,14 @@ describe('askForTalawaApiUrl', () => {
 
     expect(result).toBe('http://localhost:4000/graphql');
   });
+
+  it('should append /graphql if user does not include it in endpoint', async () => {
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      endpoint: 'http://example.com',
+    });
+
+    const result = await askForTalawaApiUrl();
+
+    expect(result).toBe('http://example.com/graphql');
+  });
 });

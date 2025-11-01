@@ -10,7 +10,10 @@ export async function askForTalawaApiUrl(): Promise<string> {
     },
   ]);
 
-  const correctEndpoint = endpoint.replace(/\/graphql\/$/, '/graphql');
+  const cleanedEndpoint = endpoint.trim().replace(/\/+$/, '');
+  const correctEndpoint = cleanedEndpoint.endsWith('/graphql')
+    ? cleanedEndpoint
+    : `${cleanedEndpoint}/graphql`;
 
   return correctEndpoint;
 }
