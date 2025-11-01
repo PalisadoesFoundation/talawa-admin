@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<`TestInterfaceUpdateTimeoutProps`\>
 
-Defined in: [src/components/UpdateSession/UpdateSession.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UpdateSession/UpdateSession.tsx#L54)
+Defined in: [src/components/UpdateSession/UpdateSession.tsx:54](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/UpdateSession/UpdateSession.tsx#L54)

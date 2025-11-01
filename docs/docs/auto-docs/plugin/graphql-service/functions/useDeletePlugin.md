@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **useDeletePlugin**(): `MutationTuple`\<\{ `deletePlugin`: \{ `id`: `string`; `pluginId`: `string`; \}; \}, \{ `input`: [`DeletePluginInput`](../interfaces/DeletePluginInput.md); \}, `DefaultContext`, `ApolloCache`\<`any`\>\>
 
-Defined in: [src/plugin/graphql-service.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L65)
+Defined in: [src/plugin/graphql-service.ts:65](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/graphql-service.ts#L65)
 
 ## Returns
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **LibraryManagedAttributes**\<`TComponent`, `TProps`\> = `ReactJSX.LibraryManagedAttributes`\<`TComponent`, `TProps`\>
 
-Defined in: [src/types/jsx.d.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/jsx.d.ts#L12)
+Defined in: [src/types/jsx.d.ts:12](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/jsx.d.ts#L12)
 
 ## Type Parameters
 

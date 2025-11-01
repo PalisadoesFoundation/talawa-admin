@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **ERROR\_MOCKS**: `object`[]
 
-Defined in: [src/screens/UserPortal/Volunteer/Groups/Groups.mocks.ts:446](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Groups/Groups.mocks.ts#L446)
+Defined in: [src/screens/UserPortal/Volunteer/Groups/Groups.mocks.ts:446](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/screens/UserPortal/Volunteer/Groups/Groups.mocks.ts#L446)
 
 ## Type Declaration
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **registerPluginDynamically**(`pluginId`): `Promise`\<`void`\>
 
-Defined in: [src/plugin/registry.tsx:185](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/registry.tsx#L185)
+Defined in: [src/plugin/registry.tsx:185](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/registry.tsx#L185)
 
 Register a plugin dynamically by discovering its components from manifest
 

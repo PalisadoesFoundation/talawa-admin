@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **USER\_PLEDGES**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/fundQueries.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/fundQueries.ts#L120)
+Defined in: [src/GraphQl/Queries/fundQueries.ts:120](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/GraphQl/Queries/fundQueries.ts#L120)

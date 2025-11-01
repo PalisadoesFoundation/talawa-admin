@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/components/OrgDelete/OrgDelete.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgDelete/OrgDelete.tsx#L35)
+Defined in: [src/components/OrgDelete/OrgDelete.tsx:35](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/OrgDelete/OrgDelete.tsx#L35)
 
 ## Returns
 

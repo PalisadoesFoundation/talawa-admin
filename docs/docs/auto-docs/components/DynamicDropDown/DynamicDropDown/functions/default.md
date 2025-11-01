@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**\<`T`\>(`__namedParameters`): `Element`
 
-Defined in: [src/components/DynamicDropDown/DynamicDropDown.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/DynamicDropDown/DynamicDropDown.tsx#L55)
+Defined in: [src/components/DynamicDropDown/DynamicDropDown.tsx:55](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/DynamicDropDown/DynamicDropDown.tsx#L55)
 
 ## Type Parameters
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **tagTemplate**: `Template`
 
-Defined in: [src/components/CheckIn/tagTemplate.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/tagTemplate.ts#L4)
+Defined in: [src/components/CheckIn/tagTemplate.ts:4](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/CheckIn/tagTemplate.ts#L4)

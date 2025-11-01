@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **genderEnum**: `object`[]
 
-Defined in: [src/utils/formEnumFields.ts:296](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/formEnumFields.ts#L296)
+Defined in: [src/utils/formEnumFields.ts:296](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/formEnumFields.ts#L296)
 
 ## Type Declaration
 

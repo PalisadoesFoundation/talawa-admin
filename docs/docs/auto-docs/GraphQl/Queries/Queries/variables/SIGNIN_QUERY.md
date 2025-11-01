@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **SIGNIN\_QUERY**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/Queries.ts:1106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L1106)
+Defined in: [src/GraphQl/Queries/Queries.ts:1106](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/GraphQl/Queries/Queries.ts#L1106)

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/EventCalender/Header/EventHeader.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/Header/EventHeader.tsx#L46)
+Defined in: [src/components/EventCalender/Header/EventHeader.tsx:46](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/EventCalender/Header/EventHeader.tsx#L46)
 
 ## Parameters
 

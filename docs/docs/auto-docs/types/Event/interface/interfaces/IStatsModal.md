@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: IStatsModal
 
-Defined in: [src/types/Event/interface.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L91)
+Defined in: [src/types/Event/interface.ts:91](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L91)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:91](https://github.com/PalisadoesFound
 
 > **data**: `object`
 
-Defined in: [src/types/Event/interface.ts:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L92)
+Defined in: [src/types/Event/interface.ts:92](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L92)
 
 #### event
 

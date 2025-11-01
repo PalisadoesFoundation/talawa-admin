@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: ICreateActionItemVariables
 
-Defined in: [src/types/ActionItems/interface.ts:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L99)
+Defined in: [src/types/ActionItems/interface.ts:99](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L99)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/types/ActionItems/interface.ts:99](https://github.com/Palisadoe
 
 > **input**: [`ICreateActionItemInput`](ICreateActionItemInput.md)
 
-Defined in: [src/types/ActionItems/interface.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L100)
+Defined in: [src/types/ActionItems/interface.ts:100](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/ActionItems/interface.ts#L100)

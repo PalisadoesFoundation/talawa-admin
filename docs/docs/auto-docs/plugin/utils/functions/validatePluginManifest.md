@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **validatePluginManifest**(`manifest`): `boolean`
 
-Defined in: [src/plugin/utils.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/utils.ts#L7)
+Defined in: [src/plugin/utils.ts:7](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/utils.ts#L7)
 
 ## Parameters
 

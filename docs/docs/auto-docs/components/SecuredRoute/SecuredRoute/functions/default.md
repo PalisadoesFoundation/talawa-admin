@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/components/SecuredRoute/SecuredRoute.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/SecuredRoute/SecuredRoute.tsx#L41)
+Defined in: [src/components/SecuredRoute/SecuredRoute.tsx:41](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/SecuredRoute/SecuredRoute.tsx#L41)
 
 ## Returns
 

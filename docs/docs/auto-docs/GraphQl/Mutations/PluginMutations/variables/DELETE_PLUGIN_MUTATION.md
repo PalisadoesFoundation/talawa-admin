@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **DELETE\_PLUGIN\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/PluginMutations.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/PluginMutations.ts#L72)
+Defined in: [src/GraphQl/Mutations/PluginMutations.ts:72](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/GraphQl/Mutations/PluginMutations.ts#L72)
 
 GraphQL mutation to delete a plugin.
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:147](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx#L147)
+Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:214](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx#L214)
 
 ## Parameters
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > **InterfaceEventEdge** = [`IEventEdge`](../interfaces/IEventEdge.md)
 
-Defined in: [src/types/Event/interface.ts:245](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L245)
+Defined in: [src/types/Event/interface.ts:245](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/interface.ts#L245)

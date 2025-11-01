@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > **ElementClass** = `ReactJSX.ElementClass`
 
-Defined in: [src/types/jsx.d.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/jsx.d.ts#L6)
+Defined in: [src/types/jsx.d.ts:6](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/jsx.d.ts#L6)

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/UserPortal/OrganizationNavbar/OrganizationNavbar.tsx:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/OrganizationNavbar/OrganizationNavbar.tsx#L56)
+Defined in: [src/components/UserPortal/OrganizationNavbar/OrganizationNavbar.tsx:56](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/UserPortal/OrganizationNavbar/OrganizationNavbar.tsx#L56)
 
 ## Parameters
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/components/test-utils/AsyncComponent.tsx:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/test-utils/AsyncComponent.tsx#L12)
+Defined in: [src/components/test-utils/AsyncComponent.tsx:12](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/test-utils/AsyncComponent.tsx#L12)
 
 ## Returns
 

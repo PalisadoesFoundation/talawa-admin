@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **getLanguageName**(`code`): `string`
 
-Defined in: [src/screens/MemberDetail/MemberDetail.tsx:776](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/MemberDetail.tsx#L776)
+Defined in: [src/screens/MemberDetail/MemberDetail.tsx:776](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/screens/MemberDetail/MemberDetail.tsx#L776)
 
 ## Parameters
 

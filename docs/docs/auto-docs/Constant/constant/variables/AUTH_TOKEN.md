@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **AUTH\_TOKEN**: `""` = `''`
 
-Defined in: [src/Constant/constant.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/constant.ts#L1)
+Defined in: [src/Constant/constant.ts:1](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/Constant/constant.ts#L1)

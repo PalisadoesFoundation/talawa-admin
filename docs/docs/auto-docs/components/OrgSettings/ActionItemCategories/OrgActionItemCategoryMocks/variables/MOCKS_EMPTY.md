@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_EMPTY**: `object`[]
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/OrgActionItemCategoryMocks.ts:332](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/OrgActionItemCategoryMocks.ts#L332)
+Defined in: [src/components/OrgSettings/ActionItemCategories/OrgActionItemCategoryMocks.ts:332](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/OrgSettings/ActionItemCategories/OrgActionItemCategoryMocks.ts#L332)
 
 ## Type Declaration
 

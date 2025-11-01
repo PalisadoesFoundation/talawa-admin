@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **default**: `FC`\<[`IActionItemCategoryModal`](../interfaces/IActionItemCategoryModal.md)\>
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L24)
+Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx:24](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryModal.tsx#L24)

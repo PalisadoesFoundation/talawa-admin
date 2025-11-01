@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/components/InfiniteScrollLoader/InfiniteScrollLoader.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/InfiniteScrollLoader/InfiniteScrollLoader.tsx#L29)
+Defined in: [src/components/InfiniteScrollLoader/InfiniteScrollLoader.tsx:29](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/InfiniteScrollLoader/InfiniteScrollLoader.tsx#L29)
 
 ## Returns
 

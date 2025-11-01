@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **languages**: `object`[]
 
-Defined in: [src/utils/languages.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/languages.ts#L3)
+Defined in: [src/utils/languages.ts:3](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/languages.ts#L3)
 
 ## Type Declaration
 

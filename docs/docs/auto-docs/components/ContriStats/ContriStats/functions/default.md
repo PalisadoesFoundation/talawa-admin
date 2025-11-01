@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/ContriStats/ContriStats.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/ContriStats/ContriStats.tsx#L34)
+Defined in: [src/components/ContriStats/ContriStats.tsx:34](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/ContriStats/ContriStats.tsx#L34)
 
 ## Parameters
 

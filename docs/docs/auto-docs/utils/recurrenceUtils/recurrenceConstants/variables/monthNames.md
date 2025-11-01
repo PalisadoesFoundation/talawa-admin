@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **monthNames**: `string`[]
 
-Defined in: [src/utils/recurrenceUtils/recurrenceConstants.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceConstants.ts#L53)
+Defined in: [src/utils/recurrenceUtils/recurrenceConstants.ts:53](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/recurrenceUtils/recurrenceConstants.ts#L53)

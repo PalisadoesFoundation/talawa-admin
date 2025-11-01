@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<`MemberDetailProps`\>
 
-Defined in: [src/screens/MemberDetail/MemberDetail.tsx:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/MemberDetail.tsx#L68)
+Defined in: [src/screens/MemberDetail/MemberDetail.tsx:68](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/screens/MemberDetail/MemberDetail.tsx#L68)

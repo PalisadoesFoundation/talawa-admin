@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **useMinioDownload**(): `InterfaceMinioDownload`
 
-Defined in: [src/utils/MinioDownload.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/MinioDownload.ts#L11)
+Defined in: [src/utils/MinioDownload.ts:11](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/MinioDownload.ts#L11)
 
 ## Returns
 

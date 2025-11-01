@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **getStorageKey**(`prefix`, `key`): `string`
 
-Defined in: [src/utils/useLocalstorage.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L19)
+Defined in: [src/utils/useLocalstorage.ts:19](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/useLocalstorage.ts#L19)
 
 Generates the prefixed key for storage.
 

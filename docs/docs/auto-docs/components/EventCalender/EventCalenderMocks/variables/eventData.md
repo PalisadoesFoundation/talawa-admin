@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **eventData**: `object`[]
 
-Defined in: [src/components/EventCalender/EventCalenderMocks.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/EventCalenderMocks.ts#L6)
+Defined in: [src/components/EventCalender/EventCalenderMocks.ts:6](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/EventCalender/EventCalenderMocks.ts#L6)
 
 ## Type Declaration
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **MOCK\_VENUE\_ITEM\_LONG\_TEXT**: `object`
 
-Defined in: [src/components/Venues/VenueCardMocks.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Venues/VenueCardMocks.ts#L28)
+Defined in: [src/components/Venues/VenueCardMocks.ts:28](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/Venues/VenueCardMocks.ts#L28)
 
 ## Type Declaration
 

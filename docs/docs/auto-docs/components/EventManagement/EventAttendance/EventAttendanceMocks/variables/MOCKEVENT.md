@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **MOCKEVENT**: `object`
 
-Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L3)
+Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:3](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L3)
 
 ## Type Declaration
 

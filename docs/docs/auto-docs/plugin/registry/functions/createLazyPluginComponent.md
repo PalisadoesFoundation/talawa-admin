@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **createLazyPluginComponent**(`pluginId`, `componentName`): `ComponentType`
 
-Defined in: [src/plugin/registry.tsx:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/registry.tsx#L77)
+Defined in: [src/plugin/registry.tsx:77](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/registry.tsx#L77)
 
 Dynamically import a plugin component with lazy loading
 

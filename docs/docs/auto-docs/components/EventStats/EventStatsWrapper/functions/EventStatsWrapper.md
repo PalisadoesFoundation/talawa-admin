@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **EventStatsWrapper**(`__namedParameters`): `Element`
 
-Defined in: [src/components/EventStats/EventStatsWrapper.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/EventStatsWrapper.tsx#L38)
+Defined in: [src/components/EventStats/EventStatsWrapper.tsx:38](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/EventStats/EventStatsWrapper.tsx#L38)
 
 ## Parameters
 

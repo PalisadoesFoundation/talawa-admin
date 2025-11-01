@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: FileOperationResult
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L18)
+Defined in: [src/plugin/services/InternalFileWriter.ts:18](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/services/InternalFileWriter.ts#L18)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/services/InternalFileWriter.ts:18](https://github.com/Pa
 
 > `optional` **data**: `any`
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L21)
+Defined in: [src/plugin/services/InternalFileWriter.ts:21](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/services/InternalFileWriter.ts#L21)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/services/InternalFileWriter.ts:21](https://github.com/Pa
 
 > `optional` **error**: `string`
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L20)
+Defined in: [src/plugin/services/InternalFileWriter.ts:20](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/services/InternalFileWriter.ts#L20)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/plugin/services/InternalFileWriter.ts:20](https://github.com/Pa
 
 > **success**: `boolean`
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L19)
+Defined in: [src/plugin/services/InternalFileWriter.ts:19](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/services/InternalFileWriter.ts#L19)

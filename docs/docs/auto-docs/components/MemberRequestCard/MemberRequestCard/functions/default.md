@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/MemberRequestCard/MemberRequestCard.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberRequestCard/MemberRequestCard.tsx#L51)
+Defined in: [src/components/MemberRequestCard/MemberRequestCard.tsx:51](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/MemberRequestCard/MemberRequestCard.tsx#L51)
 
 ## Parameters
 

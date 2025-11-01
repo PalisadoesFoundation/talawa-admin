@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **dateTimeFields**: `object`
 
-Defined in: [src/utils/timezoneUtils/dateTimeConfig.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/timezoneUtils/dateTimeConfig.ts#L3)
+Defined in: [src/utils/timezoneUtils/dateTimeConfig.ts:3](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/utils/timezoneUtils/dateTimeConfig.ts#L3)
 
 ## Type Declaration
 

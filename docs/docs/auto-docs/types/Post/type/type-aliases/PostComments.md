@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **PostComments** = `object`[]
 
-Defined in: [src/types/Post/type.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L83)
+Defined in: [src/types/Post/type.ts:83](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Post/type.ts#L83)
 
 ## Type Declaration
 

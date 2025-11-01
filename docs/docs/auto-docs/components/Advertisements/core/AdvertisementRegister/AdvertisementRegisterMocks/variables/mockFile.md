@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **mockFile**: `File`
 
-Defined in: [src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts#L15)
+Defined in: [src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts:15](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts#L15)

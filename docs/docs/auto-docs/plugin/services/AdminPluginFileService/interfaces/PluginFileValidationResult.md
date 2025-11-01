@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: PluginFileValidationResult
 
-Defined in: [src/plugin/services/AdminPluginFileService.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L19)
+Defined in: [src/plugin/services/AdminPluginFileService.ts:19](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/services/AdminPluginFileService.ts#L19)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/services/AdminPluginFileService.ts:19](https://github.co
 
 > `optional` **error**: `string`
 
-Defined in: [src/plugin/services/AdminPluginFileService.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L21)
+Defined in: [src/plugin/services/AdminPluginFileService.ts:21](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/services/AdminPluginFileService.ts#L21)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/services/AdminPluginFileService.ts:21](https://github.co
 
 > `optional` **manifest**: [`AdminPluginManifest`](../../../../utils/adminPluginInstaller/interfaces/AdminPluginManifest.md)
 
-Defined in: [src/plugin/services/AdminPluginFileService.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L22)
+Defined in: [src/plugin/services/AdminPluginFileService.ts:22](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/services/AdminPluginFileService.ts#L22)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/plugin/services/AdminPluginFileService.ts:22](https://github.co
 
 > **valid**: `boolean`
 
-Defined in: [src/plugin/services/AdminPluginFileService.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L20)
+Defined in: [src/plugin/services/AdminPluginFileService.ts:20](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/plugin/services/AdminPluginFileService.ts#L20)

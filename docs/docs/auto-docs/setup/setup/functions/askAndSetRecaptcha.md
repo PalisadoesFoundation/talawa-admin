@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **askAndSetRecaptcha**(): `Promise`\<`void`\>
 
-Defined in: [src/setup/setup.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L13)
+Defined in: [src/setup/setup.ts:13](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/setup/setup.ts#L13)
 
 ## Returns
 

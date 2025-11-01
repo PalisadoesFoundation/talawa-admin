@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **EventOrderByInputEnum**: `object`
 
-Defined in: [src/types/Event/type.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L116)
+Defined in: [src/types/Event/type.ts:116](https://github.com/iamanishx/talawa-admin/blob/c51144eaab32178a2cfff21cbfeafafbf406559b/src/types/Event/type.ts#L116)
 
 ## Type Declaration
 
