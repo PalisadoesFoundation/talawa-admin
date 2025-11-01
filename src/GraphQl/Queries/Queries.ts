@@ -108,13 +108,24 @@ export const USER_JOINED_ORGANIZATIONS_PG = gql`
 `;
 
 export const ALL_ORGANIZATIONS_PG = gql`
-  query UserJoinedOrganizations {
-    organizations {
+  query UserJoinedOrganizations(
+    $limit: Int
+    $offset: Int
+    $filter: String
+    $orderBy: OrganizationOrderByInput
+  ) {
+    organizations(
+      limit: $limit
+      offset: $offset
+      filter: $filter
+      orderBy: $orderBy
+    ) {
       id
       name
       addressLine1
       description
       avatarURL
+      createdAt
       members(first: 32) {
         edges {
           node {

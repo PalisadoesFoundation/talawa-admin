@@ -155,9 +155,22 @@ function orgList(): JSX.Element {
     loading,
     error: errorList,
     refetch: refetchOrgs,
-  } = useQuery(ALL_ORGANIZATIONS_PG, { notifyOnNetworkStatusChange: true });
+  } = useQuery(ALL_ORGANIZATIONS_PG, {
+    notifyOnNetworkStatusChange: true,
+    variables: {
+      limit: perPageResult, // how many orgs to fetch
+      offset: 0, // pagination offset
+      orderBy: 'createdAt_DESC', // latest first
+    },
+  });
 
   const orgsData = UsersOrgsData?.organizations;
+
+  useEffect(() => {
+    if (UsersOrgsData) {
+      console.log('organization data', UsersOrgsData.organizations);
+    }
+  }, [UsersOrgsData]);
 
   // To clear the search field and form fields on unmount
   // useEffect(() => {
@@ -332,15 +345,21 @@ function orgList(): JSX.Element {
   // };
 
   const handleSortChange = (value: string): void => {
+    console.log('value of the sort algo', value);
+    console.log('value of the sort ', value);
+
     // Update the sorting state and refetch organizations based on the selected sorting option
     setSortingState({ option: value, selectedOption: t(value) });
-    // const orderBy = value === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC';
-    // refetchOrgs({
-    //   first: perPageResult,
-    //   skip: 0,
-    //   filter: searchByName,
-    //   orderBy,
-    // });
+
+    console.log('sortingState', sortingState);
+    const orderBy = value === 'Latest' ? 'createdAt_DESC' : 'createdAt_ASC';
+    console.log('orderby', orderBy);
+    refetchOrgs({
+      first: perPageResult,
+      skip: 0,
+      filter: searchByName,
+      orderBy,
+    });
   };
 
   return (
