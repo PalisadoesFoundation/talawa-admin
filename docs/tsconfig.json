@@ -1,0 +1,10 @@
+// docs/tsconfig.json
+{
+  "extends": "@docusaurus/tsconfig",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "strict": true
+  },
+  "include": ["src", "*.config.ts"],
+  "exclude": ["node_modules", "build"]
+}
