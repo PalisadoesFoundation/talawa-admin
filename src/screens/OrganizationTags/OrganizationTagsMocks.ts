@@ -512,3 +512,30 @@ export const MOCKS_WITH_UNDEFINED_ORGANIZATION = [
     },
   },
 ];
+
+export const MOCKS_WITH_EMPTY_TAGS_EDGES = [
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
+      variables: {
+        input: { id: 'orgId' },
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          tags: {
+            edges: null, // Simulate null edges to test optional chaining
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: null,
+            },
+          },
+        },
+      },
+    },
+  },
+];

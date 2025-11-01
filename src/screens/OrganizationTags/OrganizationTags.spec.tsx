@@ -29,6 +29,7 @@ import {
   MOCKS_NO_MORE_PAGES,
   MOCKS_WITH_NULL_FETCH_MORE_RESULT,
   MOCKS_WITH_UNDEFINED_ORGANIZATION,
+  MOCKS_WITH_EMPTY_TAGS_EDGES,
 } from './OrganizationTagsMocks';
 import type { ApolloLink } from '@apollo/client';
 
@@ -51,6 +52,7 @@ const link6 = new StaticMockLink(MOCKS_NULL_END_CURSOR, true);
 const link7 = new StaticMockLink(MOCKS_NO_MORE_PAGES, true);
 const link8 = new StaticMockLink(MOCKS_WITH_NULL_FETCH_MORE_RESULT, true);
 const link9 = new StaticMockLink(MOCKS_WITH_UNDEFINED_ORGANIZATION, true);
+const link10 = new StaticMockLink(MOCKS_WITH_EMPTY_TAGS_EDGES, true);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -494,6 +496,21 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByText('userTag 1')).toBeInTheDocument();
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
+    });
+  });
+
+  test('should handle null tags edges gracefully', async () => {
+    renderOrganizationTags(link10);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
+    });
+
+    // Component should render even with null edges (empty list)
+    await waitFor(() => {
+      expect(screen.getByText(translations.createTag)).toBeInTheDocument();
     });
   });
 });
