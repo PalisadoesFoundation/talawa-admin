@@ -1801,6 +1801,7 @@ form label,
   width: auto;
   margin-inline-start: 12px;
 }
+
 .pMessageAdvertisement {
   width: 100%;
   display: flex;
@@ -3847,10 +3848,18 @@ form label,
 
 .CardItemImage {
   background-color: #eaebef;
-  height: 3.5rem;
-  min-width: 3.5rem;
-  border: 3.25rem solid transparent;
+  height: 5rem;
+  width: 5rem;
+  min-width: 5rem;
+  /* border: 3.25rem solid transparent; */
   border-radius: 8px;
+}
+
+.CardItemImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
 }
 
 .cardItemtitle {
@@ -4475,12 +4484,6 @@ form label,
   font-weight: 600;
 }
 
-.cardBody {
-  padding: 1.25rem 1rem 1.5rem 1rem;
-  display: flex;
-  flex-direction: column;
-}
-
 .cardLabel {
   font-weight: bold;
   padding-bottom: 1px;
@@ -4872,17 +4875,17 @@ form label,
 
 .requestsTableItemIndex {
   padding-inline-start: 2.5rem;
-  padding-top: 1rem;
+  vertical-align: middle;
 }
 
 .requestsTableItemName {
   padding-inline-start: 1.5rem;
-  padding-top: 1rem;
+  vertical-align: middle;
 }
 
 .requestsTableItemEmail {
   padding-inline-start: 1.5rem;
-  padding-top: 1rem;
+  vertical-align: middle;
 }
 
 .requestsAcceptButton {
@@ -4966,6 +4969,7 @@ form label,
     width: 100%;
   }
 }
+
 .btnConfirmDelete {
   background-color: var(--removeButton-bg);
   color: var(--removeButton-color);
@@ -5260,6 +5264,7 @@ form {
   font-size: 0.9rem;
   color: var(--secondText-color);
 }
+
 /* -- ProfileDropdown.tsx -- */
 
 /* -- CustomRecurrenceModal.tsx -- */
@@ -8981,6 +8986,7 @@ form {
     width: 100%;
   }
 }
+
 @media (max-width: 1120px) {
   .collapseSidebarButton {
     width: calc(250px + 2rem);
@@ -9555,6 +9561,7 @@ form {
   text-overflow: ellipsis;
   color: var(--primaryText-color);
 }
+
 .expandedDrawer {
   width: var(--sidebar-expanded-width);
 }
@@ -9569,11 +9576,13 @@ form {
 .CardItemMainDiv {
   width: 100%;
 }
+
 .CardItemMainDivEvent {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .upcomingEventsTitle {
   text-overflow: ellipsis;
   overflow: hidden;

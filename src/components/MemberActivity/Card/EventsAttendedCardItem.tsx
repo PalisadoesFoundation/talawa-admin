@@ -93,6 +93,7 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
           <Col xs={7} md={8} className="ps-3">
             <h6
               className={`mb-2 fw-semibold text-dark ${styles.eventsAttendedCardTitle}`}
+              data-testid="EventsAttendedCardTitle"
             >
               {title}
             </h6>
