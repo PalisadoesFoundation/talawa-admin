@@ -33,9 +33,7 @@ const OrgContribution = lazy(
 const OrgList = lazy(() => import('screens/OrgList/OrgList'));
 const OrgPost = lazy(() => import('screens/OrgPost/OrgPost'));
 const OrgSettings = lazy(() => import('screens/OrgSettings/OrgSettings'));
-const OrganizationActionItems = lazy(
-  () => import('screens/OrganizationActionItems/OrganizationActionItems'),
-);
+
 const OrganizationDashboard = lazy(
   () => import('screens/OrganizationDashboard/OrganizationDashboard'),
 );
@@ -127,8 +125,9 @@ function App(): React.ReactElement {
   // Get user permissions and admin status (memoized to prevent infinite loops)
   const userPermissions = useMemo(() => {
     return (
-      data?.currentUser?.appUserProfile?.adminFor?.map((org: any) => org._id) ||
-      []
+      data?.currentUser?.appUserProfile?.adminFor?.map(
+        (org: { _id: string }) => org._id,
+      ) || []
     );
   }, [data?.currentUser?.appUserProfile?.adminFor]);
 
@@ -263,10 +262,7 @@ function App(): React.ReactElement {
                 path="/event/:orgId/:eventId"
                 element={<EventManagement />}
               />
-              <Route
-                path="/orgactionitems/:orgId"
-                element={<OrganizationActionItems />}
-              />
+
               <Route path="/orgfunds/:orgId" element={<OrganizationFunds />} />
               <Route
                 path="/orgtransactions/:orgId"

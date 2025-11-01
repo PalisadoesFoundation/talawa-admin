@@ -233,49 +233,6 @@ export const USER_LIST_FOR_TABLE = gql`
   }
 `;
 
-export const USER_LIST_REQUEST = gql`
-  query Users(
-    $firstName_contains: String
-    $lastName_contains: String
-    $first: Int
-    $skip: Int
-  ) {
-    users(
-      where: {
-        firstName_contains: $firstName_contains
-        lastName_contains: $lastName_contains
-      }
-      skip: $skip
-      first: $first
-    ) {
-      user {
-        firstName
-        lastName
-        image
-        _id
-        email
-        createdAt
-      }
-      appUserProfile {
-        _id
-        adminFor {
-          _id
-        }
-        isSuperAdmin
-        createdOrganizations {
-          _id
-        }
-        createdEvents {
-          _id
-        }
-        eventAdmin {
-          _id
-        }
-      }
-    }
-  }
-`;
-
 export const EVENT_DETAILS = gql`
   query GetEvent($eventId: String!) {
     event(input: { id: $eventId }) {
@@ -406,66 +363,6 @@ export const EVENT_CHECKINS = gql`
   }
 `;
 
-export const GET_EVENT_ATTENDEE = gql`
-  query GetEventAttendee(
-    $userId: ID!
-    $eventId: ID
-    $recurringEventInstanceId: ID
-  ) {
-    getEventAttendee(
-      userId: $userId
-      eventId: $eventId
-      recurringEventInstanceId: $recurringEventInstanceId
-    ) {
-      id
-      user {
-        id
-        name
-        emailAddress
-      }
-      isInvited
-      isRegistered
-      isCheckedIn
-      isCheckedOut
-    }
-  }
-`;
-
-export const GET_EVENT_INVITES_BY_USER_ID = gql`
-  query GetEventInvitesByUserId($userId: ID!) {
-    getEventInvitesByUserId(userId: $userId) {
-      id
-      user {
-        id
-        name
-        emailAddress
-      }
-      event {
-        id
-        name
-        startAt
-        endAt
-      }
-      isInvited
-      isRegistered
-    }
-  }
-`;
-
-export const HAS_SUBMITTED_FEEDBACK = gql`
-  query HasSubmittedFeedback(
-    $userId: ID!
-    $eventId: ID
-    $recurringEventInstanceId: ID
-  ) {
-    hasSubmittedFeedback(
-      userId: $userId
-      eventId: $eventId
-      recurringEventInstanceId: $recurringEventInstanceId
-    )
-  }
-`;
-
 export const EVENT_FEEDBACKS = gql`
   query eventFeedback($id: ID!) {
     event(id: $id) {
@@ -553,25 +450,6 @@ export const GET_ORGANIZATION_BLOCKED_USERS_PG = gql`
             name
             emailAddress
             role
-          }
-          cursor
-        }
-        pageInfo {
-          hasNextPage
-          endCursor
-        }
-      }
-    }
-  }
-`;
-
-export const IS_USER_BLOCKED = gql`
-  query IsUserBlockedInOrganization($id: String!, $first: Int, $after: String) {
-    organization(input: { id: $id }) {
-      blockedUsers(first: $first, after: $after) {
-        edges {
-          node {
-            id
           }
           cursor
         }
@@ -910,32 +788,6 @@ export const MEMBERS_LIST = gql`
   }
 `;
 
-export const BLOCK_PAGE_MEMBER_LIST = gql`
-  query Organizations(
-    $orgId: ID!
-    $firstName_contains: String
-    $lastName_contains: String
-  ) {
-    organizationsMemberConnection(
-      orgId: $orgId
-      where: {
-        firstName_contains: $firstName_contains
-        lastName_contains: $lastName_contains
-      }
-    ) {
-      edges {
-        _id
-        firstName
-        lastName
-        email
-        organizationsBlockedBy {
-          _id
-        }
-      }
-    }
-  }
-`;
-
 // Query to filter out all the members with the macthing query and a particular OrgId
 export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
   query Organizations(
@@ -1109,23 +961,6 @@ export const ORGANIZATION_DONATION_CONNECTION_LIST = gql`
   }
 `;
 
-// to take the list of the admins of a particular
-export const ADMIN_LIST = gql`
-  query Organizations($id: ID!) {
-    organizations(id: $id) {
-      _id
-      admins {
-        _id
-        firstName
-        lastName
-        image
-        email
-        createdAt
-      }
-    }
-  }
-`;
-
 // to take the membership request
 export const MEMBERSHIP_REQUEST = gql`
   query Organization(
@@ -1145,9 +980,11 @@ export const MEMBERSHIP_REQUEST = gql`
         createdAt
         status
         user {
+          avatarURL
           id
           name
           emailAddress
+          avatarURL
         }
       }
     }
@@ -1266,27 +1103,6 @@ export const GET_COMMUNITY_DATA_PG = gql`
   }
 `;
 
-export const GET_COMMUNITY_DATA = gql`
-  query CommunityInfo {
-    community {
-      id
-      name
-      websiteLink
-      logoUrl
-      socialMediaUrls {
-        facebook
-        gitHub
-        instagram
-        X
-        linkedIn
-        youTube
-        reddit
-        slack
-      }
-    }
-  }
-`;
-
 export const SIGNIN_QUERY = gql`
   query SignIn($email: EmailAddress!, $password: String!) {
     signIn(input: { emailAddress: $email, password: $password }) {
@@ -1345,15 +1161,11 @@ export { ACTION_ITEM_CATEGORY_LIST } from './ActionItemCategoryQueries';
 // get the list of Action Items
 export { ACTION_ITEM_LIST } from './ActionItemQueries';
 
-export {
-  AgendaItemByEvent,
-  AgendaItemByOrganization,
-} from './AgendaItemQueries';
+export { AgendaItemByEvent } from './AgendaItemQueries';
 
 export { AGENDA_ITEM_CATEGORY_LIST } from './AgendaCategoryQueries';
 // to take the list of the blocked users
 export {
-  ADVERTISEMENTS_GET,
   IS_SAMPLE_ORGANIZATION_QUERY,
   ORGANIZATION_EVENTS_CONNECTION,
 } from './PlugInQueries';
@@ -1364,7 +1176,4 @@ export { ORGANIZATION_POST_LIST_WITH_VOTES } from './OrganizationQueries';
 
 export { ORGANIZATION_ADVERTISEMENT_LIST } from './AdvertisementQueries';
 
-export {
-  ORGANIZATION_ADMINS_LIST,
-  USER_CREATED_ORGANIZATIONS,
-} from './OrganizationQueries';
+export { USER_CREATED_ORGANIZATIONS } from './OrganizationQueries';
