@@ -52,6 +52,10 @@ jobs:
           ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
           echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
 
+          # Get only lintable files (TypeScript, JavaScript, GraphQL) excluding docs and node_modules
+          LINTABLE_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | grep -E '\.(ts|tsx|js|jsx|graphql)$' | grep -v '^docs/' | grep -v 'node_modules/' | tr '\n' ' ' || true)
+          echo "lintable_files=${LINTABLE_FILES}" >> $GITHUB_OUTPUT
+
           # Count all changed files
           ALL_CHANGED_FILES_COUNT=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | wc -l | tr -d ' ')
           echo "all_changed_files_count=$ALL_CHANGED_FILES_COUNT" >> $GITHUB_OUTPUT
@@ -81,8 +85,13 @@ jobs:
       - name: Check for linting errors in modified files
         if: steps.changed-files.outputs.only_changed != 'true'
         env:
-          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: npx eslint ${CHANGED_FILES}
+          CHANGED_FILES: ${{ steps.changed-files.outputs.lintable_files }}
+        run: |
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No lintable files changed, skipping ESLint check"
+            exit 0
+          fi
+          npx eslint ${CHANGED_FILES}
 
       - name: Check for TSDoc comments
         run: npm run check-tsdoc # Run the TSDoc check script
