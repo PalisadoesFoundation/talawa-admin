@@ -149,7 +149,7 @@ const UpcomingEvents = (): JSX.Element => {
         event: eventId,
         group,
         status,
-        userId: (userId as string) || '',
+        userId: userId as string,
       };
 
       // Add scope fields for recurring events
@@ -192,7 +192,7 @@ const UpcomingEvents = (): JSX.Element => {
       if (eventData?.baseEventId) {
         targetEventId = eventData.baseEventId;
       }
-    } else if (scope === 'THIS_INSTANCE_ONLY') {
+    } else {
       // For instance-only volunteering, use current event ID and pass instanceId
       recurringEventInstanceId = eventId;
       // The target event should be the base event for the backend logic
@@ -378,10 +378,9 @@ const UpcomingEvents = (): JSX.Element => {
           const searchValue = searchTerm.toLowerCase();
           if (searchBy === 'title') {
             return event.title.toLowerCase().includes(searchValue);
-          } else if (searchBy === 'location') {
+          } else {
             return event.location?.toLowerCase().includes(searchValue);
           }
-          return true;
         });
       }
 
