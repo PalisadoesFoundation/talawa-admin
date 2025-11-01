@@ -43,7 +43,7 @@ import { toast } from 'react-toastify';
 import { generate } from '@pdfme/generator';
 import { tagTemplate } from '../../tagTemplate';
 import { useTranslation } from 'react-i18next';
-import { GenerateProps } from '@pdfme/common';
+import type { GenerateProps } from '@pdfme/common';
 
 export const TableRow = ({
   data,

@@ -3,7 +3,12 @@
   "extends": "@docusaurus/tsconfig",
   "compilerOptions": {
     "baseUrl": ".",
-    "strict": true
+    "strict": true,
+    "types": [
+      "@docusaurus/types",
+      "@docusaurus/module-type-aliases",
+      "@docusaurus/theme-classic"
+    ]
   },
   "include": ["src", "*.config.ts"],
   "exclude": ["node_modules", "build"]

@@ -17,11 +17,12 @@ function ActionButton({
   children,
   buttonClassName,
   ariaLabel,
+  rel,
 }: IActionButtonProps) {
   return (
     <a
       className={`ActionButton ${type}${buttonClassName ? ` ${buttonClassName}` : ''}`}
-      rel={target === '_blank' ? 'noopener noreferrer' : undefined}
+      rel={rel ?? (target === '_blank' ? 'noopener noreferrer' : undefined)}
       href={href}
       target={target}
       role="button"
