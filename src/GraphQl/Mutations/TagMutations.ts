@@ -77,7 +77,7 @@ export const REMOVE_USER_TAG = gql`
 export const ADD_PEOPLE_TO_TAG = gql`
   mutation AddPeopleToUserTag($tagId: ID!, $userIds: [ID!]!) {
     addPeopleToUserTag(input: { tagId: $tagId, userIds: $userIds }) {
-      _id
+      id
     }
   }
 `;
@@ -94,7 +94,7 @@ export const ASSIGN_TO_TAGS = gql`
     assignToUserTags(
       input: { currentTagId: $currentTagId, selectedTagIds: $selectedTagIds }
     ) {
-      _id
+      id
     }
   }
 `;
@@ -111,7 +111,7 @@ export const REMOVE_FROM_TAGS = gql`
     removeFromUserTags(
       input: { currentTagId: $currentTagId, selectedTagIds: $selectedTagIds }
     ) {
-      _id
+      id
     }
   }
 `;

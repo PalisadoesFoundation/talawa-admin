@@ -1527,7 +1527,7 @@ interface InterfaceTagMembersData {
 /**
  * @interface InterfaceQueryOrganizationUserTags
  * @description Defines the structure for a query result containing organization user tags.
- * @property {InterfaceTagNodeData} tags - The user tags data.
+ * @property {InterfaceTagNodeData} tags - The tags data.
  */
 export interface InterfaceQueryOrganizationUserTags {
   tags: InterfaceTagNodeData;

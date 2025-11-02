@@ -250,7 +250,7 @@ export const MOCKS = [
     result: {
       data: {
         assignToUserTags: {
-          _id: '1',
+          id: '1',
         },
       },
     },
@@ -266,7 +266,7 @@ export const MOCKS = [
     result: {
       data: {
         removeFromUserTags: {
-          _id: '1',
+          id: '1',
         },
       },
     },

@@ -70,7 +70,7 @@ interface InterfacePaginationVariables {
 // 3. Generic fetch more options
 interface InterfaceBaseFetchMoreOptions<T> {
   variables: InterfacePaginationVariables;
-  updateQuery?: (prev: T, options: { fetchMoreResult: T }) => T;
+  updateQuery?: (prev: T, options: { fetchMoreResult?: T | null }) => T;
 }
 
 // 4. Query interfaces
