@@ -387,13 +387,13 @@ describe('Organisation Tags Page', () => {
     });
     await userEvent.click(screen.getByTestId('clearSelectedTag2'));
 
-    // Click tag2 checkbox again to deselect (when already unselected)
+    // Select tag2 again after clearing
     await waitFor(() => {
       expect(screen.getByTestId('checkTag2')).toBeInTheDocument();
     });
     await userEvent.click(screen.getByTestId('checkTag2'));
 
-    // Deselect tag2 again through checkbox
+    // Deselect tag2 through checkbox
     await userEvent.click(screen.getByTestId('checkTag2'));
   });
 
