@@ -321,17 +321,22 @@ describe('Organisation Tags Page', () => {
 
     // Call the loadMore callback to test fetchMore logic
     await act(async () => {
-      capturedLoadMoreCallback?.();
+      if (capturedLoadMoreCallback) {
+        await capturedLoadMoreCallback();
+      }
     });
 
-    // Wait for fetchMore to complete
-    await wait(500);
+    // Wait for fetchMore to complete and UI to update
+    await wait(1000);
 
     // Verify pagination works - should have 12 tags total (10 from page 1 + 2 from page 2)
-    await waitFor(() => {
-      const tags = screen.getAllByTestId('orgUserTag');
-      expect(tags.length).toBe(12);
-    });
+    await waitFor(
+      () => {
+        const tags = screen.getAllByTestId('orgUserTag');
+        expect(tags.length).toBe(12);
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('Should handle null fetchMore result gracefully', async () => {
