@@ -489,7 +489,7 @@ export const MOCKS_WITH_NULL_FETCH_MORE_RESULT = [
       },
     },
     result: {
-      data: null, // Simulate null fetchMoreResult to test line 114
+      data: null, // Simulate null fetchMoreResult to test null-data handling in fetchMore callback
     },
   },
 ];

@@ -100,7 +100,9 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         after: orgUserTagsData?.organization?.tags?.pageInfo?.endCursor,
       },
       updateQuery: (prevResult, { fetchMoreResult }) => {
-        if (!fetchMoreResult) return prevResult;
+        if (!fetchMoreResult?.organization || !prevResult.organization) {
+          return prevResult;
+        }
 
         return {
           organization: {

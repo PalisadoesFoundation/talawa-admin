@@ -462,6 +462,8 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByText('userTag 1')).toBeInTheDocument();
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
+      // Verify no error toast was triggered when fetchMore returns null
+      expect(toast.error).not.toHaveBeenCalled();
     });
   });
 

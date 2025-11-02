@@ -54,6 +54,10 @@ vi.mock('react-toastify', () => ({
 // Capture the loadMore callback from InfiniteScroll for testing
 let capturedLoadMoreCallback: (() => void) | null = null;
 
+beforeEach(() => {
+  capturedLoadMoreCallback = null;
+});
+
 vi.mock('react-infinite-scroll-component', async () => {
   const actual = await vi.importActual<
     typeof import('react-infinite-scroll-component')
