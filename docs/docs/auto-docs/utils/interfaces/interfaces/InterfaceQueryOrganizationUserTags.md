@@ -20,4 +20,4 @@ Defines the structure for a query result containing organization user tags.
 
 Defined in: [src/utils/interfaces.ts:1533](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1533)
 
-The user tags data.
+The tags data.
