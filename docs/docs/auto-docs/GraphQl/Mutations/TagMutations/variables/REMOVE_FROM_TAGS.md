@@ -6,7 +6,7 @@
 
 > `const` **REMOVE\_FROM\_TAGS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/TagMutations.ts:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L109)
+Defined in: [src/GraphQl/Mutations/TagMutations.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L108)
 
 GraphQL mutation to remove people from multiple tags.
 

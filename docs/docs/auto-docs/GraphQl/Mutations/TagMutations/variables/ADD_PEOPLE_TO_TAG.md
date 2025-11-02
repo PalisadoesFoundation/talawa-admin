@@ -6,7 +6,7 @@
 
 > `const` **ADD\_PEOPLE\_TO\_TAG**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/TagMutations.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L77)
+Defined in: [src/GraphQl/Mutations/TagMutations.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L76)
 
 GraphQL mutation to add people to tag.
 
