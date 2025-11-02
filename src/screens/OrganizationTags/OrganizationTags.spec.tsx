@@ -458,13 +458,18 @@ describe('Organisation Tags Page', () => {
     await wait();
 
     // Component should still render after null fetchMoreResult
-    // Original tags should still be visible (no crash/error)
     await waitFor(() => {
       expect(screen.getByText('userTag 1')).toBeInTheDocument();
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
-      // Verify no error toast was triggered when fetchMore returns null
-      expect(toast.error).not.toHaveBeenCalled();
     });
+
+    // Verify no new tags were appended  
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagNode')).toHaveLength(10);
+    });
+
+    // No error toast should be triggered
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   test('should handle undefined organization in fetchMoreResult', async () => {
@@ -499,6 +504,14 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByText('userTag 1')).toBeInTheDocument();
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
+
+    // Verify stable tag count
+    await waitFor(() => {
+      expect(screen.getAllByTestId('tagNode')).toHaveLength(10);
+    });
+
+    // No error toast should be triggered
+    expect(toast.error).not.toHaveBeenCalled();
   });
 
   test('should handle null tags edges gracefully', async () => {
@@ -514,5 +527,8 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByText(translations.createTag)).toBeInTheDocument();
     });
+
+    // No error toast should be triggered
+    expect(toast.error).not.toHaveBeenCalled();
   });
 });
