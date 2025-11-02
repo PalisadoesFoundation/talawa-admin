@@ -233,7 +233,9 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('Renders error component when when subTags query is unsuccessful', async () => {
+  test(
+    'Renders error component when when subTags query is unsuccessful',
+    async () => {
     const { getByText } = renderTagActionsModal(props[0], link3);
 
     await wait();
@@ -249,9 +251,12 @@ describe('Organisation Tags Page', () => {
         getByText(translations.errorOccurredWhileLoadingSubTags),
       ).toBeInTheDocument();
     });
-  });
+  },
+  );
 
-  test('searchs for tags where the name matches the provided search input', async () => {
+  test(
+    'searchs for tags where the name matches the provided search input',
+    async () => {
     renderTagActionsModal(props[0], link);
 
     await wait();
@@ -270,7 +275,8 @@ describe('Organisation Tags Page', () => {
       const tags = screen.getAllByTestId('orgUserTag');
       expect(tags.length).toEqual(2);
     });
-  });
+  },
+  );
 
   test('Renders tags list with scrollable container', async () => {
     const { getByText } = renderTagActionsModal(props[0], link);
@@ -296,13 +302,16 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByTestId(`checkTag${i}`)).toBeInTheDocument();
     }
 
-    // Note: InfiniteScroll's scroll-to-load-more behavior cannot be reliably tested in JSDOM
-    // as it uses IntersectionObserver and getBoundingClientRect which are not accurately
-    // simulated in test environment. The fetchMore pagination logic is thoroughly tested
+    // Note: InfiniteScroll's scroll-to-load-more behavior cannot be
+    // reliably tested in JSDOM as it uses IntersectionObserver and
+    // getBoundingClientRect which are not accurately simulated in test
+    // environment. The fetchMore pagination logic is thoroughly tested
     // in OrganizationTags tests which use the same implementation.
   });
 
-  test('Should call loadMore function when more data is available', async () => {
+  test(
+    'Should call loadMore function when more data is available',
+    async () => {
     renderTagActionsModal(props[0], link);
 
     await wait();
@@ -341,7 +350,8 @@ describe('Organisation Tags Page', () => {
         screen.getAllByTestId('orgUserTag').length,
       ).toBeGreaterThanOrEqual(10);
     });
-  });
+  },
+  );
 
   test('Should handle null fetchMore result gracefully', async () => {
     renderTagActionsModal(props[0], link5);
@@ -406,7 +416,9 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('checkTag2'));
   });
 
-  test('fetches and lists the child tags and then selects and deselects them', async () => {
+  test(
+    'fetches and lists the child tags and then selects and deselects them',
+    async () => {
     renderTagActionsModal(props[0], link);
 
     await wait();
@@ -448,7 +460,8 @@ describe('Organisation Tags Page', () => {
     });
     await userEvent.click(screen.getByTestId('checkTagsubTag2'));
 
-    // Try to uncheck the ancestor tag (tag1) directly - this should hit early return
+    // Try to uncheck the ancestor tag (tag1) directly
+    // - this should hit early return
     await waitFor(() => {
       expect(screen.getByTestId('checkTag1')).toBeInTheDocument();
     });
@@ -470,7 +483,8 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByTestId('expandSubTags1')).toBeInTheDocument();
     });
     await userEvent.click(screen.getByTestId('expandSubTags1'));
-  });
+  },
+  );
 
   test('Toasts error when no tag is selected while assigning', async () => {
     renderTagActionsModal(props[0], link);
@@ -486,7 +500,9 @@ describe('Organisation Tags Page', () => {
       expect(toast.error).toHaveBeenCalledWith(translations.noTagSelected);
     });
   });
-  test('Toasts error when something wrong happen while assigning/removing tag', async () => {
+  test(
+    'Toasts error when something wrong happen while assigning/removing tag',
+    async () => {
     renderTagActionsModal(props[0], link4);
     await wait();
 
@@ -497,7 +513,8 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
     });
-  });
+  },
+  );
 
   test('Successfully assigns to tags', async () => {
     renderTagActionsModal(props[0], link);
