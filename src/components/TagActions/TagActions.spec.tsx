@@ -327,10 +327,10 @@ describe('Organisation Tags Page', () => {
     // Wait for fetchMore to complete
     await wait(500);
 
-    // Verify pagination works - tags should still be rendered
+    // Verify pagination works - should have 12 tags total (10 from page 1 + 2 from page 2)
     await waitFor(() => {
       const tags = screen.getAllByTestId('orgUserTag');
-      expect(tags.length).toBeGreaterThanOrEqual(10);
+      expect(tags.length).toBe(12);
     });
   });
 
