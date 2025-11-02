@@ -175,6 +175,8 @@ const Campaigns = (): JSX.Element => {
       });
 
       setCampaigns(sortedCampaigns);
+    } else {
+      setCampaigns([]);
     }
   }, [campaignData, searchTerm, sortBy]);
 
