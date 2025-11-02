@@ -174,9 +174,9 @@ function ManageTag(): JSX.Element {
         {
           fetchMoreResult,
         }: {
-          fetchMoreResult: {
-            getAssignedUsers: InterfaceQueryUserTagsAssignedMembers;
-          };
+          fetchMoreResult?:
+            | { getAssignedUsers: InterfaceQueryUserTagsAssignedMembers }
+            | null;
         },
       ) => {
         if (!fetchMoreResult) return prevResult;

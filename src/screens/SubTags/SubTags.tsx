@@ -124,7 +124,9 @@ function SubTags(): JSX.Element {
         {
           fetchMoreResult,
         }: {
-          fetchMoreResult?: { getChildTags: InterfaceQueryUserTagChildTags };
+          fetchMoreResult?:
+            | { getChildTags: InterfaceQueryUserTagChildTags }
+            | null;
         },
       ) => {
         if (!fetchMoreResult) return prevResult;
