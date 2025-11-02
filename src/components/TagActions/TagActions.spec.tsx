@@ -28,6 +28,7 @@ import {
   MOCKS_ERROR_ORGANIZATION_TAGS_QUERY,
   MOCKS_ERROR_SUBTAGS_QUERY,
   MOCKS_WITH_NULL_FETCH_MORE,
+  MOCKS_WITH_UNDEFINED_PAGEINFO,
 } from './TagActionsMocks';
 import type { TFunction } from 'i18next';
 
@@ -36,6 +37,7 @@ const link2 = new StaticMockLink(MOCKS_ERROR_ORGANIZATION_TAGS_QUERY, true);
 const link3 = new StaticMockLink(MOCKS_ERROR_SUBTAGS_QUERY, true);
 const link4 = new StaticMockLink(MOCKS_ERROR_ASSIGN_OR_REMOVAL_TAGS);
 const link5 = new StaticMockLink(MOCKS_WITH_NULL_FETCH_MORE, true);
+const link6 = new StaticMockLink(MOCKS_WITH_UNDEFINED_PAGEINFO, true);
 async function wait(ms = 500): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -531,5 +533,24 @@ describe('Organisation Tags Page', () => {
         translations.successfullyRemovedFromTags,
       );
     });
+  });
+
+  test('Should handle undefined pageInfo gracefully', async () => {
+    renderTagActionsModal(props[0], link6);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByText(translations.assign)).toBeInTheDocument();
+    });
+
+    // Verify tags are loaded even with undefined pageInfo
+    await waitFor(() => {
+      expect(screen.getAllByTestId('orgUserTag').length).toBe(10);
+    });
+
+    // Verify hasMore defaults to false when pageInfo is undefined
+    // This is tested by checking that the component renders without errors
+    expect(screen.getByTestId('scrollableDiv')).toBeInTheDocument();
   });
 });

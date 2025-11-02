@@ -391,3 +391,29 @@ export const MOCKS_WITH_NULL_FETCH_MORE = [
   },
   ...MOCKS.slice(2),
 ];
+
+export const MOCKS_WITH_UNDEFINED_PAGEINFO = [
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
+      variables: {
+        input: { id: '123' },
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          tags: {
+            edges: userTagEdgesFirst,
+            pageInfo: undefined, // Test undefined pageInfo to trigger ?? false fallback
+            totalCount: 10,
+          },
+        },
+      },
+    },
+  },
+  ...MOCKS.slice(1),
+];
