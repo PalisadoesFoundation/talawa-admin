@@ -201,14 +201,24 @@ describe('Testing CategoryViewModal Component', () => {
 
   it('should display correct category name for different categories', () => {
     // Test with disabled category
-    const { unmount } = renderCategoryViewModal({
+    const { rerender } = renderCategoryViewModal({
       category: mockDisabledCategory,
     });
     expect(screen.getByDisplayValue('Disabled Category')).toBeInTheDocument();
 
-    // Unmount and test with long description category
-    unmount();
-    renderCategoryViewModal({ category: mockCategoryWithLongDescription });
+    // Rerender with long description category
+    rerender(
+      <Provider store={store}>
+        <MemoryRouter>
+          <I18nextProvider i18n={i18n}>
+            <CategoryViewModal
+              {...defaultProps}
+              category={mockCategoryWithLongDescription}
+            />
+          </I18nextProvider>
+        </MemoryRouter>
+      </Provider>,
+    );
     expect(
       screen.getByDisplayValue('Category with Long Description'),
     ).toBeInTheDocument();
@@ -256,22 +266,36 @@ describe('Testing CategoryViewModal Component', () => {
 
   it('should maintain consistent styling across different category states', () => {
     // Test active category styling
-    const { unmount } = renderCategoryViewModal({
+    const { rerender } = renderCategoryViewModal({
       category: mockActiveCategory,
     });
     let statusField = screen.getByRole('textbox', { name: /status/i });
+    // Direct SVG access needed to verify color indicator - no accessible alternative available
     let circleIcon = statusField.parentElement?.querySelector('svg');
     // Verify distinct colors for active/disabled states
+    // Note: These specific RGB values are implementation details and may change
     expect(getComputedStyle(circleIcon as Element).color).toBe(
       'rgb(76, 175, 80)',
     );
 
-    // Unmount and re-render with disabled category
-    unmount();
-    renderCategoryViewModal({ category: mockDisabledCategory });
+    // Rerender with disabled category
+    rerender(
+      <Provider store={store}>
+        <MemoryRouter>
+          <I18nextProvider i18n={i18n}>
+            <CategoryViewModal
+              {...defaultProps}
+              category={mockDisabledCategory}
+            />
+          </I18nextProvider>
+        </MemoryRouter>
+      </Provider>,
+    );
     statusField = screen.getByRole('textbox', { name: /status/i });
+    // Direct SVG access needed to verify color indicator - no accessible alternative available
     circleIcon = statusField.parentElement?.querySelector('svg');
     // Verify distinct colors for active/disabled states
+    // Note: These specific RGB values are implementation details and may change
     expect(getComputedStyle(circleIcon as Element).color).toBe(
       'rgb(255, 82, 82)',
     );
