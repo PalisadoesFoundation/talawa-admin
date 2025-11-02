@@ -233,7 +233,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('Renders error component when when subTags query is unsuccessful', async () => {
+  test('Renders error when subTags query fails', async () => {
     const { getByText } = renderTagActionsModal(props[0], link3);
 
     await wait();
@@ -251,7 +251,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('searchs for tags where the name matches the provided search input', async () => {
+  test('Searches tags by name from search input', async () => {
     renderTagActionsModal(props[0], link);
 
     await wait();
@@ -303,7 +303,7 @@ describe('Organisation Tags Page', () => {
     // in OrganizationTags tests which use the same implementation.
   });
 
-  test('Should call loadMore function when more data is available', async () => {
+  test('Calls loadMore when more data is available', async () => {
     renderTagActionsModal(props[0], link);
 
     await wait();
@@ -338,9 +338,9 @@ describe('Organisation Tags Page', () => {
     // Verify component remains stable after fetchMore
     await waitFor(() => {
       expect(screen.getByText(translations.assign)).toBeInTheDocument();
-      expect(
-        screen.getAllByTestId('orgUserTag').length,
-      ).toBeGreaterThanOrEqual(10);
+      expect(screen.getAllByTestId('orgUserTag').length).toBeGreaterThanOrEqual(
+        10,
+      );
     });
   });
 
@@ -407,7 +407,7 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('checkTag2'));
   });
 
-  test('fetches and lists the child tags and then selects and deselects them', async () => {
+  test('Fetches child tags and handles selection/deselection', async () => {
     renderTagActionsModal(props[0], link);
 
     await wait();
@@ -488,7 +488,7 @@ describe('Organisation Tags Page', () => {
       expect(toast.error).toHaveBeenCalledWith(translations.noTagSelected);
     });
   });
-  test('Toasts error when something wrong happen while assigning/removing tag', async () => {
+  test('Shows error toast on assign/remove failure', async () => {
     renderTagActionsModal(props[0], link4);
     await wait();
 
