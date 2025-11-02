@@ -810,6 +810,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
     // Rate limit errors should be suppressed (not logged)
     // The component should still render without crashing
+    expect(consoleWarnSpy).not.toHaveBeenCalled();
 
     consoleWarnSpy.mockRestore();
   });
