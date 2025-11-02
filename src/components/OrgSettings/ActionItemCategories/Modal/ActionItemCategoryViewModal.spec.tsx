@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { MemoryRouter } from 'react-router';
 import { store } from 'state/store';
 import i18n from 'utils/i18nForTest';
 import type { ICategoryViewModalProps } from './ActionItemCategoryViewModal';
@@ -79,11 +79,11 @@ const renderCategoryViewModal = (
 
   return render(
     <Provider store={store}>
-      <BrowserRouter>
+      <MemoryRouter>
         <I18nextProvider i18n={i18n}>
           <CategoryViewModal {...finalProps} />
         </I18nextProvider>
-      </BrowserRouter>
+      </MemoryRouter>
     </Provider>,
   );
 };
@@ -97,13 +97,18 @@ describe('Testing CategoryViewModal Component', () => {
     renderCategoryViewModal();
 
     expect(screen.getByText(translations.categoryDetails)).toBeInTheDocument();
-    expect(screen.getByTestId('categoryNameView')).toHaveValue(
-      'Active Category',
-    );
-    expect(screen.getByTestId('categoryDescriptionView')).toHaveValue(
+
+    // MUI TextField wraps the actual input/textarea; use querySelector to access them
+    const nameField = screen.getByTestId('categoryNameView');
+    expect(nameField.querySelector('input')).toHaveValue('Active Category');
+
+    const descriptionField = screen.getByTestId('categoryDescriptionView');
+    expect(descriptionField.querySelector('textarea')).toHaveValue(
       'This is an active category with description',
     );
-    expect(screen.getByTestId('categoryStatusView')).toHaveValue(
+
+    const statusField = screen.getByTestId('categoryStatusView');
+    expect(statusField.querySelector('input')).toHaveValue(
       translations.active || 'Active',
     );
   });
@@ -112,36 +117,49 @@ describe('Testing CategoryViewModal Component', () => {
     renderCategoryViewModal({ category: mockActiveCategory });
 
     const statusField = screen.getByTestId('categoryStatusView');
-    expect(statusField).toHaveValue(translations.active || 'Active');
-
-    // Check if the input has the correct styling for active status
+    // MUI TextField wraps the actual input; use querySelector to access it
     const input = statusField.querySelector('input');
-    expect(input).toHaveStyle({ 'webkit-text-fill-color': '#4caf50' });
+    expect(input).toHaveValue(translations.active || 'Active');
+
+    // Check if the parent container has the correct styling for active status
+    const container = statusField.querySelector('.MuiInputBase-root');
+    // Use computed style for robustness in tests
+    expect(getComputedStyle(container as Element).color).toBe(
+      'rgb(76, 175, 80)',
+    );
   });
 
   it('should display disabled status with red color for disabled category', () => {
     renderCategoryViewModal({ category: mockDisabledCategory });
 
     const statusField = screen.getByTestId('categoryStatusView');
-    expect(statusField).toHaveValue(translations.disabled || 'Disabled');
-
-    // Check if the input has the correct styling for disabled status
+    // MUI TextField wraps the actual input; use querySelector to access it
     const input = statusField.querySelector('input');
-    expect(input).toHaveStyle({ 'webkit-text-fill-color': '#ff5252' });
+    expect(input).toHaveValue(translations.disabled || 'Disabled');
+
+    // Check if the parent container has the correct styling for disabled status
+    const container = statusField.querySelector('.MuiInputBase-root');
+    // Use computed style for robustness in tests
+    expect(getComputedStyle(container as Element).color).toBe(
+      'rgb(255, 82, 82)',
+    );
   });
 
   it('should display fallback text for empty description', () => {
     renderCategoryViewModal({ category: mockDisabledCategory });
 
+    // MUI TextField wraps the actual textarea; use querySelector to access it
     const descriptionField = screen.getByTestId('categoryDescriptionView');
-    expect(descriptionField).toHaveValue('No description provided');
+    expect(descriptionField.querySelector('textarea')).toHaveValue(
+      'No description provided',
+    );
   });
 
   it('should handle long descriptions properly', () => {
     renderCategoryViewModal({ category: mockCategoryWithLongDescription });
 
     const descriptionField = screen.getByTestId('categoryDescriptionView');
-    expect(descriptionField).toHaveValue(
+    expect(descriptionField.querySelector('textarea')).toHaveValue(
       mockCategoryWithLongDescription.description,
     );
 
@@ -190,30 +208,19 @@ describe('Testing CategoryViewModal Component', () => {
 
   it('should display correct category name for different categories', () => {
     // Test with disabled category
-    const { rerender } = renderCategoryViewModal({
+    const { unmount } = renderCategoryViewModal({
       category: mockDisabledCategory,
     });
-    expect(screen.getByTestId('categoryNameView')).toHaveValue(
-      'Disabled Category',
-    );
+    expect(
+      screen.getByTestId('categoryNameView').querySelector('input'),
+    ).toHaveValue('Disabled Category');
 
-    // Test with long description category
-    rerender(
-      <Provider store={store}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <CategoryViewModal
-              isOpen={true}
-              hide={vi.fn()}
-              category={mockCategoryWithLongDescription}
-            />
-          </I18nextProvider>
-        </BrowserRouter>
-      </Provider>,
-    );
-    expect(screen.getByTestId('categoryNameView')).toHaveValue(
-      'Category with Long Description',
-    );
+    // Unmount and test with long description category
+    unmount();
+    renderCategoryViewModal({ category: mockCategoryWithLongDescription });
+    expect(
+      screen.getByTestId('categoryNameView').querySelector('input'),
+    ).toHaveValue('Category with Long Description');
   });
 
   it('should have correct modal structure and styling', () => {
@@ -224,45 +231,57 @@ describe('Testing CategoryViewModal Component', () => {
     expect(screen.getByTestId('categoryViewModalCloseBtn')).toBeInTheDocument();
 
     // Check form structure
-    const form = screen.getByRole('form');
+    const form = document.querySelector('form');
     expect(form).toBeInTheDocument();
     expect(form).toHaveClass('p-3');
   });
 
   it('should handle category with minimal required fields', () => {
+    // include all required fields from the interface to avoid type regressions
     const minimalCategory: IActionItemCategoryInfo = {
       id: 'minimal',
       name: 'Minimal Category',
       description: '',
       isDisabled: false,
       createdAt: '2024-01-01T00:00:00Z',
+      updatedAt: '2024-01-01T00:00:00Z',
+      creatorId: 'test-user',
       organizationId: 'org123',
     };
 
     renderCategoryViewModal({ category: minimalCategory });
 
-    expect(screen.getByTestId('categoryNameView')).toHaveValue(
-      'Minimal Category',
-    );
-    expect(screen.getByTestId('categoryDescriptionView')).toHaveValue(
-      'No description provided',
-    );
-    expect(screen.getByTestId('categoryStatusView')).toHaveValue(
-      translations.active || 'Active',
-    );
+    expect(
+      screen.getByTestId('categoryNameView').querySelector('input'),
+    ).toHaveValue('Minimal Category');
+    expect(
+      screen.getByTestId('categoryDescriptionView').querySelector('textarea'),
+    ).toHaveValue('No description provided');
+    expect(
+      screen.getByTestId('categoryStatusView').querySelector('input'),
+    ).toHaveValue(translations.active || 'Active');
   });
 
   it('should maintain consistent styling across different category states', () => {
     // Test active category styling
-    renderCategoryViewModal({ category: mockActiveCategory });
+    const { unmount } = renderCategoryViewModal({
+      category: mockActiveCategory,
+    });
     let statusField = screen.getByTestId('categoryStatusView');
     let circleIcon = statusField.querySelector('svg');
-    expect(circleIcon).toHaveStyle({ color: '#4caf50' });
+    // check computed style color to avoid hex/rgb mismatches
+    expect(getComputedStyle(circleIcon as Element).color).toBe(
+      'rgb(76, 175, 80)',
+    );
 
-    // Re-render with disabled category
+    // Unmount and re-render with disabled category
+    unmount();
     renderCategoryViewModal({ category: mockDisabledCategory });
     statusField = screen.getByTestId('categoryStatusView');
     circleIcon = statusField.querySelector('svg');
-    expect(circleIcon).toHaveStyle({ color: '#ff5252' });
+    // check computed style color to avoid hex/rgb mismatches
+    expect(getComputedStyle(circleIcon as Element).color).toBe(
+      'rgb(255, 82, 82)',
+    );
   });
 });
