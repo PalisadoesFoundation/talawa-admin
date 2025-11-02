@@ -1,11 +1,10 @@
 import gql from 'graphql-tag';
 
 /**
- * GraphQL mutation to create a user tag.
+ * GraphQL mutation to create a tag.
  *
  * @param name - Name of the tag.
- * @param tagColor - Color of the tag.
- * @param parentTagId - Id of the parent tag.
+ * @param folderId - Id of the containing folder (optional).
  * @param organizationId - Organization to which the tag belongs.
  */
 
@@ -24,10 +23,10 @@ export const CREATE_USER_TAG = gql`
 `;
 
 /**
- * GraphQL mutation to unsssign a user tag from a user.
+ * GraphQL mutation to unassign a tag from a user.
  *
- * @param tagId - Id the tag.
- * @param userId - Id of the user to be unassigned.
+ * @param tagId - Id of the tag.
+ * @param assigneeId - Id of the user to be unassigned.
  */
 
 export const UNASSIGN_USER_TAG = gql`
@@ -41,7 +40,7 @@ export const UNASSIGN_USER_TAG = gql`
 /**
  * GraphQL mutation to update a user tag.
  *
- * @param tagId - Id the tag.
+ * @param id - Id of the tag.
  * @param name - Updated name of the tag.
  */
 
