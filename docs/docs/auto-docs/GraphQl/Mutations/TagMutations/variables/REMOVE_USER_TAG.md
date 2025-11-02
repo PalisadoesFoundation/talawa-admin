@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -12,4 +12,4 @@ GraphQL mutation to remove a user tag.
 
 ## Param
 
-Id of the tag to be removed .
+Id of the tag to be removed.

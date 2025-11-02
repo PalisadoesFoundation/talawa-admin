@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:79](https://github.com/Palisadoe
 
 #### organization
 
-> **organization**: [`InterfaceQueryOrganizationUserTags`](../../interfaces/interfaces/InterfaceQueryOrganizationUserTags.md)
+> **organization**: [`InterfaceQueryOrganizationTags`](../../interfaces/interfaces/InterfaceQueryOrganizationTags.md)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:82](https://github.com/Palisadoe
 
 ##### options
 
-`InterfaceBaseFetchMoreOptions`\<\{ `organization`: [`InterfaceQueryOrganizationUserTags`](../../interfaces/interfaces/InterfaceQueryOrganizationUserTags.md); \}\>
+`InterfaceBaseFetchMoreOptions`\<\{ `organization`: [`InterfaceQueryOrganizationTags`](../../interfaces/interfaces/InterfaceQueryOrganizationTags.md); \}\>
 
 #### Returns
 

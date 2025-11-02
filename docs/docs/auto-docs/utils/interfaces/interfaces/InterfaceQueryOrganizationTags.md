@@ -1,16 +1,16 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
-# Interface: InterfaceQueryOrganizationUserTags
+# Interface: InterfaceQueryOrganizationTags
 
 Defined in: [src/utils/interfaces.ts:1532](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1532)
 
-InterfaceQueryOrganizationUserTags
+InterfaceQueryOrganizationTags
 
 ## Description
 
-Defines the structure for a query result containing organization user tags.
+Defines the structure for a query result containing organization tags.
 
 ## Properties
 
