@@ -280,8 +280,9 @@ describe('Organisation Tags Page', () => {
     });
 
     // Verify initial tags are loaded
-    const initialTagsDataLength = screen.getAllByTestId('orgUserTag').length;
-    expect(initialTagsDataLength).toBe(10);
+    await waitFor(() => {
+      expect(screen.getAllByTestId('orgUserTag').length).toBe(10);
+    });
 
     // Verify scrollable container exists with proper styling
     const scrollableDiv = screen.getByTestId('scrollableDiv');
@@ -309,22 +310,22 @@ describe('Organisation Tags Page', () => {
     });
 
     // Verify initial tags are loaded
-    const initialTags = screen.getAllByTestId('orgUserTag');
-    expect(initialTags.length).toBe(10);
+    await waitFor(() => {
+      expect(screen.getAllByTestId('orgUserTag').length).toBe(10);
+    });
+
+    // Ensure callback was captured
+    expect(capturedLoadMoreCallback).toBeTruthy();
 
     // Call the loadMore callback to test fetchMore logic
-    if (capturedLoadMoreCallback) {
-      const callback = capturedLoadMoreCallback;
-      act(() => {
-        callback();
-      });
+    await act(async () => {
+      capturedLoadMoreCallback?.();
+    });
 
-      // Wait for fetchMore to complete and verify pagination works
-      await wait(500);
-
-      // The callback was executed, covering the loadMoreUserTags function
-      expect(initialTags.length).toBeGreaterThanOrEqual(10);
-    }
+    // Verify pagination works - should have 12 tags after fetchMore
+    await waitFor(() => {
+      expect(screen.getAllByTestId('orgUserTag').length).toBe(12);
+    });
   });
 
   test('Should handle null fetchMore result gracefully', async () => {
@@ -337,23 +338,22 @@ describe('Organisation Tags Page', () => {
     });
 
     // Verify initial tags are loaded
-    const initialTags = screen.getAllByTestId('orgUserTag');
-    expect(initialTags.length).toBe(10);
+    await waitFor(() => {
+      expect(screen.getAllByTestId('orgUserTag').length).toBe(10);
+    });
+
+    // Ensure callback was captured
+    expect(capturedLoadMoreCallback).toBeTruthy();
 
     // Call the loadMore callback which will return null
-    if (capturedLoadMoreCallback) {
-      const callback = capturedLoadMoreCallback;
-      act(() => {
-        callback();
-      });
+    await act(async () => {
+      capturedLoadMoreCallback?.();
+    });
 
-      // Wait for fetchMore to complete
-      await wait(500);
-
-      // Should still have 10 tags (no new tags added due to null response)
-      const tagsAfterNull = screen.getAllByTestId('orgUserTag');
-      expect(tagsAfterNull.length).toBe(10);
-    }
+    // Should still have 10 tags (no new tags added due to null response)
+    await waitFor(() => {
+      expect(screen.getAllByTestId('orgUserTag').length).toBe(10);
+    });
   });
 
   test('Selects and deselects tags', async () => {
