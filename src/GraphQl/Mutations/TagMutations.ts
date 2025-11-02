@@ -55,7 +55,7 @@ export const UPDATE_USER_TAG = gql`
 /**
  * GraphQL mutation to remove a user tag.
  *
- * @param id - Id of the tag to be removed .
+ * @param id - Id of the tag to be removed.
  */
 
 export const REMOVE_USER_TAG = gql`
