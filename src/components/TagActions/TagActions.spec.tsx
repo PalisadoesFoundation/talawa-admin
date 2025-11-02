@@ -233,50 +233,44 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test(
-    'Renders error component when when subTags query is unsuccessful',
-    async () => {
-      const { getByText } = renderTagActionsModal(props[0], link3);
+  test('Renders error component when when subTags query is unsuccessful', async () => {
+    const { getByText } = renderTagActionsModal(props[0], link3);
 
-      await wait();
+    await wait();
 
-      // expand tag 1 to list its subtags
-      await waitFor(() => {
-        expect(screen.getByTestId('expandSubTags1')).toBeInTheDocument();
-      });
-      await userEvent.click(screen.getByTestId('expandSubTags1'));
+    // expand tag 1 to list its subtags
+    await waitFor(() => {
+      expect(screen.getByTestId('expandSubTags1')).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getByTestId('expandSubTags1'));
 
-      await waitFor(() => {
-        expect(
-          getByText(translations.errorOccurredWhileLoadingSubTags),
-        ).toBeInTheDocument();
-      });
-    },
-  );
+    await waitFor(() => {
+      expect(
+        getByText(translations.errorOccurredWhileLoadingSubTags),
+      ).toBeInTheDocument();
+    });
+  });
 
-  test(
-    'searchs for tags where the name matches the provided search input',
-    async () => {
-      renderTagActionsModal(props[0], link);
+  test('searchs for tags where the name matches the provided search input', async () => {
+    renderTagActionsModal(props[0], link);
 
-      await wait();
+    await wait();
 
-      await waitFor(() => {
-        expect(
-          screen.getByPlaceholderText(translations.searchByName),
-        ).toBeInTheDocument();
-      });
-      const input = screen.getByPlaceholderText(translations.searchByName);
-      fireEvent.change(input, { target: { value: 'searchUserTag' } });
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(translations.searchByName),
+      ).toBeInTheDocument();
+    });
+    const input = screen.getByPlaceholderText(translations.searchByName);
+    fireEvent.change(input, { target: { value: 'searchUserTag' } });
 
-      // should render the two searched tags from the mock data
-      // where name starts with "searchUserTag"
-      await waitFor(() => {
-        const tags = screen.getAllByTestId('orgUserTag');
-        expect(tags.length).toEqual(2);
-      });
-    },
-  );
+    // should render the two searched tags from the mock data
+    // where name starts with "searchUserTag"
+    await waitFor(() => {
+      const tags = screen.getAllByTestId('orgUserTag');
+      expect(tags.length).toEqual(2);
+    });
+  });
 
   test('Renders tags list with scrollable container', async () => {
     const { getByText } = renderTagActionsModal(props[0], link);
@@ -309,49 +303,46 @@ describe('Organisation Tags Page', () => {
     // in OrganizationTags tests which use the same implementation.
   });
 
-  test(
-    'Should call loadMore function when more data is available',
-    async () => {
-      renderTagActionsModal(props[0], link);
+  test('Should call loadMore function when more data is available', async () => {
+    renderTagActionsModal(props[0], link);
 
-      await wait();
+    await wait();
 
-      await waitFor(() => {
-        expect(screen.getByText(translations.assign)).toBeInTheDocument();
-      });
+    await waitFor(() => {
+      expect(screen.getByText(translations.assign)).toBeInTheDocument();
+    });
 
-      // Verify initial tags are loaded
-      await waitFor(() => {
-        expect(screen.getAllByTestId('orgUserTag').length).toBe(10);
-      });
+    // Verify initial tags are loaded
+    await waitFor(() => {
+      expect(screen.getAllByTestId('orgUserTag').length).toBe(10);
+    });
 
-      // Ensure callback was captured
-      expect(capturedLoadMoreCallback).toBeTruthy();
+    // Ensure callback was captured
+    expect(capturedLoadMoreCallback).toBeTruthy();
 
-      // Call the loadMore callback to test fetchMore logic
-      let fetchMoreError: Error | null = null;
-      await act(async () => {
-        try {
-          if (capturedLoadMoreCallback) {
-            await capturedLoadMoreCallback();
-          }
-        } catch (error) {
-          fetchMoreError = error as Error;
+    // Call the loadMore callback to test fetchMore logic
+    let fetchMoreError: Error | null = null;
+    await act(async () => {
+      try {
+        if (capturedLoadMoreCallback) {
+          await capturedLoadMoreCallback();
         }
-      });
+      } catch (error) {
+        fetchMoreError = error as Error;
+      }
+    });
 
-      // Verify fetchMore executed without errors
-      expect(fetchMoreError).toBeNull();
+    // Verify fetchMore executed without errors
+    expect(fetchMoreError).toBeNull();
 
-      // Verify component remains stable after fetchMore
-      await waitFor(() => {
-        expect(screen.getByText(translations.assign)).toBeInTheDocument();
-        expect(
-          screen.getAllByTestId('orgUserTag').length,
-        ).toBeGreaterThanOrEqual(10);
-      });
-    },
-  );
+    // Verify component remains stable after fetchMore
+    await waitFor(() => {
+      expect(screen.getByText(translations.assign)).toBeInTheDocument();
+      expect(
+        screen.getAllByTestId('orgUserTag').length,
+      ).toBeGreaterThanOrEqual(10);
+    });
+  });
 
   test('Should handle null fetchMore result gracefully', async () => {
     renderTagActionsModal(props[0], link5);
@@ -416,75 +407,72 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('checkTag2'));
   });
 
-  test(
-    'fetches and lists the child tags and then selects and deselects them',
-    async () => {
-      renderTagActionsModal(props[0], link);
+  test('fetches and lists the child tags and then selects and deselects them', async () => {
+    renderTagActionsModal(props[0], link);
 
-      await wait();
+    await wait();
 
-      // expand tag 1 to list its subtags
-      await waitFor(() => {
-        expect(screen.getByTestId('expandSubTags1')).toBeInTheDocument();
-      });
-      await userEvent.click(screen.getByTestId('expandSubTags1'));
+    // expand tag 1 to list its subtags
+    await waitFor(() => {
+      expect(screen.getByTestId('expandSubTags1')).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getByTestId('expandSubTags1'));
 
-      await waitFor(() => {
-        expect(screen.getByTestId('subTagsScrollableDiv1')).toBeInTheDocument();
-      });
-      // Find the infinite scroll div for subtags by test ID or another selector
-      const subTagsScrollableDiv1 = screen.getByTestId('subTagsScrollableDiv1');
+    await waitFor(() => {
+      expect(screen.getByTestId('subTagsScrollableDiv1')).toBeInTheDocument();
+    });
+    // Find the infinite scroll div for subtags by test ID or another selector
+    const subTagsScrollableDiv1 = screen.getByTestId('subTagsScrollableDiv1');
 
-      const initialTagsDataLength =
+    const initialTagsDataLength =
+      screen.getAllByTestId('orgUserSubTags').length;
+
+    // Set scroll position to the bottom
+    fireEvent.scroll(subTagsScrollableDiv1, {
+      target: { scrollY: subTagsScrollableDiv1.scrollHeight },
+    });
+
+    await waitFor(() => {
+      const finalTagsDataLength =
         screen.getAllByTestId('orgUserSubTags').length;
+      expect(finalTagsDataLength).toBeGreaterThan(initialTagsDataLength);
+    });
 
-      // Set scroll position to the bottom
-      fireEvent.scroll(subTagsScrollableDiv1, {
-        target: { scrollY: subTagsScrollableDiv1.scrollHeight },
-      });
+    // select subtags 1 & 2
+    await waitFor(() => {
+      expect(screen.getByTestId('checkTagsubTag1')).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getByTestId('checkTagsubTag1'));
 
-      await waitFor(() => {
-        const finalTagsDataLength =
-          screen.getAllByTestId('orgUserSubTags').length;
-        expect(finalTagsDataLength).toBeGreaterThan(initialTagsDataLength);
-      });
+    await waitFor(() => {
+      expect(screen.getByTestId('checkTagsubTag2')).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getByTestId('checkTagsubTag2'));
 
-      // select subtags 1 & 2
-      await waitFor(() => {
-        expect(screen.getByTestId('checkTagsubTag1')).toBeInTheDocument();
-      });
-      await userEvent.click(screen.getByTestId('checkTagsubTag1'));
+    // Try to uncheck the ancestor tag (tag1) directly
+    // - this should hit early return
+    await waitFor(() => {
+      expect(screen.getByTestId('checkTag1')).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getByTestId('checkTag1'));
 
-      await waitFor(() => {
-        expect(screen.getByTestId('checkTagsubTag2')).toBeInTheDocument();
-      });
-      await userEvent.click(screen.getByTestId('checkTagsubTag2'));
+    // deselect subtags 1 & 2
+    await waitFor(() => {
+      expect(screen.getByTestId('checkTagsubTag1')).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getByTestId('checkTagsubTag1'));
 
-      // Try to uncheck the ancestor tag (tag1) directly
-      // - this should hit early return
-      await waitFor(() => {
-        expect(screen.getByTestId('checkTag1')).toBeInTheDocument();
-      });
-      await userEvent.click(screen.getByTestId('checkTag1'));
+    await waitFor(() => {
+      expect(screen.getByTestId('checkTagsubTag2')).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getByTestId('checkTagsubTag2'));
 
-      // deselect subtags 1 & 2
-      await waitFor(() => {
-        expect(screen.getByTestId('checkTagsubTag1')).toBeInTheDocument();
-      });
-      await userEvent.click(screen.getByTestId('checkTagsubTag1'));
-
-      await waitFor(() => {
-        expect(screen.getByTestId('checkTagsubTag2')).toBeInTheDocument();
-      });
-      await userEvent.click(screen.getByTestId('checkTagsubTag2'));
-
-      // hide subtags of tag 1
-      await waitFor(() => {
-        expect(screen.getByTestId('expandSubTags1')).toBeInTheDocument();
-      });
-      await userEvent.click(screen.getByTestId('expandSubTags1'));
-    },
-  );
+    // hide subtags of tag 1
+    await waitFor(() => {
+      expect(screen.getByTestId('expandSubTags1')).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getByTestId('expandSubTags1'));
+  });
 
   test('Toasts error when no tag is selected while assigning', async () => {
     renderTagActionsModal(props[0], link);
@@ -500,21 +488,18 @@ describe('Organisation Tags Page', () => {
       expect(toast.error).toHaveBeenCalledWith(translations.noTagSelected);
     });
   });
-  test(
-    'Toasts error when something wrong happen while assigning/removing tag',
-    async () => {
-      renderTagActionsModal(props[0], link4);
-      await wait();
+  test('Toasts error when something wrong happen while assigning/removing tag', async () => {
+    renderTagActionsModal(props[0], link4);
+    await wait();
 
-      await waitFor(() => {
-        expect(screen.getByTestId('tagActionSubmitBtn')).toBeInTheDocument();
-      });
-      await userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalled();
-      });
-    },
-  );
+    await waitFor(() => {
+      expect(screen.getByTestId('tagActionSubmitBtn')).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+  });
 
   test('Successfully assigns to tags', async () => {
     renderTagActionsModal(props[0], link);
