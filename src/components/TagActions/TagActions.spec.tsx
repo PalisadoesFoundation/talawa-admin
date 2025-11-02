@@ -337,7 +337,9 @@ describe('Organisation Tags Page', () => {
     // Verify component remains stable after fetchMore
     await waitFor(() => {
       expect(screen.getByText(translations.assign)).toBeInTheDocument();
-      expect(screen.getAllByTestId('orgUserTag').length).toBeGreaterThanOrEqual(10);
+      expect(
+        screen.getAllByTestId('orgUserTag').length,
+      ).toBeGreaterThanOrEqual(10);
     });
   });
 
