@@ -77,10 +77,10 @@ const theme = createTheme({
 // Helper variables to match Events.tsx query structure
 const currentMonth = new Date().getMonth();
 const currentYear = new Date().getFullYear();
-const startAt = dayjs(new Date(currentYear, currentMonth, 1))
+const startDate = dayjs(new Date(currentYear, currentMonth, 1))
   .startOf('month')
   .toISOString();
-const endAt = dayjs(new Date(currentYear, currentMonth, 1))
+const endDate = dayjs(new Date(currentYear, currentMonth, 1))
   .endOf('month')
   .toISOString();
 
@@ -93,8 +93,8 @@ const MOCKS = [
         id: 'org123',
         first: 150,
         after: null,
-        startAt,
-        endAt,
+        startDate,
+        endDate,
         includeRecurring: true,
       },
     },
@@ -179,7 +179,6 @@ const MOCKS = [
   {
     request: {
       query: ORGANIZATIONS_LIST,
-      variables: { id: 'org123' },
     },
     result: {
       data: {
@@ -253,8 +252,8 @@ const ERROR_MOCKS = [
         id: 'org123',
         first: 150,
         after: null,
-        startAt,
-        endAt,
+        startDate,
+        endDate,
         includeRecurring: true,
       },
     },
@@ -263,7 +262,6 @@ const ERROR_MOCKS = [
   {
     request: {
       query: ORGANIZATIONS_LIST,
-      variables: { id: 'org123' },
     },
     result: {
       data: {
@@ -282,8 +280,8 @@ const RATE_LIMIT_MOCKS = [
         id: 'org123',
         first: 150,
         after: null,
-        startAt,
-        endAt,
+        startDate,
+        endDate,
         includeRecurring: true,
       },
     },
@@ -292,7 +290,6 @@ const RATE_LIMIT_MOCKS = [
   {
     request: {
       query: ORGANIZATIONS_LIST,
-      variables: { id: 'org123' },
     },
     result: {
       data: {
