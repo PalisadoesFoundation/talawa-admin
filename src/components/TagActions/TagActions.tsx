@@ -352,8 +352,8 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                     dataLength={userTagsList?.length ?? 0}
                     next={loadMoreUserTags}
                     hasMore={
-                      orgUserTagsData?.organization?.tags?.pageInfo?.hasNextPage ??
-                      false
+                      orgUserTagsData?.organization?.tags?.pageInfo
+                        ?.hasNextPage ?? false
                     }
                     loader={<InfiniteScrollLoader />}
                     scrollableTarget="scrollableDiv"

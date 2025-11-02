@@ -463,7 +463,7 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
 
-    // Verify no new tags were appended  
+    // Verify no new tags were appended
     await waitFor(() => {
       expect(screen.getAllByTestId('tagNode')).toHaveLength(10);
     });
