@@ -230,7 +230,7 @@ describe('Testing CategoryViewModal Component', () => {
   it('should handle category with all fields populated (including optional fields)', () => {
     // Includes all fields (required and optional) to ensure type safety
     // and prevent type regressions in the IActionItemCategoryInfo interface
-    const minimalCategory: IActionItemCategoryInfo = {
+    const fullCategory: IActionItemCategoryInfo = {
       id: 'minimal',
       name: 'Minimal Category',
       description: '',
@@ -241,7 +241,7 @@ describe('Testing CategoryViewModal Component', () => {
       organizationId: 'org123',
     };
 
-    renderCategoryViewModal({ category: minimalCategory });
+    renderCategoryViewModal({ category: fullCategory });
 
     expect(screen.getByRole('textbox', { name: /name/i })).toHaveValue(
       'Minimal Category',
