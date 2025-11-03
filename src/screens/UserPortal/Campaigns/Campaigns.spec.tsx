@@ -383,9 +383,9 @@ describe('Testing User Campaigns Screen', () => {
       await userEvent.click(activeButton);
     }
 
-    // Modal state should change (tested via component behavior)
+    // Verify that the pledge modal opens
     await waitFor(() => {
-      expect(activeButton).toBeInTheDocument();
+      expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
     });
   });
 
