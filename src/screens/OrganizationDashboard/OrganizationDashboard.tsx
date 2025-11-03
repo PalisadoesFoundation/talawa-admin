@@ -25,18 +25,15 @@
 
  */
 import { useQuery } from '@apollo/client';
-import React, { useEffect, useState, useRef, JSX } from 'react';
+import React, { useEffect, useState, JSX } from 'react';
 import { Button, Card } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import {
-  GET_ORGANIZATION_MEMBERS_PG,
   GET_ORGANIZATION_POSTS_COUNT_PG,
   GET_ORGANIZATION_EVENTS_PG,
   GET_ORGANIZATION_POSTS_PG,
-  GET_ORGANIZATION_BLOCKED_USERS_PG,
-  GET_ORGANIZATION_VENUES_PG,
   MEMBERSHIP_REQUEST,
   ORGANIZATION_MEMBER_ADMIN_COUNT,
   GET_ORGANIZATION_BLOCKED_USERS_COUNT,
@@ -56,7 +53,6 @@ import DashboardStats from './components/DashboardStats';
 import UpcomingEventsCard from './components/UpcomingEventsCard';
 import type {
   IEvent,
-  InterfaceOrganizationMembersConnectionEdgePg,
   InterfaceOrganizationPg,
   InterfaceOrganizationPostsConnectionEdgePg,
 } from 'utils/interfaces';
