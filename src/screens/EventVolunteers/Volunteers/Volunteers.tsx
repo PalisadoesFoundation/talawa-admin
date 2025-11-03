@@ -232,13 +232,11 @@ function volunteers(): JSX.Element {
         (volunteer: InterfaceEventVolunteerInfo) =>
           volunteer.volunteerStatus === 'accepted',
       );
-    } else {
-      /* istanbul ignore next -- @preserve
-       * Defensive check: This else block is unreachable in normal TypeScript usage
-       * since the status parameter is type-safe (VolunteerStatus enum).
-       * However, it guards against runtime manipulation or security exploits that
-       * could bypass type checking.
-       */
+    }
+    // All VolunteerStatus enum values are handled above.
+    // This else block is unreachable in normal TypeScript usage since status is type-safe.
+    // It guards against runtime manipulation or security exploits that could bypass type checking.
+    else {
       throw new Error(`Unexpected volunteer status: ${status}`);
     }
   }, [eventData, status, searchTerm]);

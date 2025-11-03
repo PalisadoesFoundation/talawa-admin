@@ -418,35 +418,24 @@ describe('Testing Volunteers Screen', () => {
     });
 
     it('should execute Rejected status filtering logic', async () => {
+      vi.mocked(useParams).mockReturnValue({
+        orgId: 'orgId',
+        eventId: 'eventId',
+      });
       renderVolunteers(link1);
 
-      await waitFor(() => {
-        expect(screen.getByTestId('searchBy')).toBeInTheDocument();
-      });
-
-      // Trigger rejected status filter
       const filterBtn = await screen.findByTestId('filter');
-      await userEvent.click(filterBtn);
+      expect(filterBtn).toBeInTheDocument();
 
+      // Filter by Rejected
+      fireEvent.click(filterBtn);
       await waitFor(() => {
-        const rejectedOption = screen.getByTestId('rejected');
-        expect(rejectedOption).toBeInTheDocument();
+        expect(screen.getByTestId('rejected')).toBeInTheDocument();
       });
+      fireEvent.click(screen.getByTestId('rejected'));
 
-      await userEvent.click(screen.getByTestId('rejected'));
-
-      // This should trigger the volunteers useMemo recalculation with:
-      // } else if (status === VolunteerStatus.Rejected) {
-      //   return filteredVolunteers.filter(
-      //     (volunteer: InterfaceEventVolunteerInfo) =>
-      //       volunteer.volunteerStatus === 'rejected',
-      //   );
-
-      await waitFor(() => {
-        // Component should handle the rejected filter without errors
-        // The filtering logic should have executed
-        expect(screen.getByTestId('searchBy')).toBeInTheDocument();
-      });
+      const volunteerName = await screen.findAllByTestId('volunteerName');
+      expect(volunteerName[0]).toHaveTextContent('Alice Johnson');
     });
 
     it('should execute Accepted status filtering logic', async () => {

@@ -202,7 +202,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        event: eventResponseWrapper([volunteer2]),
+        event: eventResponseWrapper([volunteer2, volunteer3]),
       },
     },
   },
