@@ -6,4 +6,4 @@
 
 > `const` **UNREAD\_CHAT\_LIST**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/PlugInQueries.ts:198](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L198)
+Defined in: [src/GraphQl/Queries/PlugInQueries.ts:155](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L155)
