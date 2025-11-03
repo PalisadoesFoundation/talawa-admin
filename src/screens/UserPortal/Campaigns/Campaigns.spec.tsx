@@ -27,6 +27,7 @@ import {
   MOCKS,
   MOCKS_WITH_FUND_NO_CAMPAIGNS,
   MOCKS_WITH_NULL_ORGANIZATION,
+  MOCKS_WITH_UNDEFINED_CAMPAIGNS,
   USER_FUND_CAMPAIGNS_ERROR,
 } from './CampaignsMocks';
 
@@ -424,6 +425,7 @@ describe('Testing User Campaigns Screen', () => {
     });
 
     // Use within() to scope query to specific campaign container
+    // Navigate to parent element (AccordionSummary) which contains the addPledgeBtn
     const hospitalContainer = screen.getByTestId('detailContainer2');
     const accordionSummary = hospitalContainer.parentElement;
     expect(accordionSummary).toBeDefined();
@@ -476,6 +478,16 @@ describe('Testing User Campaigns Screen', () => {
     renderCampaigns(link);
 
     // Should show "No Campaigns Found" message when organization is null
+    await waitFor(() => {
+      expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument();
+    });
+  });
+
+  it('Handles fund with undefined campaigns field', async () => {
+    const link = new StaticMockLink(MOCKS_WITH_UNDEFINED_CAMPAIGNS);
+    renderCampaigns(link);
+
+    // Should show "No Campaigns Found" when campaigns field is undefined
     await waitFor(() => {
       expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument();
     });

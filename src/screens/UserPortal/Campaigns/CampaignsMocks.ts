@@ -174,6 +174,33 @@ export const MOCKS_WITH_NULL_ORGANIZATION = [
   userDetailsQuery,
 ];
 
+export const MOCKS_WITH_UNDEFINED_CAMPAIGNS = [
+  {
+    request: {
+      query: USER_FUND_CAMPAIGNS,
+      variables: {
+        input: { id: 'orgId' },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          funds: {
+            edges: [
+              {
+                node: {
+                  campaigns: undefined,
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  userDetailsQuery,
+];
+
 export const USER_FUND_CAMPAIGNS_ERROR = [
   {
     request: {
