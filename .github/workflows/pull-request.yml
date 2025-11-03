@@ -107,6 +107,14 @@ jobs:
       - name: Check for unused files and exports in src/ and docs/src
         run: npx knip --include files,exports
 
+      - name: Cache docs dependencies
+        uses: actions/cache@v4
+        with:
+          path: docs/node_modules
+          key: ${{ runner.os }}-docs-${{ hashFiles('docs/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-docs-
+
       - name: Lint Docs directory
         run: |
           cd docs
