@@ -4,7 +4,10 @@
  */
 
 import React, { createContext, useContext, useCallback } from 'react';
-import { toast as toastify, type ToastOptions as ReactToastifyOptions } from 'react-toastify';
+import {
+  toast as toastify,
+  type ToastOptions as ReactToastifyOptions,
+} from 'react-toastify';
 import type {
   ToastContextValue,
   ToastOptions,
@@ -25,22 +28,7 @@ const ToastContext = createContext<ToastContextValue | undefined>(undefined);
 const mapPosition = (
   position?: ToastPosition,
 ): ReactToastifyOptions['position'] => {
-  switch (position) {
-    case 'top-left':
-      return 'top-left';
-    case 'top-center':
-      return 'top-center';
-    case 'top-right':
-      return 'top-right';
-    case 'bottom-left':
-      return 'bottom-left';
-    case 'bottom-center':
-      return 'bottom-center';
-    case 'bottom-right':
-      return 'bottom-right';
-    default:
-      return 'top-right';
-  }
+  return (position as ReactToastifyOptions['position']) || 'top-right';
 };
 
 /**

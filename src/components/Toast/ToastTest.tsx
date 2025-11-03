@@ -20,7 +20,7 @@ export const ToastTest: React.FC = () => {
 
   const testLoadingToast = (): void => {
     const id = toast.showLoading('Processing your request...');
-    
+
     setTimeout(() => {
       toast.updateToast(id, 'Request completed successfully!', {
         type: ToastType.SUCCESS,
@@ -65,17 +65,49 @@ export const ToastTest: React.FC = () => {
 
   const testPositions = (): void => {
     toast.showInfo('Top Left', { position: ToastPosition.TOP_LEFT });
-    setTimeout(() => toast.showInfo('Top Center', { position: ToastPosition.TOP_CENTER }), 200);
-    setTimeout(() => toast.showInfo('Top Right', { position: ToastPosition.TOP_RIGHT }), 400);
-    setTimeout(() => toast.showInfo('Bottom Left', { position: ToastPosition.BOTTOM_LEFT }), 600);
-    setTimeout(() => toast.showInfo('Bottom Center', { position: ToastPosition.BOTTOM_CENTER }), 800);
-    setTimeout(() => toast.showInfo('Bottom Right', { position: ToastPosition.BOTTOM_RIGHT }), 1000);
+    setTimeout(
+      () =>
+        toast.showInfo('Top Center', { position: ToastPosition.TOP_CENTER }),
+      200,
+    );
+    setTimeout(
+      () => toast.showInfo('Top Right', { position: ToastPosition.TOP_RIGHT }),
+      400,
+    );
+    setTimeout(
+      () =>
+        toast.showInfo('Bottom Left', { position: ToastPosition.BOTTOM_LEFT }),
+      600,
+    );
+    setTimeout(
+      () =>
+        toast.showInfo('Bottom Center', {
+          position: ToastPosition.BOTTOM_CENTER,
+        }),
+      800,
+    );
+    setTimeout(
+      () =>
+        toast.showInfo('Bottom Right', {
+          position: ToastPosition.BOTTOM_RIGHT,
+        }),
+      1000,
+    );
   };
 
   const testCustomDuration = (): void => {
     toast.showInfo('Quick toast (2s)', { duration: 2000 });
-    setTimeout(() => toast.showWarning('Normal toast (5s)', { duration: 5000 }), 300);
-    setTimeout(() => toast.showError('Persistent toast (no auto-close)', { duration: false }), 600);
+    setTimeout(
+      () => toast.showWarning('Normal toast (5s)', { duration: 5000 }),
+      300,
+    );
+    setTimeout(
+      () =>
+        toast.showError('Persistent toast (no auto-close)', {
+          duration: false,
+        }),
+      600,
+    );
   };
 
   return (
@@ -85,7 +117,11 @@ export const ToastTest: React.FC = () => {
 
       <div className={styles.section}>
         <h2>Basic Toasts</h2>
-        <button onClick={testBasicToasts} className={styles.button}>
+        <button
+          type="button"
+          onClick={testBasicToasts}
+          className={styles.button}
+        >
           Test All Basic Types
         </button>
       </div>
@@ -93,16 +129,32 @@ export const ToastTest: React.FC = () => {
       <div className={styles.section}>
         <h2>Individual Toasts</h2>
         <div className={styles.buttonGroup}>
-          <button onClick={() => toast.showSuccess('Success!')} className={`${styles.button} ${styles.success}`}>
+          <button
+            type="button"
+            onClick={() => toast.showSuccess('Success!')}
+            className={`${styles.button} ${styles.success}`}
+          >
             Success
           </button>
-          <button onClick={() => toast.showError('Error!')} className={`${styles.button} ${styles.error}`}>
+          <button
+            type="button"
+            onClick={() => toast.showError('Error!')}
+            className={`${styles.button} ${styles.error}`}
+          >
             Error
           </button>
-          <button onClick={() => toast.showWarning('Warning!')} className={`${styles.button} ${styles.warning}`}>
+          <button
+            type="button"
+            onClick={() => toast.showWarning('Warning!')}
+            className={`${styles.button} ${styles.warning}`}
+          >
             Warning
           </button>
-          <button onClick={() => toast.showInfo('Info!')} className={`${styles.button} ${styles.info}`}>
+          <button
+            type="button"
+            onClick={() => toast.showInfo('Info!')}
+            className={`${styles.button} ${styles.info}`}
+          >
             Info
           </button>
         </div>
@@ -110,7 +162,11 @@ export const ToastTest: React.FC = () => {
 
       <div className={styles.section}>
         <h2>Loading State</h2>
-        <button onClick={testLoadingToast} className={styles.button}>
+        <button
+          type="button"
+          onClick={testLoadingToast}
+          className={styles.button}
+        >
           Test Loading Toast
         </button>
       </div>
@@ -118,10 +174,18 @@ export const ToastTest: React.FC = () => {
       <div className={styles.section}>
         <h2>Action Buttons</h2>
         <div className={styles.buttonGroup}>
-          <button onClick={testToastWithActions} className={styles.button}>
+          <button
+            type="button"
+            onClick={testToastWithActions}
+            className={styles.button}
+          >
             Error with Retry/Cancel
           </button>
-          <button onClick={testUndoAction} className={styles.button}>
+          <button
+            type="button"
+            onClick={testUndoAction}
+            className={styles.button}
+          >
             Delete with Undo
           </button>
         </div>
@@ -129,26 +193,34 @@ export const ToastTest: React.FC = () => {
 
       <div className={styles.section}>
         <h2>Positions</h2>
-        <button onClick={testPositions} className={styles.button}>
+        <button type="button" onClick={testPositions} className={styles.button}>
           Test All Positions
         </button>
       </div>
 
       <div className={styles.section}>
         <h2>Custom Duration</h2>
-        <button onClick={testCustomDuration} className={styles.button}>
+        <button
+          type="button"
+          onClick={testCustomDuration}
+          className={styles.button}
+        >
           Test Different Durations
         </button>
       </div>
 
       <div className={styles.section}>
         <h2>Utilities</h2>
-        <button onClick={() => toast.dismissAll()} className={`${styles.button} ${styles.danger}`}>
+        <button
+          type="button"
+          onClick={() => toast.dismissAll()}
+          className={`${styles.button} ${styles.danger}`}
+        >
           Dismiss All Toasts
         </button>
       </div>
 
-      <div className={styles.info}>
+      <div className={styles.infoBox}>
         <h3>✅ Features Tested:</h3>
         <ul>
           <li>✓ Success, Error, Warning, Info, Loading toasts</li>

@@ -19,7 +19,6 @@ import 'flag-icons/css/flag-icons.min.css'; // Flag Icons Styles
 import 'react-toastify/dist/ReactToastify.css'; // Toast notification styles
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { Provider } from 'react-redux';
-import { toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
@@ -68,11 +67,9 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
       }
     });
   } else if (networkError) {
-    console.log(`[Network error]: ${networkError}`);
-    toast.error(
-      'API server unavailable. Check your connection or try again later',
-      { toastId: 'apiServer' },
-    );
+    console.error(`[Network error]: ${networkError}`);
+    // Note: Toast notifications should be handled in components after ToastProvider is mounted
+    // This error link runs at Apollo Client initialization, before React renders
   }
 });
 

@@ -79,26 +79,26 @@
   background: var(--bs-danger);
 }
 
-.info {
+.infoBox {
   background: var(--bs-gray-100);
   padding: 24px;
   border-radius: 8px;
   border-left: 4px solid var(--bs-primary);
 }
 
-.info h3 {
+.infoBox h3 {
   color: var(--bs-gray-800);
   margin-bottom: 12px;
   font-size: 16px;
 }
 
-.info ul {
+.infoBox ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.info li {
+.infoBox li {
   padding: 6px 0;
   color: var(--bs-gray-700);
   font-size: 14px;

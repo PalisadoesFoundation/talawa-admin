@@ -16,20 +16,32 @@ export const BasicToastExample: React.FC = () => {
   return (
     <div>
       <h2>Basic Toast Examples</h2>
-      
-      <button onClick={() => toast.showSuccess('Operation successful!')}>
+
+      <button
+        type="button"
+        onClick={() => toast.showSuccess('Operation successful!')}
+      >
         Show Success
       </button>
 
-      <button onClick={() => toast.showError('An error occurred!')}>
+      <button
+        type="button"
+        onClick={() => toast.showError('An error occurred!')}
+      >
         Show Error
       </button>
 
-      <button onClick={() => toast.showWarning('This is a warning!')}>
+      <button
+        type="button"
+        onClick={() => toast.showWarning('This is a warning!')}
+      >
         Show Warning
       </button>
 
-      <button onClick={() => toast.showInfo('Here is some information.')}>
+      <button
+        type="button"
+        onClick={() => toast.showInfo('Here is some information.')}
+      >
         Show Info
       </button>
     </div>
@@ -41,14 +53,16 @@ export const BasicToastExample: React.FC = () => {
  */
 export const FormSubmissionExample: React.FC = () => {
   const toast = useToast();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const handleSubmit = async (formData: any): Promise<void> => {
+    setIsLoading(true);
     const loadingId = toast.showLoading('Saving your data...');
 
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      
+
       // Update the loading toast to success
       toast.updateToast(loadingId, 'Data saved successfully!', {
         type: ToastType.SUCCESS,
@@ -65,12 +79,18 @@ export const FormSubmissionExample: React.FC = () => {
           },
         ],
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <button onClick={() => void handleSubmit({ name: 'Test' })}>
-      Submit Form
+    <button
+      type="button"
+      onClick={() => void handleSubmit({ name: 'Test' })}
+      disabled={isLoading}
+    >
+      {isLoading ? 'Submitting...' : 'Submit Form'}
     </button>
   );
 };
@@ -122,7 +142,9 @@ export const DeleteWithUndoExample: React.FC = () => {
       {items.map((item) => (
         <div key={item}>
           {item}
-          <button onClick={() => handleDelete(item)}>Delete</button>
+          <button type="button" onClick={() => handleDelete(item)}>
+            Delete
+          </button>
         </div>
       ))}
     </div>
@@ -139,13 +161,17 @@ export const NetworkErrorExample: React.FC = () => {
     try {
       const response = await fetch('https://api.example.com/data');
       if (!response.ok) throw new Error('Failed to fetch');
-      
+
       const data = await response.json();
       toast.showSuccess('Data loaded successfully!');
       console.log(data);
     } catch (error) {
       // Check if it's a network error
-      if (error instanceof TypeError) {
+      if (
+        !navigator.onLine ||
+        error instanceof TypeError ||
+        (error instanceof Error && error.message === 'Failed to fetch')
+      ) {
         toast.showError('No internet connection', {
           toastId: 'network-error', // Prevent duplicates
           duration: false, // Don't auto-dismiss
@@ -166,7 +192,9 @@ export const NetworkErrorExample: React.FC = () => {
   };
 
   return (
-    <button onClick={() => void fetchData()}>Load Data</button>
+    <button type="button" onClick={() => void fetchData()}>
+      Load Data
+    </button>
   );
 };
 
@@ -204,7 +232,11 @@ export const MultipleActionsExample: React.FC = () => {
     });
   };
 
-  return <button onClick={handleConflict}>Upload File</button>;
+  return (
+    <button type="button" onClick={handleConflict}>
+      Upload File
+    </button>
+  );
 };
 
 /**
@@ -216,6 +248,7 @@ export const CustomPositionExample: React.FC = () => {
   return (
     <div>
       <button
+        type="button"
         onClick={() =>
           toast.showInfo('Top Right', { position: ToastPosition.TOP_RIGHT })
         }
@@ -224,14 +257,18 @@ export const CustomPositionExample: React.FC = () => {
       </button>
 
       <button
+        type="button"
         onClick={() =>
-          toast.showInfo('Bottom Center', { position: ToastPosition.BOTTOM_CENTER })
+          toast.showInfo('Bottom Center', {
+            position: ToastPosition.BOTTOM_CENTER,
+          })
         }
       >
         Bottom Center
       </button>
 
       <button
+        type="button"
         onClick={() =>
           toast.showInfo('Top Left', { position: ToastPosition.TOP_LEFT })
         }
@@ -255,7 +292,7 @@ export const ValidationExample: React.FC = () => {
     const errors: string[] = [];
 
     if (!formData.email) errors.push('Email is required');
-    else if (!/\S+@\S+\.\S+/.test(formData.email))
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
       errors.push('Email is invalid');
 
     if (!formData.password) errors.push('Password is required');
@@ -289,7 +326,11 @@ export const ValidationExample: React.FC = () => {
     }
   };
 
-  return <button onClick={handleSubmit}>Submit</button>;
+  return (
+    <button type="button" onClick={handleSubmit}>
+      Submit
+    </button>
+  );
 };
 
 /**
@@ -304,7 +345,7 @@ export const ProgressUpdateExample: React.FC = () => {
     // Simulate progress updates
     for (let progress = 0; progress <= 100; progress += 20) {
       await new Promise((resolve) => setTimeout(resolve, 500));
-      
+
       if (progress < 100) {
         toast.updateToast(toastId, `Uploading files... ${progress}%`, {
           type: ToastType.LOADING,
@@ -318,7 +359,11 @@ export const ProgressUpdateExample: React.FC = () => {
     }
   };
 
-  return <button onClick={() => void uploadFiles()}>Upload Files</button>;
+  return (
+    <button type="button" onClick={() => void uploadFiles()}>
+      Upload Files
+    </button>
+  );
 };
 
 /**
@@ -326,18 +371,23 @@ export const ProgressUpdateExample: React.FC = () => {
  */
 export const NoDuplicateExample: React.FC = () => {
   const toast = useToast();
+  const TOAST_ID = 'unique-notification';
 
   const showNotification = (): void => {
     // This will only show one toast even if clicked multiple times
-    if (!toast.isActive('unique-notification')) {
+    if (!toast.isActive(TOAST_ID)) {
       toast.showInfo('This notification appears only once', {
-        toastId: 'unique-notification',
+        toastId: TOAST_ID,
         duration: 5000,
       });
     }
   };
 
-  return <button onClick={showNotification}>Show Unique Toast</button>;
+  return (
+    <button type="button" onClick={showNotification}>
+      Show Unique Notification
+    </button>
+  );
 };
 
 /**
@@ -354,8 +404,12 @@ export const DismissAllExample: React.FC = () => {
 
   return (
     <div>
-      <button onClick={showMultiple}>Show Multiple Toasts</button>
-      <button onClick={() => toast.dismissAll()}>Dismiss All</button>
+      <button type="button" onClick={showMultiple}>
+        Show Multiple Toasts
+      </button>
+      <button type="button" onClick={() => toast.dismissAll()}>
+        Dismiss All
+      </button>
     </div>
   );
 };
@@ -425,6 +479,7 @@ export const UserProfileUpdateExample: React.FC = () => {
   return (
     <div>
       <button
+        type="button"
         onClick={() => void updateProfile({ name: 'John Doe' })}
         disabled={isSaving}
       >

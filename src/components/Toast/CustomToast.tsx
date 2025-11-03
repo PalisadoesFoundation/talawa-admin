@@ -8,7 +8,7 @@ import type { ToastAction } from './types';
 import styles from './Toast.module.css';
 import {
   CheckCircle,
-  Error,
+  Error as ErrorIcon,
   Warning,
   Info,
   Close,
@@ -68,7 +68,7 @@ const getIconForType = (type: CustomToastProps['type']): React.ReactNode => {
     case 'success':
       return <CheckCircle className={styles.toastIcon} />;
     case 'error':
-      return <Error className={styles.toastIcon} />;
+      return <ErrorIcon className={styles.toastIcon} />;
     case 'warning':
       return <Warning className={styles.toastIcon} />;
     case 'info':

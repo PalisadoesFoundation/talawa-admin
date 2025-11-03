@@ -216,10 +216,7 @@ export interface ToastContextValue {
   /**
    * Show a custom toast notification with full control
    */
-  showToast: (
-    message: string | ReactNode,
-    options?: ToastOptions,
-  ) => string;
+  showToast: (message: string | ReactNode, options?: ToastOptions) => string;
 
   /**
    * Dismiss a specific toast by ID
