@@ -16,14 +16,16 @@ import './assets/css/app.css';
 import 'bootstrap/dist/js/bootstrap.min.js'; // Bootstrap JS (ensure Bootstrap is installed)
 import 'react-datepicker/dist/react-datepicker.css'; // React Datepicker Styles
 import 'flag-icons/css/flag-icons.min.css'; // Flag Icons Styles
+import 'react-toastify/dist/ReactToastify.css'; // Toast notification styles
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { Provider } from 'react-redux';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import App from './App';
 import { store } from './state/store';
+import { ToastProvider, ToastContainer } from './components/Toast';
 import {
   BACKEND_URL,
   REACT_APP_BACKEND_WEBSOCKET_URL,
@@ -135,8 +137,22 @@ root.render(
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ThemeProvider theme={theme}>
             <Provider store={store}>
-              <App />
-              <ToastContainer limit={5} />
+              <ToastProvider>
+                <App />
+                <ToastContainer
+                  limit={5}
+                  position="top-right"
+                  autoClose={5000}
+                  hideProgressBar={false}
+                  newestOnTop={true}
+                  closeOnClick={false}
+                  rtl={false}
+                  pauseOnFocusLoss
+                  draggable
+                  pauseOnHover
+                  theme="light"
+                />
+              </ToastProvider>
             </Provider>
           </ThemeProvider>
         </LocalizationProvider>

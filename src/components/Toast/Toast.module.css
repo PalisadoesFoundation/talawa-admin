@@ -1,0 +1,322 @@
+/**
+ * Toast Notification Styles
+ * Provides consistent styling for all toast notifications with animations
+ */
+
+/* Base toast styles */
+.customToast {
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+  max-width: 500px;
+  padding: 0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  font-family: var(--bs-body-font-family);
+  background: white;
+}
+
+/* Toast content wrapper */
+.toastContent {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  position: relative;
+}
+
+/* Icon wrapper */
+.toastIconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+}
+
+.toastIcon {
+  width: 24px;
+  height: 24px;
+}
+
+/* Message content */
+.toastMessage {
+  flex: 1;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--bs-body-color);
+  word-break: break-word;
+  padding-right: 8px;
+}
+
+/* Close button */
+.toastCloseButton {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--bs-gray-600);
+  transition: color 0.2s ease;
+  border-radius: 4px;
+}
+
+.toastCloseButton:hover {
+  color: var(--bs-gray-800);
+  background: var(--bs-gray-100);
+}
+
+.toastCloseButton:focus {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+}
+
+/* Action buttons container */
+.toastActions {
+  display: flex;
+  gap: 8px;
+  padding: 8px 16px 16px 16px;
+  border-top: 1px solid var(--bs-gray-200);
+  background: var(--bs-gray-50);
+}
+
+.toastActionButton {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+  color: var(--bs-primary);
+  border: 1px solid var(--bs-primary);
+}
+
+.toastActionButton:hover {
+  background: var(--bs-primary);
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toastActionButton:focus {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+}
+
+.toastActionButton:active {
+  transform: translateY(0);
+}
+
+/* Success toast variant */
+.toast-success {
+  border-left: 4px solid var(--bs-success);
+}
+
+.toast-success .toastIconWrapper {
+  color: var(--bs-success);
+}
+
+/* Error toast variant */
+.toast-error {
+  border-left: 4px solid var(--bs-danger);
+}
+
+.toast-error .toastIconWrapper {
+  color: var(--bs-danger);
+}
+
+/* Warning toast variant */
+.toast-warning {
+  border-left: 4px solid var(--bs-warning);
+}
+
+.toast-warning .toastIconWrapper {
+  color: var(--bs-warning);
+}
+
+/* Info toast variant */
+.toast-info {
+  border-left: 4px solid var(--bs-info);
+}
+
+.toast-info .toastIconWrapper {
+  color: var(--bs-info);
+}
+
+/* Loading toast variant */
+.toast-loading {
+  border-left: 4px solid var(--bs-primary);
+}
+
+.toast-loading .toastIconWrapper {
+  color: var(--bs-primary);
+}
+
+/* Toast container animations */
+:global(.Toastify__toast-container) {
+  z-index: 9999;
+  padding: 8px;
+}
+
+:global(.Toastify__toast) {
+  padding: 0;
+  min-height: auto;
+  border-radius: 8px;
+  font-family: var(--bs-body-font-family);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  margin-bottom: 8px;
+}
+
+:global(.Toastify__toast-body) {
+  padding: 0;
+}
+
+/* Progress bar styling */
+:global(.Toastify__progress-bar) {
+  height: 3px;
+}
+
+:global(.Toastify__progress-bar--success) {
+  background: var(--bs-success);
+}
+
+:global(.Toastify__progress-bar--error) {
+  background: var(--bs-danger);
+}
+
+:global(.Toastify__progress-bar--warning) {
+  background: var(--bs-warning);
+}
+
+:global(.Toastify__progress-bar--info) {
+  background: var(--bs-info);
+}
+
+/* Animation keyframes */
+@keyframes toastSlideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toastSlideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+:global(.Toastify__toast--top-right) {
+  animation: toastSlideIn 0.3s ease-out;
+}
+
+:global(.Toastify__toast--top-left) {
+  animation: toastSlideIn 0.3s ease-out;
+}
+
+:global(.Toastify__toast--bottom-right) {
+  animation: toastSlideIn 0.3s ease-out;
+}
+
+:global(.Toastify__toast--bottom-left) {
+  animation: toastSlideIn 0.3s ease-out;
+}
+
+/* Responsive design */
+@media only screen and (max-width: 480px) {
+  .customToast {
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  :global(.Toastify__toast-container) {
+    width: 100vw;
+    padding: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+  }
+
+  :global(.Toastify__toast) {
+    margin-bottom: 0;
+    border-radius: 0;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .customToast {
+    background: var(--bs-dark);
+  }
+
+  .toastMessage {
+    color: var(--bs-white);
+  }
+
+  .toastCloseButton {
+    color: var(--bs-gray-400);
+  }
+
+  .toastCloseButton:hover {
+    color: var(--bs-gray-200);
+    background: var(--bs-gray-700);
+  }
+
+  .toastActions {
+    background: var(--bs-gray-800);
+    border-top-color: var(--bs-gray-700);
+  }
+
+  .toastActionButton {
+    background: var(--bs-gray-700);
+    color: var(--bs-white);
+  }
+
+  .toastActionButton:hover {
+    background: var(--bs-primary);
+  }
+}
+
+/* Accessibility - High contrast mode */
+@media (prefers-contrast: high) {
+  .customToast {
+    border: 2px solid currentColor;
+  }
+
+  .toastActionButton {
+    border-width: 2px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  :global(.Toastify__toast),
+  :global(.Toastify__toast--top-right),
+  :global(.Toastify__toast--top-left),
+  :global(.Toastify__toast--bottom-right),
+  :global(.Toastify__toast--bottom-left) {
+    animation: none;
+  }
+
+  .toastActionButton:hover {
+    transform: none;
+  }
+}
