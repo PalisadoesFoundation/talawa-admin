@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_UNDEFINED\_USER\_TAGS**: `object`[]
 
-Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:376](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L376)
+Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:366](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L366)
 
 ## Type Declaration
 
@@ -62,6 +62,10 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:376](https://
 
 > **data**: `object`
 
-#### result.data.organizations
+#### result.data.organization
 
-> **organizations**: `object`[]
+> **organization**: `object`
+
+#### result.data.organization.tags
+
+> **tags**: `any` = `undefined`

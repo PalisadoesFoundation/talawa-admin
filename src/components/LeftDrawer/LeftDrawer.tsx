@@ -146,13 +146,6 @@ const leftDrawer = ({
           'communityProfileBtn',
         )}
 
-        {renderDrawerItem(
-          '/notification',
-          <SettingsIcon />,
-          t('notification'),
-          'notificationBtn',
-        )}
-
         {/* Plugin Settings Section */}
         {pluginDrawerItems?.length > 0 && (
           <>

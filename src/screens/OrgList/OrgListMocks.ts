@@ -8,7 +8,6 @@ import {
   USER_ORGANIZATION_LIST,
   ALL_ORGANIZATIONS_PG,
 } from 'GraphQl/Queries/Queries';
-import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
 import type {
   InterfaceOrgInfoTypePG,
   InterfaceUserType,
@@ -51,20 +50,6 @@ const MOCKS = [
     },
     result: {
       data: { user: superAdminUser },
-    },
-  },
-  {
-    request: {
-      query: GET_USER_NOTIFICATIONS,
-      variables: { userId: '123', input: { first: 5, skip: 0 } },
-    },
-    result: {
-      data: {
-        user: {
-          __typename: 'User',
-          notifications: [],
-        },
-      },
     },
   },
   {
@@ -212,20 +197,6 @@ const MOCKS_EMPTY = [
       data: { user: superAdminUser },
     },
   },
-  {
-    request: {
-      query: GET_USER_NOTIFICATIONS,
-      variables: { userId: '123', input: { first: 5, skip: 0 } },
-    },
-    result: {
-      data: {
-        user: {
-          __typename: 'User',
-          notifications: [],
-        },
-      },
-    },
-  },
 ];
 const MOCKS_WITH_ERROR = [
   {
@@ -288,20 +259,6 @@ const MOCKS_ADMIN = [
     },
     result: {
       data: { user: adminUser },
-    },
-  },
-  {
-    request: {
-      query: GET_USER_NOTIFICATIONS,
-      variables: { userId: '123', input: { first: 5, skip: 0 } },
-    },
-    result: {
-      data: {
-        user: {
-          __typename: 'User',
-          notifications: [],
-        },
-      },
     },
   },
 ];
