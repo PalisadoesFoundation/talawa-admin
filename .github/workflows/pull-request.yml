@@ -118,7 +118,7 @@ jobs:
       - name: Lint Docs directory
         run: |
           cd docs
-          npm install
+          npm ci
           npm run lint:check
 
       - name: Typecheck Docs directory
