@@ -9,7 +9,6 @@ import {
   render,
   screen,
   waitFor,
-  within,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -397,10 +396,11 @@ describe('Testing User Campaigns Screen', () => {
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
     });
 
-    // Find the Hospital Campaign container and verify its button is disabled
-    const hospitalContainer = screen.getByTestId('detailContainer2');
-    const endedCampaignButton =
-      within(hospitalContainer).getByTestId('addPledgeBtn');
+    // Get all add pledge buttons
+    const addPledgeButtons = screen.getAllByTestId('addPledgeBtn');
+
+    // Hospital Campaign is the second campaign (index 1) and should be disabled
+    const endedCampaignButton = addPledgeButtons[1];
 
     expect(endedCampaignButton).toBeInTheDocument();
     expect(endedCampaignButton).toBeDisabled();
