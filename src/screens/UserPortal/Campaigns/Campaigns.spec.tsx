@@ -437,4 +437,35 @@ describe('Testing User Campaigns Screen', () => {
       expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument();
     });
   });
+
+  it('Filters campaigns by search term correctly', async () => {
+    renderCampaigns(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+    });
+
+    // Search for "School"
+    const searchInput = screen.getByTestId('searchCampaigns');
+    fireEvent.change(searchInput, { target: { value: 'School' } });
+    fireEvent.click(screen.getByTestId('searchBtn'));
+
+    // Should show only School Campaign
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.queryByText('Hospital Campaign')).not.toBeInTheDocument();
+    });
+
+    // Clear search
+    fireEvent.change(searchInput, { target: { value: '' } });
+    fireEvent.click(screen.getByTestId('searchBtn'));
+
+    // Should show both campaigns again
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+    });
+  });
 });
