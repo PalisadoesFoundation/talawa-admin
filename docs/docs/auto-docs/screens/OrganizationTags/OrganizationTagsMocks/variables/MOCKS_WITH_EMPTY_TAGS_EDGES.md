@@ -2,11 +2,11 @@
 
 ***
 
-# Variable: MOCKS\_EMPTY
+# Variable: MOCKS\_WITH\_EMPTY\_TAGS\_EDGES
 
-> `const` **MOCKS\_EMPTY**: `object`[]
+> `const` **MOCKS\_WITH\_EMPTY\_TAGS\_EDGES**: `object`[]
 
-Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:336](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L336)
+Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:516](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L516)
 
 ## Type Declaration
 
@@ -72,7 +72,7 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:336](https://
 
 #### result.data.organization.tags.edges
 
-> **edges**: `any`[] = `[]`
+> **edges**: `any` = `null`
 
 #### result.data.organization.tags.pageInfo
 
@@ -85,15 +85,3 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:336](https://
 #### result.data.organization.tags.pageInfo.hasNextPage
 
 > **hasNextPage**: `boolean` = `false`
-
-#### result.data.organization.tags.pageInfo.hasPreviousPage
-
-> **hasPreviousPage**: `boolean` = `false`
-
-#### result.data.organization.tags.pageInfo.startCursor
-
-> **startCursor**: `any` = `null`
-
-#### result.data.organization.tags.totalCount
-
-> **totalCount**: `number` = `0`
