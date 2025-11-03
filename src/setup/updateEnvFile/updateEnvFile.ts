@@ -47,7 +47,7 @@ export const updateEnvFile = (
 
     // Append block with exactly one blank line separation if not empty
     envContent = envContent ? `${envContent}\n\n${newBlock}` : newBlock;
-    fs.writeFileSync(ENV_PATH, envContent.trim() + '\n\n', 'utf8');
+    fs.writeFileSync(ENV_PATH, envContent.trim() + '\n', 'utf8');
   } catch (error) {
     console.error('Error updating the .env file:', error);
   }
