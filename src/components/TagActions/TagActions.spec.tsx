@@ -29,6 +29,7 @@ import {
   MOCKS_ERROR_SUBTAGS_QUERY,
   MOCKS_WITH_NULL_FETCH_MORE,
   MOCKS_WITH_UNDEFINED_PAGEINFO,
+  MOCKS_WITH_NULL_PAGEINFO_FETCHMORE,
 } from './TagActionsMocks';
 import type { TFunction } from 'i18next';
 
@@ -38,6 +39,7 @@ const link3 = new StaticMockLink(MOCKS_ERROR_SUBTAGS_QUERY, true);
 const link4 = new StaticMockLink(MOCKS_ERROR_ASSIGN_OR_REMOVAL_TAGS);
 const link5 = new StaticMockLink(MOCKS_WITH_NULL_FETCH_MORE, true);
 const link6 = new StaticMockLink(MOCKS_WITH_UNDEFINED_PAGEINFO, true);
+const link7 = new StaticMockLink(MOCKS_WITH_NULL_PAGEINFO_FETCHMORE, true);
 async function wait(ms = 500): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -557,7 +559,7 @@ describe('Organisation Tags Page', () => {
 
   test('Should handle null pageInfo in fetchMore gracefully', async () => {
     // This test verifies the fallback: pageInfo: nextTags.pageInfo ?? prevTags.pageInfo
-    renderTagActionsModal(props[0], link5);
+    renderTagActionsModal(props[0], link7);
     await wait();
     await waitFor(() => {
       expect(screen.getAllByTestId('orgUserTag').length).toBe(10);
@@ -569,7 +571,9 @@ describe('Organisation Tags Page', () => {
       capturedLoadMoreCallback?.();
     });
 
-    // Component should handle null pageInfo gracefully
-    expect(screen.getByTestId('scrollableDiv')).toBeInTheDocument();
+    // Verify more tags loaded despite null pageInfo (fallback worked)
+    await waitFor(() => {
+      expect(screen.getAllByTestId('orgUserTag').length).toBeGreaterThan(10);
+    });
   });
 });

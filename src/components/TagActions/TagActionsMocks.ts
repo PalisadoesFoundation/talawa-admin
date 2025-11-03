@@ -417,3 +417,30 @@ export const MOCKS_WITH_UNDEFINED_PAGEINFO = [
   },
   ...MOCKS.slice(1),
 ];
+
+export const MOCKS_WITH_NULL_PAGEINFO_FETCHMORE = [
+  MOCKS[0], // Initial query with valid pageInfo
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
+      variables: {
+        input: { id: '123' },
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: '10',
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          tags: {
+            edges: userTagEdgesNext,
+            pageInfo: null, // Test null pageInfo in fetchMore to trigger fallback
+            totalCount: 12,
+          },
+        },
+      },
+    },
+  },
+];

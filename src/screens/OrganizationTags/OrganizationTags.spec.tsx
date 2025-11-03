@@ -30,6 +30,7 @@ import {
   MOCKS_WITH_NULL_FETCH_MORE_RESULT,
   MOCKS_WITH_UNDEFINED_ORGANIZATION,
   MOCKS_WITH_EMPTY_TAGS_EDGES,
+  MOCKS_WITH_NULL_PAGEINFO_FETCHMORE,
 } from './OrganizationTagsMocks';
 import type { ApolloLink } from '@apollo/client';
 
@@ -53,6 +54,7 @@ const link7 = new StaticMockLink(MOCKS_NO_MORE_PAGES, true);
 const link8 = new StaticMockLink(MOCKS_WITH_NULL_FETCH_MORE_RESULT, true);
 const link9 = new StaticMockLink(MOCKS_WITH_UNDEFINED_ORGANIZATION, true);
 const link10 = new StaticMockLink(MOCKS_WITH_EMPTY_TAGS_EDGES, true);
+const link11 = new StaticMockLink(MOCKS_WITH_NULL_PAGEINFO_FETCHMORE, true);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -524,15 +526,22 @@ describe('Organisation Tags Page', () => {
     expect(toast.error).not.toHaveBeenCalled();
   });
 
-  test('Should handle null fetchMore result gracefully', async () => {
+  test('Should handle null pageInfo in fetchMore gracefully', async () => {
     // This test verifies the fallback: pageInfo: nextTags.pageInfo ?? prevTags.pageInfo
-    const link = new StaticMockLink(MOCKS_WITH_NULL_FETCH_MORE_RESULT, true);
-    renderOrganizationTags(link);
+    renderOrganizationTags(link11);
     await wait();
     await waitFor(() => {
       expect(screen.getAllByTestId('userTag').length).toBe(10);
     });
-    // Component should render without errors even with null fetchMore result
-    expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
+
+    // Trigger infinite scroll to load more
+    const scrollableDiv = screen.getByTestId('orgUserTagsScrollableDiv');
+    fireEvent.scroll(scrollableDiv, { target: { scrollTop: 1000 } });
+    await wait();
+
+    // Verify more tags loaded despite null pageInfo (fallback worked)
+    await waitFor(() => {
+      expect(screen.getAllByTestId('userTag').length).toBeGreaterThan(10);
+    });
   });
 });
