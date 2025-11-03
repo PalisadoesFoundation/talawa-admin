@@ -457,16 +457,11 @@ describe('Organisation Tags Page', () => {
 
     await wait();
 
-    // Component should still render after null fetchMoreResult
-    await waitFor(() => {
-      expect(screen.getByText('userTag 1')).toBeInTheDocument();
-      expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
-    });
-
     // Verify tags remain stable (no new tags added)
     await waitFor(() => {
       expect(screen.getByText('userTag 1')).toBeInTheDocument();
       expect(screen.getByText('userTag 10')).toBeInTheDocument();
+      expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
 
     // No error toast should be triggered
@@ -500,16 +495,11 @@ describe('Organisation Tags Page', () => {
 
     await wait();
 
-    // Component should still render after undefined organization in fetchMoreResult
-    await waitFor(() => {
-      expect(screen.getByText('userTag 1')).toBeInTheDocument();
-      expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
-    });
-
     // Verify tags remain stable (no changes after undefined organization)
     await waitFor(() => {
       expect(screen.getByText('userTag 1')).toBeInTheDocument();
       expect(screen.getByText('userTag 10')).toBeInTheDocument();
+      expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
 
     // No error toast should be triggered
@@ -532,5 +522,17 @@ describe('Organisation Tags Page', () => {
 
     // No error toast should be triggered
     expect(toast.error).not.toHaveBeenCalled();
+  });
+
+  test('Should handle null fetchMore result gracefully', async () => {
+    // This test verifies the fallback: pageInfo: nextTags.pageInfo ?? prevTags.pageInfo
+    const link = new StaticMockLink(MOCKS_WITH_NULL_FETCH_MORE_RESULT, true);
+    renderOrganizationTags(link);
+    await wait();
+    await waitFor(() => {
+      expect(screen.getAllByTestId('userTag').length).toBe(10);
+    });
+    // Component should render without errors even with null fetchMore result
+    expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
   });
 });

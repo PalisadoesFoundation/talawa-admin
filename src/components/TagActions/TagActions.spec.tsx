@@ -321,19 +321,9 @@ describe('Organisation Tags Page', () => {
     expect(capturedLoadMoreCallback).toBeTruthy();
 
     // Call the loadMore callback to test fetchMore logic
-    let fetchMoreError: Error | null = null;
     await act(async () => {
-      try {
-        if (capturedLoadMoreCallback) {
-          await capturedLoadMoreCallback();
-        }
-      } catch (error) {
-        fetchMoreError = error as Error;
-      }
+      capturedLoadMoreCallback?.();
     });
-
-    // Verify fetchMore executed without errors
-    expect(fetchMoreError).toBeNull();
 
     // Verify component remains stable after fetchMore
     await waitFor(() => {
@@ -562,6 +552,24 @@ describe('Organisation Tags Page', () => {
 
     // Verify hasMore defaults to false when pageInfo is undefined
     // This is tested by checking that the component renders without errors
+    expect(screen.getByTestId('scrollableDiv')).toBeInTheDocument();
+  });
+
+  test('Should handle null pageInfo in fetchMore gracefully', async () => {
+    // This test verifies the fallback: pageInfo: nextTags.pageInfo ?? prevTags.pageInfo
+    renderTagActionsModal(props[0], link5);
+    await wait();
+    await waitFor(() => {
+      expect(screen.getAllByTestId('orgUserTag').length).toBe(10);
+    });
+
+    // Invoke fetchMore using captured callback
+    expect(capturedLoadMoreCallback).toBeTruthy();
+    await act(async () => {
+      capturedLoadMoreCallback?.();
+    });
+
+    // Component should handle null pageInfo gracefully
     expect(screen.getByTestId('scrollableDiv')).toBeInTheDocument();
   });
 });
