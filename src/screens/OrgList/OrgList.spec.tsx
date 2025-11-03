@@ -20,6 +20,7 @@ import i18nForTest from 'utils/i18nForTest';
 import OrgList from './OrgList';
 import { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY } from './OrgListMocks';
 import { ORGANIZATION_LIST, CURRENT_USER } from 'GraphQl/Queries/Queries';
+import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 import {
@@ -425,6 +426,20 @@ const mockConfigurations = {
               email: 'john.doe@akatsuki.com',
               image: null,
             },
+          },
+        },
+      },
+    },
+    {
+      request: {
+        query: GET_USER_NOTIFICATIONS,
+        variables: { userId: '123', input: { first: 5, skip: 0 } },
+      },
+      result: {
+        data: {
+          user: {
+            __typename: 'User',
+            notifications: [],
           },
         },
       },
