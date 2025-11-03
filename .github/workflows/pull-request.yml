@@ -382,8 +382,7 @@ jobs:
       [
         Code-Quality-Checks,
         Check-ESlint-Disable,
-        Check-Code-Coverage-Disable,
-        Check-AutoDocs,
+        Check-Code-Coverage-Disable
       ]
     steps:
       - name: Checkout the Repository
