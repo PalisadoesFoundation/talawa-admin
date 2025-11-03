@@ -1,4 +1,12 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  beforeEach,
+  afterEach,
+  type Mock,
+} from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import React from 'react';
@@ -47,7 +55,7 @@ describe('ChangeLanguageDropDown', () => {
     vi.clearAllMocks();
 
     // Setup default mock implementations
-    (useLocalStorage as jest.Mock).mockReturnValue({
+    (useLocalStorage as Mock).mockReturnValue({
       getItem: vi.fn((key) => {
         if (key === 'id') return mockUserId;
         if (key === 'UserImage') return mockUserImage;
@@ -55,8 +63,8 @@ describe('ChangeLanguageDropDown', () => {
       }),
     });
 
-    (cookies.get as jest.Mock).mockReturnValue('en');
-    (urlToFile as jest.Mock).mockResolvedValue(mockFile);
+    (cookies.get as Mock).mockReturnValue('en');
+    (urlToFile as Mock).mockResolvedValue(mockFile);
   });
 
   afterEach(() => {
@@ -75,7 +83,7 @@ describe('ChangeLanguageDropDown', () => {
   });
 
   it('shows error toast when userId is not found', async () => {
-    (useLocalStorage as jest.Mock).mockReturnValue({
+    (useLocalStorage as Mock).mockReturnValue({
       getItem: vi.fn(() => null),
     });
 
@@ -133,7 +141,7 @@ describe('ChangeLanguageDropDown', () => {
 
   it('handles avatar processing error gracefully', async () => {
     // Mock urlToFile to throw an error
-    (urlToFile as jest.Mock).mockRejectedValue(
+    (urlToFile as Mock).mockRejectedValue(
       new Error('Avatar processing failed'),
     );
 
@@ -220,7 +228,7 @@ describe('ChangeLanguageDropDown', () => {
     'handles language change without avatar when userImage is $description',
     async ({ userImage }) => {
       // Mock userImage to be the specified invalid value
-      (useLocalStorage as jest.Mock).mockReturnValue({
+      (useLocalStorage as Mock).mockReturnValue({
         getItem: vi.fn((key) => {
           if (key === 'id') return mockUserId;
           if (key === 'UserImage') return userImage;
@@ -263,9 +271,9 @@ describe('ChangeLanguageDropDown', () => {
 
   it('uses default language when cookies.get returns falsy value', () => {
     // Mock cookies.get to return a falsy value (null, undefined, or empty string)
-    (cookies.get as jest.Mock).mockReturnValue(null);
+    (cookies.get as Mock).mockReturnValue(null);
 
-    (useLocalStorage as jest.Mock).mockReturnValue({
+    (useLocalStorage as Mock).mockReturnValue({
       getItem: vi.fn((key) => {
         if (key === 'id') return mockUserId;
         if (key === 'UserImage') return 'https://example.com/avatar.jpg';
