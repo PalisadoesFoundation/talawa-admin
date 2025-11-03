@@ -9,6 +9,7 @@ import {
   render,
   screen,
   waitFor,
+  within,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -384,7 +385,9 @@ describe('Testing User Campaigns Screen', () => {
       await userEvent.click(activeButton);
     }
 
+    // Verify that the pledge modal opens with both modal container and form
     await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
       expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
     });
   });
@@ -404,7 +407,6 @@ describe('Testing User Campaigns Screen', () => {
       expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
     });
 
-    // Close the modal
     const closeButton = screen.getByTestId('pledgeModalCloseBtn');
     await userEvent.click(closeButton);
 
@@ -420,9 +422,13 @@ describe('Testing User Campaigns Screen', () => {
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
     });
 
-    const addPledgeButtons = screen.getAllByTestId('addPledgeBtn');
-
-    const endedCampaignButton = addPledgeButtons[1];
+    // Use within() to scope query to specific campaign container
+    const hospitalContainer = screen.getByTestId('detailContainer2');
+    const accordionSummary = hospitalContainer.parentElement;
+    expect(accordionSummary).toBeDefined();
+    const endedCampaignButton = within(
+      accordionSummary as HTMLElement,
+    ).getByTestId('addPledgeBtn');
 
     expect(endedCampaignButton).toBeInTheDocument();
     expect(endedCampaignButton).toBeDisabled();
@@ -441,28 +447,23 @@ describe('Testing User Campaigns Screen', () => {
   it('Filters campaigns by search term correctly', async () => {
     renderCampaigns(link1);
 
-    // Wait for campaigns to load
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
     });
 
-    // Search for "School"
     const searchInput = screen.getByTestId('searchCampaigns');
     fireEvent.change(searchInput, { target: { value: 'School' } });
     fireEvent.click(screen.getByTestId('searchBtn'));
 
-    // Should show only School Campaign
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
       expect(screen.queryByText('Hospital Campaign')).not.toBeInTheDocument();
     });
 
-    // Clear search
     fireEvent.change(searchInput, { target: { value: '' } });
     fireEvent.click(screen.getByTestId('searchBtn'));
 
-    // Should show both campaigns again
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
