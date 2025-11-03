@@ -197,19 +197,19 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
       expect(detailContainer).toHaveTextContent(
-        new Date('2024-07-28').toLocaleDateString(),
+        new Date('2024-07-28').toLocaleDateString('en-US'),
       );
       expect(detailContainer).toHaveTextContent(
-        new Date('2099-12-31').toLocaleDateString(),
+        new Date('2099-12-31').toLocaleDateString('en-US'),
       );
       expect(detailContainer).toHaveTextContent('Active');
       expect(detailContainer2).toHaveTextContent('Hospital Campaign');
       expect(detailContainer2).toHaveTextContent('$9000');
       expect(detailContainer2).toHaveTextContent(
-        new Date('2024-07-28').toLocaleDateString(),
+        new Date('2024-07-28').toLocaleDateString('en-US'),
       );
       expect(detailContainer2).toHaveTextContent(
-        new Date('2022-08-30').toLocaleDateString(),
+        new Date('2022-08-30').toLocaleDateString('en-US'),
       );
       expect(detailContainer2).toHaveTextContent('Ended');
     });
@@ -237,10 +237,10 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
       expect(detailContainer).toHaveTextContent(
-        new Date('2024-07-28').toLocaleDateString(),
+        new Date('2024-07-28').toLocaleDateString('en-US'),
       );
       expect(detailContainer).toHaveTextContent(
-        new Date('2099-12-31').toLocaleDateString(),
+        new Date('2099-12-31').toLocaleDateString('en-US'),
       );
     });
   });
@@ -267,10 +267,10 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
       expect(detailContainer).toHaveTextContent(
-        new Date('2024-07-28').toLocaleDateString(),
+        new Date('2024-07-28').toLocaleDateString('en-US'),
       );
       expect(detailContainer).toHaveTextContent(
-        new Date('2099-12-31').toLocaleDateString(),
+        new Date('2099-12-31').toLocaleDateString('en-US'),
       );
     });
   });
@@ -297,10 +297,10 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
       expect(detailContainer).toHaveTextContent(
-        new Date('2024-07-28').toLocaleDateString(),
+        new Date('2024-07-28').toLocaleDateString('en-US'),
       );
       expect(detailContainer).toHaveTextContent(
-        new Date('2099-12-31').toLocaleDateString(),
+        new Date('2099-12-31').toLocaleDateString('en-US'),
       );
     });
   });
@@ -327,10 +327,10 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
       expect(detailContainer).toHaveTextContent(
-        new Date('2024-07-28').toLocaleDateString(),
+        new Date('2024-07-28').toLocaleDateString('en-US'),
       );
       expect(detailContainer).toHaveTextContent(
-        new Date('2099-12-31').toLocaleDateString(),
+        new Date('2099-12-31').toLocaleDateString('en-US'),
       );
     });
   });
