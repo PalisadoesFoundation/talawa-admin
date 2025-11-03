@@ -128,6 +128,35 @@ export const EMPTY_MOCKS = [
   userDetailsQuery,
 ];
 
+export const MOCKS_WITH_FUND_NO_CAMPAIGNS = [
+  {
+    request: {
+      query: USER_FUND_CAMPAIGNS,
+      variables: {
+        input: { id: 'orgId' },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          funds: {
+            edges: [
+              {
+                node: {
+                  campaigns: {
+                    edges: [],
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  userDetailsQuery,
+];
+
 export const USER_FUND_CAMPAIGNS_ERROR = [
   {
     request: {

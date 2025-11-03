@@ -24,6 +24,7 @@ import { vi, it, expect, describe } from 'vitest';
 import {
   EMPTY_MOCKS,
   MOCKS,
+  MOCKS_WITH_FUND_NO_CAMPAIGNS,
   USER_FUND_CAMPAIGNS_ERROR,
 } from './CampaignsMocks';
 
@@ -383,7 +384,6 @@ describe('Testing User Campaigns Screen', () => {
       await userEvent.click(activeButton);
     }
 
-    // Verify that the pledge modal opens
     await waitFor(() => {
       expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
     });
@@ -392,17 +392,14 @@ describe('Testing User Campaigns Screen', () => {
   it('Closes pledge modal when close button is clicked', async () => {
     renderCampaigns(link1);
 
-    // Wait for campaigns to load
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
     });
 
-    // Open the modal
     const addPledgeButtons = screen.getAllByTestId('addPledgeBtn');
     const activeButton = addPledgeButtons[0];
     await userEvent.click(activeButton);
 
-    // Verify modal is open
     await waitFor(() => {
       expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
     });
@@ -411,7 +408,6 @@ describe('Testing User Campaigns Screen', () => {
     const closeButton = screen.getByTestId('pledgeModalCloseBtn');
     await userEvent.click(closeButton);
 
-    // Verify modal is closed
     await waitFor(() => {
       expect(screen.queryByTestId('pledgeForm')).not.toBeInTheDocument();
     });
@@ -424,13 +420,21 @@ describe('Testing User Campaigns Screen', () => {
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
     });
 
-    // Get all add pledge buttons
     const addPledgeButtons = screen.getAllByTestId('addPledgeBtn');
 
-    // Hospital Campaign is the second campaign (index 1) and should be disabled
     const endedCampaignButton = addPledgeButtons[1];
 
     expect(endedCampaignButton).toBeInTheDocument();
     expect(endedCampaignButton).toBeDisabled();
+  });
+
+  it('Handles fund with no campaigns gracefully', async () => {
+    const link = new StaticMockLink(MOCKS_WITH_FUND_NO_CAMPAIGNS);
+    renderCampaigns(link);
+
+    // Should show "No Campaigns Found" message
+    await waitFor(() => {
+      expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument();
+    });
   });
 });
