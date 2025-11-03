@@ -23,9 +23,9 @@ import useLocalStorage from 'utils/useLocalstorage';
 import Campaigns from './Campaigns';
 import { vi, it, expect, describe } from 'vitest';
 import {
-  EMPTY_MOCKS,
   MOCKS,
   MOCKS_WITH_FUND_NO_CAMPAIGNS,
+  MOCKS_WITH_NO_FUNDS,
   MOCKS_WITH_NULL_ORGANIZATION,
   MOCKS_WITH_UNDEFINED_CAMPAIGNS,
   USER_FUND_CAMPAIGNS_ERROR,
@@ -56,7 +56,7 @@ const { setItem } = useLocalStorage();
  */
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(USER_FUND_CAMPAIGNS_ERROR);
-const link3 = new StaticMockLink(EMPTY_MOCKS);
+const link3 = new StaticMockLink(MOCKS_WITH_NO_FUNDS);
 
 const cTranslations = JSON.parse(
   JSON.stringify(

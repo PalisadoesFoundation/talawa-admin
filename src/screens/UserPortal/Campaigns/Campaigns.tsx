@@ -168,9 +168,8 @@ const Campaigns = (): JSX.Element => {
           case 'endDate_ASC':
             return a.endDate.getTime() - b.endDate.getTime();
           case 'endDate_DESC':
-            return b.endDate.getTime() - a.endDate.getTime();
           default:
-            return 0;
+            return b.endDate.getTime() - a.endDate.getTime();
         }
       });
 

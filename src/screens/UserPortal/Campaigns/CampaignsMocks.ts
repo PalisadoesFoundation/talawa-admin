@@ -107,7 +107,7 @@ export const MOCKS = [
   userDetailsQuery,
 ];
 
-export const EMPTY_MOCKS = [
+export const MOCKS_WITH_NO_FUNDS = [
   {
     request: {
       query: USER_FUND_CAMPAIGNS,
