@@ -51,6 +51,7 @@ import { languages } from 'utils/languages';
 import i18next from 'i18next';
 import cookies from 'js-cookie';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
@@ -143,6 +144,8 @@ function userNavbar(): JSX.Element {
               ))}
             </Dropdown.Menu>
           </Dropdown>
+
+          <NotificationIcon />
 
           {/* Dropdown for user actions */}
           <Dropdown drop="start">

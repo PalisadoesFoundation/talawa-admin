@@ -1,0 +1,90 @@
+.colorWhite {
+  color: white;
+}
+
+.glassMenu {
+  background: rgb(255, 255, 255) !important;
+  backdrop-filter: blur(8px);
+  border-radius: 5px;
+  min-width: 250px !important;
+  max-width: 270px;
+  padding: 8px 0;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.18);
+}
+
+.notificationItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  min-height: 48px;
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background: transparent;
+  transition: background 0.2s;
+}
+
+.notificationItem:hover {
+  background: rgba(154, 151, 151, 0.15);
+}
+
+.notificationDot {
+  width: 10px;
+  height: 10px;
+  background: #0a0a0a;
+  border-radius: 50%;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.notificationText {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.97em;
+  color: #222;
+}
+
+.iconButton {
+  width: 36px !important;
+  height: 36px !important;
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+  padding: 0 !important;
+}
+.iconButton:focus,
+.iconButton:active {
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.unreadBadge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background: #d63031; /* red badge */
+  color: #fff;
+  border-radius: 12px;
+  font-size: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
