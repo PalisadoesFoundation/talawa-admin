@@ -21,7 +21,13 @@ export const updateEnvFile = (
   value: string | undefined | null,
 ): void => {
   try {
-    const description = PARAM_DESCRIPTIONS[key] || 'No description available.';
+    const description = PARAM_DESCRIPTIONS[key];
+    if (!description) {
+      console.warn(
+        `Warning: No description found for "${key}". Using fallback.`,
+      );
+    }
+    const finalDescription = description || 'No description available.';
 
     if (!fs.existsSync(ENV_PATH)) {
       fs.writeFileSync(ENV_PATH, '');
@@ -43,7 +49,7 @@ export const updateEnvFile = (
       .trim();
 
     // Prepare new variable block
-    const newBlock = `# ${description}\n${key}=${value ?? ''}`;
+    const newBlock = `# ${finalDescription}\n${key}=${value ?? ''}`;
 
     // Append block with exactly one blank line separation if not empty
     envContent = envContent ? `${envContent}\n\n${newBlock}` : newBlock;
