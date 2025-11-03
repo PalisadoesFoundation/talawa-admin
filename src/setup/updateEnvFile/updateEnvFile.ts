@@ -34,7 +34,10 @@ export const updateEnvFile = (key: string, value: string): void => {
     );
 
     envContent = envContent.replace(regex, '\n');
-    envContent = envContent.replace(/\n{3,}/g, '\n\n').trim();
+    envContent = envContent
+      .replace(/\r\n/g, '\n')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
 
     // Prepare new variable block
     const newBlock = `# ${description}\n${key}=${value ?? ''}`;
