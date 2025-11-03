@@ -9,6 +9,7 @@ import {
   render,
   screen,
   waitFor,
+  within,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -396,15 +397,12 @@ describe('Testing User Campaigns Screen', () => {
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
     });
 
-    // Get all add pledge buttons
-    const addPledgeButtons = screen.getAllByTestId('addPledgeBtn');
+    // Find the Hospital Campaign container and verify its button is disabled
+    const hospitalContainer = screen.getByTestId('detailContainer2');
+    const endedCampaignButton =
+      within(hospitalContainer).getByTestId('addPledgeBtn');
 
-    // Find the button for the ended campaign (Hospital Campaign with endDate 2022-08-30)
-    const endedCampaignButton = addPledgeButtons.find((btn) =>
-      btn.hasAttribute('disabled'),
-    );
-
-    expect(endedCampaignButton).toBeDefined();
+    expect(endedCampaignButton).toBeInTheDocument();
     expect(endedCampaignButton).toBeDisabled();
   });
 });
