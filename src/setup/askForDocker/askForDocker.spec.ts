@@ -147,29 +147,32 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
 
     const originalURL = global.URL;
     let callCount = 0;
-    global.URL = class extends originalURL {
-      constructor(url: string) {
-        super(url);
-        callCount++;
-        if (callCount === 2 && url.startsWith('ws')) {
-          Object.defineProperty(this, 'protocol', {
-            get: () => 'invalid:',
-            configurable: true,
-          });
+
+    try {
+      global.URL = class extends originalURL {
+        constructor(url: string) {
+          super(url);
+          callCount++;
+          if (callCount === 2 && url.startsWith('ws')) {
+            Object.defineProperty(this, 'protocol', {
+              get: () => 'invalid:',
+              configurable: true,
+            });
+          }
         }
-      }
-    } as typeof URL;
+      } as typeof URL;
 
-    await askAndUpdateTalawaApiUrl();
+      await askAndUpdateTalawaApiUrl();
 
-    expect(console.error).toHaveBeenCalledWith(
-      'Error setting up Talawa API URL:',
-      expect.objectContaining({
-        message: 'Invalid WebSocket URL generated: ',
-      }),
-    );
-
-    global.URL = originalURL;
+      expect(console.error).toHaveBeenCalledWith(
+        'Error setting up Talawa API URL:',
+        expect.objectContaining({
+          message: 'Invalid WebSocket URL generated: ',
+        }),
+      );
+    } finally {
+      global.URL = originalURL;
+    }
   });
 
   test('should handle Docker URL with invalid protocol after construction', async () => {
@@ -180,28 +183,31 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
 
     const originalURL = global.URL;
     let callCount = 0;
-    global.URL = class extends originalURL {
-      constructor(url: string) {
-        super(url);
-        callCount++;
-        if (callCount === 3 && url.includes('host.docker.internal')) {
-          Object.defineProperty(this, 'protocol', {
-            get: () => 'ftp:',
-            configurable: true,
-          });
+
+    try {
+      global.URL = class extends originalURL {
+        constructor(url: string) {
+          super(url);
+          callCount++;
+          if (callCount === 3 && url.includes('host.docker.internal')) {
+            Object.defineProperty(this, 'protocol', {
+              get: () => 'ftp:',
+              configurable: true,
+            });
+          }
         }
-      }
-    } as typeof URL;
+      } as typeof URL;
 
-    await askAndUpdateTalawaApiUrl(true);
+      await askAndUpdateTalawaApiUrl(true);
 
-    expect(console.error).toHaveBeenCalledWith(
-      'Error setting up Talawa API URL:',
-      expect.objectContaining({
-        message: 'Invalid Docker URL generated',
-      }),
-    );
-
-    global.URL = originalURL;
+      expect(console.error).toHaveBeenCalledWith(
+        'Error setting up Talawa API URL:',
+        expect.objectContaining({
+          message: 'Invalid Docker URL generated',
+        }),
+      );
+    } finally {
+      global.URL = originalURL;
+    }
   });
 });
