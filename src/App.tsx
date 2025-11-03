@@ -96,6 +96,7 @@ const VolunteerManagement = lazy(
 const LeaveOrganization = lazy(
   () => import('screens/UserPortal/LeaveOrganization/LeaveOrganization'),
 );
+const Notification = lazy(() => import('screens/Notification/Notification'));
 
 const PluginStore = lazy(() => import('screens/PluginStore/PluginStore'));
 
@@ -216,6 +217,7 @@ function App(): React.ReactElement {
           <Route element={<SecuredRoute />}>
             <Route element={<SuperAdminScreen />}>
               <Route path="/orglist" element={<OrgList />} />
+              <Route path="/notification" element={<Notification />} />
               <Route path="/member" element={<MemberDetail />} />
               <Route path="/users" element={<Users />} />
               <Route path="/communityProfile" element={<CommunityProfile />} />
@@ -343,6 +345,7 @@ function App(): React.ReactElement {
                 path="/user/leaveOrg/:orgId"
                 element={<LeaveOrganization />}
               />
+              <Route path="/user/notification" element={<Notification />} />
               <Route
                 path="/user/volunteer/:orgId"
                 element={<VolunteerManagement />}
