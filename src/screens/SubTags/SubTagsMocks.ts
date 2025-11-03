@@ -478,8 +478,8 @@ export const MOCKS = [
     },
     result: {
       data: {
-        createUserTag: {
-          _id: 'subTag12',
+        createTag: {
+          id: 'subTag12',
         },
       },
     },
