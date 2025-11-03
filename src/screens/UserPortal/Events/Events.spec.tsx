@@ -812,9 +812,7 @@ describe('Testing Events Screen [User Portal]', () => {
     // Check that no rate limit specific warnings were logged
     const rateLimitWarnings = consoleWarnSpy.mock.calls.filter((call) =>
       call.some(
-        (arg) =>
-          typeof arg === 'string' &&
-          arg.includes('Too many requests'),
+        (arg) => typeof arg === 'string' && arg.includes('Too many requests'),
       ),
     );
     expect(rateLimitWarnings).toHaveLength(0);
