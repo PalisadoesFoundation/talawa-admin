@@ -29,7 +29,7 @@ export const updateEnvFile = (key: string, value: string): void => {
     // Remove existing key and its comment (and any surrounding blank lines)
     const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const regex = new RegExp(
-      String.raw`(^|\r?\n)\s*(#.*\r?\n)?\s*#?\s*${escapedKey}\s*=.*(\r?\n)?`,
+      String.raw`(^|\r?\n)\s*(?:#.*\r?\n\s*)*\s*#?\s*${escapedKey}\s*=.*(\r?\n)?`,
       'gm',
     );
 

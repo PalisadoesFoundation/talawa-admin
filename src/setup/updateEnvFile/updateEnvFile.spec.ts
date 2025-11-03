@@ -29,6 +29,32 @@ describe('updateEnvFile', () => {
     );
   });
 
+  it('should remove all contiguous comment blocks when updating a key', () => {
+    const envContent = `
+# Frontend port number to run the app on.
+
+# Frontend port number to run the app on.
+
+# Frontend port number to run the app on.
+PORT=3000
+`;
+    vi.spyOn(fs, 'existsSync').mockReturnValueOnce(true);
+    vi.spyOn(fs, 'readFileSync').mockReturnValueOnce(envContent);
+    const writeFileMock = vi
+      .spyOn(fs, 'writeFileSync')
+      .mockImplementation(() => {});
+
+    updateEnvFile('PORT', '4321');
+
+    const written = writeFileMock.mock.calls[0][1];
+    // Should have exactly ONE comment line for PORT
+    const commentCount = (
+      String(written).match(/# Frontend port number/g) || []
+    ).length;
+    expect(commentCount).toBe(1);
+    expect(written).toContain('PORT=4321');
+  });
+
   it('should update an existing key in the .env file (remove old value even if commented)', () => {
     const envContent = `
 # PORT=1234

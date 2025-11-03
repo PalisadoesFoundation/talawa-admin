@@ -176,16 +176,5 @@ describe('Talawa Admin Setup', () => {
       'REACT_APP_RECAPTCHA_SITE_KEY',
       mockValidKey,
     );
-
-    const validateFn = (input: string): boolean | string => {
-      return (
-        mockValidateRecaptcha(input) ||
-        'Invalid reCAPTCHA site key. Please try again.'
-      );
-    };
-
-    const result = validateFn(mockValidKey);
-    expect(result).toBe(true);
-    expect(mockValidateRecaptcha).toHaveBeenCalledWith(mockValidKey);
   });
 });

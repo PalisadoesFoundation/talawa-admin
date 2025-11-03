@@ -3,7 +3,7 @@ import { askForCustomPort } from 'setup/askForCustomPort/askForCustomPort';
 import inquirer from 'inquirer';
 
 // Ask and update the custom port
-let DEFAULT_PORT = 4321;
+const DEFAULT_PORT = 4321;
 const askAndUpdatePort = async (): Promise<void> => {
   const { shouldSetCustomPortResponse } = await inquirer.prompt([
     {
