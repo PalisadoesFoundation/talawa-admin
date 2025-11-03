@@ -6,7 +6,7 @@
 
 > `const` **IS\_SAMPLE\_ORGANIZATION\_QUERY**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/PlugInQueries.ts:308](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L308)
+Defined in: [src/GraphQl/Queries/PlugInQueries.ts:265](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L265)
 
 GraphQL query to check if an organization is a sample organization.
 
