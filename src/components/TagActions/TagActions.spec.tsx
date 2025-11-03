@@ -327,12 +327,10 @@ describe('Organisation Tags Page', () => {
       capturedLoadMoreCallback?.();
     });
 
-    // Verify component remains stable after fetchMore
+    // Verify fetchMore loaded page 2 tags
     await waitFor(() => {
-      expect(screen.getByText(translations.assign)).toBeInTheDocument();
-      expect(screen.getAllByTestId('orgUserTag').length).toBeGreaterThanOrEqual(
-        10,
-      );
+      expect(screen.getAllByTestId('orgUserTag').length).toBeGreaterThan(10);
+      expect(screen.getByText('userTag 11')).toBeInTheDocument();
     });
   });
 
