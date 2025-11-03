@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_ERROR\_ORGANIZATION\_TAGS\_QUERY**: `object`[]
 
-Defined in: [src/components/TagActions/TagActionsMocks.ts:279](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActionsMocks.ts#L279)
+Defined in: [src/components/TagActions/TagActionsMocks.ts:276](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActionsMocks.ts#L276)
 
 ## Type Declaration
 
@@ -20,7 +20,7 @@ Defined in: [src/components/TagActions/TagActionsMocks.ts:279](https://github.co
 
 #### request.query
 
-> **query**: `DocumentNode` = `ORGANIZATION_USER_TAGS_LIST`
+> **query**: `DocumentNode` = `ORGANIZATION_USER_TAGS_LIST_PG`
 
 #### request.variables
 
@@ -30,9 +30,21 @@ Defined in: [src/components/TagActions/TagActionsMocks.ts:279](https://github.co
 
 > **first**: `number` = `TAGS_QUERY_DATA_CHUNK_SIZE`
 
-#### request.variables.id
+#### request.variables.input
+
+> **input**: `object`
+
+#### request.variables.input.id
 
 > **id**: `string` = `'123'`
+
+#### request.variables.sortedBy
+
+> **sortedBy**: `object`
+
+#### request.variables.sortedBy.id
+
+> **id**: `string` = `'DESCENDING'`
 
 #### request.variables.where
 

@@ -4,6 +4,56 @@
 
 # Variable: MOCKS\_NO\_MORE\_PAGES
 
-> `const` **MOCKS\_NO\_MORE\_PAGES**: (\{ `error?`: `undefined`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `first`: `number`; `id`: `string`; `input?`: `undefined`; `sortedBy`: \{ `id`: `string`; \}; `where`: \{ `name`: \{ `starts_with`: `string`; \}; \}; \}; \}; `result`: \{ `data`: \{ `organizations`: `object`[]; \}; \}; \} \| \{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `first`: `number`; `id?`: `undefined`; `input`: \{ `id`: `string`; \}; `sortedBy`: \{ `id`: `string`; \}; `where`: \{ `name`: \{ `starts_with`: `string`; \}; \}; \}; \}; `result?`: `undefined`; \})[]
+> `const` **MOCKS\_NO\_MORE\_PAGES**: `object`[]
 
-Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:477](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L477)
+Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:463](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L463)
+
+## Type Declaration
+
+### error
+
+> **error**: `Error`
+
+### request
+
+> **request**: `object`
+
+#### request.query
+
+> **query**: `DocumentNode` = `ORGANIZATION_USER_TAGS_LIST_PG`
+
+#### request.variables
+
+> **variables**: `object`
+
+#### request.variables.first
+
+> **first**: `number` = `TAGS_QUERY_DATA_CHUNK_SIZE`
+
+#### request.variables.input
+
+> **input**: `object`
+
+#### request.variables.input.id
+
+> **id**: `string` = `'orgId'`
+
+#### request.variables.sortedBy
+
+> **sortedBy**: `object`
+
+#### request.variables.sortedBy.id
+
+> **id**: `string` = `'DESCENDING'`
+
+#### request.variables.where
+
+> **where**: `object`
+
+#### request.variables.where.name
+
+> **name**: `object`
+
+#### request.variables.where.name.starts\_with
+
+> **starts\_with**: `string` = `''`
