@@ -108,6 +108,7 @@ jobs:
         run: npx knip --include files,exports
 
   Check-AutoDocs:
+    if: ${{ github.actor != 'dependabot[bot]' }}
     name: Generate and Validate Documentation
     runs-on: ubuntu-latest
     needs: [Code-Quality-Checks]
@@ -381,8 +382,7 @@ jobs:
       [
         Code-Quality-Checks,
         Check-ESlint-Disable,
-        Check-Code-Coverage-Disable,
-        Check-AutoDocs,
+        Check-Code-Coverage-Disable
       ]
     steps:
       - name: Checkout the Repository

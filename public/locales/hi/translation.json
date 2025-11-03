@@ -109,6 +109,7 @@
     "pluginSettings": "प्लगइन सेटिंग्स",
     "requests": "सदस्यता अनुरोध",
     "communityProfile": "समुदाय प्रोफ़ाइल",
+    "notification": "सूचनाएं",
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "मेनू",
     "users": "उपयोगकर्ता",
@@ -137,6 +138,9 @@
     "plugins": "प्लगइन",
     "logout": "लॉग आउट",
     "close": "बंद करें"
+  },
+  "notification": {
+    "title": "सूचनाएं"
   },
   "orgList": {
     "title": "तालावा संगठन",
