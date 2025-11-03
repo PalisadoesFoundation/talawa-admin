@@ -32,7 +32,7 @@ export const MOCKS_SUCCESS_UNASSIGN_USER_TAG = [
       query: UNASSIGN_USER_TAG,
       variables: {
         tagId: '1',
-        userId: '1',
+        assigneeId: '1',
       },
     },
     result: {
@@ -69,7 +69,7 @@ export const MOCKS_SUCCESS_UPDATE_USER_TAG = [
     request: {
       query: UPDATE_USER_TAG,
       variables: {
-        tagId: '1',
+        id: '1',
         name: 'tag 1 edited',
       },
     },
