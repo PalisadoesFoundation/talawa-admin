@@ -292,11 +292,11 @@ const Campaigns = (): JSX.Element => {
                     <span>Raised: $0</span>
                     <span>
                       Start Date:{' '}
-                      {new Date(campaign.startDate).toLocaleDateString()}
+                      {new Date(campaign.startDate).toLocaleDateString('en-US')}
                     </span>
                     <span>
                       End Date:{' '}
-                      {new Date(campaign.endDate).toLocaleDateString()}
+                      {new Date(campaign.endDate).toLocaleDateString('en-US')}
                     </span>
                   </div>
                 </div>
