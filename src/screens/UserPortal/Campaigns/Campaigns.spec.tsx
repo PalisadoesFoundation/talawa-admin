@@ -389,6 +389,34 @@ describe('Testing User Campaigns Screen', () => {
     });
   });
 
+  it('Closes pledge modal when close button is clicked', async () => {
+    renderCampaigns(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+    });
+
+    // Open the modal
+    const addPledgeButtons = screen.getAllByTestId('addPledgeBtn');
+    const activeButton = addPledgeButtons[0];
+    await userEvent.click(activeButton);
+
+    // Verify modal is open
+    await waitFor(() => {
+      expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
+    });
+
+    // Close the modal
+    const closeButton = screen.getByTestId('pledgeModalCloseBtn');
+    await userEvent.click(closeButton);
+
+    // Verify modal is closed
+    await waitFor(() => {
+      expect(screen.queryByTestId('pledgeForm')).not.toBeInTheDocument();
+    });
+  });
+
   it('Disables add pledge button for ended campaigns', async () => {
     renderCampaigns(link1);
 
