@@ -270,7 +270,7 @@ export const MOCKS_ERROR_OBJECT = [
       query: UNASSIGN_USER_TAG,
       variables: {
         tagId: '1',
-        userId: '1',
+        assigneeId: '1',
       },
     },
     error: new Error('Simulated error to exercise generic error path'),

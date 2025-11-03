@@ -282,7 +282,7 @@ export const MOCKS = [
       query: UNASSIGN_USER_TAG,
       variables: {
         tagId: '1',
-        userId: '1',
+        assigneeId: '1',
       },
     },
     result: {
