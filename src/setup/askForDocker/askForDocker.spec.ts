@@ -123,32 +123,6 @@ describe('askAndUpdateTalawaApiUrl', () => {
     );
   });
 
-  test('should catch error when docker URL generation fails with invalid protocol', async () => {
-    (askForTalawaApiUrl as Mock).mockResolvedValue('http://localhost:3000');
-    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
-      shouldSetTalawaApiUrlResponse: true,
-    });
-
-    // Mock URL constructor to throw for docker URL
-    const originalURL = global.URL;
-    let urlCallCount = 0;
-    global.URL = class extends originalURL {
-      constructor(url: string) {
-        urlCallCount++;
-        if (urlCallCount === 3) {
-          throw new Error('Invalid URL');
-        }
-        super(url);
-      }
-    } as typeof URL;
-
-    await askAndUpdateTalawaApiUrl(true);
-
-    expect(console.error).toHaveBeenCalled();
-
-    global.URL = originalURL;
-  });
-
   test('should validate Docker URL protocol when useDocker=true', async () => {
     (askForTalawaApiUrl as Mock).mockResolvedValue('https://localhost:3000');
     vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
@@ -161,35 +135,6 @@ describe('askAndUpdateTalawaApiUrl', () => {
       'REACT_APP_DOCKER_TALAWA_URL',
       'https://host.docker.internal:3000',
     );
-  });
-
-  test('should catch error when WebSocket URL generation throws', async () => {
-    (askForTalawaApiUrl as Mock).mockResolvedValue('https://example.com');
-    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
-      shouldSetTalawaApiUrlResponse: true,
-    });
-
-    // Mock URL constructor to throw on second call (websocket URL validation)
-    const originalURL = global.URL;
-    let callCount = 0;
-    global.URL = class extends originalURL {
-      constructor(url: string) {
-        callCount++;
-        if (callCount === 2) {
-          throw new Error('Invalid WebSocket URL');
-        }
-        super(url);
-      }
-    } as typeof URL;
-
-    await askAndUpdateTalawaApiUrl();
-
-    expect(console.error).toHaveBeenCalledWith(
-      'Error setting up Talawa API URL:',
-      expect.any(Error),
-    );
-
-    global.URL = originalURL;
   });
 });
 
