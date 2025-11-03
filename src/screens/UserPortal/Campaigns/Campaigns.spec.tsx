@@ -26,6 +26,7 @@ import {
   EMPTY_MOCKS,
   MOCKS,
   MOCKS_WITH_FUND_NO_CAMPAIGNS,
+  MOCKS_WITH_NULL_ORGANIZATION,
   USER_FUND_CAMPAIGNS_ERROR,
 } from './CampaignsMocks';
 
@@ -467,6 +468,16 @@ describe('Testing User Campaigns Screen', () => {
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+    });
+  });
+
+  it('Clears campaigns when organization data is null', async () => {
+    const link = new StaticMockLink(MOCKS_WITH_NULL_ORGANIZATION);
+    renderCampaigns(link);
+
+    // Should show "No Campaigns Found" message when organization is null
+    await waitFor(() => {
+      expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument();
     });
   });
 });

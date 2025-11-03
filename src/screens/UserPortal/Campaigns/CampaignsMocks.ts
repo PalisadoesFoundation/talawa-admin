@@ -157,6 +157,23 @@ export const MOCKS_WITH_FUND_NO_CAMPAIGNS = [
   userDetailsQuery,
 ];
 
+export const MOCKS_WITH_NULL_ORGANIZATION = [
+  {
+    request: {
+      query: USER_FUND_CAMPAIGNS,
+      variables: {
+        input: { id: 'orgId' },
+      },
+    },
+    result: {
+      data: {
+        organization: null,
+      },
+    },
+  },
+  userDetailsQuery,
+];
+
 export const USER_FUND_CAMPAIGNS_ERROR = [
   {
     request: {
