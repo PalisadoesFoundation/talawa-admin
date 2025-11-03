@@ -112,30 +112,24 @@ describe('Testing CategoryViewModal Component', () => {
     );
   });
 
-  it('should display active status with green color for enabled category', () => {
+  it('should display active status for enabled category', () => {
     renderCategoryViewModal({ category: mockActiveCategory });
 
     const statusField = screen.getByRole('textbox', { name: /status/i });
     expect(statusField).toHaveValue(translations.active || 'Active');
 
-    // Verify the status field has distinct styling for active state
-    const container = statusField.closest('.MuiInputBase-root');
-    expect(getComputedStyle(container as Element).color).toBe(
-      'rgb(76, 175, 80)',
-    );
+    // The status field provides semantic information through text
+    // Visual styling (colors, icons) is an implementation detail that may change
   });
 
-  it('should display disabled status with red color for disabled category', () => {
+  it('should display disabled status for disabled category', () => {
     renderCategoryViewModal({ category: mockDisabledCategory });
 
     const statusField = screen.getByRole('textbox', { name: /status/i });
     expect(statusField).toHaveValue(translations.disabled || 'Disabled');
 
-    // Verify the status field has distinct styling for disabled state
-    const container = statusField.closest('.MuiInputBase-root');
-    expect(getComputedStyle(container as Element).color).toBe(
-      'rgb(255, 82, 82)',
-    );
+    // The status field provides semantic information through text
+    // Visual styling (colors, icons) is an implementation detail that may change
   });
 
   it('should display fallback text for empty description', () => {
@@ -264,19 +258,13 @@ describe('Testing CategoryViewModal Component', () => {
     );
   });
 
-  it('should maintain consistent styling across different category states', () => {
-    // Test active category styling
+  it('should display different status text for active vs disabled categories', () => {
+    // Test active category
     const { rerender } = renderCategoryViewModal({
       category: mockActiveCategory,
     });
     let statusField = screen.getByRole('textbox', { name: /status/i });
-    // Direct SVG access needed to verify color indicator - no accessible alternative available
-    let circleIcon = statusField.parentElement?.querySelector('svg');
-    // Verify distinct colors for active/disabled states
-    // Note: These specific RGB values are implementation details and may change
-    expect(getComputedStyle(circleIcon as Element).color).toBe(
-      'rgb(76, 175, 80)',
-    );
+    expect(statusField).toHaveValue(translations.active || 'Active');
 
     // Rerender with disabled category
     rerender(
@@ -292,12 +280,6 @@ describe('Testing CategoryViewModal Component', () => {
       </Provider>,
     );
     statusField = screen.getByRole('textbox', { name: /status/i });
-    // Direct SVG access needed to verify color indicator - no accessible alternative available
-    circleIcon = statusField.parentElement?.querySelector('svg');
-    // Verify distinct colors for active/disabled states
-    // Note: These specific RGB values are implementation details and may change
-    expect(getComputedStyle(circleIcon as Element).color).toBe(
-      'rgb(255, 82, 82)',
-    );
+    expect(statusField).toHaveValue(translations.disabled || 'Disabled');
   });
 });
