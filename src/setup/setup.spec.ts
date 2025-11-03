@@ -157,10 +157,10 @@ describe('Talawa Admin Setup', () => {
   });
   it('should handle reCAPTCHA setup when user opts in with valid key', async () => {
     const mockValidKey = 'valid-key';
-    const mockValidateRecaptcha = vi.fn().mockReturnValue(true);
-    vi.mocked(
-      await import('./validateRecaptcha/validateRecaptcha'),
-    ).validateRecaptcha = mockValidateRecaptcha;
+    const { validateRecaptcha: mockValidateRecaptcha } = await vi.importMock<
+      typeof import('./validateRecaptcha/validateRecaptcha')
+    >('./validateRecaptcha/validateRecaptcha');
+    mockValidateRecaptcha.mockReturnValue(true);
 
     vi.mocked(inquirer.prompt)
       .mockResolvedValueOnce({ shouldUseRecaptcha: true })
