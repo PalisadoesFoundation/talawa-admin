@@ -112,7 +112,7 @@ describe('askAndUpdateTalawaApiUrl', () => {
     );
   });
 
-  test('should clear Docker URL when useDocker=false and user declines', async () => {
+  test('should clear Docker URL when useDocker=true and user declines', async () => {
     vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
       shouldSetTalawaApiUrlResponse: false,
     });
