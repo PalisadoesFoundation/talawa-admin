@@ -288,8 +288,7 @@ export const MOCKS = [
     result: {
       data: {
         unassignUserTag: {
-          _id: '1',
-          __typename: 'UserTag',
+          id: '1',
         },
       },
     },
@@ -298,15 +297,14 @@ export const MOCKS = [
     request: {
       query: UPDATE_USER_TAG,
       variables: {
-        tagId: '1',
+        id: '1',
         name: 'tag 1 edited',
       },
     },
     result: {
       data: {
-        updateUserTag: {
-          _id: '1',
-          __typename: 'UserTag',
+        updateTag: {
+          id: '1',
         },
       },
     },
@@ -320,9 +318,8 @@ export const MOCKS = [
     },
     result: {
       data: {
-        removeUserTag: {
-          _id: '1',
-          __typename: 'UserTag',
+        deleteTag: {
+          id: '1',
         },
       },
     },

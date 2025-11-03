@@ -2,7 +2,7 @@
 
 import type { ApolloError } from '@apollo/client';
 import type {
-  InterfaceQueryOrganizationUserTags,
+  InterfaceQueryOrganizationTags,
   InterfaceQueryUserTagChildTags,
   InterfaceQueryUserTagsAssignedMembers,
   InterfaceQueryUserTagsMembersToAssignTo,
@@ -70,18 +70,18 @@ interface InterfacePaginationVariables {
 // 3. Generic fetch more options
 interface InterfaceBaseFetchMoreOptions<T> {
   variables: InterfacePaginationVariables;
-  updateQuery?: (prev: T, options: { fetchMoreResult: T }) => T;
+  updateQuery?: (prev: T, options: { fetchMoreResult?: T | null }) => T;
 }
 
 // 4. Query interfaces
 export interface InterfaceOrganizationTagsQuery
   extends InterfaceBaseQueryResult {
   data?: {
-    organizations: InterfaceQueryOrganizationUserTags[];
+    organization: InterfaceQueryOrganizationTags;
   };
   fetchMore: (
     options: InterfaceBaseFetchMoreOptions<{
-      organizations: InterfaceQueryOrganizationUserTags[];
+      organization: InterfaceQueryOrganizationTags;
     }>,
   ) => void;
 }

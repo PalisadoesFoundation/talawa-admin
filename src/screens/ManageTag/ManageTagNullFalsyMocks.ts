@@ -197,7 +197,7 @@ export const MOCKS_ERROR_UNASSIGN_USER_TAG = [
       query: UNASSIGN_USER_TAG,
       variables: {
         tagId: '1',
-        userId: '1',
+        assigneeId: '1',
       },
     },
     error: new Error('Failed to unassign user tag'),
@@ -228,7 +228,7 @@ export const MOCKS_ERROR_UPDATE_USER_TAG = [
     request: {
       query: UPDATE_USER_TAG,
       variables: {
-        tagId: '1',
+        id: '1',
         name: 'tag 1 edited',
       },
     },

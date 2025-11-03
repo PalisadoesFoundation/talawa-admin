@@ -35,12 +35,9 @@ import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import { useParams } from 'react-router';
-import type {
-  InterfaceQueryOrganizationUserTags,
-  InterfaceTagData,
-} from 'utils/interfaces';
+import type { InterfaceTagData } from 'utils/interfaces';
 import styles from '../../style/app-fixed.module.css';
-import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
+import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
 import {
   ASSIGN_TO_TAGS,
   REMOVE_FROM_TAGS,
@@ -86,11 +83,12 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     loading: orgUserTagsLoading,
     error: orgUserTagsError,
     fetchMore: orgUserTagsFetchMore,
-  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST, {
+  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST_PG, {
     variables: {
-      id: orgId,
+      input: { id: orgId },
       first: TAGS_QUERY_DATA_CHUNK_SIZE,
       where: { name: { starts_with: tagSearchName } },
+      sortedBy: { id: 'DESCENDING' },
     },
     skip: !tagActionsModalIsOpen,
   });
@@ -99,43 +97,37 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     orgUserTagsFetchMore({
       variables: {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after: orgUserTagsData?.organizations[0].userTags.pageInfo.endCursor,
+        after: orgUserTagsData?.organization?.tags?.pageInfo?.endCursor,
       },
-      updateQuery: (
-        prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
-        {
-          fetchMoreResult,
-        }: {
-          fetchMoreResult?: {
-            organizations: InterfaceQueryOrganizationUserTags[];
-          };
-        },
-      ) => {
-        if (!fetchMoreResult) return prevResult;
+      updateQuery: (prevResult, { fetchMoreResult }) => {
+        const prevTags = prevResult.organization?.tags;
+        const nextTags = fetchMoreResult?.organization?.tags;
+
+        if (
+          !prevTags ||
+          !nextTags ||
+          !Array.isArray(prevTags.edges) ||
+          !Array.isArray(nextTags.edges)
+        ) {
+          return prevResult;
+        }
 
         return {
-          organizations: [
-            {
-              ...prevResult.organizations[0],
-              userTags: {
-                ...prevResult.organizations[0].userTags,
-                edges: [
-                  ...prevResult.organizations[0].userTags.edges,
-                  ...fetchMoreResult.organizations[0].userTags.edges,
-                ],
-                pageInfo: fetchMoreResult.organizations[0].userTags.pageInfo,
-              },
+          organization: {
+            ...prevResult.organization,
+            tags: {
+              ...prevTags,
+              edges: [...prevTags.edges, ...nextTags.edges],
+              pageInfo: nextTags.pageInfo ?? prevTags.pageInfo,
             },
-          ],
+          },
         };
       },
     });
   };
 
   const userTagsList =
-    orgUserTagsData?.organizations[0]?.userTags.edges.map(
-      (edge) => edge.node,
-    ) ?? [];
+    orgUserTagsData?.organization?.tags?.edges?.map(({ node }) => node) ?? [];
 
   // tags that we have selected to assigned
   const [selectedTags, setSelectedTags] = useState<InterfaceTagData[]>([]);
@@ -365,8 +357,8 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                     dataLength={userTagsList?.length ?? 0}
                     next={loadMoreUserTags}
                     hasMore={
-                      orgUserTagsData?.organizations[0].userTags.pageInfo
-                        .hasNextPage ?? false
+                      orgUserTagsData?.organization?.tags?.pageInfo
+                        ?.hasNextPage ?? false
                     }
                     loader={<InfiniteScrollLoader />}
                     scrollableTarget="scrollableDiv"

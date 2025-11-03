@@ -2,7 +2,7 @@ import {
   ASSIGN_TO_TAGS,
   REMOVE_FROM_TAGS,
 } from 'GraphQl/Mutations/TagMutations';
-import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
+import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 
@@ -104,86 +104,83 @@ const subTagEdgesNext = [
 export const MOCKS = [
   {
     request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
       variables: {
-        id: '123',
+        input: { id: '123' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
       },
     },
     result: {
       data: {
-        organizations: [
-          {
-            userTags: {
-              edges: userTagEdgesFirst,
-              pageInfo: {
-                startCursor: '1',
-                endCursor: '10',
-                hasNextPage: true,
-                hasPreviousPage: false,
-              },
-              totalCount: 12,
+        organization: {
+          tags: {
+            edges: userTagEdgesFirst,
+            pageInfo: {
+              startCursor: '1',
+              endCursor: '10',
+              hasNextPage: true,
+              hasPreviousPage: false,
             },
+            totalCount: 12,
           },
-        ],
+        },
       },
     },
   },
   {
     request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
       variables: {
-        id: '123',
+        input: { id: '123' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: '10',
         where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
       },
     },
     result: {
       data: {
-        organizations: [
-          {
-            userTags: {
-              edges: userTagEdgesNext,
-              pageInfo: {
-                startCursor: '11',
-                endCursor: '12',
-                hasNextPage: false,
-                hasPreviousPage: true,
-              },
-              totalCount: 12,
+        organization: {
+          tags: {
+            edges: userTagEdgesNext,
+            pageInfo: {
+              startCursor: '11',
+              endCursor: '12',
+              hasNextPage: false,
+              hasPreviousPage: true,
             },
+            totalCount: 12,
           },
-        ],
+        },
       },
     },
   },
   {
     request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
       variables: {
-        id: '123',
+        input: { id: '123' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: 'searchUserTag' } },
+        sortedBy: { id: 'DESCENDING' },
       },
     },
     result: {
       data: {
-        organizations: [
-          {
-            userTags: {
-              edges: userTagEdgesSearch,
-              pageInfo: {
-                startCursor: '1',
-                endCursor: '2',
-                hasNextPage: false,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
+        organization: {
+          tags: {
+            edges: userTagEdgesSearch,
+            pageInfo: {
+              startCursor: '1',
+              endCursor: '2',
+              hasNextPage: false,
+              hasPreviousPage: false,
             },
+            totalCount: 2,
           },
-        ],
+        },
       },
     },
   },
@@ -253,7 +250,7 @@ export const MOCKS = [
     result: {
       data: {
         assignToUserTags: {
-          _id: '1',
+          id: '1',
         },
       },
     },
@@ -269,7 +266,7 @@ export const MOCKS = [
     result: {
       data: {
         removeFromUserTags: {
-          _id: '1',
+          id: '1',
         },
       },
     },
@@ -279,11 +276,12 @@ export const MOCKS = [
 export const MOCKS_ERROR_ORGANIZATION_TAGS_QUERY = [
   {
     request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
       variables: {
-        id: '123',
+        input: { id: '123' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
       },
     },
     error: new Error('Mock Graphql Error for organization root tags query'),
@@ -291,34 +289,34 @@ export const MOCKS_ERROR_ORGANIZATION_TAGS_QUERY = [
 ];
 
 export const MOCKS_ERROR_SUBTAGS_QUERY = [
+  ...MOCKS.slice(0, 3),
   {
     request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
       variables: {
-        id: '123',
+        input: { id: '123' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
       },
     },
     result: {
       data: {
-        organizations: [
-          {
-            userTags: {
-              edges: [
-                createEdge('1', 'userTag 1', null, 5, 11, []),
-                createEdge('2', 'userTag 2', null, 5, 0, []),
-              ],
-              pageInfo: {
-                startCursor: '1',
-                endCursor: '2',
-                hasNextPage: false,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
+        organization: {
+          tags: {
+            edges: [
+              createEdge('1', 'userTag 1', null, 5, 11, []),
+              createEdge('2', 'userTag 2', null, 5, 0, []),
+            ],
+            pageInfo: {
+              startCursor: '1',
+              endCursor: '2',
+              hasNextPage: false,
+              hasPreviousPage: false,
             },
+            totalCount: 2,
           },
-        ],
+        },
       },
     },
   },
@@ -337,29 +335,28 @@ export const MOCKS_ERROR_SUBTAGS_QUERY = [
 export const MOCKS_ERROR_ASSIGN_OR_REMOVAL_TAGS = [
   {
     request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
       variables: {
-        id: '123',
+        input: { id: '123' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
       },
     },
     result: {
       data: {
-        organizations: [
-          {
-            userTags: {
-              edges: userTagEdgesFirst,
-              pageInfo: {
-                startCursor: '1',
-                endCursor: '10',
-                hasNextPage: true,
-                hasPreviousPage: false,
-              },
-              totalCount: 12,
+        organization: {
+          tags: {
+            edges: userTagEdgesFirst,
+            pageInfo: {
+              startCursor: '1',
+              endCursor: '10',
+              hasNextPage: true,
+              hasPreviousPage: false,
             },
+            totalCount: 12,
           },
-        ],
+        },
       },
     },
   },
@@ -373,4 +370,50 @@ export const MOCKS_ERROR_ASSIGN_OR_REMOVAL_TAGS = [
     },
     error: new Error('Mock Graphql Error While assigning/removing tags'),
   },
+];
+
+export const MOCKS_WITH_NULL_FETCH_MORE = [
+  MOCKS[0], // Initial query with hasNextPage: true
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
+      variables: {
+        input: { id: '123' },
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: '10',
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: null, // Simulate null response to test the null check in updateQuery
+    },
+  },
+  ...MOCKS.slice(2),
+];
+
+export const MOCKS_WITH_UNDEFINED_PAGEINFO = [
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST_PG,
+      variables: {
+        input: { id: '123' },
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          tags: {
+            edges: userTagEdgesFirst,
+            pageInfo: undefined, // Test undefined pageInfo to trigger ?? false fallback
+            totalCount: 10,
+          },
+        },
+      },
+    },
+  },
+  ...MOCKS.slice(1),
 ];

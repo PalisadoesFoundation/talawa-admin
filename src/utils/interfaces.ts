@@ -1525,12 +1525,12 @@ interface InterfaceTagMembersData {
 }
 
 /**
- * @interface InterfaceQueryOrganizationUserTags
- * @description Defines the structure for a query result containing organization user tags.
- * @property {InterfaceTagNodeData} userTags - The user tags data.
+ * @interface InterfaceQueryOrganizationTags
+ * @description Defines the structure for a query result containing organization tags.
+ * @property {InterfaceTagNodeData} tags - The tags data.
  */
-export interface InterfaceQueryOrganizationUserTags {
-  userTags: InterfaceTagNodeData;
+export interface InterfaceQueryOrganizationTags {
+  tags: InterfaceTagNodeData;
 }
 
 /**

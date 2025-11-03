@@ -124,7 +124,9 @@ function SubTags(): JSX.Element {
         {
           fetchMoreResult,
         }: {
-          fetchMoreResult?: { getChildTags: InterfaceQueryUserTagChildTags };
+          fetchMoreResult?: {
+            getChildTags: InterfaceQueryUserTagChildTags;
+          } | null;
         },
       ) => {
         if (!fetchMoreResult) return prevResult;
@@ -153,7 +155,11 @@ function SubTags(): JSX.Element {
 
     try {
       const { data } = await create({
-        variables: { name: tagName, organizationId: orgId, parentTagId },
+        variables: {
+          name: tagName,
+          organizationId: orgId,
+          folderId: parentTagId,
+        },
       });
 
       if (data) {

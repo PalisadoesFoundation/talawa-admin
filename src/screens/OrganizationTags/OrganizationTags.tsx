@@ -47,10 +47,7 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import IconComponent from 'components/IconComponent/IconComponent';
-import type {
-  InterfaceQueryOrganizationUserTags,
-  InterfaceTagData,
-} from 'utils/interfaces';
+import type { InterfaceTagData } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import { DataGrid } from '@mui/x-data-grid';
 import type {
@@ -111,46 +108,30 @@ function OrganizationTags(): JSX.Element {
     orgUserTagsFetchMore({
       variables: {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after:
-          orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo?.endCursor ??
-          null,
+        after: orgUserTagsData?.organization?.tags?.pageInfo?.endCursor ?? null,
       },
-      updateQuery: (
-        prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
-        {
-          fetchMoreResult,
-        }: {
-          fetchMoreResult?: {
-            organizations: InterfaceQueryOrganizationUserTags[];
-          };
-        },
-      ) => {
-        if (!fetchMoreResult) {
-          return prevResult;
-        }
+      updateQuery: (prevResult, { fetchMoreResult }) => {
+        const prevTags = prevResult.organization?.tags;
+        const nextTags = fetchMoreResult?.organization?.tags;
 
-        // Check if organizations exists in both prevResult and fetchMoreResult
         if (
-          !prevResult.organizations?.[0] ||
-          !fetchMoreResult.organizations?.[0]
+          !prevTags ||
+          !nextTags ||
+          !Array.isArray(prevTags.edges) ||
+          !Array.isArray(nextTags.edges)
         ) {
           return prevResult;
         }
 
         return {
-          organizations: [
-            {
-              ...prevResult.organizations[0],
-              userTags: {
-                ...prevResult.organizations[0].userTags,
-                edges: [
-                  ...prevResult.organizations[0].userTags.edges,
-                  ...fetchMoreResult.organizations[0].userTags.edges,
-                ],
-                pageInfo: fetchMoreResult.organizations[0].userTags.pageInfo,
-              },
+          organization: {
+            ...prevResult.organization,
+            tags: {
+              ...prevTags,
+              edges: [...prevTags.edges, ...nextTags.edges],
+              pageInfo: nextTags.pageInfo ?? prevTags.pageInfo,
             },
-          ],
+          },
         };
       },
     });
@@ -204,7 +185,7 @@ function OrganizationTags(): JSX.Element {
   };
 
   const userTagsList =
-    orgUserTagsData?.organizations?.[0]?.userTags?.edges?.map(
+    orgUserTagsData?.organization?.tags?.edges?.map(
       (edge: { node: InterfaceTagData }) => edge.node,
     ) || [];
 
@@ -397,7 +378,7 @@ function OrganizationTags(): JSX.Element {
                   dataLength={userTagsList?.length}
                   next={loadMoreUserTags}
                   hasMore={
-                    orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo
+                    orgUserTagsData?.organization?.tags?.pageInfo
                       ?.hasNextPage ?? false
                   }
                   loader={<InfiniteScrollLoader />}
@@ -446,10 +427,12 @@ function OrganizationTags(): JSX.Element {
                     getRowClassName={() => `${styles.rowBackground}`}
                     autoHeight
                     rowHeight={65}
-                    rows={userTagsList?.map((userTag, index) => ({
-                      id: index + 1,
-                      ...userTag,
-                    }))}
+                    rows={userTagsList?.map(
+                      (userTag: InterfaceTagData, index: number) => ({
+                        id: index + 1,
+                        ...userTag,
+                      }),
+                    )}
                     columns={columns}
                     isRowSelectable={() => false}
                   />

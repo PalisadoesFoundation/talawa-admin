@@ -38,8 +38,7 @@ export const MOCKS_SUCCESS_UNASSIGN_USER_TAG = [
     result: {
       data: {
         unassignUserTag: {
-          _id: '1',
-          __typename: 'UserTag',
+          id: '1',
         },
       },
     },
@@ -76,9 +75,8 @@ export const MOCKS_SUCCESS_UPDATE_USER_TAG = [
     },
     result: {
       data: {
-        updateUserTag: {
-          _id: '1',
-          __typename: 'UserTag',
+        updateTag: {
+          id: '1',
         },
       },
     },
@@ -114,9 +112,8 @@ export const MOCKS_SUCCESS_REMOVE_USER_TAG = [
     },
     result: {
       data: {
-        removeUserTag: {
-          _id: '1',
-          __typename: 'UserTag',
+        deleteTag: {
+          id: '1',
         },
       },
     },
