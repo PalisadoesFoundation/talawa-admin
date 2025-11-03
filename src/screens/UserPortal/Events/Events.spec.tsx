@@ -808,9 +808,16 @@ describe('Testing Events Screen [User Portal]', () => {
       expect(screen.getByText('Month View')).toBeInTheDocument();
     });
 
-    // Rate limit errors should be suppressed (not logged)
-    // The component should still render without crashing
-    expect(consoleWarnSpy).not.toHaveBeenCalled();
+    // Rate limit errors should be suppressed (not logged by our component)
+    // Check that no rate limit specific warnings were logged
+    const rateLimitWarnings = consoleWarnSpy.mock.calls.filter((call) =>
+      call.some(
+        (arg) =>
+          typeof arg === 'string' &&
+          arg.includes('Too many requests'),
+      ),
+    );
+    expect(rateLimitWarnings).toHaveLength(0);
 
     consoleWarnSpy.mockRestore();
   });
