@@ -2,3 +2,4 @@ node_modules
 # Contains the PDF file of the Tag as JSON string, thus does not need to be formatted
 src/components/CheckIn/tagTemplate.ts
 vitest.config.ts
+package-lock.json
