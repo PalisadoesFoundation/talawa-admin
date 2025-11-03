@@ -155,7 +155,11 @@ function SubTags(): JSX.Element {
 
     try {
       const { data } = await create({
-        variables: { name: tagName, organizationId: orgId, parentTagId },
+        variables: {
+          name: tagName,
+          organizationId: orgId,
+          folderId: parentTagId,
+        },
       });
 
       if (data) {

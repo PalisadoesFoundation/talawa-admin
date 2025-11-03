@@ -212,7 +212,7 @@ function ManageTag(): JSX.Element {
   const handleUnassignUserTag = async (): Promise<void> => {
     try {
       await unassignUserTag({
-        variables: { tagId: currentTagId, userId: unassignUserId },
+        variables: { tagId: currentTagId, assigneeId: unassignUserId },
       });
 
       userTagAssignedMembersRefetch();
@@ -248,7 +248,7 @@ function ManageTag(): JSX.Element {
 
     try {
       const { data } = await edit({
-        variables: { tagId: currentTagId, name: newTagName },
+        variables: { id: currentTagId, name: newTagName },
       });
 
       if (data) {

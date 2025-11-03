@@ -100,7 +100,15 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         after: orgUserTagsData?.organization?.tags?.pageInfo?.endCursor,
       },
       updateQuery: (prevResult, { fetchMoreResult }) => {
-        if (!fetchMoreResult?.organization || !prevResult.organization) {
+        const prevTags = prevResult.organization?.tags;
+        const nextTags = fetchMoreResult?.organization?.tags;
+
+        if (
+          !prevTags ||
+          !nextTags ||
+          !Array.isArray(prevTags.edges) ||
+          !Array.isArray(nextTags.edges)
+        ) {
           return prevResult;
         }
 
@@ -108,12 +116,9 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
           organization: {
             ...prevResult.organization,
             tags: {
-              ...prevResult.organization.tags,
-              edges: [
-                ...prevResult.organization.tags.edges,
-                ...fetchMoreResult.organization.tags.edges,
-              ],
-              pageInfo: fetchMoreResult.organization.tags.pageInfo,
+              ...prevTags,
+              edges: [...prevTags.edges, ...nextTags.edges],
+              pageInfo: nextTags.pageInfo ?? prevTags.pageInfo,
             },
           },
         };
