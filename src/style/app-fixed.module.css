@@ -1010,6 +1010,19 @@
   border-color: transparent !important;
 }
 
+/* Override for header placement: make search button inline within header controls */
+.btnsContainerSearchBar .searchButton {
+  position: static;
+  bottom: auto;
+  right: auto;
+  margin: 0;
+  padding: 0.45rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+}
+
 /* Modal Header*/
 
 .modalHeader {
@@ -7489,9 +7502,10 @@ form {
 
 .btnsContainerSearchBar {
   display: flex;
-  width: 95%;
+  width: 100%;
   justify-content: space-between;
-  margin: 2.5rem 0 2.5rem 0;
+  margin: 1.8rem 0 1.8rem 0;
+  align-items: center;
 }
 
 .btnsContainerSearchBar .btnsBlockSearchBar {
@@ -7504,7 +7518,8 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 20px;
+  margin-left: 12px; /* bring controls closer together */
+  gap: 12px;
 }
 
 .btnsContainerSearchBar .btnsBlockSearchBar button {
@@ -7515,8 +7530,12 @@ form {
 }
 
 .btnsContainerSearchBar .inputOrgList {
-  flex: 1;
+  flex: 1 1 640px; /* make input wider and flexible */
+  max-width: 760px;
   position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 18px; /* gap from left */
 }
 
 .btnsContainerSearchBar input {
@@ -7524,7 +7543,21 @@ form {
 }
 
 .btnsContainerSearchBar .inputOrgList button {
-  width: 52px;
+  width: 44px; /* slightly smaller square button */
+  height: 38px;
+  margin-left: 8px;
+  flex: 0 0 44px;
+}
+
+/* When search button is placed in the header controls (btnsBlock), make it visually consistent */
+.btnsContainerSearchBar .btnsBlock .searchButton {
+  width: 44px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  box-shadow: var(--hover-shadow);
 }
 
 @media (max-width: 1020px) {
