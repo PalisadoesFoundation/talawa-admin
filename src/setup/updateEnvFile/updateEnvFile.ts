@@ -16,7 +16,10 @@ const PARAM_DESCRIPTIONS: Record<string, string> = {
   ALLOW_LOGS: 'Whether logs are allowed in the console.',
 };
 
-export const updateEnvFile = (key: string, value: string): void => {
+export const updateEnvFile = (
+  key: string,
+  value: string | undefined | null,
+): void => {
   try {
     const description = PARAM_DESCRIPTIONS[key] || 'No description available.';
 
