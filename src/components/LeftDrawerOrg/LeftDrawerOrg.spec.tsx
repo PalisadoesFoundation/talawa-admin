@@ -90,12 +90,17 @@ vi.mock('components/SignOut/SignOut', () => ({
   )),
 }));
 
+const mockGetItem = vi.fn((key: string) => {
+  if (key === 'id') return 'user-123';
+  return null;
+});
+
+const mockSetItem = vi.fn();
+
 vi.mock('utils/useLocalstorage', () => ({
   default: vi.fn(() => ({
-    getItem: vi.fn((key: string) => {
-      if (key === 'id') return 'user-123';
-      return null;
-    }),
+    getItem: mockGetItem,
+    setItem: mockSetItem,
   })),
 }));
 
@@ -252,6 +257,8 @@ describe('LeftDrawerOrg', () => {
     vi.clearAllMocks();
     mockT.mockClear();
     mockTErrors.mockClear();
+    mockSetItem.mockClear();
+    mockGetItem.mockClear();
     mockUsePluginDrawerItems.mockReturnValue([]);
     // Reset window.innerWidth to a default value
     Object.defineProperty(window, 'innerWidth', {
@@ -705,6 +712,79 @@ describe('LeftDrawerOrg', () => {
       // This should not be considered a profile page for the current user
       expect(true).toBe(true); // Profile page logic is internal
     });
+  });
+
+  it('should handle empty pathname via direct routing', () => {
+    render(
+      <MockedProvider mocks={successMocks} addTypename={false}>
+        <MemoryRouter initialEntries={['']}>
+          <LeftDrawerOrg {...defaultProps} />
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // The component should still render without error
+    expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
+  });
+
+  it('should toggle drawer state and update localStorage on click and keydown events', () => {
+    // Test with initial hideDrawer = false
+    const { unmount: unmount1 } = renderComponent({ hideDrawer: false });
+
+    const toggleButton = screen.getByTestId('toggleBtn');
+    expect(toggleButton).toBeInTheDocument();
+
+    // Test onClick functionality
+    fireEvent.click(toggleButton);
+
+    expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'true');
+    expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+
+    // Clear mocks and unmount previous component
+    mockSetItem.mockClear();
+    mockSetHideDrawer.mockClear();
+    unmount1();
+
+    // Re-render with hideDrawer = true
+    const { unmount: unmount2 } = renderComponent({ hideDrawer: true });
+    const toggleButtonCollapsed = screen.getByTestId('toggleBtn');
+
+    // Test onClick when drawer is hidden
+    fireEvent.click(toggleButtonCollapsed);
+
+    expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'false');
+    expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
+
+    // Clear mocks for keydown tests
+    mockSetItem.mockClear();
+    mockSetHideDrawer.mockClear();
+
+    // Test onKeyDown with Enter key
+    fireEvent.keyDown(toggleButtonCollapsed, { key: 'Enter' });
+
+    expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'false');
+    expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
+
+    // Clear mocks
+    mockSetItem.mockClear();
+    mockSetHideDrawer.mockClear();
+
+    // Test onKeyDown with Space key
+    fireEvent.keyDown(toggleButtonCollapsed, { key: ' ' });
+
+    expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'false');
+    expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
+
+    // Test that other keys don't trigger the toggle
+    mockSetItem.mockClear();
+    mockSetHideDrawer.mockClear();
+
+    fireEvent.keyDown(toggleButtonCollapsed, { key: 'Escape' });
+
+    expect(mockSetItem).not.toHaveBeenCalled();
+    expect(mockSetHideDrawer).not.toHaveBeenCalled();
+
+    unmount2();
   });
 
   describe('Internationalization', () => {
