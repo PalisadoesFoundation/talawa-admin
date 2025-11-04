@@ -65,10 +65,7 @@ export const MOCKS = [
       query: USER_PLEDGES,
       variables: {
         input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -141,7 +138,6 @@ export const MOCKS = [
         input: { userId: 'userId' },
         where: {
           firstName_contains: 'Harve',
-          name_contains: undefined,
         },
         orderBy: 'endDate_DESC',
       },
@@ -187,7 +183,6 @@ export const MOCKS = [
       variables: {
         input: { userId: 'userId' },
         where: {
-          firstName_contains: '',
           name_contains: 'School',
         },
         orderBy: 'endDate_DESC',
@@ -279,10 +274,7 @@ export const MOCKS = [
       query: USER_PLEDGES,
       variables: {
         input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        where: {},
         orderBy: 'amount_ASC',
       },
     },

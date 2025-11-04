@@ -35,7 +35,7 @@
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, ProgressBar } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
@@ -127,10 +127,12 @@ const Pledges = (): JSX.Element => {
   } = useQuery(USER_PLEDGES, {
     variables: {
       input: { userId },
-      where: {
-        firstName_contains: searchBy === 'pledgers' ? searchTerm : undefined,
-        name_contains: searchBy === 'campaigns' ? searchTerm : undefined,
-      },
+      where: searchTerm
+        ? {
+            ...(searchBy === 'pledgers' && { firstName_contains: searchTerm }),
+            ...(searchBy === 'campaigns' && { name_contains: searchTerm }),
+          }
+        : {},
       orderBy: sortBy,
     },
   });
@@ -459,7 +461,9 @@ const Pledges = (): JSX.Element => {
           amount: pledge.amount,
           campaign: pledge.campaign,
           pledger: pledge.pledger,
-          users: (pledge as any).users, // Include users array for multiple pledgers functionality
+          users: (
+            pledge as InterfacePledgeInfo & { users?: InterfaceUserInfoPG[] }
+          ).users, // Include users array for multiple pledgers functionality
           currency: pledge.campaign?.currencyCode,
           goalAmount: pledge.campaign?.goalAmount,
         }))}

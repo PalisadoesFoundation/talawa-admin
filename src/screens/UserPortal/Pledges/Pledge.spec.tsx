@@ -3,13 +3,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -32,10 +26,7 @@ const MOCKS_WITH_MULTIPLE_PLEDGERS = [
       query: USER_PLEDGES,
       variables: {
         input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -108,10 +99,7 @@ const MOCKS_WITH_MISSING_CAMPAIGN = [
       query: USER_PLEDGES,
       variables: {
         input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -149,10 +137,7 @@ const MOCKS_WITH_INVALID_DATE = [
       query: USER_PLEDGES,
       variables: {
         input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -198,10 +183,7 @@ const MOCKS_WITH_MORE_USERS = [
       query: USER_PLEDGES,
       variables: {
         input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -324,10 +306,7 @@ const MOCKS_WITH_SINGLE_PLEDGER = [
       query: USER_PLEDGES,
       variables: {
         input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -372,10 +351,7 @@ const MOCKS_WITH_DIFFERENT_CURRENCIES = [
       query: USER_PLEDGES,
       variables: {
         input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -420,10 +396,7 @@ const MOCKS_WITH_ZERO_GOAL = [
       query: USER_PLEDGES,
       variables: {
         input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -468,10 +441,7 @@ const EMPTY_MOCKS = [
       query: USER_PLEDGES,
       variables: {
         input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -544,10 +514,7 @@ const USER_PLEDGES_ERROR = [
       query: USER_PLEDGES,
       variables: {
         input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -563,7 +530,6 @@ const SEARCH_MOCKS = [
         input: { userId: 'userId' },
         where: {
           firstName_contains: 'Harve',
-          name_contains: undefined,
         },
         orderBy: 'endDate_DESC',
       },
@@ -607,7 +573,6 @@ const SEARCH_MOCKS = [
       variables: {
         input: { userId: 'userId' },
         where: {
-          firstName_contains: '',
           name_contains: 'School',
         },
         orderBy: 'endDate_DESC',
@@ -695,10 +660,7 @@ const SEARCH_MOCKS = [
       query: USER_PLEDGES,
       variables: {
         input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: '',
-        },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -766,9 +728,7 @@ const SEARCH_MOCKS = [
       query: USER_PLEDGES,
       variables: {
         input: { userId: 'userId' },
-        where: {
-          name_contains: '',
-        },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -836,10 +796,7 @@ const SEARCH_MOCKS = [
       query: USER_PLEDGES,
       variables: {
         input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        where: {},
         orderBy: 'amount_ASC',
       },
     },
@@ -907,10 +864,7 @@ const SEARCH_MOCKS = [
       query: USER_PLEDGES,
       variables: {
         input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        where: {},
         orderBy: 'amount_DESC',
       },
     },
@@ -978,10 +932,7 @@ const SEARCH_MOCKS = [
       query: USER_PLEDGES,
       variables: {
         input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        where: {},
         orderBy: 'endDate_ASC',
       },
     },
