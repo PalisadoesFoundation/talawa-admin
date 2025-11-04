@@ -9,6 +9,7 @@ import {
   render,
   screen,
   waitFor,
+  within,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -22,8 +23,11 @@ import useLocalStorage from 'utils/useLocalstorage';
 import Campaigns from './Campaigns';
 import { vi, it, expect, describe } from 'vitest';
 import {
-  EMPTY_MOCKS,
   MOCKS,
+  MOCKS_WITH_FUND_NO_CAMPAIGNS,
+  MOCKS_WITH_NO_FUNDS,
+  MOCKS_WITH_NULL_ORGANIZATION,
+  MOCKS_WITH_UNDEFINED_CAMPAIGNS,
   USER_FUND_CAMPAIGNS_ERROR,
 } from './CampaignsMocks';
 
@@ -52,16 +56,12 @@ const { setItem } = useLocalStorage();
  */
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(USER_FUND_CAMPAIGNS_ERROR);
-const link3 = new StaticMockLink(EMPTY_MOCKS);
+const link3 = new StaticMockLink(MOCKS_WITH_NO_FUNDS);
 
 const cTranslations = JSON.parse(
   JSON.stringify(
     i18nForTest.getDataByLanguage('en')?.translation.userCampaigns,
   ),
-);
-
-const pTranslations = JSON.parse(
-  JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
 );
 
 /*
@@ -200,13 +200,21 @@ describe('Testing User Campaigns Screen', () => {
       expect(detailContainer2).toBeInTheDocument();
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
-      expect(detailContainer).toHaveTextContent('2024-07-28');
-      expect(detailContainer).toHaveTextContent('2099-12-31');
+      expect(detailContainer).toHaveTextContent(
+        new Date('2024-07-28').toLocaleDateString('en-US'),
+      );
+      expect(detailContainer).toHaveTextContent(
+        new Date('2099-12-31').toLocaleDateString('en-US'),
+      );
       expect(detailContainer).toHaveTextContent('Active');
       expect(detailContainer2).toHaveTextContent('Hospital Campaign');
       expect(detailContainer2).toHaveTextContent('$9000');
-      expect(detailContainer2).toHaveTextContent('2024-07-28');
-      expect(detailContainer2).toHaveTextContent('2022-08-30');
+      expect(detailContainer2).toHaveTextContent(
+        new Date('2024-07-28').toLocaleDateString('en-US'),
+      );
+      expect(detailContainer2).toHaveTextContent(
+        new Date('2022-08-30').toLocaleDateString('en-US'),
+      );
       expect(detailContainer2).toHaveTextContent('Ended');
     });
   });
@@ -232,8 +240,12 @@ describe('Testing User Campaigns Screen', () => {
       const detailContainer = screen.getByTestId('detailContainer2');
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
-      expect(detailContainer).toHaveTextContent('2024-07-28');
-      expect(detailContainer).toHaveTextContent('2099-12-31');
+      expect(detailContainer).toHaveTextContent(
+        new Date('2024-07-28').toLocaleDateString('en-US'),
+      );
+      expect(detailContainer).toHaveTextContent(
+        new Date('2099-12-31').toLocaleDateString('en-US'),
+      );
     });
   });
 
@@ -258,8 +270,12 @@ describe('Testing User Campaigns Screen', () => {
       const detailContainer = screen.getByTestId('detailContainer1');
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
-      expect(detailContainer).toHaveTextContent('2024-07-28');
-      expect(detailContainer).toHaveTextContent('2099-12-31');
+      expect(detailContainer).toHaveTextContent(
+        new Date('2024-07-28').toLocaleDateString('en-US'),
+      );
+      expect(detailContainer).toHaveTextContent(
+        new Date('2099-12-31').toLocaleDateString('en-US'),
+      );
     });
   });
 
@@ -284,8 +300,12 @@ describe('Testing User Campaigns Screen', () => {
       const detailContainer = screen.getByTestId('detailContainer2');
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
-      expect(detailContainer).toHaveTextContent('2024-07-28');
-      expect(detailContainer).toHaveTextContent('2099-12-31');
+      expect(detailContainer).toHaveTextContent(
+        new Date('2024-07-28').toLocaleDateString('en-US'),
+      );
+      expect(detailContainer).toHaveTextContent(
+        new Date('2099-12-31').toLocaleDateString('en-US'),
+      );
     });
   });
 
@@ -310,8 +330,12 @@ describe('Testing User Campaigns Screen', () => {
       const detailContainer = screen.getByTestId('detailContainer1');
       expect(detailContainer).toHaveTextContent('School Campaign');
       expect(detailContainer).toHaveTextContent('$22000');
-      expect(detailContainer).toHaveTextContent('2024-07-28');
-      expect(detailContainer).toHaveTextContent('2099-12-31');
+      expect(detailContainer).toHaveTextContent(
+        new Date('2024-07-28').toLocaleDateString('en-US'),
+      );
+      expect(detailContainer).toHaveTextContent(
+        new Date('2099-12-31').toLocaleDateString('en-US'),
+      );
     });
   });
 
@@ -341,6 +365,131 @@ describe('Testing User Campaigns Screen', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('pledgeScreen')).toBeInTheDocument();
+    });
+  });
+
+  it('Opens pledge modal when clicking add pledge button for active campaign', async () => {
+    renderCampaigns(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+    });
+
+    // Find and click the "Add Pledge" button for an active campaign
+    const addPledgeButtons = screen.getAllByTestId('addPledgeBtn');
+    const activeButton = addPledgeButtons.find(
+      (btn) => !btn.hasAttribute('disabled'),
+    );
+
+    expect(activeButton).toBeDefined();
+    if (activeButton) {
+      await userEvent.click(activeButton);
+    }
+
+    // Verify that the pledge modal opens with both modal container and form
+    await waitFor(() => {
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
+    });
+  });
+
+  it('Closes pledge modal when close button is clicked', async () => {
+    renderCampaigns(link1);
+
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+    });
+
+    const addPledgeButtons = screen.getAllByTestId('addPledgeBtn');
+    const activeButton = addPledgeButtons[0];
+    await userEvent.click(activeButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
+    });
+
+    const closeButton = screen.getByTestId('pledgeModalCloseBtn');
+    await userEvent.click(closeButton);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('pledgeForm')).not.toBeInTheDocument();
+    });
+  });
+
+  it('Disables add pledge button for ended campaigns', async () => {
+    renderCampaigns(link1);
+
+    await waitFor(() => {
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+    });
+
+    // Use within() to scope query to specific campaign container
+    // Navigate to parent element (AccordionSummary) which contains the addPledgeBtn
+    const hospitalContainer = screen.getByTestId('detailContainer2');
+    const accordionSummary = hospitalContainer.parentElement;
+    expect(accordionSummary).toBeDefined();
+    const endedCampaignButton = within(
+      accordionSummary as HTMLElement,
+    ).getByTestId('addPledgeBtn');
+
+    expect(endedCampaignButton).toBeInTheDocument();
+    expect(endedCampaignButton).toBeDisabled();
+  });
+
+  it('Handles fund with no campaigns gracefully', async () => {
+    const link = new StaticMockLink(MOCKS_WITH_FUND_NO_CAMPAIGNS);
+    renderCampaigns(link);
+
+    // Should show "No Campaigns Found" message
+    await waitFor(() => {
+      expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument();
+    });
+  });
+
+  it('Filters campaigns by search term correctly', async () => {
+    renderCampaigns(link1);
+
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchCampaigns');
+    fireEvent.change(searchInput, { target: { value: 'School' } });
+    fireEvent.click(screen.getByTestId('searchBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.queryByText('Hospital Campaign')).not.toBeInTheDocument();
+    });
+
+    fireEvent.change(searchInput, { target: { value: '' } });
+    fireEvent.click(screen.getByTestId('searchBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+    });
+  });
+
+  it('Clears campaigns when organization data is null', async () => {
+    const link = new StaticMockLink(MOCKS_WITH_NULL_ORGANIZATION);
+    renderCampaigns(link);
+
+    // Should show "No Campaigns Found" message when organization is null
+    await waitFor(() => {
+      expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument();
+    });
+  });
+
+  it('Handles fund with undefined campaigns field', async () => {
+    const link = new StaticMockLink(MOCKS_WITH_UNDEFINED_CAMPAIGNS);
+    renderCampaigns(link);
+
+    // Should show "No Campaigns Found" when campaigns field is undefined
+    await waitFor(() => {
+      expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument();
     });
   });
 });
