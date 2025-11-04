@@ -14,7 +14,7 @@ export const MOCKS = [
       query: ORGANIZATION_MEMBER_ADMIN_COUNT,
       variables: { id: 'orgId' },
     },
-    maxusagecount: 2,
+    maxUsageCount: 2,
     result: {
       data: {
         organization: {
@@ -252,7 +252,7 @@ export const MOCKS = [
     result: {
       data: {
         organization: {
-          membershipRequestsCount: 1,
+          membershipRequestsCount: 0,
           id: 'orgId',
           membershipRequests: [],
         },
@@ -325,7 +325,7 @@ export const EMPTY_MOCKS = [
     result: {
       data: {
         organization: {
-          membershipRequestsCount: 1,
+          membershipRequestsCount: 0,
           id: 'orgId',
           membershipRequests: [],
         },
