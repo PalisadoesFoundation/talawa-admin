@@ -4183,6 +4183,31 @@ form label,
   font-weight: 600;
 }
 
+.expandButton {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 4px 0;
+  text-decoration: none;
+  display: inline-block;
+  transition: color 0.2s ease;
+}
+
+.cardBodyAdminPosts {
+  min-height: 120px;
+  transition: all 0.4s ease;
+}
+
+.titleOrgPostCardDiv {
+  line-height: 1.6em;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-bottom: 8px;
+}
+
 .textOrgPostCard {
   font-size: 13px;
   color: var(--textOrgPostCard-color);

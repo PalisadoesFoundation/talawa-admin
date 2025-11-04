@@ -2000,19 +2000,26 @@ describe('OrgPostCard - Additional Coverage for Uncovered Lines', () => {
     });
 
     it('should handle attachment with complex file path (line 424)', async () => {
-      const updateMock = {
+      vi.spyOn(globalThis.crypto.subtle, 'digest').mockResolvedValue(
+        new Uint8Array(32).fill(1).buffer, // predictable hash
+      );
+      const mockHash = Array.from(new Uint8Array(32).fill(1))
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('');
+
+      const updateMockWithAttachment = {
         request: {
           query: UPDATE_POST_MUTATION,
           variables: {
             input: {
               id: '12',
-              caption: 'Test',
+              caption: 'Updated Caption with Attachment',
               attachments: [
                 {
-                  fileHash: expect.any(String),
-                  mimetype: 'IMAGE_JPEG',
-                  name: 'complex-image.jpg',
-                  objectName: expect.stringContaining('uploads/'),
+                  fileHash: mockHash,
+                  mimetype: 'IMAGE_PNG',
+                  name: 'test-image.png',
+                  objectName: 'uploads/test-image.png',
                 },
               ],
             },
@@ -2026,7 +2033,7 @@ describe('OrgPostCard - Additional Coverage for Uncovered Lines', () => {
       };
 
       render(
-        <MockedProvider mocks={[updateMock]} addTypename={false}>
+        <MockedProvider mocks={[updateMockWithAttachment]} addTypename={false}>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard post={mockPost} />
           </I18nextProvider>

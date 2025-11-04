@@ -380,24 +380,14 @@ export default function OrgPostCard({
               />
             )}
 
-            <Card.Body
-              style={{
-                minHeight: '120px',
-                transition: 'all 0.4s ease',
-              }}
-            >
+            <Card.Body className={styles.cardBodyAdminPosts}>
               {isPinned && (
                 <PushPin color="success" fontSize="large" className="fs-5" />
               )}
               <Card.Title className={styles.titleOrgPostCard}>
                 <div
                   ref={captionRef}
-                  style={{
-                    lineHeight: '1.6em',
-                    whiteSpace: 'pre-wrap',
-                    wordBreak: 'break-word',
-                    marginBottom: '8px',
-                  }}
+                  className={styles.titleOrgPostCardDiv}
                   aria-expanded={expanded}
                 >
                   {displayCaption}
@@ -407,18 +397,7 @@ export default function OrgPostCard({
                 {isLong && (
                   <button
                     onClick={toggleExpand}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: '#007bff',
-                      cursor: 'pointer',
-                      fontSize: '0.875rem',
-                      fontWeight: '500',
-                      padding: '4px 0',
-                      textDecoration: 'none',
-                      display: 'inline-block',
-                      transition: 'color 0.2s ease',
-                    }}
+                    className={styles.expandButton}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.color = '#0056b3';
                       e.currentTarget.style.textDecoration = 'underline';
