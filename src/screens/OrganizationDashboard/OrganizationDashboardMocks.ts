@@ -33,6 +33,7 @@ export const MOCKS = [
       query: GET_ORGANIZATION_POSTS_COUNT_PG,
       variables: { id: 'orgId' },
     },
+    maxUsageCount: 2,
     result: {
       data: {
         organization: { id: 'orgId', postsCount: 10 },
@@ -122,6 +123,7 @@ export const MOCKS = [
       query: GET_ORGANIZATION_VENUES_COUNT,
       variables: { id: 'orgId' },
     },
+    maxUsageCount: 2,
     result: {
       data: {
         organization: {
@@ -142,6 +144,7 @@ export const MOCKS = [
         firstName_contains: '',
       },
     },
+    maxUsageCount: 2,
     result: {
       data: {
         organization: {
@@ -181,99 +184,12 @@ export const MOCKS = [
       query: GET_ORGANIZATION_BLOCKED_USERS_COUNT,
       variables: { id: 'orgId' },
     },
+    maxUsageCount: 2,
     result: {
       data: {
         organization: {
           id: '01960b81-bfed-7369-ae96-689dbd4281ba',
           blockedUsersCount: 2,
-        },
-      },
-      loading: false,
-    },
-  },
-
-  //Organization Venues Count (Duplicate)
-  {
-    request: {
-      query: GET_ORGANIZATION_VENUES_COUNT,
-      variables: { id: 'orgId' },
-    },
-    result: {
-      data: {
-        organization: {
-          venuesCount: 10,
-        },
-      },
-      loading: false,
-    },
-  },
-
-  //Organization Blocked Users Count (Duplicate)
-  {
-    request: {
-      query: GET_ORGANIZATION_BLOCKED_USERS_COUNT,
-      variables: { id: 'orgId' },
-    },
-    result: {
-      data: {
-        organization: {
-          id: '01960b81-bfed-7369-ae96-689dbd4281ba',
-          blockedUsersCount: 2,
-        },
-      },
-      loading: false,
-    },
-  },
-
-  // --- Organization Posts Count (Duplicate) ---
-  {
-    request: {
-      query: GET_ORGANIZATION_POSTS_COUNT_PG,
-      variables: { id: 'orgId' },
-    },
-    result: {
-      data: {
-        organization: { id: 'orgId', postsCount: 10 },
-      },
-      loading: false,
-    },
-  },
-  // --- Organization membership request (Duplicate) ---
-  {
-    request: {
-      query: MEMBERSHIP_REQUEST,
-      variables: {
-        input: { id: 'orgId' },
-        skip: 0,
-        first: 8,
-        firstName_contains: '',
-      },
-    },
-    result: {
-      data: {
-        organization: {
-          membershipRequestsCount: 0,
-          id: 'orgId',
-          membershipRequests: [],
-        },
-      },
-    },
-  },
-
-  // --- Organization Events (Duplicate) ---
-  {
-    request: {
-      query: GET_ORGANIZATION_EVENTS_PG,
-      variables: { id: 'orgId', first: 8, after: null },
-    },
-    result: {
-      data: {
-        organization: {
-          eventsCount: 1,
-          events: {
-            edges: [],
-            pageInfo: { hasNextPage: true, endCursor: 'cursor2' },
-          },
         },
       },
       loading: false,
