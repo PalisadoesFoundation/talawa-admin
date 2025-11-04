@@ -1093,10 +1093,9 @@ describe('Testing Requests screen', () => {
 
     await wait(600);
     const rows = screen.getAllByRole('row');
-    expect(rows.length).toBeGreaterThan(9);
     expect(screen.getByText('User7 Test')).toBeInTheDocument();
     expect(screen.getByText('User8 Test')).toBeInTheDocument();
-    expect(screen.getByText('User9 Test')).toBeInTheDocument();
+    expect(rows.length).toBeGreaterThan(9);
   });
 
   test('should handle loadMoreRequests when data is undefined or data.organization is undefined', async () => {

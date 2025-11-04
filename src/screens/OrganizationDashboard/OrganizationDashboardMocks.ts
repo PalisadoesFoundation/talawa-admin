@@ -14,6 +14,7 @@ export const MOCKS = [
       query: ORGANIZATION_MEMBER_ADMIN_COUNT,
       variables: { id: 'orgId' },
     },
+    maxusagecount: 2,
     result: {
       data: {
         organization: {
@@ -185,23 +186,6 @@ export const MOCKS = [
         organization: {
           id: '01960b81-bfed-7369-ae96-689dbd4281ba',
           blockedUsersCount: 2,
-        },
-      },
-      loading: false,
-    },
-  },
-
-  {
-    request: {
-      query: ORGANIZATION_MEMBER_ADMIN_COUNT,
-      variables: { id: 'orgId' },
-    },
-    result: {
-      data: {
-        organization: {
-          id: '01960b81-bfed-7369-ae96-689dbd4281ba',
-          membersCount: 2,
-          adminsCount: 1,
         },
       },
       loading: false,
