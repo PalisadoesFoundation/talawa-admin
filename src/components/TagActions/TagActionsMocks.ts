@@ -7,7 +7,7 @@ import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 
 function createEdge(
-  _id: string,
+  id: string,
   name: string,
   parentTag: { _id: string } | null,
   usersCount: number,
@@ -16,6 +16,7 @@ function createEdge(
   cursorVal?: string,
 ): {
   node: {
+    id: string;
     _id: string;
     name: string;
     parentTag: { _id: string } | null;
@@ -27,14 +28,15 @@ function createEdge(
 } {
   return {
     node: {
-      _id,
+      id,
+      _id: id,
       name,
       parentTag,
       usersAssignedTo: { totalCount: usersCount },
       childTags: { totalCount: childCount },
       ancestorTags,
     },
-    cursor: cursorVal || _id,
+    cursor: cursorVal || id,
   };
 }
 

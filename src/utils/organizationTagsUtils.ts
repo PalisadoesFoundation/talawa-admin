@@ -63,8 +63,17 @@ interface InterfaceBaseQueryResult {
 
 // 2. Generic pagination options
 interface InterfacePaginationVariables {
+  input?: { id: string | undefined };
   after?: string | null;
   first?: number | null;
+  where?: {
+    name?: {
+      starts_with?: string;
+    };
+  };
+  sortedBy?: {
+    id?: string;
+  };
 }
 
 // 3. Generic fetch more options

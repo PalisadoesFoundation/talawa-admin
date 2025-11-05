@@ -69,7 +69,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
     error: subTagsError,
     fetchMore: fetchMoreSubTags,
   }: InterfaceOrganizationSubTagsQuery = useQuery(USER_TAG_SUB_TAGS, {
-    variables: { id: tag._id, first: TAGS_QUERY_DATA_CHUNK_SIZE },
+    variables: { id: tag.id ?? tag._id, first: TAGS_QUERY_DATA_CHUNK_SIZE },
     skip: !expanded,
   });
 
@@ -186,8 +186,8 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
       {expanded && subTagsList?.length && (
         <div style={{ marginLeft: '20px' }}>
           <div
-            id={`subTagsScrollableDiv${tag._id}`}
-            data-testid={`subTagsScrollableDiv${tag._id}`}
+            id={`subTagsScrollableDiv${tag.id ?? tag._id}`}
+            data-testid={`subTagsScrollableDiv${tag.id ?? tag._id}`}
             style={{ maxHeight: 300, overflow: 'auto' }}
           >
             <InfiniteScroll
@@ -198,10 +198,10 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
                 false
               }
               loader={<InfiniteScrollLoader />}
-              scrollableTarget={`subTagsScrollableDiv${tag._id}`}
+              scrollableTarget={`subTagsScrollableDiv${tag.id ?? tag._id}`}
             >
               {subTagsList.map((tag: InterfaceTagData) => (
-                <div key={tag._id} data-testid="orgUserSubTags">
+                <div key={tag.id ?? tag._id} data-testid="orgUserSubTags">
                   <TagNode
                     tag={tag}
                     checkedTags={checkedTags}

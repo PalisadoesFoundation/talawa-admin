@@ -104,8 +104,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         after: orgUserTagsData?.organization?.tags?.pageInfo?.endCursor ?? null,
         where: { name: { starts_with: tagSearchName } },
         sortedBy: { id: 'DESCENDING' },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } as any,
+      },
       updateQuery: (
         prevResult: { organization: InterfaceQueryOrganizationUserTags },
         {
@@ -202,9 +201,10 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
   const selectTag = (tag: InterfaceTagData): void => {
     const newCheckedTags = new Set(checkedTags);
+    const tagId = tag.id ?? tag._id;
 
     setSelectedTags((selectedTags) => [...selectedTags, tag]);
-    newCheckedTags.add(tag._id);
+    newCheckedTags.add(tagId);
 
     setAddAncestorTagsData(new Set(tag.ancestorTags));
 
@@ -212,16 +212,23 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   };
 
   const deSelectTag = (tag: InterfaceTagData): void => {
-    if (!selectedTags.some((selectedTag) => selectedTag._id === tag._id)) {
+    const tagId = tag.id ?? tag._id;
+    if (
+      !selectedTags.some(
+        (selectedTag) => (selectedTag.id ?? selectedTag._id) === tagId,
+      )
+    ) {
       return;
     }
 
     const newCheckedTags = new Set(checkedTags);
 
     setSelectedTags(
-      selectedTags.filter((selectedTag) => selectedTag._id !== tag._id),
+      selectedTags.filter(
+        (selectedTag) => (selectedTag.id ?? selectedTag._id) !== tagId,
+      ),
     );
-    newCheckedTags.delete(tag._id);
+    newCheckedTags.delete(tagId);
 
     setRemoveAncestorTagsData(new Set(tag.ancestorTags));
 
@@ -255,7 +262,9 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     const mutationObject = {
       variables: {
         currentTagId,
-        selectedTagIds: selectedTags.map((selectedTag) => selectedTag._id),
+        selectedTagIds: selectedTags
+          .map((selectedTag) => selectedTag.id ?? selectedTag._id)
+          .filter(Boolean),
       },
     };
 
@@ -325,14 +334,14 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
               ) : (
                 selectedTags.map((tag: InterfaceTagData) => (
                   <div
-                    key={tag._id}
+                    key={tag.id ?? tag._id}
                     className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.tagBadge}`}
                   >
                     {tag.name}
                     <button
                       className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary border-0 bg-transparent`}
                       onClick={() => deSelectTag(tag)}
-                      data-testid={`clearSelectedTag${tag._id}`}
+                      data-testid={`clearSelectedTag${tag.id ?? tag._id}`}
                       aria-label={t('remove')}
                     />
                   </div>
@@ -378,7 +387,10 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                     scrollableTarget="scrollableDiv"
                   >
                     {userTagsList?.map((tag: InterfaceTagData) => (
-                      <div key={tag._id} className="position-relative w-100">
+                      <div
+                        key={tag.id ?? tag._id}
+                        className="position-relative w-100"
+                      >
                         <div
                           className="d-inline-block w-100"
                           data-testid="orgUserTag"
