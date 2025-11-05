@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, beforeEach, afterEach } from 'vitest';
 import SecuredRoute from './SecuredRoute';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -15,7 +15,7 @@ vi.mock('react-toastify', () => ({
 const TestComponent = (): JSX.Element => <div>Test Protected Content</div>;
 
 describe('SecuredRoute', () => {
-  const { setItem, getItem } = useLocalStorage();
+  const { setItem } = useLocalStorage();
 
   beforeEach(() => {
     // Clear all mocks before each test
