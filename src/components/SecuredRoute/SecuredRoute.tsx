@@ -36,7 +36,7 @@ import { Navigate, Outlet } from 'react-router';
 import { toast } from 'react-toastify';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import useLocalStorage from 'utils/useLocalstorage';
-const { getItem, setItem } = useLocalStorage();
+const { getItem, setItem, removeItem } = useLocalStorage();
 
 const SecuredRoute = (): JSX.Element => {
   const isLoggedIn = getItem('IsLoggedIn');
@@ -58,10 +58,14 @@ const inactiveIntervalMilsec = inactiveIntervalMin * 60 * 1000;
 
 let lastActive: number = Date.now();
 
-// Update lastActive timestamp on mouse movement
-document.addEventListener('mousemove', () => {
+const updateLastActive = () => {
   lastActive = Date.now();
-});
+};
+
+document.addEventListener('mousemove', updateLastActive);
+document.addEventListener('keydown', updateLastActive);
+document.addEventListener('click', updateLastActive);
+document.addEventListener('scroll', updateLastActive);
 
 // Check for inactivity and handle session timeout
 setInterval(() => {
@@ -72,8 +76,16 @@ setInterval(() => {
   if (timeSinceLastActive > timeoutMilliseconds) {
     toast.warn('Kindly relogin as sessison has expired');
 
-    window.location.href = '/';
     setItem('IsLoggedIn', 'FALSE');
+    removeItem('email');
+    removeItem('id');
+    removeItem('name');
+    removeItem('role');
+    removeItem('token');
+    removeItem('userId');
+    setTimeout(() => {
+      window.location.href = '/';
+    }, 1000);
   }
 }, inactiveIntervalMilsec);
 
