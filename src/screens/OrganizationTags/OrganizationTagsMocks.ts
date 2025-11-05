@@ -246,14 +246,14 @@ export const MOCKS = [
   {
     request: {
       query: CREATE_USER_TAG,
-      variables: { name: 'userTag 12', organizationId: 'orgId' },
+      variables: { name: 'userTag 12', organizationId: 'orgId', folderId: null },
     },
     result: { data: { createTag: { id: '12', name: 'userTag 12' } } },
   },
   {
     request: {
       query: CREATE_USER_TAG,
-      variables: { name: 'userTag 13', organizationId: 'orgId' },
+      variables: { name: 'userTag 13', organizationId: 'orgId', folderId: null },
     },
     result: { data: null },
   },
@@ -278,7 +278,7 @@ export const MOCKS_ERROR_ERROR_TAG = [
   {
     request: {
       query: CREATE_USER_TAG,
-      variables: { name: 'userTagE', organizationId: 'orgId' },
+      variables: { name: 'userTagE', organizationId: 'orgId', folderId: null },
     },
     error: new Error('Mock Graphql Error'),
   },

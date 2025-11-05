@@ -26,6 +26,10 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:277](https://
 
 > **variables**: `object`
 
+#### request.variables.folderId
+
+> **folderId**: `any` = `null`
+
 #### request.variables.name
 
 > **name**: `string` = `'userTagE'`
