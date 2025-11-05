@@ -252,7 +252,14 @@ export const ORGANIZATION_USER_TAGS_LIST_PG = gql`
     organization(input: $input) {
       id
       name
-      tags(after: $after, before: $before, first: $first, last: $last, where: $where, sortedBy: $sortedBy) {
+      tags(
+        after: $after
+        before: $before
+        first: $first
+        last: $last
+        where: $where
+        sortedBy: $sortedBy
+      ) {
         edges {
           cursor
           node {
