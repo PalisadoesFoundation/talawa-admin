@@ -245,6 +245,21 @@ describe('AdminPluginFileService', () => {
       expect(result.error).toBe('Internal file writer error');
     });
 
+    it('should catch non-Error exceptions during installPlugin', async () => {
+      // Force validatePluginFiles to throw a non-Error to hit the outer catch block
+      const originalValidate = service.validatePluginFiles.bind(service);
+      service.validatePluginFiles = vi.fn().mockImplementation(() => {
+        throw 'A non-error string was thrown';
+      });
+
+      const result = await service.installPlugin('TestPlugin', validFiles);
+      expect(result.success).toBe(false);
+      expect(result.error).toBe('Unknown error');
+
+      // Restore
+      service.validatePluginFiles = originalValidate;
+    });
+
     it('should handle non-Error exceptions in writeFilesToFilesystem', async () => {
       // Mock writePluginFiles to throw a non-Error object
       mockInternalFileWriter.writePluginFiles.mockRejectedValue('String error');
@@ -551,6 +566,29 @@ describe('AdminPluginFileService', () => {
         { version: '1.0.0', changes: ['Initial release'] },
       ]);
       expect(result?.readme).toContain('# Test Plugin');
+    });
+
+    it('should handle absolute screenshot URLs correctly', async () => {
+      const absoluteScreenshotUrl = 'https://example.com/image.png';
+      const mockFiles = {
+        'manifest.json': JSON.stringify(validManifest),
+        'info.json': JSON.stringify({
+          screenshots: [absoluteScreenshotUrl],
+        }),
+      };
+
+      mockInternalFileWriter.readPluginFiles.mockResolvedValue({
+        success: true,
+        manifest: validManifest,
+        files: mockFiles,
+      });
+
+      const result =
+        await AdminPluginFileService.getPluginDetails('TestPlugin');
+      expect(result).not.toBeNull();
+      expect(result?.screenshots).toBeDefined();
+      // This checks the 'else' path of the map function
+      expect(result?.screenshots[0]).toBe(absoluteScreenshotUrl);
     });
 
     it('should return null when readPluginFiles fails', async () => {
