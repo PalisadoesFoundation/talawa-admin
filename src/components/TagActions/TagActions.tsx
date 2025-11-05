@@ -104,6 +104,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         after: orgUserTagsData?.organization?.tags?.pageInfo?.endCursor ?? null,
         where: { name: { starts_with: tagSearchName } },
         sortedBy: { id: 'DESCENDING' },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } as any,
       updateQuery: (
         prevResult: { organization: InterfaceQueryOrganizationUserTags },
