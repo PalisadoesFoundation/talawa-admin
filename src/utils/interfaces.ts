@@ -1850,6 +1850,7 @@ export interface InterfacePledgeInfo {
   endDate: string;
   startDate: string;
   pledger: InterfaceUserInfoPG;
+  users?: InterfaceUserInfoPG[];
 }
 
 /**

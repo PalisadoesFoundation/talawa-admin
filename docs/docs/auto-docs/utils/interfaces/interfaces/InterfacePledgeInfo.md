@@ -107,3 +107,13 @@ Defined in: [src/utils/interfaces.ts:1852](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1851](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1851)
 
 The start date of the pledge.
+
+***
+
+### users?
+
+> `optional` **users**: [`InterfaceUserInfoPG`](InterfaceUserInfoPG.md)[]
+
+Defined in: [src/utils/interfaces.ts:1853](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1853)
+
+An array of user information associated with the pledge.
