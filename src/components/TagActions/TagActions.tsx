@@ -40,7 +40,7 @@ import type {
   InterfaceTagData,
 } from 'utils/interfaces';
 import styles from '../../style/app-fixed.module.css';
-import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
+import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
 import {
   ASSIGN_TO_TAGS,
   REMOVE_FROM_TAGS,
@@ -86,11 +86,12 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     loading: orgUserTagsLoading,
     error: orgUserTagsError,
     fetchMore: orgUserTagsFetchMore,
-  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST, {
+  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST_PG, {
     variables: {
-      id: orgId,
+      input: { id: orgId },
       first: TAGS_QUERY_DATA_CHUNK_SIZE,
       where: { name: { starts_with: tagSearchName } },
+      sortedBy: { id: 'DESCENDING' },
     },
     skip: !tagActionsModalIsOpen,
   });
