@@ -6,7 +6,7 @@
 
 > `const` **USER\_CREATED\_ORGANIZATIONS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:290](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L290)
+Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:246](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L246)
 
 GraphQL query to retrieve organizations created by a user.
 
