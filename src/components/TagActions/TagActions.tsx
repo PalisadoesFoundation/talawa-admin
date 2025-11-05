@@ -99,9 +99,12 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   const loadMoreUserTags = (): void => {
     orgUserTagsFetchMore({
       variables: {
+        input: { id: orgId },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: orgUserTagsData?.organization?.tags?.pageInfo?.endCursor ?? null,
-      },
+        where: { name: { starts_with: tagSearchName } },
+        sortedBy: { id: 'DESCENDING' },
+      } as any,
       updateQuery: (
         prevResult: { organization: InterfaceQueryOrganizationUserTags },
         {

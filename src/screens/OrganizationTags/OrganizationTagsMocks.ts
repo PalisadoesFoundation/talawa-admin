@@ -440,24 +440,7 @@ export const MOCKS_NO_MORE_PAGES = [
         organization: {
           id: 'orgId',
           name: 'Test Organization',
-          tags: {
-            edges: [
-              {
-                node: {
-                  id: '1',
-                  name: 'userTag 1',
-                  folder: { id: 'folder1', name: 'Folder 1' },
-                },
-                cursor: '1',
-              },
-            ],
-            pageInfo: {
-              startCursor: '1',
-              endCursor: '1',
-              hasNextPage: false,
-              hasPreviousPage: false,
-            },
-          },
+          tags: undefined,
         },
       },
     },

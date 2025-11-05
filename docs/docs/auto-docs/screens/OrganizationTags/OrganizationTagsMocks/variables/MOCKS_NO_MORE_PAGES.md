@@ -76,28 +76,4 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:427](https://
 
 #### result.data.organization.tags
 
-> **tags**: `object`
-
-#### result.data.organization.tags.edges
-
-> **edges**: `object`[]
-
-#### result.data.organization.tags.pageInfo
-
-> **pageInfo**: `object`
-
-#### result.data.organization.tags.pageInfo.endCursor
-
-> **endCursor**: `string` = `'1'`
-
-#### result.data.organization.tags.pageInfo.hasNextPage
-
-> **hasNextPage**: `boolean` = `false`
-
-#### result.data.organization.tags.pageInfo.hasPreviousPage
-
-> **hasPreviousPage**: `boolean` = `false`
-
-#### result.data.organization.tags.pageInfo.startCursor
-
-> **startCursor**: `string` = `'1'`
+> **tags**: `any` = `undefined`
