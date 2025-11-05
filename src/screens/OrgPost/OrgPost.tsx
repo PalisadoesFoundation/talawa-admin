@@ -27,6 +27,7 @@ import type {
   InterfaceOrganizationPostListData,
   InterfacePost,
 } from '../../types/Post/interface';
+import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
 
 /**
  * OrgPost Component
@@ -105,6 +106,23 @@ function OrgPost(): JSX.Element {
       last: last,
     },
   });
+  const {
+    data: orgPinnedPostListData,
+    loading: orgPinnedPostListLoading,
+    error: orgPinnedPostListError,
+    // refetchPinnedPosts,
+  } = useQuery<InterfaceOrganizationPostListData>(
+    ORGANIZATION_PINNED_POST_LIST,
+    {
+      variables: {
+        input: { id: currentUrl as string },
+        after: after ?? null,
+        before: before ?? null,
+        first: first,
+        last: last,
+      },
+    },
+  );
 
   const [create, { loading: createPostLoading }] =
     useMutation(CREATE_POST_MUTATION);
@@ -250,6 +268,12 @@ function OrgPost(): JSX.Element {
   }, [orgPostListError]);
 
   useEffect(() => {
+    if (orgPinnedPostListError) {
+      toast.error('Failed to load pinned posts');
+    }
+  }, [orgPinnedPostListError]);
+
+  useEffect(() => {
     if (data?.postsByOrganization) {
       const posts = [...data.postsByOrganization];
 
@@ -264,7 +288,7 @@ function OrgPost(): JSX.Element {
     }
   }, [data, sortingOption]);
 
-  if (createPostLoading || orgPostListLoading) {
+  if (createPostLoading || orgPostListLoading || orgPinnedPostListLoading) {
     return <Loader />;
   }
 
@@ -280,6 +304,7 @@ function OrgPost(): JSX.Element {
         loading={loading}
         error={error}
         data={isFiltering ? data : orgPostListData}
+        pinnedPostData={orgPinnedPostListData?.organization?.pinnedPosts?.edges}
         isFiltering={isFiltering}
         searchTerm={searchTerm}
         sortingOption={sortingOption}

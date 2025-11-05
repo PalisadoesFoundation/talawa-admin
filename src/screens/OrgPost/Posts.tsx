@@ -39,6 +39,7 @@ interface InterfacePostsRenderer {
   loading: boolean;
   error: ApolloError | undefined;
   data: InterfaceOrganizationData;
+  pinnedPostData: InterfacePostEdge[] | undefined;
   isFiltering: boolean;
   searchTerm: string;
   sortingOption: string;
@@ -49,6 +50,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
   loading,
   error,
   data,
+  pinnedPostData,
   isFiltering,
   searchTerm,
   sortingOption,
@@ -140,9 +142,6 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
     );
   }
 
-  // Filter pinned posts
-  const pinnedPosts = allPosts.filter((post) => post.pinned || post.pinnedAt);
-
   if (isFiltering) {
     if (!data?.postsByOrganization || data.postsByOrganization.length === 0) {
       return <NotFound title="post" keyPrefix="postNotFound" />;
@@ -206,7 +205,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
     <>
       {/* Pinned Posts Stories */}
       <PinnedPostsStory
-        pinnedPosts={pinnedPosts}
+        pinnedPosts={pinnedPostData || []}
         onStoryClick={handleStoryClick}
         data-testid="story-pinned-post-1"
       />
