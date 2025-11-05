@@ -530,6 +530,7 @@ const SEARCH_MOCKS = [
         userId: { id: 'userId' },
         where: {
           firstName_contains: 'Harve',
+          name_contains: undefined,
         },
         orderBy: 'endDate_DESC',
       },
@@ -573,6 +574,7 @@ const SEARCH_MOCKS = [
       variables: {
         userId: { id: 'userId' },
         where: {
+          firstName_contains: '',
           name_contains: 'School',
         },
         orderBy: 'endDate_DESC',
@@ -728,7 +730,9 @@ const SEARCH_MOCKS = [
       query: USER_PLEDGES,
       variables: {
         userId: { id: 'userId' },
-        where: {},
+        where: {
+          name_contains: '',
+        },
         orderBy: 'endDate_DESC',
       },
     },
@@ -1506,10 +1510,7 @@ describe('Testing User Pledge Screen', () => {
         query: USER_PLEDGES,
         variables: {
           userId: { id: 'userId' },
-          where: {
-            firstName_contains: '',
-            name_contains: undefined,
-          },
+          where: {},
           orderBy: 'endDate_DESC',
         },
       },
@@ -1520,15 +1521,26 @@ describe('Testing User Pledge Screen', () => {
               id: '1',
               amount: 100,
               note: 'Test note',
+              updatedAt: '2024-01-01T00:00:00Z',
               campaign: {
                 id: '1',
                 name: 'Test Campaign',
                 startAt: '2023-01-01T00:00:00Z',
                 endAt: '2024-12-31T23:59:59Z',
                 currencyCode: 'USD',
+                goalAmount: 1000,
                 __typename: 'FundraisingCampaign',
               },
               pledger: usersArr[0],
+              users: usersArr,
+              updater: {
+                id: '1',
+                __typename: 'User',
+              },
+              startDate: '2023-01-01T00:00:00Z',
+              endDate: '2024-12-31T23:59:59Z',
+              currency: 'USD',
+              goalAmount: 1000,
               __typename: 'FundraisingCampaignPledge',
             },
           ],

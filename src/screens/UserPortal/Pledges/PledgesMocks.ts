@@ -138,6 +138,7 @@ export const MOCKS = [
         userId: { id: 'userId' },
         where: {
           firstName_contains: 'Harve',
+          name_contains: undefined,
         },
         orderBy: 'endDate_DESC',
       },
@@ -183,6 +184,7 @@ export const MOCKS = [
       variables: {
         userId: { id: 'userId' },
         where: {
+          firstName_contains: '',
           name_contains: 'School',
         },
         orderBy: 'endDate_DESC',
