@@ -47,24 +47,11 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const memberOrgs =
     user.organizationsWhereMember?.edges?.map((e) => e.node) ?? [];
   const blockedOrgs =
-    user.organizationsWhereMember?.edges?.map((e) => ({
-      name: e.node.name,
-      id: e.node.id,
-      avatarURL: e.node.avatarURL,
-      city: e.node.city,
-      createdAt: e.node.createdAt,
-      creator: e.node.creator,
-      blockedUsers: e.node.blockedUsers?.edges?.map((b) => b.node) ?? [],
-    })) ?? [];
-
-  const usersBlockedByOrgs = blockedOrgs.filter((org) =>
-    org.blockedUsers.some((u) => u.id === user.id),
-  );
+    user.orgsWhereUserIsBlocked?.edges?.map((e) => e.node) ?? [];
   const [joinedOrgs, setJoinedOrgs] = useState(memberOrgs);
-  const [blockedUsers, setBlockedUsers] = useState(usersBlockedByOrgs);
+  const [blockedUsers, setBlockedUsers] = useState(blockedOrgs);
   const [searchByNameJoinedOrgs, setSearchByNameJoinedOrgs] = useState('');
   const [searchByNameBlockedOrgs, setSearchByNameBlockedOrgs] = useState('');
-
   const [removeUser] = useMutation(REMOVE_MEMBER_MUTATION);
   const [unblockUser] = useMutation(UNBLOCK_USER_MUTATION_PG);
   const [updateUserInOrgType] = useMutation(UPDATE_USER_ROLE_IN_ORG_MUTATION);
@@ -72,7 +59,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
 
   useEffect(() => {
     setJoinedOrgs(memberOrgs);
-    setBlockedUsers(usersBlockedByOrgs);
+    setBlockedUsers(blockedOrgs);
   }, [user]);
 
   const confirmRemoveUser = async (): Promise<void> => {
@@ -157,9 +144,9 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const searchBlockedOrgs = (value: string): void => {
     setSearchByNameBlockedOrgs(value);
     if (value.trim() === '') {
-      setBlockedUsers(usersBlockedByOrgs);
+      setBlockedUsers(blockedOrgs);
     } else {
-      const filteredOrgs = usersBlockedByOrgs.filter((org) =>
+      const filteredOrgs = blockedOrgs.filter((org) =>
         org.name.toLowerCase().includes(value.toLowerCase()),
       );
       setBlockedUsers(filteredOrgs);
@@ -443,7 +430,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {usersBlockedByOrgs.length !== 0 && (
+          {blockedOrgs.length !== 0 && (
             <div className={'position-relative mb-4 border rounded'}>
               <Form.Control
                 id="orgname-blocked-orgs"
@@ -465,7 +452,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             </div>
           )}
           <Row>
-            {usersBlockedByOrgs.length === 0 ? (
+            {blockedOrgs.length === 0 ? (
               <div className={styles.notJoined}>
                 <h4>
                   {user.name} {t('isNotBlockedByAnyOrg')}
@@ -517,10 +504,10 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             onClick={() => handleCreator()}
                             data-testid={`creator${org.id}`}
                           >
-                            {org.creator.avatarURL ? (
-                              <img src={org.creator.avatarURL} alt="creator" />
+                            {org.avatarURL ? (
+                              <img src={org.avatarURL} alt="creator" />
                             ) : (
-                              <Avatar name={org.creator.name} alt="creator" />
+                              <Avatar name={org.name} alt="creator" />
                             )}
                             {org.creator.name}
                           </Button>

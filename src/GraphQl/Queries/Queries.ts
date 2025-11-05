@@ -210,6 +210,21 @@ export const USER_LIST_FOR_TABLE = gql`
           state
           countryCode
           postalCode
+          orgsWhereUserIsBlocked(first: 16) {
+            edges {
+              node {
+                id
+                name
+                avatarURL
+                city
+                state
+                createdAt
+                creator {
+                  name
+                }
+              }
+            }
+          }
           organizationsWhereMember(first: $orgFirst) {
             edges {
               node {
@@ -220,19 +235,6 @@ export const USER_LIST_FOR_TABLE = gql`
                 city
                 state
                 countryCode
-                blockedUsers(first: 16) {
-                  edges {
-                    node {
-                      id
-                      name
-                      emailAddress
-                      avatarURL
-                      city
-                      state
-                      createdAt
-                    }
-                  }
-                }
                 creator {
                   id
                   name

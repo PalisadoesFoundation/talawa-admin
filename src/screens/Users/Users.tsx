@@ -248,7 +248,6 @@ const Users = (): JSX.Element => {
         orgFirst: 32,
       },
     });
-    type Edge = { cursor: string; node: InterfaceQueryUserListItem };
     const moreEdges = (moreData?.allUsers?.edges ?? []) as Edge[];
     const newUsers = moreEdges.map((edge) => edge.node);
 
