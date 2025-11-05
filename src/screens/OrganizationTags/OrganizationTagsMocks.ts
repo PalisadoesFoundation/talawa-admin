@@ -326,7 +326,15 @@ export const MOCKS_UNDEFINED_USER_TAGS = [
         sortedBy: { id: 'DESCENDING' },
       },
     },
-    result: { data: { organization: { id: 'orgId', name: 'Test Organization', tags: undefined } } },
+    result: {
+      data: {
+        organization: {
+          id: 'orgId',
+          name: 'Test Organization',
+          tags: undefined,
+        },
+      },
+    },
   },
 ];
 

@@ -99,42 +99,43 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     orgUserTagsFetchMore({
       variables: {
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after: orgUserTagsData?.organizations?.[0]?.userTags.pageInfo.endCursor,
+        after: orgUserTagsData?.organization?.tags?.pageInfo?.endCursor ?? null,
       },
       updateQuery: (
-        prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
+        prevResult: { organization: InterfaceQueryOrganizationUserTags },
         {
           fetchMoreResult,
         }: {
           fetchMoreResult?: {
-            organizations: InterfaceQueryOrganizationUserTags[];
+            organization: InterfaceQueryOrganizationUserTags;
           };
         },
       ) => {
         if (!fetchMoreResult) return prevResult;
+        if (!prevResult.organization || !fetchMoreResult.organization)
+          return prevResult;
 
         return {
-          organizations: [
-            {
-              ...prevResult.organizations[0],
-              userTags: {
-                ...prevResult.organizations[0].userTags,
-                edges: [
-                  ...prevResult.organizations[0].userTags.edges,
-                  ...fetchMoreResult.organizations[0].userTags.edges,
-                ],
-                pageInfo: fetchMoreResult.organizations[0].userTags.pageInfo,
-              },
+          organization: {
+            ...prevResult.organization,
+            tags: {
+              ...prevResult.organization.tags,
+              edges: [
+                ...prevResult.organization.tags.edges,
+                ...fetchMoreResult.organization.tags.edges,
+              ],
+              pageInfo: fetchMoreResult.organization.tags.pageInfo,
+              totalCount: fetchMoreResult.organization.tags.totalCount,
             },
-          ],
+          },
         };
       },
     });
   };
 
   const userTagsList =
-    orgUserTagsData?.organizations?.[0]?.userTags?.edges?.map(
-      (edge) => edge.node,
+    orgUserTagsData?.organization?.tags?.edges?.map(
+      (edge: { node: InterfaceTagData }) => edge.node,
     ) ?? [];
 
   // tags that we have selected to assigned
@@ -196,37 +197,28 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
   const selectTag = (tag: InterfaceTagData): void => {
     const newCheckedTags = new Set(checkedTags);
-    const tagId = tag.id || tag._id || '';
 
     setSelectedTags((selectedTags) => [...selectedTags, tag]);
-    newCheckedTags.add(tagId);
+    newCheckedTags.add(tag._id);
 
-    setAddAncestorTagsData(new Set(tag.ancestorTags || []));
+    setAddAncestorTagsData(new Set(tag.ancestorTags));
 
     setCheckedTags(newCheckedTags);
   };
 
   const deSelectTag = (tag: InterfaceTagData): void => {
-    const tagId = tag.id || tag._id || '';
-    const selectedTagId = (selectedTag: InterfaceTagData) =>
-      selectedTag.id || selectedTag._id || '';
-
-    if (
-      !selectedTags.some((selectedTag) => selectedTagId(selectedTag) === tagId)
-    ) {
+    if (!selectedTags.some((selectedTag) => selectedTag._id === tag._id)) {
       return;
     }
 
     const newCheckedTags = new Set(checkedTags);
 
     setSelectedTags(
-      selectedTags.filter(
-        (selectedTag) => selectedTagId(selectedTag) !== tagId,
-      ),
+      selectedTags.filter((selectedTag) => selectedTag._id !== tag._id),
     );
-    newCheckedTags.delete(tagId);
+    newCheckedTags.delete(tag._id);
 
-    setRemoveAncestorTagsData(new Set(tag.ancestorTags || []));
+    setRemoveAncestorTagsData(new Set(tag.ancestorTags));
 
     setCheckedTags(newCheckedTags);
   };
@@ -374,17 +366,14 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                     dataLength={userTagsList?.length ?? 0}
                     next={loadMoreUserTags}
                     hasMore={
-                      orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo
+                      orgUserTagsData?.organization?.tags?.pageInfo
                         ?.hasNextPage ?? false
                     }
                     loader={<InfiniteScrollLoader />}
                     scrollableTarget="scrollableDiv"
                   >
-                    {userTagsList?.map((tag) => (
-                      <div
-                        key={tag.id || tag._id}
-                        className="position-relative w-100"
-                      >
+                    {userTagsList?.map((tag: InterfaceTagData) => (
+                      <div key={tag._id} className="position-relative w-100">
                         <div
                           className="d-inline-block w-100"
                           data-testid="orgUserTag"
@@ -401,16 +390,18 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                         {tag.parentTag && (
                           <div className="position-absolute end-0 top-0 d-flex flex-row mt-2 me-3 pt-0 text-secondary">
                             <>{'('}</>
-                            {tag.ancestorTags?.map((ancestorTag) => (
-                              <span
-                                key={ancestorTag._id}
-                                className="ms-2 my-0"
-                                data-testid="ancestorTagsBreadCrumbs"
-                              >
-                                {ancestorTag.name}
-                                <i className="ms-2 fa fa-caret-right" />
-                              </span>
-                            ))}
+                            {tag.ancestorTags?.map(
+                              (ancestorTag: { _id: string; name: string }) => (
+                                <span
+                                  key={ancestorTag._id}
+                                  className="ms-2 my-0"
+                                  data-testid="ancestorTagsBreadCrumbs"
+                                >
+                                  {ancestorTag.name}
+                                  <i className="ms-2 fa fa-caret-right" />
+                                </span>
+                              ),
+                            )}
                             <>{')'}</>
                           </div>
                         )}

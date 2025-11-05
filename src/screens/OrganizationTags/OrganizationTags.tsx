@@ -47,10 +47,16 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import IconComponent from 'components/IconComponent/IconComponent';
-import type { InterfaceTagData } from 'utils/interfaces';
+import type {
+  InterfaceTagData,
+  InterfaceQueryOrganizationUserTags,
+} from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import { DataGrid } from '@mui/x-data-grid';
-import type { SortedByType } from 'utils/organizationTagsUtils';
+import type {
+  InterfaceOrganizationTagsQuery,
+  SortedByType,
+} from 'utils/organizationTagsUtils';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
@@ -92,7 +98,7 @@ function OrganizationTags(): JSX.Element {
     error: orgUserTagsError,
     refetch: orgUserTagsRefetch,
     fetchMore: orgUserTagsFetchMore,
-  } = useQuery(ORGANIZATION_USER_TAGS_LIST_PG, {
+  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST_PG, {
     variables: {
       input: { id: orgId },
       first: TAGS_QUERY_DATA_CHUNK_SIZE,
@@ -108,14 +114,14 @@ function OrganizationTags(): JSX.Element {
         after: orgUserTagsData?.organization?.tags?.pageInfo?.endCursor ?? null,
       },
       updateQuery: (
-        /* eslint-disable @typescript-eslint/no-explicit-any */
-        prevResult: any,
+        prevResult: { organization: InterfaceQueryOrganizationUserTags },
         {
           fetchMoreResult,
         }: {
-          fetchMoreResult?: any;
+          fetchMoreResult?: {
+            organization: InterfaceQueryOrganizationUserTags;
+          };
         },
-        /* eslint-enable @typescript-eslint/no-explicit-any */
       ) => {
         if (!fetchMoreResult) {
           return prevResult;
@@ -136,6 +142,7 @@ function OrganizationTags(): JSX.Element {
                 ...fetchMoreResult.organization.tags.edges,
               ],
               pageInfo: fetchMoreResult.organization.tags.pageInfo,
+              totalCount: fetchMoreResult.organization.tags.totalCount,
             },
           },
         };
@@ -160,7 +167,7 @@ function OrganizationTags(): JSX.Element {
 
     try {
       const { data } = await create({
-        variables: { name: tagName, organizationId: orgId },
+        variables: { name: tagName, organizationId: orgId, folderId: null },
       });
       if (data) {
         toast.success(t('tagCreationSuccess'));
@@ -226,12 +233,22 @@ function OrganizationTags(): JSX.Element {
       renderCell: (params: GridCellParams<InterfaceTagData>) => {
         return (
           <div className="d-flex">
+            {params.row.parentTag &&
+              params.row.ancestorTags?.map((tag) => (
+                <div
+                  key={tag._id}
+                  className={styles.tagsBreadCrumbs}
+                  data-testid="ancestorTagsBreadCrumbs"
+                >
+                  {tag.name}
+                  <i className={'mx-2 fa fa-caret-right'} />
+                </div>
+              ))}
+
             <div
               className={styles.subTagsLink}
               data-testid="tagName"
-              onClick={() =>
-                redirectToSubTags(params.row.id || params.row._id || '')
-              }
+              onClick={() => redirectToSubTags(params.row._id)}
             >
               {params.row.name}
               <i className={'ms-2 fa fa-caret-right'} />
@@ -253,9 +270,9 @@ function OrganizationTags(): JSX.Element {
         return (
           <Link
             className="text-secondary"
-            to={`/orgtags/${orgId}/subTags/${params.row.id || params.row._id}`}
+            to={`/orgtags/${orgId}/subTags/${params.row._id}`}
           >
-            {params.row.folder ? 1 : 0}
+            {params.row.childTags?.totalCount || 0}
           </Link>
         );
       },
@@ -273,9 +290,9 @@ function OrganizationTags(): JSX.Element {
         return (
           <Link
             className="text-secondary"
-            to={`/orgtags/${orgId}/manageTag/${params.row.id || params.row._id}`}
+            to={`/orgtags/${orgId}/manageTag/${params.row._id}`}
           >
-            0
+            {params.row.usersAssignedTo?.totalCount || 0}
           </Link>
         );
       },
@@ -294,9 +311,7 @@ function OrganizationTags(): JSX.Element {
           <Button
             size="sm"
             variant="outline-primary"
-            onClick={() =>
-              redirectToManageTag(params.row.id || params.row._id || '')
-            }
+            onClick={() => redirectToManageTag(params.row._id)}
             data-testid="manageTagBtn"
             className={styles.editButton}
           >
@@ -425,12 +440,10 @@ function OrganizationTags(): JSX.Element {
                     getRowClassName={() => `${styles.rowBackground}`}
                     autoHeight
                     rowHeight={65}
-                    rows={userTagsList?.map(
-                      (userTag: InterfaceTagData, index: number) => ({
-                        id: index + 1,
-                        ...userTag,
-                      }),
-                    )}
+                    rows={userTagsList?.map((userTag, index) => ({
+                      id: index + 1,
+                      ...userTag,
+                    }))}
                     columns={columns}
                     isRowSelectable={() => false}
                   />

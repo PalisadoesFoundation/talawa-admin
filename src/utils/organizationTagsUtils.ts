@@ -77,28 +77,12 @@ interface InterfaceBaseFetchMoreOptions<T> {
 export interface InterfaceOrganizationTagsQuery
   extends InterfaceBaseQueryResult {
   data?: {
-    organizations?: InterfaceQueryOrganizationUserTags[];
-    organization?: {
-      id: string;
-      name: string;
-      tags: {
-        edges: Array<{
-          cursor: string;
-          /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-          node: any;
-        }>;
-        pageInfo: {
-          hasNextPage: boolean;
-          hasPreviousPage: boolean;
-          startCursor: string;
-          endCursor: string;
-        };
-      };
-    };
+    organization: InterfaceQueryOrganizationUserTags;
   };
   fetchMore: (
-    /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-    options: InterfaceBaseFetchMoreOptions<any>,
+    options: InterfaceBaseFetchMoreOptions<{
+      organization: InterfaceQueryOrganizationUserTags;
+    }>,
   ) => void;
 }
 

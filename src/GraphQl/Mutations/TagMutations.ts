@@ -1,16 +1,15 @@
 import gql from 'graphql-tag';
 
 /**
- * GraphQL mutation to create a user tag.
+ * GraphQL mutation to create a tag.
  *
  * @param name - Name of the tag.
- * @param tagColor - Color of the tag.
- * @param parentTagId - Id of the parent tag.
+ * @param folderId - Id of the folder (parent tag).
  * @param organizationId - Organization to which the tag belongs.
  */
 
 export const CREATE_USER_TAG = gql`
-  mutation CreateUserTag($name: String!, $folderId: ID, $organizationId: ID!) {
+  mutation CreateTag($name: String!, $folderId: ID, $organizationId: ID!) {
     createTag(
       input: {
         name: $name
@@ -55,15 +54,16 @@ export const UPDATE_USER_TAG = gql`
 `;
 
 /**
- * GraphQL mutation to remove a user tag.
+ * GraphQL mutation to remove a tag.
  *
- * @param id - Id of the tag to be removed .
+ * @param id - Id of the tag to be removed.
  */
 
 export const REMOVE_USER_TAG = gql`
-  mutation RemoveUserTag($id: ID!) {
-    removeUserTag(id: $id) {
-      _id
+  mutation DeleteTag($id: ID!) {
+    deleteTag(input: { id: $id }) {
+      id
+      name
     }
   }
 `;

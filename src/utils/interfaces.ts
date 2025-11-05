@@ -1450,14 +1450,20 @@ export interface InterfaceQueryOrganizationPostListItem {
  * @property {string} ancestorTags.name - The name of the ancestor tag.
  */
 export interface InterfaceTagData {
-  _id?: string;
+  _id: string;
   id?: string;
   name: string;
-  parentTag?: { _id: string };
-  folder?: { id: string; name: string };
-  usersAssignedTo?: { totalCount: number };
-  childTags?: { totalCount: number };
-  ancestorTags?: { _id: string; name: string }[];
+  parentTag: { _id: string };
+  usersAssignedTo: {
+    totalCount: number;
+  };
+  childTags: {
+    totalCount: number;
+  };
+  ancestorTags: {
+    _id: string;
+    name: string;
+  }[];
 }
 
 /**
@@ -1521,11 +1527,11 @@ interface InterfaceTagMembersData {
 
 /**
  * @interface InterfaceQueryOrganizationUserTags
- * @description Defines the structure for a query result containing organization user tags.
- * @property {InterfaceTagNodeData} userTags - The user tags data.
+ * @description Defines the structure for a query result containing organization tags.
+ * @property {InterfaceTagNodeData} tags - The tags data.
  */
 export interface InterfaceQueryOrganizationUserTags {
-  userTags: InterfaceTagNodeData;
+  tags: InterfaceTagNodeData;
 }
 
 /**

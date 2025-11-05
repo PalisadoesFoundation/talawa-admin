@@ -4,20 +4,20 @@
 
 # Interface: InterfaceQueryOrganizationUserTags
 
-Defined in: [src/utils/interfaces.ts:1532](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1532)
+Defined in: [src/utils/interfaces.ts:1533](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1533)
 
 InterfaceQueryOrganizationUserTags
 
 ## Description
 
-Defines the structure for a query result containing organization user tags.
+Defines the structure for a query result containing organization tags.
 
 ## Properties
 
-### userTags
+### tags
 
-> **userTags**: `InterfaceTagNodeData`
+> **tags**: `InterfaceTagNodeData`
 
-Defined in: [src/utils/interfaces.ts:1533](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1533)
+Defined in: [src/utils/interfaces.ts:1534](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1534)
 
-The user tags data.
+The tags data.
