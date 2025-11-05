@@ -163,7 +163,7 @@ export const MOCKS = [
       variables: {
         input: { id: '123' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: { name: { starts_with: 'searchUserTag' } },
+        where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
       },
     },

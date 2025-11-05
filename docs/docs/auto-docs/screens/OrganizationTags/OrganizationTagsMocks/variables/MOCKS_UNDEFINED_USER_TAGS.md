@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_UNDEFINED\_USER\_TAGS**: `object`[]
 
-Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:318](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L318)
+Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:326](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L326)
 
 ## Type Declaration
 

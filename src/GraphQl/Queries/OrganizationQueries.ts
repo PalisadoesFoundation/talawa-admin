@@ -246,11 +246,13 @@ export const ORGANIZATION_USER_TAGS_LIST_PG = gql`
     $before: String
     $first: Int
     $last: Int
+    $where: TagWhereInput
+    $sortedBy: TagSortByInput
   ) {
     organization(input: $input) {
       id
       name
-      tags(after: $after, before: $before, first: $first, last: $last) {
+      tags(after: $after, before: $before, first: $first, last: $last, where: $where, sortedBy: $sortedBy) {
         edges {
           cursor
           node {
