@@ -47,16 +47,8 @@ export default defineConfig({
     }),
   ],
   server: {
-    // Vite 7 requires explicit allowedHosts for security
-    // Allow localhost, local network access, and test domains
-    allowedHosts: [
-      'localhost',
-      '.localhost',
-      '127.0.0.1',
-      '0.0.0.0',
-      '.local',
-      'test.talawa.io',
-    ],
+    // Allow all hosts for flexibility as Talawa runs on multiple domains
+    allowedHosts: true,
     watch: {
       ignored: ['**/coverage/**', '**/.nyc_output/**'],
     },
