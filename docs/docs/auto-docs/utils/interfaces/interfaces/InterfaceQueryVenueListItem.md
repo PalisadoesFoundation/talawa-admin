@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryVenueListItem
 
-Defined in: [src/utils/interfaces.ts:2057](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2057)
+Defined in: [src/utils/interfaces.ts:2060](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2060)
 
 InterfaceQueryVenueListItem
 
@@ -18,7 +18,7 @@ Defines the structure for a venue list item returned from a query.
 
 > **node**: `object`
 
-Defined in: [src/utils/interfaces.ts:2058](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2058)
+Defined in: [src/utils/interfaces.ts:2061](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2061)
 
 #### attachments?
 
