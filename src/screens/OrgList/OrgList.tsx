@@ -163,6 +163,7 @@ function orgList(): JSX.Element {
 
   const {
     data: userData,
+    error: errorUser,
   }: {
     data: InterfaceCurrentUserTypePG | undefined;
     loading: boolean;
@@ -175,6 +176,7 @@ function orgList(): JSX.Element {
   const {
     data: allOrganizationsData,
     loading: loadingAll,
+    error: errorList,
     refetch: refetchOrgs,
   } = useQuery(ORGANIZATION_LIST, {
     variables: { filter: filterName },
@@ -259,6 +261,12 @@ function orgList(): JSX.Element {
       errorHandler(t, error);
     }
   };
+
+  if (errorList || errorUser) {
+    errorHandler(t, errorList || errorUser);
+    localStorage.clear();
+    window.location.assign('/');
+  }
 
   const doSearch = (value: string): void => {
     setFilterName(value);

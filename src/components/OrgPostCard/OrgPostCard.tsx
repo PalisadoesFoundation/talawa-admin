@@ -337,16 +337,7 @@ export default function OrgPostCard({
         onClick={handleCardClick}
       >
         <div className={styles.cardsOrgPostCard}>
-          <Card
-            className={styles.cardOrgPostCard}
-            data-cy="postCardContainer"
-            style={{
-              borderRadius: '12px',
-              overflow: 'hidden',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-              transition: 'all 0.3s ease',
-            }}
-          >
+          <Card className={styles.cardOrgPostCard} data-cy="postCardContainer">
             {videoAttachment ? (
               <video
                 ref={videoRef}
