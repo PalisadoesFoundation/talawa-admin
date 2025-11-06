@@ -6,4 +6,4 @@
 
 > `const` **EVENT\_ATTENDEES**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/Queries.ts:304](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L304)
+Defined in: [src/GraphQl/Queries/Queries.ts:315](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L315)
