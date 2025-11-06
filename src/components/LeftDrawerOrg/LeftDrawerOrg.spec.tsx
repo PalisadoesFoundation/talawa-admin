@@ -2,9 +2,53 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter } from 'react-router';
+import React from 'react';
+import type { IDrawerExtension } from 'plugin/types';
 import LeftDrawerOrg from './LeftDrawerOrg';
 import type { ILeftDrawerProps } from './LeftDrawerOrg';
 import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
+
+// Type definitions for better type safety
+interface IMockedResponse {
+  request: {
+    query: typeof GET_ORGANIZATION_DATA_PG;
+    variables: {
+      id: string;
+      first: number;
+      after: null;
+    };
+  };
+  result?: {
+    data: {
+      organization: {
+        id: string;
+        name: string;
+        description: string;
+        addressLine1: string;
+        addressLine2: string;
+        city: string | null;
+        state: string;
+        postalCode: string;
+        countryCode: string;
+        avatarURL: string | null;
+        createdAt: string;
+        updatedAt: string;
+        creator: {
+          id: string;
+          name: string;
+          emailAddress: string;
+        };
+        updater: {
+          id: string;
+          name: string;
+          emailAddress: string;
+        };
+      };
+    };
+  };
+  error?: Error;
+  delay?: number;
+}
 
 // Mock the dependencies
 const mockT = vi.fn((key: string) => {
@@ -21,7 +65,7 @@ const mockT = vi.fn((key: string) => {
   return translations[key] || key;
 });
 
-const mockTErrors = vi.fn((key: string, options?: any) => {
+const mockTErrors = vi.fn((key: string, options?: { entity?: string }) => {
   if (key === 'errorLoading' && options?.entity) {
     return `Error loading ${options.entity}`;
   }
@@ -45,9 +89,7 @@ vi.mock('react-i18next', () => ({
 }));
 
 const { mockUsePluginDrawerItems } = vi.hoisted(() => ({
-  mockUsePluginDrawerItems: vi.fn(
-    (): import('plugin/types').IDrawerExtension[] => [],
-  ),
+  mockUsePluginDrawerItems: vi.fn((): IDrawerExtension[] => []),
 }));
 
 vi.mock('plugin', () => ({
@@ -195,7 +237,7 @@ const mockOrganizationDataWithoutCity = {
   },
 };
 
-const successMocks = [
+const successMocks: IMockedResponse[] = [
   {
     request: {
       query: GET_ORGANIZATION_DATA_PG,
@@ -207,7 +249,7 @@ const successMocks = [
   },
 ];
 
-const loadingMocks = [
+const loadingMocks: IMockedResponse[] = [
   {
     request: {
       query: GET_ORGANIZATION_DATA_PG,
@@ -217,7 +259,7 @@ const loadingMocks = [
   },
 ];
 
-const errorMocks = [
+const errorMocks: IMockedResponse[] = [
   {
     request: {
       query: GET_ORGANIZATION_DATA_PG,
@@ -280,7 +322,7 @@ describe('LeftDrawerOrg', () => {
 
   const renderComponent = (
     props: Partial<ILeftDrawerProps> = {},
-    mocks: any[] = successMocks,
+    mocks: IMockedResponse[] = successMocks,
     initialRoute = '/orgdash/org-123',
   ) => {
     return render(
@@ -355,7 +397,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should display Avatar component when no avatarURL', async () => {
-      const mocksWithoutAvatar = [
+      const mocksWithoutAvatar: IMockedResponse[] = [
         {
           request: {
             query: GET_ORGANIZATION_DATA_PG,
@@ -380,7 +422,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should display N/A when city is not available', async () => {
-      const mocksWithoutCity = [
+      const mocksWithoutCity: IMockedResponse[] = [
         {
           request: {
             query: GET_ORGANIZATION_DATA_PG,
@@ -567,7 +609,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should show plugin section when plugin items exist', () => {
-      const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
+      const mockPluginItems: IDrawerExtension[] = [
         {
           pluginId: 'test-plugin',
           path: '/plugin/:orgId/test',
@@ -584,7 +626,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should replace :orgId in plugin paths', () => {
-      const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
+      const mockPluginItems: IDrawerExtension[] = [
         {
           pluginId: 'test-plugin',
           path: '/plugin/:orgId/test',
@@ -601,7 +643,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should render plugin item with custom icon', () => {
-      const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
+      const mockPluginItems: IDrawerExtension[] = [
         {
           pluginId: 'test-plugin',
           path: '/plugin/:orgId/test',
@@ -619,7 +661,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should render plugin item with default plugin icon when no custom icon', () => {
-      const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
+      const mockPluginItems: IDrawerExtension[] = [
         {
           pluginId: 'test-plugin',
           path: '/plugin/:orgId/test',
@@ -641,7 +683,7 @@ describe('LeftDrawerOrg', () => {
         value: 800,
       });
 
-      const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
+      const mockPluginItems: IDrawerExtension[] = [
         {
           pluginId: 'test-plugin',
           path: '/plugin/:orgId/test',
@@ -670,7 +712,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should render multiple plugin items', () => {
-      const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
+      const mockPluginItems: IDrawerExtension[] = [
         {
           pluginId: 'plugin-1',
           path: '/plugin/:orgId/1',
@@ -811,7 +853,9 @@ describe('LeftDrawerOrg', () => {
 
   describe('Edge Cases', () => {
     it('should handle undefined plugin items gracefully', () => {
-      mockUsePluginDrawerItems.mockReturnValue(undefined as any);
+      mockUsePluginDrawerItems.mockReturnValue(
+        undefined as unknown as IDrawerExtension[],
+      );
 
       expect(() => renderComponent()).not.toThrow();
       expect(screen.queryByText('Plugins')).not.toBeInTheDocument();
@@ -820,7 +864,9 @@ describe('LeftDrawerOrg', () => {
     it('should handle null setHideDrawer prop', () => {
       const propsWithNullSetter = {
         ...defaultProps,
-        setHideDrawer: null as any,
+        setHideDrawer: null as unknown as React.Dispatch<
+          React.SetStateAction<boolean>
+        >,
       };
 
       expect(() => renderComponent(propsWithNullSetter)).not.toThrow();
@@ -888,7 +934,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should handle different orgId prop', () => {
-      const differentOrgMocks = [
+      const differentOrgMocks: IMockedResponse[] = [
         {
           request: {
             query: GET_ORGANIZATION_DATA_PG,
