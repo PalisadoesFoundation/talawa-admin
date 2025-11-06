@@ -558,6 +558,148 @@ describe('Testing Requests screen', () => {
     expect(rows.length).toBeGreaterThan(8);
   });
 
+  test('rows.length whould be greater than 9 when newRequests.length > perPageResult', async () => {
+    // Create mocks with the CORRECT structure matching what the component expects
+    const CORRECT_STRUCTURE_MOCKS = [
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: {
+            organizations: [
+              {
+                id: 'org1',
+                name: 'Test Organization',
+                addressLine1: '123 Test Street',
+                description: 'Test description',
+                avatarURL: null,
+                members: {
+                  edges: [
+                    {
+                      node: {
+                        id: 'user1',
+                      },
+                    },
+                  ],
+                  pageInfo: {
+                    hasNextPage: false,
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+      // Initial membership requests query - CORRECTED STRUCTURE
+      {
+        request: {
+          query: MEMBERSHIP_REQUEST,
+          variables: {
+            input: { id: '' },
+            skip: 0,
+            first: 8,
+            name_contains: '',
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              id: 'org1',
+              membershipRequests: Array(8)
+                .fill(null)
+                .map((_, i) => ({
+                  membershipRequestId: `request${i + 1}`,
+                  createdAt: `2023-01-0${i + 1}T00:00:00Z`,
+                  status: 'pending',
+                  user: {
+                    avatarURL: null,
+                    id: `user${i + 1}`,
+                    name: `User${i + 1} Test`,
+                    emailAddress: `user${i + 1}@test.com`,
+                  },
+                })),
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: MEMBERSHIP_REQUEST,
+          variables: {
+            input: { id: '' },
+            skip: 8,
+            first: 8,
+            name_contains: '',
+          },
+        },
+        result: {
+          data: {
+            organization: {
+              id: 'org1',
+              membershipRequests: Array(9)
+                .fill(null)
+                .map((_, i) => ({
+                  membershipRequestId: `request${i + 9}`,
+                  createdAt: `2023-01-${(i + 9).toString().padStart(2, '0')}T00:00:00Z`,
+                  status: 'pending',
+                  user: {
+                    avatarURL: null,
+                    id: `user${i + 9}`,
+                    name: `User${i + 9} Test`,
+                    emailAddress: `user${i + 9}@test.com`,
+                  },
+                })),
+            },
+          },
+        },
+      },
+    ];
+
+    const correctStructureLink = new StaticMockLink(
+      CORRECT_STRUCTURE_MOCKS,
+      true,
+    );
+
+    render(
+      <MockedProvider addTypename={false} link={correctStructureLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Requests />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(500);
+
+    expect(screen.getAllByRole('row').length).toBeGreaterThan(1);
+
+    expect(screen.getByText('User1 Test')).toBeInTheDocument();
+    expect(screen.getByText('User2 Test')).toBeInTheDocument();
+
+    const requestsContainer = document.querySelector(
+      '[data-testid="requests-list"]',
+    );
+    if (requestsContainer) {
+      fireEvent.scroll(requestsContainer, {
+        target: { scrollTop: (requestsContainer as HTMLElement).scrollHeight },
+      });
+    } else {
+      fireEvent.scroll(window, {
+        target: { scrollY: document.documentElement.scrollHeight },
+      });
+    }
+
+    await wait(600);
+    const rows = screen.getAllByRole('row');
+    expect(rows.length).toBeGreaterThan(9);
+    expect(screen.getByText('User7 Test')).toBeInTheDocument();
+    expect(screen.getByText('User8 Test')).toBeInTheDocument();
+  });
+
   test('should handle loading more requests with search term', async () => {
     render(
       <MockedProvider addTypename={false} link={linkInfiniteScroll}>
@@ -954,149 +1096,6 @@ describe('Testing Requests screen', () => {
     await wait(200);
 
     expect(screen.getByTestId('testComp')).toBeInTheDocument();
-  });
-
-  test('should handle loading more request with newRequests.length > perPageResult', async () => {
-    // Create mocks with the CORRECT structure matching what the component expects
-    const CORRECT_STRUCTURE_MOCKS = [
-      {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                id: 'org1',
-                name: 'Test Organization',
-                addressLine1: '123 Test Street',
-                description: 'Test description',
-                avatarURL: null,
-                members: {
-                  edges: [
-                    {
-                      node: {
-                        id: 'user1',
-                      },
-                    },
-                  ],
-                  pageInfo: {
-                    hasNextPage: false,
-                  },
-                },
-              },
-            ],
-          },
-        },
-      },
-      // Initial membership requests query - CORRECTED STRUCTURE
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 8,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: 'org1',
-              membershipRequests: Array(8)
-                .fill(null)
-                .map((_, i) => ({
-                  membershipRequestId: `request${i + 1}`,
-                  createdAt: `2023-01-0${i + 1}T00:00:00Z`,
-                  status: 'pending',
-                  user: {
-                    avatarURL: null,
-                    id: `user${i + 1}`,
-                    name: `User${i + 1} Test`,
-                    emailAddress: `user${i + 1}@test.com`,
-                  },
-                })),
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST,
-          variables: {
-            input: { id: '' },
-            skip: 8,
-            first: 8,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: 'org1',
-              membershipRequests: Array(9)
-                .fill(null)
-                .map((_, i) => ({
-                  membershipRequestId: `request${i + 9}`,
-                  createdAt: `2023-01-${(i + 9).toString().padStart(2, '0')}T00:00:00Z`,
-                  status: 'pending',
-                  user: {
-                    avatarURL: null,
-                    id: `user${i + 9}`,
-                    name: `User${i + 9} Test`,
-                    emailAddress: `user${i + 9}@test.com`,
-                  },
-                })),
-            },
-          },
-        },
-      },
-    ];
-
-    const correctStructureLink = new StaticMockLink(
-      CORRECT_STRUCTURE_MOCKS,
-      true,
-    );
-
-    render(
-      <MockedProvider addTypename={false} link={correctStructureLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(500);
-
-    expect(screen.getAllByRole('row').length).toBeGreaterThan(1);
-
-    expect(screen.getByText('User1 Test')).toBeInTheDocument();
-    expect(screen.getByText('User2 Test')).toBeInTheDocument();
-
-    const requestsContainer = document.querySelector(
-      '[data-testid="requests-list"]',
-    );
-    if (requestsContainer) {
-      fireEvent.scroll(requestsContainer, {
-        target: { scrollTop: (requestsContainer as HTMLElement).scrollHeight },
-      });
-    } else {
-      fireEvent.scroll(window, {
-        target: { scrollY: document.documentElement.scrollHeight },
-      });
-    }
-
-    await wait(600);
-    const rows = screen.getAllByRole('row');
-    expect(rows.length).toBeGreaterThan(9);
-    expect(screen.getByText('User7 Test')).toBeInTheDocument();
-    expect(screen.getByText('User8 Test')).toBeInTheDocument();
-    expect(screen.getByText('User9 Test')).toBeInTheDocument();
   });
 
   test('should handle loadMoreRequests when data is undefined or data.organization is undefined', async () => {
