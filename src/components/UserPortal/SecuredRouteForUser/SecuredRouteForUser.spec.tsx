@@ -134,7 +134,6 @@ describe('SecuredRouteForUser', () => {
       setItem('userId', 'user-123');
       setItem('AdminFor', [{ _id: 'org-123' }]);
       setItem('role', 'regular');
-      setItem('id', 'user-legacy-id');
 
       render(
         <MemoryRouter initialEntries={['/user/organizations']}>

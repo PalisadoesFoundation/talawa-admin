@@ -38,8 +38,8 @@ import useLocalStorage from 'utils/useLocalstorage';
 const timeoutMinutes = 15;
 const timeoutMilliseconds = timeoutMinutes * 60 * 1000;
 
-const inactiveIntervalMin = 1;
-const inactiveIntervalMilsec = inactiveIntervalMin * 60 * 1000;
+const inactiveIntervalMinutes = 1;
+const inactiveIntervalMilliseconds = inactiveIntervalMinutes * 60 * 1000;
 
 const SecuredRouteForUser = (): JSX.Element => {
   // Custom hook to interact with local storage
@@ -85,7 +85,7 @@ const SecuredRouteForUser = (): JSX.Element => {
             window.location.href = '/';
           }, 1000);
         }
-      }, inactiveIntervalMilsec);
+      }, inactiveIntervalMilliseconds);
     }
 
     // Cleanup function

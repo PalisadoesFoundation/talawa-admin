@@ -130,6 +130,38 @@ describe('SecuredRoute', () => {
       // but we can verify the event listener is attached by checking if the event fires
       expect(screen.getByText('Test Protected Content')).toBeInTheDocument();
     });
+
+    it('should prevent timeout when user activity occurs within timeout window', () => {
+      setItem('IsLoggedIn', 'TRUE');
+      setItem('role', 'administrator');
+      setItem('token', 'test-token');
+
+      render(
+        <MemoryRouter initialEntries={['/orglist']}>
+          <Routes>
+            <Route element={<SecuredRoute />}>
+              <Route path="/orglist" element={testComponent} />
+            </Route>
+          </Routes>
+        </MemoryRouter>,
+      );
+
+      // Advance close to timeout
+      vi.advanceTimersByTime(14 * 60 * 1000);
+
+      // Simulate user activity
+      fireEvent(document, new Event('mousemove'));
+
+      // Advance past original timeout point
+      vi.advanceTimersByTime(2 * 60 * 1000);
+
+      // Session should still be active
+      const storage = useLocalStorage();
+      expect(storage.getItem('IsLoggedIn')).toBe('TRUE');
+      expect(storage.getItem('token')).toBe('test-token');
+      expect(toast.warn).not.toHaveBeenCalled();
+      expect(screen.getByText('Test Protected Content')).toBeInTheDocument();
+    });
   });
 
   describe('Session Timeout and Inactivity', () => {
