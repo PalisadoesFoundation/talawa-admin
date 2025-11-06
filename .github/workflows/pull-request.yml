@@ -429,7 +429,7 @@ jobs:
         if: steps.changed-files.outputs.any_changed == 'true'
         env:
           NODE_V8_COVERAGE: './coverage/vitest'
-          NODE_OPTIONS: '--max-old-space-size=6144'
+          NODE_OPTIONS: '--max-old-space-size=4096'
           SHARD_INDEX: ${{ matrix.shard }}
           SHARD_COUNT: ${{ matrix.total_shards }}
         run: |
