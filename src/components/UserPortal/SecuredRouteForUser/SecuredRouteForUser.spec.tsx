@@ -2,6 +2,7 @@ import React from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
+import { toast } from 'react-toastify';
 import SecuredRouteForUser from './SecuredRouteForUser';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -25,6 +26,7 @@ vi.mock('react-toastify', () => ({
 const TestComponent = (): JSX.Element => <div>Test Protected Content</div>;
 
 describe('SecuredRouteForUser', () => {
+  const originalLocation = window.location;
   const { setItem, getItem } = useLocalStorage();
 
   beforeEach(() => {
@@ -36,8 +38,9 @@ describe('SecuredRouteForUser', () => {
     vi.useFakeTimers();
     // Mock window.location.href
     Object.defineProperty(window, 'location', {
-      value: { href: '' },
+      configurable: true,
       writable: true,
+      value: { href: '' },
     });
   });
 
@@ -46,6 +49,10 @@ describe('SecuredRouteForUser', () => {
     vi.clearAllTimers();
     vi.useRealTimers();
     vi.restoreAllMocks();
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: originalLocation,
+    });
   });
 
   describe('Authentication and Authorization', () => {
@@ -126,6 +133,8 @@ describe('SecuredRouteForUser', () => {
       setItem('token', 'test-token');
       setItem('userId', 'user-123');
       setItem('AdminFor', [{ _id: 'org-123' }]);
+      setItem('role', 'regular');
+      setItem('id', 'user-legacy-id');
 
       render(
         <MemoryRouter initialEntries={['/user/organizations']}>
@@ -141,8 +150,18 @@ describe('SecuredRouteForUser', () => {
       vi.advanceTimersByTime(15 * 60 * 1000 + 1000);
       vi.advanceTimersByTime(1 * 60 * 1000);
 
-      // Verify IsLoggedIn was set to FALSE
+      expect(toast.warn).toHaveBeenCalledWith(
+        'Kindly relogin as session has expired',
+      );
       expect(getItem('IsLoggedIn')).toBe('FALSE');
+      expect(getItem('token')).toBeNull();
+      expect(getItem('userId')).toBeNull();
+      expect(getItem('AdminFor')).toBeNull();
+      expect(getItem('role')).toBeNull();
+      expect(getItem('email')).toBeNull();
+      expect(getItem('name')).toBeNull();
+      expect(getItem('id')).toBeNull();
+      expect(window.location.href).toBe('/');
     });
   });
 });

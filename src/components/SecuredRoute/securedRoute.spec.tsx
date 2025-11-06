@@ -19,6 +19,8 @@ describe('SecuredRoute', () => {
   const homeComponent = <div>Home Page</div>;
   const { setItem } = useLocalStorage();
 
+  const originalLocation = window.location;
+
   beforeEach(() => {
     // Clear all mocks before each test
     vi.clearAllMocks();
@@ -28,8 +30,9 @@ describe('SecuredRoute', () => {
     vi.useFakeTimers();
     // Mock window.location.href
     Object.defineProperty(window, 'location', {
-      value: { href: '' },
+      configurable: true,
       writable: true,
+      value: { href: '' },
     });
   });
 
@@ -38,6 +41,10 @@ describe('SecuredRoute', () => {
     vi.clearAllTimers();
     vi.useRealTimers();
     vi.restoreAllMocks();
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: originalLocation,
+    });
   });
 
   describe('Authentication and Authorization', () => {
@@ -129,6 +136,11 @@ describe('SecuredRoute', () => {
     it('should show warning toast after 15 minutes of inactivity', async () => {
       setItem('IsLoggedIn', 'TRUE');
       setItem('role', 'administrator');
+      setItem('token', 'test-token');
+      setItem('userId', 'user-123');
+      setItem('email', 'admin@example.com');
+      setItem('name', 'Admin User');
+      setItem('id', 'admin-123');
 
       render(
         <MemoryRouter initialEntries={['/orglist']}>
@@ -149,6 +161,16 @@ describe('SecuredRoute', () => {
       expect(toast.warn).toHaveBeenCalledWith(
         'Kindly relogin as sessison has expired',
       );
+
+      const storage = useLocalStorage();
+      expect(storage.getItem('IsLoggedIn')).toBe('FALSE');
+      expect(storage.getItem('token')).toBeNull();
+      expect(storage.getItem('userId')).toBeNull();
+      expect(storage.getItem('role')).toBeNull();
+      expect(storage.getItem('email')).toBeNull();
+      expect(storage.getItem('name')).toBeNull();
+      expect(storage.getItem('id')).toBeNull();
+      expect(window.location.href).toBe('/');
     });
   });
 });
