@@ -196,7 +196,7 @@ Defined in: [src/utils/interfaces.ts:2027](https://github.com/PalisadoesFoundati
 
 > `optional` **orgsWhereUserIsBlocked**: `object`
 
-Defined in: [src/utils/interfaces.ts:2034](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2034)
+Defined in: [src/utils/interfaces.ts:2036](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2036)
 
 #### edges
 
