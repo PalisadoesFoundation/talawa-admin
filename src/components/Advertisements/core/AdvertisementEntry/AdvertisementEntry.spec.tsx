@@ -10,8 +10,7 @@ import { I18nextProvider } from 'react-i18next';
 import { MockedProvider } from '@apollo/client/testing';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
 import { DELETE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/AdvertisementMutations';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import '@testing-library/jest-dom';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { client } from 'components/Advertisements/AdvertisementsMocks';
 import { AdvertisementType } from 'types/Advertisement/type';
 
