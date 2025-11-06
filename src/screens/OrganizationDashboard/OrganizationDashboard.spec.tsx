@@ -23,7 +23,6 @@ import {
 import {
   MEMBERSHIP_REQUEST,
   GET_ORGANIZATION_BLOCKED_USERS_PG,
-  GET_ORGANIZATION_VENUES_PG,
 } from 'GraphQl/Queries/Queries';
 
 vi.mock('react-i18next', () => ({
@@ -542,86 +541,6 @@ describe('OrganizationDashboard', () => {
       const fallbackUIs = screen.getAllByTestId('fallback-ui');
       expect(fallbackUIs.length).toBeGreaterThan(0);
       expect(fallbackUIs.length).toBe(6);
-    });
-
-    it('should accumulate venues count correctly as pages are fetched', async () => {
-      const VENUES_PAGINATION_MOCKS = [
-        {
-          request: {
-            query: GET_ORGANIZATION_VENUES_PG,
-            variables: { id: 'orgId', first: 32, after: null },
-          },
-          result: {
-            data: {
-              organization: {
-                venues: {
-                  edges: Array.from({ length: 32 }, (_, i) => ({
-                    node: {
-                      id: `venue${i + 1}`,
-                      name: `Venue ${i + 1}`,
-                      description: `Description for venue ${i + 1}`,
-                      capacity: 100 + i,
-                      attachments: [],
-                      createdAt: '2025-09-01T00:00:00.000Z',
-                      updatedAt: '2025-09-05T00:00:00.000Z',
-                    },
-                    cursor: `v${i + 1}`,
-                  })),
-                  pageInfo: { hasNextPage: true, endCursor: 'v32' },
-                },
-              },
-            },
-          },
-        },
-        {
-          request: {
-            query: GET_ORGANIZATION_VENUES_PG,
-            variables: { id: 'orgId', first: 32, after: 'v32' },
-          },
-          result: {
-            data: {
-              organization: {
-                venues: {
-                  edges: Array.from({ length: 10 }, (_, i) => ({
-                    node: {
-                      id: `venue${i + 33}`,
-                      name: `Venue ${i + 33}`,
-                      description: `Description for venue ${i + 33}`,
-                      capacity: 100 + i + 32,
-                      attachments: [],
-                      createdAt: '2025-09-01T00:00:00.000Z',
-                      updatedAt: '2025-09-05T00:00:00.000Z',
-                    },
-                    cursor: `v${i + 33}`,
-                  })),
-                  pageInfo: { hasNextPage: false, endCursor: 'v42' },
-                },
-              },
-            },
-          },
-        },
-        ...MOCKS.filter(
-          (mock) =>
-            mock.request.query !== GET_ORGANIZATION_VENUES_PG &&
-            !(
-              mock.request.query === GET_ORGANIZATION_VENUES_PG &&
-              mock.request.variables.first === 1
-            ),
-        ),
-      ];
-
-      renderWithProviders({ mocks: VENUES_PAGINATION_MOCKS });
-
-      await waitFor(() => {
-        expect(screen.queryAllByTestId('fallback-ui').length).toBe(0);
-      });
-
-      // Note: In the actual implementation, pagination would accumulate 32 + 10 = 42 venues.
-      // However, in this test environment with MockedProvider, fetchMore doesn't automatically
-      // trigger the second mock, so we verify the first page count (32) is displayed correctly.
-      const venuesCard = screen.getByTestId('venuesCount');
-      expect(venuesCard).toBeInTheDocument();
-      expect(venuesCard.textContent).toContain('32');
     });
   });
 
