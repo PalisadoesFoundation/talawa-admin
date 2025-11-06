@@ -31,23 +31,11 @@
  * Displays a warning toast and redirects to the home page upon session expiration.
  */
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Navigate, Outlet } from 'react-router';
 import { toast } from 'react-toastify';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import useLocalStorage from 'utils/useLocalstorage';
-const { getItem, setItem, removeItem } = useLocalStorage();
-
-const SecuredRoute = (): JSX.Element => {
-  const isLoggedIn = getItem('IsLoggedIn');
-  const role = getItem('role');
-
-  return isLoggedIn === 'TRUE' ? (
-    <>{role === 'administrator' ? <Outlet /> : <PageNotFound />}</>
-  ) : (
-    <Navigate to="/" replace />
-  );
-};
 
 // Time constants for session timeout and inactivity interval
 const timeoutMinutes = 15;
@@ -56,37 +44,68 @@ const timeoutMilliseconds = timeoutMinutes * 60 * 1000;
 const inactiveIntervalMin = 1;
 const inactiveIntervalMilsec = inactiveIntervalMin * 60 * 1000;
 
-let lastActive: number = Date.now();
+const SecuredRoute = (): JSX.Element => {
+  const { getItem, setItem, removeItem } = useLocalStorage();
+  const lastActiveRef = useRef<number>(Date.now());
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-const updateLastActive = () => {
-  lastActive = Date.now();
+  const isLoggedIn = getItem('IsLoggedIn');
+  const role = getItem('role');
+
+  const updateLastActive = () => {
+    lastActiveRef.current = Date.now();
+  };
+
+  useEffect(() => {
+    // Only set up session timeout if user is logged in
+    if (isLoggedIn === 'TRUE') {
+      // Add event listeners for user activity
+      document.addEventListener('mousemove', updateLastActive);
+      document.addEventListener('keydown', updateLastActive);
+      document.addEventListener('click', updateLastActive);
+      document.addEventListener('scroll', updateLastActive);
+
+      // Set up interval to check for inactivity
+      intervalRef.current = setInterval(() => {
+        const currentTime = Date.now();
+        const timeSinceLastActive = currentTime - lastActiveRef.current;
+
+        // If inactive for longer than the timeout period, show a warning and log out
+        if (timeSinceLastActive > timeoutMilliseconds) {
+          toast.warn('Kindly relogin as sessison has expired');
+
+          setItem('IsLoggedIn', 'FALSE');
+          removeItem('email');
+          removeItem('id');
+          removeItem('name');
+          removeItem('role');
+          removeItem('token');
+          removeItem('userId');
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 1000);
+        }
+      }, inactiveIntervalMilsec);
+    }
+
+    // Cleanup function
+    return () => {
+      document.removeEventListener('mousemove', updateLastActive);
+      document.removeEventListener('keydown', updateLastActive);
+      document.removeEventListener('click', updateLastActive);
+      document.removeEventListener('scroll', updateLastActive);
+
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, [isLoggedIn, setItem, removeItem]);
+
+  return isLoggedIn === 'TRUE' ? (
+    <>{role === 'administrator' ? <Outlet /> : <PageNotFound />}</>
+  ) : (
+    <Navigate to="/" replace />
+  );
 };
-
-document.addEventListener('mousemove', updateLastActive);
-document.addEventListener('keydown', updateLastActive);
-document.addEventListener('click', updateLastActive);
-document.addEventListener('scroll', updateLastActive);
-
-// Check for inactivity and handle session timeout
-setInterval(() => {
-  const currentTime = Date.now();
-  const timeSinceLastActive = currentTime - lastActive;
-
-  // If inactive for longer than the timeout period, show a warning and log out
-  if (timeSinceLastActive > timeoutMilliseconds) {
-    toast.warn('Kindly relogin as sessison has expired');
-
-    setItem('IsLoggedIn', 'FALSE');
-    removeItem('email');
-    removeItem('id');
-    removeItem('name');
-    removeItem('role');
-    removeItem('token');
-    removeItem('userId');
-    setTimeout(() => {
-      window.location.href = '/';
-    }, 1000);
-  }
-}, inactiveIntervalMilsec);
 
 export default SecuredRoute;
