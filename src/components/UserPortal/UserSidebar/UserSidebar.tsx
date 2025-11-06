@@ -37,8 +37,8 @@ import PluginLogo from 'assets/svgs/plugins.svg?react';
 import styles from '../../../style/app-fixed.module.css';
 import { usePluginDrawerItems } from 'plugin';
 import type { IDrawerExtension } from 'plugin';
-import useLocalStorage, { setItem } from 'utils/useLocalstorage';
-import { FaBars } from 'react-icons/fa';
+import useLocalStorage from 'utils/useLocalstorage';
+import { FaBars, FaBell } from 'react-icons/fa';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
 import IconComponent from 'components/IconComponent/IconComponent';
@@ -206,6 +206,37 @@ const userSidebar = ({
                     >
                       {t('my organizations')}
                     </div>
+                  </div>
+                </Button>
+              )}
+            </NavLink>
+            {/* Link to Notifications page */}
+            <NavLink to={'/user/notification'} onClick={handleLinkClick}>
+              {({ isActive }) => (
+                <Button
+                  variant={isActive ? 'success' : ''}
+                  style={{
+                    backgroundColor: isActive ? 'var(--sidebar-option-bg)' : '',
+                    fontWeight: isActive ? 'bold' : 'normal',
+                    color: isActive
+                      ? 'var(--sidebar-option-text-active)'
+                      : 'var(--sidebar-option-text-inactive)',
+                  }}
+                  data-testid="userNotificationBtn"
+                >
+                  <div className={styles.iconWrapper}>
+                    <FaBell
+                      style={{
+                        width: 25,
+                        height: 25,
+                        color: isActive
+                          ? 'var(--sidebar-icon-stroke-active)'
+                          : 'var(--bs-secondary)',
+                      }}
+                    />
+                  </div>
+                  <div style={{ display: hideDrawer ? 'none' : 'block' }}>
+                    {tCommon('notifications')}
                   </div>
                 </Button>
               )}

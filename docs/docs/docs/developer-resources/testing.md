@@ -7,7 +7,11 @@ sidebar_position: 5
 
 ## Introduction
 
-It is important to test our code. If you are a contributor, please follow these steps.
+It is important to test our code. If you are a contributor, please follow the guidance on this page.
+
+### Developers using Microsoft Windows
+
+All our workflows use Linux based commands, therefore if you are a developer who codes in Microsoft Windows then we strongly suggest that you use the Windows Subsystem for Linux (WSL) as your command line interface (CLI).
 
 ### UI/UX Testing
 

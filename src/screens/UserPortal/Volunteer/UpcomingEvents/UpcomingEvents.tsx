@@ -84,12 +84,11 @@ const UpcomingEvents = (): JSX.Element => {
 
   // Extracts organization ID from the URL parameters
   const { orgId } = useParams();
-  if (!orgId || !userId) {
-    // Redirects to the homepage if orgId or userId is missing
-    return <Navigate to={'/'} replace />;
-  }
-  const [, setSearchTerm] = useState<string>('');
+  // Redirects to the homepage if orgId or userId is missing
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchBy, setSearchBy] = useState<'title' | 'location'>('title');
+
+  if (!orgId || !userId) return <Navigate to={'/'} replace />;
 
   // Modal state for recurring event volunteering
   const [showRecurringModal, setShowRecurringModal] = useState(false);
@@ -149,7 +148,7 @@ const UpcomingEvents = (): JSX.Element => {
         event: eventId,
         group,
         status,
-        userId: (userId as string) || '',
+        userId: userId as string,
       };
 
       // Add scope fields for recurring events
@@ -339,7 +338,7 @@ const UpcomingEvents = (): JSX.Element => {
   // Extracts the list of upcoming events from the fetched data
   const events = useMemo(() => {
     if (eventsData?.organization?.events?.edges) {
-      return eventsData.organization.events.edges.map((edge) => {
+      const mappedEvents = eventsData.organization.events.edges.map((edge) => {
         // Determine if this is a recurring event:
         // 1. If isRecurringEventTemplate is true, it's the base template/series
         // 2. If isRecurringEventTemplate is false but baseEvent exists and baseEvent.isRecurringEventTemplate is true, it's a recurring instance
@@ -371,9 +370,23 @@ const UpcomingEvents = (): JSX.Element => {
 
         return event;
       });
+
+      // Filter events based on search term and search by field
+      if (searchTerm.trim()) {
+        return mappedEvents.filter((event) => {
+          const searchValue = searchTerm.toLowerCase();
+          if (searchBy === 'title') {
+            return event.title.toLowerCase().includes(searchValue);
+          }
+          const location = event.location?.toLowerCase() ?? '';
+          return location.includes(searchValue);
+        });
+      }
+
+      return mappedEvents;
     }
     return [];
-  }, [eventsData]);
+  }, [eventsData, searchTerm, searchBy]);
 
   // Create enhanced membership lookup after events are defined
   const membershipLookup = useMemo(() => {
@@ -398,9 +411,7 @@ const UpcomingEvents = (): JSX.Element => {
             : relatedEvent._id;
 
           // Only add if we don't already have a specific membership for this instance
-          if (!lookup[instanceKey]) {
-            lookup[instanceKey] = membership;
-          }
+          if (!lookup[instanceKey]) lookup[instanceKey] = membership;
         });
       });
     }
@@ -410,8 +421,8 @@ const UpcomingEvents = (): JSX.Element => {
 
   // Renders a loader while events or membership data are being fetched
   if (eventsLoading || membershipLoading) return <Loader size="xl" />;
-  if (eventsError) {
-    // Displays an error message if there is an issue loading the events
+  // Displays an error message if there is an issue loading the events
+  if (eventsError)
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
@@ -422,7 +433,6 @@ const UpcomingEvents = (): JSX.Element => {
         </div>
       </div>
     );
-  }
 
   // Renders the upcoming events list and UI elements for searching, sorting, and adding pledges
   return (
@@ -433,6 +443,7 @@ const UpcomingEvents = (): JSX.Element => {
           placeholder={tCommon('searchBy', {
             item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
           })}
+          onChange={debouncedSearch}
           onSearch={debouncedSearch}
           inputTestId="searchBy"
           buttonTestId="searchBtn"

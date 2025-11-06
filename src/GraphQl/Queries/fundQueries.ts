@@ -102,17 +102,26 @@ export const FUND_CAMPAIGN_PLEDGE = gql`
 `;
 
 export const USER_FUND_CAMPAIGNS = gql`
-  query GetFundraisingCampaigns(
-    $where: CampaignWhereInput
-    $campaignOrderBy: CampaignOrderByInput
-  ) {
-    getFundraisingCampaigns(where: $where, campaignOrderBy: $campaignOrderBy) {
-      id
-      name
-      currency
-      fundingGoal
-      startDate
-      endDate
+  query GetFundraisingCampaigns($input: QueryOrganizationInput!) {
+    organization(input: $input) {
+      funds(first: 32) {
+        edges {
+          node {
+            campaigns(first: 32) {
+              edges {
+                node {
+                  id
+                  name
+                  currencyCode
+                  goalAmount
+                  startAt
+                  endAt
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 `;

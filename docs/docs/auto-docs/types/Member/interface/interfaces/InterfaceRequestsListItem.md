@@ -38,6 +38,10 @@ Defined in: [src/types/Member/interface.ts:13](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Member/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L14)
 
+#### avatarURL?
+
+> `optional` **avatarURL**: `string`
+
 #### emailAddress
 
 > **emailAddress**: `string`

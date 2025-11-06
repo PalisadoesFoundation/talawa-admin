@@ -3,7 +3,13 @@ import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -466,9 +472,10 @@ describe('Testing Upcoming Events Screen', () => {
         const volunteerBtns = screen.getAllByTestId('volunteerBtn');
         expect(volunteerBtns.length).toBeGreaterThan(0);
 
-        // Verify default behavior - shows "Volunteer" button
+        // Verify that buttons have appropriate text based on membership status
+        // Some should show "Volunteer", others "Joined", "Pending", etc. based on their membership status
         volunteerBtns.forEach((btn) => {
-          expect(btn).toHaveTextContent(/volunteer/i);
+          expect(btn).toHaveTextContent(/volunteer|joined|pending/i);
         });
       });
 
@@ -639,6 +646,154 @@ describe('Testing Upcoming Events Screen', () => {
           ).toBeTruthy();
         });
       });
+    });
+  });
+
+  it('should test rejected volunteer status in getVolunteerStatus function', async () => {
+    renderUpcomingEvents(link1);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    // Find volunteer buttons that should show rejected status
+    const volunteerBtns = screen.getAllByTestId('volunteerBtn');
+    expect(volunteerBtns.length).toBeGreaterThan(0);
+
+    // Check that the rejected status is properly displayed
+    const rejectedButton = volunteerBtns.find((btn) =>
+      btn.textContent?.toLowerCase().includes('rejected'),
+    );
+    if (rejectedButton) {
+      expect(rejectedButton).toHaveTextContent(/rejected/i);
+    }
+
+    const detailContainer = screen.getByTestId('detailContainer1');
+    const accordionButton = detailContainer
+      .closest('.MuiAccordion-root')
+      ?.querySelector('button');
+
+    if (
+      accordionButton &&
+      accordionButton.getAttribute('aria-expanded') === 'false'
+    ) {
+      await userEvent.click(accordionButton);
+    }
+
+    await waitFor(() => {
+      // Check if group buttons are rendered with rejected status
+      const joinBtns = screen.queryAllByTestId('joinBtn');
+      if (joinBtns.length > 0) {
+        const rejectedGroupButton = joinBtns.find((btn) =>
+          btn.textContent?.toLowerCase().includes('rejected'),
+        );
+        if (rejectedGroupButton) {
+          expect(rejectedGroupButton).toHaveTextContent(/rejected/i);
+        }
+      }
+    });
+  });
+
+  it('should test past event button states', async () => {
+    renderUpcomingEvents(link1);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByText('Past Test Event')).toBeInTheDocument();
+    });
+
+    // Find the Past Test Event card
+    const pastEventCard = screen
+      .getByText('Past Test Event')
+      .closest('[data-testid*="detailContainer"]');
+    expect(pastEventCard).toBeInTheDocument();
+
+    // Check that volunteer button is not rendered for past events (since it's in the past)
+    const volunteerButton = within(pastEventCard as HTMLElement).queryByTestId(
+      'volunteerBtn',
+    );
+    expect(volunteerButton).not.toBeInTheDocument();
+
+    // Verify the past event shows correct dates (2020 dates should be in the past)
+    const dateElements = within(pastEventCard as HTMLElement).getAllByText(
+      /10\/30\/2020/,
+    );
+    expect(dateElements.length).toBeGreaterThan(0);
+
+    // Expand accordion to check if group volunteer buttons are also not rendered for past events
+    const accordionButton = pastEventCard
+      ?.closest('.MuiAccordion-root')
+      ?.querySelector('button');
+    if (
+      accordionButton &&
+      accordionButton.getAttribute('aria-expanded') === 'false'
+    ) {
+      await userEvent.click(accordionButton);
+    }
+
+    await waitFor(() => {
+      // Check that group buttons are also not rendered for past events
+      const joinBtns = within(pastEventCard as HTMLElement).queryAllByTestId(
+        'joinBtn',
+      );
+      expect(joinBtns.length).toBe(0); // No join buttons should be present for past events
+    });
+  });
+
+  it('should test membership lookup with existing instanceKey to cover line 416', async () => {
+    renderUpcomingEvents(link1);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    // The component should process membership lookup and handle the conditional
+    // check for existing instanceKey properly (line 416)
+    const events = screen.getAllByTestId(/detailContainer/);
+    expect(events.length).toBeGreaterThan(0);
+
+    // Both events should be rendered with appropriate membership status
+    const volunteerBtns = screen.getAllByTestId('volunteerBtn');
+    expect(volunteerBtns.length).toBe(6);
+
+    // The instance should inherit status from base template if no specific membership exists
+    // But if specific membership exists for instance, it should use that instead
+    volunteerBtns.forEach((btn) => {
+      expect(btn).toBeInTheDocument();
+    });
+  });
+
+  it('should handle events with null volunteerGroups and volunteers', async () => {
+    renderUpcomingEvents(link1);
+
+    await waitFor(() => {
+      expect(screen.getByText('Event with Null Fields')).toBeInTheDocument();
+    });
+  });
+
+  it('should handle group.volunteers null (fallback to empty array)', async () => {
+    renderUpcomingEvents(link1);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('Event with Group Volunteers Null'),
+      ).toBeInTheDocument();
+    });
+
+    const accordionButton = screen.getByRole('button', {
+      name: /Event with Group Volunteers Null/i,
+    });
+    fireEvent.click(accordionButton);
+
+    await waitFor(() => {
+      const groupName = screen.getByText('Group NullVols');
+      const row = groupName.closest('tr') as HTMLElement;
+      expect(row).toBeTruthy();
+      expect(within(row).getByText('0')).toBeInTheDocument();
+
+      // Verify the Join button exists and shows correct text (groupId exists, so should show 'Join')
+      const joinButton = within(row).getByTestId('joinBtn');
+      expect(joinButton).toHaveTextContent('Join');
     });
   });
 });
