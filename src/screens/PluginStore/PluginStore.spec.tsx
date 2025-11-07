@@ -316,40 +316,6 @@ describe('PluginStore', () => {
       // Upload modal might not be implemented yet
       // expect(screen.getByTestId('upload-plugin-modal')).toBeInTheDocument();
     });
-
-    it('should close upload modal, refetch data, and reload page', async () => {
-      // Mock window.location.reload
-      const reloadMock = vi.fn();
-      Object.defineProperty(window, 'location', {
-        writable: true,
-        value: { reload: reloadMock },
-      });
-
-      // Update mock to return refetch
-      mockGetAllPlugins.mockReturnValue({
-        getPlugins: mockGraphQLPlugins,
-      });
-
-      render(
-        <MockedProvider>
-          <PluginStore />
-        </MockedProvider>,
-      );
-
-      // Wait for the component to render
-      await waitFor(() => {
-        expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument();
-      });
-
-      // Open upload modal
-      const uploadButton = screen.getByTestId('uploadPluginBtn');
-      fireEvent.click(uploadButton);
-
-      // The closeUploadModal will be called when the modal closes
-      // This tests the async function with refetch and reload
-      // Since we can't directly test the internal closeUploadModal,
-      // we verify the modal state changes
-    });
   });
 
   describe('Plugin Activation/Deactivation', () => {
@@ -1236,9 +1202,13 @@ describe('PluginStore', () => {
   describe('Upload Modal Close with Reload', () => {
     it('should execute closeUploadModal async operations correctly', async () => {
       // This test specifically targets the closeUploadModal function (lines 105-109)
-      const reloadMock = vi
-        .spyOn(window.location, 'reload')
-        .mockImplementation(() => {});
+      const reloadMock = vi.fn();
+
+      // Use vi.stubGlobal to mock location.reload
+      vi.stubGlobal('location', {
+        ...window.location,
+        reload: reloadMock,
+      });
 
       mockRefetch.mockClear();
       mockRefetch.mockResolvedValue({});
@@ -1282,6 +1252,9 @@ describe('PluginStore', () => {
           screen.queryByTestId('upload-plugin-modal'),
         ).not.toBeInTheDocument();
       });
+
+      // Restore original location
+      vi.unstubAllGlobals();
     });
   });
 });
