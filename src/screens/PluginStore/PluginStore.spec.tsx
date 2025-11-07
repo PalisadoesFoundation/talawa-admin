@@ -25,7 +25,11 @@ vi.mock('./UploadPluginModal', () => ({
   default: ({ show, onHide }: { show: boolean; onHide: () => void }) => {
     return show ? (
       <div role="dialog" data-testid="upload-plugin-modal">
-        <button onClick={onHide} data-testid="mock-close-upload-modal">
+        <button
+          type="button"
+          onClick={onHide}
+          data-testid="mock-close-upload-modal"
+        >
           Close
         </button>
       </div>
@@ -1182,54 +1186,11 @@ describe('PluginStore', () => {
   });
 
   describe('Upload Modal Close with Reload', () => {
-    it('should call refetch and reload when closeUploadModal is triggered', async () => {
-      // Mock window.location.reload using Object.defineProperty
-      const reloadMock = vi.fn();
-      Object.defineProperty(window, 'location', {
-        writable: true,
-        value: { reload: reloadMock },
-      });
-
-      // Mock refetch to be resolved
-      mockRefetch.mockResolvedValue({});
-
-      renderPluginStore();
-
-      // Wait for the component to render
-      await waitFor(() => {
-        expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument();
-      });
-
-      // Open upload modal
-      const uploadButton = screen.getByTestId('uploadPluginBtn');
-      fireEvent.click(uploadButton);
-
-      await waitFor(() => {
-        // Modal should be shown
-        expect(screen.getByTestId('upload-plugin-modal')).toBeInTheDocument();
-      });
-
-      // Click the close button which triggers onHide -> closeUploadModal
-      const closeButton = screen.getByTestId('mock-close-upload-modal');
-      fireEvent.click(closeButton);
-
-      // Wait for async closeUploadModal to complete (it calls refetch and reload)
-      await waitFor(
-        () => {
-          expect(mockRefetch).toHaveBeenCalled();
-          expect(reloadMock).toHaveBeenCalled();
-        },
-        { timeout: 2000 },
-      );
-    });
-
     it('should execute closeUploadModal async operations correctly', async () => {
       // This test specifically targets the closeUploadModal function (lines 105-109)
-      const reloadMock = vi.fn();
-      Object.defineProperty(window, 'location', {
-        writable: true,
-        value: { reload: reloadMock },
-      });
+      const reloadMock = vi
+        .spyOn(window.location, 'reload')
+        .mockImplementation(() => {});
 
       mockRefetch.mockClear();
       mockRefetch.mockResolvedValue({});
