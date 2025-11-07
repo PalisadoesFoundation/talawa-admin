@@ -1,13 +1,7 @@
 /* global HTMLSelectElement */
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
-import {
-  render,
-  screen,
-  waitFor,
-  fireEvent,
-  within,
-} from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
@@ -925,8 +919,6 @@ test('should correctly map joined organizations data ', async () => {
     expect(orgCards.length).toBe(2);
 
     orgCards.forEach((card) => {
-      const orgName = card.getAttribute('data-organization-name');
-
       expect(card.getAttribute('data-membership-status')).toBe('accepted');
     });
   });
@@ -1671,4 +1663,89 @@ test('should set membershipRequestStatus to empty string when isMember is false'
 
   expect(emptyStatusCards.length).toBe(1);
   expect(acceptedStatusCards.length).toBe(1);
+});
+
+test('should handle rowsPerPage <= 0 to show all organizations', async () => {
+  const TEST_USER_ID = 'test-all-rows-user';
+
+  setItem('userId', TEST_USER_ID);
+
+  const mockOrganizations = Array(15)
+    .fill(0)
+    .map((_, index) => ({
+      id: `org-id-${index}`,
+      name: `Organization ${index + 1}`,
+      avatarURL: '',
+      description: `Description ${index + 1}`,
+      addressLine1: 'Test Address',
+      adminsCount: 5,
+      membersCount: 100,
+      isMember: true,
+    }));
+
+  const mocks = [
+    {
+      request: { query: ORGANIZATION_FILTER_LIST, variables: { filter: '' } },
+      result: { data: { organizations: mockOrganizations } },
+    },
+    {
+      request: {
+        query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
+        variables: { id: TEST_USER_ID, first: 5, filter: '' },
+      },
+      result: {
+        data: {
+          user: {
+            organizationsWhereMember: {
+              edges: [],
+              pageInfo: { hasNextPage: false },
+            },
+          },
+        },
+      },
+    },
+    {
+      request: {
+        query: USER_CREATED_ORGANIZATIONS,
+        variables: { id: TEST_USER_ID, filter: '' },
+      },
+      result: {
+        data: {
+          user: {
+            createdOrganizations: [],
+          },
+        },
+      },
+    },
+  ];
+
+  render(
+    <MockedProvider mocks={mocks}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await waitFor(() => {
+    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+  });
+
+  // Change rows per page to show all (simulate selecting a large value)
+  const rowsPerPageSelect = screen.getByTestId(
+    'rows-per-page',
+  ) as HTMLSelectElement;
+
+  // Simulate setting rowsPerPage to 0 or negative to trigger the else branch
+  fireEvent.change(rowsPerPageSelect, { target: { value: '0' } });
+
+  await waitFor(() => {
+    // All organizations should be displayed when rowsPerPage <= 0
+    const orgCards = screen.getAllByTestId('organization-card');
+    expect(orgCards.length).toBe(15);
+  });
 });
