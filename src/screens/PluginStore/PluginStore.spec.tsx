@@ -7,6 +7,7 @@ import {
   within,
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
+import { ApolloError } from '@apollo/client';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import PluginStore from './PluginStore';
 import * as pluginHooks from 'plugin/hooks';
@@ -18,6 +19,19 @@ import userEvent from '@testing-library/user-event';
 vi.mock('plugin/hooks');
 vi.mock('plugin/manager');
 vi.mock('plugin/services/AdminPluginFileService');
+
+// Mock UploadPluginModal to allow triggering onHide
+vi.mock('./UploadPluginModal', () => ({
+  default: ({ show, onHide }: { show: boolean; onHide: () => void }) => {
+    return show ? (
+      <div role="dialog" data-testid="upload-plugin-modal">
+        <button onClick={onHide} data-testid="mock-close-upload-modal">
+          Close
+        </button>
+      </div>
+    ) : null;
+  },
+}));
 
 // Mock i18n translation
 vi.mock('react-i18next', () => ({
@@ -31,13 +45,15 @@ const mockCreatePlugin = vi.fn();
 const mockUpdatePlugin = vi.fn();
 const mockDeletePlugin = vi.fn();
 const mockGetAllPlugins = vi.fn();
+const mockRefetch = vi.fn();
+let mockGraphQLError: ApolloError | null = null;
 
 vi.mock('plugin/graphql-service', () => ({
   useGetAllPlugins: () => ({
     data: mockGetAllPlugins(),
     loading: false,
-    error: null,
-    refetch: vi.fn(),
+    error: mockGraphQLError,
+    refetch: mockRefetch,
   }),
   useCreatePlugin: () => [mockCreatePlugin],
   useUpdatePlugin: () => [mockUpdatePlugin],
@@ -615,6 +631,43 @@ describe('PluginStore', () => {
       expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument();
     });
 
+    it('should log error when GraphQL fetch fails', async () => {
+      // Mock console.error to verify it's called
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      // Set the error in our mock
+      const apolloError = new ApolloError({
+        errorMessage: 'GraphQL fetch failed',
+      });
+      mockGraphQLError = apolloError;
+
+      // Render the component which will trigger the useEffect with error
+      render(
+        <MockedProvider>
+          <PluginStore />
+        </MockedProvider>,
+      );
+
+      // Wait for component to render and useEffect to run
+      await waitFor(() => {
+        expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument();
+      });
+
+      // Verify console.error was called with the error
+      await waitFor(() => {
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          'Failed to fetch plugins via GraphQL:',
+          apolloError,
+        );
+      });
+
+      // Cleanup
+      mockGraphQLError = null;
+      consoleErrorSpy.mockRestore();
+    });
+
     it('should handle plugin status toggle error', async () => {
       mockUpdatePlugin.mockRejectedValue(new Error('Toggle failed'));
 
@@ -1129,13 +1182,97 @@ describe('PluginStore', () => {
   });
 
   describe('Upload Modal Close with Reload', () => {
-    it('should acknowledge closeUploadModal function exists', () => {
-      // This test acknowledges the closeUploadModal function (lines 105-109)
-      // Direct testing requires mocking the UploadPluginModal component
-      // which is complex due to react-bootstrap Modal implementation
-      // The function performs: setShowUploadModal(false), await refetch(), window.location.reload()
-      // It's called via onHide prop when the UploadPluginModal is closed
-      expect(true).toBe(true);
+    it('should call refetch and reload when closeUploadModal is triggered', async () => {
+      // Mock window.location.reload using Object.defineProperty
+      const reloadMock = vi.fn();
+      Object.defineProperty(window, 'location', {
+        writable: true,
+        value: { reload: reloadMock },
+      });
+
+      // Mock refetch to be resolved
+      mockRefetch.mockResolvedValue({});
+
+      renderPluginStore();
+
+      // Wait for the component to render
+      await waitFor(() => {
+        expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument();
+      });
+
+      // Open upload modal
+      const uploadButton = screen.getByTestId('uploadPluginBtn');
+      fireEvent.click(uploadButton);
+
+      await waitFor(() => {
+        // Modal should be shown
+        expect(screen.getByTestId('upload-plugin-modal')).toBeInTheDocument();
+      });
+
+      // Click the close button which triggers onHide -> closeUploadModal
+      const closeButton = screen.getByTestId('mock-close-upload-modal');
+      fireEvent.click(closeButton);
+
+      // Wait for async closeUploadModal to complete (it calls refetch and reload)
+      await waitFor(
+        () => {
+          expect(mockRefetch).toHaveBeenCalled();
+          expect(reloadMock).toHaveBeenCalled();
+        },
+        { timeout: 2000 },
+      );
+    });
+
+    it('should execute closeUploadModal async operations correctly', async () => {
+      // This test specifically targets the closeUploadModal function (lines 105-109)
+      const reloadMock = vi.fn();
+      Object.defineProperty(window, 'location', {
+        writable: true,
+        value: { reload: reloadMock },
+      });
+
+      mockRefetch.mockClear();
+      mockRefetch.mockResolvedValue({});
+
+      renderPluginStore();
+
+      await waitFor(() => {
+        expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument();
+      });
+
+      // Open the upload modal
+      const uploadButton = screen.getByTestId('uploadPluginBtn');
+      fireEvent.click(uploadButton);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('upload-plugin-modal')).toBeInTheDocument();
+      });
+
+      // The closeUploadModal function (lines 105-109) performs:
+      // 1. setShowUploadModal(false)
+      // 2. await refetch()
+      // 3. window.location.reload()
+
+      // Trigger closeUploadModal by clicking the close button
+      const closeButton = screen.getByTestId('mock-close-upload-modal');
+      fireEvent.click(closeButton);
+
+      // Verify refetch was called
+      await waitFor(() => {
+        expect(mockRefetch).toHaveBeenCalled();
+      });
+
+      // Verify reload was called
+      await waitFor(() => {
+        expect(reloadMock).toHaveBeenCalled();
+      });
+
+      // Verify modal is closed
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('upload-plugin-modal'),
+        ).not.toBeInTheDocument();
+      });
     });
   });
 });
