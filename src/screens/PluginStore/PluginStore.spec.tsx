@@ -1071,17 +1071,22 @@ describe('PluginStore', () => {
 
       renderPluginStore();
 
-      // Change filter
+      // Open filter dropdown
       const filterDropdown = screen.getByTestId('filterPlugins');
       await userEvent.click(filterDropdown);
 
-      // Wait for dropdown
+      // Wait for dropdown options to render
       await new Promise((resolve) => setTimeout(resolve, 100));
 
-      // Page should be reset to 0 when filter changes
-      // Verify the plugin list is still rendered
+      // Select the 'installed' filter option by its data-testid in document.body
+      const installedOption = within(document.body).getByTestId('installed');
+      await userEvent.click(installedOption);
+
+      // Page should be reset to 0 when filter changes. Verify first-page items are rendered
       await waitFor(() => {
-        expect(screen.getByTestId('plugin-list-container')).toBeInTheDocument();
+        expect(
+          screen.getByTestId('plugin-list-item-test-plugin-0'),
+        ).toBeInTheDocument();
       });
     });
 
@@ -1127,19 +1132,18 @@ describe('PluginStore', () => {
         expect(screen.getByTestId('plugin-list-container')).toBeInTheDocument();
       });
 
-      // Find pagination controls
-      const pagination = screen.queryByTestId('table-pagination');
-      if (pagination) {
-        const nextButtons = screen.queryAllByRole('button', { name: /next/i });
-        if (nextButtons.length > 0) {
-          fireEvent.click(nextButtons[0]);
-          await waitFor(() => {
-            expect(
-              screen.getByTestId('plugin-list-container'),
-            ).toBeInTheDocument();
-          });
-        }
-      }
+      // Find and click next page button - fail if not found
+      const nextButton = screen.getByRole('button', {
+        name: /go to next page|next/i,
+      });
+      await userEvent.click(nextButton);
+
+      // Verify page changed by checking for page 2 items
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('plugin-list-item-test-plugin-5'),
+        ).toBeInTheDocument();
+      });
       // This test covers line 80: setPage(newPage);
     });
 
@@ -1185,16 +1189,18 @@ describe('PluginStore', () => {
         expect(screen.getByTestId('plugin-list-container')).toBeInTheDocument();
       });
 
-      // Find the rows per page select
-      const rowsPerPageSelect = screen.queryByLabelText('rows per page');
-      if (rowsPerPageSelect) {
-        fireEvent.change(rowsPerPageSelect, { target: { value: '10' } });
-        await waitFor(() => {
-          expect(
-            screen.getByTestId('plugin-list-container'),
-          ).toBeInTheDocument();
-        });
-      }
+      // Get rows per page select - fail if not found
+      const rowsPerPageSelect = screen.getByRole('combobox', {
+        name: /rows per page/i,
+      });
+      await userEvent.selectOptions(rowsPerPageSelect, '10');
+
+      // Verify more items are now visible
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('plugin-list-item-test-plugin-9'),
+        ).toBeInTheDocument();
+      });
       // This test covers lines 85-86: setRowsPerPage and setPage(0)
     });
   });
