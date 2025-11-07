@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { AdminPluginFileService } from '../../services/AdminPluginFileService';
 import { AdminPluginManifest } from '../../../utils/adminPluginInstaller';
 import { internalFileWriter } from '../../services/InternalFileWriter';
@@ -34,6 +34,10 @@ describe('AdminPluginFileService', () => {
   beforeEach(() => {
     service = AdminPluginFileService.getInstance();
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   describe('validatePluginFiles', () => {
@@ -247,17 +251,13 @@ describe('AdminPluginFileService', () => {
 
     it('should catch non-Error exceptions during installPlugin', async () => {
       // Force validatePluginFiles to throw a non-Error to hit the outer catch block
-      const spy = vi
-        .spyOn(service, 'validatePluginFiles')
-        .mockImplementation(() => {
-          throw 'A non-error string was thrown';
-        });
+      vi.spyOn(service, 'validatePluginFiles').mockImplementation(() => {
+        throw 'A non-error string was thrown';
+      });
 
       const result = await service.installPlugin('TestPlugin', validFiles);
       expect(result.success).toBe(false);
       expect(result.error).toBe('Unknown error');
-
-      spy.mockRestore();
     });
 
     it('should handle non-Error exceptions in writeFilesToFilesystem', async () => {
