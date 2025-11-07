@@ -893,6 +893,23 @@ describe('PluginStore', () => {
   });
 
   describe('Pagination Functionality', () => {
+    // Helper to mock matchMedia for large screen (ensures table pagination is shown)
+    const mockMatchMediaForLargeScreen = (): void => {
+      Object.defineProperty(window, 'matchMedia', {
+        writable: true,
+        value: vi.fn().mockImplementation((query) => ({
+          matches: query !== '(max-width: 600px)',
+          media: query,
+          onchange: null,
+          addListener: vi.fn(),
+          removeListener: vi.fn(),
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+          dispatchEvent: vi.fn(),
+        })),
+      });
+    };
+
     it('should handle page change', async () => {
       // Create more plugins to test pagination
       const manyPlugins = Array.from({ length: 15 }, (_, i) => ({
@@ -1038,15 +1055,15 @@ describe('PluginStore', () => {
       // Wait for debounce and page reset
       await new Promise((resolve) => setTimeout(resolve, 350));
 
-      // Should still show plugins (page should be reset to 0)
+      // Page should be reset to 0, so Plugin 1 (matching "Plugin 1") should be on first page
       await waitFor(() => {
-        const plugin1 = screen.queryByTestId('plugin-list-item-test-plugin-1');
-        const plugin10 = screen.queryByTestId(
-          'plugin-list-item-test-plugin-10',
-        );
-        // At least one matching plugin should be visible
-        expect(plugin1 || plugin10).toBeTruthy();
+        expect(
+          screen.getByTestId('plugin-list-item-test-plugin-1'),
+        ).toBeInTheDocument();
       });
+
+      // Plugin 10 should also match "Plugin 1" search but may be on different page
+      // Just verify we're on page 0 by checking plugin-1 is visible
     });
 
     it('should reset to first page when filter changes', async () => {
@@ -1091,20 +1108,7 @@ describe('PluginStore', () => {
     });
 
     it('should call handleChangePage when pagination page changes', async () => {
-      // Mock matchMedia for large screen to ensure table pagination is shown
-      Object.defineProperty(window, 'matchMedia', {
-        writable: true,
-        value: vi.fn().mockImplementation((query) => ({
-          matches: query !== '(max-width: 600px)',
-          media: query,
-          onchange: null,
-          addListener: vi.fn(),
-          removeListener: vi.fn(),
-          addEventListener: vi.fn(),
-          removeEventListener: vi.fn(),
-          dispatchEvent: vi.fn(),
-        })),
-      });
+      mockMatchMediaForLargeScreen();
 
       const manyPlugins = Array.from({ length: 25 }, (_, i) => ({
         id: `test-plugin-${i}`,
@@ -1148,20 +1152,7 @@ describe('PluginStore', () => {
     });
 
     it('should call handleChangeRowsPerPage when rows per page changes', async () => {
-      // Mock matchMedia for large screen
-      Object.defineProperty(window, 'matchMedia', {
-        writable: true,
-        value: vi.fn().mockImplementation((query) => ({
-          matches: query !== '(max-width: 600px)',
-          media: query,
-          onchange: null,
-          addListener: vi.fn(),
-          removeListener: vi.fn(),
-          addEventListener: vi.fn(),
-          removeEventListener: vi.fn(),
-          dispatchEvent: vi.fn(),
-        })),
-      });
+      mockMatchMediaForLargeScreen();
 
       const manyPlugins = Array.from({ length: 25 }, (_, i) => ({
         id: `test-plugin-${i}`,
