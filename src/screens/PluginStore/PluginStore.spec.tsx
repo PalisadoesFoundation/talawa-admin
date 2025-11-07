@@ -957,8 +957,33 @@ describe('PluginStore', () => {
         ).toBeInTheDocument();
       });
 
-      // Verify pagination is working by checking that plugin list is rendered
-      expect(screen.getByTestId('plugin-list-container')).toBeInTheDocument();
+      // Verify plugins from page 1 are visible (0-4)
+      expect(
+        screen.getByTestId('plugin-list-item-test-plugin-4'),
+      ).toBeInTheDocument();
+
+      // Plugin from page 2 should not be visible yet
+      expect(
+        screen.queryByTestId('plugin-list-item-test-plugin-5'),
+      ).not.toBeInTheDocument();
+
+      // Click next page button
+      const nextPageButton = screen.getByRole('button', {
+        name: /go to next page|next/i,
+      });
+      await userEvent.click(nextPageButton);
+
+      // Wait for page change and verify plugin from page 2 is now visible
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('plugin-list-item-test-plugin-5'),
+        ).toBeInTheDocument();
+      });
+
+      // Verify plugin from page 1 is no longer visible
+      expect(
+        screen.queryByTestId('plugin-list-item-test-plugin-0'),
+      ).not.toBeInTheDocument();
     });
 
     it('should handle rows per page change', async () => {
@@ -988,8 +1013,31 @@ describe('PluginStore', () => {
         expect(screen.getByTestId('plugin-list-container')).toBeInTheDocument();
       });
 
-      // The PaginationList component should handle rows per page changes
-      // We verify it renders correctly with many plugins
+      // Initially showing 5 items per page - plugin 5 should not be visible
+      expect(
+        screen.getByTestId('plugin-list-item-test-plugin-0'),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('plugin-list-item-test-plugin-5'),
+      ).not.toBeInTheDocument();
+
+      // Change rows per page to 10
+      const rowsPerPageSelect = screen.getByRole('combobox', {
+        name: /rows per page/i,
+      });
+      await userEvent.selectOptions(rowsPerPageSelect, '10');
+
+      // Now plugin 5-9 should be visible on the same page
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('plugin-list-item-test-plugin-5'),
+        ).toBeInTheDocument();
+      });
+      expect(
+        screen.getByTestId('plugin-list-item-test-plugin-9'),
+      ).toBeInTheDocument();
+
+      // Still on first page, so plugin 0 should still be visible
       expect(
         screen.getByTestId('plugin-list-item-test-plugin-0'),
       ).toBeInTheDocument();
