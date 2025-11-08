@@ -943,7 +943,7 @@ describe('Manage Tag Page', () => {
 
   it.skip('handles infinite scroll with pagination correctly', async () => {
     // This test is a duplicate of the earlier "Fetches more assigned members with infinite scroll" test
-    // Skipped to avoid redundant coverage and reduce test runtime.
+    // Skipped to avoid redundant coverage and reduce test runtime
   });
 
   it('handles non-Error object in catch block', async () => {
