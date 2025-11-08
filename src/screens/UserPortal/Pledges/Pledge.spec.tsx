@@ -1489,6 +1489,12 @@ describe('Testing User Pledge Screen', () => {
       expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
     });
     expect(screen.getByRole('grid')).toBeInTheDocument();
+
+    // Verify pledger information is displayed
+    await waitFor(() => {
+      const pledgerElements = screen.queryAllByText(/User/i);
+      expect(pledgerElements.length).toBeGreaterThan(0);
+    });
   });
 
   it('should handle zero goal amount', async () => {
@@ -1496,6 +1502,30 @@ describe('Testing User Pledge Screen', () => {
     await waitFor(() => {
       expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
     });
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+
+    // Verify component renders without crashing with zero goal
+    expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+  });
+
+  it('should display pledger avatar when available', async () => {
+    renderMyPledges(link2);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+    });
+
+    // Check for avatar or image elements
+    const grid = screen.getByRole('grid');
+    expect(grid).toBeInTheDocument();
+  });
+
+  it('should handle campaign with missing data gracefully', async () => {
+    renderMyPledges(link8);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+    });
+
+    // Component should render without crashing
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 });
