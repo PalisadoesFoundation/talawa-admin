@@ -99,3 +99,30 @@ export const checkInMutationUnsuccess = [
     error: new Error('Oops'),
   },
 ];
+
+export const checkInMutationSuccessRecurring = [
+  {
+    request: {
+      query: MARK_CHECKIN,
+      variables: {
+        userId: 'user123',
+        recurringEventInstanceId: 'recurring123',
+      },
+    },
+    result: {
+      data: {
+        checkIn: {
+          id: '123',
+          user: {
+            id: 'user123',
+          },
+          checkinTime: '2023-01-01T08:00:00Z',
+          checkoutTime: null,
+          isCheckedIn: true,
+          isCheckedOut: false,
+          feedbackSubmitted: false,
+        },
+      },
+    },
+  },
+];
