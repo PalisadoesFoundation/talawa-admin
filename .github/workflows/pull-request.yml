@@ -404,7 +404,7 @@ jobs:
           python .github/workflows/scripts/itskip_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
   Test-Application:
-    name: Test Application
+    name: Test Application (Shard ${{ matrix.shard }})
     runs-on: ubuntu-latest
     needs:
       [
@@ -413,6 +413,11 @@ jobs:
         Check-Code-Coverage-Disable,
         Check-ItSkip-Disable,
       ]
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
+        total_shards: [4]
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
@@ -453,28 +458,128 @@ jobs:
         run: |
           npx tsc --noEmit
 
-      - name: Run Vitest Tests
+      - name: Run Vitest Tests (Shard ${{ matrix.shard }}/${{ matrix.total_shards }})
         if: steps.changed-files.outputs.any_changed == 'true'
         env:
           NODE_V8_COVERAGE: './coverage/vitest'
-          NODE_OPTIONS: '--max-old-space-size=6144'
+          NODE_OPTIONS: '--max-old-space-size=4096'
+          SHARD_INDEX: ${{ matrix.shard }}
+          SHARD_COUNT: ${{ matrix.total_shards }}
         run: |
-          npm run test:coverage
+          npm run test:shard:coverage
 
-      ##############################################################################
+      #######################################################################
       # DO NOT DELETE ANY references to env.CODECOV_UNIQUE_NAME in this
       # section. They are required for accurate caluclations
-      ##############################################################################
-      - name: Present and upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
+      #######################################################################
+      - name: Present and upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}-shard-${{ matrix.shard }}
+        if: steps.changed-files.outputs.any_changed == 'true'
         uses: codecov/codecov-action@v5
         with:
-          ##########################################################################
-          # DO NOT DELETE ANY references to env.CODECOV_UNIQUE_NAME in this
-          # section. They are required for accurate caluclations
-          ##########################################################################
-          name: '${{env.CODECOV_UNIQUE_NAME}}'
-          ##########################################################################
+          name: '${{env.CODECOV_UNIQUE_NAME}}-shard-${{ matrix.shard }}'
           token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
+          verbose: true
+          exclude: 'docs/'
+          gcov_ignore: 'docs/'
+          files: ./coverage/vitest/lcov.info
+          flags: vitest
+
+      - name: Upload coverage artifact
+        if: always() && steps.changed-files.outputs.any_changed == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-shard-${{ matrix.shard }}
+          path: ./coverage/vitest/
+          retention-days: 1
+
+  Merge-Coverage:
+    name: Merge Coverage Reports
+    runs-on: ubuntu-latest
+    needs: [Test-Application]
+    if: success() || failure()
+    steps:
+      - name: Checkout the Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Download all coverage artifacts
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          pattern: coverage-shard-*
+          path: ./coverage-shards/
+          merge-multiple: false
+
+      - name: Install lcov-result-merger
+        run: npm install --no-save lcov-result-merger
+
+      - name: Merge coverage reports
+        run: |
+          mkdir -p ./coverage/vitest
+
+          # Check if coverage-shards directory exists
+          if [ ! -d "coverage-shards" ]; then
+            echo "ERROR: No coverage-shards directory found!"
+            echo "This likely means artifact download failed."
+            exit 1
+          fi
+
+          # Find all lcov.info files from shards
+          find coverage-shards -name "lcov.info" -type f > lcov-files.txt || true
+
+          # Check if we found any coverage files
+          if [ ! -s lcov-files.txt ]; then
+            echo "ERROR: No coverage files found to merge!"
+            echo "Expected to find lcov.info files in coverage-shards/*/lcov.info"
+            ls -la coverage-shards/ || true
+            exit 1
+          fi
+
+          echo "Found coverage files:"
+          cat lcov-files.txt
+
+          # Verify each file is not empty
+          EMPTY_FILES=0
+          while IFS= read -r file; do
+            if [ ! -s "$file" ]; then
+              echo "WARNING: Empty coverage file: $file"
+              EMPTY_FILES=$((EMPTY_FILES + 1))
+            fi
+          done < lcov-files.txt
+
+          if [ $EMPTY_FILES -gt 0 ]; then
+            echo "ERROR: Found $EMPTY_FILES empty coverage files!"
+            exit 1
+          fi
+
+          # Merge them using lcov-result-merger
+          echo "Merging coverage files..."
+          npx lcov-result-merger "coverage-shards/*/lcov.info" ./coverage/vitest/lcov.info
+
+          # Validate merged file
+          if [ ! -s ./coverage/vitest/lcov.info ]; then
+            echo "ERROR: Merged coverage file is empty!"
+            exit 1
+          fi
+
+          echo "✅ Coverage merge successful"
+          echo "Merged file size: $(wc -l < ./coverage/vitest/lcov.info) lines"
+
+      - name: Present and upload merged coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          name: '${{env.CODECOV_UNIQUE_NAME}}-merged'
+          token: ${{ secrets.CODECOV_TOKEN }}
+          # Using fail_ci_if_error: true to match develop branch behavior
+          # This is safe now because we validate the merged file is non-empty above
           fail_ci_if_error: true
           verbose: true
           exclude: 'docs/'
@@ -519,7 +624,7 @@ jobs:
   Start-App-Without-Docker:
     name: Check if Talawa Admin app starts (No Docker)
     runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks, Test-Application]
+    needs: [Code-Quality-Checks, Merge-Coverage]
     if: github.actor != 'dependabot'
     steps:
       - name: Checkout the Repository
@@ -567,7 +672,7 @@ jobs:
   Docker-Start-Check:
     name: Check if Talawa Admin app starts in Docker
     runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks, Test-Application]
+    needs: [Code-Quality-Checks, Merge-Coverage]
     if: github.actor != 'dependabot'
     steps:
       - name: Checkout the Repository
