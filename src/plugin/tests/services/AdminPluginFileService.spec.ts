@@ -250,6 +250,7 @@ describe('AdminPluginFileService', () => {
     });
 
     it('should catch non-Error exceptions during installPlugin', async () => {
+      // Spy on console.error to assert it was called (optional)
       vi.spyOn(console, 'error').mockImplementation(() => {});
       // Force validatePluginFiles to throw a non-Error to hit the outer catch block
       vi.spyOn(service, 'validatePluginFiles').mockImplementation(() => {
@@ -291,24 +292,16 @@ describe('AdminPluginFileService', () => {
 
     it('should catch unexpected errors during installPlugin and return message', async () => {
       // Force validatePluginFiles to throw to hit the outer catch block
-      const originalValidate = service.validatePluginFiles.bind(service);
-      service.validatePluginFiles = vi.fn().mockImplementation(() => {
+      vi.spyOn(service, 'validatePluginFiles').mockImplementation(() => {
         throw new Error('Unexpected validation error');
       });
-
       // Spy on console.error to assert it was called (optional)
-      const consoleSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
+      vi.spyOn(console, 'error').mockImplementation(() => {});
 
       const result = await service.installPlugin('TestPlugin', validFiles);
       expect(result.success).toBe(false);
       expect(result.error).toBe('Unexpected validation error');
-      expect(consoleSpy).toHaveBeenCalled();
-
-      // Restore
-      service.validatePluginFiles = originalValidate;
-      consoleSpy.mockRestore();
+      expect(console.error).toHaveBeenCalled();
     });
   });
 
@@ -362,8 +355,6 @@ describe('AdminPluginFileService', () => {
       const callArg = consoleSpy.mock.calls[0][1];
       expect(callArg).toBeInstanceOf(Error);
       expect((callArg as Error).message).toBe('Failed to get plugins');
-
-      consoleSpy.mockRestore();
     });
 
     it('should return empty array when listInstalledPlugins throws', async () => {
