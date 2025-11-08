@@ -102,6 +102,66 @@ const samplePosts = [
   },
 ];
 
+// Empty ORGANIZATION_PINNED_POST_LIST mock for tests that need no pinned posts
+const ORGANIZATION_PINNED_POST_LIST_EMPTY_MOCK = {
+  request: {
+    query: ORGANIZATION_PINNED_POST_LIST,
+    variables: {
+      input: { id: '123' },
+      first: 6,
+      last: null,
+    },
+  },
+  result: {
+    data: {
+      organization: {
+        id: '123',
+        postsCount: 0,
+        pinnedPosts: {
+          edges: [],
+          pageInfo: {
+            startCursor: null,
+            endCursor: null,
+            hasNextPage: false,
+            hasPreviousPage: false,
+          },
+        },
+      },
+    },
+  },
+};
+
+// ORGANIZATION_PINNED_POST_LIST mock with pagination variables
+const ORGANIZATION_PINNED_POST_LIST_WITH_PAGINATION_MOCK = {
+  request: {
+    query: ORGANIZATION_PINNED_POST_LIST,
+    variables: {
+      input: { id: '123' },
+      after: null,
+      before: null,
+      first: 6,
+      last: null,
+    },
+  },
+  result: {
+    data: {
+      organization: {
+        id: '123',
+        postsCount: 0,
+        pinnedPosts: {
+          edges: [],
+          pageInfo: {
+            startCursor: null,
+            endCursor: null,
+            hasNextPage: false,
+            hasPreviousPage: false,
+          },
+        },
+      },
+    },
+  },
+};
+
 // Prepare mocks for GraphQL queries
 const orgPostListMock = {
   request: {
@@ -138,34 +198,8 @@ const orgPostListMock = {
   },
 };
 
-// Add pinned posts mock
-const orgPinnedPostListMockBasic = {
-  request: {
-    query: ORGANIZATION_PINNED_POST_LIST,
-    variables: {
-      input: { id: '123' },
-      first: 6,
-      last: null,
-    },
-  },
-  result: {
-    data: {
-      organization: {
-        id: '123',
-        postsCount: 0,
-        pinnedPosts: {
-          edges: [],
-          pageInfo: {
-            startCursor: null,
-            endCursor: null,
-            hasNextPage: false,
-            hasPreviousPage: false,
-          },
-        },
-      },
-    },
-  },
-};
+// Use centralized pinned posts mock to avoid duplication
+const orgPinnedPostListMockBasic = ORGANIZATION_PINNED_POST_LIST_EMPTY_MOCK;
 
 const getPostsByOrgInitialMock = {
   request: {
@@ -258,35 +292,7 @@ const minimalMocks: MockedResponse[] = [
       },
     },
   },
-  {
-    request: {
-      query: ORGANIZATION_PINNED_POST_LIST,
-      variables: {
-        input: { id: '123' },
-        after: null,
-        before: null,
-        first: 6,
-        last: null,
-      },
-    },
-    result: {
-      data: {
-        organization: {
-          id: '123',
-          postsCount: 0,
-          pinnedPosts: {
-            edges: [],
-            pageInfo: {
-              startCursor: null,
-              endCursor: null,
-              hasNextPage: false,
-              hasPreviousPage: false,
-            },
-          },
-        },
-      },
-    },
-  },
+  ORGANIZATION_PINNED_POST_LIST_WITH_PAGINATION_MOCK,
 ];
 const mockPosts1 = {
   postsByOrganization: [
@@ -379,35 +385,7 @@ const mocks1 = [
     },
     result: { data: mockOrgPostList1 },
   },
-  {
-    request: {
-      query: ORGANIZATION_PINNED_POST_LIST,
-      variables: {
-        input: { id: '123' },
-        after: null,
-        before: null,
-        first: 6,
-        last: null,
-      },
-    },
-    result: {
-      data: {
-        organization: {
-          id: '123',
-          postsCount: 0,
-          pinnedPosts: {
-            edges: [],
-            pageInfo: {
-              startCursor: null,
-              endCursor: null,
-              hasNextPage: false,
-              hasPreviousPage: false,
-            },
-          },
-        },
-      },
-    },
-  },
+  ORGANIZATION_PINNED_POST_LIST_WITH_PAGINATION_MOCK,
   // Additional mocks for create mutation if needed
   {
     request: {
@@ -490,34 +468,8 @@ const mocks = [
     result: { data: mockOrgPostList1 },
   },
 
-  // Pinned posts mock
-  {
-    request: {
-      query: ORGANIZATION_PINNED_POST_LIST,
-      variables: {
-        input: { id: '123' },
-        first: 6,
-        last: null,
-      },
-    },
-    result: {
-      data: {
-        organization: {
-          id: '123',
-          postsCount: 0,
-          pinnedPosts: {
-            edges: [],
-            pageInfo: {
-              startCursor: null,
-              endCursor: null,
-              hasNextPage: false,
-              hasPreviousPage: false,
-            },
-          },
-        },
-      },
-    },
-  },
+  // Use centralized pinned posts mock
+  ORGANIZATION_PINNED_POST_LIST_EMPTY_MOCK,
 ];
 
 const loadingMocks: MockedResponse[] = [
@@ -544,31 +496,7 @@ const loadingMocks: MockedResponse[] = [
     delay: 5000,
   },
   {
-    request: {
-      query: ORGANIZATION_PINNED_POST_LIST,
-      variables: {
-        input: { id: '123' },
-        first: 6,
-        last: null,
-      },
-    },
-    result: {
-      data: {
-        organization: {
-          id: '123',
-          postsCount: 0,
-          pinnedPosts: {
-            edges: [],
-            pageInfo: {
-              startCursor: null,
-              endCursor: null,
-              hasNextPage: false,
-              hasPreviousPage: false,
-            },
-          },
-        },
-      },
-    },
+    ...ORGANIZATION_PINNED_POST_LIST_EMPTY_MOCK,
     delay: 5000,
   },
 ];
