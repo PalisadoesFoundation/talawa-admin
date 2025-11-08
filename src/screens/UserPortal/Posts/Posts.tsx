@@ -89,43 +89,6 @@ type Ad = {
   startDate: string;
 };
 
-// Interface for pinned post node from GraphQL query - matches the exact structure returned
-interface PinnedPostNode {
-  id: string;
-  caption: string;
-  commentsCount: number;
-  pinnedAt: string;
-  downVotesCount: number;
-  upVotesCount: number;
-  createdAt: string;
-  creator: {
-    id: string;
-    name: string;
-    avatarURL: string | null;
-  };
-  comments: {
-    edges: Array<{
-      node: {
-        id: string;
-        body: string;
-        creator: {
-          id: string;
-          name: string;
-          avatarURL: string | null;
-        };
-        downVotesCount: number;
-        upVotesCount: number;
-      };
-    }>;
-    pageInfo: {
-      startCursor: string | null;
-      endCursor: string | null;
-      hasNextPage: boolean;
-      hasPreviousPage: boolean;
-    };
-  };
-}
-
 export default function Home(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
   const { t: tCommon } = useTranslation('common');
@@ -141,8 +104,7 @@ export default function Home(): JSX.Element {
   const [postImg, setPostImg] = useState<string | null>('');
   const [displayPosts, setDisplayPosts] = useState<InterfacePostCard[]>([]);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalPosts, setTotalPosts] = useState(0);
-  const [adContent, setAdContent] = useState<Ad[]>([]);
+  const [, setAdContent] = useState<Ad[]>([]);
 
   if (!orgId) {
     return <Navigate to={'/user'} />;
@@ -176,7 +138,7 @@ export default function Home(): JSX.Element {
     ORGANIZATION_PINNED_POST_LIST,
     {
       variables: {
-        input: { id: orgId as string },
+        input: { id: orgId },
         first: 32,
       },
     },
@@ -196,7 +158,6 @@ export default function Home(): JSX.Element {
         (edge: { node: PostNode }) => edge.node,
       );
       setPosts(newPosts);
-      setTotalPosts(data.organization.postsCount);
       setTotalPages(Math.ceil(data.organization.postsCount / POSTS_PER_PAGE));
     }
   }, [data]);
@@ -206,10 +167,10 @@ export default function Home(): JSX.Element {
       const pinnedPostNodes =
         orgPinnedPostListData.organization.pinnedPosts.edges.map(
           (edge: InterfacePostEdge) => edge.node,
-        ) as any;
+        );
       setPinnedPosts(pinnedPostNodes);
     }
-  }, [orgPinnedPostListData, posts, adContent, totalPosts]);
+  }, [orgPinnedPostListData]);
 
   useEffect(() => {
     if (promotedPostsData?.organizations) {

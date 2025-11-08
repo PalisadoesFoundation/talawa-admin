@@ -1941,7 +1941,7 @@ describe('PinnedPostCard Component Tests', () => {
             organization: {
               id: 'orgId',
               postsCount: 1,
-              posts: {
+              pinnedPosts: {
                 edges: [
                   {
                     node: {
@@ -2170,7 +2170,7 @@ describe('PinnedPostCard Component Tests', () => {
             organization: {
               id: 'orgId',
               postsCount: 1,
-              posts: {
+              pinnedPosts: {
                 edges: [
                   {
                     node: {

@@ -3138,7 +3138,7 @@ describe('OrgPost Pinned Posts Functionality', () => {
     renderComponentWithPinnedPosts(pinnedPostsErrorMock);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Failed to load pinned posts');
+      expect(toast.error).toHaveBeenCalledWith('pinnedPostsLoadError');
     });
 
     // Component should still render despite the error

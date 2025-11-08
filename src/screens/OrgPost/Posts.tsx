@@ -131,17 +131,6 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
     setSelectedPinnedPost(null);
   };
 
-  // Get all posts from the appropriate data source
-  let allPosts: InterfacePost[] = [];
-
-  if (isFiltering && data?.postsByOrganization) {
-    allPosts = data.postsByOrganization;
-  } else if (data?.organization?.posts?.edges) {
-    allPosts = data.organization.posts.edges.map(
-      (edge: InterfacePostEdge) => edge.node,
-    );
-  }
-
   if (isFiltering) {
     if (!data?.postsByOrganization || data.postsByOrganization.length === 0) {
       return <NotFound title="post" keyPrefix="postNotFound" />;

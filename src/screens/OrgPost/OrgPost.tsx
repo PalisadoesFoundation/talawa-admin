@@ -110,7 +110,6 @@ function OrgPost(): JSX.Element {
     data: orgPinnedPostListData,
     loading: orgPinnedPostListLoading,
     error: orgPinnedPostListError,
-    // refetchPinnedPosts,
   } = useQuery<InterfaceOrganizationPostListData>(
     ORGANIZATION_PINNED_POST_LIST,
     {
@@ -267,7 +266,7 @@ function OrgPost(): JSX.Element {
 
   useEffect(() => {
     if (orgPinnedPostListError) {
-      toast.error('Failed to load pinned posts');
+      toast.error(t('pinnedPostsLoadError'));
     }
   }, [orgPinnedPostListError]);
 
