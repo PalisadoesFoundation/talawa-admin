@@ -250,7 +250,7 @@ describe('AdminPluginFileService', () => {
     });
 
     it('should catch non-Error exceptions during installPlugin', async () => {
-      // Spy on console.error to assert it was called (optional)
+      // Spy on console.error to verify logging
       vi.spyOn(console, 'error').mockImplementation(() => {});
       // Force validatePluginFiles to throw a non-Error to hit the outer catch block
       vi.spyOn(service, 'validatePluginFiles').mockImplementation(() => {
