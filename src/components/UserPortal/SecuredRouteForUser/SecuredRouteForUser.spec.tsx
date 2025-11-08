@@ -1,8 +1,17 @@
 import React from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
+import { toast } from 'react-toastify';
 import SecuredRouteForUser from './SecuredRouteForUser';
 import useLocalStorage from 'utils/useLocalstorage';
+
+// Mock react-toastify
+vi.mock('react-toastify', () => ({
+  toast: {
+    warn: vi.fn(),
+  },
+}));
 
 /**
  * Unit tests for SecuredRouteForUser component:
@@ -14,93 +23,144 @@ import useLocalStorage from 'utils/useLocalstorage';
  * LocalStorage values like 'IsLoggedIn' and 'AdminFor' are set to simulate different user states.
  */
 
-const { setItem } = useLocalStorage();
+const TestComponent = (): JSX.Element => <div>Test Protected Content</div>;
 
 describe('SecuredRouteForUser', () => {
-  it('renders the route when the user is logged in', () => {
-    // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user and do not set 'AdminFor' so that it remains undefined.
-    setItem('IsLoggedIn', 'TRUE');
+  const originalLocation = window.location;
+  const { setItem, getItem } = useLocalStorage();
 
-    render(
-      <MemoryRouter initialEntries={['/user/organizations']}>
-        <Routes>
-          <Route element={<SecuredRouteForUser />}>
-            <Route
-              path="/user/organizations"
-              element={
-                <div data-testid="organizations-content">
-                  Organizations Component
-                </div>
-              }
-            />
-          </Route>
-        </Routes>
-      </MemoryRouter>,
-    );
-
-    expect(screen.getByTestId('organizations-content')).toBeInTheDocument();
+  beforeEach(() => {
+    // Clear all mocks before each test
+    vi.clearAllMocks();
+    // Clear localStorage before each test
+    localStorage.clear();
+    // Use fake timers for controlling time-based operations
+    vi.useFakeTimers();
+    // Mock window.location.href
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      writable: true,
+      value: { href: '' },
+    });
   });
 
-  it('redirects to /user when the user is not logged in', async () => {
-    // Set the user as not logged in in local storage
-    setItem('IsLoggedIn', 'FALSE');
+  afterEach(() => {
+    // Clean up any timers or event listeners
+    vi.clearAllTimers();
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: originalLocation,
+    });
+  });
 
-    render(
-      <MemoryRouter initialEntries={['/user/organizations']}>
-        <Routes>
-          <Route path="/" element={<div>User Login Page</div>} />
-          <Route element={<SecuredRouteForUser />}>
-            <Route
-              path="/user/organizations"
-              element={
-                <div data-testid="organizations-content">
-                  Organizations Component
-                </div>
-              }
-            />
-          </Route>
-        </Routes>
-      </MemoryRouter>,
-    );
+  describe('Authentication and Authorization', () => {
+    it('renders the route when the user is logged in', () => {
+      // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user and do not set 'AdminFor' so that it remains undefined.
+      setItem('IsLoggedIn', 'TRUE');
 
-    await waitFor(() => {
+      render(
+        <MemoryRouter initialEntries={['/user/organizations']}>
+          <Routes>
+            <Route element={<SecuredRouteForUser />}>
+              <Route
+                path="/user/organizations"
+                element={
+                  <div data-testid="organizations-content">
+                    Organizations Component
+                  </div>
+                }
+              />
+            </Route>
+          </Routes>
+        </MemoryRouter>,
+      );
+
+      expect(screen.getByTestId('organizations-content')).toBeInTheDocument();
+    });
+
+    it('redirects to /user when the user is not logged in', () => {
+      // Set the user as not logged in in local storage
+      setItem('IsLoggedIn', 'FALSE');
+
+      render(
+        <MemoryRouter initialEntries={['/user/organizations']}>
+          <Routes>
+            <Route path="/" element={<div>User Login Page</div>} />
+            <Route element={<SecuredRouteForUser />}>
+              <Route
+                path="/user/organizations"
+                element={
+                  <div data-testid="organizations-content">
+                    Organizations Component
+                  </div>
+                }
+              />
+            </Route>
+          </Routes>
+        </MemoryRouter>,
+      );
+
       expect(screen.getByText('User Login Page')).toBeInTheDocument();
     });
   });
 
-  it('renders the route when the user is logged in and user is ADMIN', () => {
-    // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user and set 'AdminFor' to simulate ADMIN of some Organization.
-    setItem('IsLoggedIn', 'TRUE');
-    setItem('AdminFor', [
-      {
-        _id: '6537904485008f171cf29924',
-        __typename: 'Organization',
-      },
-    ]);
+  describe('User Activity Tracking', () => {
+    it('should update lastActive on mouse movement', () => {
+      setItem('IsLoggedIn', 'TRUE');
 
-    render(
-      <MemoryRouter initialEntries={['/user/organizations']}>
-        <Routes>
-          <Route
-            path="/user/organizations"
-            element={<div>Oops! The Page you requested was not found!</div>}
-          />
-          <Route element={<SecuredRouteForUser />}>
-            <Route
-              path="/user/organizations"
-              element={
-                <div data-testid="organizations-content">
-                  Organizations Component
-                </div>
-              }
-            />
-          </Route>
-        </Routes>
-      </MemoryRouter>,
-    );
+      render(
+        <MemoryRouter initialEntries={['/user/organizations']}>
+          <Routes>
+            <Route element={<SecuredRouteForUser />}>
+              <Route path="/user/organizations" element={<TestComponent />} />
+            </Route>
+          </Routes>
+        </MemoryRouter>,
+      );
 
-    expect(
-      screen.getByText(/Oops! The Page you requested was not found!/i),
-    ).toBeTruthy();
+      // Simulate mouse movement - this should update the lastActive timestamp
+      fireEvent(document, new Event('mousemove'));
+      expect(screen.getByText('Test Protected Content')).toBeInTheDocument();
+    });
+
+    it('should clear user session data after timeout', async () => {
+      setItem('IsLoggedIn', 'TRUE');
+      setItem('email', 'test@example.com');
+      setItem('id', '123');
+      setItem('name', 'Test User');
+      setItem('token', 'test-token');
+      setItem('userId', 'user-123');
+      setItem('AdminFor', [{ _id: 'org-123' }]);
+      setItem('role', 'regular');
+
+      render(
+        <MemoryRouter initialEntries={['/user/organizations']}>
+          <Routes>
+            <Route element={<SecuredRouteForUser />}>
+              <Route path="/user/organizations" element={<TestComponent />} />
+            </Route>
+          </Routes>
+        </MemoryRouter>,
+      );
+
+      // Fast-forward past the inactivity timeout
+      vi.advanceTimersByTime(15 * 60 * 1000 + 1000);
+      vi.advanceTimersByTime(1 * 60 * 1000);
+
+      expect(toast.warn).toHaveBeenCalledWith(
+        'Kindly relogin as session has expired',
+      );
+      expect(getItem('IsLoggedIn')).toBe('FALSE');
+      expect(getItem('token')).toBeNull();
+      expect(getItem('userId')).toBeNull();
+      expect(getItem('AdminFor')).toBeNull();
+      expect(getItem('role')).toBeNull();
+      expect(getItem('email')).toBeNull();
+      expect(getItem('name')).toBeNull();
+      expect(getItem('id')).toBeNull();
+      expect(window.location.href).toBe('/');
+    });
   });
 });
