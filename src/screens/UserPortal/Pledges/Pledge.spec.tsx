@@ -1488,8 +1488,12 @@ describe('Testing User Pledge Screen', () => {
     await waitFor(() => {
       expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
     });
-    // Verify grid renders successfully with users array mock
     expect(screen.getByRole('grid')).toBeInTheDocument();
+
+    // Verify users from the array are actually rendered
+    await waitFor(() => {
+      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
+    });
   });
 
   it('should handle zero goal amount', async () => {
@@ -1498,9 +1502,6 @@ describe('Testing User Pledge Screen', () => {
       expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
     });
     expect(screen.getByRole('grid')).toBeInTheDocument();
-
-    // Verify component renders without crashing with zero goal
-    expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
   });
 
   it('should display pledger avatar when available', async () => {
@@ -1521,8 +1522,11 @@ describe('Testing User Pledge Screen', () => {
     await waitFor(() => {
       expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
     });
-
-    // Component should render without crashing
     expect(screen.getByRole('grid')).toBeInTheDocument();
+
+    // Verify the pledge row renders with missing campaign handled appropriately
+    await waitFor(() => {
+      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
+    });
   });
 });
