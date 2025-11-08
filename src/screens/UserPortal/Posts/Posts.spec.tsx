@@ -443,6 +443,7 @@ const pinnedPostsMock2 = {
     data: {
       organization: {
         id: 'orgId',
+        postsCount: 2,
         pinnedPosts: {
           edges: [
             {
@@ -469,6 +470,7 @@ const pinnedPostsMock2 = {
                   },
                 },
               },
+              cursor: 'c1',
             },
             {
               node: {
@@ -494,6 +496,7 @@ const pinnedPostsMock2 = {
                   },
                 },
               },
+              cursor: 'c2',
             },
           ],
           pageInfo: {
@@ -2188,7 +2191,7 @@ describe('PinnedPostCard Component Tests', () => {
     );
 
     // Verify pinned posts section exists
-    expect(screen.getByText("Pinned Posts")).toBeInTheDocument();
+    expect(screen.getByText(/pinned posts/i)).toBeInTheDocument();
   });
 
   it('should display default image when post has no image', async () => {

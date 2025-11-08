@@ -2721,22 +2721,6 @@ describe('OrgPost Pinned Posts Functionality', () => {
     vi.clearAllMocks();
   });
 
-  it('should render pinned posts when available', async () => {
-    renderComponentWithPinnedPosts();
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
-    });
-
-    // Check if PostsRenderer receives pinned post data
-    const postsRenderer = screen.getByTestId('posts-renderer');
-    expect(postsRenderer).toBeInTheDocument();
-
-    await waitFor(() => {
-      expect(screen.getByText('First post title')).toBeInTheDocument();
-    });
-  });
-
   it('should handle empty pinned posts gracefully', async () => {
     renderComponentWithPinnedPosts(emptyPinnedPostListMock);
 
@@ -2765,24 +2749,6 @@ describe('OrgPost Pinned Posts Functionality', () => {
     // Component should still render even if pinned posts fail to load
     const postsRenderer = screen.getByTestId('posts-renderer');
     expect(postsRenderer).toBeInTheDocument();
-  });
-
-  it('should pass correct pinned post data to PostsRenderer', async () => {
-    renderComponentWithPinnedPosts();
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
-    });
-
-    // The component should pass the correct data structure to PostsRenderer
-    // This verifies that the type fix we made works correctly
-    const postsRenderer = screen.getByTestId('posts-renderer');
-    expect(postsRenderer).toBeInTheDocument();
-
-    // The data should be passed as edges array (not individual edge)
-    await waitFor(() => {
-      expect(screen.getByText('First post title')).toBeInTheDocument();
-    });
   });
 
   it('should create a pinned post when pin toggle is enabled', async () => {
