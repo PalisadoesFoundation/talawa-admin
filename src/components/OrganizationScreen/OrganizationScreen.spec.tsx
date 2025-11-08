@@ -47,7 +47,6 @@ const MOCKS = [
         eventsByOrganization: [
           {
             id: 'event123',
-            _id: 'event123',
             title: 'Test Event Title',
             description: 'Test Description',
             startDate: '2024-01-01',
@@ -70,7 +69,7 @@ const link = new StaticMockLink(MOCKS, true);
 describe('Testing OrganizationScreen', () => {
   beforeAll(() => {
     vi.stubGlobal('localStorage', mockLocalStorage as unknown as Storage);
-    setItem('name', 'John Doe', 3600);
+    setItem('Talawa-admin', 'name', 'John Doe');
   });
 
   afterAll(() => {
@@ -142,7 +141,9 @@ describe('Testing OrganizationScreen', () => {
     mockUseMatch.mockReturnValue({
       params: { eventId: 'event123', orgId: '123' },
     });
-    mockLocalStorage.getItem.mockImplementationOnce(() => 'false');
+    mockLocalStorage.getItem.mockImplementationOnce(() =>
+      JSON.stringify('false'),
+    );
 
     renderComponent();
 
@@ -187,7 +188,9 @@ describe('Testing OrganizationScreen', () => {
   test('resets event name when route is not an event', async () => {
     mockUseParams.mockReturnValue({ orgId: '123' });
     mockUseMatch.mockReturnValue(null);
-    mockLocalStorage.getItem.mockImplementationOnce(() => 'true');
+    mockLocalStorage.getItem.mockImplementationOnce(() =>
+      JSON.stringify('true'),
+    );
 
     renderComponent();
 
@@ -216,7 +219,9 @@ describe('Testing OrganizationScreen', () => {
     const dispatchSpy = vi.spyOn(store, 'dispatch');
     mockUseParams.mockReturnValue({ orgId: '999' });
     mockUseMatch.mockReturnValue(null);
-    mockLocalStorage.getItem.mockImplementationOnce(() => 'false');
+    mockLocalStorage.getItem.mockImplementationOnce(() =>
+      JSON.stringify('false'),
+    );
 
     const addListenerSpy = vi.spyOn(window, 'addEventListener');
     const removeListenerSpy = vi.spyOn(window, 'removeEventListener');
@@ -231,9 +236,24 @@ describe('Testing OrganizationScreen', () => {
       );
     });
 
+    const dispatchedThunk = dispatchSpy.mock.calls[0]?.[0] as unknown;
+
+    expect(typeof dispatchedThunk).toBe('function');
+
+    if (typeof dispatchedThunk === 'function') {
+      const innerDispatch = vi.fn();
+      (dispatchedThunk as any)(innerDispatch);
+      expect(innerDispatch).toHaveBeenCalledWith({
+        type: 'UPDATE_TARGETS',
+        payload: '999',
+      });
+    }
+
     const resizeHandler = addListenerSpy.mock.calls.find(
       ([event]) => event === 'resize',
     )?.[1] as EventListener | undefined;
+
+    expect(resizeHandler).toBeDefined();
 
     unmount();
 
