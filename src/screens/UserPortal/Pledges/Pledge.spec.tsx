@@ -1509,14 +1509,16 @@ describe('Testing User Pledge Screen', () => {
   });
 
   it('should display pledger avatar when available', async () => {
-    renderMyPledges(link2);
+    renderMyPledges(link1);
     await waitFor(() => {
       expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
     });
 
-    // Check for avatar or image elements
-    const grid = screen.getByRole('grid');
-    expect(grid).toBeInTheDocument();
+    // Check for avatar image element
+    expect(screen.getByTestId('image-pledger-userId')).toHaveAttribute(
+      'src',
+      'image-url',
+    );
   });
 
   it('should handle campaign with missing data gracefully', async () => {
