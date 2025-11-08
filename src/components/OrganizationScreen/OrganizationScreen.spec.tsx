@@ -12,7 +12,6 @@ import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import styles from '../../style/app-fixed.module.css';
 import { vi } from 'vitest';
-import { setItem } from 'utils/useLocalstorage';
 
 // Create mocks for the router hooks
 const mockUseParams = vi.fn();
@@ -69,7 +68,10 @@ const link = new StaticMockLink(MOCKS, true);
 describe('Testing OrganizationScreen', () => {
   beforeAll(() => {
     vi.stubGlobal('localStorage', mockLocalStorage as unknown as Storage);
+<<<<<<< HEAD
     setItem('Talawa-admin', 'name', 'John Doe');
+=======
+>>>>>>> cf0fcb626f (test: fix OrganizationScreen tests to match GraphQL schema)
   });
 
   afterAll(() => {
@@ -236,13 +238,22 @@ describe('Testing OrganizationScreen', () => {
       );
     });
 
-    const dispatchedThunk = dispatchSpy.mock.calls[0]?.[0] as unknown;
+    const dispatchedThunk = dispatchSpy.mock.calls[0]?.[0];
 
     expect(typeof dispatchedThunk).toBe('function');
 
     if (typeof dispatchedThunk === 'function') {
-      const innerDispatch = vi.fn();
-      (dispatchedThunk as any)(innerDispatch);
+      type UpdateTargetsAction = {
+        type: 'UPDATE_TARGETS';
+        payload: string | undefined;
+      };
+
+      const innerDispatch = vi.fn<(action: UpdateTargetsAction) => void>();
+      const invokeThunk = dispatchedThunk as unknown as (
+        dispatch: (action: UpdateTargetsAction) => void,
+      ) => void;
+
+      invokeThunk(innerDispatch);
       expect(innerDispatch).toHaveBeenCalledWith({
         type: 'UPDATE_TARGETS',
         payload: '999',
