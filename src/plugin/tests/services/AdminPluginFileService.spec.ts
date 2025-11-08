@@ -250,6 +250,7 @@ describe('AdminPluginFileService', () => {
     });
 
     it('should catch non-Error exceptions during installPlugin', async () => {
+      vi.spyOn(console, 'error').mockImplementation(() => {});
       // Force validatePluginFiles to throw a non-Error to hit the outer catch block
       vi.spyOn(service, 'validatePluginFiles').mockImplementation(() => {
         throw 'A non-error string was thrown';
@@ -258,6 +259,7 @@ describe('AdminPluginFileService', () => {
       const result = await service.installPlugin('TestPlugin', validFiles);
       expect(result.success).toBe(false);
       expect(result.error).toBe('Unknown error');
+      expect(console.error).toHaveBeenCalled();
     });
 
     it('should handle non-Error exceptions in writeFilesToFilesystem', async () => {
