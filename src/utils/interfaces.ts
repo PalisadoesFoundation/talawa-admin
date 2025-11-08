@@ -1851,7 +1851,13 @@ export interface InterfacePledgeInfo {
   currency: string;
   endDate: string;
   startDate: string;
+  /**
+   * The primary pledger who made this pledge
+   */
   pledger: InterfaceUserInfoPG;
+  /**
+   * Optional array of additional users associated with this pledge for future multi-pledger support
+   */
   users?: InterfaceUserInfoPG[];
 }
 

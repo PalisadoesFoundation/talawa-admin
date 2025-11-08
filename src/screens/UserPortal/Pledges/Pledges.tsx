@@ -200,48 +200,35 @@ const Pledges = (): JSX.Element => {
       sortable: false,
       renderCell: (params: GridCellParams) => {
         const pledger = params.row.pledger;
-        const users = params.row.users || (pledger ? [pledger] : []);
+        if (!pledger) return null;
+
         return (
           <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
-            {users
-              .slice(0, 2)
-              .map((user: InterfaceUserInfoPG, index: number) => (
-                <div
-                  className={styles.pledgerContainer}
-                  key={`${user.id}-${index}`}
-                >
-                  {user.avatarURL ? (
-                    <img
-                      src={user.avatarURL}
-                      alt={user.avatarURL}
-                      data-testid={`image-pledger-${user.id}`}
-                      className={styles.TableImage}
-                    />
-                  ) : (
-                    <div className={styles.avatarContainer}>
-                      <Avatar
-                        key={`${user.id}-avatar`}
-                        containerStyle={styles.imageContainerPledge}
-                        avatarStyle={styles.TableImagePledge}
-                        name={user.name}
-                        alt={user.name}
-                        dataTestId={`avatar-pledger-${user.id}`}
-                      />
-                    </div>
-                  )}
-                  <span key={`${user.id}-name`}>{user.name}</span>
+            <div
+              className={styles.pledgerContainer}
+              key={`${pledger.id}`}
+            >
+              {pledger.avatarURL ? (
+                <img
+                  src={pledger.avatarURL}
+                  alt={pledger.avatarURL}
+                  data-testid={`image-pledger-${pledger.id}`}
+                  className={styles.TableImage}
+                />
+              ) : (
+                <div className={styles.avatarContainer}>
+                  <Avatar
+                    key={`${pledger.id}-avatar`}
+                    containerStyle={styles.imageContainerPledge}
+                    avatarStyle={styles.TableImagePledge}
+                    name={pledger.name}
+                    alt={pledger.name}
+                    dataTestId={`avatar-pledger-${pledger.id}`}
+                  />
                 </div>
-              ))}
-            {users.length > 2 && (
-              <div
-                className={styles.moreContainer}
-                aria-describedby={id}
-                data-testid={`moreContainer-${params.row.id}`}
-                onClick={() => handleClick(users.slice(2))}
-              >
-                +{users.length - 2} more...
-              </div>
-            )}
+              )}
+              <span key={`${pledger.id}-name`}>{pledger.name}</span>
+            </div>
           </div>
         );
       },
@@ -461,7 +448,6 @@ const Pledges = (): JSX.Element => {
           amount: pledge.amount,
           campaign: pledge.campaign,
           pledger: pledge.pledger,
-          users: pledge.users, // Include users array for multiple pledgers functionality
           currency: pledge.campaign?.currencyCode,
           goalAmount: pledge.campaign?.goalAmount,
         }))}
