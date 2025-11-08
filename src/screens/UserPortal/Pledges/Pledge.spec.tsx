@@ -1543,9 +1543,15 @@ describe('Testing User Pledge Screen', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('amountCell')).toBeInTheDocument();
+      expect(screen.getByText('Main User 1')).toBeInTheDocument();
     });
 
-    const moreContainer = await screen.findByTestId('moreContainer-1');
+    // Wait for moreContainer to appear (it should with 7 users)
+    const moreContainer = await screen.findByTestId(
+      'moreContainer-1',
+      {},
+      { timeout: 3000 },
+    );
     expect(moreContainer).toBeInTheDocument();
     expect(moreContainer).toHaveTextContent('+5 more...');
 
