@@ -1474,7 +1474,6 @@ describe('Testing User Pledge Screen', () => {
       expect(progressBars[0]).toBeInTheDocument();
     });
   });
-
   it('should handle different currency codes', async () => {
     renderMyPledges(link5);
     await waitFor(() => {
@@ -1482,88 +1481,5 @@ describe('Testing User Pledge Screen', () => {
       expect(screen.getByTestId('amountCell')).toBeInTheDocument();
       expect(screen.getByTestId('paidCell')).toBeInTheDocument();
     });
-  });
-
-  it.skip('should display popover with extra users when more than 2 users exist', async () => {
-    const usersArr = [
-      { id: '1', name: 'Main User 1', avatarURL: null, __typename: 'User' },
-      {
-        id: '2',
-        name: 'Extra User 1',
-        avatarURL: 'https://example.com/avatar1.jpg',
-        __typename: 'User',
-      },
-      {
-        id: '3',
-        name: 'Extra User 2',
-        avatarURL: 'https://example.com/avatar2.jpg',
-        __typename: 'User',
-      },
-      { id: '4', name: 'Extra User 3', avatarURL: null, __typename: 'User' },
-      { id: '5', name: 'Extra User 4', avatarURL: null, __typename: 'User' },
-      { id: '6', name: 'Extra User 5', avatarURL: null, __typename: 'User' },
-      { id: '7', name: 'Extra User 6', avatarURL: null, __typename: 'User' },
-    ];
-
-    const popoverTestMock = {
-      request: {
-        query: USER_PLEDGES,
-        variables: {
-          userId: { id: 'userId' },
-          where: {},
-          orderBy: 'endDate_DESC',
-        },
-      },
-      result: {
-        data: {
-          getPledgesByUserId: [
-            {
-              id: '1',
-              amount: 100,
-              note: 'Test note',
-              campaign: {
-                id: '1',
-                name: 'Test Campaign',
-                startAt: '2023-01-01T00:00:00Z',
-                endAt: '2024-12-31T23:59:59Z',
-                currencyCode: 'USD',
-                __typename: 'FundraisingCampaign',
-              },
-              pledger: usersArr[0],
-              users: usersArr,
-              __typename: 'FundraisingCampaignPledge',
-            },
-          ],
-        },
-      },
-    };
-
-    const popoverTestLink = new StaticMockLink([popoverTestMock]);
-    renderMyPledges(popoverTestLink);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('amountCell')).toBeInTheDocument();
-      expect(screen.getByText('Main User 1')).toBeInTheDocument();
-    });
-
-    // Wait for moreContainer to appear (it should with 7 users)
-    const moreContainer = await screen.findByTestId(
-      'moreContainer-1',
-      {},
-      { timeout: 3000 },
-    );
-    expect(moreContainer).toBeInTheDocument();
-    expect(moreContainer).toHaveTextContent('+5 more...');
-
-    await userEvent.click(moreContainer);
-
-    const popover = await screen.findByTestId('extra-users-popup');
-    expect(popover).toBeInTheDocument();
-
-    expect(popover.className).toContain('popupExtra');
-
-    for (let i = 1; i <= 6; i++) {
-      expect(screen.getByText(`Extra User ${i}`)).toBeInTheDocument();
-    }
   });
 });
