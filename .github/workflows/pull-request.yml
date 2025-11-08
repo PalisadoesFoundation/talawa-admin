@@ -523,7 +523,9 @@ jobs:
       - name: Present and upload merged coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
-          name: 'merged-coverage'
+          # Do not change the `name:` variable 
+          # It is required for unique reporting per PR
+          name: '${{env.CODECOV_UNIQUE_NAME}}'
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
           verbose: true
