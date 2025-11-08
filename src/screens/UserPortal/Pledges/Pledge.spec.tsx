@@ -1545,7 +1545,7 @@ describe('Testing User Pledge Screen', () => {
       expect(screen.getByTestId('amountCell')).toBeInTheDocument();
     });
 
-    const moreContainer = screen.getByTestId('moreContainer-1');
+    const moreContainer = await screen.findByTestId('moreContainer-1');
     expect(moreContainer).toBeInTheDocument();
     expect(moreContainer).toHaveTextContent('+5 more...');
 
