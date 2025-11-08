@@ -1328,6 +1328,8 @@ export interface InterfaceOrganizationPg {
     updater: InterfaceUserPg;
     postsCount: number;
     pinnedPostsCount: number;
+    adminsCount: number;
+    membersCount: number;
 
     advertisements: InterfaceOrganizationAdvertisementsConnectionPg;
 

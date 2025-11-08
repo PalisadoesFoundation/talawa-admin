@@ -126,7 +126,7 @@ export default function OrgPostCard({
         variables: {
           input: {
             id: post.id,
-            isPinned: !isPinned, // Toggle the pinned status
+            isPinned: !isPinned,
           },
         },
       });
@@ -263,7 +263,7 @@ export default function OrgPostCard({
     } else if (ext === 'webm') {
       return 'VIDEO_WEBM';
     } else {
-      return 'IMAGE_JPEG'; // fallback for unknown extensions
+      return 'IMAGE_JPEG';
     }
   };
 
@@ -310,6 +310,20 @@ export default function OrgPostCard({
     }
   };
 
+  const [expanded, setExpanded] = useState(false);
+  const captionRef = useRef<HTMLDivElement>(null);
+
+  const caption = post.caption || '';
+  const maxLength = 150;
+  const isLong = caption.length > maxLength;
+
+  const displayCaption = expanded ? caption : caption.slice(0, maxLength);
+
+  const toggleExpand = (e: React.MouseEvent): void => {
+    e.stopPropagation();
+    setExpanded(!expanded);
+  };
+
   return (
     <>
       <div
@@ -323,15 +337,7 @@ export default function OrgPostCard({
         onClick={handleCardClick}
       >
         <div className={styles.cardsOrgPostCard}>
-          <Card
-            className={styles.cardOrgPostCard}
-            data-cy="postCardContainer"
-            style={{
-              borderRadius: '12px',
-              overflow: 'hidden',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-            }}
-          >
+          <Card className={styles.cardOrgPostCard} data-cy="postCardContainer">
             {videoAttachment ? (
               <video
                 ref={videoRef}
@@ -365,12 +371,39 @@ export default function OrgPostCard({
               />
             )}
 
-            <Card.Body>
+            <Card.Body className={styles.cardBodyAdminPosts}>
               {isPinned && (
                 <PushPin color="success" fontSize="large" className="fs-5" />
               )}
               <Card.Title className={styles.titleOrgPostCard}>
-                {post.caption}
+                <div
+                  ref={captionRef}
+                  className={styles.titleOrgPostCardDiv}
+                  aria-expanded={expanded}
+                >
+                  {displayCaption}
+                  {!expanded && isLong && '...'}
+                </div>
+
+                {isLong && (
+                  <button
+                    onClick={toggleExpand}
+                    className={styles.expandButton}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = '#0056b3';
+                      e.currentTarget.style.textDecoration = 'underline';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = '#007bff';
+                      e.currentTarget.style.textDecoration = 'none';
+                    }}
+                    aria-label={
+                      expanded ? 'Show less caption' : 'Show more caption'
+                    }
+                  >
+                    {expanded ? 'Show less' : 'Show more'}
+                  </button>
+                )}
               </Card.Title>
 
               {/* Plugin Extension Point G3 - Inject plugins below caption */}

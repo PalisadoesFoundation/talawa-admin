@@ -30,6 +30,10 @@ The organization object.
 
 > **addressLine2**: `string`
 
+#### adminsCount
+
+> **adminsCount**: `number`
+
 #### advertisements
 
 > **advertisements**: [`InterfaceOrganizationAdvertisementsConnectionPg`](InterfaceOrganizationAdvertisementsConnectionPg.md)
@@ -85,6 +89,10 @@ The organization object.
 #### members
 
 > **members**: [`InterfaceOrganizationMembersConnectionPg`](InterfaceOrganizationMembersConnectionPg.md)
+
+#### membersCount
+
+> **membersCount**: `number`
 
 #### name
 

@@ -47,6 +47,7 @@ export default defineConfig({
     }),
   ],
   server: {
+    allowedHosts: true,
     watch: {
       ignored: ['**/coverage/**', '**/.nyc_output/**'],
     },
