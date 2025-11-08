@@ -1,6 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import type { RenderResult } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -17,6 +18,12 @@ import { setItem } from 'utils/useLocalstorage';
 const mockUseParams = vi.fn();
 const mockUseMatch = vi.fn();
 const mockNavigate = vi.fn();
+const mockLocalStorage = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  clear: vi.fn(),
+};
 
 // Mock the router hooks
 vi.mock('react-router', async () => {
@@ -61,11 +68,12 @@ const link = new StaticMockLink(MOCKS, true);
 
 describe('Testing OrganizationScreen', () => {
   beforeAll(() => {
+    vi.stubGlobal('localStorage', mockLocalStorage as unknown as Storage);
     setItem('name', 'John Doe', 3600);
   });
 
   afterAll(() => {
-    localStorage.clear();
+    vi.unstubAllGlobals();
   });
 
   beforeEach(() => {
@@ -73,10 +81,20 @@ describe('Testing OrganizationScreen', () => {
     mockUseParams.mockReset();
     mockUseMatch.mockReset();
     mockNavigate.mockReset();
+    mockLocalStorage.getItem.mockReset();
+    mockLocalStorage.setItem.mockReset();
+    mockLocalStorage.removeItem.mockReset();
+    mockLocalStorage.clear.mockReset();
+    mockLocalStorage.getItem.mockImplementation((key: string) => {
+      if (key === 'Talawa-admin_name') {
+        return JSON.stringify('John Doe');
+      }
+      return null;
+    });
   });
 
-  const renderComponent = (): void => {
-    render(
+  const renderComponent = (): RenderResult => {
+    return render(
       <MockedProvider addTypename={false} link={link} mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
@@ -123,12 +141,17 @@ describe('Testing OrganizationScreen', () => {
     mockUseMatch.mockReturnValue({
       params: { eventId: 'event123', orgId: '123' },
     });
+    mockLocalStorage.getItem.mockImplementationOnce(() => 'false');
 
     renderComponent();
 
     window.innerWidth = 800;
     fireEvent(window, new window.Event('resize'));
     expect(screen.getByTestId('mainpageright')).toHaveClass(styles.expand);
+    expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
+      'Talawa-admin_sidebar',
+      JSON.stringify('true'),
+    );
   });
 
   test('handles event not found scenario', async () => {
@@ -160,6 +183,21 @@ describe('Testing OrganizationScreen', () => {
     warnSpy.mockRestore();
   });
 
+  test('resets event name when route is not an event', async () => {
+    mockUseParams.mockReturnValue({ orgId: '123' });
+    mockUseMatch.mockReturnValue(null);
+    mockLocalStorage.getItem.mockImplementationOnce(() => 'true');
+
+    renderComponent();
+
+    await waitFor(() => {
+      const mainPage = screen.getByTestId('mainpageright');
+      expect(mainPage).toBeInTheDocument();
+    });
+
+    expect(screen.queryByRole('heading', { level: 4 })).toBeNull();
+  });
+
   test('displays event name when on event path with valid event', async () => {
     mockUseParams.mockReturnValue({ orgId: '123' });
     mockUseMatch.mockReturnValue({
@@ -171,5 +209,37 @@ describe('Testing OrganizationScreen', () => {
       expect(eventNameElement).toBeInTheDocument();
       expect(eventNameElement.tagName).toBe('H4');
     });
+  });
+
+  test('dispatches updateTargets when orgId changes and cleans up resize listener', async () => {
+    const dispatchSpy = vi.spyOn(store, 'dispatch');
+    mockUseParams.mockReturnValue({ orgId: '999' });
+    mockUseMatch.mockReturnValue(null);
+    mockLocalStorage.getItem.mockImplementationOnce(() => 'false');
+
+    const addListenerSpy = vi.spyOn(window, 'addEventListener');
+    const removeListenerSpy = vi.spyOn(window, 'removeEventListener');
+
+    const { unmount } = renderComponent();
+
+    await waitFor(() => {
+      expect(dispatchSpy).toHaveBeenCalledWith(expect.any(Function));
+      expect(addListenerSpy).toHaveBeenCalledWith(
+        'resize',
+        expect.any(Function),
+      );
+    });
+
+    const resizeHandler = addListenerSpy.mock.calls.find(
+      ([event]) => event === 'resize',
+    )?.[1] as EventListener | undefined;
+
+    unmount();
+
+    expect(removeListenerSpy).toHaveBeenCalledWith('resize', resizeHandler);
+
+    dispatchSpy.mockRestore();
+    addListenerSpy.mockRestore();
+    removeListenerSpy.mockRestore();
   });
 });
