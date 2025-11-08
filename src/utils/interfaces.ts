@@ -1856,7 +1856,8 @@ export interface InterfacePledgeInfo {
    */
   pledger: InterfaceUserInfoPG;
   /**
-   * Optional array of additional users associated with this pledge for future multi-pledger support
+   * Optional array of all users associated with this pledge, including the primary pledger.
+   * Used for multi-pledger support to display all contributors.
    */
   users?: InterfaceUserInfoPG[];
 }

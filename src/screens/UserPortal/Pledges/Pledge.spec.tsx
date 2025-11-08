@@ -1123,7 +1123,7 @@ describe('Testing User Pledge Screen', () => {
     });
 
     // Check if moreContainer exists (it should with 4 users)
-    const moreContainer = screen.queryByTestId('moreContainer');
+    const moreContainer = screen.queryByTestId('moreContainer-pledgeId1');
     if (moreContainer) {
       expect(moreContainer).toHaveTextContent('+2 more...');
 
