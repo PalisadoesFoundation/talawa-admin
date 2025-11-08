@@ -611,7 +611,12 @@ describe('OrgPost Component', () => {
   it('creates a post and verifies mutation is called', async () => {
     render(
       <MockedProvider
-        mocks={[createPostSuccessMock, orgPinnedPostListMockBasic]}
+        mocks={[
+          orgPostListMock,
+          getPostsByOrgInitialMock,
+          createPostSuccessMock,
+          orgPinnedPostListMockBasic,
+        ]}
         addTypename={false}
       >
         <MemoryRouter>
