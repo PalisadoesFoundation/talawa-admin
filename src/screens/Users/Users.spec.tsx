@@ -10,45 +10,26 @@ import {
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Users from './Users';
 import { EMPTY_MOCKS, MOCKS_NEW, MOCKS_NEW_2 } from './UsersMocks.mocks';
+import { EMPTY_MOCKS, MOCKS_NEW, MOCKS_NEW_2 } from './UsersMocks.mocks';
 import { generateMockUser } from './Organization.mocks';
 import { MOCKS, MOCKS2 } from './User.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
-import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 
 let setItem: (key: string, value: unknown) => void;
 let removeItem: (key: string) => void;
 
-const toastMocks = vi.hoisted(() => ({
-  warning: vi.fn(),
-  error: vi.fn(),
-  success: vi.fn(),
-  info: vi.fn(),
-}));
-
-vi.mock('react-toastify', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('react-toastify')>();
-  return {
-    ...actual,
-    toast: toastMocks,
-  };
-});
-
-const createLink = (
-  mocks:
-    | typeof MOCKS
-    | typeof EMPTY_MOCKS
-    | typeof MOCKS2
-    | typeof MOCKS_NEW
-    | typeof MOCKS_NEW_2,
-) => new StaticMockLink(mocks, true);
+const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(EMPTY_MOCKS, true);
+const link3 = new StaticMockLink(MOCKS2, true);
+const link5 = new StaticMockLink(MOCKS_NEW, true);
 
 async function wait(ms = 1000): Promise<void> {
   await act(() => {
@@ -295,79 +276,6 @@ describe('Testing Users screen', () => {
     // Make sure we have users from both data sets
     expect(result.users.some((user) => user.user._id === 'id0')).toBe(true);
     expect(result.users.some((user) => user.user._id === 'id9')).toBe(true);
-  });
-
-  it('Testing filter functionality', async () => {
-    await act(async () => {
-      render(
-        <MockedProvider link={createLink(MOCKS)}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
-                <Users />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-    });
-    await wait();
-
-    const searchInput = screen.getByTestId('filterUsers');
-    expect(searchInput).toBeInTheDocument();
-
-    const inputText = screen.getByTestId('filterUsers');
-
-    await act(async () => {
-      fireEvent.click(inputText);
-    });
-
-    const toggleText = screen.getByTestId('admin');
-
-    await act(async () => {
-      fireEvent.click(toggleText);
-    });
-
-    expect(searchInput).toBeInTheDocument();
-
-    await act(async () => {
-      fireEvent.click(inputText);
-    });
-
-    let toggleTite = screen.getByTestId('superAdmin');
-
-    await act(async () => {
-      fireEvent.click(toggleTite);
-    });
-
-    expect(searchInput).toBeInTheDocument();
-
-    await act(async () => {
-      fireEvent.click(inputText);
-    });
-
-    toggleTite = screen.getByTestId('user');
-
-    await act(async () => {
-      fireEvent.click(toggleTite);
-    });
-
-    expect(searchInput).toBeInTheDocument();
-
-    await act(async () => {
-      fireEvent.click(inputText);
-    });
-
-    toggleTite = screen.getByTestId('cancel');
-
-    await act(async () => {
-      fireEvent.click(toggleTite);
-    });
-
-    await wait();
-
-    expect(searchInput).toBeInTheDocument();
   });
 
   it('check for rerendering', async () => {

@@ -209,11 +209,20 @@ const Users = (): JSX.Element => {
   }, [loading]);
 
   const handleSearch = (value: string): void => {
-    setSearchByName(value);
     if (value === '') {
-      resetAndRefetch();
+      setSearchByName('');
+      if (searchByName !== '') {
+        resetAndRefetch();
+      }
       return;
     }
+
+    if (value !== '' && value === searchByName) {
+      return;
+    }
+
+    setSearchByName(value);
+    setUsersData([]);
     refetchUsers({
       first: perPageResult,
       after: null,
@@ -224,6 +233,8 @@ const Users = (): JSX.Element => {
   };
 
   const resetAndRefetch = (): void => {
+    setUsersData([]);
+    setSearchByName('');
     refetchUsers({
       first: perPageResult,
       after: null,

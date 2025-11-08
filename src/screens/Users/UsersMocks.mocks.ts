@@ -1,5 +1,9 @@
-import { ORGANIZATION_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
-import { MOCK_USERS } from './Organization.mocks';
+import {
+  ORGANIZATION_LIST,
+  USER_LIST,
+  USER_LIST_FOR_TABLE,
+} from 'GraphQl/Queries/Queries';
+import { MOCK_USERS, MOCK_USERS2 } from './Organization.mocks';
 
 // Add pagination and sorting variables to all USER_LIST mocks
 const paginationVariables = {
@@ -20,6 +24,55 @@ const loadMoreVariables = {
 
 // Example empty mock
 export const EMPTY_MOCKS = [
+  {
+    request: {
+      query: USER_LIST_FOR_TABLE,
+      variables: {
+        first: 12,
+        after: null,
+        orgFirst: 32,
+      },
+    },
+    result: {
+      data: {
+        allUsers: {
+          pageInfo: {
+            endCursor: null,
+            hasPreviousPage: false,
+            hasNextPage: false,
+            startCursor: null,
+          },
+          edges: [],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_LIST_FOR_TABLE,
+      variables: {
+        first: 12,
+        after: null,
+        orgFirst: 32,
+        where: {
+          name: 'NonexistentName',
+        },
+      },
+    },
+    result: {
+      data: {
+        allUsers: {
+          pageInfo: {
+            endCursor: null,
+            hasPreviousPage: false,
+            hasNextPage: false,
+            startCursor: null,
+          },
+          edges: [],
+        },
+      },
+    },
+  },
   {
     request: {
       query: USER_LIST,
@@ -87,12 +140,43 @@ export const MOCKS_NEW_2 = [
 export const MOCKS_NEW = [
   {
     request: {
-      query: USER_LIST,
-      variables: paginationVariables,
+      query: USER_LIST_FOR_TABLE,
+      variables: {
+        first: 12,
+        after: null,
+        orgFirst: 32,
+        where: undefined,
+      },
     },
     result: {
       data: {
-        usersByIds: MOCK_USERS,
+        allUsers: {
+          pageInfo: {
+            endCursor: 'cursor_1',
+            hasNextPage: true,
+            hasPreviousPage: false,
+            startCursor: 'cursor_start',
+          },
+          edges: [
+            {
+              cursor: 'cursor_1',
+              node: {
+                id: '1',
+                name: 'John Doe',
+                role: 'Member',
+                avatarURL: 'https://example.com/avatar1.png',
+                emailAddress: 'john@example.com',
+                createdAt: '2025-01-01T00:00:00Z',
+                city: 'New York',
+                state: 'NY',
+                countryCode: 'US',
+                postalCode: '10001',
+                orgsWhereUserIsBlocked: { edges: [] },
+                organizationsWhereMember: { edges: [] },
+              },
+            },
+          ],
+        },
       },
     },
   },
