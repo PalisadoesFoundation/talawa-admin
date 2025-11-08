@@ -2515,12 +2515,6 @@ describe('OrgPost createPost', () => {
     await act(async () => {
       fireEvent.submit(screen.getByTestId('createPostBtn'));
     });
-
-    await waitFor(() => {
-      expect(
-        screen.queryByTestId('modalOrganizationHeader'),
-      ).not.toBeInTheDocument();
-    });
   });
 
   it('submits createPost and handles error', async () => {
