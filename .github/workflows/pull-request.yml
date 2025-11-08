@@ -494,37 +494,59 @@ jobs:
 
           # Check if coverage-shards directory exists
           if [ ! -d "coverage-shards" ]; then
-            echo "No coverage-shards directory found, creating empty one"
-            mkdir -p coverage-shards
+            echo "ERROR: No coverage-shards directory found!"
+            echo "This likely means artifact download failed."
+            exit 1
           fi
 
           # Find all lcov.info files from shards
           find coverage-shards -name "lcov.info" -type f > lcov-files.txt || true
 
           # Check if we found any coverage files
-          if [ -s lcov-files.txt ]; then
-            echo "Found coverage files:"
-            cat lcov-files.txt
-            
-            # Merge them using lcov-result-merger
-            npx lcov-result-merger "coverage-shards/*/lcov.info" ./coverage/vitest/lcov.info || {
-              echo "Warning: Coverage merge failed, but continuing"
-              # Create empty lcov.info to prevent downstream failures
-              touch ./coverage/vitest/lcov.info
-            }
-            
-            echo "Coverage merge completed"
-          else
-            echo "Warning: No coverage files found to merge"
-            # Create empty lcov.info to prevent downstream failures
-            touch ./coverage/vitest/lcov.info
+          if [ ! -s lcov-files.txt ]; then
+            echo "ERROR: No coverage files found to merge!"
+            echo "Expected to find lcov.info files in coverage-shards/*/lcov.info"
+            ls -la coverage-shards/ || true
+            exit 1
           fi
+
+          echo "Found coverage files:"
+          cat lcov-files.txt
+
+          # Verify each file is not empty
+          EMPTY_FILES=0
+          while IFS= read -r file; do
+            if [ ! -s "$file" ]; then
+              echo "WARNING: Empty coverage file: $file"
+              EMPTY_FILES=$((EMPTY_FILES + 1))
+            fi
+          done < lcov-files.txt
+
+          if [ $EMPTY_FILES -gt 0 ]; then
+            echo "ERROR: Found $EMPTY_FILES empty coverage files!"
+            exit 1
+          fi
+
+          # Merge them using lcov-result-merger
+          echo "Merging coverage files..."
+          npx lcov-result-merger "coverage-shards/*/lcov.info" ./coverage/vitest/lcov.info
+
+          # Validate merged file
+          if [ ! -s ./coverage/vitest/lcov.info ]; then
+            echo "ERROR: Merged coverage file is empty!"
+            exit 1
+          fi
+
+          echo "✅ Coverage merge successful"
+          echo "Merged file size: $(wc -l < ./coverage/vitest/lcov.info) lines"
 
       - name: Present and upload merged coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
-          name: 'merged-coverage'
+          name: '${{env.CODECOV_UNIQUE_NAME}}-merged'
           token: ${{ secrets.CODECOV_TOKEN }}
+          # Using fail_ci_if_error: true to match develop branch behavior
+          # This is safe now because we validate the merged file is non-empty above
           fail_ci_if_error: true
           verbose: true
           exclude: 'docs/'
