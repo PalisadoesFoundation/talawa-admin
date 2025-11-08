@@ -74,6 +74,8 @@ import styles from 'style/app-fixed.module.css';
 import convertToBase64 from 'utils/convertToBase64';
 import { Col, Form, Row } from 'react-bootstrap';
 import PinnedPostCard from './PinnedPostCard';
+import { InterfacePostEdge } from 'types/Post/interface';
+import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
 
 // Instagram-like posts settings
 export const POSTS_PER_PAGE = 5;
@@ -86,6 +88,43 @@ type Ad = {
   endDate: string;
   startDate: string;
 };
+
+// Interface for pinned post node from GraphQL query - matches the exact structure returned
+interface PinnedPostNode {
+  id: string;
+  caption: string;
+  commentsCount: number;
+  pinnedAt: string;
+  downVotesCount: number;
+  upVotesCount: number;
+  createdAt: string;
+  creator: {
+    id: string;
+    name: string;
+    avatarURL: string | null;
+  };
+  comments: {
+    edges: Array<{
+      node: {
+        id: string;
+        body: string;
+        creator: {
+          id: string;
+          name: string;
+          avatarURL: string | null;
+        };
+        downVotesCount: number;
+        upVotesCount: number;
+      };
+    }>;
+    pageInfo: {
+      startCursor: string | null;
+      endCursor: string | null;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+  };
+}
 
 export default function Home(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'home' });
@@ -133,6 +172,16 @@ export default function Home(): JSX.Element {
     },
   });
 
+  const { data: orgPinnedPostListData } = useQuery(
+    ORGANIZATION_PINNED_POST_LIST,
+    {
+      variables: {
+        input: { id: orgId as string },
+        first: 32,
+      },
+    },
+  );
+
   const { data: userData } = useQuery(USER_DETAILS, {
     skip: !userId,
     variables: { input: { id: userId }, first: TAGS_QUERY_DATA_CHUNK_SIZE },
@@ -153,11 +202,14 @@ export default function Home(): JSX.Element {
   }, [data]);
 
   useEffect(() => {
-    if (posts.length > 0) {
-      const pinned = posts.filter((post) => post.pinnedAt !== null);
-      setPinnedPosts(pinned);
+    if (orgPinnedPostListData?.organization?.pinnedPosts?.edges) {
+      const pinnedPostNodes =
+        orgPinnedPostListData.organization.pinnedPosts.edges.map(
+          (edge: InterfacePostEdge) => edge.node,
+        ) as any;
+      setPinnedPosts(pinnedPostNodes);
     }
-  }, [posts, adContent, totalPosts]);
+  }, [orgPinnedPostListData, posts, adContent, totalPosts]);
 
   useEffect(() => {
     if (promotedPostsData?.organizations) {

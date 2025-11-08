@@ -116,8 +116,6 @@ function OrgPost(): JSX.Element {
     {
       variables: {
         input: { id: currentUrl as string },
-        after: after ?? null,
-        before: before ?? null,
         first: first,
         last: last,
       },
@@ -398,9 +396,7 @@ function OrgPost(): JSX.Element {
       }
     } else {
       const maxPage = Math.ceil(sortedPosts.length / postsPerPage);
-      if (currentPage < maxPage) {
-        setCurrentPage((prev) => prev + 1);
-      }
+      if (currentPage < maxPage) setCurrentPage((prev) => prev + 1);
     }
   };
 
@@ -416,9 +412,7 @@ function OrgPost(): JSX.Element {
         setCurrentPage((prev) => prev - 1);
       }
     } else {
-      if (currentPage > 1) {
-        setCurrentPage((prev) => prev - 1);
-      }
+      if (currentPage > 1) setCurrentPage((prev) => prev - 1);
     }
   };
 
