@@ -432,14 +432,19 @@ jobs:
         run: |
           npm run test:coverage
 
-      #######################################################################
+      ##############################################################################
       # DO NOT DELETE ANY references to env.CODECOV_UNIQUE_NAME in this
       # section. They are required for accurate caluclations
-      #######################################################################
+      ##############################################################################
       - name: Present and upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
         uses: codecov/codecov-action@v5
         with:
+          ##########################################################################
+          # DO NOT DELETE ANY references to env.CODECOV_UNIQUE_NAME in this
+          # section. They are required for accurate caluclations
+          ##########################################################################
           name: '${{env.CODECOV_UNIQUE_NAME}}'
+          ##########################################################################
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
           verbose: true
