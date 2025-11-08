@@ -544,9 +544,17 @@ jobs:
             exit 1
           fi
 
-          # Merge them using lcov-result-merger
+          # Merge them using lcov-result-merger. Use the explicit file list so
+          # we do not rely on shell globbing that ignores nested directories.
           echo "Merging coverage files..."
-          npx lcov-result-merger "coverage-shards/*/lcov.info" ./coverage/vitest/lcov.info
+          mapfile -t LCOV_FILES < lcov-files.txt
+
+          if [ ${#LCOV_FILES[@]} -eq 0 ]; then
+            echo "ERROR: Expected at least one coverage file to merge"
+            exit 1
+          fi
+
+          npx lcov-result-merger "${LCOV_FILES[@]}" ./coverage/vitest/lcov.info
 
           # Validate merged file
           if [ ! -s ./coverage/vitest/lcov.info ]; then
