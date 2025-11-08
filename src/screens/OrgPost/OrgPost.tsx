@@ -259,15 +259,11 @@ function OrgPost(): JSX.Element {
   }, [currentPage, sortingOption, sortedPosts]);
 
   useEffect(() => {
-    if (orgPostListError) {
-      toast.error('Organization post list error:');
-    }
+    if (orgPostListError) toast.error('Organization post list error:');
   }, [orgPostListError]);
 
   useEffect(() => {
-    if (orgPinnedPostListError) {
-      toast.error(t('pinnedPostsLoadError'));
-    }
+    if (orgPinnedPostListError) toast.error(t('pinnedPostsLoadError'));
   }, [orgPinnedPostListError]);
 
   useEffect(() => {
@@ -395,7 +391,9 @@ function OrgPost(): JSX.Element {
       }
     } else {
       const maxPage = Math.ceil(sortedPosts.length / postsPerPage);
-      if (currentPage < maxPage) setCurrentPage((prev) => prev + 1);
+      if (currentPage < maxPage) {
+        setCurrentPage((prev) => prev + 1);
+      }
     }
   };
 
@@ -411,7 +409,9 @@ function OrgPost(): JSX.Element {
         setCurrentPage((prev) => prev - 1);
       }
     } else {
-      if (currentPage > 1) setCurrentPage((prev) => prev - 1);
+      if (currentPage > 1) {
+        setCurrentPage((prev) => prev - 1);
+      }
     }
   };
 

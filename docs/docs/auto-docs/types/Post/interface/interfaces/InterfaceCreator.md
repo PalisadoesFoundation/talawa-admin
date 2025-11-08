@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCreator
 
-Defined in: [src/types/Post/interface.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L84)
+Defined in: [src/types/Post/interface.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L80)
 
 ## Properties
 
@@ -12,15 +12,15 @@ Defined in: [src/types/Post/interface.ts:84](https://github.com/PalisadoesFounda
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/Post/interface.ts:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L88)
+Defined in: [src/types/Post/interface.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L84)
 
 ***
 
-### emailAddress
+### email
 
-> **emailAddress**: `string`
+> **email**: `string`
 
-Defined in: [src/types/Post/interface.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L87)
+Defined in: [src/types/Post/interface.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L83)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Post/interface.ts:87](https://github.com/PalisadoesFounda
 
 > **id**: `string`
 
-Defined in: [src/types/Post/interface.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L85)
+Defined in: [src/types/Post/interface.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L81)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/types/Post/interface.ts:85](https://github.com/PalisadoesFounda
 
 > **name**: `string`
 
-Defined in: [src/types/Post/interface.ts:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L86)
+Defined in: [src/types/Post/interface.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L82)
