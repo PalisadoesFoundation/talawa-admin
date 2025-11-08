@@ -376,7 +376,7 @@ jobs:
           python .github/workflows/scripts/code_coverage_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
   Check-ItSkip-Disable:
-    name: Check for eslint-disable
+    name: Check for it.skip commands
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
