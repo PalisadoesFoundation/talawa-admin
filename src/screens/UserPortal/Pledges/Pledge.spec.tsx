@@ -1482,4 +1482,20 @@ describe('Testing User Pledge Screen', () => {
       expect(screen.getByTestId('paidCell')).toBeInTheDocument();
     });
   });
+
+  it('should render pledges with users array data', async () => {
+    renderMyPledges(link10);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+    });
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  it('should handle zero goal amount', async () => {
+    renderMyPledges(link6);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+    });
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
 });
