@@ -68,10 +68,6 @@ const link = new StaticMockLink(MOCKS, true);
 describe('Testing OrganizationScreen', () => {
   beforeAll(() => {
     vi.stubGlobal('localStorage', mockLocalStorage as unknown as Storage);
-<<<<<<< HEAD
-    setItem('Talawa-admin', 'name', 'John Doe');
-=======
->>>>>>> cf0fcb626f (test: fix OrganizationScreen tests to match GraphQL schema)
   });
 
   afterAll(() => {
