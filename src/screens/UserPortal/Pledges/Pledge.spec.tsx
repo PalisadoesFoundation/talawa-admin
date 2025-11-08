@@ -1484,7 +1484,7 @@ describe('Testing User Pledge Screen', () => {
     });
   });
 
-  it.skip('should display popover with extra users when more than 2 users exist', async () => {
+  it('should display popover with extra users when more than 2 users exist', async () => {
     const usersArr = [
       { id: '1', name: 'Main User 1', avatarURL: null, __typename: 'User' },
       {
@@ -1530,6 +1530,7 @@ describe('Testing User Pledge Screen', () => {
                 __typename: 'FundraisingCampaign',
               },
               pledger: usersArr[0],
+              users: usersArr,
               __typename: 'FundraisingCampaignPledge',
             },
           ],

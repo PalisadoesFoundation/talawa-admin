@@ -115,6 +115,11 @@ const fundCampaignPledge = (): JSX.Element => {
         // this should be updated when raised amount data is available
         totalRaised += 0;
 
+        const allUsers =
+          'users' in edge.node && Array.isArray(edge.node.users)
+            ? edge.node.users
+            : [edge.node.pledger];
+
         return {
           id: edge.node.id,
           amount: amount,
@@ -124,7 +129,7 @@ const fundCampaignPledge = (): JSX.Element => {
           endDate: pledgeData.fundCampaign.endAt
             ? new Date(pledgeData.fundCampaign.endAt)
             : new Date(),
-          pledger: edge.node.pledger,
+          users: allUsers.filter(Boolean),
           currency: pledgeData.fundCampaign.currencyCode || 'USD',
         };
       }) ?? [];
@@ -132,7 +137,9 @@ const fundCampaignPledge = (): JSX.Element => {
     const filteredPledges = searchTerm
       ? pledgesList.filter((pledge) => {
           const search = searchTerm.toLowerCase();
-          return pledge.pledger?.name?.toLowerCase().includes(search);
+          return pledge.users.some((user) =>
+            user.name?.toLowerCase().includes(search),
+          );
         })
       : pledgesList;
 
@@ -240,32 +247,45 @@ const fundCampaignPledge = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        const pledger = params.row.pledger;
-        if (!pledger) return null;
+        const users = params.row.users || [];
+        const mainUsers = users.slice(0, 1);
+        const extraUsers = users.slice(1);
 
         return (
           <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
-            <div
-              className={styles.pledgerContainer}
-              key={`${params.row.id}-pledger`}
-              data-testid={`pledger-${params.row.id}`}
-            >
-              {pledger.avatarURL ? (
-                <img
-                  src={pledger.avatarURL}
-                  alt={pledger.name}
-                  className={styles.TableImagePledge}
-                />
-              ) : (
-                <Avatar
-                  containerStyle={styles.imageContainerPledge}
-                  avatarStyle={styles.TableImagePledge}
-                  name={pledger.name}
-                  alt={pledger.name}
-                />
-              )}
-              <span>{pledger.name}</span>
-            </div>
+            {mainUsers.map((user: InterfaceUserInfoPG, index: number) => (
+              <div
+                className={styles.pledgerContainer}
+                key={`${params.row.id}-main-${index}`}
+                data-testid={`mainUser-${params.row.id}-${index}`}
+              >
+                {user.avatarURL ? (
+                  <img
+                    src={user.avatarURL}
+                    alt={user.name}
+                    className={styles.TableImagePledge}
+                  />
+                ) : (
+                  <Avatar
+                    containerStyle={styles.imageContainerPledge}
+                    avatarStyle={styles.TableImagePledge}
+                    name={user.name}
+                    alt={user.name}
+                  />
+                )}
+                <span>{user.name}</span>
+              </div>
+            ))}
+            {extraUsers.length > 0 && (
+              <div
+                className={styles.moreContainer}
+                aria-describedby={id}
+                onClick={() => handleClick(extraUsers)}
+                data-testid={`moreContainer-${params.row.id}`}
+              >
+                +{extraUsers.length} more...
+              </div>
+            )}
           </div>
         );
       },
@@ -540,7 +560,7 @@ const fundCampaignPledge = (): JSX.Element => {
         rowHeight={65}
         rows={pledges.map((pledge) => ({
           id: pledge.id,
-          pledger: pledge.pledger,
+          users: pledge.users,
           endDate: pledge.endDate,
           pledgeDate: pledge.pledgeDate,
           amount: pledge.amount,
