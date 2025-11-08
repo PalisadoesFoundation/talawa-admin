@@ -2188,7 +2188,7 @@ describe('PinnedPostCard Component Tests', () => {
     );
 
     // Verify pinned posts section exists
-    // expect(screen.getByText("Pinned Posts")).toBeInTheDocument();
+    expect(screen.getByText("Pinned Posts")).toBeInTheDocument();
   });
 
   it('should display default image when post has no image', async () => {
