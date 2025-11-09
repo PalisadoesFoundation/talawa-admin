@@ -156,7 +156,7 @@ const UserSidebarOrg = ({
                       ${styles.talawaText} ${styles.sidebarText}
                   `}
                 >
-                  <div style={{ display: 'flex', alignItems: 'left' }}>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
                     <div className={styles.iconWrapper}>
                       <IconComponent
                         name={name}
