@@ -26,11 +26,21 @@ vi.mock('utils/errorHandler', () => ({
   errorHandler: vi.fn(),
 }));
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/no-multi-comp */
 vi.mock('@mui/x-date-pickers', async () => {
   const actual = await vi.importActual('@mui/x-date-pickers');
   return {
     ...actual,
-    DatePicker: ({ onChange, value, label }: any) => (
+    DatePicker: ({
+      onChange,
+      value,
+      label,
+    }: {
+      onChange?: (date: any) => void;
+      value?: any;
+      label?: string;
+    }) => (
       <input
         data-testid={`date-picker-${label}`}
         value={value ? value.format('YYYY-MM-DD') : ''}
@@ -40,7 +50,17 @@ vi.mock('@mui/x-date-pickers', async () => {
         }}
       />
     ),
-    TimePicker: ({ onChange, value, label, disabled }: any) => (
+    TimePicker: ({
+      onChange,
+      value,
+      label,
+      disabled,
+    }: {
+      onChange?: (time: any) => void;
+      value?: any;
+      label?: string;
+      disabled?: boolean;
+    }) => (
       <input
         data-testid={`time-picker-${label}`}
         value={value ? value.format('HH:mm:ss') : ''}
@@ -53,6 +73,8 @@ vi.mock('@mui/x-date-pickers', async () => {
     ),
   };
 });
+/* eslint-enable react/no-multi-comp */
+/* eslint-enable @typescript-eslint/no-explicit-any */
 
 const mockProps = {
   isOpen: true,
@@ -122,7 +144,12 @@ const createEventErrorMock = {
   error: new Error('Failed to create event'),
 };
 
-const renderComponent = (mocks: any[] = [createEventMock], props = mockProps) => {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const renderComponent = (
+  mocks: readonly any[] = [createEventMock],
+  props = mockProps,
+) => {
+  /* eslint-enable @typescript-eslint/no-explicit-any */
   return render(
     <MockedProvider mocks={mocks}>
       <Provider store={store}>
@@ -182,7 +209,8 @@ describe('CreateEventModal', () => {
   test('shows warning for empty name', async () => {
     renderComponent();
     const submitBtn = screen.getByTestId('createEventBtn');
-    fireEvent.submit(submitBtn.closest('form')!);
+    const form = submitBtn.closest('form');
+    if (form) fireEvent.submit(form);
     expect(toast.warning).toHaveBeenCalledWith('Name can not be blank!');
   });
 
@@ -191,7 +219,8 @@ describe('CreateEventModal', () => {
     const nameInput = screen.getByTestId('eventTitleInput');
     fireEvent.change(nameInput, { target: { value: 'Test' } });
     const submitBtn = screen.getByTestId('createEventBtn');
-    fireEvent.submit(submitBtn.closest('form')!);
+    const form = submitBtn.closest('form');
+    if (form) fireEvent.submit(form);
     expect(toast.warning).toHaveBeenCalledWith('Description can not be blank!');
   });
 
@@ -202,7 +231,8 @@ describe('CreateEventModal', () => {
     fireEvent.change(nameInput, { target: { value: 'Test' } });
     fireEvent.change(descInput, { target: { value: 'Desc' } });
     const submitBtn = screen.getByTestId('createEventBtn');
-    fireEvent.submit(submitBtn.closest('form')!);
+    const form = submitBtn.closest('form');
+    if (form) fireEvent.submit(form);
     expect(toast.warning).toHaveBeenCalledWith('Location can not be blank!');
   });
 
@@ -222,8 +252,14 @@ describe('CreateEventModal', () => {
   test('handles error during creation', async () => {
     renderComponent([createEventErrorMock]);
     await userEvent.type(screen.getByTestId('eventTitleInput'), 'Error Event');
-    await userEvent.type(screen.getByTestId('eventDescriptionInput'), 'Error Description');
-    await userEvent.type(screen.getByTestId('eventLocationInput'), 'Error Location');
+    await userEvent.type(
+      screen.getByTestId('eventDescriptionInput'),
+      'Error Description',
+    );
+    await userEvent.type(
+      screen.getByTestId('eventLocationInput'),
+      'Error Location',
+    );
     await userEvent.click(screen.getByTestId('createEventBtn'));
     await waitFor(() => {
       expect(toast.success).not.toHaveBeenCalled();
@@ -289,27 +325,34 @@ describe('CreateEventModal', () => {
     renderComponent();
     const dropdown = screen.getByTestId('recurrenceDropdown');
     fireEvent.click(dropdown);
-    await waitFor(() => {
-      expect(screen.getByText('Daily')).toBeInTheDocument();
-      expect(screen.getByText(/Weekly on/)).toBeInTheDocument();
-      expect(screen.getByText(/Monthly on day/)).toBeInTheDocument();
-      expect(screen.getByText(/Annually on/)).toBeInTheDocument();
-      expect(screen.getByText('Every weekday (Monday to Friday)')).toBeInTheDocument();
-      expect(screen.getByText('Custom...')).toBeInTheDocument();
-    }, { timeout: 3000 });
+    await waitFor(
+      () => {
+        expect(screen.getByText('Daily')).toBeInTheDocument();
+        expect(screen.getByText(/Weekly on/)).toBeInTheDocument();
+        expect(screen.getByText(/Monthly on day/)).toBeInTheDocument();
+        expect(screen.getByText(/Annually on/)).toBeInTheDocument();
+        expect(
+          screen.getByText('Every weekday (Monday to Friday)'),
+        ).toBeInTheDocument();
+        expect(screen.getByText('Custom...')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('toggles all checkboxes correctly', async () => {
     renderComponent();
     const publicCheck = screen.getByTestId('ispublicCheck') as HTMLInputElement;
-    const registrableCheck = screen.getByTestId('registrableCheck') as HTMLInputElement;
-    
+    const registrableCheck = screen.getByTestId(
+      'registrableCheck',
+    ) as HTMLInputElement;
+
     expect(publicCheck.checked).toBe(true);
     expect(registrableCheck.checked).toBe(false);
-    
+
     await userEvent.click(publicCheck);
     await userEvent.click(registrableCheck);
-    
+
     expect(publicCheck.checked).toBe(false);
     expect(registrableCheck.checked).toBe(true);
   });
@@ -324,8 +367,14 @@ describe('CreateEventModal', () => {
   test('disables submit button during loading', async () => {
     renderComponent();
     await userEvent.type(screen.getByTestId('eventTitleInput'), 'Test Event');
-    await userEvent.type(screen.getByTestId('eventDescriptionInput'), 'Test Description');
-    await userEvent.type(screen.getByTestId('eventLocationInput'), 'Test Location');
+    await userEvent.type(
+      screen.getByTestId('eventDescriptionInput'),
+      'Test Description',
+    );
+    await userEvent.type(
+      screen.getByTestId('eventLocationInput'),
+      'Test Location',
+    );
     const submitBtn = screen.getByTestId('createEventBtn') as HTMLButtonElement;
     expect(submitBtn.disabled).toBe(false);
   });
