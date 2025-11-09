@@ -8,7 +8,7 @@
 
 Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts:198](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts#L198)
 
-## Type Declaration
+## Type declaration
 
 ### baseEvent
 

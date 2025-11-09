@@ -8,7 +8,7 @@
 
 Defined in: [src/types/Event/type.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L116)
 
-## Type Declaration
+## Type declaration
 
 ### allDay\_ASC
 

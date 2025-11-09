@@ -8,7 +8,7 @@
 
 Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:330](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L330)
 
-## Type Declaration
+## Type declaration
 
 ### request
 

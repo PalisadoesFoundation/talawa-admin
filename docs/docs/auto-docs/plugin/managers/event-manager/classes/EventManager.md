@@ -11,7 +11,7 @@ Handles event listeners and event emission for the plugin system
 
 ## Constructors
 
-### Constructor
+### new EventManager()
 
 > **new EventManager**(): `EventManager`
 
@@ -119,7 +119,7 @@ Defined in: [src/plugin/managers/event-manager.ts:10](https://github.com/Palisad
 
 ### removeAllListeners()
 
-> **removeAllListeners**(`event?`): `void`
+> **removeAllListeners**(`event`?): `void`
 
 Defined in: [src/plugin/managers/event-manager.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/event-manager.ts#L63)
 
