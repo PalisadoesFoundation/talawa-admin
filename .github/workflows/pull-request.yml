@@ -414,11 +414,12 @@ jobs:
         Check-Code-Coverage-Disable,
         Check-ItSkip-Disable,
       ]
+    env:
+      TOTAL_SHARDS: 4
     strategy:
       fail-fast: false
       matrix:
         shard: [1, 2, 3, 4]
-        total_shards: [4]
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
@@ -459,13 +460,13 @@ jobs:
         run: |
           npx tsc --noEmit
 
-      - name: Run Vitest Tests (Shard ${{ matrix.shard }}/${{ matrix.total_shards }})
+      - name: Run Vitest Tests (Shard ${{ matrix.shard }}/${{ env.TOTAL_SHARDS }})
         if: steps.changed-files.outputs.any_changed == 'true'
         env:
           NODE_V8_COVERAGE: './coverage/vitest'
           NODE_OPTIONS: '--max-old-space-size=4096'
           SHARD_INDEX: ${{ matrix.shard }}
-          SHARD_COUNT: ${{ matrix.total_shards }}
+          SHARD_COUNT: ${{ env.TOTAL_SHARDS }}
         run: |
           npm run test:shard:coverage
 
@@ -589,19 +590,17 @@ jobs:
             echo "Found coverage files:"
             cat lcov-files.txt
 
-            # Verify each file is not empty
-            EMPTY_FILES=0
+            # Validate each file exists and is not empty (fail-fast)
             while IFS= read -r file; do
+              if [ ! -f "$file" ]; then
+                echo "ERROR: Coverage file does not exist: $file"
+                exit 1
+              fi
               if [ ! -s "$file" ]; then
-                echo "WARNING: Empty coverage file: $file"
-                EMPTY_FILES=$((EMPTY_FILES + 1))
+                echo "ERROR: Coverage file is empty: $file"
+                exit 1
               fi
             done < lcov-files.txt
-
-            if [ $EMPTY_FILES -gt 0 ]; then
-              echo "ERROR: Found $EMPTY_FILES empty coverage files!"
-              exit 1
-            fi
 
             # Install and use lcov-result-merger as fallback
             npm install --no-save lcov-result-merger
