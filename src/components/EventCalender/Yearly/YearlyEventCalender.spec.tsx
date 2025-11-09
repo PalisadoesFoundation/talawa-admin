@@ -1307,7 +1307,7 @@ describe('Calendar Component', () => {
     });
   });
 
-  test("highlights today's date correctly", async () => {
+  test("highlights today's date with correct styling", async () => {
     const today = new Date();
     const { getAllByTestId } = renderWithRouterAndPath(
       <Calendar
@@ -1332,7 +1332,7 @@ describe('Calendar Component', () => {
       });
 
       expect(todayElement).toBeInTheDocument();
-      // Verify the element has the today styling class
+      // Verify the element has the today styling class (day__today)
       expect(todayElement?.className).toContain('day__today');
     });
   });
@@ -1399,7 +1399,7 @@ describe('Calendar Component', () => {
     }
   });
 
-  test('handles REGULAR user viewing public events', async () => {
+  test('verifies REGULAR user can view public events', async () => {
     const today = new Date();
     const publicEvent: CalendarEventItem = {
       id: 'public-event',
@@ -1452,7 +1452,7 @@ describe('Calendar Component', () => {
     }
   });
 
-  test('renders calendar grid for different years', async () => {
+  test('navigates between years and renders calendar grid correctly', async () => {
     const { container, getByTestId } = renderWithRouterAndPath(
       <Calendar
         eventData={[]}
@@ -1479,7 +1479,7 @@ describe('Calendar Component', () => {
       expect(dayElements.length).toBeGreaterThan(0);
     });
 
-    // Navigate to next year
+    // Navigate back to current year
     await act(async () => {
       fireEvent.click(getByTestId('nextYear'));
     });
@@ -1547,9 +1547,26 @@ describe('Calendar Component', () => {
       const expandButtons = container.querySelectorAll(
         '[data-testid^="expand-btn-"]',
       );
-
+      // Should have expand buttons for dates with events
       expect(expandButtons.length).toBeGreaterThan(0);
     });
+
+    // Click first expand button and verify event appears
+    const firstExpandButton = container.querySelector(
+      '[data-testid^="expand-btn-"]',
+    );
+    if (firstExpandButton) {
+      await act(async () => {
+        fireEvent.click(firstExpandButton);
+      });
+
+      await waitFor(() => {
+        // At least one event should be visible
+        const event1Visible = screen.queryByText('Event 1');
+        const event2Visible = screen.queryByText('Event 2');
+        expect(event1Visible || event2Visible).toBeTruthy();
+      });
+    }
   });
 
   test('closes expanded no-events panel when clicked again', async () => {
