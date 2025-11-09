@@ -1306,4 +1306,319 @@ describe('Calendar Component', () => {
       expect(screen.getByText('No Event Available!')).toBeInTheDocument();
     });
   });
+
+  test("highlights today's date correctly", async () => {
+    const today = new Date();
+    const { getAllByTestId } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[]}
+        refetchEvents={vi.fn()}
+        orgData={mockOrgData}
+        userRole={UserRole.ADMINISTRATOR}
+        userId="user1"
+      />,
+    );
+
+    await waitFor(() => {
+      const dayElements = getAllByTestId('day');
+      expect(dayElements.length).toBeGreaterThan(0);
+
+      // Find today's element by matching date text
+      const todayElement = dayElements.find((element) => {
+        const dateText = element.textContent?.trim();
+        // Extract just the date number (first part before any event indicators)
+        const dateNumber = dateText?.split(/[^0-9]/)[0];
+        return dateNumber === today.getDate().toString();
+      });
+
+      expect(todayElement).toBeInTheDocument();
+      // Verify the element has the today styling class
+      expect(todayElement?.className).toContain('day__today');
+    });
+  });
+
+  test('renders events on today and shows Close button when expanded', async () => {
+    const today = new Date();
+    const todayEvent: CalendarEventItem = {
+      id: 'today-event',
+      location: 'Today Location',
+      name: 'Today Event',
+      description: 'Today Description',
+      startAt: today.toISOString(),
+      endAt: today.toISOString(),
+      startTime: '10:00:00',
+      endTime: '11:00:00',
+      allDay: false,
+      isPublic: true,
+      isRegisterable: true,
+      attendees: [],
+      creator: {
+        id: 'creator1',
+        name: 'John Doe',
+        emailAddress: 'john@example.com',
+      },
+    };
+
+    const { container } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[todayEvent]}
+        refetchEvents={vi.fn()}
+        orgData={mockOrgData}
+        userRole={UserRole.ADMINISTRATOR}
+        userId="user1"
+      />,
+    );
+
+    await waitFor(() => {
+      const expandButtons = container.querySelectorAll(
+        '[data-testid^="expand-btn-"]',
+      );
+      expect(expandButtons.length).toBeGreaterThan(0);
+    });
+
+    const expandButton = container.querySelector(
+      '[data-testid^="expand-btn-"]',
+    );
+    if (expandButton) {
+      await act(async () => {
+        fireEvent.click(expandButton);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('Today Event')).toBeInTheDocument();
+        expect(screen.getByText('Close')).toBeInTheDocument();
+      });
+
+      await act(async () => {
+        fireEvent.click(expandButton);
+      });
+
+      await waitFor(() => {
+        expect(screen.queryByText('Today Event')).not.toBeInTheDocument();
+      });
+    }
+  });
+
+  test('handles REGULAR user viewing public events', async () => {
+    const today = new Date();
+    const publicEvent: CalendarEventItem = {
+      id: 'public-event',
+      location: 'Public Location',
+      name: 'Public Event',
+      description: 'Public Description',
+      startAt: today.toISOString(),
+      endAt: today.toISOString(),
+      startTime: '10:00:00',
+      endTime: '11:00:00',
+      allDay: false,
+      isPublic: true,
+      isRegisterable: true,
+      attendees: [],
+      creator: {
+        id: 'creator1',
+        name: 'John Doe',
+        emailAddress: 'john@example.com',
+      },
+    };
+
+    const { container } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[publicEvent]}
+        refetchEvents={vi.fn()}
+        orgData={mockOrgData}
+        userRole={UserRole.REGULAR}
+        userId="user1"
+      />,
+    );
+
+    await waitFor(() => {
+      const expandButtons = container.querySelectorAll(
+        '[data-testid^="expand-btn-"]',
+      );
+      expect(expandButtons.length).toBeGreaterThan(0);
+    });
+
+    const expandButton = container.querySelector(
+      '[data-testid^="expand-btn-"]',
+    );
+    if (expandButton) {
+      await act(async () => {
+        fireEvent.click(expandButton);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('Public Event')).toBeInTheDocument();
+      });
+    }
+  });
+
+  test('renders calendar grid for different years', async () => {
+    const { container, getByTestId } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[]}
+        refetchEvents={vi.fn()}
+        orgData={mockOrgData}
+        userRole={UserRole.ADMINISTRATOR}
+        userId="user1"
+      />,
+    );
+
+    const currentYear = new Date().getFullYear();
+    await waitFor(() => {
+      expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
+    });
+
+    // Navigate to previous year
+    await act(async () => {
+      fireEvent.click(getByTestId('prevYear'));
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(String(currentYear - 1))).toBeInTheDocument();
+      const dayElements = container.querySelectorAll('[data-testid="day"]');
+      expect(dayElements.length).toBeGreaterThan(0);
+    });
+
+    // Navigate to next year
+    await act(async () => {
+      fireEvent.click(getByTestId('nextYear'));
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(String(currentYear))).toBeInTheDocument();
+      const dayElements = container.querySelectorAll('[data-testid="day"]');
+      expect(dayElements.length).toBeGreaterThan(0);
+    });
+  });
+
+  test('handles events with different dates in the same month', async () => {
+    const currentYear = new Date().getFullYear();
+    const event1: CalendarEventItem = {
+      id: 'event-1',
+      location: 'Location 1',
+      name: 'Event 1',
+      description: 'Description 1',
+      startAt: new Date(currentYear, 0, 5).toISOString(),
+      endAt: new Date(currentYear, 0, 5).toISOString(),
+      startTime: '10:00:00',
+      endTime: '11:00:00',
+      allDay: false,
+      isPublic: true,
+      isRegisterable: true,
+      attendees: [],
+      creator: {
+        id: 'creator1',
+        name: 'John Doe',
+        emailAddress: 'john@example.com',
+      },
+    };
+
+    const event2: CalendarEventItem = {
+      id: 'event-2',
+      location: 'Location 2',
+      name: 'Event 2',
+      description: 'Description 2',
+      startAt: new Date(currentYear, 0, 15).toISOString(),
+      endAt: new Date(currentYear, 0, 15).toISOString(),
+      startTime: '14:00:00',
+      endTime: '15:00:00',
+      allDay: false,
+      isPublic: true,
+      isRegisterable: true,
+      attendees: [],
+      creator: {
+        id: 'creator2',
+        name: 'Jane Doe',
+        emailAddress: 'jane@example.com',
+      },
+    };
+
+    const { container } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[event1, event2]}
+        refetchEvents={vi.fn()}
+        orgData={mockOrgData}
+        userRole={UserRole.ADMINISTRATOR}
+        userId="user1"
+      />,
+    );
+
+    await waitFor(() => {
+      const expandButtons = container.querySelectorAll(
+        '[data-testid^="expand-btn-"]',
+      );
+
+      expect(expandButtons.length).toBeGreaterThan(0);
+    });
+  });
+
+  test('closes expanded no-events panel when clicked again', async () => {
+    const { container } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[]}
+        refetchEvents={vi.fn()}
+        orgData={mockOrgData}
+        userRole={UserRole.ADMINISTRATOR}
+        userId="user1"
+      />,
+    );
+
+    await waitFor(() => {
+      const dayElements = container.querySelectorAll('[data-testid="day"]');
+      expect(dayElements.length).toBeGreaterThan(0);
+    });
+
+    const noEventsButton = container.querySelector(
+      '[data-testid^="no-events-btn-"]',
+    );
+    expect(noEventsButton).toBeInTheDocument();
+
+    if (noEventsButton) {
+      await act(async () => {
+        fireEvent.click(noEventsButton);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('No Event Available!')).toBeInTheDocument();
+        expect(screen.getByText('Close')).toBeInTheDocument();
+      });
+
+      await act(async () => {
+        fireEvent.click(noEventsButton);
+      });
+
+      await waitFor(() => {
+        expect(
+          screen.queryByText('No Event Available!'),
+        ).not.toBeInTheDocument();
+      });
+    }
+  });
+
+  test('renders days from adjacent months (padding days)', async () => {
+    const { container } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[]}
+        refetchEvents={vi.fn()}
+        orgData={mockOrgData}
+        userRole={UserRole.ADMINISTRATOR}
+        userId="user1"
+      />,
+    );
+
+    await waitFor(() => {
+      const dayElements = container.querySelectorAll('[data-testid="day"]');
+      expect(dayElements.length).toBeGreaterThan(0);
+
+      // Calendar should render padding days from adjacent months
+      // Total days should be more than just the days in 12 months (28*12=336)
+      expect(dayElements.length).toBeGreaterThan(28 * 12);
+
+      // Verify some days have the outside month styling
+      const daysWithOutsideClass = Array.from(dayElements).filter((el) =>
+        el.className.includes('day__outside'),
+      );
+      expect(daysWithOutsideClass.length).toBeGreaterThan(0);
+    });
+  });
 });
