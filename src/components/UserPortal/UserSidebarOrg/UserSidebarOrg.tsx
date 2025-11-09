@@ -72,7 +72,6 @@ const UserSidebarOrg = ({
   hideDrawer,
   setHideDrawer,
 }: InterfaceUserSidebarOrgProps): JSX.Element => {
-  const { t } = useTranslation('translation', { keyPrefix: 'userSidebarOrg' });
   const { t: tCommon } = useTranslation('common');
 
   // State for managing dropdown visibility
@@ -253,21 +252,18 @@ const UserSidebarOrg = ({
           style={{
             display: hideDrawer ? 'none' : 'flex',
             alignItems: 'center',
-            paddingRight: '40px',
+            marginRight: 'auto',
+            paddingLeft: '5px',
           }}
         >
           <TalawaLogo className={styles.talawaLogo} />
           <div className={`${styles.talawaText} ${styles.sidebarText}`}>
-            {t('talawaUserPortal')}
+            User Portal
           </div>
         </div>
       </div>
 
       {/* Options List */}
-      <h5 className={`${styles.titleHeader} text-secondary`}>
-        {!hideDrawer && tCommon('menu')}
-      </h5>
-
       <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         {drawerContent}
       </div>

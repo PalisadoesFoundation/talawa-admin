@@ -222,19 +222,16 @@ const leftDrawer = ({
           style={{
             display: hideDrawer ? 'none' : 'flex',
             alignItems: 'center',
-            paddingRight: '40px',
+            marginRight: 'auto',
+            paddingLeft: '5px',
           }}
         >
           <TalawaLogo className={styles.talawaLogo} />
           <div className={`${styles.talawaText} ${styles.sidebarText}`}>
-            {tCommon('talawaAdminPortal')}
+            Admin Portal
           </div>
         </div>
       </div>
-
-      <h5 className={`${styles.titleHeader} ${styles.sidebarText}`}>
-        {!hideDrawer && tCommon('menu')}
-      </h5>
 
       <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
         {drawerContent}

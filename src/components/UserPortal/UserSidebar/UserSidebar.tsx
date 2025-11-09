@@ -198,18 +198,30 @@ const userSidebar = ({
             style={{
               display: hideDrawer ? 'none' : 'flex',
               alignItems: 'center',
-              paddingRight: '40px',
+              marginRight: 'auto',
+              paddingLeft: '5px',
             }}
           >
             <TalawaLogo className={styles.talawaLogo} />
             <div className={`${styles.talawaText} ${styles.sidebarText}`}>
-              {t('talawaUserPortal')}
+              User Portal
             </div>
           </div>
         </div>
-        <h5 className={`${styles.titleHeader} ${styles.sidebarText}`}>
-          {!hideDrawer && tCommon('menu')}
-        </h5>
+
+        {/* User Profile Section - Top position like Admin Portal */}
+        {!hideDrawer && (
+          <div
+            style={{
+              backgroundColor: '#e8f4f8',
+              padding: '10px',
+              borderRadius: '8px',
+              margin: '10px',
+            }}
+          >
+            <ProfileCard />
+          </div>
+        )}
 
         <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
           <div className={styles.optionList}>
