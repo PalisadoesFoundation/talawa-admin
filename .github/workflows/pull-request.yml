@@ -632,6 +632,23 @@ jobs:
           echo "�📋 First 30 lines of merged coverage:"
           head -30 ./coverage/vitest/lcov.info
 
+      - name: Clean up individual shard coverage files
+        if: steps.check-artifacts.outputs.artifacts_found == 'true'
+        run: |
+          echo "🧹 Cleaning up individual shard coverage files..."
+          # Remove all individual coverage JSON files to prevent Codecov from finding them
+          # This ensures only the merged lcov.info is uploaded
+          find ./coverage -name "coverage-*.json" -type f -delete
+          find ./coverage -name "coverage-final.json" -type f -delete
+          rm -rf ./coverage/tmp ./.nyc_output 2>/dev/null || true
+
+          echo "✅ Cleanup complete. Remaining coverage files:"
+          find ./coverage -type f \( -name "*.info" -o -name "*.json" \)
+
+          echo ""
+          echo "📊 Final coverage file to upload:"
+          ls -lh ./coverage/vitest/lcov.info
+
       - name: Present and upload merged coverage to Codecov
         if: steps.check-artifacts.outputs.artifacts_found == 'true'
         uses: codecov/codecov-action@v5
