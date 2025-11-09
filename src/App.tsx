@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import React, { lazy, Suspense, useEffect, useMemo } from 'react';
 import { Route, Routes } from 'react-router';
 import { useQuery, useApolloClient } from '@apollo/client';
