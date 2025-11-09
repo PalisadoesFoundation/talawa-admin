@@ -22,6 +22,10 @@ import { generateMockUser } from './Organization.mocks';
 import { MOCKS, MOCKS2 } from './User.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
+import {
+  ORGANIZATION_LIST,
+  USER_LIST_FOR_TABLE,
+} from 'GraphQl/Queries/Queries';
 
 let setItem: (key: string, value: unknown) => void;
 let removeItem: (key: string) => void;
@@ -418,6 +422,83 @@ describe('Testing Users screen', () => {
 
       expect(mockUser.appUserProfile.adminFor).toEqual([]);
       expect(mockUser.appUserProfile.isSuperAdmin).toBe(false);
+    });
+  });
+
+  describe('Additional coverage tests', () => {
+    it('should display error message when query fails', async () => {
+      const errorMock = [
+        {
+          request: {
+            query: USER_LIST_FOR_TABLE,
+            variables: {
+              first: 12,
+              after: null,
+              orgFirst: 32,
+              where: undefined,
+            },
+          },
+          error: new Error('Network error occurred'),
+        },
+        {
+          request: {
+            query: ORGANIZATION_LIST,
+          },
+          result: {
+            data: {
+              organizations: [],
+            },
+          },
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={errorMock} addTypename={false}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Users />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await wait();
+      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
+      expect(
+        screen.getByText(/Error occurred while loading Users/),
+      ).toBeInTheDocument();
+      expect(screen.getByText(/Network error occurred/)).toBeInTheDocument();
+    });
+
+    it('should reset search and refetch on clear', async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Users />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await wait();
+
+      const searchInput = screen.getByTestId('searchByName');
+      await userEvent.type(searchInput, 'John');
+      await userEvent.click(screen.getByTestId('searchButton'));
+
+      await wait();
+
+      // Clear search
+      await userEvent.clear(searchInput);
+      await userEvent.click(screen.getByTestId('searchButton'));
+
+      await wait();
+      expect(screen.queryByText(/no results found/i)).not.toBeInTheDocument();
     });
   });
 });

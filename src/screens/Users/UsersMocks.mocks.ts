@@ -31,6 +31,7 @@ export const EMPTY_MOCKS = [
         first: 12,
         after: null,
         orgFirst: 32,
+        where: undefined,
       },
     },
     result: {
