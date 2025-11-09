@@ -43,6 +43,7 @@ export default defineConfig({
       enabled: true,
       provider: 'istanbul',
       reportsDirectory: './coverage/vitest',
+      // Don't use 'all: true' with sharding - let merge handle combining partial coverage
       exclude: [
         'node_modules',
         'dist',
@@ -60,7 +61,7 @@ export default defineConfig({
         'scripts/**', // Exclude build/setup scripts
         'config/**', // Exclude configuration files
       ],
-      reporter: ['text', 'html', 'text-summary', 'lcov'],
+      reporter: ['lcov', 'json'], // Use json for accurate merging, lcov for final report
     },
   },
 });
