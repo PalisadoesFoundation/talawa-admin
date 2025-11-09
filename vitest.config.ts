@@ -4,7 +4,6 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
 
 const isCI = !!process.env.CI;
-const isShardedRun = !!process.env.SHARD_INDEX; // Detect if running via sharding script
 
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), svgrPlugin()],
@@ -29,11 +28,8 @@ export default defineConfig({
         singleThread: false,
         minThreads: 1,
         maxThreads: isCI ? 2 : 4, // Conservative in CI to avoid OOM
-        // Conditional isolation strategy:
-        // - Regular runs (isolate=true): Full isolation prevents test interference
-        // - Sharded runs (isolate=false): Shared context required for jsdom in parallel shards
-        // Note: Disabling isolation trades safety for jsdom compatibility in sharded CI runs
-        isolate: !isShardedRun,
+        // Keep isolation enabled to prevent test interference
+        isolate: true,
       },
     },
     // Lower concurrency in CI to avoid memory issues
