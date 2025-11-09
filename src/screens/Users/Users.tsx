@@ -251,12 +251,14 @@ const Users = (): JSX.Element => {
       return;
     }
     setIsLoadingMore(true);
-
+    // Preserve current search filter
+    const currentWhere = searchByName ? { name: searchByName } : undefined;
     const { data: moreData } = await fetchMore({
       variables: {
         first: perPageResult,
         after: pageInfoState?.endCursor,
         orgFirst: 32,
+        where: currentWhere,
       },
     });
     const moreEdges = (moreData?.allUsers?.edges ?? []) as Edge[];
