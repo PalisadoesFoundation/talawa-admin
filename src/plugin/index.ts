@@ -7,7 +7,6 @@
 
 export { default as PluginManager } from './manager';
 
-export { default as PluginRoutes } from './routes/PluginRoutes';
 export { default as PluginRouteRenderer } from './routes/PluginRouteRenderer';
 
 export {
