@@ -209,6 +209,20 @@ const userSidebar = ({
           </div>
         </div>
 
+        {/* User Profile Section - Top position like Admin Portal */}
+        {!hideDrawer && (
+          <div
+            style={{
+              backgroundColor: '#e8f4f8',
+              padding: '10px',
+              borderRadius: '8px',
+              margin: '10px',
+            }}
+          >
+            <ProfileCard />
+          </div>
+        )}
+
         <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
           <div className={styles.optionList}>
             {renderDrawerItem(

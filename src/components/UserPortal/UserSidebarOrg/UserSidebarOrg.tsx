@@ -37,9 +37,6 @@
  * ```
  *
  */
-// import { useQuery } from '@apollo/client';
-// import { WarningAmberOutlined } from '@mui/icons-material';
-// import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
 import IconComponent from 'components/IconComponent/IconComponent';
 import React, { useCallback, useMemo } from 'react';
@@ -47,12 +44,9 @@ import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router';
 import type { TargetsType } from 'state/reducers/routesReducer';
-// import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
-// import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import PluginLogo from 'assets/svgs/plugins.svg?react';
 import styles from 'style/app-fixed.module.css';
-// import Avatar from 'components/Avatar/Avatar';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from './../../SignOut/SignOut';
 import { usePluginDrawerItems } from 'plugin';
@@ -262,6 +256,20 @@ const UserSidebarOrg = ({
           </div>
         </div>
       </div>
+
+      {/* User Profile Section - Top position like UserSidebar */}
+      {!hideDrawer && (
+        <div
+          style={{
+            backgroundColor: '#e8f4f8',
+            padding: '10px',
+            borderRadius: '8px',
+            margin: '10px',
+          }}
+        >
+          <ProfileCard />
+        </div>
+      )}
 
       {/* Options List */}
       <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
