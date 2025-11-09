@@ -28,7 +28,7 @@ export default defineConfig({
         singleThread: false,
         minThreads: 1,
         maxThreads: isCI ? 2 : 4, // Conservative in CI to avoid OOM
-        isolate: true,
+        isolate: false, // Don't fully isolate to preserve jsdom environment
       },
     },
     // Lower concurrency in CI to avoid memory issues
