@@ -11,6 +11,16 @@ const shardIndex = process.env.SHARD_INDEX || '1';
 const shardCount = process.env.SHARD_COUNT || '1';
 const withCoverage = process.argv.includes('--coverage');
 
+// Validate shard values
+const idx = parseInt(shardIndex, 10);
+const count = parseInt(shardCount, 10);
+if (isNaN(idx) || isNaN(count) || idx < 1 || count < 1 || idx > count) {
+  console.error(
+    `Invalid shard configuration: SHARD_INDEX=${shardIndex}, SHARD_COUNT=${shardCount}`,
+  );
+  process.exit(1);
+}
+
 const args = ['vitest', 'run'];
 if (withCoverage) args.push('--coverage');
 args.push('--shard', `${shardIndex}/${shardCount}`);
@@ -19,4 +29,10 @@ args.push('--shard', `${shardIndex}/${shardCount}`);
 const env = { ...process.env, SHARD_INDEX: shardIndex, SHARD_COUNT: shardCount };
 
 const child = spawn('npx', args, { stdio: 'inherit', shell: true, env });
+
+child.on('error', (err) => {
+  console.error('Failed to spawn test process:', err);
+  process.exit(1);
+});
+
 child.on('exit', (code) => process.exit(code || 0));
