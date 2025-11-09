@@ -173,7 +173,7 @@ function OrgPost(): JSX.Element {
             caption: postformState.posttitle.trim(),
             organizationId: currentUrl,
             isPinned: postformState.pinPost,
-            attachments: attachment ? [attachment] : [],
+            ...(attachment && { attachments: [attachment] }),
           },
         },
       });
