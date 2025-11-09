@@ -353,8 +353,8 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     resizeWindow(800);
     expect(screen.getAllByText(/People/i)[0]).toBeInTheDocument();
 
-    const peopelBtn = screen.getAllByTestId(/People/i)[0];
-    await userEvent.click(peopelBtn);
+    const peopleBtn = screen.getAllByTestId(/People/i)[0];
+    await userEvent.click(peopleBtn);
     await wait();
     expect(window.location.pathname).toContain('user/people/123');
   });
