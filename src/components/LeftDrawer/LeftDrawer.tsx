@@ -228,7 +228,7 @@ const leftDrawer = ({
         >
           <TalawaLogo className={styles.talawaLogo} />
           <div className={`${styles.talawaText} ${styles.sidebarText}`}>
-            Admin Portal
+            {tCommon('adminPortal')}
           </div>
         </div>
       </div>

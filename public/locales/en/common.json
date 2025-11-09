@@ -43,6 +43,8 @@
   "confirmPassword": "Confirm Password",
   "forgotPassword": "Forgot Password ?",
   "talawaAdminPortal": "Talawa Admin Portal",
+  "adminPortal": "Admin Portal",
+  "userPortal": "User Portal",
   "address": "Address",
   "location": "Location",
   "enterLocation": "Enter Location",

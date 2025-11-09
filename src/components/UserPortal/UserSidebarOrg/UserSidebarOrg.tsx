@@ -258,7 +258,7 @@ const UserSidebarOrg = ({
         >
           <TalawaLogo className={styles.talawaLogo} />
           <div className={`${styles.talawaText} ${styles.sidebarText}`}>
-            User Portal
+            {tCommon('userPortal')}
           </div>
         </div>
       </div>
