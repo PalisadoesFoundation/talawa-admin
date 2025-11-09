@@ -35,6 +35,7 @@ const organizations: InterfaceOrgInfoTypePG[] = [
     name: 'Dogs Care',
     avatarURL: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
     description: 'Dog care center',
+    createdAt: '2023-04-13T04:53:17.742+00:00',
     members: {
       edges: [],
     },
@@ -122,6 +123,7 @@ const MOCKS = [
             avatarURL: 'image1.jpg',
             addressLine1: 'Address 1',
             description: 'Description 1',
+            createdAt: '2023-04-13T04:53:17.742+00:00',
             members: {
               edges: [
                 {
@@ -138,6 +140,7 @@ const MOCKS = [
             avatarURL: 'image2.jpg',
             addressLine1: 'Address 2',
             description: 'Description 2',
+            createdAt: '2023-04-14T04:53:17.742+00:00',
             members: {
               edges: [
                 {
@@ -170,6 +173,7 @@ const MOCKS = [
             avatarURL: 'image3.jpg',
             addressLine1: 'Address 3',
             description: 'Description 3',
+            createdAt: '2023-04-15T04:53:17.742+00:00',
             members: {
               edges: [
                 {

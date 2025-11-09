@@ -49,6 +49,7 @@ const ORG_FIELDS = gql`
     avatarURL
     membersCount
     adminsCount
+    createdAt
   }
 `;
 
