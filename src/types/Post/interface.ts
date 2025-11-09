@@ -54,6 +54,11 @@ export interface InterfaceOrganization {
     pageInfo: InterfacePageInfo;
     totalCount: number; // Move totalCount inside posts
   };
+  pinnedPosts: {
+    edges: InterfacePostEdge[];
+    pageInfo: InterfacePageInfo;
+    totalCount: number;
+  };
 }
 
 export interface InterfaceOrganizationPostListData {
