@@ -565,13 +565,34 @@ jobs:
             # Copy all JSON files to a temp directory for nyc merge
             for shard_dir in coverage-shards/coverage-shard-*/; do
               if [ -f "${shard_dir}coverage-final.json" ]; then
+                echo "Found JSON coverage in: $shard_dir"
                 cp "${shard_dir}coverage-final.json" "./coverage/tmp/coverage-shard-$(basename $shard_dir).json"
               fi
+            done
+            
+            # Validate JSON files before merging
+            echo "Validating JSON coverage files..."
+            JSON_COUNT=$(find ./coverage/tmp -name "*.json" -type f | wc -l)
+            echo "Found $JSON_COUNT JSON files to merge"
+            
+            if [ "$JSON_COUNT" -eq 0 ]; then
+              echo "ERROR: No JSON coverage files found!"
+              exit 1
+            fi
+            
+            # Show sample of file count in each JSON
+            for json_file in ./coverage/tmp/*.json; do
+              FILE_COUNT=$(jq 'keys | length' "$json_file" 2>/dev/null || echo "0")
+              echo "  $(basename $json_file): $FILE_COUNT files"
             done
             
             # Merge using nyc (more accurate than lcov merge)
             echo "🔄 Merging coverage with nyc..."
             npx nyc merge ./coverage/tmp ./.nyc_output/coverage-final.json
+            
+            # Validate merged JSON
+            MERGED_FILE_COUNT=$(jq 'keys | length' ./.nyc_output/coverage-final.json 2>/dev/null || echo "0")
+            echo "Merged coverage contains $MERGED_FILE_COUNT files"
             
             # Generate lcov from merged JSON
             echo "📝 Generating lcov report from merged coverage..."
@@ -615,8 +636,18 @@ jobs:
 
           echo "✅ Coverage merge successful"
           echo "📈 Merged file size: $(wc -l < ./coverage/vitest/lcov.info) lines"
-          echo "📋 First 20 lines of merged coverage:"
-          head -20 ./coverage/vitest/lcov.info
+
+          # Count number of source files in merged coverage
+          SF_COUNT=$(grep -c "^SF:" ./coverage/vitest/lcov.info || echo "0")
+          echo "� Number of files in merged coverage: $SF_COUNT"
+
+          if [ "$SF_COUNT" -lt 100 ]; then
+            echo "⚠️ WARNING: Only $SF_COUNT files in coverage (expected 300+)"
+            echo "This might indicate incomplete coverage merge"
+          fi
+
+          echo "�📋 First 30 lines of merged coverage:"
+          head -30 ./coverage/vitest/lcov.info
 
       - name: Present and upload merged coverage to Codecov
         if: steps.check-artifacts.outputs.artifacts_found == 'true'
