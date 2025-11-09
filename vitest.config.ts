@@ -29,8 +29,10 @@ export default defineConfig({
         singleThread: false,
         minThreads: 1,
         maxThreads: isCI ? 2 : 4, // Conservative in CI to avoid OOM
-        // Only disable isolation for sharded runs to preserve jsdom environment
-        // Regular runs need isolation to prevent test interference
+        // Conditional isolation strategy:
+        // - Regular runs (isolate=true): Full isolation prevents test interference
+        // - Sharded runs (isolate=false): Shared context required for jsdom in parallel shards
+        // Note: Disabling isolation trades safety for jsdom compatibility in sharded CI runs
         isolate: !isShardedRun,
       },
     },
