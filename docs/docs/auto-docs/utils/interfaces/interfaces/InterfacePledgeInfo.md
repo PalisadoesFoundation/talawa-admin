@@ -96,7 +96,9 @@ Defined in: [src/utils/interfaces.ts:1850](https://github.com/PalisadoesFoundati
 
 > **pledger**: [`InterfaceUserInfoPG`](InterfaceUserInfoPG.md)
 
-Defined in: [src/utils/interfaces.ts:1854](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1854)
+Defined in: [src/utils/interfaces.ts:1857](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1857)
+
+The primary pledger who made this pledge
 
 ***
 
@@ -107,3 +109,13 @@ Defined in: [src/utils/interfaces.ts:1854](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1853](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1853)
 
 The start date of the pledge.
+
+***
+
+### users?
+
+> `optional` **users**: [`InterfaceUserInfoPG`](InterfaceUserInfoPG.md)[]
+
+Defined in: [src/utils/interfaces.ts:1862](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1862)
+
+An array of user information associated with the pledge.

@@ -22,12 +22,12 @@ import React from 'react';
 import { Card, CardMedia, CardContent, Typography, Box } from '@mui/material';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { InterfacePost } from 'types/Post/interface';
+import { InterfacePost, InterfacePostEdge } from 'types/Post/interface';
 import AboutImg from 'assets/images/defaultImg.png';
 import styles from './postStyles.module.css';
 
 interface InterfacePinnedPostsStoryProps {
-  pinnedPosts: InterfacePost[];
+  pinnedPosts: InterfacePostEdge[];
   onStoryClick: (post: InterfacePost) => void;
 }
 
@@ -65,8 +65,8 @@ const PinnedPostsStory: React.FC<InterfacePinnedPostsStoryProps> = ({
       >
         {pinnedPosts.map((post) => (
           <Card
-            key={post.id}
-            onClick={() => onStoryClick(post)}
+            key={post.node.id}
+            onClick={() => onStoryClick(post.node)}
             data-testid="pinned-post"
             sx={{
               display: 'flex',
@@ -81,8 +81,8 @@ const PinnedPostsStory: React.FC<InterfacePinnedPostsStoryProps> = ({
             <CardMedia
               component="img"
               sx={{ width: '100%', height: '120px', objectFit: 'cover' }}
-              image={post.imageUrl ?? AboutImg}
-              alt={post.caption ?? 'Pinned Post'}
+              image={post.node.imageUrl ?? AboutImg}
+              alt={post.node.caption ?? 'Pinned Post'}
             />
             <Box
               sx={{
@@ -104,7 +104,7 @@ const PinnedPostsStory: React.FC<InterfacePinnedPostsStoryProps> = ({
                   }}
                   noWrap
                 >
-                  {post.caption ?? 'Untitled'}
+                  {post.node.caption ?? 'Untitled'}
                 </Typography>
                 <Typography
                   variant="caption"
@@ -112,7 +112,7 @@ const PinnedPostsStory: React.FC<InterfacePinnedPostsStoryProps> = ({
                   sx={{ mb: 1, display: 'block', fontSize: 12 }}
                   noWrap
                 >
-                  {post.creator?.name ?? 'Unknown'}
+                  {post.node.creator?.name ?? 'Unknown'}
                 </Typography>
               </CardContent>
             </Box>
