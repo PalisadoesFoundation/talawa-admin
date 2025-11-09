@@ -375,6 +375,34 @@ jobs:
         run: |
           python .github/workflows/scripts/code_coverage_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
+  Check-ItSkip-Disable:
+    name: Check for it.skip commands
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for all branches and tags
+
+      - name: Get changed files
+        id: changed-files
+        run: |
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+
+          # Get all changed files
+          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
+          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+
+      - name: Run Python script
+        run: |
+          python .github/workflows/scripts/itskip_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
+
   Test-Application:
     name: Test Application
     runs-on: ubuntu-latest
@@ -382,7 +410,8 @@ jobs:
       [
         Code-Quality-Checks,
         Check-ESlint-Disable,
-        Check-Code-Coverage-Disable
+        Check-Code-Coverage-Disable,
+        Check-ItSkip-Disable,
       ]
     steps:
       - name: Checkout the Repository
@@ -432,14 +461,19 @@ jobs:
         run: |
           npm run test:coverage
 
-      #######################################################################
+      ##############################################################################
       # DO NOT DELETE ANY references to env.CODECOV_UNIQUE_NAME in this
       # section. They are required for accurate caluclations
-      #######################################################################
+      ##############################################################################
       - name: Present and upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
         uses: codecov/codecov-action@v5
         with:
+          ##########################################################################
+          # DO NOT DELETE ANY references to env.CODECOV_UNIQUE_NAME in this
+          # section. They are required for accurate caluclations
+          ##########################################################################
           name: '${{env.CODECOV_UNIQUE_NAME}}'
+          ##########################################################################
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true
           verbose: true
@@ -452,7 +486,7 @@ jobs:
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
           path: './coverage/vitest/lcov.info'
-          min_coverage: 87.0
+          min_coverage: 88.5
 
   # Graphql-Inspector:
   #   if: ${{ github.actor != 'dependabot[bot]' }}

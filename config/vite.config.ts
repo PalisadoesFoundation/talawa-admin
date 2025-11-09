@@ -47,6 +47,7 @@ export default defineConfig({
     }),
   ],
   server: {
+    // Allow all hosts for flexibility as Talawa runs on multiple domains
     allowedHosts: true,
     watch: {
       ignored: ['**/coverage/**', '**/.nyc_output/**'],
