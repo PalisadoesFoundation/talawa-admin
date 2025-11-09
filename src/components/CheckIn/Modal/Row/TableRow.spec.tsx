@@ -33,6 +33,8 @@ vi.mock('@pdfme/generator', () => ({
 describe('Testing Table Row for CheckIn Table', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    global.URL.createObjectURL = vi.fn(() => 'mockURL');
+    global.window.open = vi.fn();
   });
 
   test('If the user is not checked in, button to check in should be displayed, and the user should be able to check in successfully', async () => {
@@ -86,12 +88,6 @@ describe('Testing Table Row for CheckIn Table', () => {
       },
       refetch: vi.fn(),
     };
-
-    const mockOpen = vi.fn();
-    const mockCreateObjectURL = vi.fn(() => 'mockURL');
-
-    global.URL.createObjectURL = mockCreateObjectURL;
-    global.window.open = mockOpen;
 
     const { findByText } = render(
       <BrowserRouter>
@@ -187,10 +183,6 @@ describe('Testing Table Row for CheckIn Table', () => {
         </LocalizationProvider>
       </BrowserRouter>,
     );
-
-    // Mocking the PDF generation function to throw an error
-    global.URL.createObjectURL = vi.fn(() => 'mockURL');
-    global.window.open = vi.fn();
 
     fireEvent.click(await findByText('Download Tag'));
 
