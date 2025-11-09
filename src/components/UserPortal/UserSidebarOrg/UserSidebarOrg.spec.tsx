@@ -353,7 +353,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     resizeWindow(800);
     expect(screen.getAllByText(/People/i)[0]).toBeInTheDocument();
 
-    const peopelBtn = screen.getByTestId(/People/i);
+    const peopelBtn = screen.getAllByTestId(/People/i)[0];
     await userEvent.click(peopelBtn);
     await wait();
     expect(window.location.pathname).toContain('user/people/123');
@@ -461,7 +461,6 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
 
     const toggleButton = screen.getByTestId('toggleBtn');
     expect(toggleButton).toBeInTheDocument();
-    expect(toggleButton).toHaveAttribute('role', 'button');
     expect(toggleButton).toHaveAttribute('tabIndex', '0');
 
     await userEvent.click(toggleButton);

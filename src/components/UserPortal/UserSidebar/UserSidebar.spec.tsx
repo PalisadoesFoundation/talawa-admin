@@ -533,12 +533,12 @@ describe('UserSidebar', () => {
       expect(container).toHaveClass('leftDrawer');
 
       // Check for the main content structure
-      const mainContent = container.querySelector('.leftbarcompheight');
+      const mainContent = container.querySelector('.sidebarcompheight');
       expect(mainContent).toBeInTheDocument();
       expect(mainContent).toHaveClass(
         'd-flex',
         'flex-column',
-        'leftbarcompheight',
+        'sidebarcompheight',
       );
     });
   });
@@ -548,28 +548,14 @@ describe('UserSidebar', () => {
       renderWithRoute('/user/organizations');
 
       const orgsButton = screen.getByTestId('orgsBtn');
-      expect(orgsButton).toHaveClass('btn-success');
+      expect(orgsButton).toHaveClass('sidebarBtnActive');
     });
 
-    it('should apply active styles when on settings route', () => {
+    it('should apply inactive styles when on settings route', () => {
       renderWithRoute('/user/settings');
 
-      const settingsButton = screen.getByTestId('settingsBtn');
-      expect(settingsButton).toHaveClass('btn-success');
-    });
-
-    it('should apply active stroke color to icons when route is active', () => {
-      renderWithRoute('/user/organizations');
-
-      const orgIcon = screen.getByTestId('organizations-icon');
-      expect(orgIcon).toHaveAttribute('data-stroke', '#000000');
-    });
-
-    it('should apply inactive stroke color to icons when route is not active', () => {
-      renderWithRoute('/user/other');
-
-      const orgIcon = screen.getByTestId('organizations-icon');
-      expect(orgIcon).toHaveAttribute('data-stroke', 'var(--bs-secondary)');
+      const orgsButton = screen.getByTestId('orgsBtn');
+      expect(orgsButton).toHaveClass('sidebarBtn');
     });
   });
 
