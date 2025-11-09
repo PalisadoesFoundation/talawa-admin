@@ -495,6 +495,9 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
+      - name: Install coverage merge tools
+        run: npm install --no-save nyc lcov-result-merger
+
       - name: Download all coverage artifacts
         id: download-artifacts
         continue-on-error: true
@@ -515,10 +518,6 @@ jobs:
             echo "artifacts_found=false" >> $GITHUB_OUTPUT
             echo "⚠️ No coverage artifacts found - tests may have been skipped"
           fi
-
-      - name: Install lcov-result-merger
-        if: steps.check-artifacts.outputs.artifacts_found == 'true'
-        run: npm install --no-save @vitest/coverage-istanbul nyc
 
       - name: Merge coverage reports
         if: steps.check-artifacts.outputs.artifacts_found == 'true'
@@ -606,8 +605,7 @@ jobs:
               fi
             done < lcov-files.txt
 
-            # Install and use lcov-result-merger as fallback
-            npm install --no-save lcov-result-merger
+            # Use lcov-result-merger as fallback
             npx lcov-result-merger "coverage-shards/*/lcov.info" ./coverage/vitest/lcov.info
           fi
 
