@@ -470,23 +470,6 @@ jobs:
         run: |
           npm run test:shard:coverage
 
-      #######################################################################
-      # DO NOT DELETE ANY references to env.CODECOV_UNIQUE_NAME in this
-      # section. They are required for accurate caluclations
-      #######################################################################
-      - name: Present and upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}-shard-${{ matrix.shard }}
-        if: steps.changed-files.outputs.any_changed == 'true'
-        uses: codecov/codecov-action@v5
-        with:
-          name: '${{env.CODECOV_UNIQUE_NAME}}-shard-${{ matrix.shard }}'
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
-          verbose: true
-          exclude: 'docs/'
-          gcov_ignore: 'docs/'
-          files: ./coverage/vitest/lcov.info
-          flags: vitest
-
       - name: Upload coverage artifact
         if: always() && steps.changed-files.outputs.any_changed == 'true'
         uses: actions/upload-artifact@v4
