@@ -17,7 +17,6 @@ pnpm-lock.yaml
 
 # testing
 coverage/
-coverage-shards/
 codecov
 
 # production
