@@ -622,16 +622,15 @@ jobs:
 
           # Count number of source files in merged coverage
           SF_COUNT=$(grep -c "^SF:" ./coverage/vitest/lcov.info || echo "0")
-          echo "� Number of files in merged coverage: $SF_COUNT"
+          echo "📊 Number of files in merged coverage: $SF_COUNT"
 
           if [ "$SF_COUNT" -lt 100 ]; then
             echo "⚠️ WARNING: Only $SF_COUNT files in coverage (expected 300+)"
             echo "This might indicate incomplete coverage merge"
           fi
 
-          echo "�📋 First 30 lines of merged coverage:"
+          echo "📋 First 30 lines of merged coverage:"
           head -30 ./coverage/vitest/lcov.info
-
       - name: Present and upload merged coverage to Codecov
         if: steps.check-artifacts.outputs.artifacts_found == 'true'
         uses: codecov/codecov-action@v5
