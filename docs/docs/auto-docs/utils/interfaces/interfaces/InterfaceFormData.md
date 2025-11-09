@@ -4,7 +4,7 @@
 
 # Interface: InterfaceFormData
 
-Defined in: [src/utils/interfaces.ts:2284](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2284)
+Defined in: [src/utils/interfaces.ts:2292](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2292)
 
 InterfaceFormData
 
@@ -18,7 +18,7 @@ Defines the structure for form data.
 
 > **email**: `string`
 
-Defined in: [src/utils/interfaces.ts:2287](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2287)
+Defined in: [src/utils/interfaces.ts:2295](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2295)
 
 The email address.
 
@@ -28,7 +28,7 @@ The email address.
 
 > **firstName**: `string`
 
-Defined in: [src/utils/interfaces.ts:2285](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2285)
+Defined in: [src/utils/interfaces.ts:2293](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2293)
 
 The first name.
 
@@ -38,7 +38,7 @@ The first name.
 
 > **gender**: `string`
 
-Defined in: [src/utils/interfaces.ts:2289](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2289)
+Defined in: [src/utils/interfaces.ts:2297](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2297)
 
 The gender.
 
@@ -48,7 +48,7 @@ The gender.
 
 > **lastName**: `string`
 
-Defined in: [src/utils/interfaces.ts:2286](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2286)
+Defined in: [src/utils/interfaces.ts:2294](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2294)
 
 The last name.
 
@@ -58,6 +58,6 @@ The last name.
 
 > **phoneNo**: `string`
 
-Defined in: [src/utils/interfaces.ts:2288](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2288)
+Defined in: [src/utils/interfaces.ts:2296](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2296)
 
 The phone number.
