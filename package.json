@@ -74,6 +74,8 @@
     "test": "vitest run",
     "test:watch": "vitest --ui",
     "test:coverage": "vitest run --coverage",
+    "test:shard": "node scripts/run-shard.js",
+    "test:shard:coverage": "node scripts/run-shard.js --coverage",
     "eject": "react-scripts eject",
     "lint:check": "eslint \"**/*.{ts,tsx,graphql}\" --max-warnings=0 && python .github/workflows/scripts/eslint_disable_check.py",
     "lint:fix": "eslint --fix \"**/*.{ts,tsx,graphql}\"",
