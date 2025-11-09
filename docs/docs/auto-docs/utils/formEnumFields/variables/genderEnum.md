@@ -8,7 +8,7 @@
 
 Defined in: [src/utils/formEnumFields.ts:296](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/formEnumFields.ts#L296)
 
-## Type declaration
+## Type Declaration
 
 ### label
 

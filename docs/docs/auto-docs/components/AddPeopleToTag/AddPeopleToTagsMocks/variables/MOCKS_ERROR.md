@@ -8,7 +8,7 @@
 
 Defined in: [src/components/AddPeopleToTag/AddPeopleToTagsMocks.ts:277](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AddPeopleToTag/AddPeopleToTagsMocks.ts#L277)
 
-## Type declaration
+## Type Declaration
 
 ### error
 

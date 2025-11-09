@@ -8,7 +8,7 @@
 
 Defined in: [src/components/TagActions/TagActionsMocks.ts:279](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActionsMocks.ts#L279)
 
-## Type declaration
+## Type Declaration
 
 ### error
 

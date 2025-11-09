@@ -8,7 +8,7 @@
 
 Defined in: [src/components/EventListCard/Modal/EventListCardMocks.ts:255](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/Modal/EventListCardMocks.ts#L255)
 
-## Type declaration
+## Type Declaration
 
 ### error
 

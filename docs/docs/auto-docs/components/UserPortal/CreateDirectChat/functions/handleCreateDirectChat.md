@@ -24,7 +24,7 @@ Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:89]
 
 ### createChat
 
-(`options`?) => `Promise`\<`FetchResult`\<`unknown`\>\>(`arg0`) => `unknown`
+\{(`options?`): `Promise`\<`FetchResult`\<`unknown`\>\>; (`arg0`): `unknown`; \}
 
 ### organizationId
 
@@ -36,11 +36,11 @@ Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:89]
 
 ### chatsListRefetch
 
-(`variables`?) => `Promise`\<`ApolloQueryResult`\<`unknown`\>\>() => `Promise`\<`ApolloQueryResult`\<`unknown`\>\>
+\{(`variables?`): `Promise`\<`ApolloQueryResult`\<`unknown`\>\>; (): `Promise`\<`ApolloQueryResult`\<`unknown`\>\>; \}
 
 ### toggleCreateDirectChatModal
 
-() => `void`() => `void`
+\{(): `void`; (): `void`; \}
 
 ## Returns
 

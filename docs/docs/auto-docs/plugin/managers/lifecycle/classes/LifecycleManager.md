@@ -8,7 +8,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:12](https://github.com/PalisadoesF
 
 ## Constructors
 
-### new LifecycleManager()
+### Constructor
 
 > **new LifecycleManager**(`discoveryManager`, `extensionRegistry`, `eventManager`): `LifecycleManager`
 
@@ -114,7 +114,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:21](https://github.com/PalisadoesF
 
 ### getPluginComponent()
 
-> **getPluginComponent**(`pluginId`, `componentName`): `ComponentType`\<\{\}\>
+> **getPluginComponent**(`pluginId`, `componentName`): `ComponentType`\<\{ \}\>
 
 Defined in: [src/plugin/managers/lifecycle.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/lifecycle.ts#L32)
 
@@ -130,7 +130,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:32](https://github.com/PalisadoesF
 
 #### Returns
 
-`ComponentType`\<\{\}\>
+`ComponentType`\<\{ \}\>
 
 ***
 

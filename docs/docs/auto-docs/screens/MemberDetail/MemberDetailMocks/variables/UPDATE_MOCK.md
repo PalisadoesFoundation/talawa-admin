@@ -8,7 +8,7 @@
 
 Defined in: [src/screens/MemberDetail/MemberDetailMocks.ts:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/MemberDetailMocks.ts#L107)
 
-## Type declaration
+## Type Declaration
 
 ### request
 

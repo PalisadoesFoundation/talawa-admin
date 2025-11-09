@@ -8,7 +8,7 @@
 
 Defined in: [src/components/Venues/VenueCardMocks.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Venues/VenueCardMocks.ts#L13)
 
-## Type declaration
+## Type Declaration
 
 ### node
 

@@ -8,7 +8,7 @@
 
 Defined in: [src/screens/Users/Organization.mocks.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Users/Organization.mocks.ts#L68)
 
-## Type declaration
+## Type Declaration
 
 ### \_id
 
