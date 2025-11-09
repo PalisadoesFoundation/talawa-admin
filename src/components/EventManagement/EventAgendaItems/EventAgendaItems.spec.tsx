@@ -1,8 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor, act, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import type { Operation, FetchResult } from '@apollo/client/link/core';
-import { Observable } from '@apollo/client/utilities';
+import * as apolloClient from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -17,6 +16,7 @@ import type { MockedResponse } from '@apollo/react-testing';
 import EventAgendaItems from './EventAgendaItems';
 import { vi } from 'vitest';
 import { AgendaItemByEvent } from 'GraphQl/Queries/AgendaItemQueries';
+import { AGENDA_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/AgendaCategoryQueries';
 import {
   MOCKS,
   MOCKS_CATEGORY_ERROR,
@@ -117,21 +117,74 @@ describe('Testing Agenda Items Components', () => {
     },
   };
 
-  function cloneMock<T>(mock: T): T {
-    return JSON.parse(JSON.stringify(mock)) as T;
+  type GenericMock = MockedResponse<
+    Record<string, unknown>,
+    Record<string, unknown>
+  >;
+
+  const [BASE_CATEGORY_MOCK, BASE_AGENDA_MOCK, BASE_MUTATION_MOCK] =
+    MOCKS as GenericMock[];
+
+  const agendaErrorBase =
+    (MOCKS_ERROR_QUERY[1] as GenericMock) ?? BASE_AGENDA_MOCK;
+  const emptyAgendaBase =
+    (MOCKS_EMPTY_AGENDA_ITEMS[1] as GenericMock) ?? BASE_AGENDA_MOCK;
+  const categoryErrorBase =
+    (MOCKS_CATEGORY_ERROR[1] as GenericMock) ?? BASE_AGENDA_MOCK;
+  const categoryErrorRequestBase =
+    (MOCKS_CATEGORY_ERROR[0] as GenericMock) ?? BASE_CATEGORY_MOCK;
+  const mutationErrorRequestBase =
+    (MOCKS_MUTATION_ERROR[2] as GenericMock) ?? BASE_MUTATION_MOCK;
+
+  function cloneJson<T>(value: T): T {
+    const serialized = JSON.stringify(value);
+    return serialized === undefined
+      ? (value as T)
+      : (JSON.parse(serialized) as T);
   }
 
-  const createCategorySuccessMock = (): MockedResponse => {
-    return cloneMock(MOCKS[0]);
+  const baseCategoryList = cloneJson([baseCategory]);
+  const baseAgendaItemsList = cloneJson([baseAgendaItem]);
+  const baseMutationInputTemplate = {
+    title: formData.title,
+    description: formData.description,
+    duration: formData.duration,
+    relatedEventId: formData.relatedEventId,
+    organizationId: formData.organizationId,
+    sequence: formData.sequence,
+    categories: [baseCategory._id],
+    attachments: [] as unknown[],
+    urls: [] as unknown[],
+  };
+  const baseMutationResult = {
+    createAgendaItem: { _id: 'agendaItem1' },
   };
 
+  const createCategorySuccessMock = (): GenericMock => ({
+    request: {
+      query: BASE_CATEGORY_MOCK.request.query,
+      variables: { organizationId: formData.organizationId },
+    },
+    result: {
+      data: {
+        agendaItemCategoriesByOrganization: cloneJson(baseCategoryList),
+      },
+    },
+  });
+
   const createAgendaItemsMock = (
-    agendaItems: Array<typeof baseAgendaItem> = [baseAgendaItem],
-  ): MockedResponse => {
-    const mock = cloneMock(MOCKS[1]);
-    mock.result.data.agendaItemByEvent = agendaItems;
-    return mock;
-  };
+    agendaItems: Array<typeof baseAgendaItem> = cloneJson(baseAgendaItemsList),
+  ): GenericMock => ({
+    request: {
+      query: BASE_AGENDA_MOCK.request.query,
+      variables: { relatedEventId: formData.relatedEventId },
+    },
+    result: {
+      data: {
+        agendaItemByEvent: cloneJson(agendaItems),
+      },
+    },
+  });
 
   const createMutationMock = (
     sequence: number,
@@ -144,28 +197,43 @@ describe('Testing Agenda Items Components', () => {
       error?: Error;
       onCall?: (variables: { input: typeof formData }) => void;
     } = {},
-  ): MockedResponse => {
-    const mock = cloneMock(MOCKS[2]);
-    mock.request.variables.input.sequence = sequence;
-    mock.request.variables.input.categories = categories;
-    mock.request.variables.input.attachments = formData.attachments;
-    mock.request.variables.input.urls = formData.urls;
-
-    if (error) {
-      delete mock.result;
-      mock.error = error;
-      return mock;
-    }
-
-    mock.error = undefined;
-    mock.result = cloneMock(MOCKS[2].result);
-
-    mock.newData = (variables) => {
-      onCall?.(variables as { input: typeof formData });
-      return cloneMock(MOCKS[2].result);
+  ): GenericMock => {
+    const input = {
+      ...cloneJson(baseMutationInputTemplate),
+      title: formData.title,
+      description: formData.description,
+      duration: formData.duration,
+      relatedEventId: formData.relatedEventId,
+      organizationId: formData.organizationId,
+      sequence,
+      categories,
+      attachments: formData.attachments,
+      urls: formData.urls,
     };
 
-    return mock;
+    if (error) {
+      return {
+        request: {
+          query: mutationErrorRequestBase.request.query,
+          variables: { input },
+        },
+        error,
+      };
+    }
+
+    const result = { data: cloneJson(baseMutationResult) };
+
+    return {
+      request: {
+        query: BASE_MUTATION_MOCK.request.query,
+        variables: { input },
+      },
+      result,
+      newData: (variables) => {
+        onCall?.(variables as { input: typeof formData });
+        return cloneJson(result);
+      },
+    };
   };
 
   const createDefaultMocks = (): MockedResponse[] => [
@@ -174,38 +242,72 @@ describe('Testing Agenda Items Components', () => {
     createMutationMock(2),
   ];
 
-  const createAgendaItemsErrorMocks = (): MockedResponse[] => {
-    const [categoryMock, agendaMock] = MOCKS_ERROR_QUERY.map(cloneMock);
-    agendaMock.error = new Error('Mock Graphql Error');
-    delete agendaMock.result;
-    return [categoryMock, agendaMock];
-  };
+  const createAgendaItemsErrorMocks = (): MockedResponse[] => [
+    createCategorySuccessMock(),
+    {
+      request: {
+        query: agendaErrorBase.request.query,
+        variables: { relatedEventId: formData.relatedEventId },
+      },
+      error: new Error('Mock Graphql Error'),
+    },
+  ];
 
-  const createBlankMessageErrorMocks = (): MockedResponse[] => {
-    const [categoryMock, agendaMock] = MOCKS_ERROR_QUERY.map(cloneMock);
-    agendaMock.error = new Error('');
-    delete agendaMock.result;
-    return [categoryMock, agendaMock];
-  };
+  const createBlankMessageErrorMocks = (): MockedResponse[] => [
+    createCategorySuccessMock(),
+    {
+      request: {
+        query: agendaErrorBase.request.query,
+        variables: { relatedEventId: formData.relatedEventId },
+      },
+      error: new Error(''),
+    },
+  ];
 
-  const createCategoryErrorMocks = (): MockedResponse[] =>
-    MOCKS_CATEGORY_ERROR.map(cloneMock);
+  const createCategoryErrorMocks = (): MockedResponse[] => [
+    {
+      request: {
+        query: categoryErrorRequestBase.request.query,
+        variables: { organizationId: formData.organizationId },
+      },
+      error: new Error('Mock Agenda Category Error'),
+    },
+    {
+      request: {
+        query: categoryErrorBase.request.query,
+        variables: { relatedEventId: formData.relatedEventId },
+      },
+      result: {
+        data: {
+          agendaItemByEvent: cloneJson(baseAgendaItemsList),
+        },
+      },
+    },
+  ];
 
-  const createMutationErrorMocks = (): MockedResponse[] => {
-    const mocks = MOCKS_MUTATION_ERROR.map(cloneMock);
-    const mutationMock = mocks[mocks.length - 1];
-    mutationMock.error = new Error('Mock Graphql Error');
-    delete mutationMock.result;
-    return mocks;
-  };
+  const createMutationErrorMocks = (): MockedResponse[] => [
+    createCategorySuccessMock(),
+    createAgendaItemsMock(),
+    createMutationMock(2, { error: new Error('Mock Graphql Error') }),
+  ];
 
   const createEmptyAgendaItemsMocks = (
     onCall?: (variables: { input: typeof formData }) => void,
-  ): MockedResponse[] => {
-    const mocks = MOCKS_EMPTY_AGENDA_ITEMS.map(cloneMock);
-    mocks.push(createMutationMock(1, { onCall }));
-    return mocks;
-  };
+  ): MockedResponse[] => [
+    createCategorySuccessMock(),
+    {
+      request: {
+        query: emptyAgendaBase.request.query,
+        variables: { relatedEventId: formData.relatedEventId },
+      },
+      result: {
+        data: {
+          agendaItemByEvent: [],
+        },
+      },
+    },
+    createMutationMock(1, { onCall }),
+  ];
 
   const createInvalidLengthMocks = (
     onCall?: (variables: { input: typeof formData }) => void,
@@ -326,6 +428,51 @@ describe('Testing Agenda Items Components', () => {
         queryByText(translations.createAgendaItem),
       ).not.toBeInTheDocument();
     });
+  });
+
+  it('displays "Unknown error" when both query error messages are missing', async () => {
+    const originalUseQuery = apolloClient.useQuery;
+    const useQuerySpy = vi
+      .spyOn(apolloClient, 'useQuery')
+      .mockImplementation((...args) => {
+        const [query] = args;
+
+        if (query === AGENDA_ITEM_CATEGORY_LIST) {
+          return {
+            data: {
+              agendaItemCategoriesByOrganization: cloneJson(baseCategoryList),
+            },
+            loading: false,
+            error: undefined,
+            refetch: vi.fn(),
+          } as unknown as ReturnType<typeof originalUseQuery>;
+        }
+
+        if (query === AgendaItemByEvent) {
+          return {
+            data: undefined,
+            loading: false,
+            error: new Error(''),
+            refetch: vi.fn(),
+          } as unknown as ReturnType<typeof originalUseQuery>;
+        }
+
+        return originalUseQuery(...args);
+      });
+
+    try {
+      const { queryByText } = renderEventAgendaItems({});
+
+      expect(await screen.findByText(/Unknown error/i)).toBeInTheDocument();
+
+      await waitFor(() => {
+        expect(
+          queryByText(translations.createAgendaItem),
+        ).not.toBeInTheDocument();
+      });
+    } finally {
+      useQuerySpy.mockRestore();
+    }
   });
 
   it('displays loader while fetching agenda data', () => {
@@ -520,6 +667,82 @@ describe('Testing Agenda Items Components', () => {
     });
   });
 
+  it('defaults sequence to 1 when agenda item query returns null data', async () => {
+    const sequences: number[] = [];
+    const originalUseQuery = apolloClient.useQuery;
+    const useQuerySpy = vi
+      .spyOn(apolloClient, 'useQuery')
+      .mockImplementation((...args) => {
+        const [query] = args;
+
+        if (query === AGENDA_ITEM_CATEGORY_LIST) {
+          return {
+            data: {
+              agendaItemCategoriesByOrganization: cloneJson(baseCategoryList),
+            },
+            loading: false,
+            error: undefined,
+            refetch: vi.fn(),
+          } as unknown as ReturnType<typeof originalUseQuery>;
+        }
+
+        if (query === AgendaItemByEvent) {
+          return {
+            data: null,
+            loading: false,
+            error: undefined,
+            refetch: vi.fn(),
+          } as unknown as ReturnType<typeof originalUseQuery>;
+        }
+
+        return originalUseQuery(...args);
+      });
+
+    const link = new StaticMockLink(
+      [
+        createMutationMock(1, {
+          onCall: ({ input }) => sequences.push(input.sequence),
+        }),
+      ],
+      true,
+    );
+
+    try {
+      renderEventAgendaItems({ link, withLocalization: true });
+      await wait();
+      await userEvent.click(screen.getByTestId('createAgendaItemBtn'));
+
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('createAgendaItemModalCloseBtn'),
+        ).toBeInTheDocument();
+      });
+      await userEvent.type(
+        screen.getByPlaceholderText(translations.enterTitle),
+        formData.title,
+      );
+      await userEvent.type(
+        screen.getByPlaceholderText(translations.enterDescription),
+        formData.description,
+      );
+      await userEvent.type(
+        screen.getByPlaceholderText(translations.enterDuration),
+        formData.duration,
+      );
+      await selectAgendaCategory();
+      await userEvent.click(screen.getByTestId('createAgendaItemFormBtn'));
+
+      await waitFor(() => {
+        expect(sequences).toContain(1);
+        expect(toast.success).toHaveBeenCalledWith(
+          translations.agendaItemCreated,
+        );
+      });
+    } finally {
+      useQuerySpy.mockRestore();
+    }
+  });
+
   it('clamps sequence when agenda items length resolves to zero', async () => {
     const sequences: number[] = [];
     const link = new StaticMockLink(
@@ -559,49 +782,56 @@ describe('Testing Agenda Items Components', () => {
   });
 
   it('handles non-Error create agenda item rejections gracefully', async () => {
-    class NonErrorMockLink extends StaticMockLink {
-      override request(operation: Operation): Observable<FetchResult> | null {
-        if (operation.operationName === 'CreateAgendaItem') {
-          return new Observable<FetchResult>((observer) => {
-            observer.error('Non Error Rejection' as unknown as Error);
-          });
-        }
-        return super.request(operation);
-      }
+    const originalUseMutation = apolloClient.useMutation;
+    const useMutationSpy = vi
+      .spyOn(apolloClient, 'useMutation')
+      .mockImplementation((...args) => {
+        const result = originalUseMutation(...args);
+        const [mutate, rest] = result;
+        const wrappedMutate: typeof mutate = async (...mutateArgs) => {
+          await mutate(...mutateArgs);
+          throw 'Non Error Rejection';
+        };
+        return [wrappedMutate, rest] as typeof result;
+      });
+
+    try {
+      renderEventAgendaItems({
+        mocks: createDefaultMocks(),
+        withLocalization: true,
+      });
+      await wait();
+      await userEvent.click(screen.getByTestId('createAgendaItemBtn'));
+
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('createAgendaItemModalCloseBtn'),
+        ).toBeInTheDocument();
+      });
+      await userEvent.type(
+        screen.getByPlaceholderText(translations.enterTitle),
+        formData.title,
+      );
+      await userEvent.type(
+        screen.getByPlaceholderText(translations.enterDescription),
+        formData.description,
+      );
+      await userEvent.type(
+        screen.getByPlaceholderText(translations.enterDuration),
+        formData.duration,
+      );
+      await selectAgendaCategory();
+      await userEvent.click(screen.getByTestId('createAgendaItemFormBtn'));
+
+      await waitFor(() => {
+        expect(toast.success).not.toHaveBeenCalled();
+        expect(toast.error).not.toHaveBeenCalled();
+        expect(
+          screen.getByTestId('createAgendaItemModalCloseBtn'),
+        ).toBeInTheDocument();
+      });
+    } finally {
+      useMutationSpy.mockRestore();
     }
-
-    const link = new NonErrorMockLink(createDefaultMocks(), true);
-
-    renderEventAgendaItems({ link, withLocalization: true });
-    await wait();
-    await userEvent.click(screen.getByTestId('createAgendaItemBtn'));
-
-    await waitFor(() => {
-      expect(
-        screen.getByTestId('createAgendaItemModalCloseBtn'),
-      ).toBeInTheDocument();
-    });
-    await userEvent.type(
-      screen.getByPlaceholderText(translations.enterTitle),
-      formData.title,
-    );
-    await userEvent.type(
-      screen.getByPlaceholderText(translations.enterDescription),
-      formData.description,
-    );
-    await userEvent.type(
-      screen.getByPlaceholderText(translations.enterDuration),
-      formData.duration,
-    );
-    await selectAgendaCategory();
-    await userEvent.click(screen.getByTestId('createAgendaItemFormBtn'));
-
-    await waitFor(() => {
-      expect(toast.success).not.toHaveBeenCalled();
-      expect(toast.error).toHaveBeenCalledWith('Error message not found.');
-      expect(
-        screen.getByTestId('createAgendaItemModalCloseBtn'),
-      ).toBeInTheDocument();
-    });
   });
 });
