@@ -105,6 +105,7 @@ const UserSidebarOrg = ({
       >
         {({ isActive }) => (
           <button
+            type="button"
             className={
               isActive
                 ? styles.leftDrawerActiveButton
@@ -223,6 +224,7 @@ const UserSidebarOrg = ({
         className={`d-flex align-items-center ${hideDrawer ? 'justify-content-center' : 'justify-content-between'}`}
       >
         <button
+          type="button"
           className={`d-flex align-items-center btn p-0 border-0 bg-transparent`}
           data-testid="toggleBtn"
           onClick={() => {
@@ -234,7 +236,6 @@ const UserSidebarOrg = ({
               setHideDrawer(!hideDrawer);
             }
           }}
-          role="button"
           tabIndex={0}
         >
           <FaBars

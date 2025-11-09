@@ -110,11 +110,11 @@ const userSidebar = ({
 
           return (
             <button
+              type="button"
               className={`${
                 isActive ? styles.sidebarBtnActive : styles.sidebarBtn
               }`}
               data-testid={testId}
-              type="button"
             >
               <div className={styles.iconWrapper}>{styledIcon}</div>
               {!hideDrawer && label}
