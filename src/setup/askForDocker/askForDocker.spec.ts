@@ -85,20 +85,6 @@ describe('askAndUpdateTalawaApiUrl', () => {
     );
   });
 
-  test('should skip setup when user declines', async () => {
-    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
-      shouldSetTalawaApiUrlResponse: false,
-    });
-
-    await askAndUpdateTalawaApiUrl();
-
-    expect(updateEnvFile).toHaveBeenCalledWith('REACT_APP_TALAWA_URL', '');
-    expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_BACKEND_WEBSOCKET_URL',
-      '',
-    );
-  });
-
   test('should handle invalid URL protocol (ftp)', async () => {
     (askForTalawaApiUrl as Mock).mockResolvedValue('ftp://example.com');
     vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
@@ -109,17 +95,6 @@ describe('askAndUpdateTalawaApiUrl', () => {
     expect(updateEnvFile).not.toHaveBeenCalledWith(
       'REACT_APP_TALAWA_URL',
       expect.stringContaining('ftp://'),
-    );
-  });
-
-  test('should clear Docker URL when useDocker=true and user declines', async () => {
-    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
-      shouldSetTalawaApiUrlResponse: false,
-    });
-    await askAndUpdateTalawaApiUrl(true);
-    expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_DOCKER_TALAWA_URL',
-      '',
     );
   });
 

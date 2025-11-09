@@ -95,12 +95,6 @@ export const askAndUpdateTalawaApiUrl = async (
         }
         updateEnvFile('REACT_APP_DOCKER_TALAWA_URL', dockerUrl);
       }
-    } else {
-      updateEnvFile('REACT_APP_TALAWA_URL', '');
-      updateEnvFile('REACT_APP_BACKEND_WEBSOCKET_URL', '');
-      if (useDocker) {
-        updateEnvFile('REACT_APP_DOCKER_TALAWA_URL', '');
-      }
     }
   } catch (error) {
     console.error('Error setting up Talawa API URL:', error);
