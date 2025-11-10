@@ -43,6 +43,8 @@
   "confirmPassword": "确认密码",
   "forgotPassword": "忘记密码 ？",
   "talawaAdminPortal": "塔拉瓦管理门户",
+  "adminPortal": "管理门户",
+  "userPortal": "用户门户",
   "address": "地址",
   "location": "地点",
   "enterLocation": "输入位置",

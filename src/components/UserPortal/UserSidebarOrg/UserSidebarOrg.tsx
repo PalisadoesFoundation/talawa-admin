@@ -37,23 +37,16 @@
  * ```
  *
  */
-// import { useQuery } from '@apollo/client';
-// import { WarningAmberOutlined } from '@mui/icons-material';
-// import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
 import IconComponent from 'components/IconComponent/IconComponent';
 import React, { useCallback, useMemo } from 'react';
 // import React, { useEffect, useState } from 'react';
-import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router';
 import type { TargetsType } from 'state/reducers/routesReducer';
-// import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
-// import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import PluginLogo from 'assets/svgs/plugins.svg?react';
 import styles from 'style/app-fixed.module.css';
-// import Avatar from 'components/Avatar/Avatar';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from './../../SignOut/SignOut';
 import { usePluginDrawerItems } from 'plugin';
@@ -73,7 +66,6 @@ const UserSidebarOrg = ({
   hideDrawer,
   setHideDrawer,
 }: InterfaceUserSidebarOrgProps): JSX.Element => {
-  const { t } = useTranslation('translation', { keyPrefix: 'userSidebarOrg' });
   const { t: tCommon } = useTranslation('common');
 
   // State for managing dropdown visibility
@@ -105,9 +97,13 @@ const UserSidebarOrg = ({
         onClick={handleLinkClick}
       >
         {({ isActive }) => (
-          <Button
-            variant=""
-            className={isActive === true ? styles.activeItem : ''}
+          <button
+            type="button"
+            className={
+              isActive
+                ? styles.leftDrawerActiveButton
+                : styles.leftDrawerInactiveButton
+            }
           >
             <div className={styles.iconWrapper}>
               {item.icon ? (
@@ -125,7 +121,7 @@ const UserSidebarOrg = ({
               )}
             </div>
             {item.label}
-          </Button>
+          </button>
         )}
       </NavLink>
     ),
@@ -140,23 +136,31 @@ const UserSidebarOrg = ({
           return url ? (
             <NavLink to={url} key={name} onClick={handleLinkClick}>
               {({ isActive }) => (
-                <Button
-                  key={name}
-                  variant=""
-                  className={isActive === true ? styles.activeItem : ''}
+                <button
+                  type="button"
+                  style={{ height: '40px' }}
+                  data-testid={name}
+                  className={`
+                    ${
+                      isActive
+                        ? styles.leftDrawerActiveButton
+                        : styles.leftDrawerInactiveButton
+                    }
+                      ${styles.talawaText} ${styles.sidebarText}
+                  `}
                 >
-                  <div className={styles.iconWrapper}>
-                    <IconComponent
-                      name={name}
-                      fill={
-                        isActive === true ? '#000000' : 'var(--bs-secondary)'
-                      }
-                    />
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <div className={styles.iconWrapper}>
+                      <IconComponent
+                        name={name}
+                        fill={
+                          isActive ? 'var(--bs-black)' : 'var(--bs-secondary)'
+                        }
+                      />
+                    </div>
+                    {!hideDrawer && tCommon(name)}
                   </div>
-                  {!hideDrawer && (
-                    <div style={{ whiteSpace: 'nowrap' }}>{tCommon(name)}</div>
-                  )}
-                </Button>
+                </button>
               )}
             </NavLink>
           ) : (
@@ -181,7 +185,9 @@ const UserSidebarOrg = ({
                 color: 'var(--bs-secondary)',
               }}
             >
-              {tCommon('plugins')}
+              <h5 className={`${styles.titleHeader} text-secondary`}>
+                {!hideDrawer && tCommon('plugins')}
+              </h5>
             </h4>
             {pluginDrawerItems?.map((item) => renderPluginDrawerItem(item))}
           </>
@@ -200,120 +206,127 @@ const UserSidebarOrg = ({
   );
 
   return (
-    <>
+    <div
+      className={`${styles.leftDrawer} 
+        ${hideDrawer ? styles.collapsedDrawer : styles.expandedDrawer}`}
+      style={{ backgroundColor: '#f0f7fb' }}
+      data-testid="leftDrawerContainer"
+    >
+      {/* Branding Section */}
       <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          marginRight: hideDrawer ? '20px' : '200px',
-        }}
-        className={`${styles.leftDrawer} ${hideDrawer ? styles.collapsedDrawer : ''}`}
-        data-testid="leftDrawerContainer"
+        className={`d-flex align-items-center ${hideDrawer ? 'justify-content-center' : 'justify-content-between'}`}
       >
-        <div>
-          {/* Branding Section */}
-          <div
-            className={`d-flex align-items-center ${hideDrawer ? 'justify-content-center' : 'justify-content-between'}`}
-          >
-            <button
-              className={`d-flex align-items-center btn p-0 border-0 bg-transparent`}
-              data-testid="toggleBtn"
-              onClick={() => {
-                setHideDrawer(!hideDrawer);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  setHideDrawer(!hideDrawer);
-                }
-              }}
-              role="button"
-              tabIndex={0}
-            >
-              <FaBars
-                className={styles.hamburgerIcon}
-                aria-label="Toggle sidebar"
-                size={22}
-                style={{
-                  cursor: 'pointer',
-                  height: '38px',
-                  marginLeft: hideDrawer ? '0px' : '10px',
-                }}
-              />
-            </button>
-            <div
-              style={{
-                display: hideDrawer ? 'none' : 'flex',
-                alignItems: 'center',
-                paddingRight: '40px',
-              }}
-            >
-              <TalawaLogo className={styles.talawaLogo} />
-              <div className={`${styles.talawaText} ${styles.sidebarText}`}>
-                {t('talawaUserPortal')}
-              </div>
-            </div>
+        <button
+          type="button"
+          className={`d-flex align-items-center btn p-0 border-0 bg-transparent`}
+          data-testid="toggleBtn"
+          onClick={() => {
+            setHideDrawer(!hideDrawer);
+          }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setHideDrawer(!hideDrawer);
+            }
+          }}
+          tabIndex={0}
+        >
+          <FaBars
+            className={styles.hamburgerIcon}
+            aria-label="Toggle sidebar"
+            size={22}
+            style={{
+              cursor: 'pointer',
+              height: '38px',
+              marginLeft: hideDrawer ? '0px' : '10px',
+            }}
+          />
+        </button>
+        <div
+          style={{
+            display: hideDrawer ? 'none' : 'flex',
+            alignItems: 'center',
+            marginRight: 'auto',
+            paddingLeft: '5px',
+          }}
+        >
+          <TalawaLogo className={styles.talawaLogo} />
+          <div className={`${styles.talawaText} ${styles.sidebarText}`}>
+            {tCommon('userPortal')}
           </div>
-          {/* Options List */}
-          {!hideDrawer ? (
-            <h5 className={styles.titleHeader}>{tCommon('menu')}</h5>
-          ) : (
-            <div style={{ paddingBottom: '40px' }}></div>
-          )}{' '}
-          {drawerContent}
-        </div>
-
-        {/* Organization Section */}
-        {/* <div className={styles.organizationContainer}>
-          {loading ? (
-            <>
-              <button
-                className={`${styles.profileContainer} shimmer`}
-                data-testid="orgBtn"
-              />
-            </>
-          ) : organization == undefined ? (
-            <>
-              <button
-                className={`${styles.profileContainer} bg-danger text-start text-white`}
-                disabled
-              >
-                <div className="px-3">
-                  <WarningAmberOutlined />
-                </div>
-                Error Occured while loading the Organization
-              </button>
-            </>
-          ) : (
-            <button className={styles.profileContainer} data-testid="OrgBtn">
-              <div className={styles.imageContainer}>
-                {organization.image ? (
-                  <img src={organization.image} alt={`profile picture`} />
-                ) : (
-                  <Avatar
-                    name={organization.name}
-                    alt={'Dummy Organization Picture'}
-                  />
-                )}
-              </div>
-              <div className={styles.profileText}>
-                <span className={styles.primaryText}>{organization.name}</span>
-                <span className={styles.secondaryText}>
-                  {organization.address.city}
-                </span>
-              </div>
-              <AngleRightIcon fill={'var(--bs-secondary)'} />
-            </button>
-          )}
-        </div> */}
-
-        <div className={styles.userSidebarOrgFooter}>
-          {!hideDrawer && <ProfileCard />}
-          <SignOut hideDrawer={hideDrawer} />
         </div>
       </div>
-    </>
+
+      {/* User Profile Section - Top position like UserSidebar */}
+      {!hideDrawer && (
+        <div
+          style={{
+            backgroundColor: '#e8f4f8',
+            padding: '10px',
+            borderRadius: '8px',
+            margin: '10px',
+          }}
+        >
+          <ProfileCard />
+        </div>
+      )}
+
+      {/* Options List */}
+      <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+        {drawerContent}
+      </div>
+
+      {/* Organization Section */}
+      {/* <div className={styles.organizationContainer}>
+        {loading ? (
+          <>
+            <button
+              className={`${styles.profileContainer} shimmer`}
+              data-testid="orgBtn"
+            />
+          </>
+        ) : organization == undefined ? (
+          <>
+            <button
+              className={`${styles.profileContainer} bg-danger text-start text-white`}
+              disabled
+            >
+              <div className="px-3">
+                <WarningAmberOutlined />
+              </div>
+              Error Occured while loading the Organization
+            </button>
+          </>
+        ) : (
+          <button className={styles.profileContainer} data-testid="OrgBtn">
+            <div className={styles.imageContainer}>
+              {organization.image ? (
+                <img src={organization.image} alt={`profile picture`} />
+              ) : (
+                <Avatar
+                  name={organization.name}
+                  alt={'Dummy Organization Picture'}
+                />
+              )}
+            </div>
+            <div className={styles.profileText}>
+              <span className={styles.primaryText}>{organization.name}</span>
+              <span className={styles.secondaryText}>
+                {organization.address.city}
+              </span>
+            </div>
+            <AngleRightIcon fill={'var(--bs-secondary)'} />
+          </button>
+        )}
+      </div> */}
+
+      <div className={styles.userSidebarOrgFooter}>
+        <div style={{ display: hideDrawer ? 'none' : 'flex' }}>
+          <ProfileCard />
+        </div>
+        <SignOut hideDrawer={hideDrawer} />
+      </div>
+    </div>
   );
 };
 

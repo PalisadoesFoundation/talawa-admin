@@ -362,7 +362,7 @@ test('Screen should be rendered properly', async () => {
   );
 
   await wait();
-  expect(screen.getByText('My Organizations')).toBeInTheDocument();
+  expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
 });
 
 test('Search works properly', async () => {
@@ -592,8 +592,8 @@ test('Testing sidebar when the screen size is less than or equal to 820px', asyn
   );
 
   await waitFor(() => {
-    expect(screen.getByText('My Organizations')).toBeInTheDocument();
-    expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
+    expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
+    expect(screen.getByText('User Portal')).toBeInTheDocument();
   });
 
   await act(async () => {
