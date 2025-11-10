@@ -54,6 +54,7 @@ interface IMockedResponse {
 const mockT = vi.fn((key: string) => {
   const translations: Record<string, string> = {
     talawaAdminPortal: 'Talawa Admin Portal',
+    adminPortal: 'Admin Portal',
     menu: 'Menu',
     plugins: 'Plugins',
     Dashboard: 'Dashboard',
@@ -340,8 +341,7 @@ describe('LeftDrawerOrg', () => {
 
       expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
       expect(screen.getByTestId('talawa-logo')).toBeInTheDocument();
-      expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
-      expect(screen.getByText('Menu')).toBeInTheDocument();
+      expect(screen.getByText('Admin Portal')).toBeInTheDocument();
 
       await waitFor(() => {
         expect(screen.getByTestId('OrgBtn')).toBeInTheDocument();
@@ -833,8 +833,7 @@ describe('LeftDrawerOrg', () => {
     it('should use correct translation keys', () => {
       renderComponent();
 
-      expect(mockT).toHaveBeenCalledWith('talawaAdminPortal');
-      expect(mockT).toHaveBeenCalledWith('menu');
+      expect(mockT).toHaveBeenCalledWith('adminPortal');
       expect(mockT).toHaveBeenCalledWith('Dashboard');
       expect(mockT).toHaveBeenCalledWith('Members');
       expect(mockT).toHaveBeenCalledWith('Events');
@@ -880,7 +879,7 @@ describe('LeftDrawerOrg', () => {
 
       renderComponent(propsWithEmptyTargets);
 
-      expect(screen.getByText('Menu')).toBeInTheDocument();
+      expect(screen.getByText('Admin Portal')).toBeInTheDocument();
       expect(screen.queryByText('Dashboard')).not.toBeInTheDocument();
     });
 
