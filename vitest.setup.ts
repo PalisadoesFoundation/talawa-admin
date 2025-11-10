@@ -1,10 +1,11 @@
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
-import { vi } from 'vitest';
+import { afterEach, vi } from 'vitest';
 
 // Basic cleanup after each test
 afterEach(() => {
   cleanup();
+  vi.clearAllMocks();
 });
 
 // Global mocks for URL API (needed for file upload tests)
