@@ -1,6 +1,26 @@
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
-import { afterEach, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, vi } from 'vitest';
+
+// Simple console error handler for React 18 and Apollo deprecation warnings
+const originalError = console.error;
+beforeAll(() => {
+  console.error = (...args: unknown[]) => {
+    const firstArg = args[0];
+    if (
+      typeof firstArg === 'string' &&
+      (/Warning: ReactDOM.render is no longer supported in React 18./.test(
+        firstArg,
+      ) ||
+        /Please remove the `addTypename` option from MockedProvider/.test(
+          firstArg,
+        ))
+    ) {
+      return; // Suppress known deprecation warnings (to be fixed in follow-up issues)
+    }
+    originalError.call(console, ...args);
+  };
+});
 
 // Basic cleanup after each test
 afterEach(() => {
@@ -24,27 +44,6 @@ if (typeof HTMLFormElement.prototype.requestSubmit === 'undefined') {
     }
   };
 }
-
-// Simple console error handler for React 18 and Apollo deprecation warnings
-const originalError = console.error;
-beforeAll(() => {
-  console.error = (...args: unknown[]) => {
-    const firstArg = args[0];
-    if (
-      typeof firstArg === 'string' &&
-      (/Warning: ReactDOM.render is no longer supported in React 18./.test(
-        firstArg,
-      ) ||
-        /Please remove the `addTypename` option from MockedProvider/.test(
-          firstArg,
-        ))
-    ) {
-      return; // Suppress known deprecation warnings (to be fixed in follow-up issues)
-    }
-    originalError.call(console, ...args);
-  };
-});
-
 afterAll(() => {
   console.error = originalError;
 });
