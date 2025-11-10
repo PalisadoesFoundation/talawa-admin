@@ -184,6 +184,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   // Query for paginated comments
   const shouldSkipComments = !showComments || !userId;
   const {
+    data: commentsData,
     loading: commentsLoading,
     fetchMore: fetchMoreComments,
     refetch: refetchComments,
@@ -196,16 +197,18 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           userId: userId as string,
           first: 10,
         },
-    onCompleted: (data) => {
-      if (data?.post?.comments) {
-        const edges = data.post.comments.edges;
-        const pageInfo = data.post.comments.pageInfo;
-        setComments(edges.map((edge: InterfaceCommentEdge) => edge.node));
-        setEndCursor(pageInfo.endCursor);
-        setHasNextPage(pageInfo.hasNextPage);
-      }
-    },
   });
+
+  React.useEffect(() => {
+    if (!commentsData?.post?.comments) {
+      return;
+    }
+
+    const { edges, pageInfo } = commentsData.post.comments;
+    setComments(edges.map((edge: InterfaceCommentEdge) => edge.node));
+    setEndCursor(pageInfo.endCursor);
+    setHasNextPage(pageInfo.hasNextPage);
+  }, [commentsData]);
 
   const toggleComments = (): void => {
     setShowComments((prev) => !prev);
@@ -505,10 +508,10 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                     {loadingMoreComments ? (
                       <>
                         <CircularProgress size={16} sx={{ mr: 1 }} />
-                        {t('loadingComments', 'Loading more comments...')}
+                        {t('loadingComments')}
                       </>
                     ) : (
-                      t('loadMoreComments', 'Load more comments')
+                      t('loadMoreComments')
                     )}
                   </Button>
                 </Box>

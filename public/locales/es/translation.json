@@ -1085,6 +1085,8 @@
     "editPost": "Editar publicación",
     "viewComments": "Ver {{count}} comentarios",
     "hideComments": "Ocultar comentarios",
+    "loadingComments": "Cargando comentarios...",
+    "loadMoreComments": "Cargar más comentarios",
     "postedOn": "Publicado el {{date}}",
     "emptyCommentError": "Por favor ingrese un comentario antes de enviarlo.",
     "unexpectedError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo."
