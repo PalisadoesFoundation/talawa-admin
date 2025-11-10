@@ -2179,6 +2179,25 @@ export interface InterfaceComment {
   };
 }
 
+export interface InterfaceCommentEdge {
+  node: {
+    id: string;
+    body: string;
+    creator: {
+      id: string;
+      name: string;
+      avatarURL?: string | null;
+    };
+    createdAt: string;
+    upVotesCount: number;
+    downVotesCount: number;
+    hasUserVoted?: {
+      hasVoted: boolean;
+      voteType: VoteType;
+    };
+  };
+}
+
 /**
  * @interface InterfaceCreatePledge
  * @description Defines the structure for creating a pledge.

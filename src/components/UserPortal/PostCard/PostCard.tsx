@@ -49,7 +49,11 @@ import {
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import UserDefault from '../../../assets/images/defaultImg.png';
-import type { InterfaceComment, InterfacePostCard } from 'utils/interfaces';
+import type {
+  InterfaceComment,
+  InterfaceCommentEdge,
+  InterfacePostCard,
+} from 'utils/interfaces';
 import {
   CREATE_COMMENT_POST,
   DELETE_POST_MUTATION,
@@ -193,7 +197,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       if (data?.post?.comments) {
         const edges = data.post.comments.edges || [];
         const pageInfo = data.post.comments.pageInfo;
-        setComments(edges.map((edge: any) => edge.node));
+        setComments(edges.map((edge: InterfaceCommentEdge) => edge.node));
         setEndCursor(pageInfo.endCursor);
         setHasNextPage(pageInfo.hasNextPage);
       }
@@ -230,7 +234,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           // Update local state
           setComments((prevComments) => [
             ...prevComments,
-            ...newEdges.map((edge: any) => edge.node),
+            ...newEdges.map((edge: InterfaceCommentEdge) => edge.node),
           ]);
           setEndCursor(newPageInfo.endCursor);
           setHasNextPage(newPageInfo.hasNextPage);
