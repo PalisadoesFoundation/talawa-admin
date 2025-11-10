@@ -223,7 +223,10 @@ const userSidebar = ({
           </div>
         )}
 
-        <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
+        <div
+          className={`d-flex flex-column ${styles.sidebarcompheight}`}
+          data-testid="sidebar-main-content"
+        >
           <div className={styles.optionList}>
             {renderDrawerItem(
               '/user/organizations',

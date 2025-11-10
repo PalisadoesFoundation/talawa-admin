@@ -520,8 +520,9 @@ describe('UserSidebar', () => {
     it('should have ProfileDropdown in the bottom section', () => {
       renderComponent();
 
+      // Note: Multiple ProfileCards render by design - one at top (with blue bg) and one at bottom for navigation
       const profileDropdowns = screen.getAllByTestId('profile-dropdown');
-      expect(profileDropdowns.length).toBeGreaterThan(0);
+      expect(profileDropdowns.length).toBe(2);
     });
 
     it('should apply correct structure classes', () => {
@@ -531,9 +532,7 @@ describe('UserSidebar', () => {
       expect(container).toHaveClass('leftDrawer');
 
       // Check for the main content structure
-      const mainContent = container.querySelector(
-        '[class*="sidebarcompheight"]',
-      );
+      const mainContent = screen.getByTestId('sidebar-main-content');
       expect(mainContent).toBeInTheDocument();
     });
   });
