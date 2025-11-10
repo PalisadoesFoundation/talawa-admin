@@ -24,6 +24,7 @@ const mockTCommon = vi.fn((key: string) => {
   const translations: Record<string, string> = {
     menu: 'Menu',
     Settings: 'Settings',
+    userPortal: 'User Portal',
   };
   return translations[key] || key;
 });
@@ -222,7 +223,9 @@ describe('UserSidebar', () => {
       expect(screen.getByText('User Portal')).toBeInTheDocument();
       expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
       expect(screen.getByTestId('settingsBtn')).toBeInTheDocument();
-      expect(screen.getByTestId('profile-dropdown')).toBeInTheDocument();
+      // Multiple ProfileCards render by design - one at top (with blue bg) and one at bottom
+      const profileDropdowns = screen.getAllByTestId('profile-dropdown');
+      expect(profileDropdowns.length).toBe(2);
     });
 
     it('should render navigation links with correct text', () => {
