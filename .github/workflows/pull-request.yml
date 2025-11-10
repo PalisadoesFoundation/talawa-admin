@@ -495,6 +495,9 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
+      - name: Install coverage merge tools
+        run: npm install --no-save nyc lcov-result-merger
+
       - name: Download all coverage artifacts
         id: download-artifacts
         continue-on-error: true
@@ -515,10 +518,6 @@ jobs:
             echo "artifacts_found=false" >> $GITHUB_OUTPUT
             echo "⚠️ No coverage artifacts found - tests may have been skipped"
           fi
-
-      - name: Install lcov-result-merger
-        if: steps.check-artifacts.outputs.artifacts_found == 'true'
-        run: npm install --no-save @vitest/coverage-istanbul nyc
 
       - name: Merge coverage reports
         if: steps.check-artifacts.outputs.artifacts_found == 'true'
@@ -606,8 +605,7 @@ jobs:
               fi
             done < lcov-files.txt
 
-            # Install and use lcov-result-merger as fallback
-            npm install --no-save lcov-result-merger
+            # Use lcov-result-merger as fallback
             npx lcov-result-merger "coverage-shards/*/lcov.info" ./coverage/vitest/lcov.info
           fi
 
@@ -622,15 +620,33 @@ jobs:
 
           # Count number of source files in merged coverage
           SF_COUNT=$(grep -c "^SF:" ./coverage/vitest/lcov.info || echo "0")
-          echo "📊 Number of files in merged coverage: $SF_COUNT"
+          echo "� Number of files in merged coverage: $SF_COUNT"
 
           if [ "$SF_COUNT" -lt 100 ]; then
             echo "⚠️ WARNING: Only $SF_COUNT files in coverage (expected 300+)"
             echo "This might indicate incomplete coverage merge"
           fi
 
-          echo "📋 First 30 lines of merged coverage:"
+          echo "�📋 First 30 lines of merged coverage:"
           head -30 ./coverage/vitest/lcov.info
+
+      - name: Clean up individual shard coverage files
+        if: steps.check-artifacts.outputs.artifacts_found == 'true'
+        run: |
+          echo "🧹 Cleaning up individual shard coverage files..."
+          # Remove all individual coverage JSON files to prevent Codecov from finding them
+          # This ensures only the merged lcov.info is uploaded
+          find ./coverage -name "coverage-*.json" -type f -delete
+          find ./coverage -name "coverage-final.json" -type f -delete
+          rm -rf ./coverage/tmp ./.nyc_output 2>/dev/null || true
+
+          echo "✅ Cleanup complete. Remaining coverage files:"
+          find ./coverage -type f \( -name "*.info" -o -name "*.json" \)
+
+          echo ""
+          echo "📊 Final coverage file to upload:"
+          ls -lh ./coverage/vitest/lcov.info
+
       - name: Present and upload merged coverage to Codecov
         if: steps.check-artifacts.outputs.artifacts_found == 'true'
         uses: codecov/codecov-action@v5

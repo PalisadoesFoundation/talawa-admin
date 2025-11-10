@@ -2759,7 +2759,6 @@ describe('OrgPost Pinned Posts Functionality', () => {
             caption: 'New Pinned Post',
             organizationId: mockOrgId,
             isPinned: true,
-            attachments: [],
           },
         },
       },
