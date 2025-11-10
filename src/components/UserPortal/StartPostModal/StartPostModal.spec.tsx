@@ -204,7 +204,6 @@ describe('Testing StartPostModal Component: User Portal', () => {
             input: {
               caption: 'Test content',
               organizationId: '123',
-              attachments: [],
             },
           },
         },

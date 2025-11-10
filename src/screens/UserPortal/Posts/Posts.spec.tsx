@@ -24,6 +24,7 @@ import Home from './Posts';
 import useLocalStorage from 'utils/useLocalstorage';
 import { expect, describe, it, vi } from 'vitest';
 import { GraphQLError } from 'graphql';
+import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
 
 const { setItem } = useLocalStorage();
 
@@ -371,6 +372,144 @@ const MOCKS = [
     },
   },
 ];
+
+const pinnedPostsMock1 = {
+  request: {
+    query: ORGANIZATION_PINNED_POST_LIST,
+    variables: {
+      input: { id: 'orgId' },
+      first: 32,
+    },
+  },
+  result: {
+    data: {
+      organization: {
+        id: 'orgId',
+        postsCount: 1,
+        pinnedPosts: {
+          edges: [
+            {
+              node: {
+                id: 'pinned-close-test',
+                caption: 'Test Close Modal',
+                creator: {
+                  id: 'u1',
+                  name: 'User1',
+                  avatarURL: null,
+                },
+                commentsCount: 0,
+                pinnedAt: '2024-01-01T00:00:00.000Z',
+                downVotesCount: 0,
+                upVotesCount: 0,
+                hasUserVoted: {
+                  hasVoted: false,
+                  voteType: null,
+                },
+                createdAt: '2024-01-01T00:00:00.000Z',
+                comments: {
+                  edges: [],
+                  pageInfo: {
+                    startCursor: null,
+                    endCursor: null,
+                    hasNextPage: false,
+                    hasPreviousPage: false,
+                  },
+                },
+              },
+              cursor: 'c1',
+            },
+          ],
+          pageInfo: {
+            startCursor: 'c1',
+            endCursor: 'c1',
+            hasNextPage: false,
+            hasPreviousPage: false,
+          },
+        },
+      },
+    },
+  },
+};
+
+const pinnedPostsMock2 = {
+  request: {
+    query: ORGANIZATION_PINNED_POST_LIST,
+    variables: {
+      input: { id: 'orgId' },
+      first: 32,
+    },
+  },
+  result: {
+    data: {
+      organization: {
+        id: 'orgId',
+        postsCount: 2,
+        pinnedPosts: {
+          edges: [
+            {
+              node: {
+                id: 'pinned-1',
+                caption: 'First Pinned Post',
+                creator: {
+                  id: 'u1',
+                  name: 'User1',
+                  avatarURL: null,
+                },
+                commentsCount: 0,
+                pinnedAt: '2024-01-01T00:00:00.000Z',
+                upVotesCount: 0,
+                downVotesCount: 0,
+                createdAt: '2024-01-01T00:00:00.000Z',
+                comments: {
+                  edges: [],
+                  pageInfo: {
+                    startCursor: null,
+                    endCursor: null,
+                    hasNextPage: false,
+                    hasPreviousPage: false,
+                  },
+                },
+              },
+              cursor: 'c1',
+            },
+            {
+              node: {
+                id: 'pinned-2',
+                caption: 'Second Pinned Post',
+                creator: {
+                  id: 'u2',
+                  name: 'User2',
+                  avatarURL: null,
+                },
+                commentsCount: 0,
+                pinnedAt: '2024-01-02T00:00:00.000Z',
+                upVotesCount: 0,
+                downVotesCount: 0,
+                createdAt: '2024-01-02T00:00:00.000Z',
+                comments: {
+                  edges: [],
+                  pageInfo: {
+                    startCursor: null,
+                    endCursor: null,
+                    hasNextPage: false,
+                    hasPreviousPage: false,
+                  },
+                },
+              },
+              cursor: 'c2',
+            },
+          ],
+          pageInfo: {
+            startCursor: 'c1',
+            endCursor: 'c2',
+            hasNextPage: false,
+            hasPreviousPage: false,
+          },
+        },
+      },
+    },
+  },
+};
 
 const link = new StaticMockLink(MOCKS, true);
 
@@ -1927,6 +2066,8 @@ describe('PinnedPostCard Component Tests', () => {
           },
         },
       },
+      pinnedPostsMock1,
+      pinnedPostsMock2,
       createEmptyAdsMock(),
     ];
 
@@ -2022,6 +2163,7 @@ describe('PinnedPostCard Component Tests', () => {
           },
         },
       },
+      pinnedPostsMock1,
       createEmptyAdsMock(),
     ];
 
@@ -2338,6 +2480,7 @@ describe('PinnedPostCard Component Tests', () => {
           },
         },
       },
+      pinnedPostsMock1,
       createEmptyAdsMock(),
     ];
 

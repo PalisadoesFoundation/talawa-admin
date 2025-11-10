@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import PinnedPostsStory from './PinnedPostsStory';
-import type { InterfacePost } from 'types/Post/interface';
+import type { InterfacePost, InterfacePostEdge } from 'types/Post/interface';
 import AboutImg from 'assets/images/defaultImg.png';
 
 // Mock react-multi-carousel to render children directly
@@ -11,31 +11,37 @@ vi.mock('react-multi-carousel', () => ({
   ),
 }));
 
-const mockPosts: InterfacePost[] = [
+const mockPosts: InterfacePostEdge[] = [
   {
-    id: '1',
-    caption: 'Test Post 1',
-    createdAt: new Date().toISOString(),
-    pinned: true,
-    creator: {
-      id: 'u1',
-      name: 'Alice Johnson',
-      email: 'example@example.com',
-      avatarURL: 'http://example.com/alice.jpg',
-    },
-  } as InterfacePost,
+    node: {
+      id: '1',
+      caption: 'Test Post 1',
+      createdAt: new Date().toISOString(),
+      pinned: true,
+      creator: {
+        id: 'u1',
+        name: 'Alice Johnson',
+        email: 'example@example.com',
+        avatarURL: 'http://example.com/alice.jpg',
+      },
+    } as InterfacePost,
+    cursor: 'cursor-1',
+  },
   {
-    id: '2',
-    caption: 'Test Post 2',
-    createdAt: new Date().toISOString(),
-    pinned: true,
-    creator: {
-      id: 'u2',
-      name: 'Bob Smith',
-      email: 'example@example.com',
-      avatarURL: '',
-    },
-  } as InterfacePost,
+    node: {
+      id: '2',
+      caption: 'Test Post 2',
+      createdAt: new Date().toISOString(),
+      pinned: true,
+      creator: {
+        id: 'u2',
+        name: 'Bob Smith',
+        email: 'example@example.com',
+        avatarURL: '',
+      },
+    } as InterfacePost,
+    cursor: 'cursor-2',
+  },
 ];
 
 describe('PinnedPostsStory', () => {
@@ -69,24 +75,30 @@ describe('PinnedPostsStory', () => {
     fireEvent.click(aliceStory);
 
     expect(handleClick).toHaveBeenCalledTimes(1);
-    expect(handleClick).toHaveBeenCalledWith(mockPosts[0]);
+    expect(handleClick).toHaveBeenCalledWith(mockPosts[0].node);
   });
 
   it('renders Unknown when creator is missing', () => {
-    const posts = [{ ...mockPosts[0], creator: undefined }];
+    const posts = [
+      { ...mockPosts[0], node: { ...mockPosts[0].node, creator: undefined } },
+    ];
     render(<PinnedPostsStory pinnedPosts={posts} onStoryClick={vi.fn()} />);
     expect(screen.getByText('Unknown')).toBeInTheDocument();
   });
 
   it('uses default image when imageUrl is missing', () => {
-    const posts = [{ ...mockPosts[0], imageUrl: undefined }];
+    const posts = [
+      { ...mockPosts[0], node: { ...mockPosts[0].node, imageUrl: undefined } },
+    ];
     render(<PinnedPostsStory pinnedPosts={posts} onStoryClick={vi.fn()} />);
     const img = screen.getByRole('img') as HTMLImageElement;
     expect(img.src).toContain(AboutImg);
   });
 
   it('renders "Untitled" when caption is missing', () => {
-    const posts = [{ ...mockPosts[0], caption: undefined }];
+    const posts = [
+      { ...mockPosts[0], node: { ...mockPosts[0].node, caption: undefined } },
+    ];
     render(<PinnedPostsStory pinnedPosts={posts} onStoryClick={vi.fn()} />);
 
     // Strict check for the fallback text

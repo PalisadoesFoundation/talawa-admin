@@ -1,6 +1,13 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
+import { ApolloError } from '@apollo/client';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import PluginStore from './PluginStore';
 import * as pluginHooks from 'plugin/hooks';
@@ -12,6 +19,23 @@ import userEvent from '@testing-library/user-event';
 vi.mock('plugin/hooks');
 vi.mock('plugin/manager');
 vi.mock('plugin/services/AdminPluginFileService');
+
+// Mock UploadPluginModal to allow triggering onHide
+vi.mock('./UploadPluginModal', () => ({
+  default: ({ show, onHide }: { show: boolean; onHide: () => void }) => {
+    return show ? (
+      <div role="dialog" data-testid="upload-plugin-modal">
+        <button
+          type="button"
+          onClick={onHide}
+          data-testid="mock-close-upload-modal"
+        >
+          Close
+        </button>
+      </div>
+    ) : null;
+  },
+}));
 
 // Mock i18n translation
 vi.mock('react-i18next', () => ({
@@ -25,13 +49,15 @@ const mockCreatePlugin = vi.fn();
 const mockUpdatePlugin = vi.fn();
 const mockDeletePlugin = vi.fn();
 const mockGetAllPlugins = vi.fn();
+const mockRefetch = vi.fn();
+let mockGraphQLError: ApolloError | null = null;
 
 vi.mock('plugin/graphql-service', () => ({
   useGetAllPlugins: () => ({
     data: mockGetAllPlugins(),
     loading: false,
-    error: null,
-    refetch: vi.fn(),
+    error: mockGraphQLError,
+    refetch: mockRefetch,
   }),
   useCreatePlugin: () => [mockCreatePlugin],
   useUpdatePlugin: () => [mockUpdatePlugin],
@@ -48,9 +74,6 @@ vi.mock('react-toastify', () => ({
     warning: vi.fn(),
   },
 }));
-
-// Get the mocked toast for assertions
-const getMockedToast = () => require('react-toastify').toast;
 
 describe('PluginStore', () => {
   const mockLoadedPlugins = [
@@ -105,6 +128,8 @@ describe('PluginStore', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    // Reset mockGraphQLError to ensure test isolation
+    mockGraphQLError = null;
 
     // Mock plugin hooks
     vi.mocked(pluginHooks.useLoadedPlugins).mockReturnValue(mockLoadedPlugins);
@@ -114,9 +139,11 @@ describe('PluginStore', () => {
       loadPlugin: vi.fn().mockResolvedValue(true),
       unloadPlugin: vi.fn().mockResolvedValue(true),
       togglePluginStatus: vi.fn().mockResolvedValue(true),
-    } as any;
+    };
     vi.mocked(pluginManager.getPluginManager).mockReturnValue(
-      mockPluginManager,
+      mockPluginManager as unknown as ReturnType<
+        typeof pluginManager.getPluginManager
+      >,
     );
 
     // Mock GraphQL data
@@ -125,7 +152,8 @@ describe('PluginStore', () => {
     });
 
     // Mock admin plugin file service
-    (adminPluginFileService.adminPluginFileService.removePlugin as any) = vi
+    (adminPluginFileService.adminPluginFileService
+      .removePlugin as unknown as typeof vi.fn) = vi
       .fn()
       .mockResolvedValue(true);
   });
@@ -232,7 +260,6 @@ describe('PluginStore', () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // Find the dropdown option for installed plugins by data-testid in document.body
-      const { within } = require('@testing-library/react');
       const installedOption = within(document.body).getByTestId('installed');
       fireEvent.click(installedOption);
 
@@ -290,21 +317,6 @@ describe('PluginStore', () => {
 
       // Upload modal might not be implemented yet
       // expect(screen.getByTestId('upload-plugin-modal')).toBeInTheDocument();
-    });
-
-    it('should close upload modal', () => {
-      renderPluginStore();
-
-      const uploadButton = screen.getByTestId('uploadPluginBtn');
-      fireEvent.click(uploadButton);
-
-      // expect(screen.getByTestId('upload-plugin-modal')).toBeInTheDocument();
-
-      // Close modal (this would depend on the actual modal implementation)
-      // const closeButton = screen.getByTestId('close-upload-modal');
-      // fireEvent.click(closeButton);
-
-      // expect(screen.queryByTestId('upload-plugin-modal')).not.toBeInTheDocument();
     });
   });
 
@@ -485,7 +497,6 @@ describe('PluginStore', () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
 
       // Find the dropdown option for installed plugins by data-testid in document.body
-      const { within } = require('@testing-library/react');
       const installedOption = within(document.body).getByTestId('installed');
       await userEvent.click(installedOption);
 
@@ -592,6 +603,43 @@ describe('PluginStore', () => {
       expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument();
     });
 
+    it('should log error when GraphQL fetch fails', async () => {
+      // Mock console.error to verify it's called
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      // Set the error in our mock
+      const apolloError = new ApolloError({
+        errorMessage: 'GraphQL fetch failed',
+      });
+      mockGraphQLError = apolloError;
+
+      // Render the component which will trigger the useEffect with error
+      render(
+        <MockedProvider>
+          <PluginStore />
+        </MockedProvider>,
+      );
+
+      // Wait for component to render and useEffect to run
+      await waitFor(() => {
+        expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument();
+      });
+
+      // Verify console.error was called with the error
+      await waitFor(() => {
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          'Failed to fetch plugins via GraphQL:',
+          apolloError,
+        );
+      });
+
+      // Cleanup
+      mockGraphQLError = null;
+      consoleErrorSpy.mockRestore();
+    });
+
     it('should handle plugin status toggle error', async () => {
       mockUpdatePlugin.mockRejectedValue(new Error('Toggle failed'));
 
@@ -662,9 +710,11 @@ describe('PluginStore', () => {
         loadPlugin: vi.fn().mockResolvedValue(true),
         unloadPlugin: vi.fn().mockResolvedValue(true),
         togglePluginStatus: vi.fn().mockResolvedValue(false),
-      } as any;
+      };
       vi.mocked(pluginManager.getPluginManager).mockReturnValue(
-        mockPluginManager,
+        mockPluginManager as unknown as ReturnType<
+          typeof pluginManager.getPluginManager
+        >,
       );
 
       mockUpdatePlugin.mockResolvedValue({
@@ -700,9 +750,11 @@ describe('PluginStore', () => {
         loadPlugin: vi.fn().mockResolvedValue(true),
         unloadPlugin: vi.fn().mockResolvedValue(false),
         togglePluginStatus: vi.fn().mockResolvedValue(true),
-      } as any;
+      };
       vi.mocked(pluginManager.getPluginManager).mockReturnValue(
-        mockPluginManager,
+        mockPluginManager as unknown as ReturnType<
+          typeof pluginManager.getPluginManager
+        >,
       );
 
       mockDeletePlugin.mockResolvedValue({
@@ -742,7 +794,8 @@ describe('PluginStore', () => {
 
     it('should handle admin plugin file service failure', async () => {
       // Mock admin plugin file service to fail
-      (adminPluginFileService.adminPluginFileService.removePlugin as any) = vi
+      (adminPluginFileService.adminPluginFileService
+        .removePlugin as unknown as typeof vi.fn) = vi
         .fn()
         .mockResolvedValue(false);
 
@@ -838,6 +891,371 @@ describe('PluginStore', () => {
           screen.getByTestId('plugin-list-item-test-plugin-2'),
         ).toBeInTheDocument();
       });
+    });
+  });
+
+  describe('Pagination Functionality', () => {
+    // Helper to mock matchMedia for large screen (ensures table pagination is shown)
+    const mockMatchMediaForLargeScreen = (): void => {
+      Object.defineProperty(window, 'matchMedia', {
+        writable: true,
+        value: vi.fn().mockImplementation((query) => ({
+          matches: query !== '(max-width: 600px)',
+          media: query,
+          onchange: null,
+          addListener: vi.fn(),
+          removeListener: vi.fn(),
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+          dispatchEvent: vi.fn(),
+        })),
+      });
+    };
+
+    it('should handle page change', async () => {
+      // Create more plugins to test pagination
+      const manyPlugins = Array.from({ length: 15 }, (_, i) => ({
+        id: `test-plugin-${i}`,
+        manifest: {
+          pluginId: `test-plugin-${i}`,
+          name: `Test Plugin ${i}`,
+          description: `Plugin description ${i}`,
+          author: `Author ${i}`,
+          version: '1.0.0',
+          icon: '/test-icon.png',
+          homepage: 'https://test.com',
+          license: 'MIT',
+          tags: ['test'],
+          main: 'index.js',
+        },
+        status: 'active' as const,
+      }));
+
+      vi.mocked(pluginHooks.useLoadedPlugins).mockReturnValue(manyPlugins);
+
+      renderPluginStore();
+
+      // Should show first 5 plugins initially (default rowsPerPage)
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('plugin-list-item-test-plugin-0'),
+        ).toBeInTheDocument();
+      });
+
+      // Verify plugins from page 1 are visible (0-4)
+      expect(
+        screen.getByTestId('plugin-list-item-test-plugin-4'),
+      ).toBeInTheDocument();
+
+      // Plugin from page 2 should not be visible yet
+      expect(
+        screen.queryByTestId('plugin-list-item-test-plugin-5'),
+      ).not.toBeInTheDocument();
+
+      // Click next page button
+      const nextPageButton = screen.getByRole('button', {
+        name: /go to next page|next/i,
+      });
+      await userEvent.click(nextPageButton);
+
+      // Wait for page change and verify plugin from page 2 is now visible
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('plugin-list-item-test-plugin-5'),
+        ).toBeInTheDocument();
+      });
+
+      // Verify plugin from page 1 is no longer visible
+      expect(
+        screen.queryByTestId('plugin-list-item-test-plugin-0'),
+      ).not.toBeInTheDocument();
+    });
+
+    it('should handle rows per page change', async () => {
+      // Create more plugins
+      const manyPlugins = Array.from({ length: 15 }, (_, i) => ({
+        id: `test-plugin-${i}`,
+        manifest: {
+          pluginId: `test-plugin-${i}`,
+          name: `Test Plugin ${i}`,
+          description: `Plugin description ${i}`,
+          author: `Author ${i}`,
+          version: '1.0.0',
+          icon: '/test-icon.png',
+          homepage: 'https://test.com',
+          license: 'MIT',
+          tags: ['test'],
+          main: 'index.js',
+        },
+        status: 'active' as const,
+      }));
+
+      vi.mocked(pluginHooks.useLoadedPlugins).mockReturnValue(manyPlugins);
+
+      renderPluginStore();
+
+      await waitFor(() => {
+        expect(screen.getByTestId('plugin-list-container')).toBeInTheDocument();
+      });
+
+      // Initially showing 5 items per page - plugin 5 should not be visible
+      expect(
+        screen.getByTestId('plugin-list-item-test-plugin-0'),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('plugin-list-item-test-plugin-5'),
+      ).not.toBeInTheDocument();
+
+      // Change rows per page to 10
+      const rowsPerPageSelect = screen.getByRole('combobox', {
+        name: /rows per page/i,
+      });
+      await userEvent.selectOptions(rowsPerPageSelect, '10');
+
+      // Now plugin 5-9 should be visible on the same page
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('plugin-list-item-test-plugin-5'),
+        ).toBeInTheDocument();
+      });
+      expect(
+        screen.getByTestId('plugin-list-item-test-plugin-9'),
+      ).toBeInTheDocument();
+
+      // Still on first page, so plugin 0 should still be visible
+      expect(
+        screen.getByTestId('plugin-list-item-test-plugin-0'),
+      ).toBeInTheDocument();
+    });
+
+    it('should reset to first page when search term changes', async () => {
+      const manyPlugins = Array.from({ length: 15 }, (_, i) => ({
+        id: `test-plugin-${i}`,
+        manifest: {
+          pluginId: `test-plugin-${i}`,
+          name: `Test Plugin ${i}`,
+          description: `Plugin description ${i}`,
+          author: `Author ${i}`,
+          version: '1.0.0',
+          icon: '/test-icon.png',
+          homepage: 'https://test.com',
+          license: 'MIT',
+          tags: ['test'],
+          main: 'index.js',
+        },
+        status: 'active' as const,
+      }));
+
+      vi.mocked(pluginHooks.useLoadedPlugins).mockReturnValue(manyPlugins);
+
+      renderPluginStore();
+
+      // Search for something
+      const searchInput = screen.getByTestId('searchPlugins');
+      fireEvent.change(searchInput, { target: { value: 'Plugin 1' } });
+
+      // Wait for debounce and page reset
+      await new Promise((resolve) => setTimeout(resolve, 350));
+
+      // Page should be reset to 0, so Plugin 1 (matching "Plugin 1") should be on first page
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('plugin-list-item-test-plugin-1'),
+        ).toBeInTheDocument();
+      });
+
+      // Plugin 10 should also match "Plugin 1" search but may be on different page
+      // Just verify we're on page 0 by checking plugin-1 is visible
+    });
+
+    it('should reset to first page when filter changes', async () => {
+      const manyPlugins = Array.from({ length: 15 }, (_, i) => ({
+        id: `test-plugin-${i}`,
+        manifest: {
+          pluginId: `test-plugin-${i}`,
+          name: `Test Plugin ${i}`,
+          description: `Plugin description ${i}`,
+          author: `Author ${i}`,
+          version: '1.0.0',
+          icon: '/test-icon.png',
+          homepage: 'https://test.com',
+          license: 'MIT',
+          tags: ['test'],
+          main: 'index.js',
+        },
+        status: 'active' as const,
+      }));
+
+      vi.mocked(pluginHooks.useLoadedPlugins).mockReturnValue(manyPlugins);
+
+      renderPluginStore();
+
+      // Open filter dropdown
+      const filterDropdown = screen.getByTestId('filterPlugins');
+      await userEvent.click(filterDropdown);
+
+      // Wait for dropdown options to render
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Select the 'installed' filter option by its data-testid in document.body
+      const installedOption = within(document.body).getByTestId('installed');
+      await userEvent.click(installedOption);
+
+      // Page should be reset to 0 when filter changes. Verify first-page items are rendered
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('plugin-list-item-test-plugin-0'),
+        ).toBeInTheDocument();
+      });
+    });
+
+    it('should call handleChangePage when pagination page changes', async () => {
+      mockMatchMediaForLargeScreen();
+
+      const manyPlugins = Array.from({ length: 25 }, (_, i) => ({
+        id: `test-plugin-${i}`,
+        manifest: {
+          pluginId: `test-plugin-${i}`,
+          name: `Test Plugin ${i}`,
+          description: `Plugin description ${i}`,
+          author: `Author ${i}`,
+          version: '1.0.0',
+          icon: '/test-icon.png',
+          homepage: 'https://test.com',
+          license: 'MIT',
+          tags: ['test'],
+          main: 'index.js',
+        },
+        status: 'active' as const,
+      }));
+
+      vi.mocked(pluginHooks.useLoadedPlugins).mockReturnValue(manyPlugins);
+
+      renderPluginStore();
+
+      // Wait for component to render
+      await waitFor(() => {
+        expect(screen.getByTestId('plugin-list-container')).toBeInTheDocument();
+      });
+
+      // Find and click next page button - fail if not found
+      const nextButton = screen.getByRole('button', {
+        name: /go to next page|next/i,
+      });
+      await userEvent.click(nextButton);
+
+      // Verify page changed by checking for page 2 items
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('plugin-list-item-test-plugin-5'),
+        ).toBeInTheDocument();
+      });
+      // This test covers line 80: setPage(newPage);
+    });
+
+    it('should call handleChangeRowsPerPage when rows per page changes', async () => {
+      mockMatchMediaForLargeScreen();
+
+      const manyPlugins = Array.from({ length: 25 }, (_, i) => ({
+        id: `test-plugin-${i}`,
+        manifest: {
+          pluginId: `test-plugin-${i}`,
+          name: `Test Plugin ${i}`,
+          description: `Plugin description ${i}`,
+          author: `Author ${i}`,
+          version: '1.0.0',
+          icon: '/test-icon.png',
+          homepage: 'https://test.com',
+          license: 'MIT',
+          tags: ['test'],
+          main: 'index.js',
+        },
+        status: 'active' as const,
+      }));
+
+      vi.mocked(pluginHooks.useLoadedPlugins).mockReturnValue(manyPlugins);
+
+      renderPluginStore();
+
+      // Wait for component to render
+      await waitFor(() => {
+        expect(screen.getByTestId('plugin-list-container')).toBeInTheDocument();
+      });
+
+      // Get rows per page select - fail if not found
+      const rowsPerPageSelect = screen.getByRole('combobox', {
+        name: /rows per page/i,
+      });
+      await userEvent.selectOptions(rowsPerPageSelect, '10');
+
+      // Verify more items are now visible
+      await waitFor(() => {
+        expect(
+          screen.getByTestId('plugin-list-item-test-plugin-9'),
+        ).toBeInTheDocument();
+      });
+      // This test covers lines 85-86: setRowsPerPage and setPage(0)
+    });
+  });
+
+  describe('Upload Modal Close with Reload', () => {
+    it('should execute closeUploadModal async operations correctly', async () => {
+      // This test specifically targets the closeUploadModal function (lines 105-109)
+      const reloadMock = vi.fn();
+
+      try {
+        // Use vi.stubGlobal to mock location.reload
+        vi.stubGlobal('location', {
+          ...window.location,
+          reload: reloadMock,
+        });
+
+        mockRefetch.mockClear();
+        mockRefetch.mockResolvedValue({});
+
+        renderPluginStore();
+
+        await waitFor(() => {
+          expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument();
+        });
+
+        // Open the upload modal
+        const uploadButton = screen.getByTestId('uploadPluginBtn');
+        fireEvent.click(uploadButton);
+
+        await waitFor(() => {
+          expect(screen.getByTestId('upload-plugin-modal')).toBeInTheDocument();
+        });
+
+        // The closeUploadModal function (lines 105-109) performs:
+        // 1. setShowUploadModal(false)
+        // 2. await refetch()
+        // 3. window.location.reload()
+
+        // Trigger closeUploadModal by clicking the close button
+        const closeButton = screen.getByTestId('mock-close-upload-modal');
+        fireEvent.click(closeButton);
+
+        // Verify refetch was called
+        await waitFor(() => {
+          expect(mockRefetch).toHaveBeenCalled();
+        });
+
+        // Verify reload was called
+        await waitFor(() => {
+          expect(reloadMock).toHaveBeenCalled();
+        });
+
+        // Verify modal is closed
+        await waitFor(() => {
+          expect(
+            screen.queryByTestId('upload-plugin-modal'),
+          ).not.toBeInTheDocument();
+        });
+      } finally {
+        // Restore original location even if test fails
+        vi.unstubAllGlobals();
+      }
     });
   });
 });
