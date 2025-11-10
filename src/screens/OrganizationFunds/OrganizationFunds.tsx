@@ -16,8 +16,7 @@ import FundModal from './modal/FundModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
+import PageHeader from 'screens/components/Navbar';
 
 const dataGridStyle = {
   borderRadius: 'var(--table-head-radius)',
@@ -336,42 +335,37 @@ const organizationFunds = (): JSX.Element => {
     <div>
       <div className={styles.head}>
         <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-          <SearchBar
-            placeholder={tCommon('searchByName')}
-            inputTestId="searchByName"
-            buttonTestId="searchBtn"
-            onSearch={(text) => setSearchText(text)}
+          <PageHeader
+            search={{
+              placeholder: tCommon('searchByName'),
+              onSearch: (text) => setSearchText(text),
+              inputTestId: 'searchByName',
+              buttonTestId: 'searchBtn',
+            }}
+            sorting={[
+              {
+                title: tCommon('sort'),
+                options: [
+                  { label: t('createdLatest'), value: 'createdAt_DESC' },
+                  { label: t('createdEarliest'), value: 'createdAt_ASC' },
+                ],
+                selected: sortBy,
+                onChange: (value: string) =>
+                  setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC'),
+              },
+            ]}
+            actions={
+              <Button
+                variant="success"
+                onClick={() => handleOpenModal(null, 'create')}
+                className={styles.createButton}
+                data-testid="createFundBtn"
+              >
+                <i className="fa fa-plus me-2" />
+                {t('createFund')}
+              </Button>
+            }
           />
-          <div className="d-flex gap-4 mb-1">
-            <SortingButton
-              title={tCommon('sort')}
-              sortingOptions={[
-                { label: t('createdLatest'), value: 'createdAt_DESC' },
-                { label: t('createdEarliest'), value: 'createdAt_ASC' },
-              ]}
-              selectedOption={
-                sortBy === 'createdAt_DESC'
-                  ? t('createdLatest')
-                  : t('createdEarliest')
-              }
-              onSortChange={(value) =>
-                setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC')
-              }
-              dataTestIdPrefix="filter"
-              buttonLabel={tCommon('sort')}
-              className={styles.dropdown}
-            />
-            <Button
-              variant="success"
-              onClick={() => handleOpenModal(null, 'create')}
-              className={styles.createButton}
-              style={{ marginTop: '0px' }}
-              data-testid="createFundBtn"
-            >
-              <i className={'fa fa-plus me-2'} />
-              {t('createFund')}
-            </Button>
-          </div>
         </div>
       </div>
 

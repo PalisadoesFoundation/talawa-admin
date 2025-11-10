@@ -59,8 +59,7 @@ import VenueModal from 'components/Venues/Modal/VenueModal';
 import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/Venues/VenueCard';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
+import PageHeader from 'screens/components/Navbar';
 
 function organizationVenues(): JSX.Element {
   // Translation hooks for i18n support
@@ -214,46 +213,44 @@ function organizationVenues(): JSX.Element {
   return (
     <>
       <div className={`${styles.btnsContainer} gap-3 flex-wrap`}>
-        <SearchBar
-          placeholder={t('searchBy') + ' ' + tCommon(searchBy)}
-          onSearch={handleSearch}
-          inputTestId="searchBy"
-          buttonTestId="searchBtn"
+        <PageHeader
+          search={{
+            placeholder: `${t('searchBy')} ${tCommon(searchBy)}`,
+            onSearch: handleSearch,
+            inputTestId: 'searchBy',
+            buttonTestId: 'searchBtn',
+          }}
+          sorting={[
+            {
+              title: 'SearchBy',
+              options: [
+                { label: tCommon('name'), value: 'name' },
+                { label: tCommon('description'), value: 'desc' },
+              ],
+              selected: searchBy,
+              onChange: handleSearchByChange,
+            },
+            {
+              title: 'Sort Venues',
+              options: [
+                { label: t('highestCapacity'), value: 'highest' },
+                { label: t('lowestCapacity'), value: 'lowest' },
+              ],
+              selected: sortOrder,
+              onChange: handleSortChange,
+            },
+          ]}
+          actions={
+            <Button
+              variant="success"
+              className={styles.dropdown}
+              onClick={showCreateVenueModal}
+              data-testid="createVenueBtn"
+            >
+              <i className="fa fa-plus me-1"></i> {t('addVenue')}
+            </Button>
+          }
         />
-        <div className="d-flex gap-3 flex-wrap">
-          <SortingButton
-            title="SearchBy"
-            sortingOptions={[
-              { label: tCommon('name'), value: 'name' },
-              { label: tCommon('description'), value: 'desc' },
-            ]}
-            selectedOption={tCommon(searchBy)}
-            onSortChange={handleSearchByChange}
-            dataTestIdPrefix="searchByDrpdwn"
-            className={styles.dropdown} // Pass a custom class name if needed
-          />
-          <SortingButton
-            title="Sort Venues"
-            sortingOptions={[
-              { label: t('highestCapacity'), value: 'highest' },
-              { label: t('lowestCapacity'), value: 'lowest' },
-            ]}
-            selectedOption={t(
-              sortOrder === 'highest' ? 'highestCapacity' : 'lowestCapacity',
-            )}
-            onSortChange={handleSortChange}
-            dataTestIdPrefix="sortVenues"
-            className={styles.dropdown} // Pass a custom class name if needed
-          />
-          <Button
-            variant="success"
-            className={styles.dropdown}
-            onClick={showCreateVenueModal}
-            data-testid="createVenueBtn"
-          >
-            <i className="fa fa-plus me-1"></i> {t('addVenue')}
-          </Button>
-        </div>
       </div>
 
       <Col>

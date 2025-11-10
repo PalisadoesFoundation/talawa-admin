@@ -69,10 +69,9 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { Row, Button } from 'react-bootstrap';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
-import SearchBar from 'subComponents/SearchBar';
-import SortingButton from 'subComponents/SortingButton';
 import Avatar from 'components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
+import PageHeader from 'screens/components/Navbar';
 
 const PAGE_SIZE = 10;
 interface IProcessedRow {
@@ -484,34 +483,27 @@ function OrganizationPeople(): JSX.Element {
       <Row className={styles.head}>
         <div className={styles.mainpageright}>
           <div className={styles.btnsContainer}>
-            <SearchBar
-              placeholder={t('searchFullName')}
-              onSearch={(term: string) => setSearchTerm(term)}
-              buttonTestId="searchbtn"
+            <PageHeader
+              search={{
+                placeholder: t('searchFullName'),
+                onSearch: (term: string) => setSearchTerm(term),
+                buttonTestId: 'searchbtn',
+              }}
+              sorting={[
+                {
+                  title: tCommon('sort'),
+                  options: [
+                    { label: tCommon('members'), value: 'members' },
+                    { label: tCommon('admin'), value: 'admin' },
+                    { label: tCommon('users'), value: 'users' },
+                  ],
+                  selected:
+                    state === 2 ? 'Users' : state === 1 ? 'Admin' : 'Members',
+                  onChange: handleSortChange,
+                },
+              ]}
+              actions={<AddMember />}
             />
-            <div className={styles.btnsBlock}>
-              <SortingButton
-                className={styles.dropdown}
-                title={tCommon('sort')}
-                sortingOptions={[
-                  { label: tCommon('members'), value: 'members' },
-                  { label: tCommon('admin'), value: 'admin' },
-                  { label: tCommon('users'), value: 'users' },
-                ]}
-                selectedOption={
-                  state === 2
-                    ? tCommon('users')
-                    : state === 1
-                      ? tCommon('admin')
-                      : tCommon('members')
-                }
-                onSortChange={handleSortChange}
-                dataTestIdPrefix="role"
-              />
-            </div>
-            <div className={styles.btnsBlock}>
-              <AddMember />
-            </div>
           </div>
         </div>
       </Row>

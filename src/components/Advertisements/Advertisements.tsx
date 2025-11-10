@@ -42,11 +42,11 @@ import AdvertisementEntry from './core/AdvertisementEntry/AdvertisementEntry';
 import AdvertisementRegister from './core/AdvertisementRegister/AdvertisementRegister';
 import { useParams } from 'react-router';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import SearchBar from 'subComponents/SearchBar';
 import type { Advertisement } from 'types/Advertisement/type';
 import Loader from 'components/Loader/Loader';
 import { AdvertisementSkeleton } from './skeleton/AdvertisementSkeleton';
 import { toast } from 'react-toastify';
+import PageHeader from 'screens/components/Navbar';
 
 export default function Advertisements(): JSX.Element {
   const { orgId: currentOrgId } = useParams<{ orgId: string }>();
@@ -186,35 +186,38 @@ export default function Advertisements(): JSX.Element {
         <Col md={8} className={styles.containerAdvertisements}>
           {loading && <Loader />}
           <Col className={styles.colAdvertisements}>
-            <SearchBar
-              placeholder={'Search..'}
-              onSearch={(value) => {
-                const searchValue = value.toLowerCase();
-                const filteredActiveAds =
-                  activeAdvertisements.filter(
-                    (ad: Advertisement) =>
+            <PageHeader
+              search={{
+                placeholder: 'Search advertisements...',
+                onSearch: (value) => {
+                  const searchValue = value.toLowerCase();
+                  const filteredActiveAds = activeAdvertisements.filter(
+                    (ad) =>
                       ad.name.toLowerCase().includes(searchValue) ||
                       (ad.description ?? '')
                         .toLowerCase()
                         .includes(searchValue),
-                  ) || [];
-                const filteredCompletedAds =
-                  completedAdvertisements.filter(
-                    (ad: Advertisement) =>
+                  );
+                  const filteredCompletedAds = completedAdvertisements.filter(
+                    (ad) =>
                       ad.name.toLowerCase().includes(searchValue) ||
                       (ad.description ?? '')
                         .toLowerCase()
                         .includes(searchValue),
-                  ) || [];
-                setActiveAdvertisements(filteredActiveAds);
-                setCompletedAdvertisements(filteredCompletedAds);
+                  );
+
+                  setActiveAdvertisements(filteredActiveAds);
+                  setCompletedAdvertisements(filteredCompletedAds);
+                },
+                inputTestId: 'searchname',
+                buttonTestId: 'searchButton',
               }}
-              inputTestId="searchname"
-              buttonTestId="searchButton"
-            />
-            <AdvertisementRegister
-              setAfterActive={setAfterActive}
-              setAfterCompleted={setAfterCompleted}
+              actions={
+                <AdvertisementRegister
+                  setAfterActive={setAfterActive}
+                  setAfterCompleted={setAfterCompleted}
+                />
+              }
             />
           </Col>
           <Tabs

@@ -70,8 +70,8 @@ import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import Avatar from 'components/Avatar/Avatar';
-import SortingButton from 'subComponents/SortingButton';
 import { TablePagination } from '@mui/material';
+import PageHeader from 'screens/components/Navbar';
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -394,16 +394,34 @@ function AddMember(): JSX.Element {
 
   return (
     <>
-      <SortingButton
-        title={translateOrgPeople('addMembers')}
-        sortingOptions={[
-          { label: translateOrgPeople('existingUser'), value: 'existingUser' },
-          { label: translateOrgPeople('newUser'), value: 'newUser' },
+      <PageHeader
+        search={{
+          placeholder: translateOrgPeople('searchFullName'),
+          onSearch: (value) => {
+            setUserName(value);
+            resetPagination();
+            fetchUsers({
+              variables: {
+                first: PAGE_SIZE,
+                where: value ? { name: value } : undefined,
+              },
+            });
+          },
+        }}
+        sorting={[
+          {
+            title: translateOrgPeople('addMembers'),
+            options: [
+              {
+                label: translateOrgPeople('existingUser'),
+                value: 'existingUser',
+              },
+              { label: translateOrgPeople('newUser'), value: 'newUser' },
+            ],
+            selected: translateOrgPeople('addMembers'),
+            onChange: handleSortChange,
+          },
         ]}
-        selectedOption={translateOrgPeople('addMembers')}
-        onSortChange={handleSortChange}
-        dataTestIdPrefix="addMembers"
-        className={styles.dropdown}
       />
 
       {/* Existing User Modal */}

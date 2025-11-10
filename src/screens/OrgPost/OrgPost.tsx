@@ -18,16 +18,15 @@ import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
-import SortingButton from '../../subComponents/SortingButton';
 import PostsRenderer from './Posts';
-// import SearchingButton from 'subComponents/SearchingButton';
-import SearchBar from 'subComponents/SearchBar';
 import type {
   InterfacePostEdge,
   InterfaceOrganizationPostListData,
   InterfacePost,
 } from '../../types/Post/interface';
 import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
+import PageHeader from 'screens/components/Navbar';
+import AddIcon from '@mui/icons-material/Add';
 
 /**
  * OrgPost Component
@@ -57,7 +56,6 @@ function OrgPost(): JSX.Element {
   const [videoPreview, setVideoPreview] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const { orgId: currentUrl } = useParams();
-  const [showTitle] = useState(true);
   const [after, setAfter] = useState<string | null | undefined>(null);
   const [before, setBefore] = useState<string | null | undefined>(null);
   const [first, setFirst] = useState<number | null>(6);
@@ -419,36 +417,26 @@ function OrgPost(): JSX.Element {
     <>
       <Row className={styles.head}>
         <div className={styles.mainpagerightOrgPost}>
-          <div className={styles.btnsContainerOrgPost}>
-            <SearchBar
-              placeholder={showTitle ? t('searchTitle') : t('searchText')}
-              onSearch={handleSearch}
-              inputTestId="searchByName"
-            />
-
-            <div className={styles.btnsBlockOrgPost}>
-              <div className="d-flex">
-                {/* <SearchingButton
-                  text="Search" 
-                  dataTestIdPrefix="sort-button"
-                  type="sort" 
-                  className={`${styles.dropdown} `}
-                /> */}
-                <SortingButton
-                  title="Sort Post"
-                  sortingOptions={[
-                    { label: 'Latest', value: 'latest' },
-                    { label: 'Oldest', value: 'oldest' },
-                    { label: 'None', value: 'None' },
-                  ]}
-                  selectedOption={sortingOption}
-                  onSortChange={handleSorting}
-                  data-testid="sorting"
-                  dataTestIdPrefix="sortpost-toggle"
-                  dropdownTestId="sortpost-dropdown"
-                />
-              </div>
-
+          <PageHeader
+            search={{
+              placeholder: t('searchTitle'),
+              onSearch: handleSearch,
+              inputTestId: 'searchByName',
+            }}
+            sorting={[
+              {
+                title: 'Sort Post',
+                options: [
+                  { label: 'Latest', value: 'latest' },
+                  { label: 'Oldest', value: 'oldest' },
+                  { label: 'None', value: 'None' },
+                ],
+                selected: sortingOption,
+                onChange: handleSorting,
+              },
+            ]}
+            showEventTypeFilter={false}
+            actions={
               <Button
                 variant="success"
                 onClick={showInviteModal}
@@ -456,11 +444,12 @@ function OrgPost(): JSX.Element {
                 data-cy="createPostModalBtn"
                 className={`${styles.createButton} mb-2`}
               >
-                <i className={'fa fa-plus me-2'} />
+                <AddIcon sx={{ fontSize: '20px', marginRight: '6px' }} />
                 {t('createPost')}
               </Button>
-            </div>
-          </div>
+            }
+          />
+
           <div className={`row ${styles.list_box}`}>{content}</div>
         </div>
         <div className="row m-lg-1 d-flex justify-content-center w-100">
