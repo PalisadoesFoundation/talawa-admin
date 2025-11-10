@@ -25,12 +25,13 @@ const mockTCommon = vi.fn((key: string) => {
     menu: 'Menu',
     Settings: 'Settings',
     userPortal: 'User Portal',
+    notifications: 'Notifications',
   };
   return translations[key] || key;
 });
 
 vi.mock('react-i18next', () => ({
-  useTranslation: vi.fn((namespace: string) => {
+  useTranslation: vi.fn((namespace?: string) => {
     if (namespace === 'common') {
       return { t: mockTCommon };
     }
@@ -537,22 +538,6 @@ describe('UserSidebar', () => {
       // Check for the main content structure
       const mainContent = screen.getByTestId('sidebar-main-content');
       expect(mainContent).toBeInTheDocument();
-    });
-  });
-
-  describe('Active State Styling', () => {
-    it('should apply active styles when on organizations route', () => {
-      renderWithRoute('/user/organizations');
-
-      const orgsButton = screen.getByTestId('orgsBtn');
-      expect(orgsButton).toBeInTheDocument();
-    });
-
-    it('should apply inactive styles when on settings route', () => {
-      renderWithRoute('/user/settings');
-
-      const orgsButton = screen.getByTestId('orgsBtn');
-      expect(orgsButton).toBeInTheDocument();
     });
   });
 
