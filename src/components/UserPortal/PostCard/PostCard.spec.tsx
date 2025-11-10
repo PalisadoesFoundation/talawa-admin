@@ -104,6 +104,59 @@ const commentsQueryMock = {
   },
 };
 
+// Mock where data is undefined
+const undefinedDataMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+    },
+  },
+  result: {
+    data: undefined,
+  },
+};
+
+// Mock where data.post is undefined
+const undefinedPostMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+    },
+  },
+  result: {
+    data: {
+      post: undefined,
+    },
+  },
+};
+
+// Mock where data.post.comments is undefined (different from null)
+const undefinedCommentsMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+    },
+  },
+  result: {
+    data: {
+      post: {
+        __typename: 'Post',
+        id: '1',
+        comments: undefined,
+      },
+    },
+  },
+};
+
 // Comments with pagination mock (for testing pagination)
 const commentsWithPaginationMock = {
   request: {
@@ -478,6 +531,31 @@ const renderPostCard = (props: Partial<InterfacePostCard> = {}) => {
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
             <PostCard {...defaultProps} {...props} />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+};
+
+const renderPostCardWithCustomMock = (customMock: MockedResponse) => {
+  const { setItem } = useLocalStorage();
+  setItem('userId', '1');
+
+  // Only include the custom mock and base mocks, NOT commentsWithPaginationMock
+  const mocksArray = [
+    customMock,
+    ...mocks.filter((m) => m.request.query !== GET_POST_COMMENTS), // Exclude other comment mocks
+  ];
+
+  const linkWithCustomMock = new StaticMockLink(mocksArray, true);
+
+  return render(
+    <MockedProvider link={linkWithCustomMock} addTypename={true}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <PostCard {...defaultProps} />
           </I18nextProvider>
         </Provider>
       </BrowserRouter>
@@ -1096,34 +1174,76 @@ describe('PostCard', () => {
     // Should not show comments button or text when commentCount is 0
     expect(screen.queryByTestId('comment-card')).not.toBeInTheDocument();
   });
-});
 
-it('should render avatar with UserDefault fallback when avatarURL is null', () => {
-  const { setItem } = useLocalStorage();
-  setItem('userId', '1');
+  it('should render avatar with UserDefault fallback when avatarURL is null', () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
 
-  // Post props with null avatarURL to test the fallback
-  const postWithNullAvatar = {
-    ...defaultProps,
-    creator: {
-      ...defaultProps.creator,
-      avatarURL: null,
-    },
-  };
+    // Post props with null avatarURL to test the fallback
+    const postWithNullAvatar = {
+      ...defaultProps,
+      creator: {
+        ...defaultProps.creator,
+        avatarURL: null,
+      },
+    };
 
-  render(
-    <MockedProvider mocks={mocks} link={link}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <PostCard {...postWithNullAvatar} />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
+    render(
+      <MockedProvider mocks={mocks} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...postWithNullAvatar} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
-  // Check that avatar uses fallback (UserDefault) when avatarURL is null
-  const avatar = screen.getByRole('img', { name: defaultProps.creator.name });
-  expect(avatar).toBeInTheDocument();
+    // Check that avatar uses fallback (UserDefault) when avatarURL is null
+    const avatar = screen.getByRole('img', { name: defaultProps.creator.name });
+    expect(avatar).toBeInTheDocument();
+  });
+
+  it('should handle onCompleted when data is undefined', async () => {
+    renderPostCardWithCustomMock(undefinedDataMock);
+
+    // Show comments to trigger the query
+    const viewCommentsButton = screen.getByTestId('comment-card');
+    fireEvent.click(viewCommentsButton);
+
+    // Wait for query to complete without throwing errors
+    await waitFor(() => {
+      expect(screen.queryByText('First comment')).not.toBeInTheDocument();
+      expect(screen.queryByText('Test comment')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should handle onCompleted when data.post is undefined', async () => {
+    renderPostCardWithCustomMock(undefinedPostMock);
+
+    // Show comments to trigger the query
+    const viewCommentsButton = screen.getByTestId('comment-card');
+    fireEvent.click(viewCommentsButton);
+
+    // Wait for query to complete without throwing errors
+    await waitFor(() => {
+      expect(screen.queryByText('First comment')).not.toBeInTheDocument();
+      expect(screen.queryByText('Test comment')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should handle onCompleted when data.post.comments is undefined', async () => {
+    renderPostCardWithCustomMock(undefinedCommentsMock);
+
+    // Show comments to trigger the query
+    const viewCommentsButton = screen.getByTestId('comment-card');
+    fireEvent.click(viewCommentsButton);
+
+    // Wait for query to complete without throwing errors
+    await waitFor(() => {
+      expect(screen.queryByText('First comment')).not.toBeInTheDocument();
+      expect(screen.queryByText('Test comment')).not.toBeInTheDocument();
+    });
+  });
 });
