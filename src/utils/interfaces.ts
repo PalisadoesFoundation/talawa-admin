@@ -2159,20 +2159,24 @@ export interface InterfacePostCard {
   commentCount: number;
   upVoteCount: number;
   downVoteCount: number;
-  comments: {
-    id: string;
-    body: string;
-    creator: {
-      id: string;
-      name: string;
-      avatarURL?: string | null;
-    };
-    hasUserVoted: VoteState;
-    downVoteCount: number;
-    upVoteCount: number;
-    text: string;
-  }[];
   fetchPosts: () => void;
+}
+
+export interface InterfaceComment {
+  id: string;
+  body: string;
+  creator: {
+    id: string;
+    name: string;
+    avatarURL?: string | null;
+  };
+  createdAt: string;
+  upVotesCount: number;
+  downVotesCount: number;
+  hasUserVoted?: {
+    hasVoted: boolean;
+    voteType: VoteType;
+  };
 }
 
 /**
