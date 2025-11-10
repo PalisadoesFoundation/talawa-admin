@@ -16,6 +16,26 @@ Defined in: [src/types/Post/interface.ts:51](https://github.com/PalisadoesFounda
 
 ***
 
+### pinnedPosts
+
+> **pinnedPosts**: `object`
+
+Defined in: [src/types/Post/interface.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L57)
+
+#### edges
+
+> **edges**: [`InterfacePostEdge`](InterfacePostEdge.md)[]
+
+#### pageInfo
+
+> **pageInfo**: [`InterfacePageInfo`](InterfacePageInfo.md)
+
+#### totalCount
+
+> **totalCount**: `number`
+
+***
+
 ### posts
 
 > **posts**: `object`

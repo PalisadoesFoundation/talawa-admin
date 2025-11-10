@@ -126,7 +126,6 @@ const leftDrawerOrg = ({
   });
 
   const getIdFromPath = (pathname: string): string => {
-    if (!pathname) return '';
     const segments = pathname.split('/');
     return segments.length > 2 ? segments[2] : '';
   };

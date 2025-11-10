@@ -4183,6 +4183,31 @@ form label,
   font-weight: 600;
 }
 
+.expandButton {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 4px 0;
+  text-decoration: none;
+  display: inline-block;
+  transition: color 0.2s ease;
+}
+
+.cardBodyAdminPosts {
+  min-height: 120px;
+  transition: all 0.4s ease;
+}
+
+.titleOrgPostCardDiv {
+  line-height: 1.6em;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-bottom: 8px;
+}
+
 .textOrgPostCard {
   font-size: 13px;
   color: var(--textOrgPostCard-color);
@@ -4191,8 +4216,11 @@ form label,
 
 .cardOrgPostCard {
   width: 100%;
-  height: 33rem;
   margin-bottom: 2rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .nopostimage {

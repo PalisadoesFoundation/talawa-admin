@@ -74,6 +74,8 @@
     "test": "vitest run",
     "test:watch": "vitest --ui",
     "test:coverage": "vitest run --coverage",
+    "test:shard": "node scripts/run-shard.js",
+    "test:shard:coverage": "node scripts/run-shard.js --coverage",
     "eject": "react-scripts eject",
     "lint:check": "eslint \"**/*.{ts,tsx,graphql}\" --max-warnings=0 && python .github/workflows/scripts/eslint_disable_check.py",
     "lint:fix": "eslint --fix \"**/*.{ts,tsx,graphql}\"",
@@ -159,7 +161,7 @@
     "typedoc": "^0.28.1",
     "typedoc-plugin-markdown": "^4.5.0",
     "typescript": "^5.8.3",
-    "vite": "^6.3.5",
+    "vite": "^7.1.12",
     "vite-plugin-istanbul": "^7.1.0",
     "vite-plugin-svgr": "^4.3.0",
     "vitest": "^3.2.4"

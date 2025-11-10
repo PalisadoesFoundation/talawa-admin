@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserInfoPG
 
-Defined in: [src/utils/interfaces.ts:1896](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1896)
+Defined in: [src/utils/interfaces.ts:1904](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1904)
 
 InterfaceUserInfoPG
 
@@ -18,7 +18,7 @@ Defines the structure for user information with PostgreSQL-specific fields.
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/utils/interfaces.ts:1901](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1901)
+Defined in: [src/utils/interfaces.ts:1909](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1909)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [src/utils/interfaces.ts:1901](https://github.com/PalisadoesFoundati
 
 > `optional` **firstName**: `string`
 
-Defined in: [src/utils/interfaces.ts:1897](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1897)
+Defined in: [src/utils/interfaces.ts:1905](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1905)
 
 The first name of the user.
 
@@ -36,7 +36,7 @@ The first name of the user.
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1900](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1900)
+Defined in: [src/utils/interfaces.ts:1908](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1908)
 
 The unique identifier of the user.
 
@@ -46,7 +46,7 @@ The unique identifier of the user.
 
 > `optional` **lastName**: `string`
 
-Defined in: [src/utils/interfaces.ts:1898](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1898)
+Defined in: [src/utils/interfaces.ts:1906](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1906)
 
 The last name of the user.
 
@@ -56,6 +56,6 @@ The last name of the user.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1899](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1899)
+Defined in: [src/utils/interfaces.ts:1907](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1907)
 
 The full name of the user.
