@@ -524,9 +524,10 @@ describe('UserSidebar', () => {
     it('should have ProfileDropdown in the bottom section', () => {
       renderComponent();
 
-      // Note: Multiple ProfileCards render by design - one at top (with blue bg) and one at bottom for navigation
+      // ProfileCard count already verified in "Component Rendering" section
+      // This test verifies the bottom ProfileCard specifically exists
       const profileDropdowns = screen.getAllByTestId('profile-dropdown');
-      expect(profileDropdowns.length).toBe(2);
+      expect(profileDropdowns[1]).toBeInTheDocument();
     });
 
     it('should apply correct structure classes', () => {
