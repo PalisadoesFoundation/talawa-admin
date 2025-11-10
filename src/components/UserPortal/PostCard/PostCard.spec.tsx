@@ -282,6 +282,7 @@ const nullCommentsMock = {
     variables: {
       postId: '1',
       userId: '1',
+      first: 10,
     },
   },
   result: {
@@ -483,13 +484,6 @@ const renderPostCard = (props: Partial<InterfacePostCard> = {}) => {
     </MockedProvider>,
   );
 };
-
-// Mock plugin injector used by PostCard (injectorType G4)
-vi.mock('plugin', () => ({
-  PluginInjector: vi.fn(() => (
-    <div data-testid="plugin-injector-g4">Mock Plugin Injector G4</div>
-  )),
-}));
 
 describe('PostCard Component', () => {
   beforeEach(() => {
@@ -901,17 +895,32 @@ describe('PostCard', () => {
   });
 
   // Render helper for pagination tests
-  const renderPostCardWithPagination = (mockOverrides = {}) => {
+  const renderPostCardWithPagination = (
+    options: {
+      mockOverrides?: Partial<InterfacePostCard>;
+      customMocks?: any[];
+      fetchMoreMock?: any;
+      addTypename?: boolean;
+    } = {},
+  ) => {
+    const {
+      mockOverrides = {},
+      customMocks = [],
+      fetchMoreMock = fetchMoreCommentsMock,
+      addTypename = true,
+    } = options;
+
     const mocksWithPagination = [
       commentsWithPaginationMock,
-      fetchMoreCommentsMock,
+      fetchMoreMock,
+      ...customMocks,
       ...mocks,
     ];
 
     const linkWithPagination = new StaticMockLink(mocksWithPagination, true);
 
     return render(
-      <MockedProvider link={linkWithPagination}>
+      <MockedProvider link={linkWithPagination} addTypename={addTypename}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -958,25 +967,9 @@ describe('PostCard', () => {
     const { setItem } = useLocalStorage();
     setItem('userId', '1');
 
-    const mocksWithError = [
-      commentsWithPaginationMock,
-      fetchMoreCommentsErrorMock,
-      ...mocks,
-    ];
-
-    const linkWithError = new StaticMockLink(mocksWithError, true);
-
-    render(
-      <MockedProvider link={linkWithError}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...defaultProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderPostCardWithPagination({
+      fetchMoreMock: fetchMoreCommentsErrorMock,
+    });
 
     // Open comments section
     const viewCommentsButton = screen.getByTestId('comment-card');
@@ -1001,20 +994,13 @@ describe('PostCard', () => {
   });
 
   it('should handle comment creation with showComments true', async () => {
-    const link = new StaticMockLink([...mocks, createCommentMock], true);
     const mockFetchPosts = vi.fn();
 
-    render(
-      <MockedProvider link={link} addTypename={false}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...defaultProps} fetchPosts={mockFetchPosts} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderPostCardWithPagination({
+      customMocks: [createCommentMock],
+      mockOverrides: { fetchPosts: mockFetchPosts },
+      addTypename: false,
+    });
 
     await waitFor(() => {
       expect(screen.getByText('Test Post')).toBeInTheDocument();
@@ -1044,19 +1030,9 @@ describe('PostCard', () => {
     const { setItem } = useLocalStorage();
     setItem('userId', '1');
 
-    const mockLink = new StaticMockLink([nullCommentsMock, ...mocks], true);
-
-    render(
-      <MockedProvider link={mockLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...defaultProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderPostCardWithPagination({
+      customMocks: [nullCommentsMock],
+    });
 
     // Show comments to trigger the query
     const viewCommentsButton = screen.getByTestId('comment-card');
@@ -1072,28 +1048,9 @@ describe('PostCard', () => {
     const { setItem } = useLocalStorage();
     setItem('userId', '1');
 
-    const mocksWithNullFetchMore = [
-      commentsWithPaginationMock,
-      nullFetchMoreMock,
-      ...mocks,
-    ];
-
-    const linkWithNullFetchMore = new StaticMockLink(
-      mocksWithNullFetchMore,
-      true,
-    );
-
-    render(
-      <MockedProvider link={linkWithNullFetchMore}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...defaultProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderPostCardWithPagination({
+      fetchMoreMock: nullFetchMoreMock,
+    });
 
     // Open comments section
     const viewCommentsButton = screen.getByTestId('comment-card');

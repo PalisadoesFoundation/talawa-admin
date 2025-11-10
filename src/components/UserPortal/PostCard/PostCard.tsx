@@ -182,17 +182,20 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
   // Query for paginated comments
+  const shouldSkipComments = !showComments || !userId;
   const {
     data: commentsData,
     loading: commentsLoading,
     fetchMore: fetchMoreComments,
   } = useQuery(GET_POST_COMMENTS, {
-    variables: {
-      postId: props.id,
-      userId: userId,
-      first: 10, // Initial load - first 10 comments
-    },
-    skip: !showComments, // Only fetch when comments are shown
+    skip: shouldSkipComments,
+    variables: shouldSkipComments
+      ? undefined
+      : {
+          postId: props.id,
+          userId: userId as string,
+          first: 10,
+        },
     onCompleted: (data) => {
       if (data?.post?.comments) {
         const edges = data.post.comments.edges || [];
