@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -898,8 +898,8 @@ describe('PostCard', () => {
   const renderPostCardWithPagination = (
     options: {
       mockOverrides?: Partial<InterfacePostCard>;
-      customMocks?: any[];
-      fetchMoreMock?: any;
+      customMocks?: MockedResponse[];
+      fetchMoreMock?: MockedResponse;
       addTypename?: boolean;
     } = {},
   ) => {

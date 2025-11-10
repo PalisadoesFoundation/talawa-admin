@@ -225,6 +225,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       await fetchMoreComments({
         variables: {
           postId: props.id,
+          userId: userId as string,
           first: 10,
           after: endCursor,
         },
