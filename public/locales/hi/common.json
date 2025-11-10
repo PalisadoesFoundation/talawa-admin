@@ -43,6 +43,8 @@
   "confirmPassword": "पासवर्ड की पुष्टि कीजिये",
   "forgotPassword": "पासवर्ड भूल गए ?",
   "talawaAdminPortal": "तलावा एडमिन पोर्टल",
+  "adminPortal": "एडमिन पोर्टल",
+  "userPortal": "यूज़र पोर्टल",
   "address": "पता",
   "location": "जगह",
   "enterLocation": "स्थान दर्ज करें",

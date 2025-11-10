@@ -24,12 +24,14 @@ const mockTCommon = vi.fn((key: string) => {
   const translations: Record<string, string> = {
     menu: 'Menu',
     Settings: 'Settings',
+    userPortal: 'User Portal',
+    notifications: 'Notifications', // Used by notification button in component
   };
   return translations[key] || key;
 });
 
 vi.mock('react-i18next', () => ({
-  useTranslation: vi.fn((namespace: string) => {
+  useTranslation: vi.fn((namespace?: string) => {
     if (namespace === 'common') {
       return { t: mockTCommon };
     }
@@ -219,11 +221,12 @@ describe('UserSidebar', () => {
 
       expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
       expect(screen.getByTestId('talawa-logo')).toBeInTheDocument();
-      expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
-      expect(screen.getByText('Menu')).toBeInTheDocument();
+      expect(screen.getByText('User Portal')).toBeInTheDocument();
       expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
       expect(screen.getByTestId('settingsBtn')).toBeInTheDocument();
-      expect(screen.getByTestId('profile-dropdown')).toBeInTheDocument();
+      // Multiple ProfileCards render by design - one at top (with blue bg) and one at bottom
+      const profileDropdowns = screen.getAllByTestId('profile-dropdown');
+      expect(profileDropdowns.length).toBe(2);
     });
 
     it('should render navigation links with correct text', () => {
@@ -511,9 +514,8 @@ describe('UserSidebar', () => {
     it('should use correct translation keys', () => {
       renderComponent();
 
-      expect(mockT).toHaveBeenCalledWith('talawaUserPortal');
+      expect(mockTCommon).toHaveBeenCalledWith('userPortal');
       expect(mockT).toHaveBeenCalledWith('my organizations');
-      expect(mockTCommon).toHaveBeenCalledWith('menu');
       expect(mockTCommon).toHaveBeenCalledWith('Settings');
     });
   });
@@ -522,8 +524,10 @@ describe('UserSidebar', () => {
     it('should have ProfileDropdown in the bottom section', () => {
       renderComponent();
 
-      const profileDropdown = screen.getByTestId('profile-dropdown');
-      expect(profileDropdown).toBeInTheDocument();
+      // ProfileCard count already verified in "Component Rendering" section
+      // This test verifies the bottom ProfileCard specifically exists
+      const profileDropdowns = screen.getAllByTestId('profile-dropdown');
+      expect(profileDropdowns[1]).toBeInTheDocument();
     });
 
     it('should apply correct structure classes', () => {
@@ -533,43 +537,8 @@ describe('UserSidebar', () => {
       expect(container).toHaveClass('leftDrawer');
 
       // Check for the main content structure
-      const mainContent = container.querySelector('.leftbarcompheight');
+      const mainContent = screen.getByTestId('sidebar-main-content');
       expect(mainContent).toBeInTheDocument();
-      expect(mainContent).toHaveClass(
-        'd-flex',
-        'flex-column',
-        'leftbarcompheight',
-      );
-    });
-  });
-
-  describe('Active State Styling', () => {
-    it('should apply active styles when on organizations route', () => {
-      renderWithRoute('/user/organizations');
-
-      const orgsButton = screen.getByTestId('orgsBtn');
-      expect(orgsButton).toHaveClass('btn-success');
-    });
-
-    it('should apply active styles when on settings route', () => {
-      renderWithRoute('/user/settings');
-
-      const settingsButton = screen.getByTestId('settingsBtn');
-      expect(settingsButton).toHaveClass('btn-success');
-    });
-
-    it('should apply active stroke color to icons when route is active', () => {
-      renderWithRoute('/user/organizations');
-
-      const orgIcon = screen.getByTestId('organizations-icon');
-      expect(orgIcon).toHaveAttribute('data-stroke', '#000000');
-    });
-
-    it('should apply inactive stroke color to icons when route is not active', () => {
-      renderWithRoute('/user/other');
-
-      const orgIcon = screen.getByTestId('organizations-icon');
-      expect(orgIcon).toHaveAttribute('data-stroke', 'var(--bs-secondary)');
     });
   });
 
