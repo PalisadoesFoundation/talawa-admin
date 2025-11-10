@@ -184,9 +184,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   // Query for paginated comments
   const shouldSkipComments = !showComments || !userId;
   const {
-    data: commentsData,
     loading: commentsLoading,
     fetchMore: fetchMoreComments,
+    refetch: refetchComments,
   } = useQuery(GET_POST_COMMENTS, {
     skip: shouldSkipComments,
     variables: shouldSkipComments
@@ -198,7 +198,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         },
     onCompleted: (data) => {
       if (data?.post?.comments) {
-        const edges = data.post.comments.edges || [];
+        const edges = data.post.comments.edges;
         const pageInfo = data.post.comments.pageInfo;
         setComments(edges.map((edge: InterfaceCommentEdge) => edge.node));
         setEndCursor(pageInfo.endCursor);
@@ -218,8 +218,6 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   };
 
   const handleLoadMoreComments = async (): Promise<void> => {
-    if (!hasNextPage || loadingMoreComments) return;
-
     setLoadingMoreComments(true);
     try {
       await fetchMoreComments({
@@ -232,7 +230,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         updateQuery: (prev, { fetchMoreResult }) => {
           if (!fetchMoreResult?.post?.comments) return prev;
 
-          const newEdges = fetchMoreResult.post.comments.edges || [];
+          const newEdges = fetchMoreResult.post.comments.edges;
           const newPageInfo = fetchMoreResult.post.comments.pageInfo;
 
           // Update local state
@@ -249,7 +247,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               ...prev.post,
               comments: {
                 ...prev.post.comments,
-                edges: [...(prev.post?.comments?.edges || []), ...newEdges],
+                edges: [...prev.post.comments.edges, ...newEdges],
                 pageInfo: newPageInfo,
               },
             },
@@ -306,13 +304,12 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       // Refresh the post data and comments
       props.fetchPosts();
 
-      // If comments are currently shown, refresh the comments query
-      if (showComments && commentsData?.post?.comments) {
-        // Reset and refetch comments to show the new comment
-        setComments([]);
-        setEndCursor(null);
-        setHasNextPage(false);
-        // The useQuery hook will automatically refetch since the post was updated
+      if (showComments && userId) {
+        await refetchComments({
+          postId: props.id,
+          userId: userId as string,
+          first: 10,
+        });
       }
     } catch (error: unknown) {
       errorHandler(t, error);
