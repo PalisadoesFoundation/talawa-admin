@@ -493,7 +493,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               ))}
 
               {/* Load More Comments Button */}
-              {hasNextPage && (
+              {hasNextPage ? (
                 <Box display="flex" justifyContent="center" py={2}>
                   <Button
                     onClick={handleLoadMoreComments}
@@ -514,6 +514,12 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                       t('loadMoreComments')
                     )}
                   </Button>
+                </Box>
+              ) : (
+                <Box display="flex" justifyContent="center" py={2}>
+                  <Typography variant="body2" color="text.secondary">
+                    {t('noMoreComments')}
+                  </Typography>
                 </Box>
               )}
             </CommentSection>

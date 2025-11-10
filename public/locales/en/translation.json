@@ -1125,8 +1125,9 @@
     "editPost": "Edit Post",
     "viewComments": "View {{count}} comments",
     "hideComments": "Hide comments",
-    "loadingComments": "Loading comments...",
+    "loadingComments": "Loading comments…",
     "loadMoreComments": "Load more comments",
+    "noMoreComments": "No more comments",
     "postedOn": "Posted on {{date}}",
     "emptyCommentError": "Please enter a comment before submitting.",
     "unexpectedError": "An unexpected error occurred. Please try again."

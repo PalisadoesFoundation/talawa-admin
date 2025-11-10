@@ -1084,8 +1084,9 @@
     "editPost": "पोस्ट संपादित करें",
     "viewComments": "{{count}} टिप्पणियाँ देखें",
     "hideComments": "टिप्पणियाँ छुपाएँ",
-    "loadingComments": "टिप्पणियाँ लोड हो रही हैं...",
+    "loadingComments": "टिप्पणियाँ लोड हो रही हैं…",
     "loadMoreComments": "अधिक टिप्पणियाँ लोड करें",
+    "noMoreComments": "और कोई टिप्पणी नहीं है",
     "postedOn": "{{date}} को पोस्ट किया गया",
     "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।",
     "unexpectedError": "एक अप्रत्याशित त्रुटि हुई। कृपया फिर से प्रयास करें।"
