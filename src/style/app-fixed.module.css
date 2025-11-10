@@ -988,7 +988,7 @@
   position: absolute;
   z-index: 10;
   bottom: 0;
-  right: 0;
+  right: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1513,6 +1513,9 @@ form label,
   background-color: var(--createButton-bg) !important;
   color: var(--createButton-color) !important;
   border: 1px solid var(--createButton-border) !important;
+  margin: 5px 10px;
+  width: 10rem;
+  height: 3rem;
 }
 
 .createButton:hover {
@@ -7758,6 +7761,7 @@ form {
 
 .btnsContainerOrgPost .btnsBlockOrgPost {
   display: flex;
+  align-items: center;
 }
 
 .btnsContainerOrgPost .btnsBlockOrgPost button {
