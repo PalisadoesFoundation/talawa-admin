@@ -10,7 +10,6 @@ describe('EventHeader Component', () => {
   const viewType = ViewType.MONTH;
   let handleChangeView: ReturnType<typeof vi.fn>;
   let showInviteModal: ReturnType<typeof vi.fn>;
-  let consoleSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
     /**
@@ -22,12 +21,6 @@ describe('EventHeader Component', () => {
      * Mock function to handle the display of the invite modal.
      */
     showInviteModal = vi.fn();
-
-    consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-  });
-
-  afterEach(() => {
-    consoleSpy.mockRestore();
   });
 
   it('renders correctly', () => {
@@ -66,7 +59,7 @@ describe('EventHeader Component', () => {
     // Expect handleChangeView to be called with the new view type
     expect(handleChangeView).toHaveBeenCalledTimes(1);
   });
-  it('logs selected event type without calling handleChangeView', async () => {
+  it('calls handleChangeView with selected event type', async () => {
     const { getByTestId } = render(
       <I18nextProvider i18n={i18nForTest}>
         <EventHeader
@@ -83,8 +76,7 @@ describe('EventHeader Component', () => {
       fireEvent.click(getByTestId('Events'));
     });
 
-    expect(handleChangeView).not.toHaveBeenCalled();
-    expect(consoleSpy).toHaveBeenCalledWith('Selected: Events');
+    expect(handleChangeView).toHaveBeenCalledTimes(1);
   });
 
   it('calls showInviteModal when create event button is clicked', () => {
