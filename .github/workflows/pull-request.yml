@@ -624,7 +624,7 @@ jobs:
           SF_COUNT=$(grep -c "^SF:" ./coverage/vitest/lcov.info || echo "0")
           echo "� Number of files in merged coverage: $SF_COUNT"
 
-          if [ "$SF_COUNT" -lt 100 ]; then
+          if [ "$SF_COUNT" -lt 250 ]; then
             echo "⚠️ WARNING: Only $SF_COUNT files in coverage (expected 300+)"
             echo "This might indicate incomplete coverage merge"
           fi
