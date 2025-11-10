@@ -25,7 +25,7 @@ const mockTCommon = vi.fn((key: string) => {
     menu: 'Menu',
     Settings: 'Settings',
     userPortal: 'User Portal',
-    notifications: 'Notifications',
+    notifications: 'Notifications', // Used by notification button in component
   };
   return translations[key] || key;
 });
