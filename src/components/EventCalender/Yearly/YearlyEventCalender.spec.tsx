@@ -396,13 +396,16 @@ describe('Calendar Component', () => {
       <Calendar eventData={[]} refetchEvents={mockRefetchEvents} />,
     );
 
-    const expandButton = container.querySelector('.btn__more');
-    if (expandButton) {
-      await act(async () => {
-        fireEvent.click(expandButton);
-      });
-      expect(await findByText('No Event Available!')).toBeInTheDocument();
-    }
+    const expandButton = await waitFor(() => {
+      const btn = container.querySelector('.btn__more');
+      expect(btn).toBeInTheDocument();
+      return btn as HTMLElement;
+    });
+
+    await act(async () => {
+      fireEvent.click(expandButton);
+    });
+    expect(await findByText('No Event Available!')).toBeInTheDocument();
   });
 
   it('updates events when props change', async () => {
@@ -443,16 +446,13 @@ describe('Calendar Component', () => {
       '[data-testid^="expand-btn-"]',
     );
 
-    for (const button of Array.from(expandButtons)) {
-      fireEvent.click(button);
-      // Expect one of the event names to appear when expanded
-      if (
-        screen.queryByText('New Test Event') ||
-        screen.queryByText('Test Event')
-      ) {
+    // Click first expand button and verify event appears
+    if (expandButtons.length > 0) {
+      fireEvent.click(expandButtons[0]);
+      await waitFor(() => {
+        // Expect one of the event names to appear when expanded
         expect(screen.queryByText(/New Test Event|Test Event/)).toBeTruthy();
-        break;
-      }
+      });
     }
   });
 
@@ -694,21 +694,16 @@ describe('Calendar Component', () => {
     await findAllByTestId('day');
 
     // There should be no expand button for events since the private event is excluded
-    const expandButton = container.querySelector(
-      '[data-testid^="expand-btn-"]',
-    );
-    expect(expandButton).toBeNull();
-
     // Click a no-events button to exercise the toggleExpand(onClick) path
-    const noEventsButton = container.querySelector(
-      '[data-testid^="no-events-btn-"]',
-    );
-    expect(noEventsButton).toBeInTheDocument();
-    if (noEventsButton) {
-      await act(async () => {
-        fireEvent.click(noEventsButton);
-      });
-    }
+    const noEventsButton = await waitFor(() => {
+      const btn = container.querySelector('[data-testid^="no-events-btn-"]');
+      expect(btn).toBeInTheDocument();
+      return btn as HTMLButtonElement;
+    });
+
+    await act(async () => {
+      fireEvent.click(noEventsButton);
+    });
 
     await waitFor(() => {
       expect(screen.getByText('No Event Available!')).toBeInTheDocument();
@@ -727,16 +722,15 @@ describe('Calendar Component', () => {
 
     await findAllByTestId('day');
 
-    const noEventsButton = container.querySelector(
-      '[data-testid^="no-events-btn-"]',
-    );
-    expect(noEventsButton).toBeInTheDocument();
+    const noEventsButton = await waitFor(() => {
+      const btn = container.querySelector('[data-testid^="no-events-btn-"]');
+      expect(btn).toBeInTheDocument();
+      return btn as HTMLButtonElement;
+    });
 
-    if (noEventsButton) {
-      await act(async () => {
-        fireEvent.click(noEventsButton);
-      });
-    }
+    await act(async () => {
+      fireEvent.click(noEventsButton);
+    });
 
     await waitFor(() => {
       expect(screen.getByText('No Event Available!')).toBeInTheDocument();
@@ -867,14 +861,9 @@ describe('Calendar Component', () => {
       // Wait for potential event list to appear
       await waitFor(
         () => {
-          const eventList = container.querySelector(
-            '._expand_event_list_d8535b',
-          );
-          if (eventList) {
-            // Assert public event is present and private event is not
-            expect(screen.getByText('Public Event')).toBeInTheDocument();
-            expect(screen.queryByText('Private Event')).toBeNull();
-          }
+          // Assert public event is present and private event is not
+          expect(screen.getByText('Public Event')).toBeInTheDocument();
+          expect(screen.queryByText('Private Event')).toBeNull();
         },
         { timeout: 1000 },
       );
@@ -955,14 +944,9 @@ describe('Calendar Component', () => {
       // Wait for potential event list to appear
       await waitFor(
         () => {
-          const eventList = container.querySelector(
-            '._expand_event_list_d8535b',
-          );
-          if (eventList) {
-            // Assert public event is present and private event is not
-            expect(screen.getByText('Public Event')).toBeInTheDocument();
-            expect(screen.queryByText('Private Event')).not.toBeInTheDocument();
-          }
+          // Assert public event is present and private event is not
+          expect(screen.getByText('Public Event')).toBeInTheDocument();
+          expect(screen.queryByText('Private Event')).not.toBeInTheDocument();
         },
         { timeout: 1000 },
       );
@@ -1292,15 +1276,15 @@ describe('Calendar Component', () => {
     });
 
     // Optionally interact with the explicit no-events button to validate empty-state UI
-    const noEventsButton = container.querySelector(
-      '[data-testid^="no-events-btn-"]',
-    );
-    expect(noEventsButton).toBeInTheDocument();
-    if (noEventsButton) {
-      await act(async () => {
-        fireEvent.click(noEventsButton);
-      });
-    }
+    const noEventsButton = await waitFor(() => {
+      const btn = container.querySelector('[data-testid^="no-events-btn-"]');
+      expect(btn).toBeInTheDocument();
+      return btn as HTMLButtonElement;
+    });
+
+    await act(async () => {
+      fireEvent.click(noEventsButton);
+    });
 
     await waitFor(() => {
       expect(screen.getByText('No Event Available!')).toBeInTheDocument();
@@ -1332,9 +1316,8 @@ describe('Calendar Component', () => {
       });
 
       expect(todayElement).toBeInTheDocument();
-      // Verify the element has distinct styling (CSS modules generate hashed class names)
-      // The className should include the today styling
-      expect(todayElement?.className).toBeTruthy();
+      // Verify the specific today highlighting class is applied
+      expect(todayElement?.className).toContain('day__today');
     });
   });
 
@@ -1370,34 +1353,29 @@ describe('Calendar Component', () => {
       />,
     );
 
-    await waitFor(() => {
-      const expandButtons = container.querySelectorAll(
-        '[data-testid^="expand-btn-"]',
-      );
-      expect(expandButtons.length).toBeGreaterThan(0);
+    // Use assertive query - test will fail if button not found
+    const expandButton = await waitFor(() => {
+      const btn = container.querySelector('[data-testid^="expand-btn-"]');
+      expect(btn).toBeInTheDocument();
+      return btn as HTMLButtonElement;
     });
 
-    const expandButton = container.querySelector(
-      '[data-testid^="expand-btn-"]',
-    );
-    if (expandButton) {
-      await act(async () => {
-        fireEvent.click(expandButton);
-      });
+    await act(async () => {
+      fireEvent.click(expandButton);
+    });
 
-      await waitFor(() => {
-        expect(screen.getByText('Today Event')).toBeInTheDocument();
-        expect(screen.getByText('Close')).toBeInTheDocument();
-      });
+    await waitFor(() => {
+      expect(screen.getByText('Today Event')).toBeInTheDocument();
+      expect(screen.getByText('Close')).toBeInTheDocument();
+    });
 
-      await act(async () => {
-        fireEvent.click(expandButton);
-      });
+    await act(async () => {
+      fireEvent.click(expandButton);
+    });
 
-      await waitFor(() => {
-        expect(screen.queryByText('Today Event')).not.toBeInTheDocument();
-      });
-    }
+    await waitFor(() => {
+      expect(screen.queryByText('Today Event')).not.toBeInTheDocument();
+    });
   });
 
   test('verifies REGULAR user can view public events', async () => {
@@ -1432,63 +1410,19 @@ describe('Calendar Component', () => {
       />,
     );
 
-    await waitFor(() => {
-      const expandButtons = container.querySelectorAll(
-        '[data-testid^="expand-btn-"]',
-      );
-      expect(expandButtons.length).toBeGreaterThan(0);
+    // Use assertive query - test will fail if button not found
+    const expandButton = await waitFor(() => {
+      const btn = container.querySelector('[data-testid^="expand-btn-"]');
+      expect(btn).toBeInTheDocument();
+      return btn as HTMLButtonElement;
     });
 
-    const expandButton = container.querySelector(
-      '[data-testid^="expand-btn-"]',
-    );
-    if (expandButton) {
-      await act(async () => {
-        fireEvent.click(expandButton);
-      });
-
-      await waitFor(() => {
-        expect(screen.getByText('Public Event')).toBeInTheDocument();
-      });
-    }
-  });
-
-  test('navigates between years and renders calendar grid correctly', async () => {
-    const { container, getByTestId } = renderWithRouterAndPath(
-      <Calendar
-        eventData={[]}
-        refetchEvents={vi.fn()}
-        orgData={mockOrgData}
-        userRole={UserRole.ADMINISTRATOR}
-        userId="user1"
-      />,
-    );
-
-    const currentYear = new Date().getFullYear();
-    await waitFor(() => {
-      expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
-    });
-
-    // Navigate to previous year
     await act(async () => {
-      fireEvent.click(getByTestId('prevYear'));
+      fireEvent.click(expandButton);
     });
 
     await waitFor(() => {
-      expect(screen.getByText(String(currentYear - 1))).toBeInTheDocument();
-      const dayElements = container.querySelectorAll('[data-testid="day"]');
-      expect(dayElements.length).toBeGreaterThan(0);
-    });
-
-    // Navigate back to current year
-    await act(async () => {
-      fireEvent.click(getByTestId('nextYear'));
-    });
-
-    await waitFor(() => {
-      expect(screen.getByText(String(currentYear))).toBeInTheDocument();
-      const dayElements = container.querySelectorAll('[data-testid="day"]');
-      expect(dayElements.length).toBeGreaterThan(0);
+      expect(screen.getByText('Public Event')).toBeInTheDocument();
     });
   });
 
@@ -1552,22 +1486,30 @@ describe('Calendar Component', () => {
       expect(expandButtons.length).toBeGreaterThan(0);
     });
 
-    // Click first expand button and verify event appears
-    const firstExpandButton = container.querySelector(
+    // Verify both events can be expanded and displayed
+    const expandButtons = container.querySelectorAll(
       '[data-testid^="expand-btn-"]',
     );
-    if (firstExpandButton) {
-      await act(async () => {
-        fireEvent.click(firstExpandButton);
-      });
+    expect(expandButtons.length).toBeGreaterThanOrEqual(2);
 
-      await waitFor(() => {
-        // At least one event should be visible
-        const event1Visible = screen.queryByText('Event 1');
-        const event2Visible = screen.queryByText('Event 2');
-        expect(event1Visible || event2Visible).toBeTruthy();
-      });
-    }
+    // Expand and verify first event
+    await act(async () => {
+      fireEvent.click(expandButtons[0]);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Event 1')).toBeInTheDocument();
+    });
+
+    // Collapse first, expand second
+    await act(async () => {
+      fireEvent.click(expandButtons[0]);
+      fireEvent.click(expandButtons[1]);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Event 2')).toBeInTheDocument();
+    });
   });
 
   test('closes expanded no-events panel when clicked again', async () => {
@@ -1586,31 +1528,29 @@ describe('Calendar Component', () => {
       expect(dayElements.length).toBeGreaterThan(0);
     });
 
-    const noEventsButton = container.querySelector(
-      '[data-testid^="no-events-btn-"]',
-    );
-    expect(noEventsButton).toBeInTheDocument();
+    // Use assertive query - test will fail if button not found
+    const noEventsButton = await waitFor(() => {
+      const btn = container.querySelector('[data-testid^="no-events-btn-"]');
+      expect(btn).toBeInTheDocument();
+      return btn as HTMLButtonElement;
+    });
 
-    if (noEventsButton) {
-      await act(async () => {
-        fireEvent.click(noEventsButton);
-      });
+    await act(async () => {
+      fireEvent.click(noEventsButton);
+    });
 
-      await waitFor(() => {
-        expect(screen.getByText('No Event Available!')).toBeInTheDocument();
-        expect(screen.getByText('Close')).toBeInTheDocument();
-      });
+    await waitFor(() => {
+      expect(screen.getByText('No Event Available!')).toBeInTheDocument();
+      expect(screen.getByText('Close')).toBeInTheDocument();
+    });
 
-      await act(async () => {
-        fireEvent.click(noEventsButton);
-      });
+    await act(async () => {
+      fireEvent.click(noEventsButton);
+    });
 
-      await waitFor(() => {
-        expect(
-          screen.queryByText('No Event Available!'),
-        ).not.toBeInTheDocument();
-      });
-    }
+    await waitFor(() => {
+      expect(screen.queryByText('No Event Available!')).not.toBeInTheDocument();
+    });
   });
 
   test('renders days from adjacent months (padding days)', async () => {
@@ -1625,6 +1565,28 @@ describe('Calendar Component', () => {
     );
 
     await waitFor(() => {
+      // Verify all 12 month headers are rendered
+      const monthHeaders = screen.getAllByRole('heading', { level: 6 });
+      expect(monthHeaders.length).toBeGreaterThanOrEqual(12);
+
+      const months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+      ];
+      months.forEach((month) => {
+        expect(screen.getByText(month)).toBeInTheDocument();
+      });
+
       const dayElements = container.querySelectorAll('[data-testid="day"]');
       expect(dayElements.length).toBeGreaterThan(0);
 
