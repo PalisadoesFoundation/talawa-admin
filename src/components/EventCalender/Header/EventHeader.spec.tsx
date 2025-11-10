@@ -8,16 +8,20 @@ import { vi } from 'vitest';
 
 describe('EventHeader Component', () => {
   const viewType = ViewType.MONTH;
+  let handleChangeView: ReturnType<typeof vi.fn>;
+  let showInviteModal: ReturnType<typeof vi.fn>;
 
-  /**
-   * Mock function to handle view type changes.
-   */
-  const handleChangeView = vi.fn();
+  beforeEach(() => {
+    /**
+     * Mock function to handle view type changes.
+     */
+    handleChangeView = vi.fn();
 
-  /**
-   * Mock function to handle the display of the invite modal.
-   */
-  const showInviteModal = vi.fn();
+    /**
+     * Mock function to handle the display of the invite modal.
+     */
+    showInviteModal = vi.fn();
+  });
 
   it('renders correctly', () => {
     const { getByTestId } = render(

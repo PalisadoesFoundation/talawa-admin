@@ -39,52 +39,6 @@ const t = JSON.parse(
   ),
 );
 
-// Updated itemProps to match the new interface
-const itemProps: IItemDeleteModalProps = {
-  isOpen: true,
-  hide: vi.fn(),
-  actionItemsRefetch: vi.fn(),
-  actionItem: {
-    id: 'actionItemId1',
-    volunteerId: null,
-    volunteerGroupId: null,
-    categoryId: 'categoryId1',
-    eventId: null,
-    recurringEventInstanceId: null,
-    organizationId: 'orgId1',
-    creatorId: 'userId2',
-    updaterId: null,
-    assignedAt: new Date('2024-08-27'),
-    completionAt: new Date('2044-09-03'),
-    createdAt: new Date('2024-01-01T00:00:00.000Z'),
-    updatedAt: null,
-    isCompleted: true,
-    preCompletionNotes: 'Notes 1',
-    postCompletionNotes: 'Cmp Notes 1',
-    isInstanceException: false,
-
-    // Related entities updated according to the new interfaces
-    volunteer: null,
-    volunteerGroup: null,
-    creator: {
-      id: 'userId2',
-      name: 'Wilt Shepherd',
-      emailAddress: '',
-      avatarURL: '',
-    },
-    event: null,
-    recurringEventInstance: null,
-    category: {
-      id: 'categoryId1',
-      name: 'Category 1',
-      description: null, // Added required field
-      isDisabled: false, // Added required field
-      createdAt: '2024-01-01T00:00:00.000Z', // Added required field
-      organizationId: 'orgId1', // Added required field
-    },
-  },
-};
-
 const renderItemDeleteModal = (
   link: ApolloLink,
   props: IItemDeleteModalProps,
@@ -105,13 +59,61 @@ const renderItemDeleteModal = (
 };
 
 describe('Testing ItemDeleteModal', () => {
+  let testItemProps: IItemDeleteModalProps;
+
+  beforeEach(() => {
+    // Create fresh mocks for each test
+    testItemProps = {
+      isOpen: true,
+      hide: vi.fn(),
+      actionItemsRefetch: vi.fn(),
+      actionItem: {
+        id: 'actionItemId1',
+        volunteerId: null,
+        volunteerGroupId: null,
+        categoryId: 'categoryId1',
+        eventId: null,
+        recurringEventInstanceId: null,
+        organizationId: 'orgId1',
+        creatorId: 'userId2',
+        updaterId: null,
+        assignedAt: new Date('2024-08-27'),
+        completionAt: new Date('2044-09-03'),
+        createdAt: new Date('2024-01-01T00:00:00.000Z'),
+        updatedAt: null,
+        isCompleted: true,
+        preCompletionNotes: 'Notes 1',
+        postCompletionNotes: 'Cmp Notes 1',
+        isInstanceException: false,
+        volunteer: null,
+        volunteerGroup: null,
+        creator: {
+          id: 'userId2',
+          name: 'Wilt Shepherd',
+          emailAddress: '',
+          avatarURL: '',
+        },
+        event: null,
+        recurringEventInstance: null,
+        category: {
+          id: 'categoryId1',
+          name: 'Category 1',
+          description: null,
+          isDisabled: false,
+          createdAt: '2024-01-01T00:00:00.000Z',
+          organizationId: 'orgId1',
+        },
+      },
+    };
+  });
+
   it('should render ItemDeleteModal', () => {
-    renderItemDeleteModal(link1, itemProps);
+    renderItemDeleteModal(link1, testItemProps);
     expect(screen.getByText(t.deleteActionItem)).toBeInTheDocument();
   });
 
   it('should successfully Delete Action Item', async () => {
-    renderItemDeleteModal(link1, itemProps);
+    renderItemDeleteModal(link1, testItemProps);
     expect(screen.getByTestId('deleteyesbtn')).toBeInTheDocument();
 
     await act(() => {
@@ -119,14 +121,14 @@ describe('Testing ItemDeleteModal', () => {
     });
 
     await waitFor(() => {
-      expect(itemProps.actionItemsRefetch).toHaveBeenCalled();
-      expect(itemProps.hide).toHaveBeenCalled();
+      expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
+      expect(testItemProps.hide).toHaveBeenCalled();
       expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
     });
   });
 
   it('should fail to Delete Action Item', async () => {
-    renderItemDeleteModal(link2, itemProps);
+    renderItemDeleteModal(link2, testItemProps);
     expect(screen.getByTestId('deleteyesbtn')).toBeInTheDocument();
     fireEvent.click(screen.getByTestId('deleteyesbtn'));
 
@@ -138,7 +140,7 @@ describe('Testing ItemDeleteModal', () => {
   describe('Conditional Logic for Recurring Events', () => {
     it('should not render applyTo radio buttons when eventId is not provided', () => {
       const propsWithoutEventId: IItemDeleteModalProps = {
-        ...itemProps,
+        ...testItemProps,
         eventId: undefined,
         isRecurring: true,
       };
@@ -152,7 +154,7 @@ describe('Testing ItemDeleteModal', () => {
 
     it('should not render applyTo radio buttons when isRecurring is false', () => {
       const propsNotRecurring: IItemDeleteModalProps = {
-        ...itemProps,
+        ...testItemProps,
         eventId: 'event123',
         isRecurring: false,
       };
@@ -166,9 +168,9 @@ describe('Testing ItemDeleteModal', () => {
 
     it('should render applyTo radio buttons when eventId and isRecurring are provided', () => {
       const propsWithRecurring: IItemDeleteModalProps = {
-        ...itemProps,
+        ...testItemProps,
         actionItem: {
-          ...itemProps.actionItem,
+          ...testItemProps.actionItem,
           isTemplate: true,
         },
         eventId: 'event123',
@@ -188,9 +190,9 @@ describe('Testing ItemDeleteModal', () => {
 
     it('should allow switching between series and instance options', () => {
       const propsWithRecurring: IItemDeleteModalProps = {
-        ...itemProps,
+        ...testItemProps,
         actionItem: {
-          ...itemProps.actionItem,
+          ...testItemProps.actionItem,
           isTemplate: true,
         },
         eventId: 'event123',
@@ -219,9 +221,9 @@ describe('Testing ItemDeleteModal', () => {
 
     it('should use DELETE_ACTION_ITEM_MUTATION when applyTo is series', async () => {
       const propsWithRecurring: IItemDeleteModalProps = {
-        ...itemProps,
+        ...testItemProps,
         actionItem: {
-          ...itemProps.actionItem,
+          ...testItemProps.actionItem,
           isTemplate: true,
         },
         eventId: 'event123',
@@ -240,17 +242,17 @@ describe('Testing ItemDeleteModal', () => {
       });
 
       await waitFor(() => {
-        expect(itemProps.actionItemsRefetch).toHaveBeenCalled();
-        expect(itemProps.hide).toHaveBeenCalled();
+        expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
+        expect(testItemProps.hide).toHaveBeenCalled();
         expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
       });
     });
 
     it('should use DELETE_ACTION_FOR_INSTANCE when applyTo is instance', async () => {
       const propsWithRecurring: IItemDeleteModalProps = {
-        ...itemProps,
+        ...testItemProps,
         actionItem: {
-          ...itemProps.actionItem,
+          ...testItemProps.actionItem,
           isTemplate: true,
         },
         eventId: 'event123',
@@ -270,15 +272,15 @@ describe('Testing ItemDeleteModal', () => {
       });
 
       await waitFor(() => {
-        expect(itemProps.actionItemsRefetch).toHaveBeenCalled();
-        expect(itemProps.hide).toHaveBeenCalled();
+        expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
+        expect(testItemProps.hide).toHaveBeenCalled();
         expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
       });
     });
 
     it('should use DELETE_ACTION_ITEM_MUTATION for non-recurring events', async () => {
       const propsNonRecurring: IItemDeleteModalProps = {
-        ...itemProps,
+        ...testItemProps,
         eventId: 'event123',
         isRecurring: false,
       };
@@ -294,15 +296,15 @@ describe('Testing ItemDeleteModal', () => {
       });
 
       await waitFor(() => {
-        expect(itemProps.actionItemsRefetch).toHaveBeenCalled();
-        expect(itemProps.hide).toHaveBeenCalled();
+        expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
+        expect(testItemProps.hide).toHaveBeenCalled();
         expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
       });
     });
 
     it('should use DELETE_ACTION_ITEM_MUTATION when eventId is not provided', async () => {
       const propsWithoutEventId: IItemDeleteModalProps = {
-        ...itemProps,
+        ...testItemProps,
         eventId: undefined,
         isRecurring: true,
       };
@@ -318,17 +320,17 @@ describe('Testing ItemDeleteModal', () => {
       });
 
       await waitFor(() => {
-        expect(itemProps.actionItemsRefetch).toHaveBeenCalled();
-        expect(itemProps.hide).toHaveBeenCalled();
+        expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
+        expect(testItemProps.hide).toHaveBeenCalled();
         expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
       });
     });
 
     it('should handle error when deleting instance fails', async () => {
       const propsWithRecurring: IItemDeleteModalProps = {
-        ...itemProps,
+        ...testItemProps,
         actionItem: {
-          ...itemProps.actionItem,
+          ...testItemProps.actionItem,
           isTemplate: true,
         },
         eventId: 'event123',
