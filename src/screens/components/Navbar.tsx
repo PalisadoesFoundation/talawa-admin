@@ -22,7 +22,6 @@ interface InterfacePageHeaderProps {
     title: string;
     options: { label: string; value: string | number }[];
     selected: string | number;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onChange: (value: any) => void;
   }>;
   showEventTypeFilter?: boolean;
