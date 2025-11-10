@@ -404,22 +404,15 @@ jobs:
           python .github/workflows/scripts/itskip_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
   Test-Application:
-    name: Test Application (Shard ${{ matrix.shard }})
+    name: Test Application
     runs-on: ubuntu-latest
     needs:
       [
         Code-Quality-Checks,
-        Check-AutoDocs,
         Check-ESlint-Disable,
         Check-Code-Coverage-Disable,
         Check-ItSkip-Disable,
       ]
-    env:
-      TOTAL_SHARDS: 4
-    strategy:
-      fail-fast: false
-      matrix:
-        shard: [1, 2, 3, 4]
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
@@ -460,201 +453,28 @@ jobs:
         run: |
           npx tsc --noEmit
 
-      - name: Run Vitest Tests (Shard ${{ matrix.shard }}/${{ env.TOTAL_SHARDS }})
+      - name: Run Vitest Tests
         if: steps.changed-files.outputs.any_changed == 'true'
         env:
           NODE_V8_COVERAGE: './coverage/vitest'
-          NODE_OPTIONS: '--max-old-space-size=4096'
-          SHARD_INDEX: ${{ matrix.shard }}
-          SHARD_COUNT: ${{ env.TOTAL_SHARDS }}
+          NODE_OPTIONS: '--max-old-space-size=6144'
         run: |
-          npm run test:shard:coverage
+          npm run test:coverage
 
-      - name: Upload coverage artifact
-        if: always() && steps.changed-files.outputs.any_changed == 'true'
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-shard-${{ matrix.shard }}
-          path: ./coverage/vitest/
-          retention-days: 1
-
-  Merge-Coverage:
-    name: Merge Coverage Reports
-    runs-on: ubuntu-latest
-    needs: [Test-Application]
-    if: success() || failure()
-    steps:
-      - name: Checkout the Repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24.x'
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Install coverage merge tools
-        run: npm install --no-save nyc lcov-result-merger
-
-      - name: Download all coverage artifacts
-        id: download-artifacts
-        continue-on-error: true
-        uses: actions/download-artifact@v4
-        with:
-          pattern: coverage-shard-*
-          path: ./coverage-shards/
-          merge-multiple: false
-
-      - name: Check if artifacts were downloaded
-        id: check-artifacts
-        run: |
-          # Check if any coverage files exist
-          if find coverage-shards -name "lcov.info" -type f | grep -q .; then
-            echo "artifacts_found=true" >> $GITHUB_OUTPUT
-            echo "✅ Coverage artifacts found"
-          else
-            echo "artifacts_found=false" >> $GITHUB_OUTPUT
-            echo "⚠️ No coverage artifacts found - tests may have been skipped"
-          fi
-
-      - name: Merge coverage reports
-        if: steps.check-artifacts.outputs.artifacts_found == 'true'
-        run: |
-          mkdir -p ./coverage/vitest
-          mkdir -p ./coverage/tmp
-
-          # Find all coverage directories from shards
-          echo "📦 Finding coverage data from shards..."
-          SHARD_DIRS=$(find coverage-shards -type d -name "coverage-shard-*" 2>/dev/null || true)
-
-          if [ -z "$SHARD_DIRS" ]; then
-            echo "ERROR: No shard directories found!"
-            ls -la coverage-shards/ || true
-            exit 1
-          fi
-
-          echo "Found shard directories:"
-          echo "$SHARD_DIRS"
-
-          # Check if we have JSON coverage files (better for merging)
-          JSON_FILES=$(find coverage-shards -name "coverage-final.json" -type f 2>/dev/null || true)
-
-          if [ -n "$JSON_FILES" ]; then
-            echo "📊 Using JSON coverage files for accurate merging..."
-            
-            # Copy all JSON files to a temp directory for nyc merge
-            for shard_dir in coverage-shards/coverage-shard-*/; do
-              if [ -f "${shard_dir}coverage-final.json" ]; then
-                echo "Found JSON coverage in: $shard_dir"
-                cp "${shard_dir}coverage-final.json" "./coverage/tmp/coverage-shard-$(basename $shard_dir).json"
-              fi
-            done
-            
-            # Validate JSON files before merging
-            echo "Validating JSON coverage files..."
-            JSON_COUNT=$(find ./coverage/tmp -name "*.json" -type f | wc -l)
-            echo "Found $JSON_COUNT JSON files to merge"
-            
-            if [ "$JSON_COUNT" -eq 0 ]; then
-              echo "ERROR: No JSON coverage files found!"
-              exit 1
-            fi
-            
-            # Show sample of file count in each JSON
-            for json_file in ./coverage/tmp/*.json; do
-              FILE_COUNT=$(jq 'keys | length' "$json_file" 2>/dev/null || echo "0")
-              echo "  $(basename $json_file): $FILE_COUNT files"
-            done
-            
-            # Merge using nyc (more accurate than lcov merge)
-            echo "🔄 Merging coverage with nyc..."
-            npx nyc merge ./coverage/tmp ./.nyc_output/coverage-final.json
-            
-            # Validate merged JSON
-            MERGED_FILE_COUNT=$(jq 'keys | length' ./.nyc_output/coverage-final.json 2>/dev/null || echo "0")
-            echo "Merged coverage contains $MERGED_FILE_COUNT files"
-            
-            # Generate lcov from merged JSON
-            echo "📝 Generating lcov report from merged coverage..."
-            npx nyc report --reporter=lcov --report-dir=./coverage/vitest
-            
-          else
-            echo "📊 Using LCOV files for merging..."
-            # Find all lcov.info files from shards
-            find coverage-shards -name "lcov.info" -type f > lcov-files.txt
-
-            if [ ! -s lcov-files.txt ]; then
-              echo "ERROR: No lcov.info files found!"
-              exit 1
-            fi
-
-            echo "Found coverage files:"
-            cat lcov-files.txt
-
-            # Validate each file exists and is not empty (fail-fast)
-            while IFS= read -r file; do
-              if [ ! -f "$file" ]; then
-                echo "ERROR: Coverage file does not exist: $file"
-                exit 1
-              fi
-              if [ ! -s "$file" ]; then
-                echo "ERROR: Coverage file is empty: $file"
-                exit 1
-              fi
-            done < lcov-files.txt
-
-            # Use lcov-result-merger as fallback
-            npx lcov-result-merger "coverage-shards/*/lcov.info" ./coverage/vitest/lcov.info
-          fi
-
-          # Validate merged file exists and is not empty
-          if [ ! -s ./coverage/vitest/lcov.info ]; then
-            echo "ERROR: Merged coverage file is empty or missing!"
-            exit 1
-          fi
-
-          echo "✅ Coverage merge successful"
-          echo "📈 Merged file size: $(wc -l < ./coverage/vitest/lcov.info) lines"
-
-          # Count number of source files in merged coverage
-          SF_COUNT=$(grep -c "^SF:" ./coverage/vitest/lcov.info || echo "0")
-          echo "� Number of files in merged coverage: $SF_COUNT"
-
-          if [ "$SF_COUNT" -lt 100 ]; then
-            echo "⚠️ WARNING: Only $SF_COUNT files in coverage (expected 300+)"
-            echo "This might indicate incomplete coverage merge"
-          fi
-
-          echo "�📋 First 30 lines of merged coverage:"
-          head -30 ./coverage/vitest/lcov.info
-
-      - name: Clean up individual shard coverage files
-        if: steps.check-artifacts.outputs.artifacts_found == 'true'
-        run: |
-          echo "🧹 Cleaning up individual shard coverage files..."
-          # Remove all individual coverage JSON files to prevent Codecov from finding them
-          # This ensures only the merged lcov.info is uploaded
-          find ./coverage -name "coverage-*.json" -type f -delete
-          find ./coverage -name "coverage-final.json" -type f -delete
-          rm -rf ./coverage/tmp ./.nyc_output 2>/dev/null || true
-
-          echo "✅ Cleanup complete. Remaining coverage files:"
-          find ./coverage -type f \( -name "*.info" -o -name "*.json" \)
-
-          echo ""
-          echo "📊 Final coverage file to upload:"
-          ls -lh ./coverage/vitest/lcov.info
-
-      - name: Present and upload merged coverage to Codecov
-        if: steps.check-artifacts.outputs.artifacts_found == 'true'
+      ##############################################################################
+      # DO NOT DELETE ANY references to env.CODECOV_UNIQUE_NAME in this
+      # section. They are required for accurate caluclations
+      ##############################################################################
+      - name: Present and upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
         uses: codecov/codecov-action@v5
         with:
-          name: '${{env.CODECOV_UNIQUE_NAME}}-merged'
+          ##########################################################################
+          # DO NOT DELETE ANY references to env.CODECOV_UNIQUE_NAME in this
+          # section. They are required for accurate caluclations
+          ##########################################################################
+          name: '${{env.CODECOV_UNIQUE_NAME}}'
+          ##########################################################################
           token: ${{ secrets.CODECOV_TOKEN }}
-          # Using fail_ci_if_error: true to match develop branch behavior
-          # This is safe now because we validate the merged file is non-empty above
           fail_ci_if_error: true
           verbose: true
           exclude: 'docs/'
@@ -663,7 +483,6 @@ jobs:
           flags: vitest
 
       - name: Test acceptable level of code coverage
-        if: steps.check-artifacts.outputs.artifacts_found == 'true'
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
           path: './coverage/vitest/lcov.info'
@@ -700,7 +519,7 @@ jobs:
   Start-App-Without-Docker:
     name: Check if Talawa Admin app starts (No Docker)
     runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks, Merge-Coverage]
+    needs: [Code-Quality-Checks, Test-Application]
     if: github.actor != 'dependabot'
     steps:
       - name: Checkout the Repository
@@ -748,7 +567,7 @@ jobs:
   Docker-Start-Check:
     name: Check if Talawa Admin app starts in Docker
     runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks, Merge-Coverage]
+    needs: [Code-Quality-Checks, Test-Application]
     if: github.actor != 'dependabot'
     steps:
       - name: Checkout the Repository
