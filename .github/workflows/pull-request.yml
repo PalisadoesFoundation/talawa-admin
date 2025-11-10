@@ -515,10 +515,10 @@ jobs:
           # Check if any coverage files exist
           if find coverage-shards -name "lcov.info" -type f | grep -q .; then
             echo "artifacts_found=true" >> $GITHUB_OUTPUT
-            echo "✅ Coverage artifacts found"
+            echo "Coverage artifacts found"
           else
             echo "artifacts_found=false" >> $GITHUB_OUTPUT
-            echo "⚠️ No coverage artifacts found - tests may have been skipped"
+            echo "No coverage artifacts found - tests may have been skipped"
           fi
 
       - name: Merge coverage reports
@@ -528,7 +528,7 @@ jobs:
           mkdir -p ./coverage/tmp
 
           # Find all coverage directories from shards
-          echo "📦 Finding coverage data from shards..."
+          echo "Finding coverage data from shards..."
           SHARD_DIRS=$(find coverage-shards -type d -name "coverage-shard-*" 2>/dev/null || true)
 
           if [ -z "$SHARD_DIRS" ]; then
@@ -544,7 +544,7 @@ jobs:
           JSON_FILES=$(find coverage-shards -name "coverage-final.json" -type f 2>/dev/null || true)
 
           if [ -n "$JSON_FILES" ]; then
-            echo "📊 Using JSON coverage files for accurate merging..."
+            echo "Using JSON coverage files for accurate merging..."
             
             # Copy all JSON files to a temp directory for nyc merge
             for shard_dir in coverage-shards/coverage-shard-*/; do
@@ -571,7 +571,7 @@ jobs:
             done
             
             # Merge using nyc (more accurate than lcov merge)
-            echo "🔄 Merging coverage with nyc..."
+            echo "Merging coverage with nyc..."
             npx nyc merge ./coverage/tmp ./.nyc_output/coverage-final.json
             
             # Validate merged JSON
@@ -579,11 +579,11 @@ jobs:
             echo "Merged coverage contains $MERGED_FILE_COUNT files"
             
             # Generate lcov from merged JSON
-            echo "📝 Generating lcov report from merged coverage..."
+            echo "Generating lcov report from merged coverage..."
             npx nyc report --reporter=lcov --report-dir=./coverage/vitest
             
           else
-            echo "📊 Using LCOV files for merging..."
+            echo "Using LCOV files for merging..."
             # Find all lcov.info files from shards
             find coverage-shards -name "lcov.info" -type f > lcov-files.txt
 
@@ -617,36 +617,36 @@ jobs:
             exit 1
           fi
 
-          echo "✅ Coverage merge successful"
-          echo "📈 Merged file size: $(wc -l < ./coverage/vitest/lcov.info) lines"
+          echo "Coverage merge successful"
+          echo "Merged file size: $(wc -l < ./coverage/vitest/lcov.info) lines"
 
           # Count number of source files in merged coverage
           SF_COUNT=$(grep -c "^SF:" ./coverage/vitest/lcov.info || echo "0")
-          echo "� Number of files in merged coverage: $SF_COUNT"
+          echo "Number of files in merged coverage: $SF_COUNT"
 
           if [ "$SF_COUNT" -lt 250 ]; then
-            echo "⚠️ WARNING: Only $SF_COUNT files in coverage (expected 300+)"
+            echo "WARNING: Only $SF_COUNT files in coverage (expected 300+)"
             echo "This might indicate incomplete coverage merge"
           fi
 
-          echo "�📋 First 30 lines of merged coverage:"
+          echo "First 30 lines of merged coverage:"
           head -30 ./coverage/vitest/lcov.info
 
       - name: Clean up individual shard coverage files
         if: steps.check-artifacts.outputs.artifacts_found == 'true'
         run: |
-          echo "🧹 Cleaning up individual shard coverage files..."
+          echo "Cleaning up individual shard coverage files..."
           # Remove all individual coverage JSON files to prevent Codecov from finding them
           # This ensures only the merged lcov.info is uploaded
           find ./coverage -name "coverage-*.json" -type f -delete
           find ./coverage -name "coverage-final.json" -type f -delete
           rm -rf ./coverage/tmp ./.nyc_output 2>/dev/null || true
 
-          echo "✅ Cleanup complete. Remaining coverage files:"
+          echo "Cleanup complete. Remaining coverage files:"
           find ./coverage -type f \( -name "*.info" -o -name "*.json" \)
 
           echo ""
-          echo "📊 Final coverage file to upload:"
+          echo "Final coverage file to upload:"
           ls -lh ./coverage/vitest/lcov.info
 
       - name: Present and upload merged coverage to Codecov
@@ -966,9 +966,9 @@ jobs:
         run: |
           echo "=== Seeding Sample Data ==="
           if docker exec talawa-api-1 /bin/bash -c 'set -a; source ./.env; set +a; pnpm run add:sample_data'; then
-            echo "✅ Seeding completed successfully"
+            echo "Seeding completed successfully"
           else
-            echo "❌ Seeding failed - Debug Information:"
+            echo "Seeding failed - Debug Information:"
             echo "Container status:"
             docker ps | grep talawa
             echo "Recent container logs:"
