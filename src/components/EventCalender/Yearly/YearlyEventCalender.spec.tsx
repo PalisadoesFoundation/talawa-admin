@@ -446,14 +446,17 @@ describe('Calendar Component', () => {
       '[data-testid^="expand-btn-"]',
     );
 
-    // Click first expand button and verify event appears
-    if (expandButtons.length > 0) {
+    // Assert expand buttons exist before clicking
+    expect(expandButtons.length).toBeGreaterThan(0);
+
+    await act(async () => {
       fireEvent.click(expandButtons[0]);
-      await waitFor(() => {
-        // Expect one of the event names to appear when expanded
-        expect(screen.queryByText(/New Test Event|Test Event/)).toBeTruthy();
-      });
-    }
+    });
+
+    await waitFor(() => {
+      // Verify one of the event names appears when expanded
+      expect(screen.getByText(/New Test Event|Test Event/)).toBeInTheDocument();
+    });
   });
 
   it('filters events correctly for ADMINISTRATOR role with private events', async () => {
@@ -852,6 +855,9 @@ describe('Calendar Component', () => {
       '[data-testid^="expand-btn-"]',
     );
 
+    // Ensure expand buttons exist for events
+    expect(expandButtons.length).toBeGreaterThan(0);
+
     // Check if there are events by clicking expand buttons and checking content
     for (const button of Array.from(expandButtons)) {
       await act(async () => {
@@ -934,6 +940,9 @@ describe('Calendar Component', () => {
     const expandButtons = container.querySelectorAll(
       '[data-testid^="expand-btn-"]',
     );
+
+    // Ensure expand buttons exist for events
+    expect(expandButtons.length).toBeGreaterThan(0);
 
     // Check if there are events by clicking expand buttons and checking content
     for (const button of Array.from(expandButtons)) {
