@@ -6,6 +6,26 @@ import SecuredRoute from './SecuredRoute';
 import useLocalStorage from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
 
+const createLocalStorageMock = () => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: (key: string) => store[key] ?? null,
+    setItem: (key: string, value: string) => {
+      store[key] = value;
+    },
+    removeItem: (key: string) => {
+      delete store[key];
+    },
+    clear: () => {
+      store = {};
+    },
+    key: (index: number) => Object.keys(store)[index] ?? null,
+    get length() {
+      return Object.keys(store).length;
+    },
+  };
+};
+
 // Mock react-toastify
 vi.mock('react-toastify', () => ({
   toast: {
@@ -24,6 +44,7 @@ describe('SecuredRoute', () => {
   beforeEach(() => {
     // Clear all mocks before each test
     vi.clearAllMocks();
+    vi.stubGlobal('localStorage', createLocalStorageMock());
     // Clear localStorage before each test
     localStorage.clear();
     // Use fake timers for controlling time-based operations
@@ -41,6 +62,7 @@ describe('SecuredRoute', () => {
     vi.clearAllTimers();
     vi.useRealTimers();
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: originalLocation,
@@ -161,6 +183,113 @@ describe('SecuredRoute', () => {
       expect(storage.getItem('token')).toBe('test-token');
       expect(toast.warn).not.toHaveBeenCalled();
       expect(screen.getByText('Test Protected Content')).toBeInTheDocument();
+    });
+  });
+
+  describe('Session Lifecycle Management', () => {
+    it('should register activity listeners and interval when user is logged in', () => {
+      const addEventListenerSpy = vi.spyOn(document, 'addEventListener');
+      const setIntervalSpy = vi.spyOn(window, 'setInterval');
+
+      setItem('IsLoggedIn', 'TRUE');
+      setItem('role', 'administrator');
+
+      render(
+        <MemoryRouter initialEntries={['/orglist']}>
+          <Routes>
+            <Route element={<SecuredRoute />}>
+              <Route path="/orglist" element={testComponent} />
+            </Route>
+          </Routes>
+        </MemoryRouter>,
+      );
+
+      expect(addEventListenerSpy).toHaveBeenCalledWith(
+        'mousemove',
+        expect.any(Function),
+      );
+      expect(addEventListenerSpy).toHaveBeenCalledWith(
+        'keydown',
+        expect.any(Function),
+      );
+      expect(addEventListenerSpy).toHaveBeenCalledWith(
+        'click',
+        expect.any(Function),
+      );
+      expect(addEventListenerSpy).toHaveBeenCalledWith(
+        'scroll',
+        expect.any(Function),
+      );
+
+      expect(setIntervalSpy).toHaveBeenCalledWith(
+        expect.any(Function),
+        60 * 1000,
+      );
+    });
+
+    it('should remove activity listeners and clear interval on unmount', () => {
+      const removeEventListenerSpy = vi.spyOn(document, 'removeEventListener');
+      const clearIntervalSpy = vi.spyOn(window, 'clearInterval');
+      const setIntervalSpy = vi.spyOn(window, 'setInterval');
+
+      setItem('IsLoggedIn', 'TRUE');
+      setItem('role', 'administrator');
+
+      const { unmount } = render(
+        <MemoryRouter initialEntries={['/orglist']}>
+          <Routes>
+            <Route element={<SecuredRoute />}>
+              <Route path="/orglist" element={testComponent} />
+            </Route>
+          </Routes>
+        </MemoryRouter>,
+      );
+
+      const intervalCall = setIntervalSpy.mock.results[0];
+      expect(intervalCall).toBeDefined();
+      const intervalId = intervalCall?.value;
+      expect(intervalId).toBeDefined();
+
+      unmount();
+
+      expect(removeEventListenerSpy).toHaveBeenCalledWith(
+        'mousemove',
+        expect.any(Function),
+      );
+      expect(removeEventListenerSpy).toHaveBeenCalledWith(
+        'keydown',
+        expect.any(Function),
+      );
+      expect(removeEventListenerSpy).toHaveBeenCalledWith(
+        'click',
+        expect.any(Function),
+      );
+      expect(removeEventListenerSpy).toHaveBeenCalledWith(
+        'scroll',
+        expect.any(Function),
+      );
+      expect(clearIntervalSpy).toHaveBeenCalledWith(
+        intervalId as ReturnType<typeof setInterval>,
+      );
+    });
+
+    it('should not register listeners when user is not logged in', () => {
+      const addEventListenerSpy = vi.spyOn(document, 'addEventListener');
+      const setIntervalSpy = vi.spyOn(window, 'setInterval');
+
+      render(
+        <MemoryRouter initialEntries={['/orglist']}>
+          <Routes>
+            <Route path="/" element={homeComponent} />
+            <Route element={<SecuredRoute />}>
+              <Route path="/orglist" element={testComponent} />
+            </Route>
+          </Routes>
+        </MemoryRouter>,
+      );
+
+      expect(addEventListenerSpy).not.toHaveBeenCalled();
+      expect(setIntervalSpy).not.toHaveBeenCalled();
     });
   });
 
