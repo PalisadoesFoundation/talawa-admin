@@ -732,12 +732,13 @@ describe('Organisations Page testing as SuperAdmin', () => {
     });
 
     // After search, pagination should still be present but with filtered results
-    expect(paginationElement).toBeInTheDocument();
+    const paginationAfterSearch = screen.getByTestId('table-pagination');
+    expect(paginationAfterSearch).toBeInTheDocument();
     expect(screen.getByText('Dog Shelter North')).toBeInTheDocument();
     expect(screen.getByText('Dog Training Center')).toBeInTheDocument();
     expect(screen.getByText('Dog Walking Service')).toBeInTheDocument();
-    expect(screen.queryByText('Cat Rescue South')).not.toBeInTheDocument();
-    expect(screen.queryByText('Pet Hospital')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cat Rescue Center')).not.toBeInTheDocument();
+    expect(screen.queryByText('Pet Grooming Service')).not.toBeInTheDocument();
   });
 
   test('Should render no organisation warning alert when there are no organization', async () => {
