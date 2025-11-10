@@ -356,7 +356,6 @@ function AddMember(): JSX.Element {
   // Handle page change
   const handleChangePage = (event: unknown, newPage: number) => {
     const isForwardNavigation = newPage > page;
-
     // Check if navigation is allowed
     if (isForwardNavigation && !paginationMeta.hasNextPage) {
       return; // Prevent navigation if there's no next page
@@ -382,7 +381,6 @@ function AddMember(): JSX.Element {
       variables.first = null;
       variables.after = null;
     }
-
     setPage(newPage);
     responsePageRef.current = newPage;
     fetchUsers({ variables });
@@ -423,7 +421,6 @@ function AddMember(): JSX.Element {
           },
         ]}
       />
-
       {/* Existing User Modal */}
       <Modal
         data-testid="addExistingUserModal"
@@ -697,5 +694,4 @@ function AddMember(): JSX.Element {
     </>
   );
 }
-
 export default AddMember;
