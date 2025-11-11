@@ -620,9 +620,9 @@ describe('Organisation Events Page', () => {
     const descriptionInput = screen.getByTestId('eventDescriptionInput');
     const locationInput = screen.getByTestId('eventLocationInput');
 
-    expect(titleInput).toHaveAttribute('required');
-    expect(descriptionInput).toHaveAttribute('required');
-    expect(locationInput).toHaveAttribute('required');
+    expect(titleInput).toBeRequired();
+    expect(descriptionInput).toBeRequired();
+    expect(locationInput).toBeRequired();
 
     // Test that form submission is prevented when required fields are empty
     // HTML5 validation should prevent the onSubmit handler from being called
