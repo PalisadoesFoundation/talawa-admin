@@ -31,8 +31,8 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-const link1 = new StaticMockLink(MOCKS);
-const link2 = new StaticMockLink(MOCKS_ERROR);
+let successLink: StaticMockLink;
+let errorLink: StaticMockLink;
 const t = JSON.parse(
   JSON.stringify(
     i18nForTest.getDataByLanguage('en')?.translation.organizationActionItems,
@@ -105,15 +105,18 @@ describe('Testing ItemDeleteModal', () => {
         },
       },
     };
+
+    successLink = new StaticMockLink(MOCKS);
+    errorLink = new StaticMockLink(MOCKS_ERROR);
   });
 
   it('should render ItemDeleteModal', () => {
-    renderItemDeleteModal(link1, testItemProps);
+    renderItemDeleteModal(successLink, testItemProps);
     expect(screen.getByText(t.deleteActionItem)).toBeInTheDocument();
   });
 
   it('should successfully Delete Action Item', async () => {
-    renderItemDeleteModal(link1, testItemProps);
+    renderItemDeleteModal(successLink, testItemProps);
     expect(screen.getByTestId('deleteyesbtn')).toBeInTheDocument();
 
     await act(() => {
@@ -128,7 +131,7 @@ describe('Testing ItemDeleteModal', () => {
   });
 
   it('should fail to Delete Action Item', async () => {
-    renderItemDeleteModal(link2, testItemProps);
+    renderItemDeleteModal(errorLink, testItemProps);
     expect(screen.getByTestId('deleteyesbtn')).toBeInTheDocument();
     fireEvent.click(screen.getByTestId('deleteyesbtn'));
 
@@ -145,7 +148,7 @@ describe('Testing ItemDeleteModal', () => {
         isRecurring: true,
       };
 
-      renderItemDeleteModal(link1, propsWithoutEventId);
+      renderItemDeleteModal(successLink, propsWithoutEventId);
 
       // Radio buttons should not be present
       expect(screen.queryByText(t.entireSeries)).not.toBeInTheDocument();
@@ -159,7 +162,7 @@ describe('Testing ItemDeleteModal', () => {
         isRecurring: false,
       };
 
-      renderItemDeleteModal(link1, propsNotRecurring);
+      renderItemDeleteModal(successLink, propsNotRecurring);
 
       // Radio buttons should not be present
       expect(screen.queryByText(t.entireSeries)).not.toBeInTheDocument();
@@ -177,7 +180,7 @@ describe('Testing ItemDeleteModal', () => {
         isRecurring: true,
       };
 
-      renderItemDeleteModal(link1, propsWithRecurring);
+      renderItemDeleteModal(successLink, propsWithRecurring);
 
       // Radio buttons should be present
       expect(screen.getByText(t.entireSeries)).toBeInTheDocument();
@@ -199,7 +202,7 @@ describe('Testing ItemDeleteModal', () => {
         isRecurring: true,
       };
 
-      renderItemDeleteModal(link1, propsWithRecurring);
+      renderItemDeleteModal(successLink, propsWithRecurring);
 
       const seriesRadio = screen.getByTestId('deleteApplyToSeries');
       const instanceRadio = screen.getByTestId('deleteApplyToInstance');
@@ -230,7 +233,7 @@ describe('Testing ItemDeleteModal', () => {
         isRecurring: true,
       };
 
-      renderItemDeleteModal(link1, propsWithRecurring);
+      renderItemDeleteModal(successLink, propsWithRecurring);
 
       // Ensure series is selected (default)
       const seriesRadio = screen.getByTestId('deleteApplyToSeries');
@@ -259,7 +262,7 @@ describe('Testing ItemDeleteModal', () => {
         isRecurring: true,
       };
 
-      renderItemDeleteModal(link1, propsWithRecurring);
+      renderItemDeleteModal(successLink, propsWithRecurring);
 
       // Switch to instance
       const instanceRadio = screen.getByTestId('deleteApplyToInstance');
@@ -285,7 +288,7 @@ describe('Testing ItemDeleteModal', () => {
         isRecurring: false,
       };
 
-      renderItemDeleteModal(link1, propsNonRecurring);
+      renderItemDeleteModal(successLink, propsNonRecurring);
 
       // No radio buttons should be present
       expect(screen.queryByText(t.entireSeries)).not.toBeInTheDocument();
@@ -309,7 +312,7 @@ describe('Testing ItemDeleteModal', () => {
         isRecurring: true,
       };
 
-      renderItemDeleteModal(link1, propsWithoutEventId);
+      renderItemDeleteModal(successLink, propsWithoutEventId);
 
       // No radio buttons should be present
       expect(screen.queryByText(t.entireSeries)).not.toBeInTheDocument();
@@ -337,7 +340,7 @@ describe('Testing ItemDeleteModal', () => {
         isRecurring: true,
       };
 
-      renderItemDeleteModal(link2, propsWithRecurring);
+      renderItemDeleteModal(errorLink, propsWithRecurring);
 
       // Switch to instance
       const instanceRadio = screen.getByTestId('deleteApplyToInstance');

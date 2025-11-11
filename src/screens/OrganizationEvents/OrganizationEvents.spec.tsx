@@ -626,8 +626,11 @@ describe('Organisation Events Page', () => {
   });
 
   test('Testing enhanced form validation for empty fields', async () => {
+    const user = userEvent.setup();
+    const validationLink = new StaticMockLink(MOCKS, true);
+
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={validationLink}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -648,21 +651,28 @@ describe('Organisation Events Page', () => {
       expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await user.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
     });
 
     // Test submitting with all empty fields to trigger all validation paths
-    await userEvent.click(screen.getByTestId('createEventBtn'));
+    await user.click(screen.getByTestId('createEventBtn'));
 
     await waitFor(() => {
-      expect(toast.warning).toHaveBeenCalledWith('Name can not be blank!');
-      expect(toast.warning).toHaveBeenCalledWith(
+      expect(toast.warning).toHaveBeenNthCalledWith(
+        1,
+        'Name can not be blank!',
+      );
+      expect(toast.warning).toHaveBeenNthCalledWith(
+        2,
         'Description can not be blank!',
       );
-      expect(toast.warning).toHaveBeenCalledWith('Location can not be blank!');
+      expect(toast.warning).toHaveBeenNthCalledWith(
+        3,
+        'Location can not be blank!',
+      );
     });
   });
 
