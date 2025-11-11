@@ -488,7 +488,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                   text={comment.body}
                   upVoteCount={comment.upVotesCount}
                   hasUserVoted={comment.hasUserVoted}
-                  fetchComments={props.fetchPosts}
+                  refetchComments={refetchComments}
                 />
               ))}
 
