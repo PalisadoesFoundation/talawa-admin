@@ -12,7 +12,17 @@ import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
 import type {
   InterfaceOrgInfoTypePG,
   InterfaceUserType,
+  InterfaceCurrentUserTypePG,
 } from 'utils/interfaces';
+
+const superAdminCurrentUser: InterfaceCurrentUserTypePG = {
+  currentUser: {
+    id: '123',
+    name: 'John Doe',
+    role: 'administrator',
+    emailAddress: 'john.doe@akatsuki.com',
+  },
+};
 
 const superAdminUser: InterfaceUserType = {
   user: {
@@ -51,7 +61,10 @@ const MOCKS = [
       variables: { userId: '123' },
     },
     result: {
-      data: { user: superAdminUser },
+      data: {
+        user: superAdminUser,
+        currentUser: superAdminCurrentUser.currentUser,
+      },
     },
   },
   {
@@ -65,6 +78,17 @@ const MOCKS = [
           __typename: 'User',
           notifications: [],
         },
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_LIST,
+      variables: { filter: '' },
+    },
+    result: {
+      data: {
+        organizations: organizations,
       },
     },
   },
@@ -192,6 +216,17 @@ const MOCKS = [
 const MOCKS_EMPTY = [
   {
     request: {
+      query: ORGANIZATION_LIST,
+      variables: { filter: '' },
+    },
+    result: {
+      data: {
+        organizations: [],
+      },
+    },
+  },
+  {
+    request: {
       query: ALL_ORGANIZATIONS_PG,
       variables: {
         first: 8,
@@ -268,6 +303,26 @@ const MOCKS_WITH_ERROR = [
 
 // MOCKS FOR ADMIN
 const MOCKS_ADMIN = [
+  {
+    request: {
+      query: ORGANIZATION_LIST,
+      variables: { filter: '' },
+    },
+    result: {
+      data: {
+        organizations: organizations,
+      },
+    },
+  },
+  {
+    request: {
+      query: CURRENT_USER,
+      variables: { userId: '123' },
+    },
+    result: {
+      data: { user: adminUser },
+    },
+  },
   {
     request: {
       query: ORGANIZATION_LIST,
