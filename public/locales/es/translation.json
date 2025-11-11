@@ -1068,7 +1068,8 @@
     "communityProfile": "Perfil de la comunidad",
     "logout": "Cerrar sesión",
     "settings": "Ajustes",
-    "chat": "Chat"
+    "chat": "Chat",
+    "selectOrgBeforeSwitch": "Por favor seleccione una organización de Mis Organizaciones antes de cambiar al Portal de Administración"
   },
   "organizationSidebar": {
     "viewAll": "Ver todo",

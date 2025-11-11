@@ -59,8 +59,10 @@ import Avatar from 'components/Avatar/Avatar';
 import { useNavigate } from 'react-router';
 import type { ApolloError } from '@apollo/client';
 import type { InterfaceOrganizationCardProps } from 'types/Organization/interface';
-import { getItem } from 'utils/useLocalstorage';
+import { getItem, setItem } from 'utils/useLocalstorage';
 import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQueries';
+
+const STORAGE_PREFIX = 'Talawa-admin';
 
 function OrganizationCard({
   id,
@@ -79,7 +81,7 @@ function OrganizationCard({
 
   useEffect(() => {
     try {
-      const storedUserId = getItem('Talawa-admin', 'id');
+      const storedUserId = getItem(STORAGE_PREFIX, 'id');
       setUserId(storedUserId as string | null);
     } catch (error) {
       // Handle localStorage error silently
@@ -222,7 +224,24 @@ function OrganizationCard({
           <Button
             data-testid="manageBtn"
             className={styles.addButton}
-            onClick={() => navigate(`/user/organization/${id}`)}
+            onClick={() => {
+              setItem(STORAGE_PREFIX, 'selectedUserOrgId', id);
+
+              // Check if user clicked switch button and wants to go to admin portal
+              const switchIntent = getItem(
+                STORAGE_PREFIX,
+                'switchToAdminIntent',
+              ) as string;
+              if (switchIntent === 'true') {
+                // Clear the flag
+                setItem(STORAGE_PREFIX, 'switchToAdminIntent', 'false');
+                // Redirect to admin portal member page
+                navigate(`/member/${id}`);
+              } else {
+                // Normal flow - go to user organization page
+                navigate(`/user/organization/${id}`);
+              }
+            }}
             style={{ width: '8rem' }}
             data-cy="manageBtn"
           >

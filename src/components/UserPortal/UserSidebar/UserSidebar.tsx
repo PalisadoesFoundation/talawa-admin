@@ -28,19 +28,20 @@
  * ```
  *
  */
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavLink } from 'react-router';
-import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import PluginLogo from 'assets/svgs/plugins.svg?react';
 import styles from '../../../style/app-fixed.module.css';
 import { usePluginDrawerItems } from 'plugin';
 import type { IDrawerExtension } from 'plugin';
-import useLocalStorage from 'utils/useLocalstorage';
-import { FaBars, FaBell } from 'react-icons/fa';
-import ProfileCard from 'components/ProfileCard/ProfileCard';
-import SignOut from 'components/SignOut/SignOut';
+import { FaBell, FaExchangeAlt } from 'react-icons/fa';
 import IconComponent from 'components/IconComponent/IconComponent';
+import SidebarHeader from 'components/Sidebar/SidebarHeader';
+import SidebarMenuItem from 'components/Sidebar/SidebarMenuItem';
+import SidebarProfileSection from 'components/Sidebar/SidebarProfileSection';
+import useLocalStorage from 'utils/useLocalstorage';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export interface InterfaceUserSidebarProps {
   hideDrawer: boolean;
@@ -54,12 +55,13 @@ const userSidebar = ({
   // Translation hook for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'userSidebarOrg' });
   const { t: tCommon } = useTranslation('common');
+  const navigate = useNavigate();
 
   // Memoize the parameters to prevent infinite re-renders
   const userPermissions = React.useMemo(() => [], []);
   const isAdmin = React.useMemo(() => false, []);
   const isOrg = React.useMemo(() => false, []);
-  const { setItem } = useLocalStorage();
+  const { setItem, getItem } = useLocalStorage();
 
   // Get plugin drawer items for user global (no orgId required)
   const pluginDrawerItems = usePluginDrawerItems(
@@ -68,186 +70,162 @@ const userSidebar = ({
     isOrg,
   );
 
-  const handleLinkClick = useCallback((): void => {
+  const handleLinkClick = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
     }
-  }, [setHideDrawer]);
+  };
 
-  // Render a drawer item with icon
-  const renderDrawerItem = useCallback(
-    (to: string, icon: React.ReactNode, label: string, testId: string) => (
-      <NavLink key={to} to={to} onClick={handleLinkClick}>
-        {({ isActive }) => {
-          let styledIcon = icon;
+  const handleSwitchToAdmin = (
+    e: React.MouseEvent<HTMLButtonElement>,
+  ): void => {
+    e.preventDefault();
+    const selectedOrgId = getItem('selectedUserOrgId') as string;
 
-          if (React.isValidElement(icon) && typeof icon.type !== 'string') {
-            // Check if it's FaBell (react-icon) by checking the icon itself
-            if (icon.type === FaBell) {
-              styledIcon = React.cloneElement(
-                icon as React.ReactElement<{ style?: React.CSSProperties }>,
-                {
-                  style: {
-                    fontSize: 25,
-                    color: isActive ? '#000000' : 'var(--bs-secondary)',
-                  },
-                },
-              );
-            } else {
-              // Handle SVG icons
-              styledIcon = React.cloneElement<React.SVGProps<SVGSVGElement>>(
-                icon as React.ReactElement<React.SVGProps<SVGSVGElement>>,
-                {
-                  fill: 'none',
-                  fontSize: 25,
-                  stroke: isActive
-                    ? 'var(--sidebar-icon-stroke-active)'
-                    : 'var(--sidebar-icon-stroke-inactive)',
-                },
-              );
-            }
-          }
-
-          return (
-            <button
-              type="button"
-              className={`${
-                isActive ? styles.sidebarBtnActive : styles.sidebarBtn
-              }`}
-              data-testid={testId}
-            >
-              <div className={styles.iconWrapper}>{styledIcon}</div>
-              {!hideDrawer && label}
-            </button>
-          );
-        }}
-      </NavLink>
-    ),
-    [handleLinkClick, hideDrawer],
-  );
+    if (!selectedOrgId) {
+      // Set flag to indicate user wants to switch to admin
+      setItem('switchToAdminIntent', 'true');
+      toast.warning(t('selectOrgBeforeSwitch'), {
+        position: 'top-right',
+        autoClose: 4000,
+      });
+    } else {
+      navigate('/orglist');
+    }
+  };
 
   // Render a plugin drawer item
-  const renderPluginDrawerItem = useCallback(
-    (item: IDrawerExtension) => {
-      const Icon = item.icon ? (
-        <img
-          src={item.icon}
-          alt={item.label}
-          style={{ width: 25, height: 25 }}
-        />
-      ) : (
-        <PluginLogo
-          fill="none"
-          fontSize={25}
-          stroke="var(--sidebar-icon-stroke-inactive)"
-        />
-      );
+  const renderPluginDrawerItem = (item: IDrawerExtension) => {
+    const Icon = item.icon ? (
+      <img src={item.icon} alt={item.label} style={{ width: 25, height: 25 }} />
+    ) : (
+      <PluginLogo
+        fill="none"
+        fontSize={25}
+        stroke="var(--sidebar-icon-stroke-inactive)"
+      />
+    );
 
-      return renderDrawerItem(
-        item.path,
-        Icon,
-        item.label,
-        `plugin-${item.pluginId}-btn`,
-      );
-    },
-    [renderDrawerItem],
-  );
+    return (
+      <SidebarMenuItem
+        key={item.pluginId}
+        to={item.path}
+        icon={Icon}
+        label={item.label}
+        testId={`plugin-${item.pluginId}-btn`}
+        hideDrawer={hideDrawer}
+        onClick={handleLinkClick}
+        variant="user"
+      />
+    );
+  };
 
   return (
     <>
       <div
-        className={`${styles.leftDrawer} 
-        ${hideDrawer ? styles.collapsedDrawer : styles.expandedDrawer}`}
-        style={{ backgroundColor: '#f0f7fb' }}
+        className={`${styles.leftDrawer} ${hideDrawer ? styles.collapsedDrawer : styles.expandedDrawer}`}
+        style={{ backgroundColor: '#e3f2fd' }}
         data-testid="leftDrawerContainer"
       >
-        <div
-          className={`d-flex align-items-center ${hideDrawer ? 'justify-content-center' : 'justify-content-between'}`}
-        >
-          <button
-            className={`d-flex align-items-center btn p-0 border-0 bg-transparent`}
-            data-testid="toggleBtn"
-            onClick={() => {
-              const newState = !hideDrawer;
-              setItem('sidebar', newState.toString());
-              setHideDrawer(newState);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                const newState = !hideDrawer;
-                setItem('sidebar', newState.toString());
-                setHideDrawer(newState);
-              }
-            }}
-            role="button"
-            tabIndex={0}
-          >
-            <FaBars
-              className={styles.hamburgerIcon}
-              aria-label="Toggle sidebar"
-              size={22}
-              style={{
-                cursor: 'pointer',
-                height: '38px',
-                marginLeft: hideDrawer ? '0px' : '10px',
-              }}
-            />
-          </button>
-          <div
-            style={{
-              display: hideDrawer ? 'none' : 'flex',
-              alignItems: 'center',
-              marginRight: 'auto',
-              paddingLeft: '5px',
-            }}
-          >
-            <TalawaLogo className={styles.talawaLogo} />
-            <div className={`${styles.talawaText} ${styles.sidebarText}`}>
-              {tCommon('userPortal')}
-            </div>
-          </div>
-        </div>
-
-        {/* User Profile Section - Top position like Admin Portal */}
+        <SidebarHeader
+          hideDrawer={hideDrawer}
+          setHideDrawer={setHideDrawer}
+          portalTitle={tCommon('userPortal')}
+          persistState={true}
+        />
+        {/* Switch to Admin Portal Button - Top position */}
         {!hideDrawer && (
           <div
             style={{
-              backgroundColor: '#e8f4f8',
-              padding: '10px',
-              borderRadius: '8px',
               margin: '10px',
             }}
           >
-            <ProfileCard />
+            <button
+              type="button"
+              className="btn w-100 d-flex align-items-center justify-content-between"
+              style={{
+                backgroundColor: '#e8f4f8',
+                borderColor: '#d0e8f0',
+                borderRadius: '8px',
+                padding: '15px 12px',
+                fontWeight: '600',
+                fontSize: '14px',
+                color: '#333',
+                transition: 'all 0.3s ease',
+                minHeight: '70px',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#d0e8f0';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#e8f4f8';
+              }}
+              onClick={handleSwitchToAdmin}
+            >
+              <span>Switch to Admin Portal</span>
+              <FaExchangeAlt size={18} />
+            </button>
           </div>
         )}
-
         <div
-          className={`d-flex flex-column ${styles.sidebarcompheight}`}
-          data-testid="sidebar-main-content"
+          className={`d-flex flex-column ${styles.leftbarcompheight}`}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+          }}
         >
           <div className={styles.optionList}>
-            {renderDrawerItem(
-              '/user/organizations',
-              <IconComponent name="My Organizations" />,
-              t('my organizations'),
-              'orgsBtn',
-            )}
-
-            {renderDrawerItem(
-              '/user/notification',
-              <FaBell />,
-              tCommon('notifications'),
-              'userNotificationBtn',
-            )}
-
-            {renderDrawerItem(
-              '/user/settings',
-              <IconComponent name="Settings" />,
-              tCommon('Settings'),
-              'settingsBtn',
-            )}
+            {/* Link to "My Organizations" page */}
+            <SidebarMenuItem
+              to="/user/organizations"
+              icon={
+                <IconComponent
+                  data-testid="myOrgsIcon"
+                  name="My Organizations"
+                  fill="var(--bs-secondary)"
+                />
+              }
+              label={t('my organizations')}
+              testId="orgsBtn"
+              hideDrawer={hideDrawer}
+              onClick={handleLinkClick}
+              variant="user"
+            />
+            {/* Link to Notifications page */}
+            <SidebarMenuItem
+              to="/user/notification"
+              icon={
+                <FaBell
+                  style={{
+                    width: 25,
+                    height: 25,
+                    color: 'var(--bs-secondary)',
+                  }}
+                />
+              }
+              label={tCommon('notifications')}
+              testId="userNotificationBtn"
+              hideDrawer={hideDrawer}
+              onClick={handleLinkClick}
+              variant="user"
+            />
+            {/* Link to "Settings" page */}
+            <SidebarMenuItem
+              to="/user/settings"
+              icon={
+                <IconComponent
+                  data-testid="settingsIcon"
+                  name="Settings"
+                  fill="var(--bs-secondary)"
+                />
+              }
+              label={tCommon('Settings')}
+              testId="settingsBtn"
+              hideDrawer={hideDrawer}
+              onClick={handleLinkClick}
+              variant="user"
+            />
 
             {/* Plugin Global Features Section */}
             {pluginDrawerItems?.length > 0 && (
@@ -268,12 +246,7 @@ const userSidebar = ({
             )}
           </div>
         </div>
-        <div className={styles.userSidebarOrgFooter}>
-          <div style={{ display: hideDrawer ? 'none' : 'flex' }}>
-            <ProfileCard />
-          </div>
-          <SignOut hideDrawer={hideDrawer} />
-        </div>
+        <SidebarProfileSection hideDrawer={hideDrawer} />
       </div>
     </>
   );

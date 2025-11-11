@@ -1067,7 +1067,8 @@
     "logout": "se déconnecter",
     "settings": "paramètres",
     "chat": "discussion",
-    "menu": "Menu"
+    "menu": "Menu",
+    "selectOrgBeforeSwitch": "Veuillez sélectionner une organisation dans Mes organisations avant de passer au portail d'administration"
   },
   "organizationSidebar": {
     "viewAll": "Voir tout",

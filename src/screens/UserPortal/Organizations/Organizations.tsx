@@ -367,23 +367,6 @@ export default function Organizations(): React.JSX.Element {
 
   return (
     <>
-      {/* {hideDrawer ? (
-        <Button
-          className={styles.opendrawer}
-          onClick={() => setHideDrawer(!hideDrawer)}
-          data-testid="openMenu"
-        >
-          <i className="fa fa-angle-double-right" />
-        </Button>
-      ) : (
-        <Button
-          className={styles.collapseSidebarButton}
-          onClick={() => setHideDrawer(!hideDrawer)}
-          data-testid="closeMenu"
-        >
-          <i className="fa fa-angle-double-left" />
-        </Button>
-      )} */}
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
         className={`${hideDrawer ? styles.expand : styles.contract}`}

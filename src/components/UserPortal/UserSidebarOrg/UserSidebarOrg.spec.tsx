@@ -2,7 +2,7 @@ import React, { act } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceUserSidebarOrgProps } from './UserSidebarOrg';
 import UserSidebarOrg from './UserSidebarOrg';
@@ -353,7 +353,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     resizeWindow(800);
     expect(screen.getAllByText(/People/i)[0]).toBeInTheDocument();
 
-    const peopleBtn = screen.getAllByTestId(/People/i)[0];
+    const peopleBtn = screen.getByRole('button', { name: /People/i });
     await userEvent.click(peopleBtn);
     await wait();
     expect(window.location.pathname).toContain('user/people/123');
@@ -461,6 +461,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
 
     const toggleButton = screen.getByTestId('toggleBtn');
     expect(toggleButton).toBeInTheDocument();
+    expect(toggleButton).toHaveAttribute('type', 'button');
     expect(toggleButton).toHaveAttribute('tabIndex', '0');
 
     await userEvent.click(toggleButton);

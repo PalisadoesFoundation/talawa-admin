@@ -34,19 +34,17 @@ import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropd
 import IconComponent from 'components/IconComponent/IconComponent';
 import React, { useCallback, useEffect, useMemo, useState, JSX } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NavLink, useLocation } from 'react-router';
+import { NavLink, useLocation } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
-import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import PluginLogo from 'assets/svgs/plugins.svg?react';
 import styles from './../../style/app-fixed.module.css';
 import Avatar from 'components/Avatar/Avatar';
 import useLocalStorage from 'utils/useLocalstorage';
 import { usePluginDrawerItems } from 'plugin';
 import type { IDrawerExtension } from 'plugin';
-import { FaBars } from 'react-icons/fa';
-import ProfileCard from 'components/ProfileCard/ProfileCard';
-import SignOut from 'components/SignOut/SignOut';
+import SidebarHeader from 'components/Sidebar/SidebarHeader';
+import SidebarProfileSection from 'components/Sidebar/SidebarProfileSection';
 
 export interface ILeftDrawerProps {
   orgId: string;
@@ -106,7 +104,6 @@ const leftDrawerOrg = ({
 
   const [isProfilePage, setIsProfilePage] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
-  const { setItem } = useLocalStorage();
 
   // Memoize the user permissions and admin status
   const userPermissions = useMemo(() => [], []);
@@ -194,53 +191,12 @@ const leftDrawerOrg = ({
       data-testid="leftDrawerContainer"
     >
       {/* Branding Section */}
-      <div
-        className={`d-flex align-items-center ${hideDrawer ? 'justify-content-center' : 'justify-content-between'}`}
-      >
-        <div
-          className={`d-flex align-items-center`}
-          data-testid="toggleBtn"
-          onClick={() => {
-            const newState = !hideDrawer;
-            setItem('sidebar', newState.toString());
-            setHideDrawer(newState);
-          }}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              const newState = !hideDrawer;
-              setItem('sidebar', newState.toString());
-              setHideDrawer(newState);
-            }
-          }}
-          role="button"
-          tabIndex={0}
-        >
-          <FaBars
-            className={styles.hamburgerIcon}
-            aria-label="Toggle sidebar"
-            size={22}
-            style={{
-              cursor: 'pointer',
-              height: '38px',
-              marginLeft: hideDrawer ? '0px' : '10px',
-            }}
-          />
-        </div>
-        <div
-          style={{
-            display: hideDrawer ? 'none' : 'flex',
-            alignItems: 'center',
-            marginRight: 'auto',
-            paddingLeft: '5px',
-          }}
-        >
-          <TalawaLogo className={styles.talawaLogo} />
-          <div className={`${styles.talawaText} ${styles.sidebarText}`}>
-            {tCommon('adminPortal')}
-          </div>
-        </div>
-      </div>
+      <SidebarHeader
+        hideDrawer={hideDrawer}
+        setHideDrawer={setHideDrawer}
+        portalTitle={tCommon('talawaAdminPortal')}
+        persistState={true}
+      />
 
       {/* Organization Section */}
       {!hideDrawer && (
@@ -372,12 +328,7 @@ const leftDrawerOrg = ({
           </>
         )}
       </div>
-      <div className={styles.userSidebarOrgFooter}>
-        <div style={{ display: hideDrawer ? 'none' : 'flex' }}>
-          <ProfileCard />
-        </div>
-        <SignOut hideDrawer={hideDrawer} />
-      </div>
+      <SidebarProfileSection hideDrawer={hideDrawer} />
     </div>
   );
 };

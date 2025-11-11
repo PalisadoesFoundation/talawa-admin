@@ -330,7 +330,6 @@ function App(): React.ReactElement {
             </Route>
             <Route element={<UserScreen />}>
               <Route path="/user/chat/:orgId" element={<Chat />} />
-              <Route path="/user/organizations" element={<Organizations />} />
               <Route path="/user/organization/:orgId" element={<Posts />} />
               <Route path="/user/people/:orgId" element={<People />} />
               <Route path="/user/donate/:orgId" element={<Donate />} />
