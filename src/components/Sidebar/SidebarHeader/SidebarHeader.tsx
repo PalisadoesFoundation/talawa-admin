@@ -93,7 +93,7 @@ const SidebarHeader = ({
           paddingLeft: '5px',
         }}
       >
-        <TalawaLogo className={styles.talawaLogo} />
+        <TalawaLogo className={styles.talawaLogo} aria-hidden="true" />
         <div className={`${styles.talawaText} ${styles.sidebarText}`}>
           {portalTitle}
         </div>
