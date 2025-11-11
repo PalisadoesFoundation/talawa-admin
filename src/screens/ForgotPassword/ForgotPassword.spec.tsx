@@ -239,8 +239,8 @@ describe('Testing Forgot Password screen', () => {
   it('Testing forgot password functionality, if the otp got deleted from the local storage', async () => {
     const formData = {
       userOtp: '12345',
-      newPassword: 'johnDoe',
-      confirmNewPassword: 'johnDoe',
+      newPassword: 'johnDoe@12345',
+      confirmNewPassword: 'johnDoe@12345',
       email: 'johndoe@gmail.com',
     };
 
@@ -350,8 +350,8 @@ describe('Testing Forgot Password screen', () => {
     const formData = {
       email: 'johndoe@gmail.com',
       userOtp: '12345',
-      newPassword: 'johnDoe',
-      confirmNewPassword: 'doeJohn',
+      newPassword: 'johnDoe@12345',
+      confirmNewPassword: '12345johnDoe@',
     };
 
     render(
@@ -482,8 +482,8 @@ describe('Testing Forgot Password screen', () => {
   it('Testing forgot password functionality, when otp token is not present', async () => {
     const formData = {
       userOtp: '12345',
-      newPassword: 'johnDoe',
-      confirmNewPassword: 'johnDoe',
+      newPassword: 'johnDoe@12345',
+      confirmNewPassword: 'johnDoe@12345',
       email: 'johndoe@gmail.com',
     };
 
