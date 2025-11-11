@@ -6,7 +6,7 @@
 
 > `const` **itemWithoutCategory**: `object`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L130)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:131](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L131)
 
 ## Type Declaration
 
