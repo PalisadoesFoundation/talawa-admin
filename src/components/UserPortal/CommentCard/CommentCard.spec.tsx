@@ -822,6 +822,32 @@ describe('Testing CommentCard Component [User Portal]', () => {
     expect(toast.success).toHaveBeenCalledWith('Comment updated successfully');
   });
 
+  it('should thow empty comment error when updating comment with empty body', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CommentCard {...defaultProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    await userEvent.click(screen.getByTestId('more-options-button'));
+    await userEvent.click(screen.getByTestId('update-comment-button'));
+    const textArea = screen.getByTestId('edit-comment-input').children[0];
+    await userEvent.clear(textArea);
+    await userEvent.type(textArea, ' ');
+    await userEvent.click(screen.getByTestId('save-comment-button'));
+    await wait();
+    expect(toast.error).toHaveBeenCalledWith(
+      'Please enter a comment before submitting.',
+    );
+  });
+
   it('should handle update comment error correctly', async () => {
     render(
       <MockedProvider addTypename={false} link={updateMockErrorLink}>

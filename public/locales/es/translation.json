@@ -1607,6 +1607,7 @@
     "noAssociatedVoteFound": "No se encontró voto asociado para eliminar.",
     "editComment": "Editar comentario",
     "deleteComment": "Eliminar comentario",
-    "deleting": "Eliminando..."
+    "deleting": "Eliminando...",
+    "emptyCommentError": "Por favor ingrese un comentario antes de enviar."
   }
 }

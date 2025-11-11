@@ -165,7 +165,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
     }
   };
 
-  const handleUpdateCOmment = async (body: string): Promise<boolean> => {
+  const handleUpdateComment = async (body: string): Promise<boolean> => {
     try {
       await updateComment({
         variables: { input: { id: id, body: body } },
@@ -342,8 +342,13 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
               </Button>
               <Button
                 variant="contained"
+                disabled={updatingComment}
                 onClick={async () => {
-                  const updated = await handleUpdateCOmment(editedCommentText);
+                  if (!editedCommentText.trim()) {
+                    toast.error(t('emptyCommentError'));
+                    return;
+                  }
+                  const updated = await handleUpdateComment(editedCommentText);
                   if (updated) {
                     toggleEditComment();
                   }
