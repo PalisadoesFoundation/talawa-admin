@@ -14,6 +14,7 @@ import {
   ORGANIZATION_ADVERTISEMENT_LIST,
   ORGANIZATION_POST_LIST_WITH_VOTES,
   USER_DETAILS,
+  GET_POST_COMMENTS,
 } from 'GraphQl/Queries/Queries';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
@@ -133,15 +134,6 @@ const MOCKS = [
                     voteType: null,
                   },
                   createdAt: '2024-01-01T00:00:00.000Z',
-                  comments: {
-                    edges: [],
-                    pageInfo: {
-                      startCursor: null,
-                      endCursor: null,
-                      hasNextPage: false,
-                      hasPreviousPage: false,
-                    },
-                  },
                 },
                 cursor: 'c1',
               },
@@ -163,15 +155,6 @@ const MOCKS = [
                     voteType: null,
                   },
                   createdAt: '2024-01-01T00:00:00.000Z',
-                  comments: {
-                    edges: [],
-                    pageInfo: {
-                      startCursor: null,
-                      endCursor: null,
-                      hasNextPage: false,
-                      hasPreviousPage: false,
-                    },
-                  },
                 },
                 cursor: 'c2',
               },
@@ -225,15 +208,6 @@ const MOCKS = [
                     voteType: null,
                   },
                   createdAt: '2024-01-02T00:00:00.000Z',
-                  comments: {
-                    edges: [],
-                    pageInfo: {
-                      startCursor: null,
-                      endCursor: null,
-                      hasNextPage: false,
-                      hasPreviousPage: false,
-                    },
-                  },
                 },
                 cursor: 'c3',
               },
@@ -255,15 +229,6 @@ const MOCKS = [
                     voteType: null,
                   },
                   createdAt: '2024-01-02T00:00:00.000Z',
-                  comments: {
-                    edges: [],
-                    pageInfo: {
-                      startCursor: null,
-                      endCursor: null,
-                      hasNextPage: false,
-                      hasPreviousPage: false,
-                    },
-                  },
                 },
                 cursor: 'c4',
               },
@@ -317,15 +282,6 @@ const MOCKS = [
                     voteType: null,
                   },
                   createdAt: '2024-01-01T00:00:00.000Z',
-                  comments: {
-                    edges: [],
-                    pageInfo: {
-                      startCursor: null,
-                      endCursor: null,
-                      hasNextPage: false,
-                      hasPreviousPage: false,
-                    },
-                  },
                 },
                 cursor: 'c1',
               },
@@ -347,15 +303,6 @@ const MOCKS = [
                     voteType: null,
                   },
                   createdAt: '2024-01-01T00:00:00.000Z',
-                  comments: {
-                    edges: [],
-                    pageInfo: {
-                      startCursor: null,
-                      endCursor: null,
-                      hasNextPage: false,
-                      hasPreviousPage: false,
-                    },
-                  },
                 },
                 cursor: 'c2',
               },
@@ -406,15 +353,6 @@ const pinnedPostsMock1 = {
                   voteType: null,
                 },
                 createdAt: '2024-01-01T00:00:00.000Z',
-                comments: {
-                  edges: [],
-                  pageInfo: {
-                    startCursor: null,
-                    endCursor: null,
-                    hasNextPage: false,
-                    hasPreviousPage: false,
-                  },
-                },
               },
               cursor: 'c1',
             },
@@ -460,15 +398,6 @@ const pinnedPostsMock2 = {
                 upVotesCount: 0,
                 downVotesCount: 0,
                 createdAt: '2024-01-01T00:00:00.000Z',
-                comments: {
-                  edges: [],
-                  pageInfo: {
-                    startCursor: null,
-                    endCursor: null,
-                    hasNextPage: false,
-                    hasPreviousPage: false,
-                  },
-                },
               },
               cursor: 'c1',
             },
@@ -486,15 +415,6 @@ const pinnedPostsMock2 = {
                 upVotesCount: 0,
                 downVotesCount: 0,
                 createdAt: '2024-01-02T00:00:00.000Z',
-                comments: {
-                  edges: [],
-                  pageInfo: {
-                    startCursor: null,
-                    endCursor: null,
-                    hasNextPage: false,
-                    hasPreviousPage: false,
-                  },
-                },
               },
               cursor: 'c2',
             },
@@ -502,6 +422,142 @@ const pinnedPostsMock2 = {
           pageInfo: {
             startCursor: 'c1',
             endCursor: 'c2',
+            hasNextPage: false,
+            hasPreviousPage: false,
+          },
+        },
+      },
+    },
+  },
+};
+
+// Mock for comments query
+const commentsQueryMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: 'post-with-comments',
+      userId: '640d98d9eb6a743d75341067',
+      first: 10,
+    },
+  },
+  result: {
+    data: {
+      post: {
+        id: 'post-with-comments',
+        caption: 'Post with comments',
+        comments: {
+          edges: [
+            {
+              node: {
+                id: 'comment-1',
+                body: 'Great post!',
+                creator: {
+                  id: 'c1',
+                  name: 'Commenter1',
+                  avatarURL: null,
+                },
+                createdAt: '2024-01-01T00:00:00.000Z',
+                upVotesCount: 1,
+                downVotesCount: 0,
+                hasUserVoted: {
+                  hasVoted: false,
+                  voteType: null,
+                },
+              },
+              cursor: 'cc1',
+            },
+            {
+              node: {
+                id: 'comment-2',
+                body: 'I agree!',
+                creator: {
+                  id: 'c2',
+                  name: 'Commenter2',
+                  avatarURL: null,
+                },
+                createdAt: '2024-01-01T00:00:00.000Z',
+                upVotesCount: 0,
+                downVotesCount: 0,
+                hasUserVoted: {
+                  hasVoted: false,
+                  voteType: null,
+                },
+              },
+              cursor: 'cc2',
+            },
+          ],
+          pageInfo: {
+            startCursor: 'cc1',
+            endCursor: 'cc2',
+            hasNextPage: false,
+            hasPreviousPage: false,
+          },
+        },
+      },
+    },
+  },
+};
+
+// Alternative mock with different userId - to handle cases where userId might be different
+const commentsQueryMockAlt = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: 'post-with-comments',
+      userId: '', // Sometimes userId might be empty in tests
+      first: 10,
+    },
+  },
+  result: {
+    data: {
+      post: {
+        id: 'post-with-comments',
+        caption: 'Post with comments',
+        comments: {
+          edges: [
+            {
+              node: {
+                id: 'comment-1',
+                body: 'Great post!',
+                creator: {
+                  id: 'c1',
+                  name: 'Commenter1',
+                  avatarURL: null,
+                },
+                createdAt: '2024-01-01T00:00:00.000Z',
+                upVotesCount: 1,
+                downVotesCount: 0,
+                hasUserVoted: {
+                  hasVoted: false,
+                  voteType: null,
+                },
+              },
+              cursor: 'cc1',
+            },
+            {
+              node: {
+                id: 'comment-2',
+                body: 'I agree!',
+                creator: {
+                  id: 'c2',
+                  name: 'Commenter2',
+                  avatarURL: null,
+                },
+                createdAt: '2024-01-01T00:00:00.000Z',
+                upVotesCount: 0,
+                downVotesCount: 0,
+                hasUserVoted: {
+                  hasVoted: false,
+                  voteType: null,
+                },
+              },
+              cursor: 'cc2',
+            },
+          ],
+          pageInfo: {
+            startCursor: 'cc1',
+            endCursor: 'cc2',
             hasNextPage: false,
             hasPreviousPage: false,
           },
@@ -715,15 +771,6 @@ describe('HomeScreen additional scenarios', () => {
                         voteType: null,
                       },
                       createdAt: '2024-01-01T00:00:00.000Z',
-                      comments: {
-                        edges: [],
-                        pageInfo: {
-                          startCursor: null,
-                          endCursor: null,
-                          hasNextPage: false,
-                          hasPreviousPage: false,
-                        },
-                      },
                     },
                     cursor: 'c1',
                   },
@@ -745,15 +792,6 @@ describe('HomeScreen additional scenarios', () => {
                         voteType: null,
                       },
                       createdAt: '2024-01-02T00:00:00.000Z',
-                      comments: {
-                        edges: [],
-                        pageInfo: {
-                          startCursor: null,
-                          endCursor: null,
-                          hasNextPage: false,
-                          hasPreviousPage: false,
-                        },
-                      },
                     },
                     cursor: 'c2',
                   },
@@ -855,15 +893,6 @@ describe('HomeScreen additional scenarios', () => {
                         voteType: null,
                       },
                       createdAt: '2024-01-01T00:00:00.000Z',
-                      comments: {
-                        edges: [],
-                        pageInfo: {
-                          startCursor: null,
-                          endCursor: null,
-                          hasNextPage: false,
-                          hasPreviousPage: false,
-                        },
-                      },
                     },
                     cursor: 'c1',
                   },
@@ -985,15 +1014,6 @@ describe('HomeScreen additional scenarios', () => {
                         voteType: null,
                       },
                       createdAt: '2024-01-01T00:00:00.000Z',
-                      comments: {
-                        edges: [],
-                        pageInfo: {
-                          startCursor: null,
-                          endCursor: null,
-                          hasNextPage: false,
-                          hasPreviousPage: false,
-                        },
-                      },
                     },
                     cursor: 'c1',
                   },
@@ -1287,7 +1307,7 @@ describe('HomeScreen additional scenarios', () => {
             user: {
               id: '640d98d9eb6a743d75341067',
               name: 'Test User',
-              email: 'test@example.com',
+              emailAddress: 'test@example.com',
               joinedOrganizations: {
                 edges: [],
                 pageInfo: {
@@ -1356,50 +1376,6 @@ describe('HomeScreen additional scenarios', () => {
                         voteType: 'up_vote',
                       },
                       createdAt: '2024-01-01T00:00:00.000Z',
-                      comments: {
-                        edges: [
-                          {
-                            node: {
-                              id: 'comment-1',
-                              body: 'Great post!',
-                              creator: {
-                                id: 'u2',
-                                name: 'Commenter1',
-                                avatarURL: null,
-                              },
-                              downVotesCount: 0,
-                              upVotesCount: 2,
-                              hasUserVoted: {
-                                hasVoted: false,
-                                voteType: null,
-                              },
-                            },
-                          },
-                          {
-                            node: {
-                              id: 'comment-2',
-                              body: 'I agree!',
-                              creator: {
-                                id: 'u3',
-                                name: 'Commenter2',
-                                avatarURL: 'https://example.com/avatar2.jpg',
-                              },
-                              downVotesCount: 1,
-                              upVotesCount: 0,
-                              hasUserVoted: {
-                                hasVoted: true,
-                                voteType: 'down_vote',
-                              },
-                            },
-                          },
-                        ],
-                        pageInfo: {
-                          startCursor: 'comment-cursor-1',
-                          endCursor: 'comment-cursor-2',
-                          hasNextPage: false,
-                          hasPreviousPage: false,
-                        },
-                      },
                     },
                     cursor: 'c1',
                   },
@@ -1433,6 +1409,9 @@ describe('HomeScreen additional scenarios', () => {
           },
         },
       },
+      // Add both comment mocks to handle different userId scenarios
+      commentsQueryMock,
+      commentsQueryMockAlt,
     ];
 
     const linkWithComments = new StaticMockLink(mocksWithComments, true);
@@ -1456,12 +1435,21 @@ describe('HomeScreen additional scenarios', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Post with comments')).toBeInTheDocument();
-      const showCommentsBtn = screen.getByTestId('comment-card');
-      expect(showCommentsBtn).toBeInTheDocument();
-      fireEvent.click(showCommentsBtn);
-      expect(screen.getByText('Great post!')).toBeInTheDocument();
-      expect(screen.getByText('I agree!')).toBeInTheDocument();
     });
+
+    // Click on the view comments button
+    const showCommentsBtn = screen.getByTestId('comment-card');
+    expect(showCommentsBtn).toBeInTheDocument();
+    fireEvent.click(showCommentsBtn);
+
+    // Wait for comments to load and appear
+    await waitFor(
+      () => {
+        expect(screen.getByText('Great post!')).toBeInTheDocument();
+        expect(screen.getByText('I agree!')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('should handle file selection without files', async () => {
@@ -1596,15 +1584,6 @@ describe('HomeScreen additional scenarios', () => {
                           url: 'https://example.com/video.mp4',
                         },
                       ],
-                      comments: {
-                        edges: [],
-                        pageInfo: {
-                          startCursor: null,
-                          endCursor: null,
-                          hasNextPage: false,
-                          hasPreviousPage: false,
-                        },
-                      },
                     },
                     cursor: 'c1',
                   },
@@ -1755,15 +1734,6 @@ describe('HomeScreen additional scenarios', () => {
                         voteType: null,
                       },
                       createdAt: '2024-01-01T00:00:00.000Z',
-                      comments: {
-                        edges: [],
-                        pageInfo: {
-                          startCursor: null,
-                          endCursor: null,
-                          hasNextPage: false,
-                          hasPreviousPage: false,
-                        },
-                      },
                     },
                     cursor: 'c1',
                   },
@@ -2012,15 +1982,6 @@ describe('PinnedPostCard Component Tests', () => {
                         voteType: null,
                       },
                       createdAt: '2024-01-01T00:00:00.000Z',
-                      comments: {
-                        edges: [],
-                        pageInfo: {
-                          startCursor: null,
-                          endCursor: null,
-                          hasNextPage: false,
-                          hasPreviousPage: false,
-                        },
-                      },
                     },
                     cursor: 'c1',
                   },
@@ -2042,15 +2003,6 @@ describe('PinnedPostCard Component Tests', () => {
                         voteType: null,
                       },
                       createdAt: '2024-01-02T00:00:00.000Z',
-                      comments: {
-                        edges: [],
-                        pageInfo: {
-                          startCursor: null,
-                          endCursor: null,
-                          hasNextPage: false,
-                          hasPreviousPage: false,
-                        },
-                      },
                     },
                     cursor: 'c2',
                   },
@@ -2139,15 +2091,6 @@ describe('PinnedPostCard Component Tests', () => {
                         voteType: null,
                       },
                       createdAt: '2024-01-01T00:00:00.000Z',
-                      comments: {
-                        edges: [],
-                        pageInfo: {
-                          startCursor: null,
-                          endCursor: null,
-                          hasNextPage: false,
-                          hasPreviousPage: false,
-                        },
-                      },
                     },
                     cursor: 'c1',
                   },
@@ -2234,15 +2177,6 @@ describe('PinnedPostCard Component Tests', () => {
                         voteType: null,
                       },
                       createdAt: '2024-01-01T00:00:00.000Z',
-                      comments: {
-                        edges: [],
-                        pageInfo: {
-                          startCursor: null,
-                          endCursor: null,
-                          hasNextPage: false,
-                          hasPreviousPage: false,
-                        },
-                      },
                     },
                     cursor: 'c1',
                   },
@@ -2326,15 +2260,6 @@ describe('PinnedPostCard Component Tests', () => {
                         voteType: null,
                       },
                       createdAt: '2024-01-01T00:00:00.000Z',
-                      comments: {
-                        edges: [],
-                        pageInfo: {
-                          startCursor: null,
-                          endCursor: null,
-                          hasNextPage: false,
-                          hasPreviousPage: false,
-                        },
-                      },
                     },
                     cursor: 'c1',
                   },
@@ -2410,15 +2335,6 @@ describe('PinnedPostCard Component Tests', () => {
                       upVotesCount: 0,
                       hasUserVoted: { hasVoted: false, voteType: null },
                       createdAt: '2024-01-01T00:00:00.000Z',
-                      comments: {
-                        edges: [],
-                        pageInfo: {
-                          startCursor: null,
-                          endCursor: null,
-                          hasNextPage: false,
-                          hasPreviousPage: false,
-                        },
-                      },
                     },
                     cursor: 'c1',
                   },
@@ -2433,15 +2349,6 @@ describe('PinnedPostCard Component Tests', () => {
                       upVotesCount: 0,
                       hasUserVoted: { hasVoted: false, voteType: null },
                       createdAt: '2024-01-02T00:00:00.000Z',
-                      comments: {
-                        edges: [],
-                        pageInfo: {
-                          startCursor: null,
-                          endCursor: null,
-                          hasNextPage: false,
-                          hasPreviousPage: false,
-                        },
-                      },
                     },
                     cursor: 'c2',
                   },
@@ -2456,15 +2363,6 @@ describe('PinnedPostCard Component Tests', () => {
                       upVotesCount: 0,
                       hasUserVoted: { hasVoted: false, voteType: null },
                       createdAt: '2024-01-03T00:00:00.000Z',
-                      comments: {
-                        edges: [],
-                        pageInfo: {
-                          startCursor: null,
-                          endCursor: null,
-                          hasNextPage: false,
-                          hasPreviousPage: false,
-                        },
-                      },
                     },
                     cursor: 'c3',
                   },

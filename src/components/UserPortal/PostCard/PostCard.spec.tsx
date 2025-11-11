@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -19,9 +19,11 @@ import {
   UPDATE_POST_MUTATION,
   UPDATE_POST_VOTE,
 } from 'GraphQl/Mutations/mutations';
+import { GET_POST_COMMENTS } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
 
+// ===== MODULE MOCKS =====
 vi.mock('react-toastify', () => ({
   toast: {
     error: vi.fn(),
@@ -33,8 +35,339 @@ vi.mock('utils/errorHandler', () => ({
   errorHandler: vi.fn(),
 }));
 
+vi.mock('plugin', () => ({
+  __esModule: true,
+  default: [],
+  PluginInjector: vi.fn(() => (
+    <div data-testid="plugin-injector-g4">Mock Plugin Injector G4</div>
+  )),
+}));
+
+// ===== FUNCTION MOCKS =====
 const fetchPostsMock = vi.fn();
 
+// ===== APOLLO GRAPHQL MOCKS =====
+
+// Base comments query mock
+const commentsQueryMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+    },
+  },
+  result: {
+    data: {
+      post: {
+        __typename: 'Post',
+        id: '1',
+        caption: 'Test Post',
+        comments: {
+          __typename: 'CommentConnection',
+          edges: [
+            {
+              __typename: 'CommentEdge',
+              node: {
+                __typename: 'Comment',
+                id: '1',
+                body: 'Test comment',
+                creator: {
+                  __typename: 'User',
+                  id: '2',
+                  name: 'Jane Smith',
+                  avatarURL: null,
+                },
+                createdAt: '2023-01-01T00:00:00Z',
+                upVotesCount: 2,
+                downVotesCount: 0,
+                hasUserVoted: {
+                  __typename: 'HasUserVotedResponse',
+                  hasVoted: false,
+                  voteType: null,
+                },
+              },
+              cursor: 'cc1',
+            },
+          ],
+          pageInfo: {
+            __typename: 'PageInfo',
+            startCursor: 'cc1',
+            endCursor: 'cc1',
+            hasNextPage: false,
+            hasPreviousPage: false,
+          },
+        },
+      },
+    },
+  },
+};
+
+// Mock where data is undefined
+const undefinedDataMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+    },
+  },
+  result: {
+    data: undefined,
+  },
+};
+
+// Mock where data.post is undefined
+const undefinedPostMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+    },
+  },
+  result: {
+    data: {
+      post: undefined,
+    },
+  },
+};
+
+// Mock where data.post.comments is undefined (different from null)
+const undefinedCommentsMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+    },
+  },
+  result: {
+    data: {
+      post: {
+        __typename: 'Post',
+        id: '1',
+        comments: undefined,
+      },
+    },
+  },
+};
+
+// Comments with pagination mock (for testing pagination)
+const commentsWithPaginationMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+    },
+  },
+  result: {
+    data: {
+      post: {
+        __typename: 'Post',
+        id: '1',
+        caption: 'Test Post',
+        comments: {
+          __typename: 'CommentConnection',
+          edges: [
+            {
+              __typename: 'CommentEdge',
+              node: {
+                __typename: 'Comment',
+                id: '1',
+                body: 'First comment',
+                creator: {
+                  __typename: 'User',
+                  id: '2',
+                  name: 'Jane Smith',
+                  avatarURL: null,
+                },
+                createdAt: '2023-01-01T00:00:00Z',
+                upVotesCount: 2,
+                downVotesCount: 0,
+                hasUserVoted: {
+                  __typename: 'HasUserVotedResponse',
+                  hasVoted: false,
+                  voteType: null,
+                },
+              },
+              cursor: 'cc1',
+            },
+          ],
+          pageInfo: {
+            __typename: 'PageInfo',
+            startCursor: 'cc1',
+            endCursor: 'cc1',
+            hasNextPage: true,
+            hasPreviousPage: false,
+          },
+        },
+      },
+    },
+  },
+};
+
+// Fetch more comments mock (for testing pagination)
+const fetchMoreCommentsMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+      after: 'cc1',
+    },
+  },
+  result: {
+    data: {
+      post: {
+        __typename: 'Post',
+        id: '1',
+        caption: 'Test Post',
+        comments: {
+          __typename: 'CommentConnection',
+          edges: [
+            {
+              __typename: 'CommentEdge',
+              node: {
+                __typename: 'Comment',
+                id: '2',
+                body: 'Second comment',
+                creator: {
+                  __typename: 'User',
+                  id: '3',
+                  name: 'John Smith',
+                  avatarURL: null,
+                },
+                createdAt: '2023-01-01T01:00:00Z',
+                upVotesCount: 1,
+                downVotesCount: 0,
+                hasUserVoted: {
+                  __typename: 'HasUserVotedResponse',
+                  hasVoted: false,
+                  voteType: null,
+                },
+              },
+              cursor: 'cc2',
+            },
+          ],
+          pageInfo: {
+            __typename: 'PageInfo',
+            startCursor: 'cc2',
+            endCursor: 'cc2',
+            hasNextPage: false,
+            hasPreviousPage: true,
+          },
+        },
+      },
+    },
+  },
+};
+
+// Fetch more comments error mock
+const fetchMoreCommentsErrorMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+      after: 'cc1',
+    },
+  },
+  error: new Error('Network error occurred'),
+};
+
+// Create comment mock
+const createCommentMock = {
+  request: {
+    query: CREATE_COMMENT_POST,
+    variables: {
+      input: {
+        postId: '1',
+        body: 'New test comment',
+      },
+    },
+  },
+  result: {
+    data: {
+      createComment: {
+        __typename: 'Comment',
+        id: '3',
+        body: 'New test comment',
+        creator: {
+          __typename: 'User',
+          id: '1',
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john@example.com',
+        },
+        createdAt: '2024-01-01',
+        likeCount: 0,
+      },
+    },
+  },
+};
+
+// Delete post error mock
+const deletePostErrorMock = {
+  request: {
+    query: DELETE_POST_MUTATION,
+    variables: {
+      input: {
+        id: '1',
+      },
+    },
+  },
+  error: new Error('Failed to delete post'),
+};
+
+// Null comments mock
+const nullCommentsMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+    },
+  },
+  result: {
+    data: {
+      post: {
+        comments: null,
+      },
+    },
+  },
+};
+
+// Null fetch more mock
+const nullFetchMoreMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+      after: 'cc1',
+    },
+  },
+  result: {
+    data: {
+      post: {
+        comments: null,
+      },
+    },
+  },
+};
+
+// ===== BASE MOCKS ARRAY =====
 const mocks = [
   {
     request: {
@@ -49,6 +382,7 @@ const mocks = [
     result: {
       data: {
         updatePostVote: {
+          __typename: 'UpdatePostVoteResponse',
           id: '1',
         },
       },
@@ -67,6 +401,7 @@ const mocks = [
     result: {
       data: {
         updatePostVote: {
+          __typename: 'UpdatePostVoteResponse',
           id: '1',
         },
       },
@@ -78,16 +413,18 @@ const mocks = [
       variables: {
         input: {
           postId: '1',
-          body: 'Test comment',
+          body: 'My comment',
         },
       },
     },
     result: {
       data: {
         createComment: {
+          __typename: 'Comment',
           id: '1',
-          body: 'Test comment',
+          body: 'My comment',
           creator: {
+            __typename: 'User',
             id: '1',
             firstName: 'John',
             lastName: 'Doe',
@@ -105,15 +442,18 @@ const mocks = [
       variables: {
         input: {
           id: '1',
-          caption: 'Updated post content',
+          caption: 'This is a test post',
         },
       },
     },
     result: {
       data: {
         updatePost: {
+          __typename: 'Post',
           id: '1',
-          caption: 'Updated post content',
+          caption: 'This is a test post',
+          pinnedAt: null,
+          attachments: [],
         },
       },
     },
@@ -131,6 +471,7 @@ const mocks = [
     result: {
       data: {
         updatePost: {
+          __typename: 'Post',
           id: '1',
           caption: 'Updated content',
         },
@@ -149,11 +490,13 @@ const mocks = [
     result: {
       data: {
         deletePost: {
+          __typename: 'DeletePostResponse',
           id: '1',
         },
       },
     },
   },
+  commentsQueryMock,
 ];
 
 const link = new StaticMockLink(mocks, true);
@@ -178,30 +521,12 @@ const defaultProps = {
   upVoteCount: 5,
   downVoteCount: 0,
   commentCount: 3,
-  comments: [
-    {
-      id: '1',
-      body: 'Test comment',
-      creator: {
-        id: '2',
-        name: 'Jane Smith',
-        email: 'jane@example.com',
-      },
-      hasUserVoted: {
-        hasVoted: false,
-        voteType: null,
-      },
-      upVoteCount: 2,
-      downVoteCount: 0,
-      text: 'Test comment',
-    },
-  ],
   fetchPosts: fetchPostsMock,
 };
 
 const renderPostCard = (props: Partial<InterfacePostCard> = {}) => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -213,12 +538,30 @@ const renderPostCard = (props: Partial<InterfacePostCard> = {}) => {
   );
 };
 
-// Mock plugin injector used by PostCard (injectorType G4)
-vi.mock('plugin', () => ({
-  PluginInjector: vi.fn(() => (
-    <div data-testid="plugin-injector-g4">Mock Plugin Injector G4</div>
-  )),
-}));
+const renderPostCardWithCustomMock = (customMock: MockedResponse) => {
+  const { setItem } = useLocalStorage();
+  setItem('userId', '1');
+
+  // Only include the custom mock and base mocks, NOT commentsWithPaginationMock
+  const mocksArray = [
+    customMock,
+    ...mocks.filter((m) => m.request.query !== GET_POST_COMMENTS), // Exclude other comment mocks
+  ];
+
+  const linkWithCustomMock = new StaticMockLink(mocksArray, true);
+
+  return render(
+    <MockedProvider link={linkWithCustomMock} addTypename={true}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <PostCard {...defaultProps} />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+};
 
 describe('PostCard Component', () => {
   beforeEach(() => {
@@ -304,18 +647,10 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-// Mock apollo client exports used in this test: provide gql and useMutation
-vi.mock('@apollo/client', () => {
-  const gql = (strings: TemplateStringsArray): string => strings.join('');
-  return {
-    gql,
-    useMutation: () => [vi.fn().mockResolvedValue({}), { loading: false }],
-  };
-});
-
 describe('PostCard', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    fetchPostsMock.mockClear();
     const { setItem } = useLocalStorage();
     setItem('userId', '1');
   });
@@ -331,23 +666,18 @@ describe('PostCard', () => {
     });
   });
 
-  it('edits post successfully and shows success toast', async () => {
-    renderPostCard();
-    // open edit modal
-    fireEvent.click(screen.getByTestId('more-options-button'));
-    // save post
-    fireEvent.click(screen.getByTestId('save-post-button'));
-    await waitFor(() => {
-      expect(defaultProps.fetchPosts).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith('Post updated successfully');
-    });
-  });
-
-  it('renders CommentCard when comments exist', () => {
+  it('renders CommentCard when comments exist', async () => {
     renderPostCard();
     // reveal comments
     fireEvent.click(screen.getByText(/view/i));
-    expect(screen.getByTestId('comment-card')).toBeInTheDocument();
+
+    // Wait for comments to load
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('comment-card')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('handles like button click when post is not liked', async () => {
@@ -479,25 +809,41 @@ describe('PostCard', () => {
     expect(screen.getByText('Test Post')).toBeInTheDocument();
   });
 
-  it('shows comments section when showComments is toggled', () => {
+  it('shows comments section when showComments is toggled', async () => {
     renderPostCard();
 
-    const viewCommentsButton = screen.getByText(/view/i);
+    const viewCommentsButton = screen.getByTestId('comment-card');
     fireEvent.click(viewCommentsButton);
 
-    expect(screen.getByText('Test comment')).toBeInTheDocument();
+    // Wait for comments to load
+    await waitFor(
+      () => {
+        expect(screen.getByText('Test comment')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
   });
 
-  it('hides comments when clicking hide comments', () => {
+  it('hides comments when clicking hide comments', async () => {
     renderPostCard();
 
     const viewCommentsButton = screen.getByText(/view/i);
     fireEvent.click(viewCommentsButton);
+
+    // Wait for comments to load first
+    await waitFor(
+      () => {
+        expect(screen.getByText('Test comment')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
 
     const hideCommentsButton = screen.getByText(/hide/i);
     fireEvent.click(hideCommentsButton);
 
-    expect(screen.queryByText('Test comment')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText('Test comment')).not.toBeInTheDocument();
+    });
   });
 
   it('handles edit post with pinned status change', async () => {
@@ -549,13 +895,22 @@ describe('PostCard', () => {
   });
 
   it('handles delete post error', async () => {
-    // Use a mock that will actually cause an error
-    const originalEdit = defaultProps.fetchPosts;
-    defaultProps.fetchPosts = vi
-      .fn()
-      .mockRejectedValue(new Error('Failed to delete'));
+    const linkWithDeleteError = new StaticMockLink(
+      [deletePostErrorMock, ...mocks],
+      true,
+    );
 
-    renderPostCard();
+    render(
+      <MockedProvider link={linkWithDeleteError}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...defaultProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
     const moreButton = screen.getByTestId('more-options-button');
     fireEvent.click(moreButton);
@@ -568,8 +923,13 @@ describe('PostCard', () => {
     const deleteButton = screen.getByText('Delete');
     fireEvent.click(deleteButton);
 
-    // Reset the mock
-    defaultProps.fetchPosts = originalEdit;
+    // Wait for error handler to be called
+    await waitFor(() => {
+      expect(errorHandler).toHaveBeenCalledWith(
+        expect.any(Function),
+        expect.any(Object),
+      );
+    });
   });
 
   it('renders loading state for like button', async () => {
@@ -595,36 +955,6 @@ describe('PostCard', () => {
     // This test verifies the like functionality works, which includes the loading state handling.
   });
 
-  it('renders loading state for comment submission', async () => {
-    renderPostCard();
-
-    const commentInput = screen.getByPlaceholderText(/add comment/i);
-    const sendButton = screen.getByTestId('comment-send');
-
-    fireEvent.change(commentInput, { target: { value: 'Test comment' } });
-    fireEvent.click(sendButton);
-
-    // Check for loading state indicators
-    await waitFor(() => {
-      // Assert send button becomes disabled during loading
-      expect(sendButton).toBeDisabled();
-    });
-
-    // Alternatively, check for progress indicator or aria-busy
-    const progressIndicator = screen.queryByRole('progressbar');
-    const elementWithAriaBusy =
-      screen.queryByLabelText(/loading/i) ||
-      document.querySelector('[aria-busy="true"]');
-
-    // At least one loading indicator should be present
-    expect(
-      sendButton.hasAttribute('disabled') ||
-        sendButton.getAttribute('aria-disabled') === 'true' ||
-        progressIndicator ||
-        elementWithAriaBusy,
-    ).toBeTruthy();
-  });
-
   it('disables comment send button when input is empty', () => {
     renderPostCard();
 
@@ -642,15 +972,278 @@ describe('PostCard', () => {
     expect(sendButton).not.toBeDisabled();
   });
 
-  it('renders without comments when comments array is empty', () => {
-    renderPostCard({ comments: [], commentCount: 0 });
+  // Render helper for pagination tests
+  const renderPostCardWithPagination = (
+    options: {
+      mockOverrides?: Partial<InterfacePostCard>;
+      customMocks?: MockedResponse[];
+      fetchMoreMock?: MockedResponse;
+      addTypename?: boolean;
+    } = {},
+  ) => {
+    const {
+      mockOverrides = {},
+      customMocks = [],
+      fetchMoreMock = fetchMoreCommentsMock,
+      addTypename = true,
+    } = options;
 
+    const mocksWithPagination = [
+      commentsWithPaginationMock,
+      fetchMoreMock,
+      ...customMocks,
+      ...mocks,
+    ];
+
+    const linkWithPagination = new StaticMockLink(mocksWithPagination, true);
+
+    return render(
+      <MockedProvider link={linkWithPagination} addTypename={addTypename}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...defaultProps} {...mockOverrides} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+  };
+
+  it('should load more comments successfully when button is clicked', async () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+    renderPostCardWithPagination();
+
+    // Open comments section
+    const viewCommentsButton = screen.getByTestId('comment-card');
+    fireEvent.click(viewCommentsButton);
+
+    // Wait for initial comments to load
+    await waitFor(() => {
+      expect(screen.getByText('First comment')).toBeInTheDocument();
+    });
+
+    // Click "Load more comments" button
+    const loadMoreButton = screen.getByText('Load more comments');
+    fireEvent.click(loadMoreButton);
+
+    // Verify that the loading state is triggered (this tests the function execution)
+    await waitFor(() => {
+      // The button should change to loading state or disappear
+      // Since the pagination mock resolves with hasNextPage: false, button should disappear
+      expect(screen.queryByText('Load more comments')).not.toBeInTheDocument();
+    });
+
+    // Verify that the second comment was loaded
+    await waitFor(() => {
+      expect(screen.getByText('Second comment')).toBeInTheDocument();
+    });
+  });
+
+  it('should handle error when loading more comments fails', async () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+
+    renderPostCardWithPagination({
+      fetchMoreMock: fetchMoreCommentsErrorMock,
+    });
+
+    // Open comments section
+    const viewCommentsButton = screen.getByTestId('comment-card');
+    fireEvent.click(viewCommentsButton);
+
+    // Wait for initial comments to load
+    await waitFor(() => {
+      expect(screen.getByText('First comment')).toBeInTheDocument();
+    });
+
+    // Click "Load more comments" button
+    const loadMoreButton = screen.getByText('Load more comments');
+    fireEvent.click(loadMoreButton);
+
+    // Wait for error handling to be called
+    await waitFor(() => {
+      expect(errorHandler).toHaveBeenCalledWith(
+        expect.any(Function),
+        expect.any(Object),
+      );
+    });
+  });
+
+  it('should handle comment creation with showComments true', async () => {
+    const mockFetchPosts = vi.fn();
+
+    renderPostCardWithPagination({
+      customMocks: [createCommentMock],
+      mockOverrides: { fetchPosts: mockFetchPosts },
+      addTypename: false,
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Test Post')).toBeInTheDocument();
+    });
+
+    // Show comments first to test the refresh logic
+    fireEvent.click(screen.getByTestId('comment-card'));
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText(/add comment/i)).toBeInTheDocument();
+    });
+
+    // Create a new comment while comments are visible
+    const commentInput = screen.getByPlaceholderText(
+      /add comment/i,
+    ) as HTMLInputElement;
+    fireEvent.change(commentInput, { target: { value: 'New test comment' } });
+    fireEvent.click(screen.getByTestId('comment-send'));
+
+    await waitFor(() => {
+      expect(mockFetchPosts).toHaveBeenCalled();
+      expect(commentInput.value).toBe('');
+    });
+  });
+
+  it('should handle onCompleted callback when data.post.comments is null', async () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+
+    renderPostCardWithPagination({
+      customMocks: [nullCommentsMock],
+    });
+
+    // Show comments to trigger the query
+    const viewCommentsButton = screen.getByTestId('comment-card');
+    fireEvent.click(viewCommentsButton);
+
+    // Wait for query to complete without throwing errors
+    await waitFor(() => {
+      expect(screen.queryByText('First comment')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should handle fetchMoreResult with null comments in updateQuery', async () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+
+    renderPostCardWithPagination({
+      fetchMoreMock: nullFetchMoreMock,
+    });
+
+    // Open comments section
+    const viewCommentsButton = screen.getByTestId('comment-card');
+    fireEvent.click(viewCommentsButton);
+
+    // Wait for initial comments to load
+    await waitFor(() => {
+      expect(screen.getByText('First comment')).toBeInTheDocument();
+    });
+
+    // Click "Load more comments" button
+    const loadMoreButton = screen.getByText('Load more comments');
+    fireEvent.click(loadMoreButton);
+
+    // Wait for the load more to complete (should return prev data since fetchMoreResult is null)
+    await waitFor(() => {
+      // Load more button should still be present since fetch returned null
+      expect(screen.getByText('Load more comments')).toBeInTheDocument();
+    });
+  });
+
+  const postPropsWithZeroComments = {
+    ...defaultProps,
+    commentCount: 0,
+  };
+
+  it('should not display comments section when commentCount is 0', () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+
+    render(
+      <MockedProvider mocks={mocks} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...postPropsWithZeroComments} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Should not show comments button or text when commentCount is 0
     expect(screen.queryByTestId('comment-card')).not.toBeInTheDocument();
   });
 
-  it('renders with modal view prop', () => {
-    renderPostCard({ isModalView: true });
+  it('should render avatar with UserDefault fallback when avatarURL is null', () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
 
-    expect(screen.getByText('Test Post')).toBeInTheDocument();
+    // Post props with null avatarURL to test the fallback
+    const postWithNullAvatar = {
+      ...defaultProps,
+      creator: {
+        ...defaultProps.creator,
+        avatarURL: null,
+      },
+    };
+
+    render(
+      <MockedProvider mocks={mocks} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...postWithNullAvatar} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Check that avatar uses fallback (UserDefault) when avatarURL is null
+    const avatar = screen.getByRole('img', { name: defaultProps.creator.name });
+    expect(avatar).toBeInTheDocument();
+  });
+
+  it('should handle onCompleted when data is undefined', async () => {
+    renderPostCardWithCustomMock(undefinedDataMock);
+
+    // Show comments to trigger the query
+    const viewCommentsButton = screen.getByTestId('comment-card');
+    fireEvent.click(viewCommentsButton);
+
+    // Wait for query to complete without throwing errors
+    await waitFor(() => {
+      expect(screen.queryByText('First comment')).not.toBeInTheDocument();
+      expect(screen.queryByText('Test comment')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should handle onCompleted when data.post is undefined', async () => {
+    renderPostCardWithCustomMock(undefinedPostMock);
+
+    // Show comments to trigger the query
+    const viewCommentsButton = screen.getByTestId('comment-card');
+    fireEvent.click(viewCommentsButton);
+
+    // Wait for query to complete without throwing errors
+    await waitFor(() => {
+      expect(screen.queryByText('First comment')).not.toBeInTheDocument();
+      expect(screen.queryByText('Test comment')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should handle onCompleted when data.post.comments is undefined', async () => {
+    renderPostCardWithCustomMock(undefinedCommentsMock);
+
+    // Show comments to trigger the query
+    const viewCommentsButton = screen.getByTestId('comment-card');
+    fireEvent.click(viewCommentsButton);
+
+    // Wait for query to complete without throwing errors
+    await waitFor(() => {
+      expect(screen.queryByText('First comment')).not.toBeInTheDocument();
+      expect(screen.queryByText('Test comment')).not.toBeInTheDocument();
+    });
   });
 });

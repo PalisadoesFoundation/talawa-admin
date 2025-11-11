@@ -166,31 +166,6 @@ export const ORGANIZATION_POST_LIST_WITH_VOTES = gql`
               avatarURL
             }
             createdAt
-            comments(first: 10) {
-              edges {
-                node {
-                  hasUserVoted(userId: $userId) {
-                    hasVoted
-                    voteType
-                  }
-                  id
-                  body
-                  creator {
-                    id
-                    name
-                    avatarURL
-                  }
-                  downVotesCount
-                  upVotesCount
-                }
-              }
-              pageInfo {
-                startCursor
-                endCursor
-                hasNextPage
-                hasPreviousPage
-              }
-            }
           }
           cursor
         }
