@@ -44,6 +44,7 @@ import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router';
 import { toast } from 'react-toastify';
+import { validatePassword } from 'utils/passwordValidator';
 
 import {
   FORGOT_PASSWORD_MUTATION,
@@ -71,6 +72,10 @@ const ForgotPassword = (): JSX.Element => {
 
   // Custom hook for accessing local storage
   const { getItem, removeItem, setItem } = useLocalStorage();
+
+  const [passwordTouched, setPasswordTouched] = useState(false);
+
+  const [passwordValid, setPasswordValid] = useState(false);
 
   // State hooks for form data and UI
   const [showEnterEmail, setShowEnterEmail] = useState(true);
@@ -135,6 +140,12 @@ const ForgotPassword = (): JSX.Element => {
   ): Promise<void> => {
     e.preventDefault();
     const { userOtp, newPassword, confirmNewPassword } = forgotPassFormData;
+
+    if (!validatePassword(newPassword)) {
+      setPasswordTouched(true);
+      toast.error(tErrors('passwordStrengthError') as string);
+      return;
+    }
 
     if (newPassword !== confirmNewPassword) {
       toast.error(t('passwordMismatches') as string);
@@ -248,13 +259,23 @@ const ForgotPassword = (): JSX.Element => {
                       name="newPassword"
                       value={forgotPassFormData.newPassword}
                       required
-                      onChange={(e): void =>
+                      onBlur={(): void => setPasswordTouched(true)}
+                      onChange={(e): void => {
+                        const newPwd = e.target.value;
                         setForgotPassFormData({
                           ...forgotPassFormData,
-                          newPassword: e.target.value,
-                        })
-                      }
+                          newPassword: newPwd,
+                        });
+                        setPasswordValid(validatePassword(newPwd));
+                      }}
                     />
+
+                    {passwordTouched && !passwordValid && (
+                      <Form.Text className="text-danger">
+                        {tErrors('passwordStrengthError')}
+                      </Form.Text>
+                    )}
+
                     <Form.Label htmlFor="confirmNewPassword">
                       {t('cofirmNewPassword')}:
                     </Form.Label>

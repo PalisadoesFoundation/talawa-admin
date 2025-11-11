@@ -12,5 +12,6 @@
   "invalidEducationGrade": "Veuillez sélectionner un niveau d'études valide",
   "invalidEmploymentStatus": "Veuillez sélectionner un statut d'emploi valide",
   "invalidMaritalStatus": "Veuillez sélectionner un état matrimonial valide",
-  "error400": "Réponse non réussie. Code d'état 400 reçu du serveur"
+  "error400": "Réponse non réussie. Code d'état 400 reçu du serveur",
+  "passwordStrengthError": "Le mot de passe doit contenir au moins 8 caractères, y compris une lettre majuscule, une lettre minuscule, un chiffre et un caractère spécial."
 }

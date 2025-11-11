@@ -12,5 +12,6 @@
   "invalidEducationGrade": "Por favor seleccione un grado de educación válido",
   "invalidEmploymentStatus": "Por favor seleccione un estado de empleo válido",
   "invalidMaritalStatus": "Por favor seleccione un estado civil válido",
-  "error400": "Respuesta no exitosa. Se recibió el código de estado 400 del servidor"
+  "error400": "Respuesta no exitosa. Se recibió el código de estado 400 del servidor",
+  "passwordStrengthError": "La contraseña debe contener al menos 8 caracteres, incluyendo una letra mayúscula, una letra minúscula, un número y un carácter especial."
 }
