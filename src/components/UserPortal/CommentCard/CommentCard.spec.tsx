@@ -822,7 +822,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     expect(toast.success).toHaveBeenCalledWith('Comment updated successfully');
   });
 
-  it('should thow empty comment error when updating comment with empty body', async () => {
+  it('should throw empty comment error when updating comment with empty body', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>

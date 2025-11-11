@@ -1604,7 +1604,7 @@
     "noAssociatedVoteFound": "Aucun vote associé trouvé à supprimer.",
     "editComment": "Modifier le commentaire",
     "deleteComment": "Supprimer le commentaire",
-    "deleting": "Suppression...",
+    "deleting": "Suppression…",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre."
   }
 }

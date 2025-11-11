@@ -1604,7 +1604,7 @@
     "noAssociatedVoteFound": "No associated vote found to remove.",
     "editComment": "Edit Comment",
     "deleteComment": "Delete Comment",
-    "deleting": "Deleting...",
+    "deleting": "Deleting…",
     "emptyCommentError": "Please enter a comment before submitting."
   }
 }
