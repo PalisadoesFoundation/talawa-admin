@@ -814,7 +814,9 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await wait();
     await userEvent.click(screen.getByTestId('more-options-button'));
     await userEvent.click(screen.getByTestId('update-comment-button'));
-    const textArea = screen.getByTestId('edit-comment-input').children[0];
+    const textArea = screen
+      .getByTestId('edit-comment-input')
+      .querySelector('textarea') as HTMLTextAreaElement;
     await userEvent.clear(textArea);
     await userEvent.type(textArea, 'Updated comment text');
     await userEvent.click(screen.getByTestId('save-comment-button'));
@@ -838,7 +840,9 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await wait();
     await userEvent.click(screen.getByTestId('more-options-button'));
     await userEvent.click(screen.getByTestId('update-comment-button'));
-    const textArea = screen.getByTestId('edit-comment-input').children[0];
+    const textArea = screen
+      .getByTestId('edit-comment-input')
+      .querySelector('textarea') as HTMLTextAreaElement;
     await userEvent.clear(textArea);
     await userEvent.type(textArea, ' ');
     await userEvent.click(screen.getByTestId('save-comment-button'));
@@ -864,7 +868,9 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await wait();
     await userEvent.click(screen.getByTestId('more-options-button'));
     await userEvent.click(screen.getByTestId('update-comment-button'));
-    const textArea = screen.getByTestId('edit-comment-input').children[0];
+    const textArea = screen
+      .getByTestId('edit-comment-input')
+      .querySelector('textarea') as HTMLTextAreaElement;
     await userEvent.clear(textArea);
     await userEvent.type(textArea, 'Updated comment text');
     await userEvent.click(screen.getByTestId('save-comment-button'));
