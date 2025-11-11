@@ -1500,8 +1500,15 @@ describe('Advanced Component Functionality Tests', () => {
     // Mock localStorage.clear and window.location.assign
     const clearSpy = vi.spyOn(Storage.prototype, 'clear');
     const assignMock = vi.fn();
+    const originalLocation = window.location;
+    const originalDescriptor = Object.getOwnPropertyDescriptor(
+      window,
+      'location',
+    );
+
     Object.defineProperty(window, 'location', {
-      value: { assign: assignMock },
+      value: { ...originalLocation, assign: assignMock },
+      configurable: true,
       writable: true,
     });
 
@@ -1568,6 +1575,10 @@ describe('Advanced Component Functionality Tests', () => {
     // Note: Depending on error handler implementation, these may or may not be called
     // This test ensures the error path is covered
 
+    // Restore original window.location
+    if (originalDescriptor) {
+      Object.defineProperty(window, 'location', originalDescriptor);
+    }
     clearSpy.mockRestore();
   });
 
