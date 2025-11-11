@@ -6,6 +6,8 @@ import EnvironmentPlugin from 'vite-plugin-environment';
 import createInternalFileWriterPlugin from '../src/plugin/vite/internalFileWriterPlugin';
 import istanbul from 'vite-plugin-istanbul';
 
+const PORT = process.env.PORT ? Number(process.env.PORT) : 4321;
+
 export default defineConfig({
   // depending on your application, base can also be "/"
   build: {
@@ -56,6 +58,6 @@ export default defineConfig({
     open: false,
     host: '0.0.0.0',
     // this sets a default port to 4321
-    port: 4321,
+    port: PORT,
   },
 });
