@@ -1576,9 +1576,15 @@ describe('Advanced Component Functionality Tests', () => {
     // This test ensures the error path is covered
 
     // Restore original window.location
-    if (originalDescriptor) {
-      Object.defineProperty(window, 'location', originalDescriptor);
-    }
+    Object.defineProperty(
+      window,
+      'location',
+      originalDescriptor || {
+        value: originalLocation,
+        configurable: true,
+        writable: true,
+      },
+    );
     clearSpy.mockRestore();
   });
 
