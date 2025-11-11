@@ -24,7 +24,7 @@ const shouldSuppressError = (value: unknown): boolean => {
       'Please remove the `addTypename` option when initializing `InMemoryCache`',
     ) ||
     value.includes('Please remove this option.') ||
-    (value.includes('https://go.apollo.dev/c/err') &&
+    (value.includes('go.apollo.dev/c/err') &&
       (value.includes('addTypename') ||
         value.includes('canonizeResults') ||
         value.includes('message%22%3A43') ||
