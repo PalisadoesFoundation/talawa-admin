@@ -284,7 +284,20 @@ describe('Organisation Events Page', () => {
     );
   });
 
-  test('Testing HTML5 validation prevents submission with empty required fields', async () => {
+  test('Testing Create event with invalid inputs', async () => {
+    const invalidFormData = {
+      title: ' ',
+      description: ' ',
+      location: ' ',
+      startDate: '03/28/2022',
+      endDate: '03/30/2022',
+      startTime: '02:00',
+      endTime: '06:00',
+      allDay: false,
+      isPublic: true,
+      isRegisterable: true,
+    };
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -313,19 +326,48 @@ describe('Organisation Events Page', () => {
       expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
     });
 
-    // Leave all required fields empty and try to submit
-    await userEvent.click(screen.getByTestId('createEventBtn'));
+    await userEvent.type(
+      screen.getByTestId('eventTitleInput'),
+      invalidFormData.title,
+    );
+    await userEvent.type(
+      screen.getByTestId('eventDescriptionInput'),
+      invalidFormData.description,
+    );
+    await userEvent.type(
+      screen.getByTestId('eventLocationInput'),
+      invalidFormData.location,
+    );
 
-    // HTML5 validation should prevent form submission
-    // The modal should still be open since form didn't submit
-    await waitFor(() => {
-      expect(
-        screen.getByTestId('createEventModalCloseBtn'),
-      ).toBeInTheDocument();
+    const endDatePicker = screen.getByLabelText('End Date');
+    const startDatePicker = screen.getByLabelText('Start Date');
+
+    fireEvent.change(endDatePicker, {
+      target: { value: invalidFormData.endDate },
+    });
+    fireEvent.change(startDatePicker, {
+      target: { value: invalidFormData.startDate },
     });
 
-    // No toast warnings should be shown since custom validation never runs
-    expect(toast.warning).not.toHaveBeenCalled();
+    await userEvent.click(screen.getByTestId('alldayCheck'));
+    await userEvent.click(screen.getByTestId('ispublicCheck'));
+    await userEvent.click(screen.getByTestId('registrableCheck'));
+
+    await wait();
+
+    expect(screen.getByTestId('eventTitleInput')).toHaveValue(' ');
+    expect(screen.getByTestId('eventDescriptionInput')).toHaveValue(' ');
+
+    expect(endDatePicker).toHaveValue(invalidFormData.endDate);
+    expect(startDatePicker).toHaveValue(invalidFormData.startDate);
+    expect(screen.getByTestId('alldayCheck')).not.toBeChecked();
+    expect(screen.getByTestId('ispublicCheck')).not.toBeChecked();
+    expect(screen.getByTestId('registrableCheck')).toBeChecked();
+
+    await userEvent.click(screen.getByTestId('createEventBtn'));
+    expect(toast.warning).toHaveBeenCalledWith('Name can not be blank!');
+    expect(toast.warning).toHaveBeenCalledWith('Description can not be blank!');
+    expect(toast.warning).toHaveBeenCalledWith('Location can not be blank!');
 
     await userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
 
@@ -583,7 +625,7 @@ describe('Organisation Events Page', () => {
     });
   });
 
-  test('Testing HTML5 form validation for required fields', async () => {
+  test('Testing enhanced form validation for empty fields', async () => {
     const user = userEvent.setup();
     const validationLink = new StaticMockLink(MOCKS, true);
 
@@ -615,26 +657,22 @@ describe('Organisation Events Page', () => {
       expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
     });
 
-    // Verify that required fields have the required attribute for HTML5 validation
-    const titleInput = screen.getByTestId('eventTitleInput');
-    const descriptionInput = screen.getByTestId('eventDescriptionInput');
-    const locationInput = screen.getByTestId('eventLocationInput');
+    // Test submitting with all empty fields to trigger all validation paths
+    await user.click(screen.getByTestId('createEventBtn'));
 
-    expect(titleInput).toBeRequired();
-    expect(descriptionInput).toBeRequired();
-    expect(locationInput).toBeRequired();
-
-    // Test that form submission is prevented when required fields are empty
-    // HTML5 validation should prevent the onSubmit handler from being called
-    const createButton = screen.getByTestId('createEventBtn');
-    await user.click(createButton);
-
-    // Since HTML5 validation prevents submission, no mutation should be called
-    // and the modal should still be open (form not submitted)
     await waitFor(() => {
-      expect(
-        screen.getByTestId('createEventModalCloseBtn'),
-      ).toBeInTheDocument();
+      expect(toast.warning).toHaveBeenNthCalledWith(
+        1,
+        'Name can not be blank!',
+      );
+      expect(toast.warning).toHaveBeenNthCalledWith(
+        2,
+        'Description can not be blank!',
+      );
+      expect(toast.warning).toHaveBeenNthCalledWith(
+        3,
+        'Location can not be blank!',
+      );
     });
   });
 
