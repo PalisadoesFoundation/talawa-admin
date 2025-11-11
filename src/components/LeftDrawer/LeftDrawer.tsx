@@ -21,9 +21,9 @@ import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { usePluginDrawerItems } from 'plugin';
 import type { IDrawerExtension } from 'plugin';
-import SidebarHeader from 'components/Sidebar/SidebarHeader';
-import SidebarMenuItem from 'components/Sidebar/SidebarMenuItem';
-import SidebarProfileSection from 'components/Sidebar/SidebarProfileSection';
+import SidebarHeader from 'components/SidebarHeader/SidebarHeader';
+import SidebarMenuItem from 'components/SidebarMenuItem/SidebarMenuItem';
+import SidebarProfileSection from 'components/SidebarProfileSection/SidebarProfileSection';
 
 export interface ILeftDrawerProps {
   hideDrawer: boolean;

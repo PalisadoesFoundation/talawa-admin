@@ -52,8 +52,8 @@ import styles from 'style/app-fixed.module.css';
 import Avatar from 'components/Avatar/Avatar';
 import { usePluginDrawerItems } from 'plugin';
 import type { IDrawerExtension } from 'plugin';
-import SidebarHeader from 'components/Sidebar/SidebarHeader';
-import SidebarProfileSection from 'components/Sidebar/SidebarProfileSection';
+import SidebarHeader from 'components/SidebarHeader/SidebarHeader';
+import SidebarProfileSection from 'components/SidebarProfileSection/SidebarProfileSection';
 import useLocalStorage from 'utils/useLocalstorage';
 
 export interface InterfaceUserSidebarOrgProps {

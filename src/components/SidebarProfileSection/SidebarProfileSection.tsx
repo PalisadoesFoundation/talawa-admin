@@ -29,7 +29,10 @@ const SidebarProfileSection = ({
   hideDrawer,
 }: ISidebarProfileSectionProps): JSX.Element => {
   return (
-    <div className={styles.userSidebarOrgFooter}>
+    <div
+      className={styles.userSidebarOrgFooter}
+      data-testid="sidebar-profile-section"
+    >
       {!hideDrawer && <ProfileCard />}
       <SignOut hideDrawer={hideDrawer} />
     </div>
