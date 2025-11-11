@@ -13,6 +13,10 @@ import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 import { toast } from 'react-toastify';
+import {
+  DELETE_COMMENT,
+  UPDATE_COMMENT,
+} from 'GraphQl/Mutations/CommentMutations';
 
 // Interface for GraphQL error structure
 interface InterfaceGraphQLErrorWithCode extends Error {
@@ -25,6 +29,7 @@ interface InterfaceGraphQLErrorWithCode extends Error {
 
 vi.mock('react-toastify', () => ({
   toast: {
+    success: vi.fn(),
     error: vi.fn(),
     warn: vi.fn(),
   },
@@ -77,6 +82,69 @@ const MOCKS = [
   },
 ];
 
+const DELETE_COMMENT_MOCK = {
+  request: {
+    query: DELETE_COMMENT,
+    variables: {
+      input: {
+        id: '1',
+      },
+    },
+  },
+  result: {
+    data: {
+      deleteComment: {
+        id: '1',
+      },
+    },
+  },
+};
+
+const UPDATE_COMMENT_MOCK = {
+  request: {
+    query: UPDATE_COMMENT,
+    variables: {
+      input: {
+        id: '1',
+        body: 'Updated comment text',
+      },
+    },
+  },
+  result: {
+    data: {
+      updateComment: {
+        id: '1',
+        body: 'Updated comment text',
+      },
+    },
+  },
+};
+
+const DELETE_COMMENT_MOCK_ERROR = {
+  request: {
+    query: DELETE_COMMENT,
+    variables: {
+      input: {
+        id: '1',
+      },
+    },
+  },
+  error: new Error('Failed to delete comment'),
+};
+
+const UPDATE_COMMENT_MOCK_ERROR = {
+  request: {
+    query: UPDATE_COMMENT,
+    variables: {
+      input: {
+        id: '1',
+        body: 'Updated comment text',
+      },
+    },
+  },
+  error: new Error('Failed to update comment'),
+};
+
 const defaultProps = {
   id: '1',
   creator: {
@@ -90,9 +158,26 @@ const defaultProps = {
     hasVoted: true,
     voteType: 'up_vote' as const,
   },
+  refetchComments: vi.fn(),
 };
 
 const link = new StaticMockLink(MOCKS, true);
+const deleteMockLink = new StaticMockLink(
+  [...MOCKS, DELETE_COMMENT_MOCK],
+  true,
+);
+const updateMockLink = new StaticMockLink(
+  [...MOCKS, UPDATE_COMMENT_MOCK],
+  true,
+);
+const updateMockErrorLink = new StaticMockLink(
+  [...MOCKS, UPDATE_COMMENT_MOCK_ERROR],
+  true,
+);
+const deleteMockErrorLink = new StaticMockLink(
+  [...MOCKS, DELETE_COMMENT_MOCK_ERROR],
+  true,
+);
 
 describe('Testing CommentCard Component [User Portal]', () => {
   let setItemLocal: (key: string, value: string | null) => void;
@@ -691,5 +776,149 @@ describe('Testing CommentCard Component [User Portal]', () => {
     expect(toast.error).toHaveBeenCalledWith(
       'Could not find an existing like to remove.',
     );
+  });
+
+  it('comment gets deleted as expected if user deletes comment.', async () => {
+    render(
+      <MockedProvider addTypename={false} link={deleteMockLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CommentCard {...defaultProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    await userEvent.click(screen.getByTestId('more-options-button'));
+    await userEvent.click(screen.getByTestId('delete-comment-button'));
+    await wait();
+    expect(toast.success).toHaveBeenCalledWith('Comment deleted successfully');
+  });
+
+  it('comment gets updated when user updates comment', async () => {
+    render(
+      <MockedProvider addTypename={false} link={updateMockLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CommentCard {...defaultProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    await userEvent.click(screen.getByTestId('more-options-button'));
+    await userEvent.click(screen.getByTestId('update-comment-button'));
+    const textArea = screen.getByTestId('edit-comment-input').children[0];
+    await userEvent.clear(textArea);
+    await userEvent.type(textArea, 'Updated comment text');
+    await userEvent.click(screen.getByTestId('save-comment-button'));
+    await wait();
+    expect(toast.success).toHaveBeenCalledWith('Comment updated successfully');
+  });
+
+  it('should handle update comment error correctly', async () => {
+    render(
+      <MockedProvider addTypename={false} link={updateMockErrorLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CommentCard {...defaultProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    await userEvent.click(screen.getByTestId('more-options-button'));
+    await userEvent.click(screen.getByTestId('update-comment-button'));
+    const textArea = screen.getByTestId('edit-comment-input').children[0];
+    await userEvent.clear(textArea);
+    await userEvent.type(textArea, 'Updated comment text');
+    await userEvent.click(screen.getByTestId('save-comment-button'));
+    await wait();
+    expect(toast.error).toHaveBeenCalledWith('Failed to update comment');
+  });
+
+  it('should handle delete comment error correctly', async () => {
+    render(
+      <MockedProvider addTypename={false} link={deleteMockErrorLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CommentCard {...defaultProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    await userEvent.click(screen.getByTestId('more-options-button'));
+    await userEvent.click(screen.getByTestId('delete-comment-button'));
+    await wait();
+    expect(toast.error).toHaveBeenCalledWith('Failed to delete comment');
+  });
+
+  it('should not update state when createCommentVote returns null id', async () => {
+    const nullIdMock = {
+      request: {
+        query: LIKE_COMMENT,
+        variables: {
+          input: {
+            commentId: '1',
+            type: 'up_vote',
+          },
+        },
+      },
+      result: {
+        data: {
+          createCommentVote: {
+            id: null, // null id should make the condition falsy
+          },
+        },
+      },
+    };
+
+    const nullIdLink = new StaticMockLink([nullIdMock], true);
+    setItemLocal('userId', '2');
+
+    // Create props where user hasn't voted yet so we trigger LIKE_COMMENT
+    const notVotedProps = {
+      ...defaultProps,
+      hasUserVoted: {
+        hasVoted: false,
+        voteType: null,
+      },
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={nullIdLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <CommentCard {...notVotedProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Verify initial state - should show 1 like (from defaultProps)
+    expect(screen.getByText(/^\s*1\s*$/)).toBeInTheDocument();
+
+    await userEvent.click(screen.getByTestId('likeCommentBtn'));
+    await wait();
+
+    // Verify the like count didn't change because id was null
+    expect(screen.getByText(/^\s*1\s*$/)).toBeInTheDocument();
   });
 });
