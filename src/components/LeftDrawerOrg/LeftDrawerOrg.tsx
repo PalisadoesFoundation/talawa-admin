@@ -44,6 +44,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { usePluginDrawerItems } from 'plugin';
 import type { IDrawerExtension } from 'plugin';
 import SidebarHeader from 'components/Sidebar/SidebarHeader';
+import SidebarMenuItem from 'components/Sidebar/SidebarMenuItem';
 import SidebarProfileSection from 'components/Sidebar/SidebarProfileSection';
 
 export interface ILeftDrawerProps {
@@ -146,42 +147,34 @@ const leftDrawerOrg = ({
   };
 
   // Render a plugin drawer item
-  const renderPluginDrawerItem = useCallback(
+  const renderPluginItem = useCallback(
     (item: IDrawerExtension) => (
-      <NavLink
-        to={item.path.replace(':orgId', orgId)}
+      <SidebarMenuItem
         key={item.pluginId}
+        to={item.path.replace(':orgId', orgId)}
+        icon={
+          item.icon ? (
+            <img
+              src={item.icon}
+              alt={item.label}
+              style={{ width: 25, height: 25 }}
+            />
+          ) : (
+            <PluginLogo
+              fill="none"
+              fontSize={25}
+              stroke="var(--sidebar-icon-stroke-inactive)"
+            />
+          )
+        }
+        label={item.label}
         onClick={handleLinkClick}
-      >
-        {({ isActive }) => (
-          <button
-            className={
-              isActive
-                ? styles.leftDrawerActiveButton
-                : styles.leftDrawerInactiveButton
-            }
-          >
-            <div className={styles.iconWrapper}>
-              {item.icon ? (
-                <img
-                  src={item.icon}
-                  alt={item.label}
-                  style={{ width: 25, height: 25 }}
-                />
-              ) : (
-                <PluginLogo
-                  fill="none"
-                  fontSize={25}
-                  stroke="var(--sidebar-icon-stroke-inactive)"
-                />
-              )}
-            </div>
-            {item.label}
-          </button>
-        )}
-      </NavLink>
+        variant="admin"
+        testId={`plugin-${item.pluginId}`}
+        hideDrawer={hideDrawer}
+      />
     ),
-    [orgId, handleLinkClick],
+    [orgId, handleLinkClick, hideDrawer],
   );
 
   return (
@@ -324,7 +317,7 @@ const leftDrawerOrg = ({
                 {!hideDrawer && tCommon('plugins')}
               </h5>
             </h4>
-            {pluginDrawerItems?.map((item) => renderPluginDrawerItem(item))}
+            {pluginDrawerItems?.map((item) => renderPluginItem(item))}
           </>
         )}
       </div>
