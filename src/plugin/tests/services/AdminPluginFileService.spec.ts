@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { AdminPluginFileService } from '../../services/AdminPluginFileService';
 import { AdminPluginManifest } from '../../../utils/adminPluginInstaller';
 import { internalFileWriter } from '../../services/InternalFileWriter';
@@ -34,6 +34,10 @@ describe('AdminPluginFileService', () => {
   beforeEach(() => {
     service = AdminPluginFileService.getInstance();
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   describe('validatePluginFiles', () => {
@@ -245,6 +249,20 @@ describe('AdminPluginFileService', () => {
       expect(result.error).toBe('Internal file writer error');
     });
 
+    it('should catch non-Error exceptions during installPlugin', async () => {
+      // Spy on console.error to verify logging
+      vi.spyOn(console, 'error').mockImplementation(() => {});
+      // Force validatePluginFiles to throw a non-Error to hit the outer catch block
+      vi.spyOn(service, 'validatePluginFiles').mockImplementation(() => {
+        throw 'A non-error string was thrown';
+      });
+
+      const result = await service.installPlugin('TestPlugin', validFiles);
+      expect(result.success).toBe(false);
+      expect(result.error).toBe('Unknown error');
+      expect(console.error).toHaveBeenCalled();
+    });
+
     it('should handle non-Error exceptions in writeFilesToFilesystem', async () => {
       // Mock writePluginFiles to throw a non-Error object
       mockInternalFileWriter.writePluginFiles.mockRejectedValue('String error');
@@ -274,24 +292,16 @@ describe('AdminPluginFileService', () => {
 
     it('should catch unexpected errors during installPlugin and return message', async () => {
       // Force validatePluginFiles to throw to hit the outer catch block
-      const originalValidate = service.validatePluginFiles.bind(service);
-      service.validatePluginFiles = vi.fn().mockImplementation(() => {
+      vi.spyOn(service, 'validatePluginFiles').mockImplementation(() => {
         throw new Error('Unexpected validation error');
       });
-
       // Spy on console.error to assert it was called (optional)
-      const consoleSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
+      vi.spyOn(console, 'error').mockImplementation(() => {});
 
       const result = await service.installPlugin('TestPlugin', validFiles);
       expect(result.success).toBe(false);
       expect(result.error).toBe('Unexpected validation error');
-      expect(consoleSpy).toHaveBeenCalled();
-
-      // Restore
-      service.validatePluginFiles = originalValidate;
-      consoleSpy.mockRestore();
+      expect(console.error).toHaveBeenCalled();
     });
   });
 
@@ -345,8 +355,6 @@ describe('AdminPluginFileService', () => {
       const callArg = consoleSpy.mock.calls[0][1];
       expect(callArg).toBeInstanceOf(Error);
       expect((callArg as Error).message).toBe('Failed to get plugins');
-
-      consoleSpy.mockRestore();
     });
 
     it('should return empty array when listInstalledPlugins throws', async () => {
@@ -551,6 +559,29 @@ describe('AdminPluginFileService', () => {
         { version: '1.0.0', changes: ['Initial release'] },
       ]);
       expect(result?.readme).toContain('# Test Plugin');
+    });
+
+    it('should handle absolute screenshot URLs correctly', async () => {
+      const absoluteScreenshotUrl = 'https://example.com/image.png';
+      const mockFiles = {
+        'manifest.json': JSON.stringify(validManifest),
+        'info.json': JSON.stringify({
+          screenshots: [absoluteScreenshotUrl],
+        }),
+      };
+
+      mockInternalFileWriter.readPluginFiles.mockResolvedValue({
+        success: true,
+        manifest: validManifest,
+        files: mockFiles,
+      });
+
+      const result =
+        await AdminPluginFileService.getPluginDetails('TestPlugin');
+      expect(result).not.toBeNull();
+      expect(result?.screenshots).toBeDefined();
+      // This checks the 'else' path of the map function
+      expect(result?.screenshots[0]).toBe(absoluteScreenshotUrl);
     });
 
     it('should return null when readPluginFiles fails', async () => {

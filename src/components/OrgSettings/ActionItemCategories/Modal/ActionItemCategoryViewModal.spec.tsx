@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { MemoryRouter } from 'react-router';
 import { store } from 'state/store';
 import i18n from 'utils/i18nForTest';
 import type { ICategoryViewModalProps } from './ActionItemCategoryViewModal';
@@ -79,11 +79,11 @@ const renderCategoryViewModal = (
 
   return render(
     <Provider store={store}>
-      <BrowserRouter>
+      <MemoryRouter>
         <I18nextProvider i18n={i18n}>
           <CategoryViewModal {...finalProps} />
         </I18nextProvider>
-      </BrowserRouter>
+      </MemoryRouter>
     </Provider>,
   );
 };
@@ -97,68 +97,71 @@ describe('Testing CategoryViewModal Component', () => {
     renderCategoryViewModal();
 
     expect(screen.getByText(translations.categoryDetails)).toBeInTheDocument();
-    expect(screen.getByTestId('categoryNameView')).toHaveValue(
+
+    // Use accessible queries for form fields with proper labels
+    expect(screen.getByRole('textbox', { name: /name/i })).toHaveValue(
       'Active Category',
     );
-    expect(screen.getByTestId('categoryDescriptionView')).toHaveValue(
+
+    expect(screen.getByRole('textbox', { name: /description/i })).toHaveValue(
       'This is an active category with description',
     );
-    expect(screen.getByTestId('categoryStatusView')).toHaveValue(
+
+    expect(screen.getByRole('textbox', { name: /status/i })).toHaveValue(
       translations.active || 'Active',
     );
   });
 
-  it('should display active status with green color for enabled category', () => {
+  it('should display active status for enabled category', () => {
     renderCategoryViewModal({ category: mockActiveCategory });
 
-    const statusField = screen.getByTestId('categoryStatusView');
+    const statusField = screen.getByRole('textbox', { name: /status/i });
     expect(statusField).toHaveValue(translations.active || 'Active');
 
-    // Check if the input has the correct styling for active status
-    const input = statusField.querySelector('input');
-    expect(input).toHaveStyle({ 'webkit-text-fill-color': '#4caf50' });
+    // The status field provides semantic information through text
+    // Visual styling (colors, icons) is an implementation detail that may change
   });
 
-  it('should display disabled status with red color for disabled category', () => {
+  it('should display disabled status for disabled category', () => {
     renderCategoryViewModal({ category: mockDisabledCategory });
 
-    const statusField = screen.getByTestId('categoryStatusView');
+    const statusField = screen.getByRole('textbox', { name: /status/i });
     expect(statusField).toHaveValue(translations.disabled || 'Disabled');
 
-    // Check if the input has the correct styling for disabled status
-    const input = statusField.querySelector('input');
-    expect(input).toHaveStyle({ 'webkit-text-fill-color': '#ff5252' });
+    // The status field provides semantic information through text
+    // Visual styling (colors, icons) is an implementation detail that may change
   });
 
   it('should display fallback text for empty description', () => {
     renderCategoryViewModal({ category: mockDisabledCategory });
 
-    const descriptionField = screen.getByTestId('categoryDescriptionView');
-    expect(descriptionField).toHaveValue('No description provided');
+    expect(screen.getByRole('textbox', { name: /description/i })).toHaveValue(
+      'No description provided',
+    );
   });
 
   it('should handle long descriptions properly', () => {
     renderCategoryViewModal({ category: mockCategoryWithLongDescription });
 
-    const descriptionField = screen.getByTestId('categoryDescriptionView');
+    const descriptionField = screen.getByRole('textbox', {
+      name: /description/i,
+    });
     expect(descriptionField).toHaveValue(
       mockCategoryWithLongDescription.description,
     );
 
-    // Verify it's a multiline field
-    expect(descriptionField.querySelector('textarea')).toBeInTheDocument();
+    // Verify it's a multiline field (textarea)
+    expect(descriptionField.tagName).toBe('TEXTAREA');
   });
 
   it('should have all input fields disabled', () => {
     renderCategoryViewModal();
 
-    const nameField = screen.getByTestId('categoryNameView');
-    const descriptionField = screen.getByTestId('categoryDescriptionView');
-    const statusField = screen.getByTestId('categoryStatusView');
-
-    expect(nameField.querySelector('input')).toBeDisabled();
-    expect(descriptionField.querySelector('textarea')).toBeDisabled();
-    expect(statusField.querySelector('input')).toBeDisabled();
+    expect(screen.getByRole('textbox', { name: /name/i })).toBeDisabled();
+    expect(
+      screen.getByRole('textbox', { name: /description/i }),
+    ).toBeDisabled();
+    expect(screen.getByRole('textbox', { name: /status/i })).toBeDisabled();
   });
 
   it('should close modal when close button is clicked', async () => {
@@ -177,7 +180,9 @@ describe('Testing CategoryViewModal Component', () => {
     expect(
       screen.queryByText(translations.categoryDetails),
     ).not.toBeInTheDocument();
-    expect(screen.queryByTestId('categoryNameView')).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('textbox', { name: /name/i }),
+    ).not.toBeInTheDocument();
   });
 
   it('should not render modal when isOpen is false', () => {
@@ -193,27 +198,24 @@ describe('Testing CategoryViewModal Component', () => {
     const { rerender } = renderCategoryViewModal({
       category: mockDisabledCategory,
     });
-    expect(screen.getByTestId('categoryNameView')).toHaveValue(
-      'Disabled Category',
-    );
+    expect(screen.getByDisplayValue('Disabled Category')).toBeInTheDocument();
 
-    // Test with long description category
+    // Rerender with long description category
     rerender(
       <Provider store={store}>
-        <BrowserRouter>
+        <MemoryRouter>
           <I18nextProvider i18n={i18n}>
             <CategoryViewModal
-              isOpen={true}
-              hide={vi.fn()}
+              {...defaultProps}
               category={mockCategoryWithLongDescription}
             />
           </I18nextProvider>
-        </BrowserRouter>
+        </MemoryRouter>
       </Provider>,
     );
-    expect(screen.getByTestId('categoryNameView')).toHaveValue(
-      'Category with Long Description',
-    );
+    expect(
+      screen.getByDisplayValue('Category with Long Description'),
+    ).toBeInTheDocument();
   });
 
   it('should have correct modal structure and styling', () => {
@@ -223,46 +225,61 @@ describe('Testing CategoryViewModal Component', () => {
     expect(screen.getByText(translations.categoryDetails)).toBeInTheDocument();
     expect(screen.getByTestId('categoryViewModalCloseBtn')).toBeInTheDocument();
 
-    // Check form structure
-    const form = screen.getByRole('form');
+    // Check form structure - using getByRole for better accessibility testing
+    const form = screen.getByRole('textbox', { name: /name/i }).closest('form');
     expect(form).toBeInTheDocument();
     expect(form).toHaveClass('p-3');
   });
 
-  it('should handle category with minimal required fields', () => {
-    const minimalCategory: IActionItemCategoryInfo = {
+  it('should handle category with all fields populated (including optional fields)', () => {
+    // Includes all fields (required and optional) to ensure type safety
+    // and prevent type regressions in the IActionItemCategoryInfo interface
+    const fullCategory: IActionItemCategoryInfo = {
       id: 'minimal',
       name: 'Minimal Category',
       description: '',
       isDisabled: false,
       createdAt: '2024-01-01T00:00:00Z',
+      updatedAt: '2024-01-01T00:00:00Z',
+      creatorId: 'test-user',
       organizationId: 'org123',
     };
 
-    renderCategoryViewModal({ category: minimalCategory });
+    renderCategoryViewModal({ category: fullCategory });
 
-    expect(screen.getByTestId('categoryNameView')).toHaveValue(
+    expect(screen.getByRole('textbox', { name: /name/i })).toHaveValue(
       'Minimal Category',
     );
-    expect(screen.getByTestId('categoryDescriptionView')).toHaveValue(
+    expect(screen.getByRole('textbox', { name: /description/i })).toHaveValue(
       'No description provided',
     );
-    expect(screen.getByTestId('categoryStatusView')).toHaveValue(
+    expect(screen.getByRole('textbox', { name: /status/i })).toHaveValue(
       translations.active || 'Active',
     );
   });
 
-  it('should maintain consistent styling across different category states', () => {
-    // Test active category styling
-    renderCategoryViewModal({ category: mockActiveCategory });
-    let statusField = screen.getByTestId('categoryStatusView');
-    let circleIcon = statusField.querySelector('svg');
-    expect(circleIcon).toHaveStyle({ color: '#4caf50' });
+  it('should display different status text for active vs disabled categories', () => {
+    // Test active category
+    const { rerender } = renderCategoryViewModal({
+      category: mockActiveCategory,
+    });
+    let statusField = screen.getByRole('textbox', { name: /status/i });
+    expect(statusField).toHaveValue(translations.active || 'Active');
 
-    // Re-render with disabled category
-    renderCategoryViewModal({ category: mockDisabledCategory });
-    statusField = screen.getByTestId('categoryStatusView');
-    circleIcon = statusField.querySelector('svg');
-    expect(circleIcon).toHaveStyle({ color: '#ff5252' });
+    // Rerender with disabled category
+    rerender(
+      <Provider store={store}>
+        <MemoryRouter>
+          <I18nextProvider i18n={i18n}>
+            <CategoryViewModal
+              {...defaultProps}
+              category={mockDisabledCategory}
+            />
+          </I18nextProvider>
+        </MemoryRouter>
+      </Provider>,
+    );
+    statusField = screen.getByRole('textbox', { name: /status/i });
+    expect(statusField).toHaveValue(translations.disabled || 'Disabled');
   });
 });

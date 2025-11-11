@@ -41,9 +41,26 @@ describe('calculateFileHash', () => {
       return Promise.resolve(buffer);
     });
 
+    // Ensure crypto.subtle exists before trying to mock it
+    if (!globalThis.crypto) {
+      Object.defineProperty(globalThis, 'crypto', {
+        value: {},
+        writable: true,
+        configurable: true,
+      });
+    }
+    if (!globalThis.crypto.subtle) {
+      Object.defineProperty(globalThis.crypto, 'subtle', {
+        value: {},
+        writable: true,
+        configurable: true,
+      });
+    }
+
     Object.defineProperty(crypto.subtle, 'digest', {
       value: mockDigest,
       writable: true,
+      configurable: true,
     });
   });
 

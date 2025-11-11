@@ -85,6 +85,9 @@ const Chat = lazy(() => import('screens/UserPortal/Chat/Chat'));
 const EventDashboardScreen = lazy(
   () => import('components/EventDashboardScreen/EventDashboardScreen'),
 );
+const AcceptInvitation = lazy(
+  () => import('screens/Public/Invitation/AcceptInvitation'),
+);
 const Campaigns = lazy(() => import('screens/UserPortal/Campaigns/Campaigns'));
 const Pledges = lazy(() => import('screens/UserPortal/Pledges/Pledges'));
 const VolunteerManagement = lazy(
@@ -302,6 +305,11 @@ function App(): React.ReactElement {
             </Route>
           </Route>
           <Route path="/forgotPassword" element={<ForgotPassword />} />
+          {/* Public invitation accept route */}
+          <Route
+            path="/event/invitation/:token"
+            element={<AcceptInvitation />}
+          />
           {/* User Portal Routes */}
           <Route element={<SecuredRouteForUser />}>
             <Route path="/user/organizations" element={<Organizations />} />

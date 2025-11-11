@@ -1328,6 +1328,8 @@ export interface InterfaceOrganizationPg {
     updater: InterfaceUserPg;
     postsCount: number;
     pinnedPostsCount: number;
+    adminsCount: number;
+    membersCount: number;
 
     advertisements: InterfaceOrganizationAdvertisementsConnectionPg;
 
@@ -1849,7 +1851,15 @@ export interface InterfacePledgeInfo {
   currency: string;
   endDate: string;
   startDate: string;
+  /**
+   * The primary pledger who made this pledge
+   */
   pledger: InterfaceUserInfoPG;
+  /**
+   * Optional array of all users associated with this pledge, including the primary pledger.
+   * Used for multi-pledger support to display all contributors.
+   */
+  users?: InterfaceUserInfoPG[];
 }
 
 /**
@@ -2149,7 +2159,28 @@ export interface InterfacePostCard {
   commentCount: number;
   upVoteCount: number;
   downVoteCount: number;
-  comments: {
+  fetchPosts: () => void;
+}
+
+export interface InterfaceComment {
+  id: string;
+  body: string;
+  creator: {
+    id: string;
+    name: string;
+    avatarURL?: string | null;
+  };
+  createdAt: string;
+  upVotesCount: number;
+  downVotesCount: number;
+  hasUserVoted?: {
+    hasVoted: boolean;
+    voteType: VoteType;
+  };
+}
+
+export interface InterfaceCommentEdge {
+  node: {
     id: string;
     body: string;
     creator: {
@@ -2157,12 +2188,14 @@ export interface InterfacePostCard {
       name: string;
       avatarURL?: string | null;
     };
-    hasUserVoted: VoteState;
-    downVoteCount: number;
-    upVoteCount: number;
-    text: string;
-  }[];
-  fetchPosts: () => void;
+    createdAt: string;
+    upVotesCount: number;
+    downVotesCount: number;
+    hasUserVoted?: {
+      hasVoted: boolean;
+      voteType: VoteType;
+    };
+  };
 }
 
 /**

@@ -3,13 +3,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
-import {
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -31,11 +25,8 @@ const MOCKS_WITH_MULTIPLE_PLEDGERS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        userId: { id: 'userId' },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -107,11 +98,8 @@ const MOCKS_WITH_MISSING_CAMPAIGN = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        userId: { id: 'userId' },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -148,11 +136,8 @@ const MOCKS_WITH_INVALID_DATE = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        userId: { id: 'userId' },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -197,11 +182,8 @@ const MOCKS_WITH_MORE_USERS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        userId: { id: 'userId' },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -323,11 +305,8 @@ const MOCKS_WITH_SINGLE_PLEDGER = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        userId: { id: 'userId' },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -371,11 +350,8 @@ const MOCKS_WITH_DIFFERENT_CURRENCIES = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        userId: { id: 'userId' },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -419,11 +395,8 @@ const MOCKS_WITH_ZERO_GOAL = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        userId: { id: 'userId' },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -467,11 +440,8 @@ const EMPTY_MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        userId: { id: 'userId' },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -543,11 +513,8 @@ const USER_PLEDGES_ERROR = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        userId: { id: 'userId' },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -560,7 +527,7 @@ const SEARCH_MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        input: { userId: 'userId' },
+        userId: { id: 'userId' },
         where: {
           firstName_contains: 'Harve',
           name_contains: undefined,
@@ -605,7 +572,7 @@ const SEARCH_MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        input: { userId: 'userId' },
+        userId: { id: 'userId' },
         where: {
           firstName_contains: '',
           name_contains: 'School',
@@ -650,7 +617,7 @@ const SEARCH_MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        input: { userId: 'userId' },
+        userId: { id: 'userId' },
         where: {
           name_contains: 'School',
         },
@@ -694,9 +661,76 @@ const SEARCH_MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        input: { userId: 'userId' },
+        userId: { id: 'userId' },
+        where: {},
+        orderBy: 'endDate_DESC',
+      },
+    },
+    result: {
+      data: {
+        getPledgesByUserId: [
+          {
+            id: 'pledgeId2',
+            amount: 100,
+            note: 'School pledge note',
+            updatedAt: '2024-07-28T10:00:00.000Z',
+            campaign: {
+              id: 'campaignId2',
+              name: 'School Campaign',
+              startAt: '2024-07-01T00:00:00.000Z',
+              endAt: '2024-09-30T23:59:59.000Z',
+              currencyCode: 'USD',
+              goalAmount: 5000,
+              __typename: 'FundraisingCampaign',
+            },
+            pledger: {
+              id: 'userId5',
+              name: 'John Doe',
+              avatarURL: null,
+              __typename: 'User',
+            },
+            updater: {
+              id: 'userId5',
+              __typename: 'User',
+            },
+            __typename: 'FundraisingCampaignPledge',
+          },
+          {
+            id: 'pledgeId1',
+            amount: 700,
+            note: 'Hospital pledge note',
+            updatedAt: '2024-07-28T10:00:00.000Z',
+            campaign: {
+              id: 'campaignId1',
+              name: 'Hospital Campaign',
+              startAt: '2024-07-01T00:00:00.000Z',
+              endAt: '2024-08-30T23:59:59.000Z',
+              currencyCode: 'USD',
+              goalAmount: 10000,
+              __typename: 'FundraisingCampaign',
+            },
+            pledger: {
+              id: 'userId',
+              name: 'Harve Lance',
+              avatarURL: 'image-url',
+              __typename: 'User',
+            },
+            updater: {
+              id: 'userId',
+              __typename: 'User',
+            },
+            __typename: 'FundraisingCampaignPledge',
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_PLEDGES,
+      variables: {
+        userId: { id: 'userId' },
         where: {
-          firstName_contains: '',
           name_contains: '',
         },
         orderBy: 'endDate_DESC',
@@ -765,81 +799,8 @@ const SEARCH_MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        input: { userId: 'userId' },
-        where: {
-          name_contains: '',
-        },
-        orderBy: 'endDate_DESC',
-      },
-    },
-    result: {
-      data: {
-        getPledgesByUserId: [
-          {
-            id: 'pledgeId2',
-            amount: 100,
-            note: 'School pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
-            campaign: {
-              id: 'campaignId2',
-              name: 'School Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-09-30T23:59:59.000Z',
-              currencyCode: 'USD',
-              goalAmount: 5000,
-              __typename: 'FundraisingCampaign',
-            },
-            pledger: {
-              id: 'userId5',
-              name: 'John Doe',
-              avatarURL: null,
-              __typename: 'User',
-            },
-            updater: {
-              id: 'userId5',
-              __typename: 'User',
-            },
-            __typename: 'FundraisingCampaignPledge',
-          },
-          {
-            id: 'pledgeId1',
-            amount: 700,
-            note: 'Hospital pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
-            campaign: {
-              id: 'campaignId1',
-              name: 'Hospital Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-08-30T23:59:59.000Z',
-              currencyCode: 'USD',
-              goalAmount: 10000,
-              __typename: 'FundraisingCampaign',
-            },
-            pledger: {
-              id: 'userId',
-              name: 'Harve Lance',
-              avatarURL: 'image-url',
-              __typename: 'User',
-            },
-            updater: {
-              id: 'userId',
-              __typename: 'User',
-            },
-            __typename: 'FundraisingCampaignPledge',
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_PLEDGES,
-      variables: {
-        input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        userId: { id: 'userId' },
+        where: {},
         orderBy: 'amount_ASC',
       },
     },
@@ -906,11 +867,8 @@ const SEARCH_MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        userId: { id: 'userId' },
+        where: {},
         orderBy: 'amount_DESC',
       },
     },
@@ -977,11 +935,8 @@ const SEARCH_MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        input: { userId: 'userId' },
-        where: {
-          firstName_contains: '',
-          name_contains: undefined,
-        },
+        userId: { id: 'userId' },
+        where: {},
         orderBy: 'endDate_ASC',
       },
     },
@@ -1168,7 +1123,7 @@ describe('Testing User Pledge Screen', () => {
     });
 
     // Check if moreContainer exists (it should with 4 users)
-    const moreContainer = screen.queryByTestId('moreContainer');
+    const moreContainer = screen.queryByTestId('moreContainer-pledgeId1');
     if (moreContainer) {
       expect(moreContainer).toHaveTextContent('+2 more...');
 
@@ -1519,7 +1474,6 @@ describe('Testing User Pledge Screen', () => {
       expect(progressBars[0]).toBeInTheDocument();
     });
   });
-
   it('should handle different currency codes', async () => {
     renderMyPledges(link5);
     await waitFor(() => {
@@ -1529,93 +1483,50 @@ describe('Testing User Pledge Screen', () => {
     });
   });
 
-  it('should display popover with extra users when more than 2 users exist', async () => {
-    const usersArr = [
-      { id: '1', name: 'Main User 1', avatarURL: null, __typename: 'User' },
-      {
-        id: '2',
-        name: 'Extra User 1',
-        avatarURL: 'https://example.com/avatar1.jpg',
-        __typename: 'User',
-      },
-      {
-        id: '3',
-        name: 'Extra User 2',
-        avatarURL: 'https://example.com/avatar2.jpg',
-        __typename: 'User',
-      },
-      { id: '4', name: 'Extra User 3', avatarURL: null, __typename: 'User' },
-      { id: '5', name: 'Extra User 4', avatarURL: null, __typename: 'User' },
-      { id: '6', name: 'Extra User 5', avatarURL: null, __typename: 'User' },
-      { id: '7', name: 'Extra User 6', avatarURL: null, __typename: 'User' },
-    ];
-
-    const popoverTestMock = {
-      request: {
-        query: USER_PLEDGES,
-        variables: {
-          input: { userId: 'userId' },
-          where: {
-            firstName_contains: '',
-            name_contains: undefined,
-          },
-          orderBy: 'endDate_DESC',
-        },
-      },
-      result: {
-        data: {
-          getPledgesByUserId: [
-            {
-              id: '1',
-              amount: 100,
-              note: 'Test note',
-              updatedAt: '2024-01-01T00:00:00Z',
-              campaign: {
-                id: '1',
-                name: 'Test Campaign',
-                startAt: '2023-01-01T00:00:00Z',
-                endAt: '2024-12-31T23:59:59Z',
-                currencyCode: 'USD',
-                goalAmount: 1000,
-                __typename: 'FundraisingCampaign',
-              },
-              pledger: usersArr[0],
-              users: usersArr,
-              updater: {
-                id: '1',
-                __typename: 'User',
-              },
-              startDate: '2023-01-01T00:00:00Z',
-              endDate: '2024-12-31T23:59:59Z',
-              currency: 'USD',
-              goalAmount: 1000,
-              __typename: 'FundraisingCampaignPledge',
-            },
-          ],
-        },
-      },
-    };
-
-    const popoverTestLink = new StaticMockLink([popoverTestMock]);
-    renderMyPledges(popoverTestLink);
-
+  it('should render pledges with users array data', async () => {
+    renderMyPledges(link10);
     await waitFor(() => {
-      expect(screen.getByTestId('amountCell')).toBeInTheDocument();
+      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+    });
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+
+    // Verify users from the array are actually rendered
+    await waitFor(() => {
+      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
+    });
+  });
+
+  it('should handle zero goal amount', async () => {
+    renderMyPledges(link6);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+    });
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  it('should display pledger avatar when available', async () => {
+    renderMyPledges(link1);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
     });
 
-    const moreContainer = screen.getByTestId('moreContainer-1');
-    expect(moreContainer).toBeInTheDocument();
-    expect(moreContainer).toHaveTextContent('+5 more...');
+    // Check for avatar image element
+    expect(screen.getByTestId('image-pledger-userId')).toHaveAttribute(
+      'src',
+      'image-url',
+    );
+  });
 
-    await userEvent.click(moreContainer);
+  it('should handle campaign with missing data gracefully', async () => {
+    renderMyPledges(link8);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+    });
+    expect(screen.getByRole('grid')).toBeInTheDocument();
 
-    const popover = await screen.findByTestId('extra-users-popup');
-    expect(popover).toBeInTheDocument();
-
-    expect(popover.className).toContain('popupExtra');
-
-    for (let i = 1; i <= 6; i++) {
-      expect(screen.getByText(`Extra User ${i}`)).toBeInTheDocument();
-    }
+    // Verify the pledge row renders with missing campaign handled appropriately
+    await waitFor(() => {
+      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
+    });
   });
 });

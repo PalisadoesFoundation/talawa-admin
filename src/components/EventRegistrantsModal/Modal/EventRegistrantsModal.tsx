@@ -52,6 +52,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useTranslation } from 'react-i18next';
 import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
+import InviteByEmailModal from './InviteByEmail/InviteByEmailModal';
 import type { InterfaceUser } from 'types/User/interface';
 
 type ModalPropType = {
@@ -65,6 +66,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   const { eventId, orgId, handleClose, show } = props;
   const [member, setMember] = useState<InterfaceUser | null>(null);
   const [open, setOpen] = useState(false);
+  const [inviteOpen, setInviteOpen] = useState(false);
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
 
   // Hooks for mutation operations
@@ -134,6 +136,15 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
             attendeesRefetch();
           }}
         />
+        <InviteByEmailModal
+          show={inviteOpen}
+          handleClose={() => setInviteOpen(false)}
+          eventId={eventId}
+          isRecurring={isRecurring}
+          onInvitesSent={() => {
+            attendeesRefetch();
+          }}
+        />
         <Modal.Header
           closeButton
           style={{ backgroundColor: 'var(--tableHeader-bg)' }}
@@ -179,6 +190,12 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
           <br />
         </Modal.Body>
         <Modal.Footer>
+          <Button
+            style={{ backgroundColor: '#6CC9A6', color: '#fff' }}
+            onClick={() => setInviteOpen(true)}
+          >
+            Invite by Email
+          </Button>
           <Button
             style={{ backgroundColor: '#A8C7FA', color: '#555' }}
             onClick={addRegistrant}

@@ -6,7 +6,7 @@
 
 > **EventRegistrantsModal**(`props`): `Element`
 
-Defined in: [src/components/EventRegistrantsModal/Modal/EventRegistrantsModal.tsx:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventRegistrantsModal/Modal/EventRegistrantsModal.tsx#L64)
+Defined in: [src/components/EventRegistrantsModal/Modal/EventRegistrantsModal.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventRegistrantsModal/Modal/EventRegistrantsModal.tsx#L65)
 
 ## Parameters
 
