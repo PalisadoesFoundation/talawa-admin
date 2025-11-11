@@ -2,7 +2,7 @@
 id: plugin
 title: Plugin System
 slug: /developer-resources/plugin
-sidebar_position: 4
+sidebar_position: 40
 ---
 
 ## Overview
