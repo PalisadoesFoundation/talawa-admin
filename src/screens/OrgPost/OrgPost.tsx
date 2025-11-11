@@ -27,6 +27,7 @@ import type {
   InterfaceOrganizationPostListData,
   InterfacePost,
 } from '../../types/Post/interface';
+import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
 
 /**
  * OrgPost Component
@@ -105,6 +106,20 @@ function OrgPost(): JSX.Element {
       last: last,
     },
   });
+  const {
+    data: orgPinnedPostListData,
+    loading: orgPinnedPostListLoading,
+    error: orgPinnedPostListError,
+  } = useQuery<InterfaceOrganizationPostListData>(
+    ORGANIZATION_PINNED_POST_LIST,
+    {
+      variables: {
+        input: { id: currentUrl as string },
+        first: first,
+        last: last,
+      },
+    },
+  );
 
   const [create, { loading: createPostLoading }] =
     useMutation(CREATE_POST_MUTATION);
@@ -158,7 +173,7 @@ function OrgPost(): JSX.Element {
             caption: postformState.posttitle.trim(),
             organizationId: currentUrl,
             isPinned: postformState.pinPost,
-            attachments: attachment ? [attachment] : [],
+            ...(attachment && { attachments: [attachment] }),
           },
         },
       });
@@ -244,10 +259,12 @@ function OrgPost(): JSX.Element {
   }, [currentPage, sortingOption, sortedPosts]);
 
   useEffect(() => {
-    if (orgPostListError) {
-      toast.error('Organization post list error:');
-    }
+    if (orgPostListError) toast.error('Organization post list error:');
   }, [orgPostListError]);
+
+  useEffect(() => {
+    if (orgPinnedPostListError) toast.error(t('pinnedPostsLoadError'));
+  }, [orgPinnedPostListError]);
 
   useEffect(() => {
     if (data?.postsByOrganization) {
@@ -264,7 +281,7 @@ function OrgPost(): JSX.Element {
     }
   }, [data, sortingOption]);
 
-  if (createPostLoading || orgPostListLoading) {
+  if (createPostLoading || orgPostListLoading || orgPinnedPostListLoading) {
     return <Loader />;
   }
 
@@ -280,6 +297,7 @@ function OrgPost(): JSX.Element {
         loading={loading}
         error={error}
         data={isFiltering ? data : orgPostListData}
+        pinnedPostData={orgPinnedPostListData?.organization?.pinnedPosts?.edges}
         isFiltering={isFiltering}
         searchTerm={searchTerm}
         sortingOption={sortingOption}

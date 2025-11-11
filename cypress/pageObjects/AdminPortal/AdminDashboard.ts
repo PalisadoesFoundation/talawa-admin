@@ -25,7 +25,7 @@ export class AdminDashboardPage {
   verifyOnDashboard(timeout = 20000) {
     cy.url({ timeout }).should('include', '/orglist');
     cy.get(this._orgcardContainer, { timeout }).should('be.visible');
-    cy.contains('Talawa Admin Portal', { timeout }).should('be.visible');
+    cy.contains('Admin Portal', { timeout }).should('be.visible');
     return this;
   }
 
