@@ -162,7 +162,7 @@ const userSidebar = ({
               }}
               onClick={handleSwitchToAdmin}
             >
-              <span>Switch to Admin Portal</span>
+              <span>{tCommon('switchToAdminPortal')}</span>
               <FaExchangeAlt size={18} />
             </button>
           </div>

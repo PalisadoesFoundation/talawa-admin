@@ -53,7 +53,7 @@ interface IMockedResponse {
 // Mock the dependencies
 const mockT = vi.fn((key: string) => {
   const translations: Record<string, string> = {
-    talawaAdminPortal: 'Talawa Admin Portal',
+    talawaAdminPortal: 'Admin Portal',
     plugins: 'Plugins',
     Dashboard: 'Dashboard',
     Members: 'Members',
@@ -339,7 +339,7 @@ describe('LeftDrawerOrg', () => {
 
       expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
       expect(screen.getByTestId('talawa-logo')).toBeInTheDocument();
-      expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
+      expect(screen.getByText('Admin Portal')).toBeInTheDocument();
 
       await waitFor(() => {
         expect(screen.getByTestId('OrgBtn')).toBeInTheDocument();
