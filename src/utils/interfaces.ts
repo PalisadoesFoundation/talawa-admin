@@ -540,6 +540,7 @@ export interface InterfaceOrgInfoTypePG {
   addressLine1: string;
   description: string;
   avatarURL: string | null;
+  createdAt: string;
   members: {
     edges: {
       node: {
