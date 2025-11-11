@@ -162,22 +162,6 @@ const defaultProps = {
 };
 
 const link = new StaticMockLink(MOCKS, true);
-const deleteMockLink = new StaticMockLink(
-  [...MOCKS, DELETE_COMMENT_MOCK],
-  true,
-);
-const updateMockLink = new StaticMockLink(
-  [...MOCKS, UPDATE_COMMENT_MOCK],
-  true,
-);
-const updateMockErrorLink = new StaticMockLink(
-  [...MOCKS, UPDATE_COMMENT_MOCK_ERROR],
-  true,
-);
-const deleteMockErrorLink = new StaticMockLink(
-  [...MOCKS, DELETE_COMMENT_MOCK_ERROR],
-  true,
-);
 
 describe('Testing CommentCard Component [User Portal]', () => {
   let setItemLocal: (key: string, value: string | null) => void;
@@ -779,6 +763,11 @@ describe('Testing CommentCard Component [User Portal]', () => {
   });
 
   it('comment gets deleted as expected if user deletes comment.', async () => {
+    const deleteMockLink = new StaticMockLink(
+      [...MOCKS, DELETE_COMMENT_MOCK],
+      true,
+    );
+
     render(
       <MockedProvider addTypename={false} link={deleteMockLink}>
         <BrowserRouter>
@@ -795,10 +784,16 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.click(screen.getByTestId('more-options-button'));
     await userEvent.click(screen.getByTestId('delete-comment-button'));
     await wait();
+    expect(defaultProps.refetchComments).toHaveBeenCalled();
     expect(toast.success).toHaveBeenCalledWith('Comment deleted successfully');
   });
 
   it('comment gets updated when user updates comment', async () => {
+    const updateMockLink = new StaticMockLink(
+      [...MOCKS, UPDATE_COMMENT_MOCK],
+      true,
+    );
+
     render(
       <MockedProvider addTypename={false} link={updateMockLink}>
         <BrowserRouter>
@@ -821,6 +816,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.type(textArea, 'Updated comment text');
     await userEvent.click(screen.getByTestId('save-comment-button'));
     await wait();
+    expect(defaultProps.refetchComments).toHaveBeenCalled();
     expect(toast.success).toHaveBeenCalledWith('Comment updated successfully');
   });
 
@@ -853,6 +849,11 @@ describe('Testing CommentCard Component [User Portal]', () => {
   });
 
   it('should handle update comment error correctly', async () => {
+    const updateMockErrorLink = new StaticMockLink(
+      [...MOCKS, UPDATE_COMMENT_MOCK_ERROR],
+      true,
+    );
+
     render(
       <MockedProvider addTypename={false} link={updateMockErrorLink}>
         <BrowserRouter>
@@ -879,6 +880,11 @@ describe('Testing CommentCard Component [User Portal]', () => {
   });
 
   it('should handle delete comment error correctly', async () => {
+    const deleteMockErrorLink = new StaticMockLink(
+      [...MOCKS, DELETE_COMMENT_MOCK_ERROR],
+      true,
+    );
+
     render(
       <MockedProvider addTypename={false} link={deleteMockErrorLink}>
         <BrowserRouter>
