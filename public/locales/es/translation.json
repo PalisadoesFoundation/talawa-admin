@@ -1069,7 +1069,7 @@
     "logout": "Cerrar sesión",
     "settings": "Ajustes",
     "chat": "Chat",
-    "selectOrgBeforeSwitch": "Por favor seleccione una organización de Mis Organizaciones antes de cambiar al Portal de Administración"
+    "selectOrgBeforeSwitch": "Por favor, seleccione una organización de Mis Organizaciones antes de cambiar al Portal de Administración"
   },
   "organizationSidebar": {
     "viewAll": "Ver todo",

@@ -346,7 +346,8 @@
   --memberfontbtn-border: #e8e5e5;
   --memberfont-bg: #eaebef;
   --memberfont-color: #fff;
-  --removeMemberCancel-bg: #f8d6dc --loader-size: 10em;
+  --removeMemberCancel-bg: #f8d6dc;
+  --loader-size: 10em;
   --loader-border: #ffffff33;
   --loader-border-left: #febc59;
 
@@ -735,7 +736,8 @@
   --primary-theme-color: #1778f2;
   --advertisement-dropdown-border: 1px solid rgba(0, 0, 0, 0.15);
   --advertisement-dropdown-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
-  --advertisement-media-height: 12.5rem --pledgeModal-bg: #ffffff;
+  --advertisement-media-height: 12.5rem;
+  --pledgeModal-bg: #ffffff;
   --pledgeModal-header-text: #000000;
   --pledgeModal-title-text: #4b5563;
   --pledgeModal-close-button-bg: #f8d6dc;

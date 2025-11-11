@@ -49,7 +49,7 @@ const SidebarHeader = ({
   const handleToggle = (): void => {
     const newState = !hideDrawer;
     if (persistState) {
-      setItem('sidebar', newState.toString());
+      setItem('sidebar', newState);
     }
     setHideDrawer(newState);
   };
