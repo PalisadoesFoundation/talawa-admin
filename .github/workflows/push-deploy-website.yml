@@ -31,7 +31,7 @@ jobs:
       # This "name" has to be the repos' branch that contains
       # the current active website. There must be an entry for
       # the same branch in the PalisadoesFoundation's
-      # "Code and automation > Environments > gigithub-pages"
+      # "Code and automation > Environments > github-pages"
       # menu. The branch "name" must match the branch in the
       # "on.push.branches" section at the top of this file
       name: develop
