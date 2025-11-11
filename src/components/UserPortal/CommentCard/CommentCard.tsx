@@ -165,17 +165,18 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
     }
   };
 
-  const handleUpdateCOmment = async (body: string): Promise<void> => {
+  const handleUpdateCOmment = async (body: string): Promise<boolean> => {
     try {
       await updateComment({
         variables: { input: { id: id, body: body } },
       });
       toast.success(t('commentUpdatedSuccessfully'));
       refetchComments?.();
+      handleMenuClose();
+      return true;
     } catch (error) {
       toast.error((error as Error).message);
-    } finally {
-      handleMenuClose();
+      return false;
     }
   };
 
@@ -276,38 +277,42 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
             <VoteCount>{likes}</VoteCount>
           </Stack>
         </Box>
-        <IconButton
-          ref={menuAnchorRef}
-          onClick={handleMenuOpen}
-          size="small"
-          aria-label="more options"
-          data-testid="more-options-button"
-        >
-          <MoreHoriz />
-        </IconButton>
-        <Menu
-          anchorEl={menuAnchorRef.current}
-          open={showCommentOptions}
-          onClose={handleMenuClose}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-          transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        >
-          <MenuItem
-            data-testid="update-comment-button"
-            onClick={toggleEditComment}
-          >
-            <EditOutlined sx={{ mr: 1 }} fontSize="small" />
-            {t('editComment')}
-          </MenuItem>
-          <MenuItem
-            data-testid="delete-comment-button"
-            onClick={handleDeleteComment}
-            disabled={deletingComment}
-          >
-            <DeleteOutline sx={{ mr: 1 }} fontSize="small" />
-            {deletingComment ? t('deleting') : t('deleteComment')}
-          </MenuItem>
-        </Menu>
+        {userId === creator.id && (
+          <>
+            <IconButton
+              ref={menuAnchorRef}
+              onClick={handleMenuOpen}
+              size="small"
+              aria-label="more options"
+              data-testid="more-options-button"
+            >
+              <MoreHoriz />
+            </IconButton>
+            <Menu
+              anchorEl={menuAnchorRef.current}
+              open={showCommentOptions}
+              onClose={handleMenuClose}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+              <MenuItem
+                data-testid="update-comment-button"
+                onClick={toggleEditComment}
+              >
+                <EditOutlined sx={{ mr: 1 }} fontSize="small" />
+                {t('editComment')}
+              </MenuItem>
+              <MenuItem
+                data-testid="delete-comment-button"
+                onClick={handleDeleteComment}
+                disabled={deletingComment}
+              >
+                <DeleteOutline sx={{ mr: 1 }} fontSize="small" />
+                {deletingComment ? t('deleting') : t('deleteComment')}
+              </MenuItem>
+            </Menu>
+          </>
+        )}
       </Stack>
 
       {/* Edit Comment Modal */}
@@ -337,9 +342,11 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
               </Button>
               <Button
                 variant="contained"
-                onClick={() => {
-                  handleUpdateCOmment(editedCommentText);
-                  toggleEditComment();
+                onClick={async () => {
+                  const updated = await handleUpdateCOmment(editedCommentText);
+                  if (updated) {
+                    toggleEditComment();
+                  }
                 }}
                 data-testid="save-comment-button"
                 startIcon={<EditOutlined />}

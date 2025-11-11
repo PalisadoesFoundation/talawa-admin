@@ -1602,8 +1602,8 @@
     "couldNotRemoveExistingLike": "Impossible de trouver un j'aime existant à supprimer.",
     "alreadyLikedComment": "Vous avez déjà aimé ce commentaire.",
     "noAssociatedVoteFound": "Aucun vote associé trouvé à supprimer.",
-    "editComment": "Modifier le Commentaire",
-    "deleteComment": "Supprimer le Commentaire",
+    "editComment": "Modifier le commentaire",
+    "deleteComment": "Supprimer le commentaire",
     "deleting": "Suppression..."
   }
 }

@@ -1605,8 +1605,8 @@
     "couldNotRemoveExistingLike": "No se pudo encontrar un me gusta existente para eliminar.",
     "alreadyLikedComment": "Ya has dado me gusta a este comentario.",
     "noAssociatedVoteFound": "No se encontró voto asociado para eliminar.",
-    "editComment": "Editar Comentario",
-    "deleteComment": "Eliminar Comentario",
+    "editComment": "Editar comentario",
+    "deleteComment": "Eliminar comentario",
     "deleting": "Eliminando..."
   }
 }
