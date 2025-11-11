@@ -667,7 +667,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     setupUser('superAdmin');
     setItem('role', 'administrator');
 
-    const mockWithManyOrgs = createOrgMock(mockOrgData.singleOrg);
+    const mockWithManyOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithManyOrgs);
     await wait();
 
@@ -680,7 +680,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     setupUser('superAdmin');
     setItem('role', 'administrator');
 
-    const mockWithManyOrgs = createOrgMock(mockOrgData.singleOrg);
+    const mockWithManyOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithManyOrgs);
     await wait();
 
