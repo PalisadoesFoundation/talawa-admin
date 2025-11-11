@@ -283,6 +283,69 @@ describe('Testing Forgot Password screen', () => {
     await wait();
   });
 
+  it('shows strength error and blocks submission when password is weak', async () => {
+    const formData = {
+      email: 'johndoe@gmail.com',
+      userOtp: '12345',
+      newPassword: 'weak',
+      confirmNewPassword: 'weak',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <ForgotPassword />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await userEvent.type(
+      screen.getByPlaceholderText(/Registered email/i),
+      formData.email,
+    );
+    await userEvent.click(screen.getByText(/Get OTP/i));
+    await wait();
+
+    await userEvent.type(
+      screen.getByPlaceholderText('e.g. 12345'),
+      formData.userOtp,
+    );
+    await userEvent.type(
+      screen.getByTestId('newPassword'),
+      formData.newPassword,
+    );
+    await userEvent.type(
+      screen.getByTestId('confirmNewPassword'),
+      formData.confirmNewPassword,
+    );
+
+    setItem('otpToken', 'lorem ipsum');
+
+    vi.clearAllMocks();
+
+    await userEvent.click(screen.getByText(/Change Password/i));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        translations.passwordStrengthError,
+      );
+    });
+
+    expect(
+      screen.getByText(translations.passwordStrengthError),
+    ).toBeInTheDocument();
+
+    expect(toast.success).not.toHaveBeenCalledWith(
+      translations.passwordChanges,
+    );
+  });
+
   it('Testing forgot password functionality, when new password and confirm password is not same', async () => {
     const formData = {
       email: 'johndoe@gmail.com',
