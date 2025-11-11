@@ -285,19 +285,6 @@ describe('Organisation Events Page', () => {
   });
 
   test('Testing HTML5 validation prevents submission with empty required fields', async () => {
-    const invalidFormData = {
-      title: ' ',
-      description: ' ',
-      location: ' ',
-      startDate: '03/28/2022',
-      endDate: '03/30/2022',
-      startTime: '02:00',
-      endTime: '06:00',
-      allDay: false,
-      isPublic: true,
-      isRegisterable: true,
-    };
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -332,7 +319,9 @@ describe('Organisation Events Page', () => {
     // HTML5 validation should prevent form submission
     // The modal should still be open since form didn't submit
     await waitFor(() => {
-      expect(screen.getByTestId('createEventModalCloseBtn')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('createEventModalCloseBtn'),
+      ).toBeInTheDocument();
     });
 
     // No toast warnings should be shown since custom validation never runs
@@ -643,7 +632,9 @@ describe('Organisation Events Page', () => {
     // Since HTML5 validation prevents submission, no mutation should be called
     // and the modal should still be open (form not submitted)
     await waitFor(() => {
-      expect(screen.getByTestId('createEventModalCloseBtn')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('createEventModalCloseBtn'),
+      ).toBeInTheDocument();
     });
   });
 
