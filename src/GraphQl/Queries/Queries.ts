@@ -1203,6 +1203,9 @@ export { IS_SAMPLE_ORGANIZATION_QUERY } from './PlugInQueries';
 export { ORGANIZATION_POST_LIST } from './OrganizationQueries';
 export { ORGANIZATION_POST_LIST_WITH_VOTES } from './OrganizationQueries';
 
+// comments
+export { GET_POST_COMMENTS } from './CommentQueries';
+
 export { ORGANIZATION_ADVERTISEMENT_LIST } from './AdvertisementQueries';
 
 export { USER_CREATED_ORGANIZATIONS } from './OrganizationQueries';

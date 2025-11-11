@@ -21,7 +21,7 @@
  * @returns A JSX.Element representing the post card.
  */
 import React from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import {
@@ -49,17 +49,23 @@ import {
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import UserDefault from '../../../assets/images/defaultImg.png';
-import type { InterfacePostCard } from 'utils/interfaces';
+import type {
+  InterfaceComment,
+  InterfaceCommentEdge,
+  InterfacePostCard,
+} from 'utils/interfaces';
 import {
   CREATE_COMMENT_POST,
   DELETE_POST_MUTATION,
   UPDATE_POST_VOTE,
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import { GET_POST_COMMENTS } from 'GraphQl/Queries/Queries';
 import { errorHandler } from 'utils/errorHandler';
 import CommentCard from '../CommentCard/CommentCard';
 import styles from '../../../style/app-fixed.module.css';
 import { PluginInjector } from 'plugin';
+import useLocalStorage from 'utils/useLocalstorage';
 
 const PostContainer = styled(Box)(({ theme }) => ({
   width: '100%',
@@ -167,9 +173,96 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const [showEditPost, setShowEditPost] = React.useState(false);
   const [postContent, setPostContent] = React.useState(props.text);
   const [showComments, setShowComments] = React.useState(false);
-  const commentCount = props.comments?.length ?? props.commentCount ?? 0;
+  const [comments, setComments] = React.useState<InterfaceComment[]>([]);
+  const [endCursor, setEndCursor] = React.useState<string | null>(null);
+  const [hasNextPage, setHasNextPage] = React.useState(false);
+  const [loadingMoreComments, setLoadingMoreComments] = React.useState(false);
 
-  const toggleComments = (): void => setShowComments((prev) => !prev);
+  const commentCount = props.commentCount;
+  const { getItem } = useLocalStorage();
+  const userId = getItem('userId');
+  // Query for paginated comments
+  const shouldSkipComments = !showComments || !userId;
+  const {
+    data: commentsData,
+    loading: commentsLoading,
+    fetchMore: fetchMoreComments,
+    refetch: refetchComments,
+  } = useQuery(GET_POST_COMMENTS, {
+    skip: shouldSkipComments,
+    variables: shouldSkipComments
+      ? undefined
+      : {
+          postId: props.id,
+          userId: userId as string,
+          first: 10,
+        },
+  });
+
+  React.useEffect(() => {
+    if (!commentsData?.post?.comments) {
+      return;
+    }
+
+    const { edges, pageInfo } = commentsData.post.comments;
+    setComments(edges.map((edge: InterfaceCommentEdge) => edge.node));
+    setEndCursor(pageInfo.endCursor);
+    setHasNextPage(pageInfo.hasNextPage);
+  }, [commentsData]);
+
+  const toggleComments = (): void => {
+    setShowComments((prev) => !prev);
+    // Reset comments when hiding
+    if (showComments) {
+      setComments([]);
+      setEndCursor(null);
+      setHasNextPage(false);
+    }
+  };
+
+  const handleLoadMoreComments = async (): Promise<void> => {
+    setLoadingMoreComments(true);
+    try {
+      await fetchMoreComments({
+        variables: {
+          postId: props.id,
+          userId: userId as string,
+          first: 10,
+          after: endCursor,
+        },
+        updateQuery: (prev, { fetchMoreResult }) => {
+          if (!fetchMoreResult?.post?.comments) return prev;
+
+          const newEdges = fetchMoreResult.post.comments.edges;
+          const newPageInfo = fetchMoreResult.post.comments.pageInfo;
+
+          // Update local state
+          setComments((prevComments) => [
+            ...prevComments,
+            ...newEdges.map((edge: InterfaceCommentEdge) => edge.node),
+          ]);
+          setEndCursor(newPageInfo.endCursor);
+          setHasNextPage(newPageInfo.hasNextPage);
+
+          return {
+            ...prev,
+            post: {
+              ...prev.post,
+              comments: {
+                ...prev.post.comments,
+                edges: [...prev.post.comments.edges, ...newEdges],
+                pageInfo: newPageInfo,
+              },
+            },
+          };
+        },
+      });
+    } catch (error) {
+      errorHandler(t, error);
+    } finally {
+      setLoadingMoreComments(false);
+    }
+  };
 
   const [likePost, { loading: likeLoading }] = useMutation(UPDATE_POST_VOTE);
   const [createComment, { loading: commentLoading }] =
@@ -206,16 +299,21 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
     setCommentInput(e.target.value);
 
   const handleCreateComment = async (): Promise<void> => {
-    if (!commentInput.trim()) {
-      toast.error(t('emptyCommentError'));
-      return;
-    }
     try {
       await createComment({
         variables: { input: { postId: props.id, body: commentInput } },
       });
       setCommentInput('');
+      // Refresh the post data and comments
       props.fetchPosts();
+
+      if (showComments && userId) {
+        await refetchComments({
+          postId: props.id,
+          userId: userId as string,
+          first: 10,
+        });
+      }
     } catch (error: unknown) {
       errorHandler(t, error);
     }
@@ -361,7 +459,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             creator: props.creator,
             upVoteCount: props.upVoteCount,
             downVoteCount: props.downVoteCount,
-            comments: props.comments,
+            comments: comments,
             commentCount: props.commentCount,
             postedAt: props.postedAt,
             pinnedAt: props.pinnedAt,
@@ -373,27 +471,63 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       </PostContent>
 
       {/* Comments Section */}
-      {showComments && props.comments?.length > 0 && (
+      {showComments && (
         <>
           <Divider />
-          <CommentSection>
-            {props.comments.map((comment) => (
-              <CommentCard
-                key={comment.id}
-                id={comment.id}
-                creator={comment.creator}
-                text={comment.body}
-                upVoteCount={comment.upVoteCount}
-                // downVoteCount={comment.downVoteCount}
-                hasUserVoted={comment.hasUserVoted}
-                fetchComments={props.fetchPosts}
-              />
-            ))}
-          </CommentSection>
+          {commentsLoading && comments.length === 0 ? (
+            <Box display="flex" justifyContent="center" p={2}>
+              <CircularProgress size={24} />
+            </Box>
+          ) : (
+            <CommentSection>
+              {comments.map((comment) => (
+                <CommentCard
+                  key={comment.id}
+                  id={comment.id}
+                  creator={comment.creator}
+                  text={comment.body}
+                  upVoteCount={comment.upVotesCount}
+                  hasUserVoted={comment.hasUserVoted}
+                  fetchComments={props.fetchPosts}
+                />
+              ))}
+
+              {/* Load More Comments Button */}
+              {hasNextPage ? (
+                <Box display="flex" justifyContent="center" py={2}>
+                  <Button
+                    onClick={handleLoadMoreComments}
+                    disabled={loadingMoreComments}
+                    size="small"
+                    sx={{
+                      color: 'primary.main',
+                      fontSize: '0.875rem',
+                      textTransform: 'none',
+                    }}
+                  >
+                    {loadingMoreComments ? (
+                      <>
+                        <CircularProgress size={16} sx={{ mr: 1 }} />
+                        {t('loadingComments')}
+                      </>
+                    ) : (
+                      t('loadMoreComments')
+                    )}
+                  </Button>
+                </Box>
+              ) : (
+                <Box display="flex" justifyContent="center" py={2}>
+                  <Typography variant="body2" color="text.secondary">
+                    {t('noMoreComments')}
+                  </Typography>
+                </Box>
+              )}
+            </CommentSection>
+          )}
         </>
       )}
 
-      {/* View Comments Button */}
+      {/* View/Hide Comments Button */}
       {commentCount > 0 && (
         <Button
           onClick={toggleComments}

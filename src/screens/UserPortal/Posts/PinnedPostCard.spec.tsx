@@ -16,7 +16,6 @@ describe('PinnedPostCard', () => {
     hasUserVoted: { hasVoted: false, voteType: null },
     upVoteCount: 3,
     downVoteCount: 1,
-    comments: [],
     fetchPosts: vi.fn(),
   };
 

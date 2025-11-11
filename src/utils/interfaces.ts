@@ -2160,7 +2160,28 @@ export interface InterfacePostCard {
   commentCount: number;
   upVoteCount: number;
   downVoteCount: number;
-  comments: {
+  fetchPosts: () => void;
+}
+
+export interface InterfaceComment {
+  id: string;
+  body: string;
+  creator: {
+    id: string;
+    name: string;
+    avatarURL?: string | null;
+  };
+  createdAt: string;
+  upVotesCount: number;
+  downVotesCount: number;
+  hasUserVoted?: {
+    hasVoted: boolean;
+    voteType: VoteType;
+  };
+}
+
+export interface InterfaceCommentEdge {
+  node: {
     id: string;
     body: string;
     creator: {
@@ -2168,12 +2189,14 @@ export interface InterfacePostCard {
       name: string;
       avatarURL?: string | null;
     };
-    hasUserVoted: VoteState;
-    downVoteCount: number;
-    upVoteCount: number;
-    text: string;
-  }[];
-  fetchPosts: () => void;
+    createdAt: string;
+    upVotesCount: number;
+    downVotesCount: number;
+    hasUserVoted?: {
+      hasVoted: boolean;
+      voteType: VoteType;
+    };
+  };
 }
 
 /**

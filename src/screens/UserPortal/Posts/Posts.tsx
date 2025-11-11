@@ -190,7 +190,6 @@ export default function Home(): JSX.Element {
       creator,
       upVotesCount,
       downVotesCount,
-      comments,
       // attachments,
       pinnedAt,
       hasUserVoted,
@@ -219,22 +218,6 @@ export default function Home(): JSX.Element {
       hasUserVoted: hasUserVoted,
       upVoteCount: upVotesCount,
       downVoteCount: downVotesCount,
-
-      comments:
-        comments?.edges?.map(({ node: comment }) => ({
-          id: comment.id,
-          body: comment.body,
-          creator: {
-            id: comment.creator.id,
-            name: comment.creator.name,
-            avatarURL: comment.creator.avatarURL || undefined,
-          },
-          downVoteCount: comment.downVotesCount,
-          upVoteCount: comment.upVotesCount,
-          text: comment.text || '',
-          hasUserVoted: comment.hasUserVoted,
-        })) ?? [],
-
       fetchPosts: refetch,
     };
   };

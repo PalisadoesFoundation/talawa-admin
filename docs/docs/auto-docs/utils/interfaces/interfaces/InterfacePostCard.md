@@ -16,54 +16,6 @@ Defined in: [src/utils/interfaces.ts:2160](https://github.com/PalisadoesFoundati
 
 ***
 
-### comments
-
-> **comments**: `object`[]
-
-Defined in: [src/utils/interfaces.ts:2163](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2163)
-
-#### body
-
-> **body**: `string`
-
-#### creator
-
-> **creator**: `object`
-
-##### creator.avatarURL?
-
-> `optional` **avatarURL**: `string`
-
-##### creator.id
-
-> **id**: `string`
-
-##### creator.name
-
-> **name**: `string`
-
-#### downVoteCount
-
-> **downVoteCount**: `number`
-
-#### hasUserVoted
-
-> **hasUserVoted**: [`VoteState`](../type-aliases/VoteState.md)
-
-#### id
-
-> **id**: `string`
-
-#### text
-
-> **text**: `string`
-
-#### upVoteCount
-
-> **upVoteCount**: `number`
-
-***
-
 ### creator
 
 > **creator**: `object`
@@ -96,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:2162](https://github.com/PalisadoesFoundati
 
 > **fetchPosts**: () => `void`
 
-Defined in: [src/utils/interfaces.ts:2176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2176)
+Defined in: [src/utils/interfaces.ts:2163](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2163)
 
 #### Returns
 
