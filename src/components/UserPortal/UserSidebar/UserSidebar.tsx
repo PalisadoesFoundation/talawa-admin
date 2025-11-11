@@ -135,31 +135,10 @@ const userSidebar = ({
         />
         {/* Switch to Admin Portal Button - Top position */}
         {!hideDrawer && (
-          <div
-            style={{
-              margin: '10px',
-            }}
-          >
+          <div className={styles.switchToAdminBtnContainer}>
             <button
               type="button"
-              className="btn w-100 d-flex align-items-center justify-content-between"
-              style={{
-                backgroundColor: '#e8f4f8',
-                borderColor: '#d0e8f0',
-                borderRadius: '8px',
-                padding: '15px 12px',
-                fontWeight: '600',
-                fontSize: '14px',
-                color: '#333',
-                transition: 'all 0.3s ease',
-                minHeight: '70px',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#d0e8f0';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#e8f4f8';
-              }}
+              className={`btn w-100 d-flex align-items-center justify-content-between ${styles.switchToAdminBtn}`}
               onClick={handleSwitchToAdmin}
             >
               <span>{tCommon('switchToAdminPortal')}</span>

@@ -1128,6 +1128,28 @@ form label,
   border-color: var(--regularBtn-border-hover) !important;
 }
 
+/* Switch to Admin Portal Button */
+
+.switchToAdminBtn {
+  background-color: #e8f4f8;
+  border-color: #d0e8f0;
+  border-radius: 8px;
+  padding: 15px 12px;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.3s ease;
+  min-height: 70px;
+}
+
+.switchToAdminBtn:hover {
+  background-color: #d0e8f0;
+}
+
+.switchToAdminBtnContainer {
+  margin: 10px;
+}
+
 .searchButtonOrgList {
   background-color: var(--light-blue);
   position: absolute;
