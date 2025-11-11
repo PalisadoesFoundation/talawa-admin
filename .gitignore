@@ -8,7 +8,7 @@
 
 # files that interfere with YARN
 yarn.lock
-/pnpm-lock.yaml
+pnpm-lock.yaml
 
 # dependencies
 /node_modules
