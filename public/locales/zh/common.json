@@ -99,5 +99,7 @@
   "createdLatest": "最近创建",
   "createdEarliest": "最早创建",
   "searchBy": "按{{item}}搜索",
-  "plugins": "插件"
+  "plugins": "插件",
+  "save": "保存",
+  "saving": "保存中..."
 }
