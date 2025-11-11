@@ -1594,5 +1594,16 @@
     "installPluginsToSeeHere": "安装插件以在此查看",
     "checkBackLater": "稍后查看新插件",
     "noResultsFoundFor": "未找到相关结果"
+  },
+  "commentCard": {
+    "commentDeletedSuccessfully": "评论删除成功",
+    "commentUpdatedSuccessfully": "评论更新成功",
+    "pleaseSignInToLikeComments": "请先登录以点赞评论。",
+    "couldNotRemoveExistingLike": "找不到要删除的现有点赞。",
+    "alreadyLikedComment": "您已经为这条评论点过赞了。",
+    "noAssociatedVoteFound": "未找到要删除的相关投票。",
+    "editComment": "编辑评论",
+    "deleteComment": "删除评论",
+    "deleting": "删除中..."
   }
 }

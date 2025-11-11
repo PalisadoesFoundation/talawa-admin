@@ -98,5 +98,7 @@
   "createdLatest": "नवीनतम बनाया गया",
   "createdEarliest": "सबसे पहले बनाया गया",
   "searchBy": "{{item}} से खोजें",
-  "plugins": "प्लगइन्स"
+  "plugins": "प्लगइन्स",
+  "save": "सहेजें",
+  "saving": "सहेज रहे हैं..."
 }

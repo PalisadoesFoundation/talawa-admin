@@ -1594,5 +1594,16 @@
     "installPluginsToSeeHere": "Install plugins to see them here",
     "checkBackLater": "Check back later for new plugins",
     "noResultsFoundFor": "No results found for"
+  },
+  "commentCard": {
+    "commentDeletedSuccessfully": "Comment deleted successfully",
+    "commentUpdatedSuccessfully": "Comment updated successfully",
+    "pleaseSignInToLikeComments": "Please sign in to like comments.",
+    "couldNotRemoveExistingLike": "Could not find an existing like to remove.",
+    "alreadyLikedComment": "You have already liked this comment.",
+    "noAssociatedVoteFound": "No associated vote found to remove.",
+    "editComment": "Edit Comment",
+    "deleteComment": "Delete Comment",
+    "deleting": "Deleting..."
   }
 }

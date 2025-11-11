@@ -1597,5 +1597,16 @@
     "installPluginsToSeeHere": "Instala plugins para verlos aquí",
     "checkBackLater": "Vuelve más tarde para nuevos plugins",
     "noResultsFoundFor": "No se encontraron resultados para"
+  },
+  "commentCard": {
+    "commentDeletedSuccessfully": "Comentario eliminado exitosamente",
+    "commentUpdatedSuccessfully": "Comentario actualizado exitosamente",
+    "pleaseSignInToLikeComments": "Por favor inicia sesión para dar me gusta a los comentarios.",
+    "couldNotRemoveExistingLike": "No se pudo encontrar un me gusta existente para eliminar.",
+    "alreadyLikedComment": "Ya has dado me gusta a este comentario.",
+    "noAssociatedVoteFound": "No se encontró voto asociado para eliminar.",
+    "editComment": "Editar Comentario",
+    "deleteComment": "Eliminar Comentario",
+    "deleting": "Eliminando..."
   }
 }

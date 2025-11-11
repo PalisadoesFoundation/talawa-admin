@@ -1594,5 +1594,16 @@
     "installPluginsToSeeHere": "Installez des plugins pour les voir ici",
     "checkBackLater": "Revenez plus tard pour de nouveaux plugins",
     "noResultsFoundFor": "Aucun résultat trouvé pour"
+  },
+  "commentCard": {
+    "commentDeletedSuccessfully": "Commentaire supprimé avec succès",
+    "commentUpdatedSuccessfully": "Commentaire mis à jour avec succès",
+    "pleaseSignInToLikeComments": "Veuillez vous connecter pour aimer les commentaires.",
+    "couldNotRemoveExistingLike": "Impossible de trouver un j'aime existant à supprimer.",
+    "alreadyLikedComment": "Vous avez déjà aimé ce commentaire.",
+    "noAssociatedVoteFound": "Aucun vote associé trouvé à supprimer.",
+    "editComment": "Modifier le Commentaire",
+    "deleteComment": "Supprimer le Commentaire",
+    "deleting": "Suppression..."
   }
 }
