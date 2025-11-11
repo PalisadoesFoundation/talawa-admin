@@ -3,6 +3,7 @@
  *
  * A shared component for rendering the sidebar header with branding and toggle functionality.
  * Used across Admin Portal (LeftDrawer, LeftDrawerOrg) and User Portal (UserSidebar, UserSidebarOrg).
+ * Provides consistent UI/UX across all portal variants.
  *
  * @component
  * @param {ISidebarHeaderProps} props - The props for the component.

@@ -4,7 +4,7 @@
 
 # Interface: ISidebarHeaderProps
 
-Defined in: [src/components/Sidebar/SidebarHeader/SidebarHeader.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarHeader/SidebarHeader.tsx#L33)
+Defined in: [src/components/Sidebar/SidebarHeader/SidebarHeader.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarHeader/SidebarHeader.tsx#L34)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/Sidebar/SidebarHeader/SidebarHeader.tsx:33](https://
 
 > **hideDrawer**: `boolean`
 
-Defined in: [src/components/Sidebar/SidebarHeader/SidebarHeader.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarHeader/SidebarHeader.tsx#L34)
+Defined in: [src/components/Sidebar/SidebarHeader/SidebarHeader.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarHeader/SidebarHeader.tsx#L35)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/components/Sidebar/SidebarHeader/SidebarHeader.tsx:34](https://
 
 > `optional` **persistState**: `boolean`
 
-Defined in: [src/components/Sidebar/SidebarHeader/SidebarHeader.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarHeader/SidebarHeader.tsx#L37)
+Defined in: [src/components/Sidebar/SidebarHeader/SidebarHeader.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarHeader/SidebarHeader.tsx#L38)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/components/Sidebar/SidebarHeader/SidebarHeader.tsx:37](https://
 
 > **portalTitle**: `string`
 
-Defined in: [src/components/Sidebar/SidebarHeader/SidebarHeader.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarHeader/SidebarHeader.tsx#L36)
+Defined in: [src/components/Sidebar/SidebarHeader/SidebarHeader.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarHeader/SidebarHeader.tsx#L37)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/components/Sidebar/SidebarHeader/SidebarHeader.tsx:36](https://
 
 > **setHideDrawer**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/components/Sidebar/SidebarHeader/SidebarHeader.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarHeader/SidebarHeader.tsx#L35)
+Defined in: [src/components/Sidebar/SidebarHeader/SidebarHeader.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarHeader/SidebarHeader.tsx#L36)
