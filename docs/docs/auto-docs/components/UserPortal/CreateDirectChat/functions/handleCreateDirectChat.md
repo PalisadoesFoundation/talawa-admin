@@ -4,13 +4,17 @@
 
 # Function: handleCreateDirectChat()
 
-> **handleCreateDirectChat**(`id`, `chats`, `t`, `createChat`, `organizationId`, `userId`, `chatsListRefetch`, `toggleCreateDirectChatModal`): `Promise`\<`void`\>
+> **handleCreateDirectChat**(`id`, `userName`, `chats`, `t`, `createChat`, `createChatMembership`, `organizationId`, `userId`, `currentUserName`, `chatsListRefetch`, `toggleCreateDirectChatModal`): `Promise`\<`void`\>
 
-Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx#L89)
+Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx#L98)
 
 ## Parameters
 
 ### id
+
+`string`
+
+### userName
 
 `string`
 
@@ -26,11 +30,19 @@ Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:89]
 
 \{(`options?`): `Promise`\<`FetchResult`\<`unknown`\>\>; (`arg0`): `unknown`; \}
 
+### createChatMembership
+
+\{(`options?`): `Promise`\<`FetchResult`\<`unknown`\>\>; (`arg0`): `unknown`; \}
+
 ### organizationId
 
 `string`
 
 ### userId
+
+`string`
+
+### currentUserName
 
 `string`
 

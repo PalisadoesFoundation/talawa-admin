@@ -386,3 +386,40 @@ export const VENUE_LIST = gql`
     }
   }
 `;
+
+/**
+ * GraphQL query to fetch organization members with pagination and filtering.
+ * This query uses the new connection-based schema with input objects.
+ *
+ * @param input - QueryOrganizationInput containing the organization ID
+ * @param first - Number of members to fetch
+ * @param after - Cursor for pagination
+ * @param where - MembersWhereInput for filtering (e.g., name_contains)
+ * @returns Organization members with connection structure
+ */
+export const ORGANIZATION_MEMBERS = gql`
+  query OrganizationMembers(
+    $input: QueryOrganizationInput!
+    $first: Int
+    $after: String
+    $where: MembersWhereInput
+  ) {
+    organization(input: $input) {
+      members(first: $first, after: $after, where: $where) {
+        edges {
+          node {
+            id
+            name
+            avatarURL
+            role
+          }
+          cursor
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+`;

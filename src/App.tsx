@@ -288,6 +288,7 @@ function App(): React.ReactElement {
                 element={<OrganizationVenues />}
               />
               <Route path="/leaderboard/:orgId" element={<Leaderboard />} />
+              <Route path="/orgchat/:orgId" element={<Chat />} />
               {/* Admin org plugin routes */}
               {adminOrgPluginRoutes.map((route) => (
                 <Route

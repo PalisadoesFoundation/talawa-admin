@@ -49,10 +49,11 @@ import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
 const { getItem } = useLocalStorage();
 const authLink = setContext((_, { headers }) => {
   const lng = i18n.language;
+  const token = getItem('token');
   return {
     headers: {
       ...headers,
-      authorization: getItem('token') ? `Bearer ${getItem('token')}` : '',
+      authorization: token ? `Bearer ${token}` : '',
       'Accept-Language': lng,
     },
   };
@@ -82,19 +83,33 @@ const uploadLink = createUploadLink({
 });
 
 const wsLink = new GraphQLWsLink(
-  createClient({ url: REACT_APP_BACKEND_WEBSOCKET_URL }),
+  createClient({
+    url: REACT_APP_BACKEND_WEBSOCKET_URL,
+    connectionParams: () => {
+      const token = getItem('token');
+      return {
+        authorization: token ? `Bearer ${token}` : '',
+        'Accept-Language': i18n.language,
+      };
+    },
+    on: {
+      connected: () => console.log('WebSocket connected'),
+      error: (error) => console.log('WebSocket error:', error),
+      closed: (event) => console.log('WebSocket closed:', event),
+      connecting: () => console.log('WebSocket connecting...'),
+    },
+  }),
 );
 
-// const wsLink = new GraphQLWsLink(
-//   createClient({
-//     url: 'ws://localhost:4000/subscriptions',
-//   }),
-// );
-// The split function takes three parameters:
-//
-// * A function that's called for each operation to execute
-// * The Link to use for an operation if the function returns a "truthy" value
-// * The Link to use for an operation if the function returns a "falsy" value
+// Create HTTP link with authentication
+const httpLink = ApolloLink.from([
+  authLink, // Only apply to HTTP operations
+  requestMiddleware,
+  responseMiddleware,
+  uploadLink,
+]);
+
+// The split function routes operations correctly
 const splitLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query);
@@ -103,17 +118,12 @@ const splitLink = split(
       definition.operation === 'subscription'
     );
   },
-  wsLink,
-  uploadLink,
+  wsLink, // WebSocket for subscriptions (auth via connectionParams)
+  httpLink, // HTTP with auth headers for queries/mutations
 );
 
-const combinedLink = ApolloLink.from([
-  errorLink,
-  authLink,
-  requestMiddleware,
-  responseMiddleware,
-  splitLink,
-]);
+// Simplified combined link
+const combinedLink = ApolloLink.from([errorLink, splitLink]);
 
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache({
@@ -144,6 +154,13 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
             },
           },
         },
+      },
+      // Normalize chat entities for stable references (non-breaking)
+      Chat: {
+        keyFields: ['id'],
+      },
+      ChatMessage: {
+        keyFields: ['id'],
       },
     },
   }),
