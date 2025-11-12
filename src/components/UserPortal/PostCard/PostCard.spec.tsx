@@ -1077,7 +1077,6 @@ describe('PostCard', () => {
     renderPostCardWithPagination({
       customMocks: [createCommentMock],
       mockOverrides: { fetchPosts: mockFetchPosts },
-      addTypename: false,
     });
 
     await waitFor(() => {
