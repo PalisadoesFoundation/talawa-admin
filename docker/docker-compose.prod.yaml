@@ -14,7 +14,7 @@ services:
     #  - REACT_APP_USE_RECAPTCHA=${REACT_APP_USE_RECAPTCHA}
     #  - REACT_APP_RECAPTCHA_SITE_KEY=${REACT_APP_RECAPTCHA_SITE_KEY}
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:80']
+      test: ['CMD', 'curl', '-f', 'http://localhost:${PORT:-4321}']
       interval: 30s
       timeout: 10s
       retries: 3
