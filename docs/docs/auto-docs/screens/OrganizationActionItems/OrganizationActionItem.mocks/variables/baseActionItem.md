@@ -6,7 +6,7 @@
 
 > `const` **baseActionItem**: `object`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L31)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L32)
 
 ## Type Declaration
 

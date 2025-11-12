@@ -98,5 +98,7 @@
   "createdLatest": "Created Latest",
   "createdEarliest": "Created Earliest",
   "searchBy": "Search by {{item}}",
-  "plugins": "Plugins"
+  "plugins": "Plugins",
+  "save": "Save",
+  "saving": "Saving..."
 }
