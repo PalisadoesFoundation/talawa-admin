@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationListObject
 
-Defined in: [src/utils/interfaces.ts:1374](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1374)
+Defined in: [src/utils/interfaces.ts:1375](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1375)
 
 InterfaceQueryOrganizationListObject
 
@@ -18,7 +18,7 @@ Defines the structure for an organization list object returned from a query.
 
 > **addressLine1**: `string`
 
-Defined in: [src/utils/interfaces.ts:1377](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1377)
+Defined in: [src/utils/interfaces.ts:1378](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1378)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [src/utils/interfaces.ts:1377](https://github.com/PalisadoesFoundati
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:1378](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1378)
+Defined in: [src/utils/interfaces.ts:1379](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1379)
 
 ***
 
@@ -34,7 +34,7 @@ Defined in: [src/utils/interfaces.ts:1378](https://github.com/PalisadoesFoundati
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1375](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1375)
+Defined in: [src/utils/interfaces.ts:1376](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1376)
 
 ***
 
@@ -42,6 +42,6 @@ Defined in: [src/utils/interfaces.ts:1375](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1376](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1376)
+Defined in: [src/utils/interfaces.ts:1377](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1377)
 
 The name of the organization.

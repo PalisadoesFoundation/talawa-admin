@@ -98,5 +98,7 @@
   "createdLatest": "Créé le plus récemment",
   "createdEarliest": "Créé le plus tôt",
   "searchBy": "Rechercher par {{item}}",
-  "plugins": "Extensions"
+  "plugins": "Extensions",
+  "save": "Enregistrer",
+  "saving": "Enregistrement..."
 }

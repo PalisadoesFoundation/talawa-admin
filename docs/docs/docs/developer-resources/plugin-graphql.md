@@ -2,7 +2,7 @@
 id: plugin-graphql-integration
 title: Plugin GraphQL Integration
 slug: /developer-resources/plugin-graphql-integration
-sidebar_position: 5
+sidebar_position: 50
 ---
 
 # 
