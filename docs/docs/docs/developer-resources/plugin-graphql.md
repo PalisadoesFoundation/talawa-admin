@@ -1,4 +1,11 @@
-# Plugin GraphQL Integration
+---
+id: plugin-graphql-integration
+title: Plugin GraphQL Integration
+slug: /developer-resources/plugin-graphql-integration
+sidebar_position: 50
+---
+
+# 
 
 This document describes the new GraphQL-based plugin management system that replaces the local `index.json` file approach.
 

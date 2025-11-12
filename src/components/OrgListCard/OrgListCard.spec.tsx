@@ -54,6 +54,7 @@ const props: InterfaceOrgListCardPropsPG = {
     name: 'Dogs Care',
     avatarURL: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
     description: 'Dog care center',
+    createdAt: '2023-04-13T04:53:17.742+00:00',
     members: {
       edges: [],
     },

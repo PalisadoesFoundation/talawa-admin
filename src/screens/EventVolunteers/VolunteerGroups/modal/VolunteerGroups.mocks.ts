@@ -253,6 +253,30 @@ export const MOCKS = [
       },
     },
   },
+  // Mock for recurring event series scope with alternate payload
+  {
+    request: {
+      query: CREATE_VOLUNTEER_GROUP,
+      variables: {
+        data: {
+          eventId: 'baseEventId',
+          leaderId: 'userId',
+          name: 'Test Group',
+          description: 'desc',
+          volunteerUserIds: ['userId', 'userId2'],
+          volunteersRequired: 10,
+          scope: 'ENTIRE_SERIES',
+        },
+      },
+    },
+    result: {
+      data: {
+        createEventVolunteerGroup: {
+          id: 'recurringTestGroupId',
+        },
+      },
+    },
+  },
   // Mock for recurring event instance scope
   {
     request: {
