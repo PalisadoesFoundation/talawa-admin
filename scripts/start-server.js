@@ -24,7 +24,7 @@ serve.on("error", (err) => {
   process.exit(1);
 });
 serve.on("close", (code) => {
-if (code !== null) {
+  if (code !== null) {
    console.log(`Server exited with code ${code}`);
     process.exit(code);
   } else {
