@@ -12,7 +12,6 @@ const command = process.platform === "win32" ? "npm.cmd" : "npm";
 
 const serve = spawn(command, ["run", "serve"], {
   stdio: "inherit",
-  shell: true,
   env: {
     ...process.env,
     PORT: PORT.toString(),
@@ -24,6 +23,11 @@ serve.on("error", (err) => {
   process.exit(1);
 });
 serve.on("close", (code) => {
-  console.log(`Server exited with code ${code}`);
-  process.exit(code);
+if (code !== null) {
+   console.log(`Server exited with code ${code}`);
+    process.exit(code);
+  } else {
+    console.log(`Server was terminated by a signal`);
+    process.exit(1);
+}
 });
