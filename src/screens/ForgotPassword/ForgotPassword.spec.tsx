@@ -291,6 +291,10 @@ describe('Testing Forgot Password screen', () => {
       confirmNewPassword: 'weak',
     };
 
+    const mutationHandler = vi.fn(() => ({
+      data: { forgotPassword: { success: true } },
+    }));
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -344,6 +348,7 @@ describe('Testing Forgot Password screen', () => {
     expect(toast.success).not.toHaveBeenCalledWith(
       translations.passwordChanges,
     );
+    expect(mutationHandler).not.toHaveBeenCalled();
   });
 
   it('Testing forgot password functionality, when new password and confirm password is not same', async () => {
