@@ -53,6 +53,7 @@ const components: ComponentType[] = [
   { name: 'Venues', comp_id: 'orgvenues', component: 'OrganizationVenues' },
 
   { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
+  { name: 'Chat', comp_id: 'orgchat', component: 'Chat' },
   { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
   { name: 'Advertisement', comp_id: 'orgads', component: 'Advertisements' },
   { name: 'Funds', comp_id: 'orgfunds', component: 'OrganizationFunds' },

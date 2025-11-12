@@ -25,7 +25,7 @@ export const validateFile = (
   maxSizeInMB = FILE_UPLOAD_MAX_SIZE_MB,
   allowedTypes: readonly string[] = FILE_UPLOAD_ALLOWED_TYPES,
 ): IFileValidationResult => {
-  const maxSize = maxSizeInMB * 1024 * 1024; // Convert MB to bytes
+  const maxSize = maxSizeInMB * 1024 * 1024;
 
   // Check file size
   if (file.size > maxSize) {
