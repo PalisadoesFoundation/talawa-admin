@@ -583,7 +583,7 @@ async function wait(ms = 100): Promise<void> {
 
 const renderHomeScreen = (): RenderResult =>
   render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/user/organization/orgId']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -833,7 +833,7 @@ describe('HomeScreen additional scenarios', () => {
     setItem('userId', '640d98d9eb6a743d75341067');
 
     render(
-      <MockedProvider addTypename={false} link={linkWithPinnedPosts}>
+      <MockedProvider link={linkWithPinnedPosts}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -955,7 +955,7 @@ describe('HomeScreen additional scenarios', () => {
     setItem('userId', '640d98d9eb6a743d75341067');
 
     render(
-      <MockedProvider addTypename={false} link={linkWithAds}>
+      <MockedProvider link={linkWithAds}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1055,7 +1055,7 @@ describe('HomeScreen additional scenarios', () => {
     setItem('userId', '640d98d9eb6a743d75341067');
 
     render(
-      <MockedProvider addTypename={false} link={linkWithPinnedPosts}>
+      <MockedProvider link={linkWithPinnedPosts}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1085,7 +1085,7 @@ describe('HomeScreen additional scenarios', () => {
     setItem('userId', '640d98d9eb6a743d75341067');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1215,7 +1215,7 @@ describe('HomeScreen additional scenarios', () => {
     setItem('userId', '640d98d9eb6a743d75341067');
 
     render(
-      <MockedProvider addTypename={false} link={linkWithNoPosts}>
+      <MockedProvider link={linkWithNoPosts}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1273,7 +1273,7 @@ describe('HomeScreen additional scenarios', () => {
     setItem('userId', '640d98d9eb6a743d75341067');
 
     render(
-      <MockedProvider addTypename={false} link={linkWithErrors}>
+      <MockedProvider link={linkWithErrors}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1420,7 +1420,7 @@ describe('HomeScreen additional scenarios', () => {
     setItem('userId', '640d98d9eb6a743d75341067');
 
     render(
-      <MockedProvider addTypename={false} link={linkWithComments}>
+      <MockedProvider link={linkWithComments}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1457,7 +1457,7 @@ describe('HomeScreen additional scenarios', () => {
     setItem('userId', '640d98d9eb6a743d75341067');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1625,7 +1625,7 @@ describe('HomeScreen additional scenarios', () => {
     setItem('userId', '640d98d9eb6a743d75341067');
 
     render(
-      <MockedProvider addTypename={false} link={linkWithAttachments}>
+      <MockedProvider link={linkWithAttachments}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1772,7 +1772,7 @@ describe('HomeScreen additional scenarios', () => {
     const singlePageLink = new StaticMockLink(singlePageMocks, true);
 
     render(
-      <MockedProvider addTypename={false} link={singlePageLink}>
+      <MockedProvider link={singlePageLink}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1807,7 +1807,7 @@ describe('HomeScreen additional scenarios', () => {
 
   it('Redirect to /user when organizationId is falsy', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/user/organization/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2026,7 +2026,7 @@ describe('PinnedPostCard Component Tests', () => {
     const link = new StaticMockLink(mocksWithPinnedPosts, true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2113,7 +2113,7 @@ describe('PinnedPostCard Component Tests', () => {
     const link = new StaticMockLink(mocksWithPinnedPost, true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2198,7 +2198,7 @@ describe('PinnedPostCard Component Tests', () => {
     const link = new StaticMockLink(mocksWithPinnedPost, true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2281,7 +2281,7 @@ describe('PinnedPostCard Component Tests', () => {
     const link = new StaticMockLink(mocksWithoutPinnedPosts, true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2385,7 +2385,7 @@ describe('PinnedPostCard Component Tests', () => {
     const link = new StaticMockLink(mocksWithMixedPosts, true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/user/organization/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

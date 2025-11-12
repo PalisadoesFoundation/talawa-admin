@@ -37,6 +37,7 @@ const DEFAULT_SEARCH = '';
 const DEFAULT_FIRST = 5;
 
 // Helper for members edges
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const memberEdge = (props: any = {}) => ({
   cursor: props.cursor || 'cursor1',
   node: {
@@ -329,7 +330,7 @@ describe('Testing People Screen [User Portal]', () => {
 
   it('Screen should be rendered properly', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={[defaultQueryMock]}>
+      <MockedProvider mocks={[defaultQueryMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -346,10 +347,7 @@ describe('Testing People Screen [User Portal]', () => {
 
   it('Search works properly by pressing enter', async () => {
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[defaultQueryMock, adSearchMock]}
-      >
+      <MockedProvider mocks={[defaultQueryMock, adSearchMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -371,10 +369,7 @@ describe('Testing People Screen [User Portal]', () => {
 
   it('Search works properly by clicking search Btn', async () => {
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[defaultQueryMock, adminSearchMock]}
-      >
+      <MockedProvider mocks={[defaultQueryMock, adminSearchMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -399,10 +394,7 @@ describe('Testing People Screen [User Portal]', () => {
 
   it('Mode is changed to Admins', async () => {
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[defaultQueryMock, adminsOnlyMock]}
-      >
+      <MockedProvider mocks={[defaultQueryMock, adminsOnlyMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -425,7 +417,7 @@ describe('Testing People Screen [User Portal]', () => {
 
   it('Shows loading state while fetching data', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={[defaultQueryMock]}>
+      <MockedProvider mocks={[defaultQueryMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -442,10 +434,7 @@ describe('Testing People Screen [User Portal]', () => {
 
   it('pagination working', async () => {
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[fiveMembersMock, lotsOfMembersMock]}
-      >
+      <MockedProvider mocks={[fiveMembersMock, lotsOfMembersMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -464,10 +453,7 @@ describe('Testing People Screen [User Portal]', () => {
 describe('Testing People Screen Pagination [User Portal]', () => {
   const renderComponent = (): RenderResult => {
     return render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[fiveMembersMock, lotsOfMembersMock]}
-      >
+      <MockedProvider mocks={[fiveMembersMock, lotsOfMembersMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -518,10 +504,7 @@ describe('Testing People Screen Pagination [User Portal]', () => {
 describe('People Component Mode Switch and Search Coverage', () => {
   it('searches partial user name correctly and displays matching results', async (): Promise<void> => {
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[defaultQueryMock, adminSearchMock]}
-      >
+      <MockedProvider mocks={[defaultQueryMock, adminSearchMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -562,10 +545,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
 
   it('handles rowsPerPage = 0 case and edge cases', async () => {
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[defaultQueryMock, nextPageMock]}
-      >
+      <MockedProvider mocks={[defaultQueryMock, nextPageMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -585,7 +565,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
 
   it('should not trigger search for non-Enter key press', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={[defaultQueryMock]}>
+      <MockedProvider mocks={[defaultQueryMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -605,7 +585,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
 
   it('should handle search with empty input value', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={[defaultQueryMock]}>
+      <MockedProvider mocks={[defaultQueryMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -629,7 +609,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
 describe('People Component Field Tests (Email, ID, Role)', () => {
   const renderComponentWithEmailMock = (): RenderResult => {
     return render(
-      <MockedProvider mocks={[defaultQueryMock]} addTypename={false}>
+      <MockedProvider mocks={[defaultQueryMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

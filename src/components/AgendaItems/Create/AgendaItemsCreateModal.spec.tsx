@@ -42,7 +42,7 @@ const mockedConvertToBase64 = convertToBase64 as MockedFunction<
 describe('AgendaItemsCreateModal', () => {
   test('renders modal correctly', () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -80,7 +80,7 @@ describe('AgendaItemsCreateModal', () => {
       agendaItemCategoryIds: ['1'],
     };
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -146,7 +146,7 @@ describe('AgendaItemsCreateModal', () => {
   });
   test('handleAddUrl correctly adds valid URL', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -181,7 +181,7 @@ describe('AgendaItemsCreateModal', () => {
 
   test('shows error toast for invalid URL', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -215,7 +215,7 @@ describe('AgendaItemsCreateModal', () => {
 
   test('shows error toast for file size exceeding limit', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -257,7 +257,7 @@ describe('AgendaItemsCreateModal', () => {
     mockedConvertToBase64.mockResolvedValue('base64-file');
 
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -296,7 +296,7 @@ describe('AgendaItemsCreateModal', () => {
   });
   test('renders autocomplete and selects categories correctly', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>

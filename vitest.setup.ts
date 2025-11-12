@@ -17,16 +17,9 @@ const shouldSuppressError = (value: unknown): boolean => {
     value.includes(
       'Warning: ReactDOM.render is no longer supported in React 18.',
     ) ||
-    value.includes(
-      'Please remove the `addTypename` option from MockedProvider',
-    ) ||
-    value.includes(
-      'Please remove the `addTypename` option when initializing `InMemoryCache`',
-    ) ||
     value.includes('Please remove this option.') ||
     (value.includes('go.apollo.dev/c/err') &&
-      (value.includes('addTypename') ||
-        value.includes('canonizeResults') ||
+      (value.includes('canonizeResults') ||
         value.includes('message%22%3A43') ||
         value.includes('message%22%3A49')))
   );

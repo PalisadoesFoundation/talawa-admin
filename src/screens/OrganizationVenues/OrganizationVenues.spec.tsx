@@ -144,7 +144,7 @@ vi.mock('react-toastify', () => ({
 
 const renderOrganizationVenue = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/orgvenues/orgId']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -178,7 +178,7 @@ describe('OrganizationVenue with missing orgId', () => {
   });
   test('Redirect to /orglist when orgId is falsy/undefined', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgvenues/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

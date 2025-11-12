@@ -1018,7 +1018,7 @@ const translations = JSON.parse(
 
 const renderMyPledges = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/user/pledges/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1073,7 +1073,7 @@ describe('Testing User Pledge Screen', () => {
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>

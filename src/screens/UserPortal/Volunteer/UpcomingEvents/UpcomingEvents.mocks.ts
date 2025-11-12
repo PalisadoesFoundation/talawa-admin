@@ -10,18 +10,25 @@ const createMembershipResponse = (
   eventId: string,
   groupId?: string,
 ) => ({
+  __typename: 'VolunteerMembership',
   id: `membershipId${id}`,
   status: 'requested',
   createdAt: '2025-09-20T15:20:00.000Z',
   volunteer: {
+    __typename: 'EventVolunteer',
     id: `volunteerId${id}`,
     hasAccepted: false,
-    user: { id: 'userId', name: 'User Name' },
+    user: { __typename: 'User', id: 'userId', name: 'User Name' },
   },
-  event: { id: eventId, name: `Event ${id}` },
-  createdBy: { id: 'createrId', name: 'Creator Name' },
+  event: { __typename: 'Event', id: eventId, name: `Event ${id}` },
+  createdBy: { __typename: 'User', id: 'createrId', name: 'Creator Name' },
   ...(groupId && {
-    group: { id: groupId, name: `Group ${id}`, description: 'desc' },
+    group: {
+      __typename: 'EventVolunteerGroup',
+      id: groupId,
+      name: `Group ${id}`,
+      description: 'desc',
+    },
   }),
 });
 
@@ -31,11 +38,13 @@ const createMembershipWithStatus = (
   status: string,
   groupId?: string,
 ) => ({
+  __typename: 'VolunteerMembership',
   id: `membership${id}`,
   status,
   createdAt: '2024-10-30T10:00:00.000Z',
   updatedAt: '2024-10-30T10:00:00.000Z',
   event: {
+    __typename: 'Event',
     id: eventId,
     name: eventId === 'eventId1' ? 'Test Event' : `Event ${eventId}`,
     startAt: '2044-10-30T10:00:00.000Z',
@@ -43,11 +52,13 @@ const createMembershipWithStatus = (
     recurrenceRule: null,
   },
   volunteer: {
+    __typename: 'EventVolunteer',
     id: `volunteerId${id}`,
-    createdBy: { id: 'userId' },
-    updatedBy: { id: 'userId' },
+    createdBy: { __typename: 'User', id: 'userId' },
+    updatedBy: { __typename: 'User', id: 'userId' },
   },
   group: {
+    __typename: 'EventVolunteerGroup',
     id: groupId,
     name: 'Test Group',
     description: 'Test Description',
@@ -56,6 +67,7 @@ const createMembershipWithStatus = (
 
 // Base events
 const event1 = {
+  __typename: 'Event',
   _id: 'eventId1',
   title: 'Event 1',
   name: 'Event 1',
@@ -68,20 +80,33 @@ const event1 = {
   recurring: true,
   volunteerGroups: [
     {
+      __typename: 'EventVolunteerGroup',
       _id: 'groupId1',
       name: 'Group 1',
       volunteersRequired: null,
       description: 'desc',
-      volunteers: [{ _id: 'volunteerId1' }, { _id: 'volunteerId2' }],
+      volunteers: [
+        { __typename: 'EventVolunteer', _id: 'volunteerId1' },
+        { __typename: 'EventVolunteer', _id: 'volunteerId2' },
+      ],
     },
   ],
   volunteers: [
-    { _id: 'volunteerId1', user: { _id: 'userId1' } },
-    { _id: 'volunteerId2', user: { _id: 'userId2' } },
+    {
+      __typename: 'EventVolunteer',
+      _id: 'volunteerId1',
+      user: { __typename: 'User', _id: 'userId1' },
+    },
+    {
+      __typename: 'EventVolunteer',
+      _id: 'volunteerId2',
+      user: { __typename: 'User', _id: 'userId2' },
+    },
   ],
 };
 
 const event2 = {
+  __typename: 'Event',
   id: 'eventId2',
   title: 'Event 2',
   name: 'Event 2',
@@ -94,17 +119,25 @@ const event2 = {
   recurring: false,
   volunteerGroups: [
     {
+      __typename: 'EventVolunteerGroup',
       id: 'groupId2',
       name: 'Group 2',
       volunteersRequired: null,
       description: 'desc',
-      volunteers: [{ _id: 'volunteerId3' }],
+      volunteers: [{ __typename: 'EventVolunteer', _id: 'volunteerId3' }],
     },
   ],
-  volunteers: [{ _id: 'volunteerId3', user: { _id: 'userId3' } }],
+  volunteers: [
+    {
+      __typename: 'EventVolunteer',
+      _id: 'volunteerId3',
+      user: { __typename: 'User', _id: 'userId3' },
+    },
+  ],
 };
 
 const event3 = {
+  __typename: 'Event',
   _id: 'eventId3',
   title: 'Event 3',
   name: 'Event with Group Volunteers Null',
@@ -118,6 +151,7 @@ const event3 = {
   recurring: true,
   volunteerGroups: [
     {
+      __typename: 'EventVolunteerGroup',
       id: 'groupIdNull',
       name: 'Group NullVols',
       description: 'desc',
@@ -128,6 +162,7 @@ const event3 = {
   volunteers: null,
 };
 const nullVolunteerGroups = {
+  __typename: 'Event',
   id: 'nullEventId',
   name: 'Event with Null Fields',
   startAt: '2044-10-30T10:00:00.000Z',
@@ -142,6 +177,7 @@ const nullVolunteerGroups = {
 // Create past event based on existing event structure
 const pastEvent = {
   ...event1,
+  __typename: 'Event',
   id: 'eventId1',
   name: 'Past Test Event',
   startAt: '2020-10-30T10:00:00.000Z',
@@ -150,6 +186,7 @@ const pastEvent = {
 
 // Create instance event for duplicate membership testing
 const duplicateInstanceEvent = {
+  __typename: 'Event',
   id: 'instanceEventId1',
   name: 'Instance Event 1',
   startDate: '2044-11-06',
@@ -159,9 +196,14 @@ const duplicateInstanceEvent = {
   allDay: false,
   recurring: true,
   isRecurringEventTemplate: false,
-  baseEvent: { id: 'baseEventId1', isRecurringEventTemplate: true },
+  baseEvent: {
+    __typename: 'Event',
+    id: 'baseEventId1',
+    isRecurringEventTemplate: true,
+  },
   volunteerGroups: [
     {
+      __typename: 'EventVolunteerGroup',
       id: 'recurringGroupId1',
       name: 'Recurring Group 1',
       description: 'desc',
@@ -170,10 +212,11 @@ const duplicateInstanceEvent = {
     },
   ],
   volunteers: [],
-  recurrenceRule: { frequency: 'WEEKLY' },
+  recurrenceRule: { __typename: 'RecurrenceRule', frequency: 'WEEKLY' },
 };
 
 const recurringInstanceEvent = {
+  __typename: 'Event',
   id: 'eventInstanceId1',
   name: 'Recurring Event Instance 1',
   startAt: '2044-11-01T10:00:00.000Z',
@@ -181,9 +224,14 @@ const recurringInstanceEvent = {
   location: 'Mumbai',
   description: 'A recurring event instance',
   isRecurringEventTemplate: false,
-  baseEvent: { id: 'baseEventId1', isRecurringEventTemplate: true },
+  baseEvent: {
+    __typename: 'Event',
+    id: 'baseEventId1',
+    isRecurringEventTemplate: true,
+  },
   volunteerGroups: [
     {
+      __typename: 'EventVolunteerGroup',
       id: 'recurringGroupId1',
       name: 'Recurring Group 1',
       description: 'desc',
@@ -192,22 +240,24 @@ const recurringInstanceEvent = {
     },
   ],
   volunteers: [],
-  recurrenceRule: { frequency: 'WEEKLY' },
+  recurrenceRule: { __typename: 'RecurrenceRule', frequency: 'WEEKLY' },
 };
 
 export const baseRecurringEvent = {
+  __typename: 'Event',
   startAt: '2044-10-30T10:00:00.000Z',
   endAt: '2044-10-30T12:00:00.000Z',
   location: 'Test Location',
   description: 'Test Description',
   isRecurringEventTemplate: true,
   baseEvent: null,
-  recurrenceRule: { frequency: 'WEEKLY' },
+  recurrenceRule: { __typename: 'RecurrenceRule', frequency: 'WEEKLY' },
   volunteerGroups: [],
   volunteers: [],
 };
 
 export const baseEvent = {
+  __typename: 'Event',
   startAt: '2044-10-30T10:00:00.000Z',
   endAt: '2044-10-30T12:00:00.000Z',
   location: 'Test Location',
@@ -217,6 +267,7 @@ export const baseEvent = {
   recurrenceRule: null,
   volunteerGroups: [
     {
+      __typename: 'EventVolunteerGroup',
       id: 'groupId1',
       name: 'Test Group',
       description: 'Test Description',
@@ -248,6 +299,8 @@ export const MOCKS = [
     result: {
       data: {
         organization: {
+          __typename: 'Organization',
+          id: 'orgId',
           events: {
             edges: [
               { node: event1 },
@@ -268,13 +321,16 @@ export const MOCKS = [
       data: {
         getVolunteerMembership: [
           {
+            __typename: 'VolunteerMembership',
             id: 'membership1',
             status: 'accepted',
             event: {
+              __typename: 'Event',
               id: 'eventId2',
               name: 'Event With Group Joined',
             },
             group: {
+              __typename: 'EventVolunteerGroup',
               id: 'groupId2',
               name: 'Test Group',
               description: 'Test Description',
@@ -288,7 +344,10 @@ export const MOCKS = [
               ...createMembershipWithStatus('3', 'baseEventId1', 'accepted')
                 .event,
               name: 'Base Template Event',
-              recurrenceRule: { frequency: 'WEEKLY' },
+              recurrenceRule: {
+                __typename: 'RecurrenceRule',
+                frequency: 'WEEKLY',
+              },
             },
           },
           // Instance event membership
@@ -358,6 +417,8 @@ export const RECURRING_MODAL_MOCKS = [
     result: {
       data: {
         organization: {
+          __typename: 'Organization',
+          id: 'orgId',
           events: {
             edges: [
               { node: recurringInstanceEvent },
@@ -477,6 +538,8 @@ export const MEMBERSHIP_LOOKUP_MOCKS = [
     result: {
       data: {
         organization: {
+          __typename: 'Organization',
+          id: 'orgId',
           events: {
             edges: [
               { node: recurringInstanceEvent },
@@ -484,6 +547,7 @@ export const MEMBERSHIP_LOOKUP_MOCKS = [
               // Add another instance that references the same base
               {
                 node: {
+                  __typename: 'Event',
                   id: 'eventInstanceId2',
                   name: 'Recurring Event Instance 2',
                   startAt: '2044-11-08T10:00:00.000Z',
@@ -492,11 +556,13 @@ export const MEMBERSHIP_LOOKUP_MOCKS = [
                   description: 'Another instance of recurring event',
                   isRecurringEventTemplate: false,
                   baseEvent: {
+                    __typename: 'Event',
                     id: 'baseEventId1',
                     isRecurringEventTemplate: true,
                   },
                   volunteerGroups: [
                     {
+                      __typename: 'EventVolunteerGroup',
                       id: 'recurringGroupId1',
                       name: 'Recurring Group 1',
                       description: 'desc',
@@ -505,7 +571,10 @@ export const MEMBERSHIP_LOOKUP_MOCKS = [
                     },
                   ],
                   volunteers: [],
-                  recurrenceRule: { frequency: 'WEEKLY' },
+                  recurrenceRule: {
+                    __typename: 'RecurrenceRule',
+                    frequency: 'WEEKLY',
+                  },
                 },
               },
             ],
@@ -521,17 +590,22 @@ export const MEMBERSHIP_LOOKUP_MOCKS = [
         getVolunteerMembership: [
           // Base event membership (should cascade to instances)
           {
+            __typename: 'VolunteerMembership',
             id: 'baseMembership1',
             status: 'accepted',
-            event: { id: 'baseEventId1' },
+            event: { __typename: 'Event', id: 'baseEventId1' },
             group: null,
           },
           // Base event group membership (should cascade to instances)
           {
+            __typename: 'VolunteerMembership',
             id: 'baseMembership2',
             status: 'requested',
-            event: { id: 'baseEventId1' },
-            group: { id: 'recurringGroupId1' },
+            event: { __typename: 'Event', id: 'baseEventId1' },
+            group: {
+              __typename: 'EventVolunteerGroup',
+              id: 'recurringGroupId1',
+            },
           },
         ],
       },
@@ -545,6 +619,8 @@ export const MEMBERSHIP_STATUS_MOCKS = [
     result: {
       data: {
         organization: {
+          __typename: 'Organization',
+          id: 'orgId',
           events: {
             edges: [{ node: event1 }, { node: event2 }],
           },
@@ -558,22 +634,25 @@ export const MEMBERSHIP_STATUS_MOCKS = [
       data: {
         getVolunteerMembership: [
           {
+            __typename: 'VolunteerMembership',
             id: 'membership1',
             status: 'accepted',
-            event: { id: 'eventId1' },
+            event: { __typename: 'Event', id: 'eventId1' },
             group: null,
           },
           {
+            __typename: 'VolunteerMembership',
             id: 'membership2',
             status: 'rejected',
-            event: { id: 'eventId2' },
-            group: { id: 'groupId2' },
+            event: { __typename: 'Event', id: 'eventId2' },
+            group: { __typename: 'EventVolunteerGroup', id: 'groupId2' },
           },
           {
+            __typename: 'VolunteerMembership',
             id: 'membership3',
             status: 'requested',
-            event: { id: 'eventId1' },
-            group: { id: 'groupId1' },
+            event: { __typename: 'Event', id: 'eventId1' },
+            group: { __typename: 'EventVolunteerGroup', id: 'groupId1' },
           },
         ],
       },
@@ -585,7 +664,13 @@ export const EMPTY_MOCKS = [
   {
     ...eventsQuery,
     result: {
-      data: { organization: { events: { edges: [] } } },
+      data: {
+        organization: {
+          __typename: 'Organization',
+          id: 'orgId',
+          events: { edges: [] },
+        },
+      },
     },
   },
 ];
@@ -603,6 +688,8 @@ export const CREATE_ERROR_MOCKS = [
     result: {
       data: {
         organization: {
+          __typename: 'Organization',
+          id: 'orgId',
           events: {
             edges: [{ node: event1 }, { node: event2 }, { node: event3 }],
           },

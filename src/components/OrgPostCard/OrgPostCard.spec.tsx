@@ -238,7 +238,7 @@ describe('OrgPostCard Component', () => {
 
   const renderComponentVideo = (): RenderResult => {
     return render(
-      <MockedProvider mocks={[userMock as MockedResponse]} addTypename={false}>
+      <MockedProvider mocks={[userMock as MockedResponse]}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={videoPost} />
         </I18nextProvider>
@@ -333,7 +333,7 @@ describe('OrgPostCard Component', () => {
 
   const renderComponent = (): RenderResult => {
     return render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={mockPost} />
         </I18nextProvider>
@@ -399,7 +399,7 @@ describe('OrgPostCard Component', () => {
       };
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard post={postWithoutImage} />
           </I18nextProvider>
@@ -448,10 +448,7 @@ describe('OrgPostCard Component', () => {
       };
 
       render(
-        <MockedProvider
-          mocks={[userMock as MockedResponse]}
-          addTypename={false}
-        >
+        <MockedProvider mocks={[userMock as MockedResponse]}>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard post={simplePost} />
           </I18nextProvider>
@@ -536,7 +533,7 @@ describe('OrgPostCard Component', () => {
 
     it('deletes a post successfully', async () => {
       render(
-        <MockedProvider mocks={[successMock]} addTypename={false}>
+        <MockedProvider mocks={[successMock]}>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard post={mockPost} />
           </I18nextProvider>
@@ -574,7 +571,7 @@ describe('OrgPostCard Component', () => {
 
     it('handles delete error gracefully', async () => {
       render(
-        <MockedProvider mocks={[errorMock]} addTypename={false}>
+        <MockedProvider mocks={[errorMock]}>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard post={mockPost} />
           </I18nextProvider>
@@ -600,7 +597,7 @@ describe('OrgPostCard Component', () => {
 
     it('handles null response gracefully', async () => {
       render(
-        <MockedProvider mocks={[nullResponseMock]} addTypename={false}>
+        <MockedProvider mocks={[nullResponseMock]}>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard post={mockPost} />
           </I18nextProvider>
@@ -627,7 +624,7 @@ describe('OrgPostCard Component', () => {
 
     it('closes delete modal when cancel is clicked', async () => {
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard post={mockPost} />
           </I18nextProvider>
@@ -703,7 +700,7 @@ describe('OrgPostCard Pin Toggle and update post Functionality ', () => {
     post: InterfacePost = mockPost,
   ): void => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={post} />
         </I18nextProvider>
@@ -890,7 +887,7 @@ describe('OrgPostCard Pin Toggle and update post Functionality ', () => {
 
   it('updates post successfully', async () => {
     render(
-      <MockedProvider mocks={[updateMock]} addTypename={false}>
+      <MockedProvider mocks={[updateMock]}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={mockPost} />
         </I18nextProvider>
@@ -927,7 +924,7 @@ describe('OrgPostCard Pin Toggle and update post Functionality ', () => {
 
   it('deletes post successfully', async () => {
     render(
-      <MockedProvider mocks={[deleteMock]} addTypename={false}>
+      <MockedProvider mocks={[deleteMock]}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={mockPost} />
         </I18nextProvider>
@@ -974,7 +971,7 @@ describe('OrgPostCard Pin Toggle and update post Functionality ', () => {
     };
 
     render(
-      <MockedProvider mocks={[errorMock]} addTypename={false}>
+      <MockedProvider mocks={[errorMock]}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={mockPost} />
         </I18nextProvider>
@@ -1158,7 +1155,7 @@ describe('OrgPostCard Additional Coverage Tests', () => {
 
   it('should cover attachment processing in updatePost', async () => {
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={mockPost} />
         </I18nextProvider>
@@ -1216,7 +1213,7 @@ describe('OrgPostCard Additional Coverage Tests', () => {
     };
 
     render(
-      <MockedProvider mocks={[updateMock]} addTypename={false}>
+      <MockedProvider mocks={[updateMock]}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={mockPost} />
         </I18nextProvider>
@@ -1261,7 +1258,7 @@ describe('OrgPostCard Additional Coverage Tests', () => {
     };
 
     render(
-      <MockedProvider mocks={[errorMock]} addTypename={false}>
+      <MockedProvider mocks={[errorMock]}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={mockPost} />
         </I18nextProvider>
@@ -1298,7 +1295,7 @@ describe('OrgPostCard Additional Coverage Tests', () => {
 
   it('should handle close menu option', async () => {
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={mockPost} />
         </I18nextProvider>
@@ -1336,7 +1333,7 @@ describe('OrgPostCard Additional Coverage Tests', () => {
     };
 
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={mockWithUrl} />
         </I18nextProvider>
@@ -1378,7 +1375,7 @@ describe('OrgPostCard Additional Coverage Tests', () => {
     };
 
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={mockPost} />
         </I18nextProvider>
@@ -1427,7 +1424,7 @@ describe('OrgPostCard Additional Coverage Tests', () => {
     };
 
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={postWithoutUpdatedAt} />
         </I18nextProvider>
@@ -1457,7 +1454,7 @@ describe('OrgPostCard Additional Coverage Tests', () => {
     };
 
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={postWithNullCaption} />
         </I18nextProvider>
@@ -1497,7 +1494,7 @@ describe('OrgPostCard Additional Coverage Tests', () => {
     };
 
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={postWithBothAttachments} />
         </I18nextProvider>
@@ -1556,7 +1553,7 @@ describe('OrgPostCard Additional Coverage Tests', () => {
     };
 
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={videoPost} />
         </I18nextProvider>
@@ -1573,7 +1570,7 @@ describe('OrgPostCard Additional Coverage Tests', () => {
 
   it('should handle edit modal cancel', async () => {
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={mockPost} />
         </I18nextProvider>
@@ -1620,7 +1617,7 @@ describe('OrgPostCard Additional Coverage Tests', () => {
     };
 
     render(
-      <MockedProvider mocks={[updateMock]} addTypename={false}>
+      <MockedProvider mocks={[updateMock]}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={mockPost} />
         </I18nextProvider>
@@ -1680,7 +1677,7 @@ describe('OrgPostCard Additional Coverage Tests', () => {
 
   it('should handle video upload in edit modal', async () => {
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={mockPost} />
         </I18nextProvider>
@@ -1731,7 +1728,7 @@ describe('OrgPostCard Additional Coverage Tests', () => {
     };
 
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={pinnedPost} />
         </I18nextProvider>
@@ -1745,7 +1742,7 @@ describe('OrgPostCard Additional Coverage Tests', () => {
 
   it('should trigger modal onHide callback', async () => {
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <I18nextProvider i18n={i18nForTest}>
           <OrgPostCard post={mockPost} />
         </I18nextProvider>
@@ -1856,7 +1853,7 @@ describe('OrgPostCard - Additional Coverage for Uncovered Lines', () => {
       };
 
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard post={longCaptionPost} />
           </I18nextProvider>
@@ -1892,7 +1889,7 @@ describe('OrgPostCard - Additional Coverage for Uncovered Lines', () => {
       };
 
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard post={longCaptionPost} />
           </I18nextProvider>
@@ -1920,7 +1917,7 @@ describe('OrgPostCard - Additional Coverage for Uncovered Lines', () => {
       };
 
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard post={shortCaptionPost} />
           </I18nextProvider>
@@ -1961,7 +1958,7 @@ describe('OrgPostCard - Additional Coverage for Uncovered Lines', () => {
       };
 
       render(
-        <MockedProvider mocks={[updateMockWithAttachment]} addTypename={false}>
+        <MockedProvider mocks={[updateMockWithAttachment]}>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard post={mockPost} />
           </I18nextProvider>
@@ -2033,7 +2030,7 @@ describe('OrgPostCard - Additional Coverage for Uncovered Lines', () => {
       };
 
       render(
-        <MockedProvider mocks={[updateMockWithAttachment]} addTypename={false}>
+        <MockedProvider mocks={[updateMockWithAttachment]}>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard post={mockPost} />
           </I18nextProvider>
@@ -2092,7 +2089,7 @@ describe('OrgPostCard - Additional Coverage for Uncovered Lines', () => {
       };
 
       render(
-        <MockedProvider mocks={[updateMock]} addTypename={false}>
+        <MockedProvider mocks={[updateMock]}>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard post={mockPost} />
           </I18nextProvider>
@@ -2142,7 +2139,7 @@ describe('OrgPostCard - Additional Coverage for Uncovered Lines', () => {
       };
 
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard post={videoPost} />
           </I18nextProvider>
@@ -2160,7 +2157,7 @@ describe('OrgPostCard - Additional Coverage for Uncovered Lines', () => {
       };
 
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard post={postWithoutCreator} />
           </I18nextProvider>
@@ -2192,7 +2189,7 @@ describe('OrgPostCard - Additional Coverage for Uncovered Lines', () => {
       };
 
       render(
-        <MockedProvider mocks={[userLoadingMock]} addTypename={false}>
+        <MockedProvider mocks={[userLoadingMock]}>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard post={mockPost} />
           </I18nextProvider>

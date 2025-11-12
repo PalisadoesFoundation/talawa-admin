@@ -59,7 +59,7 @@ const renderPledgeDeleteModal = (
   props: InterfaceDeletePledgeModal,
 ): RenderResult => {
   return render(
-    <MockedProvider link={link} addTypename={false}>
+    <MockedProvider link={link}>
       <Provider store={store}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>

@@ -59,7 +59,7 @@ function renderWithProviders({
   initialRoute = '/orgdash/orgId',
 }: InterfaceRenderOptions): RenderResult {
   return render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <MemoryRouter initialEntries={[initialRoute]}>
         <Routes>
           <Route path="/orgdash/:orgId" element={<OrganizationDashboard />} />
@@ -186,7 +186,7 @@ describe('OrganizationDashboard', () => {
 
   it('redirects to "/" when orgId is missing from URL params', () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <MemoryRouter initialEntries={['/orgdash/']}>
           <Routes>
             <Route
@@ -204,7 +204,7 @@ describe('OrganizationDashboard', () => {
 
   it('redirects to "/" when orgId is undefined', () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <MemoryRouter initialEntries={['/orgdash']}>
           <Routes>
             <Route path="/orgdash" element={<OrganizationDashboard />} />
@@ -322,7 +322,7 @@ describe('OrganizationDashboard', () => {
         : mock,
     );
     rerender(
-      <MockedProvider mocks={EMPTY_REQUESTS_MOCK} addTypename={false}>
+      <MockedProvider mocks={EMPTY_REQUESTS_MOCK}>
         <MemoryRouter initialEntries={['/orgdash/orgId']}>
           <Routes>
             <Route path="/orgdash/:orgId" element={<OrganizationDashboard />} />

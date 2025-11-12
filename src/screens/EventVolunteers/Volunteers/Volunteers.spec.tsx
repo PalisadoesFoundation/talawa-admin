@@ -39,7 +39,7 @@ const debounceWait = async (ms = 300): Promise<void> => {
 
 const renderVolunteers = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/event/orgId/eventId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -79,7 +79,7 @@ describe('Testing Volunteers Screen', () => {
   it('should redirect to fallback URL if URL params are undefined', async () => {
     vi.mocked(useParams).mockReturnValue({ orgId: '', eventId: '' });
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/event/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>

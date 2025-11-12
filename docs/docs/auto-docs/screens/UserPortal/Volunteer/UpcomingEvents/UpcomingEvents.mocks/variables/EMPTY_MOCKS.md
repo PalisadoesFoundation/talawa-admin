@@ -6,7 +6,7 @@
 
 > `const` **EMPTY\_MOCKS**: `object`[]
 
-Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts:584](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts#L584)
+Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts:663](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts#L663)
 
 ## Type Declaration
 
@@ -46,6 +46,10 @@ Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mock
 
 > **organization**: `object`
 
+#### result.data.organization.\_\_typename
+
+> **\_\_typename**: `string` = `'Organization'`
+
 #### result.data.organization.events
 
 > **events**: `object`
@@ -53,3 +57,7 @@ Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mock
 #### result.data.organization.events.edges
 
 > **edges**: `any`[] = `[]`
+
+#### result.data.organization.id
+
+> **id**: `string` = `'orgId'`

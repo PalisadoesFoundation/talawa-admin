@@ -133,7 +133,7 @@ const generateNotifications = (
 describe('Notification Component', () => {
   it('should render skeleton loader while loading', () => {
     const { container } = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <MemoryRouter>
           <Notification />
         </MemoryRouter>
@@ -146,7 +146,7 @@ describe('Notification Component', () => {
 
   it('should render "You\'re all caught up!" when there are no notifications', async () => {
     render(
-      <MockedProvider mocks={mocks([])} addTypename={false}>
+      <MockedProvider mocks={mocks([])}>
         <MemoryRouter>
           <Notification />
         </MemoryRouter>
@@ -161,7 +161,7 @@ describe('Notification Component', () => {
   it('should render a list of notifications', async () => {
     const notifications = generateNotifications(5, false);
     render(
-      <MockedProvider mocks={mocks(notifications)} addTypename={false}>
+      <MockedProvider mocks={mocks(notifications)}>
         <MemoryRouter>
           <Notification />
         </MemoryRouter>
@@ -210,10 +210,7 @@ describe('Notification Component', () => {
     };
 
     render(
-      <MockedProvider
-        mocks={[initialGet, markMock, refetchMock]}
-        addTypename={false}
-      >
+      <MockedProvider mocks={[initialGet, markMock, refetchMock]}>
         <MemoryRouter>
           <Notification />
         </MemoryRouter>
@@ -234,7 +231,7 @@ describe('Notification Component', () => {
   it('should handle pagination', async () => {
     const notifications = generateNotifications(10, false);
     render(
-      <MockedProvider mocks={mocks(notifications)} addTypename={false}>
+      <MockedProvider mocks={mocks(notifications)}>
         <MemoryRouter>
           <Notification />
         </MemoryRouter>
@@ -256,7 +253,7 @@ describe('Notification Component', () => {
   it('should disable prev button on first page and next button on last page', async () => {
     const notifications = generateNotifications(3, false);
     render(
-      <MockedProvider mocks={mocks(notifications)} addTypename={false}>
+      <MockedProvider mocks={mocks(notifications)}>
         <MemoryRouter>
           <Notification />
         </MemoryRouter>
@@ -272,7 +269,7 @@ describe('Notification Component', () => {
   it('should render empty list items to fill the space', async () => {
     const notifications = generateNotifications(3, true);
     const { container } = render(
-      <MockedProvider mocks={mocks(notifications)} addTypename={false}>
+      <MockedProvider mocks={mocks(notifications)}>
         <MemoryRouter>
           <Notification />
         </MemoryRouter>
@@ -296,7 +293,7 @@ describe('Notification Component', () => {
       .mockImplementation(() => {});
 
     render(
-      <MockedProvider mocks={mocks(notifications, true)} addTypename={false}>
+      <MockedProvider mocks={mocks(notifications, true)}>
         <MemoryRouter>
           <Notification />
         </MemoryRouter>

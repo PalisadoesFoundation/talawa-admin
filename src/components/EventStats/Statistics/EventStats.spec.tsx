@@ -23,7 +23,7 @@ describe('Testing Event Stats', () => {
 
   it('The stats should be rendered properly', async () => {
     const { queryByText } = render(
-      <MockedProvider mocks={mockData} addTypename={false}>
+      <MockedProvider mocks={mockData}>
         <BrowserRouter>
           <EventStats {...props} />
         </BrowserRouter>

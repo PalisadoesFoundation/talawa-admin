@@ -73,7 +73,7 @@ describe('ChangeLanguageDropDown', () => {
 
   it('renders with default language (English)', () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
@@ -88,7 +88,7 @@ describe('ChangeLanguageDropDown', () => {
     });
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
@@ -106,7 +106,7 @@ describe('ChangeLanguageDropDown', () => {
 
   it('successfully changes language', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
@@ -125,7 +125,7 @@ describe('ChangeLanguageDropDown', () => {
 
   it('renders all available languages in the dropdown', () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
@@ -160,7 +160,7 @@ describe('ChangeLanguageDropDown', () => {
     ];
 
     render(
-      <MockedProvider mocks={mocksWithoutAvatar} addTypename={false}>
+      <MockedProvider mocks={mocksWithoutAvatar}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
@@ -199,7 +199,7 @@ describe('ChangeLanguageDropDown', () => {
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     render(
-      <MockedProvider mocks={errorMocks} addTypename={false}>
+      <MockedProvider mocks={errorMocks}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
@@ -248,7 +248,7 @@ describe('ChangeLanguageDropDown', () => {
       ];
 
       render(
-        <MockedProvider mocks={mocksWithoutAvatar} addTypename={false}>
+        <MockedProvider mocks={mocksWithoutAvatar}>
           <ChangeLanguageDropDown />
         </MockedProvider>,
       );
@@ -282,7 +282,7 @@ describe('ChangeLanguageDropDown', () => {
     });
 
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );

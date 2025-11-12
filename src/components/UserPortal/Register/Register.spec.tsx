@@ -107,7 +107,7 @@ async function waitForAsync(): Promise<void> {
 describe('Testing Register Component [User Portal]', () => {
   it('Component should be rendered properly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -123,7 +123,7 @@ describe('Testing Register Component [User Portal]', () => {
 
   it('Expect the mode to be changed to Login', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -143,7 +143,7 @@ describe('Testing Register Component [User Portal]', () => {
 
   it('Expect toast.error to be called if email input is empty', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -163,7 +163,7 @@ describe('Testing Register Component [User Portal]', () => {
 
   it('Expect toast.error to be called if password input is empty', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -184,7 +184,7 @@ describe('Testing Register Component [User Portal]', () => {
 
   it('Expect toast.error to be called if first name input is empty', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -209,7 +209,7 @@ describe('Testing Register Component [User Portal]', () => {
 
   it('Expect toast.error to be called if last name input is empty', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -238,7 +238,7 @@ describe('Testing Register Component [User Portal]', () => {
 
   it("Expect toast.error to be called if confirmPassword doesn't match with password", async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -273,7 +273,7 @@ describe('Testing Register Component [User Portal]', () => {
 
   it('Expect toast.success to be called if valid credentials are entered.', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -315,7 +315,7 @@ describe('Testing Register Component [User Portal]', () => {
   // Error Test Case
   it('Expect toast.error to be called if GraphQL mutation fails', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={ERROR_MOCKS}>
+      <MockedProvider mocks={ERROR_MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

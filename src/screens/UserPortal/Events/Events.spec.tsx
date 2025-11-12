@@ -366,7 +366,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should render the Events screen properly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -390,7 +390,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should open and close the create event modal', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -426,7 +426,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should create an all-day event successfully', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -478,7 +478,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should handle create event error', async () => {
     render(
-      <MockedProvider addTypename={false} link={createEventErrorLink}>
+      <MockedProvider link={createEventErrorLink}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -530,7 +530,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should toggle all-day checkbox and enable/disable time pickers', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -573,7 +573,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should toggle public, registerable, recurring, and createChat checkboxes', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -615,7 +615,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should handle date picker changes', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -660,7 +660,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should handle time picker changes when all-day is disabled', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -711,7 +711,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should handle null date values gracefully', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -758,7 +758,7 @@ describe('Testing Events Screen [User Portal]', () => {
       .mockImplementation(() => {});
 
     render(
-      <MockedProvider addTypename={false} link={errorLink}>
+      <MockedProvider link={errorLink}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -787,7 +787,7 @@ describe('Testing Events Screen [User Portal]', () => {
       .mockImplementation(() => {});
 
     render(
-      <MockedProvider addTypename={false} link={rateLimitLink}>
+      <MockedProvider link={rateLimitLink}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -822,7 +822,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should handle input changes for title, description, and location', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -865,7 +865,7 @@ describe('Testing Events Screen [User Portal]', () => {
     setItem('role', 'administrator');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -893,7 +893,7 @@ describe('Testing Events Screen [User Portal]', () => {
     setItem('role', 'user');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>

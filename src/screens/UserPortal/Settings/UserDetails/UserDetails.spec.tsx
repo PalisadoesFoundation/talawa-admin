@@ -53,7 +53,7 @@ describe('UserDetailsForm', () => {
 
   it('renders all form fields with correct initial values', () => {
     render(
-      <MockedProvider mocks={MOCKS1} addTypename={false}>
+      <MockedProvider mocks={MOCKS1}>
         <UserDetailsForm {...defaultProps} />
       </MockedProvider>,
     );
@@ -80,7 +80,7 @@ describe('UserDetailsForm', () => {
 
   it('handles password field changes', async () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} />
       </MockedProvider>,
     );
@@ -96,7 +96,7 @@ describe('UserDetailsForm', () => {
 
   it('disables email field', () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} />
       </MockedProvider>,
     );
@@ -106,7 +106,7 @@ describe('UserDetailsForm', () => {
 
   it('shows/hides action buttons based on isUpdated prop', () => {
     const { rerender } = render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} isUpdated={false} />
       </MockedProvider>,
     );
@@ -116,7 +116,7 @@ describe('UserDetailsForm', () => {
     expect(screen.queryByTestId('updateUserBtn')).not.toBeInTheDocument();
 
     rerender(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} isUpdated={true} />
       </MockedProvider>,
     );
@@ -128,7 +128,7 @@ describe('UserDetailsForm', () => {
 
   it('handles form submission correctly', async () => {
     render(
-      <MockedProvider mocks={UPDATE_MOCK} addTypename={false}>
+      <MockedProvider mocks={UPDATE_MOCK}>
         <UserDetailsForm {...defaultProps} isUpdated={true} />
       </MockedProvider>,
     );
@@ -141,7 +141,7 @@ describe('UserDetailsForm', () => {
 
   it('handles reset changes correctly', async () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} isUpdated={true} />
       </MockedProvider>,
     );
@@ -154,7 +154,7 @@ describe('UserDetailsForm', () => {
 
   it('renders select fields with correct options', () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} />
       </MockedProvider>,
     );
@@ -180,7 +180,7 @@ describe('UserDetailsForm', () => {
 
   it('validates birth date to not be in the future', () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} />
       </MockedProvider>,
     );
@@ -199,7 +199,7 @@ describe('UserDetailsForm', () => {
     };
 
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} userDetails={userDetailsWithHtml} />
       </MockedProvider>,
     );
@@ -210,7 +210,7 @@ describe('UserDetailsForm', () => {
 
   it('handles empty user details gracefully', () => {
     render(
-      <MockedProvider mocks={MOCKS2} addTypename={false}>
+      <MockedProvider mocks={MOCKS2}>
         <UserDetailsForm
           {...defaultProps}
           userDetails={{ ...MOCKS2[0].result.data.currentUser, password: '' }}
@@ -225,7 +225,7 @@ describe('UserDetailsForm', () => {
 
   it('handles address fields changes correctly', async () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} />
       </MockedProvider>,
     );
@@ -241,7 +241,7 @@ describe('UserDetailsForm', () => {
 
   it('handles all form field changes correctly', async () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} />
       </MockedProvider>,
     );
@@ -368,7 +368,7 @@ describe('UserDetailsForm', () => {
     };
 
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...propsWithNullBirthDate} />
       </MockedProvider>,
     );
@@ -379,7 +379,7 @@ describe('UserDetailsForm', () => {
 
   it('renders address section with correct heading', () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} />
       </MockedProvider>,
     );

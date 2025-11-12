@@ -224,7 +224,7 @@ const mockParamsState = {
 
 const renderFundCampaignPledge = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter
         initialEntries={['/fundCampaignPledge/orgId/fundCampaignId']}
       >
@@ -275,7 +275,7 @@ describe('Testing Campaign Pledge Screen', () => {
     mockParamsState.fundCampaignId = '';
 
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/fundCampaignPledge/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

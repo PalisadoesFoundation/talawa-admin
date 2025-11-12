@@ -85,7 +85,7 @@ describe('Testing User List Card', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={123} {...props} />
@@ -138,7 +138,7 @@ describe('Testing User List Card', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={errorLink}>
+      <MockedProvider link={errorLink}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={123} {...props} />
@@ -178,7 +178,7 @@ describe('Testing User List Card', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={errorLink}>
+      <MockedProvider link={errorLink}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={456} {...props} />
@@ -228,7 +228,7 @@ describe('Testing User List Card', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={nullDataLink}>
+      <MockedProvider link={nullDataLink}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={789} {...props} />
@@ -272,7 +272,7 @@ describe('Testing User List Card', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={undefinedDataLink}>
+      <MockedProvider link={undefinedDataLink}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={101} {...props} />
@@ -300,7 +300,7 @@ describe('Testing User List Card', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={999} {...props} />
@@ -347,7 +347,7 @@ describe('Testing User List Card', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={linkWithVariables}>
+      <MockedProvider link={linkWithVariables}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={202} {...props} />
@@ -387,7 +387,7 @@ describe('Testing User List Card', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={graphQLErrorLink}>
+      <MockedProvider link={graphQLErrorLink}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={303} {...props} />

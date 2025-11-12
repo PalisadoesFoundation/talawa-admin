@@ -72,7 +72,7 @@ describe('Testing the Super Dash List', () => {
     setItem('id', '123'); // Means the user is an admin
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <OrgListCard {...props} />
@@ -96,7 +96,7 @@ describe('Testing the Super Dash List', () => {
   test('Testing if the props data is not provided', () => {
     window.location.assign('/orgdash');
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <OrgListCard {...props} />
@@ -115,7 +115,7 @@ describe('Testing the Super Dash List', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <OrgListCard {...imageNullProps} />
@@ -129,7 +129,7 @@ describe('Testing the Super Dash List', () => {
 
   test('Testing if user is redirected to orgDash screen', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <OrgListCard {...props} />
