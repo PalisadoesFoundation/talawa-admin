@@ -19,7 +19,10 @@ const serve = spawn(command, ["run", "serve"], {
   },
 });
 
-
+serve.on("error", (err) => {
+  console.error(`Failed to start server: ${err.message}`);
+  process.exit(1);
+});
 serve.on("close", (code) => {
   console.log(`Server exited with code ${code}`);
   process.exit(code);
