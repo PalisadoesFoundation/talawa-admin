@@ -93,8 +93,7 @@
     "generate-docs": "typedoc && npm run postgenerate-docs && node scripts/docs/fix-readme-links.js",
     "cypress:run": "cypress run && nyc report --reporter=text-summary",
     "cypress:open": "cypress open",
-    "start-server-test": "start-server-and-test serve http://localhost:$PORT",
-    "start-server": "dotenv -e .env -- node -e \"const port=process.env.PORT||4321; require('child_process').execSync('npm run start-server-test', {stdio:'inherit', env: {...process.env, PORT: port}})\"",
+    "start-server": "dotenv -e .env -- start-server-and-test serve http://localhost:${PORT:-4321}",
     "cy:open": "npm run start-server cypress:open",
     "cy:run": "cross-env CYPRESS_COVERAGE=true npm run start-server cypress:run",
     "check:pom": "node scripts/githooks/check_pom.js"

@@ -1,6 +1,9 @@
 import { defineConfig } from 'cypress';
 import fs from 'node:fs';
 import codeCoverageTask from '@cypress/code-coverage/task';
+import dotenv from 'dotenv';
+dotenv.config();
+
 const PORT = process.env.PORT || '4321';
 
 export default defineConfig({

@@ -1,6 +1,6 @@
 FROM node:24 AS build
 
-ARG PORT
+ARG PORT=4321
 ENV PORT=${PORT}
 
 WORKDIR /usr/src/app
