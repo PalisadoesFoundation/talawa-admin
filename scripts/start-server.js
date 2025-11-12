@@ -7,9 +7,9 @@ dotenv.config({ path: path.resolve(process.cwd(), ".env") });
 const parsed = parseInt(process.env.PORT, 10);
 const PORT = !isNaN(parsed) && parsed >= 1024 && parsed <= 65535 ? parsed : 4321;
 
-const args = ['start-server-and-test', 'serve', `http://localhost:${PORT}`];
+const args = ['start-server-and-test', 'serve', `http://localhost:${PORT}`, "test"];
 
-const serve = spawn('npx', args, { stdio: 'inherit', shell: true });
+const serve = spawn('npx', args, { stdio: 'inherit' });
 serve.on("error", (err) => {
   console.error(`Failed to start server: ${err.message}`);
   process.exit(1);
