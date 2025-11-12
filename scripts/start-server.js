@@ -4,7 +4,8 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: path.resolve(process.cwd(), ".env") });
 
-const PORT = typeof process.env.PORT === Number ? parseInt(process.env.PORT, 10) : 4321;
+const parsed = parseInt(process.env.PORT, 10);
+const PORT = !isNaN(parsed) && parsed >= 1 && parsed <= 65535 ? parsed : 4321;
 
 console.log(`Starting dev server on port ${PORT}...`);
 
