@@ -106,8 +106,8 @@ describe('Testing ItemDeleteModal', () => {
       },
     };
 
-    successLink = new StaticMockLink(MOCKS);
-    errorLink = new StaticMockLink(MOCKS_ERROR);
+    successLink = new StaticMockLink(MOCKS, true);
+    errorLink = new StaticMockLink(MOCKS_ERROR, true);
   });
 
   it('should render ItemDeleteModal', () => {

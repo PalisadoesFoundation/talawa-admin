@@ -69,24 +69,24 @@ vi.mock('react-infinite-scroll-component', () => ({
   },
 }));
 
-const link = new StaticMockLink(MOCKS, false);
-const link2 = new StaticMockLink(MOCKS_ERROR_ASSIGNED_MEMBERS, false);
-const link3 = new StaticMockLink(MOCKS_SUCCESS_UNASSIGN_USER_TAG, false);
-const link4 = new StaticMockLink(MOCKS_SUCCESS_UPDATE_USER_TAG, false);
-const link5 = new StaticMockLink(MOCKS_SUCCESS_REMOVE_USER_TAG, false);
-const link6 = new StaticMockLink(MOCKS_WITH_ANCESTOR_TAGS, false);
-const link7 = new StaticMockLink(MOCKS_INFINITE_SCROLL_PAGINATION, false);
-const link8 = new StaticMockLink(MOCKS_ERROR_OBJECT, false);
-const link9 = new StaticMockLink(MOCKS_NULL_USERS_ASSIGNED_TO, false);
-const link10 = new StaticMockLink(MOCKS_EMPTY_ASSIGNED_MEMBERS_ARRAY, false);
-const link11 = new StaticMockLink(MOCKS_EMPTY_EDGES_ARRAY, false);
-const link12 = new StaticMockLink(MOCKS_EMPTY_PAGE_INFO, false);
-const link13 = new StaticMockLink(MOCKS_NULL_ANCESTOR_TAGS, false);
-const link14 = new StaticMockLink(MOCKS_UNDEFINED_DATA, false);
-const link15 = new StaticMockLink(MOCKS_NULL_DATA, false);
-const link16 = new StaticMockLink(MOCKS_ERROR_UNASSIGN_USER_TAG, false);
-const link17 = new StaticMockLink(MOCKS_ERROR_UPDATE_USER_TAG, false);
-const link18 = new StaticMockLink(MOCKS_ERROR_REMOVE_USER_TAG, false);
+const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(MOCKS_ERROR_ASSIGNED_MEMBERS, true);
+const link3 = new StaticMockLink(MOCKS_SUCCESS_UNASSIGN_USER_TAG, true);
+const link4 = new StaticMockLink(MOCKS_SUCCESS_UPDATE_USER_TAG, true);
+const link5 = new StaticMockLink(MOCKS_SUCCESS_REMOVE_USER_TAG, true);
+const link6 = new StaticMockLink(MOCKS_WITH_ANCESTOR_TAGS, true);
+const link7 = new StaticMockLink(MOCKS_INFINITE_SCROLL_PAGINATION, true);
+const link8 = new StaticMockLink(MOCKS_ERROR_OBJECT, true);
+const link9 = new StaticMockLink(MOCKS_NULL_USERS_ASSIGNED_TO, true);
+const link10 = new StaticMockLink(MOCKS_EMPTY_ASSIGNED_MEMBERS_ARRAY, true);
+const link11 = new StaticMockLink(MOCKS_EMPTY_EDGES_ARRAY, true);
+const link12 = new StaticMockLink(MOCKS_EMPTY_PAGE_INFO, true);
+const link13 = new StaticMockLink(MOCKS_NULL_ANCESTOR_TAGS, true);
+const link14 = new StaticMockLink(MOCKS_UNDEFINED_DATA, true);
+const link15 = new StaticMockLink(MOCKS_NULL_DATA, true);
+const link16 = new StaticMockLink(MOCKS_ERROR_UNASSIGN_USER_TAG, true);
+const link17 = new StaticMockLink(MOCKS_ERROR_UPDATE_USER_TAG, true);
+const link18 = new StaticMockLink(MOCKS_ERROR_REMOVE_USER_TAG, true);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -491,7 +491,7 @@ describe('Manage Tag Page', () => {
     };
 
     const mocks = [initialMock, searchMock];
-    const searchLink = new StaticMockLink(mocks, false);
+    const searchLink = new StaticMockLink(mocks, true);
 
     renderManageTag(searchLink);
 
@@ -641,7 +641,7 @@ describe('Manage Tag Page', () => {
     };
 
     const mocks = [initialMock, searchMock];
-    const searchLink = new StaticMockLink(mocks, false);
+    const searchLink = new StaticMockLink(mocks, true);
 
     renderManageTag(searchLink);
 
@@ -939,11 +939,6 @@ describe('Manage Tag Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('allTagsBtn')).toBeInTheDocument();
     });
-  });
-
-  it.skip('handles infinite scroll with pagination correctly', async () => {
-    // This test is a duplicate of the earlier "Fetches more assigned members with infinite scroll" test
-    // Skipped to avoid redundant coverage and reduce test runtime
   });
 
   it('handles non-Error object in catch block', async () => {

@@ -30,8 +30,8 @@ vi.mock('react-toastify', () => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 
-const link1 = new StaticMockLink(PLEDGE_MODAL_MOCKS, false);
-const errorLink = new StaticMockLink(PLEDGE_MODAL_ERROR_MOCKS, false);
+const link1 = new StaticMockLink(PLEDGE_MODAL_MOCKS, true);
+const errorLink = new StaticMockLink(PLEDGE_MODAL_ERROR_MOCKS, true);
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
 );
@@ -509,7 +509,7 @@ describe('PledgeModal', () => {
       error: new Error('Update failed'),
     };
 
-    const mockLink = new StaticMockLink([updateErrorMock], false);
+    const mockLink = new StaticMockLink([updateErrorMock], true);
     const props = { ...pledgeProps[1], refetchPledge: vi.fn(), hide: vi.fn() };
     renderPledgeModal(mockLink, props);
 

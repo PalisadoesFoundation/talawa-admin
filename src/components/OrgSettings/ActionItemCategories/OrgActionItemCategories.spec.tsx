@@ -45,9 +45,9 @@ vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
   };
 });
 
-const link1 = new StaticMockLink(MOCKS);
-const link2 = new StaticMockLink(MOCKS_EMPTY);
-const link3 = new StaticMockLink(MOCKS_ERROR);
+const link1 = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(MOCKS_EMPTY, true);
+const link3 = new StaticMockLink(MOCKS_ERROR, true);
 const t = {
   ...JSON.parse(
     JSON.stringify(

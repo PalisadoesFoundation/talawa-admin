@@ -46,8 +46,8 @@ const t = {
 let modalProps: InterfaceVolunteerGroupModal[];
 
 beforeEach(() => {
-  successLink = new StaticMockLink(MOCKS);
-  errorLink = new StaticMockLink(MOCKS_ERROR);
+  successLink = new StaticMockLink(MOCKS, true);
+  errorLink = new StaticMockLink(MOCKS_ERROR, true);
 
   modalProps = [
     {

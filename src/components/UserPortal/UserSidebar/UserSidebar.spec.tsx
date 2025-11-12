@@ -172,7 +172,7 @@ describe('UserSidebar', () => {
   const createApolloClient = () =>
     new ApolloClient({
       cache: new InMemoryCache(),
-      link: new StaticMockLink(createCommunityMocks(), false),
+      link: new StaticMockLink(createCommunityMocks(), true),
     });
 
   beforeEach(() => {

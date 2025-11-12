@@ -101,10 +101,14 @@ const MOCKS = [
     result: {
       data: {
         organization: {
+          __typename: 'Organization',
           events: {
+            __typename: 'EventConnection',
             edges: [
               {
+                __typename: 'EventEdge',
                 node: {
+                  __typename: 'Event',
                   id: 'event1',
                   name: 'Test Event 1',
                   description: 'Test Description 1',
@@ -123,11 +127,13 @@ const MOCKS = [
                   recurrenceDescription: null,
                   recurrenceRule: null,
                   creator: {
+                    __typename: 'User',
                     id: 'user1',
                     name: 'Test User',
                   },
                   attachments: [],
                   organization: {
+                    __typename: 'Organization',
                     id: 'org123',
                     name: 'Test Org',
                   },
@@ -135,7 +141,9 @@ const MOCKS = [
                 cursor: 'cursor1',
               },
               {
+                __typename: 'EventEdge',
                 node: {
+                  __typename: 'Event',
                   id: 'event2',
                   name: 'Test Event 2',
                   description: 'Test Description 2',
@@ -154,11 +162,13 @@ const MOCKS = [
                   recurrenceDescription: null,
                   recurrenceRule: null,
                   creator: {
+                    __typename: 'User',
                     id: 'user2',
                     name: 'Test User 2',
                   },
                   attachments: [],
                   organization: {
+                    __typename: 'Organization',
                     id: 'org123',
                     name: 'Test Org',
                   },
@@ -167,6 +177,7 @@ const MOCKS = [
               },
             ],
             pageInfo: {
+              __typename: 'PageInfo',
               hasNextPage: false,
               endCursor: 'cursor2',
             },
@@ -184,6 +195,7 @@ const MOCKS = [
       data: {
         organizations: [
           {
+            __typename: 'Organization',
             id: 'org123',
             name: 'Test Organization',
             description: 'Test Description',
@@ -197,11 +209,13 @@ const MOCKS = [
             createdAt: '2024-01-01T00:00:00.000Z',
             updatedAt: '2024-01-01T00:00:00.000Z',
             creator: {
+              __typename: 'User',
               id: 'user1',
               name: 'Creator User',
               emailAddress: 'creator@test.com',
             },
             updater: {
+              __typename: 'User',
               id: 'user1',
               name: 'Creator User',
               emailAddress: 'creator@test.com',
@@ -327,9 +341,9 @@ const CREATE_EVENT_ERROR_MOCKS = [
   },
 ];
 
-const link = new StaticMockLink(MOCKS, false);
-const errorLink = new StaticMockLink(ERROR_MOCKS, false);
-const rateLimitLink = new StaticMockLink(RATE_LIMIT_MOCKS, false);
+const link = new StaticMockLink(MOCKS, true);
+const errorLink = new StaticMockLink(ERROR_MOCKS, true);
+const rateLimitLink = new StaticMockLink(RATE_LIMIT_MOCKS, true);
 const createEventErrorLink = new StaticMockLink(
   CREATE_EVENT_ERROR_MOCKS,
   false,
