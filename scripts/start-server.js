@@ -21,5 +21,5 @@ serve.on("close", (code) => {
   } else {
     console.log(`Server was terminated by a signal`);
     process.exit(1);
-}
+  }
 });
