@@ -16,7 +16,7 @@ serve.on("error", (err) => {
 });
 serve.on("close", (code) => {
   if (code !== null) {
-   console.log(`Server exited with code ${code}`);
+    console.log(`Server exited with code ${code}`);
     process.exit(code);
   } else {
     console.log(`Server was terminated by a signal`);
