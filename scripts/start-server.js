@@ -9,7 +9,14 @@ const PORT = !isNaN(parsed) && parsed >= 1024 && parsed <= 65535 ? parsed : 4321
 
 const args = ['start-server-and-test', 'serve', `http://localhost:${PORT}`, "test"];
 
-const serve = spawn('npx', args, { stdio: 'inherit' });
+const serve = spawn('npx', args, { 
+  stdio: 'inherit',
+  env: {
+    ...process.env,
+    PORT: PORT.toString(),
+  },
+});
+
 serve.on("error", (err) => {
   console.error(`Failed to start server: ${err.message}`);
   process.exit(1);
