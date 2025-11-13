@@ -8,14 +8,12 @@ If you are new to contributing to open source, please read the Open Source Guide
 
 <!-- toc -->
 
-- [Contributing to Talawa-Admin](#contributing-to-talawa-admin)
-  - [Table of Contents](#table-of-contents)
-  - [General](#general)
-  - [Linting and Formatting](#linting-and-formatting)
-  - [Testing:](#testing)
-    - [Vitest Testing](#vitest-testing)
-    - [Cypress End to End Testing](#cypress-end-to-end-testing)
-    - [Test Code Coverage:](#test-code-coverage)
+- [General](#general)
+- [Linting and Formatting](#linting-and-formatting)
+- [Testing:](#testing)
+  - [Vitest Testing](#vitest-testing)
+  - [Cypress End to End Testing](#cypress-end-to-end-testing)
+  - [Test Code Coverage:](#test-code-coverage)
 
 <!-- tocstop -->
 
