@@ -6,7 +6,7 @@
 
 > `const` **baseRecurringEvent**: `object`
 
-Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts:246](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts#L246)
+Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockData.ts:184](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockData.ts#L184)
 
 ## Type Declaration
 

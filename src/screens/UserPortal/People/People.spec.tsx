@@ -36,9 +36,18 @@ const DEFAULT_ORG_ID = '';
 const DEFAULT_SEARCH = '';
 const DEFAULT_FIRST = 5;
 
+interface InterfaceMemberEdgeProps {
+  cursor?: string;
+  id?: string;
+  name?: string;
+  role?: string;
+  avatarURL?: string | null;
+  emailAddress?: string | null;
+  node?: Record<string, unknown>;
+}
+
 // Helper for members edges
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const memberEdge = (props: any = {}) => ({
+const memberEdge = (props: InterfaceMemberEdgeProps = {}) => ({
   cursor: props.cursor || 'cursor1',
   node: {
     id: props.id || 'user-1',

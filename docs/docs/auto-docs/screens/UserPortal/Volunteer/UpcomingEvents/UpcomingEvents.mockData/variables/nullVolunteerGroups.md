@@ -2,21 +2,17 @@
 
 ***
 
-# Variable: baseEvent
+# Variable: nullVolunteerGroups
 
-> `const` **baseEvent**: `object`
+> `const` **nullVolunteerGroups**: `object`
 
-Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts:259](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts#L259)
+Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockData.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockData.ts#L102)
 
 ## Type Declaration
 
 ### \_\_typename
 
 > **\_\_typename**: `string` = `'Event'`
-
-### baseEvent
-
-> **baseEvent**: `any` = `null`
 
 ### description
 
@@ -26,6 +22,10 @@ Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mock
 
 > **endAt**: `string` = `'2044-10-30T12:00:00.000Z'`
 
+### id
+
+> **id**: `string` = `'nullEventId'`
+
 ### isRecurringEventTemplate
 
 > **isRecurringEventTemplate**: `boolean` = `false`
@@ -34,9 +34,9 @@ Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mock
 
 > **location**: `string` = `'Test Location'`
 
-### recurrenceRule
+### name
 
-> **recurrenceRule**: `any` = `null`
+> **name**: `string` = `'Event with Null Fields'`
 
 ### startAt
 
@@ -44,8 +44,8 @@ Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mock
 
 ### volunteerGroups
 
-> **volunteerGroups**: `object`[]
+> **volunteerGroups**: `any` = `null`
 
 ### volunteers
 
-> **volunteers**: `any`[] = `[]`
+> **volunteers**: `any` = `null`
