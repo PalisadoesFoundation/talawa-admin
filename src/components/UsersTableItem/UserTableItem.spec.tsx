@@ -16,9 +16,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import type * as RouterTypes from 'react-router';
-
 const { setItem } = useLocalStorage();
-
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -27,7 +25,6 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 const resetAndRefetchMock = vi.fn();
-
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -35,16 +32,13 @@ vi.mock('react-toastify', () => ({
     warning: vi.fn(),
   },
 }));
-
 Object.defineProperty(window, 'location', {
   value: {
     replace: vi.fn(),
   },
   writable: true,
 });
-
 const mockNavgatePush = vi.fn();
-
 vi.mock('react-router', async () => {
   const actual = (await vi.importActual('react-router')) as typeof RouterTypes;
   return {
@@ -52,17 +46,14 @@ vi.mock('react-router', async () => {
     useNavigate: () => mockNavgatePush,
   };
 });
-
 beforeEach(() => {
   setItem('SuperAdmin', true);
   setItem('id', '123');
 });
-
 afterEach(() => {
   localStorage.clear();
   vi.clearAllMocks();
 });
-
 describe('Testing User Table Item', () => {
   console.error = vi.fn((message) => {
     if (message.includes('validateDOMNesting')) {
@@ -100,9 +91,7 @@ describe('Testing User Table Item', () => {
         mobilePhoneNumber: null,
         homePhoneNumber: null,
         workPhoneNumber: null,
-
         createdOrganizations: [],
-
         organizationsWhereMember: {
           edges: [
             {
@@ -142,7 +131,6 @@ describe('Testing User Table Item', () => {
       loggedInUserId: '123',
       resetAndRefetch: resetAndRefetchMock,
     };
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -152,14 +140,12 @@ describe('Testing User Table Item', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
     await wait();
     expect(screen.getByText(/1/i)).toBeInTheDocument();
     expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
     expect(screen.getByText(/john@example.com/i)).toBeInTheDocument();
     expect(screen.getByTestId(`showJoinedOrgsBtn${123}`)).toBeInTheDocument();
   });
-
   test('Should render props and text elements test for the Joined Organizations Modal properly', async () => {
     const props: {
       user: InterfaceQueryUserListItem;
@@ -189,9 +175,7 @@ describe('Testing User Table Item', () => {
         mobilePhoneNumber: null,
         homePhoneNumber: null,
         workPhoneNumber: null,
-
         createdOrganizations: [],
-
         organizationsWhereMember: {
           edges: [
             {
@@ -231,7 +215,6 @@ describe('Testing User Table Item', () => {
       loggedInUserId: '123',
       resetAndRefetch: resetAndRefetchMock,
     };
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -239,13 +222,11 @@ describe('Testing User Table Item', () => {
         </I18nextProvider>
       </MockedProvider>,
     );
-
     await wait();
     const showJoinedOrgsBtn = screen.getByTestId(`showJoinedOrgsBtn${123}`);
     expect(showJoinedOrgsBtn).toBeInTheDocument();
     fireEvent.click(showJoinedOrgsBtn);
     expect(screen.getByTestId('modal-joined-org-123')).toBeInTheDocument();
-
     // Close using escape key and reopen
     fireEvent.keyDown(screen.getByTestId('modal-joined-org-123'), {
       key: 'Escape',
@@ -262,9 +243,7 @@ describe('Testing User Table Item', () => {
     expect(
       screen.queryByRole('dialog')?.className.includes('show'),
     ).toBeFalsy();
-
     fireEvent.click(showJoinedOrgsBtn);
-
     // Expect the following to exist in modal
     const inputBox = screen.getByTestId(`searchByNameJoinedOrgs`);
     expect(inputBox).toBeInTheDocument();
@@ -289,7 +268,6 @@ describe('Testing User Table Item', () => {
     expect(
       screen.queryByText(/Joined Organization 2/i),
     ).not.toBeInTheDocument();
-
     // Search for an Organization which does not exist
     fireEvent.keyUp(inputBox, {
       key: 'Enter',
@@ -298,7 +276,6 @@ describe('Testing User Table Item', () => {
     expect(
       screen.getByText(`No results found for "Joined Organization 3"`),
     ).toBeInTheDocument();
-
     // Now clear the search box
     fireEvent.keyUp(inputBox, { key: 'Enter', target: { value: '' } });
     fireEvent.keyUp(inputBox, { target: { value: '' } });
@@ -306,14 +283,12 @@ describe('Testing User Table Item', () => {
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorabc`));
     expect(toast.success).toHaveBeenCalledWith('Profile Page Coming Soon !');
-
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Joined Organization 1/i));
     expect(window.location.replace).toHaveBeenCalledWith('/orgdash/abc');
     expect(mockNavgatePush).toHaveBeenCalledWith('/orgdash/abc');
     fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
   });
-
   test('Remove user from Organization should function properly in Organizations Joined Modal', async () => {
     const props: {
       user: InterfaceQueryUserListItem;
@@ -343,9 +318,7 @@ describe('Testing User Table Item', () => {
         mobilePhoneNumber: null,
         homePhoneNumber: null,
         workPhoneNumber: null,
-
         createdOrganizations: [],
-
         organizationsWhereMember: {
           edges: [
             {
@@ -385,7 +358,6 @@ describe('Testing User Table Item', () => {
       loggedInUserId: '123',
       resetAndRefetch: resetAndRefetchMock,
     };
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -395,7 +367,6 @@ describe('Testing User Table Item', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
     await wait();
     const showJoinedOrgsBtn = screen.getByTestId(`showJoinedOrgsBtn${123}`);
     expect(showJoinedOrgsBtn).toBeInTheDocument();
@@ -404,7 +375,6 @@ describe('Testing User Table Item', () => {
     fireEvent.click(showJoinedOrgsBtn);
     fireEvent.click(screen.getByTestId(`removeUserFromOrgBtn${'abc'}`));
     expect(screen.getByTestId('modal-remove-user-123')).toBeInTheDocument();
-
     // Close using escape key and reopen
     fireEvent.keyDown(screen.getByTestId('modal-joined-org-123'), {
       key: 'Escape',
@@ -425,15 +395,12 @@ describe('Testing User Table Item', () => {
         .queryAllByRole('dialog')
         .some((el) => el.className.includes('show')),
     ).toBeTruthy();
-
     fireEvent.click(showJoinedOrgsBtn);
     fireEvent.click(screen.getByTestId(`removeUserFromOrgBtn${'abc'}`));
     const confirmRemoveBtn = screen.getByTestId(`confirmRemoveUser123`);
     expect(confirmRemoveBtn).toBeInTheDocument();
-
     fireEvent.click(confirmRemoveBtn);
   });
-
   test('handles errors in removeUser mutation', async () => {
     const props: {
       user: InterfaceQueryUserListItem;
@@ -463,9 +430,7 @@ describe('Testing User Table Item', () => {
         mobilePhoneNumber: null,
         homePhoneNumber: null,
         workPhoneNumber: null,
-
         createdOrganizations: [],
-
         organizationsWhereMember: {
           edges: [
             {
@@ -505,7 +470,6 @@ describe('Testing User Table Item', () => {
       loggedInUserId: '123',
       resetAndRefetch: resetAndRefetchMock,
     };
-
     render(
       <MockedProvider addTypename={false} link={link2}>
         <BrowserRouter>
@@ -524,7 +488,6 @@ describe('Testing User Table Item', () => {
     await wait();
     expect(toast.error).toHaveBeenCalled();
   });
-
   test('change role button should function properly', async () => {
     const props: {
       user: InterfaceQueryUserListItem;
@@ -554,9 +517,7 @@ describe('Testing User Table Item', () => {
         mobilePhoneNumber: null,
         homePhoneNumber: null,
         workPhoneNumber: null,
-
         createdOrganizations: [],
-
         organizationsWhereMember: {
           edges: [
             {
@@ -596,7 +557,6 @@ describe('Testing User Table Item', () => {
       loggedInUserId: '123',
       resetAndRefetch: resetAndRefetchMock,
     };
-
     render(
       <MockedProvider addTypename={false} link={link3}>
         <BrowserRouter>
@@ -606,7 +566,6 @@ describe('Testing User Table Item', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
     await wait();
     const showJoinedOrgs = screen.getByTestId(`showJoinedOrgsBtn${123}`);
     expect(showJoinedOrgs).toBeInTheDocument();
@@ -1091,7 +1050,6 @@ describe('Testing User Table Item', () => {
     fireEvent.click(showBlockedOrgsBtn);
     expect(screen.getByText(/ADMIN/i)).toBeInTheDocument();
   });
-
   test('Should handle successful remove user with assertions', async () => {
     const props = {
       user: {
@@ -1121,7 +1079,6 @@ describe('Testing User Table Item', () => {
       loggedInUserId: '123',
       resetAndRefetch: resetAndRefetchMock,
     };
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -1131,7 +1088,6 @@ describe('Testing User Table Item', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
     await wait();
     fireEvent.click(screen.getByTestId(`showJoinedOrgsBtn${123}`));
     fireEvent.click(screen.getByTestId(`removeUserFromOrgBtn${'abc'}`));
@@ -1145,7 +1101,6 @@ describe('Testing User Table Item', () => {
       ).not.toBeInTheDocument();
     });
   });
-
   test('Should handle admin user role in joined organizations modal (disabled select)', async () => {
     const props = {
       user: {
@@ -1171,7 +1126,6 @@ describe('Testing User Table Item', () => {
       loggedInUserId: '123',
       resetAndRefetch: resetAndRefetchMock,
     };
-
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -1181,7 +1135,6 @@ describe('Testing User Table Item', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
     await wait();
     fireEvent.click(screen.getByTestId(`showJoinedOrgsBtn${123}`));
     expect(screen.getByText('ADMIN', { selector: 'td' })).toBeInTheDocument();
@@ -1196,5 +1149,160 @@ describe('Testing User Table Item', () => {
     expect(select.value).toBe('ADMIN?abc');
     expect(toast.success).not.toHaveBeenCalled();
     expect(resetAndRefetchMock).not.toHaveBeenCalled();
+  });
+  test('Should handle cancel remove user and reopen joined organizations modal', async () => {
+    const props = {
+      user: {
+        id: '123',
+        name: 'John Doe',
+        emailAddress: 'john@example.com',
+        avatarURL: 'profile.png',
+        birthDate: null,
+        city: 'New York',
+        countryCode: 'US',
+        createdAt: '2023-08-20T10:00:00.000Z',
+        updatedAt: '2023-08-29T15:39:36.355Z',
+        educationGrade: null,
+        employmentStatus: null,
+        isEmailAddressVerified: true,
+        maritalStatus: null,
+        natalSex: null,
+        naturalLanguageCode: 'en',
+        postalCode: '10001',
+        role: null,
+        state: 'NY',
+        mobilePhoneNumber: null,
+        homePhoneNumber: null,
+        workPhoneNumber: null,
+        createdOrganizations: [],
+        organizationsWhereMember: {
+          edges: [
+            {
+              node: {
+                id: 'abc',
+                name: 'Joined Organization 1',
+                avatarURL: 'joined-org.png',
+                city: 'Kingston',
+                createdAt: '2023-06-29T15:39:36.355Z',
+                creator: {
+                  id: '123',
+                  name: 'John Doe',
+                  emailAddress: 'john@example.com',
+                  avatarURL: 'image.png',
+                },
+              },
+            },
+          ],
+        },
+        orgsWhereUserIsBlocked: {
+          edges: [],
+        },
+      } as InterfaceQueryUserListItem,
+      index: 0,
+      loggedInUserId: '123',
+      resetAndRefetch: resetAndRefetchMock,
+    };
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    fireEvent.click(screen.getByTestId(`showJoinedOrgsBtn${123}`));
+    expect(screen.getByTestId(`modal-joined-org-${123}`)).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId(`removeUserFromOrgBtn${'abc'}`));
+    expect(screen.getByTestId(`modal-remove-user-${123}`)).toBeInTheDocument();
+    // Cancel remove
+    fireEvent.click(screen.getByTestId(`closeRemoveUserModal${123}`));
+    // Should reopen joined modal
+    await waitFor(() => {
+      expect(screen.getByTestId(`modal-joined-org-${123}`)).toBeInTheDocument();
+      expect(
+        screen.queryByTestId(`modal-remove-user-${123}`),
+      ).not.toBeInTheDocument();
+    });
+    expect(screen.getByText(/Joined Organization 1/i)).toBeInTheDocument();
+  });
+
+  test('Should handle cancel unblock user and reopen blocked organizations modal', async () => {
+    const props = {
+      user: {
+        id: '123',
+        name: 'John Doe',
+        emailAddress: 'john@example.com',
+        avatarURL: 'profile.png',
+        birthDate: null,
+        city: 'New York',
+        countryCode: 'US',
+        createdAt: '2023-08-20T10:00:00.000Z',
+        updatedAt: '2023-08-29T15:39:36.355Z',
+        educationGrade: null,
+        employmentStatus: null,
+        isEmailAddressVerified: true,
+        maritalStatus: null,
+        natalSex: null,
+        naturalLanguageCode: 'en',
+        postalCode: '10001',
+        role: null,
+        state: 'NY',
+        mobilePhoneNumber: null,
+        homePhoneNumber: null,
+        workPhoneNumber: null,
+        createdOrganizations: [],
+        organizationsWhereMember: {
+          edges: [],
+        },
+        orgsWhereUserIsBlocked: {
+          edges: [
+            {
+              node: {
+                id: 'ghi',
+                name: 'Blocked Organization 1',
+                avatarURL: 'blocked-org.png',
+                city: 'Toronto',
+                state: 'Ontario',
+                createdAt: '2023-08-29T15:39:36.355Z',
+                creator: {
+                  name: 'Jane Smith',
+                },
+              },
+            },
+          ],
+        },
+      } as InterfaceQueryUserListItem,
+      index: 0,
+      loggedInUserId: '123',
+      resetAndRefetch: resetAndRefetchMock,
+    };
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    fireEvent.click(screen.getByTestId(`showBlockedOrgsBtn${123}`));
+    expect(screen.getByTestId(`modal-blocked-org-${123}`)).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId(`unblockUserFromOrgBtn${'ghi'}`));
+    expect(screen.getByTestId(`modal-unblock-user-${123}`)).toBeInTheDocument();
+    // Cancel unblock
+    fireEvent.click(screen.getByTestId(`closeUnblockUserModal${123}`));
+    // Should reopen blocked modal
+    await waitFor(() => {
+      expect(
+        screen.getByTestId(`modal-blocked-org-${123}`),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByTestId(`modal-unblock-user-${123}`),
+      ).not.toBeInTheDocument();
+    });
+    expect(screen.getByText(/Blocked Organization 1/i)).toBeInTheDocument();
   });
 });
