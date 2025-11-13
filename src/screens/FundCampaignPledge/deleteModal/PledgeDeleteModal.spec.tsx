@@ -21,8 +21,8 @@ vi.mock('react-toastify', () => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 
-const link = new StaticMockLink(MOCKS);
-const link2 = new StaticMockLink(MOCKS_DELETE_PLEDGE_ERROR);
+const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(MOCKS_DELETE_PLEDGE_ERROR, true);
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
 );

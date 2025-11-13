@@ -14,7 +14,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import OrgSettings from './OrgSettings';
 import { MOCKS } from './OrgSettings.mocks';
 
-const link1 = new StaticMockLink(MOCKS);
+const link1 = new StaticMockLink(MOCKS, true);
 const mockRouterParams = (orgId: string | undefined): void => {
   vi.doMock('react-router', async () => {
     const actual = await vi.importActual('react-router');

@@ -36,9 +36,9 @@ import { vi } from 'vitest';
  * - Redux store and i18n for consistent state and translations.
  */
 
-const link1 = new StaticMockLink(MOCKS);
-const link2 = new StaticMockLink(ERROR_MOCKS);
-const link3 = new StaticMockLink(EMPTY_MOCKS);
+const link1 = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(ERROR_MOCKS, true);
+const link3 = new StaticMockLink(EMPTY_MOCKS, true);
 const t = {
   ...JSON.parse(
     JSON.stringify(i18n.getDataByLanguage('en')?.translation.leaderboard ?? {}),

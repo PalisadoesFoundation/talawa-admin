@@ -16,9 +16,9 @@ import type { ApolloLink } from '@apollo/client';
 import { MOCKS, MOCKS_EMPTY, MOCKS_ERROR } from './modal/VolunteerGroups.mocks';
 import { vi } from 'vitest';
 
-const link1 = new StaticMockLink(MOCKS);
-const link2 = new StaticMockLink(MOCKS_ERROR);
-const link3 = new StaticMockLink(MOCKS_EMPTY);
+const link1 = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(MOCKS_ERROR, true);
+const link3 = new StaticMockLink(MOCKS_EMPTY, true);
 const t = {
   ...JSON.parse(
     JSON.stringify(

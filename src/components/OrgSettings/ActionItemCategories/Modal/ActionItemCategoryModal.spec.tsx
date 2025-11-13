@@ -36,8 +36,8 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-const link1 = new StaticMockLink(MOCKS);
-const link3 = new StaticMockLink(MOCKS_ERROR);
+const link1 = new StaticMockLink(MOCKS, true);
+const link3 = new StaticMockLink(MOCKS_ERROR, true);
 
 const translations = {
   ...JSON.parse(

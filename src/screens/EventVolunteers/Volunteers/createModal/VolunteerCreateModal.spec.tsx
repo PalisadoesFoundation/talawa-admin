@@ -34,8 +34,8 @@ vi.mock('react-toastify', () => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 
-const link1 = new StaticMockLink(MOCKS);
-const link2 = new StaticMockLink(MOCKS_ERROR);
+const link1 = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(MOCKS_ERROR, true);
 const t = {
   ...JSON.parse(
     JSON.stringify(

@@ -45,10 +45,10 @@ vi.mock('react-router', async () => {
 
 const { setItem } = useLocalStorage();
 
-const link1 = new StaticMockLink(MOCKS);
-const link2 = new StaticMockLink(ERROR_MOCKS);
-const link3 = new StaticMockLink(EMPTY_MOCKS);
-const link4 = new StaticMockLink(UPDATE_ERROR_MOCKS);
+const link1 = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(ERROR_MOCKS, true);
+const link3 = new StaticMockLink(EMPTY_MOCKS, true);
+const link4 = new StaticMockLink(UPDATE_ERROR_MOCKS, true);
 const t = {
   ...JSON.parse(
     JSON.stringify(
@@ -311,7 +311,10 @@ describe('Testing Invvitations Screen', () => {
 
   describe('Invitation subject rendering based on type and recurrence', () => {
     it('should display group invitation recurring subject for group invitations with recurrence rule', async () => {
-      const groupRecurringLink = new StaticMockLink(GROUP_RECURRING_MOCKS);
+      const groupRecurringLink = new StaticMockLink(
+        GROUP_RECURRING_MOCKS,
+        true,
+      );
       renderInvitations(groupRecurringLink);
 
       await waitFor(() => {

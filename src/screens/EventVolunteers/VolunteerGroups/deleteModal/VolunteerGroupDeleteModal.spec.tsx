@@ -29,8 +29,8 @@ vi.mock('react-toastify', () => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 
-const link1 = new StaticMockLink(MOCKS);
-const link2 = new StaticMockLink(MOCKS_ERROR);
+const link1 = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(MOCKS_ERROR, true);
 const t = {
   ...JSON.parse(
     JSON.stringify(
@@ -254,7 +254,7 @@ describe('Testing Group Delete Modal', () => {
       },
     ];
 
-    const linkForInstance = new StaticMockLink(MOCK_DELETE_FOR_INSTANCE);
+    const linkForInstance = new StaticMockLink(MOCK_DELETE_FOR_INSTANCE, true);
     renderGroupDeleteModal(linkForInstance, recurringGroupProps);
 
     expect(screen.getByText(t.deleteGroup)).toBeInTheDocument();

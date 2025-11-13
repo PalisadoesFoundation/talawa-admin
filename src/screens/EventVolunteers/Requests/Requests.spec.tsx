@@ -46,11 +46,11 @@ const debounceWait = async (ms = 300): Promise<void> => {
   });
 };
 
-const link1 = new StaticMockLink(MOCKS);
-const link2 = new StaticMockLink(ERROR_MOCKS);
-const link3 = new StaticMockLink(EMPTY_MOCKS);
-const link4 = new StaticMockLink(UPDATE_ERROR_MOCKS);
-const link5 = new StaticMockLink(MOCKS_WITH_FILTER_DATA);
+const link1 = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(ERROR_MOCKS, true);
+const link3 = new StaticMockLink(EMPTY_MOCKS, true);
+const link4 = new StaticMockLink(UPDATE_ERROR_MOCKS, true);
+const link5 = new StaticMockLink(MOCKS_WITH_FILTER_DATA, true);
 const t = {
   ...JSON.parse(
     JSON.stringify(

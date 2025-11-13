@@ -183,7 +183,7 @@ const PLEDGE_MODAL_MOCKS = [
   },
 ];
 
-const link1 = new StaticMockLink(PLEDGE_MODAL_MOCKS);
+const link1 = new StaticMockLink(PLEDGE_MODAL_MOCKS, true);
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
 );

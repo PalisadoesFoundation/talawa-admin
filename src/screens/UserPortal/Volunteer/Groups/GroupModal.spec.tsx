@@ -25,8 +25,8 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-const link1 = new StaticMockLink(MOCKS);
-const link2 = new StaticMockLink(UPDATE_ERROR_MOCKS);
+const link1 = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(UPDATE_ERROR_MOCKS, true);
 
 /**
  * Translations for test cases

@@ -122,7 +122,7 @@ const MOCKS = [
   },
 ];
 
-const link1 = new StaticMockLink(MOCKS);
+const link1 = new StaticMockLink(MOCKS, true);
 
 // Test data for different scenarios
 const createActionItem = (

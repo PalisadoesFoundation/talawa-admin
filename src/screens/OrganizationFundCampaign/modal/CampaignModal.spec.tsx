@@ -35,8 +35,8 @@ vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
   return { DateTimePicker: actual.DesktopDateTimePicker };
 });
 
-const link1 = new StaticMockLink(MOCKS);
-const link2 = new StaticMockLink(MOCK_ERROR);
+const link1 = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(MOCK_ERROR, true);
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.fundCampaign),
 );
@@ -186,10 +186,13 @@ const UPDATE_CURRENCY_ONLY_MOCK = [
   },
 ];
 
-const nameOnlyMockLink = new StaticMockLink(UPDATE_NAME_ONLY_MOCK);
-const allFieldsMockLink = new StaticMockLink(UPDATE_ALL_FIELDS_MOCK);
-const noFieldsMockLink = new StaticMockLink(UPDATE_NO_FIELDS_MOCK);
-const currencyOnlyMockLink = new StaticMockLink(UPDATE_CURRENCY_ONLY_MOCK);
+const nameOnlyMockLink = new StaticMockLink(UPDATE_NAME_ONLY_MOCK, true);
+const allFieldsMockLink = new StaticMockLink(UPDATE_ALL_FIELDS_MOCK, true);
+const noFieldsMockLink = new StaticMockLink(UPDATE_NO_FIELDS_MOCK, true);
+const currencyOnlyMockLink = new StaticMockLink(
+  UPDATE_CURRENCY_ONLY_MOCK,
+  true,
+);
 
 describe('CampaignModal', () => {
   afterEach(() => {

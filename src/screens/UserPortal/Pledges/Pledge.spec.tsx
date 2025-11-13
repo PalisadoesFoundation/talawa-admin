@@ -1002,15 +1002,15 @@ const SEARCH_MOCKS = [
 ];
 
 const link1 = new StaticMockLink([...MOCKS, ...SEARCH_MOCKS]);
-const link2 = new StaticMockLink(USER_PLEDGES_ERROR);
-const link3 = new StaticMockLink(EMPTY_MOCKS);
-const link4 = new StaticMockLink(MOCKS_WITH_SINGLE_PLEDGER);
-const link5 = new StaticMockLink(MOCKS_WITH_DIFFERENT_CURRENCIES);
-const link6 = new StaticMockLink(MOCKS_WITH_ZERO_GOAL);
-const link7 = new StaticMockLink(MOCKS_WITH_MULTIPLE_PLEDGERS);
-const link8 = new StaticMockLink(MOCKS_WITH_MISSING_CAMPAIGN);
-const link9 = new StaticMockLink(MOCKS_WITH_INVALID_DATE);
-const link10 = new StaticMockLink(MOCKS_WITH_MORE_USERS);
+const link2 = new StaticMockLink(USER_PLEDGES_ERROR, true);
+const link3 = new StaticMockLink(EMPTY_MOCKS, true);
+const link4 = new StaticMockLink(MOCKS_WITH_SINGLE_PLEDGER, true);
+const link5 = new StaticMockLink(MOCKS_WITH_DIFFERENT_CURRENCIES, true);
+const link6 = new StaticMockLink(MOCKS_WITH_ZERO_GOAL, true);
+const link7 = new StaticMockLink(MOCKS_WITH_MULTIPLE_PLEDGERS, true);
+const link8 = new StaticMockLink(MOCKS_WITH_MISSING_CAMPAIGN, true);
+const link9 = new StaticMockLink(MOCKS_WITH_INVALID_DATE, true);
+const link10 = new StaticMockLink(MOCKS_WITH_MORE_USERS, true);
 
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation),

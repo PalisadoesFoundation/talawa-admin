@@ -210,9 +210,9 @@ const mockWithExtraUsers = {
   },
 };
 
-const link1 = new StaticMockLink([updatedMocks]);
-const link2 = new StaticMockLink(MOCKS_FUND_CAMPAIGN_PLEDGE_ERROR);
-const link3 = new StaticMockLink([EMPTY_MOCK]);
+const link1 = new StaticMockLink([updatedMocks], true);
+const link2 = new StaticMockLink(MOCKS_FUND_CAMPAIGN_PLEDGE_ERROR, true);
+const link3 = new StaticMockLink([EMPTY_MOCK], true);
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
 );
@@ -475,7 +475,7 @@ describe('Testing Campaign Pledge Screen', () => {
 
   // Fix the extra users test
   it('should render extraUserDetails in Popup', async () => {
-    const customLink = new StaticMockLink([mockWithExtraUsers]);
+    const customLink = new StaticMockLink([mockWithExtraUsers], true);
     renderFundCampaignPledge(customLink);
 
     await waitFor(() => {
@@ -535,7 +535,7 @@ describe('Testing Campaign Pledge Screen', () => {
       },
     };
 
-    const manyUsersLink = new StaticMockLink([manyUsersMock]);
+    const manyUsersLink = new StaticMockLink([manyUsersMock], true);
     renderFundCampaignPledge(manyUsersLink);
 
     // Wait for table to load and find main user
@@ -675,7 +675,7 @@ describe('Testing Campaign Pledge Screen', () => {
 
   it('should disable add pledge button for future campaign', async () => {
     vi.setSystemTime(new Date('2024-01-01')); // Set current date to known value
-    const futureCampaignLink = new StaticMockLink([FUTURE_CAMPAIGN_MOCK]);
+    const futureCampaignLink = new StaticMockLink([FUTURE_CAMPAIGN_MOCK], true);
     renderFundCampaignPledge(futureCampaignLink);
 
     await waitFor(() => {
@@ -691,7 +691,7 @@ describe('Testing Campaign Pledge Screen', () => {
 
   it('should enable add pledge button for active campaign', async () => {
     vi.setSystemTime(new Date('2024-06-15')); // Set current date within campaign period
-    const activeCampaignLink = new StaticMockLink([ACTIVE_CAMPAIGN_MOCK]);
+    const activeCampaignLink = new StaticMockLink([ACTIVE_CAMPAIGN_MOCK], true);
     renderFundCampaignPledge(activeCampaignLink);
 
     await waitFor(() => {

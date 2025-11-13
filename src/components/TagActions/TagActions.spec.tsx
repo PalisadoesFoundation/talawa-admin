@@ -33,7 +33,7 @@ import type { TFunction } from 'i18next';
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR_ORGANIZATION_TAGS_QUERY, true);
 const link3 = new StaticMockLink(MOCKS_ERROR_SUBTAGS_QUERY, true);
-const link4 = new StaticMockLink(MOCKS_ERROR_ASSIGN_OR_REMOVAL_TAGS);
+const link4 = new StaticMockLink(MOCKS_ERROR_ASSIGN_OR_REMOVAL_TAGS, true);
 async function wait(ms = 500): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {

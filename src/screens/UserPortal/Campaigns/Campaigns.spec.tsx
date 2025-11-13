@@ -54,9 +54,9 @@ const { setItem } = useLocalStorage();
 /**
  * Creates a mocked Apollo link for testing.
  */
-const link1 = new StaticMockLink(MOCKS);
-const link2 = new StaticMockLink(USER_FUND_CAMPAIGNS_ERROR);
-const link3 = new StaticMockLink(MOCKS_WITH_NO_FUNDS);
+const link1 = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(USER_FUND_CAMPAIGNS_ERROR, true);
+const link3 = new StaticMockLink(MOCKS_WITH_NO_FUNDS, true);
 
 const cTranslations = JSON.parse(
   JSON.stringify(
@@ -438,7 +438,7 @@ describe('Testing User Campaigns Screen', () => {
   });
 
   it('Handles fund with no campaigns gracefully', async () => {
-    const link = new StaticMockLink(MOCKS_WITH_FUND_NO_CAMPAIGNS);
+    const link = new StaticMockLink(MOCKS_WITH_FUND_NO_CAMPAIGNS, true);
     renderCampaigns(link);
 
     // Should show "No Campaigns Found" message
@@ -474,7 +474,7 @@ describe('Testing User Campaigns Screen', () => {
   });
 
   it('Clears campaigns when organization data is null', async () => {
-    const link = new StaticMockLink(MOCKS_WITH_NULL_ORGANIZATION);
+    const link = new StaticMockLink(MOCKS_WITH_NULL_ORGANIZATION, true);
     renderCampaigns(link);
 
     // Should show "No Campaigns Found" message when organization is null
@@ -484,7 +484,7 @@ describe('Testing User Campaigns Screen', () => {
   });
 
   it('Handles fund with undefined campaigns field', async () => {
-    const link = new StaticMockLink(MOCKS_WITH_UNDEFINED_CAMPAIGNS);
+    const link = new StaticMockLink(MOCKS_WITH_UNDEFINED_CAMPAIGNS, true);
     renderCampaigns(link);
 
     // Should show "No Campaigns Found" when campaigns field is undefined

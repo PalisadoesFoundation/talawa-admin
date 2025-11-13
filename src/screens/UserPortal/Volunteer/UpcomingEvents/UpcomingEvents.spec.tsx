@@ -49,13 +49,13 @@ vi.mock('react-toastify', () => ({
 
 const { setItem } = useLocalStorage();
 
-const link1 = new StaticMockLink(MOCKS);
-const link2 = new StaticMockLink(ERROR_MOCKS);
-const link3 = new StaticMockLink(EMPTY_MOCKS);
-const link4 = new StaticMockLink(CREATE_ERROR_MOCKS);
-const link5 = new StaticMockLink(RECURRING_MODAL_MOCKS);
-const link6 = new StaticMockLink(MEMBERSHIP_STATUS_MOCKS);
-const link8 = new StaticMockLink(MEMBERSHIP_LOOKUP_MOCKS);
+const link1 = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(ERROR_MOCKS, true);
+const link3 = new StaticMockLink(EMPTY_MOCKS, true);
+const link4 = new StaticMockLink(CREATE_ERROR_MOCKS, true);
+const link5 = new StaticMockLink(RECURRING_MODAL_MOCKS, true);
+const link6 = new StaticMockLink(MEMBERSHIP_STATUS_MOCKS, true);
+const link8 = new StaticMockLink(MEMBERSHIP_LOOKUP_MOCKS, true);
 
 const t = {
   ...JSON.parse(

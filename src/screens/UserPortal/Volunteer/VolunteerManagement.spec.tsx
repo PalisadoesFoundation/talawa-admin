@@ -16,7 +16,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 const { setItem } = useLocalStorage();
 
-const link1 = new StaticMockLink(MOCKS);
+const link1 = new StaticMockLink(MOCKS, true);
 
 const renderVolunteerManagement = (): RenderResult => {
   return render(
