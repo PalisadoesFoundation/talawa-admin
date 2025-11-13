@@ -10,16 +10,9 @@
  * - Displays group chat details when applicable.
  *
  * @param props - The props for the ChatRoom component.
- * @returns The rendered ChatRoom comp                            {message.parentMessage && (
-                              <a href={`#${message.parentMessage.id}`}>
-                                <div className={styles.replyToMessage}>
-                                  <p className={styles.replyToMessageSender}>
-                                    {message.parentMessage.creator.name}
-                                  </p>
-                                  <span>{message.parentMessage.body}</span>
-                                </div>
-                              </a>
-                            )} @example
+ * @returns The rendered ChatRoom component
+ *
+ * @example
  * ```tsx
  * <ChatRoom
  *   selectedContact="12345"
@@ -30,13 +23,10 @@
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import type { ChangeEvent } from 'react';
-import SendIcon from '@mui/icons-material/Send';
-import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import styles from './ChatRoom.module.css';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import { useTranslation } from 'react-i18next';
 import { CHAT_BY_ID, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
-import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
 import {
   EDIT_CHAT_MESSAGE,
@@ -46,170 +36,16 @@ import {
   DELETE_CHAT_MESSAGE,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import useLocalStorage from 'utils/useLocalstorage';
-import Avatar from 'components/Avatar/Avatar';
-import { MoreVert, Close } from '@mui/icons-material';
 import GroupChatDetails from 'components/GroupChatDetails/GroupChatDetails';
-import { GrAttachment } from 'react-icons/gr';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
-import type { GroupChat } from 'types/Chat/type';
-// import { toast } from 'react-toastify';
-// import { validateFile } from 'utils/fileValidation';
+import type { IChatRoomProps, INewChat } from './ChatRoomTypes';
+import { ChatHeader } from './ChatHeader';
+import { ChatMessageList } from './ChatMessageList';
+import { MessageInput } from './MessageInput';
+import { MessageImage } from './MessageImage';
 
-interface IChatRoomProps {
-  selectedContact: string;
-  chatListRefetch: (
-    variables?:
-      | Partial<{
-          id: string;
-        }>
-      | undefined,
-  ) => Promise<ApolloQueryResult<{ chatList: GroupChat[] }>>;
-}
-
-interface INewChat {
-  id: string;
-  name: string;
-  description?: string;
-  avatarMimeType?: string;
-  avatarURL?: string;
-  isGroup: boolean;
-  createdAt: string;
-  updatedAt: string;
-  organization?: {
-    id: string;
-    name: string;
-    countryCode?: string;
-  };
-  creator?: {
-    id: string;
-    name: string;
-    avatarMimeType?: string;
-    avatarURL?: string;
-  };
-  updater?: {
-    id: string;
-    name: string;
-    avatarMimeType?: string;
-    avatarURL?: string;
-  };
-  members: {
-    edges: Array<{
-      cursor: string;
-      node: {
-        user: {
-          id: string;
-          name: string;
-          avatarMimeType?: string;
-          avatarURL?: string;
-        };
-        role: string;
-      };
-    }>;
-  };
-  messages: {
-    edges: Array<{
-      cursor: string;
-      node: {
-        id: string;
-        body: string;
-        createdAt: string;
-        updatedAt: string;
-        creator: {
-          id: string;
-          name: string;
-          avatarMimeType?: string;
-          avatarURL?: string;
-        };
-        parentMessage?: {
-          id: string;
-          body: string;
-          createdAt: string;
-          creator: {
-            id: string;
-            name: string;
-          };
-        };
-      };
-    }>;
-    pageInfo: {
-      hasNextPage: boolean;
-      hasPreviousPage: boolean;
-      startCursor: string;
-      endCursor: string;
-    };
-  };
-}
-
-interface IMessageImageProps {
-  media: string;
-  organizationId?: string;
-  getFileFromMinio: (
-    objectName: string,
-    organizationId: string,
-  ) => Promise<string>;
-}
-
-const MessageImageBase: React.FC<IMessageImageProps> = ({
-  media,
-  organizationId,
-  getFileFromMinio,
-}) => {
-  const [imageState, setImageState] = useState<{
-    url: string | null;
-    loading: boolean;
-    error: boolean;
-  }>({
-    url: null,
-    loading: !!media,
-    error: false,
-  });
-
-  useEffect(() => {
-    if (!media) {
-      setImageState((prev) => ({ ...prev, error: true, loading: false }));
-      return;
-    }
-
-    const orgId = organizationId || 'organization';
-
-    let stillMounted = true;
-    const loadImage = async (): Promise<void> => {
-      try {
-        const url = await getFileFromMinio(media, orgId);
-        if (stillMounted) setImageState({ url, loading: false, error: false });
-      } catch (error) {
-        console.error('Error fetching image from MinIO:', error);
-        if (stillMounted)
-          setImageState({ url: null, loading: false, error: true });
-      }
-    };
-
-    loadImage();
-    return () => {
-      stillMounted = false;
-    };
-  }, [media, organizationId, getFileFromMinio]);
-
-  if (imageState.loading) {
-    return <div className={styles.messageAttachment}>Loading image...</div>;
-  }
-
-  if (imageState.error || !imageState.url) {
-    return <div className={styles.messageAttachment}>Image not available</div>;
-  }
-
-  return (
-    <img
-      className={styles.messageAttachment}
-      src={imageState.url}
-      alt="attachment"
-      onError={() => setImageState((prev) => ({ ...prev, error: true }))}
-    />
-  );
-};
-
-export const MessageImage = React.memo(MessageImageBase);
+export { MessageImage };
 
 export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -233,6 +69,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       setLoadingMoreMessages(false);
     }
   }, [props.selectedContact, setItem]);
+
   const [chatTitle, setChatTitle] = useState('');
   const [chatSubtitle, setChatSubtitle] = useState('');
   const [chatImage, setChatImage] = useState('');
@@ -260,9 +97,11 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const { uploadFileToMinio } = useMinioUpload();
   const { getFileFromMinio: unstableGetFile } = useMinioDownload();
   const getFileFromMinioRef = useRef(unstableGetFile);
+
   useEffect(() => {
     getFileFromMinioRef.current = unstableGetFile;
   }, [unstableGetFile]);
+
   const getFileFromMinio = useCallback(
     (objectName: string, organizationId: string) =>
       getFileFromMinioRef.current(objectName, organizationId),
@@ -276,13 +115,6 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const toggleGroupChatDetailsModal = (): void =>
     setGroupChatDetailsModalisOpen(!groupChatDetailsModalisOpen);
 
-  /**
-   * Handles changes to the new message input field.
-   *
-   * Updates the state with the current value of the input field whenever it changes.
-   *
-   * @param e - The event triggered by the input field change.
-   */
   const handleNewMessageChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const newMessageValue = e.target.value;
     setNewMessage(newMessageValue);
@@ -296,9 +128,6 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
         body: newMessage,
       },
     },
-    // TODO(caching): When enabling Apollo cache, add optimisticResponse and
-    // an update(cache) handler here to append the optimistic message edge to
-    // Chat.messages and to refresh unread lists for other chats if needed.
   });
 
   const [editChatMessage] = useMutation(EDIT_CHAT_MESSAGE, {
@@ -311,10 +140,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   });
 
   const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ);
-
   const [deleteChatMessage] = useMutation(DELETE_CHAT_MESSAGE);
-  // TODO(caching): After enabling cache policies, implement update(cache)
-  // here to remove the message edge from Chat.messages when deletion succeeds.
 
   const [supportsMarkRead, setSupportsMarkRead] = useState(true);
   const markReadIfSupported = useCallback(
@@ -449,15 +275,8 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       loadMoreMessages();
     }
   };
-  // const { refetch: chatListRefetch } = useQuery(CHATS_LIST, {
-  //   variables: {
-  //     id: userId,
-  //   },
-  // });
 
   const { refetch: unreadChatListRefetch } = useQuery(UNREAD_CHATS);
-  // NOTE(caching): With cache policies, unread chats list can be updated via
-  // cache.modify on Query.unreadChats instead of refetching.
 
   useEffect(() => {
     if (chatData?.chat?.messages?.edges?.length) {
@@ -559,9 +378,6 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           () => {},
         );
 
-        // Soft-append the new message to local state to avoid pagination issues.
-        // TODO(caching): With cache policies, prefer cache.modify on Chat.messages
-        //               to append if the message is not present (dedupe by node.id).
         setChat((prev: INewChat | undefined) => {
           if (!prev) return prev;
           try {
@@ -611,8 +427,6 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       }
       props.chatListRefetch();
       unreadChatListRefetch();
-      // TODO(caching): Replace refetches above with targeted cache updates once
-      // cache policies are enabled (e.g., bump lastMessage and unread count).
     },
   });
 
@@ -666,6 +480,29 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     }
   };
 
+  const handleReply = (
+    message: INewChat['messages']['edges'][0]['node'],
+  ): void => {
+    setReplyToDirectMessage(message);
+  };
+
+  const handleEdit = (
+    message: INewChat['messages']['edges'][0]['node'],
+  ): void => {
+    setEditMessage(message);
+    setNewMessage(message.body);
+  };
+
+  const handleRemoveAttachment = (): void => {
+    setAttachment(null);
+    setAttachmentObjectName(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleCloseReply = (): void => {
+    setReplyToDirectMessage(null);
+  };
+
   return (
     <div
       className={`d-flex flex-column ${styles.chatAreaContainer}`}
@@ -680,271 +517,46 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
         </div>
       ) : (
         <>
-          <div className={styles.header}>
-            <div className={styles.userInfo}>
-              {chatImage ? (
-                <img
-                  src={chatImage}
-                  alt={chatTitle}
-                  className={styles.contactImage}
-                />
-              ) : (
-                <Avatar
-                  name={chatTitle}
-                  alt={chatTitle}
-                  avatarStyle={styles.contactImage}
-                />
-              )}
-              <div
-                onClick={() => (chat?.isGroup ? openGroupChatDetails() : null)}
-                className={styles.userDetails}
-              >
-                <p className={styles.title}>{chatTitle}</p>
-                <p className={styles.subtitle}>{chatSubtitle}</p>
-              </div>
-            </div>
-          </div>
-          <div
-            className={`d-flex flex-grow-1 flex-column`}
-            style={{ minHeight: 0 }}
-          >
-            <div
-              className={styles.chatMessages}
-              ref={messagesContainerRef}
+          <ChatHeader
+            chatImage={chatImage}
+            chatTitle={chatTitle}
+            chatSubtitle={chatSubtitle}
+            isGroup={!!chat?.isGroup}
+            onOpenGroupDetails={openGroupChatDetails}
+          />
+          {chat && (
+            <ChatMessageList
+              chat={chat}
+              userId={userId as string}
+              messagesContainerRef={messagesContainerRef}
+              hasMoreMessages={hasMoreMessages}
+              loadingMoreMessages={loadingMoreMessages}
+              getFileFromMinio={getFileFromMinio}
               onScroll={handleScroll}
-            >
-              {hasMoreMessages && (
-                <div className={styles.loadMoreBar}>
-                  <Button
-                    variant="light"
-                    size="sm"
-                    onClick={loadMoreMessages}
-                    disabled={loadingMoreMessages}
-                  >
-                    {loadingMoreMessages ? 'Loading…' : 'Load older messages'}
-                  </Button>
-                </div>
-              )}
-              {loadingMoreMessages && (
-                <div className={styles.loadingMore}>
-                  Loading more messages...
-                </div>
-              )}
-              {!!chat?.messages?.edges?.length && (
-                <div id="messages">
-                  {chat?.messages.edges.map(
-                    (edge: {
-                      node: INewChat['messages']['edges'][0]['node'];
-                    }) => {
-                      const message = edge.node;
-                      const isFile = message.body.startsWith('uploads/');
-
-                      return (
-                        <div
-                          className={
-                            message.creator.id === userId
-                              ? styles.messageSentContainer
-                              : styles.messageReceivedContainer
-                          }
-                          key={message.id}
-                        >
-                          {chat.isGroup &&
-                            message.creator.id !== userId &&
-                            (message.creator?.avatarURL ? (
-                              <img
-                                src={message.creator.avatarURL}
-                                alt={message.creator.avatarURL}
-                                className={styles.contactImage}
-                              />
-                            ) : (
-                              <Avatar
-                                name={message.creator.name}
-                                alt={message.creator.name}
-                                avatarStyle={styles.contactImage}
-                              />
-                            ))}
-                          <div
-                            className={
-                              message.creator.id === userId
-                                ? styles.messageSent
-                                : styles.messageReceived
-                            }
-                            data-testid="message"
-                            key={message.id}
-                            id={message.id}
-                          >
-                            <span className={styles.messageContent}>
-                              {chat.isGroup &&
-                                message.creator.id !== userId && (
-                                  <p className={styles.senderInfo}>
-                                    {message.creator.name}
-                                  </p>
-                                )}
-                              {message.parentMessage && (
-                                <a href={`#${message.parentMessage.id}`}>
-                                  <div className={styles.replyToMessage}>
-                                    <p className={styles.replyToMessageSender}>
-                                      {message.parentMessage.creator.name}
-                                    </p>
-                                    <span>{message.parentMessage.body}</span>
-                                  </div>
-                                </a>
-                              )}
-                              {isFile ? (
-                                <MessageImage
-                                  media={message.body}
-                                  organizationId={chat?.organization?.id}
-                                  getFileFromMinio={getFileFromMinio}
-                                />
-                              ) : (
-                                message.body
-                              )}
-                            </span>
-                            <div className={styles.messageAttributes}>
-                              <Dropdown
-                                data-testid="moreOptions"
-                                style={{ cursor: 'pointer' }}
-                              >
-                                <Dropdown.Toggle
-                                  className={styles.customToggle}
-                                  data-testid={'dropdown'}
-                                >
-                                  <MoreVert />
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                  <Dropdown.Item
-                                    onClick={() => {
-                                      setReplyToDirectMessage(message);
-                                    }}
-                                    data-testid="replyBtn"
-                                  >
-                                    {t('reply')}
-                                  </Dropdown.Item>
-                                  {message.creator.id === userId && (
-                                    <>
-                                      {!message.body.startsWith('uploads/') && (
-                                        <Dropdown.Item
-                                          onClick={() => {
-                                            setEditMessage(message);
-                                            setNewMessage(message.body);
-                                          }}
-                                          data-testid="replyToMessage"
-                                        >
-                                          Edit
-                                        </Dropdown.Item>
-                                      )}
-                                      <Dropdown.Item
-                                        onClick={() =>
-                                          deleteMessage(message.id)
-                                        }
-                                        data-testid="deleteMessage"
-                                        style={{ color: 'red' }}
-                                      >
-                                        Delete
-                                      </Dropdown.Item>
-                                    </>
-                                  )}
-                                </Dropdown.Menu>
-                              </Dropdown>
-                              <span className={styles.messageTime}>
-                                {new Date(
-                                  message?.createdAt,
-                                ).toLocaleTimeString('it-IT', {
-                                  hour: '2-digit',
-                                  minute: '2-digit',
-                                })}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    },
-                  )}
-                </div>
-              )}
-            </div>
-          </div>
-          <div id="messageInput">
-            <input
-              type="file"
-              accept="image/*"
-              ref={fileInputRef}
-              style={{ display: 'none' }} // Hide the input
-              onChange={handleImageChange}
-              data-testid="hidden-file-input"
+              onLoadMore={loadMoreMessages}
+              onReply={handleReply}
+              onEdit={handleEdit}
+              onDelete={deleteMessage}
+              replyLabel={t('reply')}
+              editLabel="Edit"
+              deleteLabel="Delete"
+              loadOlderMessagesLabel="Load older messages"
+              loadingLabel="Loading…"
             />
-            {!!replyToDirectMessage?.id && (
-              <div data-testid="replyMsg" className={styles.replyTo}>
-                <div className={styles.replyToMessageContainer}>
-                  <div className={styles.userDetails}>
-                    <Avatar
-                      name={replyToDirectMessage.creator.name}
-                      alt={replyToDirectMessage.creator.name}
-                      avatarStyle={styles.userImage}
-                    />
-                    <span>{replyToDirectMessage.creator.name}</span>
-                  </div>
-                  <p>{replyToDirectMessage.body}</p>
-                </div>
-
-                <Button
-                  data-testid="closeReply"
-                  onClick={() => setReplyToDirectMessage(null)}
-                  className={styles.closeBtn}
-                >
-                  <Close />
-                </Button>
-              </div>
-            )}
-            {attachment && (
-              <div className={styles.attachment}>
-                <img src={attachment} alt="attachment" />
-
-                <Button
-                  data-testid="removeAttachment"
-                  onClick={() => {
-                    setAttachment(null);
-                    setAttachmentObjectName(null);
-                    if (fileInputRef.current) fileInputRef.current.value = '';
-                  }}
-                  className={styles.closeBtn}
-                >
-                  <Close />
-                </Button>
-              </div>
-            )}
-
-            <InputGroup>
-              <button
-                onClick={handleAddAttachment}
-                className={styles.addAttachmentBtn}
-              >
-                <GrAttachment />
-              </button>
-              <Form.Control
-                placeholder={t('sendMessage')}
-                aria-label="Send Message"
-                value={newMessage}
-                data-testid="messageInput"
-                onChange={handleNewMessageChange}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                  }
-                }}
-                className={styles.sendMessageInput}
-              />
-              <Button
-                onClick={sendMessage}
-                variant="primary"
-                id="button-send"
-                data-testid="sendMessage"
-              >
-                <SendIcon fontSize="small" />
-              </Button>
-            </InputGroup>
-          </div>
+          )}
+          <MessageInput
+            newMessage={newMessage}
+            attachment={attachment}
+            replyToMessage={replyToDirectMessage}
+            fileInputRef={fileInputRef}
+            onNewMessageChange={handleNewMessageChange}
+            onSendMessage={sendMessage}
+            onAddAttachment={handleAddAttachment}
+            onImageChange={handleImageChange}
+            onRemoveAttachment={handleRemoveAttachment}
+            onCloseReply={handleCloseReply}
+            placeholder={t('sendMessage')}
+          />
         </>
       )}
       {groupChatDetailsModalisOpen && chat && (
