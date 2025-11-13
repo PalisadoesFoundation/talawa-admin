@@ -62,7 +62,7 @@ export default defineConfig({
         'scripts/**', // Exclude build/setup scripts
         'config/**', // Exclude configuration files
       ],
-      reporter: ['lcov', 'json'], // Use json for accurate merging, lcov for final report
+      reporter: ['lcov', 'json', 'text-summary', 'text'], // Use json for accurate merging, lcov for final report
     },
   },
 });
