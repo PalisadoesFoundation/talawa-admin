@@ -1001,7 +1001,7 @@ const SEARCH_MOCKS = [
   },
 ];
 
-const link1 = new StaticMockLink([...MOCKS, ...SEARCH_MOCKS]);
+const link1 = new StaticMockLink([...MOCKS, ...SEARCH_MOCKS], true);
 const link2 = new StaticMockLink(USER_PLEDGES_ERROR, true);
 const link3 = new StaticMockLink(EMPTY_MOCKS, true);
 const link4 = new StaticMockLink(MOCKS_WITH_SINGLE_PLEDGER, true);

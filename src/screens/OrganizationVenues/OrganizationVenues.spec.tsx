@@ -397,17 +397,20 @@ describe('Organisation Venues Error Handling', () => {
 
   test('handles venue query error correctly', async () => {
     const mockError = new Error('Failed to fetch venues');
-    const errorLink = new StaticMockLink([
-      {
-        request: {
-          query: VENUE_LIST,
-          variables: {
-            orgId: 'orgId',
+    const errorLink = new StaticMockLink(
+      [
+        {
+          request: {
+            query: VENUE_LIST,
+            variables: {
+              orgId: 'orgId',
+            },
           },
+          error: mockError,
         },
-        error: mockError,
-      },
-    ]);
+      ],
+      true,
+    );
 
     renderOrganizationVenue(errorLink);
 
