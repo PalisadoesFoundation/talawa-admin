@@ -196,6 +196,10 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
       shouldSetTalawaApiUrlResponse: true,
     });
 
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
     const originalURL = global.URL;
 
     try {
@@ -204,7 +208,7 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
           super(url);
           if (typeof url === 'string' && url.includes('host.docker.internal')) {
             Object.defineProperty(this, 'protocol', {
-              get: () => 'ftp:',
+              get: () => 'https:',
               configurable: true,
             });
           }
@@ -213,7 +217,7 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
 
       await askAndUpdateTalawaApiUrl(true);
 
-      expect(console.error).not.toHaveBeenCalled();
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
 
       expect(updateEnvFile).toHaveBeenCalledWith(
         'REACT_APP_DOCKER_TALAWA_URL',
@@ -221,6 +225,7 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
       );
     } finally {
       global.URL = originalURL;
+      consoleErrorSpy.mockRestore();
     }
   });
 });
