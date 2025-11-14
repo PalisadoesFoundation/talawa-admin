@@ -560,102 +560,104 @@ describe('Testing Community Profile Screen', () => {
     expect(convertToBase64Module.default).toHaveBeenCalledWith(mockFile);
   });
 
-  test('should handle null base64 conversion when updating logo', async () => {
-    vi.spyOn(convertToBase64Module, 'default').mockResolvedValue(null);
+ test('should handle null base64 conversion when updating logo', async () => {
+  // Option 1: Mock with empty string (preferred)
+  vi.spyOn(convertToBase64Module, 'default').mockResolvedValue('');
 
-    render(
-      <MockedProvider addTypename={false} link={link1}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <CommunityProfile />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  render(
+    <MockedProvider addTypename={false} link={link1}>
+      <BrowserRouter>
+        <I18nextProvider i18n={i18n}>
+          <CommunityProfile />
+        </I18nextProvider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
 
-    await wait();
+  await wait();
 
-    const mockFile = new File([''], 'test.png', { type: 'image/png' });
-    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+  const mockFile = new File([''], 'test.png', { type: 'image/png' });
+  const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
 
-    await userEvent.upload(fileInput, mockFile);
-    await wait();
+  await userEvent.upload(fileInput, mockFile);
+  await wait();
 
-    expect(convertToBase64Module.default).toHaveBeenCalledWith(mockFile);
+  expect(convertToBase64Module.default).toHaveBeenCalledWith(mockFile);
+});
+
+
+ test('should show success toast when profile is updated successfully', async () => {
+  const mockBase64 = 'data:image/png;base64,mockBase64String';
+  const convertSpy = vi.spyOn(convertToBase64Module, 'default').mockResolvedValue(mockBase64);
+
+  const { container } = render(
+    <MockedProvider addTypename={false} mocks={UPDATE_SUCCESS_MOCKS}>
+      <BrowserRouter>
+        <I18nextProvider i18n={i18n}>
+          <CommunityProfile />
+        </I18nextProvider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await wait();
+
+  const form = container.querySelector('form') as HTMLFormElement;
+  const nameInput = screen.getByPlaceholderText(
+    /Community Name/i,
+  ) as HTMLInputElement;
+  const websiteInput = screen.getByPlaceholderText(
+    /Website Link/i,
+  ) as HTMLInputElement;
+  const logoInput = screen.getByTestId('fileInput') as HTMLInputElement;
+
+  // Update text fields
+  await userEvent.clear(nameInput);
+  await userEvent.type(nameInput, 'Test Name');
+
+  await userEvent.clear(websiteInput);
+  await userEvent.type(websiteInput, 'https://test.com');
+
+  // Upload file
+  const file = new File(['test'], 'test.png', { type: 'image/png' });
+  await userEvent.upload(logoInput, file);
+
+  // Wait for conversion - now using convertSpy
+  await waitFor(
+    () => {
+      return convertSpy.mock.calls.length > 0;
+    },
+    { timeout: 2000 },
+  );
+
+  // Additional wait for state propagation
+  await act(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 500));
   });
 
-  test('should show success toast when profile is updated successfully', async () => {
-    const mockBase64 = 'data:image/png;base64,mockBase64String';
-    vi.spyOn(convertToBase64Module, 'default').mockResolvedValue(mockBase64);
+  // Verify inputs have values
+  expect(nameInput.value).toBe('Test Name');
+  expect(websiteInput.value).toBe('https://test.com');
 
-    const { container } = render(
-      <MockedProvider addTypename={false} mocks={UPDATE_SUCCESS_MOCKS}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <CommunityProfile />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  const submitButton = screen.getByTestId('saveChangesBtn');
+  expect(submitButton).not.toBeDisabled();
 
-    await wait();
-
-    const form = container.querySelector('form') as HTMLFormElement;
-    const nameInput = screen.getByPlaceholderText(
-      /Community Name/i,
-    ) as HTMLInputElement;
-    const websiteInput = screen.getByPlaceholderText(
-      /Website Link/i,
-    ) as HTMLInputElement;
-    const logoInput = screen.getByTestId('fileInput') as HTMLInputElement;
-
-    // Update text fields
-    await userEvent.clear(nameInput);
-    await userEvent.type(nameInput, 'Test Name');
-
-    await userEvent.clear(websiteInput);
-    await userEvent.type(websiteInput, 'https://test.com');
-
-    // Upload file
-    const file = new File(['test'], 'test.png', { type: 'image/png' });
-    await userEvent.upload(logoInput, file);
-
-    // Wait for conversion
-    await waitFor(
-      () => {
-        return convertToBase64Module.default.mock.calls.length > 0;
-      },
-      { timeout: 2000 },
-    );
-
-    // Additional wait for state propagation
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-    });
-
-    // Verify inputs have values
-    expect(nameInput.value).toBe('Test Name');
-    expect(websiteInput.value).toBe('https://test.com');
-
-    const submitButton = screen.getByTestId('saveChangesBtn');
-    expect(submitButton).not.toBeDisabled();
-
-    // Submit using form submission (not button click)
-    await act(async () => {
-      fireEvent.submit(form);
-    });
-
-    // Wait for toast
-    await waitFor(
-      () => {
-        expect(toast.success).toHaveBeenCalled();
-      },
-      {
-        timeout: 5000,
-        interval: 100,
-      },
-    );
+  // Submit using form submission (not button click)
+  await act(async () => {
+    fireEvent.submit(form);
   });
+
+  // Wait for toast
+  await waitFor(
+    () => {
+      expect(toast.success).toHaveBeenCalled();
+    },
+    {
+      timeout: 5000,
+      interval: 100,
+    },
+  );
+});
 
   test('should handle reset error correctly', async () => {
     render(
