@@ -85,26 +85,18 @@ export const askAndUpdateTalawaApiUrl = async (
       }
       if (useDocker && endpoint) {
         const raw = endpoint.includes('://') ? endpoint : `http://${endpoint}`;
-        let parsed;
         try {
-          parsed = new URL(raw);
-        } catch {
-          throw new Error('Invalid endpoint URL');
-        }
-
-        const localHosts = new Set(['localhost', '127.0.0.1', '::1']);
-        if (localHosts.has(parsed.hostname)) {
-          parsed.hostname = 'host.docker.internal';
-          const dockerUrl = parsed.toString();
-          try {
-            const urlCheck = new URL(dockerUrl);
-            if (!['http:', 'https:'].includes(urlCheck.protocol)) {
-              throw new Error('Invalid Docker URL protocol');
-            }
-          } catch {
-            throw new Error('Invalid Docker URL generated');
+          const parsed = new URL(raw);
+          const localHosts = new Set(['localhost', '127.0.0.1', '::1']);
+          if (localHosts.has(parsed.hostname)) {
+            parsed.hostname = 'host.docker.internal';
+            const dockerUrl = parsed.toString();
+            updateEnvFile('REACT_APP_DOCKER_TALAWA_URL', dockerUrl);
           }
-          updateEnvFile('REACT_APP_DOCKER_TALAWA_URL', dockerUrl);
+        } catch (error) {
+          throw new Error(
+            `Docker URL transformation failed: ${error instanceof Error ? error.message : String(error)}`,
+          );
         }
       }
     }

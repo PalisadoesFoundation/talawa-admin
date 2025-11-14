@@ -142,8 +142,6 @@ describe('askAndUpdateTalawaApiUrl', () => {
 
     await askAndUpdateTalawaApiUrl(true);
 
-    // The Docker URL may be written with or without a trailing slash depending on URL.toString().
-    // Match either form and ensure hostname + port are correct.
     expect(updateEnvFile).toHaveBeenCalledWith(
       'REACT_APP_DOCKER_TALAWA_URL',
       expect.stringMatching(/^https?:\/\/host\.docker\.internal:3000\/?$/),
