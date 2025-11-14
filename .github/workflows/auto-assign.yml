@@ -97,7 +97,9 @@ jobs:
                 per_page: 100,
               });
 
-              for (const r of repos) {
+              // Filter out archived repositories
+              const activeRepos = repos.filter(r => !r.archived);
+              for (const r of activeRepos) {
                 const assignedIssues = await github.paginate(
                   github.rest.issues.listForRepo,
                   {
