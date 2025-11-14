@@ -59,7 +59,7 @@ export default defineConfig({
     // this ensures that the browser opens upon server start
     open: false,
     host: '0.0.0.0',
-    // this sets a default port to 4321
+    // Uses PORT environment variable, defaults to 4321
     port: PORT,
   },
 });
