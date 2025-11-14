@@ -159,7 +159,6 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
     const originalURL = global.URL;
 
     try {
-      // Override URL to return an invalid protocol specifically when a ws:// or wss:// URL is constructed.
       global.URL = class extends originalURL {
         constructor(url: string) {
           super(url);
@@ -191,7 +190,7 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
     }
   });
 
-  test('should handle Docker URL with invalid protocol after construction', async () => {
+  test('should transform localhost to host.docker.internal and not error on Docker URL protocol', async () => {
     (askForTalawaApiUrl as Mock).mockResolvedValue('https://localhost:3000');
     vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
       shouldSetTalawaApiUrlResponse: true,
@@ -200,7 +199,6 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
     const originalURL = global.URL;
 
     try {
-      // Override URL to return an invalid protocol specifically when the host.docker.internal URL is constructed.
       global.URL = class extends originalURL {
         constructor(url: string) {
           super(url);
@@ -215,11 +213,11 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
 
       await askAndUpdateTalawaApiUrl(true);
 
-      expect(console.error).toHaveBeenCalledWith(
-        'Error setting up Talawa API URL:',
-        expect.objectContaining({
-          message: expect.stringContaining('Invalid Docker URL generated'),
-        }),
+      expect(console.error).not.toHaveBeenCalled();
+
+      expect(updateEnvFile).toHaveBeenCalledWith(
+        'REACT_APP_DOCKER_TALAWA_URL',
+        expect.stringContaining('host.docker.internal'),
       );
     } finally {
       global.URL = originalURL;
