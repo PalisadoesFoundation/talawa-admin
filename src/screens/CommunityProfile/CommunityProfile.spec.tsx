@@ -601,8 +601,6 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
     const form = container.querySelector('form') as HTMLFormElement;
     const nameInput = screen.getByPlaceholderText(
       /Community Name/i,
@@ -623,40 +621,32 @@ describe('Testing Community Profile Screen', () => {
     const file = new File(['test'], 'test.png', { type: 'image/png' });
     await userEvent.upload(logoInput, file);
 
-    // Wait for conversion - now using convertSpy
+    // Wait for base64 conversion to complete
     await waitFor(
       () => {
-        return convertSpy.mock.calls.length > 0;
+        expect(convertSpy).toHaveBeenCalledWith(file);
       },
       { timeout: 2000 },
     );
 
-    // Additional wait for state propagation
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-    });
-
-    // Verify inputs have values
+    // Verify inputs have values and button is enabled
     expect(nameInput.value).toBe('Test Name');
     expect(websiteInput.value).toBe('https://test.com');
 
     const submitButton = screen.getByTestId('saveChangesBtn');
     expect(submitButton).not.toBeDisabled();
 
-    // Submit using form submission (not button click)
+    // Submit form
     await act(async () => {
       fireEvent.submit(form);
     });
 
-    // Wait for toast
+    // Wait for success toast
     await waitFor(
       () => {
         expect(toast.success).toHaveBeenCalled();
       },
-      {
-        timeout: 5000,
-        interval: 100,
-      },
+      { timeout: 2000 },
     );
   });
 
