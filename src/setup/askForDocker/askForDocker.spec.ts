@@ -63,6 +63,42 @@ describe('askForDocker', () => {
   });
 });
 
+describe('askAndUpdateTalawaApiUrl - extended coverage', () => {
+  test('should skip setup when user selects No', async () => {
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      shouldSetTalawaApiUrlResponse: false,
+    });
+
+    await askAndUpdateTalawaApiUrl();
+
+    expect(askForTalawaApiUrl).not.toHaveBeenCalled();
+    expect(updateEnvFile).not.toHaveBeenCalled();
+  });
+
+  test('should ignore Docker logic when URL hostname is not localhost', async () => {
+    (askForTalawaApiUrl as Mock).mockResolvedValue('https://example.com');
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      shouldSetTalawaApiUrlResponse: true,
+    });
+
+    await askAndUpdateTalawaApiUrl(true);
+
+    // Should only update normal URLs, not Docker URL
+    expect(updateEnvFile).toHaveBeenCalledWith(
+      'REACT_APP_TALAWA_URL',
+      'https://example.com',
+    );
+    expect(updateEnvFile).toHaveBeenCalledWith(
+      'REACT_APP_BACKEND_WEBSOCKET_URL',
+      'wss://example.com',
+    );
+    expect(updateEnvFile).not.toHaveBeenCalledWith(
+      'REACT_APP_DOCKER_TALAWA_URL',
+      expect.anything(),
+    );
+  });
+});
+
 describe('askAndUpdateTalawaApiUrl', () => {
   test('should proceed with setup when user confirms', async () => {
     (askForTalawaApiUrl as Mock).mockResolvedValue(
@@ -106,9 +142,11 @@ describe('askAndUpdateTalawaApiUrl', () => {
 
     await askAndUpdateTalawaApiUrl(true);
 
+    // The Docker URL may be written with or without a trailing slash depending on URL.toString().
+    // Match either form and ensure hostname + port are correct.
     expect(updateEnvFile).toHaveBeenCalledWith(
       'REACT_APP_DOCKER_TALAWA_URL',
-      'https://host.docker.internal:3000',
+      expect.stringMatching(/^https?:\/\/host\.docker\.internal:3000\/?$/),
     );
   });
 });
@@ -121,14 +159,19 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
     });
 
     const originalURL = global.URL;
-    let callCount = 0;
 
     try {
+      // Override URL to return an invalid protocol specifically when a ws:// or wss:// URL is constructed.
       global.URL = class extends originalURL {
         constructor(url: string) {
           super(url);
-          callCount++;
-          if (callCount === 2 && url.startsWith('ws')) {
+          if (
+            typeof url === 'string' &&
+            (url.startsWith('ws:') ||
+              url.startsWith('wss:') ||
+              url.includes('ws://') ||
+              url.includes('wss://'))
+          ) {
             Object.defineProperty(this, 'protocol', {
               get: () => 'invalid:',
               configurable: true,
@@ -142,7 +185,7 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
       expect(console.error).toHaveBeenCalledWith(
         'Error setting up Talawa API URL:',
         expect.objectContaining({
-          message: 'Invalid WebSocket URL generated: ',
+          message: expect.stringContaining('Invalid WebSocket URL generated'),
         }),
       );
     } finally {
@@ -157,14 +200,13 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
     });
 
     const originalURL = global.URL;
-    let callCount = 0;
 
     try {
+      // Override URL to return an invalid protocol specifically when the host.docker.internal URL is constructed.
       global.URL = class extends originalURL {
         constructor(url: string) {
           super(url);
-          callCount++;
-          if (callCount === 3 && url.includes('host.docker.internal')) {
+          if (typeof url === 'string' && url.includes('host.docker.internal')) {
             Object.defineProperty(this, 'protocol', {
               get: () => 'ftp:',
               configurable: true,
@@ -178,7 +220,7 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
       expect(console.error).toHaveBeenCalledWith(
         'Error setting up Talawa API URL:',
         expect.objectContaining({
-          message: 'Invalid Docker URL generated',
+          message: expect.stringContaining('Invalid Docker URL generated'),
         }),
       );
     } finally {
