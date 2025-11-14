@@ -249,7 +249,7 @@ jobs:
               for (const r of activeRepos) {
 
                 // Exit early once limit is detected                
-                if (totalAssigned >= maxAssignments) break;  
+                if (reCheckCount >= maxAssignments) break;  
 
                 try {
                   const assignedIssues = await github.paginate(
