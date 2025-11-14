@@ -73,9 +73,6 @@ describe('Testing OrganizationScreen', () => {
     mockUseParams = vi.fn();
     mockUseMatch = vi.fn();
     mockNavigate = vi.fn();
-    mockUseParams.mockReset();
-    mockUseMatch.mockReset();
-    mockNavigate.mockReset();
   });
   afterEach(() => {
     vi.restoreAllMocks();

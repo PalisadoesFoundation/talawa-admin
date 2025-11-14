@@ -51,9 +51,8 @@ describe('EditOrgCustomFieldDropDown Component', () => {
         required: false,
       },
       setCustomFieldData: mockSetCustomFieldData,
-      variant: 'outline-success' as const,
+      variant: 'outline-success',
     };
-    vi.clearAllMocks();
   });
 
   afterEach(() => {
