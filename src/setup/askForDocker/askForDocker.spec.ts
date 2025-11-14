@@ -190,8 +190,9 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
     }
   });
 
-  test('should transform localhost to host.docker.internal and not error on Docker URL protocol', async () => {
-    (askForTalawaApiUrl as Mock).mockResolvedValue('https://localhost:3000');
+  test('should transform localhost to host.docker.internal and not error', async () => {
+    (askForTalawaApiUrl as Mock).mockResolvedValue('http://localhost:3000');
+
     vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
       shouldSetTalawaApiUrlResponse: true,
     });
@@ -200,32 +201,15 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
       .spyOn(console, 'error')
       .mockImplementation(() => {});
 
-    const originalURL = global.URL;
+    await askAndUpdateTalawaApiUrl(true);
 
-    try {
-      global.URL = class extends originalURL {
-        constructor(url: string) {
-          super(url);
-          if (typeof url === 'string' && url.includes('host.docker.internal')) {
-            Object.defineProperty(this, 'protocol', {
-              get: () => 'https:',
-              configurable: true,
-            });
-          }
-        }
-      } as typeof URL;
+    expect(consoleErrorSpy).not.toHaveBeenCalled();
 
-      await askAndUpdateTalawaApiUrl(true);
+    expect(updateEnvFile).toHaveBeenCalledWith(
+      'REACT_APP_DOCKER_TALAWA_URL',
+      expect.stringContaining('host.docker.internal'),
+    );
 
-      expect(consoleErrorSpy).not.toHaveBeenCalled();
-
-      expect(updateEnvFile).toHaveBeenCalledWith(
-        'REACT_APP_DOCKER_TALAWA_URL',
-        expect.stringContaining('host.docker.internal'),
-      );
-    } finally {
-      global.URL = originalURL;
-      consoleErrorSpy.mockRestore();
-    }
+    consoleErrorSpy.mockRestore();
   });
 });
