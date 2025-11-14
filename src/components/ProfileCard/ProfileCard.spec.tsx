@@ -13,7 +13,7 @@ import { vi } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
-const mockNavigate = vi.fn();
+let mockNavigate: ReturnType<typeof vi.fn>;
 
 // Mock useNavigate hook
 vi.mock('react-router', async () => {
@@ -60,6 +60,7 @@ vi.mock('react-toastify', () => ({
 }));
 
 beforeEach(() => {
+  mockNavigate = vi.fn();
   setItem('name', 'John Doe');
   setItem('FirstName', 'John');
   setItem('LastName', 'Doe');
@@ -73,7 +74,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  vi.clearAllMocks();
+  vi.restoreAllMocks();
   localStorage.clear();
 });
 

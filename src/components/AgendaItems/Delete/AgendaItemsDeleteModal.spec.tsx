@@ -10,16 +10,22 @@ import AgendaItemsDeleteModal from './AgendaItemsDeleteModal';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import userEvent from '@testing-library/user-event';
 
-const mockToggleDeleteModal = vi.fn();
-const mockDeleteAgendaItemHandler = vi.fn();
+let mockToggleDeleteModal: ReturnType<typeof vi.fn>;
+let mockDeleteAgendaItemHandler: ReturnType<typeof vi.fn>;
 const mockT = (key: string): string => key;
 const mockTCommon = (key: string): string => key;
 
 describe('AgendaItemsDeleteModal', () => {
   beforeEach(() => {
+    mockToggleDeleteModal = vi.fn();
+    mockDeleteAgendaItemHandler = vi.fn();
     vi.clearAllMocks();
     // Reset any manual timers
     vi.useRealTimers();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   const renderComponent = (

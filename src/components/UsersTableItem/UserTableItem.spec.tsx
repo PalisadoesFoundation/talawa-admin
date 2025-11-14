@@ -43,7 +43,7 @@ Object.defineProperty(window, 'location', {
   writable: true,
 });
 
-const mockNavgatePush = vi.fn();
+let mockNavgatePush: ReturnType<typeof vi.fn>;
 
 vi.mock('react-router', async () => {
   const actual = (await vi.importActual('react-router')) as typeof RouterTypes;
@@ -54,13 +54,14 @@ vi.mock('react-router', async () => {
 });
 
 beforeEach(() => {
+  mockNavgatePush = vi.fn();
   setItem('SuperAdmin', true);
   setItem('id', '123');
 });
 
 afterEach(() => {
+  vi.restoreAllMocks();
   localStorage.clear();
-  vi.clearAllMocks();
 });
 
 describe('Testing User Table Item', () => {
