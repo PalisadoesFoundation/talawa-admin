@@ -92,6 +92,16 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     }
   };
 
+  // Safe date formatting that handles null values
+  const safeFormatDate = (dateString: string | null): string => {
+    if (!dateString) return 'N/A';
+    try {
+      return formatDate(dateString);
+    } catch {
+      return 'N/A';
+    }
+  };
+
   const eventListCardProps: InterfaceEvent = {
     userRole: userRole,
     key: eventData.event.id,
@@ -192,7 +202,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                     : ''}
                 </b>{' '}
                 <span className={styles.startDate} data-testid="start-date">
-                  {formatDate(eventData.event.startAt)}{' '}
+                  {safeFormatDate(eventData.event.startAt)}{' '}
                 </span>
               </p>
               <p className={styles.to}>{t('to')}</p>
@@ -203,7 +213,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                     : ''}
                 </b>{' '}
                 <span className={styles.endDate} data-testid="end-date">
-                  {formatDate(eventData.event.endAt)}{' '}
+                  {safeFormatDate(eventData.event.endAt)}{' '}
                 </span>
               </p>
             </div>
