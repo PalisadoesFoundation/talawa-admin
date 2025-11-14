@@ -350,8 +350,9 @@ const organizationFunds = (): JSX.Element => {
                   { label: t('createdEarliest'), value: 'createdAt_ASC' },
                 ],
                 selected: sortBy,
-                onChange: (value: string) =>
+                onChange: (value) =>
                   setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC'),
+                testIdPrefix: 'sort',
               },
             ]}
             actions={

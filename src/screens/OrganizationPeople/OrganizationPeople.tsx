@@ -499,7 +499,8 @@ function OrganizationPeople(): JSX.Element {
                   ],
                   selected:
                     state === 2 ? 'Users' : state === 1 ? 'Admin' : 'Members',
-                  onChange: handleSortChange,
+                  onChange: (value) => handleSortChange(value.toString()),
+                  testIdPrefix: 'sort',
                 },
               ]}
               actions={<AddMember />}

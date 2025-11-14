@@ -215,7 +215,7 @@ describe('OrganizationFunds Screen =>', () => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
     });
 
-    await userEvent.click(await screen.findByTestId('filter'));
+    await userEvent.click(await screen.findByTestId('sort'));
     await userEvent.click(screen.getByTestId('createdAt_DESC'));
 
     await waitFor(() => {

@@ -228,7 +228,8 @@ function organizationVenues(): JSX.Element {
                 { label: tCommon('description'), value: 'desc' },
               ],
               selected: searchBy,
-              onChange: handleSearchByChange,
+              onChange: (value) => handleSearchByChange(value as string),
+              testIdPrefix: 'searchByButton',
             },
             {
               title: 'Sort Venues',
@@ -237,7 +238,8 @@ function organizationVenues(): JSX.Element {
                 { label: t('lowestCapacity'), value: 'lowest' },
               ],
               selected: sortOrder,
-              onChange: handleSortChange,
+              onChange: (value) => handleSortChange(value as string),
+              testIdPrefix: 'sortVenues',
             },
           ]}
           actions={

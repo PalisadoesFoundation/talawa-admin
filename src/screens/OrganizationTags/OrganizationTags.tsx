@@ -351,7 +351,8 @@ function OrganizationTags(): JSX.Element {
                     { label: tCommon('Oldest'), value: 'oldest' },
                   ],
                   selected: tagSortOrder === 'DESCENDING' ? 'latest' : 'oldest',
-                  onChange: handleSortChange,
+                  onChange: (value) => handleSortChange(value.toString()),
+                  testIdPrefix: 'sortedBy',
                 },
               ]}
               actions={

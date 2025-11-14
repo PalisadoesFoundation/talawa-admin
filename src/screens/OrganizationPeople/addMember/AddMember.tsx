@@ -72,6 +72,7 @@ import styles from 'style/app-fixed.module.css';
 import Avatar from 'components/Avatar/Avatar';
 import { TablePagination } from '@mui/material';
 import PageHeader from 'screens/components/Navbar';
+import type { IEdge, IUserDetails, IQueryVariable } from './types';
 
 const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
@@ -80,66 +81,29 @@ const StyledTableCell = styled(TableCell)(() => ({
   },
   [`&.${tableCellClasses.body}`]: { fontSize: 14 },
 }));
-
 const StyledTableRow = styled(TableRow)(() => ({
   '&:last-child td, &:last-child th': { border: 0 },
 }));
-
-interface IEdge {
-  cursor: string;
-  node: {
-    id: string;
-    name: string;
-    role: string;
-    avatarURL: string;
-    emailAddress: string;
-    createdAt?: string;
-  };
-}
-interface IUserDetails {
-  id: string;
-  name: string;
-  emailAddress: string;
-  avatarURL?: string;
-}
-
-interface IQueryVariable {
-  orgId?: string | undefined;
-  first?: number | null;
-  after?: string | null;
-  last?: number | null;
-  before?: string | null;
-  where?: { role: { equal: 'administrator' | 'regular' } };
-}
 
 function AddMember(): JSX.Element {
   const { t: translateOrgPeople } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
   });
-
   const { t: translateAddMember } = useTranslation('translation', {
     keyPrefix: 'addMember',
   });
-
   const { t: tCommon } = useTranslation('common');
-
   document.title = translateOrgPeople('title');
-
   const [addUserModalisOpen, setAddUserModalIsOpen] = useState(false);
-
   const PAGE_SIZE = 10;
-  // Pagination state
   const [page, setPage] = useState(0);
   const [paginationMeta, setPaginationMeta] = useState({
     hasNextPage: false,
     hasPreviousPage: false,
   });
-
-  // Refs to store cursors for navigation
   const mapPageToCursor = useRef<Record<number, string>>({});
   const backwardMapPageToCursor = useRef<Record<number, string>>({});
   const responsePageRef = useRef<number>(0);
-
   const resetPagination = useCallback(() => {
     mapPageToCursor.current = {};
     backwardMapPageToCursor.current = {};
@@ -147,8 +111,6 @@ function AddMember(): JSX.Element {
     responsePageRef.current = 0;
     setPaginationMeta({ hasNextPage: false, hasPreviousPage: false });
   }, []);
-
-  // Query for fetching users with pagination
   const [
     fetchUsers,
     { loading: userLoading, error: userError, data: userData },
@@ -156,28 +118,18 @@ function AddMember(): JSX.Element {
     variables: { first: PAGE_SIZE, after: null, last: null, before: null },
   });
 
-  function openAddUserModal(): void {
-    setAddUserModalIsOpen(true);
-  }
+  const openAddUserModal = () => setAddUserModalIsOpen(true);
   useEffect(() => {
     setUserName('');
   }, [addUserModalisOpen]);
-
   const toggleDialogModal = (): void =>
     setAddUserModalIsOpen(!addUserModalisOpen);
 
   const [createNewUserModalisOpen, setCreateNewUserModalIsOpen] =
     useState(false);
-  function openCreateNewUserModal(): void {
-    setCreateNewUserModalIsOpen(true);
-  }
-
-  function closeCreateNewUserModal(): void {
-    setCreateNewUserModalIsOpen(false);
-  }
-
+  const openCreateNewUserModal = () => setCreateNewUserModalIsOpen(true);
+  const closeCreateNewUserModal = () => setCreateNewUserModalIsOpen(false);
   const [addMember] = useMutation(CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG);
-
   const createMember = async (userId: string): Promise<void> => {
     try {
       await addMember({
@@ -192,50 +144,29 @@ function AddMember(): JSX.Element {
       errorHandler(tCommon, error);
     }
   };
-
   const { orgId: currentUrl } = useParams();
-
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
-
   const togglePassword = (): void => setShowPassword(!showPassword);
   const toggleConfirmPassword = (): void =>
     setShowConfirmPassword(!showConfirmPassword);
-
   const [userName, setUserName] = useState('');
-
   const {
     data: organizationData,
   }: { data?: { organization: InterfaceQueryOrganizationsListObject } } =
     useQuery(GET_ORGANIZATION_BASIC_DATA, { variables: { id: currentUrl } });
-
-  // const {
-  //   data: allUsersData,
-  //   loading: allUsersLoading,
-  //   refetch: allUsersRefetch,
-  // } = useQuery(USER_LIST_FOR_TABLE, {
-  //   variables: {
-  //     id_not_in: getMembersId(),
-  //     firstName_contains: '',
-  //     lastName_contains: '',
-  //   },
-  // });
-
   const [registerMutation] = useMutation(CREATE_MEMBER_PG);
-
   const [createUserVariables, setCreateUserVariables] = React.useState({
     name: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
-
   enum OrganizationMembershipRole {
     ADMIN = 'administrator',
     REGULAR = 'regular',
   }
-
   const handleCreateUser = async (): Promise<void> => {
     if (
       !(
@@ -261,11 +192,8 @@ function AddMember(): JSX.Element {
           },
         });
         const createdUserId = registeredUser?.data.createUser.user.id;
-
         await createMember(createdUserId);
-
         closeCreateNewUserModal();
-
         setCreateUserVariables({
           name: '',
           email: '',
@@ -277,29 +205,24 @@ function AddMember(): JSX.Element {
       }
     }
   };
-
   const handleFirstName = (e: ChangeEvent<HTMLInputElement>): void => {
     const name = e.target.value;
     setCreateUserVariables({ ...createUserVariables, name });
   };
-
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const email = e.target.value;
     setCreateUserVariables({ ...createUserVariables, email });
   };
-
   const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const password = e.target.value;
     setCreateUserVariables({ ...createUserVariables, password });
   };
-
   const handleConfirmPasswordChange = (
     e: ChangeEvent<HTMLInputElement>,
   ): void => {
     const confirmPassword = e.target.value;
     setCreateUserVariables({ ...createUserVariables, confirmPassword });
   };
-
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
     e.preventDefault();
     resetPagination();
@@ -310,10 +233,8 @@ function AddMember(): JSX.Element {
       last: null,
       before: null,
     };
-
     fetchUsers({ variables });
   };
-
   const handleSortChange = (value: string): void => {
     if (value === 'existingUser') {
       openAddUserModal();
@@ -321,8 +242,6 @@ function AddMember(): JSX.Element {
       openCreateNewUserModal();
     }
   };
-
-  // Initial data fetch
   useEffect(() => {
     if (addUserModalisOpen) {
       resetPagination();
@@ -331,13 +250,9 @@ function AddMember(): JSX.Element {
       });
     }
   }, [currentUrl, addUserModalisOpen]);
-
-  // Process data when it arrives
   useEffect(() => {
     if (userData?.allUsers) {
       const { pageInfo } = userData.allUsers;
-
-      // Store cursors relative to the page for which this response was requested
       const pageIndex = responsePageRef.current;
       if (pageInfo.endCursor) {
         mapPageToCursor.current[pageIndex + 1] = pageInfo.endCursor;
@@ -345,27 +260,17 @@ function AddMember(): JSX.Element {
       if (pageIndex > 0 && pageInfo.startCursor) {
         backwardMapPageToCursor.current[pageIndex - 1] = pageInfo.startCursor;
       }
-
       setPaginationMeta({
         hasNextPage: pageInfo.hasNextPage,
         hasPreviousPage: pageInfo.hasPreviousPage,
       });
     }
   }, [userData]);
-
-  // Handle page change
   const handleChangePage = (event: unknown, newPage: number) => {
     const isForwardNavigation = newPage > page;
-    // Check if navigation is allowed
-    if (isForwardNavigation && !paginationMeta.hasNextPage) {
-      return; // Prevent navigation if there's no next page
-    }
-    if (!isForwardNavigation && !paginationMeta.hasPreviousPage) {
-      return; // Prevent navigation if there's no previous page
-    }
-
+    if (isForwardNavigation && !paginationMeta.hasNextPage) return;
+    if (!isForwardNavigation && !paginationMeta.hasPreviousPage) return;
     const variables: IQueryVariable = {};
-
     if (isForwardNavigation) {
       const afterCursor = mapPageToCursor.current[newPage];
       if (!afterCursor) return;
@@ -385,11 +290,8 @@ function AddMember(): JSX.Element {
     responsePageRef.current = newPage;
     fetchUsers({ variables });
   };
-
-  // Extract user data from the query result
   const allUsersData =
     userData?.allUsers?.edges?.map((edge: IEdge) => edge.node) || [];
-
   return (
     <>
       <PageHeader
@@ -417,11 +319,11 @@ function AddMember(): JSX.Element {
               { label: translateOrgPeople('newUser'), value: 'newUser' },
             ],
             selected: translateOrgPeople('addMembers'),
-            onChange: handleSortChange,
+            onChange: (value) => handleSortChange(value.toString()),
+            testIdPrefix: 'addMembers',
           },
         ]}
       />
-      {/* Existing User Modal */}
       <Modal
         data-testid="addExistingUserModal"
         show={addUserModalisOpen}
@@ -556,11 +458,11 @@ function AddMember(): JSX.Element {
               </TableContainer>
               <TablePagination
                 component="div"
-                count={-1} // Use -1 for infinite/unknown count with cursor-based pagination
+                count={-1}
                 rowsPerPage={PAGE_SIZE}
                 page={page}
                 onPageChange={handleChangePage}
-                rowsPerPageOptions={[PAGE_SIZE]} // Fixed page size
+                rowsPerPageOptions={[PAGE_SIZE]}
                 backIconButtonProps={{
                   disabled: !paginationMeta.hasPreviousPage,
                   'aria-label': 'Previous Page',
@@ -575,8 +477,6 @@ function AddMember(): JSX.Element {
           )}
         </Modal.Body>
       </Modal>
-
-      {/* New User Modal */}
       <Modal data-testid="addNewUserModal" show={createNewUserModalisOpen}>
         <Modal.Header className={styles.headers} data-testid="createUser">
           <Modal.Title>{translateOrgPeople('createUser')}</Modal.Title>

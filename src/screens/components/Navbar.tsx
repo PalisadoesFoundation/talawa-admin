@@ -1,10 +1,3 @@
-/**
- * PageHeader Component
- *
- * A flexible reusable header/navbar for pages.
- * Supports title, search bar, sorting dropdowns, optional event type dropdown, and action buttons.
- */
-
 import React from 'react';
 import styles from 'style/app-fixed.module.css';
 import SearchBar from 'subComponents/SearchBar';
@@ -22,7 +15,8 @@ interface InterfacePageHeaderProps {
     title: string;
     options: { label: string; value: string | number }[];
     selected: string | number;
-    onChange: (value: any) => void;
+    onChange: (value: string | number) => void;
+    testIdPrefix: string;
   }>;
   showEventTypeFilter?: boolean;
   actions?: React.ReactNode;
@@ -62,7 +56,7 @@ export default function PageHeader({
                 sortingOptions={sort.options}
                 selectedOption={sort.selected}
                 onSortChange={sort.onChange}
-                dataTestIdPrefix={sort.title}
+                dataTestIdPrefix={sort.testIdPrefix}
                 className={styles.dropdown}
               />
             </div>

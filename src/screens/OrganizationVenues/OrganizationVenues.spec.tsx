@@ -215,14 +215,96 @@ describe('Organisation Venues', () => {
     vi.clearAllMocks();
   });
 
+  interface TestInterfaceMockSearch {
+    placeholder: string;
+    onSearch: (value: string) => void;
+    inputTestId?: string;
+    buttonTestId?: string;
+  }
+
+  interface TestInterfaceTestInterfaceMockSortingOption {
+    label: string;
+    value: string | number;
+  }
+
+  interface TestInterfaceMockSorting {
+    title: string;
+    options: TestInterfaceTestInterfaceMockSortingOption[];
+    selected: string | number;
+    onChange: (value: string | number) => void;
+    testIdPrefix: string;
+  }
+
+  vi.mock('screens/components/Navbar', () => {
+    return {
+      default: function MockPageHeader({
+        search,
+        sorting,
+        actions,
+      }: {
+        search?: TestInterfaceMockSearch;
+        sorting?: TestInterfaceMockSorting[];
+        actions?: React.ReactNode;
+      }) {
+        return (
+          <div data-testid="calendarEventHeader">
+            <div>
+              {search && (
+                <>
+                  <input
+                    placeholder={search.placeholder}
+                    onChange={(e) => search.onSearch(e.target.value)}
+                    autoComplete="off"
+                    required
+                    type="text"
+                    className="form-control"
+                  />
+                  <button
+                    data-testid={search.buttonTestId}
+                    onClick={() => {}}
+                    tabIndex={-1}
+                    type="button"
+                  >
+                    Search
+                  </button>
+                </>
+              )}
+            </div>
+
+            {sorting?.map((sort, index) => (
+              <div key={index}>
+                <button title={sort.title} data-testid={sort.testIdPrefix}>
+                  {sort.selected}
+                </button>
+                <div>
+                  {sort.options.map((option) => (
+                    <button
+                      key={option.value}
+                      data-testid={option.value.toString()}
+                      onClick={() => sort.onChange(String(option.value))}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            {actions}
+          </div>
+        );
+      },
+    };
+  });
+
   test('searches the venue list correctly by Name', async () => {
     renderOrganizationVenue(link);
     await wait();
-    const searchInput = screen.getByTestId('searchBy');
+    // Use the inputTestId from the search config
+    const searchInput = screen.getByPlaceholderText(/Search By/i);
     fireEvent.change(searchInput, {
       target: { value: 'Updated Venue 1' },
     });
-    fireEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument();
@@ -235,14 +317,29 @@ describe('Organisation Venues', () => {
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
 
-    fireEvent.click(screen.getByTestId('searchByDrpdwn'));
+    // Click the searchBy dropdown (first sorting dropdown)
+    fireEvent.click(screen.getByTestId('searchByButton'));
+    // Click the 'desc' option
     fireEvent.click(screen.getByTestId('desc'));
 
-    const searchInput = screen.getByTestId('searchBy');
+    const searchInput = screen.getByPlaceholderText(/Search By/i);
     fireEvent.change(searchInput, {
       target: { value: 'Updated description for venue 1' },
     });
-    fireEvent.click(screen.getByTestId('searchBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument();
+    });
+  });
+
+  test('sorts the venue list by highest capacity correctly', async () => {
+    renderOrganizationVenue(link);
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+    );
+
+    fireEvent.click(screen.getByTestId('sortVenues'));
+    fireEvent.click(screen.getByTestId('highest'));
 
     await waitFor(() => {
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument();
@@ -257,24 +354,8 @@ describe('Organisation Venues', () => {
 
     fireEvent.click(screen.getByTestId('sortVenues'));
     fireEvent.click(screen.getByTestId('lowest'));
-    await waitFor(() => {
-      // Since sorting might not be working with current query structure,
-      // just verify the list is rendered
-      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument();
-    });
-  });
 
-  test('sorts the venue list by highest capacity correctly', async () => {
-    renderOrganizationVenue(link);
-    await waitFor(() =>
-      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
-    );
-
-    fireEvent.click(screen.getByTestId('sortVenues'));
-    fireEvent.click(screen.getByTestId('highest'));
     await waitFor(() => {
-      // Since sorting might not be working with current query structure,
-      // just verify the list is rendered
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument();
     });
   });

@@ -303,9 +303,9 @@ function OrgPost(): JSX.Element {
       />
     </div>
   );
-  const handleSorting = (option: string): void => {
+  const handleSorting = (option: string | number): void => {
     setCurrentPage(1);
-    setSortingOption(option);
+    setSortingOption(option as string);
 
     if (option === 'None') {
       setDisplayPosts([]);
@@ -433,6 +433,7 @@ function OrgPost(): JSX.Element {
                 ],
                 selected: sortingOption,
                 onChange: handleSorting,
+                testIdPrefix: 'sortpost-toggle',
               },
             ]}
             showEventTypeFilter={false}

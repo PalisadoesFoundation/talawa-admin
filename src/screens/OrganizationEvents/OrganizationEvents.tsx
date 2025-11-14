@@ -244,7 +244,8 @@ function organizationEvents(): JSX.Element {
                   { label: ViewType.DAY, value: ViewType.DAY },
                   { label: ViewType.YEAR, value: ViewType.YEAR },
                 ],
-                onChange: (value) => handleChangeView(value),
+                onChange: (value) => handleChangeView(value.toString()),
+                testIdPrefix: 'selectViewType',
               },
             ]}
             showEventTypeFilter={true}

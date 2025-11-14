@@ -368,7 +368,8 @@ const Users = (): JSX.Element => {
                 { label: t('Oldest'), value: 'oldest' },
               ],
               selected: sortingOption,
-              onChange: handleSorting,
+              onChange: (value) => handleSorting(value.toString()),
+              testIdPrefix: 'sortUsers',
             },
             {
               title: 'Filter by role',
@@ -379,7 +380,8 @@ const Users = (): JSX.Element => {
                 { label: tCommon('cancel'), value: 'cancel' },
               ],
               selected: filteringOption,
-              onChange: handleFiltering,
+              onChange: (value) => handleFiltering(value.toString()),
+              testIdPrefix: 'filterUsers',
             },
           ]}
         />

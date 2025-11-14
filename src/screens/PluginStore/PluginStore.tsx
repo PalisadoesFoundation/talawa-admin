@@ -124,13 +124,14 @@ export default function PluginStore() {
         }}
         sorting={[
           {
-            title: 'Filter plugins',
+            title: 'Filter Plugins',
             options: [
               { label: t('allPlugins'), value: 'all' },
               { label: t('installedPlugins'), value: 'installed' },
             ],
             selected: filterState.selectedOption,
-            onChange: handleFilterChange,
+            onChange: (value) => handleFilterChange(value.toString()),
+            testIdPrefix: 'filterPlugins',
           },
         ]}
         actions={

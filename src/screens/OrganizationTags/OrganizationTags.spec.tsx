@@ -27,6 +27,7 @@ import {
   MOCKS_UNDEFINED_USER_TAGS,
   MOCKS_NULL_END_CURSOR,
   MOCKS_NO_MORE_PAGES,
+  MOCKS_ASCENDING_NO_SEARCH,
 } from './OrganizationTagsMocks';
 import type { ApolloLink } from '@apollo/client';
 
@@ -194,9 +195,97 @@ describe('Organisation Tags Page', () => {
       expect(buttons.length).toEqual(2);
     });
   });
-  test('fetches the tags by the sort order, i.e. latest or oldest first', async () => {
-    renderOrganizationTags(link);
 
+  interface TestInterfaceMockSearch {
+    placeholder: string;
+    onSearch: (value: string) => void;
+    inputTestId?: string;
+    buttonTestId?: string;
+  }
+
+  interface TestInterfaceTestInterfaceMockSortingOption {
+    label: string;
+    value: string | number;
+  }
+
+  interface TestInterfaceMockSorting {
+    title: string;
+    options: TestInterfaceTestInterfaceMockSortingOption[];
+    selected: string | number;
+    onChange: (value: string | number) => void;
+    testIdPrefix: string;
+  }
+
+  vi.mock('screens/components/Navbar', () => {
+    return {
+      default: function MockPageHeader({
+        search,
+        sorting,
+        actions,
+      }: {
+        search?: TestInterfaceMockSearch;
+        sorting?: TestInterfaceMockSorting[];
+        actions?: React.ReactNode;
+      }) {
+        return (
+          <div data-testid="calendarEventHeader">
+            <div>
+              {search && (
+                <>
+                  <input
+                    placeholder={search.placeholder}
+                    onChange={(e) => search.onSearch(e.target.value)}
+                    autoComplete="off"
+                    required
+                    type="text"
+                    className="form-control"
+                  />
+                  <button
+                    data-testid={search.buttonTestId}
+                    onClick={() => {}}
+                    tabIndex={-1}
+                    type="button"
+                  >
+                    Search
+                  </button>
+                </>
+              )}
+            </div>
+
+            {sorting?.map((sort, index) => (
+              <div key={index}>
+                <button title={sort.title} data-testid={sort.testIdPrefix}>
+                  {sort.selected}
+                </button>
+                <div>
+                  {sort.options.map((option) => (
+                    <button
+                      key={option.value}
+                      data-testid={option.value.toString()}
+                      onClick={() => sort.onChange(option.value)}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            {actions}
+          </div>
+        );
+      },
+    };
+  });
+
+  test('fetches the tags by the sort order, i.e. latest or oldest first', async () => {
+    // Create a link with all necessary mocks including ascending sort
+    const linkWithAllMocks = new StaticMockLink(
+      [...MOCKS, ...MOCKS_ASCENDING_NO_SEARCH],
+      true,
+    );
+
+    renderOrganizationTags(linkWithAllMocks);
     await wait();
 
     await waitFor(() => {
@@ -204,53 +293,41 @@ describe('Organisation Tags Page', () => {
         screen.getByPlaceholderText(translations.searchByName),
       ).toBeInTheDocument();
     });
-    const input = screen.getByPlaceholderText(translations.searchByName);
-    fireEvent.change(input, { target: { value: 'searchUserTag' } });
-    fireEvent.click(screen.getByTestId('searchBtn'));
 
-    // should render the two searched tags from the mock data
-    // where name starts with "searchUserTag"
+    const input = screen.getByPlaceholderText(translations.searchByName);
+
+    // Trigger search by changing the input value
+    // The mock PageHeader's onChange handler calls onSearch with the input value
+    fireEvent.change(input, { target: { value: 'searchUserTag' } });
+
+    // Wait for the search results to load
     await waitFor(() => {
       expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
         'searchUserTag 1',
       );
     });
 
-    // now change the sorting order
-    await waitFor(() => {
-      expect(screen.getByTestId('sortTags')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('sortTags'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('oldest')).toBeInTheDocument();
-    });
+    // Click the "Oldest" button to sort in ascending order
     await userEvent.click(screen.getByTestId('oldest'));
 
-    // returns the tags in reverse order
+    // Wait for tags to be re-ordered (oldest first)
     await waitFor(() => {
       expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
         'searchUserTag 2',
       );
     });
 
-    await waitFor(() => {
-      expect(screen.getByTestId('sortTags')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('sortTags'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('latest')).toBeInTheDocument();
-    });
+    // Click "Latest" to switch back to descending order
     await userEvent.click(screen.getByTestId('latest'));
 
-    // reverse the order again
+    // Wait for tags to be re-ordered back (latest first)
     await waitFor(() => {
       expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
         'searchUserTag 1',
       );
     });
   });
+
   test('fetches more tags with infinite scroll', async () => {
     const { getByText } = renderOrganizationTags(link);
 

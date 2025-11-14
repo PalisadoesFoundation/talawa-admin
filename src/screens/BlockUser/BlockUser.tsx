@@ -261,6 +261,7 @@ const BlockUser = (): JSX.Element => {
                     : 'All Members',
                   onChange: (value) =>
                     setShowBlockedMembers(value === 'blockedUsers'),
+                  testIdPrefix: 'sortOrganizations',
                 },
               ]}
             />
