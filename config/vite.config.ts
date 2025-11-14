@@ -6,7 +6,9 @@ import EnvironmentPlugin from 'vite-plugin-environment';
 import createInternalFileWriterPlugin from '../src/plugin/vite/internalFileWriterPlugin';
 import istanbul from 'vite-plugin-istanbul';
 
-const PORT = process.env.PORT ? Number(process.env.PORT) : 4321;
+const parsed = parseInt(process.env.PORT || '', 10);
+const PORT =
+  !isNaN(parsed) && parsed >= 1024 && parsed <= 65535 ? parsed : 4321;
 
 export default defineConfig({
   // depending on your application, base can also be "/"
