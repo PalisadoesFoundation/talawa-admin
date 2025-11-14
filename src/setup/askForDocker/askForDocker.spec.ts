@@ -134,7 +134,7 @@ describe('askAndUpdateTalawaApiUrl', () => {
     );
   });
 
-  test('should validate Docker URL protocol when useDocker=true', async () => {
+  test('should write Docker URL for localhost when useDocker=true', async () => {
     (askForTalawaApiUrl as Mock).mockResolvedValue('https://localhost:3000');
     vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
       shouldSetTalawaApiUrlResponse: true,
