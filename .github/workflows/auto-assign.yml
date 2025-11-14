@@ -4,6 +4,9 @@ on:
   issue_comment:
     types: [created]
 
+env:
+  MAX_OPEN_ASSIGNMENTS: 2
+
 jobs:
   handle-comment:
     runs-on: ubuntu-latest
@@ -153,7 +156,7 @@ jobs:
             //    if over limit (but this creates noise in notifications).
             //
             // Current implementation: Option 1 (accept transient violations for simplicity).
-            if (totalAssigned >= 2) {
+            if (totalAssigned >= parseInt(process.env.MAX_OPEN_ASSIGNMENTS || '2')) {
               const message = `⚠️ @${user} already has ${totalAssigned} open assignments across the org. Please finish or unassign before taking new ones.`;
               await github.rest.issues.createComment({
                 owner,
