@@ -389,7 +389,9 @@ describe('Testing Community Profile Screen', () => {
     await userEvent.type(youtube, profileVariables.socialURL);
     await userEvent.type(reddit, profileVariables.socialURL);
     await userEvent.type(slack, profileVariables.socialURL);
-    await userEvent.upload(logo, profileVariables.logoURL);
+
+    const mockFile = new File(['logo'], 'test.png', { type: 'image/png' });
+    fireEvent.change(logo, { target: { files: [mockFile] } });
     await wait();
 
     expect(communityName).toHaveValue(profileVariables.name);
@@ -519,10 +521,9 @@ describe('Testing Community Profile Screen', () => {
 
     await userEvent.type(nameInput, 'Test Name');
     await userEvent.type(websiteInput, 'https://test.com');
-    await userEvent.upload(
-      logoInput,
-      new File(['test'], 'test.png', { type: 'image/png' }),
-    );
+
+    const mockFile = new File(['test'], 'test.png', { type: 'image/png' });
+    fireEvent.change(logoInput, { target: { files: [mockFile] } });
 
     await wait();
 
@@ -554,7 +555,7 @@ describe('Testing Community Profile Screen', () => {
     });
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
 
-    await userEvent.upload(fileInput, mockFile);
+    fireEvent.change(fileInput, { target: { files: [mockFile] } });
     await wait();
 
     expect(convertToBase64Module.default).toHaveBeenCalledWith(mockFile);
@@ -579,7 +580,7 @@ describe('Testing Community Profile Screen', () => {
     const mockFile = new File([''], 'test.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
 
-    await userEvent.upload(fileInput, mockFile);
+    fireEvent.change(fileInput, { target: { files: [mockFile] } });
     await wait();
 
     expect(convertToBase64Module.default).toHaveBeenCalledWith(mockFile);
@@ -619,7 +620,7 @@ describe('Testing Community Profile Screen', () => {
 
     // Upload file
     const file = new File(['test'], 'test.png', { type: 'image/png' });
-    await userEvent.upload(logoInput, file);
+    fireEvent.change(logoInput, { target: { files: [file] } });
 
     // Wait for base64 conversion to complete
     await waitFor(
@@ -734,10 +735,8 @@ describe('Testing Community Profile Screen', () => {
     await wait();
 
     const logoInput = screen.getByTestId('fileInput');
-    await userEvent.upload(
-      logoInput,
-      new File(['test'], 'test.png', { type: 'image/png' }),
-    );
+    const mockFile = new File(['test'], 'test.png', { type: 'image/png' });
+    fireEvent.change(logoInput, { target: { files: [mockFile] } });
 
     // Wait for the base64 conversion to complete and state to update
     await waitFor(
@@ -836,14 +835,14 @@ describe('Testing Community Profile Screen', () => {
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
     const mockFile = new File(['content'], 'test.png', { type: 'image/png' });
 
-    await userEvent.upload(fileInput, mockFile);
+    fireEvent.change(fileInput, { target: { files: [mockFile] } });
     await wait();
 
     // Upload another file to test the clearing behavior
     const mockFile2 = new File(['content2'], 'test2.png', {
       type: 'image/png',
     });
-    await userEvent.upload(fileInput, mockFile2);
+    fireEvent.change(fileInput, { target: { files: [mockFile2] } });
     await wait();
 
     expect(convertToBase64Module.default).toHaveBeenCalledTimes(2);
