@@ -31,19 +31,33 @@ vi.mock('utils/fieldTypes', () => ({
 }));
 
 describe('EditOrgCustomFieldDropDown Component', () => {
-  const mockSetCustomFieldData = vi.fn();
-  const defaultProps = {
+  let mockSetCustomFieldData: ReturnType<typeof vi.fn>;
+  let defaultProps: {
     customFieldData: {
-      type: 'TEXT',
-      name: 'Test Field',
-      required: false,
-    },
-    setCustomFieldData: mockSetCustomFieldData,
-    variant: 'outline-success' as const,
+      type: string;
+      name: string;
+      required: boolean;
+    };
+    setCustomFieldData: ReturnType<typeof vi.fn>;
+    variant: 'outline-success';
   };
 
   beforeEach(() => {
+    mockSetCustomFieldData = vi.fn();
+    defaultProps = {
+      customFieldData: {
+        type: 'TEXT',
+        name: 'Test Field',
+        required: false,
+      },
+      setCustomFieldData: mockSetCustomFieldData,
+      variant: 'outline-success' as const,
+    };
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('renders with initial type', () => {
