@@ -5,8 +5,8 @@
  * Currently shows an empty state as backend API is not yet implemented.
  *
  * @component
- * @param {ProfileEventsProps} props - The props for the component.
- * @param {UserData} props.user - The user data.
+ * @param {InterfaceProfileEventsProps} props - The props for the component.
+ * @param {InterfaceUserData} props.user - The user data.
  * @param {boolean} props.isOwnProfile - Whether this is the current user's own profile.
  * @param {boolean} props.isEditing - Whether the profile is in edit mode.
  * @param {function} props.onSave - Function to save user data changes.

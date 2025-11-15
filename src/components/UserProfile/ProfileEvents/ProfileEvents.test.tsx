@@ -21,7 +21,7 @@ describe('ProfileEvents Component', () => {
     vi.clearAllMocks();
   });
 
-  test('renders empty state with user events heading', () => {
+  test('renders placeholder empty state with all required messages', () => {
     render(
       <ProfileEvents
         user={mockUser}
@@ -32,33 +32,9 @@ describe('ProfileEvents Component', () => {
     );
 
     expect(screen.getByText('User Events')).toBeInTheDocument();
-  });
-
-  test('renders under development message', () => {
-    render(
-      <ProfileEvents
-        user={mockUser}
-        isOwnProfile={true}
-        isEditing={false}
-        onSave={mockOnSave}
-      />,
-    );
-
     expect(
       screen.getByText(/This feature is currently under development/i),
     ).toBeInTheDocument();
-  });
-
-  test('shows message about backend API not existing', () => {
-    render(
-      <ProfileEvents
-        user={mockUser}
-        isOwnProfile={true}
-        isEditing={false}
-        onSave={mockOnSave}
-      />,
-    );
-
     expect(
       screen.getByText(
         /The backend API for fetching user events does not exist yet/i,

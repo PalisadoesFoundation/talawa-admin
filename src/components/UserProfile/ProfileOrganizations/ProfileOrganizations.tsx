@@ -5,8 +5,8 @@
  * This is one of the tab contents for the profile view.
  *
  * @component
- * @param {ProfileOrganizationsProps} props - The props for the component.
- * @param {UserData} props.user - The user data.
+ * @param {InterfaceProfileOrganizationsProps} props - The props for the component.
+ * @param {InterfaceUserData} props.user - The user data.
  * @param {boolean} props.isOwnProfile - Whether this is the current user's own profile.
  *
  * @returns {JSX.Element} The rendered ProfileOrganizations component.

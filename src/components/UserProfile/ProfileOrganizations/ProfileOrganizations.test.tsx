@@ -14,23 +14,13 @@ describe('ProfileOrganizations Component', () => {
     createdAt: '2023-01-01T00:00:00Z',
   };
 
-  test('renders empty state with user organizations heading', () => {
+  test('renders placeholder empty state with all required messages', () => {
     render(<ProfileOrganizations user={mockUser} isOwnProfile={true} />);
 
     expect(screen.getByText('User Organizations')).toBeInTheDocument();
-  });
-
-  test('renders under development message', () => {
-    render(<ProfileOrganizations user={mockUser} isOwnProfile={true} />);
-
     expect(
       screen.getByText(/This feature is currently under development/i),
     ).toBeInTheDocument();
-  });
-
-  test('shows message about backend API not existing', () => {
-    render(<ProfileOrganizations user={mockUser} isOwnProfile={true} />);
-
     expect(
       screen.getByText(
         /The backend API for fetching user organizations does not exist yet/i,
