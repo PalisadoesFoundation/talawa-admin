@@ -20,7 +20,6 @@
  */
 import type { FC } from 'react';
 import React from 'react';
-import styles from 'style/app-fixed.module.css';
 
 interface IProfileHeaderProps {
   title: string;
@@ -34,7 +33,10 @@ const ProfileHeader: FC<IProfileHeaderProps> = ({
     data-testid="profile-header"
   >
     <div style={{ flex: 1 }}>
-      <h1 data-testid="profile-header-title" className={styles.pageTitle}>
+      <h1
+        data-testid="profile-header-title"
+        style={{ fontWeight: 700, marginTop: '20px', marginBottom: '20px' }}
+      >
         {title}
       </h1>
     </div>
