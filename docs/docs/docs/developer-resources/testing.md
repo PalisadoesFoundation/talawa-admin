@@ -105,7 +105,7 @@ npm run test:shard:coverage
 ### Code Coverage Standards
 
 - The current code coverage of the repository: [![codecov](https://codecov.io/gh/PalisadoesFoundation/talawa-admin/branch/develop/graph/badge.svg?token=II0R0RREES)](https://codecov.io/gh/PalisadoesFoundation/talawa-admin)
-- The currently acceptable coverage rate can be found in the [GitHub Pull Request workflow file](.github/workflows/pull-requests.yml). Search for the value below the line containing `min_coverage`.
+- The currently acceptable coverage rate can be found in the [GitHub Pull Request workflow file](../../../../.github/workflows/pull-request.yml). Search for the value below the line containing `min_coverage`.
 
 ## Cypress End-to-End Testing
 
