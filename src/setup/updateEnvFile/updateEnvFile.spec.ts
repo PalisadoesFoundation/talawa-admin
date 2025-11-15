@@ -1,15 +1,6 @@
 import fs from 'fs';
-import updateEnvFile from './updateEnvFile';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-
-/**
- * Unit tests for the `updateEnvFile` function.
- *
- * These tests verify:
- * - Updating an existing key in the `.env` file.
- * - Appending a new key if it does not exist in the `.env` file.
- * - Handling an empty `.env` file.
- */
+import updateEnvFile from './updateEnvFile';
 
 vi.mock('fs');
 
@@ -19,99 +10,124 @@ describe('updateEnvFile', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
-  it('should update an existing key in the .env file', () => {
-    const envContent = 'EXISTING_KEY=old_value\nANOTHER_KEY=another_value\n';
-    const updatedEnvContent =
-      'EXISTING_KEY=new_value\nANOTHER_KEY=another_value\n';
+  it('should create a new .env file if it does not exist', () => {
+    vi.spyOn(fs, 'existsSync').mockReturnValueOnce(false);
+    const writeFileMock = vi
+      .spyOn(fs, 'writeFileSync')
+      .mockImplementation(() => {});
+    vi.spyOn(fs, 'readFileSync').mockReturnValueOnce('');
 
-    // Mock file system read and write operations
-    vi.spyOn(fs, 'readFileSync').mockReturnValueOnce(envContent);
-    const writeMock = vi.spyOn(fs, 'writeFileSync');
+    updateEnvFile('PORT', '3000');
 
-    updateEnvFile('EXISTING_KEY', 'new_value');
-
-    // Verify that the updated content is written to the file
-    expect(writeMock).toHaveBeenCalledWith('.env', updatedEnvContent, 'utf8');
-  });
-
-  it('should append a new key if it does not exist in the .env file', () => {
-    const envContent = 'EXISTING_KEY=existing_value\n';
-    const newKey = 'NEW_KEY=new_value';
-
-    // Mock file system read and append operations
-    vi.spyOn(fs, 'readFileSync').mockReturnValueOnce(envContent);
-    const appendMock = vi.spyOn(fs, 'appendFileSync');
-
-    updateEnvFile('NEW_KEY', 'new_value');
-
-    // Verify that the new key is appended to the file
-    expect(appendMock).toHaveBeenCalledWith('.env', `\n${newKey}`, 'utf8');
-  });
-
-  it('should handle an empty .env file and append the new key', () => {
-    const envContent = '';
-    const newKey = 'NEW_KEY=new_value';
-
-    // Mock file system read and append operations
-    vi.spyOn(fs, 'readFileSync').mockReturnValueOnce(envContent);
-    const appendMock = vi.spyOn(fs, 'appendFileSync');
-
-    updateEnvFile('NEW_KEY', 'new_value');
-
-    // Verify that the new key is appended to the file
-    expect(appendMock).toHaveBeenCalledWith('.env', `\n${newKey}`, 'utf8');
-  });
-
-  it('should correctly handle keys with special characters', () => {
-    const envContent = 'EXISTING_KEY=old_value\n';
-    const updatedEnvContent = 'EXISTING_KEY=value_with=special_characters\n';
-
-    // Mock file system read and write operations
-    vi.spyOn(fs, 'readFileSync').mockReturnValueOnce(envContent);
-    const writeMock = vi.spyOn(fs, 'writeFileSync');
-
-    updateEnvFile('EXISTING_KEY', 'value_with=special_characters');
-
-    // Verify that the updated content is written to the file
-    expect(writeMock).toHaveBeenCalledWith('.env', updatedEnvContent, 'utf8');
-  });
-
-  it('should log an error when file system operations fail', () => {
-    // Use existing console.error spy for verification
-    const consoleErrorSpy = vi.spyOn(console, 'error');
-    // Mock readFileSync to throw an error
-    vi.spyOn(fs, 'readFileSync').mockImplementationOnce(() => {
-      throw new Error('Simulated file system error');
-    });
-    // This call should trigger the catch block and log the error
-    updateEnvFile('TEST_KEY', 'test_value');
-    // Verify that the error was logged
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Error updating the .env file:',
-      expect.any(Error),
+    expect(writeFileMock).toHaveBeenCalled();
+    const lastCall = writeFileMock.mock.calls.at(-1);
+    expect(lastCall).toBeTruthy();
+    const writtenContent = lastCall ? lastCall[1] : '';
+    expect(writtenContent).toContain('PORT=3000');
+    expect(writtenContent).toContain(
+      '# Frontend port number to run the app on.',
     );
   });
 
-  it('should handle file system errors during append operation', () => {
-    // Mock readFileSync to throw ENOENT error
-    vi.spyOn(fs, 'readFileSync').mockImplementationOnce(() => {
-      const error = new Error(
-        'ENOENT: no such file or directory',
-      ) as NodeJS.ErrnoException;
-      error.code = 'ENOENT';
-      throw error;
+  it('should remove all contiguous comment blocks when updating a key', () => {
+    const envContent = `
+# Frontend port number to run the app on.
+
+# Frontend port number to run the app on.
+
+# Frontend port number to run the app on.
+PORT=3000
+`;
+    vi.spyOn(fs, 'existsSync').mockReturnValueOnce(true);
+    vi.spyOn(fs, 'readFileSync').mockReturnValueOnce(envContent);
+    const writeFileMock = vi
+      .spyOn(fs, 'writeFileSync')
+      .mockImplementation(() => {});
+
+    updateEnvFile('PORT', '4321');
+
+    const written = writeFileMock.mock.calls[0][1];
+    // Should have exactly ONE comment line for PORT
+    const commentCount = (
+      String(written).match(/# Frontend port number/g) || []
+    ).length;
+    expect(commentCount).toBe(1);
+    expect(written).toContain('PORT=4321');
+  });
+
+  it('should update an existing key in the .env file (remove old value even if commented)', () => {
+    const envContent = `
+# PORT=1234
+PORT=8080
+ANOTHER_KEY=VALUE
+`;
+    vi.spyOn(fs, 'existsSync').mockReturnValueOnce(true);
+    vi.spyOn(fs, 'readFileSync').mockReturnValueOnce(envContent);
+    const writeFileMock = vi
+      .spyOn(fs, 'writeFileSync')
+      .mockImplementation(() => {});
+
+    updateEnvFile('PORT', '9000');
+
+    const written = writeFileMock.mock.calls[0][1];
+    expect(written).toContain('PORT=9000');
+    expect(written).toContain('# Frontend port number to run the app on.');
+    expect(written).not.toMatch(/8080/);
+  });
+
+  it('should append new key with description if not present', () => {
+    const envContent = 'EXISTING_KEY=123\n';
+    vi.spyOn(fs, 'existsSync').mockReturnValueOnce(true);
+    vi.spyOn(fs, 'readFileSync').mockReturnValueOnce(envContent);
+    const writeFileMock = vi
+      .spyOn(fs, 'writeFileSync')
+      .mockImplementation(() => {});
+
+    updateEnvFile('REACT_APP_TALAWA_URL', 'http://localhost/graphql');
+
+    const written = writeFileMock.mock.calls[0][1];
+    expect(written).toContain('REACT_APP_TALAWA_URL=http://localhost/graphql');
+    expect(written).toContain('# GraphQL endpoint for the Talawa backend.');
+  });
+
+  it('should handle keys not in PARAM_DESCRIPTIONS', () => {
+    const envContent = 'EXISTING_KEY=value\n';
+    vi.spyOn(fs, 'existsSync').mockReturnValueOnce(true);
+    vi.spyOn(fs, 'readFileSync').mockReturnValueOnce(envContent);
+    const writeFileMock = vi
+      .spyOn(fs, 'writeFileSync')
+      .mockImplementation(() => {});
+
+    updateEnvFile('UNKNOWN_KEY', 'some_value');
+
+    const written = writeFileMock.mock.calls[0][1];
+    expect(written).toContain('# No description available.');
+    expect(written).toContain('UNKNOWN_KEY=some_value');
+  });
+
+  it('should handle empty value correctly', () => {
+    const envContent = 'EXISTING_KEY=1\n';
+    vi.spyOn(fs, 'existsSync').mockReturnValueOnce(true);
+    vi.spyOn(fs, 'readFileSync').mockReturnValueOnce(envContent);
+    const writeFileMock = vi
+      .spyOn(fs, 'writeFileSync')
+      .mockImplementation(() => {});
+
+    updateEnvFile('ALLOW_LOGS', '');
+
+    const written = writeFileMock.mock.calls[0][1];
+    expect(written).toContain('ALLOW_LOGS=');
+  });
+
+  it('should log an error if fs operations throw', () => {
+    const consoleErrorSpy = vi.spyOn(console, 'error');
+    vi.spyOn(fs, 'existsSync').mockImplementationOnce(() => {
+      throw new Error('boom');
     });
 
-    // Mock appendFileSync to throw error
-    vi.spyOn(fs, 'appendFileSync').mockImplementationOnce(() => {
-      throw new Error('Failed to append');
-    });
+    updateEnvFile('PORT', '4000');
 
-    // Call the function
-    updateEnvFile('TEST_KEY', 'test_value');
-
-    // Verify error was logged
-    expect(console.error).toHaveBeenCalledWith(
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
       'Error updating the .env file:',
       expect.any(Error),
     );

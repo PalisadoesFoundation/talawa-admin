@@ -1,18 +1,12 @@
 import fs from 'fs';
 import { checkEnvFile, modifyEnvFile } from './checkEnvFile';
-import { vi } from 'vitest';
-
-/**
- * This file contains unit tests for the `modifyEnvFile` function.
- *
- * The tests cover:
- * - Behavior when the `.env` file is missing required keys and appending them appropriately.
- * - Ensuring no changes are made when all keys are present in the `.env` file.
- *
- * These tests utilize Vitest for test execution and mock the `fs` module to simulate file operations.
- */
+import { vi, describe, it, expect, beforeEach } from 'vitest';
+import updateEnvFile from '../updateEnvFile/updateEnvFile';
 
 vi.mock('fs');
+vi.mock('../updateEnvFile/updateEnvFile', () => ({
+  default: vi.fn(),
+}));
 
 describe('modifyEnvFile', () => {
   beforeEach(() => {
@@ -25,18 +19,13 @@ describe('modifyEnvFile', () => {
       'EXISTING_KEY=existing_value\nNEW_KEY=default_value\n';
 
     vi.spyOn(fs, 'readFileSync')
-      .mockReturnValueOnce(envContent)
-      .mockReturnValueOnce(envExampleContent)
-      .mockReturnValueOnce(envExampleContent);
-
-    vi.spyOn(fs, 'appendFileSync');
+      .mockReturnValueOnce(envContent) // .env
+      .mockReturnValueOnce(envExampleContent) // .env.example (for misplaced)
+      .mockReturnValueOnce(envExampleContent); // .env.example (for config)
 
     modifyEnvFile();
 
-    expect(fs.appendFileSync).toHaveBeenCalledWith(
-      '.env',
-      'NEW_KEY=default_value\n',
-    );
+    expect(updateEnvFile).toHaveBeenCalledWith('NEW_KEY', 'default_value');
   });
 
   it('should not append anything if all keys are present', () => {
@@ -47,11 +36,9 @@ describe('modifyEnvFile', () => {
       .mockReturnValueOnce(envContent)
       .mockReturnValueOnce(envExampleContent);
 
-    vi.spyOn(fs, 'appendFileSync');
-
     modifyEnvFile();
 
-    expect(fs.appendFileSync).not.toHaveBeenCalled();
+    expect(updateEnvFile).not.toHaveBeenCalled();
   });
 });
 

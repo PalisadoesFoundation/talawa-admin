@@ -30,7 +30,9 @@ export const askForDocker = async (): Promise<string> => {
 };
 
 // Function to ask and update Talawa API URL
-export const askAndUpdateTalawaApiUrl = async (): Promise<void> => {
+export const askAndUpdateTalawaApiUrl = async (
+  useDocker = false,
+): Promise<void> => {
   try {
     const { shouldSetTalawaApiUrlResponse } = await inquirer.prompt([
       {
@@ -81,18 +83,21 @@ export const askAndUpdateTalawaApiUrl = async (): Promise<void> => {
       } catch {
         throw new Error('Invalid WebSocket URL generated: ');
       }
-
-      if (endpoint.includes('localhost')) {
-        const dockerUrl = endpoint.replace('localhost', 'host.docker.internal');
+      if (useDocker && endpoint) {
+        const raw = endpoint.includes('://') ? endpoint : `http://${endpoint}`;
         try {
-          const url = new URL(dockerUrl);
-          if (!['http:', 'https:'].includes(url.protocol)) {
-            throw new Error('Invalid Docker URL protocol');
+          const parsed = new URL(raw);
+          const localHosts = new Set(['localhost', '127.0.0.1', '::1']);
+          if (localHosts.has(parsed.hostname)) {
+            parsed.hostname = 'host.docker.internal';
+            const dockerUrl = parsed.toString();
+            updateEnvFile('REACT_APP_DOCKER_TALAWA_URL', dockerUrl);
           }
-        } catch {
-          throw new Error('Invalid Docker URL generated');
+        } catch (error) {
+          throw new Error(
+            `Docker URL transformation failed: ${error instanceof Error ? error.message : String(error)}`,
+          );
         }
-        updateEnvFile('REACT_APP_DOCKER_TALAWA_URL', dockerUrl);
       }
     }
   } catch (error) {
