@@ -502,8 +502,10 @@ describe('Calendar Component', () => {
       },
     ];
 
+    // Ensure all router mocks are properly set up for this test
     vi.mocked(useParams).mockReturnValue({ orgId: 'org1' });
 
+    // Use the new helper with a route that includes orgId
     const { container, findAllByTestId } = render(
       <MemoryRouter initialEntries={['/organization/org1']}>
         <Suspense fallback={<div>Loading...</div>}>
@@ -521,9 +523,10 @@ describe('Calendar Component', () => {
       </MemoryRouter>,
     );
 
+    // Wait for the calendar days to be rendered
     await findAllByTestId('day');
 
-    // Wait for all components to be fully mounted
+    // Wait a bit for all components to be fully mounted
     await waitFor(() => {
       const buttons = container.querySelectorAll(
         '[data-testid^="expand-btn-"]',
@@ -531,7 +534,6 @@ describe('Calendar Component', () => {
       expect(buttons.length).toBeGreaterThan(0);
     });
 
-    // Ensure all router mocks are properly set up for this test
     const start = new Date(today.getFullYear(), 0, 15);
     await clickExpandForDate(container, start);
   });
@@ -1014,7 +1016,7 @@ describe('Calendar Component', () => {
     // Assert that the private event is not present
     expect(screen.queryByText('Private Event')).toBeNull();
 
-    // There should be no expand buttons since no events are visible
+    // There should be no expand buttons since no events are visible to this user
     const expandButtons = container.querySelectorAll(
       '[data-testid^="expand-btn-"]',
     );
@@ -1069,8 +1071,11 @@ describe('Calendar Component', () => {
       expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
     });
 
+    // Since user is not in the members list (empty edges), private events should be filtered out
+    // Assert that the private event is not present
     expect(screen.queryByText('Private Event')).toBeNull();
 
+    // There should be no expand buttons since no events are visible to this user
     const expandButtons = container.querySelectorAll(
       '[data-testid^="expand-btn-"]',
     );
@@ -1156,6 +1161,7 @@ describe('Calendar Component', () => {
       },
     };
 
+    // Test with user as a member - should see all events
     const { findAllByTestId } = render(
       <BrowserRouter>
         <Calendar
@@ -1168,8 +1174,10 @@ describe('Calendar Component', () => {
       </BrowserRouter>,
     );
 
+    // Wait for calendar to render
     await findAllByTestId('day');
 
+    // Verify component renders successfully with events
     const currentYear = new Date().getFullYear();
     await waitFor(() => {
       expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
@@ -1193,6 +1201,7 @@ describe('Calendar Component', () => {
     const prevButton = getByTestId('prevYear');
     const nextButton = getByTestId('nextYear');
 
+    // Test navigation to previous year
     await act(async () => {
       fireEvent.click(prevButton);
     });
@@ -1201,6 +1210,7 @@ describe('Calendar Component', () => {
       expect(screen.getByText(String(currentYear - 1))).toBeInTheDocument();
     });
 
+    // Test navigation to next year (back to current)
     await act(async () => {
       fireEvent.click(nextButton);
     });
@@ -1209,6 +1219,7 @@ describe('Calendar Component', () => {
       expect(screen.getByText(String(currentYear))).toBeInTheDocument();
     });
 
+    // Test navigation to future year
     await act(async () => {
       fireEvent.click(nextButton);
     });
@@ -1232,6 +1243,7 @@ describe('Calendar Component', () => {
     );
 
     await waitFor(() => {
+      // Check for all 12 month names instead of CSS classes
       const monthNames = [
         'January',
         'February',
@@ -1251,6 +1263,7 @@ describe('Calendar Component', () => {
         expect(screen.getByText(monthName)).toBeInTheDocument();
       });
 
+      // Alternative: count all month headers
       const allMonthHeaders = screen.getAllByText(
         /(January|February|March|April|May|June|July|August|September|October|November|December)/,
       );
@@ -1274,12 +1287,14 @@ describe('Calendar Component', () => {
     await waitFor(() => {
       const dayElements = container.querySelectorAll('[data-testid="day"]');
       expect(dayElements.length).toBeGreaterThan(0);
+      // Stronger check: no expand buttons should be rendered when there are no events
       const expandButtons = container.querySelectorAll(
         '[data-testid^="expand-btn-"]',
       );
       expect(expandButtons.length).toBe(0);
     });
 
+    // Optionally interact with the explicit no-events button to validate empty-state UI
     const noEventsButton = container.querySelector(
       '[data-testid^="no-events-btn-"]',
     );
