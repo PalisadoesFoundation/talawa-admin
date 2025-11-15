@@ -65,6 +65,9 @@ jobs:
 
             // Log the type of user
             console.log(`Commenting user ${user} is a ${association}`);
+            if (association === 'MEMBER') {
+              console.log(`FOUND! Commenting user ${user} is a ${association}`);
+            }
 
             // New contributors cannot auto assign
             if (association === 'FIRST_TIME_CONTRIBUTOR' || association === 'FIRST_TIMER') {
