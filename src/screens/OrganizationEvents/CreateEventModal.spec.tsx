@@ -168,7 +168,7 @@ const createTestStore = () => {
 type MockType = typeof createEventMock | typeof createEventErrorMock;
 
 const renderComponent = (
-  mocks: readonly MockType[] = [createEventMock],
+  mocks: readonly any[] = [createEventMock],
   props = mockProps,
 ) => {
   const testStore = createTestStore();
