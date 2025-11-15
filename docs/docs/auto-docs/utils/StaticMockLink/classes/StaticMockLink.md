@@ -25,7 +25,7 @@ Defined in: [src/utils/StaticMockLink.ts:40](https://github.com/PalisadoesFounda
 
 ##### mockedResponses
 
-readonly `MockedResponse`[]
+readonly `MockedResponse`\<`Record`\<`string`, `any`\>, `Record`\<`string`, `any`\>\>[]
 
 ##### addTypename
 
