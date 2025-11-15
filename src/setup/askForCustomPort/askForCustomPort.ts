@@ -37,7 +37,7 @@ export async function askForCustomPort(): Promise<number> {
       {
         type: 'input',
         name: 'customPort',
-        message: `Enter custom port for development server (leave blank for default ${DEFAULT_PORT}):`,
+        message: `Enter the custom port for Talawa Admin: (default ${DEFAULT_PORT}):`,
         default: DEFAULT_PORT.toString(),
         validate: validatePort,
       },
