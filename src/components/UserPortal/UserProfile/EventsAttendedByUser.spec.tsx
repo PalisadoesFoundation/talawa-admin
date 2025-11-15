@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { EventsAttendedByUser } from './EventsAttendedByUser';
 import { MockedProvider } from '@apollo/client/testing';
-import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
+import { EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';
 
 /**
  * Unit tests for EventsAttendedByUser component:
@@ -29,36 +29,34 @@ const mockT = (key: string, params?: Record<string, string>): string => {
 const mocks = [
   {
     request: {
-      query: EVENT_DETAILS,
-      variables: { id: '1' },
+      query: EVENT_DETAILS_BASIC,
+      variables: { eventId: '1' },
     },
     result: {
       data: {
         event: {
-          _id: '1',
-          title: 'Event 1',
-          startDate: '2023-01-01',
-          recurring: false,
-          attendees: [],
-          organization: { _id: 'org1' },
+          id: '1',
+          name: 'Event 1',
+          location: 'Location 1',
+          startAt: '2023-01-01',
+          organization: { id: 'org1', name: 'Organization 1' },
         },
       },
     },
   },
   {
     request: {
-      query: EVENT_DETAILS,
-      variables: { id: '2' },
+      query: EVENT_DETAILS_BASIC,
+      variables: { eventId: '2' },
     },
     result: {
       data: {
         event: {
-          _id: '2',
-          title: 'Event 2',
-          startDate: '2023-01-01',
-          recurring: false,
-          attendees: [],
-          organization: { _id: 'org1' },
+          id: '2',
+          name: 'Event 2',
+          location: 'Location 2',
+          startAt: '2023-01-01',
+          organization: { id: 'org1', name: 'Organization 1' },
         },
       },
     },

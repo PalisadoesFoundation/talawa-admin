@@ -1329,6 +1329,14 @@ form label,
   display: inline-block;
 }
 
+/* Page Title */
+
+.pageTitle {
+  font-weight: 700;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 .customDropdown {
   width: auto;
 }
