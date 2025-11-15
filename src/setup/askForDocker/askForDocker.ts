@@ -14,7 +14,7 @@ export const askForDocker = async (): Promise<string> => {
     {
       type: 'input',
       name: 'dockerAppPort',
-      message: 'Enter the docker port for Talawa Admin (default 4321):',
+      message: 'Enter the Docker port for Talawa Admin (default 4321):',
       default: '4321',
       validate: (input: string) => {
         const port = Number(input);
