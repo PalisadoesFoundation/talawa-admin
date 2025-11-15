@@ -251,4 +251,42 @@ describe('Testing Groups Screen', () => {
     expect(await screen.findByText(t.manageGroup)).toBeInTheDocument();
     await userEvent.click(await screen.findByTestId('modalCloseBtn'));
   });
+
+  /**
+   * Verifies the search by leader functionality of the Groups screen.
+   */
+  it('Search by Leader', async () => {
+    renderGroups(link1);
+    const searchInput = await screen.findByTestId('searchBy');
+    expect(searchInput).toBeInTheDocument();
+
+    const searchToggle = await screen.findByTestId('searchByToggle');
+    expect(searchToggle).toBeInTheDocument();
+    await userEvent.click(searchToggle);
+
+    const searchByLeader = await screen.findByTestId('leader');
+    expect(searchByLeader).toBeInTheDocument();
+
+    // Click on leader search option - this exercises the branch
+    await userEvent.click(searchByLeader);
+  });
+
+  /**
+   * Verifies that edit button is not shown for groups where user is not the leader.
+   */
+  it('Should not show edit button for groups where user is not the leader', async () => {
+    renderGroups(link1);
+
+    await waitFor(async () => {
+      const groupElements = await screen.findAllByTestId('groupName');
+      expect(groupElements.length).toBeGreaterThan(0);
+    });
+
+    const editButtons = screen.getAllByTestId('editGroupBtn');
+    const viewButtons = screen.getAllByTestId('viewGroupBtn');
+
+    // There should be fewer edit buttons than view buttons
+    // because Group 3 has a different leader (userId1 instead of userId)
+    expect(viewButtons.length).toBeGreaterThan(editButtons.length);
+  });
 });
