@@ -49,45 +49,33 @@ interface IMockPickerProps {
   minTime?: dayjs.Dayjs;
 }
 
-vi.mock('@mui/x-date-pickers', async () => {
-  const actual = await vi.importActual('@mui/x-date-pickers');
-
-  const MockDatePickerComponent = ({
-    onChange,
-    value,
-    label,
-  }: IMockPickerProps) => (
-    <input
-      data-testid={`date-picker-${label}`}
-      value={value ? value.format('YYYY-MM-DD') : ''}
-      onChange={(e) => {
-        const mockDate = dayjs(e.target.value);
-        if (onChange && mockDate.isValid()) onChange(mockDate);
-      }}
-    />
-  );
-
-  const MockTimePickerComponent = ({
-    onChange,
-    value,
-    label,
-    disabled,
-  }: IMockPickerProps) => (
-    <input
-      data-testid={`time-picker-${label}`}
-      value={value ? value.format('HH:mm:ss') : ''}
-      disabled={disabled}
-      onChange={(e) => {
-        const mockTime = dayjs(e.target.value, 'HH:mm:ss');
-        if (onChange && mockTime.isValid()) onChange(mockTime);
-      }}
-    />
-  );
-
+vi.mock('@mui/x-date-pickers', () => {
   return {
-    ...actual,
-    DatePicker: MockDatePickerComponent,
-    TimePicker: MockTimePickerComponent,
+    LocalizationProvider: vi.fn(({ children }) => children),
+    DatePicker: vi.fn(({ onChange, value, label }: IMockPickerProps) => (
+      <input
+        data-testid={`date-picker-${label}`}
+        value={value ? value.format('YYYY-MM-DD') : ''}
+        onChange={(e) => {
+          const mockDate = dayjs(e.target.value);
+          if (onChange && mockDate.isValid()) onChange(mockDate);
+        }}
+      />
+    )),
+    TimePicker: vi.fn(
+      ({ onChange, value, label, disabled }: IMockPickerProps) => (
+        <input
+          data-testid={`time-picker-${label}`}
+          value={value ? value.format('HH:mm:ss') : ''}
+          disabled={disabled}
+          onChange={(e) => {
+            const mockTime = dayjs(e.target.value, 'HH:mm:ss');
+            if (onChange && mockTime.isValid()) onChange(mockTime);
+          }}
+        />
+      ),
+    ),
+    AdapterDayjs: vi.fn(),
   };
 });
 
@@ -165,10 +153,10 @@ const createTestStore = () => {
   });
 };
 
-type MockType = typeof createEventMock | typeof createEventErrorMock;
-
 const renderComponent = (
-  mocks: readonly any[] = [createEventMock],
+  mocks: readonly (typeof createEventMock | typeof createEventErrorMock)[] = [
+    createEventMock,
+  ],
   props = mockProps,
 ) => {
   const testStore = createTestStore();
@@ -538,7 +526,6 @@ describe('CreateEventModal', () => {
   });
 
   test('creates event successfully with valid data', async () => {
-    const { toast: mockToast } = await import('react-toastify');
     const onClose = vi.fn();
     const onEventCreated = vi.fn();
 
@@ -594,7 +581,7 @@ describe('CreateEventModal', () => {
 
     await waitFor(
       () => {
-        expect(mockToast.success).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalled();
       },
       { timeout: 3000 },
     );
@@ -604,7 +591,6 @@ describe('CreateEventModal', () => {
   });
 
   test('creates event with non-allDay time selection', async () => {
-    const { toast: mockToast } = await import('react-toastify');
     const onClose = vi.fn();
     const onEventCreated = vi.fn();
 
@@ -677,24 +663,8 @@ describe('CreateEventModal', () => {
   });
 
   test('creates event with time parsing and non-allDay event successfully', async () => {
-    const { toast: mockToast } = await import('react-toastify');
     const onClose = vi.fn();
     const onEventCreated = vi.fn();
-
-    const timedEventMock = vi.fn().mockResolvedValue({
-      data: {
-        createEvent: {
-          id: 'timed-event-id',
-          name: 'Timed Event',
-        },
-      },
-    });
-
-    const mockCreate = timedEventMock as ReturnType<typeof vi.fn>;
-
-    vi.doMock('GraphQl/Mutations/mutations', () => ({
-      CREATE_EVENT_MUTATION: 'mock-mutation',
-    }));
 
     renderComponent([], { ...mockProps, onClose, onEventCreated });
 
@@ -727,7 +697,6 @@ describe('CreateEventModal', () => {
   });
 
   test('creates event with recurrence successfully', async () => {
-    const { toast: mockToast } = await import('react-toastify');
     const onClose = vi.fn();
     const onEventCreated = vi.fn();
 
