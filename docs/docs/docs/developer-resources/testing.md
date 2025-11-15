@@ -107,22 +107,6 @@ npm run test:shard:coverage
 - The current code coverage of the repository: [![codecov](https://codecov.io/gh/PalisadoesFoundation/talawa-admin/branch/develop/graph/badge.svg?token=II0R0RREES)](https://codecov.io/gh/PalisadoesFoundation/talawa-admin)
 - The currently acceptable coverage rate can be found in the [GitHub Pull Request workflow file](.github/workflows/pull-requests.yml). Search for the value below the line containing `min_coverage`.
 
-### Setting Up Codecov for Your Fork
-
-You can see code coverage online for your fork of the repo using `codecov.io`:
-
-1. Go to `https://app.codecov.io/gh/XXXX/YYYY` where XXXX is your GitHub username and YYYY is the repository name
-2. Login to `codecov.io` using your GitHub account, and add your **repo** and **branches** to the dashboard
-   ![Codecov Authorization](../../../static/img/codecov/authorise-codecov-github.jpg)
-3. Add the `Repository Upload Token` found under `Settings` of your `codecov.io` account
-4. Click on Setup Repo option
-   ![Codecov Setup](../../../static/img/codecov/homescrenn%20(1).jpg)
-5. Create a secret named `CODE_COV` for your forked repo using this token value
-   ![Codecov Token](../../../static/img/codecov/Code-cov-token.jpg)
-   ![Add Key](../../../static/img/codecov/addd-your-key.jpg)
-6. You will see code coverage reports with every push to your repo
-   ![Codecov Results](../../../static/img/codecov/results.jpg)
-
 ## Cypress End-to-End Testing
 
 Cypress is used for end-to-end testing to ensure the application works correctly from a user's perspective.
