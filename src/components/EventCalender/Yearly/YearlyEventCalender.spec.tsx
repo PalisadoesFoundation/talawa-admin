@@ -1602,9 +1602,7 @@ describe('Calendar Component', () => {
     });
 
     await waitFor(() => {
-      expect(
-        screen.queryByText('No Event Available!'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText('No Event Available!')).not.toBeInTheDocument();
     });
   });
 
