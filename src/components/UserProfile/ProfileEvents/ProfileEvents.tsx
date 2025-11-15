@@ -71,6 +71,7 @@ const ProfileEvents: React.FC<InterfaceProfileEventsProps> = ({
       <div
         className="d-flex justify-content-center align-items-center"
         style={{ minHeight: '400px' }}
+        aria-live="polite"
       >
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Loading...</span>

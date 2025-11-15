@@ -42,7 +42,7 @@ describe('ProfileEvents Component', () => {
     ];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <ProfileEvents
           user={mockUser}
           isOwnProfile={true}
@@ -73,7 +73,7 @@ describe('ProfileEvents Component', () => {
     ];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <ProfileEvents
           user={mockUser}
           isOwnProfile={true}
@@ -106,7 +106,7 @@ describe('ProfileEvents Component', () => {
     ];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <ProfileEvents
           user={mockUser}
           isOwnProfile={true}
@@ -133,7 +133,7 @@ describe('ProfileEvents Component', () => {
     ];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <ProfileEvents
           user={mockUser}
           isOwnProfile={true}
@@ -150,7 +150,7 @@ describe('ProfileEvents Component', () => {
 
   test('shows unavailable message when not own profile', () => {
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <ProfileEvents
           user={mockUser}
           isOwnProfile={false}

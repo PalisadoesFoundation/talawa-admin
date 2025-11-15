@@ -34,6 +34,7 @@ const ProfileOrganizations: React.FC<InterfaceProfileOrganizationsProps> = ({
 }) => {
   const { data, loading, error } = useQuery(USER_DETAILS, {
     variables: { input: { id: user.id } },
+    skip: !user?.id,
   });
 
   if (loading) {
@@ -41,6 +42,7 @@ const ProfileOrganizations: React.FC<InterfaceProfileOrganizationsProps> = ({
       <div
         className="d-flex justify-content-center align-items-center"
         style={{ minHeight: '400px' }}
+        aria-live="polite"
       >
         <Spinner animation="border" role="status">
           <span className="visually-hidden">Loading...</span>

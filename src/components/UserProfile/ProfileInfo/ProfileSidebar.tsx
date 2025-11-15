@@ -83,6 +83,7 @@ const ProfileSidebar: React.FC<InterfaceProfileSidebarProps> = ({
                   backgroundColor: '#e9ecef',
                   color: '#6c757d',
                 }}
+                role="img"
                 aria-label="User avatar"
               >
                 {(formData.name || '')

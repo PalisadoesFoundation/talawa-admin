@@ -50,6 +50,7 @@ const ProfileTags: React.FC<InterfaceProfileTagsProps> = () => {
             fontSize: '48px',
             color: '#6c757d',
           }}
+          aria-hidden="true"
         ></i>
       </div>
       <h3
