@@ -1,6 +1,7 @@
 import inquirer from 'inquirer';
 import { askForTalawaApiUrl } from '../askForTalawaApiUrl/askForTalawaApiUrl';
 import updateEnvFile from '../updateEnvFile/updateEnvFile';
+const DEFAULT_PORT = 4321;
 
 // Mock implementation of checkConnection
 const checkConnection = async (): Promise<boolean> => {
@@ -14,8 +15,8 @@ export const askForDocker = async (): Promise<string> => {
     {
       type: 'input',
       name: 'dockerAppPort',
-      message: 'Enter the Docker port for Talawa Admin (default 4321):',
-      default: '4321',
+      message: `Enter the custom port for Talawa Admin: (default ${DEFAULT_PORT}):`,
+      default: DEFAULT_PORT.toString(),
       validate: (input: string) => {
         const port = Number(input);
         if (Number.isNaN(port) || port < 1024 || port > 65535) {
