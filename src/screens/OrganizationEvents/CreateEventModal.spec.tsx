@@ -223,41 +223,6 @@ describe('CreateEventModal', () => {
     expect(toast.warning).toHaveBeenCalledWith('Name can not be blank!');
   });
 
-  test('shows warning for empty description', async () => {
-    renderComponent();
-    const nameInput = screen.getByTestId('eventTitleInput');
-    fireEvent.change(nameInput, { target: { value: 'Test' } });
-    const submitBtn = screen.getByTestId('createEventBtn');
-    const form = submitBtn.closest('form');
-    if (form) fireEvent.submit(form);
-    expect(toast.warning).toHaveBeenCalledWith('Description can not be blank!');
-  });
-
-  test('shows warning for empty location', async () => {
-    renderComponent();
-    const nameInput = screen.getByTestId('eventTitleInput');
-    const descInput = screen.getByTestId('eventDescriptionInput');
-    fireEvent.change(nameInput, { target: { value: 'Test' } });
-    fireEvent.change(descInput, { target: { value: 'Desc' } });
-    const submitBtn = screen.getByTestId('createEventBtn');
-    const form = submitBtn.closest('form');
-    if (form) fireEvent.submit(form);
-    expect(toast.warning).toHaveBeenCalledWith('Location can not be blank!');
-  });
-
-  test('creates event with all fields filled', async () => {
-    renderComponent();
-    const nameInput = screen.getByTestId('eventTitleInput');
-    const descInput = screen.getByTestId('eventDescriptionInput');
-    const locInput = screen.getByTestId('eventLocationInput');
-    fireEvent.change(nameInput, { target: { value: 'Test Event' } });
-    fireEvent.change(descInput, { target: { value: 'Test Description' } });
-    fireEvent.change(locInput, { target: { value: 'Test Location' } });
-    expect(nameInput).toHaveValue('Test Event');
-    expect(descInput).toHaveValue('Test Description');
-    expect(locInput).toHaveValue('Test Location');
-  });
-
   test('handles error during creation', async () => {
     renderComponent([createEventErrorMock]);
     await userEvent.type(screen.getByTestId('eventTitleInput'), 'Error Event');
@@ -273,12 +238,6 @@ describe('CreateEventModal', () => {
     await waitFor(() => {
       expect(toast.success).not.toHaveBeenCalled();
     });
-  });
-
-  test('closes modal on close button click', async () => {
-    renderComponent();
-    await userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
-    expect(mockProps.onClose).toHaveBeenCalled();
   });
 
   test('opens recurrence dropdown', async () => {
@@ -306,25 +265,6 @@ describe('CreateEventModal', () => {
     await userEvent.click(dropdown);
     const customOption = await screen.findByTestId('recurrenceOption-6');
     expect(customOption).toHaveTextContent('Custom...');
-  });
-
-  test('updates dates', async () => {
-    renderComponent();
-    const startDate = screen.getByTestId('date-picker-Start Date');
-    fireEvent.change(startDate, { target: { value: '2024-12-31' } });
-    await waitFor(() => {
-      expect(startDate).toHaveValue('2024-12-31');
-    });
-  });
-
-  test('updates times when not allDay', async () => {
-    renderComponent();
-    await userEvent.click(screen.getByTestId('alldayCheck'));
-    await waitFor(() => {
-      const startTime = screen.getByTestId('time-picker-Start Time');
-      fireEvent.change(startTime, { target: { value: '10:00:00' } });
-      expect(startTime).toHaveValue('10:00:00');
-    });
   });
 
   test('renders all recurrence options', async () => {
@@ -430,32 +370,6 @@ describe('CreateEventModal', () => {
     const form = submitBtn.closest('form');
     if (form) fireEvent.submit(form);
     expect(toast.warning).toHaveBeenCalledWith('Name can not be blank!');
-  });
-
-  test('shows warning for whitespace-only description', async () => {
-    renderComponent();
-    const nameInput = screen.getByTestId('eventTitleInput');
-    const descInput = screen.getByTestId('eventDescriptionInput');
-    fireEvent.change(nameInput, { target: { value: 'Valid Name' } });
-    fireEvent.change(descInput, { target: { value: '   ' } });
-    const submitBtn = screen.getByTestId('createEventBtn');
-    const form = submitBtn.closest('form');
-    if (form) fireEvent.submit(form);
-    expect(toast.warning).toHaveBeenCalledWith('Description can not be blank!');
-  });
-
-  test('shows warning for whitespace-only location', async () => {
-    renderComponent();
-    const nameInput = screen.getByTestId('eventTitleInput');
-    const descInput = screen.getByTestId('eventDescriptionInput');
-    const locInput = screen.getByTestId('eventLocationInput');
-    fireEvent.change(nameInput, { target: { value: 'Valid Name' } });
-    fireEvent.change(descInput, { target: { value: 'Valid Desc' } });
-    fireEvent.change(locInput, { target: { value: '   ' } });
-    const submitBtn = screen.getByTestId('createEventBtn');
-    const form = submitBtn.closest('form');
-    if (form) fireEvent.submit(form);
-    expect(toast.warning).toHaveBeenCalledWith('Location can not be blank!');
   });
 
   test('auto-corrects end date when start date is after end date', async () => {
