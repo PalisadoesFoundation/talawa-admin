@@ -2,7 +2,7 @@
  * Unit tests for ProfileOrganizations component
  */
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import ProfileOrganizations from './ProfileOrganizations';
 import type { InterfaceUserData } from '../types';
 
@@ -14,51 +14,27 @@ describe('ProfileOrganizations Component', () => {
     createdAt: '2023-01-01T00:00:00Z',
   };
 
-  test('renders organizations filter dropdown', () => {
+  test('renders empty state with user organizations heading', () => {
     render(<ProfileOrganizations user={mockUser} isOwnProfile={true} />);
 
-    expect(screen.getByText('Created Organizations')).toBeInTheDocument();
+    expect(screen.getByText('User Organizations')).toBeInTheDocument();
   });
 
-  test('renders search input', () => {
+  test('renders under development message', () => {
     render(<ProfileOrganizations user={mockUser} isOwnProfile={true} />);
 
     expect(
-      screen.getByPlaceholderText('Search created organizations'),
+      screen.getByText(/This feature is currently under development/i),
     ).toBeInTheDocument();
   });
 
-  test('renders organization cards', () => {
+  test('shows message about backend API not existing', () => {
     render(<ProfileOrganizations user={mockUser} isOwnProfile={true} />);
 
-    // Check for mock organization
-    expect(screen.getByText('Lorem Ipsum')).toBeInTheDocument();
-  });
-
-  test('handles search input change', () => {
-    render(<ProfileOrganizations user={mockUser} isOwnProfile={true} />);
-
-    const searchInput = screen.getByPlaceholderText(
-      'Search created organizations',
-    );
-    fireEvent.change(searchInput, { target: { value: 'test' } });
-
-    expect(searchInput).toHaveValue('test');
-  });
-
-  test('renders sort button', () => {
-    render(<ProfileOrganizations user={mockUser} isOwnProfile={true} />);
-
-    expect(screen.getByText(/Sort/i)).toBeInTheDocument();
-  });
-
-  test('handles filter change', () => {
-    render(<ProfileOrganizations user={mockUser} isOwnProfile={true} />);
-
-    const filterButton = screen.getByText('Created Organizations');
-    fireEvent.click(filterButton);
-
-    // Filter dropdown should be visible
-    expect(filterButton).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        /The backend API for fetching user organizations does not exist yet/i,
+      ),
+    ).toBeInTheDocument();
   });
 });
