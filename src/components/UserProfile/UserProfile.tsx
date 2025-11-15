@@ -165,7 +165,6 @@ const UserProfile: React.FC<InterfaceUserProfileProps> = ({
     }
     // Only use demo data if backend fails or is unavailable
     if (error) {
-      console.warn('Using demo data due to backend error:', error.message);
       return DEMO_USER_DATA;
     }
     // While loading, return null
@@ -174,7 +173,6 @@ const UserProfile: React.FC<InterfaceUserProfileProps> = ({
 
   useEffect(() => {
     if (error) {
-      console.warn('Backend API unavailable, using demo data:', error.message);
       toast.info('Unable to fetch profile data. Showing demo data.', {
         toastId: 'profile-demo-data',
         autoClose: 3000,

@@ -1,8 +1,7 @@
 /**
  * ProfileEvents Component
  *
- * Displays user's events (created, registered, admin for).
- * Currently shows an empty state as backend API is not yet implemented.
+ * Displays user's events attended using the CURRENT_USER query.
  *
  * @component
  * @param {InterfaceProfileEventsProps} props - The props for the component.
@@ -14,8 +13,13 @@
  * @returns {JSX.Element} The rendered ProfileEvents component.
  */
 import React from 'react';
+import { useQuery } from '@apollo/client';
 import { Event } from '@mui/icons-material';
+import { Card, Spinner } from 'react-bootstrap';
+import { CURRENT_USER } from 'GraphQl/Queries/Queries';
+import EventsAttendedByMember from 'components/MemberActivity/EventsAttendedByMember';
 import { InterfaceUserData } from '../types';
+import styles from 'components/UserPortal/UserProfile/common.module.css';
 
 interface InterfaceProfileEventsProps {
   user: InterfaceUserData;
@@ -24,55 +28,88 @@ interface InterfaceProfileEventsProps {
   onSave: (data: Partial<InterfaceUserData>) => Promise<void>;
 }
 
-const ProfileEvents: React.FC<InterfaceProfileEventsProps> = () => {
-  // TODO: Implement real GraphQL query when backend is ready
-  // No backend API exists yet for fetching user events list
-  // This will need to be implemented when the backend endpoint becomes available
+const ProfileEvents: React.FC<InterfaceProfileEventsProps> = ({
+  isOwnProfile,
+}) => {
+  const { data, loading, error } = useQuery(CURRENT_USER, {
+    skip: !isOwnProfile,
+  });
+
+  if (loading) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: '400px' }}
+      >
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: '400px' }}
+      >
+        <div className="text-center">
+          <Event style={{ fontSize: '48px', color: '#dc3545', opacity: 0.5 }} />
+          <p className="text-danger mt-3">Failed to load events</p>
+        </div>
+      </div>
+    );
+  }
+
+  const eventsAttended = data?.currentUser?.eventsAttended || [];
+
+  if (eventsAttended.length === 0) {
+    return (
+      <div
+        className="d-flex flex-column align-items-center justify-content-center"
+        style={{
+          minHeight: '400px',
+          padding: '40px 20px',
+          textAlign: 'center',
+        }}
+      >
+        <Event
+          style={{
+            fontSize: '64px',
+            color: '#6c757d',
+            marginBottom: '20px',
+            opacity: 0.5,
+          }}
+        />
+        <h5 className="text-secondary">No Events Attended</h5>
+        <p className="text-muted" style={{ maxWidth: '500px' }}>
+          You haven't attended any events yet. Events you attend will appear
+          here.
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '400px',
-        padding: '40px 20px',
-        textAlign: 'center',
-      }}
-    >
-      <Event
-        style={{
-          fontSize: '64px',
-          color: '#6c757d',
-          marginBottom: '20px',
-          opacity: 0.5,
-        }}
-      />
-      <h5
-        style={{
-          color: '#495057',
-          fontWeight: '600',
-          marginBottom: '12px',
-          fontSize: '20px',
-        }}
-      >
-        User Events
-      </h5>
-      <p
-        style={{
-          color: '#6c757d',
-          fontSize: '14px',
-          maxWidth: '500px',
-          lineHeight: '1.6',
-          margin: '0',
-        }}
-      >
-        This feature is currently under development. The backend API for
-        fetching user events does not exist yet and will be implemented in a
-        future update.
-      </p>
-    </div>
+    <Card className="border-0 rounded-4 mb-4">
+      <Card.Body className={styles.cardBody}>
+        <div className="mb-3">
+          <h5 className="fw-semibold">Events Attended</h5>
+          <p className="text-muted small mb-0">
+            {eventsAttended.length}{' '}
+            {eventsAttended.length === 1 ? 'event' : 'events'}
+          </p>
+        </div>
+        <div className={styles.scrollableCardBody}>
+          {eventsAttended.map((event: { id: string }) => (
+            <div key={event.id} data-testid="event-item">
+              <EventsAttendedByMember eventsId={event.id} />
+            </div>
+          ))}
+        </div>
+      </Card.Body>
+    </Card>
   );
 };
 

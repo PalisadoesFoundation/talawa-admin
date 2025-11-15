@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<`InterfaceProfileOrganizationsProps`\>
 
-Defined in: [src/components/UserProfile/ProfileOrganizations/ProfileOrganizations.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserProfile/ProfileOrganizations/ProfileOrganizations.tsx#L23)
+Defined in: [src/components/UserProfile/ProfileOrganizations/ProfileOrganizations.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserProfile/ProfileOrganizations/ProfileOrganizations.tsx#L32)

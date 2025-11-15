@@ -2,9 +2,11 @@
  * Unit tests for ProfileOrganizations component
  */
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { MockedProvider } from '@apollo/client/testing';
 import ProfileOrganizations from './ProfileOrganizations';
 import type { InterfaceUserData } from '../types';
+import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 
 describe('ProfileOrganizations Component', () => {
   const mockUser: InterfaceUserData = {
@@ -14,17 +16,124 @@ describe('ProfileOrganizations Component', () => {
     createdAt: '2023-01-01T00:00:00Z',
   };
 
-  test('renders placeholder empty state with all required messages', () => {
-    render(<ProfileOrganizations user={mockUser} isOwnProfile={true} />);
+  test('renders loading state initially', () => {
+    const mocks = [
+      {
+        request: {
+          query: USER_DETAILS,
+          variables: { input: { id: '123' } },
+        },
+        result: {
+          data: {
+            user: {
+              id: '123',
+              organizationsWhereMember: {
+                edges: [],
+              },
+            },
+          },
+        },
+      },
+    ];
 
-    expect(screen.getByText('User Organizations')).toBeInTheDocument();
-    expect(
-      screen.getByText(/This feature is currently under development/i),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        /The backend API for fetching user organizations does not exist yet/i,
-      ),
-    ).toBeInTheDocument();
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <ProfileOrganizations user={mockUser} isOwnProfile={true} />
+      </MockedProvider>,
+    );
+
+    expect(screen.getByRole('status')).toBeInTheDocument();
+  });
+
+  test('renders empty state when no organizations', async () => {
+    const mocks = [
+      {
+        request: {
+          query: USER_DETAILS,
+          variables: { input: { id: '123' } },
+        },
+        result: {
+          data: {
+            user: {
+              id: '123',
+              organizationsWhereMember: {
+                edges: [],
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <ProfileOrganizations user={mockUser} isOwnProfile={true} />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('No Organizations')).toBeInTheDocument();
+    });
+  });
+
+  test('renders organizations when data is available', async () => {
+    const mocks = [
+      {
+        request: {
+          query: USER_DETAILS,
+          variables: { input: { id: '123' } },
+        },
+        result: {
+          data: {
+            user: {
+              id: '123',
+              organizationsWhereMember: {
+                edges: [
+                  { node: { id: 'org1', name: 'Organization 1' } },
+                  { node: { id: 'org2', name: 'Organization 2' } },
+                ],
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <ProfileOrganizations user={mockUser} isOwnProfile={true} />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Member Organizations')).toBeInTheDocument();
+      expect(screen.getByText('2 organizations')).toBeInTheDocument();
+      expect(screen.getByText('Organization 1')).toBeInTheDocument();
+      expect(screen.getByText('Organization 2')).toBeInTheDocument();
+    });
+  });
+
+  test('renders error state on query failure', async () => {
+    const mocks = [
+      {
+        request: {
+          query: USER_DETAILS,
+          variables: { input: { id: '123' } },
+        },
+        error: new Error('Failed to fetch organizations'),
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <ProfileOrganizations user={mockUser} isOwnProfile={true} />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByText('Failed to load organizations'),
+      ).toBeInTheDocument();
+    });
   });
 });
