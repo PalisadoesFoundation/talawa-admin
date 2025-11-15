@@ -69,7 +69,7 @@ const today = new Date();
 const tomorrow = today;
 tomorrow.setDate(today.getDate() + 1);
 
-const mockUseMutation = vi.fn();
+let mockUseMutation: ReturnType<typeof vi.fn>;
 vi.mock('@apollo/client', async () => {
   const actual = await vi.importActual('@apollo/client');
   return {
@@ -80,11 +80,11 @@ vi.mock('@apollo/client', async () => {
 
 describe('Testing Advertisement Component', () => {
   beforeEach(() => {
+    mockUseMutation = vi.fn();
     vi.clearAllMocks();
     mockUseMutation.mockReturnValue([vi.fn()]);
   });
   afterEach(() => {
-    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

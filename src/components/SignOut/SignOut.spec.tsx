@@ -16,7 +16,7 @@ vi.mock('utils/useSession', () => ({
   })),
 }));
 
-const mockNavigate = vi.fn();
+let mockNavigate: ReturnType<typeof vi.fn>;
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
@@ -25,12 +25,7 @@ vi.mock('react-router', async () => {
   };
 });
 
-const mockLocalStorage = {
-  clear: vi.fn(),
-};
-Object.defineProperty(window, 'localStorage', {
-  value: mockLocalStorage,
-});
+let mockLocalStorage: { clear: ReturnType<typeof vi.fn> };
 
 describe('SignOut Component', () => {
   const mockRevokeRefreshToken = {
@@ -45,7 +40,19 @@ describe('SignOut Component', () => {
   };
 
   beforeEach(() => {
+    mockNavigate = vi.fn();
+    mockLocalStorage = {
+      clear: vi.fn(),
+    };
+    Object.defineProperty(window, 'localStorage', {
+      value: mockLocalStorage,
+      configurable: true,
+    });
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   test('calls logout functionality when sign out button is clicked', async () => {

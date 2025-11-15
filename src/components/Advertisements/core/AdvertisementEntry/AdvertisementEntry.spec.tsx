@@ -20,7 +20,7 @@ const translations = JSON.parse(
   ),
 );
 
-const mockUseMutation = vi.fn();
+let mockUseMutation: ReturnType<typeof vi.fn>;
 vi.mock('@apollo/client', async () => {
   const actual = await vi.importActual('@apollo/client');
   return {
@@ -41,11 +41,11 @@ global.URL.createObjectURL = vi.fn(() => 'mocked-url');
 
 describe('Testing Advertisement Entry Component', () => {
   beforeEach(() => {
+    mockUseMutation = vi.fn();
     vi.clearAllMocks();
     mockUseMutation.mockReturnValue([vi.fn()]);
   });
   afterEach(() => {
-    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

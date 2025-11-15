@@ -10,7 +10,11 @@ import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
 // Mock the dependencies
-const mockT = vi.fn((key: string) => {
+let mockT: ReturnType<typeof vi.fn>;
+
+let mockTCommon: ReturnType<typeof vi.fn>;
+
+const mockTImplementation = (key: string) => {
   const translations: Record<string, string> = {
     talawaUserPortal: 'Talawa User Portal',
     'my organizations': 'My Organizations',
@@ -18,9 +22,9 @@ const mockT = vi.fn((key: string) => {
     Settings: 'Settings', // Capital S for common namespace
   };
   return translations[key] || key;
-});
+};
 
-const mockTCommon = vi.fn((key: string) => {
+const mockTCommonImplementation = (key: string) => {
   const translations: Record<string, string> = {
     menu: 'Menu',
     Settings: 'Settings',
@@ -28,14 +32,14 @@ const mockTCommon = vi.fn((key: string) => {
     notifications: 'Notifications', // Used by notification button in component
   };
   return translations[key] || key;
-});
+};
 
 vi.mock('react-i18next', () => ({
   useTranslation: vi.fn((namespace?: string) => {
     if (namespace === 'common') {
-      return { t: mockTCommon };
+      return { t: mockTCommon || vi.fn() };
     }
-    return { t: mockT };
+    return { t: mockT || vi.fn() };
   }),
   initReactI18next: {
     type: '3rdParty',
@@ -177,8 +181,8 @@ describe('UserSidebar', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockT.mockClear();
-    mockTCommon.mockClear();
+    mockT = vi.fn(mockTImplementation);
+    mockTCommon = vi.fn(mockTCommonImplementation);
     mockUsePluginDrawerItems.mockReturnValue([]);
     // Reset window.innerWidth to a default value
     Object.defineProperty(window, 'innerWidth', {

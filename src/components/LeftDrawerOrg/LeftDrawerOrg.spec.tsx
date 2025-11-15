@@ -51,7 +51,11 @@ interface IMockedResponse {
 }
 
 // Mock the dependencies
-const mockT = vi.fn((key: string) => {
+let mockT: ReturnType<typeof vi.fn>;
+
+let mockTErrors: ReturnType<typeof vi.fn>;
+
+const mockTImplementation = (key: string) => {
   const translations: Record<string, string> = {
     talawaAdminPortal: 'Talawa Admin Portal',
     adminPortal: 'Admin Portal',
@@ -64,24 +68,27 @@ const mockT = vi.fn((key: string) => {
     Posts: 'Posts',
   };
   return translations[key] || key;
-});
+};
 
-const mockTErrors = vi.fn((key: string, options?: { entity?: string }) => {
+const mockTErrorsImplementation = (
+  key: string,
+  options?: { entity?: string },
+) => {
   if (key === 'errorLoading' && options?.entity) {
     return `Error loading ${options.entity}`;
   }
   return key;
-});
+};
 
 vi.mock('react-i18next', () => ({
   useTranslation: vi.fn((namespace: string) => {
     if (namespace === 'common') {
-      return { t: mockT };
+      return { t: mockT || vi.fn() };
     }
     if (namespace === 'errors') {
-      return { t: mockTErrors };
+      return { t: mockTErrors || vi.fn() };
     }
-    return { t: mockT };
+    return { t: mockT || vi.fn() };
   }),
   initReactI18next: {
     type: '3rdParty',
@@ -133,12 +140,8 @@ vi.mock('components/SignOut/SignOut', () => ({
   )),
 }));
 
-const mockGetItem = vi.fn((key: string) => {
-  if (key === 'id') return 'user-123';
-  return null;
-});
-
-const mockSetItem = vi.fn();
+let mockGetItem: ReturnType<typeof vi.fn>;
+let mockSetItem: ReturnType<typeof vi.fn>;
 
 vi.mock('utils/useLocalstorage', () => ({
   default: vi.fn(() => ({
@@ -298,10 +301,13 @@ describe('LeftDrawerOrg', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockT.mockClear();
-    mockTErrors.mockClear();
-    mockSetItem.mockClear();
-    mockGetItem.mockClear();
+    mockT = vi.fn(mockTImplementation);
+    mockTErrors = vi.fn(mockTErrorsImplementation);
+    mockGetItem = vi.fn((key: string) => {
+      if (key === 'id') return 'user-123';
+      return null;
+    });
+    mockSetItem = vi.fn();
     mockUsePluginDrawerItems.mockReturnValue([]);
     // Reset window.innerWidth to a default value
     Object.defineProperty(window, 'innerWidth', {
