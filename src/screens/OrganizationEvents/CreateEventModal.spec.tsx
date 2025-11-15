@@ -601,7 +601,7 @@ describe('CreateEventModal', () => {
       () => {
         expect(toast.success).toHaveBeenCalled();
       },
-      { timeout: 3000 },
+      { timeout: 1000 },
     );
 
     expect(onEventCreated).toHaveBeenCalled();
@@ -676,7 +676,7 @@ describe('CreateEventModal', () => {
       () => {
         expect(errorHandler).toHaveBeenCalled();
       },
-      { timeout: 3000 },
+      { timeout: 1000 },
     );
   });
 
@@ -755,7 +755,7 @@ describe('CreateEventModal', () => {
       () => {
         expect(toast.success).toHaveBeenCalled();
       },
-      { timeout: 3000 },
+      { timeout: 1000 },
     );
 
     expect(onEventCreated).toHaveBeenCalled();
