@@ -21,7 +21,7 @@ Please read the [Palisadoes Contributing Guidelines](https://github.com/Palisado
 
 ## Testing and Code Quality
 
-For detailed information about testing, linting, formatting, and code coverage, please refer to our comprehensive [Testing Guide](https://docs.talawa.io/docs/developer-resources/testing).
+For detailed information about testing, linting, formatting, and code coverage, please refer to our comprehensive [Testing Guide](docs/docs/docs/developer-resources/testing.md).
 
 ### Quick Reference
 
@@ -40,7 +40,7 @@ For detailed information about testing, linting, formatting, and code coverage, 
 **Cypress E2E Testing:**
 - See the [Cypress Guide](cypress/README.md) for end-to-end testing
 
-For complete documentation including test sharding, code coverage setup, debugging, and git hooks, visit the [Testing Guide](https://docs.talawa.io/docs/developer-resources/testing).
+For complete documentation including test sharding, code coverage setup, debugging, and git hooks, visit the [Testing Guide](docs/docs/docs/developer-resources/testing.md).
 
 ## Making Contributions   
 
