@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
+import type { MockedResponse } from '@apollo/client/testing';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
@@ -154,9 +155,7 @@ const createTestStore = () => {
 };
 
 const renderComponent = (
-  mocks: readonly (typeof createEventMock | typeof createEventErrorMock)[] = [
-    createEventMock,
-  ],
+  mocks: ReadonlyArray<MockedResponse> = [createEventMock],
   props = mockProps,
 ) => {
   const testStore = createTestStore();
@@ -428,11 +427,17 @@ describe('CreateEventModal', () => {
   test('auto-corrects end date when start date is after end date', async () => {
     renderComponent();
     const startDatePicker = screen.getByTestId('date-picker-Start Date');
+    const endDatePicker = screen.getByTestId('date-picker-End Date');
+
+    const yesterday = dayjs().subtract(1, 'day').format('YYYY-MM-DD');
+    fireEvent.change(endDatePicker, { target: { value: yesterday } });
+
     const tomorrow = dayjs().add(2, 'day').format('YYYY-MM-DD');
     fireEvent.change(startDatePicker, { target: { value: tomorrow } });
+
     await waitFor(() => {
-      const endDatePicker = screen.getByTestId('date-picker-End Date');
-      expect(endDatePicker).toBeInTheDocument();
+      const endValue = endDatePicker.getAttribute('value') || '';
+      expect(dayjs(endValue).isSameOrAfter(tomorrow, 'day')).toBe(true);
     });
   });
 
@@ -443,11 +448,21 @@ describe('CreateEventModal', () => {
       const startTimePicker = screen.getByTestId('time-picker-Start Time');
       expect(startTimePicker).toBeInTheDocument();
     });
+
     const startTimePicker = screen.getByTestId('time-picker-Start Time');
+    const endTimePicker = screen.getByTestId('time-picker-End Time');
+
+    fireEvent.change(endTimePicker, { target: { value: '10:00:00' } });
     fireEvent.change(startTimePicker, { target: { value: '20:00:00' } });
+
     await waitFor(() => {
-      const endTimePicker = screen.getByTestId('time-picker-End Time');
-      expect(endTimePicker).toBeInTheDocument();
+      const endValue = endTimePicker.getAttribute('value') || '';
+      const startValue = startTimePicker.getAttribute('value') || '';
+      expect(
+        dayjs(endValue, 'HH:mm:ss').isSameOrAfter(
+          dayjs(startValue, 'HH:mm:ss'),
+        ),
+      ).toBe(true);
     });
   });
 
