@@ -23,10 +23,7 @@ export const useMinioUpload = (): InterfaceMinioUpload => {
     organizationId: string,
   ): Promise<{ objectName: string; fileHash: string }> => {
     try {
-      // Compute the file hash
       const fileHash = await calculateFileHash(file);
-
-      // Generate a presigned URL using the mutation
       const { data } = await generatePresignedUrl({
         variables: {
           input: {

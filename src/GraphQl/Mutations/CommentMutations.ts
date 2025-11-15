@@ -58,3 +58,19 @@ export const UNLIKE_COMMENT = gql`
     }
   }
 `;
+export const DELETE_COMMENT = gql`
+  mutation deleteComment($input: MutationDeleteCommentInput!) {
+    deleteComment(input: $input) {
+      id
+    }
+  }
+`;
+
+export const UPDATE_COMMENT = gql`
+  mutation updateComment($input: MutationUpdateCommentInput!) {
+    updateComment(input: $input) {
+      id
+      body
+    }
+  }
+`;

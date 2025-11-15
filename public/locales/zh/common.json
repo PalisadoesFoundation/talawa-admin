@@ -62,6 +62,7 @@
   "Venues": "场地",
   "Action Items": "行动项目",
   "Posts": "帖子",
+  "Chat": "聊天",
   "Block/Unblock": "封锁/解除封锁",
   "Advertisement": "广告",
   "Funds": "资金",
@@ -98,5 +99,7 @@
   "createdLatest": "最近创建",
   "createdEarliest": "最早创建",
   "searchBy": "按{{item}}搜索",
-  "plugins": "插件"
+  "plugins": "插件",
+  "save": "保存",
+  "saving": "保存中..."
 }

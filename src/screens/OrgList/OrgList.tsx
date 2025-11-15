@@ -44,7 +44,7 @@
  * - `OrganizationModal` - For creating new organizations.
  * - `Modal` - For managing features after organization creation.
  */
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import {
   CREATE_ORGANIZATION_MUTATION_PG,
@@ -184,6 +184,34 @@ function orgList(): JSX.Element {
   });
 
   const orgsData = allOrganizationsData?.organizations;
+
+  // Sort and filter organizations based on sorting state
+  const sortedOrganizations = useMemo(() => {
+    if (!orgsData) return [];
+
+    let result = [...orgsData];
+
+    // Apply search filter
+    if (searchByName) {
+      result = result.filter((org: InterfaceOrgInfoTypePG) =>
+        org.name.toLowerCase().includes(searchByName.toLowerCase()),
+      );
+    }
+
+    // Apply sorting
+    if (
+      sortingState.option === 'Latest' ||
+      sortingState.option === 'Earliest'
+    ) {
+      result.sort((a: InterfaceOrgInfoTypePG, b: InterfaceOrgInfoTypePG) => {
+        const dateA = new Date(a.createdAt).getTime();
+        const dateB = new Date(b.createdAt).getTime();
+        return sortingState.option === 'Latest' ? dateB - dateA : dateA - dateB;
+      });
+    }
+
+    return result;
+  }, [orgsData, searchByName, sortingState.option]);
 
   useEffect(() => {
     setIsLoading(loadingAll);
@@ -372,14 +400,16 @@ function orgList(): JSX.Element {
       {/* Text Infos for list */}
 
       {!isLoading &&
-      (!orgsData || orgsData.length === 0) &&
+      (!sortedOrganizations || sortedOrganizations.length === 0) &&
       searchByName.length === 0 &&
       (!userData || adminFor.length === 0) ? (
         <div className={styles.notFound}>
           <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
           <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
         </div>
-      ) : !isLoading && orgsData?.length == 0 && searchByName.length > 0 ? (
+      ) : !isLoading &&
+        sortedOrganizations?.length == 0 &&
+        searchByName.length > 0 ? (
         <div className={styles.notFound} data-testid="noResultFound">
           <h4 className="m-0">
             {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
@@ -410,22 +440,11 @@ function orgList(): JSX.Element {
           )}
           <div className={`${styles.listBoxOrgList}`}>
             {(rowsPerPage > 0
-              ? orgsData
-                  ?.filter((org: InterfaceOrgInfoTypePG) =>
-                    searchByName
-                      ? org.name
-                          .toLowerCase()
-                          .includes(searchByName.toLowerCase())
-                      : org,
-                  )
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : orgsData?.filter((org: InterfaceOrgInfoTypePG) =>
-                  searchByName
-                    ? org.name
-                        .toLowerCase()
-                        .includes(searchByName.toLowerCase())
-                    : org,
+              ? sortedOrganizations.slice(
+                  page * rowsPerPage,
+                  page * rowsPerPage + rowsPerPage,
                 )
+              : sortedOrganizations
             )?.map((item: InterfaceOrgInfoTypePG) => {
               return (
                 <div key={item.id} className={styles.itemCardOrgList}>
@@ -439,15 +458,7 @@ function orgList(): JSX.Element {
             <tbody>
               <tr>
                 <PaginationList
-                  count={
-                    orgsData?.filter((org: InterfaceOrgInfoTypePG) =>
-                      searchByName
-                        ? org.name
-                            .toLowerCase()
-                            .includes(searchByName.toLowerCase())
-                        : org,
-                    ).length || 0
-                  }
+                  count={sortedOrganizations.length || 0}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   onPageChange={handleChangePage}
