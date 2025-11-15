@@ -5,58 +5,155 @@ slug: /developer-resources/e2e-testing
 sidebar_position: 70
 ---
 
-## Introduction
+This project uses Cypress for comprehensive end-to-end testing to ensure the application works correctly from a user's perspective.
 
-End-to-End (E2E) testing is performed using **Cypress** to validate the application from a user's perspective, ensuring all components function together reliably.
+## Prerequisites
 
----
+Before running Cypress tests, ensure you have the following setup:
 
-### Prerequisites
+### Talawa API Setup
 
-Before running tests, ensure the following are set up:
+1. **Important**: The [Talawa API](https://github.com/PalisadoesFoundation/talawa-api) must be properly installed, configured, and running before executing any Cypress tests. The tests depend on API endpoints being available and functional.
+2. Please follow the complete installation guide at: https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md
 
-* **Talawa API:** The **Talawa API** must be fully installed, configured, and running. Tests depend on its endpoints.
-    * *Installation Guide:* [https://docs-api.talawa.io/docs/installation](https://docs-api.talawa.io/docs/installation)
-* **Application Server:** Your local development server must be running at **`http://localhost:4321`**.
+### Application Server
+Ensure your local development server is running on `http://localhost:4321`.
 
----
+## Directory Structure
 
-### Test Structure and Components
+The tests follow the Page Object Model pattern for maintainability.
 
-The tests follow the **Page Object Model** pattern for maintainability.
+```
+cypress/
+├── e2e/                    # End-to-end test specifications
+│   └── example_spec/       # Related tests
+├── fixtures/               # Test data and mock files
+│   └── users.json         # User test data
+├── pageObjects/           # Page Object Model files
+│   └── auth/              # Authentication page objects
+└── support/               # Support files and custom commands
+    └── commands.ts        # Custom Cypress commands
+```
 
-| Directory | Purpose | Key Component |
-| :--- | :--- | :--- |
-| **`cypress/e2e/`** | End-to-end test specification files, organized by feature. | `login.cy.ts` |
-| **`cypress/fixtures/`** | Static test data (e.g., JSON files). | `users.json` |
-| **`cypress/pageObjects/`** | **Page Object Model** classes for abstracting page interactions. | `auth/LoginPage.ts` |
-| **`cypress/support/`** | Custom commands and utilities for reusable functionality. | `commands.ts` |
+### Key Components:
 
----
+1. **e2e/**: Contains all test specification files organized by feature
+1. **fixtures/**: Static data used in tests (JSON files, images, etc.)
+1. **pageObjects/**: Page Object Model implementation for maintainable test code
+1. **support/**: Custom commands and utilities to extend Cypress functionality
 
-### Running Tests
+## Running Tests
 
-| Mode | Command | Description |
-| :--- | :--- | :--- |
-| **Interactive (Debugging)** | `npm run cy:open` | Opens the Cypress Test Runner for visual feedback and debugging. |
-| **Headless (CI/Run All)** | `npm run cy:run` | Runs all tests in the headless mode. |
+Follow these steps to run end to end tests
 
----
+### Available Commands
 
-### Writing Tests & Best Practices
+```bash
 
-1.  **Page Object Model (POM):** Use POM (located in `cypress/pageObjects/`) to make tests more readable and maintainable.
-2.  **Custom Commands:** Define reusable actions in `cypress/support/commands.ts`.
-3.  **Test Data:** Use **fixtures** (loaded via `cy.fixture('users')`) for consistent test data.
+# Open Cypress Test Runner (Interactive Mode) 
+# Preferred for Debugging
 
----
+npm run cy:open
+
+# Run all tests in headless mode
+
+npm run cy:run
+```
+
+### Running Specific Tests
+
+There are multiple testing modes.
+
+#### Interactive Mode
+
+For running specific tests with visual feedback, use the Interactive Mode where you can view all test specs and run individual tests:
+
+```bash
+npm run cy:open
+```
+
+#### Headless Mode
+
+For running specific tests in headless mode, first manually start your application at `http://localhost:4321`, then use the following commands:
+
+```bash
+# Run tests in a specific folder
+npm run cypress:run --spec "cypress/e2e/dashboard_spec/**/*"
+
+# Run a specific test file
+npm run cypress:run --spec "cypress/e2e/login_spec/login.cy.ts"
+```
+
+## Writing Tests
+
+Follow these best practices when writing tests.
+
+### Page Object Model
+
+This project follows the Page Object Model pattern for better test maintenance:
+
+```javascript
+// Example usage of page objects
+import { LoginPage } from '../pageObjects/auth/LoginPage';
+
+const loginPage = new LoginPage();
+
+it('should login successfully', () => {
+  loginPage.verifyLoginPage().login(userData.email, userData.password);;
+});
+```
+
+### Custom Commands
+
+Custom Cypress commands are defined in `cypress/support/commands.ts` to provide reusable functionality across tests.
+
+### Test Data
+
+Use fixtures for consistent test data:
+
+```javascript
+// Load test data from fixtures
+cy.fixture('users').then((users) => {
+  // Use users data in tests
+});
+```
 
 ### Test Coverage Report
 
-Generate a detailed HTML report to analyze code coverage:
+After running your Cypress tests, you can generate detailed HTML coverage reports to analyze code coverage:
 
-1.  **Run Tests:** `npm run cy:run` (collects coverage data).
-2.  **Generate Report:** `npx nyc --reporter=html`
-3.  **View Report:** `open coverage/index.html` (in your browser).
+1. **Run Cypress tests** to collect coverage data:
+   ```bash
+   npm run cy:run
+   ```
 
-The report provides overall percentages and detailed line-by-line coverage analysis.
+2. **Generate HTML coverage report** using nyc:
+   ```bash
+   npx nyc --reporter=html
+   ```
+
+3. **View the coverage report** in your browser:
+   ```bash
+   open coverage/index.html
+   ```
+
+The HTML report provides an interactive view of:
+
+1. Overall coverage percentages (statements, branches, functions, lines)
+1. File-by-file coverage breakdown
+1. Detailed line-by-line coverage highlighting
+1. Uncovered code sections for easy identification
+
+**Note**: Coverage data is collected during test execution and stored in the `.nyc_output` directory. The HTML report is generated in the `coverage/` directory.
+
+## Contributing
+
+When adding new tests:
+
+1. Follow the existing directory structure
+2. Use Page Object Model pattern
+3. Add appropriate fixtures for test data
+4. Ensure tests are independent and repeatable
+5. Document any new custom commands
+
+For more information about Cypress testing, visit the [official Cypress documentation](https://docs.cypress.io/).

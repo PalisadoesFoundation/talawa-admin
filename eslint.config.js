@@ -5,7 +5,7 @@ import tsParser from '@typescript-eslint/parser';
 import imports from 'eslint-plugin-import';
 import prettier from 'eslint-plugin-prettier';
 import react from 'eslint-plugin-react';
-import vitest from 'eslint-plugin-vitest';
+import vitest from '@vitest/eslint-plugin';
 import tsdoc from 'eslint-plugin-tsdoc';
 
 export default [

@@ -46,7 +46,11 @@ import type {
   InterfaceUserInfoPG,
 } from 'utils/interfaces';
 import { Popover } from '@base-ui-components/react/popover';
-import { type ApolloQueryResult, useQuery } from '@apollo/client';
+import {
+  type ApolloError,
+  type ApolloQueryResult,
+  useQuery,
+} from '@apollo/client';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import {
@@ -120,7 +124,7 @@ const Pledges = (): JSX.Element => {
   }: {
     data?: { getPledgesByUserId: InterfacePledgeInfo[] };
     loading: boolean;
-    error?: Error | undefined;
+    error?: ApolloError;
     refetch: () => Promise<
       ApolloQueryResult<{ getPledgesByUserId: InterfacePledgeInfo[] }>
     >;
@@ -166,14 +170,26 @@ const Pledges = (): JSX.Element => {
     setOpen(true);
   };
 
+  const isNoPledgesFoundError =
+    pledgeError?.graphQLErrors.some((graphQLError) => {
+      const code = (graphQLError.extensions as { code?: string } | undefined)
+        ?.code;
+      return code === 'arguments_associated_resources_not_found';
+    }) ?? false;
+
   useEffect(() => {
-    if (pledgeData) {
+    if (pledgeData?.getPledgesByUserId) {
       setPledges(pledgeData.getPledgesByUserId);
+      return;
     }
-  }, [pledgeData]);
+
+    if (isNoPledgesFoundError) {
+      setPledges([]);
+    }
+  }, [pledgeData, isNoPledgesFoundError]);
 
   if (pledgeLoading) return <Loader size="xl" />;
-  if (pledgeError) {
+  if (pledgeError && !isNoPledgesFoundError) {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">

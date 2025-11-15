@@ -2,7 +2,7 @@ import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 import { afterAll, afterEach, beforeAll, vi } from 'vitest';
 
-// Simple console error handler for React 18 and Apollo deprecation warnings
+// Simple console error handler for React 18 warnings
 const originalError = console.error;
 const originalWarn = console.warn;
 const shouldSuppressError = (value: unknown): boolean => {
@@ -13,29 +13,15 @@ const shouldSuppressError = (value: unknown): boolean => {
     return false;
   }
 
-  return (
-    value.includes(
-      'Warning: ReactDOM.render is no longer supported in React 18.',
-    ) ||
-    value.includes(
-      'Please remove the `addTypename` option from MockedProvider',
-    ) ||
-    value.includes(
-      'Please remove the `addTypename` option when initializing `InMemoryCache`',
-    ) ||
-    value.includes('Please remove this option.') ||
-    (value.includes('go.apollo.dev/c/err') &&
-      (value.includes('addTypename') ||
-        value.includes('canonizeResults') ||
-        value.includes('message%22%3A43') ||
-        value.includes('message%22%3A49')))
+  return value.includes(
+    'Warning: ReactDOM.render is no longer supported in React 18.',
   );
 };
 
 beforeAll(() => {
   console.error = (...args: unknown[]) => {
     if (args.some(shouldSuppressError)) {
-      return; // Suppress known deprecation warnings (to be fixed in follow-up issues)
+      return; // Suppress known React 18 warnings
     }
     originalError.call(console, ...args);
   };

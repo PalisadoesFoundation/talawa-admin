@@ -1,4 +1,5 @@
 import React from 'react';
+import { GraphQLError } from 'graphql';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -18,6 +19,47 @@ import Pledges from './Pledges';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, expect, describe, it } from 'vitest';
+
+type MockStorage = Storage & { resetStore: () => void };
+
+const createLocalStorageMock = (): MockStorage => {
+  const store = new Map<string, string>();
+
+  const storage = {
+    getItem: (key: string) => {
+      if (!store.has(key)) {
+        return null;
+      }
+
+      return store.get(key) ?? null;
+    },
+    setItem: (key: string, value: unknown) => {
+      store.set(key, String(value));
+    },
+    removeItem: (key: string) => {
+      store.delete(key);
+    },
+    clear: () => {
+      store.clear();
+    },
+    key: (index: number) => Array.from(store.keys())[index] ?? null,
+    get length() {
+      return store.size;
+    },
+    resetStore: () => {
+      store.clear();
+    },
+  } satisfies Storage & { resetStore: () => void };
+
+  return storage;
+};
+
+const localStorageMock = createLocalStorageMock();
+
+Object.defineProperty(window, 'localStorage', {
+  configurable: true,
+  value: localStorageMock,
+});
 
 // Mock for multiple pledgers to test popup - Fixed to have proper pledger
 const MOCKS_WITH_MULTIPLE_PLEDGERS = [
@@ -522,6 +564,34 @@ const USER_PLEDGES_ERROR = [
   },
 ];
 
+const USER_PLEDGES_NO_ASSOCIATED_RESOURCES_ERROR = [
+  {
+    request: {
+      query: USER_PLEDGES,
+      variables: {
+        userId: { id: 'userId' },
+        where: {},
+        orderBy: 'endDate_DESC',
+      },
+    },
+    result: {
+      data: {
+        getPledgesByUserId: null,
+      },
+      errors: [
+        new GraphQLError(
+          'No associated resources found for the provided arguments.',
+          {
+            extensions: {
+              code: 'arguments_associated_resources_not_found',
+            },
+          },
+        ),
+      ],
+    },
+  },
+];
+
 const SEARCH_MOCKS = [
   {
     request: {
@@ -1011,6 +1081,7 @@ const link7 = new StaticMockLink(MOCKS_WITH_MULTIPLE_PLEDGERS);
 const link8 = new StaticMockLink(MOCKS_WITH_MISSING_CAMPAIGN);
 const link9 = new StaticMockLink(MOCKS_WITH_INVALID_DATE);
 const link10 = new StaticMockLink(MOCKS_WITH_MORE_USERS);
+const link11 = new StaticMockLink(USER_PLEDGES_NO_ASSOCIATED_RESOURCES_ERROR);
 
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation),
@@ -1041,6 +1112,7 @@ const renderMyPledges = (link: ApolloLink): RenderResult => {
 describe('Testing User Pledge Screen', () => {
   const { setItem } = useLocalStorage();
   beforeEach(() => {
+    localStorageMock.resetStore();
     setItem('userId', 'userId');
     vi.spyOn(console, 'error').mockImplementation(() => {});
   });
@@ -1346,6 +1418,16 @@ describe('Testing User Pledge Screen', () => {
     // Check that the error message is displayed (it's in the same element)
     const errorElement = screen.getByTestId('errorMsg');
     expect(errorElement).toHaveTextContent('Mock Graphql USER_PLEDGES Error');
+  });
+
+  it('should show empty state when server returns no associated resources error', async () => {
+    renderMyPledges(link11);
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.userCampaigns.noPledges),
+      ).toBeInTheDocument();
+    });
+    expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
   });
 
   it('should render empty state', async () => {
