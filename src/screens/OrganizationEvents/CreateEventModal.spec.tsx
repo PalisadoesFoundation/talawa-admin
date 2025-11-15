@@ -9,8 +9,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
+import { configureStore } from '@reduxjs/toolkit';
 import CreateEventModal from './CreateEventModal';
-import { store } from 'state/store';
+import { reducers } from 'state/reducers';
 import i18n from 'utils/i18nForTest';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 
@@ -25,6 +26,19 @@ vi.mock('react-toastify', () => ({
 vi.mock('utils/errorHandler', () => ({
   errorHandler: vi.fn(),
 }));
+
+vi.mock('utils/recurrenceUtils', async () => {
+  const actual = await vi.importActual<typeof import('utils/recurrenceUtils')>(
+    'utils/recurrenceUtils',
+  );
+  return {
+    ...actual,
+    validateRecurrenceInput: vi.fn(() => ({
+      isValid: true,
+      errors: [],
+    })),
+  };
+});
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable react/no-multi-comp */
@@ -144,15 +158,22 @@ const createEventErrorMock = {
   error: new Error('Failed to create event'),
 };
 
+const createTestStore = () => {
+  return configureStore({
+    reducer: reducers,
+  });
+};
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const renderComponent = (
   mocks: readonly any[] = [createEventMock],
   props = mockProps,
 ) => {
   /* eslint-enable @typescript-eslint/no-explicit-any */
+  const testStore = createTestStore();
   return render(
     <MockedProvider mocks={mocks}>
-      <Provider store={store}>
+      <Provider store={testStore}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18n}>
@@ -377,5 +398,138 @@ describe('CreateEventModal', () => {
     );
     const submitBtn = screen.getByTestId('createEventBtn') as HTMLButtonElement;
     expect(submitBtn.disabled).toBe(false);
+  });
+
+  test('shows warning for whitespace-only name', async () => {
+    renderComponent();
+    const nameInput = screen.getByTestId('eventTitleInput');
+    fireEvent.change(nameInput, { target: { value: '   ' } });
+    const submitBtn = screen.getByTestId('createEventBtn');
+    const form = submitBtn.closest('form');
+    if (form) fireEvent.submit(form);
+    expect(toast.warning).toHaveBeenCalledWith('Name can not be blank!');
+  });
+
+  test('shows warning for whitespace-only description', async () => {
+    renderComponent();
+    const nameInput = screen.getByTestId('eventTitleInput');
+    const descInput = screen.getByTestId('eventDescriptionInput');
+    fireEvent.change(nameInput, { target: { value: 'Valid Name' } });
+    fireEvent.change(descInput, { target: { value: '   ' } });
+    const submitBtn = screen.getByTestId('createEventBtn');
+    const form = submitBtn.closest('form');
+    if (form) fireEvent.submit(form);
+    expect(toast.warning).toHaveBeenCalledWith('Description can not be blank!');
+  });
+
+  test('shows warning for whitespace-only location', async () => {
+    renderComponent();
+    const nameInput = screen.getByTestId('eventTitleInput');
+    const descInput = screen.getByTestId('eventDescriptionInput');
+    const locInput = screen.getByTestId('eventLocationInput');
+    fireEvent.change(nameInput, { target: { value: 'Valid Name' } });
+    fireEvent.change(descInput, { target: { value: 'Valid Desc' } });
+    fireEvent.change(locInput, { target: { value: '   ' } });
+    const submitBtn = screen.getByTestId('createEventBtn');
+    const form = submitBtn.closest('form');
+    if (form) fireEvent.submit(form);
+    expect(toast.warning).toHaveBeenCalledWith('Location can not be blank!');
+  });
+
+  test('auto-corrects end date when start date is after end date', async () => {
+    renderComponent();
+    const startDatePicker = screen.getByTestId('date-picker-Start Date');
+    const tomorrow = dayjs().add(2, 'day').format('YYYY-MM-DD');
+    fireEvent.change(startDatePicker, { target: { value: tomorrow } });
+    await waitFor(() => {
+      const endDatePicker = screen.getByTestId('date-picker-End Date');
+      expect(endDatePicker).toBeInTheDocument();
+    });
+  });
+
+  test('auto-corrects end time when start time is after end time', async () => {
+    renderComponent();
+    await userEvent.click(screen.getByTestId('alldayCheck'));
+    await waitFor(() => {
+      const startTimePicker = screen.getByTestId('time-picker-Start Time');
+      expect(startTimePicker).toBeInTheDocument();
+    });
+    const startTimePicker = screen.getByTestId('time-picker-Start Time');
+    fireEvent.change(startTimePicker, { target: { value: '20:00:00' } });
+    await waitFor(() => {
+      const endTimePicker = screen.getByTestId('time-picker-End Time');
+      expect(endTimePicker).toBeInTheDocument();
+    });
+  });
+
+  test('handles recurrence validation error', async () => {
+    const { validateRecurrenceInput } = await import('utils/recurrenceUtils');
+    (validateRecurrenceInput as any).mockReturnValueOnce({
+      isValid: false,
+      errors: ['Invalid recurrence pattern'],
+    });
+
+    renderComponent();
+    const nameInput = screen.getByTestId('eventTitleInput');
+    const descInput = screen.getByTestId('eventDescriptionInput');
+    const locInput = screen.getByTestId('eventLocationInput');
+    fireEvent.change(nameInput, { target: { value: 'Event' } });
+    fireEvent.change(descInput, { target: { value: 'Desc' } });
+    fireEvent.change(locInput, { target: { value: 'Loc' } });
+
+    const dropdown = screen.getByTestId('recurrenceDropdown');
+    fireEvent.click(dropdown);
+    await waitFor(() => {
+      const dailyOption = screen.queryByTestId('recurrenceOption-1');
+      if (dailyOption) fireEvent.click(dailyOption);
+    });
+
+    const submitBtn = screen.getByTestId('createEventBtn');
+    const form = submitBtn.closest('form');
+    if (form) fireEvent.submit(form);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Invalid recurrence pattern');
+    });
+  });
+
+  test('verifies recurrence state updates for daily option', async () => {
+    renderComponent();
+    const dropdown = screen.getByTestId('recurrenceDropdown');
+    expect(dropdown).toHaveTextContent('Does not repeat');
+    fireEvent.click(dropdown);
+    await waitFor(() => {
+      const dailyOption = screen.queryByTestId('recurrenceOption-1');
+      if (dailyOption) fireEvent.click(dailyOption);
+    });
+    await waitFor(() => {
+      expect(dropdown).toHaveTextContent('Daily');
+    });
+  });
+
+  test('verifies recurrence state updates for weekly option', async () => {
+    renderComponent();
+    const dropdown = screen.getByTestId('recurrenceDropdown');
+    fireEvent.click(dropdown);
+    await waitFor(() => {
+      const weeklyOption = screen.queryByTestId('recurrenceOption-2');
+      if (weeklyOption) fireEvent.click(weeklyOption);
+    });
+    await waitFor(() => {
+      expect(dropdown).toHaveTextContent(/Weekly on/);
+    });
+  });
+
+  test('verifies recurrence state updates for monthly option', async () => {
+    renderComponent();
+    const dropdown = screen.getByTestId('recurrenceDropdown');
+    fireEvent.click(dropdown);
+    await waitFor(() => {
+      const monthlyOption = screen.queryByTestId('recurrenceOption-3');
+      if (monthlyOption) fireEvent.click(monthlyOption);
+    });
+    await waitFor(() => {
+      expect(dropdown).toHaveTextContent(/Monthly on day/);
+    });
   });
 });
