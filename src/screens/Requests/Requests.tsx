@@ -60,7 +60,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import styles from '../../style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router';
-import SearchBar from 'subComponents/SearchBar';
 import {
   Paper,
   TableBody,
@@ -69,6 +68,7 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
+import PageHeader from 'screens/components/Navbar';
 
 interface InterfaceRequestsListItem {
   membershipRequestId: string;
@@ -277,15 +277,14 @@ const Requests = (): JSX.Element => {
         className={`${styles.btnsContainer} gap-4 flex-wrap`}
         data-testid="testComp"
       >
-        <div className={`${styles.input}`}>
-          <SearchBar
-            placeholder={t('searchRequests')}
-            onSearch={handleSearch}
-            inputTestId="searchByName"
-            buttonTestId="searchButton"
-            className=""
-          />
-        </div>
+        <PageHeader
+          search={{
+            placeholder: t('searchRequests'),
+            onSearch: handleSearch,
+            inputTestId: 'searchByName',
+            buttonTestId: 'searchButton',
+          }}
+        />
       </div>
 
       {!isLoading && orgsData?.organizations?.length === 0 ? (

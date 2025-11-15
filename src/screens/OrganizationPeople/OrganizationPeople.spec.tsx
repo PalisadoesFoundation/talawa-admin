@@ -34,6 +34,88 @@ vi.mock('./addMember/AddMember', () => ({
   ),
 }));
 
+interface TestInterfaceMockSearch {
+  placeholder: string;
+  onSearch: (value: string) => void;
+  inputTestId?: string;
+  buttonTestId?: string;
+}
+
+interface TestInterfaceTestInterfaceMockSortingOption {
+  label: string;
+  value: string | number;
+}
+
+interface TestInterfaceMockSorting {
+  title: string;
+  options: TestInterfaceTestInterfaceMockSortingOption[];
+  selected: string | number;
+  onChange: (value: string | number) => void;
+  testIdPrefix: string;
+}
+
+vi.mock('screens/components/Navbar', () => {
+  return {
+    default: function MockPageHeader({
+      search,
+      sorting,
+      actions,
+    }: {
+      search?: TestInterfaceMockSearch;
+      sorting?: TestInterfaceMockSorting[];
+      actions?: React.ReactNode;
+    }) {
+      return (
+        <div data-testid="calendarEventHeader">
+          <div>
+            {search && (
+              <>
+                <input
+                  placeholder={search.placeholder}
+                  onChange={(e) => search.onSearch(e.target.value)}
+                  autoComplete="off"
+                  required
+                  type="text"
+                  className="form-control"
+                />
+                <button
+                  data-testid={search.buttonTestId}
+                  onClick={() => {}}
+                  tabIndex={-1}
+                  type="button"
+                >
+                  Search
+                </button>
+              </>
+            )}
+          </div>
+
+          {sorting?.map((sort, index) => (
+            <div key={index}>
+              <button title={sort.title} data-testid={sort.testIdPrefix}>
+                {sort.selected}
+              </button>
+              <div>
+                {sort.options.map((option) => (
+                  <button
+                    key={option.value}
+                    data-testid={option.value.toString()}
+                    onClick={() => sort.onChange(option.value)}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          {actions}
+        </div>
+      );
+    },
+  };
+});
+
 // Setup mock window.location
 const setupLocationMock = () => {
   Object.defineProperty(window, 'location', {
@@ -441,7 +523,7 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to admin tab
-    const sortingButton = screen.getByText(/members/i);
+    const sortingButton = screen.getByTestId('sort');
     fireEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/admin/i);
@@ -699,7 +781,7 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to admin tab
-    const sortingButton = screen.getByText(/members/i);
+    const sortingButton = screen.getByTestId('sort');
     fireEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/ADMIN/i);
@@ -816,7 +898,7 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to admin tab
-    const sortingButton = screen.getByText(/members/i);
+    const sortingButton = screen.getByTestId('sort');
     fireEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/user/i);
@@ -913,14 +995,16 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to admin tab
-    const sortingButton = screen.getByText(/members/i);
+    const sortingButton = screen.getByTestId('sort');
     fireEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/ADMIN/i);
     fireEvent.click(adminOption);
 
     await waitFor(() => {
-      expect(screen.getByText('Admin User')).toBeInTheDocument();
+      expect(
+        screen.getByText((content) => content.includes('Admin User')),
+      ).toBeInTheDocument();
     });
 
     // Navigate to next page
@@ -1022,7 +1106,7 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to admin tab
-    const sortingButton = screen.getByText(/members/i);
+    const sortingButton = screen.getByTestId('sort');
     fireEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/user/i);
