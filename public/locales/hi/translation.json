@@ -1067,7 +1067,8 @@
     "logout": "लॉग आउट",
     "settings": "सेटिंग्स",
     "chat": "चैट",
-    "menu": "मेनू"
+    "menu": "मेनू",
+    "selectOrgBeforeSwitch": "एडमिन पोर्टल पर स्विच करने से पहले कृपया मेरे संगठनों से एक संगठन चुनें"
   },
   "organizationSidebar": {
     "viewAll": "सभी को देखें",

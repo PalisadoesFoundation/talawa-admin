@@ -8,7 +8,7 @@ import UserPasswordUpdate from './UserPasswordUpdate';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast as mockToast } from 'react-toastify';
 import { MOCKS } from './UserPasswordUpdateMocks';
-import { vi } from 'vitest';
+import { vi, afterEach } from 'vitest';
 import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 
 vi.mock('react-toastify', () => ({
@@ -37,6 +37,10 @@ describe('Testing User Password Update', () => {
   };
 
   global.alert = vi.fn();
+
+  afterEach(() => {
+    vi.clearAllTimers();
+  });
 
   it('should render props and text elements it for the page component', async () => {
     render(

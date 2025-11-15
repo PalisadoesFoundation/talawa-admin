@@ -48,6 +48,8 @@ import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
+import { useQuery } from '@apollo/client';
+import { USER_JOINED_ORGANIZATIONS_NO_MEMBERS } from 'GraphQl/Queries/Queries';
 
 const map: InterfaceMapType = {
   organization: 'home',
@@ -73,6 +75,27 @@ const UserScreen = (): React.JSX.Element => {
   });
 
   const { orgId } = useParams();
+
+  // Fetch user's joined organizations to set default if needed
+  const userId = getItem('id') as string;
+  const { data: orgsData } = useQuery(USER_JOINED_ORGANIZATIONS_NO_MEMBERS, {
+    variables: { id: userId, first: 1 },
+    skip: !userId, // Skip if no user ID
+  });
+
+  // Use orgId from URL, or fall back to localStorage, or use first joined org as default
+  const storedOrgId = getItem('selectedUserOrgId') as string;
+  const firstOrgId =
+    orgsData?.user?.organizationsWhereMember?.edges?.[0]?.node?._id ??
+    orgsData?.user?.organizationsWhereMember?.edges?.[0]?.node?.id;
+  const selectedOrgId = orgId || storedOrgId || firstOrgId;
+
+  // Save first org to localStorage if no org is selected yet
+  useEffect(() => {
+    if (!storedOrgId && firstOrgId) {
+      setItem('selectedUserOrgId', firstOrgId);
+    }
+  }, [firstOrgId, storedOrgId, setItem]);
 
   // Note: some user routes (for example global user pages like /user/notification)
   // don't include an `orgId`. In that case render the global user sidebar
@@ -151,9 +174,9 @@ const UserScreen = (): React.JSX.Element => {
         </Button>
       )} */}
       <div className={styles.drawer}>
-        {orgId ? (
+        {selectedOrgId ? (
           <UserSidebarOrg
-            orgId={orgId}
+            orgId={selectedOrgId}
             targets={targets}
             hideDrawer={hideDrawer}
             setHideDrawer={setHideDrawer}

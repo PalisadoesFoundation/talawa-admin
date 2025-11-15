@@ -1067,7 +1067,8 @@
     "logout": "登出",
     "settings": "设置",
     "chat": "聊天",
-    "menu": "菜单"
+    "menu": "菜单",
+    "selectOrgBeforeSwitch": "在切换到管理门户之前，请先从我的组织中选择一个组织"
   },
   "organizationSidebar": {
     "viewAll": "查看全部",

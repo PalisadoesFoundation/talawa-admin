@@ -1108,7 +1108,8 @@
     "logout": "Logout",
     "settings": "Settings",
     "chat": "Chat",
-    "menu": "menu"
+    "menu": "menu",
+    "selectOrgBeforeSwitch": "Please select an organization from My Organizations before switching to Admin Portal"
   },
   "organizationSidebar": {
     "viewAll": "View all",

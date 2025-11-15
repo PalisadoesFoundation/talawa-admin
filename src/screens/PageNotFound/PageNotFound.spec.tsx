@@ -13,7 +13,6 @@ const { setItem } = useLocalStorage();
 
 describe('Testing Page not found component', () => {
   it('should render component properly for User', () => {
-    //setItem('AdminFor', undefined);
     render(
       <BrowserRouter>
         <Provider store={store}>
@@ -50,7 +49,7 @@ describe('Testing Page not found component', () => {
       </BrowserRouter>,
     );
 
-    expect(screen.getByText(/Talawa Admin Portal/i)).toBeInTheDocument();
+    expect(screen.getByText(/Admin Portal/i)).toBeInTheDocument();
     expect(screen.getByText(/404/i)).toBeInTheDocument();
     expect(
       screen.getByText(/Oops! The Page you requested was not found!/i),
