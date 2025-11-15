@@ -437,7 +437,10 @@ describe('CreateEventModal', () => {
 
     await waitFor(() => {
       const endValue = endDatePicker.getAttribute('value') || '';
-      expect(dayjs(endValue).isSameOrAfter(tomorrow, 'day')).toBe(true);
+      expect(
+        dayjs(endValue).isAfter(tomorrow, 'day') ||
+          dayjs(endValue).isSame(tomorrow, 'day'),
+      ).toBe(true);
     });
   });
 
@@ -458,11 +461,11 @@ describe('CreateEventModal', () => {
     await waitFor(() => {
       const endValue = endTimePicker.getAttribute('value') || '';
       const startValue = startTimePicker.getAttribute('value') || '';
-      expect(
-        dayjs(endValue, 'HH:mm:ss').isSameOrAfter(
-          dayjs(startValue, 'HH:mm:ss'),
-        ),
-      ).toBe(true);
+      const endTime = dayjs(endValue, 'HH:mm:ss');
+      const startTime = dayjs(startValue, 'HH:mm:ss');
+      expect(endTime.isAfter(startTime) || endTime.isSame(startTime)).toBe(
+        true,
+      );
     });
   });
 
@@ -784,7 +787,7 @@ describe('CreateEventModal', () => {
 
     await waitFor(
       () => {
-        expect(mockToast.success).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalled();
       },
       { timeout: 3000 },
     );
