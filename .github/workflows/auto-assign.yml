@@ -10,6 +10,7 @@ env:
 jobs:
   handle-comment:
     runs-on: ubuntu-latest
+    # Only runs on issue comments, not those of pull requests
     if: github.event.issue.pull_request == null
     timeout-minutes: 15
     permissions:
