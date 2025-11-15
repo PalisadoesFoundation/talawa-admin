@@ -24,11 +24,19 @@ const mockTag: InterfaceTagData = {
 };
 
 const mockCheckedTags: Set<string> = new Set<string>();
-const mockToggleTagSelection = vi.fn();
+let mockToggleTagSelection: ReturnType<typeof vi.fn>;
 const mockT: TFunction<'translation', 'manageTag'> = ((key: string) =>
   key) as TFunction<'translation', 'manageTag'>;
 
 describe('TagNode', () => {
+  beforeEach(() => {
+    mockToggleTagSelection = vi.fn();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   // Existing tests
   it('renders the tag name', () => {
     render(

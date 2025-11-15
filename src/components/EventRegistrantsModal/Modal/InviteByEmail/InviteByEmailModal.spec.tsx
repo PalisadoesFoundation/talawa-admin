@@ -16,15 +16,15 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-const mockHandleClose = vi.fn();
-const mockOnInvitesSent = vi.fn();
+let mockHandleClose: ReturnType<typeof vi.fn>;
+let mockOnInvitesSent: ReturnType<typeof vi.fn>;
 
-const defaultProps = {
-  show: true,
-  handleClose: mockHandleClose,
-  eventId: 'test-event-1',
-  isRecurring: false,
-  onInvitesSent: mockOnInvitesSent,
+let defaultProps: {
+  show: boolean;
+  handleClose: ReturnType<typeof vi.fn>;
+  eventId: string;
+  isRecurring: boolean;
+  onInvitesSent: ReturnType<typeof vi.fn>;
 };
 
 const mocks = [
@@ -66,7 +66,19 @@ const renderComponent = (
 
 describe('InviteByEmailModal', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    mockHandleClose = vi.fn();
+    mockOnInvitesSent = vi.fn();
+    defaultProps = {
+      show: true,
+      handleClose: mockHandleClose,
+      eventId: 'test-event-1',
+      isRecurring: false,
+      onInvitesSent: mockOnInvitesSent,
+    };
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('renders the modal with initial fields when show is true', () => {

@@ -15,12 +15,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem, removeItem } = useLocalStorage();
 
-// Mock window.location
-const mockAssign = vi.fn();
-Object.defineProperty(window, 'location', {
-  value: { assign: mockAssign },
-  writable: true,
-});
+let mockAssign: ReturnType<typeof vi.fn>;
 
 const MOCKS = [
   {
@@ -64,7 +59,17 @@ const props: InterfaceOrgListCardPropsPG = {
 
 describe('Testing the Super Dash List', () => {
   beforeEach(() => {
+    mockAssign = vi.fn();
+    Object.defineProperty(window, 'location', {
+      value: { assign: mockAssign },
+      writable: true,
+      configurable: true,
+    });
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   test('should render props and text elements test for the page component', async () => {

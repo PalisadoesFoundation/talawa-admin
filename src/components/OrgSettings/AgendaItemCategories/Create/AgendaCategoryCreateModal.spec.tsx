@@ -28,12 +28,21 @@ const mockFormState = {
   description: 'Test Description',
   createdBy: 'Test User',
 };
-const mockHideCreateModal = vi.fn();
-const mockSetFormState = vi.fn();
-const mockCreateAgendaCategoryHandler = vi.fn();
+let mockHideCreateModal: ReturnType<typeof vi.fn>;
+let mockSetFormState: ReturnType<typeof vi.fn>;
+let mockCreateAgendaCategoryHandler: ReturnType<typeof vi.fn>;
 const mockT = (key: string): string => key;
 
 describe('AgendaCategoryCreateModal', () => {
+  beforeEach(() => {
+    mockHideCreateModal = vi.fn();
+    mockSetFormState = vi.fn();
+    mockCreateAgendaCategoryHandler = vi.fn();
+  });
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('renders modal correctly', () => {
     render(
       <MockedProvider addTypename={false}>
