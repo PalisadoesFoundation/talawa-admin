@@ -10,6 +10,7 @@ env:
 jobs:
   handle-comment:
     runs-on: ubuntu-latest
+    if: github.event.issue.pull_request == null
     timeout-minutes: 15
     permissions:
       issues: write
