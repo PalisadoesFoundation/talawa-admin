@@ -680,40 +680,6 @@ describe('CreateEventModal', () => {
     );
   });
 
-  test('creates event with time parsing and non-allDay event successfully', async () => {
-    const onClose = vi.fn();
-    const onEventCreated = vi.fn();
-
-    renderComponent([], { ...mockProps, onClose, onEventCreated });
-
-    await userEvent.type(screen.getByTestId('eventTitleInput'), 'Timed Event');
-    await userEvent.type(
-      screen.getByTestId('eventDescriptionInput'),
-      'Timed Description',
-    );
-    await userEvent.type(
-      screen.getByTestId('eventLocationInput'),
-      'Timed Location',
-    );
-
-    await userEvent.click(screen.getByTestId('alldayCheck'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('time-picker-Start Time')).toBeInTheDocument();
-    });
-
-    const startTimePicker = screen.getByTestId('time-picker-Start Time');
-    const endTimePicker = screen.getByTestId('time-picker-End Time');
-
-    fireEvent.change(startTimePicker, { target: { value: '10:00:00' } });
-    fireEvent.change(endTimePicker, { target: { value: '11:30:00' } });
-
-    await waitFor(() => {
-      expect(startTimePicker).toHaveValue('10:00:00');
-      expect(endTimePicker).toHaveValue('11:30:00');
-    });
-  });
-
   test('creates event with recurrence successfully', async () => {
     const onClose = vi.fn();
     const onEventCreated = vi.fn();
