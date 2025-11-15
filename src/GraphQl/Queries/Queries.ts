@@ -214,17 +214,10 @@ export const USER_LIST_FOR_TABLE = gql`
   query allUsers(
     $first: Int
     $after: String
-    $last: Int
-    $before: String
+    $orgFirst: Int
     $where: QueryAllUsersWhereInput
   ) {
-    allUsers(
-      first: $first
-      after: $after
-      last: $last
-      before: $before
-      where: $where
-    ) {
+    allUsers(first: $first, after: $after, where: $where) {
       pageInfo {
         endCursor
         hasPreviousPage
@@ -239,6 +232,46 @@ export const USER_LIST_FOR_TABLE = gql`
           role
           avatarURL
           emailAddress
+          avatarURL
+          createdAt
+          city
+          state
+          countryCode
+          postalCode
+          orgsWhereUserIsBlocked(first: 16) {
+            edges {
+              node {
+                id
+                name
+                avatarURL
+                city
+                state
+                createdAt
+                creator {
+                  name
+                }
+              }
+            }
+          }
+          organizationsWhereMember(first: $orgFirst) {
+            edges {
+              node {
+                id
+                name
+                avatarURL
+                createdAt
+                city
+                state
+                countryCode
+                creator {
+                  id
+                  name
+                  emailAddress
+                  avatarURL
+                }
+              }
+            }
+          }
         }
       }
     }

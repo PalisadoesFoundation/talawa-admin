@@ -2041,6 +2041,22 @@ export interface InterfaceQueryUserListItem {
       };
     }[];
   };
+
+  orgsWhereUserIsBlocked?: {
+    edges: {
+      node: {
+        id: string;
+        name: string;
+        avatarURL?: string;
+        city: string;
+        state: string;
+        createdAt: string;
+        creator: {
+          name: string;
+        };
+      };
+    }[];
+  };
 }
 
 /**

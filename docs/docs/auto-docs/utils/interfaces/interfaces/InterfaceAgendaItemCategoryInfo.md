@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAgendaItemCategoryInfo
 
-Defined in: [src/utils/interfaces.ts:2258](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2258)
+Defined in: [src/utils/interfaces.ts:2274](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2274)
 
 InterfaceAgendaItemCategoryInfo
 
@@ -18,7 +18,7 @@ Defines the structure for agenda item category information.
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:2259](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2259)
+Defined in: [src/utils/interfaces.ts:2275](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2275)
 
 The unique identifier of the agenda item category.
 
@@ -28,7 +28,7 @@ The unique identifier of the agenda item category.
 
 > **createdBy**: `object`
 
-Defined in: [src/utils/interfaces.ts:2262](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2262)
+Defined in: [src/utils/interfaces.ts:2278](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2278)
 
 The user who created this agenda item category.
 
@@ -50,7 +50,7 @@ The user who created this agenda item category.
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:2261](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2261)
+Defined in: [src/utils/interfaces.ts:2277](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2277)
 
 The description of the agenda item category.
 
@@ -60,6 +60,6 @@ The description of the agenda item category.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:2260](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2260)
+Defined in: [src/utils/interfaces.ts:2276](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2276)
 
 The name of the agenda item category.

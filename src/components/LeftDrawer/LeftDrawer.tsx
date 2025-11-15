@@ -40,7 +40,8 @@ const leftDrawer = ({
   const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
-  const superAdmin = getItem('SuperAdmin') === 'true';
+  const storedRole = (getItem<string>('role') ?? 'regular').toLowerCase();
+  const isAdmin = storedRole === 'administrator';
 
   const handleLinkClick = useCallback((): void => {
     if (window.innerWidth <= 820) {
@@ -129,15 +130,45 @@ const leftDrawer = ({
           'organizationsBtn',
         )}
 
+        {isAdmin && (
+          <NavLink to="/users" onClick={handleLinkClick}>
+            {({ isActive }) => {
+              const fillColor = isActive
+                ? 'var(--sidebar-icon-fill-active)'
+                : 'var(--sidebar-icon-fill-inactive)';
+
+              const styledRolesIcon = (
+                <RolesIcon
+                  width={25}
+                  height={25}
+                  fill={fillColor}
+                  stroke="none"
+                  color={fillColor}
+                />
+              );
+
+              return (
+                <button
+                  className={`${
+                    isActive ? styles.sidebarBtnActive : styles.sidebarBtn
+                  }`}
+                  data-testid="rolesBtn"
+                  type="button"
+                >
+                  <div className={styles.iconWrapper}>{styledRolesIcon}</div>
+                  {!hideDrawer && t('users')}
+                </button>
+              );
+            }}
+          </NavLink>
+        )}
+
         {renderDrawerItem(
           '/pluginstore',
           <PluginLogo />,
           t('plugin store'),
           'pluginStoreBtn',
         )}
-
-        {superAdmin &&
-          renderDrawerItem('/users', <RolesIcon />, t('users'), 'rolesBtn')}
 
         {renderDrawerItem(
           '/communityProfile',
@@ -176,7 +207,7 @@ const leftDrawer = ({
       renderDrawerItem,
       renderPluginDrawerItem,
       pluginDrawerItems,
-      superAdmin,
+      isAdmin,
       t,
       tCommon,
       hideDrawer,
