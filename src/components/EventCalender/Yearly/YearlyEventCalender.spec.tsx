@@ -432,10 +432,7 @@ describe('Calendar Component', () => {
 
     rerender(
       <Suspense fallback={<div>Loading...</div>}>
-        <Calendar
-          eventData={newMockEvents}
-          refetchEvents={mockRefetchEvents}
-        />
+        <Calendar eventData={newMockEvents} refetchEvents={mockRefetchEvents} />
       </Suspense>,
     );
 
@@ -452,7 +449,9 @@ describe('Calendar Component', () => {
     );
 
     // Verify the component has processed the updated events
-    expect(container.querySelectorAll('[data-testid="day"]').length).toBeGreaterThan(0);
+    expect(
+      container.querySelectorAll('[data-testid="day"]').length,
+    ).toBeGreaterThan(0);
   });
 
   it('filters events correctly for ADMINISTRATOR role with private events', async () => {
@@ -849,7 +848,7 @@ describe('Calendar Component', () => {
     const expandButtons = container.querySelectorAll(
       '[data-testid^="expand-btn-"]',
     );
-    
+
     // Verify that at least one expand button exists (for the public event)
     expect(expandButtons.length).toBeGreaterThan(0);
   });
@@ -1327,7 +1326,9 @@ describe('Calendar Component', () => {
 
     // Verify calendar renders (the event may or may not have an expand button
     // depending on date/timezone, but the calendar should still render properly)
-    expect(container.querySelectorAll('[data-testid="day"]').length).toBeGreaterThan(0);
+    expect(
+      container.querySelectorAll('[data-testid="day"]').length,
+    ).toBeGreaterThan(0);
   });
 
   test('handles REGULAR user with public event', async () => {
@@ -1375,7 +1376,9 @@ describe('Calendar Component', () => {
 
     // Verify calendar renders with days
     // Public events should be accessible to REGULAR users
-    expect(container.querySelectorAll('[data-testid="day"]').length).toBeGreaterThan(0);
+    expect(
+      container.querySelectorAll('[data-testid="day"]').length,
+    ).toBeGreaterThan(0);
   });
 
   test('handles month starting on Sunday (dayOfWeek === 0 edge case)', async () => {
@@ -1552,7 +1555,6 @@ describe('Calendar Component', () => {
       container.querySelectorAll('[data-testid^="expand-btn-"]'),
     );
     expect(expandButtons.length).toBeGreaterThanOrEqual(2);
-
   });
 
   test('closes expanded no-events panel when clicked again', async () => {
