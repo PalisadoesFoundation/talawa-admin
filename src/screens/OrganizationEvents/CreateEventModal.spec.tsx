@@ -40,7 +40,7 @@ vi.mock('utils/recurrenceUtils', async () => {
   };
 });
 
-interface MockPickerProps {
+interface IMockPickerProps {
   onChange?: (date: dayjs.Dayjs | null) => void;
   value?: dayjs.Dayjs | null;
   label?: string;
@@ -53,7 +53,7 @@ vi.mock('@mui/x-date-pickers', async () => {
   const actual = await vi.importActual('@mui/x-date-pickers');
   return {
     ...actual,
-    DatePicker: ({ onChange, value, label }: MockPickerProps) => (
+    DatePicker: ({ onChange, value, label }: IMockPickerProps) => (
       <input
         data-testid={`date-picker-${label}`}
         value={value ? value.format('YYYY-MM-DD') : ''}
@@ -63,7 +63,8 @@ vi.mock('@mui/x-date-pickers', async () => {
         }}
       />
     ),
-    TimePicker: ({ onChange, value, label, disabled }: MockPickerProps) => (
+    // eslint-disable-next-line react/no-multi-comp -- Mock component for testing
+    TimePicker: ({ onChange, value, label, disabled }: IMockPickerProps) => (
       <input
         data-testid={`time-picker-${label}`}
         value={value ? value.format('HH:mm:ss') : ''}
@@ -451,7 +452,10 @@ describe('CreateEventModal', () => {
 
   test('handles recurrence validation error', async () => {
     const { validateRecurrenceInput } = await import('utils/recurrenceUtils');
-    (validateRecurrenceInput as any).mockReturnValueOnce({
+    const mockValidateRecurrenceInput = validateRecurrenceInput as ReturnType<
+      typeof vi.fn
+    >;
+    mockValidateRecurrenceInput.mockReturnValueOnce({
       isValid: false,
       errors: ['Invalid recurrence pattern'],
     });
