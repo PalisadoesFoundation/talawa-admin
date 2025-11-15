@@ -110,7 +110,7 @@ npm run test:shard:coverage
 ## Cypress End-to-End Testing
 
 Cypress is used for end-to-end testing to ensure the application works correctly from a user's perspective.
-To read more about Cypress testing, please refer to the [Cypress Guide](../../../../cypress/README.md).
+To read more about Cypress testing, please refer to the [Our end to end testing with Cypress guide](./e2e-testing.md).
 
 ## Debugging Tests
 
