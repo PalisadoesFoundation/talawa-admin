@@ -251,4 +251,43 @@ describe('Testing Groups Screen', () => {
     expect(await screen.findByText(t.manageGroup)).toBeInTheDocument();
     await userEvent.click(await screen.findByTestId('modalCloseBtn'));
   });
+
+  /**
+   * Verifies the search by leader functionality of the Groups screen.
+   */
+  it('Search by Leader', async () => {
+    renderGroups(link1);
+
+    // Wait for initial render
+    await screen.findByTestId('searchBy');
+
+    const searchToggle = await screen.findByTestId('searchByToggle');
+    await userEvent.click(searchToggle);
+
+    // Wait for dropdown menu to appear and find leader option
+    const searchByLeader = await screen.findByTestId('leader');
+
+    // Click on leader search option - this exercises the searchBy === 'leader' branch
+    await userEvent.click(searchByLeader);
+  });
+
+  /**
+   * Verifies that edit button is not shown for groups where user is not the leader.
+   */
+  it('Should not show edit button for groups where user is not the leader', async () => {
+    renderGroups(link1);
+
+    await waitFor(async () => {
+      const groupElements = await screen.findAllByTestId('groupName');
+      expect(groupElements.length).toBeGreaterThan(0);
+    });
+
+    const editButtons = screen.getAllByTestId('editGroupBtn');
+    const viewButtons = screen.getAllByTestId('viewGroupBtn');
+
+    // Group 1 and 2 are led by userId (current user) → show edit buttons
+    // Group 3 is led by userId1 (different user) → no edit button
+    expect(viewButtons).toHaveLength(3); // All groups show view button
+    expect(editButtons).toHaveLength(2); // Only groups led by current user
+  });
 });

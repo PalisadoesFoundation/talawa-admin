@@ -207,13 +207,14 @@ export const MOCKS = [
           userId: 'userId',
           orgId: 'orgId',
           leaderName: 'Bruce',
+          name_contains: undefined,
         },
         orderBy: null,
       },
     },
     result: {
       data: {
-        getEventVolunteerGroups: [group1],
+        getEventVolunteerGroups: [group3],
       },
     },
   },
