@@ -40,21 +40,20 @@ vi.mock('utils/recurrenceUtils', async () => {
   };
 });
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/no-multi-comp */
+interface MockPickerProps {
+  onChange?: (date: dayjs.Dayjs | null) => void;
+  value?: dayjs.Dayjs | null;
+  label?: string;
+  disabled?: boolean;
+  minDate?: dayjs.Dayjs;
+  minTime?: dayjs.Dayjs;
+}
+
 vi.mock('@mui/x-date-pickers', async () => {
   const actual = await vi.importActual('@mui/x-date-pickers');
   return {
     ...actual,
-    DatePicker: ({
-      onChange,
-      value,
-      label,
-    }: {
-      onChange?: (date: any) => void;
-      value?: any;
-      label?: string;
-    }) => (
+    DatePicker: ({ onChange, value, label }: MockPickerProps) => (
       <input
         data-testid={`date-picker-${label}`}
         value={value ? value.format('YYYY-MM-DD') : ''}
@@ -64,17 +63,7 @@ vi.mock('@mui/x-date-pickers', async () => {
         }}
       />
     ),
-    TimePicker: ({
-      onChange,
-      value,
-      label,
-      disabled,
-    }: {
-      onChange?: (time: any) => void;
-      value?: any;
-      label?: string;
-      disabled?: boolean;
-    }) => (
+    TimePicker: ({ onChange, value, label, disabled }: MockPickerProps) => (
       <input
         data-testid={`time-picker-${label}`}
         value={value ? value.format('HH:mm:ss') : ''}
@@ -87,8 +76,6 @@ vi.mock('@mui/x-date-pickers', async () => {
     ),
   };
 });
-/* eslint-enable react/no-multi-comp */
-/* eslint-enable @typescript-eslint/no-explicit-any */
 
 const mockProps = {
   isOpen: true,
@@ -164,12 +151,12 @@ const createTestStore = () => {
   });
 };
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+type MockType = typeof createEventMock | typeof createEventErrorMock;
+
 const renderComponent = (
-  mocks: readonly any[] = [createEventMock],
+  mocks: readonly MockType[] = [createEventMock],
   props = mockProps,
 ) => {
-  /* eslint-enable @typescript-eslint/no-explicit-any */
   const testStore = createTestStore();
   return render(
     <MockedProvider mocks={mocks}>
