@@ -51,30 +51,43 @@ interface IMockPickerProps {
 
 vi.mock('@mui/x-date-pickers', async () => {
   const actual = await vi.importActual('@mui/x-date-pickers');
+
+  const MockDatePickerComponent = ({
+    onChange,
+    value,
+    label,
+  }: IMockPickerProps) => (
+    <input
+      data-testid={`date-picker-${label}`}
+      value={value ? value.format('YYYY-MM-DD') : ''}
+      onChange={(e) => {
+        const mockDate = dayjs(e.target.value);
+        if (onChange && mockDate.isValid()) onChange(mockDate);
+      }}
+    />
+  );
+
+  const MockTimePickerComponent = ({
+    onChange,
+    value,
+    label,
+    disabled,
+  }: IMockPickerProps) => (
+    <input
+      data-testid={`time-picker-${label}`}
+      value={value ? value.format('HH:mm:ss') : ''}
+      disabled={disabled}
+      onChange={(e) => {
+        const mockTime = dayjs(e.target.value, 'HH:mm:ss');
+        if (onChange && mockTime.isValid()) onChange(mockTime);
+      }}
+    />
+  );
+
   return {
     ...actual,
-    DatePicker: ({ onChange, value, label }: IMockPickerProps) => (
-      <input
-        data-testid={`date-picker-${label}`}
-        value={value ? value.format('YYYY-MM-DD') : ''}
-        onChange={(e) => {
-          const mockDate = dayjs(e.target.value);
-          if (onChange && mockDate.isValid()) onChange(mockDate);
-        }}
-      />
-    ),
-    // eslint-disable-next-line react/no-multi-comp -- Mock component for testing
-    TimePicker: ({ onChange, value, label, disabled }: IMockPickerProps) => (
-      <input
-        data-testid={`time-picker-${label}`}
-        value={value ? value.format('HH:mm:ss') : ''}
-        disabled={disabled}
-        onChange={(e) => {
-          const mockTime = dayjs(e.target.value, 'HH:mm:ss');
-          if (onChange && mockTime.isValid()) onChange(mockTime);
-        }}
-      />
-    ),
+    DatePicker: MockDatePickerComponent,
+    TimePicker: MockTimePickerComponent,
   };
 });
 
@@ -522,5 +535,277 @@ describe('CreateEventModal', () => {
     await waitFor(() => {
       expect(dropdown).toHaveTextContent(/Monthly on day/);
     });
+  });
+
+  test('creates event successfully with valid data', async () => {
+    const { toast: mockToast } = await import('react-toastify');
+    const onClose = vi.fn();
+    const onEventCreated = vi.fn();
+
+    const successMock = {
+      request: {
+        query: CREATE_EVENT_MUTATION,
+        variables: {
+          input: {
+            name: 'Success Event',
+            description: 'Success Description',
+            location: 'Success Location',
+            startAt: dayjs(new Date())
+              .startOf('day')
+              .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            endAt: dayjs(new Date())
+              .endOf('day')
+              .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            organizationId: 'org123',
+            allDay: true,
+            isPublic: true,
+            isRegisterable: false,
+            recurrence: undefined,
+          },
+        },
+      },
+      result: {
+        data: {
+          createEvent: {
+            id: 'event-success',
+            name: 'Success Event',
+          },
+        },
+      },
+    };
+
+    renderComponent([successMock], { ...mockProps, onClose, onEventCreated });
+
+    await userEvent.type(
+      screen.getByTestId('eventTitleInput'),
+      'Success Event',
+    );
+    await userEvent.type(
+      screen.getByTestId('eventDescriptionInput'),
+      'Success Description',
+    );
+    await userEvent.type(
+      screen.getByTestId('eventLocationInput'),
+      'Success Location',
+    );
+
+    const submitBtn = screen.getByTestId('createEventBtn');
+    await userEvent.click(submitBtn);
+
+    await waitFor(
+      () => {
+        expect(mockToast.success).toHaveBeenCalled();
+      },
+      { timeout: 3000 },
+    );
+
+    expect(onEventCreated).toHaveBeenCalled();
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  test('creates event with non-allDay time selection', async () => {
+    const { toast: mockToast } = await import('react-toastify');
+    const onClose = vi.fn();
+    const onEventCreated = vi.fn();
+
+    renderComponent([], { ...mockProps, onClose, onEventCreated });
+
+    await userEvent.type(screen.getByTestId('eventTitleInput'), 'Timed Event');
+    await userEvent.type(screen.getByTestId('eventDescriptionInput'), 'Desc');
+    await userEvent.type(screen.getByTestId('eventLocationInput'), 'Location');
+
+    await userEvent.click(screen.getByTestId('alldayCheck'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('time-picker-Start Time')).toBeInTheDocument();
+    });
+
+    const startTime = screen.getByTestId('time-picker-Start Time');
+    const endTime = screen.getByTestId('time-picker-End Time');
+
+    fireEvent.change(startTime, { target: { value: '10:00:00' } });
+    fireEvent.change(endTime, { target: { value: '11:00:00' } });
+
+    await waitFor(() => {
+      expect(startTime).toHaveValue('10:00:00');
+      expect(endTime).toHaveValue('11:00:00');
+    });
+  });
+
+  test('handles GraphQL mutation error properly', async () => {
+    const { errorHandler } = await import('utils/errorHandler');
+
+    const errorMock = {
+      request: {
+        query: CREATE_EVENT_MUTATION,
+        variables: {
+          input: {
+            name: 'Error Event',
+            description: 'Desc',
+            location: 'Location',
+            startAt: dayjs(new Date())
+              .startOf('day')
+              .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            endAt: dayjs(new Date())
+              .endOf('day')
+              .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            organizationId: 'org123',
+            allDay: true,
+            isPublic: true,
+            isRegisterable: false,
+            recurrence: undefined,
+          },
+        },
+      },
+      error: new Error('GraphQL Error: Failed to create event'),
+    };
+
+    renderComponent([errorMock]);
+
+    await userEvent.type(screen.getByTestId('eventTitleInput'), 'Error Event');
+    await userEvent.type(screen.getByTestId('eventDescriptionInput'), 'Desc');
+    await userEvent.type(screen.getByTestId('eventLocationInput'), 'Location');
+
+    await userEvent.click(screen.getByTestId('createEventBtn'));
+
+    await waitFor(
+      () => {
+        expect(errorHandler).toHaveBeenCalled();
+      },
+      { timeout: 3000 },
+    );
+  });
+
+  test('creates event with time parsing and non-allDay event successfully', async () => {
+    const { toast: mockToast } = await import('react-toastify');
+    const onClose = vi.fn();
+    const onEventCreated = vi.fn();
+
+    const timedEventMock = vi.fn().mockResolvedValue({
+      data: {
+        createEvent: {
+          id: 'timed-event-id',
+          name: 'Timed Event',
+        },
+      },
+    });
+
+    const mockCreate = timedEventMock as ReturnType<typeof vi.fn>;
+
+    vi.doMock('GraphQl/Mutations/mutations', () => ({
+      CREATE_EVENT_MUTATION: 'mock-mutation',
+    }));
+
+    renderComponent([], { ...mockProps, onClose, onEventCreated });
+
+    await userEvent.type(screen.getByTestId('eventTitleInput'), 'Timed Event');
+    await userEvent.type(
+      screen.getByTestId('eventDescriptionInput'),
+      'Timed Description',
+    );
+    await userEvent.type(
+      screen.getByTestId('eventLocationInput'),
+      'Timed Location',
+    );
+
+    await userEvent.click(screen.getByTestId('alldayCheck'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('time-picker-Start Time')).toBeInTheDocument();
+    });
+
+    const startTimePicker = screen.getByTestId('time-picker-Start Time');
+    const endTimePicker = screen.getByTestId('time-picker-End Time');
+
+    fireEvent.change(startTimePicker, { target: { value: '10:00:00' } });
+    fireEvent.change(endTimePicker, { target: { value: '11:30:00' } });
+
+    await waitFor(() => {
+      expect(startTimePicker).toHaveValue('10:00:00');
+      expect(endTimePicker).toHaveValue('11:30:00');
+    });
+  });
+
+  test('creates event with recurrence successfully', async () => {
+    const { toast: mockToast } = await import('react-toastify');
+    const onClose = vi.fn();
+    const onEventCreated = vi.fn();
+
+    const currentDate = dayjs(new Date());
+
+    const recurrenceEventMock = {
+      request: {
+        query: CREATE_EVENT_MUTATION,
+        variables: {
+          input: {
+            name: 'Recurring Event',
+            description: 'Recurring Description',
+            location: 'Recurring Location',
+            startAt: currentDate
+              .startOf('day')
+              .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            endAt: currentDate
+              .endOf('day')
+              .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            organizationId: 'org123',
+            allDay: true,
+            isPublic: true,
+            isRegisterable: false,
+            recurrence: {
+              frequency: 'DAILY',
+              interval: 1,
+              never: true,
+            },
+          },
+        },
+      },
+      result: {
+        data: {
+          createEvent: {
+            id: 'recurring-event-id',
+            name: 'Recurring Event',
+          },
+        },
+      },
+    };
+
+    renderComponent([recurrenceEventMock], {
+      ...mockProps,
+      onClose,
+      onEventCreated,
+    });
+
+    await userEvent.type(
+      screen.getByTestId('eventTitleInput'),
+      'Recurring Event',
+    );
+    await userEvent.type(
+      screen.getByTestId('eventDescriptionInput'),
+      'Recurring Description',
+    );
+    await userEvent.type(
+      screen.getByTestId('eventLocationInput'),
+      'Recurring Location',
+    );
+
+    const dropdown = screen.getByTestId('recurrenceDropdown');
+    fireEvent.click(dropdown);
+
+    await waitFor(() => {
+      const dailyOption = screen.queryByTestId('recurrenceOption-1');
+      if (dailyOption) fireEvent.click(dailyOption);
+    });
+
+    await userEvent.click(screen.getByTestId('createEventBtn'));
+
+    await waitFor(
+      () => {
+        expect(mockToast.success).toHaveBeenCalled();
+      },
+      { timeout: 3000 },
+    );
+
+    expect(onEventCreated).toHaveBeenCalled();
+    expect(onClose).toHaveBeenCalled();
   });
 });
