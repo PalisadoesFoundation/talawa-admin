@@ -7,7 +7,7 @@ dotenv.config({ path: path.resolve(process.cwd(), ".env") });
 const parsed = parseInt(process.env.PORT, 10);
 const PORT = !isNaN(parsed) && parsed >= 1024 && parsed <= 65535 ? parsed : 4321;
 
-const args = ['start-server-and-test', 'serve', `http://localhost:${PORT}`, "test"];
+const args = ['start-server-and-test', 'serve', `http://localhost:${PORT}`, ...process.argv.slice(2)];
 
 const serve = spawn('npx', args, { 
   stdio: 'inherit',
