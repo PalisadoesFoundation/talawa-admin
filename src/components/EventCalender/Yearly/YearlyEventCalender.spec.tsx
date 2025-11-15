@@ -828,29 +828,24 @@ describe('Calendar Component', () => {
       expect(screen.getByText(currentYear.toString())).toBeInTheDocument();
     });
 
-    // Wait for events to be processed
-    // When userRole is undefined, only public events should create expand buttons
+    // Wait for calendar to render
     await waitFor(
       () => {
         const dayElements = container.querySelectorAll('[data-testid="day"]');
         expect(dayElements.length).toBeGreaterThan(0);
-        // Verify expand button exists for public event
-        const expandButtons = container.querySelectorAll(
-          '[data-testid^="expand-btn-"]',
-        );
-        expect(expandButtons.length).toBeGreaterThan(0);
       },
       { timeout: 3000 },
     );
 
-    // Verify private event is not rendered (no expand button for it)
-    // The component should only show public events when userRole is undefined
+    // When userRole is undefined, only public events should create expand buttons
+    // Verify that expand buttons exist (for public events)
     const expandButtons = container.querySelectorAll(
       '[data-testid^="expand-btn-"]',
     );
-
-    // Verify that at least one expand button exists (for the public event)
     expect(expandButtons.length).toBeGreaterThan(0);
+
+    // Verify private event text is not visible in the DOM
+    expect(screen.queryByText('Private Event')).not.toBeInTheDocument();
   });
 
   test('filters events correctly when userId is undefined but has userRole', async () => {
@@ -926,6 +921,9 @@ describe('Calendar Component', () => {
       '[data-testid^="expand-btn-"]',
     );
     expect(expandButtons.length).toBeGreaterThan(0);
+
+    // Verify private event text is not visible in the DOM
+    expect(screen.queryByText('Private Event')).not.toBeInTheDocument();
   });
 
   test('handles orgData being undefined', async () => {
@@ -1476,7 +1474,7 @@ describe('Calendar Component', () => {
   });
 
   test('renders weekday headers correctly', async () => {
-    const { container } = renderWithRouterAndPath(
+    renderWithRouterAndPath(
       <Calendar
         eventData={[]}
         refetchEvents={vi.fn()}
@@ -1487,8 +1485,19 @@ describe('Calendar Component', () => {
     );
 
     await waitFor(() => {
-      const dayElements = container.querySelectorAll('[data-testid="day"]');
-      expect(dayElements.length).toBeGreaterThan(0);
+      // Component uses single-letter weekday names: M, T, W, T, F, S, S
+      // Verify at least one occurrence of each unique letter
+      const mElements = screen.getAllByText('M');
+      const tElements = screen.getAllByText('T');
+      const wElements = screen.getAllByText('W');
+      const fElements = screen.getAllByText('F');
+      const sElements = screen.getAllByText('S');
+
+      expect(mElements.length).toBeGreaterThan(0);
+      expect(tElements.length).toBeGreaterThan(0);
+      expect(wElements.length).toBeGreaterThan(0);
+      expect(fElements.length).toBeGreaterThan(0);
+      expect(sElements.length).toBeGreaterThan(0);
     });
   });
 
