@@ -814,6 +814,18 @@ describe('Testing Community Profile Screen', () => {
 
     // Should not crash and maintain empty state
     expect(fileInput.files?.length).toBe(0);
+
+    // Assert component-level effects: buttons should remain disabled
+    const saveChangesBtn = screen.getByTestId('saveChangesBtn');
+    const resetChangesBtn = screen.getByTestId('resetChangesBtn');
+
+    expect(saveChangesBtn).toBeDisabled();
+    expect(resetChangesBtn).toBeDisabled();
+
+    // Verify the component's logo state was cleared/remains empty
+    // Note: This assumes the component exposes logo state through the file input
+    // or that no logo was set, keeping the form in its initial disabled state
+    expect(fileInput.value).toBe('');
   });
 
   test('should clear logo state before setting new file', async () => {
