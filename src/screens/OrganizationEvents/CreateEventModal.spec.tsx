@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import type { MockedResponse } from '@apollo/client/testing';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -368,7 +368,36 @@ describe('CreateEventModal', () => {
   });
 
   test('disables submit button during loading', async () => {
-    renderComponent();
+    let resolveMutation: (value: unknown) => void;
+    const pendingResult = new Promise((resolve) => {
+      resolveMutation = resolve;
+    });
+
+    const loadingMock = {
+      request: {
+        query: CREATE_EVENT_MUTATION,
+        variables: {
+          input: {
+            name: 'Test Event',
+            description: 'Test Description',
+            location: 'Test Location',
+            startAt: expect.any(String),
+            endAt: expect.any(String),
+            organizationId: 'org123',
+            allDay: true,
+            isPublic: true,
+            isRegisterable: false,
+          },
+        },
+      },
+      result: () =>
+        pendingResult.then(() => ({
+          data: createEventMock.result.data,
+        })),
+    };
+
+    renderComponent([loadingMock]);
+
     await userEvent.type(screen.getByTestId('eventTitleInput'), 'Test Event');
     await userEvent.type(
       screen.getByTestId('eventDescriptionInput'),
@@ -378,8 +407,19 @@ describe('CreateEventModal', () => {
       screen.getByTestId('eventLocationInput'),
       'Test Location',
     );
+
     const submitBtn = screen.getByTestId('createEventBtn') as HTMLButtonElement;
-    expect(submitBtn.disabled).toBe(false);
+    await userEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(submitBtn).toBeDisabled();
+    });
+
+    resolveMutation?.({});
+
+    await waitFor(() => {
+      expect(submitBtn).not.toBeDisabled();
+    });
   });
 
   test('shows warning for whitespace-only name', async () => {
