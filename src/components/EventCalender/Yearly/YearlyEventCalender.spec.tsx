@@ -379,17 +379,17 @@ describe('Calendar Component', () => {
       <Calendar eventData={[]} refetchEvents={mockRefetchEvents} />,
     );
 
-    const noEventsButton = container.querySelector(
-      '[data-testid^="no-events-btn-"]',
-    ) as HTMLButtonElement | null;
-    expect(noEventsButton).toBeInTheDocument();
+    const noEventsButton = await waitFor(() => {
+      const btn = container.querySelector('[data-testid^="no-events-btn-"]');
+      expect(btn).toBeInTheDocument();
+      return btn as HTMLButtonElement;
+    });
 
-    if (noEventsButton) {
-      await act(async () => {
-        fireEvent.click(noEventsButton);
-      });
-      expect(await findByText('No Event Available!')).toBeInTheDocument();
-    }
+    await act(async () => {
+      fireEvent.click(noEventsButton);
+    });
+
+    expect(await findByText('No Event Available!')).toBeInTheDocument();
   });
 
   it('updates events when props change', async () => {
@@ -1582,31 +1582,30 @@ describe('Calendar Component', () => {
       expect(dayElements.length).toBeGreaterThan(0);
     });
 
-    const noEventsButton = container.querySelector(
-      '[data-testid^="no-events-btn-"]',
-    );
-    expect(noEventsButton).toBeInTheDocument();
+    const noEventsButton = await waitFor(() => {
+      const btn = container.querySelector('[data-testid^="no-events-btn-"]');
+      expect(btn).toBeInTheDocument();
+      return btn as HTMLButtonElement;
+    });
 
-    if (noEventsButton) {
-      await act(async () => {
-        fireEvent.click(noEventsButton);
-      });
+    await act(async () => {
+      fireEvent.click(noEventsButton);
+    });
 
-      await waitFor(() => {
-        expect(screen.getByText('No Event Available!')).toBeInTheDocument();
-        expect(screen.getByText('Close')).toBeInTheDocument();
-      });
+    await waitFor(() => {
+      expect(screen.getByText('No Event Available!')).toBeInTheDocument();
+      expect(screen.getByText('Close')).toBeInTheDocument();
+    });
 
-      await act(async () => {
-        fireEvent.click(noEventsButton);
-      });
+    await act(async () => {
+      fireEvent.click(noEventsButton);
+    });
 
-      await waitFor(() => {
-        expect(
-          screen.queryByText('No Event Available!'),
-        ).not.toBeInTheDocument();
-      });
-    }
+    await waitFor(() => {
+      expect(
+        screen.queryByText('No Event Available!'),
+      ).not.toBeInTheDocument();
+    });
   });
 
   test('renders days outside current month with correct styling', async () => {
@@ -1624,7 +1623,14 @@ describe('Calendar Component', () => {
       const dayElements = container.querySelectorAll('[data-testid="day"]');
       expect(dayElements.length).toBeGreaterThan(0);
 
+      // Verify padding days are rendered (more than 28 days per month * 12 months)
       expect(dayElements.length).toBeGreaterThan(28 * 12);
+
+      // Verify out-of-month days have distinct styling
+      const outOfMonthDays = Array.from(dayElements).filter((el) =>
+        el.className.includes('day__outside'),
+      );
+      expect(outOfMonthDays.length).toBeGreaterThan(0);
     });
   });
 });
