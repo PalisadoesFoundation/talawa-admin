@@ -50,14 +50,11 @@ const ProfileInfo: React.FC<InterfaceProfileInfoProps> = ({
       await onSave({
         ...formData,
         naturalLanguageCode: selectedLanguage,
-        // TODO: Map pluginCreationAllowed and adminApproved to backend fields once schema supports them
-        // pluginCreationAllowed,
-        // adminApproved,
       });
       setIsEditing(false);
-      // TODO: Show success toast notification
+      toast.success('Profile updated successfully');
     } catch {
-      // TODO: Show error toast notification to user
+      toast.error('Failed to update profile. Please try again.');
     }
   };
 
@@ -65,14 +62,6 @@ const ProfileInfo: React.FC<InterfaceProfileInfoProps> = ({
     setFormData(user);
     setSelectedImage(null);
     setImagePreview('');
-  };
-
-  const handleDeleteUser = () => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
-      // TODO: Implement actual user deletion API call
-      // onDelete?.(user.id);
-      // Show success/error toast
-    }
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -143,7 +132,6 @@ const ProfileInfo: React.FC<InterfaceProfileInfoProps> = ({
         setAdminApproved={setAdminApproved}
         selectedLanguage={selectedLanguage}
         setSelectedLanguage={setSelectedLanguage}
-        handleDeleteUser={handleDeleteUser}
       />
     </Row>
   );

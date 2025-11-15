@@ -14,6 +14,7 @@
  */
 import React from 'react';
 import { useQuery } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
 import { Event } from '@mui/icons-material';
 import { Card, Spinner } from 'react-bootstrap';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
@@ -31,9 +32,39 @@ interface InterfaceProfileEventsProps {
 const ProfileEvents: React.FC<InterfaceProfileEventsProps> = ({
   isOwnProfile,
 }) => {
+  const { t } = useTranslation('common');
+
+  // Query current user's events - API exists and works!
   const { data, loading, error } = useQuery(CURRENT_USER, {
     skip: !isOwnProfile,
   });
+
+  if (!isOwnProfile) {
+    return (
+      <div
+        className="d-flex flex-column align-items-center justify-content-center"
+        style={{
+          minHeight: '400px',
+          padding: '40px 20px',
+          textAlign: 'center',
+        }}
+      >
+        <Event
+          style={{
+            fontSize: '64px',
+            color: '#6c757d',
+            marginBottom: '20px',
+            opacity: 0.5,
+          }}
+        />
+        <h5 className="text-secondary" data-testid="events-unavailable-message">
+          {t('profile.events.unavailable', {
+            defaultValue: 'Events are not available in admin view',
+          })}
+        </h5>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
@@ -51,13 +82,11 @@ const ProfileEvents: React.FC<InterfaceProfileEventsProps> = ({
   if (error) {
     return (
       <div
-        className="d-flex justify-content-center align-items-center"
+        className="d-flex flex-column align-items-center justify-content-center"
         style={{ minHeight: '400px' }}
       >
-        <div className="text-center">
-          <Event style={{ fontSize: '48px', color: '#dc3545', opacity: 0.5 }} />
-          <p className="text-danger mt-3">Failed to load events</p>
-        </div>
+        <Event style={{ fontSize: '64px', color: '#dc3545', opacity: 0.5 }} />
+        <p className="text-danger mt-3">Failed to load events</p>
       </div>
     );
   }
@@ -82,10 +111,16 @@ const ProfileEvents: React.FC<InterfaceProfileEventsProps> = ({
             opacity: 0.5,
           }}
         />
-        <h5 className="text-secondary">No Events Attended</h5>
+        <h5 className="text-secondary">
+          {t('profile.events.emptyTitle', {
+            defaultValue: 'No Events Attended',
+          })}
+        </h5>
         <p className="text-muted" style={{ maxWidth: '500px' }}>
-          You haven't attended any events yet. Events you attend will appear
-          here.
+          {t('profile.events.emptyDesc', {
+            defaultValue:
+              "You haven't attended any events yet. Events you attend will appear here.",
+          })}
         </p>
       </div>
     );
@@ -95,10 +130,14 @@ const ProfileEvents: React.FC<InterfaceProfileEventsProps> = ({
     <Card className="border-0 rounded-4 mb-4">
       <Card.Body className={styles.cardBody}>
         <div className="mb-3">
-          <h5 className="fw-semibold">Events Attended</h5>
+          <h5 className="fw-semibold">
+            {t('profile.events.header', { defaultValue: 'Events Attended' })}
+          </h5>
           <p className="text-muted small mb-0">
             {eventsAttended.length}{' '}
-            {eventsAttended.length === 1 ? 'event' : 'events'}
+            {eventsAttended.length === 1
+              ? t('profile.events.singular', { defaultValue: 'event' })
+              : t('profile.events.plural', { defaultValue: 'events' })}
           </p>
         </div>
         <div className={styles.scrollableCardBody}>

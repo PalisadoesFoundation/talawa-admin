@@ -15,11 +15,10 @@
  * @param props.setAdminApproved - Function to set admin approval status
  * @param props.selectedLanguage - Currently selected language
  * @param props.setSelectedLanguage - Function to set selected language
- * @param props.handleDeleteUser - Function to handle user deletion
  * @returns JSX element representing the profile sidebar
  */
 import React from 'react';
-import { Form, Button, Card, Col } from 'react-bootstrap';
+import { Form, Card, Col } from 'react-bootstrap';
 import { InterfaceUserData } from '../types';
 
 interface InterfaceProfileSidebarProps {
@@ -32,7 +31,6 @@ interface InterfaceProfileSidebarProps {
   setAdminApproved: (value: boolean) => void;
   selectedLanguage: string;
   setSelectedLanguage: (value: string) => void;
-  handleDeleteUser: () => void;
 }
 
 const ProfileSidebar: React.FC<InterfaceProfileSidebarProps> = ({
@@ -45,7 +43,6 @@ const ProfileSidebar: React.FC<InterfaceProfileSidebarProps> = ({
   setAdminApproved,
   selectedLanguage,
   setSelectedLanguage,
-  handleDeleteUser,
 }) => {
   return (
     <Col lg={4}>
@@ -163,25 +160,6 @@ const ProfileSidebar: React.FC<InterfaceProfileSidebarProps> = ({
               <option value="Hindi">Hindi</option>
             </Form.Select>
           </div>
-          {isAdminView && !isOwnProfile && (
-            <Button
-              variant="danger"
-              size="sm"
-              onClick={handleDeleteUser}
-              className="w-100"
-              style={{
-                borderRadius: '6px',
-                padding: '8px 16px',
-                fontSize: '14px',
-                fontWeight: '500',
-                border: 'none',
-                backgroundColor: '#dc3545',
-                transition: 'all 0.3s ease',
-              }}
-            >
-              🗑️ Delete User
-            </Button>
-          )}
         </Card.Body>
       </Card>
     </Col>

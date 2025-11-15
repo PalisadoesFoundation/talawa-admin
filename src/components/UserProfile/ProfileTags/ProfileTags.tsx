@@ -20,8 +20,8 @@ interface InterfaceProfileTagsProps {
 }
 
 const ProfileTags: React.FC<InterfaceProfileTagsProps> = () => {
-  // TODO: Implement GraphQL query to fetch user tags when backend support is available
-  // Currently, there is no backend API to fetch tags assigned to a specific user
+  // Note: User tags feature is not yet available in the backend API.
+  // This component will be updated once the backend supports user tag management.
 
   return (
     <div

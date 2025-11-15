@@ -32,10 +32,12 @@ describe('ProfileEvents Component', () => {
         result: {
           data: {
             currentUser: {
+              id: '123',
               eventsAttended: [],
             },
           },
         },
+        delay: 100,
       },
     ];
 
@@ -50,7 +52,7 @@ describe('ProfileEvents Component', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByRole('status')).toBeInTheDocument();
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
 
   test('renders empty state when no events attended', async () => {
@@ -146,7 +148,7 @@ describe('ProfileEvents Component', () => {
     });
   });
 
-  test('skips query when not own profile', () => {
+  test('shows unavailable message when not own profile', () => {
     render(
       <MockedProvider mocks={[]} addTypename={false}>
         <ProfileEvents
@@ -158,7 +160,9 @@ describe('ProfileEvents Component', () => {
       </MockedProvider>,
     );
 
-    // Should show empty state immediately when skipped
-    expect(screen.getByText('No Events Attended')).toBeInTheDocument();
+    // Should show unavailable message when not own profile (admin view)
+    expect(
+      screen.getByTestId('events-unavailable-message'),
+    ).toBeInTheDocument();
   });
 });
