@@ -292,23 +292,20 @@ describe('CreateEventModal', () => {
   test('selects recurrence options', async () => {
     renderComponent();
     const dropdown = screen.getByTestId('recurrenceDropdown');
-    fireEvent.click(dropdown);
+    await userEvent.click(dropdown);
+    const option = await screen.findByTestId('recurrenceOption-1');
+    await userEvent.click(option);
     await waitFor(() => {
-      const option = screen.queryByTestId('recurrenceOption-1');
-      if (option) {
-        fireEvent.click(option);
-      }
+      expect(dropdown).toHaveTextContent('Daily');
     });
-    expect(screen.getByTestId('recurrenceDropdown')).toBeInTheDocument();
   });
 
   test('custom recurrence option exists', async () => {
     renderComponent();
     const dropdown = screen.getByTestId('recurrenceDropdown');
-    fireEvent.click(dropdown);
-    await waitFor(() => {
-      expect(screen.queryByTestId('recurrenceOption-6')).toBeInTheDocument();
-    });
+    await userEvent.click(dropdown);
+    const customOption = await screen.findByTestId('recurrenceOption-6');
+    expect(customOption).toHaveTextContent('Custom...');
   });
 
   test('updates dates', async () => {
@@ -366,7 +363,7 @@ describe('CreateEventModal', () => {
     expect(registrableCheck.checked).toBe(true);
   });
 
-  test('form resets on close', async () => {
+  test('calls onClose when close button is clicked', async () => {
     renderComponent();
     await userEvent.type(screen.getByTestId('eventTitleInput'), 'Test');
     await userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
