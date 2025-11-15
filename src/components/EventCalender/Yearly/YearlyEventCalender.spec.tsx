@@ -1312,7 +1312,7 @@ describe('Calendar Component', () => {
 
   test("highlights today's date correctly", async () => {
     const today = new Date(new Date().getFullYear(), 0, 15); // Jan 15 of current year
-    vi.useFakeTimers();
+    const originalTime = new Date();
     vi.setSystemTime(today);
 
     const { getAllByTestId } = renderWithRouterAndPath(
@@ -1324,8 +1324,6 @@ describe('Calendar Component', () => {
         userId="user1"
       />,
     );
-
-    vi.useRealTimers();
 
     await waitFor(() => {
       const dayElements = getAllByTestId('day');
@@ -1343,6 +1341,8 @@ describe('Calendar Component', () => {
       expect(todayElement).toBeInTheDocument();
       expect(todayElement?.className).toMatch(/day__today/);
     });
+
+    vi.setSystemTime(originalTime);
   });
 
   test('renders expand buttons for events on calendar', async () => {
