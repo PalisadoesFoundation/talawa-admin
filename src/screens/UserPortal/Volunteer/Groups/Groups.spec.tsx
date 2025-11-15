@@ -257,17 +257,17 @@ describe('Testing Groups Screen', () => {
    */
   it('Search by Leader', async () => {
     renderGroups(link1);
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
+
+    // Wait for initial render
+    await screen.findByTestId('searchBy');
 
     const searchToggle = await screen.findByTestId('searchByToggle');
-    expect(searchToggle).toBeInTheDocument();
     await userEvent.click(searchToggle);
 
+    // Wait for dropdown menu to appear and find leader option
     const searchByLeader = await screen.findByTestId('leader');
-    expect(searchByLeader).toBeInTheDocument();
 
-    // Click on leader search option - this exercises the branch
+    // Click on leader search option - this exercises the searchBy === 'leader' branch
     await userEvent.click(searchByLeader);
   });
 
@@ -285,8 +285,9 @@ describe('Testing Groups Screen', () => {
     const editButtons = screen.getAllByTestId('editGroupBtn');
     const viewButtons = screen.getAllByTestId('viewGroupBtn');
 
-    // There should be fewer edit buttons than view buttons
-    // because Group 3 has a different leader (userId1 instead of userId)
-    expect(viewButtons.length).toBeGreaterThan(editButtons.length);
+    // Group 1 and 2 are led by userId (current user) → show edit buttons
+    // Group 3 is led by userId1 (different user) → no edit button
+    expect(viewButtons).toHaveLength(3); // All groups show view button
+    expect(editButtons).toHaveLength(2); // Only groups led by current user
   });
 });
