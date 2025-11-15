@@ -330,20 +330,17 @@ describe('CreateEventModal', () => {
   test('renders all recurrence options', async () => {
     renderComponent();
     const dropdown = screen.getByTestId('recurrenceDropdown');
-    fireEvent.click(dropdown);
-    await waitFor(
-      () => {
-        expect(screen.getByText('Daily')).toBeInTheDocument();
-        expect(screen.getByText(/Weekly on/)).toBeInTheDocument();
-        expect(screen.getByText(/Monthly on day/)).toBeInTheDocument();
-        expect(screen.getByText(/Annually on/)).toBeInTheDocument();
-        expect(
-          screen.getByText('Every weekday (Monday to Friday)'),
-        ).toBeInTheDocument();
-        expect(screen.getByText('Custom...')).toBeInTheDocument();
-      },
-      { timeout: 3000 },
-    );
+    await userEvent.click(dropdown);
+    await waitFor(() => {
+      expect(screen.getByText('Daily')).toBeInTheDocument();
+      expect(screen.getByText(/Weekly on/)).toBeInTheDocument();
+      expect(screen.getByText(/Monthly on day/)).toBeInTheDocument();
+      expect(screen.getByText(/Annually on/)).toBeInTheDocument();
+      expect(
+        screen.getByText('Every weekday (Monday to Friday)'),
+      ).toBeInTheDocument();
+      expect(screen.getByText('Custom...')).toBeInTheDocument();
+    });
   });
 
   test('toggles all checkboxes correctly', async () => {
