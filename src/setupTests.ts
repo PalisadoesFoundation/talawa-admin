@@ -44,7 +44,7 @@ if (typeof globalThis.localStorage === 'undefined') {
       get length(): number {
         return Object.keys(store).length;
       },
-    } as Storage;
+    };
   };
   globalThis.localStorage = createLocalStorageMock() as unknown as Storage;
 }
