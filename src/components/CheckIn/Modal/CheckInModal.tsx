@@ -174,18 +174,6 @@ export const CheckInModal = ({
                   ],
                 });
               }}
-              onSearch={(value) => {
-                setUserFilterQuery(value);
-                setFilterQueryModel({
-                  items: [
-                    {
-                      field: 'userName',
-                      operator: 'contains',
-                      value,
-                    },
-                  ],
-                });
-              }}
               onClear={() => {
                 setUserFilterQuery('');
                 setFilterQueryModel({
