@@ -363,7 +363,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
           </Button>
         </Modal.Header>
         <Modal.Body>
-          <Form onSubmit={createEvent}>
+          <Form onSubmit={createEvent} noValidate>
             <label htmlFor="eventName">{t('eventName')}</label>
             <Form.Control
               type="title"
