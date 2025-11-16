@@ -306,7 +306,6 @@ function AddMember(): JSX.Element {
                 where: value ? { name: value } : undefined,
               },
             });
-            setAddUserModalIsOpen(true);
           },
         }}
         sorting={[
