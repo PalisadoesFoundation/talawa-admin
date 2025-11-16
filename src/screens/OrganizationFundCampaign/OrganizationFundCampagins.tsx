@@ -152,6 +152,35 @@ const orgFundCampaign = (): JSX.Element => {
     );
   }, [compaignsData, searchTerm]);
 
+  const sortedCampaigns = useMemo(() => {
+    const campaigns = [...filteredCampaigns];
+    switch (sortBy) {
+      case 'goalAmount_ASC':
+        campaigns.sort(
+          (a, b) => (a.goalAmount as number) - (b.goalAmount as number),
+        );
+        break;
+      case 'goalAmount_DESC':
+        campaigns.sort(
+          (a, b) => (b.goalAmount as number) - (a.goalAmount as number),
+        );
+        break;
+      case 'endAt_ASC':
+        campaigns.sort(
+          (a, b) => dayjs(a.endAt).valueOf() - dayjs(b.endAt).valueOf(),
+        );
+        break;
+      case 'endAt_DESC':
+        campaigns.sort(
+          (a, b) => dayjs(b.endAt).valueOf() - dayjs(a.endAt).valueOf(),
+        );
+        break;
+      default:
+        break;
+    }
+    return campaigns;
+  }, [filteredCampaigns, sortBy]);
+
   const handleClick = (campaignId: string): void => {
     navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
   };
@@ -376,15 +405,7 @@ const orgFundCampaign = (): JSX.Element => {
                 { label: t('latestEndDate'), value: 'endAt_DESC' },
                 { label: t('earliestEndDate'), value: 'endAt_ASC' },
               ]}
-              selectedOption={
-                sortBy === 'goalAmount_ASC'
-                  ? tCommon('lowestGoal')
-                  : sortBy === 'goalAmount_DESC'
-                    ? tCommon('highestGoal')
-                    : sortBy === 'endAt_DESC'
-                      ? tCommon('latestEndDate')
-                      : tCommon('earliestEndDate')
-              }
+              selectedOption={sortBy ?? ''}
               onSortChange={(value) =>
                 setSortBy(
                   value as
@@ -431,7 +452,7 @@ const orgFundCampaign = (): JSX.Element => {
         }
         autoHeight
         rowHeight={65}
-        rows={filteredCampaigns}
+        rows={sortedCampaigns}
         columns={columns}
         isRowSelectable={() => false}
       />

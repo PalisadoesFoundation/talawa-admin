@@ -34,7 +34,7 @@
  * @file OrgContribution.tsx
  * @module OrgContribution
  */
-import React from 'react';
+import React, { useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
@@ -50,6 +50,10 @@ function OrgContribution(): JSX.Element {
   // Set the document title based on the translated title for this page
   document.title = t('title');
 
+  // Local filters (wired for future list filtering)
+  const [orgNameFilter, setOrgNameFilter] = useState<string>('');
+  const [transactionFilter, setTransactionFilter] = useState<string>('');
+
   return (
     <>
       <Row>
@@ -61,6 +65,7 @@ function OrgContribution(): JSX.Element {
               <SearchBar
                 placeholder={t('orgname')}
                 showSearchButton={false}
+                onSearch={(term) => setOrgNameFilter(term)}
                 inputTestId="filterOrgName"
               />
 
@@ -69,6 +74,7 @@ function OrgContribution(): JSX.Element {
               <SearchBar
                 placeholder={t('searchtransaction')}
                 showSearchButton={false}
+                onSearch={(term) => setTransactionFilter(term)}
                 inputTestId="filterTransaction"
               />
 
