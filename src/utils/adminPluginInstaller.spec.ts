@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import JSZip from 'jszip';
 import {
@@ -8,7 +7,10 @@ import {
   removeAdminPlugin,
   validateAdminPluginStructure,
 } from './adminPluginInstaller';
-import { adminPluginFileService } from '../plugin/services/AdminPluginFileService';
+import {
+  adminPluginFileService,
+  type InstalledPlugin,
+} from '../plugin/services/AdminPluginFileService';
 // import { toast } from 'react-toastify';
 
 // Mock dependencies
@@ -24,9 +26,27 @@ const mockJSZip = vi.mocked(JSZip);
 // const mockToast = vi.mocked(toast);
 const mockAdminPluginFileService = vi.mocked(adminPluginFileService);
 
+// Type definitions for mocks
+interface IMockZipFile {
+  async: ReturnType<typeof vi.fn>;
+}
+
+interface IMockZipContent {
+  files: Record<string, IMockZipFile>;
+  file: (path: string) => IMockZipFile | null;
+}
+
+interface IMockApolloClient {
+  mutate: ReturnType<typeof vi.fn>;
+}
+
 describe('adminPluginInstaller', () => {
-  let mockZip: any;
-  let mockApolloClient: any;
+  let mockZip: {
+    loadAsync: ReturnType<typeof vi.fn>;
+    file: ReturnType<typeof vi.fn>;
+    files: Record<string, unknown>;
+  };
+  let mockApolloClient: IMockApolloClient;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -37,7 +57,7 @@ describe('adminPluginInstaller', () => {
       file: vi.fn(),
       files: {},
     };
-    mockJSZip.mockImplementation(() => mockZip);
+    mockJSZip.mockImplementation(() => mockZip as unknown as JSZip);
 
     // Setup mock Apollo client
     mockApolloClient = {
@@ -51,8 +71,10 @@ describe('adminPluginInstaller', () => {
   });
 
   // Helper function to create consistent mock zip content
-  const createMockZipContent = (files: Record<string, any>) => {
-    const mockFiles: Record<string, any> = {};
+  const createMockZipContent = (
+    files: Record<string, string>,
+  ): IMockZipContent => {
+    const mockFiles: Record<string, IMockZipFile> = {};
 
     // Create file objects for each path
     Object.entries(files).forEach(([path, content]) => {
@@ -458,7 +480,7 @@ describe('adminPluginInstaller', () => {
           installedAt: undefined,
           lastUpdated: undefined,
         },
-      ] as unknown as Array<any>);
+      ] as unknown as InstalledPlugin[]);
 
       const result = await getInstalledAdminPlugins();
 
@@ -562,16 +584,15 @@ describe('adminPluginInstaller', () => {
     it('should handle non-Error exception in validateAdminPluginStructure', () => {
       // Force JSON.parse to throw a string
       const files = { 'manifest.json': '{invalid json}' };
-      const original = JSON.parse;
-      JSON.parse = () => {
+      const parseSpy = vi.spyOn(JSON, 'parse').mockImplementation(() => {
         throw 'string error';
-      };
+      });
 
       const result = validateAdminPluginStructure(files);
 
       expect(result.valid).toBe(false);
       expect(result.error).toBe('Invalid manifest.json format');
-      JSON.parse = original;
+      parseSpy.mockRestore();
     });
   });
 
