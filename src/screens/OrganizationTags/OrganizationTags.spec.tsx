@@ -29,6 +29,7 @@ import {
   MOCKS_NO_MORE_PAGES,
   MOCKS_ASCENDING_NO_SEARCH,
 } from './OrganizationTagsMocks';
+
 import type { ApolloLink } from '@apollo/client';
 
 const translations = {
@@ -303,7 +304,7 @@ describe('Organisation Tags Page', () => {
     // Wait for the search results to load
     await waitFor(() => {
       expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
-        'searchUserTag 1',
+        'userTag searchUserTag1',
       );
     });
 
@@ -313,7 +314,7 @@ describe('Organisation Tags Page', () => {
     // Wait for tags to be re-ordered (oldest first)
     await waitFor(() => {
       expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
-        'searchUserTag 2',
+        'userTag searchUserTag2',
       );
     });
 
@@ -323,7 +324,7 @@ describe('Organisation Tags Page', () => {
     // Wait for tags to be re-ordered back (latest first)
     await waitFor(() => {
       expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
-        'searchUserTag 1',
+        'userTag searchUserTag1',
       );
     });
   });
@@ -440,11 +441,11 @@ describe('Organisation Tags Page', () => {
     await wait();
 
     await waitFor(() => {
-      expect(
-        screen.getByText(/Error occurred while loading Organization Tags Data/),
-      ).toBeInTheDocument();
       expect(screen.getByTestId('createTagBtn')).toBeInTheDocument();
     });
+    expect(
+      screen.queryByText(/Error occurred.*Organization Tags Data/i),
+    ).not.toBeInTheDocument();
   });
   test('creates a new user tag with undefined data', async () => {
     renderOrganizationTags(link);

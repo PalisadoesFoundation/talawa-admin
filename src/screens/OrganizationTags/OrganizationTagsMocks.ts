@@ -2,676 +2,292 @@ import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 
-export const MOCKS = [
-  {
-    request: {
-      query: ORGANIZATION_USER_TAGS_LIST_PG,
-      variables: {
+/* ---------- Types ---------- */
+
+type TagAncestor = { _id: string; name: string };
+
+type TagEdge = {
+  node: {
+    _id: string;
+    name: string;
+    parentTag: { _id: string } | null;
+    usersAssignedTo: { totalCount: number };
+    childTags: { totalCount: number };
+    ancestorTags: TagAncestor[];
+  };
+  cursor: string;
+};
+
+type PageInfo = {
+  startCursor: string | null;
+  endCursor: string | null;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+};
+
+type UserTags = {
+  edges: TagEdge[];
+  pageInfo: PageInfo;
+  totalCount: number;
+};
+
+type ListMock = {
+  request: {
+    query: typeof ORGANIZATION_USER_TAGS_LIST_PG;
+    variables: Record<string, unknown>;
+  };
+  result: { data: { organizations: { userTags: UserTags }[] } };
+};
+
+type ErrorMock = {
+  request: {
+    query: typeof ORGANIZATION_USER_TAGS_LIST_PG;
+    variables: Record<string, unknown>;
+  };
+  error: Error;
+};
+
+/* ---------- Utility builders ---------- */
+
+const makeTagEdge = (
+  id: string | number,
+  opts?: {
+    parentId?: string | null;
+    users?: number;
+    children?: number;
+    ancestors?: TagAncestor[];
+  },
+): TagEdge => ({
+  node: {
+    _id: String(id),
+    name: `userTag ${id}`,
+    parentTag: opts?.parentId ? { _id: opts.parentId } : null,
+    usersAssignedTo: { totalCount: opts?.users ?? 5 },
+    childTags: { totalCount: opts?.children ?? 5 },
+    ancestorTags: opts?.ancestors ?? [],
+  },
+  cursor: String(id),
+});
+
+const makeUserTags = (
+  edges: TagEdge[],
+  pageInfo: Partial<PageInfo> = {},
+): UserTags => ({
+  edges,
+  pageInfo: {
+    startCursor: edges[0]?.cursor ?? null,
+    endCursor: edges[edges.length - 1]?.cursor ?? null,
+    hasNextPage: false,
+    hasPreviousPage: false,
+    ...pageInfo,
+  },
+  totalCount: edges.length,
+});
+
+const listMock = (
+  variables: Record<string, unknown>,
+  edges: TagEdge[],
+  pageInfo: Partial<PageInfo> = {},
+): ListMock => ({
+  request: { query: ORGANIZATION_USER_TAGS_LIST_PG, variables },
+  result: {
+    data: { organizations: [{ userTags: makeUserTags(edges, pageInfo) }] },
+  },
+});
+
+const errorMock = (
+  variables: Record<string, unknown>,
+  error: Error,
+): ErrorMock => ({
+  request: { query: ORGANIZATION_USER_TAGS_LIST_PG, variables },
+  error,
+});
+
+/* ---------- Build mock sets ---------- */
+
+export const MOCK_RESPONSES = {
+  DEFAULT: [
+    listMock(
+      {
         input: { id: 'orgId' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
       },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            userTags: {
-              edges: [
-                {
-                  node: {
-                    _id: '1',
-                    name: 'userTag 1',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 5 },
-                    childTags: { totalCount: 11 },
-                    ancestorTags: [],
-                  },
-                  cursor: '1',
-                },
-                {
-                  node: {
-                    _id: '2',
-                    name: 'userTag 2',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 5 },
-                    childTags: { totalCount: 0 },
-                    ancestorTags: [],
-                  },
-                  cursor: '2',
-                },
-                {
-                  node: {
-                    _id: '3',
-                    name: 'userTag 3',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 0 },
-                    childTags: { totalCount: 5 },
-                    ancestorTags: [],
-                  },
-                  cursor: '3',
-                },
-                {
-                  node: {
-                    _id: '4',
-                    name: 'userTag 4',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 0 },
-                    childTags: { totalCount: 0 },
-                    ancestorTags: [],
-                  },
-                  cursor: '4',
-                },
-                {
-                  node: {
-                    _id: '5',
-                    name: 'userTag 5',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 5 },
-                    childTags: { totalCount: 5 },
-                    ancestorTags: [],
-                  },
-                  cursor: '5',
-                },
-                {
-                  node: {
-                    _id: '6',
-                    name: 'userTag 6',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 6 },
-                    childTags: { totalCount: 6 },
-                    ancestorTags: [],
-                  },
-                  cursor: '6',
-                },
-                {
-                  node: {
-                    _id: '7',
-                    name: 'userTag 7',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 7 },
-                    childTags: { totalCount: 7 },
-                    ancestorTags: [],
-                  },
-                  cursor: '7',
-                },
-                {
-                  node: {
-                    _id: '8',
-                    name: 'userTag 8',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 8 },
-                    childTags: { totalCount: 8 },
-                    ancestorTags: [],
-                  },
-                  cursor: '8',
-                },
-                {
-                  node: {
-                    _id: '9',
-                    name: 'userTag 9',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 9 },
-                    childTags: { totalCount: 9 },
-                    ancestorTags: [],
-                  },
-                  cursor: '9',
-                },
-                {
-                  node: {
-                    _id: '10',
-                    name: 'userTag 10',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 10 },
-                    childTags: { totalCount: 10 },
-                    ancestorTags: [],
-                  },
-                  cursor: '10',
-                },
-              ],
-              pageInfo: {
-                startCursor: '1',
-                endCursor: '10',
-                hasNextPage: true,
-                hasPreviousPage: false,
-              },
-              totalCount: 12,
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_USER_TAGS_LIST_PG,
-      variables: {
+      [...Array(10)].map((_, i) => makeTagEdge(i + 1)),
+      { hasNextPage: true },
+    ),
+    listMock(
+      {
         input: { id: 'orgId' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: '10',
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
       },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            userTags: {
-              edges: [
-                {
-                  node: {
-                    _id: '11',
-                    name: 'userTag 11',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 5 },
-                    childTags: { totalCount: 5 },
-                    ancestorTags: [],
-                  },
-                  cursor: '11',
-                },
-                {
-                  node: {
-                    _id: '12',
-                    name: 'userTag 12',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 5 },
-                    childTags: { totalCount: 0 },
-                    ancestorTags: [],
-                  },
-                  cursor: '12',
-                },
-              ],
-              pageInfo: {
-                startCursor: '11',
-                endCursor: '12',
-                hasNextPage: false,
-                hasPreviousPage: true,
-              },
-              totalCount: 12,
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_USER_TAGS_LIST_PG,
-      variables: {
+      [makeTagEdge(11), makeTagEdge(12)],
+    ),
+    listMock(
+      {
         input: { id: 'orgId' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: 'searchUserTag' } },
         sortedBy: { id: 'DESCENDING' },
       },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            userTags: {
-              edges: [
-                {
-                  node: {
-                    _id: 'searchUserTag1',
-                    name: 'searchUserTag 1',
-                    parentTag: { _id: '1' },
-                    usersAssignedTo: { totalCount: 5 },
-                    childTags: { totalCount: 5 },
-                    ancestorTags: [{ _id: '1', name: 'userTag 1' }],
-                  },
-                  cursor: 'searchUserTag1',
-                },
-                {
-                  node: {
-                    _id: 'searchUserTag2',
-                    name: 'searchUserTag 2',
-                    parentTag: { _id: '1' },
-                    usersAssignedTo: { totalCount: 5 },
-                    childTags: { totalCount: 0 },
-                    ancestorTags: [{ _id: '1', name: 'userTag 1' }],
-                  },
-                  cursor: 'searchUserTag2',
-                },
-              ],
-              pageInfo: {
-                startCursor: 'searchUserTag1',
-                endCursor: 'searchUserTag2',
-                hasNextPage: false,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_USER_TAGS_LIST_PG,
-      variables: {
+      [
+        makeTagEdge('searchUserTag1', {
+          parentId: '1',
+          ancestors: [{ _id: '1', name: 'userTag 1' }],
+        }),
+        makeTagEdge('searchUserTag2', {
+          parentId: '1',
+          ancestors: [{ _id: '1', name: 'userTag 1' }],
+        }),
+      ],
+    ),
+    listMock(
+      {
         input: { id: 'orgId' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: 'searchUserTag' } },
         sortedBy: { id: 'ASCENDING' },
       },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            userTags: {
-              edges: [
-                {
-                  node: {
-                    _id: 'searchUserTag2',
-                    name: 'searchUserTag 2',
-                    parentTag: { _id: '1' },
-                    usersAssignedTo: { totalCount: 5 },
-                    childTags: { totalCount: 5 },
-                    ancestorTags: [{ _id: '1', name: 'userTag 1' }],
-                  },
-                  cursor: 'searchUserTag2',
-                },
-                {
-                  node: {
-                    _id: 'searchUserTag1',
-                    name: 'searchUserTag 1',
-                    parentTag: { _id: '1' },
-                    usersAssignedTo: { totalCount: 5 },
-                    childTags: { totalCount: 0 },
-                    ancestorTags: [{ _id: '1', name: 'userTag 1' }],
-                  },
-                  cursor: 'searchUserTag1',
-                },
-              ],
-              pageInfo: {
-                startCursor: 'searchUserTag2',
-                endCursor: 'searchUserTag1',
-                hasNextPage: false,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
-            },
-          },
-        ],
+      [
+        makeTagEdge('searchUserTag2', {
+          parentId: '1',
+          ancestors: [{ _id: '1', name: 'userTag 1' }],
+        }),
+        makeTagEdge('searchUserTag1', {
+          parentId: '1',
+          ancestors: [{ _id: '1', name: 'userTag 1' }],
+        }),
+      ],
+    ),
+    {
+      request: {
+        query: CREATE_USER_TAG,
+        variables: { name: 'userTag 12', organizationId: 'orgId' },
       },
+      result: { data: { createUserTag: { _id: '12' } } },
     },
-  },
-  {
-    request: {
-      query: CREATE_USER_TAG,
-      variables: { name: 'userTag 12', organizationId: 'orgId' },
+    {
+      request: {
+        query: CREATE_USER_TAG,
+        variables: { name: 'userTag 13', organizationId: 'orgId' },
+      },
+      result: { data: null },
     },
-    result: { data: { createUserTag: { _id: '12' } } },
-  },
-  {
-    request: {
-      query: CREATE_USER_TAG,
-      variables: { name: 'userTag 13', organizationId: 'orgId' },
-    },
-    result: { data: null },
-  },
-];
+  ],
 
-export const MOCKS_ERROR = [
-  {
-    request: {
-      query: ORGANIZATION_USER_TAGS_LIST_PG,
-      variables: {
+  ERROR_ORG: [
+    errorMock(
+      {
         input: { id: 'orgIdError' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
       },
-    },
-    error: new Error('Mock Graphql Error'),
-  },
-];
+      new Error('Mock Graphql Error'),
+    ),
+  ],
 
-export const MOCKS_ERROR_ERROR_TAG = [
-  {
-    request: {
-      query: CREATE_USER_TAG,
-      variables: { name: 'userTagE', organizationId: 'orgId' },
+  ERROR_CREATE_TAG: [
+    {
+      request: {
+        query: CREATE_USER_TAG,
+        variables: { name: 'userTagE', organizationId: 'orgId' },
+      },
+      error: new Error('Mock Graphql Error'),
     },
-    error: new Error('Mock Graphql Error'),
-  },
-];
+  ],
 
-export const MOCKS_EMPTY = [
-  {
-    request: {
-      query: ORGANIZATION_USER_TAGS_LIST_PG,
-      variables: {
+  EMPTY: [
+    listMock(
+      {
         input: { id: 'orgId' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
       },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            userTags: {
-              edges: [],
-              pageInfo: {
-                hasNextPage: false,
-                hasPreviousPage: false,
-                startCursor: null,
-                endCursor: null,
-              },
-              totalCount: 0,
-            },
-          },
-        ],
+      [],
+    ),
+  ],
+
+  UNDEFINED_USER_TAGS: [
+    {
+      request: {
+        query: ORGANIZATION_USER_TAGS_LIST_PG,
+        variables: {
+          input: { id: 'orgId' },
+          first: TAGS_QUERY_DATA_CHUNK_SIZE,
+          where: { name: { starts_with: '' } },
+          sortedBy: { id: 'DESCENDING' },
+        },
+      },
+      result: {
+        data: {
+          organizations: [{ userTags: undefined as unknown as UserTags }],
+        },
       },
     },
-  },
-];
+  ],
 
-export const MOCKS_UNDEFINED_USER_TAGS = [
-  {
-    request: {
-      query: ORGANIZATION_USER_TAGS_LIST_PG,
-      variables: {
+  NULL_END_CURSOR: [
+    listMock(
+      {
         input: { id: 'orgId' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
       },
-    },
-    result: { data: { organizations: [{ userTags: undefined }] } },
-  },
-];
-
-export const MOCKS_NULL_END_CURSOR = [
-  {
-    request: {
-      query: ORGANIZATION_USER_TAGS_LIST_PG,
-      variables: {
+      [makeTagEdge(1)],
+      { endCursor: null, hasNextPage: true },
+    ),
+    listMock(
+      {
         input: { id: 'orgId' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: { name: { starts_with: '' } },
-        sortedBy: { id: 'DESCENDING' },
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            userTags: {
-              edges: [
-                {
-                  node: {
-                    _id: '1',
-                    name: 'userTag 1',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 5 },
-                    childTags: { totalCount: 11 },
-                    ancestorTags: [],
-                  },
-                  cursor: '1',
-                },
-              ],
-              pageInfo: {
-                startCursor: '1',
-                endCursor: null,
-                hasNextPage: true,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_USER_TAGS_LIST_PG,
-      variables: {
-        input: { id: 'orgId' },
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: { name: { starts_with: '' } },
         after: null,
-        sortedBy: { id: 'DESCENDING' },
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            userTags: {
-              edges: [
-                {
-                  node: {
-                    _id: '1',
-                    name: 'userTag 1',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 5 },
-                    childTags: { totalCount: 11 },
-                    ancestorTags: [],
-                  },
-                  cursor: '2',
-                },
-              ],
-              pageInfo: {
-                startCursor: '2',
-                endCursor: null,
-                hasNextPage: true,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
-            },
-          },
-        ],
-      },
-    },
-  },
-];
-
-export const MOCKS_NO_MORE_PAGES = [
-  {
-    request: {
-      query: ORGANIZATION_USER_TAGS_LIST_PG,
-      variables: {
-        id: 'orgId',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
       },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            userTags: {
-              edges: [
-                {
-                  node: {
-                    _id: '1',
-                    name: 'userTag 1',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 5 },
-                    childTags: { totalCount: 11 },
-                    ancestorTags: [],
-                  },
-                  cursor: '1',
-                },
-              ],
-              pageInfo: {
-                startCursor: '1',
-                endCursor: '1',
-                hasNextPage: true,
-                hasPreviousPage: false,
-              },
-              totalCount: 2,
-            },
-          },
-        ],
+      [makeTagEdge(1, {})],
+      { endCursor: null, hasNextPage: true },
+    ),
+    {
+      request: {
+        query: ORGANIZATION_USER_TAGS_LIST_PG,
+        variables: {
+          input: { id: 'orgId' },
+          first: TAGS_QUERY_DATA_CHUNK_SIZE,
+          after: null,
+          where: { name: { starts_with: '' } },
+          sortedBy: { id: 'DESCENDING' },
+        },
       },
+      error: new Error('Mock Graphql Error'),
     },
-  },
-  {
-    request: {
-      query: ORGANIZATION_USER_TAGS_LIST_PG,
-      variables: {
-        input: { id: 'orgId' },
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: { name: { starts_with: '' } },
-        sortedBy: { id: 'DESCENDING' },
-      },
-    },
-    error: new Error('Mock Graphql Error'),
-  },
-];
+  ],
 
-// Add this to your OrganizationTagsMocks.ts file at the end, before the exports
-
-// Additional mocks for sorting without search filter
-export const MOCKS_ASCENDING_NO_SEARCH = [
-  {
-    request: {
-      query: ORGANIZATION_USER_TAGS_LIST_PG,
-      variables: {
+  ASCENDING_NO_SEARCH: [
+    listMock(
+      {
         input: { id: 'orgId' },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'ASCENDING' },
       },
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            userTags: {
-              edges: [
-                {
-                  node: {
-                    _id: '10',
-                    name: 'userTag 10',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 10 },
-                    childTags: { totalCount: 10 },
-                    ancestorTags: [],
-                  },
-                  cursor: '10',
-                },
-                {
-                  node: {
-                    _id: '9',
-                    name: 'userTag 9',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 9 },
-                    childTags: { totalCount: 9 },
-                    ancestorTags: [],
-                  },
-                  cursor: '9',
-                },
-                {
-                  node: {
-                    _id: '8',
-                    name: 'userTag 8',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 8 },
-                    childTags: { totalCount: 8 },
-                    ancestorTags: [],
-                  },
-                  cursor: '8',
-                },
-                {
-                  node: {
-                    _id: '7',
-                    name: 'userTag 7',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 7 },
-                    childTags: { totalCount: 7 },
-                    ancestorTags: [],
-                  },
-                  cursor: '7',
-                },
-                {
-                  node: {
-                    _id: '6',
-                    name: 'userTag 6',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 6 },
-                    childTags: { totalCount: 6 },
-                    ancestorTags: [],
-                  },
-                  cursor: '6',
-                },
-                {
-                  node: {
-                    _id: '5',
-                    name: 'userTag 5',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 5 },
-                    childTags: { totalCount: 5 },
-                    ancestorTags: [],
-                  },
-                  cursor: '5',
-                },
-                {
-                  node: {
-                    _id: '4',
-                    name: 'userTag 4',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 0 },
-                    childTags: { totalCount: 0 },
-                    ancestorTags: [],
-                  },
-                  cursor: '4',
-                },
-                {
-                  node: {
-                    _id: '3',
-                    name: 'userTag 3',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 0 },
-                    childTags: { totalCount: 5 },
-                    ancestorTags: [],
-                  },
-                  cursor: '3',
-                },
-                {
-                  node: {
-                    _id: '2',
-                    name: 'userTag 2',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 5 },
-                    childTags: { totalCount: 0 },
-                    ancestorTags: [],
-                  },
-                  cursor: '2',
-                },
-                {
-                  node: {
-                    _id: '1',
-                    name: 'userTag 1',
-                    parentTag: null,
-                    usersAssignedTo: { totalCount: 5 },
-                    childTags: { totalCount: 11 },
-                    ancestorTags: [],
-                  },
-                  cursor: '1',
-                },
-              ],
-              pageInfo: {
-                startCursor: '10',
-                endCursor: '1',
-                hasNextPage: true,
-                hasPreviousPage: false,
-              },
-              totalCount: 12,
-            },
-          },
-        ],
-      },
-    },
-  },
-];
+      [...Array(10)].map((_, i) => makeTagEdge(10 - i)),
+      { hasNextPage: true },
+    ),
+  ],
+};
+
+export const MOCKS = MOCK_RESPONSES.DEFAULT;
+export const MOCKS_ERROR = MOCK_RESPONSES.ERROR_ORG;
+export const MOCKS_ERROR_ERROR_TAG = MOCK_RESPONSES.ERROR_CREATE_TAG;
+export const MOCKS_EMPTY = MOCK_RESPONSES.EMPTY;
+export const MOCKS_UNDEFINED_USER_TAGS = MOCK_RESPONSES.UNDEFINED_USER_TAGS;
+export const MOCKS_NULL_END_CURSOR = MOCK_RESPONSES.NULL_END_CURSOR;
+export const MOCKS_NO_MORE_PAGES = MOCK_RESPONSES.DEFAULT;
+export const MOCKS_ASCENDING_NO_SEARCH = MOCK_RESPONSES.ASCENDING_NO_SEARCH;
