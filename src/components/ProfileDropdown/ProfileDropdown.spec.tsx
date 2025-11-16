@@ -11,6 +11,24 @@ import i18nForTest from 'utils/i18nForTest';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { vi } from 'vitest';
 
+const createLocalStorageMock = () => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: (key: string) => store[key] ?? null,
+    setItem: (key: string, value: unknown) => {
+      store[key] = String(value);
+    },
+    removeItem: (key: string) => {
+      delete store[key];
+    },
+    clear: () => {
+      store = {};
+    },
+  };
+};
+
+vi.stubGlobal('localStorage', createLocalStorageMock());
+
 const { setItem } = useLocalStorage();
 
 let mockNavigate: ReturnType<typeof vi.fn>;
@@ -190,7 +208,7 @@ describe('ProfileDropdown Component', () => {
       await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
-    expect(mockNavigate).toHaveBeenCalledWith('/member/');
+    expect(mockNavigate).toHaveBeenCalledWith('/member');
   });
 
   test('navigates to /member/:userID for non-user roles', async () => {
@@ -219,5 +237,28 @@ describe('ProfileDropdown Component', () => {
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/member/321');
+  });
+
+  test('uses user settings route for admin when portal is user', async () => {
+    setItem('role', 'administrator');
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileDropdown portal="user" />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('togDrop'));
+    });
+
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('profileBtn'));
+    });
+
+    expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
   });
 });

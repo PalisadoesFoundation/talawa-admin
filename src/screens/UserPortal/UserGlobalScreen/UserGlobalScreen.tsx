@@ -93,7 +93,7 @@ const UserGlobalScreen = (): JSX.Element => {
           <div style={{ flex: 1 }}>
             <h1>Global Features</h1>
           </div>
-          <ProfileDropdown />
+          <ProfileDropdown portal="user" />
         </div>
         <Outlet />
       </div>

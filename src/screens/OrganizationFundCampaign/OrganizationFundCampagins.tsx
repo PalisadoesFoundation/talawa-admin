@@ -21,7 +21,7 @@ import type {
   InterfaceQueryOrganizationFundCampaigns,
 } from 'utils/interfaces';
 import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 const dataGridStyle = {
   borderRadius: 'var(--table-head-radius)',

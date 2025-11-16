@@ -40,8 +40,8 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import ContriStats from 'components/ContriStats/ContriStats';
 import OrgContriCards from 'components/OrgContriCards/OrgContriCards';
-import { Form } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 function OrgContribution(): JSX.Element {
   // Hook to get translation functions and translation text
@@ -58,22 +58,18 @@ function OrgContribution(): JSX.Element {
             <div className={styles.sidebarsticky}>
               {/* Input for filtering by organization name */}
               <h6 className={styles.searchtitle}>{t('filterByName')}</h6>
-              <Form.Control
-                type="name"
-                id="orgname"
+              <SearchBar
                 placeholder={t('orgname')}
-                autoComplete="off"
-                required
+                showSearchButton={false}
+                inputTestId="filterOrgName"
               />
 
               {/* Input for filtering by transaction ID */}
               <h6 className={styles.searchtitle}>{t('filterByTransId')}</h6>
-              <Form.Control
-                type="transaction"
-                id="searchtransaction"
+              <SearchBar
                 placeholder={t('searchtransaction')}
-                autoComplete="off"
-                required
+                showSearchButton={false}
+                inputTestId="filterTransaction"
               />
 
               {/* Section displaying recent contribution statistics */}

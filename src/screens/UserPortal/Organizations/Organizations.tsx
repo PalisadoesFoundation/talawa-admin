@@ -33,7 +33,6 @@
  */
 
 import { useQuery } from '@apollo/client';
-import { SearchOutlined } from '@mui/icons-material';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import {
   USER_CREATED_ORGANIZATIONS,
@@ -44,10 +43,11 @@ import PaginationList from 'components/Pagination/PaginationList/PaginationList'
 import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import React, { useEffect, useState, useRef } from 'react';
-import { Dropdown, Form, InputGroup } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../../style/app-fixed.module.css';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 function useDebounce<T>(fn: (val: T) => void, delay: number) {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -253,23 +253,9 @@ export default function Organizations(): React.JSX.Element {
 
   const debouncedSearch = useDebounce(doSearch, 300);
 
-  const handleChangeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newVal = e.target.value;
+  const handleChangeFilter = (newVal: string): void => {
     setTypedValue(newVal);
     debouncedSearch(newVal);
-  };
-
-  const handleSearchByEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      doSearch(typedValue);
-    }
-  };
-
-  /**
-   * Clicking the search button also triggers the same logic
-   */
-  const handleSearchByBtnClick = () => {
-    doSearch(typedValue);
   };
 
   /**
@@ -406,26 +392,15 @@ export default function Organizations(): React.JSX.Element {
           <div className={styles.head}>
             <div className={styles.btnsContainer}>
               <div className={styles.input}>
-                <InputGroup className={styles.maxWidth}>
-                  <Form.Control
-                    placeholder={t('searchOrganizations')}
-                    id="searchUserOrgs"
-                    type="text"
-                    className={styles.inputField}
-                    value={typedValue}
-                    onChange={handleChangeFilter} // debounced
-                    onKeyUp={handleSearchByEnter} // immediate search if user presses Enter
-                    data-testid="searchInput"
-                  />
-                  <InputGroup.Text
-                    className={styles.searchButton}
-                    style={{ cursor: 'pointer' }}
-                    onClick={handleSearchByBtnClick}
-                    data-testid="searchBtn"
-                  >
-                    <SearchOutlined className={styles.colorWhite} />
-                  </InputGroup.Text>
-                </InputGroup>
+                <SearchBar
+                  className={styles.maxWidth}
+                  placeholder={t('searchOrganizations')}
+                  value={typedValue}
+                  onChange={(val) => handleChangeFilter(val)}
+                  onSearch={(val) => doSearch(val)}
+                  inputTestId="searchInput"
+                  buttonTestId="searchBtn"
+                />
               </div>
               <div className={styles.btnsBlock}>
                 <Dropdown drop="down-centered">
