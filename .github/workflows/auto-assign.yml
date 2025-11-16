@@ -71,6 +71,35 @@ jobs:
               return;
             }
 
+            /**
+            * Check if a user has any merged PRs in the repository
+            * @param {object} github - GitHub API client
+            * @param {string} owner - Repository owner
+            * @param {string} repo - Repository name
+            * @param {string} username - GitHub username to check
+            * @returns {Promise<boolean>} - True if user has merged PRs, false otherwise
+            */
+            async function hasMergedPRs(github, owner, repo, username) {
+              try {
+                // Use GitHub Search API to find merged PRs authored by the user
+                const query = `repo:${owner}/${repo} type:pr is:merged author:${username}`;
+                
+                const result = await github.rest.search.issuesAndPullRequests({
+                  q: query,
+                  per_page: 1, // We only need to know if at least one exists
+                });
+                
+                const count = result.data.total_count;
+                console.log(`User ${username} has ${count} merged PR(s) in ${owner}/${repo}`);
+                
+                return count > 0;
+              } catch (error) {
+                console.error(`Error checking merged PRs for ${username}:`, error);
+                // On error, return false to be safe (deny access)
+                return false;
+              }
+            }  
+
             const isAssign = body.startsWith("/assign");
             const isUnassign = body.startsWith("/unassign");
 
@@ -379,32 +408,3 @@ jobs:
                 throw new Error(`Assignment failed and unable to notify user: ${error.message || error}`);
               }
             }
-
-            /**
-            * Check if a user has any merged PRs in the repository
-            * @param {object} github - GitHub API client
-            * @param {string} owner - Repository owner
-            * @param {string} repo - Repository name
-            * @param {string} username - GitHub username to check
-            * @returns {Promise<boolean>} - True if user has merged PRs, false otherwise
-            */
-            async function hasMergedPRs(github, owner, repo, username) {
-              try {
-                // Use GitHub Search API to find merged PRs authored by the user
-                const query = `repo:${owner}/${repo} type:pr is:merged author:${username}`;
-                
-                const result = await github.rest.search.issuesAndPullRequests({
-                  q: query,
-                  per_page: 1, // We only need to know if at least one exists
-                });
-                
-                const count = result.data.total_count;
-                console.log(`User ${username} has ${count} merged PR(s) in ${owner}/${repo}`);
-                
-                return count > 0;
-              } catch (error) {
-                console.error(`Error checking merged PRs for ${username}:`, error);
-                // On error, return false to be safe (deny access)
-                return false;
-              }
-            }            
