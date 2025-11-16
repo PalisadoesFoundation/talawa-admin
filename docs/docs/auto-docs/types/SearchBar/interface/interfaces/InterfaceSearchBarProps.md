@@ -172,7 +172,7 @@ Callback fired after the clear button is pressed.
 
 ### onSearch()?
 
-> `optional` **onSearch**: (`value`, `metadata`) => `void`
+> `optional` **onSearch**: (`value`, `metadata?`) => `void`
 
 Defined in: [src/types/SearchBar/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L37)
 
@@ -184,7 +184,7 @@ Callback invoked when the user submits a search via button, Enter, or clear.
 
 `string`
 
-##### metadata
+##### metadata?
 
 [`InterfaceSearchMeta`](InterfaceSearchMeta.md)
 
