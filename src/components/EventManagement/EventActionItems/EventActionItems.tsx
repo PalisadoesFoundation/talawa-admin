@@ -44,7 +44,7 @@ import ItemDeleteModal from 'screens/OrganizationActionItems/ActionItemDeleteMod
 import Avatar from 'components/Avatar/Avatar';
 import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
 import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 enum ItemStatus {
   Pending = 'pending',

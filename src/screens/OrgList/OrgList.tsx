@@ -67,10 +67,10 @@ import { Button } from '@mui/material';
 import OrganizationModal from './modal/OrganizationModal';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router';
-import { Form, InputGroup, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
-import SearchOutlined from '@mui/icons-material/SearchOutlined';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 const { getItem } = useLocalStorage();
 
@@ -303,21 +303,10 @@ function orgList(): JSX.Element {
 
   const debouncedSearch = useDebounce(doSearch, 300);
 
-  const handleChangeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newVal = e.target.value;
+  const handleChangeFilter = (newVal: string): void => {
     setTypedValue(newVal);
     setSearchByName(newVal);
     debouncedSearch(newVal);
-  };
-
-  const handleSearchByEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      doSearch(typedValue);
-    }
-  };
-
-  const handleSearchByBtnClick = () => {
-    doSearch(typedValue);
   };
 
   const handleSortChange = (value: string): void => {
@@ -341,34 +330,20 @@ function orgList(): JSX.Element {
 
   return (
     <>
-      {/* Buttons Container */}
       <div className={styles.btnsContainerSearchBar}>
         <div className={styles.inputOrgList}>
-          <InputGroup className={styles.maxWidth}>
-            <Form.Control
-              placeholder={t('searchOrganizations')}
-              id="searchUserOrgs"
-              type="text"
-              className={styles.inputField}
-              value={typedValue}
-              onChange={handleChangeFilter}
-              onKeyUp={handleSearchByEnter}
-              data-testid="searchInput"
-            />
-          </InputGroup>
+          <SearchBar
+            className={styles.maxWidth}
+            placeholder={t('searchOrganizations')}
+            value={typedValue}
+            onChange={(val) => handleChangeFilter(val)}
+            onSearch={(val) => doSearch(val)}
+            inputTestId="searchInput"
+            buttonTestId="searchBtn"
+          />
         </div>
 
         <div className={styles.btnsBlock}>
-          <InputGroup.Text
-            className={styles.searchButton}
-            style={{ cursor: 'pointer' }}
-            onClick={handleSearchByBtnClick}
-            data-testid="searchBtn"
-            title={t('search')}
-          >
-            <SearchOutlined className={styles.colorWhite} />
-          </InputGroup.Text>
-
           <NotificationIcon />
 
           <div style={{ display: 'flex', alignItems: 'center' }}>

@@ -59,7 +59,7 @@ import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import { useParams } from 'react-router';
 import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 import type {
   InterfaceUserPg,

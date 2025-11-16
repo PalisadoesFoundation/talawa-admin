@@ -64,7 +64,7 @@ import VolunteerGroupViewModal from 'screens/EventVolunteers/VolunteerGroups/vie
 import useLocalStorage from 'utils/useLocalstorage';
 import GroupModal from './GroupModal';
 import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 enum ModalState {
   EDIT = 'edit',

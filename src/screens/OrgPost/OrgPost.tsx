@@ -21,7 +21,7 @@ import styles from 'style/app-fixed.module.css';
 import SortingButton from '../../subComponents/SortingButton';
 import PostsRenderer from './Posts';
 // import SearchingButton from 'subComponents/SearchingButton';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 import type {
   InterfacePostEdge,
   InterfaceOrganizationPostListData,

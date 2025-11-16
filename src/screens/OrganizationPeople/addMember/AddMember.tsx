@@ -41,7 +41,7 @@
  * @returns {JSX.Element} The rendered AddMember component.
  */
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
-import { Check, Close, Search } from '@mui/icons-material';
+import { Check, Close } from '@mui/icons-material';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -63,6 +63,7 @@ import Loader from 'components/Loader/Loader';
 import type { ChangeEvent } from 'react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Form, InputGroup, Modal } from 'react-bootstrap';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { toast } from 'react-toastify';
@@ -300,12 +301,12 @@ function AddMember(): JSX.Element {
     setCreateUserVariables({ ...createUserVariables, confirmPassword });
   };
 
-  const handleUserModalSearchChange = (e: React.FormEvent): void => {
-    e.preventDefault();
+  const handleUserModalSearchChange = (value: string): void => {
     resetPagination();
+    const trimmedValue = value.trim();
     const variables = {
       first: PAGE_SIZE,
-      where: userName ? { name: userName } : null,
+      where: trimmedValue ? { name: trimmedValue } : null,
       after: null,
       last: null,
       before: null,
@@ -422,28 +423,20 @@ function AddMember(): JSX.Element {
           ) : (
             <>
               <div className={styles.input}>
-                <Form onSubmit={handleUserModalSearchChange}>
-                  <Form.Control
-                    type="name"
-                    id="searchUser"
-                    data-testid="searchUser"
-                    placeholder={translateOrgPeople('searchFullName')}
-                    autoComplete="off"
-                    className={styles.inputFieldModal}
-                    value={userName}
-                    onChange={(e): void => {
-                      const { value } = e.target;
-                      setUserName(value);
-                    }}
-                  />
-                  <Button
-                    type="submit"
-                    data-testid="submitBtn"
-                    className={styles.searchButton}
-                  >
-                    <Search className={styles.searchIcon} />
-                  </Button>
-                </Form>
+                <SearchBar
+                  placeholder={translateOrgPeople('searchFullName')}
+                  value={userName}
+                  onChange={(value) => {
+                    setUserName(value);
+                  }}
+                  onSearch={(value) => handleUserModalSearchChange(value)}
+                  onClear={() => {
+                    setUserName('');
+                    handleUserModalSearchChange('');
+                  }}
+                  inputTestId="searchUser"
+                  buttonTestId="submitBtn"
+                />
               </div>
               <TableContainer component={Paper}>
                 <Table aria-label="customized table">

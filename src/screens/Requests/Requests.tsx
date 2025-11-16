@@ -16,7 +16,7 @@
  * @requires GraphQl/Queries/Queries
  * @requires components/TableLoader/TableLoader
  * @requires components/RequestsTableItem/RequestsTableItem
- * @requires subComponents/SearchBar
+ * @requires shared-components/SearchBar/SearchBar
  * @requires utils/interfaces
  * @requires utils/useLocalstorage
  * @requires style/app-fixed.module.css
@@ -60,7 +60,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import styles from '../../style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 import {
   Paper,
   TableBody,

@@ -47,16 +47,16 @@
  */
 import React, { useEffect, useState } from 'react';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
-import { Dropdown, Form, Button } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import { FilterAltOutlined } from '@mui/icons-material';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useParams } from 'react-router';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 interface IMemberNode {
   id: string;
@@ -189,22 +189,6 @@ export default function People(): React.JSX.Element {
     });
   };
 
-  const handleSearchByEnter = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-  ): void => {
-    if (e.key === 'Enter') {
-      const { value } = e.currentTarget;
-      handleSearch(value);
-    }
-  };
-
-  const handleSearchByBtnClick = (): void => {
-    const inputValue =
-      (document.getElementById('searchPeople') as HTMLInputElement)?.value ||
-      '';
-    handleSearch(inputValue);
-  };
-
   useEffect(() => {
     // When mode changes, refetch from first page
     setPageCursors(['']);
@@ -222,23 +206,13 @@ export default function People(): React.JSX.Element {
       <div className={`${styles.mainContainer_people}`}>
         <div className={styles.people__header}>
           <div className={styles.input}>
-            <Form.Control
+            <SearchBar
               placeholder={t('searchUsers')}
-              id="searchPeople"
-              type="text"
-              className={styles.inputField}
-              onKeyUp={handleSearchByEnter}
-              data-testid="searchInput"
+              onSearch={handleSearch}
+              onClear={() => handleSearch('')}
+              inputTestId="searchInput"
+              buttonTestId="searchBtn"
             />
-
-            <Button
-              className={styles.searchButton}
-              data-testid="searchBtn"
-              style={{ cursor: 'pointer' }}
-              onClick={handleSearchByBtnClick}
-            >
-              <SearchOutlinedIcon />
-            </Button>
           </div>
 
           <Dropdown drop="down-centered">

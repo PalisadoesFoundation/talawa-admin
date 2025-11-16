@@ -44,7 +44,7 @@ import AgendaCategoryContainer from 'components/AgendaCategory/AgendaCategoryCon
 import AgendaCategoryCreateModal from './Create/AgendaCategoryCreateModal';
 import styles from 'style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 interface InterfaceAgendaCategoryProps {
   orgId: string;

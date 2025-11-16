@@ -24,7 +24,7 @@ import type {
 } from 'utils/interfaces';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 enum ModalState {
   SAME = 'same',

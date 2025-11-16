@@ -219,7 +219,7 @@ const userSidebar = ({
               margin: '10px',
             }}
           >
-            <ProfileCard />
+            <ProfileCard portal="user" />
           </div>
         )}
 
@@ -270,7 +270,7 @@ const userSidebar = ({
         </div>
         <div className={styles.userSidebarOrgFooter}>
           <div style={{ display: hideDrawer ? 'none' : 'flex' }}>
-            <ProfileCard />
+            <ProfileCard portal="user" />
           </div>
           <SignOut hideDrawer={hideDrawer} />
         </div>
