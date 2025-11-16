@@ -41,4 +41,34 @@ describe('resolveProfileNavigation', () => {
       }),
     ).toBe('/member');
   });
+
+  it('returns member route when role is undefined on admin portal', () => {
+    expect(
+      resolveProfileNavigation({
+        portal: 'admin',
+        role: undefined,
+        orgId: '123',
+      }),
+    ).toBe('/member/123');
+  });
+
+  it('handles null orgId gracefully for admin', () => {
+    expect(
+      resolveProfileNavigation({
+        portal: 'admin',
+        role: 'administrator',
+        orgId: null,
+      }),
+    ).toBe('/member');
+  });
+
+  it('handles case-insensitive role values', () => {
+    expect(
+      resolveProfileNavigation({
+        portal: 'admin',
+        role: 'REGULAR',
+        orgId: '123',
+      }),
+    ).toBe('/user/settings');
+  });
 });
