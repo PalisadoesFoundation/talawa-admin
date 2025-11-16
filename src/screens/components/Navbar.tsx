@@ -1,3 +1,63 @@
+/**
+ * PageHeader Component
+ *
+ * A flexible and reusable header component used across multiple screens.
+ * It supports page title, search bar, sorting dropdowns, optional event type filter,
+ * and action buttons.
+ *
+ * @component
+ *
+ * @remarks
+ * - Primarily used for pages that require filtering, sorting, or search.
+ * - Uses `SearchBar` and `SortingButton` subcomponents for search and sorting functionality.
+ * - Layout is responsive and adjusts based on provided props.
+ *
+ * @example
+ * ```tsx
+ * <PageHeader
+ *   title="Users"
+ *   search={{
+ *     placeholder: "Search user...",
+ *     onSearch: handleSearch
+ *   }}
+ *   sorting={[
+ *     {
+ *       title: "Sort By",
+ *       options: [
+ *         { label: "Newest", value: "DESC" },
+ *         { label: "Oldest", value: "ASC" }
+ *       ],
+ *       selected: "DESC",
+ *       onChange: handleSort,
+ *       testIdPrefix: "usersSort"
+ *     }
+ *   ]}
+ *   actions={<Button>Add User</Button>}
+ * />
+ * ```
+ *
+ * @param {string} [title] — Optional title displayed at the top of the page.
+ * @param {{
+ *   placeholder: string;
+ *   onSearch: (value: string) => void;
+ *   inputTestId?: string;
+ *   buttonTestId?: string;
+ * }} [search] — Search bar configuration.
+ *
+ * @param {Array<{
+ *   title: string;
+ *   options: { label: string; value: string | number }[];
+ *   selected: string | number;
+ *   onChange: (value: string | number) => void;
+ *   testIdPrefix: string;
+ * }>} [sorting] — List of sorting dropdown selectors.
+ *
+ * @param {boolean} [showEventTypeFilter=false] — Whether to show the event type dropdown.
+ *
+ * @param {React.ReactNode} [actions] — Action buttons/elements rendered on the right side.
+ *
+ * @returns {JSX.Element} The rendered PageHeader component.
+ */
 import React from 'react';
 import styles from 'style/app-fixed.module.css';
 import SearchBar from 'subComponents/SearchBar';
