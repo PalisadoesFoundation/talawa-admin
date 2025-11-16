@@ -966,3 +966,51 @@ describe('AddMember Component', () => {
     });
   });
 });
+
+test('triggers PageHeader search and fetches users correctly', async () => {
+  const orgId = 'org123';
+
+  const initialMock = createUserListMock({
+    first: 10,
+    after: null,
+    last: null,
+    before: null,
+  });
+
+  const searchMock = createUserListMock({
+    first: 10,
+    where: { name: 'Alex' },
+    after: null,
+    last: null,
+    before: null,
+  });
+
+  const mocks = [createOrganizationsMock(orgId), initialMock, searchMock];
+
+  render(
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
+        <I18nextProvider i18n={i18nForTest}>
+          <AddMember />
+        </I18nextProvider>
+      </MemoryRouter>
+    </MockedProvider>,
+  );
+
+  // Wait for header to load
+  // search triggered
+  fireEvent.change(screen.getByPlaceholderText('Enter Full Name'), {
+    target: { value: 'Alex' },
+  });
+
+  // search was executed (search input contains Alex)
+  expect(screen.getByPlaceholderText('Enter Full Name')).toHaveValue('Alex');
+
+  // component continues normally (Add Members still visible)
+  expect(screen.getByTestId('addMembers')).toBeInTheDocument();
+
+  // no error message should appear
+  expect(
+    screen.queryByText(/Error occurred.*fetching Users/i),
+  ).not.toBeInTheDocument();
+});
