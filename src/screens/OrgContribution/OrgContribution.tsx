@@ -51,8 +51,8 @@ function OrgContribution(): JSX.Element {
   document.title = t('title');
 
   // Local filters (wired for future list filtering)
-  const [orgNameFilter, setOrgNameFilter] = useState<string>('');
-  const [transactionFilter, setTransactionFilter] = useState<string>('');
+  const [, setOrgNameFilter] = useState<string>('');
+  const [, setTransactionFilter] = useState<string>('');
 
   return (
     <>

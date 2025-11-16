@@ -491,8 +491,10 @@ export default function groupChatDetails({
                 <SearchBar
                   placeholder="searchFullName"
                   value={userName}
-                  onChange={(value) => setUserName(value)}
-                  onSearch={(value) => handleUserModalSearchChange(value)}
+                  onChange={(value) => {
+                    setUserName(value);
+                    handleUserModalSearchChange(value);
+                  }}
                   onClear={() => {
                     // Only reset local state; clear already triggers onSearch('')
                     // which refetches with an empty filter.
