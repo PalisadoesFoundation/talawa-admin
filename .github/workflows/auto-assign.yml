@@ -101,10 +101,10 @@ jobs:
             * CONTRIBUTOR
             * Author has previously committed to the repository.
             * 
-            * FIRST_TIMER
+            * FIRST_TIMER (Seems to be only applicable to PR commenters)
             * Author has not previously committed to GitHub.
             * 
-            * FIRST_TIME_CONTRIBUTOR
+            * FIRST_TIME_CONTRIBUTOR (Seems to be only applicable to PR commenters)
             * Author has not previously committed to the repository.
             * 
             * MANNEQUIN
@@ -113,7 +113,7 @@ jobs:
             * MEMBER
             * Author is a member of the organization that owns the repository.
             * 
-            * NONE
+            * NONE (Default for non-PR commenters who don't match any of the other associations)
             * Author has no association with the repository.
             * 
             * OWNER
@@ -125,7 +125,7 @@ jobs:
 
             // New contributors cannot auto assign themselves, but they can unassign themselves
             if (isAssign) {
-              if (association === 'FIRST_TIME_CONTRIBUTOR' || association === 'FIRST_TIMER' || association === 'NONE') {
+              if (association === 'FIRST_TIME_CONTRIBUTOR' || association === 'FIRST_TIMER') {
                 await github.rest.issues.createComment({
                   owner,
                   repo,
