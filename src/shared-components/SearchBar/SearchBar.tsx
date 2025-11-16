@@ -142,8 +142,13 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
         setInternalValue('');
       }
       emitChange('');
-      onClear?.();
-      triggerSearch('clear', undefined, '');
+      // If a consumer provided onClear, treat it as the primary clear handler
+      // and avoid invoking onSearch('') to prevent duplicate side effects.
+      if (onClear) {
+        onClear();
+      } else {
+        triggerSearch('clear', undefined, '');
+      }
       inputRef.current?.focus();
     }, [disabled, emitChange, isControlled, onClear, triggerSearch]);
 

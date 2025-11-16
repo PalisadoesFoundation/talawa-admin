@@ -34,7 +34,7 @@ export interface InterfaceSearchBarProps
   /** Initial value when used in uncontrolled mode. */
   defaultValue?: string;
   /** Callback invoked when the user submits a search via button, Enter, or clear. */
-  onSearch?: (value: string, metadata: InterfaceSearchMeta) => void;
+  onSearch?: (value: string, metadata?: InterfaceSearchMeta) => void;
   /** Callback fired whenever the input value changes. */
   onChange?: (value: string, event: ChangeEvent<HTMLInputElement>) => void;
   /** Callback fired after the clear button is pressed. */

@@ -198,14 +198,10 @@ const UsersTableItem = (props: Props): JSX.Element => {
                 <tbody>
                   {joinedOrgs.map((org) => {
                     // Adjust organization/admin mapping as per your data model
-                    let isAdmin = false;
-                    appUserProfile?.adminFor?.forEach(
-                      (item: { _id: string }) => {
-                        if (item._id === org.id) {
-                          isAdmin = true;
-                        }
-                      },
-                    );
+                    const isAdmin =
+                      appUserProfile?.adminFor?.some(
+                        (item: { _id: string }) => item._id === org.id,
+                      ) ?? false;
                     return (
                       <tr key={`org-joined-${org.id}`}>
                         <td>

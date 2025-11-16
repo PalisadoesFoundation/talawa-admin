@@ -495,10 +495,13 @@ export default function groupChatDetails({
                     setUserName(value);
                     handleUserModalSearchChange(value);
                   }}
+                  onSearch={(value) => {
+                    handleUserModalSearchChange(value);
+                  }}
                   onClear={() => {
-                    // Only reset local state; clear already triggers onSearch('')
-                    // which refetches with an empty filter.
+                    // Reset local input; refetch with empty filter explicitly for clarity
                     setUserName('');
+                    handleUserModalSearchChange('');
                   }}
                   inputTestId="searchUser"
                   buttonTestId="searchBtn"
