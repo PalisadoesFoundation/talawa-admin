@@ -470,9 +470,15 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
                     value={timeToDayJs(formState.endTime)}
                     onChange={(time): void => {
                       if (time) {
+                        const newEndTime = time.format('HH:mm:ss');
+                        const currentStartTime = formState.startTime;
                         setFormState({
                           ...formState,
-                          endTime: time.format('HH:mm:ss'),
+                          endTime: newEndTime,
+                          startTime:
+                            timeToDayJs(currentStartTime) > time
+                              ? newEndTime
+                              : currentStartTime,
                         });
                       }
                     }}
