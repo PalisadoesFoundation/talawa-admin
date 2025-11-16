@@ -372,7 +372,6 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
               data-testid="eventTitleInput"
               data-cy="eventTitleInput"
               autoComplete="off"
-              required
               value={formState.name}
               className={styles.inputField}
               onChange={(e): void => {
@@ -387,7 +386,6 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
               data-testid="eventDescriptionInput"
               data-cy="eventDescriptionInput"
               autoComplete="off"
-              required
               value={formState.eventdescrip}
               className={styles.inputField}
               onChange={(e): void => {
@@ -402,7 +400,6 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
               data-testid="eventLocationInput"
               data-cy="eventLocationInput"
               autoComplete="off"
-              required
               value={formState.location}
               className={styles.inputField}
               onChange={(e): void => {
