@@ -2041,6 +2041,14 @@ export interface InterfaceQueryUserListItem {
       };
     }[];
   };
+  /**
+   * Optional app user profile with administrative metadata.
+   * Note: This field is present in several GraphQL responses and is optional.
+   */
+  appUserProfile?: {
+    isSuperAdmin?: boolean;
+    adminFor?: Array<{ _id: string }>;
+  };
 }
 
 /**
