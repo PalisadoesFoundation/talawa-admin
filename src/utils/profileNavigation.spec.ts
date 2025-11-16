@@ -71,4 +71,34 @@ describe('resolveProfileNavigation', () => {
       }),
     ).toBe('/user/settings');
   });
+
+  it('routes to user settings when role is explicitly user', () => {
+    expect(
+      resolveProfileNavigation({
+        portal: 'admin',
+        role: 'user',
+        orgId: '999',
+      }),
+    ).toBe('/user/settings');
+  });
+
+  it('normalizes Administrator role and routes to member by org', () => {
+    expect(
+      resolveProfileNavigation({
+        portal: 'admin',
+        role: 'Administrator',
+        orgId: '42',
+      }),
+    ).toBe('/member/42');
+  });
+
+  it('defaults portal to admin when undefined', () => {
+    expect(
+      resolveProfileNavigation({
+        // portal omitted to use default
+        role: 'administrator',
+        orgId: '7',
+      }),
+    ).toBe('/member/7');
+  });
 });

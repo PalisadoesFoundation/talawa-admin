@@ -134,7 +134,7 @@ Renders a loading spinner inside the button when true.
 
 ### onChange()?
 
-> `optional` **onChange**: (`value`, `event`) => `void`
+> `optional` **onChange**: (`value`, `event?`) => `void`
 
 Defined in: [src/types/SearchBar/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L39)
 
@@ -146,7 +146,7 @@ Callback fired whenever the input value changes.
 
 `string`
 
-##### event
+##### event?
 
 `ChangeEvent`\<`HTMLInputElement`\>
 

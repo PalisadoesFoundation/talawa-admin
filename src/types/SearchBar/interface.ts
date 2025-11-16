@@ -36,7 +36,7 @@ export interface InterfaceSearchBarProps
   /** Callback invoked when the user submits a search via button, Enter, or clear. */
   onSearch?: (value: string, metadata?: InterfaceSearchMeta) => void;
   /** Callback fired whenever the input value changes. */
-  onChange?: (value: string, event: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (value: string, event?: ChangeEvent<HTMLInputElement>) => void;
   /** Callback fired after the clear button is pressed. */
   onClear?: () => void;
   /** Additional class applied to the container. */

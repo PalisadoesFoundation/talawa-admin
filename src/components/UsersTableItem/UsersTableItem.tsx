@@ -117,14 +117,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   }
 
   // If there is a super admin notion, adapt this logic to your API.
-  const appUserProfile = (
-    user as unknown as {
-      appUserProfile?: {
-        isSuperAdmin?: boolean;
-        adminFor?: Array<{ _id: string }>;
-      };
-    }
-  ).appUserProfile;
+  const appUserProfile = user.appUserProfile;
   const isSuperAdmin = appUserProfile?.isSuperAdmin ?? false;
 
   return (
