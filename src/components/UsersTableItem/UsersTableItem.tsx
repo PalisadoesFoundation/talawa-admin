@@ -163,6 +163,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                 value={searchByNameJoinedOrgs}
                 onChange={searchJoinedOrgs}
                 onSearch={searchJoinedOrgs}
+                onClear={() => searchJoinedOrgs('')}
                 inputTestId="searchByNameJoinedOrgs"
                 buttonTestId="searchBtnJoinedOrgs"
               />

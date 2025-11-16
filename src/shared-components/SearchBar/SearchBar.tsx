@@ -194,7 +194,7 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
     const LeadingIcon = icon ?? <SearchIcon fontSize="small" />;
 
     return (
-      <div className={containerClassName} role="search">
+      <div className={containerClassName}>
         <div className={wrapperClassName}>
           {showLeadingIcon && (
             <span className={styles.searchBarIcon} aria-hidden="true">
