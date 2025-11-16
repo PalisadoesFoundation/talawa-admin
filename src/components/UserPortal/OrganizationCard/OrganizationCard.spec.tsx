@@ -19,7 +19,7 @@ import {
 import { InterfaceOrganizationCardProps } from 'types/Organization/interface';
 
 // Mock hooks
-const mockGetItem = vi.fn();
+let mockGetItem: ReturnType<typeof vi.fn>;
 vi.mock('utils/useLocalstorage', () => ({
   getItem: () => mockGetItem(),
   setItem: vi.fn(),
@@ -32,7 +32,7 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-const mockNavigate = vi.fn();
+let mockNavigate: ReturnType<typeof vi.fn>;
 vi.mock('react-router', () => {
   const actual = vi.importActual('react-router');
   return {
@@ -233,7 +233,12 @@ const defaultProps: InterfaceOrganizationCardProps = {
 describe('OrganizationCard Component with New Interface', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockGetItem = vi.fn();
+    mockNavigate = vi.fn();
     mockGetItem.mockReturnValue('mockUserId');
+  });
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   // Basic Rendering Tests

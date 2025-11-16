@@ -13,7 +13,7 @@ vi.mock('utils/useLocalstorage', () => ({
   }),
 }));
 
-const mockNavigate = vi.fn();
+let mockNavigate: ReturnType<typeof vi.fn>;
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
@@ -71,7 +71,11 @@ const generateNotifications = (
 
 describe('NotificationIcon Component', () => {
   beforeEach(() => {
-    mockNavigate.mockClear();
+    mockNavigate = vi.fn();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('should render loading state', async () => {

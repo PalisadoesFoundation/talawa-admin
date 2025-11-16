@@ -23,9 +23,9 @@ import type { MockedFunction } from 'vitest';
 import { describe, test, expect, vi } from 'vitest';
 import { mockFormState1, mockAgendaItemCategories } from '../AgendaItemsMocks';
 
-const mockHideCreateModal = vi.fn();
-const mockSetFormState = vi.fn();
-const mockCreateAgendaItemHandler = vi.fn();
+let mockHideCreateModal: ReturnType<typeof vi.fn>;
+let mockSetFormState: ReturnType<typeof vi.fn>;
+let mockCreateAgendaItemHandler: ReturnType<typeof vi.fn>;
 const mockT = (key: string): string => key;
 
 vi.mock('react-toastify', () => ({
@@ -35,11 +35,22 @@ vi.mock('react-toastify', () => ({
   },
 }));
 vi.mock('utils/convertToBase64');
-const mockedConvertToBase64 = convertToBase64 as MockedFunction<
-  typeof convertToBase64
->;
+let mockedConvertToBase64: MockedFunction<typeof convertToBase64>;
 
 describe('AgendaItemsCreateModal', () => {
+  beforeEach(() => {
+    mockHideCreateModal = vi.fn();
+    mockSetFormState = vi.fn();
+    mockCreateAgendaItemHandler = vi.fn();
+    mockedConvertToBase64 = convertToBase64 as MockedFunction<
+      typeof convertToBase64
+    >;
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   test('renders modal correctly', () => {
     render(
       <MockedProvider addTypename={false}>

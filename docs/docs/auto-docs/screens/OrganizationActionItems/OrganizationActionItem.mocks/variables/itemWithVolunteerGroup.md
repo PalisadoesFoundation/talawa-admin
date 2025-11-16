@@ -6,7 +6,7 @@
 
 > `const` **itemWithVolunteerGroup**: `object`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:184](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L184)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:185](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L185)
 
 ## Type Declaration
 

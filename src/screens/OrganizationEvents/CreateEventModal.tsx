@@ -336,13 +336,6 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
           errorHandler(t, error);
         }
       }
-    } else {
-      if (formState.name.trim().length === 0)
-        toast.warning('Name can not be blank!');
-      if (formState.eventdescrip.trim().length === 0)
-        toast.warning('Description can not be blank!');
-      if (formState.location.trim().length === 0)
-        toast.warning('Location can not be blank!');
     }
   };
 

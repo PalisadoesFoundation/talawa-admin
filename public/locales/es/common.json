@@ -62,6 +62,7 @@
   "Venues": "Lugares",
   "Action Items": "Elementos de Acción",
   "Posts": "Publicaciones",
+  "Chat": "Chat",
   "Block/Unblock": "Bloquear/Desbloquear",
   "Advertisement": "Publicidad",
   "Funds": "Fondos",
@@ -98,5 +99,7 @@
   "createdLatest": "Creado más reciente",
   "createdEarliest": "Creado más temprano",
   "searchBy": "Buscar por {{item}}",
-  "plugins": "Complementos"
+  "plugins": "Complementos",
+  "save": "Guardar",
+  "saving": "Guardando..."
 }

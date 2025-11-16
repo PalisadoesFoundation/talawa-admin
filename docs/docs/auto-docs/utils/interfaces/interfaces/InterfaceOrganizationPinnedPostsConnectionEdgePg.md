@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationPinnedPostsConnectionEdgePg
 
-Defined in: [src/utils/interfaces.ts:1074](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1074)
+Defined in: [src/utils/interfaces.ts:1075](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1075)
 
 InterfaceOrganizationPinnedPostsConnectionEdgePg
 
@@ -18,7 +18,7 @@ Defines the structure for an edge in the organization pinned posts connection wi
 
 > **cursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:1075](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1075)
+Defined in: [src/utils/interfaces.ts:1076](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1076)
 
 The cursor for this edge.
 
@@ -28,6 +28,6 @@ The cursor for this edge.
 
 > **node**: [`InterfacePostPg`](InterfacePostPg.md)
 
-Defined in: [src/utils/interfaces.ts:1076](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1076)
+Defined in: [src/utils/interfaces.ts:1077](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1077)
 
 The post node.

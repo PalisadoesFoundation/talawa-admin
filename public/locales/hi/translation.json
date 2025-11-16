@@ -1594,5 +1594,17 @@
     "installPluginsToSeeHere": "प्लगइन देखने के लिए उन्हें स्थापित करें",
     "checkBackLater": "नए प्लगइन के लिए बाद में जांचें",
     "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला"
+  },
+  "commentCard": {
+    "commentDeletedSuccessfully": "टिप्पणी सफलतापूर्वक हटा दी गई",
+    "commentUpdatedSuccessfully": "टिप्पणी सफलतापूर्वक अपडेट की गई",
+    "pleaseSignInToLikeComments": "कृपया टिप्पणियों को पसंद करने के लिए साइन इन करें।",
+    "couldNotRemoveExistingLike": "हटाने के लिए कोई मौजूदा पसंद नहीं मिली।",
+    "alreadyLikedComment": "आपने पहले से ही इस टिप्पणी को पसंद किया है।",
+    "noAssociatedVoteFound": "हटाने के लिए कोई संबंधित वोट नहीं मिला।",
+    "editComment": "टिप्पणी संपादित करें",
+    "deleteComment": "टिप्पणी हटाएं",
+    "deleting": "हटाया जा रहा है…",
+    "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।"
   }
 }
