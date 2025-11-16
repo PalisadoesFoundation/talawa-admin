@@ -49,7 +49,7 @@ interface InterfaceProfileDropdownProps {
   portal?: 'admin' | 'user';
 }
 
-const profileDropdown = ({
+const ProfileDropdown = ({
   portal = 'admin',
 }: InterfaceProfileDropdownProps): JSX.Element => {
   const { endSession } = useSession();
@@ -142,4 +142,4 @@ const profileDropdown = ({
   );
 };
 
-export default profileDropdown;
+export default ProfileDropdown;

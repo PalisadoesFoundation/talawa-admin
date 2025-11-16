@@ -73,6 +73,10 @@ afterEach(() => {
   vi.restoreAllMocks();
   localStorage.clear();
 });
+afterAll(() => {
+  // Ensure any global stubs are cleaned up for other test files
+  vi.unstubAllGlobals();
+});
 
 describe('ProfileDropdown Component', () => {
   test('renders with user information', () => {

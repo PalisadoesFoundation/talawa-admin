@@ -99,6 +99,13 @@ export default function Advertisements(): JSX.Element {
   const [activeAdvertisements, setActiveAdvertisements] = useState<
     Advertisement[]
   >([]);
+  // Keep source arrays to avoid destructive filtering on repeated searches
+  const [allCompletedAdvertisements, setAllCompletedAdvertisements] = useState<
+    Advertisement[]
+  >([]);
+  const [allActiveAdvertisements, setAllActiveAdvertisements] = useState<
+    Advertisement[]
+  >([]);
 
   useEffect(() => {
     if (
@@ -108,14 +115,12 @@ export default function Advertisements(): JSX.Element {
         orgCompletedAdvertisementListData.organization.advertisements.edges.map(
           (edge: { node: Advertisement }) => edge.node,
         );
-      if (afterCompleted) {
-        setCompletedAdvertisements((prevAds) => {
-          const unique = mergedAdvertisements(prevAds, ads);
-          return unique;
-        });
-      } else {
-        setCompletedAdvertisements(ads);
-      }
+      setAllCompletedAdvertisements((prev) =>
+        afterCompleted ? mergedAdvertisements(prev, ads) : ads,
+      );
+      setCompletedAdvertisements((prev) =>
+        afterCompleted ? mergedAdvertisements(prev, ads) : ads,
+      );
     }
   }, [orgCompletedAdvertisementListData, afterCompleted]);
 
@@ -125,14 +130,12 @@ export default function Advertisements(): JSX.Element {
         orgActiveAdvertisementListData.organization.advertisements.edges.map(
           (edge: { node: Advertisement }) => edge.node,
         );
-      if (afterActive) {
-        setActiveAdvertisements((prevAds) => {
-          const unique = mergedAdvertisements(prevAds, ads);
-          return unique;
-        });
-      } else {
-        setActiveAdvertisements(ads);
-      }
+      setAllActiveAdvertisements((prev) =>
+        afterActive ? mergedAdvertisements(prev, ads) : ads,
+      );
+      setActiveAdvertisements((prev) =>
+        afterActive ? mergedAdvertisements(prev, ads) : ads,
+      );
     }
   }, [orgActiveAdvertisementListData, afterActive]);
 
@@ -191,7 +194,7 @@ export default function Advertisements(): JSX.Element {
               onSearch={(value) => {
                 const searchValue = value.toLowerCase();
                 const filteredActiveAds =
-                  activeAdvertisements.filter(
+                  allActiveAdvertisements.filter(
                     (ad: Advertisement) =>
                       ad.name.toLowerCase().includes(searchValue) ||
                       (ad.description ?? '')
@@ -199,7 +202,7 @@ export default function Advertisements(): JSX.Element {
                         .includes(searchValue),
                   ) || [];
                 const filteredCompletedAds =
-                  completedAdvertisements.filter(
+                  allCompletedAdvertisements.filter(
                     (ad: Advertisement) =>
                       ad.name.toLowerCase().includes(searchValue) ||
                       (ad.description ?? '')
