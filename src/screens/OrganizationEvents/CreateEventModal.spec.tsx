@@ -387,6 +387,36 @@ describe('CreateEventModal', () => {
     expect(toast.warning).toHaveBeenCalledWith('Name can not be blank!');
   });
 
+  test('shows warning for whitespace-only description', async () => {
+    renderComponent();
+    await userEvent.type(screen.getByTestId('eventTitleInput'), 'Valid Name');
+    const descInput = screen.getByTestId('eventDescriptionInput');
+    fireEvent.change(descInput, { target: { value: '   ' } });
+    await userEvent.type(
+      screen.getByTestId('eventLocationInput'),
+      'Valid Location',
+    );
+    const submitBtn = screen.getByTestId('createEventBtn');
+    const form = submitBtn.closest('form');
+    if (form) fireEvent.submit(form);
+    expect(toast.warning).toHaveBeenCalledWith('Description can not be blank!');
+  });
+
+  test('shows warning for whitespace-only location', async () => {
+    renderComponent();
+    await userEvent.type(screen.getByTestId('eventTitleInput'), 'Valid Name');
+    await userEvent.type(
+      screen.getByTestId('eventDescriptionInput'),
+      'Valid Description',
+    );
+    const locationInput = screen.getByTestId('eventLocationInput');
+    fireEvent.change(locationInput, { target: { value: '   ' } });
+    const submitBtn = screen.getByTestId('createEventBtn');
+    const form = submitBtn.closest('form');
+    if (form) fireEvent.submit(form);
+    expect(toast.warning).toHaveBeenCalledWith('Location can not be blank!');
+  });
+
   test('auto-corrects end date when start date is after end date', async () => {
     renderComponent();
     const startDatePicker = screen.getByTestId('date-picker-Start Date');
@@ -454,11 +484,9 @@ describe('CreateEventModal', () => {
     fireEvent.change(locInput, { target: { value: 'Loc' } });
 
     const dropdown = screen.getByTestId('recurrenceDropdown');
-    fireEvent.click(dropdown);
-    await waitFor(() => {
-      const dailyOption = screen.queryByTestId('recurrenceOption-1');
-      if (dailyOption) fireEvent.click(dailyOption);
-    });
+    await userEvent.click(dropdown);
+    const dailyOption = await screen.findByTestId('recurrenceOption-1');
+    await userEvent.click(dailyOption);
 
     const submitBtn = screen.getByTestId('createEventBtn');
     const form = submitBtn.closest('form');
@@ -473,11 +501,9 @@ describe('CreateEventModal', () => {
     renderComponent();
     const dropdown = screen.getByTestId('recurrenceDropdown');
     expect(dropdown).toHaveTextContent('Does not repeat');
-    fireEvent.click(dropdown);
-    await waitFor(() => {
-      const dailyOption = screen.queryByTestId('recurrenceOption-1');
-      if (dailyOption) fireEvent.click(dailyOption);
-    });
+    await userEvent.click(dropdown);
+    const dailyOption = await screen.findByTestId('recurrenceOption-1');
+    await userEvent.click(dailyOption);
     await waitFor(() => {
       expect(dropdown).toHaveTextContent('Daily');
     });
@@ -486,11 +512,9 @@ describe('CreateEventModal', () => {
   test('verifies recurrence state updates for weekly option', async () => {
     renderComponent();
     const dropdown = screen.getByTestId('recurrenceDropdown');
-    fireEvent.click(dropdown);
-    await waitFor(() => {
-      const weeklyOption = screen.queryByTestId('recurrenceOption-2');
-      if (weeklyOption) fireEvent.click(weeklyOption);
-    });
+    await userEvent.click(dropdown);
+    const weeklyOption = await screen.findByTestId('recurrenceOption-2');
+    await userEvent.click(weeklyOption);
     await waitFor(() => {
       expect(dropdown).toHaveTextContent(/Weekly on/);
     });
@@ -499,11 +523,9 @@ describe('CreateEventModal', () => {
   test('verifies recurrence state updates for monthly option', async () => {
     renderComponent();
     const dropdown = screen.getByTestId('recurrenceDropdown');
-    fireEvent.click(dropdown);
-    await waitFor(() => {
-      const monthlyOption = screen.queryByTestId('recurrenceOption-3');
-      if (monthlyOption) fireEvent.click(monthlyOption);
-    });
+    await userEvent.click(dropdown);
+    const monthlyOption = await screen.findByTestId('recurrenceOption-3');
+    await userEvent.click(monthlyOption);
     await waitFor(() => {
       expect(dropdown).toHaveTextContent(/Monthly on day/);
     });
@@ -574,7 +596,7 @@ describe('CreateEventModal', () => {
     expect(onClose).toHaveBeenCalled();
   });
 
-  test('creates event with non-allDay time selection', async () => {
+  test('shows and enables time pickers when allDay is unchecked', async () => {
     const onClose = vi.fn();
     const onEventCreated = vi.fn();
 
@@ -716,12 +738,9 @@ describe('CreateEventModal', () => {
     );
 
     const dropdown = screen.getByTestId('recurrenceDropdown');
-    fireEvent.click(dropdown);
-
-    await waitFor(() => {
-      const dailyOption = screen.queryByTestId('recurrenceOption-1');
-      if (dailyOption) fireEvent.click(dailyOption);
-    });
+    await userEvent.click(dropdown);
+    const dailyOption = await screen.findByTestId('recurrenceOption-1');
+    await userEvent.click(dailyOption);
 
     await userEvent.click(screen.getByTestId('createEventBtn'));
 
