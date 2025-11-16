@@ -42,7 +42,7 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-const mockUseMutation = vi.fn();
+let mockUseMutation: ReturnType<typeof vi.fn>;
 vi.mock('@apollo/client', async () => {
   const actual = await vi.importActual('@apollo/client');
   return {
@@ -73,11 +73,10 @@ const translations = {
 
 describe('Testing Advertisement Register Component', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    mockUseMutation = vi.fn();
     mockUseMutation.mockReturnValue([vi.fn()]);
   });
   afterEach(() => {
-    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
   test('AdvertismentRegister component loads correctly in register mode', async () => {

@@ -22,8 +22,8 @@ import { vi } from 'vitest'; // Use Vitest's mocking utility
  */
 
 // Mock functions
-const mockToggleDeleteModal = vi.fn();
-const mockDeleteAgendaCategoryHandler = vi.fn();
+let mockToggleDeleteModal: ReturnType<typeof vi.fn>;
+let mockDeleteAgendaCategoryHandler: ReturnType<typeof vi.fn>;
 const mockT = (key: string): string => key;
 
 const renderComponent = (isOpen: boolean): ReturnType<typeof render> => {
@@ -48,8 +48,16 @@ const renderComponent = (isOpen: boolean): ReturnType<typeof render> => {
   );
 };
 
-describe('AgendaCategoryDeleteModal Component', () => {
-  test('renders modal when open', () => {
+describe('AgendaCategoryDeleteModal', () => {
+  beforeEach(() => {
+    mockToggleDeleteModal = vi.fn();
+    mockDeleteAgendaCategoryHandler = vi.fn();
+  });
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('renders the modal when open', () => {
     renderComponent(true);
     expect(screen.getByText('deleteAgendaCategory')).toBeInTheDocument();
     expect(screen.getByText('deleteAgendaCategoryMsg')).toBeInTheDocument();

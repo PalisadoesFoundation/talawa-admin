@@ -22,8 +22,7 @@ vi.mock('react-router', async () => {
   };
 });
 
-// Mock useLocalStorage
-const mockGetItem = vi.fn();
+let mockGetItem: ReturnType<typeof vi.fn>;
 vi.mock('utils/useLocalstorage', () => ({
   default: () => ({
     getItem: mockGetItem,
@@ -49,9 +48,14 @@ describe('EventAttendedCard', () => {
   };
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    mockGetItem = vi.fn();
     // Default to administrator role
     mockGetItem.mockReturnValue('administrator');
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   describe('Basic rendering', () => {
