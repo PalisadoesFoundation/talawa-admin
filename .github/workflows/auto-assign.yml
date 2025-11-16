@@ -130,7 +130,7 @@ jobs:
                   owner,
                   repo,
                   issue_number: issueNumber,
-                  body: `❌ @${user} First time contributors cannot use auto assignment. Please ask to be assigned instead.`,
+                  body: `❌ @${user} First time contributors cannot use auto assignment. You have not successfully merged code into the repository. Please ask to be assigned instead.`,
                 });
                 return;
               }    
