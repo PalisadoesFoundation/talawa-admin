@@ -112,6 +112,28 @@ beforeEach(() => {
   };
 });
 
+const mockDeleteForInstance = [
+  {
+    request: {
+      query: DELETE_VOLUNTEER_FOR_INSTANCE,
+      variables: {
+        input: {
+          volunteerId: itemProps[0].volunteer.id,
+          recurringEventInstanceId: 'recurringEventId1',
+        },
+      },
+    },
+    result: {
+      data: {
+        deleteEventVolunteerForInstance: {
+          id: itemProps[0].volunteer.id,
+        },
+      },
+    },
+  },
+];
+const linkInstanceDelete = new StaticMockLink(mockDeleteForInstance);
+
 const renderVolunteerDeleteModal = (
   link: ApolloLink,
   props: InterfaceDeleteVolunteerModal,
@@ -170,6 +192,36 @@ describe('Testing Volunteer Delete Modal', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
+    });
+  });
+
+  it('Delete Volunteer for a recurring event instance only', async () => {
+    renderVolunteerDeleteModal(linkInstanceDelete, recurringItemProps);
+
+    // Click "instance" radio to cover its onChange handler
+    const instanceRadio = screen.getByTestId('deleteApplyToInstance');
+    await userEvent.click(instanceRadio);
+    expect(instanceRadio).toBeChecked();
+
+    // Click "series" radio to cover its onChange handler
+    const seriesRadio = screen.getByTestId('deleteApplyToSeries');
+    await userEvent.click(seriesRadio);
+    expect(seriesRadio).toBeChecked();
+
+    // Set state back to "instance" for the delete action
+    await userEvent.click(instanceRadio);
+    expect(instanceRadio).toBeChecked();
+
+    // Find and click the delete button
+    const yesBtn = screen.getByTestId('deleteyesbtn');
+    expect(yesBtn).toBeInTheDocument();
+    await userEvent.click(yesBtn);
+
+    // Assert the results
+    await waitFor(() => {
+      expect(recurringItemProps.refetchVolunteers).toHaveBeenCalled();
+      expect(recurringItemProps.hide).toHaveBeenCalled();
+      expect(toast.success).toHaveBeenCalledWith(t.volunteerRemoved);
     });
   });
 
