@@ -25,7 +25,7 @@ import type {
   InterfacePost,
 } from '../../types/Post/interface';
 import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
-import PageHeader from 'screens/components/Navbar';
+import PageHeader from 'shared-components/Navbar/Navbar';
 import AddIcon from '@mui/icons-material/Add';
 
 /**

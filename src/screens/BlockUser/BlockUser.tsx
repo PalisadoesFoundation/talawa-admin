@@ -66,7 +66,7 @@ import type {
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan, faUserPlus } from '@fortawesome/free-solid-svg-icons';
-import PageHeader from 'screens/components/Navbar';
+import PageHeader from 'shared-components/Navbar/Navbar';
 
 const BlockUser = (): JSX.Element => {
   // Translation hooks for internationalization

@@ -68,7 +68,7 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import PageHeader from 'screens/components/Navbar';
+import PageHeader from 'shared-components/Navbar/Navbar';
 
 interface InterfaceRequestsListItem {
   membershipRequestId: string;
