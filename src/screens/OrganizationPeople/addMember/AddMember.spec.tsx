@@ -1014,3 +1014,109 @@ test('triggers PageHeader search and fetches users correctly', async () => {
     screen.queryByText(/Error occurred.*fetching Users/i),
   ).not.toBeInTheDocument();
 });
+
+test('handles PageHeader search with empty value', async () => {
+  const orgId = 'org123';
+
+  const initialMock = createUserListMock({
+    first: 10,
+    after: null,
+    last: null,
+    before: null,
+  });
+
+  // Mock for search with empty value (should pass undefined instead of where clause)
+  const emptySearchMock = createUserListMock({
+    first: 10,
+    after: null,
+    last: null,
+    before: null,
+  });
+
+  const mocks = [createOrganizationsMock(orgId), initialMock, emptySearchMock];
+
+  render(
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
+        <I18nextProvider i18n={i18nForTest}>
+          <AddMember />
+        </I18nextProvider>
+      </MemoryRouter>
+    </MockedProvider>,
+  );
+
+  // Wait for component to load
+  const addMembersButton = await screen.findByTestId('addMembers');
+  expect(addMembersButton).toBeInTheDocument();
+
+  // Find the search input in PageHeader
+  const searchInput = screen.getByPlaceholderText('Enter Full Name');
+
+  // Type a search value
+  fireEvent.change(searchInput, { target: { value: 'Test User' } });
+
+  // Wait for the search to trigger
+  await waitFor(() => {
+    expect(searchInput).toHaveValue('Test User');
+  });
+
+  // Clear the search (this will test the undefined path on line 306)
+  fireEvent.change(searchInput, { target: { value: '' } });
+
+  await waitFor(() => {
+    expect(searchInput).toHaveValue('');
+  });
+
+  // Verify component is still functional
+  expect(addMembersButton).toBeInTheDocument();
+});
+
+test('handles PageHeader search with non-empty value', async () => {
+  const orgId = 'org123';
+
+  const initialMock = createUserListMock({
+    first: 10,
+    after: null,
+    last: null,
+    before: null,
+  });
+
+  // Mock for search with a specific name
+  const searchMock = createUserListMock({
+    first: 10,
+    where: { name: 'John' },
+    after: null,
+    last: null,
+    before: null,
+  });
+
+  const mocks = [createOrganizationsMock(orgId), initialMock, searchMock];
+
+  render(
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
+        <I18nextProvider i18n={i18nForTest}>
+          <AddMember />
+        </I18nextProvider>
+      </MemoryRouter>
+    </MockedProvider>,
+  );
+
+  // Wait for component to load
+  const addMembersButton = await screen.findByTestId('addMembers');
+  expect(addMembersButton).toBeInTheDocument();
+
+  // Find the search input in PageHeader
+  const searchInput = screen.getByPlaceholderText('Enter Full Name');
+
+  // Type a search value - this will trigger lines 300-306
+  fireEvent.change(searchInput, { target: { value: 'John' } });
+
+  // Wait for the search to complete
+  await waitFor(() => {
+    expect(searchInput).toHaveValue('John');
+  });
+
+  // Verify component is still functional
+  expect(addMembersButton).toBeInTheDocument();
+});
