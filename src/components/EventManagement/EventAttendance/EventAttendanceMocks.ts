@@ -65,12 +65,8 @@ export const MOCKS = [
               natalSex: null,
               birthDate: null,
               eventsAttended: [
-                {
-                  id: '660fdf7d2c1ef6c7db1649ad',
-                },
-                {
-                  id: '660fdd562c1ef6c7db1644f7',
-                },
+                { id: '660fdf7d2c1ef6c7db1649ad' },
+                { id: '660fdd562c1ef6c7db1644f7' },
               ],
             },
             {
@@ -82,11 +78,28 @@ export const MOCKS = [
               role: 'attendee',
               natalSex: null,
               birthDate: null,
-              eventsAttended: [
-                {
-                  id: '660fdf7d2c1ef6c7db1649ad',
-                },
-              ],
+              eventsAttended: [{ id: '660fdf7d2c1ef6c7db1649ad' }],
+            },
+
+            // covers all branches
+            {
+              id: '6589386a2caa9d8d69087486',
+              name: 'Tagged Member',
+              emailAddress: 'tagged@example.com',
+              avatarURL: null,
+              createdAt: new Date().toISOString(), // current year/month
+              role: 'attendee',
+              natalSex: null,
+              birthDate: null,
+              eventsAttended: null,
+
+              // covers: tagsAssignedWith.edges.map
+              tagsAssignedWith: {
+                edges: [
+                  { node: { name: 'Volunteer' } },
+                  { node: { name: 'Coordinator' } },
+                ],
+              },
             },
           ],
         },
