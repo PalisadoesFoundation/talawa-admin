@@ -1307,13 +1307,11 @@ describe('Calendar Component', () => {
     });
   });
 
-  it('renders correctly when eventData is null', async () => {
-    const mockRefetch = vi.fn();
-
+  it('renders safely when eventData is null (renders days and no-events panel)', async () => {
     const { container, findAllByTestId } = renderWithRouterAndPath(
       <Calendar
         eventData={null as unknown as InterfaceCalendarProps['eventData']}
-        refetchEvents={mockRefetch}
+        refetchEvents={vi.fn()}
         orgData={mockOrgData}
       />,
     );
@@ -1381,21 +1379,24 @@ describe('Calendar Component', () => {
       expect(screen.queryByText('Event B')).toBeInTheDocument(),
     );
 
-    // Event A should be collapsed now
     expect(screen.queryByText('Event A')).toBeNull();
   });
 
-  it('renders months that start on Sunday and expands events', async () => {
+  it('handles month layout correctly when month starts on Sunday', async () => {
+    // Find a month in the current year where the 1st is Sunday.
     const year = new Date().getFullYear();
     let sundayMonth = -1;
-
     for (let m = 0; m < 12; m++) {
       if (new Date(year, m, 1).getDay() === 0) {
         sundayMonth = m;
         break;
       }
     }
-    if (sundayMonth === -1) sundayMonth = 9; // fallback
+
+    if (sundayMonth === -1) {
+      console.warn('No Sunday-start month in current year — skipping test.');
+      return;
+    }
 
     const specialDate = new Date(year, sundayMonth, 1, 12);
     const specialEvent = {
@@ -1428,7 +1429,7 @@ describe('Calendar Component', () => {
     );
   });
 
-  it('handles malformed event date without crashing and does not render expand button for it', async () => {
+  it('handles malformed event dates without crashing and does not render an expand button', async () => {
     const malformedEvent = {
       ...mockEventData[0],
       id: 'bad-date',
@@ -1449,22 +1450,23 @@ describe('Calendar Component', () => {
 
     await findAllByTestId('day');
 
+    // strict check: malformed events must NOT get expand buttons
     const expandBtn = container.querySelector('[data-testid^="expand-btn-"]');
+    expect(expandBtn).toBeNull();
+
+    // instead they should fall back to a no-events button
     const noEventsBtn = container.querySelector(
       '[data-testid^="no-events-btn-"]',
     );
+    expect(noEventsBtn).toBeInTheDocument();
 
-    // Should not crash; should show fallback UI
-    expect(expandBtn || noEventsBtn).toBeTruthy();
-
-    if (expandBtn) {
-      await act(async () => fireEvent.click(expandBtn));
-      expect(screen.queryByText('BadDateEvent')).toBeNull();
-    } else if (noEventsBtn) {
+    if (noEventsBtn) {
       await act(async () => fireEvent.click(noEventsBtn));
       await waitFor(() =>
         expect(screen.getByText('No Event Available!')).toBeInTheDocument(),
       );
     }
+
+    expect(screen.queryByText('BadDateEvent')).toBeNull();
   });
 });
