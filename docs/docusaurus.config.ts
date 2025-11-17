@@ -40,7 +40,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: ({ docPath }: { docPath: String }) => {
+          editUrl: ({ docPath }: { docPath: string }) => {
             return `https://github.com/PalisadoesFoundation/talawa-admin/edit/develop/docs/docs/${docPath}`;
           },
         },
