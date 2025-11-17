@@ -31,6 +31,7 @@ const config: Config = {
     locales: ['en'],
   },
 
+  // Remote css file fetched from talawa-docs
   stylesheets: ['https://docs.talawa.io/css/styles-latest.css'],
 
   presets: [
@@ -39,7 +40,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: ({ docPath }) => {
+          editUrl: ({ docPath }: { docPath: String }) => {
             return `https://github.com/PalisadoesFoundation/talawa-admin/edit/develop/docs/docs/${docPath}`;
           },
         },
@@ -49,7 +50,8 @@ const config: Config = {
             'https://github.com/PalisadoesFoundation/talawa-admin/tree/develop/docs/docs',
         },
         theme: {
-          customCss: undefined,
+          // the custom css file is default css provided by docusaurus
+          customCss: require.resolve('./src/css/custom.css'),
         },
       },
     ],
