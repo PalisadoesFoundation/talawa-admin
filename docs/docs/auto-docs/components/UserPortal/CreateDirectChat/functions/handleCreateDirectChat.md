@@ -28,11 +28,11 @@ Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:98]
 
 ### createChat
 
-\{(`options?`): `Promise`\<`FetchResult`\<`unknown`\>\>; (`arg0`): `unknown`; \}
+\{(`options?`): `Promise`\<`FormattedExecutionResult`\<`unknown`, `Record`\<`string`, `any`\>\>\>; (`arg0`): `unknown`; \}
 
 ### createChatMembership
 
-\{(`options?`): `Promise`\<`FetchResult`\<`unknown`\>\>; (`arg0`): `unknown`; \}
+\{(`options?`): `Promise`\<`FormattedExecutionResult`\<`unknown`, `Record`\<`string`, `any`\>\>\>; (`arg0`): `unknown`; \}
 
 ### organizationId
 

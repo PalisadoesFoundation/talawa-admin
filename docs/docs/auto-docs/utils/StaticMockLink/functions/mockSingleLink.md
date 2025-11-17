@@ -12,7 +12,7 @@ Defined in: [src/utils/StaticMockLink.ts:169](https://github.com/PalisadoesFound
 
 ### mockedResponses
 
-...(`boolean` \| `MockedResponse`\<`Record`\<`string`, `any`\>, `Record`\<`string`, `any`\>\>)[]
+...`any`[]
 
 ## Returns
 

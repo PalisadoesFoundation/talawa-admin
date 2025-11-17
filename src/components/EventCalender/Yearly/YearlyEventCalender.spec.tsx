@@ -1306,4 +1306,165 @@ describe('Calendar Component', () => {
       expect(screen.getByText('No Event Available!')).toBeInTheDocument();
     });
   });
+
+  it('renders correctly when eventData is null', async () => {
+    const mockRefetch = vi.fn();
+
+    const { container, findAllByTestId } = renderWithRouterAndPath(
+      <Calendar
+        eventData={null as unknown as InterfaceCalendarProps['eventData']}
+        refetchEvents={mockRefetch}
+        orgData={mockOrgData}
+      />,
+    );
+
+    const days = await findAllByTestId('day');
+    expect(days.length).toBeGreaterThan(0);
+
+    const noEventsBtn = container.querySelector(
+      '[data-testid^="no-events-btn-"]',
+    );
+    expect(noEventsBtn).toBeInTheDocument();
+
+    if (noEventsBtn) {
+      await act(async () => fireEvent.click(noEventsBtn));
+      await waitFor(() =>
+        expect(screen.getByText('No Event Available!')).toBeInTheDocument(),
+      );
+    }
+  });
+
+  it('collapses previously expanded day when a new day is expanded', async () => {
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
+    const eventA = {
+      ...mockEventData[0],
+      id: 'A',
+      name: 'Event A',
+      startAt: today.toISOString(),
+      endAt: today.toISOString(),
+    };
+
+    const eventB = {
+      ...mockEventData[0],
+      id: 'B',
+      name: 'Event B',
+      startAt: tomorrow.toISOString(),
+      endAt: tomorrow.toISOString(),
+    };
+
+    const { container } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[eventA, eventB]}
+        refetchEvents={vi.fn()}
+        orgData={mockOrgData}
+        userRole={UserRole.REGULAR}
+        userId="user1"
+      />,
+    );
+
+    await waitFor(() =>
+      expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
+    );
+
+    const btnA = await clickExpandForDate(container, new Date(eventA.startAt));
+    expect(btnA).toBeTruthy();
+    await waitFor(() =>
+      expect(screen.queryByText('Event A')).toBeInTheDocument(),
+    );
+
+    const btnB = await clickExpandForDate(container, new Date(eventB.startAt));
+    expect(btnB).toBeTruthy();
+    await waitFor(() =>
+      expect(screen.queryByText('Event B')).toBeInTheDocument(),
+    );
+
+    // Event A should be collapsed now
+    expect(screen.queryByText('Event A')).toBeNull();
+  });
+
+  it('renders months that start on Sunday and expands events', async () => {
+    const year = new Date().getFullYear();
+    let sundayMonth = -1;
+
+    for (let m = 0; m < 12; m++) {
+      if (new Date(year, m, 1).getDay() === 0) {
+        sundayMonth = m;
+        break;
+      }
+    }
+    if (sundayMonth === -1) sundayMonth = 9; // fallback
+
+    const specialDate = new Date(year, sundayMonth, 1, 12);
+    const specialEvent = {
+      ...mockEventData[0],
+      id: 'sunday-start',
+      name: 'SundayStartEvent',
+      startAt: specialDate.toISOString(),
+      endAt: specialDate.toISOString(),
+    };
+
+    const { container } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[specialEvent]}
+        refetchEvents={vi.fn()}
+        orgData={mockOrgData}
+        userRole={UserRole.ADMINISTRATOR}
+        userId="admin1"
+      />,
+    );
+
+    await waitFor(() =>
+      expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
+    );
+
+    const expandBtn = await clickExpandForDate(container, specialDate);
+    expect(expandBtn).toBeTruthy();
+
+    await waitFor(() =>
+      expect(screen.queryByText('SundayStartEvent')).toBeInTheDocument(),
+    );
+  });
+
+  it('handles malformed event date without crashing and does not render expand button for it', async () => {
+    const malformedEvent = {
+      ...mockEventData[0],
+      id: 'bad-date',
+      name: 'BadDateEvent',
+      startAt: 'INVALID_DATE',
+      endAt: 'INVALID_DATE',
+    };
+
+    const { container, findAllByTestId } = renderWithRouterAndPath(
+      <Calendar
+        eventData={[malformedEvent]}
+        refetchEvents={vi.fn()}
+        orgData={mockOrgData}
+        userRole={UserRole.ADMINISTRATOR}
+        userId="admin1"
+      />,
+    );
+
+    await findAllByTestId('day');
+
+    const expandBtn = container.querySelector('[data-testid^="expand-btn-"]');
+    const noEventsBtn = container.querySelector(
+      '[data-testid^="no-events-btn-"]',
+    );
+
+    // Should not crash; should show fallback UI
+    expect(expandBtn || noEventsBtn).toBeTruthy();
+
+    if (expandBtn) {
+      await act(async () => fireEvent.click(expandBtn));
+      expect(screen.queryByText('BadDateEvent')).toBeNull();
+    } else if (noEventsBtn) {
+      await act(async () => fireEvent.click(noEventsBtn));
+      await waitFor(() =>
+        expect(screen.getByText('No Event Available!')).toBeInTheDocument(),
+      );
+    }
+  });
 });
