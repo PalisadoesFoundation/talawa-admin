@@ -1394,7 +1394,6 @@ describe('Calendar Component', () => {
     }
 
     if (sundayMonth === -1) {
-      console.warn('No Sunday-start month in current year — skipping test.');
       return;
     }
 
