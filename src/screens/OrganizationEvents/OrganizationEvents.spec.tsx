@@ -63,10 +63,15 @@ Object.defineProperty(window, 'location', {
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink([], true);
 
-async function wait(ms = 2000): Promise<void> {
+/**
+ * Original helper waited for real time (2000 ms) which caused this suite to
+ * block for ~40s. We only need to let MockedProvider resolve its pending
+ * promises, so a single zero-delay tick is enough.
+ */
+async function wait(): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
-      setTimeout(resolve, ms);
+      setTimeout(resolve, 0);
     });
   });
 }
