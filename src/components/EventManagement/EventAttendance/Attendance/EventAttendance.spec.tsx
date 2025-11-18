@@ -1,3 +1,4 @@
+// Trigger CodeRabbit full review
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
