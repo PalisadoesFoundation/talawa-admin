@@ -92,7 +92,7 @@
     "generate-docs": "typedoc && npm run postgenerate-docs && node scripts/docs/fix-readme-links.js",
     "cypress:run": "cypress run && nyc report --reporter=text-summary",
     "cypress:open": "cypress open",
-    "start-server": "start-server-and-test serve http://localhost:4321",
+    "start-server": "node scripts/start-server.js",
     "cy:open": "npm run start-server cypress:open",
     "cy:run": "cross-env CYPRESS_COVERAGE=true npm run start-server cypress:run",
     "check:pom": "node scripts/githooks/check_pom.js"
@@ -156,7 +156,6 @@
     "nyc": "^17.1.0",
     "prettier": "^3.6.2",
     "sass": "^1.93.3",
-    "start-server-and-test": "^2.0.12",
     "tsx": "^4.19.1",
     "typedoc": "^0.28.1",
     "typedoc-plugin-markdown": "^4.5.0",
