@@ -43,6 +43,18 @@ const renderEventAttendance = (): RenderResult => {
   );
 };
 
+const renderEventAttendanceWithSpy = (): RenderResult => {
+  return render(
+    <BrowserRouter>
+      <Provider store={store}>
+        <I18nextProvider i18n={i18n}>
+          <EventAttendance />
+        </I18nextProvider>
+      </Provider>
+    </BrowserRouter>,
+  );
+};
+
 function mockLazyQuery(returned: {
   data?: unknown;
   loading?: boolean;
@@ -104,8 +116,9 @@ describe('Event Attendance Component', () => {
       fireEvent.change(searchInput, { target: { value: 'Bruce' } });
 
       await waitFor(() => {
-        const filteredAttendee = screen.getByTestId('attendee-name-0');
-        expect(filteredAttendee).toHaveTextContent('Bruce Garza');
+        expect(screen.getByTestId('attendee-name-0')).toHaveTextContent(
+          'Bruce Garza',
+        );
       });
     });
   });
@@ -125,17 +138,14 @@ describe('Event Attendance Component', () => {
   it('Sort functionality changes attendee order (ascending)', async () => {
     renderEventAttendance();
 
-    await waitFor(() => {
-      expect(screen.getByTestId('table-header-row')).toBeInTheDocument();
-    });
+    await waitFor(() =>
+      expect(screen.getByTestId('table-header-row')).toBeInTheDocument(),
+    );
 
     const sortDropdown = screen.getByTestId('sort-dropdown');
     await userEvent.click(sortDropdown);
 
-    await waitFor(() => {
-      const sortOption = screen.getByText('Ascending');
-      userEvent.click(sortOption);
-    });
+    await userEvent.click(screen.getByText('Ascending'));
 
     await waitFor(() => {
       const attendees = screen.getAllByTestId(/^attendee-name-/);
@@ -151,8 +161,7 @@ describe('Event Attendance Component', () => {
     const sortDropdown = screen.getByTestId('sort-dropdown');
     await userEvent.click(sortDropdown);
 
-    const descendingOption = await screen.findByText('Descending');
-    await userEvent.click(descendingOption);
+    await userEvent.click(await screen.findByText('Descending'));
 
     await waitFor(() => {
       const attendees = screen.getAllByTestId(/^attendee-name-/);
@@ -169,9 +178,7 @@ describe('Event Attendance Component', () => {
 
     const filterDropdown = screen.getByTestId('filter-dropdown');
     await userEvent.click(filterDropdown);
-
-    const filterOption = screen.getByText('This Month');
-    await userEvent.click(filterOption);
+    await userEvent.click(screen.getByText('This Month'));
 
     await waitFor(() => {
       const attendees = screen.getAllByTestId(/^attendee-row-/);
@@ -186,9 +193,7 @@ describe('Event Attendance Component', () => {
 
     const filterDropdown = screen.getByTestId('filter-dropdown');
     await userEvent.click(filterDropdown);
-
-    const thisYearOption = screen.getByText('This Year');
-    await userEvent.click(thisYearOption);
+    await userEvent.click(screen.getByText('This Year'));
 
     await waitFor(() => {
       const rows = screen.getAllByTestId(/^attendee-row-/);
@@ -199,23 +204,21 @@ describe('Event Attendance Component', () => {
   it('Statistics modal opens and closes correctly', async () => {
     renderEventAttendance();
 
-    await waitFor(() => {
-      expect(screen.getByTestId('table-header-row')).toBeInTheDocument();
-    });
+    await waitFor(() =>
+      expect(screen.getByTestId('table-header-row')).toBeInTheDocument(),
+    );
 
-    const statsButton = screen.getByTestId('stats-modal');
-    await userEvent.click(statsButton);
+    await userEvent.click(screen.getByTestId('stats-modal'));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
-    });
+    await waitFor(() =>
+      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument(),
+    );
 
-    const closeButton = screen.getByTestId('close-button');
-    await userEvent.click(closeButton);
+    await userEvent.click(screen.getByTestId('close-button'));
 
-    await waitFor(() => {
-      expect(screen.queryByTestId('attendance-modal')).not.toBeInTheDocument();
-    });
+    await waitFor(() =>
+      expect(screen.queryByTestId('attendance-modal')).not.toBeInTheDocument(),
+    );
   });
 
   it('Handles members with no eventsAttended', async () => {
@@ -223,20 +226,15 @@ describe('Event Attendance Component', () => {
 
     await waitFor(() => screen.getByTestId('table-header-row'));
 
-    const zeroEventsCell = await screen.findByText('0');
-    expect(zeroEventsCell).toBeInTheDocument();
+    expect(await screen.findByText('0')).toBeInTheDocument();
   });
 
   it('Covers tagsAssignedWith branch without relying on text structure', async () => {
     renderEventAttendance();
 
-    await waitFor(() => {
-      expect(screen.getByTestId('table-header-row')).toBeInTheDocument();
-    });
+    await waitFor(() => screen.getByTestId('table-header-row'));
 
     const rows = await screen.findAllByTestId(/attendee-row-/);
-    expect(rows.length).toBeGreaterThan(0);
-
     const taggedRow = rows.find((row) => {
       const nameEl = row.querySelector("[data-testid^='attendee-name-']");
       return (nameEl?.textContent ?? '').trim() === 'Tagged Member';
@@ -247,11 +245,9 @@ describe('Event Attendance Component', () => {
 
     const scoped = within(taggedRow as HTMLElement);
     const taskCells = scoped.getAllByTestId(/^attendee-task-assigned-/);
-    expect(taskCells.length).toBeGreaterThan(0);
 
-    const taskCell = taskCells[0] as HTMLElement;
-    const divs = Array.from(taskCell.querySelectorAll('div'));
-    expect(divs.length).toBeGreaterThan(0);
+    expect(taskCells.length).toBeGreaterThan(0);
+    expect(taskCells[0].querySelectorAll('div').length).toBeGreaterThan(0);
   });
 
   it('Covers comparison===0 path in sortAttendees', async () => {
@@ -259,8 +255,9 @@ describe('Event Attendance Component', () => {
 
     await waitFor(() => screen.getByTestId('table-header-row'));
 
-    const searchInput = screen.getByTestId('searchByName');
-    fireEvent.change(searchInput, { target: { value: 'Tagged Member' } });
+    fireEvent.change(screen.getByTestId('searchByName'), {
+      target: { value: 'Tagged Member' },
+    });
 
     await waitFor(() => {
       const rows = screen.getAllByTestId(/^attendee-row-/);
@@ -269,26 +266,21 @@ describe('Event Attendance Component', () => {
   });
 
   it('shows loading state when query is loading', async () => {
-    mockLazyQuery({
-      loading: true,
-      data: undefined,
-    });
+    mockLazyQuery({ loading: true, data: undefined });
 
-    renderEventAttendance();
+    renderEventAttendanceWithSpy();
 
     expect(await screen.findByText(/loading/i)).toBeInTheDocument();
   });
 
   it('shows error message when query errors', async () => {
-    const apolloErr = new ApolloError({ errorMessage: 'Network Error' });
-
     mockLazyQuery({
       loading: false,
       data: undefined,
-      error: apolloErr,
+      error: new ApolloError({ errorMessage: 'Network Error' }),
     });
 
-    renderEventAttendance();
+    renderEventAttendanceWithSpy();
 
     expect(await screen.findByText('Network Error')).toBeInTheDocument();
   });
@@ -296,19 +288,16 @@ describe('Event Attendance Component', () => {
   it('renders empty state when no attendees exist', async () => {
     mockLazyQuery({
       loading: false,
-      data: {
-        event: { attendees: [] },
-      },
+      data: { event: { attendees: [] } },
     });
 
-    renderEventAttendance();
+    renderEventAttendanceWithSpy();
 
     await waitFor(() =>
       expect(screen.getByTestId('table-header-row')).toBeInTheDocument(),
     );
 
-    const rows = screen.queryAllByTestId(/^attendee-row-/);
-    expect(rows).toHaveLength(0);
+    expect(screen.queryAllByTestId(/^attendee-row-/)).toHaveLength(0);
   });
 
   it('renders Admin label for administrator role', async () => {
@@ -330,7 +319,7 @@ describe('Event Attendance Component', () => {
       },
     });
 
-    renderEventAttendance();
+    renderEventAttendanceWithSpy();
 
     await waitFor(() =>
       expect(screen.getByTestId('table-header-row')).toBeInTheDocument(),
@@ -358,7 +347,7 @@ describe('Event Attendance Component', () => {
       },
     });
 
-    renderEventAttendance();
+    renderEventAttendanceWithSpy();
 
     await waitFor(() =>
       expect(screen.getByTestId('table-header-row')).toBeInTheDocument(),
@@ -382,8 +371,9 @@ describe('Event Attendance Component', () => {
       renderEventAttendance();
       const cells = await screen.findAllByTestId(/attendee-events-attended-/);
       cells.forEach((cell) => {
-        const span = cell.querySelector(`.${styles.eventsAttended}`);
-        expect(span).toBeInTheDocument();
+        expect(
+          cell.querySelector(`.${styles.eventsAttended}`),
+        ).toBeInTheDocument();
       });
     });
 
