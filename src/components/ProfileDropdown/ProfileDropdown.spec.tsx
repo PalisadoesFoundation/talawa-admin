@@ -163,44 +163,28 @@ describe('ProfileDropdown Component', () => {
     });
   });
 
-  describe.each([
-    {
-      title: 'regular user in default portal',
-      role: 'regular',
-      portal: undefined as 'user' | undefined,
-    },
-    {
-      title: 'administrator in user portal',
-      role: 'administrator',
-      portal: 'user' as 'user' | undefined,
-    },
-  ])('routes to /user/settings: $title', ({ role, portal }) => {
-    test('navigates correctly', async () => {
-      setItem('role', role);
-      render(
-        <MockedProvider mocks={MOCKS} addTypename={false}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              {portal ? (
-                <ProfileDropdown portal={portal} />
-              ) : (
-                <ProfileDropdown />
-              )}
-            </I18nextProvider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+  test('navigates to /user/settings for a user', async () => {
+    setItem('role', 'regular');
 
-      await act(async () => {
-        await userEvent.click(screen.getByTestId('togDrop'));
-      });
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileDropdown />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
-      await act(async () => {
-        await userEvent.click(screen.getByTestId('profileBtn'));
-      });
-
-      expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('togDrop'));
     });
+
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('profileBtn'));
+    });
+
+    expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
   });
 
   test('navigates to /member/:orgId for non-user roles when orgId is not present', async () => {
@@ -259,5 +243,26 @@ describe('ProfileDropdown Component', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/member/321');
   });
 
-  // consolidated into parameterized block above
+  test('uses user settings route for admin when portal is user', async () => {
+    setItem('role', 'administrator');
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileDropdown portal="user" />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('togDrop'));
+    });
+
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('profileBtn'));
+    });
+
+    expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
+  });
 });

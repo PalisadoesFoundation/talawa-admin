@@ -79,8 +79,20 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
         if (!onChange) {
           return;
         }
-        // Pass through the native event when available; otherwise explicitly use undefined.
-        onChange(nextValue, event);
+        if (event) {
+          onChange(nextValue, event);
+          return;
+        }
+        const target = inputRef.current;
+        if (target) {
+          const syntheticEvent = {
+            target,
+            currentTarget: target,
+          } as React.ChangeEvent<HTMLInputElement>;
+          onChange(nextValue, syntheticEvent);
+        } else {
+          onChange(nextValue, {} as React.ChangeEvent<HTMLInputElement>);
+        }
       },
       [onChange],
     );
