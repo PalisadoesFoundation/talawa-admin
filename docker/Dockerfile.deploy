@@ -6,11 +6,15 @@
 #
 ###############################################################################
 FROM node:24 AS build
+
+ARG PORT=4321
+ENV PORT=${PORT}
+
 WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
 ENV NODE_ENV=production
-EXPOSE 4321
+EXPOSE ${PORT}
 CMD ["npm", "run", "serve"]
