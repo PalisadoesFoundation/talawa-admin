@@ -37,15 +37,7 @@ export interface InterfaceSearchBarProps
   onSearch?: (value: string, metadata?: InterfaceSearchMeta) => void;
   /** Callback fired whenever the input value changes. */
   onChange?: (value: string, event?: ChangeEvent<HTMLInputElement>) => void;
-  /**
-   * Callback fired after the clear button is pressed.
-   *
-   * @remarks
-   * The `SearchBar` will always invoke {@link onSearch} with an empty string
-   * when the clear button is clicked. To avoid duplicate work (for example,
-   * re‑fetching data twice), keep `onClear` side effects lightweight and let
-   * `onSearch('')` handle any expensive operations such as network requests.
-   */
+  /** Callback fired after the clear button is pressed. */
   onClear?: () => void;
   /** Additional class applied to the container. */
   className?: string;

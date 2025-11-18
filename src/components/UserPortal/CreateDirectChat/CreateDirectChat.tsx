@@ -247,7 +247,6 @@ export default function createDirectChatModal({
   const currentUserName = currentUser?.name || 'You';
 
   const handleUserModalSearchChange = (value: string): void => {
-    setUserName(value);
     const trimmedName = value.trim();
     allUsersRefetch({
       input: { id: organizationId },
@@ -279,8 +278,8 @@ export default function createDirectChatModal({
                 <SearchBar
                   placeholder="searchFullName"
                   value={userName}
-                  onChange={handleUserModalSearchChange}
-                  onSearch={handleUserModalSearchChange}
+                  onChange={(value) => setUserName(value)}
+                  onSearch={(value) => handleUserModalSearchChange(value)}
                   onClear={() => {
                     // Clearing the input is enough; SearchBar's clear action will
                     // also trigger onSearch('') which performs the refetch.
