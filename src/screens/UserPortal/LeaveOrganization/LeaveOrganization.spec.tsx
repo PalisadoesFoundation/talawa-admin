@@ -580,7 +580,7 @@ describe('LeaveOrganization Component', () => {
   test('handles missing organizationId or userId', async () => {
     // Mock useParams to return undefined orgId
     (useParams as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      orgId: undefined,
+      orgId: undefined as unknown as string,
     });
 
     // Render with mocks that don't depend on specific orgId

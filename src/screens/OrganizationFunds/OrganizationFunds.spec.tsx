@@ -93,7 +93,9 @@ describe('OrganizationFunds Screen =>', () => {
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
-    vi.mocked(useParams).mockReturnValue({});
+    vi.mocked(useParams).mockReturnValue({
+      orgId: undefined as unknown as string,
+    });
     render(
       <MockedProvider addTypename={false} link={link1}>
         <MemoryRouter initialEntries={['/orgfunds/']}>
