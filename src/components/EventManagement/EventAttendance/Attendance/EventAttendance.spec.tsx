@@ -43,20 +43,6 @@ const renderEventAttendance = (): RenderResult => {
   );
 };
 
-const renderEventAttendanceCSS = (): RenderResult => {
-  return render(
-    <MockedProvider mocks={MOCKS} addTypename={false}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18n}>
-            <EventAttendance />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-};
-
 function mockLazyQuery(returned: {
   data?: unknown;
   loading?: boolean;
@@ -132,7 +118,7 @@ describe('Event Attendance Component', () => {
 
     await waitFor(() => {
       const attendees = screen.getAllByTestId(/^attendee-name-/);
-      expect(attendees.length).toBeGreaterThan(0);
+      expect(attendees).toHaveLength(3); // All mock attendees contain example.com
     });
   });
 
@@ -189,7 +175,7 @@ describe('Event Attendance Component', () => {
 
     await waitFor(() => {
       const attendees = screen.getAllByTestId(/^attendee-row-/);
-      expect(attendees).toHaveLength(1);
+      expect(attendees).toHaveLength(1); // Only Tagged Member matches current month
     });
   });
 
@@ -244,7 +230,6 @@ describe('Event Attendance Component', () => {
   it('Covers tagsAssignedWith branch without relying on text structure', async () => {
     renderEventAttendance();
 
-    // Wait for table to load
     await waitFor(() => {
       expect(screen.getByTestId('table-header-row')).toBeInTheDocument();
     });
@@ -252,7 +237,6 @@ describe('Event Attendance Component', () => {
     const rows = await screen.findAllByTestId(/attendee-row-/);
     expect(rows.length).toBeGreaterThan(0);
 
-    // Find the specific row that contains Tagged Member by locating the attendee-name element
     const taggedRow = rows.find((row) => {
       const nameEl = row.querySelector("[data-testid^='attendee-name-']");
       return (nameEl?.textContent ?? '').trim() === 'Tagged Member';
@@ -275,13 +259,12 @@ describe('Event Attendance Component', () => {
 
     await waitFor(() => screen.getByTestId('table-header-row'));
 
-    // Enter same name to produce comparison=0
     const searchInput = screen.getByTestId('searchByName');
     fireEvent.change(searchInput, { target: { value: 'Tagged Member' } });
 
     await waitFor(() => {
       const rows = screen.getAllByTestId(/^attendee-row-/);
-      expect(rows.length).toBe(1); // comparison=0 hit
+      expect(rows.length).toBe(1);
     });
   });
 
@@ -353,8 +336,7 @@ describe('Event Attendance Component', () => {
       expect(screen.getByTestId('table-header-row')).toBeInTheDocument(),
     );
 
-    const statusCell = screen.getByTestId('attendee-status-0');
-    expect(statusCell).toHaveTextContent('Admin');
+    expect(screen.getByTestId('attendee-status-0')).toHaveTextContent('Admin');
   });
 
   it('renders "None" when tagsAssignedWith is missing', async () => {
@@ -382,14 +364,14 @@ describe('Event Attendance Component', () => {
       expect(screen.getByTestId('table-header-row')).toBeInTheDocument(),
     );
 
-    const taskCell = screen.getByTestId('attendee-task-assigned-0');
-    expect(taskCell).toHaveTextContent('None');
+    expect(screen.getByTestId('attendee-task-assigned-0')).toHaveTextContent(
+      'None',
+    );
   });
 
-  // CSS TESTS
   describe('EventAttendance CSS Tests', () => {
     it('should apply correct styles to member name links', async () => {
-      renderEventAttendanceCSS();
+      renderEventAttendance();
       const memberLinks = await screen.findAllByRole('link');
       memberLinks.forEach((link) => {
         expect(link).toHaveClass(styles.membername);
@@ -397,7 +379,7 @@ describe('Event Attendance Component', () => {
     });
 
     it('should style events attended count correctly', async () => {
-      renderEventAttendanceCSS();
+      renderEventAttendance();
       const cells = await screen.findAllByTestId(/attendee-events-attended-/);
       cells.forEach((cell) => {
         const span = cell.querySelector(`.${styles.eventsAttended}`);
@@ -406,7 +388,7 @@ describe('Event Attendance Component', () => {
     });
 
     it('should maintain consistent row spacing', async () => {
-      renderEventAttendanceCSS();
+      renderEventAttendance();
       const tableRows = await screen.findAllByTestId(/attendee-row-/);
       tableRows.forEach((row) => {
         expect(row).toHaveClass('my-6');
@@ -414,7 +396,7 @@ describe('Event Attendance Component', () => {
     });
 
     it('should apply tooltip styles correctly', async () => {
-      renderEventAttendanceCSS();
+      renderEventAttendance();
       const tooltipCells = await screen.findAllByTestId(
         /attendee-events-attended-\d+/,
       );
