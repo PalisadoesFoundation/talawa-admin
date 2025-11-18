@@ -81,19 +81,22 @@ export const MOCKS = [
               eventsAttended: [{ id: '660fdf7d2c1ef6c7db1649ad' }],
             },
 
-            // covers all branches
             {
               id: '6589386a2caa9d8d69087486',
               name: 'Tagged Member',
               emailAddress: 'tagged@example.com',
               avatarURL: null,
-              createdAt: new Date().toISOString(), // current year/month
+              // Fixed to current year/month to keep date-filter tests stable
+              createdAt: new Date(
+                new Date().getFullYear(),
+                new Date().getMonth(),
+                15,
+              ).toISOString(),
+
               role: 'attendee',
               natalSex: null,
               birthDate: null,
               eventsAttended: null,
-
-              // covers: tagsAssignedWith.edges.map
               tagsAssignedWith: {
                 edges: [
                   { node: { name: 'Volunteer' } },

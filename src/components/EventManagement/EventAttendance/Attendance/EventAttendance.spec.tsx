@@ -7,6 +7,7 @@ import {
   fireEvent,
   cleanup,
   waitFor,
+  within,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -18,6 +19,8 @@ import i18n from 'utils/i18nForTest';
 import { MOCKS } from '../EventAttendanceMocks';
 import { vi, describe, afterEach, expect, it } from 'vitest';
 import styles from 'style/app-fixed.module.css';
+import { ApolloError, useLazyQuery } from '@apollo/client';
+import * as ApolloClientModule from '@apollo/client';
 
 // Mock chart.js to avoid canvas errors
 vi.mock('react-chartjs-2', async () => ({
@@ -40,6 +43,39 @@ const renderEventAttendance = (): RenderResult => {
   );
 };
 
+const renderEventAttendanceCSS = (): RenderResult => {
+  return render(
+    <MockedProvider mocks={MOCKS} addTypename={false}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18n}>
+            <EventAttendance />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+};
+
+function mockLazyQuery(returned: {
+  data?: unknown;
+  loading?: boolean;
+  error?: ApolloError | null;
+}) {
+  vi.spyOn(ApolloClientModule, 'useLazyQuery').mockReturnValue([
+    () => {},
+    {
+      data: returned.data,
+      loading: returned.loading ?? false,
+      error: returned.error ?? undefined,
+      called: true,
+      client: undefined,
+      networkStatus: 7,
+      refetch: vi.fn(),
+    },
+  ] as unknown as ReturnType<typeof useLazyQuery>);
+}
+
 describe('Event Attendance Component', () => {
   beforeEach(() => {
     vi.mock('react-router', async () => ({
@@ -49,7 +85,7 @@ describe('Event Attendance Component', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     cleanup();
   });
 
@@ -134,7 +170,7 @@ describe('Event Attendance Component', () => {
 
     await waitFor(() => {
       const attendees = screen.getAllByTestId(/^attendee-name-/);
-      expect(attendees[0]).toHaveTextContent('Tagged Member'); // FIXED
+      expect(attendees[0]).toHaveTextContent('Tagged Member');
     });
   });
 
@@ -153,7 +189,7 @@ describe('Event Attendance Component', () => {
 
     await waitFor(() => {
       const attendees = screen.getAllByTestId(/^attendee-row-/);
-      expect(attendees).toHaveLength(1); // FIXED
+      expect(attendees).toHaveLength(1);
     });
   });
 
@@ -216,21 +252,20 @@ describe('Event Attendance Component', () => {
     const rows = await screen.findAllByTestId(/attendee-row-/);
     expect(rows.length).toBeGreaterThan(0);
 
-    // Find the specific row that contains Tagged Member
-    const taggedRow = rows.find((row) =>
-      (row.textContent ?? '').includes('Tagged Member'),
-    );
+    // Find the specific row that contains Tagged Member by locating the attendee-name element
+    const taggedRow = rows.find((row) => {
+      const nameEl = row.querySelector("[data-testid^='attendee-name-']");
+      return (nameEl?.textContent ?? '').trim() === 'Tagged Member';
+    });
 
-    expect(taggedRow).not.toBeUndefined();
+    expect(taggedRow).toBeDefined();
     if (!taggedRow) return;
 
-    const taskCells = taggedRow.querySelectorAll(
-      "[data-testid^='attendee-task-assigned-']",
-    );
+    const scoped = within(taggedRow as HTMLElement);
+    const taskCells = scoped.getAllByTestId(/^attendee-task-assigned-/);
     expect(taskCells.length).toBeGreaterThan(0);
 
     const taskCell = taskCells[0] as HTMLElement;
-
     const divs = Array.from(taskCell.querySelectorAll('div'));
     expect(divs.length).toBeGreaterThan(0);
   });
@@ -250,21 +285,109 @@ describe('Event Attendance Component', () => {
     });
   });
 
-  describe('EventAttendance CSS Tests', () => {
-    const renderEventAttendanceCSS = (): RenderResult => {
-      return render(
-        <MockedProvider mocks={MOCKS} addTypename={false}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18n}>
-                <EventAttendance />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-    };
+  it('shows loading state when query is loading', async () => {
+    mockLazyQuery({
+      loading: true,
+      data: undefined,
+    });
 
+    renderEventAttendance();
+
+    expect(await screen.findByText(/loading/i)).toBeInTheDocument();
+  });
+
+  it('shows error message when query errors', async () => {
+    const apolloErr = new ApolloError({ errorMessage: 'Network Error' });
+
+    mockLazyQuery({
+      loading: false,
+      data: undefined,
+      error: apolloErr,
+    });
+
+    renderEventAttendance();
+
+    expect(await screen.findByText('Network Error')).toBeInTheDocument();
+  });
+
+  it('renders empty state when no attendees exist', async () => {
+    mockLazyQuery({
+      loading: false,
+      data: {
+        event: { attendees: [] },
+      },
+    });
+
+    renderEventAttendance();
+
+    await waitFor(() =>
+      expect(screen.getByTestId('table-header-row')).toBeInTheDocument(),
+    );
+
+    const rows = screen.queryAllByTestId(/^attendee-row-/);
+    expect(rows).toHaveLength(0);
+  });
+
+  it('renders Admin label for administrator role', async () => {
+    mockLazyQuery({
+      loading: false,
+      data: {
+        event: {
+          attendees: [
+            {
+              id: 'admin1',
+              name: 'Admin User',
+              emailAddress: 'admin@example.com',
+              createdAt: '2030-04-13T10:23:17.742Z',
+              role: 'administrator',
+              eventsAttended: [],
+            },
+          ],
+        },
+      },
+    });
+
+    renderEventAttendance();
+
+    await waitFor(() =>
+      expect(screen.getByTestId('table-header-row')).toBeInTheDocument(),
+    );
+
+    const statusCell = screen.getByTestId('attendee-status-0');
+    expect(statusCell).toHaveTextContent('Admin');
+  });
+
+  it('renders "None" when tagsAssignedWith is missing', async () => {
+    mockLazyQuery({
+      loading: false,
+      data: {
+        event: {
+          attendees: [
+            {
+              id: 'no-tags-1',
+              name: 'No Tags User',
+              emailAddress: 'notags@example.com',
+              createdAt: '2030-04-13T10:23:17.742Z',
+              role: 'attendee',
+              eventsAttended: null,
+            },
+          ],
+        },
+      },
+    });
+
+    renderEventAttendance();
+
+    await waitFor(() =>
+      expect(screen.getByTestId('table-header-row')).toBeInTheDocument(),
+    );
+
+    const taskCell = screen.getByTestId('attendee-task-assigned-0');
+    expect(taskCell).toHaveTextContent('None');
+  });
+
+  // CSS TESTS
+  describe('EventAttendance CSS Tests', () => {
     it('should apply correct styles to member name links', async () => {
       renderEventAttendanceCSS();
       const memberLinks = await screen.findAllByRole('link');
