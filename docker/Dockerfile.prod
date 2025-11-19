@@ -3,7 +3,7 @@ FROM node:24 AS builder
 WORKDIR /talawa-admin
 
 COPY package*.json ./
-RUN corepack enable && corepack prepare pnpm@latest --activate && pnpm install
+RUN corepack enable && corepack prepare pnpm@10.4.1 --activate && pnpm install
 
 COPY . .
 

@@ -29,19 +29,21 @@ jobs:
         with:
           fetch-depth: 0 # Fetch all history for all branches and tags
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
           cache: 'pnpm'
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.4.1
-
+      - name: Prepare dependency store
+        run: pnpm fetch
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Count number of lines
         run: |
@@ -440,19 +442,22 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
-          cache: pnpm
+          cache: 'pnpm'
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.4.1
+      - name: Prepare dependency store
+        run: pnpm fetch
 
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Get changed TypeScript files
         id: changed-files
@@ -506,23 +511,22 @@ jobs:
         with:
           fetch-depth: 0 # Fetch all history for Codecov to calculate patch coverage
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
           cache: pnpm
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.4.1
+      - name: Prepare dependency store
+        run: pnpm fetch
 
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Install coverage merge tools
-        run: pnpm add -Dw nyc lcov-result-merger
-
+        run: pnpm install --frozen-lockfile --prefer-offline
       - name: Download all coverage artifacts
         id: download-artifacts
         continue-on-error: true
@@ -727,20 +731,26 @@ jobs:
       - name: Checkout the Repository
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
+          cache: 'pnpm'
+
+      - name: Prepare dependency store
+        run: pnpm fetch
 
       - name: Install Dependencies
-        run: npm install
-
-      - name: Build Production App
-        run: npm run build
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Start Production App
         run: |
-          npm run preview &
+          pnpm run preview &
           echo $! > .pidfile_prod
       - name: Check if Production App is running
         run: |
@@ -753,7 +763,7 @@ jobs:
           fi
       - name: Start Development App
         run: |
-          npm run serve &
+          pnpm run serve &
           echo $! > .pidfile_dev
       - name: Check if Development App is running
         run: |
@@ -847,17 +857,25 @@ jobs:
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
+          cache: 'pnpm'
+
+      - name: Prepare dependency store
+        run: pnpm fetch
       - name: Install dependencies
         working-directory: ./docs
-        run: npm install
+        run: pnpm install --frozen-lockfile --prefer-offline
       - name: Test building the website
         working-directory: ./docs
-        run: npm run build
-
+        run: pnpm run build
   Check-Target-Branch:
     if: ${{ github.actor != 'dependabot[bot]' }}
     name: Check Target Branch
@@ -1003,18 +1021,29 @@ jobs:
         with:
           path: frontend
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
+          cache: 'pnpm'
 
-      - name: Install Frontend Dependencies
+      - name: Prepare dependency store
         working-directory: frontend
-        run: npm install
+        run: pnpm fetch
+
+      - name: Install Frontend Dependencies (frozen)
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Setup .env
+        working-directory: frontend
         run: |
-          pwd && cp frontend/.env.example frontend/.env
+          pwd && cp .env.example .env
           echo $REACT_APP_TALAWA_URL
           curl -s -X POST http://127.0.0.1:4000/graphql \
             -H "Content-Type: application/json" \
@@ -1024,7 +1053,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           working-directory: frontend
-          start: npm run serve
+          start: pnpm run serve
           wait-on: 'http://localhost:4321'
           wait-on-timeout: 120
           config-file: cypress.config.ts
@@ -1059,15 +1088,26 @@ jobs:
       - name: Checkout the Repository
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
+          cache: 'pnpm'
 
-      - name: Install Dependencies & Start Application
+      - name: Prepare dependency store
+        run: pnpm fetch
+
+      - name: Install Dependencies (frozen)
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Start Application
         run: |
-          npm install
-          npm run serve &
+          pnpm run serve &
           echo $! > .pidfile_dev
 
       - name: Check if Development App is running
