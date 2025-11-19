@@ -7,7 +7,6 @@ import {
   fireEvent,
   cleanup,
   waitFor,
-  within,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -229,26 +228,40 @@ describe('Event Attendance Component', () => {
     expect(zeroEventsCell).toHaveTextContent('0');
   });
 
-  it('Covers tagsAssignedWith branch without relying on text structure', async () => {
-    renderEventAttendance();
-
-    await waitFor(() => screen.getByTestId('table-header-row'));
-
-    const rows = await screen.findAllByTestId(/attendee-row-/);
-    const taggedRow = rows.find((row) => {
-      const nameEl = row.querySelector("[data-testid^='attendee-name-']");
-      return (nameEl?.textContent ?? '').trim() === 'Tagged Member';
+  it('Covers tagsAssignedWith branch and renders all assigned tags', async () => {
+    mockLazyQuery({
+      loading: false,
+      data: {
+        event: {
+          attendees: [
+            {
+              id: 'tagged-123',
+              name: 'Tagged Member',
+              emailAddress: 'tagged@example.com',
+              createdAt: '2030-04-13T10:23:17.742Z',
+              role: 'attendee',
+              eventsAttended: [],
+              tagsAssignedWith: {
+                edges: [
+                  { node: { name: 'Volunteer' } },
+                  { node: { name: 'Coordinator' } },
+                ],
+              },
+            },
+          ],
+        },
+      },
     });
 
-    expect(taggedRow).toBeDefined();
-    if (!taggedRow) return;
+    renderEventAttendanceWithSpy();
 
-    const scoped = within(taggedRow as HTMLElement);
-    const taskCells = scoped.getAllByTestId(/^attendee-task-assigned-/);
-    expect(taskCells.length).toBeGreaterThan(0);
+    const cell = await screen.findByTestId('attendee-task-assigned-0');
 
-    expect(taskCells.length).toBe(1);
-    expect(taskCells[0].querySelectorAll('div').length).toBeGreaterThan(0);
+    const divs = cell.querySelectorAll(':scope > div');
+
+    expect(divs.length).toBe(2);
+    expect(cell).toHaveTextContent('Volunteer');
+    expect(cell).toHaveTextContent('Coordinator');
   });
 
   it('Covers comparison===0 path in sortAttendees', async () => {
@@ -337,7 +350,7 @@ describe('Event Attendance Component', () => {
           attendees: [
             {
               id: 'no-tags-1',
-              name: 'No Tags User',
+              name: 'ZZZ User',
               emailAddress: 'notags@example.com',
               createdAt: '2030-04-13T10:23:17.742Z',
               role: 'attendee',
@@ -350,13 +363,9 @@ describe('Event Attendance Component', () => {
 
     renderEventAttendanceWithSpy();
 
-    await waitFor(() =>
-      expect(screen.getByTestId('table-header-row')).toBeInTheDocument(),
-    );
+    const cell = await screen.findByTestId(/^attendee-task-assigned-/);
 
-    expect(screen.getByTestId('attendee-task-assigned-0')).toHaveTextContent(
-      'None',
-    );
+    expect(cell).toHaveTextContent('None');
   });
 
   describe('EventAttendance CSS Tests', () => {
