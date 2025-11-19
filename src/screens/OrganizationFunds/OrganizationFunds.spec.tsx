@@ -20,7 +20,11 @@ import { MOCKS, MOCKS_ERROR, NO_FUNDS } from './OrganizationFundsMocks';
 import type { ApolloLink } from '@apollo/client';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { vi } from 'vitest';
+import { vi, afterEach } from 'vitest';
+
+const routerMocks = vi.hoisted(() => ({
+  useParams: vi.fn(),
+}));
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -34,7 +38,7 @@ vi.mock('react-router', async () => {
     await vi.importActual<typeof import('react-router')>('react-router');
   return {
     ...actual,
-    useParams: vi.fn<typeof actual.useParams>(),
+    useParams: routerMocks.useParams,
   };
 });
 
@@ -85,7 +89,7 @@ describe('OrganizationFunds Screen =>', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     cleanup();
   });
 

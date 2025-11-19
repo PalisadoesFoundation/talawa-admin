@@ -22,7 +22,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { MOCKS } from './OrganizationEventsMocks';
 import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
-import { describe, test, expect, vi } from 'vitest';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 
 const theme = createTheme({
   palette: {
@@ -31,6 +31,10 @@ const theme = createTheme({
     },
   },
 });
+
+const sharedWindowSpies = vi.hoisted(() => ({
+  alertMock: vi.fn(),
+}));
 
 Object.defineProperty(window, 'location', {
   value: {
@@ -114,7 +118,14 @@ describe('Organisation Events Page', () => {
     endTime: '05:00 PM',
   };
 
-  window.alert = vi.fn();
+  beforeEach(() => {
+    sharedWindowSpies.alertMock.mockReset();
+    window.alert = sharedWindowSpies.alertMock;
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   test('It is necessary to check correct render', async () => {
     window.location.assign('/orglist');

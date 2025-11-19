@@ -17,7 +17,12 @@ import {
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { getItem } from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
-import { vi } from 'vitest';
+import { vi, beforeEach, afterEach, describe, test } from 'vitest';
+
+const routerMocks = vi.hoisted(() => ({
+  params: vi.fn(),
+  navigate: vi.fn(),
+}));
 
 vi.mock('react-toastify', () => ({
   toast: { success: vi.fn() }, // Mock toast function
@@ -36,11 +41,12 @@ Object.defineProperty(window, 'localStorage', {
 // Mock useParams to return a test organization ID
 
 vi.mock('react-router', async () => {
-  const actualDom = await vi.importActual('react-router');
+  const actualDom =
+    await vi.importActual<typeof import('react-router')>('react-router');
   return {
     ...actualDom,
-    useParams: vi.fn(),
-    useNavigate: vi.fn(),
+    useParams: routerMocks.params,
+    useNavigate: () => routerMocks.navigate,
   };
 });
 
@@ -180,15 +186,22 @@ const errorMocks = [
   },
 ];
 
-beforeEach(() => {
-  localStorage.clear();
-  vi.clearAllMocks();
-  (useParams as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-    orgId: 'test-org-id',
-  });
-});
-
 describe('LeaveOrganization Component', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    vi.clearAllMocks();
+    routerMocks.params.mockReset();
+    routerMocks.navigate.mockReset();
+    routerMocks.params.mockReturnValue({
+      orgId: 'test-org-id',
+    });
+    toast.success.mockClear();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   test('renders organization details and shows loading spinner', async () => {
     render(
       <MockedProvider mocks={mocks.slice(0, 1)} addTypename={false}>
@@ -282,12 +295,9 @@ describe('LeaveOrganization Component', () => {
   });
 
   test('navigates and shows toast when email matches', async () => {
-    const mockNavigate = vi.fn();
-    (useNavigate as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
-      mockNavigate,
-    );
-    const toastSuccessMock = vi.fn();
-    toast.success = toastSuccessMock;
+    routerMocks.navigate.mockReset();
+    const toastSuccessMock = toast.success as ReturnType<typeof vi.fn>;
+    toastSuccessMock.mockClear();
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
@@ -314,7 +324,7 @@ describe('LeaveOrganization Component', () => {
     });
     fireEvent.keyDown(emailInput, { key: 'Enter', code: 'Enter' });
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith(`/user/organizations`);
+      expect(routerMocks.navigate).toHaveBeenCalledWith(`/user/organizations`);
     });
     await waitFor(() => {
       expect(toastSuccessMock).toHaveBeenCalledWith(
@@ -433,10 +443,7 @@ describe('LeaveOrganization Component', () => {
   });
 
   test('closes modal and resets state when Esc key is pressed', async () => {
-    const mockNavigate = vi.fn();
-    (useNavigate as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
-      mockNavigate,
-    );
+    routerMocks.navigate.mockReset();
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
