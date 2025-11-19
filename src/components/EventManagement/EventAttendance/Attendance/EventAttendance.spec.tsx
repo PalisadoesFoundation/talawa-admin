@@ -363,9 +363,11 @@ describe('Event Attendance Component', () => {
 
     renderEventAttendanceWithSpy();
 
-    const cell = await screen.findByTestId(/^attendee-task-assigned-/);
+    const cells = await screen.findAllByTestId(/^attendee-task-assigned-/);
 
-    expect(cell).toHaveTextContent('None');
+    cells.forEach((cell) => {
+      expect(cell).toHaveTextContent('None');
+    });
   });
 
   describe('EventAttendance CSS Tests', () => {
