@@ -197,7 +197,6 @@ describe('LeaveOrganization Component', () => {
     routerMocks.params.mockReturnValue({
       orgId: 'test-org-id',
     });
-    toastMocks.success.mockClear();
   });
 
   afterEach(() => {
@@ -297,8 +296,6 @@ describe('LeaveOrganization Component', () => {
   });
 
   test('navigates and shows toast when email matches', async () => {
-    routerMocks.navigate.mockReset();
-    toastMocks.success.mockClear();
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
@@ -444,7 +441,6 @@ describe('LeaveOrganization Component', () => {
   });
 
   test('closes modal and resets state when Esc key is pressed', async () => {
-    routerMocks.navigate.mockReset();
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
@@ -588,7 +584,7 @@ describe('LeaveOrganization Component', () => {
   test('handles missing organizationId or userId', async () => {
     // Mock useParams to return undefined orgId
     (useParams as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      orgId: undefined as unknown as string,
+      orgId: undefined as string | undefined,
     });
 
     // Render with mocks that don't depend on specific orgId
