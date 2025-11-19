@@ -258,12 +258,18 @@ describe('UserDetailsForm', () => {
     // Test name field
     const nameInput = screen.getByTestId('inputName');
     fireEvent.change(nameInput, { target: { value: 'New Name' } });
-    expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith('name', 'New Name');
+    expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith(
+      'name',
+      'New Name',
+    );
 
     // Test gender field
     const genderSelect = screen.getByTestId('inputGender');
     await userEvent.selectOptions(genderSelect, 'male');
-    expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith('natalSex', 'male');
+    expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith(
+      'natalSex',
+      'male',
+    );
 
     // Test phone numbers
     const mobilePhone = screen.getByTestId('inputPhoneNumber');
@@ -332,7 +338,10 @@ describe('UserDetailsForm', () => {
         fireEvent.blur(dateInput);
       }
     });
-    expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith('birthDate', '');
+    expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith(
+      'birthDate',
+      '',
+    );
 
     // Test education grade
     const gradeSelect = screen.getByTestId('inputGrade');
