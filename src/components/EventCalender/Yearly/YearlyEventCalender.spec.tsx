@@ -15,14 +15,9 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { UserRole, type InterfaceCalendarProps } from 'types/Event/interface';
 
 // Helper to get specific expand button for a given Date based on component's indexing
-interface IExpandButtonOptions {
-  allowFallback?: boolean;
-}
-
 function getExpandButtonForDate(
   container: HTMLElement,
   date: Date,
-  options?: IExpandButtonOptions,
 ): HTMLButtonElement | null {
   const monthIdx = date.getMonth();
   const monthStart = new Date(date.getFullYear(), monthIdx, 1);
@@ -46,23 +41,16 @@ function getExpandButtonForDate(
     return expandButton;
   }
 
-  if (options?.allowFallback === true) {
-    const noEventsSelector = `[data-testid="no-events-btn-${monthIdx}-${dayIdx}"]`;
-    return container.querySelector(
-      noEventsSelector,
-    ) as HTMLButtonElement | null;
-  }
-
-  return null;
+  const noEventsSelector = `[data-testid="no-events-btn-${monthIdx}-${dayIdx}"]`;
+  return container.querySelector(noEventsSelector) as HTMLButtonElement | null;
 }
 
 async function clickExpandForDate(
   container: HTMLElement,
   date: Date,
-  options?: IExpandButtonOptions,
 ): Promise<HTMLButtonElement> {
   const btn = await waitFor(() => {
-    const found = getExpandButtonForDate(container, date, options);
+    const found = getExpandButtonForDate(container, date);
     if (!found) {
       throw new Error(
         `Unable to find expand button for ${date.toISOString()} yet`,
@@ -130,7 +118,7 @@ vi.mock('react-router', async () => {
 vi.mock('components/EventListCard/EventListCard', () => {
   return {
     __esModule: true,
-    default: (props: { name: string }) => (
+    default: (props: { name?: string } & Record<string, unknown>) => (
       <div data-testid="event-list-card">{props.name}</div>
     ),
   };
@@ -472,15 +460,18 @@ describe('Calendar Component', () => {
       '[data-testid^="expand-btn-"]',
     );
 
+    let foundMatch = false;
     for (const button of Array.from(expandButtons)) {
       fireEvent.click(button);
       // Expect one of the event names to appear when expanded
       const matches = screen.queryAllByText(/New Test Event|Test Event/);
       if (matches.length > 0) {
         expect(matches[0]).toBeInTheDocument();
+        foundMatch = true;
         break;
       }
     }
+    expect(foundMatch).toBe(true);
   });
 
   it('filters events correctly for ADMINISTRATOR role with private events', async () => {
