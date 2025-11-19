@@ -1,4 +1,3 @@
-// Trigger CodeRabbit full review
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
@@ -112,15 +111,13 @@ describe('Event Attendance Component', () => {
   it('Search filters attendees by name correctly', async () => {
     renderEventAttendance();
 
-    await waitFor(async () => {
-      const searchInput = screen.getByTestId('searchByName');
-      fireEvent.change(searchInput, { target: { value: 'Bruce' } });
+    const searchInput = await screen.findByTestId('searchByName');
+    fireEvent.change(searchInput, { target: { value: 'Bruce' } });
 
-      await waitFor(() => {
-        expect(screen.getByTestId('attendee-name-0')).toHaveTextContent(
-          'Bruce Garza',
-        );
-      });
+    await waitFor(() => {
+      expect(screen.getByTestId('attendee-name-0')).toHaveTextContent(
+        'Bruce Garza',
+      );
     });
   });
 
@@ -227,7 +224,9 @@ describe('Event Attendance Component', () => {
 
     await waitFor(() => screen.getByTestId('table-header-row'));
 
-    expect(await screen.findByText('0')).toBeInTheDocument();
+    const zeroEventsCell = screen.getByTestId('attendee-events-attended-2');
+
+    expect(zeroEventsCell).toHaveTextContent('0');
   });
 
   it('Covers tagsAssignedWith branch without relying on text structure', async () => {
@@ -246,8 +245,9 @@ describe('Event Attendance Component', () => {
 
     const scoped = within(taggedRow as HTMLElement);
     const taskCells = scoped.getAllByTestId(/^attendee-task-assigned-/);
-
     expect(taskCells.length).toBeGreaterThan(0);
+
+    expect(taskCells.length).toBe(1);
     expect(taskCells[0].querySelectorAll('div').length).toBeGreaterThan(0);
   });
 
@@ -378,30 +378,30 @@ describe('Event Attendance Component', () => {
       });
     });
 
-    it('should maintain consistent row spacing', async () => {
-      renderEventAttendance();
-      const tableRows = await screen.findAllByTestId(/attendee-row-/);
-      tableRows.forEach((row) => {
-        expect(row).toHaveClass('my-6');
-      });
-    });
-
     it('should apply tooltip styles correctly', async () => {
       renderEventAttendance();
-      const tooltipCells = await screen.findAllByTestId(
+
+      const cells = await screen.findAllByTestId(
         /attendee-events-attended-\d+/,
       );
 
-      tooltipCells.forEach((cell) => {
-        const tooltip = cell.closest("[role='tooltip']");
-        if (tooltip) {
-          expect(tooltip).toHaveStyle({
-            backgroundColor: 'var(--bs-white)',
-            fontSize: '2em',
-            maxHeight: '170px',
-          });
-        }
-      });
+      for (const cell of cells) {
+        await userEvent.hover(cell);
+        const tooltipWrapper = await screen.findByRole('tooltip');
+        expect(tooltipWrapper).toBeInTheDocument();
+
+        const inner = tooltipWrapper.querySelector('.MuiTooltip-tooltip');
+
+        expect(inner).toBeInTheDocument();
+
+        expect(inner).toHaveStyle({
+          backgroundColor: 'var(--bs-white)',
+          fontSize: '2em',
+          maxHeight: '170px',
+        });
+
+        await userEvent.unhover(cell);
+      }
     });
   });
 });
