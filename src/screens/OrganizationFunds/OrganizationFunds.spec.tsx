@@ -29,6 +29,17 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+vi.mock('react-router', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-router')>('react-router');
+  return {
+    ...actual,
+    useParams: vi.fn<typeof actual.useParams>(),
+  };
+});
+
+const mockedUseParams = vi.mocked(useParams);
+
 const link1 = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR, true);
 const link3 = new StaticMockLink(NO_FUNDS, true);
@@ -70,13 +81,7 @@ const renderOrganizationFunds = (link: ApolloLink): RenderResult => {
 
 describe('OrganizationFunds Screen =>', () => {
   beforeEach(() => {
-    vi.mock('react-router', async () => {
-      const actual = await vi.importActual('react-router');
-      return {
-        ...actual,
-        useParams: vi.fn(),
-      };
-    });
+    mockedUseParams.mockReset();
   });
 
   afterEach(() => {
@@ -85,7 +90,7 @@ describe('OrganizationFunds Screen =>', () => {
   });
 
   it('should render the Campaign Pledge screen', async () => {
-    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
     await waitFor(() => {
       expect(screen.getByTestId('searchByName')).toBeInTheDocument();
@@ -93,8 +98,8 @@ describe('OrganizationFunds Screen =>', () => {
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
-    vi.mocked(useParams).mockReturnValue({
-      orgId: undefined as unknown as string,
+    mockedUseParams.mockReturnValue({
+      orgId: undefined,
     });
     render(
       <MockedProvider addTypename={false} link={link1}>
@@ -122,7 +127,7 @@ describe('OrganizationFunds Screen =>', () => {
   });
 
   it('open and close Create Fund modal', async () => {
-    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
 
     await waitFor(() => {
@@ -145,7 +150,7 @@ describe('OrganizationFunds Screen =>', () => {
   });
 
   it('open and close update fund modal', async () => {
-    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
 
     await waitFor(() => {
@@ -168,7 +173,7 @@ describe('OrganizationFunds Screen =>', () => {
   });
 
   it('Search the Funds list by name', async () => {
-    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
 
     await waitFor(() => {
@@ -194,7 +199,7 @@ describe('OrganizationFunds Screen =>', () => {
   });
 
   it('should render the Fund screen with error', async () => {
-    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link2);
     await waitFor(() => {
       expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
@@ -202,7 +207,7 @@ describe('OrganizationFunds Screen =>', () => {
   });
 
   it('renders the empty fund component', async () => {
-    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link3);
     await waitFor(() =>
       expect(screen.getByText(translations.noFundsFound)).toBeInTheDocument(),
@@ -210,7 +215,7 @@ describe('OrganizationFunds Screen =>', () => {
   });
 
   it('Sort the Pledges list by Latest created Date', async () => {
-    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
 
     await waitFor(() => {
@@ -228,7 +233,7 @@ describe('OrganizationFunds Screen =>', () => {
   });
 
   it('Click on Fund Name', async () => {
-    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
 
     const fundName = await screen.findAllByTestId('fundName');
@@ -241,7 +246,7 @@ describe('OrganizationFunds Screen =>', () => {
   });
 
   it('Click on View Campaign', async () => {
-    vi.mocked(useParams).mockReturnValue({ orgId: 'orgId' });
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
 
     const viewBtn = await screen.findAllByTestId('viewBtn');
