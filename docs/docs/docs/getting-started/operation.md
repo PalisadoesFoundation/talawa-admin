@@ -12,6 +12,6 @@ This page outlines how to successfully operate the application
 Run the following command to start the `talawa-admin` development server:
 
 ```bash
-npm run serve
+pnpm run serve
 
 ```

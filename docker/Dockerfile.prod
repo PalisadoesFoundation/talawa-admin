@@ -3,15 +3,15 @@ FROM node:24 AS builder
 WORKDIR /talawa-admin
 
 COPY package*.json ./
-RUN npm install
+RUN corepack enable && corepack prepare pnpm@latest --activate && pnpm install
 
 COPY . .
 
 ENV NODE_ENV=production
 
-RUN npm run build
+RUN pnpm run build
 
-#Step 2: Production
+# Step 2: Production
 FROM nginx:1.27.3-alpine AS production
 
 ENV NODE_ENV=production
