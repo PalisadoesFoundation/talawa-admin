@@ -52,9 +52,6 @@ describe('UserDetailsForm', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    handlerMocks.handleFieldChange.mockReset();
-    handlerMocks.handleResetChanges.mockReset();
-    handlerMocks.handleUpdateUserDetails.mockReset();
   });
 
   afterEach(() => {
