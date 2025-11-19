@@ -6,7 +6,6 @@ import {
   MemoryRouter,
   Route,
   Routes,
-  useNavigate,
   useParams,
 } from 'react-router';
 import LeaveOrganization from './LeaveOrganization';
@@ -16,7 +15,6 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { getItem } from 'utils/useLocalstorage';
-import { toast } from 'react-toastify';
 import { vi, beforeEach, afterEach, describe, test } from 'vitest';
 
 const routerMocks = vi.hoisted(() => ({
@@ -24,8 +22,12 @@ const routerMocks = vi.hoisted(() => ({
   navigate: vi.fn(),
 }));
 
+const toastMocks = vi.hoisted(() => ({
+  success: vi.fn(),
+}));
+
 vi.mock('react-toastify', () => ({
-  toast: { success: vi.fn() }, // Mock toast function
+  toast: toastMocks,
 }));
 
 Object.defineProperty(window, 'localStorage', {
@@ -195,7 +197,7 @@ describe('LeaveOrganization Component', () => {
     routerMocks.params.mockReturnValue({
       orgId: 'test-org-id',
     });
-    toast.success.mockClear();
+    toastMocks.success.mockClear();
   });
 
   afterEach(() => {
@@ -296,8 +298,7 @@ describe('LeaveOrganization Component', () => {
 
   test('navigates and shows toast when email matches', async () => {
     routerMocks.navigate.mockReset();
-    const toastSuccessMock = toast.success as ReturnType<typeof vi.fn>;
-    toastSuccessMock.mockClear();
+    toastMocks.success.mockClear();
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <BrowserRouter>
@@ -327,7 +328,7 @@ describe('LeaveOrganization Component', () => {
       expect(routerMocks.navigate).toHaveBeenCalledWith(`/user/organizations`);
     });
     await waitFor(() => {
-      expect(toastSuccessMock).toHaveBeenCalledWith(
+      expect(toastMocks.success).toHaveBeenCalledWith(
         'You have successfully left the organization!',
       );
     });
