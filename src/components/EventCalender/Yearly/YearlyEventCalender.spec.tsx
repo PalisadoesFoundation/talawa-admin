@@ -15,14 +15,14 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { UserRole, type InterfaceCalendarProps } from 'types/Event/interface';
 
 // Helper to get specific expand button for a given Date based on component's indexing
-interface ExpandButtonOptions {
+interface IExpandButtonOptions {
   allowFallback?: boolean;
 }
 
 function getExpandButtonForDate(
   container: HTMLElement,
   date: Date,
-  options?: ExpandButtonOptions,
+  options?: IExpandButtonOptions,
 ): HTMLButtonElement | null {
   const monthIdx = date.getMonth();
   const monthStart = new Date(date.getFullYear(), monthIdx, 1);
@@ -59,7 +59,7 @@ function getExpandButtonForDate(
 async function clickExpandForDate(
   container: HTMLElement,
   date: Date,
-  options?: ExpandButtonOptions,
+  options?: IExpandButtonOptions,
 ): Promise<HTMLButtonElement> {
   const btn = await waitFor(() => {
     const found = getExpandButtonForDate(container, date, options);
