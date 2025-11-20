@@ -38,6 +38,7 @@ Core features include:
 1. **talawa**: [A mobile application with social media features](https://github.com/PalisadoesFoundation/talawa)
 1. **talawa-api**: [An API providing access to user data and features](https://github.com/PalisadoesFoundation/talawa-api)
 1. **talawa-admin**: [A web based administrative portal](https://github.com/PalisadoesFoundation/talawa-admin)
+1. **talawa-plugin**: [Plugins for Talawa-Admin](https://github.com/PalisadoesFoundation/talawa-plugin)
 1. **talawa-docs**: [The online documentation website](https://github.com/PalisadoesFoundation/talawa-docs)
 
 # Documentation
@@ -48,7 +49,7 @@ Core features include:
     1. How we handle the processing of new and existing issues in our [ISSUE_GUIDELINES.md](ISSUE_GUIDELINES.md) file.
     1. The methodologies we use to manage our pull requests in our [PR_GUIDELINES.md](PR_GUIDELINES.md) file.
 1. The `talawa` documentation can be found at our [docs.talawa.io](https://docs.talawa.io) site.
-    1. It is automatically generated from the markdown files stored in our [Talawa-Docs GitHub repository](https://github.com/PalisadoesFoundation/talawa-docs). This makes it easy for you to update our documenation.   
+    1. It is automatically generated from the markdown files stored in our [Talawa-Docs GitHub repository](https://github.com/PalisadoesFoundation/talawa-docs). This makes it easy for you to update our documenation.
 
 #  Videos
 
