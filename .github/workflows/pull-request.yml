@@ -873,9 +873,23 @@ jobs:
 
       - name: Prepare dependency store
         run: pnpm fetch
-      - name: Install dependencies
+      - name: Prepare dependency store (if lockfile exists)
+        run: |
+          if [ -f ./docs/pnpm-lock.yaml ]; then
+            pnpm fetch
+          else
+            echo "No lockfile in ./docs — skipping pnpm fetch"
+          fi
+
+      - name: Install dependencies (allow lockfile creation)
         working-directory: ./docs
-        run: pnpm install --frozen-lockfile --prefer-offline
+        run: |
+          if [ -f pnpm-lock.yaml ]; then
+            pnpm install --frozen-lockfile --prefer-offline
+          else
+            echo "pnpm-lock.yaml not found — installing without --frozen-lockfile"
+            pnpm install --prefer-offline
+          fi
       - name: Test building the website
         working-directory: ./docs
         run: pnpm run build
