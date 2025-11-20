@@ -1057,7 +1057,6 @@ jobs:
           wait-on: 'http://localhost:4321'
           wait-on-timeout: 120
           config-file: cypress.config.ts
-          install: false
         env:
           CYPRESS_BASE_URL: http://localhost:4321
           CYPRESS_API_URL: http://127.0.0.1:4000/graphql
