@@ -6,7 +6,7 @@
 
 > `const` **MOCK\_REGISTRANTS\_NULL**: `object`
 
-Defined in: [src/components/EventManagement/EventRegistrant/EventRegistrants.mocks.ts:254](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventRegistrant/EventRegistrants.mocks.ts#L254)
+Defined in: [src/components/EventManagement/EventRegistrant/EventRegistrants.mocks.ts:252](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventRegistrant/EventRegistrants.mocks.ts#L252)
 
 ## Type Declaration
 

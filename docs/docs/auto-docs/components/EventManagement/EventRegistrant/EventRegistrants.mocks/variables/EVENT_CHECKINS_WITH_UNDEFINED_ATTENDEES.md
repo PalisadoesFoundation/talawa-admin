@@ -6,7 +6,7 @@
 
 > `const` **EVENT\_CHECKINS\_WITH\_UNDEFINED\_ATTENDEES**: `object`
 
-Defined in: [src/components/EventManagement/EventRegistrant/EventRegistrants.mocks.ts:240](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventRegistrant/EventRegistrants.mocks.ts#L240)
+Defined in: [src/components/EventManagement/EventRegistrant/EventRegistrants.mocks.ts:238](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventRegistrant/EventRegistrants.mocks.ts#L238)
 
 ## Type Declaration
 
