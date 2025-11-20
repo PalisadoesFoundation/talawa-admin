@@ -128,7 +128,6 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10.4.1
           run_install: false
 
       - name: Set up Node.js
@@ -598,13 +597,13 @@ jobs:
             # Merge using nyc (more accurate than lcov merge)
             echo "Merging coverage with nyc..."
 
-          pnpm exec nyc merge ./coverage/tmp ./.nyc_output/coverage-final.json
+            pnpm exec nyc merge ./coverage/tmp ./.nyc_output/coverage-final.json
             # Validate merged JSON
             MERGED_FILE_COUNT=$(jq 'keys | length' ./.nyc_output/coverage-final.json 2>/dev/null || echo "0")
             echo "Merged coverage contains $MERGED_FILE_COUNT files"
             # Generate lcov from merged JSON
             echo "Generating lcov report from merged coverage..."
-          pnpm exec nyc report --reporter=lcov --report-dir=./coverage/vitest
+            pnpm exec nyc report --reporter=lcov --report-dir=./coverage/vitest
           else
             echo "Using LCOV files for merging..."
             # Find all lcov.info files from shards
@@ -631,7 +630,7 @@ jobs:
             done < lcov-files.txt
 
             # Use lcov-result-merger as fallback
-          pnpm exec lcov-result-merger "coverage-shards/*/lcov.info" ./coverage/vitest/lcov.info
+            pnpm exec lcov-result-merger "coverage-shards/*/lcov.info" ./coverage/vitest/lcov.info
           fi
 
           # Validate merged file exists and is not empty
@@ -875,10 +874,11 @@ jobs:
         working-directory: ./docs
         run: |
           if [ -f pnpm-lock.yaml ]; then
-            echo "Lockfile found in ./docs — running pnpm fetch"
+            echo "pnpm-lock.yaml found — running pnpm fetch"
             pnpm fetch
           else
-            echo "No pnpm-lock.yaml in ./docs — skipping pnpm fetch"
+            echo "No pnpm-lock.yaml found — running pnpm install to generate it"
+            pnpm install --frozen-lockfile=false
           fi
 
       - name: Install dependencies (allow lockfile creation)
