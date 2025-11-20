@@ -14,7 +14,8 @@ import { I18nextProvider } from 'react-i18next';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, vi, afterEach } from 'vitest';
+import dayjs from 'dayjs';
 
 import OrganizationEvents from './OrganizationEvents';
 import { store } from 'state/store';
@@ -69,7 +70,7 @@ Object.defineProperty(window, 'location', {
       }
     }),
     reload: vi.fn(),
-    pathname: '/',
+    pathname: '/orglist',
     search: '',
     hash: '',
     origin: 'http://localhost',
@@ -78,7 +79,7 @@ Object.defineProperty(window, 'location', {
 
 const defaultLink = new StaticMockLink(MOCKS, true);
 
-async function wait(ms = 2000): Promise<void> {
+async function wait(ms = 0): Promise<void> {
   await act(
     () =>
       new Promise((resolve) => {
@@ -96,6 +97,29 @@ const translations = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
+
+const buildEventsVariables = () => {
+  const now = new Date();
+  const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  const startDate = dayjs(firstOfMonth).startOf('month').toISOString();
+  const endDate = dayjs(firstOfMonth).endOf('month').toISOString();
+
+  return {
+    id: undefined,
+    first: 150,
+    after: null,
+    startDate,
+    endDate,
+    includeRecurring: true,
+  };
+};
+
+const buildOrgVariables = () => ({
+  id: undefined,
+  first: 10,
+  after: null,
+});
 
 vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
   const actual = await vi.importActual(
@@ -144,7 +168,7 @@ describe('Organisation Events Page', () => {
       </MockedProvider>,
     );
 
-  beforeEach(() => {
+  afterEach(() => {
     vi.restoreAllMocks();
   });
 
@@ -411,21 +435,13 @@ describe('Organisation Events Page', () => {
 
     await userEvent.click(recurrenceDropdown);
 
-    await waitFor(() => {
-      const customOption = screen.queryByText('Custom...');
-      if (customOption) return customOption;
-      throw new Error('Custom option not found');
-    });
-
-    const customOption = screen.getByText('Custom...');
+    const customOption = await screen.findByText('Custom...');
     await userEvent.click(customOption);
 
-    await waitFor(() => {
-      const customModal = screen.queryByTestId('customRecurrenceModalCloseBtn');
-      if (customModal) {
-        expect(customModal).toBeInTheDocument();
-      }
-    });
+    const customModal = await screen.findByTestId(
+      'customRecurrenceModalCloseBtn',
+    );
+    expect(customModal).toBeInTheDocument();
   });
 
   test('CustomRecurrenceModal setRecurrenceRuleState function path', async () => {
@@ -454,21 +470,13 @@ describe('Organisation Events Page', () => {
 
     await userEvent.click(recurrenceDropdown);
 
-    await waitFor(() => {
-      const customOption = screen.queryByText('Custom...');
-      if (customOption) return customOption;
-      throw new Error('Custom option not found');
-    });
-
-    const customOption = screen.getByText('Custom...');
+    const customOption = await screen.findByText('Custom...');
     await userEvent.click(customOption);
 
-    await waitFor(() => {
-      const customModal = screen.queryByTestId('customRecurrenceModalCloseBtn');
-      if (customModal) {
-        expect(customModal).toBeInTheDocument();
-      }
-    });
+    const customModal = await screen.findByTestId(
+      'customRecurrenceModalCloseBtn',
+    );
+    expect(customModal).toBeInTheDocument();
   });
 
   test('recurrence validation path executes when Weekly recurrence selected', async () => {
@@ -548,26 +556,29 @@ describe('Organisation Events Page', () => {
   test('rate-limit eventDataError is silently suppressed', async () => {
     const mockWarn = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-    const rateLimitLink = new StaticMockLink([
-      {
-        request: {
-          query: GET_ORGANIZATION_EVENTS_PG,
-          variables: expect.any(Object),
+    const rateLimitLink = new StaticMockLink(
+      [
+        {
+          request: {
+            query: GET_ORGANIZATION_EVENTS_PG,
+            variables: buildEventsVariables(),
+          },
+          error: new Error('Too Many Requests'),
         },
-        error: new Error('Too Many Requests'),
-      },
-      {
-        request: {
-          query: GET_ORGANIZATION_DATA_PG,
-          variables: expect.any(Object),
-        },
-        result: {
-          data: {
-            organization: { id: '1', name: 'Org' },
+        {
+          request: {
+            query: GET_ORGANIZATION_DATA_PG,
+            variables: buildOrgVariables(),
+          },
+          result: {
+            data: {
+              organization: { id: '1', name: 'Org' },
+            },
           },
         },
-      },
-    ]);
+      ],
+      true,
+    );
 
     renderWithLink(rateLimitLink);
 
@@ -583,8 +594,6 @@ describe('Organisation Events Page', () => {
     expect(
       messages.some((msg) => msg.toLowerCase().includes('too many requests')),
     ).toBe(false);
-
-    mockWarn.mockRestore();
   });
 
   test('non-rate-limit eventDataError logs warning', async () => {
@@ -595,14 +604,14 @@ describe('Organisation Events Page', () => {
         {
           request: {
             query: GET_ORGANIZATION_EVENTS_PG,
-            variables: expect.any(Object),
+            variables: buildEventsVariables(),
           },
           error: new Error('some other apollo error'),
         },
         {
           request: {
             query: GET_ORGANIZATION_DATA_PG,
-            variables: expect.any(Object),
+            variables: buildOrgVariables(),
           },
           result: {
             data: {
@@ -623,7 +632,6 @@ describe('Organisation Events Page', () => {
     );
 
     expect(mockWarn).toHaveBeenCalled();
-    mockWarn.mockRestore();
   });
 
   test('orgDataError with successful events query logs warning', async () => {
@@ -634,7 +642,7 @@ describe('Organisation Events Page', () => {
         {
           request: {
             query: GET_ORGANIZATION_EVENTS_PG,
-            variables: expect.any(Object),
+            variables: buildEventsVariables(),
           },
           result: {
             data: {
@@ -647,7 +655,7 @@ describe('Organisation Events Page', () => {
         {
           request: {
             query: GET_ORGANIZATION_DATA_PG,
-            variables: expect.any(Object),
+            variables: buildOrgVariables(),
           },
           error: new Error('org data failure'),
         },
@@ -657,10 +665,9 @@ describe('Organisation Events Page', () => {
 
     renderWithLink(orgErrorLink);
 
-    await wait(500);
+    await wait(50);
 
     expect(warnSpy).toHaveBeenCalled();
-    warnSpy.mockRestore();
   });
 
   test('handles undefined events data gracefully (events = null)', async () => {
@@ -669,7 +676,7 @@ describe('Organisation Events Page', () => {
         {
           request: {
             query: GET_ORGANIZATION_EVENTS_PG,
-            variables: expect.any(Object),
+            variables: buildEventsVariables(),
           },
           result: {
             data: {
@@ -682,7 +689,7 @@ describe('Organisation Events Page', () => {
         {
           request: {
             query: GET_ORGANIZATION_DATA_PG,
-            variables: expect.any(Object),
+            variables: buildOrgVariables(),
           },
           result: {
             data: {
@@ -707,7 +714,7 @@ describe('Organisation Events Page', () => {
         {
           request: {
             query: GET_ORGANIZATION_EVENTS_PG,
-            variables: expect.any(Object),
+            variables: buildEventsVariables(),
           },
           result: {
             data: {
@@ -720,7 +727,7 @@ describe('Organisation Events Page', () => {
         {
           request: {
             query: GET_ORGANIZATION_DATA_PG,
-            variables: expect.any(Object),
+            variables: buildOrgVariables(),
           },
           result: {
             data: {
@@ -749,7 +756,7 @@ describe('Organisation Events Page', () => {
     expect(() => unmount()).not.toThrow();
   });
 
-  test('userRole becomes ADMINISTRATOR when role=administrator', async () => {
+  test('renders successfully with ADMINISTRATOR role from useLocalStorage', async () => {
     renderWithLink(defaultLink);
 
     await waitFor(() =>

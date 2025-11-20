@@ -3,14 +3,54 @@ import {
   GET_ORGANIZATION_EVENTS_PG,
   GET_ORGANIZATION_DATA_PG,
 } from 'GraphQl/Queries/Queries';
-import { expect } from 'vitest';
+import dayjs from 'dayjs';
+
+function buildEventsVariables() {
+  const now = new Date();
+  const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  return {
+    id: undefined,
+    first: 150,
+    after: null,
+    startDate: dayjs(firstOfMonth).startOf('month').toISOString(),
+    endDate: dayjs(firstOfMonth).endOf('month').toISOString(),
+    includeRecurring: true,
+  };
+}
+
+function buildOrgVariables() {
+  return {
+    id: undefined,
+    first: 10,
+    after: null,
+  };
+}
+
+function buildCreateEventVariables() {
+  return {
+    id: undefined,
+    input: {
+      name: 'Dummy Org',
+      description: 'This is a dummy organization',
+      startAt: '2030-03-28T00:00:00.000Z',
+      endAt: '2030-03-30T23:59:59.999Z',
+      allDay: true,
+      location: 'New Delhi',
+      isPublic: false,
+      isRegisterable: true,
+      recurrenceRule: null,
+      parentEventId: null,
+    },
+  };
+}
 
 export const MOCKS = [
-  // Mock for GET_ORGANIZATION_EVENTS_PG with events having different data scenarios
+  // GET_ORGANIZATION_EVENTS_PG (main events list)
   {
     request: {
       query: GET_ORGANIZATION_EVENTS_PG,
-      variables: expect.any(Object),
+      variables: buildEventsVariables(),
     },
     result: {
       data: {
@@ -105,11 +145,10 @@ export const MOCKS = [
     },
   },
 
-  // GET_ORGANIZATION_DATA_PG success (component expects org data)
   {
     request: {
       query: GET_ORGANIZATION_DATA_PG,
-      variables: expect.any(Object),
+      variables: buildOrgVariables(),
     },
     result: {
       data: {
@@ -120,10 +159,11 @@ export const MOCKS = [
       },
     },
   },
+
   {
     request: {
       query: CREATE_EVENT_MUTATION,
-      variables: expect.any(Object),
+      variables: buildCreateEventVariables(),
     },
     result: {
       data: {
