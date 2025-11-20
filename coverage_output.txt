@@ -1,0 +1,743 @@
+
+> talawa-admin@3.0.0 test:coverage
+> vitest run --coverage src/components/EventManagement/EventRegistrant/EventRegistrants.spec.tsx
+
+
+ RUN  v3.0.5 /home/shofikul/Desktop/talawa-admin
+      Coverage enabled with istanbul
+
+(node:58546) Warning: `--localstorage-file` was provided without a valid path
+(Use `node --trace-warnings ...` to show where the warning was created)
+stderr | src/components/EventManagement/EventRegistrant/EventRegistrants.spec.tsx > Event Registrants Component > Component loads correctly with table headers
+Warning: React does not recognize the `eventId` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `eventid` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+    at div
+    at spy
+    at div
+    at div
+    at EventRegistrants (/home/shofikul/Desktop/talawa-admin/src/components/EventManagement/EventRegistrant/EventRegistrants.tsx:1426:72)
+    at I18nextProvider (file:///home/shofikul/Desktop/talawa-admin/node_modules/react-i18next/dist/es/I18nextProvider.js:4:3)
+    at Provider (file:///home/shofikul/Desktop/talawa-admin/node_modules/react-redux/dist/react-redux.mjs:875:11)
+    at Router (file:///home/shofikul/Desktop/talawa-admin/node_modules/react-router/dist/development/chunk-HA7DTUK3.mjs:4999:13)
+    at BrowserRouter (file:///home/shofikul/Desktop/talawa-admin/node_modules/react-router/dist/development/chunk-HA7DTUK3.mjs:7197:3)
+    at ApolloProvider (/home/shofikul/Desktop/talawa-admin/node_modules/@apollo/client/react/context/context.cjs:50:21)
+    at MockedProvider (/home/shofikul/Desktop/talawa-admin/node_modules/@apollo/client/testing/testing.cjs:30:28)
+Warning: Unknown event handler property `onCheckInUpdate`. It will be ignored.
+    at div
+    at spy
+    at div
+    at div
+    at EventRegistrants (/home/shofikul/Desktop/talawa-admin/src/components/EventManagement/EventRegistrant/EventRegistrants.tsx:1426:72)
+    at I18nextProvider (file:///home/shofikul/Desktop/talawa-admin/node_modules/react-i18next/dist/es/I18nextProvider.js:4:3)
+    at Provider (file:///home/shofikul/Desktop/talawa-admin/node_modules/react-redux/dist/react-redux.mjs:875:11)
+    at Router (file:///home/shofikul/Desktop/talawa-admin/node_modules/react-router/dist/development/chunk-HA7DTUK3.mjs:4999:13)
+    at BrowserRouter (file:///home/shofikul/Desktop/talawa-admin/node_modules/react-router/dist/development/chunk-HA7DTUK3.mjs:7197:3)
+    at ApolloProvider (/home/shofikul/Desktop/talawa-admin/node_modules/@apollo/client/react/context/context.cjs:50:21)
+    at MockedProvider (/home/shofikul/Desktop/talawa-admin/node_modules/@apollo/client/testing/testing.cjs:30:28)
+Warning: React does not recognize the `orgId` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `orgid` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+    at div
+    at spy
+    at div
+    at div
+    at EventRegistrants (/home/shofikul/Desktop/talawa-admin/src/components/EventManagement/EventRegistrant/EventRegistrants.tsx:1426:72)
+    at I18nextProvider (file:///home/shofikul/Desktop/talawa-admin/node_modules/react-i18next/dist/es/I18nextProvider.js:4:3)
+    at Provider (file:///home/shofikul/Desktop/talawa-admin/node_modules/react-redux/dist/react-redux.mjs:875:11)
+    at Router (file:///home/shofikul/Desktop/talawa-admin/node_modules/react-router/dist/development/chunk-HA7DTUK3.mjs:4999:13)
+    at BrowserRouter (file:///home/shofikul/Desktop/talawa-admin/node_modules/react-router/dist/development/chunk-HA7DTUK3.mjs:7197:3)
+    at ApolloProvider (/home/shofikul/Desktop/talawa-admin/node_modules/@apollo/client/react/context/context.cjs:50:21)
+    at MockedProvider (/home/shofikul/Desktop/talawa-admin/node_modules/@apollo/client/testing/testing.cjs:30:28)
+Warning: Unknown event handler property `onUpdate`. It will be ignored.
+    at div
+    at spy
+    at div
+    at div
+    at EventRegistrants (/home/shofikul/Desktop/talawa-admin/src/components/EventManagement/EventRegistrant/EventRegistrants.tsx:1426:72)
+    at I18nextProvider (file:///home/shofikul/Desktop/talawa-admin/node_modules/react-i18next/dist/es/I18nextProvider.js:4:3)
+    at Provider (file:///home/shofikul/Desktop/talawa-admin/node_modules/react-redux/dist/react-redux.mjs:875:11)
+    at Router (file:///home/shofikul/Desktop/talawa-admin/node_modules/react-router/dist/development/chunk-HA7DTUK3.mjs:4999:13)
+    at BrowserRouter (file:///home/shofikul/Desktop/talawa-admin/node_modules/react-router/dist/development/chunk-HA7DTUK3.mjs:7197:3)
+    at ApolloProvider (/home/shofikul/Desktop/talawa-admin/node_modules/@apollo/client/react/context/context.cjs:50:21)
+    at MockedProvider (/home/shofikul/Desktop/talawa-admin/node_modules/@apollo/client/testing/testing.cjs:30:28)
+
+stderr | src/components/EventManagement/EventRegistrant/EventRegistrants.spec.tsx > Event Registrants Component > should handle non-empty registrant with empty user object
+An error occurred! For more details, see the full error text at https://go.apollo.dev/c/err#%7B%22version%22%3A%223.12.11%22%2C%22message%22%3A13%2C%22args%22%3A%5B%22id%22%2C%22%7B%7D%22%5D%7D
+An error occurred! For more details, see the full error text at https://go.apollo.dev/c/err#%7B%22version%22%3A%223.12.11%22%2C%22message%22%3A13%2C%22args%22%3A%5B%22name%22%2C%22%7B%7D%22%5D%7D
+An error occurred! For more details, see the full error text at https://go.apollo.dev/c/err#%7B%22version%22%3A%223.12.11%22%2C%22message%22%3A13%2C%22args%22%3A%5B%22emailAddress%22%2C%22%7B%7D%22%5D%7D
+An error occurred! For more details, see the full error text at https://go.apollo.dev/c/err#%7B%22version%22%3A%223.12.11%22%2C%22message%22%3A13%2C%22args%22%3A%5B%22isInvited%22%2C%22%7B%5Cn%20%20%5C%22id%5C%22%3A%20%5C%221%5C%22%2C%5Cn%20%20%5C%22user%5C%22%3A%20%7B%7D%2C%5Cn%20%20%5C%22isRegistered%5C%22%3A%20true%2C%5Cn%20%20%5C%22createdAt%5C%22%3A%20%5C%222023-09-25T10%3A00%3A00.000Z%5C%22%2C%5Cn%20%20%5C%22__typename%5C%22%3A%20%5C%22EventAttendee%5C%22%5Cn%7D%22%5D%7D
+
+stderr | src/components/EventManagement/EventRegistrant/EventRegistrants.spec.tsx > Event Registrants Component > should disable unregister button for checked-in user
+An error occurred! For more details, see the full error text at https://go.apollo.dev/c/err#%7B%22version%22%3A%223.12.11%22%2C%22message%22%3A13%2C%22args%22%3A%5B%22id%22%2C%22%7B%5Cn%20%20%5C%22user%5C%22%3A%20%7B%5Cn%20%20%20%20%5C%22id%5C%22%3A%20%5C%22user1%5C%22%2C%5Cn%20%20%20%20%5C%22__typename%5C%22%3A%20%5C%22User%5C%22%5Cn%20%20%7D%2C%5Cn%20%20%5C%22isCheckedIn%5C%22%3A%20true%5Cn%7D%22%5D%7D
+An error occurred! For more details, see the full error text at https://go.apollo.dev/c/err#%7B%22version%22%3A%223.12.11%22%2C%22message%22%3A13%2C%22args%22%3A%5B%22name%22%2C%22%7B%5Cn%20%20%5C%22id%5C%22%3A%20%5C%22user1%5C%22%2C%5Cn%20%20%5C%22__typename%5C%22%3A%20%5C%22User%5C%22%5Cn%7D%22%5D%7D
+An error occurred! For more details, see the full error text at https://go.apollo.dev/c/err#%7B%22version%22%3A%223.12.11%22%2C%22message%22%3A13%2C%22args%22%3A%5B%22emailAddress%22%2C%22%7B%5Cn%20%20%5C%22id%5C%22%3A%20%5C%22user1%5C%22%2C%5Cn%20%20%5C%22__typename%5C%22%3A%20%5C%22User%5C%22%5Cn%7D%22%5D%7D
+An error occurred! For more details, see the full error text at https://go.apollo.dev/c/err#%7B%22version%22%3A%223.12.11%22%2C%22message%22%3A13%2C%22args%22%3A%5B%22checkInTime%22%2C%22%7B%5Cn%20%20%5C%22user%5C%22%3A%20%7B%5Cn%20%20%20%20%5C%22id%5C%22%3A%20%5C%22user1%5C%22%2C%5Cn%20%20%20%20%5C%22__typename%5C%22%3A%20%5C%22User%5C%22%5Cn%20%20%7D%2C%5Cn%20%20%5C%22isCheckedIn%5C%22%3A%20true%5Cn%7D%22%5D%7D
+An error occurred! For more details, see the full error text at https://go.apollo.dev/c/err#%7B%22version%22%3A%223.12.11%22%2C%22message%22%3A13%2C%22args%22%3A%5B%22checkOutTime%22%2C%22%7B%5Cn%20%20%5C%22user%5C%22%3A%20%7B%5Cn%20%20%20%20%5C%22id%5C%22%3A%20%5C%22user1%5C%22%2C%5Cn%20%20%20%20%5C%22__typename%5C%22%3A%20%5C%22User%5C%22%5Cn%20%20%7D%2C%5Cn%20%20%5C%22isCheckedIn%5C%22%3A%20true%5Cn%7D%22%5D%7D
+An error occurred! For more details, see the full error text at https://go.apollo.dev/c/err#%7B%22version%22%3A%223.12.11%22%2C%22message%22%3A13%2C%22args%22%3A%5B%22isCheckedOut%22%2C%22%7B%5Cn%20%20%5C%22user%5C%22%3A%20%7B%5Cn%20%20%20%20%5C%22id%5C%22%3A%20%5C%22user1%5C%22%2C%5Cn%20%20%20%20%5C%22__typename%5C%22%3A%20%5C%22User%5C%22%5Cn%20%20%7D%2C%5Cn%20%20%5C%22isCheckedIn%5C%22%3A%20true%5Cn%7D%22%5D%7D
+
+stderr | src/components/EventManagement/EventRegistrant/EventRegistrants.spec.tsx > Event Registrants Component > should handle undefined attendeesCheckInStatus in check-in
+An error occurred! For more details, see the full error text at https://go.apollo.dev/c/err#%7B%22version%22%3A%223.12.11%22%2C%22message%22%3A13%2C%22args%22%3A%5B%22id%22%2C%22%7B%5Cn%20%20%5C%22__typename%5C%22%3A%20%5C%22Event%5C%22%5Cn%7D%22%5D%7D
+An error occurred! For more details, see the full error text at https://go.apollo.dev/c/err#%7B%22version%22%3A%223.12.11%22%2C%22message%22%3A13%2C%22args%22%3A%5B%22attendeesCheckInStatus%22%2C%22%7B%5Cn%20%20%5C%22__typename%5C%22%3A%20%5C%22Event%5C%22%5Cn%7D%22%5D%7D
+
+stderr | src/components/EventManagement/EventRegistrant/EventRegistrants.spec.tsx > Event Registrants Component > should handle undefined event in check-in
+An error occurred! For more details, see the full error text at https://go.apollo.dev/c/err#%7B%22version%22%3A%223.12.11%22%2C%22message%22%3A13%2C%22args%22%3A%5B%22event%22%2C%22%7B%5Cn%20%20%5C%22event%5C%22%3A%20%3Cundefined%3E%5Cn%7D%22%5D%7D
+
+stderr | src/components/EventManagement/EventRegistrant/EventRegistrants.spec.tsx > Event Registrants Component > should handle undefined getEventAttendeesByEventId in registrants query response
+An error occurred! For more details, see the full error text at https://go.apollo.dev/c/err#%7B%22version%22%3A%223.12.11%22%2C%22message%22%3A13%2C%22args%22%3A%5B%22getEventAttendeesByEventId%22%2C%22%7B%5Cn%20%20%5C%22getEventAttendeesByEventId%5C%22%3A%20%3Cundefined%3E%5Cn%7D%22%5D%7D
+
+stderr | src/components/EventManagement/EventRegistrant/EventRegistrants.spec.tsx > Event Registrants Component > should handle missing getEventAttendeesByEventId property in registrants query response
+An error occurred! For more details, see the full error text at https://go.apollo.dev/c/err#%7B%22version%22%3A%223.12.11%22%2C%22message%22%3A13%2C%22args%22%3A%5B%22getEventAttendeesByEventId%22%2C%22%7B%7D%22%5D%7D
+
+ ✓ src/components/EventManagement/EventRegistrant/EventRegistrants.spec.tsx (22 tests) 684ms
+
+ Test Files  1 passed (1)
+      Tests  22 passed (22)
+   Start at  07:40:16
+   Duration  14.23s (transform 1.01s, setup 217ms, collect 2.73s, tests 684ms, environment 447ms, prepare 87ms)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |    2.58 |     1.16 |    1.21 |    2.66 |                   
+ src               |       0 |        0 |       0 |       0 |                   
+  App.tsx          |       0 |        0 |       0 |       0 | 16-356            
+  constants.ts     |       0 |      100 |     100 |       0 | 12                
+  index.tsx        |       0 |        0 |       0 |       0 | 36-178            
+  ...tWebVitals.ts |       0 |        0 |       0 |       0 | 3-10              
+  setupTests.ts    |       0 |      100 |       0 |       0 | 3-25              
+ src/Constant      |       0 |        0 |     100 |       0 |                   
+  constant.ts      |       0 |        0 |     100 |       0 | 1-6               
+  fileUpload.ts    |       0 |        0 |     100 |       0 | 3-7               
+ ...phQl/Mutations |   77.23 |      100 |     100 |   77.23 |                   
+  ...yMutations.ts |     100 |      100 |     100 |     100 |                   
+  ...mMutations.ts |     100 |      100 |     100 |     100 |                   
+  ...tMutations.ts |     100 |      100 |     100 |     100 |                   
+  ...yMutations.ts |     100 |      100 |     100 |     100 |                   
+  ...mMutations.ts |     100 |      100 |     100 |     100 |                   
+  ...gnMutation.ts |       0 |      100 |     100 |       0 | 15-51             
+  ...tMutations.ts |     100 |      100 |     100 |     100 |                   
+  ...eMutations.ts |     100 |      100 |     100 |     100 |                   
+  ...tMutations.ts |     100 |      100 |     100 |     100 |                   
+  ...erMutation.ts |       0 |      100 |     100 |       0 | 11-198            
+  FundMutation.ts  |       0 |      100 |     100 |       0 | 11-37             
+  ...nMutations.ts |     100 |      100 |     100 |     100 |                   
+  ...geMutation.ts |       0 |      100 |     100 |       0 | 12-73             
+  ...nMutations.ts |       0 |      100 |     100 |       0 | 9-81              
+  TagMutations.ts  |       0 |      100 |     100 |       0 | 12-115            
+  ...eMutations.ts |     100 |      100 |     100 |     100 |                   
+  mutations.ts     |     100 |      100 |     100 |     100 |                   
+ ...raphQl/Queries |   81.39 |      100 |     100 |   81.39 |                   
+  ...oryQueries.ts |     100 |      100 |     100 |     100 |                   
+  ...temQueries.ts |     100 |      100 |     100 |     100 |                   
+  ...entQueries.ts |     100 |      100 |     100 |     100 |                   
+  ...oryQueries.ts |     100 |      100 |     100 |     100 |                   
+  ...temQueries.ts |     100 |      100 |     100 |     100 |                   
+  ...entQueries.ts |     100 |      100 |     100 |     100 |                   
+  ...eerQueries.ts |       0 |      100 |     100 |       0 | 12-251            
+  ...ionQueries.ts |       0 |      100 |     100 |       0 | 3-22              
+  ...ionQueries.ts |     100 |      100 |     100 |     100 |                   
+  PlugInQueries.ts |     100 |      100 |     100 |     100 |                   
+  Queries.ts       |     100 |      100 |     100 |     100 |                   
+  fundQueries.ts   |       0 |      100 |     100 |       0 | 13-129            
+  ...TagQueries.ts |       0 |      100 |     100 |       0 | 10-119            
+ ...AddPeopleToTag |       0 |        0 |       0 |       0 |                   
+  ...opleToTag.tsx |       0 |        0 |       0 |       0 | 65-409            
+  ...oTagsMocks.ts |       0 |      100 |     100 |       0 | 5-413             
+ ...Advertisements |       0 |        0 |       0 |       0 |                   
+  ...tisements.tsx |       0 |        0 |       0 |       0 | 52-284            
+  ...mentsMocks.ts |       0 |        0 |       0 |       0 | 109-517           
+ ...rtisementEntry |       0 |        0 |       0 |       0 |                   
+  ...mentEntry.tsx |       0 |        0 |       0 |       0 | 72-341            
+ ...sementRegister |       0 |        0 |       0 |       0 |                   
+  ...tRegister.tsx |       0 |        0 |       0 |       0 | 60-521            
+  ...isterMocks.ts |       0 |        0 |       0 |       0 | 15-182            
+ ...ments/skeleton |       0 |      100 |       0 |       0 |                   
+  ...tSkeleton.tsx |       0 |      100 |       0 |       0 | 23-24             
+ ...AgendaCategory |       0 |        0 |       0 |       0 |                   
+  ...Container.tsx |       0 |        0 |       0 |       0 | 60-283            
+  ...ainerMocks.ts |       0 |      100 |     100 |       0 | 9-117             
+ ...ts/AgendaItems |       0 |        0 |       0 |       0 |                   
+  ...Container.tsx |       0 |        0 |       0 |       0 | 65-414            
+  ...ItemsMocks.ts |       0 |      100 |     100 |       0 | 9-258             
+ ...daItems/Create |       0 |        0 |       0 |       0 |                   
+  ...eateModal.tsx |       0 |        0 |       0 |       0 | 52-313            
+ ...daItems/Delete |       0 |      100 |       0 |       0 |                   
+  ...leteModal.tsx |       0 |      100 |       0 |       0 | 39-46             
+ ...aItems/Preview |       0 |        0 |       0 |       0 |                   
+  ...viewModal.tsx |       0 |        0 |       0 |       0 | 36-90             
+ ...daItems/Update |       0 |        0 |       0 |       0 |                   
+  ...dateModal.tsx |       0 |        0 |       0 |       0 | 55-315            
+ ...ponents/Avatar |       0 |        0 |       0 |       0 |                   
+  Avatar.tsx       |       0 |        0 |       0 |       0 | 41-61             
+ ...nguageDropdown |       0 |        0 |       0 |       0 |                   
+  ...eDropDown.tsx |       0 |        0 |       0 |       0 | 46-114            
+ ...onents/CheckIn |       0 |        0 |       0 |       0 |                   
+  CheckInMocks.ts  |       0 |      100 |     100 |       0 | 5-103             
+  ...InWrapper.tsx |       0 |        0 |       0 |       0 | 35-62             
+  tagTemplate.ts   |       0 |      100 |     100 |       0 | 4                 
+ .../CheckIn/Modal |       0 |        0 |       0 |       0 |                   
+  CheckInModal.tsx |       0 |        0 |       0 |       0 | 52-185            
+ ...ckIn/Modal/Row |       0 |        0 |       0 |       0 |                   
+  TableRow.tsx     |       0 |        0 |       0 |       0 | 47-117            
+ ...psibleDropdown |       0 |        0 |       0 |       0 |                   
+  ...eDropdown.tsx |       0 |        0 |       0 |       0 | 48-107            
+ ...ts/ContriStats |       0 |      100 |       0 |       0 |                   
+  ContriStats.tsx  |       0 |      100 |       0 |       0 | 39-43             
+ ...tHourIndicator |       0 |      100 |       0 |       0 |                   
+  ...Indicator.tsx |       0 |      100 |       0 |       0 | 31-32             
+ ...ynamicDropDown |       0 |        0 |       0 |       0 |                   
+  ...cDropDown.tsx |       0 |        0 |       0 |       0 | 55-113            
+ ...mFieldDropDown |       0 |        0 |       0 |       0 |                   
+  ...dDropDown.tsx |       0 |        0 |       0 |       0 | 45-75             
+ .../EventCalender |       0 |      100 |     100 |       0 |                   
+  ...enderMocks.ts |       0 |      100 |     100 |       0 | 6-39              
+ ...alender/Header |       0 |      100 |       0 |       0 |                   
+  EventHeader.tsx  |       0 |      100 |       0 |       0 | 51-89             
+ ...lender/Monthly |       0 |        0 |       0 |       0 |                   
+  ...tCalender.tsx |       0 |        0 |       0 |       0 | 60-534            
+ ...alender/Yearly |       0 |        0 |       0 |       0 |                   
+  ...tCalender.tsx |       0 |        0 |       0 |       0 | 47-319            
+ ...ashboardScreen |       0 |        0 |       0 |       0 |                   
+  ...ardScreen.tsx |       0 |        0 |       0 |       0 | 48-173            
+  ...creenMocks.ts |       0 |      100 |     100 |       0 | 3                 
+ .../EventListCard |       0 |        0 |       0 |       0 |                   
+  ...tListCard.tsx |       0 |        0 |       0 |       0 | 47-75             
+  ...tCardProps.ts |       0 |      100 |       0 |       0 | 7                 
+ ...ListCard/Modal |       0 |        0 |       0 |       0 |                   
+  ...tCardMocks.ts |       0 |      100 |     100 |       0 | 8-255             
+  ...ardModals.tsx |       0 |        0 |       0 |       0 | 48-511            
+  updateLogic.ts   |       0 |        0 |       0 |       0 | 15-247            
+ ...d/Modal/Delete |       0 |        0 |       0 |       0 |                   
+  ...leteModal.tsx |       0 |        0 |       0 |       0 | 40-114            
+ .../Modal/Preview |       0 |        0 |       0 |       0 |                   
+  ...viewModal.tsx |       0 |        0 |       0 |       0 | 51-530            
+ ...ment/Dashboard |       0 |        0 |       0 |       0 |                   
+  ...oard.mocks.ts |       0 |      100 |     100 |       0 | 3-36              
+  ...Dashboard.tsx |       0 |        0 |       0 |       0 | 41-119            
+ ...entActionItems |       0 |        0 |       0 |       0 |                   
+  ...tionItems.tsx |       0 |        0 |       0 |       0 | 49-550            
+ ...entAgendaItems |       0 |        0 |       0 |       0 |                   
+  ...endaItems.tsx |       0 |        0 |       0 |       0 | 63-207            
+  ...ItemsMocks.ts |       0 |      100 |       0 |       0 | 6-201             
+ ...ventAttendance |       0 |      100 |     100 |       0 |                   
+  ...danceMocks.ts |       0 |      100 |     100 |       0 | 3-48              
+ ...nce/Attendance |       0 |        0 |       0 |       0 |                   
+  ...ttendance.tsx |       0 |        0 |       0 |       0 | 58-351            
+ ...AttendanceList |       0 |        0 |       0 |       0 |                   
+  ...EventList.tsx |       0 |        0 |       0 |       0 | 42-57             
+ ...nce/Statistics |       0 |        0 |       0 |       0 |                   
+  ...tatistics.tsx |       0 |        0 |       0 |       0 | 72-508            
+ ...ventRegistrant |     100 |    97.29 |     100 |     100 |                   
+  ...ants.mocks.ts |     100 |      100 |     100 |     100 |                   
+  ...gistrants.tsx |     100 |      100 |     100 |     100 |                   
+  utils.ts         |     100 |       75 |     100 |     100 | 20                
+ ...gistrantsModal |       0 |        0 |       0 |       0 |                   
+  ...tsWrapper.tsx |       0 |        0 |       0 |       0 | 37-60             
+ ...ntsModal/Modal |       0 |        0 |       0 |       0 |                   
+  ...antsModal.tsx |       0 |        0 |       0 |       0 | 65-195            
+ ...odal/AddOnSpot |       0 |        0 |       0 |       0 |                   
+  ...tAttendee.tsx |       0 |        0 |       0 |       0 | 52-135            
+ .../InviteByEmail |       0 |        0 |       0 |       0 |                   
+  ...mailModal.tsx |       0 |        0 |       0 |       0 | 22-207            
+ ...nts/EventStats |       0 |        0 |       0 |       0 |                   
+  ...StatsMocks.ts |       0 |      100 |     100 |       0 | 3-71              
+  ...tsWrapper.tsx |       0 |        0 |       0 |       0 | 38-62             
+ ...ats/Statistics |       0 |        0 |       0 |       0 |                   
+  EventStats.tsx   |       0 |        0 |       0 |       0 | 50-69             
+ .../AverageRating |       0 |      100 |       0 |       0 |                   
+  ...ageRating.tsx |       0 |      100 |       0 |       0 | 35-36             
+ ...stics/Feedback |       0 |        0 |       0 |       0 |                   
+  Feedback.tsx     |       0 |        0 |       0 |       0 | 44-94             
+ ...tistics/Review |       0 |        0 |       0 |       0 |                   
+  Review.tsx       |       0 |        0 |       0 |       0 | 40-63             
+ ...oupChatDetails |       0 |        0 |       0 |       0 |                   
+  ...atDetails.tsx |       0 |        0 |       0 |       0 | 77-576            
+  ...ailsMocks.tsx |       0 |      100 |       0 |       0 | 30-114            
+ ...s/HolidayCards |       0 |      100 |       0 |       0 |                   
+  HolidayCard.tsx  |       0 |      100 |       0 |       0 | 27-28             
+ .../IconComponent |       0 |        0 |       0 |       0 |                   
+  ...Component.tsx |       0 |        0 |       0 |       0 | 66-179            
+ ...teScrollLoader |       0 |      100 |       0 |       0 |                   
+  ...ollLoader.tsx |       0 |      100 |       0 |       0 | 29-30             
+ ...nts/LeftDrawer |       0 |        0 |       0 |       0 |                   
+  LeftDrawer.tsx   |       0 |        0 |       0 |       0 | 35-204            
+ .../LeftDrawerOrg |       0 |        0 |       0 |       0 |                   
+  ...DrawerOrg.tsx |       0 |        0 |       0 |       0 | 95-371            
+ ...ponents/Loader |       0 |        0 |       0 |       0 |                   
+  Loader.tsx       |       0 |        0 |       0 |       0 | 43-44             
+ ...inPortalToggle |       0 |        0 |       0 |       0 |                   
+  ...talToggle.tsx |       0 |        0 |       0 |       0 | 40-68             
+ ...MemberActivity |       0 |        0 |       0 |       0 |                   
+  ...dByMember.tsx |       0 |        0 |       0 |       0 | 42-64             
+  ...ivityMocks.ts |       0 |      100 |     100 |       0 | 3-73              
+ ...rActivity/Card |       0 |        0 |       0 |       0 |                   
+  ...dCardItem.tsx |       0 |        0 |       0 |       0 | 54-62             
+ ...Activity/Modal |       0 |        0 |       0 |       0 |                   
+  ...mberModal.tsx |       0 |        0 |       0 |       0 | 56-135            
+ ...dal/CustomCell |       0 |        0 |       0 |       0 |                   
+  ...TableCell.tsx |       0 |        0 |       0 |       0 | 34-71             
+ ...berRequestCard |       0 |        0 |       0 |       0 |                   
+  ...questCard.tsx |       0 |        0 |       0 |       0 | 59-92             
+  ...questMocks.ts |       0 |      100 |     100 |       0 | 6-86              
+ ...nents/NotFound |       0 |      100 |       0 |       0 |                   
+  NotFound.tsx     |       0 |      100 |       0 |       0 | 41-43             
+ ...tificationIcon |       0 |        0 |       0 |       0 |                   
+  ...ationIcon.tsx |       0 |        0 |       0 |       0 | 25-112            
+ ...gAdminListCard |       0 |        0 |       0 |       0 |                   
+  ...nListCard.tsx |       0 |        0 |       0 |       0 | 48-81             
+ ...OrgContriCards |       0 |      100 |       0 |       0 |                   
+  ...ntriCards.tsx |       0 |      100 |       0 |       0 | 41-43             
+ ...ents/OrgDelete |       0 |      100 |       0 |       0 |                   
+  OrgDelete.tsx    |       0 |      100 |       0 |       0 | 36-38             
+ ...ts/OrgListCard |       0 |        0 |       0 |       0 |                   
+  OrgListCard.tsx  |       0 |        0 |       0 |       0 | 57-67             
+  ...catedText.tsx |       0 |        0 |       0 |       0 | 39-81             
+  useDebounce.tsx  |       0 |        0 |       0 |       0 | 35-55             
+ ...PeopleListCard |       0 |        0 |       0 |       0 |                   
+  ...eListCard.tsx |       0 |        0 |       0 |       0 | 49-79             
+ ...ts/OrgPostCard |       0 |        0 |       0 |       0 |                   
+  OrgPostCard.tsx  |       0 |        0 |       0 |       0 | 95-635            
+ ...rd/DeleteModal |       0 |      100 |       0 |       0 |                   
+  ...PostModal.tsx |       0 |      100 |       0 |       0 | 44-57             
+ ...ItemCategories |       0 |        0 |       0 |       0 |                   
+  ...ategories.tsx |       0 |        0 |       0 |       0 | 52-445            
+  ...egoryMocks.ts |       0 |      100 |     100 |       0 | 9-350             
+ ...tegories/Modal |       0 |        0 |       0 |       0 |                   
+  ...goryModal.tsx |       0 |        0 |       0 |       0 | 24-228            
+  ...ViewModal.tsx |       0 |        0 |       0 |       0 | 19-31             
+ ...ItemCategories |       0 |        0 |       0 |       0 |                   
+  ...aCategory.tsx |       0 |        0 |       0 |       0 | 53-159            
+  ...ErrorMocks.ts |       0 |      100 |     100 |       0 | 5-20              
+  ...egoryMocks.ts |       0 |      100 |     100 |       0 | 5                 
+ ...egories/Create |       0 |      100 |       0 |       0 |                   
+  ...eateModal.tsx |       0 |      100 |       0 |       0 | 55-103            
+ ...egories/Delete |       0 |      100 |       0 |       0 |                   
+  ...leteModal.tsx |       0 |      100 |       0 |       0 | 47-54             
+ ...gories/Preview |       0 |      100 |       0 |       0 |                   
+  ...viewModal.tsx |       0 |      100 |       0 |       0 | 54-102            
+ ...egories/Update |       0 |      100 |       0 |       0 |                   
+  ...dateModal.tsx |       0 |      100 |       0 |       0 | 57-102            
+ ...ttings/General |       0 |      100 |       0 |       0 |                   
+  ...lSettings.tsx |       0 |      100 |       0 |       0 | 23-26             
+ ...eral/DeleteOrg |       0 |        0 |       0 |       0 |                   
+  DeleteOrg.tsx    |       0 |        0 |       0 |       0 | 29-89             
+ ...eral/OrgUpdate |       0 |        0 |       0 |       0 |                   
+  OrgUpdate.tsx    |       0 |        0 |       0 |       0 | 46-323            
+ ...ationCardStart |       0 |        0 |       0 |       0 |                   
+  ...CardStart.tsx |       0 |        0 |       0 |       0 | 35-37             
+ ...ationDashCards |       0 |        0 |       0 |       0 |                   
+  ...boardCard.tsx |       0 |        0 |       0 |       0 | 35-41             
+ ...Cards/CardItem |       0 |        0 |       0 |       0 |                   
+  CardItem.tsx     |       0 |        0 |       0 |       0 | 53-78             
+ ...ardItem/Loader |       0 |      100 |       0 |       0 |                   
+  ...emLoading.tsx |       0 |      100 |       0 |       0 | 37-38             
+ ...shCards/Loader |       0 |      100 |       0 |       0 |                   
+  ...rdLoading.tsx |       0 |      100 |       0 |       0 | 41-42             
+ ...nizationScreen |       0 |        0 |       0 |       0 |                   
+  ...ionScreen.tsx |       0 |        0 |       0 |       0 | 44-155            
+ ...tion/Navigator |       0 |        0 |       0 |       0 |                   
+  Pagination.tsx   |       0 |        0 |       0 |       0 | 53-105            
+ ...PaginationList |       0 |        0 |       0 |       0 |                   
+  ...ationList.tsx |       0 |        0 |       0 |       0 | 50-63             
+ ...ts/ProfileCard |       0 |        0 |       0 |       0 |                   
+  ProfileCard.tsx  |       0 |        0 |       0 |       0 | 49-109            
+ ...rofileDropdown |       0 |        0 |       0 |       0 |                   
+  ...eDropdown.tsx |       0 |        0 |       0 |       0 | 47-116            
+ ...uestsTableItem |       0 |        0 |       0 |       0 |                   
+  ...TableItem.tsx |       0 |        0 |       0 |       0 | 52-166            
+  ...eItemMocks.ts |       0 |      100 |     100 |       0 | 6-45              
+ ...s/SecuredRoute |       0 |        0 |       0 |       0 |                   
+  SecuredRoute.tsx |       0 |        0 |       0 |       0 | 41-104            
+ ...onents/SignOut |       0 |        0 |       0 |       0 |                   
+  SignOut.tsx      |       0 |        0 |       0 |       0 | 49-90             
+ ...perAdminScreen |       0 |        0 |       0 |       0 |                   
+  ...minScreen.tsx |       0 |        0 |       0 |       0 | 31-117            
+ ...ts/TableLoader |       0 |        0 |       0 |       0 |                   
+  TableLoader.tsx  |       0 |        0 |       0 |       0 | 42-79             
+ ...nts/TagActions |       0 |        0 |       0 |       0 |                   
+  TagActions.tsx   |       0 |        0 |       0 |       0 | 73-416            
+  ...tionsMocks.ts |       0 |        0 |       0 |       0 | 28-337            
+ ...agActions/Node |       0 |        0 |       0 |       0 |                   
+  TagNode.tsx      |       0 |        0 |       0 |       0 | 58-204            
+  TagNodeMocks.ts  |       0 |      100 |     100 |       0 | 3-64              
+ .../UpdateSession |       0 |        0 |       0 |       0 |                   
+  ...teSession.tsx |       0 |        0 |       0 |       0 | 54-152            
+ ...s/UserListCard |       0 |        0 |       0 |       0 |                   
+  UserListCard.tsx |       0 |        0 |       0 |       0 | 56-78             
+ ...PasswordUpdate |       0 |        0 |       0 |       0 |                   
+  ...ordUpdate.tsx |       0 |        0 |       0 |       0 | 51-161            
+  ...pdateMocks.ts |       0 |      100 |     100 |       0 | 3                 
+ ...ortal/ChatRoom |       0 |        0 |       0 |       0 |                   
+  ChatRoom.tsx     |       0 |        0 |       0 |       0 | 153-933           
+ ...al/CommentCard |       0 |        0 |       0 |       0 |                   
+  CommentCard.tsx  |       0 |        0 |       0 |       0 | 56-353            
+ ...al/ContactCard |       0 |        0 |       0 |       0 |                   
+  ContactCard.tsx  |       0 |        0 |       0 |       0 | 44-56             
+ ...eateDirectChat |       0 |        0 |       0 |       0 |                   
+  ...irectChat.tsx |       0 |        0 |       0 |       0 | 80-348            
+ ...reateGroupChat |       0 |        0 |       0 |       0 |                   
+  ...GroupChat.tsx |       0 |        0 |       0 |       0 | 85-422            
+ ...l/DonationCard |       0 |      100 |       0 |       0 |                   
+  DonationCard.tsx |       0 |      100 |       0 |       0 | 36-46             
+ ...rtal/EventCard |       0 |        0 |       0 |       0 |                   
+  EventCard.tsx    |       0 |        0 |       0 |       0 | 61-106            
+ ...ganizationCard |       0 |        0 |       0 |       0 |                   
+  ...ationCard.tsx |       0 |        0 |       0 |       0 | 78-225            
+ ...nizationNavbar |       0 |        0 |       0 |       0 |                   
+  ...ionNavbar.tsx |       0 |        0 |       0 |       0 | 57-151            
+ ...izationSidebar |       0 |        0 |       0 |       0 |                   
+  ...onSidebar.tsx |       0 |        0 |       0 |       0 | 53-174            
+ ...tal/PeopleCard |       0 |        0 |       0 |       0 |                   
+  PeopleCard.tsx   |       0 |        0 |       0 |       0 | 46-48             
+ ...ortal/PostCard |       0 |        0 |       0 |       0 |                   
+  PostCard.tsx     |       0 |        0 |       0 |       0 | 70-484            
+ ...l/PromotedPost |       0 |        0 |       0 |       0 |                   
+  PromotedPost.tsx |       0 |        0 |       0 |       0 | 47                
+ ...ortal/Register |       0 |        0 |       0 |       0 |                   
+  Register.tsx     |       0 |        0 |       0 |       0 | 46-165            
+ ...edRouteForUser |       0 |        0 |       0 |       0 |                   
+  ...teForUser.tsx |       0 |        0 |       0 |       0 | 38-105            
+ ...StartPostModal |       0 |        0 |       0 |       0 |                   
+  ...PostModal.tsx |       0 |        0 |       0 |       0 | 52-191            
+ ...tal/UserNavbar |       0 |        0 |       0 |       0 |                   
+  UserNavbar.tsx   |       0 |        0 |       0 |       0 | 64-170            
+ ...al/UserProfile |       0 |        0 |       0 |       0 |                   
+  ...dedByUser.tsx |       0 |        0 |       0 |       0 | 59-75             
+  ...essFields.tsx |       0 |      100 |       0 |       0 | 55-156            
+ ...al/UserSidebar |       0 |        0 |       0 |       0 |                   
+  UserSidebar.tsx  |       0 |        0 |       0 |       0 | 50-266            
+ ...UserSidebarOrg |       0 |        0 |       0 |       0 |                   
+  ...idebarOrg.tsx |       0 |        0 |       0 |       0 | 63-229            
+ ...rofileSettings |       0 |        0 |       0 |       0 |                   
+  UserProfile.tsx  |       0 |        0 |       0 |       0 | 48-69             
+ ...ettings/Delete |       0 |      100 |       0 |       0 |                   
+  DeleteUser.tsx   |       0 |      100 |       0 |       0 | 44-46             
+ ...s/OtherSetting |       0 |      100 |       0 |       0 |                   
+  ...rSettings.tsx |       0 |      100 |       0 |       0 | 37-39             
+ ...UsersTableItem |       0 |        0 |       0 |       0 |                   
+  ...eItemMocks.ts |       0 |      100 |     100 |       0 | 6-55              
+  ...TableItem.tsx |       0 |        0 |       0 |       0 | 31-339            
+ ...ponents/Venues |       0 |        0 |       0 |       0 |                   
+  VenueCard.tsx    |       0 |        0 |       0 |       0 | 47-113            
+  ...eCardMocks.ts |       0 |      100 |     100 |       0 | 3-40              
+ ...s/Venues/Modal |       0 |        0 |       0 |       0 |                   
+  VenueModal.tsx   |       0 |        0 |       0 |       0 | 65-354            
+ ...nts/test-utils |       0 |        0 |       0 |       0 |                   
+  ...Component.tsx |       0 |        0 |       0 |       0 | 12-21             
+  ...viderMock.tsx |       0 |        0 |       0 |       0 | 21                
+  ...serRouter.tsx |       0 |      100 |       0 |       0 | 12-13             
+  ...rBoundary.tsx |       0 |        0 |       0 |       0 | 27-49             
+  TestWrapper.tsx  |       0 |        0 |       0 |       0 | 51-55             
+ src/plugin        |       0 |        0 |       0 |       0 |                   
+  ...ql-service.ts |       0 |        0 |       0 |       0 | 43-146            
+  hooks.ts         |       0 |        0 |       0 |       0 | 14-194            
+  manager.ts       |       0 |        0 |       0 |       0 | 20-193            
+  registry.tsx     |       0 |        0 |       0 |       0 | 24-277            
+  types.ts         |       0 |        0 |       0 |       0 | 150-158           
+  utils.ts         |       0 |        0 |       0 |       0 | 8-82              
+ ...gin/components |       0 |        0 |       0 |       0 |                   
+  ...nInjector.tsx |       0 |        0 |       0 |       0 | 26-67             
+ ...lugin/managers |       0 |        0 |       0 |       0 |                   
+  discovery.ts     |       0 |        0 |       0 |       0 | 12-200            
+  event-manager.ts |       0 |        0 |       0 |       0 | 7-77              
+  ...n-registry.ts |       0 |        0 |       0 |       0 | 13-295            
+  lifecycle.ts     |       0 |        0 |       0 |       0 | 13-508            
+ src/plugin/routes |       0 |        0 |       0 |       0 |                   
+  ...eRenderer.tsx |       0 |        0 |       0 |       0 | 20-139            
+  PluginRoutes.tsx |       0 |        0 |       0 |       0 | 22-93             
+ ...lugin/services |       0 |        0 |       0 |       0 |                   
+  ...ileService.ts |       0 |        0 |       0 |       0 | 47-453            
+  ...FileWriter.ts |       0 |        0 |       0 |       0 | 29-438            
+ src/plugin/vite   |       0 |        0 |       0 |       0 |                   
+  ...iterPlugin.ts |       0 |        0 |       0 |       0 | 39-396            
+ ...eens/BlockUser |       0 |        0 |       0 |       0 |                   
+  BlockUser.tsx    |       0 |        0 |       0 |       0 | 72-345            
+ ...mmunityProfile |       0 |        0 |       0 |       0 |                   
+  ...tyProfile.tsx |       0 |        0 |       0 |       0 | 64-285            
+ ...ventManagement |       0 |        0 |       0 |       0 |                   
+  ...anagement.tsx |       0 |        0 |       0 |       0 | 77-252            
+ ...ventVolunteers |       0 |        0 |       0 |       0 |                   
+  ...Container.tsx |       0 |        0 |       0 |       0 | 43-104            
+ ...teers/Requests |       0 |        0 |       0 |       0 |                   
+  ...ests.mocks.ts |       0 |      100 |     100 |       0 | 4-327             
+  Requests.tsx     |       0 |        0 |       0 |       0 | 62-360            
+ ...olunteerGroups |       0 |        0 |       0 |       0 |                   
+  ...eerGroups.tsx |       0 |        0 |       0 |       0 | 45-431            
+ ...ps/deleteModal |       0 |        0 |       0 |       0 |                   
+  ...leteModal.tsx |       0 |        0 |       0 |       0 | 58-131            
+ ...erGroups/modal |       0 |        0 |       0 |       0 |                   
+  ...roupModal.tsx |       0 |        0 |       0 |       0 | 107-399           
+  ...oups.mocks.ts |       0 |      100 |     100 |       0 | 9-328             
+ ...oups/viewModal |       0 |        0 |       0 |       0 |                   
+  ...ViewModal.tsx |       0 |        0 |       0 |       0 | 63-229            
+ ...ers/Volunteers |       0 |        0 |       0 |       0 |                   
+  ...eers.mocks.ts |       0 |      100 |       0 |       0 | 9-394             
+  Volunteers.tsx   |       0 |        0 |       0 |       0 | 72-523            
+ ...rs/createModal |       0 |        0 |       0 |       0 |                   
+  ...eateModal.tsx |       0 |        0 |       0 |       0 | 66-186            
+ ...rs/deleteModal |       0 |        0 |       0 |       0 |                   
+  ...leteModal.tsx |       0 |        0 |       0 |       0 | 58-138            
+ ...eers/viewModal |       0 |        0 |       0 |       0 |                   
+  ...ViewModal.tsx |       0 |        0 |       0 |       0 | 68-204            
+ ...ForgotPassword |       0 |        0 |       0 |       0 |                   
+  ...tPassword.tsx |       0 |        0 |       0 |       0 | 63-271            
+ ...CampaignPledge |       0 |        0 |       0 |       0 |                   
+  ...ignPledge.tsx |       0 |        0 |       0 |       0 | 29-600            
+  PledgesMocks.ts  |       0 |      100 |     100 |       0 | 10-508            
+ ...ge/deleteModal |       0 |      100 |       0 |       0 |                   
+  ...leteModal.tsx |       0 |      100 |       0 |       0 | 48-69             
+ ...gnPledge/modal |       0 |        0 |       0 |       0 |                   
+  PledgeModal.tsx  |       0 |        0 |       0 |       0 | 89-327            
+ ...ns/Leaderboard |       0 |        0 |       0 |       0 |                   
+  ...oard.mocks.ts |       0 |      100 |     100 |       0 | 3-183             
+  Leaderboard.tsx  |       0 |        0 |       0 |       0 | 71-329            
+ ...eens/LoginPage |       0 |        0 |       0 |       0 |                   
+  LoginPage.tsx    |       0 |        0 |       0 |       0 | 90-893            
+ ...eens/ManageTag |       0 |        0 |       0 |       0 |                   
+  ManageTag.tsx    |       0 |        0 |       0 |       0 | 97-533            
+  ...gMockUtils.ts |       0 |        0 |       0 |       0 | 4-27              
+  ...geTagMocks.ts |       0 |      100 |     100 |       0 | 10-391            
+  ...ErrorMocks.ts |       0 |      100 |     100 |       0 | 10-251            
+  ...FalsyMocks.ts |       0 |      100 |     100 |       0 | 10-239            
+ ...MockComponents |       0 |        0 |       0 |       0 |                   
+  ...opleToTag.tsx |       0 |        0 |       0 |       0 | 34-42             
+  ...agActions.tsx |       0 |        0 |       0 |       0 | 32-36             
+ ...eTag/editModal |       0 |        0 |       0 |       0 |                   
+  ...rTagModal.tsx |       0 |        0 |       0 |       0 | 49-103            
+ ...ag/removeModal |       0 |      100 |       0 |       0 |                   
+  ...rTagModal.tsx |       0 |      100 |       0 |       0 | 46-53             
+ .../unassignModal |       0 |      100 |       0 |       0 |                   
+  ...rTagModal.tsx |       0 |      100 |       0 |       0 | 44-93             
+ ...s/MemberDetail |       0 |        0 |       0 |       0 |                   
+  MemberDetail.tsx |       0 |        0 |       0 |       0 | 68-783            
+  ...etailMocks.ts |       0 |      100 |     100 |       0 | 5-165             
+ ...s/Notification |       0 |        0 |       0 |       0 |                   
+  Notification.tsx |       0 |        0 |       0 |       0 | 29-139            
+ ...rgContribution |       0 |      100 |       0 |       0 |                   
+  ...tribution.tsx |       0 |      100 |       0 |       0 | 48-53             
+ ...creens/OrgList |       0 |        0 |       0 |       0 |                   
+  OrgList.tsx      |       0 |        0 |       0 |       0 | 75-454            
+  OrgListMocks.ts  |       0 |      100 |     100 |       0 | 18-305            
+ .../OrgList/modal |       0 |        0 |       0 |       0 |                   
+  ...tionModal.tsx |       0 |        0 |       0 |       0 | 80-292            
+ ...creens/OrgPost |       0 |        0 |       0 |       0 |                   
+  OrgPost.tsx      |       0 |        0 |       0 |       0 | 38-646            
+  ...ostsStory.tsx |       0 |        0 |       0 |       0 | 34-69             
+  Posts.tsx        |       0 |        0 |       0 |       0 | 49-205            
+ ...ns/OrgSettings |       0 |        0 |       0 |       0 |                   
+  ...ings.mocks.ts |       0 |      100 |     100 |       0 | 8                 
+  OrgSettings.tsx  |       0 |        0 |       0 |       0 | 51-104            
+ ...ionActionItems |       0 |      100 |     100 |       0 |                   
+  ...Item.mocks.ts |       0 |      100 |     100 |       0 | 12-530            
+ ...temDeleteModal |       0 |        0 |       0 |       0 |                   
+  ...leteModal.tsx |       0 |        0 |       0 |       0 | 55-139            
+ ...ctionItemModal |       0 |        0 |       0 |       0 |                   
+  ...ItemModal.tsx |       0 |        0 |       0 |       0 | 52-666            
+ ...temUpdateModal |       0 |        0 |       0 |       0 |                   
+  ...atusModal.tsx |       0 |        0 |       0 |       0 | 57-222            
+ ...nItemViewModal |       0 |        0 |       0 |       0 |                   
+  ...ViewModal.tsx |       0 |        0 |       0 |       0 | 27-116            
+ ...ationDashboard |       0 |        0 |       0 |       0 |                   
+  ...Dashboard.tsx |       0 |        0 |       0 |       0 | 63-439            
+  ...boardMocks.ts |       0 |      100 |       0 |       0 | 11-378            
+ ...ard/components |       0 |        0 |       0 |       0 |                   
+  ...oardStats.tsx |       0 |        0 |       0 |       0 | 85-120            
+  ...uestsCard.tsx |       0 |        0 |       0 |       0 | 58-131            
+  ...PostsCard.tsx |       0 |        0 |       0 |       0 | 29-67             
+  ...ventsCard.tsx |       0 |        0 |       0 |       0 | 67-108            
+ ...nizationEvents |       0 |        0 |       0 |       0 |                   
+  ...ventModal.tsx |       0 |        0 |       0 |       0 | 30-570            
+  ...enceModal.tsx |       0 |        0 |       0 |       0 | 52-561            
+  ...ionEvents.tsx |       0 |        0 |       0 |       0 | 84-225            
+  ...ventsMocks.ts |       0 |      100 |     100 |       0 | 7                 
+ ...onFundCampaign |       0 |        0 |       0 |       0 |                   
+  ...Campagins.tsx |       0 |        0 |       0 |       0 | 26-442            
+  ...paignMocks.ts |       0 |      100 |     100 |       0 | 7-177             
+ ...Campaign/modal |       0 |        0 |       0 |       0 |                   
+  ...aignModal.tsx |       0 |        0 |       0 |       0 | 60-298            
+ ...anizationFunds |       0 |        0 |       0 |       0 |                   
+  ...tionFunds.tsx |       0 |        0 |       0 |       0 | 22-400            
+  ...FundsMocks.ts |       0 |      100 |     100 |       0 | 7-148             
+ ...ionFunds/modal |       0 |        0 |       0 |       0 |                   
+  FundModal.tsx    |       0 |        0 |       0 |       0 | 69-262            
+ ...nizationPeople |       0 |        0 |       0 |       0 |                   
+  ...ionPeople.tsx |       0 |        0 |       0 |       0 | 77-567            
+ ...ople/addMember |       0 |        0 |       0 |       0 |                   
+  AddMember.tsx    |       0 |        0 |       0 |       0 | 76-557            
+ ...ganizationTags |       0 |        0 |       0 |       0 |                   
+  ...ationTags.tsx |       0 |        0 |       0 |       0 | 71-499            
+  ...nTagsMocks.ts |       0 |      100 |     100 |       0 | 5-477             
+ ...onTransactions |       0 |      100 |       0 |       0 |                   
+  ...nsactions.tsx |       0 |      100 |       0 |       0 | 23-29             
+ ...nizationVenues |       0 |        0 |       0 |       0 |                   
+  ...ionVenues.tsx |       0 |        0 |       0 |       0 | 67-273            
+ ...s/PageNotFound |       0 |        0 |       0 |       0 |                   
+  PageNotFound.tsx |       0 |        0 |       0 |       0 | 50-63             
+ ...ns/PluginStore |       0 |        0 |       0 |       0 |                   
+  PluginModal.tsx  |       0 |        0 |       0 |       0 | 21-433            
+  PluginStore.tsx  |       0 |        0 |       0 |       0 | 21-147            
+  ...uginModal.tsx |       0 |        0 |       0 |       0 | 23-130            
+ ...ore/components |       0 |        0 |       0 |       0 |                   
+  PluginCard.tsx   |       0 |      100 |       0 |       0 | 14-83             
+  PluginList.tsx   |       0 |        0 |       0 |       0 | 22-62             
+  ...tionModal.tsx |       0 |      100 |       0 |       0 | 28                
+ ...ginStore/hooks |       0 |        0 |       0 |       0 |                   
+  ...stallTimer.ts |       0 |        0 |       0 |       0 | 9-38              
+  ...ginActions.ts |       0 |        0 |       0 |       0 | 23-180            
+  ...ginFilters.ts |       0 |        0 |       0 |       0 | 15-161            
+ ...lic/Invitation |       0 |        0 |       0 |       0 |                   
+  ...nvitation.tsx |       0 |        0 |       0 |       0 | 18-223            
+ ...reens/Requests |       0 |        0 |       0 |       0 |                   
+  Requests.tsx     |       0 |        0 |       0 |       0 | 85-358            
+  RequestsMocks.ts |       0 |      100 |     100 |       0 | 3-560             
+ ...creens/SubTags |       0 |        0 |       0 |       0 |                   
+  SubTags.tsx      |       0 |        0 |       0 |       0 | 76-463            
+  SubTagsMocks.ts  |       0 |      100 |     100 |       0 | 5-489             
+ ...rtal/Campaigns |       0 |        0 |       0 |       0 |                   
+  Campaigns.tsx    |       0 |        0 |       0 |       0 | 58-312            
+  ...aignsMocks.ts |       0 |      100 |     100 |       0 | 4-204             
+  PledgeModal.tsx  |       0 |        0 |       0 |       0 | 79-355            
+ ...serPortal/Chat |       0 |        0 |       0 |       0 |                   
+  Chat.tsx         |       0 |        0 |       0 |       0 | 57-378            
+ ...rPortal/Donate |       0 |        0 |       0 |       0 |                   
+  Donate.tsx       |       0 |        0 |       0 |       0 | 74-275            
+ ...rPortal/Events |       0 |        0 |       0 |       0 |                   
+  Events.tsx       |       0 |        0 |       0 |       0 | 71-519            
+ ...veOrganization |       0 |        0 |       0 |       0 |                   
+  ...anization.tsx |       0 |        0 |       0 |       0 | 55-255            
+ .../Organizations |       0 |        0 |       0 |       0 |                   
+  ...nizations.tsx |       0 |        0 |       0 |       0 | 53-498            
+ ...rPortal/People |       0 |        0 |       0 |       0 |                   
+  People.tsx       |       0 |        0 |       0 |       0 | 89-304            
+ ...Portal/Pledges |       0 |        0 |       0 |       0 |                   
+  Pledges.tsx      |       0 |        0 |       0 |       0 | 71-518            
+  PledgesMocks.ts  |       0 |      100 |     100 |       0 | 5-61              
+ ...erPortal/Posts |       0 |        0 |       0 |       0 |                   
+  ...dPostCard.tsx |       0 |        0 |       0 |       0 | 30-34             
+  Posts.tsx        |       0 |        0 |       0 |       0 | 81-370            
+ ...ortal/Settings |       0 |        0 |       0 |       0 |                   
+  Settings.tsx     |       0 |        0 |       0 |       0 | 53-256            
+  SettingsMocks.ts |       0 |      100 |     100 |       0 | 4-124             
+ .../ProfileHeader |       0 |      100 |       0 |       0 |                   
+  ...ileHeader.tsx |       0 |      100 |       0 |       0 | 28-31             
+ ...leImageSection |       0 |        0 |       0 |       0 |                   
+  ...geSection.tsx |       0 |        0 |       0 |       0 | 60-89             
+ ...ngs/SideToggle |       0 |        0 |       0 |       0 |                   
+  SideToggle.tsx   |       0 |        0 |       0 |       0 | 42-48             
+ ...gs/UserDetails |       0 |        0 |       0 |       0 |                   
+  UserDetails.tsx  |       0 |        0 |       0 |       0 | 88-322            
+ ...l/Transactions |       0 |      100 |       0 |       0 |                   
+  Transactions.tsx |       0 |      100 |       0 |       0 | 27-33             
+ ...erGlobalScreen |       0 |        0 |       0 |       0 |                   
+  ...balScreen.tsx |       0 |        0 |       0 |       0 | 34-72             
+ ...tal/UserScreen |       0 |        0 |       0 |       0 |                   
+  UserScreen.tsx   |       0 |        0 |       0 |       0 | 52-130            
+ ...rtal/Volunteer |       0 |        0 |       0 |       0 |                   
+  ...anagement.tsx |       0 |        0 |       0 |       0 | 50-215            
+ ...unteer/Actions |       0 |        0 |       0 |       0 |                   
+  Actions.mocks.ts |       0 |      100 |     100 |       0 | 4-187             
+  Actions.tsx      |       0 |        0 |       0 |       0 | 58-467            
+ ...lunteer/Groups |       0 |        0 |       0 |       0 |                   
+  GroupModal.tsx   |       0 |        0 |       0 |       0 | 70-387            
+  Groups.mocks.ts  |       0 |      100 |     100 |       0 | 10-464            
+  Groups.tsx       |       0 |        0 |       0 |       0 | 69-364            
+ ...er/Invitations |       0 |        0 |       0 |       0 |                   
+  ...ions.mocks.ts |       0 |      100 |     100 |       0 | 4-401             
+  Invitations.tsx  |       0 |        0 |       0 |       0 | 59-268            
+ ...UpcomingEvents |       0 |        0 |       0 |       0 |                   
+  ...teerModal.tsx |       0 |        0 |       0 |       0 | 79-164            
+  ...ents.mocks.ts |       0 |        0 |       0 |       0 | 8-600             
+  ...ingEvents.tsx |       0 |        0 |       0 |       0 | 75-682            
+ src/screens/Users |       0 |        0 |       0 |       0 |                   
+  ...tion.mocks.ts |       0 |        0 |       0 |       0 | 57-284            
+  User.mocks.ts    |       0 |      100 |     100 |       0 | 7-161             
+  Users.tsx        |       0 |        0 |       0 |       0 | 80-462            
+  ...ocks.mocks.ts |       0 |      100 |       0 |       0 | 5-203             
+ src/setup         |       0 |        0 |       0 |       0 |                   
+  setup.ts         |       0 |        0 |       0 |       0 | 13-97             
+ ...etDockerOption |       0 |        0 |       0 |       0 |                   
+  ...ckerOption.ts |       0 |        0 |       0 |       0 | 6-33              
+ ...kAndUpdatePort |       0 |        0 |       0 |       0 |                   
+  ...UpdatePort.ts |       0 |        0 |       0 |       0 | 6-23              
+ ...kForCustomPort |       0 |        0 |       0 |       0 |                   
+  ...CustomPort.ts |       0 |        0 |       0 |       0 | 3-64              
+ ...p/askForDocker |       0 |        0 |       0 |       0 |                   
+  askForDocker.ts  |       0 |        0 |       0 |       0 | 6-99              
+ ...orTalawaApiUrl |       0 |      100 |       0 |       0 |                   
+  ...lawaApiUrl.ts |       0 |      100 |       0 |       0 | 4-15              
+ .../backupEnvFile |       0 |        0 |       0 |       0 |                   
+  backupEnvFile.ts |       0 |        0 |       0 |       0 | 6-46              
+ ...heckConnection |       0 |      100 |       0 |       0 |                   
+  ...Connection.ts |       0 |      100 |       0 |       0 | 2-14              
+ ...p/checkEnvFile |       0 |        0 |       0 |       0 |                   
+  checkEnvFile.ts  |       0 |        0 |       0 |       0 | 4-25              
+ .../updateEnvFile |       0 |        0 |       0 |       0 |                   
+  updateEnvFile.ts |       0 |        0 |       0 |       0 | 3-17              
+ ...idateRecaptcha |       0 |      100 |       0 |       0 |                   
+  ...eRecaptcha.ts |       0 |      100 |       0 |       0 | 2-3               
+ src/state         |      50 |      100 |     100 |      50 |                   
+  hooks.ts         |       0 |      100 |     100 |       0 | 5                 
+  store.ts         |     100 |      100 |     100 |     100 |                   
+ ...state/reducers |   86.95 |    81.25 |   88.88 |   86.95 |                   
+  routesReducer.ts |   83.33 |    77.77 |      80 |   83.33 | 22,90             
+  ...tesReducer.ts |    90.9 |    85.71 |     100 |    90.9 | 22                
+ src/subComponents |       0 |        0 |       0 |       0 |                   
+  SearchBar.tsx    |       0 |        0 |       0 |       0 | 29-60             
+  ...ingButton.tsx |       0 |        0 |       0 |       0 | 29-53             
+  ...ingButton.tsx |       0 |        0 |       0 |       0 | 43-85             
+ ...eact-bootstrap |       0 |      100 |     100 |       0 |                   
+  Dropdown.tsx     |       0 |      100 |     100 |       0 | 13-16             
+ ...rap/components |       0 |        0 |       0 |       0 |                   
+  DropdownBase.tsx |       0 |      100 |       0 |       0 | 12-13             
+  DropdownItem.tsx |       0 |      100 |       0 |       0 | 11-12             
+  DropdownMenu.tsx |       0 |      100 |       0 |       0 | 11-12             
+  ...ownToggle.tsx |       0 |        0 |       0 |       0 | 12-13             
+ .../Advertisement |       0 |        0 |       0 |       0 |                   
+  type.ts          |       0 |        0 |       0 |       0 | 5-8               
+ src/types/Event   |       0 |        0 |       0 |       0 |                   
+  interface.ts     |       0 |        0 |       0 |       0 | 7-12              
+  type.ts          |       0 |      100 |     100 |       0 | 108-116           
+  utils.ts         |       0 |      100 |     100 |       0 | 7-29              
+ src/types/Post    |       0 |      100 |     100 |       0 |                   
+  type.ts          |       0 |      100 |     100 |       0 | 32                
+ src/types/Tag     |       0 |      100 |     100 |       0 |                   
+  utils.ts         |       0 |      100 |     100 |       0 | 1-3               
+ src/utils         |    7.24 |    12.96 |   12.82 |    7.38 |                   
+  MinioDownload.ts |       0 |        0 |       0 |       0 | 11-46             
+  MinioUpload.ts   |       0 |        0 |       0 |       0 | 12-67             
+  ...icMockLink.ts |   81.25 |    60.86 |    90.9 |   81.25 | ...17,121,174-183 
+  ...nInstaller.ts |       0 |        0 |       0 |       0 | 56-410            
+  chartToPdf.ts    |       0 |        0 |       0 |       0 | 3-105             
+  ...rtToBase64.ts |       0 |      100 |       0 |       0 | 1-11              
+  currency.ts      |       0 |      100 |     100 |       0 | 1-166             
+  dateFormatter.ts |       0 |        0 |       0 |       0 | 2-32              
+  errorHandler.tsx |       0 |        0 |       0 |       0 | 10-30             
+  fieldTypes.ts    |       0 |      100 |     100 |       0 | 1                 
+  ...Validation.ts |       0 |        0 |       0 |       0 | 23-49             
+  filehash.ts      |       0 |      100 |       0 |       0 | 1-8               
+  ...EnumFields.ts |       0 |      100 |     100 |       0 | 1-326             
+  ...freshToken.ts |       0 |      100 |       0 |       0 | 7-33              
+  i18n.ts          |       0 |      100 |     100 |       0 | 8                 
+  i18nForTest.ts   |     100 |      100 |     100 |     100 |                   
+  interfaces.ts    |       0 |        0 |       0 |       0 | 5-335             
+  languages.ts     |     100 |      100 |     100 |     100 |                   
+  linkValidator.ts |       0 |      100 |       0 |       0 | 1-6               
+  ...nTagsUtils.ts |       0 |      100 |     100 |       0 | 12-48             
+  ...dValidator.ts |       0 |        0 |       0 |       0 | 1-7               
+  ...tizeAvatar.ts |       0 |        0 |       0 |       0 | 1-17              
+  urlToFile.ts     |       0 |        0 |       0 |       0 | 2-13              
+  ...calstorage.ts |       0 |        0 |       0 |       0 | 11-68             
+  useSession.tsx   |       0 |        0 |       0 |       0 | 30-156            
+ ...ecurrenceUtils |       0 |        0 |       0 |       0 |                   
+  ...eConstants.ts |       0 |      100 |     100 |       0 | 8-53              
+  ...renceTypes.ts |       0 |        0 |       0 |       0 | 20-42             
+  ...yFunctions.ts |       0 |        0 |       0 |       0 | 20-316            
+ .../timezoneUtils |       0 |        0 |       0 |       0 |                   
+  ...TimeConfig.ts |       0 |      100 |     100 |       0 | 3                 
+  ...Middleware.ts |       0 |        0 |       0 |       0 | 8-103             
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 2.58% ( 302/11664 )
+Branches     : 1.16% ( 77/6604 )
+Functions    : 1.21% ( 35/2878 )
+Lines        : 2.66% ( 302/11313 )
+================================================================================

@@ -34,7 +34,7 @@
  * - This component is used in the event management section of the application
  *   to display and manage event registrants and attendees.
  */
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import {
   Paper,
   TableCell,
@@ -45,7 +45,6 @@ import {
 } from '@mui/material';
 import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import styles from 'style/app-fixed.module.css';
 import { useLazyQuery, useQuery, useMutation } from '@apollo/client';
 import {
@@ -58,6 +57,7 @@ import { useParams } from 'react-router';
 import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
 import type { InterfaceUserAttendee } from 'types/User/interface';
+import { deleteRegistrantUtil } from './utils';
 
 function EventRegistrants(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventRegistrant' });
@@ -136,26 +136,16 @@ function EventRegistrants(): JSX.Element {
   // Function to remove a registrant from the event
   const deleteRegistrant = useCallback(
     (userId: string): void => {
-      // Check if user is already checked in
-      if (checkedInUsers.includes(userId)) {
-        toast.error('Cannot unregister a user who has already checked in');
-        return;
+      if (eventId) {
+        deleteRegistrantUtil(
+          userId,
+          isRecurring,
+          eventId,
+          removeRegistrantMutation,
+          refreshData,
+          checkedInUsers,
+        );
       }
-
-      toast.warn('Removing the attendee...');
-      const removeVariables = isRecurring
-        ? { userId, recurringEventInstanceId: eventId }
-        : { userId, eventId: eventId };
-
-      removeRegistrantMutation({ variables: removeVariables })
-        .then(() => {
-          toast.success('Attendee removed successfully');
-          refreshData(); // Refresh the data after removal
-        })
-        .catch((err) => {
-          toast.error('Error removing attendee');
-          toast.error(err.message);
-        });
     },
     [
       isRecurring,
@@ -165,6 +155,7 @@ function EventRegistrants(): JSX.Element {
       checkedInUsers,
     ],
   );
+
   useEffect(() => {
     refreshData();
   }, [refreshData]);

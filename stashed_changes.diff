@@ -1,0 +1,1952 @@
+diff --git a/package-lock.json b/package-lock.json
+index fbfe8d2de6..a65fcd4f14 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -169,7 +169,6 @@
+       "resolved": "https://registry.npmjs.org/@ant-design/colors/-/colors-7.2.0.tgz",
+       "integrity": "sha512-bjTObSnZ9C/O8MB/B4OUtd/q9COomuJAR2SYfhxLyHvCKn4EKwCN3e+fWGMo7H5InAyV0wL17jdE9ALrdOW/6A==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@ant-design/fast-color": "^2.0.6"
+       }
+@@ -179,7 +178,6 @@
+       "resolved": "https://registry.npmjs.org/@ant-design/cssinjs/-/cssinjs-1.23.0.tgz",
+       "integrity": "sha512-7GAg9bD/iC9ikWatU9ym+P9ugJhi/WbsTWzcKN6T4gU0aehsprtke1UAaaSxxkjjmkJb3llet/rbUSLPgwlY4w==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.11.1",
+         "@emotion/hash": "^0.8.0",
+@@ -199,7 +197,6 @@
+       "resolved": "https://registry.npmjs.org/@ant-design/cssinjs-utils/-/cssinjs-utils-1.1.3.tgz",
+       "integrity": "sha512-nOoQMLW1l+xR1Co8NFVYiP8pZp3VjIIzqV6D6ShYF2ljtdwWJn5WSsH+7kvCktXL/yhEtWURKOfH5Xz/gzlwsg==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@ant-design/cssinjs": "^1.21.0",
+         "@babel/runtime": "^7.23.2",
+@@ -214,29 +211,25 @@
+       "version": "0.8.0",
+       "resolved": "https://registry.npmjs.org/@emotion/hash/-/hash-0.8.0.tgz",
+       "integrity": "sha512-kBJtf7PH6aWwZ6fka3zQ0p6SBYzx4fl1LoZXE2RrnYST9Xljm7WfKJrU4g/Xr3Beg72MLrp1AWNUmuYJTL7Cow==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/@ant-design/cssinjs/node_modules/@emotion/unitless": {
+       "version": "0.7.5",
+       "resolved": "https://registry.npmjs.org/@emotion/unitless/-/unitless-0.7.5.tgz",
+       "integrity": "sha512-OWORNpfjMsSSUBVrRBVGECkhWcULOAJz9ZW8uK9qgxD+87M7jHRcvh/A96XXNhXTLmKcoYSQtBEX7lHMO7YRwg==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/@ant-design/cssinjs/node_modules/stylis": {
+       "version": "4.3.6",
+       "resolved": "https://registry.npmjs.org/stylis/-/stylis-4.3.6.tgz",
+       "integrity": "sha512-yQ3rwFWRfwNUY7H5vpU0wfdkNSnvnJinhF9830Swlaxl03zsOjCfmX0ugac+3LtK0lYSgwL/KXc8oYL3mG4YFQ==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/@ant-design/fast-color": {
+       "version": "2.0.6",
+       "resolved": "https://registry.npmjs.org/@ant-design/fast-color/-/fast-color-2.0.6.tgz",
+       "integrity": "sha512-y2217gk4NqL35giHl72o6Zzqji9O7vHh9YmhUVkPtAOpoTCH4uWxo/pr4VE8t0+ChEPs0qo4eJRC5Q1eXWo3vA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.24.7"
+       },
+@@ -249,7 +242,6 @@
+       "resolved": "https://registry.npmjs.org/@ant-design/icons/-/icons-5.6.1.tgz",
+       "integrity": "sha512-0/xS39c91WjPAZOWsvi1//zjx6kAp4kxWwctR6kuU6p133w8RU0D2dSCvZC19uQyharg/sAvYxGYWl01BbZZfg==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@ant-design/colors": "^7.0.0",
+         "@ant-design/icons-svg": "^4.4.0",
+@@ -269,15 +261,13 @@
+       "version": "4.4.2",
+       "resolved": "https://registry.npmjs.org/@ant-design/icons-svg/-/icons-svg-4.4.2.tgz",
+       "integrity": "sha512-vHbT+zJEVzllwP+CM+ul7reTEfBR0vgxFe7+lREAsAA7YGsYpboiq2sQNeQeRvh09GfQgs/GyFEvZpJ9cLXpXA==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/@ant-design/react-slick": {
+       "version": "1.1.2",
+       "resolved": "https://registry.npmjs.org/@ant-design/react-slick/-/react-slick-1.1.2.tgz",
+       "integrity": "sha512-EzlvzE6xQUBrZuuhSAFTdsr4P2bBBHGZwKFemEfq8gIGyIQCxalYfZW/T2ORbtQx5rU69o+WycP3exY/7T1hGA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.10.4",
+         "classnames": "^2.2.5",
+@@ -294,6 +284,7 @@
+       "resolved": "https://registry.npmjs.org/@apollo/client/-/client-3.12.11.tgz",
+       "integrity": "sha512-1RppV9U3E6Uusl/33yGkZa+rXpkGU5iCstcYltwWjdTjoA/YBD2Yyu0aHy8J4uKfIExUgnMW1HJWn4A0E0rRsw==",
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "@graphql-typed-document-node/core": "^3.1.1",
+         "@wry/caches": "^1.0.0",
+@@ -384,6 +375,7 @@
+       "resolved": "https://registry.npmjs.org/@babel/core/-/core-7.26.7.tgz",
+       "integrity": "sha512-SRijHmF0PSPgLIBYlWnG0hyeJLwXE2CgpsXaMOrtt2yp9/86ALw6oUlj9KYuZ0JN07T4eBMVIW4li/9S1j2BGA==",
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "@ampproject/remapping": "^2.2.0",
+         "@babel/code-frame": "^7.26.2",
+@@ -2563,6 +2555,7 @@
+       "integrity": "sha512-itvL5h8RETACmOTFc4UfIyB2RfEHi71Ax6E/PivVxq9NseKbOWpeyHEOIbmAw1rs8Ak0VursQNww7lf7YtUwzg==",
+       "dev": true,
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "env-paths": "^2.2.1",
+         "import-fresh": "^3.3.0",
+@@ -2842,7 +2835,6 @@
+       "resolved": "https://registry.npmjs.org/@ctrl/tinycolor/-/tinycolor-3.6.1.tgz",
+       "integrity": "sha512-SITSV6aIXsuVNV3f3O0f2n/cgyEDWoSqtZMYiAmcsYHydcKrOz3gUxB/iXd/Qf08+IZX4KpgNbvUdMBmWz+kcA==",
+       "license": "MIT",
+-      "peer": true,
+       "engines": {
+         "node": ">=10"
+       }
+@@ -3084,6 +3076,7 @@
+       "resolved": "https://registry.npmjs.org/@dicebear/core/-/core-9.2.2.tgz",
+       "integrity": "sha512-ROhgHG249dPtcXgBHcqPEsDeAPRPRD/9d+tZCjLYyueO+cXDlIA8dUlxpwIVcOuZFvCyW6RJtqo8BhNAi16pIQ==",
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "@types/json-schema": "^7.0.11"
+       },
+@@ -3407,6 +3400,7 @@
+       "resolved": "https://registry.npmjs.org/@emotion/react/-/react-11.14.0.tgz",
+       "integrity": "sha512-O000MLDBDdk/EohJPFUqvnp4qnHeYkVP5B0xEG0D/L7cOKP9kefu2DXn8dj74cQfsEzUqh+sr1RzFqiL1o+PpA==",
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.18.3",
+         "@emotion/babel-plugin": "^11.13.5",
+@@ -3450,6 +3444,7 @@
+       "resolved": "https://registry.npmjs.org/@emotion/styled/-/styled-11.14.0.tgz",
+       "integrity": "sha512-XxfOnXFffatap2IyCeJyNov3kiDQWoR08gPUQxvbL7fxKryGBKUZUkG6Hz48DZwVrJSVh9sJboyV1Ds4OW6SgA==",
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.18.3",
+         "@emotion/babel-plugin": "^11.13.5",
+@@ -4193,6 +4188,7 @@
+       "version": "6.7.2",
+       "resolved": "https://registry.npmjs.org/@fortawesome/fontawesome-svg-core/-/fontawesome-svg-core-6.7.2.tgz",
+       "integrity": "sha512-yxtOBWDrdi5DD5o1pmVdq3WMCvnobT0LU6R8RyyVXPvFRd2o79/0NCuQoCjNTeZz9EzA9xS3JxNWfv54RIHFEA==",
++      "peer": true,
+       "dependencies": {
+         "@fortawesome/fontawesome-common-types": "6.7.2"
+       },
+@@ -6219,6 +6215,7 @@
+       "resolved": "https://registry.npmjs.org/@mui/material/-/material-6.4.3.tgz",
+       "integrity": "sha512-ubtQjplbWneIEU8Y+4b2VA0CDBlyH5I3AmVFGmsLyDe/bf0ubxav5t11c8Afem6rkSFWPlZA2DilxmGka1xiKQ==",
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.26.0",
+         "@mui/core-downloads-tracker": "^6.4.3",
+@@ -6403,6 +6400,7 @@
+       "resolved": "https://registry.npmjs.org/@mui/system/-/system-7.0.1.tgz",
+       "integrity": "sha512-pK+puz0hRPHEKGlcPd80mKYD3jpyi0uVIwWffox1WZgPTQMw2dCKLcD+9ndMDJADnrKzmKlpoH756PPFh2UvWA==",
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.26.10",
+         "@mui/private-theming": "^7.0.1",
+@@ -7109,6 +7107,7 @@
+       "resolved": "https://registry.npmjs.org/@pdfme/common/-/common-5.3.3.tgz",
+       "integrity": "sha512-U2EChHUzTVIxAI16DUaaMcHV3cFHyHNQHkD8AwBs7bzylH7MakM0GAv4czVYKdIju6AosVDAF5O34RdZx6m2yw==",
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "@pdfme/pdf-lib": "*",
+         "acorn": "^8.14.0",
+@@ -7153,6 +7152,7 @@
+       "resolved": "https://registry.npmjs.org/@pdfme/schemas/-/schemas-5.3.3.tgz",
+       "integrity": "sha512-1BTVFipWC5kj8+DfU3KqWKzM6g9MSesO3qNfE2REAZWG3o/U8aLClDlC8mvWzKjjRU36pB1Ue88w2JYMPMT0bA==",
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "@pdfme/pdf-lib": "*",
+         "air-datepicker": "^3.5.3",
+@@ -7202,6 +7202,7 @@
+       "resolved": "https://registry.npmjs.org/@popperjs/core/-/core-2.11.8.tgz",
+       "integrity": "sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==",
+       "license": "MIT",
++      "peer": true,
+       "funding": {
+         "type": "opencollective",
+         "url": "https://opencollective.com/popperjs"
+@@ -7212,7 +7213,6 @@
+       "resolved": "https://registry.npmjs.org/@rc-component/async-validator/-/async-validator-5.0.4.tgz",
+       "integrity": "sha512-qgGdcVIF604M9EqjNF0hbUTz42bz/RDtxWdWuU5EQe3hi7M8ob54B6B35rOsvX5eSvIHIzT9iH1R3n+hk3CGfg==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.24.4"
+       },
+@@ -7225,7 +7225,6 @@
+       "resolved": "https://registry.npmjs.org/@rc-component/color-picker/-/color-picker-2.0.1.tgz",
+       "integrity": "sha512-WcZYwAThV/b2GISQ8F+7650r5ZZJ043E57aVBFkQ+kSY4C6wdofXgB0hBx+GPGpIU0Z81eETNoDUJMr7oy/P8Q==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@ant-design/fast-color": "^2.0.6",
+         "@babel/runtime": "^7.23.6",
+@@ -7242,7 +7241,6 @@
+       "resolved": "https://registry.npmjs.org/@rc-component/context/-/context-1.4.0.tgz",
+       "integrity": "sha512-kFcNxg9oLRMoL3qki0OMxK+7g5mypjgaaJp/pkOis/6rVxma9nJBF/8kCIuTYHUQNr0ii7MxqE33wirPZLJQ2w==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.10.1",
+         "rc-util": "^5.27.0"
+@@ -7257,7 +7255,6 @@
+       "resolved": "https://registry.npmjs.org/@rc-component/mini-decimal/-/mini-decimal-1.1.0.tgz",
+       "integrity": "sha512-jS4E7T9Li2GuYwI6PyiVXmxTiM6b07rlD9Ge8uGZSCz3WlzcG5ZK7g5bbuKNeZ9pgUuPK/5guV781ujdVpm4HQ==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.18.0"
+       },
+@@ -7270,7 +7267,6 @@
+       "resolved": "https://registry.npmjs.org/@rc-component/mutate-observer/-/mutate-observer-1.1.0.tgz",
+       "integrity": "sha512-QjrOsDXQusNwGZPf4/qRQasg7UFEj06XiCJ8iuiq/Io7CrHrgVi6Uuetw60WAMG1799v+aM8kyc+1L/GBbHSlw==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.18.0",
+         "classnames": "^2.3.2",
+@@ -7289,7 +7285,6 @@
+       "resolved": "https://registry.npmjs.org/@rc-component/portal/-/portal-1.1.2.tgz",
+       "integrity": "sha512-6f813C0IsasTZms08kfA8kPAGxbbkYToa8ALaiDIGGECU4i9hj8Plgbx0sNJDrey3EtHO30hmdaxtT0138xZcg==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.18.0",
+         "classnames": "^2.3.2",
+@@ -7308,7 +7303,6 @@
+       "resolved": "https://registry.npmjs.org/@rc-component/qrcode/-/qrcode-1.0.0.tgz",
+       "integrity": "sha512-L+rZ4HXP2sJ1gHMGHjsg9jlYBX/SLN2D6OxP9Zn3qgtpMWtO2vUfxVFwiogHpAIqs54FnALxraUy/BCO1yRIgg==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.24.7",
+         "classnames": "^2.3.2",
+@@ -7327,7 +7321,6 @@
+       "resolved": "https://registry.npmjs.org/@rc-component/tour/-/tour-1.15.1.tgz",
+       "integrity": "sha512-Tr2t7J1DKZUpfJuDZWHxyxWpfmj8EZrqSgyMZ+BCdvKZ6r1UDsfU46M/iWAAFBy961Ssfom2kv5f3UcjIL2CmQ==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.18.0",
+         "@rc-component/portal": "^1.0.0-9",
+@@ -7348,7 +7341,6 @@
+       "resolved": "https://registry.npmjs.org/@rc-component/trigger/-/trigger-2.2.6.tgz",
+       "integrity": "sha512-/9zuTnWwhQ3S3WT1T8BubuFTT46kvnXgaERR9f4BTKyn61/wpf/BvbImzYBubzJibU707FxwbKszLlHjcLiv1Q==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.23.2",
+         "@rc-component/portal": "^1.1.0",
+@@ -8114,6 +8106,7 @@
+       "integrity": "sha512-/xdLSWxK5QkqG524ONSjvg3V/FkNyCv538OIBdQqPNaAta3AsXj/Bd2FbvR87yMbXO2hFSWiAe/Q6IkVPDw+mw==",
+       "dev": true,
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "@babel/core": "^7.19.6",
+         "@svgr/babel-preset": "^6.5.1",
+@@ -8211,6 +8204,7 @@
+       "integrity": "sha512-pemlzrSESWbdAloYml3bAJMEfNh1Z7EduzqPKprCH5S341frlpYnUEW0H72dLxa6IsYr+mPno20GiSm+h9dEdQ==",
+       "dev": true,
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "@babel/code-frame": "^7.10.4",
+         "@babel/runtime": "^7.12.5",
+@@ -8471,18 +8465,6 @@
+       "integrity": "sha512-yuzZug1nkAAaBlBBikKZTgzCeA+k1uy4ZFwWANOfKw5z5LRhV0gNA7gNkKm7HoK+HRN0wX3EkxGk0fpbWhmB7g==",
+       "license": "MIT"
+     },
+-    "node_modules/@types/debug": {
+-      "version": "4.1.12",
+-      "resolved": "https://registry.npmjs.org/@types/debug/-/debug-4.1.12.tgz",
+-      "integrity": "sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==",
+-      "dev": true,
+-      "license": "MIT",
+-      "optional": true,
+-      "peer": true,
+-      "dependencies": {
+-        "@types/ms": "*"
+-      }
+-    },
+     "node_modules/@types/estree": {
+       "version": "1.0.6",
+       "resolved": "https://registry.npmjs.org/@types/estree/-/estree-1.0.6.tgz",
+@@ -8767,14 +8749,14 @@
+       "integrity": "sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==",
+       "dev": true,
+       "license": "MIT",
+-      "optional": true,
+-      "peer": true
++      "optional": true
+     },
+     "node_modules/@types/node": {
+       "version": "22.13.1",
+       "resolved": "https://registry.npmjs.org/@types/node/-/node-22.13.1.tgz",
+       "integrity": "sha512-jK8uzQlrvXqEU91UxiK5J7pKHyzgnI1Qnl0QDHIgVGuolJhRb9EEl28Cj9b3rGR8B2lhFCtvIm5os8lFnO/1Ew==",
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "undici-types": "~6.20.0"
+       }
+@@ -8828,6 +8810,7 @@
+       "resolved": "https://registry.npmjs.org/@types/react/-/react-18.3.18.tgz",
+       "integrity": "sha512-t4yC+vtgnkYjNSKlFx1jkAhH8LgTo2N/7Qvi83kdEaUtMDiwpbLAktKDaAMlRcJ5eSxZkH74eEGt1ky31d7kfQ==",
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "@types/prop-types": "*",
+         "csstype": "^3.0.2"
+@@ -8859,6 +8842,7 @@
+       "integrity": "sha512-P4t6saawp+b/dFrUr2cvkVsfvPguwsxtH6dNIYRllMsefqFzkZk5UIjzyDOv5g1dXIPdG4Sp1yCR4Z6RCUsG/Q==",
+       "dev": true,
+       "license": "MIT",
++      "peer": true,
+       "peerDependencies": {
+         "@types/react": "^18.0.0"
+       }
+@@ -9944,6 +9928,7 @@
+       "resolved": "https://registry.npmjs.org/acorn/-/acorn-8.14.0.tgz",
+       "integrity": "sha512-cl669nCJTZBsL97OF4kUQm5g5hC2uihk0NxY3WENAC0TYdILVkAyHymAntgxGkl7K+t0cXIrH5siy5S4XkFycA==",
+       "license": "MIT",
++      "peer": true,
+       "bin": {
+         "acorn": "bin/acorn"
+       },
+@@ -10000,7 +9985,6 @@
+       "resolved": "https://registry.npmjs.org/add-dom-event-listener/-/add-dom-event-listener-1.1.0.tgz",
+       "integrity": "sha512-WCxx1ixHT0GQU9hb0KI/mhgRQhnU+U3GvwY6ZvVjYq8rsihIGoaIOUbY0yMPBxLH5MDtr0kz3fisWGNcbWW7Jw==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "object-assign": "4.x"
+       }
+@@ -10036,7 +10020,6 @@
+       "resolved": "https://registry.npmjs.org/ahooks/-/ahooks-3.8.4.tgz",
+       "integrity": "sha512-39wDEw2ZHvypaT14EpMMk4AzosHWt0z9bulY0BeDsvc9PqJEV+Kjh/4TZfftSsotBMq52iYIOFPd3PR56e0ZJg==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.21.0",
+         "dayjs": "^1.9.1",
+@@ -10610,8 +10593,7 @@
+       "version": "3.5.2",
+       "resolved": "https://registry.npmjs.org/async-validator/-/async-validator-3.5.2.tgz",
+       "integrity": "sha512-8eLCg00W9pIRZSB781UUX/H6Oskmm8xloZfr09lz5bikRpBVDlJ3hRVuxxP1SxcwsEYfJ4IU8Q19Y8/893r3rQ==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/asynckit": {
+       "version": "0.4.0",
+@@ -10932,7 +10914,6 @@
+       "resolved": "https://registry.npmjs.org/babel-runtime/-/babel-runtime-6.26.0.tgz",
+       "integrity": "sha512-ITKNuq2wKlW1fJg9sSW52eepoYgZBggvOAHC0u/CYu/qxQ9EVzThCgR69BnSXLHjy2f7SY5zaQ4yt7H9ZVxY2g==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "core-js": "^2.4.0",
+         "regenerator-runtime": "^0.11.0"
+@@ -10942,8 +10923,7 @@
+       "version": "0.11.1",
+       "resolved": "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.11.1.tgz",
+       "integrity": "sha512-MguG95oij0fC3QV3URf4V2SDYGJhJnJGqvIIgdECeODCT98wSWDAJ94SSuVpYQUoTcGUIL6L4yNB7j1DFFHSBg==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/balanced-match": {
+       "version": "1.0.2",
+@@ -11239,6 +11219,7 @@
+         }
+       ],
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "caniuse-lite": "^1.0.30001688",
+         "electron-to-chromium": "^1.5.73",
+@@ -11565,6 +11546,7 @@
+       "resolved": "https://registry.npmjs.org/chart.js/-/chart.js-4.4.7.tgz",
+       "integrity": "sha512-pwkcKfdzTMAU/+jNosKhNL2bHtJc/sSmYgVbuGTEDhzkrhmyihmP7vUc/5ZK9WopidMDHNe3Wm7jOd/WhuHWuw==",
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "@kurkle/color": "^0.3.0"
+       },
+@@ -12003,7 +11985,6 @@
+       "resolved": "https://registry.npmjs.org/component-classes/-/component-classes-1.2.6.tgz",
+       "integrity": "sha512-hPFGULxdwugu1QWW3SvVOCUHLzO34+a2J6Wqy0c5ASQkfi9/8nZcBB0ZohaEbXOQlCflMAEMmEWk7u7BVs4koA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "component-indexof": "0.0.3"
+       }
+@@ -12011,15 +11992,13 @@
+     "node_modules/component-indexof": {
+       "version": "0.0.3",
+       "resolved": "https://registry.npmjs.org/component-indexof/-/component-indexof-0.0.3.tgz",
+-      "integrity": "sha512-puDQKvx/64HZXb4hBwIcvQLaLgux8o1CbWl39s41hrIIZDl1lJiD5jc22gj3RBeGK0ovxALDYpIbyjqDUUl0rw==",
+-      "peer": true
++      "integrity": "sha512-puDQKvx/64HZXb4hBwIcvQLaLgux8o1CbWl39s41hrIIZDl1lJiD5jc22gj3RBeGK0ovxALDYpIbyjqDUUl0rw=="
+     },
+     "node_modules/compute-scroll-into-view": {
+       "version": "3.1.1",
+       "resolved": "https://registry.npmjs.org/compute-scroll-into-view/-/compute-scroll-into-view-3.1.1.tgz",
+       "integrity": "sha512-VRhuHOLoKYOy4UbilLbUzbYg93XLjv2PncJC50EuTWPA3gaja1UjBsUP/D/9/juV3vQFr6XBEzn9KCAHdUvOHw==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/concat-map": {
+       "version": "0.0.1",
+@@ -12265,7 +12244,6 @@
+       "resolved": "https://registry.npmjs.org/copy-to-clipboard/-/copy-to-clipboard-3.3.3.tgz",
+       "integrity": "sha512-2KV8NhB5JqC3ky0r9PMCAZKbUHSwtEo4CwCs0KXgruG43gX5PMqDEBbVU4OUzw2MuAWUfsuFmWvEKG5QRfSnJA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "toggle-selection": "^1.0.6"
+       }
+@@ -12276,7 +12254,6 @@
+       "integrity": "sha512-7vsMc/Lty6AGnn7uFpYT56QesI5D2Y/UkgKounk87OP9Z2H9Z8kj6jzcSGAxFmUtDOS0ntK6lbQz+Nsa0Jj6mQ==",
+       "hasInstallScript": true,
+       "license": "MIT",
+-      "peer": true,
+       "funding": {
+         "type": "opencollective",
+         "url": "https://opencollective.com/core-js"
+@@ -12332,7 +12309,6 @@
+       "resolved": "https://registry.npmjs.org/create-react-class/-/create-react-class-15.7.0.tgz",
+       "integrity": "sha512-QZv4sFWG9S5RUvkTYWbflxeZX+JG7Cz0Tn33rQBJ+WFQTqTfUTjMjiv9tnfXazjsO5r0KhPs+AqCjyrQX6h2ng==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "loose-envify": "^1.3.1",
+         "object-assign": "^4.1.1"
+@@ -12409,7 +12385,6 @@
+       "resolved": "https://registry.npmjs.org/css-animation/-/css-animation-1.6.1.tgz",
+       "integrity": "sha512-/48+/BaEaHRY6kNQ2OIPzKf9A6g8WjZYjhiNDNuIVbsm5tXCGIAsHDjB4Xu1C4vXJtUWZo26O68OQkDpNBaPog==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "babel-runtime": "6.x",
+         "component-classes": "^1.2.5"
+@@ -13087,6 +13062,7 @@
+       "resolved": "https://registry.npmjs.org/date-fns/-/date-fns-4.1.0.tgz",
+       "integrity": "sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==",
+       "license": "MIT",
++      "peer": true,
+       "funding": {
+         "type": "github",
+         "url": "https://github.com/sponsors/kossnocorp"
+@@ -13096,7 +13072,8 @@
+       "version": "1.11.13",
+       "resolved": "https://registry.npmjs.org/dayjs/-/dayjs-1.11.13.tgz",
+       "integrity": "sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==",
+-      "license": "MIT"
++      "license": "MIT",
++      "peer": true
+     },
+     "node_modules/debug": {
+       "version": "4.4.1",
+@@ -13361,8 +13338,7 @@
+       "version": "1.12.4",
+       "resolved": "https://registry.npmjs.org/dom-align/-/dom-align-1.12.4.tgz",
+       "integrity": "sha512-R8LUSEay/68zE5c8/3BDxiTEvgb4xZTF0RKmAHfiEVN3klfIpXfi2/QCoiWPccVQ0J/ZGdz9OjzL4uJEP/MRAw==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/dom-helpers": {
+       "version": "5.2.1",
+@@ -13605,6 +13581,7 @@
+       "integrity": "sha512-rRqJg/6gd538VHvR3PSrdRBb/1Vy2YfzHqzvbhGIQpDRKIa4FgV/54b5Q1xYSxOOwKvjXweS26E0Q+nAMwp2pQ==",
+       "dev": true,
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "ansi-colors": "^4.1.1",
+         "strip-ansi": "^6.0.1"
+@@ -14290,6 +14267,7 @@
+       "integrity": "sha512-9V/QURhsRN40xuHXWjV64yvrzMjcz7ZyNoF2jJFmy9j/SLk0u1OLSZgXi28MrXjymnjEGSR80WCdab3RGMDveQ==",
+       "dev": true,
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "@eslint-community/eslint-utils": "^4.2.0",
+         "@eslint-community/regexpp": "^4.12.1",
+@@ -14351,6 +14329,7 @@
+       "integrity": "sha512-4EQQr6wXwS+ZJSzaR5ZCrYgLxqvUjdXctaEtBqHcbkW944B1NQyO4qpdHQbXBONfwxXdkAY81HH4+LUfrg+zPw==",
+       "dev": true,
+       "license": "MIT",
++      "peer": true,
+       "bin": {
+         "eslint-config-prettier": "bin/cli.js"
+       },
+@@ -15871,7 +15850,6 @@
+       "resolved": "https://registry.npmjs.org/form-render/-/form-render-2.5.2.tgz",
+       "integrity": "sha512-pkDNK+n2CZt4Mz05Poq5+N9XpS9vmctTCPVHeadhypCbn7g+uTBYLWy7DWR02PyRVwP2YtKxSMj1wMn0SbnjNQ==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@ant-design/icons": "^4.0.2",
+         "ahooks": "^3.7.5",
+@@ -15895,7 +15873,6 @@
+       "resolved": "https://registry.npmjs.org/@ant-design/colors/-/colors-6.0.0.tgz",
+       "integrity": "sha512-qAZRvPzfdWHtfameEGP2Qvuf838NhergR35o+EuVyB5XvSA98xod5r4utvi4TJ3ywmevm290g9nsCG5MryrdWQ==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@ctrl/tinycolor": "^3.4.0"
+       }
+@@ -15905,7 +15882,6 @@
+       "resolved": "https://registry.npmjs.org/@ant-design/icons/-/icons-4.8.3.tgz",
+       "integrity": "sha512-HGlIQZzrEbAhpJR6+IGdzfbPym94Owr6JZkJ2QCCnOkPVIWMO2xgIVcOKnl8YcpijIo39V7l2qQL5fmtw56cMw==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@ant-design/colors": "^6.0.0",
+         "@ant-design/icons-svg": "^4.3.0",
+@@ -15927,7 +15903,6 @@
+       "resolved": "https://registry.npmjs.org/color/-/color-3.2.1.tgz",
+       "integrity": "sha512-aBl7dZI9ENN6fUGC7mWpMTPNHmWUSNan9tuWN6ahh5ZLNk9baLJOnSMlrQkHcrfFgz2/RigjUVAjdx36VcemKA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "color-convert": "^1.9.3",
+         "color-string": "^1.6.0"
+@@ -15938,7 +15913,6 @@
+       "resolved": "https://registry.npmjs.org/color-convert/-/color-convert-1.9.3.tgz",
+       "integrity": "sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "color-name": "1.1.3"
+       }
+@@ -15947,8 +15921,7 @@
+       "version": "1.1.3",
+       "resolved": "https://registry.npmjs.org/color-name/-/color-name-1.1.3.tgz",
+       "integrity": "sha512-72fSenhMw2HZMTVHeCA9KCmpEIbzWiQsjN+BHcBbS9vr1mtt+vJjPdksIBNUmKAW8TFUDPJK5SUU3QhE9NEXDw==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/formdata-polyfill": {
+       "version": "4.0.10",
+@@ -16526,6 +16499,7 @@
+       "resolved": "https://registry.npmjs.org/graphql/-/graphql-16.10.0.tgz",
+       "integrity": "sha512-AjqGKbDGUFRKIRCP9tCKiIGHyriz2oHEbPIbEtcSLSs4YjReZOIPQQWek4+6hjw62H9QShXHyaGivGiYVLeYFQ==",
+       "license": "MIT",
++      "peer": true,
+       "engines": {
+         "node": "^12.22.0 || ^14.16.0 || ^16.0.0 || >=17.0.0"
+       }
+@@ -16645,6 +16619,7 @@
+       "resolved": "https://registry.npmjs.org/graphql-ws/-/graphql-ws-6.0.4.tgz",
+       "integrity": "sha512-8b4OZtNOvv8+NZva8HXamrc0y1jluYC0+13gdh7198FKjVzXyTvVc95DCwGzaKEfn3YuWZxUqjJlHe3qKM/F2g==",
+       "license": "MIT",
++      "peer": true,
+       "engines": {
+         "node": ">=20"
+       },
+@@ -17026,6 +17001,7 @@
+         }
+       ],
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.23.2"
+       },
+@@ -17135,6 +17111,7 @@
+       "resolved": "https://registry.npmjs.org/immer/-/immer-10.1.1.tgz",
+       "integrity": "sha512-s2MPrmjovJcoMaHtx6K11Ra7oD05NT97w1IC5zpMkT6Atjr7H8LjaDd81iIxUYpMKSRRNMJE703M1Fhr/TctHw==",
+       "license": "MIT",
++      "peer": true,
+       "funding": {
+         "type": "opencollective",
+         "url": "https://opencollective.com/immer"
+@@ -17312,8 +17289,7 @@
+       "version": "0.12.2",
+       "resolved": "https://registry.npmjs.org/intersection-observer/-/intersection-observer-0.12.2.tgz",
+       "integrity": "sha512-7m1vEcPCxXYI8HqnL8CKI6siDyD+eIWSwgB3DZA+ZTogxk9I4CDnj4wilt9x/+/QbHI4YG5YZNmC6458/e9Ktg==",
+-      "license": "Apache-2.0",
+-      "peer": true
++      "license": "Apache-2.0"
+     },
+     "node_modules/invariant": {
+       "version": "2.2.4",
+@@ -18122,6 +18098,7 @@
+       "integrity": "sha512-Yn0mADZB89zTtjkPJEXwrac3LHudkQMR+Paqa8uxJHCBr9agxztUifWCyiYrjhMPBoUVBjyny0I7XH6ozDr7QQ==",
+       "dev": true,
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "@jest/core": "^27.5.1",
+         "import-local": "^3.0.2",
+@@ -20698,7 +20675,6 @@
+       "resolved": "https://registry.npmjs.org/json2mq/-/json2mq-0.2.0.tgz",
+       "integrity": "sha512-SzoRg7ux5DWTII9J2qkrZrqV1gt+rTaoufMxEzXbS26Uid0NwaJd123HcoB80TgubEppxxIGdNxCx50fEoEWQA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "string-convert": "^0.2.0"
+       }
+@@ -21246,8 +21222,7 @@
+       "version": "4.17.21",
+       "resolved": "https://registry.npmjs.org/lodash-es/-/lodash-es-4.17.21.tgz",
+       "integrity": "sha512-mKnC+QJ9pWVzv+C4/U3rRsHapFfHvQFoFB92e52xeyGMcX6/OlIl78je1u8vePzYZSkkogMPJ2yjxxsb89cxyw==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/lodash._reinterpolate": {
+       "version": "3.0.0",
+@@ -22798,6 +22773,7 @@
+         }
+       ],
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "nanoid": "^3.3.8",
+         "picocolors": "^1.1.1",
+@@ -22991,6 +22967,7 @@
+       "integrity": "sha512-QQtaxnoDJeAkDvDKWCLiwIXkTgRhwYDEQCghU9Z6q03iyek/rxRh/2lC3HB7P8sWT2xC/y5JDctPLBIGzHKbhw==",
+       "dev": true,
+       "license": "MIT",
++      "peer": true,
+       "bin": {
+         "prettier": "bin/prettier.cjs"
+       },
+@@ -23268,7 +23245,6 @@
+       "resolved": "https://registry.npmjs.org/raf/-/raf-3.4.1.tgz",
+       "integrity": "sha512-Sq4CW4QhwOHE8ucn6J34MqtZCeWFP2aQSmrlroYgqAV1PjStIhJXxYuTgUIfkEk7zTLjmIjLmU5q+fbD1NnOJA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "performance-now": "^2.1.0"
+       }
+@@ -23358,7 +23334,6 @@
+       "resolved": "https://registry.npmjs.org/rc-align/-/rc-align-2.4.5.tgz",
+       "integrity": "sha512-nv9wYUYdfyfK+qskThf4BQUSIadeI/dCsfaMZfNEoxm9HwOIioQ+LyqmMK6jWHAZQgOzMLaqawhuBXlF63vgjw==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "babel-runtime": "^6.26.0",
+         "dom-align": "^1.7.0",
+@@ -23371,7 +23346,6 @@
+       "resolved": "https://registry.npmjs.org/rc-util/-/rc-util-4.21.1.tgz",
+       "integrity": "sha512-Z+vlkSQVc1l8O2UjR3WQ+XdWlhj5q9BMQNLk2iOBch75CqPfrJyGtcWMcnhRlNuDu0Ndtt4kLVO8JI8BrABobg==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "add-dom-event-listener": "^1.1.0",
+         "prop-types": "^15.5.10",
+@@ -23384,15 +23358,13 @@
+       "version": "16.13.1",
+       "resolved": "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz",
+       "integrity": "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/rc-animate": {
+       "version": "2.11.1",
+       "resolved": "https://registry.npmjs.org/rc-animate/-/rc-animate-2.11.1.tgz",
+       "integrity": "sha512-1NyuCGFJG/0Y+9RKh5y/i/AalUCA51opyyS/jO2seELpgymZm2u9QV3xwODwEuzkmeQ1BDPxMLmYLcTJedPlkQ==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "babel-runtime": "6.x",
+         "classnames": "^2.2.6",
+@@ -23408,7 +23380,6 @@
+       "resolved": "https://registry.npmjs.org/rc-util/-/rc-util-4.21.1.tgz",
+       "integrity": "sha512-Z+vlkSQVc1l8O2UjR3WQ+XdWlhj5q9BMQNLk2iOBch75CqPfrJyGtcWMcnhRlNuDu0Ndtt4kLVO8JI8BrABobg==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "add-dom-event-listener": "^1.1.0",
+         "prop-types": "^15.5.10",
+@@ -23421,15 +23392,13 @@
+       "version": "16.13.1",
+       "resolved": "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz",
+       "integrity": "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/rc-cascader": {
+       "version": "3.33.0",
+       "resolved": "https://registry.npmjs.org/rc-cascader/-/rc-cascader-3.33.0.tgz",
+       "integrity": "sha512-JvZrMbKBXIbEDmpIORxqvedY/bck6hGbs3hxdWT8eS9wSQ1P7//lGxbyKjOSyQiVBbgzNWriSe6HoMcZO/+0rQ==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.25.7",
+         "classnames": "^2.3.1",
+@@ -23447,7 +23416,6 @@
+       "resolved": "https://registry.npmjs.org/rc-checkbox/-/rc-checkbox-3.5.0.tgz",
+       "integrity": "sha512-aOAQc3E98HteIIsSqm6Xk2FPKIER6+5vyEFMZfo73TqM+VVAIqOkHoPjgKLqSNtVLWScoaM7vY2ZrGEheI79yg==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.10.1",
+         "classnames": "^2.3.2",
+@@ -23463,7 +23431,6 @@
+       "resolved": "https://registry.npmjs.org/rc-collapse/-/rc-collapse-3.9.0.tgz",
+       "integrity": "sha512-swDdz4QZ4dFTo4RAUMLL50qP0EY62N2kvmk2We5xYdRwcRn8WcYtuetCJpwpaCbUfUt5+huLpVxhvmnK+PHrkA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.10.1",
+         "classnames": "2.x",
+@@ -23480,7 +23447,6 @@
+       "resolved": "https://registry.npmjs.org/rc-color-picker/-/rc-color-picker-1.2.6.tgz",
+       "integrity": "sha512-AaC9Pg7qCHSy5M4eVbqDIaNb2FC4SEw82GOHB2C4R/+vF2FVa/r5XA+Igg5+zLPmAvBLhz9tL4MAfkRA8yWNJw==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "classnames": "^2.2.5",
+         "prop-types": "^15.5.8",
+@@ -23498,7 +23464,6 @@
+       "resolved": "https://registry.npmjs.org/rc-util/-/rc-util-4.21.1.tgz",
+       "integrity": "sha512-Z+vlkSQVc1l8O2UjR3WQ+XdWlhj5q9BMQNLk2iOBch75CqPfrJyGtcWMcnhRlNuDu0Ndtt4kLVO8JI8BrABobg==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "add-dom-event-listener": "^1.1.0",
+         "prop-types": "^15.5.10",
+@@ -23511,15 +23476,13 @@
+       "version": "16.13.1",
+       "resolved": "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz",
+       "integrity": "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/rc-dialog": {
+       "version": "9.6.0",
+       "resolved": "https://registry.npmjs.org/rc-dialog/-/rc-dialog-9.6.0.tgz",
+       "integrity": "sha512-ApoVi9Z8PaCQg6FsUzS8yvBEQy0ZL2PkuvAgrmohPkN3okps5WZ5WQWPc1RNuiOKaAYv8B97ACdsFU5LizzCqg==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.10.1",
+         "@rc-component/portal": "^1.0.0-8",
+@@ -23537,7 +23500,6 @@
+       "resolved": "https://registry.npmjs.org/rc-drawer/-/rc-drawer-7.2.0.tgz",
+       "integrity": "sha512-9lOQ7kBekEJRdEpScHvtmEtXnAsy+NGDXiRWc2ZVC7QXAazNVbeT4EraQKYwCME8BJLa8Bxqxvs5swwyOepRwg==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.23.9",
+         "@rc-component/portal": "^1.1.1",
+@@ -23555,7 +23517,6 @@
+       "resolved": "https://registry.npmjs.org/rc-dropdown/-/rc-dropdown-4.2.1.tgz",
+       "integrity": "sha512-YDAlXsPv3I1n42dv1JpdM7wJ+gSUBfeyPK59ZpBD9jQhK9jVuxpjj3NmWQHOBceA1zEPVX84T2wbdb2SD0UjmA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.18.3",
+         "@rc-component/trigger": "^2.0.0",
+@@ -23572,7 +23533,6 @@
+       "resolved": "https://registry.npmjs.org/rc-field-form/-/rc-field-form-2.7.0.tgz",
+       "integrity": "sha512-hgKsCay2taxzVnBPZl+1n4ZondsV78G++XVsMIJCAoioMjlMQR9YwAp7JZDIECzIu2Z66R+f4SFIRrO2DjDNAA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.18.0",
+         "@rc-component/async-validator": "^5.0.3",
+@@ -23591,7 +23551,6 @@
+       "resolved": "https://registry.npmjs.org/rc-image/-/rc-image-7.11.0.tgz",
+       "integrity": "sha512-aZkTEZXqeqfPZtnSdNUnKQA0N/3MbgR7nUnZ+/4MfSFWPFHZau4p5r5ShaI0KPEMnNjv4kijSCFq/9wtJpwykw==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.11.2",
+         "@rc-component/portal": "^1.0.2",
+@@ -23610,7 +23569,6 @@
+       "resolved": "https://registry.npmjs.org/rc-input/-/rc-input-1.7.2.tgz",
+       "integrity": "sha512-g3nYONnl4edWj2FfVoxsU3Ec4XTE+Hb39Kfh2MFxMZjp/0gGyPUgy/v7ZhS27ZxUFNkuIDYXm9PJsLyJbtg86A==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.11.1",
+         "classnames": "^2.2.1",
+@@ -23626,7 +23584,6 @@
+       "resolved": "https://registry.npmjs.org/rc-input-number/-/rc-input-number-9.4.0.tgz",
+       "integrity": "sha512-Tiy4DcXcFXAf9wDhN8aUAyMeCLHJUHA/VA/t7Hj8ZEx5ETvxG7MArDOSE6psbiSCo+vJPm4E3fGN710ITVn6GA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.10.1",
+         "@rc-component/mini-decimal": "^1.0.1",
+@@ -23644,7 +23601,6 @@
+       "resolved": "https://registry.npmjs.org/rc-mentions/-/rc-mentions-2.19.1.tgz",
+       "integrity": "sha512-KK3bAc/bPFI993J3necmaMXD2reZTzytZdlTvkeBbp50IGH1BDPDvxLdHDUrpQx2b2TGaVJsn+86BvYa03kGqA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.22.5",
+         "@rc-component/trigger": "^2.0.0",
+@@ -23664,7 +23620,6 @@
+       "resolved": "https://registry.npmjs.org/rc-menu/-/rc-menu-9.16.0.tgz",
+       "integrity": "sha512-vAL0yqPkmXWk3+YKRkmIR8TYj3RVdEt3ptG2jCJXWNAvQbT0VJJdRyHZ7kG/l1JsZlB+VJq/VcYOo69VR4oD+w==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.10.1",
+         "@rc-component/trigger": "^2.0.0",
+@@ -23683,7 +23638,6 @@
+       "resolved": "https://registry.npmjs.org/rc-motion/-/rc-motion-2.9.5.tgz",
+       "integrity": "sha512-w+XTUrfh7ArbYEd2582uDrEhmBHwK1ZENJiSJVb7uRxdE7qJSYjbO2eksRXmndqyKqKoYPc9ClpPh5242mV1vA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.11.1",
+         "classnames": "^2.2.1",
+@@ -23699,7 +23653,6 @@
+       "resolved": "https://registry.npmjs.org/rc-notification/-/rc-notification-5.6.3.tgz",
+       "integrity": "sha512-42szwnn8VYQoT6GnjO00i1iwqV9D1TTMvxObWsuLwgl0TsOokzhkYiufdtQBsJMFjJravS1hfDKVMHLKLcPE4g==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.10.1",
+         "classnames": "2.x",
+@@ -23719,7 +23672,6 @@
+       "resolved": "https://registry.npmjs.org/rc-overflow/-/rc-overflow-1.4.1.tgz",
+       "integrity": "sha512-3MoPQQPV1uKyOMVNd6SZfONi+f3st0r8PksexIdBTeIYbMX0Jr+k7pHEDvsXtR4BpCv90/Pv2MovVNhktKrwvw==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.11.1",
+         "classnames": "^2.2.1",
+@@ -23736,7 +23688,6 @@
+       "resolved": "https://registry.npmjs.org/rc-pagination/-/rc-pagination-5.1.0.tgz",
+       "integrity": "sha512-8416Yip/+eclTFdHXLKTxZvn70duYVGTvUUWbckCCZoIl3jagqke3GLsFrMs0bsQBikiYpZLD9206Ej4SOdOXQ==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.10.1",
+         "classnames": "^2.3.2",
+@@ -23752,7 +23703,6 @@
+       "resolved": "https://registry.npmjs.org/rc-picker/-/rc-picker-4.9.2.tgz",
+       "integrity": "sha512-SLW4PRudODOomipKI0dvykxW4P8LOqtMr17MOaLU6NQJhkh9SZeh44a/8BMxwv5T6e3kiIeYc9k5jFg2Mv35Pg==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.24.7",
+         "@rc-component/trigger": "^2.0.0",
+@@ -23792,7 +23742,6 @@
+       "resolved": "https://registry.npmjs.org/rc-progress/-/rc-progress-4.0.0.tgz",
+       "integrity": "sha512-oofVMMafOCokIUIBnZLNcOZFsABaUw8PPrf1/y0ZBvKZNpOiu5h4AO9vv11Sw0p4Hb3D0yGWuEattcQGtNJ/aw==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.10.1",
+         "classnames": "^2.2.6",
+@@ -23808,7 +23757,6 @@
+       "resolved": "https://registry.npmjs.org/rc-rate/-/rc-rate-2.13.0.tgz",
+       "integrity": "sha512-oxvx1Q5k5wD30sjN5tqAyWTvJfLNNJn7Oq3IeS4HxWfAiC4BOXMITNAsw7u/fzdtO4MS8Ki8uRLOzcnEuoQiAw==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.10.1",
+         "classnames": "^2.2.5",
+@@ -23827,7 +23775,6 @@
+       "resolved": "https://registry.npmjs.org/rc-resize-observer/-/rc-resize-observer-1.4.3.tgz",
+       "integrity": "sha512-YZLjUbyIWox8E9i9C3Tm7ia+W7euPItNWSPX5sCcQTYbnwDb5uNpnLHQCG1f22oZWUhLw4Mv2tFmeWe68CDQRQ==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.20.7",
+         "classnames": "^2.2.1",
+@@ -23844,7 +23791,6 @@
+       "resolved": "https://registry.npmjs.org/rc-segmented/-/rc-segmented-2.7.0.tgz",
+       "integrity": "sha512-liijAjXz+KnTRVnxxXG2sYDGd6iLL7VpGGdR8gwoxAXy2KglviKCxLWZdjKYJzYzGSUwKDSTdYk8brj54Bn5BA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.11.1",
+         "classnames": "^2.2.1",
+@@ -23861,7 +23807,6 @@
+       "resolved": "https://registry.npmjs.org/rc-select/-/rc-select-14.16.6.tgz",
+       "integrity": "sha512-YPMtRPqfZWOm2XGTbx5/YVr1HT0vn//8QS77At0Gjb3Lv+Lbut0IORJPKLWu1hQ3u4GsA0SrDzs7nI8JG7Zmyg==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.10.1",
+         "@rc-component/trigger": "^2.1.1",
+@@ -23884,7 +23829,6 @@
+       "resolved": "https://registry.npmjs.org/rc-slider/-/rc-slider-11.1.8.tgz",
+       "integrity": "sha512-2gg/72YFSpKP+Ja5AjC5DPL1YnV8DEITDQrcc1eASrUYjl0esptaBVJBh5nLTXCCp15eD8EuGjwezVGSHhs9tQ==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.10.1",
+         "classnames": "^2.2.5",
+@@ -23903,7 +23847,6 @@
+       "resolved": "https://registry.npmjs.org/rc-steps/-/rc-steps-6.0.1.tgz",
+       "integrity": "sha512-lKHL+Sny0SeHkQKKDJlAjV5oZ8DwCdS2hFhAkIjuQt1/pB81M0cA0ErVFdHq9+jmPmFw1vJB2F5NBzFXLJxV+g==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.16.7",
+         "classnames": "^2.2.3",
+@@ -23922,7 +23865,6 @@
+       "resolved": "https://registry.npmjs.org/rc-switch/-/rc-switch-4.1.0.tgz",
+       "integrity": "sha512-TI8ufP2Az9oEbvyCeVE4+90PDSljGyuwix3fV58p7HV2o4wBnVToEyomJRVyTaZeqNPAp+vqeo4Wnj5u0ZZQBg==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.21.0",
+         "classnames": "^2.2.1",
+@@ -23938,7 +23880,6 @@
+       "resolved": "https://registry.npmjs.org/rc-table/-/rc-table-7.50.2.tgz",
+       "integrity": "sha512-+nJbzxzstBriLb5sr9U7Vjs7+4dO8cWlouQbMwBVYghk2vr508bBdkHJeP/z9HVjAIKmAgMQKxmtbgDd3gc5wA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.10.1",
+         "@rc-component/context": "^1.4.0",
+@@ -23960,7 +23901,6 @@
+       "resolved": "https://registry.npmjs.org/rc-tabs/-/rc-tabs-15.5.1.tgz",
+       "integrity": "sha512-yiWivLAjEo5d1v2xlseB2dQocsOhkoVSfo1krS8v8r+02K+TBUjSjXIf7dgyVSxp6wRIPv5pMi5hanNUlQMgUA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.11.2",
+         "classnames": "2.x",
+@@ -23983,7 +23923,6 @@
+       "resolved": "https://registry.npmjs.org/rc-textarea/-/rc-textarea-1.9.0.tgz",
+       "integrity": "sha512-dQW/Bc/MriPBTugj2Kx9PMS5eXCCGn2cxoIaichjbNvOiARlaHdI99j4DTxLl/V8+PIfW06uFy7kjfUIDDKyxQ==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.10.1",
+         "classnames": "^2.2.1",
+@@ -24001,7 +23940,6 @@
+       "resolved": "https://registry.npmjs.org/rc-tooltip/-/rc-tooltip-6.3.2.tgz",
+       "integrity": "sha512-oA4HZIiZJbUQ5ojigM0y4XtWxaH/aQlJSzknjICRWNpqyemy1sL3X3iEQV2eSPBWEq+bqU3+aSs81z+28j9luA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.11.2",
+         "@rc-component/trigger": "^2.0.0",
+@@ -24017,7 +23955,6 @@
+       "resolved": "https://registry.npmjs.org/rc-tree/-/rc-tree-5.13.0.tgz",
+       "integrity": "sha512-2+lFvoVRnvHQ1trlpXMOWtF8BUgF+3TiipG72uOfhpL5CUdXCk931kvDdUkTL/IZVtNEDQKwEEmJbAYJSA5NnA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.10.1",
+         "classnames": "2.x",
+@@ -24038,7 +23975,6 @@
+       "resolved": "https://registry.npmjs.org/rc-tree-select/-/rc-tree-select-5.27.0.tgz",
+       "integrity": "sha512-2qTBTzwIT7LRI1o7zLyrCzmo5tQanmyGbSaGTIf7sYimCklAToVVfpMC6OAldSKolcnjorBYPNSKQqJmN3TCww==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.25.7",
+         "classnames": "2.x",
+@@ -24055,7 +23991,6 @@
+       "version": "1.11.5",
+       "resolved": "https://registry.npmjs.org/rc-trigger/-/rc-trigger-1.11.5.tgz",
+       "integrity": "sha512-MBuUPw1nFzA4K7jQOwb7uvFaZFjXGd00EofUYiZ+l/fgKVq8wnLC0lkv36kwqM7vfKyftRo2sh7cWVpdPuNnnw==",
+-      "peer": true,
+       "dependencies": {
+         "babel-runtime": "6.x",
+         "create-react-class": "15.x",
+@@ -24070,7 +24005,6 @@
+       "resolved": "https://registry.npmjs.org/rc-util/-/rc-util-4.21.1.tgz",
+       "integrity": "sha512-Z+vlkSQVc1l8O2UjR3WQ+XdWlhj5q9BMQNLk2iOBch75CqPfrJyGtcWMcnhRlNuDu0Ndtt4kLVO8JI8BrABobg==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "add-dom-event-listener": "^1.1.0",
+         "prop-types": "^15.5.10",
+@@ -24083,15 +24017,13 @@
+       "version": "16.13.1",
+       "resolved": "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz",
+       "integrity": "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/rc-upload": {
+       "version": "4.8.1",
+       "resolved": "https://registry.npmjs.org/rc-upload/-/rc-upload-4.8.1.tgz",
+       "integrity": "sha512-toEAhwl4hjLAI1u8/CgKWt30BR06ulPa4iGQSMvSXoHzO88gPCslxqV/mnn4gJU7PDoltGIC9Eh+wkeudqgHyw==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.18.3",
+         "classnames": "^2.2.5",
+@@ -24107,7 +24039,6 @@
+       "resolved": "https://registry.npmjs.org/rc-util/-/rc-util-5.44.3.tgz",
+       "integrity": "sha512-q6KCcOFk3rv/zD3MckhJteZxb0VjAIFuf622B7ElK4vfrZdAzs16XR5p3VTdy3+U5jfJU5ACz4QnhLSuAGe5dA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.18.3",
+         "react-is": "^18.2.0"
+@@ -24121,15 +24052,13 @@
+       "version": "18.3.1",
+       "resolved": "https://registry.npmjs.org/react-is/-/react-is-18.3.1.tgz",
+       "integrity": "sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/rc-virtual-list": {
+       "version": "3.18.1",
+       "resolved": "https://registry.npmjs.org/rc-virtual-list/-/rc-virtual-list-3.18.1.tgz",
+       "integrity": "sha512-ARSsD/dey/I4yNQHFYYUaKLUkD1wnD4lRZIvb3rCLMbTMmoFQJRVrWuSfbNt5P5MzMNooEBDvqrUPM4QN7BMNA==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "@babel/runtime": "^7.20.0",
+         "classnames": "^2.2.6",
+@@ -24159,6 +24088,7 @@
+       "resolved": "https://registry.npmjs.org/react/-/react-18.3.1.tgz",
+       "integrity": "sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==",
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "loose-envify": "^1.1.0"
+       },
+@@ -24310,6 +24240,7 @@
+       "resolved": "https://registry.npmjs.org/react-dom/-/react-dom-18.3.1.tgz",
+       "integrity": "sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==",
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "loose-envify": "^1.1.0",
+         "scheduler": "^0.23.2"
+@@ -24322,8 +24253,7 @@
+       "version": "3.2.2",
+       "resolved": "https://registry.npmjs.org/react-fast-compare/-/react-fast-compare-3.2.2.tgz",
+       "integrity": "sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/react-google-recaptcha": {
+       "version": "3.1.0",
+@@ -24416,6 +24346,7 @@
+       "resolved": "https://registry.npmjs.org/react-redux/-/react-redux-9.2.0.tgz",
+       "integrity": "sha512-ROY9fvHhwOD9ySfrF0wmvu//bKCQ6AeZZq1nJNtbDC+kk5DuSuNX/n6YWYF/SYy7bSba4D4FSz8DJeKY/S/r+g==",
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "@types/use-sync-external-store": "^0.0.6",
+         "use-sync-external-store": "^1.4.0"
+@@ -24592,7 +24523,8 @@
+       "version": "5.0.1",
+       "resolved": "https://registry.npmjs.org/redux/-/redux-5.0.1.tgz",
+       "integrity": "sha512-M9/ELqF6fy8FwmkpnF0S3YKOqMyoWJ4+CS5Efg2ct3oY9daQvd/Pc71FpGZsVsbl3Cpb+IIcjBDUnnyBdQbq4w==",
+-      "license": "MIT"
++      "license": "MIT",
++      "peer": true
+     },
+     "node_modules/redux-thunk": {
+       "version": "3.1.0",
+@@ -24865,8 +24797,7 @@
+       "version": "1.5.1",
+       "resolved": "https://registry.npmjs.org/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz",
+       "integrity": "sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/resolve": {
+       "version": "1.22.10",
+@@ -25040,6 +24971,7 @@
+       "resolved": "https://registry.npmjs.org/rollup/-/rollup-4.34.6.tgz",
+       "integrity": "sha512-wc2cBWqJgkU3Iz5oztRkQbfVkbxoz5EhnCGOrnJvnLnQ7O0WhQUYyv18qQI79O8L7DdHrrlJNeCHd4VGpnaXKQ==",
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "@types/estree": "1.0.6"
+       },
+@@ -25216,6 +25148,7 @@
+       "integrity": "sha512-XDAbhEPJRxi7H0SxrnOpiXFQoUJHwkR2u3Zc4el+fK/Tt5Hpzw5kkQ59qVDfvdaUq6gCrEZIbySFBM2T9DNKHg==",
+       "devOptional": true,
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "chokidar": "^4.0.0",
+         "immutable": "^5.0.2",
+@@ -25288,7 +25221,6 @@
+       "resolved": "https://registry.npmjs.org/screenfull/-/screenfull-5.2.0.tgz",
+       "integrity": "sha512-9BakfsO2aUQN2K9Fdbj87RJIEZ82Q9IGim7FqM5OsebfoFC6ZHXgDq/KvniuLTPdeM8wY2o6Dj3WQ7KeQCj3cA==",
+       "license": "MIT",
+-      "peer": true,
+       "engines": {
+         "node": ">=0.10.0"
+       },
+@@ -25301,7 +25233,6 @@
+       "resolved": "https://registry.npmjs.org/scroll-into-view-if-needed/-/scroll-into-view-if-needed-3.1.0.tgz",
+       "integrity": "sha512-49oNpRjWRvnU8NyGVmUaYG4jtTkNonFZI86MmGRDqBphEK2EXT9gdEUoQPZhuBM8yWHxCWbobltqYO5M4XrUvQ==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "compute-scroll-into-view": "^3.0.2"
+       }
+@@ -25503,8 +25434,7 @@
+       "version": "1.1.0",
+       "resolved": "https://registry.npmjs.org/shallowequal/-/shallowequal-1.1.0.tgz",
+       "integrity": "sha512-y0m1JoUZSlPAjXVtPPW70aZWfIL/dSP7AFkRnniLCrK/8MDKog3TySTBmckD+RObVxH0v4Tox67+F14PdED2oQ==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/shebang-command": {
+       "version": "2.0.0",
+@@ -25917,8 +25847,7 @@
+       "version": "0.2.1",
+       "resolved": "https://registry.npmjs.org/string-convert/-/string-convert-0.2.1.tgz",
+       "integrity": "sha512-u/1tdPl4yQnPBjnVrmdLo9gtuLvELKsAoRapekWggdiQNvvvum+jYF329d84NAa660KQw7pB2n36KrIKVoXa3A==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/string-env-interpolation": {
+       "version": "1.0.1",
+@@ -26424,7 +26353,6 @@
+       "resolved": "https://registry.npmjs.org/throttle-debounce/-/throttle-debounce-5.0.2.tgz",
+       "integrity": "sha512-B71/4oyj61iNH0KeCamLuE2rmKuTO5byTOSVwECM5FA7TiAiAW+UqTKZ9ERueC4qvgSttUhdmq1mXC3kJqGX7A==",
+       "license": "MIT",
+-      "peer": true,
+       "engines": {
+         "node": ">=12.22"
+       }
+@@ -26489,8 +26417,7 @@
+       "version": "1.6.0",
+       "resolved": "https://registry.npmjs.org/tinycolor2/-/tinycolor2-1.6.0.tgz",
+       "integrity": "sha512-XPaBkWQJdsf3pLKJV9p4qN/S+fm2Oj8AIPo1BTUhg5oxkvm9+SVEGFdhyOz7tTdUTfvxMiAs4sp6/eZO2Ew+pw==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/tinyexec": {
+       "version": "0.3.2",
+@@ -26534,6 +26461,7 @@
+       "integrity": "sha512-M7BAV6Rlcy5u+m6oPhAPFgJTzAioX/6B0DxyvDlo9l8+T3nLKbrczg2WLUyzd45L8RqfUMyGPzekbMvX2Ldkwg==",
+       "dev": true,
+       "license": "MIT",
++      "peer": true,
+       "engines": {
+         "node": ">=12"
+       },
+@@ -26657,8 +26585,7 @@
+       "version": "1.0.6",
+       "resolved": "https://registry.npmjs.org/toggle-selection/-/toggle-selection-1.0.6.tgz",
+       "integrity": "sha512-BiZS+C1OS8g/q2RRbJmy59xpyghNBqrr6k5L/uKBGRsTfxmu3ffiRnd8mlGPUVayg8pvfi5urfnu8TU7DVOkLQ==",
+-      "license": "MIT",
+-      "peer": true
++      "license": "MIT"
+     },
+     "node_modules/toidentifier": {
+       "version": "1.0.1",
+@@ -26816,6 +26743,7 @@
+       "integrity": "sha512-pOUl6Vo2LUq/bSa8S5q7b91cgNSjctn9ugq/+Mvow99qW6x/UZYwzxy/3NmqoT66eHYfCVvFvACC58UBPFf28g==",
+       "devOptional": true,
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "esbuild": "~0.23.0",
+         "get-tsconfig": "^4.7.5"
+@@ -27004,6 +26932,7 @@
+       "integrity": "sha512-Mn2VPNMaxoe/hlBiLriG4U55oyAa3Xo+8HbtEwV7F5WEOPXqtxzGuMZhJYHaqFJpajeQ6ZDUC2c990NAtTbdgw==",
+       "dev": true,
+       "license": "Apache-2.0",
++      "peer": true,
+       "dependencies": {
+         "@gerrit0/mini-shiki": "^3.2.1",
+         "lunr": "^2.3.9",
+@@ -27040,6 +26969,7 @@
+       "resolved": "https://registry.npmjs.org/typescript/-/typescript-5.7.3.tgz",
+       "integrity": "sha512-84MVSjMEHP+FQRPy3pX9sTVV/INIex71s9TL2Gm5FG/WG1SqXeKyZ0k7/blY/4FdOzI12CBy1vGc4og/eus0fw==",
+       "license": "Apache-2.0",
++      "peer": true,
+       "bin": {
+         "tsc": "bin/tsc",
+         "tsserver": "bin/tsserver"
+@@ -27481,7 +27411,6 @@
+       "resolved": "https://registry.npmjs.org/virtualizedtableforantd4/-/virtualizedtableforantd4-1.3.1.tgz",
+       "integrity": "sha512-rW8KoToI2nt1jNtweXIUIiygi74XMzKLzUrrtZbGsQc7m3v68AaedPuf4CZcte+nosgYuPEWnAgjuI/KR8BVbg==",
+       "license": "MIT",
+-      "peer": true,
+       "peerDependencies": {
+         "antd": "^4.0.0 || ^5.0.0",
+         "react": "^16.8.0 || ^17.0.0 || ^18.0.0",
+@@ -27493,6 +27422,7 @@
+       "resolved": "https://registry.npmjs.org/vite/-/vite-6.1.0.tgz",
+       "integrity": "sha512-RjjMipCKVoR4hVfPY6GQTgveinjNuyLw+qruksLDvA5ktI1150VmcMBKmQaEWJhg/j6Uaf6dNCNA0AfdzUb/hQ==",
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "esbuild": "^0.24.2",
+         "postcss": "^8.5.1",
+@@ -27741,6 +27671,7 @@
+       "integrity": "sha512-8QqtOQT5ACVlmsvKOJNEaWmRPmcojMOzCz4Hs2BGG/toAp/K38LcsMRyLp349glq5AzJbCEeimEoxaX6v/fLrA==",
+       "dev": true,
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "@babel/core": "^7.21.3",
+         "@svgr/babel-preset": "8.1.0",
+@@ -28306,6 +28237,7 @@
+       "integrity": "sha512-4dof+HvqONw9bvsYxtkfUp2uHsTN9bV2CZIi1pWgoFpL1Lld8LA1ka9q/ONSsoScAKG7NVGf2stJTI7XRkXb2Q==",
+       "dev": true,
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "@vitest/expect": "3.0.5",
+         "@vitest/mocker": "3.0.5",
+@@ -28427,6 +28359,7 @@
+       "integrity": "sha512-UIksWtThob6ZVSyxcOqCLOUNg/dyO1Qvx4McgeuhrEtHTLFTf7BBhEazaE4K806FGTPtzd/2sE90qn4fVr7cyw==",
+       "dev": true,
+       "license": "MIT",
++      "peer": true,
+       "dependencies": {
+         "undici-types": "~5.26.4"
+       }
+@@ -28996,6 +28929,7 @@
+       "resolved": "https://registry.npmjs.org/ws/-/ws-8.18.0.tgz",
+       "integrity": "sha512-8VbfWfHLbbwu3+N6OKsOMpBdT4kXPDDB9cJk2bJ6mh9ucxdlnNvH1e+roYkKmN9Nxw2yjz7VzeO9oOz2zJ04Pw==",
+       "license": "MIT",
++      "peer": true,
+       "engines": {
+         "node": ">=10.0.0"
+       },
+@@ -29199,7 +29133,6 @@
+       "resolved": "https://registry.npmjs.org/zustand/-/zustand-4.5.6.tgz",
+       "integrity": "sha512-ibr/n1hBzLLj5Y+yUcU7dYw8p6WnIVzdJbnX+1YpaScvZVF2ziugqHs+LAmHw4lWO9c/zRj+K1ncgWDQuthEdQ==",
+       "license": "MIT",
+-      "peer": true,
+       "dependencies": {
+         "use-sync-external-store": "^1.2.2"
+       },
+diff --git a/src/components/EventManagement/EventRegistrant/EventRegistrants.spec.tsx b/src/components/EventManagement/EventRegistrant/EventRegistrants.spec.tsx
+index 1a040fd361..91993ab985 100644
+--- a/src/components/EventManagement/EventRegistrant/EventRegistrants.spec.tsx
++++ b/src/components/EventManagement/EventRegistrant/EventRegistrants.spec.tsx
+@@ -9,11 +9,37 @@ import EventRegistrants from './EventRegistrants';
+ import { store } from 'state/store';
+ import { StaticMockLink } from 'utils/StaticMockLink';
+ import i18n from 'utils/i18nForTest';
+-import { REGISTRANTS_MOCKS } from './Registrations.mocks';
++import {
++  REGISTRANTS_MOCKS,
++  REGISTRANTS_MOCKS_NULL_REGISTRANTS,
++  REGISTRANTS_MOCKS_NULL_ATTENDEES,
++} from './Registrations.mocks';
+ import { MOCKS as ATTENDEES_MOCKS } from '../EventAttendance/EventAttendanceMocks';
+ import { vi } from 'vitest';
+ import { EVENT_REGISTRANTS, EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
+ import styles from 'style/app-fixed.module.css';
++import { CheckInWrapper as MockedCheckInWrapper } from 'components/CheckIn/CheckInWrapper';
++
++vi.mock('components/CheckIn/CheckInWrapper', () => ({
++  CheckInWrapper: vi.fn((props) => (
++    <div data-testid="mock-checkin-wrapper" {...props} />
++  )),
++}));
++
++const mocks = vi.hoisted(() => {
++  return {
++    useParams: vi.fn(),
++  };
++});
++
++vi.mock('react-router', async () => {
++  const actual = await vi.importActual('react-router');
++  return {
++    ...actual,
++    useParams: mocks.useParams,
++    useNavigate: vi.fn(),
++  };
++});
+ 
+ const COMBINED_MOCKS = [...REGISTRANTS_MOCKS, ...ATTENDEES_MOCKS];
+ 
+@@ -25,9 +51,11 @@ async function wait(): Promise<void> {
+   });
+ }
+ 
+-const renderEventRegistrants = (): RenderResult => {
++const renderEventRegistrants = (customMocks = COMBINED_MOCKS): RenderResult => {
++  const customLink = new StaticMockLink(customMocks, true);
++
+   return render(
+-    <MockedProvider addTypename={false} link={link}>
++    <MockedProvider addTypename={false} link={customLink}>
+       <BrowserRouter>
+         <Provider store={store}>
+           <I18nextProvider i18n={i18n}>
+@@ -41,19 +69,14 @@ const renderEventRegistrants = (): RenderResult => {
+ 
+ describe('Event Registrants Component', () => {
+   beforeEach(() => {
+-    vi.mock('react-router', async () => {
+-      const actual = await vi.importActual('react-router');
+-      return {
+-        ...actual,
+-        useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
+-        useNavigate: vi.fn(),
+-      };
+-    });
++    mocks.useParams.mockReturnValue({ eventId: 'event123', orgId: 'org123' });
+   });
+ 
+   afterEach(() => {
+     vi.clearAllMocks();
+     cleanup();
++    (MockedCheckInWrapper as ReturnType<typeof vi.fn>).mockClear();
++    mocks.useParams.mockClear();
+   });
+ 
+   test('Component loads correctly with table headers', async () => {
+@@ -75,7 +98,6 @@ describe('Event Registrants Component', () => {
+     renderEventRegistrants();
+ 
+     await waitFor(() => {
+-      expect(screen.getByTestId('stats-modal')).toBeInTheDocument();
+       expect(screen.getByTestId('filter-button')).toBeInTheDocument();
+     });
+   });
+@@ -85,31 +107,20 @@ describe('Event Registrants Component', () => {
+       {
+         request: {
+           query: EVENT_REGISTRANTS,
+-          variables: { eventId: '660fdf7d2c1ef6c7db1649ad' },
++          variables: { eventId: 'event123' },
+         },
+         result: { data: { getEventAttendeesByEventId: [] } },
+       },
+       {
+         request: {
+           query: EVENT_ATTENDEES,
+-          variables: { id: '660fdf7d2c1ef6c7db1649ad' },
++          variables: { id: 'event123' },
+         },
+         result: { data: { event: { attendees: [] } } },
+       },
+     ];
+ 
+-    const customLink = new StaticMockLink(emptyMocks, true);
+-    render(
+-      <MockedProvider addTypename={false} link={customLink}>
+-        <BrowserRouter>
+-          <Provider store={store}>
+-            <I18nextProvider i18n={i18n}>
+-              <EventRegistrants />
+-            </I18nextProvider>
+-          </Provider>
+-        </BrowserRouter>
+-      </MockedProvider>,
+-    );
++    renderEventRegistrants(emptyMocks);
+ 
+     await waitFor(() => {
+       expect(screen.getByTestId('no-registrants')).toBeInTheDocument();
+@@ -156,18 +167,7 @@ describe('Event Registrants Component', () => {
+       },
+     ];
+ 
+-    const customLink = new StaticMockLink(mockData, true);
+-    render(
+-      <MockedProvider addTypename={false} link={customLink}>
+-        <BrowserRouter>
+-          <Provider store={store}>
+-            <I18nextProvider i18n={i18n}>
+-              <EventRegistrants />
+-            </I18nextProvider>
+-          </Provider>
+-        </BrowserRouter>
+-      </MockedProvider>,
+-    );
++    renderEventRegistrants(mockData);
+ 
+     await waitFor(() => {
+       expect(screen.getByTestId('registrant-row-0')).toBeInTheDocument();
+@@ -183,6 +183,203 @@ describe('Event Registrants Component', () => {
+     );
+   });
+ 
++  test('should render "N/A" for registrants with no matching attendee data', async () => {
++    const mocks = [
++      {
++        request: {
++          query: EVENT_REGISTRANTS,
++          variables: { eventId: 'event123' },
++        },
++        result: {
++          data: {
++            getEventAttendeesByEventId: [
++              {
++                _id: '1',
++                userId: 'user-no-match',
++                isRegistered: true,
++                __typename: 'EventAttendee',
++              },
++            ],
++          },
++        },
++      },
++      {
++        request: {
++          query: EVENT_ATTENDEES,
++          variables: { id: 'event123' },
++        },
++        result: {
++          data: {
++            event: {
++              attendees: [
++                {
++                  _id: 'user1',
++                  firstName: 'Jane',
++                  lastName: 'Doe',
++                  createdAt: '2023-09-25T10:00:00.000Z',
++                  __typename: 'User',
++                },
++              ],
++            },
++          },
++        },
++      },
++    ];
++
++    renderEventRegistrants(mocks);
++
++    await waitFor(() => {
++      expect(screen.getByTestId('registrant-row-0')).toBeInTheDocument();
++    });
++
++    expect(screen.getByTestId('attendee-name-0')).toHaveTextContent('N/A N/A');
++    expect(screen.getByTestId('registrant-registered-at-0')).toHaveTextContent(
++      'N/A',
++    );
++    expect(screen.getByTestId('registrant-created-at-0')).toHaveTextContent(
++      'N/A',
++    );
++  });
++
++  test('should handle non-empty registrants with empty attendees', async () => {
++    const mocks = [
++      {
++        request: {
++          query: EVENT_REGISTRANTS,
++          variables: { eventId: 'event123' },
++        },
++        result: {
++          data: {
++            getEventAttendeesByEventId: [
++              {
++                _id: '1',
++                userId: 'user1',
++                isRegistered: true,
++                __typename: 'EventAttendee',
++              },
++            ],
++          },
++        },
++      },
++      {
++        request: {
++          query: EVENT_ATTENDEES,
++          variables: { id: 'event123' },
++        },
++        result: {
++          data: {
++            event: {
++              attendees: [],
++            },
++          },
++        },
++      },
++    ];
++
++    renderEventRegistrants(mocks);
++
++    await waitFor(() => {
++      expect(screen.getByTestId('no-registrants')).toBeInTheDocument();
++    });
++  });
++
++  test('should handle empty registrants with non-empty attendees', async () => {
++    const mocks = [
++      {
++        request: {
++          query: EVENT_REGISTRANTS,
++          variables: { eventId: 'event123' },
++        },
++        result: {
++          data: {
++            getEventAttendeesByEventId: [],
++          },
++        },
++      },
++      {
++        request: {
++          query: EVENT_ATTENDEES,
++          variables: { id: 'event123' },
++        },
++        result: {
++          data: {
++            event: {
++              attendees: [
++                {
++                  _id: 'user1',
++                  firstName: 'Jane',
++                  lastName: 'Doe',
++                  createdAt: '2023-09-25T10:00:00Z',
++                  __typename: 'User',
++                },
++              ],
++            },
++          },
++        },
++      },
++    ];
++
++    renderEventRegistrants(mocks);
++
++    await waitFor(() => {
++      expect(screen.getByTestId('no-registrants')).toBeInTheDocument();
++    });
++  });
++
++  // test('should handle createdAt without milliseconds', async () => {
++  //   const mocks = [
++  //     {
++  //       request: {
++  //         query: EVENT_REGISTRANTS,
++  //         variables: { eventId: 'event123' },
++  //       },
++  //       result: {
++  //         data: {
++  //           getEventAttendeesByEventId: [
++  //             {
++  //               _id: '1',
++  //               userId: 'user1',
++  //               isRegistered: true,
++  //               __typename: 'EventAttendee',
++  //             },
++  //           ],
++  //         },
++  //       },
++  //     },
++  //     {
++  //       request: {
++  //         query: EVENT_ATTENDEES,
++  //         variables: { id: 'event123' },
++  //       },
++  //       result: {
++  //         data: {
++  //           event: {
++  //             attendees: [
++  //               {
++  //                 _id: 'user1',
++  //                 firstName: 'Jane',
++  //                 lastName: 'Doe',
++  //                 createdAt: '2023-09-25T10:00:00Z',
++  //                 __typename: 'User',
++  //               },
++  //             ],
++  //           },
++  //         },
++  //       },
++  //     },
++  //   ];
++
++  //   renderEventRegistrants(mocks);
++
++  //   await waitFor(() => {
++  //     expect(screen.getByTestId('registrant-row-0')).toBeInTheDocument();
++  //   });
++
++  //   expect(screen.getByTestId('registrant-created-at-0')).toHaveTextContent(
++  //     '10:00:00',
++  //   );
++  // });
++
+   test('Handles missing attendee data with fallback values', async () => {
+     const mocksWithMissingFields = [
+       {
+@@ -223,18 +420,7 @@ describe('Event Registrants Component', () => {
+       },
+     ];
+ 
+-    const customLink = new StaticMockLink(mocksWithMissingFields, true);
+-    render(
+-      <MockedProvider addTypename={false} link={customLink}>
+-        <BrowserRouter>
+-          <Provider store={store}>
+-            <I18nextProvider i18n={i18n}>
+-              <EventRegistrants />
+-            </I18nextProvider>
+-          </Provider>
+-        </BrowserRouter>
+-      </MockedProvider>,
+-    );
++    renderEventRegistrants(mocksWithMissingFields as any);
+ 
+     await waitFor(() => {
+       expect(screen.getByTestId('registrant-row-0')).toBeInTheDocument();
+@@ -246,6 +432,260 @@ describe('Event Registrants Component', () => {
+       'N/A',
+     );
+   });
++
++  test('should handle createdAt without milliseconds', async () => {
++    const mocks = [
++      {
++        request: {
++          query: EVENT_REGISTRANTS,
++          variables: { eventId: 'event123' },
++        },
++        result: {
++          data: {
++            getEventAttendeesByEventId: [
++              {
++                _id: '1',
++                userId: 'user1',
++                isRegistered: true,
++                __typename: 'EventAttendee',
++              },
++            ],
++          },
++        },
++      },
++      {
++        request: {
++          query: EVENT_ATTENDEES,
++          variables: { id: 'event123' },
++        },
++        result: {
++          data: {
++            event: {
++              attendees: [
++                {
++                  _id: 'user1',
++                  firstName: 'Jane',
++                  lastName: 'Doe',
++                  createdAt: '2023-09-25T10:00:00Z',
++                  __typename: 'User',
++                },
++              ],
++            },
++          },
++        },
++      },
++    ];
++
++    renderEventRegistrants(mocks);
++
++    await waitFor(() => {
++      expect(screen.getByTestId('registrant-row-0')).toBeInTheDocument();
++    });
++
++    expect(screen.getByTestId('registrant-created-at-0')).toHaveTextContent(
++      '10:00:00',
++    );
++  });
++
++  test('should handle null firstName and lastName for existing attendee', async () => {
++    const mocks = [
++      {
++        request: {
++          query: EVENT_REGISTRANTS,
++          variables: { eventId: 'event123' },
++        },
++        result: {
++          data: {
++            getEventAttendeesByEventId: [
++              {
++                _id: '1',
++                userId: 'user1',
++                isRegistered: true,
++                __typename: 'EventAttendee',
++              },
++            ],
++          },
++        },
++      },
++      {
++        request: {
++          query: EVENT_ATTENDEES,
++          variables: { id: 'event123' },
++        },
++        result: {
++          data: {
++            event: {
++              attendees: [
++                {
++                  _id: 'user1',
++                  firstName: null,
++                  lastName: null,
++                  createdAt: '2023-09-25T10:00:00Z',
++                  __typename: 'User',
++                },
++              ],
++            },
++          },
++        },
++      },
++    ];
++
++    renderEventRegistrants(mocks);
++
++    await waitFor(() => {
++      expect(screen.getByTestId('registrant-row-0')).toBeInTheDocument();
++    });
++
++    expect(screen.getByTestId('attendee-name-0')).toHaveTextContent('N/A N/A');
++  });
++
++  test('should handle empty string for createdAt', async () => {
++    const mocks = [
++      {
++        request: {
++          query: EVENT_REGISTRANTS,
++          variables: { eventId: 'event123' },
++        },
++        result: {
++          data: {
++            getEventAttendeesByEventId: [
++              {
++                _id: '1',
++                userId: 'user1',
++                isRegistered: true,
++                __typename: 'EventAttendee',
++              },
++            ],
++          },
++        },
++      },
++      {
++        request: {
++          query: EVENT_ATTENDEES,
++          variables: { id: 'event123' },
++        },
++        result: {
++          data: {
++            event: {
++              attendees: [
++                {
++                  _id: 'user1',
++                  firstName: 'John',
++                  lastName: 'Doe',
++                  createdAt: '',
++                  __typename: 'User',
++                },
++              ],
++            },
++          },
++        },
++      },
++    ];
++
++    renderEventRegistrants(mocks);
++
++    await waitFor(() => {
++      expect(screen.getByTestId('registrant-row-0')).toBeInTheDocument();
++    });
++
++    expect(screen.getByTestId('registrant-registered-at-0')).toHaveTextContent(
++      'N/A',
++    );
++    expect(screen.getByTestId('registrant-created-at-0')).toHaveTextContent(
++      'N/A',
++    );
++  });
++
++  test('should handle createdAt without T separator', async () => {
++    const mocks = [
++      {
++        request: {
++          query: EVENT_REGISTRANTS,
++          variables: { eventId: 'event123' },
++        },
++        result: {
++          data: {
++            getEventAttendeesByEventId: [
++              {
++                _id: '1',
++                userId: 'user1',
++                isRegistered: true,
++                __typename: 'EventAttendee',
++              },
++            ],
++          },
++        },
++      },
++      {
++        request: {
++          query: EVENT_ATTENDEES,
++          variables: { id: 'event123' },
++        },
++        result: {
++          data: {
++            event: {
++              attendees: [
++                {
++                  _id: 'user1',
++                  firstName: 'John',
++                  lastName: 'Doe',
++                  createdAt: '2023-09-25', // Missing 'T' separator
++                  __typename: 'User',
++                },
++              ],
++            },
++          },
++        },
++      },
++    ];
++
++    renderEventRegistrants(mocks);
++
++    await waitFor(() => {
++      expect(screen.getByTestId('registrant-row-0')).toBeInTheDocument();
++    });
++
++    expect(screen.getByTestId('registrant-registered-at-0')).toHaveTextContent(
++      '2023-09-25',
++    );
++    expect(screen.getByTestId('registrant-created-at-0')).toHaveTextContent(
++      'N/A',
++    );
++  });
++
++  test('should handle null getEventAttendeesByEventId', async () => {
++    renderEventRegistrants(REGISTRANTS_MOCKS_NULL_REGISTRANTS as any);
++
++    await wait();
++
++    await waitFor(() => {
++      expect(screen.getByTestId('no-registrants')).toBeInTheDocument();
++    });
++  });
++
++  test('should handle null event.attendees', async () => {
++    renderEventRegistrants(REGISTRANTS_MOCKS_NULL_ATTENDEES as any);
++
++    await wait();
++
++    await waitFor(() => {
++      expect(screen.getByTestId('no-registrants')).toBeInTheDocument();
++    });
++  });
++
++  test('should pass empty eventId to CheckInWrapper when eventId is missing', async () => {
++    mocks.useParams.mockReturnValue({ eventId: undefined, orgId: 'org123' });
++
++    renderEventRegistrants();
++
++    await wait();
++
++    // Assert that MockedCheckInWrapper was called with eventId=""
++    expect(MockedCheckInWrapper).toHaveBeenCalledWith(
++      expect.objectContaining({ eventId: '' }),
++      {},
++    );
++  });
+ });
+ 
+ describe('EventRegistrants CSS Tests', () => {
+@@ -264,14 +704,12 @@ describe('EventRegistrants CSS Tests', () => {
+   };
+ 
+   beforeEach(() => {
+-    vi.mock('react-router', async () => ({
+-      ...(await vi.importActual('react-router')),
+-      useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
+-    }));
++    mocks.useParams.mockReturnValue({ eventId: 'event123', orgId: 'org123' });
+   });
+ 
+   afterEach(() => {
+     vi.clearAllMocks();
++    mocks.useParams.mockClear();
+   });
+ 
+   it('should apply correct styles to the filter button', () => {
+diff --git a/src/components/EventManagement/EventRegistrant/EventRegistrants.tsx b/src/components/EventManagement/EventRegistrant/EventRegistrants.tsx
+index d9e84becde..71f76cd93f 100644
+--- a/src/components/EventManagement/EventRegistrant/EventRegistrants.tsx
++++ b/src/components/EventManagement/EventRegistrant/EventRegistrants.tsx
+@@ -109,7 +109,7 @@ function EventRegistrants(): JSX.Element {
+           ? matchedAttendee.createdAt.split('T')
+           : ['N/A', 'N/A'];
+         const [time] =
+-          timeWithMilliseconds !== 'N/A'
++          timeWithMilliseconds && timeWithMilliseconds !== 'N/A'
+             ? timeWithMilliseconds.split('.')
+             : ['N/A'];
+         return {
+diff --git a/src/components/EventManagement/EventRegistrant/Registrations.mocks.ts b/src/components/EventManagement/EventRegistrant/Registrations.mocks.ts
+index d71714459e..db8d0e4aa8 100644
+--- a/src/components/EventManagement/EventRegistrant/Registrations.mocks.ts
++++ b/src/components/EventManagement/EventRegistrant/Registrations.mocks.ts
+@@ -65,3 +65,35 @@ export const REGISTRANTS_MOCKS_ERROR = [
+     error: new Error('An error occurred while fetching registrants'),
+   },
+ ];
++
++export const REGISTRANTS_MOCKS_NULL_REGISTRANTS = [
++  {
++    request: {
++      query: EVENT_REGISTRANTS,
++      variables: { eventId: 'event123' },
++    },
++    result: {
++      data: {
++        getEventAttendeesByEventId: null, // Simulate null registrants
++      },
++    },
++  },
++ 
++];
++
++export const REGISTRANTS_MOCKS_NULL_ATTENDEES = [
++  
++  {
++    request: {
++      query: EVENT_ATTENDEES,
++      variables: { id: 'event123' },
++    },
++    result: {
++      data: {
++        event: {
++          attendees: null, // Simulate null attendees
++        },
++      },
++    },
++  },
++];
+\ No newline at end of file

@@ -1,33 +1,81 @@
-import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import type { RenderResult } from '@testing-library/react';
-import { render, screen, cleanup, waitFor } from '@testing-library/react';
+import { toast } from 'react-toastify';
+
+import {
+  render,
+  screen,
+  cleanup,
+  waitFor,
+  fireEvent,
+} from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import EventRegistrants from './EventRegistrants';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
-import { REGISTRANTS_MOCKS } from './Registrations.mocks';
-import { MOCKS as ATTENDEES_MOCKS } from '../EventAttendance/EventAttendanceMocks';
+import {
+  COMBINED_MOCKS,
+  EVENT_CHECKINS_MOCK,
+  EVENT_CHECKINS_WITH_CHECKED_IN_MOCK,
+  EVENT_DETAILS_MOCK,
+  EVENT_DETAILS_RECURRING_MOCK,
+  MOCK_REGISTRANTS,
+  REMOVE_REGISTRANT_SUCCESS_MOCK,
+  MOCK_REGISTRANTS_WITH_NULL_CREATED_AT,
+  MOCK_REGISTRANTS_WITH_EMPTY_USER,
+  EVENT_CHECKINS_WITH_UNDEFINED_ATTENDEES,
+  MOCK_REGISTRANTS_NULL,
+  EventRegistrantsMockType,
+} from './EventRegistrants.mocks';
 import { vi } from 'vitest';
-import { EVENT_REGISTRANTS, EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
+import { EVENT_REGISTRANTS } from 'GraphQl/Queries/Queries';
 import styles from 'style/app-fixed.module.css';
+import { CheckInWrapper as MockedCheckInWrapper } from 'components/CheckIn/CheckInWrapper';
+import { EventRegistrantsWrapper as MockedEventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 
-const COMBINED_MOCKS = [...REGISTRANTS_MOCKS, ...ATTENDEES_MOCKS];
+import * as Utils from './utils';
 
-const link = new StaticMockLink(COMBINED_MOCKS, true);
+vi.mock('components/CheckIn/CheckInWrapper', () => ({
+  CheckInWrapper: vi.fn((props) => (
+    <div data-testid="mock-checkin-wrapper" {...props} />
+  )),
+}));
 
-async function wait(): Promise<void> {
-  await waitFor(() => {
-    return Promise.resolve();
-  });
-}
+vi.mock('components/EventRegistrantsModal/EventRegistrantsWrapper', () => ({
+  EventRegistrantsWrapper: vi.fn((props) => (
+    <div data-testid="mock-event-registrants-wrapper" {...props} />
+  )),
+}));
 
-const renderEventRegistrants = (): RenderResult => {
+const mocks = vi.hoisted(() => {
+  return { useParams: vi.fn() };
+});
+
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
+  return {
+    ...actual,
+    useParams: mocks.useParams,
+    useNavigate: vi.fn(),
+  };
+});
+
+vi.mock('react-toastify', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warn: vi.fn(),
+  },
+}));
+
+const renderEventRegistrants = (
+  customMocks: EventRegistrantsMockType[] = COMBINED_MOCKS,
+) => {
+  const customLink = new StaticMockLink(customMocks, true);
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider addTypename={false} link={customLink}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
@@ -41,14 +89,7 @@ const renderEventRegistrants = (): RenderResult => {
 
 describe('Event Registrants Component', () => {
   beforeEach(() => {
-    vi.mock('react-router', async () => {
-      const actual = await vi.importActual('react-router');
-      return {
-        ...actual,
-        useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
-        useNavigate: vi.fn(),
-      };
-    });
+    mocks.useParams.mockReturnValue({ eventId: 'event123', orgId: 'org123' });
   });
 
   afterEach(() => {
@@ -58,9 +99,6 @@ describe('Event Registrants Component', () => {
 
   test('Component loads correctly with table headers', async () => {
     renderEventRegistrants();
-
-    await wait();
-
     await waitFor(() => {
       expect(screen.getByTestId('table-header-serial')).toBeInTheDocument();
       expect(screen.getByTestId('table-header-registrant')).toBeInTheDocument();
@@ -69,248 +107,289 @@ describe('Event Registrants Component', () => {
     });
   });
 
-  test('Renders registrants button correctly', async () => {
-    renderEventRegistrants();
-
-    await waitFor(() => {
-      expect(screen.getByTestId('stats-modal')).toBeInTheDocument();
-      expect(screen.getByTestId('filter-button')).toBeInTheDocument();
-    });
-  });
-
   test('Handles empty registrants list', async () => {
     const emptyMocks = [
       {
         request: {
           query: EVENT_REGISTRANTS,
-          variables: { eventId: '660fdf7d2c1ef6c7db1649ad' },
+          variables: { eventId: 'event123' },
         },
         result: { data: { getEventAttendeesByEventId: [] } },
       },
-      {
-        request: {
-          query: EVENT_ATTENDEES,
-          variables: { id: '660fdf7d2c1ef6c7db1649ad' },
-        },
-        result: { data: { event: { attendees: [] } } },
-      },
+      EVENT_DETAILS_MOCK,
+      EVENT_CHECKINS_MOCK,
     ];
-
-    const customLink = new StaticMockLink(emptyMocks, true);
-    render(
-      <MockedProvider addTypename={false} link={customLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <EventRegistrants />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
+    renderEventRegistrants(emptyMocks);
     await waitFor(() => {
       expect(screen.getByTestId('no-registrants')).toBeInTheDocument();
     });
   });
 
+  test('CheckInWrapper should call with empty eventId', async () => {
+    mocks.useParams.mockReturnValue({ eventId: undefined, orgId: 'org123' });
+    renderEventRegistrants();
+    await waitFor(() => {
+      expect(MockedCheckInWrapper).toHaveBeenCalledWith(
+        expect.objectContaining({ eventId: '' }),
+        {},
+      );
+    });
+  });
+
+  test('CheckInWrapper should be called with correct eventId and onCheckInUpdate when eventId is defined', async () => {
+    renderEventRegistrants();
+    await waitFor(() => {
+      expect(MockedCheckInWrapper).toHaveBeenCalledWith(
+        expect.objectContaining({
+          eventId: 'event123',
+          onCheckInUpdate: expect.any(Function),
+        }),
+        {},
+      );
+    });
+  });
+
+  test('EventRegistrantsWrapper should not be called when eventId is undefined', async () => {
+    mocks.useParams.mockReturnValue({ eventId: undefined, orgId: 'org123' });
+    renderEventRegistrants();
+    await waitFor(() => {
+      expect(MockedEventRegistrantsWrapper).not.toHaveBeenCalled();
+    });
+  });
+
+  test('EventRegistrantsWrapper should not be called when orgId is undefined', async () => {
+    mocks.useParams.mockReturnValue({ eventId: 'event123', orgId: undefined });
+    renderEventRegistrants();
+    await waitFor(() => {
+      expect(MockedEventRegistrantsWrapper).not.toHaveBeenCalled();
+    });
+  });
+
+  test('EventRegistrantsWrapper should be called with correct props when both eventId and orgId are defined', async () => {
+    renderEventRegistrants();
+    await waitFor(() => {
+      expect(MockedEventRegistrantsWrapper).toHaveBeenCalledWith(
+        expect.objectContaining({
+          eventId: 'event123',
+          orgId: 'org123',
+          onUpdate: expect.any(Function),
+        }),
+        {},
+      );
+    });
+  });
+
   test('Successfully combines and displays registrant and attendee data', async () => {
-    const mockData = [
-      {
-        request: {
-          query: EVENT_REGISTRANTS,
-          variables: { eventId: 'event123' },
-        },
-        result: {
-          data: {
-            getEventAttendeesByEventId: [
-              {
-                id: '1',
-                user: {
-                  id: 'user1',
-                  name: 'John Doe',
-                  emailAddress: 'john@example.com',
-                },
-                isRegistered: true,
-                isInvited: false,
-                createdAt: '2023-09-25T10:00:00.000Z',
-                __typename: 'EventAttendee',
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: { query: EVENT_ATTENDEES, variables: { eventId: 'event123' } },
-        result: {
-          data: {
-            event: {
-              attendees: [
-                {
-                  id: 'user1',
-                  name: 'John Doe',
-                  emailAddress: 'john@example.com',
-                  createdAt: '2023-09-25T10:00:00.000Z',
-                  __typename: 'User',
-                },
-              ],
-            },
-          },
-        },
-      },
-    ];
-
-    const customLink = new StaticMockLink(mockData, true);
-    render(
-      <MockedProvider addTypename={false} link={customLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <EventRegistrants />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
+    renderEventRegistrants();
     await waitFor(() => {
       expect(screen.getByTestId('registrant-row-0')).toBeInTheDocument();
     });
-
-    // Validate mapped data
-    expect(screen.getByTestId('attendee-name-0')).toHaveTextContent('John Doe');
+    expect(screen.getByTestId('attendee-name-0')).toHaveTextContent(
+      'Bruce Garza',
+    );
     expect(screen.getByTestId('registrant-registered-at-0')).toHaveTextContent(
-      '2023-09-25',
+      '2024-07-22',
     );
   });
 
-  test('Handles missing attendee data with fallback values', async () => {
+  test('Handles missing createdAt data with fallback values', async () => {
     const mocksWithMissingFields = [
-      {
-        request: {
-          query: EVENT_REGISTRANTS,
-          variables: { eventId: 'event123' },
-        },
-        result: {
-          data: {
-            getEventAttendeesByEventId: [
-              {
-                id: '1',
-                user: {
-                  id: 'user1',
-                  name: 'Jane Doe',
-                  emailAddress: 'jane@example.com',
-                },
-                isRegistered: true,
-                isInvited: false,
-                __typename: 'EventAttendee',
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: { query: EVENT_ATTENDEES, variables: { eventId: 'event123' } },
-        result: {
-          data: {
-            event: {
-              attendees: [
-                {
-                  id: 'user1',
-                  name: 'Jane Doe',
-                  emailAddress: 'jane@example.com',
-                  createdAt: null,
-                  __typename: 'User',
-                },
-              ],
-            },
-          },
-        },
-      },
+      MOCK_REGISTRANTS_WITH_NULL_CREATED_AT,
+      EVENT_DETAILS_MOCK,
+      EVENT_CHECKINS_MOCK,
     ];
-
-    const customLink = new StaticMockLink(mocksWithMissingFields, true);
-    render(
-      <MockedProvider addTypename={false} link={customLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <EventRegistrants />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
+    renderEventRegistrants(mocksWithMissingFields);
     await waitFor(() => {
       expect(screen.getByTestId('registrant-row-0')).toBeInTheDocument();
     });
-
-    // Validate fallback values
     expect(screen.getByTestId('attendee-name-0')).toHaveTextContent('Jane Doe');
     expect(screen.getByTestId('registrant-created-at-0')).toHaveTextContent(
       'N/A',
     );
   });
+
+  test('should handle non-empty registrant with empty user object', async () => {
+    const mocksWithEmptyUser = [
+      MOCK_REGISTRANTS_WITH_EMPTY_USER,
+      EVENT_DETAILS_MOCK,
+      EVENT_CHECKINS_MOCK,
+    ];
+    renderEventRegistrants(mocksWithEmptyUser);
+    await waitFor(() => {
+      expect(screen.getByTestId('registrant-row-0')).toBeInTheDocument();
+    });
+    expect(screen.getByTestId('attendee-name-0')).toHaveTextContent('N/A');
+  });
+
+  test('should call deleteRegistrantUtil when unregister button is clicked', async () => {
+    const deleteRegistrantUtilSpy = vi.spyOn(Utils, 'deleteRegistrantUtil');
+    renderEventRegistrants([...COMBINED_MOCKS, REMOVE_REGISTRANT_SUCCESS_MOCK]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('registrant-row-0')).toBeInTheDocument();
+    });
+
+    const unregisterButton = screen.getByTestId('delete-registrant-0');
+    fireEvent.click(unregisterButton);
+
+    await waitFor(() => {
+      expect(deleteRegistrantUtilSpy).toHaveBeenCalled();
+    });
+  });
+
+  test('should disable unregister button for checked-in user', async () => {
+    renderEventRegistrants([
+      MOCK_REGISTRANTS,
+      EVENT_DETAILS_MOCK,
+      EVENT_CHECKINS_WITH_CHECKED_IN_MOCK,
+    ]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('registrant-row-0')).toBeInTheDocument();
+    });
+
+    const unregisterButton = screen.getByTestId('delete-registrant-0');
+    expect(unregisterButton).toBeDisabled();
+    expect(unregisterButton).toHaveAttribute(
+      'title',
+      'Cannot unregister checked-in user',
+    );
+  });
+
+  test('should fetch registrants for a recurring event', async () => {
+    const recurringMocks = [
+      MOCK_REGISTRANTS,
+      EVENT_DETAILS_RECURRING_MOCK,
+      EVENT_CHECKINS_MOCK,
+    ];
+    renderEventRegistrants(recurringMocks);
+    await waitFor(() => {
+      expect(screen.getByTestId('registrant-row-0')).toBeInTheDocument();
+    });
+  });
+
+  test('should handle undefined attendeesCheckInStatus in check-in', async () => {
+    const mocksWithUndefinedAttendees = [
+      MOCK_REGISTRANTS,
+      EVENT_DETAILS_MOCK,
+      EVENT_CHECKINS_WITH_UNDEFINED_ATTENDEES,
+    ];
+    renderEventRegistrants(mocksWithUndefinedAttendees);
+    await waitFor(() => {
+      expect(screen.getByTestId('registrant-row-0')).toBeInTheDocument();
+    });
+  });
+
+  test('should handle missing getEventAttendeesByEventId in registrants query response', async () => {
+    const mocksWithMissingRegistrants = [
+      MOCK_REGISTRANTS_NULL,
+      EVENT_DETAILS_MOCK,
+      EVENT_CHECKINS_MOCK,
+    ];
+    renderEventRegistrants(mocksWithMissingRegistrants);
+    await waitFor(() => {
+      expect(screen.getByTestId('no-registrants')).toBeInTheDocument();
+    });
+  });
 });
 
-describe('EventRegistrants CSS Tests', () => {
-  const renderEventRegistrants = (): RenderResult => {
-    return render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <EventRegistrants />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+describe('deleteRegistrantUtil edge cases', () => {
+  const refreshData = vi.fn();
+  const baseArgs = {
+    userId: 'user-1',
+    eventId: 'event-1',
   };
 
   beforeEach(() => {
-    vi.mock('react-router', async () => ({
-      ...(await vi.importActual('react-router')),
-      useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
-    }));
+    refreshData.mockReset();
+    vi.clearAllMocks();
+  });
+
+  test('should not call mutation when user already checked in', async () => {
+    const removeRegistrantMutation = vi.fn();
+    await Utils.deleteRegistrantUtil(
+      baseArgs.userId,
+      false,
+      baseArgs.eventId,
+      removeRegistrantMutation,
+      refreshData,
+      [baseArgs.userId],
+    );
+
+    expect(toast.error).toHaveBeenCalledWith(
+      'Cannot unregister a user who has already checked in',
+    );
+    expect(removeRegistrantMutation).not.toHaveBeenCalled();
+  });
+
+  test('should surface mutation errors', async () => {
+    const error = new Error('Mutation failed');
+    const removeRegistrantMutation = vi.fn().mockRejectedValueOnce(error);
+
+    await Utils.deleteRegistrantUtil(
+      baseArgs.userId,
+      false,
+      baseArgs.eventId,
+      removeRegistrantMutation,
+      refreshData,
+      [],
+    );
+
+    await Promise.resolve();
+    expect(toast.error).toHaveBeenCalledWith('Error removing attendee');
+    expect(toast.error).toHaveBeenCalledWith(error.message);
+  });
+
+  test('should surface mutation errors for recurring events', async () => {
+    const error = new Error('Mutation failed');
+    const removeRegistrantMutation = vi.fn().mockRejectedValueOnce(error);
+
+    await Utils.deleteRegistrantUtil(
+      baseArgs.userId,
+      true,
+      baseArgs.eventId,
+      removeRegistrantMutation,
+      refreshData,
+      [],
+    );
+
+    await Promise.resolve();
+    expect(toast.error).toHaveBeenCalledWith('Error removing attendee');
+    expect(toast.error).toHaveBeenCalledWith(error.message);
+  });
+});
+
+describe('EventRegistrants CSS Tests', () => {
+  beforeEach(() => {
+    mocks.useParams.mockReturnValue({ eventId: 'event123', orgId: 'org123' });
   });
 
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  it('should apply correct styles to the filter button', () => {
+  it('should apply correct styles to the table container', async () => {
     renderEventRegistrants();
-    const filterButton = screen.getByTestId('filter-button');
-
-    expect(filterButton).toHaveClass('border-1', 'mx-4', styles.createButton);
-  });
-
-  it('should apply correct styles to the table container', () => {
-    renderEventRegistrants();
-    const tableContainer = screen.getByRole('grid').closest('.MuiPaper-root');
-    expect(tableContainer).toHaveClass('mt-3');
-    expect(tableContainer).toHaveStyle({ borderRadius: '16px' });
-  });
-
-  it('should style table header cells with custom cell class', () => {
-    renderEventRegistrants();
-    const headerCells = [
-      screen.getByTestId('table-header-serial'),
-      screen.getByTestId('table-header-registrant'),
-      screen.getByTestId('table-header-registered-at'),
-      screen.getByTestId('table-header-created-at'),
-      screen.getByTestId('table-header-options'),
-    ];
-    headerCells.forEach((cell) => {
-      expect(cell).toHaveClass(styles.customcell);
+    await waitFor(() => {
+      const tableContainer = screen.getByRole('grid').closest('.MuiPaper-root');
+      expect(tableContainer).toHaveClass('mt-3');
+      expect(tableContainer).toHaveStyle({ borderRadius: '16px' });
     });
   });
 
-  it('should apply proper spacing between buttons', () => {
+  it('should style table header cells with custom cell class', async () => {
     renderEventRegistrants();
-    const filterButton = screen.getByTestId('filter-button');
-    expect(filterButton).toHaveClass('mx-4');
+    await waitFor(() => {
+      const headerCells = [
+        screen.getByTestId('table-header-serial'),
+        screen.getByTestId('table-header-registrant'),
+        screen.getByTestId('table-header-registered-at'),
+        screen.getByTestId('table-header-created-at'),
+        screen.getByTestId('table-header-options'),
+      ];
+      headerCells.forEach((cell) => {
+        expect(cell).toHaveClass(styles.customcell);
+      });
+    });
   });
 });
