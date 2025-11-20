@@ -520,7 +520,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
-          cache: pnpm
+          cache: 'pnpm'
 
       - name: Prepare dependency store
         run: pnpm fetch
