@@ -872,13 +872,13 @@ jobs:
           cache: 'pnpm'
 
       - name: Prepare dependency store
-        run: pnpm fetch
-      - name: Prepare dependency store (if lockfile exists)
+        working-directory: ./docs
         run: |
-          if [ -f ./docs/pnpm-lock.yaml ]; then
+          if [ -f pnpm-lock.yaml ]; then
+            echo "Lockfile found in ./docs — running pnpm fetch"
             pnpm fetch
           else
-            echo "No lockfile in ./docs — skipping pnpm fetch"
+            echo "No pnpm-lock.yaml in ./docs — skipping pnpm fetch"
           fi
 
       - name: Install dependencies (allow lockfile creation)
