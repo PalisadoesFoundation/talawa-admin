@@ -1,5 +1,14 @@
 import { renderHook, act } from '@testing-library/react';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import {
+  vi,
+  describe,
+  it,
+  expect,
+  beforeEach,
+  afterEach,
+  beforeAll,
+  afterAll,
+} from 'vitest';
 import { usePluginActions } from './usePluginActions';
 import { getPluginManager } from 'plugin/manager';
 import type { IPluginMeta } from 'plugin';
@@ -24,11 +33,22 @@ vi.mock('plugin/graphql-service', () => ({
 
 // Mock window.location.reload
 const mockReload = vi.fn();
-Object.defineProperty(window, 'location', {
-  value: {
-    reload: mockReload,
-  },
-  writable: true,
+const originalLocation = window.location;
+const locationStub = { reload: mockReload } as unknown as Location;
+
+beforeAll(() => {
+  Object.defineProperty(window, 'location', {
+    configurable: true,
+    value: locationStub,
+    writable: true,
+  });
+});
+
+afterAll(() => {
+  Object.defineProperty(window, 'location', {
+    configurable: true,
+    value: originalLocation,
+  });
 });
 
 describe('usePluginActions', () => {
@@ -60,12 +80,17 @@ describe('usePluginActions', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockReload.mockReset();
     (getPluginManager as any).mockReturnValue(mockPluginManager);
     mockRefetch.mockResolvedValue({});
     mockCreatePlugin.mockResolvedValue({});
     mockUpdatePlugin.mockResolvedValue({});
     mockDeletePlugin.mockResolvedValue({});
     mockInstallPlugin.mockResolvedValue({});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('should initialize with correct default state', () => {

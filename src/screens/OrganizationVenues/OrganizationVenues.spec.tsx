@@ -30,7 +30,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { VENUE_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import type { ApolloLink } from '@apollo/client';
 import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
-import { vi } from 'vitest';
+import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
 import { errorHandler } from 'utils/errorHandler';
 
 const MOCKS = [
@@ -83,6 +83,8 @@ const MOCKS = [
             ],
             pageInfo: {
               hasNextPage: false,
+              hasPreviousPage: false,
+              startCursor: null,
               endCursor: null,
             },
           },
@@ -134,13 +136,36 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-vi.mock('react-toastify', () => ({
+const sharedMocks = vi.hoisted(() => ({
   toast: {
     success: vi.fn(),
     warning: vi.fn(),
     error: vi.fn(),
   },
+  alert: vi.fn(),
+  errorHandler: vi.fn(),
 }));
+
+vi.mock('react-toastify', () => ({
+  toast: sharedMocks.toast,
+}));
+
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: sharedMocks.errorHandler,
+}));
+
+const originalAlert = window.alert;
+
+beforeEach(() => {
+  vi.clearAllMocks();
+  sharedMocks.alert.mockReset();
+  window.alert = sharedMocks.alert;
+});
+
+afterEach(() => {
+  window.alert = originalAlert;
+  vi.restoreAllMocks();
+});
 
 const renderOrganizationVenue = (link: ApolloLink): RenderResult => {
   return render(
@@ -166,16 +191,6 @@ const renderOrganizationVenue = (link: ApolloLink): RenderResult => {
 };
 
 describe('OrganizationVenue with missing orgId', () => {
-  beforeAll(() => {
-    vi.doMock('react-router', async () => ({
-      ...(await vi.importActual('react-router')),
-      useParams: () => ({ orgId: undefined }),
-    }));
-  });
-
-  afterAll(() => {
-    vi.clearAllMocks();
-  });
   test('Redirect to /orglist when orgId is falsy/undefined', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -202,19 +217,6 @@ describe('OrganizationVenue with missing orgId', () => {
 });
 
 describe('Organisation Venues', () => {
-  global.alert = vi.fn();
-
-  beforeAll(() => {
-    vi.doMock('react-router', async () => ({
-      ...(await vi.importActual('react-router')),
-      useParams: () => ({ orgId: 'orgId' }),
-    }));
-  });
-
-  afterAll(() => {
-    vi.clearAllMocks();
-  });
-
   test('searches the venue list correctly by Name', async () => {
     renderOrganizationVenue(link);
     await wait();
@@ -389,12 +391,7 @@ describe('Organisation Venues', () => {
   });
 });
 
-vi.mock('utils/errorHandler');
 describe('Organisation Venues Error Handling', () => {
-  beforeEach(() => {
-    vi.resetAllMocks();
-  });
-
   test('handles venue query error correctly', async () => {
     const mockError = new Error('Failed to fetch venues');
     const errorLink = new StaticMockLink([
@@ -453,6 +450,8 @@ describe('Organisation Venues Error Handling', () => {
                   ],
                   pageInfo: {
                     hasNextPage: false,
+                    hasPreviousPage: false,
+                    startCursor: null,
                     endCursor: null,
                   },
                 },

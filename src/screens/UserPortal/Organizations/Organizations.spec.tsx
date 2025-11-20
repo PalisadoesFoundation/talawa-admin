@@ -12,6 +12,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { store } from 'state/store';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
+  GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
   ORGANIZATION_FILTER_LIST,
   USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
 } from 'GraphQl/Queries/Queries';
@@ -22,47 +23,66 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 const { setItem, getItem } = useLocalStorage();
 
 const TEST_USER_ID = '01958985-600e-7cde-94a2-b3fc1ce66cf3';
+const baseOrgFields = {
+  addressLine1: 'asdfg',
+  description: 'desc',
+  avatarURL: '',
+  membersCount: 0,
+  adminsCount: 0,
+  createdAt: '1234567890',
+};
+
+const makeOrg = (overrides: Record<string, unknown> = {}) => ({
+  __typename: 'Organization',
+  ...baseOrgFields,
+  id: 'org-default',
+  name: 'Default Org',
+  isMember: false,
+  ...overrides,
+});
+
+const makeCreatedOrg = (overrides: Record<string, unknown> = {}) => ({
+  ...makeOrg({
+    avatarMimeType: 'image/png',
+    isMember: true,
+    ...overrides,
+  }),
+});
+
+const COMMUNITY_TIMEOUT_MOCK = {
+  request: {
+    query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
+  },
+  result: {
+    data: {
+      community: {
+        inactivityTimeoutDuration: 1800,
+      },
+    },
+  },
+};
+
 const MOCKS = [
+  COMMUNITY_TIMEOUT_MOCK,
   {
     request: {
       query: USER_CREATED_ORGANIZATIONS,
       variables: {
         id: getItem('userId'),
+        filter: '',
       },
     },
     result: {
       data: {
-        users: [
-          {
-            appUserProfile: {
-              createdOrganizations: [
-                {
-                  __typename: 'Organization',
-                  _id: '6401ff65ce8e8406b8f07af2',
-                  image: '',
-                  name: 'anyOrganization1',
-                  description: 'desc',
-                  address: {
-                    city: 'abc',
-                    countryCode: '123',
-                    postalCode: '456',
-                    state: 'def',
-                    dependentLocality: 'ghi',
-                    line1: 'asdfg',
-                    line2: 'dfghj',
-                    sortingCode: '4567',
-                  },
-                  createdAt: '1234567890',
-                  userRegistrationRequired: true,
-                  creator: {
-                    __typename: 'User',
-                    name: 'John Doe',
-                  },
-                },
-              ],
-            },
-          },
-        ],
+        user: {
+          id: getItem('userId'),
+          createdOrganizations: [
+            makeCreatedOrg({
+              id: '6401ff65ce8e8406b8f07af2',
+              name: 'anyOrganization1',
+            }),
+          ],
+        },
       },
     },
   },
@@ -76,46 +96,16 @@ const MOCKS = [
     result: {
       data: {
         organizations: [
-          {
-            __typename: 'Organization',
+          makeOrg({
             id: '6401ff65ce8e8406b8f07af2',
-            image: '',
             name: 'anyOrganization1',
-            description: 'desc',
-            address: {
-              city: 'abc',
-              countryCode: '123',
-              postalCode: '456',
-              state: 'def',
-              dependentLocality: 'ghi',
-              line1: 'asdfg',
-              line2: 'dfghj',
-              sortingCode: '4567',
-            },
-            createdAt: '1234567890',
-            userRegistrationRequired: true,
-            creator: { __typename: 'User', name: 'John Doe' },
-          },
-          {
-            __typename: 'Organization',
-            _id: '6401ff65ce8e8406b8f07af3',
-            image: '',
+            isMember: true,
+          }),
+          makeOrg({
+            id: '6401ff65ce8e8406b8f07af3',
             name: 'anyOrganization2',
-            createdAt: '1234567890',
-            address: {
-              city: 'abc',
-              countryCode: '123',
-              postalCode: '456',
-              state: 'def',
-              dependentLocality: 'ghi',
-              line1: 'asdfg',
-              line2: 'dfghj',
-              sortingCode: '4567',
-            },
-            description: 'desc',
-            userRegistrationRequired: true,
-            creator: { __typename: 'User', name: 'John Doe' },
-          },
+            isMember: true,
+          }),
         ],
       },
     },
@@ -126,6 +116,7 @@ const MOCKS = [
       variables: {
         id: getItem('userId'),
         first: 5,
+        filter: '',
       },
     },
     result: {
@@ -137,22 +128,18 @@ const MOCKS = [
             },
             edges: [
               {
-                node: {
+                node: makeOrg({
                   id: '6401ff65ce8e8406b8f07af2',
                   name: 'Test Edge Org',
                   addressLine1: 'Test Line 1',
                   description: 'Test Description',
-                  avatarURL: '',
-                },
+                }),
               },
               {
-                node: {
+                node: makeOrg({
                   id: '6401ff65ce8e8406b8f07af3',
                   name: 'anyOrganization1',
-                  addressLine1: 'asdfg',
-                  description: 'desc',
-                  avatarURL: '',
-                },
+                }),
               },
             ],
           },
@@ -170,26 +157,11 @@ const MOCKS = [
     result: {
       data: {
         organizations: [
-          {
-            __typename: 'Organization',
+          makeOrg({
             id: '6401ff65ce8e8406b8f07af3',
-            image: '',
             name: 'anyOrganization2',
-            description: 'desc',
-            address: {
-              city: 'abc',
-              countryCode: '123',
-              postalCode: '456',
-              state: 'def',
-              dependentLocality: 'ghi',
-              line1: 'asdfg',
-              line2: 'dfghj',
-              sortingCode: '4567',
-            },
-            userRegistrationRequired: true,
-            createdAt: '1234567890',
-            creator: { __typename: 'User', name: 'John Doe' },
-          },
+            isMember: true,
+          }),
         ],
       },
     },
@@ -200,6 +172,7 @@ const MOCKS = [
       variables: {
         id: getItem('userId'),
         first: 5,
+        filter: '',
       },
     },
     result: {
@@ -211,22 +184,16 @@ const MOCKS = [
             },
             edges: [
               {
-                node: {
+                node: makeOrg({
                   id: '6401ff65ce8e8406b8f07af2',
                   name: 'anyOrganization1',
-                  addressLine1: 'asdfg',
-                  description: 'desc',
-                  avatarURL: '',
-                },
+                }),
               },
               {
-                node: {
+                node: makeOrg({
                   id: '6401ff65ce8e8406b8f07af3',
                   name: 'anyOrganization2',
-                  addressLine1: 'asdfg',
-                  description: 'desc',
-                  avatarURL: '',
-                },
+                }),
               },
             ],
           },
@@ -240,6 +207,7 @@ const MOCKS = [
       variables: {
         id: getItem('userId'),
         first: 5,
+        filter: '',
       },
     },
     result: {
@@ -251,13 +219,10 @@ const MOCKS = [
             },
             edges: [
               {
-                node: {
+                node: makeOrg({
                   id: '6401ff65ce8e8406b8f07af3',
                   name: 'anyOrganization2',
-                  addressLine1: 'asdfg',
-                  description: 'desc',
-                  avatarURL: '',
-                },
+                }),
               },
             ],
           },
@@ -271,6 +236,7 @@ const MOCKS = [
       variables: {
         id: getItem('userId'),
         first: 5,
+        filter: '',
       },
     },
     result: {
@@ -282,22 +248,16 @@ const MOCKS = [
             },
             edges: [
               {
-                node: {
+                node: makeOrg({
                   id: '6401ff65ce8e8406b8f07af2',
                   name: 'anyOrganization1',
-                  addressLine1: 'asdfg',
-                  description: 'desc',
-                  avatarURL: '',
-                },
+                }),
               },
               {
-                node: {
+                node: makeOrg({
                   id: '6401ff65ce8e8406b8f07af3',
                   name: 'anyOrganization2',
-                  addressLine1: 'asdfg',
-                  description: 'desc',
-                  avatarURL: '',
-                },
+                }),
               },
             ],
           },
@@ -311,6 +271,7 @@ const MOCKS = [
       variables: {
         id: getItem('userId'),
         first: 5,
+        filter: '',
       },
     },
     result: {
@@ -322,13 +283,12 @@ const MOCKS = [
             },
             edges: [
               {
-                node: {
+                node: makeOrg({
                   id: '6401ff65ce8e8406b8f07af2',
                   name: 'Test Edge Org',
                   addressLine1: 'Test Line 1',
                   description: 'Test Description',
-                  avatarURL: '',
-                },
+                }),
               },
             ],
           },
@@ -366,8 +326,203 @@ test('Screen should be rendered properly', async () => {
 });
 
 test('Search works properly', async () => {
+  const searchMocks = [
+    COMMUNITY_TIMEOUT_MOCK,
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: {
+          filter: '',
+        },
+      },
+      result: {
+        data: {
+          organizations: [
+            makeOrg({
+              id: '6401ff65ce8e8406b8f07af2',
+              name: 'anyOrganization1',
+              isMember: true,
+            }),
+            makeOrg({
+              id: '6401ff65ce8e8406b8f07af3',
+              name: 'anyOrganization2',
+              isMember: true,
+            }),
+          ],
+        },
+      },
+    },
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: {
+          filter: '2',
+        },
+      },
+      result: {
+        data: {
+          organizations: [
+            makeOrg({
+              id: '6401ff65ce8e8406b8f07af3',
+              name: 'anyOrganization2',
+              isMember: true,
+            }),
+          ],
+        },
+      },
+    },
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: {
+          filter: '',
+        },
+      },
+      result: {
+        data: {
+          organizations: [
+            makeOrg({
+              id: '6401ff65ce8e8406b8f07af2',
+              name: 'anyOrganization1',
+              isMember: true,
+            }),
+            makeOrg({
+              id: '6401ff65ce8e8406b8f07af3',
+              name: 'anyOrganization2',
+              isMember: true,
+            }),
+          ],
+        },
+      },
+    },
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: {
+          filter: '2',
+        },
+      },
+      result: {
+        data: {
+          organizations: [
+            makeOrg({
+              id: '6401ff65ce8e8406b8f07af3',
+              name: 'anyOrganization2',
+              isMember: true,
+            }),
+          ],
+        },
+      },
+    },
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: {
+          filter: '2',
+        },
+      },
+      result: {
+        data: {
+          organizations: [
+            makeOrg({
+              id: '6401ff65ce8e8406b8f07af3',
+              name: 'anyOrganization2',
+              isMember: true,
+            }),
+          ],
+        },
+      },
+    },
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: {
+          filter: '',
+        },
+      },
+      result: {
+        data: {
+          organizations: [
+            makeOrg({
+              id: '6401ff65ce8e8406b8f07af2',
+              name: 'anyOrganization1',
+              isMember: true,
+            }),
+            makeOrg({
+              id: '6401ff65ce8e8406b8f07af3',
+              name: 'anyOrganization2',
+              isMember: true,
+            }),
+          ],
+        },
+      },
+    },
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: {
+          filter: '2',
+        },
+      },
+      result: {
+        data: {
+          organizations: [
+            makeOrg({
+              id: '6401ff65ce8e8406b8f07af3',
+              name: 'anyOrganization2',
+              isMember: true,
+            }),
+          ],
+        },
+      },
+    },
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: {
+          filter: '',
+        },
+      },
+      result: {
+        data: {
+          organizations: [
+            makeOrg({
+              id: '6401ff65ce8e8406b8f07af2',
+              name: 'anyOrganization1',
+              isMember: true,
+            }),
+            makeOrg({
+              id: '6401ff65ce8e8406b8f07af3',
+              name: 'anyOrganization2',
+              isMember: true,
+            }),
+          ],
+        },
+      },
+    },
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: {
+          filter: '2',
+        },
+      },
+      result: {
+        data: {
+          organizations: [
+            makeOrg({
+              id: '6401ff65ce8e8406b8f07af3',
+              name: 'anyOrganization2',
+              isMember: true,
+            }),
+          ],
+        },
+      },
+    },
+  ];
+
   render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider addTypename={false} mocks={searchMocks}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -381,12 +536,14 @@ test('Search works properly', async () => {
   await wait(500);
 
   await waitFor(() => {
-    expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
-  });
-
-  await waitFor(() => {
-    expect(screen.getByTestId('org-name-anyOrganization1')).toBeInTheDocument();
-    expect(screen.getByTestId('org-name-anyOrganization2')).toBeInTheDocument();
+    const list = screen.getByTestId('organizations-list');
+    expect(list).toBeInTheDocument();
+    const cards = screen.getAllByTestId('organization-card');
+    const orgNames = cards.map((card) =>
+      card.getAttribute('data-organization-name'),
+    );
+    expect(orgNames).toContain('anyOrganization1');
+    expect(orgNames).toContain('anyOrganization2');
   });
 
   const searchInput = screen.getByTestId('searchInput');
@@ -408,8 +565,11 @@ test('Search works properly', async () => {
   await wait(300);
 
   await waitFor(() => {
-    const org2Element = screen.getByTestId('org-name-anyOrganization2');
-    expect(org2Element).toBeInTheDocument();
+    const cards = screen.getAllByTestId('organization-card');
+    const orgNames = cards.map((card) =>
+      card.getAttribute('data-organization-name'),
+    );
+    expect(orgNames).toContain('anyOrganization2');
   });
 });
 
@@ -471,24 +631,24 @@ test('Join Now button renders correctly', async () => {
     result: {
       data: {
         organizations: [
-          {
+          makeOrg({
             id: 'org-id-1',
             name: 'anyOrganization1',
-            avatarURL: '',
             description: 'Test description 1',
             addressLine1: 'Test Address',
             adminsCount: 5,
             membersCount: 100,
-          },
-          {
+            isMember: false,
+          }),
+          makeOrg({
             id: 'org-id-2',
             name: 'anyOrganization2',
-            avatarURL: '',
             description: 'Test description 2',
             addressLine1: 'Test Address',
             adminsCount: 3,
             membersCount: 50,
-          },
+            isMember: false,
+          }),
         ],
       },
     },
@@ -521,13 +681,19 @@ test('Join Now button renders correctly', async () => {
     result: {
       data: {
         user: {
+          id: TEST_USER_ID,
           createdOrganizations: [],
         },
       },
     },
   };
 
-  const testMocks = [organizationsMock, joinedOrgsMock, createdOrgsMock];
+  const testMocks = [
+    COMMUNITY_TIMEOUT_MOCK,
+    organizationsMock,
+    joinedOrgsMock,
+    createdOrgsMock,
+  ];
   const link = new StaticMockLink(testMocks, true);
 
   render(
@@ -689,22 +855,18 @@ test('should update rowsPerPage when rows per page selector is changed', async (
 test('setPage updates page state correctly when pagination controls are used', async () => {
   const mockOrganizations = Array(12)
     .fill(0)
-    .map((_, index) => ({
-      id: `org-id-${index}`,
-      name: `Organization ${index + 1}`,
-      image: '',
-      description: `Description for org ${index + 1}`,
-      address: {
-        city: 'Test City',
-        countryCode: 'TC',
-        line1: 'Test Address',
-        postalCode: '12345',
-        state: 'TS',
-      },
-      userRegistrationRequired: true,
-    }));
+    .map((_, index) =>
+      makeOrg({
+        id: `org-id-${index}`,
+        name: `Organization ${index + 1}`,
+        description: `Description for org ${index + 1}`,
+        addressLine1: 'Test Address',
+        isMember: false,
+      }),
+    );
 
   const paginationMocks = [
+    COMMUNITY_TIMEOUT_MOCK,
     {
       request: {
         query: ORGANIZATION_FILTER_LIST,
@@ -740,6 +902,7 @@ test('setPage updates page state correctly when pagination controls are used', a
       result: {
         data: {
           user: {
+            id: getItem('userId'),
             createdOrganizations: [],
           },
         },
@@ -819,7 +982,7 @@ test('should correctly map joined organizations data ', async () => {
             },
             edges: [
               {
-                node: {
+                node: makeOrg({
                   id: 'joined-org-1',
                   name: 'Joined Organization 1',
                   avatarURL: 'org1.jpg',
@@ -828,10 +991,11 @@ test('should correctly map joined organizations data ', async () => {
                   members: [{ _id: TEST_USER_ID }],
                   membershipRequests: [],
                   userRegistrationRequired: false,
-                },
+                  isMember: true,
+                }),
               },
               {
-                node: {
+                node: makeOrg({
                   id: 'joined-org-2',
                   name: 'Joined Organization 2',
                   avatarURL: 'org2.jpg',
@@ -840,7 +1004,8 @@ test('should correctly map joined organizations data ', async () => {
                   members: [{ _id: TEST_USER_ID }],
                   membershipRequests: [],
                   userRegistrationRequired: true,
-                },
+                  isMember: true,
+                }),
               },
             ],
           },
@@ -869,13 +1034,19 @@ test('should correctly map joined organizations data ', async () => {
     result: {
       data: {
         user: {
+          id: TEST_USER_ID,
           createdOrganizations: [],
         },
       },
     },
   };
 
-  const mocks = [joinedOrgsMock, allOrgsMock, createdOrgsMock];
+  const mocks = [
+    COMMUNITY_TIMEOUT_MOCK,
+    joinedOrgsMock,
+    allOrgsMock,
+    createdOrgsMock,
+  ];
   const link = new StaticMockLink(mocks, true);
 
   render(
@@ -936,22 +1107,18 @@ test('should set membershipRequestStatus to "created" for created organizations'
     result: {
       data: {
         user: {
+          id: TEST_USER_ID,
           createdOrganizations: [
-            {
+            makeCreatedOrg({
               id: 'created-org-1',
               name: 'Created Organization 1',
-              image: 'test.jpg',
               description: 'Test Description',
-              address: {
-                city: 'Test City',
-                countryCode: 'TC',
-                line1: 'Test Address',
-                postalCode: '12345',
-                state: 'TS',
-              },
-              userRegistrationRequired: false,
-              membershipRequests: [],
-            },
+              addressLine1: 'Test Address',
+              isMember: true,
+              membersCount: 0,
+              adminsCount: 0,
+              avatarURL: 'test.jpg',
+            }),
           ],
         },
       },
@@ -959,6 +1126,7 @@ test('should set membershipRequestStatus to "created" for created organizations'
   };
 
   const mocks = [
+    COMMUNITY_TIMEOUT_MOCK,
     createdOrgsMock,
     {
       request: {
@@ -1023,6 +1191,7 @@ test('correctly map joined organizations data when mode is 1', async () => {
   setItem('userId', TEST_USER_ID);
 
   const mocks = [
+    COMMUNITY_TIMEOUT_MOCK,
     {
       request: {
         query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
@@ -1035,7 +1204,7 @@ test('correctly map joined organizations data when mode is 1', async () => {
               pageInfo: { hasNextPage: false },
               edges: [
                 {
-                  node: {
+                  node: makeOrg({
                     id: 'org-1',
                     name: 'Test Organization',
                     avatarURL: 'test.jpg',
@@ -1043,15 +1212,9 @@ test('correctly map joined organizations data when mode is 1', async () => {
                     addressLine1: '123 Test St',
                     membershipRequests: [],
                     userRegistrationRequired: false,
-                    address: {
-                      city: 'Test City',
-                      countryCode: 'TC',
-                      line1: '123 Test St',
-                      postalCode: '12345',
-                      state: 'TS',
-                    },
                     admins: [],
-                  },
+                    isMember: true,
+                  }),
                 },
               ],
             },
@@ -1078,6 +1241,7 @@ test('correctly map joined organizations data when mode is 1', async () => {
       result: {
         data: {
           user: {
+            id: TEST_USER_ID,
             createdOrganizations: [],
           },
         },
@@ -1132,6 +1296,7 @@ test('should search organizations when pressing Enter key', async () => {
   setItem('userId', TEST_USER_ID);
 
   const mocks = [
+    COMMUNITY_TIMEOUT_MOCK,
     {
       request: {
         query: ORGANIZATION_FILTER_LIST,
@@ -1140,13 +1305,14 @@ test('should search organizations when pressing Enter key', async () => {
       result: {
         data: {
           organizations: [
-            {
+            makeOrg({
               id: 'org-1',
               name: 'Test Organization',
               avatarURL: 'test.jpg',
               description: 'Test Description',
               addressLine1: '123 Test St',
-            },
+              isMember: false,
+            }),
           ],
         },
       },
@@ -1159,13 +1325,34 @@ test('should search organizations when pressing Enter key', async () => {
       result: {
         data: {
           organizations: [
-            {
+            makeOrg({
               id: 'org-2',
               name: 'Search Term Organization',
               avatarURL: 'search.jpg',
               description: 'Search Term Description',
               addressLine1: '456 Search St',
-            },
+              isMember: false,
+            }),
+          ],
+        },
+      },
+    },
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: { filter: 'Search Term' },
+      },
+      result: {
+        data: {
+          organizations: [
+            makeOrg({
+              id: 'org-2',
+              name: 'Search Term Organization',
+              avatarURL: 'search.jpg',
+              description: 'Search Term Description',
+              addressLine1: '456 Search St',
+              isMember: false,
+            }),
           ],
         },
       },
@@ -1194,6 +1381,7 @@ test('should search organizations when pressing Enter key', async () => {
       result: {
         data: {
           user: {
+            id: TEST_USER_ID,
             createdOrganizations: [],
           },
         },
@@ -1233,6 +1421,7 @@ test('should search organizations when clicking search button', async () => {
   setItem('userId', TEST_USER_ID);
 
   const mocks = [
+    COMMUNITY_TIMEOUT_MOCK,
     {
       request: {
         query: ORGANIZATION_FILTER_LIST,
@@ -1241,13 +1430,14 @@ test('should search organizations when clicking search button', async () => {
       result: {
         data: {
           organizations: [
-            {
+            makeOrg({
               id: 'org-1',
               name: 'Test Organization',
               avatarURL: 'test.jpg',
               description: 'Test Description',
               addressLine1: '123 Test St',
-            },
+              isMember: false,
+            }),
           ],
         },
       },
@@ -1260,13 +1450,34 @@ test('should search organizations when clicking search button', async () => {
       result: {
         data: {
           organizations: [
-            {
+            makeOrg({
               id: 'org-3',
               name: 'Button Search Organization',
               avatarURL: 'button.jpg',
               description: 'Button Search Description',
               addressLine1: '789 Button St',
-            },
+              isMember: false,
+            }),
+          ],
+        },
+      },
+    },
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: { filter: 'Button Search' },
+      },
+      result: {
+        data: {
+          organizations: [
+            makeOrg({
+              id: 'org-3',
+              name: 'Button Search Organization',
+              avatarURL: 'button.jpg',
+              description: 'Button Search Description',
+              addressLine1: '789 Button St',
+              isMember: false,
+            }),
           ],
         },
       },
@@ -1295,6 +1506,7 @@ test('should search organizations when clicking search button', async () => {
       result: {
         data: {
           user: {
+            id: TEST_USER_ID,
             createdOrganizations: [],
           },
         },
@@ -1336,6 +1548,40 @@ test('doSearch function should call appropriate refetch based on mode', async ()
   const searchValue = 'test search';
 
   const mocks = [
+    COMMUNITY_TIMEOUT_MOCK,
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: { filter: '' },
+      },
+      result: {
+        data: {
+          organizations: [],
+        },
+      },
+    },
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: { filter: searchValue },
+      },
+      result: {
+        data: {
+          organizations: [],
+        },
+      },
+    },
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: { filter: searchValue },
+      },
+      result: {
+        data: {
+          organizations: [],
+        },
+      },
+    },
     {
       request: {
         query: ORGANIZATION_FILTER_LIST,
@@ -1365,12 +1611,43 @@ test('doSearch function should call appropriate refetch based on mode', async ()
     },
     {
       request: {
+        query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
+        variables: { id: TEST_USER_ID, first: 5, filter: searchValue },
+      },
+      result: {
+        data: {
+          user: {
+            organizationsWhereMember: {
+              edges: [],
+              pageInfo: { hasNextPage: false },
+            },
+          },
+        },
+      },
+    },
+    {
+      request: {
         query: USER_CREATED_ORGANIZATIONS,
         variables: { id: TEST_USER_ID, filter: searchValue },
       },
       result: {
         data: {
           user: {
+            id: TEST_USER_ID,
+            createdOrganizations: [],
+          },
+        },
+      },
+    },
+    {
+      request: {
+        query: USER_CREATED_ORGANIZATIONS,
+        variables: { id: TEST_USER_ID, filter: searchValue },
+      },
+      result: {
+        data: {
+          user: {
+            id: TEST_USER_ID,
             createdOrganizations: [],
           },
         },
@@ -1460,7 +1737,10 @@ test('should display loading spinner when data is loading', async () => {
   };
 
   render(
-    <MockedProvider mocks={[loadingMock]} addTypename={false}>
+    <MockedProvider
+      mocks={[COMMUNITY_TIMEOUT_MOCK, loadingMock]}
+      addTypename={false}
+    >
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -1513,6 +1793,7 @@ test('should display "no organizations" message when organizations list is empty
     result: {
       data: {
         user: {
+          id: getItem('userId'),
           createdOrganizations: [],
         },
       },
@@ -1521,7 +1802,12 @@ test('should display "no organizations" message when organizations list is empty
 
   render(
     <MockedProvider
-      mocks={[emptyMock, joinedOrgsMock, createdOrgsMock]}
+      mocks={[
+        COMMUNITY_TIMEOUT_MOCK,
+        emptyMock,
+        joinedOrgsMock,
+        createdOrgsMock,
+      ]}
       addTypename={false}
     >
       <BrowserRouter>
@@ -1553,7 +1839,7 @@ test('should set membershipRequestStatus to empty string when isMember is false'
     result: {
       data: {
         organizations: [
-          {
+          makeOrg({
             id: 'non-member-org-1',
             name: 'Non Member Organization',
             avatarURL: 'test.jpg',
@@ -1562,8 +1848,8 @@ test('should set membershipRequestStatus to empty string when isMember is false'
             adminsCount: 5,
             membersCount: 100,
             isMember: false, // Explicitly set to false
-          },
-          {
+          }),
+          makeOrg({
             id: 'member-org-1',
             name: 'Member Organization',
             avatarURL: 'test.jpg',
@@ -1572,7 +1858,7 @@ test('should set membershipRequestStatus to empty string when isMember is false'
             adminsCount: 3,
             membersCount: 50,
             isMember: true, // Set to true for comparison
-          },
+          }),
         ],
       },
     },
@@ -1609,7 +1895,12 @@ test('should set membershipRequestStatus to empty string when isMember is false'
     },
   };
 
-  const mocks = [organizationsMock, joinedOrgsMock, createdOrgsMock];
+  const mocks = [
+    COMMUNITY_TIMEOUT_MOCK,
+    organizationsMock,
+    joinedOrgsMock,
+    createdOrgsMock,
+  ];
   const link = new StaticMockLink(mocks, true);
 
   render(
@@ -1672,18 +1963,20 @@ test('should handle rowsPerPage <= 0 to show all organizations', async () => {
 
   const mockOrganizations = Array(15)
     .fill(0)
-    .map((_, index) => ({
-      id: `org-id-${index}`,
-      name: `Organization ${index + 1}`,
-      avatarURL: '',
-      description: `Description ${index + 1}`,
-      addressLine1: 'Test Address',
-      adminsCount: 5,
-      membersCount: 100,
-      isMember: true,
-    }));
+    .map((_, index) =>
+      makeOrg({
+        id: `org-id-${index}`,
+        name: `Organization ${index + 1}`,
+        description: `Description ${index + 1}`,
+        addressLine1: 'Test Address',
+        adminsCount: 5,
+        membersCount: 100,
+        isMember: true,
+      }),
+    );
 
   const mocks = [
+    COMMUNITY_TIMEOUT_MOCK,
     {
       request: { query: ORGANIZATION_FILTER_LIST, variables: { filter: '' } },
       result: { data: { organizations: mockOrganizations } },
@@ -1712,6 +2005,7 @@ test('should handle rowsPerPage <= 0 to show all organizations', async () => {
       result: {
         data: {
           user: {
+            id: TEST_USER_ID,
             createdOrganizations: [],
           },
         },

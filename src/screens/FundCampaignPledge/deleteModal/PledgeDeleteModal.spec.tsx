@@ -17,10 +17,16 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import { vi } from 'vitest';
 
-vi.mock('react-toastify', () => ({
-  toast: { success: vi.fn(), error: vi.fn() },
+const toastMocks = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
 }));
 
+vi.mock('react-toastify', () => ({
+  toast: toastMocks,
+}));
+
+const locationStub = { reload: vi.fn() } as unknown as Location;
 const link = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(MOCKS_DELETE_PLEDGE_ERROR);
 const translations = JSON.parse(
@@ -74,6 +80,18 @@ const renderPledgeDeleteModal = (
 };
 
 describe('PledgeDeleteModal', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    (pledgeProps.hide as unknown as ReturnType<typeof vi.fn>).mockClear();
+    (
+      pledgeProps.refetchPledge as unknown as ReturnType<typeof vi.fn>
+    ).mockClear();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should render PledgeDeleteModal', () => {
     renderPledgeDeleteModal(link, pledgeProps);
     expect(screen.getByTestId('deletePledgeCloseBtn')).toBeInTheDocument();

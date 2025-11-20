@@ -13,7 +13,20 @@ import userEvent from '@testing-library/user-event';
 import { MOCKS } from './UpcomingEvents/UpcomingEvents.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi } from 'vitest';
+import { vi, beforeEach, afterEach } from 'vitest';
+
+const sharedMocks = vi.hoisted(() => ({
+  useParams: vi.fn(() => ({ orgId: 'orgId' })),
+}));
+
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
+  return {
+    ...actual,
+    useParams: sharedMocks.useParams,
+  };
+});
+
 const { setItem } = useLocalStorage();
 
 const link1 = new StaticMockLink(MOCKS);
@@ -43,22 +56,16 @@ const renderVolunteerManagement = (): RenderResult => {
 };
 
 describe('Volunteer Management', () => {
-  beforeAll(() => {
-    vi.mock('react-router', async () => {
-      const actual = await vi.importActual('react-router'); // Import the actual implementation
-      return {
-        ...actual,
-        useParams: () => ({ orgId: 'orgId' }),
-      };
-    });
-  });
-
   beforeEach(() => {
+    localStorage.clear();
+    sharedMocks.useParams.mockReturnValue({ orgId: 'orgId' });
     setItem('userId', 'userId');
   });
 
-  afterAll(() => {
+  afterEach(() => {
     vi.clearAllMocks();
+    sharedMocks.useParams.mockReturnValue({ orgId: 'orgId' });
+    localStorage.clear();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {

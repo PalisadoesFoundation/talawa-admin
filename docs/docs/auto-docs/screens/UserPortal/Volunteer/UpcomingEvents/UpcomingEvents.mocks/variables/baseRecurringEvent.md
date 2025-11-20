@@ -6,9 +6,13 @@
 
 > `const` **baseRecurringEvent**: `object`
 
-Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts:198](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts#L198)
+Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts:324](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts#L324)
 
 ## Type Declaration
+
+### allDay
+
+> **allDay**: `boolean` = `false`
 
 ### baseEvent
 
@@ -22,6 +26,10 @@ Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mock
 
 > **endAt**: `string` = `'2044-10-30T12:00:00.000Z'`
 
+### id
+
+> **id**: `string` = `'baseEventId1'`
+
 ### isRecurringEventTemplate
 
 > **isRecurringEventTemplate**: `boolean` = `true`
@@ -29,6 +37,10 @@ Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mock
 ### location
 
 > **location**: `string` = `'Test Location'`
+
+### name
+
+> **name**: `string` = `'Recurring Template Event'`
 
 ### recurrenceRule
 
@@ -38,13 +50,17 @@ Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mock
 
 > **frequency**: `string` = `'WEEKLY'`
 
+#### recurrenceRule.id
+
+> **id**: `string` = `'baseRecurrenceRule'`
+
 ### startAt
 
 > **startAt**: `string` = `'2044-10-30T10:00:00.000Z'`
 
 ### volunteerGroups
 
-> **volunteerGroups**: `any`[] = `[]`
+> **volunteerGroups**: `object`[]
 
 ### volunteers
 

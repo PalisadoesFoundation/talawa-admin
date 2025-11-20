@@ -7,7 +7,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes, useParams } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
@@ -15,6 +15,25 @@ import Volunteers from './Volunteers';
 import type { ApolloLink } from '@apollo/client';
 import { MOCKS, MOCKS_EMPTY, MOCKS_ERROR } from './Volunteers.mocks';
 import { vi } from 'vitest';
+
+const { routerMocks } = vi.hoisted(() => {
+  const useParams = vi.fn();
+  useParams.mockReturnValue({ orgId: 'orgId', eventId: 'eventId' });
+  return {
+    routerMocks: {
+      useParams,
+    },
+  };
+});
+
+vi.mock('react-router', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-router')>('react-router');
+  return {
+    ...actual,
+    useParams: routerMocks.useParams,
+  };
+});
 
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(MOCKS_ERROR);
@@ -62,22 +81,20 @@ const renderVolunteers = (link: ApolloLink): RenderResult => {
 /** Mock useParams to provide consistent test data */
 
 describe('Testing Volunteers Screen', () => {
-  beforeAll(() => {
-    vi.mock('react-router', async () => {
-      const actualDom = await vi.importActual('react-router');
-      return {
-        ...actualDom,
-        useParams: vi.fn(),
-      };
+  beforeEach(() => {
+    vi.clearAllMocks();
+    routerMocks.useParams.mockReturnValue({
+      orgId: 'orgId',
+      eventId: 'eventId',
     });
   });
 
-  afterAll(() => {
-    vi.clearAllMocks();
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
-    vi.mocked(useParams).mockReturnValue({ orgId: '', eventId: '' });
+    routerMocks.useParams.mockReturnValue({ orgId: '', eventId: '' });
     render(
       <MockedProvider addTypename={false} link={link1}>
         <MemoryRouter initialEntries={['/event/']}>
@@ -102,7 +119,7 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('should render Volunteers screen', async () => {
-    vi.mocked(useParams).mockReturnValue({
+    routerMocks.useParams.mockReturnValue({
       orgId: 'orgId',
       eventId: 'eventId',
     });
@@ -113,7 +130,7 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Check Sorting Functionality', async () => {
-    vi.mocked(useParams).mockReturnValue({
+    routerMocks.useParams.mockReturnValue({
       orgId: 'orgId',
       eventId: 'eventId',
     });
@@ -150,7 +167,7 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('should render status chips for all volunteer statuses', async () => {
-    vi.mocked(useParams).mockReturnValue({
+    routerMocks.useParams.mockReturnValue({
       orgId: 'orgId',
       eventId: 'eventId',
     });
@@ -182,7 +199,7 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Filter Volunteers by status (All)', async () => {
-    vi.mocked(useParams).mockReturnValue({
+    routerMocks.useParams.mockReturnValue({
       orgId: 'orgId',
       eventId: 'eventId',
     });
@@ -203,7 +220,7 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Filter Volunteers by status (Pending)', async () => {
-    vi.mocked(useParams).mockReturnValue({
+    routerMocks.useParams.mockReturnValue({
       orgId: 'orgId',
       eventId: 'eventId',
     });
@@ -224,7 +241,7 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Filter Volunteers by status (Accepted)', async () => {
-    vi.mocked(useParams).mockReturnValue({
+    routerMocks.useParams.mockReturnValue({
       orgId: 'orgId',
       eventId: 'eventId',
     });
@@ -245,7 +262,7 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Search by pressing Enter key', async () => {
-    vi.mocked(useParams).mockReturnValue({
+    routerMocks.useParams.mockReturnValue({
       orgId: 'orgId',
       eventId: 'eventId',
     });
@@ -263,7 +280,7 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Search by clicking search button', async () => {
-    vi.mocked(useParams).mockReturnValue({
+    routerMocks.useParams.mockReturnValue({
       orgId: 'orgId',
       eventId: 'eventId',
     });
@@ -289,7 +306,7 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('should render screen with No Volunteers', async () => {
-    vi.mocked(useParams).mockReturnValue({
+    routerMocks.useParams.mockReturnValue({
       orgId: 'orgId',
       eventId: 'eventId',
     });
@@ -302,7 +319,7 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Error while fetching volunteers data', async () => {
-    vi.mocked(useParams).mockReturnValue({
+    routerMocks.useParams.mockReturnValue({
       orgId: 'orgId',
       eventId: 'eventId',
     });
@@ -314,7 +331,7 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Open and close Volunteer Modal (View)', async () => {
-    vi.mocked(useParams).mockReturnValue({
+    routerMocks.useParams.mockReturnValue({
       orgId: 'orgId',
       eventId: 'eventId',
     });
@@ -328,7 +345,7 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Open and Close Volunteer Modal (Delete)', async () => {
-    vi.mocked(useParams).mockReturnValue({
+    routerMocks.useParams.mockReturnValue({
       orgId: 'orgId',
       eventId: 'eventId',
     });
@@ -342,7 +359,7 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Open and close Volunteer Modal (Create)', async () => {
-    vi.mocked(useParams).mockReturnValue({
+    routerMocks.useParams.mockReturnValue({
       orgId: 'orgId',
       eventId: 'eventId',
     });
@@ -357,7 +374,7 @@ describe('Testing Volunteers Screen', () => {
 
   describe('Client-side Search Filtering', () => {
     beforeEach(() => {
-      vi.mocked(useParams).mockReturnValue({
+      routerMocks.useParams.mockReturnValue({
         orgId: 'orgId',
         eventId: 'eventId',
       });
@@ -443,7 +460,7 @@ describe('Testing Volunteers Screen', () => {
 
   describe('Status Filtering in volunteers useMemo', () => {
     beforeEach(() => {
-      vi.mocked(useParams).mockReturnValue({
+      routerMocks.useParams.mockReturnValue({
         orgId: 'orgId',
         eventId: 'eventId',
       });
@@ -576,7 +593,7 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('should render Avatar component when volunteer has no avatarURL', async () => {
-    vi.mocked(useParams).mockReturnValue({
+    routerMocks.useParams.mockReturnValue({
       orgId: 'orgId',
       eventId: 'eventId',
     });
@@ -607,7 +624,7 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('should render volunteer modals conditionally when volunteer state is set', async () => {
-    vi.mocked(useParams).mockReturnValue({
+    routerMocks.useParams.mockReturnValue({
       orgId: 'orgId',
       eventId: 'eventId',
     });

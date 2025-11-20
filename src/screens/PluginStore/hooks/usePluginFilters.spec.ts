@@ -1,5 +1,5 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { usePluginFilters } from './usePluginFilters';
 import type { IPluginMeta } from 'plugin';
 
@@ -85,6 +85,10 @@ describe('usePluginFilters', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockT.mockImplementation((key: string) => key);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   describe('Initialization', () => {

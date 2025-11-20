@@ -1,29 +1,38 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import Transactions from './Transactions';
 import i18nForTest from '../../../utils/i18nForTest';
 
-vi.mock('plugin', () => ({
+const sharedMocks = vi.hoisted(() => ({
   PluginInjector: vi.fn(() => (
     <div data-testid="plugin-injector">Mock Plugin Injector</div>
   )),
+  localStorage: {
+    getItem: () => 'test-user-id',
+    setItem: () => undefined,
+    removeItem: () => undefined,
+  },
+}));
+
+vi.mock('plugin', () => ({
+  PluginInjector: sharedMocks.PluginInjector,
 }));
 
 vi.mock('utils/useLocalstorage', () => ({
   __esModule: true,
-  useLocalStorage: () => ({
-    getItem: (_key: string) => 'test-user-id',
-    setItem: (_key: string, _value: string) => undefined,
-    removeItem: (_key: string) => undefined,
-  }),
+  useLocalStorage: () => sharedMocks.localStorage,
 }));
 
 describe('UserPortal Transactions', () => {
   beforeEach(() => {
     document.title = '';
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
   const renderWithRouter = (initialEntry = '/user/transactions/123') => {

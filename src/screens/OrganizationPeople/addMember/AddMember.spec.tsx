@@ -1,5 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -16,11 +16,15 @@ import {
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { vi } from 'vitest';
+import { vi, afterEach } from 'vitest';
 
 // Mock react-toastify
-vi.mock('react-toastify', () => ({
+const sharedMocks = vi.hoisted(() => ({
   toast: { success: vi.fn(), error: vi.fn() },
+}));
+
+vi.mock('react-toastify', () => ({
+  toast: sharedMocks.toast,
 }));
 
 // Setup mock window.location
@@ -84,8 +88,18 @@ const createUserListMock = (
   };
 
   const data = { ...defaultData };
+  const withRole = (edge: (typeof defaultData.allUsers.edges)[number]) => ({
+    ...edge,
+    node: {
+      ...edge.node,
+      role: edge.node.role ?? 'regular',
+    },
+  });
+
+  data.allUsers.edges = data.allUsers.edges.map(withRole) as any;
+
   if (Array.isArray(overrides.edges)) {
-    data.allUsers.edges = overrides.edges;
+    data.allUsers.edges = overrides.edges.map(withRole) as any;
   }
   if (overrides.pageInfo) {
     data.allUsers.pageInfo = {
@@ -110,16 +124,41 @@ const createOrganizationsMock = (orgId: string) => {
 };
 
 const createAddMemberMutationMock = (variables: Record<string, unknown>) => {
+  const defaultVariables = {
+    organizationId: 'org123',
+    ...variables,
+  };
   return {
-    request: { query: CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG, variables },
+    request: {
+      query: CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
+      variables: defaultVariables,
+    },
     result: { data: { createOrganizationMembership: { id: 'membership1' } } },
   };
 };
 
 const createRegisterMutationMock = (variables: Record<string, unknown>) => {
+  const defaultVariables = {
+    role: 'regular',
+    ...variables,
+  };
+
   return {
-    request: { query: CREATE_MEMBER_PG, variables },
-    result: { data: { createUser: { user: { id: 'newUser1' } } } },
+    request: { query: CREATE_MEMBER_PG, variables: defaultVariables },
+    result: {
+      data: {
+        createUser: {
+          authenticationToken: 'token',
+          user: {
+            id: 'newUser1',
+            name:
+              typeof (defaultVariables as any).name === 'string'
+                ? (defaultVariables as any).name
+                : 'New User',
+          },
+        },
+      },
+    },
   };
 };
 
@@ -138,6 +177,7 @@ const createMemberConnectionMock = (
               emailAddress: 'john@example.com',
               avatarURL: 'https://example.com/avatar1.jpg',
               createdAt: '2023-01-01T00:00:00Z',
+              role: 'member',
             },
             cursor: 'cursor1',
           },
@@ -148,6 +188,7 @@ const createMemberConnectionMock = (
               emailAddress: 'jane@example.com',
               avatarURL: null,
               createdAt: '2023-01-02T00:00:00Z',
+              role: 'member',
             },
             cursor: 'cursor2',
           },
@@ -163,8 +204,20 @@ const createMemberConnectionMock = (
   };
 
   const data = { ...defaultData };
+  const withRole = (edge: (typeof defaultData.organization.members.edges)[0]) =>
+    ({
+      ...edge,
+      node: {
+        ...edge.node,
+        role: edge.node.role ?? 'member',
+      },
+    }) as (typeof defaultData.organization.members.edges)[0];
+
+  data.organization.members.edges =
+    data.organization.members.edges.map(withRole);
+
   if (Array.isArray(overrides.edges)) {
-    data.organization.members.edges = overrides.edges;
+    data.organization.members.edges = overrides.edges.map(withRole);
   }
   if (overrides.pageInfo) {
     data.organization.members.pageInfo = {
@@ -179,27 +232,59 @@ const createMemberConnectionMock = (
   };
 };
 
+type RenderConfig = {
+  mocks?: MockedResponse[];
+  link?: StaticMockLink;
+  initialEntry?: string;
+};
+
+const DEFAULT_ROUTE = '/orgpeople/org123';
+
+const renderAddMemberView = ({
+  mocks = [],
+  link,
+  initialEntry = DEFAULT_ROUTE,
+}: RenderConfig) => {
+  const content = (
+    <MemoryRouter initialEntries={[initialEntry]}>
+      <I18nextProvider i18n={i18nForTest}>
+        <Routes>
+          <Route path="/orgpeople/:orgId" element={<AddMember />} />
+        </Routes>
+      </I18nextProvider>
+    </MemoryRouter>
+  );
+
+  if (link) {
+    return render(
+      <MockedProvider addTypename={false} link={link}>
+        {content}
+      </MockedProvider>,
+    );
+  }
+
+  return render(
+    <MockedProvider addTypename={false} mocks={mocks}>
+      {content}
+    </MockedProvider>,
+  );
+};
+
 describe('AddMember Component', () => {
   beforeEach(() => {
     setupLocationMock();
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   test('renders the add member button correctly', async () => {
     const orgId = 'org123';
     const mocks = [createOrganizationsMock(orgId)];
 
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Routes>
-              <Route path={`/orgpeople/${orgId}`} element={<AddMember />} />
-            </Routes>
-          </I18nextProvider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
     // Check if the SortingButton is rendered
     expect(await screen.findByTestId('addMembers')).toBeInTheDocument();
@@ -219,15 +304,7 @@ describe('AddMember Component', () => {
     });
     const mocks = [orgMock, createOrganizationsMock(orgId), ...userListMock];
 
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AddMember />
-          </I18nextProvider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
     // Click the add member button
     const addMembersButton = await screen.findByTestId('addMembers');
@@ -311,15 +388,7 @@ describe('AddMember Component', () => {
       searchUserListMock,
     ];
 
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AddMember />
-          </I18nextProvider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
     // Open the add member modal
     const addMembersButton = await screen.findByTestId('addMembers');
@@ -378,15 +447,7 @@ describe('AddMember Component', () => {
 
     const mocks = [createOrganizationsMock(orgId), userListMock, addMemberMock];
 
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AddMember />
-          </I18nextProvider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
     // Open the add member modal
     const addMembersButton = await screen.findByTestId('addMembers');
@@ -439,15 +500,7 @@ describe('AddMember Component', () => {
 
     const mocks = [createOrganizationsMock(orgId), userListMock, addMemberMock];
 
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AddMember />
-          </I18nextProvider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
     // Open the add member modal
     const addMembersButton = await screen.findByTestId('addMembers');
@@ -531,15 +584,10 @@ describe('AddMember Component', () => {
 
     const link = new StaticMockLink(mocks, true);
 
-    render(
-      <MockedProvider link={link} addTypename={false}>
-        <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AddMember />
-          </I18nextProvider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderAddMemberView({
+      link,
+      initialEntry: `/orgpeople/${orgId}`,
+    });
 
     // Open the add member modal
     const addMembersButton = await screen.findByTestId('addMembers');
@@ -612,15 +660,7 @@ describe('AddMember Component', () => {
     const orgId = 'org123';
     const mocks = [createOrganizationsMock(orgId)];
 
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AddMember />
-          </I18nextProvider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
     // Click the add member button
     const addMembersButton = await screen.findByTestId('addMembers');
@@ -645,15 +685,7 @@ describe('AddMember Component', () => {
     const orgId = 'org123';
     const mocks = [createOrganizationsMock(orgId)];
 
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AddMember />
-          </I18nextProvider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
     // Open the create user modal
     const addMembersButton = await screen.findByTestId('addMembers');
@@ -704,15 +736,7 @@ describe('AddMember Component', () => {
 
     const mocks = [createOrganizationsMock(orgId), registerMock, addMemberMock];
 
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AddMember />
-          </I18nextProvider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
     // Open the create user modal
     const addMembersButton = await screen.findByTestId('addMembers');
@@ -763,15 +787,7 @@ describe('AddMember Component', () => {
 
     const mocks = [createOrganizationsMock(orgId), registerMock, addMemberMock];
 
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AddMember />
-          </I18nextProvider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
     // Open the create user modal
     const addMembersButton = await screen.findByTestId('addMembers');
@@ -817,15 +833,7 @@ describe('AddMember Component', () => {
 
     const mocks = [createOrganizationsMock(orgId), registerMock, addMemberMock];
 
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AddMember />
-          </I18nextProvider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
     // Open the create user modal
     const addMembersButton = await screen.findByTestId('addMembers');
@@ -871,15 +879,7 @@ describe('AddMember Component', () => {
 
     const mocks = [createOrganizationsMock(orgId), registerMock, addMemberMock];
 
-    render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AddMember />
-          </I18nextProvider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
     // Open the create user modal
     const addMembersButton = await screen.findByTestId('addMembers');
@@ -942,15 +942,10 @@ describe('AddMember Component', () => {
     const mocks = [createOrganizationsMock(orgId), mockWithoutEndCursor];
     const link = new StaticMockLink(mocks, true);
 
-    render(
-      <MockedProvider link={link} addTypename={false}>
-        <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
-          <I18nextProvider i18n={i18nForTest}>
-            <AddMember />
-          </I18nextProvider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderAddMemberView({
+      link,
+      initialEntry: `/orgpeople/${orgId}`,
+    });
 
     // Open the add member modal
     const addMembersButton = await screen.findByTestId('addMembers');

@@ -33,20 +33,26 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-const mockedNavigate = vi.fn();
+const { routerMocks, toastMocks } = vi.hoisted(() => ({
+  routerMocks: {
+    navigate: vi.fn(),
+  },
+  toastMocks: {
+    error: vi.fn(),
+    success: vi.fn(),
+  },
+}));
+
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,
-    useNavigate: () => mockedNavigate,
+    useNavigate: () => routerMocks.navigate,
   };
 });
 
 vi.mock('react-toastify', () => ({
-  toast: {
-    error: vi.fn(),
-    success: vi.fn(),
-  },
+  toast: toastMocks,
 }));
 
 interface InterfaceRenderOptions {
@@ -72,9 +78,9 @@ function renderWithProviders({
 
 describe('OrganizationDashboard', () => {
   beforeEach(() => {
-    mockedNavigate.mockReset();
-    vi.mocked(toast.error).mockReset();
-    vi.mocked(toast.success).mockReset();
+    routerMocks.navigate.mockReset();
+    toastMocks.error.mockReset();
+    toastMocks.success.mockReset();
   });
 
   it('navigates to requests page when clicking on membership requests card', async () => {
@@ -99,7 +105,7 @@ describe('OrganizationDashboard', () => {
       throw new Error('Membership requests card button not found');
     }
 
-    expect(mockedNavigate).toHaveBeenCalledWith('/requests/orgId');
+    expect(routerMocks.navigate).toHaveBeenCalledWith('/requests/orgId');
   });
 
   it('renders dashboard cards with correct data when GraphQL queries succeed', async () => {
@@ -148,8 +154,8 @@ describe('OrganizationDashboard', () => {
     renderWithProviders({ mocks: ERROR_MOCKS });
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('errorLoading');
-      expect(mockedNavigate).toHaveBeenCalledWith('/');
+      expect(toastMocks.error).toHaveBeenCalledWith('errorLoading');
+      expect(routerMocks.navigate).toHaveBeenCalledWith('/');
     });
   });
 
@@ -164,19 +170,19 @@ describe('OrganizationDashboard', () => {
 
     const viewRequestsBtn = screen.getByTestId('viewAllMembershipRequests');
     fireEvent.click(viewRequestsBtn);
-    expect(mockedNavigate).toHaveBeenCalledWith('/requests/orgId');
+    expect(routerMocks.navigate).toHaveBeenCalledWith('/requests/orgId');
 
     const viewLeaderBtn = screen.getByTestId('viewAllLeadeboard');
     fireEvent.click(viewLeaderBtn);
-    expect(toast.success).toHaveBeenCalledWith('comingSoon');
+    expect(toastMocks.success).toHaveBeenCalledWith('comingSoon');
 
     const viewEventsBtn = screen.getByTestId('viewAllEvents');
     fireEvent.click(viewEventsBtn);
-    expect(mockedNavigate).toHaveBeenCalledWith('/orgevents/orgId');
+    expect(routerMocks.navigate).toHaveBeenCalledWith('/orgevents/orgId');
 
     const viewPostBtn = screen.getByTestId('viewAllPosts');
     fireEvent.click(viewPostBtn);
-    expect(mockedNavigate).toHaveBeenCalledWith('/orgpost/orgId');
+    expect(routerMocks.navigate).toHaveBeenCalledWith('/orgpost/orgId');
   });
 
   it('redirects to home when orgId is not provided', () => {
@@ -235,7 +241,7 @@ describe('OrganizationDashboard', () => {
       const postsCountElement = screen.getByTestId('postsCount');
       fireEvent.click(postsCountElement);
 
-      expect(mockedNavigate).toHaveBeenCalledWith('/orgpost/orgId');
+      expect(routerMocks.navigate).toHaveBeenCalledWith('/orgpost/orgId');
     });
   });
 
@@ -246,7 +252,7 @@ describe('OrganizationDashboard', () => {
       const eventsCountElement = screen.getByTestId('eventsCount');
       fireEvent.click(eventsCountElement);
 
-      expect(mockedNavigate).toHaveBeenCalledWith('/orgevents/orgId');
+      expect(routerMocks.navigate).toHaveBeenCalledWith('/orgevents/orgId');
     });
   });
 
@@ -257,7 +263,7 @@ describe('OrganizationDashboard', () => {
       const blockedUsersCountElement = screen.getByTestId('blockedUsersCount');
       fireEvent.click(blockedUsersCountElement);
 
-      expect(mockedNavigate).toHaveBeenCalledWith('/blockuser/orgId');
+      expect(routerMocks.navigate).toHaveBeenCalledWith('/blockuser/orgId');
     });
   });
 
@@ -475,7 +481,7 @@ describe('OrganizationDashboard', () => {
       fireEvent.click(venuesCard);
 
       await waitFor(() => {
-        expect(mockedNavigate).toHaveBeenCalledWith('/orgvenues/orgId');
+        expect(routerMocks.navigate).toHaveBeenCalledWith('/orgvenues/orgId');
       });
     });
 
@@ -509,11 +515,11 @@ describe('OrganizationDashboard', () => {
       renderWithProviders({ mocks: ERROR_MOCKS });
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalled();
+        expect(toastMocks.error).toHaveBeenCalled();
       });
 
       await waitFor(() => {
-        expect(mockedNavigate).toHaveBeenCalledWith('/');
+        expect(routerMocks.navigate).toHaveBeenCalledWith('/');
       });
     });
 
@@ -557,7 +563,7 @@ describe('OrganizationDashboard', () => {
       await waitFor(async () => {
         fireEvent.click(viewAllEventsButton);
         await new Promise((resolve) => setTimeout(resolve, 0));
-        expect(mockedNavigate).toHaveBeenCalledWith('/orgevents/orgId');
+        expect(routerMocks.navigate).toHaveBeenCalledWith('/orgevents/orgId');
       });
     });
 
@@ -573,7 +579,7 @@ describe('OrganizationDashboard', () => {
       await waitFor(async () => {
         fireEvent.click(viewAllPostsButton);
         await new Promise((resolve) => setTimeout(resolve, 0));
-        expect(mockedNavigate).toHaveBeenCalledWith('/orgpost/orgId');
+        expect(routerMocks.navigate).toHaveBeenCalledWith('/orgpost/orgId');
       });
     });
 
@@ -591,7 +597,7 @@ describe('OrganizationDashboard', () => {
       await waitFor(async () => {
         fireEvent.click(viewAllRequestsButton);
         await new Promise((resolve) => setTimeout(resolve, 0));
-        expect(mockedNavigate).toHaveBeenCalledWith('/requests/orgId');
+        expect(routerMocks.navigate).toHaveBeenCalledWith('/requests/orgId');
       });
     });
   });

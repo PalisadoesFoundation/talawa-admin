@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import PinnedPostsStory from './PinnedPostsStory';
 import type { InterfacePost, InterfacePostEdge } from 'types/Post/interface';
@@ -45,6 +45,10 @@ const mockPosts: InterfacePostEdge[] = [
 ];
 
 describe('PinnedPostsStory', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders nothing when pinnedPosts is empty', () => {
     const { container } = render(
       <PinnedPostsStory pinnedPosts={[]} onStoryClick={vi.fn()} />,

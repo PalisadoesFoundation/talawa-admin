@@ -6,9 +6,13 @@
 
 > `const` **baseEvent**: `object`
 
-Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts:210](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts#L210)
+Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts:347](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts#L347)
 
 ## Type Declaration
+
+### allDay
+
+> **allDay**: `boolean` = `false`
 
 ### baseEvent
 
@@ -22,6 +26,10 @@ Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mock
 
 > **endAt**: `string` = `'2044-10-30T12:00:00.000Z'`
 
+### id
+
+> **id**: `string` = `'baseSingleEventId'`
+
 ### isRecurringEventTemplate
 
 > **isRecurringEventTemplate**: `boolean` = `false`
@@ -29,6 +37,10 @@ Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mock
 ### location
 
 > **location**: `string` = `'Test Location'`
+
+### name
+
+> **name**: `string` = `'Base Single Event'`
 
 ### recurrenceRule
 
