@@ -136,16 +136,14 @@ function EventRegistrants(): JSX.Element {
   // Function to remove a registrant from the event
   const deleteRegistrant = useCallback(
     (userId: string): void => {
-      if (eventId) {
-        deleteRegistrantUtil(
-          userId,
-          isRecurring,
-          eventId,
-          removeRegistrantMutation,
-          refreshData,
-          checkedInUsers,
-        );
-      }
+      deleteRegistrantUtil(
+        userId,
+        isRecurring,
+        eventId,
+        removeRegistrantMutation,
+        refreshData,
+        checkedInUsers,
+      );
     },
     [
       isRecurring,

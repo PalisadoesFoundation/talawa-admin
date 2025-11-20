@@ -237,17 +237,6 @@ describe('Event Registrants Component', () => {
     });
   });
 
-  test('should not call deleteRegistrantUtil when eventId is undefined', async () => {
-    mocks.useParams.mockReturnValue({ eventId: undefined, orgId: 'org123' });
-    const deleteRegistrantUtilSpy = vi.spyOn(Utils, 'deleteRegistrantUtil');
-    renderEventRegistrants([...COMBINED_MOCKS, REMOVE_REGISTRANT_SUCCESS_MOCK]);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('no-registrants')).toBeInTheDocument();
-    });
-    expect(deleteRegistrantUtilSpy).not.toHaveBeenCalled();
-  });
-
   test('should disable unregister button for checked-in user', async () => {
     renderEventRegistrants([
       MOCK_REGISTRANTS,
@@ -367,6 +356,21 @@ describe('deleteRegistrantUtil edge cases', () => {
     await Promise.resolve();
     expect(toast.error).toHaveBeenCalledWith('Error removing attendee');
     expect(toast.error).toHaveBeenCalledWith(error.message);
+  });
+
+  it('should resolve immediately when eventId is undefined', async () => {
+    const removeRegistrantMutation = vi.fn();
+    await Utils.deleteRegistrantUtil(
+      'user1',
+      false,
+      undefined,
+      removeRegistrantMutation,
+      refreshData,
+      [],
+    );
+
+    expect(removeRegistrantMutation).not.toHaveBeenCalled();
+    expect(refreshData).not.toHaveBeenCalled();
   });
 });
 
