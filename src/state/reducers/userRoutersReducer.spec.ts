@@ -1,4 +1,4 @@
-import expect from 'expect';
+import { expect } from 'vitest';
 import reducer from './userRoutesReducer';
 
 describe('Testing Routes reducer', () => {

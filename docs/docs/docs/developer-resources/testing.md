@@ -24,16 +24,16 @@ All pull requests must have code that is properly linted and formatted to ensure
 Before opening a PR, run the following scripts to automatically lint and format the code:
 
 ```bash
-npm run lint:fix
-npm run format:fix
+pnpm run lint:fix
+pnpm run format:fix
 ```
 
 Both scripts also have a `check` counterpart, which is used by GitHub CI to ensure that the code is properly formatted.
 You can run these scripts yourself to ensure that your pull request doesn't fail due to linting and formatting errors:
 
 ```bash
-npm run lint:check
-npm run format:check
+pnpm run lint:check
+pnpm run format:check
 ```
 
 ## Vitest Testing
@@ -44,17 +44,17 @@ This project uses [Vitest](https://vitest.dev/) as the testing framework.
 
 - **Run all tests:**
   ```bash
-  npm run test
+  pnpm run test
   ```
 
 - **Run a single test file:**
   ```bash
-  npm run test /path/to/test/file
+  pnpm run test /path/to/test/file
   ```
 
 - **Watch tests for changes:**
   ```bash
-  npm run test:watch
+  pnpm run test:watch
   ```
   This opens the Vitest UI for interactive testing.
 
@@ -62,17 +62,17 @@ This project uses [Vitest](https://vitest.dev/) as the testing framework.
 
 - **View coverage for all test files:**
   ```bash
-  npm run test:coverage
+  pnpm run test:coverage
   ```
 
 - **View coverage for a single test file:**
   ```bash
-  npm run test:coverage /path/to/test/file
+  pnpm run test:coverage /path/to/test/file
   ```
 
 - **Generate HTML coverage report:**
   ```bash
-  npm run test:coverage
+  pnpm run test:coverage
   genhtml coverage/lcov.info -o coverage
   ```
   The `genhtml` command is part of the Linux `lcov` package. Similar packages are available for Windows and MacOS.
@@ -82,13 +82,13 @@ This project uses [Vitest](https://vitest.dev/) as the testing framework.
 For improved performance, especially in CI/CD environments, you can run tests in parallel using sharding:
 
 ```bash
-npm run test:shard
+pnpm run test:shard
 ```
 
 To run a specific shard, use environment variables:
 
 ```bash
-SHARD_INDEX=1 SHARD_COUNT=4 npm run test:shard
+SHARD_INDEX=1 SHARD_COUNT=4 pnpm run test:shard
 ```
 
 This divides the test suite into 4 parts and runs the 1st part. This is particularly useful for:
@@ -99,7 +99,7 @@ This divides the test suite into 4 parts and runs the 1st part. This is particul
 You can also run sharded tests with coverage:
 
 ```bash
-npm run test:shard:coverage
+pnpm run test:shard:coverage
 ```
 
 ### Code Coverage Standards
@@ -117,7 +117,7 @@ To read more about Cypress testing, please refer to the [Our end to end testing 
 You can see the output of failing tests in your browser using the `vitest` UI:
 
 ```bash
-npm run test:watch
+pnpm run test:watch
 ```
 
 This opens an interactive UI where you can:\n- View test results in real-time
@@ -141,7 +141,7 @@ git commit -m "commit message" --no-verify
 
 ### post-merge hook
 
-We are also running a post-merge(post-pull) hook which will automatically run "npm install" only if there is any change made to package.json file so that the developer has all the required dependencies when pulling files from remote.
+We are also running a post-merge(post-pull) hook which will automatically run "pnpm install" only if there is any change made to package.json file so that the developer has all the required dependencies when pulling files from remote.
 
 If you don't want this hook to run, you can manually opt out of this using the `--no-verify` flag while using the merge command `git pull`:
 

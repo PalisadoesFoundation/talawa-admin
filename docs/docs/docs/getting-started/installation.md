@@ -10,7 +10,7 @@ Installation is not difficult, but there are many steps. This is a brief explana
 1. Install `git`
 2. Download the code from GitHub using `git`
 3. Install `node.js` (Node), the runtime environment the application will need to work.
-4. Configure the Node Package Manager (`npm`) to automatically use the correct version of Node for our application.
+4. Configure the Node Package Manager (`pnpm`) to automatically use the correct version of Node for our application.
 5. Use `npm` to install TypeScript, the language the application is written in.
 6. Install other supporting software such as the database.
 7. Configure the application
@@ -116,7 +116,7 @@ This command installs TypeScript globally on your system so that it can be acces
 Run the following command to install the packages and dependencies required by the app:
 
 ```
-npm install
+pnpm install
 ```
 
 The prerequisites are now installed. The next step will be to get the app up and running.

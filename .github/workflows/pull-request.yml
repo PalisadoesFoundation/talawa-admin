@@ -29,13 +29,21 @@ jobs:
         with:
           fetch-depth: 0 # Fetch all history for all branches and tags
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
+          cache: 'pnpm'
 
+      - name: Prepare dependency store
+        run: pnpm fetch
       - name: Install Dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Count number of lines
         run: |
@@ -62,33 +70,32 @@ jobs:
           else
             echo "any_changed=false" >> $GITHUB_OUTPUT
           fi
-
           # Set only_changed to false by default (adjust logic as needed)
           echo "only_changed=false" >> $GITHUB_OUTPUT
 
       - name: Check formatting
         if: steps.changed-files.outputs.only_changed != 'true'
-        run: npm run format:check
+        run: pnpm format:check
 
       - name: Run formatting if check fails
         if: failure()
-        run: npm run format:fix
+        run: pnpm format:fix
 
       - name: Check for type errors
         if: steps.changed-files.outputs.only_changed != 'true'
-        run: npm run typecheck
+        run: pnpm typecheck
 
       - name: Check for linting errors in modified files
         if: steps.changed-files.outputs.only_changed != 'true'
         env:
           CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: npx eslint ${CHANGED_FILES}
+        run: pnpm exec eslint ${CHANGED_FILES}
 
       - name: Check for TSDoc comments
-        run: npm run check-tsdoc # Run the TSDoc check script
+        run: pnpm check-tsdoc
 
       - name: Check for localStorage Usage
-        run: npx tsx scripts/githooks/check-localstorage-usage.ts --scan-entire-repo
+        run: pnpm exec tsx scripts/githooks/check-localstorage-usage.ts --scan-entire-repo
 
       - name: Compare translation files
         run: |
@@ -105,7 +112,7 @@ jobs:
           exit 1
 
       - name: Check for unused files and exports in src/ and docs/src
-        run: npx knip --include files,exports
+        run: pnpm knip --include files,exports
 
   Check-AutoDocs:
     if: ${{ github.actor != 'dependabot[bot]' }}
@@ -118,23 +125,31 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
+          cache: 'pnpm'
 
-      - name: Install Dependencies
-        run: npm ci
+      - name: Prepare dependency store
+        run: pnpm fetch
+
+      - name: Install Dependencies (frozen)
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Run documentation generation
-        run: |
-          npm run generate-docs
+        run: pnpm run generate-docs
 
       - name: Check for uncommitted doc changes
         run: |
           if [ -n "$(git status --porcelain)" ]; then
             echo "::error::Documentation files are outdated or missing."
-            echo "Please run 'npm run generate-docs' locally and commit the updated files."
+            echo "Please run 'pnpm run generate-docs' locally and commit the updated files."
             echo ""
             echo "Changed files:"
             git status --porcelain
@@ -144,7 +159,7 @@ jobs:
           fi
 
       - name: Check for unused dependencies
-        run: npx knip --config knip.deps.json --include dependencies
+        run: pnpm knip --config knip.deps.json --include dependencies
 
   Check-Sensitive-Files:
     if: ${{ github.actor != 'dependabot[bot]' }}
@@ -426,13 +441,22 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
+          cache: 'pnpm'
+
+      - name: Prepare dependency store
+        run: pnpm fetch
 
       - name: Install Dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Get changed TypeScript files
         id: changed-files
@@ -457,8 +481,7 @@ jobs:
           echo "ts_files=$TS_FILES" >> $GITHUB_OUTPUT
 
       - name: TypeScript compilation
-        run: |
-          npx tsc --noEmit
+        run: pnpm exec tsc --noEmit
 
       - name: Run Vitest Tests (Shard ${{ matrix.shard }}/${{ env.TOTAL_SHARDS }})
         if: steps.changed-files.outputs.any_changed == 'true'
@@ -467,9 +490,7 @@ jobs:
           NODE_OPTIONS: '--max-old-space-size=4096'
           SHARD_INDEX: ${{ matrix.shard }}
           SHARD_COUNT: ${{ env.TOTAL_SHARDS }}
-        run: |
-          npm run test:shard:coverage
-
+        run: pnpm test:shard:coverage
       - name: Upload coverage artifact
         if: always() && steps.changed-files.outputs.any_changed == 'true'
         uses: actions/upload-artifact@v4
@@ -489,17 +510,22 @@ jobs:
         with:
           fetch-depth: 0 # Fetch all history for Codecov to calculate patch coverage
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
+          cache: 'pnpm'
+
+      - name: Prepare dependency store
+        run: pnpm fetch
 
       - name: Install Dependencies
-        run: npm ci
-
-      - name: Install coverage merge tools
-        run: npm install --no-save nyc lcov-result-merger
-
+        run: pnpm install --frozen-lockfile --prefer-offline
       - name: Download all coverage artifacts
         id: download-artifacts
         continue-on-error: true
@@ -558,30 +584,26 @@ jobs:
             echo "Validating JSON coverage files..."
             JSON_COUNT=$(find ./coverage/tmp -name "*.json" -type f | wc -l)
             echo "Found $JSON_COUNT JSON files to merge"
-            
             if [ "$JSON_COUNT" -eq 0 ]; then
               echo "ERROR: No JSON coverage files found!"
               exit 1
             fi
-            
+              
             # Show sample of file count in each JSON
             for json_file in ./coverage/tmp/*.json; do
               FILE_COUNT=$(jq 'keys | length' "$json_file" 2>/dev/null || echo "0")
               echo "  $(basename $json_file): $FILE_COUNT files"
             done
-            
             # Merge using nyc (more accurate than lcov merge)
             echo "Merging coverage with nyc..."
-            npx nyc merge ./coverage/tmp ./.nyc_output/coverage-final.json
-            
+
+            pnpm exec nyc merge ./coverage/tmp ./.nyc_output/coverage-final.json
             # Validate merged JSON
             MERGED_FILE_COUNT=$(jq 'keys | length' ./.nyc_output/coverage-final.json 2>/dev/null || echo "0")
             echo "Merged coverage contains $MERGED_FILE_COUNT files"
-            
             # Generate lcov from merged JSON
             echo "Generating lcov report from merged coverage..."
-            npx nyc report --reporter=lcov --report-dir=./coverage/vitest
-            
+            pnpm exec nyc report --reporter=lcov --report-dir=./coverage/vitest
           else
             echo "Using LCOV files for merging..."
             # Find all lcov.info files from shards
@@ -608,7 +630,7 @@ jobs:
             done < lcov-files.txt
 
             # Use lcov-result-merger as fallback
-            npx lcov-result-merger "coverage-shards/*/lcov.info" ./coverage/vitest/lcov.info
+            pnpm exec lcov-result-merger "coverage-shards/*/lcov.info" ./coverage/vitest/lcov.info
           fi
 
           # Validate merged file exists and is not empty
@@ -708,20 +730,29 @@ jobs:
       - name: Checkout the Repository
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
+          cache: 'pnpm'
+
+      - name: Prepare dependency store
+        run: pnpm fetch
 
       - name: Install Dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Build Production App
-        run: npm run build
+        run: pnpm run build
 
       - name: Start Production App
         run: |
-          npm run preview &
+          pnpm run preview &
           echo $! > .pidfile_prod
       - name: Check if Production App is running
         run: |
@@ -734,7 +765,7 @@ jobs:
           fi
       - name: Start Development App
         run: |
-          npm run serve &
+          pnpm run serve &
           echo $! > .pidfile_dev
       - name: Check if Development App is running
         run: |
@@ -828,17 +859,40 @@ jobs:
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
-      - name: Install dependencies
+          cache: 'pnpm'
+
+      - name: Prepare dependency store
         working-directory: ./docs
-        run: npm install
+        run: |
+          if [ -f pnpm-lock.yaml ]; then
+            echo "pnpm-lock.yaml found — running pnpm fetch"
+            pnpm fetch
+          else
+            echo "No pnpm-lock.yaml found — running pnpm install to generate it"
+            pnpm install --frozen-lockfile=false
+          fi
+
+      - name: Install dependencies (allow lockfile creation)
+        working-directory: ./docs
+        run: |
+          if [ -f pnpm-lock.yaml ]; then
+            pnpm install --frozen-lockfile --prefer-offline
+          else
+            echo "pnpm-lock.yaml not found — installing without --frozen-lockfile"
+            pnpm install --prefer-offline
+          fi
       - name: Test building the website
         working-directory: ./docs
-        run: npm run build
-
+        run: pnpm run build
   Check-Target-Branch:
     if: ${{ github.actor != 'dependabot[bot]' }}
     name: Check Target Branch
@@ -984,18 +1038,32 @@ jobs:
         with:
           path: frontend
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
+          cache: 'pnpm'
 
-      - name: Install Frontend Dependencies
+      - name: Prepare dependency store
         working-directory: frontend
-        run: npm install
+        run: pnpm fetch
+
+      - name: Install Frontend Dependencies (frozen)
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile --prefer-offline
+      - name: Ensure Cypress binary is installed
+        working-directory: frontend
+        run: pnpm exec cypress install
 
       - name: Setup .env
+        working-directory: frontend
         run: |
-          pwd && cp frontend/.env.example frontend/.env
+          pwd && cp .env.example .env
           echo $REACT_APP_TALAWA_URL
           curl -s -X POST http://127.0.0.1:4000/graphql \
             -H "Content-Type: application/json" \
@@ -1005,7 +1073,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           working-directory: frontend
-          start: npm run serve
+          start: pnpm run serve
           wait-on: 'http://localhost:4321'
           wait-on-timeout: 120
           config-file: cypress.config.ts
@@ -1040,15 +1108,26 @@ jobs:
       - name: Checkout the Repository
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24.x'
+          cache: 'pnpm'
 
-      - name: Install Dependencies & Start Application
+      - name: Prepare dependency store
+        run: pnpm fetch
+
+      - name: Install Dependencies (frozen)
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Start Application
         run: |
-          npm install
-          npm run serve &
+          pnpm run serve &
           echo $! > .pidfile_dev
 
       - name: Check if Development App is running
