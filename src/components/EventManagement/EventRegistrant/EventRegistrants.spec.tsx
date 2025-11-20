@@ -131,7 +131,7 @@ describe('Event Registrants Component', () => {
     await waitFor(() => {
       expect(MockedCheckInWrapper).toHaveBeenCalledWith(
         expect.objectContaining({ eventId: '' }),
-        {},
+        undefined,
       );
     });
   });
@@ -144,7 +144,7 @@ describe('Event Registrants Component', () => {
           eventId: 'event123',
           onCheckInUpdate: expect.any(Function),
         }),
-        {},
+        undefined,
       );
     });
   });
@@ -174,7 +174,7 @@ describe('Event Registrants Component', () => {
           orgId: 'org123',
           onUpdate: expect.any(Function),
         }),
-        {},
+        undefined,
       );
     });
   });
@@ -235,6 +235,17 @@ describe('Event Registrants Component', () => {
     await waitFor(() => {
       expect(deleteRegistrantUtilSpy).toHaveBeenCalled();
     });
+  });
+
+  test('should not call deleteRegistrantUtil when eventId is undefined', async () => {
+    mocks.useParams.mockReturnValue({ eventId: undefined, orgId: 'org123' });
+    const deleteRegistrantUtilSpy = vi.spyOn(Utils, 'deleteRegistrantUtil');
+    renderEventRegistrants([...COMBINED_MOCKS, REMOVE_REGISTRANT_SUCCESS_MOCK]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('no-registrants')).toBeInTheDocument();
+    });
+    expect(deleteRegistrantUtilSpy).not.toHaveBeenCalled();
   });
 
   test('should disable unregister button for checked-in user', async () => {
