@@ -62,9 +62,6 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
 
   const [postformState, setPostFormState] = useState({
     posttitle: '',
-    postinfo: '',
-    postImage: '',
-    postVideo: '',
     addMedia: '',
     pinPost: false,
   });
@@ -143,15 +140,26 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
         toast.success(t('postCreatedSuccess') as string);
         await refetch();
 
+        // Reset all state
         setPostFormState({
           posttitle: '',
-          postinfo: '',
-          postImage: '',
-          postVideo: '',
           addMedia: '',
           pinPost: false,
         });
         setFile(null);
+        setVideoFile(null);
+        setVideoPreview('');
+
+        // Clear DOM file inputs
+        const fileInput = document.getElementById(
+          'addMedia',
+        ) as HTMLInputElement;
+        const videoInput = document.getElementById(
+          'videoAddMedia',
+        ) as HTMLInputElement;
+        if (fileInput) fileInput.value = '';
+        if (videoInput) videoInput.value = '';
+
         onHide();
       }
     } catch (error: unknown) {
@@ -227,15 +235,21 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
   const handleClose = (): void => {
     setPostFormState({
       posttitle: '',
-      postinfo: '',
-      postImage: '',
-      postVideo: '',
       addMedia: '',
       pinPost: false,
     });
     setFile(null);
     setVideoFile(null);
     setVideoPreview('');
+
+    // Clear DOM file inputs
+    const fileInput = document.getElementById('addMedia') as HTMLInputElement;
+    const videoInput = document.getElementById(
+      'videoAddMedia',
+    ) as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+    if (videoInput) videoInput.value = '';
+
     onHide();
   };
 
@@ -267,24 +281,6 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
               setPostFormState({
                 ...postformState,
                 posttitle: e.target.value,
-              });
-            }}
-          />
-          <Form.Label htmlFor="postinfo">{t('information')}</Form.Label>
-          <Form.Control
-            as="textarea"
-            id="postinfo"
-            className={`mb-3 ${styles.inputField}`}
-            placeholder={t('information1')}
-            data-testid="modalinfo"
-            data-cy="modalinfo"
-            autoComplete="off"
-            required
-            value={postformState.postinfo}
-            onChange={(e): void => {
-              setPostFormState({
-                ...postformState,
-                postinfo: e.target.value,
               });
             }}
           />
@@ -325,14 +321,17 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
                 />
               ) : (
                 <video controls data-testid="videoPreview">
-                  <source src={postformState.addMedia} type={file.type} />(
+                  <source src={postformState.addMedia} type={file.type} />
+                  {/* TODO: add captions (track src) for accessibility */}(
                   {t('tag')})
                 </video>
               )}
               <button
+                type="button"
                 className={styles.closeButtonOrgPost}
                 onClick={(): void => {
                   setPostFormState({ ...postformState, addMedia: '' });
+                  setFile(null);
                   const fileInput = document.getElementById(
                     'addMedia',
                   ) as HTMLInputElement;
@@ -353,9 +352,12 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
               data-testid="videoPreviewContainer"
             >
               <video controls data-testid="videoPreview">
-                <source src={videoPreview} type={videoFile.type} />({t('tag')})
+                <source src={videoPreview} type={videoFile.type} />
+                {/* TODO: add captions (track src) for accessibility */}(
+                {t('tag')})
               </video>
               <button
+                type="button"
                 className={styles.closeButtonOrgPost}
                 onClick={(): void => {
                   setVideoPreview('');
@@ -381,7 +383,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
             type="checkbox"
             data-testid="pinPost"
             data-cy="pinPost"
-            defaultChecked={postformState.pinPost}
+            checked={postformState.pinPost}
             onChange={(): void =>
               setPostFormState({
                 ...postformState,
@@ -409,7 +411,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
             className={`${styles.addButton} mt-2`}
             disabled={createPostLoading}
           >
-            {createPostLoading ? 'Creating...' : t('addPost')}
+            {createPostLoading ? t('creatingPost') : t('addPost')}
           </Button>
         </Modal.Footer>
       </Form>
