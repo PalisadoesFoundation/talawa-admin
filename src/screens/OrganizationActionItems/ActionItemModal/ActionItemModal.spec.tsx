@@ -5,7 +5,6 @@ import {
   screen,
   waitFor,
   within,
-  act,
 } from '@testing-library/react';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';

@@ -37,6 +37,7 @@ const DEFAULT_SEARCH = '';
 const DEFAULT_FIRST = 5;
 
 // Helper for members edges
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const memberEdge = (props: any = {}) => ({
   cursor: props.cursor || 'cursor1',
   node: {

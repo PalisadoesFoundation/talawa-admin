@@ -1,4 +1,3 @@
-/* global HTMLElement */
 /**
  * This file contains unit tests for the UserScreen component.
  *
@@ -11,7 +10,7 @@
  */
 
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, it, vi, beforeEach, afterEach, expect } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -25,7 +24,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import '@testing-library/dom';
 import useLocalStorage from 'utils/useLocalstorage';
 
-const { setItem } = useLocalStorage();
+const { setItem, removeItem } = useLocalStorage();
 let mockID: string | undefined = '123';
 let mockLocation: string | undefined = '/user/organization/123';
 
@@ -86,27 +85,19 @@ const MOCKS = [
 ];
 const link = new StaticMockLink(MOCKS, true);
 
-const resizeWindow = (width: number): void => {
-  window.innerWidth = width;
-  fireEvent(window, new window.Event('resize'));
-};
-
-const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
-  fireEvent.click(toggleButton);
-};
-
 describe('UserScreen tests with LeftDrawer functionality', () => {
   beforeEach(() => {
     setItem('name', 'John Doe');
     mockID = '123';
     mockLocation = '/user/organization/123';
     routerSpies.navigate.mockReset();
-    localStorage.setItem('sidebar', 'false');
+    setItem('sidebar', 'false');
   });
 
   afterEach(() => {
     routerSpies.navigate.mockReset();
-    localStorage.clear();
+    removeItem('name');
+    removeItem('sidebar');
   });
 
   it('renders the correct title for posts', () => {
