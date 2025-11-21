@@ -42,9 +42,13 @@ First you need a local copy of `talawa-admin`. Run the following command in the 
 
       ![Image with fork](../../../static/img/markdown/installation/install1.png)
 
+       1. On the fork screen, turn off the "Copy the main branch only" option if it is enabled by default.
+
+      ![Fork screen with Copy the main branch only option](../../../static/img/markdown/installation/install2.png)
+
    1. You should now see `talawa-admin` under your repositories. It will be marked as forked from `PalisadoesFoundation/talawa-admin`
 
-      ![Image of user's clone](../../../static/img/markdown/installation/install2.png)
+      ![Image of user's clone](../../../static/img/markdown/installation/install3.png)
 
    1. Clone the repository to your local computer (replacing the values in `{{}}`):
       ```bash
@@ -138,7 +142,15 @@ You now need to setup the environment. This follows next.
 
 #### Development Setup
 
+**Note:** If you are a developer looking to contribute to this project, follow the guidelines below.
+
+If you want to install and use Talawa Admin for your organization, please refer to the Production Setup section instead.
+
 If you prefer to use Docker, you can install the app using the following command:
+
+**Important:** Before running any Docker commands, ensure that the Docker daemon is running.
+- On Windows/macOS: Open Docker Desktop and verify it is running.
+- On Linux: Ensure the Docker service is active.
 
 1. Create a `.env` file as described in the Configuration section
 
@@ -160,7 +172,15 @@ The application will be accessible at `http://localhost:4321`
 
 #### Production Setup
 
+**Note:** If you want to use Talawa Admin for your organization, follow the guidelines below.
+
+If you are a developer planning to contribute to the project, please refer to the Development Setup section instead.
+
 If you prefer to use Docker, you can install the app using the following command:
+
+**Important:** Before running any Docker commands, ensure that the Docker daemon is running.
+- On Windows/macOS: Open Docker Desktop and verify it is running.
+- On Linux: Ensure the Docker service is active.
 
 1. Create a `.env` file as described in the Configuration section
 
