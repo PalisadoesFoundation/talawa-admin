@@ -6,13 +6,13 @@
 
 > **enrichPostNode**(`post`): `object`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L11)
+Defined in: [src/screens/OrgPost/OrgPostMocks.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L38)
 
 ## Parameters
 
 ### post
 
-`any`
+`IPostNode`
 
 ## Returns
 
@@ -20,23 +20,23 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.ts:11](https://github.com/Palisado
 
 ### attachments
 
-> **attachments**: `any`
+> **attachments**: `unknown`[]
 
 ### caption
 
-> **caption**: `any`
+> **caption**: `string`
 
 ### comments
 
-> **comments**: `any`
+> **comments**: `unknown`[]
 
 ### commentsCount
 
-> **commentsCount**: `any`
+> **commentsCount**: `number`
 
 ### createdAt
 
-> **createdAt**: `any`
+> **createdAt**: `string`
 
 ### creator
 
@@ -44,60 +44,60 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.ts:11](https://github.com/Palisado
 
 #### creator.avatarURL
 
-> **avatarURL**: `any`
+> **avatarURL**: `string`
 
 #### creator.emailAddress
 
-> **emailAddress**: `any`
+> **emailAddress**: `string`
 
 #### creator.firstName
 
-> **firstName**: `any`
+> **firstName**: `string`
 
 #### creator.id
 
-> **id**: `any`
+> **id**: `string`
 
 #### creator.lastName
 
-> **lastName**: `any`
+> **lastName**: `string`
 
 #### creator.name
 
-> **name**: `any`
+> **name**: `string`
 
 ### downVotesCount
 
-> **downVotesCount**: `any`
+> **downVotesCount**: `number`
 
 ### id
 
-> **id**: `any`
+> **id**: `string`
 
 ### imageUrl
 
-> **imageUrl**: `any`
+> **imageUrl**: `string`
 
 ### pinned
 
-> **pinned**: `any`
+> **pinned**: `boolean`
 
 ### pinnedAt
 
-> **pinnedAt**: `any`
+> **pinnedAt**: `string`
 
 ### postsCount
 
-> **postsCount**: `any`
+> **postsCount**: `number`
 
 ### updatedAt
 
-> **updatedAt**: `any`
+> **updatedAt**: `string`
 
 ### upVotesCount
 
-> **upVotesCount**: `any`
+> **upVotesCount**: `number`
 
 ### videoUrl
 
-> **videoUrl**: `any`
+> **videoUrl**: `string`

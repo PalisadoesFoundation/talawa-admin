@@ -6,7 +6,7 @@
 
 > `const` **getPostsByOrgInitialMock**: `object`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.ts:315](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L315)
+Defined in: [src/screens/OrgPost/OrgPostMocks.ts:341](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L341)
 
 ## Type Declaration
 

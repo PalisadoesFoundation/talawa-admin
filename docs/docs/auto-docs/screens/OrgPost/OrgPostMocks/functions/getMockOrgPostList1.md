@@ -6,7 +6,7 @@
 
 > **getMockOrgPostList1**(`count`): `any`[]
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.ts:556](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L556)
+Defined in: [src/screens/OrgPost/OrgPostMocks.ts:581](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L581)
 
 ## Parameters
 

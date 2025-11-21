@@ -26,7 +26,6 @@ vi.mock('react-toastify', () => ({
   toast: toastMocks,
 }));
 
-const locationStub = { reload: vi.fn() } as unknown as Location;
 const link = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(MOCKS_DELETE_PLEDGE_ERROR);
 const translations = JSON.parse(

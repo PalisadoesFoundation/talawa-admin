@@ -6,7 +6,7 @@
 
 > `const` **orgPinnedPostListMockBasic**: `object`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.ts:139](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L139)
+Defined in: [src/screens/OrgPost/OrgPostMocks.ts:165](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L165)
 
 ## Type Declaration
 

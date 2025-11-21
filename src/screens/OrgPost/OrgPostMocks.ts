@@ -7,8 +7,35 @@ import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueri
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import type { MockedResponse } from '@apollo/client/testing';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const enrichPostNode = (post: any) => {
+interface IPostCreator {
+  id?: string;
+  firstName?: string;
+  lastName?: string;
+  name?: string;
+  avatarURL?: string | null;
+  emailAddress?: string;
+}
+
+interface IPostNode {
+  id?: string;
+  _id?: string;
+  caption?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  pinnedAt?: string | null;
+  pinned?: boolean;
+  attachments?: unknown[];
+  imageUrl?: string | null;
+  videoUrl?: string | null;
+  creator?: IPostCreator;
+  postsCount?: number;
+  commentsCount?: number;
+  upVotesCount?: number;
+  downVotesCount?: number;
+  comments?: unknown[];
+}
+
+export const enrichPostNode = (post: IPostNode) => {
   const creator = {
     id: post.creator?.id || 'creator-id',
     firstName: post.creator?.firstName || 'Creator',
@@ -23,8 +50,7 @@ export const enrichPostNode = (post: any) => {
   };
 
   return {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    id: post.id ?? (post as any)._id ?? `post-${Math.random()}`,
+    id: post.id ?? post._id ?? `post-${Math.random()}`,
     caption: post.caption ?? 'Untitled',
     createdAt: post.createdAt ?? new Date().toISOString(),
     updatedAt: post.updatedAt ?? post.createdAt ?? new Date().toISOString(),
@@ -377,8 +403,7 @@ export const mockOrgPostList = {
     postsCount: mockPosts.postsByOrganization.length,
     posts: {
       edges: mockPosts.postsByOrganization.map((post, index) => ({
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        cursor: `cursor-${post.id ?? (post as any)._id ?? index}`,
+        cursor: `cursor-${post.id ?? index}`,
         node: enrichPostNode(post),
       })),
       pageInfo: {

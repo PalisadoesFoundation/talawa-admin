@@ -96,9 +96,11 @@ const createUserListMock = (
     },
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data.allUsers.edges = data.allUsers.edges.map(withRole) as any;
 
   if (Array.isArray(overrides.edges)) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data.allUsers.edges = overrides.edges.map(withRole) as any;
   }
   if (overrides.pageInfo) {
@@ -152,8 +154,10 @@ const createRegisterMutationMock = (variables: Record<string, unknown>) => {
           user: {
             id: 'newUser1',
             name:
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
               typeof (defaultVariables as any).name === 'string'
-                ? (defaultVariables as any).name
+                ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  (defaultVariables as any).name
                 : 'New User',
           },
         },

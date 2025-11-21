@@ -81,6 +81,7 @@ describe('usePluginActions', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockReload.mockReset();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (getPluginManager as any).mockReturnValue(mockPluginManager);
     mockRefetch.mockResolvedValue({});
     mockCreatePlugin.mockResolvedValue({});
@@ -400,7 +401,6 @@ describe('usePluginActions', () => {
     mockPluginManager.uninstallPlugin.mockResolvedValue(true);
 
     // Mock the import to throw an error
-    const originalImport = vi.fn();
     vi.doMock('../../../plugin/services/AdminPluginFileService', () => {
       throw new Error('Import failed');
     });
