@@ -16,7 +16,33 @@ import { MOCKS, MOCKS2 } from './User.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
 
-const { setItem, removeItem } = useLocalStorage();
+const link = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(EMPTY_MOCKS, true);
+const link3 = new StaticMockLink(MOCKS2, true);
+const link5 = new StaticMockLink(MOCKS_NEW, true);
+// link6 and link7 are intentionally omitted as they are not used in tests
+
+let setItem: ReturnType<typeof useLocalStorage>['setItem'];
+let removeItem: ReturnType<typeof useLocalStorage>['removeItem'];
+
+async function wait(ms = 1000): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
+
+beforeEach(() => {
+  const localStorage = useLocalStorage();
+  setItem = localStorage.setItem;
+  removeItem = localStorage.removeItem;
+
+  setItem('id', '123');
+  setItem('SuperAdmin', true);
+  setItem('name', 'John Doe');
+  setItem('AdminFor', [{ name: 'adi', id: '1234', avatarURL: '' }]);
+});
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
