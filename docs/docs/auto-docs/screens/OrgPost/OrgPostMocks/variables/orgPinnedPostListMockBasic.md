@@ -6,7 +6,7 @@
 
 > `const` **orgPinnedPostListMockBasic**: `object`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.ts:165](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L165)
+Defined in: [src/screens/OrgPost/OrgPostMocks.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L27)
 
 ## Type Declaration
 
@@ -60,7 +60,7 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.ts:165](https://github.com/Palisad
 
 #### result.data.organization.name
 
-> **name**: `string` = `'Test Org'`
+> **name**: `string` = `'Test Organization'`
 
 #### result.data.organization.pinnedPosts
 
@@ -68,7 +68,7 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.ts:165](https://github.com/Palisad
 
 #### result.data.organization.pinnedPosts.edges
 
-> **edges**: `any`[] = `[]`
+> **edges**: `object`[]
 
 #### result.data.organization.pinnedPosts.pageInfo
 
@@ -76,7 +76,7 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.ts:165](https://github.com/Palisad
 
 #### result.data.organization.pinnedPosts.pageInfo.endCursor
 
-> **endCursor**: `any` = `null`
+> **endCursor**: `string` = `'cursor2'`
 
 #### result.data.organization.pinnedPosts.pageInfo.hasNextPage
 
@@ -88,8 +88,12 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.ts:165](https://github.com/Palisad
 
 #### result.data.organization.pinnedPosts.pageInfo.startCursor
 
-> **startCursor**: `any` = `null`
+> **startCursor**: `string` = `'cursor1'`
+
+#### result.data.organization.pinnedPosts.totalCount
+
+> **totalCount**: `number` = `2`
 
 #### result.data.organization.postsCount
 
-> **postsCount**: `number` = `0`
+> **postsCount**: `number` = `3`

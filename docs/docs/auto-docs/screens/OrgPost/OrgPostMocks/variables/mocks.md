@@ -4,6 +4,6 @@
 
 # Variable: mocks
 
-> `const` **mocks**: `any`[]
+> `const` **mocks**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `input`: \{ `id`: `string`; \}; \}; \}; `result`: \{ `data`: \{ `user`: \{ `id`: `string`; `name`: `string`; \}; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after`: `any`; `before`: `any`; `first`: `number`; `input`: \{ `id`: `string`; \}; `last`: `any`; \}; \}; `result`: \{ `data`: \{ `organization`: \{ `avatarURL`: `any`; `id`: `string`; `name`: `string`; `posts`: \{ `edges`: `object`[]; `pageInfo`: \{ `endCursor`: `string`; `hasNextPage`: `boolean`; `hasPreviousPage`: `boolean`; `startCursor`: `string`; \}; `totalCount`: `number`; \}; `postsCount`: `number`; \}; \}; \}; \})[]
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.ts:650](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L650)
+Defined in: [src/screens/OrgPost/OrgPostMocks.ts:347](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L347)

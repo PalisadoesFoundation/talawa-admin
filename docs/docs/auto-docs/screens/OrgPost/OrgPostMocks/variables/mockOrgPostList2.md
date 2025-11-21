@@ -6,58 +6,102 @@
 
 > `const` **mockOrgPostList2**: `object`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.ts:559](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L559)
+Defined in: [src/screens/OrgPost/OrgPostMocks.ts:304](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L304)
 
 ## Type Declaration
 
-### organization
+### request
 
-> **organization**: `object`
+> **request**: `object`
 
-#### organization.avatarURL
+#### request.query
 
-> **avatarURL**: `any` = `null`
+> **query**: `DocumentNode` = `ORGANIZATION_POST_LIST`
 
-#### organization.id
+#### request.variables
+
+> **variables**: `object`
+
+#### request.variables.after
+
+> **after**: `string` = `'cursor2'`
+
+#### request.variables.before
+
+> **before**: `any` = `null`
+
+#### request.variables.first
+
+> **first**: `number` = `6`
+
+#### request.variables.input
+
+> **input**: `object`
+
+#### request.variables.input.id
 
 > **id**: `string` = `'123'`
 
-#### organization.name
+#### request.variables.last
 
-> **name**: `string` = `'Test Org'`
+> **last**: `any` = `null`
 
-#### organization.posts
+### result
+
+> **result**: `object`
+
+#### result.data
+
+> **data**: `object`
+
+#### result.data.organization
+
+> **organization**: `object`
+
+#### result.data.organization.avatarURL
+
+> **avatarURL**: `any` = `null`
+
+#### result.data.organization.id
+
+> **id**: `string` = `'123'`
+
+#### result.data.organization.name
+
+> **name**: `string` = `'Test Organization'`
+
+#### result.data.organization.posts
 
 > **posts**: `object`
 
-#### organization.posts.edges
+#### result.data.organization.posts.edges
 
 > **edges**: `object`[]
 
-#### organization.posts.pageInfo
+#### result.data.organization.posts.pageInfo
 
 > **pageInfo**: `object`
 
-#### organization.posts.pageInfo.endCursor
+#### result.data.organization.posts.pageInfo.endCursor
 
 > **endCursor**: `string` = `'cursor3'`
 
-#### organization.posts.pageInfo.hasNextPage
+#### result.data.organization.posts.pageInfo.hasNextPage
 
 > **hasNextPage**: `boolean` = `false`
 
-#### organization.posts.pageInfo.hasPreviousPage
+#### result.data.organization.posts.pageInfo.hasPreviousPage
 
 > **hasPreviousPage**: `boolean` = `true`
 
-#### organization.posts.pageInfo.startCursor
+#### result.data.organization.posts.pageInfo.startCursor
 
-> **startCursor**: `string` = `'cursor2'`
+> **startCursor**: `string` = `'cursor3'`
 
-#### organization.posts.totalCount
+#### result.data.organization.posts.totalCount
 
-> **totalCount**: `number` = `2`
+> **totalCount**: `number` = `1`
 
-#### organization.postsCount
+#### result.data.organization.postsCount
 
-> **postsCount**: `number` = `mockPosts2.postsByOrganization.length`
+> **postsCount**: `number` = `1`

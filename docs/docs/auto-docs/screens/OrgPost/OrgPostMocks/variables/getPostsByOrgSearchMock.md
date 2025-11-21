@@ -6,7 +6,7 @@
 
 > `const` **getPostsByOrgSearchMock**: `object`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.ts:349](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L349)
+Defined in: [src/screens/OrgPost/OrgPostMocks.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L108)
 
 ## Type Declaration
 
@@ -22,13 +22,9 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.ts:349](https://github.com/Palisad
 
 > **variables**: `object`
 
-#### request.variables.input
+#### request.variables.id
 
-> **input**: `object`
-
-#### request.variables.input.organizationId
-
-> **organizationId**: `string` = `'123'`
+> **id**: `string` = `'123'`
 
 ### result
 
