@@ -7,6 +7,7 @@ import {
   useUpdatePlugin,
   useDeletePlugin,
 } from '../graphql-service';
+import { type ApolloClient } from '@apollo/client';
 
 // Mock Apollo client
 const mockApolloClient = {
@@ -37,7 +38,9 @@ describe('PluginGraphQLService', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    graphqlService = new PluginGraphQLService(mockApolloClient);
+    graphqlService = new PluginGraphQLService(
+      mockApolloClient as unknown as ApolloClient<unknown>,
+    );
   });
 
   afterEach(() => {
