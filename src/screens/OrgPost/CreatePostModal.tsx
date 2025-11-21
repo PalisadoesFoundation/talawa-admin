@@ -44,6 +44,13 @@ interface ICreatePostData {
   };
 }
 
+/**
+ * Modal component for creating posts within an organization.
+ *
+ * @component
+ * @param props - Props including show, onHide, refetch, and orgId
+ * @returns The modal for adding a post
+ */
 const CreatePostModal: React.FC<ICreatePostModalProps> = ({
   show,
   onHide,
