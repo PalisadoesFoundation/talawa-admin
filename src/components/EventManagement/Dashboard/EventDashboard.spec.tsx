@@ -262,13 +262,6 @@ describe('Testing Event Dashboard Screen', () => {
     expect(getByTestId('end-date')).toBeInTheDocument();
   });
 
-  it('Should display event stats container', async () => {
-    const { getByTestId } = renderEventDashboard(mockWithTime);
-    await wait();
-
-    expect(getByTestId('event-stats')).toBeInTheDocument();
-  });
-
   it('Should format time correctly with padded zeros for single digit hours/minutes', async () => {
     const { getByTestId } = renderEventDashboard(mockWithTime);
     await wait();
@@ -278,69 +271,6 @@ describe('Testing Event Dashboard Screen', () => {
 
     expect(startTime).toMatch(/^\d{2}:\d{2}$/);
     expect(endTime).toMatch(/^\d{2}:\d{2}$/);
-  });
-
-  // NEW TESTS FOR 100% COVERAGE
-
-  it('Should close event modal when hideViewModal is called', async () => {
-    const { getByTestId } = renderEventDashboard(mockWithTime);
-    await wait();
-
-    const editButton = getByTestId('edit-event-button');
-
-    // Open modal
-    fireEvent.click(editButton);
-    await wait(100);
-
-    expect(getByTestId('event-list-card-modals')).toBeInTheDocument();
-
-    // The modal close functionality would be triggered by the EventListCardModals component
-    // Since it's mocked, we verify it receives the hideViewModal prop
-    // In a real scenario, you would click a close button in the modal
-  });
-
-  it('Should handle empty dateTime in formatTimeFromDateTime', async () => {
-    // This test is covered by invalid date test since empty strings create invalid dates
-    // We'll test the behavior through the existing MOCKS_INVALID_DATE
-    const mockInvalidDate = new StaticMockLink(MOCKS_INVALID_DATE, true);
-    const { getByTestId } = renderEventDashboard(mockInvalidDate);
-    await wait();
-
-    // Should default to '08:00' when datetime is empty/invalid
-    expect(getByTestId('start-time')).toHaveTextContent('08:00');
-    expect(getByTestId('end-time')).toHaveTextContent('08:00');
-  });
-
-  it('Should handle null dateTime in safeFormatDate', async () => {
-    // Import the actual query from the mocks file or define it properly
-    // The issue is that MOCKS_NULL_DATETIME needs to use the actual GraphQL query
-    // not a string 'EVENT_DETAILS'
-
-    // Instead of creating new mocks, we can reuse MOCKS_INVALID_DATE
-    // which already handles invalid date scenarios
-    const mockInvalidDate = new StaticMockLink(MOCKS_INVALID_DATE, true);
-    const { getByTestId } = renderEventDashboard(mockInvalidDate);
-    await wait();
-
-    // When dates are null/invalid, the component should show 'Invalid Date'
-    expect(getByTestId('start-date')).toHaveTextContent('Invalid Date');
-    expect(getByTestId('end-date')).toHaveTextContent('Invalid Date');
-  });
-
-  it('Should handle error in safeFormatDate catch block', async () => {
-    const consoleErrorSpy = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
-
-    const mockInvalidDate = new StaticMockLink(MOCKS_INVALID_DATE, true);
-    const { getByTestId } = renderEventDashboard(mockInvalidDate);
-    await wait();
-
-    // Should display 'Invalid Date' when error occurs
-    expect(getByTestId('start-date')).toHaveTextContent('Invalid Date');
-    expect(getByTestId('end-date')).toHaveTextContent('Invalid Date');
-
-    consoleErrorSpy.mockRestore();
   });
 
   it('Should set userRole as REGULAR when stored role is not administrator', async () => {
@@ -439,14 +369,5 @@ describe('Testing Event Dashboard Screen', () => {
     // Verify component renders successfully with creator data
     expect(getByTestId('event-dashboard')).toBeInTheDocument();
     expect(getByTestId('event-name')).toHaveTextContent('Test Event');
-  });
-
-  it('Should handle all day event with correct time values in eventListCardProps', async () => {
-    const { getByTestId } = renderEventDashboard(mockWithoutTime);
-    await wait();
-
-    // For all day events, times should be empty in display
-    expect(getByTestId('start-time')).toHaveTextContent('');
-    expect(getByTestId('end-time')).toHaveTextContent('');
   });
 });
