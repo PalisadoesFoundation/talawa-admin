@@ -114,7 +114,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
 
         attachment = {
           fileHash,
-          mimetype: getMimeTypeEnum(mediaFile.type),
+          mimeType: getMimeTypeEnum(mediaFile.type),
           name: fileName,
           objectName,
         };
