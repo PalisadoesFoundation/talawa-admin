@@ -317,7 +317,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
                 <img
                   src={postformState.addMedia}
                   data-testid="imagePreview"
-                  alt="Post Image Preview"
+                  alt="Post preview"
                 />
               ) : (
                 <video controls data-testid="videoPreview">
