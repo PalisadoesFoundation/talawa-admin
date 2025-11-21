@@ -88,11 +88,12 @@ const UserUpdate: React.FC<
         toast.success(
           tCommon('updatedSuccessfully', { item: 'Password' }) as string,
         );
-        setTimeout(() => {
-          if (typeof window !== 'undefined') {
-            window.location.reload();
-          }
-        }, 2000);
+        // Reset form state after successful update
+        setFormState({
+          previousPassword: '',
+          newPassword: '',
+          confirmNewPassword: '',
+        });
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -103,12 +104,14 @@ const UserUpdate: React.FC<
 
   /**
    * Handles canceling the update process.
-   * It reloads the page to reset any changes.
+   * Resets the form to its initial state.
    */
   const cancelUpdate = (): void => {
-    if (typeof window !== 'undefined') {
-      window.location.reload();
-    }
+    setFormState({
+      previousPassword: '',
+      newPassword: '',
+      confirmNewPassword: '',
+    });
   };
 
   return (
