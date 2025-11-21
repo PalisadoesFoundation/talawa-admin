@@ -2,11 +2,11 @@
 
 ***
 
-# Variable: getPostsByOrgInitialMock
+# Variable: getPostsByOrgSearchMock
 
-> `const` **getPostsByOrgInitialMock**: `object`
+> `const` **getPostsByOrgSearchMock**: `object`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.ts:341](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L341)
+Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:250](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L250)
 
 ## Type Declaration
 

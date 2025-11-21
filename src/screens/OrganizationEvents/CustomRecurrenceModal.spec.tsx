@@ -24,18 +24,11 @@ interface ITestMockDatePickerProps {
   [key: string]: unknown;
 }
 
-type GlobalWithMockDatePicker = typeof globalThis & {
-  mockDatePickerOnChange?: (value: dayjs.Dayjs | null) => void;
-};
-
 vi.mock('@mui/x-date-pickers', async () => {
   const actual = await vi.importActual('@mui/x-date-pickers');
   return {
     ...actual,
     DatePicker: ({ onChange, ...props }: ITestMockDatePickerProps) => {
-      // Store the onChange function globally so we can call it in tests
-      (globalThis as GlobalWithMockDatePicker).mockDatePickerOnChange =
-        onChange;
       return (
         <input
           {...props}

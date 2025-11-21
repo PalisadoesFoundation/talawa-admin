@@ -6,13 +6,13 @@
 
 > **enrichPostNode**(`post`): `object`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L38)
+Defined in: [src/screens/OrgPost/OrgPostMocks.helpers.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.helpers.ts#L3)
 
 ## Parameters
 
 ### post
 
-`IPostNode`
+[`IPostNode`](../../OrgPostMocks.types/interfaces/IPostNode.md)
 
 ## Returns
 

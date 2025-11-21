@@ -6,7 +6,7 @@
 
 > `const` **mockOrgPostList1**: `object`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.ts:500](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L500)
+Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:366](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L366)
 
 ## Type Declaration
 

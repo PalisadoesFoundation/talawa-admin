@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Modal, Form, Button } from 'react-bootstrap';
-import type { ChangeEvent } from 'react';
+import type { FormEvent } from 'react';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
@@ -96,19 +96,21 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
     }
   }
 
-  const createPost = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+  const createPost = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     try {
       let attachment: IFileMetadataInput | null = null;
-      if (file && typeof file !== 'string') {
-        const fileName = file.name.split('/').pop() || 'defaultFileName';
+      const mediaFile = videoFile || file;
+
+      if (mediaFile && typeof mediaFile !== 'string') {
+        const fileName = mediaFile.name.split('/').pop() || 'defaultFileName';
         const objectName = 'uploads/' + fileName;
-        const fileHash = await getFileHashFromFile(file);
+        const fileHash = await getFileHashFromFile(mediaFile);
 
         attachment = {
           fileHash,
-          mimetype: getMimeTypeEnum(file.type),
+          mimetype: getMimeTypeEnum(mediaFile.type),
           name: fileName,
           objectName,
         };
@@ -162,6 +164,9 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
         !selectedFile.type.startsWith('video/')
       ) {
         toast.error('Please select an image or video file');
+        setFile(null);
+        setPostFormState((prev) => ({ ...prev, addMedia: '' }));
+        e.target.value = '';
         return;
       }
 
@@ -172,10 +177,14 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
         setPostFormState((prev) => ({ ...prev, addMedia: base64 }));
       } catch {
         toast.error('Could not generate preview');
+        setFile(null);
+        setPostFormState((prev) => ({ ...prev, addMedia: '' }));
+        e.target.value = '';
       }
     } else {
       setFile(null);
       setPostFormState((prev) => ({ ...prev, addMedia: '' }));
+      e.target.value = '';
     }
   };
 
@@ -186,6 +195,9 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
     if (selectedFile) {
       if (!selectedFile.type.startsWith('video/')) {
         toast.error('Please select a video file');
+        setVideoFile(null);
+        setVideoPreview('');
+        e.target.value = '';
         return;
       }
       setVideoFile(selectedFile);
@@ -194,10 +206,14 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
         setVideoPreview(base64);
       } catch {
         toast.error('Could not generate video preview');
+        setVideoFile(null);
+        setVideoPreview('');
+        e.target.value = '';
       }
     } else {
       setVideoFile(null);
       setVideoPreview('');
+      e.target.value = '';
     }
   };
 
@@ -221,18 +237,18 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
       show={show}
       onHide={handleClose}
       backdrop="static"
-      aria-labelledby="contained-modal-title-vcenter"
+      aria-labelledby="createPostModalTitle"
       centered
     >
       <Modal.Header data-testid="modalOrganizationHeader" closeButton>
-        <Modal.Title>{t('postDetails')}</Modal.Title>
+        <Modal.Title id="createPostModalTitle">{t('postDetails')}</Modal.Title>
       </Modal.Header>
       <Form onSubmitCapture={createPost}>
         <Modal.Body>
           <Form.Label htmlFor="posttitle">{t('postTitle')}</Form.Label>
           <Form.Control
-            type="name"
-            id="orgname"
+            type="text"
+            id="posttitle"
             className={`mb-3 ${styles.inputField}`}
             placeholder={t('postTitle1')}
             data-testid="modalTitle"
@@ -249,8 +265,8 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
           />
           <Form.Label htmlFor="postinfo">{t('information')}</Form.Label>
           <Form.Control
-            type="descrip"
-            id="descrip"
+            as="textarea"
+            id="postinfo"
             className={`mb-3 ${styles.inputField}`}
             placeholder={t('information1')}
             data-testid="modalinfo"
@@ -350,7 +366,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
               </button>
             </div>
           )}
-          <Form.Label htmlFor="pinpost" className="mt-3">
+          <Form.Label htmlFor="pinPost" className="mt-3">
             {t('pinPost')}
           </Form.Label>
           <Form.Switch

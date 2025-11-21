@@ -2,11 +2,11 @@
 
 ***
 
-# Variable: ORGANIZATION\_PINNED\_POST\_LIST\_EMPTY\_MOCK
+# Variable: orgPinnedPostListMockBasic
 
-> `const` **ORGANIZATION\_PINNED\_POST\_LIST\_EMPTY\_MOCK**: `object` = `orgPinnedPostListMockBasic`
+> `const` **orgPinnedPostListMockBasic**: `object`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.ts:195](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L195)
+Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L105)
 
 ## Type Declaration
 

@@ -16,39 +16,29 @@ import { MOCKS, MOCKS2 } from './User.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
 
-const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(EMPTY_MOCKS, true);
-const link3 = new StaticMockLink(MOCKS2, true);
-const link5 = new StaticMockLink(MOCKS_NEW, true);
-// link6 and link7 are intentionally omitted as they are not used in tests
+const { setItem, removeItem } = useLocalStorage();
 
-let setItem: ReturnType<typeof useLocalStorage>['setItem'];
-let removeItem: ReturnType<typeof useLocalStorage>['removeItem'];
-
-async function wait(ms = 1000): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
-beforeEach(() => {
-  const localStorage = useLocalStorage();
-  setItem = localStorage.setItem;
-  removeItem = localStorage.removeItem;
-
-  setItem('id', '123');
-  setItem('SuperAdmin', true);
-  setItem('name', 'John Doe');
-  setItem('AdminFor', [{ name: 'adi', id: '1234', avatarURL: '' }]);
+vi.mock('react-toastify', async () => {
+  const actual = await vi.importActual('react-toastify');
+  return {
+    ...actual,
+    toast: {
+      warning: vi.fn(),
+      error: vi.fn(),
+      success: vi.fn(),
+      info: vi.fn(),
+    },
+  };
 });
 
-const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(EMPTY_MOCKS, true);
-const link3 = new StaticMockLink(MOCKS2, true);
-const link5 = new StaticMockLink(MOCKS_NEW, true);
-// link6 and link7 are intentionally omitted as they are not used in tests
+const createLink = (
+  mocks:
+    | typeof MOCKS
+    | typeof EMPTY_MOCKS
+    | typeof MOCKS2
+    | typeof MOCKS_NEW
+    | typeof MOCKS_NEW_2,
+) => new StaticMockLink(mocks, true);
 
 async function wait(ms = 1000): Promise<void> {
   await act(() => {
@@ -72,7 +62,7 @@ afterEach(() => {
 describe('Testing Users screen', () => {
   it('Component should be rendered properly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={createLink(MOCKS)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -94,7 +84,7 @@ describe('Testing Users screen', () => {
     await wait();
     setItem('id', '');
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={createLink(MOCKS)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -113,7 +103,7 @@ describe('Testing Users screen', () => {
     await wait();
     removeItem('id');
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={createLink(MOCKS)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -128,7 +118,7 @@ describe('Testing Users screen', () => {
 
   it('Component should be rendered properly when user is superAdmin', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={createLink(MOCKS)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -144,7 +134,7 @@ describe('Testing Users screen', () => {
 
   it('Testing seach by name functionality', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={createLink(MOCKS)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -183,7 +173,7 @@ describe('Testing Users screen', () => {
   it('testing search not found', async () => {
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={link2}>
+        <MockedProvider addTypename={false} link={createLink(EMPTY_MOCKS)}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -296,7 +286,7 @@ describe('Testing Users screen', () => {
   it('Testing filter functionality', async () => {
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider addTypename={false} link={createLink(MOCKS)}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -368,7 +358,7 @@ describe('Testing Users screen', () => {
 
   it('check for rerendering', async () => {
     const { rerender } = render(
-      <MockedProvider addTypename={false} link={link3}>
+      <MockedProvider addTypename={false} link={createLink(MOCKS2)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -382,7 +372,7 @@ describe('Testing Users screen', () => {
 
     await wait();
     rerender(
-      <MockedProvider addTypename={false} link={link3}>
+      <MockedProvider addTypename={false} link={createLink(MOCKS2)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -399,7 +389,7 @@ describe('Testing Users screen', () => {
   it('Check if pressing enter key triggers search', async () => {
     await act(async () => {
       render(
-        <MockedProvider link={link5} addTypename={false}>
+        <MockedProvider link={createLink(MOCKS_NEW)} addTypename={false}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>

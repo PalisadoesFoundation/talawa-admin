@@ -2,11 +2,11 @@
 
 ***
 
-# Variable: getUserByIdMockUser2
+# Variable: getUserByIdMock
 
-> `const` **getUserByIdMockUser2**: `object`
+> `const` **getUserByIdMock**: `object`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L105)
+Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L11)
 
 ## Type Declaration
 
@@ -28,7 +28,7 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.ts:105](https://github.com/Palisad
 
 #### request.variables.input.id
 
-> **id**: `string` = `'user2'`
+> **id**: `string` = `'123'`
 
 ### result
 
@@ -44,8 +44,8 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.ts:105](https://github.com/Palisad
 
 #### result.data.user.id
 
-> **id**: `string` = `'user2'`
+> **id**: `string` = `'123'`
 
 #### result.data.user.name
 
-> **name**: `string` = `'User 2'`
+> **name**: `string` = `'Test User'`

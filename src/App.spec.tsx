@@ -475,9 +475,9 @@ describe('Testing the App Component', () => {
     React.lazy = vi.fn().mockImplementation(<
       T extends React.ComponentType<unknown>,
     >(): React.LazyExoticComponent<T> => {
-      const mockComponent = React.forwardRef(() => {
+      const mockComponent = ((): React.ReactElement | null => {
         throw new Promise(() => {}); // Never resolves to keep loading
-      }) as React.LazyExoticComponent<T>;
+      }) as unknown as React.LazyExoticComponent<T>;
 
       // Add the required _result property for TypeScript compliance
       Object.defineProperty(mockComponent, '_result', {
