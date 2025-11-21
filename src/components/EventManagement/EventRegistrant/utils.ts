@@ -1,4 +1,6 @@
 import { toast } from 'react-toastify';
+import type { TFunction } from 'i18next';
+
 type MutationVariables =
   | { userId: string; recurringEventInstanceId: string }
   | {
@@ -15,28 +17,31 @@ export const deleteRegistrantUtil = (
   }) => Promise<unknown>,
   refreshData: () => void,
   checkedInUsers: string[],
+  t: TFunction,
 ): Promise<void> => {
   if (!eventId) {
     return Promise.resolve();
   }
 
   if (checkedInUsers.includes(userId)) {
-    toast.error('Cannot unregister a user who has already checked in');
+    toast.error(t('cannotUnregisterCheckedIn'));
     return Promise.resolve();
   }
 
-  toast.warn('Removing the attendee...');
+  toast.warn(t('removingAttendee'));
   const removeVariables = isRecurring
     ? { userId, recurringEventInstanceId: eventId }
     : { userId, eventId: eventId };
 
   return removeRegistrantMutation({ variables: removeVariables })
     .then(() => {
-      toast.success('Attendee removed successfully');
+      toast.success(t('attendeeRemovedSuccess'));
       refreshData();
     })
-    .catch((err) => {
-      toast.error('Error removing attendee');
-      toast.error(err.message);
+    .catch((err: unknown) => {
+      toast.error(t('errorRemovingAttendee'));
+      if (err instanceof Error) {
+        toast.error(err.message);
+      }
     });
 };

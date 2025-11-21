@@ -143,6 +143,7 @@ function EventRegistrants(): JSX.Element {
         removeRegistrantMutation,
         refreshData,
         checkedInUsers,
+        t,
       );
     },
     [

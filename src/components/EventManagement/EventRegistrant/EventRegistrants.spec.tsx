@@ -34,7 +34,7 @@ import { EVENT_REGISTRANTS } from 'GraphQl/Queries/Queries';
 import styles from 'style/app-fixed.module.css';
 import { CheckInWrapper as MockedCheckInWrapper } from 'components/CheckIn/CheckInWrapper';
 import { EventRegistrantsWrapper as MockedEventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
-
+import type { TFunction } from 'i18next';
 import * as Utils from './utils';
 
 vi.mock('components/CheckIn/CheckInWrapper', () => ({
@@ -249,7 +249,9 @@ describe('Event Registrants Component', () => {
     });
 
     const unregisterButton = screen.getByTestId('delete-registrant-0');
-    expect(unregisterButton).toBeDisabled();
+    await waitFor(() => {
+      expect(unregisterButton).toBeDisabled();
+    });
     expect(unregisterButton).toHaveAttribute(
       'title',
       'Cannot unregister checked-in user',
@@ -300,6 +302,8 @@ describe('deleteRegistrantUtil edge cases', () => {
     eventId: 'event-1',
   };
 
+  const mockT = ((key: string) => key) as unknown as TFunction;
+
   beforeEach(() => {
     refreshData.mockReset();
     vi.clearAllMocks();
@@ -314,11 +318,10 @@ describe('deleteRegistrantUtil edge cases', () => {
       removeRegistrantMutation,
       refreshData,
       [baseArgs.userId],
+      mockT,
     );
 
-    expect(toast.error).toHaveBeenCalledWith(
-      'Cannot unregister a user who has already checked in',
-    );
+    expect(toast.error).toHaveBeenCalledWith('cannotUnregisterCheckedIn');
     expect(removeRegistrantMutation).not.toHaveBeenCalled();
   });
 
@@ -333,11 +336,31 @@ describe('deleteRegistrantUtil edge cases', () => {
       removeRegistrantMutation,
       refreshData,
       [],
+      mockT,
     );
 
     await Promise.resolve();
-    expect(toast.error).toHaveBeenCalledWith('Error removing attendee');
+    expect(toast.error).toHaveBeenCalledWith('errorRemovingAttendee');
     expect(toast.error).toHaveBeenCalledWith(error.message);
+  });
+
+  test('should handle non-Error mutation failures', async () => {
+    const error = 'Unknown error';
+    const removeRegistrantMutation = vi.fn().mockRejectedValueOnce(error);
+
+    await Utils.deleteRegistrantUtil(
+      baseArgs.userId,
+      false,
+      baseArgs.eventId,
+      removeRegistrantMutation,
+      refreshData,
+      [],
+      mockT,
+    );
+
+    await Promise.resolve();
+    expect(toast.error).toHaveBeenCalledWith('errorRemovingAttendee');
+    expect(toast.error).not.toHaveBeenCalledWith(error);
   });
 
   test('should surface mutation errors for recurring events', async () => {
@@ -351,10 +374,11 @@ describe('deleteRegistrantUtil edge cases', () => {
       removeRegistrantMutation,
       refreshData,
       [],
+      mockT,
     );
 
     await Promise.resolve();
-    expect(toast.error).toHaveBeenCalledWith('Error removing attendee');
+    expect(toast.error).toHaveBeenCalledWith('errorRemovingAttendee');
     expect(toast.error).toHaveBeenCalledWith(error.message);
   });
 
@@ -367,6 +391,7 @@ describe('deleteRegistrantUtil edge cases', () => {
       removeRegistrantMutation,
       refreshData,
       [],
+      mockT,
     );
 
     expect(removeRegistrantMutation).not.toHaveBeenCalled();

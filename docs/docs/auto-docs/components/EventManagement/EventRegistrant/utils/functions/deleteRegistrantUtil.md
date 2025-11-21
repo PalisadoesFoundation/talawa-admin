@@ -4,9 +4,9 @@
 
 # Function: deleteRegistrantUtil()
 
-> **deleteRegistrantUtil**(`userId`, `isRecurring`, `eventId`, `removeRegistrantMutation`, `refreshData`, `checkedInUsers`): `Promise`\<`void`\>
+> **deleteRegistrantUtil**(`userId`, `isRecurring`, `eventId`, `removeRegistrantMutation`, `refreshData`, `checkedInUsers`, `t`): `Promise`\<`void`\>
 
-Defined in: [src/components/EventManagement/EventRegistrant/utils.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventRegistrant/utils.ts#L9)
+Defined in: [src/components/EventManagement/EventRegistrant/utils.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventRegistrant/utils.ts#L11)
 
 ## Parameters
 
@@ -33,6 +33,10 @@ Defined in: [src/components/EventManagement/EventRegistrant/utils.ts:9](https://
 ### checkedInUsers
 
 `string`[]
+
+### t
+
+`TFunction`
 
 ## Returns
 
