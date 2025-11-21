@@ -23,6 +23,5 @@
   "cleanOutputDir": true,
   "skipErrorChecking": true,
   "logLevel": "Warn",
-  "hideBreadcrumbs": true,
-  "sourceLinkTemplate": "https://github.com/PalisadoesFoundation/talawa-admin/blob/main/{path}#L{line}"
+  "hideBreadcrumbs": true
 }
