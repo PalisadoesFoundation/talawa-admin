@@ -96,12 +96,14 @@ const createUserListMock = (
     },
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  data.allUsers.edges = data.allUsers.edges.map(withRole) as any;
+  data.allUsers.edges = data.allUsers.edges.map(
+    withRole,
+  ) as unknown as typeof data.allUsers.edges;
 
   if (Array.isArray(overrides.edges)) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    data.allUsers.edges = overrides.edges.map(withRole) as any;
+    data.allUsers.edges = overrides.edges.map(
+      withRole,
+    ) as unknown as typeof data.allUsers.edges;
   }
   if (overrides.pageInfo) {
     data.allUsers.pageInfo = {
@@ -154,10 +156,9 @@ const createRegisterMutationMock = (variables: Record<string, unknown>) => {
           user: {
             id: 'newUser1',
             name:
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              typeof (defaultVariables as any).name === 'string'
-                ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  (defaultVariables as any).name
+              'name' in defaultVariables &&
+              typeof defaultVariables.name === 'string'
+                ? defaultVariables.name
                 : 'New User',
           },
         },

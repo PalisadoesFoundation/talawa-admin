@@ -81,8 +81,9 @@ describe('usePluginActions', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockReload.mockReset();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (getPluginManager as any).mockReturnValue(mockPluginManager);
+    (getPluginManager as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+      mockPluginManager,
+    );
     mockRefetch.mockResolvedValue({});
     mockCreatePlugin.mockResolvedValue({});
     mockUpdatePlugin.mockResolvedValue({});
