@@ -62,6 +62,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
 
   const [postformState, setPostFormState] = useState({
     posttitle: '',
+    postInfo: '',
     addMedia: '',
     pinPost: false,
   });
@@ -151,6 +152,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
         // Reset all state
         setPostFormState({
           posttitle: '',
+          postInfo: '',
           addMedia: '',
           pinPost: false,
         });
@@ -243,6 +245,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
   const handleClose = (): void => {
     setPostFormState({
       posttitle: '',
+      postInfo: '',
       addMedia: '',
       pinPost: false,
     });
@@ -289,6 +292,23 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
               setPostFormState({
                 ...postformState,
                 posttitle: e.target.value,
+              });
+            }}
+          />
+
+          <Form.Label htmlFor="postInfo">{t('postDescription')}</Form.Label>
+          <Form.Control
+            as="textarea"
+            id="postInfo"
+            className={`mb-3 ${styles.inputField}`}
+            placeholder={t('postDescription')}
+            data-testid="modalinfo"
+            rows={3}
+            value={postformState.postInfo}
+            onChange={(e): void => {
+              setPostFormState({
+                ...postformState,
+                postInfo: e.target.value,
               });
             }}
           />
