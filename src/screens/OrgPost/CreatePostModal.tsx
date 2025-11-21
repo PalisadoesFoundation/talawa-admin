@@ -16,6 +16,34 @@ interface ICreatePostModalProps {
   orgId: string | undefined;
 }
 
+interface IFileMetadataInput {
+  fileHash: string;
+  mimetype: string;
+  name: string;
+  objectName: string;
+}
+
+interface ICreatePostInput {
+  caption: string;
+  organizationId: string;
+  isPinned: boolean;
+  attachments?: IFileMetadataInput[];
+}
+
+interface ICreatePostData {
+  createPost: {
+    id: string;
+    caption: string;
+    pinnedAt?: string;
+    attachments?: {
+      fileHash: string;
+      mimeType: string;
+      name: string;
+      objectName: string;
+    }[];
+  };
+}
+
 const CreatePostModal: React.FC<ICreatePostModalProps> = ({
   show,
   onHide,
@@ -37,11 +65,13 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [videoPreview, setVideoPreview] = useState('');
 
-  const [create, { loading: createPostLoading }] =
-    useMutation(CREATE_POST_MUTATION);
+  const [create, { loading: createPostLoading }] = useMutation<
+    ICreatePostData,
+    { input: ICreatePostInput }
+  >(CREATE_POST_MUTATION);
 
-  async function getFileHashFromFile(file: File): Promise<string> {
-    const arrayBuffer = await file.arrayBuffer();
+  async function getFileHashFromFile(fileToHash: File): Promise<string> {
+    const arrayBuffer = await fileToHash.arrayBuffer();
     const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
     return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
@@ -70,7 +100,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
     e.preventDefault();
 
     try {
-      let attachment = null;
+      let attachment: IFileMetadataInput | null = null;
       if (file && typeof file !== 'string') {
         const fileName = file.name.split('/').pop() || 'defaultFileName';
         const objectName = 'uploads/' + fileName;
@@ -83,6 +113,12 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
           objectName,
         };
       }
+
+      if (!orgId) {
+        toast.error(t('organizationIdMissing'));
+        return;
+      }
+
       const { data } = await create({
         variables: {
           input: {

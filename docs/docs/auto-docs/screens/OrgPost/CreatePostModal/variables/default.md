@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<`ICreatePostModalProps`\>
 
-Defined in: [src/screens/OrgPost/CreatePostModal.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/CreatePostModal.tsx#L19)
+Defined in: [src/screens/OrgPost/CreatePostModal.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/CreatePostModal.tsx#L47)

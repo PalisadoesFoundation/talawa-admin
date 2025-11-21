@@ -4,27 +4,17 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Users from './Users';
-import {
-  EMPTY_MOCKS,
-  MOCKS_NEW,
-  MOCKS_NEW2,
-  MOCKS_NEW3,
-  MOCKS_NEW_2,
-} from './UsersMocks.mocks';
+import { EMPTY_MOCKS, MOCKS_NEW, MOCKS_NEW_2 } from './UsersMocks.mocks';
 import { generateMockUser } from './Organization.mocks';
 import { MOCKS, MOCKS2 } from './User.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
-import * as ApolloClient from '@apollo/client';
-import type { OperationVariables } from '@apollo/client';
-
-import { ORGANIZATION_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
 
 const { setItem, removeItem } = useLocalStorage();
 
@@ -32,8 +22,7 @@ const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
 const link3 = new StaticMockLink(MOCKS2, true);
 const link5 = new StaticMockLink(MOCKS_NEW, true);
-const link6 = new StaticMockLink(MOCKS_NEW2, true);
-const link7 = new StaticMockLink(MOCKS_NEW3, true);
+// link6 and link7 are intentionally omitted as they are not used in tests
 
 async function wait(ms = 1000): Promise<void> {
   await act(() => {

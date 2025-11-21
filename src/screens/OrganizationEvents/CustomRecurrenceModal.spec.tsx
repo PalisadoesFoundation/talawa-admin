@@ -19,13 +19,23 @@ import {
 } from '../../utils/recurrenceUtils';
 
 // Mock the DatePicker to capture its onChange prop
+interface ITestMockDatePickerProps {
+  onChange?: (value: dayjs.Dayjs | null) => void;
+  [key: string]: unknown;
+}
+
+type GlobalWithMockDatePicker = typeof globalThis & {
+  mockDatePickerOnChange?: (value: dayjs.Dayjs | null) => void;
+};
+
 vi.mock('@mui/x-date-pickers', async () => {
   const actual = await vi.importActual('@mui/x-date-pickers');
   return {
     ...actual,
-    DatePicker: ({ onChange, ...props }: any) => {
+    DatePicker: ({ onChange, ...props }: ITestMockDatePickerProps) => {
       // Store the onChange function globally so we can call it in tests
-      (globalThis as any).mockDatePickerOnChange = onChange;
+      (globalThis as GlobalWithMockDatePicker).mockDatePickerOnChange =
+        onChange;
       return (
         <input
           {...props}
@@ -33,7 +43,7 @@ vi.mock('@mui/x-date-pickers', async () => {
           data-testid="mocked-date-picker"
           onChange={(e) => {
             // Mock a dayjs date object
-            const mockDate = dayjs(e.target.value);
+            const mockDate = dayjs((e.target as HTMLInputElement).value);
             if (onChange && mockDate.isValid()) {
               onChange(mockDate);
             }

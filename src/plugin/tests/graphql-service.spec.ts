@@ -29,7 +29,7 @@ vi.mock('../GraphQl/Mutations/PluginMutations', () => ({
 vi.mock('@apollo/client', () => ({
   useQuery: vi.fn(),
   useMutation: vi.fn(),
-  gql: vi.fn((strings, ...args) => strings.join('')),
+  gql: vi.fn((strings: readonly string[]) => strings.join('')),
 }));
 
 describe('PluginGraphQLService', () => {
@@ -280,50 +280,30 @@ describe('GraphQL Hooks', () => {
   });
 
   describe('useGetAllPlugins', () => {
-    it('should return useQuery hook for getting all plugins', () => {
-      const mockResult = {
-        data: { getPlugins: [] },
-        loading: false,
-        error: null,
-      };
-      const mockUseQuery = vi.fn().mockReturnValue(mockResult);
-
-      // Mock the hook directly
-      const { result } = renderHook(() => mockUseQuery());
-      expect(result.current).toEqual(mockResult);
+    it('should be callable without throwing', () => {
+      const { result } = renderHook(() => useGetAllPlugins());
+      expect(result).toBeDefined();
     });
   });
 
   describe('useCreatePlugin', () => {
-    it('should return useMutation hook for creating plugins', () => {
-      const mockResult = [vi.fn(), { data: null, loading: false, error: null }];
-      const mockUseMutation = vi.fn().mockReturnValue(mockResult);
-
-      // Mock the hook directly
-      const { result } = renderHook(() => mockUseMutation());
-      expect(result.current).toEqual(mockResult);
+    it('should be callable without throwing', () => {
+      const { result } = renderHook(() => useCreatePlugin());
+      expect(result).toBeDefined();
     });
   });
 
   describe('useUpdatePlugin', () => {
-    it('should return useMutation hook for updating plugins', () => {
-      const mockResult = [vi.fn(), { data: null, loading: false, error: null }];
-      const mockUseMutation = vi.fn().mockReturnValue(mockResult);
-
-      // Mock the hook directly
-      const { result } = renderHook(() => mockUseMutation());
-      expect(result.current).toEqual(mockResult);
+    it('should be callable without throwing', () => {
+      const { result } = renderHook(() => useUpdatePlugin());
+      expect(result).toBeDefined();
     });
   });
 
   describe('useDeletePlugin', () => {
-    it('should return useMutation hook for deleting plugins', () => {
-      const mockResult = [vi.fn(), { data: null, loading: false, error: null }];
-      const mockUseMutation = vi.fn().mockReturnValue(mockResult);
-
-      // Mock the hook directly
-      const { result } = renderHook(() => mockUseMutation());
-      expect(result.current).toEqual(mockResult);
+    it('should be callable without throwing', () => {
+      const { result } = renderHook(() => useDeletePlugin());
+      expect(result).toBeDefined();
     });
   });
 });

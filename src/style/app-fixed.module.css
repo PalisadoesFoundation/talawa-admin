@@ -90,8 +90,8 @@
   --searchButton-border-focus: #a8c7fa;
   --searchButton-bg-hover: #a8c7fa;
   --searchButton-bg-active: #a8c7fa;
-  --hover-shadow: 0 1px 3px 0 rgba(168, 199, 250, 1),
-    0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  --hover-shadow:
+    0 1px 3px 0 rgba(168, 199, 250, 1), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
 
   --modalHeader-color: #000000;
   --modalHeader-bg: #ffffff;
@@ -298,8 +298,8 @@
   --colorPrimary-bg-active: #a8c7fa;
   --colorPrimary-bg-active: #a8c7fa;
 
-  --hover-shadow: 0 1px 3px 0 rgba(168, 199, 250, 1),
-    0 4px 8px 3px rgba(60, 64, 67, 0.15);
+  --hover-shadow:
+    0 1px 3px 0 rgba(168, 199, 250, 1), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
 
   --colorPrimary-color-active: #555555;
   --colorWhite: #555555;
@@ -1334,14 +1334,14 @@ form label,
 }
 
 .dropdown:is(
-    :hover,
-    :focus,
-    :active,
-    :focus-visible,
-    .show,
-    :disabled,
-    :checked
-  ) {
+  :hover,
+  :focus,
+  :active,
+  :focus-visible,
+  .show,
+  :disabled,
+  :checked
+) {
   box-shadow: var(--hover-shadow);
   border: 1px solid var(--dropdown-border) !important;
   color: var(--dropdown-font-color) !important;
