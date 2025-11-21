@@ -6,102 +6,10 @@
 
 > `const` **mockPosts**: `object`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L118)
+Defined in: [src/screens/OrgPost/OrgPostMocks.ts:357](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L357)
 
 ## Type Declaration
 
-### request
+### postsByOrganization
 
-> **request**: `object`
-
-#### request.query
-
-> **query**: `DocumentNode` = `ORGANIZATION_POST_LIST`
-
-#### request.variables
-
-> **variables**: `object`
-
-#### request.variables.after
-
-> **after**: `any` = `null`
-
-#### request.variables.before
-
-> **before**: `any` = `null`
-
-#### request.variables.first
-
-> **first**: `number` = `6`
-
-#### request.variables.input
-
-> **input**: `object`
-
-#### request.variables.input.id
-
-> **id**: `string` = `'123'`
-
-#### request.variables.last
-
-> **last**: `any` = `null`
-
-### result
-
-> **result**: `object`
-
-#### result.data
-
-> **data**: `object`
-
-#### result.data.organization
-
-> **organization**: `object`
-
-#### result.data.organization.avatarURL
-
-> **avatarURL**: `any` = `null`
-
-#### result.data.organization.id
-
-> **id**: `string` = `'123'`
-
-#### result.data.organization.name
-
-> **name**: `string` = `'Test Org'`
-
-#### result.data.organization.posts
-
-> **posts**: `object`
-
-#### result.data.organization.posts.edges
-
-> **edges**: `object`[]
-
-#### result.data.organization.posts.pageInfo
-
-> **pageInfo**: `object`
-
-#### result.data.organization.posts.pageInfo.endCursor
-
-> **endCursor**: `string` = `'cursor2'`
-
-#### result.data.organization.posts.pageInfo.hasNextPage
-
-> **hasNextPage**: `boolean` = `true`
-
-#### result.data.organization.posts.pageInfo.hasPreviousPage
-
-> **hasPreviousPage**: `boolean` = `false`
-
-#### result.data.organization.posts.pageInfo.startCursor
-
-> **startCursor**: `string` = `'cursor1'`
-
-#### result.data.organization.posts.totalCount
-
-> **totalCount**: `number` = `6`
-
-#### result.data.organization.postsCount
-
-> **postsCount**: `number` = `6`
+> **postsByOrganization**: (\{ `attachments`: `any`[]; `caption`: `string`; `comments`: `any`[]; `createdAt`: `string`; `creator`: \{ `avatarURL`: `any`; `emailAddress`: `string`; `firstName?`: `undefined`; `id`: `string`; `lastName?`: `undefined`; `name`: `string`; \}; `creatorid`: `string`; `id`: `string`; `imageUrl`: `any`; `isPinned`: `boolean`; `pinnedAt`: `any`; `videoUrl`: `any`; \} \| \{ `attachments`: `any`[]; `caption`: `string`; `comments`: `any`[]; `createdAt`: `string`; `creator`: \{ `avatarURL`: `any`; `emailAddress?`: `undefined`; `firstName`: `string`; `id`: `string`; `lastName`: `string`; `name`: `string`; \}; `creatorid?`: `undefined`; `id`: `string`; `imageUrl`: `any`; `isPinned`: `boolean`; `pinnedAt`: `string`; `videoUrl`: `any`; \})[]

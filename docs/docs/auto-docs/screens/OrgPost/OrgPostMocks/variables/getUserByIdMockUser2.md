@@ -6,7 +6,7 @@
 
 > `const` **getUserByIdMockUser2**: `object`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L37)
+Defined in: [src/screens/OrgPost/OrgPostMocks.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L105)
 
 ## Type Declaration
 
@@ -42,26 +42,10 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:37](https://github.com/Pal
 
 > **user**: `object`
 
-#### result.data.user.avatarURL
-
-> **avatarURL**: `any` = `null`
-
-#### result.data.user.email
-
-> **email**: `string` = `'jane.smith@example.com'`
-
-#### result.data.user.firstName
-
-> **firstName**: `string` = `'Jane'`
-
 #### result.data.user.id
 
 > **id**: `string` = `'user2'`
 
-#### result.data.user.lastName
-
-> **lastName**: `string` = `'Smith'`
-
 #### result.data.user.name
 
-> **name**: `string` = `'Jane Smith'`
+> **name**: `string` = `'User 2'`
