@@ -80,7 +80,7 @@ export const MOCKS_NO_EVENT = [
   },
 ];
 
-export const MOCKS_WITH_ADMIN_ROLE = [
+export const MOCKS_WITH_SINGLE_ATTENDEE = [
   {
     request: {
       query: EVENT_DETAILS,
@@ -168,6 +168,39 @@ export const MOCKS_WITH_NULL_DESCRIPTION = [
           isPublic: true,
           isRegisterable: true,
           attendees: [],
+          creator: {
+            _id: 'creator1',
+            firstName: 'John',
+            lastName: 'Doe',
+          },
+        },
+      },
+    },
+  },
+];
+
+export const MOCKS_WITH_ADMIN_ROLE = [
+  {
+    request: {
+      query: EVENT_DETAILS,
+      variables: { eventId: 'event123' },
+    },
+    result: {
+      data: {
+        event: {
+          _id: 'event123',
+          id: 'event123',
+          name: 'Test Event',
+          description: 'Test Description',
+          startAt: '2024-01-01T09:00:00Z',
+          endAt: '2024-01-02T17:00:00Z',
+          startTime: '09:00:00',
+          endTime: '17:00:00',
+          allDay: false,
+          location: 'India',
+          isPublic: true,
+          isRegisterable: true,
+          attendees: [{ _id: 'user1' }, { _id: 'user2' }],
           creator: {
             _id: 'creator1',
             firstName: 'John',

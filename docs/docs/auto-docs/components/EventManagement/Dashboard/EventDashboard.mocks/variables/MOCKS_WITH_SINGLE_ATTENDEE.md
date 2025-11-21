@@ -2,11 +2,11 @@
 
 ***
 
-# Variable: MOCKS\_WITH\_ADMIN\_ROLE
+# Variable: MOCKS\_WITH\_SINGLE\_ATTENDEE
 
-> `const` **MOCKS\_WITH\_ADMIN\_ROLE**: `object`[]
+> `const` **MOCKS\_WITH\_SINGLE\_ATTENDEE**: `object`[]
 
-Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L182)
+Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L83)
 
 ## Type Declaration
 
@@ -60,11 +60,11 @@ Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:18
 
 #### result.data.event.creator.firstName
 
-> **firstName**: `string` = `'John'`
+> **firstName**: `string` = `'Admin'`
 
 #### result.data.event.creator.lastName
 
-> **lastName**: `string` = `'Doe'`
+> **lastName**: `string` = `'User'`
 
 #### result.data.event.description
 
