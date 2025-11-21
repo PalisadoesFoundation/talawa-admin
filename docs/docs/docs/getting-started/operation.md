@@ -7,6 +7,9 @@ sidebar_position: 3
 
 This page outlines how to successfully operate the application
 
+## Configuration Pre-Requisites
+
+You will first need to create a `.env` file as described in the [Configuration Guide](./configuration.md)
 
 ## Operation Using Docker
 
@@ -36,9 +39,7 @@ Please follow them closely.
 
 This section describes how to setup the application in a production environment.
 
-1. Create a `.env` file as described in the [Configuration Guide](./configuration.md)
-
-2. Configure `nginx.conf` file located at `config/docker/setup`. Modify it to fit your preferences before running the application.
+1. Configure `nginx.conf` file located at `config/docker/setup`. Modify it to fit your preferences before running the application.
 
 3. Build and Run the Docker Image:
 
@@ -60,9 +61,7 @@ The application will be accessible at `http://localhost:4321`
 
 This section describes how to setup the application in a development  environment.
 
-1. Create a `.env` file as described in the [Configuration Guide](./configuration.md)
-
-2. Build and Run the Docker Image:
+1. Build and Run the Docker Image:
 
    Run the following command to run the Docker image:
 
@@ -70,7 +69,7 @@ This section describes how to setup the application in a development  environmen
    docker-compose -f docker/docker-compose.dev.yaml --env-file .env up
    ```
 
-3. To stop the container run the following command:
+2. To stop the container run the following command:
 
    ```bash
    docker-compose -f docker/docker-compose.dev.yaml down
