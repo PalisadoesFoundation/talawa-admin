@@ -178,3 +178,36 @@ export const MOCKS_WITH_ADMIN_ROLE = [
     },
   },
 ];
+
+export const MOCKS_INVALID_DATE = [
+  {
+    request: {
+      query: EVENT_DETAILS,
+      variables: { eventId: 'event123' },
+    },
+    result: {
+      data: {
+        event: {
+          _id: 'event123',
+          id: 'event123',
+          name: 'Test Event',
+          description: 'Test Description',
+          startAt: 'invalid-date-string',
+          endAt: 'another-invalid-format',
+          startTime: null,
+          endTime: null,
+          allDay: false,
+          location: 'India',
+          isPublic: true,
+          isRegisterable: true,
+          attendees: [],
+          creator: {
+            _id: 'creator1',
+            firstName: 'John',
+            lastName: 'Doe',
+          },
+        },
+      },
+    },
+  },
+];

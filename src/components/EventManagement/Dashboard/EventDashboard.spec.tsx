@@ -18,6 +18,7 @@ import {
   MOCKS_WITH_ADMIN_ROLE,
   MOCKS_WITH_NULL_LOCATION,
   MOCKS_WITH_NULL_DESCRIPTION,
+  MOCKS_INVALID_DATE,
 } from './EventDashboard.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { vi, expect, it, describe, beforeEach, afterEach } from 'vitest';
@@ -229,6 +230,18 @@ describe('Testing Event Dashboard Screen', () => {
     await wait();
 
     expect(getByTestId('event-description')).toHaveTextContent('');
+  });
+
+  it('Should display default time "08:00" when date format is invalid', async () => {
+    // Create a mock with invalid date strings
+
+    const mockInvalidDate = new StaticMockLink(MOCKS_INVALID_DATE, true);
+    const { getByTestId } = renderEventDashboard(mockInvalidDate);
+    await wait();
+
+    // After fixing the component, this should show "08:00" instead of "NaN:NaN"
+    expect(getByTestId('start-time')).toHaveTextContent('08:00');
+    expect(getByTestId('end-time')).toHaveTextContent('08:00');
   });
 
   it('Should display N/A for statistics cards', async () => {
