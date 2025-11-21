@@ -18,7 +18,7 @@ interface ICreatePostModalProps {
 
 interface IFileMetadataInput {
   fileHash: string;
-  mimetype: string;
+  mimeType: string;
   name: string;
   objectName: string;
 }
