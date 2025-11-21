@@ -3,20 +3,62 @@ import {
   GET_ORGANIZATION_EVENTS_PG,
   GET_ORGANIZATION_DATA_PG,
 } from 'GraphQl/Queries/Queries';
+import dayjs from 'dayjs';
+
+function buildEventsVariables() {
+  const now = new Date();
+  const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+  return {
+    id: undefined,
+    first: 150,
+    after: null,
+    startDate: dayjs(firstOfMonth).startOf('month').toISOString(),
+    endDate: dayjs(firstOfMonth).endOf('month').toISOString(),
+    includeRecurring: true,
+  };
+}
+
+function buildOrgVariables() {
+  return {
+    id: undefined,
+    first: 10,
+    after: null,
+  };
+}
+
+function buildCreateEventVariables() {
+  return {
+    id: undefined,
+    input: {
+      name: 'Dummy Org',
+      description: 'This is a dummy organization',
+      startAt: '2030-03-28T00:00:00.000Z',
+      endAt: '2030-03-30T23:59:59.999Z',
+      allDay: true,
+      location: 'New Delhi',
+      isPublic: false,
+      isRegisterable: true,
+      recurrenceRule: null,
+      parentEventId: null,
+    },
+  };
+}
 
 export const MOCKS = [
-  // Mock for GET_ORGANIZATION_EVENTS_PG with events having different data scenarios
+  // GET_ORGANIZATION_EVENTS_PG (main events list)
   {
     request: {
       query: GET_ORGANIZATION_EVENTS_PG,
+      variables: buildEventsVariables(),
     },
     result: {
       data: {
         organization: {
           events: {
             edges: [
-              // Event with null description and location (to test fallback to empty string)
               {
+                cursor: 'cursor1',
                 node: {
                   id: '1',
                   name: 'Event with null description',
@@ -27,31 +69,23 @@ export const MOCKS = [
                   location: null,
                   isPublic: true,
                   isRegisterable: true,
-                  isMaterialized: false,
-                  isRecurringTemplate: false,
-                  recurringEventId: null,
-                  instanceStartTime: null,
-                  baseEventId: null,
+                  isRecurringEventTemplate: false,
+                  baseEvent: null,
                   sequenceNumber: null,
                   totalCount: null,
                   hasExceptions: false,
                   progressLabel: null,
+                  recurrenceDescription: null,
+                  recurrenceRule: null,
                   attachments: [],
-                  creator: {
-                    id: '1',
-                    name: 'Creator User',
-                  },
-                  organization: {
-                    id: '1',
-                    name: 'Test Organization',
-                  },
+                  creator: { id: '1', name: 'Creator User' },
+                  organization: { id: '1', name: 'Test Organization' },
                   createdAt: '2030-03-28T00:00:00.000Z',
                   updatedAt: '2030-03-28T00:00:00.000Z',
                 },
-                cursor: 'cursor1',
               },
-              // All-day event (to test startTime/endTime being undefined)
               {
+                cursor: 'cursor2',
                 node: {
                   id: '2',
                   name: 'All Day Event',
@@ -62,31 +96,23 @@ export const MOCKS = [
                   location: 'Conference Room A',
                   isPublic: false,
                   isRegisterable: false,
-                  isMaterialized: false,
-                  isRecurringTemplate: false,
-                  recurringEventId: null,
-                  instanceStartTime: null,
-                  baseEventId: null,
+                  isRecurringEventTemplate: false,
+                  baseEvent: null,
                   sequenceNumber: null,
                   totalCount: null,
                   hasExceptions: false,
                   progressLabel: null,
+                  recurrenceDescription: null,
+                  recurrenceRule: null,
                   attachments: [],
-                  creator: {
-                    id: '2',
-                    name: 'Another Creator',
-                  },
-                  organization: {
-                    id: '1',
-                    name: 'Test Organization',
-                  },
+                  creator: { id: '2', name: 'Another Creator' },
+                  organization: { id: '1', name: 'Test Organization' },
                   createdAt: '2030-03-29T00:00:00.000Z',
                   updatedAt: '2030-03-29T00:00:00.000Z',
                 },
-                cursor: 'cursor2',
               },
-              // Timed event (to test startTime/endTime being set)
               {
+                cursor: 'cursor3',
                 node: {
                   id: '3',
                   name: 'Timed Event',
@@ -97,28 +123,20 @@ export const MOCKS = [
                   location: 'Meeting Room B',
                   isPublic: true,
                   isRegisterable: true,
-                  isMaterialized: false,
-                  isRecurringTemplate: false,
-                  recurringEventId: null,
-                  instanceStartTime: null,
-                  baseEventId: null,
+                  isRecurringEventTemplate: false,
+                  baseEvent: null,
                   sequenceNumber: null,
                   totalCount: null,
                   hasExceptions: false,
                   progressLabel: null,
+                  recurrenceDescription: null,
+                  recurrenceRule: null,
                   attachments: [],
-                  creator: {
-                    id: '3',
-                    name: 'Third Creator',
-                  },
-                  organization: {
-                    id: '1',
-                    name: 'Test Organization',
-                  },
+                  creator: { id: '3', name: 'Third Creator' },
+                  organization: { id: '1', name: 'Test Organization' },
                   createdAt: '2030-03-30T00:00:00.000Z',
                   updatedAt: '2030-03-30T00:00:00.000Z',
                 },
-                cursor: 'cursor3',
               },
             ],
           },
@@ -126,10 +144,11 @@ export const MOCKS = [
       },
     },
   },
-  // Mock for GET_ORGANIZATION_DATA_PG
+
   {
     request: {
       query: GET_ORGANIZATION_DATA_PG,
+      variables: buildOrgVariables(),
     },
     result: {
       data: {
@@ -140,22 +159,11 @@ export const MOCKS = [
       },
     },
   },
+
   {
     request: {
       query: CREATE_EVENT_MUTATION,
-      variables: {
-        input: {
-          name: 'Dummy Org',
-          location: 'New Delhi',
-          description: 'This is a dummy organization',
-          isPublic: false,
-          isRegisterable: true,
-          organizationId: '',
-          startAt: '2030-03-28T00:00:00.000Z',
-          endAt: '2030-03-30T23:59:59.999Z',
-          allDay: true,
-        },
-      },
+      variables: buildCreateEventVariables(),
     },
     result: {
       data: {
@@ -180,131 +188,9 @@ export const MOCKS = [
           sequenceNumber: 1,
           totalCount: 1,
           progressLabel: 'Event 1 of 1',
-          creator: {
-            id: '1',
-            name: 'Admin User',
-          },
-          updater: {
-            id: '1',
-            name: 'Admin User',
-          },
-          organization: {
-            id: '1',
-            name: 'Test Organization',
-          },
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: CREATE_EVENT_MUTATION,
-      variables: {
-        input: {
-          name: 'Dummy Org',
-          location: 'New Delhi',
-          description: 'This is a dummy organization',
-          isPublic: true,
-          isRegisterable: false,
-          organizationId: '',
-          startAt: '2030-03-28T03:30:00.540Z',
-          endAt: '2030-03-30T11:30:00.540Z',
-          allDay: false,
-        },
-      },
-    },
-    result: {
-      data: {
-        createEvent: {
-          id: '2',
-          name: 'Dummy Org',
-          description: 'This is a dummy organization',
-          startAt: '2030-03-28T03:30:00.540Z',
-          endAt: '2022-03-30T11:30:00.540Z',
-          allDay: false,
-          location: 'New Delhi',
-          isPublic: true,
-          isRegisterable: false,
-          createdAt: '2022-03-28T00:00:00.000Z',
-          updatedAt: '2022-03-28T00:00:00.000Z',
-          isRecurringTemplate: false,
-          recurringEventId: null,
-          instanceStartTime: null,
-          isMaterialized: false,
-          baseEventId: null,
-          hasExceptions: false,
-          sequenceNumber: 1,
-          totalCount: 1,
-          progressLabel: 'Event 1 of 1',
-          creator: {
-            id: '1',
-            name: 'Admin User',
-          },
-          updater: {
-            id: '1',
-            name: 'Admin User',
-          },
-          organization: {
-            id: '1',
-            name: 'Test Organization',
-          },
-        },
-      },
-    },
-  },
-  // Additional mock for successful event creation test
-  {
-    request: {
-      query: CREATE_EVENT_MUTATION,
-      variables: {
-        input: {
-          name: 'Dummy Org',
-          location: 'New Delhi',
-          description: 'This is a dummy organization',
-          isPublic: true,
-          isRegisterable: false,
-          organizationId: '',
-          startAt: '2022-03-28T00:00:00.000Z',
-          endAt: '2022-03-30T23:59:59.999Z',
-          allDay: true,
-        },
-      },
-    },
-    result: {
-      data: {
-        createEvent: {
-          id: '3',
-          name: 'Dummy Org',
-          description: 'This is a dummy organization',
-          startAt: '2022-03-28T00:00:00.000Z',
-          endAt: '2022-03-30T23:59:59.999Z',
-          allDay: true,
-          location: 'New Delhi',
-          isPublic: true,
-          isRegisterable: false,
-          createdAt: '2022-03-28T00:00:00.000Z',
-          updatedAt: '2022-03-28T00:00:00.000Z',
-          isRecurringTemplate: false,
-          recurringEventId: null,
-          instanceStartTime: null,
-          isMaterialized: false,
-          baseEventId: null,
-          hasExceptions: false,
-          sequenceNumber: 1,
-          totalCount: 1,
-          progressLabel: 'Event 1 of 1',
-          creator: {
-            id: '1',
-            name: 'Admin User',
-          },
-          updater: {
-            id: '1',
-            name: 'Admin User',
-          },
-          organization: {
-            id: '1',
-            name: 'Test Organization',
-          },
+          creator: { id: '1', name: 'Admin User' },
+          updater: { id: '1', name: 'Admin User' },
+          organization: { id: '1', name: 'Test Organization' },
         },
       },
     },
