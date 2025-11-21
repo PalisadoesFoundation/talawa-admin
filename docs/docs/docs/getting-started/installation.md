@@ -11,7 +11,7 @@ Installation is not difficult, but there are many steps. This is a brief explana
 2. Download the code from GitHub using `git`
 3. Install `node.js` (Node), the runtime environment the application will need to work.
 4. Configure the Node Package Manager (`pnpm`) to automatically use the correct version of Node for our application.
-5. Use `npm` to install TypeScript, the language the application is written in.
+5. Use `pnpm` to install TypeScript, the language the application is written in.
 6. Install other supporting software such as the database.
 7. Configure the application
 8. Start the application
@@ -72,27 +72,36 @@ The best way to install and manage `node.js` is making use of node version manag
 
 Follow these steps to install the `node.js` packages in Windows, Linux and MacOS.
 
-1. For Windows:
-   1. Install `node.js` from their website at https://nodejs.org
-      1. When installing, don't click the option to install the `necessary tools`. These are not needed in our case.
-   2. Install [fnm](https://github.com/Schniz/fnm). Please read all the steps in this section first.
-      1. All the commands listed on this page will need to be run in a Windows terminal session in the `talawa-admin` directory.
-      2. Install `fnm` using the `winget` option listed on the page.
-      3. Setup `fnm` to automatically set the version of `node.js` to the version required for the repository using these steps:
-         1. Refer to the `Shell Setup` section of the `fnm` site's installation page for recommendations.
-         2. Open a `Windows PowerShell` terminal window
-         3. Run the recommended `Windows PowerShell` command to open `notepad`.
-         4. Paste the recommended string into `notepad`
-         5. Save the document.
-         6. Exit `notepad`
-         7. Exit PowerShell
-         8. This will ensure that you are always using the correct version of `node.js`
-2. For Linux and MacOS, use the terminal window.
-   1. Install `node.js` from their website at https://nodejs.org
-   2. Install [fnm](https://github.com/Schniz/fnm).
+#### For Windows Users
+
+Follow these steps:
+
+1. Install `node.js` from their website at https://nodejs.org
+   1. When installing, don't click the option to install the `necessary tools`. These are not needed in our case.
+2. Install [fnm](https://github.com/Schniz/fnm). Please read all the steps in this section first.
+   1. All the commands listed on this page will need to be run in a Windows terminal session in the `talawa-admin` directory.
+   2. Install `fnm` using the `winget` option listed on the page.
+   3. Setup `fnm` to automatically set the version of `node.js` to the version required for the repository using these steps:
       1. Refer to the `Shell Setup` section of the `fnm` site's installation page for recommendations.
-      2. Run the respective recommended commands to setup your node environment
-      3. This will ensure that you are always using the correct version of `node.js`
+      2. Open a `Windows PowerShell` terminal window
+      3. Run the recommended `Windows PowerShell` command to open `notepad`.
+      4. Paste the recommended string into `notepad`
+      5. Save the document.
+      6. Exit `notepad`
+      7. Exit PowerShell
+      8. This will ensure that you are always using the correct version of `node.js`
+
+Proceed to the next section.
+
+#### For Linux and MacOS Users
+
+Follow these steps:
+
+1. Install `node.js` from their website at https://nodejs.org
+2. Install [fnm](https://github.com/Schniz/fnm).
+   1. Refer to the `Shell Setup` section of the `fnm` site's installation page for recommendations.
+   2. Run the respective recommended commands to setup your node environment
+   3. This will ensure that you are always using the correct version of `node.js`
 
 Proceed to the next section.
 
