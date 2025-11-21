@@ -104,6 +104,14 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
     e.preventDefault();
 
     try {
+      const trimmedTitle = postformState.posttitle.trim();
+
+      // Validate that title is not empty after trimming
+      if (trimmedTitle === '') {
+        toast.error(t('venueTitleError'));
+        return;
+      }
+
       let attachment: IFileMetadataInput | null = null;
       const mediaFile = videoFile || file;
 
@@ -128,7 +136,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
       const { data } = await create({
         variables: {
           input: {
-            caption: postformState.posttitle.trim(),
+            caption: trimmedTitle,
             organizationId: orgId,
             isPinned: postformState.pinPost,
             ...(attachment && { attachments: [attachment] }),
@@ -264,7 +272,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
       <Modal.Header data-testid="modalOrganizationHeader" closeButton>
         <Modal.Title id="createPostModalTitle">{t('postDetails')}</Modal.Title>
       </Modal.Header>
-      <Form onSubmitCapture={createPost}>
+      <Form onSubmit={createPost}>
         <Modal.Body>
           <Form.Label htmlFor="posttitle">{t('postTitle')}</Form.Label>
           <Form.Control

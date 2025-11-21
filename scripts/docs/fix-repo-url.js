@@ -15,6 +15,9 @@ function replaceRepoUrl(dir) {
       let content = fs.readFileSync(filePath, 'utf8');
 
       // Replace any repository URL before the "src" directory with the main repository URL
+      if (content.match(/https:\/\/github\.com\/[^/]+\/[^/]+\/blob\/[^/]+\//g)) {
+        console.log(`Replacing URL in ${file}`);
+      }
       content = content.replace(
         /https:\/\/github\.com\/[^/]+\/[^/]+\/blob\/[^/]+\//g,
         mainRepoUrl,

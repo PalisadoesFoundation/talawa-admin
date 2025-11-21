@@ -153,6 +153,7 @@ jobs:
             echo ""
             echo "Changed files:"
             git status --porcelain
+            git diff
             exit 1
           else
             echo "Documentation is up to date."
