@@ -35,25 +35,26 @@ First you need a local copy of `talawa-admin`. Run the following command in the 
 1. On your computer, navigate to the folder where you want to setup the repository.
 2. Open a `cmd` (Windows) or `terminal` (Linux or MacOS) session in this folder.
    1. An easy way to do this is to right-click and choose appropriate option based on your OS.
-3. **For Our Open Source Contributor Software Developers:**
 
-   1. Next, we'll fork and clone the `talawa-admin` repository.
-   1. In your web browser, navigate to [https://github.com/PalisadoesFoundation/talawa-admin/](https://github.com/PalisadoesFoundation/talawa-admin/) and click on the `fork` button. It is placed on the right corner opposite the repository name `PalisadoesFoundation/talawa-admin`.
+The next steps will depend on whether you are an end user installalling our software, or one of our open source contributors.
 
-      ![Image with fork](../../../static/img/markdown/installation/install1.png)
+#### For Talawa Administrator End Users
 
-   1. You should now see `talawa-admin` under your repositories. It will be marked as forked from `PalisadoesFoundation/talawa-admin`
+Clone the repository to your local computer using this command:
 
-      ![Image of user's clone](../../../static/img/markdown/installation/install2.png)
+```bash
+$ git clone https://github.com/PalisadoesFoundation/talawa-admin.git
+```
 
-   1. Clone the repository to your local computer (replacing the values in `{{}}`):
-      ```bash
-      $ git clone https://github.com/{{YOUR GITHUB USERNAME}}/talawa-admin.git
-      cd talawa-admin
-      git checkout develop
-      ```
-      - **Note:** Make sure to check out the `develop` branch
-   1. You now have a local copy of the code files.
+Proceed to the next section.
+   
+#### For Our Open Source Contributor Software Developers
+
+Follow these steps carefully in forking and cloning the `talawa-admin` repository.
+
+   1. Follow the steps in our [Git Guide for Developers](https://developer.palisadoes.org/docs/git-guide/introduction/quickstart)
+   2. As a developer you will be working with our `develop` branch.
+   1. You will    now have a local copy of the code files.
    1. For more detailed instructions on contributing code, please review the following documents in the root directory of the code:
       1. CONTRIBUTING.md
       2. CODE_OF_CONDUCT.md
@@ -63,28 +64,22 @@ First you need a local copy of `talawa-admin`. Run the following command in the 
       6. ISSUE_GUIDELINES.md
       7. PR_GUIDELINES.md
 
-4. **Talawa Administrators:**
-
-   1. Clone the repository to your local computer using this command:
-
-      ```bash
-      $ git clone https://github.com/PalisadoesFoundation/talawa-admin.git
-      ```
+Proceed to the next section.
 
 ### Install node.js
 
-Best way to install and manage `node.js` is making use of node version managers. We recommend using `fnm`, which will be described in more detail later.
+The best way to install and manage `node.js` is making use of node version managers. We recommend using `fnm`, which will be described in more detail later.
 
 Follow these steps to install the `node.js` packages in Windows, Linux and MacOS.
 
 1. For Windows:
-   1. first install `node.js` from their website at https://nodejs.org
+   1. Install `node.js` from their website at https://nodejs.org
       1. When installing, don't click the option to install the `necessary tools`. These are not needed in our case.
-   2. then install [fnm](https://github.com/Schniz/fnm). Please read all the steps in this section first.
+   2. Install [fnm](https://github.com/Schniz/fnm). Please read all the steps in this section first.
       1. All the commands listed on this page will need to be run in a Windows terminal session in the `talawa-admin` directory.
       2. Install `fnm` using the `winget` option listed on the page.
       3. Setup `fnm` to automatically set the version of `node.js` to the version required for the repository using these steps:
-         1. First, refer to the `fnm` web page's section on `Shell Setup` recommendations.
+         1. Refer to the `Shell Setup` section of the `fnm` site's installation page for recommendations.
          2. Open a `Windows PowerShell` terminal window
          3. Run the recommended `Windows PowerShell` command to open `notepad`.
          4. Paste the recommended string into `notepad`
@@ -93,25 +88,33 @@ Follow these steps to install the `node.js` packages in Windows, Linux and MacOS
          7. Exit PowerShell
          8. This will ensure that you are always using the correct version of `node.js`
 2. For Linux and MacOS, use the terminal window.
-   1. install `node.js`
-   2. then install `fnm`
-      1. Refer to the installation page's section on the `Shell Setup` recommendations.
+   1. Install `node.js` from their website at https://nodejs.org
+   2. Install [fnm](https://github.com/Schniz/fnm).
+      1. Refer to the `Shell Setup` section of the `fnm` site's installation page for recommendations.
       2. Run the respective recommended commands to setup your node environment
       3. This will ensure that you are always using the correct version of `node.js`
+
+Proceed to the next section.
+
+### Install pnpm
+
+The application uses `pnpm` to manage the various `node.js` packages that need to be installed.
+
+Install `pnpm` from the [pnpm website](https://pnpm.io/installation)
 
 ### Install TypeScript
 
 TypeScript is a typed superset of JavaScript that compiles to plain JavaScript. It adds optional types, classes, and modules to JavaScript, and supports tools for large-scale JavaScript applications.
 
-To install TypeScript, you can use the `npm` command which comes with `node.js`:
+To install TypeScript, you can use the `pnpm` command:
 
 ```bash
-npm install -g typescript
+pnpm install -g typescript
 ```
 
 This command installs TypeScript globally on your system so that it can be accessed from any project.
 
-### Install Required Packages
+### Install The Required Packages
 
 Run the following command to install the packages and dependencies required by the app:
 
@@ -129,10 +132,14 @@ We use it to simplify installation
 
 ### Prerequisites
 
-Follow these steps to install Docker on your system
+Follow these steps to install Docker on your system:
 
-- [Docker Desktop for Windows/Mac](https://www.docker.com/products/docker-desktop)
-- [Docker Engine for Linux](https://docs.docker.com/engine/install/)
+1. The steps are different for Windows/Mac versus Linux users:
+
+   1. [Docker Desktop for Windows/Mac](https://www.docker.com/products/docker-desktop)
+   2. [Docker Engine for Linux](https://docs.docker.com/engine/install/)
+
+1. You must ensure that docker is running for the Talawa-Admin application to work correctly.
 
 You now need to setup the environment. This follows next.
 
@@ -140,7 +147,7 @@ You now need to setup the environment. This follows next.
 
 If you prefer to use Docker, you can install the app using the following command:
 
-1. Create a `.env` file as described in the Configuration section
+1. Create a `.env` file as described in the [Configuration Guide](./configuration.md)
 
 2. Build and Run the Docker Image:
 
@@ -162,7 +169,7 @@ The application will be accessible at `http://localhost:4321`
 
 If you prefer to use Docker, you can install the app using the following command:
 
-1. Create a `.env` file as described in the Configuration section
+1. Create a `.env` file as described in the [Configuration Guide](./configuration.md)
 
 2. Configure `nginx.conf` file located at `config/docker/setup`. Modify it to fit your preferences before running the application.
 
