@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_WITH\_ADMIN\_ROLE**: `object`[]
 
-Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L182)
+Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:149](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L149)
 
 ## Type Declaration
 
