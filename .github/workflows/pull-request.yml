@@ -425,7 +425,6 @@ jobs:
     needs:
       [
         Code-Quality-Checks,
-        Check-AutoDocs,
         Check-ESlint-Disable,
         Check-Code-Coverage-Disable,
         Check-ItSkip-Disable,
