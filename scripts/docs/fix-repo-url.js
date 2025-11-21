@@ -14,13 +14,20 @@ function replaceRepoUrl(dir) {
     } else if (file.endsWith('.md')) {
       let content = fs.readFileSync(filePath, 'utf8');
 
-      // Replace any repository URL before the "src" directory with the main repository URL
-      if (content.match(/https:\/\/github\.com\/[^/]+\/[^/]+\/blob\/[^/]+\//g)) {
-        console.log(`Replacing URL in ${file}`);
-      }
+      // Robustly replace the "Defined in" link by constructing it from the label
+      // Label format: [src/path/to/file.ts:43]
       content = content.replace(
-        /https:\/\/github\.com\/[^/]+\/[^/]+\/blob\/[^/]+\//g,
-        mainRepoUrl,
+        /Defined in: \[(.*?)\]\((.*?)\)/g,
+        (match, label, oldUrl) => {
+          const parts = label.split(':');
+          if (parts.length === 2) {
+            const [filePath, line] = parts;
+            // Construct the canonical URL: base + path + #L + line
+            const newUrl = `${mainRepoUrl}${filePath}#L${line}`;
+            return `Defined in: [${label}](${newUrl})`;
+          }
+          return match;
+        }
       );
 
       fs.writeFileSync(filePath, content, 'utf8');
