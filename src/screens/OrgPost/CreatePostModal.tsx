@@ -303,6 +303,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
             className={`mb-3 ${styles.inputField}`}
             placeholder={t('postDescription')}
             data-testid="modalinfo"
+            data-cy="modalinfo"
             rows={3}
             value={postformState.postInfo}
             onChange={(e): void => {
