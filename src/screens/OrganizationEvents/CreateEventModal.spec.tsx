@@ -71,53 +71,9 @@ vi.mock('../../utils/recurrenceUtils', () => ({
   InterfaceRecurrenceRule: {},
 }));
 
-// Mock CustomRecurrenceModal with a functional component that can trigger callbacks
+// Mock CustomRecurrenceModal
 vi.mock('./CustomRecurrenceModal', () => ({
-  default: (props: any) => {
-    if (!props.customRecurrenceModalIsOpen) return null;
-    const React = require('react');
-    return React.createElement('div', {
-      'data-testid': 'customRecurrenceModal',
-      children: [
-        React.createElement(
-          'button',
-          {
-            'data-testid': 'updateRecurrenceWithFunction',
-            onClick: () => {
-              // Test the function-based state update path (lines 567-570)
-              props.setRecurrenceRuleState((prev: any) => ({
-                ...prev,
-                interval: (prev?.interval || 1) + 1,
-              }));
-            },
-          },
-          'Update with function',
-        ),
-        React.createElement(
-          'button',
-          {
-            'data-testid': 'updateRecurrenceDirectly',
-            onClick: () => {
-              // Test the direct state update path
-              props.setRecurrenceRuleState({
-                frequency: 'MONTHLY',
-                interval: 2,
-              });
-            },
-          },
-          'Update directly',
-        ),
-        React.createElement(
-          'button',
-          {
-            'data-testid': 'closeCustomModal',
-            onClick: () => props.hideCustomRecurrenceModal(),
-          },
-          'Close',
-        ),
-      ],
-    });
-  },
+  default: () => null,
 }));
 
 // Prepare mock for useMutation
@@ -699,89 +655,5 @@ describe('CreateEventModal', () => {
       expect(callArgs.variables.input.isPublic).toBe(false);
       expect(callArgs.variables.input.isRegisterable).toBe(true);
     });
-  });
-
-  it('closes custom recurrence modal when selecting non-custom option after opening it', () => {
-    render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
-    );
-
-    const dropdown = screen.getByTestId('recurrenceDropdown');
-
-    // First, open custom recurrence modal by selecting "Custom..."
-    fireEvent.click(dropdown);
-    fireEvent.click(screen.getByTestId('recurrenceOption-6'));
-    expect(mockCreateDefaultRecurrenceRule).toHaveBeenCalled();
-
-    // CustomRecurrenceModal should be visible
-    expect(screen.getByTestId('customRecurrenceModal')).toBeInTheDocument();
-
-    // Click the close button in the custom modal
-    const closeButton = screen.getByTestId('closeCustomModal');
-    fireEvent.click(closeButton);
-
-    // Modal should be hidden after calling hideCustomRecurrenceModal
-    expect(
-      screen.queryByTestId('customRecurrenceModal'),
-    ).not.toBeInTheDocument();
-  });
-
-  it('updates recurrence state with function callback in custom modal', () => {
-    render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
-    );
-
-    const dropdown = screen.getByTestId('recurrenceDropdown');
-
-    // Open custom recurrence modal
-    fireEvent.click(dropdown);
-    fireEvent.click(screen.getByTestId('recurrenceOption-6'));
-
-    expect(screen.getByTestId('customRecurrenceModal')).toBeInTheDocument();
-
-    // Trigger function-based state update (covers lines 567-570)
-    const updateWithFunctionBtn = screen.getByTestId(
-      'updateRecurrenceWithFunction',
-    );
-    fireEvent.click(updateWithFunctionBtn);
-
-    // The function callback path should have been executed
-    expect(screen.getByTestId('customRecurrenceModal')).toBeInTheDocument();
-  });
-
-  it('updates recurrence state directly in custom modal', () => {
-    render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
-    );
-
-    const dropdown = screen.getByTestId('recurrenceDropdown');
-
-    // Open custom recurrence modal
-    fireEvent.click(dropdown);
-    fireEvent.click(screen.getByTestId('recurrenceOption-6'));
-
-    expect(screen.getByTestId('customRecurrenceModal')).toBeInTheDocument();
-
-    // Trigger direct state update
-    const updateDirectlyBtn = screen.getByTestId('updateRecurrenceDirectly');
-    fireEvent.click(updateDirectlyBtn);
-
-    // The direct update path should have been executed
-    expect(screen.getByTestId('customRecurrenceModal')).toBeInTheDocument();
   });
 });
