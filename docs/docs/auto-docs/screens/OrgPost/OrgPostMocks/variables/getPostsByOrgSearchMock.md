@@ -22,9 +22,13 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.ts:108](https://github.com/Palisad
 
 > **variables**: `object`
 
-#### request.variables.id
+#### request.variables.input
 
-> **id**: `string` = `'123'`
+> **input**: `object`
+
+#### request.variables.input.organizationId
+
+> **organizationId**: `string` = `'123'`
 
 ### result
 

@@ -98,7 +98,7 @@ export const orgPostListMock = {
 export const getPostsByOrgInitialMock = {
   request: {
     query: GET_POSTS_BY_ORG,
-    variables: { id: '123' },
+    variables: { input: { organizationId: '123' } },
   },
   result: {
     data: { postsByOrganization: samplePosts.map(enrichPostNode) },
@@ -108,7 +108,7 @@ export const getPostsByOrgInitialMock = {
 export const getPostsByOrgSearchMock = {
   request: {
     query: GET_POSTS_BY_ORG,
-    variables: { id: '123' },
+    variables: { input: { organizationId: '123' } },
   },
   result: {
     data: { postsByOrganization: samplePosts.map(enrichPostNode) },
@@ -139,12 +139,11 @@ export const mockPosts = {
             hasNextPage: true,
             hasPreviousPage: false,
             startCursor: 'cursor1',
-            endCursor: 'cursor3',
+            endCursor: 'cursor2',
           },
           edges: [
             { node: enrichPostNode(samplePosts[0]), cursor: 'cursor1' },
             { node: enrichPostNode(samplePosts[1]), cursor: 'cursor2' },
-            { node: enrichPostNode(samplePosts[2]), cursor: 'cursor3' },
           ],
         },
       },
@@ -194,6 +193,8 @@ export const baseMocks = [
   getUserByIdMockUser1,
   getUserByIdMockUser2,
   mockPosts,
+  getPostsByOrgInitialMock,
+  orgPinnedPostListMockBasic,
 ];
 
 export const mockPosts1 = {
@@ -301,6 +302,42 @@ export const mockPosts2 = {
   },
 };
 
+export const mockPostsPrevious = {
+  request: {
+    query: ORGANIZATION_POST_LIST,
+    variables: {
+      input: { id: '123' },
+      after: null,
+      before: 'cursor3',
+      first: null,
+      last: 6,
+    },
+  },
+  result: {
+    data: {
+      organization: {
+        id: '123',
+        name: 'Test Org',
+        avatarURL: null,
+        postsCount: 2,
+        posts: {
+          totalCount: 2,
+          pageInfo: {
+            hasNextPage: true,
+            hasPreviousPage: false,
+            startCursor: 'cursor1',
+            endCursor: 'cursor2',
+          },
+          edges: [
+            { node: enrichPostNode(samplePosts[0]), cursor: 'cursor1' },
+            { node: enrichPostNode(samplePosts[1]), cursor: 'cursor2' },
+          ],
+        },
+      },
+    },
+  },
+};
+
 export const mockOrgPostList2 = {
   request: {
     query: ORGANIZATION_POST_LIST,
@@ -355,6 +392,9 @@ export const mocks = [
   mockOrgPostList,
   mockPosts2,
   mockOrgPostList2,
+  mockPostsPrevious,
+  getPostsByOrgInitialMock,
+  orgPinnedPostListMockBasic,
 ];
 
 export const loadingMocks: MockedResponse[] = [

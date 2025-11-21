@@ -316,6 +316,10 @@ function OrgPost(): JSX.Element {
       return;
     }
 
+    if (!data?.postsByOrganization) {
+      return;
+    }
+
     const posts = [...data.postsByOrganization];
     const sorted = posts.sort((a, b) => {
       const dateA = new Date(a.createdAt).getTime();

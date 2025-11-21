@@ -944,13 +944,9 @@ describe('OrgPost SearchBar functionality', () => {
     await waitFor(() => {
       expect(postsRenderer.getAttribute('data-is-filtering')).toBe('true');
       expect(postsRenderer.getAttribute('data-loading')).toBe('false');
-      expect(screen.queryByText('First post title')).toBeInTheDocument();
-      expect(
-        screen.queryByText('Second post about testing'),
-      ).toBeInTheDocument();
-      expect(
-        screen.queryByText('Third post with random content'),
-      ).toBeInTheDocument();
+      expect(screen.queryByText('Sample Post 1')).toBeInTheDocument();
+      expect(screen.queryByText('Sample Post 2')).toBeInTheDocument();
+      expect(screen.queryByText('Sample Post 3')).toBeInTheDocument();
     });
   });
 
@@ -1870,7 +1866,7 @@ describe('pagination handlers', () => {
 
     // Page 1 should load
     await waitFor(() => {
-      expect(screen.getByText('Early Post')).toBeInTheDocument();
+      expect(screen.getByText('Sample Post 1')).toBeInTheDocument();
     });
 
     // Click Next → Page 2
@@ -1880,7 +1876,7 @@ describe('pagination handlers', () => {
     // Wait for pagination to complete and new content to load
     await waitFor(
       () => {
-        expect(screen.getByText('Post 3 on page 2')).toBeInTheDocument();
+        expect(screen.getByText('Sample Post 3')).toBeInTheDocument();
       },
       { timeout: 5000 },
     );
@@ -1890,7 +1886,7 @@ describe('pagination handlers', () => {
     fireEvent.click(prevBtn);
 
     await waitFor(() => {
-      expect(screen.getByText('Early Post')).toBeInTheDocument();
+      expect(screen.getByText('Sample Post 1')).toBeInTheDocument();
     });
   });
 });
@@ -2648,7 +2644,7 @@ describe('OrgPost Pinned Posts Functionality', () => {
 
     // Verify that regular posts are rendered (which indicates the component works with pinned posts)
     await waitFor(() => {
-      expect(screen.getByText('First post title')).toBeInTheDocument();
+      expect(screen.getByText('Sample Post 1')).toBeInTheDocument();
     });
 
     // The pagination should still work for regular posts while pinned posts are present

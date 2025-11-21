@@ -84,7 +84,7 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.ts:118](https://github.com/Palisad
 
 #### result.data.organization.posts.pageInfo.endCursor
 
-> **endCursor**: `string` = `'cursor3'`
+> **endCursor**: `string` = `'cursor2'`
 
 #### result.data.organization.posts.pageInfo.hasNextPage
 

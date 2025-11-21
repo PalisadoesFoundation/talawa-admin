@@ -2,11 +2,11 @@
 
 ***
 
-# Variable: mockOrgPostList1
+# Variable: mockPostsPrevious
 
-> `const` **mockOrgPostList1**: `object`
+> `const` **mockPostsPrevious**: `object`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.ts:236](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L236)
+Defined in: [src/screens/OrgPost/OrgPostMocks.ts:305](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L305)
 
 ## Type Declaration
 
@@ -28,11 +28,11 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.ts:236](https://github.com/Palisad
 
 #### request.variables.before
 
-> **before**: `any` = `null`
+> **before**: `string` = `'cursor3'`
 
 #### request.variables.first
 
-> **first**: `number` = `6`
+> **first**: `any` = `null`
 
 #### request.variables.input
 
@@ -44,7 +44,7 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.ts:236](https://github.com/Palisad
 
 #### request.variables.last
 
-> **last**: `any` = `null`
+> **last**: `number` = `6`
 
 ### result
 
@@ -68,7 +68,7 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.ts:236](https://github.com/Palisad
 
 #### result.data.organization.name
 
-> **name**: `string` = `'Test Organization'`
+> **name**: `string` = `'Test Org'`
 
 #### result.data.organization.posts
 
