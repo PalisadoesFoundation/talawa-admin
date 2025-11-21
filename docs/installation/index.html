@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.9.2">
 <title data-rh="true">Installation | Talawa-Admin Documentation</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://docs-admin.talawa.io/docs/installation"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Installation | Talawa-Admin Documentation"><meta data-rh="true" name="description" content="Installation is not difficult, but there are many steps. This is a brief explanation of what needs to be done:"><meta data-rh="true" property="og:description" content="Installation is not difficult, but there are many steps. This is a brief explanation of what needs to be done:"><link data-rh="true" rel="icon" href="/img/icons/favicon_palisadoes.ico"><link data-rh="true" rel="canonical" href="https://docs-admin.talawa.io/docs/installation"><link data-rh="true" rel="alternate" href="https://docs-admin.talawa.io/docs/installation" hreflang="en"><link data-rh="true" rel="alternate" href="https://docs-admin.talawa.io/docs/installation" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Installation","item":"https://docs-admin.talawa.io/docs/installation"}]}</script><link rel="stylesheet" href="https://docs.talawa.io/css/styles-latest.css"><link rel="stylesheet" href="/assets/css/styles.36e011b5.css">
-<script src="/assets/js/runtime~main.47d2fa8d.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.93d93410.js" defer="defer"></script>
 <script src="/assets/js/main.b337d594.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -17,7 +17,7 @@
 <li class="">Download the code from GitHub using <code>git</code></li>
 <li class="">Install <code>node.js</code> (Node), the runtime environment the application will need to work.</li>
 <li class="">Configure the Node Package Manager (<code>pnpm</code>) to automatically use the correct version of Node for our application.</li>
-<li class="">Use <code>npm</code> to install TypeScript, the language the application is written in.</li>
+<li class="">Use <code>pnpm</code> to install TypeScript, the language the application is written in.</li>
 <li class="">Install other supporting software such as the database.</li>
 <li class="">Configure the application</li>
 <li class="">Start the application</li>
@@ -31,41 +31,38 @@
 <h3 class="anchor anchorTargetStickyNavbar_g03t" id="setting-up-this-repository">Setting up this repository<a href="#setting-up-this-repository" class="hash-link" aria-label="Direct link to Setting up this repository" title="Direct link to Setting up this repository" translate="no">​</a></h3>
 <p>First you need a local copy of <code>talawa-admin</code>. Run the following command in the directory of choice on your local system.</p>
 <ol>
-<li class="">
-<p>On your computer, navigate to the folder where you want to setup the repository.</p>
-</li>
-<li class="">
-<p>Open a <code>cmd</code> (Windows) or <code>terminal</code> (Linux or MacOS) session in this folder.</p>
+<li class="">On your computer, navigate to the folder where you want to setup the repository.</li>
+<li class="">Open a <code>cmd</code> (Windows) or <code>terminal</code> (Linux or MacOS) session in this folder.<!-- -->
 <ol>
 <li class="">An easy way to do this is to right-click and choose appropriate option based on your OS.</li>
 </ol>
 </li>
-<li class="">
-<p><strong>For Our Open Source Contributor Software Developers:</strong></p>
+</ol>
+<p>The next steps will depend on whether you are:</p>
+<ol>
+<li class="">an end user installing our software (Production Environments) or</li>
+<li class="">one of our open source contributors (Development Environments).</li>
+</ol>
+<p>Please follow them closely.</p>
+<h4 class="anchor anchorTargetStickyNavbar_g03t" id="for-production-environments">For Production Environments<a href="#for-production-environments" class="hash-link" aria-label="Direct link to For Production Environments" title="Direct link to For Production Environments" translate="no">​</a></h4>
+<p>Follow the steps in this section if you are using Talawa-Admin as an end user.</p>
 <ol>
 <li class="">
-<p>Next, we&#x27;ll fork and clone the <code>talawa-admin</code> repository.</p>
+<p>Clone the repository to your local computer using this command:</p>
+<div class="language-bash codeBlockContainer_tfll theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_jRSR"><pre tabindex="0" class="prism-code language-bash codeBlock_GwRN thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_Eb4y"><span class="token-line" style="color:#393A34"><span class="token plain">$ git clone https://github.com/PalisadoesFoundation/talawa-admin.git</span><br></span></code></pre></div></div>
+<ol>
+<li class="">Proceed to the next section.</li>
+</ol>
 </li>
-<li class="">
-<p>In your web browser, navigate to <a href="https://github.com/PalisadoesFoundation/talawa-admin/" target="_blank" rel="noopener noreferrer" class="">https://github.com/PalisadoesFoundation/talawa-admin/</a> and click on the <code>fork</code> button. It is placed on the right corner opposite the repository name <code>PalisadoesFoundation/talawa-admin</code>.</p>
-<p><img decoding="async" loading="lazy" alt="Image with fork" src="/assets/images/install1-2d1693c6392340c01045251b87428716.png" width="1843" height="141" class="img_R1RL"></p>
-</li>
-<li class="">
-<p>You should now see <code>talawa-admin</code> under your repositories. It will be marked as forked from <code>PalisadoesFoundation/talawa-admin</code></p>
-<p><img decoding="async" loading="lazy" alt="Image of user&amp;#39;s clone" src="/assets/images/install2-4c389fafa8b5af0a2592da7fb5639fd4.png" width="1817" height="264" class="img_R1RL"></p>
-</li>
-<li class="">
-<p>Clone the repository to your local computer (replacing the values in <code>{{}}</code>):</p>
-<div class="language-bash codeBlockContainer_tfll theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_jRSR"><pre tabindex="0" class="prism-code language-bash codeBlock_GwRN thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_Eb4y"><span class="token-line" style="color:#393A34"><span class="token plain">$ git clone https://github.com/{{YOUR GITHUB USERNAME}}/talawa-admin.git</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">cd talawa-admin</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">git checkout develop</span><br></span></code></pre></div></div>
-<ul>
-<li class=""><strong>Note:</strong> Make sure to check out the <code>develop</code> branch</li>
-</ul>
-</li>
-<li class="">
-<p>You now have a local copy of the code files.</p>
-</li>
-<li class="">
-<p>For more detailed instructions on contributing code, please review the following documents in the root directory of the code:</p>
+</ol>
+<h4 class="anchor anchorTargetStickyNavbar_g03t" id="for-development-environments">For Development Environments<a href="#for-development-environments" class="hash-link" aria-label="Direct link to For Development Environments" title="Direct link to For Development Environments" translate="no">​</a></h4>
+<p>If you are one of our open source software developer contributors then
+follow these steps carefully in forking and cloning the <code>talawa-admin</code> repository.</p>
+<ol>
+<li class="">Follow the steps in our <a href="https://developer.palisadoes.org/docs/git-guide/introduction/quickstart" target="_blank" rel="noopener noreferrer" class="">Git Guide for Developers</a></li>
+<li class="">As a developer you will be working with our <code>develop</code> branch.</li>
+<li class="">You will    now have a local copy of the code files.</li>
+<li class="">For more detailed instructions on contributing code, please review the following documents in the root directory of the code:<!-- -->
 <ol>
 <li class="">CONTRIBUTING.md</li>
 <li class="">CODE_OF_CONDUCT.md</li>
@@ -77,35 +74,25 @@
 </ol>
 </li>
 </ol>
-</li>
-<li class="">
-<p><strong>Talawa Administrators:</strong></p>
-<ol>
-<li class="">
-<p>Clone the repository to your local computer using this command:</p>
-<div class="language-bash codeBlockContainer_tfll theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_jRSR"><pre tabindex="0" class="prism-code language-bash codeBlock_GwRN thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_Eb4y"><span class="token-line" style="color:#393A34"><span class="token plain">$ git clone https://github.com/PalisadoesFoundation/talawa-admin.git</span><br></span></code></pre></div></div>
-</li>
-</ol>
-</li>
-</ol>
+<p>Proceed to the next section.</p>
 <h3 class="anchor anchorTargetStickyNavbar_g03t" id="install-nodejs">Install node.js<a href="#install-nodejs" class="hash-link" aria-label="Direct link to Install node.js" title="Direct link to Install node.js" translate="no">​</a></h3>
-<p>Best way to install and manage <code>node.js</code> is making use of node version managers. We recommend using <code>fnm</code>, which will be described in more detail later.</p>
+<p>The best way to install and manage <code>node.js</code> is making use of node version managers. We recommend using <code>fnm</code>, which will be described in more detail later.</p>
 <p>Follow these steps to install the <code>node.js</code> packages in Windows, Linux and MacOS.</p>
+<h4 class="anchor anchorTargetStickyNavbar_g03t" id="for-windows-users">For Windows Users<a href="#for-windows-users" class="hash-link" aria-label="Direct link to For Windows Users" title="Direct link to For Windows Users" translate="no">​</a></h4>
+<p>Follow these steps:</p>
 <ol>
-<li class="">For Windows:<!-- -->
-<ol>
-<li class="">first install <code>node.js</code> from their website at <a href="https://nodejs.org" target="_blank" rel="noopener noreferrer" class="">https://nodejs.org</a>
+<li class="">Install <code>node.js</code> from their website at <a href="https://nodejs.org" target="_blank" rel="noopener noreferrer" class="">https://nodejs.org</a>
 <ol>
 <li class="">When installing, don&#x27;t click the option to install the <code>necessary tools</code>. These are not needed in our case.</li>
 </ol>
 </li>
-<li class="">then install <a href="https://github.com/Schniz/fnm" target="_blank" rel="noopener noreferrer" class="">fnm</a>. Please read all the steps in this section first.<!-- -->
+<li class="">Install <a href="https://github.com/Schniz/fnm" target="_blank" rel="noopener noreferrer" class="">fnm</a>. Please read all the steps in this section first.<!-- -->
 <ol>
 <li class="">All the commands listed on this page will need to be run in a Windows terminal session in the <code>talawa-admin</code> directory.</li>
 <li class="">Install <code>fnm</code> using the <code>winget</code> option listed on the page.</li>
 <li class="">Setup <code>fnm</code> to automatically set the version of <code>node.js</code> to the version required for the repository using these steps:<!-- -->
 <ol>
-<li class="">First, refer to the <code>fnm</code> web page&#x27;s section on <code>Shell Setup</code> recommendations.</li>
+<li class="">Refer to the <code>Shell Setup</code> section of the <code>fnm</code> site&#x27;s installation page for recommendations.</li>
 <li class="">Open a <code>Windows PowerShell</code> terminal window</li>
 <li class="">Run the recommended <code>Windows PowerShell</code> command to open <code>notepad</code>.</li>
 <li class="">Paste the recommended string into <code>notepad</code></li>
@@ -118,75 +105,39 @@
 </ol>
 </li>
 </ol>
-</li>
-<li class="">For Linux and MacOS, use the terminal window.<!-- -->
+<p>Proceed to the next section.</p>
+<h4 class="anchor anchorTargetStickyNavbar_g03t" id="for-linux-and-macos-users">For Linux and MacOS Users<a href="#for-linux-and-macos-users" class="hash-link" aria-label="Direct link to For Linux and MacOS Users" title="Direct link to For Linux and MacOS Users" translate="no">​</a></h4>
+<p>Follow these steps:</p>
 <ol>
-<li class="">install <code>node.js</code></li>
-<li class="">then install <code>fnm</code>
+<li class="">Install <code>node.js</code> from their website at <a href="https://nodejs.org" target="_blank" rel="noopener noreferrer" class="">https://nodejs.org</a></li>
+<li class="">Install <a href="https://github.com/Schniz/fnm" target="_blank" rel="noopener noreferrer" class="">fnm</a>.<!-- -->
 <ol>
-<li class="">Refer to the installation page&#x27;s section on the <code>Shell Setup</code> recommendations.</li>
+<li class="">Refer to the <code>Shell Setup</code> section of the <code>fnm</code> site&#x27;s installation page for recommendations.</li>
 <li class="">Run the respective recommended commands to setup your node environment</li>
 <li class="">This will ensure that you are always using the correct version of <code>node.js</code></li>
 </ol>
 </li>
 </ol>
-</li>
-</ol>
+<p>Proceed to the next section.</p>
+<h3 class="anchor anchorTargetStickyNavbar_g03t" id="install-pnpm">Install pnpm<a href="#install-pnpm" class="hash-link" aria-label="Direct link to Install pnpm" title="Direct link to Install pnpm" translate="no">​</a></h3>
+<p>The application uses <code>pnpm</code> to manage the various <code>node.js</code> packages that need to be installed.</p>
+<ul>
+<li class="">Install <code>pnpm</code> from the <a href="https://pnpm.io/installation" target="_blank" rel="noopener noreferrer" class="">pnpm website</a></li>
+</ul>
+<p>Proceed to the next section.</p>
 <h3 class="anchor anchorTargetStickyNavbar_g03t" id="install-typescript">Install TypeScript<a href="#install-typescript" class="hash-link" aria-label="Direct link to Install TypeScript" title="Direct link to Install TypeScript" translate="no">​</a></h3>
 <p>TypeScript is a typed superset of JavaScript that compiles to plain JavaScript. It adds optional types, classes, and modules to JavaScript, and supports tools for large-scale JavaScript applications.</p>
-<p>To install TypeScript, you can use the <code>npm</code> command which comes with <code>node.js</code>:</p>
-<div class="language-bash codeBlockContainer_tfll theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_jRSR"><pre tabindex="0" class="prism-code language-bash codeBlock_GwRN thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_Eb4y"><span class="token-line" style="color:#393A34"><span class="token plain">npm install -g typescript</span><br></span></code></pre></div></div>
+<p>To install TypeScript, you can use the <code>pnpm</code> command:</p>
+<div class="language-bash codeBlockContainer_tfll theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_jRSR"><pre tabindex="0" class="prism-code language-bash codeBlock_GwRN thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_Eb4y"><span class="token-line" style="color:#393A34"><span class="token plain">pnpm install -g typescript</span><br></span></code></pre></div></div>
 <p>This command installs TypeScript globally on your system so that it can be accessed from any project.</p>
-<h3 class="anchor anchorTargetStickyNavbar_g03t" id="install-required-packages">Install Required Packages<a href="#install-required-packages" class="hash-link" aria-label="Direct link to Install Required Packages" title="Direct link to Install Required Packages" translate="no">​</a></h3>
+<p>Proceed to the next section.</p>
+<h3 class="anchor anchorTargetStickyNavbar_g03t" id="install-the-required-packages">Install The Required Packages<a href="#install-the-required-packages" class="hash-link" aria-label="Direct link to Install The Required Packages" title="Direct link to Install The Required Packages" translate="no">​</a></h3>
 <p>Run the following command to install the packages and dependencies required by the app:</p>
 <div class="language-text codeBlockContainer_tfll theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_jRSR"><pre tabindex="0" class="prism-code language-text codeBlock_GwRN thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_Eb4y"><span class="token-line" style="color:#393A34"><span class="token plain">pnpm install</span><br></span></code></pre></div></div>
 <p>The prerequisites are now installed. The next step will be to get the app up and running.</p>
-<h2 class="anchor anchorTargetStickyNavbar_g03t" id="installation-using-docker">Installation using Docker<a href="#installation-using-docker" class="hash-link" aria-label="Direct link to Installation using Docker" title="Direct link to Installation using Docker" translate="no">​</a></h2>
-<p>Docker is used to build, deploy, and manage applications within isolated, lightweight containers, effectively packaging an application with all its dependencies so it can run consistently across different environments, allowing for faster development, testing, and deployment of software.</p>
-<p>We use it to simplify installation</p>
-<h3 class="anchor anchorTargetStickyNavbar_g03t" id="prerequisites-1">Prerequisites<a href="#prerequisites-1" class="hash-link" aria-label="Direct link to Prerequisites" title="Direct link to Prerequisites" translate="no">​</a></h3>
-<p>Follow these steps to install Docker on your system</p>
+<h2 class="anchor anchorTargetStickyNavbar_g03t" id="running-talawa-admin">Running Talawa Admin<a href="#running-talawa-admin" class="hash-link" aria-label="Direct link to Running Talawa Admin" title="Direct link to Running Talawa Admin" translate="no">​</a></h2>
 <ul>
-<li class=""><a href="https://www.docker.com/products/docker-desktop" target="_blank" rel="noopener noreferrer" class="">Docker Desktop for Windows/Mac</a></li>
-<li class=""><a href="https://docs.docker.com/engine/install/" target="_blank" rel="noopener noreferrer" class="">Docker Engine for Linux</a></li>
-</ul>
-<p>You now need to setup the environment. This follows next.</p>
-<h4 class="anchor anchorTargetStickyNavbar_g03t" id="development-setup">Development Setup<a href="#development-setup" class="hash-link" aria-label="Direct link to Development Setup" title="Direct link to Development Setup" translate="no">​</a></h4>
-<p>If you prefer to use Docker, you can install the app using the following command:</p>
-<ol>
-<li class="">
-<p>Create a <code>.env</code> file as described in the Configuration section</p>
-</li>
-<li class="">
-<p>Build and Run the Docker Image:</p>
-<p>Run the following command to run the Docker image:</p>
-<div class="language-bash codeBlockContainer_tfll theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_jRSR"><pre tabindex="0" class="prism-code language-bash codeBlock_GwRN thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_Eb4y"><span class="token-line" style="color:#393A34"><span class="token plain">docker-compose -f docker/docker-compose.dev.yaml --env-file .env up</span><br></span></code></pre></div></div>
-</li>
-<li class="">
-<p>To stop the container run the following command:</p>
-<div class="language-bash codeBlockContainer_tfll theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_jRSR"><pre tabindex="0" class="prism-code language-bash codeBlock_GwRN thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_Eb4y"><span class="token-line" style="color:#393A34"><span class="token plain">docker-compose -f docker/docker-compose.dev.yaml down</span><br></span></code></pre></div></div>
-</li>
-</ol>
-<p>The application will be accessible at <code>http://localhost:4321</code></p>
-<h4 class="anchor anchorTargetStickyNavbar_g03t" id="production-setup">Production Setup<a href="#production-setup" class="hash-link" aria-label="Direct link to Production Setup" title="Direct link to Production Setup" translate="no">​</a></h4>
-<p>If you prefer to use Docker, you can install the app using the following command:</p>
-<ol>
-<li class="">
-<p>Create a <code>.env</code> file as described in the Configuration section</p>
-</li>
-<li class="">
-<p>Configure <code>nginx.conf</code> file located at <code>config/docker/setup</code>. Modify it to fit your preferences before running the application.</p>
-</li>
-<li class="">
-<p>Build and Run the Docker Image:</p>
-<p>Run the following command to run the Docker image:</p>
-<div class="language-bash codeBlockContainer_tfll theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_jRSR"><pre tabindex="0" class="prism-code language-bash codeBlock_GwRN thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_Eb4y"><span class="token-line" style="color:#393A34"><span class="token plain">docker-compose -f docker/docker-compose.prod.yaml --env-file .env up</span><br></span></code></pre></div></div>
-</li>
-<li class="">
-<p>To stop the container run the following command:</p>
-<div class="language-bash codeBlockContainer_tfll theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_jRSR"><pre tabindex="0" class="prism-code language-bash codeBlock_GwRN thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_Eb4y"><span class="token-line" style="color:#393A34"><span class="token plain">docker-compose -f docker/docker-compose.prod.yaml down</span><br></span></code></pre></div></div>
-</li>
-</ol>
-<p>The application will be accessible at <code>http://localhost:4321</code></p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_t3wW"><a href="https://github.com/PalisadoesFoundation/talawa-admin/edit/develop/docs/docs/docs/getting-started/installation.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_K08S" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_koZS"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Introduction</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/configuration"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Configuration</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_K1hx thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#prerequisites" class="table-of-contents__link toc-highlight">Prerequisites</a><ul><li><a href="#install-git" class="table-of-contents__link toc-highlight">Install git</a></li><li><a href="#setting-up-this-repository" class="table-of-contents__link toc-highlight">Setting up this repository</a></li><li><a href="#install-nodejs" class="table-of-contents__link toc-highlight">Install node.js</a></li><li><a href="#install-typescript" class="table-of-contents__link toc-highlight">Install TypeScript</a></li><li><a href="#install-required-packages" class="table-of-contents__link toc-highlight">Install Required Packages</a></li></ul></li><li><a href="#installation-using-docker" class="table-of-contents__link toc-highlight">Installation using Docker</a><ul><li><a href="#prerequisites-1" class="table-of-contents__link toc-highlight">Prerequisites</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/PalisadoesFoundation" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__slack">Slack</a></li><li class="footer__item"><a href="https://www.palisadoes.org/news/" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__news">News</a></li><li class="footer__item"><a href="https://www.palisadoes.org/contact/" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__contact">Contact Us</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Social Media</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://twitter.com/palisadoesorg?lang=en" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__twitter"> Twitter</a></li><li class="footer__item"><a href="https://www.facebook.com/palisadoesproject/" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__facebook"> Facebook</a></li><li class="footer__item"><a href="https://www.instagram.com/palisadoes/?hl=en" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__instagram"> Instagram</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Development</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/PalisadoesFoundation" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__github"> GitHub</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 The Palisadoes Foundation, LLC. Built with Docusaurus.</div></div></div></footer></div>
+<li class="">Please go to the <a class="" href="/docs/operation">Operation Page</a> to get Talawa-Admin started</li>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_t3wW"><a href="https://github.com/PalisadoesFoundation/talawa-admin/edit/develop/docs/docs/docs/getting-started/installation.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_K08S" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_koZS"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Introduction</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/configuration"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Configuration</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_K1hx thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#prerequisites" class="table-of-contents__link toc-highlight">Prerequisites</a><ul><li><a href="#install-git" class="table-of-contents__link toc-highlight">Install git</a></li><li><a href="#setting-up-this-repository" class="table-of-contents__link toc-highlight">Setting up this repository</a></li><li><a href="#install-nodejs" class="table-of-contents__link toc-highlight">Install node.js</a></li><li><a href="#install-pnpm" class="table-of-contents__link toc-highlight">Install pnpm</a></li><li><a href="#install-typescript" class="table-of-contents__link toc-highlight">Install TypeScript</a></li><li><a href="#install-the-required-packages" class="table-of-contents__link toc-highlight">Install The Required Packages</a></li></ul></li><li><a href="#running-talawa-admin" class="table-of-contents__link toc-highlight">Running Talawa Admin</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/PalisadoesFoundation" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__slack">Slack</a></li><li class="footer__item"><a href="https://www.palisadoes.org/news/" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__news">News</a></li><li class="footer__item"><a href="https://www.palisadoes.org/contact/" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__contact">Contact Us</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Social Media</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://twitter.com/palisadoesorg?lang=en" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__twitter"> Twitter</a></li><li class="footer__item"><a href="https://www.facebook.com/palisadoesproject/" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__facebook"> Facebook</a></li><li class="footer__item"><a href="https://www.instagram.com/palisadoes/?hl=en" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__instagram"> Instagram</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Development</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/PalisadoesFoundation" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__github"> GitHub</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2025 The Palisadoes Foundation, LLC. Built with Docusaurus.</div></div></div></footer></div>
 </body>
 </html>
