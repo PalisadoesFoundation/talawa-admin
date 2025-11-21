@@ -71,12 +71,11 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
 
   // Extract time from startAt/endAt if needed (assuming ISO format like "2025-04-01T10:00:00Z")
   const formatTimeFromDateTime = (dateTime: string): string => {
-    if (!dateTime) return '08:00';
+    if (!dateTime) return '08:00'; // Or t('common:defaultTime')
 
     const date = new Date(dateTime);
-    // Validate the date - Invalid Date objects have NaN time value
     if (isNaN(date.getTime())) {
-      return '08:00';
+      return '08:00'; // Or t('common:defaultTime')
     }
 
     const hours = date.getUTCHours().toString().padStart(2, '0');

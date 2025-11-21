@@ -229,7 +229,10 @@ describe('Testing Event Dashboard Screen', () => {
     const { getByTestId } = renderEventDashboard(mockWithNullDescription);
     await wait();
 
-    expect(getByTestId('event-description')).toHaveTextContent('');
+    const descriptionElement = getByTestId('event-description');
+    expect(descriptionElement).toBeEmptyDOMElement();
+    // or, more explicitly:
+    // expect(descriptionElement.textContent).toBe('');
   });
 
   it('Should display default time "08:00" when date format is invalid', async () => {
@@ -242,6 +245,10 @@ describe('Testing Event Dashboard Screen', () => {
     // After fixing the component, this should show "08:00" instead of "NaN:NaN"
     expect(getByTestId('start-time')).toHaveTextContent('08:00');
     expect(getByTestId('end-time')).toHaveTextContent('08:00');
+
+    // Also verify that invalid dates render "Invalid Date" for date elements
+    expect(getByTestId('start-date')).toHaveTextContent('Invalid Date');
+    expect(getByTestId('end-date')).toHaveTextContent('Invalid Date');
   });
 
   it('Should display N/A for statistics cards', async () => {
