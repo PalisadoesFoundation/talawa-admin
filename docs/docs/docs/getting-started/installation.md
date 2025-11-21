@@ -36,26 +36,34 @@ First you need a local copy of `talawa-admin`. Run the following command in the 
 2. Open a `cmd` (Windows) or `terminal` (Linux or MacOS) session in this folder.
    1. An easy way to do this is to right-click and choose appropriate option based on your OS.
 
-The next steps will depend on whether you are an end user installalling our software, or one of our open source contributors.
+The next steps will depend on whether you are:
 
-#### For Talawa Administrator End Users
+1. an end user installing our software (Production Environments) or 
+2. one of our open source contributors (Development Environments).
 
-Clone the repository to your local computer using this command:
+Please follow them closely.
 
-```bash
-$ git clone https://github.com/PalisadoesFoundation/talawa-admin.git
-```
+#### For Production Environments
 
-Proceed to the next section.
+Follow the steps in this section if you are using Talawa-Admin as an end user.
+
+1. Clone the repository to your local computer using this command:
+
+   ```bash
+   $ git clone https://github.com/PalisadoesFoundation/talawa-admin.git
+   ```
+
+   1. Proceed to the next section.
    
-#### For Our Open Source Contributor Software Developers
+#### For Development Environments
 
-Follow these steps carefully in forking and cloning the `talawa-admin` repository.
+If you are one of our open source software developer contributors then 
+follow these steps carefully in forking and cloning the `talawa-admin` repository.
 
    1. Follow the steps in our [Git Guide for Developers](https://developer.palisadoes.org/docs/git-guide/introduction/quickstart)
    2. As a developer you will be working with our `develop` branch.
-   1. You will    now have a local copy of the code files.
-   1. For more detailed instructions on contributing code, please review the following documents in the root directory of the code:
+   3. You will    now have a local copy of the code files.
+   4. For more detailed instructions on contributing code, please review the following documents in the root directory of the code:
       1. CONTRIBUTING.md
       2. CODE_OF_CONDUCT.md
       3. CODE_STYLE.md
@@ -109,7 +117,9 @@ Proceed to the next section.
 
 The application uses `pnpm` to manage the various `node.js` packages that need to be installed.
 
-Install `pnpm` from the [pnpm website](https://pnpm.io/installation)
+- Install `pnpm` from the [pnpm website](https://pnpm.io/installation)
+
+Proceed to the next section.
 
 ### Install TypeScript
 
@@ -123,6 +133,8 @@ pnpm install -g typescript
 
 This command installs TypeScript globally on your system so that it can be accessed from any project.
 
+Proceed to the next section.
+
 ### Install The Required Packages
 
 Run the following command to install the packages and dependencies required by the app:
@@ -133,67 +145,6 @@ pnpm install
 
 The prerequisites are now installed. The next step will be to get the app up and running.
 
-## Installation using Docker
+## Running Talawa Admin
 
-Docker is used to build, deploy, and manage applications within isolated, lightweight containers, effectively packaging an application with all its dependencies so it can run consistently across different environments, allowing for faster development, testing, and deployment of software.
-
-We use it to simplify installation
-
-### Prerequisites
-
-Follow these steps to install Docker on your system:
-
-1. The steps are different for Windows/Mac versus Linux users:
-
-   1. [Docker Desktop for Windows/Mac](https://www.docker.com/products/docker-desktop)
-   2. [Docker Engine for Linux](https://docs.docker.com/engine/install/)
-
-1. You must ensure that docker is running for the Talawa-Admin application to work correctly.
-
-You now need to setup the environment. This follows next.
-
-#### Development Setup
-
-If you prefer to use Docker, you can install the app using the following command:
-
-1. Create a `.env` file as described in the [Configuration Guide](./configuration.md)
-
-2. Build and Run the Docker Image:
-
-   Run the following command to run the Docker image:
-
-   ```bash
-   docker-compose -f docker/docker-compose.dev.yaml --env-file .env up
-   ```
-
-3. To stop the container run the following command:
-
-   ```bash
-   docker-compose -f docker/docker-compose.dev.yaml down
-   ```
-
-The application will be accessible at `http://localhost:4321`
-
-#### Production Setup
-
-If you prefer to use Docker, you can install the app using the following command:
-
-1. Create a `.env` file as described in the [Configuration Guide](./configuration.md)
-
-2. Configure `nginx.conf` file located at `config/docker/setup`. Modify it to fit your preferences before running the application.
-
-3. Build and Run the Docker Image:
-
-   Run the following command to run the Docker image:
-
-   ```bash
-   docker-compose -f docker/docker-compose.prod.yaml --env-file .env up
-   ```
-
-4. To stop the container run the following command:
-
-   ```bash
-   docker-compose -f docker/docker-compose.prod.yaml down
-   ```
-
-The application will be accessible at `http://localhost:4321`
+- Please go to the [Operation Page](./operation.md) to get Talawa-Admin started
