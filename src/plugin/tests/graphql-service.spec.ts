@@ -7,7 +7,12 @@ import {
   useUpdatePlugin,
   useDeletePlugin,
 } from '../graphql-service';
-import { type ApolloClient } from '@apollo/client';
+import {
+  type ApolloClient,
+  useQuery,
+  useMutation,
+  type QueryResult,
+} from '@apollo/client';
 
 // Mock Apollo client
 const mockApolloClient = {
@@ -282,31 +287,238 @@ describe('GraphQL Hooks', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('useGetAllPlugins', () => {
-    it('should be callable without throwing', () => {
+    it('should call useQuery with correct query and return the result', () => {
+      const mockData = {
+        getPlugins: [
+          {
+            id: '1',
+            pluginName: 'Test Plugin',
+            pluginCreatedBy: 'Admin',
+            pluginDesc: 'Test Description',
+            uninstalledOrgs: [],
+          },
+        ],
+      };
+
+      const mockQueryResult = {
+        data: mockData,
+        loading: false,
+        error: undefined,
+        refetch: vi.fn(),
+        fetchMore: vi.fn(),
+        networkStatus: 7,
+        called: true,
+      };
+
+      vi.mocked(useQuery).mockReturnValue(
+        mockQueryResult as unknown as QueryResult,
+      );
+
       const { result } = renderHook(() => useGetAllPlugins());
-      expect(result).toBeDefined();
+
+      expect(vi.mocked(useQuery)).toHaveBeenCalled();
+      expect(result.current.data).toEqual(mockData);
+      expect(result.current.loading).toBe(false);
+      expect(result.current.error).toBeUndefined();
+    });
+
+    it('should handle loading state', () => {
+      const mockQueryResult = {
+        data: undefined,
+        loading: true,
+        error: undefined,
+        refetch: vi.fn(),
+        fetchMore: vi.fn(),
+        networkStatus: 1,
+        called: true,
+      };
+
+      vi.mocked(useQuery).mockReturnValue(
+        mockQueryResult as unknown as QueryResult,
+      );
+
+      const { result } = renderHook(() => useGetAllPlugins());
+
+      expect(result.current.loading).toBe(true);
+      expect(result.current.data).toBeUndefined();
+    });
+
+    it('should handle error state', () => {
+      const mockError = new Error('Failed to fetch plugins');
+      const mockQueryResult = {
+        data: undefined,
+        loading: false,
+        error: mockError,
+        refetch: vi.fn(),
+        fetchMore: vi.fn(),
+        networkStatus: 8,
+        called: true,
+      };
+
+      vi.mocked(useQuery).mockReturnValue(
+        mockQueryResult as unknown as QueryResult,
+      );
+
+      const { result } = renderHook(() => useGetAllPlugins());
+
+      expect(result.current.error).toEqual(mockError);
+      expect(result.current.loading).toBe(false);
     });
   });
 
   describe('useCreatePlugin', () => {
-    it('should be callable without throwing', () => {
+    it('should call useMutation and return mutation function', () => {
+      const mockMutationFn = vi.fn();
+      const mockMutationResult = {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        called: false,
+        reset: vi.fn(),
+      };
+
+      vi.mocked(useMutation).mockReturnValue([
+        mockMutationFn,
+        mockMutationResult,
+      ] as unknown as ReturnType<typeof useMutation>);
+
       const { result } = renderHook(() => useCreatePlugin());
-      expect(result).toBeDefined();
+
+      expect(vi.mocked(useMutation)).toHaveBeenCalled();
+      expect(result.current[0]).toBe(mockMutationFn);
+      expect(result.current[1]).toEqual(mockMutationResult);
+    });
+
+    it('should pass correct variables when mutation function is called', async () => {
+      const mockMutationFn = vi.fn().mockResolvedValue({
+        data: { createPlugin: { id: '1', pluginId: 'plugin-1' } },
+      });
+      const mockMutationResult = {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        called: false,
+        reset: vi.fn(),
+      };
+
+      vi.mocked(useMutation).mockReturnValue([
+        mockMutationFn,
+        mockMutationResult,
+      ] as unknown as ReturnType<typeof useMutation>);
+
+      const { result } = renderHook(() => useCreatePlugin());
+
+      const input = { pluginId: 'plugin-1' };
+      await result.current[0]({ variables: { input } });
+
+      expect(mockMutationFn).toHaveBeenCalledWith({ variables: { input } });
     });
   });
 
   describe('useUpdatePlugin', () => {
-    it('should be callable without throwing', () => {
+    it('should call useMutation and return mutation function', () => {
+      const mockMutationFn = vi.fn();
+      const mockMutationResult = {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        called: false,
+        reset: vi.fn(),
+      };
+
+      vi.mocked(useMutation).mockReturnValue([
+        mockMutationFn,
+        mockMutationResult,
+      ] as unknown as ReturnType<typeof useMutation>);
+
       const { result } = renderHook(() => useUpdatePlugin());
-      expect(result).toBeDefined();
+
+      expect(vi.mocked(useMutation)).toHaveBeenCalled();
+      expect(result.current[0]).toBe(mockMutationFn);
+      expect(result.current[1]).toEqual(mockMutationResult);
+    });
+
+    it('should pass correct variables when mutation function is called', async () => {
+      const mockMutationFn = vi.fn().mockResolvedValue({
+        data: { updatePlugin: { id: '1', pluginName: 'Updated Plugin' } },
+      });
+      const mockMutationResult = {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        called: false,
+        reset: vi.fn(),
+      };
+
+      vi.mocked(useMutation).mockReturnValue([
+        mockMutationFn,
+        mockMutationResult,
+      ] as unknown as ReturnType<typeof useMutation>);
+
+      const { result } = renderHook(() => useUpdatePlugin());
+
+      const input = {
+        id: '1',
+        pluginName: 'Updated Plugin',
+        pluginDesc: 'Updated Description',
+      };
+      await result.current[0]({ variables: { input } });
+
+      expect(mockMutationFn).toHaveBeenCalledWith({ variables: { input } });
     });
   });
 
   describe('useDeletePlugin', () => {
-    it('should be callable without throwing', () => {
+    it('should call useMutation and return mutation function', () => {
+      const mockMutationFn = vi.fn();
+      const mockMutationResult = {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        called: false,
+        reset: vi.fn(),
+      };
+
+      vi.mocked(useMutation).mockReturnValue([
+        mockMutationFn,
+        mockMutationResult,
+      ] as unknown as ReturnType<typeof useMutation>);
+
       const { result } = renderHook(() => useDeletePlugin());
-      expect(result).toBeDefined();
+
+      expect(vi.mocked(useMutation)).toHaveBeenCalled();
+      expect(result.current[0]).toBe(mockMutationFn);
+      expect(result.current[1]).toEqual(mockMutationResult);
+    });
+
+    it('should pass correct variables when mutation function is called', async () => {
+      const mockMutationFn = vi.fn().mockResolvedValue({
+        data: { deletePlugin: { success: true } },
+      });
+      const mockMutationResult = {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        called: false,
+        reset: vi.fn(),
+      };
+
+      vi.mocked(useMutation).mockReturnValue([
+        mockMutationFn,
+        mockMutationResult,
+      ] as unknown as ReturnType<typeof useMutation>);
+
+      const { result } = renderHook(() => useDeletePlugin());
+
+      const input = { id: '1' };
+      await result.current[0]({ variables: { input } });
+
+      expect(mockMutationFn).toHaveBeenCalledWith({ variables: { input } });
     });
   });
 });

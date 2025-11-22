@@ -18,7 +18,7 @@ interface ICreatePostModalProps {
 
 interface IFileMetadataInput {
   fileHash: string;
-  mimetype: string;
+  mimeType: string;
   name: string;
   objectName: string;
 }
@@ -123,7 +123,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
 
         attachment = {
           fileHash,
-          mimetype: getMimeTypeEnum(mediaFile.type),
+          mimeType: getMimeTypeEnum(mediaFile.type),
           name: fileName,
           objectName,
         };
@@ -303,7 +303,6 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
             className={`mb-3 ${styles.inputField}`}
             placeholder={t('postDescription')}
             data-testid="modalinfo"
-            data-cy="modalinfo"
             rows={3}
             value={postformState.postInfo}
             onChange={(e): void => {
