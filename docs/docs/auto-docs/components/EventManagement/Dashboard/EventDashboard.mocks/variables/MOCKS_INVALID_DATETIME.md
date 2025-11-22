@@ -2,11 +2,11 @@
 
 ***
 
-# Variable: MOCK\_EMPTY\_START\_TIME
+# Variable: MOCKS\_INVALID\_DATETIME
 
-> `const` **MOCK\_EMPTY\_START\_TIME**: `object`[]
+> `const` **MOCKS\_INVALID\_DATETIME**: `object`[]
 
-Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:248](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L248)
+Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L128)
 
 ## Type Declaration
 
@@ -72,7 +72,7 @@ Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:24
 
 #### result.data.event.endAt
 
-> **endAt**: `any` = `null`
+> **endAt**: `string` = `'2024-01-02T17:00:00Z'`
 
 #### result.data.event.endTime
 
@@ -100,7 +100,7 @@ Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:24
 
 #### result.data.event.startAt
 
-> **startAt**: `any` = `null`
+> **startAt**: `string` = `'2024-01-01T09:00:00Z'`
 
 #### result.data.event.startTime
 

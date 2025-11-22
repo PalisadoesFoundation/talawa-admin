@@ -2,11 +2,11 @@
 
 ***
 
-# Variable: MOCK\_BOUNDARY\_TIME
+# Variable: MOCKS\_NO\_LOCATION
 
-> `const` **MOCK\_BOUNDARY\_TIME**: `object`[]
+> `const` **MOCKS\_NO\_LOCATION**: `object`[]
 
-Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:215](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L215)
+Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L95)
 
 ## Type Declaration
 
@@ -68,15 +68,15 @@ Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:21
 
 #### result.data.event.description
 
-> **description**: `string` = `'Test Description'`
+> **description**: `string` = `''`
 
 #### result.data.event.endAt
 
-> **endAt**: `string` = `'2024-01-02T23:55:00Z'`
+> **endAt**: `string` = `'2024-01-02T17:00:00Z'`
 
 #### result.data.event.endTime
 
-> **endTime**: `string` = `'23:55:00'`
+> **endTime**: `string` = `'17:00:00'`
 
 #### result.data.event.id
 
@@ -92,7 +92,7 @@ Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:21
 
 #### result.data.event.location
 
-> **location**: `string` = `'India'`
+> **location**: `any` = `null`
 
 #### result.data.event.name
 
@@ -100,8 +100,8 @@ Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:21
 
 #### result.data.event.startAt
 
-> **startAt**: `string` = `'2024-01-01T00:05:00Z'`
+> **startAt**: `string` = `'2024-01-01T09:00:00Z'`
 
 #### result.data.event.startTime
 
-> **startTime**: `string` = `'00:05:00'`
+> **startTime**: `string` = `'09:00:00'`

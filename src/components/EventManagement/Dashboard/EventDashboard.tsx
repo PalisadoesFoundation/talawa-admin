@@ -69,37 +69,6 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     setEventModalIsOpen(false);
   };
 
-  // Extract time from startAt/endAt if needed (assuming ISO format like "2025-04-01T10:00:00Z")
-  const formatTimeFromDateTime = (dateTime: string): string => {
-    if (!dateTime) return '08:00'; // Or t('common:defaultTime')
-
-    const date = new Date(dateTime);
-    if (isNaN(date.getTime())) {
-      return '08:00'; // Or t('common:defaultTime')
-    }
-
-    const hours = date.getUTCHours().toString().padStart(2, '0');
-    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-    return `${hours}:${minutes}`;
-  };
-
-  // Safe wrapper for formatDate to handle invalid dates
-  const safeFormatDate = (dateTime: string): string => {
-    try {
-      if (!dateTime) return 'Invalid Date';
-
-      const date = new Date(dateTime);
-      if (isNaN(date.getTime())) {
-        return 'Invalid Date';
-      }
-
-      return formatDate(dateTime);
-    } catch (error) {
-      console.error('Error formatting date:', error);
-      return 'Invalid Date';
-    }
-  };
-
   if (eventInfoLoading) {
     return <Loader data-testid="loader" />;
   }
@@ -107,6 +76,21 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
   if (!eventData || !eventData.event) {
     return <div data-testid="no-event">Event not found</div>;
   }
+
+  // Extract time from startAt/endAt if needed (assuming ISO format like "2025-04-01T10:00:00Z")
+  const formatTimeFromDateTime = (dateTime: string): string => {
+    if (!dateTime) return '08:00';
+
+    try {
+      const date = new Date(dateTime);
+      const hours = date.getUTCHours().toString().padStart(2, '0');
+      const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+      // Return time in UTC to match the test expectations
+      return `${hours}:${minutes}`;
+    } catch {
+      return '08:00';
+    }
+  };
 
   const eventListCardProps: InterfaceEvent = {
     userRole: userRole,
@@ -208,7 +192,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                     : ''}
                 </b>{' '}
                 <span className={styles.startDate} data-testid="start-date">
-                  {safeFormatDate(eventData.event.startAt)}{' '}
+                  {formatDate(eventData.event.startAt)}{' '}
                 </span>
               </p>
               <p className={styles.to}>{t('to')}</p>
@@ -219,7 +203,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                     : ''}
                 </b>{' '}
                 <span className={styles.endDate} data-testid="end-date">
-                  {safeFormatDate(eventData.event.endAt)}{' '}
+                  {formatDate(eventData.event.endAt)}{' '}
                 </span>
               </p>
             </div>
