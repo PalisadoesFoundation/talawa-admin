@@ -1264,7 +1264,7 @@ describe('ChatRoom Component', () => {
   });
 
   it('sends message with attachment and clears state', async () => {
-    const chatListRefetch = renderChatRoom([
+    const { chatListRefetch } = renderChatRoom([
       CHAT_BY_ID_AFTER_SEND_MOCK,
       SEND_MESSAGE_UPLOADED_MOCK,
     ]);
