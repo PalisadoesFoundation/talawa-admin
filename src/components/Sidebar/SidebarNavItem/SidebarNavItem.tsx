@@ -57,7 +57,39 @@ const SidebarNavItem = ({
         return icon;
       }
 
-      // Clone icon with appropriate styling
+      // Check if it's a React Icon (from react-icons) by checking if it has a displayName or is a function component
+      // React Icons typically don't have SVG-specific props and use 'style' instead
+      const isReactIcon =
+        icon.type &&
+        typeof icon.type === 'function' &&
+        (icon.type.name?.startsWith('Fa') ||
+          icon.type.name?.startsWith('Md') ||
+          icon.type.name?.startsWith('Io') ||
+          icon.type.name?.startsWith('Bs') ||
+          icon.type.name?.startsWith('Ai') ||
+          icon.type.name?.startsWith('Fi') ||
+          icon.type.name?.startsWith('Gi') ||
+          icon.type.name?.startsWith('Hi') ||
+          icon.type.name?.startsWith('Ri') ||
+          icon.type.name?.startsWith('Si') ||
+          icon.type.name?.startsWith('Ti') ||
+          icon.type.name?.startsWith('Tb') ||
+          icon.type.name?.startsWith('Vsc'));
+
+      if (isReactIcon) {
+        // Handle React Icons with style prop
+        return React.cloneElement(
+          icon as React.ReactElement<{ style?: React.CSSProperties }>,
+          {
+            style: {
+              fontSize: 25,
+              color: isActive ? '#000000' : 'var(--bs-secondary)',
+            },
+          },
+        );
+      }
+
+      // Handle SVG icons with fill/stroke props
       return React.cloneElement<React.SVGProps<SVGSVGElement>>(
         icon as React.ReactElement<React.SVGProps<SVGSVGElement>>,
         {
@@ -95,13 +127,7 @@ const SidebarNavItem = ({
           data-testid={testId}
           style={useSimpleButton ? { height: '40px' } : undefined}
         >
-          <div
-            style={
-              useSimpleButton
-                ? { display: 'flex', alignItems: 'center' }
-                : undefined
-            }
-          >
+          <div style={{ display: 'flex', alignItems: 'center' }}>
             <div className={styles.iconWrapper}>{renderIcon(isActive)}</div>
             {!hideDrawer && label}
           </div>
