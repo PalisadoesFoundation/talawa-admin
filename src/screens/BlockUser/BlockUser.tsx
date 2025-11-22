@@ -58,8 +58,6 @@ import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import { useParams } from 'react-router';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
 
 import type {
   InterfaceUserPg,
@@ -68,6 +66,7 @@ import type {
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import PageHeader from 'shared-components/Navbar/Navbar';
 
 const BlockUser = (): JSX.Element => {
   // Translation hooks for internationalization
@@ -243,33 +242,29 @@ const BlockUser = (): JSX.Element => {
       <div>
         <div className={styles.head}>
           <div className={styles.btnsContainer}>
-            <SearchBar
-              placeholder={t('searchByName')}
-              onSearch={handleSearch}
-              inputTestId="searchByName"
-              buttonTestId="searchBtn"
-              data-testid="searchByName"
+            <PageHeader
+              search={{
+                placeholder: t('searchByName'),
+                onSearch: handleSearch,
+                inputTestId: 'searchByName',
+                buttonTestId: 'searchBtn',
+              }}
+              sorting={[
+                {
+                  title: t('sortOrganizations'),
+                  options: [
+                    { label: t('allMembers'), value: 'allMembers' },
+                    { label: t('blockedUsers'), value: 'blockedUsers' },
+                  ],
+                  selected: showBlockedMembers
+                    ? 'Blocked Users'
+                    : 'All Members',
+                  onChange: (value) =>
+                    setShowBlockedMembers(value === 'blockedUsers'),
+                  testIdPrefix: 'sortOrganizations',
+                },
+              ]}
             />
-            <div
-              className={styles.btnsBlock}
-              data-testid="userFilterDropdownToggle"
-            >
-              <SortingButton
-                title={t('sortOrganizations')}
-                sortingOptions={[
-                  { label: t('allMembers'), value: 'allMembers' },
-                  { label: t('blockedUsers'), value: 'blockedUsers' },
-                ]}
-                selectedOption={
-                  showBlockedMembers ? t('blockedUsers') : t('allMembers')
-                }
-                onSortChange={(value) =>
-                  setShowBlockedMembers(value === 'blockedUsers')
-                }
-                dataTestIdPrefix="userFilter"
-                className={`${styles.createButton} mt-2`}
-              />
-            </div>
           </div>
         </div>
         <div className={styles.listBox}>

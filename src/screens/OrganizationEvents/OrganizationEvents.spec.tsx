@@ -529,8 +529,8 @@ describe('Organisation Events Page', () => {
 
     const viewTypeDropdown = screen.getByTestId('selectViewType');
     await userEvent.click(viewTypeDropdown);
-
-    const dayOption = await screen.findByText('Select Day');
+    // Find and click the "Day" option in the dropdown
+    const dayOption = await screen.findByText('Day');
     await userEvent.click(dayOption);
 
     await waitFor(() => {

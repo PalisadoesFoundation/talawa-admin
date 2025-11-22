@@ -73,7 +73,7 @@ function eventHeader({
               { label: 'Select Year', value: ViewType.YEAR },
             ]}
             selectedOption={viewType}
-            onSortChange={handleChangeView}
+            onSortChange={(value) => handleChangeView(value as ViewType)}
             dataTestIdPrefix="selectViewType"
             className={styles.dropdown}
           />
