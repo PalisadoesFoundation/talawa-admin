@@ -21,7 +21,6 @@ import {
   MOCKS_INVALID_DATE,
   MOCK_EMPTY_START_TIME,
   MOCK_BOUNDARY_TIME,
-  MOCK_EMPTY_DATES,
 } from './EventDashboard.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import {
@@ -271,15 +270,15 @@ describe('Testing Event Dashboard Screen', () => {
     expect(getByTestId('end-date')).toHaveTextContent('Invalid Date');
   });
 
-  it('Should display N/A for statistics cards', async () => {
+  it('Should display N/A for statistics and registrants', async () => {
     const { getByTestId } = renderEventDashboard(mockWithTime);
     await wait();
 
     expect(getByTestId('registrations-count')).toHaveTextContent('N/A');
     expect(getByTestId('attendees-count')).toHaveTextContent('N/A');
     expect(getByTestId('feedback-rating')).toHaveTextContent('N/A');
+    expect(getByTestId('event-registrants')).toHaveTextContent('N/A');
   });
-
   it('Should handle empty startAt and return default time', async () => {
     const { getByTestId } = renderEventDashboard(mockWithTime);
     await wait();
@@ -428,7 +427,7 @@ describe('Testing Event Dashboard Screen', () => {
   });
 
   it('Should handle safeFormatDate with empty dateTime', async () => {
-    const mockEmptyDates = new StaticMockLink(MOCK_EMPTY_DATES, true);
+    const mockEmptyDates = new StaticMockLink(MOCK_EMPTY_START_TIME, true);
     const { getByTestId } = renderEventDashboard(mockEmptyDates);
     await wait();
 

@@ -277,36 +277,3 @@ export const MOCK_EMPTY_START_TIME = [
     },
   },
 ];
-
-export const MOCK_EMPTY_DATES = [
-  {
-    request: {
-      query: EVENT_DETAILS,
-      variables: { eventId: 'event123' },
-    },
-    result: {
-      data: {
-        event: {
-          _id: 'event123',
-          id: 'event123',
-          name: 'Test Event',
-          description: 'Test Description',
-          startAt: null,
-          endAt: null,
-          startTime: null,
-          endTime: null,
-          allDay: false,
-          location: 'India',
-          isPublic: true,
-          isRegisterable: true,
-          attendees: [],
-          creator: {
-            _id: 'creator1',
-            firstName: 'John',
-            lastName: 'Doe',
-          },
-        },
-      },
-    },
-  },
-];
