@@ -22,13 +22,15 @@ import { toast } from 'react-toastify';
 import ItemDeleteModal, {
   type IItemDeleteModalProps,
 } from './ActionItemDeleteModal';
-import { vi } from 'vitest';
+import { vi, afterEach, beforeEach } from 'vitest';
+
+const toastMocks = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+}));
 
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: toastMocks,
 }));
 
 let successLink: StaticMockLink;
@@ -63,6 +65,7 @@ describe('Testing ItemDeleteModal', () => {
 
   beforeEach(() => {
     // Create fresh mocks for each test
+    vi.clearAllMocks();
     testItemProps = {
       isOpen: true,
       hide: vi.fn(),
@@ -108,6 +111,10 @@ describe('Testing ItemDeleteModal', () => {
 
     successLink = new StaticMockLink(MOCKS);
     errorLink = new StaticMockLink(MOCKS_ERROR);
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
   it('should render ItemDeleteModal', () => {

@@ -27,17 +27,22 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi } from 'vitest';
+import { vi, beforeEach, afterEach } from 'vitest';
 import { toast } from 'react-toastify';
 
 const { setItem } = useLocalStorage();
 
-vi.mock('react-toastify', () => ({
-  toast: {
+const { mockToast, mockUseParams } = vi.hoisted(() => ({
+  mockToast: {
     error: vi.fn(),
     info: vi.fn(),
     success: vi.fn(),
   },
+  mockUseParams: vi.fn(),
+}));
+
+vi.mock('react-toastify', () => ({
+  toast: mockToast,
 }));
 
 vi.mock('@mui/x-date-pickers/DatePicker', async () => {
@@ -62,7 +67,7 @@ vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,
-    useParams: () => ({ orgId: 'org123' }),
+    useParams: mockUseParams,
   };
 });
 
@@ -359,9 +364,29 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   beforeEach(() => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: vi.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    });
     setItem('id', 'user123');
     setItem('role', 'administrator');
-    vi.clearAllMocks();
+    mockUseParams.mockReturnValue({ orgId: 'org123' });
+    mockToast.error.mockClear();
+    mockToast.info.mockClear();
+    mockToast.success.mockClear();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('Should render the Events screen properly', async () => {

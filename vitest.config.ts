@@ -50,6 +50,7 @@ export default defineConfig({
         'dist',
         'docs/**',
         '**/*.{spec,test}.{js,jsx,ts,tsx}',
+        '**/*.{mocks,mock}.{js,jsx,ts,tsx}', // Exclude mock/fixture files from coverage
         'coverage/**',
         '**/index.{js,ts}',
         '**/*.d.ts',

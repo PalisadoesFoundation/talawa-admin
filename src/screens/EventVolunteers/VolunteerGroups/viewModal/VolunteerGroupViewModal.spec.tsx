@@ -113,6 +113,14 @@ const renderGroupViewModal = (
 };
 
 describe('Testing VolunteerGroupViewModal', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('Render VolunteerGroupViewModal (variation 1)', async () => {
     renderGroupViewModal(itemProps[0]);
     expect(screen.getByText(t.groupDetails)).toBeInTheDocument();

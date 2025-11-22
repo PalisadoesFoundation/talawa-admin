@@ -33,7 +33,7 @@ export const MOCKS = [
       query: GET_ORGANIZATION_POSTS_COUNT_PG,
       variables: { id: 'orgId' },
     },
-    maxUsageCount: 2,
+    maxUsageCount: 5,
     result: {
       data: {
         organization: { id: 'orgId', postsCount: 10 },
@@ -48,6 +48,7 @@ export const MOCKS = [
       query: GET_ORGANIZATION_EVENTS_PG,
       variables: { id: 'orgId', first: 8, after: null },
     },
+    maxUsageCount: 5,
     result: {
       data: {
         organization: {
@@ -65,16 +66,27 @@ export const MOCKS = [
                   location: 'Test Location',
                   isPublic: true,
                   isRegisterable: true,
-                  isMaterialized: true,
-                  isRecurringTemplate: false,
-                  recurringEventId: null,
-                  instanceStartTime: null,
-                  baseEventId: null,
+                  isRecurringEventTemplate: false,
+                  baseEvent: null,
                   sequenceNumber: null,
                   totalCount: 1,
                   hasExceptions: false,
                   progressLabel: null,
-                  attachments: [],
+                  recurrenceDescription: null,
+                  recurrenceRule: {
+                    id: 'recRule1',
+                    frequency: 'DAILY',
+                    interval: 1,
+                    recurrenceStartDate: '2025-10-29',
+                    recurrenceEndDate: null,
+                    count: null,
+                    byDay: null,
+                    byMonth: null,
+                    byMonthDay: null,
+                  },
+                  attachments: [
+                    { url: 'https://example.com', mimeType: 'pdf' },
+                  ],
                   creator: { id: 'creator1', name: 'John Doe' },
                   organization: { id: 'orgId', name: 'Test Organization' },
                   createdAt: '2025-10-28T00:00:00.000Z',
@@ -96,6 +108,7 @@ export const MOCKS = [
       query: GET_ORGANIZATION_POSTS_PG,
       variables: { id: 'orgId', first: 5 },
     },
+    maxUsageCount: 5,
     result: {
       data: {
         organization: {
@@ -123,7 +136,7 @@ export const MOCKS = [
       query: GET_ORGANIZATION_VENUES_COUNT,
       variables: { id: 'orgId' },
     },
-    maxUsageCount: 2,
+    maxUsageCount: 5,
     result: {
       data: {
         organization: {
@@ -144,7 +157,7 @@ export const MOCKS = [
         firstName_contains: '',
       },
     },
-    maxUsageCount: 2,
+    maxUsageCount: 5,
     result: {
       data: {
         organization: {
@@ -184,7 +197,7 @@ export const MOCKS = [
       query: GET_ORGANIZATION_BLOCKED_USERS_COUNT,
       variables: { id: 'orgId' },
     },
-    maxUsageCount: 2,
+    maxUsageCount: 5,
     result: {
       data: {
         organization: {
@@ -203,6 +216,7 @@ export const EMPTY_MOCKS = [
       query: GET_ORGANIZATION_POSTS_COUNT_PG,
       variables: { id: 'orgId' },
     },
+    maxUsageCount: 5,
     result: {
       data: {
         organization: { id: 'orgId', postsCount: 0 },
@@ -215,6 +229,7 @@ export const EMPTY_MOCKS = [
       query: GET_ORGANIZATION_EVENTS_PG,
       variables: { id: 'orgId', first: 8, after: null },
     },
+    maxUsageCount: 5,
     result: {
       data: {
         organization: {
@@ -265,6 +280,7 @@ export const EMPTY_MOCKS = [
       query: ORGANIZATION_MEMBER_ADMIN_COUNT,
       variables: { id: 'orgId' },
     },
+    maxUsageCount: 3,
     result: {
       data: {
         organization: {
@@ -281,6 +297,7 @@ export const EMPTY_MOCKS = [
       query: GET_ORGANIZATION_BLOCKED_USERS_COUNT,
       variables: { id: 'orgId' },
     },
+    maxUsageCount: 3,
     result: {
       data: {
         organization: {
@@ -296,6 +313,7 @@ export const EMPTY_MOCKS = [
       query: GET_ORGANIZATION_VENUES_COUNT,
       variables: { id: 'orgId' },
     },
+    maxUsageCount: 5,
     result: {
       data: {
         organization: {
@@ -318,6 +336,7 @@ export const MIXED_REQUESTS_MOCK = [
         firstName_contains: '',
       },
     },
+    maxUsageCount: 3,
     result: {
       data: {
         organization: {

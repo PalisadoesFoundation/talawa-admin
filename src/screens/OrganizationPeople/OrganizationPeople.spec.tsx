@@ -6,7 +6,7 @@ import { MemoryRouter, Routes, Route } from 'react-router';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { vi } from 'vitest';
+import { vi, afterEach } from 'vitest';
 import OrganizationPeople from './OrganizationPeople';
 import i18nForTest from 'utils/i18nForTest';
 import {
@@ -17,13 +17,17 @@ import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import { toast } from 'react-toastify';
 
-// Mock the required modules
-vi.mock('react-toastify', () => ({
+const sharedMocks = vi.hoisted(() => ({
   toast: {
     error: vi.fn(),
     info: vi.fn(),
     success: vi.fn(),
   },
+}));
+
+// Mock the required modules
+vi.mock('react-toastify', () => ({
+  toast: sharedMocks.toast,
 }));
 
 vi.mock('./addMember/AddMember', () => ({
@@ -73,6 +77,7 @@ type MemberEdge = {
     emailAddress: string;
     avatarURL: string | null;
     createdAt: string;
+    role?: string;
   };
   cursor: string;
 };
@@ -102,6 +107,7 @@ const createMemberConnectionMock = (
               emailAddress: 'john@example.com',
               avatarURL: 'https://example.com/avatar1.jpg',
               createdAt: '2023-01-01T00:00:00Z',
+              role: 'member',
             },
             cursor: 'cursor1',
           },
@@ -112,6 +118,7 @@ const createMemberConnectionMock = (
               emailAddress: 'jane@example.com',
               avatarURL: null,
               createdAt: '2023-01-02T00:00:00Z',
+              role: 'member',
             },
             cursor: 'cursor2',
           },
@@ -127,8 +134,19 @@ const createMemberConnectionMock = (
   };
 
   const data = { ...defaultData };
+  const withRole = (edge: MemberEdge): MemberEdge => ({
+    ...edge,
+    node: {
+      ...edge.node,
+      role: edge.node.role ?? 'member',
+    },
+  });
+
+  data.organization.members.edges =
+    data.organization.members.edges.map(withRole);
+
   if (overrides.edges) {
-    data.organization.members.edges = overrides.edges;
+    data.organization.members.edges = overrides.edges.map(withRole);
   }
   if (overrides.pageInfo) {
     data.organization.members.pageInfo = {
@@ -163,6 +181,7 @@ type UserEdge = {
     emailAddress: string;
     avatarURL: string | null;
     createdAt: string;
+    role: string;
   };
   cursor: string;
 };
@@ -191,6 +210,7 @@ const createUserListMock = (
             emailAddress: 'user1@example.com',
             avatarURL: 'https://example.com/avatar1.jpg' as string | null,
             createdAt: '2023-01-01T00:00:00Z',
+            role: 'member',
           },
           cursor: 'userCursor1',
         },
@@ -201,6 +221,7 @@ const createUserListMock = (
             emailAddress: 'user2@example.com',
             avatarURL: null as string | null,
             createdAt: '2023-01-02T00:00:00Z',
+            role: 'member',
           },
           cursor: 'userCursor2',
         },
@@ -215,8 +236,18 @@ const createUserListMock = (
   };
 
   const data = { ...defaultData };
+  const withRole = (edge: UserEdge): UserEdge => ({
+    ...edge,
+    node: {
+      ...edge.node,
+      role: edge.node.role ?? 'member',
+    },
+  });
+
+  data.allUsers.edges = data.allUsers.edges.map(withRole) as UserEdge[];
+
   if (overrides.edges) {
-    data.allUsers.edges = overrides.edges;
+    data.allUsers.edges = overrides.edges.map(withRole);
   }
   if (overrides.pageInfo) {
     data.allUsers.pageInfo = {
@@ -241,6 +272,10 @@ describe('OrganizationPeople', () => {
   beforeEach(() => {
     setupLocationMock();
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   test('renders loading state initially', async () => {
@@ -400,6 +435,7 @@ describe('OrganizationPeople', () => {
               emailAddress: 'admin@example.com',
               avatarURL: null,
               createdAt: '2023-01-03T00:00:00Z',
+              role: 'administrator',
             },
             cursor: 'adminCursor1',
           },
@@ -593,6 +629,7 @@ describe('OrganizationPeople', () => {
               emailAddress: 'admin@example.com',
               avatarURL: null,
               createdAt: '2023-01-03T00:00:00Z',
+              role: 'administrator',
             },
             cursor: 'adminCursor1',
           },
@@ -624,6 +661,7 @@ describe('OrganizationPeople', () => {
               emailAddress: 'admin2@example.com',
               avatarURL: null,
               createdAt: '2023-01-03T00:00:00Z',
+              role: 'administrator',
             },
             cursor: 'adminCursor2',
           },
@@ -655,6 +693,7 @@ describe('OrganizationPeople', () => {
               emailAddress: 'admin1@example.com',
               avatarURL: null,
               createdAt: '2023-01-03T00:00:00Z',
+              role: 'administrator',
             },
             cursor: 'adminCursor1',
           },
@@ -764,6 +803,7 @@ describe('OrganizationPeople', () => {
               emailAddress: 'bob@example.com',
               avatarURL: null,
               createdAt: '2023-01-03T00:00:00Z',
+              role: 'member',
             },
             cursor: 'cursor3',
           },
@@ -874,6 +914,7 @@ describe('OrganizationPeople', () => {
               emailAddress: 'admin@example.com',
               avatarURL: null,
               createdAt: '2023-01-03T00:00:00Z',
+              role: 'administrator',
             },
             cursor: 'adminCursor1',
           },

@@ -8,7 +8,7 @@ import React, { act } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-import { vi } from 'vitest';
+import { vi, beforeEach, afterEach } from 'vitest';
 import {
   ORGANIZATION_DONATION_CONNECTION_LIST,
   ORGANIZATION_LIST,
@@ -25,9 +25,25 @@ import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 import * as errorHandlerModule from 'utils/errorHandler';
 
+const { mockErrorHandler, mockUseParams, mockToast } = vi.hoisted(() => ({
+  mockErrorHandler: vi.fn(),
+  mockUseParams: vi.fn(),
+  mockToast: {
+    error: vi.fn(),
+    success: vi.fn(),
+  },
+}));
 // Mock the errorHandler module
 vi.mock('utils/errorHandler', () => ({
-  errorHandler: vi.fn(),
+  errorHandler: mockErrorHandler,
+}));
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
+  useParams: mockUseParams,
+}));
+
+vi.mock('react-toastify', () => ({
+  toast: mockToast,
 }));
 
 const MOCKS = [
@@ -144,35 +160,29 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-vi.mock('react-router', async () => ({
-  ...(await vi.importActual('react-router')),
-  useParams: vi.fn(() => ({ orgId: '' })),
-}));
-
-vi.mock('react-toastify', () => ({
-  toast: {
-    error: vi.fn(),
-    success: vi.fn(),
-  },
-}));
-
 describe('Testing Donate Screen [User Portal]', () => {
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: vi.fn().mockImplementation((query) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    })),
+  beforeEach(() => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: vi.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    });
+    mockUseParams.mockReturnValue({ orgId: '' });
+    mockErrorHandler.mockClear();
+    mockToast.error.mockClear();
+    mockToast.success.mockClear();
   });
 
-  beforeEach(() => {
-    vi.clearAllMocks();
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   test('Screen should be rendered properly', async () => {

@@ -1,6 +1,10 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import PinnedPostCard, { InterfacePinnedPostCardProps } from './PinnedPostCard';
+
+afterEach(() => {
+  vi.clearAllMocks();
+});
 
 describe('PinnedPostCard', () => {
   const mockPost: InterfacePinnedPostCardProps['post'] = {

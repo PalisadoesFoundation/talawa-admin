@@ -17,8 +17,13 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import { vi } from 'vitest';
 
+const toastMocks = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+}));
+
 vi.mock('react-toastify', () => ({
-  toast: { success: vi.fn(), error: vi.fn() },
+  toast: toastMocks,
 }));
 
 const link = new StaticMockLink(MOCKS);
@@ -74,6 +79,18 @@ const renderPledgeDeleteModal = (
 };
 
 describe('PledgeDeleteModal', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    (pledgeProps.hide as unknown as ReturnType<typeof vi.fn>).mockClear();
+    (
+      pledgeProps.refetchPledge as unknown as ReturnType<typeof vi.fn>
+    ).mockClear();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should render PledgeDeleteModal', () => {
     renderPledgeDeleteModal(link, pledgeProps);
     expect(screen.getByTestId('deletePledgeCloseBtn')).toBeInTheDocument();

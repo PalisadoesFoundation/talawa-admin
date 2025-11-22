@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import EditUserTagModal, {
   InterfaceEditUserTagModalProps,
 } from './EditUserTagModal';
@@ -40,6 +40,10 @@ describe('EditUserTagModal Component', () => {
   };
 
   beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
     vi.clearAllMocks();
   });
 

@@ -6,9 +6,12 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi, type Mock } from 'vitest';
+import { vi, type Mock, beforeEach, afterEach } from 'vitest';
 import Chat from './Chat';
 import { CHATS_LIST, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
+const { mockUseParams } = vi.hoisted(() => ({
+  mockUseParams: vi.fn(),
+}));
 
 // Mock child components
 vi.mock('components/UserPortal/ContactCard/ContactCard', () => ({
@@ -46,12 +49,11 @@ vi.mock('components/UserPortal/CreateDirectChat/CreateDirectChat', () => ({
 vi.mock('utils/useLocalstorage');
 
 // Mock react-router-dom
-const mockUseParams = vi.fn();
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
   return {
     ...actual,
-    useParams: () => mockUseParams(),
+    useParams: mockUseParams,
   };
 });
 
@@ -211,6 +213,19 @@ describe('Chat Component', () => {
   let setItemMock: Mock;
 
   beforeEach(() => {
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: vi.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    });
     getItemMock = vi.fn();
     setItemMock = vi.fn();
     (useLocalStorage as Mock).mockReturnValue({
@@ -218,7 +233,10 @@ describe('Chat Component', () => {
       setItem: setItemMock,
     });
     mockUseParams.mockReturnValue({}); // Default: no orgId
-    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   const renderComponent = (customMocks = mocks) =>

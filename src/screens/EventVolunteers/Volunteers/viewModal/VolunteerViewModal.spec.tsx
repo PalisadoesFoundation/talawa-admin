@@ -1,6 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
@@ -10,7 +11,7 @@ import { store } from 'state/store';
 import i18n from 'utils/i18nForTest';
 import type { InterfaceVolunteerViewModal } from './VolunteerViewModal';
 import VolunteerViewModal from './VolunteerViewModal';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 
 const t = {
   ...JSON.parse(
@@ -121,7 +122,7 @@ const renderVolunteerViewModal = (
     <MockedProvider>
       <Provider store={store}>
         <BrowserRouter>
-          <LocalizationProvider>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18n}>
               <VolunteerViewModal {...props} />
             </I18nextProvider>
@@ -135,6 +136,10 @@ const renderVolunteerViewModal = (
 describe('Testing VolunteerViewModal', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   describe('Basic Rendering', () => {

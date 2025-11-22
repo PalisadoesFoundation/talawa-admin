@@ -11,8 +11,6 @@ import { MOCKS, MOCKS2, MOCKS3 } from './MemberRequestMocks';
 
 // Optimized mock links - reused for performance
 const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS2, true);
-const link3 = new StaticMockLink(MOCKS3, true);
 
 // Performance-optimized wait function
 async function wait(ms = 100): Promise<void> {

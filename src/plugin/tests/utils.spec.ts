@@ -60,9 +60,9 @@ describe('Plugin Utils', () => {
       const invalidManifest = {
         name: 'Test Plugin',
         // Missing pluginId, version, description, author, main
-      };
+      } as unknown as IPluginManifest;
 
-      expect(validatePluginManifest(invalidManifest as any)).toBe(false);
+      expect(validatePluginManifest(invalidManifest)).toBe(false);
     });
 
     it('should reject manifest with invalid extension points', () => {
@@ -76,17 +76,25 @@ describe('Plugin Utils', () => {
         extensionPoints: {
           routes: 'not-an-array',
           drawer: 'not-an-array',
-        } as any,
+        } as unknown as IPluginManifest['extensionPoints'],
       };
 
       expect(validatePluginManifest(invalidManifest)).toBe(false);
     });
 
     it('should reject non-object input', () => {
-      expect(validatePluginManifest(null as any)).toBe(false);
-      expect(validatePluginManifest(undefined as any)).toBe(false);
-      expect(validatePluginManifest('string' as any)).toBe(false);
-      expect(validatePluginManifest(123 as any)).toBe(false);
+      expect(validatePluginManifest(null as unknown as IPluginManifest)).toBe(
+        false,
+      );
+      expect(
+        validatePluginManifest(undefined as unknown as IPluginManifest),
+      ).toBe(false);
+      expect(
+        validatePluginManifest('string' as unknown as IPluginManifest),
+      ).toBe(false);
+      expect(validatePluginManifest(123 as unknown as IPluginManifest)).toBe(
+        false,
+      );
     });
   });
 
@@ -181,10 +189,10 @@ describe('Plugin Utils', () => {
   });
 
   describe('filterByPermissions', () => {
-    interface TestItem {
+    type TestItem = {
       permissions?: string[];
       isAdmin?: boolean;
-    }
+    };
 
     it('should filter items by admin status', () => {
       const items: TestItem[] = [

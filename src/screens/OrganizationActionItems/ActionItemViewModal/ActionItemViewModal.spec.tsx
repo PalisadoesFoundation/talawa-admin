@@ -16,13 +16,15 @@ import type { IActionItemInfo } from 'types/ActionItems/interface';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
-import { vi, it } from 'vitest';
+import { vi, it, describe, beforeEach, afterEach } from 'vitest';
+
+const toastMocks = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+}));
 
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: toastMocks,
 }));
 
 const t = JSON.parse(
@@ -47,12 +49,17 @@ const mockCategory = {
   updatedAt: '2024-01-01T00:00:00.000Z',
 };
 
+const baseTimestamp = '2024-01-01T00:00:00.000Z';
+
 const mockMembers = [
   {
     id: 'userId1',
     name: 'John Doe',
-    emailAddress: 'john@example.com', // Fixed: changed from emailAddress to emailAddress
+    emailAddress: 'john@example.com',
+    role: 'MEMBER',
     avatarURL: 'https://example.com/avatar1.jpg',
+    createdAt: baseTimestamp,
+    updatedAt: baseTimestamp,
   },
   {
     id: 'userId2',
@@ -60,8 +67,8 @@ const mockMembers = [
     emailAddress: 'jane@example.com',
     role: 'ADMIN',
     avatarURL: null,
-    createdAt: new Date('2024-01-01T00:00:00.000Z'),
-    updatedAt: new Date('2024-01-01T00:00:00.000Z'),
+    createdAt: baseTimestamp,
+    updatedAt: baseTimestamp,
     firstName: 'Jane',
     lastName: 'Smith',
   },
@@ -73,8 +80,8 @@ const mockMembers = [
     emailAddress: 'bob@example.com',
     role: 'REGULAR',
     avatarURL: null,
-    createdAt: new Date('2024-01-01T00:00:00.000Z'),
-    updatedAt: new Date('2024-01-01T00:00:00.000Z'),
+    createdAt: baseTimestamp,
+    updatedAt: baseTimestamp,
   },
 ];
 
@@ -198,11 +205,15 @@ const renderItemViewModal = (
 };
 
 describe('Testing ItemViewModal', () => {
-  const mockHide = vi.fn();
-
   beforeEach(() => {
     vi.clearAllMocks();
   });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  const mockHide = vi.fn();
 
   describe('Modal Rendering and Basic Functionality', () => {
     it('should render modal when isOpen is true', () => {

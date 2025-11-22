@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -8,8 +8,8 @@ import styles from 'style/app-fixed.module.css';
 describe('SidebarToggle', () => {
   const mockSetHideDrawer = vi.fn();
 
-  // Reset mock function before each test
-  beforeEach(() => {
+  // Reset mock function after each test
+  afterEach(() => {
     mockSetHideDrawer.mockClear();
   });
 

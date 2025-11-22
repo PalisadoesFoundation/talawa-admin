@@ -18,11 +18,28 @@ import { vi } from 'vitest';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import styles from 'style/app-fixed.module.css';
 
+const mockParamsState = {
+  orgId: 'orgId',
+  fundCampaignId: 'fundCampaignId',
+};
+
+const { toastMocks, routerMocks } = vi.hoisted(() => {
+  const navigate = vi.fn();
+  const useParams = vi.fn(() => ({ ...mockParamsState }));
+  return {
+    toastMocks: {
+      success: vi.fn(),
+      error: vi.fn(),
+    },
+    routerMocks: {
+      useParams,
+      navigate,
+    },
+  };
+});
+
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: toastMocks,
 }));
 vi.mock('@mui/x-date-pickers/DateTimePicker', () => {
   return {
@@ -217,10 +234,15 @@ const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
 );
 
-const mockParamsState = {
-  orgId: 'orgId',
-  fundCampaignId: 'fundCampaignId',
-};
+vi.mock('react-router', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-router')>('react-router');
+  return {
+    ...actual,
+    useParams: routerMocks.useParams,
+    useNavigate: () => routerMocks.navigate,
+  };
+});
 
 const renderFundCampaignPledge = (link: ApolloLink): RenderResult => {
   return render(
@@ -250,24 +272,16 @@ const renderFundCampaignPledge = (link: ApolloLink): RenderResult => {
 };
 
 describe('Testing Campaign Pledge Screen', () => {
-  const mockNavigate = vi.fn();
-
-  vi.mock('react-router', async () => {
-    const actual = await vi.importActual('react-router');
-    return {
-      ...actual,
-      useParams: () => ({ ...mockParamsState }),
-      useNavigate: () => mockNavigate,
-    };
-  });
-
   beforeEach(() => {
+    vi.clearAllMocks();
     mockParamsState.orgId = 'orgId';
     mockParamsState.fundCampaignId = 'fundCampaignId';
+    routerMocks.navigate.mockReset();
+    routerMocks.useParams.mockImplementation(() => ({ ...mockParamsState }));
   });
 
-  afterAll(() => {
-    vi.clearAllMocks();
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {

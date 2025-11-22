@@ -2,6 +2,7 @@ import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
@@ -24,8 +25,13 @@ import { DELETE_VOLUNTEER_FOR_INSTANCE } from 'GraphQl/Mutations/EventVolunteerM
  * without triggering actual toast notifications.
  */
 
+const toastMocks = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+}));
+
 vi.mock('react-toastify', () => ({
-  toast: { success: vi.fn(), error: vi.fn() },
+  toast: toastMocks,
 }));
 
 const link1 = new StaticMockLink(MOCKS);
@@ -97,6 +103,7 @@ let recurringItemPropsHide: ReturnType<typeof vi.fn>;
 let recurringItemPropsRefetch: ReturnType<typeof vi.fn>;
 
 beforeEach(() => {
+  vi.clearAllMocks();
   recurringItemPropsHide = vi.fn();
   recurringItemPropsRefetch = vi.fn();
   recurringItemProps = {
@@ -110,6 +117,10 @@ beforeEach(() => {
       ...itemProps[0].volunteer,
     },
   };
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 const mockDeleteForInstance = [
@@ -142,7 +153,7 @@ const renderVolunteerDeleteModal = (
     <MockedProvider link={link} addTypename={false}>
       <Provider store={store}>
         <BrowserRouter>
-          <LocalizationProvider>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18n}>
               <VolunteerDeleteModal {...props} />
             </I18nextProvider>

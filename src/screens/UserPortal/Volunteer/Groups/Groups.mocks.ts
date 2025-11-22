@@ -129,6 +129,7 @@ const membership1 = {
   group: {
     id: 'groupId',
     name: 'Group 1',
+    description: 'Group 1 description',
   },
   createdBy: {
     id: 'adminId',
@@ -166,6 +167,7 @@ const membership2 = {
   group: {
     id: 'groupId',
     name: 'Group 2',
+    description: 'Group 2 description',
   },
   createdBy: {
     id: 'adminId',

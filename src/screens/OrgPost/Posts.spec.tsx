@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import PostsRenderer from './Posts';
 import { ApolloError } from '@apollo/client';
 import type {
@@ -59,6 +59,10 @@ vi.mock('./PinnedPostsStory', () => ({
 }));
 
 describe('PostsRenderer', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   const mockPost: InterfacePost = {
     id: 'post-1',
     caption: 'Test Post',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, expect, beforeAll, vi, it } from 'vitest';
+import { describe, expect, vi, it, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -13,13 +13,21 @@ import { toast } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalstorage';
 import { MOCKS1, MOCKS2 } from './SettingsMocks';
 
-vi.mock('react-toastify', () => ({
+const sharedMocks = vi.hoisted(() => ({
   toast: { success: vi.fn(), warn: vi.fn(), error: vi.fn() },
+  errorHandler: vi.fn(),
+  urlToFile: vi.fn(),
 }));
 
-vi.mock('utils/errorHandler', () => ({ errorHandler: vi.fn() }));
+vi.mock('react-toastify', () => ({
+  toast: sharedMocks.toast,
+}));
 
-vi.mock('utils/urlToFile', () => ({ urlToFile: vi.fn() }));
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: sharedMocks.errorHandler,
+}));
+
+vi.mock('utils/urlToFile', () => ({ urlToFile: sharedMocks.urlToFile }));
 
 const link = new StaticMockLink(MOCKS1, true);
 const link1 = new StaticMockLink(MOCKS1, true);
@@ -36,8 +44,11 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+const originalMatchMedia = window.matchMedia;
+
 describe('Testing Settings Screen [User Portal]', () => {
-  beforeAll(() => {
+  beforeEach(() => {
+    localStorage.clear();
     const { setItem } = useLocalStorage();
     setItem('name', 'John Doe');
     vi.useFakeTimers();
@@ -51,6 +62,15 @@ describe('Testing Settings Screen [User Portal]', () => {
         removeEventListener: vi.fn(),
         dispatchEvent: vi.fn(),
       })),
+    });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.useRealTimers();
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: originalMatchMedia,
     });
   });
 

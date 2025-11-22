@@ -25,8 +25,13 @@ import { DELETE_VOLUNTEER_GROUP_FOR_INSTANCE } from 'GraphQl/Mutations/EventVolu
  * without triggering actual toast notifications.
  */
 
+const toastMocks = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+}));
+
 vi.mock('react-toastify', () => ({
-  toast: { success: vi.fn(), error: vi.fn() },
+  toast: toastMocks,
 }));
 
 const link1 = new StaticMockLink(MOCKS);
@@ -103,6 +108,14 @@ const renderGroupDeleteModal = (
 };
 
 describe('Testing Group Delete Modal', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('Delete Group', async () => {
     renderGroupDeleteModal(link1, itemProps[0]);
     expect(screen.getByText(t.deleteGroup)).toBeInTheDocument();

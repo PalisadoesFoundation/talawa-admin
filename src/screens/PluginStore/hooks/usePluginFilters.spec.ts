@@ -1,7 +1,6 @@
-import { renderHook, act, waitFor } from '@testing-library/react';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { renderHook, act } from '@testing-library/react';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { usePluginFilters } from './usePluginFilters';
-import type { IPluginMeta } from 'plugin';
 
 // Mock the useTranslation hook
 const mockT = vi.fn((key: string) => key);
@@ -48,7 +47,6 @@ vi.mock('plugin/hooks', () => ({
 }));
 
 // Mock the useDebounce hook
-const mockDebouncedCallback = vi.fn();
 vi.mock('components/OrgListCard/useDebounce', () => ({
   default: vi.fn((callback) => ({
     debouncedCallback: (value: string) => {
@@ -85,6 +83,10 @@ describe('usePluginFilters', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockT.mockImplementation((key: string) => key);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   describe('Initialization', () => {
@@ -662,8 +664,10 @@ describe('usePluginFilters', () => {
         usePluginFilters({ pluginData: mockPluginData }),
       );
 
-      expect(result.current.isInstalled(null as any)).toBe(false);
-      expect(result.current.isInstalled(undefined as any)).toBe(false);
+      expect(result.current.isInstalled(null as unknown as string)).toBe(false);
+      expect(result.current.isInstalled(undefined as unknown as string)).toBe(
+        false,
+      );
       expect(result.current.isInstalled('')).toBe(false);
     });
 
@@ -672,9 +676,11 @@ describe('usePluginFilters', () => {
         usePluginFilters({ pluginData: mockPluginData }),
       );
 
-      expect(result.current.getInstalledPlugin(null as any)).toBeUndefined();
       expect(
-        result.current.getInstalledPlugin(undefined as any),
+        result.current.getInstalledPlugin(null as unknown as string),
+      ).toBeUndefined();
+      expect(
+        result.current.getInstalledPlugin(undefined as unknown as string),
       ).toBeUndefined();
       expect(result.current.getInstalledPlugin('')).toBeUndefined();
     });
