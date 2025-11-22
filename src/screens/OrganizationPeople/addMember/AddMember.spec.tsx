@@ -966,6 +966,61 @@ describe('AddMember Component', () => {
     });
   });
 
+  test('handles error when adding member to organization fails', async () => {
+    const orgId = 'org123';
+
+    // 1. Mock the user list query (SUCCESS)
+    const userListMock = createUserListMock({
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+
+    // 2. Mock the add member mutation (ERROR)
+    const addMemberErrorMock = {
+      request: {
+        query: CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
+        variables: {
+          memberId: 'user1', // Corresponds to the first user in defaultData of createUserListMock
+          organizationId: orgId,
+          role: 'regular',
+        },
+      },
+      error: new Error('Failed to add member'),
+    };
+
+    const mocks = [
+      createOrganizationsMock(orgId),
+      userListMock,
+      addMemberErrorMock,
+    ];
+
+    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+
+    // Open the add member modal
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    // Select existing user option
+    const existingUserOption = screen.getByText('Existing User');
+    fireEvent.click(existingUserOption);
+
+    // Wait for users to load
+    await waitFor(async () => {
+      const users = await screen.findAllByTestId('user');
+      expect(users.length).toBeGreaterThan(0);
+    });
+
+    // Click add button for the first user (user1)
+    const addButtons = await screen.findAllByTestId('addBtn');
+    fireEvent.click(addButtons[0]);
+
+    // Wait for error toast to be called
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+  });
   test('handles error when creating new user fails', async () => {
     const orgId = 'org123';
 
