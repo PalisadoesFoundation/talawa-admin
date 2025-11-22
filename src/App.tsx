@@ -7,7 +7,11 @@ import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/Secur
 import OrganizaitionFundCampiagn from 'screens/OrganizationFundCampaign/OrganizationFundCampagins';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import LoginPage from 'screens/LoginPage/LoginPage';
-import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
+import {
+  usePluginRoutes,
+  PluginRouteRenderer,
+  discoverAndRegisterAllPlugins,
+} from 'plugin';
 import { getPluginManager } from 'plugin/manager';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
@@ -57,7 +61,6 @@ const OrganizationTags = lazy(
 );
 const ManageTag = lazy(() => import('screens/ManageTag/ManageTag'));
 const SubTags = lazy(() => import('screens/SubTags/SubTags'));
-const PageNotFound = lazy(() => import('screens/PageNotFound/PageNotFound'));
 const Requests = lazy(() => import('screens/Requests/Requests'));
 const Users = lazy(() => import('screens/Users/Users'));
 const CommunityProfile = lazy(
@@ -101,6 +104,10 @@ const Notification = lazy(() => import('screens/Notification/Notification'));
 const PluginStore = lazy(() => import('screens/PluginStore/PluginStore'));
 
 const { setItem } = useLocalStorage();
+
+const LazyPageNotFound = lazy(
+  () => import('screens/PageNotFound/PageNotFound'),
+);
 
 /**
  * This is the main function for our application. It sets up all the routes and components,
@@ -181,10 +188,6 @@ function App(): React.ReactElement {
         // Initialize plugin manager
         await getPluginManager().initializePluginSystem();
 
-        // Import and initialize plugin registry
-        const { discoverAndRegisterAllPlugins } = await import(
-          './plugin/registry'
-        );
         await discoverAndRegisterAllPlugins();
 
         console.log('Plugin system initialized successfully');
@@ -373,7 +376,14 @@ function App(): React.ReactElement {
             </Route>
           </Route>
           {/* <SecuredRouteForUser path="/user/chat" component={Chat} /> */}
-          <Route path="*" element={<PageNotFound />} />
+          <Route
+            path="*"
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <LazyPageNotFound />
+              </Suspense>
+            }
+          />
         </Routes>
       </Suspense>
     </>

@@ -1,40 +1,17 @@
 /**
  * A secured route component for user access control in the application.
- *
- * This component ensures that only authenticated users with the appropriate
- * role can access certain routes. It uses a custom hook to interact with
- * local storage for retrieving authentication and role information.
- *
- * @component
- *
- * @returns {JSX.Element} - A JSX element that conditionally renders:
- * - The child route components if the user is logged in and does not have an admin role.
- * - A `PageNotFound` component if the user has an admin role.
- * - A redirection to the home page (`"/"`) if the user is not logged in.
- *
- * @example
- * ```tsx
- * <Route path="/user" element={<SecuredRouteForUser />}>
- *   <Route path="dashboard" element={<UserDashboard />} />
- * </Route>
- * ```
- *
- * @remarks
- * - The `isLoggedIn` value is retrieved from local storage using the key `'IsLoggedIn'`.
- * - The `adminFor` value is retrieved from local storage using the key `'AdminFor'`.
- * - If `isLoggedIn` is `'TRUE'` and `adminFor` is `undefined`, the child routes are rendered.
- * - If `isLoggedIn` is not `'TRUE'`, the user is redirected to the home page.
- *
- * @requires `react-router-dom` for navigation and route handling.
- * @requires `useLocalStorage` custom hook for local storage interaction.
  */
-import React, { useEffect, useRef } from 'react';
+
+import React, { lazy, Suspense, useEffect, useRef } from 'react';
 import { Navigate, Outlet } from 'react-router';
 import { toast } from 'react-toastify';
-import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import useLocalStorage from 'utils/useLocalstorage';
+import Loader from 'components/Loader/Loader';
 
-// Time constants for session timeout and inactivity interval
+// LAZY import to avoid mixing static + dynamic imports
+const PageNotFound = lazy(() => import('screens/PageNotFound/PageNotFound'));
+
+// Time constants
 const timeoutMinutes = 15;
 const timeoutMilliseconds = timeoutMinutes * 60 * 1000;
 
@@ -42,12 +19,10 @@ const inactiveIntervalMinutes = 1;
 const inactiveIntervalMilliseconds = inactiveIntervalMinutes * 60 * 1000;
 
 const SecuredRouteForUser = (): JSX.Element => {
-  // Custom hook to interact with local storage
   const { getItem, setItem, removeItem } = useLocalStorage();
   const lastActiveRef = useRef<number>(Date.now());
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Check if the user is logged in and the role of the user
   const isLoggedIn = getItem('IsLoggedIn');
   const adminFor = getItem('AdminFor');
 
@@ -56,20 +31,16 @@ const SecuredRouteForUser = (): JSX.Element => {
   };
 
   useEffect(() => {
-    // Only set up session timeout if user is logged in
     if (isLoggedIn === 'TRUE') {
-      // Add event listeners for user activity
       document.addEventListener('mousemove', updateLastActive);
       document.addEventListener('keydown', updateLastActive);
       document.addEventListener('click', updateLastActive);
       document.addEventListener('scroll', updateLastActive);
 
-      // Set up interval to check for inactivity
       intervalRef.current = setInterval(() => {
         const currentTime = Date.now();
         const timeSinceLastActive = currentTime - lastActiveRef.current;
 
-        // If inactive for longer than the timeout period, show a warning and log out
         if (timeSinceLastActive > timeoutMilliseconds) {
           toast.warn('Kindly relogin as session has expired');
 
@@ -81,6 +52,7 @@ const SecuredRouteForUser = (): JSX.Element => {
           removeItem('token');
           removeItem('userId');
           removeItem('AdminFor');
+
           setTimeout(() => {
             window.location.href = '/';
           }, 1000);
@@ -88,22 +60,26 @@ const SecuredRouteForUser = (): JSX.Element => {
       }, inactiveIntervalMilliseconds);
     }
 
-    // Cleanup function
     return () => {
       document.removeEventListener('mousemove', updateLastActive);
       document.removeEventListener('keydown', updateLastActive);
       document.removeEventListener('click', updateLastActive);
       document.removeEventListener('scroll', updateLastActive);
 
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
-      }
+      if (intervalRef.current) clearInterval(intervalRef.current);
     };
   }, [isLoggedIn, setItem, removeItem]);
 
-  // Conditional rendering based on authentication status and role
   return isLoggedIn === 'TRUE' ? (
-    <>{adminFor == undefined ? <Outlet /> : <PageNotFound />}</>
+    <>
+      {adminFor === undefined ? (
+        <Outlet />
+      ) : (
+        <Suspense fallback={<Loader />}>
+          <PageNotFound />
+        </Suspense>
+      )}
+    </>
   ) : (
     <Navigate to="/" replace />
   );

@@ -8,6 +8,7 @@ import { ILoadedPlugin, PluginStatus } from '../types';
 import { DiscoveryManager } from './discovery';
 import { ExtensionRegistryManager } from './extension-registry';
 import { EventManager } from './event-manager';
+import { registerPluginDynamically } from '../registry';
 
 export class LifecycleManager {
   private loadedPlugins: Map<string, ILoadedPlugin> = new Map();
@@ -359,7 +360,6 @@ export class LifecycleManager {
       this.extensionRegistry.registerExtensionPoints(pluginId, plugin.manifest);
 
       try {
-        const { registerPluginDynamically } = await import('../registry');
         await registerPluginDynamically(pluginId);
         this.eventManager.emit('plugin:loaded', pluginId);
       } catch (error) {
