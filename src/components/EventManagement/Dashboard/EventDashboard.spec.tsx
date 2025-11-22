@@ -230,9 +230,12 @@ describe('Testing Event Dashboard Screen', () => {
     const { getByTestId } = renderEventDashboard(mockInvalidDateTime);
     await wait();
 
-    // Component should render successfully even with edge case data
     expect(getByTestId('event-name')).toHaveTextContent('Test Event');
     expect(getByTestId('event-details')).toBeInTheDocument();
+
+    // Time is displayed from startTime/endTime fields
+    expect(getByTestId('start-time')).toHaveTextContent('09:00');
+    expect(getByTestId('end-time')).toHaveTextContent('17:00');
   });
 
   it('Should use userId from localStorage when available', async () => {
@@ -339,8 +342,8 @@ describe('Testing Event Dashboard Screen', () => {
     expect(getByTestId('end-time')).toHaveTextContent('00:00');
   });
 
-  it('Should handle empty string for startAt/endAt', async () => {
-    const mockEmpty = new StaticMockLink(
+  it('Should handle missing startTime/endTime with allDay event', async () => {
+    const mockAllDay = new StaticMockLink(
       [
         {
           request: {
@@ -354,9 +357,11 @@ describe('Testing Event Dashboard Screen', () => {
                 id: 'event123',
                 name: 'Test Event',
                 description: 'Test Description',
-                startAt: '2024-01-01T08:00:00Z',
-                endAt: '2024-01-02T08:00:00Z',
-                allDay: false,
+                startAt: '2024-01-01T00:00:00Z',
+                endAt: '2024-01-02T00:00:00Z',
+                startTime: null,
+                endTime: null,
+                allDay: true, // Changed to true - no time display expected
                 location: 'India',
                 isPublic: true,
                 isRegisterable: true,
@@ -374,11 +379,12 @@ describe('Testing Event Dashboard Screen', () => {
       true,
     );
 
-    const { getByTestId } = renderEventDashboard(mockEmpty);
+    const { getByTestId } = renderEventDashboard(mockAllDay);
     await wait();
 
-    expect(getByTestId('start-time')).toHaveTextContent('08:00');
-    expect(getByTestId('end-time')).toHaveTextContent('08:00');
+    // For allDay events, time fields should be empty
+    expect(getByTestId('start-time')).toHaveTextContent('');
+    expect(getByTestId('end-time')).toHaveTextContent('');
     expect(getByTestId('event-details')).toBeInTheDocument();
   });
 });

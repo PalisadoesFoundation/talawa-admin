@@ -76,7 +76,7 @@ Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:12
 
 #### result.data.event.endTime
 
-> **endTime**: `any` = `null`
+> **endTime**: `string` = `'17:00:00'`
 
 #### result.data.event.id
 
@@ -104,4 +104,4 @@ Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:12
 
 #### result.data.event.startTime
 
-> **startTime**: `any` = `null`
+> **startTime**: `string` = `'09:00:00'`

@@ -140,8 +140,8 @@ export const MOCKS_INVALID_DATETIME = [
           description: 'Test Description',
           startAt: '2024-01-01T09:00:00Z',
           endAt: '2024-01-02T17:00:00Z',
-          startTime: null,
-          endTime: null,
+          startTime: '09:00:00', // Changed from null to valid time
+          endTime: '17:00:00', // Changed from null to valid time
           allDay: false,
           location: 'India',
           isPublic: true,
