@@ -965,4 +965,114 @@ describe('AddMember Component', () => {
       expect(screen.getByTestId('user')).toBeInTheDocument();
     });
   });
+
+  test('handles error when adding member to organization fails', async () => {
+    const orgId = 'org123';
+    const userListMock = createUserListMock({
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+
+    // Create a mock that returns an error
+    const addMemberErrorMock = {
+      request: {
+        query: CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
+        variables: {
+          memberId: 'user1',
+          organizationId: orgId,
+          role: 'regular',
+        },
+      },
+      error: new Error('Failed to add member'),
+    };
+
+    const mocks = [
+      createOrganizationsMock(orgId),
+      userListMock,
+      addMemberErrorMock,
+    ];
+
+    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+
+    // Open the add member modal
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    // Select existing user option
+    const existingUserOption = screen.getByText('Existing User');
+    fireEvent.click(existingUserOption);
+
+    // Wait for users to load
+    await waitFor(() => {
+      expect(screen.getByTestId('user')).toBeInTheDocument();
+    });
+
+    // Click add button
+    const addButtons = await screen.findAllByTestId('addBtn');
+    fireEvent.click(addButtons[0]);
+
+    // Wait for error toast to be called
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+  });
+
+  test('handles error when creating new user fails', async () => {
+    const orgId = 'org123';
+
+    // Create a mock that returns an error for CREATE_MEMBER_PG
+    const createMemberErrorMock = {
+      request: {
+        query: CREATE_MEMBER_PG,
+        variables: {
+          name: 'Test User',
+          email: 'test@example.com',
+          password: 'password123',
+          role: 'regular',
+          isEmailAddressVerified: true,
+        },
+      },
+      error: new Error('Failed to create member'),
+    };
+
+    const mocks = [createOrganizationsMock(orgId), createMemberErrorMock];
+
+    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+
+    // Open create new user modal
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    const newUserOption = screen.getByText('New User');
+    fireEvent.click(newUserOption);
+
+    // Wait for modal to open
+    await waitFor(() => {
+      expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
+    });
+
+    // Fill in user details
+    const nameInput = screen.getByTestId('firstNameInput');
+    const emailInput = screen.getByTestId('emailInput');
+    const passwordInput = screen.getByTestId('passwordInput');
+    const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
+
+    fireEvent.change(nameInput, { target: { value: 'Test User' } });
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+    fireEvent.change(confirmPasswordInput, {
+      target: { value: 'password123' },
+    });
+
+    // Click create button
+    const createButton = screen.getByTestId('createBtn');
+    fireEvent.click(createButton);
+
+    // Wait for error toast to be called
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+  });
 });
