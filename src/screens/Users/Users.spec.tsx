@@ -16,7 +16,8 @@ import { MOCKS, MOCKS2 } from './User.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
 
-const { setItem, removeItem } = useLocalStorage();
+let setItem: (key: string, value: unknown) => void;
+let removeItem: (key: string) => void;
 
 const toastMocks = vi.hoisted(() => ({
   warning: vi.fn(),
@@ -50,6 +51,10 @@ async function wait(ms = 1000): Promise<void> {
   });
 }
 beforeEach(() => {
+  const storage = useLocalStorage();
+  setItem = storage.setItem;
+  removeItem = storage.removeItem;
+
   setItem('id', '123');
   setItem('SuperAdmin', true);
   setItem('name', 'John Doe');
