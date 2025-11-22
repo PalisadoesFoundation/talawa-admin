@@ -11,7 +11,6 @@ describe('useDebounce', () => {
   afterEach(() => {
     vi.runOnlyPendingTimers();
     vi.clearAllMocks();
-    // keep fake timers active to respect the global setupTests.ts contract
     vi.useFakeTimers();
   });
 
@@ -79,5 +78,69 @@ describe('useDebounce', () => {
     });
 
     expect(callback).not.toHaveBeenCalled();
+  });
+
+  it('should use the updated delay when delay changes', () => {
+    const callback = vi.fn();
+
+    const { result, rerender } = renderHook(
+      ({ delay }) => useDebounce(callback, delay),
+      { initialProps: { delay: 100 } },
+    );
+
+    act(() => {
+      result.current.debouncedCallback('value');
+    });
+
+    act(() => {
+      result.current.cancel();
+    });
+
+    rerender({ delay: 300 });
+
+    act(() => {
+      result.current.debouncedCallback('updated');
+    });
+
+    act(() => {
+      vi.advanceTimersByTime(100);
+    });
+
+    expect(callback).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
+
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith('updated');
+  });
+
+  it('should do nothing when cancel is called with no pending timeout and still work afterwards', () => {
+    const callback = vi.fn();
+    const { result } = renderHook(() => useDebounce(callback, 100));
+
+    // Cancel immediately (no timeout scheduled)
+    act(() => {
+      result.current.cancel();
+    });
+
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
+
+    expect(callback).not.toHaveBeenCalled();
+
+    // Ensure debounce still works after above cancel call
+    act(() => {
+      result.current.debouncedCallback('run-after-cancel');
+    });
+
+    act(() => {
+      vi.advanceTimersByTime(100);
+    });
+
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith('run-after-cancel');
   });
 });
