@@ -4,7 +4,7 @@ import {
   UPLOAD_PLUGIN_ZIP_MUTATION,
   CREATE_PLUGIN_MUTATION,
 } from '../GraphQl/Mutations/PluginMutations';
-import { adminPluginFileService } from '../plugin/services/AdminPluginFileService';
+import { adminPluginFileService } from 'plugin/services/AdminPluginFileService';
 
 export interface AdminPluginManifest {
   name: string;

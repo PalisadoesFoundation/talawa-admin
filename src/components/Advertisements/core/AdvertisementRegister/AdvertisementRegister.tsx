@@ -42,7 +42,7 @@
  *   setAfter={setAfterCallback}
  * />
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import styles from 'style/app-fixed.module.css';
 import { Button, Form, Modal } from 'react-bootstrap';
 import {
@@ -56,6 +56,8 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 
+// LAZY import to prevent Vite static/dynamic import conflict
+const PageNotFound = lazy(() => import('screens/PageNotFound/PageNotFound'));
 // Extend dayjs with UTC plugin
 dayjs.extend(utc);
 import { useParams } from 'react-router';
@@ -64,7 +66,7 @@ import type {
   InterfaceFormStateTypes,
 } from 'types/Advertisement/interface';
 import { FaTrashCan } from 'react-icons/fa6';
-import PageNotFound from 'screens/PageNotFound/PageNotFound';
+import Loader from 'components/Loader/Loader';
 
 function AdvertisementRegister({
   formStatus = 'register',
@@ -85,7 +87,11 @@ function AdvertisementRegister({
   const [show, setShow] = useState(false);
 
   if (currentOrg === undefined) {
-    return <PageNotFound />;
+    return (
+      <Suspense fallback={<Loader />}>
+        <PageNotFound />
+      </Suspense>
+    );
   }
   /*
    * Mutation to add advertisement and refetch the advertisement list
