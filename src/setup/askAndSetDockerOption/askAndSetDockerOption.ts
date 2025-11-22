@@ -19,14 +19,12 @@ const askAndSetDockerOption = async (): Promise<void> => {
     const answers = await askForDocker();
     const DOCKER_PORT_NUMBER = answers;
     updateEnvFile('DOCKER_PORT', DOCKER_PORT_NUMBER);
+    updateEnvFile('PORT', DOCKER_PORT_NUMBER);
 
-    const DOCKER_NAME = 'talawa-admin';
     console.log(`
         
           Run the commands below after setup:-
-                1. docker build -t ${DOCKER_NAME} .
-                2. docker run -d -p ${DOCKER_PORT_NUMBER}:${DOCKER_PORT_NUMBER} ${DOCKER_NAME}
-                
+                docker compose --env-file .env -f docker/docker-compose.dev.yaml up       
        `);
   } else {
     console.log('Setting up without Docker...');

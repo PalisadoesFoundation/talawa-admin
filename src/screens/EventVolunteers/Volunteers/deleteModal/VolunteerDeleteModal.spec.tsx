@@ -16,6 +16,7 @@ import type { InterfaceDeleteVolunteerModal } from './VolunteerDeleteModal';
 import VolunteerDeleteModal from './VolunteerDeleteModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
+import { DELETE_VOLUNTEER_FOR_INSTANCE } from 'GraphQl/Mutations/EventVolunteerMutation';
 
 /**
  * Mock implementation of the `react-toastify` module.
@@ -91,6 +92,48 @@ const itemProps: InterfaceDeleteVolunteerModal[] = [
   },
 ];
 
+let recurringItemProps: InterfaceDeleteVolunteerModal;
+let recurringItemPropsHide: ReturnType<typeof vi.fn>;
+let recurringItemPropsRefetch: ReturnType<typeof vi.fn>;
+
+beforeEach(() => {
+  recurringItemPropsHide = vi.fn();
+  recurringItemPropsRefetch = vi.fn();
+  recurringItemProps = {
+    ...itemProps[0],
+    isOpen: true,
+    isRecurring: true,
+    eventId: 'recurringEventId1',
+    hide: recurringItemPropsHide,
+    refetchVolunteers: recurringItemPropsRefetch,
+    volunteer: {
+      ...itemProps[0].volunteer,
+    },
+  };
+});
+
+const mockDeleteForInstance = [
+  {
+    request: {
+      query: DELETE_VOLUNTEER_FOR_INSTANCE,
+      variables: {
+        input: {
+          volunteerId: itemProps[0].volunteer.id,
+          recurringEventInstanceId: 'recurringEventId1',
+        },
+      },
+    },
+    result: {
+      data: {
+        deleteEventVolunteerForInstance: {
+          id: itemProps[0].volunteer.id,
+        },
+      },
+    },
+  },
+];
+const linkInstanceDelete = new StaticMockLink(mockDeleteForInstance);
+
 const renderVolunteerDeleteModal = (
   link: ApolloLink,
   props: InterfaceDeleteVolunteerModal,
@@ -149,6 +192,70 @@ describe('Testing Volunteer Delete Modal', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
+    });
+  });
+
+  it('Delete Volunteer for a recurring event instance only', async () => {
+    renderVolunteerDeleteModal(linkInstanceDelete, recurringItemProps);
+
+    // Click "instance" radio to cover its onChange handler
+    const instanceRadio = screen.getByTestId('deleteApplyToInstance');
+    await userEvent.click(instanceRadio);
+    expect(instanceRadio).toBeChecked();
+
+    // Click "series" radio to cover its onChange handler
+    const seriesRadio = screen.getByTestId('deleteApplyToSeries');
+    await userEvent.click(seriesRadio);
+    expect(seriesRadio).toBeChecked();
+
+    // Set state back to "instance" for the delete action
+    await userEvent.click(instanceRadio);
+    expect(instanceRadio).toBeChecked();
+
+    // Find and click the delete button
+    const yesBtn = screen.getByTestId('deleteyesbtn');
+    expect(yesBtn).toBeInTheDocument();
+    await userEvent.click(yesBtn);
+
+    // Assert the results
+    await waitFor(() => {
+      expect(recurringItemProps.refetchVolunteers).toHaveBeenCalled();
+      expect(recurringItemProps.hide).toHaveBeenCalled();
+      expect(toast.success).toHaveBeenCalledWith(t.volunteerRemoved);
+    });
+  });
+
+  it('Delete Volunteer for a recurring event instance -> Error', async () => {
+    const mockDeleteForInstanceError = [
+      {
+        request: {
+          query: DELETE_VOLUNTEER_FOR_INSTANCE,
+          variables: {
+            input: {
+              volunteerId: recurringItemProps.volunteer.id,
+              recurringEventInstanceId: recurringItemProps.eventId,
+            },
+          },
+        },
+        error: new Error('Failed to delete volunteer for instance'),
+      },
+    ];
+    const linkInstanceDeleteError = new StaticMockLink(
+      mockDeleteForInstanceError,
+    );
+
+    renderVolunteerDeleteModal(linkInstanceDeleteError, recurringItemProps);
+
+    const instanceRadio = screen.getByTestId('deleteApplyToInstance');
+    await userEvent.click(instanceRadio);
+
+    const yesBtn = screen.getByTestId('deleteyesbtn');
+    await userEvent.click(yesBtn);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'Failed to delete volunteer for instance',
+      );
     });
   });
 });

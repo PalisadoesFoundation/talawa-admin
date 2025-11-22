@@ -26,16 +26,16 @@ For detailed information about testing, linting, formatting, and code coverage, 
 ### Quick Reference
 
 **Testing:**
-- Run all tests: `npm run test`
-- Run specific test: `npm run test /path/to/test/file`
-- Run with coverage: `npm run test:coverage`
-- Run with sharding: `npm run test:shard`
+- Run all tests: `pnpm run test`
+- Run specific test: `pnpm run test /path/to/test/file`
+- Run with coverage: `pnpm run test:coverage`
+- Run with sharding: `pnpm run test:shard`
 
 **Linting and Formatting:**
-- Fix linting issues: `npm run lint:fix`
-- Fix formatting issues: `npm run format:fix`
-- Check linting: `npm run lint:check`
-- Check formatting: `npm run format:check`
+- Fix linting issues: `pnpm run lint:fix`
+- Fix formatting issues: `pnpm run format:fix`
+- Check linting: `pnpm run lint:check`
+- Check formatting: `pnpm run format:check`
 
 **Cypress E2E Testing:**
 - See the [Cypress Guide](cypress/README.md) for end-to-end testing

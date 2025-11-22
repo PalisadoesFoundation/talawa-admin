@@ -1,15 +1,16 @@
 FROM node:24 AS build
 
+ARG PORT=4321
+ENV PORT=${PORT}
+
 WORKDIR /usr/src/app
 
 COPY package*.json ./
-
-RUN npm install
+RUN corepack enable && corepack prepare pnpm@10.4.1 --activate && pnpm install
 
 COPY . .
 
-RUN npm run build
+RUN pnpm run build
+EXPOSE ${PORT}
 
-EXPOSE 4321
-
-CMD ["npm", "run", "serve"]
+CMD ["pnpm", "run", "serve"]
