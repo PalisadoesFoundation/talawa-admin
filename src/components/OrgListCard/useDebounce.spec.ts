@@ -80,25 +80,6 @@ describe('useDebounce', () => {
     expect(callback).not.toHaveBeenCalled();
   });
 
-  it('should clear timeout and reset internal ref when cancelled', () => {
-    const callback = vi.fn();
-    const { result } = renderHook(() => useDebounce(callback, 100));
-
-    act(() => {
-      result.current.debouncedCallback('test');
-    });
-
-    act(() => {
-      result.current.cancel();
-    });
-
-    act(() => {
-      vi.runAllTimers();
-    });
-
-    expect(callback).not.toHaveBeenCalled();
-  });
-
   it('should use the updated delay when delay changes', () => {
     const callback = vi.fn();
 
@@ -135,12 +116,11 @@ describe('useDebounce', () => {
     expect(callback).toHaveBeenCalledWith('updated');
   });
 
-  // NEW TEST: covers missing branch in cancel()
-  it('should do nothing when cancel is called with no pending timeout', () => {
+  it('should do nothing when cancel is called with no pending timeout and still work afterwards', () => {
     const callback = vi.fn();
     const { result } = renderHook(() => useDebounce(callback, 100));
 
-    // Immediately cancel
+    // Cancel immediately (no timeout scheduled)
     act(() => {
       result.current.cancel();
     });
@@ -150,5 +130,17 @@ describe('useDebounce', () => {
     });
 
     expect(callback).not.toHaveBeenCalled();
+
+    // Ensure debounce still works after above cancel call
+    act(() => {
+      result.current.debouncedCallback('run-after-cancel');
+    });
+
+    act(() => {
+      vi.advanceTimersByTime(100);
+    });
+
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith('run-after-cancel');
   });
 });
