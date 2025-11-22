@@ -61,6 +61,7 @@ import type {
   InterfaceQueryUserTagsMembersToAssignTo,
 } from 'types/Tag/interface';
 import { TAGS_QUERY_DATA_CHUNK_SIZE, dataGridStyle } from 'types/Tag/utils';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   addPeopleToTagModalIsOpen,
@@ -321,33 +322,29 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
               )}
             </div>
 
-            <div className="my-3 d-flex">
-              <div className="me-2 position-relative">
-                <i className="fa fa-search position-absolute text-body-tertiary end-0 top-50 translate-middle" />
-                <Form.Control
-                  type="text"
-                  id="firstName"
-                  className={`bg-light ${styles.inputField}`}
+            <div className="my-3 d-flex flex-wrap gap-3">
+              <div className="flex-grow-1">
+                <SearchBar
                   placeholder={tCommon('firstName')}
-                  onChange={(e) =>
-                    setMemberToAssignToSearchFirstName(e.target.value.trim())
+                  value={memberToAssignToSearchFirstName}
+                  onChange={(value) =>
+                    setMemberToAssignToSearchFirstName(value.trim())
                   }
-                  data-testid="searchByFirstName"
-                  autoComplete="off"
+                  onClear={() => setMemberToAssignToSearchFirstName('')}
+                  showSearchButton={false}
+                  inputTestId="searchByFirstName"
                 />
               </div>
-              <div className="mx-2 position-relative">
-                <i className="fa fa-search position-absolute text-body-tertiary end-0 top-50 translate-middle" />
-                <Form.Control
-                  type="text"
-                  id="lastName"
-                  className={`bg-light ${styles.inputField}`}
+              <div className="flex-grow-1">
+                <SearchBar
                   placeholder={tCommon('lastName')}
-                  onChange={(e) =>
-                    setMemberToAssignToSearchLastName(e.target.value.trim())
+                  value={memberToAssignToSearchLastName}
+                  onChange={(value) =>
+                    setMemberToAssignToSearchLastName(value.trim())
                   }
-                  data-testid="searchByLastName"
-                  autoComplete="off"
+                  onClear={() => setMemberToAssignToSearchLastName('')}
+                  showSearchButton={false}
+                  inputTestId="searchByLastName"
                 />
               </div>
             </div>

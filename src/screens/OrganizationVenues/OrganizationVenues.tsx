@@ -60,7 +60,7 @@ import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/Venues/VenueCard';
 import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 function organizationVenues(): JSX.Element {
   // Translation hooks for i18n support

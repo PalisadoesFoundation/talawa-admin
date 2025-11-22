@@ -14,6 +14,24 @@ Defines the structure for a user list item returned from a query.
 
 ## Properties
 
+### appUserProfile?
+
+> `optional` **appUserProfile**: `object`
+
+Defined in: [src/utils/interfaces.ts:2048](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2048)
+
+The application user profile.
+
+#### adminFor?
+
+> `optional` **adminFor**: `object`[]
+
+#### isSuperAdmin?
+
+> `optional` **isSuperAdmin**: `boolean`
+
+***
+
 ### avatarURL
 
 > **avatarURL**: `string`

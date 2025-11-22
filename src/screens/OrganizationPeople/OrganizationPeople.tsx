@@ -69,7 +69,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { Row, Button } from 'react-bootstrap';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
 import Avatar from 'components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';

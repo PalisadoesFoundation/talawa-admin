@@ -43,15 +43,22 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import useSession from 'utils/useSession';
+import { resolveProfileNavigation } from 'utils/profileNavigation';
 
-const profileDropdown = (): JSX.Element => {
+interface InterfaceProfileDropdownProps {
+  portal?: 'admin' | 'user';
+}
+
+const ProfileDropdown = ({
+  portal = 'admin',
+}: InterfaceProfileDropdownProps): JSX.Element => {
   const { endSession } = useSession();
   const { t: tCommon } = useTranslation('common');
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const { getItem } = useLocalStorage();
-  const userRole = getItem('role');
-  const name: string = getItem('name') || '';
-  const userImage: string = getItem('UserImage') || '';
+  const userRole = getItem<string>('role');
+  const name: string = getItem<string>('name') || '';
+  const userImage: string = getItem<string>('UserImage') || '';
   const navigate = useNavigate();
   const { orgId } = useParams();
 
@@ -70,6 +77,12 @@ const profileDropdown = (): JSX.Element => {
     name.length > MAX_NAME_LENGTH
       ? name.substring(0, MAX_NAME_LENGTH - 3) + '...'
       : name;
+
+  const profileDestination = resolveProfileNavigation({
+    portal,
+    role: userRole,
+    orgId,
+  });
 
   return (
     <Dropdown as={ButtonGroup} variant="none" className={styles.customDropdown}>
@@ -112,11 +125,7 @@ const profileDropdown = (): JSX.Element => {
       <Dropdown.Menu>
         <Dropdown.Item
           data-testid="profileBtn"
-          onClick={() =>
-            userRole === 'regular'
-              ? navigate(`/user/settings`)
-              : navigate(`/member/${orgId || ''}`)
-          }
+          onClick={() => navigate(profileDestination)}
           aria-label="View Profile"
         >
           {tCommon('viewProfile')}
@@ -133,4 +142,4 @@ const profileDropdown = (): JSX.Element => {
   );
 };
 
-export default profileDropdown;
+export default ProfileDropdown;

@@ -160,7 +160,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
           <div style={{ flex: 1 }}>
             <h1>{t('title')}</h1>
           </div>
-          <ProfileDropdown />
+          <ProfileDropdown portal="admin" />
         </div>
         <Outlet />
       </div>

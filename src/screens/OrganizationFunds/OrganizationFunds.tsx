@@ -17,7 +17,7 @@ import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
 import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 const dataGridStyle = {
   borderRadius: 'var(--table-head-radius)',

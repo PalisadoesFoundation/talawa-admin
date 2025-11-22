@@ -5,7 +5,6 @@
  */
 
 import { useMutation } from '@apollo/client';
-import { Search } from '@mui/icons-material';
 import {
   REMOVE_MEMBER_MUTATION,
   UPDATE_USER_ROLE_IN_ORG_MUTATION,
@@ -14,6 +13,7 @@ import Avatar from 'components/Avatar/Avatar';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
 import { Button, Form, Modal, Row, Table } from 'react-bootstrap';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
@@ -109,22 +109,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
     }
   };
 
-  const handleSearchJoinedOrgs = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-  ): void => {
-    if (e.key === 'Enter') {
-      const { value } = e.currentTarget;
-      searchJoinedOrgs(value);
-    }
-  };
-
-  const handleSearchButtonClickJoinedOrgs = (): void => {
-    const inputValue =
-      (document.getElementById('orgname-joined-orgs') as HTMLInputElement)
-        ?.value || '';
-    searchJoinedOrgs(inputValue);
-  };
-
   function onHideRemoveUserModal(): void {
     setShowRemoveUserModal(false);
     if (removeUserProps.setShowOnCancel === 'JOINED') {
@@ -133,7 +117,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
   }
 
   // If there is a super admin notion, adapt this logic to your API.
-  const isSuperAdmin = (user as any)?.appUserProfile?.isSuperAdmin ?? false;
+  const appUserProfile = user.appUserProfile;
+  const isSuperAdmin = appUserProfile?.isSuperAdmin ?? false;
 
   return (
     <>
@@ -165,24 +150,16 @@ const UsersTableItem = (props: Props): JSX.Element => {
         </Modal.Header>
         <Modal.Body>
           {memberOrgs.length !== 0 && (
-            <div className={'position-relative mb-4 border rounded'}>
-              <Form.Control
-                id="orgname-joined-orgs"
-                className={styles.inputField}
-                defaultValue={searchByNameJoinedOrgs}
+            <div className="mb-4">
+              <SearchBar
                 placeholder={t('searchByOrgName')}
-                data-testid="searchByNameJoinedOrgs"
-                autoComplete="off"
-                onKeyUp={handleSearchJoinedOrgs}
+                value={searchByNameJoinedOrgs}
+                onChange={searchJoinedOrgs}
+                onSearch={searchJoinedOrgs}
+                onClear={() => searchJoinedOrgs('')}
+                inputTestId="searchByNameJoinedOrgs"
+                buttonTestId="searchBtnJoinedOrgs"
               />
-              <Button
-                tabIndex={-1}
-                className={styles.searchButton}
-                onClick={handleSearchButtonClickJoinedOrgs}
-                data-testid="searchBtnJoinedOrgs"
-              >
-                <Search />
-              </Button>
             </div>
           )}
           <Row>
@@ -215,14 +192,10 @@ const UsersTableItem = (props: Props): JSX.Element => {
                 <tbody>
                   {joinedOrgs.map((org) => {
                     // Adjust organization/admin mapping as per your data model
-                    let isAdmin = false;
-                    if ((user as any)?.appUserProfile?.adminFor) {
-                      (user as any).appUserProfile.adminFor.map((item: any) => {
-                        if (item._id === org.id) {
-                          isAdmin = true;
-                        }
-                      });
-                    }
+                    const isAdmin =
+                      appUserProfile?.adminFor?.some(
+                        (item: { _id: string }) => item._id === org.id,
+                      ) ?? false;
                     return (
                       <tr key={`org-joined-${org.id}`}>
                         <td>

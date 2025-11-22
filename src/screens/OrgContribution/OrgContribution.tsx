@@ -34,14 +34,14 @@
  * @file OrgContribution.tsx
  * @module OrgContribution
  */
-import React from 'react';
+import React, { useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import ContriStats from 'components/ContriStats/ContriStats';
 import OrgContriCards from 'components/OrgContriCards/OrgContriCards';
-import { Form } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 function OrgContribution(): JSX.Element {
   // Hook to get translation functions and translation text
@@ -49,6 +49,10 @@ function OrgContribution(): JSX.Element {
 
   // Set the document title based on the translated title for this page
   document.title = t('title');
+
+  // Local filters (wired for future list filtering)
+  const [, setOrgNameFilter] = useState<string>('');
+  const [, setTransactionFilter] = useState<string>('');
 
   return (
     <>
@@ -58,22 +62,20 @@ function OrgContribution(): JSX.Element {
             <div className={styles.sidebarsticky}>
               {/* Input for filtering by organization name */}
               <h6 className={styles.searchtitle}>{t('filterByName')}</h6>
-              <Form.Control
-                type="name"
-                id="orgname"
+              <SearchBar
                 placeholder={t('orgname')}
-                autoComplete="off"
-                required
+                showSearchButton={false}
+                onSearch={(term) => setOrgNameFilter(term)}
+                inputTestId="filterOrgName"
               />
 
               {/* Input for filtering by transaction ID */}
               <h6 className={styles.searchtitle}>{t('filterByTransId')}</h6>
-              <Form.Control
-                type="transaction"
-                id="searchtransaction"
+              <SearchBar
                 placeholder={t('searchtransaction')}
-                autoComplete="off"
-                required
+                showSearchButton={false}
+                onSearch={(term) => setTransactionFilter(term)}
+                inputTestId="filterTransaction"
               />
 
               {/* Section displaying recent contribution statistics */}

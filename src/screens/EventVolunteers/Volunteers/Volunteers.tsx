@@ -17,7 +17,7 @@
  * @requires components/Loader/Loader
  * @requires components/Avatar/Avatar
  * @requires subComponents/SortingButton
- * @requires subComponents/SearchBar
+ * @requires shared-components/SearchBar/SearchBar
  * @requires GraphQl/Queries/EventVolunteerQueries
  * @requires utils/interfaces
  * @requires ./createModal/VolunteerCreateModal
@@ -67,7 +67,7 @@ import VolunteerCreateModal from './createModal/VolunteerCreateModal';
 import VolunteerDeleteModal from './deleteModal/VolunteerDeleteModal';
 import VolunteerViewModal from './viewModal/VolunteerViewModal';
 import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 enum VolunteerStatus {
   All = 'all',
