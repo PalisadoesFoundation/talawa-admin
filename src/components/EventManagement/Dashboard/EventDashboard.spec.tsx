@@ -236,7 +236,7 @@ describe('Testing Event Dashboard Screen', () => {
   });
 
   it('Should use userId from localStorage when available', async () => {
-    localStorage.setItem('userId', 'test-user-123');
+    localStorageMock.setItem('userId', 'test-user-123');
     const { getByTestId } = renderEventDashboard(mockWithTime);
     await wait();
 
@@ -244,7 +244,7 @@ describe('Testing Event Dashboard Screen', () => {
   });
 
   it('Should fallback to id from localStorage when userId is not available', async () => {
-    localStorage.setItem('id', 'test-id-456');
+    localStorageMock.setItem('id', 'test-id-456');
     const { getByTestId } = renderEventDashboard(mockWithTime);
     await wait();
 
@@ -252,7 +252,7 @@ describe('Testing Event Dashboard Screen', () => {
   });
 
   it('Should set userRole as ADMINISTRATOR when role is administrator', async () => {
-    localStorage.setItem('role', 'administrator');
+    localStorageMock.setItem('role', 'administrator');
     const { getByTestId } = renderEventDashboard(mockWithTime);
     await wait();
 
@@ -260,7 +260,7 @@ describe('Testing Event Dashboard Screen', () => {
   });
 
   it('Should set userRole as REGULAR when role is not administrator', async () => {
-    localStorage.setItem('role', 'user');
+    localStorageMock.setItem('role', 'user');
     const { getByTestId } = renderEventDashboard(mockWithTime);
     await wait();
 
