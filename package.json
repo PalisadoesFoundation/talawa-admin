@@ -214,7 +214,8 @@
       "react": "^19.1.0",
       "react-dom": "^19.1.0"
     },
-    "gulp-header": "^2.0.9"
+    "gulp-header": "^2.0.9",
+    "rimraf": "^6.1.2"
   },
   "lint-staged": {
     "**/*.{ts, tsx, json, scss, css}": [
