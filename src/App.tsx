@@ -379,7 +379,7 @@ function App(): React.ReactElement {
           <Route
             path="*"
             element={
-              <Suspense fallback={<div>Loading...</div>}>
+              <Suspense fallback={<Loader />}>
                 <LazyPageNotFound />
               </Suspense>
             }
