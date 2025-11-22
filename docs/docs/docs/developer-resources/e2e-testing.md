@@ -53,11 +53,11 @@ Follow these steps to run end to end tests
 # Open Cypress Test Runner (Interactive Mode) 
 # Preferred for Debugging
 
-npm run cy:open
+pnpm run cy:open
 
 # Run all tests in headless mode
 
-npm run cy:run
+pnpm run cy:run
 ```
 
 ### Running Specific Tests
@@ -69,7 +69,7 @@ There are multiple testing modes.
 For running specific tests with visual feedback, use the Interactive Mode where you can view all test specs and run individual tests:
 
 ```bash
-npm run cy:open
+pnpm run cy:open
 ```
 
 #### Headless Mode
@@ -78,10 +78,10 @@ For running specific tests in headless mode, first manually start your applicati
 
 ```bash
 # Run tests in a specific folder
-npm run cypress:run --spec "cypress/e2e/dashboard_spec/**/*"
+pnpm run cypress:run --spec "cypress/e2e/dashboard_spec/**/*"
 
 # Run a specific test file
-npm run cypress:run --spec "cypress/e2e/login_spec/login.cy.ts"
+pnpm run cypress:run --spec "cypress/e2e/login_spec/login.cy.ts"
 ```
 
 ## Writing Tests
@@ -124,7 +124,7 @@ After running your Cypress tests, you can generate detailed HTML coverage report
 
 1. **Run Cypress tests** to collect coverage data:
    ```bash
-   npm run cy:run
+   pnpm run cy:run
    ```
 
 2. **Generate HTML coverage report** using nyc:
