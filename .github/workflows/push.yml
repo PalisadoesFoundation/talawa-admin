@@ -33,30 +33,26 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Cache node modules
-        id: cache-npm
-        uses: actions/cache@v4
-        env:
-          cache-name: cache-node-modules
+      - uses: pnpm/action-setup@v4
         with:
-          path: |
-            ~/.npm
-            node_modules
-          key: ${{ runner.os }}-code-coverage-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          version: 10.4.1
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        id: pnpm-cache
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-code-coverage-${{ env.cache-name }}-
-            ${{ runner.os }}-code-coverage-
-            ${{ runner.os }}-
+            ${{ runner.os }}-pnpm-
 
-      - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
-        name: List the state of node modules
-        run: npm install
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Run Vitest Tests
         env:
           NODE_V8_COVERAGE: './coverage/vitest'
         run: |
-          npm run test:coverage
+          pnpm run test:coverage
 
       #######################################################################
       # DO NOT DELETE ANY references to env.CODECOV_UNIQUE_NAME in this

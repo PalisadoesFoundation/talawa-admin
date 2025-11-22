@@ -6,14 +6,15 @@
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# files that interfere with YARN
+# lockfiles from other package managers (YARN, npm)
 yarn.lock
-pnpm-lock.yaml
+package-lock.json
 
 # dependencies
 /node_modules
 /.pnp
 .pnp.js
+.node-version
 
 # testing
 coverage/
