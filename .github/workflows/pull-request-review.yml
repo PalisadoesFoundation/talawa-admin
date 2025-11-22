@@ -3,6 +3,8 @@ name: Pull Request Review
 on:
   pull_request_review:
     types: [submitted]
+  pull_request:
+    types: [synchronize]
 
 jobs:
   Check-CodeRabbit-Approval:
