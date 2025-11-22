@@ -18,16 +18,18 @@ import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
 
 const { setItem, removeItem } = useLocalStorage();
 
-vi.mock('react-toastify', async () => {
-  const actual = await vi.importActual('react-toastify');
+const toastMocks = vi.hoisted(() => ({
+  warning: vi.fn(),
+  error: vi.fn(),
+  success: vi.fn(),
+  info: vi.fn(),
+}));
+
+vi.mock('react-toastify', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-toastify')>();
   return {
     ...actual,
-    toast: {
-      warning: vi.fn(),
-      error: vi.fn(),
-      success: vi.fn(),
-      info: vi.fn(),
-    },
+    toast: toastMocks,
   };
 });
 
