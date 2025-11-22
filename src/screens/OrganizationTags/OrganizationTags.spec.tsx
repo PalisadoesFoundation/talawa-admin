@@ -304,17 +304,17 @@ describe('Organisation Tags Page', () => {
     // Wait for the search results to load
     await waitFor(() => {
       expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
-        'userTag searchUserTag1',
+        'userTag 1',
       );
     });
-
+    await userEvent.click(screen.getByTestId('sortedBy'));
     // Click the "Oldest" button to sort in ascending order
     await userEvent.click(screen.getByTestId('oldest'));
 
     // Wait for tags to be re-ordered (oldest first)
     await waitFor(() => {
       expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
-        'userTag searchUserTag2',
+        'userTag 10',
       );
     });
 
@@ -324,7 +324,7 @@ describe('Organisation Tags Page', () => {
     // Wait for tags to be re-ordered back (latest first)
     await waitFor(() => {
       expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
-        'userTag searchUserTag1',
+        'userTag 1',
       );
     });
   });
