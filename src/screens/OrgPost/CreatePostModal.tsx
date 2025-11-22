@@ -18,7 +18,7 @@ interface ICreatePostModalProps {
 
 interface IFileMetadataInput {
   fileHash: string;
-  mimeType: string;
+  mimetype: string;
   name: string;
   objectName: string;
 }
@@ -123,7 +123,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
 
         attachment = {
           fileHash,
-          mimeType: getMimeTypeEnum(mediaFile.type),
+          mimetype: getMimeTypeEnum(mediaFile.type),
           name: fileName,
           objectName,
         };
