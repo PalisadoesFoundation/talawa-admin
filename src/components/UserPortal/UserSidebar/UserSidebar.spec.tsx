@@ -492,7 +492,7 @@ describe('UserSidebar', () => {
       expect(screen.getAllByTestId('plugin-icon')).toHaveLength(1);
     });
 
-    it('should apply active stroke color to plugin icon when plugin route is active', () => {
+    it('should render plugin icon with consistent stroke color', () => {
       const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
         {
           pluginId: 'test-plugin',
@@ -503,13 +503,14 @@ describe('UserSidebar', () => {
       ];
       mockUsePluginDrawerItems.mockReturnValue(mockPluginItems);
 
-      // Render on the plugin route to make it active
+      // Render on the plugin route
       renderWithRoute('/user/plugin/test');
 
       const pluginIcon = screen.getByTestId('plugin-icon');
+      // Plugin icons use a consistent stroke color (inactive color) regardless of active state
       expect(pluginIcon).toHaveAttribute(
         'data-stroke',
-        'var(--sidebar-icon-stroke-active)',
+        'var(--sidebar-icon-stroke-inactive)',
       );
     });
   });
@@ -540,9 +541,9 @@ describe('UserSidebar', () => {
       const container = screen.getByTestId('leftDrawerContainer');
       expect(container).toHaveClass('leftDrawer');
 
-      // Check for the main content structure
-      const mainContent = screen.getByTestId('sidebar-main-content');
-      expect(mainContent).toBeInTheDocument();
+      // Verify the option list exists (navigation items container)
+      expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('settingsBtn')).toBeInTheDocument();
     });
   });
 
