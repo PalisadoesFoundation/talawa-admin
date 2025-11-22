@@ -2043,3 +2043,45 @@ test('should handle rowsPerPage <= 0 to show all organizations', async () => {
     expect(orgCards.length).toBe(15);
   });
 });
+
+it('should handle GraphQL error in ORGANIZATION_FILTER_LIST query', async () => {
+  const consoleErrorSpy = vi
+    .spyOn(console, 'error')
+    .mockImplementation(() => {});
+
+  const ERROR_MOCKS = [
+    COMMUNITY_TIMEOUT_MOCK,
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: {
+          filter: '',
+        },
+      },
+      error: new Error('GraphQL Network Error'),
+    },
+  ];
+
+  setItem('userId', TEST_USER_ID);
+
+  render(
+    <MockedProvider mocks={ERROR_MOCKS} addTypename={false}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await waitFor(() => {
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      'All orgs error:',
+      expect.any(Error),
+    );
+  });
+
+  consoleErrorSpy.mockRestore();
+});
