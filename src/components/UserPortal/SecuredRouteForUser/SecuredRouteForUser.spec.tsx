@@ -22,26 +22,34 @@ vi.mock('screens/PageNotFound/PageNotFound', () => ({
 // Mock storage object to simulate localStorage
 let mockStorage: Record<string, string> = {};
 
-// Mock the useLocalStorage hook
+// Mock the useLocalStorage hook with prefix support
 vi.mock('utils/useLocalstorage', () => ({
-  default: () => ({
-    getItem: (key: string) => {
-      const value = mockStorage[key];
-      if (value === undefined) return undefined;
-      try {
-        return JSON.parse(value);
-      } catch {
-        return value;
-      }
-    },
-    setItem: (key: string, value: unknown) => {
-      mockStorage[key] =
-        typeof value === 'string' ? value : JSON.stringify(value);
-    },
-    removeItem: (key: string) => {
-      delete mockStorage[key];
-    },
-  }),
+  default: (prefix = 'Talawa-admin') => {
+    const getStorageKey = (key: string) => `${prefix}_${key}`;
+
+    return {
+      getItem: (key: string) => {
+        const prefixedKey = getStorageKey(key);
+        const value = mockStorage[prefixedKey];
+        if (value === undefined) return undefined;
+        try {
+          return JSON.parse(value);
+        } catch {
+          return value;
+        }
+      },
+      setItem: (key: string, value: unknown) => {
+        const prefixedKey = getStorageKey(key);
+        mockStorage[prefixedKey] =
+          typeof value === 'string' ? value : JSON.stringify(value);
+      },
+      removeItem: (key: string) => {
+        const prefixedKey = getStorageKey(key);
+        delete mockStorage[prefixedKey];
+      },
+      getStorageKey,
+    };
+  },
 }));
 
 const TestComponent = (): JSX.Element => (
@@ -92,7 +100,7 @@ describe('SecuredRouteForUser', () => {
 
   describe('Authentication and Authorization', () => {
     it('renders protected content when user is logged in and not an admin', () => {
-      mockStorage['IsLoggedIn'] = 'TRUE';
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       // AdminFor is undefined (not set)
 
       renderWithRouter();
@@ -101,7 +109,7 @@ describe('SecuredRouteForUser', () => {
     });
 
     it('redirects to home page when user is not logged in', () => {
-      mockStorage['IsLoggedIn'] = 'FALSE';
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'FALSE';
 
       renderWithRouter();
 
@@ -118,8 +126,10 @@ describe('SecuredRouteForUser', () => {
     });
 
     it('shows PageNotFound when logged-in user has admin role', () => {
-      mockStorage['IsLoggedIn'] = 'TRUE';
-      mockStorage['AdminFor'] = JSON.stringify([{ _id: 'org-123' }]);
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
+      mockStorage['Talawa-admin_AdminFor'] = JSON.stringify([
+        { _id: 'org-123' },
+      ]);
 
       renderWithRouter();
 
@@ -128,8 +138,8 @@ describe('SecuredRouteForUser', () => {
     });
 
     it('shows PageNotFound when AdminFor is an empty array', () => {
-      mockStorage['IsLoggedIn'] = 'TRUE';
-      mockStorage['AdminFor'] = JSON.stringify([]);
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
+      mockStorage['Talawa-admin_AdminFor'] = JSON.stringify([]);
 
       renderWithRouter();
 
@@ -140,7 +150,7 @@ describe('SecuredRouteForUser', () => {
 
   describe('User Activity Tracking', () => {
     it('updates lastActive on mousemove event', () => {
-      mockStorage['IsLoggedIn'] = 'TRUE';
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
 
       act(() => {
@@ -151,7 +161,7 @@ describe('SecuredRouteForUser', () => {
     });
 
     it('updates lastActive on keydown event', () => {
-      mockStorage['IsLoggedIn'] = 'TRUE';
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
 
       act(() => {
@@ -162,7 +172,7 @@ describe('SecuredRouteForUser', () => {
     });
 
     it('updates lastActive on click event', () => {
-      mockStorage['IsLoggedIn'] = 'TRUE';
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
 
       act(() => {
@@ -173,7 +183,7 @@ describe('SecuredRouteForUser', () => {
     });
 
     it('updates lastActive on scroll event', () => {
-      mockStorage['IsLoggedIn'] = 'TRUE';
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
 
       act(() => {
@@ -185,7 +195,7 @@ describe('SecuredRouteForUser', () => {
 
     it('does not set up activity listeners when user is not logged in', () => {
       const addEventListenerSpy = vi.spyOn(document, 'addEventListener');
-      mockStorage['IsLoggedIn'] = 'FALSE';
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'FALSE';
 
       renderWithRouter();
 
@@ -193,18 +203,30 @@ describe('SecuredRouteForUser', () => {
         'mousemove',
         expect.any(Function),
       );
+      expect(addEventListenerSpy).not.toHaveBeenCalledWith(
+        'keydown',
+        expect.any(Function),
+      );
+      expect(addEventListenerSpy).not.toHaveBeenCalledWith(
+        'click',
+        expect.any(Function),
+      );
+      expect(addEventListenerSpy).not.toHaveBeenCalledWith(
+        'scroll',
+        expect.any(Function),
+      );
     });
   });
 
   describe('Session Timeout', () => {
     it('logs out user after 15 minutes of inactivity', () => {
-      mockStorage['IsLoggedIn'] = 'TRUE';
-      mockStorage['email'] = 'test@example.com';
-      mockStorage['id'] = '123';
-      mockStorage['name'] = 'Test User';
-      mockStorage['token'] = 'test-token';
-      mockStorage['userId'] = 'user-123';
-      mockStorage['role'] = 'regular';
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
+      mockStorage['Talawa-admin_email'] = 'test@example.com';
+      mockStorage['Talawa-admin_id'] = '123';
+      mockStorage['Talawa-admin_name'] = 'Test User';
+      mockStorage['Talawa-admin_token'] = 'test-token';
+      mockStorage['Talawa-admin_userId'] = 'user-123';
+      mockStorage['Talawa-admin_role'] = 'regular';
 
       renderWithRouter();
 
@@ -216,18 +238,18 @@ describe('SecuredRouteForUser', () => {
       expect(toast.warn).toHaveBeenCalledWith(
         'Kindly relogin as session has expired',
       );
-      expect(mockStorage['IsLoggedIn']).toBe('FALSE');
-      expect(mockStorage['email']).toBeUndefined();
-      expect(mockStorage['id']).toBeUndefined();
-      expect(mockStorage['name']).toBeUndefined();
-      expect(mockStorage['token']).toBeUndefined();
-      expect(mockStorage['userId']).toBeUndefined();
-      expect(mockStorage['role']).toBeUndefined();
-      expect(mockStorage['AdminFor']).toBeUndefined();
+      expect(mockStorage['Talawa-admin_IsLoggedIn']).toBe('FALSE');
+      expect(mockStorage['Talawa-admin_email']).toBeUndefined();
+      expect(mockStorage['Talawa-admin_id']).toBeUndefined();
+      expect(mockStorage['Talawa-admin_name']).toBeUndefined();
+      expect(mockStorage['Talawa-admin_token']).toBeUndefined();
+      expect(mockStorage['Talawa-admin_userId']).toBeUndefined();
+      expect(mockStorage['Talawa-admin_role']).toBeUndefined();
+      expect(mockStorage['Talawa-admin_AdminFor']).toBeUndefined();
     });
 
     it('redirects to home page after session timeout', () => {
-      mockStorage['IsLoggedIn'] = 'TRUE';
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
 
       act(() => {
@@ -243,7 +265,7 @@ describe('SecuredRouteForUser', () => {
     });
 
     it('resets inactivity timer on user activity', () => {
-      mockStorage['IsLoggedIn'] = 'TRUE';
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
 
       // Advance time but not past timeout
@@ -267,7 +289,7 @@ describe('SecuredRouteForUser', () => {
     });
 
     it('does not trigger timeout check when user is not logged in', () => {
-      mockStorage['IsLoggedIn'] = 'FALSE';
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'FALSE';
       renderWithRouter();
 
       act(() => {
@@ -281,7 +303,7 @@ describe('SecuredRouteForUser', () => {
   describe('Cleanup', () => {
     it('removes event listeners on unmount', () => {
       const removeEventListenerSpy = vi.spyOn(document, 'removeEventListener');
-      mockStorage['IsLoggedIn'] = 'TRUE';
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
 
       const { unmount } = renderWithRouter();
       unmount();
@@ -306,7 +328,7 @@ describe('SecuredRouteForUser', () => {
 
     it('clears interval on unmount', () => {
       const clearIntervalSpy = vi.spyOn(global, 'clearInterval');
-      mockStorage['IsLoggedIn'] = 'TRUE';
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
 
       const { unmount } = renderWithRouter();
       unmount();
@@ -315,7 +337,7 @@ describe('SecuredRouteForUser', () => {
     });
 
     it('handles unmount when interval is not set (not logged in)', () => {
-      mockStorage['IsLoggedIn'] = 'FALSE';
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'FALSE';
 
       const { unmount } = renderWithRouter();
 
@@ -326,8 +348,8 @@ describe('SecuredRouteForUser', () => {
 
   describe('Edge Cases', () => {
     it('handles AdminFor being null', () => {
-      mockStorage['IsLoggedIn'] = 'TRUE';
-      mockStorage['AdminFor'] = JSON.stringify(null);
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
+      mockStorage['Talawa-admin_AdminFor'] = JSON.stringify(null);
 
       renderWithRouter();
 
@@ -336,26 +358,8 @@ describe('SecuredRouteForUser', () => {
       expect(screen.queryByTestId('page-not-found')).not.toBeInTheDocument();
     });
 
-    it('clears AdminFor during logout', () => {
-      mockStorage['IsLoggedIn'] = 'TRUE';
-      mockStorage['AdminFor'] = JSON.stringify([{ _id: 'org-123' }]);
-
-      // Re-render as non-admin to test the timeout path
-      cleanup();
-      mockStorage = {};
-      mockStorage['IsLoggedIn'] = 'TRUE';
-
-      renderWithRouter();
-
-      act(() => {
-        vi.advanceTimersByTime(16 * 60 * 1000);
-      });
-
-      expect(mockStorage['AdminFor']).toBeUndefined();
-    });
-
     it('handles multiple activity events in quick succession', () => {
-      mockStorage['IsLoggedIn'] = 'TRUE';
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
 
       act(() => {
@@ -369,7 +373,7 @@ describe('SecuredRouteForUser', () => {
     });
 
     it('properly checks inactivity at each interval', () => {
-      mockStorage['IsLoggedIn'] = 'TRUE';
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
 
       // First interval check (1 min) - should not logout
@@ -397,8 +401,8 @@ describe('SecuredRouteForUser', () => {
     });
 
     it('handles AdminFor being a string value', () => {
-      mockStorage['IsLoggedIn'] = 'TRUE';
-      mockStorage['AdminFor'] = 'some-org-id';
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
+      mockStorage['Talawa-admin_AdminFor'] = 'some-org-id';
 
       renderWithRouter();
 
@@ -407,7 +411,7 @@ describe('SecuredRouteForUser', () => {
     });
 
     it('remains logged in with continuous activity before timeout', () => {
-      mockStorage['IsLoggedIn'] = 'TRUE';
+      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
 
       // Simulate activity every 5 minutes for 30 minutes
