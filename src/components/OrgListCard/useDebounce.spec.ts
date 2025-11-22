@@ -11,7 +11,6 @@ describe('useDebounce', () => {
   afterEach(() => {
     vi.runOnlyPendingTimers();
     vi.clearAllMocks();
-    // keep fake timers active to respect the global setupTests.ts contract
     vi.useFakeTimers();
   });
 
@@ -70,6 +69,78 @@ describe('useDebounce', () => {
       result.current.debouncedCallback('pending');
     });
 
+    act(() => {
+      result.current.cancel();
+    });
+
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
+
+    expect(callback).not.toHaveBeenCalled();
+  });
+
+  it('should clear timeout and reset internal ref when cancelled', () => {
+    const callback = vi.fn();
+    const { result } = renderHook(() => useDebounce(callback, 100));
+
+    act(() => {
+      result.current.debouncedCallback('test');
+    });
+
+    act(() => {
+      result.current.cancel();
+    });
+
+    act(() => {
+      vi.runAllTimers();
+    });
+
+    expect(callback).not.toHaveBeenCalled();
+  });
+
+  it('should use the updated delay when delay changes', () => {
+    const callback = vi.fn();
+
+    const { result, rerender } = renderHook(
+      ({ delay }) => useDebounce(callback, delay),
+      { initialProps: { delay: 100 } },
+    );
+
+    act(() => {
+      result.current.debouncedCallback('value');
+    });
+
+    act(() => {
+      result.current.cancel();
+    });
+
+    rerender({ delay: 300 });
+
+    act(() => {
+      result.current.debouncedCallback('updated');
+    });
+
+    act(() => {
+      vi.advanceTimersByTime(100);
+    });
+
+    expect(callback).not.toHaveBeenCalled();
+
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
+
+    expect(callback).toHaveBeenCalledTimes(1);
+    expect(callback).toHaveBeenCalledWith('updated');
+  });
+
+  // NEW TEST: covers missing branch in cancel()
+  it('should do nothing when cancel is called with no pending timeout', () => {
+    const callback = vi.fn();
+    const { result } = renderHook(() => useDebounce(callback, 100));
+
+    // Immediately cancel
     act(() => {
       result.current.cancel();
     });
