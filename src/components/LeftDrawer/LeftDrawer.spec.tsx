@@ -507,9 +507,8 @@ describe('LeftDrawer Component', () => {
 
       renderComponent();
 
-      // Note: The LeftDrawer component currently hardcodes isAdmin=true in usePluginDrawerItems call
-      // This appears to be a bug - it should use the actual isAdmin value from the useMemo
-      expect(usePluginDrawerItems).toHaveBeenCalledWith([], true, false);
+      // Non-admin users should have isAdmin=false
+      expect(usePluginDrawerItems).toHaveBeenCalledWith([], false, false);
     });
   });
 
