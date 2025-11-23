@@ -214,4 +214,127 @@ describe('CreatePostModal', () => {
     expect(mockRefetch).toHaveBeenCalled();
     expect(mockOnHide).toHaveBeenCalled();
   });
+  it('handles video file upload preview', async () => {
+    global.URL.createObjectURL = vi.fn(() => 'mock-video-url');
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <CreatePostModal
+          show={true}
+          onHide={mockOnHide}
+          refetch={mockRefetch}
+          orgId={orgId}
+        />
+      </MockedProvider>,
+    );
+
+    const file = new File(['video content'], 'video.mp4', {
+      type: 'video/mp4',
+    });
+    const input = screen.getByTestId('addMediaField');
+
+    await userEvent.upload(input, file);
+
+    expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
+    expect(screen.getByTestId('videoPreview')).toBeInTheDocument();
+  });
+
+  it('handles removing media', async () => {
+    global.URL.createObjectURL = vi.fn(() => 'mock-url');
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <CreatePostModal
+          show={true}
+          onHide={mockOnHide}
+          refetch={mockRefetch}
+          orgId={orgId}
+        />
+      </MockedProvider>,
+    );
+
+    const file = new File(['hello'], 'hello.png', { type: 'image/png' });
+    const input = screen.getByTestId('addMediaField');
+
+    await userEvent.upload(input, file);
+    expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
+
+    const removeBtn = screen.getByTestId('mediaCloseButton');
+    await userEvent.click(removeBtn);
+
+    expect(screen.queryByTestId('mediaPreview')).not.toBeInTheDocument();
+  });
+
+  it('handles pin post toggle', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <CreatePostModal
+          show={true}
+          onHide={mockOnHide}
+          refetch={mockRefetch}
+          orgId={orgId}
+        />
+      </MockedProvider>,
+    );
+
+    const pinCheckbox = screen.getByTestId('pinPost');
+    expect(pinCheckbox).not.toBeChecked();
+
+    await userEvent.click(pinCheckbox);
+    expect(pinCheckbox).toBeChecked();
+  });
+
+  it('handles various mime types correctly', async () => {
+    // This test implicitly covers the getMimeTypeEnum switch case by uploading different file types
+    // We can verify the internal state or just ensure no errors and correct preview behavior
+    global.URL.createObjectURL = vi.fn(() => 'mock-url');
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <CreatePostModal
+          show={true}
+          onHide={mockOnHide}
+          refetch={mockRefetch}
+          orgId={orgId}
+        />
+      </MockedProvider>,
+    );
+
+    const input = screen.getByTestId('addMediaField');
+
+    // Test PNG
+    await userEvent.upload(
+      input,
+      new File([''], 'test.png', { type: 'image/png' }),
+    );
+    expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
+
+    // Test JPEG
+    await userEvent.upload(
+      input,
+      new File([''], 'test.jpg', { type: 'image/jpeg' }),
+    );
+    expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
+
+    // Test WEBP
+    await userEvent.upload(
+      input,
+      new File([''], 'test.webp', { type: 'image/webp' }),
+    );
+    expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
+
+    // Test AVIF
+    await userEvent.upload(
+      input,
+      new File([''], 'test.avif', { type: 'image/avif' }),
+    );
+    expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
+
+    // Test WEBM
+    await userEvent.upload(
+      input,
+      new File([''], 'test.webm', { type: 'video/webm' }),
+    );
+    expect(screen.getByTestId('videoPreview')).toBeInTheDocument();
+  });
 });

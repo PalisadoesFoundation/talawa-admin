@@ -378,9 +378,6 @@ describe('Testing Events Screen [User Portal]', () => {
     localStorage.setItem('id', 'user123');
     localStorage.setItem('role', 'administrator');
     mockUseParams.mockReturnValue({ orgId: 'org123' });
-    mockToast.error.mockClear();
-    mockToast.info.mockClear();
-    mockToast.success.mockClear();
   });
 
   afterEach(() => {
