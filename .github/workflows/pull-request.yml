@@ -1094,7 +1094,7 @@ jobs:
   ZAP-Security-Scan:
     name: ZAP Security Scan
     runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks, Test-Application, Test-Application-E2E]
+    needs: [Test-Application, Test-Application-E2E]
     permissions:
       contents: read
     steps:
