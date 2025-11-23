@@ -72,10 +72,6 @@ describe('CreatePostModal', () => {
     },
   ];
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -170,10 +166,7 @@ describe('CreatePostModal', () => {
           query: CREATE_POST_MUTATION,
           variables: {
             input: {
-              caption: 'Test Title', // The code uses title as caption if description is empty? No, let's check code.
-              // Looking at code:
-              // caption: postformState.postInfo || postformState.posttitle,
-              // So if postInfo is empty, it uses posttitle.
+              caption: 'Test Title',
               organizationId: orgId,
               isPinned: false,
             },

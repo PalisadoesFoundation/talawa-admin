@@ -42,6 +42,7 @@ const paginationMock = vi.hoisted(() => ({
     <div data-testid="pagination">
       <span data-testid="current-page">{page}</span>
       <button
+        type="button"
         data-testid="prev-page"
         onClick={(e) => onPageChange(e, page - 1)}
         disabled={page === 0}
@@ -49,6 +50,7 @@ const paginationMock = vi.hoisted(() => ({
         Previous
       </button>
       <button
+        type="button"
         data-testid="next-page"
         onClick={(e) => onPageChange(e, page + 1)}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
