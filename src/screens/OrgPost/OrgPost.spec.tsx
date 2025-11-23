@@ -1486,14 +1486,159 @@ describe('OrgPost Edge Cases', () => {
     const latestOption = await screen.findByText('Latest');
     fireEvent.click(latestOption);
 
-    // Test pagination buttons
+    // Test pagination buttons are rendered
+    expect(screen.getByTestId('next-page-button')).toBeInTheDocument();
+    expect(screen.getByTestId('previous-page-button')).toBeDisabled();
+  });
+
+  it('handles sorting reset to None', async () => {
+    render(
+      <MockedProvider mocks={[...baseMocks, ...mocks1]} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={['/org/123']}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    // First, enable sorting
+    const sortButton = screen.getByTestId('sortpost-toggle');
+    fireEvent.click(sortButton);
+
+    const latestOption = await screen.findByText('Latest');
+    fireEvent.click(latestOption);
+
+    // Now reset to None
+    fireEvent.click(sortButton);
+    const noneOption = await screen.findByText('None');
+    fireEvent.click(noneOption);
+
+    // After resetting to None, the component should refetch posts
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+  });
+
+  it('handles sorting when no data is available', async () => {
+    const emptyMocks: MockedResponse[] = [
+      ...baseMocks,
+      {
+        request: {
+          query: GET_POSTS_BY_ORG,
+          variables: { input: { organizationId: '123' } },
+        },
+        result: { data: { postsByOrganization: null } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={emptyMocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={['/org/123']}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    // Try to enable sorting when no data is available
+    const sortButton = screen.getByTestId('sortpost-toggle');
+    fireEvent.click(sortButton);
+
+    const latestOption = await screen.findByText('Latest');
+    fireEvent.click(latestOption);
+
+    // Should handle gracefully without crashing
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+  });
+
+  it('handles next page for sorted posts when not at max page', async () => {
+    render(
+      <MockedProvider mocks={[...baseMocks, ...mocks1]} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={['/org/123']}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    // Enable sorting
+    const sortButton = screen.getByTestId('sortpost-toggle');
+    fireEvent.click(sortButton);
+
+    const latestOption = await screen.findByText('Latest');
+    fireEvent.click(latestOption);
+
+    // Click next page (this tests lines 245-247)
     const nextButton = screen.getByTestId('next-page-button');
-    const prevButton = screen.getByTestId('previous-page-button');
-
-    expect(prevButton).toBeDisabled();
-    // expect(nextButton).not.toBeDisabled();
-
     fireEvent.click(nextButton);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+  });
+
+  it('handles previous page for sorted posts', async () => {
+    render(
+      <MockedProvider mocks={[...baseMocks, ...mocks1]} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={['/org/123']}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    // Enable sorting
+    const sortButton = screen.getByTestId('sortpost-toggle');
+    fireEvent.click(sortButton);
+
+    const latestOption = await screen.findByText('Latest');
+    fireEvent.click(latestOption);
+
+    // Go to next page first
+    const nextButton = screen.getByTestId('next-page-button');
+    fireEvent.click(nextButton);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    // Now click previous page (this tests lines 264-265)
+    const prevButton = screen.getByTestId('previous-page-button');
+    fireEvent.click(prevButton);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
   });
 
   it('handles form submission with empty title', async () => {
