@@ -1675,7 +1675,6 @@ describe('OrgPost Edge Cases', () => {
     }));
 
     const largeDataMocks: MockedResponse[] = [
-      ...baseMocks,
       {
         request: {
           query: GET_POSTS_BY_ORG,
@@ -1689,6 +1688,7 @@ describe('OrgPost Edge Cases', () => {
           },
         },
       },
+      ...baseMocks,
     ];
 
     render(
@@ -1733,6 +1733,51 @@ describe('OrgPost Edge Cases', () => {
     const prevButton = screen.getByTestId('previous-page-button');
     fireEvent.click(prevButton);
 
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+  });
+
+  it('handles sorting when postsByOrganization is missing', async () => {
+    const missingDataMock = {
+      request: {
+        query: GET_POSTS_BY_ORG,
+        variables: { input: { organizationId: '123' } },
+      },
+      result: {
+        data: {
+          postsByOrganization: null,
+        },
+      },
+    };
+
+    render(
+      <MockedProvider
+        mocks={[missingDataMock, ...baseMocks]}
+        addTypename={false}
+      >
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={['/org/123']}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    // Enable sorting
+    const sortButton = screen.getByTestId('sortpost-toggle');
+    fireEvent.click(sortButton);
+
+    const latestOption = await screen.findByText('Latest');
+    fireEvent.click(latestOption);
+
+    // Should handle gracefully without crashing and return early
     await waitFor(() => {
       expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
     });
