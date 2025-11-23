@@ -741,11 +741,11 @@
     "Next": "下一页",
     "Previous": "上一页",
     "cancel": "取消",
-    "postTitleError": "Post title cannot be empty!",
-    "organizationIdMissing": "Organization ID is missing!",
-    "postDescription": "Post Description",
-    "addVideo": "Add Video",
-    "creatingPost": "Creating Post..."
+    "postTitleError": "帖子标题不能为空！",
+    "organizationIdMissing": "组织 ID 缺失！",
+    "postDescription": "帖子描述",
+    "addVideo": "添加视频",
+    "creatingPost": "正在创建帖子..."
   },
   "postNotFound": {
     "post": "邮政",

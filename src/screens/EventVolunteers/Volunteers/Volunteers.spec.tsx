@@ -117,21 +117,12 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('should render Volunteers screen', async () => {
-    routerMocks.useParams.mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
-
     renderVolunteers(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
   });
 
   it('Check Sorting Functionality', async () => {
-    routerMocks.useParams.mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
     renderVolunteers(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
@@ -165,10 +156,6 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('should render status chips for all volunteer statuses', async () => {
-    routerMocks.useParams.mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
     renderVolunteers(link1);
 
     // Wait for volunteers to load
@@ -197,10 +184,6 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Filter Volunteers by status (All)', async () => {
-    routerMocks.useParams.mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
     renderVolunteers(link1);
 
     const filterBtn = await screen.findByTestId('filter');
@@ -218,10 +201,6 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Filter Volunteers by status (Pending)', async () => {
-    routerMocks.useParams.mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
     renderVolunteers(link1);
 
     const filterBtn = await screen.findByTestId('filter');
@@ -239,10 +218,6 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Filter Volunteers by status (Accepted)', async () => {
-    routerMocks.useParams.mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
     renderVolunteers(link1);
 
     const filterBtn = await screen.findByTestId('filter');
@@ -260,10 +235,6 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Search by pressing Enter key', async () => {
-    routerMocks.useParams.mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
     renderVolunteers(link1);
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
@@ -278,10 +249,6 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Search by clicking search button', async () => {
-    routerMocks.useParams.mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
     renderVolunteers(link1);
     const searchInput = await screen.findByTestId('searchBy');
     const searchBtn = await screen.findByTestId('searchBtn');
@@ -304,10 +271,6 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('should render screen with No Volunteers', async () => {
-    routerMocks.useParams.mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
     renderVolunteers(link3);
 
     await waitFor(() => {
@@ -317,10 +280,6 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Error while fetching volunteers data', async () => {
-    routerMocks.useParams.mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
     renderVolunteers(link2);
 
     await waitFor(() => {
@@ -329,10 +288,6 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Open and close Volunteer Modal (View)', async () => {
-    routerMocks.useParams.mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
     renderVolunteers(link1);
 
     const viewItemBtn = await screen.findAllByTestId('viewItemBtn');
@@ -343,10 +298,6 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Open and Close Volunteer Modal (Delete)', async () => {
-    routerMocks.useParams.mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
     renderVolunteers(link1);
 
     const deleteItemBtn = await screen.findAllByTestId('deleteItemBtn');
@@ -357,10 +308,6 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('Open and close Volunteer Modal (Create)', async () => {
-    routerMocks.useParams.mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
     renderVolunteers(link1);
 
     const addVolunteerBtn = await screen.findByTestId('addVolunteerBtn');
@@ -371,12 +318,7 @@ describe('Testing Volunteers Screen', () => {
   });
 
   describe('Client-side Search Filtering', () => {
-    beforeEach(() => {
-      routerMocks.useParams.mockReturnValue({
-        orgId: 'orgId',
-        eventId: 'eventId',
-      });
-    });
+    beforeEach(() => {});
 
     it('should test debouncedSearch useMemo creation and execution', async () => {
       renderVolunteers(link1);
@@ -457,12 +399,7 @@ describe('Testing Volunteers Screen', () => {
   });
 
   describe('Status Filtering in volunteers useMemo', () => {
-    beforeEach(() => {
-      routerMocks.useParams.mockReturnValue({
-        orgId: 'orgId',
-        eventId: 'eventId',
-      });
-    });
+    beforeEach(() => {});
 
     it('should execute Rejected status filtering logic', async () => {
       renderVolunteers(link1);
@@ -591,10 +528,6 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('should render Avatar component when volunteer has no avatarURL', async () => {
-    routerMocks.useParams.mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
     renderVolunteers(link1);
 
     // Wait for volunteers to load and DataGrid to render
@@ -622,10 +555,6 @@ describe('Testing Volunteers Screen', () => {
   });
 
   it('should render volunteer modals conditionally when volunteer state is set', async () => {
-    routerMocks.useParams.mockReturnValue({
-      orgId: 'orgId',
-      eventId: 'eventId',
-    });
     renderVolunteers(link1);
 
     // Wait for volunteers to load

@@ -741,11 +741,11 @@
     "Next": "Page suivante",
     "Previous": "Page précédente",
     "cancel": "Annuler",
-    "postTitleError": "Post title cannot be empty!",
-    "organizationIdMissing": "Organization ID is missing!",
-    "postDescription": "Post Description",
-    "addVideo": "Add Video",
-    "creatingPost": "Creating Post..."
+    "postTitleError": "Le titre de la publication ne peut pas être vide !",
+    "organizationIdMissing": "L'ID de l'organisation est manquant !",
+    "postDescription": "Description de la publication",
+    "addVideo": "Ajouter une vidéo",
+    "creatingPost": "Création de la publication..."
   },
   "postNotFound": {
     "post": "Poste",

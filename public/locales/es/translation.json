@@ -741,18 +741,18 @@
     "pinPost": "Fijar publicación",
     "Next": "Siguiente página",
     "Previous": "Página anterior",
-    "postTitleError": "Post title cannot be empty!",
-    "organizationIdMissing": "Organization ID is missing!",
-    "postDescription": "Post Description",
-    "addVideo": "Add Video",
-    "creatingPost": "Creating Post..."
+    "postTitleError": "¡El título de la publicación no puede estar vacío!",
+    "organizationIdMissing": "¡Falta el ID de la organización!",
+    "postDescription": "Descripción de la publicación",
+    "addVideo": "Añadir video",
+    "creatingPost": "Creando publicación..."
   },
   "postNotFound": {
-    "post": "Publicaciones",
-    "not found!": "Extraviado!",
+    "post": "Publicación",
+    "not found!": "¡No encontrado!",
     "organization": "Organización",
-    "post not found!": "Publicaciones Extraviado!",
-    "organization not found!": "Organización Extraviado!"
+    "post not found!": "¡Publicación no encontrada!",
+    "organization not found!": "¡Organización no encontrada!"
   },
   "userNotFound": {
     "user": "usuari(a/o)",
