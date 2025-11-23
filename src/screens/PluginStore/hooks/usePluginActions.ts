@@ -5,28 +5,37 @@ import { useState, useCallback } from 'react';
 import { getPluginManager } from 'plugin/manager';
 import type { IPluginMeta } from 'plugin';
 import {
-  useCreatePlugin,
   useUpdatePlugin,
   useDeletePlugin,
   useInstallPlugin,
 } from 'plugin/graphql-service';
 import { adminPluginFileService } from 'plugin/services/AdminPluginFileService';
 
-interface UsePluginActionsProps {
-  pluginData: any;
-  refetch: () => Promise<any>;
+interface IPluginGraphQLItem {
+  id: string;
+  pluginId: string;
+  isActivated?: boolean;
+}
+
+interface IUsePluginActionsProps {
+  pluginData?: {
+    getPlugins?: IPluginGraphQLItem[];
+  };
+  refetch: () => Promise<unknown>;
 }
 
 export function usePluginActions({
   pluginData,
   refetch,
-}: UsePluginActionsProps) {
+}: IUsePluginActionsProps) {
   const [loading, setLoading] = useState(false);
   const [showUninstallModal, setShowUninstallModal] = useState(false);
   const [pluginToUninstall, setPluginToUninstall] =
     useState<IPluginMeta | null>(null);
 
-  const [createPlugin] = useCreatePlugin();
+  // SAFELY normalize pluginData
+  const plugins = pluginData?.getPlugins ?? [];
+
   const [updatePlugin] = useUpdatePlugin();
   const [deletePlugin] = useDeletePlugin();
   const [installPlugin] = useInstallPlugin();
@@ -35,25 +44,16 @@ export function usePluginActions({
     async (plugin: IPluginMeta) => {
       setLoading(true);
       try {
-        // First, call the API to mark the plugin as installed
         await installPlugin({
           variables: {
-            input: {
-              pluginId: plugin.id,
-            },
+            input: { pluginId: plugin.id },
           },
         });
 
-        // Then, call the admin plugin manager to handle the installation lifecycle
         const success = await getPluginManager().installPlugin(plugin.id);
-        if (!success) {
-          throw new Error('Failed to install plugin in admin plugin manager');
-        }
+        if (!success) throw new Error('Failed to install plugin');
 
-        // Refetch plugin data to update UI
         await refetch();
-
-        // Reload the page to ensure all plugin states are properly updated
         window.location.reload();
       } catch (error) {
         console.error('Failed to install plugin:', error);
@@ -68,10 +68,8 @@ export function usePluginActions({
     async (plugin: IPluginMeta, status: 'active' | 'inactive') => {
       setLoading(true);
       try {
-        // Update plugin status in GraphQL
-        const existingPlugin = pluginData?.getPlugins?.find(
-          (p: any) => p.pluginId === plugin.id,
-        );
+        const existingPlugin = plugins.find((p) => p.pluginId === plugin.id);
+
         if (existingPlugin) {
           await updatePlugin({
             variables: {
@@ -83,19 +81,13 @@ export function usePluginActions({
           });
         }
 
-        // Update plugin manager status
         const success = await getPluginManager().togglePluginStatus(
           plugin.id,
           status,
         );
-        if (!success) {
-          throw new Error('Failed to toggle plugin status');
-        }
+        if (!success) throw new Error('Failed to toggle plugin');
 
-        // Refetch plugin data to update UI
         await refetch();
-
-        // Reload the page to ensure all plugin states are properly updated
         window.location.reload();
       } catch (error) {
         console.error('Failed to toggle plugin status:', error);
@@ -103,7 +95,7 @@ export function usePluginActions({
         setLoading(false);
       }
     },
-    [pluginData, updatePlugin, refetch],
+    [plugins, updatePlugin, refetch],
   );
 
   const uninstallPlugin = useCallback((plugin: IPluginMeta) => {
@@ -116,50 +108,30 @@ export function usePluginActions({
 
     setLoading(true);
     try {
-      const existingPlugin = pluginData?.getPlugins?.find(
-        (p: any) => p.pluginId === pluginToUninstall.id,
+      const existingPlugin = plugins.find(
+        (p) => p.pluginId === pluginToUninstall.id,
       );
+
       if (existingPlugin) {
-        // Remove permanently - delete from database
         await deletePlugin({
           variables: {
-            input: {
-              id: existingPlugin.id,
-            },
+            input: { id: existingPlugin.id },
           },
         });
 
-        // Remove plugin folder from admin filesystem
         try {
-          const success = await adminPluginFileService.removePlugin(
-            pluginToUninstall.id,
-          );
-          if (!success) {
-            console.error(
-              `Failed to remove admin plugin directory for ${pluginToUninstall.id}`,
-            );
-          }
-        } catch (error) {
-          console.error(
-            `Failed to remove admin plugin directory for ${pluginToUninstall.id}:`,
-            error,
-          );
-          // Don't throw error - plugin is already deleted from database
+          await adminPluginFileService.removePlugin(pluginToUninstall.id);
+        } catch (err) {
+          console.error('Failed to remove plugin directory:', err);
         }
       }
 
-      // Call admin plugin manager uninstall lifecycle
       const success = await getPluginManager().uninstallPlugin(
         pluginToUninstall.id,
       );
-      if (!success) {
-        throw new Error('Failed to uninstall plugin');
-      }
+      if (!success) throw new Error('Failed to uninstall plugin');
 
-      // Refetch plugin data to update UI
       await refetch();
-
-      // Reload the page to ensure all plugin states are properly updated
       window.location.reload();
     } catch (error) {
       console.error('Failed to uninstall plugin:', error);
@@ -168,7 +140,7 @@ export function usePluginActions({
       setShowUninstallModal(false);
       setPluginToUninstall(null);
     }
-  }, [pluginToUninstall, pluginData, deletePlugin, refetch]);
+  }, [plugins, pluginToUninstall, deletePlugin, refetch]);
 
   const closeUninstallModal = useCallback(() => {
     setShowUninstallModal(false);
