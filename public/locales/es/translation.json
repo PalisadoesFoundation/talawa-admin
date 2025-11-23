@@ -713,7 +713,6 @@
     "raisedAmount": "Monto recaudado",
     "pledgedAmount": "Monto comprometido"
   },
-
   "orgPost": {
     "title": "Publicaciones de Talawa",
     "searchPost": "Buscar Publicación",
@@ -741,7 +740,12 @@
     "postCreatedSuccess": "¡Felicidades! Has publicado algo.",
     "pinPost": "Fijar publicación",
     "Next": "Siguiente página",
-    "Previous": "Página anterior"
+    "Previous": "Página anterior",
+    "postTitleError": "Post title cannot be empty!",
+    "organizationIdMissing": "Organization ID is missing!",
+    "postDescription": "Post Description",
+    "addVideo": "Add Video",
+    "creatingPost": "Creating Post..."
   },
   "postNotFound": {
     "post": "Publicaciones",
@@ -1110,7 +1114,6 @@
     "article": "Artículo",
     "postNowVisibleInFeed": "Publicar ahora visible en el feed"
   },
-
   "eventAttendance": {
     "historical_statistics": "Estadísticas históricas",
     "Search member": "Buscar miembro",
@@ -1123,7 +1126,6 @@
     "loading": "Cargando...",
     "noAttendees": "No se encontraron asistentes"
   },
-
   "eventRegistrant": {
     "sort": "Ordenar",
     "allRegistrants": "Todos los registrados",

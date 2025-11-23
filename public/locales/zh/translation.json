@@ -740,7 +740,12 @@
     "pinPost": "针柱",
     "Next": "下一页",
     "Previous": "上一页",
-    "cancel": "取消"
+    "cancel": "取消",
+    "postTitleError": "Post title cannot be empty!",
+    "organizationIdMissing": "Organization ID is missing!",
+    "postDescription": "Post Description",
+    "addVideo": "Add Video",
+    "creatingPost": "Creating Post..."
   },
   "postNotFound": {
     "post": "邮政",

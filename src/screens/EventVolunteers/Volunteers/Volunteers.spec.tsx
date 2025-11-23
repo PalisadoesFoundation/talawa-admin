@@ -79,10 +79,8 @@ const renderVolunteers = (link: ApolloLink): RenderResult => {
 };
 
 /** Mock useParams to provide consistent test data */
-
 describe('Testing Volunteers Screen', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({
       orgId: 'orgId',
       eventId: 'eventId',

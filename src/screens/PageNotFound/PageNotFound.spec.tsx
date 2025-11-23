@@ -15,16 +15,13 @@ describe('Testing Page not found component', () => {
 
   beforeEach(() => {
     localStorage.clear();
-    const { setItem: localSetItem } = useLocalStorage();
-    setItem = localSetItem;
+    setItem = useLocalStorage().setItem;
   });
 
   afterEach(() => {
     localStorage.clear();
   });
-
   it('should render component properly for User', () => {
-    //setItem('AdminFor', undefined);
     render(
       <BrowserRouter>
         <Provider store={store}>

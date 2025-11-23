@@ -93,7 +93,7 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
   });
 
   afterEach(() => {
-    routerSpies.navigate.mockReset();
+    vi.clearAllMocks();
     localStorage.removeItem('name');
     localStorage.removeItem('sidebar');
   });

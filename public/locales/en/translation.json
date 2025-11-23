@@ -741,7 +741,11 @@
     "postTitleError": "Post title cannot be empty!",
     "Next": "Next Page",
     "Previous": "Previous Page",
-    "cancel": "cancel"
+    "cancel": "cancel",
+    "organizationIdMissing": "Organization ID is missing!",
+    "postDescription": "Post Description",
+    "addVideo": "Add Video",
+    "creatingPost": "Creating Post..."
   },
   "postNotFound": {
     "post": "Post",
