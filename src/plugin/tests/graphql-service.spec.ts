@@ -4,6 +4,7 @@ import {
   PluginGraphQLService,
   useGetAllPlugins,
   useCreatePlugin,
+  useInstallPlugin,
   useUpdatePlugin,
   useDeletePlugin,
 } from '../graphql-service';
@@ -177,6 +178,62 @@ describe('PluginGraphQLService', () => {
       expect(result).toBeNull();
       expect(consoleSpy).toHaveBeenCalledWith(
         'Failed to create plugin:',
+        expect.any(Error),
+      );
+
+      consoleSpy.mockRestore();
+    });
+  });
+
+  describe('installPlugin', () => {
+    it('should install plugin successfully', async () => {
+      const mockPlugin = {
+        id: '1',
+        pluginId: 'test-plugin',
+        isActivated: true,
+        isInstalled: true,
+        backup: false,
+        createdAt: '2023-01-01',
+        updatedAt: '2023-01-01',
+      };
+      const input = { orgId: 'org1', pluginId: 'test-plugin' };
+
+      mockApolloClient.mutate.mockResolvedValue({
+        data: { installPlugin: mockPlugin },
+      });
+
+      const result = await graphqlService.installPlugin(input);
+      expect(result).toEqual(mockPlugin);
+      expect(mockApolloClient.mutate).toHaveBeenCalledWith(
+        expect.objectContaining({
+          mutation: expect.anything(),
+          variables: { input },
+          refetchQueries: expect.any(Array),
+        }),
+      );
+    });
+
+    it('should return null when install result is null', async () => {
+      const input = { orgId: 'org1', pluginId: 'test-plugin' };
+      mockApolloClient.mutate.mockResolvedValue({
+        data: { installPlugin: null },
+      });
+
+      const result = await graphqlService.installPlugin(input);
+      expect(result).toBeNull();
+    });
+
+    it('should handle errors and return null', async () => {
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+      const input = { orgId: 'org1', pluginId: 'test-plugin' };
+      mockApolloClient.mutate.mockRejectedValue(new Error('Install failed'));
+
+      const result = await graphqlService.installPlugin(input);
+      expect(result).toBeNull();
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Failed to install plugin:',
         expect.any(Error),
       );
 
@@ -421,6 +478,55 @@ describe('GraphQL Hooks', () => {
       const { result } = renderHook(() => useCreatePlugin());
 
       const input = { pluginId: 'plugin-1' };
+      await result.current[0]({ variables: { input } });
+
+      expect(mockMutationFn).toHaveBeenCalledWith({ variables: { input } });
+    });
+  });
+
+  describe('useInstallPlugin', () => {
+    it('should call useMutation and return mutation function', () => {
+      const mockMutationFn = vi.fn();
+      const mockMutationResult = {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        called: false,
+        reset: vi.fn(),
+      };
+
+      vi.mocked(useMutation).mockReturnValue([
+        mockMutationFn,
+        mockMutationResult,
+      ] as unknown as ReturnType<typeof useMutation>);
+
+      const { result } = renderHook(() => useInstallPlugin());
+
+      expect(vi.mocked(useMutation)).toHaveBeenCalled();
+      expect(result.current[0]).toBe(mockMutationFn);
+      expect(result.current[1]).toEqual(mockMutationResult);
+    });
+
+    it('should pass correct variables when mutation function is called', async () => {
+      const mockMutationFn = vi.fn().mockResolvedValue({
+        data: { installPlugin: { id: '1', isInstalled: true } },
+      });
+      const mockMutationResult = {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        called: false,
+        reset: vi.fn(),
+      };
+
+      vi.mocked(useMutation).mockReturnValue([
+        mockMutationFn,
+        mockMutationResult,
+      ] as unknown as ReturnType<typeof useMutation>);
+
+      const { result } = renderHook(() => useInstallPlugin());
+
+      const input = { orgId: 'org1', pluginId: 'test-plugin' };
       await result.current[0]({ variables: { input } });
 
       expect(mockMutationFn).toHaveBeenCalledWith({ variables: { input } });
