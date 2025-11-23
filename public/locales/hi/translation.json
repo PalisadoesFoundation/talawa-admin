@@ -741,11 +741,11 @@
     "Next": "अगला पृष्ठ",
     "Previous": "पिछला पृष्ठ",
     "cancel": "रद्द करें",
-    "postTitleError": "पोस्ट का शीर्षक खाली नहीं हो सकता!",
+    "messageTitleError": "पोस्ट का शीर्षक खाली नहीं हो सकता!",
     "organizationIdMissing": "संगठन आईडी गायब है!",
-    "postDescription": "पोस्ट विवरण",
+    "messageDescription": "पोस्ट विवरण",
     "addVideo": "वीडियो जोड़ें",
-    "creatingPost": "पोस्ट बनाई जा रही है..."
+    "creatingMessage": "पोस्ट बनाई जा रही है..."
   },
   "postNotFound": {
     "post": "डाक",

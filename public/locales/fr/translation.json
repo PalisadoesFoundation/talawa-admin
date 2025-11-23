@@ -741,11 +741,11 @@
     "Next": "Page suivante",
     "Previous": "Page précédente",
     "cancel": "Annuler",
-    "postTitleError": "Le titre de la publication ne peut pas être vide !",
+    "messageTitleError": "Le titre du message ne peut pas être vide !",
     "organizationIdMissing": "L'ID de l'organisation est manquant !",
-    "postDescription": "Description de la publication",
+    "messageDescription": "Description du message",
     "addVideo": "Ajouter une vidéo",
-    "creatingPost": "Création de la publication..."
+    "creatingMessage": "Création du message..."
   },
   "postNotFound": {
     "post": "Poste",

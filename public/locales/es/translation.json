@@ -741,11 +741,11 @@
     "pinPost": "Fijar publicación",
     "Next": "Siguiente página",
     "Previous": "Página anterior",
-    "postTitleError": "¡El título de la publicación no puede estar vacío!",
+    "messageTitleError": "¡El título de la publicación no puede estar vacío!",
     "organizationIdMissing": "¡Falta el ID de la organización!",
-    "postDescription": "Descripción de la publicación",
+    "messageDescription": "Descripción de la publicación",
     "addVideo": "Añadir video",
-    "creatingPost": "Creando publicación..."
+    "creatingMessage": "Creando publicación..."
   },
   "postNotFound": {
     "post": "Publicación",

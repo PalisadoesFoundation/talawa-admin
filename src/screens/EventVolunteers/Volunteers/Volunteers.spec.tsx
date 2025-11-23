@@ -318,8 +318,6 @@ describe('Testing Volunteers Screen', () => {
   });
 
   describe('Client-side Search Filtering', () => {
-    beforeEach(() => {});
-
     it('should test debouncedSearch useMemo creation and execution', async () => {
       renderVolunteers(link1);
 
@@ -399,8 +397,6 @@ describe('Testing Volunteers Screen', () => {
   });
 
   describe('Status Filtering in volunteers useMemo', () => {
-    beforeEach(() => {});
-
     it('should execute Rejected status filtering logic', async () => {
       renderVolunteers(link1);
 

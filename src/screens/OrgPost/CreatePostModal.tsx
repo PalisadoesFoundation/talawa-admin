@@ -109,7 +109,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
 
       // Validate that title is not empty after trimming
       if (trimmedTitle === '') {
-        toast.error(t('postTitleError'));
+        toast.error(t('messageTitleError'));
         return;
       }
 
@@ -296,12 +296,12 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
             }}
           />
 
-          <Form.Label htmlFor="postInfo">{t('postDescription')}</Form.Label>
+          <Form.Label htmlFor="postInfo">{t('messageDescription')}</Form.Label>
           <Form.Control
             as="textarea"
             id="postInfo"
             className={`mb-3 ${styles.inputField}`}
-            placeholder={t('postDescription')}
+            placeholder={t('messageDescription')}
             data-testid="modalinfo"
             data-cy="modalinfo"
             rows={3}
@@ -440,7 +440,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
             className={`${styles.addButton} mt-2`}
             disabled={createPostLoading}
           >
-            {createPostLoading ? t('creatingPost') : t('addPost')}
+            {createPostLoading ? t('creatingMessage') : t('addPost')}
           </Button>
         </Modal.Footer>
       </Form>

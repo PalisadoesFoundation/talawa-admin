@@ -738,14 +738,11 @@
     "tag": " Your browser does not support the video tag",
     "postCreatedSuccess": "Congratulations! You have Posted Something.",
     "pinPost": "Pin post",
-    "postTitleError": "Post title cannot be empty!",
-    "Next": "Next Page",
-    "Previous": "Previous Page",
-    "cancel": "cancel",
+    "messageTitleError": "Post title cannot be empty!",
     "organizationIdMissing": "Organization ID is missing!",
-    "postDescription": "Post Description",
+    "messageDescription": "Post Description",
     "addVideo": "Add Video",
-    "creatingPost": "Creating Post..."
+    "creatingMessage": "Creating Post..."
   },
   "postNotFound": {
     "post": "Post",
