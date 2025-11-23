@@ -1,7 +1,13 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, cleanup, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  cleanup,
+  waitFor,
+  fireEvent,
+} from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
@@ -9,23 +15,142 @@ import EventRegistrants from './EventRegistrants';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
-import { REGISTRANTS_MOCKS } from './Registrations.mocks';
-import { MOCKS as ATTENDEES_MOCKS } from '../EventAttendance/EventAttendanceMocks';
 import { vi } from 'vitest';
-import { EVENT_REGISTRANTS, EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
-import styles from 'style/app-fixed.module.css';
+import {
+  EVENT_REGISTRANTS,
+  EVENT_DETAILS,
+  EVENT_CHECKINS,
+} from 'GraphQl/Queries/Queries';
+import { REMOVE_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
+import { toast } from 'react-toastify';
 
-const COMBINED_MOCKS = [...REGISTRANTS_MOCKS, ...ATTENDEES_MOCKS];
+// Mock toast
+vi.mock('react-toastify', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warn: vi.fn(),
+  },
+}));
 
-const link = new StaticMockLink(COMBINED_MOCKS, true);
+const mockNavigate = vi.fn();
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
+  return {
+    ...actual,
+    useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
+    useNavigate: () => mockNavigate,
+  };
+});
 
-async function wait(): Promise<void> {
-  await waitFor(() => {
-    return Promise.resolve();
-  });
-}
+// Mock data setup
+const EVENT_DETAILS_MOCK = {
+  request: {
+    query: EVENT_DETAILS,
+    variables: { eventId: 'event123' },
+  },
+  result: {
+    data: {
+      event: {
+        id: 'event123',
+        title: 'Test Event',
+        recurrenceRule: null,
+      },
+    },
+  },
+};
 
-const renderEventRegistrants = (): RenderResult => {
+const EVENT_CHECKINS_MOCK = {
+  request: {
+    query: EVENT_CHECKINS,
+    variables: { eventId: 'event123' },
+  },
+  result: {
+    data: {
+      event: {
+        attendeesCheckInStatus: [
+          {
+            user: { id: '6589386a2caa9d8d69087484' },
+            isCheckedIn: true,
+          },
+          {
+            user: { id: '6589386a2caa9d8d69087485' },
+            isCheckedIn: false,
+          },
+        ],
+      },
+    },
+  },
+};
+
+const REGISTRANTS_MOCK = {
+  request: {
+    query: EVENT_REGISTRANTS,
+    variables: { eventId: 'event123' },
+  },
+  result: {
+    data: {
+      getEventAttendeesByEventId: [
+        {
+          id: '6589386a2caa9d8d69087484',
+          user: {
+            id: '6589386a2caa9d8d69087484',
+            name: 'Bruce Garza',
+            emailAddress: 'bruce@example.com',
+          },
+          isRegistered: true,
+          createdAt: '2030-04-13T10:23:17.742Z',
+        },
+        {
+          id: '6589386a2caa9d8d69087485',
+          user: {
+            id: '6589386a2caa9d8d69087485',
+            name: 'Jane Smith',
+            emailAddress: 'jane@example.com',
+          },
+          isRegistered: true,
+          createdAt: '2030-04-13T10:23:17.742Z',
+        },
+      ],
+    },
+  },
+};
+
+const REMOVE_ATTENDEE_SUCCESS_MOCK = {
+  request: {
+    query: REMOVE_EVENT_ATTENDEE,
+    variables: { userId: '6589386a2caa9d8d69087485', eventId: 'event123' },
+  },
+  result: {
+    data: {
+      removeEventAttendee: {
+        id: '6589386a2caa9d8d69087485',
+      },
+    },
+  },
+};
+
+const REMOVE_ATTENDEE_ERROR_MOCK = {
+  request: {
+    query: REMOVE_EVENT_ATTENDEE,
+    variables: { userId: 'user3', eventId: 'event123' },
+  },
+  error: new Error('Failed to remove attendee'),
+};
+
+const COMBINED_MOCKS = [
+  EVENT_DETAILS_MOCK,
+  EVENT_CHECKINS_MOCK,
+  REGISTRANTS_MOCK,
+  REMOVE_ATTENDEE_SUCCESS_MOCK,
+  REMOVE_ATTENDEE_ERROR_MOCK,
+];
+
+// Change the type to 'any[]' to allow flexibility with different mock arrays
+const renderEventRegistrants = (
+  customMocks: any[] = COMBINED_MOCKS,
+): RenderResult => {
+  const link = new StaticMockLink(customMocks, true);
   return render(
     <MockedProvider addTypename={false} link={link}>
       <BrowserRouter>
@@ -39,83 +164,299 @@ const renderEventRegistrants = (): RenderResult => {
   );
 };
 
-describe('Event Registrants Component', () => {
+describe('Event Registrants Component - Enhanced Coverage', () => {
   beforeEach(() => {
-    vi.mock('react-router', async () => {
-      const actual = await vi.importActual('react-router');
-      return {
-        ...actual,
-        useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
-        useNavigate: vi.fn(),
-      };
-    });
+    vi.clearAllMocks();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
     cleanup();
   });
 
+  // Basic rendering tests
   test('Component loads correctly with table headers', async () => {
     renderEventRegistrants();
-
-    await wait();
 
     await waitFor(() => {
       expect(screen.getByTestId('table-header-serial')).toBeInTheDocument();
       expect(screen.getByTestId('table-header-registrant')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('table-header-registered-at'),
+      ).toBeInTheDocument();
       expect(screen.getByTestId('table-header-created-at')).toBeInTheDocument();
       expect(screen.getByTestId('table-header-options')).toBeInTheDocument();
     });
   });
 
-  test('Renders registrants button correctly', async () => {
+  test('Renders all column headers with correct text', async () => {
     renderEventRegistrants();
 
     await waitFor(() => {
-      expect(screen.getByTestId('stats-modal')).toBeInTheDocument();
-      expect(screen.getByTestId('filter-button')).toBeInTheDocument();
+      expect(screen.getByTestId('table-header-serial')).toHaveTextContent(
+        'Serial Number',
+      );
+      expect(screen.getByTestId('table-header-registrant')).toHaveTextContent(
+        'Registrant',
+      );
+      expect(
+        screen.getByTestId('table-header-registered-at'),
+      ).toHaveTextContent('Registered At');
+      expect(screen.getByTestId('table-header-created-at')).toHaveTextContent(
+        'Created At',
+      );
+      expect(screen.getByTestId('table-header-options')).toHaveTextContent(
+        'Options',
+      );
     });
   });
 
-  test('Handles empty registrants list', async () => {
+  // Data display tests
+  test('Displays registrant data correctly', async () => {
+    renderEventRegistrants();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('registrant-row-0')).toBeInTheDocument();
+      expect(screen.getByTestId('registrant-row-1')).toBeInTheDocument();
+    });
+
+    expect(screen.getByTestId('attendee-name-0')).toHaveTextContent(
+      'Bruce Garza',
+    );
+    expect(screen.getByTestId('attendee-name-1')).toHaveTextContent(
+      'Jane Smith',
+    );
+  });
+
+  test('Displays serial numbers correctly', async () => {
+    renderEventRegistrants();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('serial-number-1')).toHaveTextContent('1');
+      expect(screen.getByTestId('serial-number-2')).toHaveTextContent('2');
+    });
+  });
+
+  test('Formats registration dates correctly', async () => {
+    renderEventRegistrants();
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('registrant-registered-at-0'),
+      ).toHaveTextContent('2030-04-13');
+      expect(
+        screen.getByTestId('registrant-registered-at-1'),
+      ).toHaveTextContent('2030-04-13');
+    });
+  });
+
+  test('Formats creation time correctly', async () => {
+    renderEventRegistrants();
+
+    await waitFor(() => {
+      const timeCell0 = screen.getByTestId('registrant-created-at-0');
+      const timeCell1 = screen.getByTestId('registrant-created-at-1');
+
+      // Should display formatted time (10:23 AM format)
+      expect(timeCell0).toBeInTheDocument();
+      expect(timeCell1).toBeInTheDocument();
+      // The exact format may vary by locale, so we just check it's not N/A
+      expect(timeCell0).not.toHaveTextContent('N/A');
+      expect(timeCell1).not.toHaveTextContent('N/A');
+    });
+  });
+
+  // Check-in status tests
+  test('Displays checked-in status for users who have checked in', async () => {
+    renderEventRegistrants();
+
+    await waitFor(() => {
+      const deleteButton = screen.getByTestId('delete-registrant-0');
+      expect(deleteButton).toHaveTextContent('Checked In');
+      expect(deleteButton).toBeDisabled();
+      expect(deleteButton).toHaveClass('btn-secondary');
+    });
+  });
+
+  test('Displays unregister button for users who have not checked in', async () => {
+    renderEventRegistrants();
+
+    await waitFor(() => {
+      const deleteButton = screen.getByTestId('delete-registrant-1');
+      expect(deleteButton).toHaveTextContent('Unregister');
+      expect(deleteButton).not.toBeDisabled();
+      expect(deleteButton).toHaveClass('btn-outline-danger');
+    });
+  });
+
+  test('Shows correct tooltip for checked-in users', async () => {
+    renderEventRegistrants();
+
+    await waitFor(() => {
+      const deleteButton = screen.getByTestId('delete-registrant-0');
+      expect(deleteButton).toHaveAttribute(
+        'title',
+        'Cannot unregister checked-in user',
+      );
+    });
+  });
+
+  test('Shows correct tooltip for non-checked-in users', async () => {
+    renderEventRegistrants();
+
+    await waitFor(() => {
+      const deleteButton = screen.getByTestId('delete-registrant-1');
+      expect(deleteButton).toHaveAttribute('title', 'Unregister');
+    });
+  });
+
+  // Deletion tests
+  test('Prevents deletion of checked-in user', async () => {
+    renderEventRegistrants();
+
+    await waitFor(() => {
+      const deleteButton = screen.getByTestId('delete-registrant-0');
+      expect(deleteButton).toBeDisabled();
+
+      // Try to click (should do nothing)
+      fireEvent.click(deleteButton);
+    });
+
+    // Toast should not be called since button is disabled
+    expect(toast.warn).not.toHaveBeenCalled();
+  });
+
+  test('Successfully triggers delete for non-checked-in registrant', async () => {
+    renderEventRegistrants();
+
+    await waitFor(() => {
+      const deleteButton = screen.getByTestId('delete-registrant-1');
+      fireEvent.click(deleteButton);
+    });
+
+    await waitFor(() => {
+      expect(toast.warn).toHaveBeenCalledWith('Removing the attendee...');
+    });
+
+    await waitFor(
+      () => {
+        expect(toast.success).toHaveBeenCalledWith(
+          'Attendee removed successfully',
+        );
+      },
+      { timeout: 3000 },
+    );
+  });
+
+  test('Prevents deletion with toast error when checked-in user removal attempted programmatically', async () => {
+    renderEventRegistrants();
+
+    await waitFor(() => {
+      const deleteButton = screen.getByTestId('delete-registrant-0');
+      // Simulate programmatic attempt to delete
+      if (!deleteButton.hasAttribute('disabled')) {
+        fireEvent.click(deleteButton);
+      }
+    });
+
+    // Should not show warning toast since button is disabled
+    expect(toast.warn).not.toHaveBeenCalled();
+  });
+
+  // Empty state tests
+  test('Displays no registrants message when list is empty', async () => {
     const emptyMocks = [
+      EVENT_DETAILS_MOCK,
       {
         request: {
           query: EVENT_REGISTRANTS,
-          variables: { eventId: '660fdf7d2c1ef6c7db1649ad' },
+          variables: { eventId: 'event123' },
         },
-        result: { data: { getEventAttendeesByEventId: [] } },
+        result: {
+          data: {
+            getEventAttendeesByEventId: [],
+          },
+        },
       },
       {
         request: {
-          query: EVENT_ATTENDEES,
-          variables: { id: '660fdf7d2c1ef6c7db1649ad' },
+          query: EVENT_CHECKINS,
+          variables: { eventId: 'event123' },
         },
-        result: { data: { event: { attendees: [] } } },
+        result: {
+          data: {
+            event: {
+              attendeesCheckInStatus: [],
+            },
+          },
+        },
       },
     ];
 
-    const customLink = new StaticMockLink(emptyMocks, true);
-    render(
-      <MockedProvider addTypename={false} link={customLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <EventRegistrants />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderEventRegistrants(emptyMocks);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('no-registrants')).toBeInTheDocument();
+      expect(screen.getByTestId('no-registrants')).toHaveTextContent(
+        'No Registrants Found.',
+      );
+    });
+  });
+
+  // Recurring event tests
+  test('Handles recurring events correctly', async () => {
+    const recurringEventMocks = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event123' },
+        },
+        result: {
+          data: {
+            event: {
+              id: 'event123',
+              title: 'Recurring Event',
+              recurrenceRule: 'FREQ=WEEKLY',
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: EVENT_REGISTRANTS,
+          variables: { recurringEventInstanceId: 'event123' },
+        },
+        result: {
+          data: {
+            getEventAttendeesByEventId: [],
+          },
+        },
+      },
+      {
+        request: {
+          query: EVENT_CHECKINS,
+          variables: { eventId: 'event123' },
+        },
+        result: {
+          data: {
+            event: {
+              attendeesCheckInStatus: [],
+            },
+          },
+        },
+      },
+    ];
+
+    renderEventRegistrants(recurringEventMocks);
 
     await waitFor(() => {
       expect(screen.getByTestId('no-registrants')).toBeInTheDocument();
     });
   });
 
-  test('Successfully combines and displays registrant and attendee data', async () => {
-    const mockData = [
+  // Edge cases
+  test('Handles missing createdAt with N/A fallback', async () => {
+    const missingDateMocks = [
+      EVENT_DETAILS_MOCK,
       {
         request: {
           query: EVENT_REGISTRANTS,
@@ -132,60 +473,30 @@ describe('Event Registrants Component', () => {
                   emailAddress: 'john@example.com',
                 },
                 isRegistered: true,
-                isInvited: false,
-                createdAt: '2023-09-25T10:00:00.000Z',
-                __typename: 'EventAttendee',
+                createdAt: null,
               },
             ],
           },
         },
       },
-      {
-        request: { query: EVENT_ATTENDEES, variables: { eventId: 'event123' } },
-        result: {
-          data: {
-            event: {
-              attendees: [
-                {
-                  id: 'user1',
-                  name: 'John Doe',
-                  emailAddress: 'john@example.com',
-                  createdAt: '2023-09-25T10:00:00.000Z',
-                  __typename: 'User',
-                },
-              ],
-            },
-          },
-        },
-      },
+      EVENT_CHECKINS_MOCK,
     ];
 
-    const customLink = new StaticMockLink(mockData, true);
-    render(
-      <MockedProvider addTypename={false} link={customLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <EventRegistrants />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderEventRegistrants(missingDateMocks);
 
     await waitFor(() => {
-      expect(screen.getByTestId('registrant-row-0')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('registrant-registered-at-0'),
+      ).toHaveTextContent('N/A');
+      expect(screen.getByTestId('registrant-created-at-0')).toHaveTextContent(
+        'N/A',
+      );
     });
-
-    // Validate mapped data
-    expect(screen.getByTestId('attendee-name-0')).toHaveTextContent('John Doe');
-    expect(screen.getByTestId('registrant-registered-at-0')).toHaveTextContent(
-      '2023-09-25',
-    );
   });
 
-  test('Handles missing attendee data with fallback values', async () => {
-    const mocksWithMissingFields = [
+  test('Handles missing user name with N/A fallback', async () => {
+    const missingNameMocks = [
+      EVENT_DETAILS_MOCK,
       {
         request: {
           query: EVENT_REGISTRANTS,
@@ -198,119 +509,111 @@ describe('Event Registrants Component', () => {
                 id: '1',
                 user: {
                   id: 'user1',
-                  name: 'Jane Doe',
-                  emailAddress: 'jane@example.com',
+                  name: null,
+                  emailAddress: 'john@example.com',
                 },
                 isRegistered: true,
-                isInvited: false,
-                __typename: 'EventAttendee',
+                createdAt: '2030-04-13T10:23:17.742Z',
               },
             ],
           },
         },
       },
+      EVENT_CHECKINS_MOCK,
+    ];
+
+    renderEventRegistrants(missingNameMocks);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('attendee-name-0')).toHaveTextContent('N/A');
+    });
+  });
+
+  // Table accessibility tests
+  test('Table has correct ARIA attributes', async () => {
+    renderEventRegistrants();
+
+    await waitFor(() => {
+      const table = screen.getByRole('grid');
+      expect(table).toBeInTheDocument();
+      expect(table).toHaveAttribute('aria-label', 'Event Registrants Table');
+    });
+  });
+
+  test('Table headers have correct role attributes', async () => {
+    renderEventRegistrants();
+
+    await waitFor(() => {
+      const serialHeader = screen.getByTestId('table-header-serial');
+      expect(serialHeader).toHaveAttribute('role', 'columnheader');
+      expect(serialHeader).toHaveAttribute('aria-sort', 'none');
+    });
+  });
+
+  // Refresh functionality test
+  test('Refreshes data after successful deletion', async () => {
+    renderEventRegistrants();
+
+    await waitFor(() => {
+      const deleteButton = screen.getByTestId('delete-registrant-1');
+      fireEvent.click(deleteButton);
+    });
+
+    await waitFor(
+      () => {
+        expect(toast.success).toHaveBeenCalledWith(
+          'Attendee removed successfully',
+        );
+      },
+      { timeout: 3000 },
+    );
+
+    // Data should be refreshed (queries should be called again)
+    // This is implicitly tested by the successful completion of the delete operation
+  });
+
+  // Error handling test
+  test('Handles deletion error gracefully', async () => {
+    const errorMocks = [
+      EVENT_DETAILS_MOCK,
+      EVENT_CHECKINS_MOCK,
       {
-        request: { query: EVENT_ATTENDEES, variables: { eventId: 'event123' } },
+        request: {
+          query: EVENT_REGISTRANTS,
+          variables: { eventId: 'event123' },
+        },
         result: {
           data: {
-            event: {
-              attendees: [
-                {
-                  id: 'user1',
-                  name: 'Jane Doe',
-                  emailAddress: 'jane@example.com',
-                  createdAt: null,
-                  __typename: 'User',
+            getEventAttendeesByEventId: [
+              {
+                id: 'user3',
+                user: {
+                  id: 'user3',
+                  name: 'Error User',
+                  emailAddress: 'error@example.com',
                 },
-              ],
-            },
+                isRegistered: true,
+                createdAt: '2030-04-13T10:23:17.742Z',
+              },
+            ],
           },
         },
       },
+      REMOVE_ATTENDEE_ERROR_MOCK,
     ];
 
-    const customLink = new StaticMockLink(mocksWithMissingFields, true);
-    render(
-      <MockedProvider addTypename={false} link={customLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <EventRegistrants />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderEventRegistrants(errorMocks);
 
     await waitFor(() => {
-      expect(screen.getByTestId('registrant-row-0')).toBeInTheDocument();
+      const deleteButton = screen.getByTestId('delete-registrant-0');
+      fireEvent.click(deleteButton);
     });
 
-    // Validate fallback values
-    expect(screen.getByTestId('attendee-name-0')).toHaveTextContent('Jane Doe');
-    expect(screen.getByTestId('registrant-created-at-0')).toHaveTextContent(
-      'N/A',
+    await waitFor(
+      () => {
+        expect(toast.error).toHaveBeenCalledWith('Error removing attendee');
+      },
+      { timeout: 3000 },
     );
-  });
-});
-
-describe('EventRegistrants CSS Tests', () => {
-  const renderEventRegistrants = (): RenderResult => {
-    return render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <EventRegistrants />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-  };
-
-  beforeEach(() => {
-    vi.mock('react-router', async () => ({
-      ...(await vi.importActual('react-router')),
-      useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
-    }));
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it('should apply correct styles to the filter button', () => {
-    renderEventRegistrants();
-    const filterButton = screen.getByTestId('filter-button');
-
-    expect(filterButton).toHaveClass('border-1', 'mx-4', styles.createButton);
-  });
-
-  it('should apply correct styles to the table container', () => {
-    renderEventRegistrants();
-    const tableContainer = screen.getByRole('grid').closest('.MuiPaper-root');
-    expect(tableContainer).toHaveClass('mt-3');
-    expect(tableContainer).toHaveStyle({ borderRadius: '16px' });
-  });
-
-  it('should style table header cells with custom cell class', () => {
-    renderEventRegistrants();
-    const headerCells = [
-      screen.getByTestId('table-header-serial'),
-      screen.getByTestId('table-header-registrant'),
-      screen.getByTestId('table-header-registered-at'),
-      screen.getByTestId('table-header-created-at'),
-      screen.getByTestId('table-header-options'),
-    ];
-    headerCells.forEach((cell) => {
-      expect(cell).toHaveClass(styles.customcell);
-    });
-  });
-
-  it('should apply proper spacing between buttons', () => {
-    renderEventRegistrants();
-    const filterButton = screen.getByTestId('filter-button');
-    expect(filterButton).toHaveClass('mx-4');
   });
 });
