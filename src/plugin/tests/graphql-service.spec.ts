@@ -38,6 +38,13 @@ vi.mock('@apollo/client', () => ({
   gql: vi.fn((strings: readonly string[]) => strings.join('')),
 }));
 
+// Mock i18n to prevent initialization errors
+vi.mock('../../utils/i18n', () => ({
+  default: {
+    getFixedT: () => (key: string) => key,
+  },
+}));
+
 describe('PluginGraphQLService', () => {
   let graphqlService: PluginGraphQLService;
 

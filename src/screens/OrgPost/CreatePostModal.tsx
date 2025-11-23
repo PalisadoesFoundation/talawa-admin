@@ -275,7 +275,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
       <Modal.Header data-testid="modalOrganizationHeader" closeButton>
         <Modal.Title id="createPostModalTitle">{t('postDetails')}</Modal.Title>
       </Modal.Header>
-      <Form onSubmit={createPost}>
+      <Form onSubmit={createPost} data-testid="createPostForm">
         <Modal.Body>
           <Form.Label htmlFor="posttitle">{t('postTitle')}</Form.Label>
           <Form.Control
