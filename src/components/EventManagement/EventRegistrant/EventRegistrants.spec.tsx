@@ -11,6 +11,7 @@ import {
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
+import type { MockedResponse } from '@apollo/react-testing';
 import EventRegistrants from './EventRegistrants';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -44,7 +45,7 @@ vi.mock('react-router', async () => {
 });
 
 // Mock data setup
-const EVENT_DETAILS_MOCK = {
+const EVENT_DETAILS_MOCK: MockedResponse = {
   request: {
     query: EVENT_DETAILS,
     variables: { eventId: 'event123' },
@@ -60,7 +61,7 @@ const EVENT_DETAILS_MOCK = {
   },
 };
 
-const EVENT_CHECKINS_MOCK = {
+const EVENT_CHECKINS_MOCK: MockedResponse = {
   request: {
     query: EVENT_CHECKINS,
     variables: { eventId: 'event123' },
@@ -83,7 +84,7 @@ const EVENT_CHECKINS_MOCK = {
   },
 };
 
-const REGISTRANTS_MOCK = {
+const REGISTRANTS_MOCK: MockedResponse = {
   request: {
     query: EVENT_REGISTRANTS,
     variables: { eventId: 'event123' },
@@ -116,7 +117,7 @@ const REGISTRANTS_MOCK = {
   },
 };
 
-const REMOVE_ATTENDEE_SUCCESS_MOCK = {
+const REMOVE_ATTENDEE_SUCCESS_MOCK: MockedResponse = {
   request: {
     query: REMOVE_EVENT_ATTENDEE,
     variables: { userId: '6589386a2caa9d8d69087485', eventId: 'event123' },
@@ -130,7 +131,7 @@ const REMOVE_ATTENDEE_SUCCESS_MOCK = {
   },
 };
 
-const REMOVE_ATTENDEE_ERROR_MOCK = {
+const REMOVE_ATTENDEE_ERROR_MOCK: MockedResponse = {
   request: {
     query: REMOVE_EVENT_ATTENDEE,
     variables: { userId: 'user3', eventId: 'event123' },
@@ -138,7 +139,7 @@ const REMOVE_ATTENDEE_ERROR_MOCK = {
   error: new Error('Failed to remove attendee'),
 };
 
-const COMBINED_MOCKS = [
+const COMBINED_MOCKS: MockedResponse[] = [
   EVENT_DETAILS_MOCK,
   EVENT_CHECKINS_MOCK,
   REGISTRANTS_MOCK,
@@ -146,9 +147,8 @@ const COMBINED_MOCKS = [
   REMOVE_ATTENDEE_ERROR_MOCK,
 ];
 
-// Change the type to 'any[]' to allow flexibility with different mock arrays
 const renderEventRegistrants = (
-  customMocks: any[] = COMBINED_MOCKS,
+  customMocks: MockedResponse[] = COMBINED_MOCKS,
 ): RenderResult => {
   const link = new StaticMockLink(customMocks, true);
   return render(
@@ -364,7 +364,7 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
 
   // Empty state tests
   test('Displays no registrants message when list is empty', async () => {
-    const emptyMocks = [
+    const emptyMocks: MockedResponse[] = [
       EVENT_DETAILS_MOCK,
       {
         request: {
@@ -404,7 +404,7 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
 
   // Recurring event tests
   test('Handles recurring events correctly', async () => {
-    const recurringEventMocks = [
+    const recurringEventMocks: MockedResponse[] = [
       {
         request: {
           query: EVENT_DETAILS,
@@ -455,7 +455,7 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
 
   // Edge cases
   test('Handles missing createdAt with N/A fallback', async () => {
-    const missingDateMocks = [
+    const missingDateMocks: MockedResponse[] = [
       EVENT_DETAILS_MOCK,
       {
         request: {
@@ -495,7 +495,7 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
   });
 
   test('Handles missing user name with N/A fallback', async () => {
-    const missingNameMocks = [
+    const missingNameMocks: MockedResponse[] = [
       EVENT_DETAILS_MOCK,
       {
         request: {
@@ -574,7 +574,7 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
 
   // Error handling test
   test('Handles deletion error gracefully', async () => {
-    const errorMocks = [
+    const errorMocks: MockedResponse[] = [
       EVENT_DETAILS_MOCK,
       EVENT_CHECKINS_MOCK,
       {
