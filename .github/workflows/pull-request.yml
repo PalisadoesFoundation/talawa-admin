@@ -893,6 +893,7 @@ jobs:
       - name: Test building the website
         working-directory: ./docs
         run: pnpm run build
+
   Check-Target-Branch:
     if: ${{ github.actor != 'dependabot[bot]' }}
     name: Check Target Branch
