@@ -202,12 +202,9 @@ describe('CreatePostModal', () => {
     const submitBtn = screen.getByText('addPost');
     await userEvent.click(submitBtn);
 
-    await waitFor(
-      () => {
-        expect(toast.success).toHaveBeenCalledWith('postCreatedSuccess');
-      },
-      { timeout: 3000 },
-    );
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('postCreatedSuccess');
+    });
     expect(mockRefetch).toHaveBeenCalled();
     expect(mockOnHide).toHaveBeenCalled();
   });
@@ -480,15 +477,12 @@ describe('CreatePostModal', () => {
       await userEvent.click(submitButton);
 
       // Verify that crypto.subtle.digest was called for hashing
-      await waitFor(
-        () => {
-          expect(mockDigest).toHaveBeenCalledWith(
-            'SHA-256',
-            expect.any(ArrayBuffer),
-          );
-        },
-        { timeout: 2000 },
-      );
+      await waitFor(() => {
+        expect(mockDigest).toHaveBeenCalledWith(
+          'SHA-256',
+          expect.any(ArrayBuffer),
+        );
+      });
     } finally {
       // Restore originals
       File.prototype.arrayBuffer = originalArrayBuffer;
