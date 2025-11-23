@@ -72,7 +72,7 @@ const SecuredRouteForUser = (): JSX.Element => {
 
   return isLoggedIn === 'TRUE' ? (
     <>
-      {adminFor === undefined ? (
+      {adminFor === null ? (
         <Outlet />
       ) : (
         <Suspense fallback={<Loader />}>

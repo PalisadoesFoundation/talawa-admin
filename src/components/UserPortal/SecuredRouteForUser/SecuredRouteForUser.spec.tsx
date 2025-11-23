@@ -4,61 +4,98 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 import { toast } from 'react-toastify';
 import SecuredRouteForUser from './SecuredRouteForUser';
-import useLocalStorage from 'utils/useLocalstorage';
 
-// Mock react-toastify
+// ======================================================
+// 1. Mock useLocalStorage with an in-memory store
+// ======================================================
+
+let storage: Record<string, unknown> = {};
+
+const getItem = (key: string) => {
+  if (Object.prototype.hasOwnProperty.call(storage, key)) {
+    return storage[key];
+  }
+  return null;
+};
+
+const setItem = (key: string, value: unknown) => {
+  storage[key] = value;
+};
+
+const removeItem = (key: string) => {
+  delete storage[key];
+};
+
+vi.mock('utils/useLocalstorage', () => ({
+  default: () => ({
+    getItem,
+    setItem,
+    removeItem,
+  }),
+}));
+
+// ======================================================
+// 2. Mock react-toastify
+// ======================================================
+
 vi.mock('react-toastify', () => ({
   toast: {
     warn: vi.fn(),
   },
 }));
 
-/**
- * Unit tests for SecuredRouteForUser component:
- *
- * 1. **Logged-in user**: Verifies that the route renders when 'IsLoggedIn' is set to 'TRUE'.
- * 2. **Not logged-in user**: Ensures redirection to the login page when 'IsLoggedIn' is 'FALSE'.
- * 3. **Logged-in user with admin access**: Checks that the route renders for a logged-in user with 'AdminFor' set (i.e., admin of an organization).
- *
- * LocalStorage values like 'IsLoggedIn' and 'AdminFor' are set to simulate different user states.
- */
-
 const TestComponent = (): JSX.Element => <div>Test Protected Content</div>;
 
 describe('SecuredRouteForUser', () => {
   const originalLocation = window.location;
-  const { setItem, getItem } = useLocalStorage();
+  let hrefValue = '';
 
   beforeEach(() => {
-    // Clear all mocks before each test
     vi.clearAllMocks();
-    // Clear localStorage before each test
-    localStorage.clear();
-    // Use fake timers for controlling time-based operations
     vi.useFakeTimers();
-    // Mock window.location.href
+
+    // reset our in-memory "local storage"
+    storage = {};
+
+    // Mock window.location so redirects can be asserted
+    hrefValue = '';
+    const mockLocation = {
+      get href() {
+        return hrefValue;
+      },
+      set href(value: string) {
+        hrefValue = value;
+      },
+      assign(url: string | URL) {
+        hrefValue = typeof url === 'string' ? url : url.toString();
+      },
+    };
+
     Object.defineProperty(window, 'location', {
       configurable: true,
-      writable: true,
-      value: { href: '' },
+      value: mockLocation,
     });
   });
 
   afterEach(() => {
-    // Clean up any timers or event listeners
     vi.clearAllTimers();
     vi.useRealTimers();
-    vi.restoreAllMocks();
+
+    // restore original window.location
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: originalLocation,
     });
   });
 
+  // ======================================================
+  // Authentication / Authorization tests
+  // ======================================================
+
   describe('Authentication and Authorization', () => {
     it('renders the route when the user is logged in', () => {
-      // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user and do not set 'AdminFor' so that it remains undefined.
       setItem('IsLoggedIn', 'TRUE');
+      removeItem('AdminFor');
 
       render(
         <MemoryRouter initialEntries={['/user/organizations']}>
@@ -81,7 +118,6 @@ describe('SecuredRouteForUser', () => {
     });
 
     it('redirects to /user when the user is not logged in', () => {
-      // Set the user as not logged in in local storage
       setItem('IsLoggedIn', 'FALSE');
 
       render(
@@ -106,9 +142,14 @@ describe('SecuredRouteForUser', () => {
     });
   });
 
+  // ======================================================
+  // User activity / session timeout tests
+  // ======================================================
+
   describe('User Activity Tracking', () => {
     it('should update lastActive on mouse movement', () => {
       setItem('IsLoggedIn', 'TRUE');
+      removeItem('AdminFor');
 
       render(
         <MemoryRouter initialEntries={['/user/organizations']}>
@@ -120,12 +161,12 @@ describe('SecuredRouteForUser', () => {
         </MemoryRouter>,
       );
 
-      // Simulate mouse movement - this should update the lastActive timestamp
       fireEvent(document, new Event('mousemove'));
+
       expect(screen.getByText('Test Protected Content')).toBeInTheDocument();
     });
 
-    it('should clear user session data after timeout', async () => {
+    it('should clear user session data after timeout', () => {
       setItem('IsLoggedIn', 'TRUE');
       setItem('email', 'test@example.com');
       setItem('id', '123');
@@ -145,13 +186,15 @@ describe('SecuredRouteForUser', () => {
         </MemoryRouter>,
       );
 
-      // Fast-forward past the inactivity timeout
+      // Fast-forward past the inactivity timeout used by the component
       vi.advanceTimersByTime(15 * 60 * 1000 + 1000);
       vi.advanceTimersByTime(1 * 60 * 1000);
 
       expect(toast.warn).toHaveBeenCalledWith(
         'Kindly relogin as session has expired',
       );
+
+      // Our mocked "local storage" should now reflect a cleared session
       expect(getItem('IsLoggedIn')).toBe('FALSE');
       expect(getItem('token')).toBeNull();
       expect(getItem('userId')).toBeNull();
@@ -160,6 +203,7 @@ describe('SecuredRouteForUser', () => {
       expect(getItem('email')).toBeNull();
       expect(getItem('name')).toBeNull();
       expect(getItem('id')).toBeNull();
+
       expect(window.location.href).toBe('/');
     });
   });

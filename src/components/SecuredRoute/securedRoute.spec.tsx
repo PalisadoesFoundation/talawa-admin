@@ -1,7 +1,35 @@
 import React from 'react';
+import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
+
+vi.mock('screens/PageNotFound/PageNotFound', () => ({
+  default: () => (
+    <div>
+      <span>talawaUser</span>
+      <span>404</span>
+    </div>
+  ),
+}));
+
+vi.mock('src/screens/PageNotFound/PageNotFound', () => ({
+  default: () => (
+    <div>
+      <span>talawaUser</span>
+      <span>404</span>
+    </div>
+  ),
+}));
+
+vi.mock('@/screens/PageNotFound/PageNotFound', () => ({
+  default: () => (
+    <div>
+      <span>talawaUser</span>
+      <span>404</span>
+    </div>
+  ),
+}));
+
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 import SecuredRoute from './SecuredRoute';
 import useLocalStorage from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
@@ -66,8 +94,10 @@ describe('SecuredRoute', () => {
       expect(screen.getByText('Test Protected Content')).toBeInTheDocument();
     });
 
-    it('should render PageNotFound for authenticated non-administrator user', () => {
-      // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user and role regular to simulate a non admin user.
+    it('should render PageNotFound for authenticated non-administrator user', async () => {
+      // Disable fake timers for this test — required for lazy() to resolve
+      vi.useRealTimers();
+
       setItem('IsLoggedIn', 'TRUE');
       setItem('role', 'regular');
 
@@ -81,11 +111,15 @@ describe('SecuredRoute', () => {
         </MemoryRouter>,
       );
 
-      expect(screen.getByText('talawaUser')).toBeInTheDocument();
-      expect(screen.getByText('404')).toBeInTheDocument();
+      expect(await screen.findByText(/talawaUser/i)).toBeInTheDocument();
+      expect(await screen.findByText(/404/i)).toBeInTheDocument();
+
       expect(
         screen.queryByText('Test Protected Content'),
       ).not.toBeInTheDocument();
+
+      // Restore fake timers for remaining tests
+      vi.useFakeTimers();
     });
 
     it('should redirect to home page for unauthenticated user', () => {
