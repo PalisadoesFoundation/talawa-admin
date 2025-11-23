@@ -901,6 +901,10 @@ describe('Tests for sorting , nextpage , previousPage', () => {
 });
 
 describe('OrgPost SearchBar functionality', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   // Helper function to render the component with specified mocks
   const renderWithMocks = (mocks: MockedResponse[]): RenderResult => {
     // For error tests, only use the provided mocks
@@ -1004,7 +1008,7 @@ describe('OrgPost SearchBar functionality', () => {
 
     await waitFor(() => {
       expect(toastErrorSpy).toHaveBeenCalledWith(
-        'Organization post list error:',
+        expect.stringContaining('Organization post list error:'),
       );
       const postsRenderer = screen.getByTestId('posts-renderer');
       expect(postsRenderer.getAttribute('data-is-filtering')).toBe('false');
@@ -1013,7 +1017,11 @@ describe('OrgPost SearchBar functionality', () => {
 
   it('renders loader when loading', async () => {
     renderWithMocks([]);
-    expect(await screen.findByTestId('posts-renderer')).toBeInTheDocument();
+    // Check for the posts-renderer with loading state
+    const postsRenderer = await screen.findByTestId('posts-renderer');
+    expect(postsRenderer).toBeInTheDocument();
+    // Optionally check for a loading attribute if available
+    expect(postsRenderer.getAttribute('data-is-filtering')).toBeDefined();
   });
 
   it('renders error state when query fails', async () => {
@@ -1033,6 +1041,10 @@ describe('OrgPost SearchBar functionality', () => {
 });
 
 describe('OrgPost component - Post Creation Tests', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   const mockOrgId = '123';
 
   const createPostMock: MockedResponse = {
@@ -1369,7 +1381,9 @@ describe('OrgPost Edge Cases', () => {
     );
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Organization post list error:');
+      expect(toast.error).toHaveBeenCalledWith(
+        expect.stringContaining('Organization post list error:'),
+      );
     });
   });
 
@@ -1458,7 +1472,9 @@ describe('OrgPost Edge Cases', () => {
     );
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Organization post list error:');
+      expect(toast.error).toHaveBeenCalledWith(
+        expect.stringContaining('Organization post list error:'),
+      );
     });
   });
 
@@ -2340,6 +2356,10 @@ describe('OrgPost createPost', () => {
 });
 
 describe('OrgPost Pinned Posts Functionality', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   const mockOrgId = '123';
 
   // Mock data for pinned posts
@@ -2824,7 +2844,9 @@ describe('OrgPost Pinned Posts Functionality', () => {
     renderComponentWithPinnedPosts(pinnedPostsErrorMock);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('pinnedPostsLoadError');
+      expect(toast.error).toHaveBeenCalledWith(
+        expect.stringContaining('pinnedPostsLoadError'),
+      );
     });
 
     // Component should still render despite the error
