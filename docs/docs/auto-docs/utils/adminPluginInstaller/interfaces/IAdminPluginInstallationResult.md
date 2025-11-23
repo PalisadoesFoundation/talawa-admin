@@ -24,9 +24,9 @@ Defined in: [src/utils/adminPluginInstaller.ts:53](https://github.com/Palisadoes
 
 ***
 
-### manifest
+### manifest?
 
-> **manifest**: [`IAdminPluginManifest`](IAdminPluginManifest.md)
+> `optional` **manifest**: [`IAdminPluginManifest`](IAdminPluginManifest.md)
 
 Defined in: [src/utils/adminPluginInstaller.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L52)
 

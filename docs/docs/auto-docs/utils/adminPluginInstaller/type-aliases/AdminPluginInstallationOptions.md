@@ -6,4 +6,4 @@
 
 > **AdminPluginInstallationOptions** = [`IAdminPluginInstallationOptions`](../interfaces/IAdminPluginInstallationOptions.md)
 
-Defined in: [src/utils/adminPluginInstaller.ts:345](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L345)
+Defined in: [src/utils/adminPluginInstaller.ts:351](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L351)

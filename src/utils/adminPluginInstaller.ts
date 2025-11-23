@@ -49,7 +49,7 @@ export interface IAdminPluginZipStructure {
 export interface IAdminPluginInstallationResult {
   success: boolean;
   pluginId: string;
-  manifest: IAdminPluginManifest;
+  manifest?: IAdminPluginManifest;
   installedComponents: string[];
   error?: string;
 }
@@ -130,8 +130,9 @@ export async function validateAdminPluginZip(
 
       structure.adminManifest = manifest;
       structure.pluginId = manifest.pluginId;
-    } catch {
-      throw new Error('Invalid admin manifest.json');
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      throw new Error(`Invalid admin manifest.json: ${msg}`);
     }
   }
 
@@ -179,8 +180,9 @@ export async function validateAdminPluginZip(
       if (!structure.pluginId) {
         structure.pluginId = apiManifest.pluginId;
       }
-    } catch {
-      throw new Error('Invalid api manifest.json');
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      throw new Error(`Invalid api manifest.json: ${msg}`);
     }
   }
 
@@ -237,9 +239,10 @@ export async function installAdminPluginFromZip(
     if (!structure.adminManifest && !structure.apiManifest)
       throw new Error('No valid manifest (admin or api) found in plugin ZIP');
 
-    const manifest: IAdminPluginManifest =
-      structure.adminManifest ??
-      (structure.apiManifest as IAdminPluginManifest);
+    const manifest = structure.adminManifest ?? structure.apiManifest;
+    if (!manifest) {
+      throw new Error('No valid manifest found in plugin ZIP');
+    }
 
     const installedComponents: string[] = [];
 
@@ -251,6 +254,7 @@ export async function installAdminPluginFromZip(
           variables: { input: { pluginId } },
         })) as ICreatePluginMutationResponse;
 
+        // Response intentionally unused — mutation only needs to succeed
         void resp;
       } catch (error) {
         const msg = error instanceof Error ? error.message : '';
@@ -325,7 +329,8 @@ export async function getInstalledAdminPlugins() {
       manifest: p.manifest,
       installedAt: p.installedAt,
     }));
-  } catch {
+  } catch (error) {
+    console.error('Failed to get installed plugins:', error);
     return [];
   }
 }
@@ -333,7 +338,8 @@ export async function getInstalledAdminPlugins() {
 export async function removeAdminPlugin(pluginId: string) {
   try {
     return await adminPluginFileService.removePlugin(pluginId);
-  } catch {
+  } catch (error) {
+    console.error(`Failed to remove plugin ${pluginId}:`, error);
     return false;
   }
 }
