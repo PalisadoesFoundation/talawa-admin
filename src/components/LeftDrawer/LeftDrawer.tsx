@@ -114,9 +114,10 @@ const leftDrawer = ({
 
   // Memoize the user permissions and admin status
   const userPermissions = useMemo(() => [], []);
+  const isAdmin = useMemo(() => superAdmin, [superAdmin]);
 
   // Get plugin drawer items for admin global (settings only)
-  const pluginDrawerItems = usePluginDrawerItems(userPermissions, true, false);
+  const pluginDrawerItems = usePluginDrawerItems(userPermissions, isAdmin, false);
 
   // Memoize the main content to prevent unnecessary re-renders
   const drawerContent = useMemo(
@@ -154,7 +155,7 @@ const leftDrawer = ({
         )}
 
         {/* Plugin Settings Section */}
-        {pluginDrawerItems?.length > 0 && (
+        {isAdmin && pluginDrawerItems?.length > 0 && (
           <>
             <h4
               className={styles.titleHeader}

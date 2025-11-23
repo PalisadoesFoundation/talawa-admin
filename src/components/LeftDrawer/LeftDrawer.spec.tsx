@@ -480,10 +480,10 @@ describe('LeftDrawer Component', () => {
       expect(pluginButton.textContent).toContain('Default Plugin');
     });
 
-    it('should call usePluginDrawerItems with correct parameters', () => {
+    it('should call usePluginDrawerItems with correct parameters for admin user', () => {
       renderComponent();
 
-      // Should call usePluginDrawerItems with empty permissions, true for admin, false for org-specific
+      // Admin user (SuperAdmin='true') should call with isAdmin=true
       expect(usePluginDrawerItems).toHaveBeenCalledWith([], true, false);
     });
 
@@ -561,7 +561,7 @@ describe('LeftDrawer Component', () => {
       expect(screen.getByTestId('plugin-plugin-3-btn')).toBeInTheDocument();
     });
 
-    it('should handle non-admin users correctly for plugins', () => {
+    it('should call usePluginDrawerItems with isAdmin=false for non-admin users', () => {
       vi.mocked(useLocalStorage).mockImplementation(() => ({
         getItem: vi.fn((key) => (key === 'SuperAdmin' ? null : null)), // Non-admin user (SuperAdmin is null)
         setItem: vi.fn(),
@@ -571,9 +571,58 @@ describe('LeftDrawer Component', () => {
 
       renderComponent();
 
-      // Note: The LeftDrawer component currently hardcodes isAdmin=true in usePluginDrawerItems call
-      // This appears to be a bug - it should use the actual isAdmin value from the useMemo
-      expect(usePluginDrawerItems).toHaveBeenCalledWith([], true, false);
+      // Non-admin user should call usePluginDrawerItems with isAdmin=false
+      expect(usePluginDrawerItems).toHaveBeenCalledWith([], false, false);
+    });
+
+    it('should NOT display plugin section for non-admin users even if items exist', () => {
+      vi.mocked(useLocalStorage).mockImplementation(() => ({
+        getItem: vi.fn((key) => (key === 'SuperAdmin' ? null : null)), // Non-admin user
+        setItem: vi.fn(),
+        removeItem: vi.fn(),
+        getStorageKey: vi.fn(() => ''),
+      }));
+
+      const mockPluginItems = [
+        {
+          pluginId: 'test-plugin',
+          path: '/plugin/test',
+          label: 'Test Plugin',
+          icon: '',
+        },
+      ];
+      vi.mocked(usePluginDrawerItems).mockReturnValue(mockPluginItems);
+
+      renderComponent();
+
+      // Plugin Settings section should NOT be visible for non-admin users (defensive check)
+      expect(screen.queryByText('Plugin Settings')).not.toBeInTheDocument();
+      expect(screen.queryByText('Test Plugin')).not.toBeInTheDocument();
+    });
+
+    it('should display plugin section for admin users', () => {
+      vi.mocked(useLocalStorage).mockImplementation(() => ({
+        getItem: vi.fn((key) => (key === 'SuperAdmin' ? 'true' : null)), // Admin user
+        setItem: vi.fn(),
+        removeItem: vi.fn(),
+        getStorageKey: vi.fn(() => ''),
+      }));
+
+      const mockPluginItems = [
+        {
+          pluginId: 'admin-plugin',
+          path: '/plugin/admin',
+          label: 'Admin Plugin',
+          icon: '',
+        },
+      ];
+      vi.mocked(usePluginDrawerItems).mockReturnValue(mockPluginItems);
+
+      renderComponent();
+
+      // Plugin Settings section SHOULD be visible for admin users
+      expect(screen.getByText('Plugin Settings')).toBeInTheDocument();
+      expect(screen.getByText('Admin Plugin')).toBeInTheDocument();
     });
   });
 
