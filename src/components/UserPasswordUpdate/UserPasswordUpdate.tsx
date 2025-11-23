@@ -53,14 +53,22 @@ const UserUpdate: React.FC<
     keyPrefix: 'userPasswordUpdate',
   });
   const { t: tCommon } = useTranslation('common');
-  const [formState, setFormState] = React.useState({
+
+  // Form reset constant to avoid duplication
+  const INITIAL_FORM_STATE = {
     previousPassword: '',
     newPassword: '',
     confirmNewPassword: '',
-  });
+  };
+
+  const [formState, setFormState] = React.useState(INITIAL_FORM_STATE);
 
   const [login] = useMutation(UPDATE_USER_PASSWORD_MUTATION);
 
+  /**
+   * Handles the form submission to update the password.
+   * Validates the inputs and calls the mutation.
+   */
   const loginLink = async (): Promise<string | void> => {
     if (
       !formState.previousPassword ||
@@ -89,11 +97,7 @@ const UserUpdate: React.FC<
           tCommon('updatedSuccessfully', { item: 'Password' }) as string,
         );
         // Reset form state after successful update
-        setFormState({
-          previousPassword: '',
-          newPassword: '',
-          confirmNewPassword: '',
-        });
+        setFormState(INITIAL_FORM_STATE);
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -107,11 +111,7 @@ const UserUpdate: React.FC<
    * Resets the form to its initial state.
    */
   const cancelUpdate = (): void => {
-    setFormState({
-      previousPassword: '',
-      newPassword: '',
-      confirmNewPassword: '',
-    });
+    setFormState(INITIAL_FORM_STATE);
   };
 
   return (

@@ -86,7 +86,7 @@ describe('Testing VolunteerCreateModal', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('VolunteerCreateModal -> Create', async () => {

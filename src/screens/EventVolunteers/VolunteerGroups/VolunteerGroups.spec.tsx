@@ -93,7 +93,7 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   const mockRouteParams = (orgId = 'orgId', eventId = 'eventId'): void => {

@@ -14,8 +14,8 @@ import { BrowserRouter, MemoryRouter, useParams } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { UserRole, type InterfaceCalendarProps } from 'types/Event/interface';
 
-// Helper to get specific expand button for a given Date based on component's indexing
-function getExpandButtonForDate(
+// Helper to get toggle button (expand or no-events) for a given Date
+function getToggleButtonForDate(
   container: HTMLElement,
   date: Date,
 ): HTMLButtonElement | null {
@@ -50,7 +50,7 @@ async function clickExpandForDate(
   date: Date,
 ): Promise<HTMLButtonElement> {
   const btn = await waitFor(() => {
-    const found = getExpandButtonForDate(container, date);
+    const found = getToggleButtonForDate(container, date);
     if (!found) {
       throw new Error(
         `Unable to find expand button for ${date.toISOString()} yet`,
