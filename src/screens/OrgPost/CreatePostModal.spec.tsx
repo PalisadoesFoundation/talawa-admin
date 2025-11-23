@@ -341,4 +341,26 @@ describe('CreatePostModal', () => {
     );
     expect(screen.getByTestId('videoPreview')).toBeInTheDocument();
   });
+  it('handles missing orgId error', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <CreatePostModal
+          show={true}
+          onHide={mockOnHide}
+          refetch={mockRefetch}
+          orgId={undefined}
+        />
+      </MockedProvider>,
+    );
+
+    const titleInput = screen.getByTestId('modalTitle');
+    await userEvent.type(titleInput, 'Test Title');
+
+    const form = screen.getByTestId('createPostForm');
+    fireEvent.submit(form);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('organizationIdMissing');
+    });
+  });
 });
