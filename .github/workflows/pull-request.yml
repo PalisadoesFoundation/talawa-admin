@@ -691,7 +691,7 @@ jobs:
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
           path: './coverage/vitest/lcov.info'
-          min_coverage: 93.0
+          min_coverage: 93.3
 
   # Graphql-Inspector:
   #   if: ${{ github.actor != 'dependabot[bot]' }}
