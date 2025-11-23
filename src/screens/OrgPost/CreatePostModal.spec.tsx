@@ -76,6 +76,10 @@ describe('CreatePostModal', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders correctly when shown', () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
