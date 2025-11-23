@@ -498,7 +498,7 @@ const mockQueries = [
     variableMatcher: () => true,
     result: {
       data: {
-        updateActionForInstance: {
+        updateActionItemForInstance: {
           id: '1',
         },
       },
@@ -1732,7 +1732,7 @@ describe('updateActionForInstanceHandler', () => {
         }),
       result: {
         data: {
-          updateActionForInstance: {
+          updateActionItemForInstance: {
             id: '1',
           },
         },
@@ -1956,7 +1956,7 @@ describe('updateActionForInstanceHandler', () => {
         }),
       result: {
         data: {
-          updateActionForInstance: {
+          updateActionItemForInstance: {
             id: '1',
           },
         },
@@ -2024,7 +2024,7 @@ describe('updateActionForInstanceHandler', () => {
         }),
       result: {
         data: {
-          updateActionForInstance: {
+          updateActionItemForInstance: {
             id: '1',
           },
         },
@@ -2101,7 +2101,7 @@ describe('updateActionForInstanceHandler', () => {
       },
       result: {
         data: {
-          updateActionForInstance: {
+          updateActionItemForInstance: {
             id: '1',
           },
         },
@@ -2176,7 +2176,7 @@ describe('updateActionForInstanceHandler', () => {
       },
       result: {
         data: {
-          updateActionForInstance: {
+          updateActionItemForInstance: {
             id: '1',
           },
         },
@@ -2251,7 +2251,7 @@ describe('updateActionForInstanceHandler', () => {
       },
       result: {
         data: {
-          updateActionForInstance: {
+          updateActionItemForInstance: {
             id: '1',
           },
         },
@@ -2332,7 +2332,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
       },
       result: {
         data: {
-          updateActionForInstance: {
+          updateActionItemForInstance: {
             id: '1',
           },
         },
@@ -2901,7 +2901,7 @@ describe('orgActionItemsRefetch functionality', () => {
       },
       result: {
         data: {
-          updateActionForInstance: {
+          updateActionItemForInstance: {
             id: '1',
           },
         },

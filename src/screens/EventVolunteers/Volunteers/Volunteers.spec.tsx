@@ -90,7 +90,7 @@ describe('Testing Volunteers Screen', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {

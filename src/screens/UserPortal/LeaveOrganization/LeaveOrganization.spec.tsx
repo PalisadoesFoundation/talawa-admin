@@ -1,13 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import {
-  BrowserRouter,
-  MemoryRouter,
-  Route,
-  Routes,
-  useParams,
-} from 'react-router';
+import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
 import LeaveOrganization from './LeaveOrganization';
 import {
   ORGANIZATIONS_LIST_BASIC,
@@ -583,7 +577,7 @@ describe('LeaveOrganization Component', () => {
 
   test('handles missing organizationId or userId', async () => {
     // Mock useParams to return undefined orgId
-    (useParams as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
+    routerMocks.params.mockReturnValue({
       orgId: undefined as string | undefined,
     });
 

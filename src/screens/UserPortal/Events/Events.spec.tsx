@@ -6,6 +6,7 @@
  * @module EventsSpec
  */
 
+// SKIP_LOCALSTORAGE_CHECK
 import React, { act } from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
@@ -26,11 +27,8 @@ import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, afterEach } from 'vitest';
 import { toast } from 'react-toastify';
-
-const { setItem } = useLocalStorage();
 
 const { mockToast, mockUseParams } = vi.hoisted(() => ({
   mockToast: {
@@ -377,8 +375,8 @@ describe('Testing Events Screen [User Portal]', () => {
         dispatchEvent: vi.fn(),
       })),
     });
-    setItem('id', 'user123');
-    setItem('role', 'administrator');
+    localStorage.setItem('id', 'user123');
+    localStorage.setItem('role', 'administrator');
     mockUseParams.mockReturnValue({ orgId: 'org123' });
     mockToast.error.mockClear();
     mockToast.info.mockClear();
@@ -386,6 +384,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   afterEach(() => {
+    localStorage.clear();
     vi.restoreAllMocks();
   });
 
@@ -887,7 +886,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should test userRole as administrator', async () => {
-    setItem('role', 'administrator');
+    localStorage.setItem('role', 'administrator');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -915,7 +914,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should test userRole as regular user', async () => {
-    setItem('role', 'user');
+    localStorage.setItem('role', 'user');
 
     render(
       <MockedProvider addTypename={false} link={link}>

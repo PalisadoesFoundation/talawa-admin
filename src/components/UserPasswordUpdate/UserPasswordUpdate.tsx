@@ -46,20 +46,20 @@ interface InterfaceUserPasswordUpdateProps {
   id: string;
 }
 
-const UserUpdate: React.FC<
+// Form reset constant to avoid duplication
+const INITIAL_FORM_STATE = {
+  previousPassword: '',
+  newPassword: '',
+  confirmNewPassword: '',
+};
+
+export const UserUpdate: React.FC<
   InterfaceUserPasswordUpdateProps
 > = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userPasswordUpdate',
   });
   const { t: tCommon } = useTranslation('common');
-
-  // Form reset constant to avoid duplication
-  const INITIAL_FORM_STATE = {
-    previousPassword: '',
-    newPassword: '',
-    confirmNewPassword: '',
-  };
 
   const [formState, setFormState] = React.useState(INITIAL_FORM_STATE);
 

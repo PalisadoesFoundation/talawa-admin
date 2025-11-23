@@ -9,17 +9,20 @@ import PageNotFound from './PageNotFound';
 import i18nForTest from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
 import { it, expect, describe, beforeEach, afterEach } from 'vitest';
-const { setItem } = useLocalStorage();
-
-beforeEach(() => {
-  localStorage.clear();
-});
-
-afterEach(() => {
-  localStorage.clear();
-});
 
 describe('Testing Page not found component', () => {
+  let setItem: ReturnType<typeof useLocalStorage>['setItem'];
+
+  beforeEach(() => {
+    localStorage.clear();
+    const { setItem: localSetItem } = useLocalStorage();
+    setItem = localSetItem;
+  });
+
+  afterEach(() => {
+    localStorage.clear();
+  });
+
   it('should render component properly for User', () => {
     //setItem('AdminFor', undefined);
     render(

@@ -9,6 +9,7 @@
  * These tests use Vitest for test execution and MockedProvider for mocking GraphQL queries.
  */
 
+// SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, vi, beforeEach, afterEach, expect } from 'vitest';
@@ -22,9 +23,6 @@ import UserScreen from './UserScreen';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import '@testing-library/dom';
-import useLocalStorage from 'utils/useLocalstorage';
-
-const { setItem, removeItem } = useLocalStorage();
 let mockID: string | undefined = '123';
 let mockLocation: string | undefined = '/user/organization/123';
 
@@ -87,17 +85,17 @@ const link = new StaticMockLink(MOCKS, true);
 
 describe('UserScreen tests with LeftDrawer functionality', () => {
   beforeEach(() => {
-    setItem('name', 'John Doe');
+    localStorage.setItem('name', 'John Doe');
     mockID = '123';
     mockLocation = '/user/organization/123';
     routerSpies.navigate.mockReset();
-    setItem('sidebar', 'false');
+    localStorage.setItem('sidebar', 'false');
   });
 
   afterEach(() => {
     routerSpies.navigate.mockReset();
-    removeItem('name');
-    removeItem('sidebar');
+    localStorage.removeItem('name');
+    localStorage.removeItem('sidebar');
   });
 
   it('renders the correct title for posts', () => {

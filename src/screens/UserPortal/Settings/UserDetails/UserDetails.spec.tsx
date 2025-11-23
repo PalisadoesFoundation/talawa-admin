@@ -55,7 +55,7 @@ describe('UserDetailsForm', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders all form fields with correct initial values', () => {

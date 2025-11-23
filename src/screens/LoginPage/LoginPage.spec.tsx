@@ -175,7 +175,7 @@ const link = new StaticMockLink(MOCKS, true);
 const link3 = new StaticMockLink(MOCKS3, true);
 const link4 = new StaticMockLink(MOCKS4, true);
 
-const { toastMocks, routerMocks } = vi.hoisted(() => ({
+const { toastMocks, routerMocks, resetReCAPTCHA } = vi.hoisted(() => ({
   toastMocks: {
     success: vi.fn(),
     warn: vi.fn(),
@@ -184,6 +184,7 @@ const { toastMocks, routerMocks } = vi.hoisted(() => ({
   routerMocks: {
     navigate: vi.fn(),
   },
+  resetReCAPTCHA: vi.fn(),
 }));
 
 async function wait(ms = 100): Promise<void> {
@@ -228,7 +229,6 @@ vi.mock('react-router', async () => ({
   useNavigate: () => routerMocks.navigate,
 }));
 
-const resetReCAPTCHA = vi.fn();
 vi.mock('react-google-recaptcha', async () => {
   const react = await vi.importActual<typeof React>('react');
   const recaptcha = react.forwardRef(

@@ -109,14 +109,14 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
 
       // Validate that title is not empty after trimming
       if (trimmedTitle === '') {
-        toast.error(t('venueTitleError'));
+        toast.error(t('postTitleError'));
         return;
       }
 
       let attachment: IFileMetadataInput | null = null;
       const mediaFile = videoFile || file;
 
-      if (mediaFile && typeof mediaFile !== 'string') {
+      if (mediaFile) {
         const fileName = mediaFile.name.split('/').pop() || 'defaultFileName';
         const objectName = 'uploads/' + fileName;
         const fileHash = await getFileHashFromFile(mediaFile);

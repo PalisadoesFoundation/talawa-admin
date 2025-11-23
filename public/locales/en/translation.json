@@ -738,6 +738,7 @@
     "tag": " Your browser does not support the video tag",
     "postCreatedSuccess": "Congratulations! You have Posted Something.",
     "pinPost": "Pin post",
+    "postTitleError": "Post title cannot be empty!",
     "Next": "Next Page",
     "Previous": "Previous Page",
     "cancel": "cancel"

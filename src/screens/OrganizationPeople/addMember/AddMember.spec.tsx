@@ -209,14 +209,17 @@ const createMemberConnectionMock = (
   };
 
   const data = { ...defaultData };
-  const withRole = (edge: (typeof defaultData.organization.members.edges)[0]) =>
+
+  type MemberEdge = (typeof defaultData.organization.members.edges)[number];
+
+  const withRole = (edge: MemberEdge): MemberEdge =>
     ({
       ...edge,
       node: {
         ...edge.node,
         role: edge.node.role ?? 'member',
       },
-    }) as (typeof defaultData.organization.members.edges)[0];
+    }) as MemberEdge;
 
   data.organization.members.edges =
     data.organization.members.edges.map(withRole);

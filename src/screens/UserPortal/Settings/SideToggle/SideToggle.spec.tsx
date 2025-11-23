@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -6,11 +6,15 @@ import SidebarToggle from './SideToggle';
 import styles from 'style/app-fixed.module.css';
 
 describe('SidebarToggle', () => {
-  const mockSetHideDrawer = vi.fn();
+  let mockSetHideDrawer: ReturnType<typeof vi.fn>;
+
+  beforeEach(() => {
+    mockSetHideDrawer = vi.fn();
+  });
 
   // Reset mock function after each test
   afterEach(() => {
-    mockSetHideDrawer.mockClear();
+    vi.clearAllMocks();
   });
 
   it('renders with correct classes when drawer is hidden', () => {

@@ -13,7 +13,7 @@ import userEvent from '@testing-library/user-event';
 import { MOCKS } from './UpcomingEvents/UpcomingEvents.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi, beforeEach, afterEach } from 'vitest';
+import { vi, beforeEach } from 'vitest';
 
 const sharedMocks = vi.hoisted(() => ({
   useParams: vi.fn(() => ({ orgId: 'orgId' })),
@@ -60,12 +60,6 @@ describe('Volunteer Management', () => {
     localStorage.clear();
     sharedMocks.useParams.mockReturnValue({ orgId: 'orgId' });
     setItem('userId', 'userId');
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
-    sharedMocks.useParams.mockReturnValue({ orgId: 'orgId' });
-    localStorage.clear();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
