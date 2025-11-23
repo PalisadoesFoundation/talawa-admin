@@ -49,6 +49,7 @@ describe('MembershipRequestsCard Component', () => {
   afterEach(() => {
     toastMocks.success.mockReset();
     toastMocks.error.mockReset();
+    vi.restoreAllMocks();
   });
   const mockMembershipRequestData = {
     organization: {

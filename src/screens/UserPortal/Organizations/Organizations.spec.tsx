@@ -22,6 +22,57 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 
 const { setItem, getItem } = useLocalStorage();
 
+const paginationMock = vi.hoisted(() => ({
+  default: ({
+    count,
+    rowsPerPage,
+    page,
+    onPageChange,
+    onRowsPerPageChange,
+  }: {
+    count: number;
+    rowsPerPage: number;
+    page: number;
+    onPageChange: (
+      event: React.MouseEvent<unknown> | null,
+      newPage: number,
+    ) => void;
+    onRowsPerPageChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  }) => (
+    <div data-testid="pagination">
+      <span data-testid="current-page">{page}</span>
+      <button
+        data-testid="prev-page"
+        onClick={(e) => onPageChange(e, page - 1)}
+        disabled={page === 0}
+      >
+        Previous
+      </button>
+      <button
+        data-testid="next-page"
+        onClick={(e) => onPageChange(e, page + 1)}
+        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+      >
+        Next
+      </button>
+      <select
+        data-testid="rows-per-page"
+        value={rowsPerPage}
+        onChange={(e) => onRowsPerPageChange(e)}
+      >
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="25">25</option>
+      </select>
+    </div>
+  ),
+}));
+
+vi.mock(
+  'components/Pagination/PaginationList/PaginationList',
+  () => paginationMock,
+);
+
 const TEST_USER_ID = '01958985-600e-7cde-94a2-b3fc1ce66cf3';
 const baseOrgFields = {
   addressLine1: 'asdfg',
@@ -306,6 +357,10 @@ const TEST_USER_NAME = 'Noble Mittal';
 beforeEach(() => {
   setItem('name', TEST_USER_NAME);
   setItem('userId', TEST_USER_ID);
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
 });
 
 test('Screen should be rendered properly', async () => {
@@ -778,52 +833,6 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
-
-vi.mock('components/Pagination/PaginationList/PaginationList', () => ({
-  default: ({
-    count,
-    rowsPerPage,
-    page,
-    onPageChange,
-    onRowsPerPageChange,
-  }: {
-    count: number;
-    rowsPerPage: number;
-    page: number;
-    onPageChange: (
-      event: React.MouseEvent<unknown> | null,
-      newPage: number,
-    ) => void;
-    onRowsPerPageChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  }) => (
-    <div data-testid="pagination">
-      <span data-testid="current-page">{page}</span>
-      <button
-        data-testid="prev-page"
-        onClick={(e) => onPageChange(e, page - 1)}
-        disabled={page === 0}
-      >
-        Previous
-      </button>
-      <button
-        data-testid="next-page"
-        onClick={(e) => onPageChange(e, page + 1)}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-      >
-        Next
-      </button>
-      <select
-        data-testid="rows-per-page"
-        value={rowsPerPage}
-        onChange={(e) => onRowsPerPageChange(e)}
-      >
-        <option value="5">5</option>
-        <option value="10">10</option>
-        <option value="25">25</option>
-      </select>
-    </div>
-  ),
-}));
 
 test('should update rowsPerPage when rows per page selector is changed', async () => {
   render(

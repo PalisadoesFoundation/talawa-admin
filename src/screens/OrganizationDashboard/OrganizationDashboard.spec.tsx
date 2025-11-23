@@ -82,6 +82,10 @@ describe('OrganizationDashboard', () => {
     toastMocks.success.mockReset();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('navigates to requests page when clicking on membership requests card', async () => {
     renderWithProviders({ mocks: MOCKS });
 
