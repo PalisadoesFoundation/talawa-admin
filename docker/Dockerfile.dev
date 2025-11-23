@@ -1,4 +1,4 @@
-FROM node:24 AS build
+FROM node:24-slim AS build
 
 ARG PORT=4321
 ENV PORT=${PORT}
