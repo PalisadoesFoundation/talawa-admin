@@ -17,13 +17,15 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import { vi } from 'vitest';
-import {
-  EVENT_REGISTRANTS,
-  EVENT_DETAILS,
-  EVENT_CHECKINS,
-} from 'GraphQl/Queries/Queries';
-import { REMOVE_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
+import {
+  COMBINED_MOCKS,
+  EMPTY_STATE_MOCKS,
+  RECURRING_EVENT_MOCKS,
+  MISSING_DATE_MOCKS,
+  MISSING_NAME_MOCKS,
+  ERROR_DELETION_MOCKS,
+} from './Registrations.mocks';
 
 // Mock toast
 vi.mock('react-toastify', () => ({
@@ -43,109 +45,6 @@ vi.mock('react-router', async () => {
     useNavigate: () => mockNavigate,
   };
 });
-
-// Mock data setup
-const EVENT_DETAILS_MOCK: MockedResponse = {
-  request: {
-    query: EVENT_DETAILS,
-    variables: { eventId: 'event123' },
-  },
-  result: {
-    data: {
-      event: {
-        id: 'event123',
-        title: 'Test Event',
-        recurrenceRule: null,
-      },
-    },
-  },
-};
-
-const EVENT_CHECKINS_MOCK: MockedResponse = {
-  request: {
-    query: EVENT_CHECKINS,
-    variables: { eventId: 'event123' },
-  },
-  result: {
-    data: {
-      event: {
-        attendeesCheckInStatus: [
-          {
-            user: { id: '6589386a2caa9d8d69087484' },
-            isCheckedIn: true,
-          },
-          {
-            user: { id: '6589386a2caa9d8d69087485' },
-            isCheckedIn: false,
-          },
-        ],
-      },
-    },
-  },
-};
-
-const REGISTRANTS_MOCK: MockedResponse = {
-  request: {
-    query: EVENT_REGISTRANTS,
-    variables: { eventId: 'event123' },
-  },
-  result: {
-    data: {
-      getEventAttendeesByEventId: [
-        {
-          id: '6589386a2caa9d8d69087484',
-          user: {
-            id: '6589386a2caa9d8d69087484',
-            name: 'Bruce Garza',
-            emailAddress: 'bruce@example.com',
-          },
-          isRegistered: true,
-          createdAt: '2030-04-13T10:23:17.742Z',
-        },
-        {
-          id: '6589386a2caa9d8d69087485',
-          user: {
-            id: '6589386a2caa9d8d69087485',
-            name: 'Jane Smith',
-            emailAddress: 'jane@example.com',
-          },
-          isRegistered: true,
-          createdAt: '2030-04-13T10:23:17.742Z',
-        },
-      ],
-    },
-  },
-};
-
-const REMOVE_ATTENDEE_SUCCESS_MOCK: MockedResponse = {
-  request: {
-    query: REMOVE_EVENT_ATTENDEE,
-    variables: { userId: '6589386a2caa9d8d69087485', eventId: 'event123' },
-  },
-  result: {
-    data: {
-      removeEventAttendee: {
-        id: '6589386a2caa9d8d69087485',
-      },
-    },
-  },
-};
-
-const REMOVE_ATTENDEE_ERROR_MOCK: MockedResponse = {
-  request: {
-    query: REMOVE_EVENT_ATTENDEE,
-    variables: { userId: 'user3', eventId: 'event123' },
-  },
-  error: new Error('Failed to remove attendee'),
-};
-
-const COMBINED_MOCKS: MockedResponse[] = [
-  EVENT_DETAILS_MOCK,
-  EVENT_CHECKINS_MOCK,
-  REGISTRANTS_MOCK,
-  REMOVE_ATTENDEE_SUCCESS_MOCK,
-  REMOVE_ATTENDEE_ERROR_MOCK,
-];
 
 const renderEventRegistrants = (
   customMocks: MockedResponse[] = COMBINED_MOCKS,
@@ -364,35 +263,7 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
 
   // Empty state tests
   test('Displays no registrants message when list is empty', async () => {
-    const emptyMocks: MockedResponse[] = [
-      EVENT_DETAILS_MOCK,
-      {
-        request: {
-          query: EVENT_REGISTRANTS,
-          variables: { eventId: 'event123' },
-        },
-        result: {
-          data: {
-            getEventAttendeesByEventId: [],
-          },
-        },
-      },
-      {
-        request: {
-          query: EVENT_CHECKINS,
-          variables: { eventId: 'event123' },
-        },
-        result: {
-          data: {
-            event: {
-              attendeesCheckInStatus: [],
-            },
-          },
-        },
-      },
-    ];
-
-    renderEventRegistrants(emptyMocks);
+    renderEventRegistrants(EMPTY_STATE_MOCKS);
 
     await waitFor(() => {
       expect(screen.getByTestId('no-registrants')).toBeInTheDocument();
@@ -404,49 +275,7 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
 
   // Recurring event tests
   test('Handles recurring events correctly', async () => {
-    const recurringEventMocks: MockedResponse[] = [
-      {
-        request: {
-          query: EVENT_DETAILS,
-          variables: { eventId: 'event123' },
-        },
-        result: {
-          data: {
-            event: {
-              id: 'event123',
-              title: 'Recurring Event',
-              recurrenceRule: 'FREQ=WEEKLY',
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: EVENT_REGISTRANTS,
-          variables: { recurringEventInstanceId: 'event123' },
-        },
-        result: {
-          data: {
-            getEventAttendeesByEventId: [],
-          },
-        },
-      },
-      {
-        request: {
-          query: EVENT_CHECKINS,
-          variables: { eventId: 'event123' },
-        },
-        result: {
-          data: {
-            event: {
-              attendeesCheckInStatus: [],
-            },
-          },
-        },
-      },
-    ];
-
-    renderEventRegistrants(recurringEventMocks);
+    renderEventRegistrants(RECURRING_EVENT_MOCKS);
 
     await waitFor(() => {
       expect(screen.getByTestId('no-registrants')).toBeInTheDocument();
@@ -455,34 +284,7 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
 
   // Edge cases
   test('Handles missing createdAt with N/A fallback', async () => {
-    const missingDateMocks: MockedResponse[] = [
-      EVENT_DETAILS_MOCK,
-      {
-        request: {
-          query: EVENT_REGISTRANTS,
-          variables: { eventId: 'event123' },
-        },
-        result: {
-          data: {
-            getEventAttendeesByEventId: [
-              {
-                id: '1',
-                user: {
-                  id: 'user1',
-                  name: 'John Doe',
-                  emailAddress: 'john@example.com',
-                },
-                isRegistered: true,
-                createdAt: null,
-              },
-            ],
-          },
-        },
-      },
-      EVENT_CHECKINS_MOCK,
-    ];
-
-    renderEventRegistrants(missingDateMocks);
+    renderEventRegistrants(MISSING_DATE_MOCKS);
 
     await waitFor(() => {
       expect(
@@ -495,34 +297,7 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
   });
 
   test('Handles missing user name with N/A fallback', async () => {
-    const missingNameMocks: MockedResponse[] = [
-      EVENT_DETAILS_MOCK,
-      {
-        request: {
-          query: EVENT_REGISTRANTS,
-          variables: { eventId: 'event123' },
-        },
-        result: {
-          data: {
-            getEventAttendeesByEventId: [
-              {
-                id: '1',
-                user: {
-                  id: 'user1',
-                  name: null,
-                  emailAddress: 'john@example.com',
-                },
-                isRegistered: true,
-                createdAt: '2030-04-13T10:23:17.742Z',
-              },
-            ],
-          },
-        },
-      },
-      EVENT_CHECKINS_MOCK,
-    ];
-
-    renderEventRegistrants(missingNameMocks);
+    renderEventRegistrants(MISSING_NAME_MOCKS);
 
     await waitFor(() => {
       expect(screen.getByTestId('attendee-name-0')).toHaveTextContent('N/A');
@@ -574,35 +349,7 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
 
   // Error handling test
   test('Handles deletion error gracefully', async () => {
-    const errorMocks: MockedResponse[] = [
-      EVENT_DETAILS_MOCK,
-      EVENT_CHECKINS_MOCK,
-      {
-        request: {
-          query: EVENT_REGISTRANTS,
-          variables: { eventId: 'event123' },
-        },
-        result: {
-          data: {
-            getEventAttendeesByEventId: [
-              {
-                id: 'user3',
-                user: {
-                  id: 'user3',
-                  name: 'Error User',
-                  emailAddress: 'error@example.com',
-                },
-                isRegistered: true,
-                createdAt: '2030-04-13T10:23:17.742Z',
-              },
-            ],
-          },
-        },
-      },
-      REMOVE_ATTENDEE_ERROR_MOCK,
-    ];
-
-    renderEventRegistrants(errorMocks);
+    renderEventRegistrants(ERROR_DELETION_MOCKS);
 
     await waitFor(() => {
       const deleteButton = screen.getByTestId('delete-registrant-0');
