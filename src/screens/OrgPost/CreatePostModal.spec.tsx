@@ -356,4 +356,72 @@ describe('CreatePostModal', () => {
       expect(toast.error).toHaveBeenCalledWith('organizationIdMissing');
     });
   });
+
+  it('handles modal close correctly', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <CreatePostModal
+          show={true}
+          onHide={mockOnHide}
+          refetch={mockRefetch}
+          orgId={orgId}
+        />
+      </MockedProvider>,
+    );
+
+    const closeButton = screen.getByTestId('closeOrganizationModal');
+    await userEvent.click(closeButton);
+
+    expect(mockOnHide).toHaveBeenCalled();
+  });
+
+  it('handles invalid video file type', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <CreatePostModal
+          show={true}
+          onHide={mockOnHide}
+          refetch={mockRefetch}
+          orgId={orgId}
+        />
+      </MockedProvider>,
+    );
+
+    const invalidFile = new File(['content'], 'test.txt', {
+      type: 'text/plain',
+    });
+    const videoInput = screen.getByTestId('addVideoField');
+
+    // Manually trigger the change event
+    Object.defineProperty(videoInput, 'files', {
+      value: [invalidFile],
+      writable: false,
+    });
+    fireEvent.change(videoInput);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Please select a video file');
+    });
+  });
+
+  it('handles video file with no file selected', async () => {
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <CreatePostModal
+          show={true}
+          onHide={mockOnHide}
+          refetch={mockRefetch}
+          orgId={orgId}
+        />
+      </MockedProvider>,
+    );
+
+    const videoInput = screen.getByTestId('addVideoField');
+
+    // Trigger change event with no files
+    fireEvent.change(videoInput, { target: { files: [] } });
+
+    // Should not show any error
+    expect(toast.error).not.toHaveBeenCalled();
+  });
 });
