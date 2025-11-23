@@ -1641,6 +1641,87 @@ describe('OrgPost Edge Cases', () => {
     });
   });
 
+  it('handles pagination for sorted posts with sufficient data', async () => {
+    // Create 12 posts so we have 2 pages (postsPerPage = 6)
+    const largeSamplePosts = Array.from({ length: 12 }, (_, i) => ({
+      id: `post-${i + 1}`,
+      caption: `Post ${i + 1} title`,
+      createdAt: new Date(2023, 0, i + 1).toISOString(),
+      creator: {
+        id: 'user1',
+        name: 'John Doe',
+        avatarURL: null,
+        emailAddress: 'john.doe@example.com',
+      },
+      imageUrl: `image${i + 1}.jpg`,
+      videoUrl: null,
+      pinned: false,
+    }));
+
+    const largeDataMocks: MockedResponse[] = [
+      ...baseMocks,
+      {
+        request: {
+          query: GET_POSTS_BY_ORG,
+          variables: { input: { organizationId: '123' } },
+        },
+        result: {
+          data: {
+            postsByOrganization: largeSamplePosts.map((post) =>
+              enrichPostNode(post),
+            ),
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={largeDataMocks} addTypename={false}>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={['/org/123']}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    // Enable sorting to trigger the "else" branch in pagination
+    const sortButton = screen.getByTestId('sortpost-toggle');
+    fireEvent.click(sortButton);
+
+    const latestOption = await screen.findByText('Latest');
+    fireEvent.click(latestOption);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    // Now we should have 2 pages of sorted posts (12 posts / 6 per page = 2 pages)
+    // Click next page - this should execute lines 245-247
+    const nextButton = screen.getByTestId('next-page-button');
+    expect(nextButton).toBeInTheDocument();
+
+    fireEvent.click(nextButton);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    // Now we're on page 2, click previous - this should execute lines 264-265
+    const prevButton = screen.getByTestId('previous-page-button');
+    fireEvent.click(prevButton);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+  });
+
   it('handles form submission with empty title', async () => {
     render(
       <MockedProvider mocks={[...baseMocks, ...mocks]} addTypename={false}>
