@@ -425,11 +425,10 @@ describe('CreatePostModal', () => {
     expect(toast.error).not.toHaveBeenCalled();
   });
 
-  // TODO: Re-enable these tests once mutation mocking is properly configured
-  // These tests are intended to cover:
-  // - Lines 80-82: getFileHashFromFile function (crypto.subtle.digest)
-  // - Lines 85-100: getMimeTypeEnum function (MIME type conversion)
-  // - Line 124: attachment object creation
+  // These tests cover:
+  // - getFileHashFromFile (crypto.subtle.digest)
+  // - getMimeTypeEnum (MIME type conversion)
+  // - attachment object creation
   it('calculates file hash when uploading image', async () => {
     const originalArrayBuffer = File.prototype.arrayBuffer;
     const originalCrypto = global.crypto;
