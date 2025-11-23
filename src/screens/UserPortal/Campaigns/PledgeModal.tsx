@@ -178,7 +178,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       if (endDate !== dayjs(pledge?.endDate).format('YYYY-MM-DD')) {
         updatedFields.endDate = endDate;
       }
-      if (pledgeUsers !== pledge?.users) {
+      if (pledgeUsers.length > 0) {
         updatedFields.users = pledgeUsers.map((user) => user.id);
       }
       try {
