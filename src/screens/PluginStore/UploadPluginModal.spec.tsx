@@ -1609,7 +1609,9 @@ describe('UploadPluginModal Component', () => {
           // This should not be reached due to early return
           await installAdminPluginFromZip({
             zipFile: selectedFile,
-            apolloClient: {},
+            apolloClient: {
+              mutate: vi.fn().mockResolvedValue({ data: {} }),
+            },
           });
         };
 

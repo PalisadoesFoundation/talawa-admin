@@ -26,7 +26,7 @@ Defined in: [src/plugin/services/AdminPluginFileService.ts:39](https://github.co
 
 ### manifest
 
-> **manifest**: [`AdminPluginManifest`](../../../../utils/adminPluginInstaller/interfaces/AdminPluginManifest.md)
+> **manifest**: [`IAdminPluginManifest`](../../../../utils/adminPluginInstaller/interfaces/IAdminPluginManifest.md)
 
 Defined in: [src/plugin/services/AdminPluginFileService.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L37)
 
