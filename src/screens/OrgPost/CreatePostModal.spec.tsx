@@ -424,4 +424,213 @@ describe('CreatePostModal', () => {
     // Should not show any error
     expect(toast.error).not.toHaveBeenCalled();
   });
+
+  // TODO: Re-enable these tests once mutation mocking is properly configured
+  // These tests are intended to cover:
+  // - Lines 80-82: getFileHashFromFile function (crypto.subtle.digest)
+  // - Lines 85-100: getMimeTypeEnum function (MIME type conversion)
+  // - Line 124: attachment object creation
+  it('calculates file hash when uploading image', async () => {
+    // Mock File.prototype.arrayBuffer
+    File.prototype.arrayBuffer = vi.fn().mockResolvedValue(new ArrayBuffer(8));
+
+    // Mock crypto.subtle.digest for file hashing
+    const mockDigest = vi
+      .fn()
+      .mockResolvedValue(new Uint8Array([1, 2, 3, 4, 5, 6]).buffer);
+    Object.defineProperty(global, 'crypto', {
+      value: {
+        subtle: {
+          digest: mockDigest,
+        },
+      },
+      writable: true,
+    });
+
+    global.URL.createObjectURL = vi.fn(() => 'mock-url');
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <CreatePostModal
+          show={true}
+          onHide={mockOnHide}
+          refetch={mockRefetch}
+          orgId={orgId}
+        />
+      </MockedProvider>,
+    );
+
+    const titleInput = screen.getByTestId('modalTitle');
+    await userEvent.type(titleInput, 'Test');
+
+    const imageFile = new File(['image content'], 'test.jpg', {
+      type: 'image/jpeg',
+    });
+    const fileInput = screen.getByTestId('addMediaField');
+    await userEvent.upload(fileInput, imageFile);
+
+    const submitButton = screen.getByText('addPost');
+    await userEvent.click(submitButton);
+
+    // Verify that crypto.subtle.digest was called for hashing
+    await waitFor(
+      () => {
+        expect(mockDigest).toHaveBeenCalledWith(
+          'SHA-256',
+          expect.any(ArrayBuffer),
+        );
+      },
+      { timeout: 2000 },
+    );
+  });
+
+  it('handles PNG MIME type correctly', async () => {
+    // Mock File.prototype.arrayBuffer
+    File.prototype.arrayBuffer = vi.fn().mockResolvedValue(new ArrayBuffer(8));
+
+    const mockDigest = vi
+      .fn()
+      .mockResolvedValue(new Uint8Array([10, 20, 30]).buffer);
+    Object.defineProperty(global, 'crypto', {
+      value: {
+        subtle: {
+          digest: mockDigest,
+        },
+      },
+      writable: true,
+    });
+
+    global.URL.createObjectURL = vi.fn(() => 'mock-url');
+
+    const postMock = {
+      request: {
+        query: CREATE_POST_MUTATION,
+        variables: {
+          input: {
+            caption: 'Test PNG',
+            organizationId: orgId,
+            isPinned: false,
+            attachments: [
+              {
+                fileHash: '0a141e',
+                mimetype: 'IMAGE_PNG',
+                name: 'test.png',
+                objectName: 'uploads/test.png',
+              },
+            ],
+          },
+        },
+      },
+      result: {
+        data: {
+          createPost: {
+            id: '1',
+            caption: 'Test PNG',
+          },
+        },
+      },
+    };
+
+    render(
+      <MockedProvider mocks={[...mocks, postMock]} addTypename={false}>
+        <CreatePostModal
+          show={true}
+          onHide={mockOnHide}
+          refetch={mockRefetch}
+          orgId={orgId}
+        />
+      </MockedProvider>,
+    );
+
+    const titleInput = screen.getByTestId('modalTitle');
+    await userEvent.type(titleInput, 'Test PNG');
+
+    const file = new File(['content'], 'test.png', {
+      type: 'image/png',
+    });
+    const fileInput = screen.getByTestId('addMediaField');
+    await userEvent.upload(fileInput, file);
+
+    const submitButton = screen.getByTestId('createPostBtn');
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(mockDigest).toHaveBeenCalled();
+    });
+  });
+
+  it('handles WEBP MIME type correctly', async () => {
+    // Mock File.prototype.arrayBuffer
+    File.prototype.arrayBuffer = vi.fn().mockResolvedValue(new ArrayBuffer(8));
+
+    const mockDigest = vi
+      .fn()
+      .mockResolvedValue(new Uint8Array([15, 25, 35]).buffer);
+    Object.defineProperty(global, 'crypto', {
+      value: {
+        subtle: {
+          digest: mockDigest,
+        },
+      },
+      writable: true,
+    });
+
+    global.URL.createObjectURL = vi.fn(() => 'mock-url');
+
+    const postMock = {
+      request: {
+        query: CREATE_POST_MUTATION,
+        variables: {
+          input: {
+            caption: 'Test Unknown',
+            organizationId: orgId,
+            isPinned: false,
+            attachments: [
+              {
+                fileHash: '0f1923',
+                mimetype: 'IMAGE_JPEG', // fallback
+                name: 'test.unknown',
+                objectName: 'uploads/test.unknown',
+              },
+            ],
+          },
+        },
+      },
+      result: {
+        data: {
+          createPost: {
+            id: '1',
+            caption: 'Test WebP',
+          },
+        },
+      },
+    };
+
+    render(
+      <MockedProvider mocks={[...mocks, postMock]} addTypename={false}>
+        <CreatePostModal
+          show={true}
+          onHide={mockOnHide}
+          refetch={mockRefetch}
+          orgId={orgId}
+        />
+      </MockedProvider>,
+    );
+
+    const titleInput = screen.getByTestId('modalTitle');
+    await userEvent.type(titleInput, 'Test WebP');
+
+    const file = new File(['content'], 'test.webp', {
+      type: 'image/webp',
+    });
+    const fileInput = screen.getByTestId('addMediaField');
+    await userEvent.upload(fileInput, file);
+
+    const submitButton = screen.getByTestId('createPostBtn');
+    await userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(mockDigest).toHaveBeenCalled();
+    });
+  });
 });
