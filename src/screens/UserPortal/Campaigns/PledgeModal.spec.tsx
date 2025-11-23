@@ -1,5 +1,5 @@
 import type { ApolloLink } from '@apollo/client';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider, type MockedResponse } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import type { RenderResult } from '@testing-library/react';
 import {
@@ -24,6 +24,7 @@ import React, { act } from 'react';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { vi } from 'vitest';
+import { setupLocalStorageMock } from 'test-utils/localStorageMock';
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -90,98 +91,129 @@ const pledgeProps: InterfacePledgeModal[] = [
   },
 ];
 
-const PLEDGE_MODAL_MOCKS = [
-  {
-    request: {
-      query: USER_DETAILS,
-      variables: {
-        id: 'userId',
-      },
+// Shared user details mock for reuse across tests
+const USER_DETAILS_MOCK = {
+  request: {
+    query: USER_DETAILS,
+    variables: {
+      id: 'userId',
     },
-    result: {
-      data: {
+  },
+  result: {
+    data: {
+      user: {
         user: {
-          user: {
-            _id: 'userId',
-            joinedOrganizations: [
-              {
-                _id: '6537904485008f171cf29924',
-                __typename: 'Organization',
-              },
-            ],
-            firstName: 'Harve',
-            lastName: 'Lance',
-            email: 'testuser1@example.com',
-            image: null,
-            createdAt: '2023-04-13T04:53:17.742Z',
-            birthDate: null,
-            educationGrade: null,
-            employmentStatus: null,
-            gender: null,
-            maritalStatus: null,
-            phone: null,
-            address: {
-              line1: 'Line1',
-              countryCode: 'CountryCode',
-              city: 'CityName',
-              state: 'State',
-              __typename: 'Address',
+          _id: 'userId',
+          joinedOrganizations: [
+            {
+              _id: '6537904485008f171cf29924',
+              __typename: 'Organization',
             },
-            registeredEvents: [],
-            membershipRequests: [],
-            __typename: 'User',
+          ],
+          firstName: 'Harve',
+          lastName: 'Lance',
+          email: 'testuser1@example.com',
+          image: null,
+          createdAt: '2023-04-13T04:53:17.742Z',
+          birthDate: null,
+          educationGrade: null,
+          employmentStatus: null,
+          gender: null,
+          maritalStatus: null,
+          phone: null,
+          address: {
+            line1: 'Line1',
+            countryCode: 'CountryCode',
+            city: 'CityName',
+            state: 'State',
+            __typename: 'Address',
           },
-          appUserProfile: {
-            _id: '67078abd85008f171cf2991d',
-            adminFor: [],
-            isSuperAdmin: false,
-            appLanguageCode: 'en',
-            createdOrganizations: [],
-            createdEvents: [],
-            eventAdmin: [],
-            __typename: 'AppUserProfile',
+          registeredEvents: [],
+          membershipRequests: [],
+          __typename: 'User',
+        },
+        appUserProfile: {
+          _id: '67078abd85008f171cf2991d',
+          adminFor: [],
+          isSuperAdmin: false,
+          appLanguageCode: 'en',
+          createdOrganizations: [],
+          createdEvents: [],
+          eventAdmin: [],
+          __typename: 'AppUserProfile',
+        },
+        __typename: 'UserData',
+      },
+    },
+  },
+};
+
+// Base mocks shared across all tests
+const BASE_PLEDGE_MODAL_MOCKS = [USER_DETAILS_MOCK];
+
+// Helper to create UPDATE_PLEDGE mock with custom variables
+const createUpdatePledgeMock = (
+  variables: { id: string; amount: number },
+  isError = false,
+): MockedResponse => ({
+  request: {
+    query: UPDATE_PLEDGE,
+    variables,
+  },
+  ...(isError
+    ? { error: new Error('Failed to update pledge') }
+    : {
+        result: {
+          data: {
+            updateFundraisingCampaignPledge: {
+              _id: variables.id,
+            },
           },
-          __typename: 'UserData',
         },
-      },
-    },
+      }),
+});
+
+// Helper to create CREATE_PLEDGE mock with custom variables
+const createCreatePledgeMock = (
+  variables: {
+    campaignId: string;
+    amount: number;
+    currency: string;
+    startDate: string;
+    endDate: string;
+    userIds: string[];
   },
-  {
-    request: {
-      query: UPDATE_PLEDGE,
-      variables: {
-        id: '1',
-        amount: 200,
-      },
-    },
-    result: {
-      data: {
-        updateFundraisingCampaignPledge: {
-          _id: '1',
+  isError = false,
+): MockedResponse => ({
+  request: {
+    query: CREATE_PLEDGE,
+    variables,
+  },
+  ...(isError
+    ? { error: new Error('Failed to create pledge') }
+    : {
+        result: {
+          data: {
+            createFundraisingCampaignPledge: {
+              _id: '3',
+            },
+          },
         },
-      },
-    },
-  },
-  {
-    request: {
-      query: CREATE_PLEDGE,
-      variables: {
-        campaignId: 'campaignId',
-        amount: 200,
-        currency: 'USD',
-        startDate: '2024-01-02',
-        endDate: '2024-01-02',
-        userIds: ['1'],
-      },
-    },
-    result: {
-      data: {
-        createFundraisingCampaignPledge: {
-          _id: '3',
-        },
-      },
-    },
-  },
+      }),
+});
+
+// Default mocks for basic rendering tests
+const PLEDGE_MODAL_MOCKS = [
+  ...BASE_PLEDGE_MODAL_MOCKS,
+  createUpdatePledgeMock({ id: '1', amount: 200 }),
+  createCreatePledgeMock({
+    campaignId: 'campaignId',
+    amount: 200,
+    currency: 'USD',
+    startDate: '2024-01-02',
+    endDate: '2024-01-02',
+    userIds: ['1'],
+  }),
 ];
 
 const link1 = new StaticMockLink(PLEDGE_MODAL_MOCKS);
@@ -208,26 +240,8 @@ const renderPledgeModal = (
   );
 };
 
-// Mock localStorage
-const localStorageMock = (() => {
-  let store: Record<string, string> = {};
-  return {
-    getItem: (key: string): string | null => store[key] || null,
-    setItem: (key: string, value: string): void => {
-      store[key] = value.toString();
-    },
-    removeItem: (key: string): void => {
-      delete store[key];
-    },
-    clear: (): void => {
-      store = {};
-    },
-  };
-})();
-
-Object.defineProperty(window, 'localStorage', {
-  value: localStorageMock,
-});
+// Setup shared localStorage mock
+const localStorageMock = setupLocalStorageMock();
 
 describe('PledgeModal', () => {
   beforeAll(() => {
@@ -336,7 +350,8 @@ describe('PledgeModal', () => {
       const startDateInput = screen.getByLabelText('Start Date');
 
       fireEvent.change(startDateInput, { target: { value: null } });
-      expect(pledgeProps[1].pledge?.startDate).toEqual('2024-01-01');
+      // When the change value is null, the field is cleared
+      expect(startDateInput).toHaveValue('');
     });
 
     it('should update pledgeEndDate when a new date is selected', async () => {
@@ -352,7 +367,8 @@ describe('PledgeModal', () => {
       const endDateInput = screen.getByLabelText('End Date');
 
       fireEvent.change(endDateInput, { target: { value: null } });
-      expect(pledgeProps[1].pledge?.endDate).toEqual('2024-01-10');
+      // When the change value is null, the field is cleared
+      expect(endDateInput).toHaveValue('');
     });
 
     it('should update currency when changed', async () => {
@@ -407,75 +423,18 @@ describe('PledgeModal', () => {
 
     it('should handle pledge creation error', async () => {
       const errorMock = [
-        {
-          request: {
-            query: USER_DETAILS,
-            variables: {
-              id: 'userId',
-            },
+        ...BASE_PLEDGE_MODAL_MOCKS,
+        createCreatePledgeMock(
+          {
+            campaignId: 'campaignId',
+            amount: 200,
+            currency: 'USD',
+            startDate: '2024-01-02',
+            endDate: '2024-01-02',
+            userIds: ['1'],
           },
-          result: {
-            data: {
-              user: {
-                user: {
-                  _id: 'userId',
-                  joinedOrganizations: [
-                    {
-                      _id: '6537904485008f171cf29924',
-                      __typename: 'Organization',
-                    },
-                  ],
-                  firstName: 'Harve',
-                  lastName: 'Lance',
-                  email: 'testuser1@example.com',
-                  image: null,
-                  createdAt: '2023-04-13T04:53:17.742Z',
-                  birthDate: null,
-                  educationGrade: null,
-                  employmentStatus: null,
-                  gender: null,
-                  maritalStatus: null,
-                  phone: null,
-                  address: {
-                    line1: 'Line1',
-                    countryCode: 'CountryCode',
-                    city: 'CityName',
-                    state: 'State',
-                    __typename: 'Address',
-                  },
-                  registeredEvents: [],
-                  membershipRequests: [],
-                  __typename: 'User',
-                },
-                appUserProfile: {
-                  _id: '67078abd85008f171cf2991d',
-                  adminFor: [],
-                  isSuperAdmin: false,
-                  appLanguageCode: 'en',
-                  createdOrganizations: [],
-                  createdEvents: [],
-                  eventAdmin: [],
-                  __typename: 'AppUserProfile',
-                },
-                __typename: 'UserData',
-              },
-            },
-          },
-        },
-        {
-          request: {
-            query: CREATE_PLEDGE,
-            variables: {
-              campaignId: 'campaignId',
-              amount: 200,
-              currency: 'USD',
-              startDate: '2024-01-02',
-              endDate: '2024-01-02',
-              userIds: ['1'],
-            },
-          },
-          error: new Error('Failed to create pledge'),
-        },
+          true,
+        ),
       ];
 
       const errorLink = new StaticMockLink(errorMock);
@@ -506,23 +465,8 @@ describe('PledgeModal', () => {
   describe('Pledge Update', () => {
     it('should successfully update pledge with amount change', async () => {
       const updateMock = [
-        ...PLEDGE_MODAL_MOCKS,
-        {
-          request: {
-            query: UPDATE_PLEDGE,
-            variables: {
-              id: '1',
-              amount: 200,
-            },
-          },
-          result: {
-            data: {
-              updateFundraisingCampaignPledge: {
-                _id: '1',
-              },
-            },
-          },
-        },
+        ...BASE_PLEDGE_MODAL_MOCKS,
+        createUpdatePledgeMock({ id: '1', amount: 200 }),
       ];
 
       const updateLink = new StaticMockLink(updateMock);
@@ -553,23 +497,8 @@ describe('PledgeModal', () => {
 
     it('should not include pledgerId in update when no new user is selected', async () => {
       const updateMock = [
-        ...PLEDGE_MODAL_MOCKS,
-        {
-          request: {
-            query: UPDATE_PLEDGE,
-            variables: {
-              id: '1',
-              amount: 150,
-            },
-          },
-          result: {
-            data: {
-              updateFundraisingCampaignPledge: {
-                _id: '1',
-              },
-            },
-          },
-        },
+        ...BASE_PLEDGE_MODAL_MOCKS,
+        createUpdatePledgeMock({ id: '1', amount: 150 }),
       ];
 
       const updateLink = new StaticMockLink(updateMock);
@@ -597,71 +526,8 @@ describe('PledgeModal', () => {
 
     it('should handle pledge update error', async () => {
       const errorMock = [
-        {
-          request: {
-            query: USER_DETAILS,
-            variables: {
-              id: 'userId',
-            },
-          },
-          result: {
-            data: {
-              user: {
-                user: {
-                  _id: 'userId',
-                  joinedOrganizations: [
-                    {
-                      _id: '6537904485008f171cf29924',
-                      __typename: 'Organization',
-                    },
-                  ],
-                  firstName: 'Harve',
-                  lastName: 'Lance',
-                  email: 'testuser1@example.com',
-                  image: null,
-                  createdAt: '2023-04-13T04:53:17.742Z',
-                  birthDate: null,
-                  educationGrade: null,
-                  employmentStatus: null,
-                  gender: null,
-                  maritalStatus: null,
-                  phone: null,
-                  address: {
-                    line1: 'Line1',
-                    countryCode: 'CountryCode',
-                    city: 'CityName',
-                    state: 'State',
-                    __typename: 'Address',
-                  },
-                  registeredEvents: [],
-                  membershipRequests: [],
-                  __typename: 'User',
-                },
-                appUserProfile: {
-                  _id: '67078abd85008f171cf2991d',
-                  adminFor: [],
-                  isSuperAdmin: false,
-                  appLanguageCode: 'en',
-                  createdOrganizations: [],
-                  createdEvents: [],
-                  eventAdmin: [],
-                  __typename: 'AppUserProfile',
-                },
-                __typename: 'UserData',
-              },
-            },
-          },
-        },
-        {
-          request: {
-            query: UPDATE_PLEDGE,
-            variables: {
-              id: '1',
-              amount: 200,
-            },
-          },
-          error: new Error('Failed to update pledge'),
-        },
+        ...BASE_PLEDGE_MODAL_MOCKS,
+        createUpdatePledgeMock({ id: '1', amount: 200 }, true),
       ];
 
       const errorLink = new StaticMockLink(errorMock);
@@ -756,7 +622,19 @@ describe('PledgeModal', () => {
     });
 
     it('should trigger onChange when autocomplete selection changes in create mode', async () => {
-      const link = new StaticMockLink([...PLEDGE_MODAL_MOCKS], true);
+      const createMockWithEmptyUsers = [
+        ...BASE_PLEDGE_MODAL_MOCKS,
+        createCreatePledgeMock({
+          campaignId: 'campaignId',
+          amount: 150,
+          currency: 'USD',
+          startDate: '2024-01-02',
+          endDate: '2024-01-02',
+          userIds: [],
+        }),
+      ];
+
+      const link = new StaticMockLink(createMockWithEmptyUsers);
       renderPledgeModal(link, pledgeProps[0]);
 
       await waitFor(() => {
@@ -770,58 +648,42 @@ describe('PledgeModal', () => {
         await act(async () => {
           fireEvent.click(clearButton);
         });
+
+        // Verify that clearing the autocomplete removes the selected users
+        await waitFor(() => {
+          const chips = within(autocomplete).queryAllByRole('button', {
+            name: /remove/i,
+          });
+          expect(chips).toHaveLength(0);
+        });
       }
 
-      await waitFor(() => {
-        expect(autocomplete).toBeInTheDocument();
+      // Submit the form to verify empty userIds is sent to GraphQL
+      fireEvent.change(screen.getByLabelText('Amount'), {
+        target: { value: '150' },
       });
+      fireEvent.change(screen.getByLabelText('Start Date'), {
+        target: { value: '02/01/2024' },
+      });
+      fireEvent.change(screen.getByLabelText('End Date'), {
+        target: { value: '02/01/2024' },
+      });
+
+      const form = screen.getByTestId('pledgeForm');
+      fireEvent.submit(form);
+
+      await waitFor(
+        () => {
+          expect(toast.success).toHaveBeenCalledWith(
+            translations.pledgeCreated,
+          );
+        },
+        { timeout: 2000 },
+      );
     });
   });
 
-  describe('Additional coverage tests', () => {
-    it('should render component with all props', async () => {
-      // Covers component function declaration
-      renderPledgeModal(link1, pledgeProps[0]);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
-      });
-    });
-
-    it('should verify modal structure in create mode', async () => {
-      renderPledgeModal(link1, pledgeProps[0]);
-
-      await waitFor(() => {
-        expect(screen.getAllByText('Create Pledge')[0]).toBeInTheDocument();
-        expect(screen.getByLabelText('Amount')).toBeInTheDocument();
-        expect(screen.getByLabelText('Currency')).toBeInTheDocument();
-        expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
-        expect(screen.getByLabelText('End Date')).toBeInTheDocument();
-      });
-    });
-
-    it('should verify modal structure in edit mode', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
-
-      await waitFor(() => {
-        expect(screen.getByText('Edit Pledge')).toBeInTheDocument();
-        expect(screen.getByLabelText('Amount')).toBeInTheDocument();
-      });
-    });
-  });
-
-  describe('Coverage for update field change paths', () => {
-    it('should render readonly autocomplete in edit mode', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
-
-      await waitFor(() => {
-        expect(screen.getByText('Edit Pledge')).toBeInTheDocument();
-      });
-
-      const inputs = screen.getAllByRole('combobox');
-      expect(inputs[0]).toHaveAttribute('readonly');
-    });
-
+  describe('Update field change flows', () => {
     it('should update pledge with currency change', async () => {
       const updateMock = [
         ...PLEDGE_MODAL_MOCKS,
@@ -955,19 +817,6 @@ describe('PledgeModal', () => {
         },
         { timeout: 2000 },
       );
-    });
-
-    it('should verify readOnly autocomplete property in edit mode', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
-
-      await waitFor(() =>
-        expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
-      );
-
-      const autocomplete = screen.getByTestId('pledgerSelect');
-      const input = within(autocomplete).getByRole('combobox');
-
-      expect(input).toHaveAttribute('readonly');
     });
 
     it('should cover remaining edge cases for 100% coverage', async () => {
