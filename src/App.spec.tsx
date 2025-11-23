@@ -47,6 +47,10 @@ vi.mock('./plugin', () => ({
   PluginInjector: vi.fn(() => <div>Mock Plugin Injector</div>),
 }));
 
+vi.mock('screens/UserPortal/Settings/Settings', () => ({
+  default: () => <div data-testid="mock-settings">Mock Settings</div>,
+}));
+
 // Mock console methods
 const originalConsoleLog = console.log;
 const originalConsoleError = console.error;
@@ -548,6 +552,15 @@ describe('Testing the App Component', () => {
           isSuperAdmin: false,
         }),
       );
+    });
+  });
+
+  it('should navigate to user settings', async () => {
+    renderApp(link, '/user/settings');
+
+    await waitFor(() => {
+      // Should render user screen components
+      expect(screen.getByTestId('mock-settings')).toBeInTheDocument();
     });
   });
 });

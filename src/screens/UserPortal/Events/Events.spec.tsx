@@ -940,4 +940,47 @@ describe('Testing Events Screen [User Portal]', () => {
 
     // Component should render with regular user role
   });
+
+  it('Should change view type', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Initial view should be Month View
+    await waitFor(() => {
+      expect(screen.getByText('Month View')).toBeInTheDocument();
+    });
+
+    // Find the view type dropdown toggle
+    // SortingButton uses dataTestIdPrefix="selectViewType"
+    // The toggle has data-testid={`${dataTestIdPrefix}`} -> 'selectViewType'
+    const viewTypeToggle = screen.getByTestId('selectViewType');
+    await userEvent.click(viewTypeToggle);
+
+    // Select Day View
+    // SortingButton items have data-testid={`${option.value}`}
+    // Using getByText to be safer as test ID might vary based on ViewType enum
+    const dayViewOption = screen.getByText('Select Day');
+    await userEvent.click(dayViewOption);
+
+    // Verify view changed
+    // EventCalendar should render Day View (which has data-testid="hour")
+    await waitFor(() => {
+      expect(screen.getByTestId('hour')).toBeInTheDocument();
+    });
+  });
 });
