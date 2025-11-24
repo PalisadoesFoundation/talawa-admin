@@ -64,6 +64,10 @@ describe('calculateFileHash', () => {
     });
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should calculate the correct SHA-256 hash for a file', async () => {
     const fileContent = 'test content';
     const file = new MockFile(fileContent, 'test.txt', {
