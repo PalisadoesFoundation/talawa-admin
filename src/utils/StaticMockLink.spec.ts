@@ -123,12 +123,11 @@ describe('StaticMockLink', () => {
   let mockLink: StaticMockLink;
 
   beforeEach((): void => {
-    vi.clearAllMocks();
     mockLink = new StaticMockLink([], true);
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should create instance with empty mocked responses', () => {

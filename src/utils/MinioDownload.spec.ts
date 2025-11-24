@@ -9,7 +9,7 @@ vi.mock('@apollo/client', () => ({
 
 describe('useMinioDownload', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   const mockPresignedUrl = 'https://minio.example.com/presigned?token=abc123';
