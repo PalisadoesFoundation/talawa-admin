@@ -68,11 +68,13 @@ describe('localStorageMock', () => {
     });
 
     it('should handle empty string keys and values', () => {
-      mockStorage.setItem('', 'emptyKey');
-      mockStorage.setItem('key', 'value');
-      expect(mockStorage.getItem('')).toBe('emptyKey');
-      expect(mockStorage.getItem('key')).toBe('value');
+      mockStorage.setItem('', '');
+      mockStorage.setItem('nonEmptyKey', '');
+      expect(mockStorage.getItem('')).toBe('');
+      expect(mockStorage.getItem('nonEmptyKey')).toBe('');
       expect(mockStorage.length).toBe(2);
+      expect(mockStorage.key(0)).toBe('');
+      expect(mockStorage.key(1)).toBe('nonEmptyKey');
     });
 
     it('should handle special characters in keys and values', () => {
