@@ -52,6 +52,36 @@ describe('localStorageMock', () => {
       expect(mockStorage.key(1)).toBe('key2');
       expect(mockStorage.key(2)).toBeNull();
     });
+
+    it('should overwrite existing key and maintain correct length', () => {
+      mockStorage.setItem('key', 'value1');
+      expect(mockStorage.length).toBe(1);
+      mockStorage.setItem('key', 'value2');
+      expect(mockStorage.getItem('key')).toBe('value2');
+      expect(mockStorage.length).toBe(1);
+    });
+
+    it('should handle removing non-existent key without errors', () => {
+      expect(mockStorage.length).toBe(0);
+      mockStorage.removeItem('nonexistent');
+      expect(mockStorage.length).toBe(0);
+    });
+
+    it('should handle empty string keys and values', () => {
+      mockStorage.setItem('', 'emptyKey');
+      mockStorage.setItem('key', 'value');
+      expect(mockStorage.getItem('')).toBe('emptyKey');
+      expect(mockStorage.getItem('key')).toBe('value');
+      expect(mockStorage.length).toBe(2);
+    });
+
+    it('should handle special characters in keys and values', () => {
+      mockStorage.setItem('key-with-dashes', 'value');
+      mockStorage.setItem('key.with.dots', 'value with spaces');
+      expect(mockStorage.getItem('key-with-dashes')).toBe('value');
+      expect(mockStorage.getItem('key.with.dots')).toBe('value with spaces');
+      expect(mockStorage.length).toBe(2);
+    });
   });
 
   describe('setupLocalStorageMock', () => {
@@ -61,18 +91,18 @@ describe('localStorageMock', () => {
     });
 
     it('should allow setting and getting from window.localStorage', () => {
-      setupLocalStorageMock();
-      window.localStorage.setItem('testKey', 'testValue');
-      expect(window.localStorage.getItem('testKey')).toBe('testValue');
+      const mock = setupLocalStorageMock();
+      mock.setItem('testKey', 'testValue');
+      expect(mock.getItem('testKey')).toBe('testValue');
     });
 
     it('should allow clearing window.localStorage', () => {
       const mock = setupLocalStorageMock();
-      window.localStorage.setItem('key1', 'value1');
-      window.localStorage.setItem('key2', 'value2');
+      mock.setItem('key1', 'value1');
+      mock.setItem('key2', 'value2');
       mock.clear();
-      expect(window.localStorage.getItem('key1')).toBeNull();
-      expect(window.localStorage.getItem('key2')).toBeNull();
+      expect(mock.getItem('key1')).toBeNull();
+      expect(mock.getItem('key2')).toBeNull();
     });
   });
 });
