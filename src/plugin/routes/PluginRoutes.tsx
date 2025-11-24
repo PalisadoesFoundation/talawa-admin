@@ -73,7 +73,9 @@ const PluginRoutes: React.FC<IPluginRoutesProps> = ({
                       Plugin: <strong>{route.pluginId}</strong>
                     </p>
                     <p style={{ color: '#6c757d', fontSize: '14px' }}>
-                      {error.message}
+                      {process.env.NODE_ENV === 'development'
+                        ? error.message
+                        : 'Please contact support if this issue persists.'}
                     </p>
                   </div>
                 ),

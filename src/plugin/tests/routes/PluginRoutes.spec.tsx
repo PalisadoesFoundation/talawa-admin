@@ -659,4 +659,83 @@ describe('PluginRoutes', () => {
       ).toBeInTheDocument();
     });
   });
+
+  describe('Error Message Sanitization', () => {
+    it('should display raw error message in development environment', async () => {
+      const originalEnv = process.env.NODE_ENV;
+      process.env.NODE_ENV = 'development';
+
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      const mockRoutes = [
+        {
+          pluginId: 'dev-error-plugin',
+          path: '/dev-error',
+          component: 'DevErrorComponent',
+          title: 'Dev Error Route',
+          permissions: ['user'],
+        },
+      ];
+      mockUsePluginRoutes.mockReturnValue(mockRoutes);
+
+      // Mock failed import
+      mockDynamicImportPlugin.mockRejectedValue(new Error('Dev Network error'));
+
+      render(
+        <TestWrapper>
+          <PluginRoutes />
+        </TestWrapper>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('Dev Network error')).toBeInTheDocument();
+      });
+
+      consoleErrorSpy.mockRestore();
+      process.env.NODE_ENV = originalEnv;
+    });
+
+    it('should display sanitized error message in non-development environment', async () => {
+      // NODE_ENV is 'test' by default in vitest
+
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      const mockRoutes = [
+        {
+          pluginId: 'prod-error-plugin',
+          path: '/prod-error',
+          component: 'ProdErrorComponent',
+          title: 'Prod Error Route',
+          permissions: ['user'],
+        },
+      ];
+      mockUsePluginRoutes.mockReturnValue(mockRoutes);
+
+      // Mock failed import
+      mockDynamicImportPlugin.mockRejectedValue(
+        new Error('Prod Network error'),
+      );
+
+      render(
+        <TestWrapper>
+          <PluginRoutes />
+        </TestWrapper>,
+      );
+
+      await waitFor(() => {
+        expect(
+          screen.queryByText('Prod Network error'),
+        ).not.toBeInTheDocument();
+        expect(
+          screen.getByText('Please contact support if this issue persists.'),
+        ).toBeInTheDocument();
+      });
+
+      consoleErrorSpy.mockRestore();
+    });
+  });
 });
