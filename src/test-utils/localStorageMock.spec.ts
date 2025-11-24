@@ -85,6 +85,20 @@ describe('localStorageMock', () => {
   });
 
   describe('setupLocalStorageMock', () => {
+    let originalLocalStorage: Storage;
+
+    beforeEach(() => {
+      originalLocalStorage = window.localStorage;
+    });
+
+    afterEach(() => {
+      Object.defineProperty(window, 'localStorage', {
+        value: originalLocalStorage,
+        writable: true,
+        configurable: true,
+      });
+    });
+
     it('should configure window.localStorage', () => {
       const mock = setupLocalStorageMock();
       expect(window.localStorage).toBe(mock);
@@ -92,17 +106,18 @@ describe('localStorageMock', () => {
 
     it('should allow setting and getting from window.localStorage', () => {
       const mock = setupLocalStorageMock();
-      mock.setItem('testKey', 'testValue');
+      window.localStorage.setItem('testKey', 'testValue');
+      expect(window.localStorage.getItem('testKey')).toBe('testValue');
       expect(mock.getItem('testKey')).toBe('testValue');
     });
 
     it('should allow clearing window.localStorage', () => {
-      const mock = setupLocalStorageMock();
-      mock.setItem('key1', 'value1');
-      mock.setItem('key2', 'value2');
-      mock.clear();
-      expect(mock.getItem('key1')).toBeNull();
-      expect(mock.getItem('key2')).toBeNull();
+      setupLocalStorageMock();
+      window.localStorage.setItem('key1', 'value1');
+      window.localStorage.setItem('key2', 'value2');
+      window.localStorage.clear();
+      expect(window.localStorage.getItem('key1')).toBeNull();
+      expect(window.localStorage.getItem('key2')).toBeNull();
     });
   });
 });
