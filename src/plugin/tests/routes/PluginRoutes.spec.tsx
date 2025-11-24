@@ -21,9 +21,6 @@ vi.mock('../../utils', async () => {
   };
 });
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/no-multi-comp */
-
 // Mock Route component
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
@@ -41,6 +38,7 @@ const mockUsePluginRoutes = vi.mocked(usePluginRoutes);
 const mockDynamicImportPlugin = vi.mocked(dynamicImportPlugin);
 
 // Test wrapper component
+// eslint-disable-next-line react/no-multi-comp
 const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <BrowserRouter>{children}</BrowserRouter>
 );
@@ -172,6 +170,7 @@ describe('PluginRoutes', () => {
     });
 
     it('should handle null/undefined routes gracefully', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       mockUsePluginRoutes.mockReturnValue(null as any);
 
       render(
@@ -531,6 +530,7 @@ describe('PluginRoutes', () => {
 
       // Mock successful import
       mockDynamicImportPlugin.mockResolvedValue({
+        // eslint-disable-next-line react/no-multi-comp
         SuccessComponent: () => <div data-testid="success-comp">Success</div>,
       });
 
@@ -563,6 +563,7 @@ describe('PluginRoutes', () => {
 
       // Mock successful import but missing the requested component
       mockDynamicImportPlugin.mockResolvedValue({
+        // eslint-disable-next-line react/no-multi-comp
         OtherComponent: () => <div>Other</div>,
       });
 
