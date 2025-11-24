@@ -19,7 +19,7 @@
     "@hello-pangea/dnd": "^18.0.1",
     "@mui/icons-material": "7.3.4",
     "@mui/material": "7.3.4",
-    "@mui/system": "7.3.3",
+    "@mui/system": "7.3.5",
     "@mui/x-charts": "^8.5.2",
     "@mui/x-data-grid": "^7.28.3",
     "@mui/x-date-pickers": "^7.28.3",
@@ -215,7 +215,8 @@
       "react-dom": "^19.1.0"
     },
     "gulp-header": "^2.0.9",
-    "rimraf": "^6.1.2"
+    "rimraf": "^6.1.2",
+    "glob": "^13.0.0"
   },
   "lint-staged": {
     "**/*.{ts, tsx, json, scss, css}": [
