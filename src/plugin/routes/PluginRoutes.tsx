@@ -31,52 +31,61 @@ const PluginRoutes: React.FC<IPluginRoutesProps> = ({
   const renderPluginRoute = (route: IRouteExtension) => {
     // Dynamically import the plugin's main entry point and get the specific component
     const PluginComponent = lazy(() =>
-      dynamicImportPlugin(route.pluginId || '')
-        .then((module: unknown) => {
-          // Try to get the named export first, then default export
-          const moduleObj = module as Record<string, unknown>;
-          const Component = moduleObj[route.component] || moduleObj.default;
-          if (!Component) {
-            throw new Error(
-              `Component '${route.component}' not found in plugin '${route.pluginId}'`,
-            );
-          }
-          return { default: Component as React.ComponentType<unknown> };
-        })
-        .catch((error) => {
-          console.error(
-            `Failed to load plugin component '${route.component}' from '${route.pluginId}':`,
-            error,
-          );
-          // Return a fallback error component
-          return {
+      route.pluginId
+        ? dynamicImportPlugin(route.pluginId)
+            .then((module: unknown) => {
+              // Try to get the named export first, then default export
+              const moduleObj = module as Record<string, unknown>;
+              const Component = moduleObj[route.component] || moduleObj.default;
+              if (!Component) {
+                throw new Error(
+                  `Component '${route.component}' not found in plugin '${route.pluginId}'`,
+                );
+              }
+              return { default: Component as React.ComponentType<unknown> };
+            })
+            .catch((error) => {
+              console.error(
+                `Failed to load plugin component '${route.component}' from '${route.pluginId}':`,
+                error,
+              );
+              // Return a fallback error component
+              return {
+                default: () => (
+                  <div
+                    style={{
+                      padding: '40px',
+                      textAlign: 'center',
+                      backgroundColor: '#f8f9fa',
+                      border: '1px solid #dee2e6',
+                      borderRadius: '8px',
+                      margin: '20px',
+                    }}
+                  >
+                    <h3 style={{ color: '#dc3545', marginBottom: '16px' }}>
+                      Plugin Error
+                    </h3>
+                    <p style={{ color: '#6c757d', marginBottom: '8px' }}>
+                      Failed to load component:{' '}
+                      <strong>{route.component}</strong>
+                    </p>
+                    <p style={{ color: '#6c757d', marginBottom: '8px' }}>
+                      Plugin: <strong>{route.pluginId}</strong>
+                    </p>
+                    <p style={{ color: '#6c757d', fontSize: '14px' }}>
+                      {error.message}
+                    </p>
+                  </div>
+                ),
+              };
+            })
+        : Promise.resolve({
             default: () => (
-              <div
-                style={{
-                  padding: '40px',
-                  textAlign: 'center',
-                  backgroundColor: '#f8f9fa',
-                  border: '1px solid #dee2e6',
-                  borderRadius: '8px',
-                  margin: '20px',
-                }}
-              >
-                <h3 style={{ color: '#dc3545', marginBottom: '16px' }}>
-                  Plugin Error
-                </h3>
-                <p style={{ color: '#6c757d', marginBottom: '8px' }}>
-                  Failed to load component: <strong>{route.component}</strong>
-                </p>
-                <p style={{ color: '#6c757d', marginBottom: '8px' }}>
-                  Plugin: <strong>{route.pluginId}</strong>
-                </p>
-                <p style={{ color: '#6c757d', fontSize: '14px' }}>
-                  {error.message}
-                </p>
+              <div style={{ padding: '20px', color: '#dc3545' }}>
+                Error: Plugin ID is missing for route "{route.path}"
               </div>
             ),
-          };
-        }),
+          }),
     );
 
     return (

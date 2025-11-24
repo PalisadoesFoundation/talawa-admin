@@ -41,8 +41,8 @@ export function validatePluginManifest(manifest: unknown): boolean {
     }
 
     // Validate each route extension
-    if (routes && Array.isArray(routes)) {
-      for (const route of routes) {
+    if (routes) {
+      for (const route of routes as unknown[]) {
         const routeObj = route as Record<string, unknown>;
         if (!routeObj.pluginId || !routeObj.path || !routeObj.component) {
           return false;
@@ -96,7 +96,14 @@ export function filterByPermissions<
 /**
  * Dynamically imports a plugin module
  * Extracted for better testability
+ * @param pluginId - The unique identifier of the plugin to import
+ * @throws Error if pluginId is empty or contains invalid characters
  */
-export const dynamicImportPlugin = (pluginId: string) => {
+export const dynamicImportPlugin = (
+  pluginId: string,
+): Promise<Record<string, unknown>> => {
+  if (!pluginId || pluginId.trim() === '') {
+    return Promise.reject(new Error('Plugin ID cannot be empty'));
+  }
   return import(/* @vite-ignore */ `/plugins/${pluginId}/index.ts`);
 };
