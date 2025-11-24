@@ -41,6 +41,9 @@ This `.env` file must be populated with the following environment variables for 
 | REACT_APP_BACKEND_WEBSOCKET_URL | URL endpoint for websocket end point              |
 | REACT_APP_USE_RECAPTCHA         | Whether you want to use reCAPTCHA or not          |
 | REACT_APP_RECAPTCHA_SITE_KEY    | Site key for authentication using reCAPTCHA       |
+| USE_DOCKER | Whether to use Docker for deployment (YES/NO) |
+| DOCKER_PORT | Custom port for Docker container |
+| ALLOW_LOGS | Enable/disable compilation and runtime logs (YES/blank) |
 
 #### Setting up PORT in .env file
 
@@ -113,6 +116,22 @@ REACT_APP_RECAPTCHA_SITE_KEY="this_is_the_recaptcha_key"
 
 ```
 
+
+#### Setting up USE_DOCKER in .env file
+
+Set the `USE_DOCKER` variable to "YES" if you want to run Talawa-Admin using Docker, or "NO" for native development. This parameter controls whether Docker-based deployment is enabled.
+
+```
+USE_DOCKER="YES"
+```
+
+#### Setting up DOCKER_PORT in .env file
+
+Add a custom port number for the Docker container to the variable named `DOCKER_PORT` in the `.env` file. This is used when `USE_DOCKER` is set to "YES".
+
+```
+DOCKER_PORT="8080"
+```
 #### Setting up Compiletime and Runtime logs
 
 Set the `ALLOW_LOGS` to "YES" if you want warnings , info and error messages in your console or leave it blank if you dont need them or want to keep the console clean
