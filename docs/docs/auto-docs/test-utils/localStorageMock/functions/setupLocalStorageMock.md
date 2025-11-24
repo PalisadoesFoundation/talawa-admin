@@ -6,11 +6,28 @@
 
 > **setupLocalStorageMock**(): `Storage`
 
-Defined in: [src/test-utils/localStorageMock.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/localStorageMock.ts#L33)
+Defined in: [src/test-utils/localStorageMock.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/localStorageMock.ts#L53)
 
 Setup localStorage mock for tests
-Call this in your test file's setup
+Configures window.localStorage with a mock implementation for test isolation
 
 ## Returns
 
 `Storage`
+
+Storage - The configured localStorage mock instance
+
+## Example
+
+```ts
+// In your test file's setup:
+const localStorageMock = setupLocalStorageMock();
+
+afterEach(() => {
+  localStorageMock.clear();
+});
+
+// Then in your tests:
+window.localStorage.setItem('token', 'abc123');
+expect(window.localStorage.getItem('token')).toBe('abc123');
+```

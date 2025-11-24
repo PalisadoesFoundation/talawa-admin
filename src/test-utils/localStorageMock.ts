@@ -1,6 +1,13 @@
 /**
- * Shared localStorage mock for test isolation
+ * Creates an in-memory localStorage mock for test isolation
  * Prevents tests from interfering with each other or real browser storage
+ *
+ * @returns Storage - Mock implementation of the Storage interface
+ * @example
+ * const mockStorage = createLocalStorageMock();
+ * mockStorage.setItem('key', 'value');
+ * expect(mockStorage.getItem('key')).toBe('value');
+ * mockStorage.clear();
  */
 export const createLocalStorageMock = (): Storage => {
   let store: Record<string, string> = {};
@@ -28,13 +35,27 @@ export const createLocalStorageMock = (): Storage => {
 
 /**
  * Setup localStorage mock for tests
- * Call this in your test file's setup
+ * Configures window.localStorage with a mock implementation for test isolation
+ *
+ * @returns Storage - The configured localStorage mock instance
+ * @example
+ * // In your test file's setup:
+ * const localStorageMock = setupLocalStorageMock();
+ *
+ * afterEach(() => {
+ *   localStorageMock.clear();
+ * });
+ *
+ * // Then in your tests:
+ * window.localStorage.setItem('token', 'abc123');
+ * expect(window.localStorage.getItem('token')).toBe('abc123');
  */
 export const setupLocalStorageMock = (): Storage => {
   const localStorageMock = createLocalStorageMock();
   Object.defineProperty(window, 'localStorage', {
     value: localStorageMock,
     writable: true,
+    configurable: true,
   });
   return localStorageMock;
 };
