@@ -4,7 +4,7 @@
 
 # Function: getRecurrenceRuleText()
 
-> **getRecurrenceRuleText**(`recurrence`, `startDate`, `endDate`?): `string`
+> **getRecurrenceRuleText**(`recurrence`, `startDate`, `endDate?`): `string`
 
 Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L104)
 

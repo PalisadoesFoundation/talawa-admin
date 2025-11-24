@@ -62,20 +62,6 @@ export const UPDATE_ORGANIZATION_MUTATION = gql`
   }
 `;
 
-// fragment for defining the Address input type.
-export const ADDRESS_DETAILS_FRAGMENT = gql`
-  fragment AddressDetails on AddressInput {
-    city: String
-    countryCode: String
-    dependentLocality: String
-    line1: String
-    line2: String
-    postalCode: String
-    sortingCode: String
-    state: String
-  }
-`;
-
 // to update the details of the current user
 export const UPDATE_CURRENT_USER_MUTATION = gql`
   mutation UpdateCurrentUser($input: MutationUpdateCurrentUserInput!) {
@@ -109,39 +95,6 @@ export const UPDATE_CURRENT_USER_MUTATION = gql`
   }
 `;
 
-// to update the details of the user
-
-export const UPDATE_USER_MUTATION = gql`
-  mutation UpdateCurrentUser($input: MutationUpdateCurrentUserInput!) {
-    updateCurrentUser(input: $input) {
-      addressLine1
-      addressLine2
-      avatarMimeType
-      avatarURL
-      birthDate
-      city
-      countryCode
-      createdAt
-      description
-      educationGrade
-      emailAddress
-      employmentStatus
-      homePhoneNumber
-      id
-      isEmailAddressVerified
-      maritalStatus
-      mobilePhoneNumber
-      name
-      natalSex
-      naturalLanguageCode
-      postalCode
-      role
-      state
-      updatedAt
-      workPhoneNumber
-    }
-  }
-`;
 // to update the password of user
 
 export const UPDATE_USER_PASSWORD_MUTATION = gql`
@@ -185,6 +138,66 @@ export const SIGNUP_MUTATION = gql`
         id
       }
       authenticationToken
+    }
+  }
+`;
+
+// to send event invitations via email to external users
+export const SEND_EVENT_INVITATIONS = gql`
+  mutation SendEventInvitations($input: SendEventInvitationsInput!) {
+    sendEventInvitations(input: $input) {
+      id
+      eventId
+      recurringEventInstanceId
+      invitedBy
+      userId
+      inviteeEmail
+      inviteeName
+      invitationToken
+      status
+      expiresAt
+      respondedAt
+      metadata
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
+// preview/verify an invitation by token (returns metadata but does not accept)
+export const VERIFY_EVENT_INVITATION = gql`
+  mutation VerifyEventInvitation($input: VerifyEventInvitationInput!) {
+    verifyEventInvitation(input: $input) {
+      invitationToken
+      inviteeEmailMasked
+      inviteeName
+      status
+      expiresAt
+      eventId
+      recurringEventInstanceId
+      organizationId
+    }
+  }
+`;
+
+// accept an invitation (finalize and add user as attendee/member)
+export const ACCEPT_EVENT_INVITATION = gql`
+  mutation AcceptEventInvitation($input: AcceptEventInvitationInput!) {
+    acceptEventInvitation(input: $input) {
+      id
+      eventId
+      recurringEventInstanceId
+      invitedBy
+      userId
+      inviteeEmail
+      inviteeName
+      invitationToken
+      status
+      expiresAt
+      respondedAt
+      metadata
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -374,16 +387,6 @@ export const ADD_ADMIN_MUTATION = gql`
   }
 `;
 
-export const ADD_MEMBER_MUTATION = gql`
-  mutation CreateMember($orgid: ID!, $userid: ID!) {
-    createMember(input: { organizationId: $orgid, userId: $userid }) {
-      organization {
-        _id
-      }
-    }
-  }
-`;
-
 export const CREATE_POST_MUTATION = gql`
   mutation CreatePost($input: MutationCreatePostInput!) {
     createPost(input: $input) {
@@ -391,10 +394,11 @@ export const CREATE_POST_MUTATION = gql`
       caption
       pinnedAt
       attachments {
-        url
+        fileHash
+        mimeType
+        name
+        objectName
       }
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -432,30 +436,62 @@ export const FORGOT_PASSWORD_MUTATION = gql`
 `;
 
 export const UPDATE_POST_MUTATION = gql`
-  mutation UpdatePost($input: MutationUpdatePostInput!) {
+  mutation updatePost($input: MutationUpdatePostInput!) {
     updatePost(input: $input) {
       id
       caption
       pinnedAt
       attachments {
-        url
+        fileHash
+        mimeType
+        name
+        objectName
       }
     }
   }
 `;
 
-export const LIKE_POST = gql`
-  mutation likePost($postId: ID!) {
-    likePost(id: $postId) {
-      _id
+export const UPDATE_EVENT_MUTATION = gql`
+  mutation UpdateEvent($input: MutationUpdateEventInput!) {
+    updateEvent(input: $input) {
+      id
+      name
+      description
+      startAt
+      endAt
+      allDay
+      location
+      isPublic
+      isRegisterable
+      createdAt
+      updatedAt
+      creator {
+        id
+        name
+      }
+      updater {
+        id
+        name
+      }
+      organization {
+        id
+        name
+      }
     }
   }
 `;
 
-export const UNLIKE_POST = gql`
-  mutation unlikePost($postId: ID!) {
-    unlikePost(id: $postId) {
-      _id
+export const UPDATE_POST_VOTE = gql`
+  mutation updatePostVote($input: MutationUpdatePostVoteInput!) {
+    updatePostVote(input: $input) {
+      id
+      upVoters(first: 10) {
+        edges {
+          node {
+            id
+          }
+        }
+      }
     }
   }
 `;
@@ -599,18 +635,15 @@ export {
 // Create, Update and Delete Events
 export {
   CREATE_EVENT_MUTATION,
-  UPDATE_EVENT_MUTATION,
   DELETE_STANDALONE_EVENT_MUTATION,
   DELETE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION,
   DELETE_SINGLE_EVENT_INSTANCE_MUTATION,
   DELETE_THIS_AND_FOLLOWING_EVENTS_MUTATION,
-  REGISTER_EVENT,
 } from './EventMutations';
 
 export const PRESIGNED_URL = gql`
   mutation createPresignedUrl($input: MutationCreatePresignedUrlInput!) {
     createPresignedUrl(input: $input) {
-      fileUrl
       presignedUrl
       objectName
       requiresUpload
@@ -619,7 +652,7 @@ export const PRESIGNED_URL = gql`
 `;
 
 export const GET_FILE_PRESIGNEDURL = gql`
-  mutation CreateGetfileUrl($input: CreateGetfileUrlInput!) {
+  mutation createGetfileUrl($input: MutationCreateGetfileUrlInput!) {
     createGetfileUrl(input: $input) {
       presignedUrl
     }

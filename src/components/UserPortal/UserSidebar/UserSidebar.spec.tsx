@@ -1,12 +1,20 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
-import { MockedProvider } from '@apollo/client/testing';
+import type { FetchResult } from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { type MockedResponse } from '@apollo/client/testing';
 import UserSidebar from './UserSidebar';
 import type { InterfaceUserSidebarProps } from './UserSidebar';
+import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 // Mock the dependencies
-const mockT = vi.fn((key: string) => {
+let mockT: ReturnType<typeof vi.fn>;
+
+let mockTCommon: ReturnType<typeof vi.fn>;
+
+const mockTImplementation = (key: string) => {
   const translations: Record<string, string> = {
     talawaUserPortal: 'Talawa User Portal',
     'my organizations': 'My Organizations',
@@ -14,22 +22,24 @@ const mockT = vi.fn((key: string) => {
     Settings: 'Settings', // Capital S for common namespace
   };
   return translations[key] || key;
-});
+};
 
-const mockTCommon = vi.fn((key: string) => {
+const mockTCommonImplementation = (key: string) => {
   const translations: Record<string, string> = {
     menu: 'Menu',
     Settings: 'Settings',
+    userPortal: 'User Portal',
+    notifications: 'Notifications', // Used by notification button in component
   };
   return translations[key] || key;
-});
+};
 
 vi.mock('react-i18next', () => ({
-  useTranslation: vi.fn((namespace: string) => {
+  useTranslation: vi.fn((namespace?: string) => {
     if (namespace === 'common') {
-      return { t: mockTCommon };
+      return { t: mockTCommon || vi.fn() };
     }
-    return { t: mockT };
+    return { t: mockT || vi.fn() };
   }),
   initReactI18next: {
     type: '3rdParty',
@@ -55,10 +65,10 @@ vi.mock('components/UserPortal/SignOut/SignOut', () => ({
   )),
 }));
 
+type DrawerItems = import('plugin/types').IDrawerExtension[] | undefined;
+
 const { mockUsePluginDrawerItems } = vi.hoisted(() => ({
-  mockUsePluginDrawerItems: vi.fn(
-    (): import('plugin/types').IDrawerExtension[] => [],
-  ),
+  mockUsePluginDrawerItems: vi.fn<() => DrawerItems>(() => []),
 }));
 
 const { mockUseLocalStorage } = vi.hoisted(() => ({
@@ -128,10 +138,51 @@ describe('UserSidebar', () => {
     setHideDrawer: mockSetHideDrawer,
   };
 
+  const buildCommunityData = () => ({
+    community: {
+      __typename: 'Community',
+      createdAt: '2024-01-01T00:00:00.000Z',
+      facebookURL: null,
+      githubURL: null,
+      id: 'community-id',
+      inactivityTimeoutDuration: 30,
+      instagramURL: null,
+      linkedinURL: null,
+      logoMimeType: null,
+      logoURL: null,
+      name: 'Talawa',
+      redditURL: null,
+      slackURL: null,
+      updatedAt: '2024-01-01T00:00:00.000Z',
+      websiteURL: null,
+      xURL: null,
+      youtubeURL: null,
+    },
+  });
+
+  const createCommunityResponse = (): FetchResult => ({
+    data: buildCommunityData(),
+  });
+
+  const createCommunityMocks = (): MockedResponse[] => [
+    {
+      request: {
+        query: GET_COMMUNITY_DATA_PG,
+      },
+      result: createCommunityResponse(),
+    },
+  ];
+
+  const createApolloClient = () =>
+    new ApolloClient({
+      cache: new InMemoryCache(),
+      link: new StaticMockLink(createCommunityMocks(), false),
+    });
+
   beforeEach(() => {
     vi.clearAllMocks();
-    mockT.mockClear();
-    mockTCommon.mockClear();
+    mockT = vi.fn(mockTImplementation);
+    mockTCommon = vi.fn(mockTCommonImplementation);
     mockUsePluginDrawerItems.mockReturnValue([]);
     // Reset window.innerWidth to a default value
     Object.defineProperty(window, 'innerWidth', {
@@ -151,15 +202,22 @@ describe('UserSidebar', () => {
     });
   });
 
-  const renderComponent = (props: Partial<InterfaceUserSidebarProps> = {}) => {
+  const renderWithRoute = (
+    route: string,
+    props: Partial<InterfaceUserSidebarProps> = {},
+  ) => {
+    const client = createApolloClient();
     return render(
-      <MockedProvider mocks={[]} addTypename={false}>
-        <MemoryRouter>
+      <ApolloProvider client={client}>
+        <MemoryRouter initialEntries={[route]}>
           <UserSidebar {...defaultProps} {...props} />
         </MemoryRouter>
-      </MockedProvider>,
+      </ApolloProvider>,
     );
   };
+
+  const renderComponent = (props: Partial<InterfaceUserSidebarProps> = {}) =>
+    renderWithRoute('/', props);
 
   describe('Component Rendering', () => {
     it('should render all required elements', () => {
@@ -167,11 +225,12 @@ describe('UserSidebar', () => {
 
       expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
       expect(screen.getByTestId('talawa-logo')).toBeInTheDocument();
-      expect(screen.getByText('Talawa User Portal')).toBeInTheDocument();
-      expect(screen.getByText('Menu')).toBeInTheDocument();
+      expect(screen.getByText('User Portal')).toBeInTheDocument();
       expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
       expect(screen.getByTestId('settingsBtn')).toBeInTheDocument();
-      expect(screen.getByTestId('profile-dropdown')).toBeInTheDocument();
+      // Multiple ProfileCards render by design - one at top (with blue bg) and one at bottom
+      const profileDropdowns = screen.getAllByTestId('profile-dropdown');
+      expect(profileDropdowns.length).toBe(2);
     });
 
     it('should render navigation links with correct text', () => {
@@ -432,15 +491,35 @@ describe('UserSidebar', () => {
       expect(screen.getByAltText('Plugin One')).toBeInTheDocument();
       expect(screen.getAllByTestId('plugin-icon')).toHaveLength(1);
     });
+
+    it('should apply active stroke color to plugin icon when plugin route is active', () => {
+      const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
+        {
+          pluginId: 'test-plugin',
+          path: '/user/plugin/test',
+          label: 'Test Plugin',
+          icon: '', // No custom icon, so it uses PluginLogo
+        },
+      ];
+      mockUsePluginDrawerItems.mockReturnValue(mockPluginItems);
+
+      // Render on the plugin route to make it active
+      renderWithRoute('/user/plugin/test');
+
+      const pluginIcon = screen.getByTestId('plugin-icon');
+      expect(pluginIcon).toHaveAttribute(
+        'data-stroke',
+        'var(--sidebar-icon-stroke-active)',
+      );
+    });
   });
 
   describe('Internationalization', () => {
     it('should use correct translation keys', () => {
       renderComponent();
 
-      expect(mockT).toHaveBeenCalledWith('talawaUserPortal');
+      expect(mockTCommon).toHaveBeenCalledWith('userPortal');
       expect(mockT).toHaveBeenCalledWith('my organizations');
-      expect(mockTCommon).toHaveBeenCalledWith('menu');
       expect(mockTCommon).toHaveBeenCalledWith('Settings');
     });
   });
@@ -449,8 +528,10 @@ describe('UserSidebar', () => {
     it('should have ProfileDropdown in the bottom section', () => {
       renderComponent();
 
-      const profileDropdown = screen.getByTestId('profile-dropdown');
-      expect(profileDropdown).toBeInTheDocument();
+      // ProfileCard count already verified in "Component Rendering" section
+      // This test verifies the bottom ProfileCard specifically exists
+      const profileDropdowns = screen.getAllByTestId('profile-dropdown');
+      expect(profileDropdowns[1]).toBeInTheDocument();
     });
 
     it('should apply correct structure classes', () => {
@@ -460,73 +541,14 @@ describe('UserSidebar', () => {
       expect(container).toHaveClass('leftDrawer');
 
       // Check for the main content structure
-      const mainContent = container.querySelector('.leftbarcompheight');
+      const mainContent = screen.getByTestId('sidebar-main-content');
       expect(mainContent).toBeInTheDocument();
-      expect(mainContent).toHaveClass(
-        'd-flex',
-        'flex-column',
-        'leftbarcompheight',
-      );
-    });
-  });
-
-  describe('Active State Styling', () => {
-    it('should apply active styles when on organizations route', () => {
-      render(
-        <MockedProvider mocks={[]} addTypename={false}>
-          <MemoryRouter initialEntries={['/user/organizations']}>
-            <UserSidebar {...defaultProps} />
-          </MemoryRouter>
-        </MockedProvider>,
-      );
-
-      const orgsButton = screen.getByTestId('orgsBtn');
-      expect(orgsButton).toHaveClass('btn-success');
-    });
-
-    it('should apply active styles when on settings route', () => {
-      render(
-        <MockedProvider mocks={[]} addTypename={false}>
-          <MemoryRouter initialEntries={['/user/settings']}>
-            <UserSidebar {...defaultProps} />
-          </MemoryRouter>
-        </MockedProvider>,
-      );
-
-      const settingsButton = screen.getByTestId('settingsBtn');
-      expect(settingsButton).toHaveClass('btn-success');
-    });
-
-    it('should apply active stroke color to icons when route is active', () => {
-      render(
-        <MockedProvider mocks={[]} addTypename={false}>
-          <MemoryRouter initialEntries={['/user/organizations']}>
-            <UserSidebar {...defaultProps} />
-          </MemoryRouter>
-        </MockedProvider>,
-      );
-
-      const orgIcon = screen.getByTestId('organizations-icon');
-      expect(orgIcon).toHaveAttribute('data-stroke', '#000000');
-    });
-
-    it('should apply inactive stroke color to icons when route is not active', () => {
-      render(
-        <MockedProvider mocks={[]} addTypename={false}>
-          <MemoryRouter initialEntries={['/user/other']}>
-            <UserSidebar {...defaultProps} />
-          </MemoryRouter>
-        </MockedProvider>,
-      );
-
-      const orgIcon = screen.getByTestId('organizations-icon');
-      expect(orgIcon).toHaveAttribute('data-stroke', 'var(--bs-secondary)');
     });
   });
 
   describe('Edge Cases', () => {
     it('should handle undefined plugin items gracefully', () => {
-      mockUsePluginDrawerItems.mockReturnValue(undefined as any);
+      mockUsePluginDrawerItems.mockReturnValue(undefined);
 
       expect(() => renderComponent()).not.toThrow();
       expect(screen.queryByText('Plugin Settings')).not.toBeInTheDocument();
@@ -535,7 +557,8 @@ describe('UserSidebar', () => {
     it('should handle null setHideDrawer prop', () => {
       const propsWithNullSetter = {
         hideDrawer: false,
-        setHideDrawer: null as any,
+        setHideDrawer:
+          null as unknown as InterfaceUserSidebarProps['setHideDrawer'],
       };
 
       expect(() => renderComponent(propsWithNullSetter)).not.toThrow();

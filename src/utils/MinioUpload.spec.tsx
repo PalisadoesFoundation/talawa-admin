@@ -18,7 +18,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { PRESIGNED_URL } from 'GraphQl/Mutations/mutations';
 import { useMinioUpload } from './MinioUpload';
-import { vi } from 'vitest';
+import { vi, type Mock } from 'vitest';
 import { calculateFileHash } from './filehash';
 
 const TestComponent = ({
@@ -57,7 +57,7 @@ const TestComponent = ({
 
 describe('Minio Upload Integration', (): void => {
   beforeEach(() => {
-    (calculateFileHash as jest.Mock).mockResolvedValue('mocked-file-hash');
+    (calculateFileHash as Mock).mockResolvedValue('mocked-file-hash');
     global.fetch = vi.fn(() =>
       Promise.resolve({
         ok: true,

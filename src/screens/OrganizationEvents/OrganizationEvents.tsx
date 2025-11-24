@@ -18,10 +18,9 @@
  * ```
  */
 
-import React, { useState, useEffect, useMemo, JSX } from 'react';
+import React, { useState, useEffect, useRef, JSX } from 'react';
 import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { debounce } from '@mui/material';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
 import styles from '../../style/app-fixed.module.css';
 import {
@@ -35,6 +34,7 @@ import { useParams, useNavigate } from 'react-router';
 import EventHeader from 'components/EventCalender/Header/EventHeader';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
+import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
 import CreateEventModal from './CreateEventModal';
 
 // Define the type for an event edge
@@ -59,6 +59,9 @@ interface IEventEdge {
     totalCount?: number | null;
     hasExceptions?: boolean;
     progressLabel?: string | null;
+    // New recurrence description fields
+    recurrenceDescription?: string | null;
+    recurrenceRule?: InterfaceRecurrenceRule | null;
     // Attachments
     attachments?: Array<{
       url: string;
@@ -95,24 +98,13 @@ function organizationEvents(): JSX.Element {
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-  const [debouncedMonth, setDebouncedMonth] = useState(new Date().getMonth());
-  const [debouncedYear, setDebouncedYear] = useState(new Date().getFullYear());
   const { orgId: currentUrl } = useParams();
   const navigate = useNavigate();
+  const queryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const showInviteModal = (): void => setCreateEventmodalisOpen(true);
   const hideCreateEventModal = (): void => setCreateEventmodalisOpen(false);
 
-  // Debounced functions for month/year changes
-  const debouncedSetMonth = useMemo(
-    () => debounce((month: number) => setDebouncedMonth(month), 300),
-    [],
-  );
-
-  const debouncedSetYear = useMemo(
-    () => debounce((year: number) => setDebouncedYear(year), 300),
-    [],
-  );
   const handleChangeView = (item: string | null): void => {
     if (item) setViewType(item as ViewType);
   };
@@ -120,29 +112,29 @@ function organizationEvents(): JSX.Element {
   const handleMonthChange = (month: number, year: number): void => {
     setCurrentMonth(month);
     setCurrentYear(year);
-    debouncedSetMonth(month);
-    debouncedSetYear(year);
+    // No manual refetch - let useQuery handle it automatically with cache-first policy
   };
 
   const {
     data: eventData,
-    loading: eventLoading,
     error: eventDataError,
     refetch: refetchEvents,
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
     variables: {
       id: currentUrl,
-      first: 50,
+      first: 150,
       after: null,
-      startDate: dayjs(new Date(debouncedYear, debouncedMonth, 1))
+      startDate: dayjs(new Date(currentYear, currentMonth, 1))
         .startOf('month')
         .toISOString(),
-      endDate: dayjs(new Date(debouncedYear, debouncedMonth, 1))
+      endDate: dayjs(new Date(currentYear, currentMonth, 1))
         .endOf('month')
         .toISOString(),
       includeRecurring: true,
     },
     notifyOnNetworkStatusChange: true,
+    errorPolicy: 'all',
+    fetchPolicy: 'cache-and-network',
   });
 
   const {
@@ -166,40 +158,69 @@ function organizationEvents(): JSX.Element {
   const events: InterfaceEvent[] = (
     eventData?.organization?.events?.edges || []
   ).map((edge: IEventEdge) => ({
-    _id: edge.node.id,
+    id: edge.node.id,
     name: edge.node.name,
     description: edge.node.description || '',
-    startDate: dayjs(edge.node.startAt).format('YYYY-MM-DD'),
-    endDate: dayjs(edge.node.endAt).format('YYYY-MM-DD'),
+    startAt: edge.node.startAt,
+    endAt: edge.node.endAt,
     startTime: edge.node.allDay
-      ? undefined
+      ? null
       : dayjs(edge.node.startAt).format('HH:mm:ss'),
     endTime: edge.node.allDay
-      ? undefined
+      ? null
       : dayjs(edge.node.endAt).format('HH:mm:ss'),
     allDay: edge.node.allDay,
     location: edge.node.location || '',
     isPublic: edge.node.isPublic,
     isRegisterable: edge.node.isRegisterable,
     // Add recurring event information
-    isRecurringTemplate: edge.node.isRecurringEventTemplate,
-    baseEventId: edge.node.baseEvent?.id || null,
+    isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
+    baseEvent: edge.node.baseEvent,
     sequenceNumber: edge.node.sequenceNumber,
     totalCount: edge.node.totalCount,
     hasExceptions: edge.node.hasExceptions,
     progressLabel: edge.node.progressLabel,
+    recurrenceDescription: edge.node.recurrenceDescription,
+    recurrenceRule: edge.node.recurrenceRule,
     creator: {
-      _id: edge.node.creator.id,
+      id: edge.node.creator.id,
       name: edge.node.creator.name,
     },
     attendees: [], // Adjust if attendees are added to schema
   }));
 
   useEffect(() => {
-    if (eventDataError || orgDataError) navigate('/orglist');
-  }, [eventDataError, orgDataError]);
+    // Only navigate away for serious errors, not for empty results or month navigation
+    if (eventDataError || orgDataError) {
+      // Handle rate limiting errors more gracefully - check multiple variations
+      const isRateLimitError =
+        eventDataError?.message?.toLowerCase().includes('too many requests') ||
+        eventDataError?.message?.toLowerCase().includes('rate limit') ||
+        eventDataError?.message?.includes('Please try again later');
 
-  if (eventLoading || orgLoading) return <Loader />;
+      if (isRateLimitError) {
+        // Just suppress rate limit errors silently
+        return;
+      }
+
+      // For other errors (like empty results), just log them but don't redirect
+      console.warn('Non-critical error in events page:', {
+        eventDataError: eventDataError?.message,
+        orgDataError: orgDataError?.message,
+      });
+    }
+  }, [eventDataError, orgDataError, navigate]);
+
+  useEffect(() => {
+    // Cleanup timeout on unmount
+    return () => {
+      if (queryTimeoutRef.current) {
+        clearTimeout(queryTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  if (orgLoading) return <Loader />;
 
   return (
     <>

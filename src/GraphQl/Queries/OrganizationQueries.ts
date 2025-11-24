@@ -23,15 +23,43 @@ export const ORGANIZATION_POST_LIST = gql`
   ) {
     organization(input: $input) {
       id
+      postsCount
       posts(after: $after, before: $before, first: $first, last: $last) {
         edges {
           node {
             id
             caption
+            commentsCount
+            pinnedAt
+            downVotesCount
+            upVotesCount
             creator {
               id
+              name
+              avatarURL
             }
             createdAt
+            comments(first: 10) {
+              edges {
+                node {
+                  id
+                  body
+                  creator {
+                    id
+                    name
+                    avatarURL
+                  }
+                  downVotesCount
+                  upVotesCount
+                }
+              }
+              pageInfo {
+                startCursor
+                endCursor
+                hasNextPage
+                hasPreviousPage
+              }
+            }
           }
           cursor
         }
@@ -46,28 +74,9 @@ export const ORGANIZATION_POST_LIST = gql`
   }
 `;
 
-export const GET_POSTS_BY_ORG = gql`
-  query GetPostsByOrganization($input: GetPostsByOrgInput!) {
-    postsByOrganization(input: $input) {
-      id
-      createdAt
-      updatedAt
-      caption
-      attachments {
-        url
-      }
-      creator {
-        id
-      }
-    }
-  }
-`;
-
-export const FILTERED_ORGANIZATION_POSTS = gql`
-  query FilteredOrganizationPosts(
+export const ORGANIZATION_PINNED_POST_LIST = gql`
+  query OrganizationpinnedPosts(
     $input: QueryOrganizationInput!
-    $title_contains: String
-    $text_contains: String
     $after: String
     $before: String
     $first: Int
@@ -75,29 +84,43 @@ export const FILTERED_ORGANIZATION_POSTS = gql`
   ) {
     organization(input: $input) {
       id
-      posts(
-        title_contains: $title_contains
-        text_contains: $text_contains
-        after: $after
-        before: $before
-        first: $first
-        last: $last
-      ) {
+      postsCount
+      pinnedPosts(after: $after, before: $before, first: $first, last: $last) {
         edges {
           node {
             id
-            title
-            text
-            imageUrl
+            caption
+            commentsCount
+            pinnedAt
+            downVotesCount
+            upVotesCount
             creator {
               id
               name
+              avatarURL
             }
             createdAt
-            updatedAt
-            likeCount
-            commentCount
-            pinned
+            comments(first: 10) {
+              edges {
+                node {
+                  id
+                  body
+                  creator {
+                    id
+                    name
+                    avatarURL
+                  }
+                  downVotesCount
+                  upVotesCount
+                }
+              }
+              pageInfo {
+                startCursor
+                endCursor
+                hasNextPage
+                hasPreviousPage
+              }
+            }
           }
           cursor
         }
@@ -111,6 +134,52 @@ export const FILTERED_ORGANIZATION_POSTS = gql`
     }
   }
 `;
+
+export const ORGANIZATION_POST_LIST_WITH_VOTES = gql`
+  query OrganizationPostList(
+    $input: QueryOrganizationInput!
+    $after: String
+    $before: String
+    $first: Int
+    $last: Int
+    $userId: ID!
+  ) {
+    organization(input: $input) {
+      id
+      postsCount
+      posts(after: $after, before: $before, first: $first, last: $last) {
+        edges {
+          node {
+            hasUserVoted(userId: $userId) {
+              hasVoted
+              voteType
+            }
+            id
+            caption
+            commentsCount
+            pinnedAt
+            downVotesCount
+            upVotesCount
+            creator {
+              id
+              name
+              avatarURL
+            }
+            createdAt
+          }
+          cursor
+        }
+        pageInfo {
+          startCursor
+          endCursor
+          hasNextPage
+          hasPreviousPage
+        }
+      }
+    }
+  }
+`;
+
 // GraphQL query to retrieve all the Organizations user is Part of with filter by name
 export const USER_JOINED_ORGANIZATIONS_PG = gql`
   query UserJoinedOrganizations($id: String!, $filter: String, $first: Int) {
@@ -277,42 +346,12 @@ export const USER_CREATED_ORGANIZATIONS = gql`
  * @returns The list of admins associated with the organization.
  */
 
-export const ORGANIZATION_ADMINS_LIST = gql`
-  query Organizations($id: ID!) {
-    organizations(id: $id) {
-      _id
-      admins {
-        _id
-        image
-        firstName
-        lastName
-        email
-      }
-    }
-  }
-`;
-
 /**
  * GraphQL query to retrieve the list of members for a specific organization.
  *
  * @param id - The ID of the organization for which members are being retrieved.
  * @returns The list of members associated with the organization.
  */
-export const ORGANIZATION_FUNDS = gql`
-  query Organizations($id: ID!) {
-    organizations(id: $id) {
-      funds {
-        _id
-        name
-        refrenceNumber
-        taxDeductible
-        isArchived
-        isDefault
-        createdAt
-      }
-    }
-  }
-`;
 
 /**
  * GraphQL query to retrieve the list of venues for a specific organization.
@@ -321,25 +360,65 @@ export const ORGANIZATION_FUNDS = gql`
  * @returns The list of venues associated with the organization.
  */
 export const VENUE_LIST = gql`
-  query GetVenueByOrgId(
-    $orgId: ID!
+  query venuesByOrganization($orgId: String!) {
+    organization(input: { id: $orgId }) {
+      venues(first: 32) {
+        edges {
+          node {
+            id
+            name
+            description
+            createdAt
+            capacity
+            attachments {
+              url
+              mimeType
+            }
+          }
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+          startCursor
+          hasPreviousPage
+        }
+      }
+    }
+  }
+`;
+
+/**
+ * GraphQL query to fetch organization members with pagination and filtering.
+ * This query uses the new connection-based schema with input objects.
+ *
+ * @param input - QueryOrganizationInput containing the organization ID
+ * @param first - Number of members to fetch
+ * @param after - Cursor for pagination
+ * @param where - MembersWhereInput for filtering (e.g., name_contains)
+ * @returns Organization members with connection structure
+ */
+export const ORGANIZATION_MEMBERS = gql`
+  query OrganizationMembers(
+    $input: QueryOrganizationInput!
     $first: Int
-    $orderBy: VenueOrderByInput
-    $where: VenueWhereInput
+    $after: String
+    $where: MembersWhereInput
   ) {
-    getVenueByOrgId(
-      orgId: $orgId
-      first: $first
-      orderBy: $orderBy
-      where: $where
-    ) {
-      _id
-      capacity
-      name
-      description
-      imageUrl
-      organization {
-        _id
+    organization(input: $input) {
+      members(first: $first, after: $after, where: $where) {
+        edges {
+          node {
+            id
+            name
+            avatarURL
+            role
+          }
+          cursor
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
       }
     }
   }

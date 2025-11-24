@@ -269,13 +269,13 @@ function OrganizationPeople(): JSX.Element {
     if (isForwardNavigation) {
       // Forward navigation uses "after" with the endCursor of the current page
       variables.first = PAGE_SIZE;
-      variables.after = currentPageCursors?.startCursor || null;
+      variables.after = currentPageCursors?.endCursor;
       variables.last = null;
       variables.before = null;
     } else {
       // Backward navigation uses "before" with the startCursor of the current page
       variables.last = PAGE_SIZE;
-      variables.before = currentPageCursors?.endCursor || null;
+      variables.before = currentPageCursors?.startCursor;
       variables.first = null;
       variables.after = null;
     }
@@ -388,6 +388,7 @@ function OrganizationPeople(): JSX.Element {
                   borderRadius: '50%',
                   objectFit: 'cover',
                 }}
+                crossOrigin="anonymous"
               />
             ) : (
               <div
@@ -467,6 +468,7 @@ function OrganizationPeople(): JSX.Element {
         <Button
           className={`${styles.removeButton}`}
           variant="danger"
+          disabled={state === 2}
           onClick={() => toggleRemoveMemberModal(params.row._id)}
           aria-label="Remove member"
           data-testid="removeMemberModalBtn"
@@ -520,7 +522,11 @@ function OrganizationPeople(): JSX.Element {
           getRowId={(row) => row._id}
           rows={filteredRows}
           columns={columns}
-          rowCount={-1}
+          rowCount={
+            paginationModel.page * PAGE_SIZE +
+            currentRows.length +
+            (paginationMeta.hasNextPage ? PAGE_SIZE : 0)
+          }
           paginationMode="server"
           paginationModel={paginationModel}
           onPaginationModelChange={handlePaginationModelChange}

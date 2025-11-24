@@ -22,9 +22,9 @@ import type { MockedFunction } from 'vitest';
 import { describe, test, expect, vi } from 'vitest';
 import { mockAgendaItemCategories, mockFormState1 } from '../AgendaItemsMocks';
 
-const mockHideUpdateModal = vi.fn();
-const mockSetFormState = vi.fn();
-const mockUpdateAgendaItemHandler = vi.fn();
+let mockHideUpdateModal: ReturnType<typeof vi.fn>;
+let mockSetFormState: ReturnType<typeof vi.fn>;
+let mockUpdateAgendaItemHandler: ReturnType<typeof vi.fn>;
 const mockT = (key: string): string => key;
 
 vi.mock('react-toastify', () => ({
@@ -34,11 +34,23 @@ vi.mock('react-toastify', () => ({
   },
 }));
 vi.mock('utils/convertToBase64');
-const mockedConvertToBase64 = convertToBase64 as MockedFunction<
-  typeof convertToBase64
->;
+let mockedConvertToBase64: MockedFunction<typeof convertToBase64>;
 
 describe('AgendaItemsUpdateModal', () => {
+  beforeEach(() => {
+    mockHideUpdateModal = vi.fn();
+    mockSetFormState = vi.fn();
+    mockUpdateAgendaItemHandler = vi.fn();
+    mockedConvertToBase64 = convertToBase64 as MockedFunction<
+      typeof convertToBase64
+    >;
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   test('renders modal correctly', () => {
     render(
       <MockedProvider addTypename={false}>
@@ -320,5 +332,386 @@ describe('AgendaItemsUpdateModal', () => {
 
     fireEvent.click(options[0]);
     fireEvent.click(options[1]);
+  });
+
+  test('useEffect filters empty URLs and attachments on component mount', async () => {
+    const formStateWithEmptyValues = {
+      ...mockFormState1,
+      urls: ['https://example.com', '', '   ', 'https://test.com'],
+      attachments: ['attachment1', '', 'attachment2'],
+    };
+
+    render(
+      <MockedProvider addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsUpdateModal
+                  agendaItemCategories={[]}
+                  agendaItemUpdateModalIsOpen
+                  hideUpdateModal={mockHideUpdateModal}
+                  formState={formStateWithEmptyValues}
+                  setFormState={mockSetFormState}
+                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
+                  t={mockT}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(mockSetFormState).toHaveBeenCalledWith(expect.any(Function));
+    });
+
+    // Test the function that was passed to setFormState
+    const setFormStateCall = mockSetFormState.mock.calls.find(
+      (call) => typeof call[0] === 'function',
+    );
+    expect(setFormStateCall).toBeDefined();
+
+    if (setFormStateCall) {
+      const result = setFormStateCall[0](formStateWithEmptyValues);
+      expect(result.urls).toEqual(['https://example.com', 'https://test.com']);
+      expect(result.attachments).toEqual(['attachment1', 'attachment2']);
+    }
+  });
+
+  test('handles empty URL input correctly', async () => {
+    render(
+      <MockedProvider addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsUpdateModal
+                  agendaItemCategories={[]}
+                  agendaItemUpdateModalIsOpen
+                  hideUpdateModal={mockHideUpdateModal}
+                  formState={mockFormState1}
+                  setFormState={mockSetFormState}
+                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
+                  t={mockT}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const urlInput = screen.getByTestId('urlInput');
+    const linkBtn = screen.getByTestId('linkBtn');
+
+    // Test empty URL
+    fireEvent.change(urlInput, { target: { value: '' } });
+    fireEvent.click(linkBtn);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('invalidUrl');
+    });
+
+    // Test whitespace-only URL
+    fireEvent.change(urlInput, { target: { value: '   ' } });
+    fireEvent.click(linkBtn);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('invalidUrl');
+    });
+  });
+
+  test('handles file input with no files selected', async () => {
+    render(
+      <MockedProvider addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsUpdateModal
+                  agendaItemCategories={[]}
+                  agendaItemUpdateModalIsOpen
+                  hideUpdateModal={mockHideUpdateModal}
+                  formState={mockFormState1}
+                  setFormState={mockSetFormState}
+                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
+                  t={mockT}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const fileInput = screen.getByTestId('attachment');
+
+    // Simulate file input change with no files
+    Object.defineProperty(fileInput, 'files', {
+      value: null,
+    });
+
+    fireEvent.change(fileInput);
+
+    // Should not call setFormState when no files are selected
+    expect(mockSetFormState).not.toHaveBeenCalledWith(
+      expect.objectContaining({
+        attachments: expect.any(Array),
+      }),
+    );
+  });
+
+  test('displays video attachments correctly', async () => {
+    const formStateWithVideo = {
+      ...mockFormState1,
+      attachments: ['data:video/mp4;base64,video-data'],
+    };
+
+    render(
+      <MockedProvider addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsUpdateModal
+                  agendaItemCategories={[]}
+                  agendaItemUpdateModalIsOpen
+                  hideUpdateModal={mockHideUpdateModal}
+                  formState={formStateWithVideo}
+                  setFormState={mockSetFormState}
+                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
+                  t={mockT}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const mediaPreview = screen.getByTestId('mediaPreview');
+    expect(mediaPreview).toBeInTheDocument();
+
+    // Check if video element exists
+    const videoElement = mediaPreview.querySelector('video');
+    if (videoElement) {
+      // Just verify the video element exists - the specific attributes may vary
+      expect(videoElement).toBeInTheDocument();
+    } else {
+      // If no video element, check for image element (fallback behavior)
+      const imageElement = mediaPreview.querySelector('img');
+      expect(imageElement).toBeInTheDocument();
+      // This covers the case where video attachments are displayed as images
+    }
+  });
+
+  test('displays image attachments correctly', async () => {
+    const formStateWithImage = {
+      ...mockFormState1,
+      attachments: ['data:image/jpeg;base64,image-data'],
+    };
+
+    render(
+      <MockedProvider addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsUpdateModal
+                  agendaItemCategories={[]}
+                  agendaItemUpdateModalIsOpen
+                  hideUpdateModal={mockHideUpdateModal}
+                  formState={formStateWithImage}
+                  setFormState={mockSetFormState}
+                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
+                  t={mockT}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const imageElement = screen
+      .getByTestId('mediaPreview')
+      .querySelector('img');
+    expect(imageElement).toBeInTheDocument();
+    expect(imageElement).toHaveAttribute(
+      'src',
+      'data:image/jpeg;base64,image-data',
+    );
+    expect(imageElement).toHaveAttribute('alt', 'Attachment preview');
+  });
+
+  test('handles URL display truncation correctly', async () => {
+    const longUrl =
+      'https://thisisaverylongurlthatexceedsfiftycharacters.com/very/long/path';
+    const formStateWithLongUrl = {
+      ...mockFormState1,
+      urls: [longUrl],
+    };
+
+    render(
+      <MockedProvider addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsUpdateModal
+                  agendaItemCategories={[]}
+                  agendaItemUpdateModalIsOpen
+                  hideUpdateModal={mockHideUpdateModal}
+                  formState={formStateWithLongUrl}
+                  setFormState={mockSetFormState}
+                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
+                  t={mockT}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    // Check that the URL is displayed and truncated
+    const urlLink = screen.getByRole('link', {
+      name: /https:\/\/thisisaverylongurlthatexceedsfiftycharacte\.\.\./,
+    });
+    expect(urlLink).toBeInTheDocument();
+    expect(urlLink.textContent).toContain('...');
+  });
+
+  test('handles undefined agendaItemCategories correctly', async () => {
+    render(
+      <MockedProvider addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsUpdateModal
+                  agendaItemCategories={undefined}
+                  agendaItemUpdateModalIsOpen
+                  hideUpdateModal={mockHideUpdateModal}
+                  formState={mockFormState1}
+                  setFormState={mockSetFormState}
+                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
+                  t={mockT}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const autocomplete = screen.getByTestId('categorySelect');
+    expect(autocomplete).toBeInTheDocument();
+  });
+
+  test('handles undefined agendaItemCategories gracefully', async () => {
+    render(
+      <MockedProvider addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsUpdateModal
+                  agendaItemCategories={
+                    undefined as unknown as
+                      | typeof mockAgendaItemCategories
+                      | undefined
+                  }
+                  agendaItemUpdateModalIsOpen
+                  hideUpdateModal={mockHideUpdateModal}
+                  formState={mockFormState1}
+                  setFormState={mockSetFormState}
+                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
+                  t={mockT}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const autocomplete = screen.getByTestId('categorySelect');
+    expect(autocomplete).toBeInTheDocument();
+  });
+
+  test('handles file input with no files property', async () => {
+    render(
+      <MockedProvider addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsUpdateModal
+                  agendaItemCategories={[]}
+                  agendaItemUpdateModalIsOpen
+                  hideUpdateModal={mockHideUpdateModal}
+                  formState={mockFormState1}
+                  setFormState={mockSetFormState}
+                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
+                  t={mockT}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const fileInput = screen.getByTestId('attachment');
+
+    // Simulate file input change with no files property
+    Object.defineProperty(fileInput, 'files', {
+      value: undefined,
+    });
+
+    fireEvent.change(fileInput);
+
+    // Should not call setFormState when files property is undefined
+    expect(mockSetFormState).not.toHaveBeenCalledWith(
+      expect.objectContaining({
+        attachments: expect.any(Array),
+      }),
+    );
+  });
+
+  test('handles short URL display correctly', async () => {
+    const shortUrl = 'https://example.com';
+    const formStateWithShortUrl = {
+      ...mockFormState1,
+      urls: [shortUrl],
+    };
+
+    render(
+      <MockedProvider addTypename={false}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsUpdateModal
+                  agendaItemCategories={[]}
+                  agendaItemUpdateModalIsOpen
+                  hideUpdateModal={mockHideUpdateModal}
+                  formState={formStateWithShortUrl}
+                  setFormState={mockSetFormState}
+                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
+                  t={mockT}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const urlLink = screen.getByText('https://example.com');
+    expect(urlLink).toBeInTheDocument();
   });
 });

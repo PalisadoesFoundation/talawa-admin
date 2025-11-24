@@ -99,11 +99,6 @@ function organizationVenues(): JSX.Element {
   } = useQuery(VENUE_LIST, {
     variables: {
       orgId: orgId,
-      orderBy: sortOrder === 'highest' ? 'capacity_DESC' : 'capacity_ASC',
-      where: {
-        name_starts_with: searchBy === 'name' ? searchTerm : undefined,
-        description_starts_with: searchBy === 'desc' ? searchTerm : undefined,
-      },
     },
   });
 
@@ -180,10 +175,41 @@ function organizationVenues(): JSX.Element {
 
   // Updating venues state when venue data changes
   useEffect(() => {
-    if (venueData && venueData.getVenueByOrgId) {
-      setVenues(venueData.getVenueByOrgId);
+    if (venueData && venueData?.organization?.venues?.edges) {
+      let filteredVenues = venueData.organization.venues.edges;
+
+      // Client-side filtering
+      if (searchTerm) {
+        filteredVenues = filteredVenues.filter(
+          (venue: InterfaceQueryVenueListItem) => {
+            if (searchBy === 'name') {
+              return venue.node.name
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase());
+            } else if (searchBy === 'desc') {
+              return venue.node.description
+                ?.toLowerCase()
+                .includes(searchTerm.toLowerCase());
+            }
+            return true;
+          },
+        );
+      }
+
+      // Client-side sorting by capacity
+      if (filteredVenues.length > 0) {
+        filteredVenues = [...filteredVenues].sort((a, b) => {
+          const capacityA = parseInt(a.node.capacity || '0');
+          const capacityB = parseInt(b.node.capacity || '0');
+          return sortOrder === 'highest'
+            ? capacityB - capacityA
+            : capacityA - capacityB;
+        });
+      }
+
+      setVenues(filteredVenues);
     }
-  }, [venueData]);
+  }, [venueData, searchTerm, searchBy, sortOrder]);
 
   return (
     <>

@@ -8,7 +8,7 @@
 
 Defined in: [src/screens/MemberDetail/MemberDetailMocks.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/MemberDetailMocks.ts#L64)
 
-## Type declaration
+## Type Declaration
 
 ### request
 
@@ -72,7 +72,7 @@ Defined in: [src/screens/MemberDetail/MemberDetailMocks.ts:64](https://github.co
 
 #### result.data.currentUser.createdAt
 
-> **createdAt**: `string` = `'2025-02-06T03:10:50.254'`
+> **createdAt**: `string` = `'2025-02-06T03:10:50.254Z'`
 
 #### result.data.currentUser.description
 
@@ -136,7 +136,7 @@ Defined in: [src/screens/MemberDetail/MemberDetailMocks.ts:64](https://github.co
 
 #### result.data.currentUser.updatedAt
 
-> **updatedAt**: `string` = `'2025-02-06T03:22:17.808'`
+> **updatedAt**: `string` = `'2025-02-06T03:22:17.808Z'`
 
 #### result.data.currentUser.workPhoneNumber
 

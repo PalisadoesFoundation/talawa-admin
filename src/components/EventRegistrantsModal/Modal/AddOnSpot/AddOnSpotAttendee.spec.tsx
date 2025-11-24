@@ -38,23 +38,19 @@ const MOCKS = [
     request: {
       query: SIGNUP_MUTATION,
       variables: {
-        firstName: 'John',
-        lastName: 'Doe',
+        ID: '123',
+        name: 'John Doe',
         email: 'john@example.com',
-        phoneNo: '1234567890',
-        gender: 'Male',
         password: '123456',
-        orgId: '123',
       },
     },
     result: {
       data: {
         signUp: {
           user: {
-            _id: '1',
+            id: '1',
           },
-          accessToken: 'mock-access-token',
-          refreshToken: 'mock-refresh-token',
+          authenticationToken: 'mock-access-token',
         },
       },
     },
@@ -63,7 +59,15 @@ const MOCKS = [
 
 const ERROR_MOCKS = [
   {
-    ...MOCKS[0],
+    request: {
+      query: SIGNUP_MUTATION,
+      variables: {
+        ID: '123',
+        name: 'John Doe',
+        email: 'john@example.com',
+        password: '123456',
+      },
+    },
     error: new Error('Failed to add attendee'),
   },
 ];

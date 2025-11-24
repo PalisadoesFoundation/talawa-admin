@@ -1,12 +1,11 @@
+import React, { act } from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import UserDetailsForm from './UserDetails';
 import { MOCKS, MOCKS1, MOCKS2, UPDATE_MOCK } from '../SettingsMocks';
 import { MockedProvider } from '@apollo/client/testing';
 import dayjs from 'dayjs';
-import { act } from 'react-dom/test-utils';
 
 // Mock the dependencies
 vi.mock('sanitize-html', () => ({
@@ -188,7 +187,7 @@ describe('UserDetailsForm', () => {
 
     const birthDateInput = screen.getByLabelText(mockT('birthDate'));
     const today = new Date();
-    const maxDate = new Intl.DateTimeFormat('en-CA').format(today);
+    const maxDate = today.toISOString().split('T')[0]; // This returns YYYY-MM-DD format
 
     expect(birthDateInput).toHaveAttribute('max', maxDate);
   });

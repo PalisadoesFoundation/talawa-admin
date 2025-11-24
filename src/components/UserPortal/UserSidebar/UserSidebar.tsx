@@ -28,8 +28,7 @@
  * ```
  *
  */
-import React from 'react';
-import Button from 'react-bootstrap/Button';
+import React, { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
@@ -37,8 +36,8 @@ import PluginLogo from 'assets/svgs/plugins.svg?react';
 import styles from '../../../style/app-fixed.module.css';
 import { usePluginDrawerItems } from 'plugin';
 import type { IDrawerExtension } from 'plugin';
-import useLocalStorage, { setItem } from 'utils/useLocalstorage';
-import { FaBars } from 'react-icons/fa';
+import useLocalStorage from 'utils/useLocalstorage';
+import { FaBars, FaBell } from 'react-icons/fa';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
 import IconComponent from 'components/IconComponent/IconComponent';
@@ -69,53 +68,97 @@ const userSidebar = ({
     isOrg,
   );
 
-  const handleLinkClick = (): void => {
+  const handleLinkClick = useCallback((): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
     }
-  };
+  }, [setHideDrawer]);
+
+  // Render a drawer item with icon
+  const renderDrawerItem = useCallback(
+    (to: string, icon: React.ReactNode, label: string, testId: string) => (
+      <NavLink key={to} to={to} onClick={handleLinkClick}>
+        {({ isActive }) => {
+          let styledIcon = icon;
+
+          if (React.isValidElement(icon) && typeof icon.type !== 'string') {
+            // Check if it's FaBell (react-icon) by checking the icon itself
+            if (icon.type === FaBell) {
+              styledIcon = React.cloneElement(
+                icon as React.ReactElement<{ style?: React.CSSProperties }>,
+                {
+                  style: {
+                    fontSize: 25,
+                    color: isActive ? '#000000' : 'var(--bs-secondary)',
+                  },
+                },
+              );
+            } else {
+              // Handle SVG icons
+              styledIcon = React.cloneElement<React.SVGProps<SVGSVGElement>>(
+                icon as React.ReactElement<React.SVGProps<SVGSVGElement>>,
+                {
+                  fill: 'none',
+                  fontSize: 25,
+                  stroke: isActive
+                    ? 'var(--sidebar-icon-stroke-active)'
+                    : 'var(--sidebar-icon-stroke-inactive)',
+                },
+              );
+            }
+          }
+
+          return (
+            <button
+              type="button"
+              className={`${
+                isActive ? styles.sidebarBtnActive : styles.sidebarBtn
+              }`}
+              data-testid={testId}
+            >
+              <div className={styles.iconWrapper}>{styledIcon}</div>
+              {!hideDrawer && label}
+            </button>
+          );
+        }}
+      </NavLink>
+    ),
+    [handleLinkClick, hideDrawer],
+  );
 
   // Render a plugin drawer item
-  const renderPluginDrawerItem = (item: IDrawerExtension) => (
-    <NavLink to={item.path} key={item.pluginId} onClick={handleLinkClick}>
-      {({ isActive }) => (
-        <Button
-          variant={isActive ? 'success' : ''}
-          style={{
-            backgroundColor: isActive ? 'var(--sidebar-option-bg)' : '',
-            fontWeight: isActive ? 'bold' : 'normal',
-            color: isActive
-              ? 'var(--sidebar-option-text-active)'
-              : 'var(--sidebar-option-text-inactive)',
-          }}
-        >
-          <div className={styles.iconWrapper}>
-            {item.icon ? (
-              <img
-                src={item.icon}
-                alt={item.label}
-                style={{ width: 25, height: 25 }}
-              />
-            ) : (
-              <PluginLogo
-                stroke={`${
-                  isActive === true
-                    ? 'var(--sidebar-icon-stroke-active)'
-                    : 'var(--sidebar-icon-stroke-inactive)'
-                }`}
-              />
-            )}
-          </div>
-          {item.label}
-        </Button>
-      )}
-    </NavLink>
+  const renderPluginDrawerItem = useCallback(
+    (item: IDrawerExtension) => {
+      const Icon = item.icon ? (
+        <img
+          src={item.icon}
+          alt={item.label}
+          style={{ width: 25, height: 25 }}
+        />
+      ) : (
+        <PluginLogo
+          fill="none"
+          fontSize={25}
+          stroke="var(--sidebar-icon-stroke-inactive)"
+        />
+      );
+
+      return renderDrawerItem(
+        item.path,
+        Icon,
+        item.label,
+        `plugin-${item.pluginId}-btn`,
+      );
+    },
+    [renderDrawerItem],
   );
 
   return (
     <>
       <div
-        className={`${styles.leftDrawer} ${hideDrawer ? styles.collapsedDrawer : styles.expandedDrawer}`}
+        className={`${styles.leftDrawer} 
+        ${hideDrawer ? styles.collapsedDrawer : styles.expandedDrawer}`}
+        style={{ backgroundColor: '#f0f7fb' }}
         data-testid="leftDrawerContainer"
       >
         <div
@@ -155,94 +198,56 @@ const userSidebar = ({
             style={{
               display: hideDrawer ? 'none' : 'flex',
               alignItems: 'center',
-              paddingRight: '40px',
+              marginRight: 'auto',
+              paddingLeft: '5px',
             }}
           >
             <TalawaLogo className={styles.talawaLogo} />
             <div className={`${styles.talawaText} ${styles.sidebarText}`}>
-              {t('talawaUserPortal')}
+              {tCommon('userPortal')}
             </div>
           </div>
         </div>
-        <h5 className={`${styles.titleHeader} text-secondary`}>
-          {!hideDrawer && tCommon('menu')}
-        </h5>
+
+        {/* User Profile Section - Top position like Admin Portal */}
+        {!hideDrawer && (
+          <div
+            style={{
+              backgroundColor: '#e8f4f8',
+              padding: '10px',
+              borderRadius: '8px',
+              margin: '10px',
+            }}
+          >
+            <ProfileCard />
+          </div>
+        )}
+
         <div
-          className={`d-flex flex-column ${styles.leftbarcompheight}`}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-          }}
+          className={`d-flex flex-column ${styles.sidebarcompheight}`}
+          data-testid="sidebar-main-content"
         >
           <div className={styles.optionList}>
-            {/* Link to "My Organizations" page */}
-            <NavLink to={'/user/organizations'} onClick={handleLinkClick}>
-              {({ isActive }) => (
-                <Button
-                  variant={isActive ? 'success' : ''}
-                  style={{
-                    backgroundColor: isActive ? 'var(--sidebar-option-bg)' : '',
-                    fontWeight: isActive ? 'bold' : 'normal',
-                    color: isActive
-                      ? 'var(--sidebar-option-text-active)'
-                      : 'var(--sidebar-option-text-inactive)',
-                  }}
-                  data-testid="orgsBtn"
-                >
-                  <div className={styles.iconWrapper}>
-                    <IconComponent
-                      data-testid="myOrgsIcon"
-                      name="My Organizations"
-                      fill={
-                        isActive === true ? '#000000' : 'var(--bs-secondary)'
-                      }
-                    />
-                  </div>
-                  <div className={styles.sidebarText} data-testid="myOrgsText">
-                    <div
-                      style={{ display: hideDrawer ? 'none' : 'block' }}
-                      data-testid="myOrgText"
-                    >
-                      {t('my organizations')}
-                    </div>
-                  </div>
-                </Button>
-              )}
-            </NavLink>
-            {/* Link to "Settings" page */}
-            <NavLink to={'/user/settings'} onClick={handleLinkClick}>
-              {({ isActive }) => (
-                <Button
-                  variant={isActive ? 'success' : ''}
-                  style={{
-                    backgroundColor: isActive ? 'var(--sidebar-option-bg)' : '',
-                    fontWeight: isActive ? 'bold' : 'normal',
-                    boxShadow: isActive ? 'none' : '',
-                    color: isActive
-                      ? 'var(--sidebar-option-text-active)'
-                      : 'var(--sidebar-option-text-inactive)',
-                  }}
-                  data-testid="settingsBtn"
-                >
-                  <div className={styles.iconWrapper}>
-                    <IconComponent
-                      data-testid="settingsIcon"
-                      name="Settings"
-                      fill={
-                        isActive === true ? '#000000' : 'var(--bs-secondary)'
-                      }
-                    />
-                  </div>
-                  <div
-                    style={{ display: hideDrawer ? 'none' : 'block' }}
-                    data-testid="settingsText"
-                  >
-                    {tCommon('Settings')}
-                  </div>
-                </Button>
-              )}
-            </NavLink>
+            {renderDrawerItem(
+              '/user/organizations',
+              <IconComponent name="My Organizations" />,
+              t('my organizations'),
+              'orgsBtn',
+            )}
+
+            {renderDrawerItem(
+              '/user/notification',
+              <FaBell />,
+              tCommon('notifications'),
+              'userNotificationBtn',
+            )}
+
+            {renderDrawerItem(
+              '/user/settings',
+              <IconComponent name="Settings" />,
+              tCommon('Settings'),
+              'settingsBtn',
+            )}
 
             {/* Plugin Global Features Section */}
             {pluginDrawerItems?.length > 0 && (
@@ -262,12 +267,12 @@ const userSidebar = ({
               </>
             )}
           </div>
-          <div className={styles.userSidebarOrgFooter}>
-            <div style={{ display: hideDrawer ? 'none' : 'flex' }}>
-              <ProfileCard />
-            </div>
-            <SignOut hideDrawer={hideDrawer} />
+        </div>
+        <div className={styles.userSidebarOrgFooter}>
+          <div style={{ display: hideDrawer ? 'none' : 'flex' }}>
+            <ProfileCard />
           </div>
+          <SignOut hideDrawer={hideDrawer} />
         </div>
       </div>
     </>

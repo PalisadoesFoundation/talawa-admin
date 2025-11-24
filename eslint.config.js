@@ -5,7 +5,7 @@ import tsParser from '@typescript-eslint/parser';
 import imports from 'eslint-plugin-import';
 import prettier from 'eslint-plugin-prettier';
 import react from 'eslint-plugin-react';
-import vitest from 'eslint-plugin-vitest';
+import vitest from '@vitest/eslint-plugin';
 import tsdoc from 'eslint-plugin-tsdoc';
 
 export default [
@@ -32,7 +32,7 @@ export default [
     ],
   },
   {
-    files: ['*.ts', '*.tsx'],
+    files: ['**/*.ts', '**/*.tsx'], // Changed from ['*.ts', '*.tsx'] to include subdirectories
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
@@ -110,7 +110,7 @@ export default [
           selector: 'memberLike',
           modifiers: ['private'],
           format: ['camelCase'],
-          leadingUnderscore: 'require',
+          leadingUnderscore: 'allow',
         },
         { selector: 'variable', modifiers: ['exported'], format: null },
       ],

@@ -72,11 +72,10 @@ function EventAttendance(): JSX.Element {
 
   const sortAttendees = (attendees: InterfaceMember[]): InterfaceMember[] => {
     return [...attendees].sort((a, b) => {
-      const nameA = `${a.firstName} ${a.lastName}`.toLowerCase();
-      const nameB = `${b.firstName} ${b.lastName}`.toLowerCase();
-      return sortOrder === 'ascending'
-        ? nameA.localeCompare(nameB)
-        : nameB.localeCompare(nameA);
+      const comparison = (a.name || '')
+        .toLowerCase()
+        .localeCompare((b.name || '').toLowerCase());
+      return sortOrder === 'ascending' ? comparison : -comparison;
     });
   };
 
@@ -103,13 +102,10 @@ function EventAttendance(): JSX.Element {
 
     const filtered = (memberData?.event?.attendees ?? []).filter(
       (attendee: InterfaceMember) => {
-        const fullName =
-          `${attendee.firstName} ${attendee.lastName}`.toLowerCase();
+        const name = attendee.name?.toLowerCase() || '';
+        const email = attendee.emailAddress?.toLowerCase() || '';
         return (
-          attendee.firstName?.toLowerCase().includes(searchValueLower) ||
-          attendee.lastName?.toLowerCase().includes(searchValueLower) ||
-          attendee.email?.toLowerCase().includes(searchValueLower) ||
-          fullName.includes(searchValueLower)
+          name.includes(searchValueLower) || email.includes(searchValueLower)
         );
       },
     );
@@ -135,7 +131,7 @@ function EventAttendance(): JSX.Element {
 
   const [getEventAttendees, { data: memberData, loading, error }] =
     useLazyQuery(EVENT_ATTENDEES, {
-      variables: { id: eventId },
+      variables: { eventId: eventId },
       fetchPolicy: 'cache-and-network',
       nextFetchPolicy: 'cache-first',
       errorPolicy: 'all',
@@ -230,7 +226,7 @@ function EventAttendance(): JSX.Element {
       >
         <Table aria-label={t('event_attendance_table')} role="grid">
           <TableHead>
-            <TableRow className="" data-testid="table-header-row" role="row">
+            <TableRow className="" data-testid="table-header-row">
               <TableCell
                 className={styles.customcell}
                 data-testid="header-index"
@@ -293,17 +289,19 @@ function EventAttendance(): JSX.Element {
                     >
                       <Link
                         to={`/member/${currentUrl}`}
-                        state={{ id: member._id }}
+                        state={{ id: member.id }}
                         className={styles.membername}
                       >
-                        {member.firstName} {member.lastName}
+                        {member.name}
                       </Link>
                     </TableCell>
                     <TableCell
                       align="left"
                       data-testid={`attendee-status-${index}`}
                     >
-                      {member.__typename === 'User' ? t('Member') : t('Admin')}
+                      {member.role === 'administrator'
+                        ? t('Admin')
+                        : t('Member')}
                     </TableCell>
                     <Tooltip
                       componentsProps={{
@@ -321,10 +319,10 @@ function EventAttendance(): JSX.Element {
                         },
                       }}
                       title={member.eventsAttended?.map(
-                        (event: { _id: string }, index: number) => (
+                        (event: { id: string }, index: number) => (
                           <AttendedEventList
-                            key={event._id}
-                            _id={event._id}
+                            key={event.id}
+                            id={event.id}
                             data-testid={`attendee-events-attended-${index}`}
                           />
                         ),

@@ -102,43 +102,59 @@ export const FUND_CAMPAIGN_PLEDGE = gql`
 `;
 
 export const USER_FUND_CAMPAIGNS = gql`
-  query GetFundraisingCampaigns(
-    $where: CampaignWhereInput
-    $campaignOrderBy: CampaignOrderByInput
-  ) {
-    getFundraisingCampaigns(where: $where, campaignOrderBy: $campaignOrderBy) {
-      id
-      name
-      currency
-      fundingGoal
-      startDate
-      endDate
+  query GetFundraisingCampaigns($input: QueryOrganizationInput!) {
+    organization(input: $input) {
+      funds(first: 32) {
+        edges {
+          node {
+            campaigns(first: 32) {
+              edges {
+                node {
+                  id
+                  name
+                  currencyCode
+                  goalAmount
+                  startAt
+                  endAt
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 `;
 
 export const USER_PLEDGES = gql`
   query GetPledgesByUserId(
-    $userId: ID!
-    $where: PledgeWhereInput
-    $orderBy: PledgeOrderByInput
+    $userId: QueryUserInput!
+    $where: QueryPledgeWhereInput
+    $orderBy: QueryPledgeOrderByInput
+    $limit: Int
+    $offset: Int
   ) {
-    getPledgesByUserId(userId: $userId, where: $where, orderBy: $orderBy) {
+    getPledgesByUserId(
+      userId: $userId
+      where: $where
+      orderBy: $orderBy
+      limit: $limit
+      offset: $offset
+    ) {
       id
       amount
-      startDate
-      endDate
+      note
       campaign {
         id
         name
-        endDate
+        startAt
+        endAt
+        currencyCode
       }
-      currency
-      users {
+      pledger {
         id
-        firstName
-        lastName
-        image
+        name
+        avatarURL
       }
     }
   }

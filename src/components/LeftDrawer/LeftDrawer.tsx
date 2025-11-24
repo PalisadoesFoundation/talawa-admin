@@ -11,7 +11,7 @@
  * @returns The rendered LeftDrawer component.
  */
 
-import React, { useEffect, useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router';
 import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
@@ -42,13 +42,6 @@ const leftDrawer = ({
   const { getItem } = useLocalStorage();
   const superAdmin = getItem('SuperAdmin') === 'true';
 
-  // Initialize drawer state only once
-  useEffect(() => {
-    if (hideDrawer === null) {
-      setHideDrawer(false);
-    }
-  }, []); // Empty dependency array since we only want to run this once
-
   const handleLinkClick = useCallback((): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
@@ -59,25 +52,34 @@ const leftDrawer = ({
   const renderDrawerItem = useCallback(
     (to: string, icon: React.ReactNode, label: string, testId: string) => (
       <NavLink key={to} to={to} onClick={handleLinkClick}>
-        {({ isActive }) => (
-          <button
-            className={`${
-              isActive ? styles.sidebarBtnActive : styles.sidebarBtn
-            }`}
-            data-testid={testId}
-          >
-            <div className={styles.iconWrapper}>
-              {React.cloneElement(icon as React.ReactElement, {
-                fill: 'none',
-                fontSize: 25,
-                stroke: isActive
-                  ? 'var(--sidebar-icon-stroke-active)'
-                  : 'var(--sidebar-icon-stroke-inactive)',
-              })}
-            </div>
-            {!hideDrawer && label}
-          </button>
-        )}
+        {({ isActive }) => {
+          const styledIcon =
+            React.isValidElement(icon) && typeof icon.type !== 'string'
+              ? React.cloneElement<React.SVGProps<SVGSVGElement>>(
+                  icon as React.ReactElement<React.SVGProps<SVGSVGElement>>,
+                  {
+                    fill: 'none',
+                    fontSize: 25,
+                    stroke: isActive
+                      ? 'var(--sidebar-icon-stroke-active)'
+                      : 'var(--sidebar-icon-stroke-inactive)',
+                  },
+                )
+              : icon;
+
+          return (
+            <button
+              className={`${
+                isActive ? styles.sidebarBtnActive : styles.sidebarBtn
+              }`}
+              data-testid={testId}
+              type="button"
+            >
+              <div className={styles.iconWrapper}>{styledIcon}</div>
+              {!hideDrawer && label}
+            </button>
+          );
+        }}
       </NavLink>
     ),
     [handleLinkClick, hideDrawer],
@@ -112,7 +114,6 @@ const leftDrawer = ({
 
   // Memoize the user permissions and admin status
   const userPermissions = useMemo(() => [], []);
-  const isAdmin = useMemo(() => superAdmin, [superAdmin]);
 
   // Get plugin drawer items for admin global (settings only)
   const pluginDrawerItems = usePluginDrawerItems(userPermissions, true, false);
@@ -139,10 +140,17 @@ const leftDrawer = ({
           renderDrawerItem('/users', <RolesIcon />, t('users'), 'rolesBtn')}
 
         {renderDrawerItem(
-          '/CommunityProfile',
+          '/communityProfile',
           <SettingsIcon />,
           t('communityProfile'),
           'communityProfileBtn',
+        )}
+
+        {renderDrawerItem(
+          '/notification',
+          <SettingsIcon />,
+          t('notification'),
+          'notificationBtn',
         )}
 
         {/* Plugin Settings Section */}
@@ -214,19 +222,16 @@ const leftDrawer = ({
           style={{
             display: hideDrawer ? 'none' : 'flex',
             alignItems: 'center',
-            paddingRight: '40px',
+            marginRight: 'auto',
+            paddingLeft: '5px',
           }}
         >
           <TalawaLogo className={styles.talawaLogo} />
           <div className={`${styles.talawaText} ${styles.sidebarText}`}>
-            {tCommon('talawaAdminPortal')}
+            {tCommon('adminPortal')}
           </div>
         </div>
       </div>
-
-      <h5 className={`${styles.titleHeader} ${styles.sidebarText}`}>
-        {!hideDrawer && tCommon('menu')}
-      </h5>
 
       <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
         {drawerContent}

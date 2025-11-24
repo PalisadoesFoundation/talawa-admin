@@ -10,8 +10,7 @@ import { I18nextProvider } from 'react-i18next';
 import { MockedProvider } from '@apollo/client/testing';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
 import { DELETE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/AdvertisementMutations';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import '@testing-library/jest-dom';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { client } from 'components/Advertisements/AdvertisementsMocks';
 import { AdvertisementType } from 'types/Advertisement/type';
 
@@ -21,7 +20,7 @@ const translations = JSON.parse(
   ),
 );
 
-const mockUseMutation = vi.fn();
+let mockUseMutation: ReturnType<typeof vi.fn>;
 vi.mock('@apollo/client', async () => {
   const actual = await vi.importActual('@apollo/client');
   return {
@@ -42,11 +41,11 @@ global.URL.createObjectURL = vi.fn(() => 'mocked-url');
 
 describe('Testing Advertisement Entry Component', () => {
   beforeEach(() => {
+    mockUseMutation = vi.fn();
     vi.clearAllMocks();
     mockUseMutation.mockReturnValue([vi.fn()]);
   });
   afterEach(() => {
-    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -128,6 +127,63 @@ describe('Testing Advertisement Entry Component', () => {
       });
       expect(deletionFailedText).toBeNull();
     });
+  });
+
+  it('should handle deletion error when error is not an Error instance', async () => {
+    const deleteAdByIdMock = vi.fn();
+    mockUseMutation.mockReturnValue([deleteAdByIdMock, { loading: false }]);
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementEntry
+                advertisement={{
+                  endAt: new Date(),
+                  startAt: new Date(),
+                  id: '1',
+                  attachments: [{ url: 'test.jpg', mimeType: 'image/jpeg' }],
+                  name: 'Test Ad',
+                  createdAt: new Date(),
+                  organization: {
+                    id: '12',
+                  },
+                  orgId: '1',
+                  type: AdvertisementType.Banner,
+                  updatedAt: new Date(),
+                }}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    // Mock deletion to reject with a non-Error value (string, number, object, etc.)
+    deleteAdByIdMock.mockRejectedValueOnce('Network failure');
+
+    fireEvent.click(screen.getByTestId('moreiconbtn'));
+    fireEvent.click(screen.getByTestId('deletebtn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('delete_title')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId('delete_yes'));
+
+    await waitFor(() => {
+      expect(deleteAdByIdMock).toHaveBeenCalledWith({
+        variables: {
+          id: '1',
+        },
+      });
+    });
+
+    // When error is not an Error instance, toast.error should not be called
+    // (no way to easily assert that, but the branch will be covered)
   });
 
   it('should use default props when none are provided', () => {
@@ -630,5 +686,353 @@ describe('Testing Advertisement Entry Component', () => {
         `Advertisement image #${index + 1} for Advert1`,
       );
     });
+  });
+
+  it('should render video media when attachment is video type', () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementEntry
+                advertisement={{
+                  endAt: new Date(),
+                  startAt: new Date(),
+                  id: '1',
+                  attachments: [
+                    { url: 'test-video.mp4', mimeType: 'video/mp4' },
+                  ],
+                  name: 'Video Ad',
+                  createdAt: new Date(),
+                  organization: {
+                    id: '12',
+                  },
+                  orgId: '1',
+                  type: AdvertisementType.Banner,
+                  updatedAt: new Date(),
+                }}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    const videoElement = screen.getByTestId('media');
+    expect(videoElement.tagName.toLowerCase()).toBe('video');
+    expect(videoElement).toHaveProperty('muted', true);
+    expect(videoElement).toHaveProperty('autoplay', true);
+    expect(videoElement).toHaveProperty('loop', true);
+  });
+
+  it('should display "No media available" when there are no attachments', () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementEntry
+                advertisement={{
+                  endAt: new Date(),
+                  startAt: new Date(),
+                  id: '1',
+                  attachments: [],
+                  name: 'No Media Ad',
+                  createdAt: new Date(),
+                  organization: {
+                    id: '12',
+                  },
+                  orgId: '1',
+                  type: AdvertisementType.Banner,
+                  updatedAt: new Date(),
+                }}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByText('No media available')).toBeInTheDocument();
+  });
+
+  it('should display "No Description" when description is empty', () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementEntry
+                advertisement={{
+                  endAt: new Date(),
+                  startAt: new Date(),
+                  id: '1',
+                  attachments: [{ url: 'test.jpg', mimeType: 'image/jpeg' }],
+                  name: 'No Description Ad',
+                  description: '',
+                  createdAt: new Date(),
+                  organization: {
+                    id: '12',
+                  },
+                  orgId: '1',
+                  type: AdvertisementType.Banner,
+                  updatedAt: new Date(),
+                }}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByText(translations.noDescription)).toBeInTheDocument();
+  });
+
+  it('should display description when provided', () => {
+    const testDescription = 'This is a test advertisement description';
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementEntry
+                advertisement={{
+                  endAt: new Date(),
+                  startAt: new Date(),
+                  id: '1',
+                  attachments: [{ url: 'test.jpg', mimeType: 'image/jpeg' }],
+                  name: 'Ad with Description',
+                  description: testDescription,
+                  createdAt: new Date(),
+                  organization: {
+                    id: '12',
+                  },
+                  orgId: '1',
+                  type: AdvertisementType.Banner,
+                  updatedAt: new Date(),
+                }}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByText(testDescription)).toBeInTheDocument();
+  });
+
+  it('should display "N/A" when startAt is null or undefined', () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementEntry
+                advertisement={{
+                  endAt: new Date(),
+                  startAt: null as unknown as Date,
+                  id: '1',
+                  attachments: [{ url: 'test.jpg', mimeType: 'image/jpeg' }],
+                  name: 'Ad with no start date',
+                  createdAt: new Date(),
+                  organization: {
+                    id: '12',
+                  },
+                  orgId: '1',
+                  type: AdvertisementType.Banner,
+                  updatedAt: new Date(),
+                }}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByText('Starts : N/A')).toBeInTheDocument();
+  });
+
+  it('should display "N/A" when endAt is null or undefined', () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementEntry
+                advertisement={{
+                  endAt: null as unknown as Date,
+                  startAt: new Date(),
+                  id: '1',
+                  attachments: [{ url: 'test.jpg', mimeType: 'image/jpeg' }],
+                  name: 'Ad with no end date',
+                  createdAt: new Date(),
+                  organization: {
+                    id: '12',
+                  },
+                  orgId: '1',
+                  type: AdvertisementType.Banner,
+                  updatedAt: new Date(),
+                }}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByText('Ends : N/A')).toBeInTheDocument();
+  });
+
+  it('should display "pop up" for pop_up type advertisement', () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementEntry
+                advertisement={{
+                  endAt: new Date(),
+                  startAt: new Date(),
+                  id: '1',
+                  attachments: [{ url: 'test.jpg', mimeType: 'image/jpeg' }],
+                  name: 'Popup Ad',
+                  createdAt: new Date(),
+                  organization: {
+                    id: '12',
+                  },
+                  orgId: '1',
+                  type: AdvertisementType.Popup,
+                  updatedAt: new Date(),
+                }}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('Ad_type')).toHaveTextContent('Type: pop up');
+  });
+
+  it('should display "No Description" when description is null or undefined', () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementEntry
+                advertisement={{
+                  endAt: new Date(),
+                  startAt: new Date(),
+                  id: '1',
+                  attachments: [{ url: 'test.jpg', mimeType: 'image/jpeg' }],
+                  name: 'No Description Ad',
+                  description: undefined,
+                  createdAt: new Date(),
+                  organization: {
+                    id: '12',
+                  },
+                  orgId: '1',
+                  type: AdvertisementType.Banner,
+                  updatedAt: new Date(),
+                }}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByText(translations.noDescription)).toBeInTheDocument();
+  });
+
+  it('should use "ad" as fallback when advertisement name is null in carousel alt text', () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementEntry
+                advertisement={{
+                  endAt: new Date(),
+                  startAt: new Date(),
+                  id: '1',
+                  attachments: [
+                    { url: 'test1.jpg', mimeType: 'image/jpeg' },
+                    { url: 'test2.jpg', mimeType: 'image/jpeg' },
+                  ],
+                  name: null as unknown as string,
+                  createdAt: new Date(),
+                  organization: {
+                    id: '12',
+                  },
+                  orgId: '1',
+                  type: AdvertisementType.Banner,
+                  updatedAt: new Date(),
+                }}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    const mediaElements = screen.queryAllByTestId('media');
+    expect(mediaElements).toHaveLength(2);
+    expect(mediaElements[0]).toHaveAttribute(
+      'alt',
+      'Advertisement image #1 for ad',
+    );
+  });
+
+  it('should display "No media available" when attachments is null or undefined', () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementEntry
+                advertisement={{
+                  endAt: new Date(),
+                  startAt: new Date(),
+                  id: '1',
+                  attachments: undefined,
+                  name: 'No Attachments Ad',
+                  createdAt: new Date(),
+                  organization: {
+                    id: '12',
+                  },
+                  orgId: '1',
+                  type: AdvertisementType.Banner,
+                  updatedAt: new Date(),
+                }}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByText('No media available')).toBeInTheDocument();
   });
 });

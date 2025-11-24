@@ -3,221 +3,121 @@ import {
   DELETE_VOLUNTEER_GROUP,
   UPDATE_VOLUNTEER_GROUP,
 } from 'GraphQl/Mutations/EventVolunteerMutation';
-import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
+import { GET_EVENT_VOLUNTEER_GROUPS } from 'GraphQl/Queries/EventVolunteerQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 
 const group1 = {
-  _id: 'groupId1',
+  id: 'groupId1',
   name: 'Group 1',
   description: 'desc',
-  volunteersRequired: null,
-  createdAt: '2024-10-25T16:16:32.978Z',
+  volunteersRequired: 2,
+  isTemplate: true,
+  isInstanceException: false,
+  createdAt: '2030-10-25T16:16:32.978Z',
   creator: {
-    _id: 'creatorId1',
-    firstName: 'Wilt',
-    lastName: 'Shepherd',
-    image: null,
+    id: 'creatorId1',
+    name: 'Wilt Shepherd',
+    avatarURL: null,
   },
   leader: {
-    _id: 'userId',
-    firstName: 'Teresa',
-    lastName: 'Bradley',
-    image: 'img-url',
+    id: 'userId',
+    name: 'Bruce Trainer',
+    avatarURL: 'img-url',
   },
   volunteers: [
     {
-      _id: 'volunteerId1',
+      id: 'volunteerId1',
+      hasAccepted: true,
+      hoursVolunteered: 10,
+      isPublic: true,
       user: {
-        _id: 'userId',
-        firstName: 'Teresa',
-        lastName: 'Bradley',
-        image: null,
+        id: 'userId',
+        name: 'Teresa Bradley',
+        avatarURL: null,
       },
     },
   ],
-  assignments: [],
   event: {
-    _id: 'eventId',
+    id: 'eventId',
   },
 };
 
 const group2 = {
-  _id: 'groupId2',
+  id: 'groupId2',
   name: 'Group 2',
   description: 'desc',
-  volunteersRequired: null,
-  createdAt: '2024-10-27T15:25:13.044Z',
+  volunteersRequired: 3,
+  isTemplate: true,
+  isInstanceException: false,
+  createdAt: '2030-10-27T15:25:13.044Z',
   creator: {
-    _id: 'creatorId2',
-    firstName: 'Wilt',
-    lastName: 'Shepherd',
-    image: null,
+    id: 'creatorId2',
+    name: 'Test Creator',
+    avatarURL: null,
   },
   leader: {
-    _id: 'userId',
-    firstName: 'Teresa',
-    lastName: 'Bradley',
-    image: null,
+    id: 'userId2',
+    name: 'Bruce Garza',
+    avatarURL: null,
   },
-  volunteers: [
-    {
-      _id: 'volunteerId2',
-      user: {
-        _id: 'userId',
-        firstName: 'Teresa',
-        lastName: 'Bradley',
-        image: null,
-      },
-    },
-  ],
-  assignments: [],
+  volunteers: [],
   event: {
-    _id: 'eventId',
+    id: 'eventId',
   },
 };
 
 const group3 = {
-  _id: 'groupId3',
+  id: 'groupId3',
   name: 'Group 3',
   description: 'desc',
-  volunteersRequired: null,
-  createdAt: '2024-10-27T15:34:15.889Z',
+  volunteersRequired: 1,
+  isTemplate: true,
+  isInstanceException: false,
+  createdAt: '2030-10-27T15:34:15.889Z',
   creator: {
-    _id: 'creatorId3',
-    firstName: 'Wilt',
-    lastName: 'Shepherd',
-    image: null,
+    id: 'creatorId3',
+    name: 'Test Creator',
+    avatarURL: null,
   },
   leader: {
-    _id: 'userId1',
-    firstName: 'Bruce',
-    lastName: 'Garza',
-    image: null,
+    id: 'userId3',
+    name: 'Bruce Garza',
+    avatarURL: null,
   },
   volunteers: [
     {
-      _id: 'volunteerId3',
+      id: 'volunteerId3',
+      hasAccepted: true,
+      hoursVolunteered: null,
+      isPublic: true,
       user: {
-        _id: 'userId',
-        firstName: 'Teresa',
-        lastName: 'Bradley',
-        image: null,
+        id: 'userId3',
+        name: 'Bruce Garza',
+        avatarURL: null,
       },
     },
   ],
-  assignments: [],
   event: {
-    _id: 'eventId',
+    id: 'eventId',
   },
 };
 
 export const MOCKS = [
   {
     request: {
-      query: EVENT_VOLUNTEER_GROUP_LIST,
+      query: GET_EVENT_VOLUNTEER_GROUPS,
       variables: {
-        where: {
-          eventId: 'eventId',
-          leaderName: null,
-          name_contains: '',
-        },
-        orderBy: null,
+        input: { id: 'eventId' },
       },
     },
     result: {
       data: {
-        getEventVolunteerGroups: [group1, group2, group3],
-      },
-    },
-  },
-  {
-    request: {
-      query: EVENT_VOLUNTEER_GROUP_LIST,
-      variables: {
-        where: {
-          eventId: 'eventId',
-          leaderName: null,
-          name_contains: '',
+        event: {
+          id: 'eventId',
+          recurrenceRule: null,
+          baseEvent: null,
+          volunteerGroups: [group1, group2, group3],
         },
-        orderBy: 'volunteers_DESC',
-      },
-    },
-    result: {
-      data: {
-        getEventVolunteerGroups: [group1, group2],
-      },
-    },
-  },
-
-  {
-    request: {
-      query: EVENT_VOLUNTEER_GROUP_LIST,
-      variables: {
-        where: {
-          eventId: 'eventId',
-          leaderName: null,
-          name_contains: '',
-        },
-        orderBy: 'volunteers_ASC',
-      },
-    },
-    result: {
-      data: {
-        getEventVolunteerGroups: [group2, group1],
-      },
-    },
-  },
-  {
-    request: {
-      query: EVENT_VOLUNTEER_GROUP_LIST,
-      variables: {
-        where: {
-          eventId: 'eventId',
-          leaderName: null,
-          name_contains: '1',
-        },
-        orderBy: null,
-      },
-    },
-    result: {
-      data: {
-        getEventVolunteerGroups: [group1],
-      },
-    },
-  },
-  {
-    request: {
-      query: EVENT_VOLUNTEER_GROUP_LIST,
-      variables: {
-        where: {
-          eventId: 'eventId',
-          leaderName: '',
-          name_contains: null,
-        },
-        orderBy: null,
-      },
-    },
-    result: {
-      data: {
-        getEventVolunteerGroups: [group1, group2, group3],
-      },
-    },
-  },
-  {
-    request: {
-      query: EVENT_VOLUNTEER_GROUP_LIST,
-      variables: {
-        where: {
-          eventId: 'eventId',
-          leaderName: 'Bruce',
-          name_contains: null,
-        },
-        orderBy: null,
-      },
-    },
-    result: {
-      data: {
-        getEventVolunteerGroups: [group3],
       },
     },
   },
@@ -225,34 +125,29 @@ export const MOCKS = [
     request: {
       query: MEMBERS_LIST,
       variables: {
-        id: 'orgId',
+        organizationId: 'orgId',
       },
     },
     result: {
       data: {
-        organizations: [
+        usersByOrganizationId: [
           {
-            _id: 'orgId',
-            members: [
-              {
-                _id: 'userId',
-                firstName: 'Harve',
-                lastName: 'Lance',
-                email: 'harve@example.com',
-                image: '',
-                organizationsBlockedBy: [],
-                createdAt: '2024-02-14',
-              },
-              {
-                _id: 'userId2',
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'johndoe@example.com',
-                image: '',
-                organizationsBlockedBy: [],
-                createdAt: '2024-02-14',
-              },
-            ],
+            id: 'userId',
+            name: 'Harve Lance',
+            emailAddress: 'harve@example.com',
+            avatarURL: '',
+            role: 'regular',
+            createdAt: '2030-02-14',
+            updatedAt: '2023-01-01T00:00:00Z',
+          },
+          {
+            id: 'userId2',
+            name: 'John Doe',
+            emailAddress: 'johndoe@example.com',
+            avatarURL: '',
+            role: 'regular',
+            createdAt: '2030-02-14',
+            updatedAt: '2023-01-01T00:00:00Z',
           },
         ],
       },
@@ -275,7 +170,7 @@ export const MOCKS = [
     result: {
       data: {
         createEventVolunteerGroup: {
-          _id: 'groupId',
+          id: 'groupId',
         },
       },
     },
@@ -290,7 +185,7 @@ export const MOCKS = [
     result: {
       data: {
         removeEventVolunteerGroup: {
-          _id: 'groupId',
+          id: 'groupId',
         },
       },
     },
@@ -311,7 +206,7 @@ export const MOCKS = [
     result: {
       data: {
         updateEventVolunteerGroup: {
-          _id: 'groupId',
+          id: 'groupId',
         },
       },
     },
@@ -329,7 +224,80 @@ export const MOCKS = [
     result: {
       data: {
         updateEventVolunteerGroup: {
-          _id: 'groupId',
+          id: 'groupId',
+        },
+      },
+    },
+  },
+  // Mock for recurring event series scope
+  {
+    request: {
+      query: CREATE_VOLUNTEER_GROUP,
+      variables: {
+        data: {
+          eventId: 'baseEventId',
+          leaderId: 'userId',
+          name: 'Recurring Group Series',
+          description: 'desc',
+          volunteerUserIds: ['userId', 'userId2'],
+          volunteersRequired: 10,
+          scope: 'ENTIRE_SERIES',
+        },
+      },
+    },
+    result: {
+      data: {
+        createEventVolunteerGroup: {
+          id: 'recurringGroupId',
+        },
+      },
+    },
+  },
+  // Mock for recurring event series scope with alternate payload
+  {
+    request: {
+      query: CREATE_VOLUNTEER_GROUP,
+      variables: {
+        data: {
+          eventId: 'baseEventId',
+          leaderId: 'userId',
+          name: 'Test Group',
+          description: 'desc',
+          volunteerUserIds: ['userId', 'userId2'],
+          volunteersRequired: 10,
+          scope: 'ENTIRE_SERIES',
+        },
+      },
+    },
+    result: {
+      data: {
+        createEventVolunteerGroup: {
+          id: 'recurringTestGroupId',
+        },
+      },
+    },
+  },
+  // Mock for recurring event instance scope
+  {
+    request: {
+      query: CREATE_VOLUNTEER_GROUP,
+      variables: {
+        data: {
+          eventId: 'baseEventId',
+          leaderId: 'userId',
+          name: 'Recurring Group Instance',
+          description: 'desc',
+          volunteerUserIds: ['userId', 'userId2'],
+          volunteersRequired: 10,
+          scope: 'THIS_INSTANCE_ONLY',
+          recurringEventInstanceId: 'eventInstanceId',
+        },
+      },
+    },
+    result: {
+      data: {
+        createEventVolunteerGroup: {
+          id: 'recurringGroupInstanceId',
         },
       },
     },
@@ -339,19 +307,19 @@ export const MOCKS = [
 export const MOCKS_EMPTY = [
   {
     request: {
-      query: EVENT_VOLUNTEER_GROUP_LIST,
+      query: GET_EVENT_VOLUNTEER_GROUPS,
       variables: {
-        where: {
-          eventId: 'eventId',
-          leaderName: null,
-          name_contains: '',
-        },
-        orderBy: null,
+        input: { id: 'eventId' },
       },
     },
     result: {
       data: {
-        getEventVolunteerGroups: [],
+        event: {
+          id: 'eventId',
+          recurrenceRule: null,
+          baseEvent: null,
+          volunteerGroups: [],
+        },
       },
     },
   },
@@ -360,14 +328,9 @@ export const MOCKS_EMPTY = [
 export const MOCKS_ERROR = [
   {
     request: {
-      query: EVENT_VOLUNTEER_GROUP_LIST,
+      query: GET_EVENT_VOLUNTEER_GROUPS,
       variables: {
-        where: {
-          eventId: 'eventId',
-          leaderName: null,
-          name_contains: '',
-        },
-        orderBy: null,
+        input: { id: 'eventId' },
       },
     },
     error: new Error('An error occurred'),
@@ -385,34 +348,29 @@ export const MOCKS_ERROR = [
     request: {
       query: MEMBERS_LIST,
       variables: {
-        id: 'orgId',
+        organizationId: 'orgId',
       },
     },
     result: {
       data: {
-        organizations: [
+        usersByOrganizationId: [
           {
-            _id: 'orgId',
-            members: [
-              {
-                _id: 'userId',
-                firstName: 'Harve',
-                lastName: 'Lance',
-                email: 'harve@example.com',
-                image: '',
-                organizationsBlockedBy: [],
-                createdAt: '2024-02-14',
-              },
-              {
-                _id: 'userId2',
-                firstName: 'John',
-                lastName: 'Doe',
-                email: 'johndoe@example.com',
-                image: '',
-                organizationsBlockedBy: [],
-                createdAt: '2024-02-14',
-              },
-            ],
+            id: 'userId',
+            name: 'Harve Lance',
+            emailAddress: 'harve@example.com',
+            role: 'regular',
+            avatarURL: '',
+            createdAt: '2030-02-14',
+            updatedAt: '2023-01-01T00:00:00Z',
+          },
+          {
+            id: 'userId2',
+            name: 'John Doe',
+            emailAddress: 'johndoe@example.com',
+            role: 'regular',
+            avatarURL: '',
+            createdAt: '2030-02-14',
+            updatedAt: '2023-01-01T00:00:00Z',
           },
         ],
       },

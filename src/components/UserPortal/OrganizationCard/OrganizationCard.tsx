@@ -176,7 +176,12 @@ function OrganizationCard({
       <div className={styles.innerContainer}>
         <div className={styles.orgImgContainer}>
           {image ? (
-            <img src={image} alt={`${name} image`} />
+            <img
+              src={image}
+              alt={`${name} image`}
+              crossOrigin="anonymous"
+              referrerPolicy="no-referrer"
+            ></img>
           ) : (
             <Avatar
               name={name}

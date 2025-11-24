@@ -34,7 +34,6 @@
  *   `.inActiveTab` (for tabs which are not selected)
  *
  */
-
 :root {
   --primary-theme-color: #1778f2;
 
@@ -989,7 +988,7 @@
   position: absolute;
   z-index: 10;
   bottom: 0;
-  right: 0;
+  right: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1009,6 +1008,19 @@
   transform: scale(0.95);
   background-color: var(--searchButton-bg-active) !important;
   border-color: transparent !important;
+}
+
+/* Override for header placement: make search button inline within header controls */
+.btnsContainerSearchBar .searchButton {
+  position: static;
+  bottom: auto;
+  right: auto;
+  margin: 0;
+  padding: 0.45rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
 }
 
 /* Modal Header*/
@@ -1132,7 +1144,6 @@ form label,
   display: flex;
   margin: 2.5rem 0;
   align-items: center;
-  gap: 10px;
 }
 
 /* Table Header */
@@ -1157,10 +1168,12 @@ form label,
   display: flex;
   margin: 2.5rem 0;
   align-items: center;
-  gap: 10px;
+  /* gap: 10px; */
 }
 
 .btnsContainer .btnsBlock {
+  padding-right: 30px;
+  padding-inline-end: 30px;
   display: flex;
   width: max-content;
 }
@@ -1223,6 +1236,7 @@ form label,
     margin-bottom: 1rem;
     margin-right: 0;
     width: 100%;
+    max-width: 800px;
   }
 
   .btnsContainer .btnsBlock div button {
@@ -1231,7 +1245,6 @@ form label,
 }
 
 .btnsContainer .btnsBlock button {
-  margin-left: 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1424,9 +1437,8 @@ form label,
 .input {
   flex: 1;
   position: relative;
-  margin-left: 8px;
-  background-color: var(--input-bg);
-  margin-right: 180px;
+  padding-right: 30px;
+  padding-inline-end: 30px;
   width: 425px;
 }
 
@@ -1501,6 +1513,9 @@ form label,
   background-color: var(--createButton-bg) !important;
   color: var(--createButton-color) !important;
   border: 1px solid var(--createButton-border) !important;
+  margin: 5px 10px;
+  width: 10rem;
+  height: 3rem;
 }
 
 .createButton:hover {
@@ -1787,6 +1802,18 @@ form label,
   background-color: var(--containerAdvertisemens-bg);
   border-radius: 20px;
   width: auto;
+  margin-inline-start: 12px;
+}
+
+.pMessageAdvertisement {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.2;
+  padding-bottom: 24px;
 }
 
 .justifyspAdvertisements {
@@ -1809,7 +1836,7 @@ form label,
   display: grid;
   width: 100%;
   grid-template-rows: auto;
-  grid-template-columns: repeat(2, 1fr);
+  /* grid-template-columns: repeat(2, 1fr); */
   grid-gap: 0.8rem 0.4rem;
   overflow: hidden;
 }
@@ -2792,6 +2819,12 @@ form label,
   align-items: center;
 }
 
+.navigation_buttons {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
 .buttonEventCalendar {
   border-radius: 100px;
   color: var(--buttonEventCalendar-color);
@@ -3159,19 +3192,14 @@ form label,
 .time {
   display: flex;
   justify-content: space-between;
-  padding: 15px;
-  padding-bottom: 0px;
-  width: 33%;
+  align-items: center;
+  padding: 12px;
+  width: fit-content;
   border: 1px solid var(--time-border);
   box-sizing: border-box;
   background: var(--time-bg);
   box-shadow: 0 3px 8px var(--time-box-shadow);
-  border-radius: 20px;
-  background: var(--time-bg);
   border-radius: 8px;
-  margin-bottom: 0;
-  margin-top: 20px;
-  margin-left: 10px;
 }
 
 @supports (-webkit-line-clamp: 1) {
@@ -3180,14 +3208,10 @@ form label,
   .cardItem .time {
     display: -webkit-box;
     -webkit-line-clamp: 1;
+    line-clamp: 1;
     -webkit-box-orient: vertical;
     white-space: initial;
   }
-}
-
-.cardItem .time {
-  font-size: 0.9rem;
-  color: var(--cardItem-color);
 }
 
 .startTime,
@@ -3827,10 +3851,18 @@ form label,
 
 .CardItemImage {
   background-color: #eaebef;
-  height: 3.5rem;
-  min-width: 3.5rem;
-  border: 3.25rem solid transparent;
+  height: 5rem;
+  width: 5rem;
+  min-width: 5rem;
+  /* border: 3.25rem solid transparent; */
   border-radius: 8px;
+}
+
+.CardItemImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
 }
 
 .cardItemtitle {
@@ -3878,6 +3910,7 @@ form label,
   .cardItem .time {
     display: -webkit-box;
     -webkit-line-clamp: 1;
+    line-clamp: 1;
     -webkit-box-orient: vertical;
     white-space: initial;
   }
@@ -3894,7 +3927,9 @@ form label,
 }
 
 .cardItem .time {
-  font-size: 0.9rem;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
   color: var(--cardItem-time-color);
 }
 
@@ -3937,13 +3972,13 @@ form label,
 
 .rightCard {
   display: flex;
+  width: fit-content;
   gap: 7px;
-  min-width: 170px;
   justify-content: center;
   flex-direction: column;
   margin-left: 10px;
   overflow-x: hidden;
-  width: 210px;
+  /* min-width: 240px; */
 }
 
 .creator {
@@ -3981,6 +4016,7 @@ form label,
   .cardItem .time {
     display: -webkit-box;
     -webkit-line-clamp: 1;
+    line-clamp: 1;
     -webkit-box-orient: vertical;
     white-space: initial;
   }
@@ -4136,9 +4172,9 @@ form label,
 .postimageOrgPostCard {
   border-radius: 0px;
   width: 100%;
-  height: 12rem;
+  height: 27rem;
   max-width: 100%;
-  max-height: 12rem;
+  max-height: 27rem;
   object-fit: cover;
   position: relative;
   color: var(--postimageOrgPostCard-color);
@@ -4150,6 +4186,31 @@ form label,
   font-weight: 600;
 }
 
+.expandButton {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 4px 0;
+  text-decoration: none;
+  display: inline-block;
+  transition: color 0.2s ease;
+}
+
+.cardBodyAdminPosts {
+  min-height: 120px;
+  transition: all 0.4s ease;
+}
+
+.titleOrgPostCardDiv {
+  line-height: 1.6em;
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-bottom: 8px;
+}
+
 .textOrgPostCard {
   font-size: 13px;
   color: var(--textOrgPostCard-color);
@@ -4158,15 +4219,18 @@ form label,
 
 .cardOrgPostCard {
   width: 100%;
-  height: 20rem;
   margin-bottom: 2rem;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .nopostimage {
   border-radius: 0px;
   width: 100%;
-  height: 12rem;
-  max-height: 12rem;
+  height: 25rem;
+  max-height: 25rem;
   object-fit: cover;
   position: relative;
 }
@@ -4449,12 +4513,6 @@ form label,
 .cardHeader .cardTitle {
   font-size: 1.2rem;
   font-weight: 600;
-}
-
-.cardBody {
-  padding: 1.25rem 1rem 1.5rem 1rem;
-  display: flex;
-  flex-direction: column;
 }
 
 .cardLabel {
@@ -4751,7 +4809,7 @@ form label,
   }
 
   .profileContainer {
-    flex-direction: column;
+    flex-direction: row;
   }
 }
 
@@ -4833,6 +4891,114 @@ form label,
   color: var(--removeButton-color);
   box-shadow: 2.5px 2.5px 2.5px var(--hover-shadow);
   outline: none;
+}
+
+/* Utility: add hover shadow without changing colors */
+.hoverShadowOnly:hover,
+.hoverShadowOnly:focus,
+.hoverShadowOnly:active {
+  box-shadow: var(--hover-shadow);
+}
+
+/* Keep base colors on hover by pairing with .hoverShadowOnly helper */
+
+/* -- RequestsTableItem.tsx -- */
+
+.requestsTableItemIndex {
+  padding-inline-start: 2.5rem;
+  vertical-align: middle;
+}
+
+.requestsTableItemName {
+  padding-inline-start: 1.5rem;
+  vertical-align: middle;
+}
+
+.requestsTableItemEmail {
+  padding-inline-start: 1.5rem;
+  vertical-align: middle;
+}
+
+.requestsAcceptButton {
+  background-color: var(--actionsButton-bg);
+  color: var(--actionsButton-color);
+  border-color: var(--actionsButton-border);
+  width: 120px;
+  height: 46px;
+  margin-inline-start: -1rem;
+}
+
+.requestsRejectButton {
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color);
+  border-color: var(--removeButton-border);
+  width: 120px;
+  height: 46px;
+  margin-inline-start: -1rem;
+}
+
+.requestsAcceptButton:focus-visible {
+  background-color: var(--actionsButton-bg) !important;
+  color: var(--actionsButton-color);
+  box-shadow: 2.5px 2.5px 2.5px var(--hover-shadow);
+  outline: none;
+}
+
+.requestsRejectButton:focus-visible {
+  background-color: var(--removeButton-bg) !important;
+  color: var(--removeButton-color);
+  box-shadow: 2.5px 2.5px 2.5px var(--hover-shadow);
+  outline: none;
+}
+
+.requestsAcceptButton:disabled,
+.requestsAcceptButton.disabled {
+  background-color: var(--disabled-btn) !important;
+  color: var(--outlineBtn-color-disabled) !important;
+  border-color: var(--outlineBtn-border-disabled) !important;
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.requestsRejectButton:disabled,
+.requestsRejectButton.disabled {
+  background-color: var(--disabled-btn) !important;
+  color: var(--outlineBtn-color-disabled) !important;
+  border-color: var(--outlineBtn-border-disabled) !important;
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+@media (max-width: 1020px) {
+  .requestsTableItemIndex {
+    padding-inline-start: 2rem;
+  }
+
+  .requestsTableItemName,
+  .requestsTableItemEmail {
+    padding-inline-start: 1rem;
+  }
+
+  .requestsAcceptButton,
+  .requestsRejectButton {
+    margin-inline-start: -0.25rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .requestsTableItemIndex,
+  .requestsTableItemName,
+  .requestsTableItemEmail {
+    padding-inline-start: 1rem;
+  }
+
+  .requestsAcceptButton,
+  .requestsRejectButton {
+    margin-inline-start: 0;
+    width: 100%;
+  }
 }
 
 .btnConfirmDelete {
@@ -5088,6 +5254,7 @@ form {
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   white-space: normal;
@@ -5121,13 +5288,12 @@ form {
 .primaryText {
   font-weight: bold;
   color: var(--bs-emphasis-color, var(--primaryText-color));
-  @extend .reusable-text-ellipsis;
 }
 
 .secondaryText {
   font-size: 0.9rem;
+  font-size: 0.9rem;
   color: var(--secondText-color);
-  @extend .reusable-text-ellipsis;
 }
 
 /* -- ProfileDropdown.tsx -- */
@@ -5538,6 +5704,13 @@ form {
   max-width: 70px;
 }
 
+.userAvatar {
+  border-radius: 50%;
+  margin-right: 25px;
+  width: 53px;
+  height: 53px;
+}
+
 .people_card_container {
   display: flex;
 }
@@ -5641,9 +5814,10 @@ form {
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: var(--max-lines);
-
+  line-clamp: var(--max-lines);
   font-size: 1.3rem !important;
   font-weight: 600;
+  line-clamp: var(--max-lines);
 }
 
 .date {
@@ -5656,6 +5830,7 @@ form {
   overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: var(--max-lines);
+  line-clamp: var(--max-lines);
   padding-top: 0;
   font-weight: 300;
   margin-top: 0.7rem !important;
@@ -5805,7 +5980,28 @@ form {
   top: 0;
   left: 0;
   width: 100%;
-  scale: 1.5;
+  transform: scale(1.5);
+}
+
+.userImageUserComment {
+  display: flex;
+  width: 32px;
+  height: 32px;
+  margin-left: 1rem;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  position: relative;
+  border: 2px solid var(--userImageUserPost-border);
+}
+
+.userImageUserComment img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transform: scale(1.5);
 }
 
 .previewImage {
@@ -5832,18 +6028,12 @@ form {
 
 .inactiveDrawer {
   transform: translateX(-100%);
-
-  &[data-hidden='true'] {
-    /* Specific styles for inactive drawers if needed */
-  }
 }
 
 .activeDrawer {
   transform: translateX(0);
 
-  &[data-hidden='false'] {
-    /* Specific styles for active drawers if needed */
-  }
+  /* Removed empty ruleset for [data-hidden='false'] */
 }
 
 .leftbarcompheight {
@@ -6032,6 +6222,7 @@ form {
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   white-space: normal;
@@ -7106,7 +7297,6 @@ form {
   display: flex;
   width: 100% !important;
   justify-content: center;
-  align-items: center;
 }
 
 .cardHeading {
@@ -7343,9 +7533,10 @@ form {
 
 .btnsContainerSearchBar {
   display: flex;
-  width: 95%;
+  width: 100%;
   justify-content: space-between;
-  margin: 2.5rem 0 2.5rem 0;
+  margin: 1.8rem 0 1.8rem 0;
+  align-items: center;
 }
 
 .btnsContainerSearchBar .btnsBlockSearchBar {
@@ -7358,7 +7549,8 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 20px;
+  margin-left: 12px; /* bring controls closer together */
+  gap: 12px;
 }
 
 .btnsContainerSearchBar .btnsBlockSearchBar button {
@@ -7369,8 +7561,12 @@ form {
 }
 
 .btnsContainerSearchBar .inputOrgList {
-  flex: 1;
+  flex: 1 1 640px; /* make input wider and flexible */
+  max-width: 760px;
   position: relative;
+  display: flex;
+  align-items: center;
+  margin-left: 18px; /* gap from left */
 }
 
 .btnsContainerSearchBar input {
@@ -7378,7 +7574,21 @@ form {
 }
 
 .btnsContainerSearchBar .inputOrgList button {
-  width: 52px;
+  width: 44px; /* slightly smaller square button */
+  height: 38px;
+  margin-left: 8px;
+  flex: 0 0 44px;
+}
+
+/* When search button is placed in the header controls (btnsBlock), make it visually consistent */
+.btnsContainerSearchBar .btnsBlock .searchButton {
+  width: 44px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  box-shadow: var(--hover-shadow);
 }
 
 @media (max-width: 1020px) {
@@ -7388,7 +7598,6 @@ form {
   }
 
   .btnsContainerSearchBar .btnsBlockSearchBar {
-    margin: 1.5rem 0 0 0;
     justify-content: space-between;
   }
 
@@ -7425,6 +7634,11 @@ form {
     margin-right: 0;
     width: 100%;
   }
+}
+
+.toolbarRow {
+  display: flex;
+  align-items: center;
 }
 
 .listBoxOrgList {
@@ -7575,6 +7789,7 @@ form {
 
 .btnsContainerOrgPost .btnsBlockOrgPost {
   display: flex;
+  align-items: center;
 }
 
 .btnsContainerOrgPost .btnsBlockOrgPost button {
@@ -7749,6 +7964,14 @@ form {
   width: var(--table-image-size) !important;
   height: var(--table-image-size) !important;
   border-radius: 100% !important;
+}
+
+.tableImageWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  margin-right: 8px;
 }
 
 /* -- OrganizationActionItems.tsx -- */
@@ -8435,6 +8658,27 @@ form {
   padding-inline: 1rem !important;
 }
 
+/* Shared section styles */
+.sectionContainer {
+  padding-top: 4rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionContent {
+  padding-top: 10px;
+  flex-grow: 1;
+}
+
+.cardsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  --bs-gutter-x: 0;
+}
+
+/* Donate specific styles */
 .donationsContainer {
   padding-top: 4rem;
   flex-grow: 1;
@@ -8448,6 +8692,26 @@ form {
 }
 
 .donationCardsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  --bs-gutter-x: 0;
+}
+
+/* Transactions specific styles */
+.transactionsContainer {
+  padding-top: 4rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.contentTransactions {
+  padding-top: 10px;
+  flex-grow: 1;
+}
+
+.transactionCardsContainer {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
@@ -8756,10 +9020,6 @@ form {
 }
 
 @media (max-width: 1120px) {
-  .contract {
-    padding-left: calc(250px + 2rem + 1.5rem);
-  }
-
   .collapseSidebarButton {
     width: calc(250px + 2rem);
   }
@@ -9003,10 +9263,6 @@ form {
 }
 
 @media (max-width: 1120px) {
-  .contract {
-    padding-left: calc(250px + 2rem + 1.5rem);
-  }
-
   .collapseSidebarButton {
     width: calc(250px + 2rem);
   }
@@ -9337,7 +9593,86 @@ form {
   text-overflow: ellipsis;
   color: var(--primaryText-color);
 }
+
 .expandedDrawer {
   width: var(--sidebar-expanded-width);
 }
+
+.venueimage {
+  width: 100%;
+  aspect-ratio: 3/2;
+  object-fit: cover;
+  display: block;
+}
+
+.CardItemMainDiv {
+  width: 100%;
+}
+
+.CardItemMainDivEvent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.upcomingEventsTitle {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* Events Attended Card Item Styles */
+.eventsAttendedCard {
+  transition: all 0.3s ease;
+  background: linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%);
+  border: 1px solid #e3f2fd;
+}
+
+.eventsAttendedCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.eventsAttendedCardDate {
+  background: linear-gradient(135deg, #a8c7fa 0%, #a8c7fa 100%);
+  color: #555;
+  min-width: 60px;
+}
+
+.eventsAttendedCardDateMonth {
+  font-size: 0.75rem;
+}
+
+.eventsAttendedCardTitle {
+  font-size: 1rem;
+}
+
+.eventsAttendedCardLocation {
+  font-size: 0.85rem;
+}
+
+.eventsAttendedCardDateNA {
+  font-size: 0.75rem;
+}
+
+.eventsAttendedCardChevron {
+  width: 32px;
+  height: 32px;
+  background-color: #e3f2fd;
+  transition: all 0.2s ease;
+}
+
+.eventsAttendedCardChevronIcon {
+  transition: color 0.2s ease;
+}
+
+.eventsAttendedCardAccent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(135deg, #a8c7fa 0%, #a8c7fa 100%);
+}
+
 /* ----------------------------------------------------- */

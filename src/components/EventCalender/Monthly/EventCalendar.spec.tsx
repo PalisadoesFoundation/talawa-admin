@@ -81,7 +81,7 @@ describe('Calendar', () => {
       month: 'long',
     });
     const currentYear = new Date().getFullYear();
-    const expectedText = ` ${currentYear} ${currentMonth}`;
+    const expectedText = `${currentYear} ${currentMonth}`;
     expect(currentDateElement.textContent).toContain(expectedText);
   });
 
@@ -174,11 +174,11 @@ describe('Calendar', () => {
   it('Should render eventlistcard of current day event', () => {
     const currentDayEventMock = [
       {
-        _id: '0',
+        id: '0',
         name: 'demo',
         description: 'agrsg',
-        startDate: new Date().toISOString().split('T')[0],
-        endDate: new Date().toISOString().split('T')[0],
+        startAt: new Date().toISOString(),
+        endAt: new Date().toISOString(),
         location: 'delhi',
         startTime: '10:00',
         endTime: '12:00',
@@ -280,11 +280,11 @@ describe('Calendar', () => {
     const date = new Date().toISOString().split('T')[0];
     const multipleEventData = [
       {
-        _id: '1',
+        id: '1',
         name: 'Event 1',
         description: 'This is event 1',
-        startDate: date,
-        endDate: date,
+        startAt: `${date}T00:00:00Z`,
+        endAt: `${date}T23:59:59Z`,
         location: 'Los Angeles',
         startTime: null,
         endTime: null,
@@ -295,11 +295,11 @@ describe('Calendar', () => {
         creator: {},
       },
       {
-        _id: '2',
+        id: '2',
         name: 'Event 2',
         description: 'This is event 2',
-        startDate: date,
-        endDate: date,
+        startAt: `${date}T00:00:00Z`,
+        endAt: `${date}T23:59:59Z`,
         location: 'Los Angeles',
         startTime: null,
         endTime: null,
@@ -310,11 +310,11 @@ describe('Calendar', () => {
         creator: {},
       },
       {
-        _id: '3',
+        id: '3',
         name: 'Event 3',
         description: 'This is event 3',
-        startDate: date,
-        endDate: date,
+        startAt: `${date}T14:00:00Z`,
+        endAt: `${date}T16:00:00Z`,
         location: 'Los Angeles',
         startTime: '14:00',
         endTime: '16:00',
@@ -325,11 +325,11 @@ describe('Calendar', () => {
         creator: {},
       },
       {
-        _id: '4',
+        id: '4',
         name: 'Event 4',
         description: 'This is event 4',
-        startDate: date,
-        endDate: date,
+        startAt: `${date}T14:00:00Z`,
+        endAt: `${date}T16:00:00Z`,
         location: 'Los Angeles',
         startTime: '14:00',
         endTime: '16:00',
@@ -340,11 +340,11 @@ describe('Calendar', () => {
         creator: {},
       },
       {
-        _id: '5',
+        id: '5',
         name: 'Event 5',
         description: 'This is event 5',
-        startDate: date,
-        endDate: date,
+        startAt: `${date}T17:00:00Z`,
+        endAt: `${date}T19:00:00Z`,
         location: 'Los Angeles',
         startTime: '17:00',
         endTime: '19:00',
@@ -465,7 +465,7 @@ describe('Calendar', () => {
     const mockOnMonthChange = vi.fn();
 
     // Test navigation at month boundaries
-    const { rerender } = render(
+    render(
       <Router>
         <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
@@ -546,17 +546,15 @@ describe('Calendar', () => {
 
     // Mock today's date to be January 1st to ensure currentDate starts at 1
     const originalDate = globalThis.Date;
-    function MockDate(...args: any[]) {
+    globalThis.Date = vi.fn((...args: unknown[]) => {
       if (args.length === 0) {
         return new originalDate(2024, 0, 1); // January 1st, 2024
       }
-      return new (originalDate as any)(...args);
-    }
-    MockDate.now = originalDate.now;
-    MockDate.parse = originalDate.parse;
-    MockDate.UTC = originalDate.UTC;
-    MockDate.prototype = originalDate.prototype;
-    globalThis.Date = MockDate as any;
+      return new originalDate(...(args as ConstructorParameters<typeof Date>));
+    }) as unknown as DateConstructor;
+    globalThis.Date.now = originalDate.now;
+    globalThis.Date.parse = originalDate.parse;
+    globalThis.Date.UTC = originalDate.UTC;
 
     render(
       <Router>
@@ -598,17 +596,19 @@ describe('Calendar', () => {
 
     // Mock today's date to be June 1st to ensure currentDate starts at 1
     const originalDate = globalThis.Date;
-    function MockDate(...args: any[]) {
+    function MockDate(...args: unknown[]) {
       if (args.length === 0) {
         return new originalDate(2024, 5, 1); // June 1st, 2024
       }
-      return new (originalDate as any)(...args);
+      return new (originalDate as unknown as typeof Date)(
+        ...(args as ConstructorParameters<typeof Date>),
+      );
     }
     MockDate.now = originalDate.now;
     MockDate.parse = originalDate.parse;
     MockDate.UTC = originalDate.UTC;
     MockDate.prototype = originalDate.prototype;
-    globalThis.Date = MockDate as any;
+    globalThis.Date = MockDate as unknown as DateConstructor;
 
     render(
       <Router>
@@ -649,17 +649,19 @@ describe('Calendar', () => {
 
     // Mock today's date to be December 31st to ensure currentDate starts at 31
     const originalDate = globalThis.Date;
-    function MockDate(...args: any[]) {
+    function MockDate(...args: unknown[]) {
       if (args.length === 0) {
         return new originalDate(2024, 11, 31); // December 31st, 2024
       }
-      return new (originalDate as any)(...args);
+      return new (originalDate as unknown as typeof Date)(
+        ...(args as ConstructorParameters<typeof Date>),
+      );
     }
     MockDate.now = originalDate.now;
     MockDate.parse = originalDate.parse;
     MockDate.UTC = originalDate.UTC;
     MockDate.prototype = originalDate.prototype;
-    globalThis.Date = MockDate as any;
+    globalThis.Date = MockDate as unknown as DateConstructor;
 
     render(
       <Router>
@@ -700,17 +702,19 @@ describe('Calendar', () => {
 
     // Mock today's date to be June 30th to ensure currentDate starts at 30
     const originalDate = globalThis.Date;
-    function MockDate(...args: any[]) {
+    function MockDate(...args: unknown[]) {
       if (args.length === 0) {
         return new originalDate(2024, 5, 30); // June 30th, 2024
       }
-      return new (originalDate as any)(...args);
+      return new (originalDate as unknown as typeof Date)(
+        ...(args as ConstructorParameters<typeof Date>),
+      );
     }
     MockDate.now = originalDate.now;
     MockDate.parse = originalDate.parse;
     MockDate.UTC = originalDate.UTC;
     MockDate.prototype = originalDate.prototype;
-    globalThis.Date = MockDate as any;
+    globalThis.Date = MockDate as unknown as DateConstructor;
 
     render(
       <Router>
@@ -775,11 +779,11 @@ describe('Calendar', () => {
       const currentDate = new Date().toISOString().split('T')[0];
       const adminTestEventData = [
         {
-          _id: 'event1',
+          id: 'event1',
           name: 'Public Event',
           description: 'This is a public event',
-          startDate: currentDate,
-          endDate: currentDate,
+          startAt: `${currentDate}T10:00:00Z`,
+          endAt: `${currentDate}T12:00:00Z`,
           location: 'Public Location',
           startTime: '10:00',
           endTime: '12:00',
@@ -790,11 +794,11 @@ describe('Calendar', () => {
           creator: {},
         },
         {
-          _id: 'event2',
+          id: 'event2',
           name: 'Private Event',
           description: 'This is a private event',
-          startDate: currentDate,
-          endDate: currentDate,
+          startAt: `${currentDate}T14:00:00Z`,
+          endAt: `${currentDate}T16:00:00Z`,
           location: 'Private Location',
           startTime: '14:00',
           endTime: '16:00',
@@ -805,11 +809,11 @@ describe('Calendar', () => {
           creator: {},
         },
         {
-          _id: 'event3',
+          id: 'event3',
           name: 'Another Private Event',
           description: 'Another private event',
-          startDate: currentDate,
-          endDate: currentDate,
+          startAt: `${currentDate}T18:00:00Z`,
+          endAt: `${currentDate}T20:00:00Z`,
           location: 'Another Private Location',
           startTime: '18:00',
           endTime: '20:00',
@@ -844,7 +848,7 @@ describe('Calendar', () => {
 
       // Administrator should see all events (public and private)
       // Check that the day with events has the correct class indicating events are present
-      const dayWithEvents = container.querySelector('._day__events_d00707');
+      const dayWithEvents = container.querySelector('._day__events_d8535b');
       expect(dayWithEvents).toBeInTheDocument();
 
       // Check that "View all" button exists, indicating multiple events are available
@@ -857,11 +861,11 @@ describe('Calendar', () => {
       const currentDate = new Date().toISOString().split('T')[0];
       const memberTestEventData = [
         {
-          _id: 'event1',
+          id: 'event1',
           name: 'Public Event',
           description: 'This is a public event',
-          startDate: currentDate,
-          endDate: currentDate,
+          startAt: `${currentDate}T10:00:00Z`,
+          endAt: `${currentDate}T12:00:00Z`,
           location: 'Public Location',
           startTime: '10:00',
           endTime: '12:00',
@@ -872,11 +876,11 @@ describe('Calendar', () => {
           creator: {},
         },
         {
-          _id: 'event2',
+          id: 'event2',
           name: 'Private Event',
           description: 'This is a private event',
-          startDate: currentDate,
-          endDate: currentDate,
+          startAt: `${currentDate}T14:00:00Z`,
+          endAt: `${currentDate}T16:00:00Z`,
           location: 'Private Location',
           startTime: '14:00',
           endTime: '16:00',
@@ -910,7 +914,7 @@ describe('Calendar', () => {
       await wait();
 
       // Regular user who is a member should see both public and private events
-      const dayWithEvents = container.querySelector('._day__events_d00707');
+      const dayWithEvents = container.querySelector('._day__events_d8535b');
       expect(dayWithEvents).toBeInTheDocument();
 
       const viewAllButton = screen.queryByTestId('more');
@@ -922,11 +926,11 @@ describe('Calendar', () => {
       // Test with 3 events: 2 public and 1 private to better test filtering
       const nonMemberTestEventData = [
         {
-          _id: 'event1',
+          id: 'event1',
           name: 'Public Event 1',
           description: 'This is a public event',
-          startDate: currentDate,
-          endDate: currentDate,
+          startAt: `${currentDate}T10:00:00Z`,
+          endAt: `${currentDate}T12:00:00Z`,
           location: 'Public Location',
           startTime: '10:00',
           endTime: '12:00',
@@ -937,11 +941,11 @@ describe('Calendar', () => {
           creator: {},
         },
         {
-          _id: 'event2',
+          id: 'event2',
           name: 'Private Event',
           description: 'This is a private event',
-          startDate: currentDate,
-          endDate: currentDate,
+          startAt: `${currentDate}T14:00:00Z`,
+          endAt: `${currentDate}T16:00:00Z`,
           location: 'Private Location',
           startTime: '14:00',
           endTime: '16:00',
@@ -952,11 +956,11 @@ describe('Calendar', () => {
           creator: {},
         },
         {
-          _id: 'event3',
+          id: 'event3',
           name: 'Public Event 2',
           description: 'This is another public event',
-          startDate: currentDate,
-          endDate: currentDate,
+          startAt: `${currentDate}T18:00:00Z`,
+          endAt: `${currentDate}T20:00:00Z`,
           location: 'Another Public Location',
           startTime: '18:00',
           endTime: '20:00',
@@ -1028,11 +1032,11 @@ describe('Calendar', () => {
       const currentDate = new Date().toISOString().split('T')[0];
       const noRoleTestEventData = [
         {
-          _id: 'event1',
+          id: 'event1',
           name: 'Public Event',
           description: 'This is a public event',
-          startDate: currentDate,
-          endDate: currentDate,
+          startAt: `${currentDate}T10:00:00Z`,
+          endAt: `${currentDate}T12:00:00Z`,
           location: 'Public Location',
           startTime: '10:00',
           endTime: '12:00',
@@ -1043,11 +1047,11 @@ describe('Calendar', () => {
           creator: {},
         },
         {
-          _id: 'event2',
+          id: 'event2',
           name: 'Private Event',
           description: 'This is a private event',
-          startDate: currentDate,
-          endDate: currentDate,
+          startAt: `${currentDate}T14:00:00Z`,
+          endAt: `${currentDate}T16:00:00Z`,
           location: 'Private Location',
           startTime: '14:00',
           endTime: '16:00',
@@ -1106,7 +1110,7 @@ describe('Calendar', () => {
       await wait();
 
       // When userRole is not provided, should see only public events (single event, no View all button)
-      const dayWithEvents = container.querySelector('._day__events_d00707');
+      const dayWithEvents = container.querySelector('._day__events_d8535b');
       expect(dayWithEvents).toBeInTheDocument();
     });
 
@@ -1114,11 +1118,11 @@ describe('Calendar', () => {
       const currentDate = new Date().toISOString().split('T')[0];
       const noUserIdTestEventData = [
         {
-          _id: 'event1',
+          id: 'event1',
           name: 'Public Event',
           description: 'This is a public event',
-          startDate: currentDate,
-          endDate: currentDate,
+          startAt: `${currentDate}T10:00:00Z`,
+          endAt: `${currentDate}T12:00:00Z`,
           location: 'Public Location',
           startTime: '10:00',
           endTime: '12:00',
@@ -1129,11 +1133,11 @@ describe('Calendar', () => {
           creator: {},
         },
         {
-          _id: 'event2',
+          id: 'event2',
           name: 'Private Event',
           description: 'This is a private event',
-          startDate: currentDate,
-          endDate: currentDate,
+          startAt: `${currentDate}T14:00:00Z`,
+          endAt: `${currentDate}T16:00:00Z`,
           location: 'Private Location',
           startTime: '14:00',
           endTime: '16:00',
@@ -1192,7 +1196,7 @@ describe('Calendar', () => {
       await wait();
 
       // When userId is not provided, should see only public events
-      const dayWithEvents = container.querySelector('._day__events_d00707');
+      const dayWithEvents = container.querySelector('._day__events_d8535b');
       expect(dayWithEvents).toBeInTheDocument();
     });
 
@@ -1200,11 +1204,11 @@ describe('Calendar', () => {
       const currentDate = new Date().toISOString().split('T')[0];
       const emptyOrgTestEventData = [
         {
-          _id: 'event1',
+          id: 'event1',
           name: 'Public Event',
           description: 'This is a public event',
-          startDate: currentDate,
-          endDate: currentDate,
+          startAt: `${currentDate}T10:00:00Z`,
+          endAt: `${currentDate}T12:00:00Z`,
           location: 'Public Location',
           startTime: '10:00',
           endTime: '12:00',
@@ -1215,11 +1219,11 @@ describe('Calendar', () => {
           creator: {},
         },
         {
-          _id: 'event2',
+          id: 'event2',
           name: 'Private Event',
           description: 'This is a private event',
-          startDate: currentDate,
-          endDate: currentDate,
+          startAt: `${currentDate}T14:00:00Z`,
+          endAt: `${currentDate}T16:00:00Z`,
           location: 'Private Location',
           startTime: '14:00',
           endTime: '16:00',
@@ -1278,7 +1282,7 @@ describe('Calendar', () => {
       await wait();
 
       // When orgData is not provided, should see only public events
-      const dayWithEvents = container.querySelector('._day__events_d00707');
+      const dayWithEvents = container.querySelector('._day__events_d8535b');
       expect(dayWithEvents).toBeInTheDocument();
     });
 
@@ -1297,11 +1301,11 @@ describe('Calendar', () => {
       const currentDate = new Date().toISOString().split('T')[0];
       const emptyMembersTestEventData = [
         {
-          _id: 'event1',
+          id: 'event1',
           name: 'Public Event',
           description: 'This is a public event',
-          startDate: currentDate,
-          endDate: currentDate,
+          startAt: `${currentDate}T10:00:00Z`,
+          endAt: `${currentDate}T12:00:00Z`,
           location: 'Public Location',
           startTime: '10:00',
           endTime: '12:00',
@@ -1312,11 +1316,11 @@ describe('Calendar', () => {
           creator: {},
         },
         {
-          _id: 'event2',
+          id: 'event2',
           name: 'Private Event',
           description: 'This is a private event',
-          startDate: currentDate,
-          endDate: currentDate,
+          startAt: `${currentDate}T14:00:00Z`,
+          endAt: `${currentDate}T16:00:00Z`,
           location: 'Private Location',
           startTime: '14:00',
           endTime: '16:00',
@@ -1376,7 +1380,7 @@ describe('Calendar', () => {
       await wait();
 
       // When orgData has no members, should see only public events
-      const dayWithEvents = container.querySelector('._day__events_d00707');
+      const dayWithEvents = container.querySelector('._day__events_d8535b');
       expect(dayWithEvents).toBeInTheDocument();
     });
 
@@ -1384,11 +1388,11 @@ describe('Calendar', () => {
       const currentDate = new Date().toISOString().split('T')[0]; // Use current date
       const mixedEventData = [
         {
-          _id: 'event1',
+          id: 'event1',
           name: 'Public Event',
           description: 'This is a public event',
-          startDate: currentDate,
-          endDate: currentDate,
+          startAt: `${currentDate}T10:00:00Z`,
+          endAt: `${currentDate}T12:00:00Z`,
           location: 'Public Location',
           startTime: '10:00',
           endTime: '12:00',
@@ -1399,11 +1403,11 @@ describe('Calendar', () => {
           creator: {},
         },
         {
-          _id: 'event2',
+          id: 'event2',
           name: 'Private Event',
           description: 'This is a private event',
-          startDate: currentDate,
-          endDate: currentDate,
+          startAt: `${currentDate}T14:00:00Z`,
+          endAt: `${currentDate}T16:00:00Z`,
           location: 'Private Location',
           startTime: '14:00',
           endTime: '16:00',
@@ -1414,11 +1418,11 @@ describe('Calendar', () => {
           creator: {},
         },
         {
-          _id: 'event4',
+          id: 'event4',
           name: 'Another Public Event',
           description: 'Another public event',
-          startDate: currentDate,
-          endDate: currentDate,
+          startAt: `${currentDate}T09:00:00Z`,
+          endAt: `${currentDate}T11:00:00Z`,
           location: 'Another Public Location',
           startTime: '09:00',
           endTime: '11:00',
@@ -1452,7 +1456,7 @@ describe('Calendar', () => {
       await wait();
 
       // Check that the day with events has the correct class indicating events are present
-      const dayWithEvents = container.querySelector('._day__events_d00707');
+      const dayWithEvents = container.querySelector('._day__events_d8535b');
       expect(dayWithEvents).toBeInTheDocument();
 
       // Check that "View all" button exists, indicating multiple events are filtered and available

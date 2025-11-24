@@ -1,4 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import type { Mock } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import PluginModal from './PluginModal';
 import { AdminPluginFileService } from '../../plugin/services/AdminPluginFileService';
@@ -76,7 +77,9 @@ describe('PluginModal', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     // Default mock implementation
-    (AdminPluginFileService.getPluginDetails as any).mockResolvedValue(null);
+    (
+      AdminPluginFileService.getPluginDetails as unknown as Mock
+    ).mockResolvedValue(null);
   });
 
   afterEach(() => {
@@ -153,9 +156,9 @@ describe('PluginModal', () => {
 
   describe('Plugin Details Loading', () => {
     it('should load plugin details when modal opens', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -167,9 +170,9 @@ describe('PluginModal', () => {
     });
 
     it('should display detailed plugin information when loaded', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -179,9 +182,9 @@ describe('PluginModal', () => {
     });
 
     it('should handle loading error gracefully', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockRejectedValueOnce(
-        new Error('File not found'),
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockRejectedValueOnce(new Error('File not found'));
 
       render(<PluginModal {...defaultProps} />);
 
@@ -194,9 +197,9 @@ describe('PluginModal', () => {
     });
 
     it('should handle null response gracefully', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        null,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(null);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -209,9 +212,9 @@ describe('PluginModal', () => {
     });
 
     it('should show loading state while fetching', () => {
-      (AdminPluginFileService.getPluginDetails as any).mockImplementationOnce(
-        () => new Promise(() => {}),
-      ); // Never resolves
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockImplementationOnce(() => new Promise(() => {})); // Never resolves
 
       render(<PluginModal {...defaultProps} />);
 
@@ -220,10 +223,11 @@ describe('PluginModal', () => {
   });
 
   describe('Plugin Actions - Not Installed', () => {
-    it('should show Install button for non-installed plugin', () => {
+    it('should show Install and Uninstall buttons for non-installed plugin', () => {
       render(<PluginModal {...defaultProps} />);
 
       expect(screen.getByText('Install')).toBeInTheDocument();
+      expect(screen.getByText('Uninstall')).toBeInTheDocument();
     });
 
     it('should call installPlugin when Install button is clicked', () => {
@@ -234,11 +238,20 @@ describe('PluginModal', () => {
       expect(defaultProps.installPlugin).toHaveBeenCalledWith(mockMeta);
     });
 
-    it('should disable Install button when loading', () => {
+    it('should call uninstallPlugin when Uninstall button is clicked', () => {
+      render(<PluginModal {...defaultProps} />);
+
+      fireEvent.click(screen.getByText('Uninstall'));
+
+      expect(defaultProps.uninstallPlugin).toHaveBeenCalledWith(mockMeta);
+    });
+
+    it('should disable Install and Uninstall buttons when loading', () => {
       render(<PluginModal {...defaultProps} loading={true} />);
 
-      const installButton = screen.getByText('Install');
-      expect(installButton).toBeDisabled();
+      const buttons = screen.getAllByRole('button');
+      const disabledButtons = buttons.filter((b) => b.hasAttribute('disabled'));
+      expect(disabledButtons.length).toBeGreaterThanOrEqual(2);
     });
   });
 
@@ -333,9 +346,9 @@ describe('PluginModal', () => {
     });
 
     it('should display screenshots when available', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -349,9 +362,9 @@ describe('PluginModal', () => {
 
   describe('Content Display - Features Tab', () => {
     it('should display features when available', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -378,9 +391,9 @@ describe('PluginModal', () => {
 
   describe('Content Display - Changelog Tab', () => {
     it('should display changelog when available', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -407,11 +420,66 @@ describe('PluginModal', () => {
     });
   });
 
+  describe('Install Elapsed Ticker', () => {
+    beforeEach(() => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date('2020-01-01T00:00:00.000Z'));
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it('should show Installing with mm:ss while loading', () => {
+      render(<PluginModal {...defaultProps} loading={true} />);
+
+      expect(
+        screen.getByRole('button', { name: /Installing\s*\(\d{2}:\d{2}\)/ }),
+      ).toBeInTheDocument();
+    });
+
+    it('should reset when loading stops and start at 00:00 when restarted', () => {
+      const { rerender } = render(
+        <PluginModal {...defaultProps} loading={true} />,
+      );
+
+      // While loading, shows Installing (mm:ss)
+      expect(
+        screen.getByRole('button', { name: /Installing\s*\(\d{2}:\d{2}\)/ }),
+      ).toBeInTheDocument();
+
+      // Stop loading -> text reverts to Install
+      rerender(<PluginModal {...defaultProps} loading={false} />);
+      expect(screen.getByText('Install')).toBeInTheDocument();
+
+      // Start loading again -> should show 00:00 initially
+      rerender(<PluginModal {...defaultProps} loading={true} />);
+      expect(
+        screen.getByRole('button', { name: /Installing\s*\(00:00\)/ }),
+      ).toBeInTheDocument();
+    });
+
+    it('should clean up interval on unmount', () => {
+      const { unmount } = render(
+        <PluginModal {...defaultProps} loading={true} />,
+      );
+
+      // Unmount while interval is active
+      unmount();
+
+      // Advance timers to ensure no setState after unmount
+      vi.advanceTimersByTime(5000);
+
+      // No explicit assertion needed; absence of act/state update warnings is success
+      expect(true).toBe(true);
+    });
+  });
+
   describe('Error Handling', () => {
     it('should handle missing plugin meta gracefully', () => {
       const propsWithoutMeta = {
         ...defaultProps,
-        meta: null as any,
+        meta: null as unknown as IPluginMeta,
       };
 
       render(<PluginModal {...propsWithoutMeta} />);
@@ -421,9 +489,9 @@ describe('PluginModal', () => {
     });
 
     it('should handle missing plugin details gracefully', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        null,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(null);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -432,9 +500,9 @@ describe('PluginModal', () => {
     });
 
     it('should handle network errors gracefully', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockRejectedValueOnce(
-        new Error('Network error'),
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockRejectedValueOnce(new Error('Network error'));
 
       render(<PluginModal {...defaultProps} />);
 
@@ -469,9 +537,9 @@ describe('PluginModal', () => {
 
   describe('Screenshot Viewer', () => {
     it('should open screenshot viewer when screenshot is clicked', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -485,9 +553,9 @@ describe('PluginModal', () => {
     });
 
     it('should show navigation buttons when multiple screenshots', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -504,9 +572,9 @@ describe('PluginModal', () => {
     });
 
     it('should show dot indicators for multiple screenshots', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -521,9 +589,9 @@ describe('PluginModal', () => {
     });
 
     it('should navigate to next screenshot', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -539,9 +607,9 @@ describe('PluginModal', () => {
     });
 
     it('should navigate to previous screenshot', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -560,9 +628,9 @@ describe('PluginModal', () => {
     });
 
     it('should close screenshot viewer when back button is clicked', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -579,9 +647,9 @@ describe('PluginModal', () => {
     });
 
     it('should navigate to specific screenshot when dot is clicked', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -599,9 +667,9 @@ describe('PluginModal', () => {
 
   describe('Keyboard Navigation', () => {
     it('should close screenshot viewer on Escape key', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -616,9 +684,9 @@ describe('PluginModal', () => {
     });
 
     it('should navigate to next screenshot on ArrowRight key', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -633,9 +701,9 @@ describe('PluginModal', () => {
     });
 
     it('should navigate to previous screenshot on ArrowLeft key', async () => {
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetails,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -661,9 +729,9 @@ describe('PluginModal', () => {
         changelog: [],
       };
 
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetailsWithEmptyChangelog,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetailsWithEmptyChangelog);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -682,9 +750,9 @@ describe('PluginModal', () => {
         screenshots: ['screenshot1.png'],
       };
 
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetailsWithSingleScreenshot,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetailsWithSingleScreenshot);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -712,9 +780,9 @@ describe('PluginModal', () => {
         ],
       };
 
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValueOnce(
-        mockDetailsWithManyScreenshots,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetailsWithManyScreenshots);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -741,9 +809,9 @@ describe('PluginModal', () => {
           'Some content\nFeatures:\n- Feature 1\n- Feature 2\n- Feature 3\nMore content',
       };
 
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValue(
-        mockDetailsWithReadme,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValue(mockDetailsWithReadme);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -769,9 +837,9 @@ describe('PluginModal', () => {
           'Some content without Features section\n- This should not be extracted',
       };
 
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValue(
-        mockDetailsWithReadmeNoFeatures,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValue(mockDetailsWithReadmeNoFeatures);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -796,9 +864,9 @@ describe('PluginModal', () => {
         readme: 'Some content\nFeatures:\nNo bullet points here\nMore content',
       };
 
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValue(
-        mockDetailsWithReadmeNoBullets,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValue(mockDetailsWithReadmeNoBullets);
 
       render(<PluginModal {...defaultProps} />);
 
@@ -824,9 +892,9 @@ describe('PluginModal', () => {
           'Some content\nFeatures:\n- Feature 1\nRegular text\n- Feature 2\nMore text\n- Feature 3',
       };
 
-      (AdminPluginFileService.getPluginDetails as any).mockResolvedValue(
-        mockDetailsWithMixedContent,
-      );
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValue(mockDetailsWithMixedContent);
 
       render(<PluginModal {...defaultProps} />);
 

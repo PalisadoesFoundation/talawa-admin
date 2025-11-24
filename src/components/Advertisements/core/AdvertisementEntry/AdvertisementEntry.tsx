@@ -184,7 +184,7 @@ function AdvertisementEntry({
                   </ul>
                 )}
               </div>
-              {advertisement.attachments?.[0]?.mimeType?.includes('videos') ? (
+              {advertisement.attachments?.[0]?.mimeType?.includes('video') ? (
                 <video
                   muted
                   className={`${styles.admedia} ${styles.mediaContainer}`}

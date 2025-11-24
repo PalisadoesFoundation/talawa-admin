@@ -37,13 +37,14 @@
  */
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Navigate, Outlet, useLocation, useParams } from 'react-router';
+import { Outlet, useLocation, useParams } from 'react-router';
 import { updateTargets } from 'state/action-creators';
 import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from 'style/app-fixed.module.css';
 import UserSidebarOrg from 'components/UserPortal/UserSidebarOrg/UserSidebarOrg';
+import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -53,11 +54,13 @@ const map: InterfaceMapType = {
   people: 'people',
   events: 'userEvents',
   donate: 'donate',
+  transactions: 'transactions',
   chat: 'userChat',
   campaigns: 'userCampaigns',
   pledges: 'userPledges',
   volunteer: 'userVolunteer',
   leaveorg: 'leaveOrganization',
+  notification: 'notification',
 };
 
 const UserScreen = (): React.JSX.Element => {
@@ -71,10 +74,9 @@ const UserScreen = (): React.JSX.Element => {
 
   const { orgId } = useParams();
 
-  // Redirect to home if orgId is not present
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
+  // Note: some user routes (for example global user pages like /user/notification)
+  // don't include an `orgId`. In that case render the global user sidebar
+  // instead of redirecting to home.
 
   const titleKey: string | undefined = map[location.pathname.split('/')[2]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
@@ -97,7 +99,9 @@ const UserScreen = (): React.JSX.Element => {
    * This hook is triggered when the orgId changes.
    */
   useEffect(() => {
-    dispatch(updateTargets(orgId));
+    if (orgId) {
+      dispatch(updateTargets(orgId));
+    }
   }, [orgId]);
 
   /**
@@ -147,12 +151,16 @@ const UserScreen = (): React.JSX.Element => {
         </Button>
       )} */}
       <div className={styles.drawer}>
-        <UserSidebarOrg
-          orgId={orgId}
-          targets={targets}
-          hideDrawer={hideDrawer}
-          setHideDrawer={setHideDrawer}
-        />
+        {orgId ? (
+          <UserSidebarOrg
+            orgId={orgId}
+            targets={targets}
+            hideDrawer={hideDrawer}
+            setHideDrawer={setHideDrawer}
+          />
+        ) : (
+          <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
+        )}
       </div>
       <div
         className={`${hideDrawer ? styles.expand : styles.contract}`}

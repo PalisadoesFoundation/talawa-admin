@@ -50,7 +50,7 @@ describe('Testing CheckIn Wrapper', () => {
     );
 
     // Open the modal
-    fireEvent.click(screen.getByLabelText('checkInRegistrants') as Element);
+    fireEvent.click(screen.getByLabelText('checkInMembers') as Element);
 
     await waitFor(() =>
       expect(screen.queryByTestId('modal-title')).toBeInTheDocument(),

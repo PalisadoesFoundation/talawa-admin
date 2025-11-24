@@ -40,17 +40,19 @@ import type {
   MutationFunctionOptions,
   OperationVariables,
 } from '@apollo/client';
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
-import { CREATE_CHAT } from 'GraphQl/Mutations/OrganizationMutations';
+import {
+  CREATE_CHAT,
+  CREATE_CHAT_MEMBERSHIP,
+} from 'GraphQl/Mutations/OrganizationMutations';
+import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import Table from '@mui/material/Table';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
-import type { InterfaceQueryUserListItem } from 'utils/interfaces';
-import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import { Search } from '@mui/icons-material';
 import { useParams } from 'react-router';
@@ -59,6 +61,13 @@ import styles from 'style/app-fixed.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import type { TFunction } from 'i18next';
 import { type GroupChat } from 'types/Chat/type';
+
+interface InterfaceOrganizationMember {
+  id: string;
+  name: string;
+  avatarURL?: string;
+  role: string;
+}
 interface InterfaceCreateDirectChatProps {
   toggleCreateDirectChatModal: () => void;
   createDirectChatModalisOpen: boolean;
@@ -88,6 +97,7 @@ const { getItem } = useLocalStorage();
 
 export const handleCreateDirectChat = async (
   id: string,
+  userName: string,
   chats: GroupChat[],
   t: TFunction<'translation', 'userChat'>,
   createChat: {
@@ -103,14 +113,39 @@ export const handleCreateDirectChat = async (
     ): Promise<FetchResult<unknown>>;
     (arg0: {
       variables: {
-        organizationId: unknown;
-        userIds: unknown[];
-        isGroup: boolean;
+        input: {
+          organizationId: string;
+          name: string;
+          description: string;
+          avatar: null;
+        };
+      };
+    }): unknown;
+  },
+  createChatMembership: {
+    (
+      options?:
+        | MutationFunctionOptions<
+            unknown,
+            OperationVariables,
+            DefaultContext,
+            ApolloCache<unknown>
+          >
+        | undefined,
+    ): Promise<FetchResult<unknown>>;
+    (arg0: {
+      variables: {
+        input: {
+          memberId: string;
+          chatId: string;
+          role: string;
+        };
       };
     }): unknown;
   },
   organizationId: string | undefined,
   userId: string | null,
+  currentUserName: string,
   chatsListRefetch: {
     (
       variables?: Partial<{ id: string }> | undefined,
@@ -133,9 +168,41 @@ export const handleCreateDirectChat = async (
     );
   } else {
     try {
-      await createChat({
-        variables: { organizationId, userIds: [userId, id], isGroup: false },
+      const chatResult = await createChat({
+        variables: {
+          input: {
+            organizationId,
+            name: `${currentUserName} & ${userName}`,
+            description: 'A direct chat conversation',
+            avatar: null,
+          },
+        },
       });
+
+      const chatId = (chatResult.data as { createChat: { id: string } })
+        ?.createChat?.id;
+
+      if (chatId && userId) {
+        await createChatMembership({
+          variables: {
+            input: {
+              memberId: userId,
+              chatId,
+              role: 'regular',
+            },
+          },
+        });
+        await createChatMembership({
+          variables: {
+            input: {
+              memberId: id,
+              chatId,
+              role: 'regular',
+            },
+          },
+        });
+      }
+
       await chatsListRefetch();
       toggleCreateDirectChatModal();
     } catch (error) {
@@ -153,30 +220,42 @@ export default function createDirectChatModal({
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
   const { orgId: organizationId } = useParams();
 
-  const userId: string | null = getItem('userId');
+  // Support both 'userId' (for regular users) and 'id' (for admins)
+  const userId: string | null = getItem('userId') || getItem('id');
 
   const [userName, setUserName] = useState('');
 
   const [createChat] = useMutation(CREATE_CHAT);
+  const [createChatMembership] = useMutation(CREATE_CHAT_MEMBERSHIP);
 
   const {
     data: allUsersData,
     loading: allUsersLoading,
     refetch: allUsersRefetch,
-  } = useQuery(USERS_CONNECTION_LIST, {
-    variables: { firstName_contains: '', lastName_contains: '' },
+  } = useQuery(ORGANIZATION_MEMBERS, {
+    variables: {
+      input: { id: organizationId },
+      first: 20,
+      after: null,
+      where: {},
+    },
   });
+  const currentUser = allUsersData?.organization?.members?.edges?.find(
+    (edge: { node: InterfaceOrganizationMember }) => edge.node.id === userId,
+  )?.node;
+
+  const currentUserName = currentUser?.name || 'You';
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
     e.preventDefault();
-    const [firstName, lastName] = userName.split(' ');
+    const trimmedName = userName.trim();
 
-    const newFilterData = {
-      firstName_contains: firstName || '',
-      lastName_contains: lastName || '',
-    };
-
-    allUsersRefetch({ ...newFilterData });
+    allUsersRefetch({
+      input: { id: organizationId },
+      first: 20,
+      after: null,
+      where: trimmedName ? { name_contains: trimmedName } : undefined,
+    });
   };
 
   return (
@@ -235,48 +314,59 @@ export default function createDirectChatModal({
                   </TableHead>
                   <TableBody>
                     {allUsersData &&
-                      allUsersData.users.length > 0 &&
-                      allUsersData.users.map(
-                        (
-                          userDetails: InterfaceQueryUserListItem,
-                          index: number,
-                        ) => (
-                          <StyledTableRow
-                            data-testid="user"
-                            key={userDetails.user._id}
-                          >
-                            <StyledTableCell component="th" scope="row">
-                              {index + 1}
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              {userDetails.user.firstName +
-                                ' ' +
-                                userDetails.user.lastName}
-                              <br />
-                              {userDetails.user.email}
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              <Button
-                                onClick={() => {
-                                  handleCreateDirectChat(
-                                    userDetails.user._id,
-                                    chats,
-                                    t,
-                                    createChat,
-                                    organizationId,
-                                    userId,
-                                    chatsListRefetch,
-                                    toggleCreateDirectChatModal,
-                                  );
-                                }}
-                                data-testid="addBtn"
-                              >
-                                {t('add')}
-                              </Button>
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        ),
-                      )}
+                      allUsersData.organization?.members?.edges?.length > 0 &&
+                      allUsersData.organization.members.edges
+                        .filter(
+                          ({
+                            node: userDetails,
+                          }: {
+                            node: InterfaceOrganizationMember;
+                          }) => userDetails.id !== userId,
+                        )
+                        .map(
+                          (
+                            {
+                              node: userDetails,
+                            }: { node: InterfaceOrganizationMember },
+                            index: number,
+                          ) => (
+                            <StyledTableRow
+                              data-testid="user"
+                              key={userDetails.id}
+                            >
+                              <StyledTableCell component="th" scope="row">
+                                {index + 1}
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                {userDetails.name}
+                                <br />
+                                {userDetails.role || 'Member'}
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                <Button
+                                  onClick={() => {
+                                    handleCreateDirectChat(
+                                      userDetails.id,
+                                      userDetails.name,
+                                      chats,
+                                      t,
+                                      createChat,
+                                      createChatMembership,
+                                      organizationId,
+                                      userId,
+                                      currentUserName,
+                                      chatsListRefetch,
+                                      toggleCreateDirectChatModal,
+                                    );
+                                  }}
+                                  data-testid="addBtn"
+                                >
+                                  {t('add')}
+                                </Button>
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          ),
+                        )}
                   </TableBody>
                 </Table>
               </TableContainer>

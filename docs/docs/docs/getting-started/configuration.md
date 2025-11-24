@@ -12,7 +12,7 @@ It's important to configure Talawa-Admin. Here's how to do it.
 You can use our interactive setup script for the configuration. Use the following command for the same.
 
 ```bash
-npm run setup
+pnpm run setup
 ```
 
 All the options in "setup" can be done manually as well and this is covered in a section below.
@@ -62,7 +62,7 @@ REACT_APP_TALAWA_URL="http://localhost:4000/graphql"
 
 ```
 
-If you are trying to access Talawa Admin from a remote host with the API URL containing "localhost", You will have to change the API URL to
+If you are trying to access Talawa Admin from a remote host with the API URL containing `localhost`, You will have to change the API URL to
 
 ```
 REACT_APP_TALAWA_URL="http://YOUR-REMOTE-ADDRESS:4000/graphql"
@@ -85,7 +85,7 @@ REACT_APP_BACKEND_WEBSOCKET_URL="ws://localhost:4000/graphql"
 
 ```
 
-If you are trying to access Talawa Admin from a remote host with the API URL containing "localhost", You will have to change the API URL to
+If you are trying to access Talawa Admin from a remote host with the API URL containing `localhost`, You will have to change the API URL to
 
 ```
 REACT_APP_BACKEND_WEBSOCKET_URL="ws://YOUR-REMOTE-ADDRESS:4000/graphql"

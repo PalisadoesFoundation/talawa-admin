@@ -6,4 +6,4 @@
 
 > `const` **UPLOAD\_PLUGIN\_ZIP\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/PluginMutations.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/PluginMutations.ts#L61)
+Defined in: [src/GraphQl/Mutations/PluginMutations.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/PluginMutations.ts#L81)

@@ -1,4 +1,12 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  beforeEach,
+  afterEach,
+  type Mock,
+} from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import React from 'react';
@@ -47,7 +55,7 @@ describe('ChangeLanguageDropDown', () => {
     vi.clearAllMocks();
 
     // Setup default mock implementations
-    (useLocalStorage as jest.Mock).mockReturnValue({
+    (useLocalStorage as Mock).mockReturnValue({
       getItem: vi.fn((key) => {
         if (key === 'id') return mockUserId;
         if (key === 'UserImage') return mockUserImage;
@@ -55,8 +63,8 @@ describe('ChangeLanguageDropDown', () => {
       }),
     });
 
-    (cookies.get as jest.Mock).mockReturnValue('en');
-    (urlToFile as jest.Mock).mockResolvedValue(mockFile);
+    (cookies.get as Mock).mockReturnValue('en');
+    (urlToFile as Mock).mockResolvedValue(mockFile);
   });
 
   afterEach(() => {
@@ -75,7 +83,7 @@ describe('ChangeLanguageDropDown', () => {
   });
 
   it('shows error toast when userId is not found', async () => {
-    (useLocalStorage as jest.Mock).mockReturnValue({
+    (useLocalStorage as Mock).mockReturnValue({
       getItem: vi.fn(() => null),
     });
 
@@ -129,5 +137,158 @@ describe('ChangeLanguageDropDown', () => {
       const option = screen.getByTestId(`change-language-btn-${language.code}`);
       expect(option).toBeInTheDocument();
     });
+  });
+
+  it('handles avatar processing error gracefully', async () => {
+    // Mock urlToFile to throw an error
+    (urlToFile as Mock).mockRejectedValue(
+      new Error('Avatar processing failed'),
+    );
+
+    // Mock console.log to verify error logging
+    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+
+    // Create mocks that expect no avatar in the mutation
+    const mocksWithoutAvatar = [
+      {
+        request: {
+          query: UPDATE_CURRENT_USER_MUTATION,
+          variables: { input: { naturalLanguageCode: 'es' } },
+        },
+        result: { data: { updateUser: { id: mockUserId } } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocksWithoutAvatar} addTypename={false}>
+        <ChangeLanguageDropDown />
+      </MockedProvider>,
+    );
+
+    const dropdown = screen.getByTestId('language-dropdown-btn');
+    fireEvent.click(dropdown);
+
+    const spanishOption = screen.getByTestId('change-language-btn-es');
+    fireEvent.click(spanishOption);
+
+    await waitFor(() => {
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Error processing avatar:',
+        expect.any(Error),
+      );
+      expect(i18next.changeLanguage).toHaveBeenCalledWith('es');
+      expect(cookies.set).toHaveBeenCalledWith('i18next', 'es');
+    });
+
+    consoleSpy.mockRestore();
+  });
+
+  it('handles mutation error gracefully', async () => {
+    // Mock the mutation to throw an error
+    const errorMocks = [
+      {
+        request: {
+          query: UPDATE_CURRENT_USER_MUTATION,
+          variables: { input: { naturalLanguageCode: 'es', avatar: mockFile } },
+        },
+        error: new Error('Mutation failed'),
+      },
+    ];
+
+    // Mock console.log to verify error logging
+    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+
+    render(
+      <MockedProvider mocks={errorMocks} addTypename={false}>
+        <ChangeLanguageDropDown />
+      </MockedProvider>,
+    );
+
+    const dropdown = screen.getByTestId('language-dropdown-btn');
+    fireEvent.click(dropdown);
+
+    const spanishOption = screen.getByTestId('change-language-btn-es');
+    fireEvent.click(spanishOption);
+
+    await waitFor(() => {
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Error in changing language',
+        expect.any(Error),
+      );
+    });
+
+    consoleSpy.mockRestore();
+  });
+
+  it.each([
+    { userImage: null, description: 'null' },
+    { userImage: { invalid: 'object' }, description: 'non-string object' },
+    { userImage: undefined, description: 'undefined' },
+  ])(
+    'handles language change without avatar when userImage is $description',
+    async ({ userImage }) => {
+      // Mock userImage to be the specified invalid value
+      (useLocalStorage as Mock).mockReturnValue({
+        getItem: vi.fn((key) => {
+          if (key === 'id') return mockUserId;
+          if (key === 'UserImage') return userImage;
+          return null;
+        }),
+      });
+
+      // Create mocks that expect no avatar in the mutation
+      const mocksWithoutAvatar = [
+        {
+          request: {
+            query: UPDATE_CURRENT_USER_MUTATION,
+            variables: { input: { naturalLanguageCode: 'es' } },
+          },
+          result: { data: { updateUser: { id: mockUserId } } },
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={mocksWithoutAvatar} addTypename={false}>
+          <ChangeLanguageDropDown />
+        </MockedProvider>,
+      );
+
+      const dropdown = screen.getByTestId('language-dropdown-btn');
+      fireEvent.click(dropdown);
+
+      const spanishOption = screen.getByTestId('change-language-btn-es');
+      fireEvent.click(spanishOption);
+
+      await waitFor(() => {
+        expect(i18next.changeLanguage).toHaveBeenCalledWith('es');
+        expect(cookies.set).toHaveBeenCalledWith('i18next', 'es');
+      });
+
+      // Verify urlToFile was not called since userImage is not a valid string
+      expect(urlToFile).not.toHaveBeenCalled();
+    },
+  );
+
+  it('uses default language when cookies.get returns falsy value', () => {
+    // Mock cookies.get to return a falsy value (null, undefined, or empty string)
+    (cookies.get as Mock).mockReturnValue(null);
+
+    (useLocalStorage as Mock).mockReturnValue({
+      getItem: vi.fn((key) => {
+        if (key === 'id') return mockUserId;
+        if (key === 'UserImage') return 'https://example.com/avatar.jpg';
+        return null;
+      }),
+    });
+
+    render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <ChangeLanguageDropDown />
+      </MockedProvider>,
+    );
+
+    // The component should render without errors even when cookies.get returns null
+    // This tests the fallback branch: cookies.get('i18next') || 'en'
+    expect(screen.getByTestId('language-dropdown-btn')).toBeInTheDocument();
   });
 });

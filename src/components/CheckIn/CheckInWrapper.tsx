@@ -1,13 +1,13 @@
 /**
- * A wrapper component for managing the "Check-In Registrants" functionality.
+ * A wrapper component for managing the "Check-In Members" functionality.
  *
  * This component renders a button that, when clicked, opens a modal for
- * checking in registrants for a specific event. The modal is controlled
+ * checking in members for a specific event. The modal is controlled
  * using a local state to toggle its visibility.
  *
  * @component
  * @param {string} eventId - The unique identifier of the event for which
- * registrants are being checked in.
+ * members are being checked in.
  *
  * @returns {JSX.Element} The rendered CheckInWrapper component.
  *
@@ -29,9 +29,13 @@ import style from '../../../src/style/app-fixed.module.css';
 
 type PropType = {
   eventId: string;
+  onCheckInUpdate?: () => void;
 };
 
-export const CheckInWrapper = ({ eventId }: PropType): JSX.Element => {
+export const CheckInWrapper = ({
+  eventId,
+  onCheckInUpdate,
+}: PropType): JSX.Element => {
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -39,7 +43,7 @@ export const CheckInWrapper = ({ eventId }: PropType): JSX.Element => {
       <Button
         data-testid="stats-modal"
         className={style.createButton}
-        aria-label="checkInRegistrants"
+        aria-label="checkInMembers"
         onClick={(): void => {
           setShowModal(true);
         }}
@@ -50,13 +54,14 @@ export const CheckInWrapper = ({ eventId }: PropType): JSX.Element => {
           height={30.63}
           alt="Sort"
         />
-        Check In Registrants
+        Check In Members
       </Button>
       {showModal && (
         <CheckInModal
           show={showModal}
           handleClose={(): void => setShowModal(false)}
           eventId={eventId}
+          onCheckInUpdate={onCheckInUpdate}
         />
       )}
     </>

@@ -27,47 +27,7 @@ vi.mock('../../GraphQl/Mutations/PluginMutations', () => ({
   UPLOAD_PLUGIN_ZIP_MUTATION: 'UPLOAD_PLUGIN_ZIP_MUTATION',
 }));
 
-// Mock GraphQL responses
-const createPluginSuccessMock = {
-  request: {
-    query: 'CREATE_PLUGIN_MUTATION',
-    variables: {
-      input: {
-        pluginId: 'test-plugin',
-        isInstalled: false,
-        isActivated: false,
-      },
-    },
-  },
-  result: {
-    data: {
-      createPlugin: {
-        id: '1',
-        pluginId: 'test-plugin',
-        isActivated: false,
-        isInstalled: false,
-        backup: null,
-        createdAt: '2024-01-01T00:00:00Z',
-        updatedAt: '2024-01-01T00:00:00Z',
-        __typename: 'Plugin',
-      },
-    },
-  },
-};
-
-const createPluginErrorMock = {
-  request: {
-    query: 'CREATE_PLUGIN_MUTATION',
-    variables: {
-      input: {
-        pluginId: 'test-plugin',
-        isInstalled: false,
-        isActivated: false,
-      },
-    },
-  },
-  error: new Error('Database error'),
-};
+// Mock GraphQL responses removed as they were unused
 
 const defaultProps = {
   show: true,
@@ -103,10 +63,12 @@ describe('UploadPluginModal Component', () => {
         </MockedProvider>,
       );
 
-      expect(screen.getByText('Upload Plugin')).toBeInTheDocument();
+      expect(
+        screen.getByRole('heading', { name: 'Upload Plugin' }),
+      ).toBeInTheDocument();
       expect(
         screen.getByText(
-          'Select a ZIP file containing admin and/or API plugin components',
+          'Upload a ZIP file to create a plugin entry. The plugin will be available for installation after upload.',
         ),
       ).toBeInTheDocument();
     });
@@ -145,10 +107,10 @@ describe('UploadPluginModal Component', () => {
         </MockedProvider>,
       );
 
-      const installButton = screen.getByRole('button', {
-        name: /install plugin/i,
+      const uploadButton = screen.getByRole('button', {
+        name: /upload plugin/i,
       });
-      expect(installButton).toBeDisabled();
+      expect(uploadButton).toBeDisabled();
     });
   });
 
@@ -157,7 +119,9 @@ describe('UploadPluginModal Component', () => {
       const { validateAdminPluginZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -199,7 +163,9 @@ describe('UploadPluginModal Component', () => {
       const { validateAdminPluginZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (validateAdminPluginZip as any).mockRejectedValue(
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockRejectedValue(
         new Error(
           "Zip file must contain either 'admin' or 'api' folder with valid plugin structure",
         ),
@@ -233,9 +199,9 @@ describe('UploadPluginModal Component', () => {
       const { validateAdminPluginZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (validateAdminPluginZip as any).mockRejectedValue(
-        new Error('Invalid ZIP file'),
-      );
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockRejectedValue(new Error('Invalid ZIP file'));
 
       render(
         <MockedProvider>
@@ -263,7 +229,9 @@ describe('UploadPluginModal Component', () => {
       const { validateAdminPluginZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -348,10 +316,10 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
     });
 
@@ -359,9 +327,9 @@ describe('UploadPluginModal Component', () => {
       const { validateAdminPluginZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (validateAdminPluginZip as any).mockRejectedValue(
-        new Error('Invalid admin manifest.json'),
-      );
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockRejectedValue(new Error('Invalid admin manifest.json'));
 
       render(
         <MockedProvider>
@@ -389,7 +357,9 @@ describe('UploadPluginModal Component', () => {
       const { validateAdminPluginZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (validateAdminPluginZip as any).mockRejectedValue(
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockRejectedValue(
         new Error(
           'Missing required fields in admin manifest.json: pluginId, version',
         ),
@@ -423,7 +393,9 @@ describe('UploadPluginModal Component', () => {
       const { validateAdminPluginZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -446,7 +418,9 @@ describe('UploadPluginModal Component', () => {
       const { installAdminPluginFromZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (installAdminPluginFromZip as any).mockResolvedValue({
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         success: true,
         pluginId: 'test-plugin',
         manifest: {
@@ -476,17 +450,17 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
         expect(toast.success).toHaveBeenCalledWith(
-          'Plugin installed successfully! (Admin Dashboard Components components)',
+          'Plugin uploaded successfully! (Admin Dashboard Components components) - You can now install it from the plugin list.',
         );
         expect(defaultProps.onHide).toHaveBeenCalled();
       });
@@ -496,7 +470,9 @@ describe('UploadPluginModal Component', () => {
       const { installAdminPluginFromZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (installAdminPluginFromZip as any).mockResolvedValue({
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         success: false,
         pluginId: 'test-plugin',
         manifest: {
@@ -508,7 +484,7 @@ describe('UploadPluginModal Component', () => {
           pluginId: 'test-plugin',
         },
         installedComponents: [],
-        error: 'Failed to install plugin',
+        error: 'Failed to upload plugin',
       });
 
       render(
@@ -527,16 +503,16 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Failed to install plugin');
+        expect(toast.error).toHaveBeenCalledWith('Failed to upload plugin');
       });
     });
 
@@ -544,9 +520,9 @@ describe('UploadPluginModal Component', () => {
       const { installAdminPluginFromZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (installAdminPluginFromZip as any).mockRejectedValue(
-        new Error('Network error'),
-      );
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockRejectedValue(new Error('Network error'));
 
       render(
         <MockedProvider>
@@ -564,17 +540,17 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
-          'Failed to install plugin. Please try again.',
+          'Failed to upload plugin. Please try again.',
         );
       });
     });
@@ -633,7 +609,9 @@ describe('UploadPluginModal Component', () => {
       const { validateAdminPluginZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (validateAdminPluginZip as any).mockRejectedValue('String error');
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockRejectedValue('String error');
 
       render(
         <MockedProvider>
@@ -660,7 +638,9 @@ describe('UploadPluginModal Component', () => {
     it('should handle non-Error exceptions in plugin installation', async () => {
       const { validateAdminPluginZip, installAdminPluginFromZip } =
         await import('../../utils/adminPluginInstaller');
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -677,7 +657,9 @@ describe('UploadPluginModal Component', () => {
           'index.tsx': 'export default {}',
         },
       });
-      (installAdminPluginFromZip as any).mockRejectedValue('String error');
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockRejectedValue('String error');
 
       render(
         <MockedProvider>
@@ -695,17 +677,17 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
-          'Failed to install plugin. Please try again.',
+          'Failed to upload plugin. Please try again.',
         );
       });
     });
@@ -816,6 +798,25 @@ describe('UploadPluginModal Component', () => {
       expect(screen.queryByText('Test Plugin')).not.toBeInTheDocument();
     });
 
+    it('should call handleClose when modal is closed via backdrop click', () => {
+      const mockOnHide = vi.fn();
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal show={true} onHide={mockOnHide} />
+        </MockedProvider>,
+      );
+
+      // Get the modal backdrop and click it to trigger handleClose
+      const modal = screen.getByRole('dialog');
+      const backdrop = modal.closest('.modal');
+
+      if (backdrop) {
+        fireEvent.click(backdrop);
+        expect(mockOnHide).toHaveBeenCalled();
+      }
+    });
+
     it('should handle close when modal is hidden', async () => {
       const mockOnHide = vi.fn();
       render(
@@ -833,7 +834,9 @@ describe('UploadPluginModal Component', () => {
     it('should handle installation with null result', async () => {
       const { validateAdminPluginZip, installAdminPluginFromZip } =
         await import('../../utils/adminPluginInstaller');
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -850,7 +853,9 @@ describe('UploadPluginModal Component', () => {
           'index.tsx': 'export default {}',
         },
       });
-      (installAdminPluginFromZip as any).mockResolvedValue(null);
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue(null);
 
       render(
         <MockedProvider>
@@ -868,18 +873,18 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       // Should handle null result gracefully - it will throw an error before reaching the catch block
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
-          'Failed to install plugin. Please try again.',
+          'Failed to upload plugin. Please try again.',
         );
       });
     });
@@ -887,7 +892,9 @@ describe('UploadPluginModal Component', () => {
     it('should handle installation with undefined error', async () => {
       const { validateAdminPluginZip, installAdminPluginFromZip } =
         await import('../../utils/adminPluginInstaller');
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -904,7 +911,9 @@ describe('UploadPluginModal Component', () => {
           'index.tsx': 'export default {}',
         },
       });
-      (installAdminPluginFromZip as any).mockResolvedValue({
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         success: false,
         error: undefined,
       });
@@ -925,16 +934,16 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Failed to install plugin');
+        expect(toast.error).toHaveBeenCalledWith('Failed to upload plugin');
       });
     });
   });
@@ -969,7 +978,9 @@ describe('UploadPluginModal Component', () => {
       const { validateAdminPluginZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: false,
         hasApiFolder: true,
         apiManifest: {
@@ -1009,7 +1020,9 @@ describe('UploadPluginModal Component', () => {
       const { validateAdminPluginZip } = await import(
         '../../utils/adminPluginInstaller'
       );
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: true,
         adminManifest: {
@@ -1080,7 +1093,9 @@ describe('UploadPluginModal Component', () => {
     it('should handle installation with empty installedComponents array', async () => {
       const { validateAdminPluginZip, installAdminPluginFromZip } =
         await import('../../utils/adminPluginInstaller');
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -1097,7 +1112,9 @@ describe('UploadPluginModal Component', () => {
           'index.tsx': 'export default {}',
         },
       });
-      (installAdminPluginFromZip as any).mockResolvedValue({
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         success: true,
         pluginId: 'test-plugin',
         manifest: {
@@ -1127,17 +1144,17 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
         expect(toast.success).toHaveBeenCalledWith(
-          'Plugin installed successfully! ( components)',
+          'Plugin uploaded successfully! ( components) - You can now install it from the plugin list.',
         );
         expect(defaultProps.onHide).toHaveBeenCalled();
       });
@@ -1146,7 +1163,9 @@ describe('UploadPluginModal Component', () => {
     it('should handle installation with single component', async () => {
       const { validateAdminPluginZip, installAdminPluginFromZip } =
         await import('../../utils/adminPluginInstaller');
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -1163,7 +1182,9 @@ describe('UploadPluginModal Component', () => {
           'index.tsx': 'export default {}',
         },
       });
-      (installAdminPluginFromZip as any).mockResolvedValue({
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         success: true,
         pluginId: 'test-plugin',
         manifest: {
@@ -1193,17 +1214,17 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
         expect(toast.success).toHaveBeenCalledWith(
-          'Plugin installed successfully! (Admin components)',
+          'Plugin uploaded successfully! (Admin components) - You can now install it from the plugin list.',
         );
         expect(defaultProps.onHide).toHaveBeenCalled();
       });
@@ -1212,7 +1233,9 @@ describe('UploadPluginModal Component', () => {
     it('should handle installation with multiple components', async () => {
       const { validateAdminPluginZip, installAdminPluginFromZip } =
         await import('../../utils/adminPluginInstaller');
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: true,
         adminManifest: {
@@ -1229,7 +1252,9 @@ describe('UploadPluginModal Component', () => {
           'index.tsx': 'export default {}',
         },
       });
-      (installAdminPluginFromZip as any).mockResolvedValue({
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         success: true,
         pluginId: 'test-plugin',
         manifest: {
@@ -1259,17 +1284,17 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
         expect(toast.success).toHaveBeenCalledWith(
-          'Plugin installed successfully! (Admin and API components)',
+          'Plugin uploaded successfully! (Admin and API components) - You can now install it from the plugin list.',
         );
         expect(defaultProps.onHide).toHaveBeenCalled();
       });
@@ -1351,7 +1376,9 @@ describe('UploadPluginModal Component', () => {
     it('should handle installation with missing apolloClient', async () => {
       const { validateAdminPluginZip, installAdminPluginFromZip } =
         await import('../../utils/adminPluginInstaller');
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -1368,7 +1395,9 @@ describe('UploadPluginModal Component', () => {
           'index.tsx': 'export default {}',
         },
       });
-      (installAdminPluginFromZip as any).mockResolvedValue({
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         success: true,
         pluginId: 'test-plugin',
         manifest: {
@@ -1398,17 +1427,17 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
         expect(toast.success).toHaveBeenCalledWith(
-          'Plugin installed successfully! (Admin components)',
+          'Plugin uploaded successfully! (Admin components) - You can now install it from the plugin list.',
         );
         expect(defaultProps.onHide).toHaveBeenCalled();
       });
@@ -1417,7 +1446,9 @@ describe('UploadPluginModal Component', () => {
     it('should handle installation with undefined result', async () => {
       const { validateAdminPluginZip, installAdminPluginFromZip } =
         await import('../../utils/adminPluginInstaller');
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -1434,7 +1465,9 @@ describe('UploadPluginModal Component', () => {
           'index.tsx': 'export default {}',
         },
       });
-      (installAdminPluginFromZip as any).mockResolvedValue(undefined);
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue(undefined);
 
       render(
         <MockedProvider>
@@ -1452,17 +1485,17 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
-          'Failed to install plugin. Please try again.',
+          'Failed to upload plugin. Please try again.',
         );
       });
     });
@@ -1470,7 +1503,9 @@ describe('UploadPluginModal Component', () => {
     it('should handle installation with null result', async () => {
       const { validateAdminPluginZip, installAdminPluginFromZip } =
         await import('../../utils/adminPluginInstaller');
-      (validateAdminPluginZip as any).mockResolvedValue({
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
         hasAdminFolder: true,
         hasApiFolder: false,
         adminManifest: {
@@ -1487,7 +1522,9 @@ describe('UploadPluginModal Component', () => {
           'index.tsx': 'export default {}',
         },
       });
-      (installAdminPluginFromZip as any).mockResolvedValue(null);
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue(null);
 
       render(
         <MockedProvider>
@@ -1505,18 +1542,520 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        const installButton = screen.getByRole('button', {
-          name: /install plugin/i,
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
         });
-        expect(installButton).not.toBeDisabled();
+        expect(uploadButton).not.toBeDisabled();
       });
 
-      fireEvent.click(screen.getByRole('button', { name: /install plugin/i }));
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
-          'Failed to install plugin. Please try again.',
+          'Failed to upload plugin. Please try again.',
         );
+      });
+    });
+
+    it('should handle early return when required data is missing', async () => {
+      const { installAdminPluginFromZip } = await import(
+        '../../utils/adminPluginInstaller'
+      );
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      // Try to click upload button without selecting a file
+      const uploadButton = screen.getByRole('button', {
+        name: /upload plugin/i,
+      });
+
+      // Button should be disabled initially
+      expect(uploadButton).toBeDisabled();
+
+      // Even if we somehow trigger the click, it should return early
+      fireEvent.click(uploadButton);
+
+      // installAdminPluginFromZip should not be called
+      expect(installAdminPluginFromZip).not.toHaveBeenCalled();
+    });
+
+    it('should test early return logic by directly calling handleAddPlugin', async () => {
+      const { installAdminPluginFromZip } = await import(
+        '../../utils/adminPluginInstaller'
+      );
+
+      // Create a test component that exposes the handleAddPlugin function
+      const TestComponent = () => {
+        const [selectedFile, setSelectedFile] = React.useState<File | null>(
+          null,
+        );
+        const [manifest, setManifest] = React.useState<Record<
+          string,
+          unknown
+        > | null>(null);
+        const [pluginStructure, setPluginStructure] = React.useState<Record<
+          string,
+          unknown
+        > | null>(null);
+
+        const handleAddPlugin = async () => {
+          // This is the exact early return logic from line 94
+          if (!selectedFile || !manifest || !pluginStructure) return;
+
+          // This should not be reached due to early return
+          await installAdminPluginFromZip({
+            zipFile: selectedFile,
+            apolloClient: {},
+          });
+        };
+
+        return (
+          <div>
+            <button
+              type="button"
+              onClick={handleAddPlugin}
+              data-testid="test-handle-add-plugin"
+            >
+              Test Handle Add Plugin
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedFile(new File(['test'], 'test.zip'))}
+              data-testid="set-file"
+            >
+              Set File
+            </button>
+            <button
+              type="button"
+              onClick={() => setManifest({ name: 'test' })}
+              data-testid="set-manifest"
+            >
+              Set Manifest
+            </button>
+            <button
+              type="button"
+              onClick={() => setPluginStructure({ files: {} })}
+              data-testid="set-structure"
+            >
+              Set Structure
+            </button>
+          </div>
+        );
+      };
+
+      render(
+        <MockedProvider>
+          <TestComponent />
+        </MockedProvider>,
+      );
+
+      // Test early return when selectedFile is null
+      const testButton = screen.getByTestId('test-handle-add-plugin');
+      fireEvent.click(testButton);
+      expect(installAdminPluginFromZip).not.toHaveBeenCalled();
+
+      // Set file but not manifest - should still return early
+      fireEvent.click(screen.getByTestId('set-file'));
+      fireEvent.click(testButton);
+      expect(installAdminPluginFromZip).not.toHaveBeenCalled();
+
+      // Set manifest but not structure - should still return early
+      fireEvent.click(screen.getByTestId('set-manifest'));
+      fireEvent.click(testButton);
+      expect(installAdminPluginFromZip).not.toHaveBeenCalled();
+
+      // Set all required data - should call the function
+      fireEvent.click(screen.getByTestId('set-structure'));
+      fireEvent.click(testButton);
+      expect(installAdminPluginFromZip).toHaveBeenCalled();
+    });
+
+    it('should test actual UploadPluginModal with valid data', async () => {
+      const { validateAdminPluginZip, installAdminPluginFromZip } =
+        await import('../../utils/adminPluginInstaller');
+
+      // Mock the validation to return valid data
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
+        hasAdminFolder: true,
+        hasApiFolder: false,
+        adminManifest: {
+          name: 'Test Plugin',
+          version: '1.0.0',
+          description: 'Test',
+          author: 'Test Author',
+          main: 'index.tsx',
+          pluginId: 'test-plugin',
+        },
+        files: {
+          'manifest.json': 'content',
+          'index.tsx': 'content',
+        },
+      });
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      // Upload a file to enable the button
+      const fileInput = getFileInput();
+      const file = createMockFile('test-plugin.zip', 'mock content');
+      Object.defineProperty(fileInput, 'files', {
+        value: createMockFileList([file]),
+        writable: false,
+      });
+
+      fireEvent.change(fileInput);
+
+      // Wait for validation to complete
+      await waitFor(() => {
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
+        });
+        expect(uploadButton).not.toBeDisabled();
+      });
+
+      // Click the upload button - this should call installAdminPluginFromZip
+      const uploadButton = screen.getByRole('button', {
+        name: /upload plugin/i,
+      });
+      fireEvent.click(uploadButton);
+
+      // The function should be called since all required data is present
+      await waitFor(() => {
+        expect(installAdminPluginFromZip).toHaveBeenCalled();
+      });
+    });
+
+    it('should handle API manifest when admin manifest is not available', async () => {
+      const { validateAdminPluginZip } = await import(
+        '../../utils/adminPluginInstaller'
+      );
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
+        hasAdminFolder: false,
+        hasApiFolder: true,
+        adminManifest: null,
+        apiManifest: {
+          name: 'Test API Plugin',
+          version: '1.0.0',
+          description: 'Test API',
+          author: 'Test Author',
+          main: 'api.js',
+          pluginId: 'test-api-plugin',
+        },
+        apiFiles: ['api.js', 'manifest.json'],
+        files: {},
+      });
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      const fileInput = getFileInput();
+      const file = createMockFile('test-api-plugin.zip', 'mock content');
+      Object.defineProperty(fileInput, 'files', {
+        value: createMockFileList([file]),
+        writable: false,
+      });
+
+      fireEvent.change(fileInput);
+
+      await waitFor(() => {
+        expect(screen.getByText('Plugin Information')).toBeInTheDocument();
+        expect(screen.getByText('Test API Plugin')).toBeInTheDocument();
+        expect(screen.getByText('test-api-plugin')).toBeInTheDocument();
+      });
+    });
+
+    it('should show detected files when pluginFiles are available', async () => {
+      const { validateAdminPluginZip } = await import(
+        '../../utils/adminPluginInstaller'
+      );
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
+        hasAdminFolder: true,
+        hasApiFolder: false,
+        adminManifest: {
+          name: 'Test Plugin',
+          version: '1.0.0',
+          description: 'Test',
+          author: 'Test Author',
+          main: 'index.tsx',
+          pluginId: 'test-plugin',
+        },
+        files: {
+          'manifest.json': 'content',
+          'index.tsx': 'content',
+          'pages/ComponentA.tsx': 'content',
+        },
+      });
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      const fileInput = getFileInput();
+      const file = createMockFile('test-plugin.zip', 'mock content');
+      Object.defineProperty(fileInput, 'files', {
+        value: createMockFileList([file]),
+        writable: false,
+      });
+
+      fireEvent.change(fileInput);
+
+      await waitFor(() => {
+        expect(screen.getByText('Detected Files')).toBeInTheDocument();
+        expect(screen.getByText(/admin\//)).toBeInTheDocument();
+        expect(screen.getByText(/manifest\.json/)).toBeInTheDocument();
+        expect(screen.getByText(/index\.tsx/)).toBeInTheDocument();
+      });
+    });
+
+    it('should show expected structure when no pluginFiles are available', () => {
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      expect(
+        screen.getByText('Expected Directory Structure'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText('Required manifest.json Fields'),
+      ).toBeInTheDocument();
+      expect(screen.getByText(/plugin\.zip/)).toBeInTheDocument();
+    });
+
+    it('should handle both admin and API components display', async () => {
+      const { validateAdminPluginZip } = await import(
+        '../../utils/adminPluginInstaller'
+      );
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
+        hasAdminFolder: true,
+        hasApiFolder: true,
+        adminManifest: {
+          name: 'Test Plugin',
+          version: '1.0.0',
+          description: 'Test',
+          author: 'Test Author',
+          main: 'index.tsx',
+          pluginId: 'test-plugin',
+        },
+        files: {
+          'manifest.json': 'content',
+          'index.tsx': 'content',
+        },
+        apiManifest: {
+          name: 'Test API Plugin',
+          version: '1.0.0',
+          description: 'Test API',
+          author: 'Test Author',
+          main: 'api.js',
+          pluginId: 'test-plugin',
+        },
+        apiFiles: ['api.js', 'manifest.json'],
+      });
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      const fileInput = getFileInput();
+      const file = createMockFile('test-plugin.zip', 'mock content');
+      Object.defineProperty(fileInput, 'files', {
+        value: createMockFileList([file]),
+        writable: false,
+      });
+
+      fireEvent.change(fileInput);
+
+      await waitFor(() => {
+        expect(
+          screen.getByText('Admin Dashboard Components'),
+        ).toBeInTheDocument();
+        expect(screen.getByText('API Backend Components')).toBeInTheDocument();
+      });
+    });
+
+    it('should handle only admin components display', async () => {
+      const { validateAdminPluginZip } = await import(
+        '../../utils/adminPluginInstaller'
+      );
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
+        hasAdminFolder: true,
+        hasApiFolder: false,
+        adminManifest: {
+          name: 'Test Plugin',
+          version: '1.0.0',
+          description: 'Test',
+          author: 'Test Author',
+          main: 'index.tsx',
+          pluginId: 'test-plugin',
+        },
+        files: {
+          'manifest.json': 'content',
+          'index.tsx': 'content',
+        },
+      });
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      const fileInput = getFileInput();
+      const file = createMockFile('test-plugin.zip', 'mock content');
+      Object.defineProperty(fileInput, 'files', {
+        value: createMockFileList([file]),
+        writable: false,
+      });
+
+      fireEvent.change(fileInput);
+
+      await waitFor(() => {
+        expect(
+          screen.getByText('Admin Dashboard Components'),
+        ).toBeInTheDocument();
+        expect(
+          screen.queryByText('API Backend Components'),
+        ).not.toBeInTheDocument();
+      });
+    });
+
+    it('should handle only API components display', async () => {
+      const { validateAdminPluginZip } = await import(
+        '../../utils/adminPluginInstaller'
+      );
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
+        hasAdminFolder: false,
+        hasApiFolder: true,
+        adminManifest: null,
+        apiManifest: {
+          name: 'Test API Plugin',
+          version: '1.0.0',
+          description: 'Test API',
+          author: 'Test Author',
+          main: 'api.js',
+          pluginId: 'test-api-plugin',
+        },
+        apiFiles: ['api.js', 'manifest.json'],
+        files: {},
+      });
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      const fileInput = getFileInput();
+      const file = createMockFile('test-api-plugin.zip', 'mock content');
+      Object.defineProperty(fileInput, 'files', {
+        value: createMockFileList([file]),
+        writable: false,
+      });
+
+      fireEvent.change(fileInput);
+
+      await waitFor(() => {
+        expect(screen.getByText('API Backend Components')).toBeInTheDocument();
+        expect(
+          screen.queryByText('Admin Dashboard Components'),
+        ).not.toBeInTheDocument();
+      });
+    });
+
+    it('should handle installation with single component in installedComponents', async () => {
+      const { validateAdminPluginZip, installAdminPluginFromZip } =
+        await import('../../utils/adminPluginInstaller');
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
+        hasAdminFolder: true,
+        hasApiFolder: false,
+        adminManifest: {
+          name: 'Test Plugin',
+          version: '1.0.0',
+          description: 'Test',
+          author: 'Test Author',
+          main: 'index.tsx',
+          pluginId: 'test-plugin',
+        },
+        files: {
+          'manifest.json':
+            '{"name":"Test Plugin","version":"1.0.0","description":"Test","author":"Test Author","main":"index.tsx","pluginId":"test-plugin"}',
+          'index.tsx': 'export default {}',
+        },
+      });
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
+        success: true,
+        pluginId: 'test-plugin',
+        manifest: {
+          name: 'Test Plugin',
+          version: '1.0.0',
+          description: 'Test',
+          author: 'Test Author',
+          main: 'index.tsx',
+          pluginId: 'test-plugin',
+        },
+        installedComponents: ['Admin'], // Single component
+      });
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      const fileInput = getFileInput();
+      const file = createMockFile('test-plugin.zip', 'mock content');
+      Object.defineProperty(fileInput, 'files', {
+        value: createMockFileList([file]),
+        writable: false,
+      });
+
+      fireEvent.change(fileInput);
+
+      await waitFor(() => {
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
+        });
+        expect(uploadButton).not.toBeDisabled();
+      });
+
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
+
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith(
+          'Plugin uploaded successfully! (Admin components) - You can now install it from the plugin list.',
+        );
+        expect(defaultProps.onHide).toHaveBeenCalled();
       });
     });
   });

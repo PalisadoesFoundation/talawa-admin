@@ -1,23 +1,22 @@
+/* global HTMLFormElement */
 /**
  * AgendaItemsContainer Component
  *
  * This component is responsible for displaying and managing agenda items.
  * It supports functionalities such as previewing, updating, deleting, and
- * reordering agenda items using drag-and-drop. The component also integrates
- * with GraphQL mutations for updating and deleting agenda items.
+ * reordering agenda items using drag-and-drop.
  *
- * @param props - Component props
- * @param props.agendaItemConnection - The type of connection for agenda items (e.g., 'Event').
- * @param props.agendaItemData - Array of agenda item data to display.
- * @param props.agendaItemRefetch - Function to refetch agenda item data after updates.
- * @param props.agendaItemCategories - Array of available agenda item categories.
+ * @param agendaItemConnection - The type of connection for agenda items (e.g., 'Event')
+ * @param agendaItemData - Array of agenda item data to display
+ * @param agendaItemRefetch - Function to refetch agenda item data after updates
+ * @param agendaItemCategories - Array of available agenda item categories
  *
- * @returns JSX.Element - Rendered component.
+ * @returns Rendered component
  *
  * @remarks
- * - Uses `react-beautiful-dnd` for drag-and-drop functionality.
- * - Integrates with `react-toastify` for user notifications.
- * - Includes modals for previewing, updating, and deleting agenda items.
+ * Uses `@hello-pangea/dnd` for drag-and-drop functionality.
+ * Integrates with `react-toastify` for user notifications.
+ * Includes modals for previewing, updating, and deleting agenda items.
  *
  * @example
  * ```tsx
@@ -28,22 +27,15 @@
  *   agendaItemCategories={categories}
  * />
  * ```
- *
- * @dependencies
- * - `@apollo/client` for GraphQL mutations.
- * - `react-bootstrap` for UI components.
- * - `react-beautiful-dnd` for drag-and-drop functionality.
- * - `react-toastify` for notifications.
- * - `react-i18next` for translations.
  */
 import React, { useState } from 'react';
-import type { ChangeEvent } from 'react';
+import type { FormEvent, JSX } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import type { DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import type { DropResult } from '@hello-pangea/dnd';
 
 import {
   DELETE_AGENDA_ITEM_MUTATION,
@@ -148,7 +140,7 @@ function AgendaItemsContainer({
    * @param e - The form submission event.
    */
   const updateAgendaItemHandler = async (
-    e: ChangeEvent<HTMLFormElement>,
+    e: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
     try {

@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import { getPluginManager } from './manager';
-import { IDrawerExtension, IRouteExtension } from './types';
+import { IDrawerExtension, IRouteExtension, IInjectorExtension } from './types';
 
 export function usePluginDrawerItems(
   userPermissions: string[] = [],
@@ -24,36 +24,16 @@ export function usePluginDrawerItems(
 
       if (isAdmin && !isOrg) {
         // Admin global
-        items = getPluginManager().getExtensionPoints(
-          'DA1',
-          userPermissions,
-          isAdmin,
-          isOrg,
-        );
+        items = getPluginManager().getExtensionPoints('DA1');
       } else if (isAdmin && isOrg) {
         // Admin org
-        items = getPluginManager().getExtensionPoints(
-          'DA2',
-          userPermissions,
-          isAdmin,
-          isOrg,
-        );
+        items = getPluginManager().getExtensionPoints('DA2');
       } else if (!isAdmin && isOrg) {
         // User org
-        items = getPluginManager().getExtensionPoints(
-          'DU1',
-          userPermissions,
-          isAdmin,
-          isOrg,
-        );
+        items = getPluginManager().getExtensionPoints('DU1');
       } else if (!isAdmin && !isOrg) {
         // User global
-        items = getPluginManager().getExtensionPoints(
-          'DU2',
-          userPermissions,
-          isAdmin,
-          isOrg,
-        );
+        items = getPluginManager().getExtensionPoints('DU2');
       }
 
       setDrawerItems(items);
@@ -104,36 +84,16 @@ export function usePluginRoutes(
 
       if (isAdmin && !isOrg) {
         // Admin global
-        routeExtensions = getPluginManager().getExtensionPoints(
-          'RA1',
-          userPermissions,
-          isAdmin,
-          isOrg,
-        );
+        routeExtensions = getPluginManager().getExtensionPoints('RA1');
       } else if (isAdmin && isOrg) {
         // Admin org
-        routeExtensions = getPluginManager().getExtensionPoints(
-          'RA2',
-          userPermissions,
-          isAdmin,
-          isOrg,
-        );
+        routeExtensions = getPluginManager().getExtensionPoints('RA2');
       } else if (!isAdmin && isOrg) {
         // User org
-        routeExtensions = getPluginManager().getExtensionPoints(
-          'RU1',
-          userPermissions,
-          isAdmin,
-          isOrg,
-        );
+        routeExtensions = getPluginManager().getExtensionPoints('RU1');
       } else if (!isAdmin && !isOrg) {
         // User global
-        routeExtensions = getPluginManager().getExtensionPoints(
-          'RU2',
-          userPermissions,
-          isAdmin,
-          isOrg,
-        );
+        routeExtensions = getPluginManager().getExtensionPoints('RU2');
       }
 
       setRoutes(routeExtensions);
@@ -193,9 +153,9 @@ export function useLoadedPlugins() {
  * Hook to get plugin injector extensions
  */
 export function usePluginInjectors(
-  injectorType: 'G1' | 'G2' | 'G3' = 'G1',
-): any[] {
-  const [injectors, setInjectors] = useState<any[]>([]);
+  injectorType: 'G1' | 'G2' | 'G3' | 'G4' = 'G1',
+): IInjectorExtension[] {
+  const [injectors, setInjectors] = useState<IInjectorExtension[]>([]);
 
   useEffect(() => {
     const updateInjectors = () => {
@@ -204,12 +164,8 @@ export function usePluginInjectors(
         return;
       }
 
-      const injectorExtensions = getPluginManager().getExtensionPoints(
-        injectorType,
-        [],
-        false,
-        false,
-      );
+      const injectorExtensions =
+        getPluginManager().getExtensionPoints(injectorType);
 
       setInjectors(injectorExtensions);
     };

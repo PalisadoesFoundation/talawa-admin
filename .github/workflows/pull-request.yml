@@ -21,26 +21,34 @@ env:
 
 jobs:
   Code-Quality-Checks:
-    name: Performs linting, formatting, type-checking, checking for different source and target branch
+    name: Performs linting, formatting, type-checking, unused file detection, checking for different source and target branch
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Fetch all history for all branches and tags
+          fetch-depth: 0 # Fetch all history for all branches and tags
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '24.x'
+          cache: 'pnpm'
 
+      - name: Prepare dependency store
+        run: pnpm fetch
       - name: Install Dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Count number of lines
         run: |
           chmod +x ./.github/workflows/scripts/countline.py
-          ./.github/workflows/scripts/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx src/components/OrgPostCard/OrgPostCard.tsx src/components/UsersTableItem/UsersTableItem.tsx
+          ./.github/workflows/scripts/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx src/components/OrgPostCard/OrgPostCard.tsx src/components/UsersTableItem/UsersTableItem.tsx src/components/UserPortal/ChatRoom/ChatRoom.tsx
 
       - name: Get changed TypeScript files
         id: changed-files
@@ -62,33 +70,32 @@ jobs:
           else
             echo "any_changed=false" >> $GITHUB_OUTPUT
           fi
-
           # Set only_changed to false by default (adjust logic as needed)
           echo "only_changed=false" >> $GITHUB_OUTPUT
 
       - name: Check formatting
         if: steps.changed-files.outputs.only_changed != 'true'
-        run: npm format:check
+        run: pnpm format:check
 
       - name: Run formatting if check fails
         if: failure()
-        run: npm format:fix
+        run: pnpm format:fix
 
       - name: Check for type errors
         if: steps.changed-files.outputs.only_changed != 'true'
-        run: npm run typecheck
+        run: pnpm typecheck
 
       - name: Check for linting errors in modified files
         if: steps.changed-files.outputs.only_changed != 'true'
-        env: 
+        env:
           CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: npx eslint ${CHANGED_FILES}
-        
+        run: pnpm exec eslint ${CHANGED_FILES}
+
       - name: Check for TSDoc comments
-        run: npm run check-tsdoc # Run the TSDoc check script
+        run: pnpm check-tsdoc
 
       - name: Check for localStorage Usage
-        run: npx tsx scripts/githooks/check-localstorage-usage.ts --scan-entire-repo
+        run: pnpm exec tsx scripts/githooks/check-localstorage-usage.ts --scan-entire-repo
 
       - name: Compare translation files
         run: |
@@ -104,29 +111,161 @@ jobs:
           echo "Error: Close this PR and try again."
           exit 1
 
+      - name: Check for unused files and exports in src/ and docs/src
+        run: pnpm knip --include files,exports
+
+  Check-AutoDocs:
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    name: Generate and Validate Documentation
+    runs-on: ubuntu-latest
+    needs: [Code-Quality-Checks]
+    steps:
+      - name: Checkout the Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: 'pnpm'
+
+      - name: Prepare dependency store
+        run: pnpm fetch
+
+      - name: Install Dependencies (frozen)
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Run documentation generation
+        run: pnpm run generate-docs
+
+      - name: Check for uncommitted doc changes
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::Documentation files are outdated or missing."
+            echo "Please run 'pnpm run generate-docs' locally and commit the updated files."
+            echo ""
+            echo "Changed files:"
+            git status --porcelain
+            exit 1
+          else
+            echo "Documentation is up to date."
+          fi
+
+      - name: Check for unused dependencies
+        run: pnpm knip --config knip.deps.json --include dependencies
+
   Check-Sensitive-Files:
-    if: ${{ github.actor != 'dependabot[bot]' && !contains(github.event.pull_request.labels.*.name, 'ignore-sensitive-files-pr') }}
+    if: ${{ github.actor != 'dependabot[bot]' }}
     name: Checks if sensitive files have been changed without authorization
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Fetch all history for all branches and tags
+          fetch-depth: 0 # Fetch all history for all branches and tags
+
+      - name: Get PR labels
+        id: check-labels
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -z "${{ github.event.pull_request.number }}" ]; then
+            echo "skip=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          LABELS="$(gh api repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/labels --jq '.[].name' | tr '\n' ' ')"
+
+          if echo "$LABELS" | grep -qw "ignore-sensitive-files-pr"; then
+            echo "::notice::Skipping sensitive files check due to 'ignore-sensitive-files-pr' label."
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Get Changed Unauthorized files
+        if: steps.check-labels.outputs.skip != 'true'
         id: changed-unauth-files
         run: |
-          # Get the base branch ref
-          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
 
-          # Define sensitive files pattern
-          SENSITIVE_FILES=".flake8 .pydocstyle pyproject.toml .env* vitest.config.js src/App.tsx .github/** env.example .node-version .husky/** scripts/** src/style/** schema.graphql package.json package-lock.json tsconfig.json .gitignore .eslintrc.json .eslintignore .prettierrc .prettierignore vite.config.ts docker/docker-compose.prod.yaml docker/docker-compose.dev.yaml docker/Dockerfile.dev docker/Dockerfile.prod config/docker/setup/nginx.conf config/docker/setup/nginx.prod.conf CODEOWNERS LICENSE setup.ts .coderabbit.yaml CODE_OF_CONDUCT.md CODE_STYLE.md CONTRIBUTING.md DOCUMENTATION.md INSTALLATION.md ISSUE_GUIDELINES.md PR_GUIDELINES.md README.md *.pem *.key *.cert *.password *.secret *.credentials .nojekyll yarn.lock docs/docusaurus.config.ts docs/sidebar* CNAME"
+          # Skip if not in PR context
+          if [ -z "${{ github.event.pull_request.base.sha }}" ]; then
+            echo "any_changed=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Determine base and head commits for comparison
+          HEAD_SHA="${{ github.event.pull_request.head.sha || github.sha }}"
+          BASE_SHA=$(git merge-base "${{ github.event.pull_request.base.sha }}" "$HEAD_SHA")
+
+          # Define sensitive files patterns as a bash array
+          SENSITIVE_PATTERNS=(
+            '.flake8$'
+            '.pydocstyle$'
+            'pyproject.toml$'
+            '.env..*$'
+            'vitest.config.js$'
+            'src/App.tsx$'
+            '^.github/.*'
+            '^.husky/.*'
+            '^scripts/.*'
+            '^src/style/.*'
+            'schema.graphql$'
+            'package.json$'
+            'package-lock.json$'
+            'tsconfig.json$'
+            '^.gitignore$'
+            '^env.example$'
+            '.node-version$'
+            '.eslintrc.json$'
+            '.eslintignore$'
+            '.prettierrc$'
+            '.prettierignore$'
+            'vite.config.ts$'
+            '^docker/docker-compose.prod.yaml$'
+            '^docker/docker-compose.dev.yaml$'
+            '^docker/Dockerfile.dev$'
+            '^docker/Dockerfile.prod$'
+            '^config/docker/setup/nginx.conf$'
+            '^config/docker/setup/nginx.prod.conf$'
+            'CODEOWNERS$'
+            'LICENSE$'
+            'setup.ts$'
+            '.coderabbit.yaml$'
+            'CODE_OF_CONDUCT.md$'
+            'CODE_STYLE.md$'
+            'CONTRIBUTING.md$'
+            'DOCUMENTATION.md$'
+            'INSTALLATION.md$'
+            'ISSUE_GUIDELINES.md$'
+            'PR_GUIDELINES.md$'
+            'README.md$'
+            '.*.pem$'
+            '.*.key$'
+            '.*.cert$'
+            '.*.password$'
+            '.*.secret$'
+            '.*.credentials$'
+            '.nojekyll$'
+            'yarn.lock$'
+            'knip.json$'
+            'knip.deps.json$'
+            '^docs/docusaurus.config.ts$'
+            '^docs/sidebar..*'
+            'CNAME$'
+          )
 
           # Check for changes in sensitive files
           CHANGED_UNAUTH_FILES=""
-          for pattern in $SENSITIVE_FILES; do
-            FILES=$(git diff --name-only --diff-filter=ACMRD $BASE_SHA ${{ github.event.pull_request.head.sha }} | grep -E "$pattern" || true)
+          for pattern in "${SENSITIVE_PATTERNS[@]}"; do
+            FILES=$(git diff --name-only --diff-filter=ACMRD "$BASE_SHA" "$HEAD_SHA" | grep -E "$pattern" || true)
             if [ ! -z "$FILES" ]; then
               CHANGED_UNAUTH_FILES="$CHANGED_UNAUTH_FILES $FILES"
             fi
@@ -139,21 +278,23 @@ jobs:
           # Check if any unauthorized files changed
           if [ ! -z "$CHANGED_UNAUTH_FILES" ]; then
             echo "any_changed=true" >> $GITHUB_OUTPUT
-            echo "any_deleted=true" >> $GITHUB_OUTPUT
           else
             echo "any_changed=false" >> $GITHUB_OUTPUT
-            echo "any_deleted=false" >> $GITHUB_OUTPUT
           fi
 
       - name: List all changed unauthorized files
-        if: steps.changed-unauth-files.outputs.any_changed == 'true' || steps.changed-unauth-files.outputs.any_deleted == 'true'
-        env: 
+        if: steps.changed-unauth-files.outputs.any_changed == 'true'
+        env:
           CHANGED_UNAUTH_FILES: ${{ steps.changed-unauth-files.outputs.all_changed_files }}
         run: |
-          for file in ${CHANGED_UNAUTH_FILES}; do
-            echo "$file is unauthorized to change/delete"
+          echo "::error::Unauthorized changes detected in sensitive files:"
+          echo ""
+          for file in $CHANGED_UNAUTH_FILES; do
+            echo "- $file"
           done
-          echo "To override this, apply the 'ignore-sensitive-files-pr' label"          
+          echo ""
+          echo "To override:"
+          echo "Add the 'ignore-sensitive-files-pr' label to this PR."
           exit 1
 
   Count-Changed-Files:
@@ -164,7 +305,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Fetch all history for all branches and tags
+          fetch-depth: 0 # Fetch all history for all branches and tags
 
       - name: Get changed files
         id: changed-files
@@ -177,14 +318,14 @@ jobs:
           echo "all_changed_files_count=$ALL_CHANGED_FILES_COUNT" >> $GITHUB_OUTPUT
 
       - name: Echo number of changed files
-        env: 
+        env:
           CHANGED_FILES_COUNT: ${{ steps.changed-files.outputs.all_changed_files_count }}
         run: |
           echo "Number of files changed: $CHANGED_FILES_COUNT"
 
       - name: Check if the number of changed files is less than 100
         if: steps.changed-files.outputs.all_changed_files_count > 100
-        env: 
+        env:
           CHANGED_FILES_COUNT: ${{ steps.changed-files.outputs.all_changed_files_count }}
         run: |
           echo "Error: Too many files (greater than 100) changed in the pull request."
@@ -200,7 +341,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Fetch all history for all branches and tags
+          fetch-depth: 0 # Fetch all history for all branches and tags
 
       - name: Get changed files
         id: changed-files
@@ -228,7 +369,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Fetch all history for all branches and tags
+          fetch-depth: 0 # Fetch all history for all branches and tags
 
       - name: Get changed files
         id: changed-files
@@ -247,25 +388,75 @@ jobs:
 
       - name: Run Python script
         run: |
-          python .github/workflows/scripts/code_coverage_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }} 
+          python .github/workflows/scripts/code_coverage_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
+
+  Check-ItSkip-Disable:
+    name: Check for it.skip commands
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for all branches and tags
+
+      - name: Get changed files
+        id: changed-files
+        run: |
+          # Get the base branch ref
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+
+          # Get all changed files
+          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
+          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+
+      - name: Run Python script
+        run: |
+          python .github/workflows/scripts/itskip_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
   Test-Application:
-    name: Test Application
+    name: Test Application (Shard ${{ matrix.shard }})
     runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks, Check-ESlint-Disable, Check-Code-Coverage-Disable]
+    needs:
+      [
+        Code-Quality-Checks,
+        Check-AutoDocs,
+        Check-ESlint-Disable,
+        Check-Code-Coverage-Disable,
+        Check-ItSkip-Disable,
+      ]
+    env:
+      TOTAL_SHARDS: 4
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [1, 2, 3, 4]
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '24.x'
+          cache: 'pnpm'
+
+      - name: Prepare dependency store
+        run: pnpm fetch
 
       - name: Install Dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Get changed TypeScript files
         id: changed-files
@@ -290,30 +481,217 @@ jobs:
           echo "ts_files=$TS_FILES" >> $GITHUB_OUTPUT
 
       - name: TypeScript compilation
-        run: |
-          npx tsc --noEmit
+        run: pnpm exec tsc --noEmit
 
-      - name: Run Vitest Tests
+      - name: Run Vitest Tests (Shard ${{ matrix.shard }}/${{ env.TOTAL_SHARDS }})
         if: steps.changed-files.outputs.any_changed == 'true'
         env:
           NODE_V8_COVERAGE: './coverage/vitest'
-          NODE_OPTIONS: "--max-old-space-size=6144"
-        run: |
-          npm run test:coverage
-
-      - name: Upload Coverage to Codecov
-        uses: codecov/codecov-action@v4
+          NODE_OPTIONS: '--max-old-space-size=4096'
+          SHARD_INDEX: ${{ matrix.shard }}
+          SHARD_COUNT: ${{ env.TOTAL_SHARDS }}
+        run: pnpm test:shard:coverage
+      - name: Upload coverage artifact
+        if: always() && steps.changed-files.outputs.any_changed == 'true'
+        uses: actions/upload-artifact@v4
         with:
+          name: coverage-shard-${{ matrix.shard }}
+          path: ./coverage/vitest/
+          retention-days: 1
+
+  Merge-Coverage:
+    name: Merge Coverage Reports
+    runs-on: ubuntu-latest
+    needs: [Test-Application]
+    if: success() || failure()
+    steps:
+      - name: Checkout the Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for Codecov to calculate patch coverage
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: 'pnpm'
+
+      - name: Prepare dependency store
+        run: pnpm fetch
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+      - name: Download all coverage artifacts
+        id: download-artifacts
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          pattern: coverage-shard-*
+          path: ./coverage-shards/
+          merge-multiple: false
+
+      - name: Check if artifacts were downloaded
+        id: check-artifacts
+        run: |
+          # Check if any coverage files exist
+          if find coverage-shards -name "lcov.info" -type f | grep -q .; then
+            echo "artifacts_found=true" >> $GITHUB_OUTPUT
+            echo "Coverage artifacts found"
+          else
+            echo "artifacts_found=false" >> $GITHUB_OUTPUT
+            echo "No coverage artifacts found - tests may have been skipped"
+          fi
+
+      - name: Merge coverage reports
+        if: steps.check-artifacts.outputs.artifacts_found == 'true'
+        run: |
+          mkdir -p ./coverage/vitest
+          mkdir -p ./coverage/tmp
+
+          # Find all coverage directories from shards
+          echo "Finding coverage data from shards..."
+          SHARD_DIRS=$(find coverage-shards -type d -name "coverage-shard-*" 2>/dev/null || true)
+
+          if [ -z "$SHARD_DIRS" ]; then
+            echo "ERROR: No shard directories found!"
+            ls -la coverage-shards/ || true
+            exit 1
+          fi
+
+          echo "Found shard directories:"
+          echo "$SHARD_DIRS"
+
+          # Check if we have JSON coverage files (better for merging)
+          JSON_FILES=$(find coverage-shards -name "coverage-final.json" -type f 2>/dev/null || true)
+
+          if [ -n "$JSON_FILES" ]; then
+            echo "Using JSON coverage files for accurate merging..."
+            
+            # Copy all JSON files to a temp directory for nyc merge
+            for shard_dir in coverage-shards/coverage-shard-*/; do
+              if [ -f "${shard_dir}coverage-final.json" ]; then
+                echo "Found JSON coverage in: $shard_dir"
+                cp "${shard_dir}coverage-final.json" "./coverage/tmp/coverage-shard-$(basename $shard_dir).json"
+              fi
+            done
+            
+            # Validate JSON files before merging
+            echo "Validating JSON coverage files..."
+            JSON_COUNT=$(find ./coverage/tmp -name "*.json" -type f | wc -l)
+            echo "Found $JSON_COUNT JSON files to merge"
+            if [ "$JSON_COUNT" -eq 0 ]; then
+              echo "ERROR: No JSON coverage files found!"
+              exit 1
+            fi
+              
+            # Show sample of file count in each JSON
+            for json_file in ./coverage/tmp/*.json; do
+              FILE_COUNT=$(jq 'keys | length' "$json_file" 2>/dev/null || echo "0")
+              echo "  $(basename $json_file): $FILE_COUNT files"
+            done
+            # Merge using nyc (more accurate than lcov merge)
+            echo "Merging coverage with nyc..."
+
+            pnpm exec nyc merge ./coverage/tmp ./.nyc_output/coverage-final.json
+            # Validate merged JSON
+            MERGED_FILE_COUNT=$(jq 'keys | length' ./.nyc_output/coverage-final.json 2>/dev/null || echo "0")
+            echo "Merged coverage contains $MERGED_FILE_COUNT files"
+            # Generate lcov from merged JSON
+            echo "Generating lcov report from merged coverage..."
+            pnpm exec nyc report --reporter=lcov --report-dir=./coverage/vitest
+          else
+            echo "Using LCOV files for merging..."
+            # Find all lcov.info files from shards
+            find coverage-shards -name "lcov.info" -type f > lcov-files.txt
+
+            if [ ! -s lcov-files.txt ]; then
+              echo "ERROR: No lcov.info files found!"
+              exit 1
+            fi
+
+            echo "Found coverage files:"
+            cat lcov-files.txt
+
+            # Validate each file exists and is not empty (fail-fast)
+            while IFS= read -r file; do
+              if [ ! -f "$file" ]; then
+                echo "ERROR: Coverage file does not exist: $file"
+                exit 1
+              fi
+              if [ ! -s "$file" ]; then
+                echo "ERROR: Coverage file is empty: $file"
+                exit 1
+              fi
+            done < lcov-files.txt
+
+            # Use lcov-result-merger as fallback
+            pnpm exec lcov-result-merger "coverage-shards/*/lcov.info" ./coverage/vitest/lcov.info
+          fi
+
+          # Validate merged file exists and is not empty
+          if [ ! -s ./coverage/vitest/lcov.info ]; then
+            echo "ERROR: Merged coverage file is empty or missing!"
+            exit 1
+          fi
+
+          echo "Coverage merge successful"
+          echo "Merged file size: $(wc -l < ./coverage/vitest/lcov.info) lines"
+
+          # Count number of source files in merged coverage
+          SF_COUNT=$(grep -c "^SF:" ./coverage/vitest/lcov.info || echo "0")
+          echo "Number of files in merged coverage: $SF_COUNT"
+
+          if [ "$SF_COUNT" -lt 250 ]; then
+            echo "WARNING: Only $SF_COUNT files in coverage (expected 300+)"
+            echo "This might indicate incomplete coverage merge"
+          fi
+
+          echo "First 30 lines of merged coverage:"
+          head -30 ./coverage/vitest/lcov.info
+
+      - name: Clean up individual shard coverage files
+        if: steps.check-artifacts.outputs.artifacts_found == 'true'
+        run: |
+          echo "Cleaning up individual shard coverage files..."
+          # Remove all individual coverage JSON files to prevent Codecov from finding them
+          # This ensures only the merged lcov.info is uploaded
+          find ./coverage -name "coverage-*.json" -type f -delete
+          find ./coverage -name "coverage-final.json" -type f -delete
+          rm -rf ./coverage/tmp ./.nyc_output 2>/dev/null || true
+
+          echo "Cleanup complete. Remaining coverage files:"
+          find ./coverage -type f \( -name "*.info" -o -name "*.json" \)
+
+          echo ""
+          echo "Final coverage file to upload:"
+          ls -lh ./coverage/vitest/lcov.info
+
+      - name: Present and upload merged coverage to Codecov
+        if: steps.check-artifacts.outputs.artifacts_found == 'true'
+        uses: codecov/codecov-action@v5
+        with:
+          name: '${{env.CODECOV_UNIQUE_NAME}}-merged'
           token: ${{ secrets.CODECOV_TOKEN }}
-          exclude: 'docs/'
-          files: ./coverage/vitest/lcov.info
+          # Using fail_ci_if_error: true to match develop branch behavior
+          # This is safe now because we validate the merged file is non-empty above
           fail_ci_if_error: true
+          verbose: true
+          exclude: 'docs/'
+          gcov_ignore: 'docs/'
+          files: ./coverage/vitest/lcov.info
+          flags: vitest
 
       - name: Test acceptable level of code coverage
+        if: steps.check-artifacts.outputs.artifacts_found == 'true'
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
-          path: "./coverage/vitest/lcov.info"
-          min_coverage: 86.0
+          path: './coverage/vitest/lcov.info'
+          min_coverage: 93.3
 
   # Graphql-Inspector:
   #   if: ${{ github.actor != 'dependabot[bot]' }}
@@ -326,19 +704,19 @@ jobs:
   #     - name: Set up Node.js
   #       uses: actions/setup-node@v4
   #       with:
-  #         node-version: '22.x'
+  #         node-version: '24.x'
 
   #     - name: resolve dependency
   #       run: npm install -g @graphql-inspector/cli
-      
+
   #     - name: Clone API Repository
   #       run: |
   #         # Retrieve the complete branch name directly from the GitHub context
   #         FULL_BRANCH_NAME=${{ github.base_ref }}
   #         echo "FULL_Branch_NAME: $FULL_BRANCH_NAME"
-          
+
   #         # Clone the specified repository using the extracted branch name
-  #         git clone --branch $FULL_BRANCH_NAME https://github.com/PalisadoesFoundation/talawa-api && ls -a 
+  #         git clone --branch $FULL_BRANCH_NAME https://github.com/PalisadoesFoundation/talawa-api && ls -a
 
   #     - name: Validate Documents
   #       run: graphql-inspector validate './src/GraphQl/**/*.ts' './talawa-api/schema.graphql'
@@ -346,26 +724,35 @@ jobs:
   Start-App-Without-Docker:
     name: Check if Talawa Admin app starts (No Docker)
     runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks, Test-Application]
+    needs: [Code-Quality-Checks, Merge-Coverage]
     if: github.actor != 'dependabot'
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '24.x'
+          cache: 'pnpm'
+
+      - name: Prepare dependency store
+        run: pnpm fetch
 
       - name: Install Dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile --prefer-offline
 
       - name: Build Production App
-        run: npm run build
+        run: pnpm run build
 
       - name: Start Production App
         run: |
-          npm run preview &
+          pnpm run preview &
           echo $! > .pidfile_prod
       - name: Check if Production App is running
         run: |
@@ -378,7 +765,7 @@ jobs:
           fi
       - name: Start Development App
         run: |
-          npm run serve &
+          pnpm run serve &
           echo $! > .pidfile_dev
       - name: Check if Development App is running
         run: |
@@ -391,10 +778,10 @@ jobs:
             kill "$(cat .pidfile_dev)"
           fi
 
-  Docker-Start-Check:
+  Start-App-Using-Docker:
     name: Check if Talawa Admin app starts in Docker
     runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks, Test-Application]
+    needs: [Code-Quality-Checks, Merge-Coverage]
     if: github.actor != 'dependabot'
     steps:
       - name: Checkout the Repository
@@ -466,22 +853,46 @@ jobs:
   Test-Docusaurus-Deployment:
     name: Test Deployment to https://docs-admin.talawa.io
     runs-on: ubuntu-latest
-    needs: [Docker-Start-Check, Start-App-Without-Docker]
+    needs: [Start-App-Using-Docker, Start-App-Without-Docker]
     # Run only if the develop branch and not dependabot
     if: ${{ github.actor != 'dependabot[bot]' && github.event.pull_request.base.ref == 'develop' }}
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x' 
-      - name: Install dependencies
+          node-version: '24.x'
+          cache: 'pnpm'
+
+      - name: Prepare dependency store
         working-directory: ./docs
-        run: npm install
+        run: |
+          if [ -f pnpm-lock.yaml ]; then
+            echo "pnpm-lock.yaml found — running pnpm fetch"
+            pnpm fetch
+          else
+            echo "No pnpm-lock.yaml found — running pnpm install to generate it"
+            pnpm install --frozen-lockfile=false
+          fi
+
+      - name: Install dependencies (allow lockfile creation)
+        working-directory: ./docs
+        run: |
+          if [ -f pnpm-lock.yaml ]; then
+            pnpm install --frozen-lockfile --prefer-offline
+          else
+            echo "pnpm-lock.yaml not found — installing without --frozen-lockfile"
+            pnpm install --prefer-offline
+          fi
       - name: Test building the website
         working-directory: ./docs
-        run: npm run build
+        run: pnpm run build
 
   Check-Target-Branch:
     if: ${{ github.actor != 'dependabot[bot]' }}
@@ -545,9 +956,17 @@ jobs:
           source venv/bin/activate
           python .github/workflows/scripts/check_docstrings.py --directories .github
 
-  Run-Cypress-Tests:
+  Test-Application-E2E:
     timeout-minutes: 35
     runs-on: ubuntu-latest
+    needs:
+      [
+        Code-Quality-Checks,
+        Check-AutoDocs,
+        Check-ESlint-Disable,
+        Check-Code-Coverage-Disable,
+        Check-ItSkip-Disable,
+      ]
     env:
       REACT_APP_TALAWA_URL: http://127.0.0.1:4000/graphql
     steps:
@@ -608,9 +1027,9 @@ jobs:
         run: |
           echo "=== Seeding Sample Data ==="
           if docker exec talawa-api-1 /bin/bash -c 'set -a; source ./.env; set +a; pnpm run add:sample_data'; then
-            echo "✅ Seeding completed successfully"
+            echo "Seeding completed successfully"
           else
-            echo "❌ Seeding failed - Debug Information:"
+            echo "Seeding failed - Debug Information:"
             echo "Container status:"
             docker ps | grep talawa
             echo "Recent container logs:"
@@ -620,24 +1039,38 @@ jobs:
             -c "SELECT id, email_address, name, role FROM users;" 2>/dev/null || echo "Could not query users"
             exit 1
           fi
-                    
+
       - name: Checkout Frontend
         uses: actions/checkout@v4
         with:
           path: frontend
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.x'
+          node-version: '24.x'
+          cache: 'pnpm'
 
-      - name: Install Frontend Dependencies
+      - name: Prepare dependency store
         working-directory: frontend
-        run: npm install
+        run: pnpm fetch
+
+      - name: Install Frontend Dependencies (frozen)
+        working-directory: frontend
+        run: pnpm install --frozen-lockfile --prefer-offline
+      - name: Ensure Cypress binary is installed
+        working-directory: frontend
+        run: pnpm exec cypress install
 
       - name: Setup .env
+        working-directory: frontend
         run: |
-          pwd && cp frontend/.env.example frontend/.env
+          pwd && cp .env.example .env
           echo $REACT_APP_TALAWA_URL
           curl -s -X POST http://127.0.0.1:4000/graphql \
             -H "Content-Type: application/json" \
@@ -647,7 +1080,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           working-directory: frontend
-          start: npm run serve
+          start: pnpm run serve
           wait-on: 'http://localhost:4321'
           wait-on-timeout: 120
           config-file: cypress.config.ts
@@ -657,10 +1090,73 @@ jobs:
           CYPRESS_API_URL: http://127.0.0.1:4000/graphql
           REACT_APP_BACKEND_WEBSOCKET_URL: ws://127.0.0.1:4000/graphql
 
-      - name: Upload cypress screenshots on failure 
+      - name: Upload cypress screenshots on failure
         uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: cypress-screenshots
           path: frontend/cypress/screenshots
           compression-level: 9
+
+  ZAP-Security-Scan:
+    name: ZAP Security Scan
+    runs-on: ubuntu-latest
+    needs:
+      [
+        Test-Application,
+        Test-Application-E2E,
+        Start-App-Without-Docker,
+        Start-App-Using-Docker,
+      ]
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout the Repository
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: 'pnpm'
+
+      - name: Prepare dependency store
+        run: pnpm fetch
+
+      - name: Install Dependencies (frozen)
+        run: pnpm install --frozen-lockfile --prefer-offline
+
+      - name: Start Application
+        run: |
+          pnpm run serve &
+          echo $! > .pidfile_dev
+
+      - name: Check if Development App is running
+        run: |
+          chmod +x .github/workflows/scripts/app_health_check.sh
+          .github/workflows/scripts/app_health_check.sh 4321 120
+
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.12.0
+        with:
+          target: 'http://localhost:4321'
+          allow_issue_writing: false
+
+      - name: Upload ZAP Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-scan-report
+          path: report_html.html
+
+      - name: Stop Development App
+        if: always()
+        run: |
+          if [ -f .pidfile_dev ]; then
+            kill "$(cat .pidfile_dev)"
+          fi

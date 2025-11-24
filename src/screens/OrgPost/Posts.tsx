@@ -1,6 +1,7 @@
 /**
  * A React functional component that renders a list of posts based on the provided props.
  * Handles loading, error states, filtering, and sorting of posts.
+ * Now includes Instagram-style stories for pinned posts.
  *
  * @component
  * @param {InterfacePostsRenderer} props - The props for the component.
@@ -13,33 +14,16 @@
  * @param {InterfacePost[]} props.displayPosts - The list of posts to display when sorting is applied.
  *
  * @returns {JSX.Element | null} A JSX element rendering the posts or appropriate fallback UI.
- *
- * @remarks
- * - Displays a loader when `loading` is true.
- * - Shows an error message if `error` is present.
- * - Filters posts based on `searchTerm` when `isFiltering` is true.
- * - Sorts and displays posts based on `sortingOption` when applicable.
- * - Renders a "Not Found" component if no posts are available after filtering or sorting.
- *
- * @example
- * ```tsx
- * <PostsRenderer
- *   loading={false}
- *   error={undefined}
- *   data={data}
- *   isFiltering={true}
- *   searchTerm="example"
- *   sortingOption="Date"
- *   displayPosts={[]}
- * />
- * ```
  */
-import React from 'react';
+import React, { useState } from 'react';
 import type { ApolloError } from '@apollo/client';
+import { Modal, Button } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
 import NotFound from 'components/NotFound/NotFound';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
 import type { InterfacePost, InterfacePostEdge } from 'types/Post/interface';
+import PinnedPostsStory from './PinnedPostsStory';
+import { Close } from '@mui/icons-material';
 
 interface InterfaceOrganizationData {
   organization?: {
@@ -53,8 +37,9 @@ interface InterfaceOrganizationData {
 // Define interface for props with proper types
 interface InterfacePostsRenderer {
   loading: boolean;
-  error: ApolloError | undefined; // Updated to match Apollo's error type
+  error: ApolloError | undefined;
   data: InterfaceOrganizationData;
+  pinnedPostData: InterfacePostEdge[] | undefined;
   isFiltering: boolean;
   searchTerm: string;
   sortingOption: string;
@@ -65,16 +50,18 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
   loading,
   error,
   data,
+  pinnedPostData,
   isFiltering,
   searchTerm,
   sortingOption,
   displayPosts,
 }): JSX.Element | null => {
-  if (loading) return <Loader />;
-  if (error) return <div>Error loading posts</div>;
+  const [selectedPinnedPost, setSelectedPinnedPost] =
+    useState<InterfacePost | null>(null);
+  const [showPinnedPostModal, setShowPinnedPostModal] = useState(false);
 
-  // Rest of the component remains the same...
-  // (Previous implementation of createAttachments, renderPostCard, and rendering logic)
+  if (loading) return <Loader />;
+  if (error) return <div data-testid="error-message">Error loading posts</div>;
 
   const createAttachments = (
     post: InterfacePost,
@@ -116,21 +103,32 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
     if (!post || !post.id) return null;
     const createdAt = new Date(post.createdAt);
     const attachments = createAttachments(post, createdAt);
+
     return (
-      <div data-testid="post-caption" key={post.id}>
+      <div data-testid="postCardContainer" key={post.id}>
         <OrgPostCard
           key={post.id}
           post={{
             id: post.id,
-            caption: post.caption,
+            caption: post.caption || null,
             createdAt,
-            pinnedAt: post.pinned ? new Date() : null,
+            pinnedAt: post.pinnedAt ? new Date(post.pinnedAt) : null,
             creatorId: post.creator?.id || null,
             attachments,
           }}
         />
       </div>
     );
+  };
+
+  const handleStoryClick = (post: InterfacePost) => {
+    setSelectedPinnedPost(post);
+    setShowPinnedPostModal(true);
+  };
+
+  const handleClosePinnedModal = () => {
+    setShowPinnedPostModal(false);
+    setSelectedPinnedPost(null);
   };
 
   if (isFiltering) {
@@ -156,7 +154,20 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
 
     return (
       <>
-        {filtered.map((edge: InterfacePostEdge) => renderPostCard(edge.node))}
+        <div
+          data-testid="filtered-posts-container"
+          style={{
+            maxWidth: 900,
+            margin: '0 auto',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '16px',
+            marginTop: '20px',
+          }}
+        >
+          {/* Filtered Posts */}
+          {filtered.map((edge: InterfacePostEdge) => renderPostCard(edge.node))}
+        </div>
       </>
     );
   }
@@ -166,7 +177,13 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
       return <NotFound title="post" keyPrefix="postNotFound" />;
     }
 
-    return <>{displayPosts.map((post) => renderPostCard(post))}</>;
+    return (
+      <>
+        <div data-testid="dropdown">
+          {displayPosts.map((post) => renderPostCard(post))}
+        </div>
+      </>
+    );
   }
 
   if (!data?.organization?.posts?.edges?.length) {
@@ -175,9 +192,64 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
 
   return (
     <>
-      {data.organization.posts.edges
-        .map((edge: InterfacePostEdge) => renderPostCard(edge.node))
-        .filter(Boolean)}
+      {/* Pinned Posts Stories */}
+      <PinnedPostsStory
+        pinnedPosts={pinnedPostData || []}
+        onStoryClick={handleStoryClick}
+        data-testid="story-pinned-post-1"
+      />
+
+      {/* Regular Posts */}
+      <div data-testid="regular-posts-container">
+        {data.organization.posts.edges
+          .map((edge: InterfacePostEdge) => renderPostCard(edge.node))
+          .filter(Boolean)}
+      </div>
+
+      {/* Pinned Post Modal */}
+      {selectedPinnedPost && (
+        <Modal
+          show={showPinnedPostModal}
+          onHide={handleClosePinnedModal}
+          data-testid="pinned-post-modal"
+          centered
+          size="lg"
+          backdrop="static"
+          style={{
+            backdropFilter: 'blur(3px)',
+          }}
+        >
+          <Modal.Body
+            style={{
+              maxHeight: '90vh',
+              overflowY: 'auto',
+              padding: '20px',
+              position: 'relative',
+            }}
+          >
+            <Button
+              variant="light"
+              onClick={handleClosePinnedModal}
+              data-testid="close-pinned-post-button"
+              className="position-absolute top-0 end-0 m-2 btn-close-custom"
+              style={{
+                backgroundColor: 'rgba(0,0,0,0.1)',
+                border: 'none',
+                borderRadius: '50%',
+                width: '32px',
+                height: '32px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Close sx={{ fontSize: 20 }} />
+            </Button>
+            {/* Render the pinned post */}
+            {renderPostCard(selectedPinnedPost)}
+          </Modal.Body>
+        </Modal>
+      )}
     </>
   );
 };

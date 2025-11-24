@@ -37,8 +37,9 @@ import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client';
+import { ACTION_ITEM_LIST } from 'GraphQl/Queries/ActionItemQueries';
 
-import type { IActionItemInfo } from 'types/Actions/interface';
+import type { IActionItemInfo } from 'types/ActionItems/interface';
 import styles from 'style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import {
@@ -50,7 +51,6 @@ import { Chip, debounce, Stack } from '@mui/material';
 import ItemViewModal from 'screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal';
 import Avatar from 'components/Avatar/Avatar';
 import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
-import { ACTION_ITEMS_BY_USER } from 'GraphQl/Queries/ActionItemQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'subComponents/SearchBar';
@@ -119,7 +119,7 @@ function actions(): JSX.Element {
   );
 
   /**
-   * Query to fetch action items for the organization based on filters and sorting.
+   * Query to fetch all action items for the organization, then filter for user involvement.
    */
   const {
     data: actionItemsData,
@@ -127,27 +127,72 @@ function actions(): JSX.Element {
     error: actionItemsError,
     refetch: actionItemsRefetch,
   }: {
-    data?: { actionItemsByUser: IActionItemInfo[] };
+    data?: { actionItemsByOrganization: IActionItemInfo[] };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
-  } = useQuery(ACTION_ITEMS_BY_USER, {
+  } = useQuery(ACTION_ITEM_LIST, {
     variables: {
-      userId,
-      orderBy: sortBy,
-      where: {
-        orgId,
-        assigneeName: searchBy === 'assignee' ? searchTerm : undefined,
-        categoryName: searchBy === 'category' ? searchTerm : undefined,
+      input: {
+        organizationId: orgId,
       },
     },
   });
 
-  const actionItems = useMemo(
-    () => actionItemsData?.actionItemsByUser || [],
-    [actionItemsData],
-  );
+  const actionItems = useMemo(() => {
+    const allActionItems = actionItemsData?.actionItemsByOrganization || [];
 
+    // Filter action items where the current user is involved as a volunteer or part of a volunteer group
+    let userActionItems = allActionItems.filter((item) => {
+      // Check if user is the assigned volunteer
+      const isAssignedVolunteer = item.volunteer?.user?.id === userId;
+
+      // Check if user is part of the assigned volunteer group
+      const isInVolunteerGroup = item.volunteerGroup?.volunteers?.some(
+        (volunteer: { id: string; user: { id: string; name: string } }) =>
+          volunteer.user?.id === userId,
+      );
+
+      return isAssignedVolunteer || isInVolunteerGroup;
+    });
+
+    // Apply search filtering if search term exists
+    if (searchTerm) {
+      userActionItems = userActionItems.filter((item) => {
+        if (searchBy === 'assignee') {
+          // Search in volunteer name or volunteer group name
+          const volunteerName = item.volunteer?.user?.name?.toLowerCase() || '';
+          const volunteerGroupName =
+            item.volunteerGroup?.name?.toLowerCase() || '';
+          return (
+            volunteerName.includes(searchTerm.toLowerCase()) ||
+            volunteerGroupName.includes(searchTerm.toLowerCase())
+          );
+        } else if (searchBy === 'category') {
+          // Search in category name
+          const categoryName = item.category?.name?.toLowerCase() || '';
+          return categoryName.includes(searchTerm.toLowerCase());
+        }
+        return true;
+      });
+    }
+
+    // Apply sorting if specified
+    if (sortBy) {
+      return userActionItems.sort((a, b) => {
+        const dateA = new Date(a.assignedAt || a.createdAt);
+        const dateB = new Date(b.assignedAt || b.createdAt);
+
+        if (sortBy === 'dueDate_ASC') {
+          return dateA.getTime() - dateB.getTime();
+        } else {
+          return dateB.getTime() - dateA.getTime();
+        }
+      });
+    }
+
+    return userActionItems;
+  }, [actionItemsData, userId, sortBy, searchTerm, searchBy]);
   if (actionItemsLoading) {
     return <Loader size="xl" />;
   }
@@ -174,54 +219,62 @@ function actions(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const { _id, firstName, lastName, image } =
-          params.row.assignee?.user || {};
+        const { id, name, avatarURL } = params.row.volunteer?.user || {};
 
         return (
           <>
-            {params.row.assigneeType === 'EventVolunteer' ? (
+            {params.row.volunteer ? (
               <>
                 <div
-                  className="d-flex fw-bold align-items-center ms-2"
+                  className="d-flex fw-bold align-items-center justify-content-start ms-2"
                   data-testid="assigneeName"
+                  style={{ height: '100%' }}
                 >
-                  {image ? (
+                  {avatarURL ? (
                     <img
-                      src={image}
+                      src={avatarURL}
                       alt="Assignee"
-                      data-testid={`image${_id + 1}`}
-                      className={styles.TableImage}
+                      data-testid={`image${id + 1}`}
+                      className={`${styles.TableImage} me-2`}
+                      style={{ verticalAlign: 'middle' }}
                     />
                   ) : (
-                    <div className={styles.avatarContainer}>
+                    <div
+                      className={`${styles.avatarContainer} me-2 d-flex align-items-center justify-content-center`}
+                    >
                       <Avatar
-                        key={_id + '1'}
+                        key={id + '1'}
                         containerStyle={styles.imageContainer}
                         avatarStyle={styles.TableImage}
-                        name={firstName + ' ' + lastName}
-                        alt={firstName + ' ' + lastName}
+                        name={name}
+                        alt={name}
                       />
                     </div>
                   )}
-                  {firstName + ' ' + lastName}
+                  <span className="d-flex align-items-center">{name}</span>
                 </div>
               </>
             ) : (
               <>
                 <div
-                  className="d-flex fw-bold align-items-center ms-2"
+                  className="d-flex fw-bold align-items-center justify-content-start ms-2"
                   data-testid="assigneeName"
+                  style={{ height: '100%' }}
                 >
-                  <div className={styles.avatarContainer}>
+                  <div
+                    className={`${styles.avatarContainer} me-2 d-flex align-items-center justify-content-center`}
+                  >
                     <Avatar
-                      key={_id + '1'}
+                      key={id + '1'}
                       containerStyle={styles.imageContainer}
                       avatarStyle={styles.TableImage}
-                      name={params.row.assigneeGroup?.name as string}
-                      alt={params.row.assigneeGroup?.name as string}
+                      name={params.row.volunteerGroup?.name as string}
+                      alt={params.row.volunteerGroup?.name as string}
                     />
                   </div>
-                  {params.row.assigneeGroup?.name as string}
+                  <span className="d-flex align-items-center">
+                    {params.row.volunteerGroup?.name as string}
+                  </span>
                 </div>
               </>
             )}
@@ -244,7 +297,7 @@ function actions(): JSX.Element {
             className="d-flex justify-content-center fw-bold"
             data-testid="categoryName"
           >
-            {params.row.actionItemCategory?.name}
+            {params.row.category?.name}
           </div>
         );
       },
@@ -270,8 +323,8 @@ function actions(): JSX.Element {
       },
     },
     {
-      field: 'allottedHours',
-      headerName: 'Allotted Hours',
+      field: 'assignedAt',
+      headerName: 'Assigned Date',
       align: 'center',
       headerAlign: 'center',
       sortable: false,
@@ -279,24 +332,8 @@ function actions(): JSX.Element {
       flex: 1,
       renderCell: (params: GridCellParams) => {
         return (
-          <div data-testid="allottedHours">
-            {params.row.allottedHours ?? '-'}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'dueDate',
-      headerName: 'Due Date',
-      align: 'center',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      flex: 1,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div data-testid="createdOn">
-            {dayjs(params.row.dueDate).format('DD/MM/YYYY')}
+          <div data-testid="assignedAt">
+            {dayjs(params.row.assignedAt).format('DD/MM/YYYY')}
           </div>
         );
       },
@@ -354,7 +391,7 @@ function actions(): JSX.Element {
 
   return (
     <div>
-      {/* Header with search, filter  and Create Button */}
+      {/* Header with search, filter and Create Button */}
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         <SearchBar
           placeholder={tCommon('searchBy', {
@@ -380,8 +417,8 @@ function actions(): JSX.Element {
             />
             <SortingButton
               sortingOptions={[
-                { label: t('latestDueDate'), value: 'dueDate_DESC' },
-                { label: t('earliestDueDate'), value: 'dueDate_ASC' },
+                { label: t('latestAssigned'), value: 'dueDate_DESC' },
+                { label: t('earliestAssigned'), value: 'dueDate_ASC' },
               ]}
               onSortChange={(value) =>
                 setSortBy(value as 'dueDate_DESC' | 'dueDate_ASC')
@@ -398,7 +435,7 @@ function actions(): JSX.Element {
         disableColumnMenu
         columnBufferPx={7}
         hideFooter={true}
-        getRowId={(row) => row._id}
+        getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">

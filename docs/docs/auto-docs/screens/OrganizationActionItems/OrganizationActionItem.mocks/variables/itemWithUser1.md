@@ -6,37 +6,13 @@
 
 > `const` **itemWithUser1**: `object`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L43)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L52)
 
-## Type declaration
+## Type Declaration
 
 ### assignedAt
 
 > **assignedAt**: `Date`
-
-### assignee
-
-> **assignee**: `object`
-
-#### assignee.avatarURL
-
-> **avatarURL**: `string` = `'user-image'`
-
-#### assignee.emailAddress
-
-> **emailAddress**: `string` = `'john@example.com'`
-
-#### assignee.id
-
-> **id**: `string` = `'userId1'`
-
-#### assignee.name
-
-> **name**: `string` = `'John Doe'`
-
-### assigneeId
-
-> **assigneeId**: `string` = `'userId1'`
 
 ### category
 
@@ -154,6 +130,14 @@ Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts
 
 > **preCompletionNotes**: `string` = `'Notes 1'`
 
+### recurringEventInstance
+
+> **recurringEventInstance**: `any` = `null`
+
+### recurringEventInstanceId
+
+> **recurringEventInstanceId**: `any` = `null`
+
 ### updatedAt
 
 > **updatedAt**: `Date`
@@ -161,3 +145,51 @@ Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts
 ### updaterId
 
 > **updaterId**: `string` = `'userId'`
+
+### volunteer
+
+> **volunteer**: `object`
+
+#### volunteer.hasAccepted
+
+> **hasAccepted**: `boolean` = `true`
+
+#### volunteer.hoursVolunteered
+
+> **hoursVolunteered**: `number` = `8`
+
+#### volunteer.id
+
+> **id**: `string` = `'volunteerUserId1'`
+
+#### volunteer.isPublic
+
+> **isPublic**: `boolean` = `true`
+
+#### volunteer.user
+
+> **user**: `object`
+
+#### volunteer.user.avatarURL
+
+> **avatarURL**: `string` = `'user-image'`
+
+#### volunteer.user.id
+
+> **id**: `string` = `'userId1'`
+
+#### volunteer.user.name
+
+> **name**: `string` = `'John Doe'`
+
+### volunteerGroup
+
+> **volunteerGroup**: `any` = `null`
+
+### volunteerGroupId
+
+> **volunteerGroupId**: `any` = `null`
+
+### volunteerId
+
+> **volunteerId**: `string` = `'volunteerUserId1'`
