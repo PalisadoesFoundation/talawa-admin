@@ -344,7 +344,7 @@ describe('BlockUser Component', () => {
       });
 
       // Switch to blocked users view
-      const sortingButton = await screen.findByTestId('userFilter');
+      const sortingButton = await screen.findByTestId('sortOrganizations');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
@@ -397,7 +397,7 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('userFilter');
+      const sortingButton = await screen.findByTestId('sortOrganizations');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
@@ -451,7 +451,7 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('userFilter');
+      const sortingButton = await screen.findByTestId('sortOrganizations');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
@@ -549,7 +549,7 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('userFilter');
+      const sortingButton = await screen.findByTestId('sortOrganizations');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
@@ -591,7 +591,7 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('userFilter');
+      const sortingButton = await screen.findByTestId('sortOrganizations');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
@@ -665,7 +665,7 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('userFilter');
+      const sortingButton = await screen.findByTestId('sortOrganizations');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
@@ -787,7 +787,7 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('userFilter');
+      const sortingButton = await screen.findByTestId('sortOrganizations');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
@@ -857,7 +857,7 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('userFilter');
+      const sortingButton = await screen.findByTestId('sortOrganizations');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
@@ -958,7 +958,7 @@ describe('BlockUser Component', () => {
       });
 
       // Switch to blocked users view
-      const sortingButton = await screen.findByTestId('userFilter');
+      const sortingButton = await screen.findByTestId('sortOrganizations');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
@@ -1128,7 +1128,7 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument(),
       );
 
-      const sortingButton = await screen.findByTestId('userFilter');
+      const sortingButton = await screen.findByTestId('sortOrganizations');
 
       await act(async () => {
         fireEvent.click(sortingButton);
