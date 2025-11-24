@@ -175,6 +175,18 @@ const link = new StaticMockLink(MOCKS, true);
 const link3 = new StaticMockLink(MOCKS3, true);
 const link4 = new StaticMockLink(MOCKS4, true);
 
+const { toastMocks, routerMocks, resetReCAPTCHA } = vi.hoisted(() => ({
+  toastMocks: {
+    success: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+  },
+  routerMocks: {
+    navigate: vi.fn(),
+  },
+  resetReCAPTCHA: vi.fn(),
+}));
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -183,8 +195,27 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+const mockUseLocalStorage = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  getStorageKey: vi.fn(),
+};
+
+beforeEach(() => {
+  vi.clearAllMocks();
+  routerMocks.navigate.mockReset();
+  mockUseLocalStorage.getItem.mockReset();
+  mockUseLocalStorage.setItem.mockReset();
+  mockUseLocalStorage.removeItem.mockReset();
+  mockUseLocalStorage.getStorageKey.mockReset();
+  (useLocalStorage as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+    mockUseLocalStorage as InterfaceStorageHelper,
+  );
+});
+
 vi.mock('react-toastify', () => ({
-  toast: { success: vi.fn(), warn: vi.fn(), error: vi.fn() },
+  toast: toastMocks,
 }));
 
 vi.mock('Constant/constant.ts', async () => ({
@@ -193,13 +224,11 @@ vi.mock('Constant/constant.ts', async () => ({
   RECAPTCHA_SITE_KEY: 'xxx',
 }));
 
-const mockNavigate = vi.fn();
 vi.mock('react-router', async () => ({
   ...(await vi.importActual('react-router')),
-  useNavigate: () => mockNavigate,
+  useNavigate: () => routerMocks.navigate,
 }));
 
-const resetReCAPTCHA = vi.fn();
 vi.mock('react-google-recaptcha', async () => {
   const react = await vi.importActual<typeof React>('react');
   const recaptcha = react.forwardRef(
@@ -1089,20 +1118,6 @@ describe('Testing Login Page Screen', () => {
   });
 });
 
-const mockUseLocalStorage = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-  getStorageKey: vi.fn(),
-};
-
-beforeEach(() => {
-  vi.clearAllMocks();
-  (useLocalStorage as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
-    mockUseLocalStorage as InterfaceStorageHelper,
-  );
-});
-
 describe('Testing redirect if already logged in', () => {
   it('Logged in as USER', async () => {
     mockUseLocalStorage.getItem.mockImplementation((key: string) => {
@@ -1123,7 +1138,7 @@ describe('Testing redirect if already logged in', () => {
       </MockedProvider>,
     );
     await wait();
-    expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
+    expect(routerMocks.navigate).toHaveBeenCalledWith('/user/organizations');
   });
 
   it('Logged in as Admin or SuperAdmin', async () => {
@@ -1145,7 +1160,7 @@ describe('Testing redirect if already logged in', () => {
       </MockedProvider>,
     );
     await wait();
-    expect(mockNavigate).toHaveBeenCalledWith('/orglist');
+    expect(routerMocks.navigate).toHaveBeenCalledWith('/orglist');
   });
 });
 
@@ -1304,7 +1319,7 @@ describe('Testing invitation functionality', () => {
     await wait();
 
     // Verify normal navigation (no invitation redirect)
-    expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
+    expect(routerMocks.navigate).toHaveBeenCalledWith('/user/organizations');
     expect(window.location.href).toBe('http://localhost:3000/');
   });
 });

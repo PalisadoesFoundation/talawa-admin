@@ -4,7 +4,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import CommunityProfile from './CommunityProfile';
 import i18n from 'utils/i18nForTest';
@@ -17,16 +17,21 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 
-vi.mock('utils/errorHandler', () => ({
-  errorHandler: vi.fn(),
-}));
-
-vi.mock('react-toastify', () => ({
-  toast: {
+const { toastMocks, errorHandlerMock } = vi.hoisted(() => ({
+  toastMocks: {
     success: vi.fn(),
     warn: vi.fn(),
     error: vi.fn(),
   },
+  errorHandlerMock: vi.fn(),
+}));
+
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: errorHandlerMock,
+}));
+
+vi.mock('react-toastify', () => ({
+  toast: toastMocks,
 }));
 
 const MOCKS1 = [
@@ -317,6 +322,10 @@ async function wait(ms = 100): Promise<void> {
 describe('Testing Community Profile Screen', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   test('Components should render properly', async () => {

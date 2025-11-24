@@ -82,6 +82,10 @@ Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:44](https://github
 
 > **employmentStatus**: `string` = `'employed'`
 
+#### result.data.currentUser.eventsAttended
+
+> **eventsAttended**: `any`[] = `[]`
+
 #### result.data.currentUser.homePhoneNumber
 
 > **homePhoneNumber**: `string` = `'+9999999998'`

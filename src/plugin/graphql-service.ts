@@ -2,7 +2,13 @@
  * GraphQL service for plugin operations
  */
 
-import { useMutation, useQuery } from '@apollo/client';
+import {
+  useMutation,
+  useQuery,
+  type QueryResult,
+  type OperationVariables,
+  type ApolloClient,
+} from '@apollo/client';
 import { GET_ALL_PLUGINS } from '../GraphQl/Queries/PlugInQueries';
 import {
   CREATE_PLUGIN_MUTATION,
@@ -21,43 +27,47 @@ export interface IPlugin {
   updatedAt: string;
 }
 
-export interface CreatePluginInput {
+export interface ICreatePluginInput {
   pluginId: string;
 }
 
-export interface InstallPluginInput {
+export interface IInstallPluginInput {
   pluginId: string;
 }
 
-export interface UpdatePluginInput {
+export interface IUpdatePluginInput {
   id: string;
   isActivated?: boolean;
   isInstalled?: boolean;
   backup?: boolean;
 }
 
-export interface DeletePluginInput {
+export interface IDeletePluginInput {
   id: string;
 }
 
-export const useGetAllPlugins = () => {
+export const useGetAllPlugins = (): QueryResult<
+  { getPlugins: IPlugin[] },
+  OperationVariables
+> => {
   return useQuery<{ getPlugins: IPlugin[] }>(GET_ALL_PLUGINS);
 };
 
 export const useCreatePlugin = () => {
-  return useMutation<{ createPlugin: IPlugin }, { input: CreatePluginInput }>(
+  return useMutation<{ createPlugin: IPlugin }, { input: ICreatePluginInput }>(
     CREATE_PLUGIN_MUTATION,
   );
 };
 
 export const useInstallPlugin = () => {
-  return useMutation<{ installPlugin: IPlugin }, { input: InstallPluginInput }>(
-    INSTALL_PLUGIN_MUTATION,
-  );
+  return useMutation<
+    { installPlugin: IPlugin },
+    { input: IInstallPluginInput }
+  >(INSTALL_PLUGIN_MUTATION);
 };
 
 export const useUpdatePlugin = () => {
-  return useMutation<{ updatePlugin: IPlugin }, { input: UpdatePluginInput }>(
+  return useMutation<{ updatePlugin: IPlugin }, { input: IUpdatePluginInput }>(
     UPDATE_PLUGIN_MUTATION,
   );
 };
@@ -65,14 +75,14 @@ export const useUpdatePlugin = () => {
 export const useDeletePlugin = () => {
   return useMutation<
     { deletePlugin: { id: string; pluginId: string } },
-    { input: DeletePluginInput }
+    { input: IDeletePluginInput }
   >(DELETE_PLUGIN_MUTATION);
 };
 
 export class PluginGraphQLService {
-  private client: any;
+  private client: ApolloClient<unknown>;
 
-  constructor(apolloClient: any) {
+  constructor(apolloClient: ApolloClient<unknown>) {
     this.client = apolloClient;
   }
 
@@ -89,7 +99,7 @@ export class PluginGraphQLService {
     }
   }
 
-  async createPlugin(input: CreatePluginInput): Promise<IPlugin | null> {
+  async createPlugin(input: ICreatePluginInput): Promise<IPlugin | null> {
     try {
       const result = await this.client.mutate({
         mutation: CREATE_PLUGIN_MUTATION,
@@ -103,7 +113,7 @@ export class PluginGraphQLService {
     }
   }
 
-  async installPlugin(input: InstallPluginInput): Promise<IPlugin | null> {
+  async installPlugin(input: IInstallPluginInput): Promise<IPlugin | null> {
     try {
       const result = await this.client.mutate({
         mutation: INSTALL_PLUGIN_MUTATION,
@@ -117,7 +127,7 @@ export class PluginGraphQLService {
     }
   }
 
-  async updatePlugin(input: UpdatePluginInput): Promise<IPlugin | null> {
+  async updatePlugin(input: IUpdatePluginInput): Promise<IPlugin | null> {
     try {
       const result = await this.client.mutate({
         mutation: UPDATE_PLUGIN_MUTATION,
@@ -132,7 +142,7 @@ export class PluginGraphQLService {
   }
 
   async deletePlugin(
-    input: DeletePluginInput,
+    input: IDeletePluginInput,
   ): Promise<{ id: string; pluginId: string } | null> {
     try {
       const result = await this.client.mutate({
