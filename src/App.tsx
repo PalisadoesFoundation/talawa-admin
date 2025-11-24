@@ -11,6 +11,7 @@ import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
 import { getPluginManager } from 'plugin/manager';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
+import Loader from 'components/Loader/Loader';
 
 const OrganizationScreen = lazy(
   () => import('components/OrganizationScreen/OrganizationScreen'),
@@ -32,9 +33,7 @@ const OrgContribution = lazy(
 const OrgList = lazy(() => import('screens/OrgList/OrgList'));
 const OrgPost = lazy(() => import('screens/OrgPost/OrgPost'));
 const OrgSettings = lazy(() => import('screens/OrgSettings/OrgSettings'));
-const OrganizationActionItems = lazy(
-  () => import('screens/OrganizationActionItems/OrganizationActionItems'),
-);
+
 const OrganizationDashboard = lazy(
   () => import('screens/OrganizationDashboard/OrganizationDashboard'),
 );
@@ -43,6 +42,9 @@ const OrganizationEvents = lazy(
 );
 const OrganizationFunds = lazy(
   () => import('screens/OrganizationFunds/OrganizationFunds'),
+);
+const OrganizationTransactions = lazy(
+  () => import('screens/OrganizationTransactions/OrganizationTransactions'),
 );
 const FundCampaignPledge = lazy(
   () => import('screens/FundCampaignPledge/FundCampaignPledge'),
@@ -69,6 +71,9 @@ const Advertisements = lazy(
   () => import('components/Advertisements/Advertisements'),
 );
 const Donate = lazy(() => import('screens/UserPortal/Donate/Donate'));
+const Transactions = lazy(
+  () => import('screens/UserPortal/Transactions/Transactions'),
+);
 const Events = lazy(() => import('screens/UserPortal/Events/Events'));
 const Posts = lazy(() => import('screens/UserPortal/Posts/Posts'));
 const Organizations = lazy(
@@ -80,6 +85,9 @@ const Chat = lazy(() => import('screens/UserPortal/Chat/Chat'));
 const EventDashboardScreen = lazy(
   () => import('components/EventDashboardScreen/EventDashboardScreen'),
 );
+const AcceptInvitation = lazy(
+  () => import('screens/Public/Invitation/AcceptInvitation'),
+);
 const Campaigns = lazy(() => import('screens/UserPortal/Campaigns/Campaigns'));
 const Pledges = lazy(() => import('screens/UserPortal/Pledges/Pledges'));
 const VolunteerManagement = lazy(
@@ -88,6 +96,7 @@ const VolunteerManagement = lazy(
 const LeaveOrganization = lazy(
   () => import('screens/UserPortal/LeaveOrganization/LeaveOrganization'),
 );
+const Notification = lazy(() => import('screens/Notification/Notification'));
 
 const PluginStore = lazy(() => import('screens/PluginStore/PluginStore'));
 
@@ -117,8 +126,9 @@ function App(): React.ReactElement {
   // Get user permissions and admin status (memoized to prevent infinite loops)
   const userPermissions = useMemo(() => {
     return (
-      data?.currentUser?.appUserProfile?.adminFor?.map((org: any) => org._id) ||
-      []
+      data?.currentUser?.appUserProfile?.adminFor?.map(
+        (org: { _id: string }) => org._id,
+      ) || []
     );
   }, [data?.currentUser?.appUserProfile?.adminFor]);
 
@@ -199,7 +209,7 @@ function App(): React.ReactElement {
 
   return (
     <>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/register" element={<LoginPage />} />
@@ -207,6 +217,7 @@ function App(): React.ReactElement {
           <Route element={<SecuredRoute />}>
             <Route element={<SuperAdminScreen />}>
               <Route path="/orglist" element={<OrgList />} />
+              <Route path="/notification" element={<Notification />} />
               <Route path="/member" element={<MemberDetail />} />
               <Route path="/users" element={<Users />} />
               <Route path="/communityProfile" element={<CommunityProfile />} />
@@ -253,11 +264,12 @@ function App(): React.ReactElement {
                 path="/event/:orgId/:eventId"
                 element={<EventManagement />}
               />
-              <Route
-                path="/orgactionitems/:orgId"
-                element={<OrganizationActionItems />}
-              />
+
               <Route path="/orgfunds/:orgId" element={<OrganizationFunds />} />
+              <Route
+                path="/orgtransactions/:orgId"
+                element={<OrganizationTransactions />}
+              />
               <Route
                 path="/orgfundcampaign/:orgId/:fundId"
                 element={<OrganizaitionFundCampiagn />}
@@ -276,6 +288,7 @@ function App(): React.ReactElement {
                 element={<OrganizationVenues />}
               />
               <Route path="/leaderboard/:orgId" element={<Leaderboard />} />
+              <Route path="/orgchat/:orgId" element={<Chat />} />
               {/* Admin org plugin routes */}
               {adminOrgPluginRoutes.map((route) => (
                 <Route
@@ -292,6 +305,11 @@ function App(): React.ReactElement {
             </Route>
           </Route>
           <Route path="/forgotPassword" element={<ForgotPassword />} />
+          {/* Public invitation accept route */}
+          <Route
+            path="/event/invitation/:token"
+            element={<AcceptInvitation />}
+          />
           {/* User Portal Routes */}
           <Route element={<SecuredRouteForUser />}>
             <Route path="/user/organizations" element={<Organizations />} />
@@ -317,6 +335,10 @@ function App(): React.ReactElement {
               <Route path="/user/organization/:orgId" element={<Posts />} />
               <Route path="/user/people/:orgId" element={<People />} />
               <Route path="/user/donate/:orgId" element={<Donate />} />
+              <Route
+                path="/user/transactions/:orgId"
+                element={<Transactions />}
+              />
               <Route path="/user/events/:orgId" element={<Events />} />
               <Route path="/user/campaigns/:orgId" element={<Campaigns />} />
               <Route path="/user/pledges/:orgId" element={<Pledges />} />
@@ -324,6 +346,7 @@ function App(): React.ReactElement {
                 path="/user/leaveOrg/:orgId"
                 element={<LeaveOrganization />}
               />
+              <Route path="/user/notification" element={<Notification />} />
               <Route
                 path="/user/volunteer/:orgId"
                 element={<VolunteerManagement />}

@@ -8,13 +8,16 @@ export const MOCKS = [
     request: {
       query: ACCEPT_ORGANIZATION_REQUEST_MUTATION,
       variables: {
-        id: '123',
+        input: {
+          membershipRequestId: '123',
+        },
       },
     },
     result: {
       data: {
         acceptMembershipRequest: {
-          _id: '123',
+          success: true,
+          message: 'Membership request accepted successfully',
         },
       },
     },
@@ -23,15 +26,43 @@ export const MOCKS = [
     request: {
       query: REJECT_ORGANIZATION_REQUEST_MUTATION,
       variables: {
-        id: '123',
+        input: {
+          membershipRequestId: '123',
+        },
       },
     },
     result: {
       data: {
         rejectMembershipRequest: {
-          _id: '123',
+          success: true,
+          message: 'Membership request rejected successfully',
         },
       },
     },
+  },
+];
+
+export const ERROR_MOCKS = [
+  {
+    request: {
+      query: ACCEPT_ORGANIZATION_REQUEST_MUTATION,
+      variables: {
+        input: {
+          membershipRequestId: '123',
+        },
+      },
+    },
+    error: new Error('Failed to accept membership request'),
+  },
+  {
+    request: {
+      query: REJECT_ORGANIZATION_REQUEST_MUTATION,
+      variables: {
+        input: {
+          membershipRequestId: '123',
+        },
+      },
+    },
+    error: new Error('Failed to reject membership request'),
   },
 ];

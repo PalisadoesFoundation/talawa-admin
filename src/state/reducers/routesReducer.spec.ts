@@ -1,4 +1,4 @@
-import expect from 'expect';
+import { expect } from 'vitest';
 import reducer from './routesReducer';
 
 describe('Testing Routes reducer', () => {
@@ -16,19 +16,24 @@ describe('Testing Routes reducer', () => {
         { name: 'Tags', url: '/orgtags/undefined' },
         { name: 'Events', url: '/orgevents/undefined' },
         { name: 'Venues', url: '/orgvenues/undefined' },
-        { name: 'Action Items', url: '/orgactionitems/undefined' },
         { name: 'Posts', url: '/orgpost/undefined' },
+        { name: 'Chat', url: '/orgchat/undefined' },
         {
           name: 'Block/Unblock',
           url: '/blockuser/undefined',
         },
         { name: 'Advertisement', url: '/orgads/undefined' },
         { name: 'Funds', url: '/orgfunds/undefined' },
+        { name: 'Transactions', url: '/orgtransactions/undefined' },
         { name: 'Membership Requests', url: '/requests/undefined' },
         { name: 'Settings', url: '/orgsetting/undefined' },
       ],
       components: [
-        { name: 'My Organizations', comp_id: 'orglist', component: 'OrgList' },
+        {
+          name: 'My Organizations',
+          comp_id: 'orglist',
+          component: 'OrgList',
+        },
         {
           name: 'Dashboard',
           comp_id: 'orgdash',
@@ -55,12 +60,20 @@ describe('Testing Routes reducer', () => {
           component: 'OrganizationVenues',
         },
         {
-          name: 'Action Items',
-          comp_id: 'orgactionitems',
-          component: 'OrganizationActionItems',
+          name: 'Posts',
+          comp_id: 'orgpost',
+          component: 'OrgPost',
         },
-        { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
-        { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
+        {
+          name: 'Chat',
+          comp_id: 'orgchat',
+          component: 'Chat',
+        },
+        {
+          name: 'Block/Unblock',
+          comp_id: 'blockuser',
+          component: 'BlockUser',
+        },
         {
           name: 'Advertisement',
           comp_id: 'orgads',
@@ -72,12 +85,25 @@ describe('Testing Routes reducer', () => {
           component: 'OrganizationFunds',
         },
         {
+          name: 'Transactions',
+          comp_id: 'orgtransactions',
+          component: 'OrganizationTransactions',
+        },
+        {
           name: 'Membership Requests',
           comp_id: 'requests',
           component: 'Requests',
         },
-        { name: 'Settings', comp_id: 'orgsetting', component: 'OrgSettings' },
-        { name: '', comp_id: 'member', component: 'MemberDetail' },
+        {
+          name: 'Settings',
+          comp_id: 'orgsetting',
+          component: 'OrgSettings',
+        },
+        {
+          name: '',
+          comp_id: 'member',
+          component: 'MemberDetail',
+        },
       ],
     });
   });
@@ -96,11 +122,12 @@ describe('Testing Routes reducer', () => {
         { name: 'Tags', url: '/orgtags/orgId' },
         { name: 'Events', url: '/orgevents/orgId' },
         { name: 'Venues', url: '/orgvenues/orgId' },
-        { name: 'Action Items', url: '/orgactionitems/orgId' },
         { name: 'Posts', url: '/orgpost/orgId' },
+        { name: 'Chat', url: '/orgchat/orgId' },
         { name: 'Block/Unblock', url: '/blockuser/orgId' },
         { name: 'Advertisement', url: '/orgads/orgId' },
         { name: 'Funds', url: '/orgfunds/orgId' },
+        { name: 'Transactions', url: '/orgtransactions/orgId' },
         { name: 'Membership Requests', url: '/requests/orgId' },
         { name: 'Settings', url: '/orgsetting/orgId' },
       ],
@@ -131,12 +158,8 @@ describe('Testing Routes reducer', () => {
           comp_id: 'orgvenues',
           component: 'OrganizationVenues',
         },
-        {
-          name: 'Action Items',
-          comp_id: 'orgactionitems',
-          component: 'OrganizationActionItems',
-        },
         { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
+        { name: 'Chat', comp_id: 'orgchat', component: 'Chat' },
         { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
         {
           name: 'Advertisement',
@@ -144,6 +167,11 @@ describe('Testing Routes reducer', () => {
           component: 'Advertisements',
         },
         { name: 'Funds', comp_id: 'orgfunds', component: 'OrganizationFunds' },
+        {
+          name: 'Transactions',
+          comp_id: 'orgtransactions',
+          component: 'OrganizationTransactions',
+        },
         {
           name: 'Membership Requests',
           comp_id: 'requests',

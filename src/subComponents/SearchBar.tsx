@@ -9,6 +9,8 @@ interface InterfaceSearchBarProps {
   placeholder?: string;
   /** Function to handle search input change */
   onSearch: (searchTerm: string) => void;
+  /** Optional function to handle input change (for automatic search) */
+  onChange?: (searchTerm: string) => void;
   /** Optional custom class name for the search bar container */
   className?: string;
   /** Custom data-testid for the search input */
@@ -27,6 +29,7 @@ interface InterfaceSearchBarProps {
 const SearchBar: React.FC<InterfaceSearchBarProps> = ({
   placeholder,
   onSearch,
+  onChange,
   className = styles.input, // Default className
   inputTestId,
   buttonTestId,
@@ -34,7 +37,12 @@ const SearchBar: React.FC<InterfaceSearchBarProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleSearchChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    setSearchTerm(event.target.value);
+    const value = event.target.value;
+    setSearchTerm(value);
+    // Call onChange for automatic search if provided
+    if (onChange) {
+      onChange(value);
+    }
   };
 
   const handleSearchClick = (): void => {

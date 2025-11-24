@@ -7,6 +7,7 @@ import askAndSetDockerOption from './askAndSetDockerOption/askAndSetDockerOption
 import updateEnvFile from './updateEnvFile/updateEnvFile';
 import askAndUpdatePort from './askAndUpdatePort/askAndUpdatePort';
 import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
+import { backupEnvFile } from './backupEnvFile/backupEnvFile';
 
 // Ask and set up reCAPTCHA
 export const askAndSetRecaptcha = async (): Promise<void> => {
@@ -19,6 +20,8 @@ export const askAndSetRecaptcha = async (): Promise<void> => {
         default: true,
       },
     ]);
+
+    updateEnvFile('REACT_APP_USE_RECAPTCHA', shouldUseRecaptcha ? 'YES' : 'NO');
 
     if (shouldUseRecaptcha) {
       const { recaptchaSiteKeyInput } = await inquirer.prompt([
@@ -36,6 +39,8 @@ export const askAndSetRecaptcha = async (): Promise<void> => {
       ]);
 
       updateEnvFile('REACT_APP_RECAPTCHA_SITE_KEY', recaptchaSiteKeyInput);
+    } else {
+      updateEnvFile('REACT_APP_RECAPTCHA_SITE_KEY', '');
     }
   } catch (error) {
     console.error('Error setting up reCAPTCHA:', error);
@@ -53,9 +58,7 @@ const askAndSetLogErrors = async (): Promise<void> => {
     default: true,
   });
 
-  if (shouldLogErrors) {
-    updateEnvFile('ALLOW_LOGS', 'YES');
-  }
+  updateEnvFile('ALLOW_LOGS', shouldLogErrors ? 'YES' : 'NO');
 };
 
 // Main function to run the setup process
@@ -67,15 +70,18 @@ export async function main(): Promise<void> {
 
     console.log('Welcome to the Talawa Admin setup! 🚀');
 
+    await backupEnvFile();
+
     modifyEnvFile();
     await askAndSetDockerOption();
     const envConfig = dotenv.parse(fs.readFileSync('.env', 'utf8'));
     const useDocker = envConfig.USE_DOCKER === 'YES';
 
-    // Only run these commands if Docker is NOT used
-    if (!useDocker) {
+    if (useDocker) {
+      await askAndUpdateTalawaApiUrl(useDocker);
+    } else {
       await askAndUpdatePort();
-      await askAndUpdateTalawaApiUrl();
+      await askAndUpdateTalawaApiUrl(useDocker);
     }
 
     await askAndSetRecaptcha();

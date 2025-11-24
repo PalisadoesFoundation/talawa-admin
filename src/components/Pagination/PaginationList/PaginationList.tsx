@@ -28,7 +28,7 @@
  * ```
  */
 import React from 'react';
-import { Hidden, TablePagination } from '@mui/material';
+import { TablePagination, useMediaQuery } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
 import Pagination from '../Navigator/Pagination';
@@ -58,9 +58,11 @@ const PaginationList = ({
     keyPrefix: 'paginationList',
   });
 
+  const isSmallScreen = useMediaQuery('(max-width: 600px)');
+
   return (
     <>
-      <Hidden smUp>
+      {isSmallScreen ? (
         <TablePagination
           sx={{
             display: 'flex',
@@ -82,8 +84,7 @@ const PaginationList = ({
           onRowsPerPageChange={onRowsPerPageChange}
           ActionsComponent={Pagination}
         />
-      </Hidden>
-      <Hidden smDown initialWidth={'lg'}>
+      ) : (
         <TablePagination
           rowsPerPageOptions={[
             5,
@@ -107,7 +108,7 @@ const PaginationList = ({
           ActionsComponent={Pagination}
           labelRowsPerPage={t('rowsPerPage')}
         />
-      </Hidden>
+      )}
     </>
   );
 };

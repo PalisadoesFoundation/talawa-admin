@@ -115,8 +115,8 @@ const EventsAttendedMemberModal: React.FC<
                 <TableBody>
                   {paginatedEvents.map((event) => (
                     <CustomTableCell
-                      key={event._id ?? ''}
-                      eventId={event._id ?? ''}
+                      key={event.id ?? ''}
+                      eventId={event.id ?? ''}
                     />
                   ))}
                 </TableBody>

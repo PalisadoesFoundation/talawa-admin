@@ -34,7 +34,7 @@ import type { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import type { InterfaceUserInfo } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
@@ -43,12 +43,24 @@ import { Autocomplete, TextField } from '@mui/material';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import { ADD_VOLUNTEER } from 'GraphQl/Mutations/EventVolunteerMutation';
 
+// Interface for add volunteer mutation data
+interface InterfaceAddVolunteerData {
+  userId: string;
+  eventId: string | undefined;
+  scope?: 'ENTIRE_SERIES' | 'THIS_INSTANCE_ONLY';
+  recurringEventInstanceId?: string;
+}
+
 export interface InterfaceVolunteerCreateModal {
   isOpen: boolean;
   hide: () => void;
   eventId: string;
   orgId: string;
   refetchVolunteers: () => void;
+  // New props for recurring events
+  isRecurring?: boolean;
+  baseEvent?: { id: string } | null;
+  recurringEventInstanceId?: string;
 }
 
 const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
@@ -57,39 +69,61 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
   eventId,
   orgId,
   refetchVolunteers,
+  isRecurring = false,
+  baseEvent = null,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
 
   const [userId, setUserId] = useState<string>('');
-  const [members, setMembers] = useState<InterfaceUserInfo[]>([]);
+  const [applyTo, setApplyTo] = useState<'series' | 'instance'>('series');
   const [addVolunteer] = useMutation(ADD_VOLUNTEER);
 
-  const { data: memberData } = useQuery(MEMBERS_LIST, {
-    variables: { id: orgId },
+  const { data: membersData } = useQuery(MEMBERS_LIST, {
+    variables: { organizationId: orgId },
   });
 
-  useEffect(() => {
-    if (memberData) {
-      setMembers(memberData.organizations[0].members);
-    }
-  }, [memberData]);
+  const members = useMemo(
+    () => membersData?.usersByOrganizationId || [],
+    [membersData],
+  );
 
   // Function to add a volunteer for an event
   const addVolunteerHandler = useCallback(
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       try {
         e.preventDefault();
-        await addVolunteer({ variables: { data: { eventId, userId } } });
+
+        // Template-First Hierarchy: Use scope-based approach
+        const mutationData: InterfaceAddVolunteerData = {
+          userId,
+          eventId: isRecurring
+            ? baseEvent?.id // Use baseEvent.id if available, fallback to eventId
+            : eventId, // Use eventId for non-recurring events
+        };
+
+        // Add Template-First recurring event logic
+        if (isRecurring) {
+          if (applyTo === 'series') {
+            mutationData.scope = 'ENTIRE_SERIES';
+            // No recurringEventInstanceId needed - template appears on all instances
+          } else {
+            mutationData.scope = 'THIS_INSTANCE_ONLY';
+            mutationData.recurringEventInstanceId = eventId; // Current instance ID
+          }
+        }
+
+        await addVolunteer({ variables: { data: mutationData } });
 
         toast.success(t('volunteerAdded'));
         refetchVolunteers();
         setUserId('');
+        setApplyTo('series'); // Reset to default
         hide();
       } catch (error: unknown) {
         toast.error((error as Error).message);
       }
     },
-    [userId, eventId],
+    [userId, eventId, isRecurring, applyTo, baseEvent],
   );
 
   return (
@@ -111,6 +145,29 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
           onSubmitCapture={addVolunteerHandler}
           className="p-3"
         >
+          {/* Radio buttons for recurring events */}
+          {isRecurring ? (
+            <Form.Group className="mb-3">
+              <Form.Label>{t('applyTo')}</Form.Label>
+              <Form.Check
+                type="radio"
+                label={t('entireSeries')}
+                name="applyTo"
+                id="applyToSeries"
+                checked={applyTo === 'series'}
+                onChange={() => setApplyTo('series')}
+              />
+              <Form.Check
+                type="radio"
+                label={t('thisEventOnly')}
+                name="applyTo"
+                id="applyToInstance"
+                checked={applyTo === 'instance'}
+                onChange={() => setApplyTo('instance')}
+              />
+            </Form.Group>
+          ) : null}
+
           {/* A Multi-select dropdown enables admin to invite a member as volunteer  */}
           <Form.Group className="d-flex mb-3 w-100">
             <Autocomplete
@@ -118,13 +175,13 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
               limitTags={2}
               data-testid="membersSelect"
               options={members}
-              isOptionEqualToValue={(option, value) => option._id === value._id}
+              isOptionEqualToValue={(option, value) => option.id === value.id}
               filterSelectedOptions={true}
               getOptionLabel={(member: InterfaceUserInfo): string =>
-                `${member.firstName} ${member.lastName}`
+                member.name
               }
               onChange={(_, newVolunteer): void => {
-                setUserId(newVolunteer?._id ?? '');
+                setUserId(newVolunteer?.id ?? '');
               }}
               renderInput={(params) => <TextField {...params} label="Member" />}
             />

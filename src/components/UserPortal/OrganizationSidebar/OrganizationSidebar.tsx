@@ -173,7 +173,7 @@ export default function organizationSidebar(): JSX.Element {
             events.map((event: InterfaceQueryOrganizationEventListItem) => {
               return (
                 <ListGroup.Item
-                  key={event._id}
+                  key={event.id}
                   action
                   className={`${styles.rounded} ${styles.colorLight} my-1`}
                 >

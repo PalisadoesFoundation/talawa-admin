@@ -43,6 +43,8 @@
   "confirmPassword": "Confirm Password",
   "forgotPassword": "Forgot Password ?",
   "talawaAdminPortal": "Talawa Admin Portal",
+  "adminPortal": "Admin Portal",
+  "userPortal": "User Portal",
   "address": "Address",
   "location": "Location",
   "enterLocation": "Enter Location",
@@ -60,6 +62,7 @@
   "Venues": "Venues",
   "Action Items": "Action Items",
   "Posts": "Posts",
+  "Chat": "Chat",
   "Block/Unblock": "Block/Unblock",
   "Advertisement": "Advertisement",
   "Funds": "Funds",
@@ -79,6 +82,7 @@
   "searchResultsFor": "Search results for {{text}}",
   "none": "None",
   "Donate": "Donate",
+  "Transactions": "Transactions",
   "addedSuccessfully": "{{item}} added Successfully",
   "updatedSuccessfully": "{{item}} updated Successfully",
   "removedSuccessfully": "{{item}} removed Successfully",
@@ -95,5 +99,7 @@
   "createdLatest": "Created Latest",
   "createdEarliest": "Created Earliest",
   "searchBy": "Search by {{item}}",
-  "plugins": "Plugins"
+  "plugins": "Plugins",
+  "save": "Save",
+  "saving": "Saving..."
 }

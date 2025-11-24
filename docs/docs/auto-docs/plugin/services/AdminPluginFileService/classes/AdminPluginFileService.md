@@ -15,7 +15,7 @@ Writes actual files to the filesystem for production deployment
 
 > **getInstalledPlugins**(): `Promise`\<[`InstalledPlugin`](../interfaces/InstalledPlugin.md)[]\>
 
-Defined in: [src/plugin/services/AdminPluginFileService.ts:293](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L293)
+Defined in: [src/plugin/services/AdminPluginFileService.ts:289](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L289)
 
 Get all installed plugins from filesystem
 
@@ -29,7 +29,7 @@ Get all installed plugins from filesystem
 
 > **getPlugin**(`pluginId`): `Promise`\<[`InstalledPlugin`](../interfaces/InstalledPlugin.md)\>
 
-Defined in: [src/plugin/services/AdminPluginFileService.ts:318](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L318)
+Defined in: [src/plugin/services/AdminPluginFileService.ts:314](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L314)
 
 Get specific plugin from filesystem
 
@@ -49,7 +49,7 @@ Get specific plugin from filesystem
 
 > **healthCheck**(): `Promise`\<\{ `message`: `string`; `status`: `"error"` \| `"healthy"`; \}\>
 
-Defined in: [src/plugin/services/AdminPluginFileService.ts:354](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L354)
+Defined in: [src/plugin/services/AdminPluginFileService.ts:350](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L350)
 
 Health check for the service
 
@@ -87,7 +87,7 @@ Install plugin files to filesystem (Production-First)
 
 > **removePlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/services/AdminPluginFileService.ts:341](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L341)
+Defined in: [src/plugin/services/AdminPluginFileService.ts:337](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L337)
 
 Remove plugin from filesystem
 
@@ -169,7 +169,7 @@ Get singleton instance
 
 > `static` **getPluginDetails**(`pluginId`): `Promise`\<[`IPluginDetails`](../../../types/interfaces/IPluginDetails.md)\>
 
-Defined in: [src/plugin/services/AdminPluginFileService.ts:376](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L376)
+Defined in: [src/plugin/services/AdminPluginFileService.ts:372](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L372)
 
 Get comprehensive plugin details from local files
 

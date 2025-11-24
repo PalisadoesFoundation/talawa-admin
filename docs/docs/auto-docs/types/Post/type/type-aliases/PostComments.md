@@ -8,7 +8,7 @@
 
 Defined in: [src/types/Post/type.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L83)
 
-## Type declaration
+## Type Declaration
 
 ### creator
 
@@ -37,10 +37,6 @@ Defined in: [src/types/Post/type.ts:83](https://github.com/PalisadoesFoundation/
 ### likeCount
 
 > **likeCount**: `number`
-
-### likedBy
-
-> **likedBy**: `object`[]
 
 ### text
 

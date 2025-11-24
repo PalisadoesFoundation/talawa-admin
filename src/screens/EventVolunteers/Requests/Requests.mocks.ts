@@ -2,45 +2,111 @@ import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMut
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 
 const membership1 = {
-  _id: 'membershipId1',
+  id: 'membershipId1',
   status: 'requested',
-  createdAt: '2024-10-29T10:18:05.851Z',
+  createdAt: '2030-10-29T10:18:05.851Z',
+  updatedAt: '2030-10-29T10:18:05.851Z',
   event: {
-    _id: 'eventId',
-    title: 'Event 1',
-    startDate: '2044-10-31',
+    id: 'eventId',
+    name: 'Event 1',
+    startAt: '2030-10-31',
+    endAt: '2030-10-31',
+    recurrenceRule: null,
   },
   volunteer: {
-    _id: 'volunteerId1',
+    id: 'volunteerId1',
+    hasAccepted: false,
+    hoursVolunteered: null,
     user: {
-      _id: 'userId1',
-      firstName: 'John',
-      lastName: 'Doe',
-      image: 'img-url',
+      id: 'userId1',
+      name: 'John Doe',
+      emailAddress: 'john@example.com',
+      avatarURL: 'img-url',
+      createdAt: '2030-01-01T00:00:00Z',
     },
   },
   group: null,
+  createdBy: {
+    id: 'creatorId1',
+    name: 'Creator',
+  },
+  updatedBy: {
+    id: 'updaterId1',
+    name: 'Updater',
+  },
 };
 
 const membership2 = {
-  _id: 'membershipId2',
+  id: 'membershipId2',
   status: 'requested',
-  createdAt: '2024-10-30T10:18:05.851Z',
+  createdAt: '2030-10-30T10:18:05.851Z',
+  updatedAt: '2030-10-30T10:18:05.851Z',
   event: {
-    _id: 'eventId',
-    title: 'Event 2',
-    startDate: '2044-11-31',
+    id: 'eventId',
+    name: 'Event 2',
+    startAt: '2030-11-31',
+    endAt: '2030-11-31',
+    recurrenceRule: null,
   },
   volunteer: {
-    _id: 'volunteerId1',
+    id: 'volunteerId2',
+    hasAccepted: false,
+    hoursVolunteered: null,
     user: {
-      _id: 'userId1',
-      firstName: 'Teresa',
-      lastName: 'Bradley',
-      image: null,
+      id: 'userId2',
+      name: 'Teresa Bradley',
+      emailAddress: 'teresa@example.com',
+      avatarURL: null,
+      createdAt: '2030-01-01T00:00:00Z',
     },
   },
   group: null,
+  createdBy: {
+    id: 'creatorId2',
+    name: 'Creator',
+  },
+  updatedBy: {
+    id: 'updaterId2',
+    name: 'Updater',
+  },
+};
+
+const membershipWithGroup = {
+  id: 'membershipId3',
+  status: 'requested',
+  createdAt: '2030-10-28T10:18:05.851Z',
+  updatedAt: '2030-10-28T10:18:05.851Z',
+  event: {
+    id: 'eventId',
+    name: 'Event 3',
+    startAt: '2030-12-31',
+    endAt: '2030-12-31',
+    recurrenceRule: null,
+  },
+  volunteer: {
+    id: 'volunteerId3',
+    hasAccepted: false,
+    hoursVolunteered: null,
+    user: {
+      id: 'userId3',
+      name: 'Group Volunteer',
+      emailAddress: 'group@example.com',
+      avatarURL: null,
+      createdAt: '2030-01-01T00:00:00Z',
+    },
+  },
+  group: {
+    id: 'groupId1',
+    name: 'Volunteer Group 1',
+  },
+  createdBy: {
+    id: 'creatorId3',
+    name: 'Creator',
+  },
+  updatedBy: {
+    id: 'updaterId3',
+    name: 'Updater',
+  },
 };
 
 export const MOCKS = [
@@ -122,7 +188,7 @@ export const MOCKS = [
     result: {
       data: {
         updateVolunteerMembership: {
-          _id: 'membershipId1',
+          id: 'membershipId1',
         },
       },
     },
@@ -138,7 +204,74 @@ export const MOCKS = [
     result: {
       data: {
         updateVolunteerMembership: {
-          _id: 'membershipId1',
+          id: 'membershipId1',
+        },
+      },
+    },
+  },
+];
+
+export const MOCKS_WITH_FILTER_DATA = [
+  {
+    request: {
+      query: USER_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        where: {
+          eventId: 'eventId',
+          status: 'requested',
+        },
+      },
+    },
+    result: {
+      data: {
+        getVolunteerMembership: [membership1, membership2, membershipWithGroup],
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        id: 'membershipId1',
+        status: 'accepted',
+      },
+    },
+    result: {
+      data: {
+        updateVolunteerMembership: {
+          id: 'membershipId1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        id: 'membershipId2',
+        status: 'accepted',
+      },
+    },
+    result: {
+      data: {
+        updateVolunteerMembership: {
+          id: 'membershipId2',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        id: 'membershipId3',
+        status: 'accepted',
+      },
+    },
+    result: {
+      data: {
+        updateVolunteerMembership: {
+          id: 'membershipId3',
         },
       },
     },

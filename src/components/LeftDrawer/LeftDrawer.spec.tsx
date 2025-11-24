@@ -3,7 +3,7 @@ import { describe, it, vi, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router';
 import { MockedProvider } from '@apollo/react-testing';
-import LeftDrawer, { type ILeftDrawerProps } from './LeftDrawer';
+import LeftDrawer from './LeftDrawer';
 import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
@@ -84,24 +84,28 @@ vi.mock('components/ProfileDropdown/ProfileDropdown', () => ({
 }));
 
 describe('LeftDrawer Component', () => {
-  const defaultProps: ILeftDrawerProps = {
-    hideDrawer: false,
-    setHideDrawer: vi.fn(),
-  };
+  const TestWrapper = ({
+    initialHideDrawer = false,
+  }: {
+    initialHideDrawer?: boolean;
+  }) => {
+    const [hideDrawer, setHideDrawer] = React.useState(initialHideDrawer);
 
-  const renderComponent = (
-    props: Partial<ILeftDrawerProps> = {},
-  ): ReturnType<typeof render> => {
-    const finalProps = { ...defaultProps, ...props };
-    return render(
+    return (
       <MockedProvider mocks={[]}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
-            <LeftDrawer {...finalProps} />
+            <LeftDrawer hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
           </I18nextProvider>
         </BrowserRouter>
-      </MockedProvider>,
+      </MockedProvider>
     );
+  };
+
+  const renderComponent = (
+    initialHideDrawer = false,
+  ): ReturnType<typeof render> => {
+    return render(<TestWrapper initialHideDrawer={initialHideDrawer} />);
   };
 
   beforeEach(() => {
@@ -150,34 +154,78 @@ describe('LeftDrawer Component', () => {
   });
 
   describe('Drawer State Initialization', () => {
-    it('should not initialize hideDrawer when it has a value', () => {
-      const setHideDrawer = vi.fn();
-      renderComponent({ hideDrawer: true, setHideDrawer });
-
-      // The useEffect should not call setHideDrawer when hideDrawer has a value
-      expect(setHideDrawer).not.toHaveBeenCalled();
+    it('should initialize drawer as visible by default', () => {
+      renderComponent(false);
+      const element = screen.getByTestId('leftDrawerContainer');
+      expect(element.className).toContain('expandedDrawer');
     });
 
-    it('should not initialize hideDrawer when it is false', () => {
-      const setHideDrawer = vi.fn();
-      renderComponent({ hideDrawer: false, setHideDrawer });
-
-      // The useEffect should not call setHideDrawer when hideDrawer is false
-      expect(setHideDrawer).not.toHaveBeenCalled();
+    it('should initialize drawer as hidden when specified', () => {
+      renderComponent(true);
+      const element = screen.getByTestId('leftDrawerContainer');
+      expect(element.className).toContain('collapsedDrawer');
     });
   });
 
   describe('Drawer Styling', () => {
     it('applies correct styles when drawer is hidden', () => {
-      renderComponent({ ...defaultProps, hideDrawer: true });
+      renderComponent(true);
       const element = screen.getByTestId('leftDrawerContainer');
       expect(element.className).toContain('collapsedDrawer');
     });
 
     it('applies correct styles when drawer is visible', () => {
-      renderComponent({ ...defaultProps, hideDrawer: false });
+      renderComponent(false);
       const element = screen.getByTestId('leftDrawerContainer');
       expect(element.className).toContain('expandedDrawer');
+    });
+  });
+
+  describe('Drawer toggling', () => {
+    it('toggles sidebar correctly on click', () => {
+      renderComponent(false); // Start with drawer visible
+      const element = screen.getByTestId('toggleBtn');
+      const container = screen.getByTestId('leftDrawerContainer');
+
+      // Should show expanded drawer initially
+      expect(container.className).toContain('expandedDrawer');
+
+      // Click to hide
+      fireEvent.click(element);
+      expect(container.className).toContain('collapsedDrawer');
+    });
+
+    it('test onKeyDown toggles sidebar correctly', () => {
+      renderComponent(false); // Start with drawer visible
+      const element = screen.getByTestId('toggleBtn');
+      const container = screen.getByTestId('leftDrawerContainer');
+
+      // Initial state - drawer should be expanded
+      expect(container.className).toContain('expandedDrawer');
+
+      // Click to hide
+      fireEvent.click(element);
+      expect(container.className).toContain('collapsedDrawer');
+
+      // Enter key to show
+      fireEvent.keyDown(element, { key: 'Enter', code: 'Enter' });
+      expect(container.className).toContain('expandedDrawer');
+
+      // Space key to hide
+      fireEvent.keyDown(element, { key: ' ', code: 'Space' });
+      expect(container.className).toContain('collapsedDrawer');
+    });
+    it('test onKeyDown does not toggle sidebar on other keys', () => {
+      renderComponent(false); // Start with drawer visible
+      const element = screen.getByTestId('toggleBtn');
+      const container = screen.getByTestId('leftDrawerContainer');
+
+      // Initial state - drawer should be expanded
+      expect(container.className).toContain('expandedDrawer');
+
+      // Other key should not toggle
+      fireEvent.keyDown(element, { key: 'A', code: 'KeyA' });
+      expect(container.className).toContain('expandedDrawer');
     });
   });
 
@@ -205,12 +253,15 @@ describe('LeftDrawer Component', () => {
         value: 800,
       });
 
-      renderComponent();
+      renderComponent(false); // Start with drawer visible
 
       const organizationsButton = screen.getByTestId('organizationsBtn');
       fireEvent.click(organizationsButton);
 
-      expect(defaultProps.setHideDrawer).toHaveBeenCalledWith(true);
+      // In mobile view, clicking navigation should hide the drawer
+      expect(screen.getByTestId('leftDrawerContainer').className).toContain(
+        'collapsedDrawer',
+      );
     });
 
     it('applies active styles to the current route button', () => {
@@ -221,6 +272,19 @@ describe('LeftDrawer Component', () => {
       window.history.pushState({}, '', '/orglist');
 
       expect(organizationsButton).toHaveClass(`${styles.sidebarBtnActive}`);
+    });
+
+    it('renders navigation buttons as non-submitting buttons', () => {
+      renderComponent();
+
+      expect(screen.getByTestId('organizationsBtn')).toHaveAttribute(
+        'type',
+        'button',
+      );
+      expect(screen.getByTestId('pluginStoreBtn')).toHaveAttribute(
+        'type',
+        'button',
+      );
     });
 
     it('does not hide drawer on desktop view navigation button clicks', () => {

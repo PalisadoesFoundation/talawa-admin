@@ -126,7 +126,6 @@ const leftDrawerOrg = ({
   });
 
   const getIdFromPath = (pathname: string): string => {
-    if (!pathname) return '';
     const segments = pathname.split('/');
     return segments.length > 2 ? segments[2] : '';
   };
@@ -232,12 +231,13 @@ const leftDrawerOrg = ({
           style={{
             display: hideDrawer ? 'none' : 'flex',
             alignItems: 'center',
-            paddingRight: '40px',
+            marginRight: 'auto',
+            paddingLeft: '5px',
           }}
         >
           <TalawaLogo className={styles.talawaLogo} />
           <div className={`${styles.talawaText} ${styles.sidebarText}`}>
-            {tCommon('talawaAdminPortal')}
+            {tCommon('adminPortal')}
           </div>
         </div>
       </div>
@@ -273,6 +273,10 @@ const leftDrawerOrg = ({
               <div className={styles.imageContainer}>
                 {data.organization.avatarURL ? (
                   <img
+                    crossOrigin="anonymous"
+                    referrerPolicy="no-referrer"
+                    loading="lazy"
+                    decoding="async"
                     src={data.organization.avatarURL}
                     alt={`${data.organization.name}`}
                   />
@@ -303,9 +307,6 @@ const leftDrawerOrg = ({
       )}
 
       {/* Options List */}
-      <h5 className={`${styles.titleHeader} text-secondary`}>
-        {!hideDrawer && tCommon('menu')}
-      </h5>
       <div className={styles.optionList} data-cy="leftDrawerOptionList">
         {targets.map(({ name, url }, index) =>
           url ? (

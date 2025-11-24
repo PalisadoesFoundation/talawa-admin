@@ -6,9 +6,9 @@
 
 > `const` **markActionItemAsPendingMutation**: `object`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:316](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L316)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:354](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L354)
 
-## Type declaration
+## Type Declaration
 
 ### request
 

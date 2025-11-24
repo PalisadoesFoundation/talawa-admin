@@ -103,15 +103,15 @@ const UploadPluginModal: React.FC<UploadPluginModalProps> = ({
       if (result.success) {
         const components = result.installedComponents.join(' and ');
         toast.success(
-          `Plugin installed successfully! (${components} components)`,
+          `Plugin uploaded successfully! (${components} components) - You can now install it from the plugin list.`,
         );
         onHide();
       } else {
-        toast.error(result.error || 'Failed to install plugin');
+        toast.error(result.error || 'Failed to upload plugin');
       }
     } catch (error) {
-      console.error('Failed to install plugin:', error);
-      toast.error('Failed to install plugin. Please try again.');
+      console.error('Failed to upload plugin:', error);
+      toast.error('Failed to upload plugin. Please try again.');
     } finally {
       setIsInstalling(false);
     }
@@ -149,7 +149,8 @@ const UploadPluginModal: React.FC<UploadPluginModalProps> = ({
           <div style={{ marginBottom: 32 }}>
             <h3 style={{ margin: 0, marginBottom: 8 }}>Upload Plugin</h3>
             <p style={{ margin: 0, color: '#666', fontSize: 14 }}>
-              Select a ZIP file containing admin and/or API plugin components
+              Upload a ZIP file to create a plugin entry. The plugin will be
+              available for installation after upload.
             </p>
           </div>
 
@@ -262,16 +263,11 @@ const UploadPluginModal: React.FC<UploadPluginModalProps> = ({
               variant="contained"
               color="primary"
               onClick={handleAddPlugin}
-              disabled={!manifest || isInstalling}
-              className="w-100"
-              style={{
-                height: 48,
-                fontSize: 16,
-                fontWeight: 500,
-                textTransform: 'none',
-              }}
+              disabled={!selectedFile || !manifest || isInstalling}
+              style={{ width: '100%' }}
+              data-testid="upload-plugin-button"
             >
-              {isInstalling ? 'Installing...' : 'Install Plugin'}
+              {isInstalling ? 'Uploading...' : 'Upload Plugin'}
             </Button>
           </div>
         </div>

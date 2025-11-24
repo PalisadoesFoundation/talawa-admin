@@ -4,5 +4,5 @@ module.exports = {
     '@babel/preset-typescript', // Transforms TypeScript
     '@babel/preset-react', // Transforms JSX
   ],
-  plugins: ['babel-plugin-transform-import-meta'],
+  plugins: ['babel-plugin-transform-import-meta', 'istanbul'],
 };

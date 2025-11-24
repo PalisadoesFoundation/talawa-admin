@@ -17,15 +17,44 @@ export const ACTION_ITEM_LIST = gql`
   ) {
     actionItemsByOrganization(input: $input) {
       id
-      assignee {
+      volunteer {
+        id
+        hasAccepted
+        isPublic
+        hoursVolunteered
+        user {
+          id
+          name
+          avatarURL
+        }
+      }
+      volunteerGroup {
         id
         name
+        description
+        volunteersRequired
+        leader {
+          id
+          name
+          avatarURL
+        }
+        volunteers {
+          id
+          user {
+            id
+            name
+          }
+        }
       }
       category {
         id
         name
       }
       event {
+        id
+        name
+      }
+      recurringEventInstance {
         id
         name
       }
@@ -47,46 +76,74 @@ export const ACTION_ITEM_LIST = gql`
       isCompleted
       preCompletionNotes
       postCompletionNotes
+      isInstanceException
+      isTemplate
     }
   }
 `;
 
-export const ACTION_ITEMS_BY_USER = gql`
-  query ActionItemsByUser($input: QueryActionItemsByUserInput!) {
-    actionItemsByUser(input: $input) {
+export const GET_EVENT_ACTION_ITEMS = gql`
+  query GetEventActionItems($input: QueryEventInput!) {
+    event(input: $input) {
       id
-      isCompleted
-      assignedAt
-      completionAt
-      preCompletionNotes
-      postCompletionNotes
-      createdAt
-      assignee {
+      recurrenceRule {
         id
-        name
       }
-      creator {
+      baseEvent {
         id
-        name
       }
-      updater {
-        id
-        name
-      }
-      category {
-        id
-        name
-        description
-      }
-      event {
-        id
-
-        description
-      }
-      organization {
-        id
-        name
-        description
+      actionItems(first: 20) {
+        edges {
+          node {
+            id
+            isCompleted
+            assignedAt
+            preCompletionNotes
+            postCompletionNotes
+            isInstanceException
+            isTemplate
+            creator {
+              id
+              name
+            }
+            event {
+              id
+              name
+            }
+            recurringEventInstance {
+              id
+              name
+            }
+            volunteer {
+              id
+              hasAccepted
+              isPublic
+              hoursVolunteered
+              user {
+                id
+                name
+              }
+            }
+            volunteerGroup {
+              id
+              name
+              description
+              volunteersRequired
+              leader {
+                id
+                name
+              }
+            }
+            category {
+              id
+              name
+            }
+          }
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
       }
     }
   }

@@ -31,54 +31,13 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-const link1 = new StaticMockLink(MOCKS);
-const link2 = new StaticMockLink(MOCKS_ERROR);
+let successLink: StaticMockLink;
+let errorLink: StaticMockLink;
 const t = JSON.parse(
   JSON.stringify(
     i18nForTest.getDataByLanguage('en')?.translation.organizationActionItems,
   ),
 );
-
-// Updated itemProps to match the new interface
-const itemProps: IItemDeleteModalProps = {
-  isOpen: true,
-  hide: vi.fn(),
-  actionItemsRefetch: vi.fn(),
-  actionItem: {
-    id: 'actionItemId1',
-    assigneeId: null,
-    categoryId: 'categoryId1',
-    eventId: null,
-    organizationId: 'orgId1',
-    creatorId: 'userId2',
-    updaterId: null,
-    assignedAt: new Date('2024-08-27'),
-    completionAt: new Date('2044-09-03'),
-    createdAt: new Date('2024-01-01T00:00:00.000Z'),
-    updatedAt: null,
-    isCompleted: true,
-    preCompletionNotes: 'Notes 1',
-    postCompletionNotes: 'Cmp Notes 1',
-
-    // Related entities updated according to the new interfaces
-    assignee: null,
-    creator: {
-      id: 'userId2',
-      name: 'Wilt Shepherd',
-      emailAddress: '',
-      avatarURL: '',
-    },
-    event: null,
-    category: {
-      id: 'categoryId1',
-      name: 'Category 1',
-      description: null, // Added required field
-      isDisabled: false, // Added required field
-      createdAt: '2024-01-01T00:00:00.000Z', // Added required field
-      organizationId: 'orgId1', // Added required field
-    },
-  },
-};
 
 const renderItemDeleteModal = (
   link: ApolloLink,
@@ -100,13 +59,64 @@ const renderItemDeleteModal = (
 };
 
 describe('Testing ItemDeleteModal', () => {
+  let testItemProps: IItemDeleteModalProps;
+
+  beforeEach(() => {
+    // Create fresh mocks for each test
+    testItemProps = {
+      isOpen: true,
+      hide: vi.fn(),
+      actionItemsRefetch: vi.fn(),
+      actionItem: {
+        id: 'actionItemId1',
+        volunteerId: null,
+        volunteerGroupId: null,
+        categoryId: 'categoryId1',
+        eventId: null,
+        recurringEventInstanceId: null,
+        organizationId: 'orgId1',
+        creatorId: 'userId2',
+        updaterId: null,
+        assignedAt: new Date('2024-08-27'),
+        completionAt: new Date('2044-09-03'),
+        createdAt: new Date('2024-01-01T00:00:00.000Z'),
+        updatedAt: null,
+        isCompleted: true,
+        preCompletionNotes: 'Notes 1',
+        postCompletionNotes: 'Cmp Notes 1',
+        isInstanceException: false,
+        volunteer: null,
+        volunteerGroup: null,
+        creator: {
+          id: 'userId2',
+          name: 'Wilt Shepherd',
+          emailAddress: '',
+          avatarURL: '',
+        },
+        event: null,
+        recurringEventInstance: null,
+        category: {
+          id: 'categoryId1',
+          name: 'Category 1',
+          description: null,
+          isDisabled: false,
+          createdAt: '2024-01-01T00:00:00.000Z',
+          organizationId: 'orgId1',
+        },
+      },
+    };
+
+    successLink = new StaticMockLink(MOCKS);
+    errorLink = new StaticMockLink(MOCKS_ERROR);
+  });
+
   it('should render ItemDeleteModal', () => {
-    renderItemDeleteModal(link1, itemProps);
+    renderItemDeleteModal(successLink, testItemProps);
     expect(screen.getByText(t.deleteActionItem)).toBeInTheDocument();
   });
 
   it('should successfully Delete Action Item', async () => {
-    renderItemDeleteModal(link1, itemProps);
+    renderItemDeleteModal(successLink, testItemProps);
     expect(screen.getByTestId('deleteyesbtn')).toBeInTheDocument();
 
     await act(() => {
@@ -114,19 +124,234 @@ describe('Testing ItemDeleteModal', () => {
     });
 
     await waitFor(() => {
-      expect(itemProps.actionItemsRefetch).toHaveBeenCalled();
-      expect(itemProps.hide).toHaveBeenCalled();
+      expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
+      expect(testItemProps.hide).toHaveBeenCalled();
       expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
     });
   });
 
   it('should fail to Delete Action Item', async () => {
-    renderItemDeleteModal(link2, itemProps);
+    renderItemDeleteModal(errorLink, testItemProps);
     expect(screen.getByTestId('deleteyesbtn')).toBeInTheDocument();
     fireEvent.click(screen.getByTestId('deleteyesbtn'));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+    });
+  });
+
+  describe('Conditional Logic for Recurring Events', () => {
+    it('should not render applyTo radio buttons when eventId is not provided', () => {
+      const propsWithoutEventId: IItemDeleteModalProps = {
+        ...testItemProps,
+        eventId: undefined,
+        isRecurring: true,
+      };
+
+      renderItemDeleteModal(successLink, propsWithoutEventId);
+
+      // Radio buttons should not be present
+      expect(screen.queryByText(t.entireSeries)).not.toBeInTheDocument();
+      expect(screen.queryByText(t.thisEventOnly)).not.toBeInTheDocument();
+    });
+
+    it('should not render applyTo radio buttons when isRecurring is false', () => {
+      const propsNotRecurring: IItemDeleteModalProps = {
+        ...testItemProps,
+        eventId: 'event123',
+        isRecurring: false,
+      };
+
+      renderItemDeleteModal(successLink, propsNotRecurring);
+
+      // Radio buttons should not be present
+      expect(screen.queryByText(t.entireSeries)).not.toBeInTheDocument();
+      expect(screen.queryByText(t.thisEventOnly)).not.toBeInTheDocument();
+    });
+
+    it('should render applyTo radio buttons when eventId and isRecurring are provided', () => {
+      const propsWithRecurring: IItemDeleteModalProps = {
+        ...testItemProps,
+        actionItem: {
+          ...testItemProps.actionItem,
+          isTemplate: true,
+        },
+        eventId: 'event123',
+        isRecurring: true,
+      };
+
+      renderItemDeleteModal(successLink, propsWithRecurring);
+
+      // Radio buttons should be present
+      expect(screen.getByText(t.entireSeries)).toBeInTheDocument();
+      expect(screen.getByText(t.thisEventOnly)).toBeInTheDocument();
+
+      // Series should be selected by default
+      expect(screen.getByTestId('deleteApplyToSeries')).toBeChecked();
+      expect(screen.getByTestId('deleteApplyToInstance')).not.toBeChecked();
+    });
+
+    it('should allow switching between series and instance options', () => {
+      const propsWithRecurring: IItemDeleteModalProps = {
+        ...testItemProps,
+        actionItem: {
+          ...testItemProps.actionItem,
+          isTemplate: true,
+        },
+        eventId: 'event123',
+        isRecurring: true,
+      };
+
+      renderItemDeleteModal(successLink, propsWithRecurring);
+
+      const seriesRadio = screen.getByTestId('deleteApplyToSeries');
+      const instanceRadio = screen.getByTestId('deleteApplyToInstance');
+
+      // Initially series should be selected
+      expect(seriesRadio).toBeChecked();
+      expect(instanceRadio).not.toBeChecked();
+
+      // Click instance radio
+      fireEvent.click(instanceRadio);
+      expect(seriesRadio).not.toBeChecked();
+      expect(instanceRadio).toBeChecked();
+
+      // Click series radio again
+      fireEvent.click(seriesRadio);
+      expect(seriesRadio).toBeChecked();
+      expect(instanceRadio).not.toBeChecked();
+    });
+
+    it('should use DELETE_ACTION_ITEM_MUTATION when applyTo is series', async () => {
+      const propsWithRecurring: IItemDeleteModalProps = {
+        ...testItemProps,
+        actionItem: {
+          ...testItemProps.actionItem,
+          isTemplate: true,
+        },
+        eventId: 'event123',
+        isRecurring: true,
+      };
+
+      renderItemDeleteModal(successLink, propsWithRecurring);
+
+      // Ensure series is selected (default)
+      const seriesRadio = screen.getByTestId('deleteApplyToSeries');
+      expect(seriesRadio).toBeChecked();
+
+      // Click delete button
+      await act(() => {
+        fireEvent.click(screen.getByTestId('deleteyesbtn'));
+      });
+
+      await waitFor(() => {
+        expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
+        expect(testItemProps.hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
+      });
+    });
+
+    it('should use DELETE_ACTION_FOR_INSTANCE when applyTo is instance', async () => {
+      const propsWithRecurring: IItemDeleteModalProps = {
+        ...testItemProps,
+        actionItem: {
+          ...testItemProps.actionItem,
+          isTemplate: true,
+        },
+        eventId: 'event123',
+        isRecurring: true,
+      };
+
+      renderItemDeleteModal(successLink, propsWithRecurring);
+
+      // Switch to instance
+      const instanceRadio = screen.getByTestId('deleteApplyToInstance');
+      fireEvent.click(instanceRadio);
+      expect(instanceRadio).toBeChecked();
+
+      // Click delete button
+      await act(() => {
+        fireEvent.click(screen.getByTestId('deleteyesbtn'));
+      });
+
+      await waitFor(() => {
+        expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
+        expect(testItemProps.hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
+      });
+    });
+
+    it('should use DELETE_ACTION_ITEM_MUTATION for non-recurring events', async () => {
+      const propsNonRecurring: IItemDeleteModalProps = {
+        ...testItemProps,
+        eventId: 'event123',
+        isRecurring: false,
+      };
+
+      renderItemDeleteModal(successLink, propsNonRecurring);
+
+      // No radio buttons should be present
+      expect(screen.queryByText(t.entireSeries)).not.toBeInTheDocument();
+
+      // Click delete button
+      await act(() => {
+        fireEvent.click(screen.getByTestId('deleteyesbtn'));
+      });
+
+      await waitFor(() => {
+        expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
+        expect(testItemProps.hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
+      });
+    });
+
+    it('should use DELETE_ACTION_ITEM_MUTATION when eventId is not provided', async () => {
+      const propsWithoutEventId: IItemDeleteModalProps = {
+        ...testItemProps,
+        eventId: undefined,
+        isRecurring: true,
+      };
+
+      renderItemDeleteModal(successLink, propsWithoutEventId);
+
+      // No radio buttons should be present
+      expect(screen.queryByText(t.entireSeries)).not.toBeInTheDocument();
+
+      // Click delete button
+      await act(() => {
+        fireEvent.click(screen.getByTestId('deleteyesbtn'));
+      });
+
+      await waitFor(() => {
+        expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
+        expect(testItemProps.hide).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
+      });
+    });
+
+    it('should handle error when deleting instance fails', async () => {
+      const propsWithRecurring: IItemDeleteModalProps = {
+        ...testItemProps,
+        actionItem: {
+          ...testItemProps.actionItem,
+          isTemplate: true,
+        },
+        eventId: 'event123',
+        isRecurring: true,
+      };
+
+      renderItemDeleteModal(errorLink, propsWithRecurring);
+
+      // Switch to instance
+      const instanceRadio = screen.getByTestId('deleteApplyToInstance');
+      fireEvent.click(instanceRadio);
+
+      // Click delete button
+      fireEvent.click(screen.getByTestId('deleteyesbtn'));
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+      });
     });
   });
 });

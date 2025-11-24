@@ -10,18 +10,13 @@ import {
   FaPowerOff,
   FaTrash,
   FaSpinner,
-  FaTimes,
   FaChevronLeft,
   FaChevronRight,
 } from 'react-icons/fa';
 import { AdminPluginFileService } from '../../plugin/services/AdminPluginFileService';
-import type {
-  IPluginMeta,
-  IPluginDetails,
-  IInstalledPlugin,
-  IPluginModalProps,
-} from 'plugin';
+import type { IPluginDetails, IPluginModalProps } from 'plugin';
 import styles from './PluginModal.module.css';
+import { useInstallTimer } from './hooks/useInstallTimer';
 
 const TABS = ['Details', 'Features', 'Changelog'] as const;
 type TabType = (typeof TABS)[number];
@@ -41,6 +36,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
   const [details, setDetails] = useState<IPluginDetails | null>(null);
   const [fetching, setFetching] = useState(false);
   const [tab, setTab] = useState<TabType>('Details');
+  const installElapsed = useInstallTimer(loading);
   const [screenshotViewer, setScreenshotViewer] = useState<{
     open: boolean;
     currentIndex: number;
@@ -78,6 +74,14 @@ const PluginModal: React.FC<IPluginModalProps> = ({
       setScreenshotViewer({ open: false, currentIndex: 0, screenshots: [] });
     }
   }, [show, pluginId]);
+
+  // Ticker for elapsed install time while loading
+  useEffect(() => {
+    if (!loading) {
+      // Reset handled by useInstallTimer when loading becomes false
+      return;
+    }
+  }, [loading]);
 
   // Use details if loaded, else fallback to meta
   const plugin = details || meta;
@@ -231,14 +235,36 @@ const PluginModal: React.FC<IPluginModalProps> = ({
               </>
             )}
             {plugin && !isInstalled(plugin.name) && meta && (
-              <Button
-                variant="primary"
-                className="w-100"
-                onClick={() => installPlugin(meta)}
-                disabled={loading}
-              >
-                Install
-              </Button>
+              <>
+                <Button
+                  variant="primary"
+                  className="w-100 d-flex align-items-center justify-content-center gap-2"
+                  onClick={() => installPlugin(meta)}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <>
+                      <FaSpinner className="animate-spin" />
+                      Installing{installElapsed ? ` (${installElapsed})` : ''}
+                    </>
+                  ) : (
+                    'Install'
+                  )}
+                </Button>
+                <Button
+                  variant="light"
+                  className={`w-100 d-flex align-items-center justify-content-center gap-2 ${styles.actionButtonDanger}`}
+                  onClick={() => uninstallPlugin(meta)}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <FaSpinner className="animate-spin" />
+                  ) : (
+                    <FaTrash style={{ fontSize: '14px' }} />
+                  )}
+                  Uninstall
+                </Button>
+              </>
             )}
           </div>
         </div>

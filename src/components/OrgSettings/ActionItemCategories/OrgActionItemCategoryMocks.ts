@@ -39,13 +39,14 @@ export const MOCKS = [
       },
     },
   },
+  // CREATE mutations for tests
   {
     request: {
       query: CREATE_ACTION_ITEM_CATEGORY_MUTATION,
       variables: {
         input: {
-          name: 'Category 2',
-          description: 'This is a test category',
+          name: 'New Category',
+          description: 'New description',
           isDisabled: true,
           organizationId: 'orgId',
         },
@@ -54,9 +55,9 @@ export const MOCKS = [
     result: {
       data: {
         createActionItemCategory: {
-          id: 'categoryId3',
-          name: 'Category 2',
-          description: 'This is a test category',
+          id: 'newCategoryId1',
+          name: 'New Category',
+          description: 'New description',
           isDisabled: true,
           createdAt: '2044-01-01',
           creator: {
@@ -72,26 +73,67 @@ export const MOCKS = [
   },
   {
     request: {
-      query: UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
+      query: CREATE_ACTION_ITEM_CATEGORY_MUTATION,
       variables: {
         input: {
-          id: 'categoryId',
-          name: 'Category 2',
-          isDisabled: true,
+          name: 'New Category',
+          description: null,
+          isDisabled: false,
+          organizationId: 'orgId',
         },
       },
     },
     result: {
       data: {
-        updateActionItemCategory: {
-          id: 'categoryId',
-          name: 'Category 2',
-          isDisabled: true,
-          updatedAt: '2044-01-01',
+        createActionItemCategory: {
+          id: 'newCategoryId2',
+          name: 'New Category',
+          description: null,
+          isDisabled: false,
+          createdAt: '2044-01-01',
+          creator: {
+            id: 'userId',
+          },
+          organization: {
+            id: 'orgId',
+            name: 'Test Organization',
+          },
         },
       },
     },
   },
+  {
+    request: {
+      query: CREATE_ACTION_ITEM_CATEGORY_MUTATION,
+      variables: {
+        input: {
+          name: 'Minimal Category',
+          description: null,
+          isDisabled: false,
+          organizationId: 'orgId',
+        },
+      },
+    },
+    result: {
+      data: {
+        createActionItemCategory: {
+          id: 'newCategoryId3',
+          name: 'Minimal Category',
+          description: null,
+          isDisabled: false,
+          createdAt: '2044-01-01',
+          creator: {
+            id: 'userId',
+          },
+          organization: {
+            id: 'orgId',
+            name: 'Test Organization',
+          },
+        },
+      },
+    },
+  },
+  // UPDATE mutations for single field changes
   {
     request: {
       query: UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
@@ -119,6 +161,27 @@ export const MOCKS = [
       variables: {
         input: {
           id: 'categoryId',
+          description: 'New description only',
+        },
+      },
+    },
+    result: {
+      data: {
+        updateActionItemCategory: {
+          id: 'categoryId',
+          name: 'Category 1',
+          isDisabled: false,
+          updatedAt: '2044-01-01',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
+      variables: {
+        input: {
+          id: 'categoryId',
           isDisabled: true,
         },
       },
@@ -134,6 +197,118 @@ export const MOCKS = [
       },
     },
   },
+  {
+    request: {
+      query: UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
+      variables: {
+        input: {
+          id: 'categoryId',
+          description: null,
+        },
+      },
+    },
+    result: {
+      data: {
+        updateActionItemCategory: {
+          id: 'categoryId',
+          name: 'Category 1',
+          description: null,
+          updatedAt: '2044-01-01',
+        },
+      },
+    },
+  },
+  // UPDATE mutations for multiple field changes
+  {
+    request: {
+      query: UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
+      variables: {
+        input: {
+          id: 'categoryId',
+          name: 'Updated Name',
+          description: 'Updated description',
+        },
+      },
+    },
+    result: {
+      data: {
+        updateActionItemCategory: {
+          id: 'categoryId',
+          name: 'Updated Name',
+          isDisabled: false,
+          updatedAt: '2044-01-01',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
+      variables: {
+        input: {
+          id: 'categoryId',
+          name: 'Updated Name',
+          isDisabled: true,
+        },
+      },
+    },
+    result: {
+      data: {
+        updateActionItemCategory: {
+          id: 'categoryId',
+          name: 'Updated Name',
+          isDisabled: true,
+          updatedAt: '2044-01-01',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
+      variables: {
+        input: {
+          id: 'categoryId',
+          description: 'Updated description',
+          isDisabled: true,
+        },
+      },
+    },
+    result: {
+      data: {
+        updateActionItemCategory: {
+          id: 'categoryId',
+          name: 'Category 1',
+          isDisabled: true,
+          updatedAt: '2044-01-01',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
+      variables: {
+        input: {
+          id: 'categoryId',
+          name: 'Completely New Name',
+          description: 'Completely new description',
+          isDisabled: true,
+        },
+      },
+    },
+    result: {
+      data: {
+        updateActionItemCategory: {
+          id: 'categoryId',
+          name: 'Completely New Name',
+          isDisabled: true,
+          updatedAt: '2044-01-01',
+        },
+      },
+    },
+  },
+  // DELETE mutation
   {
     request: {
       query: DELETE_ACTION_ITEM_CATEGORY_MUTATION,
@@ -189,8 +364,8 @@ export const MOCKS_ERROR = [
       query: CREATE_ACTION_ITEM_CATEGORY_MUTATION,
       variables: {
         input: {
-          name: 'Category 2',
-          description: 'This is a test category',
+          name: 'New Category',
+          description: 'New description',
           isDisabled: true,
           organizationId: 'orgId',
         },
@@ -204,7 +379,20 @@ export const MOCKS_ERROR = [
       variables: {
         input: {
           id: 'categoryId',
-          name: 'Category 2',
+          name: 'Updated Name',
+        },
+      },
+    },
+    error: new Error('Mock Graphql Error'),
+  },
+  {
+    request: {
+      query: UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
+      variables: {
+        input: {
+          id: 'categoryId',
+          name: 'Updated Name',
+          description: 'Updated description',
           isDisabled: true,
         },
       },

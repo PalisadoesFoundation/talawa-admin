@@ -3,7 +3,7 @@
 #
 # NOTE!
 #
-# Please read the README.md file in this directory that defines what should 
+# Please read the README.md file in this directory that defines what should
 # be placed in this file
 #
 ##############################################################################
@@ -13,16 +13,16 @@ name: Mark stale issues and pull requests
 
 on:
   schedule:
-    - cron: "*/20 0 * * *"
+    - cron: '*/20 0 * * *'
 
 permissions:
   issues: write
-  pull-requests: write  
+  pull-requests: write
   actions: write
-  
+
 jobs:
   stale:
-    name: Process Stale Issues and PRs 
+    name: Process Stale Issues and PRs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/stale@v10

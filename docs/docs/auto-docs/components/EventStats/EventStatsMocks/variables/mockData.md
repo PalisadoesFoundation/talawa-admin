@@ -8,7 +8,7 @@
 
 Defined in: [src/components/EventStats/EventStatsMocks.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/EventStatsMocks.ts#L3)
 
-## Type declaration
+## Type Declaration
 
 ### request
 

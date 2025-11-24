@@ -3,16 +3,16 @@
 #
 # NOTE!
 #
-# Please read the README.md file in this directory that defines what should 
+# Please read the README.md file in this directory that defines what should
 # be placed in this file
 #
 ##############################################################################
 ##############################################################################
 
 name: PR Target Workflow
-on: 
+on:
   pull_request_target:
-  
+
 jobs:
   PR-Greeting:
     name: Pull Request Target
@@ -24,9 +24,9 @@ jobs:
           comment-tag: pr_review_policy
           message: |
             ## Our Pull Request Approval Process
-            
+
             Thanks for contributing! 
-            
+
             ### Testing Your Code
             Remember, your PRs won't be reviewed until these criteria are met:
 
@@ -67,7 +67,7 @@ jobs:
             ### Other
 
             1. :dart: Please be considerate of our volunteers' time. Contacting the person who assigned the reviewers is not advised unless they ask for your input. Do not @ the person who did the assignment otherwise.
-            2. Read the CONTRIBUTING.md file make 
+            2. Read the CONTRIBUTING.md file make
 
       - name: Greeting Message to User
         uses: actions/first-interaction@v1

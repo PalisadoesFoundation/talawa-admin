@@ -4,14 +4,27 @@ import gql from 'graphql-tag';
  * GraphQL mutation to create an event volunteer.
  *
  * @param data - The data required to create an event volunteer.
- * @returns The ID of the created event volunteer.
+ * @returns The created event volunteer with full details.
  *
  */
 
 export const ADD_VOLUNTEER = gql`
   mutation CreateEventVolunteer($data: EventVolunteerInput!) {
     createEventVolunteer(data: $data) {
-      _id
+      id
+      hasAccepted
+      hoursVolunteered
+      isPublic
+      createdAt
+      user {
+        id
+        name
+        avatarURL
+      }
+      event {
+        id
+        name
+      }
     }
   }
 `;
@@ -20,13 +33,21 @@ export const ADD_VOLUNTEER = gql`
  * GraphQL mutation to delete an event volunteer.
  *
  * @param id - The ID of the event volunteer being deleted.
- * @returns The ID of the deleted event volunteer.
+ * @returns The deleted event volunteer.
  *
  */
 export const DELETE_VOLUNTEER = gql`
-  mutation RemoveEventVolunteer($id: ID!) {
-    removeEventVolunteer(id: $id) {
-      _id
+  mutation DeleteEventVolunteer($id: ID!) {
+    deleteEventVolunteer(id: $id) {
+      id
+      user {
+        id
+        name
+      }
+      event {
+        id
+        name
+      }
     }
   }
 `;
@@ -48,7 +69,7 @@ export const DELETE_VOLUNTEER = gql`
 export const CREATE_VOLUNTEER_GROUP = gql`
   mutation CreateEventVolunteerGroup($data: EventVolunteerGroupInput!) {
     createEventVolunteerGroup(data: $data) {
-      _id
+      id
     }
   }
 `;
@@ -67,7 +88,7 @@ export const UPDATE_VOLUNTEER_GROUP = gql`
     $data: UpdateEventVolunteerGroupInput!
   ) {
     updateEventVolunteerGroup(id: $id, data: $data) {
-      _id
+      id
     }
   }
 `;
@@ -80,9 +101,62 @@ export const UPDATE_VOLUNTEER_GROUP = gql`
  *
  */
 export const DELETE_VOLUNTEER_GROUP = gql`
-  mutation RemoveEventVolunteerGroup($id: ID!) {
-    removeEventVolunteerGroup(id: $id) {
-      _id
+  mutation DeleteEventVolunteerGroup($id: ID!) {
+    deleteEventVolunteerGroup(id: $id) {
+      id
+    }
+  }
+`;
+
+/**
+ * GraphQL mutation to delete a volunteer from a specific recurring event instance.
+ *
+ * @param input - The input containing volunteerId and recurringEventInstanceId.
+ * @returns The deleted volunteer information.
+ */
+export const DELETE_VOLUNTEER_FOR_INSTANCE = gql`
+  mutation DeleteEventVolunteerForInstance(
+    $input: DeleteEventVolunteerForInstanceInput!
+  ) {
+    deleteEventVolunteerForInstance(input: $input) {
+      id
+      hasAccepted
+      isPublic
+      hoursVolunteered
+      user {
+        id
+        name
+        avatarURL
+      }
+    }
+  }
+`;
+
+/**
+ * GraphQL mutation to delete a volunteer group from a specific recurring event instance.
+ *
+ * @param input - The input containing volunteerGroupId and recurringEventInstanceId.
+ * @returns The deleted volunteer group information.
+ */
+export const DELETE_VOLUNTEER_GROUP_FOR_INSTANCE = gql`
+  mutation DeleteEventVolunteerGroupForInstance(
+    $input: DeleteEventVolunteerGroupForInstanceInput!
+  ) {
+    deleteEventVolunteerGroupForInstance(input: $input) {
+      id
+      name
+      description
+      volunteersRequired
+      createdAt
+      leader {
+        id
+        name
+        avatarURL
+      }
+      creator {
+        id
+        name
+      }
     }
   }
 `;
@@ -90,7 +164,25 @@ export const DELETE_VOLUNTEER_GROUP = gql`
 export const CREATE_VOLUNTEER_MEMBERSHIP = gql`
   mutation CreateVolunteerMembership($data: VolunteerMembershipInput!) {
     createVolunteerMembership(data: $data) {
-      _id
+      id
+      status
+      createdAt
+      volunteer {
+        id
+        hasAccepted
+        user {
+          id
+          name
+        }
+      }
+      event {
+        id
+        name
+      }
+      createdBy {
+        id
+        name
+      }
     }
   }
 `;
@@ -106,7 +198,25 @@ export const CREATE_VOLUNTEER_MEMBERSHIP = gql`
 export const UPDATE_VOLUNTEER_MEMBERSHIP = gql`
   mutation UpdateVolunteerMembership($id: ID!, $status: String!) {
     updateVolunteerMembership(id: $id, status: $status) {
-      _id
+      id
+      status
+      updatedAt
+      volunteer {
+        id
+        hasAccepted
+        user {
+          id
+          name
+        }
+      }
+      event {
+        id
+        name
+      }
+      updatedBy {
+        id
+        name
+      }
     }
   }
 `;

@@ -47,6 +47,7 @@ import ProfileHeader from './ProfileHeader/ProfileHeader';
 import ProfileImageSection from './ProfileImageSection/ProfileImageSection';
 import UserDetailsForm from './UserDetails/UserDetails';
 import { validatePassword } from 'utils/passwordValidator';
+import EventsAttendedByUser from 'components/UserPortal/UserProfile/EventsAttendedByUser';
 
 export default function Settings(): React.JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
@@ -54,7 +55,7 @@ export default function Settings(): React.JSX.Element {
   const [isUpdated, setIsUpdated] = useState<boolean>(false);
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
   const originalImageState = React.useRef<string>('');
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const fileInputRef = React.useRef<HTMLInputElement | null>(null);
   const { getItem, setItem } = useLocalStorage();
   const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
     const stored = getItem('sidebar');
@@ -298,10 +299,10 @@ export default function Settings(): React.JSX.Element {
             </Col>
             <Col lg={5}>
               <OtherSettings />
+              <Card border="0" className="rounded-4 mb-4"></Card>
+              <EventsAttendedByUser userDetails={userDetails} t={t} />
             </Col>
           </Row>
-          {/* EventsAttendedByUser component can be added once events queries start working */}
-          {/* <EventsAttendedByUser userDetails={userDetails} t={t} /> */}
         </div>
       </div>
     </>

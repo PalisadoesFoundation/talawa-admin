@@ -8,155 +8,172 @@ import {
 } from 'GraphQl/Queries/EventVolunteerQueries';
 
 const group1 = {
-  _id: 'groupId1',
+  id: 'groupId1',
   name: 'Group 1',
-  description: 'desc',
+  description: 'Volunteer Group Description',
   volunteersRequired: null,
   createdAt: '2024-10-25T16:16:32.978Z',
   creator: {
-    _id: 'creatorId1',
-    firstName: 'Wilt',
-    lastName: 'Shepherd',
-    image: null,
+    id: 'creatorId1',
+    name: 'Wilt Shepherd',
+    avatarURL: null,
   },
   leader: {
-    _id: 'userId',
-    firstName: 'Teresa',
-    lastName: 'Bradley',
-    image: 'img-url',
+    id: 'userId',
+    name: 'Teresa Bradley',
+    avatarURL: 'img-url',
   },
   volunteers: [
     {
-      _id: 'volunteerId1',
+      id: 'volunteerId1',
+      hasAccepted: false,
       user: {
-        _id: 'userId',
-        firstName: 'Teresa',
-        lastName: 'Bradley',
-        image: null,
+        id: 'userId',
+        name: 'Teresa Bradley',
+        avatarURL: null,
       },
     },
   ],
-  assignments: [],
   event: {
-    _id: 'eventId1',
+    id: 'eventId1',
   },
 };
 
 const group2 = {
-  _id: 'groupId2',
+  id: 'groupId2',
   name: 'Group 2',
-  description: 'desc',
+  description: 'Volunteer Group Description',
   volunteersRequired: null,
   createdAt: '2024-10-27T15:25:13.044Z',
   creator: {
-    _id: 'creatorId2',
-    firstName: 'Wilt',
-    lastName: 'Shepherd',
-    image: null,
+    id: 'creatorId2',
+    name: 'Wilt Shepherd',
+    avatarURL: null,
   },
   leader: {
-    _id: 'userId',
-    firstName: 'Teresa',
-    lastName: 'Bradley',
-    image: null,
+    id: 'userId',
+    name: 'Teresa Bradley',
+    avatarURL: null,
   },
   volunteers: [
     {
-      _id: 'volunteerId2',
+      id: 'volunteerId2',
+      hasAccepted: false,
       user: {
-        _id: 'userId',
-        firstName: 'Teresa',
-        lastName: 'Bradley',
-        image: null,
+        id: 'userId',
+        name: 'Teresa Bradley',
+        avatarURL: null,
       },
     },
   ],
-  assignments: [],
   event: {
-    _id: 'eventId2',
+    id: 'eventId2',
   },
 };
 
 const group3 = {
-  _id: 'groupId3',
+  id: 'groupId3',
   name: 'Group 3',
-  description: 'desc',
+  description: 'Volunteer Group Description',
   volunteersRequired: null,
   createdAt: '2024-10-27T15:34:15.889Z',
   creator: {
-    _id: 'creatorId3',
-    firstName: 'Wilt',
-    lastName: 'Shepherd',
-    image: null,
+    id: 'creatorId3',
+    name: 'Wilt Shepherd',
+    avatarURL: null,
   },
   leader: {
-    _id: 'userId1',
-    firstName: 'Bruce',
-    lastName: 'Garza',
-    image: null,
+    id: 'userId1',
+    name: 'Bruce Garza',
+    avatarURL: null,
   },
   volunteers: [
     {
-      _id: 'volunteerId3',
+      id: 'volunteerId3',
+      hasAccepted: false,
       user: {
-        _id: 'userId',
-        firstName: 'Teresa',
-        lastName: 'Bradley',
-        image: null,
+        id: 'userId',
+        name: 'Teresa Bradley',
+        avatarURL: null,
       },
     },
   ],
-  assignments: [],
   event: {
-    _id: 'eventId3',
+    id: 'eventId3',
   },
 };
 
 const membership1 = {
-  _id: 'membershipId1',
+  id: 'membershipId1',
   status: 'requested',
   createdAt: '2024-10-29T10:18:05.851Z',
+  updatedAt: '2024-10-29T10:18:05.851Z',
   event: {
-    _id: 'eventId',
-    title: 'Event 1',
-    startDate: '2044-10-31',
+    id: 'eventId',
+    name: 'Event 1',
+    startAt: '2044-10-31',
+    endAt: '2044-10-31',
+    recurrenceRule: null,
   },
   volunteer: {
-    _id: 'volunteerId1',
+    id: 'volunteerId1',
+    hasAccepted: false,
+    hoursVolunteered: 0,
     user: {
-      _id: 'userId1',
-      firstName: 'John',
-      lastName: 'Doe',
-      image: 'img-url',
+      id: 'userId1',
+      name: 'John Doe',
+      emailAddress: 'john@example.com',
+      avatarURL: 'img-url',
     },
   },
   group: {
-    _id: 'groupId',
+    id: 'groupId',
     name: 'Group 1',
+  },
+  createdBy: {
+    id: 'adminId',
+    name: 'Admin User',
+  },
+  updatedBy: {
+    id: 'adminId',
+    name: 'Admin User',
   },
 };
 
 const membership2 = {
-  _id: 'membershipId2',
+  id: 'membershipId2',
   status: 'requested',
   createdAt: '2024-10-29T10:18:05.851Z',
+  updatedAt: '2024-10-29T10:18:05.851Z',
   event: {
-    _id: 'eventId',
-    title: 'Event 1',
-    startDate: '2044-10-31',
+    id: 'eventId',
+    name: 'Event 1',
+    startAt: '2044-10-31',
+    endAt: '2044-10-31',
+    recurrenceRule: null,
   },
   volunteer: {
-    _id: 'volunteerId2',
+    id: 'volunteerId2',
+    hasAccepted: false,
+    hoursVolunteered: 0,
     user: {
-      _id: 'userId2',
-      firstName: 'Teresa',
-      lastName: 'Bradley',
-      image: null,
+      id: 'userId2',
+      name: 'Teresa Bradley',
+      emailAddress: 'teresa@example.com',
+      avatarURL: null,
     },
   },
   group: {
-    _id: 'groupId',
+    id: 'groupId',
     name: 'Group 2',
+  },
+  createdBy: {
+    id: 'adminId',
+    name: 'Admin User',
+  },
+  updatedBy: {
+    id: 'adminId',
+    name: 'Admin User',
   },
 };
 
@@ -166,9 +183,10 @@ export const MOCKS = [
       query: EVENT_VOLUNTEER_GROUP_LIST,
       variables: {
         where: {
+          eventId: undefined,
           userId: 'userId',
           orgId: 'orgId',
-          leaderName: null,
+          leaderName: undefined,
           name_contains: '',
         },
         orderBy: null,
@@ -185,9 +203,30 @@ export const MOCKS = [
       query: EVENT_VOLUNTEER_GROUP_LIST,
       variables: {
         where: {
+          eventId: undefined,
           userId: 'userId',
           orgId: 'orgId',
-          leaderName: null,
+          leaderName: 'Bruce',
+          name_contains: undefined,
+        },
+        orderBy: null,
+      },
+    },
+    result: {
+      data: {
+        getEventVolunteerGroups: [group3],
+      },
+    },
+  },
+  {
+    request: {
+      query: EVENT_VOLUNTEER_GROUP_LIST,
+      variables: {
+        where: {
+          eventId: undefined,
+          userId: 'userId',
+          orgId: 'orgId',
+          leaderName: undefined,
           name_contains: '',
         },
         orderBy: 'volunteers_DESC',
@@ -204,9 +243,10 @@ export const MOCKS = [
       query: EVENT_VOLUNTEER_GROUP_LIST,
       variables: {
         where: {
+          eventId: undefined,
           userId: 'userId',
           orgId: 'orgId',
-          leaderName: null,
+          leaderName: undefined,
           name_contains: '',
         },
         orderBy: 'volunteers_ASC',
@@ -223,48 +263,11 @@ export const MOCKS = [
       query: EVENT_VOLUNTEER_GROUP_LIST,
       variables: {
         where: {
+          eventId: undefined,
           userId: 'userId',
           orgId: 'orgId',
-          leaderName: null,
+          leaderName: undefined,
           name_contains: '1',
-        },
-        orderBy: null,
-      },
-    },
-    result: {
-      data: {
-        getEventVolunteerGroups: [group1],
-      },
-    },
-  },
-  {
-    request: {
-      query: EVENT_VOLUNTEER_GROUP_LIST,
-      variables: {
-        where: {
-          userId: 'userId',
-          orgId: 'orgId',
-          leaderName: '',
-          name_contains: null,
-        },
-        orderBy: null,
-      },
-    },
-    result: {
-      data: {
-        getEventVolunteerGroups: [group1, group2, group3],
-      },
-    },
-  },
-  {
-    request: {
-      query: EVENT_VOLUNTEER_GROUP_LIST,
-      variables: {
-        where: {
-          userId: 'userId',
-          orgId: 'orgId',
-          leaderName: 'Bruce',
-          name_contains: null,
         },
         orderBy: null,
       },
@@ -303,7 +306,25 @@ export const MOCKS = [
     result: {
       data: {
         updateVolunteerMembership: {
-          _id: 'membershipId1',
+          id: 'membershipId1',
+          status: 'accepted',
+          updatedAt: '2024-10-29T10:20:05.851Z',
+          volunteer: {
+            id: 'volunteerId1',
+            hasAccepted: false,
+            user: {
+              id: 'userId1',
+              name: 'John Doe',
+            },
+          },
+          event: {
+            id: 'eventId',
+            name: 'Event 1',
+          },
+          updatedBy: {
+            id: 'adminId',
+            name: 'Admin User',
+          },
         },
       },
     },
@@ -319,7 +340,25 @@ export const MOCKS = [
     result: {
       data: {
         updateVolunteerMembership: {
-          _id: 'membershipId1',
+          id: 'membershipId1',
+          status: 'rejected',
+          updatedAt: '2024-10-29T10:20:05.851Z',
+          volunteer: {
+            id: 'volunteerId1',
+            hasAccepted: false,
+            user: {
+              id: 'userId1',
+              name: 'John Doe',
+            },
+          },
+          event: {
+            id: 'eventId',
+            name: 'Event 1',
+          },
+          updatedBy: {
+            id: 'adminId',
+            name: 'Admin User',
+          },
         },
       },
     },
@@ -340,7 +379,7 @@ export const MOCKS = [
     result: {
       data: {
         updateEventVolunteerGroup: {
-          _id: 'groupId',
+          id: 'groupId',
         },
       },
     },
@@ -358,7 +397,7 @@ export const MOCKS = [
     result: {
       data: {
         updateEventVolunteerGroup: {
-          _id: 'groupId',
+          id: 'groupId',
         },
       },
     },
@@ -371,9 +410,10 @@ export const EMPTY_MOCKS = [
       query: EVENT_VOLUNTEER_GROUP_LIST,
       variables: {
         where: {
+          eventId: undefined,
           userId: 'userId',
           orgId: 'orgId',
-          leaderName: null,
+          leaderName: undefined,
           name_contains: '',
         },
         orderBy: null,
@@ -391,7 +431,7 @@ export const EMPTY_MOCKS = [
       variables: {
         where: {
           eventId: 'eventId',
-          group: 'groupId',
+          groupId: 'groupId',
           status: 'requested',
         },
       },

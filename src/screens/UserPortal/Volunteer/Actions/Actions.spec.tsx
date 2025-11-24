@@ -95,6 +95,7 @@ describe('Testing Actions Screen', () => {
 
   beforeEach(() => {
     setItem('userId', 'userId');
+    setItem('volunteerId', 'volunteerId1');
   });
 
   afterAll(() => {
@@ -103,6 +104,7 @@ describe('Testing Actions Screen', () => {
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
     setItem('userId', null);
+    setItem('volunteerId', null);
     render(
       <MockedProvider addTypename={false} link={link1}>
         <MemoryRouter initialEntries={['/user/volunteer/']}>

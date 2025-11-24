@@ -87,19 +87,93 @@ const startPostModal = ({
    * Handles the creation of a new post by calling the mutation.
    * Displays a toast notification based on the outcome.
    */
+
+  async function getFileHashFromBase64(base64String: string): Promise<string> {
+    const base64 = base64String.split(',')[1];
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+
+    const hashBuffer = await crypto.subtle.digest('SHA-256', bytes);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  const getMimeTypeEnum = (url: string): string => {
+    // Check for base64 data URI
+    if (url.startsWith('data:')) {
+      const mime = url.split(';')[0].split(':')[1]; // e.g., "image/png"
+      switch (mime) {
+        case 'image/jpeg':
+          return 'IMAGE_JPEG';
+        case 'image/png':
+          return 'IMAGE_PNG';
+        case 'image/webp':
+          return 'IMAGE_WEBP';
+        case 'image/avif':
+          return 'IMAGE_AVIF';
+        case 'video/mp4':
+          return 'VIDEO_MP4';
+        case 'video/webm':
+          return 'VIDEO_WEBM';
+        default:
+          return 'IMAGE_JPEG'; // fallback
+      }
+    }
+
+    // Fallback for file URLs (e.g., https://.../file.png)
+    const ext = url.split('.').pop()?.toLowerCase();
+    switch (ext) {
+      case 'jpg':
+      case 'jpeg':
+        return 'IMAGE_JPEG';
+      case 'png':
+        return 'IMAGE_PNG';
+      case 'webp':
+        return 'IMAGE_WEBP';
+      case 'avif':
+        return 'IMAGE_AVIF';
+      case 'mp4':
+        return 'VIDEO_MP4';
+      case 'webm':
+        return 'VIDEO_WEBM';
+      default:
+        return 'IMAGE_JPEG'; // fallback
+    }
+  };
+
   const handlePost = async (): Promise<void> => {
     try {
       if (!postContent) {
         throw new Error("Can't create a post with an empty body.");
       }
+
       toast.info('Processing your post. Please wait.');
+
+      let attachment = null;
+
+      if (img) {
+        const mimeType = getMimeTypeEnum(img);
+        const fileName = img.split('/').pop() || 'attachment';
+        const fileHash = await getFileHashFromBase64(img);
+
+        attachment = {
+          fileHash,
+          mimetype: mimeType,
+          name: fileName,
+          objectName: 'uploads/' + fileName,
+        };
+      }
 
       const { data } = await createPost({
         variables: {
-          title: '',
-          text: postContent,
-          organizationId: organizationId,
-          file: img,
+          input: {
+            caption: postContent,
+            organizationId,
+            ...(attachment && { attachments: [attachment] }),
+          },
         },
       });
 
@@ -133,13 +207,14 @@ const startPostModal = ({
           <span className="d-flex gap-2 align-items-center">
             <span className={styles.userImageUserPost}>
               <Image
-                src={userData?.user?.image || UserDefault}
+                crossOrigin="anonymous"
+                src={userData?.avatarURL || UserDefault}
                 roundedCircle
                 className="mt-2"
                 data-testid="userImage"
               />
             </span>
-            <span>{`${userData?.user?.firstName} ${userData?.user?.lastName}`}</span>
+            <span>{`${userData?.name}`}</span>
           </span>
         </Modal.Title>
       </Modal.Header>

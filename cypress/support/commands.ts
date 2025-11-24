@@ -8,9 +8,9 @@ declare global {
        */
       loginByApi(role: string): Chainable<Subject>;
       /**
-       * @param expectedMessage The expected error text (string or RegExp)
+       * @param expectedMessage The expected text (string or RegExp)
        */
-      assertToastError(expectedMessage: string | RegExp): Chainable<void>;
+      assertToast(expectedMessage: string | RegExp): Chainable<void>;
     }
   }
 }
@@ -39,7 +39,7 @@ Cypress.Commands.add('loginByApi', (role: string) => {
   });
 });
 
-Cypress.Commands.add('assertToastError', (expectedMessage: string | RegExp) => {
+Cypress.Commands.add('assertToast', (expectedMessage: string | RegExp) => {
   cy.get('[role=alert]', { timeout: 5000 })
     .should('be.visible')
     .and('contain.text', expectedMessage);

@@ -2,14 +2,63 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter } from 'react-router';
+import React from 'react';
+import type { IDrawerExtension } from 'plugin/types';
 import LeftDrawerOrg from './LeftDrawerOrg';
 import type { ILeftDrawerProps } from './LeftDrawerOrg';
 import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
 
+// Type definitions for better type safety
+interface IMockedResponse {
+  request: {
+    query: typeof GET_ORGANIZATION_DATA_PG;
+    variables: {
+      id: string;
+      first: number;
+      after: null;
+    };
+  };
+  result?: {
+    data: {
+      organization: {
+        id: string;
+        name: string;
+        description: string;
+        addressLine1: string;
+        addressLine2: string;
+        city: string | null;
+        state: string;
+        postalCode: string;
+        countryCode: string;
+        avatarURL: string | null;
+        createdAt: string;
+        updatedAt: string;
+        creator: {
+          id: string;
+          name: string;
+          emailAddress: string;
+        };
+        updater: {
+          id: string;
+          name: string;
+          emailAddress: string;
+        };
+      };
+    };
+  };
+  error?: Error;
+  delay?: number;
+}
+
 // Mock the dependencies
-const mockT = vi.fn((key: string) => {
+let mockT: ReturnType<typeof vi.fn>;
+
+let mockTErrors: ReturnType<typeof vi.fn>;
+
+const mockTImplementation = (key: string) => {
   const translations: Record<string, string> = {
     talawaAdminPortal: 'Talawa Admin Portal',
+    adminPortal: 'Admin Portal',
     menu: 'Menu',
     plugins: 'Plugins',
     Dashboard: 'Dashboard',
@@ -19,24 +68,27 @@ const mockT = vi.fn((key: string) => {
     Posts: 'Posts',
   };
   return translations[key] || key;
-});
+};
 
-const mockTErrors = vi.fn((key: string, options?: any) => {
+const mockTErrorsImplementation = (
+  key: string,
+  options?: { entity?: string },
+) => {
   if (key === 'errorLoading' && options?.entity) {
     return `Error loading ${options.entity}`;
   }
   return key;
-});
+};
 
 vi.mock('react-i18next', () => ({
   useTranslation: vi.fn((namespace: string) => {
     if (namespace === 'common') {
-      return { t: mockT };
+      return { t: mockT || vi.fn() };
     }
     if (namespace === 'errors') {
-      return { t: mockTErrors };
+      return { t: mockTErrors || vi.fn() };
     }
-    return { t: mockT };
+    return { t: mockT || vi.fn() };
   }),
   initReactI18next: {
     type: '3rdParty',
@@ -45,9 +97,7 @@ vi.mock('react-i18next', () => ({
 }));
 
 const { mockUsePluginDrawerItems } = vi.hoisted(() => ({
-  mockUsePluginDrawerItems: vi.fn(
-    (): import('plugin/types').IDrawerExtension[] => [],
-  ),
+  mockUsePluginDrawerItems: vi.fn((): IDrawerExtension[] => []),
 }));
 
 vi.mock('plugin', () => ({
@@ -90,12 +140,13 @@ vi.mock('components/SignOut/SignOut', () => ({
   )),
 }));
 
+let mockGetItem: ReturnType<typeof vi.fn>;
+let mockSetItem: ReturnType<typeof vi.fn>;
+
 vi.mock('utils/useLocalstorage', () => ({
   default: vi.fn(() => ({
-    getItem: vi.fn((key: string) => {
-      if (key === 'id') return 'user-123';
-      return null;
-    }),
+    getItem: mockGetItem,
+    setItem: mockSetItem,
   })),
 }));
 
@@ -190,7 +241,7 @@ const mockOrganizationDataWithoutCity = {
   },
 };
 
-const successMocks = [
+const successMocks: IMockedResponse[] = [
   {
     request: {
       query: GET_ORGANIZATION_DATA_PG,
@@ -202,7 +253,7 @@ const successMocks = [
   },
 ];
 
-const loadingMocks = [
+const loadingMocks: IMockedResponse[] = [
   {
     request: {
       query: GET_ORGANIZATION_DATA_PG,
@@ -212,7 +263,7 @@ const loadingMocks = [
   },
 ];
 
-const errorMocks = [
+const errorMocks: IMockedResponse[] = [
   {
     request: {
       query: GET_ORGANIZATION_DATA_PG,
@@ -250,8 +301,13 @@ describe('LeftDrawerOrg', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockT.mockClear();
-    mockTErrors.mockClear();
+    mockT = vi.fn(mockTImplementation);
+    mockTErrors = vi.fn(mockTErrorsImplementation);
+    mockGetItem = vi.fn((key: string) => {
+      if (key === 'id') return 'user-123';
+      return null;
+    });
+    mockSetItem = vi.fn();
     mockUsePluginDrawerItems.mockReturnValue([]);
     // Reset window.innerWidth to a default value
     Object.defineProperty(window, 'innerWidth', {
@@ -273,7 +329,7 @@ describe('LeftDrawerOrg', () => {
 
   const renderComponent = (
     props: Partial<ILeftDrawerProps> = {},
-    mocks: any[] = successMocks,
+    mocks: IMockedResponse[] = successMocks,
     initialRoute = '/orgdash/org-123',
   ) => {
     return render(
@@ -291,8 +347,7 @@ describe('LeftDrawerOrg', () => {
 
       expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
       expect(screen.getByTestId('talawa-logo')).toBeInTheDocument();
-      expect(screen.getByText('Talawa Admin Portal')).toBeInTheDocument();
-      expect(screen.getByText('Menu')).toBeInTheDocument();
+      expect(screen.getByText('Admin Portal')).toBeInTheDocument();
 
       await waitFor(() => {
         expect(screen.getByTestId('OrgBtn')).toBeInTheDocument();
@@ -348,7 +403,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should display Avatar component when no avatarURL', async () => {
-      const mocksWithoutAvatar = [
+      const mocksWithoutAvatar: IMockedResponse[] = [
         {
           request: {
             query: GET_ORGANIZATION_DATA_PG,
@@ -373,7 +428,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should display N/A when city is not available', async () => {
-      const mocksWithoutCity = [
+      const mocksWithoutCity: IMockedResponse[] = [
         {
           request: {
             query: GET_ORGANIZATION_DATA_PG,
@@ -560,7 +615,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should show plugin section when plugin items exist', () => {
-      const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
+      const mockPluginItems: IDrawerExtension[] = [
         {
           pluginId: 'test-plugin',
           path: '/plugin/:orgId/test',
@@ -577,7 +632,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should replace :orgId in plugin paths', () => {
-      const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
+      const mockPluginItems: IDrawerExtension[] = [
         {
           pluginId: 'test-plugin',
           path: '/plugin/:orgId/test',
@@ -594,7 +649,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should render plugin item with custom icon', () => {
-      const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
+      const mockPluginItems: IDrawerExtension[] = [
         {
           pluginId: 'test-plugin',
           path: '/plugin/:orgId/test',
@@ -612,7 +667,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should render plugin item with default plugin icon when no custom icon', () => {
-      const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
+      const mockPluginItems: IDrawerExtension[] = [
         {
           pluginId: 'test-plugin',
           path: '/plugin/:orgId/test',
@@ -634,7 +689,7 @@ describe('LeftDrawerOrg', () => {
         value: 800,
       });
 
-      const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
+      const mockPluginItems: IDrawerExtension[] = [
         {
           pluginId: 'test-plugin',
           path: '/plugin/:orgId/test',
@@ -663,7 +718,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should render multiple plugin items', () => {
-      const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
+      const mockPluginItems: IDrawerExtension[] = [
         {
           pluginId: 'plugin-1',
           path: '/plugin/:orgId/1',
@@ -707,12 +762,84 @@ describe('LeftDrawerOrg', () => {
     });
   });
 
+  it('should handle empty pathname via direct routing', () => {
+    render(
+      <MockedProvider mocks={successMocks} addTypename={false}>
+        <MemoryRouter initialEntries={['']}>
+          <LeftDrawerOrg {...defaultProps} />
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // The component should still render without error
+    expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
+  });
+
+  it('should toggle drawer state and update localStorage on click and keydown events', () => {
+    // Test with initial hideDrawer = false
+    const { unmount: unmount1 } = renderComponent({ hideDrawer: false });
+
+    const toggleButton = screen.getByTestId('toggleBtn');
+    expect(toggleButton).toBeInTheDocument();
+
+    // Test onClick functionality
+    fireEvent.click(toggleButton);
+
+    expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'true');
+    expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
+
+    // Clear mocks and unmount previous component
+    mockSetItem.mockClear();
+    mockSetHideDrawer.mockClear();
+    unmount1();
+
+    // Re-render with hideDrawer = true
+    const { unmount: unmount2 } = renderComponent({ hideDrawer: true });
+    const toggleButtonCollapsed = screen.getByTestId('toggleBtn');
+
+    // Test onClick when drawer is hidden
+    fireEvent.click(toggleButtonCollapsed);
+
+    expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'false');
+    expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
+
+    // Clear mocks for keydown tests
+    mockSetItem.mockClear();
+    mockSetHideDrawer.mockClear();
+
+    // Test onKeyDown with Enter key
+    fireEvent.keyDown(toggleButtonCollapsed, { key: 'Enter' });
+
+    expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'false');
+    expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
+
+    // Clear mocks
+    mockSetItem.mockClear();
+    mockSetHideDrawer.mockClear();
+
+    // Test onKeyDown with Space key
+    fireEvent.keyDown(toggleButtonCollapsed, { key: ' ' });
+
+    expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'false');
+    expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
+
+    // Test that other keys don't trigger the toggle
+    mockSetItem.mockClear();
+    mockSetHideDrawer.mockClear();
+
+    fireEvent.keyDown(toggleButtonCollapsed, { key: 'Escape' });
+
+    expect(mockSetItem).not.toHaveBeenCalled();
+    expect(mockSetHideDrawer).not.toHaveBeenCalled();
+
+    unmount2();
+  });
+
   describe('Internationalization', () => {
     it('should use correct translation keys', () => {
       renderComponent();
 
-      expect(mockT).toHaveBeenCalledWith('talawaAdminPortal');
-      expect(mockT).toHaveBeenCalledWith('menu');
+      expect(mockT).toHaveBeenCalledWith('adminPortal');
       expect(mockT).toHaveBeenCalledWith('Dashboard');
       expect(mockT).toHaveBeenCalledWith('Members');
       expect(mockT).toHaveBeenCalledWith('Events');
@@ -731,7 +858,9 @@ describe('LeftDrawerOrg', () => {
 
   describe('Edge Cases', () => {
     it('should handle undefined plugin items gracefully', () => {
-      mockUsePluginDrawerItems.mockReturnValue(undefined as any);
+      mockUsePluginDrawerItems.mockReturnValue(
+        undefined as unknown as IDrawerExtension[],
+      );
 
       expect(() => renderComponent()).not.toThrow();
       expect(screen.queryByText('Plugins')).not.toBeInTheDocument();
@@ -740,7 +869,9 @@ describe('LeftDrawerOrg', () => {
     it('should handle null setHideDrawer prop', () => {
       const propsWithNullSetter = {
         ...defaultProps,
-        setHideDrawer: null as any,
+        setHideDrawer: null as unknown as React.Dispatch<
+          React.SetStateAction<boolean>
+        >,
       };
 
       expect(() => renderComponent(propsWithNullSetter)).not.toThrow();
@@ -754,7 +885,7 @@ describe('LeftDrawerOrg', () => {
 
       renderComponent(propsWithEmptyTargets);
 
-      expect(screen.getByText('Menu')).toBeInTheDocument();
+      expect(screen.getByText('Admin Portal')).toBeInTheDocument();
       expect(screen.queryByText('Dashboard')).not.toBeInTheDocument();
     });
 
@@ -808,7 +939,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should handle different orgId prop', () => {
-      const differentOrgMocks = [
+      const differentOrgMocks: IMockedResponse[] = [
         {
           request: {
             query: GET_ORGANIZATION_DATA_PG,

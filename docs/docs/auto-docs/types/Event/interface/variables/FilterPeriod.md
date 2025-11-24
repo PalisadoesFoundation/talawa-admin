@@ -6,9 +6,9 @@
 
 > `const` **FilterPeriod**: `object`
 
-Defined in: [src/types/Event/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L17)
+Defined in: [src/types/Event/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L12)
 
-## Type declaration
+## Type Declaration
 
 ### All
 

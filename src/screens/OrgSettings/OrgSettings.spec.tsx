@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 import React from 'react';
-import { describe, it, expect, vi } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi, afterEach } from 'vitest';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
@@ -99,7 +99,7 @@ describe('Organisation Settings Page', () => {
     });
   });
 
-  it('should render the organisation settings page', async () => {
+  it('should render the organisation settings page with general tab active by default', async () => {
     renderOrganisationSettings();
 
     const generalTab = await waitFor(() => screen.getByTestId('generalTab'));
@@ -112,5 +112,160 @@ describe('Organisation Settings Page', () => {
     });
 
     expect(screen.getByTestId('generalTab')).toBeInTheDocument();
+
+    // Check if general settings button exists and has active class
+    const generalButton = screen.getByTestId('generalSettings');
+    expect(generalButton).toBeInTheDocument();
+    expect(generalButton.className).toMatch(/_activeTabBtn_/);
+  });
+
+  it('should set document title correctly', async () => {
+    const originalTitle = document.title;
+    renderOrganisationSettings();
+
+    await waitFor(() => {
+      expect(document.title).toBe('Settings');
+    });
+
+    // Restore original title
+    document.title = originalTitle;
+  });
+
+  it('should switch to action item categories tab when clicked', async () => {
+    renderOrganisationSettings();
+
+    // Wait for component to load
+    await waitFor(() => screen.getByTestId('generalTab'));
+
+    // Click on action item categories button
+    const actionItemButton = screen.getByTestId('actionItemCategoriesSettings');
+    expect(actionItemButton).toBeInTheDocument();
+
+    fireEvent.click(actionItemButton);
+
+    // Check if action item categories tab is now displayed
+    await waitFor(() => {
+      const actionItemTab = screen.getByTestId('actionItemCategoriesTab');
+      expect(actionItemTab).toBeInTheDocument();
+      expect(actionItemTab).toBeVisible();
+    });
+
+    // General tab should no longer be visible
+    expect(screen.queryByTestId('generalTab')).not.toBeInTheDocument();
+  });
+
+  it('should switch to agenda item categories tab when clicked', async () => {
+    renderOrganisationSettings();
+
+    // Wait for component to load
+    await waitFor(() => screen.getByTestId('generalTab'));
+
+    // Click on agenda item categories button
+    const agendaItemButton = screen.getByTestId('agendaItemCategoriesSettings');
+    expect(agendaItemButton).toBeInTheDocument();
+
+    fireEvent.click(agendaItemButton);
+
+    // Check if agenda item categories tab is now displayed
+    await waitFor(() => {
+      const agendaItemTab = screen.getByTestId('agendaItemCategoriesTab');
+      expect(agendaItemTab).toBeInTheDocument();
+      expect(agendaItemTab).toBeVisible();
+    });
+
+    // General tab should no longer be visible
+    expect(screen.queryByTestId('generalTab')).not.toBeInTheDocument();
+  });
+
+  it('should switch between tabs correctly', async () => {
+    renderOrganisationSettings();
+
+    // Wait for component to load with general tab active
+    await waitFor(() => screen.getByTestId('generalTab'));
+
+    // Switch to action item categories
+    fireEvent.click(screen.getByTestId('actionItemCategoriesSettings'));
+    await waitFor(() => {
+      expect(screen.getByTestId('actionItemCategoriesTab')).toBeInTheDocument();
+      expect(screen.queryByTestId('generalTab')).not.toBeInTheDocument();
+    });
+
+    // Switch to agenda item categories
+    fireEvent.click(screen.getByTestId('agendaItemCategoriesSettings'));
+    await waitFor(() => {
+      expect(screen.getByTestId('agendaItemCategoriesTab')).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('actionItemCategoriesTab'),
+      ).not.toBeInTheDocument();
+    });
+
+    // Switch back to general
+    fireEvent.click(screen.getByTestId('generalSettings'));
+    await waitFor(() => {
+      expect(screen.getByTestId('generalTab')).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('agendaItemCategoriesTab'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  it('should render all tab buttons with correct test IDs', async () => {
+    renderOrganisationSettings();
+
+    // Wait for component to load
+    await waitFor(() => screen.getByTestId('generalTab'));
+
+    // Check that all tab buttons are rendered
+    expect(screen.getByTestId('generalSettings')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('actionItemCategoriesSettings'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByTestId('agendaItemCategoriesSettings'),
+    ).toBeInTheDocument();
+
+    // Check that buttons have correct text content
+    expect(screen.getByTestId('generalSettings')).toHaveTextContent('General');
+    expect(
+      screen.getByTestId('actionItemCategoriesSettings'),
+    ).toHaveTextContent('Action Item Categories');
+    expect(
+      screen.getByTestId('agendaItemCategoriesSettings'),
+    ).toHaveTextContent('Agenda Item Categories');
+  });
+
+  it('should apply correct CSS classes to active and inactive tabs', async () => {
+    renderOrganisationSettings();
+
+    // Wait for component to load
+    await waitFor(() => screen.getByTestId('generalTab'));
+
+    // Initially, general tab should be active
+    const generalButton = screen.getByTestId('generalSettings');
+    const actionButton = screen.getByTestId('actionItemCategoriesSettings');
+    const agendaButton = screen.getByTestId('agendaItemCategoriesSettings');
+
+    // Check initial state - general should be active (looking for CSS module class)
+    expect(generalButton.className).toMatch(/_activeTabBtn_/);
+    expect(actionButton.className).not.toMatch(/_activeTabBtn_/);
+    expect(agendaButton.className).not.toMatch(/_activeTabBtn_/);
+
+    // Click action item categories tab
+    fireEvent.click(actionButton);
+    await waitFor(() => screen.getByTestId('actionItemCategoriesTab'));
+
+    // Now action item categories should be active
+    expect(generalButton.className).not.toMatch(/_activeTabBtn_/);
+    expect(actionButton.className).toMatch(/_activeTabBtn_/);
+    expect(agendaButton.className).not.toMatch(/_activeTabBtn_/);
+
+    // Click agenda item categories tab
+    fireEvent.click(agendaButton);
+    await waitFor(() => screen.getByTestId('agendaItemCategoriesTab'));
+
+    // Now agenda item categories should be active
+    expect(generalButton.className).not.toMatch(/_activeTabBtn_/);
+    expect(actionButton.className).not.toMatch(/_activeTabBtn_/);
+    expect(agendaButton.className).toMatch(/_activeTabBtn_/);
   });
 });

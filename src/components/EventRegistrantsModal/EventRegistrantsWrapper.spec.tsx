@@ -78,7 +78,7 @@ describe('Testing Event Registrants Wrapper', () => {
     );
 
     // Open the modal
-    fireEvent.click(queryByText('Add Registrants') as Element);
+    fireEvent.click(queryByText('Register Member') as Element);
 
     await waitFor(() =>
       expect(queryByText('Event Registrants')).toBeInTheDocument(),

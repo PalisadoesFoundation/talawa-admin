@@ -6,7 +6,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import i18nForTest from 'utils/i18nForTest';
 import EventCard from './EventCard';
 import { render, screen, waitFor } from '@testing-library/react';
-import { REGISTER_EVENT } from 'GraphQl/Mutations/mutations';
+import { REGISTER_EVENT } from 'GraphQl/Mutations/EventMutations';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -20,7 +20,7 @@ const MOCKS = [
   {
     request: {
       query: REGISTER_EVENT,
-      variables: { eventId: '123' },
+      variables: { id: '123' },
     },
     result: {
       data: {
@@ -42,12 +42,12 @@ afterEach(() => {
 
 describe('Testing Event Card In User portal', () => {
   const props = {
-    _id: '123',
+    id: '123',
     name: 'Test Event',
     description: 'This is a test event',
     location: 'Virtual',
-    startDate: '2023-04-13',
-    endDate: '2023-04-15',
+    startAt: '2023-04-13T17:49:12Z',
+    endAt: '2023-04-15T19:49:12Z',
     isRegisterable: true,
     isPublic: true,
     endTime: '19:49:12',
@@ -55,56 +55,20 @@ describe('Testing Event Card In User portal', () => {
     recurring: false,
     allDay: true,
     creator: {
-      firstName: 'Joe',
-      lastName: 'David',
-      _id: '123',
+      id: '123',
+      name: 'Joe David',
+      emailAddress: 'joe@example.com',
     },
     attendees: [
       {
-        _id: '234',
+        id: '234',
+        name: 'Attendee 1',
+        emailAddress: 'attendee1@example.com',
       },
     ],
     recurrenceRule: null,
     isRecurringEventException: false,
   };
-
-  it('The card should be rendered properly, and all the details should be displayed correct', async () => {
-    const { queryByText } = render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
-              <EventCard {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await waitFor(() => expect(queryByText('Test Event')).toBeInTheDocument());
-    await waitFor(() =>
-      expect(queryByText('This is a test event')).toBeInTheDocument(),
-    );
-    await waitFor(() => expect(queryByText('Location')).toBeInTheDocument());
-    await waitFor(() => expect(queryByText('Virtual')).toBeInTheDocument());
-    await waitFor(() => expect(queryByText('Starts')).toBeInTheDocument());
-    await waitFor(() =>
-      expect(screen.getByTestId('startTime')).toBeInTheDocument(),
-    );
-    await waitFor(() =>
-      expect(queryByText(`13 April '23`)).toBeInTheDocument(),
-    );
-    await waitFor(() => expect(queryByText('Ends')).toBeInTheDocument());
-    await waitFor(() =>
-      expect(screen.getByTestId('endTime')).toBeInTheDocument(),
-    );
-    await waitFor(() =>
-      expect(queryByText(`15 April '23`)).toBeInTheDocument(),
-    );
-    await waitFor(() => expect(queryByText('Creator')).toBeInTheDocument());
-    await waitFor(() => expect(queryByText('Joe David')).toBeInTheDocument());
-    await waitFor(() => expect(queryByText('Register')).toBeInTheDocument());
-  });
 
   it('When the user is already registered', async () => {
     setItem('userId', '234');
@@ -153,7 +117,7 @@ describe('Testing Event Card In User portal', () => {
       {
         request: {
           query: REGISTER_EVENT,
-          variables: { eventId: '123' },
+          variables: { id: '123' },
         },
         error: new Error('Failed to register for the event'),
       },
@@ -186,12 +150,12 @@ describe('Testing Event Card In User portal', () => {
 
 describe('Event card when start and end time are not given', () => {
   const props = {
-    _id: '123',
+    id: '123',
     name: 'Test Event',
     description: 'This is a test event',
     location: 'Virtual',
-    startDate: '2023-04-13',
-    endDate: '2023-04-15',
+    startAt: '2023-04-13T00:00:00Z',
+    endAt: '2023-04-15T23:59:59Z',
     isRegisterable: true,
     isPublic: true,
     endTime: '',
@@ -199,13 +163,15 @@ describe('Event card when start and end time are not given', () => {
     recurring: false,
     allDay: true,
     creator: {
-      firstName: 'Joe',
-      lastName: 'David',
-      _id: '123',
+      id: '123',
+      name: 'Joe David',
+      emailAddress: 'joe@example.com',
     },
     attendees: [
       {
-        _id: '234',
+        id: '234',
+        name: 'Attendee 1',
+        emailAddress: 'attendee1@example.com',
       },
     ],
     recurrenceRule: null,

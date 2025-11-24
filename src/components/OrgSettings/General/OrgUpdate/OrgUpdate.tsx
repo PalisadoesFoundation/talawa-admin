@@ -8,10 +8,9 @@ import SaveIcon from '@mui/icons-material/Save';
 import type { ApolloError } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
-import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
+import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import { Col, Form, Row } from 'react-bootstrap';
-import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceAddress } from 'utils/interfaces';
@@ -30,7 +29,7 @@ interface InterfaceMutationUpdateOrganizationInput {
   state?: string;
   postalCode?: string;
   countryCode?: string;
-  avatar?: string | null;
+  avatar?: File;
 }
 
 /**
@@ -45,12 +44,14 @@ interface InterfaceMutationUpdateOrganizationInput {
  */
 function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const { orgId } = props;
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const [formState, setFormState] = useState<{
     orgName: string;
     orgDescrip: string;
     address: InterfaceAddress;
     orgImage: string | null;
+    avatar?: File;
   }>({
     orgName: '',
     orgDescrip: '',
@@ -97,6 +98,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     postalCode: string;
     countryCode: string;
     avatarURL: string | null;
+    isUserRegistrationRequired: boolean | null;
   }
 
   const {
@@ -107,10 +109,10 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   }: {
     data?: { organization: InterfaceOrganization };
     loading: boolean;
-    refetch: (variables: { input: { id: string } }) => void;
+    refetch: (variables: { id: string }) => void;
     error?: ApolloError;
-  } = useQuery(ORGANIZATIONS_LIST, {
-    variables: { input: { id: orgId } },
+  } = useQuery(GET_ORGANIZATION_BASIC_DATA, {
+    variables: { id: orgId },
     notifyOnNetworkStatusChange: true,
   });
 
@@ -133,6 +135,9 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         },
         orgImage: null,
       });
+      setuserRegistrationRequiredChecked(
+        data.organization.isUserRegistrationRequired ?? false,
+      );
     }
     return () => {
       isMounted = false;
@@ -154,27 +159,49 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
       }
 
       setIsSaving(true);
+      // Function to remove empty string fields from the input object
+      const removeEmptyFields = (
+        obj: InterfaceMutationUpdateOrganizationInput,
+      ): Partial<InterfaceMutationUpdateOrganizationInput> => {
+        return Object.fromEntries(
+          Object.entries(obj).filter(
+            ([key, value]) =>
+              key === 'id' ||
+              (value != null && (typeof value !== 'string' || value.trim())),
+          ),
+        ) as Partial<InterfaceMutationUpdateOrganizationInput>;
+      };
+
+      // Build the input object with only non-empty values
+      const inputData = {
+        id: orgId,
+        name: formState.orgName,
+        description: formState.orgDescrip,
+        addressLine1: formState.address.line1,
+        addressLine2: formState.address.line2,
+        city: formState.address.city,
+        state: formState.address.state,
+        postalCode: formState.address.postalCode,
+        countryCode: formState.address?.countryCode,
+        ...(formState.avatar ? { avatar: formState.avatar } : {}),
+        isUserRegistrationRequired: userRegistrationRequiredChecked,
+      };
+
+      // Filter out empty fields
+      const cleanedInput = removeEmptyFields(inputData);
 
       const { data } = await updateOrganization({
         variables: {
-          input: {
-            id: orgId,
-            name: formState.orgName,
-            description: formState.orgDescrip,
-            addressLine1: formState.address.line1,
-            addressLine2: formState.address.line2,
-            city: formState.address.city,
-            state: formState.address.state,
-            postalCode: formState.address.postalCode,
-            countryCode: formState.address.countryCode,
-            avatar: formState.orgImage,
-          },
+          input: cleanedInput as InterfaceMutationUpdateOrganizationInput,
         },
       });
 
       if (data) {
-        refetch({ input: { id: orgId } });
+        refetch({ id: orgId });
         toast.success(t('successfulUpdated') as string);
+        // Clear avatar from state and file input after successful upload
+        setFormState((prev) => ({ ...prev, avatar: undefined }));
+        if (fileInputRef.current) fileInputRef.current.value = '';
       } else {
         toast.error('Failed to update organization');
       }
@@ -251,6 +278,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             {tCommon('displayImage')}:
           </Form.Label>
           <Form.Control
+            ref={fileInputRef}
             className={styles.customFileInput}
             accept="image/*"
             placeholder={tCommon('displayImage')}
@@ -263,7 +291,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               if (file)
                 setFormState({
                   ...formState,
-                  orgImage: await convertToBase64(file),
+                  avatar: file,
                 });
             }}
             data-testid="organisationImage"
@@ -276,7 +304,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
               <Form.Switch
                 className="custom-switch"
                 placeholder={t('userRegistrationRequired')}
-                checked={userRegistrationRequiredChecked}
+                checked={!userRegistrationRequiredChecked}
                 onChange={(): void =>
                   setuserRegistrationRequiredChecked(
                     !userRegistrationRequiredChecked,

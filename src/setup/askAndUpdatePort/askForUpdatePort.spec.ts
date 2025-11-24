@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import askAndUpdatePort from './askAndUpdatePort';
 import { askForCustomPort } from 'setup/askForCustomPort/askForCustomPort';
 import updateEnvFile from 'setup/updateEnvFile/updateEnvFile';
@@ -36,27 +36,33 @@ describe('askAndUpdatePort', () => {
     expect(updateEnvFile).toHaveBeenCalledWith('PORT', '3000');
   });
 
-  it('should not update the port when user declines', async () => {
-    // Mock user declining by returning false
+  it('should update the port to default when user declines', async () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({
       shouldSetCustomPortResponse: false,
     });
 
-    // Act
     await askAndUpdatePort();
 
-    // Assert
-    expect(updateEnvFile).not.toHaveBeenCalled();
+    expect(updateEnvFile).toHaveBeenCalledWith('PORT', '4321');
   });
 
-  it('should throw an error for an invalid port', async () => {
-    // Mock user confirmation and invalid port
+  it('should throw an error for an invalid port below 1024', async () => {
     vi.mocked(inquirer.prompt).mockResolvedValueOnce({
       shouldSetCustomPortResponse: true,
     });
     vi.mocked(askForCustomPort).mockResolvedValueOnce(800);
 
-    // Act & Assert
+    await expect(askAndUpdatePort()).rejects.toThrowError(
+      'Port must be between 1024 and 65535',
+    );
+  });
+
+  it('should throw an error for an invalid port above 65535', async () => {
+    vi.mocked(inquirer.prompt).mockResolvedValueOnce({
+      shouldSetCustomPortResponse: true,
+    });
+    vi.mocked(askForCustomPort).mockResolvedValueOnce(70000);
+
     await expect(askAndUpdatePort()).rejects.toThrowError(
       'Port must be between 1024 and 65535',
     );

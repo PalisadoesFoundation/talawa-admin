@@ -77,30 +77,30 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     return <div data-testid="no-event">Event not found</div>;
   }
 
-  // Extract time from startAt/endAt if needed (assuming ISO format like "2025-04-01T10:00:00Z")
   const formatTimeFromDateTime = (dateTime: string): string => {
     if (!dateTime) return '08:00';
 
-    try {
-      const date = new Date(dateTime);
-      const hours = date.getUTCHours().toString().padStart(2, '0');
-      const minutes = date.getUTCMinutes().toString().padStart(2, '0');
-      // Return time in UTC to match the test expectations
-      return `${hours}:${minutes}`;
-    } catch {
+    const date = new Date(dateTime);
+
+    // Check if date is valid - Invalid Date objects have NaN time value
+    if (isNaN(date.getTime())) {
       return '08:00';
     }
+
+    const hours = date.getUTCHours().toString().padStart(2, '0');
+    const minutes = date.getUTCMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
   };
 
   const eventListCardProps: InterfaceEvent = {
     userRole: userRole,
     key: eventData.event.id,
-    _id: eventData.event.id,
+    id: eventData.event.id,
     location: eventData.event.location || '',
     name: eventData.event.name,
     description: eventData.event.description || '',
-    startDate: eventData.event.startAt,
-    endDate: eventData.event.endAt,
+    startAt: eventData.event.startAt,
+    endAt: eventData.event.endAt,
     // Fix: Extract actual time values instead of null
     startTime: eventData.event.allDay
       ? '00:00'

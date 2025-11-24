@@ -3,7 +3,7 @@
 #
 # NOTE!
 #
-# Please read the README.md file in this directory that defines what should 
+# Please read the README.md file in this directory that defines what should
 # be placed in this file
 #
 ##############################################################################
@@ -14,10 +14,10 @@ name: codeql codescan workflow
 on:
   pull_request:
     branches:
-      - '**'  
+      - '**'
   push:
     branches:
-      - '**'   
+      - '**'
 jobs:
   CodeQL:
     if: ${{ github.actor != 'dependabot[bot]' }}
@@ -26,19 +26,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: [ 'javascript' ]
+        language: ['javascript']
     steps:
-       - name: Checkout repository
-         uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-       - name: Initialize CodeQL
-         uses: github/codeql-action/init@v3
-         with:
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
           languages: ${{ matrix.language }}
           debug: true
 
-       - name: Autobuild
-         uses: github/codeql-action/autobuild@v3
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
 
-       - name: Perform CodeQL Analysis
-         uses: github/codeql-action/analyze@v3
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3

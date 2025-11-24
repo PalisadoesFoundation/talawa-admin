@@ -4,7 +4,8 @@
  */
 
 import React from 'react';
-import { ILoadedPlugin, IExtensionRegistry, PluginStatus } from './types';
+import type { ApolloClient } from '@apollo/client';
+import { ILoadedPlugin, IExtensionRegistry } from './types';
 import { PluginGraphQLService } from './graphql-service';
 import { DiscoveryManager } from './managers/discovery';
 import { ExtensionRegistryManager } from './managers/extension-registry';
@@ -18,7 +19,7 @@ export class PluginManager {
   private lifecycleManager: LifecycleManager;
   private isInitialized: boolean = false;
 
-  constructor(apolloClient?: any) {
+  constructor(apolloClient?: ApolloClient<unknown>) {
     // Initialize managers
     this.eventManager = new EventManager();
     this.extensionRegistry = new ExtensionRegistryManager();
@@ -39,7 +40,7 @@ export class PluginManager {
     this.initializePlugins();
   }
 
-  setApolloClient(apolloClient: any): void {
+  setApolloClient(apolloClient: ApolloClient<unknown>): void {
     if (!apolloClient) {
       throw new Error('Apollo client cannot be null or undefined');
     }
@@ -91,11 +92,32 @@ export class PluginManager {
     return this.lifecycleManager.unloadPlugin(pluginId);
   }
 
+  async installPlugin(pluginId: string): Promise<boolean> {
+    return this.lifecycleManager.installPlugin(pluginId);
+  }
+
+  async uninstallPlugin(pluginId: string): Promise<boolean> {
+    return this.lifecycleManager.uninstallPlugin(pluginId);
+  }
+
+  async activatePlugin(pluginId: string): Promise<boolean> {
+    return this.lifecycleManager.activatePlugin(pluginId);
+  }
+
+  async deactivatePlugin(pluginId: string): Promise<boolean> {
+    return this.lifecycleManager.deactivatePlugin(pluginId);
+  }
+
   async togglePluginStatus(
     pluginId: string,
     status: 'active' | 'inactive',
   ): Promise<boolean> {
     return this.lifecycleManager.togglePluginStatus(pluginId, status);
+  }
+
+  // Public API - Plugin Discovery
+  async refreshPluginDiscovery(): Promise<void> {
+    await this.discoveryManager.loadPluginIndexFromGraphQL();
   }
 
   // Public API - Plugin Information
@@ -125,24 +147,16 @@ export class PluginManager {
   // Public API - Extension Points
   getExtensionPoints<T extends keyof IExtensionRegistry>(
     type: T,
-    userPermissions: string[] = [],
-    isAdmin: boolean = false,
-    isOrg?: boolean,
   ): IExtensionRegistry[T] {
-    return this.extensionRegistry.getExtensionPoints(
-      type,
-      userPermissions,
-      isAdmin,
-      isOrg,
-    );
+    return this.extensionRegistry.getExtensionPoints(type);
   }
 
   // Public API - Event Management
-  on(event: string, callback: Function): void {
+  on(event: string, callback: (...args: unknown[]) => void): void {
     this.eventManager.on(event, callback);
   }
 
-  off(event: string, callback: Function): void {
+  off(event: string, callback: (...args: unknown[]) => void): void {
     this.eventManager.off(event, callback);
   }
 
@@ -164,7 +178,9 @@ export class PluginManager {
 // Create and export singleton instance
 let pluginManagerInstance: PluginManager | null = null;
 
-export function getPluginManager(apolloClient?: any): PluginManager {
+export function getPluginManager(
+  apolloClient?: ApolloClient<unknown>,
+): PluginManager {
   if (!pluginManagerInstance) {
     pluginManagerInstance = new PluginManager(apolloClient);
   } else if (apolloClient) {

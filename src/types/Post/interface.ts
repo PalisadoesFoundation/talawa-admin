@@ -11,7 +11,6 @@ export interface InterfacePostCard {
   likeCount: number;
   commentCount: number;
   comments: Comment[];
-  likedBy: Partial<User>[];
   fetchPosts: () => void;
 }
 
@@ -55,6 +54,11 @@ export interface InterfaceOrganization {
     pageInfo: InterfacePageInfo;
     totalCount: number; // Move totalCount inside posts
   };
+  pinnedPosts: {
+    edges: InterfacePostEdge[];
+    pageInfo: InterfacePageInfo;
+    totalCount: number;
+  };
 }
 
 export interface InterfaceOrganizationPostListData {
@@ -75,16 +79,19 @@ export interface InterfaceAttachment {
 
 export interface InterfaceCreator {
   id: string;
+  name: string;
+  email: string;
+  avatarURL?: string;
 }
 
 export interface InterfacePost {
   id: string;
-  caption: string;
+  caption?: string | null;
   createdAt: string;
   pinnedAt?: string | null;
-  pinned?: boolean; // Add this if you're using it
-  creator?: InterfaceCreator;
+  pinned?: boolean;
+  creator?: InterfaceCreator | null;
   attachments?: InterfaceAttachment[];
-  imageUrl?: string | null; // Add these if you're using them directly
-  videoUrl?: string | null; // in your component
+  imageUrl?: string | null;
+  videoUrl?: string | null;
 }

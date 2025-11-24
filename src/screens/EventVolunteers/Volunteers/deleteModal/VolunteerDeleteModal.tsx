@@ -33,20 +33,26 @@
  * - `DELETE_VOLUNTEER` GraphQL mutation for deleting a volunteer.
  * - `styles` for custom modal styling.
  */
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import { toast } from 'react-toastify';
-import { DELETE_VOLUNTEER } from 'GraphQl/Mutations/EventVolunteerMutation';
+import {
+  DELETE_VOLUNTEER,
+  DELETE_VOLUNTEER_FOR_INSTANCE,
+} from 'GraphQl/Mutations/EventVolunteerMutation';
 
 export interface InterfaceDeleteVolunteerModal {
   isOpen: boolean;
   hide: () => void;
   volunteer: InterfaceEventVolunteerInfo;
   refetchVolunteers: () => void;
+  // New props for recurring events
+  isRecurring?: boolean;
+  eventId?: string;
 }
 
 const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
@@ -54,15 +60,36 @@ const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
   hide,
   volunteer,
   refetchVolunteers,
+  isRecurring = false,
+  eventId,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
 
+  const [applyTo, setApplyTo] = useState<'series' | 'instance'>('series');
   const [deleteVolunteer] = useMutation(DELETE_VOLUNTEER);
+  const [deleteVolunteerForInstance] = useMutation(
+    DELETE_VOLUNTEER_FOR_INSTANCE,
+  );
 
   const deleteHandler = async (): Promise<void> => {
     try {
-      await deleteVolunteer({ variables: { id: volunteer._id } });
+      // Template-First Approach: For recurring events, all volunteers are templates
+      if (isRecurring && applyTo === 'instance' && eventId) {
+        // Delete for specific instance only (create exception)
+        await deleteVolunteerForInstance({
+          variables: {
+            input: {
+              volunteerId: volunteer.id,
+              recurringEventInstanceId: eventId,
+            },
+          },
+        });
+      } else {
+        // Delete for entire series or non-recurring event
+        await deleteVolunteer({ variables: { id: volunteer.id } });
+      }
+
       refetchVolunteers();
       hide();
       toast.success(t('volunteerRemoved'));
@@ -87,6 +114,31 @@ const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
         </Modal.Header>
         <Modal.Body>
           <p> {t('removeVolunteerMsg')}</p>
+
+          {/* Radio buttons for recurring events - Template-First: All recurring event volunteers are templates */}
+          {volunteer.isTemplate && !volunteer.isInstanceException && (
+            <Form.Group className="mb-3">
+              <Form.Label>{t('applyTo')}</Form.Label>
+              <Form.Check
+                type="radio"
+                label={t('entireSeries')}
+                name="applyTo"
+                id="deleteApplyToSeries"
+                data-testid="deleteApplyToSeries"
+                checked={applyTo === 'series'}
+                onChange={() => setApplyTo('series')}
+              />
+              <Form.Check
+                type="radio"
+                label={t('thisEventOnly')}
+                name="applyTo"
+                id="deleteApplyToInstance"
+                data-testid="deleteApplyToInstance"
+                checked={applyTo === 'instance'}
+                onChange={() => setApplyTo('instance')}
+              />
+            </Form.Group>
+          )}
         </Modal.Body>
         <Modal.Footer>
           <Button

@@ -486,7 +486,7 @@ describe('OrganizationPeople', () => {
       {
         orgId: 'orgid',
         first: 10,
-        after: 'cursor1',
+        after: 'cursor2',
         last: null,
         before: null,
       },
@@ -751,7 +751,7 @@ describe('OrganizationPeople', () => {
       {
         orgId: 'orgid',
         first: 10,
-        after: 'userCursor1',
+        after: 'userCursor2',
         last: null,
         before: null,
       },
@@ -1098,5 +1098,124 @@ describe('OrganizationPeople', () => {
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalled();
     });
+  });
+
+  test('prevents navigation when there are no pages available', async () => {
+    const singlePageMock = createMemberConnectionMock(
+      {
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      },
+      {
+        edges: [
+          {
+            node: {
+              id: 'member1',
+              name: 'John Doe',
+              emailAddress: 'john@example.com',
+              avatarURL: 'https://example.com/avatar1.jpg',
+              createdAt: '2023-01-01T00:00:00Z',
+            },
+            cursor: 'cursor1',
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: 'cursor1',
+          endCursor: 'cursor1',
+        },
+      },
+    );
+
+    const link = new StaticMockLink([singlePageMock], true);
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for data to load
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    // Try to navigate to next page (should not work)
+    const nextPageButton = screen.getByRole('button', { name: /next page/i });
+    fireEvent.click(nextPageButton);
+
+    // Should still show the same data
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+  });
+
+  test('handles backward navigation with missing page cursors', async () => {
+    const initialMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+
+    // Mock for backward navigation without stored cursors
+    const backwardMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: null,
+      after: null,
+      last: 10,
+      before: null, // This will test the fallback to null
+    });
+
+    const link = new StaticMockLink([initialMock, backwardMock], true);
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for initial data
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    // Manually trigger pagination to page 1 to simulate being on a later page
+    // without having proper cursor data stored
+    const nextPageButton = screen.getByRole('button', { name: /next page/i });
+    fireEvent.click(nextPageButton);
+
+    // Now try to go back - this should trigger the fallback to null
+    const prevPageButton = screen.getByRole('button', {
+      name: /previous page/i,
+    });
+    fireEvent.click(prevPageButton);
   });
 });

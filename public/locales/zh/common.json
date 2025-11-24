@@ -43,6 +43,8 @@
   "confirmPassword": "确认密码",
   "forgotPassword": "忘记密码 ？",
   "talawaAdminPortal": "塔拉瓦管理门户",
+  "adminPortal": "管理门户",
+  "userPortal": "用户门户",
   "address": "地址",
   "location": "地点",
   "enterLocation": "输入位置",
@@ -60,6 +62,7 @@
   "Venues": "场地",
   "Action Items": "行动项目",
   "Posts": "帖子",
+  "Chat": "聊天",
   "Block/Unblock": "封锁/解除封锁",
   "Advertisement": "广告",
   "Funds": "资金",
@@ -80,6 +83,7 @@
   "none": "没有",
   "sort": "种类",
   "Donate": "捐赠",
+  "Transactions": "交易",
   "addedSuccessfully": "{{item}} 添加成功",
   "updatedSuccessfully": "{{item}} 更新成功",
   "removedSuccessfully": "{{item}} 删除成功",
@@ -95,5 +99,7 @@
   "createdLatest": "最近创建",
   "createdEarliest": "最早创建",
   "searchBy": "按{{item}}搜索",
-  "plugins": "插件"
+  "plugins": "插件",
+  "save": "保存",
+  "saving": "保存中..."
 }

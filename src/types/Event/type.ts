@@ -1,19 +1,16 @@
 import type { ActionItem } from '../actionItem';
 import type { Organization } from 'types/Organization/type';
 import type { CheckInStatus } from '../CheckIn/type';
-import type { Address } from '../User/type';
 
 export type User = {
-  _id: string;
-  address?: Address;
-  birthDate?: Date;
-  createdAt: Date;
-  email: string;
-  firstName: string;
-  lastName: string;
-  gender?: string;
-  image?: string;
+  id: string;
+  name: string;
+  emailAddress: string;
+  avatarURL?: string;
+  role?: string;
+  createdAt?: Date;
   updatedAt?: Date;
+  natalSex?: string;
 };
 
 export type Event = {
@@ -84,20 +81,28 @@ export type EventAttendeeInput = {
 };
 
 export type EventVolunteer = {
-  _id: string;
+  id: string;
+  hasAccepted: boolean;
+  hoursVolunteered: number;
+  isPublic: boolean;
   createdAt: Date;
-  creator?: User; //Optional
-  event?: Event; //Optional
-  isAssigned?: boolean; //Optional
-  isInvited?: boolean; //Optional
-  response?: string; //Optional
   updatedAt: Date;
   user: User;
+  event?: Event; //Optional
+  creator?: User; //Optional
+  updater?: User; //Optional
 };
 
 export type EventVolunteerInput = {
   eventId: string;
   userId: string;
+  groupId?: string; //Optional for compatibility
+};
+
+export type UpdateEventVolunteerInput = {
+  assignments?: string[]; //Optional
+  hasAccepted?: boolean; //Optional
+  isPublic?: boolean; //Optional
 };
 
 export const EventVolunteerResponseEnum = {

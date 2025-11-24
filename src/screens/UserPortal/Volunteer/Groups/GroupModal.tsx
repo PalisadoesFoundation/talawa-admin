@@ -128,7 +128,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
     variables: {
       where: {
         eventId,
-        groupId: group._id,
+        groupId: group.id,
         status: 'requested',
       },
     },
@@ -171,7 +171,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
       try {
         await updateVolunteerGroup({
           variables: {
-            id: group?._id,
+            id: group?.id,
             data: { ...updatedFields, eventId },
           },
         });
@@ -330,8 +330,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                   </TableHead>
                   <TableBody>
                     {requests.map((request, index) => {
-                      const { _id, firstName, lastName, image } =
-                        request.volunteer.user;
+                      const { id, name, avatarURL } = request.volunteer.user;
                       return (
                         <TableRow
                           key={index + 1}
@@ -345,25 +344,25 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                             className="d-flex gap-1 align-items-center"
                             data-testid="userName"
                           >
-                            {image ? (
+                            {avatarURL ? (
                               <img
-                                src={image}
+                                src={avatarURL}
                                 alt="volunteer"
-                                data-testid={`image${_id + 1}`}
+                                data-testid={`image${id + 1}`}
                                 className={styles.TableImage}
                               />
                             ) : (
                               <div className={styles.avatarContainer}>
                                 <Avatar
-                                  key={_id + '1'}
+                                  key={id + '1'}
                                   containerStyle={styles.imageContainer}
                                   avatarStyle={styles.TableImage}
-                                  name={firstName + ' ' + lastName}
-                                  alt={firstName + ' ' + lastName}
+                                  name={name}
+                                  alt={name}
                                 />
                               </div>
                             )}
-                            {firstName + ' ' + lastName}
+                            {name}
                           </TableCell>
                           <TableCell component="th" scope="row">
                             <div className="d-flex gap-2">
@@ -374,10 +373,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                                 className="me-2 rounded"
                                 data-testid={`acceptBtn`}
                                 onClick={() =>
-                                  updateMembershipStatus(
-                                    request._id,
-                                    'accepted',
-                                  )
+                                  updateMembershipStatus(request.id, 'accepted')
                                 }
                               >
                                 <i className="fa fa-check" />
@@ -388,10 +384,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                                 className="rounded"
                                 data-testid={`rejectBtn`}
                                 onClick={() =>
-                                  updateMembershipStatus(
-                                    request._id,
-                                    'rejected',
-                                  )
+                                  updateMembershipStatus(request.id, 'rejected')
                                 }
                               >
                                 <FaXmark size={18} fontWeight={900} />

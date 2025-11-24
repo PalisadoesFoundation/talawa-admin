@@ -36,11 +36,12 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import CheckIcon from '@mui/icons-material/Check';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { errorHandler } from 'utils/errorHandler';
-import styles from './RequestsTableItem.module.css';
+import styles from '../../style/app-fixed.module.css';
 import type { InterfaceRequestsListItem } from 'types/Member/interface';
+import Avatar from 'components/Avatar/Avatar';
 
 type Props = {
   request: InterfaceRequestsListItem;
@@ -114,32 +115,59 @@ const RequestsTableItem = (props: Props): JSX.Element => {
   };
 
   return (
-    <tr className={styles.tableItem}>
-      <td className={styles.index}>{index + 1}.</td>
-      <td className={styles.name}>{`${request.user.name}`}</td>
-      <td className={styles.email}>{request.user.emailAddress}</td>
+    <tr>
+      <th scope="row" className={styles.requestsTableItemIndex}>
+        {index + 1}.
+      </th>
+      <td>
+        {request.user.avatarURL && request.user.avatarURL !== 'null' ? (
+          <img
+            src={request.user.avatarURL}
+            className={styles.userAvatar}
+            alt={`profile picture`}
+            data-testid="display-img"
+            crossOrigin="anonymous"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+        ) : (
+          <Avatar
+            data-testid="display-img"
+            size={45}
+            avatarStyle={styles.avatarStyle}
+            name={`${request.user.name}`}
+            alt={`dummy picture`}
+          />
+        )}
+      </td>
+      <td className={styles.requestsTableItemName}>{`${request.user.name}`}</td>
+      <td className={styles.requestsTableItemEmail}>
+        {request.user.emailAddress}
+      </td>
       <td>
         <Button
-          variant="success"
+          className={`btn ${styles.requestsAcceptButton} ${styles.hoverShadowOnly}`}
           data-testid={`acceptMembershipRequestBtn${request.membershipRequestId}`}
           onClick={async (): Promise<void> => {
             await handleAcceptUser(request.membershipRequestId);
           }}
-          className={styles.acceptButton}
         >
-          <CheckIcon className={styles.buttonIcon} />
+          <GroupAddIcon className="me-2" />
+          Accept
         </Button>
       </td>
       <td>
         <Button
-          variant="danger"
+          className={`btn ${styles.requestsRejectButton} ${styles.hoverShadowOnly}`}
           data-testid={`rejectMembershipRequestBtn${request.membershipRequestId}`}
           onClick={async (): Promise<void> => {
             await handleRejectUser(request.membershipRequestId);
           }}
-          className={styles.rejectButton}
         >
-          <DeleteIcon className={styles.buttonIcon} />
+          <DeleteIcon className="me-2" />
+          Decline
         </Button>
       </td>
     </tr>

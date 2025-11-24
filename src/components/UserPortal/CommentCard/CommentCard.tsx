@@ -1,159 +1,369 @@
 /**
  * CommentCard Component
  *
- * This component represents a card displaying a comment with the ability to like or unlike it.
- * It shows the comment creator's details, the comment text, and the like count.
+ * This component represents a card displaying a comment with the ability to like or dislike it.
+ * It shows the comment creator's details, the comment text, and the like/dislike counts.
  *
  * @component
  * @param props - The properties required by the CommentCard component.
  * @param props.id - The unique identifier of the comment.
- * @param props.creator - The creator of the comment, including their ID, first name, last name, and email.
- * @param props.likeCount - The initial number of likes on the comment.
- * @param props.likedBy - An array of users who have liked the comment.
+ * @param props.creator - The creator of the comment, including their ID and name.
+ * @param props.upVoteCount - The number of upvotes (likes) on the comment.
+ * @param props.downVoteCount - The number of downvotes (dislikes) on the comment.
+ * @param props.downVoters - An array of users who have disliked the comment.
  * @param props.text - The text content of the comment.
- * @param props.handleLikeComment - Callback function triggered when the comment is liked.
- * @param props.handleDislikeComment - Callback function triggered when the comment is unliked.
+ * @param props.onVote - Callback function triggered when the comment is voted on.
+ * @param props.fetchComments - Function to refresh comments after voting.
  *
  * @returns A JSX element representing the comment card.
- *
- * @remarks
- * - The component uses Apollo Client's `useMutation` hook to handle like and unlike operations.
- * - The `useLocalStorage` hook is used to retrieve the current user's ID from local storage.
- * - The like/unlike button displays a loading spinner while the mutation is in progress.
- *
- * @example
- * ```tsx
- * <CommentCard
- *   id="comment123"
- *   creator={{ id: "user1", firstName: "John", lastName: "Doe", email: "john.doe@example.com" }}
- *   likeCount={10}
- *   likedBy={[{ id: "user2" }]}
- *   text="This is a sample comment."
- *   handleLikeComment={(id) => console.log(`Liked comment with ID: ${id}`)}
- *   handleDislikeComment={(id) => console.log(`Disliked comment with ID: ${id}`)}
- * />
- * ```
  */
 import React from 'react';
-import { Button } from 'react-bootstrap';
-import styles from './CommentCard.module.css';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import {
+  IconButton,
+  Typography,
+  Stack,
+  Box,
+  CircularProgress,
+  Modal,
+  Menu,
+  MenuItem,
+  FormControl,
+  Input,
+  Button,
+} from '@mui/material';
+import {
+  MoreHoriz,
+  ThumbUp,
+  ThumbUpOutlined,
+  EditOutlined,
+  DeleteOutline,
+} from '@mui/icons-material';
 import { useMutation } from '@apollo/client';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
-import { toast } from 'react-toastify';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import useLocalStorage from 'utils/useLocalstorage';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
+import { styled } from '@mui/material/styles';
+import { Image } from 'react-bootstrap';
+import styles from '../../../style/app-fixed.module.css';
+import { VoteType } from 'utils/interfaces';
+import defaultAvatar from 'assets/images/defaultImg.png';
+import {
+  DELETE_COMMENT,
+  UPDATE_COMMENT,
+} from 'GraphQl/Mutations/CommentMutations';
+
+const CommentContainer = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(1.5),
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: theme.palette.background.paper,
+  marginBottom: theme.spacing(1),
+}));
+
+const CommentContent = styled(Typography)({
+  margin: '8px 0',
+  whiteSpace: 'pre-line',
+});
+
+const VoteCount = styled(Typography)(() => ({
+  fontSize: '0.75rem',
+  minWidth: 20,
+  textAlign: 'center',
+}));
+
+const EditModalContent = styled(Box)({
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: '90%',
+  maxWidth: 500,
+  backgroundColor: 'white',
+  borderRadius: 8,
+  padding: 24,
+  '& h3': {
+    marginBottom: 16,
+  },
+});
+
+const ModalActions = styled(Box)({
+  display: 'flex',
+  justifyContent: 'space-between',
+  marginTop: 16,
+});
+
+const RightModalActions = styled(Box)({
+  display: 'flex',
+  gap: 8,
+});
 
 interface InterfaceCommentCardProps {
   id: string;
   creator: {
     id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
+    name: string;
+    avatarURL?: string | null;
   };
-  likeCount: number;
-  likedBy: {
-    id: string;
-  }[];
+  hasUserVoted?: { voteType: VoteType } | null;
+  upVoteCount: number;
+  // downVoteCount: number;
   text: string;
-  handleLikeComment: (commentId: string) => void;
-  handleDislikeComment: (commentId: string) => void;
+  refetchComments?: () => void;
 }
 
-function commentCard(props: InterfaceCommentCardProps): JSX.Element {
-  // Full name of the comment creator
-  const creatorName = `${props.creator.firstName} ${props.creator.lastName}`;
-
-  // Hook to get user ID from local storage
+function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
+  const { id, creator, hasUserVoted, upVoteCount, text, refetchComments } =
+    props;
   const { getItem } = useLocalStorage();
+  const { t } = useTranslation('translation', { keyPrefix: 'commentCard' });
+  const { t: tCommon } = useTranslation('common');
   const userId = getItem('userId');
 
-  // Check if the current user has liked the comment
-  const likedByUser = props.likedBy.some((likedBy) => likedBy.id === userId);
+  const [likes, setLikes] = React.useState(upVoteCount);
+  const [isLiked, setIsLiked] = React.useState(false);
+  const [showCommentOptions, setShowCommentOptions] = React.useState(false);
+  const [showEditComment, setShowEditComment] = React.useState(false);
+  const [editedCommentText, setEditedCommentText] = React.useState(text);
+  const menuAnchorRef = React.useRef<HTMLButtonElement>(null);
+  const [likeComment, { loading: liking }] = useMutation(LIKE_COMMENT);
+  const [unlikeComment, { loading: unliking }] = useMutation(UNLIKE_COMMENT);
+  const [deleteComment, { loading: deletingComment }] =
+    useMutation(DELETE_COMMENT);
+  const [updateComment, { loading: updatingComment }] =
+    useMutation(UPDATE_COMMENT);
 
-  // State to track the number of likes and if the comment is liked by the user
-  const [likes, setLikes] = React.useState(props.likeCount);
-  const [isLikedByUser, setIsLikedByUser] = React.useState(likedByUser);
+  const handleMenuOpen = (): void => {
+    setShowCommentOptions(true);
+  };
 
-  // Mutation hooks for liking and unliking comments
-  const [likeComment, { loading: likeLoading }] = useMutation(LIKE_COMMENT);
-  const [unlikeComment, { loading: unlikeLoading }] =
-    useMutation(UNLIKE_COMMENT);
+  const handleMenuClose = (): void => {
+    setShowCommentOptions(false);
+  };
 
-  /**
-   * Toggles the like status of the comment.
-   *
-   * If the comment is already liked by the user, it will be unliked. Otherwise, it will be liked.
-   * Updates the number of likes and the like status accordingly.
-   *
-   * @returns  A promise that resolves when the like/unlike operation is complete.
-   */
+  const toggleEditComment = (): void => {
+    setShowEditComment(!showEditComment);
+    handleMenuClose();
+  };
+
+  const handleEditCommentInput = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
+    setEditedCommentText(e.target.value);
+  };
+
+  const handleDeleteComment = async (): Promise<void> => {
+    try {
+      await deleteComment({
+        variables: { input: { id: id } },
+      });
+      toast.success(t('commentDeletedSuccessfully'));
+      refetchComments?.();
+    } catch (error) {
+      toast.error((error as Error).message);
+    } finally {
+      handleMenuClose();
+    }
+  };
+
+  const handleUpdateComment = async (body: string): Promise<boolean> => {
+    try {
+      await updateComment({
+        variables: { input: { id: id, body: body } },
+      });
+      toast.success(t('commentUpdatedSuccessfully'));
+      refetchComments?.();
+      handleMenuClose();
+      return true;
+    } catch (error) {
+      toast.error((error as Error).message);
+      return false;
+    }
+  };
+
+  React.useEffect(() => {
+    if (!userId) {
+      setIsLiked(false);
+      return;
+    }
+    const liked = hasUserVoted?.voteType === 'up_vote';
+    setIsLiked(Boolean(liked));
+  }, [userId, hasUserVoted?.voteType]);
+
+  React.useEffect(() => {
+    setLikes(upVoteCount);
+  }, [upVoteCount]);
+
   const handleToggleLike = async (): Promise<void> => {
-    if (isLikedByUser) {
-      try {
+    if (!userId) {
+      toast.warn(t('pleaseSignInToLikeComments'));
+      return;
+    }
+    try {
+      if (isLiked) {
+        // Unlike
         const { data } = await unlikeComment({
           variables: {
-            commentId: props.id,
-          },
-        });
-        if (data && data.unlikeComment && data.unlikeComment._id) {
-          setLikes((likes) => likes - 1);
-          setIsLikedByUser(false);
-          props.handleDislikeComment(props.id);
-        }
-      } catch (error: unknown) {
-        toast.error(error as string);
-      }
-    } else {
-      try {
-        const { data } = await likeComment({
-          variables: {
-            commentId: props.id,
+            input: { commentId: id, creatorId: userId },
           },
         });
 
-        if (data && data.likeComment && data.likeComment._id) {
-          setLikes((likes) => likes + 1);
-          setIsLikedByUser(true);
-          props.handleLikeComment(props.id);
+        if (data?.deleteCommentVote !== null) {
+          setLikes((prev) => Math.max(prev - 1, 0));
+          setIsLiked(false);
+        } else {
+          toast.error(t('couldNotRemoveExistingLike'));
         }
-      } catch (error: unknown) {
-        toast.error(error as string);
+      } else {
+        // Like
+        const { data } = await likeComment({
+          variables: {
+            input: { commentId: id, type: 'up_vote' },
+          },
+        });
+
+        if (data?.createCommentVote?.id) {
+          setLikes((prev) => prev + 1);
+          setIsLiked(true);
+        }
+      }
+    } catch (error) {
+      const errorCode = (
+        error as Error & {
+          graphQLErrors?: Array<{ extensions?: { code?: string } }>;
+        }
+      )?.graphQLErrors?.[0]?.extensions?.code;
+      if (errorCode === 'forbidden_action_on_arguments_associated_resources') {
+        toast.error(t('alreadyLikedComment'));
+      } else if (errorCode === 'arguments_associated_resources_not_found') {
+        toast.error(t('noAssociatedVoteFound'));
+      } else {
+        toast.error((error as Error).message);
       }
     }
   };
 
   return (
-    <div className={styles.mainContainer}>
-      <div className={styles.personDetails}>
-        <div className="d-flex align-items-center gap-2">
-          <AccountCircleIcon className="my-2" />
-          <b>{creatorName}</b>
-        </div>
-        <span>{props.text}</span>
-        <div className={`${styles.cardActions}`}>
-          <Button
-            className={`${styles.cardActionBtn}`}
-            onClick={handleToggleLike}
-            data-testid={'likeCommentBtn'}
-            size="sm"
-          >
-            {likeLoading || unlikeLoading ? (
-              <HourglassBottomIcon fontSize="small" />
-            ) : isLikedByUser ? (
-              <ThumbUpIcon fontSize="small" />
-            ) : (
-              <ThumbUpOffAltIcon fontSize="small" />
-            )}
-          </Button>
-          {`${likes} Likes`}
-        </div>
-      </div>
-    </div>
+    <CommentContainer>
+      <Stack direction="row" spacing={2} alignItems="flex-start">
+        <span className={styles.userImageUserComment}>
+          <Image
+            crossOrigin="anonymous"
+            src={creator.avatarURL || defaultAvatar}
+            alt={creator.name}
+            loading="lazy"
+          />
+        </span>
+        <Box sx={{ flexGrow: 1 }}>
+          <Typography variant="subtitle2" fontWeight="bold">
+            {creator.name}
+          </Typography>
+          <CommentContent variant="body2">{text}</CommentContent>
+
+          <Stack direction="row" spacing={1} alignItems="center">
+            <IconButton
+              size="small"
+              onClick={handleToggleLike}
+              color={isLiked ? 'primary' : 'default'}
+              data-testid="likeCommentBtn"
+            >
+              {liking || unliking ? (
+                <CircularProgress size={20} />
+              ) : isLiked ? (
+                <ThumbUp fontSize="small" />
+              ) : (
+                <ThumbUpOutlined fontSize="small" />
+              )}
+            </IconButton>
+            <VoteCount>{likes}</VoteCount>
+          </Stack>
+        </Box>
+        {userId === creator.id && (
+          <>
+            <IconButton
+              ref={menuAnchorRef}
+              onClick={handleMenuOpen}
+              size="small"
+              aria-label="more options"
+              data-testid="more-options-button"
+            >
+              <MoreHoriz />
+            </IconButton>
+            <Menu
+              anchorEl={menuAnchorRef.current}
+              open={showCommentOptions}
+              onClose={handleMenuClose}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+              <MenuItem
+                data-testid="update-comment-button"
+                onClick={toggleEditComment}
+              >
+                <EditOutlined sx={{ mr: 1 }} fontSize="small" />
+                {t('editComment')}
+              </MenuItem>
+              <MenuItem
+                data-testid="delete-comment-button"
+                onClick={handleDeleteComment}
+                disabled={deletingComment}
+              >
+                <DeleteOutline sx={{ mr: 1 }} fontSize="small" />
+                {deletingComment ? t('deleting') : t('deleteComment')}
+              </MenuItem>
+            </Menu>
+          </>
+        )}
+      </Stack>
+
+      {/* Edit Comment Modal */}
+      <Modal
+        open={showEditComment}
+        onClose={toggleEditComment}
+        data-testid="edit-comment-modal"
+      >
+        <EditModalContent>
+          <Typography variant="h6">{t('editComment')}</Typography>
+          <FormControl fullWidth sx={{ mb: 2 }}>
+            <Input
+              multiline
+              rows={4}
+              value={editedCommentText}
+              onChange={handleEditCommentInput}
+              fullWidth
+              data-testid="edit-comment-input"
+            />
+          </FormControl>
+
+          <ModalActions>
+            <Box />
+            <RightModalActions>
+              <Button variant="outlined" onClick={toggleEditComment}>
+                {tCommon('cancel')}
+              </Button>
+              <Button
+                variant="contained"
+                disabled={updatingComment}
+                onClick={async () => {
+                  if (!editedCommentText.trim()) {
+                    toast.error(t('emptyCommentError'));
+                    return;
+                  }
+                  const updated = await handleUpdateComment(editedCommentText);
+                  if (updated) {
+                    toggleEditComment();
+                  }
+                }}
+                data-testid="save-comment-button"
+                startIcon={<EditOutlined />}
+              >
+                {updatingComment ? tCommon('saving') : tCommon('save')}
+              </Button>
+            </RightModalActions>
+          </ModalActions>
+        </EditModalContent>
+      </Modal>
+    </CommentContainer>
   );
 }
 
-export default commentCard;
+export default CommentCard;

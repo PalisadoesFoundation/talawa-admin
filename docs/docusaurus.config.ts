@@ -17,7 +17,11 @@ const config: Config = {
   projectName: 'talawa-admin', // repo name
 
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn', // Or 'throw', 'ignore'
+    },
+  },
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -27,14 +31,16 @@ const config: Config = {
     locales: ['en'],
   },
 
+  // Remote css file fetched from talawa-docs
+  stylesheets: ['https://docs.talawa.io/css/styles-latest.css'],
+
   presets: [
     [
       'classic',
-      /** @type {import('@docusaurus/preset-classic').Options} */
       {
         docs: {
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: ({ docPath }) => {
+          editUrl: ({ docPath }: { docPath: string }) => {
             return `https://github.com/PalisadoesFoundation/talawa-admin/edit/develop/docs/docs/${docPath}`;
           },
         },
@@ -44,7 +50,8 @@ const config: Config = {
             'https://github.com/PalisadoesFoundation/talawa-admin/tree/develop/docs/docs',
         },
         theme: {
-          customCss: [require.resolve('./src/css/custom.css')],
+          // the custom css file is default css provided by docusaurus
+          customCss: require.resolve('./src/css/custom.css'),
         },
       },
     ],
@@ -95,6 +102,12 @@ const config: Config = {
             label: 'Plugin Guide',
             position: 'left',
             to: 'https://docs-plugin.talawa.io/docs',
+            target: '_self',
+          },
+          {
+            label: 'Community',
+            position: 'left',
+            to: 'https://community.talawa.io',
             target: '_self',
           },
           {
@@ -175,7 +188,7 @@ const config: Config = {
       colorMode: {
         defaultMode: 'light',
         disableSwitch: false,
-        respectPrefersColorScheme: false,
+        respectPrefersColorScheme: true,
       },
       prism: {
         theme: prismThemes.github,
