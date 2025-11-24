@@ -72,8 +72,15 @@ describe('CreatePostModal', () => {
     },
   ];
 
+  const originalCreateObjectURL = global.URL.createObjectURL;
+
+  beforeEach(() => {
+    global.URL.createObjectURL = vi.fn(() => 'mock-url');
+  });
+
   afterEach(() => {
     vi.clearAllMocks();
+    global.URL.createObjectURL = originalCreateObjectURL;
   });
 
   it('renders correctly when shown', () => {
@@ -136,9 +143,6 @@ describe('CreatePostModal', () => {
   });
 
   it('handles file upload preview', async () => {
-    // Mock URL.createObjectURL
-    global.URL.createObjectURL = vi.fn(() => 'mock-url');
-
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <CreatePostModal
@@ -209,8 +213,6 @@ describe('CreatePostModal', () => {
     expect(mockOnHide).toHaveBeenCalled();
   });
   it('handles video file upload preview', async () => {
-    global.URL.createObjectURL = vi.fn(() => 'mock-video-url');
-
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <CreatePostModal
@@ -429,7 +431,6 @@ describe('CreatePostModal', () => {
   it('calculates file hash when uploading image', async () => {
     const originalArrayBuffer = File.prototype.arrayBuffer;
     const originalCrypto = global.crypto;
-    const originalCreateObjectURL = global.URL.createObjectURL;
 
     try {
       // Mock File.prototype.arrayBuffer
@@ -450,8 +451,6 @@ describe('CreatePostModal', () => {
         },
         writable: true,
       });
-
-      global.URL.createObjectURL = vi.fn(() => 'mock-url');
 
       render(
         <MockedProvider mocks={mocks} addTypename={false}>
@@ -490,14 +489,12 @@ describe('CreatePostModal', () => {
         value: originalCrypto,
         writable: true,
       });
-      global.URL.createObjectURL = originalCreateObjectURL;
     }
   });
 
   it('handles PNG MIME type correctly', async () => {
     const originalArrayBuffer = File.prototype.arrayBuffer;
     const originalCrypto = global.crypto;
-    const originalCreateObjectURL = global.URL.createObjectURL;
 
     try {
       // Mock File.prototype.arrayBuffer
@@ -518,8 +515,6 @@ describe('CreatePostModal', () => {
         writable: true,
       });
 
-      global.URL.createObjectURL = vi.fn(() => 'mock-url');
-
       const postMock = {
         request: {
           query: CREATE_POST_MUTATION,
@@ -531,7 +526,7 @@ describe('CreatePostModal', () => {
               attachments: [
                 {
                   fileHash: '0a141e',
-                  mimetype: 'IMAGE_PNG',
+                  mimeType: 'IMAGE_PNG',
                   name: 'test.png',
                   objectName: 'uploads/test.png',
                 },
@@ -582,14 +577,12 @@ describe('CreatePostModal', () => {
         value: originalCrypto,
         writable: true,
       });
-      global.URL.createObjectURL = originalCreateObjectURL;
     }
   });
 
   it('handles WEBP MIME type correctly', async () => {
     const originalArrayBuffer = File.prototype.arrayBuffer;
     const originalCrypto = global.crypto;
-    const originalCreateObjectURL = global.URL.createObjectURL;
 
     try {
       // Mock File.prototype.arrayBuffer
@@ -610,8 +603,6 @@ describe('CreatePostModal', () => {
         writable: true,
       });
 
-      global.URL.createObjectURL = vi.fn(() => 'mock-url');
-
       const postMock = {
         request: {
           query: CREATE_POST_MUTATION,
@@ -623,7 +614,7 @@ describe('CreatePostModal', () => {
               attachments: [
                 {
                   fileHash: '0f1923',
-                  mimetype: 'IMAGE_JPEG', // fallback
+                  mimeType: 'IMAGE_JPEG', // fallback
                   name: 'test.unknown',
                   objectName: 'uploads/test.unknown',
                 },
@@ -674,7 +665,6 @@ describe('CreatePostModal', () => {
         value: originalCrypto,
         writable: true,
       });
-      global.URL.createObjectURL = originalCreateObjectURL;
     }
   });
 });
