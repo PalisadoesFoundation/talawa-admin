@@ -21,9 +21,21 @@ import Groups from './Groups';
 import type { ApolloLink } from '@apollo/client';
 import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './Groups.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi } from 'vitest';
+import { vi, afterEach, beforeEach, describe, it, expect } from 'vitest';
 
 const { setItem } = useLocalStorage();
+
+const routerMocks = vi.hoisted(() => ({
+  useParams: vi.fn(() => ({ orgId: 'orgId' })),
+}));
+
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
+  return {
+    ...actual,
+    useParams: routerMocks.useParams,
+  };
+});
 
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(ERROR_MOCKS);
@@ -84,23 +96,15 @@ const renderGroups = (link: ApolloLink): RenderResult => {
  * Describes the testing suite for the Groups screen.
  */
 describe('Testing Groups Screen', () => {
-  beforeAll(() => {
-    vi.mock('react-router', async () => {
-      const actual = await vi.importActual('react-router');
-      return {
-        ...actual,
-        useParams: () => ({ orgId: 'orgId' }),
-      };
-    });
-  });
-
   beforeEach(() => {
     setItem('userId', 'userId');
   });
 
   afterEach(() => {
-    vi.resetAllMocks();
-    cleanup(); // from @testing-library/react
+    cleanup();
+    vi.clearAllMocks();
+    routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
+    localStorage.clear();
   });
 
   /**

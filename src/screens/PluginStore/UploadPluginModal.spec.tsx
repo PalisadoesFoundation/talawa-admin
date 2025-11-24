@@ -1,16 +1,20 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { toast } from 'react-toastify';
 import UploadPluginModal from './UploadPluginModal';
 
-// Mock dependencies
-vi.mock('react-toastify', () => ({
+const sharedMocks = vi.hoisted(() => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
   },
+}));
+
+// Mock dependencies
+vi.mock('react-toastify', () => ({
+  toast: sharedMocks.toast,
 }));
 
 vi.mock('jszip', () => ({
@@ -53,6 +57,10 @@ const getFileInput = () => {
 describe('UploadPluginModal Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   describe('Initial Render', () => {

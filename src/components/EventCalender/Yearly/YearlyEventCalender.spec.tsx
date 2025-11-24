@@ -14,8 +14,8 @@ import { BrowserRouter, MemoryRouter, useParams } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { UserRole, type InterfaceCalendarProps } from 'types/Event/interface';
 
-// Helper to get specific expand button for a given Date based on component's indexing
-function getExpandButtonForDate(
+// Helper to get toggle button (expand or no-events) for a given Date
+function getToggleButtonForDate(
   container: HTMLElement,
   date: Date,
 ): HTMLButtonElement | null {
@@ -32,15 +32,17 @@ function getExpandButtonForDate(
       msPerDay,
   );
 
-  // Try both expand-btn and no-events-btn selectors
   const expandSelector = `[data-testid="expand-btn-${monthIdx}-${dayIdx}"]`;
-  const noEventsSelector = `[data-testid="no-events-btn-${monthIdx}-${dayIdx}"]`;
+  const expandButton = container.querySelector(
+    expandSelector,
+  ) as HTMLButtonElement | null;
 
-  return (
-    (container.querySelector(expandSelector) as HTMLButtonElement) ||
-    (container.querySelector(noEventsSelector) as HTMLButtonElement) ||
-    null
-  );
+  if (expandButton) {
+    return expandButton;
+  }
+
+  const noEventsSelector = `[data-testid="no-events-btn-${monthIdx}-${dayIdx}"]`;
+  return container.querySelector(noEventsSelector) as HTMLButtonElement | null;
 }
 
 async function clickExpandForDate(
@@ -48,8 +50,13 @@ async function clickExpandForDate(
   date: Date,
 ): Promise<HTMLButtonElement> {
   const btn = await waitFor(() => {
-    const found = getExpandButtonForDate(container, date);
-    expect(found).not.toBeNull();
+    const found = getToggleButtonForDate(container, date);
+    if (!found) {
+      throw new Error(
+        `Unable to find expand button for ${date.toISOString()} yet`,
+      );
+    }
+
     return found as HTMLButtonElement;
   });
   await act(async () => {
@@ -105,6 +112,16 @@ vi.mock('react-router', async () => {
     useNavigate: vi.fn().mockReturnValue(vi.fn()),
     Navigate: () => null,
   } as unknown as typeof import('react-router');
+});
+
+// Simplify EventListCard rendering to avoid router/i18n dependencies in tests
+vi.mock('components/EventListCard/EventListCard', () => {
+  return {
+    __esModule: true,
+    default: (props: { name?: string } & Record<string, unknown>) => (
+      <div data-testid="event-list-card">{props.name}</div>
+    ),
+  };
 });
 
 // Mock Apollo useMutation to avoid needing an ApolloProvider context
@@ -443,17 +460,18 @@ describe('Calendar Component', () => {
       '[data-testid^="expand-btn-"]',
     );
 
+    let foundMatch = false;
     for (const button of Array.from(expandButtons)) {
       fireEvent.click(button);
       // Expect one of the event names to appear when expanded
-      if (
-        screen.queryByText('New Test Event') ||
-        screen.queryByText('Test Event')
-      ) {
-        expect(screen.queryByText(/New Test Event|Test Event/)).toBeTruthy();
+      const matches = screen.queryAllByText(/New Test Event|Test Event/);
+      if (matches.length > 0) {
+        expect(matches[0]).toBeInTheDocument();
+        foundMatch = true;
         break;
       }
     }
+    expect(foundMatch).toBe(true);
   });
 
   it('filters events correctly for ADMINISTRATOR role with private events', async () => {
@@ -482,8 +500,8 @@ describe('Calendar Component', () => {
     const multiMonthEvents = [
       {
         ...mockEventData[0],
-        startDate: new Date(today.getFullYear(), 0, 15).toISOString(),
-        endDate: new Date(today.getFullYear(), 1, 15).toISOString(),
+        startAt: new Date(today.getFullYear(), 0, 15).toISOString(),
+        endAt: new Date(today.getFullYear(), 1, 15).toISOString(),
       },
     ];
 
