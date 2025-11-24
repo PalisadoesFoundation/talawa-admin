@@ -13,7 +13,7 @@ importers:
     dependencies:
       '@apollo/client':
         specifier: ^3.4.0-beta.19
-        version: 3.14.0(@types/react@19.2.6)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 3.13.0(@types/react@19.2.6)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@apollo/link-error':
         specifier: ^2.0.0-beta.3
         version: 2.0.0-beta.3(@types/react@19.2.6)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -85,7 +85,7 @@ importers:
         version: 0.5.7
       apollo-upload-client:
         specifier: ^18.0.1
-        version: 18.0.1(@apollo/client@3.14.0(@types/react@19.2.6)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(graphql@16.12.0)
+        version: 18.0.1(@apollo/client@3.13.0(@types/react@19.2.6)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(graphql@16.12.0)
       bootstrap:
         specifier: ^5.3.3
         version: 5.3.8(@popperjs/core@2.11.8)
@@ -398,8 +398,8 @@ packages:
     peerDependencies:
       react: '>=16.9.0'
 
-  '@apollo/client@3.14.0':
-    resolution: {integrity: sha512-0YQKKRIxiMlIou+SekQqdCo0ZTHxOcES+K8vKB53cIDpwABNR0P0yRzPgsbgcj3zRJniD93S/ontsnZsCLZrxQ==}
+  '@apollo/client@3.13.0':
+    resolution: {integrity: sha512-sCrdGw6Jv+0csdy5YwnAJ231CJWvJOBsHB3mZWdI+jA62lsJcV2TYWSaIYd7Cno3Apk8JBDbEGrMEKALeQUmOQ==}
     peerDependencies:
       graphql: ^15.0.0 || ^16.0.0
       graphql-ws: ^5.5.5 || ^6.0.3
@@ -7292,7 +7292,7 @@ snapshots:
       resize-observer-polyfill: 1.5.1
       throttle-debounce: 5.0.2
 
-  '@apollo/client@3.14.0(@types/react@19.2.6)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@apollo/client@3.13.0(@types/react@19.2.6)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.12.0)
       '@wry/caches': 1.0.1
@@ -7317,7 +7317,7 @@ snapshots:
 
   '@apollo/link-error@2.0.0-beta.3(@types/react@19.2.6)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
-      '@apollo/client': 3.14.0(@types/react@19.2.6)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@apollo/client': 3.13.0(@types/react@19.2.6)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       tslib: 1.14.1
     transitivePeerDependencies:
       - '@types/react'
@@ -7329,7 +7329,7 @@ snapshots:
 
   '@apollo/react-testing@4.0.0(@types/react@19.2.6)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
-      '@apollo/client': 3.14.0(@types/react@19.2.6)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@apollo/client': 3.13.0(@types/react@19.2.6)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
     transitivePeerDependencies:
       - '@types/react'
       - graphql
@@ -9906,7 +9906,7 @@ snapshots:
 
   '@types/apollo-upload-client@18.0.1(@types/react@19.2.6)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
-      '@apollo/client': 3.14.0(@types/react@19.2.6)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@apollo/client': 3.13.0(@types/react@19.2.6)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@types/extract-files': 13.0.2
       graphql: 16.12.0
     transitivePeerDependencies:
@@ -10541,9 +10541,9 @@ snapshots:
       - luxon
       - moment
 
-  apollo-upload-client@18.0.1(@apollo/client@3.14.0(@types/react@19.2.6)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(graphql@16.12.0):
+  apollo-upload-client@18.0.1(@apollo/client@3.13.0(@types/react@19.2.6)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(graphql@16.12.0):
     dependencies:
-      '@apollo/client': 3.14.0(@types/react@19.2.6)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@apollo/client': 3.13.0(@types/react@19.2.6)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       extract-files: 13.0.0
       graphql: 16.12.0
 
