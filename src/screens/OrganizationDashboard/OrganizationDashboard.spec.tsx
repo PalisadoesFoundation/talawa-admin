@@ -73,8 +73,8 @@ function renderWithProviders({
 describe('OrganizationDashboard', () => {
   beforeEach(() => {
     mockedNavigate.mockReset();
-    (toast.error as jest.Mock).mockReset();
-    (toast.success as jest.Mock).mockReset();
+    vi.mocked(toast.error).mockReset();
+    vi.mocked(toast.success).mockReset();
   });
 
   it('navigates to requests page when clicking on membership requests card', async () => {
@@ -90,13 +90,13 @@ describe('OrganizationDashboard', () => {
 
     const requestsCard = screen.getByText('requests');
 
-    const requestsCardColumn = requestsCard.closest('[role="button"]');
-    expect(requestsCardColumn).not.toBeNull();
+    const requestsCardButton = requestsCard.closest('button');
+    expect(requestsCardButton).not.toBeNull();
 
-    if (requestsCardColumn) {
-      fireEvent.click(requestsCardColumn);
+    if (requestsCardButton) {
+      fireEvent.click(requestsCardButton);
     } else {
-      throw new Error('Membership requests card column not found');
+      throw new Error('Membership requests card button not found');
     }
 
     expect(mockedNavigate).toHaveBeenCalledWith('/requests/orgId');
@@ -439,6 +439,159 @@ describe('OrganizationDashboard', () => {
 
       await waitFor(() => {
         expect(screen.queryAllByTestId('fallback-ui').length).toBe(0);
+      });
+    });
+  });
+
+  describe('Venues functionality', () => {
+    it('displays venues count correctly', async () => {
+      renderWithProviders({ mocks: MOCKS });
+
+      await waitFor(() => {
+        expect(screen.queryAllByTestId('fallback-ui').length).toBe(0);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('venuesCount')).toBeInTheDocument();
+      });
+
+      // Should display venues count of 2 (from MOCKS)
+      const venuesCard = screen.getByTestId('venuesCount');
+      expect(venuesCard).toBeInTheDocument();
+    });
+
+    it('navigates to venues page when clicking on venues card', async () => {
+      renderWithProviders({ mocks: MOCKS });
+
+      await waitFor(() => {
+        expect(screen.queryAllByTestId('fallback-ui').length).toBe(0);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('venuesCount')).toBeInTheDocument();
+      });
+
+      const venuesCard = screen.getByTestId('venuesCount');
+      fireEvent.click(venuesCard);
+
+      await waitFor(() => {
+        expect(mockedNavigate).toHaveBeenCalledWith('/orgvenues/orgId');
+      });
+    });
+
+    it('displays zero venues count when no venues exist', async () => {
+      renderWithProviders({ mocks: EMPTY_MOCKS });
+
+      await waitFor(() => {
+        expect(screen.queryAllByTestId('fallback-ui').length).toBe(0);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('venuesCount')).toBeInTheDocument();
+      });
+
+      const venuesCard = screen.getByTestId('venuesCount');
+      expect(venuesCard).toHaveTextContent('0');
+    });
+
+    it('handles venues loading state correctly', async () => {
+      renderWithProviders({ mocks: MOCKS });
+
+      // Should show loading initially
+      expect(screen.queryAllByTestId('fallback-ui').length).toBeGreaterThan(0);
+
+      await waitFor(() => {
+        expect(screen.queryAllByTestId('fallback-ui').length).toBe(0);
+      });
+    });
+
+    it('handles venues error state correctly', async () => {
+      renderWithProviders({ mocks: ERROR_MOCKS });
+
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalled();
+      });
+
+      await waitFor(() => {
+        expect(mockedNavigate).toHaveBeenCalledWith('/');
+      });
+    });
+
+    it('displays venues title correctly', async () => {
+      renderWithProviders({ mocks: MOCKS });
+
+      await waitFor(() => {
+        expect(screen.queryAllByTestId('fallback-ui').length).toBe(0);
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('venues')).toBeInTheDocument();
+      });
+    });
+
+    it('includes venues loading in overall loading state', async () => {
+      const loadingMocks = MOCKS.map((mock) => ({
+        ...mock,
+        delay: 100, // Add delay to simulate loading
+      }));
+
+      renderWithProviders({ mocks: loadingMocks });
+
+      // Should show loading fallback UI (DashboardStats shows 6 loading cards)
+      const fallbackUIs = screen.getAllByTestId('fallback-ui');
+      expect(fallbackUIs.length).toBeGreaterThan(0);
+      expect(fallbackUIs.length).toBe(6);
+    });
+  });
+
+  describe('Async navigation handlers', () => {
+    it('handles async navigation for view all events button', async () => {
+      renderWithProviders({ mocks: MOCKS });
+
+      await waitFor(() => {
+        expect(screen.queryAllByTestId('fallback-ui').length).toBe(0);
+      });
+
+      const viewAllEventsButton = screen.getByTestId('viewAllEvents');
+
+      await waitFor(async () => {
+        fireEvent.click(viewAllEventsButton);
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        expect(mockedNavigate).toHaveBeenCalledWith('/orgevents/orgId');
+      });
+    });
+
+    it('handles async navigation for view all posts button', async () => {
+      renderWithProviders({ mocks: MOCKS });
+
+      await waitFor(() => {
+        expect(screen.queryAllByTestId('fallback-ui').length).toBe(0);
+      });
+
+      const viewAllPostsButton = screen.getByTestId('viewAllPosts');
+
+      await waitFor(async () => {
+        fireEvent.click(viewAllPostsButton);
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        expect(mockedNavigate).toHaveBeenCalledWith('/orgpost/orgId');
+      });
+    });
+
+    it('handles async navigation for view all membership requests button', async () => {
+      renderWithProviders({ mocks: MOCKS });
+
+      await waitFor(() => {
+        expect(screen.queryAllByTestId('fallback-ui').length).toBe(0);
+      });
+
+      const viewAllRequestsButton = screen.getByTestId(
+        'viewAllMembershipRequests',
+      );
+
+      await waitFor(async () => {
+        fireEvent.click(viewAllRequestsButton);
+        await new Promise((resolve) => setTimeout(resolve, 0));
+        expect(mockedNavigate).toHaveBeenCalledWith('/requests/orgId');
       });
     });
   });

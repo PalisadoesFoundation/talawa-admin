@@ -27,7 +27,7 @@ vi.mock('utils/sanitizeAvatar', () => ({
 }));
 
 describe('ProfileImageSection', () => {
-  const mockFileInputRef = React.createRef<HTMLInputElement>();
+  const mockFileInputRef = React.createRef<HTMLInputElement | null>();
   const mockHandleFileUpload = vi.fn();
 
   const defaultProps = {

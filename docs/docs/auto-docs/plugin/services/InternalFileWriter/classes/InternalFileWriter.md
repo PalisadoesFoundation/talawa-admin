@@ -27,23 +27,23 @@ Initialize the file writer
 
 ### listInstalledPlugins()
 
-> **listInstalledPlugins**(): `Promise`\<\{ `error`: `string`; `plugins`: `object`[]; `success`: `boolean`; \}\>
+> **listInstalledPlugins**(): `Promise`\<\{ `error?`: `string`; `plugins?`: `object`[]; `success`: `boolean`; \}\>
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:179](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L179)
+Defined in: [src/plugin/services/InternalFileWriter.ts:174](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L174)
 
 List all installed plugins
 
 #### Returns
 
-`Promise`\<\{ `error`: `string`; `plugins`: `object`[]; `success`: `boolean`; \}\>
+`Promise`\<\{ `error?`: `string`; `plugins?`: `object`[]; `success`: `boolean`; \}\>
 
 ***
 
 ### readPluginFiles()
 
-> **readPluginFiles**(`pluginId`): `Promise`\<\{ `error`: `string`; `files`: `Record`\<`string`, `string`\>; `manifest`: [`AdminPluginManifest`](../../../../utils/adminPluginInstaller/interfaces/AdminPluginManifest.md); `success`: `boolean`; \}\>
+> **readPluginFiles**(`pluginId`): `Promise`\<\{ `error?`: `string`; `files?`: `Record`\<`string`, `string`\>; `manifest?`: [`AdminPluginManifest`](../../../../utils/adminPluginInstaller/interfaces/AdminPluginManifest.md); `success`: `boolean`; \}\>
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:133](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L133)
+Defined in: [src/plugin/services/InternalFileWriter.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L128)
 
 Read plugin files from filesystem
 
@@ -55,7 +55,7 @@ Read plugin files from filesystem
 
 #### Returns
 
-`Promise`\<\{ `error`: `string`; `files`: `Record`\<`string`, `string`\>; `manifest`: [`AdminPluginManifest`](../../../../utils/adminPluginInstaller/interfaces/AdminPluginManifest.md); `success`: `boolean`; \}\>
+`Promise`\<\{ `error?`: `string`; `files?`: `Record`\<`string`, `string`\>; `manifest?`: [`AdminPluginManifest`](../../../../utils/adminPluginInstaller/interfaces/AdminPluginManifest.md); `success`: `boolean`; \}\>
 
 ***
 
@@ -63,7 +63,7 @@ Read plugin files from filesystem
 
 > **removePlugin**(`pluginId`): `Promise`\<[`FileOperationResult`](../interfaces/FileOperationResult.md)\>
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:225](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L225)
+Defined in: [src/plugin/services/InternalFileWriter.ts:220](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L220)
 
 Remove plugin from filesystem
 

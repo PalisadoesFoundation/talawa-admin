@@ -5,13 +5,11 @@ Welcome to our documentation guide. Here are some useful tips you need to know!
 
 <!-- toc -->
 
-- [Documentation](#documentation)
-- [Table of Contents](#table-of-contents)
-  - [General Talawa Documentation](#general-talawa-documentation)
-  - [Repo Specific Documentation](#repo-specific-documentation)
-    - [Most Common](#most-common)
-      - [How to use Docusaurus in this repository](#how-to-use-docusaurus-in-this-repository)
-    - [Other Methods](#other-methods)
+- [General Talawa Documentation](#general-talawa-documentation)
+- [Repo Specific Documentation](#repo-specific-documentation)
+  - [Most Common](#most-common)
+    - [How to use Docusaurus in this repository](#how-to-use-docusaurus-in-this-repository)
+  - [Other Methods](#other-methods)
 
 <!-- tocstop -->
 

@@ -60,7 +60,7 @@ export const EventRegistrantsWrapper = ({
           setShowModal(true); // Show the modal when button is clicked
         }}
       >
-        Add Registrants
+        Register Member
       </Button>
 
       {/* Render the EventRegistrantsModal if showModal is true */}

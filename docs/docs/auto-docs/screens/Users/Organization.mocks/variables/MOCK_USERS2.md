@@ -8,7 +8,7 @@
 
 Defined in: [src/screens/Users/Organization.mocks.ts:284](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Users/Organization.mocks.ts#L284)
 
-## Type declaration
+## Type Declaration
 
 ### appUserProfile
 
@@ -48,7 +48,7 @@ Defined in: [src/screens/Users/Organization.mocks.ts:284](https://github.com/Pal
 
 #### user.createdAt
 
-> **createdAt**: `string` = `'2023-04-09T04:53:17.742+00:00'`
+> **createdAt**: `string` = `'2030-04-09T04:53:17.742+00:00'`
 
 #### user.email
 

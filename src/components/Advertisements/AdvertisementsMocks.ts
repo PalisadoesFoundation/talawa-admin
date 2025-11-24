@@ -107,11 +107,6 @@ interface IBaseMutationMock<T = unknown> {
 }
 
 const { getItem } = useLocalStorage();
-export const mockFileForAdvertisementScreen = new File(
-  ['dummy content'],
-  'test.png',
-  { type: 'image/png' },
-);
 
 export const dateConstants = {
   create: {
@@ -308,22 +303,6 @@ export const getActiveAdvertisementMocks: IAdvertisementListMock[] = [
   createAdvertisementListMock({ isCompleted: true, edges: [] }),
 ];
 
-export const createAdSuccessMock = [
-  createMutationMock(
-    ADD_ADVERTISEMENT_MUTATION,
-    {
-      organizationId: '1',
-      name: 'Ad1',
-      type: 'banner',
-      startAt: '2022-12-31T18:30:00.000Z',
-      endAt: '2023-01-31T18:30:00.000Z',
-      attachments: [mockFileForAdvertisementScreen],
-      description: 'this advertisement is created by admin',
-    },
-    { createAdvertisement: { id: '1' } },
-  ),
-];
-
 export const deleteAdvertisementMocks = [
   createAdvertisementListMock({ isCompleted: true, edges: [completedAdNode] }),
   createAdvertisementListMock({
@@ -336,54 +315,6 @@ export const deleteAdvertisementMocks = [
     { id: '1' },
     { deleteAdvertisement: { id: '1' } },
   ),
-];
-
-export const infiniteScrollMocks: IAdvertisementListMock[] = [
-  createAdvertisementListMock({
-    isCompleted: true,
-    edges: [
-      createAdvertisementNode({
-        id: '1',
-        name: 'First Ad',
-        description: 'First batch advertisement',
-        endAt: new Date().toISOString(),
-      }),
-    ],
-  }),
-  createAdvertisementListMock({
-    isCompleted: false,
-    edges: [],
-    hasNextPage: false,
-    endCursor: null,
-    startCursor: null,
-  }),
-  createAdvertisementListMock({
-    isCompleted: true,
-    after: 'cursor-2',
-    edges: [
-      createAdvertisementNode({
-        id: '2',
-        name: 'Second Ad',
-        description: 'Second batch advertisement',
-        endAt: new Date().toISOString(),
-        createdAt: new Date('2025-02-03').toISOString(),
-        type: 'pop_up',
-      }),
-    ],
-    startCursor: 'cursor-2',
-    endCursor: 'cursor-3',
-    hasNextPage: false,
-    hasPreviousPage: true,
-  }),
-  createAdvertisementListMock({
-    isCompleted: false,
-    after: 'cursor-2',
-    edges: [],
-    startCursor: null,
-    endCursor: null,
-    hasNextPage: false,
-    hasPreviousPage: false,
-  }),
 ];
 
 export const initialArchivedData: IAdvertisementListMock[] = [

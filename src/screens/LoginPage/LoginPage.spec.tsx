@@ -28,6 +28,16 @@ import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, expect, it, describe } from 'vitest';
 
+vi.mock('utils/useLocalstorage');
+
+// Define the interface locally since it's not exported from the module
+interface InterfaceStorageHelper {
+  getItem: <T>(key: string) => T | null | string;
+  setItem: (key: string, value: unknown) => void;
+  removeItem: (key: string) => void;
+  getStorageKey: (key: string) => string;
+}
+
 const MOCKS = [
   {
     request: {
@@ -739,12 +749,9 @@ describe('Testing Login Page Screen', () => {
 
     const input = screen.getByTestId('password') as HTMLInputElement;
     const toggleText = screen.getByTestId('showLoginPassword');
-    // password should be hidden
     expect(input.type).toBe('password');
-    // click the toggle button to show password
     await userEvent.click(toggleText);
     expect(input.type).toBe('text');
-    // click the toggle button to hide password
     await userEvent.click(toggleText);
     expect(input.type).toBe('password');
 
@@ -784,12 +791,9 @@ describe('Testing Login Page Screen', () => {
 
       const input = screen.getByTestId('passwordField') as HTMLInputElement;
       const toggleText = screen.getByTestId('showPassword');
-      // password should be hidden
       expect(input.type).toBe('password');
-      // click the toggle button to show password
       await userEvent.click(toggleText);
       expect(input.type).toBe('text');
-      // click the toggle button to hide password
       await userEvent.click(toggleText);
       expect(input.type).toBe('password');
     }
@@ -798,7 +802,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing confirm password preview feature', async () => {
-    // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: {
@@ -830,12 +833,9 @@ describe('Testing Login Page Screen', () => {
 
       const input = screen.getByTestId('cpassword') as HTMLInputElement;
       const toggleText = screen.getByTestId('showPasswordCon');
-      // password should be hidden
       expect(input.type).toBe('password');
-      // click the toggle button to show password
       await userEvent.click(toggleText);
       expect(input.type).toBe('text');
-      // click the toggle button to hide password
       await userEvent.click(toggleText);
       expect(input.type).toBe('password');
     }
@@ -861,7 +861,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing for the password error warning when user clicks on password field and password is less than 8 character', async () => {
-    // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: {
@@ -906,7 +905,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing for the password error warning when user clicks on password field and password is greater than or equal to 8 character', async () => {
-    // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: {
@@ -951,7 +949,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing for the password error warning when user clicks on fields except password field and password is less than 8 character', async () => {
-    // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: {
@@ -994,7 +991,6 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing for the password error warning when user clicks on fields except password field and password is greater than or equal to 8 character', async () => {
-    // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: {
@@ -1093,11 +1089,28 @@ describe('Testing Login Page Screen', () => {
   });
 });
 
+const mockUseLocalStorage = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  getStorageKey: vi.fn(),
+};
+
+beforeEach(() => {
+  vi.clearAllMocks();
+  (useLocalStorage as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+    mockUseLocalStorage as InterfaceStorageHelper,
+  );
+});
+
 describe('Testing redirect if already logged in', () => {
   it('Logged in as USER', async () => {
-    const { setItem } = useLocalStorage();
-    setItem('IsLoggedIn', 'TRUE');
-    setItem('userId', 'id');
+    mockUseLocalStorage.getItem.mockImplementation((key: string) => {
+      if (key === 'IsLoggedIn') return 'TRUE';
+      if (key === 'userId') return 'id';
+      return null;
+    });
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -1112,10 +1125,14 @@ describe('Testing redirect if already logged in', () => {
     await wait();
     expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
   });
+
   it('Logged in as Admin or SuperAdmin', async () => {
-    const { setItem } = useLocalStorage();
-    setItem('IsLoggedIn', 'TRUE');
-    setItem('userId', null);
+    mockUseLocalStorage.getItem.mockImplementation((key: string) => {
+      if (key === 'IsLoggedIn') return 'TRUE';
+      if (key === 'userId') return null;
+      return null;
+    });
+
     render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
@@ -1129,6 +1146,166 @@ describe('Testing redirect if already logged in', () => {
     );
     await wait();
     expect(mockNavigate).toHaveBeenCalledWith('/orglist');
+  });
+});
+
+describe('Testing invitation functionality', () => {
+  beforeEach(() => {
+    // Mock window.location.href for invitation redirect tests
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        href: 'http://localhost:3000/',
+      },
+      writable: true,
+    });
+  });
+
+  it('should handle pending invitation token on successful login', async () => {
+    const mockToken = 'test-invitation-token';
+
+    // Mock getItem to return pending invitation token
+    mockUseLocalStorage.getItem.mockImplementation((key: string) => {
+      if (key === 'pendingInvitationToken') return mockToken;
+      return null;
+    });
+
+    // Mock removeItem
+    const mockRemoveItem = vi.fn();
+    mockUseLocalStorage.removeItem = mockRemoveItem;
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await userEvent.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'johndoe',
+    );
+    await userEvent.click(screen.getByTestId('loginBtn'));
+
+    await wait();
+
+    expect(mockRemoveItem).toHaveBeenCalledWith('pendingInvitationToken');
+
+    expect(window.location.href).toBe(`/event/invitation/${mockToken}`);
+  });
+
+  it('should handle pending invitation token on successful registration', async () => {
+    const mockToken = 'test-invitation-token';
+
+    mockUseLocalStorage.getItem.mockImplementation((key: string) => {
+      if (key === 'pendingInvitationToken') return mockToken;
+      return null;
+    });
+
+    const mockRemoveItem = vi.fn();
+    mockUseLocalStorage.removeItem = mockRemoveItem;
+
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        reload: vi.fn(),
+        href: 'https://localhost:4321/',
+        origin: 'https://localhost:4321',
+        pathname: '/',
+      },
+    });
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Click register button
+    const registerButton = screen.queryByTestId('goToRegisterPortion');
+    if (registerButton) {
+      await userEvent.click(registerButton);
+      await wait();
+
+      // Fill registration form
+      await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
+      await userEvent.type(
+        screen.getByTestId('signInEmail'),
+        'johndoe@gmail.com',
+      );
+      await userEvent.type(
+        screen.getByPlaceholderText('Password'),
+        'Johndoe@123',
+      );
+      await userEvent.type(
+        screen.getByPlaceholderText('Confirm Password'),
+        'Johndoe@123',
+      );
+
+      const registrationBtn = screen.queryByTestId('registrationBtn');
+      if (registrationBtn) {
+        await userEvent.click(registrationBtn);
+        await wait();
+
+        // Verify that removeItem was called with the pending invitation token
+        expect(mockRemoveItem).toHaveBeenCalledWith('pendingInvitationToken');
+
+        // Verify that window.location.href was set to the invitation URL
+        expect(window.location.href).toBe(`/event/invitation/${mockToken}`);
+      }
+    }
+  });
+
+  it('should not redirect when no pending invitation token exists', async () => {
+    // Mock getItem to return null for pending invitation token
+    mockUseLocalStorage.getItem.mockImplementation((key: string) => {
+      if (key === 'pendingInvitationToken') return null;
+      return null;
+    });
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Fill login form
+    await userEvent.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'johndoe',
+    );
+    await userEvent.click(screen.getByTestId('loginBtn'));
+
+    await wait();
+
+    // Verify normal navigation (no invitation redirect)
+    expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
+    expect(window.location.href).toBe('http://localhost:3000/');
   });
 });
 
@@ -1166,8 +1343,7 @@ it('Render the Select Organization list and change the option', async () => {
     const autocomplete = screen.getByTestId('selectOrg');
     const input = within(autocomplete).getByRole('combobox');
     autocomplete.focus();
-    // the value here can be any string you want, so you may also consider to
-    // wrapper it as a function and pass in inputValue as parameter
+
     fireEvent.change(input, { target: { value: 'a' } });
     fireEvent.keyDown(autocomplete, { key: 'ArrowDown' });
     fireEvent.keyDown(autocomplete, { key: 'Enter' });

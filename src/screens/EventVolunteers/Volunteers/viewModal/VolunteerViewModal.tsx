@@ -2,8 +2,8 @@
  * VolunteerViewModal Component
  *
  * This component renders a modal to display detailed information about a volunteer.
- * It includes the volunteer's name, avatar, status, hours volunteered, and the groups
- * they are associated with. The modal is styled using custom CSS classes and leverages
+ * It includes the volunteer's name, avatar, status, and hours volunteered.
+ * The modal is styled using custom CSS classes and leverages
  * Material-UI and React-Bootstrap components for UI elements.
  *
  * @component
@@ -15,16 +15,15 @@
  * @returns {React.FC} A React functional component.
  *
  * @remarks
- * - The modal displays the volunteer's name and avatar. If an image is not available,
+ * - The modal displays the volunteer's name and avatar. If an avatar is not available,
  *   a fallback avatar is shown using the `Avatar` component.
  * - The volunteer's status is displayed with an icon indicating whether they have
  *   accepted or are pending.
- * - If the volunteer is part of any groups, a table lists the groups along with
- *   the number of members in each group.
+ * - The number of hours volunteered by the volunteer is also displayed.
  *
  * @dependencies
  * - `react-bootstrap` for modal and form components.
- * - `@mui/material` for Material-UI components like `TextField` and `Table`.
+ * - `@mui/material` for Material-UI components like `TextField`.
  * - `react-i18next` for internationalization.
  * - `Avatar` component for rendering fallback avatars.
  *
@@ -34,10 +33,9 @@
  *   isOpen={true}
  *   hide={() => console.log('Modal closed')}
  *   volunteer={{
- *     user: { firstName: 'John', lastName: 'Doe', image: '', _id: '123' },
+ *     user: { name: 'John Doe', avatarURL: '', id: '123' },
  *     hasAccepted: true,
  *     hoursVolunteered: 10,
- *     groups: [{ _id: '1', name: 'Group A', volunteers: [] }],
  *   }}
  * />
  * ```
@@ -59,7 +57,7 @@ import {
   TextField,
 } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-import { HistoryToggleOff, TaskAlt } from '@mui/icons-material';
+import { HistoryToggleOff, TaskAlt, Cancel } from '@mui/icons-material';
 
 export interface InterfaceVolunteerViewModal {
   isOpen: boolean;
@@ -75,7 +73,7 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
 
-  const { user, hasAccepted, hoursVolunteered, groups } = volunteer;
+  const { user, volunteerStatus, hoursVolunteered, groups } = volunteer;
 
   return (
     <Modal className={styles.volunteerViewModal} onHide={hide} show={isOpen}>
@@ -99,14 +97,14 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
                 label={t('volunteer')}
                 variant="outlined"
                 className={styles.noOutline}
-                value={user.firstName + ' ' + user.lastName}
+                value={user.name}
                 disabled
                 InputProps={{
                   startAdornment: (
                     <>
-                      {user.image ? (
+                      {user.avatarURL ? (
                         <img
-                          src={user.image}
+                          src={user.avatarURL}
                           alt="Volunteer"
                           data-testid="volunteer_image"
                           className={styles.tableImage}
@@ -114,12 +112,12 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
                       ) : (
                         <div className={styles.avatarContainer}>
                           <Avatar
-                            key={user._id + '1'}
+                            key={user.id + '1'}
                             containerStyle={styles.imageContainer}
                             avatarStyle={styles.tableImage}
                             dataTestId="volunteer_avatar"
-                            name={user.firstName + ' ' + user.lastName}
-                            alt={user.firstName + ' ' + user.lastName}
+                            name={user.name}
+                            alt={user.name}
                           />
                         </div>
                       )}
@@ -134,12 +132,20 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
             <TextField
               label={t('status')}
               fullWidth
-              value={hasAccepted ? t('accepted') : tCommon('pending')}
+              value={
+                volunteerStatus === 'accepted'
+                  ? t('accepted')
+                  : volunteerStatus === 'rejected'
+                    ? t('rejected')
+                    : tCommon('pending')
+              }
               InputProps={{
                 startAdornment: (
                   <>
-                    {hasAccepted ? (
+                    {volunteerStatus === 'accepted' ? (
                       <TaskAlt color="success" className={styles.statusIcon} />
+                    ) : volunteerStatus === 'rejected' ? (
+                      <Cancel color="error" className={styles.statusIcon} />
                     ) : (
                       <HistoryToggleOff
                         color="warning"
@@ -148,9 +154,12 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
                     )}
                   </>
                 ),
-                className: hasAccepted
-                  ? styles.acceptedStatus
-                  : styles.pendingStatus,
+                className:
+                  volunteerStatus === 'accepted'
+                    ? styles.acceptedStatus
+                    : volunteerStatus === 'rejected'
+                      ? styles.rejectedStatus
+                      : styles.pendingStatus,
               }}
               disabled
             />
@@ -191,9 +200,9 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
                   </TableHead>
                   <TableBody>
                     {groups.map((group, index) => {
-                      const { _id, name, volunteers } = group;
+                      const { id, name, volunteers } = group;
                       return (
-                        <TableRow key={_id} className={styles.tableRow}>
+                        <TableRow key={id} className={styles.tableRow}>
                           <TableCell component="th" scope="row">
                             {index + 1}
                           </TableCell>
@@ -201,7 +210,7 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
                             {name}
                           </TableCell>
                           <TableCell align="center">
-                            {volunteers.length}
+                            {volunteers?.length || 0}
                           </TableCell>
                         </TableRow>
                       );

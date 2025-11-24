@@ -6,9 +6,9 @@
 
 > `const` **errorMocks**: `object`[]
 
-Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/MemberActivityMocks.ts#L42)
+Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/MemberActivityMocks.ts#L73)
 
-## Type declaration
+## Type Declaration
 
 ### error
 
@@ -20,12 +20,12 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:42](https://gi
 
 #### request.query
 
-> **query**: `DocumentNode` = `EVENT_DETAILS`
+> **query**: `DocumentNode` = `EVENT_DETAILS_BASIC`
 
 #### request.variables
 
 > **variables**: `object`
 
-#### request.variables.id
+#### request.variables.eventId
 
-> **id**: `string` = `'event123'`
+> **eventId**: `string` = `'event123'`

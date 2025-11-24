@@ -25,9 +25,9 @@ import SearchBar from 'subComponents/SearchBar';
 import type {
   InterfacePostEdge,
   InterfaceOrganizationPostListData,
-  InterfaceMutationCreatePostInput,
   InterfacePost,
 } from '../../types/Post/interface';
+import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
 
 /**
  * OrgPost Component
@@ -57,7 +57,7 @@ function OrgPost(): JSX.Element {
   const [videoPreview, setVideoPreview] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const { orgId: currentUrl } = useParams();
-  const [showTitle, setShowTitle] = useState(true);
+  const [showTitle] = useState(true);
   const [after, setAfter] = useState<string | null | undefined>(null);
   const [before, setBefore] = useState<string | null | undefined>(null);
   const [first, setFirst] = useState<number | null>(6);
@@ -106,40 +106,75 @@ function OrgPost(): JSX.Element {
       last: last,
     },
   });
+  const {
+    data: orgPinnedPostListData,
+    loading: orgPinnedPostListLoading,
+    error: orgPinnedPostListError,
+  } = useQuery<InterfaceOrganizationPostListData>(
+    ORGANIZATION_PINNED_POST_LIST,
+    {
+      variables: {
+        input: { id: currentUrl as string },
+        first: first,
+        last: last,
+      },
+    },
+  );
 
   const [create, { loading: createPostLoading }] =
     useMutation(CREATE_POST_MUTATION);
+
+  async function getFileHashFromFile(file: File): Promise<string> {
+    const arrayBuffer = await file.arrayBuffer();
+    const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  function getMimeTypeEnum(mime: string): string {
+    switch (mime) {
+      case 'image/jpeg':
+        return 'IMAGE_JPEG';
+      case 'image/png':
+        return 'IMAGE_PNG';
+      case 'image/webp':
+        return 'IMAGE_WEBP';
+      case 'image/avif':
+        return 'IMAGE_AVIF';
+      case 'video/mp4':
+        return 'VIDEO_MP4';
+      case 'video/webm':
+        return 'VIDEO_WEBM';
+      default:
+        return 'IMAGE_JPEG'; // fallback
+    }
+  }
 
   const createPost = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     try {
-      if (!postformState.posttitle.trim()) {
-        throw new Error('Title field cannot be empty');
+      let attachment = null;
+      if (file && typeof file !== 'string') {
+        const fileName = file.name.split('/').pop() || 'defaultFileName';
+        const objectName = 'uploads/' + fileName;
+        const fileHash = await getFileHashFromFile(file);
+
+        attachment = {
+          fileHash,
+          mimetype: getMimeTypeEnum(file.type),
+          name: fileName,
+          objectName,
+        };
       }
-
-      if (!currentUrl) {
-        throw new Error('Organization ID is required');
-      }
-
-      // Create the typed input object
-      const input: InterfaceMutationCreatePostInput = {
-        caption: postformState.posttitle.trim(),
-        organizationId: currentUrl,
-        isPinned: postformState.pinPost,
-      };
-
-      // Handle file upload
-      if (file instanceof File) {
-        // With apollo-upload-client, we can directly pass the File object
-        input.attachments = [file];
-      }
-
       const { data } = await create({
-        variables: { input },
-        context: {
-          // Ensure the file upload request includes the required header
-          headers: { 'Apollo-Require-Preflight': 'true' },
+        variables: {
+          input: {
+            caption: postformState.posttitle.trim(),
+            organizationId: currentUrl,
+            isPinned: postformState.pinPost,
+            ...(attachment && { attachments: [attachment] }),
+          },
         },
       });
 
@@ -163,7 +198,6 @@ function OrgPost(): JSX.Element {
     }
   };
 
-  console.log(setShowTitle);
   const handleAddMediaChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
@@ -177,10 +211,6 @@ function OrgPost(): JSX.Element {
       ) {
         toast.error('Please select an image or video file');
         return;
-      }
-
-      if (filteredPosts.length === 0) {
-        console.log('No filtered posts found');
       }
 
       setFile(selectedFile);
@@ -229,11 +259,12 @@ function OrgPost(): JSX.Element {
   }, [currentPage, sortingOption, sortedPosts]);
 
   useEffect(() => {
-    if (orgPostListError) {
-      console.error('Organization post list error:', orgPostListError);
-      // Add proper error handling here
-    }
+    if (orgPostListError) toast.error('Organization post list error:');
   }, [orgPostListError]);
+
+  useEffect(() => {
+    if (orgPinnedPostListError) toast.error(t('pinnedPostsLoadError'));
+  }, [orgPinnedPostListError]);
 
   useEffect(() => {
     if (data?.postsByOrganization) {
@@ -250,7 +281,7 @@ function OrgPost(): JSX.Element {
     }
   }, [data, sortingOption]);
 
-  if (createPostLoading || orgPostListLoading) {
+  if (createPostLoading || orgPostListLoading || orgPinnedPostListLoading) {
     return <Loader />;
   }
 
@@ -261,10 +292,12 @@ function OrgPost(): JSX.Element {
       data-is-filtering={String(isFiltering)}
       data-sorting-option={sortingOption}
     >
+      {error && <div data-testid="not-found">Error loading post</div>}
       <PostsRenderer
         loading={loading}
         error={error}
         data={isFiltering ? data : orgPostListData}
+        pinnedPostData={orgPinnedPostListData?.organization?.pinnedPosts?.edges}
         isFiltering={isFiltering}
         searchTerm={searchTerm}
         sortingOption={sortingOption}
@@ -280,9 +313,6 @@ function OrgPost(): JSX.Element {
       setDisplayPosts([]);
 
       refetchPosts({ input: { organizationId: currentUrl } });
-      return;
-    }
-    if (loading || error || !data?.postsByOrganization) {
       return;
     }
 
@@ -306,7 +336,7 @@ function OrgPost(): JSX.Element {
       const { data: searchData } = await refetchPosts({
         input: { organizationId: currentUrl },
       });
-
+      console.log(filteredPosts);
       if (!term.trim()) {
         setIsFiltering(false);
         setFilteredPosts([]);
@@ -318,12 +348,11 @@ function OrgPost(): JSX.Element {
 
         const filtered = searchData.postsByOrganization.filter(
           (post: InterfacePost) =>
-            post.caption.toLowerCase().includes(term.toLowerCase()),
+            post.caption?.toLowerCase().includes(term.toLowerCase()),
         );
         setFilteredPosts(filtered);
       }
-    } catch (error) {
-      console.error('Search error:', error);
+    } catch {
       toast.error('Error searching posts');
       setIsFiltering(false);
     }
@@ -414,6 +443,7 @@ function OrgPost(): JSX.Element {
                   ]}
                   selectedOption={sortingOption}
                   onSortChange={handleSorting}
+                  data-testid="sorting"
                   dataTestIdPrefix="sortpost-toggle"
                   dropdownTestId="sortpost-dropdown"
                 />
@@ -423,6 +453,7 @@ function OrgPost(): JSX.Element {
                 variant="success"
                 onClick={showInviteModal}
                 data-testid="createPostModalBtn"
+                data-cy="createPostModalBtn"
                 className={`${styles.createButton} mb-2`}
               >
                 <i className={'fa fa-plus me-2'} />
@@ -474,6 +505,7 @@ function OrgPost(): JSX.Element {
               className={`mb-3 ${styles.inputField}`}
               placeholder={t('postTitle1')}
               data-testid="modalTitle"
+              data-cy="modalTitle"
               autoComplete="off"
               required
               value={postformState.posttitle}
@@ -491,6 +523,7 @@ function OrgPost(): JSX.Element {
               className={`mb-3 ${styles.inputField}`}
               placeholder={t('information1')}
               data-testid="modalinfo"
+              data-cy="modalinfo"
               autoComplete="off"
               required
               value={postformState.postinfo}
@@ -513,6 +546,7 @@ function OrgPost(): JSX.Element {
               multiple={false}
               onChange={handleAddMediaChange}
               data-testid="addMediaField"
+              data-cy="addMediaField"
               className={`mb-3 ${styles.inputField}`}
             />
 
@@ -593,6 +627,7 @@ function OrgPost(): JSX.Element {
               id="pinPost"
               type="checkbox"
               data-testid="pinPost"
+              data-cy="pinPost"
               defaultChecked={postformState.pinPost}
               onChange={(): void =>
                 setPostFormState({
@@ -617,6 +652,7 @@ function OrgPost(): JSX.Element {
               type="submit"
               value="invite"
               data-testid="createPostBtn"
+              data-cy="createPostBtn"
               className={`${styles.addButton} mt-2`}
             >
               {t('addPost')}

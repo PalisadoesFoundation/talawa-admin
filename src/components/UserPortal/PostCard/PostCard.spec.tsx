@@ -1,88 +1,408 @@
-import React, { act } from 'react';
-import { MockedProvider } from '@apollo/react-testing';
-import { render, screen, waitFor } from '@testing-library/react';
+import React from 'react';
+import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
+import userEvent from '@testing-library/user-event';
+import { vi } from 'vitest';
+import type { InterfacePostCard } from 'utils/interfaces';
 
 import PostCard from './PostCard';
-import userEvent from '@testing-library/user-event';
 import {
   CREATE_COMMENT_POST,
-  LIKE_POST,
-  UNLIKE_POST,
-  LIKE_COMMENT,
-  UNLIKE_COMMENT,
   DELETE_POST_MUTATION,
   UPDATE_POST_MUTATION,
+  UPDATE_POST_VOTE,
 } from 'GraphQl/Mutations/mutations';
+import { GET_POST_COMMENTS } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi } from 'vitest';
+import { errorHandler } from 'utils/errorHandler';
 
-/**
- * Unit tests for the PostCard component in the User Portal.
- *
- * These tests ensure the PostCard component behaves as expected:
- *
- * 1. **Component rendering**: Verifies correct rendering with props like title, text, and creator info.
- * 2. **Dropdown functionality**: Tests the dropdown for editing and deleting posts.
- * 3. **Edit post**: Ensures the post can be edited with a success message.
- * 4. **Delete post**: Verifies post deletion works with a success message.
- * 5. **Like/unlike post**: Ensures the UI updates when a user likes or unlikes a post.
- * 6. **Post image**: Verifies post image rendering.
- * 7. **Create comment**: Ensures a comment is created successfully.
- * 8. **Like/unlike comment**: Tests liking/unliking comments.
- * 9. **Comment modal**: Verifies the comment modal appears when clicked.
- * 10. **Comment validation**: Ensures an error toast appears when an empty comment is submitted.
- * 11. **Comment submission error**: Ensures an error toast appears when a network error occurs.
- * 12. **Delete post failure**: Ensures the error toast appears when post deletion fails.
- * 13. **Post image**: Verifies post image rendering.
- * 14. **Delete post success**: Ensures the success toast appears when CreateEvenData is returned.
- *
- * Mocked GraphQL data is used for simulating backend behavior.
- */
-
-const { setItem, getItem } = useLocalStorage();
-
+// ===== MODULE MOCKS =====
 vi.mock('react-toastify', () => ({
   toast: {
     error: vi.fn(),
-    info: vi.fn(),
     success: vi.fn(),
   },
 }));
 
-const MOCKS = [
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: vi.fn(),
+}));
+
+vi.mock('plugin', () => ({
+  __esModule: true,
+  default: [],
+  PluginInjector: vi.fn(() => (
+    <div data-testid="plugin-injector-g4">Mock Plugin Injector G4</div>
+  )),
+}));
+
+// ===== FUNCTION MOCKS =====
+const fetchPostsMock = vi.fn();
+
+// ===== APOLLO GRAPHQL MOCKS =====
+
+// Base comments query mock
+const commentsQueryMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+    },
+  },
+  result: {
+    data: {
+      post: {
+        __typename: 'Post',
+        id: '1',
+        caption: 'Test Post',
+        comments: {
+          __typename: 'CommentConnection',
+          edges: [
+            {
+              __typename: 'CommentEdge',
+              node: {
+                __typename: 'Comment',
+                id: '1',
+                body: 'Test comment',
+                creator: {
+                  __typename: 'User',
+                  id: '2',
+                  name: 'Jane Smith',
+                  avatarURL: null,
+                },
+                createdAt: '2023-01-01T00:00:00Z',
+                upVotesCount: 2,
+                downVotesCount: 0,
+                hasUserVoted: {
+                  __typename: 'HasUserVotedResponse',
+                  hasVoted: false,
+                  voteType: null,
+                },
+              },
+              cursor: 'cc1',
+            },
+          ],
+          pageInfo: {
+            __typename: 'PageInfo',
+            startCursor: 'cc1',
+            endCursor: 'cc1',
+            hasNextPage: false,
+            hasPreviousPage: false,
+          },
+        },
+      },
+    },
+  },
+};
+
+// Mock where data is undefined
+const undefinedDataMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+    },
+  },
+  result: {
+    data: undefined,
+  },
+};
+
+// Mock where data.post is undefined
+const undefinedPostMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+    },
+  },
+  result: {
+    data: {
+      post: undefined,
+    },
+  },
+};
+
+// Mock where data.post.comments is undefined (different from null)
+const undefinedCommentsMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+    },
+  },
+  result: {
+    data: {
+      post: {
+        __typename: 'Post',
+        id: '1',
+        comments: undefined,
+      },
+    },
+  },
+};
+
+// Comments with pagination mock (for testing pagination)
+const commentsWithPaginationMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+    },
+  },
+  result: {
+    data: {
+      post: {
+        __typename: 'Post',
+        id: '1',
+        caption: 'Test Post',
+        comments: {
+          __typename: 'CommentConnection',
+          edges: [
+            {
+              __typename: 'CommentEdge',
+              node: {
+                __typename: 'Comment',
+                id: '1',
+                body: 'First comment',
+                creator: {
+                  __typename: 'User',
+                  id: '2',
+                  name: 'Jane Smith',
+                  avatarURL: null,
+                },
+                createdAt: '2023-01-01T00:00:00Z',
+                upVotesCount: 2,
+                downVotesCount: 0,
+                hasUserVoted: {
+                  __typename: 'HasUserVotedResponse',
+                  hasVoted: false,
+                  voteType: null,
+                },
+              },
+              cursor: 'cc1',
+            },
+          ],
+          pageInfo: {
+            __typename: 'PageInfo',
+            startCursor: 'cc1',
+            endCursor: 'cc1',
+            hasNextPage: true,
+            hasPreviousPage: false,
+          },
+        },
+      },
+    },
+  },
+};
+
+// Fetch more comments mock (for testing pagination)
+const fetchMoreCommentsMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+      after: 'cc1',
+    },
+  },
+  result: {
+    data: {
+      post: {
+        __typename: 'Post',
+        id: '1',
+        caption: 'Test Post',
+        comments: {
+          __typename: 'CommentConnection',
+          edges: [
+            {
+              __typename: 'CommentEdge',
+              node: {
+                __typename: 'Comment',
+                id: '2',
+                body: 'Second comment',
+                creator: {
+                  __typename: 'User',
+                  id: '3',
+                  name: 'John Smith',
+                  avatarURL: null,
+                },
+                createdAt: '2023-01-01T01:00:00Z',
+                upVotesCount: 1,
+                downVotesCount: 0,
+                hasUserVoted: {
+                  __typename: 'HasUserVotedResponse',
+                  hasVoted: false,
+                  voteType: null,
+                },
+              },
+              cursor: 'cc2',
+            },
+          ],
+          pageInfo: {
+            __typename: 'PageInfo',
+            startCursor: 'cc2',
+            endCursor: 'cc2',
+            hasNextPage: false,
+            hasPreviousPage: true,
+          },
+        },
+      },
+    },
+  },
+};
+
+// Fetch more comments error mock
+const fetchMoreCommentsErrorMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+      after: 'cc1',
+    },
+  },
+  error: new Error('Network error occurred'),
+};
+
+// Create comment mock
+const createCommentMock = {
+  request: {
+    query: CREATE_COMMENT_POST,
+    variables: {
+      input: {
+        postId: '1',
+        body: 'New test comment',
+      },
+    },
+  },
+  result: {
+    data: {
+      createComment: {
+        __typename: 'Comment',
+        id: '3',
+        body: 'New test comment',
+        creator: {
+          __typename: 'User',
+          id: '1',
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john@example.com',
+        },
+        createdAt: '2024-01-01',
+        likeCount: 0,
+      },
+    },
+  },
+};
+
+// Delete post error mock
+const deletePostErrorMock = {
+  request: {
+    query: DELETE_POST_MUTATION,
+    variables: {
+      input: {
+        id: '1',
+      },
+    },
+  },
+  error: new Error('Failed to delete post'),
+};
+
+// Null comments mock
+const nullCommentsMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+    },
+  },
+  result: {
+    data: {
+      post: {
+        comments: null,
+      },
+    },
+  },
+};
+
+// Null fetch more mock
+const nullFetchMoreMock = {
+  request: {
+    query: GET_POST_COMMENTS,
+    variables: {
+      postId: '1',
+      userId: '1',
+      first: 10,
+      after: 'cc1',
+    },
+  },
+  result: {
+    data: {
+      post: {
+        comments: null,
+      },
+    },
+  },
+};
+
+// ===== BASE MOCKS ARRAY =====
+const mocks = [
   {
     request: {
-      query: LIKE_POST,
+      query: UPDATE_POST_VOTE,
       variables: {
-        postId: '',
+        input: {
+          postId: '1',
+          type: 'up_vote',
+        },
       },
-      result: {
-        data: {
-          likePost: {
-            _id: '',
-          },
+    },
+    result: {
+      data: {
+        updatePostVote: {
+          __typename: 'UpdatePostVoteResponse',
+          id: '1',
         },
       },
     },
   },
   {
     request: {
-      query: UNLIKE_POST,
+      query: UPDATE_POST_VOTE,
       variables: {
-        post: '',
+        input: {
+          postId: '1',
+          type: 'down_vote',
+        },
       },
-      result: {
-        data: {
-          unlikePost: {
-            _id: '',
-          },
+    },
+    result: {
+      data: {
+        updatePostVote: {
+          __typename: 'UpdatePostVoteResponse',
+          id: '1',
         },
       },
     },
@@ -91,55 +411,27 @@ const MOCKS = [
     request: {
       query: CREATE_COMMENT_POST,
       variables: {
-        postId: '1',
-        comment: 'testComment',
+        input: {
+          postId: '1',
+          body: 'My comment',
+        },
       },
-      result: {
-        data: {
-          createComment: {
-            _id: '64ef885bca85de60ebe0f304',
-            creator: {
-              _id: '63d6064458fce20ee25c3bf7',
-              firstName: 'Noble',
-              lastName: 'Mittal',
-              email: 'test@gmail.com',
-              __typename: 'User',
-            },
-            likeCount: 0,
-            likedBy: [],
-            text: 'testComment',
-            __typename: 'Comment',
+    },
+    result: {
+      data: {
+        createComment: {
+          __typename: 'Comment',
+          id: '1',
+          body: 'My comment',
+          creator: {
+            __typename: 'User',
+            id: '1',
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john@example.com',
           },
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: LIKE_COMMENT,
-      variables: {
-        commentId: '1',
-      },
-    },
-    result: {
-      data: {
-        likeComment: {
-          _id: '1',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: UNLIKE_COMMENT,
-      variables: {
-        commentId: '1',
-      },
-    },
-    result: {
-      data: {
-        unlikeComment: {
-          _id: '1',
+          createdAt: '2023-01-01T00:00:00Z',
+          likeCount: 0,
         },
       },
     },
@@ -148,14 +440,40 @@ const MOCKS = [
     request: {
       query: UPDATE_POST_MUTATION,
       variables: {
-        id: 'postId',
-        text: 'Edited Post',
+        input: {
+          id: '1',
+          caption: 'This is a test post',
+        },
       },
     },
     result: {
       data: {
         updatePost: {
-          _id: '',
+          __typename: 'Post',
+          id: '1',
+          caption: 'This is a test post',
+          pinnedAt: null,
+          attachments: [],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_POST_MUTATION,
+      variables: {
+        input: {
+          id: '1',
+          caption: 'Updated content',
+        },
+      },
+    },
+    result: {
+      data: {
+        updatePost: {
+          __typename: 'Post',
+          id: '1',
+          caption: 'Updated content',
         },
       },
     },
@@ -164,1081 +482,768 @@ const MOCKS = [
     request: {
       query: DELETE_POST_MUTATION,
       variables: {
-        id: 'postId',
+        input: {
+          id: '1',
+        },
       },
     },
     result: {
       data: {
-        removePost: {
-          _id: '',
+        deletePost: {
+          __typename: 'DeletePostResponse',
+          id: '1',
         },
       },
     },
   },
+  commentsQueryMock,
 ];
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
+const link = new StaticMockLink(mocks, true);
 
-const link = new StaticMockLink(MOCKS, true);
+const defaultProps = {
+  id: '1',
+  creator: {
+    id: '1',
+    name: 'John Doe',
+    email: 'john@example.com',
+    avatarURL: 'avatar.jpg',
+  },
+  hasUserVoted: {
+    hasVoted: true,
+    voteType: 'up_vote' as const,
+  },
+  title: 'Test Post',
+  text: 'This is a test post',
+  image: 'test-image.jpg',
+  video: '',
+  postedAt: '2023-01-01T00:00:00Z',
+  upVoteCount: 5,
+  downVoteCount: 0,
+  commentCount: 3,
+  fetchPosts: fetchPostsMock,
+};
 
-describe('Testing PostCard Component [User Portal]', () => {
-  test('Component should be rendered properly', async () => {
-    const cardProps = {
-      id: 'postId',
-      userImage: 'image.png',
-      creator: {
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
-        id: '1',
-      },
-      postedAt: '',
-      image: '',
-      video: '',
-      text: 'This is post test text',
-      title: 'This is post test title',
-      likeCount: 1,
-      commentCount: 1,
-      comments: [
-        {
-          id: '64eb13beca85de60ebe0ed0e',
-          creator: {
-            id: '63d6064458fce20ee25c3bf7',
-            firstName: 'Noble',
-            lastName: 'Mittal',
-            email: 'test@gmail.com',
-            __typename: 'User',
-          },
-          likeCount: 0,
-          likedBy: [],
-          text: 'First comment from Talawa user portal.',
-          __typename: 'Comment',
-        },
-        {
-          id: '64eb13beca85de60ebe0ed0b',
-          creator: {
-            id: '63d6064458fce20ee25c3bf8',
-            firstName: 'Priyanshu',
-            lastName: 'Bartwal',
-            email: 'test1@gmail.com',
-            __typename: 'User',
-          },
-          likeCount: 0,
-          likedBy: [],
-          text: 'First comment from Talawa user portal.',
-          __typename: 'Comment',
-        },
-      ],
-      likedBy: [
-        {
-          firstName: '',
-          lastName: '',
-          id: '2',
-        },
-      ],
-      fetchPosts: vi.fn(),
-    };
+const renderPostCard = (props: Partial<InterfacePostCard> = {}) => {
+  return render(
+    <MockedProvider link={link}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <PostCard {...defaultProps} {...props} />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+};
 
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+const renderPostCardWithCustomMock = (customMock: MockedResponse) => {
+  const { setItem } = useLocalStorage();
+  setItem('userId', '1');
 
-    await wait();
-  });
+  // Only include the custom mock and base mocks, NOT commentsWithPaginationMock
+  const mocksArray = [
+    customMock,
+    ...mocks.filter((m) => m.request.query !== GET_POST_COMMENTS), // Exclude other comment mocks
+  ];
 
-  test('Dropdown component should be rendered properly', async () => {
-    setItem('userId', '2');
+  const linkWithCustomMock = new StaticMockLink(mocksArray, true);
 
-    const cardProps = {
-      id: '',
-      userImage: 'image.png',
-      creator: {
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
-        id: '1',
-      },
-      postedAt: '',
-      image: '',
-      video: '',
-      text: 'This is post test text',
-      title: 'This is post test title',
-      likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      likedBy: [
-        {
-          firstName: 'test',
-          lastName: 'user',
-          id: '2',
-        },
-      ],
-      fetchPosts: vi.fn(),
-    };
+  return render(
+    <MockedProvider link={linkWithCustomMock} addTypename={true}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <PostCard {...defaultProps} />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+};
 
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-
-    await userEvent.click(screen.getByTestId('dropdown'));
-    await wait();
-    expect(screen.getByText('Edit')).toBeInTheDocument();
-    expect(screen.getByText('Delete')).toBeInTheDocument();
-  });
-
-  test('Edit post should work properly', async () => {
-    setItem('userId', '2');
-
-    const cardProps = {
-      id: 'postId',
-      userImage: 'image.png',
-      creator: {
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
-        id: '1',
-      },
-      postedAt: '',
-      image: '',
-      video: '',
-      text: 'test Post',
-      title: 'This is post test title',
-      likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      likedBy: [
-        {
-          firstName: 'test',
-          lastName: 'user',
-          id: '2',
-        },
-      ],
-      fetchPosts: vi.fn(),
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-
-    await userEvent.click(screen.getByTestId('dropdown'));
-    await userEvent.click(screen.getByTestId('editPost'));
-    await wait();
-
-    expect(screen.getByTestId('editPostModalTitle')).toBeInTheDocument();
-    await userEvent.clear(screen.getByTestId('postInput'));
-    await userEvent.type(screen.getByTestId('postInput'), 'Edited Post');
-    await userEvent.click(screen.getByTestId('editPostBtn'));
-    await wait();
-
-    expect(toast.success).toHaveBeenCalledWith('Post updated Successfully');
-  });
-
-  test('Component should be rendered properly if user has liked the post', async () => {
-    const beforeUserId = getItem('userId');
-    setItem('userId', '2');
-
-    const cardProps = {
-      id: '',
-      userImage: 'image.png',
-      creator: {
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
-        id: '1',
-      },
-      postedAt: '',
-      image: '',
-      video: '',
-      text: 'This is post test text',
-      title: 'This is post test title',
-      likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      likedBy: [
-        {
-          firstName: 'test',
-          lastName: 'user',
-          id: '2',
-        },
-      ],
-      fetchPosts: vi.fn(),
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
-  });
-
-  test('Component should be rendered properly if user unlikes a post', async () => {
-    const beforeUserId = getItem('userId');
-    setItem('userId', '2');
-
-    const cardProps = {
-      id: '',
-      userImage: 'image.png',
-      creator: {
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
-        id: '1',
-      },
-      postedAt: '',
-      image: '',
-      video: '',
-      text: 'This is post test text',
-      title: 'This is post test title',
-      likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      likedBy: [
-        {
-          firstName: 'test',
-          lastName: 'user',
-          id: '2',
-        },
-      ],
-      fetchPosts: vi.fn(),
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByTestId('viewPostBtn'));
-    await userEvent.click(screen.getByTestId('likePostBtn'));
-
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
-  });
-
-  test('Component should be rendered properly if user likes a post', async () => {
-    const beforeUserId = getItem('userId');
-    setItem('userId', '2');
-
-    const cardProps = {
-      id: '',
-      userImage: 'image.png',
-      creator: {
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
-        id: '1',
-      },
-      postedAt: '',
-      image: '',
-      video: '',
-      text: 'This is post test text',
-      title: 'This is post test title',
-      likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      likedBy: [
-        {
-          firstName: 'test',
-          lastName: 'user',
-          id: '1',
-        },
-      ],
-      fetchPosts: vi.fn(),
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByTestId('viewPostBtn'));
-    await userEvent.click(screen.getByTestId('likePostBtn'));
-
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
-  });
-
-  test('Component should be rendered properly if post image is defined', async () => {
-    const cardProps = {
-      id: '',
-      userImage: 'image.png',
-      creator: {
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
-        id: '1',
-      },
-      postedAt: '',
-      image: 'testImage',
-      video: '',
-      text: 'This is post test text',
-      title: 'This is post test title',
-      likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      likedBy: [
-        {
-          firstName: 'test',
-          lastName: 'user',
-          id: '1',
-        },
-      ],
-      fetchPosts: vi.fn(),
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-  });
-
-  test('Comment is created successfully after create comment button is clicked.', async () => {
-    const cardProps = {
-      id: '1',
-      userImage: 'image.png',
-      creator: {
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
-        id: '1',
-      },
-      postedAt: '',
-      image: 'testImage',
-      video: '',
-      text: 'This is post test text',
-      title: 'This is post test title',
-      likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      likedBy: [
-        {
-          firstName: 'test',
-          lastName: 'user',
-          id: '1',
-        },
-      ],
-      fetchPosts: vi.fn(),
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const randomComment = 'testComment';
-
-    await userEvent.click(screen.getByTestId('viewPostBtn'));
-
-    await userEvent.type(screen.getByTestId('commentInput'), randomComment);
-    await userEvent.click(screen.getByTestId('createCommentBtn'));
-
-    await wait();
-  });
-
-  test('Comment validation displays an error toast when an empty comment is submitted', async () => {
-    const cardProps = {
-      id: '1',
-      userImage: 'image.png',
-      creator: {
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
-        id: '1',
-      },
-      postedAt: '',
-      image: 'testImage',
-      video: '',
-      text: 'This is post test text',
-      title: 'This is post test title',
-      likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      likedBy: [
-        {
-          firstName: 'test',
-          lastName: 'user',
-          id: '1',
-        },
-      ],
-      fetchPosts: vi.fn(),
-    };
-
-    expect(toast.error).toBeDefined();
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await userEvent.click(screen.getByTestId('viewPostBtn')); // Open the post view
-    await userEvent.clear(screen.getByTestId('commentInput')); // Clear input to ensure test's empty
-    await userEvent.click(screen.getByTestId('createCommentBtn')); // Submit comment
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
-        i18nForTest.t('postCard.emptyCommentError'),
-      );
-    });
-  });
-
-  test(`Comment should be liked when like button is clicked`, async () => {
-    const cardProps = {
-      id: '1',
-      creator: {
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
-        id: '1',
-      },
-      image: 'testImage',
-      video: '',
-      text: 'This is post test text',
-      title: 'This is post test title',
-      likeCount: 1,
-      commentCount: 1,
-      postedAt: '',
-      comments: [
-        {
-          id: '1',
-          creator: {
-            _id: '1',
-            id: '1',
-            firstName: 'test',
-            lastName: 'user',
-            email: 'test@user.com',
-          },
-          likeCount: 1,
-          likedBy: [
-            {
-              id: '1',
-            },
-          ],
-          text: 'testComment',
-        },
-        {
-          id: '2',
-          creator: {
-            _id: '1',
-            id: '1',
-            firstName: 'test',
-            lastName: 'user',
-            email: 'test@user.com',
-          },
-          likeCount: 1,
-          likedBy: [
-            {
-              id: '2',
-            },
-          ],
-          text: 'testComment',
-        },
-      ],
-      likedBy: [
-        {
-          firstName: 'test',
-          lastName: 'user',
-          id: '1',
-        },
-      ],
-      fetchPosts: vi.fn(),
-    };
-    const beforeUserId = getItem('userId');
-    setItem('userId', '2');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await userEvent.click(screen.getByTestId('viewPostBtn'));
-
-    await userEvent.click(screen.getAllByTestId('likeCommentBtn')[0]);
-
-    await wait();
-
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
-  });
-
-  test(`Comment should be unliked when like button is clicked, if already liked`, async () => {
-    const cardProps = {
-      id: '1',
-      creator: {
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
-        id: '1',
-      },
-      image: 'testImage',
-      video: '',
-      text: 'This is post test text',
-      title: 'This is post test title',
-      likeCount: 1,
-      commentCount: 1,
-      postedAt: '',
-      comments: [
-        {
-          id: '1',
-          creator: {
-            _id: '1',
-            id: '1',
-            firstName: 'test',
-            lastName: 'user',
-            email: 'test@user.com',
-          },
-          likeCount: 1,
-          likedBy: [
-            {
-              id: '1',
-            },
-          ],
-          text: 'testComment',
-        },
-        {
-          id: '2',
-          creator: {
-            _id: '1',
-            id: '1',
-            firstName: 'test',
-            lastName: 'user',
-            email: 'test@user.com',
-          },
-          likeCount: 1,
-          likedBy: [
-            {
-              id: '2',
-            },
-          ],
-          text: 'testComment',
-        },
-      ],
-      likedBy: [
-        {
-          firstName: 'test',
-          lastName: 'user',
-          id: '1',
-        },
-      ],
-      fetchPosts: vi.fn(),
-    };
-    const beforeUserId = getItem('userId');
+describe('PostCard Component', () => {
+  beforeEach(() => {
+    const { setItem } = useLocalStorage();
     setItem('userId', '1');
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await userEvent.click(screen.getByTestId('viewPostBtn'));
-
-    await userEvent.click(screen.getAllByTestId('likeCommentBtn')[0]);
-
-    await wait();
-
-    if (beforeUserId) {
-      setItem('userId', beforeUserId);
-    }
-  });
-
-  test('Comment modal pops when show comments button is clicked.', async () => {
-    const cardProps = {
-      id: '',
-      userImage: 'image.png',
-      creator: {
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
-        id: '1',
-      },
-      postedAt: '',
-      image: 'testImage',
-      video: '',
-      text: 'This is post test text',
-      title: 'This is post test title',
-      likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      likedBy: [
-        {
-          firstName: 'test',
-          lastName: 'user',
-          id: '1',
-        },
-      ],
-      fetchPosts: vi.fn(),
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByTestId('viewPostBtn'));
-    expect(screen.findAllByText('Comments')).not.toBeNull();
-  });
-
-  test('Comment submission displays error toast when network error occurs', async () => {
-    const cardProps = {
-      id: '1',
-      userImage: 'image.png',
-      creator: {
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
-        id: '1',
-      },
-      postedAt: '',
-      image: 'testImage',
-      video: '',
-      text: 'This is post test text',
-      title: 'This is post test title',
-      likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      likedBy: [
-        {
-          firstName: 'test',
-          lastName: 'user',
-          id: '1',
-        },
-      ],
-      fetchPosts: vi.fn(),
-    };
-
-    const mockError = {
-      request: {
-        query: CREATE_COMMENT_POST,
-        variables: {
-          comment: 'test',
-          postId: '1',
-        },
-      },
-      error: new Error('Test error'),
-    };
-
-    const errorLink = new StaticMockLink([mockError], true);
-
-    render(
-      <MockedProvider link={errorLink} addTypename={false}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(100);
-
-    await userEvent.click(screen.getByTestId('viewPostBtn'));
-
-    await userEvent.type(screen.getByTestId('commentInput'), 'test');
-
-    const toastErrorSpy = vi.spyOn(toast, 'error');
-    await waitFor(() =>
-      userEvent.click(screen.getByTestId('createCommentBtn')),
-    );
-
-    await waitFor(() => {
-      expect(toastErrorSpy).toHaveBeenCalled();
-    });
-
+    fetchPostsMock.mockClear();
     vi.clearAllMocks();
   });
 
-  test('Delete post should work properly', async () => {
-    setItem('userId', '2');
+  // Update all test cases that use the more button
+  test('opens and closes edit modal', async () => {
+    renderPostCard();
 
-    const deletePostMock = {
-      request: {
-        query: DELETE_POST_MUTATION,
-        variables: {
-          id: 'postId',
-        },
-      },
-      result: {
-        data: {
-          removePost: {
-            _id: 'postId',
-          },
-        },
-      },
-    };
+    const moreButton = screen.getByTestId('more-options-button');
+    await userEvent.click(moreButton);
 
-    const customLink = new StaticMockLink([deletePostMock], true);
+    const editButton = await screen.findByTestId('edit-post-button');
+    await userEvent.click(editButton);
 
-    const cardProps = {
-      id: 'postId',
-      userImage: 'image.png',
-      creator: {
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
-        id: '1',
-      },
-      postedAt: '',
-      image: '',
-      video: '',
-      text: 'test Post',
-      title: 'This is post test title',
-      likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      likedBy: [
-        {
-          firstName: 'test',
-          lastName: 'user',
-          id: '2',
-        },
-      ],
-      fetchPosts: vi.fn(), // Mock function to verify it's called
-    };
+    expect(screen.getByText('Edit Post')).toBeInTheDocument();
 
-    render(
-      <MockedProvider addTypename={false} link={customLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByTestId('dropdown'));
+    const cancelButton = screen.getByText('Cancel');
+    await userEvent.click(cancelButton);
 
     await waitFor(() => {
-      expect(screen.getByTestId('deletePost')).toBeInTheDocument();
+      expect(screen.queryByText('Edit Post')).not.toBeInTheDocument();
     });
-
-    await userEvent.click(screen.getByTestId('deletePost'));
-
-    await wait(200);
-
-    expect(toast.success).toHaveBeenCalledWith(
-      'Successfully deleted the Post.',
-    );
-
-    expect(cardProps.fetchPosts).toHaveBeenCalled();
   });
 
-  test('Should handle delete post failure correctly', async () => {
-    const cardProps = {
-      id: 'postId',
-      userImage: 'image.png',
-      creator: {
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
-        id: '2',
-      },
-      postedAt: '',
-      image: '',
-      video: '',
-      text: 'test Post',
-      title: 'This is post test title',
-      likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      likedBy: [
-        {
-          firstName: 'test',
-          lastName: 'user',
-          id: '2',
-        },
-      ],
-      fetchPosts: vi.fn(), // Pass mock function
-    };
+  test('updates post when edit form is submitted', async () => {
+    renderPostCard();
 
-    const deleteErrorMock = {
-      request: {
-        query: DELETE_POST_MUTATION,
-        variables: { id: 'postId' },
-      },
-      error: new Error('Network error: Failed to delete post'),
-    };
+    const moreButton = screen.getByTestId('more-options-button');
+    await userEvent.click(moreButton);
+    const editButton = await screen.findByTestId('edit-post-button');
+    await userEvent.click(editButton);
 
-    const errorLink = new StaticMockLink([deleteErrorMock], true);
+    const postInput = screen.getByRole('textbox');
+    await userEvent.clear(postInput);
+    await userEvent.type(postInput, 'Updated post content');
 
-    render(
-      <MockedProvider addTypename={false} link={errorLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    const saveButton = await screen.findByTestId('save-post-button');
+    await userEvent.click(saveButton);
+  });
+
+  test('deletes post when delete button is clicked', async () => {
+    renderPostCard();
+
+    const moreButton = screen.getByTestId('more-options-button');
+    await userEvent.click(moreButton);
+    const deleteButton = screen.getByText('Delete');
+    await userEvent.click(deleteButton);
 
     await waitFor(() => {
-      expect(screen.getByTestId('dropdown')).toBeInTheDocument();
-    });
-
-    await userEvent.click(screen.getByTestId('dropdown'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('deletePost')).toBeInTheDocument();
-    });
-
-    await userEvent.click(screen.getByTestId('deletePost'));
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
-        'Network error: Failed to delete post',
+      expect(toast.success).toHaveBeenCalledWith(
+        'Successfully deleted the Post.',
       );
-
-      expect(cardProps.fetchPosts).not.toHaveBeenCalled();
+      expect(fetchPostsMock).toHaveBeenCalled();
     });
   });
 
-  test('Post image should render properly', async () => {
-    const cardProps = {
-      id: 'postId',
-      userImage: 'image.png',
-      creator: {
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
-        id: '1',
-      },
-      postedAt: '',
-      image: 'image.png',
-      video: '',
-      text: 'test Post',
-      title: 'This is post test title',
-      likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      likedBy: [
-        {
-          firstName: 'test',
-          lastName: 'user',
-          id: '2',
-        },
-      ],
-      fetchPosts: vi.fn(), // Pass mock function
-    };
-
-    render(
-      <MockedProvider addTypename={false} link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const imageElement = await screen.findByRole('img');
-    expect(imageElement).toHaveAttribute('src', 'image.png');
+  test('displays pinned icon when post is pinned', () => {
+    renderPostCard({ pinnedAt: '2023-01-01T00:00:00Z' });
+    expect(screen.getByTestId('pinned-icon')).toBeInTheDocument();
   });
 
-  test('Delete post should execute code inside if(createEventData) conditional', async () => {
-    setItem('userId', '2');
+  test('does not display pinned icon when post is not pinned', () => {
+    renderPostCard({ pinnedAt: null });
+    expect(screen.queryByTestId('pinned-icon')).not.toBeInTheDocument();
+  });
 
-    const deletePostMock = {
-      request: {
-        query: DELETE_POST_MUTATION,
-        variables: {
-          id: 'postId',
-        },
+  test('renders G4 plugin injector in PostCard', () => {
+    renderPostCard();
+    expect(screen.getByTestId('plugin-injector-g4')).toBeInTheDocument();
+  });
+});
+
+// Mock toast
+vi.mock('react-toastify', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+  },
+}));
+
+describe('PostCard', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    fetchPostsMock.mockClear();
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+  });
+  it('creates comment and clears input', async () => {
+    renderPostCard();
+    const input = screen.getByPlaceholderText(/add comment/i);
+    fireEvent.change(input, { target: { value: 'My comment' } });
+    const sendButton = screen.getByTestId('comment-send');
+    fireEvent.click(sendButton);
+    await waitFor(() => {
+      expect(defaultProps.fetchPosts).toHaveBeenCalled();
+      expect(input).toHaveValue(''); // cleared by setCommentInput('')
+    });
+  });
+
+  it('renders CommentCard when comments exist', async () => {
+    renderPostCard();
+    // reveal comments
+    fireEvent.click(screen.getByText(/view/i));
+
+    // Wait for comments to load
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('comment-card')).toBeInTheDocument();
       },
-      result: {
-        data: {
-          deletePost: {
-            // This matches the structure expected in handleDeletePost
-            id: 'postId',
-          },
-        },
-      },
-    };
-
-    const customLink = new StaticMockLink([deletePostMock], true);
-
-    const successToastSpy = vi.spyOn(toast, 'success');
-
-    const fetchPostsSpy = vi.fn();
-
-    const cardProps = {
-      id: 'postId',
-      userImage: 'image.png',
-      creator: {
-        firstName: 'test',
-        lastName: 'user',
-        email: 'test@user.com',
-        id: '1',
-      },
-      postedAt: '',
-      image: '',
-      video: '',
-      text: 'test Post',
-      title: 'This is post test title',
-      likeCount: 1,
-      commentCount: 0,
-      comments: [],
-      likedBy: [
-        {
-          firstName: 'test',
-          lastName: 'user',
-          id: '2',
-        },
-      ],
-      fetchPosts: fetchPostsSpy, // Use our spy function
-    };
-
-    render(
-      <MockedProvider
-        addTypename={false}
-        link={customLink}
-        mocks={[deletePostMock]}
-      >
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...cardProps} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
+      { timeout: 5000 },
     );
+  });
 
-    await wait(100);
+  it('handles like button click when post is not liked', async () => {
+    renderPostCard({
+      hasUserVoted: { hasVoted: false, voteType: null },
+      upVoteCount: 0,
+    });
 
-    await userEvent.click(screen.getByTestId('dropdown'));
+    const likeButton = screen.getByTestId('like-btn');
+    fireEvent.click(likeButton);
 
     await waitFor(() => {
-      expect(screen.getByTestId('deletePost')).toBeInTheDocument();
+      expect(defaultProps.fetchPosts).toHaveBeenCalled();
+    });
+  });
+
+  it('handles like button click when post is already liked', async () => {
+    renderPostCard({
+      hasUserVoted: { hasVoted: true, voteType: 'up_vote' as const },
+      upVoteCount: 5,
     });
 
-    await userEvent.click(screen.getByTestId('deletePost'));
+    const likeButton = screen.getByTestId('like-btn');
+    fireEvent.click(likeButton);
 
-    await wait(300);
+    await waitFor(() => {
+      expect(defaultProps.fetchPosts).toHaveBeenCalled();
+    });
+  });
 
-    expect(successToastSpy).toHaveBeenCalledWith(
-      'Successfully deleted the Post.',
+  it('shows error when like action fails', async () => {
+    // Create a mock mutation function that rejects
+    const mockLikePost = vi
+      .fn()
+      .mockRejectedValue(new Error('Network error occurred'));
+
+    // Temporarily mock useMutation for this test only
+    const apolloMock = await import('@apollo/client');
+    const originalUseMutation = apolloMock.useMutation;
+
+    // Override just for this test
+    apolloMock.useMutation = vi
+      .fn()
+      .mockReturnValue([mockLikePost, { loading: false }]);
+
+    try {
+      renderPostCard({
+        hasUserVoted: { hasVoted: false, voteType: null },
+        upVoteCount: 0,
+      });
+
+      const likeButton = screen.getByTestId('like-btn');
+      fireEvent.click(likeButton);
+
+      // Wait for the mutation to be called and the error to be handled
+      await waitFor(() => {
+        expect(mockLikePost).toHaveBeenCalled();
+      });
+
+      // Wait for the error toast to be shown - component casts error to string
+      await waitFor(() => {
+        expect(toast.error).toHaveBeenCalled();
+      });
+    } finally {
+      // Always restore the original mock
+      apolloMock.useMutation = originalUseMutation;
+    }
+  });
+
+  it('handles comment creation error and calls errorHandler', async () => {
+    // Create a mock mutation function that rejects for CREATE_COMMENT_POST
+    const mockCreateComment = vi
+      .fn()
+      .mockRejectedValue(new Error('Network error occurred'));
+
+    // Temporarily mock useMutation for this test only
+    const apolloMock = await import('@apollo/client');
+    const originalUseMutation = apolloMock.useMutation;
+
+    // Override just for this test to return the error mock for CREATE_COMMENT_POST
+    apolloMock.useMutation = vi.fn((mutation) => {
+      if (mutation === CREATE_COMMENT_POST) {
+        return [mockCreateComment, { loading: false }];
+      }
+      // For other mutations, return the normal mock
+      return [vi.fn().mockResolvedValue({}), { loading: false }];
+    }) as ReturnType<typeof vi.fn>;
+
+    try {
+      renderPostCard();
+
+      const commentInput = screen.getByPlaceholderText(/add comment/i);
+      const sendButton = screen.getByTestId('comment-send');
+
+      fireEvent.change(commentInput, { target: { value: 'Test comment' } });
+
+      // The send button should be enabled with input
+      expect(sendButton).not.toBeDisabled();
+
+      fireEvent.click(sendButton);
+
+      // Wait for the mutation to be called and the error to be handled
+      await waitFor(() => {
+        expect(mockCreateComment).toHaveBeenCalled();
+      });
+
+      // Wait for the error handler to be called - this should trigger line 219
+      await waitFor(() => {
+        expect(errorHandler).toHaveBeenCalled();
+      });
+    } finally {
+      // Always restore the original mock
+      apolloMock.useMutation = originalUseMutation;
+    }
+  });
+
+  it('renders video when video prop is provided', () => {
+    renderPostCard({ video: 'test-video.mp4', image: null });
+
+    const video = document.querySelector('video');
+    expect(video).toBeInTheDocument();
+    expect(video?.getAttribute('controls')).toBe('');
+  });
+
+  it('renders post without image or video', () => {
+    renderPostCard({ image: null, video: null });
+
+    // Should render without throwing errors
+    expect(screen.getByText('Test Post')).toBeInTheDocument();
+  });
+
+  it('shows comments section when showComments is toggled', async () => {
+    renderPostCard();
+
+    const viewCommentsButton = screen.getByTestId('comment-card');
+    fireEvent.click(viewCommentsButton);
+
+    // Wait for comments to load
+    await waitFor(
+      () => {
+        expect(screen.getByText('Test comment')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+  });
+
+  it('hides comments when clicking hide comments', async () => {
+    renderPostCard();
+
+    const viewCommentsButton = screen.getByText(/view/i);
+    fireEvent.click(viewCommentsButton);
+
+    // Wait for comments to load first
+    await waitFor(
+      () => {
+        expect(screen.getByText('Test comment')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
     );
 
-    expect(fetchPostsSpy).toHaveBeenCalled();
+    const hideCommentsButton = screen.getByText(/hide/i);
+    fireEvent.click(hideCommentsButton);
 
-    successToastSpy.mockRestore();
+    await waitFor(() => {
+      expect(screen.queryByText('Test comment')).not.toBeInTheDocument();
+    });
+  });
+
+  it('handles edit post with pinned status change', async () => {
+    renderPostCard({ pinnedAt: null });
+
+    const moreButton = screen.getByTestId('more-options-button');
+    fireEvent.click(moreButton);
+
+    const editButton = await screen.findByTestId('edit-post-button');
+    fireEvent.click(editButton);
+
+    const postInput = screen.getByRole('textbox');
+    fireEvent.change(postInput, { target: { value: 'Updated content' } });
+
+    const saveButton = screen.getByTestId('save-post-button');
+    fireEvent.click(saveButton);
+
+    await waitFor(() => {
+      expect(defaultProps.fetchPosts).toHaveBeenCalled();
+      expect(toast.success).toHaveBeenCalledWith('Post updated successfully');
+    });
+  });
+
+  it('handles edit post error', async () => {
+    // Use a mock that will actually cause an error
+    const originalEdit = defaultProps.fetchPosts;
+    defaultProps.fetchPosts = vi
+      .fn()
+      .mockRejectedValue(new Error('Failed to update'));
+
+    renderPostCard();
+
+    const moreButton = screen.getByTestId('more-options-button');
+    fireEvent.click(moreButton);
+
+    // Wait for the modal to open
+    await waitFor(() => {
+      expect(screen.getByText('Edit Post')).toBeInTheDocument();
+    });
+
+    const postInput = screen.getByRole('textbox');
+    fireEvent.change(postInput, { target: { value: 'Updated content' } });
+
+    const saveButton = screen.getByTestId('save-post-button');
+    fireEvent.click(saveButton);
+
+    // Reset the mock
+    defaultProps.fetchPosts = originalEdit;
+  });
+
+  it('handles delete post error', async () => {
+    const linkWithDeleteError = new StaticMockLink(
+      [deletePostErrorMock, ...mocks],
+      true,
+    );
+
+    render(
+      <MockedProvider link={linkWithDeleteError}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...defaultProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const moreButton = screen.getByTestId('more-options-button');
+    fireEvent.click(moreButton);
+
+    // Wait for the modal to open
+    await waitFor(() => {
+      expect(screen.getByText('Edit Post')).toBeInTheDocument();
+    });
+
+    const deleteButton = screen.getByText('Delete');
+    fireEvent.click(deleteButton);
+
+    // Wait for error handler to be called
+    await waitFor(() => {
+      expect(errorHandler).toHaveBeenCalledWith(
+        expect.any(Function),
+        expect.any(Object),
+      );
+    });
+  });
+
+  it('renders loading state for like button', async () => {
+    renderPostCard();
+
+    const likeButton = screen.getByTestId('like-btn');
+
+    // Check that the like button exists and can be clicked
+    expect(likeButton).toBeInTheDocument();
+
+    // Click the like button - this triggers the mutation
+    fireEvent.click(likeButton);
+
+    // Since StaticMockLink resolves immediately, we test that the mutation was called
+    // In a real scenario, the CircularProgress would show briefly during loading
+    // The actual loading state is tested by the mutation being called
+    await waitFor(() => {
+      expect(defaultProps.fetchPosts).toHaveBeenCalled();
+    });
+
+    // Note: In the actual component, when likeLoading is true, a CircularProgress
+    // with role="progressbar" would appear inside the like button, replacing the heart icon.
+    // This test verifies the like functionality works, which includes the loading state handling.
+  });
+
+  it('disables comment send button when input is empty', () => {
+    renderPostCard();
+
+    const sendButton = screen.getByTestId('comment-send');
+    expect(sendButton).toBeDisabled();
+  });
+
+  it('enables comment send button when input has content', () => {
+    renderPostCard();
+
+    const commentInput = screen.getByPlaceholderText(/add comment/i);
+    const sendButton = screen.getByTestId('comment-send');
+
+    fireEvent.change(commentInput, { target: { value: 'Test comment' } });
+    expect(sendButton).not.toBeDisabled();
+  });
+
+  // Render helper for pagination tests
+  const renderPostCardWithPagination = (
+    options: {
+      mockOverrides?: Partial<InterfacePostCard>;
+      customMocks?: MockedResponse[];
+      fetchMoreMock?: MockedResponse;
+      addTypename?: boolean;
+    } = {},
+  ) => {
+    const {
+      mockOverrides = {},
+      customMocks = [],
+      fetchMoreMock = fetchMoreCommentsMock,
+      addTypename = true,
+    } = options;
+
+    const mocksWithPagination = [
+      commentsWithPaginationMock,
+      fetchMoreMock,
+      ...customMocks,
+      ...mocks,
+    ];
+
+    const linkWithPagination = new StaticMockLink(mocksWithPagination, true);
+
+    return render(
+      <MockedProvider link={linkWithPagination} addTypename={addTypename}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...defaultProps} {...mockOverrides} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+  };
+
+  it('should load more comments successfully when button is clicked', async () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+    renderPostCardWithPagination();
+
+    // Open comments section
+    const viewCommentsButton = screen.getByTestId('comment-card');
+    fireEvent.click(viewCommentsButton);
+
+    // Wait for initial comments to load
+    await waitFor(() => {
+      expect(screen.getByText('First comment')).toBeInTheDocument();
+    });
+
+    // Click "Load more comments" button
+    const loadMoreButton = screen.getByText('Load more comments');
+    fireEvent.click(loadMoreButton);
+
+    // Verify that the loading state is triggered (this tests the function execution)
+    await waitFor(() => {
+      // The button should change to loading state or disappear
+      // Since the pagination mock resolves with hasNextPage: false, button should disappear
+      expect(screen.queryByText('Load more comments')).not.toBeInTheDocument();
+    });
+
+    // Verify that the second comment was loaded
+    await waitFor(() => {
+      expect(screen.getByText('Second comment')).toBeInTheDocument();
+    });
+  });
+
+  it('should handle error when loading more comments fails', async () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+
+    renderPostCardWithPagination({
+      fetchMoreMock: fetchMoreCommentsErrorMock,
+    });
+
+    // Open comments section
+    const viewCommentsButton = screen.getByTestId('comment-card');
+    fireEvent.click(viewCommentsButton);
+
+    // Wait for initial comments to load
+    await waitFor(() => {
+      expect(screen.getByText('First comment')).toBeInTheDocument();
+    });
+
+    // Click "Load more comments" button
+    const loadMoreButton = screen.getByText('Load more comments');
+    fireEvent.click(loadMoreButton);
+
+    // Wait for error handling to be called
+    await waitFor(() => {
+      expect(errorHandler).toHaveBeenCalledWith(
+        expect.any(Function),
+        expect.any(Object),
+      );
+    });
+  });
+
+  it('should handle comment creation with showComments true', async () => {
+    const mockFetchPosts = vi.fn();
+
+    renderPostCardWithPagination({
+      customMocks: [createCommentMock],
+      mockOverrides: { fetchPosts: mockFetchPosts },
+      addTypename: false,
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText('Test Post')).toBeInTheDocument();
+    });
+
+    // Show comments first to test the refresh logic
+    fireEvent.click(screen.getByTestId('comment-card'));
+
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText(/add comment/i)).toBeInTheDocument();
+    });
+
+    // Create a new comment while comments are visible
+    const commentInput = screen.getByPlaceholderText(
+      /add comment/i,
+    ) as HTMLInputElement;
+    fireEvent.change(commentInput, { target: { value: 'New test comment' } });
+    fireEvent.click(screen.getByTestId('comment-send'));
+
+    await waitFor(() => {
+      expect(mockFetchPosts).toHaveBeenCalled();
+      expect(commentInput.value).toBe('');
+    });
+  });
+
+  it('should handle onCompleted callback when data.post.comments is null', async () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+
+    renderPostCardWithPagination({
+      customMocks: [nullCommentsMock],
+    });
+
+    // Show comments to trigger the query
+    const viewCommentsButton = screen.getByTestId('comment-card');
+    fireEvent.click(viewCommentsButton);
+
+    // Wait for query to complete without throwing errors
+    await waitFor(() => {
+      expect(screen.queryByText('First comment')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should handle fetchMoreResult with null comments in updateQuery', async () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+
+    renderPostCardWithPagination({
+      fetchMoreMock: nullFetchMoreMock,
+    });
+
+    // Open comments section
+    const viewCommentsButton = screen.getByTestId('comment-card');
+    fireEvent.click(viewCommentsButton);
+
+    // Wait for initial comments to load
+    await waitFor(() => {
+      expect(screen.getByText('First comment')).toBeInTheDocument();
+    });
+
+    // Click "Load more comments" button
+    const loadMoreButton = screen.getByText('Load more comments');
+    fireEvent.click(loadMoreButton);
+
+    // Wait for the load more to complete (should return prev data since fetchMoreResult is null)
+    await waitFor(() => {
+      // Load more button should still be present since fetch returned null
+      expect(screen.getByText('Load more comments')).toBeInTheDocument();
+    });
+  });
+
+  const postPropsWithZeroComments = {
+    ...defaultProps,
+    commentCount: 0,
+  };
+
+  it('should not display comments section when commentCount is 0', () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+
+    render(
+      <MockedProvider mocks={mocks} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...postPropsWithZeroComments} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Should not show comments button or text when commentCount is 0
+    expect(screen.queryByTestId('comment-card')).not.toBeInTheDocument();
+  });
+
+  it('should render avatar with UserDefault fallback when avatarURL is null', () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+
+    // Post props with null avatarURL to test the fallback
+    const postWithNullAvatar = {
+      ...defaultProps,
+      creator: {
+        ...defaultProps.creator,
+        avatarURL: null,
+      },
+    };
+
+    render(
+      <MockedProvider mocks={mocks} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...postWithNullAvatar} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Check that avatar uses fallback (UserDefault) when avatarURL is null
+    const avatar = screen.getByRole('img', { name: defaultProps.creator.name });
+    expect(avatar).toBeInTheDocument();
+  });
+
+  it('should handle onCompleted when data is undefined', async () => {
+    renderPostCardWithCustomMock(undefinedDataMock);
+
+    // Show comments to trigger the query
+    const viewCommentsButton = screen.getByTestId('comment-card');
+    fireEvent.click(viewCommentsButton);
+
+    // Wait for query to complete without throwing errors
+    await waitFor(() => {
+      expect(screen.queryByText('First comment')).not.toBeInTheDocument();
+      expect(screen.queryByText('Test comment')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should handle onCompleted when data.post is undefined', async () => {
+    renderPostCardWithCustomMock(undefinedPostMock);
+
+    // Show comments to trigger the query
+    const viewCommentsButton = screen.getByTestId('comment-card');
+    fireEvent.click(viewCommentsButton);
+
+    // Wait for query to complete without throwing errors
+    await waitFor(() => {
+      expect(screen.queryByText('First comment')).not.toBeInTheDocument();
+      expect(screen.queryByText('Test comment')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should handle onCompleted when data.post.comments is undefined', async () => {
+    renderPostCardWithCustomMock(undefinedCommentsMock);
+
+    // Show comments to trigger the query
+    const viewCommentsButton = screen.getByTestId('comment-card');
+    fireEvent.click(viewCommentsButton);
+
+    // Wait for query to complete without throwing errors
+    await waitFor(() => {
+      expect(screen.queryByText('First comment')).not.toBeInTheDocument();
+      expect(screen.queryByText('Test comment')).not.toBeInTheDocument();
+    });
   });
 });

@@ -29,22 +29,27 @@
  * ```
  *
  */
-import React from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Modal, Button, Form } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import { DELETE_ACTION_ITEM_MUTATION } from 'GraphQl/Mutations/ActionItemMutations';
+import {
+  DELETE_ACTION_ITEM_MUTATION,
+  DELETE_ACTION_ITEM_FOR_INSTANCE,
+} from 'GraphQl/Mutations/ActionItemMutations';
 import type {
   IActionItemInfo,
   IDeleteActionItemInput,
-} from 'types/Actions/interface';
+} from 'types/ActionItems/interface';
 
 export interface IItemDeleteModalProps {
   isOpen: boolean;
   hide: () => void;
   actionItem: IActionItemInfo;
   actionItemsRefetch: () => void;
+  eventId?: string;
+  isRecurring?: boolean;
 }
 
 const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
@@ -52,23 +57,49 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
   hide,
   actionItem,
   actionItemsRefetch,
+  eventId,
+  isRecurring,
 }) => {
   const { t: tCommon } = useTranslation('translation');
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
 
-  const [deleteActionItem] = useMutation(DELETE_ACTION_ITEM_MUTATION);
+  const [applyTo, setApplyTo] = useState<'series' | 'instance'>('series');
+
+  const [deleteActionItem] = useMutation(DELETE_ACTION_ITEM_MUTATION, {
+    refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
+  });
+
+  const [deleteActionForInstance] = useMutation(
+    DELETE_ACTION_ITEM_FOR_INSTANCE,
+    {
+      refetchQueries: ['GetEventActionItems'],
+    },
+  );
 
   const handleDelete = async (): Promise<void> => {
     try {
-      const input: IDeleteActionItemInput = {
-        id: actionItem.id,
-      };
+      if (actionItem.isTemplate && applyTo === 'instance') {
+        // Delete for specific instance only
+        const input = {
+          actionId: actionItem.id,
+          eventId: eventId,
+        };
 
-      await deleteActionItem({
-        variables: { input },
-      });
+        await deleteActionForInstance({
+          variables: { input },
+        });
+      } else {
+        // Delete for entire series or non-recurring event
+        const input: IDeleteActionItemInput = {
+          id: actionItem.id,
+        };
+
+        await deleteActionItem({
+          variables: { input },
+        });
+      }
 
       actionItemsRefetch();
       hide();
@@ -84,7 +115,31 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
         <Modal.Title>{t('deleteActionItem')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p> {t('deleteActionItemMsg')}</p>
+        <p>{t('deleteActionItemMsg')}</p>
+
+        {actionItem.isTemplate && !actionItem.isInstanceException && (
+          <Form.Group className="mt-3">
+            <Form.Label>{t('applyTo')}</Form.Label>
+            <Form.Check
+              type="radio"
+              label={t('entireSeries')}
+              name="applyTo"
+              id="deleteApplyToSeries"
+              data-testid="deleteApplyToSeries"
+              checked={applyTo === 'series'}
+              onChange={() => setApplyTo('series')}
+            />
+            <Form.Check
+              type="radio"
+              label={t('thisEventOnly')}
+              name="applyTo"
+              id="deleteApplyToInstance"
+              data-testid="deleteApplyToInstance"
+              checked={applyTo === 'instance'}
+              onChange={() => setApplyTo('instance')}
+            />
+          </Form.Group>
+        )}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" data-testid="deletenobtn" onClick={hide}>

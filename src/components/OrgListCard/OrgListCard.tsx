@@ -72,7 +72,14 @@ function OrgListCard({
           {/* Container for the organization image */}
           <div className={styles.orgImgContainer}>
             {avatarURL ? (
-              <img src={avatarURL} alt={`${name} image`} />
+              <img
+                src={avatarURL}
+                alt={`${name} image`}
+                crossOrigin="anonymous"
+                referrerPolicy="no-referrer"
+                loading="lazy"
+                decoding="async"
+              />
             ) : (
               <Avatar
                 name={name}

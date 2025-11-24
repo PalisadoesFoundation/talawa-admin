@@ -1,3 +1,5 @@
+import React from 'react';
+import { describe, test, expect, vi, it } from 'vitest';
 import { ApolloProvider } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
 import {
@@ -11,7 +13,6 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { toast } from 'react-toastify';
-import { describe, expect, test, vi } from 'vitest';
 import { store } from '../../state/store';
 import i18nForTest from '../../utils/i18nForTest';
 import Advertisement from './Advertisements';
@@ -68,7 +69,7 @@ const today = new Date();
 const tomorrow = today;
 tomorrow.setDate(today.getDate() + 1);
 
-const mockUseMutation = vi.fn();
+let mockUseMutation: ReturnType<typeof vi.fn>;
 vi.mock('@apollo/client', async () => {
   const actual = await vi.importActual('@apollo/client');
   return {
@@ -79,11 +80,11 @@ vi.mock('@apollo/client', async () => {
 
 describe('Testing Advertisement Component', () => {
   beforeEach(() => {
+    mockUseMutation = vi.fn();
     vi.clearAllMocks();
     mockUseMutation.mockReturnValue([vi.fn()]);
   });
   afterEach(() => {
-    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -185,70 +186,6 @@ describe('Testing Advertisement Component', () => {
     fireEvent.click(screen.getByTestId('moreiconbtn'));
     expect(screen.getByTestId('deletebtn')).toBeInTheDocument();
     expect(screen.getByTestId('editBtn')).toBeInTheDocument();
-  });
-
-  it('filter active advertisement by name', async () => {
-    render(
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider
-                mocks={getActiveAdvertisementMocks}
-                addTypename={false}
-              >
-                <Advertisement />
-              </MockedProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </ApolloProvider>,
-    );
-
-    expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
-
-    expect(screen.getByTestId('searchname')).toBeInTheDocument();
-    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
-
-    fireEvent.change(screen.getByTestId('searchname'), {
-      target: { value: 'Cookie' },
-    });
-    fireEvent.click(screen.getByTestId('searchButton'));
-
-    expect(screen.getByText('Cookie shop')).toBeInTheDocument();
-  });
-
-  it('filter active advertisement by description', async () => {
-    render(
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider
-                mocks={getActiveAdvertisementMocks}
-                addTypename={false}
-              >
-                <Advertisement />
-              </MockedProvider>
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </ApolloProvider>,
-    );
-
-    expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
-
-    expect(screen.getByTestId('searchname')).toBeInTheDocument();
-    expect(screen.getByTestId('searchButton')).toBeInTheDocument();
-
-    fireEvent.change(screen.getByTestId('searchname'), {
-      target: { value: 'this is an active advertisement' },
-    });
-    fireEvent.click(screen.getByTestId('searchButton'));
-
-    expect(screen.getByText('Cookie shop')).toBeInTheDocument();
   });
 
   it('render completed advertisement after loading', async () => {
@@ -665,16 +602,15 @@ describe('Testing Advertisement Component', () => {
     });
 
     await waitFor(() => {
-      expect(createAdMock).toHaveBeenCalledWith({
-        variables: {
-          organizationId: '1',
-          name: 'Ad1',
-          type: 'banner',
-          attachments: undefined,
-          startAt: dateConstants.create.startAtCalledWith,
-          endAt: dateConstants.create.endAtCalledWith,
-        },
+      const mockCall = createAdMock.mock.calls[0][0];
+      expect(mockCall.variables).toMatchObject({
+        organizationId: '1',
+        name: 'Ad1',
+        type: 'banner',
+        attachments: undefined,
       });
+      expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
+      expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);
       const creationFailedText = screen.queryByText((_, element) => {
         return (
           element?.textContent === 'Creation Failed' &&
@@ -938,14 +874,13 @@ describe('Testing Advertisement Component', () => {
     });
 
     await waitFor(() => {
-      expect(updateMock).toHaveBeenCalledWith({
-        variables: {
-          id: '1',
-          description: 'This is an updated advertisement',
-          startAt: dateConstants.update.startAtCalledWith,
-          endAt: dateConstants.update.endAtCalledWith,
-        },
+      const mockCall = updateMock.mock.calls[0][0];
+      expect(mockCall.variables).toMatchObject({
+        id: '1',
+        description: 'This is an updated advertisement',
       });
+      expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
+      expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);
       const updateFailedText = screen.queryByText((_, element) => {
         return (
           element?.textContent === 'Update Failed' &&

@@ -1,13 +1,7 @@
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
-import {
-  AdminPluginFileService,
-  PluginFileValidationResult,
-  PluginInstallationResult,
-  InstalledPlugin,
-} from '../../services/AdminPluginFileService';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { AdminPluginFileService } from '../../services/AdminPluginFileService';
 import { AdminPluginManifest } from '../../../utils/adminPluginInstaller';
 import { internalFileWriter } from '../../services/InternalFileWriter';
-import type { IPluginDetails } from '../../types';
 
 // Mock InternalFileWriter
 vi.mock('../../services/InternalFileWriter', () => ({
@@ -42,6 +36,10 @@ describe('AdminPluginFileService', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   describe('validatePluginFiles', () => {
     it('should return valid for correct files', () => {
       const result = service.validatePluginFiles(validFiles);
@@ -71,8 +69,8 @@ describe('AdminPluginFileService', () => {
     });
 
     it('should fail if required manifest fields are missing', () => {
-      const badManifest = { ...validManifest };
-      delete (badManifest as any).main;
+      const badManifest = { ...validManifest } as Partial<AdminPluginManifest>;
+      delete badManifest.main;
       const files = {
         ...validFiles,
         'manifest.json': JSON.stringify(badManifest),
@@ -98,13 +96,17 @@ describe('AdminPluginFileService', () => {
     });
 
     it('should fail for null files', () => {
-      const result = service.validatePluginFiles(null as any);
+      const result = service.validatePluginFiles(
+        null as unknown as Record<string, string>,
+      );
       expect(result.valid).toBe(false);
       expect(result.error).toMatch(/No files provided/);
     });
 
     it('should fail for non-object files', () => {
-      const result = service.validatePluginFiles('not an object' as any);
+      const result = service.validatePluginFiles(
+        'not an object' as unknown as Record<string, string>,
+      );
       expect(result.valid).toBe(false);
       expect(result.error).toMatch(/No files provided/);
     });
@@ -122,7 +124,7 @@ describe('AdminPluginFileService', () => {
     });
 
     it('should fail for null pluginId', () => {
-      const result = service.validatePluginId(null as any);
+      const result = service.validatePluginId(null as unknown as string);
       expect(result.valid).toBe(false);
     });
 
@@ -211,6 +213,21 @@ describe('AdminPluginFileService', () => {
       expect(result.error).toBe('Write failed');
     });
 
+    it('should use fallback message when writePluginFiles returns success:false but empty error', async () => {
+      mockInternalFileWriter.writePluginFiles.mockResolvedValue({
+        success: false,
+        path: '',
+        filesWritten: 0,
+        writtenFiles: [],
+        error: '',
+      });
+
+      const result = await service.installPlugin('TestPlugin', validFiles);
+      expect(result.success).toBe(false);
+      // Should fallback to 'Failed to write files to filesystem'
+      expect(result.error).toBe('Failed to write files to filesystem');
+    });
+
     it('should handle exceptions during installation', async () => {
       mockInternalFileWriter.writePluginFiles.mockRejectedValue(
         new Error('Network error'),
@@ -230,6 +247,20 @@ describe('AdminPluginFileService', () => {
       const result = await service.installPlugin('TestPlugin', validFiles);
       expect(result.success).toBe(false);
       expect(result.error).toBe('Internal file writer error');
+    });
+
+    it('should catch non-Error exceptions during installPlugin', async () => {
+      // Spy on console.error to verify logging
+      vi.spyOn(console, 'error').mockImplementation(() => {});
+      // Force validatePluginFiles to throw a non-Error to hit the outer catch block
+      vi.spyOn(service, 'validatePluginFiles').mockImplementation(() => {
+        throw 'A non-error string was thrown';
+      });
+
+      const result = await service.installPlugin('TestPlugin', validFiles);
+      expect(result.success).toBe(false);
+      expect(result.error).toBe('Unknown error');
+      expect(console.error).toHaveBeenCalled();
     });
 
     it('should handle non-Error exceptions in writeFilesToFilesystem', async () => {
@@ -257,6 +288,20 @@ describe('AdminPluginFileService', () => {
       const result = await service.installPlugin('TestPlugin', validFiles);
       expect(result.success).toBe(false);
       expect(result.error).toBe('Internal file writer error');
+    });
+
+    it('should catch unexpected errors during installPlugin and return message', async () => {
+      // Force validatePluginFiles to throw to hit the outer catch block
+      vi.spyOn(service, 'validatePluginFiles').mockImplementation(() => {
+        throw new Error('Unexpected validation error');
+      });
+      // Spy on console.error to assert it was called (optional)
+      vi.spyOn(console, 'error').mockImplementation(() => {});
+
+      const result = await service.installPlugin('TestPlugin', validFiles);
+      expect(result.success).toBe(false);
+      expect(result.error).toBe('Unexpected validation error');
+      expect(console.error).toHaveBeenCalled();
     });
   });
 
@@ -289,6 +334,27 @@ describe('AdminPluginFileService', () => {
 
       const result = await service.getInstalledPlugins();
       expect(result).toEqual([]);
+    });
+
+    it('should handle listInstalledPlugins returning empty error and use fallback message', async () => {
+      // Return success:false with empty error to trigger the fallback in getInstalledPlugins
+      mockInternalFileWriter.listInstalledPlugins.mockResolvedValue({
+        success: false,
+        error: '',
+      });
+
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      const result = await service.getInstalledPlugins();
+      expect(result).toEqual([]);
+
+      // Ensure console.error was called with an Error that has the fallback message
+      expect(consoleSpy).toHaveBeenCalled();
+      const callArg = consoleSpy.mock.calls[0][1];
+      expect(callArg).toBeInstanceOf(Error);
+      expect((callArg as Error).message).toBe('Failed to get plugins');
     });
 
     it('should return empty array when listInstalledPlugins throws', async () => {
@@ -495,6 +561,29 @@ describe('AdminPluginFileService', () => {
       expect(result?.readme).toContain('# Test Plugin');
     });
 
+    it('should handle absolute screenshot URLs correctly', async () => {
+      const absoluteScreenshotUrl = 'https://example.com/image.png';
+      const mockFiles = {
+        'manifest.json': JSON.stringify(validManifest),
+        'info.json': JSON.stringify({
+          screenshots: [absoluteScreenshotUrl],
+        }),
+      };
+
+      mockInternalFileWriter.readPluginFiles.mockResolvedValue({
+        success: true,
+        manifest: validManifest,
+        files: mockFiles,
+      });
+
+      const result =
+        await AdminPluginFileService.getPluginDetails('TestPlugin');
+      expect(result).not.toBeNull();
+      expect(result?.screenshots).toBeDefined();
+      // This checks the 'else' path of the map function
+      expect(result?.screenshots[0]).toBe(absoluteScreenshotUrl);
+    });
+
     it('should return null when readPluginFiles fails', async () => {
       mockInternalFileWriter.readPluginFiles.mockResolvedValue({
         success: false,
@@ -609,6 +698,41 @@ describe('AdminPluginFileService', () => {
       expect(result).not.toBeNull();
       expect(result?.description).toBe('A minimal test plugin');
       expect(result?.author).toBe('Test Author');
+      expect(result?.version).toBe('1.0.0');
+      expect(result?.icon).toBe('/images/logo512.png');
+    });
+
+    it('should use logical OR fallbacks for manifest fields when missing', async () => {
+      // Manifest with empty strings to ensure fallbacks are used
+      const emptyFieldsManifest: Partial<AdminPluginManifest> & {
+        main: string;
+      } = {
+        pluginId: '',
+        name: '',
+        version: '',
+        description: '',
+        author: '',
+        main: 'index.js',
+      };
+
+      const mockFiles = {
+        'manifest.json': JSON.stringify(emptyFieldsManifest),
+      };
+
+      mockInternalFileWriter.readPluginFiles.mockResolvedValue({
+        success: true,
+        manifest: emptyFieldsManifest as AdminPluginManifest,
+        files: mockFiles,
+      });
+
+      const result =
+        await AdminPluginFileService.getPluginDetails('FallbackPlugin');
+      expect(result).not.toBeNull();
+      // When manifest fields are falsy, the service should fall back to pluginId/name or defaults
+      expect(result?.id).toBe('FallbackPlugin');
+      expect(result?.name).toBe('FallbackPlugin');
+      expect(result?.description).toBe('No description available');
+      expect(result?.author).toBe('Unknown');
       expect(result?.version).toBe('1.0.0');
       expect(result?.icon).toBe('/images/logo512.png');
     });

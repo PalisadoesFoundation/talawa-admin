@@ -22,7 +22,7 @@ describe('User Login Functionality', () => {
       const loginPage = new LoginPage();
 
       loginPage.verifyLoginPage().login(userData.email, 'wrongpassword');
-      cy.assertToastError('Not found');
+      cy.assertToast('Not found');
     });
   });
 

@@ -45,6 +45,12 @@ vi.mock('utils/errorHandler', () => ({
   errorHandler: vi.fn(),
 }));
 
+async function flushPromises() {
+  await act(async () => {
+    await new Promise((r) => setTimeout(r, 0));
+  });
+}
+
 interface InterfaceMockOptions {
   blockUserError?: boolean;
   unblockUserError?: boolean;
@@ -196,7 +202,6 @@ describe('BlockUser Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
-
   describe('Initial Loading and Error States', () => {
     it('shows loading state when fetching data', async () => {
       render(
@@ -952,6 +957,184 @@ describe('BlockUser Component', () => {
 
         // John Doe should now be in the list too (added to state)
         expect(screen.getByText('John Doe')).toBeInTheDocument();
+      });
+    });
+  });
+  // Tests for handling falsy responses from block and unblock mutations
+  describe('Falsy Mutation Responses', () => {
+    it('handles falsy block mutation response', async () => {
+      const customMocks = [
+        {
+          request: {
+            query: GET_ORGANIZATION_MEMBERS_PG,
+            variables: { id: '123', first: 32, after: null },
+          },
+          result: {
+            data: {
+              organization: {
+                members: {
+                  edges: [
+                    {
+                      node: {
+                        id: '1',
+                        name: 'John Doe',
+                        emailAddress: 'john@example.com',
+                        role: 'regular',
+                      },
+                    },
+                  ],
+                  pageInfo: { hasNextPage: false, endCursor: null },
+                },
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: GET_ORGANIZATION_BLOCKED_USERS_PG,
+            variables: { id: '123', first: 32, after: null },
+          },
+          result: {
+            data: {
+              organization: {
+                blockedUsers: {
+                  edges: [],
+                  pageInfo: { hasNextPage: false, endCursor: null },
+                },
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: BLOCK_USER_MUTATION_PG,
+            variables: { userId: '1', organizationId: '123' },
+          },
+          result: { data: { blockUser: null } },
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={customMocks} addTypename={false}>
+          <BrowserRouter>
+            <BlockUser />
+            <ToastContainer />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await flushPromises();
+
+      await waitFor(() =>
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument(),
+      );
+      await screen.findByText('John Doe');
+
+      const blockButton = screen.getByTestId('blockUser1');
+      await act(async () => {
+        fireEvent.click(blockButton);
+      });
+      await flushPromises();
+
+      await waitFor(() => {
+        expect(toast.success).not.toHaveBeenCalledWith('blockedSuccessfully');
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      });
+    });
+
+    it('handles falsy unblock mutation response', async () => {
+      const customMocks = [
+        {
+          request: {
+            query: GET_ORGANIZATION_MEMBERS_PG,
+            variables: { id: '123', first: 32, after: null },
+          },
+          result: {
+            data: {
+              organization: {
+                members: {
+                  edges: [],
+                  pageInfo: { hasNextPage: false, endCursor: null },
+                },
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: GET_ORGANIZATION_BLOCKED_USERS_PG,
+            variables: { id: '123', first: 32, after: null },
+          },
+          result: {
+            data: {
+              organization: {
+                blockedUsers: {
+                  edges: [
+                    {
+                      node: {
+                        id: '3',
+                        name: 'Bob Johnson',
+                        emailAddress: 'bob@example.com',
+                        role: 'regular',
+                      },
+                    },
+                  ],
+                  pageInfo: { hasNextPage: false, endCursor: null },
+                },
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: UNBLOCK_USER_MUTATION_PG,
+            variables: { userId: '3', organizationId: '123' },
+          },
+          result: { data: null },
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={customMocks} addTypename={false}>
+          <BrowserRouter>
+            <BlockUser />
+            <ToastContainer />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await flushPromises();
+      await waitFor(() =>
+        expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument(),
+      );
+
+      const sortingButton = await screen.findByTestId('userFilter');
+
+      await act(async () => {
+        fireEvent.click(sortingButton);
+      });
+
+      await flushPromises();
+
+      const blockedUsersOption = await screen.findByText('blockedUsers');
+      await act(async () => {
+        fireEvent.click(blockedUsersOption);
+      });
+
+      await flushPromises();
+
+      await screen.findByText('Bob Johnson');
+
+      const unblockBtn = screen.getByTestId('blockUser3');
+      await act(async () => {
+        fireEvent.click(unblockBtn);
+      });
+
+      await waitFor(() => {
+        expect(toast.success).not.toHaveBeenCalledWith(
+          'Un-BlockedSuccessfully',
+        );
+        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
       });
     });
   });

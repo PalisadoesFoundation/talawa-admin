@@ -16,7 +16,7 @@
  *
  * @returns The rendered volunteer groups management component.
  */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
@@ -35,7 +35,7 @@ import {
 import { debounce, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import styles from 'style/app-fixed.module.css';
-import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
+import { GET_EVENT_VOLUNTEER_GROUPS } from 'GraphQl/Queries/EventVolunteerQueries';
 import VolunteerGroupModal from './modal/VolunteerGroupModal';
 import VolunteerGroupDeleteModal from './deleteModal/VolunteerGroupDeleteModal';
 import VolunteerGroupViewModal from './viewModal/VolunteerGroupViewModal';
@@ -90,6 +90,8 @@ function volunteerGroups(): JSX.Element {
     'volunteers_ASC' | 'volunteers_DESC' | null
   >(null);
   const [searchBy, setSearchBy] = useState<'leader' | 'group'>('group');
+  const [isRecurring, setIsRecurring] = useState<boolean>(false);
+  const [baseEvent, setBaseEvent] = useState<{ id: string } | null>(null);
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
   }>({
@@ -99,26 +101,30 @@ function volunteerGroups(): JSX.Element {
   });
 
   /**
-   * Query to fetch the list of volunteer groups for the event.
+   * Query to fetch event and volunteer groups for the event.
    */
   const {
-    data: groupsData,
+    data: eventData,
     loading: groupsLoading,
     error: groupsError,
     refetch: refetchGroups,
   }: {
-    data?: { getEventVolunteerGroups: InterfaceVolunteerGroupInfo[] };
+    data?: {
+      event: {
+        id: string;
+        recurrenceRule?: { id: string } | null;
+        baseEvent?: { id: string } | null;
+        volunteerGroups: InterfaceVolunteerGroupInfo[];
+      };
+    };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
-  } = useQuery(EVENT_VOLUNTEER_GROUP_LIST, {
+  } = useQuery(GET_EVENT_VOLUNTEER_GROUPS, {
     variables: {
-      where: {
-        eventId: eventId,
-        leaderName: searchBy === 'leader' ? searchTerm : null,
-        name_contains: searchBy === 'group' ? searchTerm : null,
+      input: {
+        id: eventId,
       },
-      orderBy: sortBy,
     },
   });
 
@@ -144,10 +150,48 @@ function volunteerGroups(): JSX.Element {
     [],
   );
 
-  const groups = useMemo(
-    () => groupsData?.getEventVolunteerGroups || [],
-    [groupsData],
-  );
+  // Effect to set recurring event info similar to Volunteers component
+  useEffect(() => {
+    if (eventData && eventData.event) {
+      setIsRecurring(!!eventData.event.recurrenceRule);
+      setBaseEvent(eventData.event.baseEvent || null);
+    }
+  }, [eventData]);
+
+  const groups = useMemo(() => {
+    const allGroups = eventData?.event?.volunteerGroups || [];
+
+    // Apply client-side filtering based on search term
+    let filteredGroups = allGroups;
+
+    if (searchTerm) {
+      filteredGroups = filteredGroups.filter(
+        (group: InterfaceVolunteerGroupInfo) => {
+          if (searchBy === 'leader') {
+            const leaderName = group.leader?.name || '';
+            return leaderName.toLowerCase().includes(searchTerm.toLowerCase());
+          } else {
+            const groupName = group.name || '';
+            return groupName.toLowerCase().includes(searchTerm.toLowerCase());
+          }
+        },
+      );
+    }
+
+    // Apply sorting (create a copy to avoid read-only array issues)
+    let finalGroups = [...filteredGroups];
+    if (sortBy === 'volunteers_ASC') {
+      finalGroups.sort(
+        (a, b) => (a.volunteers?.length || 0) - (b.volunteers?.length || 0),
+      );
+    } else if (sortBy === 'volunteers_DESC') {
+      finalGroups.sort(
+        (a, b) => (b.volunteers?.length || 0) - (a.volunteers?.length || 0),
+      );
+    }
+
+    return finalGroups;
+  }, [eventData, searchTerm, searchBy, sortBy]);
 
   if (groupsLoading) {
     return <Loader size="xl" />;
@@ -195,47 +239,31 @@ function volunteerGroups(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const { _id, firstName, lastName, image } = params.row.leader;
+        const { id, name, avatarURL } = params.row.leader;
         return (
           <div
             className="d-flex fw-bold align-items-center ms-2"
             data-testid="assigneeName"
           >
-            {image ? (
+            {avatarURL ? (
               <img
-                src={image}
+                src={avatarURL}
                 alt="Assignee"
-                data-testid={`image${_id + 1}`}
+                data-testid={`image${id + 1}`}
                 className={styles.TableImages}
               />
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
-                  key={_id + '1'}
+                  key={id + '1'}
                   containerStyle={styles.imageContainer}
                   avatarStyle={styles.TableImages}
-                  name={firstName + ' ' + lastName}
-                  alt={firstName + ' ' + lastName}
+                  name={name}
+                  alt={name}
                 />
               </div>
             )}
-            {firstName + ' ' + lastName}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'actions',
-      headerName: 'Actions Completed',
-      flex: 1,
-      align: 'center',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div className="d-flex justify-content-center fw-bold">
-            {params.row.assignments.length}
+            {name}
           </div>
         );
       },
@@ -251,7 +279,7 @@ function volunteerGroups(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return (
           <div className="d-flex justify-content-center fw-bold">
-            {params.row.volunteers.length}
+            {params.row.volunteers.length}{' '}
           </div>
         );
       },
@@ -360,7 +388,7 @@ function volunteerGroups(): JSX.Element {
         disableColumnMenu
         columnBufferPx={7}
         hideFooter={true}
-        getRowId={(row) => row._id}
+        getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
@@ -372,7 +400,7 @@ function volunteerGroups(): JSX.Element {
         getRowClassName={() => `${styles.rowBackgrounds}`}
         autoHeight
         rowHeight={65}
-        rows={groups.map((group, index) => ({ id: index + 1, ...group }))}
+        rows={groups}
         columns={columns}
         isRowSelectable={() => false}
       />
@@ -385,6 +413,9 @@ function volunteerGroups(): JSX.Element {
         orgId={orgId}
         group={group}
         mode={modalMode}
+        isRecurring={isRecurring}
+        baseEvent={baseEvent}
+        recurringEventInstanceId={eventId}
       />
 
       {group && (
@@ -400,6 +431,8 @@ function volunteerGroups(): JSX.Element {
             hide={() => closeModal(ModalState.DELETE)}
             refetchGroups={refetchGroups}
             group={group}
+            isRecurring={isRecurring}
+            eventId={eventId}
           />
         </>
       )}

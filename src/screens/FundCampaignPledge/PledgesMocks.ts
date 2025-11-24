@@ -21,7 +21,7 @@ const memberList = {
           _id: 'orgId',
           members: [
             {
-              createdAt: '2023-04-13T04:53:17.742Z',
+              createdAt: '2030-04-13T04:53:17.742Z',
               email: 'testuser4@example.com',
               firstName: 'John',
               image: 'img-url',
@@ -31,7 +31,7 @@ const memberList = {
               _id: '1',
             },
             {
-              createdAt: '2024-04-13T04:53:17.742Z',
+              createdAt: '2030-04-13T04:53:17.742Z',
               email: 'testuser2@example.com',
               firstName: 'Anna',
               image: null,
@@ -69,15 +69,15 @@ export const MOCKS = [
             name: 'Campaign Name',
             fundingGoal: 1000,
             currency: 'USD',
-            startDate: '2024-01-01',
+            startDate: '2030-01-01',
             endDate: '2034-08-08',
             pledges: [
               {
                 id: '1',
                 amount: 100,
                 currency: 'USD',
-                startDate: '2024-01-01',
-                endDate: '2024-01-10',
+                startDate: '2030-01-01',
+                endDate: '2030-01-10',
                 users: [
                   {
                     id: '1',
@@ -91,8 +91,8 @@ export const MOCKS = [
                 id: '2',
                 amount: 200,
                 currency: 'USD',
-                startDate: '2024-01-01',
-                endDate: '2024-01-09',
+                startDate: '2030-01-01',
+                endDate: '2030-01-09',
                 users: [
                   {
                     id: '2',
@@ -128,15 +128,15 @@ export const MOCKS = [
             name: 'Campaign Name',
             fundingGoal: 1000,
             currency: 'USD',
-            startDate: '2024-01-01',
-            endDate: '2024-08-08',
+            startDate: '2030-01-01',
+            endDate: '2030-08-08',
             pledges: [
               {
                 id: '2',
                 amount: 200,
                 currency: 'USD',
-                startDate: '2024-01-01',
-                endDate: '2024-01-09',
+                startDate: '2030-01-01',
+                endDate: '2030-01-09',
                 users: [
                   {
                     id: '2',
@@ -150,8 +150,8 @@ export const MOCKS = [
                 id: '1',
                 amount: 100,
                 currency: 'USD',
-                startDate: '2024-01-01',
-                endDate: '2024-01-10',
+                startDate: '2030-01-01',
+                endDate: '2030-01-10',
                 users: [
                   {
                     id: '1',
@@ -187,15 +187,15 @@ export const MOCKS = [
             name: 'Campaign Name',
             fundingGoal: 1000,
             currency: 'USD',
-            startDate: '2024-01-01',
-            endDate: '2024-08-08',
+            startDate: '2030-01-01',
+            endDate: '2030-08-08',
             pledges: [
               {
                 id: '2',
                 amount: 200,
                 currency: 'USD',
-                startDate: '2024-01-01',
-                endDate: '2024-01-09',
+                startDate: '2030-01-01',
+                endDate: '2030-01-09',
                 users: [
                   {
                     id: '2',
@@ -263,8 +263,8 @@ export const MOCKS = [
                 id: '1',
                 amount: 100,
                 currency: 'USD',
-                startDate: '2024-01-01',
-                endDate: '2024-01-10',
+                startDate: '2030-01-01',
+                endDate: '2030-01-10',
                 users: [
                   {
                     id: '1',
@@ -300,8 +300,8 @@ export const MOCKS = [
             name: 'Campaign Name',
             fundingGoal: 1000,
             currency: 'USD',
-            startDate: '2024-01-01',
-            endDate: '2024-08-08',
+            startDate: '2030-01-01',
+            endDate: '2030-08-08',
             pledges: [
               {
                 id: '1',
@@ -382,38 +382,6 @@ export const MOCKS_DELETE_PLEDGE_ERROR = [
       },
     },
     error: new Error('Error deleting pledge'),
-  },
-];
-
-export const EMPTY_MOCKS = [
-  memberList,
-  {
-    request: {
-      query: FUND_CAMPAIGN_PLEDGE,
-      variables: {
-        where: {
-          id: 'fundCampaignId',
-        },
-        pledgeOrderBy: 'endDate_DESC',
-      },
-    },
-    result: {
-      data: {
-        getFundraisingCampaigns: [
-          {
-            fundId: {
-              name: 'Fund 1',
-            },
-            name: 'Campaign Name',
-            fundingGoal: 1000,
-            currency: 'USD',
-            startDate: '2024-01-01',
-            endDate: '2024-01-01',
-            pledges: [],
-          },
-        ],
-      },
-    },
   },
 ];
 

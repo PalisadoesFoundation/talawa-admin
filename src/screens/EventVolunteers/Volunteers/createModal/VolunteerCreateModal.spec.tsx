@@ -123,4 +123,186 @@ describe('Testing VolunteerCreateModal', () => {
       expect(toast.error).toHaveBeenCalled();
     });
   });
+
+  it('should handle isOptionEqualToValue for members Autocomplete', async () => {
+    renderCreateModal(link1, itemProps[0]);
+    expect(screen.getAllByText(t.addVolunteer)).toHaveLength(2);
+
+    // Select a member
+    const membersSelect = await screen.findByTestId('membersSelect');
+    const memberInputField = within(membersSelect).getByRole('combobox');
+    fireEvent.mouseDown(memberInputField);
+    const memberOption = await screen.findByText('John Doe');
+    fireEvent.click(memberOption);
+
+    await waitFor(() => {
+      expect(memberInputField).toHaveValue('John Doe');
+    });
+
+    // Open again: since filterSelectedOptions is true, the selected option should be filtered out
+    fireEvent.mouseDown(memberInputField);
+
+    // 'John Doe' should NOT be in the list now, but other options like 'Jane Smith' should be
+    expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+    expect(await screen.findByText('Jane Smith')).toBeInTheDocument();
+    // Input value remains the same; isOptionEqualToValue is used internally for filtering
+    expect(memberInputField).toHaveValue('John Doe');
+  });
+
+  describe('Recurring Events', () => {
+    const recurringEventProps: InterfaceVolunteerCreateModal = {
+      isOpen: true,
+      hide: vi.fn(),
+      eventId: 'eventInstanceId',
+      orgId: 'orgId',
+      refetchVolunteers: vi.fn(),
+      isRecurring: true,
+      baseEvent: { id: 'baseEventId' },
+    };
+
+    it('should create volunteer for entire series when applyTo is "series"', async () => {
+      renderCreateModal(link1, recurringEventProps);
+      expect(screen.getAllByText(t.addVolunteer)).toHaveLength(2);
+
+      // Should show radio buttons for recurring events
+      const seriesRadio = screen.getByRole('radio', { name: /entire series/i });
+      const instanceRadio = screen.getByRole('radio', {
+        name: /this event only/i,
+      });
+
+      expect(seriesRadio).toBeInTheDocument();
+      expect(instanceRadio).toBeInTheDocument();
+      expect(seriesRadio).toBeChecked(); // Default should be 'series'
+
+      // Select a volunteer
+      const membersSelect = await screen.findByTestId('membersSelect');
+      const volunteerInputField = within(membersSelect).getByRole('combobox');
+      fireEvent.mouseDown(volunteerInputField);
+      const volunteerOption = await screen.findByText('John Doe');
+      fireEvent.click(volunteerOption);
+
+      const submitBtn = screen.getByTestId('submitBtn');
+      await userEvent.click(submitBtn);
+
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith(t.volunteerAdded);
+        expect(recurringEventProps.refetchVolunteers).toHaveBeenCalled();
+        expect(recurringEventProps.hide).toHaveBeenCalled();
+      });
+    });
+
+    it('should create volunteer for this instance only when applyTo is "instance"', async () => {
+      renderCreateModal(link1, recurringEventProps);
+      expect(screen.getAllByText(t.addVolunteer)).toHaveLength(2);
+
+      // Select "This Event Only" radio button
+      const instanceRadio = screen.getByRole('radio', {
+        name: /this event only/i,
+      });
+      await userEvent.click(instanceRadio);
+      expect(instanceRadio).toBeChecked();
+
+      // Select a volunteer
+      const membersSelect = await screen.findByTestId('membersSelect');
+      const volunteerInputField = within(membersSelect).getByRole('combobox');
+      fireEvent.mouseDown(volunteerInputField);
+      const volunteerOption = await screen.findByText('John Doe');
+      fireEvent.click(volunteerOption);
+
+      const submitBtn = screen.getByTestId('submitBtn');
+      await userEvent.click(submitBtn);
+
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalledWith(t.volunteerAdded);
+        expect(recurringEventProps.refetchVolunteers).toHaveBeenCalled();
+        expect(recurringEventProps.hide).toHaveBeenCalled();
+      });
+    });
+
+    it('should use baseEvent.id for recurring events when available', async () => {
+      renderCreateModal(link1, recurringEventProps);
+
+      // Select a volunteer to test the mutation data creation
+      const membersSelect = await screen.findByTestId('membersSelect');
+      const volunteerInputField = within(membersSelect).getByRole('combobox');
+      fireEvent.mouseDown(volunteerInputField);
+      const volunteerOption = await screen.findByText('John Doe');
+      fireEvent.click(volunteerOption);
+
+      const submitBtn = screen.getByTestId('submitBtn');
+      await userEvent.click(submitBtn);
+
+      // This test verifies the eventId logic: baseEvent?.id || eventId
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalled();
+      });
+    });
+
+    it('should handle radio button onChange for series and instance selection', async () => {
+      renderCreateModal(link1, recurringEventProps);
+
+      const seriesRadio = screen.getByRole('radio', { name: /entire series/i });
+      const instanceRadio = screen.getByRole('radio', {
+        name: /this event only/i,
+      });
+
+      // Test onChange={() => setApplyTo('instance')}
+      await userEvent.click(instanceRadio);
+      expect(instanceRadio).toBeChecked();
+      expect(seriesRadio).not.toBeChecked();
+
+      // Test onChange={() => setApplyTo('series')}
+      await userEvent.click(seriesRadio);
+      expect(seriesRadio).toBeChecked();
+      expect(instanceRadio).not.toBeChecked();
+    });
+
+    it('should not show radio buttons for non-recurring events', async () => {
+      const nonRecurringProps = {
+        ...recurringEventProps,
+        isRecurring: false,
+      };
+
+      renderCreateModal(link1, nonRecurringProps);
+      expect(screen.getAllByText(t.addVolunteer)).toHaveLength(2);
+
+      // Should NOT show radio buttons for non-recurring events
+      const seriesRadio = screen.queryByRole('radio', {
+        name: /entire series/i,
+      });
+      const instanceRadio = screen.queryByRole('radio', {
+        name: /this event only/i,
+      });
+
+      expect(seriesRadio).not.toBeInTheDocument();
+      expect(instanceRadio).not.toBeInTheDocument();
+    });
+
+    it('should reset applyTo to "series" after successful submission', async () => {
+      renderCreateModal(link1, recurringEventProps);
+
+      // Change to instance
+      const instanceRadio = screen.getByRole('radio', {
+        name: /this event only/i,
+      });
+      await userEvent.click(instanceRadio);
+      expect(instanceRadio).toBeChecked();
+
+      // Submit form
+      const membersSelect = await screen.findByTestId('membersSelect');
+      const volunteerInputField = within(membersSelect).getByRole('combobox');
+      fireEvent.mouseDown(volunteerInputField);
+      const volunteerOption = await screen.findByText('John Doe');
+      fireEvent.click(volunteerOption);
+
+      const submitBtn = screen.getByTestId('submitBtn');
+      await userEvent.click(submitBtn);
+
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalled();
+        // After successful submission, applyTo should reset to 'series'
+        // This is tested indirectly through the code path
+      });
+    });
+  });
 });

@@ -1,4 +1,4 @@
-import expect from 'expect';
+import { expect } from 'vitest';
 import reducer from './userRoutesReducer';
 
 describe('Testing Routes reducer', () => {
@@ -16,6 +16,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Events', url: 'user/events/undefined' },
         { name: 'Volunteer', url: 'user/volunteer/undefined' },
         { name: 'Donate', url: 'user/donate/undefined' },
+        { name: 'Transactions', url: 'user/transactions/undefined' },
         { name: 'Chat', url: 'user/chat/undefined' },
         { name: 'Campaigns', url: 'user/campaigns/undefined' },
         { name: 'My Pledges', url: 'user/pledges/undefined' },
@@ -40,6 +41,11 @@ describe('Testing Routes reducer', () => {
           component: 'VolunteerManagement',
         },
         { name: 'Donate', comp_id: 'donate', component: 'Donate' },
+        {
+          name: 'Transactions',
+          comp_id: 'transactions',
+          component: 'Transactions',
+        },
         { name: 'Chat', comp_id: 'chat', component: 'Chat' },
         {
           name: 'Campaigns',
@@ -70,6 +76,7 @@ describe('Testing Routes reducer', () => {
         { name: 'Events', url: 'user/events/orgId' },
         { name: 'Volunteer', url: 'user/volunteer/orgId' },
         { name: 'Donate', url: 'user/donate/orgId' },
+        { name: 'Transactions', url: 'user/transactions/orgId' },
         { name: 'Chat', url: 'user/chat/orgId' },
         { name: 'Campaigns', url: 'user/campaigns/orgId' },
         { name: 'My Pledges', url: 'user/pledges/orgId' },
@@ -94,6 +101,11 @@ describe('Testing Routes reducer', () => {
           component: 'VolunteerManagement',
         },
         { name: 'Donate', comp_id: 'donate', component: 'Donate' },
+        {
+          name: 'Transactions',
+          comp_id: 'transactions',
+          component: 'Transactions',
+        },
         { name: 'Chat', comp_id: 'chat', component: 'Chat' },
         {
           name: 'Campaigns',

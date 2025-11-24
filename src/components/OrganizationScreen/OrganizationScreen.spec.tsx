@@ -14,9 +14,9 @@ import { vi } from 'vitest';
 import { setItem } from 'utils/useLocalstorage';
 
 // Create mocks for the router hooks
-const mockUseParams = vi.fn();
-const mockUseMatch = vi.fn();
-const mockNavigate = vi.fn();
+let mockUseParams: ReturnType<typeof vi.fn>;
+let mockUseMatch: ReturnType<typeof vi.fn>;
+let mockNavigate: ReturnType<typeof vi.fn>;
 
 // Mock the router hooks
 vi.mock('react-router', async () => {
@@ -39,7 +39,7 @@ const MOCKS = [
       data: {
         eventsByOrganization: [
           {
-            _id: 'event123',
+            id: 'event123',
             title: 'Test Event Title',
             description: 'Test Description',
             startDate: '2024-01-01',
@@ -69,10 +69,13 @@ describe('Testing OrganizationScreen', () => {
   });
 
   beforeEach(() => {
-    // Reset all mocks before each test
-    mockUseParams.mockReset();
-    mockUseMatch.mockReset();
-    mockNavigate.mockReset();
+    // Create fresh mock functions before each test
+    mockUseParams = vi.fn();
+    mockUseMatch = vi.fn();
+    mockNavigate = vi.fn();
+  });
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   const renderComponent = (): void => {

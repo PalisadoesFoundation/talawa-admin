@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
@@ -10,11 +10,11 @@ import i18n from 'utils/i18nForTest';
 // Mock props for standalone event
 const mockStandaloneEventProps: InterfaceDeleteEventModalProps = {
   eventListCardProps: {
-    _id: 'standalone-event-1',
+    id: 'standalone-event-1',
     name: 'Standalone Event',
     description: 'A standalone event',
-    startDate: '2024-01-01',
-    endDate: '2024-01-01',
+    startAt: '2024-01-01T10:00:00Z',
+    endAt: '2024-01-01T11:00:00Z',
     startTime: '10:00:00',
     endTime: '11:00:00',
     allDay: false,
@@ -23,14 +23,13 @@ const mockStandaloneEventProps: InterfaceDeleteEventModalProps = {
     isRegisterable: true,
     attendees: [],
     creator: {
-      _id: 'user1',
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john@example.com',
+      id: 'user1',
+      name: 'John Doe',
+      emailAddress: 'john@example.com',
     },
     // Standalone event fields
-    isRecurringTemplate: false,
-    baseEventId: null,
+    isRecurringEventTemplate: false,
+    baseEvent: null,
     sequenceNumber: null,
     totalCount: null,
     hasExceptions: false,
@@ -46,11 +45,11 @@ const mockStandaloneEventProps: InterfaceDeleteEventModalProps = {
 // Mock props for recurring event instance
 const mockRecurringEventProps: InterfaceDeleteEventModalProps = {
   eventListCardProps: {
-    _id: 'recurring-instance-1',
+    id: 'recurring-instance-1',
     name: 'Daily Meeting',
     description: 'Daily team meeting',
-    startDate: '2024-01-01',
-    endDate: '2024-01-01',
+    startAt: '2024-01-01T09:00:00Z',
+    endAt: '2024-01-01T10:00:00Z',
     startTime: '09:00:00',
     endTime: '10:00:00',
     allDay: false,
@@ -59,14 +58,13 @@ const mockRecurringEventProps: InterfaceDeleteEventModalProps = {
     isRegisterable: true,
     attendees: [],
     creator: {
-      _id: 'user1',
-      firstName: 'John',
-      lastName: 'Doe',
-      email: 'john@example.com',
+      id: 'user1',
+      name: 'John Doe',
+      emailAddress: 'john@example.com',
     },
     // Recurring instance fields
-    isRecurringTemplate: false,
-    baseEventId: 'base-event-123', // This makes it a recurring instance
+    isRecurringEventTemplate: false,
+    baseEvent: { id: 'base-event-123' }, // This makes it a recurring instance
     sequenceNumber: 5,
     totalCount: 10,
     hasExceptions: false,
@@ -162,6 +160,40 @@ describe('EventListCardDeleteModal', () => {
       expect(singleRadio).toBeChecked();
 
       // Click delete button
+      const deleteButton = screen.getByTestId('deleteEventBtn');
+      await user.click(deleteButton);
+
+      // Verify deleteEventHandler was called with "single"
+      expect(mockRecurringEventProps.deleteEventHandler).toHaveBeenCalledWith(
+        'single',
+      );
+    });
+
+    it('should update delete option when switching back to "Delete only this instance"', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <I18nextProvider i18n={i18n}>
+          <EventListCardDeleteModal {...mockRecurringEventProps} />
+        </I18nextProvider>,
+      );
+
+      // First select a different option (following) to ensure single is not selected
+      const followingRadio = screen.getByLabelText('deleteThisAndFollowing');
+      await user.click(followingRadio);
+      expect(followingRadio).toBeChecked();
+      expect(screen.getByLabelText('deleteThisInstance')).not.toBeChecked();
+
+      // Now click the "single" radio button to trigger onChange (Line 94)
+      const singleRadio = screen.getByLabelText('deleteThisInstance');
+      await user.click(singleRadio);
+
+      // Verify single is now checked and others are not
+      expect(singleRadio).toBeChecked();
+      expect(followingRadio).not.toBeChecked();
+      expect(screen.getByLabelText('deleteAllEvents')).not.toBeChecked();
+
+      // Click delete button to verify the correct option is passed
       const deleteButton = screen.getByTestId('deleteEventBtn');
       await user.click(deleteButton);
 
@@ -309,8 +341,8 @@ describe('EventListCardDeleteModal', () => {
         ...mockRecurringEventProps,
         eventListCardProps: {
           ...mockRecurringEventProps.eventListCardProps,
-          isRecurringTemplate: true, // This is a template, not an instance
-          baseEventId: null,
+          isRecurringEventTemplate: true, // This is a template, not an instance
+          baseEvent: null,
         },
       };
 
@@ -341,8 +373,7 @@ describe('EventListCardDeleteModal', () => {
         ...mockRecurringEventProps,
         eventListCardProps: {
           ...mockRecurringEventProps.eventListCardProps,
-          isRecurringTemplate: true, // Template flag takes precedence
-          baseEventId: 'some-base-id',
+          isRecurringEventTemplate: true, // Template flag takes precedence
         },
       };
 

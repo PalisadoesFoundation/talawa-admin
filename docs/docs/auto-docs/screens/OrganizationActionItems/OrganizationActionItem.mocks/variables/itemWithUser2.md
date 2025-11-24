@@ -6,37 +6,13 @@
 
 > `const` **itemWithUser2**: `object`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L70)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L85)
 
-## Type declaration
+## Type Declaration
 
 ### assignedAt
 
 > **assignedAt**: `Date`
-
-### assignee
-
-> **assignee**: `object`
-
-#### assignee.avatarURL
-
-> **avatarURL**: `any` = `null`
-
-#### assignee.emailAddress
-
-> **emailAddress**: `string` = `'jane@example.com'`
-
-#### assignee.id
-
-> **id**: `string` = `'userId2'`
-
-#### assignee.name
-
-> **name**: `string` = `'Jane Doe'`
-
-### assigneeId
-
-> **assigneeId**: `string` = `'userId2'`
 
 ### category
 
@@ -134,6 +110,14 @@ Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts
 
 > **preCompletionNotes**: `string` = `'Notes 2'`
 
+### recurringEventInstance
+
+> **recurringEventInstance**: `any` = `null`
+
+### recurringEventInstanceId
+
+> **recurringEventInstanceId**: `any` = `null`
+
 ### updatedAt
 
 > **updatedAt**: `Date`
@@ -141,3 +125,51 @@ Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts
 ### updaterId
 
 > **updaterId**: `string` = `'userId'`
+
+### volunteer
+
+> **volunteer**: `object`
+
+#### volunteer.hasAccepted
+
+> **hasAccepted**: `boolean` = `true`
+
+#### volunteer.hoursVolunteered
+
+> **hoursVolunteered**: `number` = `5`
+
+#### volunteer.id
+
+> **id**: `string` = `'volunteerUserId2'`
+
+#### volunteer.isPublic
+
+> **isPublic**: `boolean` = `true`
+
+#### volunteer.user
+
+> **user**: `object`
+
+#### volunteer.user.avatarURL
+
+> **avatarURL**: `any` = `null`
+
+#### volunteer.user.id
+
+> **id**: `string` = `'userId2'`
+
+#### volunteer.user.name
+
+> **name**: `string` = `'Jane Doe'`
+
+### volunteerGroup
+
+> **volunteerGroup**: `any` = `null`
+
+### volunteerGroupId
+
+> **volunteerGroupId**: `any` = `null`
+
+### volunteerId
+
+> **volunteerId**: `string` = `'volunteerUserId2'`

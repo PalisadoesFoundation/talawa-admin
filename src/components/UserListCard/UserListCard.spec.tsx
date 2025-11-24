@@ -10,7 +10,8 @@ import UserListCard from './UserListCard';
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { vi, describe, it, beforeEach } from 'vitest';
+import { vi, describe, it, beforeEach, expect } from 'vitest';
+import * as errorHandlerModule from 'utils/errorHandler';
 
 // Mock react-router-dom
 vi.mock('react-router', async () => {
@@ -61,10 +62,12 @@ async function wait(ms = 100): Promise<void> {
 }
 
 describe('Testing User List Card', () => {
+  let reloadMock: ReturnType<typeof vi.fn>;
+
   beforeEach(() => {
     vi.spyOn(global, 'alert').mockImplementation(() => {});
     // Mock window.location.reload
-    const reloadMock = vi.fn(() => {
+    reloadMock = vi.fn(() => {
       console.log('window.location.reload called');
     });
     Object.defineProperty(window, 'location', {
@@ -150,5 +153,256 @@ describe('Testing User List Card', () => {
 
     expect(toast.success).not.toHaveBeenCalled();
     expect(window.location.reload).not.toHaveBeenCalled();
+  });
+
+  it('Should call errorHandler when mutation fails', async () => {
+    const errorHandlerSpy = vi.spyOn(errorHandlerModule, 'errorHandler');
+    const testError = new Error('Network error');
+
+    const errorMock = [
+      {
+        request: {
+          query: ADD_ADMIN_MUTATION,
+          variables: {
+            userid: '789',
+            orgid: '554',
+          },
+        },
+        error: testError,
+      },
+    ];
+
+    const errorLink = new StaticMockLink(errorMock, true);
+    const props = {
+      id: '789',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={errorLink}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserListCard key={456} {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const button = screen.getByText(/Add Admin/i);
+    await userEvent.click(button);
+    await wait(500);
+
+    // Verify errorHandler was called with correct arguments (t function and ApolloError)
+    // Apollo Client wraps network errors in ApolloError
+    expect(errorHandlerSpy).toHaveBeenCalledWith(
+      expect.any(Function),
+      expect.objectContaining({
+        message: expect.stringContaining('Network error'),
+      }),
+    );
+    expect(toast.success).not.toHaveBeenCalled();
+    expect(reloadMock).not.toHaveBeenCalled();
+
+    errorHandlerSpy.mockRestore();
+  });
+
+  it('Should not reload when mutation returns no data', async () => {
+    const nullDataMock = [
+      {
+        request: {
+          query: ADD_ADMIN_MUTATION,
+          variables: {
+            userid: '999',
+            orgid: '554',
+          },
+        },
+        result: {
+          data: null,
+        },
+      },
+    ];
+
+    const nullDataLink = new StaticMockLink(nullDataMock, true);
+    const props = {
+      id: '999',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={nullDataLink}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserListCard key={789} {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const button = screen.getByText(/Add Admin/i);
+    await userEvent.click(button);
+    await wait(500);
+
+    // When data is null, toast.success should not be called
+    expect(toast.success).not.toHaveBeenCalled();
+
+    // Wait additional time to ensure reload is not called
+    await wait(2100);
+    expect(reloadMock).not.toHaveBeenCalled();
+  });
+
+  it('Should not reload when mutation returns undefined data', async () => {
+    const undefinedDataMock = [
+      {
+        request: {
+          query: ADD_ADMIN_MUTATION,
+          variables: {
+            userid: '888',
+            orgid: '554',
+          },
+        },
+        result: {
+          data: undefined,
+        },
+      },
+    ];
+
+    const undefinedDataLink = new StaticMockLink(undefinedDataMock, true);
+    const props = {
+      id: '888',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={undefinedDataLink}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserListCard key={101} {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const button = screen.getByText(/Add Admin/i);
+    await userEvent.click(button);
+    await wait(500);
+
+    // When data is undefined, toast.success should not be called
+    expect(toast.success).not.toHaveBeenCalled();
+
+    // Wait additional time to ensure reload is not called
+    await wait(2100);
+    expect(reloadMock).not.toHaveBeenCalled();
+  });
+
+  it('Should render button with correct text and styling', () => {
+    const props = {
+      id: '123',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserListCard key={999} {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const button = screen.getByText(/Add Admin/i);
+    expect(button).toBeInTheDocument();
+    expect(button.tagName).toBe('BUTTON');
+    // CSS modules add a hash to the class name, so we check if the class contains the base name
+    expect(button.className).toContain('memberfontcreatedbtnUserListCard');
+  });
+
+  it('Should pass correct variables to the mutation', async () => {
+    const userId = '321';
+    const orgId = '554';
+
+    const mockWithVariables = [
+      {
+        request: {
+          query: ADD_ADMIN_MUTATION,
+          variables: {
+            userid: userId,
+            orgid: orgId,
+          },
+        },
+        result: {
+          data: {
+            createAdmin: {
+              user: {
+                _id: userId,
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    const linkWithVariables = new StaticMockLink(mockWithVariables, true);
+    const props = {
+      id: userId,
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={linkWithVariables}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserListCard key={202} {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const button = screen.getByText(/Add Admin/i);
+    await userEvent.click(button);
+    await wait(500);
+
+    // If the variables were correct, the mutation should succeed
+    expect(toast.success).toHaveBeenCalled();
+  });
+
+  it('Should handle GraphQL error in mutation response', async () => {
+    const graphQLErrorMock = [
+      {
+        request: {
+          query: ADD_ADMIN_MUTATION,
+          variables: {
+            userid: '111',
+            orgid: '554',
+          },
+        },
+        result: {
+          errors: [{ message: 'User not found' }],
+        },
+      },
+    ];
+
+    const graphQLErrorLink = new StaticMockLink(graphQLErrorMock, true);
+    const props = {
+      id: '111',
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={graphQLErrorLink}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserListCard key={303} {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    const button = screen.getByText(/Add Admin/i);
+    await userEvent.click(button);
+    await wait(500);
+
+    // GraphQL errors in the result don't trigger the catch block
+    expect(toast.success).not.toHaveBeenCalled();
+    expect(reloadMock).not.toHaveBeenCalled();
   });
 });

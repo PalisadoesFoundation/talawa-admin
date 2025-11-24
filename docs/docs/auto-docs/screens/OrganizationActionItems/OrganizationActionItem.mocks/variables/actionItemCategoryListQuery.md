@@ -6,9 +6,9 @@
 
 > `const` **actionItemCategoryListQuery**: `object`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:190](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L190)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:262](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L262)
 
-## Type declaration
+## Type Declaration
 
 ### request
 

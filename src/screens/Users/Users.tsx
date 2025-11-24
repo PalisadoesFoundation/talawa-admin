@@ -100,58 +100,72 @@ const Users = (): JSX.Element => {
       ? 'ADMIN'
       : 'USER';
   const loggedInUserId = getItem('id') as string;
-  const [usersData, setUsersData] = useState<
-    { users: InterfaceQueryUserListItem[] } | undefined
-  >(undefined);
+  const [usersData, setUsersData] = useState<InterfaceQueryUserListItem[]>([]);
 
   const {
     data,
-    loading: loading,
+    loading,
     fetchMore,
     refetch: refetchUsers,
+    error,
   }: {
-    data?: { users: InterfaceQueryUserListItem[] };
+    data?: { usersByIds: InterfaceQueryUserListItem[] };
     loading: boolean;
     fetchMore: (options: {
       variables: Record<string, unknown>;
       updateQuery: (
-        previousQueryResult: { users: InterfaceQueryUserListItem[] },
-        options: { fetchMoreResult?: { users: InterfaceQueryUserListItem[] } },
-      ) => { users: InterfaceQueryUserListItem[] };
+        previousQueryResult: { usersByIds: InterfaceQueryUserListItem[] },
+        options: {
+          fetchMoreResult?: { usersByIds: InterfaceQueryUserListItem[] };
+        },
+      ) => { usersByIds: InterfaceQueryUserListItem[] };
     }) => void;
     refetch: (variables?: Record<string, unknown>) => void;
     error?: ApolloError;
   } = useQuery(USER_LIST, {
     variables: {
-      first: perPageResult,
-      skip: 0,
-      firstName_contains: '',
-      lastName_contains: '',
-      order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC',
+      input: {
+        ids: loggedInUserId,
+      },
     },
     notifyOnNetworkStatusChange: true,
   });
 
+  console.log('GraphQL Query Data:', data); // Log query results
+  console.log('GraphQL Loading State:', loading); // Log loading state
+  console.log('GraphQL Error:', error); // Log any errors
+
   useEffect(() => {
     if (data) {
-      setUsersData(data);
+      console.log('Setting usersData with:', data.usersByIds);
+      setUsersData(data.usersByIds || []);
     }
-  }, [data, isLoading]);
+  }, [data]);
 
   const { data: dataOrgs } = useQuery(ORGANIZATION_LIST);
-  const [displayedUsers, setDisplayedUsers] = useState(usersData?.users || []);
+  const [displayedUsers, setDisplayedUsers] = useState<
+    InterfaceQueryUserListItem[]
+  >([]);
+
+  console.log('Current usersData:', usersData); // Log current usersData state
+  console.log('Current displayedUsers:', displayedUsers); // Log current displayedUsers
 
   // Manage loading more state
   useEffect(() => {
-    if (!usersData) {
+    if (!usersData || usersData.length === 0) {
+      console.log('No usersData available yet');
       return;
     }
 
-    if (usersData.users.length < perPageResult) {
+    console.log('Managing loading state for:', usersData.length, 'users');
+
+    if (usersData.length < perPageResult) {
+      console.log('Setting hasMore to false');
       setHasMore(false);
     }
-    let newDisplayedUsers = sortUsers(usersData.users, sortingOption);
+    let newDisplayedUsers = sortUsers(usersData, sortingOption);
     newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
+    console.log('Setting displayedUsers:', newDisplayedUsers);
     setDisplayedUsers(newDisplayedUsers);
   }, [usersData, sortingOption, filteringOption]);
 
@@ -175,11 +189,11 @@ const Users = (): JSX.Element => {
   }, [dataOrgs, t]);
 
   // Send to orgList page if user is not superadmin
-  useEffect(() => {
-    if (userType != 'SUPERADMIN') {
-      window.location.assign('/orglist');
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (userType != 'SUPERADMIN') {
+  //     window.location.assign('/orglist');
+  //   }
+  // }, []);
 
   // Manage the loading state
   useEffect(() => {
@@ -221,6 +235,7 @@ const Users = (): JSX.Element => {
     setHasMore(true);
   };
   const loadMoreUsers = (skipValue: number, limitVal: number): void => {
+    console.log('Loading more users. Skip:', skipValue, 'Limit:', limitVal);
     setIsLoadingMore(true);
     fetchMore({
       variables: {
@@ -230,31 +245,45 @@ const Users = (): JSX.Element => {
         order: sortingOption === 'newest' ? 'createdAt_DESC' : 'createdAt_ASC',
       },
       updateQuery: (
-        prev: { users: InterfaceQueryUserListItem[] } | undefined,
+        prev: { usersByIds: InterfaceQueryUserListItem[] },
         {
           fetchMoreResult,
-        }: { fetchMoreResult?: { users: InterfaceQueryUserListItem[] } },
+        }: { fetchMoreResult?: { usersByIds: InterfaceQueryUserListItem[] } },
       ) => {
         setIsLoadingMore(false);
-        if (!fetchMoreResult) return prev || { users: [] };
+        if (!fetchMoreResult) {
+          console.log('No fetchMoreResult available');
+          return prev;
+        }
 
-        const mergedUsers = [...(prev?.users || []), ...fetchMoreResult.users];
+        const mergedUsers = [
+          ...(prev.usersByIds || []),
+          ...fetchMoreResult.usersByIds,
+        ];
 
         const uniqueUsers = Array.from(
-          new Map(mergedUsers.map((user) => [user.user._id, user])).values(),
+          new Map(mergedUsers.map((user) => [user.id, user])).values(),
         );
-        if (uniqueUsers.length < mergedUsers.length) {
-          setLoadUnqUsers(mergedUsers.length - uniqueUsers.length);
-        } else setLoadUnqUsers(0);
+        console.log('Merged users:', mergedUsers.length);
+        console.log('Unique users:', uniqueUsers.length);
 
-        // Load more users will always run after the initial request, hence prev is not going to be undefined
-        if (prev?.users) {
-          if (uniqueUsers.length - prev?.users.length < perPageResult) {
+        if (uniqueUsers.length < mergedUsers.length) {
+          const diff = mergedUsers.length - uniqueUsers.length;
+          console.log('Duplicate users found:', diff);
+          setLoadUnqUsers(diff);
+        } else {
+          console.log('No duplicate users found');
+          setLoadUnqUsers(0);
+        }
+
+        if (prev.usersByIds) {
+          if (uniqueUsers.length - prev.usersByIds.length < perPageResult) {
+            console.log('No more users to load');
             setHasMore(false);
           }
         }
 
-        return { users: uniqueUsers };
+        return { usersByIds: uniqueUsers };
       },
     });
   };
@@ -276,15 +305,13 @@ const Users = (): JSX.Element => {
     if (sortingOption === 'newest') {
       sortedUsers.sort(
         (a, b) =>
-          new Date(b.user.createdAt).getTime() -
-          new Date(a.user.createdAt).getTime(),
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
       return sortedUsers;
     }
     sortedUsers.sort(
       (a, b) =>
-        new Date(a.user.createdAt).getTime() -
-        new Date(b.user.createdAt).getTime(),
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     );
     return sortedUsers;
   };
@@ -305,25 +332,18 @@ const Users = (): JSX.Element => {
 
     if (filteringOption === 'cancel') {
       return filteredUsers;
-    } else if (filteringOption === 'user') {
-      const output = filteredUsers.filter((user) => {
-        return user.appUserProfile.adminFor.length === 0;
-      });
-      return output;
-    } else if (filteringOption === 'admin') {
-      const output = filteredUsers.filter((user) => {
-        return (
-          user.appUserProfile.isSuperAdmin === false &&
-          user.appUserProfile.adminFor.length !== 0
-        );
-      });
-      return output;
-    } else {
-      const output = filteredUsers.filter((user) => {
-        return user.appUserProfile.isSuperAdmin === true;
-      });
-      return output;
     }
+    if (filteringOption === 'user') {
+      return allUsers.filter((user) => user.role === 'regular');
+    }
+    if (filteringOption === 'admin') {
+      return allUsers.filter((user) => user.role === 'administrator');
+    }
+    if (filteringOption === 'superAdmin') {
+      return [];
+    }
+
+    return [];
   };
 
   const headerTitles: string[] = [
@@ -441,7 +461,7 @@ const Users = (): JSX.Element => {
                     (user: InterfaceQueryUserListItem, index: number) => {
                       return (
                         <UsersTableItem
-                          key={user.user._id}
+                          key={user.id}
                           index={index}
                           resetAndRefetch={resetAndRefetch}
                           user={user}

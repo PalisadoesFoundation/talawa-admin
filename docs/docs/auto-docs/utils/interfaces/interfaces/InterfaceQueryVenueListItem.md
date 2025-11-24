@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryVenueListItem
 
-Defined in: [src/utils/interfaces.ts:2029](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2029)
+Defined in: [src/utils/interfaces.ts:2055](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2055)
 
 InterfaceQueryVenueListItem
 
@@ -14,50 +14,32 @@ Defines the structure for a venue list item returned from a query.
 
 ## Properties
 
-### \_id
+### node
 
-> **\_id**: `string`
+> **node**: `object`
 
-Defined in: [src/utils/interfaces.ts:2030](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2030)
+Defined in: [src/utils/interfaces.ts:2056](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2056)
 
-The unique identifier of the venue.
+#### attachments?
 
-***
+> `optional` **attachments**: `object`[]
 
-### capacity
+#### capacity?
 
-> **capacity**: `string`
+> `optional` **capacity**: `number`
 
-Defined in: [src/utils/interfaces.ts:2034](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2034)
-
-The capacity of the venue.
-
-***
-
-### description
+#### description
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:2032](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2032)
+#### id
 
-The description of the venue, or null.
+> **id**: `string`
 
-***
+#### image?
 
-### image
+> `optional` **image**: `string`
 
-> **image**: `string`
-
-Defined in: [src/utils/interfaces.ts:2033](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2033)
-
-The URL of the venue's image, or null.
-
-***
-
-### name
+#### name
 
 > **name**: `string`
-
-Defined in: [src/utils/interfaces.ts:2031](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2031)
-
-The name of the venue.

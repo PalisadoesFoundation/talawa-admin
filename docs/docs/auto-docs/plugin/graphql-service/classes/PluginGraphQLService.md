@@ -4,15 +4,15 @@
 
 # Class: PluginGraphQLService
 
-Defined in: [src/plugin/graphql-service.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L63)
+Defined in: [src/plugin/graphql-service.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L72)
 
 ## Constructors
 
-### new PluginGraphQLService()
+### Constructor
 
 > **new PluginGraphQLService**(`apolloClient`): `PluginGraphQLService`
 
-Defined in: [src/plugin/graphql-service.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L66)
+Defined in: [src/plugin/graphql-service.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L75)
 
 #### Parameters
 
@@ -30,7 +30,7 @@ Defined in: [src/plugin/graphql-service.ts:66](https://github.com/PalisadoesFoun
 
 > **createPlugin**(`input`): `Promise`\<[`IPlugin`](../interfaces/IPlugin.md)\>
 
-Defined in: [src/plugin/graphql-service.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L83)
+Defined in: [src/plugin/graphql-service.ts:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L92)
 
 #### Parameters
 
@@ -48,7 +48,7 @@ Defined in: [src/plugin/graphql-service.ts:83](https://github.com/PalisadoesFoun
 
 > **deletePlugin**(`input`): `Promise`\<\{ `id`: `string`; `pluginId`: `string`; \}\>
 
-Defined in: [src/plugin/graphql-service.ts:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L111)
+Defined in: [src/plugin/graphql-service.ts:134](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L134)
 
 #### Parameters
 
@@ -66,7 +66,7 @@ Defined in: [src/plugin/graphql-service.ts:111](https://github.com/PalisadoesFou
 
 > **getAllPlugins**(): `Promise`\<[`IPlugin`](../interfaces/IPlugin.md)[]\>
 
-Defined in: [src/plugin/graphql-service.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L70)
+Defined in: [src/plugin/graphql-service.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L79)
 
 #### Returns
 
@@ -74,11 +74,29 @@ Defined in: [src/plugin/graphql-service.ts:70](https://github.com/PalisadoesFoun
 
 ***
 
+### installPlugin()
+
+> **installPlugin**(`input`): `Promise`\<[`IPlugin`](../interfaces/IPlugin.md)\>
+
+Defined in: [src/plugin/graphql-service.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L106)
+
+#### Parameters
+
+##### input
+
+[`InstallPluginInput`](../interfaces/InstallPluginInput.md)
+
+#### Returns
+
+`Promise`\<[`IPlugin`](../interfaces/IPlugin.md)\>
+
+***
+
 ### updatePlugin()
 
 > **updatePlugin**(`input`): `Promise`\<[`IPlugin`](../interfaces/IPlugin.md)\>
 
-Defined in: [src/plugin/graphql-service.ts:97](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L97)
+Defined in: [src/plugin/graphql-service.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L120)
 
 #### Parameters
 

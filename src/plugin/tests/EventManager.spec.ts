@@ -312,4 +312,133 @@ describe('EventManager', () => {
       });
     });
   });
+
+  describe('Utility methods and invalid inputs', () => {
+    it('should log error for invalid on inputs', () => {
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      // invalid event name
+      expect(() => eventManager.on('', vi.fn())).not.toThrow();
+      // invalid callback
+      // @ts-expect-error testing runtime invalid input
+      expect(() => eventManager.on('test-event', null)).not.toThrow();
+
+      expect(consoleSpy).toHaveBeenCalled();
+      consoleSpy.mockRestore();
+    });
+
+    it('should log error for invalid off inputs', () => {
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      // invalid event name
+      expect(() => eventManager.off('', vi.fn())).not.toThrow();
+      // invalid callback
+      // @ts-expect-error testing runtime invalid input
+      expect(() => eventManager.off('test-event', undefined)).not.toThrow();
+
+      expect(consoleSpy).toHaveBeenCalled();
+      consoleSpy.mockRestore();
+    });
+
+    it('should register listener via public API and call it on emit (avoids private map manipulation)', () => {
+      const cb = vi.fn();
+
+      // Spy on Map.prototype.set to ensure the EventManager attempts to set listeners
+      // without reaching into its private map implementation directly.
+      const setSpy = vi.spyOn(Map.prototype, 'set');
+
+      eventManager.on('fallback-event', cb);
+
+      // The public API should result in Map.prototype.set being called for registration
+      expect(setSpy).toHaveBeenCalled();
+
+      // Emitting the event should call the registered callback
+      eventManager.emit('fallback-event');
+      expect(cb).toHaveBeenCalledTimes(1);
+
+      setSpy.mockRestore();
+    });
+
+    // not testing the unreachable `else` branch inside
+    // EventManager.on that depends on Map#get returning `undefined` after
+    // `has` — this is an internal edge-case that's hard to trigger via the
+    // public API without mocking global Map behaviour and can make tests
+    // brittle. We prefer testing observable public behaviour only.
+
+    it('should log error and return when emitting with invalid event name', () => {
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      expect(() => eventManager.emit('')).not.toThrow();
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Invalid event name provided for emission',
+      );
+
+      consoleSpy.mockRestore();
+    });
+
+    it('should remove all listeners for a specific event', () => {
+      const cb1 = vi.fn();
+      const cb2 = vi.fn();
+
+      eventManager.on('a', cb1);
+      eventManager.on('b', cb2);
+
+      eventManager.removeAllListeners('a');
+
+      eventManager.emit('a');
+      eventManager.emit('b');
+
+      expect(cb1).not.toHaveBeenCalled();
+      expect(cb2).toHaveBeenCalledTimes(1);
+    });
+
+    it('should remove all listeners when called without event', () => {
+      const cb1 = vi.fn();
+      const cb2 = vi.fn();
+
+      eventManager.on('a', cb1);
+      eventManager.on('b', cb2);
+
+      eventManager.removeAllListeners();
+
+      eventManager.emit('a');
+      eventManager.emit('b');
+
+      expect(cb1).not.toHaveBeenCalled();
+      expect(cb2).not.toHaveBeenCalled();
+    });
+
+    it('should report correct listener count and events', () => {
+      const cb1 = vi.fn();
+      const cb2 = vi.fn();
+
+      expect(eventManager.getListenerCount('x')).toBe(0);
+      expect(eventManager.getEvents()).toEqual([]);
+
+      eventManager.on('x', cb1);
+      eventManager.on('x', cb2);
+      eventManager.on('y', cb1);
+
+      expect(eventManager.getListenerCount('x')).toBe(2);
+      expect(eventManager.getListenerCount('y')).toBe(1);
+
+      const events = eventManager.getEvents();
+      expect(events).toContain('x');
+      expect(events).toContain('y');
+
+      // remove listeners of x one by one and verify updates
+      eventManager.off('x', cb1);
+      expect(eventManager.getListenerCount('x')).toBe(1);
+
+      eventManager.off('x', cb2);
+      expect(eventManager.getListenerCount('x')).toBe(0);
+      expect(eventManager.getEvents()).not.toContain('x');
+    });
+  });
 });

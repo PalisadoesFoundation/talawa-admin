@@ -26,6 +26,7 @@ import {
   EMPTY_MOCKS,
   ERROR_MOCKS,
   UPDATE_ERROR_MOCKS,
+  MOCKS_WITH_FILTER_DATA,
 } from './Requests.mocks';
 import { toast } from 'react-toastify';
 import { vi } from 'vitest';
@@ -49,6 +50,7 @@ const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(ERROR_MOCKS);
 const link3 = new StaticMockLink(EMPTY_MOCKS);
 const link4 = new StaticMockLink(UPDATE_ERROR_MOCKS);
+const link5 = new StaticMockLink(MOCKS_WITH_FILTER_DATA);
 const t = {
   ...JSON.parse(
     JSON.stringify(
@@ -244,6 +246,93 @@ describe('Testing Requests Screen', () => {
       expect(toast.error).toHaveBeenCalled();
     });
   });
+
+  it('should filter requests by individual type', async () => {
+    renderRequests(link5);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    // Initially should show all requests (2 individual + 1 group = 3)
+    let volunteerNames = await screen.findAllByTestId('volunteerName');
+    expect(volunteerNames).toHaveLength(3);
+
+    // Click filter button
+    const filterBtn = await screen.findByTestId('filter');
+    fireEvent.click(filterBtn);
+
+    // Select individual filter
+    const individualFilter = await screen.findByTestId('individual');
+    fireEvent.click(individualFilter);
+
+    await waitFor(() => {
+      // Should only show individual requests (2 requests without group)
+      const volunteerNamesAfterFilter = screen.getAllByTestId('volunteerName');
+      expect(volunteerNamesAfterFilter).toHaveLength(2);
+      expect(volunteerNamesAfterFilter[0]).toHaveTextContent('John Doe');
+      expect(volunteerNamesAfterFilter[1]).toHaveTextContent('Teresa Bradley');
+    });
+  });
+
+  it('should filter requests by group type', async () => {
+    renderRequests(link5);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    // Initially should show all requests (2 individual + 1 group = 3)
+    let volunteerNames = await screen.findAllByTestId('volunteerName');
+    expect(volunteerNames).toHaveLength(3);
+
+    // Click filter button
+    const filterBtn = await screen.findByTestId('filter');
+    fireEvent.click(filterBtn);
+
+    // Select group filter
+    const groupFilter = await screen.findByTestId('group');
+    fireEvent.click(groupFilter);
+
+    await waitFor(() => {
+      // Should only show group requests (1 request with group)
+      const volunteerNamesAfterFilter = screen.getAllByTestId('volunteerName');
+      expect(volunteerNamesAfterFilter).toHaveLength(1);
+      expect(volunteerNamesAfterFilter[0]).toHaveTextContent('Group Volunteer');
+    });
+  });
+
+  it('should show all requests when filter is set to all', async () => {
+    renderRequests(link5);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    // Click filter button
+    const filterBtn = await screen.findByTestId('filter');
+    fireEvent.click(filterBtn);
+
+    // First set to individual filter
+    const individualFilter = await screen.findByTestId('individual');
+    fireEvent.click(individualFilter);
+
+    await waitFor(() => {
+      const filteredNames = screen.getAllByTestId('volunteerName');
+      expect(filteredNames).toHaveLength(2);
+    });
+
+    // Now click filter button again
+    const filterBtnAgain = await screen.findByTestId('filter');
+    fireEvent.click(filterBtnAgain);
+
+    // Select 'all' filter to show all requests again
+    const allFilter = await screen.findByTestId('all');
+    fireEvent.click(allFilter);
+
+    await waitFor(() => {
+      // Should show all requests again (2 individual + 1 group = 3)
+      const volunteerNamesAll = screen.getAllByTestId('volunteerName');
+      expect(volunteerNamesAll).toHaveLength(3);
+    });
+  });
 });
 
 describe('Requests Component CSS Styling', () => {
@@ -268,10 +357,10 @@ describe('Requests Component CSS Styling', () => {
     const dataGrid = container.querySelector('.MuiDataGrid-root');
     expect(dataGrid).toBeInTheDocument();
     expect(dataGrid).toHaveClass('MuiDataGrid-root');
-    expect(dataGrid).toHaveStyle({
-      backgroundColor: 'white',
-      borderRadius: '16px',
-    });
+
+    const styles = getComputedStyle(dataGrid as Element);
+    expect(styles.backgroundColor).toBe('rgb(255, 255, 255)');
+    expect(styles.borderRadius).toBe('16px');
   });
 
   test('Sort button container should have correct spacing', async () => {

@@ -6,9 +6,9 @@
 
 > `const` **MOCKS**: `object`[]
 
-Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L41)
+Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L48)
 
-## Type declaration
+## Type Declaration
 
 ### request
 
@@ -20,7 +20,11 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 #### request.variables
 
-> **variables**: `object` = `{}`
+> **variables**: `object`
+
+#### request.variables.eventId
+
+> **eventId**: `string` = `'event123'`
 
 ### result
 
@@ -36,4 +40,4 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 #### result.data.event.attendees
 
-> **attendees**: `object`[]
+> **attendees**: (\{ `avatarURL`: `any`; `birthDate`: `any`; `createdAt`: `string`; `emailAddress`: `string`; `eventsAttended`: `object`[]; `id`: `string`; `name`: `string`; `natalSex`: `any`; `role`: `string`; `tagsAssignedWith?`: `undefined`; \} \| \{ `avatarURL`: `any`; `birthDate`: `any`; `createdAt`: `string`; `emailAddress`: `string`; `eventsAttended`: `any`; `id`: `string`; `name`: `string`; `natalSex`: `any`; `role`: `string`; `tagsAssignedWith`: \{ `edges`: `object`[]; \}; \})[]

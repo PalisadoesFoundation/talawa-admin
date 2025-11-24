@@ -4,7 +4,7 @@ services:
       context: ..
       dockerfile: docker/Dockerfile.prod
     ports:
-      - '4321:4321'
+      - '${PORT:-4321}:80'
     env_file:
       - ../.env
     #environment:

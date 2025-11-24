@@ -125,6 +125,10 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
+    const agendaItems = Array.isArray(agendaItemData?.agendaItemByEvent)
+      ? agendaItemData?.agendaItemByEvent
+      : [];
+    const nextSequence = agendaItems.length + 1;
     try {
       await createAgendaItem({
         variables: {
@@ -133,7 +137,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
             description: formState.description,
             relatedEventId: eventId,
             organizationId: orgId,
-            sequence: (agendaItemData?.agendaItemByEvent.length || 0) + 1 || 1, // Assign sequence based on current length
+            sequence: nextSequence, // Assign sequence based on current length
             duration: formState.duration,
             categories: formState.agendaItemCategoryIds,
             attachments: formState.attachments,

@@ -56,7 +56,7 @@ export const MOCKS1 = [
           birthDate: '2000-01-01',
           city: 'nyc',
           countryCode: 'in',
-          createdAt: '2025-02-06T03:10:50.254',
+          createdAt: '2025-02-06T03:10:50.254Z',
           description: 'This is a description',
           educationGrade: 'grade_8',
           emailAddress: 'test221@gmail.com',
@@ -72,7 +72,7 @@ export const MOCKS1 = [
           postalCode: '11111111f',
           role: 'regular',
           state: 'State1',
-          updatedAt: '2025-02-06T03:22:17.808',
+          updatedAt: '2025-02-06T03:22:17.808Z',
           workPhoneNumber: '+9999999998',
           __typename: 'User',
         },
@@ -163,20 +163,4 @@ export const UPDATE_MOCK = [
       },
     },
   },
-];
-
-export const errorMock = [
-  {
-    request: {
-      query: UPDATE_CURRENT_USER_MUTATION,
-      variables: {
-        input: {
-          name: 'Bandhan',
-          mobilePhoneNumber: '1200',
-        },
-      },
-    },
-    error: new Error('Please enter a valid phone number'),
-  },
-  ...MOCKS1,
 ];

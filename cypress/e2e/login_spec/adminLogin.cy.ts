@@ -25,7 +25,7 @@ describe('Admin Login Functionality', () => {
 
         cy.visit('/admin');
         loginPage.verifyLoginPage().login(userData.email, 'wrongpassword');
-        cy.assertToastError('Not found');
+        cy.assertToast('Not found');
       });
     });
   });

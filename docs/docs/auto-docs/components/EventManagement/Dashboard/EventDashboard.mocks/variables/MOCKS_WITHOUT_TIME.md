@@ -8,7 +8,7 @@
 
 Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L36)
 
-## Type declaration
+## Type Declaration
 
 ### request
 

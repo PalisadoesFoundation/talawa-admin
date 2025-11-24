@@ -3,7 +3,7 @@
 #
 # NOTE!
 #
-# Please read the README.md file in this directory that defines what should 
+# Please read the README.md file in this directory that defines what should
 # be placed in this file
 #
 ##############################################################################
@@ -14,11 +14,11 @@ name: PUSH Workflow - All Branches
 on:
   push:
     branches:
-      - '**'   
-      
+      - '**'
+
 env:
-    CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
-  
+  CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
+
 jobs:
   Code-Coverage:
     if: ${{ github.actor != 'dependabot[bot]' }}
@@ -33,38 +33,38 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Cache node modules
-        id: cache-npm
-        uses: actions/cache@v4
-        env:
-          cache-name: cache-node-modules
+      - uses: pnpm/action-setup@v4
         with:
-          path: |
-            ~/.npm
-            node_modules
-          key: ${{ runner.os }}-code-coverage-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          version: 10.4.1
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        id: pnpm-cache
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-code-coverage-${{ env.cache-name }}-
-            ${{ runner.os }}-code-coverage-
-            ${{ runner.os }}-
-      
-      - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
-        name: List the state of node modules
-        run: npm install
-        
+            ${{ runner.os }}-pnpm-
+
+      - name: Install dependencies
+        run: pnpm install
+
       - name: Run Vitest Tests
         env:
           NODE_V8_COVERAGE: './coverage/vitest'
         run: |
-          npm run test:coverage
-        
+          pnpm run test:coverage
+
+      #######################################################################
+      # DO NOT DELETE ANY references to env.CODECOV_UNIQUE_NAME in this
+      # section. They are required for accurate calculations
+      #######################################################################
       - name: Present and upload coverage to Codecov as ${{env.CODECOV_UNIQUE_NAME}}
         uses: codecov/codecov-action@v5
         with:
+          name: '${{env.CODECOV_UNIQUE_NAME}}'
           token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
           verbose: true
           exclude: 'docs/'
           gcov_ignore: 'docs/'
           files: ./coverage/vitest/lcov.info
-          fail_ci_if_error: false
-          name: '${{env.CODECOV_UNIQUE_NAME}}'

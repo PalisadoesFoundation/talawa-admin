@@ -133,8 +133,8 @@ function groups(): JSX.Element {
         eventId: undefined,
         userId,
         orgId,
-        leaderName: searchBy === 'leader' ? searchTerm : null,
-        name_contains: searchBy === 'group' ? searchTerm : null,
+        leaderName: searchBy === 'leader' ? searchTerm : undefined,
+        name_contains: searchBy === 'group' ? searchTerm : undefined,
       },
       orderBy: sortBy,
     },
@@ -205,47 +205,31 @@ function groups(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const { _id, firstName, lastName, image } = params.row.leader;
+        const { id, name, avatarURL } = params.row.leader;
         return (
           <div
             className="d-flex fw-bold align-items-center ms-2"
             data-testid="leaderName"
           >
-            {image ? (
+            {avatarURL ? (
               <img
-                src={image}
+                src={avatarURL}
                 alt="Assignee"
-                data-testid={`image${_id + 1}`}
+                data-testid={`image${id + 1}`}
                 className={styles.TableImage}
               />
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
-                  key={_id + '1'}
+                  key={id + '1'}
                   containerStyle={styles.imageContainer}
                   avatarStyle={styles.TableImage}
-                  name={firstName + ' ' + lastName}
-                  alt={firstName + ' ' + lastName}
+                  name={name}
+                  alt={name}
                 />
               </div>
             )}
-            {firstName + ' ' + lastName}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'actions',
-      headerName: 'Actions Completed',
-      flex: 1,
-      align: 'center',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div className="d-flex justify-content-center fw-bold">
-            {params.row.assignments.length}
+            {name}
           </div>
         );
       },
@@ -288,7 +272,7 @@ function groups(): JSX.Element {
             >
               <i className="fa fa-info" />
             </Button>
-            {params.row.leader._id === userId && (
+            {params.row.leader.id === userId && (
               <Button
                 variant="success"
                 size="sm"
@@ -349,7 +333,7 @@ function groups(): JSX.Element {
         disableColumnMenu
         columnBufferPx={7}
         hideFooter={true}
-        getRowId={(row) => row._id}
+        getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
@@ -361,7 +345,7 @@ function groups(): JSX.Element {
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}
-        rows={groups.map((group, index) => ({ id: index + 1, ...group }))}
+        rows={groups}
         columns={columns}
         isRowSelectable={() => false}
       />
@@ -373,7 +357,7 @@ function groups(): JSX.Element {
             hide={() => closeModal(ModalState.EDIT)}
             refetchGroups={refetchGroups}
             group={group}
-            eventId={group.event._id}
+            eventId={group.event.id}
           />
           <VolunteerGroupViewModal
             isOpen={modalState[ModalState.VIEW]}

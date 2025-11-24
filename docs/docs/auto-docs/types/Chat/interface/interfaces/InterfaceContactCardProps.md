@@ -4,7 +4,7 @@
 
 # Interface: InterfaceContactCardProps
 
-Defined in: [src/types/Chat/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L17)
+Defined in: [src/types/Chat/interface.ts:117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L117)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Chat/interface.ts:17](https://github.com/PalisadoesFounda
 
 > **id**: `string`
 
-Defined in: [src/types/Chat/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L18)
+Defined in: [src/types/Chat/interface.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L118)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Chat/interface.ts:18](https://github.com/PalisadoesFounda
 
 > **image**: `string`
 
-Defined in: [src/types/Chat/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L20)
+Defined in: [src/types/Chat/interface.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L120)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Chat/interface.ts:20](https://github.com/PalisadoesFounda
 
 > **isGroup**: `boolean`
 
-Defined in: [src/types/Chat/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L23)
+Defined in: [src/types/Chat/interface.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L123)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Chat/interface.ts:23](https://github.com/PalisadoesFounda
 
 > **lastMessage**: `string`
 
-Defined in: [src/types/Chat/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L25)
+Defined in: [src/types/Chat/interface.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L125)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Chat/interface.ts:25](https://github.com/PalisadoesFounda
 
 > **selectedContact**: `string`
 
-Defined in: [src/types/Chat/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L21)
+Defined in: [src/types/Chat/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L121)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Chat/interface.ts:21](https://github.com/PalisadoesFounda
 
 > **setSelectedContact**: `Dispatch`\<`SetStateAction`\<`string`\>\>
 
-Defined in: [src/types/Chat/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L22)
+Defined in: [src/types/Chat/interface.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L122)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Chat/interface.ts:22](https://github.com/PalisadoesFounda
 
 > **title**: `string`
 
-Defined in: [src/types/Chat/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L19)
+Defined in: [src/types/Chat/interface.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L119)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/types/Chat/interface.ts:19](https://github.com/PalisadoesFounda
 
 > **unseenMessages**: `number`
 
-Defined in: [src/types/Chat/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L24)
+Defined in: [src/types/Chat/interface.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L124)
