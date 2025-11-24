@@ -66,7 +66,7 @@ describe('Minio Upload Integration', (): void => {
   });
 
   afterEach(() => {
-    vi.resetAllMocks();
+    vi.restoreAllMocks();
   });
 
   const successMocks = [

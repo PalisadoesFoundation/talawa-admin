@@ -14,6 +14,10 @@ import {
 } from './recurrenceTypes';
 
 describe('Recurrence Utility Functions', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   const startDate = new Date('2024-07-21T10:00:00.000Z');
 
   describe('validateRecurrenceInput', () => {

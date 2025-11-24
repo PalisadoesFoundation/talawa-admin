@@ -2,6 +2,10 @@ import { describe, it, expect } from 'vitest';
 import { validatePassword } from './passwordValidator';
 
 describe('validatePassword', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should return true for valid passwords', () => {
     const validPasswords = [
       'Password1!',

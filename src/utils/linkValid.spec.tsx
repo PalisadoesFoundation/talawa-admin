@@ -1,6 +1,10 @@
 import { isValidLink } from './linkValidator';
 
 describe('Testing link validator', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('returns true for a valid link', () => {
     const validLink = 'https://www.example.com';
     const result = isValidLink(validLink);
