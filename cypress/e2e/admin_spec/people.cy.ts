@@ -22,9 +22,10 @@ describe('Admin People Tab', () => {
   });
 
   it('add an existing member to the organization', () => {
+    const member = 'Praise Norris';
     peoplePage.clickAddExistingMember();
-    peoplePage.searchAndSelectUser('Praise Norris');
-    peoplePage.confirmAddUser();
+    peoplePage.searchAndSelectUser(member);
+    peoplePage.confirmAddUser(member);
   });
 
   it('delete a member from the organization', () => {
