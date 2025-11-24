@@ -248,6 +248,150 @@ export const MOCKS_INFINITE_SCROLL_PAGINATION = [
   },
 ];
 
+export const MOCKS_INFINITE_SCROLL_NULL_EDGES = [
+  {
+    request: {
+      query: USER_TAGS_ASSIGNED_MEMBERS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: '' },
+        },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        getAssignedUsers: {
+          __typename: 'UserTag',
+          name: 'tag1',
+          ancestorTags: [],
+          usersAssignedTo: {
+            __typename: 'UserTagUsersAssignedToConnection',
+            edges: null,
+            pageInfo: {
+              __typename: 'PageInfo',
+              startCursor: null,
+              endCursor: '1',
+              hasNextPage: true,
+              hasPreviousPage: false,
+            },
+            totalCount: 0,
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_TAGS_ASSIGNED_MEMBERS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: '1',
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: '' },
+        },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        getAssignedUsers: {
+          __typename: 'UserTag',
+          name: 'tag1',
+          ancestorTags: [],
+          usersAssignedTo: {
+            __typename: 'UserTagUsersAssignedToConnection',
+            edges: null,
+            pageInfo: {
+              __typename: 'PageInfo',
+              startCursor: null,
+              endCursor: '2',
+              hasNextPage: false,
+              hasPreviousPage: true,
+            },
+            totalCount: 0,
+          },
+        },
+      },
+    },
+  },
+];
+
+export const MOCKS_INFINITE_SCROLL_NULL_FETCH_RESULT = [
+  {
+    request: {
+      query: USER_TAGS_ASSIGNED_MEMBERS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: '' },
+        },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        getAssignedUsers: {
+          __typename: 'UserTag',
+          name: 'tag1',
+          ancestorTags: [],
+          usersAssignedTo: {
+            __typename: 'UserTagUsersAssignedToConnection',
+            edges: [
+              {
+                __typename: 'UserTagUsersAssignedToEdge',
+                node: {
+                  __typename: 'User',
+                  _id: '1',
+                  firstName: 'member',
+                  lastName: '1',
+                  id: '1',
+                },
+                cursor: '1',
+              },
+            ],
+            pageInfo: {
+              __typename: 'PageInfo',
+              startCursor: '1',
+              endCursor: '1',
+              hasNextPage: true,
+              hasPreviousPage: false,
+            },
+            totalCount: 2,
+          },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_TAGS_ASSIGNED_MEMBERS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: '1',
+        where: {
+          firstName: { starts_with: '' },
+          lastName: { starts_with: '' },
+        },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        getAssignedUsers: null,
+      },
+    },
+  },
+];
+
 export const MOCKS_ERROR_OBJECT = [
   {
     request: {
