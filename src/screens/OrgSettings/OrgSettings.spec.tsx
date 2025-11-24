@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 import React from 'react';
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { Provider } from 'react-redux';
@@ -14,21 +14,25 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import OrgSettings from './OrgSettings';
 import { MOCKS } from './OrgSettings.mocks';
 
+const routerMocks = vi.hoisted(() => ({
+  useParams: vi.fn(() => ({ orgId: 'orgId' })),
+}));
+
+vi.mock('react-router', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-router')>('react-router');
+  return {
+    ...actual,
+    useParams: routerMocks.useParams,
+  };
+});
+
 const link1 = new StaticMockLink(MOCKS);
-const mockRouterParams = (orgId: string | undefined): void => {
-  vi.doMock('react-router', async () => {
-    const actual = await vi.importActual('react-router');
-    return {
-      ...actual,
-      useParams: () => ({ orgId }),
-    };
-  });
-};
 const renderOrganisationSettings = (
   link = link1,
   orgId = 'orgId',
 ): ReturnType<typeof render> => {
-  mockRouterParams(orgId);
+  routerMocks.useParams.mockReturnValue({ orgId });
   return render(
     <MockedProvider addTypename={false} link={link}>
       <MemoryRouter initialEntries={[`/orgsetting/${orgId}`]}>
@@ -53,18 +57,18 @@ const renderOrganisationSettings = (
 };
 
 describe('Organisation Settings Page', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
+  });
+
   afterEach(() => {
-    vi.unmock('react-router');
+    vi.clearAllMocks();
   });
 
   const SetupRedirectTest = async (): Promise<ReactElement> => {
-    const useParamsMock = vi.fn(() => ({ orgId: undefined }));
-    vi.doMock('react-router', async () => {
-      const actual = await vi.importActual('react-router');
-      return {
-        ...actual,
-        useParams: useParamsMock,
-      };
+    routerMocks.useParams.mockReturnValue({
+      orgId: undefined as unknown as string,
     });
     const orgSettingsModule = await import('./OrgSettings');
     return <orgSettingsModule.default />;

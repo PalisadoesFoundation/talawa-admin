@@ -1,20 +1,27 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import OrganizationTransactions from './OrganizationTransactions';
 import i18nForTest from '../../utils/i18nForTest';
 
-vi.mock('plugin', () => ({
+const sharedMocks = vi.hoisted(() => ({
   PluginInjector: vi.fn(() => (
     <div data-testid="plugin-injector">Mock Plugin Injector</div>
   )),
 }));
 
+vi.mock('plugin', () => sharedMocks);
+
 describe('OrganizationTransactions', () => {
   beforeEach(() => {
     document.title = '';
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   const renderWithRouter = (initialEntry = '/org/123/transactions') => {

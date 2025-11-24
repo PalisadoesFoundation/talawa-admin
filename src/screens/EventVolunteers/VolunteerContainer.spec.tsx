@@ -12,7 +12,8 @@ import userEvent from '@testing-library/user-event';
 import { MOCKS } from './Volunteers/Volunteers.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { describe, it, beforeEach, expect, vi } from 'vitest';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { describe, it, beforeEach, afterEach, expect, vi } from 'vitest';
 
 /**
  * Unit tests for the `VolunteerContainer` component.
@@ -22,26 +23,36 @@ import { describe, it, beforeEach, expect, vi } from 'vitest';
  * All tests are covered.
  */
 
-vi.mock('react-i18next', async () => {
-  const actual = await vi.importActual('react-i18next');
+const { mockedUseParams, useTranslationMock } = vi.hoisted(() => {
+  const paramsMock = vi.fn();
+  paramsMock.mockReturnValue({ orgId: 'orgId', eventId: 'eventId' });
+
   return {
-    ...actual,
-    useTranslation: () => ({
+    mockedUseParams: paramsMock,
+    useTranslationMock: vi.fn(() => ({
       t: (key: string) => key,
       i18n: {
         changeLanguage: () => new Promise(() => {}),
       },
-    }),
+    })),
   };
 });
 
-const mockedUseParams = vi.fn();
-
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
+vi.mock('react-i18next', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-i18next')>('react-i18next');
   return {
     ...actual,
-    useParams: () => mockedUseParams(),
+    useTranslation: useTranslationMock,
+  };
+});
+
+vi.mock('react-router', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-router')>('react-router');
+  return {
+    ...actual,
+    useParams: mockedUseParams,
     Navigate: () => <div data-testid="paramsError">Navigated to root</div>,
   };
 });
@@ -51,7 +62,7 @@ const renderVolunteerContainer = (): RenderResult => {
     <MockedProvider addTypename={false} link={new StaticMockLink(MOCKS)}>
       <MemoryRouter initialEntries={['/event/orgId/eventId']}>
         <Provider store={store}>
-          <LocalizationProvider>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18n}>
               <VolunteerContainer />
             </I18nextProvider>
@@ -65,6 +76,11 @@ const renderVolunteerContainer = (): RenderResult => {
 describe('Testing Volunteer Container', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockedUseParams.mockReset();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {

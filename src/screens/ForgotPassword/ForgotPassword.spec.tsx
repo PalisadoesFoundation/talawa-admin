@@ -20,12 +20,14 @@ import { vi, beforeEach, afterEach, expect, it, describe } from 'vitest';
 
 const { setItem, removeItem } = useLocalStorage();
 
+const toastMocks = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+  warn: vi.fn(),
+}));
+
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-    warn: vi.fn(),
-  },
+  toast: toastMocks,
 }));
 
 const MOCKS = [
@@ -110,10 +112,12 @@ const translations = {
 };
 
 beforeEach(() => {
+  vi.clearAllMocks();
   setItem('IsLoggedIn', 'FALSE');
 });
 afterEach(() => {
   localStorage.clear();
+  vi.restoreAllMocks();
 });
 
 describe('Testing Forgot Password screen', () => {

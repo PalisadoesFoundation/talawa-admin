@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, expect, beforeAll, vi, it } from 'vitest';
+import { describe, expect, vi, it, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -12,14 +12,23 @@ import Settings from './Settings';
 import { toast } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalstorage';
 import { MOCKS1, MOCKS2 } from './SettingsMocks';
+import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 
-vi.mock('react-toastify', () => ({
+const sharedMocks = vi.hoisted(() => ({
   toast: { success: vi.fn(), warn: vi.fn(), error: vi.fn() },
+  errorHandler: vi.fn(),
+  urlToFile: vi.fn(),
 }));
 
-vi.mock('utils/errorHandler', () => ({ errorHandler: vi.fn() }));
+vi.mock('react-toastify', () => ({
+  toast: sharedMocks.toast,
+}));
 
-vi.mock('utils/urlToFile', () => ({ urlToFile: vi.fn() }));
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: sharedMocks.errorHandler,
+}));
+
+vi.mock('utils/urlToFile', () => ({ urlToFile: sharedMocks.urlToFile }));
 
 const link = new StaticMockLink(MOCKS1, true);
 const link1 = new StaticMockLink(MOCKS1, true);
@@ -36,8 +45,11 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+const originalMatchMedia = window.matchMedia;
+
 describe('Testing Settings Screen [User Portal]', () => {
-  beforeAll(() => {
+  beforeEach(() => {
+    localStorage.clear();
     const { setItem } = useLocalStorage();
     setItem('name', 'John Doe');
     vi.useFakeTimers();
@@ -51,6 +63,15 @@ describe('Testing Settings Screen [User Portal]', () => {
         removeEventListener: vi.fn(),
         dispatchEvent: vi.fn(),
       })),
+    });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    vi.useRealTimers();
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: originalMatchMedia,
     });
   });
 
@@ -213,6 +234,123 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     expect(toastSpy).toHaveBeenCalledWith(
       'Invalid file type. Please upload a JPEG, PNG, or GIF.',
+    );
+  });
+  it('validates file size correctly', async () => {
+    const toastSpy = vi.spyOn(toast, 'error');
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link1}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+
+    await wait();
+
+    const fileInput = screen.getByTestId('fileInput');
+
+    // Test large file
+    const largeFile = new File(['a'.repeat(5 * 1024 * 1024 + 1)], 'large.png', {
+      type: 'image/png',
+    });
+
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: [largeFile] } });
+    });
+
+    expect(toastSpy).toHaveBeenCalledWith(
+      'File is too large. Maximum size is 5MB.',
+    );
+  });
+
+  it('resets changes correctly', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={link1}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+
+    await wait();
+
+    const nameInput = screen.getByTestId('inputName');
+    const originalName = nameInput.getAttribute('value');
+
+    fireEvent.change(nameInput, { target: { value: 'New Name' } });
+    expect(nameInput).toHaveValue('New Name');
+
+    const resetButton = screen.getByTestId('resetChangesBtn');
+    fireEvent.click(resetButton);
+
+    expect(nameInput).toHaveValue(originalName);
+  });
+
+  it('updates user details successfully', async () => {
+    const updateMock = {
+      request: {
+        query: UPDATE_CURRENT_USER_MUTATION,
+        variables: {
+          input: {
+            name: 'Updated Name',
+          },
+        },
+      },
+      result: {
+        data: {
+          updateCurrentUser: {
+            id: '0194d80f-03cd-79cd-8135-683494b187a1',
+            name: 'Updated Name',
+            emailAddress: 'test@example.com',
+            avatarURL: 'http://avatar.url',
+            role: 'user',
+          },
+        },
+      },
+    };
+
+    // Create a link that includes MOCKS2 and the updateMock
+    const updateLink = new StaticMockLink([MOCKS2[0], updateMock], true);
+
+    await act(async () => {
+      render(
+        <MockedProvider addTypename={false} link={updateLink}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+
+    await wait();
+
+    const nameInput = screen.getByTestId('inputName');
+    fireEvent.change(nameInput, { target: { value: 'Updated Name' } });
+
+    const updateButton = screen.getByTestId('updateUserBtn');
+    fireEvent.click(updateButton);
+
+    await wait(2000); // Wait for mutation and toast
+
+    expect(toast.success).toHaveBeenCalledWith(
+      expect.stringContaining('Profile updated Successfully'),
     );
   });
 });
