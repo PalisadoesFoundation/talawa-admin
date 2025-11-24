@@ -8,9 +8,10 @@
 import React, { lazy, Suspense } from 'react';
 import { Route } from 'react-router-dom';
 import { usePluginRoutes } from '../hooks';
+import { dynamicImportPlugin } from '../utils';
 import type { IRouteExtension } from '../types';
 
-interface PluginRoutesProps {
+interface IPluginRoutesProps {
   userPermissions?: string[];
   isAdmin?: boolean;
   fallback?: React.ReactElement;
@@ -19,7 +20,7 @@ interface PluginRoutesProps {
 /**
  * Component that renders plugin routes dynamically
  */
-const PluginRoutes: React.FC<PluginRoutesProps> = ({
+const PluginRoutes: React.FC<IPluginRoutesProps> = ({
   userPermissions = [],
   isAdmin = false,
   fallback = <div>Loading plugin...</div>,
@@ -30,16 +31,17 @@ const PluginRoutes: React.FC<PluginRoutesProps> = ({
   const renderPluginRoute = (route: IRouteExtension) => {
     // Dynamically import the plugin's main entry point and get the specific component
     const PluginComponent = lazy(() =>
-      import(/* @vite-ignore */ `/plugins/${route.pluginId}/index.ts`)
-        .then((module) => {
+      dynamicImportPlugin(route.pluginId || '')
+        .then((module: unknown) => {
           // Try to get the named export first, then default export
-          const Component = module[route.component] || module.default;
+          const moduleObj = module as Record<string, unknown>;
+          const Component = moduleObj[route.component] || moduleObj.default;
           if (!Component) {
             throw new Error(
               `Component '${route.component}' not found in plugin '${route.pluginId}'`,
             );
           }
-          return { default: Component };
+          return { default: Component as React.ComponentType<unknown> };
         })
         .catch((error) => {
           console.error(

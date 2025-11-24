@@ -3,38 +3,26 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import PluginRoutes from '../../routes/PluginRoutes';
 import { usePluginRoutes } from '../../hooks';
+import { dynamicImportPlugin } from '../../utils';
+import React from 'react';
 
 // Mock the hooks
 vi.mock('../../hooks', () => ({
   usePluginRoutes: vi.fn(),
 }));
 
-// Mock React.lazy and Suspense
-const mockLazyComponent = vi.fn();
-vi.mock('react', async () => {
-  const actual = await vi.importActual('react');
+// Mock the utils
+vi.mock('../../utils', async () => {
+  const actual =
+    await vi.importActual<typeof import('../../utils')>('../../utils');
   return {
     ...actual,
-    lazy: vi.fn((importFn) => {
-      mockLazyComponent.mockImplementation(importFn);
-      return vi.fn(() => (
-        <div data-testid="lazy-component">Lazy Component</div>
-      ));
-    }),
-    Suspense: ({
-      children,
-      fallback,
-    }: {
-      children: React.ReactNode;
-      fallback: React.ReactNode;
-    }) => (
-      <div data-testid="suspense">
-        {fallback}
-        {children}
-      </div>
-    ),
+    dynamicImportPlugin: vi.fn(),
   };
 });
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react/no-multi-comp */
 
 // Mock Route component
 vi.mock('react-router-dom', async () => {
@@ -50,6 +38,7 @@ vi.mock('react-router-dom', async () => {
 });
 
 const mockUsePluginRoutes = vi.mocked(usePluginRoutes);
+const mockDynamicImportPlugin = vi.mocked(dynamicImportPlugin);
 
 // Test wrapper component
 const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -59,6 +48,11 @@ const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
 describe('PluginRoutes', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Default mock implementation for dynamicImportPlugin to return a promise
+    // This prevents "Cannot read properties of undefined (reading 'then')" errors
+    mockDynamicImportPlugin.mockResolvedValue({
+      default: () => <div>Default Component</div>,
+    });
   });
 
   afterEach(() => {
@@ -210,7 +204,7 @@ describe('PluginRoutes', () => {
         </TestWrapper>,
       );
 
-      expect(screen.getByTestId('suspense')).toBeInTheDocument();
+      // Should show loading state initially
       expect(screen.getByText('Loading plugin...')).toBeInTheDocument();
     });
 
@@ -239,7 +233,7 @@ describe('PluginRoutes', () => {
       expect(screen.getByText('Custom Loading...')).toBeInTheDocument();
     });
 
-    it('should create lazy components for each route', () => {
+    it('should create lazy components for each route', async () => {
       const mockRoutes = [
         {
           pluginId: 'test-plugin',
@@ -257,8 +251,13 @@ describe('PluginRoutes', () => {
         </TestWrapper>,
       );
 
-      // The lazy component should be created and rendered
-      expect(screen.getByTestId('lazy-component')).toBeInTheDocument();
+      // Should show loading initially
+      expect(screen.getByText('Loading plugin...')).toBeInTheDocument();
+
+      // Should eventually render the default component from mockDynamicImportPlugin
+      await waitFor(() => {
+        expect(screen.getByText('Default Component')).toBeInTheDocument();
+      });
     });
   });
 
@@ -281,13 +280,13 @@ describe('PluginRoutes', () => {
         </TestWrapper>,
       );
 
-      // Should render the route structure with suspense wrapper
+      // Should render the route structure
       expect(screen.getByTestId('route-/error')).toBeInTheDocument();
-      expect(screen.getByTestId('suspense')).toBeInTheDocument();
+      // Should show loading state
       expect(screen.getByText('Loading plugin...')).toBeInTheDocument();
     });
 
-    it('should handle routes with non-existent components', () => {
+    it('should handle routes with non-existent components', async () => {
       const mockRoutes = [
         {
           pluginId: 'test-plugin',
@@ -299,6 +298,9 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
+      // Mock import to return module with NO exports (neither named nor default)
+      mockDynamicImportPlugin.mockResolvedValue({});
+
       render(
         <TestWrapper>
           <PluginRoutes />
@@ -307,7 +309,19 @@ describe('PluginRoutes', () => {
 
       // Should still render the route structure
       expect(screen.getByTestId('route-/test')).toBeInTheDocument();
-      expect(screen.getByTestId('suspense')).toBeInTheDocument();
+
+      // Wait for the error to be caught and fallback rendered
+
+      // Note: We need to suppress console.error for this test as it will log an error
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      await waitFor(() => {
+        expect(screen.getByText('Plugin Error')).toBeInTheDocument();
+      });
+
+      consoleSpy.mockRestore();
     });
 
     it('should render fallback loading state', () => {
@@ -500,6 +514,119 @@ describe('PluginRoutes', () => {
       );
 
       expect(screen.getByTestId('route-/long')).toBeInTheDocument();
+    });
+  });
+
+  describe('Mocked Dynamic Import Tests for Full Coverage', () => {
+    it('should successfully load plugin and render component', async () => {
+      const mockRoutes = [
+        {
+          pluginId: 'success-plugin',
+          path: '/success',
+          component: 'SuccessComponent',
+          title: 'Success Route',
+          permissions: ['user'],
+        },
+      ];
+      mockUsePluginRoutes.mockReturnValue(mockRoutes);
+
+      // Mock successful import
+      mockDynamicImportPlugin.mockResolvedValue({
+        SuccessComponent: () => <div data-testid="success-comp">Success</div>,
+      });
+
+      render(
+        <TestWrapper>
+          <PluginRoutes />
+        </TestWrapper>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId('success-comp')).toBeInTheDocument();
+      });
+    });
+
+    it('should hit line 38: throw error when component not found in loaded module', async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      const mockRoutes = [
+        {
+          pluginId: 'missing-comp-plugin',
+          path: '/missing-comp',
+          component: 'MissingComponent',
+          title: 'Missing Component Route',
+          permissions: ['user'],
+        },
+      ];
+      mockUsePluginRoutes.mockReturnValue(mockRoutes);
+
+      // Mock successful import but missing the requested component
+      mockDynamicImportPlugin.mockResolvedValue({
+        OtherComponent: () => <div>Other</div>,
+      });
+
+      render(
+        <TestWrapper>
+          <PluginRoutes />
+        </TestWrapper>,
+      );
+
+      // Should log error and render fallback
+      await waitFor(() => {
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          expect.stringContaining('Failed to load plugin component'),
+          expect.any(Error),
+        );
+      });
+
+      // Verify the error message contains the specific text from line 38
+      const errorArg = consoleErrorSpy.mock.calls[0][1];
+      expect(errorArg.message).toContain(
+        "Component 'MissingComponent' not found in plugin 'missing-comp-plugin'",
+      );
+
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('should hit line 52: render error fallback with margin style', async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      const mockRoutes = [
+        {
+          pluginId: 'error-plugin',
+          path: '/error',
+          component: 'ErrorComponent',
+          title: 'Error Route',
+          permissions: ['user'],
+        },
+      ];
+      mockUsePluginRoutes.mockReturnValue(mockRoutes);
+
+      // Mock failed import
+      mockDynamicImportPlugin.mockRejectedValue(new Error('Network error'));
+
+      render(
+        <TestWrapper>
+          <PluginRoutes />
+        </TestWrapper>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('Plugin Error')).toBeInTheDocument();
+      });
+
+      // Find the error container and check for margin style (Line 52)
+      // The error container is the parent of the h3 "Plugin Error"
+      const errorHeader = screen.getByText('Plugin Error');
+      const errorContainer = errorHeader.parentElement;
+
+      expect(errorContainer).toHaveStyle({ margin: '20px' });
+
+      consoleErrorSpy.mockRestore();
     });
   });
 });

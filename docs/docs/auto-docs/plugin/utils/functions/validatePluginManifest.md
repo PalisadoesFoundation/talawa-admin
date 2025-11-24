@@ -12,7 +12,7 @@ Defined in: [src/plugin/utils.ts:7](https://github.com/PalisadoesFoundation/tala
 
 ### manifest
 
-`any`
+`unknown`
 
 ## Returns
 

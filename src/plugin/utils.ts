@@ -4,24 +4,31 @@
 
 import { IPluginManifest, IDrawerExtension } from './types';
 
-export function validatePluginManifest(manifest: any): boolean {
+export function validatePluginManifest(manifest: unknown): boolean {
   if (!manifest || typeof manifest !== 'object') return false;
+
+  // Type guard to narrow the type
+  const manifestObj = manifest as Record<string, unknown>;
+
   const hasBasicFields =
-    typeof manifest === 'object' &&
-    typeof manifest.name === 'string' &&
-    typeof manifest.pluginId === 'string' &&
-    typeof manifest.version === 'string' &&
-    typeof manifest.description === 'string' &&
-    typeof manifest.author === 'string' &&
-    typeof manifest.main === 'string';
+    typeof manifestObj.name === 'string' &&
+    typeof manifestObj.pluginId === 'string' &&
+    typeof manifestObj.version === 'string' &&
+    typeof manifestObj.description === 'string' &&
+    typeof manifestObj.author === 'string' &&
+    typeof manifestObj.main === 'string';
 
   if (!hasBasicFields) {
     return false;
   }
 
   // Validate extension points if they exist
-  if (manifest.extensionPoints) {
-    const { routes, drawer } = manifest.extensionPoints;
+  if (manifestObj.extensionPoints) {
+    const extensionPoints = manifestObj.extensionPoints as Record<
+      string,
+      unknown
+    >;
+    const { routes, drawer } = extensionPoints;
 
     // Validate routes if they exist
     if (routes && !Array.isArray(routes)) {
@@ -34,18 +41,20 @@ export function validatePluginManifest(manifest: any): boolean {
     }
 
     // Validate each route extension
-    if (routes) {
+    if (routes && Array.isArray(routes)) {
       for (const route of routes) {
-        if (!route.pluginId || !route.path || !route.component) {
+        const routeObj = route as Record<string, unknown>;
+        if (!routeObj.pluginId || !routeObj.path || !routeObj.component) {
           return false;
         }
       }
     }
 
     // Validate each drawer extension
-    if (drawer) {
+    if (drawer && Array.isArray(drawer)) {
       for (const item of drawer) {
-        if (!item.pluginId || !item.label || !item.path) {
+        const itemObj = item as Record<string, unknown>;
+        if (!itemObj.pluginId || !itemObj.label || !itemObj.path) {
           return false;
         }
       }
@@ -83,3 +92,11 @@ export function filterByPermissions<
     );
   });
 }
+
+/**
+ * Dynamically imports a plugin module
+ * Extracted for better testability
+ */
+export const dynamicImportPlugin = (pluginId: string) => {
+  return import(/* @vite-ignore */ `/plugins/${pluginId}/index.ts`);
+};
