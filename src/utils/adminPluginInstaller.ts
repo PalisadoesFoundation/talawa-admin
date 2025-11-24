@@ -1,12 +1,25 @@
 import JSZip from 'jszip';
-import { toast } from 'react-toastify';
 import {
   UPLOAD_PLUGIN_ZIP_MUTATION,
   CREATE_PLUGIN_MUTATION,
 } from '../GraphQl/Mutations/PluginMutations';
-import { adminPluginFileService } from '../plugin/services/AdminPluginFileService';
+import { adminPluginFileService } from 'plugin/services/AdminPluginFileService';
 
-export interface AdminPluginManifest {
+interface ICreatePluginMutationResponse {
+  data?: {
+    createPlugin?: {
+      pluginId: string;
+    };
+  };
+}
+
+interface IUploadPluginZipResponse {
+  data?: {
+    uploadPluginZip?: boolean;
+  };
+}
+
+export interface IAdminPluginManifest {
   name: string;
   version: string;
   description: string;
@@ -23,194 +36,168 @@ export interface AdminPluginManifest {
   };
 }
 
-export interface AdminPluginZipStructure {
+export interface IAdminPluginZipStructure {
   hasAdminFolder: boolean;
   hasApiFolder: boolean;
-  adminManifest?: AdminPluginManifest;
-  apiManifest?: AdminPluginManifest;
+  adminManifest?: IAdminPluginManifest;
+  apiManifest?: IAdminPluginManifest;
   pluginId?: string;
   files: Record<string, string>;
   apiFiles?: string[];
 }
 
-export interface AdminPluginInstallationResult {
+export interface IAdminPluginInstallationResult {
   success: boolean;
   pluginId: string;
-  manifest: AdminPluginManifest;
+  manifest?: IAdminPluginManifest;
   installedComponents: string[];
   error?: string;
 }
 
-export interface AdminPluginInstallationOptions {
-  zipFile: File;
-  backup?: boolean;
-  apolloClient?: any;
+export interface IAdminApolloClient {
+  mutate(options: {
+    mutation: unknown;
+    variables?: Record<string, unknown>;
+  }): Promise<{ data?: unknown }>;
 }
 
-/**
- * Validates the structure of a plugin zip file (supports both admin and API)
- */
+export interface IAdminPluginInstallationOptions {
+  zipFile: File;
+  backup?: boolean;
+  apolloClient?: IAdminApolloClient;
+}
+
 export async function validateAdminPluginZip(
   zipFile: File,
-): Promise<AdminPluginZipStructure> {
+): Promise<IAdminPluginZipStructure> {
   const zip = new JSZip();
   const zipContent = await zip.loadAsync(zipFile);
 
-  const structure: AdminPluginZipStructure = {
+  const structure: IAdminPluginZipStructure = {
     hasAdminFolder: false,
     hasApiFolder: false,
     files: {},
   };
 
-  // Check for admin folder structure
+  // ADMIN FOLDER
   const adminFiles = Object.keys(zipContent.files).filter(
-    (fileName) => fileName.startsWith('admin/') && !fileName.endsWith('/'),
+    (f) => f.startsWith('admin/') && !f.endsWith('/'),
   );
 
   if (adminFiles.length > 0) {
     structure.hasAdminFolder = true;
 
-    // Load all admin files
     for (const fileName of adminFiles) {
       const file = zipContent.file(fileName);
       if (file) {
-        const relativePath = fileName.substring(6); // Remove "admin/" prefix
-
-        // Check if this is a binary asset file
-        const isBinaryAsset =
+        const rel = fileName.substring(6);
+        const isBinary =
           /\.(png|jpg|jpeg|gif|svg|ico|webp|pdf|zip|tar|gz)$/i.test(fileName);
 
-        if (isBinaryAsset) {
-          // Handle binary files - store as base64 for now
-          const binaryContent = await file.async('base64');
-          structure.files[relativePath] =
-            `data:application/octet-stream;base64,${binaryContent}`;
-        } else {
-          // Handle text files normally
-          const content = await file.async('string');
-          structure.files[relativePath] = content;
-        }
+        structure.files[rel] = isBinary
+          ? `data:application/octet-stream;base64,${await file.async('base64')}`
+          : await file.async('string');
       }
     }
 
-    // Check for admin manifest
+    // MANIFEST
     const manifestFile = zipContent.file('admin/manifest.json');
-    if (manifestFile) {
-      const manifestContent = await manifestFile.async('string');
-      try {
-        const manifest = JSON.parse(manifestContent) as AdminPluginManifest;
-
-        // Validate required fields
-        const requiredFields = [
-          'name',
-          'version',
-          'description',
-          'author',
-          'main',
-          'pluginId',
-        ];
-        const missingFields = requiredFields.filter(
-          (field) => !manifest[field as keyof AdminPluginManifest],
-        );
-
-        if (missingFields.length > 0) {
-          throw new Error(
-            `Missing required fields in admin manifest.json: ${missingFields.join(', ')}`,
-          );
-        }
-
-        structure.adminManifest = manifest;
-        structure.pluginId = manifest.pluginId;
-      } catch (error) {
-        throw new Error('Invalid admin manifest.json');
-      }
-    } else {
+    if (!manifestFile) {
       throw new Error('admin/manifest.json not found in the plugin ZIP');
+    }
+
+    try {
+      const manifestJson = await manifestFile.async('string');
+      const manifest = JSON.parse(manifestJson) as IAdminPluginManifest;
+
+      const required: Array<keyof IAdminPluginManifest> = [
+        'name',
+        'version',
+        'description',
+        'author',
+        'main',
+        'pluginId',
+      ];
+
+      const missing = required.filter((k) => !manifest[k]);
+      if (missing.length > 0) {
+        throw new Error(
+          `Missing required fields in admin manifest.json: ${missing.join(
+            ', ',
+          )}`,
+        );
+      }
+
+      structure.adminManifest = manifest;
+      structure.pluginId = manifest.pluginId;
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      throw new Error(`Invalid admin manifest.json: ${msg}`);
     }
   }
 
-  // Check for API folder structure
+  // API FOLDER
   const apiFiles = Object.keys(zipContent.files).filter(
-    (fileName) => fileName.startsWith('api/') && !fileName.endsWith('/'),
+    (f) => f.startsWith('api/') && !f.endsWith('/'),
   );
 
   if (apiFiles.length > 0) {
     structure.hasApiFolder = true;
+    structure.apiFiles = apiFiles.map((f) => f.substring(4));
 
-    // Store API file paths for display
-    structure.apiFiles = apiFiles.map((fileName) => fileName.substring(4)); // Remove "api/" prefix
-
-    // Check for API manifest
     const apiManifestFile = zipContent.file('api/manifest.json');
-    if (apiManifestFile) {
-      const apiManifestContent = await apiManifestFile.async('string');
-      try {
-        const apiManifest = JSON.parse(
-          apiManifestContent,
-        ) as AdminPluginManifest;
-
-        // Validate required fields
-        const requiredFields = [
-          'name',
-          'version',
-          'description',
-          'author',
-          'main',
-          'pluginId',
-        ];
-        const missingFields = requiredFields.filter(
-          (field) => !apiManifest[field as keyof AdminPluginManifest],
-        );
-
-        if (missingFields.length > 0) {
-          throw new Error(
-            `Missing required fields in api manifest.json: ${missingFields.join(', ')}`,
-          );
-        }
-
-        structure.apiManifest = apiManifest;
-
-        // Ensure both manifests have the same plugin ID
-        if (structure.pluginId && structure.pluginId !== apiManifest.pluginId) {
-          throw new Error(
-            'Admin and API manifests must have the same pluginId',
-          );
-        }
-
-        if (!structure.pluginId) {
-          structure.pluginId = apiManifest.pluginId;
-        }
-      } catch (error) {
-        throw new Error('Invalid api manifest.json');
-      }
-    } else {
+    if (!apiManifestFile) {
       throw new Error('api/manifest.json not found in the plugin ZIP');
+    }
+
+    try {
+      const manifestJson = await apiManifestFile.async('string');
+      const apiManifest = JSON.parse(manifestJson) as IAdminPluginManifest;
+
+      const required: Array<keyof IAdminPluginManifest> = [
+        'name',
+        'version',
+        'description',
+        'author',
+        'main',
+        'pluginId',
+      ];
+
+      const missing = required.filter((k) => !apiManifest[k]);
+      if (missing.length > 0) {
+        throw new Error(
+          `Missing required fields in api manifest.json: ${missing.join(', ')}`,
+        );
+      }
+
+      structure.apiManifest = apiManifest;
+
+      // Ensure IDs match
+      if (structure.pluginId && structure.pluginId !== apiManifest.pluginId) {
+        throw new Error('Admin and API manifests must have the same pluginId');
+      }
+
+      if (!structure.pluginId) {
+        structure.pluginId = apiManifest.pluginId;
+      }
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : 'Unknown error';
+      throw new Error(`Invalid api manifest.json: ${msg}`);
     }
   }
 
   return structure;
 }
 
-/**
- * Validates admin plugin structure
- */
-export function validateAdminPluginStructure(files: Record<string, string>): {
-  valid: boolean;
-  error?: string;
-} {
-  // Check for required manifest.json
+export function validateAdminPluginStructure(files: Record<string, string>) {
   if (!files['manifest.json']) {
-    return {
-      valid: false,
-      error: 'manifest.json is required',
-    };
+    return { valid: false, error: 'manifest.json is required' };
   }
 
-  // Validate manifest.json format
   try {
     const manifest = JSON.parse(files['manifest.json']);
 
-    const requiredFields = [
+    const required = [
       'name',
       'pluginId',
       'version',
@@ -218,137 +205,100 @@ export function validateAdminPluginStructure(files: Record<string, string>): {
       'author',
       'main',
     ];
-    for (const field of requiredFields) {
-      if (!manifest[field]) {
-        return {
-          valid: false,
-          error: `Missing required field in manifest.json: ${field}`,
-        };
+
+    for (const f of required) {
+      if (!manifest[f]) {
+        return { valid: false, error: `Missing required field: ${f}` };
       }
     }
 
-    // Check if main file exists
     if (!files[manifest.main]) {
-      return {
-        valid: false,
-        error: `Main file not found: ${manifest.main}`,
-      };
+      return { valid: false, error: `Main file not found: ${manifest.main}` };
     }
 
     return { valid: true };
-  } catch (error) {
-    return {
-      valid: false,
-      error: 'Invalid manifest.json format',
-    };
+  } catch {
+    return { valid: false, error: 'Invalid manifest.json format' };
   }
 }
 
-/**
- * Installs a plugin from a zip file (supports both admin and API)
- * Flow: 1) Create plugin in DB, 2) Install files, 3) Installation is handled separately
- */
-export async function installAdminPluginFromZip({
-  zipFile,
-  apolloClient,
-}: AdminPluginInstallationOptions): Promise<AdminPluginInstallationResult> {
+export async function installAdminPluginFromZip(
+  options: IAdminPluginInstallationOptions,
+): Promise<IAdminPluginInstallationResult> {
+  const { zipFile, apolloClient } = options;
+
   try {
-    // Validate zip structure
     const structure = await validateAdminPluginZip(zipFile);
 
-    // Validate that the zip contains at least admin or API folder
-    if (!structure.hasAdminFolder && !structure.hasApiFolder) {
-      return {
-        success: false,
-        pluginId: '',
-        manifest: {} as AdminPluginManifest,
-        installedComponents: [],
-        error:
-          "Zip file must contain either 'admin' or 'api' folder with valid plugin structure",
-      };
+    if (!structure.pluginId) {
+      throw new Error('pluginId missing in plugin ZIP');
     }
 
-    const pluginId = structure.pluginId!;
-    const manifest = structure.adminManifest || structure.apiManifest!;
+    const pluginId = structure.pluginId;
+
+    // Choose manifest defensively; if none, fail early.
+    const manifest = structure.adminManifest ?? structure.apiManifest;
+    if (!manifest) {
+      throw new Error('No valid manifest (admin or api) found in plugin ZIP');
+    }
+
     const installedComponents: string[] = [];
 
-    // STEP 1: Create plugin in database first (basic entry with isInstalled: false)
+    // STEP 1: Create plugin in DB
     if (apolloClient) {
       try {
-        await apolloClient.mutate({
+        const resp = (await apolloClient.mutate({
           mutation: CREATE_PLUGIN_MUTATION,
-          variables: {
-            input: {
-              pluginId: pluginId,
-            },
-          },
-        });
+          variables: { input: { pluginId } },
+        })) as ICreatePluginMutationResponse;
+
+        // Response intentionally unused — mutation only needs to succeed
+        void resp;
       } catch (error) {
-        console.error('Failed to create plugin in database:', error);
-        // If plugin already exists in DB, that's okay, continue
-        if (
-          !(error instanceof Error) ||
-          !error.message?.includes('already exists')
-        ) {
+        const msg = error instanceof Error ? error.message : '';
+        if (!msg.includes('already exists')) {
           throw new Error(
-            `Failed to create plugin in database: ${error instanceof Error ? error.message : 'Unknown error'}`,
+            `Failed to create plugin in database: ${msg || 'Unknown error'}`,
           );
         }
       }
     }
 
-    // STEP 2: Install API component if present (this will handle file upload)
+    // STEP 2: Install API part
     if (structure.hasApiFolder && apolloClient) {
       try {
-        const result = await apolloClient.mutate({
+        const resp = (await apolloClient.mutate({
           mutation: UPLOAD_PLUGIN_ZIP_MUTATION,
-          variables: {
-            input: {
-              pluginZip: zipFile,
-              activate: false, // Don't activate yet
-            },
-          },
-        });
+          variables: { input: { pluginZip: zipFile, activate: false } },
+        })) as IUploadPluginZipResponse;
 
-        if (result.data?.uploadPluginZip) {
+        if (resp.data?.uploadPluginZip) {
           installedComponents.push('API');
         }
       } catch (error) {
-        console.error('Failed to install API component:', error);
-        throw new Error(
-          `Failed to install API component: ${error instanceof Error ? error.message : 'Unknown error'}`,
-        );
+        const msg = error instanceof Error ? error.message : '';
+        throw new Error(`Failed to install API component: ${msg}`);
       }
     }
 
-    // STEP 3: Install admin component if present (write files to available folder via server)
+    // STEP 3: Install Admin part
     if (structure.hasAdminFolder) {
-      try {
-        // Validate admin plugin structure
-        const validation = validateAdminPluginStructure(structure.files);
-        if (!validation.valid) {
-          throw new Error(
-            `Invalid admin plugin structure: ${validation.error}`,
-          );
-        }
+      const validation = validateAdminPluginStructure(structure.files);
 
-        // Use internal plugin file service to write files
-        const result = await adminPluginFileService.installPlugin(
-          pluginId,
-          structure.files,
-        );
-
-        if (!result.success) {
-          throw new Error(`Failed to install admin plugin: ${result.error}`);
-        }
-
-        // Plugin manager will automatically discover this plugin via GraphQL
-        // and load it from the available folder
-        installedComponents.push('Admin');
-      } catch (error) {
-        console.error('Failed to install admin component:', error);
-        throw error;
+      if (!validation.valid) {
+        throw new Error(`Invalid admin structure: ${validation.error}`);
       }
+
+      const result = await adminPluginFileService.installPlugin(
+        pluginId,
+        structure.files,
+      );
+
+      if (!result.success) {
+        throw new Error(`Failed to install admin plugin: ${result.error}`);
+      }
+
+      installedComponents.push('Admin');
     }
 
     return {
@@ -357,56 +307,43 @@ export async function installAdminPluginFromZip({
       manifest,
       installedComponents,
     };
-  } catch (error) {
-    console.error('Plugin upload failed:', error);
+  } catch (err) {
     return {
       success: false,
       pluginId: '',
-      manifest: {} as AdminPluginManifest,
+      manifest: {} as IAdminPluginManifest,
       installedComponents: [],
-      error: error instanceof Error ? error.message : 'Failed to upload plugin',
+      error: err instanceof Error ? err.message : 'Failed to upload plugin',
     };
   }
 }
 
-/**
- * Gets all installed admin plugins from the file system via server API
- */
-export async function getInstalledAdminPlugins(): Promise<
-  Array<{
-    pluginId: string;
-    manifest: AdminPluginManifest;
-    installedAt: string;
-  }>
-> {
+export async function getInstalledAdminPlugins() {
   try {
     const plugins = await adminPluginFileService.getInstalledPlugins();
-    return plugins.map((plugin) => ({
-      pluginId: plugin.pluginId,
-      manifest: plugin.manifest,
-      installedAt: plugin.installedAt,
+
+    return plugins.map((p) => ({
+      pluginId: p.pluginId,
+      manifest: p.manifest,
+      installedAt: p.installedAt,
     }));
   } catch (error) {
-    console.error('Failed to get installed admin plugins:', error);
+    console.error('Failed to get installed plugins:', error);
     return [];
   }
 }
 
-/**
- * Removes an admin plugin from the file system via server API
- */
-export async function removeAdminPlugin(pluginId: string): Promise<boolean> {
+export async function removeAdminPlugin(pluginId: string) {
   try {
-    const success = await adminPluginFileService.removePlugin(pluginId);
-
-    if (success) {
-      return true;
-    } else {
-      console.error(`Failed to remove admin plugin ${pluginId}`);
-      return false;
-    }
+    return await adminPluginFileService.removePlugin(pluginId);
   } catch (error) {
-    console.error(`Failed to remove admin plugin ${pluginId}:`, error);
+    console.error(`Failed to remove plugin ${pluginId}:`, error);
     return false;
   }
 }
+
+// Backward compatibility for old imports
+export type AdminPluginManifest = IAdminPluginManifest;
+export type AdminPluginZipStructure = IAdminPluginZipStructure;
+export type AdminPluginInstallationResult = IAdminPluginInstallationResult;
+export type AdminPluginInstallationOptions = IAdminPluginInstallationOptions;

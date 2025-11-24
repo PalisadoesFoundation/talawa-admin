@@ -6,9 +6,7 @@
 
 > **removeAdminPlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/utils/adminPluginInstaller.ts:398](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L398)
-
-Removes an admin plugin from the file system via server API
+Defined in: [src/utils/adminPluginInstaller.ts:336](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L336)
 
 ## Parameters
 

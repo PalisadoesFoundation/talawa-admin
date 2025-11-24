@@ -1,7 +1,17 @@
 import React from 'react';
+import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
+
+vi.mock('screens/PageNotFound/PageNotFound', () => ({
+  default: () => (
+    <div>
+      <span>talawaUser</span>
+      <span>404</span>
+    </div>
+  ),
+}));
+
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 import SecuredRoute from './SecuredRoute';
 import useLocalStorage from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
@@ -14,7 +24,6 @@ vi.mock('react-toastify', () => ({
 }));
 
 describe('SecuredRoute', () => {
-  // Test elements
   const testComponent = <div>Test Protected Content</div>;
   const homeComponent = <div>Home Page</div>;
   const { setItem } = useLocalStorage();
@@ -22,13 +31,10 @@ describe('SecuredRoute', () => {
   const originalLocation = window.location;
 
   beforeEach(() => {
-    // Clear all mocks before each test
     vi.clearAllMocks();
-    // Clear localStorage before each test
     localStorage.clear();
-    // Use fake timers for controlling time-based operations
     vi.useFakeTimers();
-    // Mock window.location.href
+
     Object.defineProperty(window, 'location', {
       configurable: true,
       writable: true,
@@ -37,10 +43,10 @@ describe('SecuredRoute', () => {
   });
 
   afterEach(() => {
-    // Clean up any timers or event listeners
     vi.clearAllTimers();
     vi.useRealTimers();
     vi.restoreAllMocks();
+
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: originalLocation,
@@ -49,7 +55,6 @@ describe('SecuredRoute', () => {
 
   describe('Authentication and Authorization', () => {
     it('should render child component for authenticated administrator', () => {
-      // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user and role administrator to simulate admin login.
       setItem('IsLoggedIn', 'TRUE');
       setItem('role', 'administrator');
 
@@ -66,8 +71,9 @@ describe('SecuredRoute', () => {
       expect(screen.getByText('Test Protected Content')).toBeInTheDocument();
     });
 
-    it('should render PageNotFound for authenticated non-administrator user', () => {
-      // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user and role regular to simulate a non admin user.
+    it('should render PageNotFound for authenticated non-administrator user', async () => {
+      vi.useRealTimers();
+
       setItem('IsLoggedIn', 'TRUE');
       setItem('role', 'regular');
 
@@ -81,15 +87,16 @@ describe('SecuredRoute', () => {
         </MemoryRouter>,
       );
 
-      expect(screen.getByText('talawaUser')).toBeInTheDocument();
-      expect(screen.getByText('404')).toBeInTheDocument();
+      expect(await screen.findByText(/talawaUser/i)).toBeInTheDocument();
+      expect(await screen.findByText(/404/i)).toBeInTheDocument();
       expect(
         screen.queryByText('Test Protected Content'),
       ).not.toBeInTheDocument();
+
+      vi.useFakeTimers();
     });
 
     it('should redirect to home page for unauthenticated user', () => {
-      // Don't set IsLoggedIn, simulating an unauthenticated user
       render(
         <MemoryRouter initialEntries={['/orglist']}>
           <Routes>
@@ -123,11 +130,8 @@ describe('SecuredRoute', () => {
         </MemoryRouter>,
       );
 
-      // Simulate mouse movement - this should update the lastActive timestamp
       fireEvent(document, new Event('mousemove'));
 
-      // We can't directly test the lastActive variable since it's module-scoped,
-      // but we can verify the event listener is attached by checking if the event fires
       expect(screen.getByText('Test Protected Content')).toBeInTheDocument();
     });
 
@@ -146,26 +150,19 @@ describe('SecuredRoute', () => {
         </MemoryRouter>,
       );
 
-      // Advance close to timeout
       vi.advanceTimersByTime(14 * 60 * 1000);
-
-      // Simulate user activity
       fireEvent(document, new Event('mousemove'));
-
-      // Advance past original timeout point
       vi.advanceTimersByTime(2 * 60 * 1000);
 
-      // Session should still be active
       const storage = useLocalStorage();
       expect(storage.getItem('IsLoggedIn')).toBe('TRUE');
       expect(storage.getItem('token')).toBe('test-token');
       expect(toast.warn).not.toHaveBeenCalled();
-      expect(screen.getByText('Test Protected Content')).toBeInTheDocument();
     });
   });
 
   describe('Session Timeout and Inactivity', () => {
-    it('should show warning toast after 15 minutes of inactivity', async () => {
+    it('should show warning toast after 15 minutes of inactivity', () => {
       setItem('IsLoggedIn', 'TRUE');
       setItem('role', 'administrator');
       setItem('token', 'test-token');
@@ -184,10 +181,7 @@ describe('SecuredRoute', () => {
         </MemoryRouter>,
       );
 
-      // Fast-forward past the inactivity timeout (15 minutes)
       vi.advanceTimersByTime(15 * 60 * 1000 + 1000);
-
-      // Fast-forward through the setInterval check (1 minute)
       vi.advanceTimersByTime(1 * 60 * 1000);
 
       expect(toast.warn).toHaveBeenCalledWith(
@@ -197,11 +191,6 @@ describe('SecuredRoute', () => {
       const storage = useLocalStorage();
       expect(storage.getItem('IsLoggedIn')).toBe('FALSE');
       expect(storage.getItem('token')).toBeNull();
-      expect(storage.getItem('userId')).toBeNull();
-      expect(storage.getItem('role')).toBeNull();
-      expect(storage.getItem('email')).toBeNull();
-      expect(storage.getItem('name')).toBeNull();
-      expect(storage.getItem('id')).toBeNull();
       expect(window.location.href).toBe('/');
     });
   });

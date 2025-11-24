@@ -4,11 +4,9 @@
 
 # Function: validateAdminPluginStructure()
 
-> **validateAdminPluginStructure**(`files`): `object`
+> **validateAdminPluginStructure**(`files`): \{ `error`: `string`; `valid`: `boolean`; \} \| \{ `error?`: `undefined`; `valid`: `boolean`; \}
 
-Defined in: [src/utils/adminPluginInstaller.ts:197](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L197)
-
-Validates admin plugin structure
+Defined in: [src/utils/adminPluginInstaller.ts:192](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L192)
 
 ## Parameters
 
@@ -18,12 +16,4 @@ Validates admin plugin structure
 
 ## Returns
 
-`object`
-
-### error?
-
-> `optional` **error**: `string`
-
-### valid
-
-> **valid**: `boolean`
+\{ `error`: `string`; `valid`: `boolean`; \} \| \{ `error?`: `undefined`; `valid`: `boolean`; \}

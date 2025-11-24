@@ -13,7 +13,7 @@ import {
   FaChevronLeft,
   FaChevronRight,
 } from 'react-icons/fa';
-import { AdminPluginFileService } from '../../plugin/services/AdminPluginFileService';
+import { AdminPluginFileService } from 'plugin/services/AdminPluginFileService';
 import type { IPluginDetails, IPluginModalProps } from 'plugin';
 import styles from './PluginModal.module.css';
 import { useInstallTimer } from './hooks/useInstallTimer';

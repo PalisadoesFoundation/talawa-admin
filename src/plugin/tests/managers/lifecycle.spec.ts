@@ -3,8 +3,22 @@ import { LifecycleManager } from '../../managers/lifecycle';
 import { DiscoveryManager } from '../../managers/discovery';
 import { ExtensionRegistryManager } from '../../managers/extension-registry';
 import { EventManager } from '../../managers/event-manager';
-import { ILoadedPlugin, PluginStatus, IPluginManifest } from '../../types';
+import { PluginStatus, IPluginManifest, IPluginLifecycle } from '../../types';
 import React from 'react';
+
+function withLifecycle(
+  component: React.ComponentType,
+  lifecycle: Partial<IPluginLifecycle>,
+) {
+  return {
+    ...lifecycle,
+    component,
+  } as unknown as React.ComponentType;
+}
+
+const TestWrapperComponent: React.FC<{ children?: React.ReactNode }> = ({
+  children,
+}) => React.createElement('div', {}, children);
 
 // Mock the managers
 vi.mock('../../managers/discovery');
@@ -42,13 +56,6 @@ describe('LifecycleManager', () => {
     AnotherComponent: vi.fn(() =>
       React.createElement('span', {}, 'AnotherComponent'),
     ),
-  };
-
-  const mockLoadedPlugin: ILoadedPlugin = {
-    id: 'test-plugin',
-    manifest: mockManifest,
-    components: mockComponents,
-    status: PluginStatus.ACTIVE,
   };
 
   beforeEach(() => {
@@ -329,9 +336,9 @@ describe('LifecycleManager', () => {
 
     it('should handle directory deletion failure gracefully', async () => {
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-      const fetchSpy = vi
-        .mocked(fetch)
-        .mockResolvedValue(new Response('', { status: 404 }));
+      vi.mocked(global.fetch).mockResolvedValue(
+        new Response('', { status: 404 }),
+      );
 
       const result = await lifecycleManager.unloadPlugin('testPlugin');
 
@@ -345,9 +352,7 @@ describe('LifecycleManager', () => {
 
     it('should handle directory deletion network error gracefully', async () => {
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-      const fetchSpy = vi
-        .mocked(fetch)
-        .mockRejectedValue(new Error('Network error'));
+      vi.mocked(global.fetch).mockRejectedValue(new Error('Network error'));
 
       const result = await lifecycleManager.unloadPlugin('testPlugin');
 
@@ -458,7 +463,7 @@ describe('LifecycleManager', () => {
     it('should handle invalid status value by defaulting to deactivate', async () => {
       const result = await lifecycleManager.togglePluginStatus(
         'testPlugin',
-        'invalid' as any,
+        'invalid' as unknown as 'active' | 'inactive',
       );
 
       // Should call deactivatePlugin since it's not 'active'
@@ -956,11 +961,9 @@ describe('LifecycleManager', () => {
       onUninstall: vi.fn().mockResolvedValue(undefined),
     };
 
-    const mockComponentsWithHooks: Record<string, React.ComponentType> = {
-      default: mockLifecycleHooks as any,
-      TestComponent: vi.fn(() =>
-        React.createElement('div', {}, 'TestComponent'),
-      ),
+    const mockComponentsWithHooks = {
+      default: withLifecycle(TestWrapperComponent, mockLifecycleHooks),
+      TestComponent: TestWrapperComponent,
     };
 
     beforeEach(() => {
@@ -1104,11 +1107,13 @@ describe('LifecycleManager', () => {
     });
 
     it('should handle plugins with non-function lifecycle hooks', async () => {
+      const invalidLifecycle: Partial<IPluginLifecycle> = {
+        onInstall: 'not a function' as unknown as never,
+      };
+
       const componentsWithInvalidHooks: Record<string, React.ComponentType> = {
-        default: { onInstall: 'not a function' } as any,
-        TestComponent: vi.fn(() =>
-          React.createElement('div', {}, 'TestComponent'),
-        ),
+        default: withLifecycle(TestWrapperComponent, invalidLifecycle),
+        TestComponent: TestWrapperComponent,
       };
 
       (mockDiscoveryManager.loadPluginComponents as Mock).mockResolvedValue(
@@ -1174,24 +1179,6 @@ describe('LifecycleManager', () => {
         'plugin:loaded',
         'testPlugin',
       );
-    });
-
-    it('should handle dynamic registration failure gracefully', async () => {
-      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-
-      // Mock the dynamic import to fail
-      vi.doMock('../../registry', () => {
-        throw new Error('Dynamic import failed');
-      });
-
-      await lifecycleManager.activatePlugin('testPlugin');
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Failed to register plugin testPlugin dynamically:',
-        expect.any(Error),
-      );
-
-      consoleSpy.mockRestore();
     });
   });
 

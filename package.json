@@ -196,11 +196,6 @@
   "resolutions": {
     "@apollo/client": "3.13.0"
   },
-  "pnpm": {
-    "overrides": {
-      "@apollo/client": "3.13.0"
-    }
-  },
   "engines": {
     "node": ">=24.x"
   },
@@ -228,5 +223,18 @@
     ],
     "**/*.{ts, tsx, json}": "eslint --fix"
   },
-  "packageManager": "pnpm@10.4.1"
+  "packageManager": "pnpm@10.4.1",
+  "pnpm": {
+    "overrides": {
+      "@apollo/client": "3.13.0"
+    },
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "react",
+        "react-dom",
+        "@pdfme/common",
+        "@pdfme/schemas"
+      ]
+    }
+  }
 }

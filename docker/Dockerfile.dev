@@ -3,14 +3,22 @@ FROM node:24-slim AS build
 ARG PORT=4321
 ENV PORT=${PORT}
 
+# Enable pnpm globally
+RUN corepack enable
+
 WORKDIR /usr/src/app
 
-COPY package*.json ./
-RUN corepack enable && corepack prepare pnpm@10.4.1 --activate && pnpm install
+# Copy dependency manifests only
+COPY package.json pnpm-lock.yaml .pnpm-workspace.yaml ./
 
+RUN corepack prepare pnpm@10.4.1 --activate \
+    && pnpm install --frozen-lockfile --reporter=append-only
+
+# Copy the project
 COPY . .
 
+# Build the app
 RUN pnpm run build
-EXPOSE ${PORT}
 
+EXPOSE ${PORT}
 CMD ["pnpm", "run", "serve"]
