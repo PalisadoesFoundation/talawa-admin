@@ -45,7 +45,8 @@ import { Card, Row, Col, Form } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
-import MemberAttendedEventsModal from 'components/MemberActivity/Modal/EventsAttendedMemberModal';
+import EventsAttendedByMember from '../../components/MemberActivity/EventsAttendedByMember';
+import MemberAttendedEventsModal from '../../components/MemberActivity/Modal/EventsAttendedMemberModal';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
@@ -60,6 +61,7 @@ import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
 import { urlToFile } from 'utils/urlToFile';
 import { validatePassword } from 'utils/passwordValidator';
 import { sanitizeAvatars } from 'utils/sanitizeAvatar';
+import type { IEvent } from 'types/Event/interface';
 
 type MemberDetailProps = { id?: string };
 
@@ -242,6 +244,10 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     }
   };
 
+  const handleEventsAttendedModal = (): void => {
+    setShow(!show);
+  };
+
   const resetChanges = (): void => {
     setisUpdated(false);
     if (userData?.currentUser) {
@@ -260,16 +266,18 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       {show && (
         <MemberAttendedEventsModal
-          eventsAttended={userData?.user?.eventsAttended}
+          eventsAttended={userData?.currentUser?.eventsAttended || []}
           show={show}
           setShow={setShow}
         />
       )}
       <Row className="g-4 mt-1">
         <Col md={6}>
+          {/* Personal Details Card */}
           <Card className={`${styles.allRound}`}>
             <Card.Header
-              className={`bg-success text-white py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius}`}
+              className={`py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius}`}
+              style={{ backgroundColor: '#A8C7FA', color: '#555' }}
             >
               <h3 className="m-0">{t('personalDetailsHeading')}</h3>
               <Button
@@ -475,11 +483,56 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               </Row>
             </Card.Body>
           </Card>
+          <Col>
+            <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
+              <Card.Header
+                className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
+                style={{ backgroundColor: '#A8C7FA', color: '#555' }}
+              >
+                <h3 className="m-0" data-testid="eventsAttended-title">
+                  {t('eventsAttended')}
+                </h3>
+                <Button
+                  style={{ borderRadius: '20px' }}
+                  size="sm"
+                  variant="light"
+                  data-testid="viewAllEvents"
+                  onClick={handleEventsAttendedModal}
+                >
+                  {t('viewAll')}
+                </Button>
+              </Card.Header>
+              <Card.Body
+                className={`${styles.cardBody} px-4 ${styles.scrollableCardBody}`}
+              >
+                {!userData?.currentUser?.eventsAttended?.length ? (
+                  <div
+                    className={`${styles.emptyContainer} w-100 h-100 d-flex justify-content-center align-items-center fw-semibold text-secondary`}
+                  >
+                    {t('noeventsAttended')}
+                  </div>
+                ) : (
+                  userData.currentUser.eventsAttended.map(
+                    (event: IEvent, index: number) => (
+                      <span data-testid="membereventsCard" key={index}>
+                        <EventsAttendedByMember
+                          eventsId={event.id}
+                          key={index}
+                        />
+                      </span>
+                    ),
+                  )
+                )}
+              </Card.Body>
+            </Card>
+          </Col>
         </Col>
+
         <Col md={6}>
           <Card className={`${styles.allRound}`}>
             <Card.Header
-              className={`bg-success text-white py-3 px-4 ${styles.topRadius}`}
+              className={`py-3 px-4 ${styles.topRadius}`}
+              style={{ backgroundColor: '#A8C7FA', color: '#555' }}
             >
               <h3 className="m-0">{t('contactInfoHeading')}</h3>
             </Card.Header>
@@ -667,7 +720,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         </Col>
         {isUpdated && (
           <Col md={12}>
-            <Card.Footer className="bg-white border-top-0 d-flex justify-content-end gap-2 py-3 px-2">
+            <Card.Footer className=" border-top-0 d-flex justify-content-end gap-2 py-3 px-2">
               <Button
                 variant="outline-secondary"
                 onClick={resetChanges}
@@ -676,7 +729,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 {tCommon('resetChanges')}
               </Button>
               <Button
-                variant="success"
+                variant="outline"
+                style={{ backgroundColor: '#A8C7FA', color: '#555' }}
                 onClick={handleUserUpdate}
                 data-testid="saveChangesBtn"
               >
@@ -686,14 +740,14 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           </Col>
         )}
       </Row>
-
       <Row className="mb-4">
         <Col xs={12} lg={6}>
           <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
             <Card.Header
-              className={`bg-primary d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
+              className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
+              style={{ backgroundColor: '#A8C7FA', color: '#555' }}
             >
-              <h3 className="text-white m-0" data-testid="eventsAttended-title">
+              <h3 className="m-0" data-testid="tagsAssigned-title">
                 {t('tagsAssigned')}
               </h3>
             </Card.Header>

@@ -14,7 +14,7 @@
  * - Provides form validation and disables buttons when inputs are empty.
  *
  * Dependencies:
- * - React, React-Bootstrap, React-Toastify, Apollo Client, and i18next for translations.
+ * - React,React-Bootstrap, React-Toastify, Apollo Client, and i18next for translations.
  * - Custom components: `Loader` and `UpdateSession`.
  * - Utility functions: `convertToBase64` and `errorHandler`.
  *
@@ -80,7 +80,7 @@ const CommunityProfile = (): JSX.Element => {
     facebookURL: string | undefined;
     instagramURL: string | undefined;
     xURL: string | undefined;
-    linkedInURL: string | undefined;
+    linkedinURL: string | undefined;
     githubURL: string | undefined;
     youtubeURL: string | undefined;
     redditURL: string | undefined;
@@ -122,7 +122,7 @@ const CommunityProfile = (): JSX.Element => {
         inactivityTimeoutDuration: preLoginData.inactivityTimeoutDuration,
         instagramURL: preLoginData.instagramURL ?? '',
         xURL: preLoginData.xURL ?? '',
-        linkedInURL: preLoginData.linkedInURL ?? '',
+        linkedInURL: preLoginData.linkedinURL ?? '',
         githubURL: preLoginData.githubURL ?? '',
         youtubeURL: preLoginData.youtubeURL ?? '',
         redditURL: preLoginData.redditURL ?? '',

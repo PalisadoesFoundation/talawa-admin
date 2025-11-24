@@ -228,19 +228,21 @@ export default function Advertisements(): JSX.Element {
               title={t('activeAds')}
               className="pt-4 m-2"
             >
-              <InfiniteScroll
-                dataLength={activeAdvertisements.length}
-                next={loadMoreActiveAdvertisements}
-                loader={<AdvertisementSkeleton />}
-                hasMore={
-                  orgActiveAdvertisementListData?.organization?.advertisements
-                    ?.pageInfo?.hasNextPage ?? false
-                }
-                className={styles.listBoxAdvertisements}
-              >
-                {activeAdvertisements.length === 0 ? (
-                  <h4>{t('pMessage')}</h4>
-                ) : (
+              {activeAdvertisements.length === 0 ? (
+                <div className={styles.pMessageAdvertisement}>
+                  {t('pMessage')}
+                </div>
+              ) : (
+                <InfiniteScroll
+                  dataLength={activeAdvertisements.length}
+                  next={loadMoreActiveAdvertisements}
+                  loader={<AdvertisementSkeleton />}
+                  hasMore={
+                    orgActiveAdvertisementListData?.organization?.advertisements
+                      ?.pageInfo?.hasNextPage ?? false
+                  }
+                  className={styles.listBoxAdvertisements}
+                >
                   <div className={styles.justifyspAdvertisements}>
                     {activeAdvertisements.map((ad) => {
                       return (
@@ -253,8 +255,8 @@ export default function Advertisements(): JSX.Element {
                       );
                     })}
                   </div>
-                )}
-              </InfiniteScroll>
+                </InfiniteScroll>
+              )}
             </Tab>
 
             <Tab
@@ -262,19 +264,21 @@ export default function Advertisements(): JSX.Element {
               title={t('archivedAds')}
               className="pt-4 m-2"
             >
-              <InfiniteScroll
-                dataLength={completedAdvertisements.length}
-                next={loadMoreCompletedAdvertisements}
-                loader={<AdvertisementSkeleton />}
-                hasMore={
-                  orgCompletedAdvertisementListData?.organization
-                    ?.advertisements?.pageInfo?.hasNextPage ?? false
-                }
-                className={styles.listBoxAdvertisements}
-              >
-                {completedAdvertisements.length === 0 ? (
-                  <h4>{t('pMessage')}</h4>
-                ) : (
+              {completedAdvertisements.length === 0 ? (
+                <div className={styles.pMessageAdvertisement}>
+                  {t('pMessage')}
+                </div>
+              ) : (
+                <InfiniteScroll
+                  dataLength={completedAdvertisements.length}
+                  next={loadMoreCompletedAdvertisements}
+                  loader={<AdvertisementSkeleton />}
+                  hasMore={
+                    orgCompletedAdvertisementListData?.organization
+                      ?.advertisements?.pageInfo?.hasNextPage ?? false
+                  }
+                  className={styles.listBoxAdvertisements}
+                >
                   <div className={styles.justifyspAdvertisements}>
                     {completedAdvertisements.map((ad) => {
                       return (
@@ -287,8 +291,8 @@ export default function Advertisements(): JSX.Element {
                       );
                     })}
                   </div>
-                )}
-              </InfiniteScroll>
+                </InfiniteScroll>
+              )}
             </Tab>
           </Tabs>
         </Col>

@@ -2,7 +2,7 @@
 id: MiniO-fileupload-guidelines
 title: File Management - MiniO
 slug: /developer-resources/file-management
-sidebar_position: 3
+sidebar_position: 30
 ---
 
 ## Introduction

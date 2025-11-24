@@ -67,3 +67,49 @@ export const emptyProps = {
     },
   },
 };
+
+export const diverseRatingsProps = {
+  data: {
+    event: {
+      _id: '123',
+      feedback: [
+        {
+          _id: 'feedback1',
+          review: 'Excellent event!',
+          rating: 5,
+          createdAt: new Date('2021-08-10T10:00:00.000Z'),
+          updatedAt: new Date('2021-08-10T10:00:00.000Z'),
+        },
+        {
+          _id: 'feedback2',
+          review: 'Good overall',
+          rating: 3,
+          createdAt: new Date('2021-08-10T11:00:00.000Z'),
+          updatedAt: new Date('2021-08-10T11:00:00.000Z'),
+        },
+        {
+          _id: 'feedback3',
+          review: 'Average experience',
+          rating: 3,
+          createdAt: new Date('2021-08-10T12:00:00.000Z'),
+          updatedAt: new Date('2021-08-10T12:00:00.000Z'),
+        },
+        {
+          _id: 'feedback4',
+          review: 'Poor event',
+          rating: 1,
+          createdAt: new Date('2021-08-10T13:00:00.000Z'),
+          updatedAt: new Date('2021-08-10T13:00:00.000Z'),
+        },
+        {
+          _id: 'feedback5',
+          review: 'Terrible',
+          rating: 0,
+          createdAt: new Date('2021-08-10T14:00:00.000Z'),
+          updatedAt: new Date('2021-08-10T14:00:00.000Z'),
+        },
+      ],
+      averageFeedbackScore: 2.4,
+    },
+  },
+};

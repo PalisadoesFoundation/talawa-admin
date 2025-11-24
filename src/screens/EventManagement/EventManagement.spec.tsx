@@ -12,17 +12,42 @@ import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { MOCKS_WITH_TIME } from 'components/EventManagement/Dashboard/EventDashboard.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi } from 'vitest';
+import { vi, it } from 'vitest';
 const { setItem } = useLocalStorage();
 
-const mockWithTime = new StaticMockLink(MOCKS_WITH_TIME, true);
+const MOCKS_WITH_FIXED_TIME = JSON.parse(JSON.stringify(MOCKS_WITH_TIME));
+MOCKS_WITH_FIXED_TIME[0].result.data.event.startTime =
+  MOCKS_WITH_TIME[0].result.data.event.startAt;
+MOCKS_WITH_FIXED_TIME[0].result.data.event.endTime =
+  MOCKS_WITH_TIME[0].result.data.event.endAt;
+MOCKS_WITH_FIXED_TIME[0].result.data.event.createdAt = '2024-01-01T09:00:00Z';
+MOCKS_WITH_FIXED_TIME[0].result.data.event.updatedAt = '2024-01-01T09:00:00Z';
+MOCKS_WITH_FIXED_TIME[0].result.data.event.creator.id = 'creator1';
+MOCKS_WITH_FIXED_TIME[0].result.data.event.creator.name = 'John Doe';
+MOCKS_WITH_FIXED_TIME[0].result.data.event.creator.emailAddress =
+  'john.doe@example.com';
+MOCKS_WITH_FIXED_TIME[0].result.data.event.organization = {
+  _id: 'orgId',
+  id: 'orgId',
+  name: 'Test Organization',
+};
+MOCKS_WITH_FIXED_TIME[0].result.data.event.updater = {
+  _id: 'updater1',
+  id: 'updater1',
+  firstName: 'Jane',
+  lastName: 'Doe',
+  name: 'Jane Doe',
+  emailAddress: 'jane.doe@example.com',
+};
+
+const mockWithTime = new StaticMockLink(MOCKS_WITH_FIXED_TIME, true);
 
 const renderEventManagement = (): RenderResult => {
   return render(
     <MockedProvider
       addTypename={false}
       link={mockWithTime}
-      mocks={MOCKS_WITH_TIME}
+      mocks={MOCKS_WITH_FIXED_TIME}
     >
       <MemoryRouter initialEntries={['/event/orgId/eventId']}>
         <Provider store={store}>
@@ -63,6 +88,10 @@ describe('Event Management', () => {
         useParams: vi.fn(),
       };
     });
+    vi.mock('components/EventListCard/Modal/EventListCardModals', () => ({
+      __esModule: true,
+      default: () => <div data-testid="event-list-card-modals" />,
+    }));
   });
 
   afterEach(() => {
@@ -161,10 +190,15 @@ describe('Event Management', () => {
       }
     });
 
+    vi.mock('react-router-dom', async () => {
+      const actual = await vi.importActual('react-router-dom');
+      return {
+        ...actual,
+        useParams: () => ({ tab: 'invalid' }), // simulate invalid tab
+      };
+    });
+
     it('returns dashboard tab for an invalid tab selection', async () => {
-      const setTab = vi.fn();
-      const useStateSpy = vi.spyOn(React, 'useState');
-      useStateSpy.mockReturnValueOnce(['invalid', setTab]);
       await act(async () => {
         renderEventManagement();
       });

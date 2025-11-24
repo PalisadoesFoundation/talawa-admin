@@ -98,6 +98,7 @@ function eventHeader({
               className={styles.dropdown}
               onClick={showInviteModal}
               data-testid="createEventModalBtn"
+              data-cy="createEventModalBtn"
             >
               <div className="">
                 <AddIcon

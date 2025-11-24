@@ -44,7 +44,7 @@
  * - Modals are used for adding, viewing, and deleting volunteers.
  * - Displays a loader while fetching data and handles errors gracefully.
  */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
@@ -61,7 +61,7 @@ import {
 import { Chip, debounce, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import styles from '../../../style/app-fixed.module.css';
-import { EVENT_VOLUNTEER_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
+import { GET_EVENT_VOLUNTEERS } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import VolunteerCreateModal from './createModal/VolunteerCreateModal';
 import VolunteerDeleteModal from './deleteModal/VolunteerDeleteModal';
@@ -73,6 +73,7 @@ enum VolunteerStatus {
   All = 'all',
   Pending = 'pending',
   Accepted = 'accepted',
+  Rejected = 'rejected',
 }
 
 enum ModalState {
@@ -118,6 +119,8 @@ function volunteers(): JSX.Element {
     'hoursVolunteered_ASC' | 'hoursVolunteered_DESC' | null
   >(null);
   const [status, setStatus] = useState<VolunteerStatus>(VolunteerStatus.All);
+  const [isRecurring, setIsRecurring] = useState<boolean>(false);
+  const [baseEvent, setBaseEvent] = useState<{ id: string } | null>(null);
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
   }>({
@@ -149,17 +152,27 @@ function volunteers(): JSX.Element {
    * Query to fetch event volunteers for the event.
    */
   const {
-    data: volunteersData,
+    data: eventData,
     loading: volunteersLoading,
     error: volunteersError,
     refetch: refetchVolunteers,
   }: {
-    data?: { getEventVolunteers: InterfaceEventVolunteerInfo[] };
+    data?: {
+      event: {
+        id: string;
+        recurrenceRule?: { id: string } | null;
+        baseEvent?: { id: string } | null;
+        volunteers: InterfaceEventVolunteerInfo[];
+      };
+    };
     loading: boolean;
     error?: Error | undefined;
     refetch: () => void;
-  } = useQuery(EVENT_VOLUNTEER_LIST, {
+  } = useQuery(GET_EVENT_VOLUNTEERS, {
     variables: {
+      input: {
+        id: eventId,
+      },
       where: {
         eventId: eventId,
         hasAccepted:
@@ -177,10 +190,51 @@ function volunteers(): JSX.Element {
     [],
   );
 
-  const volunteers = useMemo(
-    () => volunteersData?.getEventVolunteers || [],
-    [volunteersData],
-  );
+  // Effect to set recurring event info similar to EventActionItems
+  useEffect(() => {
+    if (eventData && eventData.event) {
+      setIsRecurring(!!eventData.event.recurrenceRule);
+      setBaseEvent(eventData.event.baseEvent || null);
+    }
+  }, [eventData]);
+
+  const volunteers = useMemo(() => {
+    const allVolunteers = eventData?.event?.volunteers || [];
+
+    // Apply client-side filtering based on volunteerStatus
+    let filteredVolunteers = allVolunteers;
+
+    // Filter by search term
+    if (searchTerm) {
+      filteredVolunteers = filteredVolunteers.filter(
+        (volunteer: InterfaceEventVolunteerInfo) => {
+          const userName = volunteer.user?.name || '';
+          return userName.toLowerCase().includes(searchTerm.toLowerCase());
+        },
+      );
+    }
+
+    // Filter by status
+    if (status === VolunteerStatus.All) {
+      return filteredVolunteers;
+    } else if (status === VolunteerStatus.Pending) {
+      return filteredVolunteers.filter(
+        (volunteer: InterfaceEventVolunteerInfo) =>
+          volunteer.volunteerStatus === 'pending',
+      );
+    } else if (status === VolunteerStatus.Rejected) {
+      return filteredVolunteers.filter(
+        (volunteer: InterfaceEventVolunteerInfo) =>
+          volunteer.volunteerStatus === 'rejected',
+      );
+    } else {
+      // VolunteerStatus.Accepted
+      return filteredVolunteers.filter(
+        (volunteer: InterfaceEventVolunteerInfo) =>
+          volunteer.volunteerStatus === 'accepted',
+      );
+    }
+  }, [eventData, status, searchTerm]);
 
   if (volunteersLoading) {
     return <Loader size="xl" />;
@@ -208,15 +262,15 @@ function volunteers(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const { _id, firstName, lastName, image } = params.row.user;
+        const { id, name, avatarURL } = params.row.user;
         return (
           <div
             className="d-flex fw-bold align-items-center justify-content-center ms-2"
             data-testid="volunteerName"
           >
-            {image ? (
+            {avatarURL ? (
               <img
-                src={image}
+                src={avatarURL}
                 alt="volunteer"
                 data-testid="volunteer_image"
                 className={styles.TableImages}
@@ -224,16 +278,16 @@ function volunteers(): JSX.Element {
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
-                  key={_id + '1'}
+                  key={id + '1'}
                   dataTestId="volunteer_avatar"
                   containerStyle={styles.imageContainer}
                   avatarStyle={styles.TableImages}
-                  name={firstName + ' ' + lastName}
-                  alt={firstName + ' ' + lastName}
+                  name={name}
+                  alt={name}
                 />
               </div>
             )}
-            {firstName + ' ' + lastName}
+            {name}
           </div>
         );
       },
@@ -248,13 +302,40 @@ function volunteers(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
+        const status = params.row.volunteerStatus;
+        const getStatusInfo = (status: string) => {
+          switch (status) {
+            case 'accepted':
+              return {
+                label: 'Accepted',
+                color: 'success' as const,
+                className: styles.active,
+              };
+            case 'rejected':
+              return {
+                label: 'Rejected',
+                color: 'error' as const,
+                className: styles.rejected,
+              };
+            case 'pending':
+            default:
+              return {
+                label: 'Pending',
+                color: 'warning' as const,
+                className: styles.pending,
+              };
+          }
+        };
+
+        const statusInfo = getStatusInfo(status);
+
         return (
           <Chip
             icon={<Circle className={styles.chipIcon} />}
-            label={params.row.hasAccepted ? 'Accepted' : 'Pending'}
+            label={statusInfo.label}
             variant="outlined"
-            color="primary"
-            className={`${styles.chip} ${params.row.hasAccepted ? styles.active : styles.pending}`}
+            color={statusInfo.color}
+            className={`${styles.chip} ${statusInfo.className}`}
           />
         );
       },
@@ -278,25 +359,25 @@ function volunteers(): JSX.Element {
         );
       },
     },
-    {
-      field: 'actionItem',
-      headerName: 'Actions Completed',
-      align: 'center',
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      flex: 1,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="actionNos"
-          >
-            {params.row.assignments.length}
-          </div>
-        );
-      },
-    },
+    // {
+    //   field: 'actionItem',
+    //   headerName: 'Actions Completed',
+    //   align: 'center',
+    //   headerAlign: 'center',
+    //   sortable: false,
+    //   headerClassName: `${styles.tableHeader}`,
+    //   flex: 1,
+    //   renderCell: (params: GridCellParams) => {
+    //     return (
+    //       <div
+    //         className="d-flex justify-content-center fw-bold"
+    //         data-testid="actionNos"
+    //       >
+    //         {params.row.assignments.length}
+    //       </div>
+    //     );
+    //   },
+    // },
     {
       field: 'options',
       headerName: 'Options',
@@ -373,6 +454,7 @@ function volunteers(): JSX.Element {
                 { label: tCommon('all'), value: VolunteerStatus.All },
                 { label: tCommon('pending'), value: VolunteerStatus.Pending },
                 { label: t('accepted'), value: VolunteerStatus.Accepted },
+                { label: t('rejected'), value: VolunteerStatus.Rejected },
               ]}
               selectedOption={status}
               onSortChange={(value) => setStatus(value as VolunteerStatus)}
@@ -401,7 +483,7 @@ function volunteers(): JSX.Element {
         disableColumnResize
         columnBufferPx={7}
         hideFooter={true}
-        getRowId={(row) => row._id}
+        getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
@@ -413,10 +495,7 @@ function volunteers(): JSX.Element {
         getRowClassName={() => `${styles.rowBackgrounds}`}
         autoHeight
         rowHeight={65}
-        rows={volunteers.map((volunteer, index) => ({
-          id: index + 1,
-          ...volunteer,
-        }))}
+        rows={volunteers}
         columns={columns}
         isRowSelectable={() => false}
       />
@@ -427,6 +506,9 @@ function volunteers(): JSX.Element {
         eventId={eventId}
         orgId={orgId}
         refetchVolunteers={refetchVolunteers}
+        isRecurring={isRecurring}
+        baseEvent={baseEvent}
+        recurringEventInstanceId={eventId}
       />
 
       {volunteer && (
@@ -441,6 +523,8 @@ function volunteers(): JSX.Element {
             hide={() => closeModal(ModalState.DELETE)}
             volunteer={volunteer}
             refetchVolunteers={refetchVolunteers}
+            isRecurring={isRecurring}
+            eventId={eventId}
           />
         </>
       )}

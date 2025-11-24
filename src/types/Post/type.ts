@@ -1,3 +1,4 @@
+import type { VoteState } from 'utils/interfaces';
 import type { Comment } from '../Comment/type';
 import type { User } from '../User/type';
 import type { Organization } from 'types/Organization/type';
@@ -10,7 +11,6 @@ export type Post = {
   creator?: User; // Optional
   imageUrl?: string; // Optional
   likeCount?: number; // Optional
-  likedBy?: User[]; // Optional
   organization: Organization;
   pinned?: boolean; // Optional
   text: string;
@@ -90,40 +90,65 @@ export type PostComments = {
   };
 
   likeCount: number;
-  likedBy: {
-    id: string;
-  }[];
   text: string;
 }[];
 
 export type PostLikes = {
-  firstName: string;
-  lastName: string;
+  name: string;
   id: string;
 }[];
 
 export type PostNode = {
-  commentCount: number;
+  id: string;
+  caption: string | null;
   createdAt: string;
+  commentCount: number;
   creator: {
-    email: string;
-    firstName: string;
-    lastName: string;
-    _id: string;
+    id: string;
+    name: string;
+    emailAddress: string;
+    avatarURL?: string | null;
   };
-  imageUrl: string | null;
-  likeCount: number;
-  likedBy: {
-    _id: string;
-    firstName: string;
-    lastName: string;
+  hasUserVoted: VoteState;
+  upVotesCount: number;
+  downVotesCount: number;
+  pinnedAt: string | null;
+  downVoters: {
+    edges: {
+      node: {
+        id: string;
+        creator: {
+          id: string;
+          name: string;
+        };
+      };
+    }[];
+  };
+  attachments: {
+    mimeType: string;
+    name: string;
+    fileHash: string;
+    objectName: string;
   }[];
-  pinned: boolean;
-  text: string;
-  title: string;
-  videoUrl: string | null;
-  _id: string;
 
-  comments: PostComments;
-  likes: PostLikes;
+  commentsCount: number;
+
+  comments?: {
+    edges: {
+      node: {
+        id: string;
+        body: string;
+        creator: {
+          id: string;
+          name: string;
+          emailAddress: string;
+          avatarURL?: string | null;
+        };
+        hasUserVoted: VoteState;
+        downVotesCount: number;
+        upVotesCount: number;
+        text: string;
+      };
+    }[];
+  };
 };

@@ -99,11 +99,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   const { t: tCommon } = useTranslation('common');
 
   const [formState, setFormState] = useState<InterfaceCreatePledge>({
-    pledgeUsers:
-      pledge?.users?.map((user) => ({
-        ...user,
-        _id: user.id,
-      })) ?? [],
+    pledgeUsers: pledge?.pledger ? [pledge.pledger] : [],
     pledgeAmount: Math.max(0, pledge?.amount ?? 0),
     pledgeCurrency: pledge?.currency ?? 'USD',
     pledgeEndDate: pledge?.endDate
@@ -125,11 +121,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   useEffect(() => {
     if (pledge) {
       setFormState({
-        pledgeUsers:
-          pledge.users?.map((user) => ({
-            ...user,
-            _id: user.id,
-          })) ?? [],
+        pledgeUsers: pledge.pledger ? [pledge.pledger] : [],
         pledgeAmount: pledge.amount ?? 0,
         pledgeCurrency: pledge.currency ?? 'USD',
         pledgeEndDate: dayjs(pledge.endDate).toDate(),

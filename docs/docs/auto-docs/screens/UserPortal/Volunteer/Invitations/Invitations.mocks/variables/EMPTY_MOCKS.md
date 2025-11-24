@@ -6,9 +6,9 @@
 
 > `const` **EMPTY\_MOCKS**: `object`[]
 
-Defined in: [src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts:189](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts#L189)
+Defined in: [src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts:270](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts#L270)
 
-## Type declaration
+## Type Declaration
 
 ### request
 
@@ -25,10 +25,6 @@ Defined in: [src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts:1
 #### request.variables.where
 
 > **where**: `object`
-
-#### request.variables.where.filter
-
-> **filter**: `any` = `null`
 
 #### request.variables.where.status
 

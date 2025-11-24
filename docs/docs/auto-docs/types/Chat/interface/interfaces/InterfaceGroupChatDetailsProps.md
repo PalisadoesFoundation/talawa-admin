@@ -4,33 +4,33 @@
 
 # Interface: InterfaceGroupChatDetailsProps
 
-Defined in: [src/types/Chat/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L4)
+Defined in: [src/types/Chat/interface.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L100)
 
 ## Properties
 
 ### chat
 
-> **chat**: [`GroupChat`](../../type/type-aliases/GroupChat.md)
+> **chat**: [`NewChatType`](../type-aliases/NewChatType.md)
 
-Defined in: [src/types/Chat/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L7)
+Defined in: [src/types/Chat/interface.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L103)
 
 ***
 
 ### chatRefetch()
 
-> **chatRefetch**: (`variables`?) => `Promise`\<`ApolloQueryResult`\<\{ `chat`: [`GroupChat`](../../type/type-aliases/GroupChat.md); \}\>\>
+> **chatRefetch**: (`variables?`) => `Promise`\<`ApolloQueryResult`\<\{ `chat`: [`NewChatType`](../type-aliases/NewChatType.md); \}\>\>
 
-Defined in: [src/types/Chat/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L8)
+Defined in: [src/types/Chat/interface.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L104)
 
 #### Parameters
 
 ##### variables?
 
-`Partial`\<\{ `id`: `string`; \}\>
+`Partial`\<\{ `after?`: `string`; `beforeMessages?`: `string`; `first?`: `number`; `input`: \{ `id`: `string`; \}; `lastMessages?`: `number`; \}\>
 
 #### Returns
 
-`Promise`\<`ApolloQueryResult`\<\{ `chat`: [`GroupChat`](../../type/type-aliases/GroupChat.md); \}\>\>
+`Promise`\<`ApolloQueryResult`\<\{ `chat`: [`NewChatType`](../type-aliases/NewChatType.md); \}\>\>
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Chat/interface.ts:8](https://github.com/PalisadoesFoundat
 
 > **groupChatDetailsModalisOpen**: `boolean`
 
-Defined in: [src/types/Chat/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L6)
+Defined in: [src/types/Chat/interface.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L102)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Chat/interface.ts:6](https://github.com/PalisadoesFoundat
 
 > **toggleGroupChatDetailsModal**: () => `void`
 
-Defined in: [src/types/Chat/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L5)
+Defined in: [src/types/Chat/interface.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L101)
 
 #### Returns
 

@@ -6,18 +6,14 @@
 
 > **PostLikes** = `object`[]
 
-Defined in: [src/types/Post/type.ts:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L99)
+Defined in: [src/types/Post/type.ts:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L96)
 
-## Type declaration
-
-### firstName
-
-> **firstName**: `string`
+## Type Declaration
 
 ### id
 
 > **id**: `string`
 
-### lastName
+### name
 
-> **lastName**: `string`
+> **name**: `string`

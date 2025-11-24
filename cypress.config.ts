@@ -1,20 +1,28 @@
 import { defineConfig } from 'cypress';
 import fs from 'node:fs';
+import codeCoverageTask from '@cypress/code-coverage/task';
+import dotenv from 'dotenv';
+dotenv.config();
+
+const PORT = process.env.PORT || '4321';
 
 export default defineConfig({
   e2e: {
-    baseUrl: 'http://localhost:4321',
+    baseUrl: `http://localhost:${PORT}`,
 
     // Viewport settings
-    viewportWidth: 1280,
-    viewportHeight: 720,
+    viewportWidth: 1920,
+    viewportHeight: 1080,
     specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
     supportFile: 'cypress/support/e2e.ts',
 
-    defaultCommandTimeout: 30000,
-    requestTimeout: 30000,
-    responseTimeout: 30000,
-    pageLoadTimeout: 30000,
+    defaultCommandTimeout: 50000,
+    requestTimeout: 50000,
+    responseTimeout: 50000,
+    pageLoadTimeout: 50000,
+
+    testIsolation: false, // Keep state between tests in same spec
+    experimentalRunAllSpecs: true,
 
     watchForFileChanges: true,
     chromeWebSecurity: false,
@@ -28,6 +36,7 @@ export default defineConfig({
       apiUrl: process.env.CYPRESS_API_URL || 'http://localhost:4000/graphql',
     },
     setupNodeEvents(on, config) {
+      codeCoverageTask(on, config);
       // Custom task to log messages and read files
       on('task', {
         log(message: string) {

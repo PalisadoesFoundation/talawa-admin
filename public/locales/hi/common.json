@@ -43,6 +43,8 @@
   "confirmPassword": "पासवर्ड की पुष्टि कीजिये",
   "forgotPassword": "पासवर्ड भूल गए ?",
   "talawaAdminPortal": "तलावा एडमिन पोर्टल",
+  "adminPortal": "एडमिन पोर्टल",
+  "userPortal": "यूज़र पोर्टल",
   "address": "पता",
   "location": "जगह",
   "enterLocation": "स्थान दर्ज करें",
@@ -60,6 +62,7 @@
   "Venues": "स्थल",
   "Action Items": "कार्य आइटम",
   "Posts": "पोस्ट",
+  "Chat": "चैट",
   "Block/Unblock": "ब्लॉक/अनब्लॉक",
   "Advertisement": "विज्ञापन",
   "Funds": "निधि",
@@ -80,6 +83,7 @@
   "none": "कोई नहीं",
   "sort": "क्रम से लगाना",
   "Donate": "दान करें",
+  "Transactions": "लेन-देन",
   "addedSuccessfully": "{{item}} सफलतापूर्वक जोड़ा गया",
   "updatedSuccessfully": "{{item}} सफलतापूर्वक अपडेट किया गया",
   "removedSuccessfully": "{{item}} सफलतापूर्वक हटाया गया",
@@ -95,5 +99,7 @@
   "createdLatest": "नवीनतम बनाया गया",
   "createdEarliest": "सबसे पहले बनाया गया",
   "searchBy": "{{item}} से खोजें",
-  "plugins": "प्लगइन्स"
+  "plugins": "प्लगइन्स",
+  "save": "सहेजें",
+  "saving": "सहेज रहे हैं..."
 }

@@ -6,17 +6,19 @@
 
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# files that interfere with YARN
+# lockfiles from other package managers (YARN, npm)
 yarn.lock
-pnpm-lock.yaml
+package-lock.json
 
 # dependencies
 /node_modules
 /.pnp
 .pnp.js
+.node-version
 
 # testing
 coverage/
+coverage-shards/
 codecov
 
 # production
@@ -30,7 +32,8 @@ codecov
 /.env
 /.env-*
 /.env_*
-/.env_*
+/.env.*
+.backup/
 
 # Log files
 npm-debug.log*
@@ -52,4 +55,7 @@ debug.log
 # Cypress related
 cypress/videos
 cypress/screenshots
+.nyc_output
 
+# Redis related
+dump.rdb

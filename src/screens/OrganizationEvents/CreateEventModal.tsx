@@ -336,13 +336,6 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
           errorHandler(t, error);
         }
       }
-    } else {
-      if (formState.name.trim().length === 0)
-        toast.warning('Name can not be blank!');
-      if (formState.eventdescrip.trim().length === 0)
-        toast.warning('Description can not be blank!');
-      if (formState.location.trim().length === 0)
-        toast.warning('Location can not be blank!');
     }
   };
 
@@ -370,6 +363,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
               id="eventitle"
               placeholder={t('enterName')}
               data-testid="eventTitleInput"
+              data-cy="eventTitleInput"
               autoComplete="off"
               required
               value={formState.name}
@@ -384,6 +378,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
               id="eventdescrip"
               placeholder={t('enterDescrip')}
               data-testid="eventDescriptionInput"
+              data-cy="eventDescriptionInput"
               autoComplete="off"
               required
               value={formState.eventdescrip}
@@ -398,6 +393,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
               id="eventLocation"
               placeholder={tCommon('enterLocation')}
               data-testid="eventLocationInput"
+              data-cy="eventLocationInput"
               autoComplete="off"
               required
               value={formState.location}
@@ -555,6 +551,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
               className={styles.addButton}
               value="createevent"
               data-testid="createEventBtn"
+              data-cy="createEventBtn"
               disabled={createLoading}
             >
               {t('createEvent')}

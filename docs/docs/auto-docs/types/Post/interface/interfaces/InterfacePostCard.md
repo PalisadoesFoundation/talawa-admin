@@ -44,7 +44,7 @@ Defined in: [src/types/Post/interface.ts:5](https://github.com/PalisadoesFoundat
 
 > **fetchPosts**: () => `void`
 
-Defined in: [src/types/Post/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L15)
+Defined in: [src/types/Post/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L14)
 
 #### Returns
 
@@ -65,14 +65,6 @@ Defined in: [src/types/Post/interface.ts:7](https://github.com/PalisadoesFoundat
 > **likeCount**: `number`
 
 Defined in: [src/types/Post/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L11)
-
-***
-
-### likedBy
-
-> **likedBy**: `Partial`\<[`User`](../../../User/type/type-aliases/User.md)\>[]
-
-Defined in: [src/types/Post/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L14)
 
 ***
 

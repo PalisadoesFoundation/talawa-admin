@@ -1,40 +1,39 @@
 import {
-  GET_ORGANIZATION_MEMBERS_PG,
   GET_ORGANIZATION_POSTS_COUNT_PG,
-  GET_ORGANIZATION_EVENTS_PG, // re-enabled!
+  GET_ORGANIZATION_EVENTS_PG,
   GET_ORGANIZATION_POSTS_PG,
-  GET_ORGANIZATION_BLOCKED_USERS_PG,
   MEMBERSHIP_REQUEST,
+  ORGANIZATION_MEMBER_ADMIN_COUNT,
+  GET_ORGANIZATION_BLOCKED_USERS_COUNT,
+  GET_ORGANIZATION_VENUES_COUNT,
 } from 'GraphQl/Queries/Queries';
 
 export const MOCKS = [
   {
     request: {
-      query: GET_ORGANIZATION_MEMBERS_PG,
-      variables: { id: 'orgId', first: 32, after: null },
+      query: ORGANIZATION_MEMBER_ADMIN_COUNT,
+      variables: { id: 'orgId' },
     },
+    maxUsageCount: 2,
     result: {
       data: {
         organization: {
-          members: {
-            edges: [
-              { node: { id: '1', role: 'administrator' }, cursor: 'cursor1' },
-              { node: { id: '2', role: 'member' }, cursor: 'cursor2' },
-            ],
-            pageInfo: { hasNextPage: false, endCursor: null },
-          },
+          id: '01960b81-bfed-7369-ae96-689dbd4281ba',
+          membersCount: 2,
+          adminsCount: 1,
         },
       },
       loading: false,
     },
   },
 
-  // --- Organization Posts Count (duplicated) ---
+  // --- Organization Posts Count (Original) ---
   {
     request: {
       query: GET_ORGANIZATION_POSTS_COUNT_PG,
       variables: { id: 'orgId' },
     },
+    maxUsageCount: 2,
     result: {
       data: {
         organization: { id: 'orgId', postsCount: 10 },
@@ -43,15 +42,16 @@ export const MOCKS = [
     },
   },
 
-  // --- Organization Events (duplicated) ---
+  // --- Organization Events (Original) ---
   {
     request: {
       query: GET_ORGANIZATION_EVENTS_PG,
-      variables: { id: 'orgId', first: 50, after: null },
+      variables: { id: 'orgId', first: 8, after: null },
     },
     result: {
       data: {
         organization: {
+          eventsCount: 1,
           events: {
             edges: [
               {
@@ -83,7 +83,7 @@ export const MOCKS = [
                 cursor: 'cursor1',
               },
             ],
-            pageInfo: { hasNextPage: false, endCursor: null },
+            pageInfo: { hasNextPage: true, endCursor: 'cursor2' },
           },
         },
       },
@@ -117,6 +117,23 @@ export const MOCKS = [
       loading: false,
     },
   },
+  // Primary venues mock with attachments for comprehensive testing
+  {
+    request: {
+      query: GET_ORGANIZATION_VENUES_COUNT,
+      variables: { id: 'orgId' },
+    },
+    maxUsageCount: 2,
+    result: {
+      data: {
+        organization: {
+          venuesCount: 10,
+        },
+      },
+      loading: false,
+    },
+  },
+
   {
     request: {
       query: MEMBERSHIP_REQUEST,
@@ -127,9 +144,11 @@ export const MOCKS = [
         firstName_contains: '',
       },
     },
+    maxUsageCount: 2,
     result: {
       data: {
         organization: {
+          membershipRequestsCount: 1,
           id: 'orgId',
           membershipRequests: [
             {
@@ -140,6 +159,7 @@ export const MOCKS = [
                 id: 'user1',
                 name: 'Pending User 1',
                 emailAddress: 'user1@example.com',
+                avatarURL: 'https://example.com/avatar1.jpg',
               },
             },
             {
@@ -150,6 +170,7 @@ export const MOCKS = [
                 id: 'user2',
                 name: 'Pending User 2',
                 emailAddress: 'user2@example.com',
+                avatarURL: null,
               },
             },
           ],
@@ -157,57 +178,18 @@ export const MOCKS = [
       },
     },
   },
+
   {
     request: {
-      query: GET_ORGANIZATION_MEMBERS_PG,
-      variables: { id: 'orgId', first: 32, after: null },
+      query: GET_ORGANIZATION_BLOCKED_USERS_COUNT,
+      variables: { id: 'orgId' },
     },
+    maxUsageCount: 2,
     result: {
       data: {
         organization: {
-          members: {
-            edges: [
-              { node: { id: '1', role: 'administrator' }, cursor: 'cursor1' },
-              { node: { id: '2', role: 'member' }, cursor: 'cursor2' },
-            ],
-            pageInfo: { hasNextPage: false, endCursor: null },
-          },
-        },
-      },
-      loading: false,
-    },
-  },
-  {
-    request: {
-      query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-      variables: { id: 'orgId', first: 32, after: null },
-    },
-    result: {
-      data: {
-        organization: {
-          blockedUsers: {
-            edges: [
-              {
-                node: {
-                  id: 'blockedUser1',
-                  name: 'Blocked User 1',
-                  emailAddress: 'blocked1@example.com',
-                  role: 'member',
-                },
-                cursor: 'cursor1',
-              },
-              {
-                node: {
-                  id: 'blockedUser2',
-                  name: 'Blocked User 2',
-                  emailAddress: 'blocked2@example.com',
-                  role: 'member',
-                },
-                cursor: 'cursor2',
-              },
-            ],
-            pageInfo: { hasNextPage: false, endCursor: null },
-          },
+          id: '01960b81-bfed-7369-ae96-689dbd4281ba',
+          blockedUsersCount: 2,
         },
       },
       loading: false,
@@ -216,22 +198,6 @@ export const MOCKS = [
 ];
 
 export const EMPTY_MOCKS = [
-  {
-    request: {
-      query: GET_ORGANIZATION_MEMBERS_PG,
-      variables: { id: 'orgId', first: 32, after: null },
-    },
-    result: {
-      data: {
-        organization: {
-          members: {
-            edges: [],
-            pageInfo: { hasNextPage: false, endCursor: null },
-          },
-        },
-      },
-    },
-  },
   {
     request: {
       query: GET_ORGANIZATION_POSTS_COUNT_PG,
@@ -247,11 +213,12 @@ export const EMPTY_MOCKS = [
   {
     request: {
       query: GET_ORGANIZATION_EVENTS_PG,
-      variables: { id: 'orgId', first: 50, after: null },
+      variables: { id: 'orgId', first: 8, after: null },
     },
     result: {
       data: {
         organization: {
+          eventsCount: 0,
           events: {
             edges: [],
             pageInfo: { hasNextPage: false, endCursor: null },
@@ -274,6 +241,7 @@ export const EMPTY_MOCKS = [
     result: {
       data: {
         organization: {
+          membershipRequestsCount: 0,
           id: 'orgId',
           membershipRequests: [],
         },
@@ -294,18 +262,47 @@ export const EMPTY_MOCKS = [
   },
   {
     request: {
-      query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-      variables: { id: 'orgId', first: 32, after: null },
+      query: ORGANIZATION_MEMBER_ADMIN_COUNT,
+      variables: { id: 'orgId' },
     },
     result: {
       data: {
         organization: {
-          blockedUsers: {
-            edges: [],
-            pageInfo: { hasNextPage: false, endCursor: null },
-          },
+          id: '01960b81-bfed-7369-ae96-689dbd4281ba',
+          membersCount: 0,
+          adminsCount: 0,
         },
       },
+      loading: false,
+    },
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_BLOCKED_USERS_COUNT,
+      variables: { id: 'orgId' },
+    },
+    result: {
+      data: {
+        organization: {
+          id: '01960b81-bfed-7369-ae96-689dbd4281ba',
+          blockedUsersCount: 0,
+        },
+      },
+      loading: false,
+    },
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_VENUES_COUNT,
+      variables: { id: 'orgId' },
+    },
+    result: {
+      data: {
+        organization: {
+          venuesCount: 0,
+        },
+      },
+      loading: false,
     },
   },
 ];
@@ -334,6 +331,7 @@ export const MIXED_REQUESTS_MOCK = [
                 id: 'user1',
                 name: 'Pending User 1',
                 emailAddress: 'user1@example.com',
+                avatarURL: 'https://example.com/avatar1.jpg',
               },
             },
             {
@@ -344,6 +342,7 @@ export const MIXED_REQUESTS_MOCK = [
                 id: 'user2',
                 name: 'Pending User 2',
                 emailAddress: 'user2@example.com',
+                avatarURL: 'https://example.com/avatar2.jpg',
               },
             },
             {
@@ -354,6 +353,7 @@ export const MIXED_REQUESTS_MOCK = [
                 id: 'user3',
                 name: 'Pending User 3',
                 emailAddress: 'user3@example.com',
+                avatarURL: null,
               },
             },
             {
@@ -364,6 +364,7 @@ export const MIXED_REQUESTS_MOCK = [
                 id: 'user4',
                 name: 'Rejected User',
                 emailAddress: 'rejected@example.com',
+                avatarURL: null,
               },
             },
           ],
@@ -377,13 +378,6 @@ export const MIXED_REQUESTS_MOCK = [
 export const ERROR_MOCKS = [
   {
     request: {
-      query: GET_ORGANIZATION_MEMBERS_PG,
-      variables: { id: 'orgId', first: 32, after: null },
-    },
-    error: new Error('Mock GraphQL GET_ORGANIZATION_MEMBERS_PG Error'),
-  },
-  {
-    request: {
       query: GET_ORGANIZATION_POSTS_COUNT_PG,
       variables: { id: 'orgId' },
     },
@@ -392,7 +386,7 @@ export const ERROR_MOCKS = [
   {
     request: {
       query: GET_ORGANIZATION_EVENTS_PG,
-      variables: { id: 'orgId', first: 50, after: null },
+      variables: { id: 'orgId', first: 8, after: null },
     },
     error: new Error('Mock GraphQL GET_ORGANIZATION_EVENTS_PG Error'),
   },
@@ -418,9 +412,23 @@ export const ERROR_MOCKS = [
   },
   {
     request: {
-      query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-      variables: { id: 'orgId', first: 32, after: null },
+      query: ORGANIZATION_MEMBER_ADMIN_COUNT,
+      variables: { id: 'orgId' },
     },
-    error: new Error('Mock GraphQL GET_ORGANIZATION_BLOCKED_USERS_PG Error'),
+    error: new Error('Mock GraphQL ORGANIZATION_MEMBER_ADMIN_COUNT Error'),
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_BLOCKED_USERS_COUNT,
+      variables: { id: 'orgId' },
+    },
+    error: new Error('Mock GraphQL GET_ORGANIZATION_BLOCKED_USERS_COUNT Error'),
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_VENUES_COUNT,
+      variables: { id: 'orgId' },
+    },
+    error: new Error('Mock GraphQL GET_ORGANIZATION_VENUES_COUNT Error'),
   },
 ];

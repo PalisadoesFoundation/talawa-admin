@@ -33,7 +33,7 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
     testId: 'Icon-Component-EventsIcon',
   },
   ActionItems: {
-    name: 'Action Items',
+    name: 'ActionItem',
     testId: 'Icon-Component-ActionItemIcon',
   },
   Posts: {
@@ -87,6 +87,10 @@ const screenTestIdMap: Record<string, Record<string, string>> = {
   Volunteer: {
     name: 'Volunteer',
     testId: 'Icon-Component-Volunteer',
+  },
+  Transactions: {
+    name: 'Transactions',
+    testId: 'Icon-Component-Transactions',
   },
   default: {
     name: 'default',

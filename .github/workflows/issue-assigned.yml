@@ -3,7 +3,7 @@
 #
 # NOTE!
 #
-# Please read the README.md file in this directory that defines what should 
+# Please read the README.md file in this directory that defines what should
 # be placed in this file
 #
 ##############################################################################
@@ -12,7 +12,7 @@
 name: Issue Assignment Workflow
 on:
   issues:
-      types: ['assigned']
+    types: ['assigned']
 permissions:
   contents: read
   issues: write
@@ -32,7 +32,7 @@ jobs:
               repo,
               issue_number
             };
-            
+
             // Get current labels on the issue
             const { data: labelList } = await github.rest.issues.listLabelsOnIssue(apiParams);
             const unapprovedLabel = labelList.find(l =>

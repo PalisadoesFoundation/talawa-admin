@@ -69,8 +69,7 @@ const Calendar: React.FC<
   currentYear,
 }) => {
   const [selectedDate] = useState<Date | null>(null);
-  const today = new Date();
-  const [currentDate, setCurrentDate] = useState(today.getDate());
+  const [currentDate, setCurrentDate] = useState(() => new Date().getDate());
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
   const [expanded, setExpanded] = useState<number>(-1);
   const [windowWidth, setWindowWidth] = useState<number>(window.screen.width);
@@ -211,7 +210,10 @@ const Calendar: React.FC<
     const currentDateEvents =
       events?.filter((datas) => {
         const currDate = new Date(currentYear, currentMonth, currentDate);
-        return datas.startDate === dayjs(currDate).format('YYYY-MM-DD');
+        return (
+          dayjs(datas.startAt).format('YYYY-MM-DD') ===
+          dayjs(currDate).format('YYYY-MM-DD')
+        );
       }) || [];
 
     // Map events to EventListCard components
@@ -220,28 +222,28 @@ const Calendar: React.FC<
         <EventListCard
           refetchEvents={refetchEvents}
           userRole={userRole}
-          key={datas._id}
-          _id={datas._id}
+          key={datas.id}
+          id={datas.id}
           location={datas.location}
           name={datas.name}
           description={datas.description}
-          startDate={datas.startDate}
-          endDate={datas.endDate}
+          startAt={datas.startAt}
+          endAt={datas.endAt}
           startTime={datas.startTime}
           endTime={datas.endTime}
           allDay={datas.allDay}
           isPublic={datas.isPublic}
           isRegisterable={datas.isRegisterable}
-          attendees={datas.attendees || []}
-          creator={datas.creator}
-          userId={userId}
-          // Recurring event fields
-          isRecurringTemplate={datas.isRecurringTemplate}
-          baseEventId={datas.baseEventId}
+          isRecurringEventTemplate={datas.isRecurringEventTemplate}
+          baseEvent={datas.baseEvent}
           sequenceNumber={datas.sequenceNumber}
           totalCount={datas.totalCount}
           hasExceptions={datas.hasExceptions}
           progressLabel={datas.progressLabel}
+          recurrenceDescription={datas.recurrenceDescription}
+          recurrenceRule={datas.recurrenceRule}
+          creator={datas.creator}
+          attendees={datas.attendees}
         />
       ),
     );
@@ -373,6 +375,7 @@ const Calendar: React.FC<
     }
 
     return days.map((date, index) => {
+      const today = new Date();
       const className = [
         date.getDay() === 0 || date.getDay() === 6 ? styles.day_weekends : '',
         date.toLocaleDateString() === today.toLocaleDateString()
@@ -390,19 +393,21 @@ const Calendar: React.FC<
       const allEventsList: JSX.Element[] =
         events
           ?.filter(
-            (datas) => datas.startDate === dayjs(date).format('YYYY-MM-DD'),
+            (datas) =>
+              dayjs(datas.startAt).format('YYYY-MM-DD') ===
+              dayjs(date).format('YYYY-MM-DD'),
           )
           .map((datas: InterfaceEvent) => (
             <EventListCard
               refetchEvents={refetchEvents}
               userRole={userRole}
-              key={datas._id}
-              _id={datas._id}
+              key={datas.id}
+              id={datas.id}
               location={datas.location}
               name={datas.name}
               description={datas.description}
-              startDate={datas.startDate}
-              endDate={datas.endDate}
+              startAt={datas.startAt}
+              endAt={datas.endAt}
               startTime={datas.startTime}
               endTime={datas.endTime}
               allDay={datas.allDay}
@@ -412,12 +417,14 @@ const Calendar: React.FC<
               creator={datas.creator}
               userId={userId}
               // Recurring event fields
-              isRecurringTemplate={datas.isRecurringTemplate}
-              baseEventId={datas.baseEventId}
+              isRecurringEventTemplate={datas.isRecurringEventTemplate}
+              baseEvent={datas.baseEvent}
               sequenceNumber={datas.sequenceNumber}
               totalCount={datas.totalCount}
               hasExceptions={datas.hasExceptions}
               progressLabel={datas.progressLabel}
+              recurrenceDescription={datas.recurrenceDescription}
+              recurrenceRule={datas.recurrenceRule}
             />
           )) || [];
 
@@ -477,34 +484,36 @@ const Calendar: React.FC<
       {viewType !== ViewType.YEAR && (
         <div className={styles.calendar__header}>
           <div className={styles.calender_month}>
-            <Button
-              variant="outlined"
-              className={styles.buttonEventCalendar}
-              onClick={
-                viewType === ViewType.DAY ? handlePrevDate : handlePrevMonth
-              }
-              data-testid="prevmonthordate"
-            >
-              <ChevronLeft />
-            </Button>
+            <div className={styles.navigation_buttons}>
+              <Button
+                variant="outlined"
+                className={styles.buttonEventCalendar}
+                onClick={
+                  viewType === ViewType.DAY ? handlePrevDate : handlePrevMonth
+                }
+                data-testid="prevmonthordate"
+              >
+                <ChevronLeft />
+              </Button>
 
-            <div
-              className={styles.calendar__header_month}
-              data-testid="current-date"
-            >
-              {viewType === ViewType.DAY ? `${currentDate}` : ''} {currentYear}{' '}
-              <div>{months[currentMonth]}</div>
+              <Button
+                variant="outlined"
+                className={styles.buttonEventCalendar}
+                onClick={
+                  viewType === ViewType.DAY ? handleNextDate : handleNextMonth
+                }
+                data-testid="nextmonthordate"
+              >
+                <ChevronRight />
+              </Button>
+              <div
+                className={styles.calendar__header_month}
+                data-testid="current-date"
+              >
+                {viewType === ViewType.DAY ? `${currentDate} ` : ''}
+                {currentYear} {months[currentMonth]}
+              </div>
             </div>
-            <Button
-              variant="outlined"
-              className={styles.buttonEventCalendar}
-              onClick={
-                viewType === ViewType.DAY ? handleNextDate : handleNextMonth
-              }
-              data-testid="nextmonthordate"
-            >
-              <ChevronRight />
-            </Button>
           </div>
           <div>
             <Button

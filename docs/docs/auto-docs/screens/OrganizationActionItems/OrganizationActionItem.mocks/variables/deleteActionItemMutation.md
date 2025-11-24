@@ -6,9 +6,9 @@
 
 > `const` **deleteActionItemMutation**: `object`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:350](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L350)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:388](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L388)
 
-## Type declaration
+## Type Declaration
 
 ### request
 

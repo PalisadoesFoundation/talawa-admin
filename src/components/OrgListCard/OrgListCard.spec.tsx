@@ -15,12 +15,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem, removeItem } = useLocalStorage();
 
-// Mock window.location
-const mockAssign = vi.fn();
-Object.defineProperty(window, 'location', {
-  value: { assign: mockAssign },
-  writable: true,
-});
+let mockAssign: ReturnType<typeof vi.fn>;
 
 const MOCKS = [
   {
@@ -54,6 +49,7 @@ const props: InterfaceOrgListCardPropsPG = {
     name: 'Dogs Care',
     avatarURL: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
     description: 'Dog care center',
+    createdAt: '2023-04-13T04:53:17.742+00:00',
     members: {
       edges: [],
     },
@@ -63,7 +59,17 @@ const props: InterfaceOrgListCardPropsPG = {
 
 describe('Testing the Super Dash List', () => {
   beforeEach(() => {
+    mockAssign = vi.fn();
+    Object.defineProperty(window, 'location', {
+      value: { assign: mockAssign },
+      writable: true,
+      configurable: true,
+    });
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   test('should render props and text elements test for the page component', async () => {

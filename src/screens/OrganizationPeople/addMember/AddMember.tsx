@@ -56,12 +56,12 @@ import {
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
 } from 'GraphQl/Mutations/mutations';
 import {
-  ORGANIZATIONS_LIST,
+  GET_ORGANIZATION_BASIC_DATA,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Form, InputGroup, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
@@ -138,6 +138,15 @@ function AddMember(): JSX.Element {
   // Refs to store cursors for navigation
   const mapPageToCursor = useRef<Record<number, string>>({});
   const backwardMapPageToCursor = useRef<Record<number, string>>({});
+  const responsePageRef = useRef<number>(0);
+
+  const resetPagination = useCallback(() => {
+    mapPageToCursor.current = {};
+    backwardMapPageToCursor.current = {};
+    setPage(0);
+    responsePageRef.current = 0;
+    setPaginationMeta({ hasNextPage: false, hasPreviousPage: false });
+  }, []);
 
   // Query for fetching users with pagination
   const [
@@ -199,7 +208,7 @@ function AddMember(): JSX.Element {
   const {
     data: organizationData,
   }: { data?: { organization: InterfaceQueryOrganizationsListObject } } =
-    useQuery(ORGANIZATIONS_LIST, { variables: { id: currentUrl } });
+    useQuery(GET_ORGANIZATION_BASIC_DATA, { variables: { id: currentUrl } });
 
   // const {
   //   data: allUsersData,
@@ -293,7 +302,7 @@ function AddMember(): JSX.Element {
 
   const handleUserModalSearchChange = (e: React.FormEvent): void => {
     e.preventDefault();
-
+    resetPagination();
     const variables = {
       first: PAGE_SIZE,
       where: userName ? { name: userName } : null,
@@ -316,6 +325,7 @@ function AddMember(): JSX.Element {
   // Initial data fetch
   useEffect(() => {
     if (addUserModalisOpen) {
+      resetPagination();
       fetchUsers({
         variables: { first: PAGE_SIZE, after: null, last: null, before: null },
       });
@@ -327,21 +337,21 @@ function AddMember(): JSX.Element {
     if (userData?.allUsers) {
       const { pageInfo } = userData.allUsers;
 
-      // Store cursors for navigation
-      if (pageInfo.startCursor) {
-        mapPageToCursor.current[page] = pageInfo.startCursor;
-      }
+      // Store cursors relative to the page for which this response was requested
+      const pageIndex = responsePageRef.current;
       if (pageInfo.endCursor) {
-        backwardMapPageToCursor.current[page] = pageInfo.endCursor;
+        mapPageToCursor.current[pageIndex + 1] = pageInfo.endCursor;
+      }
+      if (pageIndex > 0 && pageInfo.startCursor) {
+        backwardMapPageToCursor.current[pageIndex - 1] = pageInfo.startCursor;
       }
 
-      // Update pagination meta information
       setPaginationMeta({
         hasNextPage: pageInfo.hasNextPage,
         hasPreviousPage: pageInfo.hasPreviousPage,
       });
     }
-  }, [userData, page]);
+  }, [userData]);
 
   // Handle page change
   const handleChangePage = (event: unknown, newPage: number) => {
@@ -358,22 +368,24 @@ function AddMember(): JSX.Element {
     const variables: IQueryVariable = {};
 
     if (isForwardNavigation) {
+      const afterCursor = mapPageToCursor.current[newPage];
+      if (!afterCursor) return;
       variables.first = PAGE_SIZE;
-      variables.after = mapPageToCursor.current[page];
+      variables.after = afterCursor;
       variables.last = null;
       variables.before = null;
     } else {
+      const beforeCursor = backwardMapPageToCursor.current[newPage];
+      if (!beforeCursor) return;
       variables.last = PAGE_SIZE;
-      variables.before = backwardMapPageToCursor.current[page];
+      variables.before = beforeCursor;
       variables.first = null;
       variables.after = null;
     }
 
-    // Execute the query with updated variables
-    fetchUsers({ variables });
-
-    // Update the page state
     setPage(newPage);
+    responsePageRef.current = newPage;
+    fetchUsers({ variables });
   };
 
   // Extract user data from the query result
@@ -485,8 +497,10 @@ function AddMember(): JSX.Element {
                               {userDetails.avatarURL ? (
                                 <img
                                   src={userDetails.avatarURL}
-                                  alt="avatar"
+                                  alt={`${userDetails.name} avatar`}
                                   className={styles.TableImage}
+                                  crossOrigin="anonymous"
+                                  loading="lazy"
                                 />
                               ) : (
                                 <Avatar

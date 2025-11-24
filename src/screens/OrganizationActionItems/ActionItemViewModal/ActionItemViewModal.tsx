@@ -7,7 +7,7 @@ import React from 'react';
 import dayjs from 'dayjs';
 import type { FC } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import type { IActionItemInfo } from 'types/Actions/interface';
+import type { IActionItemInfo } from 'types/ActionItems/interface';
 import type { InterfaceUser } from 'types/User/interface';
 import type { InterfaceEvent } from 'types/Event/interface';
 import styles from 'style/app-fixed.module.css';
@@ -32,7 +32,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
 
   const {
     categoryId,
-    assigneeId,
+
     creatorId,
     completionAt,
     assignedAt,
@@ -40,6 +40,8 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
     postCompletionNotes,
     preCompletionNotes,
     event,
+    volunteer,
+    volunteerGroup,
     organizationId,
   } = item;
 
@@ -58,12 +60,29 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
 
   const members = membersData?.usersByOrganizationId || [];
 
-  const assignee = assigneeId
-    ? members.find(
-        (member: InterfaceUser) =>
-          member.id === assigneeId || member.id === assigneeId,
-      )
-    : item.assignee;
+  // Get assigned person/group information
+  const getAssignedInfo = () => {
+    if (volunteer?.user) {
+      return {
+        type: 'volunteer',
+        name: volunteer.user.name || 'Unknown Volunteer',
+        details: `Hours Volunteered: ${volunteer.hoursVolunteered || 0}`,
+      };
+    } else if (volunteerGroup) {
+      return {
+        type: 'group',
+        name: volunteerGroup.name || 'Unknown Group',
+        details: `Required Volunteers: ${volunteerGroup.volunteersRequired || 'Not specified'}`,
+      };
+    }
+    return {
+      type: 'none',
+      name: 'No assignment',
+      details: '',
+    };
+  };
+
+  const assignedInfo = getAssignedInfo();
 
   const creator = creatorId
     ? members.find(
@@ -124,11 +143,12 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
           <Form.Group className="d-flex gap-3 mb-3">
             <FormControl fullWidth>
               <TextField
-                label={t('assignee')}
+                label={t('assignedTo')}
                 variant="outlined"
                 className={styles.noOutline}
                 data-testid="assignee_input"
-                value={getUserDisplayName(assignee)}
+                value={assignedInfo.name}
+                helperText={assignedInfo.details}
                 disabled
               />
             </FormControl>
@@ -175,7 +195,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
               label={t('event')}
               variant="outlined"
               className={`${styles.noOutline} w-100`}
-              value={getEventDisplayName(event)}
+              value={getEventDisplayName(item.recurringEventInstance || event)}
               disabled
             />
           </Form.Group>

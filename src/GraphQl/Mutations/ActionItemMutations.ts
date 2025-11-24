@@ -2,7 +2,7 @@ import gql from 'graphql-tag';
 
 /**
  * GraphQL mutation to create an action item.
- * Updated to match new schema structure.
+ * Updated to match new volunteer-based schema structure.
  */
 export const CREATE_ACTION_ITEM_MUTATION = gql`
   mutation CreateActionItem($input: CreateActionItemInput!) {
@@ -14,9 +14,25 @@ export const CREATE_ACTION_ITEM_MUTATION = gql`
       createdAt
       preCompletionNotes
       postCompletionNotes
-      assignee {
+      volunteer {
+        id
+        hasAccepted
+        isPublic
+        hoursVolunteered
+        user {
+          id
+          name
+        }
+      }
+      volunteerGroup {
         id
         name
+        description
+        volunteersRequired
+        leader {
+          id
+          name
+        }
       }
       creator {
         id
@@ -47,7 +63,7 @@ export const CREATE_ACTION_ITEM_MUTATION = gql`
 
 /**
  * GraphQL mutation to update an action item.
- * Updated to match new schema structure.
+ * Updated to match new volunteer-based schema structure.
  */
 export const UPDATE_ACTION_ITEM_MUTATION = gql`
   mutation UpdateActionItem($input: MutationUpdateActionItemInput!) {
@@ -59,14 +75,33 @@ export const UPDATE_ACTION_ITEM_MUTATION = gql`
       createdAt
       preCompletionNotes
       postCompletionNotes
-      assignee {
+      volunteer {
         id
+        hasAccepted
+        isPublic
+        hoursVolunteered
+        user {
+          id
+          name
+        }
+      }
+      volunteerGroup {
+        id
+        name
+        description
+        volunteersRequired
+        leader {
+          id
+          name
+        }
       }
       creator {
         id
+        name
       }
       updater {
         id
+        name
       }
       category {
         id
@@ -81,6 +116,7 @@ export const UPDATE_ACTION_ITEM_MUTATION = gql`
       event {
         id
         description
+        name
       }
     }
   }
@@ -107,8 +143,43 @@ export const MARK_ACTION_ITEM_AS_PENDING_MUTATION = gql`
     markActionItemAsPending(input: $input) {
       id
       isCompleted
-      postCompletionNotes
-      updatedAt
+    }
+  }
+`;
+export const COMPLETE_ACTION_ITEM_FOR_INSTANCE = gql`
+  mutation CompleteActionItemForInstance(
+    $input: MutationCompleteActionItemForInstanceInput!
+  ) {
+    completeActionItemForInstance(input: $input) {
+      id
+    }
+  }
+`;
+export const MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE = gql`
+  mutation MarkActionItemAsPendingForInstance(
+    $input: MutationMarkActionAsPendingForInstanceInput!
+  ) {
+    markActionItemAsPendingForInstance(input: $input) {
+      id
+    }
+  }
+`;
+export const UPDATE_ACTION_ITEM_FOR_INSTANCE = gql`
+  mutation UpdateActionItemForInstance(
+    $input: MutationUpdateActionItemForInstanceInput!
+  ) {
+    updateActionItemForInstance(input: $input) {
+      id
+    }
+  }
+`;
+
+export const DELETE_ACTION_ITEM_FOR_INSTANCE = gql`
+  mutation DeleteActionItemForInstance(
+    $input: MutationDeleteActionItemForInstanceInput!
+  ) {
+    deleteActionItemForInstance(input: $input) {
+      id
     }
   }
 `;

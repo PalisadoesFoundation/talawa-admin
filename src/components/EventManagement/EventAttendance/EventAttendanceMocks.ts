@@ -1,34 +1,41 @@
 import { EVENT_ATTENDEES, EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 
 export const MOCKEVENT = {
-  _id: 'event123',
-  title: 'Test Event',
+  id: 'event123',
+  name: 'Test Event',
   description: 'This is a test event description',
-  startDate: '2023-05-01',
-  endDate: '2023-05-02',
-  startTime: '09:00:00',
-  endTime: '17:00:00',
-  allDay: false,
   location: 'Test Location',
-  recurring: true,
-  baseRecurringEvent: {
-    _id: 'recurringEvent123',
+  allDay: false,
+  isPublic: true,
+  isRegisterable: true,
+  startAt: '2030-05-01T09:00:00.000Z',
+  endAt: '2030-05-02T17:00:00.000Z',
+  createdAt: '2030-04-01T00:00:00.000Z',
+  updatedAt: '2030-04-01T00:00:00.000Z',
+  recurrenceRule: {
+    id: 'recurringEvent123',
+  },
+  creator: {
+    id: 'creator123',
+    name: 'Creator Name',
+    emailAddress: 'creator@example.com',
+  },
+  updater: {
+    id: 'updater123',
+    name: 'Updater Name',
+    emailAddress: 'updater@example.com',
   },
   organization: {
-    _id: 'org456',
-    members: [
-      { _id: 'member1', firstName: 'John', lastName: 'Doe' },
-      { _id: 'member2', firstName: 'Jane', lastName: 'Smith' },
-    ],
+    id: 'org456',
+    name: 'Test Organization',
   },
-  attendees: [{ _id: 'user1' }, { _id: 'user2' }],
 };
 
 export const MOCKDETAIL = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { id: 'event123' },
+      variables: { eventId: 'event123' },
     },
     result: {
       data: {
@@ -42,59 +49,64 @@ export const MOCKS = [
   {
     request: {
       query: EVENT_ATTENDEES,
-      variables: {}, // Removed id since it's not required based on error
+      variables: { eventId: 'event123' },
     },
     result: {
       data: {
         event: {
           attendees: [
             {
-              _id: '6589386a2caa9d8d69087484',
-              firstName: 'Bruce',
-              lastName: 'Garza',
-              gender: null,
+              id: '6589386a2caa9d8d69087484',
+              name: 'Bruce Garza',
+              emailAddress: 'bruce@example.com',
+              avatarURL: null,
+              createdAt: '2030-04-13T10:23:17.742Z',
+              role: 'attendee',
+              natalSex: null,
               birthDate: null,
-              createdAt: '2023-04-13T10:23:17.742',
               eventsAttended: [
-                {
-                  __typename: 'Event',
-                  _id: '660fdf7d2c1ef6c7db1649ad',
-                },
-                {
-                  __typename: 'Event',
-                  _id: '660fdd562c1ef6c7db1644f7',
-                },
+                { id: '660fdf7d2c1ef6c7db1649ad' },
+                { id: '660fdd562c1ef6c7db1644f7' },
               ],
-              __typename: 'User',
             },
             {
-              _id: '6589386a2caa9d8d69087485',
-              firstName: 'Jane',
-              lastName: 'Smith',
-              gender: null,
+              id: '6589386a2caa9d8d69087485',
+              name: 'Jane Smith',
+              emailAddress: 'jane@example.com',
+              avatarURL: null,
+              createdAt: '2030-04-13T10:23:17.742Z',
+              role: 'attendee',
+              natalSex: null,
               birthDate: null,
-              createdAt: '2023-04-13T10:23:17.742',
-              eventsAttended: [
-                {
-                  __typename: 'Event',
-                  _id: '660fdf7d2c1ef6c7db1649ad',
-                },
-              ],
-              __typename: 'User',
+              eventsAttended: [{ id: '660fdf7d2c1ef6c7db1649ad' }],
+            },
+
+            {
+              id: '6589386a2caa9d8d69087486',
+              name: 'Tagged Member',
+              emailAddress: 'tagged@example.com',
+              avatarURL: null,
+              // Fixed to current year/month to keep date-filter tests stable
+              createdAt: new Date(
+                new Date().getFullYear(),
+                new Date().getMonth(),
+                15,
+              ).toISOString(),
+
+              role: 'attendee',
+              natalSex: null,
+              birthDate: null,
+              eventsAttended: null,
+              tagsAssignedWith: {
+                edges: [
+                  { node: { name: 'Volunteer' } },
+                  { node: { name: 'Coordinator' } },
+                ],
+              },
             },
           ],
         },
       },
     },
-  },
-];
-
-export const MOCKS_ERROR = [
-  {
-    request: {
-      query: EVENT_ATTENDEES,
-      variables: {},
-    },
-    error: new Error('An error occurred'),
   },
 ];

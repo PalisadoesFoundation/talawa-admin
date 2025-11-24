@@ -8,27 +8,43 @@ Defined in: [src/types/CheckIn/interface.ts:7](https://github.com/PalisadoesFoun
 
 ## Properties
 
-### \_id
+### checkInTime
 
-> **\_id**: `string`
+> **checkInTime**: `string`
+
+Defined in: [src/types/CheckIn/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L10)
+
+***
+
+### checkOutTime
+
+> **checkOutTime**: `string`
+
+Defined in: [src/types/CheckIn/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L11)
+
+***
+
+### id
+
+> **id**: `string`
 
 Defined in: [src/types/CheckIn/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L8)
 
 ***
 
-### checkIn
+### isCheckedIn
 
-> **checkIn**: `object`
+> **isCheckedIn**: `boolean`
 
-Defined in: [src/types/CheckIn/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L10)
+Defined in: [src/types/CheckIn/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L12)
 
-#### \_id
+***
 
-> **\_id**: `string`
+### isCheckedOut
 
-#### time
+> **isCheckedOut**: `boolean`
 
-> **time**: `string`
+Defined in: [src/types/CheckIn/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L13)
 
 ***
 

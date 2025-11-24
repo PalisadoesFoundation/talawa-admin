@@ -4,15 +4,15 @@
 
 # Function: getPluginManager()
 
-> **getPluginManager**(`apolloClient`?): [`PluginManager`](../classes/PluginManager.md)
+> **getPluginManager**(`apolloClient?`): [`PluginManager`](../classes/PluginManager.md)
 
-Defined in: [src/plugin/manager.ts:167](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L167)
+Defined in: [src/plugin/manager.ts:181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L181)
 
 ## Parameters
 
 ### apolloClient?
 
-`any`
+`ApolloClient`\<`unknown`\>
 
 ## Returns
 

@@ -30,6 +30,6 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemV
 
 ### item
 
-> **item**: [`IActionItemInfo`](../../../../../types/Actions/interface/interfaces/IActionItemInfo.md)
+> **item**: [`IActionItemInfo`](../../../../../types/ActionItems/interface/interfaces/IActionItemInfo.md)
 
 Defined in: [src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L24)

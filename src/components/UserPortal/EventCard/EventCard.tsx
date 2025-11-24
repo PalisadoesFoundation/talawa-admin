@@ -50,7 +50,7 @@ import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
-import { REGISTER_EVENT } from 'GraphQl/Mutations/mutations';
+import { REGISTER_EVENT } from 'GraphQl/Mutations/EventMutations';
 import { useTranslation } from 'react-i18next';
 
 import useLocalStorage from 'utils/useLocalstorage';
@@ -68,11 +68,11 @@ function eventCard(props: InterfaceEvent): JSX.Element {
   const userId = getItem('userId');
 
   // Create a full name for the event creator
-  const creatorName = `${props.creator.firstName} ${props.creator.lastName}`;
+  const creatorName = props.creator.name;
 
   // Check if the user is initially registered for the event
   const isInitiallyRegistered = props.attendees.some(
-    (attendee) => attendee._id === userId,
+    (attendee) => attendee.id === userId,
   );
 
   // Set up the mutation for registering for the event
@@ -89,7 +89,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
       try {
         const { data } = await registerEventMutation({
           variables: {
-            eventId: props._id,
+            id: props.id,
           },
         });
         if (data) {
@@ -127,7 +127,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         ) : (
           <></>
         )}
-        <b> {dayjs(props.startDate).format("D MMMM 'YY")}</b>
+        <b> {dayjs(props.startAt).format('D MMMM YYYY')}</b>
       </div>
       <div className={`d-flex flex-row ${styles.eventDetails}`}>
         {`${t('ends')} `}
@@ -138,7 +138,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         ) : (
           <></>
         )}{' '}
-        <b> {dayjs(props.endDate).format("D MMMM 'YY")}</b>
+        <b> {dayjs(props.endAt).format('D MMMM YYYY')}</b>
       </div>
       <span>
         {`${t('creator')} `}

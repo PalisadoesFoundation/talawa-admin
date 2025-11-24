@@ -110,13 +110,15 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
 
   // Effect to update the form state when the pledge prop changes (e.g., when editing a pledge)
   useEffect(() => {
-    setFormState({
-      pledgeUsers: pledge?.users ?? [],
-      pledgeAmount: pledge?.amount ?? 0,
-      pledgeCurrency: pledge?.currency ?? 'USD',
-      pledgeEndDate: new Date(pledge?.endDate ?? new Date()),
-      pledgeStartDate: new Date(pledge?.startDate ?? new Date()),
-    });
+    if (pledge) {
+      setFormState({
+        pledgeUsers: pledge.pledger ? [pledge.pledger] : [],
+        pledgeAmount: pledge?.amount ?? 0,
+        pledgeCurrency: pledge?.currency ?? 'USD',
+        pledgeEndDate: new Date(pledge?.endDate ?? new Date()),
+        pledgeStartDate: new Date(pledge?.startDate ?? new Date()),
+      });
+    }
   }, [pledge]);
 
   // Destructuring the form state for easier access
@@ -142,7 +144,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           firstName: userData.user.user.firstName,
           lastName: userData.user.user.lastName,
           name: `${userData.user.user.firstName} ${userData.user.user.lastName}`,
-          image: userData.user.user.image,
+          avatarURL: userData.user.user.image,
         },
       ]);
     }
@@ -178,8 +180,11 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       if (endDate !== dayjs(pledge?.endDate).format('YYYY-MM-DD')) {
         updatedFields.endDate = endDate;
       }
-      if (pledgeUsers !== pledge?.users) {
-        updatedFields.users = pledgeUsers.map((user) => user.id);
+      if (
+        pledgeUsers.length > 0 &&
+        pledgeUsers[0]?.id !== pledge?.pledger?.id
+      ) {
+        updatedFields.pledgerId = pledgeUsers[0].id;
       }
       try {
         await updatePledge({

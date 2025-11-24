@@ -6,4 +6,4 @@
 
 > `const` **RESET\_COMMUNITY**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:495](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L495)
+Defined in: [src/GraphQl/Mutations/mutations.ts:543](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L543)

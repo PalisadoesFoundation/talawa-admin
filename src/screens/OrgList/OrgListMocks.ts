@@ -8,10 +8,21 @@ import {
   USER_ORGANIZATION_LIST,
   ALL_ORGANIZATIONS_PG,
 } from 'GraphQl/Queries/Queries';
+import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
 import type {
   InterfaceOrgInfoTypePG,
   InterfaceUserType,
+  InterfaceCurrentUserTypePG,
 } from 'utils/interfaces';
+
+const superAdminCurrentUser: InterfaceCurrentUserTypePG = {
+  currentUser: {
+    id: '123',
+    name: 'John Doe',
+    role: 'administrator',
+    emailAddress: 'john.doe@akatsuki.com',
+  },
+};
 
 const superAdminUser: InterfaceUserType = {
   user: {
@@ -34,6 +45,7 @@ const organizations: InterfaceOrgInfoTypePG[] = [
     name: 'Dogs Care',
     avatarURL: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
     description: 'Dog care center',
+    createdAt: '2023-04-13T04:53:17.742+00:00',
     members: {
       edges: [],
     },
@@ -49,7 +61,35 @@ const MOCKS = [
       variables: { userId: '123' },
     },
     result: {
-      data: { user: superAdminUser },
+      data: {
+        user: superAdminUser,
+        currentUser: superAdminCurrentUser.currentUser,
+      },
+    },
+  },
+  {
+    request: {
+      query: GET_USER_NOTIFICATIONS,
+      variables: { userId: '123', input: { first: 5, skip: 0 } },
+    },
+    result: {
+      data: {
+        user: {
+          __typename: 'User',
+          notifications: [],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_LIST,
+      variables: { filter: '' },
+    },
+    result: {
+      data: {
+        organizations: organizations,
+      },
     },
   },
   {
@@ -107,6 +147,7 @@ const MOCKS = [
             avatarURL: 'image1.jpg',
             addressLine1: 'Address 1',
             description: 'Description 1',
+            createdAt: '2023-04-13T04:53:17.742+00:00',
             members: {
               edges: [
                 {
@@ -123,6 +164,7 @@ const MOCKS = [
             avatarURL: 'image2.jpg',
             addressLine1: 'Address 2',
             description: 'Description 2',
+            createdAt: '2023-04-14T04:53:17.742+00:00',
             members: {
               edges: [
                 {
@@ -155,6 +197,7 @@ const MOCKS = [
             avatarURL: 'image3.jpg',
             addressLine1: 'Address 3',
             description: 'Description 3',
+            createdAt: '2023-04-15T04:53:17.742+00:00',
             members: {
               edges: [
                 {
@@ -171,6 +214,17 @@ const MOCKS = [
   },
 ];
 const MOCKS_EMPTY = [
+  {
+    request: {
+      query: ORGANIZATION_LIST,
+      variables: { filter: '' },
+    },
+    result: {
+      data: {
+        organizations: [],
+      },
+    },
+  },
   {
     request: {
       query: ALL_ORGANIZATIONS_PG,
@@ -195,6 +249,20 @@ const MOCKS_EMPTY = [
     },
     result: {
       data: { user: superAdminUser },
+    },
+  },
+  {
+    request: {
+      query: GET_USER_NOTIFICATIONS,
+      variables: { userId: '123', input: { first: 5, skip: 0 } },
+    },
+    result: {
+      data: {
+        user: {
+          __typename: 'User',
+          notifications: [],
+        },
+      },
     },
   },
 ];
@@ -238,6 +306,26 @@ const MOCKS_ADMIN = [
   {
     request: {
       query: ORGANIZATION_LIST,
+      variables: { filter: '' },
+    },
+    result: {
+      data: {
+        organizations: organizations,
+      },
+    },
+  },
+  {
+    request: {
+      query: CURRENT_USER,
+      variables: { userId: '123' },
+    },
+    result: {
+      data: { user: adminUser },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_LIST,
       variables: {
         first: 8,
         skip: 0,
@@ -259,6 +347,20 @@ const MOCKS_ADMIN = [
     },
     result: {
       data: { user: adminUser },
+    },
+  },
+  {
+    request: {
+      query: GET_USER_NOTIFICATIONS,
+      variables: { userId: '123', input: { first: 5, skip: 0 } },
+    },
+    result: {
+      data: {
+        user: {
+          __typename: 'User',
+          notifications: [],
+        },
+      },
     },
   },
 ];

@@ -8,6 +8,7 @@ import {
   CREATE_PLUGIN_MUTATION,
   UPDATE_PLUGIN_MUTATION,
   DELETE_PLUGIN_MUTATION,
+  INSTALL_PLUGIN_MUTATION,
 } from '../GraphQl/Mutations/PluginMutations';
 
 export interface IPlugin {
@@ -22,8 +23,10 @@ export interface IPlugin {
 
 export interface CreatePluginInput {
   pluginId: string;
-  isInstalled?: boolean;
-  isActivated?: boolean;
+}
+
+export interface InstallPluginInput {
+  pluginId: string;
 }
 
 export interface UpdatePluginInput {
@@ -44,6 +47,12 @@ export const useGetAllPlugins = () => {
 export const useCreatePlugin = () => {
   return useMutation<{ createPlugin: IPlugin }, { input: CreatePluginInput }>(
     CREATE_PLUGIN_MUTATION,
+  );
+};
+
+export const useInstallPlugin = () => {
+  return useMutation<{ installPlugin: IPlugin }, { input: InstallPluginInput }>(
+    INSTALL_PLUGIN_MUTATION,
   );
 };
 
@@ -90,6 +99,20 @@ export class PluginGraphQLService {
       return result.data?.createPlugin || null;
     } catch (error) {
       console.error('Failed to create plugin:', error);
+      return null;
+    }
+  }
+
+  async installPlugin(input: InstallPluginInput): Promise<IPlugin | null> {
+    try {
+      const result = await this.client.mutate({
+        mutation: INSTALL_PLUGIN_MUTATION,
+        variables: { input },
+        refetchQueries: [{ query: GET_ALL_PLUGINS }],
+      });
+      return result.data?.installPlugin || null;
+    } catch (error) {
+      console.error('Failed to install plugin:', error);
       return null;
     }
   }
