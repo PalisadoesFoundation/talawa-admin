@@ -29,7 +29,6 @@ export default [
       '**/*.less',
       '**/*.json',
       '**/*.svg',
-      '.github/workflows/**',
     ],
   },
   {
