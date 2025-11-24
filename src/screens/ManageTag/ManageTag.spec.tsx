@@ -158,6 +158,10 @@ describe('getManageTagErrorMessage', () => {
   it('stringifies non-error values', () => {
     expect(getManageTagErrorMessage('custom issue')).toBe('custom issue');
   });
+
+  it('stringifies object values', () => {
+    expect(getManageTagErrorMessage({ foo: 'bar' })).toBe('{"foo":"bar"}');
+  });
 });
 
 describe('Manage Tag Page', () => {
@@ -698,7 +702,7 @@ describe('Manage Tag Page', () => {
     });
   });
 
-  it('Fetches more assigned members with infinite scroll', async () => {
+  it('Fetches more assigned members with infinite scroll and handles pagination correctly', async () => {
     const { getByText } = renderManageTag(link7);
 
     await wait();
@@ -736,6 +740,8 @@ describe('Manage Tag Page', () => {
       );
 
       expect(getByText(translations.addPeopleToTag)).toBeInTheDocument();
+      expect(screen.queryByTestId('load-more-trigger')).not.toBeInTheDocument();
+      expect(screen.getAllByTestId('viewProfileBtn')).toHaveLength(2);
     });
   });
 
@@ -992,31 +998,6 @@ describe('Manage Tag Page', () => {
     // Check if ancestor tags are rendered in breadcrumbs
     await waitFor(() => {
       expect(screen.getByTestId('allTagsBtn')).toBeInTheDocument();
-    });
-  });
-
-  it('handles infinite scroll with pagination correctly', async () => {
-    renderManageTag(link7);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(screen.getByText('member 1')).toBeInTheDocument();
-    });
-
-    const loadMoreBtn = screen.getByTestId('load-more-trigger');
-    await userEvent.click(loadMoreBtn);
-
-    await waitFor(
-      () => {
-        expect(screen.getByText('member 2')).toBeInTheDocument();
-      },
-      { timeout: 3000 },
-    );
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('load-more-trigger')).not.toBeInTheDocument();
-      expect(screen.getAllByTestId('viewProfileBtn')).toHaveLength(2);
     });
   });
 
