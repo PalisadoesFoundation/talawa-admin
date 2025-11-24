@@ -8,6 +8,10 @@ vi.mock('@apollo/client', () => ({
 }));
 
 describe('useMinioDownload', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   const mockPresignedUrl = 'https://minio.example.com/presigned?token=abc123';
 
   it('should return a presigned URL when the mutation succeeds', async () => {
