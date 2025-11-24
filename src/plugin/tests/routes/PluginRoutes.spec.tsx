@@ -301,6 +301,11 @@ describe('PluginRoutes', () => {
       // Mock import to return module with NO exports (neither named nor default)
       mockDynamicImportPlugin.mockResolvedValue({});
 
+      // Note: We need to suppress console.error for this test as it will log an error
+      const consoleSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
       render(
         <TestWrapper>
           <PluginRoutes />
@@ -311,12 +316,6 @@ describe('PluginRoutes', () => {
       expect(screen.getByTestId('route-/test')).toBeInTheDocument();
 
       // Wait for the error to be caught and fallback rendered
-
-      // Note: We need to suppress console.error for this test as it will log an error
-      const consoleSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
-
       await waitFor(() => {
         expect(screen.getByText('Plugin Error')).toBeInTheDocument();
       });
@@ -546,7 +545,7 @@ describe('PluginRoutes', () => {
       });
     });
 
-    it('should hit line 38: throw error when component not found in loaded module', async () => {
+    it('should throw error and render fallback when requested component is not exported by module', async () => {
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
         .mockImplementation(() => {});
@@ -590,7 +589,7 @@ describe('PluginRoutes', () => {
       consoleErrorSpy.mockRestore();
     });
 
-    it('should hit line 52: render error fallback with margin style', async () => {
+    it('should render styled error fallback when dynamic import fails', async () => {
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
         .mockImplementation(() => {});
@@ -627,6 +626,37 @@ describe('PluginRoutes', () => {
       expect(errorContainer).toHaveStyle({ margin: '20px' });
 
       consoleErrorSpy.mockRestore();
+    });
+  });
+
+  it('should handle routes with undefined pluginId', async () => {
+    const mockRoutes = [
+      {
+        pluginId: undefined as unknown as string,
+        path: '/undefined-plugin',
+        component: 'TestComponent',
+        title: 'Undefined Plugin',
+        permissions: ['user'],
+      },
+    ];
+    mockUsePluginRoutes.mockReturnValue(mockRoutes);
+
+    render(
+      <TestWrapper>
+        <PluginRoutes />
+      </TestWrapper>,
+    );
+
+    expect(screen.getByTestId('route-/undefined-plugin')).toBeInTheDocument();
+
+    // Should NOT call dynamicImportPlugin as we handle it before calling import
+    expect(mockDynamicImportPlugin).not.toHaveBeenCalled();
+
+    // Should render the error message
+    await waitFor(() => {
+      expect(
+        screen.getByText(/Error: Plugin ID is missing for route/i),
+      ).toBeInTheDocument();
     });
   });
 });
