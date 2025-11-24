@@ -12,6 +12,7 @@ import {
   type InterfaceRecurrenceRule,
   WeekDays,
 } from './recurrenceTypes';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 
 describe('Recurrence Utility Functions', () => {
   afterEach(() => {

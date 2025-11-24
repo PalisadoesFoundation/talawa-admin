@@ -1,3 +1,4 @@
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { isValidLink } from './linkValidator';
 
 describe('Testing link validator', () => {
