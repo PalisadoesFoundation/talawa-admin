@@ -1,8 +1,10 @@
 import { renderHook, act } from '@testing-library/react';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach, Mocked } from 'vitest';
+
 import { usePluginActions } from './usePluginActions';
 import { getPluginManager } from 'plugin/manager';
 import type { IPluginMeta } from 'plugin';
+import { adminPluginFileService } from 'plugin/services/AdminPluginFileService';
 
 // Mock the plugin manager
 vi.mock('plugin/manager', () => ({
@@ -21,6 +23,16 @@ vi.mock('plugin/graphql-service', () => ({
   useDeletePlugin: () => [mockDeletePlugin],
   useInstallPlugin: () => [mockInstallPlugin],
 }));
+
+// Mock AdminPluginFileService once, then tweak behaviour per test
+vi.mock('plugin/services/AdminPluginFileService', () => ({
+  adminPluginFileService: {
+    removePlugin: vi.fn(),
+  },
+}));
+
+type AdminServiceMock = Mocked<typeof adminPluginFileService>;
+const adminServiceMock = adminPluginFileService as AdminServiceMock;
 
 // Mock window.location.reload
 const mockReload = vi.fn();
@@ -60,12 +72,21 @@ describe('usePluginActions', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (getPluginManager as any).mockReturnValue(mockPluginManager);
+
+    (
+      getPluginManager as unknown as {
+        mockReturnValue(value: unknown): void;
+      }
+    ).mockReturnValue(mockPluginManager);
+
     mockRefetch.mockResolvedValue({});
     mockCreatePlugin.mockResolvedValue({});
     mockUpdatePlugin.mockResolvedValue({});
     mockDeletePlugin.mockResolvedValue({});
     mockInstallPlugin.mockResolvedValue({});
+
+    adminServiceMock.removePlugin.mockReset();
+    adminServiceMock.removePlugin.mockResolvedValue(true);
   });
 
   it('should initialize with correct default state', () => {
@@ -370,15 +391,10 @@ describe('usePluginActions', () => {
     expect(result.current.pluginToUninstall).toBe(null);
   });
 
-  it('should handle AdminPluginFileService import error', async () => {
+  it('should handle AdminPluginFileService.removePlugin failure (catch branch)', async () => {
     mockDeletePlugin.mockResolvedValue({});
+    adminServiceMock.removePlugin.mockRejectedValue(new Error('fs error'));
     mockPluginManager.uninstallPlugin.mockResolvedValue(true);
-
-    // Mock the import to throw an error
-    const originalImport = vi.fn();
-    vi.doMock('../../../plugin/services/AdminPluginFileService', () => {
-      throw new Error('Import failed');
-    });
 
     const { result } = renderHook(() =>
       usePluginActions({
@@ -387,7 +403,6 @@ describe('usePluginActions', () => {
       }),
     );
 
-    // Set plugin to uninstall
     act(() => {
       result.current.uninstallPlugin(mockPlugin);
     });
@@ -396,23 +411,16 @@ describe('usePluginActions', () => {
       await result.current.handleUninstallConfirm();
     });
 
+    // still proceeds to uninstall even if removePlugin throws
     expect(mockPluginManager.uninstallPlugin).toHaveBeenCalledWith(
       'test-plugin',
     );
   });
 
-  it('should handle AdminPluginFileService.removePlugin failure', async () => {
+  it('should fully uninstall plugin including removing plugin directory (try branch)', async () => {
     mockDeletePlugin.mockResolvedValue({});
+    adminServiceMock.removePlugin.mockResolvedValue(true);
     mockPluginManager.uninstallPlugin.mockResolvedValue(true);
-
-    // Mock AdminPluginFileService with failure
-    const mockAdminPluginFileService = {
-      removePlugin: vi.fn().mockResolvedValue(false),
-    };
-
-    vi.doMock('../../../plugin/services/AdminPluginFileService', () => ({
-      adminPluginFileService: mockAdminPluginFileService,
-    }));
 
     const { result } = renderHook(() =>
       usePluginActions({
@@ -421,7 +429,6 @@ describe('usePluginActions', () => {
       }),
     );
 
-    // Set plugin to uninstall
     act(() => {
       result.current.uninstallPlugin(mockPlugin);
     });
@@ -430,9 +437,17 @@ describe('usePluginActions', () => {
       await result.current.handleUninstallConfirm();
     });
 
+    expect(mockDeletePlugin).toHaveBeenCalledWith({
+      variables: {
+        input: { id: 'db-plugin-id' },
+      },
+    });
+    expect(adminServiceMock.removePlugin).toHaveBeenCalledWith('test-plugin');
     expect(mockPluginManager.uninstallPlugin).toHaveBeenCalledWith(
       'test-plugin',
     );
+    expect(mockRefetch).toHaveBeenCalled();
+    expect(mockReload).toHaveBeenCalled();
   });
 
   it('should handle deactivate plugin status', async () => {

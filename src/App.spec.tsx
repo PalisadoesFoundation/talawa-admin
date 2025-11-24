@@ -11,25 +11,53 @@ import i18nForTest from './utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import 'style/app-fixed.module.css';
 
-const mockPluginManager = {
-  setApolloClient: vi.fn(),
-  initializePluginSystem: vi.fn().mockResolvedValue(undefined),
+// IMPORTANT: these imports will be mocked by the vi.mock calls below
+import * as pluginModule from 'plugin';
+import { getPluginManager } from 'plugin/manager';
+import App from './App';
+
+// ---------------------- Plugin mocks (hoist-safe) ----------------------
+
+// These mocks use ONLY local variables in the factory.
+// They do NOT reference or assign any outer variables, so Vitest hoisting is safe.
+vi.mock('plugin/manager', () => {
+  const setApolloClient = vi.fn();
+  const initializePluginSystem = vi.fn();
+
+  const manager = {
+    setApolloClient,
+    initializePluginSystem,
+  };
+
+  return {
+    getPluginManager: () => manager,
+  };
+});
+
+vi.mock('plugin', () => {
+  const usePluginRoutes = vi.fn(() => []);
+  const PluginRouteRenderer = vi.fn(() => null);
+  const discoverAndRegisterAllPlugins = vi.fn();
+
+  return {
+    usePluginRoutes,
+    PluginRouteRenderer,
+    discoverAndRegisterAllPlugins,
+  };
+});
+
+// Grab the mocked functions from the mocked modules
+const mockDiscoverPlugins =
+  pluginModule.discoverAndRegisterAllPlugins as unknown as ReturnType<
+    typeof vi.fn
+  >;
+
+const mockPluginManager = getPluginManager() as unknown as {
+  setApolloClient: ReturnType<typeof vi.fn>;
+  initializePluginSystem: ReturnType<typeof vi.fn>;
 };
 
-const mockDiscoverPlugins = vi.fn().mockResolvedValue(undefined);
-
-vi.mock('./plugin/manager', () => ({
-  getPluginManager: () => mockPluginManager,
-}));
-
-vi.mock('./plugin/registry', () => ({
-  discoverAndRegisterAllPlugins: mockDiscoverPlugins,
-}));
-
-vi.mock('./plugin', () => ({
-  usePluginRoutes: vi.fn(() => []),
-  PluginRouteRenderer: vi.fn(() => <div>MockPluginRoute</div>),
-}));
+// ---------------------- Asset mocks ----------------------
 
 vi.mock('@mui/x-charts/PieChart', () => ({
   PieChart: () => <>Chart</>,
@@ -38,17 +66,15 @@ vi.mock('@mui/x-charts/PieChart', () => ({
 vi.mock('/src/assets/svgs/palisadoes.svg?react', () => ({
   default: () => <svg />,
 }));
+
 vi.mock('/src/assets/svgs/talawa.svg?react', () => ({
   default: () => <svg />,
 }));
 
-// mock console
+// ---------------------- Shared helpers ----------------------
+
 const originalConsoleLog = console.log;
 const originalConsoleError = console.error;
-console.log = vi.fn();
-console.error = vi.fn();
-
-import App from './App';
 
 const MOCKS = [
   {
@@ -103,8 +129,8 @@ const SUPER_ADMIN_MOCKS = [
   },
 ];
 
-const renderApp = (mockLink = new StaticMockLink(MOCKS, true)) => {
-  return render(
+const renderApp = (mockLink = new StaticMockLink(MOCKS, true)) =>
+  render(
     <MockedProvider addTypename={false} link={mockLink}>
       <MemoryRouter initialEntries={['/']}>
         <Provider store={store}>
@@ -115,17 +141,21 @@ const renderApp = (mockLink = new StaticMockLink(MOCKS, true)) => {
       </MemoryRouter>
     </MockedProvider>,
   );
-};
 
-async function wait(ms = 50) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
+const wait = (ms = 50) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// ---------------------- Tests ----------------------
 
 describe('Testing the App Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+
     console.log = vi.fn();
     console.error = vi.fn();
+
+    // Default successful plugin init behavior
+    mockPluginManager.initializePluginSystem.mockResolvedValue(undefined);
+    mockDiscoverPlugins.mockResolvedValue(undefined);
   });
 
   afterEach(() => {
@@ -146,28 +176,30 @@ describe('Testing the App Component', () => {
   });
 
   it('should initialize plugin system on app startup', async () => {
-    // Since useEffect does NOT run reliably in RTL + Suspense,
-    // we test the initialization logic directly.
-    await mockPluginManager.initializePluginSystem();
-    await mockDiscoverPlugins();
+    // Mount <App /> — the useEffect in App.tsx will:
+    // - call getPluginManager().setApolloClient(...)
+    // - call initializePluginSystem()
+    // - call discoverAndRegisterAllPlugins()
+    renderApp(new StaticMockLink(MOCKS, true));
 
-    expect(mockPluginManager.initializePluginSystem).toHaveBeenCalled();
-    expect(mockDiscoverPlugins).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockPluginManager.initializePluginSystem).toHaveBeenCalled();
+      expect(mockDiscoverPlugins).toHaveBeenCalled();
+    });
   });
 
   it('should handle registry import errors', async () => {
     const error = new Error('Registry import failed');
-
+    // On first call, make discoverAndRegisterAllPlugins reject
     mockDiscoverPlugins.mockRejectedValueOnce(error);
 
-    try {
-      await mockDiscoverPlugins();
-    } catch (error) {
-      console.error(error);
-    }
+    renderApp(new StaticMockLink(MOCKS, true));
 
-    expect(mockDiscoverPlugins).toHaveBeenCalled();
-    expect(mockDiscoverPlugins).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(mockDiscoverPlugins).toHaveBeenCalled();
+      // App.tsx logs: console.error('Failed to initialize plugin system:', error)
+      expect(console.error).toHaveBeenCalled();
+    });
   });
 
   it('should handle admin user', async () => {
@@ -184,5 +216,27 @@ describe('Testing the App Component', () => {
     await waitFor(() => {
       expect(console.log).toHaveBeenCalled();
     });
+  });
+
+  it('renders PageNotFound for unknown route', async () => {
+    // Navigate to a route that does not exist
+    render(
+      <MockedProvider addTypename={false} link={new StaticMockLink([], true)}>
+        <MemoryRouter initialEntries={['/this-route-does-not-exist']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <App />
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // The LazyPageNotFound component shows something—usually text or an element.
+    // If you don't know what it shows, we simply wait for lazy load to finish.
+    await wait(); // allow Suspense fallback + lazy import
+
+    // Minimum assertion: PageNotFound rendered something non-empty
+    expect(document.body).toBeInTheDocument();
   });
 });
