@@ -45,6 +45,8 @@ const PluginRoutes: React.FC<IPluginRoutesProps> = ({
               return { default: Component as React.ComponentType<unknown> };
             })
             .catch((error) => {
+              const errorMessage =
+                error instanceof Error ? error.message : String(error);
               console.error(
                 `Failed to load plugin component '${route.component}' from '${route.pluginId}':`,
                 error,
@@ -74,7 +76,7 @@ const PluginRoutes: React.FC<IPluginRoutesProps> = ({
                     </p>
                     <p style={{ color: '#6c757d', fontSize: '14px' }}>
                       {process.env.NODE_ENV === 'development'
-                        ? error.message
+                        ? errorMessage
                         : 'Please contact support if this issue persists.'}
                     </p>
                   </div>
