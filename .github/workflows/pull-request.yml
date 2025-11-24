@@ -68,11 +68,11 @@ jobs:
 
       - name: Check formatting
         if: steps.changed-files.outputs.only_changed != 'true'
-        run: npm run format:check
-        
+        run: npm format:check
+
       - name: Run formatting if check fails
         if: failure()
-        run: npm run format:fix
+        run: npm format:fix
 
       - name: Check for type errors
         if: steps.changed-files.outputs.only_changed != 'true'
