@@ -740,7 +740,12 @@
     "pinPost": "Épingler le message",
     "Next": "Page suivante",
     "Previous": "Page précédente",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "messageTitleError": "Le titre du message ne peut pas être vide !",
+    "organizationIdMissing": "L'ID de l'organisation est manquant !",
+    "messageDescription": "Description du message",
+    "addVideo": "Ajouter une vidéo",
+    "creatingMessage": "Création du message..."
   },
   "postNotFound": {
     "post": "Poste",

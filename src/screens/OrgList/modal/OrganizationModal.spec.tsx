@@ -16,14 +16,13 @@ import OrganizationModal from './OrganizationModal';
 import i18nForTest from '../../../utils/i18nForTest'; // Update path based on your project structure
 
 // Mock toast
-const mockToastError = vi.fn();
-const mockToastSuccess = vi.fn();
+const toastMocks = vi.hoisted(() => ({
+  error: vi.fn(),
+  success: vi.fn(),
+}));
 
 vi.mock('react-toastify', () => ({
-  toast: {
-    error: (msg: string) => mockToastError(msg),
-    success: (msg: string) => mockToastSuccess(msg),
-  },
+  toast: toastMocks,
 }));
 
 const mockUploadFileToMinio = vi
@@ -417,7 +416,7 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [invalidFile] } });
 
     await waitFor(() => {
-      expect(mockToastError).toHaveBeenCalledWith(
+      expect(toastMocks.error).toHaveBeenCalledWith(
         'Invalid file type. Please upload a file of type: JPEG, PNG, GIF.',
       );
     });
@@ -560,7 +559,7 @@ describe('OrganizationModal Component', () => {
     await userEvent.upload(fileInput, largeFile);
 
     await waitFor(() => {
-      expect(mockToastError).toHaveBeenCalledWith(
+      expect(toastMocks.error).toHaveBeenCalledWith(
         'File is too large. Maximum size is 5MB.',
       );
       expect(mockUploadFileToMinio).not.toHaveBeenCalled();
@@ -576,7 +575,7 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
-      expect(mockToastSuccess).toHaveBeenCalledWith('imageUploadSuccess');
+      expect(toastMocks.success).toHaveBeenCalledWith('imageUploadSuccess');
     });
     expect(mockSetFormState).toHaveBeenCalledWith(
       expect.objectContaining({ avatar: 'mocked-object-name' }),
@@ -592,7 +591,7 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
-      expect(mockToastError).toHaveBeenCalledWith('imageUploadError');
+      expect(toastMocks.error).toHaveBeenCalledWith('imageUploadError');
     });
     expect(mockSetFormState).not.toHaveBeenCalled();
   });

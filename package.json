@@ -155,7 +155,6 @@
     "husky": "^9.1.6",
     "jest-environment-jsdom": "^30.2.0",
     "knip": "^5.66.0",
-    "lcov-result-merger": "^5.0.1",
     "lint-staged": "^16.2.3",
     "nyc": "^17.1.0",
     "prettier": "^3.6.2",
@@ -195,7 +194,12 @@
     "temp-directory": ".nyc_output"
   },
   "resolutions": {
-    "@apollo/client": "^3.4.0-beta.19"
+    "@apollo/client": "3.13.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@apollo/client": "3.13.0"
+    }
   },
   "engines": {
     "node": ">=24.x"

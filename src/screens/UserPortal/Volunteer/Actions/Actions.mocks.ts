@@ -3,6 +3,8 @@ import { ACTION_ITEM_LIST } from 'GraphQl/Queries/ActionItemQueries';
 
 const action1 = {
   id: 'actionId1',
+  isInstanceException: false,
+  isTemplate: false,
   volunteer: {
     id: 'volunteerId1',
     hasAccepted: true,
@@ -49,6 +51,8 @@ const action1 = {
 
 const action2 = {
   id: 'actionId2',
+  isInstanceException: false,
+  isTemplate: false,
   volunteer: null,
   volunteerGroup: {
     id: 'groupId1',
@@ -104,6 +108,8 @@ const action2 = {
 
 const action3 = {
   id: 'actionId3',
+  isInstanceException: false,
+  isTemplate: false,
   volunteer: {
     id: 'volunteerId2',
     hasAccepted: true,

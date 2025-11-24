@@ -18,6 +18,14 @@ async function wait(ms = 100): Promise<void> {
 }
 
 describe('Organisation Contribution Page', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('should render props and text elements test for the screen', async () => {
     Object.defineProperty(window, 'location', {
       value: {

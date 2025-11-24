@@ -15,7 +15,7 @@
 // - 1: POM violations detected (forbidden patterns found)
 // 
 import { readFileSync } from "fs";
-import { globSync } from "glob";
+import { globSync as sync } from "glob";
 
 const forbiddenMethods = [
   'get', 'contains', 'find', 'children', 'closest',
@@ -27,7 +27,7 @@ const forbiddenMethods = [
 
 const forbiddenPatterns = forbiddenMethods.map(m => `cy.${m}(`);
 
-const files = globSync("cypress/e2e/**/*.ts");
+const files = sync("cypress/e2e/**/*.ts");
 
 let hasError = false;
 

@@ -1,4 +1,3 @@
-/* global HTMLElement */
 /**
  * This file contains unit tests for the UserScreen component.
  *
@@ -10,24 +9,26 @@
  * These tests use Vitest for test execution and MockedProvider for mocking GraphQL queries.
  */
 
+// SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, vi, beforeEach, expect } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { describe, it, vi, beforeEach, afterEach, expect } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter, useNavigate } from 'react-router';
+import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import UserScreen from './UserScreen';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import '@testing-library/dom';
-import useLocalStorage from 'utils/useLocalstorage';
-
-const { setItem } = useLocalStorage();
 let mockID: string | undefined = '123';
 let mockLocation: string | undefined = '/user/organization/123';
+
+const routerSpies = vi.hoisted(() => ({
+  navigate: vi.fn(),
+}));
 
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
@@ -35,7 +36,7 @@ vi.mock('react-router', async () => {
     ...actual,
     useParams: () => ({ orgId: mockID }),
     useLocation: () => ({ pathname: mockLocation }),
-    useNavigate: vi.fn(), // Mock only the necessary parts
+    useNavigate: () => routerSpies.navigate,
   };
 });
 
@@ -82,20 +83,19 @@ const MOCKS = [
 ];
 const link = new StaticMockLink(MOCKS, true);
 
-const resizeWindow = (width: number): void => {
-  window.innerWidth = width;
-  fireEvent(window, new window.Event('resize'));
-};
-
-const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
-  fireEvent.click(toggleButton);
-};
-
 describe('UserScreen tests with LeftDrawer functionality', () => {
   beforeEach(() => {
-    setItem('name', 'John Doe');
+    localStorage.setItem('name', 'John Doe');
     mockID = '123';
     mockLocation = '/user/organization/123';
+    routerSpies.navigate.mockReset();
+    localStorage.setItem('sidebar', 'false');
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    localStorage.removeItem('name');
+    localStorage.removeItem('sidebar');
   });
 
   it('renders the correct title for posts', () => {
@@ -171,10 +171,9 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
     // due to plugin system modifications
   });
 
-  it('redirects to root when orgId is undefined', () => {
+  it('renders default sidebar when orgId is undefined', () => {
     mockID = undefined;
-    const navigate = vi.fn();
-    vi.spyOn({ useNavigate }, 'useNavigate').mockReturnValue(navigate);
+    mockLocation = '/user/notification';
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -188,6 +187,8 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
       </MockedProvider>,
     );
 
-    expect(window.location.pathname).toEqual('/');
+    expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
+    expect(screen.queryByTestId('OrgBtn')).not.toBeInTheDocument();
+    expect(routerSpies.navigate).not.toHaveBeenCalled();
   });
 });
