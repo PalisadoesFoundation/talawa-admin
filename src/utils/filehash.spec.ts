@@ -27,10 +27,10 @@ class MockFile {
 }
 
 describe('calculateFileHash', () => {
-  const mockDigest = vi.fn();
+  let mockDigest: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
-    mockDigest.mockReset();
+    mockDigest = vi.fn();
 
     mockDigest.mockImplementation(() => {
       const buffer = new ArrayBuffer(32);

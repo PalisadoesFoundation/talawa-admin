@@ -1,7 +1,5 @@
 vi.resetModules();
-vi.mock('./filehash', () => ({
-  calculateFileHash: vi.fn().mockResolvedValue('mocked-file-hash'),
-}));
+vi.mock('./filehash');
 
 beforeAll(() => {
   Object.defineProperty(File.prototype, 'arrayBuffer', {
@@ -57,6 +55,7 @@ const TestComponent = ({
 
 describe('Minio Upload Integration', (): void => {
   beforeEach(() => {
+    vi.clearAllMocks();
     (calculateFileHash as Mock).mockResolvedValue('mocked-file-hash');
     global.fetch = vi.fn(() =>
       Promise.resolve({
