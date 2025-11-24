@@ -663,38 +663,43 @@ describe('PluginRoutes', () => {
   describe('Error Message Sanitization', () => {
     it('should display raw error message in development environment', async () => {
       const originalEnv = process.env.NODE_ENV;
-      process.env.NODE_ENV = 'development';
+      try {
+        process.env.NODE_ENV = 'development';
 
-      const consoleErrorSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
+        const consoleErrorSpy = vi
+          .spyOn(console, 'error')
+          .mockImplementation(() => {});
 
-      const mockRoutes = [
-        {
-          pluginId: 'dev-error-plugin',
-          path: '/dev-error',
-          component: 'DevErrorComponent',
-          title: 'Dev Error Route',
-          permissions: ['user'],
-        },
-      ];
-      mockUsePluginRoutes.mockReturnValue(mockRoutes);
+        const mockRoutes = [
+          {
+            pluginId: 'dev-error-plugin',
+            path: '/dev-error',
+            component: 'DevErrorComponent',
+            title: 'Dev Error Route',
+            permissions: ['user'],
+          },
+        ];
+        mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      // Mock failed import
-      mockDynamicImportPlugin.mockRejectedValue(new Error('Dev Network error'));
+        // Mock failed import
+        mockDynamicImportPlugin.mockRejectedValue(
+          new Error('Dev Network error'),
+        );
 
-      render(
-        <TestWrapper>
-          <PluginRoutes />
-        </TestWrapper>,
-      );
+        render(
+          <TestWrapper>
+            <PluginRoutes />
+          </TestWrapper>,
+        );
 
-      await waitFor(() => {
-        expect(screen.getByText('Dev Network error')).toBeInTheDocument();
-      });
+        await waitFor(() => {
+          expect(screen.getByText('Dev Network error')).toBeInTheDocument();
+        });
 
-      consoleErrorSpy.mockRestore();
-      process.env.NODE_ENV = originalEnv;
+        consoleErrorSpy.mockRestore();
+      } finally {
+        process.env.NODE_ENV = originalEnv;
+      }
     });
 
     it('should display sanitized error message in non-development environment', async () => {
@@ -737,5 +742,44 @@ describe('PluginRoutes', () => {
 
       consoleErrorSpy.mockRestore();
     });
+  });
+
+  it('should handle non-Error objects thrown during import', async () => {
+    const originalEnv = process.env.NODE_ENV;
+    try {
+      process.env.NODE_ENV = 'development';
+
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      const mockRoutes = [
+        {
+          pluginId: 'string-error-plugin',
+          path: '/string-error',
+          component: 'StringErrorComponent',
+          title: 'String Error Route',
+          permissions: ['user'],
+        },
+      ];
+      mockUsePluginRoutes.mockReturnValue(mockRoutes);
+
+      // Mock failed import with a string
+      mockDynamicImportPlugin.mockRejectedValue('String error message');
+
+      render(
+        <TestWrapper>
+          <PluginRoutes />
+        </TestWrapper>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('String error message')).toBeInTheDocument();
+      });
+
+      consoleErrorSpy.mockRestore();
+    } finally {
+      process.env.NODE_ENV = originalEnv;
+    }
   });
 });
