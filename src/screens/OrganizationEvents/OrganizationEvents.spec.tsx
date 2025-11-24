@@ -15,7 +15,7 @@ import { I18nextProvider } from 'react-i18next';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { describe, test, expect, vi, afterEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import dayjs from 'dayjs';
 
 import OrganizationEvents from './OrganizationEvents';
@@ -50,6 +50,10 @@ const theme = createTheme({
     },
   },
 });
+
+const sharedWindowSpies = vi.hoisted(() => ({
+  alertMock: vi.fn(),
+}));
 
 Object.defineProperty(window, 'location', {
   value: {
@@ -150,7 +154,14 @@ describe('Organisation Events Page', () => {
     endTime: '05:00 PM',
   };
 
-  window.alert = vi.fn();
+  beforeEach(() => {
+    sharedWindowSpies.alertMock.mockReset();
+    window.alert = sharedWindowSpies.alertMock;
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   const renderWithLink = (link: StaticMockLink) =>
     render(
@@ -168,10 +179,6 @@ describe('Organisation Events Page', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
 
   test('renders events page and keeps current route', async () => {
     window.location.assign('/orglist');

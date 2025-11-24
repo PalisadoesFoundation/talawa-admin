@@ -25,13 +25,18 @@ import {
 } from './Invitations.mocks';
 import { toast } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi, expect } from 'vitest';
+import { vi, expect, beforeEach, afterEach } from 'vitest';
 
-vi.mock('react-toastify', () => ({
+const sharedMocks = vi.hoisted(() => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
   },
+  navigate: vi.fn(),
+}));
+
+vi.mock('react-toastify', () => ({
+  toast: sharedMocks.toast,
 }));
 
 vi.mock('react-router', async () => {
@@ -39,7 +44,7 @@ vi.mock('react-router', async () => {
   return {
     ...actual,
     useParams: () => ({ orgId: 'orgId' }),
-    useNavigate: vi.fn(),
+    useNavigate: () => sharedMocks.navigate,
   };
 });
 
@@ -94,11 +99,14 @@ const renderInvitations = (link: ApolloLink): RenderResult => {
 
 describe('Testing Invvitations Screen', () => {
   beforeEach(() => {
+    localStorage.clear();
     setItem('userId', 'userId');
   });
 
-  afterAll(() => {
+  afterEach(() => {
     vi.clearAllMocks();
+    sharedMocks.navigate.mockReset();
+    localStorage.clear();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {

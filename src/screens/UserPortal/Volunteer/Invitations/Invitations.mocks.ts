@@ -1,26 +1,46 @@
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 
+const baseEvent = (id: string, name: string, startAt: string) => ({
+  _id: id,
+  id,
+  name,
+  startAt,
+  endAt: startAt,
+  recurrenceRule: null,
+});
+
+const baseVolunteer = (
+  id: string,
+  name: string,
+  avatarURL: string | null,
+  email = 'john@example.com',
+) => ({
+  _id: id,
+  id,
+  hasAccepted: false,
+  hoursVolunteered: 0,
+  user: {
+    _id: id.replace('volunteer', 'user'),
+    id: id.replace('volunteer', 'user'),
+    name,
+    emailAddress: email,
+    avatarURL,
+  },
+});
+
+const baseAudit = { id: 'adminId', name: 'Admin User' };
+
 const membership1 = {
   _id: 'membershipId1',
   id: 'membershipId1',
   status: 'invited',
   createdAt: '2024-10-29T10:18:05.851Z',
-  event: {
-    _id: 'eventId',
-    name: 'Event 1',
-    startDate: '2044-10-31',
-    recurrenceRule: null,
-  },
-  volunteer: {
-    _id: 'volunteerId1',
-    user: {
-      _id: 'userId',
-      firstName: 'John',
-      lastName: 'Doe',
-      image: 'img-url',
-    },
-  },
+  updatedAt: '2024-10-29T10:18:05.851Z',
+  event: baseEvent('eventId', 'Event 1', '2044-10-31T10:00:00Z'),
+  volunteer: baseVolunteer('volunteerId1', 'John Doe', 'img-url'),
+  createdBy: baseAudit,
+  updatedBy: baseAudit,
   group: null,
 };
 
@@ -29,100 +49,64 @@ const membership2 = {
   id: 'membershipId2',
   status: 'invited',
   createdAt: '2024-10-30T10:18:05.851Z',
-  event: {
-    _id: 'eventId',
-    name: 'Event 2',
-    startDate: '2044-11-30',
-    recurrenceRule: null,
-  },
-  volunteer: {
-    _id: 'volunteerId1',
-    user: {
-      _id: 'userId',
-      firstName: 'John',
-      lastName: 'Doe',
-      image: null,
-    },
-  },
+  updatedAt: '2024-10-30T10:18:05.851Z',
+  event: baseEvent('eventId2', 'Event 2', '2044-11-30T12:00:00Z'),
+  volunteer: baseVolunteer('volunteerId2', 'John Doe', null),
   group: {
     _id: 'groupId1',
     id: 'groupId1',
     name: 'Group 1',
+    description: 'Group 1 description',
   },
+  createdBy: baseAudit,
+  updatedBy: baseAudit,
 };
 const membership3 = {
   _id: 'membershipId3',
   id: 'membershipId3',
   status: 'invited',
   createdAt: '2024-10-30T10:18:05.851Z',
+  updatedAt: '2024-10-30T10:18:05.851Z',
   event: {
-    _id: 'eventId',
-    name: 'Event 2',
-    startDate: '2044-11-30',
-    recurrenceRule: {
-      id: 'recurrenceRuleId3',
-    },
+    ...baseEvent('eventId3', 'Event 3', '2044-11-30T12:00:00Z'),
+    recurrenceRule: { id: 'recurrenceRuleId3' },
   },
-  volunteer: {
-    _id: 'volunteerId1',
-    user: {
-      _id: 'userId',
-      firstName: 'John',
-      lastName: 'Doe',
-      image: null,
-    },
-  },
+  volunteer: baseVolunteer('volunteerId3', 'John Doe', null),
   group: {
     name: 'Group 2',
     _id: 'groupId2',
     id: 'groupId2',
+    description: 'Group 2 description',
   },
+  createdBy: baseAudit,
+  updatedBy: baseAudit,
 };
 const membership4 = {
   _id: 'membershipId4',
   id: 'membershipId4',
   status: 'invited',
   createdAt: '2024-10-30T10:18:05.851Z',
-  event: {
-    _id: 'eventId',
-    name: 'Event 2',
-    startDate: '2044-11-30',
-    recurrenceRule: null,
-  },
-  volunteer: {
-    _id: 'volunteerId1',
-    user: {
-      _id: 'userId',
-      firstName: 'John',
-      lastName: 'Doe',
-      image: null,
-    },
-  },
+  updatedAt: '2024-10-30T10:18:05.851Z',
+  event: baseEvent('eventId4', 'Event 4', '2044-12-01T08:00:00Z'),
+  volunteer: baseVolunteer('volunteerId4', 'John Doe', null),
   group: null,
+  createdBy: baseAudit,
+  updatedBy: baseAudit,
 };
 const membership5 = {
   _id: 'membershipId5',
   id: 'membershipId5',
   status: 'invited',
   createdAt: '2024-10-30T10:18:05.851Z',
+  updatedAt: '2024-10-30T10:18:05.851Z',
   event: {
-    _id: 'eventId',
-    name: 'Event 2',
-    startDate: '2044-11-30',
-    recurrenceRule: {
-      id: 'recurrenceRuleId5',
-    },
+    ...baseEvent('eventId5', 'Event 5', '2044-11-30T13:00:00Z'),
+    recurrenceRule: { id: 'recurrenceRuleId5' },
   },
-  volunteer: {
-    _id: 'volunteerId1',
-    user: {
-      _id: 'userId',
-      firstName: 'John',
-      lastName: 'Doe',
-      image: null,
-    },
-  },
+  volunteer: baseVolunteer('volunteerId5', 'John Doe', null),
   group: null,
+  createdBy: baseAudit,
+  updatedBy: baseAudit,
 };
 
 export const MOCKS = [

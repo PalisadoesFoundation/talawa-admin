@@ -7,6 +7,7 @@ import {
   GET_USER_NOTIFICATIONS,
   MARK_NOTIFICATION_AS_READ,
 } from 'GraphQl/Queries/NotificationQueries';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 
 vi.mock('utils/useLocalstorage', () => ({
   __esModule: true,
@@ -129,6 +130,10 @@ const generateNotifications = (
     isRead,
     navigation: `/notification/${i + 1}`,
   }));
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
 
 describe('Notification Component', () => {
   it('should render skeleton loader while loading', () => {

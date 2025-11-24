@@ -740,7 +740,12 @@
     "pinPost": "Pin post",
     "Next": "Next Page",
     "Previous": "Previous Page",
-    "cancel": "cancel"
+    "cancel": "cancel",
+    "messageTitleError": "Post title cannot be empty!",
+    "organizationIdMissing": "Organization ID is missing!",
+    "messageDescription": "Post Description",
+    "addVideo": "Add Video",
+    "creatingMessage": "Creating Post..."
   },
   "postNotFound": {
     "post": "Post",

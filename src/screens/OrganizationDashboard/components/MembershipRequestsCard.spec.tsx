@@ -11,12 +11,14 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
+const toastMocks = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+}));
+
 // Mock react-toastify
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: toastMocks,
 }));
 
 // Mock CardItem component
@@ -44,6 +46,11 @@ vi.mock(
 );
 
 describe('MembershipRequestsCard Component', () => {
+  afterEach(() => {
+    toastMocks.success.mockReset();
+    toastMocks.error.mockReset();
+    vi.restoreAllMocks();
+  });
   const mockMembershipRequestData = {
     organization: {
       membershipRequests: [
