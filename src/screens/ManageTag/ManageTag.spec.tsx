@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
-import ManageTag from './ManageTag';
+import ManageTag, { getManageTagErrorMessage } from './ManageTag';
 import { MOCKS, MOCKS_ERROR_ASSIGNED_MEMBERS } from './ManageTagMocks';
 import {
   MOCKS_SUCCESS_UNASSIGN_USER_TAG,
@@ -19,6 +19,8 @@ import {
   MOCKS_WITH_ANCESTOR_TAGS,
   MOCKS_INFINITE_SCROLL_PAGINATION,
   MOCKS_ERROR_OBJECT,
+  MOCKS_INFINITE_SCROLL_NULL_EDGES,
+  MOCKS_INFINITE_SCROLL_NULL_FETCH_RESULT,
 } from './ManageTagNonErrorMocks';
 import {
   MOCKS_NULL_USERS_ASSIGNED_TO,
@@ -35,7 +37,7 @@ import {
 import { USER_TAGS_ASSIGNED_MEMBERS } from 'GraphQl/Queries/userTagQueries';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import { type ApolloLink } from '@apollo/client';
-import { vi, beforeEach, afterEach, expect, it } from 'vitest';
+import { vi, beforeEach, afterEach, expect, it, describe } from 'vitest';
 
 const translations = {
   ...JSON.parse(
@@ -87,6 +89,11 @@ const link15 = new StaticMockLink(MOCKS_NULL_DATA, false);
 const link16 = new StaticMockLink(MOCKS_ERROR_UNASSIGN_USER_TAG, false);
 const link17 = new StaticMockLink(MOCKS_ERROR_UPDATE_USER_TAG, false);
 const link18 = new StaticMockLink(MOCKS_ERROR_REMOVE_USER_TAG, false);
+const link19 = new StaticMockLink(MOCKS_INFINITE_SCROLL_NULL_EDGES, false);
+const link20 = new StaticMockLink(
+  MOCKS_INFINITE_SCROLL_NULL_FETCH_RESULT,
+  false,
+);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -142,6 +149,16 @@ const renderManageTag = (link: ApolloLink): RenderResult => {
     </MockedProvider>,
   );
 };
+
+describe('getManageTagErrorMessage', () => {
+  it('returns message for Error instances', () => {
+    expect(getManageTagErrorMessage(new Error('boom'))).toBe('boom');
+  });
+
+  it('stringifies non-error values', () => {
+    expect(getManageTagErrorMessage('custom issue')).toBe('custom issue');
+  });
+});
 
 describe('Manage Tag Page', () => {
   beforeEach(() => {
@@ -722,6 +739,43 @@ describe('Manage Tag Page', () => {
     });
   });
 
+  it('handles pagination when edges are null', async () => {
+    const toastErrorMock = vi.mocked(toast.error);
+    toastErrorMock.mockClear();
+    renderManageTag(link19);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('load-more-trigger')).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByTestId('load-more-trigger'));
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('load-more-trigger')).not.toBeInTheDocument();
+    });
+
+    expect(toastErrorMock).not.toHaveBeenCalled();
+  });
+
+  it('retains previous data when fetchMore returns null result', async () => {
+    renderManageTag(link20);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('viewProfileBtn')[0]).toBeInTheDocument();
+    });
+    const initialCount = screen.getAllByTestId('viewProfileBtn').length;
+
+    await userEvent.click(screen.getByTestId('load-more-trigger'));
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('viewProfileBtn').length).toBe(initialCount);
+    });
+  });
+
   it('unassigns a tag from a member', async () => {
     renderManageTag(link);
 
@@ -941,9 +995,29 @@ describe('Manage Tag Page', () => {
     });
   });
 
-  it.skip('handles infinite scroll with pagination correctly', async () => {
-    // This test is a duplicate of the earlier "Fetches more assigned members with infinite scroll" test
-    // Skipped to avoid redundant coverage and reduce test runtime
+  it('handles infinite scroll with pagination correctly', async () => {
+    renderManageTag(link7);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByText('member 1')).toBeInTheDocument();
+    });
+
+    const loadMoreBtn = screen.getByTestId('load-more-trigger');
+    await userEvent.click(loadMoreBtn);
+
+    await waitFor(
+      () => {
+        expect(screen.getByText('member 2')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('load-more-trigger')).not.toBeInTheDocument();
+      expect(screen.getAllByTestId('viewProfileBtn')).toHaveLength(2);
+    });
   });
 
   it('handles non-Error object in catch block', async () => {
