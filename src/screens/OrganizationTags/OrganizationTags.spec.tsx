@@ -28,8 +28,10 @@ import {
   MOCKS_NULL_END_CURSOR,
   MOCKS_NO_MORE_PAGES,
   MOCKS_ASCENDING_NO_SEARCH,
+  TagEdge,
+  makeTagEdge,
+  makeUserTags,
 } from './OrganizationTagsMocks';
-
 import type { ApolloLink } from '@apollo/client';
 
 const translations = {
@@ -467,5 +469,77 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith('Tag creation failed');
     });
+  });
+});
+
+describe('makeUserTags utility function - pageInfo default parameter coverage', () => {
+  test('should use default empty object when pageInfo is not provided', () => {
+    const edges = [makeTagEdge(1), makeTagEdge(2)];
+
+    // Call without second parameter - this uses the default `= {}`
+    const result = makeUserTags(edges);
+
+    expect(result.pageInfo).toEqual({
+      startCursor: '1',
+      endCursor: '2',
+      hasNextPage: false,
+      hasPreviousPage: false,
+    });
+  });
+
+  test('should merge provided pageInfo with defaults', () => {
+    const edges = [makeTagEdge(1), makeTagEdge(2)];
+
+    // Call with partial pageInfo
+    const result = makeUserTags(edges, { hasNextPage: true });
+
+    expect(result.pageInfo).toEqual({
+      startCursor: '1',
+      endCursor: '2',
+      hasNextPage: true,
+      hasPreviousPage: false,
+    });
+  });
+
+  test('should override default values when pageInfo is explicitly provided', () => {
+    const edges = [makeTagEdge(1), makeTagEdge(2)];
+
+    const result = makeUserTags(edges, {
+      startCursor: 'custom-start',
+      endCursor: 'custom-end',
+      hasNextPage: true,
+      hasPreviousPage: true,
+    });
+
+    expect(result.pageInfo).toEqual({
+      startCursor: 'custom-start',
+      endCursor: 'custom-end',
+      hasNextPage: true,
+      hasPreviousPage: true,
+    });
+  });
+
+  test('should handle empty edges array with default pageInfo', () => {
+    const edges: TagEdge[] = [];
+
+    // This specifically tests the default parameter path
+    const result = makeUserTags(edges);
+
+    expect(result.pageInfo).toEqual({
+      startCursor: null,
+      endCursor: null,
+      hasNextPage: false,
+      hasPreviousPage: false,
+    });
+  });
+
+  test('should handle undefined pageInfo explicitly (different from default)', () => {
+    const edges = [makeTagEdge(1)];
+
+    // Explicitly passing undefined - still uses default
+    const result = makeUserTags(edges, undefined);
+
+    expect(result.pageInfo.hasNextPage).toBe(false);
+    expect(result.pageInfo.hasPreviousPage).toBe(false);
   });
 });

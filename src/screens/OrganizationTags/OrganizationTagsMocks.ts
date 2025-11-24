@@ -6,7 +6,7 @@ import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 
 type TagAncestor = { _id: string; name: string };
 
-type TagEdge = {
+export type TagEdge = {
   node: {
     _id: string;
     name: string;
@@ -48,8 +48,7 @@ type ErrorMock = {
 };
 
 /* ---------- Utility builders ---------- */
-
-const makeTagEdge = (
+export const makeTagEdge = (
   id: string | number,
   opts?: {
     parentId?: string | null;
@@ -69,7 +68,7 @@ const makeTagEdge = (
   cursor: String(id),
 });
 
-const makeUserTags = (
+export const makeUserTags = (
   edges: TagEdge[],
   pageInfo: Partial<PageInfo> = {},
 ): UserTags => ({

@@ -295,19 +295,6 @@ function AddMember(): JSX.Element {
   return (
     <>
       <PageHeader
-        search={{
-          placeholder: translateOrgPeople('searchFullName'),
-          onSearch: (value) => {
-            setUserName(value);
-            resetPagination();
-            fetchUsers({
-              variables: {
-                first: PAGE_SIZE,
-                where: value ? { name: value } : undefined,
-              },
-            });
-          },
-        }}
         sorting={[
           {
             title: translateOrgPeople('addMembers'),

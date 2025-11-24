@@ -1253,6 +1253,7 @@ form label,
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 1rem;
 }
 
 @media (max-width: 1020px) {

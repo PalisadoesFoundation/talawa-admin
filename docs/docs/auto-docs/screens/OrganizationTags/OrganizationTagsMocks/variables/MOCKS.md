@@ -6,4 +6,4 @@
 
 > `const` **MOCKS**: (`ListMock` \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `name`: `string`; `organizationId`: `string`; \}; \}; `result`: \{ `data`: \{ `createUserTag`: \{ `_id`: `string`; \}; \}; \}; \})[] = `MOCK_RESPONSES.DEFAULT`
 
-Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:286](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L286)
+Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:285](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L285)
