@@ -36,11 +36,22 @@ const adminServiceMock = adminPluginFileService as AdminServiceMock;
 
 // Mock window.location.reload
 const mockReload = vi.fn();
-Object.defineProperty(window, 'location', {
-  value: {
-    reload: mockReload,
-  },
-  writable: true,
+const originalLocation = window.location;
+const locationStub = { reload: mockReload } as unknown as Location;
+
+beforeAll(() => {
+  Object.defineProperty(window, 'location', {
+    configurable: true,
+    value: locationStub,
+    writable: true,
+  });
+});
+
+afterAll(() => {
+  Object.defineProperty(window, 'location', {
+    configurable: true,
+    value: originalLocation,
+  });
 });
 
 describe('usePluginActions', () => {
@@ -87,6 +98,10 @@ describe('usePluginActions', () => {
 
     adminServiceMock.removePlugin.mockReset();
     adminServiceMock.removePlugin.mockResolvedValue(true);
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('should initialize with correct default state', () => {

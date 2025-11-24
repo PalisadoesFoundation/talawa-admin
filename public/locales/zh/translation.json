@@ -740,7 +740,12 @@
     "pinPost": "针柱",
     "Next": "下一页",
     "Previous": "上一页",
-    "cancel": "取消"
+    "cancel": "取消",
+    "messageTitleError": "帖子标题不能为空！",
+    "organizationIdMissing": "组织ID 缺失！",
+    "messageDescription": "帖子描述",
+    "addVideo": "添加视频",
+    "creatingMessage": "正在创建帖子..."
   },
   "postNotFound": {
     "post": "邮政",

@@ -22,27 +22,42 @@ import { ToastContainer, toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { DocumentNode } from 'graphql';
 
-vi.mock('react-toastify', async () => {
-  const actual = await vi.importActual('react-toastify');
+const { toastMocks, routerMocks, errorHandlerMock } = vi.hoisted(() => {
+  const useParams = vi.fn();
+  useParams.mockReturnValue({ orgId: '123' });
+
   return {
-    ...actual,
-    toast: {
+    toastMocks: {
       success: vi.fn(),
       error: vi.fn(),
     },
+    routerMocks: {
+      useParams,
+    },
+    errorHandlerMock: vi.fn(),
+  };
+});
+
+vi.mock('react-toastify', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-toastify')>('react-toastify');
+  return {
+    ...actual,
+    toast: toastMocks,
   };
 });
 
 vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
+  const actual =
+    await vi.importActual<typeof import('react-router')>('react-router');
   return {
     ...actual,
-    useParams: () => ({ orgId: '123' }),
+    useParams: routerMocks.useParams,
   };
 });
 
 vi.mock('utils/errorHandler', () => ({
-  errorHandler: vi.fn(),
+  errorHandler: errorHandlerMock,
 }));
 
 async function flushPromises() {
@@ -201,6 +216,11 @@ const createMocks = (
 describe('BlockUser Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    routerMocks.useParams.mockReturnValue({ orgId: '123' });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
   describe('Initial Loading and Error States', () => {
     it('shows loading state when fetching data', async () => {

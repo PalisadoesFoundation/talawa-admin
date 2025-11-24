@@ -239,4 +239,13 @@ describe('Testing the App Component', () => {
     // Minimum assertion: PageNotFound rendered something non-empty
     expect(document.body).toBeInTheDocument();
   });
+
+  it('should navigate to user settings', async () => {
+    renderApp(link, '/user/settings');
+
+    await waitFor(() => {
+      // Should render user screen components
+      expect(screen.getByTestId('mock-settings')).toBeInTheDocument();
+    });
+  });
 });
