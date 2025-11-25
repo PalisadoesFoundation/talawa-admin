@@ -15,6 +15,10 @@ describe('SearchBar', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('renders search input with default placeholder', () => {
     render(<SearchBar {...defaultProps} />);
     const input = screen.getByPlaceholderText('Search...');

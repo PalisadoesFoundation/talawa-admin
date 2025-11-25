@@ -10,7 +10,6 @@ vi.mock('../../graphql-service');
 vi.mock('../../utils');
 
 // Mock fetch globally
-global.fetch = vi.fn();
 
 describe('DiscoveryManager', () => {
   let discoveryManager: DiscoveryManager;
@@ -42,6 +41,7 @@ describe('DiscoveryManager', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    global.fetch = vi.fn();
 
     // Setup mock GraphQL service
     mockGraphQLService = {
@@ -52,6 +52,10 @@ describe('DiscoveryManager', () => {
     };
 
     discoveryManager = new DiscoveryManager();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   describe('Constructor and GraphQL Service Management', () => {

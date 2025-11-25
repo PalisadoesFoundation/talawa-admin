@@ -8,7 +8,6 @@ import {
 import { AdminPluginManifest } from '../../../utils/adminPluginInstaller';
 
 // Mock fetch for Vite plugin API calls
-global.fetch = vi.fn();
 
 // Mock fs for Node.js environment
 vi.mock('fs', () => ({
@@ -50,6 +49,7 @@ describe('InternalFileWriter', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    global.fetch = vi.fn();
     mockFetch = fetch as any;
 
     // Reset singleton instance
@@ -66,7 +66,7 @@ describe('InternalFileWriter', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     // Restore original window
     global.window = originalWindow;
   });

@@ -12,7 +12,6 @@ vi.mock('../../managers/extension-registry');
 vi.mock('../../managers/event-manager');
 
 // Mock fetch globally
-global.fetch = vi.fn();
 
 describe('LifecycleManager', () => {
   let lifecycleManager: LifecycleManager;
@@ -53,6 +52,7 @@ describe('LifecycleManager', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    global.fetch = vi.fn();
 
     // Setup mocks
     mockDiscoveryManager = {
@@ -79,6 +79,10 @@ describe('LifecycleManager', () => {
       mockExtensionRegistry as ExtensionRegistryManager,
       mockEventManager as EventManager,
     );
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   describe('Constructor and Initialization', () => {

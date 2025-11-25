@@ -57,7 +57,7 @@ describe('PluginGraphQLService', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Constructor', () => {

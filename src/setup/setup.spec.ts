@@ -56,7 +56,7 @@ describe('Talawa Admin Setup', () => {
   });
 
   afterEach(() => {
-    vi.resetAllMocks();
+    vi.restoreAllMocks();
     processExitSpy.mockRestore();
     consoleErrorSpy.mockRestore();
   });

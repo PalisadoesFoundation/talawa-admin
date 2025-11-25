@@ -25,7 +25,6 @@ vi.mock('../manager', () => ({
 }));
 
 // Mock fetch
-global.fetch = vi.fn();
 
 // Mock React.lazy
 vi.mock('react', async () => {
@@ -54,6 +53,7 @@ vi.mock('react', async () => {
 describe('Plugin Registry', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    global.fetch = vi.fn();
     // Clear the registry before each test
     Object.keys(pluginRegistry).forEach((key) => {
       delete pluginRegistry[key];

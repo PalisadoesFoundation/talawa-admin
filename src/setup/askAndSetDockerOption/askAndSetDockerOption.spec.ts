@@ -31,6 +31,10 @@ describe('askAndSetDockerOption', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should set up Docker when user selects yes', async () => {
     (inquirer.prompt as unknown as Mock).mockResolvedValueOnce({
       useDocker: true,
