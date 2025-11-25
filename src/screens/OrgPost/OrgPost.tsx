@@ -12,16 +12,15 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import styles from 'style/app-fixed.module.css';
-import SortingButton from '../../subComponents/SortingButton';
 import PostsRenderer from './Posts';
-// import SearchingButton from 'subComponents/SearchingButton';
-import SearchBar from 'subComponents/SearchBar';
 import type {
   InterfacePostEdge,
   InterfaceOrganizationPostListData,
   InterfacePost,
 } from '../../types/Post/interface';
 import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
+import PageHeader from 'shared-components/Navbar/Navbar';
+import AddIcon from '@mui/icons-material/Add';
 
 import CreatePostModal from './CreatePostModal';
 
@@ -41,7 +40,6 @@ function OrgPost(): JSX.Element {
   const postsPerPage = 6;
   const [displayPosts, setDisplayPosts] = useState<InterfacePost[]>([]);
   const { orgId: currentUrl } = useParams();
-  const [showTitle] = useState(true);
   const [after, setAfter] = useState<string | null | undefined>(null);
   const [before, setBefore] = useState<string | null | undefined>(null);
   const [first, setFirst] = useState<number | null>(6);
@@ -153,9 +151,9 @@ function OrgPost(): JSX.Element {
       />
     </div>
   );
-  const handleSorting = (option: string): void => {
+  const handleSorting = (option: string | number): void => {
     setCurrentPage(1);
-    setSortingOption(option);
+    setSortingOption(option as string);
 
     if (option === 'None') {
       setDisplayPosts([]);
@@ -271,36 +269,27 @@ function OrgPost(): JSX.Element {
     <>
       <Row className={styles.head}>
         <div className={styles.mainpagerightOrgPost}>
-          <div className={styles.btnsContainerOrgPost}>
-            <SearchBar
-              placeholder={showTitle ? t('searchTitle') : t('searchText')}
-              onSearch={handleSearch}
-              inputTestId="searchByName"
-            />
-
-            <div className={styles.btnsBlockOrgPost}>
-              <div className="d-flex">
-                {/* <SearchingButton
-                  text="Search" 
-                  dataTestIdPrefix="sort-button"
-                  type="sort" 
-                  className={`${styles.dropdown} `}
-                /> */}
-                <SortingButton
-                  title="Sort Post"
-                  sortingOptions={[
-                    { label: 'Latest', value: 'latest' },
-                    { label: 'Oldest', value: 'oldest' },
-                    { label: 'None', value: 'None' },
-                  ]}
-                  selectedOption={sortingOption}
-                  onSortChange={handleSorting}
-                  data-testid="sorting"
-                  dataTestIdPrefix="sortpost-toggle"
-                  dropdownTestId="sortpost-dropdown"
-                />
-              </div>
-
+          <PageHeader
+            search={{
+              placeholder: t('searchTitle'),
+              onSearch: handleSearch,
+              inputTestId: 'searchByName',
+            }}
+            sorting={[
+              {
+                title: 'Sort Post',
+                options: [
+                  { label: 'Latest', value: 'latest' },
+                  { label: 'Oldest', value: 'oldest' },
+                  { label: 'None', value: 'None' },
+                ],
+                selected: sortingOption,
+                onChange: handleSorting,
+                testIdPrefix: 'sortpost-toggle',
+              },
+            ]}
+            showEventTypeFilter={false}
+            actions={
               <Button
                 variant="success"
                 onClick={showInviteModal}
@@ -308,11 +297,12 @@ function OrgPost(): JSX.Element {
                 data-cy="createPostModalBtn"
                 className={`${styles.createButton} mb-2`}
               >
-                <i className={'fa fa-plus me-2'} />
+                <AddIcon sx={{ fontSize: '20px', marginRight: '6px' }} />
                 {t('createPost')}
               </Button>
-            </div>
-          </div>
+            }
+          />
+
           <div className={`row ${styles.list_box}`}>{content}</div>
         </div>
         <div className="row m-lg-1 d-flex justify-content-center w-100">
