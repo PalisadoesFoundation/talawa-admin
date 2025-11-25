@@ -555,9 +555,17 @@ jobs:
         run: |
           mkdir -p ./coverage/vitest
 
-          echo "Installing system lcov..."
-          apt-get update
-          apt-get install -y lcov
+          echo "Finding coverage data from shards..."
+          SHARD_DIRS=$(find coverage-shards -type d -name "coverage-shard-*" 2>/dev/null || true)
+
+          if [ -z "$SHARD_DIRS" ]; then
+            echo "ERROR: No shard directories found!"
+            ls -la coverage-shards/ || true
+            exit 1
+          fi
+
+          echo "Found shard directories:"
+          echo "$SHARD_DIRS"
 
           echo "Collecting shard LCOV files..."
           find coverage-shards -name "lcov.info" -type f > lcov-files.txt
@@ -570,26 +578,42 @@ jobs:
           echo "Found coverage files:"
           cat lcov-files.txt
 
-          echo "Building LCOV merge command..."
-          MERGE_CMD=""
+          # Validate each file exists and is not empty
           while IFS= read -r file; do
-            MERGE_CMD="$MERGE_CMD -a $file"
+            if [ ! -f "$file" ]; then
+              echo "ERROR: Coverage file does not exist: $file"
+              exit 1
+            fi
+            if [ ! -s "$file" ]; then
+              echo "ERROR: Coverage file is empty: $file"
+              exit 1
+            fi
           done < lcov-files.txt
 
-          echo "Merging LCOV reports..."
-          # shellcheck disable=SC2086
-          lcov $MERGE_CMD -o ./coverage/vitest/lcov.info
+          echo "Merging coverage reports with lcov-result-merger..."
+          pnpm exec lcov-result-merger coverage-shards/**/lcov.info ./coverage/vitest/lcov.info
 
-          echo "Cleaning LCOV paths..."
-          lcov --remove ./coverage/vitest/lcov.info "node_modules/*" "cypress/*" -o ./coverage/vitest/lcov.info
 
+          # Validate merged file exists and is not empty
           if [ ! -s ./coverage/vitest/lcov.info ]; then
             echo "ERROR: Merged coverage file is empty or missing!"
             exit 1
           fi
 
           echo "Coverage merge successful"
-          wc -l ./coverage/vitest/lcov.info
+          echo "Merged file size: $(wc -l < ./coverage/vitest/lcov.info) lines"
+
+          # Count number of source files in merged coverage
+          SF_COUNT=$(grep -c "^SF:" ./coverage/vitest/lcov.info || echo "0")
+          echo "Number of files in merged coverage: $SF_COUNT"
+
+          if [ "$SF_COUNT" -lt 250 ]; then
+            echo "WARNING: Only $SF_COUNT files in coverage (expected 300+)"
+            echo "This might indicate incomplete coverage merge"
+          fi
+
+          echo "First 30 lines of merged coverage:"
+          head -30 ./coverage/vitest/lcov.info
 
       - name: Clean up individual shard coverage files
         if: steps.check-artifacts.outputs.artifacts_found == 'true'
