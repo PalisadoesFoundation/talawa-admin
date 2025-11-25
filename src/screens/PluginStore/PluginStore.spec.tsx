@@ -186,8 +186,8 @@ describe('PluginStore', () => {
       renderPluginStore();
 
       expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument();
-      expect(screen.getByTestId('plugin-store-searchbar')).toBeInTheDocument();
-      expect(screen.getByTestId('plugin-store-filters')).toBeInTheDocument();
+      expect(screen.getByTestId('searchPlugins')).toBeInTheDocument();
+      expect(screen.getByTestId('filterPlugins')).toBeInTheDocument();
       expect(screen.getByTestId('plugin-list-container')).toBeInTheDocument();
     });
 
