@@ -96,6 +96,7 @@
     "start-server": "node scripts/start-server.js",
     "cy:open": "pnpm run start-server cypress:open",
     "cy:run": "cross-env CYPRESS_COVERAGE=true pnpm run start-server cypress:run",
+    "check-mock-cleanup": "bash scripts/githooks/check-mock-cleanup.sh",
     "check:pom": "node scripts/githooks/check_pom.js"
   },
   "eslintConfig": {

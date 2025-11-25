@@ -97,6 +97,9 @@ jobs:
       - name: Check for localStorage Usage
         run: pnpm exec tsx scripts/githooks/check-localstorage-usage.ts --scan-entire-repo
 
+      - name: Check for proper mock cleanup in test files
+        run: pnpm run check-mock-cleanup
+
       - name: Compare translation files
         run: |
           chmod +x .github/workflows/scripts/compare_translations.py
