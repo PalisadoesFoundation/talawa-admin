@@ -84,6 +84,20 @@ const UserSidebarOrg = ({
     }
   }, [setHideDrawer]);
 
+  // User Profile Section at top (only when drawer is not hidden)
+  const headerContent = !hideDrawer ? (
+    <div
+      style={{
+        backgroundColor: '#e8f4f8',
+        padding: '10px',
+        borderRadius: '8px',
+        margin: '10px',
+      }}
+    >
+      <ProfileCard />
+    </div>
+  ) : null;
+
   const drawerContent = useMemo(
     () => (
       <div className={styles.optionList}>
@@ -152,6 +166,7 @@ const UserSidebarOrg = ({
       portalType="user"
       backgroundColor="#f0f7fb"
       persistToggleState={false}
+      headerContent={headerContent}
       footerContent={
         <>
           <div style={{ display: hideDrawer ? 'none' : 'flex' }}>
