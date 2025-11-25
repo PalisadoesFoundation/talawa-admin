@@ -19,7 +19,7 @@
     "@hello-pangea/dnd": "^18.0.1",
     "@mui/icons-material": "7.3.4",
     "@mui/material": "7.3.4",
-    "@mui/system": "7.3.3",
+    "@mui/system": "7.3.5",
     "@mui/x-charts": "^8.5.2",
     "@mui/x-data-grid": "^7.28.3",
     "@mui/x-date-pickers": "^7.28.3",
@@ -41,7 +41,7 @@
     "i18next": "^25.0.2",
     "i18next-browser-languagedetector": "^8.2.0",
     "i18next-http-backend": "^3.0.2",
-    "inquirer": "^12.9.0",
+    "inquirer": "^13.0.1",
     "js-cookie": "^3.0.1",
     "jszip": "^3.10.1",
     "prop-types": "^15.8.1",
@@ -155,7 +155,6 @@
     "husky": "^9.1.6",
     "jest-environment-jsdom": "^30.2.0",
     "knip": "^5.66.0",
-    "lcov-result-merger": "^5.0.1",
     "lint-staged": "^16.2.3",
     "nyc": "^17.1.0",
     "prettier": "^3.6.2",
@@ -195,7 +194,12 @@
     "temp-directory": ".nyc_output"
   },
   "resolutions": {
-    "@apollo/client": "^3.4.0-beta.19"
+    "@apollo/client": "3.13.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@apollo/client": "3.13.0"
+    }
   },
   "engines": {
     "node": ">=24.x"
@@ -215,7 +219,8 @@
       "react-dom": "^19.1.0"
     },
     "gulp-header": "^2.0.9",
-    "rimraf": "^6.1.2"
+    "rimraf": "^6.1.2",
+    "glob": "^13.0.0"
   },
   "lint-staged": {
     "**/*.{ts, tsx, json, scss, css}": [

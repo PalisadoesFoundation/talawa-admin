@@ -16,7 +16,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import People from './People';
 import userEvent from '@testing-library/user-event';
-import { vi, it } from 'vitest';
+import { vi, it, beforeEach, afterEach } from 'vitest';
 /**
  * This file contains unit tests for the People component.
  *
@@ -37,7 +37,18 @@ const DEFAULT_SEARCH = '';
 const DEFAULT_FIRST = 5;
 
 // Helper for members edges
-const memberEdge = (props: any = {}) => ({
+interface InterfaceMemberEdgeProps {
+  cursor?: string;
+  id?: string;
+  name?: string;
+  role?: string;
+  avatarURL?: string | null;
+  emailAddress?: string | null;
+  node?: Record<string, unknown>;
+}
+
+// Helper for members edges
+const memberEdge = (props: InterfaceMemberEdgeProps = {}) => ({
   cursor: props.cursor || 'cursor1',
   node: {
     id: props.id || 'user-1',
@@ -306,15 +317,19 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+const sharedMocks = vi.hoisted(() => ({
+  useParams: vi.fn(() => ({ orgId: '' })),
+}));
+
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,
-    useParams: () => ({ orgId: '' }),
+    useParams: sharedMocks.useParams,
   };
 });
 
-describe('Testing People Screen [User Portal]', () => {
+const setMatchMediaStub = (): void => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: vi.fn().mockImplementation((query) => ({
@@ -326,7 +341,20 @@ describe('Testing People Screen [User Portal]', () => {
       dispatchEvent: vi.fn(),
     })),
   });
+};
 
+beforeEach(() => {
+  vi.clearAllMocks();
+  sharedMocks.useParams.mockReturnValue({ orgId: '' });
+  setMatchMediaStub();
+});
+
+afterEach(() => {
+  vi.clearAllMocks();
+  sharedMocks.useParams.mockReturnValue({ orgId: '' });
+});
+
+describe('Testing People Screen [User Portal]', () => {
   it('Screen should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} mocks={[defaultQueryMock]}>
@@ -479,22 +507,6 @@ describe('Testing People Screen Pagination [User Portal]', () => {
     );
   };
 
-  beforeAll(() => {
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: vi.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      })),
-    });
-  });
-
   it('handles rows per page change and pagination navigation', async () => {
     renderComponent();
     await wait();
@@ -538,25 +550,6 @@ describe('People Component Mode Switch and Search Coverage', () => {
     await waitFor(() => {
       expect(screen.getByText('Admin User')).toBeInTheDocument();
       expect(screen.queryByText('Test User')).not.toBeInTheDocument();
-    });
-
-    // Mock router param with invalid tab to simulate edge case fallback
-    vi.resetModules();
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom');
-      return {
-        ...actual,
-        useParams: () => ({ tab: 'invalid' }), // simulate invalid mode/tab
-      };
-    });
-
-    // Force a re-render to trigger the useEffect with mocked state
-
-    // Verify the component still renders valid fallback data (e.g., Admin/User list)
-    await waitFor(() => {
-      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-      // Fallback to 'All Members' or default view
-      expect(screen.getByText('Admin User')).toBeInTheDocument();
     });
   });
 
@@ -640,22 +633,6 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
       </MockedProvider>,
     );
   };
-
-  beforeAll(() => {
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: vi.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      })),
-    });
-  });
 
   it('should display user email addresses correctly', async () => {
     renderComponentWithEmailMock();

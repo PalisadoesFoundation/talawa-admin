@@ -46,21 +46,29 @@ interface InterfaceUserPasswordUpdateProps {
   id: string;
 }
 
-const UserUpdate: React.FC<
+// Form reset constant to avoid duplication
+const INITIAL_FORM_STATE = {
+  previousPassword: '',
+  newPassword: '',
+  confirmNewPassword: '',
+};
+
+export const UserUpdate: React.FC<
   InterfaceUserPasswordUpdateProps
 > = (): JSX.Element => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userPasswordUpdate',
   });
   const { t: tCommon } = useTranslation('common');
-  const [formState, setFormState] = React.useState({
-    previousPassword: '',
-    newPassword: '',
-    confirmNewPassword: '',
-  });
+
+  const [formState, setFormState] = React.useState(INITIAL_FORM_STATE);
 
   const [login] = useMutation(UPDATE_USER_PASSWORD_MUTATION);
 
+  /**
+   * Handles the form submission to update the password.
+   * Validates the inputs and calls the mutation.
+   */
   const loginLink = async (): Promise<string | void> => {
     if (
       !formState.previousPassword ||
@@ -88,9 +96,8 @@ const UserUpdate: React.FC<
         toast.success(
           tCommon('updatedSuccessfully', { item: 'Password' }) as string,
         );
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        // Reset form state after successful update
+        setFormState(INITIAL_FORM_STATE);
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -101,10 +108,10 @@ const UserUpdate: React.FC<
 
   /**
    * Handles canceling the update process.
-   * It reloads the page to reset any changes.
+   * Resets the form to its initial state.
    */
   const cancelUpdate = (): void => {
-    window.location.reload();
+    setFormState(INITIAL_FORM_STATE);
   };
 
   return (

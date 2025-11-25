@@ -4,10 +4,10 @@
 
 # Function: useGetAllPlugins()
 
-> **useGetAllPlugins**(): `InteropQueryResult`\<\{ `getPlugins`: [`IPlugin`](../interfaces/IPlugin.md)[]; \}, `OperationVariables`\>
+> **useGetAllPlugins**(): `QueryResult`\<\{ `getPlugins`: [`IPlugin`](../interfaces/IPlugin.md)[]; \}, `OperationVariables`\>
 
-Defined in: [src/plugin/graphql-service.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L43)
+Defined in: [src/plugin/graphql-service.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L49)
 
 ## Returns
 
-`InteropQueryResult`\<\{ `getPlugins`: [`IPlugin`](../interfaces/IPlugin.md)[]; \}, `OperationVariables`\>
+`QueryResult`\<\{ `getPlugins`: [`IPlugin`](../interfaces/IPlugin.md)[]; \}, `OperationVariables`\>

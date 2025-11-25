@@ -31,11 +31,13 @@ import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams, useNavigate } from 'react-router';
-import EventHeader from 'components/EventCalender/Header/EventHeader';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
 import CreateEventModal from './CreateEventModal';
+import PageHeader from 'shared-components/Navbar/Navbar';
+import { Button } from 'react-bootstrap';
+import AddIcon from '@mui/icons-material/Add';
 
 // Define the type for an event edge
 interface IEventEdge {
@@ -226,10 +228,46 @@ function organizationEvents(): JSX.Element {
     <>
       <div className={styles.mainpageright}>
         <div className={styles.justifyspOrganizationEvents}>
-          <EventHeader
-            viewType={viewType}
-            handleChangeView={handleChangeView}
-            showInviteModal={showInviteModal}
+          <PageHeader
+            search={{
+              placeholder: t('searchEventName'),
+              onSearch: (value) => console.log(`Search: ${value}`),
+              inputTestId: 'searchEvent',
+              buttonTestId: 'searchButton',
+            }}
+            sorting={[
+              {
+                title: t('viewType'),
+                selected: viewType,
+                options: [
+                  { label: ViewType.MONTH, value: ViewType.MONTH },
+                  { label: ViewType.DAY, value: ViewType.DAY },
+                  { label: ViewType.YEAR, value: ViewType.YEAR },
+                ],
+                onChange: (value) => handleChangeView(value.toString()),
+                testIdPrefix: 'selectViewType',
+              },
+            ]}
+            showEventTypeFilter={true}
+            actions={
+              <Button
+                className={styles.dropdown}
+                onClick={showInviteModal}
+                data-testid="createEventModalBtn"
+                data-cy="createEventModalBtn"
+              >
+                <div>
+                  <AddIcon
+                    sx={{
+                      fontSize: '25px',
+                      marginBottom: '2px',
+                      marginRight: '2px',
+                    }}
+                  />
+                  <span>{t('createEvent')}</span>
+                </div>
+              </Button>
+            }
           />
         </div>
       </div>

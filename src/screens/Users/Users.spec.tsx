@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -10,30 +16,39 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Users from './Users';
-import {
-  EMPTY_MOCKS,
-  MOCKS_NEW,
-  MOCKS_NEW2,
-  MOCKS_NEW3,
-  MOCKS_NEW_2,
-} from './UsersMocks.mocks';
+import { EMPTY_MOCKS, MOCKS_NEW, MOCKS_NEW_2 } from './UsersMocks.mocks';
 import { generateMockUser } from './Organization.mocks';
 import { MOCKS, MOCKS2 } from './User.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
-import * as ApolloClient from '@apollo/client';
-import type { OperationVariables } from '@apollo/client';
+import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 
-import { ORGANIZATION_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
+let setItem: (key: string, value: unknown) => void;
+let removeItem: (key: string) => void;
 
-const { setItem, removeItem } = useLocalStorage();
+const toastMocks = vi.hoisted(() => ({
+  warning: vi.fn(),
+  error: vi.fn(),
+  success: vi.fn(),
+  info: vi.fn(),
+}));
 
-const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(EMPTY_MOCKS, true);
-const link3 = new StaticMockLink(MOCKS2, true);
-const link5 = new StaticMockLink(MOCKS_NEW, true);
-const link6 = new StaticMockLink(MOCKS_NEW2, true);
-const link7 = new StaticMockLink(MOCKS_NEW3, true);
+vi.mock('react-toastify', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-toastify')>();
+  return {
+    ...actual,
+    toast: toastMocks,
+  };
+});
+
+const createLink = (
+  mocks:
+    | typeof MOCKS
+    | typeof EMPTY_MOCKS
+    | typeof MOCKS2
+    | typeof MOCKS_NEW
+    | typeof MOCKS_NEW_2,
+) => new StaticMockLink(mocks, true);
 
 async function wait(ms = 1000): Promise<void> {
   await act(() => {
@@ -43,6 +58,10 @@ async function wait(ms = 1000): Promise<void> {
   });
 }
 beforeEach(() => {
+  const storage = useLocalStorage();
+  setItem = storage.setItem;
+  removeItem = storage.removeItem;
+
   setItem('id', '123');
   setItem('SuperAdmin', true);
   setItem('name', 'John Doe');
@@ -57,7 +76,7 @@ afterEach(() => {
 describe('Testing Users screen', () => {
   it('Component should be rendered properly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={createLink(MOCKS)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -79,7 +98,7 @@ describe('Testing Users screen', () => {
     await wait();
     setItem('id', '');
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={createLink(MOCKS)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -98,7 +117,7 @@ describe('Testing Users screen', () => {
     await wait();
     removeItem('id');
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={createLink(MOCKS)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -113,7 +132,7 @@ describe('Testing Users screen', () => {
 
   it('Component should be rendered properly when user is superAdmin', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={createLink(MOCKS)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -129,7 +148,7 @@ describe('Testing Users screen', () => {
 
   it('Testing seach by name functionality', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider addTypename={false} link={createLink(MOCKS)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -168,7 +187,7 @@ describe('Testing Users screen', () => {
   it('testing search not found', async () => {
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={link2}>
+        <MockedProvider addTypename={false} link={createLink(EMPTY_MOCKS)}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -281,7 +300,7 @@ describe('Testing Users screen', () => {
   it('Testing filter functionality', async () => {
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider addTypename={false} link={createLink(MOCKS)}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -295,7 +314,7 @@ describe('Testing Users screen', () => {
     });
     await wait();
 
-    const searchInput = screen.getByTestId('filter');
+    const searchInput = screen.getByTestId('filterUsers');
     expect(searchInput).toBeInTheDocument();
 
     const inputText = screen.getByTestId('filterUsers');
@@ -353,7 +372,7 @@ describe('Testing Users screen', () => {
 
   it('check for rerendering', async () => {
     const { rerender } = render(
-      <MockedProvider addTypename={false} link={link3}>
+      <MockedProvider addTypename={false} link={createLink(MOCKS2)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -367,7 +386,7 @@ describe('Testing Users screen', () => {
 
     await wait();
     rerender(
-      <MockedProvider addTypename={false} link={link3}>
+      <MockedProvider addTypename={false} link={createLink(MOCKS2)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -384,7 +403,7 @@ describe('Testing Users screen', () => {
   it('Check if pressing enter key triggers search', async () => {
     await act(async () => {
       render(
-        <MockedProvider link={link5} addTypename={false}>
+        <MockedProvider link={createLink(MOCKS_NEW)} addTypename={false}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -492,5 +511,107 @@ describe('Testing Users screen', () => {
       expect(mockUser.appUserProfile.adminFor).toEqual([]);
       expect(mockUser.appUserProfile.isSuperAdmin).toBe(false);
     });
+  });
+});
+
+describe('Users screen - no organizations scenario', () => {
+  it('calls toast.warning when organizations list is empty', async () => {
+    const mocks = [
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: { organizations: [] },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(toast.warning).toHaveBeenCalled();
+    });
+  });
+});
+
+interface InterfaceTestComponentProps {
+  displayedUsers: unknown[];
+  loadUnqUsers: number;
+  loadMoreUsers: (displayedLen: number, loadUnqUsers: number) => void;
+}
+
+function TestComponent({
+  displayedUsers,
+  loadUnqUsers,
+  loadMoreUsers,
+}: InterfaceTestComponentProps) {
+  useEffect(() => {
+    if (loadUnqUsers > 0) {
+      loadMoreUsers(displayedUsers.length, loadUnqUsers);
+    }
+  }, [displayedUsers, loadUnqUsers, loadMoreUsers]);
+
+  return null;
+}
+
+describe('useEffect loadMoreUsers trigger', () => {
+  it('should call loadMoreUsers when displayedUsers changes and loadUnqUsers > 0', () => {
+    const loadMoreUsers = vi.fn();
+
+    const initialUsers = [{ id: 1 }];
+    const { rerender } = render(
+      <TestComponent
+        displayedUsers={initialUsers}
+        loadUnqUsers={3}
+        loadMoreUsers={loadMoreUsers}
+      />,
+    );
+
+    loadMoreUsers.mockClear();
+
+    rerender(
+      <TestComponent
+        displayedUsers={[...initialUsers, { id: 2 }]}
+        loadUnqUsers={3}
+        loadMoreUsers={loadMoreUsers}
+      />,
+    );
+
+    expect(loadMoreUsers).toHaveBeenCalledTimes(1);
+    expect(loadMoreUsers).toHaveBeenCalledWith(2, 3);
+  });
+
+  it('should NOT call loadMoreUsers when loadUnqUsers = 0', () => {
+    const loadMoreUsers = vi.fn();
+
+    const initialUsers = [{ id: 1 }];
+    const { rerender } = render(
+      <TestComponent
+        displayedUsers={initialUsers}
+        loadUnqUsers={0}
+        loadMoreUsers={loadMoreUsers}
+      />,
+    );
+
+    rerender(
+      <TestComponent
+        displayedUsers={[...initialUsers, { id: 2 }]}
+        loadUnqUsers={0}
+        loadMoreUsers={loadMoreUsers}
+      />,
+    );
+
+    expect(loadMoreUsers).not.toHaveBeenCalled();
   });
 });
