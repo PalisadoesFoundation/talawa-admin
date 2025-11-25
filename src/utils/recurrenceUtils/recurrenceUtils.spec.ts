@@ -12,8 +12,13 @@ import {
   type InterfaceRecurrenceRule,
   WeekDays,
 } from './recurrenceTypes';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 
 describe('Recurrence Utility Functions', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   const startDate = new Date('2024-07-21T10:00:00.000Z');
 
   describe('validateRecurrenceInput', () => {

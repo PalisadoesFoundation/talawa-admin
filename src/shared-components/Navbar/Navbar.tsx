@@ -1,0 +1,154 @@
+/**
+ * PageHeader Component
+ *
+ * A flexible and reusable header component used across multiple screens.
+ * It supports page title, search bar, sorting dropdowns, optional event type filter,
+ * and action buttons.
+ *
+ * @component
+ *
+ * @remarks
+ * - Primarily used for pages that require filtering, sorting, or search.
+ * - Uses `SearchBar` and `SortingButton` subcomponents for search and sorting functionality.
+ * - Layout is responsive and adjusts based on provided props.
+ *
+ * @example
+ * ```tsx
+ * <PageHeader
+ *   title="Users"
+ *   search={{
+ *     placeholder: "Search user...",
+ *     onSearch: handleSearch
+ *   }}
+ *   sorting={[
+ *     {
+ *       title: "Sort By",
+ *       options: [
+ *         { label: "Newest", value: "DESC" },
+ *         { label: "Oldest", value: "ASC" }
+ *       ],
+ *       selected: "DESC",
+ *       onChange: handleSort,
+ *       testIdPrefix: "usersSort"
+ *     }
+ *   ]}
+ *   actions={<Button>Add User</Button>}
+ * />
+ * ```
+ *
+ * @param {string} [title] — Optional title displayed at the top of the page.
+ * @param {{
+ *   placeholder: string;
+ *   onSearch: (value: string) => void;
+ *   inputTestId?: string;
+ *   buttonTestId?: string;
+ * }} [search] — Search bar configuration.
+ *
+ * @param {Array<{
+ *   title: string;
+ *   options: { label: string; value: string | number }[];
+ *   selected: string | number;
+ *   onChange: (value: string | number) => void;
+ *   testIdPrefix: string;
+ * }>} [sorting] — List of sorting dropdown selectors.
+ *
+ * @param {boolean} [showEventTypeFilter=false] — Whether to show the event type dropdown.
+ *
+ * @param {React.ReactNode} [actions] — Action buttons/elements rendered on the right side.
+ *
+ * @returns {JSX.Element} The rendered PageHeader component.
+ */
+import React from 'react';
+import styles from 'style/app-fixed.module.css';
+import SearchBar from 'subComponents/SearchBar';
+import SortingButton from 'subComponents/SortingButton';
+
+interface InterfacePageHeaderProps {
+  title?: string;
+  search?: {
+    placeholder: string;
+    onSearch: (value: string) => void;
+    inputTestId?: string;
+    buttonTestId?: string;
+  };
+  sorting?: Array<{
+    title: string;
+    options: { label: string; value: string | number }[];
+    selected: string | number;
+    onChange: (value: string | number) => void;
+    testIdPrefix: string;
+  }>;
+  showEventTypeFilter?: boolean;
+  actions?: React.ReactNode;
+}
+
+export default function PageHeader({
+  title,
+  search,
+  sorting,
+  showEventTypeFilter = false,
+  actions,
+}: InterfacePageHeaderProps) {
+  return (
+    <div
+      className={styles.calendarEventHeader}
+      data-testid="calendarEventHeader"
+    >
+      <div className={styles.calendar__header}>
+        {title && <h2 className={styles.pageHeaderTitle}>{title}</h2>}
+
+        {/* ===== Search Bar ===== */}
+        {search && (
+          <SearchBar
+            placeholder={search.placeholder}
+            onSearch={search.onSearch}
+            inputTestId={search.inputTestId}
+            buttonTestId={search.buttonTestId}
+          />
+        )}
+
+        {/* ===== Sorting Props ===== */}
+        {sorting &&
+          sorting.map((sort, idx) => (
+            <div key={idx} className={styles.space}>
+              <SortingButton
+                title={sort.title}
+                sortingOptions={sort.options}
+                selectedOption={sort.selected}
+                onSortChange={sort.onChange}
+                dataTestIdPrefix={sort.testIdPrefix}
+                className={styles.dropdown}
+              />
+            </div>
+          ))}
+
+        {/*  Optional Event Type dropdown */}
+        {showEventTypeFilter && (
+          <div className={styles.btnsBlock}>
+            <SortingButton
+              title="Event Type"
+              sortingOptions={[
+                { label: 'Events', value: 'Events' },
+                { label: 'Workshops', value: 'Workshops' },
+              ]}
+              selectedOption={'Events'}
+              onSortChange={(value) =>
+                console.log(`Selected Event Type: ${value}`)
+              }
+              dataTestIdPrefix="eventType"
+              className={styles.dropdown}
+              buttonLabel="Event Type"
+            />
+          </div>
+        )}
+
+        {/* ===== Action Buttons ===== */}
+        {actions && (
+          <div className={styles.btnsBlock}>
+            <div className={styles.selectTypeEventHeader}>{actions}</div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

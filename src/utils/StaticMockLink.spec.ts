@@ -126,6 +126,10 @@ describe('StaticMockLink', () => {
     mockLink = new StaticMockLink([], true);
   });
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('should create instance with empty mocked responses', () => {
     expect(mockLink).toBeInstanceOf(StaticMockLink);
     expect(mockLink.addTypename).toBe(true);

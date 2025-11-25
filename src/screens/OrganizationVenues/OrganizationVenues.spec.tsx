@@ -237,7 +237,7 @@ describe('Organisation Venues', () => {
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
 
-    fireEvent.click(screen.getByTestId('searchByDrpdwn'));
+    fireEvent.click(screen.getByTestId('searchByButton'));
     fireEvent.click(screen.getByTestId('desc'));
 
     const searchInput = screen.getByTestId('searchBy');

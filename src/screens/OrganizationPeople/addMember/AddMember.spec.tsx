@@ -918,7 +918,6 @@ describe('AddMember Component', () => {
   test('missing endCursor condition', async () => {
     const orgId = 'org123';
 
-    // Mock with endCursor to trigger line 342
     const mockWithoutEndCursor = createUserListMock(
       {
         first: 10,
@@ -1080,4 +1079,61 @@ describe('AddMember Component', () => {
       expect(toast.error).toHaveBeenCalled();
     });
   });
+});
+
+test('calls setUserName, resetPagination and fetchUsers on search', async () => {
+  const orgId = 'org123';
+
+  const initialUserListMock = createUserListMock({
+    first: 10,
+    after: null,
+    last: null,
+    before: null,
+  });
+
+  const searchMock = createUserListMock({
+    first: 10,
+    where: { name: 'Alex' },
+    after: null,
+    last: null,
+    before: null,
+  });
+
+  const mocks = [
+    createOrganizationsMock(orgId),
+    initialUserListMock,
+    searchMock,
+  ];
+
+  render(
+    <MockedProvider mocks={mocks} addTypename={false}>
+      <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
+        <I18nextProvider i18n={i18nForTest}>
+          <AddMember />
+        </I18nextProvider>
+      </MemoryRouter>
+    </MockedProvider>,
+  );
+
+  // open modal
+  const addMembersButton = await screen.findByTestId('addMembers');
+  fireEvent.click(addMembersButton);
+
+  const existingUserOption = screen.getByText('Existing User');
+  fireEvent.click(existingUserOption);
+
+  // Wait for initial results
+  await screen.findAllByTestId('user');
+
+  // 🔍 search action
+  const searchInput = screen.getByTestId('searchUser');
+  fireEvent.change(searchInput, { target: { value: 'Alex' } });
+
+  const submitButton = screen.getByTestId('submitBtn');
+  fireEvent.click(submitButton);
+
+  // → If setUserName, resetPagination & fetchUsers were called,
+  //    the list refreshes to show only the search result.
+  const users = await screen.findAllByTestId('user');
+  expect(users.length).toBe(2);
 });
