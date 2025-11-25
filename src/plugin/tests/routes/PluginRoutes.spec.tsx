@@ -513,6 +513,43 @@ describe('PluginRoutes', () => {
 
       expect(screen.getByTestId('route-/long')).toBeInTheDocument();
     });
+
+    it('should handle routes with undefined pluginId', async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      const mockRoutes = [
+        {
+          pluginId: undefined as unknown as string,
+          path: '/undefined-plugin',
+          component: 'TestComponent',
+          title: 'Undefined Plugin',
+          permissions: ['user'],
+        },
+      ];
+      mockUsePluginRoutes.mockReturnValue(mockRoutes);
+
+      render(
+        <TestWrapper>
+          <PluginRoutes />
+        </TestWrapper>,
+      );
+
+      expect(screen.getByTestId('route-/undefined-plugin')).toBeInTheDocument();
+
+      // Should NOT call dynamicImportPlugin as we handle it before calling import
+      expect(mockDynamicImportPlugin).not.toHaveBeenCalled();
+
+      // Should render the error message
+      await waitFor(() => {
+        expect(
+          screen.getByText(/Error: Plugin ID is missing for route/i),
+        ).toBeInTheDocument();
+      });
+
+      consoleErrorSpy.mockRestore();
+    });
   });
 
   describe('Mocked Dynamic Import Tests for Full Coverage', () => {
@@ -627,37 +664,6 @@ describe('PluginRoutes', () => {
       expect(errorContainer).toHaveStyle({ margin: '20px' });
 
       consoleErrorSpy.mockRestore();
-    });
-  });
-
-  it('should handle routes with undefined pluginId', async () => {
-    const mockRoutes = [
-      {
-        pluginId: undefined as unknown as string,
-        path: '/undefined-plugin',
-        component: 'TestComponent',
-        title: 'Undefined Plugin',
-        permissions: ['user'],
-      },
-    ];
-    mockUsePluginRoutes.mockReturnValue(mockRoutes);
-
-    render(
-      <TestWrapper>
-        <PluginRoutes />
-      </TestWrapper>,
-    );
-
-    expect(screen.getByTestId('route-/undefined-plugin')).toBeInTheDocument();
-
-    // Should NOT call dynamicImportPlugin as we handle it before calling import
-    expect(mockDynamicImportPlugin).not.toHaveBeenCalled();
-
-    // Should render the error message
-    await waitFor(() => {
-      expect(
-        screen.getByText(/Error: Plugin ID is missing for route/i),
-      ).toBeInTheDocument();
     });
   });
 
