@@ -6,7 +6,7 @@
 
 > `const` **getUserByIdMock**: `object`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L11)
+Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L10)
 
 ## Type Declaration
 
