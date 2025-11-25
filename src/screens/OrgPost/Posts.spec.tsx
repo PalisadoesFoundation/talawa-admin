@@ -76,7 +76,7 @@ vi.mock('./PinnedPostsStory', () => ({
 }));
 
 // Factory function to create PostNode and InterfacePost fixtures
-interface PostFixtureOverrides {
+interface IPostFixtureOverrides {
   id?: string;
   caption?: string;
   createdAt?: string;
@@ -88,18 +88,36 @@ interface PostFixtureOverrides {
   } | null;
   commentCount?: number;
   commentsCount?: number;
-  hasUserVoted?: { hasVoted: boolean; voteType: any };
+  hasUserVoted?: {
+    hasVoted: boolean;
+    voteType: 'up_vote' | 'down_vote' | null;
+  };
   upVotesCount?: number;
   downVotesCount?: number;
   pinnedAt?: string | null;
   pinned?: boolean;
-  attachments?: any[];
-  downVoters?: { edges: any[] };
+  attachments?: {
+    mimeType: string;
+    name: string;
+    fileHash: string;
+    objectName: string;
+  }[];
+  downVoters?: {
+    edges: {
+      node: {
+        id: string;
+        creator: {
+          id: string;
+          name: string;
+        };
+      };
+    }[];
+  };
   imageUrl?: string;
   videoUrl?: string;
 }
 
-function buildPostPair(overrides: PostFixtureOverrides = {}) {
+function buildPostPair(overrides: IPostFixtureOverrides = {}) {
   const defaultId = 'post-default';
   const defaultCaption = 'Default Post Caption';
   const defaultCreatedAt = '2023-01-01T00:00:00Z';
