@@ -48,24 +48,24 @@ import {
   EditOutlined,
 } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
-import UserDefault from '../../../assets/images/defaultImg.png';
+import UserDefault from '../../assets/images/defaultImg.png';
 import type {
   InterfaceComment,
   InterfaceCommentEdge,
   InterfacePostCard,
-} from 'utils/interfaces';
+} from '../../utils/interfaces';
 import {
   CREATE_COMMENT_POST,
   DELETE_POST_MUTATION,
   UPDATE_POST_VOTE,
   UPDATE_POST_MUTATION,
-} from 'GraphQl/Mutations/mutations';
-import { GET_POST_COMMENTS } from 'GraphQl/Queries/Queries';
-import { errorHandler } from 'utils/errorHandler';
-import CommentCard from '../CommentCard/CommentCard';
-import styles from '../../../style/app-fixed.module.css';
-import { PluginInjector } from 'plugin';
-import useLocalStorage from 'utils/useLocalstorage';
+} from '../../GraphQl/Mutations/mutations';
+import { GET_POST_COMMENTS } from '../../GraphQl/Queries/Queries';
+import { errorHandler } from '../../utils/errorHandler';
+import CommentCard from '../../components/UserPortal/CommentCard/CommentCard';
+import styles from '../../style/app-fixed.module.css';
+import { PluginInjector } from '../../plugin';
+import useLocalStorage from '../../utils/useLocalstorage';
 
 const PostContainer = styled(Box)(({ theme }) => ({
   width: '100%',

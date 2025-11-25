@@ -75,15 +75,15 @@
 }
 
 .postHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  display: 'flex';
+  justify-content: 'space-between';
+  align-items: 'center';
   padding: 14px 16px;
 }
 
 .postUser {
-  display: flex;
-  align-items: center;
+  display: 'flex';
+  align-items: 'center';
 }
 
 .postAvatar {
@@ -114,13 +114,13 @@
 }
 
 .postActions {
-  display: flex;
-  justify-content: space-between;
+  display: 'flex';
+  justify-content: 'space-between';
   padding: 8px 16px;
 }
 
 .leftActions {
-  display: flex;
+  display: 'flex';
   gap: 16px;
 }
 

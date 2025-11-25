@@ -1,5 +1,9 @@
-import { ORGANIZATION_POST_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATION_POST_LIST,
+  ORGANIZATION_POST_LIST_WITH_VOTES,
+} from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import { enrichPostNode } from './OrgPostMocks.helpers';
 import {
   getUserByIdMock,
@@ -23,9 +27,10 @@ export { enrichPostNode } from './OrgPostMocks.helpers';
 export const getOrganizationPostListMock = (count = 1) => {
   const mock = {
     request: {
-      query: ORGANIZATION_POST_LIST,
+      query: ORGANIZATION_POST_LIST_WITH_VOTES,
       variables: {
         input: { id: '123' },
+        userId: 'user123',
         after: null,
         before: null,
         first: 6,
@@ -62,9 +67,10 @@ export const getOrganizationPostListMock = (count = 1) => {
 export const getMockOrgPostList1 = (count = 1) => {
   const mock = {
     request: {
-      query: ORGANIZATION_POST_LIST,
+      query: ORGANIZATION_POST_LIST_WITH_VOTES,
       variables: {
         input: { id: '123' },
+        userId: null,
         after: null,
         before: null,
         first: 6,
@@ -170,9 +176,10 @@ export const mocks = [
   ...getMockOrgPostList1(5),
   {
     request: {
-      query: ORGANIZATION_POST_LIST,
+      query: ORGANIZATION_POST_LIST_WITH_VOTES,
       variables: {
         input: { id: '123' },
+        userId: null,
         after: 'cursor1',
         before: null,
         first: 6,
@@ -183,9 +190,10 @@ export const mocks = [
   },
   {
     request: {
-      query: ORGANIZATION_POST_LIST,
+      query: ORGANIZATION_POST_LIST_WITH_VOTES,
       variables: {
         input: { id: '123' },
+        userId: null,
         after: null,
         before: 'cursor2',
         first: null,

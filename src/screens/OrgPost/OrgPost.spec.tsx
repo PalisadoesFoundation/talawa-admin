@@ -13,7 +13,7 @@ import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
 import OrgPost from './OrgPost';
 import {
   GET_POSTS_BY_ORG,
-  ORGANIZATION_POST_LIST,
+  ORGANIZATION_POST_LIST_WITH_VOTES,
 } from 'GraphQl/Queries/Queries';
 import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -814,9 +814,10 @@ describe('Tests for sorting , nextpage , previousPage', () => {
       },
       {
         request: {
-          query: ORGANIZATION_POST_LIST,
+          query: ORGANIZATION_POST_LIST_WITH_VOTES,
           variables: {
             input: { id: '123' },
+            userId: null,
             after: null,
             before: null,
             first: 6,
@@ -1097,9 +1098,10 @@ describe('OrgPost component - Post Creation Tests', () => {
 
   const orgPostListMock = {
     request: {
-      query: ORGANIZATION_POST_LIST,
+      query: ORGANIZATION_POST_LIST_WITH_VOTES,
       variables: {
         input: { id: mockOrgId },
+        userId: null,
         after: null,
         before: null,
         first: 6,
@@ -1145,9 +1147,10 @@ describe('OrgPost component - Post Creation Tests', () => {
 
   const refetchMock = {
     request: {
-      query: ORGANIZATION_POST_LIST,
+      query: ORGANIZATION_POST_LIST_WITH_VOTES,
       variables: {
         input: { id: mockOrgId },
+        userId: null,
         after: null,
         before: null,
         first: 6,
@@ -1355,9 +1358,10 @@ describe('OrgPost Edge Cases', () => {
       ...baseMocks,
       {
         request: {
-          query: ORGANIZATION_POST_LIST,
+          query: ORGANIZATION_POST_LIST_WITH_VOTES,
           variables: {
             input: { id: '123' },
+            userId: null,
             after: null,
             before: null,
             first: 6,
@@ -1392,9 +1396,10 @@ describe('OrgPost Edge Cases', () => {
       ...baseMocks,
       {
         request: {
-          query: ORGANIZATION_POST_LIST,
+          query: ORGANIZATION_POST_LIST_WITH_VOTES,
           variables: {
             input: { id: '123' },
+            userId: null,
             after: null,
             before: null,
             first: 6,
@@ -1446,9 +1451,10 @@ describe('OrgPost Edge Cases', () => {
       ...baseMocks,
       {
         request: {
-          query: ORGANIZATION_POST_LIST,
+          query: ORGANIZATION_POST_LIST_WITH_VOTES,
           variables: {
             input: { id: '123' },
+            userId: null,
             after: null,
             before: null,
             first: 6,
@@ -2309,9 +2315,10 @@ const getPostsMock2 = {
 
 const orgPostListMockForCreatePost = {
   request: {
-    query: ORGANIZATION_POST_LIST,
+    query: ORGANIZATION_POST_LIST_WITH_VOTES,
     variables: {
       input: { id: '123' },
+      userId: null,
       after: null,
       before: null,
       first: 6,
@@ -2518,9 +2525,10 @@ describe('OrgPost Pinned Posts Functionality', () => {
   // Create proper mocks that work with pinned posts
   const orgPostListWithPostsMock: MockedResponse = {
     request: {
-      query: ORGANIZATION_POST_LIST,
+      query: ORGANIZATION_POST_LIST_WITH_VOTES,
       variables: {
         input: { id: mockOrgId },
+        userId: null,
         after: null,
         before: null,
         first: 6,
@@ -2820,9 +2828,10 @@ describe('OrgPost Pinned Posts Functionality', () => {
 
     const slowOrgPostListMock: MockedResponse = {
       request: {
-        query: ORGANIZATION_POST_LIST,
+        query: ORGANIZATION_POST_LIST_WITH_VOTES,
         variables: {
           input: { id: mockOrgId },
+          userId: null,
           after: null,
           before: null,
           first: 6,
@@ -2947,5 +2956,182 @@ describe('OrgPost Pinned Posts Functionality', () => {
     // The pagination should still work for regular posts while pinned posts are present
     const nextButton = screen.getByTestId('next-page-button');
     expect(nextButton).toBeInTheDocument();
+  });
+
+  it('should handle search when postsByOrganization is undefined', async () => {
+    const searchMockWithUndefinedPosts = {
+      request: {
+        query: GET_POSTS_BY_ORG,
+        variables: { input: { organizationId: mockOrgId } },
+      },
+      result: {
+        data: {
+          postsByOrganization: null, // This will test the else branch
+        },
+      },
+    };
+
+    render(
+      <MockedProvider
+        mocks={[orgPostListWithPostsMock, searchMockWithUndefinedPosts]}
+        addTypename={false}
+      >
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={[`/org/${mockOrgId}`]}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByName');
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 'test search{enter}');
+
+    // The component should handle gracefully when postsByOrganization is null
+    await waitFor(() => {
+      const postsRenderer = screen.getByTestId('posts-renderer');
+      expect(postsRenderer).toBeInTheDocument();
+    });
+  });
+
+  it('should handle next page when endCursor is undefined', async () => {
+    const mockWithoutEndCursor = {
+      request: {
+        query: ORGANIZATION_POST_LIST_WITH_VOTES,
+        variables: {
+          input: { id: mockOrgId },
+          userId: null,
+          after: null,
+          before: null,
+          first: 6,
+          last: null,
+        },
+      },
+      result: {
+        data: {
+          organization: {
+            id: mockOrgId,
+            name: 'Test Organization',
+            posts: {
+              totalCount: 1,
+              pageInfo: {
+                hasNextPage: true,
+                hasPreviousPage: false,
+                startCursor: 'cursor1',
+                endCursor: null, // This will test the branch where endCursor is falsy
+              },
+              edges: [
+                { node: enrichPostNode(samplePosts[0]), cursor: 'cursor1' },
+              ],
+            },
+          },
+        },
+      },
+    };
+
+    render(
+      <MockedProvider
+        mocks={[
+          getPostsByOrgInitialMock,
+          mockWithoutEndCursor,
+          orgPinnedPostListMockBasic,
+        ]}
+        addTypename={false}
+      >
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={[`/org/${mockOrgId}`]}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    const nextButton = screen.getByTestId('next-page-button');
+    fireEvent.click(nextButton);
+
+    // Should handle gracefully when endCursor is null
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should handle previous page when startCursor is undefined', async () => {
+    const mockWithoutStartCursor = {
+      request: {
+        query: ORGANIZATION_POST_LIST_WITH_VOTES,
+        variables: {
+          input: { id: mockOrgId },
+          userId: null,
+          after: null,
+          before: null,
+          first: 6,
+          last: null,
+        },
+      },
+      result: {
+        data: {
+          organization: {
+            id: mockOrgId,
+            name: 'Test Organization',
+            posts: {
+              totalCount: 1,
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: true,
+                startCursor: null, // This will test the branch where startCursor is falsy
+                endCursor: 'cursor1',
+              },
+              edges: [
+                { node: enrichPostNode(samplePosts[0]), cursor: 'cursor1' },
+              ],
+            },
+          },
+        },
+      },
+    };
+
+    render(
+      <MockedProvider
+        mocks={[
+          getPostsByOrgInitialMock,
+          mockWithoutStartCursor,
+          orgPinnedPostListMockBasic,
+        ]}
+        addTypename={false}
+      >
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter initialEntries={[`/org/${mockOrgId}`]}>
+            <Routes>
+              <Route path="/org/:orgId" element={<OrgPost />} />
+            </Routes>
+          </MemoryRouter>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    const prevButton = screen.getByTestId('previous-page-button');
+    fireEvent.click(prevButton);
+
+    // Should handle gracefully when startCursor is null
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
   });
 });

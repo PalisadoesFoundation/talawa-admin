@@ -54,7 +54,7 @@ import {
   ORGANIZATION_POST_LIST_WITH_VOTES,
   USER_DETAILS,
 } from 'GraphQl/Queries/Queries';
-import PostCard from 'components/UserPortal/PostCard/PostCard';
+import PostCard from 'sharedComponents/postCard/PostCard';
 import type {
   InterfacePostCard,
   InterfaceQueryUserListItem,

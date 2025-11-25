@@ -4,13 +4,13 @@ import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { store } from 'state/store';
-import i18nForTest from 'utils/i18nForTest';
-import { StaticMockLink } from 'utils/StaticMockLink';
+import { store } from '../../state/store';
+import i18nForTest from '../../utils/i18nForTest';
+import { StaticMockLink } from '../../utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
-import type { InterfacePostCard } from 'utils/interfaces';
+import type { InterfacePostCard } from '../../utils/interfaces';
 
 import PostCard from './PostCard';
 import {
@@ -18,10 +18,10 @@ import {
   DELETE_POST_MUTATION,
   UPDATE_POST_MUTATION,
   UPDATE_POST_VOTE,
-} from 'GraphQl/Mutations/mutations';
-import { GET_POST_COMMENTS } from 'GraphQl/Queries/Queries';
-import useLocalStorage from 'utils/useLocalstorage';
-import { errorHandler } from 'utils/errorHandler';
+} from '../../GraphQl/Mutations/mutations';
+import { GET_POST_COMMENTS } from '../../GraphQl/Queries/Queries';
+import useLocalStorage from '../../utils/useLocalstorage';
+import { errorHandler } from '../../utils/errorHandler';
 
 // ===== MODULE MOCKS =====
 vi.mock('react-toastify', () => ({
@@ -31,11 +31,11 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-vi.mock('utils/errorHandler', () => ({
+vi.mock('../../utils/errorHandler', () => ({
   errorHandler: vi.fn(),
 }));
 
-vi.mock('plugin', () => ({
+vi.mock('../../plugin', () => ({
   __esModule: true,
   default: [],
   PluginInjector: vi.fn(() => (

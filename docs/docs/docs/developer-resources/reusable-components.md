@@ -19,7 +19,7 @@ Use the following path structure for shared components.
 ```
 src/
 │
-├── shared-components/
+├── sharedComponents/
 │   ├── Component/
 │   │   ├── Component.tsx
 │   │   ├── Component.spec.tsx
