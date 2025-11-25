@@ -78,13 +78,14 @@ vi.mock('./PinnedPostsStory', () => ({
 // Factory function to create PostNode and InterfacePost fixtures
 interface IPostFixtureOverrides {
   id?: string;
-  caption?: string;
-  createdAt?: string;
+  caption?: string | null;
+  createdAt?: string; // Note: createdAt is required in both types, not nullable
   creator?: {
     id?: string;
     name?: string;
     email?: string;
     emailAddress?: string;
+    avatarURL?: string | null;
   } | null;
   commentCount?: number;
   commentsCount?: number;
@@ -113,8 +114,8 @@ interface IPostFixtureOverrides {
       };
     }[];
   };
-  imageUrl?: string;
-  videoUrl?: string;
+  imageUrl?: string | null;
+  videoUrl?: string | null;
 }
 
 function buildPostPair(overrides: IPostFixtureOverrides = {}) {
@@ -130,7 +131,8 @@ function buildPostPair(overrides: IPostFixtureOverrides = {}) {
 
   const postNode: PostNode = {
     id: overrides.id ?? defaultId,
-    caption: overrides.caption ?? defaultCaption,
+    caption:
+      overrides.caption !== undefined ? overrides.caption : defaultCaption,
     createdAt: overrides.createdAt ?? defaultCreatedAt,
     creator:
       overrides.creator === null
@@ -144,20 +146,24 @@ function buildPostPair(overrides: IPostFixtureOverrides = {}) {
             name: overrides.creator?.name ?? defaultCreator.name,
             emailAddress:
               overrides.creator?.emailAddress ?? defaultCreator.emailAddress,
+            ...(overrides.creator?.avatarURL !== undefined && {
+              avatarURL: overrides.creator.avatarURL,
+            }),
           },
     commentCount: overrides.commentCount ?? 0,
     commentsCount: overrides.commentsCount ?? 0,
     hasUserVoted: overrides.hasUserVoted ?? { hasVoted: false, voteType: null },
     upVotesCount: overrides.upVotesCount ?? 0,
     downVotesCount: overrides.downVotesCount ?? 0,
-    pinnedAt: overrides.pinnedAt ?? null,
+    pinnedAt: overrides.pinnedAt !== undefined ? overrides.pinnedAt : null,
     attachments: overrides.attachments ?? [],
     downVoters: overrides.downVoters ?? { edges: [] },
   };
 
   const interfacePost: InterfacePost = {
     id: overrides.id ?? defaultId,
-    caption: overrides.caption ?? defaultCaption,
+    caption:
+      overrides.caption !== undefined ? overrides.caption : defaultCaption,
     createdAt: overrides.createdAt ?? defaultCreatedAt,
     creator:
       overrides.creator === null
@@ -167,7 +173,7 @@ function buildPostPair(overrides: IPostFixtureOverrides = {}) {
             name: overrides.creator?.name ?? defaultCreator.name,
             email: overrides.creator?.email ?? defaultCreator.email,
           },
-    pinnedAt: overrides.pinnedAt ?? null,
+    pinnedAt: overrides.pinnedAt !== undefined ? overrides.pinnedAt : null,
     pinned: overrides.pinned ?? false,
     ...(overrides.imageUrl !== undefined && { imageUrl: overrides.imageUrl }),
     ...(overrides.videoUrl !== undefined && { videoUrl: overrides.videoUrl }),

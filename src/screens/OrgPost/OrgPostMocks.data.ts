@@ -1,8 +1,4 @@
-import {
-  GET_POSTS_BY_ORG,
-  ORGANIZATION_POST_LIST,
-  GET_USER_BY_ID,
-} from 'GraphQl/Queries/Queries';
+import { GET_POSTS_BY_ORG, GET_USER_BY_ID } from 'GraphQl/Queries/Queries';
 import {
   ORGANIZATION_PINNED_POST_LIST,
   ORGANIZATION_POST_LIST_WITH_VOTES,
@@ -462,9 +458,12 @@ export const loadingMocks: MockedResponse[] = [
   },
   {
     request: {
-      query: ORGANIZATION_POST_LIST,
+      query: ORGANIZATION_POST_LIST_WITH_VOTES,
       variables: {
         input: { id: '123' },
+        userId: '',
+        after: null,
+        before: null,
         first: 6,
         last: null,
       },

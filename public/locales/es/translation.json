@@ -1085,6 +1085,8 @@
     "likes": "Gustos",
     "comments": "Comentarios",
     "postDeletedSuccess": "¡Publicación eliminada con éxito!",
+    "postPinnedSuccess": "¡Publicación fijada con éxito!",
+    "postUnpinnedSuccess": "¡Publicación desfijada con éxito!",
     "addComment": "Agregar comentario",
     "viewPost": "Ver publicación",
     "editPost": "Editar publicación",

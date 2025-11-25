@@ -1086,6 +1086,8 @@
     "comments": "评论",
     "addComment": "添加评论",
     "postDeletedSuccess": "帖子删除成功。",
+    "postPinnedSuccess": "帖子置顶成功。",
+    "postUnpinnedSuccess": "帖子取消置顶成功。",
     "viewPost": "查看帖子",
     "editPost": "编辑帖子",
     "pinPost": "置顶帖子",

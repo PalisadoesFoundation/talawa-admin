@@ -1086,6 +1086,8 @@
     "comments": "Commentaires",
     "addComment": "Ajouter un commentaire",
     "postDeletedSuccess": "Publication supprimée avec succès.",
+    "postPinnedSuccess": "Publication épinglée avec succès.",
+    "postUnpinnedSuccess": "Publication désépinglée avec succès.",
     "viewPost": "Voir la publication",
     "editPost": "Modifier la publication",
     "pinPost": "Épingler la publication",

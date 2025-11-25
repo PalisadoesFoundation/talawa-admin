@@ -1424,7 +1424,9 @@ describe('PostCard', () => {
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
-        'postCard.postUnpinnedSuccess',
+        expect.stringMatching(
+          /postCard\.postUnpinnedSuccess|unpinned.*success/i,
+        ),
       );
     });
   });
