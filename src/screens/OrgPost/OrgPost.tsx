@@ -1,8 +1,9 @@
 import { useQuery } from '@apollo/client';
 import {
-  ORGANIZATION_POST_LIST,
+  ORGANIZATION_POST_LIST_WITH_VOTES,
   GET_POSTS_BY_ORG,
 } from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
 
 import Loader from 'components/Loader/Loader';
 import { useParams } from 'react-router';
@@ -10,6 +11,7 @@ import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
+import useLocalStorage from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
 import styles from 'style/app-fixed.module.css';
 import PostsRenderer from './Posts';
@@ -18,11 +20,10 @@ import type {
   InterfaceOrganizationPostListData,
   InterfacePost,
 } from '../../types/Post/interface';
-import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
-import PageHeader from 'shared-components/Navbar/Navbar';
-import AddIcon from '@mui/icons-material/Add';
 
 import CreatePostModal from './CreatePostModal';
+import PageHeader from 'shared-components/Navbar/Navbar';
+import { Add } from '@mui/icons-material';
 
 /**
  * OrgPost Component
@@ -31,6 +32,7 @@ import CreatePostModal from './CreatePostModal';
 
 function OrgPost(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgPost' });
+  const { getItem } = useLocalStorage();
 
   document.title = t('title');
 
@@ -66,20 +68,25 @@ function OrgPost(): JSX.Element {
     setPostModalIsOpen(false);
   };
 
+  const userId = getItem('id');
   const {
     data: orgPostListData,
     loading: orgPostListLoading,
     error: orgPostListError,
     refetch,
-  } = useQuery<InterfaceOrganizationPostListData>(ORGANIZATION_POST_LIST, {
-    variables: {
-      input: { id: currentUrl as string },
-      after: after ?? null,
-      before: before ?? null,
-      first: first,
-      last: last,
+  } = useQuery<InterfaceOrganizationPostListData>(
+    ORGANIZATION_POST_LIST_WITH_VOTES,
+    {
+      variables: {
+        input: { id: currentUrl as string },
+        userId: userId ?? '',
+        after: after ?? null,
+        before: before ?? null,
+        first: first,
+        last: last,
+      },
     },
-  });
+  );
   const {
     data: orgPinnedPostListData,
     loading: orgPinnedPostListLoading,
@@ -148,6 +155,7 @@ function OrgPost(): JSX.Element {
         searchTerm={searchTerm}
         sortingOption={sortingOption}
         displayPosts={displayPosts}
+        refetch={refetch}
       />
     </div>
   );
@@ -297,7 +305,7 @@ function OrgPost(): JSX.Element {
                 data-cy="createPostModalBtn"
                 className={`${styles.createButton} mb-2`}
               >
-                <AddIcon sx={{ fontSize: '20px', marginRight: '6px' }} />
+                <Add sx={{ fontSize: '20px', marginRight: '6px' }} />
                 {t('createPost')}
               </Button>
             }
