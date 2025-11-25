@@ -208,29 +208,6 @@ export const MARK_CHAT_MESSAGES_AS_READ = gql`
 `;
 
 /**
- * GraphQL mutation to toggle the pinned status of a post.
- *
- * @param id - The ID of the post to be toggled.
- * @returns The updated post object with the new pinned status.
- */
-
-export const TOGGLE_PINNED_POST = gql`
-  mutation UpdatePost($input: MutationUpdatePostInput!) {
-    updatePost(input: $input) {
-      id
-      caption
-      pinnedAt
-      attachments {
-        id
-        name
-        mimeType
-        objectName
-      }
-    }
-  }
-`;
-
-/**
  * GraphQL mutation to remove a custom field from an organization.
  *
  * @param organizationId - The ID of the organization from which the custom field is being removed.

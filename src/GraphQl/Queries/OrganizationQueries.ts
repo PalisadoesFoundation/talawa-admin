@@ -142,7 +142,7 @@ export const ORGANIZATION_POST_LIST_WITH_VOTES = gql`
     $before: String
     $first: Int
     $last: Int
-    $userId: ID
+    $userId: ID!
   ) {
     organization(input: $input) {
       id

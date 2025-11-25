@@ -3,7 +3,6 @@ import {
   ORGANIZATION_POST_LIST_WITH_VOTES,
 } from 'GraphQl/Queries/Queries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import { enrichPostNode } from './OrgPostMocks.helpers';
 import {
   getUserByIdMock,

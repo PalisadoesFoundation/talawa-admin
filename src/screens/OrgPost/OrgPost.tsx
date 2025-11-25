@@ -22,6 +22,8 @@ import type {
 } from '../../types/Post/interface';
 
 import CreatePostModal from './CreatePostModal';
+import PageHeader from 'shared-components/Navbar/Navbar';
+import { Add } from '@mui/icons-material';
 
 /**
  * OrgPost Component
@@ -303,7 +305,7 @@ function OrgPost(): JSX.Element {
                 data-cy="createPostModalBtn"
                 className={`${styles.createButton} mb-2`}
               >
-                <AddIcon sx={{ fontSize: '20px', marginRight: '6px' }} />
+                <Add sx={{ fontSize: '20px', marginRight: '6px' }} />
                 {t('createPost')}
               </Button>
             }

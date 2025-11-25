@@ -20,7 +20,7 @@ import type { ApolloError } from '@apollo/client';
 import { Modal, Button } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
 import NotFound from 'components/NotFound/NotFound';
-import PostCard from 'sharedComponents/postCard/PostCard';
+import PostCard from 'shared-components/postCard/PostCard';
 import type { InterfacePost, InterfacePostEdge } from 'types/Post/interface';
 import type { PostNode } from 'types/Post/type';
 import type { InterfacePostCard } from 'utils/interfaces';

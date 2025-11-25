@@ -6,7 +6,7 @@
 
 > `const` **orgPostListMock**: `object`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:205](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L205)
+Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:212](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L212)
 
 ## Type Declaration
 
@@ -16,7 +16,7 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:205](https://github.com/Pa
 
 #### request.query
 
-> **query**: `DocumentNode` = `ORGANIZATION_POST_LIST`
+> **query**: `DocumentNode` = `ORGANIZATION_POST_LIST_WITH_VOTES`
 
 #### request.variables
 
