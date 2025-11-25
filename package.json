@@ -21,7 +21,7 @@
     "@mui/material": "7.3.4",
     "@mui/system": "7.3.5",
     "@mui/x-charts": "^8.5.2",
-    "@mui/x-data-grid": "^7.28.3",
+    "@mui/x-data-grid": "^8.19.0",
     "@mui/x-date-pickers": "^7.28.3",
     "@pdfme/common": "^5.2.11",
     "@pdfme/generator": "^5.2.3",
