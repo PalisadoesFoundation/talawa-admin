@@ -54,7 +54,7 @@ describe('PluginRoutes', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Basic Rendering', () => {
@@ -515,9 +515,7 @@ describe('PluginRoutes', () => {
     });
 
     it('should handle routes with undefined pluginId', async () => {
-      const consoleErrorSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
+      vi.spyOn(console, 'error').mockImplementation(() => {});
 
       const mockRoutes = [
         {
@@ -547,8 +545,6 @@ describe('PluginRoutes', () => {
           screen.getByText(/Error: Plugin ID is missing for route/i),
         ).toBeInTheDocument();
       });
-
-      consoleErrorSpy.mockRestore();
     });
   });
 
@@ -623,14 +619,10 @@ describe('PluginRoutes', () => {
       expect(errorArg.message).toContain(
         "Component 'MissingComponent' not found in plugin 'missing-comp-plugin'",
       );
-
-      consoleErrorSpy.mockRestore();
     });
 
     it('should render styled error fallback when dynamic import fails', async () => {
-      const consoleErrorSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
+      vi.spyOn(console, 'error').mockImplementation(() => {});
 
       const mockRoutes = [
         {
@@ -662,8 +654,6 @@ describe('PluginRoutes', () => {
       const errorContainer = errorHeader.parentElement;
 
       expect(errorContainer).toHaveStyle({ margin: '20px' });
-
-      consoleErrorSpy.mockRestore();
     });
   });
 
@@ -673,9 +663,7 @@ describe('PluginRoutes', () => {
       try {
         process.env.NODE_ENV = 'development';
 
-        const consoleErrorSpy = vi
-          .spyOn(console, 'error')
-          .mockImplementation(() => {});
+        vi.spyOn(console, 'error').mockImplementation(() => {});
 
         const mockRoutes = [
           {
@@ -702,8 +690,6 @@ describe('PluginRoutes', () => {
         await waitFor(() => {
           expect(screen.getByText('Dev Network error')).toBeInTheDocument();
         });
-
-        consoleErrorSpy.mockRestore();
       } finally {
         process.env.NODE_ENV = originalEnv;
       }
@@ -712,9 +698,7 @@ describe('PluginRoutes', () => {
     it('should display sanitized error message in non-development environment', async () => {
       // NODE_ENV is 'test' by default in vitest
 
-      const consoleErrorSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
+      vi.spyOn(console, 'error').mockImplementation(() => {});
 
       const mockRoutes = [
         {
@@ -746,8 +730,6 @@ describe('PluginRoutes', () => {
           screen.getByText('Please contact support if this issue persists.'),
         ).toBeInTheDocument();
       });
-
-      consoleErrorSpy.mockRestore();
     });
   });
 
@@ -756,9 +738,7 @@ describe('PluginRoutes', () => {
     try {
       process.env.NODE_ENV = 'development';
 
-      const consoleErrorSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
+      vi.spyOn(console, 'error').mockImplementation(() => {});
 
       const mockRoutes = [
         {
@@ -783,8 +763,6 @@ describe('PluginRoutes', () => {
       await waitFor(() => {
         expect(screen.getByText('String error message')).toBeInTheDocument();
       });
-
-      consoleErrorSpy.mockRestore();
     } finally {
       process.env.NODE_ENV = originalEnv;
     }
