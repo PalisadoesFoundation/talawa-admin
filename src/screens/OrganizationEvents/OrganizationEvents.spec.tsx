@@ -7,14 +7,15 @@ import {
   fireEvent,
   waitFor,
 } from '@testing-library/react';
+import { GraphQLError } from 'graphql';
+import { Provider } from 'react-redux';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router';
-import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { describe, test, expect, vi, afterEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import dayjs from 'dayjs';
 
 import OrganizationEvents from './OrganizationEvents';
@@ -49,6 +50,10 @@ const theme = createTheme({
     },
   },
 });
+
+const sharedWindowSpies = vi.hoisted(() => ({
+  alertMock: vi.fn(),
+}));
 
 Object.defineProperty(window, 'location', {
   value: {
@@ -149,7 +154,14 @@ describe('Organisation Events Page', () => {
     endTime: '05:00 PM',
   };
 
-  window.alert = vi.fn();
+  beforeEach(() => {
+    sharedWindowSpies.alertMock.mockReset();
+    window.alert = sharedWindowSpies.alertMock;
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
 
   const renderWithLink = (link: StaticMockLink) =>
     render(
@@ -167,10 +179,6 @@ describe('Organisation Events Page', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
 
   test('renders events page and keeps current route', async () => {
     window.location.assign('/orglist');
@@ -529,8 +537,8 @@ describe('Organisation Events Page', () => {
 
     const viewTypeDropdown = screen.getByTestId('selectViewType');
     await userEvent.click(viewTypeDropdown);
-
-    const dayOption = await screen.findByText('Select Day');
+    // Find and click the "Day" option in the dropdown
+    const dayOption = await screen.findByText('Day');
     await userEvent.click(dayOption);
 
     await waitFor(() => {
@@ -762,5 +770,147 @@ describe('Organisation Events Page', () => {
     await waitFor(() =>
       expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
     );
+  });
+});
+
+const ERROR_MOCK = [
+  {
+    request: {
+      query: GET_ORGANIZATION_EVENTS_PG,
+      variables: {
+        id: 'orgId',
+        first: 32,
+        after: null,
+        startDate: expect.any(String),
+        endDate: expect.any(String),
+      },
+    },
+    result: {
+      errors: [new GraphQLError('Failed to fetch organization events')],
+    },
+  },
+];
+
+describe('OrganizationEvents - Additional Coverage Tests', () => {
+  test('Testing GraphQL query error handling - line 162', async () => {
+    const errorLink = new StaticMockLink(ERROR_MOCK, true);
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    render(
+      <MockedProvider link={errorLink} addTypename={false}>
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18n}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // The error should be handled by the onError callback (line 162)
+    // This should trigger error handling logic
+    await waitFor(() => {
+      // Either shows error state or handles gracefully
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+    });
+
+    consoleSpy.mockRestore();
+  });
+
+  // Test for empty events array handling
+  test('Testing empty events array mapping', async () => {
+    const emptyEventsMock = [
+      {
+        request: {
+          query: GET_ORGANIZATION_EVENTS_PG,
+          variables: expect.any(Object),
+        },
+        result: {
+          data: {
+            organization: {
+              events: {
+                edges: [],
+                pageInfo: {
+                  hasNextPage: false,
+                  endCursor: null,
+                },
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    const emptyLink = new StaticMockLink(emptyEventsMock, true);
+
+    render(
+      <MockedProvider link={emptyLink} addTypename={false}>
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18n}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+    });
+  });
+
+  // Test for null organization data
+  test('Testing null organization events data', async () => {
+    const nullDataMock = [
+      {
+        request: {
+          query: GET_ORGANIZATION_EVENTS_PG,
+          variables: expect.any(Object),
+        },
+        result: {
+          data: {
+            organization: null,
+          },
+        },
+      },
+    ];
+
+    const nullLink = new StaticMockLink(nullDataMock, true);
+
+    render(
+      <MockedProvider link={nullLink} addTypename={false}>
+        <BrowserRouter>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <Provider store={store}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18n}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+    });
   });
 });

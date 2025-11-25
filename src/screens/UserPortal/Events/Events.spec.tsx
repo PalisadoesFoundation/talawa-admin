@@ -6,6 +6,7 @@
  * @module EventsSpec
  */
 
+// SKIP_LOCALSTORAGE_CHECK
 import React, { act } from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
@@ -26,18 +27,20 @@ import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import useLocalStorage from 'utils/useLocalstorage';
-import { vi } from 'vitest';
+import { vi, beforeEach, afterEach } from 'vitest';
 import { toast } from 'react-toastify';
 
-const { setItem } = useLocalStorage();
-
-vi.mock('react-toastify', () => ({
-  toast: {
+const { mockToast, mockUseParams } = vi.hoisted(() => ({
+  mockToast: {
     error: vi.fn(),
     info: vi.fn(),
     success: vi.fn(),
   },
+  mockUseParams: vi.fn(),
+}));
+
+vi.mock('react-toastify', () => ({
+  toast: mockToast,
 }));
 
 vi.mock('@mui/x-date-pickers/DatePicker', async () => {
@@ -62,7 +65,7 @@ vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,
-    useParams: () => ({ orgId: 'org123' }),
+    useParams: mockUseParams,
   };
 });
 
@@ -359,9 +362,27 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   beforeEach(() => {
-    setItem('id', 'user123');
-    setItem('role', 'administrator');
-    vi.clearAllMocks();
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: vi.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    });
+    localStorage.setItem('id', 'user123');
+    localStorage.setItem('role', 'administrator');
+    mockUseParams.mockReturnValue({ orgId: 'org123' });
+  });
+
+  afterEach(() => {
+    localStorage.clear();
+    vi.restoreAllMocks();
   });
 
   it('Should render the Events screen properly', async () => {
@@ -862,7 +883,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should test userRole as administrator', async () => {
-    setItem('role', 'administrator');
+    localStorage.setItem('role', 'administrator');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -890,7 +911,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should test userRole as regular user', async () => {
-    setItem('role', 'user');
+    localStorage.setItem('role', 'user');
 
     render(
       <MockedProvider addTypename={false} link={link}>
@@ -915,5 +936,48 @@ describe('Testing Events Screen [User Portal]', () => {
     });
 
     // Component should render with regular user role
+  });
+
+  it('Should change view type', async () => {
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Initial view should be Month View
+    await waitFor(() => {
+      expect(screen.getByText('Month View')).toBeInTheDocument();
+    });
+
+    // Find the view type dropdown toggle
+    // SortingButton uses dataTestIdPrefix="selectViewType"
+    // The toggle has data-testid={`${dataTestIdPrefix}`} -> 'selectViewType'
+    const viewTypeToggle = screen.getByTestId('selectViewType');
+    await userEvent.click(viewTypeToggle);
+
+    // Select Day View
+    // SortingButton items have data-testid={`${option.value}`}
+    // Using getByText to be safer as test ID might vary based on ViewType enum
+    const dayViewOption = screen.getByText('Select Day');
+    await userEvent.click(dayViewOption);
+
+    // Verify view changed
+    // EventCalendar should render Day View (which has data-testid="hour")
+    await waitFor(() => {
+      expect(screen.getByTestId('hour')).toBeInTheDocument();
+    });
   });
 });

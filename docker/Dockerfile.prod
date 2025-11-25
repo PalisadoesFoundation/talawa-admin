@@ -1,5 +1,5 @@
 # Step 1: Build Stage
-FROM node:24 AS builder
+FROM node:24-slim AS builder
 WORKDIR /talawa-admin
 
 COPY package*.json ./

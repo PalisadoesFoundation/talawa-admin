@@ -16,13 +16,15 @@ import { toast } from 'react-toastify';
 import ItemUpdateStatusModal, {
   type IItemUpdateStatusModalProps,
 } from './ActionItemUpdateStatusModal';
-import { vi, it, describe } from 'vitest';
+import { vi, it, describe, afterEach } from 'vitest';
+
+const toastMocks = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+}));
 
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: toastMocks,
 }));
 
 const link1 = new StaticMockLink(MOCKS);
@@ -219,6 +221,10 @@ const renderItemUpdateStatusModal = (
 
 describe('Testing ItemUpdateStatusModal', () => {
   beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
     vi.clearAllMocks();
   });
 

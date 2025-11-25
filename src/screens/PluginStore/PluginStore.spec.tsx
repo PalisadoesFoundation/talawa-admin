@@ -8,12 +8,16 @@ import {
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { ApolloError } from '@apollo/client';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import PluginStore from './PluginStore';
 import * as pluginHooks from 'plugin/hooks';
 import * as pluginManager from 'plugin/manager';
 import * as adminPluginFileService from 'plugin/services/AdminPluginFileService';
 import userEvent from '@testing-library/user-event';
+
+const shared = vi.hoisted(() => ({
+  reload: vi.fn(),
+}));
 
 // Mock the plugin hooks and manager
 vi.mock('plugin/hooks');
@@ -128,6 +132,13 @@ describe('PluginStore', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        ...window.location,
+        reload: shared.reload,
+      },
+    });
     // Reset mockGraphQLError to ensure test isolation
     mockGraphQLError = null;
 
@@ -158,6 +169,10 @@ describe('PluginStore', () => {
       .mockResolvedValue(true);
   });
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   const renderPluginStore = () => {
     return render(
       <MockedProvider>
@@ -171,8 +186,8 @@ describe('PluginStore', () => {
       renderPluginStore();
 
       expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument();
-      expect(screen.getByTestId('plugin-store-searchbar')).toBeInTheDocument();
-      expect(screen.getByTestId('plugin-store-filters')).toBeInTheDocument();
+      expect(screen.getByTestId('searchPlugins')).toBeInTheDocument();
+      expect(screen.getByTestId('filterPlugins')).toBeInTheDocument();
       expect(screen.getByTestId('plugin-list-container')).toBeInTheDocument();
     });
 

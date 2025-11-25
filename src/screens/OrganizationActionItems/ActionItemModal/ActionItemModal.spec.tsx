@@ -14,11 +14,15 @@ import type {
   ICreateActionItemVariables,
 } from 'types/ActionItems/interface.ts';
 import ItemModal from './ActionItemModal';
-import { vi, it, describe, expect } from 'vitest';
+import { vi, it, describe, expect, beforeEach, afterEach } from 'vitest';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
+import {
+  ACTION_ITEM_LIST,
+  GET_EVENT_ACTION_ITEMS,
+} from 'GraphQl/Queries/ActionItemQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import {
   GET_EVENT_VOLUNTEERS,
@@ -32,14 +36,24 @@ import {
 import userEvent from '@testing-library/user-event';
 import type { IActionItemInfo } from 'types/ActionItems/interface';
 
-// Mock the toast functions
+const toastMocks = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+  info: vi.fn(),
+  warning: vi.fn(),
+}));
+
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-    info: vi.fn(),
-    warning: vi.fn(),
-  },
+  toast: toastMocks,
+}));
+
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+    i18n: {
+      changeLanguage: () => Promise.resolve(),
+    },
+  }),
 }));
 
 const matchesInputSubset = (
@@ -52,6 +66,164 @@ const matchesInputSubset = (
     ([key, value]) => actualInput[key] === value,
   );
 };
+
+const createVolunteer = (
+  eventId: string,
+  {
+    id = 'volunteer1',
+    name = 'John Doe',
+    isTemplate = true,
+  }: { id?: string; name?: string; isTemplate?: boolean } = {},
+) => ({
+  id,
+  hasAccepted: true,
+  volunteerStatus: 'accepted',
+  hoursVolunteered: 10,
+  isPublic: true,
+  isTemplate,
+  isInstanceException: false,
+  createdAt: '2023-01-01T00:00:00Z',
+  updatedAt: '2023-01-01T00:00:00Z',
+  user: {
+    id: `user-${id}`,
+    name,
+    avatarURL: null,
+  },
+  event: {
+    id: eventId,
+    name: 'Test Event',
+  },
+  creator: {
+    id: `user-${id}`,
+    name,
+    avatarURL: null,
+  },
+  updater: {
+    id: `user-${id}`,
+    name,
+    avatarURL: null,
+  },
+  groups: [],
+});
+
+const createVolunteerGroup = (
+  eventId: string,
+  {
+    id = 'group1',
+    name = 'Test Group 1',
+    description = 'Test volunteer group 1',
+    isTemplate = true,
+  }: {
+    id?: string;
+    name?: string;
+    description?: string;
+    isTemplate?: boolean;
+  } = {},
+) => ({
+  id,
+  name,
+  description,
+  volunteersRequired: 5,
+  isTemplate,
+  isInstanceException: false,
+  createdAt: '2023-01-01T00:00:00Z',
+  creator: {
+    id: 'user1',
+    name: 'John Doe',
+    avatarURL: null,
+  },
+  leader: {
+    id: 'user1',
+    name: 'John Doe',
+    avatarURL: null,
+  },
+  volunteers: [
+    {
+      id: 'volunteer1',
+      hasAccepted: true,
+      user: {
+        id: 'user-volunteer1',
+        name: 'John Doe',
+        avatarURL: null,
+      },
+    },
+  ],
+  event: {
+    id: eventId,
+  },
+});
+
+const createActionItemNode = (eventId: string) => ({
+  id: '1',
+  isCompleted: false,
+  assignedAt: '2024-01-01T00:00:00Z',
+  completionAt: null,
+  createdAt: '2024-01-01T00:00:00Z',
+  updatedAt: '2024-01-02T00:00:00Z',
+  preCompletionNotes: 'Test notes',
+  postCompletionNotes: null,
+  isInstanceException: false,
+  isTemplate: false,
+  volunteer: {
+    ...createVolunteer(eventId),
+  },
+  volunteerGroup: {
+    ...createVolunteerGroup(eventId),
+  },
+  category: {
+    id: 'cat1',
+    name: 'Category 1',
+  },
+  event: {
+    id: eventId,
+    name: 'Test Event',
+  },
+  recurringEventInstance: {
+    id: `recur-${eventId}`,
+    name: 'Recurring Event',
+  },
+  organization: {
+    id: 'orgId',
+    name: 'Test Organization',
+  },
+  creator: {
+    id: 'creator1',
+    name: 'Creator 1',
+  },
+  updater: {
+    id: 'creator1',
+    name: 'Creator 1',
+  },
+});
+
+const buildEventActionItemsData = (eventId: string) => ({
+  event: {
+    id: eventId,
+    recurrenceRule: { id: `rec-${eventId}` },
+    baseEvent: { id: `base-${eventId}` },
+    actionItems: {
+      edges: [
+        {
+          node: {
+            ...createActionItemNode(eventId),
+          },
+        },
+      ],
+      pageInfo: {
+        hasNextPage: false,
+        endCursor: null,
+      },
+    },
+  },
+});
+
+const buildActionItemsByOrgData = (eventId: string) => ({
+  actionItemsByOrganization: [
+    {
+      ...createActionItemNode(eventId),
+    },
+  ],
+});
 
 // Define common mocks for GraphQL queries
 const mockQueries = [
@@ -133,73 +305,27 @@ const mockQueries = [
         where: {},
       },
     },
-    result: {
+    newData: () => ({
       data: {
         event: {
           id: 'eventId',
+          recurrenceRule: { id: 'rec-eventId' },
+          baseEvent: { id: 'base-eventId' },
           volunteers: [
-            {
+            createVolunteer('eventId', {
               id: 'volunteer1',
-              hasAccepted: true,
-              volunteerStatus: 'accepted',
-              hoursVolunteered: 10,
-              isPublic: true,
+              name: 'John Doe',
               isTemplate: true,
-              isInstanceException: false,
-              createdAt: '2023-01-01T00:00:00Z',
-              updatedAt: '2023-01-01T00:00:00Z',
-              user: {
-                id: 'user1',
-                name: 'John Doe',
-                avatarURL: null,
-              },
-              event: {
-                id: 'eventId',
-                name: 'Test Event',
-              },
-              creator: {
-                id: 'user1',
-                name: 'John Doe',
-              },
-              updater: {
-                id: 'user1',
-                name: 'John Doe',
-              },
-              groups: [],
-            },
-            {
+            }),
+            createVolunteer('eventId', {
               id: 'volunteer2',
-              hasAccepted: true,
-              volunteerStatus: 'accepted',
-              hoursVolunteered: 5,
-              isPublic: true,
+              name: 'Jane Smith',
               isTemplate: false,
-              isInstanceException: false,
-              createdAt: '2023-01-01T00:00:00Z',
-              updatedAt: '2023-01-01T00:00:00Z',
-              user: {
-                id: 'user2',
-                name: 'Jane Smith',
-                avatarURL: null,
-              },
-              event: {
-                id: 'eventId',
-                name: 'Test Event',
-              },
-              creator: {
-                id: 'user2',
-                name: 'Jane Smith',
-              },
-              updater: {
-                id: 'user2',
-                name: 'Jane Smith',
-              },
-              groups: [],
-            },
+            }),
           ],
         },
       },
-    },
+    }),
   },
   {
     request: {
@@ -209,73 +335,37 @@ const mockQueries = [
         where: {},
       },
     },
-    result: {
+    newData: () => ({
       data: {
         event: {
           id: 'event123',
+          recurrenceRule: { id: 'rec-event123' },
+          baseEvent: { id: 'base-event123' },
           volunteers: [
             {
-              id: 'volunteer1',
-              hasAccepted: true,
-              volunteerStatus: 'accepted',
-              hoursVolunteered: 10,
-              isPublic: true,
-              isTemplate: true,
-              isInstanceException: false,
-              createdAt: '2023-01-01T00:00:00Z',
-              updatedAt: '2023-01-01T00:00:00Z',
-              user: {
-                id: 'user1',
+              ...createVolunteer('event123', {
+                id: 'volunteer1',
                 name: 'John Doe',
-                avatarURL: null,
-              },
-              event: {
-                id: 'event123',
-                name: 'Test Event',
-              },
-              creator: {
-                id: 'user1',
-                name: 'John Doe',
-              },
-              updater: {
-                id: 'user1',
-                name: 'John Doe',
-              },
-              groups: [],
+                isTemplate: true,
+              }),
+              groups: [
+                {
+                  id: 'group1',
+                  name: 'Test Group 1',
+                  description: 'Test volunteer group 1',
+                  volunteers: [{ id: 'volunteer1' }],
+                },
+              ],
             },
-            {
+            createVolunteer('event123', {
               id: 'volunteer2',
-              hasAccepted: true,
-              volunteerStatus: 'accepted',
-              hoursVolunteered: 5,
-              isPublic: true,
+              name: 'Jane Smith',
               isTemplate: false,
-              isInstanceException: false,
-              createdAt: '2023-01-01T00:00:00Z',
-              updatedAt: '2023-01-01T00:00:00Z',
-              user: {
-                id: 'user2',
-                name: 'Jane Smith',
-                avatarURL: null,
-              },
-              event: {
-                id: 'event123',
-                name: 'Test Event',
-              },
-              creator: {
-                id: 'user2',
-                name: 'Jane Smith',
-              },
-              updater: {
-                id: 'user2',
-                name: 'Jane Smith',
-              },
-              groups: [],
-            },
+            }),
           ],
         },
       },
-    },
+    }),
   },
   {
     request: {
@@ -284,83 +374,24 @@ const mockQueries = [
         input: { id: 'eventId' },
       },
     },
-    result: {
+    newData: () => ({
       data: {
         event: {
           id: 'eventId',
-          recurrenceRule: null,
-          baseEvent: null,
+          recurrenceRule: { id: 'rec-eventId' },
+          baseEvent: { id: 'base-eventId' },
           volunteerGroups: [
-            {
-              id: 'group1',
-              name: 'Test Group 1',
-              description: 'Test volunteer group 1',
-              volunteersRequired: 5,
-              isTemplate: true,
-              isInstanceException: false,
-              createdAt: '2023-01-01T00:00:00Z',
-              creator: {
-                id: 'user1',
-                name: 'John Doe',
-                avatarURL: null,
-              },
-              leader: {
-                id: 'user1',
-                name: 'John Doe',
-                avatarURL: null,
-              },
-              volunteers: [
-                {
-                  id: 'volunteer1',
-                  hasAccepted: true,
-                  user: {
-                    id: 'user1',
-                    name: 'John Doe',
-                    avatarURL: null,
-                  },
-                },
-              ],
-              event: {
-                id: 'eventId',
-              },
-            },
-            {
+            createVolunteerGroup('eventId', { id: 'group1', isTemplate: true }),
+            createVolunteerGroup('eventId', {
               id: 'group2',
               name: 'Test Group 2',
               description: 'Test volunteer group 2',
-              volunteersRequired: 3,
               isTemplate: false,
-              isInstanceException: false,
-              createdAt: '2023-02-01T00:00:00Z',
-              creator: {
-                id: 'user2',
-                name: 'Jane Smith',
-                avatarURL: null,
-              },
-              leader: {
-                id: 'user2',
-                name: 'Jane Smith',
-                avatarURL: null,
-              },
-              volunteers: [
-                {
-                  id: 'volunteer2',
-                  hasAccepted: true,
-                  user: {
-                    id: 'user2',
-                    name: 'Jane Smith',
-                    avatarURL: null,
-                  },
-                },
-              ],
-              event: {
-                id: 'eventId',
-              },
-            },
+            }),
           ],
         },
       },
-    },
+    }),
   },
   {
     request: {
@@ -369,80 +400,106 @@ const mockQueries = [
         input: { id: 'event123' },
       },
     },
-    result: {
+    newData: () => ({
       data: {
         event: {
           id: 'event123',
-          recurrenceRule: null,
-          baseEvent: null,
+          recurrenceRule: { id: 'rec-event123' },
+          baseEvent: { id: 'base-event123' },
           volunteerGroups: [
-            {
+            createVolunteerGroup('event123', {
               id: 'group1',
-              name: 'Test Group 1',
-              description: 'Test volunteer group 1',
-              volunteersRequired: 5,
               isTemplate: true,
-              isInstanceException: false,
-              createdAt: '2023-01-01T00:00:00Z',
-              creator: {
-                id: 'user1',
-                name: 'John Doe',
-                avatarURL: null,
-              },
-              leader: {
-                id: 'user1',
-                name: 'John Doe',
-                avatarURL: null,
-              },
-              volunteers: [
-                {
-                  id: 'volunteer1',
-                  hasAccepted: true,
-                  user: {
-                    id: 'user1',
-                    name: 'John Doe',
-                    avatarURL: null,
-                  },
-                },
-              ],
-              event: {
-                id: 'event123',
-              },
-            },
-            {
+            }),
+            createVolunteerGroup('event123', {
               id: 'group2',
               name: 'Test Group 2',
               description: 'Test volunteer group 2',
-              volunteersRequired: 3,
               isTemplate: false,
-              isInstanceException: false,
-              createdAt: '2023-02-01T00:00:00Z',
-              creator: {
-                id: 'user2',
-                name: 'Jane Smith',
-                avatarURL: null,
-              },
-              leader: {
-                id: 'user2',
-                name: 'Jane Smith',
-                avatarURL: null,
-              },
-              volunteers: [
-                {
-                  id: 'volunteer2',
-                  hasAccepted: true,
-                  user: {
-                    id: 'user2',
-                    name: 'Jane Smith',
-                    avatarURL: null,
-                  },
-                },
-              ],
-              event: {
-                id: 'event123',
-              },
-            },
+            }),
           ],
+        },
+      },
+    }),
+  },
+  {
+    request: {
+      query: ACTION_ITEM_LIST,
+    },
+    variableMatcher: () => true,
+    newData: () => ({
+      data: buildActionItemsByOrgData('eventId'),
+    }),
+  },
+  {
+    request: {
+      query: GET_EVENT_ACTION_ITEMS,
+      variables: { input: { id: 'eventId' } },
+    },
+    newData: () => ({
+      data: buildEventActionItemsData('eventId'),
+    }),
+  },
+  {
+    request: {
+      query: GET_EVENT_ACTION_ITEMS,
+      variables: { input: { id: 'event123' } },
+    },
+    newData: () => ({
+      data: buildEventActionItemsData('event123'),
+    }),
+  },
+  {
+    request: {
+      query: CREATE_ACTION_ITEM_MUTATION,
+    },
+    variableMatcher: () => true,
+    result: {
+      data: {
+        createActionItem: {
+          id: 'created-action-item',
+          isCompleted: false,
+          assignedAt: '2024-01-01T00:00:00Z',
+          preCompletionNotes: 'Test notes',
+          postCompletionNotes: null,
+          isInstanceException: false,
+          isTemplate: false,
+          __typename: 'ActionItem',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_ACTION_ITEM_MUTATION,
+    },
+    variableMatcher: () => true,
+    result: {
+      data: {
+        updateActionItem: {
+          id: '1',
+          isCompleted: false,
+          assignedAt: '2024-01-02T00:00:00Z',
+          completionAt: null,
+          createdAt: '2024-01-01T00:00:00Z',
+          preCompletionNotes: 'Test notes',
+          postCompletionNotes: null,
+          isInstanceException: false,
+          isTemplate: false,
+          __typename: 'ActionItem',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
+    },
+    variableMatcher: () => true,
+    result: {
+      data: {
+        updateActionItemForInstance: {
+          id: '1',
         },
       },
     },
@@ -562,6 +619,13 @@ const mockActionItemWithGroup = {
 
 // Additional test cases for ItemModal component
 describe('ItemModal - Additional Test Cases', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
   // Test modal visibility and basic rendering
   describe('Modal Visibility and Basic Rendering', () => {
     it('should not render modal when isOpen is false', () => {
@@ -1668,7 +1732,7 @@ describe('updateActionForInstanceHandler', () => {
         }),
       result: {
         data: {
-          updateActionForInstance: {
+          updateActionItemForInstance: {
             id: '1',
           },
         },
@@ -1892,7 +1956,7 @@ describe('updateActionForInstanceHandler', () => {
         }),
       result: {
         data: {
-          updateActionForInstance: {
+          updateActionItemForInstance: {
             id: '1',
           },
         },
@@ -1960,7 +2024,7 @@ describe('updateActionForInstanceHandler', () => {
         }),
       result: {
         data: {
-          updateActionForInstance: {
+          updateActionItemForInstance: {
             id: '1',
           },
         },
@@ -2037,7 +2101,7 @@ describe('updateActionForInstanceHandler', () => {
       },
       result: {
         data: {
-          updateActionForInstance: {
+          updateActionItemForInstance: {
             id: '1',
           },
         },
@@ -2112,7 +2176,7 @@ describe('updateActionForInstanceHandler', () => {
       },
       result: {
         data: {
-          updateActionForInstance: {
+          updateActionItemForInstance: {
             id: '1',
           },
         },
@@ -2187,7 +2251,7 @@ describe('updateActionForInstanceHandler', () => {
       },
       result: {
         data: {
-          updateActionForInstance: {
+          updateActionItemForInstance: {
             id: '1',
           },
         },
@@ -2268,7 +2332,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
       },
       result: {
         data: {
-          updateActionForInstance: {
+          updateActionItemForInstance: {
             id: '1',
           },
         },
@@ -2837,7 +2901,7 @@ describe('orgActionItemsRefetch functionality', () => {
       },
       result: {
         data: {
-          updateActionForInstance: {
+          updateActionItemForInstance: {
             id: '1',
           },
         },

@@ -121,13 +121,7 @@ describe('Testing User Password Update', () => {
     );
   });
 
-  it('Successfully update old password', async () => {
-    const mockReload = vi.fn();
-    Object.defineProperty(window, 'location', {
-      value: { reload: mockReload },
-      writable: true,
-    });
-
+  it('Successfully update old password and reset form', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -138,18 +132,14 @@ describe('Testing User Password Update', () => {
 
     await wait();
 
-    await userEvent.type(
-      screen.getByPlaceholderText(/Previous Password/i),
-      formData.previousPassword,
-    );
-    await userEvent.type(
-      screen.getAllByPlaceholderText(/New Password/i)[0],
-      formData.newPassword,
-    );
-    await userEvent.type(
-      screen.getByPlaceholderText(/Confirm New Password/i),
-      formData.confirmNewPassword,
-    );
+    const prevPasswordInput = screen.getByPlaceholderText(/Previous Password/i);
+    const newPasswordInput = screen.getAllByPlaceholderText(/New Password/i)[0];
+    const confirmPasswordInput =
+      screen.getByPlaceholderText(/Confirm New Password/i);
+
+    await userEvent.type(prevPasswordInput, formData.previousPassword);
+    await userEvent.type(newPasswordInput, formData.newPassword);
+    await userEvent.type(confirmPasswordInput, formData.confirmNewPassword);
 
     await userEvent.click(screen.getByText(/Save Changes/i));
 
@@ -159,11 +149,14 @@ describe('Testing User Password Update', () => {
       );
     });
 
+    // Verify form fields are reset after successful update
     await waitFor(
       () => {
-        expect(mockReload).toHaveBeenCalled();
+        expect(prevPasswordInput).toHaveValue('');
+        expect(newPasswordInput).toHaveValue('');
+        expect(confirmPasswordInput).toHaveValue('');
       },
-      { timeout: 3000 },
+      { timeout: 1000 },
     );
   });
 
@@ -248,13 +241,7 @@ describe('Testing User Password Update', () => {
     );
   });
 
-  it('reloads page when cancel button is clicked', async () => {
-    const mockReload = vi.fn();
-    Object.defineProperty(window, 'location', {
-      value: { reload: mockReload },
-      writable: true,
-    });
-
+  it('resets form when cancel button is clicked', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
         <I18nextProvider i18n={i18nForTest}>
@@ -263,7 +250,31 @@ describe('Testing User Password Update', () => {
       </MockedProvider>,
     );
 
+    await wait();
+
+    const prevPasswordInput = screen.getByPlaceholderText(/Previous Password/i);
+    const newPasswordInput = screen.getAllByPlaceholderText(/New Password/i)[0];
+    const confirmPasswordInput =
+      screen.getByPlaceholderText(/Confirm New Password/i);
+
+    // Fill in the form
+    await userEvent.type(prevPasswordInput, 'test123');
+    await userEvent.type(newPasswordInput, 'test456');
+    await userEvent.type(confirmPasswordInput, 'test456');
+
+    // Verify fields have values
+    expect(prevPasswordInput).toHaveValue('test123');
+    expect(newPasswordInput).toHaveValue('test456');
+    expect(confirmPasswordInput).toHaveValue('test456');
+
+    // Click cancel
     await userEvent.click(screen.getByText(/Cancel/i));
-    expect(mockReload).toHaveBeenCalled();
+
+    // Verify form fields are reset
+    await waitFor(() => {
+      expect(prevPasswordInput).toHaveValue('');
+      expect(newPasswordInput).toHaveValue('');
+      expect(confirmPasswordInput).toHaveValue('');
+    });
   });
 });

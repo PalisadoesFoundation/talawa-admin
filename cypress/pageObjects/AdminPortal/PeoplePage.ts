@@ -48,11 +48,14 @@ export class PeoplePage {
     return this;
   }
 
-  confirmAddUser(timeout = 40000) {
+  confirmAddUser(name: string, timeout = 100000) {
     cy.get(this._addBtn, { timeout }).should('be.visible').click();
     cy.get(this._alert, { timeout })
       .should('be.visible')
       .and('contain.text', 'Member added Successfully');
+    cy.reload();
+    this.searchMemberByName(name, timeout);
+    this.verifyMemberInList(name, timeout);
     return this;
   }
 

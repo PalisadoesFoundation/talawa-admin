@@ -74,8 +74,7 @@ import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { ApolloError } from '@apollo/client';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
+import PageHeader from 'shared-components/Navbar/Navbar';
 
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
@@ -94,11 +93,6 @@ const Users = (): JSX.Element => {
   const [sortingOption, setSortingOption] = useState('newest');
   const [filteringOption, setFilteringOption] = useState('cancel');
   const [loadUnqUsers, setLoadUnqUsers] = useState(0);
-  const userType = getItem('SuperAdmin')
-    ? 'SUPERADMIN'
-    : getItem('AdminFor')
-      ? 'ADMIN'
-      : 'USER';
   const loggedInUserId = getItem('id') as string;
   const [usersData, setUsersData] = useState<InterfaceQueryUserListItem[]>([]);
 
@@ -358,40 +352,41 @@ const Users = (): JSX.Element => {
     <>
       {/* Buttons Container */}
       <div className={styles.btnsContainer} data-testid="testcomp">
-        <SearchBar
-          placeholder={t('enterName')}
-          onSearch={handleSearch}
-          inputTestId="searchByName"
-          buttonTestId="searchButton"
-        />
-        <div className={styles.btnsBlock}>
-          <div className="d-flex">
-            <SortingButton
-              sortingOptions={[
+        <PageHeader
+          title={t('title')}
+          search={{
+            placeholder: t('enterName'),
+            onSearch: handleSearch,
+            inputTestId: 'searchByName',
+            buttonTestId: 'searchButton',
+          }}
+          sorting={[
+            {
+              title: 'Sort by',
+              options: [
                 { label: t('Newest'), value: 'newest' },
                 { label: t('Oldest'), value: 'oldest' },
-              ]}
-              selectedOption={sortingOption}
-              onSortChange={handleSorting}
-              dataTestIdPrefix="sortUsers"
-            />
-            <SortingButton
-              sortingOptions={[
+              ],
+              selected: sortingOption,
+              onChange: (value) => handleSorting(value.toString()),
+              testIdPrefix: 'sortUsers',
+            },
+            {
+              title: 'Filter by role',
+              options: [
                 { label: tCommon('admin'), value: 'admin' },
                 { label: tCommon('superAdmin'), value: 'superAdmin' },
                 { label: tCommon('user'), value: 'user' },
                 { label: tCommon('cancel'), value: 'cancel' },
-              ]}
-              selectedOption={filteringOption}
-              onSortChange={handleFiltering}
-              dataTestIdPrefix="filterUsers"
-              buttonLabel={tCommon('filter')}
-              type="filter"
-              dropdownTestId="filter"
-            />
-          </div>
-        </div>
+              ],
+              selected: filteringOption,
+              onChange: (value) => handleFiltering(value.toString()),
+              testIdPrefix: 'filterUsers',
+            },
+          ]}
+        />
       </div>
+
       {isLoading == false &&
       usersData &&
       displayedUsers.length === 0 &&

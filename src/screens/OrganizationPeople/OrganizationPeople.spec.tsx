@@ -6,7 +6,7 @@ import { MemoryRouter, Routes, Route } from 'react-router';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { vi } from 'vitest';
+import { vi, afterEach } from 'vitest';
 import OrganizationPeople from './OrganizationPeople';
 import i18nForTest from 'utils/i18nForTest';
 import {
@@ -17,13 +17,17 @@ import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import { toast } from 'react-toastify';
 
-// Mock the required modules
-vi.mock('react-toastify', () => ({
+const sharedMocks = vi.hoisted(() => ({
   toast: {
     error: vi.fn(),
     info: vi.fn(),
     success: vi.fn(),
   },
+}));
+
+// Mock the required modules
+vi.mock('react-toastify', () => ({
+  toast: sharedMocks.toast,
 }));
 
 vi.mock('./addMember/AddMember', () => ({
@@ -33,6 +37,88 @@ vi.mock('./addMember/AddMember', () => ({
     </button>
   ),
 }));
+
+interface TestInterfaceMockSearch {
+  placeholder: string;
+  onSearch: (value: string) => void;
+  inputTestId?: string;
+  buttonTestId?: string;
+}
+
+interface TestInterfaceTestInterfaceMockSortingOption {
+  label: string;
+  value: string | number;
+}
+
+interface TestInterfaceMockSorting {
+  title: string;
+  options: TestInterfaceTestInterfaceMockSortingOption[];
+  selected: string | number;
+  onChange: (value: string | number) => void;
+  testIdPrefix: string;
+}
+
+vi.mock('screens/components/Navbar', () => {
+  return {
+    default: function MockPageHeader({
+      search,
+      sorting,
+      actions,
+    }: {
+      search?: TestInterfaceMockSearch;
+      sorting?: TestInterfaceMockSorting[];
+      actions?: React.ReactNode;
+    }) {
+      return (
+        <div data-testid="calendarEventHeader">
+          <div>
+            {search && (
+              <>
+                <input
+                  placeholder={search.placeholder}
+                  onChange={(e) => search.onSearch(e.target.value)}
+                  autoComplete="off"
+                  required
+                  type="text"
+                  className="form-control"
+                />
+                <button
+                  data-testid={search.buttonTestId}
+                  onClick={() => {}}
+                  tabIndex={-1}
+                  type="button"
+                >
+                  Search
+                </button>
+              </>
+            )}
+          </div>
+
+          {sorting?.map((sort, index) => (
+            <div key={index}>
+              <button title={sort.title} data-testid={sort.testIdPrefix}>
+                {sort.selected}
+              </button>
+              <div>
+                {sort.options.map((option) => (
+                  <button
+                    key={option.value}
+                    data-testid={option.value.toString()}
+                    onClick={() => sort.onChange(option.value)}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          {actions}
+        </div>
+      );
+    },
+  };
+});
 
 // Setup mock window.location
 const setupLocationMock = () => {
@@ -73,6 +159,7 @@ type MemberEdge = {
     emailAddress: string;
     avatarURL: string | null;
     createdAt: string;
+    role?: string;
   };
   cursor: string;
 };
@@ -102,6 +189,7 @@ const createMemberConnectionMock = (
               emailAddress: 'john@example.com',
               avatarURL: 'https://example.com/avatar1.jpg',
               createdAt: '2023-01-01T00:00:00Z',
+              role: 'member',
             },
             cursor: 'cursor1',
           },
@@ -112,6 +200,7 @@ const createMemberConnectionMock = (
               emailAddress: 'jane@example.com',
               avatarURL: null,
               createdAt: '2023-01-02T00:00:00Z',
+              role: 'member',
             },
             cursor: 'cursor2',
           },
@@ -127,8 +216,19 @@ const createMemberConnectionMock = (
   };
 
   const data = { ...defaultData };
+  const withRole = (edge: MemberEdge): MemberEdge => ({
+    ...edge,
+    node: {
+      ...edge.node,
+      role: edge.node.role ?? 'member',
+    },
+  });
+
+  data.organization.members.edges =
+    data.organization.members.edges.map(withRole);
+
   if (overrides.edges) {
-    data.organization.members.edges = overrides.edges;
+    data.organization.members.edges = overrides.edges.map(withRole);
   }
   if (overrides.pageInfo) {
     data.organization.members.pageInfo = {
@@ -163,6 +263,7 @@ type UserEdge = {
     emailAddress: string;
     avatarURL: string | null;
     createdAt: string;
+    role: string;
   };
   cursor: string;
 };
@@ -191,6 +292,7 @@ const createUserListMock = (
             emailAddress: 'user1@example.com',
             avatarURL: 'https://example.com/avatar1.jpg' as string | null,
             createdAt: '2023-01-01T00:00:00Z',
+            role: 'member',
           },
           cursor: 'userCursor1',
         },
@@ -201,6 +303,7 @@ const createUserListMock = (
             emailAddress: 'user2@example.com',
             avatarURL: null as string | null,
             createdAt: '2023-01-02T00:00:00Z',
+            role: 'member',
           },
           cursor: 'userCursor2',
         },
@@ -215,8 +318,18 @@ const createUserListMock = (
   };
 
   const data = { ...defaultData };
+  const withRole = (edge: UserEdge): UserEdge => ({
+    ...edge,
+    node: {
+      ...edge.node,
+      role: edge.node.role ?? 'member',
+    },
+  });
+
+  data.allUsers.edges = data.allUsers.edges.map(withRole) as UserEdge[];
+
   if (overrides.edges) {
-    data.allUsers.edges = overrides.edges;
+    data.allUsers.edges = overrides.edges.map(withRole);
   }
   if (overrides.pageInfo) {
     data.allUsers.pageInfo = {
@@ -241,6 +354,10 @@ describe('OrganizationPeople', () => {
   beforeEach(() => {
     setupLocationMock();
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   test('renders loading state initially', async () => {
@@ -400,6 +517,7 @@ describe('OrganizationPeople', () => {
               emailAddress: 'admin@example.com',
               avatarURL: null,
               createdAt: '2023-01-03T00:00:00Z',
+              role: 'administrator',
             },
             cursor: 'adminCursor1',
           },
@@ -441,7 +559,7 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to admin tab
-    const sortingButton = screen.getByText(/members/i);
+    const sortingButton = screen.getByTestId('sort');
     fireEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/admin/i);
@@ -593,6 +711,7 @@ describe('OrganizationPeople', () => {
               emailAddress: 'admin@example.com',
               avatarURL: null,
               createdAt: '2023-01-03T00:00:00Z',
+              role: 'administrator',
             },
             cursor: 'adminCursor1',
           },
@@ -624,6 +743,7 @@ describe('OrganizationPeople', () => {
               emailAddress: 'admin2@example.com',
               avatarURL: null,
               createdAt: '2023-01-03T00:00:00Z',
+              role: 'administrator',
             },
             cursor: 'adminCursor2',
           },
@@ -655,6 +775,7 @@ describe('OrganizationPeople', () => {
               emailAddress: 'admin1@example.com',
               avatarURL: null,
               createdAt: '2023-01-03T00:00:00Z',
+              role: 'administrator',
             },
             cursor: 'adminCursor1',
           },
@@ -699,7 +820,7 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to admin tab
-    const sortingButton = screen.getByText(/members/i);
+    const sortingButton = screen.getByTestId('sort');
     fireEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/ADMIN/i);
@@ -764,6 +885,7 @@ describe('OrganizationPeople', () => {
               emailAddress: 'bob@example.com',
               avatarURL: null,
               createdAt: '2023-01-03T00:00:00Z',
+              role: 'member',
             },
             cursor: 'cursor3',
           },
@@ -816,7 +938,7 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to admin tab
-    const sortingButton = screen.getByText(/members/i);
+    const sortingButton = screen.getByTestId('sort');
     fireEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/user/i);
@@ -874,6 +996,7 @@ describe('OrganizationPeople', () => {
               emailAddress: 'admin@example.com',
               avatarURL: null,
               createdAt: '2023-01-03T00:00:00Z',
+              role: 'administrator',
             },
             cursor: 'adminCursor1',
           },
@@ -913,14 +1036,16 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to admin tab
-    const sortingButton = screen.getByText(/members/i);
+    const sortingButton = screen.getByTestId('sort');
     fireEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/ADMIN/i);
     fireEvent.click(adminOption);
 
     await waitFor(() => {
-      expect(screen.getByText('Admin User')).toBeInTheDocument();
+      expect(
+        screen.getByText((content) => content.includes('Admin User')),
+      ).toBeInTheDocument();
     });
 
     // Navigate to next page
@@ -1022,7 +1147,7 @@ describe('OrganizationPeople', () => {
     });
 
     // Switch to admin tab
-    const sortingButton = screen.getByText(/members/i);
+    const sortingButton = screen.getByTestId('sort');
     fireEvent.click(sortingButton);
 
     const adminOption = screen.getByText(/user/i);
