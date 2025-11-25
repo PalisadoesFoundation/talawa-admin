@@ -10,7 +10,7 @@ import {
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
