@@ -45,7 +45,7 @@ describe('CSV Export Functions', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('exports data to CSV with proper formatting', () => {

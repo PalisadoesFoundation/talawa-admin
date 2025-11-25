@@ -40,6 +40,10 @@ interface IMockApolloClient {
 }
 
 describe('adminPluginInstaller', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   let mockZip: {
     loadAsync: ReturnType<typeof vi.fn>;
     file: ReturnType<typeof vi.fn>;
