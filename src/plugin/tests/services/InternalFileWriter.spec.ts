@@ -2,8 +2,6 @@ import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 import {
   InternalFileWriter,
   internalFileWriter,
-  FileWriteResult,
-  FileOperationResult,
 } from '../../services/InternalFileWriter';
 import { AdminPluginManifest } from '../../../utils/adminPluginInstaller';
 
@@ -44,7 +42,6 @@ const mockFiles: Record<string, string> = {
 };
 
 describe('InternalFileWriter', () => {
-  let fileWriter: InternalFileWriter;
   let mockFetch: any;
   let originalWindow: any;
 

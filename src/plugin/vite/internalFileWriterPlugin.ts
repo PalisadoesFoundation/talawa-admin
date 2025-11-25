@@ -50,7 +50,7 @@ export function createInternalFileWriterPlugin(
   return {
     name: 'internal-file-writer',
 
-    configResolved(config) {
+    configResolved() {
       if (debug) {
         console.log('Internal File Writer Plugin: Initialized');
         console.log('Base path:', basePath);
@@ -197,19 +197,19 @@ async function handleFileOperation(
     }
 
     case 'readFile':
-      return await readFile(params.path, resolvedBasePath, debug);
+      return await readFile(params.path, resolvedBasePath);
 
     case 'pathExists':
       return await pathExists(params.path, resolvedBasePath, debug);
 
     case 'listDirectories':
-      return await listDirectories(params.path, resolvedBasePath, debug);
+      return await listDirectories(params.path, resolvedBasePath);
 
     case 'readDirectoryRecursive':
-      return await readDirectoryRecursive(params.path, resolvedBasePath, debug);
+      return await readDirectoryRecursive(params.path, resolvedBasePath);
 
     case 'removeDirectory':
-      return await removeDirectory(params.path, resolvedBasePath, debug);
+      return await removeDirectory(params.path, resolvedBasePath);
 
     default:
       throw new Error(`Unknown method: ${method}`);
@@ -236,33 +236,9 @@ async function ensureDirectory(
 }
 
 /**
- * Write file
- */
-async function writeFile(
-  path: string,
-  content: string,
-  basePath: string,
-  debug: boolean,
-): Promise<void> {
-  const resolvedPath = path.startsWith('/')
-    ? join(process.cwd(), path.substring(1))
-    : join(basePath, path);
-
-  // Ensure directory exists
-  await fs.mkdir(dirname(resolvedPath), { recursive: true });
-
-  // Write file
-  await fs.writeFile(resolvedPath, content, 'utf8');
-}
-
-/**
  * Read file
  */
-async function readFile(
-  path: string,
-  basePath: string,
-  debug: boolean,
-): Promise<string> {
+async function readFile(path: string, basePath: string): Promise<string> {
   const resolvedPath = path.startsWith('/')
     ? join(process.cwd(), path.substring(1))
     : join(basePath, path);
@@ -300,7 +276,6 @@ async function pathExists(
 async function listDirectories(
   path: string,
   basePath: string,
-  debug: boolean,
 ): Promise<string[]> {
   const resolvedPath = path.startsWith('/')
     ? join(process.cwd(), path.substring(1))
@@ -318,7 +293,6 @@ async function listDirectories(
 async function readDirectoryRecursive(
   path: string,
   basePath: string,
-  debug: boolean,
 ): Promise<Record<string, string>> {
   const resolvedPath = path.startsWith('/')
     ? join(process.cwd(), path.substring(1))
@@ -353,49 +327,12 @@ async function readDirectoryRecursive(
 /**
  * Remove directory recursively
  */
-async function removeDirectory(
-  path: string,
-  basePath: string,
-  debug: boolean,
-): Promise<void> {
+async function removeDirectory(path: string, basePath: string): Promise<void> {
   const resolvedPath = path.startsWith('/')
     ? join(process.cwd(), path.substring(1))
     : join(basePath, path);
 
   await fs.rm(resolvedPath, { recursive: true, force: true });
-}
-
-/**
- * Copy directory recursively
- */
-async function copyDirectory(
-  source: string,
-  destination: string,
-  basePath: string,
-  debug: boolean,
-): Promise<void> {
-  const resolvedSource = source.startsWith('/')
-    ? join(process.cwd(), source.substring(1))
-    : join(basePath, source);
-  const resolvedDestination = destination.startsWith('/')
-    ? join(process.cwd(), destination.substring(1))
-    : join(basePath, destination);
-
-  await fs.mkdir(resolvedDestination, { recursive: true });
-
-  const entries = await fs.readdir(resolvedSource, { withFileTypes: true });
-
-  for (const entry of entries) {
-    const srcPath = join(resolvedSource, entry.name);
-    const destPath = join(resolvedDestination, entry.name);
-
-    if (entry.isDirectory()) {
-      await copyDirectory(srcPath, destPath, '', debug);
-    } else {
-      const content = await fs.readFile(srcPath);
-      await fs.writeFile(destPath, content);
-    }
-  }
 }
 
 /**

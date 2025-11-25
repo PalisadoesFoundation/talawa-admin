@@ -5,7 +5,6 @@ import { useState, useCallback } from 'react';
 import { getPluginManager } from 'plugin/manager';
 import type { IPluginMeta } from 'plugin';
 import {
-  useCreatePlugin,
   useUpdatePlugin,
   useDeletePlugin,
   useInstallPlugin,
@@ -25,7 +24,6 @@ export function usePluginActions({
   const [pluginToUninstall, setPluginToUninstall] =
     useState<IPluginMeta | null>(null);
 
-  const [createPlugin] = useCreatePlugin();
   const [updatePlugin] = useUpdatePlugin();
   const [deletePlugin] = useDeletePlugin();
   const [installPlugin] = useInstallPlugin();
