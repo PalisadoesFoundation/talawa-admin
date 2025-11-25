@@ -80,7 +80,7 @@ describe('Apollo Client Configuration', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks(); // Only module mocks, no spies
   });
 
   it('should create an Apollo Client with correct configuration', (): void => {

@@ -47,7 +47,7 @@ vi.mock('@mui/x-charts/PieChart', () => ({
 
 describe('Testing Feedback Statistics Card', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks(); // Only module mocks, no spies
   });
   const mockedPieChart = vi.mocked(PieChart);
 

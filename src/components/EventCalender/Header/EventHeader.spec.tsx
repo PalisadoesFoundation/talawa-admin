@@ -19,8 +19,7 @@ describe('EventHeader Component', () => {
   });
 
   afterEach(() => {
-    consoleSpy.mockRestore();
-    vi.restoreAllMocks();
+    vi.restoreAllMocks(); // Restores all spies including consoleSpy
   });
 
   it('renders correctly with all elements', () => {

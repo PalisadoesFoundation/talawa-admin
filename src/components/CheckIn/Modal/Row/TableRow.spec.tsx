@@ -114,9 +114,6 @@ describe('Testing Table Row for CheckIn Table', () => {
 
     expect(await findByText('Generating pdf...')).toBeInTheDocument();
     expect(await findByText('PDF generated successfully!')).toBeInTheDocument();
-
-    // Cleanup mocks
-    vi.clearAllMocks();
   });
 
   test('Upon failing of check in mutation, the appropriate error message should be shown', async () => {

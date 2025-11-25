@@ -32,7 +32,7 @@ describe('askAndSetDockerOption', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks(); // Only module mocks, no spies
   });
 
   it('should set up Docker when user selects yes', async () => {
