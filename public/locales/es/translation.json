@@ -1084,6 +1084,7 @@
   "postCard": {
     "likes": "Gustos",
     "comments": "Comentarios",
+    "postDeletedSuccess": "¡Publicación eliminada con éxito!",
     "addComment": "Agregar comentario",
     "viewPost": "Ver publicación",
     "editPost": "Editar publicación",

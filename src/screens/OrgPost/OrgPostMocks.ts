@@ -29,7 +29,7 @@ export const getOrganizationPostListMock = (count = 1) => {
       query: ORGANIZATION_POST_LIST_WITH_VOTES,
       variables: {
         input: { id: '123' },
-        userId: 'user123',
+        userId: '',
         after: null,
         before: null,
         first: 6,
@@ -69,7 +69,7 @@ export const getMockOrgPostList1 = (count = 1) => {
       query: ORGANIZATION_POST_LIST_WITH_VOTES,
       variables: {
         input: { id: '123' },
-        userId: null,
+        userId: '',
         after: null,
         before: null,
         first: 6,
@@ -178,7 +178,7 @@ export const mocks = [
       query: ORGANIZATION_POST_LIST_WITH_VOTES,
       variables: {
         input: { id: '123' },
-        userId: null,
+        userId: '',
         after: 'cursor1',
         before: null,
         first: 6,
@@ -192,7 +192,7 @@ export const mocks = [
       query: ORGANIZATION_POST_LIST_WITH_VOTES,
       variables: {
         input: { id: '123' },
-        userId: null,
+        userId: '',
         after: null,
         before: 'cursor2',
         first: null,

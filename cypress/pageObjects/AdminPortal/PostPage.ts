@@ -33,13 +33,9 @@ export class PostsPage {
   }
 
   editFirstPost(newTitle: string) {
-    cy.get(this._postCardContainer)
-      .first()
-      .click()
-      .within(() => {
-        cy.get(this._moreOptionsIcon).should('be.visible').click();
-        cy.get(this._editOption).should('be.visible').click();
-      });
+    cy.get(this._postCardContainer).first().click();
+    cy.get(this._moreOptionsIcon).first().should('be.visible').click();
+    cy.get(this._editOption).should('be.visible').click();
     cy.get(this._editCaptionInput).should('be.visible').clear().type(newTitle);
     cy.get(this._updatePostSubmit).should('be.visible').click();
     cy.assertToast('Post updated successfully');
@@ -47,14 +43,10 @@ export class PostsPage {
   }
 
   deleteFirstPost() {
-    cy.get(this._postCardContainer)
-      .first()
-      .click()
-      .within(() => {
-        cy.get(this._moreOptionsIcon).should('be.visible').click();
-        cy.get(this._deleteOption).should('be.visible').click();
-      });
-    cy.assertToast('Successfully deleted the Post.');
+    cy.get(this._postCardContainer).first().click();
+    cy.get(this._moreOptionsIcon).first().should('be.visible').click();
+    cy.get(this._deleteOption).should('be.visible').click();
+    cy.assertToast('Post deleted successfully.');
     return this;
   }
 }

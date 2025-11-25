@@ -6,4 +6,4 @@
 
 > `const` **loadingMocks**: `MockedResponse`[]
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:453](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L453)
+Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:454](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L454)

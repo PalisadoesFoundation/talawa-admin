@@ -214,6 +214,7 @@ export const orgPostListMock = {
     query: ORGANIZATION_POST_LIST_WITH_VOTES,
     variables: {
       input: { id: '123' },
+      userId: '',
       after: null,
       before: null,
       first: 6,

@@ -46,6 +46,10 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:212](https://github.com/Pa
 
 > **last**: `any` = `null`
 
+#### request.variables.userId
+
+> **userId**: `string` = `''`
+
 ### result
 
 > **result**: `object`

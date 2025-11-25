@@ -91,7 +91,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
 
   const commentCount = props.commentCount;
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId') ?? getItem('Talawa-admin_id');
+  const userId = getItem('userId') ?? getItem('id');
 
   const isPostCreator = props.creator.id === userId;
   const isAdmin = getItem('role') === 'administrator';
@@ -262,7 +262,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       });
       props.fetchPosts();
       toast.success(
-        isPinned ? 'Post unpinned successfully' : 'Post pinned successfully',
+        isPinned ? t('postUnpinnedSuccess') : t('postPinnedSuccess'),
       );
       handleDropdownClose();
     } catch (error) {
@@ -304,7 +304,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
     try {
       await deletePost({ variables: { input: { id: props.id } } });
       props.fetchPosts();
-      toast.success('Successfully deleted the Post.');
+      toast.success(t('postDeletedSuccess'));
       handleDropdownClose();
     } catch (error) {
       errorHandler(t, error);

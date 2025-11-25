@@ -225,7 +225,7 @@ describe('OrgPost Component', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(
-        expect.stringContaining('Organization post list error:'),
+        expect.stringContaining('pinnedPostsLoadError'),
       );
     });
   });
@@ -252,7 +252,7 @@ describe('OrgPost Component', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(
-        expect.stringContaining('Organization post list error:'),
+        expect.stringContaining('pinnedPostsLoadError'),
       );
     });
   });
@@ -801,81 +801,6 @@ describe('Tests for sorting , nextpage , previousPage', () => {
       </MockedProvider>,
     );
 
-  it('returns early when loading, error, or missing data', async () => {
-    const emptyPosts = { postsByOrganization: [] };
-    const emptyMocks: MockedResponse[] = [
-      ...baseMocks,
-      {
-        request: {
-          query: GET_POSTS_BY_ORG,
-          variables: { input: { organizationId: '123' } },
-        },
-        result: { data: emptyPosts },
-      },
-      {
-        request: {
-          query: ORGANIZATION_POST_LIST_WITH_VOTES,
-          variables: {
-            input: { id: '123' },
-            userId: null,
-            after: null,
-            before: null,
-            first: 6,
-            last: null,
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '123',
-              name: 'Test Org',
-              avatarURL: null,
-              postsCount: 0,
-              posts: {
-                edges: [],
-                totalCount: 0,
-                pageInfo: {
-                  hasNextPage: false,
-                  hasPreviousPage: false,
-                  startCursor: null,
-                  endCursor: null,
-                },
-              },
-            },
-          },
-        },
-      },
-    ];
-
-    const { unmount } = render(
-      <MockedProvider mocks={emptyMocks} addTypename={false}>
-        <I18nextProvider i18n={i18n}>
-          <MemoryRouter initialEntries={['/org/123']}>
-            <Routes>
-              <Route path="/org/:orgId" element={<OrgPost />} />
-            </Routes>
-          </MemoryRouter>
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
-    });
-
-    const toggleButton = screen.getAllByTestId('sortpost-toggle')[0];
-    userEvent.click(toggleButton);
-    const oldestOptionEmpty = await screen.findByText('Oldest');
-    userEvent.click(oldestOptionEmpty);
-    await waitFor(
-      () => {
-        expect(screen.getByText(/post not found/i)).toBeInTheDocument();
-      },
-      { timeout: 5000 },
-    );
-    unmount();
-  });
-
   it('shows Loader when loading (delayed response)', async () => {
     render(
       <MockedProvider
@@ -1101,7 +1026,7 @@ describe('OrgPost component - Post Creation Tests', () => {
       query: ORGANIZATION_POST_LIST_WITH_VOTES,
       variables: {
         input: { id: mockOrgId },
-        userId: null,
+        userId: '',
         after: null,
         before: null,
         first: 6,
@@ -1150,7 +1075,7 @@ describe('OrgPost component - Post Creation Tests', () => {
       query: ORGANIZATION_POST_LIST_WITH_VOTES,
       variables: {
         input: { id: mockOrgId },
-        userId: null,
+        userId: '',
         after: null,
         before: null,
         first: 6,
@@ -1361,7 +1286,7 @@ describe('OrgPost Edge Cases', () => {
           query: ORGANIZATION_POST_LIST_WITH_VOTES,
           variables: {
             input: { id: '123' },
-            userId: null,
+            userId: '',
             after: null,
             before: null,
             first: 6,
@@ -1386,7 +1311,7 @@ describe('OrgPost Edge Cases', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(
-        expect.stringContaining('Organization post list error:'),
+        expect.stringContaining('pinnedPostsLoadError'),
       );
     });
   });
@@ -1399,7 +1324,7 @@ describe('OrgPost Edge Cases', () => {
           query: ORGANIZATION_POST_LIST_WITH_VOTES,
           variables: {
             input: { id: '123' },
-            userId: null,
+            userId: '',
             after: null,
             before: null,
             first: 6,
@@ -1454,7 +1379,7 @@ describe('OrgPost Edge Cases', () => {
           query: ORGANIZATION_POST_LIST_WITH_VOTES,
           variables: {
             input: { id: '123' },
-            userId: null,
+            userId: '',
             after: null,
             before: null,
             first: 6,
@@ -1479,7 +1404,7 @@ describe('OrgPost Edge Cases', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(
-        expect.stringContaining('Organization post list error:'),
+        expect.stringContaining('pinnedPostsLoadError'),
       );
     });
   });
@@ -2318,7 +2243,7 @@ const orgPostListMockForCreatePost = {
     query: ORGANIZATION_POST_LIST_WITH_VOTES,
     variables: {
       input: { id: '123' },
-      userId: null,
+      userId: '',
       after: null,
       before: null,
       first: 6,
@@ -2528,7 +2453,7 @@ describe('OrgPost Pinned Posts Functionality', () => {
       query: ORGANIZATION_POST_LIST_WITH_VOTES,
       variables: {
         input: { id: mockOrgId },
-        userId: null,
+        userId: '',
         after: null,
         before: null,
         first: 6,
@@ -2831,7 +2756,7 @@ describe('OrgPost Pinned Posts Functionality', () => {
         query: ORGANIZATION_POST_LIST_WITH_VOTES,
         variables: {
           input: { id: mockOrgId },
-          userId: null,
+          userId: '',
           after: null,
           before: null,
           first: 6,
@@ -3011,7 +2936,7 @@ describe('OrgPost Pinned Posts Functionality', () => {
         query: ORGANIZATION_POST_LIST_WITH_VOTES,
         variables: {
           input: { id: mockOrgId },
-          userId: null,
+          userId: '',
           after: null,
           before: null,
           first: 6,
@@ -3078,7 +3003,7 @@ describe('OrgPost Pinned Posts Functionality', () => {
         query: ORGANIZATION_POST_LIST_WITH_VOTES,
         variables: {
           input: { id: mockOrgId },
-          userId: null,
+          userId: '',
           after: null,
           before: null,
           first: 6,

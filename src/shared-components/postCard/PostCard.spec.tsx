@@ -363,14 +363,6 @@ const currentUserMock = {
         updatedAt: '',
         workPhoneNumber: '',
         eventsAttended: [],
-        appUserProfile: {
-          _id: '1',
-          adminFor: [{ _id: 'org1' }],
-          isSuperAdmin: false,
-          createdOrganizations: [],
-          createdEvents: [],
-          eventAdmin: [],
-        },
       },
     },
   },
@@ -597,6 +589,34 @@ const defaultProps = {
   fetchPosts: fetchPostsMock,
 };
 
+const renderPostCardWithCustomMockAndProps = (
+  customMock: MockedResponse,
+  propsOverrides: Partial<InterfacePostCard> = {},
+) => {
+  const { setItem } = useLocalStorage();
+  setItem('userId', '1');
+  setItem('role', 'administrator');
+
+  const mocksArray = [
+    customMock,
+    ...mocks.filter((m) => m.request.query !== GET_POST_COMMENTS),
+  ];
+
+  const linkWithCustomMock = new StaticMockLink(mocksArray, true);
+
+  return render(
+    <MockedProvider link={linkWithCustomMock} addTypename={true}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <PostCard {...defaultProps} {...propsOverrides} />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+};
+
 const renderPostCard = (props: Partial<InterfacePostCard> = {}) => {
   return render(
     <MockedProvider link={link}>
@@ -690,9 +710,7 @@ describe('PostCard Component', () => {
     await userEvent.click(deleteButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
-        'Successfully deleted the Post.',
-      );
+      expect(toast.success).toHaveBeenCalledWith('Post deleted successfully.');
       expect(fetchPostsMock).toHaveBeenCalled();
     });
   });
@@ -1387,8 +1405,9 @@ describe('PostCard', () => {
       },
     };
 
-    renderPostCardWithCustomMock(toggleUnpinPostMock);
-
+    renderPostCardWithCustomMockAndProps(toggleUnpinPostMock, {
+      pinnedAt: '2023-01-01T00:00:00Z',
+    });
     await screen.findByText('Test Post');
 
     // Open dropdown
@@ -1404,7 +1423,9 @@ describe('PostCard', () => {
     await userEvent.click(unpinButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('Post unpinned successfully');
+      expect(toast.success).toHaveBeenCalledWith(
+        'postCard.postUnpinnedSuccess',
+      );
     });
   });
 

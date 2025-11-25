@@ -1127,6 +1127,7 @@
     "comments": "Comments",
     "addComment": "Add Comment",
     "viewPost": "View Post",
+    "postDeletedSuccess": "Post deleted successfully.",
     "editPost": "Edit Post",
     "pinPost": "Pin Post",
     "unpinPost": "Unpin Post",

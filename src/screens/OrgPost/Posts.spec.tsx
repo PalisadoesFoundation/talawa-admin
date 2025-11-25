@@ -75,24 +75,104 @@ vi.mock('./PinnedPostsStory', () => ({
   ),
 }));
 
+// Factory function to create PostNode and InterfacePost fixtures
+interface PostFixtureOverrides {
+  id?: string;
+  caption?: string;
+  createdAt?: string;
+  creator?: {
+    id?: string;
+    name?: string;
+    email?: string;
+    emailAddress?: string;
+  } | null;
+  commentCount?: number;
+  commentsCount?: number;
+  hasUserVoted?: { hasVoted: boolean; voteType: any };
+  upVotesCount?: number;
+  downVotesCount?: number;
+  pinnedAt?: string | null;
+  pinned?: boolean;
+  attachments?: any[];
+  downVoters?: { edges: any[] };
+  imageUrl?: string;
+  videoUrl?: string;
+}
+
+function buildPostPair(overrides: PostFixtureOverrides = {}) {
+  const defaultId = 'post-default';
+  const defaultCaption = 'Default Post Caption';
+  const defaultCreatedAt = '2023-01-01T00:00:00Z';
+  const defaultCreator = {
+    id: 'user-1',
+    name: 'Test User',
+    email: 'test@example.com',
+    emailAddress: 'test@example.com',
+  };
+
+  const postNode: PostNode = {
+    id: overrides.id ?? defaultId,
+    caption: overrides.caption ?? defaultCaption,
+    createdAt: overrides.createdAt ?? defaultCreatedAt,
+    creator:
+      overrides.creator === null
+        ? {
+            id: defaultCreator.id,
+            name: 'Unknown User',
+            emailAddress: 'unknown@example.com',
+          }
+        : {
+            id: overrides.creator?.id ?? defaultCreator.id,
+            name: overrides.creator?.name ?? defaultCreator.name,
+            emailAddress:
+              overrides.creator?.emailAddress ?? defaultCreator.emailAddress,
+          },
+    commentCount: overrides.commentCount ?? 0,
+    commentsCount: overrides.commentsCount ?? 0,
+    hasUserVoted: overrides.hasUserVoted ?? { hasVoted: false, voteType: null },
+    upVotesCount: overrides.upVotesCount ?? 0,
+    downVotesCount: overrides.downVotesCount ?? 0,
+    pinnedAt: overrides.pinnedAt ?? null,
+    attachments: overrides.attachments ?? [],
+    downVoters: overrides.downVoters ?? { edges: [] },
+  };
+
+  const interfacePost: InterfacePost = {
+    id: overrides.id ?? defaultId,
+    caption: overrides.caption ?? defaultCaption,
+    createdAt: overrides.createdAt ?? defaultCreatedAt,
+    creator:
+      overrides.creator === null
+        ? null
+        : {
+            id: overrides.creator?.id ?? defaultCreator.id,
+            name: overrides.creator?.name ?? defaultCreator.name,
+            email: overrides.creator?.email ?? defaultCreator.email,
+          },
+    pinnedAt: overrides.pinnedAt ?? null,
+    pinned: overrides.pinned ?? false,
+    ...(overrides.imageUrl !== undefined && { imageUrl: overrides.imageUrl }),
+    ...(overrides.videoUrl !== undefined && { videoUrl: overrides.videoUrl }),
+  };
+
+  return { postNode, interfacePost };
+}
+
 describe('PostsRenderer', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  const mockPost: PostNode = {
+  const { postNode: mockPost } = buildPostPair({
     id: 'post-1',
     caption: 'Test Post',
-    createdAt: '2023-01-01T00:00:00Z',
     commentCount: 5,
     commentsCount: 5,
     creator: {
       id: 'user-1',
       name: 'Test User',
       emailAddress: 'test@example.com',
-      avatarURL: 'avatar.jpg',
     },
-    hasUserVoted: { hasVoted: false, voteType: null },
     upVotesCount: 10,
     downVotesCount: 2,
     pinnedAt: '2023-01-01T00:00:00Z',
@@ -104,36 +184,17 @@ describe('PostsRenderer', () => {
         objectName: 'obj123',
       },
     ],
-    downVoters: {
-      edges: [],
-    },
-  };
+  });
 
-  const mockPostNoAttachments: PostNode = {
+  const { postNode: mockPostNoAttachments } = buildPostPair({
     id: 'post-2',
     caption: 'Test Post', // Changed to match the test expectation
-    createdAt: '2023-01-01T00:00:00Z',
-    commentCount: 0,
-    commentsCount: 0,
-    creator: {
-      id: 'user-1',
-      name: 'Test User',
-      emailAddress: 'test@example.com',
-    },
-    hasUserVoted: { hasVoted: false, voteType: null },
-    upVotesCount: 0,
-    downVotesCount: 0,
-    pinnedAt: null,
     attachments: [],
-    downVoters: {
-      edges: [],
-    },
-  };
+  });
 
-  const mockPostWithPlaceholderCreator: PostNode = {
+  const { postNode: mockPostWithPlaceholderCreator } = buildPostPair({
     id: 'post-3',
     caption: 'Test Post Placeholder Creator',
-    createdAt: '2023-01-01T00:00:00Z',
     commentCount: 1,
     commentsCount: 1,
     creator: {
@@ -141,10 +202,8 @@ describe('PostsRenderer', () => {
       name: 'Unknown User',
       emailAddress: 'unknown@example.com',
     },
-    hasUserVoted: { hasVoted: false, voteType: null },
     upVotesCount: 3,
     downVotesCount: 1,
-    pinnedAt: null,
     attachments: [
       {
         mimeType: 'image/jpeg',
@@ -153,10 +212,7 @@ describe('PostsRenderer', () => {
         objectName: 'obj456',
       },
     ],
-    downVoters: {
-      edges: [],
-    },
-  };
+  });
 
   // Create InterfacePost objects for postsByOrganization
   const mockInterfacePost: InterfacePost = {
@@ -411,26 +467,10 @@ describe('PostsRenderer', () => {
   });
 
   it('properly renders post with null id', () => {
-    const postWithNullId: PostNode = {
+    const { postNode: postWithNullId } = buildPostPair({
       id: '', // empty string to simulate a null/invalid ID
       caption: 'Post with null ID',
-      createdAt: '2023-01-01T00:00:00Z',
-      commentCount: 0,
-      commentsCount: 0,
-      creator: {
-        id: 'user-1',
-        name: 'Test User',
-        emailAddress: 'test@example.com',
-      },
-      hasUserVoted: { hasVoted: false, voteType: null },
-      upVotesCount: 0,
-      downVotesCount: 0,
-      pinnedAt: null,
-      attachments: [],
-      downVoters: {
-        edges: [],
-      },
-    };
+    });
 
     const props = {
       ...defaultProps,
@@ -503,26 +543,11 @@ describe('PostsRenderer', () => {
     pinnedAt: '2023-01-01T00:00:00Z',
   };
 
-  const mockPinnedPostNode: PostNode = {
+  const { postNode: mockPinnedPostNode } = buildPostPair({
     id: 'pinned-post-1',
     caption: 'Pinned Test Post',
-    createdAt: '2023-01-01T00:00:00Z',
-    commentCount: 0,
-    commentsCount: 0,
-    creator: {
-      id: 'user-1',
-      name: 'Test User',
-      emailAddress: 'test@example.com',
-    },
-    hasUserVoted: { hasVoted: false, voteType: null },
-    upVotesCount: 0,
-    downVotesCount: 0,
     pinnedAt: '2023-01-01T00:00:00Z',
-    attachments: [],
-    downVoters: {
-      edges: [],
-    },
-  };
+  });
 
   const defaultProps1 = {
     loading: false,
@@ -612,118 +637,73 @@ describe('PostsRenderer Branch Coverage Tests', () => {
   it('handles missing refetch function with fallback', () => {
     const mockReload = vi.fn();
     const originalLocation = window.location;
-    Object.defineProperty(window, 'location', {
-      value: { reload: mockReload },
-      writable: true,
-    });
 
-    const postWithoutRefetchNode: PostNode = {
-      id: 'post-no-refetch',
-      caption: 'Post without refetch',
-      createdAt: '2023-01-01T00:00:00Z',
-      creator: {
-        id: 'user-1',
-        name: 'Test User',
-        emailAddress: 'test@example.com',
-      },
-      commentCount: 0,
-      commentsCount: 0,
-      hasUserVoted: { hasVoted: false, voteType: null },
-      upVotesCount: 0,
-      downVotesCount: 0,
-      pinnedAt: null,
-      attachments: [],
-      downVoters: { edges: [] },
-    };
+    try {
+      Object.defineProperty(window, 'location', {
+        value: { reload: mockReload },
+        writable: true,
+      });
 
-    const postWithoutRefetch: InterfacePost = {
-      id: 'post-no-refetch',
-      caption: 'Post without refetch',
-      createdAt: '2023-01-01T00:00:00Z',
-      creator: {
-        id: 'user-1',
-        name: 'Test User',
-        email: 'test@example.com',
-      },
-      pinnedAt: null,
-    };
+      const {
+        postNode: postWithoutRefetchNode,
+        interfacePost: postWithoutRefetch,
+      } = buildPostPair({
+        id: 'post-no-refetch',
+        caption: 'Post without refetch',
+      });
 
-    const props = {
-      loading: false,
-      error: undefined,
-      data: {
-        organization: {
-          posts: {
-            edges: [
-              { node: postWithoutRefetchNode, cursor: 'cursor-no-refetch' },
-            ],
+      const props = {
+        loading: false,
+        error: undefined,
+        data: {
+          organization: {
+            posts: {
+              edges: [
+                { node: postWithoutRefetchNode, cursor: 'cursor-no-refetch' },
+              ],
+            },
           },
+          postsByOrganization: [postWithoutRefetch],
         },
-        postsByOrganization: [postWithoutRefetch],
-      },
-      pinnedPostData: undefined,
-      isFiltering: false,
-      searchTerm: '',
-      sortingOption: 'None',
-      displayPosts: [],
-      // Explicitly NOT providing refetch to test fallback
-    };
+        pinnedPostData: undefined,
+        isFiltering: false,
+        searchTerm: '',
+        sortingOption: 'None',
+        displayPosts: [],
+        // Explicitly NOT providing refetch to test fallback
+      };
 
-    render(<PostsRenderer {...props} />);
+      render(<PostsRenderer {...props} />);
 
-    expect(screen.getByTestId('org-post-card')).toBeInTheDocument();
-    expect(screen.getByText('Post without refetch')).toBeInTheDocument();
+      expect(screen.getByTestId('org-post-card')).toBeInTheDocument();
+      expect(screen.getByText('Post without refetch')).toBeInTheDocument();
 
-    // Click the fetch posts button to trigger the fallback function
-    const fetchPostsBtn = screen.getByTestId('fetch-posts-btn');
-    fireEvent.click(fetchPostsBtn);
+      // Click the fetch posts button to trigger the fallback function
+      const fetchPostsBtn = screen.getByTestId('fetch-posts-btn');
+      fireEvent.click(fetchPostsBtn);
 
-    // Verify that window.location.reload was called
-    expect(mockReload).toHaveBeenCalled();
-
-    // Restore original window.location
-    Object.defineProperty(window, 'location', {
-      value: originalLocation,
-      writable: true,
-    });
+      // Verify that window.location.reload was called
+      expect(mockReload).toHaveBeenCalled();
+    } finally {
+      // Restore original window.location
+      Object.defineProperty(window, 'location', {
+        value: originalLocation,
+        writable: true,
+      });
+    }
   });
 });
 
 // Add these tests to your Posts.spec.tsx
 describe('PostsRenderer Edge Cases', () => {
   it('handles posts with undefined imageUrl and videoUrl', () => {
-    const postWithUndefinedMediaNode: PostNode = {
+    const {
+      postNode: postWithUndefinedMediaNode,
+      interfacePost: postWithUndefinedMedia,
+    } = buildPostPair({
       id: 'post-5',
       caption: 'Post with undefined media',
-      createdAt: '2023-01-01T00:00:00Z',
-      creator: {
-        id: 'user-1',
-        name: 'Test User',
-        emailAddress: 'test@example.com',
-      },
-      commentCount: 0,
-      commentsCount: 0,
-      hasUserVoted: { hasVoted: false, voteType: null },
-      upVotesCount: 0,
-      downVotesCount: 0,
-      pinnedAt: null,
-      attachments: [],
-      downVoters: { edges: [] },
-    };
-
-    const postWithUndefinedMedia: InterfacePost = {
-      id: 'post-5',
-      caption: 'Post with undefined media',
-      createdAt: '2023-01-01T00:00:00Z',
-      creator: {
-        id: 'user-1',
-        name: 'Test User',
-        email: 'test@example.com',
-      },
-      imageUrl: undefined,
-      videoUrl: undefined,
-      pinned: false,
-    };
+    });
 
     const props = {
       loading: false,
@@ -750,32 +730,18 @@ describe('PostsRenderer Edge Cases', () => {
   });
 
   it('handles posts with null creator', () => {
-    const postWithNullCreatorNode: PostNode = {
+    const {
+      postNode: postWithNullCreatorNode,
+      interfacePost: postWithNullCreator,
+    } = buildPostPair({
       id: 'post-6',
       caption: 'Post with null creator',
-      createdAt: '2023-01-01T00:00:00Z',
       creator: {
         id: 'user-1',
         name: 'Unknown User',
         emailAddress: 'unknown@example.com',
       },
-      commentCount: 0,
-      commentsCount: 0,
-      hasUserVoted: { hasVoted: false, voteType: null },
-      upVotesCount: 0,
-      downVotesCount: 0,
-      pinnedAt: null,
-      attachments: [],
-      downVoters: { edges: [] },
-    };
-
-    const postWithNullCreator: InterfacePost = {
-      id: 'post-6',
-      caption: 'Post with null creator',
-      createdAt: '2023-01-01T00:00:00Z',
-      creator: null,
-      pinned: false,
-    };
+    });
 
     const props = {
       loading: false,
@@ -810,26 +776,10 @@ describe('PostsRenderer Edge Cases', () => {
           posts: {
             edges: [
               {
-                node: {
+                node: buildPostPair({
                   id: 'post-7',
                   caption: 'Mixed CASE Post',
-                  createdAt: '2023-01-01T00:00:00Z',
-                  commentCount: 0,
-                  commentsCount: 0,
-                  creator: {
-                    id: 'user-1',
-                    name: 'Test User',
-                    emailAddress: 'test@example.com',
-                  },
-                  hasUserVoted: { hasVoted: false, voteType: null },
-                  upVotesCount: 0,
-                  downVotesCount: 0,
-                  pinnedAt: null,
-                  attachments: [],
-                  downVoters: {
-                    edges: [],
-                  },
-                },
+                }).postNode,
                 cursor: 'cursor-7',
               },
             ],
@@ -864,37 +814,13 @@ describe('PostsRenderer Edge Cases', () => {
 
   it('handles posts with very long captions', () => {
     const longCaption = 'A'.repeat(1000);
-    const postWithLongCaption: PostNode = {
+    const {
+      postNode: postWithLongCaption,
+      interfacePost: postWithLongCaptionInterface,
+    } = buildPostPair({
       id: 'post-8',
       caption: longCaption,
-      createdAt: '2023-01-01T00:00:00Z',
-      commentCount: 0,
-      commentsCount: 0,
-      creator: {
-        id: 'user-1',
-        name: 'Test User',
-        emailAddress: 'test@example.com',
-      },
-      hasUserVoted: { hasVoted: false, voteType: null },
-      upVotesCount: 0,
-      downVotesCount: 0,
-      pinnedAt: null,
-      attachments: [],
-      downVoters: {
-        edges: [],
-      },
-    };
-    const postWithLongCaptionInterface: InterfacePost = {
-      id: 'post-8',
-      caption: longCaption,
-      createdAt: '2023-01-01T00:00:00Z',
-      creator: {
-        id: 'user-1',
-        name: 'Test User',
-        email: 'test@example.com',
-      },
-      pinned: false,
-    };
+    });
 
     const props = {
       loading: false,
@@ -920,37 +846,13 @@ describe('PostsRenderer Edge Cases', () => {
   });
 
   it('handles posts with special characters in caption', () => {
-    const postWithSpecialChars: PostNode = {
+    const {
+      postNode: postWithSpecialChars,
+      interfacePost: postWithSpecialCharsInterface,
+    } = buildPostPair({
       id: 'post-9',
       caption: 'Post with spéciål chàracters & symbols! @#$%^&*()',
-      createdAt: '2023-01-01T00:00:00Z',
-      commentCount: 0,
-      commentsCount: 0,
-      creator: {
-        id: 'user-1',
-        name: 'Test User',
-        emailAddress: 'test@example.com',
-      },
-      hasUserVoted: { hasVoted: false, voteType: null },
-      upVotesCount: 0,
-      downVotesCount: 0,
-      pinnedAt: null,
-      attachments: [],
-      downVoters: {
-        edges: [],
-      },
-    };
-    const postWithSpecialCharsInterface: InterfacePost = {
-      id: 'post-9',
-      caption: 'Post with spéciål chàracters & symbols! @#$%^&*()',
-      createdAt: '2023-01-01T00:00:00Z',
-      creator: {
-        id: 'user-1',
-        name: 'Test User',
-        email: 'test@example.com',
-      },
-      pinned: false,
-    };
+    });
 
     const props = {
       loading: false,
@@ -979,71 +881,24 @@ describe('PostsRenderer Edge Cases', () => {
   });
 
   it('handles multiple posts with same caption', () => {
-    const duplicatePost: PostNode = {
-      id: 'post-10',
-      caption: 'Duplicate Post',
-      createdAt: '2023-01-01T00:00:00Z',
-      commentCount: 0,
-      commentsCount: 0,
-      creator: {
-        id: 'user-1',
-        name: 'Test User',
-        emailAddress: 'test@example.com',
-      },
-      hasUserVoted: { hasVoted: false, voteType: null },
-      upVotesCount: 0,
-      downVotesCount: 0,
-      pinnedAt: null,
-      attachments: [],
-      downVoters: {
-        edges: [],
-      },
-    };
+    const { postNode: duplicatePost, interfacePost: duplicatePostInterface } =
+      buildPostPair({
+        id: 'post-10',
+        caption: 'Duplicate Post',
+      });
 
-    const duplicatePost2: PostNode = {
-      id: 'post-11',
-      caption: 'Duplicate Post',
-      createdAt: '2023-01-02T00:00:00Z',
-      commentCount: 0,
-      commentsCount: 0,
-      creator: {
-        id: 'user-2',
-        name: 'Test User 2',
-        emailAddress: 'test2@example.com',
-      },
-      hasUserVoted: { hasVoted: false, voteType: null },
-      upVotesCount: 0,
-      downVotesCount: 0,
-      pinnedAt: null,
-      attachments: [],
-      downVoters: {
-        edges: [],
-      },
-    };
-
-    const duplicatePostInterface: InterfacePost = {
-      id: 'post-10',
-      caption: 'Duplicate Post',
-      createdAt: '2023-01-01T00:00:00Z',
-      creator: {
-        id: 'user-1',
-        name: 'Test User',
-        email: 'test@example.com',
-      },
-      pinned: false,
-    };
-
-    const duplicatePost2Interface: InterfacePost = {
-      id: 'post-11',
-      caption: 'Duplicate Post',
-      createdAt: '2023-01-02T00:00:00Z',
-      creator: {
-        id: 'user-2',
-        name: 'Test User 2',
-        email: 'test2@example.com',
-      },
-      pinned: false,
-    };
+    const { postNode: duplicatePost2, interfacePost: duplicatePost2Interface } =
+      buildPostPair({
+        id: 'post-11',
+        caption: 'Duplicate Post',
+        createdAt: '2023-01-02T00:00:00Z',
+        creator: {
+          id: 'user-2',
+          name: 'Test User 2',
+          email: 'test2@example.com',
+          emailAddress: 'test2@example.com',
+        },
+      });
 
     const props = {
       loading: false,
@@ -1073,36 +928,14 @@ describe('PostsRenderer Edge Cases', () => {
   });
 
   it('handles posts with invalid createdAt format', () => {
-    const postWithNullDate: PostNode = {
-      id: 'post-12',
-      caption: 'Post with null date',
-      createdAt: '12',
-      creator: {
-        id: 'user-1',
-        name: 'Test User',
-        emailAddress: 'test@example.com',
-      },
-      commentCount: 0,
-      commentsCount: 0,
-      hasUserVoted: { hasVoted: false, voteType: null },
-      upVotesCount: 0,
-      downVotesCount: 0,
-      pinnedAt: null,
-      attachments: [],
-      downVoters: { edges: [] },
-    };
-
-    const postWithNullDateInterface: InterfacePost = {
+    const {
+      postNode: postWithNullDate,
+      interfacePost: postWithNullDateInterface,
+    } = buildPostPair({
       id: 'post-12',
       caption: 'Post with null date',
       createdAt: '12', // Invalid date format, not ISO 8601
-      creator: {
-        id: 'user-1',
-        name: 'Test User',
-        email: 'test@example.com',
-      },
-      pinned: false,
-    };
+    });
 
     const props = {
       loading: false,
