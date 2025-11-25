@@ -150,20 +150,23 @@ const iconComponent = (props: IIconComponent): JSX.Element => {
       );
     case 'Campaigns':
       return (
-        <NewspaperOutlined {...props} data-testid="Icon-Component-Campaigns" />
+        <NewspaperOutlined
+          sx={{ color: props.fill || 'currentColor' }}
+          data-testid="Icon-Component-Campaigns"
+        />
       );
     case 'My Pledges':
       return (
         <ContactPageOutlined
+          sx={{ color: props.fill || 'currentColor' }}
           data-testid="Icon-Component-My-Pledges"
-          stroke={props.fill}
         />
       );
     case 'Leave Organization':
       return (
         <ExitToAppIcon
+          sx={{ color: props.fill || 'currentColor' }}
           data-testid="Icon-Component-Leave-Organization"
-          stroke={props.fill}
         />
       );
     case 'Volunteer':

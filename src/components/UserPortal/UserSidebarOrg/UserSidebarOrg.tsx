@@ -36,8 +36,9 @@ import { useTranslation } from 'react-i18next';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from 'style/app-fixed.module.css';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
-import SignOut from './../../SignOut/SignOut';
+import SignOut from 'components/SignOut/SignOut';
 import { usePluginDrawerItems } from 'plugin';
+import useLocalStorage from 'utils/useLocalstorage';
 import SidebarBase from 'components/Sidebar/SidebarBase/SidebarBase';
 import SidebarNavItem from 'components/Sidebar/SidebarNavItem/SidebarNavItem';
 import SidebarPluginSection from 'components/Sidebar/SidebarPluginSection/SidebarPluginSection';
@@ -56,6 +57,7 @@ const UserSidebarOrg = ({
   setHideDrawer,
 }: InterfaceUserSidebarOrgProps): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
+  const { setItem } = useLocalStorage();
 
   const [showDropdown, setShowDropdown] = React.useState(false);
 
@@ -70,6 +72,12 @@ const UserSidebarOrg = ({
     true,
   );
 
+  const handleToggle = useCallback((): void => {
+    const newState = !hideDrawer;
+    setItem('sidebar', newState.toString());
+    setHideDrawer(newState);
+  }, [hideDrawer, setItem, setHideDrawer]);
+
   const handleLinkClick = useCallback((): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
@@ -79,27 +87,42 @@ const UserSidebarOrg = ({
   const drawerContent = useMemo(
     () => (
       <div className={styles.optionList}>
-        {targets.map(({ name, url }, index) =>
-          url ? (
-            <SidebarNavItem
-              key={name}
-              to={url}
-              icon={<IconComponent name={name} fill="var(--bs-black)" />}
-              label={tCommon(name)}
-              testId={name}
-              hideDrawer={hideDrawer}
-              onClick={handleLinkClick}
-              useSimpleButton={true}
-            />
-          ) : (
-            <CollapsibleDropdown
-              key={name}
-              target={targets[index]}
-              showDropdown={showDropdown}
-              setShowDropdown={setShowDropdown}
-            />
-          ),
-        )}
+        {Array.isArray(targets) &&
+          targets.map((target) => {
+            if (!target) return null;
+            const { name, url, subTargets } = target;
+
+            // Render navigation item if URL exists
+            if (url) {
+              return (
+                <SidebarNavItem
+                  key={name}
+                  to={url}
+                  icon={<IconComponent name={name} fill="var(--bs-black)" />}
+                  label={tCommon(name)}
+                  testId={name}
+                  hideDrawer={hideDrawer}
+                  onClick={handleLinkClick}
+                  useSimpleButton={true}
+                />
+              );
+            }
+
+            // Only render CollapsibleDropdown if subTargets exists and has items
+            if (subTargets && subTargets.length > 0) {
+              return (
+                <CollapsibleDropdown
+                  key={name}
+                  target={target}
+                  showDropdown={showDropdown}
+                  setShowDropdown={setShowDropdown}
+                />
+              );
+            }
+
+            // Skip rendering if neither url nor subTargets
+            return null;
+          })}
 
         {/* Plugin Routes Section */}
         <SidebarPluginSection
@@ -125,7 +148,7 @@ const UserSidebarOrg = ({
   return (
     <SidebarBase
       hideDrawer={hideDrawer}
-      setHideDrawer={setHideDrawer}
+      setHideDrawer={handleToggle}
       portalType="user"
       backgroundColor="#f0f7fb"
       persistToggleState={false}
