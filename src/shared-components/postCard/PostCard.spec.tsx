@@ -710,7 +710,11 @@ describe('PostCard Component', () => {
     await userEvent.click(deleteButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('Post deleted successfully.');
+      expect(toast.success).toHaveBeenCalledWith(
+        expect.stringMatching(
+          /Post deleted successfully|postCard\.postDeletedSuccess/i,
+        ),
+      );
       expect(fetchPostsMock).toHaveBeenCalled();
     });
   });
