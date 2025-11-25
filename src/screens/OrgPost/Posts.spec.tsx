@@ -130,9 +130,9 @@ describe('PostsRenderer', () => {
     },
   };
 
-  const mockPostNoCreator: PostNode = {
+  const mockPostWithPlaceholderCreator: PostNode = {
     id: 'post-3',
-    caption: 'Test Post No Creator',
+    caption: 'Test Post Placeholder Creator',
     createdAt: '2023-01-01T00:00:00Z',
     commentCount: 1,
     commentsCount: 1,
@@ -213,7 +213,7 @@ describe('PostsRenderer', () => {
           edges: [
             createEdge(mockPost),
             createEdge(mockPostNoAttachments),
-            createEdge(mockPostNoCreator),
+            createEdge(mockPostWithPlaceholderCreator),
           ],
         },
       },
@@ -247,7 +247,9 @@ describe('PostsRenderer', () => {
 
     expect(screen.getAllByTestId('org-post-card').length).toBe(3);
     expect(screen.getAllByText('Test Post').length).toBe(2);
-    expect(screen.getByText('Test Post No Creator')).toBeInTheDocument();
+    expect(
+      screen.getByText('Test Post Placeholder Creator'),
+    ).toBeInTheDocument();
   });
 
   it('renders NotFound when organization.posts.edges is empty', () => {
@@ -608,8 +610,8 @@ describe('PostsRenderer', () => {
 
 describe('PostsRenderer Branch Coverage Tests', () => {
   it('handles missing refetch function with fallback', () => {
-    // Mock window.location.reload to test the fallback
     const mockReload = vi.fn();
+    const originalLocation = window.location;
     Object.defineProperty(window, 'location', {
       value: { reload: mockReload },
       writable: true,
@@ -679,8 +681,11 @@ describe('PostsRenderer Branch Coverage Tests', () => {
     // Verify that window.location.reload was called
     expect(mockReload).toHaveBeenCalled();
 
-    // Reset the mock
-    mockReload.mockRestore();
+    // Restore original window.location
+    Object.defineProperty(window, 'location', {
+      value: originalLocation,
+      writable: true,
+    });
   });
 });
 
@@ -1067,7 +1072,7 @@ describe('PostsRenderer Edge Cases', () => {
     expect(postCards.length).toBe(2);
   });
 
-  it('handles posts with null createdAt', () => {
+  it('handles posts with invalid createdAt format', () => {
     const postWithNullDate: PostNode = {
       id: 'post-12',
       caption: 'Post with null date',
@@ -1090,7 +1095,7 @@ describe('PostsRenderer Edge Cases', () => {
     const postWithNullDateInterface: InterfacePost = {
       id: 'post-12',
       caption: 'Post with null date',
-      createdAt: '12',
+      createdAt: '12', // Invalid date format, not ISO 8601
       creator: {
         id: 'user-1',
         name: 'Test User',

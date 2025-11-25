@@ -10,10 +10,8 @@ export class PostsPage {
   private readonly _moreOptionsIcon = '[data-testid="more-options-button"]';
   private readonly _editOption = '[data-testid="edit-post-menu-item"]';
   private readonly _editCaptionInput = '[data-cy="editCaptionInput"]';
-  private readonly _editImageUploadInput = '[data-cy="image-upload-input"]';
   private readonly _updatePostSubmit = '[data-testid="save-post-button"]';
   private readonly _deleteOption = '[data-testid="delete-post-button"]';
-  private readonly _deletePostBtn = '[data-testid="deletePostBtn"]';
 
   visitPostsPage() {
     cy.get(this._postsTabButton).should('be.visible').click();
@@ -34,10 +32,14 @@ export class PostsPage {
     return this;
   }
 
-  editFirstPost(newTitle: string, mediaPath: string) {
-    cy.get(this._postCardContainer).first().click();
-    cy.get(this._moreOptionsIcon).first().should('be.visible').click();
-    cy.get(this._editOption).should('be.visible').click();
+  editFirstPost(newTitle: string) {
+    cy.get(this._postCardContainer)
+      .first()
+      .click()
+      .within(() => {
+        cy.get(this._moreOptionsIcon).should('be.visible').click();
+        cy.get(this._editOption).should('be.visible').click();
+      });
     cy.get(this._editCaptionInput).should('be.visible').clear().type(newTitle);
     cy.get(this._updatePostSubmit).should('be.visible').click();
     cy.assertToast('Post updated successfully');
@@ -45,9 +47,13 @@ export class PostsPage {
   }
 
   deleteFirstPost() {
-    cy.get(this._postCardContainer).first().click();
-    cy.get(this._moreOptionsIcon).first().should('be.visible').click();
-    cy.get(this._deleteOption).should('be.visible').click();
+    cy.get(this._postCardContainer)
+      .first()
+      .click()
+      .within(() => {
+        cy.get(this._moreOptionsIcon).should('be.visible').click();
+        cy.get(this._deleteOption).should('be.visible').click();
+      });
     cy.assertToast('Successfully deleted the Post.');
     return this;
   }

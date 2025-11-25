@@ -1376,11 +1376,12 @@ describe('PostCard', () => {
       },
       result: {
         data: {
-          togglePostPinned: {
+          updatePost: {
             __typename: 'Post',
             id: '1',
             caption: 'Test Post Content',
             pinnedAt: null,
+            attachments: [],
           },
         },
       },
