@@ -6,7 +6,7 @@
 
 > **AdminPluginInstallationResult** = [`IAdminPluginInstallationResult`](../interfaces/IAdminPluginInstallationResult.md)
 
-Defined in: [src/utils/adminPluginInstaller.ts:330](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L330)
+Defined in: [src/utils/adminPluginInstaller.ts:326](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L326)
 
 ## Deprecated
 

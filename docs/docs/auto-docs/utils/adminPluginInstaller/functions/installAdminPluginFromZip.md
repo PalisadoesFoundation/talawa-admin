@@ -6,7 +6,7 @@
 
 > **installAdminPluginFromZip**(`options`): `Promise`\<[`IAdminPluginInstallationResult`](../interfaces/IAdminPluginInstallationResult.md)\>
 
-Defined in: [src/utils/adminPluginInstaller.ts:210](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L210)
+Defined in: [src/utils/adminPluginInstaller.ts:206](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L206)
 
 ## Parameters
 

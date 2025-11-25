@@ -4,7 +4,7 @@
 
 # Interface: IAdminApolloClient
 
-Defined in: [src/utils/adminPluginInstaller.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L59)
+Defined in: [src/utils/adminPluginInstaller.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L64)
 
 ## Methods
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:59](https://github.com/Palisadoes
 
 > **mutate**(`options`): `Promise`\<\{ `data?`: `unknown`; \}\>
 
-Defined in: [src/utils/adminPluginInstaller.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L60)
+Defined in: [src/utils/adminPluginInstaller.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L65)
 
 #### Parameters
 

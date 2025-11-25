@@ -6,7 +6,7 @@
 
 > **validateAdminPluginStructure**(`files`): \{ `error`: `string`; `valid`: `boolean`; \} \| \{ `error?`: `undefined`; `valid`: `boolean`; \}
 
-Defined in: [src/utils/adminPluginInstaller.ts:177](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L177)
+Defined in: [src/utils/adminPluginInstaller.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L182)
 
 ## Parameters
 

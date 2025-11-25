@@ -7,7 +7,12 @@ import { adminPluginFileService } from 'plugin/services/AdminPluginFileService';
 
 interface IUploadPluginZipResponse {
   data?: {
-    uploadPluginZip?: boolean;
+    uploadPluginZip?: {
+      id: string;
+      pluginId: string;
+      isActivated: boolean;
+      isInstalled: boolean;
+    };
   };
 }
 
@@ -182,16 +187,7 @@ export function validateAdminPluginStructure(files: Record<string, string>) {
   try {
     const manifest = JSON.parse(files['manifest.json']);
 
-    const required = [
-      'name',
-      'pluginId',
-      'version',
-      'description',
-      'author',
-      'main',
-    ];
-
-    for (const f of required) {
+    for (const f of REQUIRED_MANIFEST_FIELDS) {
       if (!manifest[f]) {
         return { valid: false, error: `Missing required field: ${f}` };
       }
