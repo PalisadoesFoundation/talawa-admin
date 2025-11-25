@@ -125,6 +125,7 @@ export default [
       'vitest/no-focused-tests': 'error',
       'vitest/no-identical-title': 'error',
       '@typescript-eslint/no-unused-expressions': 'error',
+      '@typescript-eslint/no-require-imports': 'error',
     },
   },
   {
