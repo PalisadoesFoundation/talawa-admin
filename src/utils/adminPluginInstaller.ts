@@ -308,7 +308,7 @@ export async function installAdminPluginFromZip(
     return {
       success: false,
       pluginId: '',
-      manifest: {} as IAdminPluginManifest,
+      manifest: undefined,
       installedComponents: [],
       error: err instanceof Error ? err.message : 'Failed to upload plugin',
     };
