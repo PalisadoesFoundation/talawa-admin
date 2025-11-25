@@ -6,10 +6,10 @@ WORKDIR /talawa-admin
 RUN corepack enable
 
 # Copy dependency manifests
-COPY package.json pnpm-lock.yaml .pnpm-workspace.yaml ./
+COPY package.json pnpm-lock.yaml ./
 
 # Install dependencies
-RUN corepack prepare pnpm@10.4.1 --activate \
+RUN corepack prepare pnpm@9.13.0 --activate \
     && pnpm install --frozen-lockfile --reporter=append-only
 
 # Copy source code
@@ -21,7 +21,7 @@ ENV NODE_ENV=production
 RUN pnpm run build
 
 # 2. Nginx Production Server
-FROM nginx:1.27.3-alpine AS production
+FROM nginx:1.27.4-alpine AS production
 
 ENV NODE_ENV=production
 

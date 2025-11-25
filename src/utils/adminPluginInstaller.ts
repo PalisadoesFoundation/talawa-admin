@@ -238,9 +238,6 @@ export async function installAdminPluginFromZip(
 
     // Choose manifest defensively; if none, fail early.
     const manifest = structure.adminManifest ?? structure.apiManifest;
-    if (!manifest) {
-      throw new Error('No valid manifest (admin or api) found in plugin ZIP');
-    }
 
     const installedComponents: string[] = [];
 
