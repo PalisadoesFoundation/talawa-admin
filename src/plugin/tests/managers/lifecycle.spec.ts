@@ -3,7 +3,7 @@ import { LifecycleManager } from '../../managers/lifecycle';
 import { DiscoveryManager } from '../../managers/discovery';
 import { ExtensionRegistryManager } from '../../managers/extension-registry';
 import { EventManager } from '../../managers/event-manager';
-import { ILoadedPlugin, PluginStatus, IPluginManifest } from '../../types';
+import { PluginStatus, IPluginManifest } from '../../types';
 import React from 'react';
 
 // Mock the managers
@@ -42,13 +42,6 @@ describe('LifecycleManager', () => {
     AnotherComponent: vi.fn(() =>
       React.createElement('span', {}, 'AnotherComponent'),
     ),
-  };
-
-  const mockLoadedPlugin: ILoadedPlugin = {
-    id: 'test-plugin',
-    manifest: mockManifest,
-    components: mockComponents,
-    status: PluginStatus.ACTIVE,
   };
 
   beforeEach(() => {
@@ -329,10 +322,6 @@ describe('LifecycleManager', () => {
 
     it('should handle directory deletion failure gracefully', async () => {
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-      const fetchSpy = vi
-        .mocked(fetch)
-        .mockResolvedValue(new Response('', { status: 404 }));
-
       const result = await lifecycleManager.unloadPlugin('testPlugin');
 
       expect(result).toBe(true); // Should still succeed
@@ -345,10 +334,6 @@ describe('LifecycleManager', () => {
 
     it('should handle directory deletion network error gracefully', async () => {
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-      const fetchSpy = vi
-        .mocked(fetch)
-        .mockRejectedValue(new Error('Network error'));
-
       const result = await lifecycleManager.unloadPlugin('testPlugin');
 
       expect(result).toBe(true); // Should still succeed

@@ -94,11 +94,6 @@ const Users = (): JSX.Element => {
   const [sortingOption, setSortingOption] = useState('newest');
   const [filteringOption, setFilteringOption] = useState('cancel');
   const [loadUnqUsers, setLoadUnqUsers] = useState(0);
-  const userType = getItem('SuperAdmin')
-    ? 'SUPERADMIN'
-    : getItem('AdminFor')
-      ? 'ADMIN'
-      : 'USER';
   const loggedInUserId = getItem('id') as string;
   const [usersData, setUsersData] = useState<InterfaceQueryUserListItem[]>([]);
 

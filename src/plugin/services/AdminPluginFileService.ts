@@ -87,7 +87,7 @@ export class AdminPluginFileService {
     let manifest: AdminPluginManifest;
     try {
       manifest = JSON.parse(files['manifest.json']);
-    } catch (error) {
+    } catch {
       return {
         valid: false,
         error: 'Invalid manifest.json format',

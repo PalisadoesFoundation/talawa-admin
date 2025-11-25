@@ -374,12 +374,6 @@ describe('usePluginActions', () => {
     mockDeletePlugin.mockResolvedValue({});
     mockPluginManager.uninstallPlugin.mockResolvedValue(true);
 
-    // Mock the import to throw an error
-    const originalImport = vi.fn();
-    vi.doMock('../../../plugin/services/AdminPluginFileService', () => {
-      throw new Error('Import failed');
-    });
-
     const { result } = renderHook(() =>
       usePluginActions({
         pluginData: mockPluginData,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import { MemoryRouter, Route, Routes } from 'react-router';
@@ -15,9 +15,9 @@ vi.mock('plugin', () => ({
 vi.mock('utils/useLocalstorage', () => ({
   __esModule: true,
   useLocalStorage: () => ({
-    getItem: (_key: string) => 'test-user-id',
-    setItem: (_key: string, _value: string) => undefined,
-    removeItem: (_key: string) => undefined,
+    getItem: () => 'test-user-id',
+    setItem: () => undefined,
+    removeItem: () => undefined,
   }),
 }));
 

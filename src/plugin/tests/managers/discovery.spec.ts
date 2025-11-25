@@ -3,7 +3,6 @@ import { DiscoveryManager } from '../../managers/discovery';
 import { PluginGraphQLService, IPlugin } from '../../graphql-service';
 import { IPluginManifest } from '../../types';
 import { validatePluginManifest } from '../../utils';
-import React from 'react';
 
 // Mock the dependencies
 vi.mock('../../graphql-service');
@@ -33,11 +32,6 @@ describe('DiscoveryManager', () => {
     description: 'A test plugin',
     author: 'Test Author',
     main: 'index.ts',
-  };
-
-  const mockComponents = {
-    TestComponent: React.createElement('div'),
-    AnotherComponent: React.createElement('span'),
   };
 
   beforeEach(() => {

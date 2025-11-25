@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import PluginRouteRenderer from '../../routes/PluginRouteRenderer';
 import { getPluginComponents, isPluginRegistered } from '../../registry';
 

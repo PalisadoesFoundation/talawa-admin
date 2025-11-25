@@ -1,5 +1,4 @@
 import JSZip from 'jszip';
-import { toast } from 'react-toastify';
 import {
   UPLOAD_PLUGIN_ZIP_MUTATION,
   CREATE_PLUGIN_MUTATION,
@@ -44,7 +43,9 @@ export interface AdminPluginInstallationResult {
 export interface AdminPluginInstallationOptions {
   zipFile: File;
   backup?: boolean;
-  apolloClient?: any;
+  apolloClient?: {
+    mutate: (options: unknown) => Promise<unknown>;
+  };
 }
 
 /**
@@ -121,7 +122,7 @@ export async function validateAdminPluginZip(
 
         structure.adminManifest = manifest;
         structure.pluginId = manifest.pluginId;
-      } catch (error) {
+      } catch {
         throw new Error('Invalid admin manifest.json');
       }
     } else {
@@ -180,7 +181,7 @@ export async function validateAdminPluginZip(
         if (!structure.pluginId) {
           structure.pluginId = apiManifest.pluginId;
         }
-      } catch (error) {
+      } catch {
         throw new Error('Invalid api manifest.json');
       }
     } else {
@@ -236,7 +237,7 @@ export function validateAdminPluginStructure(files: Record<string, string>): {
     }
 
     return { valid: true };
-  } catch (error) {
+  } catch {
     return {
       valid: false,
       error: 'Invalid manifest.json format',
@@ -268,8 +269,16 @@ export async function installAdminPluginFromZip({
       };
     }
 
-    const pluginId = structure.pluginId!;
-    const manifest = structure.adminManifest || structure.apiManifest!;
+    if (!structure.pluginId) {
+      throw new Error('Missing pluginId');
+    }
+    const pluginId = structure.pluginId;
+
+    const manifest = structure.adminManifest ?? structure.apiManifest;
+    if (!manifest) {
+      throw new Error('Missing manifest');
+    }
+
     const installedComponents: string[] = [];
 
     // STEP 1: Create plugin in database first (basic entry with isInstalled: false)

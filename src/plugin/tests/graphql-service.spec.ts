@@ -1,12 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook } from '@testing-library/react';
-import {
-  PluginGraphQLService,
-  useGetAllPlugins,
-  useCreatePlugin,
-  useUpdatePlugin,
-  useDeletePlugin,
-} from '../graphql-service';
+import { PluginGraphQLService } from '../graphql-service';
 
 // Mock Apollo client
 const mockApolloClient = {
@@ -29,7 +23,7 @@ vi.mock('../GraphQl/Mutations/PluginMutations', () => ({
 vi.mock('@apollo/client', () => ({
   useQuery: vi.fn(),
   useMutation: vi.fn(),
-  gql: vi.fn((strings, ...args) => strings.join('')),
+  gql: vi.fn((strings) => strings.join('')),
 }));
 
 describe('PluginGraphQLService', () => {

@@ -576,7 +576,7 @@ describe('createInternalFileWriterPlugin', () => {
 
       const mockReq = {
         method: 'POST',
-        on: vi.fn((event, callback) => {
+        on: vi.fn((event) => {
           if (event === 'data') {
             throw new Error('Network error');
           }
@@ -637,13 +637,11 @@ describe('createInternalFileWriterPlugin', () => {
         on: vi.fn(),
       };
       // Mock req.on to throw an error during data parsing
-      mockReq.on.mockImplementation(
-        (event: string, callback: (data?: string) => void) => {
-          if (event === 'data') {
-            throw new Error('Request parsing error');
-          }
-        },
-      );
+      mockReq.on.mockImplementation((event: string) => {
+        if (event === 'data') {
+          throw new Error('Request parsing error');
+        }
+      });
 
       await middleware(mockReq, mockRes);
 
