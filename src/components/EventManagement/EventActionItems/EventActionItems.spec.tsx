@@ -339,6 +339,9 @@ const renderEventActionItems = (
 };
 
 describe('EventActionItems', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   beforeEach(() => {
     vi.clearAllMocks();
   });

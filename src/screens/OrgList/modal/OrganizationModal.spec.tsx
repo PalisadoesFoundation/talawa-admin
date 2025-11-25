@@ -55,6 +55,10 @@ describe('OrganizationModal Component', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   vi.mock('utils/convertToBase64', () => ({
     default: vi.fn((file) => {
       if (file.size > 5000000) {

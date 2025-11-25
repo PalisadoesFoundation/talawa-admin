@@ -14,6 +14,9 @@ vi.mock('assets/svgs/cardItemDate.svg?react', () => ({
 }));
 
 describe('CardItem Component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   it('renders Event type card with all properties', () => {
     const props: InterfaceCardItem = {
       type: 'Event',

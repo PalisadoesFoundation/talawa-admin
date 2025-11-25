@@ -31,6 +31,9 @@ vi.mock('@pdfme/generator', () => ({
  */
 
 describe('Testing Table Row for CheckIn Table', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   beforeEach(() => {
     vi.clearAllMocks();
     global.URL.createObjectURL = vi.fn(() => 'mockURL');

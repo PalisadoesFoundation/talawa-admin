@@ -63,6 +63,10 @@ const translations = {
 };
 
 describe('Testing Agenda Categories Component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   const formData = {
     name: 'Category',
     description: 'Test Description',

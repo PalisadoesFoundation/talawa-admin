@@ -564,6 +564,9 @@ const renderPostCardWithCustomMock = (customMock: MockedResponse) => {
 };
 
 describe('PostCard Component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   beforeEach(() => {
     const { setItem } = useLocalStorage();
     setItem('userId', '1');

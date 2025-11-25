@@ -17,6 +17,9 @@ import { vi } from 'vitest';
 const link = new StaticMockLink(checkInQueryMock, true);
 
 describe('Testing Check In Attendees Modal', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const props = {
     show: true,
     eventId: 'event123',

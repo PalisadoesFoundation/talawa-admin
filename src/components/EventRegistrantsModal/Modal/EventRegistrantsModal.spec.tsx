@@ -180,6 +180,9 @@ const unsuccessfulRemoveRegistrantMock = [
 ];
 
 describe('Testing Event Registrants Modal', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const props = {
     show: true,
     eventId: 'event123',

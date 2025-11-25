@@ -198,6 +198,9 @@ vi.mock('utils/errorHandler', () => ({
 }));
 
 describe('OrgPostCard Component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const mockPost = {
     id: '12',
     caption: 'Test Caption',

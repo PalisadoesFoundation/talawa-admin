@@ -20,6 +20,7 @@ describe('EventHeader Component', () => {
 
   afterEach(() => {
     consoleSpy.mockRestore();
+    vi.restoreAllMocks();
   });
 
   it('renders correctly with all elements', () => {

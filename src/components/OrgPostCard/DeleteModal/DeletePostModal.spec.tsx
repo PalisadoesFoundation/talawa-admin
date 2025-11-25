@@ -7,6 +7,9 @@ import DeletePostModal from './DeletePostModal';
 import i18nForTest from 'utils/i18nForTest';
 
 describe('DeletePostModal', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   it('renders the delete modal with correct text', () => {
     const mockOnHide = vi.fn();
     const mockOnDelete = vi.fn();

@@ -53,6 +53,9 @@ i18n.use(initReactI18next).init({
 });
 
 describe('GroupChatDetails', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   beforeEach(() => {
     vi.resetAllMocks();
   });

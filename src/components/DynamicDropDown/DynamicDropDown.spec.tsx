@@ -14,6 +14,9 @@ import userEvent from '@testing-library/user-event';
 import { vi, expect, it } from 'vitest';
 
 describe('DynamicDropDown component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   it('renders and handles selection correctly', async () => {
     const formData = { fieldName: 'value2' };
     const setFormData = vi.fn();

@@ -144,6 +144,9 @@ const mockStatistics = {
 };
 
 describe('AttendanceStatisticsModal', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   it('renders modal with correct initial state', async () => {
     render(
       <MockedProvider mocks={mocks}>

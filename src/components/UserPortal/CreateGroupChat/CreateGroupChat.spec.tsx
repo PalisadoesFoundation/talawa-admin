@@ -213,6 +213,9 @@ const mocks = [
 ];
 
 describe('CreateGroupChat', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const { setItem } = useLocalStorage();
   const toggleCreateGroupChatModal = vi.fn();
   const chatsListRefetch = vi.fn();

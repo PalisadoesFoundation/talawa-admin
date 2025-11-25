@@ -54,6 +54,9 @@ const clickToggleMenuBtn = (toggleButton: HTMLElement): void => {
 };
 
 describe('EventDashboardScreen Component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   it('does not render main content when orgId is undefined', async () => {
     mockID = undefined;
     setItem('IsLoggedIn', 'true');

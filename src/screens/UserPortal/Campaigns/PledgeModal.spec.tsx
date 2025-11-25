@@ -225,6 +225,7 @@ describe('PledgeModal', () => {
 
   afterEach(() => {
     cleanup();
+    vi.restoreAllMocks();
   });
   it('should populate form fields with correct values in edit mode', async () => {
     renderPledgeModal(link1, pledgeProps[1]);

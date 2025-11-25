@@ -183,6 +183,9 @@ const mocks = [
 ];
 
 describe('CreateDirectChatModal', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const { setItem } = useLocalStorage();
   const toggleCreateDirectChatModal = vi.fn();
   const chatsListRefetch = vi.fn();

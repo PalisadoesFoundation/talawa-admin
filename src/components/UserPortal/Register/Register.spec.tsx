@@ -105,6 +105,9 @@ async function waitForAsync(): Promise<void> {
 }
 
 describe('Testing Register Component [User Portal]', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   it('Component should be rendered properly', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>
