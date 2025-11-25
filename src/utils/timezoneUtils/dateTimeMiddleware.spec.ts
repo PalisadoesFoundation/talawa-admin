@@ -14,6 +14,10 @@ const DUMMY_QUERY: DocumentNode = gql`
 `;
 
 describe('Date Time Middleware Tests', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('Request Middleware', () => {
     it('should convert local date and time to UTC format in request variables', () => {
       const operation: Operation = {
