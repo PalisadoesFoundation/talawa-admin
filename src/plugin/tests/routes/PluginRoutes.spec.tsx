@@ -615,6 +615,7 @@ describe('PluginRoutes', () => {
       });
 
       // Verify the error message contains the specific text from line 38
+      expect(consoleErrorSpy.mock.calls.length).toBeGreaterThan(0);
       const errorArg = consoleErrorSpy.mock.calls[0][1];
       expect(errorArg.message).toContain(
         "Component 'MissingComponent' not found in plugin 'missing-comp-plugin'",

@@ -4,12 +4,63 @@ import {
   generatePluginId,
   sortDrawerItems,
   filterByPermissions,
+  dynamicImportPlugin,
 } from '../utils';
 import type { IPluginManifest, IDrawerExtension } from '../types';
 
 describe('Plugin Utils', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  describe('dynamicImportPlugin', () => {
+    it('should reject empty plugin ID', async () => {
+      await expect(dynamicImportPlugin('')).rejects.toThrow(
+        'Plugin ID cannot be empty',
+      );
+      await expect(dynamicImportPlugin('   ')).rejects.toThrow(
+        'Plugin ID cannot be empty',
+      );
+    });
+
+    it('should reject plugin ID with path traversal characters', async () => {
+      await expect(dynamicImportPlugin('../plugin')).rejects.toThrow(
+        'Plugin ID contains invalid characters',
+      );
+      await expect(dynamicImportPlugin('plugin/..')).rejects.toThrow(
+        'Plugin ID contains invalid characters',
+      );
+      await expect(dynamicImportPlugin('..')).rejects.toThrow(
+        'Plugin ID contains invalid characters',
+      );
+    });
+
+    it('should reject plugin ID with slashes', async () => {
+      await expect(dynamicImportPlugin('plugin/sub')).rejects.toThrow(
+        'Plugin ID contains invalid characters',
+      );
+      await expect(dynamicImportPlugin('plugin\\sub')).rejects.toThrow(
+        'Plugin ID contains invalid characters',
+      );
+    });
+
+    it('should attempt import for valid plugin ID', async () => {
+      // Since we can't easily mock the dynamic import keyword in this context without
+      // complex setup, we expect the promise to be returned.
+      // In the test environment, the actual import will likely fail with an error
+      // different from our validation errors.
+      try {
+        await dynamicImportPlugin('valid-plugin');
+      } catch (error: unknown) {
+        // It should NOT be one of our validation errors
+        if (error instanceof Error) {
+          expect(error.message).not.toBe('Plugin ID cannot be empty');
+          expect(error.message).not.toBe(
+            'Plugin ID contains invalid characters',
+          );
+        }
+      }
+    });
   });
 
   describe('validatePluginManifest', () => {

@@ -51,8 +51,8 @@ export function validatePluginManifest(manifest: unknown): boolean {
     }
 
     // Validate each drawer extension
-    if (drawer && Array.isArray(drawer)) {
-      for (const item of drawer) {
+    if (drawer) {
+      for (const item of drawer as unknown[]) {
         const itemObj = item as Record<string, unknown>;
         if (!itemObj.pluginId || !itemObj.label || !itemObj.path) {
           return false;
@@ -97,13 +97,21 @@ export function filterByPermissions<
  * Dynamically imports a plugin module
  * Extracted for better testability
  * @param pluginId - The unique identifier of the plugin to import
- * @throws Error if pluginId is empty or contains invalid characters
+ * @throws Error if pluginId is empty
  */
 export const dynamicImportPlugin = (
   pluginId: string,
 ): Promise<Record<string, unknown>> => {
   if (!pluginId || pluginId.trim() === '') {
     return Promise.reject(new Error('Plugin ID cannot be empty'));
+  }
+  // Prevent path traversal attacks
+  if (
+    pluginId.includes('..') ||
+    pluginId.includes('/') ||
+    pluginId.includes('\\')
+  ) {
+    return Promise.reject(new Error('Plugin ID contains invalid characters'));
   }
   return import(/* @vite-ignore */ `/plugins/${pluginId}/index.ts`);
 };

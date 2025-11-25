@@ -17,6 +17,29 @@ interface IPluginRoutesProps {
   fallback?: React.ReactElement;
 }
 
+const ERROR_FALLBACK_STYLES = {
+  container: {
+    padding: '40px',
+    textAlign: 'center' as const,
+    backgroundColor: '#f8f9fa',
+    border: '1px solid #dee2e6',
+    borderRadius: '8px',
+    margin: '20px',
+  },
+  heading: {
+    color: '#dc3545',
+    marginBottom: '16px',
+  },
+  text: {
+    color: '#6c757d',
+    marginBottom: '8px',
+  },
+  subText: {
+    color: '#6c757d',
+    fontSize: '14px',
+  },
+};
+
 /**
  * Component that renders plugin routes dynamically
  */
@@ -54,27 +77,16 @@ const PluginRoutes: React.FC<IPluginRoutesProps> = ({
               // Return a fallback error component
               return {
                 default: () => (
-                  <div
-                    style={{
-                      padding: '40px',
-                      textAlign: 'center',
-                      backgroundColor: '#f8f9fa',
-                      border: '1px solid #dee2e6',
-                      borderRadius: '8px',
-                      margin: '20px',
-                    }}
-                  >
-                    <h3 style={{ color: '#dc3545', marginBottom: '16px' }}>
-                      Plugin Error
-                    </h3>
-                    <p style={{ color: '#6c757d', marginBottom: '8px' }}>
+                  <div style={ERROR_FALLBACK_STYLES.container}>
+                    <h3 style={ERROR_FALLBACK_STYLES.heading}>Plugin Error</h3>
+                    <p style={ERROR_FALLBACK_STYLES.text}>
                       Failed to load component:{' '}
                       <strong>{route.component}</strong>
                     </p>
-                    <p style={{ color: '#6c757d', marginBottom: '8px' }}>
+                    <p style={ERROR_FALLBACK_STYLES.text}>
                       Plugin: <strong>{route.pluginId}</strong>
                     </p>
-                    <p style={{ color: '#6c757d', fontSize: '14px' }}>
+                    <p style={ERROR_FALLBACK_STYLES.subText}>
                       {process.env.NODE_ENV === 'development'
                         ? errorMessage
                         : 'Please contact support if this issue persists.'}

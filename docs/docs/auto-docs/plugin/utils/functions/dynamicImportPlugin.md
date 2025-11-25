@@ -25,4 +25,4 @@ The unique identifier of the plugin to import
 
 ## Throws
 
-Error if pluginId is empty or contains invalid characters
+Error if pluginId is empty
