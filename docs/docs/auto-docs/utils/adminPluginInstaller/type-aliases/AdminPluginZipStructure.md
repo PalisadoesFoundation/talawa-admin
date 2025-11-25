@@ -2,8 +2,12 @@
 
 ***
 
-# Type Alias: AdminPluginZipStructure
+# ~~Type Alias: AdminPluginZipStructure~~
 
 > **AdminPluginZipStructure** = [`IAdminPluginZipStructure`](../interfaces/IAdminPluginZipStructure.md)
 
-Defined in: [src/utils/adminPluginInstaller.ts:344](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L344)
+Defined in: [src/utils/adminPluginInstaller.ts:328](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L328)
+
+## Deprecated
+
+Use IAdminPluginZipStructure instead

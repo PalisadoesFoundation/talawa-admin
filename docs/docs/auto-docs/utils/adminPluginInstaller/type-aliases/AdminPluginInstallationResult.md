@@ -2,8 +2,12 @@
 
 ***
 
-# Type Alias: AdminPluginInstallationResult
+# ~~Type Alias: AdminPluginInstallationResult~~
 
 > **AdminPluginInstallationResult** = [`IAdminPluginInstallationResult`](../interfaces/IAdminPluginInstallationResult.md)
 
-Defined in: [src/utils/adminPluginInstaller.ts:345](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L345)
+Defined in: [src/utils/adminPluginInstaller.ts:330](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L330)
+
+## Deprecated
+
+Use IAdminPluginInstallationResult instead

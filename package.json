@@ -3,6 +3,7 @@
   "version": "3.0.0",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@10.4.1",
   "config-overrides-path": "scripts/config-overrides",
   "dependencies": {
     "@apollo/client": "3.13.0",

@@ -6,7 +6,7 @@
 
 > **validateAdminPluginZip**(`zipFile`): `Promise`\<[`IAdminPluginZipStructure`](../interfaces/IAdminPluginZipStructure.md)\>
 
-Defined in: [src/utils/adminPluginInstaller.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L70)
+Defined in: [src/utils/adminPluginInstaller.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L71)
 
 ## Parameters
 

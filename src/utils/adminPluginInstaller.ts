@@ -5,19 +5,21 @@ import {
 } from '../GraphQl/Mutations/PluginMutations';
 import { adminPluginFileService } from 'plugin/services/AdminPluginFileService';
 
-interface ICreatePluginMutationResponse {
-  data?: {
-    createPlugin?: {
-      pluginId: string;
-    };
-  };
-}
-
 interface IUploadPluginZipResponse {
   data?: {
     uploadPluginZip?: boolean;
   };
 }
+
+// Shared list of required manifest fields
+const REQUIRED_MANIFEST_FIELDS: Array<keyof IAdminPluginManifest> = [
+  'name',
+  'version',
+  'description',
+  'author',
+  'main',
+  'pluginId',
+];
 
 export interface IAdminPluginManifest {
   name: string;
@@ -63,7 +65,6 @@ export interface IAdminApolloClient {
 
 export interface IAdminPluginInstallationOptions {
   zipFile: File;
-  backup?: boolean;
   apolloClient?: IAdminApolloClient;
 }
 
@@ -110,16 +111,8 @@ export async function validateAdminPluginZip(
       const manifestJson = await manifestFile.async('string');
       const manifest = JSON.parse(manifestJson) as IAdminPluginManifest;
 
-      const required: Array<keyof IAdminPluginManifest> = [
-        'name',
-        'version',
-        'description',
-        'author',
-        'main',
-        'pluginId',
-      ];
+      const missing = REQUIRED_MANIFEST_FIELDS.filter((k) => !manifest[k]);
 
-      const missing = required.filter((k) => !manifest[k]);
       if (missing.length > 0) {
         throw new Error(
           `Missing required fields in admin manifest.json: ${missing.join(
@@ -154,16 +147,8 @@ export async function validateAdminPluginZip(
       const manifestJson = await apiManifestFile.async('string');
       const apiManifest = JSON.parse(manifestJson) as IAdminPluginManifest;
 
-      const required: Array<keyof IAdminPluginManifest> = [
-        'name',
-        'version',
-        'description',
-        'author',
-        'main',
-        'pluginId',
-      ];
+      const missing = REQUIRED_MANIFEST_FIELDS.filter((k) => !apiManifest[k]);
 
-      const missing = required.filter((k) => !apiManifest[k]);
       if (missing.length > 0) {
         throw new Error(
           `Missing required fields in api manifest.json: ${missing.join(', ')}`,
@@ -244,13 +229,10 @@ export async function installAdminPluginFromZip(
     // STEP 1: Create plugin in DB
     if (apolloClient) {
       try {
-        const resp = (await apolloClient.mutate({
+        await apolloClient.mutate({
           mutation: CREATE_PLUGIN_MUTATION,
           variables: { input: { pluginId } },
-        })) as ICreatePluginMutationResponse;
-
-        // Response intentionally unused — mutation only needs to succeed
-        void resp;
+        });
       } catch (error) {
         const msg = error instanceof Error ? error.message : '';
         if (!msg.includes('already exists')) {
@@ -340,7 +322,11 @@ export async function removeAdminPlugin(pluginId: string) {
 }
 
 // Backward compatibility for old imports
+/** @deprecated Use IAdminPluginManifest instead */
 export type AdminPluginManifest = IAdminPluginManifest;
+/** @deprecated Use IAdminPluginZipStructure instead */
 export type AdminPluginZipStructure = IAdminPluginZipStructure;
+/** @deprecated Use IAdminPluginInstallationResult instead */
 export type AdminPluginInstallationResult = IAdminPluginInstallationResult;
+/** @deprecated Use IAdminPluginInstallationOptions instead */
 export type AdminPluginInstallationOptions = IAdminPluginInstallationOptions;

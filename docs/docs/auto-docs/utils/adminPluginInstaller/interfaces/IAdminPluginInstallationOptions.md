@@ -4,7 +4,7 @@
 
 # Interface: IAdminPluginInstallationOptions
 
-Defined in: [src/utils/adminPluginInstaller.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L64)
+Defined in: [src/utils/adminPluginInstaller.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L66)
 
 ## Properties
 
@@ -12,15 +12,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:64](https://github.com/Palisadoes
 
 > `optional` **apolloClient**: [`IAdminApolloClient`](IAdminApolloClient.md)
 
-Defined in: [src/utils/adminPluginInstaller.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L67)
-
-***
-
-### backup?
-
-> `optional` **backup**: `boolean`
-
-Defined in: [src/utils/adminPluginInstaller.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L66)
+Defined in: [src/utils/adminPluginInstaller.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L68)
 
 ***
 
@@ -28,4 +20,4 @@ Defined in: [src/utils/adminPluginInstaller.ts:66](https://github.com/Palisadoes
 
 > **zipFile**: `File`
 
-Defined in: [src/utils/adminPluginInstaller.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L65)
+Defined in: [src/utils/adminPluginInstaller.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L67)
