@@ -10,9 +10,15 @@ files_without_cleanup=$(find src/ \( -iname "*.spec.tsx" -o -iname "*.spec.ts" \
   | while read -r file; do
       # Check if file uses vi.fn, vi.mock, or spyOn (indicating it uses mocks)
       if grep -q -E "(vi\.fn|vi\.mock|spyOn)" "$file"; then
-        # Check if file has afterEach with proper cleanup
-        if ! grep -q -E "afterEach.*\(.*vi\.(restoreAllMocks|clearAllMocks|resetAllMocks)" "$file"; then
+        # Check if file has afterEach block
+        if ! grep -q "afterEach" "$file"; then
           echo "$file"
+        else
+          # Check if the afterEach block contains proper cleanup
+          # Extract the afterEach block and check if it contains vi.restoreAllMocks, vi.clearAllMocks, or vi.resetAllMocks
+          if ! awk '/afterEach/,/^[[:space:]]*\}\);?[[:space:]]*$/' "$file" | grep -q -E "vi\.(restoreAllMocks|clearAllMocks|resetAllMocks)"; then
+            echo "$file"
+          fi
         fi
       fi
     done)
