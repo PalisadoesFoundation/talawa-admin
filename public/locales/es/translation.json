@@ -1087,6 +1087,8 @@
     "addComment": "Agregar comentario",
     "viewPost": "Ver publicación",
     "editPost": "Editar publicación",
+    "pinPost": "Fijar publicación",
+    "unpinPost": "Desfijar publicación",
     "viewComments": "Ver {{count}} comentarios",
     "hideComments": "Ocultar comentarios",
     "loadingComments": "Cargando comentarios…",

@@ -1128,6 +1128,8 @@
     "addComment": "Add Comment",
     "viewPost": "View Post",
     "editPost": "Edit Post",
+    "pinPost": "Pin Post",
+    "unpinPost": "Unpin Post",
     "viewComments": "View {{count}} comments",
     "hideComments": "Hide comments",
     "loadingComments": "Loading comments…",

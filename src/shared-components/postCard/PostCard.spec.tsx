@@ -19,7 +19,8 @@ import {
   UPDATE_POST_MUTATION,
   UPDATE_POST_VOTE,
 } from '../../GraphQl/Mutations/mutations';
-import { GET_POST_COMMENTS } from '../../GraphQl/Queries/Queries';
+import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutations';
+import { GET_POST_COMMENTS, CURRENT_USER } from '../../GraphQl/Queries/Queries';
 import useLocalStorage from '../../utils/useLocalstorage';
 import { errorHandler } from '../../utils/errorHandler';
 
@@ -328,6 +329,76 @@ const deletePostErrorMock = {
   error: new Error('Failed to delete post'),
 };
 
+// Current user mock for permission checks
+const currentUserMock = {
+  request: {
+    query: CURRENT_USER,
+  },
+  result: {
+    data: {
+      currentUser: {
+        addressLine1: '',
+        addressLine2: '',
+        avatarMimeType: '',
+        avatarURL: 'avatar.jpg',
+        birthDate: '',
+        city: '',
+        countryCode: '',
+        createdAt: '',
+        description: '',
+        educationGrade: '',
+        emailAddress: 'john@example.com',
+        employmentStatus: '',
+        homePhoneNumber: '',
+        id: '1',
+        isEmailAddressVerified: true,
+        maritalStatus: '',
+        mobilePhoneNumber: '',
+        name: 'John Doe',
+        natalSex: '',
+        naturalLanguageCode: '',
+        postalCode: '',
+        role: '',
+        state: '',
+        updatedAt: '',
+        workPhoneNumber: '',
+        eventsAttended: [],
+        appUserProfile: {
+          _id: '1',
+          adminFor: [{ _id: 'org1' }],
+          isSuperAdmin: false,
+          createdOrganizations: [],
+          createdEvents: [],
+          eventAdmin: [],
+        },
+      },
+    },
+  },
+};
+
+// Toggle pin post mock
+const togglePinPostMock = {
+  request: {
+    query: TOGGLE_PINNED_POST,
+    variables: {
+      input: {
+        id: '1',
+        isPinned: true,
+      },
+    },
+  },
+  result: {
+    data: {
+      updatePost: {
+        id: '1',
+        caption: 'Test Post',
+        pinnedAt: '2023-01-01T00:00:00Z',
+        attachments: [],
+      },
+    },
+  },
+};
+
 // Null comments mock
 const nullCommentsMock = {
   request: {
@@ -497,6 +568,8 @@ const mocks = [
     },
   },
   commentsQueryMock,
+  currentUserMock,
+  togglePinPostMock,
 ];
 
 const link = new StaticMockLink(mocks, true);
@@ -541,6 +614,7 @@ const renderPostCard = (props: Partial<InterfacePostCard> = {}) => {
 const renderPostCardWithCustomMock = (customMock: MockedResponse) => {
   const { setItem } = useLocalStorage();
   setItem('userId', '1');
+  setItem('role', 'administrator'); // Set admin role for pin/unpin tests
 
   // Only include the custom mock and base mocks, NOT commentsWithPaginationMock
   const mocksArray = [
@@ -578,7 +652,7 @@ describe('PostCard Component', () => {
     const moreButton = screen.getByTestId('more-options-button');
     await userEvent.click(moreButton);
 
-    const editButton = await screen.findByTestId('edit-post-button');
+    const editButton = await screen.findByTestId('edit-post-menu-item');
     await userEvent.click(editButton);
 
     expect(screen.getByText('Edit Post')).toBeInTheDocument();
@@ -596,7 +670,7 @@ describe('PostCard Component', () => {
 
     const moreButton = screen.getByTestId('more-options-button');
     await userEvent.click(moreButton);
-    const editButton = await screen.findByTestId('edit-post-button');
+    const editButton = await screen.findByTestId('edit-post-menu-item');
     await userEvent.click(editButton);
 
     const postInput = screen.getByRole('textbox');
@@ -612,7 +686,7 @@ describe('PostCard Component', () => {
 
     const moreButton = screen.getByTestId('more-options-button');
     await userEvent.click(moreButton);
-    const deleteButton = screen.getByText('Delete');
+    const deleteButton = await screen.findByTestId('delete-post-menu-item');
     await userEvent.click(deleteButton);
 
     await waitFor(() => {
@@ -852,7 +926,7 @@ describe('PostCard', () => {
     const moreButton = screen.getByTestId('more-options-button');
     fireEvent.click(moreButton);
 
-    const editButton = await screen.findByTestId('edit-post-button');
+    const editButton = await screen.findByTestId('edit-post-menu-item');
     fireEvent.click(editButton);
 
     const postInput = screen.getByRole('textbox');
@@ -878,6 +952,13 @@ describe('PostCard', () => {
 
     const moreButton = screen.getByTestId('more-options-button');
     fireEvent.click(moreButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('edit-post-menu-item')).toBeInTheDocument();
+    });
+
+    const editButton = screen.getByTestId('edit-post-menu-item');
+    fireEvent.click(editButton);
 
     // Wait for the modal to open
     await waitFor(() => {
@@ -1244,6 +1325,125 @@ describe('PostCard', () => {
     await waitFor(() => {
       expect(screen.queryByText('First comment')).not.toBeInTheDocument();
       expect(screen.queryByText('Test comment')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should handle pin post error', async () => {
+    const togglePinPostErrorMock = {
+      request: {
+        query: TOGGLE_PINNED_POST,
+        variables: {
+          input: {
+            id: '1',
+            isPinned: true,
+          },
+        },
+      },
+      error: new Error('Pin post failed'),
+    };
+
+    renderPostCardWithCustomMock(togglePinPostErrorMock);
+
+    await screen.findByText('Test Post');
+
+    // Open dropdown
+    const dropdownButton = screen.getByTestId('more-options-button');
+    await userEvent.click(dropdownButton);
+
+    // Wait for menu to appear, then click pin option
+    await waitFor(() => {
+      expect(screen.getByTestId('pin-post-menu-item')).toBeInTheDocument();
+    });
+
+    const pinButton = screen.getByTestId('pin-post-menu-item');
+    await userEvent.click(pinButton);
+
+    await waitFor(() => {
+      expect(errorHandler).toHaveBeenCalled();
+    });
+  });
+
+  it('should handle unpin post', async () => {
+    const toggleUnpinPostMock = {
+      request: {
+        query: TOGGLE_PINNED_POST,
+        variables: {
+          input: {
+            id: '1',
+            isPinned: false,
+          },
+        },
+      },
+      result: {
+        data: {
+          togglePostPinned: {
+            __typename: 'Post',
+            id: '1',
+            caption: 'Test Post Content',
+            pinnedAt: null,
+          },
+        },
+      },
+    };
+
+    renderPostCardWithCustomMock(toggleUnpinPostMock);
+
+    await screen.findByText('Test Post');
+
+    // Open dropdown
+    const dropdownButton = screen.getByTestId('more-options-button');
+    await userEvent.click(dropdownButton);
+
+    // Wait for menu to appear, then click unpin option (uses same test ID)
+    await waitFor(() => {
+      expect(screen.getByTestId('pin-post-menu-item')).toBeInTheDocument();
+    });
+
+    const unpinButton = screen.getByTestId('pin-post-menu-item');
+    await userEvent.click(unpinButton);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('Post unpinned successfully');
+    });
+  });
+
+  it('should close dropdown when clicking pin/unpin', async () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+    setItem('role', 'administrator'); // Set admin role for pin/unpin tests
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...defaultProps} pinnedAt={null} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await screen.findByText('Test Post');
+
+    // Open dropdown
+    const dropdownButton = screen.getByTestId('more-options-button');
+    await userEvent.click(dropdownButton);
+
+    // Wait for menu to appear and check that dropdown is open
+    await waitFor(() => {
+      expect(screen.getByTestId('pin-post-menu-item')).toBeInTheDocument();
+    });
+
+    // Click pin option
+    const pinButton = screen.getByTestId('pin-post-menu-item');
+    await userEvent.click(pinButton);
+
+    // Dropdown should close (pin button should no longer be visible)
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('pin-post-menu-item'),
+      ).not.toBeInTheDocument();
     });
   });
 });

@@ -68,7 +68,7 @@ function OrgPost(): JSX.Element {
     setPostModalIsOpen(false);
   };
 
-  const userId: string | null = getItem('userId');
+  const userId = getItem('id');
   const {
     data: orgPostListData,
     loading: orgPostListLoading,
@@ -79,7 +79,7 @@ function OrgPost(): JSX.Element {
     {
       variables: {
         input: { id: currentUrl as string },
-        userId: userId,
+        userId: userId ?? '',
         after: after ?? null,
         before: before ?? null,
         first: first,

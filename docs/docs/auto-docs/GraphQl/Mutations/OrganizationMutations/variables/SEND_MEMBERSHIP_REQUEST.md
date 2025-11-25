@@ -6,7 +6,7 @@
 
 > `const` **SEND\_MEMBERSHIP\_REQUEST**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:218](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L218)
+Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:241](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L241)
 
 GraphQL mutation to remove a custom field from an organization.
 

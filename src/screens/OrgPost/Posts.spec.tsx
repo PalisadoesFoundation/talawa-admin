@@ -40,7 +40,11 @@ vi.mock('shared-components/postCard/PostCard', () => ({
       <div data-testid="org-post-card" data-post-id={id}>
         <div>{title}</div>
         <div>by {creator.name}</div>
-        <button onClick={fetchPosts} data-testid="fetch-posts-btn">
+        <button
+          type="button"
+          onClick={fetchPosts}
+          data-testid="fetch-posts-btn"
+        >
           Fetch Posts
         </button>
       </div>

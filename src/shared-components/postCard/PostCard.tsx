@@ -24,6 +24,7 @@ import React from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import { useParams } from 'react-router-dom';
 import {
   Avatar,
   IconButton,
@@ -36,11 +37,16 @@ import {
   Typography,
   Divider,
   CircularProgress,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
 } from '@mui/material';
 import {
   Favorite,
   ChatBubbleOutline,
   PushPinOutlined,
+  PushPin,
   Share,
   MoreHoriz,
   Send,
@@ -60,12 +66,14 @@ import {
   UPDATE_POST_VOTE,
   UPDATE_POST_MUTATION,
 } from '../../GraphQl/Mutations/mutations';
-import { GET_POST_COMMENTS } from '../../GraphQl/Queries/Queries';
+import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutations';
+import { GET_POST_COMMENTS, CURRENT_USER } from '../../GraphQl/Queries/Queries';
 import { errorHandler } from '../../utils/errorHandler';
 import CommentCard from '../../components/UserPortal/CommentCard/CommentCard';
 import styles from '../../style/app-fixed.module.css';
 import { PluginInjector } from '../../plugin';
 import useLocalStorage from '../../utils/useLocalstorage';
+import { get } from 'http';
 
 const PostContainer = styled(Box)(({ theme }) => ({
   width: '100%',
@@ -155,19 +163,16 @@ const EditModalContent = styled(Box)({
 
 const ModalActions = styled(Box)({
   display: 'flex',
-  justifyContent: 'space-between',
-  marginTop: 16,
-});
-
-const RightModalActions = styled(Box)({
-  display: 'flex',
+  justifyContent: 'flex-end',
   gap: 8,
+  marginTop: 16,
 });
 
 export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
   const { t: tCommon } = useTranslation('common');
   const isLikedByUser = props.hasUserVoted?.voteType === 'up_vote';
+  const { orgId } = useParams<{ orgId: string }>();
 
   const [commentInput, setCommentInput] = React.useState('');
   const [showEditPost, setShowEditPost] = React.useState(false);
@@ -177,10 +182,16 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const [endCursor, setEndCursor] = React.useState<string | null>(null);
   const [hasNextPage, setHasNextPage] = React.useState(false);
   const [loadingMoreComments, setLoadingMoreComments] = React.useState(false);
+  const [dropdownAnchor, setDropdownAnchor] =
+    React.useState<null | HTMLElement>(null);
 
   const commentCount = props.commentCount;
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId');
+  const userId = getItem('userId') ?? getItem('Talawa-admin_id');
+
+  const isPostCreator = props.creator.id === userId;
+  const isAdmin = getItem('role') == 'administrator';
+
   // Query for paginated comments
   const shouldSkipComments = !showComments || !userId;
   const {
@@ -269,6 +280,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
     useMutation(CREATE_COMMENT_POST);
   const [editPost] = useMutation(UPDATE_POST_MUTATION);
   const [deletePost] = useMutation(DELETE_POST_MUTATION);
+  const [togglePinPost] = useMutation(TOGGLE_PINNED_POST);
   let isPinned = false;
 
   // Check if the post is pinned
@@ -318,7 +330,41 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       errorHandler(t, error);
     }
   };
-  const toggleEditPost = (): void => setShowEditPost(!showEditPost);
+
+  // Dropdown menu handlers
+  const handleDropdownOpen = (event: React.MouseEvent<HTMLElement>): void => {
+    setDropdownAnchor(event.currentTarget);
+  };
+
+  const handleDropdownClose = (): void => {
+    setDropdownAnchor(null);
+  };
+
+  const toggleEditPost = (): void => {
+    setShowEditPost(!showEditPost);
+    handleDropdownClose();
+  };
+
+  // Toggle pin/unpin functionality
+  const handleTogglePin = async (): Promise<void> => {
+    try {
+      await togglePinPost({
+        variables: {
+          input: {
+            id: props.id,
+            isPinned: !isPinned,
+          },
+        },
+      });
+      props.fetchPosts();
+      toast.success(
+        isPinned ? 'Post unpinned successfully' : 'Post pinned successfully',
+      );
+      handleDropdownClose();
+    } catch (error) {
+      errorHandler(t, error);
+    }
+  };
 
   // Update the handleEditPost function to use isPinned instead of pinnedAt
   const handleEditPost = async (): Promise<void> => {
@@ -355,6 +401,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       await deletePost({ variables: { input: { id: props.id } } });
       props.fetchPosts();
       toast.success('Successfully deleted the Post.');
+      handleDropdownClose();
     } catch (error) {
       errorHandler(t, error);
     }
@@ -381,14 +428,87 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             {props.creator.name}
           </Typography>
         </UserInfo>
-        <IconButton
-          onClick={toggleEditPost}
-          size="small"
-          aria-label="more options"
-          data-testid="more-options-button"
-        >
-          <MoreHoriz />
-        </IconButton>
+        <>
+          <IconButton
+            onClick={handleDropdownOpen}
+            size="small"
+            aria-label="more options"
+            data-testid="more-options-button"
+          >
+            <MoreHoriz />
+          </IconButton>
+          <Menu
+            anchorEl={dropdownAnchor}
+            open={Boolean(dropdownAnchor)}
+            onClose={handleDropdownClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            PaperProps={{
+              sx: {
+                minWidth: '150px',
+                '& .MuiMenuItem-root': {
+                  px: 2,
+                  py: 1,
+                },
+              },
+            }}
+          >
+            {(isPostCreator || isAdmin) && (
+              <MenuItem
+                onClick={toggleEditPost}
+                data-testid="edit-post-menu-item"
+              >
+                <ListItemIcon>
+                  <EditOutlined fontSize="small" />
+                </ListItemIcon>
+                <ListItemText
+                  primary={t('editPost')}
+                  data-testid="edit-post-button"
+                />
+              </MenuItem>
+            )}
+
+            {isAdmin && (
+              <MenuItem
+                onClick={handleTogglePin}
+                data-testid="pin-post-menu-item"
+              >
+                <ListItemIcon>
+                  {isPinned ? (
+                    <PushPinOutlined fontSize="small" />
+                  ) : (
+                    <PushPin fontSize="small" />
+                  )}
+                </ListItemIcon>
+                <ListItemText
+                  primary={isPinned ? t('unpinPost') : t('pinPost')}
+                />
+              </MenuItem>
+            )}
+
+            {(isAdmin || isPostCreator) && (
+              <MenuItem
+                onClick={handleDeletePost}
+                data-testid="delete-post-menu-item"
+              >
+                <ListItemIcon>
+                  <DeleteOutline fontSize="small" color="error" />
+                </ListItemIcon>
+                <ListItemText
+                  primary={tCommon('delete')}
+                  data-testid="delete-post-button"
+                  primaryTypographyProps={{ color: 'error' }}
+                />
+              </MenuItem>
+            )}
+          </Menu>
+        </>
       </PostHeader>
 
       {/* Post Media */}
@@ -599,31 +719,22 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               value={postContent}
               onChange={handlePostInput}
               fullWidth
+              data-cy="editCaptionInput"
             />
           </FormControl>
 
           <ModalActions>
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={handleDeletePost}
-              startIcon={<DeleteOutline />}
-            >
-              {tCommon('delete')}
+            <Button variant="outlined" onClick={toggleEditPost}>
+              {tCommon('cancel')}
             </Button>
-            <RightModalActions>
-              <Button variant="outlined" onClick={toggleEditPost}>
-                {tCommon('cancel')}
-              </Button>
-              <Button
-                variant="contained"
-                onClick={handleEditPost}
-                data-testid="save-post-button"
-                startIcon={<EditOutlined />}
-              >
-                {tCommon('save')}
-              </Button>
-            </RightModalActions>
+            <Button
+              variant="contained"
+              onClick={handleEditPost}
+              data-testid="save-post-button"
+              startIcon={<EditOutlined />}
+            >
+              {tCommon('save')}
+            </Button>
           </ModalActions>
         </EditModalContent>
       </Modal>

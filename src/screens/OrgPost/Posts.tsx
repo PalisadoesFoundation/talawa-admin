@@ -111,7 +111,11 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
     };
 
     return (
-      <div data-testid="postCardContainer" key={post.id}>
+      <div
+        data-testid="postCardContainer"
+        data-cy="postCardContainer"
+        key={post.id}
+      >
         <PostCard {...cardProps} />
       </div>
     );

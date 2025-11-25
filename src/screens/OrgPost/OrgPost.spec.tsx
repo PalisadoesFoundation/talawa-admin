@@ -2973,7 +2973,11 @@ describe('OrgPost Pinned Posts Functionality', () => {
 
     render(
       <MockedProvider
-        mocks={[orgPostListWithPostsMock, searchMockWithUndefinedPosts]}
+        mocks={[
+          orgPostListWithPostsMock,
+          searchMockWithUndefinedPosts,
+          orgPinnedPostListMockBasic,
+        ]}
         addTypename={false}
       >
         <I18nextProvider i18n={i18n}>
