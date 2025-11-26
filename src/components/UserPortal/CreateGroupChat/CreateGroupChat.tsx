@@ -325,7 +325,7 @@ export default function CreateGroupChat({
             <>
               <div className={styles.input}>
                 <SearchBar
-                  placeholder="searchFullName"
+                  placeholder={t('searchFullName')}
                   value={userName}
                   onChange={(value) => setUserName(value)}
                   onSearch={(value) => handleUserModalSearchChange(value)}

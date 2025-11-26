@@ -21,7 +21,6 @@ import {
 } from './RequestsMocks';
 import { vi } from 'vitest';
 import { MEMBERSHIP_REQUEST, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
-import useLocalStorage from 'utils/useLocalstorage';
 
 const { mockLocalStorageStore } = vi.hoisted(() => ({
   mockLocalStorageStore: {} as Record<string, string>,
@@ -43,10 +42,7 @@ vi.mock('utils/useLocalstorage', () => {
           delete mockLocalStorageStore[key];
       },
     }),
-    setItem: () => {
-      // Simple mock for direct setItem usage if any
-    },
-    removeItem: () => {},
+    // Removed unused named exports
   };
 });
 
@@ -54,7 +50,15 @@ vi.mock('utils/useLocalstorage', () => {
 // But we might need it if the component uses localStorage directly
 // The component uses useLocalStorage hook.
 
-const { setItem, removeItem } = useLocalStorage();
+// Direct wrapper functions for test usage
+const setItem = (key: string, value: unknown): void => {
+  mockLocalStorageStore[key] =
+    typeof value === 'string' ? value : JSON.stringify(value);
+};
+
+const removeItem = (key: string): void => {
+  delete mockLocalStorageStore[key];
+};
 
 // Mock window.location
 const mockLocation = {

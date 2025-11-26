@@ -29,7 +29,7 @@ describe('Testing Check In Attendees Modal', () => {
    */
 
   test('The modal should be rendered, and all the fetched users should be shown properly and user filtering should work', async () => {
-    const { queryByText, queryByLabelText } = render(
+    const { queryByText, getByPlaceholderText } = render(
       <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -52,9 +52,12 @@ describe('Testing Check In Attendees Modal', () => {
     await waitFor(() => expect(queryByText('John2 Doe2')).toBeInTheDocument());
 
     // Tetst filtering of users
-    fireEvent.change(queryByLabelText('Search Attendees') as Element, {
-      target: { value: 'John Doe' },
-    });
+    fireEvent.change(
+      getByPlaceholderText('Search Attendees') as HTMLInputElement,
+      {
+        target: { value: 'John Doe' },
+      },
+    );
 
     await waitFor(() => expect(queryByText('John Doe')).toBeInTheDocument());
     await waitFor(() =>

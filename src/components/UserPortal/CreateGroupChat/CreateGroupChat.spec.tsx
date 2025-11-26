@@ -32,6 +32,29 @@ vi.mock('utils/MinioUpload', () => ({
   useMinioUpload: vi.fn(() => ({ uploadFileToMinio: mockUploadFileToMinio })),
 }));
 
+const { mockLocalStorageStore } = vi.hoisted(() => ({
+  mockLocalStorageStore: {} as Record<string, unknown>,
+}));
+
+vi.mock('utils/useLocalstorage', () => {
+  return {
+    default: () => ({
+      getItem: (key: string) => mockLocalStorageStore[key] || null,
+      setItem: (key: string, value: unknown) => {
+        mockLocalStorageStore[key] =
+          typeof value === 'string' ? value : JSON.stringify(value);
+      },
+      removeItem: (key: string) => {
+        delete mockLocalStorageStore[key];
+      },
+      clear: () => {
+        for (const key in mockLocalStorageStore)
+          delete mockLocalStorageStore[key];
+      },
+    }),
+  };
+});
+
 const ORGANIZATION_MEMBERS_MOCK = {
   request: {
     query: ORGANIZATION_MEMBERS,
@@ -174,8 +197,8 @@ const CREATE_CHAT_MEMBERSHIP_ADMIN_MOCK = {
       createChatMembership: {
         __typename: 'ChatMembership',
         id: 'membership-admin',
-        role: 'administrator',
-        user: { __typename: 'User', id: '1' },
+        name: 'Test Group',
+        description: 'Test Description',
       },
     },
   },
@@ -197,8 +220,8 @@ const CREATE_CHAT_MEMBERSHIP_MEMBER_MOCK = {
       createChatMembership: {
         __typename: 'ChatMembership',
         id: 'membership-member-1',
-        role: 'regular',
-        user: { __typename: 'User', id: 'user-1' },
+        name: 'Test Group',
+        description: 'Test Description',
       },
     },
   },

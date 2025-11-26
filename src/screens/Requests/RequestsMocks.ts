@@ -375,16 +375,16 @@ export const UPDATED_MOCKS = [
         organizations: [
           {
             _id: '',
-            membershipRequests: Array(8).fill({
-              membershipRequestId: '1',
+            membershipRequests: Array.from({ length: 8 }, (_, i) => ({
+              membershipRequestId: `${i + 1}`,
               createdAt: '2023-01-01',
               status: 'pending',
               user: {
-                id: 'user1',
+                id: `user${i + 1}`,
                 name: 'Test User',
                 emailAddress: 'test@example.com',
               },
-            }),
+            })),
           },
         ],
       },
