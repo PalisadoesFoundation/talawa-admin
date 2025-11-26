@@ -478,38 +478,41 @@ describe('CreateGroupChat', () => {
       uploadFileToMinio: mockUploadFileToMinioFailure,
     });
 
-    render(
-      <MockedProvider mocks={mocks}>
-        <I18nextProvider i18n={i18nForTest}>
-          <Provider store={store}>
-            <CreateGroupChat
-              createGroupChatModalisOpen={true}
-              toggleCreateGroupChatModal={toggleCreateGroupChatModal}
-              chatsListRefetch={chatsListRefetch}
-            />
-          </Provider>
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    const fileInput = screen.getByTestId('fileInput');
-    const file = new File(['(⌐□_□)'], 'chucknorris.png', {
-      type: 'image/png',
-    });
-    fireEvent.change(fileInput, { target: { files: [file] } });
-
-    await waitFor(() => {
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error uploading image to MinIO:',
-        expect.any(Error),
+    try {
+      render(
+        <MockedProvider mocks={mocks}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Provider store={store}>
+              <CreateGroupChat
+                createGroupChatModalisOpen={true}
+                toggleCreateGroupChatModal={toggleCreateGroupChatModal}
+                chatsListRefetch={chatsListRefetch}
+              />
+            </Provider>
+          </I18nextProvider>
+        </MockedProvider>,
       );
-    });
-    consoleSpy.mockRestore();
 
-    // Restore the original mock implementation
-    vi.mocked(useMinioUpload).mockReturnValue({
-      uploadFileToMinio: mockUploadFileToMinio,
-    });
+      const fileInput = screen.getByTestId('fileInput');
+      const file = new File(['(⌐□_□)'], 'chucknorris.png', {
+        type: 'image/png',
+      });
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      await waitFor(() => {
+        expect(consoleSpy).toHaveBeenCalledWith(
+          'Error uploading image to MinIO:',
+          expect.any(Error),
+        );
+      });
+    } finally {
+      consoleSpy.mockRestore();
+
+      // Restore the original mock implementation
+      vi.mocked(useMinioUpload).mockReturnValue({
+        uploadFileToMinio: mockUploadFileToMinio,
+      });
+    }
   });
 
   test('should handle edit image button click', () => {

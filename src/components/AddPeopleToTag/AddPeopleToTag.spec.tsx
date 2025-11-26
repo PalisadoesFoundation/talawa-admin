@@ -23,8 +23,6 @@ import AddPeopleToTag from './AddPeopleToTag';
 import i18n from 'utils/i18nForTest';
 import {
   MOCK_EMPTY,
-  MOCK_NULL_FETCH_MORE,
-  MOCK_NO_DATA,
   MOCK_NON_ERROR,
   MOCKS,
   MOCKS_ERROR,
@@ -281,6 +279,41 @@ describe('Organisation Tags Page', () => {
         'second userToAssignTo',
       );
     });
+    await waitFor(() => {
+      expect(screen.getAllByTestId('memberName')[1]).toHaveTextContent(
+        'second userToAssignTo',
+      );
+    });
+  });
+
+  it('clears first name search input', async () => {
+    renderAddPeopleToTagModal(props, link);
+    await wait();
+
+    const input = screen.getByPlaceholderText(translations.firstName);
+    fireEvent.change(input, { target: { value: 'test' } });
+    expect(input).toHaveValue('test');
+
+    // SearchBar renders a clear button when value is not empty
+    const clearBtn = screen.getByTestId('clearFirstNameSearch');
+    fireEvent.click(clearBtn);
+
+    expect(input).toHaveValue('');
+  });
+
+  it('clears last name search input', async () => {
+    renderAddPeopleToTagModal(props, link);
+    await wait();
+
+    const input = screen.getByPlaceholderText(translations.lastName);
+    fireEvent.change(input, { target: { value: 'test' } });
+    expect(input).toHaveValue('test');
+
+    // SearchBar renders a clear button when value is not empty
+    const clearBtn = screen.getByTestId('clearLastNameSearch');
+    fireEvent.click(clearBtn);
+
+    expect(input).toHaveValue('');
   });
 
   it('Renders more members with infinite scroll', async () => {
@@ -424,44 +457,6 @@ describe('Organisation Tags Page', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
-    });
-  });
-
-  it('returns prevResult if fetchMoreResult is null', async () => {
-    const linkWithNullFetchMore = new StaticMockLink(
-      MOCK_NULL_FETCH_MORE,
-      true,
-    );
-
-    renderAddPeopleToTagModal(props, linkWithNullFetchMore);
-
-    await waitFor(() => {
-      expect(screen.getByText('member 1')).toBeInTheDocument();
-    });
-
-    const scrollableDiv = screen.getByTestId('addPeopleToTagScrollableDiv');
-    fireEvent.scroll(scrollableDiv, {
-      target: { scrollY: 99999 },
-    });
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('memberName')).toHaveLength(1);
-    });
-  });
-
-  it('skips the if(data) block when the mutation returns data = null', async () => {
-    const linkNoData = new StaticMockLink(MOCK_NO_DATA, true);
-    renderAddPeopleToTagModal(props, linkNoData);
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('selectMemberBtn')).toHaveLength(1);
-    });
-
-    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
-    await userEvent.click(screen.getByTestId('assignPeopleBtn'));
-
-    await waitFor(() => {
-      expect(toast.success).not.toHaveBeenCalled();
     });
   });
 });

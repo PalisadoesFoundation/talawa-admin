@@ -184,6 +184,7 @@ export const CheckInModal = ({
               }}
               showSearchButton={false}
               inputTestId="searchAttendees"
+              clearButtonTestId="clearSearchAttendees"
             />
           </div>
           <div style={{ height: 500, width: '100%' }}>

@@ -132,13 +132,93 @@ describe('SearchBar', () => {
     );
 
     expect(ref.current).toBeDefined();
+
+    // Test focus
     ref.current?.focus();
     const input = screen.getByTestId('search-input');
     expect(input).toHaveFocus();
+
+    // Test blur
+    ref.current?.blur();
+    expect(input).not.toHaveFocus();
+
+    // Test clear
     await user.type(input, 'orgs');
     await act(async () => {
       ref.current?.clear();
     });
     expect(input).toHaveValue('');
+  });
+
+  it('triggers onSearch with empty string when clearing without onClear prop', async () => {
+    const handleSearch = vi.fn();
+    render(
+      <SearchBar
+        onSearch={handleSearch}
+        inputTestId="search-input"
+        clearButtonTestId="clear-search"
+      />,
+    );
+
+    const input = screen.getByTestId('search-input');
+    await userEvent.type(input, 'query');
+    await userEvent.click(screen.getByTestId('clear-search'));
+
+    expect(handleSearch).toHaveBeenCalledWith(
+      '',
+      expect.objectContaining({ trigger: 'clear' }),
+    );
+    expect(input).toHaveValue('');
+  });
+
+  it('hides clear button when disabled', async () => {
+    const handleClear = vi.fn();
+    const handleChange = vi.fn();
+    render(
+      <SearchBar
+        onSearch={vi.fn()}
+        onClear={handleClear}
+        onChange={handleChange}
+        disabled={true}
+        value="locked"
+        inputTestId="search-input"
+        clearButtonTestId="clear-search"
+      />,
+    );
+
+    // Clear button should not be rendered when disabled usually, but if we force it or check logic
+    // The component logic says: showClearButton && currentValue.length > 0 && !disabled
+    // So the button won't exist. Let's verify that first.
+    expect(screen.queryByTestId('clear-search')).not.toBeInTheDocument();
+  });
+
+  it('prevents clearing via ref when disabled', async () => {
+    const ref = React.createRef<InterfaceSearchBarRef>();
+    const handleSearch = vi.fn();
+    render(
+      <SearchBar
+        ref={ref}
+        onSearch={handleSearch}
+        disabled={true}
+        defaultValue="locked"
+        inputTestId="search-input"
+      />,
+    );
+
+    await act(async () => {
+      ref.current?.clear();
+    });
+
+    expect(screen.getByTestId('search-input')).toHaveValue('locked');
+    expect(handleSearch).not.toHaveBeenCalled();
+  });
+
+  it('handles missing onSearch prop gracefully', async () => {
+    const user = userEvent.setup();
+    render(<SearchBar inputTestId="search-input" />);
+
+    const input = screen.getByTestId('search-input');
+    await user.type(input, 'test{enter}');
+    // Should not throw
   });
 });

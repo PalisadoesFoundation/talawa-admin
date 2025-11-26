@@ -703,4 +703,28 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
     expect(screen.queryByText('Test User')).not.toBeInTheDocument();
     expect(screen.queryByText('test@example.com')).not.toBeInTheDocument();
   });
+
+  it('clears search input', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={[defaultQueryMock]}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const searchInput = screen.getByTestId('searchInput');
+    await userEvent.type(searchInput, 'Test');
+    expect(searchInput).toHaveValue('Test');
+
+    // SearchBar renders a clear button when value is not empty
+    const clearBtn = screen.getByLabelText('Clear search');
+    await userEvent.click(clearBtn);
+
+    expect(searchInput).toHaveValue('');
+  });
 });

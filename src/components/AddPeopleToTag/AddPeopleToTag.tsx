@@ -130,7 +130,8 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
           };
         },
       ) => {
-        if (!fetchMoreResult) return prevResult;
+        if (!fetchMoreResult || !fetchMoreResult.getUsersToAssignTo)
+          return prevResult;
 
         return {
           getUsersToAssignTo: {
@@ -333,6 +334,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                   onClear={() => setMemberToAssignToSearchFirstName('')}
                   showSearchButton={false}
                   inputTestId="searchByFirstName"
+                  clearButtonTestId="clearFirstNameSearch"
                 />
               </div>
               <div className="flex-grow-1">
@@ -345,6 +347,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                   onClear={() => setMemberToAssignToSearchLastName('')}
                   showSearchButton={false}
                   inputTestId="searchByLastName"
+                  clearButtonTestId="clearLastNameSearch"
                 />
               </div>
             </div>
