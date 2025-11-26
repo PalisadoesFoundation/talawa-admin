@@ -98,7 +98,6 @@ const SidebarBase = ({
           data-testid="toggleBtn"
           onClick={handleToggle}
           onKeyDown={handleKeyDown}
-          tabIndex={0}
           type="button"
         >
           <FaBars

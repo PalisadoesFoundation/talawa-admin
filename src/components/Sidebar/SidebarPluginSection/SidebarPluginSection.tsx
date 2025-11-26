@@ -54,47 +54,46 @@ const SidebarPluginSection = ({
       const path = orgId ? item.path.replace(':orgId', orgId) : item.path;
 
       return (
-        <NavLink to={path} key={item.pluginId} onClick={onItemClick}>
-          {({ isActive }) => (
-            <button
-              type="button"
-              className={
-                useSimpleButton
-                  ? isActive
-                    ? styles.leftDrawerActiveButton
-                    : styles.leftDrawerInactiveButton
-                  : isActive
-                    ? styles.sidebarBtnActive
-                    : styles.sidebarBtn
-              }
-              data-testid={`plugin-${item.pluginId}-btn`}
-            >
-              <div
-                style={
-                  useSimpleButton
-                    ? { display: 'flex', alignItems: 'center' }
-                    : undefined
-                }
-              >
-                <div className={styles.iconWrapper}>
-                  {item.icon ? (
-                    <img
-                      src={item.icon}
-                      alt={item.label}
-                      style={{ width: 25, height: 25 }}
-                    />
-                  ) : (
-                    <PluginLogo
-                      fill="none"
-                      fontSize={25}
-                      stroke="var(--sidebar-icon-stroke-inactive)"
-                    />
-                  )}
-                </div>
-                {!hideDrawer && item.label}
-              </div>
-            </button>
-          )}
+        <NavLink
+          to={path}
+          key={item.pluginId}
+          onClick={onItemClick}
+          className={({ isActive }) =>
+            useSimpleButton
+              ? isActive
+                ? styles.leftDrawerActiveButton
+                : styles.leftDrawerInactiveButton
+              : isActive
+                ? styles.sidebarBtnActive
+                : styles.sidebarBtn
+          }
+          data-testid={`plugin-${item.pluginId}-btn`}
+          role="button"
+        >
+          <div
+            style={
+              useSimpleButton
+                ? { display: 'flex', alignItems: 'center' }
+                : undefined
+            }
+          >
+            <div className={styles.iconWrapper}>
+              {item.icon ? (
+                <img
+                  src={item.icon}
+                  alt={item.label}
+                  style={{ width: 25, height: 25 }}
+                />
+              ) : (
+                <PluginLogo
+                  fill="none"
+                  fontSize={25}
+                  stroke="var(--sidebar-icon-stroke-inactive)"
+                />
+              )}
+            </div>
+            {!hideDrawer && item.label}
+          </div>
         </NavLink>
       );
     },
@@ -129,7 +128,7 @@ const SidebarPluginSection = ({
             color: 'var(--bs-secondary)',
           }}
         >
-          Plugin Settings
+          {tCommon('pluginSettings')}
         </h4>
       )}
       {pluginItems.map((item) => renderPluginItem(item))}

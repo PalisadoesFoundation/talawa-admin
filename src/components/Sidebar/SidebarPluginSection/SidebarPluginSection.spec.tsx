@@ -164,17 +164,17 @@ describe('SidebarPluginSection Component', () => {
       const handleItemClick = vi.fn();
       renderComponent({ onItemClick: handleItemClick });
       const link = screen.getByTestId('plugin-plugin-1-btn').closest('a');
-      if (link) {
-        fireEvent.click(link);
-        expect(handleItemClick).toHaveBeenCalled();
-      }
+      expect(link).not.toBeNull();
+      fireEvent.click(link as HTMLAnchorElement);
+      expect(handleItemClick).toHaveBeenCalled();
     });
 
     it('does not error when onItemClick is not provided', () => {
       renderComponent({ onItemClick: undefined });
       const link = screen.getByTestId('plugin-plugin-1-btn').closest('a');
+      expect(link).not.toBeNull();
       expect(() => {
-        if (link) fireEvent.click(link);
+        fireEvent.click(link as HTMLAnchorElement);
       }).not.toThrow();
     });
   });

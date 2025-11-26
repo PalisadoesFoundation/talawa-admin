@@ -51,8 +51,8 @@ const userSidebar = ({
 
   // Memoize the parameters to prevent infinite re-renders
   const userPermissions = useMemo(() => [], []);
-  const isAdmin = useMemo(() => false, []);
-  const isOrg = useMemo(() => false, []);
+  const isAdmin = false;
+  const isOrg = false;
 
   // Get plugin drawer items for user global (no orgId required)
   const pluginDrawerItems = usePluginDrawerItems(

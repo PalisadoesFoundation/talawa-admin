@@ -109,27 +109,27 @@ const SidebarNavItem = ({
   );
 
   return (
-    <NavLink to={to} onClick={onClick}>
+    <NavLink
+      to={to}
+      onClick={onClick}
+      className={({ isActive }) =>
+        useSimpleButton
+          ? isActive
+            ? styles.leftDrawerActiveButton
+            : styles.leftDrawerInactiveButton
+          : isActive
+            ? styles.sidebarBtnActive
+            : styles.sidebarBtn
+      }
+      data-testid={testId}
+      style={useSimpleButton ? { height: '40px' } : undefined}
+      role="button"
+    >
       {({ isActive }) => (
-        <button
-          type="button"
-          className={
-            useSimpleButton
-              ? isActive
-                ? styles.leftDrawerActiveButton
-                : styles.leftDrawerInactiveButton
-              : isActive
-                ? styles.sidebarBtnActive
-                : styles.sidebarBtn
-          }
-          data-testid={testId}
-          style={useSimpleButton ? { height: '40px' } : undefined}
-        >
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <div className={styles.iconWrapper}>{renderIcon(isActive)}</div>
-            {!hideDrawer && label}
-          </div>
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <div className={styles.iconWrapper}>{renderIcon(isActive)}</div>
+          {!hideDrawer && label}
+        </div>
       )}
     </NavLink>
   );
