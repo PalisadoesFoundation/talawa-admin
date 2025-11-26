@@ -55,11 +55,9 @@ const queryMock = [
   },
 ];
 
-type RenderComponentProps = {
-  eventId: string;
-  orgId: string;
-  onUpdate?: () => void;
-};
+type RenderComponentProps = React.ComponentProps<
+  typeof EventRegistrantsWrapper
+>;
 
 const renderComponent = (props: RenderComponentProps) => {
   return render(
@@ -149,7 +147,7 @@ describe('EventRegistrantsWrapper Component', () => {
       });
     });
 
-    test('should pass correct eventId prop to modal', async () => {
+    test('should render modal when eventId is provided', async () => {
       const customProps = { ...defaultProps, eventId: 'custom-event-123' };
       renderComponent(customProps);
 
@@ -160,7 +158,7 @@ describe('EventRegistrantsWrapper Component', () => {
       });
     });
 
-    test('should pass correct orgId prop to modal', async () => {
+    test('should render modal when orgId is provided', async () => {
       const customProps = { ...defaultProps, orgId: 'custom-org-456' };
       renderComponent(customProps);
 
@@ -391,7 +389,7 @@ describe('EventRegistrantsWrapper Component', () => {
       expect(closeButton).toBeInTheDocument();
     });
 
-    test('should pass all required props to EventRegistrantsModal', async () => {
+    test('should render EventRegistrantsModal with all props', async () => {
       const customProps = {
         eventId: 'test-event-789',
         orgId: 'test-org-101',
