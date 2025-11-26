@@ -429,30 +429,14 @@ describe('DynamicDropDown component', () => {
 
     const dropdownMenu = screen.getByTestId('fieldname-dropdown-menu');
 
-    // Mock a non-HTMLElement as activeElement
-    const originalActiveElement = Object.getOwnPropertyDescriptor(
-      Document.prototype,
-      'activeElement',
-    );
-
-    Object.defineProperty(document, 'activeElement', {
-      value: null,
-      writable: true,
-      configurable: true,
-    });
+    // Simply blur the active element instead of mocking
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
 
     await act(async () => {
       fireEvent.keyDown(dropdownMenu, { key: 'Enter' });
     });
-
-    // Restore original activeElement
-    if (originalActiveElement) {
-      Object.defineProperty(
-        Document.prototype,
-        'activeElement',
-        originalActiveElement,
-      );
-    }
 
     expect(setFormData).not.toHaveBeenCalled();
   });
