@@ -213,6 +213,12 @@ describe('SearchBar', () => {
     expect(handleSearch).not.toHaveBeenCalled();
   });
 
+  it('has accessible search button', () => {
+    render(<SearchBar onSearch={vi.fn()} buttonTestId="search-button" />);
+    const button = screen.getByTestId('search-button');
+    expect(button).toHaveAttribute('aria-label', 'Search');
+  });
+
   it('handles missing onSearch prop gracefully', async () => {
     const user = userEvent.setup();
     render(<SearchBar inputTestId="search-input" />);

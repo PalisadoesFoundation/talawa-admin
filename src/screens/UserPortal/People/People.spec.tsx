@@ -525,6 +525,39 @@ describe('Testing People Screen Pagination [User Portal]', () => {
     await userEvent.selectOptions(select, '5');
     await wait();
   });
+
+  it('handles backward pagination correctly', async () => {
+    // Use mocks that support forward and backward navigation
+    render(
+      <MockedProvider
+        addTypename={false}
+        mocks={[defaultQueryMock, nextPageMock]}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    // Navigate to page 2
+    const nextButton = screen.getByTestId('nextPage');
+    await userEvent.click(nextButton);
+    await wait();
+
+    // Now navigate back to page 1 (this covers lines 158-161)
+    // This uses cached cursor, no new query needed
+    const prevButton = screen.getByTestId('previousPage');
+    await userEvent.click(prevButton);
+    await wait();
+
+    // Should be back on first page
+    expect(screen.getByText('Test User')).toBeInTheDocument();
+  });
 });
 
 describe('People Component Mode Switch and Search Coverage', () => {
