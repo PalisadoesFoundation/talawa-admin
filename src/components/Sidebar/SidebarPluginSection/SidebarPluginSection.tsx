@@ -127,7 +127,7 @@ const SidebarPluginSection = ({
             color: 'var(--bs-secondary)',
           }}
         >
-          {tCommon('pluginSettings')}
+          {!hideDrawer && tCommon('pluginSettings')}
         </h4>
       )}
       {pluginItems.map((item) => renderPluginItem(item))}
