@@ -11,6 +11,7 @@ import {
   adminPluginFileService,
   type InstalledPlugin,
 } from '../plugin/services/AdminPluginFileService';
+import { ApolloClient } from '@apollo/client';
 // import { toast } from 'react-toastify';
 
 // Mock dependencies
@@ -241,7 +242,7 @@ describe('adminPluginInstaller', () => {
 
       const result = await installAdminPluginFromZip({
         zipFile: mockFile,
-        apolloClient: mockApolloClient,
+        apolloClient: mockApolloClient as unknown as ApolloClient<object>,
       });
 
       // Accept that only 'Admin' is installed (matches implementation)
@@ -272,7 +273,7 @@ describe('adminPluginInstaller', () => {
 
       const result = await installAdminPluginFromZip({
         zipFile: mockFile,
-        apolloClient: mockApolloClient,
+        apolloClient: mockApolloClient as unknown as ApolloClient<object>,
       });
 
       // Accept the actual error message thrown by the implementation
@@ -385,7 +386,7 @@ describe('adminPluginInstaller', () => {
 
       const result = await installAdminPluginFromZip({
         zipFile: mockFile,
-        apolloClient: mockApolloClient,
+        apolloClient: mockApolloClient as unknown as ApolloClient<object>,
       });
 
       expect(errorSpy).toHaveBeenCalled();
@@ -661,7 +662,7 @@ describe('adminPluginInstaller', () => {
 
       const result = await installAdminPluginFromZip({
         zipFile: mockFile,
-        apolloClient: mockApolloClient,
+        apolloClient: mockApolloClient as unknown as ApolloClient<object>,
       });
 
       expect(result.success).toBe(true);

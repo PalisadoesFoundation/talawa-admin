@@ -4,6 +4,7 @@ import {
   CREATE_PLUGIN_MUTATION,
 } from '../GraphQl/Mutations/PluginMutations';
 import { adminPluginFileService } from '../plugin/services/AdminPluginFileService';
+import type { ApolloClient, FetchResult } from '@apollo/client';
 
 export interface AdminPluginManifest {
   name: string;
@@ -43,9 +44,7 @@ export interface AdminPluginInstallationResult {
 export interface AdminPluginInstallationOptions {
   zipFile: File;
   backup?: boolean;
-  apolloClient?: {
-    mutate?: (...args: any[]) => Promise<any>;
-  };
+  apolloClient?: ApolloClient<object>;
 }
 
 /**
@@ -309,15 +308,15 @@ export async function installAdminPluginFromZip({
     // STEP 2: Install API component if present (this will handle file upload)
     if (structure.hasApiFolder && apolloClient?.mutate) {
       try {
-        const result = await apolloClient.mutate({
+        const result = (await apolloClient.mutate({
           mutation: UPLOAD_PLUGIN_ZIP_MUTATION,
           variables: {
             input: {
               pluginZip: zipFile,
-              activate: false, // Don't activate yet
+              activate: false,
             },
           },
-        });
+        })) as FetchResult<{ uploadPluginZip: boolean }>;
 
         if (result.data?.uploadPluginZip) {
           installedComponents.push('API');
