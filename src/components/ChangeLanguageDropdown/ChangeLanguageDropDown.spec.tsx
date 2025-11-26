@@ -96,7 +96,7 @@ describe('ChangeLanguageDropDown', () => {
     const dropdown = screen.getByTestId('language-dropdown-btn');
     fireEvent.click(dropdown);
 
-    const spanishOption = screen.getByTestId('change-language-btn-es');
+    const spanishOption = await screen.findByTestId('change-language-btn-es');
     fireEvent.click(spanishOption);
 
     await waitFor(() => {
@@ -114,7 +114,7 @@ describe('ChangeLanguageDropDown', () => {
     const dropdown = screen.getByTestId('language-dropdown-btn');
     fireEvent.click(dropdown);
 
-    const spanishOption = screen.getByTestId('change-language-btn-es');
+    const spanishOption = await screen.findByTestId('change-language-btn-es');
     fireEvent.click(spanishOption);
 
     await waitFor(() => {
@@ -168,7 +168,7 @@ describe('ChangeLanguageDropDown', () => {
     const dropdown = screen.getByTestId('language-dropdown-btn');
     fireEvent.click(dropdown);
 
-    const spanishOption = screen.getByTestId('change-language-btn-es');
+    const spanishOption = await screen.findByTestId('change-language-btn-es');
     fireEvent.click(spanishOption);
 
     await waitFor(() => {
@@ -207,7 +207,7 @@ describe('ChangeLanguageDropDown', () => {
     const dropdown = screen.getByTestId('language-dropdown-btn');
     fireEvent.click(dropdown);
 
-    const spanishOption = screen.getByTestId('change-language-btn-es');
+    const spanishOption = await screen.findByTestId('change-language-btn-es');
     fireEvent.click(spanishOption);
 
     await waitFor(() => {
@@ -256,7 +256,7 @@ describe('ChangeLanguageDropDown', () => {
       const dropdown = screen.getByTestId('language-dropdown-btn');
       fireEvent.click(dropdown);
 
-      const spanishOption = screen.getByTestId('change-language-btn-es');
+      const spanishOption = await screen.findByTestId('change-language-btn-es');
       fireEvent.click(spanishOption);
 
       await waitFor(() => {
@@ -326,7 +326,7 @@ describe('ChangeLanguageDropDown', () => {
     const dropdown = screen.getByTestId('language-dropdown-btn');
     fireEvent.click(dropdown);
 
-    const spanishOption = screen.getByTestId('change-language-btn-es');
+    const spanishOption = await screen.findByTestId('change-language-btn-es');
     fireEvent.click(spanishOption);
 
     await waitFor(() => {
@@ -374,7 +374,7 @@ describe('ChangeLanguageDropDown', () => {
     const dropdown = screen.getByTestId('language-dropdown-btn');
     fireEvent.click(dropdown);
 
-    const spanishOption = screen.getByTestId('change-language-btn-es');
+    const spanishOption = await screen.findByTestId('change-language-btn-es');
     fireEvent.click(spanishOption);
 
     await waitFor(() => {
