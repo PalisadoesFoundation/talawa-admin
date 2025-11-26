@@ -115,7 +115,12 @@ export class InternalFileWriter {
     try {
       await this.initialize();
 
-      const pluginPath = `${this.pluginBasePath}/${pluginId}`;
+      const basePath =
+        this.pluginBasePath ||
+        (this.pluginBasePath = await this.getPluginBasePath());
+
+      const pluginPath = `${basePath}/${pluginId}`;
+
       const writtenFiles: string[] = [];
 
       // Ensure plugin directory exists
@@ -163,7 +168,11 @@ export class InternalFileWriter {
     error?: string;
   }> {
     try {
-      const pluginPath = `${this.pluginBasePath}/${pluginId}`;
+      const basePath =
+        this.pluginBasePath ||
+        (this.pluginBasePath = await this.getPluginBasePath());
+
+      const pluginPath = `${basePath}/${pluginId}`;
 
       // Check if plugin exists
       if (!(await this.pathExists(pluginPath))) {
@@ -245,7 +254,11 @@ export class InternalFileWriter {
    */
   async removePlugin(pluginId: string): Promise<IFileOperationResult> {
     try {
-      const pluginPath = `${this.pluginBasePath}/${pluginId}`;
+      const basePath =
+        this.pluginBasePath ||
+        (this.pluginBasePath = await this.getPluginBasePath());
+
+      const pluginPath = `${basePath}/${pluginId}`;
 
       if (!(await this.pathExists(pluginPath))) {
         return { success: false, error: `Plugin ${pluginId} not found` };
