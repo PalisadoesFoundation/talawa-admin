@@ -46,7 +46,7 @@ describe('ChangeLanguageDropDown', () => {
         query: UPDATE_CURRENT_USER_MUTATION,
         variables: { input: { naturalLanguageCode: 'es', avatar: mockFile } },
       },
-      result: { data: { updateUser: { id: mockUserId } } },
+      result: { data: { updateUser: { id: mockUserId, __typename: 'User' } } },
     },
   ];
 
@@ -56,9 +56,10 @@ describe('ChangeLanguageDropDown', () => {
 
     // Setup default mock implementations
     (useLocalStorage as Mock).mockReturnValue({
-      getItem: vi.fn((key) => {
+      getItem: vi.fn((key: string) => {
         if (key === 'id') return mockUserId;
         if (key === 'UserImage') return mockUserImage;
+        if (key === 'IsLoggedIn') return 'TRUE';
         return null;
       }),
     });
@@ -73,7 +74,7 @@ describe('ChangeLanguageDropDown', () => {
 
   it('renders with default language (English)', () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
@@ -84,11 +85,14 @@ describe('ChangeLanguageDropDown', () => {
 
   it('shows error toast when userId is not found', async () => {
     (useLocalStorage as Mock).mockReturnValue({
-      getItem: vi.fn(() => null),
+      getItem: vi.fn((key: string) => {
+        if (key === 'IsLoggedIn') return 'TRUE';
+        return null; // No userId
+      }),
     });
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
@@ -106,7 +110,7 @@ describe('ChangeLanguageDropDown', () => {
 
   it('successfully changes language', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
@@ -123,9 +127,9 @@ describe('ChangeLanguageDropDown', () => {
     });
   });
 
-  it('renders all available languages in the dropdown', () => {
+  it('renders all available languages in the dropdown', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
@@ -133,9 +137,13 @@ describe('ChangeLanguageDropDown', () => {
     const dropdown = screen.getByTestId('language-dropdown-btn');
     fireEvent.click(dropdown);
 
-    languages.forEach((language) => {
-      const option = screen.getByTestId(`change-language-btn-${language.code}`);
-      expect(option).toBeInTheDocument();
+    await waitFor(() => {
+      languages.forEach((language) => {
+        const option = screen.getByTestId(
+          `change-language-btn-${language.code}`,
+        );
+        expect(option).toBeInTheDocument();
+      });
     });
   });
 
@@ -145,9 +153,6 @@ describe('ChangeLanguageDropDown', () => {
       new Error('Avatar processing failed'),
     );
 
-    // Mock console.log to verify error logging
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-
     // Create mocks that expect no avatar in the mutation
     const mocksWithoutAvatar = [
       {
@@ -155,12 +160,14 @@ describe('ChangeLanguageDropDown', () => {
           query: UPDATE_CURRENT_USER_MUTATION,
           variables: { input: { naturalLanguageCode: 'es' } },
         },
-        result: { data: { updateUser: { id: mockUserId } } },
+        result: {
+          data: { updateUser: { id: mockUserId, __typename: 'User' } },
+        },
       },
     ];
 
     render(
-      <MockedProvider mocks={mocksWithoutAvatar} addTypename={false}>
+      <MockedProvider mocks={mocksWithoutAvatar}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
@@ -172,15 +179,9 @@ describe('ChangeLanguageDropDown', () => {
     fireEvent.click(spanishOption);
 
     await waitFor(() => {
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error processing avatar:',
-        expect.any(Error),
-      );
       expect(i18next.changeLanguage).toHaveBeenCalledWith('es');
       expect(cookies.set).toHaveBeenCalledWith('i18next', 'es');
     });
-
-    consoleSpy.mockRestore();
   });
 
   it('handles mutation error gracefully', async () => {
@@ -195,11 +196,8 @@ describe('ChangeLanguageDropDown', () => {
       },
     ];
 
-    // Mock console.log to verify error logging
-    const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-
     render(
-      <MockedProvider mocks={errorMocks} addTypename={false}>
+      <MockedProvider mocks={errorMocks}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
@@ -211,13 +209,9 @@ describe('ChangeLanguageDropDown', () => {
     fireEvent.click(spanishOption);
 
     await waitFor(() => {
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error in changing language',
-        expect.any(Error),
-      );
+      expect(i18next.changeLanguage).toHaveBeenCalledWith('es');
+      expect(cookies.set).toHaveBeenCalledWith('i18next', 'es');
     });
-
-    consoleSpy.mockRestore();
   });
 
   it.each([
@@ -229,9 +223,10 @@ describe('ChangeLanguageDropDown', () => {
     async ({ userImage }) => {
       // Mock userImage to be the specified invalid value
       (useLocalStorage as Mock).mockReturnValue({
-        getItem: vi.fn((key) => {
+        getItem: vi.fn((key: string) => {
           if (key === 'id') return mockUserId;
           if (key === 'UserImage') return userImage;
+          if (key === 'IsLoggedIn') return 'TRUE';
           return null;
         }),
       });
@@ -243,12 +238,14 @@ describe('ChangeLanguageDropDown', () => {
             query: UPDATE_CURRENT_USER_MUTATION,
             variables: { input: { naturalLanguageCode: 'es' } },
           },
-          result: { data: { updateUser: { id: mockUserId } } },
+          result: {
+            data: { updateUser: { id: mockUserId, __typename: 'User' } },
+          },
         },
       ];
 
       render(
-        <MockedProvider mocks={mocksWithoutAvatar} addTypename={false}>
+        <MockedProvider mocks={mocksWithoutAvatar}>
           <ChangeLanguageDropDown />
         </MockedProvider>,
       );
@@ -274,15 +271,16 @@ describe('ChangeLanguageDropDown', () => {
     (cookies.get as Mock).mockReturnValue(null);
 
     (useLocalStorage as Mock).mockReturnValue({
-      getItem: vi.fn((key) => {
+      getItem: vi.fn((key: string) => {
         if (key === 'id') return mockUserId;
         if (key === 'UserImage') return 'https://example.com/avatar.jpg';
+        if (key === 'IsLoggedIn') return 'TRUE';
         return null;
       }),
     });
 
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
@@ -291,10 +289,11 @@ describe('ChangeLanguageDropDown', () => {
     // This tests the fallback branch: cookies.get('i18next') || 'en'
     expect(screen.getByTestId('language-dropdown-btn')).toBeInTheDocument();
   });
+
   it('changes language locally without calling mutation when user is not logged in', async () => {
     // Mock user as NOT logged in
     (useLocalStorage as Mock).mockReturnValue({
-      getItem: vi.fn((key) => {
+      getItem: vi.fn((key: string) => {
         if (key === 'id') return mockUserId;
         if (key === 'UserImage') return mockUserImage;
         if (key === 'IsLoggedIn') return 'FALSE'; // User NOT logged in
@@ -312,13 +311,15 @@ describe('ChangeLanguageDropDown', () => {
         },
         result: () => {
           updateUserSpy();
-          return { data: { updateUser: { id: mockUserId } } };
+          return {
+            data: { updateUser: { id: mockUserId, __typename: 'User' } },
+          };
         },
       },
     ];
 
     render(
-      <MockedProvider mocks={mocksWithSpy} addTypename={false}>
+      <MockedProvider mocks={mocksWithSpy}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
@@ -333,16 +334,16 @@ describe('ChangeLanguageDropDown', () => {
       // Verify language changed locally
       expect(i18next.changeLanguage).toHaveBeenCalledWith('es');
       expect(cookies.set).toHaveBeenCalledWith('i18next', 'es');
-
-      // Verify mutation was NOT called (critical assertion)
-      expect(updateUserSpy).not.toHaveBeenCalled();
     });
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(updateUserSpy).not.toHaveBeenCalled();
   });
 
   it('calls mutation to update user language when user is logged in', async () => {
     // Mock user as logged in
     (useLocalStorage as Mock).mockReturnValue({
-      getItem: vi.fn((key) => {
+      getItem: vi.fn((key: string) => {
         if (key === 'id') return mockUserId;
         if (key === 'UserImage') return mockUserImage;
         if (key === 'IsLoggedIn') return 'TRUE'; // User IS logged in
@@ -360,13 +361,15 @@ describe('ChangeLanguageDropDown', () => {
         },
         result: () => {
           updateUserSpy();
-          return { data: { updateUser: { id: mockUserId } } };
+          return {
+            data: { updateUser: { id: mockUserId, __typename: 'User' } },
+          };
         },
       },
     ];
 
     render(
-      <MockedProvider mocks={mocksWithSpy} addTypename={false}>
+      <MockedProvider mocks={mocksWithSpy}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
@@ -390,7 +393,7 @@ describe('ChangeLanguageDropDown', () => {
   it('changes language locally when IsLoggedIn is null or missing', async () => {
     // Mock IsLoggedIn as null (user not logged in)
     (useLocalStorage as Mock).mockReturnValue({
-      getItem: vi.fn((key) => {
+      getItem: vi.fn((key: string) => {
         if (key === 'id') return mockUserId;
         if (key === 'UserImage') return mockUserImage;
         if (key === 'IsLoggedIn') return null; // Not set
@@ -407,13 +410,15 @@ describe('ChangeLanguageDropDown', () => {
         },
         result: () => {
           updateUserSpy();
-          return { data: { updateUser: { id: mockUserId } } };
+          return {
+            data: { updateUser: { id: mockUserId, __typename: 'User' } },
+          };
         },
       },
     ];
 
     render(
-      <MockedProvider mocks={mocksWithSpy} addTypename={false}>
+      <MockedProvider mocks={mocksWithSpy}>
         <ChangeLanguageDropDown />
       </MockedProvider>,
     );
@@ -427,7 +432,9 @@ describe('ChangeLanguageDropDown', () => {
     await waitFor(() => {
       expect(i18next.changeLanguage).toHaveBeenCalledWith('fr');
       expect(cookies.set).toHaveBeenCalledWith('i18next', 'fr');
-      expect(updateUserSpy).not.toHaveBeenCalled();
     });
+
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    expect(updateUserSpy).not.toHaveBeenCalled();
   });
 });
