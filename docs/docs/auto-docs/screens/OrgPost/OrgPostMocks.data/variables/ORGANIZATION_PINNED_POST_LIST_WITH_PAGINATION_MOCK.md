@@ -6,7 +6,7 @@
 
 > `const` **ORGANIZATION\_PINNED\_POST\_LIST\_WITH\_PAGINATION\_MOCK**: `object`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:175](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L175)
+Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L176)
 
 ## Type Declaration
 
@@ -21,6 +21,14 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:175](https://github.com/Pa
 #### request.variables
 
 > **variables**: `object`
+
+#### request.variables.after
+
+> **after**: `any` = `null`
+
+#### request.variables.before
+
+> **before**: `any` = `null`
 
 #### request.variables.first
 

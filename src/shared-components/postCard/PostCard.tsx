@@ -36,133 +36,42 @@ import {
   Typography,
   Divider,
   CircularProgress,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
 } from '@mui/material';
 import {
   Favorite,
   ChatBubbleOutline,
   PushPinOutlined,
+  PushPin,
   Share,
   MoreHoriz,
   Send,
   DeleteOutline,
   EditOutlined,
 } from '@mui/icons-material';
-import { styled } from '@mui/material/styles';
-import UserDefault from '../../../assets/images/defaultImg.png';
+import UserDefault from '../../assets/images/defaultImg.png';
 import type {
   InterfaceComment,
   InterfaceCommentEdge,
   InterfacePostCard,
-} from 'utils/interfaces';
+} from '../../utils/interfaces';
+import postCardStyles from './PostCard.module.css';
 import {
   CREATE_COMMENT_POST,
   DELETE_POST_MUTATION,
   UPDATE_POST_VOTE,
   UPDATE_POST_MUTATION,
-} from 'GraphQl/Mutations/mutations';
-import { GET_POST_COMMENTS } from 'GraphQl/Queries/Queries';
-import { errorHandler } from 'utils/errorHandler';
-import CommentCard from '../CommentCard/CommentCard';
-import styles from '../../../style/app-fixed.module.css';
-import { PluginInjector } from 'plugin';
-import useLocalStorage from 'utils/useLocalstorage';
-
-const PostContainer = styled(Box)(({ theme }) => ({
-  width: '100%',
-  maxWidth: 600,
-  margin: '0 auto 24px',
-  backgroundColor: theme.palette.background.paper,
-  borderRadius: 8,
-  boxShadow: '0 2px 10px rgba(0,0,0,0.05)',
-  overflow: 'hidden',
-}));
-
-const PostHeader = styled(Box)({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  padding: 12,
-});
-
-const UserInfo = styled(Box)({
-  display: 'flex',
-  alignItems: 'center',
-  gap: 12,
-});
-
-const PostMedia = styled(Box)({
-  width: '100%',
-  '& img, & video': {
-    width: '100%',
-    maxHeight: '600px',
-    objectFit: 'cover',
-  },
-});
-
-const PostActions = styled(Box)({
-  display: 'flex',
-  justifyContent: 'space-between',
-  padding: '8px 12px',
-});
-
-const LeftActions = styled(Box)({
-  display: 'flex',
-  gap: 8,
-});
-
-const PostContent = styled(Box)({
-  padding: '0 16px 8px',
-});
-
-const Caption = styled(Typography)({
-  margin: '8px 0',
-  whiteSpace: 'pre-line',
-});
-
-const CommentSection = styled(Box)({
-  maxHeight: 300,
-  overflowY: 'auto',
-  padding: '0 16px',
-});
-
-const CommentForm = styled(FormControl)({
-  padding: '8px 16px 16px',
-  '& .MuiInput-root': {
-    fontSize: '0.875rem',
-  },
-});
-
-const TimeText = styled(Typography)(({ theme }) => ({
-  fontSize: '0.75rem',
-  color: theme.palette.text.secondary,
-  padding: '0 16px 8px',
-}));
-
-const EditModalContent = styled(Box)({
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '90%',
-  maxWidth: 500,
-  backgroundColor: 'white',
-  borderRadius: 8,
-  padding: 24,
-  '& h3': {
-    marginBottom: 16,
-  },
-});
-
-const ModalActions = styled(Box)({
-  display: 'flex',
-  justifyContent: 'space-between',
-  marginTop: 16,
-});
-
-const RightModalActions = styled(Box)({
-  display: 'flex',
-  gap: 8,
-});
+} from '../../GraphQl/Mutations/mutations';
+import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutations';
+import { GET_POST_COMMENTS } from '../../GraphQl/Queries/Queries';
+import { errorHandler } from '../../utils/errorHandler';
+import CommentCard from '../../components/UserPortal/CommentCard/CommentCard';
+import styles from '../../style/app-fixed.module.css';
+import { PluginInjector } from '../../plugin';
+import useLocalStorage from '../../utils/useLocalstorage';
 
 export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
@@ -177,10 +86,16 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const [endCursor, setEndCursor] = React.useState<string | null>(null);
   const [hasNextPage, setHasNextPage] = React.useState(false);
   const [loadingMoreComments, setLoadingMoreComments] = React.useState(false);
+  const [dropdownAnchor, setDropdownAnchor] =
+    React.useState<null | HTMLElement>(null);
 
   const commentCount = props.commentCount;
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId');
+  const userId = getItem('userId') ?? getItem('id');
+
+  const isPostCreator = props.creator.id === userId;
+  const isAdmin = getItem('role') === 'administrator';
+
   // Query for paginated comments
   const shouldSkipComments = !showComments || !userId;
   const {
@@ -269,6 +184,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
     useMutation(CREATE_COMMENT_POST);
   const [editPost] = useMutation(UPDATE_POST_MUTATION);
   const [deletePost] = useMutation(DELETE_POST_MUTATION);
+  const [togglePinPost] = useMutation(TOGGLE_PINNED_POST);
   let isPinned = false;
 
   // Check if the post is pinned
@@ -318,7 +234,41 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       errorHandler(t, error);
     }
   };
-  const toggleEditPost = (): void => setShowEditPost(!showEditPost);
+
+  // Dropdown menu handlers
+  const handleDropdownOpen = (event: React.MouseEvent<HTMLElement>): void => {
+    setDropdownAnchor(event.currentTarget);
+  };
+
+  const handleDropdownClose = (): void => {
+    setDropdownAnchor(null);
+  };
+
+  const toggleEditPost = (): void => {
+    setShowEditPost(!showEditPost);
+    handleDropdownClose();
+  };
+
+  // Toggle pin/unpin functionality
+  const handleTogglePin = async (): Promise<void> => {
+    try {
+      await togglePinPost({
+        variables: {
+          input: {
+            id: props.id,
+            isPinned: !isPinned,
+          },
+        },
+      });
+      props.fetchPosts();
+      toast.success(
+        isPinned ? t('postUnpinnedSuccess') : t('postPinnedSuccess'),
+      );
+      handleDropdownClose();
+    } catch (error) {
+      errorHandler(t, error);
+    }
+  };
 
   // Update the handleEditPost function to use isPinned instead of pinnedAt
   const handleEditPost = async (): Promise<void> => {
@@ -354,18 +304,22 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
     try {
       await deletePost({ variables: { input: { id: props.id } } });
       props.fetchPosts();
-      toast.success('Successfully deleted the Post.');
+      toast.success(t('postDeletedSuccess'));
+      handleDropdownClose();
     } catch (error) {
       errorHandler(t, error);
     }
   };
 
   return (
-    <PostContainer>
+    <Box
+      className={postCardStyles.postContainer}
+      sx={{ backgroundColor: 'background.paper' }}
+    >
       {/* Post Header */}
 
-      <PostHeader>
-        <UserInfo>
+      <Box className={postCardStyles.postHeader}>
+        <Box className={postCardStyles.userInfo}>
           <Avatar
             className={styles.userImageUserPost}
             src={props.creator.avatarURL || UserDefault}
@@ -380,19 +334,92 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           <Typography variant="subtitle2" fontWeight="bold">
             {props.creator.name}
           </Typography>
-        </UserInfo>
-        <IconButton
-          onClick={toggleEditPost}
-          size="small"
-          aria-label="more options"
-          data-testid="more-options-button"
-        >
-          <MoreHoriz />
-        </IconButton>
-      </PostHeader>
+        </Box>
+        <>
+          <IconButton
+            onClick={handleDropdownOpen}
+            size="small"
+            aria-label="more options"
+            data-testid="more-options-button"
+          >
+            <MoreHoriz />
+          </IconButton>
+          <Menu
+            anchorEl={dropdownAnchor}
+            open={Boolean(dropdownAnchor)}
+            onClose={handleDropdownClose}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            PaperProps={{
+              sx: {
+                minWidth: '150px',
+                '& .MuiMenuItem-root': {
+                  px: 2,
+                  py: 1,
+                },
+              },
+            }}
+          >
+            {(isPostCreator || isAdmin) && (
+              <MenuItem
+                onClick={toggleEditPost}
+                data-testid="edit-post-menu-item"
+              >
+                <ListItemIcon>
+                  <EditOutlined fontSize="small" />
+                </ListItemIcon>
+                <ListItemText
+                  primary={t('editPost')}
+                  data-testid="edit-post-button"
+                />
+              </MenuItem>
+            )}
+
+            {isAdmin && (
+              <MenuItem
+                onClick={handleTogglePin}
+                data-testid="pin-post-menu-item"
+              >
+                <ListItemIcon>
+                  {isPinned ? (
+                    <PushPinOutlined fontSize="small" />
+                  ) : (
+                    <PushPin fontSize="small" />
+                  )}
+                </ListItemIcon>
+                <ListItemText
+                  primary={isPinned ? t('unpinPost') : t('pinPost')}
+                />
+              </MenuItem>
+            )}
+
+            {(isAdmin || isPostCreator) && (
+              <MenuItem
+                onClick={handleDeletePost}
+                data-testid="delete-post-menu-item"
+              >
+                <ListItemIcon>
+                  <DeleteOutline fontSize="small" color="error" />
+                </ListItemIcon>
+                <ListItemText
+                  primary={tCommon('delete')}
+                  data-testid="delete-post-button"
+                  primaryTypographyProps={{ color: 'error' }}
+                />
+              </MenuItem>
+            )}
+          </Menu>
+        </>
+      </Box>
 
       {/* Post Media */}
-      <PostMedia>
+      <Box className={postCardStyles.postMedia}>
         {props.image ||
           (UserDefault && (
             <img src={props.image || UserDefault} alt={props.title} />
@@ -402,11 +429,11 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             <source src={props.video} type="video/mp4" />
           </video>
         )}
-      </PostMedia>
+      </Box>
 
       {/* Post Actions */}
-      <PostActions>
-        <LeftActions>
+      <Box className={postCardStyles.postActions}>
+        <Box className={postCardStyles.leftActions}>
           <IconButton
             onClick={handleToggleLike}
             size="small"
@@ -426,7 +453,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           <IconButton size="small">
             <Share fontSize="small" />
           </IconButton>
-        </LeftActions>
+        </Box>
         {isPinned && (
           <PushPinOutlined
             fontSize="small"
@@ -435,19 +462,19 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             sx={{ marginLeft: 'auto' }}
           />
         )}
-      </PostActions>
+      </Box>
 
       {/* Post Content */}
-      <PostContent>
+      <Box className={postCardStyles.postContent}>
         <Typography variant="subtitle2" fontWeight="bold">
           {props.upVoteCount} {t('likes')}
         </Typography>
-        <Caption variant="body2">
+        <Typography variant="body2" className={postCardStyles.caption}>
           <Typography component="span" fontWeight="bold">
             {props.creator.name}
           </Typography>{' '}
           {props.title}
-        </Caption>
+        </Typography>
 
         {/* Plugin Extension Point G3 - Inject plugins below caption */}
         <PluginInjector
@@ -468,7 +495,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             hasUserVoted: props.hasUserVoted,
           }}
         />
-      </PostContent>
+      </Box>
 
       {/* Comments Section */}
       {showComments && (
@@ -479,7 +506,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               <CircularProgress size={24} />
             </Box>
           ) : (
-            <CommentSection>
+            <Box className={postCardStyles.commentSection}>
               {comments.map((comment) => (
                 <CommentCard
                   key={comment.id}
@@ -522,7 +549,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                   </Typography>
                 </Box>
               )}
-            </CommentSection>
+            </Box>
           )}
         </>
       )}
@@ -548,41 +575,48 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       )}
 
       {/* Post Time */}
-      <TimeText>{props.postedAt}</TimeText>
+      <Typography
+        className={postCardStyles.timeText}
+        sx={{ color: 'text.secondary' }}
+      >
+        {props.postedAt}
+      </Typography>
 
       {/* Add Comment */}
-      <CommentForm fullWidth>
-        <Input
-          placeholder={t('addComment')}
-          value={commentInput}
-          onChange={handleCommentInput}
-          fullWidth
-          disableUnderline
-          endAdornment={
-            <InputAdornment position="end">
-              <IconButton
-                onClick={handleCreateComment}
-                disabled={commentLoading || !commentInput.trim()}
-                data-testid="comment-send"
-                size="small"
-                color="primary"
-              >
-                {commentLoading ? (
-                  <CircularProgress size={20} />
-                ) : (
-                  <Send fontSize="small" />
-                )}
-              </IconButton>
-            </InputAdornment>
-          }
-          sx={{
-            backgroundColor: 'action.hover',
-            borderRadius: 20,
-            px: 2,
-            py: 0.5,
-          }}
-        />
-      </CommentForm>
+      <div className={postCardStyles.commentFormContainer}>
+        <FormControl fullWidth className={postCardStyles.commentForm}>
+          <Input
+            placeholder={t('addComment')}
+            value={commentInput}
+            onChange={handleCommentInput}
+            fullWidth
+            disableUnderline
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={handleCreateComment}
+                  disabled={commentLoading || !commentInput.trim()}
+                  data-testid="comment-send"
+                  size="small"
+                  color="primary"
+                >
+                  {commentLoading ? (
+                    <CircularProgress size={20} />
+                  ) : (
+                    <Send fontSize="small" />
+                  )}
+                </IconButton>
+              </InputAdornment>
+            }
+            sx={{
+              backgroundColor: 'action.hover',
+              borderRadius: 20,
+              px: 2,
+              py: 0.5,
+            }}
+          />
+        </FormControl>
+      </div>
 
       {/* Edit Post Modal */}
       <Modal
@@ -590,7 +624,10 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         onClose={toggleEditPost}
         data-testid="edit-post-button"
       >
-        <EditModalContent>
+        <Box
+          className={postCardStyles.editModalContent}
+          sx={{ backgroundColor: 'background.paper' }}
+        >
           <Typography variant="h6">{t('editPost')}</Typography>
           <FormControl fullWidth sx={{ mb: 2 }}>
             <Input
@@ -599,34 +636,25 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               value={postContent}
               onChange={handlePostInput}
               fullWidth
+              data-cy="editCaptionInput"
             />
           </FormControl>
 
-          <ModalActions>
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={handleDeletePost}
-              startIcon={<DeleteOutline />}
-            >
-              {tCommon('delete')}
+          <Box className={postCardStyles.modalActions}>
+            <Button variant="outlined" onClick={toggleEditPost}>
+              {tCommon('cancel')}
             </Button>
-            <RightModalActions>
-              <Button variant="outlined" onClick={toggleEditPost}>
-                {tCommon('cancel')}
-              </Button>
-              <Button
-                variant="contained"
-                onClick={handleEditPost}
-                data-testid="save-post-button"
-                startIcon={<EditOutlined />}
-              >
-                {tCommon('save')}
-              </Button>
-            </RightModalActions>
-          </ModalActions>
-        </EditModalContent>
+            <Button
+              variant="contained"
+              onClick={handleEditPost}
+              data-testid="save-post-button"
+              startIcon={<EditOutlined />}
+            >
+              {tCommon('save')}
+            </Button>
+          </Box>
+        </Box>
       </Modal>
-    </PostContainer>
+    </Box>
   );
 }
