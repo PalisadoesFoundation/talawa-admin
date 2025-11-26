@@ -5,9 +5,10 @@
  * Works in both development (Vite) and production environments.
  */
 
+import type { Dirent } from 'node:fs';
 import { AdminPluginManifest } from '../../utils/adminPluginInstaller';
 
-export interface FileWriteResult {
+export interface IFileWriteResult {
   success: boolean;
   path: string;
   filesWritten: number;
@@ -15,10 +16,16 @@ export interface FileWriteResult {
   error?: string;
 }
 
-export interface FileOperationResult {
+export interface IFileOperationResult {
   success: boolean;
   error?: string;
-  data?: any;
+  data?: unknown;
+}
+
+interface IVitePluginResponse<T> {
+  success: boolean;
+  error?: string;
+  data?: T;
 }
 
 /**
@@ -27,7 +34,7 @@ export interface FileOperationResult {
  */
 export class InternalFileWriter {
   private static instance: InternalFileWriter | null = null;
-  private pluginBasePath: string = '';
+  private pluginBasePath = '';
   private isInitialized = false;
   private fsModule: typeof import('node:fs/promises') | null = null;
   private pathModule: typeof import('node:path') | null = null;
@@ -53,13 +60,10 @@ export class InternalFileWriter {
     if (typeof window !== 'undefined') {
       // In browser environment, we'll use the Vite plugin API
       return '/src/plugin/available';
-    } else {
-      // In Node.js environment (SSR, build), use actual path
-      if (!this.pathModule) {
-        this.pathModule = await import('node:path');
-      }
-      return this.pathModule.join(process.cwd(), 'src', 'plugin', 'available');
     }
+
+    const path = await this.getPathModule();
+    return path.join(process.cwd(), 'src', 'plugin', 'available');
   }
 
   /**
@@ -89,7 +93,6 @@ export class InternalFileWriter {
     if (this.isInitialized) return;
 
     try {
-      // Set plugin base path if not already set
       if (!this.pluginBasePath) {
         this.pluginBasePath = await this.getPluginBasePath();
       }
@@ -108,7 +111,7 @@ export class InternalFileWriter {
   async writePluginFiles(
     pluginId: string,
     files: Record<string, string>,
-  ): Promise<FileWriteResult> {
+  ): Promise<IFileWriteResult> {
     try {
       await this.initialize();
 
@@ -123,8 +126,8 @@ export class InternalFileWriter {
         const fullPath = `${pluginPath}/${filePath}`;
 
         // Ensure subdirectories exist
-        const fileDir = await this.getDirectoryPath(fullPath);
-        await this.ensureDirectoryExists(fileDir);
+        const dir = await this.getDirectoryPath(fullPath);
+        await this.ensureDirectoryExists(dir);
 
         // Write file
         await this.writeFile(fullPath, content);
@@ -137,14 +140,15 @@ export class InternalFileWriter {
         filesWritten: writtenFiles.length,
         writtenFiles,
       };
-    } catch (error) {
-      console.error('Failed to write plugin files:', error);
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+      console.error('Failed to write plugin files:', err);
       return {
         success: false,
         path: '',
         filesWritten: 0,
         writtenFiles: [],
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: errorMessage,
       };
     }
   }
@@ -163,10 +167,7 @@ export class InternalFileWriter {
 
       // Check if plugin exists
       if (!(await this.pathExists(pluginPath))) {
-        return {
-          success: false,
-          error: `Plugin ${pluginId} not found`,
-        };
+        return { success: false, error: `Plugin ${pluginId} not found` };
       }
 
       // Read all files in plugin directory
@@ -174,29 +175,27 @@ export class InternalFileWriter {
 
       // Parse manifest if it exists
       let manifest: AdminPluginManifest | undefined;
-      if (files['manifest.json']) {
+      const raw = files['manifest.json'];
+
+      if (raw) {
         try {
-          manifest = JSON.parse(files['manifest.json']);
-        } catch (error) {
-          console.error('Failed to parse manifest:', error);
+          manifest = JSON.parse(raw) as AdminPluginManifest;
+        } catch {
+          console.error('Failed to parse manifest JSON.');
         }
       }
 
-      return {
-        success: true,
-        files,
-        manifest,
-      };
-    } catch (error) {
+      return { success: true, files, manifest };
+    } catch (err) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: err instanceof Error ? err.message : 'Unknown error',
       };
     }
   }
 
   /**
-   * List all installed plugins
+   * List installed plugin metadata
    */
   async listInstalledPlugins(): Promise<{
     success: boolean;
@@ -244,26 +243,21 @@ export class InternalFileWriter {
   /**
    * Remove plugin from filesystem
    */
-  async removePlugin(pluginId: string): Promise<FileOperationResult> {
+  async removePlugin(pluginId: string): Promise<IFileOperationResult> {
     try {
       const pluginPath = `${this.pluginBasePath}/${pluginId}`;
 
       if (!(await this.pathExists(pluginPath))) {
-        return {
-          success: false,
-          error: `Plugin ${pluginId} not found`,
-        };
+        return { success: false, error: `Plugin ${pluginId} not found` };
       }
 
       await this.removeDirectory(pluginPath);
 
-      return {
-        success: true,
-      };
-    } catch (error) {
+      return { success: true };
+    } catch (err) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: err instanceof Error ? err.message : 'Unknown error',
       };
     }
   }
@@ -279,11 +273,11 @@ export class InternalFileWriter {
     if (typeof window !== 'undefined') {
       // In browser, use Vite plugin API
       await this.callVitePlugin('ensureDirectory', { path: dirPath });
-    } else {
-      // In Node.js, use fs directly
-      const fs = await this.getFsModule();
-      await fs.mkdir(dirPath, { recursive: true });
+      return;
     }
+    // In Node.js, use fs directly
+    const fs = await this.getFsModule();
+    await fs.mkdir(dirPath, { recursive: true });
   }
 
   /**
@@ -293,20 +287,20 @@ export class InternalFileWriter {
     if (typeof window !== 'undefined') {
       // In browser, use Vite plugin API
       await this.callVitePlugin('writeFile', { path: filePath, content });
-    } else {
-      // In Node.js, use fs directly
-      const fs = await this.getFsModule();
+      return;
+    }
+    // In Node.js, use fs directly
+    const fs = await this.getFsModule();
 
-      // Check if this is a base64 data URL (binary asset)
-      if (content.startsWith('data:')) {
-        // Extract base64 content and write as binary
-        const base64Data = content.split(',')[1];
-        const binaryBuffer = Buffer.from(base64Data, 'base64');
-        await fs.writeFile(filePath, binaryBuffer);
-      } else {
-        // Write as text file
-        await fs.writeFile(filePath, content, 'utf8');
-      }
+    // Check if this is a base64 data URL (binary asset)
+    if (content.startsWith('data:')) {
+      // Extract base64 content and write as binary
+      const base64 = content.split(',')[1] ?? '';
+      const buffer = Buffer.from(base64, 'base64');
+      await fs.writeFile(filePath, buffer);
+    } else {
+      // Write as text file
+      await fs.writeFile(filePath, content, 'utf8');
     }
   }
 
@@ -316,12 +310,11 @@ export class InternalFileWriter {
   private async readFile(filePath: string): Promise<string> {
     if (typeof window !== 'undefined') {
       // In browser, use Vite plugin API
-      return await this.callVitePlugin('readFile', { path: filePath });
-    } else {
-      // In Node.js, use fs directly
-      const fs = await this.getFsModule();
-      return await fs.readFile(filePath, 'utf8');
+      return this.callVitePlugin<string>('readFile', { path: filePath });
     }
+    // In Node.js, use fs directly
+    const fs = await this.getFsModule();
+    return fs.readFile(filePath, 'utf8');
   }
 
   /**
@@ -330,16 +323,15 @@ export class InternalFileWriter {
   private async pathExists(path: string): Promise<boolean> {
     if (typeof window !== 'undefined') {
       // In browser, use Vite plugin API
-      return await this.callVitePlugin('pathExists', { path });
-    } else {
-      // In Node.js, use fs directly
-      const fs = await this.getFsModule();
-      try {
-        await fs.access(path);
-        return true;
-      } catch {
-        return false;
-      }
+      return this.callVitePlugin<boolean>('pathExists', { path });
+    }
+    // In Node.js, use fs directly
+    const fs = await this.getFsModule();
+    try {
+      await fs.access(path);
+      return true;
+    } catch {
+      return false;
     }
   }
 
@@ -349,15 +341,13 @@ export class InternalFileWriter {
   private async listDirectories(path: string): Promise<string[]> {
     if (typeof window !== 'undefined') {
       // In browser, use Vite plugin API
-      return await this.callVitePlugin('listDirectories', { path });
-    } else {
-      // In Node.js, use fs directly
-      const fs = await this.getFsModule();
-      const entries = await fs.readdir(path, { withFileTypes: true });
-      return entries
-        .filter((entry: any) => entry.isDirectory())
-        .map((entry: any) => entry.name);
+      return this.callVitePlugin<string[]>('listDirectories', { path });
     }
+    // In Node.js, use fs directly
+    const fs = await this.getFsModule();
+    const entries: Dirent[] = await fs.readdir(path, { withFileTypes: true });
+
+    return entries.filter((e) => e.isDirectory()).map((e) => e.name);
   }
 
   /**
@@ -368,38 +358,35 @@ export class InternalFileWriter {
   ): Promise<Record<string, string>> {
     if (typeof window !== 'undefined') {
       // In browser, use Vite plugin API
-      return await this.callVitePlugin('readDirectoryRecursive', {
-        path: dirPath,
+      return this.callVitePlugin<Record<string, string>>(
+        'readDirectoryRecursive',
+        { path: dirPath },
+      );
+    }
+    // In Node.js, use fs directly
+    const fs = await this.getFsModule();
+    const pathModule = await this.getPathModule();
+    const output: Record<string, string> = {};
+
+    const walk = async (current: string, relative = ''): Promise<void> => {
+      const entries: Dirent[] = await fs.readdir(current, {
+        withFileTypes: true,
       });
-    } else {
-      // In Node.js, use fs directly
-      const fs = await this.getFsModule();
-      const path = await this.getPathModule();
-      const files: Record<string, string> = {};
 
-      async function readDir(
-        currentPath: string,
-        relativePath = '',
-      ): Promise<void> {
-        const entries = await fs.readdir(currentPath, { withFileTypes: true });
+      for (const entry of entries) {
+        const full = pathModule.join(current, entry.name);
+        const rel = relative ? `${relative}/${entry.name}` : entry.name;
 
-        for (const entry of entries) {
-          const fullPath = path.join(currentPath, entry.name);
-          const relativeFilePath = relativePath
-            ? `${relativePath}/${entry.name}`
-            : entry.name;
-
-          if (entry.isDirectory()) {
-            await readDir(fullPath, relativeFilePath);
-          } else {
-            files[relativeFilePath] = await fs.readFile(fullPath, 'utf8');
-          }
+        if (entry.isDirectory()) {
+          await walk(full, rel);
+        } else {
+          output[rel] = await fs.readFile(full, 'utf8');
         }
       }
+    };
 
-      await readDir(dirPath);
-      return files;
-    }
+    await walk(dirPath);
+    return output;
   }
 
   /**
@@ -409,11 +396,11 @@ export class InternalFileWriter {
     if (typeof window !== 'undefined') {
       // In browser, use Vite plugin API
       await this.callVitePlugin('removeDirectory', { path });
-    } else {
-      // In Node.js, use fs directly
-      const fs = await this.getFsModule();
-      await fs.rm(path, { recursive: true, force: true });
+      return;
     }
+    // In Node.js, use fs directly
+    const fs = await this.getFsModule();
+    await fs.rm(path, { recursive: true, force: true });
   }
 
   /**
@@ -423,39 +410,33 @@ export class InternalFileWriter {
     if (typeof window !== 'undefined') {
       // In browser, use simple string manipulation
       return filePath.substring(0, filePath.lastIndexOf('/'));
-    } else {
-      // In Node.js, use path module
-      const path = await this.getPathModule();
-      return path.dirname(filePath);
     }
+    // In Node.js, use path module
+    const path = await this.getPathModule();
+    return path.dirname(filePath);
   }
 
   /**
    * Call Vite plugin API
    */
-  private async callVitePlugin(method: string, params: any): Promise<any> {
+  private async callVitePlugin<T>(method: string, params: unknown): Promise<T> {
     const response = await fetch('/__vite_plugin_internal_file_writer', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        method,
-        params,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ method, params }),
     });
 
     if (!response.ok) {
       throw new Error(`Vite plugin error: ${response.statusText}`);
     }
 
-    const result = await response.json();
+    const result = (await response.json()) as IVitePluginResponse<T>;
 
     if (!result.success) {
-      throw new Error(result.error || 'Vite plugin operation failed');
+      throw new Error(result.error ?? 'Vite plugin operation failed');
     }
 
-    return result.data;
+    return result.data as T;
   }
 }
 

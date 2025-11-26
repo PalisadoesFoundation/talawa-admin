@@ -125,7 +125,6 @@ export default [
       'vitest/no-focused-tests': 'error',
       'vitest/no-identical-title': 'error',
       '@typescript-eslint/no-unused-expressions': 'error',
-      '@typescript-eslint/no-require-imports': 'error',
     },
   },
   {
@@ -218,7 +217,6 @@ export default [
     rules: {
       ...js.configs.recommended.rules,
       ...ts.configs.recommended.rules,
-      '@typescript-eslint/no-require-imports': 'off',
       'no-undef': 'error',
       'prettier/prettier': 'error',
     },

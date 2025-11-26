@@ -1,16 +1,22 @@
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
+import {
+  describe,
+  it,
+  expect,
+  beforeEach,
+  vi,
+  afterEach,
+  type Mock,
+} from 'vitest';
 import {
   InternalFileWriter,
   internalFileWriter,
-  FileWriteResult,
-  FileOperationResult,
 } from '../../services/InternalFileWriter';
 import { AdminPluginManifest } from '../../../utils/adminPluginInstaller';
 
 // Mock fetch for Vite plugin API calls
-global.fetch = vi.fn();
+global.fetch = vi.fn() as unknown as typeof fetch;
 
-// Mock fs for Node.js environment
+// Mock fs for Node.js environment (not strictly needed by implementation, but kept)
 vi.mock('node:fs', () => ({
   promises: {
     mkdir: vi.fn(),
@@ -22,16 +28,8 @@ vi.mock('node:fs', () => ({
   },
 }));
 
-// Mock fs/promises for Node.js environment
+// Mock fs/promises for Node.js environment – shape must match real module
 vi.mock('node:fs/promises', () => ({
-  default: {
-    mkdir: vi.fn(),
-    writeFile: vi.fn(),
-    readFile: vi.fn(),
-    access: vi.fn(),
-    readdir: vi.fn(),
-    rm: vi.fn(),
-  },
   mkdir: vi.fn(),
   writeFile: vi.fn(),
   readFile: vi.fn(),
@@ -42,12 +40,8 @@ vi.mock('node:fs/promises', () => ({
 
 // Mock path for Node.js environment
 vi.mock('node:path', () => ({
-  default: {
-    join: vi.fn((...args) => args.join('/')),
-    dirname: vi.fn((path) => path.substring(0, path.lastIndexOf('/'))),
-  },
-  join: vi.fn((...args) => args.join('/')),
-  dirname: vi.fn((path) => path.substring(0, path.lastIndexOf('/'))),
+  join: vi.fn((...args: string[]) => args.join('/')),
+  dirname: vi.fn((path: string) => path.substring(0, path.lastIndexOf('/'))),
 }));
 
 const mockManifest: AdminPluginManifest = {
@@ -66,21 +60,22 @@ const mockFiles: Record<string, string> = {
 };
 
 describe('InternalFileWriter', () => {
-  let fileWriter: InternalFileWriter;
-  let mockFetch: any;
-  let originalWindow: any;
+  let mockFetch: Mock;
+  let originalWindow: unknown;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockFetch = fetch as any;
+    mockFetch = fetch as unknown as Mock;
 
     // Reset singleton instance
-    (InternalFileWriter as any).instance = null;
+    (
+      InternalFileWriter as unknown as { instance: InternalFileWriter | null }
+    ).instance = null;
 
     // Store original window
-    originalWindow = global.window;
+    originalWindow = (global as unknown as { window?: unknown }).window;
 
-    // Mock successful fetch responses
+    // Default successful fetch responses
     mockFetch.mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ success: true, data: 'test-data' }),
@@ -90,7 +85,7 @@ describe('InternalFileWriter', () => {
   afterEach(() => {
     vi.clearAllMocks();
     // Restore original window
-    global.window = originalWindow;
+    (global as unknown as { window?: unknown }).window = originalWindow;
   });
 
   describe('Singleton Pattern', () => {
@@ -108,7 +103,9 @@ describe('InternalFileWriter', () => {
 
     it('should return existing instance on subsequent calls', () => {
       // Reset singleton for this test
-      (InternalFileWriter as any).instance = null;
+      (
+        InternalFileWriter as unknown as { instance: InternalFileWriter | null }
+      ).instance = null;
 
       const instance1 = InternalFileWriter.getInstance();
       const instance2 = InternalFileWriter.getInstance();
@@ -122,35 +119,41 @@ describe('InternalFileWriter', () => {
 
   describe('getPluginBasePath', () => {
     it('should return browser path when window is defined', async () => {
-      // Mock window object
-      global.window = {} as any;
+      (global as unknown as { window?: unknown }).window = {};
 
       const instance = InternalFileWriter.getInstance();
-      // Access private method through any for testing
-      const path = await (instance as any).getPluginBasePath();
+      const withPriv = instance as unknown as {
+        getPluginBasePath: () => Promise<string>;
+      };
+
+      const path = await withPriv.getPluginBasePath();
       expect(path).toBe('/src/plugin/available');
     });
 
     it('should return Node.js path when window is not defined', async () => {
-      // Mock process.cwd
       const originalCwd = process.cwd;
-      process.cwd = vi.fn(() => '/test/root');
+      (process as unknown as { cwd: () => string }).cwd = vi.fn(
+        () => '/test/root',
+      );
 
-      // Remove window object
-      global.window = undefined as any;
+      (global as unknown as { window?: unknown }).window = undefined;
 
       const instance = InternalFileWriter.getInstance();
-      const path = await (instance as any).getPluginBasePath();
+      const withPriv = instance as unknown as {
+        getPluginBasePath: () => Promise<string>;
+      };
+
+      const path = await withPriv.getPluginBasePath();
       expect(path).toBe('/test/root/src/plugin/available');
 
       // Restore
-      process.cwd = originalCwd;
+      (process as unknown as { cwd: () => string }).cwd = originalCwd;
     });
   });
 
   describe('initialize', () => {
     it('should initialize successfully in browser environment', async () => {
-      global.window = {} as any;
+      (global as unknown as { window?: unknown }).window = {};
 
       mockFetch.mockResolvedValue({
         ok: true,
@@ -162,7 +165,7 @@ describe('InternalFileWriter', () => {
     });
 
     it('should not reinitialize if already initialized', async () => {
-      global.window = {} as any;
+      (global as unknown as { window?: unknown }).window = {};
 
       mockFetch.mockResolvedValue({
         ok: true,
@@ -175,7 +178,7 @@ describe('InternalFileWriter', () => {
     });
 
     it('should handle initialization errors', async () => {
-      global.window = {} as any;
+      (global as unknown as { window?: unknown }).window = {};
 
       mockFetch.mockRejectedValue(new Error('Network error'));
 
@@ -186,7 +189,7 @@ describe('InternalFileWriter', () => {
 
   describe('writePluginFiles', () => {
     beforeEach(() => {
-      global.window = {} as any;
+      (global as unknown as { window?: unknown }).window = {};
     });
 
     it('should write plugin files successfully in browser environment', async () => {
@@ -218,7 +221,7 @@ describe('InternalFileWriter', () => {
     });
 
     it('should handle write errors', async () => {
-      global.window = {} as any;
+      (global as unknown as { window?: unknown }).window = {};
 
       mockFetch.mockRejectedValue(new Error('Write failed'));
 
@@ -232,7 +235,7 @@ describe('InternalFileWriter', () => {
     });
 
     it('should handle initialization errors', async () => {
-      global.window = {} as any;
+      (global as unknown as { window?: unknown }).window = {};
 
       mockFetch.mockRejectedValue(new Error('Init failed'));
 
@@ -244,9 +247,9 @@ describe('InternalFileWriter', () => {
     });
 
     it('should handle base64 content correctly', async () => {
-      global.window = {} as any;
+      (global as unknown as { window?: unknown }).window = {};
 
-      const filesWithBase64 = {
+      const filesWithBase64: Record<string, string> = {
         ...mockFiles,
         'image.png':
           'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
@@ -270,7 +273,7 @@ describe('InternalFileWriter', () => {
 
   describe('readPluginFiles', () => {
     beforeEach(() => {
-      global.window = {} as any;
+      (global as unknown as { window?: unknown }).window = {};
     });
 
     it('should read plugin files successfully', async () => {
@@ -345,25 +348,30 @@ describe('InternalFileWriter', () => {
 
   describe('listInstalledPlugins', () => {
     beforeEach(() => {
-      global.window = {} as any;
+      (global as unknown as { window?: unknown }).window = {};
     });
 
     it('should list installed plugins successfully', async () => {
-      // Mock the private methods directly
       const instance = InternalFileWriter.getInstance();
-      vi.spyOn(instance as any, 'initialize').mockResolvedValue(undefined);
-      vi.spyOn(instance as any, 'listDirectories').mockResolvedValue([
+      const withPriv = instance as unknown as {
+        initialize: () => Promise<void>;
+        listDirectories: (path: string) => Promise<string[]>;
+        readPluginFiles: (
+          pluginId: string,
+        ) => Promise<{ success: boolean; manifest?: AdminPluginManifest }>;
+      };
+
+      vi.spyOn(withPriv, 'initialize').mockResolvedValue(undefined);
+      vi.spyOn(withPriv, 'listDirectories').mockResolvedValue([
         'TestPlugin',
         'AnotherPlugin',
       ]);
-      vi.spyOn(instance as any, 'readPluginFiles')
+      vi.spyOn(withPriv, 'readPluginFiles')
         .mockResolvedValueOnce({
-          // readPluginFiles for TestPlugin
           success: true,
           manifest: mockManifest,
         })
         .mockResolvedValueOnce({
-          // readPluginFiles for AnotherPlugin
           success: true,
           manifest: { ...mockManifest, pluginId: 'AnotherPlugin' },
         });
@@ -372,14 +380,19 @@ describe('InternalFileWriter', () => {
 
       expect(result.success).toBe(true);
       expect(result.plugins).toHaveLength(2);
-      expect(result.plugins![0].pluginId).toBe('TestPlugin');
-      expect(result.plugins![1].pluginId).toBe('AnotherPlugin');
+      expect(result.plugins?.[0].pluginId).toBe('TestPlugin');
+      expect(result.plugins?.[1].pluginId).toBe('AnotherPlugin');
     });
 
     it('should handle empty plugin list', async () => {
       const instance = InternalFileWriter.getInstance();
-      vi.spyOn(instance as any, 'initialize').mockResolvedValue(undefined);
-      vi.spyOn(instance as any, 'listDirectories').mockResolvedValue([]);
+      const withPriv = instance as unknown as {
+        initialize: () => Promise<void>;
+        listDirectories: (path: string) => Promise<string[]>;
+      };
+
+      vi.spyOn(withPriv, 'initialize').mockResolvedValue(undefined);
+      vi.spyOn(withPriv, 'listDirectories').mockResolvedValue([]);
 
       const result = await instance.listInstalledPlugins();
 
@@ -389,14 +402,18 @@ describe('InternalFileWriter', () => {
 
     it('should handle plugins without valid manifests', async () => {
       const instance = InternalFileWriter.getInstance();
-      vi.spyOn(instance as any, 'initialize').mockResolvedValue(undefined);
-      vi.spyOn(instance as any, 'listDirectories').mockResolvedValue([
-        'TestPlugin',
-      ]);
-      vi.spyOn(instance as any, 'readPluginFiles').mockResolvedValueOnce({
-        // readPluginFiles with invalid manifest
+      const withPriv = instance as unknown as {
+        initialize: () => Promise<void>;
+        listDirectories: (path: string) => Promise<string[]>;
+        readPluginFiles: (
+          pluginId: string,
+        ) => Promise<{ success: boolean; manifest?: AdminPluginManifest }>;
+      };
+
+      vi.spyOn(withPriv, 'initialize').mockResolvedValue(undefined);
+      vi.spyOn(withPriv, 'listDirectories').mockResolvedValue(['TestPlugin']);
+      vi.spyOn(withPriv, 'readPluginFiles').mockResolvedValueOnce({
         success: false,
-        error: 'Invalid manifest',
       });
 
       const result = await instance.listInstalledPlugins();
@@ -407,7 +424,11 @@ describe('InternalFileWriter', () => {
 
     it('should handle list errors', async () => {
       const instance = InternalFileWriter.getInstance();
-      vi.spyOn(instance as any, 'initialize').mockRejectedValue(
+      const withPriv = instance as unknown as {
+        initialize: () => Promise<void>;
+      };
+
+      vi.spyOn(withPriv, 'initialize').mockRejectedValue(
         new Error('List failed'),
       );
 
@@ -420,13 +441,18 @@ describe('InternalFileWriter', () => {
 
   describe('removePlugin', () => {
     beforeEach(() => {
-      global.window = {} as any;
+      (global as unknown as { window?: unknown }).window = {};
     });
 
     it('should remove plugin successfully', async () => {
       const instance = InternalFileWriter.getInstance();
-      vi.spyOn(instance as any, 'pathExists').mockResolvedValue(true);
-      vi.spyOn(instance as any, 'removeDirectory').mockResolvedValue(undefined);
+      const withPriv = instance as unknown as {
+        pathExists: (p: string) => Promise<boolean>;
+        removeDirectory: (p: string) => Promise<void>;
+      };
+
+      vi.spyOn(withPriv, 'pathExists').mockResolvedValue(true);
+      vi.spyOn(withPriv, 'removeDirectory').mockResolvedValue(undefined);
 
       const result = await instance.removePlugin('TestPlugin');
 
@@ -435,7 +461,11 @@ describe('InternalFileWriter', () => {
 
     it('should handle plugin not found', async () => {
       const instance = InternalFileWriter.getInstance();
-      vi.spyOn(instance as any, 'pathExists').mockResolvedValue(false);
+      const withPriv = instance as unknown as {
+        pathExists: (p: string) => Promise<boolean>;
+      };
+
+      vi.spyOn(withPriv, 'pathExists').mockResolvedValue(false);
 
       const result = await instance.removePlugin('NonExistentPlugin');
 
@@ -445,8 +475,13 @@ describe('InternalFileWriter', () => {
 
     it('should handle removal errors', async () => {
       const instance = InternalFileWriter.getInstance();
-      vi.spyOn(instance as any, 'pathExists').mockResolvedValue(true);
-      vi.spyOn(instance as any, 'removeDirectory').mockRejectedValue(
+      const withPriv = instance as unknown as {
+        pathExists: (p: string) => Promise<boolean>;
+        removeDirectory: (p: string) => Promise<void>;
+      };
+
+      vi.spyOn(withPriv, 'pathExists').mockResolvedValue(true);
+      vi.spyOn(withPriv, 'removeDirectory').mockRejectedValue(
         new Error('Removal failed'),
       );
 
@@ -458,18 +493,14 @@ describe('InternalFileWriter', () => {
   });
 
   describe('Node.js environment operations', () => {
-    // These tests are removed because they test implementation details
-    // that are hard to mock properly with the current fs mock setup.
-    // The functionality is covered by the browser environment tests.
     it('should handle Node.js environment operations', () => {
-      // Placeholder test to maintain test structure
       expect(true).toBe(true);
     });
   });
 
   describe('callVitePlugin', () => {
     beforeEach(() => {
-      global.window = {} as any;
+      (global as unknown as { window?: unknown }).window = {};
     });
 
     it('should call Vite plugin successfully', async () => {
@@ -479,7 +510,11 @@ describe('InternalFileWriter', () => {
       });
 
       const instance = InternalFileWriter.getInstance();
-      const result = await (instance as any).callVitePlugin('testMethod', {
+      const withPriv = instance as unknown as {
+        callVitePlugin: (method: string, params: unknown) => Promise<string>;
+      };
+
+      const result = await withPriv.callVitePlugin('testMethod', {
         param: 'value',
       });
 
@@ -490,9 +525,13 @@ describe('InternalFileWriter', () => {
       mockFetch.mockRejectedValue(new Error('Plugin error'));
 
       const instance = InternalFileWriter.getInstance();
-      await expect(
-        (instance as any).callVitePlugin('testMethod', {}),
-      ).rejects.toThrow('Plugin error');
+      const withPriv = instance as unknown as {
+        callVitePlugin: (method: string, params: unknown) => Promise<unknown>;
+      };
+
+      await expect(withPriv.callVitePlugin('testMethod', {})).rejects.toThrow(
+        'Plugin error',
+      );
     });
   });
 
@@ -508,33 +547,32 @@ describe('InternalFileWriter', () => {
 });
 
 describe('Node.js specific and error coverage', () => {
-  let originalWindow: any;
-  let originalConsoleError: any;
-  let mockFs: any;
-  let mockPath: any;
+  let originalWindow: unknown;
+  let originalConsoleError: (typeof console)['error'];
+  let mockPath: typeof import('node:path');
 
   beforeEach(async () => {
-    originalWindow = global.window;
-    global.window = undefined as any;
+    originalWindow = (global as unknown as { window?: unknown }).window;
+    (global as unknown as { window?: unknown }).window = undefined;
+
     originalConsoleError = console.error;
     console.error = vi.fn();
-    const fsModule = await import('node:fs/promises');
+
+    // These imports resolve to mocked modules
     const pathModule = await import('node:path');
-    // Get the mocked functions from vi.mocked
-    mockFs = { promises: fsModule };
     mockPath = pathModule;
   });
 
   afterEach(() => {
-    global.window = originalWindow;
+    (global as unknown as { window?: unknown }).window = originalWindow;
     console.error = originalConsoleError;
     vi.clearAllMocks();
   });
 
   it('should handle errors in writePluginFiles (Node.js) and call console.error', async () => {
     const instance = InternalFileWriter.getInstance();
-    // Spy on the fs module that will be imported
     const fsModule = await import('node:fs/promises');
+
     vi.spyOn(fsModule, 'mkdir').mockRejectedValueOnce(new Error('mkdir fail'));
 
     const result = await instance.writePluginFiles('TestPlugin', {
@@ -553,19 +591,30 @@ describe('Node.js specific and error coverage', () => {
     const pathModule = await import('node:path');
     const spy = vi.spyOn(pathModule, 'dirname');
     const filePath = '/foo/bar/baz.txt';
-    const dir = await (instance as any).getDirectoryPath(filePath);
+
+    const withPriv = instance as unknown as {
+      getDirectoryPath: (p: string) => Promise<string>;
+    };
+
+    const dir = await withPriv.getDirectoryPath(filePath);
     expect(spy).toHaveBeenCalledWith(filePath);
     expect(dir).toBe('/foo/bar');
   });
 
   it('should throw error if Vite plugin returns success: false', async () => {
-    global.window = {} as any;
-    (fetch as any).mockResolvedValue({
+    (global as unknown as { window?: unknown }).window = {};
+    const fetchMock = fetch as unknown as Mock;
+    fetchMock.mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ success: false, error: 'Some error' }),
     });
+
     const instance = InternalFileWriter.getInstance();
-    await expect((instance as any).callVitePlugin('test', {})).rejects.toThrow(
+    const withPriv = instance as unknown as {
+      callVitePlugin: (m: string, p: unknown) => Promise<unknown>;
+    };
+
+    await expect(withPriv.callVitePlugin('test', {})).rejects.toThrow(
       'Some error',
     );
   });
@@ -574,29 +623,38 @@ describe('Node.js specific and error coverage', () => {
     const instance = InternalFileWriter.getInstance();
     const fsModule = await import('node:fs/promises');
 
-    // Mock fs.readdir to return a simple structure
     const mockEntries = [{ name: 'file1.txt', isDirectory: () => false }];
 
-    vi.spyOn(fsModule, 'readdir').mockResolvedValue(mockEntries as any);
+    vi.spyOn(fsModule, 'readdir').mockResolvedValue(
+      mockEntries as unknown as Awaited<ReturnType<typeof fsModule.readdir>>,
+    );
     vi.spyOn(fsModule, 'readFile').mockResolvedValue('test content');
 
-    const result = await (instance as any).readDirectoryRecursive('/test/path');
+    const withPriv = instance as unknown as {
+      readDirectoryRecursive: (p: string) => Promise<Record<string, string>>;
+    };
 
-    // Just verify that the method executed and returned a result
+    const result = await withPriv.readDirectoryRecursive('/test/path');
+
     expect(result).toBeDefined();
     expect(typeof result).toBe('object');
     expect(fsModule.readdir).toHaveBeenCalled();
   });
 
   it('should return data from callVitePlugin on success', async () => {
-    global.window = {} as any;
+    (global as unknown as { window?: unknown }).window = {};
     const mockData = { files: ['test.txt'], content: 'test' };
-    (fetch as any).mockResolvedValue({
+    const fetchMock = fetch as unknown as Mock;
+    fetchMock.mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ success: true, data: mockData }),
     });
     const instance = InternalFileWriter.getInstance();
-    const result = await (instance as any).callVitePlugin('readFile', {
+    const withPriv = instance as unknown as {
+      callVitePlugin: (m: string, p: unknown) => Promise<unknown>;
+    };
+
+    const result = await withPriv.callVitePlugin('readFile', {
       path: '/test',
     });
     expect(result).toEqual(mockData);
@@ -607,7 +665,11 @@ describe('Node.js specific and error coverage', () => {
     const fsModule = await import('node:fs/promises');
     vi.spyOn(fsModule, 'rm').mockResolvedValue(undefined);
 
-    await (instance as any).removeDirectory('/test/path');
+    const withPriv = instance as unknown as {
+      removeDirectory: (p: string) => Promise<void>;
+    };
+
+    await withPriv.removeDirectory('/test/path');
 
     expect(fsModule.rm).toHaveBeenCalledWith('/test/path', {
       recursive: true,
@@ -620,21 +682,26 @@ describe('Node.js specific and error coverage', () => {
     const fsModule = await import('node:fs/promises');
     const pathModule = await import('node:path');
 
-    // Mock fs.readdir to return a simple structure
     const mockEntries = [
       { name: 'file1.txt', isDirectory: () => false },
       { name: 'file2.txt', isDirectory: () => false },
     ];
 
-    vi.spyOn(fsModule, 'readdir').mockResolvedValue(mockEntries as any);
+    vi.spyOn(fsModule, 'readdir').mockResolvedValue(
+      mockEntries as unknown as Awaited<ReturnType<typeof fsModule.readdir>>,
+    );
     vi.spyOn(fsModule, 'readFile')
       .mockResolvedValueOnce('file1 content')
       .mockResolvedValueOnce('file2 content');
-    vi.spyOn(pathModule, 'join').mockImplementation((...args) =>
+    vi.spyOn(pathModule, 'join').mockImplementation((...args: string[]) =>
       args.join('/'),
     );
 
-    const result = await (instance as any).readDirectoryRecursive('/test/path');
+    const withPriv = instance as unknown as {
+      readDirectoryRecursive: (p: string) => Promise<Record<string, string>>;
+    };
+
+    const result = await withPriv.readDirectoryRecursive('/test/path');
 
     expect(result).toBeDefined();
     expect(typeof result).toBe('object');
@@ -647,10 +714,13 @@ describe('Node.js specific and error coverage', () => {
     const instance = InternalFileWriter.getInstance();
     const fsModule = await import('node:fs/promises');
 
-    // Mock fs.readdir to return empty array
     vi.spyOn(fsModule, 'readdir').mockResolvedValue([]);
 
-    const result = await (instance as any).readDirectoryRecursive('/test/path');
+    const withPriv = instance as unknown as {
+      readDirectoryRecursive: (p: string) => Promise<Record<string, string>>;
+    };
+
+    const result = await withPriv.readDirectoryRecursive('/test/path');
 
     expect(result).toBeDefined();
     expect(typeof result).toBe('object');
@@ -658,40 +728,55 @@ describe('Node.js specific and error coverage', () => {
   });
 
   it('should handle callVitePlugin with non-ok response', async () => {
-    global.window = {} as any;
-    (fetch as any).mockResolvedValue({
+    (global as unknown as { window?: unknown }).window = {};
+    const fetchMock = fetch as unknown as Mock;
+    fetchMock.mockResolvedValue({
       ok: false,
       statusText: 'Not Found',
     });
 
     const instance = InternalFileWriter.getInstance();
-    await expect((instance as any).callVitePlugin('test', {})).rejects.toThrow(
+    const withPriv = instance as unknown as {
+      callVitePlugin: (m: string, p: unknown) => Promise<unknown>;
+    };
+
+    await expect(withPriv.callVitePlugin('test', {})).rejects.toThrow(
       'Vite plugin error: Not Found',
     );
   });
 
   it('should handle callVitePlugin with success: false response', async () => {
-    global.window = {} as any;
-    (fetch as any).mockResolvedValue({
+    (global as unknown as { window?: unknown }).window = {};
+    const fetchMock = fetch as unknown as Mock;
+    fetchMock.mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ success: false, error: 'Custom error' }),
     });
 
     const instance = InternalFileWriter.getInstance();
-    await expect((instance as any).callVitePlugin('test', {})).rejects.toThrow(
+    const withPriv = instance as unknown as {
+      callVitePlugin: (m: string, p: unknown) => Promise<unknown>;
+    };
+
+    await expect(withPriv.callVitePlugin('test', {})).rejects.toThrow(
       'Custom error',
     );
   });
 
   it('should handle callVitePlugin with success: false but no error message', async () => {
-    global.window = {} as any;
-    (fetch as any).mockResolvedValue({
+    (global as unknown as { window?: unknown }).window = {};
+    const fetchMock = fetch as unknown as Mock;
+    fetchMock.mockResolvedValue({
       ok: true,
       json: () => Promise.resolve({ success: false }),
     });
 
     const instance = InternalFileWriter.getInstance();
-    await expect((instance as any).callVitePlugin('test', {})).rejects.toThrow(
+    const withPriv = instance as unknown as {
+      callVitePlugin: (m: string, p: unknown) => Promise<unknown>;
+    };
+
+    await expect(withPriv.callVitePlugin('test', {})).rejects.toThrow(
       'Vite plugin operation failed',
     );
   });
@@ -701,7 +786,11 @@ describe('Node.js specific and error coverage', () => {
     const fsModule = await import('node:fs/promises');
     vi.spyOn(fsModule, 'mkdir').mockResolvedValue(undefined);
 
-    await (instance as any).ensureDirectoryExists('/test/dir');
+    const withPriv = instance as unknown as {
+      ensureDirectoryExists: (p: string) => Promise<void>;
+    };
+
+    await withPriv.ensureDirectoryExists('/test/dir');
 
     expect(fsModule.mkdir).toHaveBeenCalledWith('/test/dir', {
       recursive: true,
@@ -716,7 +805,11 @@ describe('Node.js specific and error coverage', () => {
     const base64Content =
       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
 
-    await (instance as any).writeFile('/test/file.png', base64Content);
+    const withPriv = instance as unknown as {
+      writeFile: (p: string, c: string) => Promise<void>;
+    };
+
+    await withPriv.writeFile('/test/file.png', base64Content);
 
     expect(fsModule.writeFile).toHaveBeenCalledWith(
       '/test/file.png',
@@ -729,7 +822,11 @@ describe('Node.js specific and error coverage', () => {
     const fsModule = await import('node:fs/promises');
     vi.spyOn(fsModule, 'writeFile').mockResolvedValue(undefined);
 
-    await (instance as any).writeFile('/test/file.txt', 'Hello World');
+    const withPriv = instance as unknown as {
+      writeFile: (p: string, c: string) => Promise<void>;
+    };
+
+    await withPriv.writeFile('/test/file.txt', 'Hello World');
 
     expect(fsModule.writeFile).toHaveBeenCalledWith(
       '/test/file.txt',
@@ -743,7 +840,11 @@ describe('Node.js specific and error coverage', () => {
     const fsModule = await import('node:fs/promises');
     vi.spyOn(fsModule, 'readFile').mockResolvedValue('file content');
 
-    const result = await (instance as any).readFile('/test/file.txt');
+    const withPriv = instance as unknown as {
+      readFile: (p: string) => Promise<string>;
+    };
+
+    const result = await withPriv.readFile('/test/file.txt');
 
     expect(result).toBe('file content');
     expect(fsModule.readFile).toHaveBeenCalledWith('/test/file.txt', 'utf8');
@@ -754,7 +855,11 @@ describe('Node.js specific and error coverage', () => {
     const fsModule = await import('node:fs/promises');
     vi.spyOn(fsModule, 'access').mockResolvedValue(undefined);
 
-    const result = await (instance as any).pathExists('/test/path');
+    const withPriv = instance as unknown as {
+      pathExists: (p: string) => Promise<boolean>;
+    };
+
+    const result = await withPriv.pathExists('/test/path');
 
     expect(result).toBe(true);
     expect(fsModule.access).toHaveBeenCalledWith('/test/path');
@@ -765,7 +870,11 @@ describe('Node.js specific and error coverage', () => {
     const fsModule = await import('node:fs/promises');
     vi.spyOn(fsModule, 'access').mockRejectedValue(new Error('ENOENT'));
 
-    const result = await (instance as any).pathExists('/test/path');
+    const withPriv = instance as unknown as {
+      pathExists: (p: string) => Promise<boolean>;
+    };
+
+    const result = await withPriv.pathExists('/test/path');
 
     expect(result).toBe(false);
   });
@@ -773,15 +882,22 @@ describe('Node.js specific and error coverage', () => {
   it('should handle Node.js listDirectories', async () => {
     const instance = InternalFileWriter.getInstance();
     const fsModule = await import('node:fs/promises');
+
     const mockEntries = [
       { name: 'dir1', isDirectory: () => true },
       { name: 'file1.txt', isDirectory: () => false },
       { name: 'dir2', isDirectory: () => true },
     ];
 
-    vi.spyOn(fsModule, 'readdir').mockResolvedValue(mockEntries as any);
+    vi.spyOn(fsModule, 'readdir').mockResolvedValue(
+      mockEntries as unknown as Awaited<ReturnType<typeof fsModule.readdir>>,
+    );
 
-    const result = await (instance as any).listDirectories('/test/path');
+    const withPriv = instance as unknown as {
+      listDirectories: (p: string) => Promise<string[]>;
+    };
+
+    const result = await withPriv.listDirectories('/test/path');
 
     expect(result).toEqual(['dir1', 'dir2']);
     expect(fsModule.readdir).toHaveBeenCalledWith('/test/path', {
@@ -789,18 +905,44 @@ describe('Node.js specific and error coverage', () => {
     });
   });
 
+  it('should handle readPluginFiles when plugin directory does not exist', async () => {
+    const instance = InternalFileWriter.getInstance();
+    const withPriv = instance as unknown as {
+      pathExists: (p: string) => Promise<boolean>;
+    };
+
+    const pathExistsSpy = vi
+      .spyOn(withPriv, 'pathExists')
+      .mockResolvedValue(false);
+
+    const result = await instance.readPluginFiles('MissingPlugin');
+
+    expect(pathExistsSpy).toHaveBeenCalled();
+    expect(result.success).toBe(false);
+    expect(result.error).toBe('Plugin MissingPlugin not found');
+  });
+
   it('should handle Node.js getDirectoryPath', async () => {
     const instance = InternalFileWriter.getInstance();
     const spy = vi.spyOn(mockPath, 'dirname');
     const filePath = '/foo/bar/baz.txt';
-    const dir = await (instance as any).getDirectoryPath(filePath);
+
+    const withPriv = instance as unknown as {
+      getDirectoryPath: (p: string) => Promise<string>;
+    };
+
+    const dir = await withPriv.getDirectoryPath(filePath);
     expect(spy).toHaveBeenCalledWith(filePath);
     expect(dir).toBe('/foo/bar');
   });
 
   it('should handle non-Error exceptions in writePluginFiles', async () => {
     const instance = InternalFileWriter.getInstance();
-    vi.spyOn(instance as any, 'initialize').mockRejectedValue('String error');
+    const withPriv = instance as unknown as {
+      initialize: () => Promise<void>;
+    };
+
+    vi.spyOn(withPriv, 'initialize').mockRejectedValue('String error');
 
     const result = await instance.writePluginFiles('TestPlugin', {
       'test.txt': 'content',
@@ -812,8 +954,13 @@ describe('Node.js specific and error coverage', () => {
 
   it('should handle non-Error exceptions in readPluginFiles', async () => {
     const instance = InternalFileWriter.getInstance();
-    vi.spyOn(instance as any, 'pathExists').mockResolvedValue(true);
-    vi.spyOn(instance as any, 'readDirectoryRecursive').mockRejectedValue(
+    const withPriv = instance as unknown as {
+      pathExists: (p: string) => Promise<boolean>;
+      readDirectoryRecursive: (p: string) => Promise<Record<string, string>>;
+    };
+
+    vi.spyOn(withPriv, 'pathExists').mockResolvedValue(true);
+    vi.spyOn(withPriv, 'readDirectoryRecursive').mockRejectedValue(
       'String error',
     );
 
@@ -825,10 +972,13 @@ describe('Node.js specific and error coverage', () => {
 
   it('should handle non-Error exceptions in removePlugin', async () => {
     const instance = InternalFileWriter.getInstance();
-    vi.spyOn(instance as any, 'pathExists').mockResolvedValue(true);
-    vi.spyOn(instance as any, 'removeDirectory').mockRejectedValue(
-      'String error',
-    );
+    const withPriv = instance as unknown as {
+      pathExists: (p: string) => Promise<boolean>;
+      removeDirectory: (p: string) => Promise<void>;
+    };
+
+    vi.spyOn(withPriv, 'pathExists').mockResolvedValue(true);
+    vi.spyOn(withPriv, 'removeDirectory').mockRejectedValue('String error');
 
     const result = await instance.removePlugin('TestPlugin');
 
@@ -836,100 +986,143 @@ describe('Node.js specific and error coverage', () => {
     expect(result.error).toBe('Unknown error');
   });
 
-  // Additional tests to increase coverage
   it('should handle browser environment getDirectoryPath', async () => {
-    global.window = {} as any;
+    (global as unknown as { window?: unknown }).window = {};
     const instance = InternalFileWriter.getInstance();
+
+    const withPriv = instance as unknown as {
+      getDirectoryPath: (p: string) => Promise<string>;
+    };
+
     const filePath = '/foo/bar/baz.txt';
-    const dir = await (instance as any).getDirectoryPath(filePath);
+    const dir = await withPriv.getDirectoryPath(filePath);
     expect(dir).toBe('/foo/bar');
   });
 
   it('should handle browser environment ensureDirectoryExists', async () => {
-    global.window = {} as any;
+    (global as unknown as { window?: unknown }).window = {};
     const instance = InternalFileWriter.getInstance();
-    vi.spyOn(instance as any, 'callVitePlugin').mockResolvedValue(undefined);
+    const withPriv = instance as unknown as {
+      ensureDirectoryExists: (p: string) => Promise<void>;
+      callVitePlugin: (m: string, p: unknown) => Promise<unknown>;
+    };
 
-    await (instance as any).ensureDirectoryExists('/test/dir');
+    const spy = vi
+      .spyOn(withPriv, 'callVitePlugin')
+      .mockResolvedValue(undefined);
 
-    expect((instance as any).callVitePlugin).toHaveBeenCalledWith(
-      'ensureDirectory',
-      {
-        path: '/test/dir',
-      },
-    );
+    await withPriv.ensureDirectoryExists('/test/dir');
+
+    expect(spy).toHaveBeenCalledWith('ensureDirectory', {
+      path: '/test/dir',
+    });
   });
 
   it('should handle browser environment writeFile with text content', async () => {
-    global.window = {} as any;
+    (global as unknown as { window?: unknown }).window = {};
     const instance = InternalFileWriter.getInstance();
-    vi.spyOn(instance as any, 'callVitePlugin').mockResolvedValue(undefined);
+    const withPriv = instance as unknown as {
+      writeFile: (p: string, c: string) => Promise<void>;
+      callVitePlugin: (m: string, p: unknown) => Promise<unknown>;
+    };
 
-    await (instance as any).writeFile('/test/file.txt', 'Hello World');
+    const spy = vi
+      .spyOn(withPriv, 'callVitePlugin')
+      .mockResolvedValue(undefined);
 
-    expect((instance as any).callVitePlugin).toHaveBeenCalledWith('writeFile', {
+    await withPriv.writeFile('/test/file.txt', 'Hello World');
+
+    expect(spy).toHaveBeenCalledWith('writeFile', {
       path: '/test/file.txt',
       content: 'Hello World',
     });
   });
 
   it('should handle browser environment writeFile with base64 content', async () => {
-    global.window = {} as any;
+    (global as unknown as { window?: unknown }).window = {};
     const instance = InternalFileWriter.getInstance();
-    vi.spyOn(instance as any, 'callVitePlugin').mockResolvedValue(undefined);
+    const withPriv = instance as unknown as {
+      writeFile: (p: string, c: string) => Promise<void>;
+      callVitePlugin: (m: string, p: unknown) => Promise<unknown>;
+    };
 
     const base64Content =
       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
 
-    await (instance as any).writeFile('/test/file.png', base64Content);
+    const spy = vi
+      .spyOn(withPriv, 'callVitePlugin')
+      .mockResolvedValue(undefined);
 
-    expect((instance as any).callVitePlugin).toHaveBeenCalledWith('writeFile', {
+    await withPriv.writeFile('/test/file.png', base64Content);
+
+    expect(spy).toHaveBeenCalledWith('writeFile', {
       path: '/test/file.png',
       content: base64Content,
     });
   });
 
   it('should handle browser environment readFile', async () => {
-    global.window = {} as any;
+    (global as unknown as { window?: unknown }).window = {};
     const instance = InternalFileWriter.getInstance();
-    vi.spyOn(instance as any, 'callVitePlugin').mockResolvedValue(
-      'file content',
-    );
+    const withPriv = instance as unknown as {
+      readFile: (p: string) => Promise<string>;
+      callVitePlugin: (m: string, p: unknown) => Promise<string>;
+    };
 
-    const result = await (instance as any).readFile('/test/file.txt');
+    const spy = vi
+      .spyOn(withPriv, 'callVitePlugin')
+      .mockResolvedValue('file content');
+
+    const result = await withPriv.readFile('/test/file.txt');
 
     expect(result).toBe('file content');
-    expect((instance as any).callVitePlugin).toHaveBeenCalledWith('readFile', {
+    expect(spy).toHaveBeenCalledWith('readFile', {
       path: '/test/file.txt',
     });
   });
 
   it('should handle browser environment pathExists', async () => {
-    global.window = {} as any;
+    (global as unknown as { window?: unknown }).window = {};
     const instance = InternalFileWriter.getInstance();
-    vi.spyOn(instance as any, 'callVitePlugin').mockResolvedValue(true);
+    const withPriv = instance as unknown as {
+      pathExists: (p: string) => Promise<boolean>;
+      callVitePlugin: (m: string, p: unknown) => Promise<boolean>;
+    };
 
-    const result = await (instance as any).pathExists('/test/path');
+    vi.spyOn(withPriv, 'callVitePlugin').mockResolvedValue(true);
+
+    const result = await withPriv.pathExists('/test/path');
 
     expect(result).toBe(true);
   });
 
   it('should handle browser environment listDirectories', async () => {
-    global.window = {} as any;
+    (global as unknown as { window?: unknown }).window = {};
     const instance = InternalFileWriter.getInstance();
-    vi.spyOn(instance as any, 'callVitePlugin').mockResolvedValue([
-      'dir1',
-      'dir2',
-    ]);
+    const withPriv = instance as unknown as {
+      listDirectories: (p: string) => Promise<string[]>;
+      callVitePlugin: (m: string, p: unknown) => Promise<string[]>;
+    };
 
-    const result = await (instance as any).listDirectories('/test/path');
+    const spy = vi
+      .spyOn(withPriv, 'callVitePlugin')
+      .mockResolvedValue(['dir1', 'dir2']);
+
+    const result = await withPriv.listDirectories('/test/path');
 
     expect(result).toEqual(['dir1', 'dir2']);
+    expect(spy).toHaveBeenCalledWith('listDirectories', {
+      path: '/test/path',
+    });
   });
 
   it('should handle listInstalledPlugins with initialization error', async () => {
     const instance = InternalFileWriter.getInstance();
-    vi.spyOn(instance as any, 'initialize').mockRejectedValue(
+    const withPriv = instance as unknown as {
+      initialize: () => Promise<void>;
+    };
+
+    vi.spyOn(withPriv, 'initialize').mockRejectedValue(
       new Error('Init failed'),
     );
 
@@ -941,14 +1134,18 @@ describe('Node.js specific and error coverage', () => {
 
   it('should handle listInstalledPlugins with readPluginFiles error', async () => {
     const instance = InternalFileWriter.getInstance();
-    vi.spyOn(instance as any, 'initialize').mockResolvedValue(undefined);
-    vi.spyOn(instance as any, 'listDirectories').mockResolvedValue([
-      'TestPlugin',
-    ]);
-    vi.spyOn(instance as any, 'readPluginFiles').mockResolvedValue({
+    const withPriv = instance as unknown as {
+      initialize: () => Promise<void>;
+      listDirectories: (p: string) => Promise<string[]>;
+      readPluginFiles: (id: string) => Promise<{ success: boolean }>;
+    };
+
+    vi.spyOn(withPriv, 'initialize').mockResolvedValue(undefined);
+    vi.spyOn(withPriv, 'listDirectories').mockResolvedValue(['TestPlugin']);
+    vi.spyOn(withPriv, 'readPluginFiles').mockResolvedValue({
       success: false,
       error: 'Read failed',
-    });
+    } as { success: boolean });
 
     const result = await instance.listInstalledPlugins();
 
@@ -958,8 +1155,13 @@ describe('Node.js specific and error coverage', () => {
 
   it('should handle listInstalledPlugins with listDirectories error', async () => {
     const instance = InternalFileWriter.getInstance();
-    vi.spyOn(instance as any, 'initialize').mockResolvedValue(undefined);
-    vi.spyOn(instance as any, 'listDirectories').mockRejectedValue(
+    const withPriv = instance as unknown as {
+      initialize: () => Promise<void>;
+      listDirectories: (p: string) => Promise<string[]>;
+    };
+
+    vi.spyOn(withPriv, 'initialize').mockResolvedValue(undefined);
+    vi.spyOn(withPriv, 'listDirectories').mockRejectedValue(
       new Error('List failed'),
     );
 
@@ -971,7 +1173,11 @@ describe('Node.js specific and error coverage', () => {
 
   it('should handle non-Error exceptions in listInstalledPlugins', async () => {
     const instance = InternalFileWriter.getInstance();
-    vi.spyOn(instance as any, 'initialize').mockRejectedValue('String error');
+    const withPriv = instance as unknown as {
+      initialize: () => Promise<void>;
+    };
+
+    vi.spyOn(withPriv, 'initialize').mockRejectedValue('String error');
 
     const result = await instance.listInstalledPlugins();
 
@@ -981,7 +1187,11 @@ describe('Node.js specific and error coverage', () => {
 
   it('should handle non-Error exceptions in initialize', async () => {
     const instance = InternalFileWriter.getInstance();
-    vi.spyOn(instance as any, 'ensureDirectoryExists').mockRejectedValue(
+    const withPriv = instance as unknown as {
+      ensureDirectoryExists: (p: string) => Promise<void>;
+    };
+
+    vi.spyOn(withPriv, 'ensureDirectoryExists').mockRejectedValue(
       'String error',
     );
 
@@ -993,9 +1203,13 @@ describe('Node.js specific and error coverage', () => {
     const fsModule = await import('node:fs/promises');
     vi.spyOn(fsModule, 'readdir').mockRejectedValue('String error');
 
-    await expect(
-      (instance as any).readDirectoryRecursive('/test/path'),
-    ).rejects.toThrow('String error');
+    const withPriv = instance as unknown as {
+      readDirectoryRecursive: (p: string) => Promise<Record<string, string>>;
+    };
+
+    await expect(withPriv.readDirectoryRecursive('/test/path')).rejects.toThrow(
+      'String error',
+    );
   });
 
   it('should handle non-Error exceptions in removeDirectory', async () => {
@@ -1003,9 +1217,13 @@ describe('Node.js specific and error coverage', () => {
     const fsModule = await import('node:fs/promises');
     vi.spyOn(fsModule, 'rm').mockRejectedValue('String error');
 
-    await expect(
-      (instance as any).removeDirectory('/test/path'),
-    ).rejects.toThrow('String error');
+    const withPriv = instance as unknown as {
+      removeDirectory: (p: string) => Promise<void>;
+    };
+
+    await expect(withPriv.removeDirectory('/test/path')).rejects.toThrow(
+      'String error',
+    );
   });
 
   it('should handle non-Error exceptions in ensureDirectoryExists', async () => {
@@ -1013,9 +1231,13 @@ describe('Node.js specific and error coverage', () => {
     const fsModule = await import('node:fs/promises');
     vi.spyOn(fsModule, 'mkdir').mockRejectedValue('String error');
 
-    await expect(
-      (instance as any).ensureDirectoryExists('/test/dir'),
-    ).rejects.toThrow('String error');
+    const withPriv = instance as unknown as {
+      ensureDirectoryExists: (p: string) => Promise<void>;
+    };
+
+    await expect(withPriv.ensureDirectoryExists('/test/dir')).rejects.toThrow(
+      'String error',
+    );
   });
 
   it('should handle non-Error exceptions in writeFile', async () => {
@@ -1023,8 +1245,12 @@ describe('Node.js specific and error coverage', () => {
     const fsModule = await import('node:fs/promises');
     vi.spyOn(fsModule, 'writeFile').mockRejectedValue('String error');
 
+    const withPriv = instance as unknown as {
+      writeFile: (p: string, c: string) => Promise<void>;
+    };
+
     await expect(
-      (instance as any).writeFile('/test/file.txt', 'content'),
+      withPriv.writeFile('/test/file.txt', 'content'),
     ).rejects.toThrow('String error');
   });
 });
