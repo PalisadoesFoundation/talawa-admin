@@ -68,6 +68,8 @@ const SidebarPluginSection = ({
                 : styles.sidebarBtn
           }
           data-testid={`plugin-${item.pluginId}-btn`}
+          aria-label={hideDrawer ? item.label : undefined}
+          title={hideDrawer ? item.label : undefined}
         >
           <div
             style={
@@ -80,7 +82,8 @@ const SidebarPluginSection = ({
               {item.icon ? (
                 <img
                   src={item.icon}
-                  alt={item.label}
+                  alt={hideDrawer ? '' : item.label}
+                  aria-hidden={hideDrawer ? 'true' : undefined}
                   style={{ width: 25, height: 25 }}
                 />
               ) : (
@@ -88,6 +91,7 @@ const SidebarPluginSection = ({
                   fill="none"
                   fontSize={25}
                   stroke="var(--sidebar-icon-stroke-inactive)"
+                  aria-hidden="true"
                 />
               )}
             </div>
