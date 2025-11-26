@@ -56,7 +56,7 @@ components/RequestsTableItem/RequestsTableItem
 
 ## Requires
 
-shared-components/SearchBar/SearchBar
+subComponents/SearchBar
 
 ## Requires
 

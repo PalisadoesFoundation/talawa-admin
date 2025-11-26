@@ -79,10 +79,8 @@ describe('SearchBar', () => {
 
     expect(handleClear).toHaveBeenCalledTimes(1);
     expect(handleChange).toHaveBeenCalledWith('', expect.any(Object));
-    expect(handleSearch).toHaveBeenLastCalledWith(
-      '',
-      expect.objectContaining({ trigger: 'clear' }),
-    );
+    // When onClear is provided, onSearch should NOT be called to avoid duplicate side effects
+    expect(handleSearch).not.toHaveBeenCalled();
     expect(input).toHaveValue('');
   });
 
