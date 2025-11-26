@@ -44,7 +44,7 @@ export interface AdminPluginInstallationOptions {
   zipFile: File;
   backup?: boolean;
   apolloClient?: {
-    mutate: (options: unknown) => Promise<unknown>;
+    mutate?: (...args: any[]) => Promise<any>;
   };
 }
 
@@ -282,7 +282,7 @@ export async function installAdminPluginFromZip({
     const installedComponents: string[] = [];
 
     // STEP 1: Create plugin in database first (basic entry with isInstalled: false)
-    if (apolloClient) {
+    if (apolloClient?.mutate) {
       try {
         await apolloClient.mutate({
           mutation: CREATE_PLUGIN_MUTATION,
@@ -307,7 +307,7 @@ export async function installAdminPluginFromZip({
     }
 
     // STEP 2: Install API component if present (this will handle file upload)
-    if (structure.hasApiFolder && apolloClient) {
+    if (structure.hasApiFolder && apolloClient?.mutate) {
       try {
         const result = await apolloClient.mutate({
           mutation: UPLOAD_PLUGIN_ZIP_MUTATION,
