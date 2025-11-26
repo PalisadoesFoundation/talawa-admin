@@ -121,7 +121,8 @@ export async function validateAdminPluginZip(
 
         structure.adminManifest = manifest;
         structure.pluginId = manifest.pluginId;
-      } catch {
+      } catch (error) {
+        console.error('Admin manifest parse error:', error);
         throw new Error('Invalid admin manifest.json');
       }
     } else {
@@ -180,7 +181,8 @@ export async function validateAdminPluginZip(
         if (!structure.pluginId) {
           structure.pluginId = apiManifest.pluginId;
         }
-      } catch {
+      } catch (error) {
+        console.error('Invalid api manifest error:', error);
         throw new Error('Invalid api manifest.json');
       }
     } else {
@@ -236,10 +238,11 @@ export function validateAdminPluginStructure(files: Record<string, string>): {
     }
 
     return { valid: true };
-  } catch {
+  } catch (error) {
+    console.error('Admin manifest parse error:', error);
     return {
       valid: false,
-      error: 'Invalid manifest.json format',
+      error: 'Invalid admin manifest.json',
     };
   }
 }
