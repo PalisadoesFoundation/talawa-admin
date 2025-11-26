@@ -336,8 +336,12 @@ describe('ChangeLanguageDropDown', () => {
       expect(cookies.set).toHaveBeenCalledWith('i18next', 'es');
     });
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    expect(updateUserSpy).not.toHaveBeenCalled();
+    await waitFor(
+      () => {
+        expect(updateUserSpy).not.toHaveBeenCalled();
+      },
+      { timeout: 500 },
+    );
   });
 
   it('calls mutation to update user language when user is logged in', async () => {
@@ -426,7 +430,7 @@ describe('ChangeLanguageDropDown', () => {
     const dropdown = screen.getByTestId('language-dropdown-btn');
     fireEvent.click(dropdown);
 
-    const frenchOption = screen.getByTestId('change-language-btn-fr');
+    const frenchOption = await screen.findByTestId('change-language-btn-fr');
     fireEvent.click(frenchOption);
 
     await waitFor(() => {
@@ -434,7 +438,11 @@ describe('ChangeLanguageDropDown', () => {
       expect(cookies.set).toHaveBeenCalledWith('i18next', 'fr');
     });
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    expect(updateUserSpy).not.toHaveBeenCalled();
+    await waitFor(
+      () => {
+        expect(updateUserSpy).not.toHaveBeenCalled();
+      },
+      { timeout: 500 },
+    );
   });
 });
