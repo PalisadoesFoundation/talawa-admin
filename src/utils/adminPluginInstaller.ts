@@ -311,15 +311,14 @@ export async function installAdminPluginFromZip({
     // STEP 2: Install API component if present (this will handle file upload)
     if (structure.hasApiFolder && apolloClient?.mutate) {
       try {
-        const result = (await apolloClient.mutate({
+        const result = await apolloClient.mutate<{
+          uploadPluginZip: unknown;
+        }>({
           mutation: UPLOAD_PLUGIN_ZIP_MUTATION,
           variables: {
-            input: {
-              pluginZip: zipFile,
-              activate: false,
-            },
+            input: { pluginZip: zipFile, activate: false },
           },
-        })) as FetchResult<{ uploadPluginZip: boolean }>;
+        });
 
         if (result.data?.uploadPluginZip) {
           installedComponents.push('API');
