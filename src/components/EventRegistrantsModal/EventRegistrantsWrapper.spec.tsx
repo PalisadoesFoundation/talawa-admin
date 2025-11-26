@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, waitFor } from '@testing-library/react';
+import { fireEvent, render, waitFor, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { EventRegistrantsWrapper } from './EventRegistrantsWrapper';
 import { EVENT_ATTENDEES, MEMBERS_LIST } from 'GraphQl/Queries/Queries';
@@ -11,7 +11,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { ToastContainer } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { describe, test, expect, vi } from 'vitest';
+import { describe, test, expect, vi, beforeEach } from 'vitest';
 
 const queryMock = [
   {
@@ -55,7 +55,6 @@ const queryMock = [
   },
 ];
 
-// Define a proper type for the component props
 type RenderComponentProps = {
   eventId: string;
   orgId: string;
@@ -79,140 +78,415 @@ const renderComponent = (props: RenderComponentProps) => {
   );
 };
 
-describe('Testing Event Registrants Wrapper', () => {
-  const props: RenderComponentProps = {
+describe('EventRegistrantsWrapper Component', () => {
+  const defaultProps: RenderComponentProps = {
     eventId: 'event123',
     orgId: 'org123',
   };
 
-  test('Should render the Register Member button', () => {
-    const { getByText, getByTestId } = renderComponent(props);
-
-    expect(getByText('Register Member')).toBeInTheDocument();
-    expect(getByTestId('filter-button')).toBeInTheDocument();
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
-  test('Should have correct aria-label on button', () => {
-    const { getByLabelText } = renderComponent(props);
+  describe('Component Rendering', () => {
+    test('should render Register Member button with correct text', () => {
+      renderComponent(defaultProps);
 
-    expect(getByLabelText('showAttendees')).toBeInTheDocument();
-  });
+      const button = screen.getByText('Register Member');
+      expect(button).toBeInTheDocument();
+      expect(button).toBeVisible();
+    });
 
-  test('Should open the modal when button is clicked', async () => {
-    const { getByText, queryByText } = renderComponent(props);
+    test('should render button with correct data-testid attribute', () => {
+      renderComponent(defaultProps);
 
-    // Modal should not be visible initially
-    expect(queryByText('Event Registrants')).not.toBeInTheDocument();
+      const button = screen.getByTestId('filter-button');
+      expect(button).toBeInTheDocument();
+    });
 
-    // Click the button to open modal
-    fireEvent.click(getByText('Register Member'));
+    test('should render button with correct aria-label', () => {
+      renderComponent(defaultProps);
 
-    // Modal should be visible
-    await waitFor(() =>
-      expect(queryByText('Event Registrants')).toBeInTheDocument(),
-    );
-  });
+      const button = screen.getByLabelText('showAttendees');
+      expect(button).toBeInTheDocument();
+    });
 
-  test('Should close the modal when close button is clicked', async () => {
-    const { getByText, queryByText, getByRole } = renderComponent(props);
+    test('should apply correct CSS classes to button', () => {
+      renderComponent(defaultProps);
 
-    // Open the modal
-    fireEvent.click(getByText('Register Member'));
+      const button = screen.getByTestId('filter-button');
+      expect(button).toHaveClass('border-1', 'mx-4');
+    });
 
-    await waitFor(() =>
-      expect(queryByText('Event Registrants')).toBeInTheDocument(),
-    );
+    test('should not render modal initially', () => {
+      renderComponent(defaultProps);
 
-    // Close the modal
-    fireEvent.click(getByRole('button', { name: /close/i }));
-
-    await waitFor(() =>
-      expect(queryByText('Event Registrants')).not.toBeInTheDocument(),
-    );
-  });
-
-  test('Should call onUpdate callback when modal is closed', async () => {
-    const onUpdateMock = vi.fn();
-    const propsWithCallback: RenderComponentProps = {
-      ...props,
-      onUpdate: onUpdateMock,
-    };
-
-    const { getByText, getByRole } = renderComponent(propsWithCallback);
-
-    // Open the modal
-    fireEvent.click(getByText('Register Member'));
-
-    await waitFor(() =>
-      expect(getByText('Event Registrants')).toBeInTheDocument(),
-    );
-
-    // Close the modal
-    fireEvent.click(getByRole('button', { name: /close/i }));
-
-    // Verify onUpdate was called
-    await waitFor(() => {
-      expect(onUpdateMock).toHaveBeenCalledTimes(1);
+      expect(screen.queryByText('Event Registrants')).not.toBeInTheDocument();
     });
   });
 
-  test('Should not call onUpdate callback when it is not provided', async () => {
-    const { getByText, getByRole, queryByText } = renderComponent(props);
+  describe('Modal Opening Functionality', () => {
+    test('should open modal when Register Member button is clicked', async () => {
+      renderComponent(defaultProps);
 
-    // Open the modal
-    fireEvent.click(getByText('Register Member'));
+      const button = screen.getByText('Register Member');
+      fireEvent.click(button);
 
-    await waitFor(() =>
-      expect(queryByText('Event Registrants')).toBeInTheDocument(),
-    );
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+    });
 
-    // Close the modal (should not throw error even without onUpdate)
-    fireEvent.click(getByRole('button', { name: /close/i }));
+    test('should set showModal state to true when button is clicked', async () => {
+      renderComponent(defaultProps);
 
-    await waitFor(() =>
-      expect(queryByText('Event Registrants')).not.toBeInTheDocument(),
-    );
+      expect(screen.queryByText('Event Registrants')).not.toBeInTheDocument();
+
+      fireEvent.click(screen.getByText('Register Member'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+    });
+
+    test('should pass correct eventId prop to modal', async () => {
+      const customProps = { ...defaultProps, eventId: 'custom-event-123' };
+      renderComponent(customProps);
+
+      fireEvent.click(screen.getByText('Register Member'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+    });
+
+    test('should pass correct orgId prop to modal', async () => {
+      const customProps = { ...defaultProps, orgId: 'custom-org-456' };
+      renderComponent(customProps);
+
+      fireEvent.click(screen.getByText('Register Member'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+    });
   });
 
-  test('Should toggle modal visibility multiple times', async () => {
-    const { getByText, queryByText, getByRole } = renderComponent(props);
+  describe('Modal Closing Functionality', () => {
+    test('should close modal when close button is clicked', async () => {
+      renderComponent(defaultProps);
 
-    // First open
-    fireEvent.click(getByText('Register Member'));
-    await waitFor(() =>
-      expect(queryByText('Event Registrants')).toBeInTheDocument(),
-    );
+      fireEvent.click(screen.getByText('Register Member'));
 
-    // First close
-    fireEvent.click(getByRole('button', { name: /close/i }));
-    await waitFor(() =>
-      expect(queryByText('Event Registrants')).not.toBeInTheDocument(),
-    );
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
 
-    // Second open
-    fireEvent.click(getByText('Register Member'));
-    await waitFor(() =>
-      expect(queryByText('Event Registrants')).toBeInTheDocument(),
-    );
+      const closeButton = screen.getByRole('button', { name: /close/i });
+      fireEvent.click(closeButton);
 
-    // Second close
-    fireEvent.click(getByRole('button', { name: /close/i }));
-    await waitFor(() =>
-      expect(queryByText('Event Registrants')).not.toBeInTheDocument(),
-    );
+      await waitFor(() => {
+        expect(screen.queryByText('Event Registrants')).not.toBeInTheDocument();
+      });
+    });
+
+    test('should set showModal state to false when modal is closed', async () => {
+      renderComponent(defaultProps);
+
+      fireEvent.click(screen.getByText('Register Member'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByRole('button', { name: /close/i }));
+
+      await waitFor(() => {
+        expect(screen.queryByText('Event Registrants')).not.toBeInTheDocument();
+      });
+    });
   });
 
-  test('Should pass correct props to EventRegistrantsModal', async () => {
-    const { getByText } = renderComponent(props);
+  describe('onUpdate Callback Functionality', () => {
+    test('should call onUpdate callback when modal is closed', async () => {
+      const onUpdateMock = vi.fn();
+      const propsWithCallback = { ...defaultProps, onUpdate: onUpdateMock };
 
-    // Open the modal
-    fireEvent.click(getByText('Register Member'));
+      renderComponent(propsWithCallback);
 
-    await waitFor(() =>
-      expect(getByText('Event Registrants')).toBeInTheDocument(),
-    );
+      fireEvent.click(screen.getByText('Register Member'));
 
-    // The modal being rendered confirms eventId and orgId are passed correctly
-    // as the GraphQL queries use these values
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByRole('button', { name: /close/i }));
+
+      await waitFor(() => {
+        expect(onUpdateMock).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    test('should call onUpdate exactly once per modal close', async () => {
+      const onUpdateMock = vi.fn();
+      const propsWithCallback = { ...defaultProps, onUpdate: onUpdateMock };
+
+      renderComponent(propsWithCallback);
+
+      fireEvent.click(screen.getByText('Register Member'));
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByRole('button', { name: /close/i }));
+
+      await waitFor(() => {
+        expect(onUpdateMock).toHaveBeenCalledTimes(1);
+      });
+
+      expect(onUpdateMock).toHaveBeenCalledWith();
+    });
+
+    test('should not call onUpdate when modal is opened', async () => {
+      const onUpdateMock = vi.fn();
+      const propsWithCallback = { ...defaultProps, onUpdate: onUpdateMock };
+
+      renderComponent(propsWithCallback);
+
+      fireEvent.click(screen.getByText('Register Member'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+
+      expect(onUpdateMock).not.toHaveBeenCalled();
+    });
+
+    test('should not throw error when onUpdate is not provided', async () => {
+      renderComponent(defaultProps);
+
+      fireEvent.click(screen.getByText('Register Member'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+
+      expect(() => {
+        fireEvent.click(screen.getByRole('button', { name: /close/i }));
+      }).not.toThrow();
+
+      await waitFor(() => {
+        expect(screen.queryByText('Event Registrants')).not.toBeInTheDocument();
+      });
+    });
+
+    test('should not throw error when onUpdate is undefined', async () => {
+      const propsWithUndefined = { ...defaultProps, onUpdate: undefined };
+      renderComponent(propsWithUndefined);
+
+      fireEvent.click(screen.getByText('Register Member'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+
+      expect(() => {
+        fireEvent.click(screen.getByRole('button', { name: /close/i }));
+      }).not.toThrow();
+    });
+  });
+
+  describe('Modal State Management', () => {
+    test('should toggle modal visibility multiple times correctly', async () => {
+      renderComponent(defaultProps);
+
+      // First cycle
+      fireEvent.click(screen.getByText('Register Member'));
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByRole('button', { name: /close/i }));
+      await waitFor(() => {
+        expect(screen.queryByText('Event Registrants')).not.toBeInTheDocument();
+      });
+
+      // Second cycle
+      fireEvent.click(screen.getByText('Register Member'));
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByRole('button', { name: /close/i }));
+      await waitFor(() => {
+        expect(screen.queryByText('Event Registrants')).not.toBeInTheDocument();
+      });
+
+      // Third cycle
+      fireEvent.click(screen.getByText('Register Member'));
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+    });
+
+    test('should call onUpdate for each modal close in multiple cycles', async () => {
+      const onUpdateMock = vi.fn();
+      const propsWithCallback = { ...defaultProps, onUpdate: onUpdateMock };
+
+      renderComponent(propsWithCallback);
+
+      // First cycle
+      fireEvent.click(screen.getByText('Register Member'));
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+      fireEvent.click(screen.getByRole('button', { name: /close/i }));
+      await waitFor(() => {
+        expect(onUpdateMock).toHaveBeenCalledTimes(1);
+      });
+
+      // Second cycle
+      fireEvent.click(screen.getByText('Register Member'));
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+      fireEvent.click(screen.getByRole('button', { name: /close/i }));
+      await waitFor(() => {
+        expect(onUpdateMock).toHaveBeenCalledTimes(2);
+      });
+
+      // Third cycle
+      fireEvent.click(screen.getByText('Register Member'));
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+      fireEvent.click(screen.getByRole('button', { name: /close/i }));
+      await waitFor(() => {
+        expect(onUpdateMock).toHaveBeenCalledTimes(3);
+      });
+    });
+  });
+
+  describe('Props Passing to EventRegistrantsModal', () => {
+    test('should pass show prop as true when modal is open', async () => {
+      renderComponent(defaultProps);
+
+      fireEvent.click(screen.getByText('Register Member'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+    });
+
+    test('should pass handleClose function to modal', async () => {
+      renderComponent(defaultProps);
+
+      fireEvent.click(screen.getByText('Register Member'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+
+      const closeButton = screen.getByRole('button', { name: /close/i });
+      expect(closeButton).toBeInTheDocument();
+    });
+
+    test('should pass all required props to EventRegistrantsModal', async () => {
+      const customProps = {
+        eventId: 'test-event-789',
+        orgId: 'test-org-101',
+        onUpdate: vi.fn(),
+      };
+
+      renderComponent(customProps);
+
+      fireEvent.click(screen.getByText('Register Member'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Edge Cases', () => {
+    test('should handle rapid button clicks without breaking', async () => {
+      renderComponent(defaultProps);
+
+      const button = screen.getByText('Register Member');
+
+      // Rapid clicks
+      fireEvent.click(button);
+      fireEvent.click(button);
+      fireEvent.click(button);
+
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+    });
+
+    test('should handle empty string eventId', async () => {
+      const propsWithEmptyEventId = { ...defaultProps, eventId: '' };
+      renderComponent(propsWithEmptyEventId);
+
+      fireEvent.click(screen.getByText('Register Member'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+    });
+
+    test('should handle empty string orgId', async () => {
+      const propsWithEmptyOrgId = { ...defaultProps, orgId: '' };
+      renderComponent(propsWithEmptyOrgId);
+
+      fireEvent.click(screen.getByText('Register Member'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+    });
+
+    test('should maintain button functionality after modal operations', async () => {
+      renderComponent(defaultProps);
+
+      const button = screen.getByText('Register Member');
+
+      // Open modal
+      fireEvent.click(button);
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+
+      // Close modal
+      fireEvent.click(screen.getByRole('button', { name: /close/i }));
+      await waitFor(() => {
+        expect(screen.queryByText('Event Registrants')).not.toBeInTheDocument();
+      });
+
+      // Button should still be clickable
+      expect(button).toBeEnabled();
+      fireEvent.click(button);
+      await waitFor(() => {
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Accessibility', () => {
+    test('should have accessible button with proper aria-label', () => {
+      renderComponent(defaultProps);
+
+      const button = screen.getByLabelText('showAttendees');
+      expect(button).toHaveAccessibleName();
+    });
+
+    test('should be keyboard accessible', async () => {
+      renderComponent(defaultProps);
+
+      const button = screen.getByText('Register Member');
+      button.focus();
+
+      expect(button).toHaveFocus();
+    });
   });
 });
