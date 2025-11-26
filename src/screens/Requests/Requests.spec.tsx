@@ -19,61 +19,67 @@ import {
   MOCKS3,
   MOCKS4,
 } from './RequestsMocks';
-import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 import { MEMBERSHIP_REQUEST, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
+import useLocalStorage from 'utils/useLocalstorage';
 
-// Store original localStorage for cleanup
-const originalLocalStorage = global.localStorage;
+const { mockLocalStorageStore } = vi.hoisted(() => ({
+  mockLocalStorageStore: {} as Record<string, string>,
+}));
 
-// Mock localStorage
-const localStorageMock = (() => {
-  let store: Record<string, string> = {};
+// Mock useLocalStorage
+vi.mock('utils/useLocalstorage', () => {
   return {
-    getItem: (key: string) => store[key] || null,
-    setItem: (key: string, value: string) => {
-      store[key] = value;
+    default: () => ({
+      getItem: (key: string) => mockLocalStorageStore[key] || null,
+      setItem: (key: string, value: string) => {
+        mockLocalStorageStore[key] = value;
+      },
+      removeItem: (key: string) => {
+        delete mockLocalStorageStore[key];
+      },
+      clear: () => {
+        for (const key in mockLocalStorageStore)
+          delete mockLocalStorageStore[key];
+      },
+    }),
+    setItem: () => {
+      // Simple mock for direct setItem usage if any
     },
-    clear: () => {
-      store = {};
-    },
-    removeItem: (key: string) => {
-      delete store[key];
-    },
-    key: (i: number) => Object.keys(store)[i] || null,
-    get length() {
-      return Object.keys(store).length;
-    },
+    removeItem: () => {},
   };
-})();
-
-// Ensure window.localStorage reflects the stub in JSDOM
-Object.defineProperty(window, 'localStorage', {
-  value: localStorageMock,
-  configurable: true,
-  writable: true,
 });
 
+// We don't need to mock global localStorage anymore for the hook
+// But we might need it if the component uses localStorage directly
+// The component uses useLocalStorage hook.
+
+const { setItem, removeItem } = useLocalStorage();
+
 // Mock window.location
+const mockLocation = {
+  href: 'http://localhost/',
+  assign: vi.fn(),
+  reload: vi.fn(),
+  pathname: '/',
+  search: '',
+  hash: '',
+  origin: 'http://localhost',
+};
+
 Object.defineProperty(window, 'location', {
-  value: {
-    href: 'http://localhost/',
-    assign: vi.fn(),
-    reload: vi.fn(),
-    pathname: '/',
-    search: '',
-    hash: '',
-    origin: 'http://localhost',
-  },
+  value: mockLocation,
   writable: true,
 });
 
 // Mock react-toastify
 vi.mock('react-toastify', async () => {
-  const actual = await vi.importActual('react-toastify');
+  const actual =
+    await vi.importActual<typeof import('react-toastify')>('react-toastify');
   return {
     ...actual,
     toast: {
+      ...actual.toast,
       warning: vi.fn(),
       error: vi.fn(),
       success: vi.fn(),
@@ -81,8 +87,6 @@ vi.mock('react-toastify', async () => {
     },
   };
 });
-
-const { setItem, removeItem } = useLocalStorage();
 
 // Create mock links
 const link = new StaticMockLink(UPDATED_MOCKS, true);
@@ -236,10 +240,9 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  localStorage.clear();
-  // Restore all mocks and original global localStorage
+  for (const key in mockLocalStorageStore) delete mockLocalStorageStore[key];
+  // Restore all mocks
   vi.restoreAllMocks();
-  global.localStorage = originalLocalStorage;
 });
 
 describe('Testing Requests screen', () => {
