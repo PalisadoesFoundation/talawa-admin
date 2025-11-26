@@ -85,9 +85,10 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
       await updateUser({
         variables: { input },
       });
-      
     } catch (error) {
       console.log('Error in changing language', error);
+      await i18next.changeLanguage(languageCode);
+    } finally {
       await i18next.changeLanguage(languageCode);
       cookies.set('i18next', languageCode);
     }
