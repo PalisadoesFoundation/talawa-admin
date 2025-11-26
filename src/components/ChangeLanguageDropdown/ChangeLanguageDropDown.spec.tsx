@@ -291,4 +291,143 @@ describe('ChangeLanguageDropDown', () => {
     // This tests the fallback branch: cookies.get('i18next') || 'en'
     expect(screen.getByTestId('language-dropdown-btn')).toBeInTheDocument();
   });
+  it('changes language locally without calling mutation when user is not logged in', async () => {
+    // Mock user as NOT logged in
+    (useLocalStorage as Mock).mockReturnValue({
+      getItem: vi.fn((key) => {
+        if (key === 'id') return mockUserId;
+        if (key === 'UserImage') return mockUserImage;
+        if (key === 'IsLoggedIn') return 'FALSE'; // User NOT logged in
+        return null;
+      }),
+    });
+
+    // Create a spy to verify the mutation is NOT called
+    const updateUserSpy = vi.fn();
+    const mocksWithSpy = [
+      {
+        request: {
+          query: UPDATE_CURRENT_USER_MUTATION,
+          variables: { input: { naturalLanguageCode: 'es', avatar: mockFile } },
+        },
+        result: () => {
+          updateUserSpy();
+          return { data: { updateUser: { id: mockUserId } } };
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocksWithSpy} addTypename={false}>
+        <ChangeLanguageDropDown />
+      </MockedProvider>,
+    );
+
+    const dropdown = screen.getByTestId('language-dropdown-btn');
+    fireEvent.click(dropdown);
+
+    const spanishOption = screen.getByTestId('change-language-btn-es');
+    fireEvent.click(spanishOption);
+
+    await waitFor(() => {
+      // Verify language changed locally
+      expect(i18next.changeLanguage).toHaveBeenCalledWith('es');
+      expect(cookies.set).toHaveBeenCalledWith('i18next', 'es');
+
+      // Verify mutation was NOT called (critical assertion)
+      expect(updateUserSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  it('calls mutation to update user language when user is logged in', async () => {
+    // Mock user as logged in
+    (useLocalStorage as Mock).mockReturnValue({
+      getItem: vi.fn((key) => {
+        if (key === 'id') return mockUserId;
+        if (key === 'UserImage') return mockUserImage;
+        if (key === 'IsLoggedIn') return 'TRUE'; // User IS logged in
+        return null;
+      }),
+    });
+
+    // Create a spy to verify the mutation IS called
+    const updateUserSpy = vi.fn();
+    const mocksWithSpy = [
+      {
+        request: {
+          query: UPDATE_CURRENT_USER_MUTATION,
+          variables: { input: { naturalLanguageCode: 'es', avatar: mockFile } },
+        },
+        result: () => {
+          updateUserSpy();
+          return { data: { updateUser: { id: mockUserId } } };
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocksWithSpy} addTypename={false}>
+        <ChangeLanguageDropDown />
+      </MockedProvider>,
+    );
+
+    const dropdown = screen.getByTestId('language-dropdown-btn');
+    fireEvent.click(dropdown);
+
+    const spanishOption = screen.getByTestId('change-language-btn-es');
+    fireEvent.click(spanishOption);
+
+    await waitFor(() => {
+      // Verify mutation WAS called (critical assertion)
+      expect(updateUserSpy).toHaveBeenCalled();
+
+      // Verify language changed (happens in finally block)
+      expect(i18next.changeLanguage).toHaveBeenCalledWith('es');
+      expect(cookies.set).toHaveBeenCalledWith('i18next', 'es');
+    });
+  });
+
+  it('changes language locally when IsLoggedIn is null or missing', async () => {
+    // Mock IsLoggedIn as null (user not logged in)
+    (useLocalStorage as Mock).mockReturnValue({
+      getItem: vi.fn((key) => {
+        if (key === 'id') return mockUserId;
+        if (key === 'UserImage') return mockUserImage;
+        if (key === 'IsLoggedIn') return null; // Not set
+        return null;
+      }),
+    });
+
+    const updateUserSpy = vi.fn();
+    const mocksWithSpy = [
+      {
+        request: {
+          query: UPDATE_CURRENT_USER_MUTATION,
+          variables: { input: { naturalLanguageCode: 'fr', avatar: mockFile } },
+        },
+        result: () => {
+          updateUserSpy();
+          return { data: { updateUser: { id: mockUserId } } };
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocksWithSpy} addTypename={false}>
+        <ChangeLanguageDropDown />
+      </MockedProvider>,
+    );
+
+    const dropdown = screen.getByTestId('language-dropdown-btn');
+    fireEvent.click(dropdown);
+
+    const frenchOption = screen.getByTestId('change-language-btn-fr');
+    fireEvent.click(frenchOption);
+
+    await waitFor(() => {
+      expect(i18next.changeLanguage).toHaveBeenCalledWith('fr');
+      expect(cookies.set).toHaveBeenCalledWith('i18next', 'fr');
+      expect(updateUserSpy).not.toHaveBeenCalled();
+    });
+  });
 });
