@@ -492,12 +492,6 @@ describe('InternalFileWriter', () => {
     });
   });
 
-  describe('Node.js environment operations', () => {
-    it('should handle Node.js environment operations', () => {
-      expect(true).toBe(true);
-    });
-  });
-
   describe('callVitePlugin', () => {
     beforeEach(() => {
       (global as unknown as { window?: unknown }).window = {};

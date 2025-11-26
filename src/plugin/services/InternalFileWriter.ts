@@ -180,8 +180,8 @@ export class InternalFileWriter {
       if (raw) {
         try {
           manifest = JSON.parse(raw) as AdminPluginManifest;
-        } catch {
-          console.error('Failed to parse manifest JSON.');
+        } catch (parseError) {
+          console.error('Failed to parse manifest JSON:', parseError);
         }
       }
 
