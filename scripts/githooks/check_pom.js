@@ -15,7 +15,9 @@
 // - 1: POM violations detected (forbidden patterns found)
 // 
 import { readFileSync } from "fs";
-import { globSync as sync } from "glob";
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const { sync } = require('glob');
 
 const forbiddenMethods = [
   'get', 'contains', 'find', 'children', 'closest',

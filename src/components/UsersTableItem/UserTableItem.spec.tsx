@@ -78,7 +78,7 @@ afterAll(() => {
 });
 
 // Direct wrapper functions for test usage
-const setItem = (key: string, value: unknown): void => {
+const setMockStorageItem = (key: string, value: unknown): void => {
   mockLocalStorageStore[key] =
     typeof value === 'string' ? value : JSON.stringify(value);
 };
@@ -120,13 +120,17 @@ vi.mock('react-router', async () => {
 
 beforeEach(() => {
   mockNavgatePush = vi.fn();
-  setItem('SuperAdmin', true);
-  setItem('id', '123');
+  setMockStorageItem('SuperAdmin', true);
+  setMockStorageItem('id', '123');
 });
 
 afterEach(async () => {
   vi.restoreAllMocks();
-  const { clear } = (await import('utils/useLocalstorage')).default() as any;
+  const { clear } = (
+    await import('utils/useLocalstorage')
+  ).default() as unknown as {
+    clear: () => void;
+  };
   clear();
 });
 
