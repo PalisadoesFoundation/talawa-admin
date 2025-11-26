@@ -52,11 +52,15 @@ const checkLocalStorageUsage = (file: string): void => {
 
   const fileName = path.basename(file);
 
-  // Skip files with specific names or containing a skip comment
+  // Skip files with specific names, paths, extensions, or containing a skip comment
   if (
     fileName === 'check-localstorage-usage.ts' || // Updated extension
     fileName === 'useLocalstorage.test.ts' ||
     fileName === 'useLocalstorage.ts' ||
+    fileName === 'localStorageMock.ts' || // Test utility that implements localStorage mock
+    fileName === 'localStorageMock.spec.ts' || // Tests for localStorage mock utility
+    file.endsWith('.md') || // Skip documentation files
+    file.startsWith('docs/') || // Skip auto-generated docs
     containsSkipComment(file)
   ) {
     console.log(`Skipping file: ${file}`);
