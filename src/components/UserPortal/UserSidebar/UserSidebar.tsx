@@ -91,6 +91,7 @@ const userSidebar = ({
           testId="orgsBtn"
           hideDrawer={hideDrawer}
           onClick={handleLinkClick}
+          iconType="svg"
         />
 
         <SidebarNavItem
@@ -110,6 +111,7 @@ const userSidebar = ({
           testId="settingsBtn"
           hideDrawer={hideDrawer}
           onClick={handleLinkClick}
+          iconType="svg"
         />
 
         {/* Plugin Global Features Section */}

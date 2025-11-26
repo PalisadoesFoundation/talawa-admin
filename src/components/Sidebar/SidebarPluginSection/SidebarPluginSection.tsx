@@ -68,7 +68,6 @@ const SidebarPluginSection = ({
                 : styles.sidebarBtn
           }
           data-testid={`plugin-${item.pluginId}-btn`}
-          role="button"
         >
           <div
             style={

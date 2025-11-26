@@ -96,7 +96,8 @@ const SidebarNavItem = ({
               ? 'var(--bs-black)'
               : 'var(--bs-secondary)'
             : 'none',
-          fontSize: 25,
+          width: 25,
+          height: 25,
           stroke: useSimpleButton
             ? undefined
             : isActive
@@ -123,7 +124,6 @@ const SidebarNavItem = ({
       }
       data-testid={testId}
       style={useSimpleButton ? { height: '40px' } : undefined}
-      role="button"
     >
       {({ isActive }) => (
         <div style={{ display: 'flex', alignItems: 'center' }}>
