@@ -4,7 +4,7 @@ import {
   CREATE_PLUGIN_MUTATION,
 } from '../GraphQl/Mutations/PluginMutations';
 import { adminPluginFileService } from '../plugin/services/AdminPluginFileService';
-import type { ApolloClient, FetchResult } from '@apollo/client';
+import type { ApolloClient } from '@apollo/client';
 
 export interface AdminPluginManifest {
   name: string;
