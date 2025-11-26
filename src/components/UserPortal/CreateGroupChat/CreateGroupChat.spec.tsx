@@ -242,6 +242,9 @@ describe('CreateGroupChat', () => {
   const chatsListRefetch = vi.fn();
 
   beforeEach(() => {
+    for (const key in mockLocalStorageStore) {
+      delete mockLocalStorageStore[key];
+    }
     setItem('userId', '1');
     vi.clearAllMocks();
   });
