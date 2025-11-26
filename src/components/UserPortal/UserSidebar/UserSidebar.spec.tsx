@@ -228,9 +228,9 @@ describe('UserSidebar', () => {
       expect(screen.getByText('User Portal')).toBeInTheDocument();
       expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
       expect(screen.getByTestId('settingsBtn')).toBeInTheDocument();
-      // Multiple ProfileCards render by design - one at top (with blue bg) and one at bottom
-      const profileDropdowns = screen.getAllByTestId('profile-dropdown');
-      expect(profileDropdowns.length).toBe(2);
+      // ProfileCard renders once in headerContent (with blue bg)
+      const profileDropdown = screen.getByTestId('profile-dropdown');
+      expect(profileDropdown).toBeInTheDocument();
     });
 
     it('should render navigation links with correct text', () => {
@@ -526,13 +526,12 @@ describe('UserSidebar', () => {
   });
 
   describe('Component Structure', () => {
-    it('should have ProfileDropdown in the bottom section', () => {
+    it('should have ProfileDropdown in the header section', () => {
       renderComponent();
 
-      // ProfileCard count already verified in "Component Rendering" section
-      // This test verifies the bottom ProfileCard specifically exists
-      const profileDropdowns = screen.getAllByTestId('profile-dropdown');
-      expect(profileDropdowns[1]).toBeInTheDocument();
+      // ProfileCard renders once in headerContent
+      const profileDropdown = screen.getByTestId('profile-dropdown');
+      expect(profileDropdown).toBeInTheDocument();
     });
 
     it('should apply correct structure classes', () => {
@@ -598,7 +597,7 @@ describe('UserSidebar', () => {
 
       expect(toggleBtn).toBeInTheDocument();
       expect(toggleBtn).toHaveAttribute('tabIndex', '0');
-      expect(toggleBtn).toHaveAttribute('role', 'button');
+      expect(toggleBtn).toHaveAttribute('type', 'button');
       // The aria-label is on the FaBars icon inside the toggle button
       expect(
         toggleBtn.querySelector('[aria-label="Toggle sidebar"]'),

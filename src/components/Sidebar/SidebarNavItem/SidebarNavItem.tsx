@@ -13,17 +13,29 @@
  * @param {boolean} props.hideDrawer - Whether the drawer is hidden/collapsed
  * @param {() => void} [props.onClick] - Optional click handler
  * @param {boolean} [props.useSimpleButton] - Use simple button style (for org drawers)
+ * @param {'react-icon' | 'svg'} [props.iconType] - Type of icon being passed. Use 'react-icon' for icons from react-icons library, 'svg' for SVG components. Defaults to 'svg' if not specified.
  *
  * @returns {React.ReactElement} The rendered SidebarNavItem component
  *
  * @example
  * ```tsx
+ * // With SVG icon (default)
  * <SidebarNavItem
  *   to="/dashboard"
  *   icon={<DashboardIcon />}
  *   label="Dashboard"
  *   testId="dashboardBtn"
  *   hideDrawer={false}
+ * />
+ *
+ * // With react-icon
+ * <SidebarNavItem
+ *   to="/notifications"
+ *   icon={<FaBell />}
+ *   label="Notifications"
+ *   testId="notificationsBtn"
+ *   hideDrawer={false}
+ *   iconType="react-icon"
  * />
  * ```
  */
@@ -40,6 +52,7 @@ export interface ISidebarNavItemProps {
   hideDrawer: boolean;
   onClick?: () => void;
   useSimpleButton?: boolean;
+  iconType?: 'react-icon' | 'svg';
 }
 
 const SidebarNavItem = ({
@@ -50,6 +63,7 @@ const SidebarNavItem = ({
   hideDrawer,
   onClick,
   useSimpleButton = false,
+  iconType,
 }: ISidebarNavItemProps): React.ReactElement => {
   const renderIcon = useCallback(
     (isActive: boolean): React.ReactNode => {
@@ -57,24 +71,8 @@ const SidebarNavItem = ({
         return icon;
       }
 
-      // Check if it's a React Icon (from react-icons) by checking if it has a displayName or is a function component
-      // React Icons typically don't have SVG-specific props and use 'style' instead
-      const isReactIcon =
-        icon.type &&
-        typeof icon.type === 'function' &&
-        (icon.type.name?.startsWith('Fa') ||
-          icon.type.name?.startsWith('Md') ||
-          icon.type.name?.startsWith('Io') ||
-          icon.type.name?.startsWith('Bs') ||
-          icon.type.name?.startsWith('Ai') ||
-          icon.type.name?.startsWith('Fi') ||
-          icon.type.name?.startsWith('Gi') ||
-          icon.type.name?.startsWith('Hi') ||
-          icon.type.name?.startsWith('Ri') ||
-          icon.type.name?.startsWith('Si') ||
-          icon.type.name?.startsWith('Ti') ||
-          icon.type.name?.startsWith('Tb') ||
-          icon.type.name?.startsWith('Vsc'));
+      // Use explicit iconType prop for robust icon detection
+      const isReactIcon = iconType === 'react-icon';
 
       if (isReactIcon) {
         // Handle React Icons with style prop
@@ -107,7 +105,7 @@ const SidebarNavItem = ({
         },
       );
     },
-    [icon, useSimpleButton],
+    [icon, useSimpleButton, iconType],
   );
 
   return (

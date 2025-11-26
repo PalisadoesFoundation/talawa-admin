@@ -156,20 +156,33 @@ describe('SidebarBase Component', () => {
       expect(mockSetHideDrawer).not.toHaveBeenCalled();
     });
 
-    it('prevents default behavior on Enter and Space keys', () => {
+    it('prevents default behavior on Enter key', () => {
       renderComponent({ hideDrawer: false });
       const toggleBtn = screen.getByTestId('toggleBtn');
 
-      // Test Enter key
-      const enterHandler = vi.fn((e) => e.preventDefault());
-      toggleBtn.addEventListener('keydown', enterHandler);
       const enterEvent = new KeyboardEvent('keydown', {
         key: 'Enter',
         code: 'Enter',
         bubbles: true,
+        cancelable: true,
       });
       const preventDefaultSpy = vi.spyOn(enterEvent, 'preventDefault');
       toggleBtn.dispatchEvent(enterEvent);
+      expect(preventDefaultSpy).toHaveBeenCalled();
+    });
+
+    it('prevents default behavior on Space key', () => {
+      renderComponent({ hideDrawer: false });
+      const toggleBtn = screen.getByTestId('toggleBtn');
+
+      const spaceEvent = new KeyboardEvent('keydown', {
+        key: ' ',
+        code: 'Space',
+        bubbles: true,
+        cancelable: true,
+      });
+      const preventDefaultSpy = vi.spyOn(spaceEvent, 'preventDefault');
+      toggleBtn.dispatchEvent(spaceEvent);
       expect(preventDefaultSpy).toHaveBeenCalled();
     });
   });
@@ -272,10 +285,11 @@ describe('SidebarBase Component', () => {
   });
 
   describe('Accessibility', () => {
-    it('has proper role attribute on toggle button', () => {
+    it('has native button semantics on toggle button', () => {
       renderComponent();
       const toggleBtn = screen.getByTestId('toggleBtn');
-      expect(toggleBtn).toHaveAttribute('role', 'button');
+      // Verify it's a native button element (has implicit button role)
+      expect(toggleBtn.tagName).toBe('BUTTON');
     });
 
     it('has proper tabIndex on toggle button', () => {

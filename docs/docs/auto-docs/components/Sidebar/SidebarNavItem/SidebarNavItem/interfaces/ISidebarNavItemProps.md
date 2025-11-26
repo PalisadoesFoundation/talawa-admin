@@ -4,7 +4,7 @@
 
 # Interface: ISidebarNavItemProps
 
-Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx#L35)
+Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx#L47)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:35](https:
 
 > **hideDrawer**: `boolean`
 
-Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx#L40)
+Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx#L52)
 
 ***
 
@@ -20,7 +20,15 @@ Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:40](https:
 
 > **icon**: `ReactNode`
 
-Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx#L37)
+Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx#L49)
+
+***
+
+### iconType?
+
+> `optional` **iconType**: `"react-icon"` \| `"svg"`
+
+Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx#L55)
 
 ***
 
@@ -28,7 +36,7 @@ Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:37](https:
 
 > **label**: `string`
 
-Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx#L38)
+Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx#L50)
 
 ***
 
@@ -36,7 +44,7 @@ Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:38](https:
 
 > `optional` **onClick**: () => `void`
 
-Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx#L41)
+Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx#L53)
 
 #### Returns
 
@@ -48,7 +56,7 @@ Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:41](https:
 
 > **testId**: `string`
 
-Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx#L39)
+Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx#L51)
 
 ***
 
@@ -56,7 +64,7 @@ Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:39](https:
 
 > **to**: `string`
 
-Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx#L36)
+Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx#L48)
 
 ***
 
@@ -64,4 +72,4 @@ Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:36](https:
 
 > `optional` **useSimpleButton**: `boolean`
 
-Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx#L42)
+Defined in: [src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Sidebar/SidebarNavItem/SidebarNavItem.tsx#L54)

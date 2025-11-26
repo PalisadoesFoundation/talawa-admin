@@ -274,11 +274,17 @@ describe('SidebarPluginSection Component', () => {
       expect(pluginLogos.length).toBeGreaterThan(0);
     });
 
-    it('icon wrapper contains the icon', () => {
+    it('each icon wrapper contains an actual icon element', () => {
       renderComponent();
-      // Verify the plugin logo is present
-      const pluginLogos = screen.getAllByTestId('plugin-logo');
-      expect(pluginLogos.length).toBeGreaterThan(0);
+      // Verify each plugin button has an icon (either custom img or default plugin-logo)
+      const buttons = screen.getAllByRole('button');
+      buttons.forEach((button) => {
+        // Check if button contains either a custom image or the default plugin logo
+        const hasCustomIcon = button.querySelector('img') !== null;
+        const hasDefaultIcon =
+          button.querySelector('[data-testid="plugin-logo"]') !== null;
+        expect(hasCustomIcon || hasDefaultIcon).toBe(true);
+      });
     });
   });
 

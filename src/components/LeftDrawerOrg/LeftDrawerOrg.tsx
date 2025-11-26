@@ -69,7 +69,7 @@ const leftDrawerOrg = ({
 }: ILeftDrawerProps): React.ReactElement => {
   const { t: tCommon } = useTranslation('common');
   const location = useLocation();
-  const { getItem, setItem } = useLocalStorage();
+  const { getItem } = useLocalStorage();
   const userId = getItem('id') as string | null;
 
   const [isProfilePage, setIsProfilePage] = useState(false);
@@ -107,12 +107,6 @@ const leftDrawerOrg = ({
       setHideDrawer(true);
     }
   }, [setHideDrawer]);
-
-  const handleToggle = useCallback((): void => {
-    const newState = !hideDrawer;
-    setItem('sidebar', newState.toString());
-    setHideDrawer(newState);
-  }, [hideDrawer, setItem, setHideDrawer]);
 
   // Memoize the main content to prevent unnecessary re-renders
   const drawerContent = useMemo(
@@ -169,7 +163,7 @@ const leftDrawerOrg = ({
   return (
     <SidebarBase
       hideDrawer={hideDrawer}
-      setHideDrawer={handleToggle}
+      setHideDrawer={setHideDrawer}
       portalType="admin"
       persistToggleState={true}
       headerContent={

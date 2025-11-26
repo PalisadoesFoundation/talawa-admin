@@ -30,7 +30,6 @@ import { useTranslation } from 'react-i18next';
 import { FaBell } from 'react-icons/fa';
 import styles from '../../../style/app-fixed.module.css';
 import { usePluginDrawerItems } from 'plugin';
-import useLocalStorage from 'utils/useLocalstorage';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
 import IconComponent from 'components/IconComponent/IconComponent';
@@ -49,7 +48,6 @@ const userSidebar = ({
 }: InterfaceUserSidebarProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'userSidebarOrg' });
   const { t: tCommon } = useTranslation('common');
-  const { setItem } = useLocalStorage();
 
   // Memoize the parameters to prevent infinite re-renders
   const userPermissions = useMemo(() => [], []);
@@ -68,12 +66,6 @@ const userSidebar = ({
       setHideDrawer(true);
     }
   }, [setHideDrawer]);
-
-  const handleToggle = useCallback((): void => {
-    const newState = !hideDrawer;
-    setItem('sidebar', newState.toString());
-    setHideDrawer(newState);
-  }, [hideDrawer, setItem, setHideDrawer]);
 
   // User Profile Section at top (only when drawer is not hidden)
   const headerContent = !hideDrawer ? (
@@ -108,6 +100,7 @@ const userSidebar = ({
           testId="userNotificationBtn"
           hideDrawer={hideDrawer}
           onClick={handleLinkClick}
+          iconType="react-icon"
         />
 
         <SidebarNavItem
@@ -133,19 +126,12 @@ const userSidebar = ({
   return (
     <SidebarBase
       hideDrawer={hideDrawer}
-      setHideDrawer={handleToggle}
+      setHideDrawer={setHideDrawer}
       portalType="user"
       backgroundColor="#f0f7fb"
       persistToggleState={true}
       headerContent={headerContent}
-      footerContent={
-        <>
-          <div style={{ display: hideDrawer ? 'none' : 'flex' }}>
-            <ProfileCard />
-          </div>
-          <SignOut hideDrawer={hideDrawer} />
-        </>
-      }
+      footerContent={<SignOut hideDrawer={hideDrawer} />}
     >
       {drawerContent}
     </SidebarBase>

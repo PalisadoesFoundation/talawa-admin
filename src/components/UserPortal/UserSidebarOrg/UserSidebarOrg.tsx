@@ -38,7 +38,6 @@ import styles from 'style/app-fixed.module.css';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
 import { usePluginDrawerItems } from 'plugin';
-import useLocalStorage from 'utils/useLocalstorage';
 import SidebarBase from 'components/Sidebar/SidebarBase/SidebarBase';
 import SidebarNavItem from 'components/Sidebar/SidebarNavItem/SidebarNavItem';
 import SidebarPluginSection from 'components/Sidebar/SidebarPluginSection/SidebarPluginSection';
@@ -57,7 +56,6 @@ const UserSidebarOrg = ({
   setHideDrawer,
 }: InterfaceUserSidebarOrgProps): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
-  const { setItem } = useLocalStorage();
 
   const [showDropdown, setShowDropdown] = React.useState(false);
 
@@ -71,12 +69,6 @@ const UserSidebarOrg = ({
     isAdmin,
     true,
   );
-
-  const handleToggle = useCallback((): void => {
-    const newState = !hideDrawer;
-    setItem('sidebar', newState.toString());
-    setHideDrawer(newState);
-  }, [hideDrawer, setItem, setHideDrawer]);
 
   const handleLinkClick = useCallback((): void => {
     if (window.innerWidth <= 820) {
@@ -162,19 +154,12 @@ const UserSidebarOrg = ({
   return (
     <SidebarBase
       hideDrawer={hideDrawer}
-      setHideDrawer={handleToggle}
+      setHideDrawer={setHideDrawer}
       portalType="user"
       backgroundColor="#f0f7fb"
       persistToggleState={false}
       headerContent={headerContent}
-      footerContent={
-        <>
-          <div style={{ display: hideDrawer ? 'none' : 'flex' }}>
-            <ProfileCard />
-          </div>
-          <SignOut hideDrawer={hideDrawer} />
-        </>
-      }
+      footerContent={<SignOut hideDrawer={hideDrawer} />}
     >
       {drawerContent}
     </SidebarBase>

@@ -573,18 +573,19 @@ describe('SignOut Component', () => {
 
       const signOutButton = screen.getByTestId('signOutBtn');
 
-      // Initially, text should be empty (hideDrawer is true)
-      expect(signOutButton).toHaveTextContent('');
+      // Initially, label text should be hidden when hideDrawer is true
+      expect(screen.queryByText('Sign Out')).not.toBeInTheDocument();
+      expect(screen.queryByText('Signing out...')).not.toBeInTheDocument();
 
       // Click the button
       fireEvent.click(signOutButton);
 
-      // Verify disabled state is still applied
+      // Verify disabled state is still applied and text remains hidden
       await waitFor(() => {
         expect(signOutButton).toHaveStyle({ opacity: '0.5' });
         expect(signOutButton).toHaveAttribute('aria-disabled', 'true');
-        // Text should still be empty when hideDrawer is true
-        expect(signOutButton).toHaveTextContent('');
+        expect(screen.queryByText('Sign Out')).not.toBeInTheDocument();
+        expect(screen.queryByText('Signing out...')).not.toBeInTheDocument();
       });
     });
   });

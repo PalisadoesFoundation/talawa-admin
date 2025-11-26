@@ -207,21 +207,19 @@ describe('SidebarNavItem Component', () => {
       const handleClick = vi.fn();
       renderComponent({ onClick: handleClick });
       const link = screen.getByTestId('testBtn').closest('a');
-      if (link) {
-        fireEvent.click(link);
-        expect(handleClick).toHaveBeenCalled();
-      }
+      expect(link).not.toBeNull();
+      fireEvent.click(link as Element);
+      expect(handleClick).toHaveBeenCalled();
     });
 
     it('allows event propagation after onClick', () => {
       const handleClick = vi.fn();
       renderComponent({ onClick: handleClick });
       const link = screen.getByTestId('testBtn').closest('a');
-      if (link) {
-        fireEvent.click(link);
-        // Just verify that the onClick was called, navigation is handled by React Router
-        expect(handleClick).toHaveBeenCalled();
-      }
+      expect(link).not.toBeNull();
+      fireEvent.click(link as Element);
+      // Just verify that the onClick was called, navigation is handled by React Router
+      expect(handleClick).toHaveBeenCalled();
     });
   });
 });

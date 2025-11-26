@@ -98,7 +98,6 @@ const SidebarBase = ({
           data-testid="toggleBtn"
           onClick={handleToggle}
           onKeyDown={handleKeyDown}
-          role="button"
           tabIndex={0}
           type="button"
         >
@@ -129,7 +128,7 @@ const SidebarBase = ({
       </div>
 
       {/* Optional Header Content (e.g., Organization Section) */}
-      {headerContent && headerContent}
+      {headerContent}
 
       {/* Main Content Area (Navigation Items) */}
       <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
