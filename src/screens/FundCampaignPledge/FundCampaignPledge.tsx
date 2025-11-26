@@ -66,7 +66,6 @@ const fundCampaignPledge = (): JSX.Element => {
     [key in ModalState]: boolean;
   }>({ [ModalState.SAME]: false, [ModalState.DELETE]: false });
 
-  const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [extraUsers, setExtraUsers] = useState<InterfaceUserInfoPG[]>([]);
   const [progressIndicator, setProgressIndicator] = useState<
     'raised' | 'pledged'
