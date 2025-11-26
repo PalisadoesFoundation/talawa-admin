@@ -502,6 +502,11 @@ describe('CreateGroupChat', () => {
       );
     });
     consoleSpy.mockRestore();
+
+    // Restore the original mock implementation
+    vi.mocked(useMinioUpload).mockReturnValue({
+      uploadFileToMinio: mockUploadFileToMinio,
+    });
   });
 
   test('should handle edit image button click', () => {
