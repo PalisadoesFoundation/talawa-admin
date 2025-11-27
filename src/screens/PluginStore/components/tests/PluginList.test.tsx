@@ -28,6 +28,7 @@ vi.mock('./PluginCard', () => ({
           alt="Plugin Icon"
         />
         <button
+        type="button"
           onClick={() => onManage(plugin)}
           data-testid={`plugin-action-btn-${plugin.id}`}
         >
@@ -41,11 +42,11 @@ vi.mock('./PluginCard', () => ({
 // Mock react-i18next - Vitest syntax
 const mockT = vi.fn((key: string) => {
   const translations: Record<string, string> = {
-    'pluginStore.noPluginsFound': 'No plugins found for your search',
-    'pluginStore.noInstalledPlugins': 'No installed plugins',
-    'pluginStore.noPluginsAvailable': 'No plugins available',
-    'pluginStore.installPluginsToSeeHere': 'Install plugins to see them here',
-    'pluginStore.checkBackLater': 'Check back later for new plugins',
+    noPluginsFound: 'No plugins found for your search',
+    noInstalledPlugins: 'No installed plugins', 
+    noPluginsAvailable: 'No plugins available',
+    installPluginsToSeeHere: 'Install plugins to see them here',
+    checkBackLater: 'Check back later for new plugins',
   };
   return translations[key];
 });
