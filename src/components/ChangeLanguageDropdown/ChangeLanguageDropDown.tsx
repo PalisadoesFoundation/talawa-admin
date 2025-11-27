@@ -60,7 +60,6 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
     }
 
     if (!userId) {
-      console.log('User not found');
       toast.error('User not found');
       return;
     }
