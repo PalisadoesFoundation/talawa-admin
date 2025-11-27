@@ -33,10 +33,18 @@ vi.mock('./AddOnSpot/AddOnSpotAttendee', () => ({
   }) =>
     show ? (
       <div data-testid="add-onspot-modal">
-        <button data-testid="add-onspot-close" onClick={handleClose}>
+        <button
+          type="button"
+          data-testid="add-onspot-close"
+          onClick={handleClose}
+        >
           Close Onspot
         </button>
-        <button data-testid="reload-members-btn" onClick={reloadMembers}>
+        <button
+          type="button"
+          data-testid="reload-members-btn"
+          onClick={reloadMembers}
+        >
           Reload Members
         </button>
       </div>
