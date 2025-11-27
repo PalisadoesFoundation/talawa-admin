@@ -156,7 +156,7 @@ const makeMembersUnknownNameMock = (): ApolloMock => ({
         {
           id: 'user2',
           name: '',
-          email: 'unknown@example.com',
+          emailAddress: 'unknown@example.com',
           role: 'member',
           avatarURL: null,
           createdAt: '2023-01-01',
