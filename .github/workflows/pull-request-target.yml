@@ -38,7 +38,7 @@ jobs:
       - name: Greeting Message to User
         uses: actions/first-interaction@v3
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
           pr-message: 'Congratulations on making your first PR!'
 
   Check-PR-Issue:
