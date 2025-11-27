@@ -60,7 +60,6 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
     }
 
     if (!userId) {
-      console.log('User not found');
       toast.error('User not found');
       return;
     }
@@ -74,7 +73,7 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
           avatarFile = await urlToFile(userImage);
         }
       } catch (error) {
-        console.log('Error processing avatar:', error);
+        console.error('Error processing avatar:', error);
       }
     }
     const input = {
@@ -87,7 +86,7 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
         variables: { input },
       });
     } catch (error) {
-      console.log('Error in changing language', error);
+      console.error('Error in changing language', error);
     } finally {
       await i18next.changeLanguage(languageCode);
       cookies.set('i18next', languageCode);

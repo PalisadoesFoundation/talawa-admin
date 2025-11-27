@@ -33,6 +33,31 @@ vi.mock('utils/MinioDownload', () => ({
   }),
 }));
 
+const { mockLocalStorageStore } = vi.hoisted(() => ({
+  mockLocalStorageStore: {} as Record<string, unknown>,
+}));
+
+vi.mock('utils/useLocalstorage', () => {
+  const useLocalStorageMock = () => ({
+    getItem: (key: string) => mockLocalStorageStore[key] || null,
+    setItem: (key: string, value: unknown) => {
+      mockLocalStorageStore[key] = value;
+    },
+    removeItem: (key: string) => {
+      delete mockLocalStorageStore[key];
+    },
+    getStorageKey: (key: string) => key,
+    clear: () => {
+      for (const key in mockLocalStorageStore)
+        delete mockLocalStorageStore[key];
+    },
+  });
+  return {
+    useLocalStorage: useLocalStorageMock,
+    default: useLocalStorageMock,
+  };
+});
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -55,6 +80,9 @@ i18n.use(initReactI18next).init({
 describe('GroupChatDetails', () => {
   beforeEach(() => {
     vi.resetAllMocks();
+    for (const key in mockLocalStorageStore) {
+      delete mockLocalStorageStore[key];
+    }
   });
 
   type MaybeChat = Partial<NewChatType> & { _id?: string };
@@ -350,7 +378,54 @@ describe('GroupChatDetails', () => {
     await wait();
   });
 
+  it('clears user search input', async () => {
+    useLocalStorage().setItem('userId', 'user1');
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={withSafeChat(filledMockChat)}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    await wait();
+    await act(async () => {
+      fireEvent.click(await screen.findByTestId('addMembers'));
+    });
+
+    await waitFor(async () => {
+      expect(await screen.findByTestId('searchUser')).toBeInTheDocument();
+    });
+
+    const searchInput = await screen.findByTestId('searchUser');
+    await act(async () => {
+      fireEvent.change(searchInput, {
+        target: { value: 'Smith' },
+      });
+    });
+
+    expect(searchInput).toHaveValue('Smith');
+
+    // Find clear button (rendered by SearchBar when value is not empty)
+    // SearchBar renders a button with aria-label="Clear search"
+    const clearBtn = await screen.findByLabelText('Clear search');
+    await act(async () => {
+      fireEvent.click(clearBtn);
+    });
+
+    await waitFor(() => {
+      expect(searchInput).toHaveValue('');
+    });
+  });
+
   it('handling invalid image type', async () => {
+    useLocalStorage().setItem('userId', 'user1');
     render(
       <I18nextProvider i18n={i18n}>
         <MockedProvider mocks={mocks} addTypename={false}>

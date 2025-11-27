@@ -91,7 +91,7 @@ import EditUserTagModal from './editModal/EditUserTagModal';
 import RemoveUserTagModal from './removeModal/RemoveUserTagModal';
 import UnassignUserTagModal from './unassignModal/UnassignUserTagModal';
 import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 export const getManageTagErrorMessage = (error: unknown): string => {
   if (error instanceof Error) {
