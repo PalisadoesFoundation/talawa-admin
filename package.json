@@ -41,7 +41,7 @@
     "i18next": "^25.6.3",
     "i18next-browser-languagedetector": "^8.2.0",
     "i18next-http-backend": "^3.0.2",
-    "inquirer": "^13.0.1",
+    "inquirer": "^12.11.1",
     "js-cookie": "^3.0.1",
     "jszip": "^3.10.1",
     "prop-types": "^15.8.1",
