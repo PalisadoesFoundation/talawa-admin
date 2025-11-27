@@ -101,10 +101,6 @@ const orgFundCampaign = (): JSX.Element => {
 
   const { fundId, orgId } = useParams();
 
-  if (!fundId || !orgId) {
-    return <Navigate to={'/'} />;
-  }
-
   const [campaign, setCampaign] = useState<InterfaceCampaignInfo | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<string | null>(null);
@@ -190,6 +186,10 @@ const orgFundCampaign = (): JSX.Element => {
     const isArchived = false;
     return { fundName, isArchived };
   }, [campaignData]);
+
+  if (!fundId || !orgId) {
+    return <Navigate to={'/'} />;
+  }
 
   if (campaignLoading) {
     return <Loader size="xl" />;

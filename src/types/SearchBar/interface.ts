@@ -5,8 +5,13 @@ import type { SearchBarSize, SearchBarVariant, SearchBarTrigger } from './type';
 /**
  * Metadata describing the action that triggered a search.
  */
+/**
+ * Metadata about how a search was triggered.
+ */
 export interface InterfaceSearchMeta {
+  /** The trigger source for the search (button click, enter key, etc.) */
   trigger: SearchBarTrigger;
+  /** The original DOM event that triggered the search, if available */
   event?: KeyboardEvent<HTMLInputElement> | MouseEvent<HTMLButtonElement>;
 }
 
@@ -14,8 +19,11 @@ export interface InterfaceSearchMeta {
  * Methods exposed by the {@link SearchBar} ref.
  */
 export interface InterfaceSearchBarRef {
+  /** Programmatically focus the search input */
   focus: () => void;
+  /** Programmatically blur the search input */
   blur: () => void;
+  /** Clear the search input value and trigger onChange */
   clear: () => void;
 }
 

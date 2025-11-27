@@ -231,7 +231,7 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
             type="button"
             className={buttonClassNames}
             onClick={handleButtonClick}
-            disabled={disabled}
+            disabled={disabled || isLoading}
             aria-label={buttonAriaLabel || buttonLabel || 'Search'}
             data-testid={buttonTestId}
           >

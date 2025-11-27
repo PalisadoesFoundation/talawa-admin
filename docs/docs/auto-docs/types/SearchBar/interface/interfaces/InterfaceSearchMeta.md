@@ -4,9 +4,9 @@
 
 # Interface: InterfaceSearchMeta
 
-Defined in: [src/types/SearchBar/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L8)
+Defined in: [src/types/SearchBar/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L11)
 
-Metadata describing the action that triggered a search.
+Metadata about how a search was triggered.
 
 ## Properties
 
@@ -14,7 +14,9 @@ Metadata describing the action that triggered a search.
 
 > `optional` **event**: `KeyboardEvent`\<`HTMLInputElement`\> \| `MouseEvent`\<`HTMLButtonElement`, `MouseEvent`\>
 
-Defined in: [src/types/SearchBar/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L10)
+Defined in: [src/types/SearchBar/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L15)
+
+The original DOM event that triggered the search, if available
 
 ***
 
@@ -22,4 +24,6 @@ Defined in: [src/types/SearchBar/interface.ts:10](https://github.com/PalisadoesF
 
 > **trigger**: [`SearchBarTrigger`](../../type/type-aliases/SearchBarTrigger.md)
 
-Defined in: [src/types/SearchBar/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L9)
+Defined in: [src/types/SearchBar/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L13)
+
+The trigger source for the search (button click, enter key, etc.)

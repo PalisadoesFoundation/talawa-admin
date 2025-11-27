@@ -4,7 +4,7 @@
 
 # Interface: InterfaceSearchBarRef
 
-Defined in: [src/types/SearchBar/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L16)
+Defined in: [src/types/SearchBar/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L21)
 
 Methods exposed by the SearchBar ref.
 
@@ -14,7 +14,9 @@ Methods exposed by the SearchBar ref.
 
 > **blur**: () => `void`
 
-Defined in: [src/types/SearchBar/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L18)
+Defined in: [src/types/SearchBar/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L25)
+
+Programmatically blur the search input
 
 #### Returns
 
@@ -26,7 +28,9 @@ Defined in: [src/types/SearchBar/interface.ts:18](https://github.com/PalisadoesF
 
 > **clear**: () => `void`
 
-Defined in: [src/types/SearchBar/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L19)
+Defined in: [src/types/SearchBar/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L27)
+
+Clear the search input value and trigger onChange
 
 #### Returns
 
@@ -38,7 +42,9 @@ Defined in: [src/types/SearchBar/interface.ts:19](https://github.com/PalisadoesF
 
 > **focus**: () => `void`
 
-Defined in: [src/types/SearchBar/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L17)
+Defined in: [src/types/SearchBar/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L23)
+
+Programmatically focus the search input
 
 #### Returns
 
