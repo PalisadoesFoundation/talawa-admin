@@ -1,12 +1,15 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import PluginRouteRenderer from '../../routes/PluginRouteRenderer';
 import { getPluginComponents, isPluginRegistered } from '../../registry';
+import MockComponent from '../components/MockComponent';
+import MockFallback from '../components/MockFallback';
 
 // Mock the registry
 vi.mock('../../registry', () => ({
   getPluginComponents: vi.fn(),
   isPluginRegistered: vi.fn(),
+  // ... other exports if needed
 }));
 
 // Mock React.Suspense
@@ -24,9 +27,6 @@ vi.mock('react', async () => {
     },
   };
 });
-
-const MockComponent = () => <div>Mock Component</div>;
-const MockFallback = () => <div>Mock Fallback</div>;
 
 describe('PluginRouteRenderer', () => {
   beforeEach(() => {

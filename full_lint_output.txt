@@ -1,0 +1,439 @@
+ WARN  Unsupported engine: wanted: {"node":">=24.x"} (current: {"node":"v23.7.0","pnpm":"10.4.1"})
+
+> talawa-admin@3.0.0 lint:check /Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin
+> eslint "**/*.{ts,tsx,graphql}" --max-warnings=0 && python .github/workflows/scripts/eslint_disable_check.py
+
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/App.spec.tsx
+    5:10  error  'BrowserRouter' is defined but never used         @typescript-eslint/no-unused-vars
+  149:7   error  'loadingLink' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  496:40  error  Unexpected any. Specify a different type          @typescript-eslint/no-explicit-any
+  497:11  error  '_factory' is defined but never used              @typescript-eslint/no-unused-vars
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/components/MemberRequestCard/MemberRequestCard.spec.tsx
+  14:7  error  'link2' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  15:7  error  'link3' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/components/UsersTableItem/UsersTableItem.tsx
+  136:33  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  219:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  220:32  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  220:72  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/plugin/graphql-service.ts
+  24:18  error  Interface name `CreatePluginInput` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u   @typescript-eslint/naming-convention
+  28:18  error  Interface name `InstallPluginInput` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u  @typescript-eslint/naming-convention
+  32:18  error  Interface name `UpdatePluginInput` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u   @typescript-eslint/naming-convention
+  39:18  error  Interface name `DeletePluginInput` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u   @typescript-eslint/naming-convention
+  73:19  error  Unexpected any. Specify a different type                                                         @typescript-eslint/no-explicit-any
+  75:29  error  Unexpected any. Specify a different type                                                         @typescript-eslint/no-explicit-any
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/plugin/managers/lifecycle.ts
+  409:44  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  440:44  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  471:44  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  502:44  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/plugin/routes/PluginRouteRenderer.tsx
+  12:11  error  Interface name `PluginRouteRendererProps` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u  @typescript-eslint/naming-convention
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/plugin/routes/PluginRoutes.tsx
+  13:11  error  Interface name `PluginRoutesProps` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u  @typescript-eslint/naming-convention
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/plugin/services/AdminPluginFileService.ts
+   19:18  error  Interface name `PluginFileValidationResult` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u  @typescript-eslint/naming-convention
+   25:18  error  Interface name `PluginInstallationResult` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u    @typescript-eslint/naming-convention
+   35:18  error  Interface name `InstalledPlugin` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u             @typescript-eslint/naming-convention
+   90:14  error  'error' is defined but never used                                                                        @typescript-eslint/no-unused-vars
+  192:24  error  Forbidden non-null assertion                                                                             @typescript-eslint/no-non-null-assertion
+  394:23  error  Unexpected any. Specify a different type                                                                 @typescript-eslint/no-explicit-any
+  427:28  error  Unexpected any. Specify a different type                                                                 @typescript-eslint/no-explicit-any
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/plugin/services/InternalFileWriter.ts
+   10:18  error  Interface name `FileWriteResult` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u      @typescript-eslint/naming-convention
+   18:18  error  Interface name `FileOperationResult` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u  @typescript-eslint/naming-convention
+   21:10  error  Unexpected any. Specify a different type                                                          @typescript-eslint/no-explicit-any
+   57:20  error  A `require()` style import is forbidden                                                           @typescript-eslint/no-require-imports
+  257:18  error  A `require()` style import is forbidden                                                           @typescript-eslint/no-require-imports
+  271:18  error  A `require()` style import is forbidden                                                           @typescript-eslint/no-require-imports
+  295:18  error  A `require()` style import is forbidden                                                           @typescript-eslint/no-require-imports
+  309:18  error  A `require()` style import is forbidden                                                           @typescript-eslint/no-require-imports
+  328:18  error  A `require()` style import is forbidden                                                           @typescript-eslint/no-require-imports
+  331:25  error  Unexpected any. Specify a different type                                                          @typescript-eslint/no-explicit-any
+  332:22  error  Unexpected any. Specify a different type                                                          @typescript-eslint/no-explicit-any
+  349:18  error  A `require()` style import is forbidden                                                           @typescript-eslint/no-require-imports
+  350:20  error  A `require()` style import is forbidden                                                           @typescript-eslint/no-require-imports
+  387:18  error  A `require()` style import is forbidden                                                           @typescript-eslint/no-require-imports
+  401:20  error  A `require()` style import is forbidden                                                           @typescript-eslint/no-require-imports
+  409:56  error  Unexpected any. Specify a different type                                                          @typescript-eslint/no-explicit-any
+  409:70  error  Unexpected any. Specify a different type                                                          @typescript-eslint/no-explicit-any
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/plugin/tests/graphql-service.spec.ts
+   5:3   error  'useGetAllPlugins' is defined but never used  @typescript-eslint/no-unused-vars
+   6:3   error  'useCreatePlugin' is defined but never used   @typescript-eslint/no-unused-vars
+   7:3   error  'useUpdatePlugin' is defined but never used   @typescript-eslint/no-unused-vars
+   8:3   error  'useDeletePlugin' is defined but never used   @typescript-eslint/no-unused-vars
+  32:27  error  'args' is defined but never used              @typescript-eslint/no-unused-vars
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/plugin/tests/managers/discovery.spec.ts
+   38:9   error  'mockComponents' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  614:29  error  Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+  622:29  error  Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+  630:29  error  Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+  638:29  error  Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+  646:29  error  Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/plugin/tests/managers/lifecycle.spec.ts
+    47:9   error  'mockLoadedPlugin' is assigned a value but never used  @typescript-eslint/no-unused-vars
+   332:13  error  'fetchSpy' is assigned a value but never used          @typescript-eslint/no-unused-vars
+   348:13  error  'fetchSpy' is assigned a value but never used          @typescript-eslint/no-unused-vars
+   461:22  error  Unexpected any. Specify a different type               @typescript-eslint/no-explicit-any
+   960:38  error  Unexpected any. Specify a different type               @typescript-eslint/no-explicit-any
+  1108:53  error  Unexpected any. Specify a different type               @typescript-eslint/no-explicit-any
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/plugin/tests/registry.spec.ts
+  105:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  123:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  141:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  183:58  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  196:58  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  216:58  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  243:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  268:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  285:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  304:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  323:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  342:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  354:21  error  Declare only one React component per file  react/no-multi-comp
+  366:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  387:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  403:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  420:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  437:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  452:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  478:33  error  Declare only one React component per file  react/no-multi-comp
+  481:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  496:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  509:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  524:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  548:21  error  Declare only one React component per file  react/no-multi-comp
+  549:21  error  Declare only one React component per file  react/no-multi-comp
+  580:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  593:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  608:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  623:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  647:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  667:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  684:12  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  704:58  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/plugin/tests/routes/PluginRouteRenderer.spec.tsx
+    2:18  error  'screen' is defined but never used         @typescript-eslint/no-unused-vars
+   17:40  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+   28:23  error  Declare only one React component per file  react/no-multi-comp
+   29:22  error  Declare only one React component per file  react/no-multi-comp
+  216:10  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  236:10  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/plugin/tests/routes/PluginRoutes.spec.tsx
+    2:26  error  'waitFor' is defined but never used        @typescript-eslint/no-unused-vars
+   44:12  error  Declare only one React component per file  react/no-multi-comp
+   55:62  error  Declare only one React component per file  react/no-multi-comp
+  181:51  error  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/plugin/tests/services/InternalFileWriter.spec.ts
+    5:3   error  'FileWriteResult' is defined but never used      @typescript-eslint/no-unused-vars
+    6:3   error  'FileOperationResult' is defined but never used  @typescript-eslint/no-unused-vars
+   47:7   error  'fileWriter' is defined but never used           @typescript-eslint/no-unused-vars
+   48:18  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+   49:23  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+   53:26  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+   56:28  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+   89:30  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  104:29  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  108:33  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  118:36  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  121:33  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  131:29  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  143:29  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  156:29  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  167:29  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  199:29  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  213:29  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  225:29  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  251:29  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  326:29  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  332:28  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  333:28  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  337:28  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  353:14  error  Forbidden non-null assertion                     @typescript-eslint/no-non-null-assertion
+  354:14  error  Forbidden non-null assertion                     @typescript-eslint/no-non-null-assertion
+  359:28  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  360:28  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  370:28  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  371:28  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  374:28  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  388:28  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  401:29  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  406:28  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  407:28  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  416:28  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  426:28  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  427:28  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  450:29  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  460:41  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  472:22  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  489:23  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  490:29  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  491:15  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  492:17  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  496:34  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  499:14  error  A `require()` style import is forbidden          @typescript-eslint/no-require-imports
+  500:16  error  A `require()` style import is forbidden          @typescript-eslint/no-require-imports
+  530:30  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  536:27  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  537:15  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  542:31  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  556:39  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  565:27  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  567:15  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  572:39  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  582:24  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  604:39  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  619:39  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  627:27  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  628:15  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  634:31  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  640:27  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  641:15  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  647:31  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  653:27  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  654:15  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  660:31  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  669:24  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  683:24  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  695:24  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  708:39  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  721:39  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  731:39  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  746:39  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  758:30  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  765:26  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  777:26  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  778:26  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  790:26  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  791:26  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  803:27  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  806:30  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  811:27  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  813:26  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  815:24  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  817:25  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  826:27  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  828:26  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  830:24  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  832:25  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  839:27  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  841:26  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  846:24  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  848:25  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  855:27  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  857:26  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  861:39  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  864:25  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  870:27  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  872:26  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  874:39  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  880:27  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  882:26  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  887:39  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  894:26  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  906:26  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  907:26  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  910:26  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  923:26  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  924:26  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  936:26  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  946:26  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  958:20  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  967:20  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  976:20  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+  985:20  error  Unexpected any. Specify a different type         @typescript-eslint/no-explicit-any
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/plugin/tests/utils.spec.ts
+   65:56  error  Unexpected any. Specify a different type                                               @typescript-eslint/no-explicit-any
+   79:14  error  Unexpected any. Specify a different type                                               @typescript-eslint/no-explicit-any
+   86:45  error  Unexpected any. Specify a different type                                               @typescript-eslint/no-explicit-any
+   87:50  error  Unexpected any. Specify a different type                                               @typescript-eslint/no-explicit-any
+   88:49  error  Unexpected any. Specify a different type                                               @typescript-eslint/no-explicit-any
+   89:44  error  Unexpected any. Specify a different type                                               @typescript-eslint/no-explicit-any
+  184:15  error  Interface name `TestItem` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u  @typescript-eslint/naming-convention
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/plugin/tests/vite/internalFileWriterPlugin.spec.ts
+   44:15  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   45:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   46:16  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  108:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  113:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  119:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  128:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  129:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  133:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  302:54  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  303:60  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  304:54  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  331:60  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  332:56  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  454:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  455:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  512:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  513:73  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  539:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  540:73  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  571:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  572:73  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  573:14  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  574:14  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  579:27  error  'callback' is defined but never used      @typescript-eslint/no-unused-vars
+  599:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  600:73  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  601:14  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  602:14  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  629:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  630:73  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  631:14  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  632:14  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  641:25  error  'callback' is defined but never used      @typescript-eslint/no-unused-vars
+  672:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  673:73  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  674:14  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  675:14  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  706:18  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  707:73  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  708:14  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  709:14  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/plugin/utils.ts
+  7:50  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/plugin/vite/internalFileWriterPlugin.ts
+   12:18  error  Interface name `InternalFileWriterPluginOptions` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u  @typescript-eslint/naming-convention
+   53:20  error  'config' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+  168:11  error  Unexpected any. Specify a different type                                                                      @typescript-eslint/no-explicit-any
+  171:12  error  Unexpected any. Specify a different type                                                                      @typescript-eslint/no-explicit-any
+  241:16  error  'writeFile' is defined but never used                                                                         @typescript-eslint/no-unused-vars
+  245:3   error  'debug' is defined but never used                                                                             @typescript-eslint/no-unused-vars
+  264:3   error  'debug' is defined but never used                                                                             @typescript-eslint/no-unused-vars
+  303:3   error  'debug' is defined but never used                                                                             @typescript-eslint/no-unused-vars
+  321:3   error  'debug' is defined but never used                                                                             @typescript-eslint/no-unused-vars
+  359:3   error  'debug' is defined but never used                                                                             @typescript-eslint/no-unused-vars
+  371:16  error  'copyDirectory' is defined but never used                                                                     @typescript-eslint/no-unused-vars
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/screens/FundCampaignPledge/FundCampaignPledge.tsx
+  69:10  error  'anchor' is assigned a value but never used     @typescript-eslint/no-unused-vars
+  69:18  error  'setAnchor' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/screens/ManageTag/ManageTag.spec.tsx
+  944:6  warning  Disabled test - if you want to skip a test temporarily, use .todo() instead  vitest/no-disabled-tests
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx
+  61:3  error  'isRecurring' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/screens/OrganizationEvents/CustomRecurrenceModal.spec.tsx
+  26:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  28:22  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/screens/PluginStore/UploadPluginModal.tsx
+  18:11  error  Interface name `UploadPluginModalProps` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u  @typescript-eslint/naming-convention
+  77:48  error  Forbidden non-null assertion                                                                         @typescript-eslint/no-non-null-assertion
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/screens/PluginStore/components/PluginCard.tsx
+  8:11  error  Interface name `PluginCardProps` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u  @typescript-eslint/naming-convention
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/screens/PluginStore/components/PluginList.tsx
+  9:11  error  Interface name `PluginListProps` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u  @typescript-eslint/naming-convention
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/screens/PluginStore/components/UninstallConfirmationModal.tsx
+  15:11  error  Interface name `UninstallConfirmationModalProps` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u  @typescript-eslint/naming-convention
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/screens/PluginStore/hooks/usePluginActions.spec.ts
+   63:26  error  Unexpected any. Specify a different type             @typescript-eslint/no-explicit-any
+  378:11  error  'originalImport' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/screens/PluginStore/hooks/usePluginActions.ts
+   14:11  error  Interface name `UsePluginActionsProps` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u  @typescript-eslint/naming-convention
+   15:15  error  Unexpected any. Specify a different type                                                            @typescript-eslint/no-explicit-any
+   16:26  error  Unexpected any. Specify a different type                                                            @typescript-eslint/no-explicit-any
+   28:10  error  'createPlugin' is assigned a value but never used                                                   @typescript-eslint/no-unused-vars
+   72:15  error  Unexpected any. Specify a different type                                                            @typescript-eslint/no-explicit-any
+  119:13  error  Unexpected any. Specify a different type                                                            @typescript-eslint/no-explicit-any
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/screens/PluginStore/hooks/usePluginFilters.spec.ts
+    1:27  error  'waitFor' is defined but never used                         @typescript-eslint/no-unused-vars
+    4:15  error  'IPluginMeta' is defined but never used                     @typescript-eslint/no-unused-vars
+   51:7   error  'mockDebouncedCallback' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  665:49  error  Unexpected any. Specify a different type                    @typescript-eslint/no-explicit-any
+  666:54  error  Unexpected any. Specify a different type                    @typescript-eslint/no-explicit-any
+  675:56  error  Unexpected any. Specify a different type                    @typescript-eslint/no-explicit-any
+  677:56  error  Unexpected any. Specify a different type                    @typescript-eslint/no-explicit-any
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/screens/PluginStore/hooks/usePluginFilters.ts
+   10:11  error  Interface name `UsePluginFiltersProps` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u  @typescript-eslint/naming-convention
+   11:15  error  Unexpected any. Specify a different type                                                            @typescript-eslint/no-explicit-any
+   35:13  error  Unexpected any. Specify a different type                                                            @typescript-eslint/no-explicit-any
+   43:27  error  Unexpected any. Specify a different type                                                            @typescript-eslint/no-explicit-any
+   46:13  error  Unexpected any. Specify a different type                                                            @typescript-eslint/no-explicit-any
+  110:23  error  Unexpected any. Specify a different type                                                            @typescript-eslint/no-explicit-any
+  115:26  error  Unexpected any. Specify a different type                                                            @typescript-eslint/no-explicit-any
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/screens/UserPortal/People/People.spec.tsx
+  40:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/screens/UserPortal/Transactions/Transactions.spec.tsx
+   2:26  error  'waitFor' is defined but never used  @typescript-eslint/no-unused-vars
+  18:15  error  '_key' is defined but never used     @typescript-eslint/no-unused-vars
+  19:15  error  '_key' is defined but never used     @typescript-eslint/no-unused-vars
+  19:29  error  '_value' is defined but never used   @typescript-eslint/no-unused-vars
+  20:18  error  '_key' is defined but never used     @typescript-eslint/no-unused-vars
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/screens/UserPortal/Transactions/Transactions.tsx
+  23:10  error  'useLocalStorage' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/screens/UserPortal/UserGlobalScreen/UserGlobalScreen.spec.tsx
+  3:24  error  'Outlet' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/screens/UserPortal/UserScreen/UserScreen.spec.tsx
+  85:7  error  'resizeWindow' is assigned a value but never used        @typescript-eslint/no-unused-vars
+  90:7  error  'clickToggleMenuBtn' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/screens/Users/Users.spec.tsx
+   7:10  error  'toast' is defined but never used               @typescript-eslint/no-unused-vars
+  24:13  error  'ApolloClient' is defined but never used        @typescript-eslint/no-unused-vars
+  25:15  error  'OperationVariables' is defined but never used  @typescript-eslint/no-unused-vars
+  27:10  error  'ORGANIZATION_LIST' is defined but never used   @typescript-eslint/no-unused-vars
+  27:29  error  'USER_LIST' is defined but never used           @typescript-eslint/no-unused-vars
+  35:7   error  'link6' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  36:7   error  'link7' is assigned a value but never used      @typescript-eslint/no-unused-vars
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/screens/Users/Users.tsx
+  97:9  error  'userType' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/utils/adminPluginInstaller.ts
+    2:10  error  'toast' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+    9:18  error  Interface name `AdminPluginManifest` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u             @typescript-eslint/naming-convention
+   26:18  error  Interface name `AdminPluginZipStructure` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u         @typescript-eslint/naming-convention
+   36:18  error  Interface name `AdminPluginInstallationResult` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u   @typescript-eslint/naming-convention
+   44:18  error  Interface name `AdminPluginInstallationOptions` must match the RegExp: /^(TestInterface|I|Interface)[A-Z]/u  @typescript-eslint/naming-convention
+   47:18  error  Unexpected any. Specify a different type                                                                     @typescript-eslint/no-explicit-any
+  124:16  error  'error' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+  183:16  error  'error' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+  239:12  error  'error' is defined but never used                                                                            @typescript-eslint/no-unused-vars
+  271:22  error  Forbidden non-null assertion                                                                                 @typescript-eslint/no-non-null-assertion
+  272:49  error  Forbidden non-null assertion                                                                                 @typescript-eslint/no-non-null-assertion
+
+/Users/riddhikhera/Desktop/Palisadoes Foundation/talawa-admin/src/utils/getRefreshToken.spec.ts
+  36:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+✖ 348 problems (347 errors, 1 warning)
+
+ ELIFECYCLE  Command failed with exit code 1.

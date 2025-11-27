@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
+import { render, screen } from '@testing-library/react';
 import PluginRoutes from '../../routes/PluginRoutes';
 import { usePluginRoutes } from '../../hooks';
+import TestWrapper from '../components/TestWrapper';
 
 // Mock the hooks
 vi.mock('../../hooks', () => ({
@@ -13,48 +13,32 @@ vi.mock('../../hooks', () => ({
 const mockLazyComponent = vi.fn();
 vi.mock('react', async () => {
   const actual = await vi.importActual('react');
+  const { default: MockLazyComponent } = await import(
+    '../components/MockLazyComponent'
+  );
+  const { default: MockSuspense } = await import('../components/MockSuspense');
+
   return {
     ...actual,
     lazy: vi.fn((importFn) => {
       mockLazyComponent.mockImplementation(importFn);
-      return vi.fn(() => (
-        <div data-testid="lazy-component">Lazy Component</div>
-      ));
+      return vi.fn(() => <MockLazyComponent />);
     }),
-    Suspense: ({
-      children,
-      fallback,
-    }: {
-      children: React.ReactNode;
-      fallback: React.ReactNode;
-    }) => (
-      <div data-testid="suspense">
-        {fallback}
-        {children}
-      </div>
-    ),
+    Suspense: MockSuspense,
   };
 });
 
 // Mock Route component
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
+  const { default: MockRoute } = await import('../components/MockRoute');
   return {
     ...actual,
-    Route: ({ path, element }: { path: string; element: React.ReactNode }) => (
-      <div data-testid={`route-${path}`} data-path={path}>
-        {element}
-      </div>
-    ),
+    Route: MockRoute,
   };
 });
 
 const mockUsePluginRoutes = vi.mocked(usePluginRoutes);
-
-// Test wrapper component
-const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
 
 describe('PluginRoutes', () => {
   beforeEach(() => {

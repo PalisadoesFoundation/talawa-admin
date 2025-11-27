@@ -1,5 +1,4 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import React from 'react';
 import {
   pluginRegistry,
   registerPluginDynamically,
@@ -14,6 +13,9 @@ import {
   extractComponentNames,
   manifestCache,
 } from '../registry';
+import MockComponent1 from './components/MockComponent1';
+import MockComponent2 from './components/MockComponent2';
+import { createMockComponent } from './components/MockComponentFactory';
 
 // Mock the plugin manager
 vi.mock('../manager', () => ({
@@ -95,8 +97,7 @@ describe('Plugin Registry', () => {
 
   describe('createLazyPluginComponent', () => {
     it('should create a lazy component that loads successfully', async () => {
-      const mockComponent = () =>
-        React.createElement('div', null, 'Test Component');
+      const mockComponent = MockComponent1;
       const mockGetPluginManager = vi.mocked(
         await import('../manager'),
       ).getPluginManager;
@@ -350,8 +351,8 @@ describe('Plugin Registry', () => {
   describe('registerPluginDynamically', () => {
     it('should register plugin with components successfully', async () => {
       const mockComponents = {
-        Component1: () => React.createElement('div', null, 'Component 1'),
-        Component2: () => React.createElement('div', null, 'Component 2'),
+        Component1: MockComponent1,
+        Component2: MockComponent2,
       };
 
       const mockGetPluginManager = vi.mocked(
@@ -372,7 +373,7 @@ describe('Plugin Registry', () => {
 
     it('should not register plugin if already registered', async () => {
       pluginRegistry['test-plugin'] = {
-        existing: () => React.createElement('div', null, 'Existing'),
+        existing: MockComponent1,
       };
 
       const mockGetPluginManager = vi.mocked(
@@ -382,7 +383,7 @@ describe('Plugin Registry', () => {
         getLoadedPlugin: vi.fn().mockReturnValue({
           id: 'test-plugin',
           status: 'active',
-          components: { new: () => React.createElement('div', null, 'New') },
+          components: { new: MockComponent2 },
         }),
       } as any);
 
@@ -415,7 +416,7 @@ describe('Plugin Registry', () => {
         getLoadedPlugin: vi.fn().mockReturnValue({
           id: 'test-plugin',
           status: 'inactive',
-          components: { test: () => React.createElement('div', null, 'Test') },
+          components: { test: MockComponent1 },
         }),
       } as any);
 
@@ -475,7 +476,7 @@ describe('Plugin Registry', () => {
           id,
           status: 'active',
           components: {
-            [`${id}Component`]: () => React.createElement('div', null, id),
+            [`${id}Component`]: createMockComponent(id),
           },
         })),
       } as any);
@@ -531,7 +532,7 @@ describe('Plugin Registry', () => {
   describe('isPluginRegistered', () => {
     it('should return true for registered plugin', () => {
       pluginRegistry['test-plugin'] = {
-        test: () => React.createElement('div', null, 'Test'),
+        test: MockComponent1,
       };
 
       expect(isPluginRegistered('test-plugin')).toBe(true);
@@ -545,8 +546,8 @@ describe('Plugin Registry', () => {
   describe('getPluginComponents', () => {
     it('should return components for registered plugin', () => {
       const mockComponents = {
-        Component1: () => React.createElement('div', null, 'Component 1'),
-        Component2: () => React.createElement('div', null, 'Component 2'),
+        Component1: MockComponent1,
+        Component2: MockComponent2,
       };
       pluginRegistry['test-plugin'] = mockComponents;
 
@@ -560,8 +561,7 @@ describe('Plugin Registry', () => {
 
   describe('getPluginComponent', () => {
     it('should return component from registry if available', () => {
-      const mockComponent = () =>
-        React.createElement('div', null, 'Test Component');
+      const mockComponent = MockComponent1;
       pluginRegistry['test-plugin'] = { TestComponent: mockComponent };
 
       expect(getPluginComponent('test-plugin', 'TestComponent')).toBe(
@@ -570,8 +570,7 @@ describe('Plugin Registry', () => {
     });
 
     it('should fallback to plugin manager if not in registry', async () => {
-      const mockComponent = () =>
-        React.createElement('div', null, 'Manager Component');
+      const mockComponent = MockComponent2;
       const mockGetPluginManager = vi.mocked(
         await import('../manager'),
       ).getPluginManager;
