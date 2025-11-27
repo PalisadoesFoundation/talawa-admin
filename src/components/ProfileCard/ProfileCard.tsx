@@ -45,16 +45,23 @@ import { useNavigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import { resolveProfileNavigation } from 'utils/profileNavigation';
 
-const ProfileCard = (): React.JSX.Element => {
+interface InterfaceProfileCardProps {
+  portal?: 'admin' | 'user';
+}
+
+const ProfileCard = ({
+  portal = 'admin',
+}: InterfaceProfileCardProps): React.JSX.Element => {
   const { getItem } = useLocalStorage();
-  const role = getItem('role');
+  const role = getItem<string>('role');
   const userRole = role != 'regular' ? 'Admin' : 'User';
-  const name = getItem('name') as string;
+  const name = getItem<string>('name') || '';
   const nameParts = name?.split(' ') || [];
   const firstName = nameParts[0] || '';
   const lastName = nameParts.slice(1).join(' ') || '';
-  const userImage = getItem('UserImage') as string;
+  const userImage = getItem<string>('UserImage') || '';
   const navigate = useNavigate();
   const { orgId } = useParams();
 
@@ -64,6 +71,11 @@ const ProfileCard = (): React.JSX.Element => {
     fullName.length > MAX_NAME_LENGTH
       ? fullName.substring(0, MAX_NAME_LENGTH - 3) + '...'
       : fullName;
+  const profileDestination = resolveProfileNavigation({
+    portal,
+    role,
+    orgId,
+  });
 
   return (
     <Dropdown as={ButtonGroup} variant="none" style={{ width: '100%' }}>
@@ -105,11 +117,7 @@ const ProfileCard = (): React.JSX.Element => {
         <button
           className={styles.chevronRightbtn}
           data-testid="profileBtn"
-          onClick={() =>
-            userRole === 'User'
-              ? navigate(`/user/settings`)
-              : navigate(`/member/${orgId || ''}`)
-          }
+          onClick={() => navigate(profileDestination)}
         >
           <ChevronRightIcon className={styles.chevronIcon} />
         </button>

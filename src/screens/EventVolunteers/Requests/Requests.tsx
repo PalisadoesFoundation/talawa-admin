@@ -16,7 +16,7 @@
  * @requires components/Loader/Loader
  * @requires components/Avatar/Avatar
  * @requires subComponents/SortingButton
- * @requires subComponents/SearchBar
+ * @requires shared-components/SearchBar/SearchBar
  * @requires GraphQl/Queries/EventVolunteerQueries
  * @requires GraphQl/Mutations/EventVolunteerMutation
  * @requires utils/interfaces
@@ -57,7 +57,7 @@ import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMut
 import { toast } from 'react-toastify';
 import { debounce } from '@mui/material';
 import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 const dataGridStyle = {
   backgroundColor: 'white',

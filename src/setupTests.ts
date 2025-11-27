@@ -23,3 +23,11 @@ import 'flag-icons/css/flag-icons.min.css';
 
 vi.useFakeTimers();
 vi.advanceTimersByTime(18000);
+
+import { createLocalStorageMock } from './test-utils/localStorageMock';
+
+// Provide a resilient localStorage mock for jsdom-based tests
+// Some suites expect setItem/getItem/clear to exist globally.
+if (typeof globalThis.localStorage === 'undefined') {
+  globalThis.localStorage = createLocalStorageMock() as unknown as Storage;
+}
