@@ -123,6 +123,8 @@ describe('PluginList', () => {
     expect(screen.getByTestId('plugin-list-empty')).toBeInTheDocument();
     expect(mockT).toHaveBeenCalledWith('noPluginsAvailable');
     expect(mockT).toHaveBeenCalledWith('checkBackLater');
+    expect(screen.getByText('No plugins available')).toBeInTheDocument();
+  expect(screen.getByText('Check back later for new plugins')).toBeInTheDocument();
   });
 
   // Test 5: When no plugins and has search term - shows "no plugins found"
@@ -170,8 +172,8 @@ describe('PluginList', () => {
     expect(listContainer).toHaveStyle('gap: 20px');
   });
 
-  // Test 9: Uses plugin id as key for each PluginCard
-  it('uses plugin id as key for each PluginCard in the list', () => {
+  // Test 9: renders one item per plugin id for each PluginCard
+  it('renders one item per plugin id for each PluginCard in the list', () => {
     render(<PluginList {...defaultProps} />);
 
     mockPlugins.forEach((plugin) => {

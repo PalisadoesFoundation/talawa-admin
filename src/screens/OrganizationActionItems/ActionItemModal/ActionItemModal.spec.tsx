@@ -1511,9 +1511,6 @@ describe('ItemModal - Specific Test Coverage', () => {
 });
 
 // ...existing code...
-beforeEach(() => {
-  vi.clearAllMocks();
-});
 
 afterAll(() => {
   vi.clearAllMocks();
