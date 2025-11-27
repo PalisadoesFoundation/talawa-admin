@@ -64,11 +64,15 @@ vi.mock('./InviteByEmail/InviteByEmailModal', () => ({
         <span data-testid="invite-is-recurring">
           {String(isRecurring ?? false)}
         </span>
-        <button data-testid="invite-close" onClick={handleClose}>
+        <button type="button" data-testid="invite-close" onClick={handleClose}>
           Close Invite
         </button>
         {onInvitesSent && (
-          <button data-testid="invite-send" onClick={onInvitesSent}>
+          <button
+            type="button"
+            data-testid="invite-send"
+            onClick={onInvitesSent}
+          >
             Send Invites
           </button>
         )}
@@ -82,7 +86,7 @@ const defaultProps = {
   show: true,
   eventId: 'event123',
   orgId: 'org123',
-  handleClose: vi.fn(),
+  handleClose: () => {},
 };
 
 const makeAttendeesEmptyMock = (): ApolloMock => ({
@@ -110,7 +114,7 @@ const makeMembersWithOneMock = (): ApolloMock => ({
         {
           id: 'user1',
           name: 'John Doe',
-          email: 'johndoe@example.com',
+          emailAddress: 'johndoe@example.com',
           role: 'member',
           avatarURL: null,
           createdAt: '2023-01-01',
@@ -179,7 +183,9 @@ const makeEventDetailsRecurringMock = (): ApolloMock => ({
     data: {
       event: {
         id: 'event123',
-        recurrenceRule: 'RRULE:FREQ=DAILY',
+        recurrenceRule: {
+          id: 'RRULE:FREQ=DAILY',
+        },
       },
     },
   },
@@ -230,7 +236,7 @@ const renderWithProviders = (
   props: typeof defaultProps = defaultProps,
 ) =>
   render(
-    <MockedProvider addTypename={false} mocks={mocks}>
+    <MockedProvider mocks={mocks}>
       <BrowserRouter>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Provider store={store}>
