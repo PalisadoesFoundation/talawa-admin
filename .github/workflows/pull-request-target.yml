@@ -14,24 +14,9 @@ on:
   pull_request_target:
 
 jobs:
-  Check-PR-Issue:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3
-      - name: Check PR linked issue and assignee
-        uses: arkid15r/check-pr-issue-action@f2c2ac3b8c73b5da96294af9ac3ec174098cf513
-        with:
-          close_pr_on_failure: 'true'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          no_assignee_message: 'The linked issue must be assigned to the PR author.'
-          no_issue_message: 'The PR must be linked to an issue assigned to the PR author.'
-          require_assignee: 'true'
-          skip_users_file_path: '.github/workflows/config/check-pr-issue-skip-usernames.txt'
-
   PR-Greeting:
     name: Pull Request Target
     runs-on: ubuntu-latest
-    needs: [Check-PR-Issue]
     steps:
       - name: Add the PR Review Policy
         uses: thollander/actions-comment-pull-request@v3
@@ -49,3 +34,18 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           pr-message: "Congratulations on making your first PR! :confetti_ball: If you haven't already, check out our [Contributing Guidelines](https://github.com/PalisadoesFoundation/talawa-admin/blob/-/CONTRIBUTING.md) and [PR Reporting Guidelines](https://github.com/PalisadoesFoundation/talawa-admin/blob/-/PR_GUIDELINES.md) to ensure that you are following our guidelines for contributing and creating PR."
+
+  Check-PR-Issue:
+    runs-on: ubuntu-latest
+    needs: [PR-Greeting]
+    steps:
+      - uses: actions/checkout@1af3b93b6815bc44a9784bd300feb67ff0d1eeb3
+      - name: Check PR linked issue and assignee
+        uses: arkid15r/check-pr-issue-action@f2c2ac3b8c73b5da96294af9ac3ec174098cf513
+        with:
+          close_pr_on_failure: 'true'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          no_assignee_message: 'The linked issue must be assigned to the PR author.'
+          no_issue_message: 'The PR must be linked to an issue assigned to the PR author.'
+          require_assignee: 'true'
+          skip_users_file_path: '.github/workflows/config/check-pr-issue-skip-usernames.txt'
