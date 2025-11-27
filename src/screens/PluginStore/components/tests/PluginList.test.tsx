@@ -28,7 +28,7 @@ vi.mock('./PluginCard', () => ({
           alt="Plugin Icon"
         />
         <button
-         type="button"
+          type="button"
           onClick={() => onManage(plugin)}
           data-testid={`plugin-action-btn-${plugin.id}`}
         >
