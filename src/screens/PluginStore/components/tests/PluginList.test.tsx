@@ -124,7 +124,9 @@ describe('PluginList', () => {
     expect(mockT).toHaveBeenCalledWith('noPluginsAvailable');
     expect(mockT).toHaveBeenCalledWith('checkBackLater');
     expect(screen.getByText('No plugins available')).toBeInTheDocument();
-  expect(screen.getByText('Check back later for new plugins')).toBeInTheDocument();
+    expect(
+      screen.getByText('Check back later for new plugins'),
+    ).toBeInTheDocument();
   });
 
   // Test 5: When no plugins and has search term - shows "no plugins found"
