@@ -66,7 +66,7 @@ import PledgeDeleteModal from 'screens/FundCampaignPledge/deleteModal/PledgeDele
 import { Navigate, useParams } from 'react-router';
 import PledgeModal from '../Campaigns/PledgeModal';
 import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
@@ -407,14 +407,18 @@ const Pledges = (): JSX.Element => {
 
   return (
     <div>
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <SearchBar
-          placeholder={t('searchBy') + ' ' + t(searchBy)}
-          onSearch={setSearchTerm}
-          inputTestId="searchPledges"
-          buttonTestId="searchBtn"
-        />
-        <div className="d-flex gap-4 ">
+      <div
+        className={`${styles.btnsContainer} gap-3 flex-column flex-lg-row align-items-stretch`}
+      >
+        <div className="flex-grow-1 w-100">
+          <SearchBar
+            placeholder={t('searchBy') + ' ' + t(searchBy)}
+            onSearch={setSearchTerm}
+            inputTestId="searchPledges"
+            buttonTestId="searchBtn"
+          />
+        </div>
+        <div className="d-flex gap-3 flex-wrap align-items-center">
           <SortingButton
             sortingOptions={[
               { label: t('pledgers'), value: 'pledgers' },
@@ -427,8 +431,6 @@ const Pledges = (): JSX.Element => {
             dataTestIdPrefix="searchByDrpdwn"
             buttonLabel={t('searchBy')}
           />
-        </div>
-        <div className={styles.btnsBlock}>
           <SortingButton
             sortingOptions={[
               { label: t('lowestAmount'), value: 'amount_ASC' },
