@@ -1,12 +1,7 @@
 import React from 'react';
-import { fireEvent, render, waitFor } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import { EventRegistrantsModal } from './EventRegistrantsModal';
-import { EVENT_ATTENDEES, MEMBERS_LIST } from 'GraphQl/Queries/Queries';
-import {
-  ADD_EVENT_ATTENDEE,
-  REMOVE_EVENT_ATTENDEE,
-} from 'GraphQl/Mutations/mutations';
+import type { MockedResponse } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
@@ -17,8 +12,16 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { describe, test, expect, vi } from 'vitest';
 
-// Mock the AddOnSpotAttendee component
+import { EventRegistrantsModal } from './EventRegistrantsModal';
+import {
+  EVENT_ATTENDEES,
+  MEMBERS_LIST,
+  EVENT_DETAILS,
+} from 'GraphQl/Queries/Queries';
+import { ADD_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
+
 vi.mock('./AddOnSpot/AddOnSpotAttendee', () => ({
+  __esModule: true,
   default: ({
     show,
     handleClose,
@@ -27,199 +30,280 @@ vi.mock('./AddOnSpot/AddOnSpotAttendee', () => ({
     show: boolean;
     handleClose: () => void;
     reloadMembers: () => void;
-  }) => {
-    return show ? (
+  }) =>
+    show ? (
       <div data-testid="add-onspot-modal">
-        <button onClick={handleClose}>Close Modal</button>
-        <button onClick={reloadMembers} data-testid="reload-members-btn">
+        <button
+          type="button"
+          data-testid="add-onspot-close"
+          onClick={handleClose}
+        >
+          Close Onspot
+        </button>
+        <button
+          type="button"
+          data-testid="reload-members-btn"
+          onClick={reloadMembers}
+        >
           Reload Members
         </button>
       </div>
-    ) : null;
-  },
+    ) : null,
 }));
 
-const queryMockWithoutRegistrant = [
-  {
-    request: {
-      query: EVENT_ATTENDEES,
-      variables: { eventId: 'event123' },
-    },
-    result: {
-      data: {
-        event: {
-          attendees: [],
-        },
-      },
-    },
-  },
-];
+vi.mock('./InviteByEmail/InviteByEmailModal', () => ({
+  __esModule: true,
+  default: ({
+    show,
+    handleClose,
+    onInvitesSent,
+    eventId,
+    isRecurring,
+  }: {
+    show: boolean;
+    handleClose: () => void;
+    onInvitesSent?: () => void;
+    eventId: string;
+    isRecurring?: boolean;
+  }) =>
+    show ? (
+      <div data-testid="invite-modal">
+        <span data-testid="invite-event-id">{eventId}</span>
+        <span data-testid="invite-is-recurring">
+          {String(isRecurring ?? false)}
+        </span>
+        <button type="button" data-testid="invite-close" onClick={handleClose}>
+          Close Invite
+        </button>
+        {onInvitesSent && (
+          <button
+            type="button"
+            data-testid="invite-send"
+            onClick={onInvitesSent}
+          >
+            Send Invites
+          </button>
+        )}
+      </div>
+    ) : null,
+}));
 
-const queryMockWithRegistrant = [
-  {
-    request: {
-      query: EVENT_ATTENDEES,
-      variables: { eventId: 'event123' },
-    },
-    result: {
-      data: {
-        event: {
-          __typename: 'Event',
-          attendees: [
-            {
-              id: 'user1',
-              name: 'John Doe',
-              email: 'johndoe@example.com',
-              avatarURL: null,
-              createdAt: '2023-01-01',
-              role: 'attendee',
-              natalSex: 'Male',
-              birthDate: '1990-01-01',
-              eventsAttended: {
-                id: 'event123',
-              },
-            },
-          ],
-        },
-      },
-    },
-  },
-];
+type ApolloMock = MockedResponse<Record<string, unknown>>;
 
-const queryMockOrgMembers = [
-  {
-    request: {
-      query: MEMBERS_LIST,
-      variables: { organizationId: 'org123' },
-    },
-    result: {
-      data: {
-        usersByOrganizationId: [
-          {
-            id: 'user1',
-            name: 'John Doe',
-            email: 'johndoe@example.com',
-            role: 'member',
-            avatarURL: null,
-            createdAt: '2023-01-01',
-            updatedAt: '2023-01-01',
-          },
-        ],
-      },
-    },
-  },
-];
-const queryMockWithoutOrgMembers = [
-  {
-    request: {
-      query: MEMBERS_LIST,
-      variables: { organizationId: 'org123' },
-    },
-    result: {
-      data: {
-        usersByOrganizationId: [],
-      },
-    },
-  },
-];
+const defaultProps = {
+  show: true,
+  eventId: 'event123',
+  orgId: 'org123',
+  handleClose: () => {},
+};
 
-const successfulAddRegistrantMock = [
-  {
-    request: {
-      query: ADD_EVENT_ATTENDEE,
-      variables: { userId: 'user1', eventId: 'event123' },
+const makeAttendeesEmptyMock = (): ApolloMock => ({
+  request: {
+    query: EVENT_ATTENDEES,
+    variables: { eventId: 'event123' },
+  },
+  result: {
+    data: {
+      event: {
+        attendees: [],
+      },
     },
-    result: {
-      data: {
-        addEventAttendee: {
+  },
+});
+
+const makeMembersWithOneMock = (): ApolloMock => ({
+  request: {
+    query: MEMBERS_LIST,
+    variables: { organizationId: 'org123' },
+  },
+  result: {
+    data: {
+      usersByOrganizationId: [
+        {
           id: 'user1',
           name: 'John Doe',
           emailAddress: 'johndoe@example.com',
+          role: 'member',
+          avatarURL: null,
+          createdAt: '2023-01-01',
+          updatedAt: '2023-01-01',
+        },
+      ],
+    },
+  },
+});
+
+const makeMembersEmptyMock = (): ApolloMock => ({
+  request: {
+    query: MEMBERS_LIST,
+    variables: { organizationId: 'org123' },
+  },
+  result: {
+    data: {
+      usersByOrganizationId: [],
+    },
+  },
+});
+
+const makeMembersUnknownNameMock = (): ApolloMock => ({
+  request: {
+    query: MEMBERS_LIST,
+    variables: { organizationId: 'org123' },
+  },
+  result: {
+    data: {
+      usersByOrganizationId: [
+        {
+          id: 'user2',
+          name: '',
+          emailAddress: 'unknown@example.com',
+          role: 'member',
+          avatarURL: null,
+          createdAt: '2023-01-01',
+          updatedAt: '2023-01-01',
+        },
+      ],
+    },
+  },
+});
+
+const makeEventDetailsNonRecurringMock = (): ApolloMock => ({
+  request: {
+    query: EVENT_DETAILS,
+    variables: { eventId: 'event123' },
+  },
+  result: {
+    data: {
+      event: {
+        id: 'event123',
+        recurrenceRule: null,
+      },
+    },
+  },
+});
+
+const makeEventDetailsRecurringMock = (): ApolloMock => ({
+  request: {
+    query: EVENT_DETAILS,
+    variables: { eventId: 'event123' },
+  },
+  result: {
+    data: {
+      event: {
+        id: 'event123',
+        recurrenceRule: {
+          id: 'RRULE:FREQ=DAILY',
         },
       },
     },
   },
-];
+});
 
-const unsuccessfulAddRegistrantMock = [
-  {
-    request: {
-      query: ADD_EVENT_ATTENDEE,
-      variables: { userId: 'user1', eventId: 'event123' },
-    },
-    error: new Error('Oops'),
+const makeAddRegistrantSuccessMock = (): ApolloMock => ({
+  request: {
+    query: ADD_EVENT_ATTENDEE,
+    variables: { userId: 'user1', eventId: 'event123' },
   },
-];
-
-const successfulRemoveRegistrantMock = [
-  {
-    request: {
-      query: REMOVE_EVENT_ATTENDEE,
-      variables: { userId: 'user1', eventId: 'event123' },
-    },
-    result: {
-      data: {
-        removeEventAttendee: {
-          id: 'user1',
-          name: 'John Doe',
-          emailAddress: 'johndoe@example.com',
-        },
+  result: {
+    data: {
+      addEventAttendee: {
+        id: 'user1',
+        name: 'John Doe',
+        emailAddress: 'johndoe@example.com',
       },
     },
   },
-];
+});
 
-const unsuccessfulRemoveRegistrantMock = [
-  {
-    request: {
-      query: REMOVE_EVENT_ATTENDEE,
-      variables: { userId: 'user1', eventId: 'event123' },
-    },
-    error: new Error('Oops'),
+const makeAddRegistrantRecurringSuccessMock = (): ApolloMock => ({
+  request: {
+    query: ADD_EVENT_ATTENDEE,
+    variables: { userId: 'user1', recurringEventInstanceId: 'event123' },
   },
-];
+  result: {
+    data: {
+      addEventAttendee: {
+        id: 'user1',
+        name: 'John Doe',
+        emailAddress: 'johndoe@example.com',
+      },
+    },
+  },
+});
 
-describe('Testing Event Registrants Modal', () => {
-  const props = {
-    show: true,
-    eventId: 'event123',
-    orgId: 'org123',
-    handleClose: vi.fn(),
-  };
+const makeAddRegistrantErrorMock = (): ApolloMock => ({
+  request: {
+    query: ADD_EVENT_ATTENDEE,
+    variables: { userId: 'user1', eventId: 'event123' },
+  },
+  error: new Error('Oops'),
+});
 
-  test('The modal should be rendered, correct text must be displayed when there are no attendees and add attendee mutation must function properly', async () => {
-    const { queryByText, queryByLabelText, getByTestId } = render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[
-          ...queryMockWithoutRegistrant,
-          ...queryMockOrgMembers,
-          ...successfulAddRegistrantMock,
-          ...queryMockWithRegistrant,
-        ]}
-      >
-        <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
-                <EventRegistrantsModal {...props} />
-              </I18nextProvider>
-            </Provider>
-          </LocalizationProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+const renderWithProviders = (
+  mocks: ApolloMock[],
+  props: typeof defaultProps = defaultProps,
+) =>
+  render(
+    <MockedProvider mocks={mocks}>
+      <BrowserRouter>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ToastContainer />
+              <EventRegistrantsModal {...props} />
+            </I18nextProvider>
+          </Provider>
+        </LocalizationProvider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+describe('EventRegistrantsModal', () => {
+  test('renders modal with basic elements', async () => {
+    const { queryByText, getByTestId } = renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersWithOneMock(),
+    ]);
+
+    await waitFor(() => {
+      expect(queryByText('Event Registrants')).toBeInTheDocument();
+      expect(getByTestId('autocomplete')).toBeInTheDocument();
+    });
+  });
+
+  test('modal close button calls handleClose', async () => {
+    const handleClose = vi.fn();
+    const { getAllByRole } = renderWithProviders(
+      [
+        makeEventDetailsNonRecurringMock(),
+        makeAttendeesEmptyMock(),
+        makeMembersWithOneMock(),
+      ],
+      { ...defaultProps, handleClose },
     );
+
+    await waitFor(() => {
+      expect(getAllByRole('button', { name: /close/i })[0]).toBeInTheDocument();
+    });
+
+    const closeButton = getAllByRole('button', { name: /close/i })[0];
+    fireEvent.click(closeButton);
+
+    expect(handleClose).toHaveBeenCalled();
+  });
+
+  test('shows warning when Add Registrant is clicked without selecting a member', async () => {
+    const { queryByText } = renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersWithOneMock(),
+    ]);
 
     await waitFor(() =>
       expect(queryByText('Event Registrants')).toBeInTheDocument(),
     );
 
-    await waitFor(() =>
-      expect(getByTestId('autocomplete')).toBeInTheDocument(),
-    );
-
-    // Get warning modal on blank button click
     fireEvent.click(queryByText('Add Registrant') as Element);
 
     await waitFor(() =>
@@ -227,14 +311,24 @@ describe('Testing Event Registrants Modal', () => {
         queryByText('Please choose an user to add first!'),
       ).toBeInTheDocument(),
     );
+  });
 
-    // Choose a user to add as an attendee
-    const attendeeInput = queryByLabelText('Add an Registrant');
-    fireEvent.change(attendeeInput as Element, {
-      target: { value: 'John Doe' },
-    });
-    fireEvent.keyDown(attendeeInput as HTMLElement, { key: 'ArrowDown' });
-    fireEvent.keyDown(attendeeInput as HTMLElement, { key: 'Enter' });
+  test('successfully adds registrant for non-recurring event', async () => {
+    const { queryByText, queryByLabelText } = renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersWithOneMock(),
+      makeAddRegistrantSuccessMock(),
+    ]);
+
+    await waitFor(() =>
+      expect(queryByText('Event Registrants')).toBeInTheDocument(),
+    );
+
+    const input = queryByLabelText('Add an Registrant') as HTMLElement;
+    fireEvent.change(input, { target: { value: 'John Doe' } });
+    fireEvent.keyDown(input, { key: 'ArrowDown' });
+    fireEvent.keyDown(input, { key: 'Enter' });
 
     fireEvent.click(queryByText('Add Registrant') as Element);
 
@@ -242,45 +336,27 @@ describe('Testing Event Registrants Modal', () => {
       expect(queryByText('Adding the attendee...')).toBeInTheDocument(),
     );
 
-    await waitFor(() => {
-      expect(queryByText('Attendee added Successfully')).toBeInTheDocument();
-    });
+    await waitFor(() =>
+      expect(queryByText('Attendee added Successfully')).toBeInTheDocument(),
+    );
   });
 
-  test('Add attendee mutation must fail properly', async () => {
-    const { queryByText, queryByLabelText } = render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[
-          ...queryMockWithoutRegistrant,
-          ...queryMockOrgMembers,
-          ...unsuccessfulAddRegistrantMock,
-        ]}
-      >
-        <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
-                <EventRegistrantsModal {...props} />
-              </I18nextProvider>
-            </Provider>
-          </LocalizationProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  test('handles error when add registrant mutation fails', async () => {
+    const { queryByText, queryByLabelText } = renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersWithOneMock(),
+      makeAddRegistrantErrorMock(),
+    ]);
 
     await waitFor(() =>
       expect(queryByText('Event Registrants')).toBeInTheDocument(),
     );
 
-    // Choose a user to add as an attendee
-    const attendeeInput = queryByLabelText('Add an Registrant');
-    fireEvent.change(attendeeInput as Element, {
-      target: { value: 'John Doe' },
-    });
-    fireEvent.keyDown(attendeeInput as HTMLElement, { key: 'ArrowDown' });
-    fireEvent.keyDown(attendeeInput as HTMLElement, { key: 'Enter' });
+    const input = queryByLabelText('Add an Registrant') as HTMLElement;
+    fireEvent.change(input, { target: { value: 'John Doe' } });
+    fireEvent.keyDown(input, { key: 'ArrowDown' });
+    fireEvent.keyDown(input, { key: 'Enter' });
 
     fireEvent.click(queryByText('Add Registrant') as Element);
 
@@ -293,322 +369,147 @@ describe('Testing Event Registrants Modal', () => {
     );
   });
 
-  test('Assigned attendees must be shown with badges and delete attendee mutation must function properly', async () => {
-    const { queryByText, getByTestId } = render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[
-          ...queryMockWithRegistrant,
-          ...queryMockOrgMembers,
-          ...successfulRemoveRegistrantMock,
-          ...queryMockWithoutRegistrant,
-        ]}
-      >
-        <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
-                <EventRegistrantsModal {...props} />
-              </I18nextProvider>
-            </Provider>
-          </LocalizationProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  test('uses recurring variables when event is recurring (isRecurring branch)', async () => {
+    const { queryByText, queryByLabelText } = renderWithProviders([
+      makeEventDetailsRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersWithOneMock(),
+      makeAddRegistrantRecurringSuccessMock(),
+    ]);
 
     await waitFor(() =>
       expect(queryByText('Event Registrants')).toBeInTheDocument(),
     );
 
+    const input = queryByLabelText('Add an Registrant') as HTMLElement;
+    fireEvent.change(input, { target: { value: 'John Doe' } });
+    fireEvent.keyDown(input, { key: 'ArrowDown' });
+    fireEvent.keyDown(input, { key: 'Enter' });
+
+    fireEvent.click(queryByText('Add Registrant') as Element);
+
     await waitFor(() =>
-      expect(getByTestId('autocomplete')).toBeInTheDocument(),
+      expect(queryByText('Adding the attendee...')).toBeInTheDocument(),
     );
 
     await waitFor(() =>
-      expect(queryByText('Add Registrant')).toBeInTheDocument(),
+      expect(queryByText('Attendee added Successfully')).toBeInTheDocument(),
     );
-
-    // Test that autocomplete works
-    const autocomplete = getByTestId('autocomplete');
-    expect(autocomplete).toBeInTheDocument();
   });
 
-  test('Delete attendee mutation must fail properly', async () => {
-    const { queryByText, getByTestId } = render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[
-          ...queryMockWithRegistrant,
-          ...queryMockOrgMembers,
-          ...unsuccessfulRemoveRegistrantMock,
-        ]}
-      >
-        <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
-                <EventRegistrantsModal {...props} />
-              </I18nextProvider>
-            </Provider>
-          </LocalizationProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  test('noOptionsText and AddOnSpotAttendee modal open & reloadMembers callback', async () => {
+    const { getByPlaceholderText, getByText, getByTestId, queryByTestId } =
+      renderWithProviders([
+        makeEventDetailsNonRecurringMock(),
+        makeAttendeesEmptyMock(),
+        makeMembersEmptyMock(),
+        makeAttendeesEmptyMock(), // for reloadMembers refetch
+      ]);
 
-    await waitFor(() =>
-      expect(queryByText('Event Registrants')).toBeInTheDocument(),
-    );
-
-    await waitFor(() =>
-      expect(getByTestId('autocomplete')).toBeInTheDocument(),
-    );
-  });
-  test('Autocomplete functionality works correctly', async () => {
-    const { getByTitle, getByText, getByPlaceholderText } = render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[...queryMockWithoutRegistrant, ...queryMockWithoutOrgMembers]}
-      >
-        <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
-                <EventRegistrantsModal {...props} />
-              </I18nextProvider>
-            </Provider>
-          </LocalizationProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    // Wait for loading state to finish
     await waitFor(() => {
-      const autocomplete = getByPlaceholderText(
+      const input = getByPlaceholderText(
         'Choose the user that you want to add',
       );
-      expect(autocomplete).toBeInTheDocument();
+      expect(input).toBeInTheDocument();
     });
 
-    // Test empty state with no options
-    const autocomplete = getByPlaceholderText(
+    const input = getByPlaceholderText(
       'Choose the user that you want to add',
-    );
-    fireEvent.change(autocomplete, { target: { value: 'NonexistentUser' } });
+    ) as HTMLElement;
+    fireEvent.change(input, { target: { value: 'NonexistentUser' } });
 
     await waitFor(() => {
       expect(getByText('No Registrations found')).toBeInTheDocument();
       expect(getByText('Add Onspot Registration')).toBeInTheDocument();
     });
 
-    // Test clicking "Add Onspot Registration"
-    fireEvent.click(getByText('Add Onspot Registration'));
-    expect(getByText('Add Onspot Registration')).toBeInTheDocument();
-    const closeButton = getByTitle('Close');
-    fireEvent.click(closeButton);
-  });
-
-  test('Modal renders with basic elements', async () => {
-    const { queryByText, getByTestId } = render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[...queryMockWithoutRegistrant, ...queryMockOrgMembers]}
-      >
-        <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
-                <EventRegistrantsModal {...props} />
-              </I18nextProvider>
-            </Provider>
-          </LocalizationProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(queryByText('Event Registrants')).toBeInTheDocument();
-      expect(getByTestId('autocomplete')).toBeInTheDocument();
-    });
-  });
-
-  test('Modal close functionality works correctly', async () => {
-    const handleClose = vi.fn();
-    const customProps = {
-      ...props,
-      handleClose: handleClose,
-    };
-
-    const { getByRole } = render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[...queryMockWithoutRegistrant, ...queryMockOrgMembers]}
-      >
-        <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
-                <EventRegistrantsModal {...customProps} />
-              </I18nextProvider>
-            </Provider>
-          </LocalizationProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(getByRole('button', { name: /close/i })).toBeInTheDocument();
-    });
-
-    const closeButton = getByRole('button', { name: /close/i });
-    fireEvent.click(closeButton);
-
-    expect(handleClose).toHaveBeenCalled();
-  });
-
-  test('AddOnSpotAttendee modal reloadMembers callback is triggered', async () => {
-    const { getByText, getByPlaceholderText, getByTestId } = render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[
-          ...queryMockWithoutRegistrant,
-          ...queryMockWithoutOrgMembers,
-          ...queryMockWithoutRegistrant, // refetch mock
-        ]}
-      >
-        <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
-                <EventRegistrantsModal {...props} />
-              </I18nextProvider>
-            </Provider>
-          </LocalizationProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    // Wait for loading state to finish
-    await waitFor(() => {
-      const autocomplete = getByPlaceholderText(
-        'Choose the user that you want to add',
-      );
-      expect(autocomplete).toBeInTheDocument();
-    });
-
-    // Open the AddOnSpotAttendee modal
-    const autocomplete = getByPlaceholderText(
-      'Choose the user that you want to add',
-    );
-    fireEvent.change(autocomplete, { target: { value: 'NonexistentUser' } });
-
-    await waitFor(() => {
-      expect(getByText('Add Onspot Registration')).toBeInTheDocument();
-    });
-
     fireEvent.click(getByText('Add Onspot Registration'));
 
-    // The AddOnSpotAttendee modal should be shown
+    await waitFor(() =>
+      expect(getByTestId('add-onspot-modal')).toBeInTheDocument(),
+    );
+
+    const reloadBtn = getByTestId('reload-members-btn');
+    fireEvent.click(reloadBtn);
+
+    const closeBtn = getByTestId('add-onspot-close');
+    fireEvent.click(closeBtn);
+
     await waitFor(() => {
-      expect(getByTestId('add-onspot-modal')).toBeInTheDocument();
-    });
-
-    // Click the reload members button which should trigger the reloadMembers callback
-    const reloadButton = getByTestId('reload-members-btn');
-    fireEvent.click(reloadButton);
-
-    // Close the modal
-    fireEvent.click(getByText('Close Modal'));
-
-    // Verify modal is closed
-    await waitFor(() => {
-      expect(() => getByTestId('add-onspot-modal')).toThrow();
+      expect(queryByTestId('add-onspot-modal')).not.toBeInTheDocument();
     });
   });
 
-  test('Attendee with only id field (no _id) works correctly', async () => {
-    // Mock with an attendee that has id but no _id to test the fallback branch
-    const queryMockWithIdOnly = [
-      {
-        request: {
-          query: EVENT_ATTENDEES,
-          variables: { eventId: 'event123' },
-        },
-        result: {
-          data: {
-            event: {
-              __typename: 'Event',
-              attendees: [
-                {
-                  __typename: 'User',
-                  id: 'user2',
-                  // Intentionally no _id to test the fallback
-                  name: 'Jane Smith',
-
-                  createdAt: '2023-02-01',
-                  gender: 'Female',
-                  birthDate: '1992-02-02',
-                  eventsAttended: [
-                    {
-                      __typename: 'Event',
-                      id: 'event123',
-                    },
-                  ],
-                },
-              ],
-            },
-          },
-        },
-      },
-    ];
-
-    const successfulRemoveWithIdOnly = [
-      {
-        request: {
-          query: REMOVE_EVENT_ATTENDEE,
-          variables: { userId: 'user2', eventId: 'event123' },
-        },
-        result: {
-          data: {
-            removeEventAttendee: { _id: 'user2' },
-          },
-        },
-      },
-    ];
-
-    const { queryByText, getByTestId } = render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[
-          ...queryMockWithIdOnly,
-          ...queryMockOrgMembers,
-          ...successfulRemoveWithIdOnly,
-        ]}
-      >
-        <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
-                <EventRegistrantsModal {...props} />
-              </I18nextProvider>
-            </Provider>
-          </LocalizationProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  test('Invite by Email button opens InviteByEmailModal and handleClose closes it', async () => {
+    const { queryByText, getByTestId, queryByTestId } = renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersWithOneMock(),
+    ]);
 
     await waitFor(() =>
       expect(queryByText('Event Registrants')).toBeInTheDocument(),
     );
 
+    const inviteButton = queryByText('Invite by Email') as HTMLElement;
+    fireEvent.click(inviteButton);
+
     await waitFor(() =>
-      expect(getByTestId('autocomplete')).toBeInTheDocument(),
+      expect(getByTestId('invite-modal')).toBeInTheDocument(),
     );
+    expect(getByTestId('invite-event-id').textContent).toBe('event123');
+    expect(getByTestId('invite-is-recurring').textContent).toBe('false');
+
+    const closeInvite = getByTestId('invite-close');
+    fireEvent.click(closeInvite);
+
+    await waitFor(() => {
+      expect(queryByTestId('invite-modal')).not.toBeInTheDocument();
+    });
+  });
+
+  test('InviteByEmailModal onInvitesSent callback triggers and isRecurring is true for recurring event', async () => {
+    const { queryByText, getByTestId } = renderWithProviders([
+      makeEventDetailsRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersWithOneMock(),
+    ]);
+
+    await waitFor(() =>
+      expect(queryByText('Event Registrants')).toBeInTheDocument(),
+    );
+
+    const inviteButton = queryByText('Invite by Email') as HTMLElement;
+    fireEvent.click(inviteButton);
+
+    await waitFor(() =>
+      expect(getByTestId('invite-modal')).toBeInTheDocument(),
+    );
+    expect(getByTestId('invite-is-recurring').textContent).toBe('true');
+
+    const sendBtn = getByTestId('invite-send');
+    fireEvent.click(sendBtn);
+    // coverage hits onInvitesSent -> attendeesRefetch
+  });
+
+  test('getOptionLabel falls back to "Unknown User" when member name is empty', async () => {
+    const { getByLabelText, findByText } = renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersUnknownNameMock(),
+    ]);
+
+    await waitFor(() =>
+      expect(getByLabelText('Add an Registrant')).toBeInTheDocument(),
+    );
+
+    const input = getByLabelText('Add an Registrant') as HTMLElement;
+
+    // Open options so the Autocomplete renders the items using getOptionLabel
+    fireEvent.keyDown(input, { key: 'ArrowDown' });
+
+    // This text only appears via getOptionLabel's "Unknown User" fallback
+    const option = await findByText('Unknown User');
+    expect(option).toBeInTheDocument();
   });
 });
