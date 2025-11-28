@@ -525,6 +525,39 @@ describe('Testing People Screen Pagination [User Portal]', () => {
     await userEvent.selectOptions(select, '5');
     await wait();
   });
+
+  it('handles backward pagination correctly', async () => {
+    // Use mocks that support forward and backward navigation
+    render(
+      <MockedProvider
+        addTypename={false}
+        mocks={[defaultQueryMock, nextPageMock]}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    // Navigate to page 2
+    const nextButton = screen.getByTestId('nextPage');
+    await userEvent.click(nextButton);
+    await wait();
+
+    // Now navigate back to page 1 (this covers lines 158-161)
+    // This uses cached cursor, no new query needed
+    const prevButton = screen.getByTestId('previousPage');
+    await userEvent.click(prevButton);
+    await wait();
+
+    // Should be back on first page
+    expect(screen.getByText('Test User')).toBeInTheDocument();
+  });
 });
 
 describe('People Component Mode Switch and Search Coverage', () => {
@@ -702,5 +735,29 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
     expect(screen.getByText('Admin User')).toBeInTheDocument();
     expect(screen.queryByText('Test User')).not.toBeInTheDocument();
     expect(screen.queryByText('test@example.com')).not.toBeInTheDocument();
+  });
+
+  it('clears search input', async () => {
+    render(
+      <MockedProvider addTypename={false} mocks={[defaultQueryMock]}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const searchInput = screen.getByTestId('searchInput');
+    await userEvent.type(searchInput, 'Test');
+    expect(searchInput).toHaveValue('Test');
+
+    // SearchBar renders a clear button when value is not empty
+    const clearBtn = screen.getByLabelText('Clear search');
+    await userEvent.click(clearBtn);
+
+    expect(searchInput).toHaveValue('');
   });
 });

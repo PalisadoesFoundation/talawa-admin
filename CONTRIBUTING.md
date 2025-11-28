@@ -8,16 +8,18 @@ If you are new to contributing to open source, please read the Open Source Guide
 
 <!-- toc -->
 
-- [General](#general)
-- [Testing and Code Quality](#testing-and-code-quality)
-  - [Quick Reference](#quick-reference)
-- [Making Contributions](#making-contributions)
+- [Contributing to Talawa-Admin](#contributing-to-talawa-admin)
+  - [Table of Contents](#table-of-contents)
+  - [General](#general)
+  - [Testing and Code Quality](#testing-and-code-quality)
+    - [Quick Reference](#quick-reference)
+  - [Making Contributions](#making-contributions)
 
 <!-- tocstop -->
 
 ## General
 
-Please read the [Palisadoes Contributing Guidelines](https://github.com/PalisadoesFoundation/.github/blob/main/profile/CONTRIBUTING.md).
+Please read the [Palisadoes Contributing Guidelines](https://developer.palisadoes.org/docs/contributor-guide/contributing).
 
 ## Testing and Code Quality
 

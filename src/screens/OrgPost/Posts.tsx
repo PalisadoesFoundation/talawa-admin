@@ -20,15 +20,20 @@ import type { ApolloError } from '@apollo/client';
 import { Modal, Button } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
 import NotFound from 'components/NotFound/NotFound';
-import OrgPostCard from 'components/OrgPostCard/OrgPostCard';
+import PostCard from 'shared-components/postCard/PostCard';
 import type { InterfacePost, InterfacePostEdge } from 'types/Post/interface';
+import type { PostNode } from 'types/Post/type';
+import type { InterfacePostCard } from 'utils/interfaces';
 import PinnedPostsStory from './PinnedPostsStory';
 import { Close } from '@mui/icons-material';
 
 interface InterfaceOrganizationData {
   organization?: {
     posts?: {
-      edges?: InterfacePostEdge[];
+      edges?: {
+        node: PostNode;
+        cursor: string;
+      }[];
     };
   };
   postsByOrganization?: InterfacePost[];
@@ -44,6 +49,7 @@ interface InterfacePostsRenderer {
   searchTerm: string;
   sortingOption: string;
   displayPosts: InterfacePost[];
+  refetch?: () => void;
 }
 
 const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
@@ -55,6 +61,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
   searchTerm,
   sortingOption,
   displayPosts,
+  refetch,
 }): JSX.Element | null => {
   const [selectedPinnedPost, setSelectedPinnedPost] =
     useState<InterfacePost | null>(null);
@@ -63,60 +70,53 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
   if (loading) return <Loader />;
   if (error) return <div data-testid="error-message">Error loading posts</div>;
 
-  const createAttachments = (
-    post: InterfacePost,
-    createdAt: Date,
-  ): {
-    id: string;
-    postId: string;
-    name: string;
-    mimeType: string;
-    createdAt: Date;
-  }[] => {
-    return [
-      ...(post.imageUrl
-        ? [
-            {
-              id: `${post.id}-image`,
-              postId: post.id,
-              name: post.imageUrl,
-              mimeType: 'image/jpeg',
-              createdAt,
-            },
-          ]
-        : []),
-      ...(post.videoUrl
-        ? [
-            {
-              id: `${post.id}-video`,
-              postId: post.id,
-              name: post.videoUrl,
-              mimeType: 'video/mp4',
-              createdAt,
-            },
-          ]
-        : []),
-    ];
-  };
-
-  const renderPostCard = (post: InterfacePost): JSX.Element | null => {
+  const renderPostCard = (
+    post: InterfacePost | PostNode,
+  ): JSX.Element | null => {
     if (!post || !post.id) return null;
-    const createdAt = new Date(post.createdAt);
-    const attachments = createAttachments(post, createdAt);
+
+    // Get image and video from attachments for PostNode, or directly from InterfacePost
+    let imageUrl = null;
+    let videoUrl = null;
+
+    const postNode = post as PostNode;
+    const imageAttachment = postNode.attachments?.find((att) =>
+      att.mimeType.startsWith('image/'),
+    );
+    const videoAttachment = postNode.attachments?.find((att) =>
+      att.mimeType.startsWith('video/'),
+    );
+    imageUrl = imageAttachment?.name || null;
+    videoUrl = videoAttachment?.name || null;
+
+    // Convert to InterfacePostCard format expected by the shared PostCard
+    const cardProps: InterfacePostCard = {
+      id: post.id,
+      creator: {
+        id: post.creator?.id || '',
+        name: post.creator?.name || 'Unknown',
+        avatarURL: post.creator?.avatarURL || null,
+      },
+      hasUserVoted: (post as PostNode).hasUserVoted,
+      postedAt: new Date(post.createdAt).toLocaleDateString(),
+      pinnedAt: post.pinnedAt || null,
+      image: imageUrl,
+      video: videoUrl,
+      title: post.caption || '',
+      text: '',
+      commentCount: (post as PostNode).commentsCount,
+      upVoteCount: (post as PostNode).upVotesCount,
+      downVoteCount: (post as PostNode).downVotesCount,
+      fetchPosts: refetch || (() => window.location.reload()),
+    };
 
     return (
-      <div data-testid="postCardContainer" key={post.id}>
-        <OrgPostCard
-          key={post.id}
-          post={{
-            id: post.id,
-            caption: post.caption || null,
-            createdAt,
-            pinnedAt: post.pinnedAt ? new Date(post.pinnedAt) : null,
-            creatorId: post.creator?.id || null,
-            attachments,
-          }}
-        />
+      <div
+        data-testid="postCardContainer"
+        data-cy="postCardContainer"
+        key={post.id}
+      >
+        <PostCard {...cardProps} />
       </div>
     );
   };
@@ -202,7 +202,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
       {/* Regular Posts */}
       <div data-testid="regular-posts-container">
         {data.organization.posts.edges
-          .map((edge: InterfacePostEdge) => renderPostCard(edge.node))
+          .map((edge) => renderPostCard(edge.node))
           .filter(Boolean)}
       </div>
 

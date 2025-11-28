@@ -193,4 +193,16 @@ describe('UpcomingEventsCard Component', () => {
     const cardItems = screen.getAllByTestId('card-item');
     expect(cardItems).toHaveLength(10);
   });
+
+  it('uses default empty array when upcomingEvents is undefined', () => {
+    const propsWithUndefined = {
+      upcomingEvents: undefined as unknown as IEvent[],
+      eventLoading: false,
+      onViewAllEventsClick: vi.fn(),
+    };
+
+    render(<UpcomingEventsCard {...propsWithUndefined} />);
+
+    expect(screen.getByText('noUpcomingEvents')).toBeInTheDocument();
+  });
 });
