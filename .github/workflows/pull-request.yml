@@ -438,15 +438,6 @@ jobs:
         Check-AutoDocs,
         Check-ESlint-Disable,
         Check-Code-Coverage-Disable,
-     needs:
-       [
-         Code-Quality-Checks,
-         Check-AutoDocs,
-         Check-ESlint-Disable,
-         Check-Code-Coverage-Disable,
-         Check-ItSkip-Disable,
-         Check-Mock-Isolation,
-       ]
         Check-ItSkip-Disable,
         Check-Mock-Isolation,
       ]
