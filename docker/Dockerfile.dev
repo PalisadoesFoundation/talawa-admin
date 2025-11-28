@@ -5,8 +5,9 @@ ENV PORT=${PORT}
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
-RUN corepack enable && corepack prepare pnpm@10.4.1 --activate && pnpm install
+RUN corepack enable && corepack prepare pnpm@10.4.1 --activate
+COPY package.json pnpm-lock.yaml ./
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 
