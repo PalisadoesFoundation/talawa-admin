@@ -212,10 +212,13 @@ describe('Talawa Admin Setup', () => {
 
     // Test the validation function with valid input
     expect(capturedValidationFn).toBeDefined();
-    if (capturedValidationFn) {
-      const result = capturedValidationFn('valid-key');
-      expect(result).toBe(true);
+    if (!capturedValidationFn) {
+      throw new Error(
+        'Validation function for reCAPTCHA site key was not captured',
+      );
     }
+    const result = capturedValidationFn('valid-key');
+    expect(result).toBe(true);
   });
 
   it('should test the validation function for reCAPTCHA site key with invalid input', async () => {
@@ -252,9 +255,12 @@ describe('Talawa Admin Setup', () => {
 
     // Test the validation function with invalid input
     expect(capturedValidationFn).toBeDefined();
-    if (capturedValidationFn) {
-      const result = capturedValidationFn('invalid-key');
-      expect(result).toBe('Invalid reCAPTCHA site key. Please try again.');
+    if (!capturedValidationFn) {
+      throw new Error(
+        'Validation function for reCAPTCHA site key was not captured',
+      );
     }
+    const result = capturedValidationFn('invalid-key');
+    expect(result).toBe('Invalid reCAPTCHA site key. Please try again.');
   });
 });
