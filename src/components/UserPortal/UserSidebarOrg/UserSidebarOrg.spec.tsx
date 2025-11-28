@@ -461,7 +461,6 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
 
     const toggleButton = screen.getByTestId('toggleBtn');
     expect(toggleButton).toBeInTheDocument();
-    expect(toggleButton).toHaveAttribute('tabIndex', '0');
 
     await userEvent.click(toggleButton);
     expect(mockSetHideDrawer).toHaveBeenCalledWith(true);

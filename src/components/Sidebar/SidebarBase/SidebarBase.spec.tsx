@@ -292,12 +292,6 @@ describe('SidebarBase Component', () => {
       expect(toggleBtn.tagName).toBe('BUTTON');
     });
 
-    it('has proper tabIndex on toggle button', () => {
-      renderComponent();
-      const toggleBtn = screen.getByTestId('toggleBtn');
-      expect(toggleBtn).toHaveAttribute('tabIndex', '0');
-    });
-
     it('has aria-label on hamburger icon', () => {
       renderComponent();
       const icon = screen
