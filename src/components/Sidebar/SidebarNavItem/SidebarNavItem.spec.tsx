@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, it, vi, expect, beforeEach } from 'vitest';
+import { describe, it, vi, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router';
 import SidebarNavItem from './SidebarNavItem';
@@ -23,10 +23,6 @@ describe('SidebarNavItem Component', () => {
       </BrowserRouter>,
     );
   };
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
 
   describe('Basic Rendering', () => {
     it('renders without crashing', () => {

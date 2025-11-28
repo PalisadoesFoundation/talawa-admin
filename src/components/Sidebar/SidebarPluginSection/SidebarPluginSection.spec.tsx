@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, it, vi, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { BrowserRouter } from 'react-router';
+import { MemoryRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
 import SidebarPluginSection from './SidebarPluginSection';
@@ -65,13 +65,13 @@ describe('SidebarPluginSection Component', () => {
     hideDrawer: false,
   };
 
-  const renderComponent = (props = {}) => {
+  const renderComponent = (props = {}, initialRoute = '/') => {
     return render(
-      <BrowserRouter>
+      <MemoryRouter initialEntries={[initialRoute]}>
         <I18nextProvider i18n={i18n}>
           <SidebarPluginSection {...defaultProps} {...props} />
         </I18nextProvider>
-      </BrowserRouter>,
+      </MemoryRouter>,
     );
   };
 
@@ -187,8 +187,7 @@ describe('SidebarPluginSection Component', () => {
     });
 
     it('applies active styles when on plugin route (default button)', () => {
-      window.history.pushState({}, '', '/plugin/one');
-      renderComponent({ useSimpleButton: false });
+      renderComponent({ useSimpleButton: false }, '/plugin/one');
       const button = screen.getByTestId('plugin-plugin-1-btn');
       expect(button.className).toContain('sidebarBtnActive');
     });
@@ -197,15 +196,13 @@ describe('SidebarPluginSection Component', () => {
   describe('Button Styling - Simple Button', () => {
     it('uses simple button styles when useSimpleButton is true', () => {
       // Navigate away from plugin routes to ensure inactive state
-      window.history.pushState({}, '', '/some-other-route');
-      renderComponent({ useSimpleButton: true });
+      renderComponent({ useSimpleButton: true }, '/some-other-route');
       const button = screen.getByTestId('plugin-plugin-1-btn');
       expect(button.className).toContain('leftDrawerInactiveButton');
     });
 
     it('applies active drawer button styles when on plugin route', () => {
-      window.history.pushState({}, '', '/plugin/one');
-      renderComponent({ useSimpleButton: true });
+      renderComponent({ useSimpleButton: true }, '/plugin/one');
       const button = screen.getByTestId('plugin-plugin-1-btn');
       expect(button.className).toContain('leftDrawerActiveButton');
     });
@@ -368,14 +365,14 @@ describe('SidebarPluginSection Component', () => {
       ];
 
       rerender(
-        <BrowserRouter>
+        <MemoryRouter initialEntries={['/']}>
           <I18nextProvider i18n={i18n}>
             <SidebarPluginSection
               {...defaultProps}
               pluginItems={newPluginItems}
             />
           </I18nextProvider>
-        </BrowserRouter>,
+        </MemoryRouter>,
       );
 
       expect(screen.queryByText('Plugin One')).not.toBeInTheDocument();
