@@ -89,7 +89,7 @@ describe('UserGlobalScreen', () => {
 
       const sidebar = screen.getByTestId('user-sidebar');
       expect(sidebar).toBeInTheDocument();
-      // The sidebar should initially show hideDrawer as null/false for desktop
+      // The sidebar should initially show hideDrawer as false for desktop
     });
 
     it('should render ProfileDropdown component', () => {
@@ -153,7 +153,7 @@ describe('UserGlobalScreen', () => {
     it('should pass correct hideDrawer state to UserSidebar', () => {
       renderComponent();
 
-      // Initially hideDrawer should be null (first render)
+      // Initially hideDrawer should be false (first render)
       expect(screen.getByText(/UserSidebar - Hide:/)).toBeInTheDocument();
 
       // Click to hide drawer
@@ -355,13 +355,14 @@ describe('UserGlobalScreen', () => {
   });
 
   describe('Initial State Handling', () => {
-    it('should handle null initial state correctly', () => {
+    it('should handle initial false state correctly ', () => {
       renderComponent();
 
       const mainContainer = screen.getByTestId('mainpageright');
 
-      // With null initial state, should not have expand or contract classes
+      // With initial state set to false, should have contract class
       expect(mainContainer).toHaveClass('pageContainer');
+      expect(mainContainer).toHaveClass('contract');
       expect(mainContainer).not.toHaveClass('expand');
     });
 
