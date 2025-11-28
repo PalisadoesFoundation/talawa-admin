@@ -37,7 +37,10 @@ const link3 = new StaticMockLink(ERROR_MOCK, true);
 const link4 = new StaticMockLink(MOCK_FILE, true);
 const link5 = new StaticMockLink(UPDATE_MOCK, true);
 
-const mockReload = vi.fn();
+const { mockReload } = vi.hoisted(() => ({
+  mockReload: vi.fn(),
+}));
+
 Object.defineProperty(window, 'location', {
   value: {
     ...window.location,
@@ -99,8 +102,15 @@ const renderMemberDetailScreen = (link: ApolloLink): RenderResult => {
 describe('MemberDetail', () => {
   global.alert = vi.fn();
 
+  beforeEach(() => {
+    vi.spyOn(toast, 'success');
+    vi.spyOn(toast, 'error');
+    vi.spyOn(toast, 'info');
+    vi.spyOn(toast, 'warning');
+  });
+
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     cleanup();
   });
 
@@ -328,7 +338,6 @@ describe('MemberDetail', () => {
   });
 
   it('validates password', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
     renderMemberDetailScreen(link1);
     await waitFor(() => {
       expect(screen.getByTestId('inputPassword')).toBeInTheDocument();
@@ -339,7 +348,7 @@ describe('MemberDetail', () => {
 
     fireEvent.change(passwordInput, { target: { value: 'weak' } });
 
-    expect(toastErrorSpy).toHaveBeenCalledWith(
+    expect(toast.error).toHaveBeenCalledWith(
       'Password must be at least 8 characters long.',
     );
   });

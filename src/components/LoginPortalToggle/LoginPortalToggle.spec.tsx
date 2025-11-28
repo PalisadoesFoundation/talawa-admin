@@ -17,6 +17,9 @@ async function wait(ms = 100): Promise<void> {
 }
 
 describe('Testing LoginPortalToggle component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   test('Component Should be rendered properly', async () => {
     const mockOnToggle = vi.fn();
     render(

@@ -62,6 +62,9 @@ async function wait(ms = 100): Promise<void> {
 }
 
 describe('Testing User List Card', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   let reloadMock: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {

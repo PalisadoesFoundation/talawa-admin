@@ -66,6 +66,9 @@ const ERROR_MOCKS = [
 ];
 
 describe('Testing Organization People List Card', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const props = {
     toggleRemoveModal: vi.fn(),
     id: '1',
