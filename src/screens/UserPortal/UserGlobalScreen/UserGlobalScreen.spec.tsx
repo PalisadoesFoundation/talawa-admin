@@ -299,8 +299,8 @@ describe('UserGlobalScreen', () => {
         window.dispatchEvent(new Event('resize'));
       });
 
-      // Should still show open menu since resize to > 820px doesn't toggle
-      expect(screen.getByTestId('openMenu')).toBeInTheDocument();
+      // Should show close menu since resize to > 820px
+      expect(screen.getByTestId('closeMenu')).toBeInTheDocument();
     });
   });
 
