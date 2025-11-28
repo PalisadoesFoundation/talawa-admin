@@ -40,7 +40,9 @@ const UserGlobalScreen = (): JSX.Element => {
    */
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
-      setHideDrawer(!hideDrawer);
+      setHideDrawer(true); // Hide on mobile
+    } else {
+      setHideDrawer(false); // Show on desktop
     }
   };
 
@@ -81,9 +83,7 @@ const UserGlobalScreen = (): JSX.Element => {
       </div>
       <div
         className={`${styles.pageContainer} ${
-          hideDrawer ? 
-          styles.expand : 
-          styles.contract
+          hideDrawer ? styles.expand : styles.contract
         } `}
         data-testid="mainpageright"
       >
