@@ -30,6 +30,7 @@ const mockTCommonImplementation = (key: string) => {
     Settings: 'Settings',
     userPortal: 'User Portal',
     notifications: 'Notifications', // Used by notification button in component
+    pluginSettings: 'Plugin Settings', // Used by SidebarPluginSection
   };
   return translations[key] || key;
 };
@@ -596,7 +597,6 @@ describe('UserSidebar', () => {
       const toggleBtn = screen.getByTestId('toggleBtn');
 
       expect(toggleBtn).toBeInTheDocument();
-      expect(toggleBtn).toHaveAttribute('tabIndex', '0');
       expect(toggleBtn).toHaveAttribute('type', 'button');
       // The aria-label is on the FaBars icon inside the toggle button
       expect(

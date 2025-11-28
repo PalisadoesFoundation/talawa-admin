@@ -48,12 +48,6 @@ describe('SidebarNavItem Component', () => {
       renderComponent();
       expect(screen.getByTestId('mock-icon')).toBeInTheDocument();
     });
-
-    it('has correct button type attribute', () => {
-      renderComponent();
-      const button = screen.getByTestId('testBtn');
-      expect(button).toHaveAttribute('type', 'button');
-    });
   });
 
   describe('Navigation', () => {

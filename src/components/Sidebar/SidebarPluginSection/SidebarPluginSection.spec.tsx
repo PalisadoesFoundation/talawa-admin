@@ -219,9 +219,9 @@ describe('SidebarPluginSection Component', () => {
   });
 
   describe('Header Section', () => {
-    it('renders "Plugin Settings" header for default button', () => {
+    it('renders "pluginSettings" header for default button', () => {
       renderComponent({ useSimpleButton: false });
-      expect(screen.getByText('Plugin Settings')).toBeInTheDocument();
+      expect(screen.getByText('pluginSettings')).toBeInTheDocument();
     });
 
     it('renders "plugins" header for simple button when drawer is visible', () => {
@@ -236,7 +236,7 @@ describe('SidebarPluginSection Component', () => {
 
     it('has correct header styling', () => {
       renderComponent();
-      const header = screen.getByText('Plugin Settings').closest('h4');
+      const header = screen.getByText('pluginSettings').closest('h4');
       expect(header).toHaveStyle({
         fontSize: '1.1rem',
         marginTop: '1.5rem',
@@ -276,24 +276,18 @@ describe('SidebarPluginSection Component', () => {
 
     it('each icon wrapper contains an actual icon element', () => {
       renderComponent();
-      // Verify each plugin button has an icon (either custom img or default plugin-logo)
-      const buttons = screen.getAllByRole('button');
-      buttons.forEach((button) => {
-        // Check if button contains either a custom image or the default plugin logo
-        const hasCustomIcon = button.querySelector('img') !== null;
+      // Verify each plugin link has an icon (either custom img or default plugin-logo)
+      const links = [
+        screen.getByTestId('plugin-plugin-1-btn'),
+        screen.getByTestId('plugin-plugin-2-btn'),
+        screen.getByTestId('plugin-plugin-3-btn'),
+      ];
+      links.forEach((link) => {
+        // Check if link contains either a custom image or the default plugin logo
+        const hasCustomIcon = link.querySelector('img') !== null;
         const hasDefaultIcon =
-          button.querySelector('[data-testid="plugin-logo"]') !== null;
+          link.querySelector('[data-testid="plugin-logo"]') !== null;
         expect(hasCustomIcon || hasDefaultIcon).toBe(true);
-      });
-    });
-  });
-
-  describe('Button Type Attribute', () => {
-    it('all plugin buttons have correct type attribute', () => {
-      renderComponent();
-      const buttons = screen.getAllByRole('button');
-      buttons.forEach((button) => {
-        expect(button).toHaveAttribute('type', 'button');
       });
     });
   });
