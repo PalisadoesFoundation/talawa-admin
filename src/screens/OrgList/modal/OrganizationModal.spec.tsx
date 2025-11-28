@@ -61,6 +61,18 @@ describe('OrganizationModal Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    (validateFile as unknown as ReturnType<typeof vi.fn>).mockImplementation(
+      () => ({
+        isValid: true,
+      }),
+    );
+    mockUploadFileToMinio.mockResolvedValue({
+      objectName: 'mocked-object-name',
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   vi.mock('utils/convertToBase64', () => ({
