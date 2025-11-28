@@ -50,6 +50,7 @@ const TruncatedText: React.FC<InterfaceTruncatedTextProps> = ({
   /**
    * Truncate the text based on the available width or the `maxWidthOverride` value.
    */
+
   const truncateText = (): void => {
     const element = textRef.current;
     if (element) {
