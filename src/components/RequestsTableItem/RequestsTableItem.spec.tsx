@@ -41,18 +41,18 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
-const resetAndRefetchMock = vi.fn();
-
 beforeEach(() => {
   setItem('id', '123');
 });
 
 afterEach(() => {
   localStorage.clear();
-  vi.clearAllMocks();
+  vi.restoreAllMocks();
 });
 
 describe('Testing User Table Item', () => {
+  const resetAndRefetchMock = vi.fn();
+
   console.error = vi.fn((message) => {
     if (message.includes('validateDOMNesting')) {
       return;

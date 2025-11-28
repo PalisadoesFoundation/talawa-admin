@@ -45,7 +45,6 @@ vi.mock('../../plugin', () => ({
 }));
 
 // ===== FUNCTION MOCKS =====
-const fetchPostsMock = vi.fn();
 
 // ===== APOLLO GRAPHQL MOCKS =====
 
@@ -431,6 +430,7 @@ const nullFetchMoreMock = {
 };
 
 // ===== BASE MOCKS ARRAY =====
+// ===== BASE MOCKS ARRAY =====
 const mocks = [
   {
     request: {
@@ -566,101 +566,102 @@ const mocks = [
 
 const link = new StaticMockLink(mocks, true);
 
-const defaultProps = {
-  id: '1',
-  creator: {
-    id: '1',
-    name: 'John Doe',
-    email: 'john@example.com',
-    avatarURL: 'avatar.jpg',
-  },
-  hasUserVoted: {
-    hasVoted: true,
-    voteType: 'up_vote' as const,
-  },
-  title: 'Test Post',
-  text: 'This is a test post',
-  image: 'test-image.jpg',
-  video: '',
-  postedAt: '2023-01-01T00:00:00Z',
-  upVoteCount: 5,
-  downVoteCount: 0,
-  commentCount: 3,
-  fetchPosts: fetchPostsMock,
-};
-
-const renderPostCardWithCustomMockAndProps = (
-  customMock: MockedResponse,
-  propsOverrides: Partial<InterfacePostCard> = {},
-) => {
-  const { setItem } = useLocalStorage();
-  setItem('userId', '1');
-  setItem('role', 'administrator');
-
-  const mocksArray = [
-    customMock,
-    ...mocks.filter((m) => m.request.query !== GET_POST_COMMENTS),
-  ];
-
-  const linkWithCustomMock = new StaticMockLink(mocksArray, true);
-
-  return render(
-    <MockedProvider link={linkWithCustomMock} addTypename={true}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <PostCard {...defaultProps} {...propsOverrides} />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-};
-
-const renderPostCard = (props: Partial<InterfacePostCard> = {}) => {
-  return render(
-    <MockedProvider link={link}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <PostCard {...defaultProps} {...props} />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-};
-
-const renderPostCardWithCustomMock = (customMock: MockedResponse) => {
-  const { setItem } = useLocalStorage();
-  setItem('userId', '1');
-  setItem('role', 'administrator'); // Set admin role for pin/unpin tests
-
-  // Only include the custom mock and base mocks, NOT commentsWithPaginationMock
-  const mocksArray = [
-    customMock,
-    ...mocks.filter((m) => m.request.query !== GET_POST_COMMENTS), // Exclude other comment mocks
-  ];
-
-  const linkWithCustomMock = new StaticMockLink(mocksArray, true);
-
-  return render(
-    <MockedProvider link={linkWithCustomMock} addTypename={true}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <PostCard {...defaultProps} />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-};
-
 describe('PostCard', () => {
+  const fetchPostsMock = vi.fn();
+
+  const defaultProps = {
+    id: '1',
+    creator: {
+      id: '1',
+      name: 'John Doe',
+      email: 'john@example.com',
+      avatarURL: 'avatar.jpg',
+    },
+    hasUserVoted: {
+      hasVoted: true,
+      voteType: 'up_vote' as const,
+    },
+    title: 'Test Post',
+    text: 'This is a test post',
+    image: 'test-image.jpg',
+    video: '',
+    postedAt: '2023-01-01T00:00:00Z',
+    upVoteCount: 5,
+    downVoteCount: 0,
+    commentCount: 3,
+    fetchPosts: fetchPostsMock,
+  };
+
+  const renderPostCardWithCustomMockAndProps = (
+    customMock: MockedResponse,
+    propsOverrides: Partial<InterfacePostCard> = {},
+  ) => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+    setItem('role', 'administrator');
+
+    const mocksArray = [
+      customMock,
+      ...mocks.filter((m) => m.request.query !== GET_POST_COMMENTS),
+    ];
+
+    const linkWithCustomMock = new StaticMockLink(mocksArray, true);
+
+    return render(
+      <MockedProvider link={linkWithCustomMock} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...defaultProps} {...propsOverrides} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+  };
+
+  const renderPostCard = (props: Partial<InterfacePostCard> = {}) => {
+    return render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...defaultProps} {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+  };
+
+  const renderPostCardWithCustomMock = (customMock: MockedResponse) => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+    setItem('role', 'administrator'); // Set admin role for pin/unpin tests
+
+    // Only include the custom mock and base mocks, NOT commentsWithPaginationMock
+    const mocksArray = [
+      customMock,
+      ...mocks.filter((m) => m.request.query !== GET_POST_COMMENTS), // Exclude other comment mocks
+    ];
+
+    const linkWithCustomMock = new StaticMockLink(mocksArray, true);
+
+    return render(
+      <MockedProvider link={linkWithCustomMock} addTypename={true}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...defaultProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
-    vi.resetAllMocks();
     fetchPostsMock.mockClear();
     const { setItem } = useLocalStorage();
     setItem('userId', '1');

@@ -6,7 +6,7 @@
 
 > `const` **MOCK\_VENUE\_ITEM\_LONG\_TEXT**: `object`
 
-Defined in: [src/components/Venues/VenueCardMocks.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Venues/VenueCardMocks.ts#L28)
+Defined in: [src/components/Venues/VenueCardMocks.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Venues/VenueCardMocks.ts#L26)
 
 ## Type Declaration
 

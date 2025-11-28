@@ -19,10 +19,19 @@ vi.mock('plugin/manager', () => ({
 }));
 
 // Mock the GraphQL hooks
-const mockCreatePlugin = vi.fn();
-const mockUpdatePlugin = vi.fn();
-const mockDeletePlugin = vi.fn();
-const mockInstallPlugin = vi.fn();
+const {
+  mockCreatePlugin,
+  mockUpdatePlugin,
+  mockDeletePlugin,
+  mockInstallPlugin,
+  mockReload,
+} = vi.hoisted(() => ({
+  mockCreatePlugin: vi.fn(),
+  mockUpdatePlugin: vi.fn(),
+  mockDeletePlugin: vi.fn(),
+  mockInstallPlugin: vi.fn(),
+  mockReload: vi.fn(),
+}));
 
 vi.mock('plugin/graphql-service', () => ({
   useCreatePlugin: () => [mockCreatePlugin],
@@ -32,7 +41,6 @@ vi.mock('plugin/graphql-service', () => ({
 }));
 
 // Mock window.location.reload
-const mockReload = vi.fn();
 const originalLocation = window.location;
 const locationStub = { reload: mockReload } as unknown as Location;
 

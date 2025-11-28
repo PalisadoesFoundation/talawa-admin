@@ -11,7 +11,10 @@ vi.mock('../../hooks', () => ({
 }));
 
 // Mock React.lazy and Suspense
-const mockLazyComponent = vi.fn();
+const { mockLazyComponent } = vi.hoisted(() => ({
+  mockLazyComponent: vi.fn(),
+}));
+
 vi.mock('react', async () => {
   const actual = await vi.importActual('react');
   return {

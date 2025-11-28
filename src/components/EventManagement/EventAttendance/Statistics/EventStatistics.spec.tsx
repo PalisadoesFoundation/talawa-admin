@@ -15,7 +15,9 @@ vi.mock('react-chartjs-2', async () => ({
   Bar: () => null,
 }));
 
-const mockUseParams = vi.fn();
+const { mockUseParams } = vi.hoisted(() => ({
+  mockUseParams: vi.fn(),
+}));
 // Mock react-router-dom
 vi.mock('react-router', async () => ({
   ...(await vi.importActual('react-router')),

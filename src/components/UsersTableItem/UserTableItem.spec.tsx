@@ -90,8 +90,6 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
-const resetAndRefetchMock = vi.fn();
-
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -135,6 +133,8 @@ afterEach(async () => {
 });
 
 describe('Testing User Table Item', () => {
+  const resetAndRefetchMock = vi.fn();
+
   console.error = vi.fn((message) => {
     if (message.includes('validateDOMNesting')) {
       return;

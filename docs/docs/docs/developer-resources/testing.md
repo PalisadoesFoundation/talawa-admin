@@ -137,7 +137,7 @@ pnpm run check-mock-cleanup
 
 #### Best Practices
 
-**✅ DO:**
+**DO:**
 ```typescript
 // Good: Cleanup after each test
 describe('MyComponent', () => {
@@ -174,7 +174,7 @@ afterEach(() => {
 });
 ```
 
-**❌ DON'T:**
+**DON'T:**
 ```typescript
 // Bad: No cleanup - mocks leak between tests
 describe('MyComponent', () => {
@@ -188,7 +188,7 @@ describe('MyComponent', () => {
 ```typescript
 // Bad: Only using clearAllMocks() - doesn't restore implementations
 afterEach(() => {
-  vi.clearAllMocks(); // ❌ Not enough!
+  vi.clearAllMocks(); // Not enough!
 });
 ```
 
@@ -197,7 +197,7 @@ afterEach(() => {
 vi.mock('some-module'); // At top of file
 
 describe('MyComponent', () => {
-  // ❌ Missing afterEach cleanup!
+  // Missing afterEach cleanup!
 });
 ```
 
@@ -213,7 +213,7 @@ vi.mock('react-router', () => ({
 
 describe('MyComponent', () => {
   afterEach(() => {
-    vi.restoreAllMocks(); // ← Required!
+    vi.restoreAllMocks(); // Required!
   });
 
   it('navigates correctly', () => {
@@ -228,7 +228,7 @@ describe('MyComponent', () => {
 ```typescript
 describe('MyComponent', () => {
   afterEach(() => {
-    vi.restoreAllMocks(); // ← Always restore spies!
+    vi.restoreAllMocks(); // Always restore spies!
   });
 
   it('calls console.log', () => {
