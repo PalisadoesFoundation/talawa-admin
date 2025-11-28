@@ -5,16 +5,21 @@ import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
 import SidebarBase from './SidebarBase';
-import useLocalStorage from 'utils/useLocalstorage';
+import { useLocalStorage } from 'utils/useLocalstorage';
 
 // Mock the local storage hook
-vi.mock('utils/useLocalstorage', () => ({
-  default: vi.fn(() => ({
+const { mockUseLocalStorage } = vi.hoisted(() => ({
+  mockUseLocalStorage: vi.fn(() => ({
     setItem: vi.fn(),
     getItem: vi.fn(),
     removeItem: vi.fn(),
     getStorageKey: vi.fn(() => ''),
   })),
+}));
+
+vi.mock('utils/useLocalstorage', () => ({
+  useLocalStorage: mockUseLocalStorage,
+  default: mockUseLocalStorage,
 }));
 
 // Mock translations

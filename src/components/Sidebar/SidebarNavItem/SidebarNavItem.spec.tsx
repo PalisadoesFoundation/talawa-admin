@@ -4,13 +4,20 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router';
 import SidebarNavItem from './SidebarNavItem';
 
-// Mock SVG icon component
-const MockIcon = () => <div data-testid="mock-icon" />;
+// Mock icon element for testing
+const mockIconElement = <div data-testid="mock-icon" />;
+
+// Mock SVG element for testing
+const mockSvgElement = (
+  <svg data-testid="mock-svg-icon" width="20" height="20">
+    <circle cx="10" cy="10" r="5" />
+  </svg>
+);
 
 describe('SidebarNavItem Component', () => {
   const defaultProps = {
     to: '/test-route',
-    icon: <MockIcon />,
+    icon: mockIconElement,
     label: 'Test Label',
     testId: 'testBtn',
     hideDrawer: false,
@@ -119,6 +126,31 @@ describe('SidebarNavItem Component', () => {
       const button = screen.getByTestId('testBtn');
       expect(button).toBeInTheDocument();
       expect(screen.getByTestId('mock-icon')).toBeInTheDocument();
+    });
+
+    it('renders React icon with iconType="react-icon"', () => {
+      renderComponent({ icon: mockIconElement, iconType: 'react-icon' });
+      const button = screen.getByTestId('testBtn');
+
+      // Verify the React icon is rendered
+      const icon = screen.getByTestId('mock-icon');
+      expect(icon).toBeInTheDocument();
+
+      // Verify it's contained within the button
+      expect(button).toContainElement(icon);
+    });
+
+    it('renders SVG element with iconType="svg"', () => {
+      renderComponent({ icon: mockSvgElement, iconType: 'svg' });
+      const button = screen.getByTestId('testBtn');
+
+      // Verify the SVG is rendered
+      const svgIcon = screen.getByTestId('mock-svg-icon');
+      expect(svgIcon).toBeInTheDocument();
+      expect(svgIcon.tagName).toBe('svg');
+
+      // Verify it's contained within the button
+      expect(button).toContainElement(svgIcon);
     });
   });
 

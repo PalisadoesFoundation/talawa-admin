@@ -119,6 +119,7 @@ const SidebarPluginSection = ({
             marginBottom: '0.75rem',
           }}
           data-testid="pluginSettingsHeader"
+          aria-hidden={hideDrawer ? 'true' : undefined}
         >
           {!hideDrawer && tCommon('plugins')}
         </h5>
@@ -132,6 +133,7 @@ const SidebarPluginSection = ({
             color: 'var(--bs-secondary)',
           }}
           data-testid="pluginSettingsHeader"
+          aria-hidden={hideDrawer ? 'true' : undefined}
         >
           {!hideDrawer && tCommon('pluginSettings')}
         </h4>
