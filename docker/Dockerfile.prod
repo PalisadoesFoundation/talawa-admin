@@ -2,8 +2,8 @@
 FROM node:24-slim AS builder
 WORKDIR /talawa-admin
 
-COPY package*.json ./
-RUN corepack enable && corepack prepare pnpm@10.4.1 --activate && pnpm install
+COPY package.json pnpm-lock.yaml ./
+RUN corepack enable && corepack prepare pnpm@10.4.1 --activate && pnpm install --frozen-lockfile
 
 COPY . .
 

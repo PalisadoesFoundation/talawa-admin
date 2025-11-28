@@ -11,8 +11,8 @@ ARG PORT=4321
 ENV PORT=${PORT}
 
 WORKDIR /usr/src/app
-COPY package*.json ./
-RUN corepack enable && corepack prepare pnpm@latest --activate && pnpm install
+COPY package.json pnpm-lock.yaml ./
+RUN corepack enable && corepack prepare pnpm@latest --activate && pnpm install --frozen-lockfile
 COPY . .
 RUN pnpm run build
 ENV NODE_ENV=production
