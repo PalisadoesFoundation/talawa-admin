@@ -76,6 +76,10 @@ const renderActionItemCategories = (
 };
 
 describe('Testing Organisation Action Item Categories', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should render the Action Item Categories Screen', async () => {
     renderActionItemCategories(link1, 'orgId');
     await waitFor(() => {

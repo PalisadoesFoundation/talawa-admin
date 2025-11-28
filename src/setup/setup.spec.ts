@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import type { MockInstance } from 'vitest';
+
 import dotenv from 'dotenv';
 import fs from 'fs';
 import { main, askAndSetRecaptcha } from './setup';
@@ -24,9 +24,6 @@ vi.mock('./askAndUpdatePort/askAndUpdatePort');
 vi.mock('./askForDocker/askForDocker');
 
 describe('Talawa Admin Setup', () => {
-  let processExitSpy: MockInstance;
-  let consoleErrorSpy: MockInstance;
-
   beforeEach(() => {
     vi.clearAllMocks();
 
@@ -45,20 +42,16 @@ describe('Talawa Admin Setup', () => {
     vi.mocked(updateEnvFile).mockImplementation(() => undefined);
 
     // default process.exit spy (we won't throw unless a test needs it)
-    processExitSpy = vi.spyOn(process, 'exit').mockImplementation(() => {
+    vi.spyOn(process, 'exit').mockImplementation(() => {
       // keep as noop for normal tests
       return undefined as never;
     });
 
-    consoleErrorSpy = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => undefined);
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
   });
 
   afterEach(() => {
-    vi.resetAllMocks();
-    processExitSpy.mockRestore();
-    consoleErrorSpy.mockRestore();
+    vi.restoreAllMocks(); // Restores all spies including processExitSpy and consoleErrorSpy
   });
 
   it('should successfully complete setup with default options', async () => {

@@ -87,6 +87,9 @@ const renderEventListCard = (
 };
 
 describe('Testing Event List Card', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   beforeAll(() => {
     vi.mock('react-router', async () => ({
       ...(await vi.importActual('react-router')),

@@ -39,6 +39,10 @@ describe('GeneralSettings Component', () => {
     );
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('renders organization update section', () => {
     expect(screen.getByTestId('org-update')).toHaveTextContent(
       `OrgUpdate - ${ORG_ID}`,

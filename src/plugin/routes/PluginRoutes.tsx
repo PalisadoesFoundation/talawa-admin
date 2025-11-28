@@ -10,7 +10,7 @@ import { Route } from 'react-router-dom';
 import { usePluginRoutes } from '../hooks';
 import type { IRouteExtension } from '../types';
 
-interface PluginRoutesProps {
+interface IPluginRoutesProps {
   userPermissions?: string[];
   isAdmin?: boolean;
   fallback?: React.ReactElement;
@@ -19,7 +19,7 @@ interface PluginRoutesProps {
 /**
  * Component that renders plugin routes dynamically
  */
-const PluginRoutes: React.FC<PluginRoutesProps> = ({
+const PluginRoutes: React.FC<IPluginRoutesProps> = ({
   userPermissions = [],
   isAdmin = false,
   fallback = <div>Loading plugin...</div>,

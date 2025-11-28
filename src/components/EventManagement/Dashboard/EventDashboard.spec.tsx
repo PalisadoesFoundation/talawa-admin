@@ -121,6 +121,7 @@ describe('Testing Event Dashboard Screen', () => {
   afterEach(() => {
     // Clean up after each test
     localStorageMock.clear();
+    vi.restoreAllMocks();
   });
 
   it('The page should display event details correctly and also show the time if provided', async () => {
