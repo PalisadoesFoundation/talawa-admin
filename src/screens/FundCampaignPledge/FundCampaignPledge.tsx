@@ -24,7 +24,7 @@ import type {
 } from 'utils/interfaces';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 enum ModalState {
   SAME = 'same',
@@ -66,7 +66,6 @@ const fundCampaignPledge = (): JSX.Element => {
     [key in ModalState]: boolean;
   }>({ [ModalState.SAME]: false, [ModalState.DELETE]: false });
 
-  const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [extraUsers, setExtraUsers] = useState<InterfaceUserInfoPG[]>([]);
   const [progressIndicator, setProgressIndicator] = useState<
     'raised' | 'pledged'

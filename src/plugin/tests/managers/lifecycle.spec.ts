@@ -3,13 +3,21 @@ import { LifecycleManager } from '../../managers/lifecycle';
 import { DiscoveryManager } from '../../managers/discovery';
 import { ExtensionRegistryManager } from '../../managers/extension-registry';
 import { EventManager } from '../../managers/event-manager';
-import { ILoadedPlugin, PluginStatus, IPluginManifest } from '../../types';
+import { PluginStatus, IPluginManifest } from '../../types';
 import React from 'react';
 
 // Mock the managers
 vi.mock('../../managers/discovery');
 vi.mock('../../managers/extension-registry');
 vi.mock('../../managers/event-manager');
+
+const registryMocks = vi.hoisted(() => ({
+  registerPluginDynamically: vi.fn(),
+}));
+
+vi.mock('../../registry', () => ({
+  registerPluginDynamically: registryMocks.registerPluginDynamically,
+}));
 
 // Mock fetch globally
 
@@ -41,13 +49,6 @@ describe('LifecycleManager', () => {
     AnotherComponent: vi.fn(() =>
       React.createElement('span', {}, 'AnotherComponent'),
     ),
-  };
-
-  const mockLoadedPlugin: ILoadedPlugin = {
-    id: 'test-plugin',
-    manifest: mockManifest,
-    components: mockComponents,
-    status: PluginStatus.ACTIVE,
   };
 
   beforeEach(() => {
@@ -333,9 +334,7 @@ describe('LifecycleManager', () => {
 
     it('should handle directory deletion failure gracefully', async () => {
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-      const fetchSpy = vi
-        .mocked(fetch)
-        .mockResolvedValue(new Response('', { status: 404 }));
+      vi.mocked(fetch).mockResolvedValue(new Response('', { status: 404 }));
 
       const result = await lifecycleManager.unloadPlugin('testPlugin');
 
@@ -349,9 +348,7 @@ describe('LifecycleManager', () => {
 
     it('should handle directory deletion network error gracefully', async () => {
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-      const fetchSpy = vi
-        .mocked(fetch)
-        .mockRejectedValue(new Error('Network error'));
+      vi.mocked(fetch).mockRejectedValue(new Error('Network error'));
 
       const result = await lifecycleManager.unloadPlugin('testPlugin');
 
@@ -462,7 +459,7 @@ describe('LifecycleManager', () => {
     it('should handle invalid status value by defaulting to deactivate', async () => {
       const result = await lifecycleManager.togglePluginStatus(
         'testPlugin',
-        'invalid' as any,
+        'invalid' as unknown as 'active',
       );
 
       // Should call deactivatePlugin since it's not 'active'
@@ -961,7 +958,7 @@ describe('LifecycleManager', () => {
     };
 
     const mockComponentsWithHooks: Record<string, React.ComponentType> = {
-      default: mockLifecycleHooks as any,
+      default: mockLifecycleHooks as unknown as React.ComponentType,
       TestComponent: vi.fn(() =>
         React.createElement('div', {}, 'TestComponent'),
       ),
@@ -1109,7 +1106,9 @@ describe('LifecycleManager', () => {
 
     it('should handle plugins with non-function lifecycle hooks', async () => {
       const componentsWithInvalidHooks: Record<string, React.ComponentType> = {
-        default: { onInstall: 'not a function' } as any,
+        default: {
+          onInstall: 'not a function',
+        } as unknown as React.ComponentType,
         TestComponent: vi.fn(() =>
           React.createElement('div', {}, 'TestComponent'),
         ),

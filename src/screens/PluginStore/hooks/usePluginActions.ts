@@ -5,27 +5,27 @@ import { useState, useCallback } from 'react';
 import { getPluginManager } from 'plugin/manager';
 import type { IPluginMeta } from 'plugin';
 import {
-  useCreatePlugin,
   useUpdatePlugin,
   useDeletePlugin,
   useInstallPlugin,
 } from 'plugin/graphql-service';
 
-interface UsePluginActionsProps {
-  pluginData: any;
-  refetch: () => Promise<any>;
+import type { IPlugin } from 'plugin/graphql-service';
+
+interface IUsePluginActionsProps {
+  pluginData?: { getPlugins: IPlugin[] };
+  refetch: () => Promise<unknown>;
 }
 
 export function usePluginActions({
   pluginData,
   refetch,
-}: UsePluginActionsProps) {
+}: IUsePluginActionsProps) {
   const [loading, setLoading] = useState(false);
   const [showUninstallModal, setShowUninstallModal] = useState(false);
   const [pluginToUninstall, setPluginToUninstall] =
     useState<IPluginMeta | null>(null);
 
-  const [createPlugin] = useCreatePlugin();
   const [updatePlugin] = useUpdatePlugin();
   const [deletePlugin] = useDeletePlugin();
   const [installPlugin] = useInstallPlugin();
@@ -69,7 +69,7 @@ export function usePluginActions({
       try {
         // Update plugin status in GraphQL
         const existingPlugin = pluginData?.getPlugins?.find(
-          (p: any) => p.pluginId === plugin.id,
+          (p: IPlugin) => p.pluginId === plugin.id,
         );
         if (existingPlugin) {
           await updatePlugin({
@@ -116,7 +116,7 @@ export function usePluginActions({
     setLoading(true);
     try {
       const existingPlugin = pluginData?.getPlugins?.find(
-        (p: any) => p.pluginId === pluginToUninstall.id,
+        (p: IPlugin) => p.pluginId === pluginToUninstall.id,
       );
       if (existingPlugin) {
         // Remove permanently - delete from database

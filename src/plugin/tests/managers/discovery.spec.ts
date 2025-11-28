@@ -3,7 +3,6 @@ import { DiscoveryManager } from '../../managers/discovery';
 import { PluginGraphQLService, IPlugin } from '../../graphql-service';
 import { IPluginManifest } from '../../types';
 import { validatePluginManifest } from '../../utils';
-import React from 'react';
 
 // Mock the dependencies
 vi.mock('../../graphql-service');
@@ -32,11 +31,6 @@ describe('DiscoveryManager', () => {
     description: 'A test plugin',
     author: 'Test Author',
     main: 'index.ts',
-  };
-
-  const mockComponents = {
-    TestComponent: React.createElement('div'),
-    AnotherComponent: React.createElement('span'),
   };
 
   beforeEach(() => {
@@ -615,7 +609,9 @@ describe('DiscoveryManager', () => {
     it('should normalize main file with .js extension', () => {
       // Access private method through type assertion
       const normalizeMainFile = (
-        discoveryManager as any
+        discoveryManager as unknown as {
+          normalizeMainFile: (file: string) => string;
+        }
       ).normalizeMainFile.bind(discoveryManager);
 
       expect(normalizeMainFile('index.js')).toBe('index.js');
@@ -623,7 +619,9 @@ describe('DiscoveryManager', () => {
 
     it('should normalize main file with .ts extension', () => {
       const normalizeMainFile = (
-        discoveryManager as any
+        discoveryManager as unknown as {
+          normalizeMainFile: (file: string) => string;
+        }
       ).normalizeMainFile.bind(discoveryManager);
 
       expect(normalizeMainFile('index.ts')).toBe('index.ts');
@@ -631,7 +629,9 @@ describe('DiscoveryManager', () => {
 
     it('should normalize main file with .tsx extension', () => {
       const normalizeMainFile = (
-        discoveryManager as any
+        discoveryManager as unknown as {
+          normalizeMainFile: (file: string) => string;
+        }
       ).normalizeMainFile.bind(discoveryManager);
 
       expect(normalizeMainFile('index.tsx')).toBe('index.tsx');
@@ -639,7 +639,9 @@ describe('DiscoveryManager', () => {
 
     it('should add .js extension to main file without extension', () => {
       const normalizeMainFile = (
-        discoveryManager as any
+        discoveryManager as unknown as {
+          normalizeMainFile: (file: string) => string;
+        }
       ).normalizeMainFile.bind(discoveryManager);
 
       expect(normalizeMainFile('index')).toBe('index.js');
@@ -647,7 +649,9 @@ describe('DiscoveryManager', () => {
 
     it('should add .js extension to main file with invalid extension', () => {
       const normalizeMainFile = (
-        discoveryManager as any
+        discoveryManager as unknown as {
+          normalizeMainFile: (file: string) => string;
+        }
       ).normalizeMainFile.bind(discoveryManager);
 
       expect(normalizeMainFile('index.txt')).toBe('index.txt.js');

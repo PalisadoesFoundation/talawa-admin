@@ -1,4 +1,5 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import JSZip from 'jszip';
 import {
   validateAdminPluginZip,
@@ -9,7 +10,7 @@ import {
 } from './adminPluginInstaller';
 import {
   adminPluginFileService,
-  type InstalledPlugin,
+  type IInstalledPlugin,
 } from '../plugin/services/AdminPluginFileService';
 // import { toast } from 'react-toastify';
 
@@ -241,7 +242,8 @@ describe('adminPluginInstaller', () => {
 
       const result = await installAdminPluginFromZip({
         zipFile: mockFile,
-        apolloClient: mockApolloClient,
+        apolloClient:
+          mockApolloClient as unknown as ApolloClient<NormalizedCacheObject>,
       });
 
       // Accept that only 'Admin' is installed (matches implementation)
@@ -272,7 +274,8 @@ describe('adminPluginInstaller', () => {
 
       const result = await installAdminPluginFromZip({
         zipFile: mockFile,
-        apolloClient: mockApolloClient,
+        apolloClient:
+          mockApolloClient as unknown as ApolloClient<NormalizedCacheObject>,
       });
 
       // Accept the actual error message thrown by the implementation
@@ -385,7 +388,8 @@ describe('adminPluginInstaller', () => {
 
       const result = await installAdminPluginFromZip({
         zipFile: mockFile,
-        apolloClient: mockApolloClient,
+        apolloClient:
+          mockApolloClient as unknown as ApolloClient<NormalizedCacheObject>,
       });
 
       expect(errorSpy).toHaveBeenCalled();
@@ -484,7 +488,7 @@ describe('adminPluginInstaller', () => {
           installedAt: undefined,
           lastUpdated: undefined,
         },
-      ] as unknown as InstalledPlugin[]);
+      ] as unknown as IInstalledPlugin[]);
 
       const result = await getInstalledAdminPlugins();
 
@@ -661,7 +665,8 @@ describe('adminPluginInstaller', () => {
 
       const result = await installAdminPluginFromZip({
         zipFile: mockFile,
-        apolloClient: mockApolloClient,
+        apolloClient:
+          mockApolloClient as unknown as ApolloClient<NormalizedCacheObject>,
       });
 
       expect(result.success).toBe(true);

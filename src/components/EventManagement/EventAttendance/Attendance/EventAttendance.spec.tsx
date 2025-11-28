@@ -132,6 +132,20 @@ describe('Event Attendance Component', () => {
     });
   });
 
+  it('Clears search input', async () => {
+    renderEventAttendance();
+
+    const searchInput = await screen.findByTestId('searchByName');
+    fireEvent.change(searchInput, { target: { value: 'Bruce' } });
+    expect(searchInput).toHaveValue('Bruce');
+
+    // SearchBar renders a clear button when value is not empty
+    const clearBtn = screen.getByLabelText('Clear search');
+    fireEvent.click(clearBtn);
+
+    expect(searchInput).toHaveValue('');
+  });
+
   it('Sort functionality changes attendee order (ascending)', async () => {
     renderEventAttendance();
 

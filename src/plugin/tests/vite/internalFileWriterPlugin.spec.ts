@@ -38,12 +38,42 @@ vi.mock('path', () => {
 
 // Import after mocking
 import { promises as fs } from 'fs';
+import type { Plugin } from 'vite';
+import type { Mock } from 'vitest';
+
 const mockFs = vi.mocked(fs);
 
+interface IMockDirent {
+  name: string;
+  isDirectory: () => boolean;
+}
+
+interface IMockServer {
+  middlewares: {
+    use: Mock;
+  };
+}
+
+interface IMockResponse {
+  statusCode: number;
+  setHeader: Mock;
+  end: Mock;
+}
+
+interface IMockRequest {
+  method: string;
+  on: Mock;
+}
+
+type MiddlewareFunction = (
+  req: IMockRequest,
+  res: IMockResponse,
+) => Promise<void> | void;
+
 describe('createInternalFileWriterPlugin', () => {
-  let plugin: any;
-  let mockServer: any;
-  let mockRes: any;
+  let plugin: Plugin;
+  let mockServer: IMockServer;
+  let mockRes: IMockResponse;
 
   beforeEach(() => {
     // Reset mocks
@@ -80,43 +110,40 @@ describe('createInternalFileWriterPlugin', () => {
     });
 
     it('should create plugin with custom options', () => {
-      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-
       plugin = createInternalFileWriterPlugin({
         enabled: true,
-        debug: true,
         basePath: 'custom/path',
       });
 
       // Test configResolved
-      plugin.configResolved();
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Internal File Writer Plugin: Initialized',
-      );
-      expect(consoleSpy).toHaveBeenCalledWith('Base path:', 'custom/path');
-
-      consoleSpy.mockRestore();
+      // No debug logs to check anymore
     });
   });
 
   describe('Server Configuration', () => {
     beforeEach(() => {
-      plugin = createInternalFileWriterPlugin({ debug: true });
+      plugin = createInternalFileWriterPlugin();
     });
 
     it('should configure server with middleware', () => {
-      (plugin as any).configureServer(mockServer);
+      (
+        plugin as unknown as { configureServer: (s: IMockServer) => void }
+      ).configureServer(mockServer);
       expect(mockServer.middlewares.use).toHaveBeenCalledTimes(2);
     });
 
     it('should add file writer middleware', () => {
-      (plugin as any).configureServer(mockServer);
+      (
+        plugin as unknown as { configureServer: (s: IMockServer) => void }
+      ).configureServer(mockServer);
       const middlewareCall = mockServer.middlewares.use.mock.calls[0];
       expect(middlewareCall[0]).toBe('/__vite_plugin_internal_file_writer');
     });
 
     it('should add info middleware', () => {
-      (plugin as any).configureServer(mockServer);
+      (
+        plugin as unknown as { configureServer: (s: IMockServer) => void }
+      ).configureServer(mockServer);
       const middlewareCall = mockServer.middlewares.use.mock.calls[1];
       expect(middlewareCall[0]).toBe(
         '/__vite_plugin_internal_file_writer/info',
@@ -125,12 +152,14 @@ describe('createInternalFileWriterPlugin', () => {
   });
 
   describe('File Writer Middleware', () => {
-    let middleware: any;
-    let mockReq: any;
+    let middleware: MiddlewareFunction;
+    let mockReq: IMockRequest;
 
     beforeEach(() => {
-      plugin = createInternalFileWriterPlugin({ debug: true });
-      (plugin as any).configureServer(mockServer);
+      plugin = createInternalFileWriterPlugin();
+      (
+        plugin as unknown as { configureServer: (s: IMockServer) => void }
+      ).configureServer(mockServer);
       middleware = mockServer.middlewares.use.mock.calls[0][1];
 
       mockReq = {
@@ -191,7 +220,7 @@ describe('createInternalFileWriterPlugin', () => {
 
       expect(mockFs.mkdir).toHaveBeenCalled();
       expect(mockFs.writeFile).toHaveBeenCalledWith(
-        resolvePath('test/file.txt'),
+        resolvePath('src/plugin/available/test/file.txt'),
         'test content',
         'utf8',
       );
@@ -219,8 +248,8 @@ describe('createInternalFileWriterPlugin', () => {
       await middleware(mockReq, mockRes);
 
       expect(mockFs.writeFile).toHaveBeenCalledWith(
-        resolvePath('test/image.png'),
-        expect.any(Object),
+        resolvePath('src/plugin/available/test/image.png'),
+        expect.any(Buffer),
       );
     });
 
@@ -298,10 +327,13 @@ describe('createInternalFileWriterPlugin', () => {
         },
       );
 
-      mockFs.readdir.mockResolvedValue([
-        { name: 'dir1', isDirectory: () => true } as any,
-        { name: 'file1.txt', isDirectory: () => false } as any,
-        { name: 'dir2', isDirectory: () => true } as any,
+      (mockFs.readdir as Mock).mockResolvedValue([
+        { name: 'dir1', isDirectory: () => true } as unknown as IMockDirent,
+        {
+          name: 'file1.txt',
+          isDirectory: () => false,
+        } as unknown as IMockDirent,
+        { name: 'dir2', isDirectory: () => true } as unknown as IMockDirent,
       ]);
 
       await middleware(mockReq, mockRes);
@@ -327,9 +359,12 @@ describe('createInternalFileWriterPlugin', () => {
         },
       );
 
-      mockFs.readdir.mockResolvedValue([
-        { name: 'file1.txt', isDirectory: () => false } as any,
-        { name: 'subdir', isDirectory: () => true } as any,
+      (mockFs.readdir as Mock).mockResolvedValue([
+        {
+          name: 'file1.txt',
+          isDirectory: () => false,
+        } as unknown as IMockDirent,
+        { name: 'subdir', isDirectory: () => true } as unknown as IMockDirent,
       ]);
 
       mockFs.readFile.mockResolvedValue('file content');
@@ -451,19 +486,23 @@ describe('createInternalFileWriterPlugin', () => {
   });
 
   describe('Info Middleware', () => {
-    let infoMiddleware: any;
-    let mockReq: any;
+    let infoMiddleware: MiddlewareFunction;
+    let mockReq: IMockRequest;
 
     beforeEach(() => {
       plugin = createInternalFileWriterPlugin({ basePath: 'custom/path' });
-      plugin.configureServer(mockServer);
+      (
+        plugin as unknown as { configureServer: (s: IMockServer) => void }
+      ).configureServer(mockServer);
       infoMiddleware = mockServer.middlewares.use.mock.calls[1][1];
 
       mockReq = {
         method: 'GET',
+        on: vi.fn(),
       };
 
       mockRes = {
+        statusCode: 200,
         setHeader: vi.fn(),
         end: vi.fn(),
       };
@@ -509,8 +548,11 @@ describe('createInternalFileWriterPlugin', () => {
   describe('Path Resolution', () => {
     it('should resolve absolute paths correctly', async () => {
       const plugin = createInternalFileWriterPlugin({ basePath: 'src/plugin' });
-      (plugin as any).configureServer(mockServer);
-      const middleware = mockServer.middlewares.use.mock.calls[0][1] as any;
+      (
+        plugin as unknown as { configureServer: (s: IMockServer) => void }
+      ).configureServer(mockServer);
+      const middleware = mockServer.middlewares.use.mock
+        .calls[0][1] as MiddlewareFunction;
 
       const mockReq = {
         method: 'POST',
@@ -536,8 +578,11 @@ describe('createInternalFileWriterPlugin', () => {
 
     it('should resolve relative paths correctly', async () => {
       const plugin = createInternalFileWriterPlugin({ basePath: 'src/plugin' });
-      (plugin as any).configureServer(mockServer);
-      const middleware = mockServer.middlewares.use.mock.calls[0][1] as any;
+      (
+        plugin as unknown as { configureServer: (s: IMockServer) => void }
+      ).configureServer(mockServer);
+      const middleware = mockServer.middlewares.use.mock
+        .calls[0][1] as MiddlewareFunction;
 
       const mockReq = {
         method: 'POST',
@@ -568,15 +613,15 @@ describe('createInternalFileWriterPlugin', () => {
   describe('Error Handling', () => {
     it('should handle request parsing errors', async () => {
       const plugin = createInternalFileWriterPlugin();
-      (plugin as any).configureServer(mockServer);
-      const middleware = mockServer.middlewares.use.mock.calls[0][1] as any as (
-        req: any,
-        res: any,
-      ) => Promise<void>;
+      (
+        plugin as unknown as { configureServer: (s: IMockServer) => void }
+      ).configureServer(mockServer);
+      const middleware = mockServer.middlewares.use.mock
+        .calls[0][1] as MiddlewareFunction;
 
       const mockReq = {
         method: 'POST',
-        on: vi.fn((event, callback) => {
+        on: vi.fn((event) => {
           if (event === 'data') {
             throw new Error('Network error');
           }
@@ -596,11 +641,11 @@ describe('createInternalFileWriterPlugin', () => {
 
     it('should handle missing method parameter', async () => {
       const plugin = createInternalFileWriterPlugin();
-      (plugin as any).configureServer(mockServer);
-      const middleware = mockServer.middlewares.use.mock.calls[0][1] as any as (
-        req: any,
-        res: any,
-      ) => Promise<void>;
+      (
+        plugin as unknown as { configureServer: (s: IMockServer) => void }
+      ).configureServer(mockServer);
+      const middleware = mockServer.middlewares.use.mock
+        .calls[0][1] as MiddlewareFunction;
 
       const mockReq = {
         method: 'POST',
@@ -625,25 +670,23 @@ describe('createInternalFileWriterPlugin', () => {
     });
 
     it('should handle middleware request parsing errors', async () => {
-      const plugin = createInternalFileWriterPlugin({ debug: true });
-      (plugin as any).configureServer(mockServer);
-      const middleware = mockServer.middlewares.use.mock.calls[0][1] as any as (
-        req: any,
-        res: any,
-      ) => Promise<void>;
+      const plugin = createInternalFileWriterPlugin();
+      (
+        plugin as unknown as { configureServer: (s: IMockServer) => void }
+      ).configureServer(mockServer);
+      const middleware = mockServer.middlewares.use.mock
+        .calls[0][1] as MiddlewareFunction;
 
       const mockReq = {
         method: 'POST',
         on: vi.fn(),
       };
       // Mock req.on to throw an error during data parsing
-      mockReq.on.mockImplementation(
-        (event: string, callback: (data?: string) => void) => {
-          if (event === 'data') {
-            throw new Error('Request parsing error');
-          }
-        },
-      );
+      mockReq.on.mockImplementation((event: string) => {
+        if (event === 'data') {
+          throw new Error('Request parsing error');
+        }
+      });
 
       await middleware(mockReq, mockRes);
 
@@ -658,78 +701,6 @@ describe('createInternalFileWriterPlugin', () => {
           error: 'Request parsing error',
         }),
       );
-    });
-  });
-
-  describe('Debug Mode', () => {
-    it('should log debug information when enabled', async () => {
-      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-      const consoleErrorSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
-
-      const plugin = createInternalFileWriterPlugin({ debug: true });
-      (plugin as any).configureServer(mockServer);
-      const middleware = mockServer.middlewares.use.mock.calls[0][1] as any as (
-        req: any,
-        res: any,
-      ) => Promise<void>;
-
-      const mockReq = {
-        method: 'POST',
-        on: vi.fn((event, callback) => {
-          if (event === 'data') {
-            callback('{"method":"ensureDirectory","params":{"path":"test"}}');
-          } else if (event === 'end') {
-            callback();
-          }
-        }),
-      };
-
-      mockFs.mkdir.mockResolvedValue(undefined);
-
-      await middleware(mockReq, mockRes);
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Ensuring directory exists:',
-        resolvePath('src/plugin/available/test'),
-      );
-
-      consoleSpy.mockRestore();
-      consoleErrorSpy.mockRestore();
-    });
-
-    it('should not log debug information when disabled', async () => {
-      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-
-      const plugin = createInternalFileWriterPlugin({ debug: false });
-      (plugin as any).configureServer(mockServer);
-      const middleware = mockServer.middlewares.use.mock.calls[0][1] as any as (
-        req: any,
-        res: any,
-      ) => Promise<void>;
-
-      const mockReq = {
-        method: 'POST',
-        on: vi.fn((event, callback) => {
-          if (event === 'data') {
-            callback('{"method":"ensureDirectory","params":{"path":"test"}}');
-          } else if (event === 'end') {
-            callback();
-          }
-        }),
-      };
-
-      mockFs.mkdir.mockResolvedValue(undefined);
-
-      await middleware(mockReq, mockRes);
-
-      expect(consoleSpy).not.toHaveBeenCalledWith(
-        'Ensuring directory exists:',
-        'test',
-      );
-
-      consoleSpy.mockRestore();
     });
   });
 });

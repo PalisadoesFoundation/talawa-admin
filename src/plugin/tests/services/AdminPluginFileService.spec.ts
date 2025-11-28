@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { AdminPluginFileService } from '../../services/AdminPluginFileService';
-import { AdminPluginManifest } from '../../../utils/adminPluginInstaller';
+import { IAdminPluginManifest } from '../../../utils/adminPluginInstaller';
 import { internalFileWriter } from '../../services/InternalFileWriter';
 
 // Mock InternalFileWriter
@@ -13,7 +13,7 @@ vi.mock('../../services/InternalFileWriter', () => ({
   },
 }));
 
-const validManifest: AdminPluginManifest = {
+const validManifest: IAdminPluginManifest = {
   name: 'Test Plugin',
   pluginId: 'TestPlugin',
   version: '1.0.0',
@@ -69,7 +69,7 @@ describe('AdminPluginFileService', () => {
     });
 
     it('should fail if required manifest fields are missing', () => {
-      const badManifest = { ...validManifest } as Partial<AdminPluginManifest>;
+      const badManifest = { ...validManifest } as Partial<IAdminPluginManifest>;
       delete badManifest.main;
       const files = {
         ...validFiles,
@@ -704,7 +704,7 @@ describe('AdminPluginFileService', () => {
 
     it('should use logical OR fallbacks for manifest fields when missing', async () => {
       // Manifest with empty strings to ensure fallbacks are used
-      const emptyFieldsManifest: Partial<AdminPluginManifest> & {
+      const emptyFieldsManifest: Partial<IAdminPluginManifest> & {
         main: string;
       } = {
         pluginId: '',
@@ -721,7 +721,7 @@ describe('AdminPluginFileService', () => {
 
       mockInternalFileWriter.readPluginFiles.mockResolvedValue({
         success: true,
-        manifest: emptyFieldsManifest as AdminPluginManifest,
+        manifest: emptyFieldsManifest as IAdminPluginManifest,
         files: mockFiles,
       });
 

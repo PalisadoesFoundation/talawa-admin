@@ -185,10 +185,6 @@ describe('Testing the App Component', () => {
       expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
       expect(mockPluginManager.initializePluginSystem).toHaveBeenCalled();
     });
-
-    expect(console.log).toHaveBeenCalledWith(
-      'Plugin system initialized successfully',
-    );
   });
 
   it('should handle plugin system initialization errors', async () => {
@@ -257,27 +253,6 @@ describe('Testing the App Component', () => {
     });
   });
 
-  it('should log user and plugin route debug information', async () => {
-    renderApp(adminLink);
-
-    await waitFor(() => {
-      expect(console.log).toHaveBeenCalledWith('=== APP.TSX ROUTE DEBUG ===');
-      expect(console.log).toHaveBeenCalledWith(
-        'Current user data:',
-        expect.objectContaining({
-          userType: 'ADMIN',
-          isAdmin: true,
-          isSuperAdmin: false,
-          userPermissions: 2,
-          userPermissionsArray: ['org1', 'org2'],
-        }),
-      );
-      expect(console.log).toHaveBeenCalledWith(
-        '=== END APP.TSX ROUTE DEBUG ===',
-      );
-    });
-  });
-
   it('should handle user data with no admin organizations', async () => {
     const noAdminMocks = [
       {
@@ -301,17 +276,13 @@ describe('Testing the App Component', () => {
     const noAdminLink = new StaticMockLink(noAdminMocks, true);
     renderApp(noAdminLink);
 
+    await wait();
+
+    // Should handle null adminFor gracefully
+    expect(document.body).toBeInTheDocument();
+    // Verify plugin system is initialized even with null adminFor
     await waitFor(() => {
-      expect(console.log).toHaveBeenCalledWith(
-        'Current user data:',
-        expect.objectContaining({
-          userType: 'USER',
-          isAdmin: false,
-          isSuperAdmin: false,
-          userPermissions: 0,
-          userPermissionsArray: [],
-        }),
-      );
+      expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
     });
   });
 
@@ -349,12 +320,6 @@ describe('Testing the App Component', () => {
       // Verify that usePluginRoutes was called, indicating plugin routes are being processed
       expect(usePluginRoutes).toHaveBeenCalled();
     });
-
-    // Verify the plugin routes were processed by checking console logs
-    expect(console.log).toHaveBeenCalledWith(
-      'Plugin routes loaded:',
-      expect.any(Object),
-    );
   });
 
   it('should handle missing user data gracefully', async () => {
@@ -376,10 +341,9 @@ describe('Testing the App Component', () => {
 
     // Should handle null user gracefully without crashing
     expect(document.body).toBeInTheDocument();
-
-    // Should log the debug information with null user handled
+    // Verify plugin system is initialized even with null user
     await waitFor(() => {
-      expect(console.log).toHaveBeenCalledWith('=== APP.TSX ROUTE DEBUG ===');
+      expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
     });
   });
 
@@ -404,17 +368,13 @@ describe('Testing the App Component', () => {
     const noProfileLink = new StaticMockLink(noProfileMocks, true);
     renderApp(noProfileLink);
 
+    await wait();
+
+    // Should handle missing appUserProfile gracefully
+    expect(document.body).toBeInTheDocument();
+    // Verify plugin system is initialized even without appUserProfile
     await waitFor(() => {
-      expect(console.log).toHaveBeenCalledWith(
-        'Current user data:',
-        expect.objectContaining({
-          userType: 'USER',
-          isAdmin: false,
-          isSuperAdmin: false,
-          userPermissions: 0,
-          userPermissionsArray: [],
-        }),
-      );
+      expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
     });
   });
 
@@ -445,25 +405,6 @@ describe('Testing the App Component', () => {
     await waitFor(() => {
       // Verify that usePluginRoutes was called 4 times for different route types
       expect(usePluginRoutes).toHaveBeenCalledTimes(4);
-
-      // Verify the plugin routes were logged
-      expect(console.log).toHaveBeenCalledWith(
-        'Plugin routes loaded:',
-        expect.objectContaining({
-          admin: expect.objectContaining({
-            count: 1,
-            routes: expect.arrayContaining([
-              expect.objectContaining({ pluginId: 'admin-org' }),
-            ]),
-          }),
-          user: expect.objectContaining({
-            count: 1,
-            routes: expect.arrayContaining([
-              expect.objectContaining({ pluginId: 'user-org' }),
-            ]),
-          }),
-        }),
-      );
     });
   });
 
@@ -524,14 +465,8 @@ describe('Testing the App Component', () => {
     renderApp(superAdminLink);
 
     await waitFor(() => {
-      expect(console.log).toHaveBeenCalledWith(
-        'Current user data:',
-        expect.objectContaining({
-          userType: 'SUPERADMIN',
-          isAdmin: true,
-          isSuperAdmin: true,
-        }),
-      );
+      // Verify plugin system is initialized
+      expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
     });
   });
 
@@ -539,14 +474,8 @@ describe('Testing the App Component', () => {
     renderApp(adminLink);
 
     await waitFor(() => {
-      expect(console.log).toHaveBeenCalledWith(
-        'Current user data:',
-        expect.objectContaining({
-          userType: 'ADMIN',
-          isAdmin: true,
-          isSuperAdmin: false,
-        }),
-      );
+      // Verify plugin system is initialized
+      expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
     });
   });
 

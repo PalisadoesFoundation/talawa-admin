@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import React from 'react';
+import { render } from '@testing-library/react';
 import PluginRouteRenderer from '../../routes/PluginRouteRenderer';
 import { getPluginComponents, isPluginRegistered } from '../../registry';
 
@@ -14,7 +15,13 @@ vi.mock('react', async () => {
   const actual = await vi.importActual('react');
   return {
     ...actual,
-    Suspense: ({ children, fallback }: any) => {
+    Suspense: ({
+      children,
+      fallback,
+    }: {
+      children: React.ReactNode;
+      fallback: React.ReactNode;
+    }) => {
       return (
         <div data-testid="suspense">
           {fallback}
@@ -25,10 +32,14 @@ vi.mock('react', async () => {
   };
 });
 
-const MockComponent = () => <div>Mock Component</div>;
-const MockFallback = () => <div>Mock Fallback</div>;
-
 describe('PluginRouteRenderer', () => {
+  const MockComponent = vi.fn(() =>
+    React.createElement('div', null, 'Mock Component'),
+  );
+  const MockFallback = vi.fn(() =>
+    React.createElement('div', null, 'Mock Fallback'),
+  );
+
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -213,7 +224,12 @@ describe('PluginRouteRenderer', () => {
       component: 'TestComponent',
       pluginId: undefined,
       permissions: ['READ'],
-    } as any;
+    } as unknown as {
+      path: string;
+      component: string;
+      pluginId: string | undefined;
+      permissions: string[];
+    };
 
     vi.mocked(isPluginRegistered).mockReturnValue(false);
 
@@ -230,10 +246,15 @@ describe('PluginRouteRenderer', () => {
 
     const route = {
       path: '/test',
-      component: undefined,
+      component: undefined as unknown as string,
       pluginId: 'test-plugin',
       permissions: ['READ'],
-    } as any;
+    } as unknown as {
+      path: string;
+      component: string;
+      pluginId: string;
+      permissions: string[];
+    };
 
     vi.mocked(isPluginRegistered).mockReturnValue(true);
     vi.mocked(getPluginComponents).mockReturnValue(mockComponents);

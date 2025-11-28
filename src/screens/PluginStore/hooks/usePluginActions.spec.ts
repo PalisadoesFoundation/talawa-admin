@@ -67,6 +67,9 @@ describe('usePluginActions', () => {
         pluginId: 'test-plugin',
         isInstalled: true,
         isActivated: true,
+        backup: false,
+        createdAt: '2023-01-01',
+        updatedAt: '2023-01-01',
       },
     ],
   };

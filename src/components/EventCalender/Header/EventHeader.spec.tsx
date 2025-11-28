@@ -10,12 +10,10 @@ describe('EventHeader Component', () => {
   const viewType = ViewType.MONTH;
   let handleChangeView: ReturnType<typeof vi.fn>;
   let showInviteModal: ReturnType<typeof vi.fn>;
-  let consoleSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
     handleChangeView = vi.fn();
     showInviteModal = vi.fn();
-    consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -118,7 +116,7 @@ describe('EventHeader Component', () => {
     expect(handleChangeView).toHaveBeenCalledTimes(1);
   });
 
-  it('logs "Events" when Events option is selected', async () => {
+  it('does not call handleChangeView when Events option is selected', async () => {
     const { getByTestId } = render(
       <I18nextProvider i18n={i18nForTest}>
         <EventHeader
@@ -136,10 +134,9 @@ describe('EventHeader Component', () => {
     });
 
     expect(handleChangeView).not.toHaveBeenCalled();
-    expect(consoleSpy).toHaveBeenCalledWith('Selected: Events');
   });
 
-  it('logs "Workshops" when Workshops option is selected', async () => {
+  it('does not call handleChangeView when Workshops option is selected', async () => {
     const { getByTestId } = render(
       <I18nextProvider i18n={i18nForTest}>
         <EventHeader
@@ -157,7 +154,6 @@ describe('EventHeader Component', () => {
     });
 
     expect(handleChangeView).not.toHaveBeenCalled();
-    expect(consoleSpy).toHaveBeenCalledWith('Selected: Workshops');
   });
 
   it('calls showInviteModal when create event button is clicked', () => {
@@ -208,7 +204,7 @@ describe('EventHeader Component', () => {
     expect(input.value).toBe('test event');
   });
 
-  it('logs search term when search is performed', () => {
+  it('allows search to be performed', () => {
     const { getByTestId } = render(
       <I18nextProvider i18n={i18nForTest}>
         <EventHeader
@@ -225,10 +221,10 @@ describe('EventHeader Component', () => {
     fireEvent.change(input, { target: { value: 'conference' } });
     fireEvent.click(searchButton);
 
-    expect(consoleSpy).toHaveBeenCalledWith('Search term: conference');
+    expect(input.value).toBe('conference');
   });
 
-  it('logs empty string when search is performed with no input', () => {
+  it('allows search with no input', () => {
     const { getByTestId } = render(
       <I18nextProvider i18n={i18nForTest}>
         <EventHeader
@@ -242,7 +238,7 @@ describe('EventHeader Component', () => {
     const searchButton = getByTestId('searchButton');
     fireEvent.click(searchButton);
 
-    expect(consoleSpy).toHaveBeenCalledWith('Search term: ');
+    expect(searchButton).toBeInTheDocument();
   });
 
   it('renders Create button with AddIcon and text', () => {
@@ -313,7 +309,6 @@ describe('EventHeader Component', () => {
       fireEvent.click(getByTestId('Events'));
     });
 
-    expect(consoleSpy).toHaveBeenCalledWith('Selected: Events');
     expect(handleChangeView).toHaveBeenCalledTimes(1); // Only called once from view type change
   });
 
