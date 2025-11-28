@@ -47,7 +47,9 @@ has_spies() {
 # Helper function to check if file uses module mocks
 has_module_mocks() {
   local file="$1"
-  grep -v "^[[:space:]]*//.*" "$file" | grep "vi\.mock\\\(" > /dev/null
+  # Note: This simple grep may match commented out code (false positives).
+  # We rely on the developer to not have commented out mock code that violates rules.
+  grep -v "^[[:space:]]*//.*" "$file" | grep "vi\.mock(" > /dev/null
 }
 
 # Find all .spec.ts and .spec.tsx files in src/

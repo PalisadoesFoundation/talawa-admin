@@ -15,7 +15,7 @@ describe('VenueCard Component', () => {
   const MOCK_HANDLE_DELETE = vi.fn();
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
   it('renders venue details correctly', (): void => {
     render(

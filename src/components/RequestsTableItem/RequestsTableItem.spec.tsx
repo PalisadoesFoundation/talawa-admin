@@ -53,11 +53,16 @@ afterEach(() => {
 describe('Testing User Table Item', () => {
   const resetAndRefetchMock = vi.fn();
 
-  console.error = vi.fn((message) => {
-    if (message.includes('validateDOMNesting')) {
-      return;
-    }
-    console.warn(message);
+  beforeEach(() => {
+    vi.spyOn(console, 'error').mockImplementation((message) => {
+      if (
+        typeof message === 'string' &&
+        message.includes('validateDOMNesting')
+      ) {
+        return;
+      }
+      console.warn(message);
+    });
   });
   it('Should render props and text elements it for the page component', async () => {
     const props: {

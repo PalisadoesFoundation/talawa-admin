@@ -338,7 +338,6 @@ describe('MemberDetail', () => {
   });
 
   it('validates password', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
     renderMemberDetailScreen(link1);
     await waitFor(() => {
       expect(screen.getByTestId('inputPassword')).toBeInTheDocument();
@@ -349,7 +348,7 @@ describe('MemberDetail', () => {
 
     fireEvent.change(passwordInput, { target: { value: 'weak' } });
 
-    expect(toastErrorSpy).toHaveBeenCalledWith(
+    expect(toast.error).toHaveBeenCalledWith(
       'Password must be at least 8 characters long.',
     );
   });

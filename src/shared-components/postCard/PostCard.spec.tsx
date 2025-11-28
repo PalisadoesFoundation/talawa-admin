@@ -662,7 +662,6 @@ describe('PostCard', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    fetchPostsMock.mockClear();
     const { setItem } = useLocalStorage();
     setItem('userId', '1');
   });

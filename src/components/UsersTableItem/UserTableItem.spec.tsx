@@ -133,14 +133,20 @@ afterEach(async () => {
 });
 
 describe('Testing User Table Item', () => {
-  const resetAndRefetchMock = vi.fn();
+  let resetAndRefetchMock: ReturnType<typeof vi.fn>;
 
-  console.error = vi.fn((message) => {
-    if (message.includes('validateDOMNesting')) {
-      return;
-    }
-    // Log other console errors
-    console.warn(message);
+  beforeEach(() => {
+    resetAndRefetchMock = vi.fn();
+    vi.spyOn(console, 'error').mockImplementation((message) => {
+      if (
+        typeof message === 'string' &&
+        message.includes('validateDOMNesting')
+      ) {
+        return;
+      }
+      // Log other console errors
+      console.warn(message);
+    });
   });
   test('Should render props and text elements test for the page component', async () => {
     const props: {

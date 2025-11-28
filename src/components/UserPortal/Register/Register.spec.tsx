@@ -93,19 +93,20 @@ vi.mock('react-toastify', () => ({
 }));
 
 describe('Testing Register Component [User Portal]', () => {
-  const setCurrentMode: React.Dispatch<SetStateAction<string>> = vi.fn();
-
-  // Test setup props
-  const props = {
-    setCurrentMode,
-  };
+  let setCurrentMode: React.Dispatch<SetStateAction<string>>;
+  let props: { setCurrentMode: React.Dispatch<SetStateAction<string>> };
 
   async function waitForAsync(): Promise<void> {
     await act(() => new Promise((resolve) => setTimeout(resolve, 100)));
   }
 
+  beforeEach(() => {
+    setCurrentMode = vi.fn();
+    props = { setCurrentMode };
+  });
+
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
   it('Component should be rendered properly', async () => {
     render(
