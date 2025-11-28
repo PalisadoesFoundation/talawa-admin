@@ -1,8 +1,0 @@
-
-> talawa-admin@3.0.0 test /home/ansingh0305/Desktop/School/gsoc/talawa-admin
-> vitest run -- src/components/UserPortal/CreateDirectChat/CreateDirectChat.spec.tsx
-
-
- RUN  v3.2.4 /home/ansingh0305/Desktop/School/gsoc/talawa-admin
-      Coverage enabled with istanbul
-
