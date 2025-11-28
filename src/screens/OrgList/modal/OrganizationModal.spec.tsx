@@ -15,6 +15,8 @@ import { I18nextProvider } from 'react-i18next';
 import OrganizationModal from './OrganizationModal';
 import i18nForTest from '../../../utils/i18nForTest'; // Update path based on your project structure
 
+import { validateFile } from 'utils/fileValidation';
+
 // Mock toast
 const toastMocks = vi.hoisted(() => ({
   error: vi.fn(),
@@ -25,9 +27,15 @@ vi.mock('react-toastify', () => ({
   toast: toastMocks,
 }));
 
-const mockUploadFileToMinio = vi
-  .fn()
-  .mockResolvedValue({ objectName: 'mocked-object-name' });
+vi.mock('utils/fileValidation', () => ({
+  validateFile: vi.fn(() => ({ isValid: true })),
+}));
+
+const { mockUploadFileToMinio } = vi.hoisted(() => ({
+  mockUploadFileToMinio: vi
+    .fn()
+    .mockResolvedValue({ objectName: 'mocked-object-name' }),
+}));
 
 vi.mock('utils/MinioUpload', () => ({
   useMinioUpload: () => ({ uploadFileToMinio: mockUploadFileToMinio }),
@@ -53,10 +61,6 @@ describe('OrganizationModal Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
   });
 
   vi.mock('utils/convertToBase64', () => ({
@@ -411,6 +415,11 @@ describe('OrganizationModal Component', () => {
   });
 
   test('should handle invalid file type', async () => {
+    (validateFile as unknown as ReturnType<typeof vi.fn>).mockReturnValueOnce({
+      isValid: false,
+      errorMessage:
+        'Invalid file type. Please upload a file of type: JPEG, PNG, GIF.',
+    });
     setup();
     const invalidFile = new File(['content'], 'test.txt', {
       type: 'text/plain',
@@ -552,6 +561,10 @@ describe('OrganizationModal Component', () => {
   });
 
   test('should handle file size exceeding 5MB', async () => {
+    (validateFile as unknown as ReturnType<typeof vi.fn>).mockReturnValueOnce({
+      isValid: false,
+      errorMessage: 'File is too large. Maximum size is 5MB.',
+    });
     setup();
     const largeFile = new File(['x'.repeat(6 * 1024 * 1024)], 'large.png', {
       type: 'image/png',

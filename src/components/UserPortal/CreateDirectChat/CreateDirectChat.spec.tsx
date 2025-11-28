@@ -13,7 +13,7 @@ import {
   CREATE_CHAT,
   CREATE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
-import * as ErrorHandler from 'utils/errorHandler';
+import { errorHandler } from 'utils/errorHandler';
 import type { GroupChat } from 'types/Chat/type';
 
 // Mock dependencies
@@ -25,7 +25,9 @@ vi.mock('react-router', async () => {
   };
 });
 
-const errorHandlerSpy = vi.spyOn(ErrorHandler, 'errorHandler');
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: vi.fn(),
+}));
 
 // Mocks
 const mockUsers = [
@@ -290,7 +292,7 @@ describe('CreateDirectChatModal', () => {
     fireEvent.click(addButtons[0]);
 
     await waitFor(() => {
-      expect(errorHandlerSpy).toHaveBeenCalledWith(
+      expect(errorHandler).toHaveBeenCalledWith(
         expect.any(Function),
         expect.any(Error),
       );
