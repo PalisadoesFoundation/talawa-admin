@@ -139,12 +139,19 @@ describe('SidebarNavItem Component', () => {
       expect(screen.getByTestId('mock-icon')).toBeInTheDocument();
     });
 
-    it('applies flex layout for simple button', () => {
-      renderComponent({ useSimpleButton: true });
+    it('renders icon and label in correct order for simple button', () => {
+      renderComponent({ useSimpleButton: true, label: 'Test Label' });
       const button = screen.getByTestId('testBtn');
-      const wrapper = button.querySelector('div[style]');
-      // Verify the wrapper div exists
-      expect(wrapper).toBeTruthy();
+
+      // Verify both icon and label are present
+      const icon = screen.getByTestId('mock-icon');
+      const label = screen.getByText('Test Label');
+      expect(icon).toBeInTheDocument();
+      expect(label).toBeInTheDocument();
+
+      // Verify they are both within the button
+      expect(button).toContainElement(icon);
+      expect(button).toContainElement(label);
     });
   });
 

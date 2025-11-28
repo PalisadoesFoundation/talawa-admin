@@ -390,8 +390,10 @@ describe('LeftDrawer Component', () => {
 
       renderComponent();
 
-      // Should not show the "pluginSettings" header when no plugin items
-      expect(screen.queryByText('pluginSettings')).not.toBeInTheDocument();
+      // Should not show the plugin settings header when no plugin items
+      expect(
+        screen.queryByTestId('pluginSettingsHeader'),
+      ).not.toBeInTheDocument();
     });
 
     it('should show plugin section when plugin items exist', () => {
@@ -413,8 +415,8 @@ describe('LeftDrawer Component', () => {
 
       renderComponent();
 
-      // Should show the "pluginSettings" header when plugin items exist
-      expect(screen.getByText('pluginSettings')).toBeInTheDocument();
+      // Should show the plugin settings header when plugin items exist
+      expect(screen.getByTestId('pluginSettingsHeader')).toBeInTheDocument();
 
       // Should render each plugin item
       expect(screen.getByText('Test Plugin')).toBeInTheDocument();

@@ -296,7 +296,7 @@ describe('SidebarBase Component', () => {
       renderComponent();
       const icon = screen
         .getByTestId('leftDrawerContainer')
-        .querySelector('[aria-label]');
+        .querySelector('[aria-label="Toggle sidebar"]');
       expect(icon).toHaveAttribute('aria-label', 'Toggle sidebar');
     });
 

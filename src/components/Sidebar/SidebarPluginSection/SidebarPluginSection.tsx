@@ -118,6 +118,7 @@ const SidebarPluginSection = ({
             marginTop: '1.5rem',
             marginBottom: '0.75rem',
           }}
+          data-testid="pluginSettingsHeader"
         >
           {!hideDrawer && tCommon('plugins')}
         </h5>
@@ -130,6 +131,7 @@ const SidebarPluginSection = ({
             marginBottom: '0.75rem',
             color: 'var(--bs-secondary)',
           }}
+          data-testid="pluginSettingsHeader"
         >
           {!hideDrawer && tCommon('pluginSettings')}
         </h4>
