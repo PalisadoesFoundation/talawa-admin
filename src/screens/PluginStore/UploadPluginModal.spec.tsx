@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { toast } from 'react-toastify';
@@ -1617,7 +1618,7 @@ describe('UploadPluginModal Component', () => {
           // This should not be reached due to early return
           await installAdminPluginFromZip({
             zipFile: selectedFile,
-            apolloClient: {},
+            apolloClient: {} as unknown as ApolloClient<NormalizedCacheObject>,
           });
         };
 

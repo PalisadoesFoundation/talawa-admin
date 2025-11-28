@@ -14,6 +14,9 @@ vi.mock('react-toastify', () => ({
 }));
 
 describe('CustomTableCell', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   it('renders event details correctly', async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>

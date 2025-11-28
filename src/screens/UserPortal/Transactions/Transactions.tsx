@@ -20,7 +20,6 @@
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
-import { useLocalStorage } from 'utils/useLocalstorage';
 import { PluginInjector } from 'plugin';
 
 export default function Transactions(): JSX.Element {

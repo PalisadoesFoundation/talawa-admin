@@ -2,7 +2,7 @@
 
 ***
 
-# Interface: PluginFileValidationResult
+# Interface: IPluginFileValidationResult
 
 Defined in: [src/plugin/services/AdminPluginFileService.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L19)
 
@@ -18,7 +18,7 @@ Defined in: [src/plugin/services/AdminPluginFileService.ts:21](https://github.co
 
 ### manifest?
 
-> `optional` **manifest**: [`AdminPluginManifest`](../../../../utils/adminPluginInstaller/interfaces/AdminPluginManifest.md)
+> `optional` **manifest**: [`IAdminPluginManifest`](../../../../utils/adminPluginInstaller/interfaces/IAdminPluginManifest.md)
 
 Defined in: [src/plugin/services/AdminPluginFileService.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L22)
 

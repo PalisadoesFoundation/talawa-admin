@@ -15,6 +15,9 @@ vi.mock('@mui/x-charts/PieChart', () => ({
 }));
 
 describe('Testing Event Stats Wrapper', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const props = {
     _id: 'eventStats123',
   };

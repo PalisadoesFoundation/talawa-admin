@@ -15,6 +15,9 @@ vi.mock('@mui/x-charts/PieChart', async () => ({
 }));
 
 describe('Testing Event Stats', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const props = {
     eventId: 'eventStats123',
     show: true,

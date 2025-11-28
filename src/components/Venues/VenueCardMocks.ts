@@ -1,5 +1,3 @@
-import { vi } from 'vitest';
-
 export const MOCK_VENUE_ITEM = {
   node: {
     id: '1',
@@ -35,6 +33,3 @@ export const MOCK_VENUE_ITEM_LONG_TEXT = {
       'This is a very long description that should be truncated. It contains more than seventy five characters to ensure we can test the truncation logic properly. This text will be cut off.',
   },
 };
-
-export const MOCK_HANDLE_EDIT = vi.fn();
-export const MOCK_HANDLE_DELETE = vi.fn();

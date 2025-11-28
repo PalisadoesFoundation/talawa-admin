@@ -90,8 +90,6 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
-const resetAndRefetchMock = vi.fn();
-
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -135,12 +133,20 @@ afterEach(async () => {
 });
 
 describe('Testing User Table Item', () => {
-  console.error = vi.fn((message) => {
-    if (message.includes('validateDOMNesting')) {
-      return;
-    }
-    // Log other console errors
-    console.warn(message);
+  let resetAndRefetchMock: ReturnType<typeof vi.fn>;
+
+  beforeEach(() => {
+    resetAndRefetchMock = vi.fn();
+    vi.spyOn(console, 'error').mockImplementation((message) => {
+      if (
+        typeof message === 'string' &&
+        message.includes('validateDOMNesting')
+      ) {
+        return;
+      }
+      // Log other console errors
+      console.warn(message);
+    });
   });
   test('Should render props and text elements test for the page component', async () => {
     const props: {

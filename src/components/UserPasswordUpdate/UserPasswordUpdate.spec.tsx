@@ -29,6 +29,9 @@ async function wait(ms = 5): Promise<void> {
 }
 
 describe('Testing User Password Update', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const formData = {
     previousPassword: 'Palisadoes',
     newPassword: 'ThePalisadoesFoundation',

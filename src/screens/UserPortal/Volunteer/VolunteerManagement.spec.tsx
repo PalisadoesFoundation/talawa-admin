@@ -62,6 +62,10 @@ describe('Volunteer Management', () => {
     setItem('userId', 'userId');
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should redirect to fallback URL if URL params are undefined', async () => {
     setItem('userId', null);
     render(
