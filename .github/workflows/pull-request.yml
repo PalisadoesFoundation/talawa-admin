@@ -97,9 +97,6 @@ jobs:
       - name: Check for localStorage Usage
         run: pnpm exec tsx scripts/githooks/check-localstorage-usage.ts --scan-entire-repo
 
-      - name: Check for proper mock cleanup in test files
-        run: pnpm run check-mock-cleanup
-
       - name: Compare translation files
         run: |
           chmod +x .github/workflows/scripts/compare_translations.py
@@ -116,6 +113,18 @@ jobs:
 
       - name: Check for unused files and exports in src/ and docs/src
         run: pnpm knip --include files,exports
+
+  Check-Mock-Isolation:
+    name: Check for proper mock cleanup in test files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the Repository
+        uses: actions/checkout@v4
+
+      - name: Check for proper mock cleanup
+        run: |
+          chmod +x scripts/githooks/check-mock-cleanup.sh
+          ./scripts/githooks/check-mock-cleanup.sh
 
   Check-AutoDocs:
     name: Generate and Validate Documentation
@@ -429,7 +438,9 @@ jobs:
         Check-AutoDocs,
         Check-ESlint-Disable,
         Check-Code-Coverage-Disable,
+        Check-Code-Coverage-Disable,
         Check-ItSkip-Disable,
+        Check-Mock-Isolation,
       ]
     env:
       TOTAL_SHARDS: 4
