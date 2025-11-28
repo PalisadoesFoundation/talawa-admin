@@ -528,6 +528,10 @@ describe('Organisation Tags Page', () => {
       // Tags without parentTag should not show breadcrumbs
       expect(tagNames[0]).toBeInTheDocument();
       expect(tagNames[0]).toHaveTextContent('userTag 1');
+      // Verify no breadcrumbs shown for the first tag (which has no ancestors)
+      const breadcrumbs = screen.queryAllByTestId('ancestorTagsBreadCrumbs');
+      // First 10 tags in initial load don't have ancestors in mock data
+      expect(breadcrumbs.length).toBe(0);
     });
   });
 
@@ -603,9 +607,6 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByText('userTag 1')).toBeInTheDocument();
     });
-
-    // Verify initial tag is loaded
-    expect(screen.getByText('userTag 1')).toBeInTheDocument();
 
     // Trigger infinite scroll
     const scrollableDiv = screen.getByTestId('orgUserTagsScrollableDiv');
