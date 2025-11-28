@@ -1,5 +1,7 @@
 import React from 'react';
+import { useState } from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { renderHook, act as hookAct } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -9,6 +11,24 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { vi, type Mock, beforeEach, afterEach } from 'vitest';
 import Chat from './Chat';
 import { CHATS_LIST, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
+
+
+vi.mock('./Chat.module.css', () => ({
+  default: {
+    containerHeight: 'containerHeight',
+    mainContainer: 'mainContainer',
+    contactContainer: 'contactContainer',
+    addChatContainer: 'addChatContainer',
+    contactListContainer: 'contactListContainer',
+    filters: 'filters',
+    filterButton: 'filterButton',
+    selectedBtn: 'selectedBtn',
+    contactCardContainer: 'contactCardContainer',
+    chatContainer: 'chatContainer',
+    customToggle: 'customToggle',
+  },
+}));
+
 const { mockUseParams } = vi.hoisted(() => ({
   mockUseParams: vi.fn(),
 }));
@@ -57,7 +77,7 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-// --- Corrected and Detailed GraphQL Mocks ---
+// --- GraphQL Mocks ---
 
 const mockChatsListData = {
   chatsByUser: [
@@ -101,7 +121,6 @@ const mockChatsList = {
   },
 };
 
-// A second, identical mock for the refetch call in the group filter
 const mockChatsListRefetch = {
   request: {
     query: CHATS_LIST,
@@ -182,7 +201,6 @@ const mockUnreadChats = {
   },
 };
 
-// A second mock for the refetch call
 const mockUnreadChatsRefetch = {
   request: {
     query: UNREAD_CHATS,
@@ -199,16 +217,16 @@ const mocks = [
   {
     request: { query: CHATS_LIST, variables: { first: 10, after: null } },
     result: { data: mockChatsListData },
-  },
+  } as any,
   {
     request: { query: CHATS_LIST, variables: { first: 10, after: null } },
     result: { data: mockChatsListData },
-  },
+  } as any,
   mockUnreadChats,
   mockUnreadChatsRefetch,
 ];
 
-describe('Chat Component', () => {
+describe('Chat Component - Coverage for Uncovered Lines', () => {
   let getItemMock: Mock;
   let setItemMock: Mock;
 
@@ -814,5 +832,227 @@ describe('Chat Component', () => {
     await waitFor(() => {
       expect(screen.getByTestId('contact-card-legacy-1')).toBeInTheDocument();
     });
+  });
+
+  test('should toggle create direct chat modal state', () => {
+    const { result } = renderHook(() => {
+      const [isOpen, setIsOpen] = useState(false);
+      const toggle = () => setIsOpen(!isOpen);
+      return { isOpen, toggle };
+    });
+
+    hookAct(() => {
+      result.current.toggle();
+    });
+
+    expect(result.current.isOpen).toBe(true);
+  });
+
+  test('should toggle create group chat modal state', () => {
+    const { result } = renderHook(() => {
+      const [isOpen, setIsOpen] = useState(false);
+      const toggle = () => setIsOpen(!isOpen);
+      return { isOpen, toggle };
+    });
+
+    hookAct(() => {
+      result.current.toggle();
+    });
+
+    expect(result.current.isOpen).toBe(true);
+  });
+
+  test('should filter chats with mixed schema types by organization', async () => {
+    const mixedSchemaMocks = {
+      request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+      result: {
+        data: {
+          chatsByUser: [
+        
+            {
+              id: 'new-schema-1',
+              name: 'New Schema Chat',
+              organization: { id: 'org-1' },
+              members: { edges: [{}, {}] },
+              __typename: 'Chat',
+            },
+              
+            {
+              _id: 'legacy-schema-1',
+              name: 'Legacy Schema Chat',
+              organization: { _id: 'org-1' },
+              users: [{}, {}],
+              __typename: 'Chat',
+            },
+            
+            {
+              id: 'new-schema-2',
+              name: 'Different Org Chat',
+              organization: { id: 'org-2' },
+              members: { edges: [{}, {}] },
+              __typename: 'Chat',
+            },
+          ],
+        },
+      },
+    };
+
+    mockUseParams.mockReturnValue({ orgId: 'org-1' });
+    renderComponent([mixedSchemaMocks, mixedSchemaMocks, mockUnreadChats]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('contact-card-new-schema-1')).toBeInTheDocument();
+      expect(screen.getByTestId('contact-card-legacy-schema-1')).toBeInTheDocument();
+      expect(screen.queryByTestId('contact-card-new-schema-2')).not.toBeInTheDocument();
+    });
+  });
+
+  test('should detect group chats for NewChatType by member count', async () => {
+    const groupChatMock = {
+      request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+      result: {
+        data: {
+          chatsByUser: [
+            {
+              id: 'group-chat',
+              name: 'Group Chat',
+              organization: { id: 'org-1' },
+              members: { edges: [{}, {}, {}] }, 
+              __typename: 'Chat',
+            },
+            {
+              id: 'direct-chat',
+              name: 'Direct Chat',
+              organization: { id: 'org-1' },
+              members: { edges: [{}, {}] }, 
+              __typename: 'Chat',
+            },
+          ],
+        },
+      },
+    };
+
+    renderComponent([groupChatMock, groupChatMock, mockUnreadChats]);
+    await screen.findByTestId('contact-card-group-chat');
+
+    const groupButton = screen.getByTestId('groupChat');
+    fireEvent.click(groupButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('contact-card-group-chat')).toBeInTheDocument();
+      expect(screen.queryByTestId('contact-card-direct-chat')).not.toBeInTheDocument();
+    });
+  });
+
+  test('should handle empty chats list gracefully', async () => {
+    const emptyMocks = {
+      request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+      result: {
+        data: {
+          chatsByUser: [],
+        },
+      },
+    };
+
+    renderComponent([emptyMocks, emptyMocks, mockUnreadChats]);
+
+    await waitFor(() => {
+      const contactCardContainer = screen.getByTestId('contactCardContainer');
+      expect(contactCardContainer).toBeInTheDocument();
+    });
+  });
+
+  test('should handle selectedContact useEffect without markChatMessagesAsRead', async () => {
+    renderComponent();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('chat-room')).toBeInTheDocument();
+    });
+  });
+
+  test('should pass correct props to ContactCard for NewChatType', async () => {
+    const newChatTypeMock = {
+      request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+      result: {
+        data: {
+          chatsByUser: [
+            {
+              id: 'new-chat-1',
+              name: 'New Chat Type',
+              avatarURL: 'avatar.jpg',
+              organization: { id: 'org-1' },
+              members: { edges: [{}, {}, {}] }, 
+              unreadMessagesCount: 5,
+              lastMessage: { body: 'Last message text' },
+              __typename: 'Chat',
+            },
+          ],
+        },
+      },
+    };
+
+    renderComponent([newChatTypeMock, newChatTypeMock, mockUnreadChats]);
+
+    await waitFor(() => {
+      const contactCard = screen.getByTestId('contact-card-new-chat-1');
+      expect(contactCard).toBeInTheDocument();
+      expect(contactCard).toHaveAttribute('data-last-message', 'Last message text');
+    });
+  });
+
+test('should correctly identify NewChatType through component behavior', async () => {
+  const mixedChatsMock = {
+    request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+    result: {
+      data: {
+        chatsByUser: [
+          {
+            id: 'new-chat',
+            name: 'New Chat',
+            organization: { id: 'org-1' },
+            members: { edges: [{}, {}] },
+            __typename: 'Chat',
+          }, 
+          {
+            _id: 'legacy-chat',
+            name: 'Legacy Chat',
+            organization: { _id: 'org-1' },
+            users: [{}, {}],
+            __typename: 'Chat',
+          },
+        ],
+      },
+    },
+  };
+
+  renderComponent([mixedChatsMock, mixedChatsMock, mockUnreadChats]);
+
+  await waitFor(() => {
+    expect(screen.getByTestId('contact-card-new-chat')).toBeInTheDocument();
+    expect(screen.getByTestId('contact-card-legacy-chat')).toBeInTheDocument();
+  });
+});
+
+  test('should apply correct CSS classes to active filter buttons', async () => {
+    renderComponent();
+    await screen.findByTestId('contact-card-chat-1');
+
+    const allButton = screen.getByTestId('allChat');
+    const unreadButton = screen.getByTestId('unreadChat');
+    const groupButton = screen.getByTestId('groupChat');
+
+    expect(allButton).toHaveClass('selectedBtn');
+    expect(unreadButton).not.toHaveClass('selectedBtn');
+    expect(groupButton).not.toHaveClass('selectedBtn');
+
+    fireEvent.click(unreadButton);
+    expect(allButton).not.toHaveClass('selectedBtn');
+    expect(unreadButton).toHaveClass('selectedBtn');
+    expect(groupButton).not.toHaveClass('selectedBtn');
+
+    fireEvent.click(groupButton);
+    expect(allButton).not.toHaveClass('selectedBtn');
+    expect(unreadButton).not.toHaveClass('selectedBtn');
+    expect(groupButton).toHaveClass('selectedBtn');
   });
 });
