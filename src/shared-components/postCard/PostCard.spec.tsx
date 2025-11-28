@@ -660,9 +660,14 @@ const renderPostCardWithCustomMock = (customMock: MockedResponse) => {
 describe('PostCard', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.resetAllMocks();
     fetchPostsMock.mockClear();
     const { setItem } = useLocalStorage();
     setItem('userId', '1');
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   test('opens and closes edit modal', async () => {
