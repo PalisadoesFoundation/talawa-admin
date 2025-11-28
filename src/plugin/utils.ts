@@ -4,6 +4,7 @@
 
 import { IPluginManifest, IDrawerExtension } from './types';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function validatePluginManifest(manifest: any): boolean {
   if (!manifest || typeof manifest !== 'object') return false;
   const hasBasicFields =
@@ -83,3 +84,26 @@ export function filterByPermissions<
     );
   });
 }
+
+/**
+ * Dynamically imports a plugin module
+ * Extracted for better testability
+ * @param pluginId - The unique identifier of the plugin to import
+ * @throws Error if pluginId is empty or contains invalid characters
+ */
+export const dynamicImportPlugin = (
+  pluginId: string,
+): Promise<Record<string, unknown>> => {
+  if (!pluginId || pluginId.trim() === '') {
+    return Promise.reject(new Error('Plugin ID cannot be empty'));
+  }
+  // Prevent path traversal attacks
+  if (
+    pluginId.includes('..') ||
+    pluginId.includes('/') ||
+    pluginId.includes('\\')
+  ) {
+    return Promise.reject(new Error('Plugin ID contains invalid characters'));
+  }
+  return import(/* @vite-ignore */ `/plugins/${pluginId}/index.ts`);
+};

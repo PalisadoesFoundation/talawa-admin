@@ -1,5 +1,6 @@
+/* eslint-disable react/no-multi-comp */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import PluginRoutes from '../../routes/PluginRoutes';
 import { usePluginRoutes } from '../../hooks';
@@ -51,11 +52,6 @@ vi.mock('react-router-dom', async () => {
 
 const mockUsePluginRoutes = vi.mocked(usePluginRoutes);
 
-// Test wrapper component
-const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
-
 describe('PluginRoutes', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -70,9 +66,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       // Should render the component even with empty routes - just an empty div
@@ -83,9 +79,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       expect(mockUsePluginRoutes).toHaveBeenCalledWith([], false);
@@ -97,9 +93,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes userPermissions={userPermissions} isAdmin={isAdmin} />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       expect(mockUsePluginRoutes).toHaveBeenCalledWith(
@@ -123,9 +119,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       expect(screen.getByTestId('route-/test')).toBeInTheDocument();
@@ -155,9 +151,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       expect(screen.getByTestId('route-/plugin1')).toBeInTheDocument();
@@ -168,9 +164,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       // Should render nothing when no routes are provided
@@ -178,12 +174,13 @@ describe('PluginRoutes', () => {
     });
 
     it('should handle null/undefined routes gracefully', () => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       mockUsePluginRoutes.mockReturnValue(null as any);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       // Should render nothing when routes are null/undefined
@@ -205,9 +202,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       expect(screen.getByTestId('suspense')).toBeInTheDocument();
@@ -230,9 +227,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes fallback={customFallback} />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       expect(screen.getByTestId('custom-fallback')).toBeInTheDocument();
@@ -252,9 +249,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       // The lazy component should be created and rendered
@@ -276,9 +273,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       // Should render the route structure with suspense wrapper
@@ -300,9 +297,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       // Should still render the route structure
@@ -323,9 +320,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       // Should show loading state
@@ -354,9 +351,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       const route1 = screen.getByTestId('route-/path1');
@@ -387,9 +384,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       expect(screen.getByTestId('route-/path1')).toBeInTheDocument();
@@ -402,9 +399,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes userPermissions={undefined} />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       expect(mockUsePluginRoutes).toHaveBeenCalledWith([], false);
@@ -414,9 +411,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes isAdmin={undefined} />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       expect(mockUsePluginRoutes).toHaveBeenCalledWith([], false);
@@ -426,9 +423,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes userPermissions={[]} />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       expect(mockUsePluginRoutes).toHaveBeenCalledWith([], false);
@@ -449,9 +446,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       expect(
@@ -472,9 +469,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       expect(screen.getByTestId('route-/empty')).toBeInTheDocument();
@@ -494,9 +491,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
       render(
-        <TestWrapper>
+        <BrowserRouter>
           <PluginRoutes />
-        </TestWrapper>,
+        </BrowserRouter>,
       );
 
       expect(screen.getByTestId('route-/long')).toBeInTheDocument();

@@ -4,6 +4,7 @@ import {
   generatePluginId,
   sortDrawerItems,
   filterByPermissions,
+  dynamicImportPlugin,
 } from '../utils';
 import type { IPluginManifest, IDrawerExtension } from '../types';
 
@@ -304,6 +305,46 @@ describe('Plugin Utils', () => {
       const items: TestItem[] = [];
       const filteredItems = filterByPermissions(items, ['read'], false);
       expect(filteredItems).toEqual([]);
+    });
+  });
+
+  describe('dynamicImportPlugin', () => {
+    it('should reject empty plugin ID', async () => {
+      await expect(dynamicImportPlugin('')).rejects.toThrow(
+        'Plugin ID cannot be empty',
+      );
+      await expect(dynamicImportPlugin('   ')).rejects.toThrow(
+        'Plugin ID cannot be empty',
+      );
+    });
+
+    it('should reject plugin ID with path traversal characters', async () => {
+      await expect(dynamicImportPlugin('../plugin')).rejects.toThrow(
+        'Plugin ID contains invalid characters',
+      );
+      await expect(dynamicImportPlugin('plugin/../other')).rejects.toThrow(
+        'Plugin ID contains invalid characters',
+      );
+      await expect(dynamicImportPlugin('plugin\\other')).rejects.toThrow(
+        'Plugin ID contains invalid characters',
+      );
+    });
+
+    it('should import valid plugin ID', async () => {
+      // We can't easily mock the dynamic import here without more setup,
+      // but we can verify it doesn't throw the validation errors
+      // and attempts the import (which will fail in test env but that's expected)
+      try {
+        await dynamicImportPlugin('valid-plugin');
+      } catch (error: unknown) {
+        // It should fail with module not found, not validation error
+        if (error instanceof Error) {
+          expect(error.message).not.toContain('Plugin ID cannot be empty');
+          expect(error.message).not.toContain(
+            'Plugin ID contains invalid characters',
+          );
+        }
+      }
     });
   });
 });
