@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import RecurringEventVolunteerModal from './RecurringEventVolunteerModal';
 
@@ -17,7 +17,17 @@ describe('RecurringEventVolunteerModal', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   test('renders modal with individual volunteering title, description and option texts', () => {
+    // Make date formatting deterministic for this test
+    const formattedDate = '1/15/2024';
+    vi.spyOn(Date.prototype, 'toLocaleDateString').mockReturnValue(
+      formattedDate,
+    );
+
     render(<RecurringEventVolunteerModal {...defaultProps} />);
 
     // Modal exists
@@ -43,9 +53,6 @@ describe('RecurringEventVolunteerModal', () => {
     ).toBeInTheDocument();
 
     // Instance option description (individual branch, with formatted date)
-    const formattedDate = new Date(defaultProps.eventDate).toLocaleDateString(
-      'en-US',
-    );
     expect(
       screen.getByText(
         `You will only be volunteering for the event on ${formattedDate}`,
@@ -61,6 +68,11 @@ describe('RecurringEventVolunteerModal', () => {
 
   test('renders group volunteering title, description and option texts when isForGroup is true', () => {
     const groupName = 'Cleanup Crew';
+    const formattedDate = '1/15/2024';
+    vi.spyOn(Date.prototype, 'toLocaleDateString').mockReturnValue(
+      formattedDate,
+    );
+
     render(
       <RecurringEventVolunteerModal
         {...defaultProps}
@@ -89,9 +101,6 @@ describe('RecurringEventVolunteerModal', () => {
     ).toBeInTheDocument();
 
     // Instance option description (group branch, with formatted date)
-    const formattedDate = new Date(defaultProps.eventDate).toLocaleDateString(
-      'en-US',
-    );
     expect(
       screen.getByText(
         `You will join this group only for the event on ${formattedDate}`,
@@ -148,7 +157,7 @@ describe('RecurringEventVolunteerModal', () => {
   test('cancel button calls onHide', () => {
     render(<RecurringEventVolunteerModal {...defaultProps} />);
 
-    fireEvent.click(screen.getByTestId('cancelVolunteerBtn'));
+    fireEvent.click(screen.getByText('Cancel'));
 
     expect(defaultProps.onHide).toHaveBeenCalledTimes(1);
   });
