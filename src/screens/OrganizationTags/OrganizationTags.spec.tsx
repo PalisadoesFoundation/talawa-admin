@@ -616,7 +616,6 @@ describe('Organisation Tags Page', () => {
 
     await wait();
 
-    // Should still show the original tag (fetchMore returned undefined)
     expect(screen.getByText('userTag 1')).toBeInTheDocument();
   });
 });
