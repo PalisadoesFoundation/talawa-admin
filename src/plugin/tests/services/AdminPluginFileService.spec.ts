@@ -157,6 +157,19 @@ describe('AdminPluginFileService', () => {
       expect(result.error).toBeDefined();
     });
 
+    it('should fail if manifest is missing despite validation passing', async () => {
+      // Mock validatePluginFiles to return valid=true but manifest=undefined
+      // This covers line 194: if (!manifest) { ... }
+      vi.spyOn(service, 'validatePluginFiles').mockReturnValue({
+        valid: true,
+        manifest: undefined,
+      });
+
+      const result = await service.installPlugin('TestPlugin', validFiles);
+      expect(result.success).toBe(false);
+      expect(result.error).toBe('Manifest is missing');
+    });
+
     it('should fail if pluginId does not match manifest', async () => {
       const files = {
         ...validFiles,

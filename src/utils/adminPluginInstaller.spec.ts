@@ -179,6 +179,21 @@ describe('adminPluginInstaller', () => {
       );
     });
 
+    it('should throw when api manifest is missing required fields', async () => {
+      const mockFile = new File([''], 'test.zip');
+      mockZip.loadAsync.mockResolvedValue(
+        createMockZipContent({
+          'api/manifest.json': JSON.stringify({ name: 'Test API' }),
+        }),
+      );
+
+      // This covers line 167: if (missingFields.length > 0) { ... }
+      // Note: The implementation catches the specific error and re-throws "Invalid api manifest.json"
+      await expect(validateAdminPluginZip(mockFile)).rejects.toThrow(
+        'Invalid api manifest.json',
+      );
+    });
+
     it('should return flags false when no admin or API folder exists', async () => {
       const mockFile = new File([''], 'test.zip');
       mockZip.loadAsync.mockResolvedValue(
