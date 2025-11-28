@@ -69,10 +69,13 @@ describe('Testing OrganizationScreen', () => {
   });
 
   beforeEach(() => {
-    // Create fresh mock functions before each test
+    // Reset all mocks before each test
     mockUseParams = vi.fn();
     mockUseMatch = vi.fn();
     mockNavigate = vi.fn();
+    mockUseParams.mockReset();
+    mockUseMatch.mockReset();
+    mockNavigate.mockReset();
   });
   afterEach(() => {
     vi.restoreAllMocks();
