@@ -46,6 +46,12 @@ vi.mock('node:path', () => ({
   dirname: vi.fn((path: string) => path.substring(0, path.lastIndexOf('/'))),
 }));
 
+// Mock path for Node.js environment
+vi.mock('node:path', () => ({
+  join: vi.fn((...args: string[]) => args.join('/')),
+  dirname: vi.fn((path: string) => path.substring(0, path.lastIndexOf('/'))),
+}));
+
 const mockManifest: IAdminPluginManifest = {
   name: 'Test Plugin',
   pluginId: 'TestPlugin',
@@ -919,9 +925,9 @@ describe('Node.js specific and error coverage', () => {
       pathExists: (p: string) => Promise<boolean>;
     };
 
-    const pathExistsSpy = vi
-      .spyOn(withPriv, 'pathExists')
-      .mockResolvedValue(false);
+    const pathExistsSpy = (
+      vi.spyOn(withPriv, 'pathExists') as MockInstance
+    ).mockResolvedValue(false);
 
     const result = await instance.readPluginFiles('MissingPlugin');
 

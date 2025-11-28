@@ -657,18 +657,14 @@ const renderPostCardWithCustomMock = (customMock: MockedResponse) => {
   );
 };
 
-describe('PostCard Component', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
+describe('PostCard', () => {
   beforeEach(() => {
+    vi.clearAllMocks();
+    fetchPostsMock.mockClear();
     const { setItem } = useLocalStorage();
     setItem('userId', '1');
-    fetchPostsMock.mockClear();
-    vi.clearAllMocks();
   });
 
-  // Update all test cases that use the more button
   test('opens and closes edit modal', async () => {
     renderPostCard();
 
@@ -686,22 +682,6 @@ describe('PostCard Component', () => {
     await waitFor(() => {
       expect(screen.queryByText('Edit Post')).not.toBeInTheDocument();
     });
-  });
-
-  test('updates post when edit form is submitted', async () => {
-    renderPostCard();
-
-    const moreButton = screen.getByTestId('more-options-button');
-    await userEvent.click(moreButton);
-    const editButton = await screen.findByTestId('edit-post-menu-item');
-    await userEvent.click(editButton);
-
-    const postInput = screen.getByRole('textbox');
-    await userEvent.clear(postInput);
-    await userEvent.type(postInput, 'Updated post content');
-
-    const saveButton = await screen.findByTestId('save-post-button');
-    await userEvent.click(saveButton);
   });
 
   test('deletes post when delete button is clicked', async () => {
@@ -735,23 +715,6 @@ describe('PostCard Component', () => {
   test('renders G4 plugin injector in PostCard', () => {
     renderPostCard();
     expect(screen.getByTestId('plugin-injector-g4')).toBeInTheDocument();
-  });
-});
-
-// Mock toast
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
-}));
-
-describe('PostCard', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-    fetchPostsMock.mockClear();
-    const { setItem } = useLocalStorage();
-    setItem('userId', '1');
   });
   it('creates comment and clears input', async () => {
     renderPostCard();

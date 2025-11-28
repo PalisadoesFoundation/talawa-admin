@@ -164,7 +164,7 @@
     "typedoc": "^0.28.1",
     "typedoc-plugin-markdown": "^4.5.0",
     "typescript": "^5.8.3",
-    "vite": "^7.1.12",
+    "vite": "^7.2.4",
     "vite-plugin-istanbul": "^7.1.0",
     "vite-plugin-svgr": "^4.3.0",
     "vitest": "^3.2.4"

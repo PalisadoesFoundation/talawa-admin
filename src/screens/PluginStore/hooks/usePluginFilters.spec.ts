@@ -88,6 +88,8 @@ describe('usePluginFilters', () => {
     },
   ];
 
+  const stablePluginData = { getPlugins: mockPlugins };
+
   beforeEach(() => {
     vi.clearAllMocks();
     mockT.mockImplementation((key: string) => key);
@@ -100,7 +102,7 @@ describe('usePluginFilters', () => {
   describe('Initialization', () => {
     it('should initialize with correct default state', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       expect(result.current.searchTerm).toBe('');
@@ -199,7 +201,7 @@ describe('usePluginFilters', () => {
   describe('Search Functionality', () => {
     it('should filter plugins by name', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -217,7 +219,7 @@ describe('usePluginFilters', () => {
 
     it('should filter plugins by description', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -236,7 +238,7 @@ describe('usePluginFilters', () => {
 
     it('should perform case-insensitive search', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -253,7 +255,7 @@ describe('usePluginFilters', () => {
 
     it('should return all plugins when search term is empty', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -266,7 +268,7 @@ describe('usePluginFilters', () => {
 
     it('should return empty array when no plugins match search', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -278,7 +280,7 @@ describe('usePluginFilters', () => {
 
     it('should search in both name and description', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -315,7 +317,7 @@ describe('usePluginFilters', () => {
   describe('Filter Functionality', () => {
     it('should show all plugins when filter is "all"', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -331,7 +333,7 @@ describe('usePluginFilters', () => {
 
     it('should show only installed plugins when filter is "installed"', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -374,7 +376,7 @@ describe('usePluginFilters', () => {
 
     it('should combine search and filter correctly', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       // Set filter to installed
@@ -397,7 +399,7 @@ describe('usePluginFilters', () => {
 
     it('should handle search with no matches in installed filter', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       // Set filter to installed
@@ -417,7 +419,7 @@ describe('usePluginFilters', () => {
   describe('isInstalled Function', () => {
     it('should return true for loaded plugins', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       expect(result.current.isInstalled('Loaded Plugin 1')).toBe(true);
@@ -426,7 +428,7 @@ describe('usePluginFilters', () => {
 
     it('should return true for installed GraphQL plugins', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       expect(result.current.isInstalled('graphql-plugin-1')).toBe(true);
@@ -435,7 +437,7 @@ describe('usePluginFilters', () => {
 
     it('should return false for non-installed GraphQL plugins', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       expect(result.current.isInstalled('graphql-plugin-3')).toBe(false);
@@ -443,7 +445,7 @@ describe('usePluginFilters', () => {
 
     it('should return false for non-existent plugins', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       expect(result.current.isInstalled('nonexistent-plugin')).toBe(false);
@@ -464,7 +466,7 @@ describe('usePluginFilters', () => {
   describe('getInstalledPlugin Function', () => {
     it('should return GraphQL plugin data for installed GraphQL plugins', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       const plugin = result.current.getInstalledPlugin('graphql-plugin-1');
@@ -483,13 +485,14 @@ describe('usePluginFilters', () => {
         license: '',
         tags: [],
         status: 'active',
-        changelog: '',
+        changelog: [],
+        features: [],
       });
     });
 
     it('should return loaded plugin data for loaded plugins', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       const plugin = result.current.getInstalledPlugin('Loaded Plugin 1');
@@ -508,13 +511,14 @@ describe('usePluginFilters', () => {
         license: 'MIT',
         tags: ['test', 'plugin'],
         status: 'active',
-        changelog: '',
+        changelog: [],
+        features: [],
       });
     });
 
     it('should return undefined for non-installed plugins', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       const plugin = result.current.getInstalledPlugin('nonexistent-plugin');
@@ -536,11 +540,8 @@ describe('usePluginFilters', () => {
         },
       ];
 
-      const { result } = renderHook(() =>
-        usePluginFilters({
-          pluginData: { getPlugins: mockPluginsWithConflict },
-        }),
-      );
+      const pluginData = { getPlugins: mockPluginsWithConflict };
+      const { result } = renderHook(() => usePluginFilters({ pluginData }));
 
       const plugin = result.current.getInstalledPlugin('Loaded Plugin 1');
 
@@ -559,7 +560,8 @@ describe('usePluginFilters', () => {
         license: '',
         tags: [],
         status: 'inactive',
-        changelog: '',
+        changelog: [],
+        features: [],
       });
     });
   });
@@ -567,7 +569,7 @@ describe('usePluginFilters', () => {
   describe('Debouncing', () => {
     it('should update search term when debounced search is called', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -579,7 +581,7 @@ describe('usePluginFilters', () => {
 
     it('should handle multiple search calls', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -606,11 +608,8 @@ describe('usePluginFilters', () => {
         },
       ];
 
-      const { result } = renderHook(() =>
-        usePluginFilters({
-          pluginData: { getPlugins: mockPluginsWithDuplicate },
-        }),
-      );
+      const pluginData = { getPlugins: mockPluginsWithDuplicate };
+      const { result } = renderHook(() => usePluginFilters({ pluginData }));
 
       // Should not duplicate the plugin in the list
       const loadedPlugin = result.current.filteredPlugins.find(
@@ -637,11 +636,8 @@ describe('usePluginFilters', () => {
         },
       ];
 
-      const { result } = renderHook(() =>
-        usePluginFilters({
-          pluginData: { getPlugins: mockPluginsWithSpecialChars },
-        }),
-      );
+      const pluginData = { getPlugins: mockPluginsWithSpecialChars };
+      const { result } = renderHook(() => usePluginFilters({ pluginData }));
 
       act(() => {
         result.current.debouncedSearch('special');
@@ -657,7 +653,7 @@ describe('usePluginFilters', () => {
 
     it('should handle very long search terms', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       const longSearchTerm = 'a'.repeat(1000);
@@ -672,7 +668,7 @@ describe('usePluginFilters', () => {
 
     it('should handle empty string filter changes', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -687,7 +683,7 @@ describe('usePluginFilters', () => {
 
     it('should handle null/undefined plugin names in isInstalled', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       expect(result.current.isInstalled(null as unknown as string)).toBe(false);
@@ -699,7 +695,7 @@ describe('usePluginFilters', () => {
 
     it('should handle null/undefined plugin names in getInstalledPlugin', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       expect(
@@ -714,16 +710,14 @@ describe('usePluginFilters', () => {
 
   describe('Translation Integration', () => {
     it('should use translation for filter options', () => {
-      renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
-      );
+      renderHook(() => usePluginFilters({ pluginData: stablePluginData }));
 
       expect(mockT).toHaveBeenCalledWith('allPlugins');
     });
 
     it('should update translation when filter changes', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -737,7 +731,7 @@ describe('usePluginFilters', () => {
   describe('Performance and Memory', () => {
     it('should not cause infinite re-renders', () => {
       const { result, rerender } = renderHook(() =>
-        usePluginFilters({ pluginData: { getPlugins: mockPlugins } }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       const initialPlugins = result.current.filteredPlugins;

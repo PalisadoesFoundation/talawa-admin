@@ -240,8 +240,8 @@ const renderPledgeModal = (
   );
 };
 
-// Setup shared localStorageMock
-setupLocalStorageMock();
+// Setup shared localStorage mock
+const localStorageMock = setupLocalStorageMock();
 
 describe('PledgeModal', () => {
   beforeAll(() => {
@@ -261,8 +261,10 @@ describe('PledgeModal', () => {
 
   afterEach(() => {
     cleanup();
+    localStorageMock.clear();
     vi.restoreAllMocks();
   });
+
   it('should populate form fields with correct values in edit mode', async () => {
     renderPledgeModal(link1, pledgeProps[1]);
     await waitFor(() =>

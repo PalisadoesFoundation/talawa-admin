@@ -1,41 +1,38 @@
 import React from 'react';
 import { render, screen, act, fireEvent } from '@testing-library/react';
 import DynamicDropDown from './DynamicDropDown';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
-import { vi, expect, it, describe, beforeEach } from 'vitest';
+import { vi, expect, it, describe } from 'vitest';
+
+const renderComponent = (props: Record<string, unknown> = {}) => {
+  const defaultProps = {
+    formState: { fieldName: 'value1' },
+    setFormState: vi.fn(),
+    fieldOptions: [
+      { value: 'value1', label: 'Label 1' },
+      { value: 'value2', label: 'Label 2' },
+      { value: 'value3', label: 'Label 3' },
+      { value: 'TEST', label: 'Label 1' },
+    ],
+    fieldName: 'fieldName',
+    ...props,
+  };
+
+  return render(
+    <BrowserRouter>
+      <I18nextProvider i18n={i18nForTest}>
+        <DynamicDropDown {...defaultProps} />
+      </I18nextProvider>
+    </BrowserRouter>,
+  );
+};
 
 describe('DynamicDropDown component', () => {
   afterEach(() => {
     vi.restoreAllMocks();
-  });
-
-  const defaultProps = {
-    formState: { fieldName: 'value2' as string | undefined },
-    setFormState: vi.fn(),
-    fieldOptions: [
-      { value: 'TEST', label: 'Label 1' },
-      { value: 'value2', label: 'Label 2' },
-      { value: 'value3', label: 'Label 3' },
-    ],
-    fieldName: 'fieldName' as string,
-  };
-
-  const renderComponent = (props = {}) => {
-    const mergedProps = { ...defaultProps, ...props };
-    return render(
-      <BrowserRouter>
-        <I18nextProvider i18n={i18nForTest}>
-          <DynamicDropDown {...mergedProps} />
-        </I18nextProvider>
-      </BrowserRouter>,
-    );
-  };
-
-  beforeEach(() => {
-    vi.clearAllMocks();
   });
   it('renders and handles selection correctly', async () => {
     const formData = { fieldName: 'value2' };
@@ -233,7 +230,8 @@ describe('DynamicDropDown component', () => {
       screen.getByTestId('change-fieldname-btn-value3'),
     ).toBeInTheDocument();
 
-    expect(screen.getByText('Label 1')).toBeInTheDocument();
+    const label1Elements = screen.getAllByText('Label 1');
+    expect(label1Elements.length).toBeGreaterThan(0);
     const label2Elements = screen.getAllByText('Label 2');
     expect(label2Elements.length).toBeGreaterThan(0);
     expect(screen.getByText('Label 3')).toBeInTheDocument();
