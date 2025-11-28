@@ -83,10 +83,6 @@ describe('PluginList', () => {
     onManagePlugin: vi.fn(),
   };
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   // Test 1: When plugins are available - renders plugin list
   it('renders plugin list container when plugins are available', () => {
     render(<PluginList {...defaultProps} />);
@@ -197,6 +193,9 @@ describe('PluginList', () => {
       />,
     );
     expect(mockT).toHaveBeenCalledWith('noPluginsFound');
+    expect(
+      screen.getByText('No plugins found for your search'),
+    ).toBeInTheDocument();
 
     // Test case 2: Empty with installed filter
     rerender(
@@ -208,6 +207,7 @@ describe('PluginList', () => {
       />,
     );
     expect(mockT).toHaveBeenCalledWith('noInstalledPlugins');
+    expect(screen.getByText('No installed plugins')).toBeInTheDocument();
 
     // Test case 3: Empty with no filters or search
     rerender(
@@ -219,5 +219,9 @@ describe('PluginList', () => {
       />,
     );
     expect(mockT).toHaveBeenCalledWith('noPluginsAvailable');
+    expect(screen.getByText('No plugins available')).toBeInTheDocument();
+    expect(
+      screen.getByText('Check back later for new plugins'),
+    ).toBeInTheDocument();
   });
 });
