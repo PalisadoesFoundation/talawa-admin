@@ -41,13 +41,13 @@ extract_aftereach_block() {
 # Helper function to check if file uses spies
 has_spies() {
   local file="$1"
-  grep -v "^[[:space:]]*//.*" "$file" | grep -q -E "(vi\.spyOn|jest\.spyOn)"
+  grep -v "^[[:space:]]*//.*" "$file" | grep -E "(vi\.spyOn|jest\.spyOn)" > /dev/null
 }
 
 # Helper function to check if file uses module mocks
 has_module_mocks() {
   local file="$1"
-  grep -v "^[[:space:]]*//.*" "$file" | grep -q "vi\.mock\\\("
+  grep -v "^[[:space:]]*//.*" "$file" | grep "vi\.mock\\\(" > /dev/null
 }
 
 # Find all .spec.ts and .spec.tsx files in src/
@@ -55,7 +55,7 @@ files_without_cleanup=$(find src/ \( -iname "*.spec.tsx" -o -iname "*.spec.ts" \
   | while read -r file; do
       # Check if file uses mocking functions (vi.fn, vi.mock, spyOn)
       # EXCLUDE commented lines to avoid false positives
-      if grep -v "^[[:space:]]*//.*vi\." "$file" | grep -q -E "(vi\.fn|vi\.mock|spyOn)"; then
+      if grep -v "^[[:space:]]*//.*vi\." "$file" | grep -E "(vi\.fn|vi\.mock|spyOn)" > /dev/null; then
         
         # Check if file has ANY form of afterEach block
         if ! grep -q "afterEach" "$file"; then
