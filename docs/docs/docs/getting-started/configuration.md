@@ -68,6 +68,15 @@ If you are trying to access Talawa Admin from a remote host with the API URL con
 REACT_APP_TALAWA_URL="http://YOUR-REMOTE-ADDRESS:4000/graphql"
 
 ```
+:::tip Proxy Configuration
+To avoid CORS issues when hosting the Admin and API on different IP addresses, you can use a **relative path** for the backend URL.
+
+Talawa-Admin includes a pre-configured Reverse Proxy (via Vite in Dev, and Nginx/Apache in Prod).
+
+**Recommended Configuration:**
+```bash
+REACT_APP_TALAWA_URL=/graphql
+REACT_APP_BACKEND_WEBSOCKET_URL=/graphql
 
 #### Setting up REACT_APP_BACKEND_WEBSOCKET_URL in .env file
 

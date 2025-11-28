@@ -61,5 +61,12 @@ export default defineConfig({
     host: '0.0.0.0',
     // Uses PORT environment variable, defaults to 4321
     port: PORT,
+    proxy: {
+      '/graphql': {
+        target: 'http://localhost:4000',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
 });
