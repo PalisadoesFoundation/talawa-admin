@@ -43,7 +43,9 @@ describe('RecurringEventVolunteerModal', () => {
     ).toBeInTheDocument();
 
     // Instance option description (individual branch, with formatted date)
-    const formattedDate = new Date(defaultProps.eventDate).toLocaleDateString();
+    const formattedDate = new Date(defaultProps.eventDate).toLocaleDateString(
+      'en-US',
+    );
     expect(
       screen.getByText(
         `You will only be volunteering for the event on ${formattedDate}`,
@@ -87,7 +89,9 @@ describe('RecurringEventVolunteerModal', () => {
     ).toBeInTheDocument();
 
     // Instance option description (group branch, with formatted date)
-    const formattedDate = new Date(defaultProps.eventDate).toLocaleDateString();
+    const formattedDate = new Date(defaultProps.eventDate).toLocaleDateString(
+      'en-US',
+    );
     expect(
       screen.getByText(
         `You will join this group only for the event on ${formattedDate}`,
@@ -144,7 +148,7 @@ describe('RecurringEventVolunteerModal', () => {
   test('cancel button calls onHide', () => {
     render(<RecurringEventVolunteerModal {...defaultProps} />);
 
-    fireEvent.click(screen.getByText('Cancel'));
+    fireEvent.click(screen.getByTestId('cancelVolunteerBtn'));
 
     expect(defaultProps.onHide).toHaveBeenCalledTimes(1);
   });
