@@ -177,4 +177,84 @@ describe('Talawa Admin Setup', () => {
       mockValidKey,
     );
   });
+
+  it('should test the validation function for reCAPTCHA site key with valid input', async () => {
+    const { validateRecaptcha } = await import(
+      './validateRecaptcha/validateRecaptcha'
+    );
+
+    // Mock validateRecaptcha to return true for valid input
+    vi.mocked(validateRecaptcha).mockReturnValue(true);
+
+    // Capture the validation function
+    let capturedValidationFn: ((input: string) => boolean | string) | undefined;
+
+    const promptSpy = vi
+      .spyOn(inquirer, 'prompt')
+      .mockResolvedValueOnce({ shouldUseRecaptcha: true })
+      .mockResolvedValueOnce({ recaptchaSiteKeyInput: 'valid-key' });
+
+    await askAndSetRecaptcha();
+
+    // Extract the validation function from the second prompt call
+    const secondCallArgs = promptSpy.mock.calls[1][0];
+    const questionArray = Array.isArray(secondCallArgs)
+      ? secondCallArgs
+      : [secondCallArgs];
+    const recaptchaKeyQuestion = questionArray.find(
+      (q: { name?: string; validate?: (input: string) => boolean | string }) =>
+        q.name === 'recaptchaSiteKeyInput',
+    );
+
+    if (recaptchaKeyQuestion && recaptchaKeyQuestion.validate) {
+      capturedValidationFn = recaptchaKeyQuestion.validate;
+    }
+
+    // Test the validation function with valid input
+    expect(capturedValidationFn).toBeDefined();
+    if (capturedValidationFn) {
+      const result = capturedValidationFn('valid-key');
+      expect(result).toBe(true);
+    }
+  });
+
+  it('should test the validation function for reCAPTCHA site key with invalid input', async () => {
+    const { validateRecaptcha } = await import(
+      './validateRecaptcha/validateRecaptcha'
+    );
+
+    // Mock validateRecaptcha to return false for invalid input
+    vi.mocked(validateRecaptcha).mockReturnValue(false);
+
+    // Capture the validation function
+    let capturedValidationFn: ((input: string) => boolean | string) | undefined;
+
+    const promptSpy = vi
+      .spyOn(inquirer, 'prompt')
+      .mockResolvedValueOnce({ shouldUseRecaptcha: true })
+      .mockResolvedValueOnce({ recaptchaSiteKeyInput: 'invalid-key' });
+
+    await askAndSetRecaptcha();
+
+    // Extract the validation function from the second prompt call
+    const secondCallArgs = promptSpy.mock.calls[1][0];
+    const questionArray = Array.isArray(secondCallArgs)
+      ? secondCallArgs
+      : [secondCallArgs];
+    const recaptchaKeyQuestion = questionArray.find(
+      (q: { name?: string; validate?: (input: string) => boolean | string }) =>
+        q.name === 'recaptchaSiteKeyInput',
+    );
+
+    if (recaptchaKeyQuestion && recaptchaKeyQuestion.validate) {
+      capturedValidationFn = recaptchaKeyQuestion.validate;
+    }
+
+    // Test the validation function with invalid input
+    expect(capturedValidationFn).toBeDefined();
+    if (capturedValidationFn) {
+      const result = capturedValidationFn('invalid-key');
+      expect(result).toBe('Invalid reCAPTCHA site key. Please try again.');
+    }
+  });
 });
