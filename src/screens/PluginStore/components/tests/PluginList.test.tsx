@@ -5,7 +5,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, describe, it, expect } from 'vitest';
 import PluginList from '../PluginList';
 import type { IPluginMeta } from 'plugin';
-import { plugins } from 'chart.js';
 
 // Mock the PluginCard component - Fix ESLint errors
 vi.mock('./PluginCard', () => ({
