@@ -1,6 +1,7 @@
-import '@testing-library/jest-dom';
+import { TextEncoder, TextDecoder } from 'util';
 import { cleanup } from '@testing-library/react';
 import { afterAll, afterEach, beforeAll, vi } from 'vitest';
+import 'vitest-dom/extend-expect';
 
 // Simple console error handler for React 18 warnings
 const originalError = console.error;
@@ -59,3 +60,9 @@ afterAll(() => {
   console.error = originalError;
   console.warn = originalWarn;
 });
+
+// Polyfill for @pdfme
+if (typeof global.TextEncoder === 'undefined') {
+  global.TextEncoder = TextEncoder;
+  global.TextDecoder = TextDecoder as unknown as typeof global.TextDecoder;
+}
