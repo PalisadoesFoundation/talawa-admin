@@ -25,27 +25,37 @@ export const buildAssignedUsers = (
     ancestorTags: Array<{ _id: string; name: string; __typename?: string }>;
   }>,
 ) => ({
+  __typename: 'UserTag',
   name: overrides?.name ?? 'tag1',
   usersAssignedTo:
     overrides?.usersAssignedTo === null
       ? null
       : {
-          edges: overrides?.usersAssignedTo?.edges ?? [
-            {
-              node: {
-                _id: '1',
-                firstName: 'member',
-                lastName: '1',
-                __typename: 'User',
+          __typename: 'UserTagUsersAssignedToConnection',
+          edges: (
+            overrides?.usersAssignedTo?.edges ?? [
+              {
+                node: {
+                  _id: '1',
+                  firstName: 'member',
+                  lastName: '1',
+                  __typename: 'User',
+                },
+                cursor: '1',
               },
-              cursor: '1',
-            },
-          ],
-          pageInfo: overrides?.usersAssignedTo?.pageInfo ?? {
-            startCursor: '1',
-            endCursor: '1',
-            hasNextPage: false,
-            hasPreviousPage: false,
+            ]
+          ).map((edge) => ({
+            ...edge,
+            __typename: 'UserTagUsersAssignedToEdge',
+          })),
+          pageInfo: {
+            __typename: 'PageInfo',
+            ...(overrides?.usersAssignedTo?.pageInfo ?? {
+              startCursor: '1',
+              endCursor: '1',
+              hasNextPage: false,
+              hasPreviousPage: false,
+            }),
           },
           totalCount: overrides?.usersAssignedTo?.totalCount ?? 1,
         },

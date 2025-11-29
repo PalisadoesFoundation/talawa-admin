@@ -121,6 +121,7 @@ export const MOCKS = [
     result: {
       data: {
         updateAgendaItem: {
+          __typename: 'AgendaItem',
           _id: 'agendaItem1',
         },
       },
@@ -140,6 +141,7 @@ export const MOCKS = [
     result: {
       data: {
         updateAgendaItem: {
+          __typename: 'AgendaItem',
           _id: 'agendaItem1',
         },
       },
@@ -159,6 +161,7 @@ export const MOCKS = [
     result: {
       data: {
         updateAgendaItem: {
+          __typename: 'AgendaItem',
           _id: 'agendaItem2',
         },
       },
@@ -174,6 +177,7 @@ export const MOCKS = [
     result: {
       data: {
         removeAgendaItem: {
+          __typename: 'AgendaItem',
           _id: 'agendaItem1',
         },
       },
@@ -189,6 +193,7 @@ export const MOCKS = [
     result: {
       data: {
         removeAgendaItem: {
+          __typename: 'AgendaItem',
           _id: 'agendaItem2',
         },
       },

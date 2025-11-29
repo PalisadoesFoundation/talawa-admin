@@ -87,7 +87,7 @@ describe('CreatePostModal', () => {
 
   it('renders correctly when shown', () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <CreatePostModal
           show={true}
           onHide={mockOnHide}
@@ -104,7 +104,7 @@ describe('CreatePostModal', () => {
 
   it('validates empty title', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <CreatePostModal
           show={true}
           onHide={mockOnHide}
@@ -124,7 +124,7 @@ describe('CreatePostModal', () => {
 
   it('handles input changes', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <CreatePostModal
           show={true}
           onHide={mockOnHide}
@@ -146,7 +146,7 @@ describe('CreatePostModal', () => {
 
   it('handles file upload preview', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <CreatePostModal
           show={true}
           onHide={mockOnHide}
@@ -192,7 +192,7 @@ describe('CreatePostModal', () => {
     ];
 
     render(
-      <MockedProvider mocks={successMocks} addTypename={false}>
+      <MockedProvider mocks={successMocks}>
         <CreatePostModal
           show={true}
           onHide={mockOnHide}
@@ -216,7 +216,7 @@ describe('CreatePostModal', () => {
   });
   it('handles video file upload preview', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <CreatePostModal
           show={true}
           onHide={mockOnHide}
@@ -241,7 +241,7 @@ describe('CreatePostModal', () => {
     global.URL.createObjectURL = vi.fn(() => 'mock-url');
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <CreatePostModal
           show={true}
           onHide={mockOnHide}
@@ -265,7 +265,7 @@ describe('CreatePostModal', () => {
 
   it('handles pin post toggle', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <CreatePostModal
           show={true}
           onHide={mockOnHide}
@@ -288,7 +288,7 @@ describe('CreatePostModal', () => {
     global.URL.createObjectURL = vi.fn(() => 'mock-url');
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <CreatePostModal
           show={true}
           onHide={mockOnHide}
@@ -337,7 +337,7 @@ describe('CreatePostModal', () => {
   });
   it('handles missing orgId error', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <CreatePostModal
           show={true}
           onHide={mockOnHide}
@@ -360,7 +360,7 @@ describe('CreatePostModal', () => {
 
   it('handles modal close correctly', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <CreatePostModal
           show={true}
           onHide={mockOnHide}
@@ -378,7 +378,7 @@ describe('CreatePostModal', () => {
 
   it('handles invalid video file type', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <CreatePostModal
           show={true}
           onHide={mockOnHide}
@@ -407,7 +407,7 @@ describe('CreatePostModal', () => {
 
   it('handles video file with no file selected', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <CreatePostModal
           show={true}
           onHide={mockOnHide}
@@ -455,7 +455,7 @@ describe('CreatePostModal', () => {
       });
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <CreatePostModal
             show={true}
             onHide={mockOnHide}
@@ -547,7 +547,7 @@ describe('CreatePostModal', () => {
       };
 
       render(
-        <MockedProvider mocks={[...mocks, postMock]} addTypename={false}>
+        <MockedProvider mocks={[...mocks, postMock]}>
           <CreatePostModal
             show={true}
             onHide={mockOnHide}
@@ -636,7 +636,7 @@ describe('CreatePostModal', () => {
       };
 
       render(
-        <MockedProvider mocks={[...mocks, postMock]} addTypename={false}>
+        <MockedProvider mocks={[...mocks, postMock]}>
           <CreatePostModal
             show={true}
             onHide={mockOnHide}
