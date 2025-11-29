@@ -76,6 +76,18 @@ describe('Talawa Admin Setup', () => {
     );
   });
 
+  it('should exit early when checkEnvFile returns false', async () => {
+    vi.mocked(checkEnvFile).mockReturnValue(false);
+
+    await main();
+
+    // Should not proceed with setup
+    expect(modifyEnvFile).not.toHaveBeenCalled();
+    expect(askAndSetDockerOption).not.toHaveBeenCalled();
+    expect(askAndUpdatePort).not.toHaveBeenCalled();
+    expect(askAndUpdateTalawaApiUrl).not.toHaveBeenCalled();
+  });
+
   it('should call askAndUpdateTalawaApiUrl when Docker is used and skip port setup', async () => {
     vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=YES');
     vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'YES' });
@@ -169,5 +181,83 @@ describe('Talawa Admin Setup', () => {
       'REACT_APP_RECAPTCHA_SITE_KEY',
       mockValidKey,
     );
+  });
+
+  // Helper function to extract validation function from prompt spy
+  const extractRecaptchaValidationFn = (promptSpy: {
+    mock: {
+      calls: unknown[][];
+    };
+  }): ((input: string) => boolean | string) | undefined => {
+    const secondCallArgs = promptSpy.mock.calls[1][0];
+    const questionArray = Array.isArray(secondCallArgs)
+      ? secondCallArgs
+      : [secondCallArgs];
+    const recaptchaKeyQuestion = questionArray.find(
+      (q: { name?: string; validate?: (input: string) => boolean | string }) =>
+        q.name === 'recaptchaSiteKeyInput',
+    );
+
+    return recaptchaKeyQuestion?.validate;
+  };
+
+  it('should test the validation function for reCAPTCHA site key with valid input', async () => {
+    const { validateRecaptcha } = await import(
+      './validateRecaptcha/validateRecaptcha'
+    );
+
+    // Mock validateRecaptcha to return true for valid input
+    vi.mocked(validateRecaptcha).mockReturnValue(true);
+
+    const promptSpy = vi
+      .spyOn(inquirer, 'prompt')
+      .mockResolvedValueOnce({ shouldUseRecaptcha: true })
+      .mockResolvedValueOnce({ recaptchaSiteKeyInput: 'valid-key' });
+
+    await askAndSetRecaptcha();
+
+    // Verify prompt was called twice
+    expect(promptSpy).toHaveBeenCalledTimes(2);
+
+    // Extract and test the validation function
+    const capturedValidationFn = extractRecaptchaValidationFn(promptSpy);
+    expect(capturedValidationFn).toBeDefined();
+    if (!capturedValidationFn) {
+      throw new Error(
+        'Validation function for reCAPTCHA site key was not captured',
+      );
+    }
+    const result = capturedValidationFn('valid-key');
+    expect(result).toBe(true);
+  });
+
+  it('should test the validation function for reCAPTCHA site key with invalid input', async () => {
+    const { validateRecaptcha } = await import(
+      './validateRecaptcha/validateRecaptcha'
+    );
+
+    // Mock validateRecaptcha to return false for invalid input
+    vi.mocked(validateRecaptcha).mockReturnValue(false);
+
+    const promptSpy = vi
+      .spyOn(inquirer, 'prompt')
+      .mockResolvedValueOnce({ shouldUseRecaptcha: true })
+      .mockResolvedValueOnce({ recaptchaSiteKeyInput: 'invalid-key' });
+
+    await askAndSetRecaptcha();
+
+    // Verify prompt was called twice
+    expect(promptSpy).toHaveBeenCalledTimes(2);
+
+    // Extract and test the validation function
+    const capturedValidationFn = extractRecaptchaValidationFn(promptSpy);
+    expect(capturedValidationFn).toBeDefined();
+    if (!capturedValidationFn) {
+      throw new Error(
+        'Validation function for reCAPTCHA site key was not captured',
+      );
+    }
+    const result = capturedValidationFn('invalid-key');
+    expect(result).toBe('Invalid reCAPTCHA site key. Please try again.');
   });
 });
