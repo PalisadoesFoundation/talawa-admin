@@ -88,6 +88,10 @@ describe('LifecycleManager', () => {
     );
   });
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('Constructor and Initialization', () => {
     it('should initialize with empty loaded plugins', () => {
       expect(lifecycleManager.getLoadedPlugins()).toEqual([]);
