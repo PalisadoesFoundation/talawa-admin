@@ -2,11 +2,13 @@ import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMut
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 
 const membership1 = {
+  __typename: 'VolunteerMembership',
   id: 'membershipId1',
   status: 'requested',
   createdAt: '2030-10-29T10:18:05.851Z',
   updatedAt: '2030-10-29T10:18:05.851Z',
   event: {
+    __typename: 'Event',
     id: 'eventId',
     name: 'Event 1',
     startAt: '2030-10-31',
@@ -14,10 +16,12 @@ const membership1 = {
     recurrenceRule: null,
   },
   volunteer: {
+    __typename: 'Volunteer',
     id: 'volunteerId1',
     hasAccepted: false,
     hoursVolunteered: null,
     user: {
+      __typename: 'User',
       id: 'userId1',
       name: 'John Doe',
       emailAddress: 'john@example.com',
@@ -27,21 +31,25 @@ const membership1 = {
   },
   group: null,
   createdBy: {
+    __typename: 'User',
     id: 'creatorId1',
     name: 'Creator',
   },
   updatedBy: {
+    __typename: 'User',
     id: 'updaterId1',
     name: 'Updater',
   },
 };
 
 const membership2 = {
+  __typename: 'VolunteerMembership',
   id: 'membershipId2',
   status: 'requested',
   createdAt: '2030-10-30T10:18:05.851Z',
   updatedAt: '2030-10-30T10:18:05.851Z',
   event: {
+    __typename: 'Event',
     id: 'eventId',
     name: 'Event 2',
     startAt: '2030-11-31',
@@ -49,10 +57,12 @@ const membership2 = {
     recurrenceRule: null,
   },
   volunteer: {
+    __typename: 'Volunteer',
     id: 'volunteerId2',
     hasAccepted: false,
     hoursVolunteered: null,
     user: {
+      __typename: 'User',
       id: 'userId2',
       name: 'Teresa Bradley',
       emailAddress: 'teresa@example.com',
@@ -62,21 +72,25 @@ const membership2 = {
   },
   group: null,
   createdBy: {
+    __typename: 'User',
     id: 'creatorId2',
     name: 'Creator',
   },
   updatedBy: {
+    __typename: 'User',
     id: 'updaterId2',
     name: 'Updater',
   },
 };
 
 const membershipWithGroup = {
+  __typename: 'VolunteerMembership',
   id: 'membershipId3',
   status: 'requested',
   createdAt: '2030-10-28T10:18:05.851Z',
   updatedAt: '2030-10-28T10:18:05.851Z',
   event: {
+    __typename: 'Event',
     id: 'eventId',
     name: 'Event 3',
     startAt: '2030-12-31',
@@ -84,10 +98,12 @@ const membershipWithGroup = {
     recurrenceRule: null,
   },
   volunteer: {
+    __typename: 'Volunteer',
     id: 'volunteerId3',
     hasAccepted: false,
     hoursVolunteered: null,
     user: {
+      __typename: 'User',
       id: 'userId3',
       name: 'Group Volunteer',
       emailAddress: 'group@example.com',
@@ -96,14 +112,17 @@ const membershipWithGroup = {
     },
   },
   group: {
+    __typename: 'Group',
     id: 'groupId1',
     name: 'Volunteer Group 1',
   },
   createdBy: {
+    __typename: 'User',
     id: 'creatorId3',
     name: 'Creator',
   },
   updatedBy: {
+    __typename: 'User',
     id: 'updaterId3',
     name: 'Updater',
   },
@@ -188,6 +207,7 @@ export const MOCKS = [
     result: {
       data: {
         updateVolunteerMembership: {
+          __typename: 'VolunteerMembership',
           id: 'membershipId1',
         },
       },
@@ -204,6 +224,7 @@ export const MOCKS = [
     result: {
       data: {
         updateVolunteerMembership: {
+          __typename: 'VolunteerMembership',
           id: 'membershipId1',
         },
       },
@@ -239,6 +260,7 @@ export const MOCKS_WITH_FILTER_DATA = [
     result: {
       data: {
         updateVolunteerMembership: {
+          __typename: 'VolunteerMembership',
           id: 'membershipId1',
         },
       },
@@ -255,6 +277,7 @@ export const MOCKS_WITH_FILTER_DATA = [
     result: {
       data: {
         updateVolunteerMembership: {
+          __typename: 'VolunteerMembership',
           id: 'membershipId2',
         },
       },
@@ -271,6 +294,7 @@ export const MOCKS_WITH_FILTER_DATA = [
     result: {
       data: {
         updateVolunteerMembership: {
+          __typename: 'VolunteerMembership',
           id: 'membershipId3',
         },
       },

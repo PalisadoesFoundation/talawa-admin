@@ -56,7 +56,7 @@ describe('Testing Agenda Items components', () => {
 
   test('component loads correctly with items', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -78,7 +78,7 @@ describe('Testing Agenda Items components', () => {
 
   test('component loads correctly with no agenda items', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -100,7 +100,7 @@ describe('Testing Agenda Items components', () => {
 
   test('opens and closes the update modal correctly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -136,7 +136,7 @@ describe('Testing Agenda Items components', () => {
 
   test('opens and closes the preview modal correctly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -174,7 +174,7 @@ describe('Testing Agenda Items components', () => {
 
   test('opens and closes the update and delete modals through the preview modal', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -249,7 +249,7 @@ describe('Testing Agenda Items components', () => {
 
   test('updates an agenda Items and toasts success', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -294,7 +294,7 @@ describe('Testing Agenda Items components', () => {
 
   test('toasts error on unsuccessful updation', async () => {
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -337,7 +337,7 @@ describe('Testing Agenda Items components', () => {
 
   test('deletes the agenda item and toasts success', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -393,7 +393,7 @@ describe('Testing Agenda Items components', () => {
 
   test('toasts error on unsuccessful deletion', async () => {
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>

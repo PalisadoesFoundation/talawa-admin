@@ -7,6 +7,26 @@ import {
 import { MEMBERS_LIST, USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 
+const createUser = (
+  id: string,
+  firstName: string,
+  lastName: string,
+  image: string | null = null,
+  email?: string,
+  createdAt?: string,
+) => ({
+  __typename: 'User',
+  _id: id,
+  id,
+  firstName,
+  lastName,
+  image,
+  email,
+  createdAt,
+  organizationsBlockedBy: [],
+  name: `${firstName} ${lastName}`,
+});
+
 const memberList = {
   request: {
     query: MEMBERS_LIST,
@@ -18,28 +38,25 @@ const memberList = {
     data: {
       organizations: [
         {
+          __typename: 'Organization',
           _id: 'orgId',
           members: [
-            {
-              createdAt: '2030-04-13T04:53:17.742Z',
-              email: 'testuser4@example.com',
-              firstName: 'John',
-              image: 'img-url',
-              lastName: 'Doe',
-              organizationsBlockedBy: [],
-              __typename: 'User',
-              _id: '1',
-            },
-            {
-              createdAt: '2030-04-13T04:53:17.742Z',
-              email: 'testuser2@example.com',
-              firstName: 'Anna',
-              image: null,
-              lastName: 'Bradley',
-              organizationsBlockedBy: [],
-              __typename: 'User',
-              _id: '2',
-            },
+            createUser(
+              '1',
+              'John',
+              'Doe',
+              'img-url',
+              'testuser4@example.com',
+              '2030-04-13T04:53:17.742Z',
+            ),
+            createUser(
+              '2',
+              'Anna',
+              'Bradley',
+              null,
+              'testuser2@example.com',
+              '2030-04-13T04:53:17.742Z',
+            ),
           ],
         },
       ],
@@ -63,7 +80,9 @@ export const MOCKS = [
       data: {
         getFundraisingCampaigns: [
           {
+            __typename: 'FundCampaign',
             fundId: {
+              __typename: 'Fund',
               name: 'Fund 1',
             },
             name: 'Campaign Name',
@@ -73,34 +92,22 @@ export const MOCKS = [
             endDate: '2034-08-08',
             pledges: [
               {
+                __typename: 'Pledge',
                 id: '1',
                 amount: 100,
                 currency: 'USD',
                 startDate: '2030-01-01',
                 endDate: '2030-01-10',
-                users: [
-                  {
-                    id: '1',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    image: 'img-url',
-                  },
-                ],
+                users: [createUser('1', 'John', 'Doe', 'img-url')],
               },
               {
+                __typename: 'Pledge',
                 id: '2',
                 amount: 200,
                 currency: 'USD',
                 startDate: '2030-01-01',
                 endDate: '2030-01-09',
-                users: [
-                  {
-                    id: '2',
-                    firstName: 'Jane',
-                    lastName: 'Doe',
-                    image: null,
-                  },
-                ],
+                users: [createUser('2', 'Jane', 'Doe')],
               },
             ],
           },
@@ -122,7 +129,9 @@ export const MOCKS = [
       data: {
         getFundraisingCampaigns: [
           {
+            __typename: 'FundCampaign',
             fundId: {
+              __typename: 'Fund',
               name: 'Fund 1',
             },
             name: 'Campaign Name',
@@ -132,34 +141,22 @@ export const MOCKS = [
             endDate: '2030-08-08',
             pledges: [
               {
+                __typename: 'Pledge',
                 id: '2',
                 amount: 200,
                 currency: 'USD',
                 startDate: '2030-01-01',
                 endDate: '2030-01-09',
-                users: [
-                  {
-                    id: '2',
-                    firstName: 'Jane',
-                    lastName: 'Doe',
-                    image: null,
-                  },
-                ],
+                users: [createUser('2', 'Jane', 'Doe')],
               },
               {
+                __typename: 'Pledge',
                 id: '1',
                 amount: 100,
                 currency: 'USD',
                 startDate: '2030-01-01',
                 endDate: '2030-01-10',
-                users: [
-                  {
-                    id: '1',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    image: null,
-                  },
-                ],
+                users: [createUser('1', 'John', 'Doe')],
               },
             ],
           },
@@ -181,7 +178,9 @@ export const MOCKS = [
       data: {
         getFundraisingCampaigns: [
           {
+            __typename: 'FundCampaign',
             fundId: {
+              __typename: 'Fund',
               name: 'Fund 1',
             },
             name: 'Campaign Name',
@@ -191,88 +190,33 @@ export const MOCKS = [
             endDate: '2030-08-08',
             pledges: [
               {
+                __typename: 'Pledge',
                 id: '2',
                 amount: 200,
                 currency: 'USD',
                 startDate: '2030-01-01',
                 endDate: '2030-01-09',
                 users: [
-                  {
-                    id: '2',
-                    firstName: 'Jane',
-                    lastName: 'Doe',
-                    image: null,
-                  },
-                  {
-                    id: '2',
-                    firstName: 'John',
-                    lastName: 'Doe2',
-                    image: 'img-url2',
-                  },
-                  {
-                    id: '3',
-                    firstName: 'John',
-                    lastName: 'Doe3',
-                    image: 'img-url3',
-                  },
-                  {
-                    id: '4',
-                    firstName: 'John',
-                    lastName: 'Doe4',
-                    image: 'img-url4',
-                  },
-                  {
-                    id: '5',
-                    firstName: 'John',
-                    lastName: 'Doe5',
-                    image: 'img-url5',
-                  },
-                  {
-                    id: '6',
-                    firstName: 'John',
-                    lastName: 'Doe6',
-                    image: 'img-url6',
-                  },
-                  {
-                    id: '7',
-                    firstName: 'John',
-                    lastName: 'Doe7',
-                    image: 'img-url7',
-                  },
-                  {
-                    id: '8',
-                    firstName: 'John',
-                    lastName: 'Doe8',
-                    image: 'img-url8',
-                  },
-                  {
-                    id: '9',
-                    firstName: 'John',
-                    lastName: 'Doe9',
-                    image: 'img-url9',
-                  },
-                  {
-                    id: '10',
-                    firstName: 'John',
-                    lastName: 'Doe10',
-                    image: null,
-                  },
+                  createUser('2', 'Jane', 'Doe'),
+                  createUser('2', 'John', 'Doe2', 'img-url2'),
+                  createUser('3', 'John', 'Doe3', 'img-url3'),
+                  createUser('4', 'John', 'Doe4', 'img-url4'),
+                  createUser('5', 'John', 'Doe5', 'img-url5'),
+                  createUser('6', 'John', 'Doe6', 'img-url6'),
+                  createUser('7', 'John', 'Doe7', 'img-url7'),
+                  createUser('8', 'John', 'Doe8', 'img-url8'),
+                  createUser('9', 'John', 'Doe9', 'img-url9'),
+                  createUser('10', 'John', 'Doe10'),
                 ],
               },
               {
+                __typename: 'Pledge',
                 id: '1',
                 amount: 100,
                 currency: 'USD',
                 startDate: '2030-01-01',
                 endDate: '2030-01-10',
-                users: [
-                  {
-                    id: '1',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    image: null,
-                  },
-                ],
+                users: [createUser('1', 'John', 'Doe')],
               },
             ],
           },
@@ -294,7 +238,9 @@ export const MOCKS = [
       data: {
         getFundraisingCampaigns: [
           {
+            __typename: 'FundCampaign',
             fundId: {
+              __typename: 'Fund',
               name: 'Fund 1',
             },
             name: 'Campaign Name',
@@ -304,34 +250,22 @@ export const MOCKS = [
             endDate: '2030-08-08',
             pledges: [
               {
+                __typename: 'Pledge',
                 id: '1',
                 amount: 100,
                 currency: 'USD',
                 startDate: '2024-01-01',
                 endDate: '2024-01-10',
-                users: [
-                  {
-                    id: '1',
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    image: null,
-                  },
-                ],
+                users: [createUser('1', 'John', 'Doe')],
               },
               {
+                __typename: 'Pledge',
                 id: '2',
                 amount: 200,
                 currency: 'USD',
                 startDate: '2024-01-01',
                 endDate: '2024-01-09',
-                users: [
-                  {
-                    id: '2',
-                    firstName: 'Jane',
-                    lastName: 'Doe',
-                    image: null,
-                  },
-                ],
+                users: [createUser('2', 'Jane', 'Doe')],
               },
             ],
           },
@@ -349,6 +283,7 @@ export const MOCKS = [
     result: {
       data: {
         removeFundraisingCampaignPledge: {
+          __typename: 'Pledge',
           id: '1',
         },
       },
@@ -398,6 +333,7 @@ export const PLEDGE_MODAL_MOCKS = [
     result: {
       data: {
         updateFundraisingCampaignPledge: {
+          __typename: 'Pledge',
           id: '1',
         },
       },
@@ -418,6 +354,7 @@ export const PLEDGE_MODAL_MOCKS = [
     result: {
       data: {
         createFundraisingCampaignPledge: {
+          __typename: 'Pledge',
           id: '3',
         },
       },
@@ -438,20 +375,13 @@ export const PLEDGE_MODAL_MOCKS = [
     result: {
       data: {
         createPledge: {
+          __typename: 'Pledge',
           id: '1',
           amount: 100,
           currency: 'USD',
           startDate: '2024-01-01',
           endDate: '2024-01-10',
-          users: [
-            {
-              id: '1',
-              firstName: 'John',
-              lastName: 'Doe',
-              name: 'John Doe',
-              image: null,
-            },
-          ],
+          users: [createUser('1', 'John', 'Doe')],
         },
       },
     },
@@ -467,20 +397,13 @@ export const PLEDGE_MODAL_MOCKS = [
     result: {
       data: {
         updatePledge: {
+          __typename: 'Pledge',
           id: '1',
           amount: 200,
           currency: 'USD',
           startDate: '2024-01-01',
           endDate: '2024-01-10',
-          users: [
-            {
-              id: '1',
-              firstName: 'John',
-              lastName: 'Doe',
-              name: 'John Doe',
-              image: null,
-            },
-          ],
+          users: [createUser('1', 'John', 'Doe')],
         },
       },
     },
@@ -494,12 +417,7 @@ export const PLEDGE_MODAL_MOCKS = [
     },
     result: {
       data: {
-        user: {
-          id: '1',
-          firstName: 'John',
-          lastName: 'Doe',
-          image: null,
-        },
+        user: createUser('1', 'John', 'Doe'),
       },
     },
   },
@@ -543,19 +461,10 @@ export const PLEDGE_MODAL_ERROR_MOCKS = [
       data: {
         organizations: [
           {
+            __typename: 'Organization',
             members: [
-              {
-                id: '1',
-                firstName: 'John',
-                lastName: 'Doe',
-                image: null,
-              },
-              {
-                id: '2',
-                firstName: 'Jane',
-                lastName: 'Smith',
-                image: null,
-              },
+              createUser('1', 'John', 'Doe'),
+              createUser('2', 'Jane', 'Smith'),
             ],
           },
         ],

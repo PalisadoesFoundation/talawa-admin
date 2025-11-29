@@ -34,7 +34,7 @@ const renderOrganisationSettings = (
 ): ReturnType<typeof render> => {
   routerMocks.useParams.mockReturnValue({ orgId });
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={[`/orgsetting/${orgId}`]}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -77,7 +77,7 @@ describe('Organisation Settings Page', () => {
   it('should redirect to fallback URL if URL params are undefined', async () => {
     const OrgSettings = await SetupRedirectTest();
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <MemoryRouter initialEntries={['/orgsetting/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

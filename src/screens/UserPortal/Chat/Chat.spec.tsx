@@ -241,7 +241,7 @@ describe('Chat Component', () => {
 
   const renderComponent = (customMocks = mocks) =>
     render(
-      <MockedProvider mocks={customMocks} addTypename={false}>
+      <MockedProvider mocks={customMocks}>
         <I18nextProvider i18n={i18nForTest}>
           <Provider store={store}>
             <Chat />

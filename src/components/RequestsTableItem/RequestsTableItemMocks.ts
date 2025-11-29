@@ -16,6 +16,7 @@ export const MOCKS = [
     result: {
       data: {
         acceptMembershipRequest: {
+          __typename: 'MembershipRequestResponse',
           success: true,
           message: 'Membership request accepted successfully',
         },
@@ -34,6 +35,7 @@ export const MOCKS = [
     result: {
       data: {
         rejectMembershipRequest: {
+          __typename: 'MembershipRequestResponse',
           success: true,
           message: 'Membership request rejected successfully',
         },
