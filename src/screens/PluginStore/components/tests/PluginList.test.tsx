@@ -237,8 +237,12 @@ describe('PluginList', () => {
 
     expect(screen.getByTestId('plugin-list-empty')).toBeInTheDocument();
     expect(mockT).toHaveBeenCalledWith('noPluginsFound');
+     expect(mockT).toHaveBeenCalledWith('installPluginsToSeeHere');
     expect(
       screen.getByText('No plugins found for your search'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('Install plugins to see them here'),
     ).toBeInTheDocument();
   });
 });
