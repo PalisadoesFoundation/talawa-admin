@@ -5,6 +5,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, describe, it, expect } from 'vitest';
 import PluginList from '../PluginList';
 import type { IPluginMeta } from 'plugin';
+import { plugins } from 'chart.js';
 
 // Mock the PluginCard component - Fix ESLint errors
 vi.mock('./PluginCard', () => ({
@@ -222,6 +223,23 @@ describe('PluginList', () => {
     expect(screen.getByText('No plugins available')).toBeInTheDocument();
     expect(
       screen.getByText('Check back later for new plugins'),
+    ).toBeInTheDocument();
+  });
+  // Test 11: Edge case - searchTerm takes precedence over filterOption
+  it('shows "no plugins found" when searchTerm exists even with installed filter', () => {
+    render(
+      <PluginList
+        {...defaultProps}
+        plugins={[]}
+        searchTerm="test"
+        filterOption="installed"
+      />,
+    );
+
+    expect(screen.getByTestId('plugin-list-empty')).toBeInTheDocument();
+    expect(mockT).toHaveBeenCalledWith('noPluginsFound');
+    expect(
+      screen.getByText('No plugins found for your search'),
     ).toBeInTheDocument();
   });
 });
