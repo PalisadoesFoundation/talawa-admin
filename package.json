@@ -244,7 +244,8 @@
       "sync-fetch": "npm:@ardatan/sync-fetch@0.0.1",
       "gulp-header": "^2.0.9",
       "rimraf": "^6.1.2",
-      "glob": "^13.0.0"
+      "glob": "^13.0.0",
+      "nyc": "17.1.0"
     },
     "peerDependencyRules": {
       "allowedVersions": {
