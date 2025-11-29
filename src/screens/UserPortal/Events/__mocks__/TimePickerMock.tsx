@@ -1,3 +1,8 @@
+/**
+ * @description Mock component for TimePicker used in testing the Events screen.
+ * Parses time input using dayjs and forwards parsed values via onChange callback.
+ */
+
 import React from 'react';
 import dayjs from 'dayjs';
 

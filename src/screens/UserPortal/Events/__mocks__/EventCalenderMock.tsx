@@ -1,3 +1,8 @@
+/**
+ * @description Mock component for EventCalender used in testing the Events screen.
+ * Exposes event data as JSON and view type for test assertions.
+ */
+
 import React from 'react';
 
 type Props = {

@@ -1,3 +1,8 @@
+/**
+ * @description Mock component for EventHeader used in testing the Events screen.
+ * Provides test buttons to simulate view type changes and modal interactions.
+ */
+
 import React from 'react';
 
 type Props = {
@@ -16,6 +21,7 @@ export default function EventHeaderMock({
       <div data-testid="calendarEventHeader">
         <div className="_calendar__controls">
           <button
+            type="button"
             data-testid="selectViewType"
             onClick={() => handleChangeView?.('MONTH')}
           >
@@ -23,12 +29,14 @@ export default function EventHeaderMock({
           </button>
           <div>
             <button
+              type="button"
               data-testid="selectDay"
               onClick={() => handleChangeView?.('DAY')}
             >
               Select Day
             </button>
             <button
+              type="button"
               data-testid="selectYear"
               onClick={() => handleChangeView?.('YEAR')}
             >
@@ -36,12 +44,14 @@ export default function EventHeaderMock({
             </button>
           </div>
           <button
+            type="button"
             data-testid="createEventModalBtn"
             onClick={() => showInviteModal?.()}
           >
             Create
           </button>
           <button
+            type="button"
             data-testid="handleChangeNullBtn"
             onClick={() => handleChangeView && handleChangeView(null)}
           >
