@@ -40,10 +40,10 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { usePluginDrawerItems } from 'plugin';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
-import SidebarBase from 'components/Sidebar/SidebarBase/SidebarBase';
-import SidebarNavItem from 'components/Sidebar/SidebarNavItem/SidebarNavItem';
-import SidebarOrgSection from 'components/Sidebar/SidebarOrgSection/SidebarOrgSection';
-import SidebarPluginSection from 'components/Sidebar/SidebarPluginSection/SidebarPluginSection';
+import SidebarBase from 'shared-components/SidebarBase/SidebarBase';
+import SidebarNavItem from 'shared-components/SidebarNavItem/SidebarNavItem';
+import SidebarOrgSection from 'shared-components/SidebarOrgSection/SidebarOrgSection';
+import SidebarPluginSection from 'shared-components/SidebarPluginSection/SidebarPluginSection';
 
 export interface ILeftDrawerProps {
   orgId: string;
@@ -61,7 +61,7 @@ export interface ILeftDrawerProps {
  * @param setHideDrawer - Function to update the visibility state of the drawer.
  * @returns JSX element for the left navigation drawer with organization details.
  */
-const leftDrawerOrg = ({
+const LeftDrawerOrg = ({
   targets,
   orgId,
   hideDrawer,
@@ -187,4 +187,4 @@ const leftDrawerOrg = ({
   );
 };
 
-export default leftDrawerOrg;
+export default LeftDrawerOrg;

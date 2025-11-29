@@ -23,16 +23,16 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { usePluginDrawerItems } from 'plugin';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
-import SidebarBase from 'components/Sidebar/SidebarBase/SidebarBase';
-import SidebarNavItem from 'components/Sidebar/SidebarNavItem/SidebarNavItem';
-import SidebarPluginSection from 'components/Sidebar/SidebarPluginSection/SidebarPluginSection';
+import SidebarBase from 'shared-components/SidebarBase/SidebarBase';
+import SidebarNavItem from 'shared-components/SidebarNavItem/SidebarNavItem';
+import SidebarPluginSection from 'shared-components/SidebarPluginSection/SidebarPluginSection';
 
 export interface ILeftDrawerProps {
   hideDrawer: boolean;
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const leftDrawer = ({
+const LeftDrawer = ({
   hideDrawer,
   setHideDrawer,
 }: ILeftDrawerProps): React.ReactElement => {
@@ -134,4 +134,4 @@ const leftDrawer = ({
   );
 };
 
-export default leftDrawer;
+export default LeftDrawer;

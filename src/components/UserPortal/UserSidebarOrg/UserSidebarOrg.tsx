@@ -38,9 +38,9 @@ import styles from 'style/app-fixed.module.css';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
 import { usePluginDrawerItems } from 'plugin';
-import SidebarBase from 'components/Sidebar/SidebarBase/SidebarBase';
-import SidebarNavItem from 'components/Sidebar/SidebarNavItem/SidebarNavItem';
-import SidebarPluginSection from 'components/Sidebar/SidebarPluginSection/SidebarPluginSection';
+import SidebarBase from 'shared-components/SidebarBase/SidebarBase';
+import SidebarNavItem from 'shared-components/SidebarNavItem/SidebarNavItem';
+import SidebarPluginSection from 'shared-components/SidebarPluginSection/SidebarPluginSection';
 
 export interface InterfaceUserSidebarOrgProps {
   orgId: string;

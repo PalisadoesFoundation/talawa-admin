@@ -33,16 +33,16 @@ import { usePluginDrawerItems } from 'plugin';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
 import IconComponent from 'components/IconComponent/IconComponent';
-import SidebarBase from 'components/Sidebar/SidebarBase/SidebarBase';
-import SidebarNavItem from 'components/Sidebar/SidebarNavItem/SidebarNavItem';
-import SidebarPluginSection from 'components/Sidebar/SidebarPluginSection/SidebarPluginSection';
+import SidebarBase from 'shared-components/SidebarBase/SidebarBase';
+import SidebarNavItem from 'shared-components/SidebarNavItem/SidebarNavItem';
+import SidebarPluginSection from 'shared-components/SidebarPluginSection/SidebarPluginSection';
 
 export interface InterfaceUserSidebarProps {
   hideDrawer: boolean;
   setHideDrawer: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const userSidebar = ({
+const UserSidebar = ({
   hideDrawer,
   setHideDrawer,
 }: InterfaceUserSidebarProps): JSX.Element => {
@@ -140,4 +140,4 @@ const userSidebar = ({
   );
 };
 
-export default userSidebar;
+export default UserSidebar;
