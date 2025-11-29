@@ -44,11 +44,7 @@ const mockWithTime = new StaticMockLink(MOCKS_WITH_FIXED_TIME, true);
 
 const renderEventManagement = (): RenderResult => {
   return render(
-    <MockedProvider
-      addTypename={false}
-      link={mockWithTime}
-      mocks={MOCKS_WITH_FIXED_TIME}
-    >
+    <MockedProvider link={mockWithTime} mocks={MOCKS_WITH_FIXED_TIME}>
       <MemoryRouter initialEntries={['/event/orgId/eventId']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>

@@ -45,7 +45,7 @@ describe('AgendaCategoryCreateModal', () => {
 
   it('renders modal correctly', () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -80,7 +80,7 @@ describe('AgendaCategoryCreateModal', () => {
       createdBy: 'Test User',
     };
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -118,7 +118,7 @@ describe('AgendaCategoryCreateModal', () => {
   });
   it('calls createAgendaCategoryHandler when form is submitted', () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>

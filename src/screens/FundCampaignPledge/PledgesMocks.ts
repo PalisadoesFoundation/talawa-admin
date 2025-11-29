@@ -18,6 +18,7 @@ const memberList = {
     data: {
       organizations: [
         {
+          __typename: 'Organization',
           _id: 'orgId',
           members: [
             {
@@ -63,7 +64,9 @@ export const MOCKS = [
       data: {
         getFundraisingCampaigns: [
           {
+            __typename: 'FundCampaign',
             fundId: {
+              __typename: 'Fund',
               name: 'Fund 1',
             },
             name: 'Campaign Name',
@@ -73,6 +76,7 @@ export const MOCKS = [
             endDate: '2034-08-08',
             pledges: [
               {
+                __typename: 'Pledge',
                 id: '1',
                 amount: 100,
                 currency: 'USD',
@@ -80,6 +84,7 @@ export const MOCKS = [
                 endDate: '2030-01-10',
                 users: [
                   {
+                    __typename: 'User',
                     id: '1',
                     firstName: 'John',
                     lastName: 'Doe',
@@ -88,6 +93,7 @@ export const MOCKS = [
                 ],
               },
               {
+                __typename: 'Pledge',
                 id: '2',
                 amount: 200,
                 currency: 'USD',
@@ -95,6 +101,7 @@ export const MOCKS = [
                 endDate: '2030-01-09',
                 users: [
                   {
+                    __typename: 'User',
                     id: '2',
                     firstName: 'Jane',
                     lastName: 'Doe',
@@ -122,7 +129,9 @@ export const MOCKS = [
       data: {
         getFundraisingCampaigns: [
           {
+            __typename: 'FundCampaign',
             fundId: {
+              __typename: 'Fund',
               name: 'Fund 1',
             },
             name: 'Campaign Name',
@@ -132,6 +141,7 @@ export const MOCKS = [
             endDate: '2030-08-08',
             pledges: [
               {
+                __typename: 'Pledge',
                 id: '2',
                 amount: 200,
                 currency: 'USD',
@@ -139,6 +149,7 @@ export const MOCKS = [
                 endDate: '2030-01-09',
                 users: [
                   {
+                    __typename: 'User',
                     id: '2',
                     firstName: 'Jane',
                     lastName: 'Doe',
@@ -147,6 +158,7 @@ export const MOCKS = [
                 ],
               },
               {
+                __typename: 'Pledge',
                 id: '1',
                 amount: 100,
                 currency: 'USD',
@@ -154,6 +166,7 @@ export const MOCKS = [
                 endDate: '2030-01-10',
                 users: [
                   {
+                    __typename: 'User',
                     id: '1',
                     firstName: 'John',
                     lastName: 'Doe',
@@ -181,7 +194,9 @@ export const MOCKS = [
       data: {
         getFundraisingCampaigns: [
           {
+            __typename: 'FundCampaign',
             fundId: {
+              __typename: 'Fund',
               name: 'Fund 1',
             },
             name: 'Campaign Name',
@@ -191,6 +206,7 @@ export const MOCKS = [
             endDate: '2030-08-08',
             pledges: [
               {
+                __typename: 'Pledge',
                 id: '2',
                 amount: 200,
                 currency: 'USD',
@@ -198,60 +214,70 @@ export const MOCKS = [
                 endDate: '2030-01-09',
                 users: [
                   {
+                    __typename: 'User',
                     id: '2',
                     firstName: 'Jane',
                     lastName: 'Doe',
                     image: null,
                   },
                   {
+                    __typename: 'User',
                     id: '2',
                     firstName: 'John',
                     lastName: 'Doe2',
                     image: 'img-url2',
                   },
                   {
+                    __typename: 'User',
                     id: '3',
                     firstName: 'John',
                     lastName: 'Doe3',
                     image: 'img-url3',
                   },
                   {
+                    __typename: 'User',
                     id: '4',
                     firstName: 'John',
                     lastName: 'Doe4',
                     image: 'img-url4',
                   },
                   {
+                    __typename: 'User',
                     id: '5',
                     firstName: 'John',
                     lastName: 'Doe5',
                     image: 'img-url5',
                   },
                   {
+                    __typename: 'User',
                     id: '6',
                     firstName: 'John',
                     lastName: 'Doe6',
                     image: 'img-url6',
                   },
                   {
+                    __typename: 'User',
                     id: '7',
                     firstName: 'John',
                     lastName: 'Doe7',
                     image: 'img-url7',
                   },
                   {
+                    __typename: 'User',
                     id: '8',
                     firstName: 'John',
                     lastName: 'Doe8',
                     image: 'img-url8',
                   },
                   {
+                    __typename: 'User',
                     id: '9',
                     firstName: 'John',
                     lastName: 'Doe9',
                     image: 'img-url9',
                   },
                   {
+                    __typename: 'User',
                     id: '10',
                     firstName: 'John',
                     lastName: 'Doe10',
@@ -260,6 +286,7 @@ export const MOCKS = [
                 ],
               },
               {
+                __typename: 'Pledge',
                 id: '1',
                 amount: 100,
                 currency: 'USD',
@@ -267,6 +294,7 @@ export const MOCKS = [
                 endDate: '2030-01-10',
                 users: [
                   {
+                    __typename: 'User',
                     id: '1',
                     firstName: 'John',
                     lastName: 'Doe',
@@ -294,7 +322,9 @@ export const MOCKS = [
       data: {
         getFundraisingCampaigns: [
           {
+            __typename: 'FundCampaign',
             fundId: {
+              __typename: 'Fund',
               name: 'Fund 1',
             },
             name: 'Campaign Name',
@@ -304,6 +334,7 @@ export const MOCKS = [
             endDate: '2030-08-08',
             pledges: [
               {
+                __typename: 'Pledge',
                 id: '1',
                 amount: 100,
                 currency: 'USD',
@@ -311,6 +342,7 @@ export const MOCKS = [
                 endDate: '2024-01-10',
                 users: [
                   {
+                    __typename: 'User',
                     id: '1',
                     firstName: 'John',
                     lastName: 'Doe',
@@ -319,6 +351,7 @@ export const MOCKS = [
                 ],
               },
               {
+                __typename: 'Pledge',
                 id: '2',
                 amount: 200,
                 currency: 'USD',
@@ -326,6 +359,7 @@ export const MOCKS = [
                 endDate: '2024-01-09',
                 users: [
                   {
+                    __typename: 'User',
                     id: '2',
                     firstName: 'Jane',
                     lastName: 'Doe',
@@ -349,6 +383,7 @@ export const MOCKS = [
     result: {
       data: {
         removeFundraisingCampaignPledge: {
+          __typename: 'Pledge',
           id: '1',
         },
       },
@@ -398,6 +433,7 @@ export const PLEDGE_MODAL_MOCKS = [
     result: {
       data: {
         updateFundraisingCampaignPledge: {
+          __typename: 'Pledge',
           id: '1',
         },
       },
@@ -418,6 +454,7 @@ export const PLEDGE_MODAL_MOCKS = [
     result: {
       data: {
         createFundraisingCampaignPledge: {
+          __typename: 'Pledge',
           id: '3',
         },
       },
@@ -438,6 +475,7 @@ export const PLEDGE_MODAL_MOCKS = [
     result: {
       data: {
         createPledge: {
+          __typename: 'Pledge',
           id: '1',
           amount: 100,
           currency: 'USD',
@@ -445,6 +483,7 @@ export const PLEDGE_MODAL_MOCKS = [
           endDate: '2024-01-10',
           users: [
             {
+              __typename: 'User',
               id: '1',
               firstName: 'John',
               lastName: 'Doe',
@@ -467,6 +506,7 @@ export const PLEDGE_MODAL_MOCKS = [
     result: {
       data: {
         updatePledge: {
+          __typename: 'Pledge',
           id: '1',
           amount: 200,
           currency: 'USD',
@@ -474,6 +514,7 @@ export const PLEDGE_MODAL_MOCKS = [
           endDate: '2024-01-10',
           users: [
             {
+              __typename: 'User',
               id: '1',
               firstName: 'John',
               lastName: 'Doe',
@@ -495,6 +536,7 @@ export const PLEDGE_MODAL_MOCKS = [
     result: {
       data: {
         user: {
+          __typename: 'User',
           id: '1',
           firstName: 'John',
           lastName: 'Doe',
@@ -543,14 +585,17 @@ export const PLEDGE_MODAL_ERROR_MOCKS = [
       data: {
         organizations: [
           {
+            __typename: 'Organization',
             members: [
               {
+                __typename: 'User',
                 id: '1',
                 firstName: 'John',
                 lastName: 'Doe',
                 image: null,
               },
               {
+                __typename: 'User',
                 id: '2',
                 firstName: 'Jane',
                 lastName: 'Smith',

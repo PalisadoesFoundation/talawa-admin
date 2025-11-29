@@ -115,7 +115,7 @@ describe('Testing Advertisement Register Component', () => {
 
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} mocks={[createAdFailMock]}>
+        <MockedProvider mocks={[createAdFailMock]}>
           <Provider store={store}>
             <router.BrowserRouter>
               <I18nextProvider i18n={i18nForTest}>
@@ -162,7 +162,7 @@ describe('Testing Advertisement Register Component', () => {
     const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
     const toastErrorSpy = vi.spyOn(toast, 'error');
     const { getByText, queryByText, getByLabelText } = render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <router.BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -290,7 +290,7 @@ describe('Testing Advertisement Register Component', () => {
   test('Throws error when the end date is less than the start date while editing the advertisement', async () => {
     const toastErrorSpy = vi.spyOn(toast, 'error');
     const { getByText, getByLabelText, queryByText } = render(
-      <MockedProvider addTypename={false} mocks={[updateAdFailMock]}>
+      <MockedProvider mocks={[updateAdFailMock]}>
         <Provider store={store}>
           <router.BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -357,7 +357,7 @@ describe('Testing Advertisement Register Component', () => {
 
   test('Media preview renders correctly', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <router.BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -401,7 +401,7 @@ describe('Testing Advertisement Register Component', () => {
         <Provider store={store}>
           <router.BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={createAdvertisement} addTypename={false}>
+              <MockedProvider mocks={createAdvertisement}>
                 <AdvertisementRegister
                   setAfterActive={vi.fn()}
                   setAfterCompleted={vi.fn()}
@@ -656,7 +656,7 @@ describe('Testing Advertisement Register Component', () => {
         <Provider store={store}>
           <router.BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={updateAdMocks} addTypename={false}>
+              <MockedProvider mocks={updateAdMocks}>
                 <AdvertisementRegister
                   endAtEdit={new Date()}
                   startAtEdit={new Date()}
@@ -724,7 +724,7 @@ describe('Testing Advertisement Register Component', () => {
         <Provider store={store}>
           <router.BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider addTypename={false}>
+              <MockedProvider>
                 <AdvertisementRegister
                   setAfterActive={vi.fn()}
                   setAfterCompleted={vi.fn()}
@@ -774,7 +774,7 @@ describe('Testing Advertisement Register Component', () => {
         <Provider store={store}>
           <router.BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider addTypename={false}>
+              <MockedProvider>
                 <AdvertisementRegister
                   setAfterActive={vi.fn()}
                   setAfterCompleted={vi.fn()}
@@ -1263,7 +1263,7 @@ describe('Testing Advertisement Register Component', () => {
         <Provider store={store}>
           <router.MemoryRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider addTypename={false}>
+              <MockedProvider>
                 <AdvertisementRegister
                   setAfterActive={vi.fn()}
                   setAfterCompleted={vi.fn()}
