@@ -55,16 +55,9 @@ const SidebarBase = ({
   const handleToggle = (): void => {
     const newState = !hideDrawer;
     if (persistToggleState) {
-      setItem('sidebar', newState.toString());
+      setItem('sidebar', newState);
     }
     setHideDrawer(newState);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent): void => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      handleToggle();
-    }
   };
 
   const portalText = portalType === 'admin' ? 'adminPortal' : 'userPortal';
@@ -87,12 +80,11 @@ const SidebarBase = ({
           className="d-flex align-items-center btn p-0 border-0 bg-transparent"
           data-testid="toggleBtn"
           onClick={handleToggle}
-          onKeyDown={handleKeyDown}
           type="button"
+          aria-label="Toggle sidebar"
         >
           <FaBars
             className={styles.hamburgerIcon}
-            aria-label="Toggle sidebar"
             size={22}
             style={{
               cursor: 'pointer',

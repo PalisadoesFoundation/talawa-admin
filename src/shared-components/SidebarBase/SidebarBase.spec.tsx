@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, it, vi, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
 import SidebarBase from './SidebarBase';
@@ -139,57 +139,6 @@ describe('SidebarBase Component', () => {
       fireEvent.click(toggleBtn);
       expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
     });
-
-    it('handles Enter key press to toggle', () => {
-      renderComponent({ hideDrawer: false });
-      const toggleBtn = screen.getByTestId('toggleBtn');
-      fireEvent.keyDown(toggleBtn, { key: 'Enter', code: 'Enter' });
-      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
-    });
-
-    it('handles Space key press to toggle', () => {
-      renderComponent({ hideDrawer: false });
-      const toggleBtn = screen.getByTestId('toggleBtn');
-      fireEvent.keyDown(toggleBtn, { key: ' ', code: 'Space' });
-      expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
-    });
-
-    it('does not toggle on other key presses', () => {
-      renderComponent({ hideDrawer: false });
-      const toggleBtn = screen.getByTestId('toggleBtn');
-      fireEvent.keyDown(toggleBtn, { key: 'A', code: 'KeyA' });
-      expect(mockSetHideDrawer).not.toHaveBeenCalled();
-    });
-
-    it('prevents default behavior on Enter key', () => {
-      renderComponent({ hideDrawer: false });
-      const toggleBtn = screen.getByTestId('toggleBtn');
-
-      const enterEvent = new KeyboardEvent('keydown', {
-        key: 'Enter',
-        code: 'Enter',
-        bubbles: true,
-        cancelable: true,
-      });
-      const preventDefaultSpy = vi.spyOn(enterEvent, 'preventDefault');
-      toggleBtn.dispatchEvent(enterEvent);
-      expect(preventDefaultSpy).toHaveBeenCalled();
-    });
-
-    it('prevents default behavior on Space key', () => {
-      renderComponent({ hideDrawer: false });
-      const toggleBtn = screen.getByTestId('toggleBtn');
-
-      const spaceEvent = new KeyboardEvent('keydown', {
-        key: ' ',
-        code: 'Space',
-        bubbles: true,
-        cancelable: true,
-      });
-      const preventDefaultSpy = vi.spyOn(spaceEvent, 'preventDefault');
-      toggleBtn.dispatchEvent(spaceEvent);
-      expect(preventDefaultSpy).toHaveBeenCalled();
-    });
   });
 
   describe('Persist Toggle State', () => {
@@ -220,7 +169,7 @@ describe('SidebarBase Component', () => {
       renderComponent({ persistToggleState: true, hideDrawer: false });
       const toggleBtn = screen.getByTestId('toggleBtn');
       fireEvent.click(toggleBtn);
-      expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'true');
+      expect(mockSetItem).toHaveBeenCalledWith('sidebar', true);
     });
 
     it('persists correct state when toggling from hidden to visible', () => {
@@ -235,7 +184,7 @@ describe('SidebarBase Component', () => {
       renderComponent({ persistToggleState: true, hideDrawer: true });
       const toggleBtn = screen.getByTestId('toggleBtn');
       fireEvent.click(toggleBtn);
-      expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'false');
+      expect(mockSetItem).toHaveBeenCalledWith('sidebar', false);
     });
   });
 
@@ -297,12 +246,10 @@ describe('SidebarBase Component', () => {
       expect(toggleBtn.tagName).toBe('BUTTON');
     });
 
-    it('has aria-label on hamburger icon', () => {
+    it('has aria-label on toggle button', () => {
       renderComponent();
-      const icon = screen
-        .getByTestId('leftDrawerContainer')
-        .querySelector('[aria-label="Toggle sidebar"]');
-      expect(icon).toHaveAttribute('aria-label', 'Toggle sidebar');
+      const toggleBtn = screen.getByTestId('toggleBtn');
+      expect(toggleBtn).toHaveAttribute('aria-label', 'Toggle sidebar');
     });
 
     it('has button type attribute', () => {
@@ -334,17 +281,15 @@ describe('SidebarBase Component', () => {
   describe('Hamburger Icon Positioning', () => {
     it('positions hamburger icon with margin when drawer is expanded', () => {
       renderComponent({ hideDrawer: false });
-      const icon = screen
-        .getByTestId('leftDrawerContainer')
-        .querySelector('[aria-label="Toggle sidebar"]');
+      const toggleBtn = screen.getByTestId('toggleBtn');
+      const icon = toggleBtn.querySelector('svg');
       expect(icon).toHaveStyle({ marginLeft: '10px' });
     });
 
     it('positions hamburger icon without margin when drawer is collapsed', () => {
       renderComponent({ hideDrawer: true });
-      const icon = screen
-        .getByTestId('leftDrawerContainer')
-        .querySelector('[aria-label="Toggle sidebar"]');
+      const toggleBtn = screen.getByTestId('toggleBtn');
+      const icon = toggleBtn.querySelector('svg');
       expect(icon).toHaveStyle({ marginLeft: '0px' });
     });
   });

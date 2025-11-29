@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, it, vi, expect, beforeEach } from 'vitest';
+import { describe, it, vi, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
@@ -74,10 +74,6 @@ describe('SidebarPluginSection Component', () => {
       </MemoryRouter>,
     );
   };
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
 
   describe('Visibility', () => {
     it('returns null when pluginItems is empty array', () => {
@@ -268,7 +264,7 @@ describe('SidebarPluginSection Component', () => {
       renderComponent();
       // Verify the plugin logo or custom icon is present
       const pluginLogos = screen.getAllByTestId('plugin-logo');
-      expect(pluginLogos.length).toBeGreaterThan(0);
+      expect(pluginLogos.length).toBe(2);
     });
 
     it('each icon wrapper contains an actual icon element', () => {

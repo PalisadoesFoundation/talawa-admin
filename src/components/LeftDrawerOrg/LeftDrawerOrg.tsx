@@ -33,7 +33,7 @@ import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropd
 import IconComponent from 'components/IconComponent/IconComponent';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router';
+import { useLocation } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './../../style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';

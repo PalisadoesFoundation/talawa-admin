@@ -103,34 +103,33 @@ const SidebarPluginSection = ({
 
   return (
     <>
-      {useSimpleButton ? (
-        <h5
-          className={`${styles.titleHeader} text-secondary`}
-          style={{
-            fontSize: '1.1rem',
-            marginTop: '1.5rem',
-            marginBottom: '0.75rem',
-          }}
-          data-testid="pluginSettingsHeader"
-          aria-hidden={hideDrawer ? 'true' : undefined}
-        >
-          {!hideDrawer && tCommon('plugins')}
-        </h5>
-      ) : (
-        <h4
-          className={styles.titleHeader}
-          style={{
-            fontSize: '1.1rem',
-            marginTop: '1.5rem',
-            marginBottom: '0.75rem',
-            color: 'var(--bs-secondary)',
-          }}
-          data-testid="pluginSettingsHeader"
-          aria-hidden={hideDrawer ? 'true' : undefined}
-        >
-          {!hideDrawer && tCommon('pluginSettings')}
-        </h4>
-      )}
+      {!hideDrawer &&
+        (useSimpleButton ? (
+          <h5
+            className={`${styles.titleHeader} text-secondary`}
+            style={{
+              fontSize: '1.1rem',
+              marginTop: '1.5rem',
+              marginBottom: '0.75rem',
+            }}
+            data-testid="pluginSettingsHeader"
+          >
+            {tCommon('plugins')}
+          </h5>
+        ) : (
+          <h4
+            className={styles.titleHeader}
+            style={{
+              fontSize: '1.1rem',
+              marginTop: '1.5rem',
+              marginBottom: '0.75rem',
+              color: 'var(--bs-secondary)',
+            }}
+            data-testid="pluginSettingsHeader"
+          >
+            {tCommon('pluginSettings')}
+          </h4>
+        ))}
       {pluginItems.map((item) => renderPluginItem(item))}
     </>
   );

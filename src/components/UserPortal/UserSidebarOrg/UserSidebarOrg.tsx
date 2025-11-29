@@ -35,6 +35,7 @@ import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from 'style/app-fixed.module.css';
+import componentStyles from './UserSidebarOrg.module.css';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
 import { usePluginDrawerItems } from 'plugin';
@@ -78,14 +79,7 @@ const UserSidebarOrg = ({
 
   // User Profile Section at top (only when drawer is not hidden)
   const headerContent = !hideDrawer ? (
-    <div
-      style={{
-        backgroundColor: '#e8f4f8',
-        padding: '10px',
-        borderRadius: '8px',
-        margin: '10px',
-      }}
-    >
+    <div className={componentStyles.profileCardContainer}>
       <ProfileCard />
     </div>
   ) : null;

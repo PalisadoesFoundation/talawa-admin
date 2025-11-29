@@ -89,6 +89,7 @@ const SidebarOrgSection = ({
             type="button"
             className={`${styles.profileContainer} ${styles.bgDanger} text-start text-white`}
             disabled
+            data-testid="sidebar-org-error"
           >
             <div className="px-3">
               <WarningAmberOutlined />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, it, vi, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { MockedProvider } from '@apollo/react-testing';
 import LeftDrawer from './LeftDrawer';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -545,7 +545,7 @@ describe('LeftDrawer Component', () => {
       expect(screen.getByText('Plugin Three')).toBeInTheDocument();
 
       // Plugin section header should be present
-      expect(screen.getByText('pluginSettings')).toBeInTheDocument();
+      expect(screen.getByTestId('pluginSettingsHeader')).toBeInTheDocument();
 
       // All plugin buttons should have correct test IDs
       expect(screen.getByTestId('plugin-plugin-1-btn')).toBeInTheDocument();

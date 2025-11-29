@@ -14,6 +14,7 @@
 
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FaBell } from 'react-icons/fa';
 import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
 import RolesIcon from 'assets/svgs/roles.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
@@ -97,11 +98,12 @@ const LeftDrawer = ({
 
         <SidebarNavItem
           to="/notification"
-          icon={<SettingsIcon />}
+          icon={<FaBell />}
           label={t('notification')}
           testId="notificationBtn"
           hideDrawer={hideDrawer}
           onClick={handleLinkClick}
+          iconType="react-icon"
         />
 
         {/* Plugin Settings Section */}
