@@ -1,7 +1,7 @@
 import { TextEncoder, TextDecoder } from 'util';
 import { cleanup } from '@testing-library/react';
 import { afterAll, afterEach, beforeAll, vi } from 'vitest';
-import 'vitest-dom/extend-expect';
+import '@testing-library/jest-dom/vitest';
 
 // Simple console error handler for React 18 warnings
 const originalError = console.error;
