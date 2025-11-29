@@ -36,7 +36,10 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-const mockNavigate = vi.fn();
+const { mockNavigate } = vi.hoisted(() => ({
+  mockNavigate: vi.fn(),
+}));
+
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
@@ -70,6 +73,7 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
 
   afterEach(() => {
     cleanup();
+    vi.restoreAllMocks();
   });
 
   // Basic rendering tests

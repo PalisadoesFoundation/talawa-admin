@@ -17,6 +17,9 @@ import { mockFormState2 } from '../AgendaItemsMocks';
 const mockT = (key: string): string => key;
 
 describe('AgendaItemsPreviewModal', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   test('check url and attachment links', () => {
     render(
       <MockedProvider addTypename={false}>

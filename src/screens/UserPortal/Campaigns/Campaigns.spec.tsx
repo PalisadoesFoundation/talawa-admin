@@ -124,6 +124,7 @@ describe('Testing User Campaigns Screen', () => {
 
   afterEach(() => {
     cleanup();
+    vi.restoreAllMocks();
   });
 
   /**

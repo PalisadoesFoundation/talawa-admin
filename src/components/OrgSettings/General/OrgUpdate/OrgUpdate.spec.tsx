@@ -124,6 +124,10 @@ describe('OrgUpdate Component', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('loads and displays organization data', async () => {
     render(
       <MockedProvider mocks={mocks} addTypename={true}>

@@ -51,10 +51,6 @@ vi.mock('screens/UserPortal/Settings/Settings', () => ({
   default: () => <div data-testid="mock-settings">Mock Settings</div>,
 }));
 
-// Mock console methods
-const originalConsoleLog = console.log;
-const originalConsoleError = console.error;
-
 const MOCKS = [
   {
     request: { query: CURRENT_USER },
@@ -162,8 +158,7 @@ describe('Testing the App Component', () => {
   });
 
   afterEach(() => {
-    console.log = originalConsoleLog;
-    console.error = originalConsoleError;
+    vi.restoreAllMocks(); // Restores console spies automatically
   });
 
   it('Component should be rendered properly and user is logged in', async () => {
