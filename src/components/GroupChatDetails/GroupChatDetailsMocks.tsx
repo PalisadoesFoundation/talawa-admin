@@ -313,3 +313,29 @@ export const mocks = [
     result: { data: { deleteChat: { id: 'chat1', success: true } } },
   },
 ];
+
+export const failingMocks = [
+  {
+    request: {
+      query: UPDATE_CHAT_MEMBERSHIP,
+      variables: {
+        input: { memberId: 'user2', chatId: 'chat1', role: null },
+      },
+    },
+    result: { data: { updateChatMembership: { id: 'chat1', success: false } } },
+  },
+  {
+    request: {
+      query: DELETE_CHAT_MEMBERSHIP,
+      variables: { input: { memberId: null, chatId: 'chat1' } },
+    },
+    result: { data: { deleteChatMembership: { id: 'chat1', success: false } } },
+  },
+  {
+    request: {
+      query: DELETE_CHAT,
+      variables: { input: { id: null } },
+    },
+    result: { data: { deleteChat: { id: 'chat1', success: true } } },
+  },
+];
