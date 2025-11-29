@@ -53,7 +53,7 @@ export default function EventHeaderMock({
           <button
             type="button"
             data-testid="handleChangeNullBtn"
-            onClick={() => handleChangeView && handleChangeView(null)}
+            onClick={() => handleChangeView?.(null)}
           >
             Null
           </button>

@@ -21,7 +21,7 @@ export default function EventCalenderMock({
       <button
         type="button"
         data-testid="monthChangeBtn"
-        onClick={() => onMonthChange && onMonthChange(5, 2023)}
+        onClick={() => onMonthChange?.(5, 2023)}
       />
       <div data-testid="hour" />
       <div data-testid="monthView" />
