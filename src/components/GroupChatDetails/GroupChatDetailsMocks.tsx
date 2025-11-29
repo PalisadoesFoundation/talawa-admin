@@ -315,27 +315,30 @@ export const mocks = [
 ];
 
 export const failingMocks = [
+  // Mock for role update failure
   {
     request: {
       query: UPDATE_CHAT_MEMBERSHIP,
       variables: {
-        input: { memberId: 'user2', chatId: 'chat1', role: null },
+        input: { memberId: 'user2', chatId: 'chat1', role: 'administrator' },
       },
     },
-    result: { data: { updateChatMembership: { id: 'chat1', success: false } } },
+    error: new Error('Failed to update role'),
   },
+  // Mock for member removal failure
   {
     request: {
       query: DELETE_CHAT_MEMBERSHIP,
-      variables: { input: { memberId: null, chatId: 'chat1' } },
+      variables: { input: { memberId: 'user2', chatId: 'chat1' } },
     },
-    result: { data: { deleteChatMembership: { id: 'chat1', success: false } } },
+    error: new Error('Failed to remove member'),
   },
+  // Mock for chat deletion failure
   {
     request: {
       query: DELETE_CHAT,
-      variables: { input: { id: null } },
+      variables: { input: { id: 'chat1' } },
     },
-    result: { data: { deleteChat: { id: 'chat1', success: true } } },
+    error: new Error('Failed to delete chat'),
   },
 ];
