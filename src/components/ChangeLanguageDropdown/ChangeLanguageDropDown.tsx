@@ -49,9 +49,16 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
 
   const userId = getItem('id');
   const userImage = getItem('UserImage');
+  const isLoggedIn = getItem('IsLoggedIn') === 'TRUE';
   const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);
 
   const changeLanguage = async (languageCode: string): Promise<void> => {
+    if (!isLoggedIn) {
+      await i18next.changeLanguage(languageCode);
+      cookies.set('i18next', languageCode);
+      return;
+    }
+
     if (!userId) {
       toast.error('User not found');
       return;
@@ -66,7 +73,7 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
           avatarFile = await urlToFile(userImage);
         }
       } catch (error) {
-        console.log('Error processing avatar:', error);
+        console.error('Error processing avatar:', error);
       }
     }
     const input = {
@@ -78,11 +85,11 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
       await updateUser({
         variables: { input },
       });
-
+    } catch (error) {
+      console.error('Error in changing language', error);
+    } finally {
       await i18next.changeLanguage(languageCode);
       cookies.set('i18next', languageCode);
-    } catch (error) {
-      console.log('Error in changing language', error);
     }
   };
 

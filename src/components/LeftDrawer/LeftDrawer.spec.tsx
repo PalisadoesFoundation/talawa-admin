@@ -84,6 +84,9 @@ vi.mock('components/ProfileDropdown/ProfileDropdown', () => ({
 }));
 
 describe('LeftDrawer Component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const TestWrapper = ({
     initialHideDrawer = false,
   }: {

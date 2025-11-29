@@ -51,6 +51,9 @@ const translations = JSON.parse(
 );
 
 describe('Testing Agenda Category Component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const formData = {
     name: 'AgendaCategory 1 Edited',
     description: 'AgendaCategory 1 Description Edited',

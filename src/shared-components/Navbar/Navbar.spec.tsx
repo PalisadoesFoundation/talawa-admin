@@ -1,6 +1,11 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { vi } from 'vitest';
+import { vi, afterEach } from 'vitest';
+
+afterEach(() => {
+  vi.restoreAllMocks();
+  vi.clearAllMocks();
+});
 import PageHeader from './Navbar';
 
 describe('PageHeader Component', () => {
@@ -83,5 +88,20 @@ describe('PageHeader Component', () => {
     render(<PageHeader sorting={sortingProps} />);
     expect(screen.getByTitle('Sort 1')).toBeInTheDocument();
     expect(screen.getByTitle('Sort 2')).toBeInTheDocument();
+  });
+
+  it('calls onSortChange and triggers console.log when event type is changed', () => {
+    const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    render(<PageHeader showEventTypeFilter={true} />);
+    // Find the dropdown/button for event type
+    const eventTypeButton = screen.getByTestId('eventType');
+    fireEvent.click(eventTypeButton);
+
+    // Select "Workshops" from the dropdown
+    const workshopsOption = screen.getByText('Workshops');
+    fireEvent.click(workshopsOption);
+
+    expect(logSpy).toHaveBeenCalledWith('Selected Event Type: Workshops');
+    logSpy.mockRestore();
   });
 });

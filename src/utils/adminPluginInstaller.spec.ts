@@ -9,7 +9,7 @@ import {
 } from './adminPluginInstaller';
 import {
   adminPluginFileService,
-  type InstalledPlugin,
+  type IInstalledPlugin,
 } from '../plugin/services/AdminPluginFileService';
 
 // Mock dependencies
@@ -502,7 +502,7 @@ describe('adminPluginInstaller', () => {
           installedAt: undefined,
           lastUpdated: undefined,
         },
-      ] as unknown as InstalledPlugin[]);
+      ] as unknown as IInstalledPlugin[]);
 
       const result = await getInstalledAdminPlugins();
 

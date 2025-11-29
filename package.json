@@ -97,6 +97,7 @@
     "start-server": "node scripts/start-server.js",
     "cy:open": "pnpm run start-server cypress:open",
     "cy:run": "cross-env CYPRESS_COVERAGE=true pnpm run start-server cypress:run",
+    "check-mock-cleanup": "bash scripts/githooks/check-mock-cleanup.sh",
     "check:pom": "node scripts/githooks/check_pom.js"
   },
   "eslintConfig": {
@@ -165,7 +166,7 @@
     "typedoc": "^0.28.1",
     "typedoc-plugin-markdown": "^4.5.0",
     "typescript": "^5.8.3",
-    "vite": "^7.1.12",
+    "vite": "^7.2.4",
     "vite-plugin-istanbul": "^7.1.0",
     "vite-plugin-svgr": "^4.3.0",
     "vitest": "^3.2.4"
@@ -185,7 +186,8 @@
     "include": [
       "src/screens/**/*.{js,jsx,ts,tsx}",
       "src/components/**/*.{js,jsx,ts,tsx}",
-      "src/subComponents/**/*.{js,jsx,ts,tsx}"
+      "src/subComponents/**/*.{js,jsx,ts,tsx}",
+      "src/shared-components/**/*.{js,jsx,ts,tsx}"
     ],
     "exclude": [
       "cypress/**",

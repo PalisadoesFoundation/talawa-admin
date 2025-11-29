@@ -214,6 +214,10 @@ beforeEach(() => {
   );
 });
 
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
 vi.mock('react-toastify', () => ({
   toast: toastMocks,
 }));

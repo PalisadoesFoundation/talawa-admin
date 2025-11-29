@@ -1,18 +1,22 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import VenueCard from './VenueCard';
 import {
   MOCK_VENUE_ITEM,
   MOCK_VENUE_ITEM_WITH_IMAGE,
   MOCK_VENUE_ITEM_LONG_TEXT,
-  MOCK_HANDLE_EDIT,
-  MOCK_HANDLE_DELETE,
 } from './VenueCardMocks';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 
 describe('VenueCard Component', () => {
+  const MOCK_HANDLE_EDIT = vi.fn();
+  const MOCK_HANDLE_DELETE = vi.fn();
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
   it('renders venue details correctly', (): void => {
     render(
       <I18nextProvider i18n={i18nForTest}>

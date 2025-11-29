@@ -87,6 +87,9 @@ const renderAddOnSpotAttendee = (): RenderResult => {
 };
 
 describe('AddOnSpotAttendee Component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   beforeEach(() => {
     vi.clearAllMocks();
   });

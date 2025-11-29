@@ -12,12 +12,76 @@ import { BrowserRouter } from 'react-router';
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS2, true);
 const link3 = new StaticMockLink(MOCKS_UPDATE, true);
-import useLocalStorage from 'utils/useLocalstorage';
+
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import type * as RouterTypes from 'react-router';
 
-const { setItem } = useLocalStorage();
+const { mockLocalStorageStore } = vi.hoisted(() => ({
+  mockLocalStorageStore: {} as Record<string, unknown>,
+}));
+
+// Mock useLocalStorage
+vi.mock('utils/useLocalstorage', () => {
+  return {
+    default: () => ({
+      getItem: (key: string) => mockLocalStorageStore[key] || null,
+      setItem: (key: string, value: unknown) => {
+        mockLocalStorageStore[key] =
+          typeof value === 'string' ? value : JSON.stringify(value);
+      },
+      removeItem: (key: string) => {
+        delete mockLocalStorageStore[key];
+      },
+      clear: () => {
+        for (const key in mockLocalStorageStore)
+          delete mockLocalStorageStore[key];
+      },
+    }),
+    setItem: (prefix: string, key: string, value: unknown) => {
+      const prefixedKey = `${prefix}_${key}`;
+      mockLocalStorageStore[prefixedKey] =
+        typeof value === 'string' ? value : JSON.stringify(value);
+    },
+    removeItem: (prefix: string, key: string) => {
+      const prefixedKey = `${prefix}_${key}`;
+      delete mockLocalStorageStore[prefixedKey];
+    },
+  };
+});
+
+const originalLocalStorage = window.localStorage;
+
+// Mock global localStorage
+Object.defineProperty(window, 'localStorage', {
+  value: {
+    getItem: (key: string) => mockLocalStorageStore[key] || null,
+    setItem: (key: string, value: string) => {
+      mockLocalStorageStore[key] = value;
+    },
+    removeItem: (key: string) => {
+      delete mockLocalStorageStore[key];
+    },
+    clear: () => {
+      for (const key in mockLocalStorageStore)
+        delete mockLocalStorageStore[key];
+    },
+  },
+  writable: true,
+});
+
+afterAll(() => {
+  Object.defineProperty(window, 'localStorage', {
+    value: originalLocalStorage,
+    writable: true,
+  });
+});
+
+// Direct wrapper functions for test usage
+const setMockStorageItem = (key: string, value: unknown): void => {
+  mockLocalStorageStore[key] =
+    typeof value === 'string' ? value : JSON.stringify(value);
+};
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -26,13 +90,12 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
-const resetAndRefetchMock = vi.fn();
-
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
     warning: vi.fn(),
+    info: vi.fn(),
   },
 }));
 
@@ -55,22 +118,35 @@ vi.mock('react-router', async () => {
 
 beforeEach(() => {
   mockNavgatePush = vi.fn();
-  setItem('SuperAdmin', true);
-  setItem('id', '123');
+  setMockStorageItem('SuperAdmin', true);
+  setMockStorageItem('id', '123');
 });
 
-afterEach(() => {
+afterEach(async () => {
   vi.restoreAllMocks();
-  localStorage.clear();
+  const { clear } = (
+    await import('utils/useLocalstorage')
+  ).default() as unknown as {
+    clear: () => void;
+  };
+  clear();
 });
 
 describe('Testing User Table Item', () => {
-  console.error = vi.fn((message) => {
-    if (message.includes('validateDOMNesting')) {
-      return;
-    }
-    // Log other console errors
-    console.warn(message);
+  let resetAndRefetchMock: ReturnType<typeof vi.fn>;
+
+  beforeEach(() => {
+    resetAndRefetchMock = vi.fn();
+    vi.spyOn(console, 'error').mockImplementation((message) => {
+      if (
+        typeof message === 'string' &&
+        message.includes('validateDOMNesting')
+      ) {
+        return;
+      }
+      // Log other console errors
+      console.warn(message);
+    });
   });
   test('Should render props and text elements test for the page component', async () => {
     const props: {
@@ -282,7 +358,7 @@ describe('Testing User Table Item', () => {
 
     // Search for Joined Organization 1
     const searchBtn = screen.getByTestId(`searchBtnJoinedOrgs`);
-    fireEvent.keyUp(inputBox, {
+    fireEvent.change(inputBox, {
       target: { value: 'Joined Organization 1' },
     });
     fireEvent.click(searchBtn);
@@ -292,8 +368,7 @@ describe('Testing User Table Item', () => {
     ).not.toBeInTheDocument();
 
     // Search for an Organization which does not exist
-    fireEvent.keyUp(inputBox, {
-      key: 'Enter',
+    fireEvent.change(inputBox, {
       target: { value: 'Joined Organization 3' },
     });
     expect(
@@ -301,8 +376,7 @@ describe('Testing User Table Item', () => {
     ).toBeInTheDocument();
 
     // Now clear the search box
-    fireEvent.keyUp(inputBox, { key: 'Enter', target: { value: '' } });
-    fireEvent.keyUp(inputBox, { target: { value: '' } });
+    fireEvent.change(inputBox, { target: { value: '' } });
     fireEvent.click(searchBtn);
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorabc`));

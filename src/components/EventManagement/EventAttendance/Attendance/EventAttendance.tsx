@@ -33,7 +33,6 @@
  * - Optimize performance for large attendee lists.
  */
 import React, { useEffect, useMemo, useState } from 'react';
-import { BiSearch as Search } from 'react-icons/bi';
 import {
   Paper,
   TableBody,
@@ -43,7 +42,7 @@ import {
   TableRow,
   Tooltip,
 } from '@mui/material';
-import { Button, Table, FormControl } from 'react-bootstrap';
+import { Button, Table } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useLazyQuery } from '@apollo/client';
 import { EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
@@ -52,6 +51,7 @@ import { useTranslation } from 'react-i18next';
 import { AttendanceStatisticsModal } from '../Statistics/EventStatistics';
 import AttendedEventList from '../AttendanceList/AttendedEventList';
 import SortingButton from 'subComponents/SortingButton';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { FilterPeriod, type InterfaceMember } from 'types/Event/interface';
 
 function EventAttendance(): JSX.Element {
@@ -172,20 +172,15 @@ function EventAttendance(): JSX.Element {
           {t('historical_statistics')}
         </Button>
         <div className="d-flex align-items-center">
-          <div className={`${styles.input} me-3 `}>
-            <FormControl
-              type="name"
-              id="posttitle"
-              className={styles.inputField}
+          <div className={`${styles.input} me-3`}>
+            <SearchBar
               placeholder={t('Search member')}
-              data-testid="searchByName"
-              autoComplete="off"
-              required
-              onChange={(e): void => searchEventAttendees(e.target.value)}
+              onChange={(value) => searchEventAttendees(value)}
+              onSearch={(value) => searchEventAttendees(value)}
+              onClear={() => searchEventAttendees('')}
+              inputTestId="searchByName"
+              buttonTestId="searchMembersBtn"
             />
-            <Button tabIndex={-1} className={styles.searchButton}>
-              <Search size={23} />
-            </Button>
           </div>
           <SortingButton
             title="Filter"

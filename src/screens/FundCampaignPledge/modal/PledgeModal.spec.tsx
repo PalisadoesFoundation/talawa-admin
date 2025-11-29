@@ -200,6 +200,7 @@ describe('PledgeModal', () => {
 
   afterEach(() => {
     cleanup();
+    vi.restoreAllMocks();
   });
 
   it('should render edit pledge modal with correct title', async () => {

@@ -1,9 +1,8 @@
+import { GET_POSTS_BY_ORG, GET_USER_BY_ID } from 'GraphQl/Queries/Queries';
 import {
-  GET_POSTS_BY_ORG,
-  ORGANIZATION_POST_LIST,
-  GET_USER_BY_ID,
-} from 'GraphQl/Queries/Queries';
-import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
+  ORGANIZATION_PINNED_POST_LIST,
+  ORGANIZATION_POST_LIST_WITH_VOTES,
+} from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import type { MockedResponse } from '@apollo/client/testing';
 import { enrichPostNode } from './OrgPostMocks.helpers';
@@ -140,6 +139,8 @@ export const ORGANIZATION_PINNED_POST_LIST_INITIAL_MOCK: MockedResponse = {
     query: ORGANIZATION_PINNED_POST_LIST,
     variables: {
       input: { id: '123' },
+      after: null,
+      before: null,
       first: 6,
       last: null,
     },
@@ -177,6 +178,8 @@ export const ORGANIZATION_PINNED_POST_LIST_WITH_PAGINATION_MOCK = {
     query: ORGANIZATION_PINNED_POST_LIST,
     variables: {
       input: { id: '123' },
+      after: null,
+      before: null,
       first: 6,
       last: null,
     },
@@ -204,9 +207,10 @@ export const ORGANIZATION_PINNED_POST_LIST_WITH_PAGINATION_MOCK = {
 
 export const orgPostListMock = {
   request: {
-    query: ORGANIZATION_POST_LIST,
+    query: ORGANIZATION_POST_LIST_WITH_VOTES,
     variables: {
       input: { id: '123' },
+      userId: '',
       after: null,
       before: null,
       first: 6,
@@ -454,9 +458,12 @@ export const loadingMocks: MockedResponse[] = [
   },
   {
     request: {
-      query: ORGANIZATION_POST_LIST,
+      query: ORGANIZATION_POST_LIST_WITH_VOTES,
       variables: {
         input: { id: '123' },
+        userId: '',
+        after: null,
+        before: null,
         first: 6,
         last: null,
       },

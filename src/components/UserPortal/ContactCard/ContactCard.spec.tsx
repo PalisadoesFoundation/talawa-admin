@@ -49,6 +49,9 @@ let props = {
 };
 
 describe('Testing ContactCard Component [User Portal]', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   it('Component should be rendered properly  if person image is undefined', async () => {
     render(
       <MockedProvider addTypename={false} link={link}>

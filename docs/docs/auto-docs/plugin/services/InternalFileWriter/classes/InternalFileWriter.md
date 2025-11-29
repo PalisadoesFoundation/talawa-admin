@@ -4,7 +4,7 @@
 
 # Class: InternalFileWriter
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L28)
+Defined in: [src/plugin/services/InternalFileWriter.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L35)
 
 Internal File Writer
 Handles all file operations without external dependencies
@@ -15,7 +15,7 @@ Handles all file operations without external dependencies
 
 > **initialize**(): `Promise`\<`void`\>
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L65)
+Defined in: [src/plugin/services/InternalFileWriter.ts:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L92)
 
 Initialize the file writer
 
@@ -29,9 +29,9 @@ Initialize the file writer
 
 > **listInstalledPlugins**(): `Promise`\<\{ `error?`: `string`; `plugins?`: `object`[]; `success`: `boolean`; \}\>
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:174](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L174)
+Defined in: [src/plugin/services/InternalFileWriter.ts:209](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L209)
 
-List all installed plugins
+List installed plugin metadata
 
 #### Returns
 
@@ -43,7 +43,7 @@ List all installed plugins
 
 > **readPluginFiles**(`pluginId`): `Promise`\<\{ `error?`: `string`; `files?`: `Record`\<`string`, `string`\>; `manifest?`: [`IAdminPluginManifest`](../../../../utils/adminPluginInstaller/interfaces/IAdminPluginManifest.md); `success`: `boolean`; \}\>
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L128)
+Defined in: [src/plugin/services/InternalFileWriter.ts:164](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L164)
 
 Read plugin files from filesystem
 
@@ -61,9 +61,9 @@ Read plugin files from filesystem
 
 ### removePlugin()
 
-> **removePlugin**(`pluginId`): `Promise`\<[`FileOperationResult`](../interfaces/FileOperationResult.md)\>
+> **removePlugin**(`pluginId`): `Promise`\<[`IFileOperationResult`](../interfaces/IFileOperationResult.md)\>
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:220](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L220)
+Defined in: [src/plugin/services/InternalFileWriter.ts:255](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L255)
 
 Remove plugin from filesystem
 
@@ -75,15 +75,15 @@ Remove plugin from filesystem
 
 #### Returns
 
-`Promise`\<[`FileOperationResult`](../interfaces/FileOperationResult.md)\>
+`Promise`\<[`IFileOperationResult`](../interfaces/IFileOperationResult.md)\>
 
 ***
 
 ### writePluginFiles()
 
-> **writePluginFiles**(`pluginId`, `files`): `Promise`\<[`FileWriteResult`](../interfaces/FileWriteResult.md)\>
+> **writePluginFiles**(`pluginId`, `files`): `Promise`\<[`IFileWriteResult`](../interfaces/IFileWriteResult.md)\>
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L81)
+Defined in: [src/plugin/services/InternalFileWriter.ts:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L111)
 
 Write plugin files to filesystem
 
@@ -99,7 +99,7 @@ Write plugin files to filesystem
 
 #### Returns
 
-`Promise`\<[`FileWriteResult`](../interfaces/FileWriteResult.md)\>
+`Promise`\<[`IFileWriteResult`](../interfaces/IFileWriteResult.md)\>
 
 ***
 
@@ -107,7 +107,7 @@ Write plugin files to filesystem
 
 > `static` **getInstance**(): `InternalFileWriter`
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L41)
+Defined in: [src/plugin/services/InternalFileWriter.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L49)
 
 Get singleton instance
 

@@ -114,6 +114,18 @@ jobs:
       - name: Check for unused files and exports in src/ and docs/src
         run: pnpm knip --include files,exports
 
+  Check-Mock-Isolation:
+    name: Check for proper mock cleanup in test files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the Repository
+        uses: actions/checkout@v4
+
+      - name: Check for proper mock cleanup
+        run: |
+          chmod +x scripts/githooks/check-mock-cleanup.sh
+          ./scripts/githooks/check-mock-cleanup.sh
+
   Check-AutoDocs:
     name: Generate and Validate Documentation
     runs-on: ubuntu-latest
@@ -427,6 +439,7 @@ jobs:
         Check-ESlint-Disable,
         Check-Code-Coverage-Disable,
         Check-ItSkip-Disable,
+        Check-Mock-Isolation,
       ]
     env:
       TOTAL_SHARDS: 4
@@ -690,7 +703,7 @@ jobs:
         uses: VeryGoodOpenSource/very_good_coverage@v3
         with:
           path: './coverage/vitest/lcov.info'
-          min_coverage: 93.3
+          min_coverage: 94.0
 
   # Graphql-Inspector:
   #   if: ${{ github.actor != 'dependabot[bot]' }}
