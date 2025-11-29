@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.9.2">
 <title data-rh="true">Operation | Talawa-Admin Documentation</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://docs-admin.talawa.io/docs/operation"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Operation | Talawa-Admin Documentation"><meta data-rh="true" name="description" content="This page outlines how to successfully operate the application"><meta data-rh="true" property="og:description" content="This page outlines how to successfully operate the application"><link data-rh="true" rel="icon" href="/img/icons/favicon_palisadoes.ico"><link data-rh="true" rel="canonical" href="https://docs-admin.talawa.io/docs/operation"><link data-rh="true" rel="alternate" href="https://docs-admin.talawa.io/docs/operation" hreflang="en"><link data-rh="true" rel="alternate" href="https://docs-admin.talawa.io/docs/operation" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Operation","item":"https://docs-admin.talawa.io/docs/operation"}]}</script><link rel="stylesheet" href="https://docs.talawa.io/css/styles-latest.css"><link rel="stylesheet" href="/assets/css/styles.36e011b5.css">
-<script src="/assets/js/runtime~main.64971b21.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.29ffaccc.js" defer="defer"></script>
 <script src="/assets/js/main.2fb4f1da.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -47,24 +47,32 @@
 <p>Build and Run the Docker Image:</p>
 <p>Run the following command to run the Docker image:</p>
 <div class="language-bash codeBlockContainer_tfll theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_jRSR"><pre tabindex="0" class="prism-code language-bash codeBlock_GwRN thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_Eb4y"><span class="token-line" style="color:#393A34"><span class="token plain">docker-compose -f docker/docker-compose.prod.yaml --env-file .env up</span><br></span></code></pre></div></div>
+<p>or</p>
+<div class="language-bash codeBlockContainer_tfll theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_jRSR"><pre tabindex="0" class="prism-code language-bash codeBlock_GwRN thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_Eb4y"><span class="token-line" style="color:#393A34"><span class="token plain">docker compose -f docker/docker-compose.prod.yaml --env-file .env up</span><br></span></code></pre></div></div>
 </li>
 <li class="">
 <p>To stop the container run the following command:</p>
 <div class="language-bash codeBlockContainer_tfll theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_jRSR"><pre tabindex="0" class="prism-code language-bash codeBlock_GwRN thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_Eb4y"><span class="token-line" style="color:#393A34"><span class="token plain">docker-compose -f docker/docker-compose.prod.yaml down</span><br></span></code></pre></div></div>
+<p>or</p>
+<div class="language-bash codeBlockContainer_tfll theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_jRSR"><pre tabindex="0" class="prism-code language-bash codeBlock_GwRN thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_Eb4y"><span class="token-line" style="color:#393A34"><span class="token plain">docker compose -f docker/docker-compose.prod.yaml down</span><br></span></code></pre></div></div>
+<p>The application will be accessible at <code>http://localhost:4321</code></p>
 </li>
 </ol>
-<p>The application will be accessible at <code>http://localhost:4321</code></p>
 <h4 class="anchor anchorTargetStickyNavbar_g03t" id="for-development-environments">For Development Environments<a href="#for-development-environments" class="hash-link" aria-label="Direct link to For Development Environments" title="Direct link to For Development Environments" translate="no">​</a></h4>
-<p>This section describes how to setup the application in a development  environment.</p>
+<p>This section describes how to setup the application in a development environment.</p>
 <ol>
 <li class="">
 <p>Build and Run the Docker Image:</p>
 <p>Run the following command to run the Docker image:</p>
 <div class="language-bash codeBlockContainer_tfll theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_jRSR"><pre tabindex="0" class="prism-code language-bash codeBlock_GwRN thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_Eb4y"><span class="token-line" style="color:#393A34"><span class="token plain">docker-compose -f docker/docker-compose.dev.yaml --env-file .env up</span><br></span></code></pre></div></div>
+<p>or</p>
+<div class="language-bash codeBlockContainer_tfll theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_jRSR"><pre tabindex="0" class="prism-code language-bash codeBlock_GwRN thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_Eb4y"><span class="token-line" style="color:#393A34"><span class="token plain">docker compose -f docker/docker-compose.dev.yaml --env-file .env up</span><br></span></code></pre></div></div>
 </li>
 <li class="">
 <p>To stop the container run the following command:</p>
 <div class="language-bash codeBlockContainer_tfll theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_jRSR"><pre tabindex="0" class="prism-code language-bash codeBlock_GwRN thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_Eb4y"><span class="token-line" style="color:#393A34"><span class="token plain">docker-compose -f docker/docker-compose.dev.yaml down</span><br></span></code></pre></div></div>
+<p>or</p>
+<div class="language-bash codeBlockContainer_tfll theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_jRSR"><pre tabindex="0" class="prism-code language-bash codeBlock_GwRN thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_Eb4y"><span class="token-line" style="color:#393A34"><span class="token plain">docker compose -f docker/docker-compose.dev.yaml down</span><br></span></code></pre></div></div>
 </li>
 </ol>
 <p>The application will be accessible at <code>http://localhost:4321</code></p>
