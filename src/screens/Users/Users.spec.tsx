@@ -76,7 +76,7 @@ afterEach(() => {
 describe('Testing Users screen', () => {
   it('Component should be rendered properly', async () => {
     render(
-      <MockedProvider addTypename={false} link={createLink(MOCKS)}>
+      <MockedProvider link={createLink(MOCKS)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -98,7 +98,7 @@ describe('Testing Users screen', () => {
     await wait();
     setItem('id', '');
     render(
-      <MockedProvider addTypename={false} link={createLink(MOCKS)}>
+      <MockedProvider link={createLink(MOCKS)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -117,7 +117,7 @@ describe('Testing Users screen', () => {
     await wait();
     removeItem('id');
     render(
-      <MockedProvider addTypename={false} link={createLink(MOCKS)}>
+      <MockedProvider link={createLink(MOCKS)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -132,7 +132,7 @@ describe('Testing Users screen', () => {
 
   it('Component should be rendered properly when user is superAdmin', async () => {
     render(
-      <MockedProvider addTypename={false} link={createLink(MOCKS)}>
+      <MockedProvider link={createLink(MOCKS)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -148,7 +148,7 @@ describe('Testing Users screen', () => {
 
   it('Testing seach by name functionality', async () => {
     render(
-      <MockedProvider addTypename={false} link={createLink(MOCKS)}>
+      <MockedProvider link={createLink(MOCKS)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -187,7 +187,7 @@ describe('Testing Users screen', () => {
   it('testing search not found', async () => {
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={createLink(EMPTY_MOCKS)}>
+        <MockedProvider link={createLink(EMPTY_MOCKS)}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -300,7 +300,7 @@ describe('Testing Users screen', () => {
   it('Testing filter functionality', async () => {
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={createLink(MOCKS)}>
+        <MockedProvider link={createLink(MOCKS)}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -372,7 +372,7 @@ describe('Testing Users screen', () => {
 
   it('check for rerendering', async () => {
     const { rerender } = render(
-      <MockedProvider addTypename={false} link={createLink(MOCKS2)}>
+      <MockedProvider link={createLink(MOCKS2)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -386,7 +386,7 @@ describe('Testing Users screen', () => {
 
     await wait();
     rerender(
-      <MockedProvider addTypename={false} link={createLink(MOCKS2)}>
+      <MockedProvider link={createLink(MOCKS2)}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -403,7 +403,7 @@ describe('Testing Users screen', () => {
   it('Check if pressing enter key triggers search', async () => {
     await act(async () => {
       render(
-        <MockedProvider link={createLink(MOCKS_NEW)} addTypename={false}>
+        <MockedProvider link={createLink(MOCKS_NEW)}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -429,7 +429,7 @@ describe('Testing Users screen', () => {
   describe('Testing sorting and loadMoreUsers functionality', () => {
     it('should set the correct order variable and update hasMore', async () => {
       render(
-        <MockedProvider mocks={MOCKS_NEW} addTypename={false}>
+        <MockedProvider mocks={MOCKS_NEW}>
           <BrowserRouter>
             <Provider store={store}>
               <Users />
@@ -461,7 +461,7 @@ describe('Testing Users screen', () => {
 
     it('should load more users and merge them correctly', async () => {
       render(
-        <MockedProvider mocks={MOCKS_NEW_2} addTypename={false}>
+        <MockedProvider mocks={MOCKS_NEW_2}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -528,7 +528,7 @@ describe('Users screen - no organizations scenario', () => {
     ];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

@@ -70,6 +70,10 @@ Defined in: [src/screens/ManageTag/ManageTagNullFalsyMocks.ts:10](https://github
 
 > **getAssignedUsers**: `object`
 
+#### result.data.getAssignedUsers.\_\_typename
+
+> **\_\_typename**: `string` = `'UserTag'`
+
 #### result.data.getAssignedUsers.ancestorTags
 
 > **ancestorTags**: `any`[] = `[]`
