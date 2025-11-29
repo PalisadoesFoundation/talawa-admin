@@ -5,7 +5,7 @@
   "type": "module",
   "config-overrides-path": "scripts/config-overrides",
   "dependencies": {
-    "@apollo/client": "3.13.0",
+    "@apollo/client": "3.14.0",
     "@apollo/link-error": "^2.0.0-beta.3",
     "@apollo/react-testing": "^4.0.0",
     "@base-ui-components/react": "^1.0.0-beta.3",
@@ -84,7 +84,6 @@
     "check-tsdoc": "node .github/workflows/check-tsdoc.js",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "prepare": "husky",
-    "jest-preview": "jest-preview",
     "update:toc": "node scripts/githooks/update-toc.js",
     "lint-staged": "lint-staged --concurrent false",
     "setup": "tsx src/setup/setup.ts",
@@ -101,8 +100,7 @@
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ]
   },
   "browserslist": {
@@ -125,11 +123,10 @@
     "@eslint/js": "^9.22.0",
     "@graphql-eslint/eslint-plugin": "^4.3.0",
     "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/apollo-upload-client": "^18.0.0",
-    "@types/jest": "^29.5.14",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^24.3.0",
     "@types/prop-types": "^15.7.15",
@@ -154,7 +151,6 @@
     "glob": "^13.0.0",
     "graphql": "^16.10.0",
     "husky": "^9.1.6",
-    "jest-environment-jsdom": "^30.2.0",
     "knip": "^5.66.0",
     "lint-staged": "^16.2.3",
     "nyc": "^17.1.0",
@@ -196,11 +192,11 @@
     "temp-directory": ".nyc_output"
   },
   "resolutions": {
-    "@apollo/client": "3.13.0"
+    "@apollo/client": "3.14.0"
   },
   "pnpm": {
     "overrides": {
-      "@apollo/client": "3.13.0"
+      "@apollo/client": "3.14.0"
     }
   },
   "engines": {

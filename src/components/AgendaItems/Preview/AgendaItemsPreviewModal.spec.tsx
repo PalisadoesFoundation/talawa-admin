@@ -22,7 +22,7 @@ describe('AgendaItemsPreviewModal', () => {
   });
   test('check url and attachment links', () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
