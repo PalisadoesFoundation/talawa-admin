@@ -76,6 +76,18 @@ describe('Talawa Admin Setup', () => {
     );
   });
 
+  it('should exit early when checkEnvFile returns false', async () => {
+    vi.mocked(checkEnvFile).mockReturnValue(false);
+
+    await main();
+
+    // Should not proceed with setup
+    expect(modifyEnvFile).not.toHaveBeenCalled();
+    expect(askAndSetDockerOption).not.toHaveBeenCalled();
+    expect(askAndUpdatePort).not.toHaveBeenCalled();
+    expect(askAndUpdateTalawaApiUrl).not.toHaveBeenCalled();
+  });
+
   it('should call askAndUpdateTalawaApiUrl when Docker is used and skip port setup', async () => {
     vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=YES');
     vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'YES' });
@@ -171,25 +183,12 @@ describe('Talawa Admin Setup', () => {
     );
   });
 
-  it('should test the validation function for reCAPTCHA site key with valid input', async () => {
-    const { validateRecaptcha } = await import(
-      './validateRecaptcha/validateRecaptcha'
-    );
-
-    // Mock validateRecaptcha to return true for valid input
-    vi.mocked(validateRecaptcha).mockReturnValue(true);
-
-    // Capture the validation function
-    let capturedValidationFn: ((input: string) => boolean | string) | undefined;
-
-    const promptSpy = vi
-      .spyOn(inquirer, 'prompt')
-      .mockResolvedValueOnce({ shouldUseRecaptcha: true })
-      .mockResolvedValueOnce({ recaptchaSiteKeyInput: 'valid-key' });
-
-    await askAndSetRecaptcha();
-
-    // Extract the validation function from the second prompt call
+  // Helper function to extract validation function from prompt spy
+  const extractRecaptchaValidationFn = (promptSpy: {
+    mock: {
+      calls: unknown[][];
+    };
+  }): ((input: string) => boolean | string) | undefined => {
     const secondCallArgs = promptSpy.mock.calls[1][0];
     const questionArray = Array.isArray(secondCallArgs)
       ? secondCallArgs
@@ -199,11 +198,29 @@ describe('Talawa Admin Setup', () => {
         q.name === 'recaptchaSiteKeyInput',
     );
 
-    if (recaptchaKeyQuestion && recaptchaKeyQuestion.validate) {
-      capturedValidationFn = recaptchaKeyQuestion.validate;
-    }
+    return recaptchaKeyQuestion?.validate;
+  };
 
-    // Test the validation function with valid input
+  it('should test the validation function for reCAPTCHA site key with valid input', async () => {
+    const { validateRecaptcha } = await import(
+      './validateRecaptcha/validateRecaptcha'
+    );
+
+    // Mock validateRecaptcha to return true for valid input
+    vi.mocked(validateRecaptcha).mockReturnValue(true);
+
+    const promptSpy = vi
+      .spyOn(inquirer, 'prompt')
+      .mockResolvedValueOnce({ shouldUseRecaptcha: true })
+      .mockResolvedValueOnce({ recaptchaSiteKeyInput: 'valid-key' });
+
+    await askAndSetRecaptcha();
+
+    // Verify prompt was called twice
+    expect(promptSpy).toHaveBeenCalledTimes(2);
+
+    // Extract and test the validation function
+    const capturedValidationFn = extractRecaptchaValidationFn(promptSpy);
     expect(capturedValidationFn).toBeDefined();
     if (!capturedValidationFn) {
       throw new Error(
@@ -222,9 +239,6 @@ describe('Talawa Admin Setup', () => {
     // Mock validateRecaptcha to return false for invalid input
     vi.mocked(validateRecaptcha).mockReturnValue(false);
 
-    // Capture the validation function
-    let capturedValidationFn: ((input: string) => boolean | string) | undefined;
-
     const promptSpy = vi
       .spyOn(inquirer, 'prompt')
       .mockResolvedValueOnce({ shouldUseRecaptcha: true })
@@ -232,21 +246,11 @@ describe('Talawa Admin Setup', () => {
 
     await askAndSetRecaptcha();
 
-    // Extract the validation function from the second prompt call
-    const secondCallArgs = promptSpy.mock.calls[1][0];
-    const questionArray = Array.isArray(secondCallArgs)
-      ? secondCallArgs
-      : [secondCallArgs];
-    const recaptchaKeyQuestion = questionArray.find(
-      (q: { name?: string; validate?: (input: string) => boolean | string }) =>
-        q.name === 'recaptchaSiteKeyInput',
-    );
+    // Verify prompt was called twice
+    expect(promptSpy).toHaveBeenCalledTimes(2);
 
-    if (recaptchaKeyQuestion && recaptchaKeyQuestion.validate) {
-      capturedValidationFn = recaptchaKeyQuestion.validate;
-    }
-
-    // Test the validation function with invalid input
+    // Extract and test the validation function
+    const capturedValidationFn = extractRecaptchaValidationFn(promptSpy);
     expect(capturedValidationFn).toBeDefined();
     if (!capturedValidationFn) {
       throw new Error(
