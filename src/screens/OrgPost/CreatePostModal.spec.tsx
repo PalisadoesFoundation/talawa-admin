@@ -31,6 +31,8 @@ Object.defineProperty(global, 'crypto', {
       digest: vi.fn().mockResolvedValue(new ArrayBuffer(32)),
     },
   },
+  writable: true,
+  configurable: true,
 });
 
 // Mock utils/errorHandler
