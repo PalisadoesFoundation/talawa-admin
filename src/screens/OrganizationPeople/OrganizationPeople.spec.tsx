@@ -374,7 +374,7 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink(mocks, true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -408,7 +408,7 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink(mocks, true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -447,7 +447,7 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink(mocks, true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -537,7 +537,7 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink(mocks, true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -642,7 +642,7 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink(mocks, true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -798,7 +798,7 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink(mocks, true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -916,7 +916,7 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink(mocks, true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1014,7 +1014,7 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink(mocks, true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1077,7 +1077,7 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink([errorMock], true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1125,7 +1125,7 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink([initialMemberMock, errorMock], true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1185,7 +1185,7 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink(mocks, true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1259,7 +1259,7 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink([singlePageMock], true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1311,7 +1311,7 @@ describe('OrganizationPeople', () => {
     const link = new StaticMockLink([initialMock, backwardMock], true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

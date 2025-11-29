@@ -131,7 +131,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
   it('Component should be rendered properly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -152,7 +152,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
   it('The language is switched to English', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -179,7 +179,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
   it('The language is switched to fr', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -203,7 +203,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
   it('The language is switched to hi', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -227,7 +227,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
   it('The language is switched to es', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -251,7 +251,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
   it('The language is switched to zh', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -298,7 +298,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
       writable: true,
     });
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -320,7 +320,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
       initialEntries: ['/initial'],
     });
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Router location={history.location} navigator={history}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

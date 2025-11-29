@@ -105,7 +105,7 @@ describe('Testing Organization People List Card', () => {
     const link = new StaticMockLink(NULL_DATA_MOCKS, true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPeopleListCard {...props} />
@@ -130,7 +130,6 @@ describe('Testing Organization People List Card', () => {
 
     render(
       <MockedProvider
-        addTypename={false}
         link={link}
         defaultOptions={{
           mutate: { errorPolicy: 'all' },
@@ -175,7 +174,7 @@ describe('Testing Organization People List Card', () => {
     const link = new StaticMockLink(ERROR_MOCKS, true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPeopleListCard {...props} />
@@ -199,7 +198,7 @@ describe('Testing Organization People List Card', () => {
 
   test('should handle modal close', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPeopleListCard {...props} />
@@ -221,7 +220,7 @@ describe('Testing Organization People List Card', () => {
 
   test('should redirect when id is undefined', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <OrgPeopleListCard id={undefined} toggleRemoveModal={vi.fn()} />
