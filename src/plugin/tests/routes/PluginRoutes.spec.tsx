@@ -1,5 +1,5 @@
 /* eslint-disable react/no-multi-comp */
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import type { ComponentType } from 'react';
@@ -87,12 +87,6 @@ const mockUsePluginRoutes = vi.mocked(usePluginRoutes);
 
 describe('PluginRoutes', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
-    lazyImportFunctions.length = 0;
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
     lazyImportFunctions.length = 0;
   });
 
