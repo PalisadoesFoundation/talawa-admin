@@ -2,8 +2,16 @@ import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
+import { cpus } from 'os';
 
 const isCI = !!process.env.CI;
+const cpuCount = cpus().length;
+
+// Calculate threads based on environment
+// In CI, use 75% of available cores (was 50%) - safe now due to mock isolation
+// Locally, use 100% of available cores (was 75%)
+const ciThreads = Math.max(2, Math.floor(cpuCount * 0.75));
+const localThreads = Math.max(4, cpuCount);
 
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), svgrPlugin()],
@@ -17,6 +25,7 @@ export default defineConfig({
     include: ['src/**/*.{spec,test}.{js,jsx,ts,tsx}'],
     globals: true,
     environment: 'jsdom',
+    css: false, // Optimization: Disable CSS processing for faster tests
     setupFiles: 'vitest.setup.ts',
     testTimeout: 30000,
     hookTimeout: 10000,
@@ -27,13 +36,20 @@ export default defineConfig({
       threads: {
         singleThread: false,
         minThreads: 1,
-        maxThreads: isCI ? 2 : 4, // Conservative in CI to avoid OOM
-        // Keep isolation enabled to prevent test interference
+        maxThreads: isCI ? ciThreads : localThreads,
         isolate: true,
       },
     },
-    // Lower concurrency in CI to avoid memory issues
-    maxConcurrency: isCI ? 1 : 2,
+    // maxConcurrency is deprecated in favor of poolOptions.threads.maxThreads
+    // but we'll keep it consistent with maxThreads for now if needed,
+    // or just rely on maxThreads.
+    // Actually, maxConcurrency controls the number of tests running concurrently *within* a file
+    // if sequence.concurrent is true. Since we have sequence.concurrent: false,
+    // this mainly affects file parallelism if fileParallelism is true.
+    // Let's set it to match maxThreads to be safe.
+    maxConcurrency: isCI ? ciThreads : localThreads,
+    // ... existing config
+
     // Enable file parallelism for better performance
     fileParallelism: true,
     sequence: {
