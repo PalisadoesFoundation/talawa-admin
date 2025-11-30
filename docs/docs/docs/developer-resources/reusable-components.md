@@ -24,13 +24,13 @@ src/
 │   |   ├── ComponentOne.tsx
 │   |   ├── ComponentOne.spec.tsx
 │   |   └── ComponentOneMocks.ts
-│   ├── ComponentTwo/
+│   └── ComponentTwo/
 │       ├── ComponentTwo.tsx
 │       ├── ComponentTwo.spec.tsx
 │       └── ComponentTwoMocks.ts
 │
 └── types/
-    └── ComponentOne/
+    ├── ComponentOne/
     |   ├── interface.ts
     |   └── type.ts
     └── ComponentTwo/
