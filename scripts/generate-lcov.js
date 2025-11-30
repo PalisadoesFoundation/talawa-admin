@@ -126,7 +126,8 @@ function jsonToLcov(coverageData, basePath = process.cwd()) {
       });
 
       for (const lineId of sortedLineIds) {
-        const lineNum = parseInt(lineId, 10) || lineId;
+        const parsed = parseInt(lineId, 10);
+        const lineNum = Number.isNaN(parsed) ? lineId : parsed;
         lines.push(`DA:${lineNum},${lineCounts[lineId] || 0}`);
       }
 
