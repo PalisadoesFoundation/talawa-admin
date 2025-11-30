@@ -341,4 +341,22 @@ export const failingMocks = [
     },
     error: new Error('Failed to delete chat'),
   },
+  // Mock for title update failure
+  {
+    request: {
+      query: UPDATE_CHAT,
+      variables: { input: { id: 'chat1', name: 'New Name' } },
+    },
+    error: new Error('Failed to update chat name'),
+  },
+  // Mock for image update failure
+  {
+    request: {
+      query: UPDATE_CHAT,
+      variables: {
+        input: { id: 'chat1', avatar: { uri: 'object1' }, name: 'Test Group' },
+      },
+    },
+    error: new Error('Failed to update chat image'),
+  },
 ];

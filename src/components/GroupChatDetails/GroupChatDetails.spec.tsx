@@ -788,4 +788,94 @@ describe('GroupChatDetails', () => {
     toastError.mockRestore();
     consoleError.mockRestore();
   });
+  it('shows error toast when title update fails', async () => {
+    useLocalStorage().setItem('userId', '2');
+    const toastError = vi.spyOn(toast, 'error');
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={failingMocks} addTypename={false}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={withSafeChat(filledMockChat)}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    await act(async () => {
+      fireEvent.click(await screen.findByTestId('editTitleBtn'));
+    });
+
+    await act(async () => {
+      fireEvent.change(await screen.findByTestId('chatNameInput'), {
+        target: { value: 'New Name' },
+      });
+    });
+
+    await act(async () => {
+      fireEvent.click(await screen.findByTestId('updateTitleBtn'));
+    });
+
+    await waitFor(() => {
+      expect(toastError).toHaveBeenCalledWith('Failed to update chat name');
+      expect(consoleError).toHaveBeenCalled();
+    });
+
+    toastError.mockRestore();
+    consoleError.mockRestore();
+  });
+
+  it('shows error toast when image upload fails', async () => {
+    useLocalStorage().setItem('userId', 'user1');
+    const toastError = vi.spyOn(toast, 'error');
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={failingMocks} addTypename={false}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={withSafeChat(filledMockChat)}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    await waitFor(async () => {
+      expect(await screen.findByTestId('editImageBtn')).toBeInTheDocument();
+    });
+
+    await act(async () => {
+      fireEvent.click(await screen.findByTestId('editImageBtn'));
+    });
+
+    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+    const file = new File(['content'], 'test.png', { type: 'image/png' });
+
+    Object.defineProperty(fileInput, 'files', {
+      value: [file],
+    });
+
+    await act(async () => {
+      fireEvent.change(fileInput);
+    });
+
+    await waitFor(() => {
+      expect(toastError).toHaveBeenCalledWith('Failed to update chat image');
+      expect(consoleError).toHaveBeenCalled();
+    });
+
+    toastError.mockRestore();
+    consoleError.mockRestore();
+  });
 });
