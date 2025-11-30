@@ -12,15 +12,12 @@ ENV PORT=${PORT}
 
 WORKDIR /usr/src/app
 
-# Enable pnpm globally
-RUN corepack enable
-
-# Copy dependency manifests
 COPY package.json pnpm-lock.yaml ./
 
-# Install dependencies
-RUN corepack prepare pnpm@10.4.1 --activate \
+RUN corepack enable \
+    && corepack prepare pnpm@10.4.1 --activate \
     && pnpm install --frozen-lockfile --reporter=append-only
+
 COPY . .
 RUN pnpm run build
 ENV NODE_ENV=production

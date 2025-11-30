@@ -196,7 +196,7 @@
   },
   "pnpm": {
     "overrides": {
-      "@apollo/client": "3.13.0",
+      "@apollo/client": "3.14.0",
       "@pdfme/common": "5.4.8",
       "@pdfme/schemas": "5.4.8",
       "@pdfme/generator": "5.4.8",

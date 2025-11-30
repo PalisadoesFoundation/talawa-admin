@@ -104,15 +104,13 @@ const SecuredRoute = (): JSX.Element => {
   }, [isLoggedIn, setItem, removeItem]);
 
   return isLoggedIn === 'TRUE' ? (
-    <>
-      {role === 'administrator' ? (
-        <Outlet />
-      ) : (
-        <Suspense fallback={<Loader />}>
-          <PageNotFound />
-        </Suspense>
-      )}
-    </>
+    role === 'administrator' ? (
+      <Outlet />
+    ) : (
+      <Suspense fallback={<Loader />}>
+        <PageNotFound />
+      </Suspense>
+    )
   ) : (
     <Navigate to="/" replace />
   );

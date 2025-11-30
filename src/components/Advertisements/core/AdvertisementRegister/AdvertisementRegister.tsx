@@ -85,13 +85,6 @@ function AdvertisementRegister({
   const { orgId: currentOrg } = useParams();
   const [show, setShow] = useState(false);
 
-  if (currentOrg === undefined) {
-    return (
-      <Suspense fallback={<Loader />}>
-        <PageNotFound />
-      </Suspense>
-    );
-  }
   /*
    * Mutation to add advertisement and refetch the advertisement list
    */
@@ -208,6 +201,14 @@ function AdvertisementRegister({
     endAtEdit,
     currentOrg,
   ]);
+
+  if (currentOrg === undefined) {
+    return (
+      <Suspense fallback={<Loader />}>
+        <PageNotFound />
+      </Suspense>
+    );
+  }
 
   // Validates the date range and performs the mutation to create an advertisement.
   const handleRegister = async (): Promise<void> => {
