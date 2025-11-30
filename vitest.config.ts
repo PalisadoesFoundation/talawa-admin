@@ -7,8 +7,24 @@ import { cpus } from 'os';
 const isCI = !!process.env.CI;
 const cpuCount = cpus().length;
 
-const ciThreads = Math.max(2, Math.floor(cpuCount * 0.75));
-const localThreads = Math.max(4, cpuCount);
+// Caps for thread usage to prevent resource exhaustion
+const MAX_CI_THREADS = 16; // Cap for large CI runners
+const MAX_LOCAL_THREADS = 16; // Soft cap for local machines
+
+// Calculate threads based on environment
+// In CI, use 75% of available cores (was 50%) - safe now due to mock isolation
+// We clamp it between 2 and MAX_CI_THREADS
+const ciThreads = Math.min(
+  MAX_CI_THREADS,
+  Math.max(2, Math.floor(cpuCount * 0.75))
+);
+
+// Locally, use 100% of available cores (was 75%)
+// We clamp it between 4 and MAX_LOCAL_THREADS
+const localThreads = Math.min(
+  MAX_LOCAL_THREADS,
+  Math.max(4, cpuCount)
+);
 
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), svgrPlugin()],
