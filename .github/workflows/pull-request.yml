@@ -442,11 +442,11 @@ jobs:
         Check-Mock-Isolation,
       ]
     env:
-      TOTAL_SHARDS: 8
+      TOTAL_SHARDS: 12
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4, 5, 6, 7, 8]
+        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
