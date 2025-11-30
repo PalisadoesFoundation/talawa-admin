@@ -7,7 +7,7 @@ import PluginList from '../PluginList';
 import type { IPluginMeta } from 'plugin';
 
 // Mock the PluginCard component - Fix ESLint errors
-vi.mock('./PluginCard', () => ({
+vi.mock('../PluginCard', () => ({
   default: ({
     plugin,
     onManage,
@@ -40,16 +40,18 @@ vi.mock('./PluginCard', () => ({
 }));
 
 // Mock react-i18next - Vitest syntax
-const mockT = vi.hoisted(() => vi.fn((key: string) => {
-  const translations: Record<string, string> = {
-    noPluginsFound: 'No plugins found for your search',
-    noInstalledPlugins: 'No installed plugins',
-    noPluginsAvailable: 'No plugins available',
-    installPluginsToSeeHere: 'Install plugins to see them here',
-    checkBackLater: 'Check back later for new plugins',
-  };
-  return translations[key];
-}));
+const mockT = vi.hoisted(() =>
+  vi.fn((key: string) => {
+    const translations: Record<string, string> = {
+      noPluginsFound: 'No plugins found for your search',
+      noInstalledPlugins: 'No installed plugins',
+      noPluginsAvailable: 'No plugins available',
+      installPluginsToSeeHere: 'Install plugins to see them here',
+      checkBackLater: 'Check back later for new plugins',
+    };
+    return translations[key];
+  }),
+);
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -132,9 +134,9 @@ describe('PluginList', () => {
     expect(screen.getByTestId('plugin-list-empty')).toBeInTheDocument();
     expect(mockT).toHaveBeenCalledWith('noPluginsFound');
     expect(mockT).toHaveBeenCalledWith('checkBackLater');
-      expect(
-        screen.getByText('No plugins found for your search'),
-      ).toBeInTheDocument();
+    expect(
+      screen.getByText('No plugins found for your search'),
+    ).toBeInTheDocument();
     expect(
       screen.getByText('Check back later for new plugins'),
     ).toBeInTheDocument();
@@ -150,9 +152,9 @@ describe('PluginList', () => {
     expect(mockT).toHaveBeenCalledWith('noInstalledPlugins');
     expect(mockT).toHaveBeenCalledWith('installPluginsToSeeHere');
     expect(screen.getByText('No installed plugins')).toBeInTheDocument();
-   expect(
-     screen.getByText('Install plugins to see them here'),
-   ).toBeInTheDocument();
+    expect(
+      screen.getByText('Install plugins to see them here'),
+    ).toBeInTheDocument();
   });
 
   // Test 7: Empty state has correct styles
