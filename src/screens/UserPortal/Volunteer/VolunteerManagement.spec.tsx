@@ -170,6 +170,11 @@ describe('Volunteer Management', () => {
     // Verify that invitations tab is now displayed
     const invitationsTab = await screen.findByTestId('invitationsTab');
     expect(invitationsTab).toBeInTheDocument();
+
+    // Verify dropdown closed after selection
+    await waitFor(() => {
+      expect(dropdownMenu).not.toHaveClass('show');
+    });
   });
 
   test('Testing mobile dropdown switches to actions tab', async () => {
@@ -190,6 +195,11 @@ describe('Volunteer Management', () => {
     // Verify that actions tab is now displayed
     const actionsTab = await screen.findByTestId('actionsTab');
     expect(actionsTab).toBeInTheDocument();
+
+    // Verify dropdown closed after selection
+    await waitFor(() => {
+      expect(dropdownMenu).not.toHaveClass('show');
+    });
   });
 
   test('Testing mobile dropdown switches to groups tab', async () => {
@@ -210,6 +220,11 @@ describe('Volunteer Management', () => {
     // Verify that groups tab is now displayed
     const groupsTab = await screen.findByTestId('groupsTab');
     expect(groupsTab).toBeInTheDocument();
+
+    // Verify dropdown closed after selection
+    await waitFor(() => {
+      expect(dropdownMenu).not.toHaveClass('show');
+    });
   });
 
   test('Testing mobile dropdown switches to upcomingEvents tab', async () => {
@@ -235,5 +250,10 @@ describe('Volunteer Management', () => {
     // Verify that upcoming events tab is now displayed
     const upcomingEventsTab = await screen.findByTestId('upcomingEventsTab');
     expect(upcomingEventsTab).toBeInTheDocument();
+
+    // Verify dropdown closed after selection
+    await waitFor(() => {
+      expect(dropdownMenu).not.toHaveClass('show');
+    });
   });
 });
