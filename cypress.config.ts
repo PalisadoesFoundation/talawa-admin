@@ -36,7 +36,10 @@ export default defineConfig({
       apiUrl: process.env.CYPRESS_API_URL || 'http://localhost:4000/graphql',
     },
     setupNodeEvents(on, config) {
+      // Setup code coverage task - must be called before other task registrations
+      // This registers the coverageReport task that @cypress/code-coverage/support uses
       codeCoverageTask(on, config);
+
       // Custom task to log messages and read files
       on('task', {
         log(message: string) {
@@ -82,9 +85,6 @@ export default defineConfig({
 
         return launchOptions;
       });
-
-      // Custom plugins can be registered here
-      // Example: require('@cypress/code-coverage/task')(on, config);
 
       return config;
     },

@@ -413,13 +413,13 @@ describe('usePluginActions', () => {
     mockPluginManager.uninstallPlugin.mockResolvedValue(true);
 
     // Mock AdminPluginFileService with failure - now using static import
-    const mockAdminPluginFileService = {
-      removePlugin: vi.fn().mockResolvedValue(false),
-    };
-
-    vi.mock('../../../plugin/services/AdminPluginFileService', () => ({
-      adminPluginFileService: mockAdminPluginFileService,
-    }));
+    vi.mock('plugin/services/AdminPluginFileService', () => {
+      return {
+        adminPluginFileService: {
+          removePlugin: vi.fn().mockResolvedValue(false),
+        },
+      };
+    });
 
     const { result } = renderHook(() =>
       usePluginActions({

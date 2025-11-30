@@ -106,7 +106,7 @@ const SecuredRouteForUser = (): JSX.Element => {
   // Conditional rendering based on authentication status and role
   return isLoggedIn === 'TRUE' ? (
     <>
-      {adminFor === null ? (
+      {adminFor == undefined ? (
         <Outlet />
       ) : (
         <Suspense fallback={<Loader />}>

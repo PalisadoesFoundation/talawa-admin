@@ -82,6 +82,9 @@ describe('SecuredRoute', () => {
       setItem('IsLoggedIn', 'TRUE');
       setItem('role', 'regular');
 
+      // Use real timers for this test since lazy loading needs real async behavior
+      vi.useRealTimers();
+
       render(
         <MemoryRouter initialEntries={['/orglist']}>
           <Routes>
@@ -92,15 +95,21 @@ describe('SecuredRoute', () => {
         </MemoryRouter>,
       );
 
-      // Wait for lazy-loaded PageNotFound to render
-      await waitFor(() => {
-        expect(screen.getByText('talawaUser')).toBeInTheDocument();
-      });
+      // Wait for lazy-loaded PageNotFound to render (mocked component)
+      await waitFor(
+        () => {
+          expect(screen.getByText('talawaUser')).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
 
       expect(screen.getByText('404')).toBeInTheDocument();
       expect(
         screen.queryByText('Test Protected Content'),
       ).not.toBeInTheDocument();
+
+      // Restore fake timers for other tests
+      vi.useFakeTimers();
     });
 
     it('should redirect to home page for unauthenticated user', () => {
