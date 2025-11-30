@@ -40,7 +40,7 @@ vi.mock('./PluginCard', () => ({
 }));
 
 // Mock react-i18next - Vitest syntax
-const mockT = vi.fn((key: string) => {
+const mockT = vi.hoisted(() => vi.fn((key: string) => {
   const translations: Record<string, string> = {
     noPluginsFound: 'No plugins found for your search',
     noInstalledPlugins: 'No installed plugins',
@@ -49,7 +49,7 @@ const mockT = vi.fn((key: string) => {
     checkBackLater: 'Check back later for new plugins',
   };
   return translations[key];
-});
+}));
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -132,6 +132,12 @@ describe('PluginList', () => {
     expect(screen.getByTestId('plugin-list-empty')).toBeInTheDocument();
     expect(mockT).toHaveBeenCalledWith('noPluginsFound');
     expect(mockT).toHaveBeenCalledWith('checkBackLater');
+      expect(
+        screen.getByText('No plugins found for your search'),
+      ).toBeInTheDocument();
+    expect(
+      screen.getByText('Check back later for new plugins'),
+    ).toBeInTheDocument();
   });
 
   // Test 6: When no plugins and filter is "installed" - shows "no installed plugins"
@@ -143,6 +149,10 @@ describe('PluginList', () => {
     expect(screen.getByTestId('plugin-list-empty')).toBeInTheDocument();
     expect(mockT).toHaveBeenCalledWith('noInstalledPlugins');
     expect(mockT).toHaveBeenCalledWith('installPluginsToSeeHere');
+    expect(screen.getByText('No installed plugins')).toBeInTheDocument();
+   expect(
+     screen.getByText('Install plugins to see them here'),
+   ).toBeInTheDocument();
   });
 
   // Test 7: Empty state has correct styles
