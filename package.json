@@ -84,6 +84,7 @@
     "check-tsdoc": "node .github/workflows/check-tsdoc.js",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "prepare": "husky",
+    "postinstall": "node scripts/fix-nyc-compatibility.js",
     "update:toc": "node scripts/githooks/update-toc.js",
     "lint-staged": "lint-staged --concurrent false",
     "setup": "tsx src/setup/setup.ts",

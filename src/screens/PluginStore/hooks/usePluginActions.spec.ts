@@ -40,6 +40,16 @@ vi.mock('plugin/graphql-service', () => ({
   useInstallPlugin: () => [mockInstallPlugin],
 }));
 
+const { mockRemovePlugin } = vi.hoisted(() => ({
+  mockRemovePlugin: vi.fn().mockResolvedValue(true), // default: success
+}));
+
+vi.mock('plugin/services/AdminPluginFileService', () => ({
+  adminPluginFileService: {
+    removePlugin: () => mockRemovePlugin(),
+  },
+}));
+
 // Mock window.location.reload
 const originalLocation = window.location;
 const locationStub = { reload: mockReload } as unknown as Location;
@@ -411,15 +421,7 @@ describe('usePluginActions', () => {
   it('should handle AdminPluginFileService.removePlugin failure', async () => {
     mockDeletePlugin.mockResolvedValue({});
     mockPluginManager.uninstallPlugin.mockResolvedValue(true);
-
-    // Mock AdminPluginFileService with failure - now using static import
-    vi.mock('plugin/services/AdminPluginFileService', () => {
-      return {
-        adminPluginFileService: {
-          removePlugin: vi.fn().mockResolvedValue(false),
-        },
-      };
-    });
+    mockRemovePlugin.mockResolvedValueOnce(false);
 
     const { result } = renderHook(() =>
       usePluginActions({
@@ -428,7 +430,6 @@ describe('usePluginActions', () => {
       }),
     );
 
-    // Set plugin to uninstall
     act(() => {
       result.current.uninstallPlugin(mockPlugin);
     });

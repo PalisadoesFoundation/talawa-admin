@@ -1,9 +1,10 @@
 import { defineConfig } from 'cypress';
 import fs from 'node:fs';
-import codeCoverageTask from '@cypress/code-coverage/task';
+import { createRequire } from 'node:module';
 import dotenv from 'dotenv';
 dotenv.config();
 
+const require = createRequire(import.meta.url);
 const PORT = process.env.PORT || '4321';
 
 export default defineConfig({
@@ -38,7 +39,22 @@ export default defineConfig({
     setupNodeEvents(on, config) {
       // Setup code coverage task - must be called before other task registrations
       // This registers the coverageReport task that @cypress/code-coverage/support uses
-      codeCoverageTask(on, config);
+      // Use require for CommonJS compatibility
+      try {
+        const codeCoverageTask = require('@cypress/code-coverage/task');
+        const taskFn = codeCoverageTask.default || codeCoverageTask;
+        if (typeof taskFn === 'function') {
+          taskFn(on, config);
+        }
+      } catch (error) {
+        console.warn('Failed to load @cypress/code-coverage/task:', error);
+        // Fallback: manually register a basic coverageReport task
+        on('task', {
+          coverageReport() {
+            return null;
+          },
+        });
+      }
 
       // Custom task to log messages and read files
       on('task', {
