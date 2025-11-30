@@ -7,24 +7,15 @@ import { cpus } from 'os';
 const isCI = !!process.env.CI;
 const cpuCount = cpus().length;
 
-// Caps for thread usage to prevent resource exhaustion
-const MAX_CI_THREADS = 16; // Cap for large CI runners
-const MAX_LOCAL_THREADS = 16; // Soft cap for local machines
+const MAX_CI_THREADS = 12; // Reduced to leave headroom
+const MAX_LOCAL_THREADS = 16;
 
-// Calculate threads based on environment
-// In CI, use 75% of available cores (was 50%) - safe now due to mock isolation
-// We clamp it between 2 and MAX_CI_THREADS
 const ciThreads = Math.min(
   MAX_CI_THREADS,
-  Math.max(2, Math.floor(cpuCount * 0.75))
+  Math.max(4, Math.floor(cpuCount * 0.85)) // Increased utilization
 );
 
-// Locally, use 100% of available cores (was 75%)
-// We clamp it between 4 and MAX_LOCAL_THREADS
-const localThreads = Math.min(
-  MAX_LOCAL_THREADS,
-  Math.max(4, cpuCount)
-);
+const localThreads = Math.min(MAX_LOCAL_THREADS, Math.max(4, cpuCount));
 
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), svgrPlugin()],
@@ -43,30 +34,25 @@ export default defineConfig({
     testTimeout: 30000,
     hookTimeout: 10000,
     teardownTimeout: 10000,
-    // Use threads for better performance in CI
     pool: 'threads',
     poolOptions: {
       threads: {
         singleThread: false,
         minThreads: 1,
         maxThreads: isCI ? ciThreads : localThreads,
-        // Keep isolation enabled to prevent test interference
         isolate: true,
       },
     },
-    // Lower concurrency in CI to avoid memory issues
     maxConcurrency: isCI ? ciThreads : localThreads,
-    // Enable file parallelism for better performance
     fileParallelism: true,
     sequence: {
       shuffle: false,
-      concurrent: false, // Disabled for test stability - files still run in parallel across shards
+      concurrent: false,
     },
     coverage: {
       enabled: true,
       provider: 'istanbul',
       reportsDirectory: './coverage/vitest',
-      // Don't use 'all: true' with sharding - let merge handle combining partial coverage
       exclude: [
         'node_modules',
         'dist',
@@ -85,7 +71,7 @@ export default defineConfig({
         'scripts/**', // Exclude build/setup scripts
         'config/**', // Exclude configuration files
       ],
-      reporter: ['lcov', 'json', 'text', 'text-summary'], // Use json for accurate merging, lcov for final report
+      reporter: ['lcov', 'json', 'text', 'text-summary'],
     },
   },
 });

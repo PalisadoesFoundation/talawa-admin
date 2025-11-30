@@ -499,9 +499,10 @@ jobs:
         if: steps.changed-files.outputs.any_changed == 'true'
         env:
           NODE_V8_COVERAGE: './coverage/vitest'
-          NODE_OPTIONS: '--max-old-space-size=4096'
+          NODE_OPTIONS: '--max-old-space-size=4096 --disable-warning=ExperimentalWarning'
           SHARD_INDEX: ${{ matrix.shard }}
           SHARD_COUNT: ${{ env.TOTAL_SHARDS }}
+          CI: true
         run: pnpm test:shard:coverage
       - name: Upload coverage artifact
         if: always() && steps.changed-files.outputs.any_changed == 'true'
