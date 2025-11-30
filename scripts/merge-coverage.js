@@ -8,9 +8,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 /**
  * Merges multiple coverage JSON files into a single coverage object
  * @param {string[]} coverageFiles - Array of paths to coverage JSON files
@@ -27,17 +24,17 @@ function mergeCoverageFiles(coverageFiles) {
 
     try {
       const coverageData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-      
+
       // Merge coverage data
-      for (const [filePath, fileCoverage] of Object.entries(coverageData)) {
-        if (!mergedCoverage[filePath]) {
+      for (const [sourceFile, fileCoverage] of Object.entries(coverageData)) {
+        if (!mergedCoverage[sourceFile]) {
           // First time seeing this file, use its coverage
-          mergedCoverage[filePath] = { ...fileCoverage };
+          mergedCoverage[sourceFile] = { ...fileCoverage };
         } else {
           // Merge coverage for files that appear in multiple shards
-          const existing = mergedCoverage[filePath];
+          const existing = mergedCoverage[sourceFile];
           const incoming = fileCoverage;
-          
+
           // Merge statement coverage
           if (incoming.s) {
             if (!existing.s) existing.s = {};
@@ -45,7 +42,7 @@ function mergeCoverageFiles(coverageFiles) {
               existing.s[stmtId] = (existing.s[stmtId] || 0) + (count || 0);
             }
           }
-          
+
           // Merge branch coverage
           if (incoming.b) {
             if (!existing.b) existing.b = {};
@@ -53,13 +50,19 @@ function mergeCoverageFiles(coverageFiles) {
               if (!existing.b[branchId]) {
                 existing.b[branchId] = [...branches];
               } else {
-                existing.b[branchId] = existing.b[branchId].map((val, idx) => 
-                  (val || 0) + ((branches[idx] || 0))
+                const maxLen = Math.max(
+                  existing.b[branchId].length,
+                  branches.length,
+                );
+                existing.b[branchId] = Array.from(
+                  { length: maxLen },
+                  (_, idx) =>
+                    (existing.b[branchId][idx] || 0) + (branches[idx] || 0),
                 );
               }
             }
           }
-          
+
           // Merge function coverage
           if (incoming.f) {
             if (!existing.f) existing.f = {};
@@ -67,7 +70,7 @@ function mergeCoverageFiles(coverageFiles) {
               existing.f[funcId] = (existing.f[funcId] || 0) + (count || 0);
             }
           }
-          
+
           // Merge line coverage
           if (incoming.l) {
             if (!existing.l) existing.l = {};
@@ -90,7 +93,9 @@ function mergeCoverageFiles(coverageFiles) {
 const args = process.argv.slice(2);
 if (args.length < 2) {
   console.error('Usage: node merge-coverage.js <input-dir> <output-file>');
-  console.error('Example: node merge-coverage.js ./coverage/tmp ./.nyc_output/coverage-final.json');
+  console.error(
+    'Example: node merge-coverage.js ./coverage/tmp ./.nyc_output/coverage-final.json',
+  );
   process.exit(1);
 }
 
@@ -105,8 +110,8 @@ if (!fs.existsSync(inputDir)) {
 
 const files = fs.readdirSync(inputDir);
 const coverageFiles = files
-  .filter(file => file.endsWith('.json'))
-  .map(file => path.join(inputDir, file));
+  .filter((file) => file.endsWith('.json'))
+  .map((file) => path.join(inputDir, file));
 
 if (coverageFiles.length === 0) {
   console.error(`Error: No JSON coverage files found in ${inputDir}`);
@@ -114,7 +119,7 @@ if (coverageFiles.length === 0) {
 }
 
 console.log(`Found ${coverageFiles.length} coverage files to merge:`);
-coverageFiles.forEach(file => console.log(`  - ${file}`));
+coverageFiles.forEach((file) => console.log(`  - ${file}`));
 
 // Merge coverage files
 console.log('Merging coverage files...');
@@ -130,6 +135,7 @@ if (!fs.existsSync(outputDir)) {
 fs.writeFileSync(outputFile, JSON.stringify(mergedCoverage, null, 2), 'utf8');
 
 const fileCount = Object.keys(mergedCoverage).length;
-console.log(`Successfully merged coverage from ${coverageFiles.length} files into ${outputFile}`);
+console.log(
+  `Successfully merged coverage from ${coverageFiles.length} files into ${outputFile}`,
+);
 console.log(`Merged coverage contains ${fileCount} files`);
-

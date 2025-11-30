@@ -48,8 +48,15 @@ export default defineConfig({
         }
       } catch (error) {
         console.warn('Failed to load @cypress/code-coverage/task:', error);
-        // Fallback: manually register a basic coverageReport task
+
+        // Fallback: register minimal no-op implementations for all coverage tasks
         on('task', {
+          resetCoverage() {
+            return null;
+          },
+          combineCoverage() {
+            return null;
+          },
           coverageReport() {
             return null;
           },

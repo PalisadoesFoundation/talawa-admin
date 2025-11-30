@@ -46,7 +46,7 @@ const { mockRemovePlugin } = vi.hoisted(() => ({
 
 vi.mock('plugin/services/AdminPluginFileService', () => ({
   adminPluginFileService: {
-    removePlugin: () => mockRemovePlugin(),
+    removePlugin: (...args: unknown[]) => mockRemovePlugin(...args),
   },
 }));
 

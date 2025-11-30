@@ -6,10 +6,6 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { createRequire } from 'node:module';
-
-const require = createRequire(import.meta.url);
-
 /**
  * Converts istanbul coverage JSON to LCOV format
  * @param {Object} coverageData - Coverage data from istanbul
@@ -18,24 +14,24 @@ const require = createRequire(import.meta.url);
  */
 function jsonToLcov(coverageData, basePath = process.cwd()) {
   const lines = [];
-  
+
   for (const [filePath, fileCoverage] of Object.entries(coverageData)) {
     // Skip if no coverage data
     if (!fileCoverage || typeof fileCoverage !== 'object') {
       continue;
     }
-    
+
     // Get absolute file path
-    const absolutePath = path.isAbsolute(filePath) 
-      ? filePath 
+    const absolutePath = path.isAbsolute(filePath)
+      ? filePath
       : path.resolve(basePath, filePath);
-    
+
     // Normalize path separators for LCOV format
     const normalizedPath = absolutePath.replace(/\\/g, '/');
-    
+
     // Start of file record
     lines.push(`SF:${normalizedPath}`);
-    
+
     // Function coverage
     if (fileCoverage.f) {
       let funcIndex = 0;
@@ -43,15 +39,21 @@ function jsonToLcov(coverageData, basePath = process.cwd()) {
         funcIndex++;
         // Extract function name and line from function ID if possible
         // Function IDs in istanbul are typically like "0" or "1"
-        lines.push(`FN:${funcId},${fileCoverage.fnMap?.[funcId]?.name || `function_${funcId}`}`);
-        lines.push(`FNDA:${count || 0},${fileCoverage.fnMap?.[funcId]?.name || `function_${funcId}`}`);
+        lines.push(
+          `FN:${funcId},${fileCoverage.fnMap?.[funcId]?.name || `function_${funcId}`}`,
+        );
+        lines.push(
+          `FNDA:${count || 0},${fileCoverage.fnMap?.[funcId]?.name || `function_${funcId}`}`,
+        );
       }
       if (funcIndex > 0) {
         lines.push(`FNF:${funcIndex}`);
-        lines.push(`FNH:${Object.values(fileCoverage.f).filter(c => c > 0).length}`);
+        lines.push(
+          `FNH:${Object.values(fileCoverage.f).filter((c) => c > 0).length}`,
+        );
       }
     }
-    
+
     // Branch coverage
     if (fileCoverage.b) {
       let branchIndex = 0;
@@ -59,9 +61,12 @@ function jsonToLcov(coverageData, basePath = process.cwd()) {
         if (Array.isArray(branches)) {
           branches.forEach((count, idx) => {
             branchIndex++;
-            const branchInfo = fileCoverage.branchMap?.[branchId]?.locations?.[idx];
+            const branchInfo =
+              fileCoverage.branchMap?.[branchId]?.locations?.[idx];
             if (branchInfo) {
-              lines.push(`BRDA:${branchInfo.start.line},${branchInfo.start.column},${branchId},${idx},${count || 0}`);
+              lines.push(
+                `BRDA:${branchInfo.start.line},${branchInfo.start.column},${branchId},${idx},${count || 0}`,
+              );
             }
           });
         }
@@ -70,17 +75,17 @@ function jsonToLcov(coverageData, basePath = process.cwd()) {
         lines.push(`BRF:${branchIndex}`);
         const coveredBranches = Object.values(fileCoverage.b)
           .flat()
-          .filter(c => c > 0).length;
+          .filter((c) => c > 0).length;
         lines.push(`BRH:${coveredBranches}`);
       }
     }
-    
+
     // Line coverage - use statement coverage to infer line coverage
     // This is the most reliable approach as istanbul coverage JSON primarily uses statement coverage
     if (fileCoverage.s && fileCoverage.statementMap) {
       const statementMap = fileCoverage.statementMap;
       const linesWithStatements = new Map();
-      
+
       // Aggregate statement coverage by line number
       for (const [stmtId, count] of Object.entries(fileCoverage.s)) {
         const stmtInfo = statementMap[stmtId];
@@ -91,16 +96,20 @@ function jsonToLcov(coverageData, basePath = process.cwd()) {
           linesWithStatements.set(lineNum, Math.max(currentHits, count || 0));
         }
       }
-      
+
       // Write line coverage data
-      const sortedLines = Array.from(linesWithStatements.keys()).sort((a, b) => a - b);
+      const sortedLines = Array.from(linesWithStatements.keys()).sort(
+        (a, b) => a - b,
+      );
       for (const lineNum of sortedLines) {
         lines.push(`DA:${lineNum},${linesWithStatements.get(lineNum)}`);
       }
-      
+
       if (sortedLines.length > 0) {
         lines.push(`LF:${sortedLines.length}`);
-        const coveredLines = Array.from(linesWithStatements.values()).filter(hits => hits > 0).length;
+        const coveredLines = Array.from(linesWithStatements.values()).filter(
+          (hits) => hits > 0,
+        ).length;
         lines.push(`LH:${coveredLines}`);
       }
     } else if (fileCoverage.l) {
@@ -115,23 +124,25 @@ function jsonToLcov(coverageData, basePath = process.cwd()) {
         }
         return a.localeCompare(b);
       });
-      
+
       for (const lineId of sortedLineIds) {
         const lineNum = parseInt(lineId, 10) || lineId;
         lines.push(`DA:${lineNum},${lineCounts[lineId] || 0}`);
       }
-      
+
       if (sortedLineIds.length > 0) {
         lines.push(`LF:${sortedLineIds.length}`);
-        const coveredLines = sortedLineIds.filter(id => (lineCounts[id] || 0) > 0).length;
+        const coveredLines = sortedLineIds.filter(
+          (id) => (lineCounts[id] || 0) > 0,
+        ).length;
         lines.push(`LH:${coveredLines}`);
       }
     }
-    
+
     // End of file record
     lines.push('end_of_record');
   }
-  
+
   return lines.join('\n') + '\n';
 }
 
@@ -139,7 +150,9 @@ function jsonToLcov(coverageData, basePath = process.cwd()) {
 const args = process.argv.slice(2);
 if (args.length < 2) {
   console.error('Usage: node generate-lcov.js <input-json> <output-lcov>');
-  console.error('Example: node generate-lcov.js ./.nyc_output/coverage-final.json ./coverage/vitest/lcov.info');
+  console.error(
+    'Example: node generate-lcov.js ./.nyc_output/coverage-final.json ./coverage/vitest/lcov.info',
+  );
   process.exit(1);
 }
 
@@ -154,19 +167,19 @@ if (!fs.existsSync(inputFile)) {
 
 try {
   const coverageData = JSON.parse(fs.readFileSync(inputFile, 'utf8'));
-  
+
   // Generate LCOV format
   const lcovContent = jsonToLcov(coverageData);
-  
+
   // Ensure output directory exists
   const outputDir = path.dirname(outputFile);
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
-  
+
   // Write LCOV file
   fs.writeFileSync(outputFile, lcovContent, 'utf8');
-  
+
   const fileCount = Object.keys(coverageData).length;
   console.log(`Successfully generated LCOV report from ${inputFile}`);
   console.log(`Coverage data contains ${fileCount} files`);
@@ -175,4 +188,3 @@ try {
   console.error(`Error generating LCOV report:`, error.message);
   process.exit(1);
 }
-
