@@ -13,10 +13,10 @@ const localThreads = Math.max(4, cpuCount);
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), svgrPlugin()],
   build: {
-    sourcemap: false,
+    sourcemap: false, // Disable sourcemaps for faster tests
   },
   esbuild: {
-    sourcemap: false,
+    sourcemap: false, // Disable sourcemaps for faster tests
   },
   test: {
     include: ['src/**/*.{spec,test}.{js,jsx,ts,tsx}'],
@@ -27,25 +27,30 @@ export default defineConfig({
     testTimeout: 30000,
     hookTimeout: 10000,
     teardownTimeout: 10000,
+    // Use threads for better performance in CI
     pool: 'threads',
     poolOptions: {
       threads: {
         singleThread: false,
         minThreads: 1,
         maxThreads: isCI ? ciThreads : localThreads,
+        // Keep isolation enabled to prevent test interference
         isolate: true,
       },
     },
+    // Lower concurrency in CI to avoid memory issues
     maxConcurrency: isCI ? ciThreads : localThreads,
+    // Enable file parallelism for better performance
     fileParallelism: true,
     sequence: {
       shuffle: false,
-      concurrent: false,
+      concurrent: false, // Disabled for test stability - files still run in parallel across shards
     },
     coverage: {
       enabled: true,
       provider: 'istanbul',
       reportsDirectory: './coverage/vitest',
+      // Don't use 'all: true' with sharding - let merge handle combining partial coverage
       exclude: [
         'node_modules',
         'dist',
