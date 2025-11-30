@@ -71,7 +71,7 @@ vi.mock('react-toastify', () => ({
 
 const renderOrganizationTags = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/orgtags/123']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>

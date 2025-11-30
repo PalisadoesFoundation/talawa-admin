@@ -33,7 +33,7 @@ const link1 = new StaticMockLink(MOCKS);
 
 const renderVolunteerManagement = (): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link1}>
+    <MockedProvider link={link1}>
       <MemoryRouter initialEntries={['/user/volunteer/orgId']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
@@ -69,7 +69,7 @@ describe('Volunteer Management', () => {
   it('should redirect to fallback URL if URL params are undefined', async () => {
     setItem('userId', null);
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <MemoryRouter initialEntries={['/user/volunteer/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>

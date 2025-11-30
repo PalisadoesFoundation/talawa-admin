@@ -8,26 +8,31 @@ import {
 } from 'GraphQl/Queries/EventVolunteerQueries';
 
 const group1 = {
+  __typename: 'EventVolunteerGroup',
   id: 'groupId1',
   name: 'Group 1',
   description: 'Volunteer Group Description',
   volunteersRequired: null,
   createdAt: '2024-10-25T16:16:32.978Z',
   creator: {
+    __typename: 'User',
     id: 'creatorId1',
     name: 'Wilt Shepherd',
     avatarURL: null,
   },
   leader: {
+    __typename: 'User',
     id: 'userId',
     name: 'Teresa Bradley',
     avatarURL: 'img-url',
   },
   volunteers: [
     {
+      __typename: 'Volunteer',
       id: 'volunteerId1',
       hasAccepted: false,
       user: {
+        __typename: 'User',
         id: 'userId',
         name: 'Teresa Bradley',
         avatarURL: null,
@@ -35,31 +40,37 @@ const group1 = {
     },
   ],
   event: {
+    __typename: 'Event',
     id: 'eventId1',
   },
 };
 
 const group2 = {
+  __typename: 'EventVolunteerGroup',
   id: 'groupId2',
   name: 'Group 2',
   description: 'Volunteer Group Description',
   volunteersRequired: null,
   createdAt: '2024-10-27T15:25:13.044Z',
   creator: {
+    __typename: 'User',
     id: 'creatorId2',
     name: 'Wilt Shepherd',
     avatarURL: null,
   },
   leader: {
+    __typename: 'User',
     id: 'userId',
     name: 'Teresa Bradley',
     avatarURL: null,
   },
   volunteers: [
     {
+      __typename: 'Volunteer',
       id: 'volunteerId2',
       hasAccepted: false,
       user: {
+        __typename: 'User',
         id: 'userId',
         name: 'Teresa Bradley',
         avatarURL: null,
@@ -67,31 +78,37 @@ const group2 = {
     },
   ],
   event: {
+    __typename: 'Event',
     id: 'eventId2',
   },
 };
 
 const group3 = {
+  __typename: 'EventVolunteerGroup',
   id: 'groupId3',
   name: 'Group 3',
   description: 'Volunteer Group Description',
   volunteersRequired: null,
   createdAt: '2024-10-27T15:34:15.889Z',
   creator: {
+    __typename: 'User',
     id: 'creatorId3',
     name: 'Wilt Shepherd',
     avatarURL: null,
   },
   leader: {
+    __typename: 'User',
     id: 'userId1',
     name: 'Bruce Garza',
     avatarURL: null,
   },
   volunteers: [
     {
+      __typename: 'Volunteer',
       id: 'volunteerId3',
       hasAccepted: false,
       user: {
+        __typename: 'User',
         id: 'userId',
         name: 'Teresa Bradley',
         avatarURL: null,
@@ -99,16 +116,19 @@ const group3 = {
     },
   ],
   event: {
+    __typename: 'Event',
     id: 'eventId3',
   },
 };
 
 const membership1 = {
+  __typename: 'VolunteerMembership',
   id: 'membershipId1',
   status: 'requested',
   createdAt: '2024-10-29T10:18:05.851Z',
   updatedAt: '2024-10-29T10:18:05.851Z',
   event: {
+    __typename: 'Event',
     id: 'eventId',
     name: 'Event 1',
     startAt: '2044-10-31',
@@ -116,10 +136,12 @@ const membership1 = {
     recurrenceRule: null,
   },
   volunteer: {
+    __typename: 'Volunteer',
     id: 'volunteerId1',
     hasAccepted: false,
     hoursVolunteered: 0,
     user: {
+      __typename: 'User',
       id: 'userId1',
       name: 'John Doe',
       emailAddress: 'john@example.com',
@@ -127,26 +149,31 @@ const membership1 = {
     },
   },
   group: {
+    __typename: 'EventVolunteerGroup',
     id: 'groupId',
     name: 'Group 1',
     description: 'Group 1 description',
   },
   createdBy: {
+    __typename: 'User',
     id: 'adminId',
     name: 'Admin User',
   },
   updatedBy: {
+    __typename: 'User',
     id: 'adminId',
     name: 'Admin User',
   },
 };
 
 const membership2 = {
+  __typename: 'VolunteerMembership',
   id: 'membershipId2',
   status: 'requested',
   createdAt: '2024-10-29T10:18:05.851Z',
   updatedAt: '2024-10-29T10:18:05.851Z',
   event: {
+    __typename: 'Event',
     id: 'eventId',
     name: 'Event 1',
     startAt: '2044-10-31',
@@ -154,10 +181,12 @@ const membership2 = {
     recurrenceRule: null,
   },
   volunteer: {
+    __typename: 'Volunteer',
     id: 'volunteerId2',
     hasAccepted: false,
     hoursVolunteered: 0,
     user: {
+      __typename: 'User',
       id: 'userId2',
       name: 'Teresa Bradley',
       emailAddress: 'teresa@example.com',
@@ -165,15 +194,18 @@ const membership2 = {
     },
   },
   group: {
+    __typename: 'EventVolunteerGroup',
     id: 'groupId',
     name: 'Group 2',
     description: 'Group 2 description',
   },
   createdBy: {
+    __typename: 'User',
     id: 'adminId',
     name: 'Admin User',
   },
   updatedBy: {
+    __typename: 'User',
     id: 'adminId',
     name: 'Admin User',
   },
@@ -308,22 +340,27 @@ export const MOCKS = [
     result: {
       data: {
         updateVolunteerMembership: {
+          __typename: 'VolunteerMembership',
           id: 'membershipId1',
           status: 'accepted',
           updatedAt: '2024-10-29T10:20:05.851Z',
           volunteer: {
+            __typename: 'Volunteer',
             id: 'volunteerId1',
             hasAccepted: false,
             user: {
+              __typename: 'User',
               id: 'userId1',
               name: 'John Doe',
             },
           },
           event: {
+            __typename: 'Event',
             id: 'eventId',
             name: 'Event 1',
           },
           updatedBy: {
+            __typename: 'User',
             id: 'adminId',
             name: 'Admin User',
           },
@@ -342,22 +379,27 @@ export const MOCKS = [
     result: {
       data: {
         updateVolunteerMembership: {
+          __typename: 'VolunteerMembership',
           id: 'membershipId1',
           status: 'rejected',
           updatedAt: '2024-10-29T10:20:05.851Z',
           volunteer: {
+            __typename: 'Volunteer',
             id: 'volunteerId1',
             hasAccepted: false,
             user: {
+              __typename: 'User',
               id: 'userId1',
               name: 'John Doe',
             },
           },
           event: {
+            __typename: 'Event',
             id: 'eventId',
             name: 'Event 1',
           },
           updatedBy: {
+            __typename: 'User',
             id: 'adminId',
             name: 'Admin User',
           },
@@ -381,6 +423,7 @@ export const MOCKS = [
     result: {
       data: {
         updateEventVolunteerGroup: {
+          __typename: 'EventVolunteerGroup',
           id: 'groupId',
         },
       },
@@ -399,6 +442,7 @@ export const MOCKS = [
     result: {
       data: {
         updateEventVolunteerGroup: {
+          __typename: 'EventVolunteerGroup',
           id: 'groupId',
         },
       },
