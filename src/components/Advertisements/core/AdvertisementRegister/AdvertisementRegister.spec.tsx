@@ -23,6 +23,16 @@ import {
   updateAdFailMock,
 } from './AdvertisementRegisterMocks';
 
+// Mock PageNotFound to avoid lazy loading issues in tests
+vi.mock('screens/PageNotFound/PageNotFound', () => ({
+  default: () => (
+    <div>
+      <div>404</div>
+      <div>Oops! The Page you requested was not found!</div>
+    </div>
+  ),
+}));
+
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {

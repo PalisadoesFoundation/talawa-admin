@@ -408,46 +408,16 @@ describe('usePluginActions', () => {
     expect(result.current.pluginToUninstall).toBe(null);
   });
 
-  it('should handle AdminPluginFileService import error', async () => {
-    mockDeletePlugin.mockResolvedValue({});
-    mockPluginManager.uninstallPlugin.mockResolvedValue(true);
-
-    // Mock the import to throw an error
-    vi.doMock('../../../plugin/services/AdminPluginFileService', () => {
-      throw new Error('Import failed');
-    });
-
-    const { result } = renderHook(() =>
-      usePluginActions({
-        pluginData: mockPluginData,
-        refetch: mockRefetch,
-      }),
-    );
-
-    // Set plugin to uninstall
-    act(() => {
-      result.current.uninstallPlugin(mockPlugin);
-    });
-
-    await act(async () => {
-      await result.current.handleUninstallConfirm();
-    });
-
-    expect(mockPluginManager.uninstallPlugin).toHaveBeenCalledWith(
-      'test-plugin',
-    );
-  });
-
   it('should handle AdminPluginFileService.removePlugin failure', async () => {
     mockDeletePlugin.mockResolvedValue({});
     mockPluginManager.uninstallPlugin.mockResolvedValue(true);
 
-    // Mock AdminPluginFileService with failure
+    // Mock AdminPluginFileService with failure - now using static import
     const mockAdminPluginFileService = {
       removePlugin: vi.fn().mockResolvedValue(false),
     };
 
-    vi.doMock('../../../plugin/services/AdminPluginFileService', () => ({
+    vi.mock('../../../plugin/services/AdminPluginFileService', () => ({
       adminPluginFileService: mockAdminPluginFileService,
     }));
 

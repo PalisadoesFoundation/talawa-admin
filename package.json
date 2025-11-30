@@ -196,8 +196,43 @@
   },
   "pnpm": {
     "overrides": {
-      "@apollo/client": "3.14.0"
-    }
+      "@apollo/client": "3.13.0",
+      "@pdfme/common": "5.4.8",
+      "@pdfme/schemas": "5.4.8",
+      "@pdfme/generator": "5.4.8",
+      "rc-color-picker>react": "^19.1.0",
+      "rc-color-picker>react-dom": "^19.1.0",
+      "virtualizedtableforantd4>react": "^19.1.0",
+      "virtualizedtableforantd4>react-dom": "^19.1.0",
+      "@types/react": "^19.1.1",
+      "@types/react-dom": "^19.1.1",
+      "whatwg-url": "^14.0.0",
+      "core-js": "^3.40.0",
+      "sync-fetch": "npm:@ardatan/sync-fetch@0.0.1",
+      "gulp-header": "^2.0.9",
+      "rimraf": "^6.1.2",
+      "glob": "^13.0.0",
+      "nyc": "17.1.0"
+    },
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "react": ">=16",
+        "react-dom": ">=16"
+      },
+      "ignoreMissing": [
+        "react",
+        "react-dom",
+        "@pdfme/common",
+        "@pdfme/schemas"
+      ]
+    },
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "@parcel/watcher",
+      "core-js",
+      "cypress",
+      "sharp"
+    ]
   },
   "engines": {
     "node": ">=24.x"

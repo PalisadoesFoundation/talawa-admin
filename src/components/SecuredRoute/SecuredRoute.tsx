@@ -31,10 +31,12 @@
  * Displays a warning toast and redirects to the home page upon session expiration.
  */
 
-import React, { useEffect, useRef } from 'react';
+import Loader from 'components/Loader/Loader';
+import React, { lazy, Suspense, useEffect, useRef } from 'react';
 import { Navigate, Outlet } from 'react-router';
 import { toast } from 'react-toastify';
-import PageNotFound from 'screens/PageNotFound/PageNotFound';
+// LAZY import to prevent Vite static/dynamic import conflict
+const PageNotFound = lazy(() => import('screens/PageNotFound/PageNotFound'));
 import useLocalStorage from 'utils/useLocalstorage';
 
 // Time constants for session timeout and inactivity interval
@@ -102,7 +104,15 @@ const SecuredRoute = (): JSX.Element => {
   }, [isLoggedIn, setItem, removeItem]);
 
   return isLoggedIn === 'TRUE' ? (
-    <>{role === 'administrator' ? <Outlet /> : <PageNotFound />}</>
+    <>
+      {role === 'administrator' ? (
+        <Outlet />
+      ) : (
+        <Suspense fallback={<Loader />}>
+          <PageNotFound />
+        </Suspense>
+      )}
+    </>
   ) : (
     <Navigate to="/" replace />
   );

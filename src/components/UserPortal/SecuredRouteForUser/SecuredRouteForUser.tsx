@@ -28,10 +28,12 @@
  * @requires `react-router-dom` for navigation and route handling.
  * @requires `useLocalStorage` custom hook for local storage interaction.
  */
-import React, { useEffect, useRef } from 'react';
+import React, { lazy, Suspense, useEffect, useRef } from 'react';
 import { Navigate, Outlet } from 'react-router';
 import { toast } from 'react-toastify';
-import PageNotFound from 'screens/PageNotFound/PageNotFound';
+import Loader from 'components/Loader/Loader';
+// LAZY import to avoid mixing static + dynamic imports
+const PageNotFound = lazy(() => import('screens/PageNotFound/PageNotFound'));
 import useLocalStorage from 'utils/useLocalstorage';
 
 // Time constants for session timeout and inactivity interval
@@ -103,7 +105,15 @@ const SecuredRouteForUser = (): JSX.Element => {
 
   // Conditional rendering based on authentication status and role
   return isLoggedIn === 'TRUE' ? (
-    <>{adminFor == undefined ? <Outlet /> : <PageNotFound />}</>
+    <>
+      {adminFor === null ? (
+        <Outlet />
+      ) : (
+        <Suspense fallback={<Loader />}>
+          <PageNotFound />
+        </Suspense>
+      )}
+    </>
   ) : (
     <Navigate to="/" replace />
   );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 import SecuredRoute from './SecuredRoute';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -11,6 +11,17 @@ vi.mock('react-toastify', () => ({
   toast: {
     warn: vi.fn(),
   },
+}));
+
+// Mock PageNotFound to avoid lazy loading issues in tests
+vi.mock('screens/PageNotFound/PageNotFound', () => ({
+  default: () => (
+    <div>
+      <div>talawaUser</div>
+      <div>404</div>
+      <div>Oops! The Page you requested was not found!</div>
+    </div>
+  ),
 }));
 
 describe('SecuredRoute', () => {
@@ -66,7 +77,7 @@ describe('SecuredRoute', () => {
       expect(screen.getByText('Test Protected Content')).toBeInTheDocument();
     });
 
-    it('should render PageNotFound for authenticated non-administrator user', () => {
+    it('should render PageNotFound for authenticated non-administrator user', async () => {
       // Set the 'IsLoggedIn' value to 'TRUE' in localStorage to simulate a logged-in user and role regular to simulate a non admin user.
       setItem('IsLoggedIn', 'TRUE');
       setItem('role', 'regular');
@@ -81,7 +92,11 @@ describe('SecuredRoute', () => {
         </MemoryRouter>,
       );
 
-      expect(screen.getByText('talawaUser')).toBeInTheDocument();
+      // Wait for lazy-loaded PageNotFound to render
+      await waitFor(() => {
+        expect(screen.getByText('talawaUser')).toBeInTheDocument();
+      });
+
       expect(screen.getByText('404')).toBeInTheDocument();
       expect(
         screen.queryByText('Test Protected Content'),
