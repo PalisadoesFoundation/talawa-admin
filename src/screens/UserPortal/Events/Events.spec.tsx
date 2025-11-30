@@ -47,16 +47,62 @@ vi.mock('react-toastify', () => ({
 
 vi.mock('@mui/x-date-pickers', async () => {
   const actual = await vi.importActual('@mui/x-date-pickers');
-  const { default: DatePickerMockModule } = await import(
-    './__mocks__/DatePickerMock'
-  );
-  const { default: TimePickerMockModule } = await import(
-    './__mocks__/TimePickerMock'
-  );
+
+  const datePicker = ({
+    label,
+    value,
+    onChange,
+    'data-testid': dataTestId,
+  }: {
+    label?: string;
+    value?: { format?: (fmt: string) => string } | null;
+    onChange?: (v: unknown) => void;
+    'data-testid'?: string;
+  }) => {
+    return (
+      <input
+        aria-label={label}
+        data-testid={dataTestId || label}
+        value={value?.format ? value.format('MM/DD/YYYY') : ''}
+        onChange={(e) => {
+          const parsed = dayjs(e.target.value, ['MM/DD/YYYY', 'YYYY-MM-DD']);
+          onChange?.(parsed);
+        }}
+      />
+    );
+  };
+
+  const timePicker = ({
+    label,
+    value,
+    onChange,
+    'data-testid': dataTestId,
+    disabled,
+  }: {
+    label?: string;
+    value?: { format?: (fmt: string) => string } | null;
+    onChange?: (v: unknown) => void;
+    'data-testid'?: string;
+    disabled?: boolean;
+  }) => {
+    return (
+      <input
+        aria-label={label}
+        data-testid={dataTestId || label}
+        value={value?.format ? value.format('HH:mm:ss') : ''}
+        disabled={disabled}
+        onChange={(e) => {
+          const parsed = dayjs(e.target.value, ['HH:mm:ss', 'hh:mm A']);
+          onChange?.(parsed);
+        }}
+      />
+    );
+  };
+
   return {
     ...actual,
-    DatePicker: DatePickerMockModule,
-    TimePicker: TimePickerMockModule,
+    DatePicker: datePicker,
+    TimePicker: timePicker,
   };
 });
 
@@ -68,21 +114,96 @@ vi.mock('react-router', async () => {
   };
 });
 
-vi.mock('components/EventCalender/Monthly/EventCalender', async () => {
-  const mod = await import('./__mocks__/EventCalenderMock');
-  return {
-    __esModule: true,
-    default: mod.default,
-  };
-});
+vi.mock('components/EventCalender/Monthly/EventCalender', () => ({
+  __esModule: true,
+  default: ({
+    onMonthChange,
+    eventData,
+    viewType,
+  }: {
+    onMonthChange?: (month: number, year: number) => void;
+    eventData?: unknown[];
+    viewType?: string | null;
+  }) => {
+    return (
+      <div>
+        <button
+          type="button"
+          data-testid="monthChangeBtn"
+          onClick={() => onMonthChange?.(5, 2023)}
+        />
+        <div data-testid="hour" />
+        <div data-testid="monthView" />
+        <pre data-testid="event-data-json">
+          {JSON.stringify(eventData ?? [])}
+        </pre>
+        <div data-testid="calendar-view-type">{String(viewType)}</div>
+      </div>
+    );
+  },
+}));
 
-vi.mock('components/EventCalender/Header/EventHeader', async () => {
-  const mod = await import('./__mocks__/EventHeaderMock');
-  return {
-    __esModule: true,
-    default: mod.default,
-  };
-});
+vi.mock('components/EventCalender/Header/EventHeader', () => ({
+  __esModule: true,
+  default: ({
+    viewType,
+    handleChangeView,
+    showInviteModal,
+  }: {
+    viewType?: string | null;
+    handleChangeView?: (v: string | null) => void;
+    showInviteModal?: () => void;
+  }) => {
+    return (
+      <div>
+        <div data-testid="calendarEventHeader">
+          <div className="_calendar__controls">
+            <button
+              type="button"
+              data-testid="selectViewType"
+              onClick={() => handleChangeView?.('MONTH')}
+            >
+              Month View
+            </button>
+            <div>
+              <button
+                type="button"
+                data-testid="selectDay"
+                onClick={() => handleChangeView?.('DAY')}
+              >
+                Select Day
+              </button>
+              <button
+                type="button"
+                data-testid="selectYear"
+                onClick={() => handleChangeView?.('YEAR')}
+              >
+                Select Year
+              </button>
+            </div>
+            <button
+              type="button"
+              data-testid="createEventModalBtn"
+              onClick={() => showInviteModal?.()}
+            >
+              Create
+            </button>
+            <button
+              type="button"
+              data-testid="handleChangeNullBtn"
+              onClick={() => handleChangeView?.(null)}
+            >
+              Null
+            </button>
+            <div data-testid="calendar-view-type-header">
+              {String(viewType)}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  },
+}));
 
 const theme = createTheme({
   palette: {
