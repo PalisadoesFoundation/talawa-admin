@@ -41,23 +41,28 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
-const resetAndRefetchMock = vi.fn();
-
 beforeEach(() => {
   setItem('id', '123');
 });
 
 afterEach(() => {
   localStorage.clear();
-  vi.clearAllMocks();
+  vi.restoreAllMocks();
 });
 
 describe('Testing User Table Item', () => {
-  console.error = vi.fn((message) => {
-    if (message.includes('validateDOMNesting')) {
-      return;
-    }
-    console.warn(message);
+  const resetAndRefetchMock = vi.fn();
+
+  beforeEach(() => {
+    vi.spyOn(console, 'error').mockImplementation((message) => {
+      if (
+        typeof message === 'string' &&
+        message.includes('validateDOMNesting')
+      ) {
+        return;
+      }
+      console.warn(message);
+    });
   });
   it('Should render props and text elements it for the page component', async () => {
     const props: {
@@ -80,7 +85,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <RequestsTableItem {...props} />
@@ -118,7 +123,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <RequestsTableItem {...props} />
@@ -162,7 +167,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={errorLink}>
+      <MockedProvider link={errorLink}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <RequestsTableItem {...props} />
@@ -197,7 +202,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <RequestsTableItem {...props} />
@@ -240,7 +245,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={errorLink}>
+      <MockedProvider link={errorLink}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <RequestsTableItem {...props} />
@@ -292,7 +297,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={noDataLink}>
+      <MockedProvider link={noDataLink}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <RequestsTableItem {...props} />
@@ -346,7 +351,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={noDataLink}>
+      <MockedProvider link={noDataLink}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <RequestsTableItem {...props} />
@@ -384,7 +389,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <RequestsTableItem {...props} />
@@ -420,7 +425,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <RequestsTableItem {...props} />
@@ -462,7 +467,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <RequestsTableItem {...props} />
@@ -511,7 +516,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <RequestsTableItem {...props} />
@@ -549,7 +554,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <RequestsTableItem {...props} />

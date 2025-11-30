@@ -30,8 +30,8 @@ vi.mock('react-toastify', () => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 
-const link1 = new StaticMockLink(PLEDGE_MODAL_MOCKS, false);
-const errorLink = new StaticMockLink(PLEDGE_MODAL_ERROR_MOCKS, false);
+const link1 = new StaticMockLink(PLEDGE_MODAL_MOCKS);
+const errorLink = new StaticMockLink(PLEDGE_MODAL_ERROR_MOCKS);
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
 );
@@ -83,7 +83,7 @@ const renderPledgeModal = (
   props: InterfacePledgeModal,
 ): RenderResult => {
   return render(
-    <MockedProvider link={link} addTypename={false}>
+    <MockedProvider link={link}>
       <Provider store={store}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -109,6 +109,7 @@ const MOCK_PLEDGE_DATA = {
   result: {
     data: {
       createPledge: {
+        __typename: 'Pledge',
         id: '1',
         amount: 100,
         currency: 'USD',
@@ -128,6 +129,7 @@ const MOCK_UPDATE_PLEDGE_DATA = {
   result: {
     data: {
       updatePledge: {
+        __typename: 'Pledge',
         id: '1',
         amount: 200,
         currency: 'USD',
@@ -144,10 +146,14 @@ const MEMBERS_MOCK = {
   result: {
     data: {
       organization: {
+        __typename: 'Organization',
         members: {
+          __typename: 'UserConnection',
           edges: [
             {
+              __typename: 'UserEdge',
               node: {
+                __typename: 'User',
                 id: '1',
                 firstName: 'John',
                 lastName: 'Doe',
@@ -161,10 +167,11 @@ const MEMBERS_MOCK = {
   },
 };
 
-const mockLink = new StaticMockLink(
-  [...PLEDGE_MODAL_MOCKS, MOCK_PLEDGE_DATA, MEMBERS_MOCK],
-  false,
-);
+const mockLink = new StaticMockLink([
+  ...PLEDGE_MODAL_MOCKS,
+  MOCK_PLEDGE_DATA,
+  MEMBERS_MOCK,
+]);
 
 const NO_CHANGE_MOCK = {
   request: {
@@ -174,6 +181,7 @@ const NO_CHANGE_MOCK = {
   result: {
     data: {
       updatePledge: {
+        __typename: 'Pledge',
         id: '1',
         amount: 100,
         currency: 'USD',
@@ -200,6 +208,7 @@ describe('PledgeModal', () => {
 
   afterEach(() => {
     cleanup();
+    vi.restoreAllMocks();
   });
 
   it('should render edit pledge modal with correct title', async () => {
@@ -441,10 +450,10 @@ describe('PledgeModal', () => {
   });
 
   it('should update pledge amount in edit mode', async () => {
-    const mockLink = new StaticMockLink(
-      [...PLEDGE_MODAL_MOCKS, MOCK_UPDATE_PLEDGE_DATA],
-      false,
-    );
+    const mockLink = new StaticMockLink([
+      ...PLEDGE_MODAL_MOCKS,
+      MOCK_UPDATE_PLEDGE_DATA,
+    ]);
     const props = { ...pledgeProps[1], refetchPledge: vi.fn(), hide: vi.fn() };
 
     renderPledgeModal(mockLink, props);
@@ -464,10 +473,10 @@ describe('PledgeModal', () => {
   });
 
   it('should handle form submission when pledge amount has not changed', async () => {
-    const mockLink = new StaticMockLink(
-      [...PLEDGE_MODAL_MOCKS, NO_CHANGE_MOCK],
-      false,
-    );
+    const mockLink = new StaticMockLink([
+      ...PLEDGE_MODAL_MOCKS,
+      NO_CHANGE_MOCK,
+    ]);
     const props = { ...pledgeProps[1], refetchPledge: vi.fn(), hide: vi.fn() };
     renderPledgeModal(mockLink, props);
 
@@ -509,7 +518,7 @@ describe('PledgeModal', () => {
       error: new Error('Update failed'),
     };
 
-    const mockLink = new StaticMockLink([updateErrorMock], false);
+    const mockLink = new StaticMockLink([updateErrorMock]);
     const props = { ...pledgeProps[1], refetchPledge: vi.fn(), hide: vi.fn() };
     renderPledgeModal(mockLink, props);
 

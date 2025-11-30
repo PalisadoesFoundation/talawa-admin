@@ -49,9 +49,12 @@ let props = {
 };
 
 describe('Testing ContactCard Component [User Portal]', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   it('Component should be rendered properly  if person image is undefined', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -72,7 +75,7 @@ describe('Testing ContactCard Component [User Portal]', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -88,7 +91,7 @@ describe('Testing ContactCard Component [User Portal]', () => {
 
   it('Contact gets selectected when component is clicked', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -113,7 +116,7 @@ describe('Testing ContactCard Component [User Portal]', () => {
       isGroup: true,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

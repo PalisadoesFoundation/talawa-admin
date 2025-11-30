@@ -29,6 +29,9 @@ async function wait(ms = 5): Promise<void> {
 }
 
 describe('Testing User Password Update', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const formData = {
     previousPassword: 'Palisadoes',
     newPassword: 'ThePalisadoesFoundation',
@@ -40,7 +43,7 @@ describe('Testing User Password Update', () => {
 
   it('should render props and text elements it for the page component', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <UserPasswordUpdate id="1" key="123" />
         </I18nextProvider>
@@ -75,7 +78,7 @@ describe('Testing User Password Update', () => {
 
   it('displays an error when the password field is empty', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <UserPasswordUpdate id="1" key="123" />
         </I18nextProvider>
@@ -90,7 +93,7 @@ describe('Testing User Password Update', () => {
 
   it('displays an error when new and confirm password field does not match', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <UserPasswordUpdate id="1" key="123" />
         </I18nextProvider>
@@ -123,7 +126,7 @@ describe('Testing User Password Update', () => {
 
   it('Successfully update old password and reset form', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <UserPasswordUpdate id="1" key="123" />
         </I18nextProvider>
@@ -162,7 +165,7 @@ describe('Testing User Password Update', () => {
 
   it('wrong old password', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <UserPasswordUpdate id="1" key="123" />
         </I18nextProvider>
@@ -209,7 +212,7 @@ describe('Testing User Password Update', () => {
     ];
 
     render(
-      <MockedProvider addTypename={false} mocks={networkErrorMock}>
+      <MockedProvider mocks={networkErrorMock}>
         <I18nextProvider i18n={i18nForTest}>
           <UserPasswordUpdate id="1" key="123" />
         </I18nextProvider>
@@ -243,7 +246,7 @@ describe('Testing User Password Update', () => {
 
   it('resets form when cancel button is clicked', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <UserPasswordUpdate id="1" key="123" />
         </I18nextProvider>

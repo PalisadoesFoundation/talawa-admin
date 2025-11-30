@@ -46,6 +46,9 @@ const mockEvents = Array.from({ length: 6 }, (_, index) => ({
 }));
 
 describe('EventsAttendedMemberModal', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const defaultProps = {
     eventsAttended: mockEvents,
     setShow: vi.fn(),

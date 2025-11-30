@@ -4,24 +4,40 @@
 
 import { IPluginManifest, IDrawerExtension } from './types';
 
-export function validatePluginManifest(manifest: any): boolean {
+export function validatePluginManifest(manifest: unknown): boolean {
   if (!manifest || typeof manifest !== 'object') return false;
+  const typedManifest = manifest as {
+    name?: unknown;
+    pluginId?: unknown;
+    version?: unknown;
+    description?: unknown;
+    author?: unknown;
+    main?: unknown;
+    extensionPoints?: {
+      routes?: Array<{
+        pluginId?: unknown;
+        path?: unknown;
+        component?: unknown;
+      }>;
+      drawer?: Array<{ pluginId?: unknown; label?: unknown; path?: unknown }>;
+    };
+  };
   const hasBasicFields =
-    typeof manifest === 'object' &&
-    typeof manifest.name === 'string' &&
-    typeof manifest.pluginId === 'string' &&
-    typeof manifest.version === 'string' &&
-    typeof manifest.description === 'string' &&
-    typeof manifest.author === 'string' &&
-    typeof manifest.main === 'string';
+    typeof typedManifest === 'object' &&
+    typeof typedManifest.name === 'string' &&
+    typeof typedManifest.pluginId === 'string' &&
+    typeof typedManifest.version === 'string' &&
+    typeof typedManifest.description === 'string' &&
+    typeof typedManifest.author === 'string' &&
+    typeof typedManifest.main === 'string';
 
   if (!hasBasicFields) {
     return false;
   }
 
   // Validate extension points if they exist
-  if (manifest.extensionPoints) {
-    const { routes, drawer } = manifest.extensionPoints;
+  if (typedManifest.extensionPoints) {
+    const { routes, drawer } = typedManifest.extensionPoints;
 
     // Validate routes if they exist
     if (routes && !Array.isArray(routes)) {

@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_UNDEFINED\_DATA**: `object`[]
 
-Defined in: [src/screens/ManageTag/ManageTagNullFalsyMocks.ts:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/ManageTagNullFalsyMocks.ts#L129)
+Defined in: [src/screens/ManageTag/ManageTagNullFalsyMocks.ts:130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/ManageTagNullFalsyMocks.ts#L130)
 
 ## Type Declaration
 
@@ -69,6 +69,10 @@ Defined in: [src/screens/ManageTag/ManageTagNullFalsyMocks.ts:129](https://githu
 #### result.data.getAssignedUsers
 
 > **getAssignedUsers**: `object`
+
+#### result.data.getAssignedUsers.\_\_typename
+
+> **\_\_typename**: `string` = `'UserTag'`
 
 #### result.data.getAssignedUsers.ancestorTags
 
