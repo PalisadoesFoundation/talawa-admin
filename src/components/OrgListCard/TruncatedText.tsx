@@ -50,21 +50,23 @@ const TruncatedText: React.FC<InterfaceTruncatedTextProps> = ({
   /**
    * Truncate the text based on the available width or the `maxWidthOverride` value.
    */
-
   const truncateText = (): void => {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- element is guaranteed to be defined when truncateText is called from useEffect after mount
-    const element = textRef.current!;
+    const element = textRef.current;
+    if (!element) return; // FIX: removes need for non-null assertion
 
     let maxWidth: number;
+
     if (maxWidthOverride) {
       maxWidth = maxWidthOverride;
     } else {
       maxWidth = element.offsetWidth;
     }
+
     const fullText = text;
 
-    const computedStyle = getComputedStyle(element);
+    const computedStyle = window.getComputedStyle(element);
     const fontSize = parseFloat(computedStyle.fontSize);
+
     const charPerPx = 0.065 + fontSize * 0.002;
     const maxChars = Math.floor(maxWidth * charPerPx);
 
@@ -78,6 +80,7 @@ const TruncatedText: React.FC<InterfaceTruncatedTextProps> = ({
   useEffect(() => {
     truncateText();
     window.addEventListener('resize', debouncedCallback);
+
     return () => {
       cancel();
       window.removeEventListener('resize', debouncedCallback);
