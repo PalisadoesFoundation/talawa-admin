@@ -70,10 +70,6 @@ Defined in: [src/screens/ManageTag/ManageTagNonErrorMocks.ts:126](https://github
 
 > **getAssignedUsers**: `object`
 
-#### result.data.getAssignedUsers.\_\_typename
-
-> **\_\_typename**: `string` = `'UserTag'`
-
 #### result.data.getAssignedUsers.ancestorTags
 
 > **ancestorTags**: `object`[]
@@ -86,10 +82,6 @@ Defined in: [src/screens/ManageTag/ManageTagNonErrorMocks.ts:126](https://github
 
 > **usersAssignedTo**: `object`
 
-#### result.data.getAssignedUsers.usersAssignedTo.\_\_typename
-
-> **\_\_typename**: `string` = `'UserTagUsersAssignedToConnection'`
-
 #### result.data.getAssignedUsers.usersAssignedTo.edges
 
 > **edges**: `object`[]
@@ -97,10 +89,6 @@ Defined in: [src/screens/ManageTag/ManageTagNonErrorMocks.ts:126](https://github
 #### result.data.getAssignedUsers.usersAssignedTo.pageInfo
 
 > **pageInfo**: `object`
-
-#### result.data.getAssignedUsers.usersAssignedTo.pageInfo.\_\_typename
-
-> **\_\_typename**: `string` = `'PageInfo'`
 
 #### result.data.getAssignedUsers.usersAssignedTo.pageInfo.endCursor
 

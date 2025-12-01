@@ -18,10 +18,6 @@ Defined in: [src/screens/ManageTag/ManageTagMockUtils.ts:4](https://github.com/P
 
 `object`
 
-### \_\_typename
-
-> **\_\_typename**: `string` = `'UserTag'`
-
 ### ancestorTags
 
 > **ancestorTags**: `object`[]
@@ -34,10 +30,6 @@ Defined in: [src/screens/ManageTag/ManageTagMockUtils.ts:4](https://github.com/P
 
 > **usersAssignedTo**: `object`
 
-#### usersAssignedTo.\_\_typename
-
-> **\_\_typename**: `string` = `'UserTagUsersAssignedToConnection'`
-
 #### usersAssignedTo.edges
 
 > **edges**: `object`[]
@@ -45,10 +37,6 @@ Defined in: [src/screens/ManageTag/ManageTagMockUtils.ts:4](https://github.com/P
 #### usersAssignedTo.pageInfo
 
 > **pageInfo**: `object`
-
-#### usersAssignedTo.pageInfo.\_\_typename
-
-> **\_\_typename**: `string` = `'PageInfo'`
 
 #### usersAssignedTo.pageInfo.endCursor
 

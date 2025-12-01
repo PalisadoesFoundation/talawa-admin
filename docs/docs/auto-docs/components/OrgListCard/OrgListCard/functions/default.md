@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/OrgListCard/OrgListCard.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgListCard/OrgListCard.tsx#L54)
+Defined in: [src/components/OrgListCard/OrgListCard.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgListCard/OrgListCard.tsx#L55)
 
 ## Parameters
 
