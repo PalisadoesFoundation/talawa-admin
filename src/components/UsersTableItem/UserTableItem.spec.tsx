@@ -90,8 +90,6 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
-const resetAndRefetchMock = vi.fn();
-
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -135,12 +133,20 @@ afterEach(async () => {
 });
 
 describe('Testing User Table Item', () => {
-  console.error = vi.fn((message) => {
-    if (message.includes('validateDOMNesting')) {
-      return;
-    }
-    // Log other console errors
-    console.warn(message);
+  let resetAndRefetchMock: ReturnType<typeof vi.fn>;
+
+  beforeEach(() => {
+    resetAndRefetchMock = vi.fn();
+    vi.spyOn(console, 'error').mockImplementation((message) => {
+      if (
+        typeof message === 'string' &&
+        message.includes('validateDOMNesting')
+      ) {
+        return;
+      }
+      // Log other console errors
+      console.warn(message);
+    });
   });
   test('Should render props and text elements test for the page component', async () => {
     const props: {
@@ -215,7 +221,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -304,7 +310,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <UsersTableItem {...props} />
         </I18nextProvider>
@@ -456,7 +462,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -576,7 +582,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -659,7 +665,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link3}>
+      <MockedProvider link={link3}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />

@@ -59,6 +59,7 @@ const EMPTY_MOCK = {
   result: {
     data: {
       fundCampaign: {
+        __typename: 'FundCampaign',
         id: '1',
         name: 'Test Campaign',
         startDate: '2024-01-01',
@@ -66,6 +67,7 @@ const EMPTY_MOCK = {
         currency: 'USD',
         fundingGoal: 1000,
         pledges: {
+          __typename: 'PledgeConnection',
           edges: [],
         },
       },
@@ -83,6 +85,7 @@ const updatedMocks = {
   result: {
     data: {
       fundCampaign: {
+        __typename: 'FundCampaign',
         id: '1',
         name: 'Test Campaign',
         startAt: '2023-01-01T00:00:00Z',
@@ -90,12 +93,16 @@ const updatedMocks = {
         currency: 'USD',
         fundingGoal: 1000,
         pledges: {
+          __typename: 'PledgeConnection',
           edges: [
             {
+              __typename: 'PledgeEdge',
               node: {
+                __typename: 'Pledge',
                 id: '1',
                 amount: 100,
                 pledger: {
+                  __typename: 'User',
                   id: '1',
                   name: 'John Doe',
                   image: 'img-url',
@@ -103,10 +110,13 @@ const updatedMocks = {
               },
             },
             {
+              __typename: 'PledgeEdge',
               node: {
+                __typename: 'Pledge',
                 id: '2',
                 amount: 200,
                 pledger: {
+                  __typename: 'User',
                   id: '2',
                   name: 'Jane Doe',
                   image: null,
@@ -114,10 +124,13 @@ const updatedMocks = {
               },
             },
             {
+              __typename: 'PledgeEdge',
               node: {
+                __typename: 'Pledge',
                 id: '3',
                 amount: 150,
                 pledger: {
+                  __typename: 'User',
                   id: '3',
                   name: 'John Doe3',
                   image: 'img-url3',
@@ -125,10 +138,13 @@ const updatedMocks = {
               },
             },
             {
+              __typename: 'PledgeEdge',
               node: {
+                __typename: 'Pledge',
                 id: '4',
                 amount: 175,
                 pledger: {
+                  __typename: 'User',
                   id: '4',
                   name: 'John Doe4',
                   image: null,
@@ -152,6 +168,7 @@ const FUTURE_CAMPAIGN_MOCK = {
   result: {
     data: {
       fundCampaign: {
+        __typename: 'FundCampaign',
         id: '1',
         name: 'Future Campaign',
         startAt: '2025-03-31T05:53:45.871Z',
@@ -159,6 +176,7 @@ const FUTURE_CAMPAIGN_MOCK = {
         currency: 'USD',
         fundingGoal: 1000,
         pledges: {
+          __typename: 'PledgeConnection',
           edges: [],
         },
       },
@@ -176,6 +194,7 @@ const ACTIVE_CAMPAIGN_MOCK = {
   result: {
     data: {
       fundCampaign: {
+        __typename: 'FundCampaign',
         id: '1',
         name: 'Active Campaign',
         startAt: '2023-01-01T00:00:00Z',
@@ -183,6 +202,7 @@ const ACTIVE_CAMPAIGN_MOCK = {
         currency: 'USD',
         fundingGoal: 1000,
         pledges: {
+          __typename: 'PledgeConnection',
           edges: [],
         },
       },
@@ -200,6 +220,7 @@ const mockWithExtraUsers = {
   result: {
     data: {
       fundCampaign: {
+        __typename: 'FundCampaign',
         id: '1',
         name: 'Test Campaign',
         startAt: '2023-01-01T00:00:00Z',
@@ -207,13 +228,17 @@ const mockWithExtraUsers = {
         currencyCode: 'USD',
         goalAmount: 1000,
         pledges: {
+          __typename: 'PledgeConnection',
           edges: [
             {
+              __typename: 'PledgeEdge',
               node: {
+                __typename: 'Pledge',
                 id: '1',
                 amount: 100,
                 createdAt: '2024-01-01T00:00:00Z',
                 pledger: {
+                  __typename: 'User',
                   id: '1',
                   name: 'Main User 1',
                   image: 'img-url1',
@@ -246,7 +271,7 @@ vi.mock('react-router', async () => {
 
 const renderFundCampaignPledge = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter
         initialEntries={['/fundCampaignPledge/orgId/fundCampaignId']}
       >
@@ -289,7 +314,7 @@ describe('Testing Campaign Pledge Screen', () => {
     mockParamsState.fundCampaignId = '';
 
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/fundCampaignPledge/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -508,6 +533,7 @@ describe('Testing Campaign Pledge Screen', () => {
       result: {
         data: {
           fundCampaign: {
+            __typename: 'FundCampaign',
             id: '1',
             name: 'Test Campaign',
             startAt: '2023-01-01T00:00:00Z',
@@ -515,30 +541,70 @@ describe('Testing Campaign Pledge Screen', () => {
             currencyCode: 'USD',
             goalAmount: 1000,
             pledges: {
+              __typename: 'PledgeConnection',
               edges: [
                 {
+                  __typename: 'PledgeEdge',
                   node: {
+                    __typename: 'Pledge',
                     id: '1',
                     amount: 100,
                     createdAt: '2024-01-01T00:00:00Z',
                     note: 'Test note',
                     campaign: {
+                      __typename: 'FundCampaign',
                       id: '1',
                       name: 'Test Campaign',
                     },
                     pledger: {
+                      __typename: 'User',
                       id: '1',
                       name: 'Main User 1',
                       image: null,
                     },
                     users: [
-                      { id: '1', name: 'Main User 1', image: null },
-                      { id: '2', name: 'Extra User 1', image: null },
-                      { id: '3', name: 'Extra User 2', image: null },
-                      { id: '4', name: 'Extra User 3', image: null },
-                      { id: '5', name: 'Extra User 4', image: null },
-                      { id: '6', name: 'Extra User 5', image: null },
-                      { id: '7', name: 'Extra User 6', image: null },
+                      {
+                        __typename: 'User',
+                        id: '1',
+                        name: 'Main User 1',
+                        image: null,
+                      },
+                      {
+                        __typename: 'User',
+                        id: '2',
+                        name: 'Extra User 1',
+                        image: null,
+                      },
+                      {
+                        __typename: 'User',
+                        id: '3',
+                        name: 'Extra User 2',
+                        image: null,
+                      },
+                      {
+                        __typename: 'User',
+                        id: '4',
+                        name: 'Extra User 3',
+                        image: null,
+                      },
+                      {
+                        __typename: 'User',
+                        id: '5',
+                        name: 'Extra User 4',
+                        image: null,
+                      },
+                      {
+                        __typename: 'User',
+                        id: '6',
+                        name: 'Extra User 5',
+                        image: null,
+                      },
+                      {
+                        __typename: 'User',
+                        id: '7',
+                        name: 'Extra User 6',
+                        image: null,
+                      },
                     ],
                   },
                 },

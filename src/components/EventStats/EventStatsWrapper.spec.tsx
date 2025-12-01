@@ -15,13 +15,16 @@ vi.mock('@mui/x-charts/PieChart', () => ({
 }));
 
 describe('Testing Event Stats Wrapper', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const props = {
     _id: 'eventStats123',
   };
 
   it('The button to open and close the modal should work properly', async () => {
     const { queryByText, queryByRole } = render(
-      <MockedProvider mocks={mockData} addTypename={false}>
+      <MockedProvider mocks={mockData}>
         <BrowserRouter>
           <EventStatsWrapper {...props} />
         </BrowserRouter>

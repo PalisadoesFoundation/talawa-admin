@@ -17,6 +17,10 @@ describe('WebSocket URL Configuration', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   test('should convert http URL to ws WebSocket URL', async () => {
     const endpoint = 'http://example.com/graphql';
     const websocketUrl = endpoint.replace(/^http(s)?:\/\//, 'ws$1://');

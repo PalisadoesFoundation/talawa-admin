@@ -5,7 +5,7 @@
   "type": "module",
   "config-overrides-path": "scripts/config-overrides",
   "dependencies": {
-    "@apollo/client": "3.13.0",
+    "@apollo/client": "3.14.0",
     "@apollo/link-error": "^2.0.0-beta.3",
     "@apollo/react-testing": "^4.0.0",
     "@base-ui-components/react": "^1.0.0-beta.3",
@@ -20,7 +20,7 @@
     "@mui/icons-material": "7.3.4",
     "@mui/material": "7.3.4",
     "@mui/system": "7.3.5",
-    "@mui/x-charts": "^8.5.2",
+    "@mui/x-charts": "^8.20.0",
     "@mui/x-data-grid": "^7.28.3",
     "@mui/x-date-pickers": "^7.28.3",
     "@pdfme/common": "^5.2.11",
@@ -33,7 +33,7 @@
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.6",
     "dayjs": "^1.11.13",
-    "dotenv": "^16.4.5",
+    "dotenv": "^17.2.3",
     "flag-icons": "^7.2.3",
     "graphql-tag": "^2.12.6",
     "graphql-ws": "^6.0.4",
@@ -84,7 +84,6 @@
     "check-tsdoc": "node .github/workflows/check-tsdoc.js",
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "prepare": "husky",
-    "jest-preview": "jest-preview",
     "update:toc": "node scripts/githooks/update-toc.js",
     "lint-staged": "lint-staged --concurrent false",
     "setup": "tsx src/setup/setup.ts",
@@ -96,12 +95,12 @@
     "start-server": "node scripts/start-server.js",
     "cy:open": "pnpm run start-server cypress:open",
     "cy:run": "cross-env CYPRESS_COVERAGE=true pnpm run start-server cypress:run",
+    "check-mock-cleanup": "bash scripts/githooks/check-mock-cleanup.sh",
     "check:pom": "node scripts/githooks/check_pom.js"
   },
   "eslintConfig": {
     "extends": [
-      "react-app",
-      "react-app/jest"
+      "react-app"
     ]
   },
   "browserslist": {
@@ -124,11 +123,10 @@
     "@eslint/js": "^9.22.0",
     "@graphql-eslint/eslint-plugin": "^4.3.0",
     "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/apollo-upload-client": "^18.0.0",
-    "@types/jest": "^29.5.14",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^24.3.0",
     "@types/prop-types": "^15.7.15",
@@ -136,8 +134,8 @@
     "@types/react-dom": "^19.1.1",
     "@types/react-google-recaptcha": "^2.1.9",
     "@types/sanitize-html": "^2.16.0",
-    "@typescript-eslint/eslint-plugin": "^8.35.1",
-    "@typescript-eslint/parser": "^8.35.1",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.2",
     "@vitejs/plugin-react": "^5.1.0",
     "@vitest/coverage-istanbul": "^3.2.4",
     "@vitest/eslint-plugin": "^1.4.2",
@@ -153,13 +151,12 @@
     "glob": "^13.0.0",
     "graphql": "^16.10.0",
     "husky": "^9.1.6",
-    "jest-environment-jsdom": "^30.2.0",
     "knip": "^5.66.0",
     "lint-staged": "^16.2.3",
     "nyc": "^17.1.0",
     "prettier": "^3.6.2",
     "sass": "^1.93.3",
-    "tsx": "^4.19.1",
+    "tsx": "^4.21.0",
     "typedoc": "^0.28.1",
     "typedoc-plugin-markdown": "^4.5.0",
     "typescript": "^5.8.3",
@@ -195,11 +192,11 @@
     "temp-directory": ".nyc_output"
   },
   "resolutions": {
-    "@apollo/client": "3.13.0"
+    "@apollo/client": "3.14.0"
   },
   "pnpm": {
     "overrides": {
-      "@apollo/client": "3.13.0"
+      "@apollo/client": "3.14.0"
     }
   },
   "engines": {

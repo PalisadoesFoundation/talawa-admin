@@ -11,6 +11,9 @@ beforeAll(() => {
 });
 
 describe('Testing Loader component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   test('Component should be rendered properly only headerTitles is provided', () => {
     const props: InterfaceTableLoader = {
       noOfRows: 10,
