@@ -509,4 +509,73 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
     // Should handle gracefully without calling updateEnvFile for Docker URL
     expect(console.error).toHaveBeenCalled();
   });
+
+  test('should handle error and not call updateEnvFile when invalid protocol URL is returned', async () => {
+    // Mock returning invalid protocol URL that will trigger catch block
+    (askForTalawaApiUrl as Mock).mockResolvedValue('ftp://example.com');
+
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      shouldSetTalawaApiUrlResponse: true,
+    });
+
+    await askAndUpdateTalawaApiUrl();
+
+    // Verify error was logged
+    expect(console.error).toHaveBeenCalledWith(
+      'Error setting up Talawa API URL:',
+      expect.any(Error),
+    );
+
+    // Verify updateEnvFile was not called due to error
+    expect(updateEnvFile).not.toHaveBeenCalled();
+  });
+
+  test('should handle multiple URL construction errors in sequence', async () => {
+    // Return URL that causes error in WebSocket URL creation
+    (askForTalawaApiUrl as Mock).mockResolvedValue('https://example.com');
+
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      shouldSetTalawaApiUrlResponse: true,
+    });
+
+    const originalURL = global.URL;
+    let callCount = 0;
+
+    try {
+      // Mock URL constructor to fail on WebSocket URL creation
+      global.URL = class extends originalURL {
+        constructor(url: string) {
+          callCount++;
+          if (callCount === 2) {
+            throw new Error('WebSocket URL creation failed');
+          }
+          super(url);
+        }
+      } as typeof URL;
+
+      await askAndUpdateTalawaApiUrl();
+
+      // Verify error was caught and logged
+      expect(console.error).toHaveBeenCalledWith(
+        'Error setting up Talawa API URL:',
+        expect.objectContaining({
+          message: 'Invalid WebSocket URL generated: ',
+        }),
+      );
+
+      // Verify REACT_APP_TALAWA_URL was set before error occurred
+      expect(updateEnvFile).toHaveBeenCalledWith(
+        'REACT_APP_TALAWA_URL',
+        'https://example.com',
+      );
+
+      // Verify WebSocket URL was NOT set due to error
+      expect(updateEnvFile).not.toHaveBeenCalledWith(
+        'REACT_APP_BACKEND_WEBSOCKET_URL',
+        expect.anything(),
+      );
+    } finally {
+      global.URL = originalURL;
+    }
+  });
 });
