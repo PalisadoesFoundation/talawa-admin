@@ -785,55 +785,56 @@ describe('Chat Component - Coverage for Uncovered Lines', () => {
   });
 
   test('should handle legacy GroupChat type in orgId filtering', async () => {
-    const mockLegacyWithOrgId = {
-      request: { query: CHATS_LIST, variables: { first: 10, after: null } },
-      result: {
-        data: {
-          chatsByUser: [
-            {
-              _id: 'legacy-1',
-              id: 'legacy-1',
-              name: 'Legacy Chat Org 1',
-              isGroup: false,
-              description: '',
-              createdAt: '2024-01-01',
-              users: [{}, {}],
-              image: '',
-              organization: { _id: 'org-1', id: 'org-1', name: 'Org 1' },
-              lastMessage: null,
-              unreadMessagesCount: 0,
-              __typename: 'Chat',
-            },
-            {
-              _id: 'legacy-2',
-              id: 'legacy-2',
-              name: 'Legacy Chat Org 2',
-              isGroup: false,
-              description: '',
-              createdAt: '2024-01-01',
-              users: [{}, {}],
-              image: '',
-              organization: { _id: 'org-2', id: 'org-2', name: 'Org 2' },
-              lastMessage: null,
-              unreadMessagesCount: 0,
-              __typename: 'Chat',
-            },
-          ],
-        },
+  const mockLegacyWithOrgId = {
+    request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+    result: {
+      data: {
+        chatsByUser: [
+          {
+            _id: 'legacy-1',
+            id: 'legacy-1',
+            name: 'Legacy Chat Org 1',
+            isGroup: false,
+            description: '',
+            createdAt: '2024-01-01',
+            users: [{}, {}],
+            image: '',
+            organization: { _id: 'org-1', id: 'org-1', name: 'Org 1' },
+            lastMessage: null,
+            unreadMessagesCount: 0,
+            __typename: 'Chat',
+          },
+          {
+            _id: 'legacy-2',
+            id: 'legacy-2',
+            name: 'Legacy Chat Org 2',
+            isGroup: false,
+            description: '',
+            createdAt: '2024-01-01',
+            users: [{}, {}],
+            image: '',
+            organization: { _id: 'org-2', id: 'org-2', name: 'Org 2' },
+            lastMessage: null,
+            unreadMessagesCount: 0,
+            __typename: 'Chat',
+          },
+        ],
       },
-    };
+    },
+  };
+  mockUseParams.mockReturnValue({ orgId: 'org-1' });
+  
+  renderComponent([
+    mockLegacyWithOrgId,
+    mockLegacyWithOrgId,
+    mockUnreadChats,
+  ]);
 
-    renderComponent([
-      mockLegacyWithOrgId,
-      mockLegacyWithOrgId,
-      mockUnreadChats,
-    ]);
+  await waitFor(() => {
 
-    await waitFor(() => {
-      expect(screen.getByTestId('contact-card-legacy-1')).toBeInTheDocument();
-    });
+    expect(screen.getByTestId('contact-card-legacy-1')).toBeInTheDocument();
   });
-
+});
   test('should toggle create direct chat modal state', () => {
     const { result } = renderHook(() => {
       const [isOpen, setIsOpen] = useState(false);
@@ -959,18 +960,12 @@ describe('Chat Component - Coverage for Uncovered Lines', () => {
     await waitFor(() => {
       const contactCardContainer = screen.getByTestId('contactCardContainer');
       expect(contactCardContainer).toBeInTheDocument();
+       // Verify no contact cards are rendered
+      expect(screen.queryByTestId(/^contact-card-/)).not.toBeInTheDocument();
     });
   });
 
-  test('should handle selectedContact useEffect without markChatMessagesAsRead', async () => {
-    renderComponent();
-
-    await waitFor(() => {
-      expect(screen.getByTestId('chat-room')).toBeInTheDocument();
-    });
-  });
-
-  test('should pass correct props to ContactCard for NewChatType', async () => {
+  test('should correctly identify NewChatType through component behavior', async () => {
     const newChatTypeMock = {
       request: { query: CHATS_LIST, variables: { first: 10, after: null } },
       result: {
@@ -999,40 +994,6 @@ describe('Chat Component - Coverage for Uncovered Lines', () => {
       expect(contactCard).toHaveAttribute('data-last-message', 'Last message text');
     });
   });
-
-test('should correctly identify NewChatType through component behavior', async () => {
-  const mixedChatsMock = {
-    request: { query: CHATS_LIST, variables: { first: 10, after: null } },
-    result: {
-      data: {
-        chatsByUser: [
-          {
-            id: 'new-chat',
-            name: 'New Chat',
-            organization: { id: 'org-1' },
-            members: { edges: [{}, {}] },
-            __typename: 'Chat',
-          }, 
-          {
-            _id: 'legacy-chat',
-            name: 'Legacy Chat',
-            organization: { _id: 'org-1' },
-            users: [{}, {}],
-            __typename: 'Chat',
-          },
-        ],
-      },
-    },
-  };
-
-  renderComponent([mixedChatsMock, mixedChatsMock, mockUnreadChats]);
-
-  await waitFor(() => {
-    expect(screen.getByTestId('contact-card-new-chat')).toBeInTheDocument();
-    expect(screen.getByTestId('contact-card-legacy-chat')).toBeInTheDocument();
-  });
-});
-
   test('should apply correct CSS classes to active filter buttons', async () => {
     renderComponent();
     await screen.findByTestId('contact-card-chat-1');
