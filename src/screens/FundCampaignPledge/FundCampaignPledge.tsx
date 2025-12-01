@@ -601,16 +601,16 @@ const fundCampaignPledge = (): JSX.Element => {
         open={open}
         anchorEl={anchorEl}
         onClose={() => setOpen(false)}
-           transformOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
-    }}
-    data-testid="extra-users-popup"
-    slotProps={{
-      paper: {
-        className: `${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`,
-      }
-    }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+         data-testid="extra-users-popup"
+         slotProps={{
+           paper: {
+            className: `${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`,
+           }
+          }}
       >
         <Box sx={{ p: 1 }}>
       {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
