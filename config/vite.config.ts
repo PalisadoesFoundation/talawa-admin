@@ -11,14 +11,31 @@ export default defineConfig(({ mode }) => {
   const parsed = parseInt(env.PORT || '', 10);
   const PORT =
     !isNaN(parsed) && parsed >= 1024 && parsed <= 65535 ? parsed : 4321;
-  const API_TARGET = env.TALAWA_API_URL || 'http://localhost:4000';
+  // 1. Get the Full Backend URL from the standard env var
+  const fullBackendUrl =
+    env.REACT_APP_TALAWA_URL || 'http://localhost:4000/graphql';
+
+  // 2. Extract the Origin (e.g., "http://192.168.1.100:4000")
+  let apiTarget = 'http://localhost:4000';
+  try {
+    // We only want the protocol and host (not the /graphql path)
+    const urlObj = new URL(fullBackendUrl);
+    apiTarget = urlObj.origin;
+  } catch {
+    // Safe fallback if the URL is empty or invalid
+    apiTarget = 'http://localhost:4000';
+  }
 
   return {
     // depending on your application, base can also be "/"
     build: {
       outDir: 'build',
     },
-    base: '',
+    define: {
+      // Force React to use relative paths so requests go through the Proxy
+      'process.env.REACT_APP_TALAWA_URL': JSON.stringify('/graphql'),
+      'process.env.REACT_APP_BACKEND_WEBSOCKET_URL': JSON.stringify('/graphql'),
+    },
     plugins: [
       react(),
       viteTsconfigPaths(),
@@ -66,7 +83,7 @@ export default defineConfig(({ mode }) => {
       port: PORT,
       proxy: {
         '/graphql': {
-          target: API_TARGET,
+          target: apiTarget,
           changeOrigin: true,
           ws: true,
         },
