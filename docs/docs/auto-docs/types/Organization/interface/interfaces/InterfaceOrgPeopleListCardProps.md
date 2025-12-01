@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrgPeopleListCardProps
 
-Defined in: [src/types/Organization/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L23)
+Defined in: [src/types/Organization/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L29)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Organization/interface.ts:23](https://github.com/Palisado
 
 > **id**: `string`
 
-Defined in: [src/types/Organization/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L24)
+Defined in: [src/types/Organization/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L30)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Organization/interface.ts:24](https://github.com/Palisado
 
 > **toggleRemoveModal**: () => `void`
 
-Defined in: [src/types/Organization/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L25)
+Defined in: [src/types/Organization/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L31)
 
 #### Returns
 
