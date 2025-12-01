@@ -24,11 +24,10 @@ import useLocalStorage from 'utils/useLocalstorage';
 
 const { setItem } = useLocalStorage();
 
-const link1 = new StaticMockLink(MOCKS);
-
 const renderVolunteerManagement = (): RenderResult => {
+  const link = new StaticMockLink(MOCKS);
   return render(
-    <MockedProvider addTypename={false} link={link1}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/user/volunteer/orgId']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
@@ -56,8 +55,9 @@ describe('Volunteer Management', () => {
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
+    const link = new StaticMockLink(MOCKS);
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/user/volunteer']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -161,6 +161,9 @@ describe('Volunteer Management', () => {
     const dropdownMenu = dropdownContainer.querySelector('.dropdown-menu');
     expect(dropdownMenu).toBeInTheDocument();
 
+    // Verify dropdown is open
+    expect(dropdownMenu).toHaveClass('show');
+
     // Find and click on "Invitations" within the dropdown menu
     const invitationsItem = within(dropdownMenu as HTMLElement).getByText(
       'Invitations',
@@ -184,9 +187,11 @@ describe('Volunteer Management', () => {
     const dropdownToggle = await screen.findByTestId('tabsDropdownToggle');
     await userEvent.click(dropdownToggle);
 
-    // Find dropdown menu and click on "Action Items" within it
+    // Find dropdown menu and verify it's open
     const dropdownContainer = screen.getByTestId('tabsDropdownContainer');
     const dropdownMenu = dropdownContainer.querySelector('.dropdown-menu');
+    expect(dropdownMenu).toHaveClass('show');
+
     const actionsItem = within(dropdownMenu as HTMLElement).getByText(
       'Action Items',
     );
@@ -209,9 +214,11 @@ describe('Volunteer Management', () => {
     const dropdownToggle = await screen.findByTestId('tabsDropdownToggle');
     await userEvent.click(dropdownToggle);
 
-    // Find dropdown menu and click on "Volunteer Groups" within it
+    // Find dropdown menu and verify it's open
     const dropdownContainer = screen.getByTestId('tabsDropdownContainer');
     const dropdownMenu = dropdownContainer.querySelector('.dropdown-menu');
+    expect(dropdownMenu).toHaveClass('show');
+
     const groupsItem = within(dropdownMenu as HTMLElement).getByText(
       'Volunteer Groups',
     );
@@ -239,9 +246,11 @@ describe('Volunteer Management', () => {
     const dropdownToggle = await screen.findByTestId('tabsDropdownToggle');
     await userEvent.click(dropdownToggle);
 
-    // Find dropdown menu and click on "Upcoming Events" within it
+    // Find dropdown menu and verify it's open
     const dropdownContainer = screen.getByTestId('tabsDropdownContainer');
     const dropdownMenu = dropdownContainer.querySelector('.dropdown-menu');
+    expect(dropdownMenu).toHaveClass('show');
+
     const upcomingEventsItem = within(dropdownMenu as HTMLElement).getByText(
       'Upcoming Events',
     );
