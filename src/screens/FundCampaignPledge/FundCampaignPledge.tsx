@@ -588,11 +588,11 @@ const fundCampaignPledge = (): JSX.Element => {
         refetchPledge={refetchPledge}
       />
       </div>
-       id={id} 
-      <div 
-      ref={(node) => {
+      <div
+        id={id}
+        ref={(node) => {
           if (node && !anchorEl) {
-           setAnchorEl(node);
+            setAnchorEl(node);
           }
         }}
         style={{ display: 'none' }}

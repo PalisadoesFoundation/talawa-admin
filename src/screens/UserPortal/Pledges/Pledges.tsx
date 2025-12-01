@@ -521,14 +521,13 @@ const Pledges = (): JSX.Element => {
     anchorEl={anchorEl}
     onClose={() => setOpen(false)}
     anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'center',
-    }}
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
     transformOrigin={{
       vertical: 'top',
       horizontal: 'center',
     }}
-    className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
     data-testid="extra-users-popup"
     slotProps={{
       paper: {
