@@ -58,13 +58,8 @@ describe('TruncatedText Component', () => {
 
   test('truncates text when it exceeds max width', () => {
     mockLayout(100, '16px');
-    const originalText = 'This is a long text';
-    render(<TruncatedText text={originalText} />);
-    const heading = screen.getByRole('heading', { level: 6 });
-    const displayedText = heading.textContent || '';
-    // Verify truncation: should have ellipsis and be shorter than original
-    expect(displayedText).toMatch(/\.\.\./);
-    expect(displayedText.length).toBeLessThan(originalText.length);
+    render(<TruncatedText text="This is a long text" />);
+    expect(screen.getByText('This i...')).toBeDefined();
   });
 
   test('uses maxWidthOverride if provided', () => {
@@ -78,13 +73,8 @@ describe('TruncatedText Component', () => {
   test('uses offsetWidth when maxWidthOverride is 0', () => {
     // 0 is falsy, so it should fallback to offsetWidth
     mockLayout(100, '16px'); // 100px -> truncates
-    const originalText = 'This is a long text';
-    render(<TruncatedText text={originalText} maxWidthOverride={0} />);
-    const heading = screen.getByRole('heading', { level: 6 });
-    const displayedText = heading.textContent || '';
-    // Should truncate using offsetWidth
-    expect(displayedText).toMatch(/\.\.\./);
-    expect(displayedText.length).toBeLessThan(originalText.length);
+    render(<TruncatedText text="This is a long text" maxWidthOverride={0} />);
+    expect(screen.getByText('This i...')).toBeDefined();
   });
 
   test('uses small maxWidthOverride and truncates accordingly', () => {
@@ -98,29 +88,23 @@ describe('TruncatedText Component', () => {
 
   test('uses offsetWidth when maxWidthOverride is explicitly undefined', () => {
     mockLayout(100, '16px');
-    const originalText = 'This is a long text';
-    render(<TruncatedText text={originalText} maxWidthOverride={undefined} />);
-    const heading = screen.getByRole('heading', { level: 6 });
-    const displayedText = heading.textContent || '';
+    render(
+      <TruncatedText text="This is a long text" maxWidthOverride={undefined} />,
+    );
     // Should use offsetWidth (100) and truncate
-    expect(displayedText).toMatch(/\.\.\./);
-    expect(displayedText.length).toBeLessThan(originalText.length);
+    expect(screen.getByText('This i...')).toBeDefined();
   });
 
   test('uses offsetWidth when maxWidthOverride is null', () => {
     mockLayout(100, '16px');
-    const originalText = 'This is a long text';
     render(
       <TruncatedText
-        text={originalText}
+        text="This is a long text"
         maxWidthOverride={null as unknown as number}
       />,
     );
-    const heading = screen.getByRole('heading', { level: 6 });
-    const displayedText = heading.textContent || '';
     // Should use offsetWidth (100) and truncate
-    expect(displayedText).toMatch(/\.\.\./);
-    expect(displayedText.length).toBeLessThan(originalText.length);
+    expect(screen.getByText('This i...')).toBeDefined();
   });
 
   test('recalculates when text prop changes', () => {
@@ -152,19 +136,14 @@ describe('TruncatedText Component', () => {
   });
   test('recalculates on resize', () => {
     mockLayout(1000, '16px');
-    const originalText = 'Resize me please';
-    render(<TruncatedText text={originalText} />);
-    expect(screen.getByText(originalText)).toBeDefined();
+    render(<TruncatedText text="Resize me please" />);
+    expect(screen.getByText('Resize me please')).toBeDefined();
 
     mockLayout(50, '16px');
     act(() => {
       window.dispatchEvent(new Event('resize'));
     });
-    const heading = screen.getByRole('heading', { level: 6 });
-    const displayedText = heading.textContent || '';
-    // After resize to small width, should be truncated
-    expect(displayedText).toMatch(/\.\.\./);
-    expect(displayedText.length).toBeLessThan(originalText.length);
+    expect(screen.getByText('R...')).toBeDefined();
   });
 
   test('handles empty text', () => {

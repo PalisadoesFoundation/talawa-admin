@@ -52,22 +52,27 @@ const TruncatedText: React.FC<InterfaceTruncatedTextProps> = ({
    */
 
   const truncateText = (): void => {
-    const element = textRef.current;
-    if (element) {
-      const maxWidth = maxWidthOverride || element.offsetWidth;
-      const fullText = text;
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- element is guaranteed to be defined when truncateText is called from useEffect after mount
+    const element = textRef.current!;
 
-      const computedStyle = getComputedStyle(element);
-      const fontSize = parseFloat(computedStyle.fontSize);
-      const charPerPx = 0.065 + fontSize * 0.002;
-      const maxChars = Math.floor(maxWidth * charPerPx);
-
-      setTruncatedText(
-        fullText.length > maxChars
-          ? `${fullText.slice(0, maxChars - 3)}...`
-          : fullText,
-      );
+    let maxWidth: number;
+    if (maxWidthOverride) {
+      maxWidth = maxWidthOverride;
+    } else {
+      maxWidth = element.offsetWidth;
     }
+    const fullText = text;
+
+    const computedStyle = getComputedStyle(element);
+    const fontSize = parseFloat(computedStyle.fontSize);
+    const charPerPx = 0.065 + fontSize * 0.002;
+    const maxChars = Math.floor(maxWidth * charPerPx);
+
+    setTruncatedText(
+      fullText.length > maxChars
+        ? `${fullText.slice(0, maxChars - 3)}...`
+        : fullText,
+    );
   };
 
   useEffect(() => {
