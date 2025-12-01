@@ -834,7 +834,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'template123' });
 
     render(
-      <MockedProvider mocks={recurringTemplateMocks} addTypename={false}>
+      <MockedProvider mocks={recurringTemplateMocks}>
         <AttendanceStatisticsModal
           show={true}
           handleClose={() => {}}

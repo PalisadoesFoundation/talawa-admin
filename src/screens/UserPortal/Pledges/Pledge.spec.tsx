@@ -121,6 +121,18 @@ const MOCKS_WITH_MULTIPLE_PLEDGERS = [
                 avatarURL: null,
                 __typename: 'User',
               },
+              {
+                id: 'userId5',
+                name: 'Bob Wilson',
+                avatarURL: 'image-url5',
+                __typename: 'User',
+              },
+              {
+                id: 'userId6',
+                name: 'Charlie Davis',
+                avatarURL: null,
+                __typename: 'User',
+              },
             ],
             updater: {
               id: 'userId1',
@@ -1089,7 +1101,7 @@ const translations = JSON.parse(
 
 const renderMyPledges = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/user/pledges/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1145,7 +1157,7 @@ describe('Testing User Pledge Screen', () => {
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1189,33 +1201,19 @@ describe('Testing User Pledge Screen', () => {
 
   it('should display multiple pledgers and trigger popup', async () => {
     renderMyPledges(link7);
+
+    const moreContainer = await screen.findByTestId('moreContainer-pledgeId1');
+    expect(moreContainer).toHaveTextContent('+4 more...');
+    await userEvent.click(moreContainer);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
-      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
+      expect(screen.getByTestId('extra-users-popup')).toBeInTheDocument();
+      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      expect(screen.getByText('Bob Wilson')).toBeInTheDocument();
     });
-
-    // Check if moreContainer exists (it should with 4 users)
-    const moreContainer = screen.queryByTestId('moreContainer-pledgeId1');
-    if (moreContainer) {
-      expect(moreContainer).toHaveTextContent('+2 more...');
-
-      await userEvent.click(moreContainer);
-      await waitFor(() => {
-        expect(screen.getByTestId('extra1')).toBeInTheDocument();
-        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-        expect(screen.getByTestId('extra2')).toBeInTheDocument();
-        expect(screen.getByText('Alice Brown')).toBeInTheDocument();
-      });
-
-      // Close popup by clicking again
-      await userEvent.click(moreContainer);
-      await waitFor(() => {
-        expect(screen.queryByTestId('extra1')).not.toBeInTheDocument();
-      });
-    } else {
-      // If moreContainer doesn't exist, just verify the component rendered successfully
-      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
-    }
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => {
+      expect(screen.queryByTestId('extra-users-popup')).not.toBeInTheDocument();
+    });
   });
 
   it('should handle missing campaign data', async () => {
