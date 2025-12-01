@@ -10,7 +10,6 @@
  * @param props.name - The name of the organization.
  * @param props.image - The URL of the organization's image.
  * @param props.description - A brief description of the organization.
- * @param props.adminsCount - The number of admins in the organization.
  * @param props.membersCount - The number of members in the organization.
  * @param props.address - The address of the organization, including city and country code.
  * @param props.membershipRequestStatus - The current membership request status for the user.
@@ -61,15 +60,15 @@ import type { ApolloError } from '@apollo/client';
 import type { InterfaceOrganizationCardProps } from 'types/Organization/interface';
 import { getItem } from 'utils/useLocalstorage';
 import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQueries';
+import TruncatedText from 'components/OrgListCard/TruncatedText';
 
 function OrganizationCard({
   id,
   name,
   image,
   description,
-  adminsCount,
   membersCount,
-  address,
+  addressLine1,
   membershipRequestStatus,
   userRegistrationRequired,
   membershipRequests,
@@ -194,7 +193,7 @@ function OrganizationCard({
           <Tooltip title={name} placement="top-end">
             <h4 className={`${styles.orgName} fw-semibold`}>{name}</h4>
           </Tooltip>
-          <h6 className={`${styles.orgdesc} fw-semibold`}>
+          {/* <h6 className={`${styles.orgdesc} fw-semibold`}>
             <span>{description}</span>
           </h6>
           {address && address.city && (
@@ -205,11 +204,18 @@ function OrganizationCard({
                 <span className="address-line">{address.countryCode}</span>
               </h6>
             </div>
+          )} */}
+          {/* Description of the organization */}
+          <div className={`${styles.orgdesc} fw-semibold`}>
+            <TruncatedText text={description} />
+          </div>
+          {/* Display the organization address if available */}
+          {addressLine1 && (
+            <div className={styles.address}>
+              <TruncatedText text={`${addressLine1}`} />
+            </div>
           )}
           <h6 className={styles.orgadmin}>
-            <div>
-              {tCommon('admins')}: <span>{adminsCount}</span>
-            </div>
             <div>
               {tCommon('members')}: <span>{membersCount}</span>
             </div>
@@ -221,7 +227,7 @@ function OrganizationCard({
         {isJoined ? (
           <Button
             data-testid="manageBtn"
-            className={styles.addButton}
+            className={styles.manageBtn}
             onClick={() => navigate(`/user/organization/${id}`)}
             style={{ width: '8rem' }}
             data-cy="manageBtn"

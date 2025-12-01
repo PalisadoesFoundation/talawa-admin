@@ -6,13 +6,7 @@ export interface InterfaceOrganizationCardProps {
   members?: {
     id: string;
   }[];
-  address: {
-    city: string;
-    countryCode: string;
-    line1: string;
-    postalCode: string;
-    state: string;
-  };
+  addressLine1: string;
   membersCount: number;
   adminsCount: number;
   membershipRequestStatus: string;

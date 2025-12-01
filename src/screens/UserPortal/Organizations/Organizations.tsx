@@ -40,15 +40,14 @@ import {
   USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
 } from 'GraphQl/Queries/Queries';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
+import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import React, { useEffect, useState, useRef } from 'react';
-import { Form, Dropdown, InputGroup } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../../style/app-fixed.module.css';
-import OrgListCard from 'components/OrgListCard/OrgListCard';
-import { InterfaceOrgInfoTypePG } from 'utils/interfaces';
-import { SearchOutlined } from '@mui/icons-material';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 function useDebounce<T>(fn: (val: T) => void, delay: number) {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -63,6 +62,26 @@ function useDebounce<T>(fn: (val: T) => void, delay: number) {
   }
 
   return debouncedFn;
+}
+
+interface IOrganizationCardProps {
+  id: string;
+  name: string;
+  image: string;
+  description: string;
+  admins: [];
+  addressLine1: string;
+  membershipRequestStatus: string;
+  userRegistrationRequired: boolean;
+  membershipRequests: {
+    id: string;
+    user: {
+      id: string;
+    };
+  }[];
+  isJoined: boolean;
+  membersCount: number; // Add this
+  adminsCount: number; // Add this
 }
 
 /**
@@ -83,6 +102,7 @@ interface InterfaceMembersConnection {
   };
 }
 interface IOrganization {
+  isJoined: boolean;
   id: string;
   name: string;
   image?: string;
@@ -108,7 +128,6 @@ interface IOrganization {
       id: string;
     };
   }[];
-  createdAt: string;
 }
 
 interface IOrgData {
@@ -116,7 +135,6 @@ interface IOrgData {
   addressLine1: string;
   avatarURL: string | null;
   id: string;
-  adminsCount: number;
   membersCount: number;
   members: {
     edges: [
@@ -132,7 +150,6 @@ interface IOrgData {
   description: string;
   __typename: string;
   name: string;
-  createdAt: string;
 }
 
 /**
@@ -229,20 +246,9 @@ export default function Organizations(): React.JSX.Element {
 
   const debouncedSearch = useDebounce(doSearch, 300);
 
-  const handleChangeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newVal = e.target.value;
+  const handleChangeFilter = (newVal: string): void => {
     setTypedValue(newVal);
     debouncedSearch(newVal);
-  };
-
-  const handleSearchByEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      doSearch(typedValue);
-    }
-  };
-
-  const handleSearchByBtnClick = () => {
-    doSearch(typedValue);
   };
 
   /**
@@ -259,22 +265,14 @@ export default function Organizations(): React.JSX.Element {
             id: org.id,
             name: org.name,
             image: org.avatarURL || null,
-            address: {
-              line1: org.addressLine1 || '',
-              city: '',
-              countryCode: '',
-              postalCode: '',
-              state: '',
-            },
-            adminsCount: org.adminsCount || 0,
+            description: org.description || '',
+            addressLine1: org.addressLine1 || '',
             membersCount: org.membersCount || 0,
             admins: [],
             membershipRequestStatus: isMember ? 'accepted' : '',
             userRegistrationRequired: false,
             membershipRequests: [],
-            createdAt: org.createdAt,
-            description: org.description,
-            addressLine1: org.addressLine1,
+            isJoined: isMember, // Set based on membership check
           };
         });
         setOrganizations(orgs);
@@ -289,7 +287,7 @@ export default function Organizations(): React.JSX.Element {
               return {
                 ...organization,
                 membershipRequestStatus: 'accepted', // Always set to 'accepted' for joined orgs
-                createdAt: organization.createdAt,
+                isJoined: true,
               };
             },
           );
@@ -304,9 +302,7 @@ export default function Organizations(): React.JSX.Element {
           (org: IOrganization) => ({
             ...org,
             membershipRequestStatus: 'created',
-            createdAt: org.createdAt,
-            description: org.description,
-            addressLine1: org.addressLine1,
+            isJoined: true,
           }),
         );
         setOrganizations(orgs);
@@ -366,7 +362,7 @@ export default function Organizations(): React.JSX.Element {
         className={`${hideDrawer ? styles.expand : styles.contract}`}
         style={{
           marginLeft: hideDrawer ? '40px' : '20px',
-          paddingTop: '40px',
+          paddingTop: '20px',
         }}
         data-testid="organizations-container"
       >
@@ -380,41 +376,18 @@ export default function Organizations(): React.JSX.Element {
             </div>
           </div>
 
-          <div className={styles.btnsContainerSearchBar}>
-            <div className={styles.searchWrapper}>
-              <div className={styles.inputOrgList}>
-                <InputGroup className={styles.maxWidth}>
-                  <Form.Control
-                    placeholder={t('searchOrganizations')}
-                    id="searchUserOrgs"
-                    type="text"
-                    className={styles.inputField}
-                    value={typedValue}
-                    onChange={handleChangeFilter}
-                    onKeyUp={handleSearchByEnter}
-                    data-testid="searchInput"
-                    aria-label={t('searchOrganizations')}
-                  />
-
-                  <InputGroup.Text
-                    className={styles.searchButton}
-                    style={{ cursor: 'pointer' }}
-                    onClick={handleSearchByBtnClick}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        handleSearchByBtnClick();
-                      }
-                    }}
-                    data-testid="searchBtn"
-                    title={t('search')}
-                    role="button"
-                    tabIndex={0}
-                    aria-label={t('search')}
-                  >
-                    <SearchOutlined className={styles.colorWhite} />
-                  </InputGroup.Text>
-                </InputGroup>
+          <div className={styles.head}>
+            <div className={styles.btnsContainer}>
+              <div className={styles.input}>
+                <SearchBar
+                  className={styles.maxWidth}
+                  placeholder={t('searchOrganizations')}
+                  value={typedValue}
+                  onChange={(val) => handleChangeFilter(val)}
+                  onSearch={(val) => doSearch(val)}
+                  inputTestId="searchInput"
+                  buttonTestId="searchBtn"
+                />
               </div>
               <div className={styles.btnsBlock}>
                 <Dropdown drop="down-centered">
@@ -468,15 +441,21 @@ export default function Organizations(): React.JSX.Element {
                           )
                         : organizations
                       ).map((organization: IOrganization, index) => {
-                        const cardProps: InterfaceOrgInfoTypePG = {
-                          id: organization.id,
+                        const cardProps: IOrganizationCardProps = {
                           name: organization.name,
-                          description: organization.description || '',
+                          image: organization.image ?? '',
+                          id: organization.id,
+                          description: organization.description,
                           addressLine1: organization.addressLine1 || '',
-                          avatarURL: organization.avatarURL || '',
-                          members: organization.members,
-                          membersCount: organization.membersCount,
-                          createdAt: organization.createdAt,
+                          admins: organization.admins,
+                          membershipRequestStatus:
+                            organization.membershipRequestStatus,
+                          userRegistrationRequired:
+                            organization.userRegistrationRequired,
+                          membershipRequests: organization.membershipRequests,
+                          isJoined: organization.isJoined,
+                          membersCount: organization.membersCount || 0,
+                          adminsCount: organization.adminsCount || 0,
                         };
                         return (
                           <div
@@ -495,8 +474,7 @@ export default function Organizations(): React.JSX.Element {
                               className="visually-hidden"
                             ></div>
 
-                            <OrgListCard data={cardProps} />
-
+                            <OrganizationCard {...cardProps} />
                             {/* Add a hidden span with organization name for testing purposes */}
                             <span
                               data-testid={`org-name-${organization.name}`}

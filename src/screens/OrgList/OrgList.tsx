@@ -353,16 +353,10 @@ function orgList(): JSX.Element {
                 aria-label={t('searchOrganizations')}
               />
 
-              <InputGroup.Text
+              <Button
                 className={styles.searchButton}
                 style={{ cursor: 'pointer' }}
                 onClick={handleSearchByBtnClick}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    handleSearchByBtnClick();
-                  }
-                }}
                 data-testid="searchBtn"
                 title={t('search')}
                 role="button"
@@ -370,7 +364,7 @@ function orgList(): JSX.Element {
                 aria-label={t('search')}
               >
                 <SearchOutlined className={styles.colorWhite} />
-              </InputGroup.Text>
+              </Button>
             </InputGroup>
           </div>
 

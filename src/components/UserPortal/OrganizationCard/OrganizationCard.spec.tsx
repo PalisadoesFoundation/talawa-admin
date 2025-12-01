@@ -46,6 +46,10 @@ vi.mock('react-router', () => {
   };
 });
 
+vi.mock('components/OrgListCard/TruncatedText', () => ({
+  default: ({ text }: { text: string }) => <span>{text}</span>,
+}));
+
 // Initialize i18n for testing
 i18n.init({
   lng: 'en',
@@ -215,13 +219,7 @@ const defaultProps: InterfaceOrganizationCardProps = {
   image: 'https://via.placeholder.com/80',
   description: '',
   members: [],
-  address: {
-    city: '',
-    countryCode: '',
-    line1: '',
-    postalCode: '',
-    state: '',
-  },
+  addressLine1: '',
   membersCount: 0,
   adminsCount: 0,
   membershipRequestStatus: '',
@@ -251,7 +249,6 @@ describe('OrganizationCard Component with New Interface', () => {
       );
 
       expect(screen.getByText(defaultProps.name)).toBeInTheDocument();
-      expect(screen.getByText(/Admins/i)).toBeInTheDocument();
       expect(screen.getByText(/Members/i)).toBeInTheDocument();
     });
 
@@ -269,13 +266,7 @@ describe('OrganizationCard Component with New Interface', () => {
     it('should render full address when provided', () => {
       const props = {
         ...defaultProps,
-        address: {
-          city: 'Test City',
-          countryCode: 'TC',
-          line1: 'Test Line 1',
-          postalCode: '12345',
-          state: 'TS',
-        },
+        addressLine1: 'Test Line 1',
       };
 
       render(
@@ -285,8 +276,6 @@ describe('OrganizationCard Component with New Interface', () => {
       );
 
       expect(screen.getByText(/Test Line 1/)).toBeInTheDocument();
-      expect(screen.getByText(/Test City/)).toBeInTheDocument();
-      expect(screen.getByText(/TC/)).toBeInTheDocument();
     });
 
     it('should display membersCount and adminsCount', () => {
@@ -307,16 +296,8 @@ describe('OrganizationCard Component with New Interface', () => {
         const text = element.textContent ?? '';
         return text.includes('members') && text.includes('15');
       });
-      const adminsElements = screen.queryAllByText((content, element) => {
-        if (!element) return false;
-        const text = element.textContent ?? '';
-        return text.includes('admins') && text.includes('3');
-      });
-
       expect(membersElements.length).toBeGreaterThan(0);
       expect(membersElements[0]).toBeInTheDocument();
-      expect(adminsElements.length).toBeGreaterThan(0);
-      expect(adminsElements[0]).toBeInTheDocument();
     });
   });
 
