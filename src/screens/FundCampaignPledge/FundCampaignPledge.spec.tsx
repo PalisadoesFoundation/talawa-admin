@@ -632,7 +632,7 @@ describe('Testing Campaign Pledge Screen', () => {
 
     // Check popup styling and content
     const popup = await screen.findByTestId('extra-users-popup');
-expect(popup).toBeInTheDocument();
+    expect(popup).toBeInTheDocument();
 
     // Verify all extra users are shown
     for (let i = 1; i <= 6; i++) {
