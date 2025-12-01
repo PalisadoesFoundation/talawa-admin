@@ -8,12 +8,10 @@ If you are new to contributing to open source, please read the Open Source Guide
 
 <!-- toc -->
 
-- [Contributing to Talawa-Admin](#contributing-to-talawa-admin)
-  - [Table of Contents](#table-of-contents)
-  - [General](#general)
-  - [Testing and Code Quality](#testing-and-code-quality)
-    - [Quick Reference](#quick-reference)
-  - [Making Contributions](#making-contributions)
+- [General](#general)
+- [Testing and Code Quality](#testing-and-code-quality)
+  - [Quick Reference](#quick-reference)
+- [Making Contributions](#making-contributions)
 
 <!-- tocstop -->
 

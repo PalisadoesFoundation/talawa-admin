@@ -10,7 +10,7 @@ import { describe, it, expect } from 'vitest';
 describe('Delete User component', () => {
   it('renders delete user correctly', () => {
     const { getByText } = render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <OtherSettings />

@@ -30,6 +30,10 @@ Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:4](https://github.
 
 > **updateCurrentUser**: `object`
 
+#### request.result.data.updateCurrentUser.\_\_typename
+
+> **\_\_typename**: `string` = `'User'`
+
 #### request.result.data.updateCurrentUser.id
 
 > **id**: `string` = `'65ba1621b7b00c20e5f1d8d2'`

@@ -18,6 +18,10 @@ describe('askForCustomPort', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   describe('basic port validation', () => {
     it('should return default port if user provides no input', async () => {
       vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({

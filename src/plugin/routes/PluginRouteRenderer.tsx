@@ -9,7 +9,7 @@ import React, { Suspense } from 'react';
 import type { IRouteExtension } from '../types';
 import { getPluginComponents, isPluginRegistered } from '../registry';
 
-interface PluginRouteRendererProps {
+interface IPluginRouteRendererProps {
   route: IRouteExtension;
   fallback?: React.ReactElement;
 }
@@ -17,7 +17,7 @@ interface PluginRouteRendererProps {
 /**
  * Component to render plugin routes using the plugin registry
  */
-const PluginRouteRenderer: React.FC<PluginRouteRendererProps> = ({
+const PluginRouteRenderer: React.FC<IPluginRouteRendererProps> = ({
   route,
   fallback = <div>Loading plugin...</div>,
 }) => {

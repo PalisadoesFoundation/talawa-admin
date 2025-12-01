@@ -41,7 +41,7 @@ List installed plugin metadata
 
 ### readPluginFiles()
 
-> **readPluginFiles**(`pluginId`): `Promise`\<\{ `error?`: `string`; `files?`: `Record`\<`string`, `string`\>; `manifest?`: [`AdminPluginManifest`](../../../../utils/adminPluginInstaller/interfaces/AdminPluginManifest.md); `success`: `boolean`; \}\>
+> **readPluginFiles**(`pluginId`): `Promise`\<\{ `error?`: `string`; `files?`: `Record`\<`string`, `string`\>; `manifest?`: [`IAdminPluginManifest`](../../../../utils/adminPluginInstaller/interfaces/IAdminPluginManifest.md); `success`: `boolean`; \}\>
 
 Defined in: [src/plugin/services/InternalFileWriter.ts:164](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L164)
 
@@ -55,7 +55,7 @@ Read plugin files from filesystem
 
 #### Returns
 
-`Promise`\<\{ `error?`: `string`; `files?`: `Record`\<`string`, `string`\>; `manifest?`: [`AdminPluginManifest`](../../../../utils/adminPluginInstaller/interfaces/AdminPluginManifest.md); `success`: `boolean`; \}\>
+`Promise`\<\{ `error?`: `string`; `files?`: `Record`\<`string`, `string`\>; `manifest?`: [`IAdminPluginManifest`](../../../../utils/adminPluginInstaller/interfaces/IAdminPluginManifest.md); `success`: `boolean`; \}\>
 
 ***
 
