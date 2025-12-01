@@ -26,18 +26,18 @@ import { describe, it, beforeEach, afterEach, beforeAll, vi } from 'vitest';
 
 // Mock localStorage
 const localStorageMock = (() => {
-  let store: Record<string, string> = {};
+  let storage: Record<string, string> = {};
 
   return {
-    getItem: (key: string) => store[key] || null,
+    getItem: (key: string) => storage[key] || null,
     setItem: (key: string, value: string) => {
-      store[key] = value.toString();
+      storage[key] = value.toString();
     },
     removeItem: (key: string) => {
-      delete store[key];
+      delete storage[key];
     },
     clear: () => {
-      store = {};
+      storage = {};
     },
   };
 })();
@@ -188,7 +188,7 @@ describe('Testing Actions Screen', () => {
   });
 
   it('should redirect to fallback URL if userId is missing', async () => {
-    setItem('userId', null as unknown as string);
+    localStorageMock.removeItem('Talawa-admin_userId');
     setItem('volunteerId', 'volunteerId1');
     render(
       <MockedProvider addTypename={false} link={link1}>
