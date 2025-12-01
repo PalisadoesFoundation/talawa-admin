@@ -633,6 +633,164 @@ test('Search works properly', async () => {
   });
 });
 
+test('Search works properly by pressing Enter on search button', async () => {
+  const searchMocks = [
+    COMMUNITY_TIMEOUT_MOCK,
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: {
+          filter: '',
+        },
+      },
+      result: {
+        data: {
+          organizations: [
+            makeOrg({
+              id: '6401ff65ce8e8406b8f07af2',
+              name: 'anyOrganization1',
+              isMember: true,
+            }),
+            makeOrg({
+              id: '6401ff65ce8e8406b8f07af3',
+              name: 'anyOrganization2',
+              isMember: true,
+            }),
+          ],
+        },
+      },
+    },
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: {
+          filter: '2',
+        },
+      },
+      result: {
+        data: {
+          organizations: [
+            makeOrg({
+              id: '6401ff65ce8e8406b8f07af3',
+              name: 'anyOrganization2',
+              isMember: true,
+            }),
+          ],
+        },
+      },
+    },
+  ];
+
+  render(
+    <MockedProvider addTypename={false} mocks={searchMocks}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await wait(500);
+
+  const searchInput = screen.getByTestId('searchInput');
+  await userEvent.type(searchInput, '2');
+
+  const searchBtn = screen.getByTestId('searchBtn');
+  fireEvent.keyDown(searchBtn, { key: 'Enter', code: 'Enter' });
+
+  await wait(300);
+
+  await waitFor(() => {
+    const cards = screen.getAllByTestId('organization-card');
+    const orgNames = cards.map((card) =>
+      card.getAttribute('data-organization-name'),
+    );
+    expect(orgNames).toContain('anyOrganization2');
+  });
+});
+
+test('Search works properly by pressing Space on search button', async () => {
+  const searchMocks = [
+    COMMUNITY_TIMEOUT_MOCK,
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: {
+          filter: '',
+        },
+      },
+      result: {
+        data: {
+          organizations: [
+            makeOrg({
+              id: '6401ff65ce8e8406b8f07af2',
+              name: 'anyOrganization1',
+              isMember: true,
+            }),
+            makeOrg({
+              id: '6401ff65ce8e8406b8f07af3',
+              name: 'anyOrganization2',
+              isMember: true,
+            }),
+          ],
+        },
+      },
+    },
+    {
+      request: {
+        query: ORGANIZATION_FILTER_LIST,
+        variables: {
+          filter: '2',
+        },
+      },
+      result: {
+        data: {
+          organizations: [
+            makeOrg({
+              id: '6401ff65ce8e8406b8f07af3',
+              name: 'anyOrganization2',
+              isMember: true,
+            }),
+          ],
+        },
+      },
+    },
+  ];
+
+  render(
+    <MockedProvider addTypename={false} mocks={searchMocks}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Organizations />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+
+  await wait(500);
+
+  const searchInput = screen.getByTestId('searchInput');
+  await userEvent.type(searchInput, '2');
+
+  const searchBtn = screen.getByTestId('searchBtn');
+  fireEvent.keyDown(searchBtn, { key: ' ', code: 'Space' });
+
+  await wait(300);
+
+  await waitFor(() => {
+    const cards = screen.getAllByTestId('organization-card');
+    const orgNames = cards.map((card) =>
+      card.getAttribute('data-organization-name'),
+    );
+    expect(orgNames).toContain('anyOrganization2');
+  });
+});
+
 test('Mode is changed to joined organizations', async () => {
   render(
     <MockedProvider addTypename={false} link={link}>

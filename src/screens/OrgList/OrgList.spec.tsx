@@ -590,6 +590,30 @@ describe('Organisations Page testing as SuperAdmin', () => {
     fireEvent.click(searchBtn);
   });
 
+  test('Testing search functionality by pressing Enter on search button', async () => {
+    setupUser('superAdmin');
+
+    renderWithProviders();
+    await wait();
+
+    const searchBar = screen.getByTestId('searchInput');
+    const searchBtn = screen.getByTestId('searchBtn');
+    await userEvent.type(searchBar, 'Dummy');
+    fireEvent.keyDown(searchBtn, { key: 'Enter', code: 'Enter' });
+  });
+
+  test('Testing search functionality by pressing Space on search button', async () => {
+    setupUser('superAdmin');
+
+    renderWithProviders();
+    await wait();
+
+    const searchBar = screen.getByTestId('searchInput');
+    const searchBtn = screen.getByTestId('searchBtn');
+    await userEvent.type(searchBar, 'Dummy');
+    fireEvent.keyDown(searchBtn, { key: ' ', code: 'Space' });
+  });
+
   test('Testing search functionality by with empty search bar', async () => {
     setupUser('basic');
 

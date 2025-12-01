@@ -340,7 +340,6 @@ function orgList(): JSX.Element {
       <div className={styles.btnsContainerSearchBar}>
         <div className={styles.searchWrapper}>
           <div className={styles.inputOrgList}>
-            {/* InputGroup contains both the input and the InputGroup.Text */}
             <InputGroup className={styles.maxWidth}>
               <Form.Control
                 placeholder={t('searchOrganizations')}
@@ -354,7 +353,6 @@ function orgList(): JSX.Element {
                 aria-label={t('searchOrganizations')}
               />
 
-              {/* Put InputGroup.Text inside the same InputGroup */}
               <InputGroup.Text
                 className={styles.searchButton}
                 style={{ cursor: 'pointer' }}

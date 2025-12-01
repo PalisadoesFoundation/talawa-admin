@@ -15,6 +15,7 @@
  * @param {string} props.data.description - A brief description of the organization.
  * @param {object} props.data.members - The members of the organization.
  * @param {Array} props.data.members.edges - The list of members in the organization.
+ * @param {number|undefined} [props.data.membersCount] - The number of members. Optional. The component uses `membersCount ?? members?.edges.length ?? 0` as the fallback.
  *
  * @returns {JSX.Element} A JSX element representing the organization card.
  *

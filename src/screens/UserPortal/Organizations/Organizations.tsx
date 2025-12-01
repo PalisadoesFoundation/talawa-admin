@@ -383,7 +383,6 @@ export default function Organizations(): React.JSX.Element {
           <div className={styles.btnsContainerSearchBar}>
             <div className={styles.searchWrapper}>
               <div className={styles.inputOrgList}>
-                {/* InputGroup contains both the input and the InputGroup.Text */}
                 <InputGroup className={styles.maxWidth}>
                   <Form.Control
                     placeholder={t('searchOrganizations')}
@@ -397,7 +396,6 @@ export default function Organizations(): React.JSX.Element {
                     aria-label={t('searchOrganizations')}
                   />
 
-                  {/* Put InputGroup.Text inside the same InputGroup */}
                   <InputGroup.Text
                     className={styles.searchButton}
                     style={{ cursor: 'pointer' }}
@@ -497,7 +495,6 @@ export default function Organizations(): React.JSX.Element {
                               className="visually-hidden"
                             ></div>
 
-                            {/* <OrganizationCard {...cardProps} /> */}
                             <OrgListCard data={cardProps} />
 
                             {/* Add a hidden span with organization name for testing purposes */}
