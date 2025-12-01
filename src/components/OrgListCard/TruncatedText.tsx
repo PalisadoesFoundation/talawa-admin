@@ -44,8 +44,7 @@ const TruncatedText: React.FC<InterfaceTruncatedTextProps> = ({
   const textRef = useRef<HTMLHeadingElement>(null);
 
   /**
-   * Stable callback (fixes CodeRabbit Issue #3: unstable effect dependencies)
-   * This re-runs only when `text` or `maxWidthOverride` changes.
+   * Stable truncateText wrapped in useCallback (fixes unstable dependency issue flagged by CodeRabbit)
    */
   const truncateText = useCallback((): void => {
     const element = textRef.current;
@@ -56,30 +55,22 @@ const TruncatedText: React.FC<InterfaceTruncatedTextProps> = ({
         ? maxWidthOverride
         : element.offsetWidth;
 
-    const fullText = text;
-
     const computedStyle = window.getComputedStyle(element);
     const fontSize = parseFloat(computedStyle.fontSize);
 
-    // Character per pixel estimation
+    // Character-per-pixel estimation
     const charPerPx = 0.065 + fontSize * 0.002;
     const maxChars = Math.floor(maxWidth * charPerPx);
 
     setTruncatedText(
-      fullText.length > maxChars
-        ? `${fullText.slice(0, Math.max(0, maxChars - 3))}...`
-        : fullText,
+      text.length > maxChars
+        ? `${text.slice(0, Math.max(0, maxChars - 3))}...`
+        : text,
     );
   }, [text, maxWidthOverride]);
 
-  /**
-   * Debounced callback for resize listener
-   */
   const { debouncedCallback, cancel } = useDebounce(truncateText, 100);
 
-  /**
-   * Handle text changes + width changes + resize listener
-   */
   useEffect(() => {
     truncateText();
     window.addEventListener('resize', debouncedCallback);
