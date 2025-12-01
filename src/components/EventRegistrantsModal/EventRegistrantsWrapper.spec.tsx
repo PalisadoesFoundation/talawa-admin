@@ -67,7 +67,7 @@ type RenderComponentProps = React.ComponentProps<
 
 const renderComponent = (props: RenderComponentProps) => {
   return render(
-    <MockedProvider addTypename={false} mocks={queryMock}>
+    <MockedProvider mocks={queryMock}>
       <BrowserRouter>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Provider store={store}>

@@ -370,7 +370,7 @@ afterEach(() => {
 
 test('Screen should be rendered properly', async () => {
   render(
-    <MockedProvider addTypename={false} link={link} mocks={MOCKS}>
+    <MockedProvider link={link} mocks={MOCKS}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -582,7 +582,7 @@ test('Search works properly', async () => {
   ];
 
   render(
-    <MockedProvider addTypename={false} mocks={searchMocks}>
+    <MockedProvider mocks={searchMocks}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -635,7 +635,7 @@ test('Search works properly', async () => {
 
 test('Mode is changed to joined organizations', async () => {
   render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -658,7 +658,7 @@ test('Mode is changed to joined organizations', async () => {
 
 test('Mode is changed to created organizations', async () => {
   render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -757,7 +757,7 @@ test('Manage button renders correctly', async () => {
   const link = new StaticMockLink(testMocks, true);
 
   render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -787,7 +787,7 @@ test('Manage button renders correctly', async () => {
 
 test('Testing Sidebar', async () => {
   render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -806,7 +806,7 @@ test('Testing Sidebar', async () => {
 test('Testing sidebar when the screen size is less than or equal to 820px', async () => {
   resizeWindow(800);
   render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -841,7 +841,7 @@ async function wait(ms = 100): Promise<void> {
 
 test('should update rowsPerPage when rows per page selector is changed', async () => {
   render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -925,7 +925,7 @@ test('setPage updates page state correctly when pagination controls are used', a
   ];
 
   render(
-    <MockedProvider addTypename={false} mocks={paginationMocks}>
+    <MockedProvider mocks={paginationMocks}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -1168,7 +1168,7 @@ test('should set membershipRequestStatus to "created" for created organizations'
   ];
 
   render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -1264,7 +1264,7 @@ test('correctly map joined organizations data when mode is 1', async () => {
   ];
 
   render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -1404,7 +1404,7 @@ test('should search organizations when pressing Enter key', async () => {
   ];
 
   render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -1529,7 +1529,7 @@ test('should search organizations when clicking search button', async () => {
   ];
 
   render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -1670,7 +1670,7 @@ test('doSearch function should call appropriate refetch based on mode', async ()
   ];
 
   render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -1751,10 +1751,7 @@ test('should display loading spinner when data is loading', async () => {
   };
 
   render(
-    <MockedProvider
-      mocks={[COMMUNITY_TIMEOUT_MOCK, loadingMock]}
-      addTypename={false}
-    >
+    <MockedProvider mocks={[COMMUNITY_TIMEOUT_MOCK, loadingMock]}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -1822,7 +1819,6 @@ test('should display "no organizations" message when organizations list is empty
         joinedOrgsMock,
         createdOrgsMock,
       ]}
-      addTypename={false}
     >
       <BrowserRouter>
         <Provider store={store}>
@@ -1918,7 +1914,7 @@ test('should set membershipRequestStatus to empty string when isMember is false'
   const link = new StaticMockLink(mocks, true);
 
   render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -2079,7 +2075,7 @@ it('should handle GraphQL error in ORGANIZATION_FILTER_LIST query', async () => 
   setItem('userId', TEST_USER_ID);
 
   render(
-    <MockedProvider mocks={ERROR_MOCKS} addTypename={false}>
+    <MockedProvider mocks={ERROR_MOCKS}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>

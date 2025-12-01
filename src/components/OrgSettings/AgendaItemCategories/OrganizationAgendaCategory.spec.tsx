@@ -74,7 +74,7 @@ describe('Testing Agenda Categories Component', () => {
   };
   it('Component loads correctly', async () => {
     const { getByText } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
@@ -93,7 +93,7 @@ describe('Testing Agenda Categories Component', () => {
   });
   test('displays loading state', async () => {
     const { getByTestId } = render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
@@ -109,7 +109,7 @@ describe('Testing Agenda Categories Component', () => {
 
   it('render error component on unsuccessful agenda category list query', async () => {
     const { queryByText } = render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
@@ -131,7 +131,7 @@ describe('Testing Agenda Categories Component', () => {
 
   it('opens and closes the create agenda category modal', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -168,7 +168,7 @@ describe('Testing Agenda Categories Component', () => {
   });
   it('creates new agenda cagtegory', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -216,7 +216,7 @@ describe('Testing Agenda Categories Component', () => {
 
   test('toasts error on unsuccessful creation', async () => {
     render(
-      <MockedProvider addTypename={false} link={link3}>
+      <MockedProvider link={link3}>
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -261,7 +261,7 @@ describe('Testing Agenda Categories Component', () => {
   });
   test('allow user to type in the search field', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -283,7 +283,7 @@ describe('Testing Agenda Categories Component', () => {
   });
   test('triggers search on pressing Enter key', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -309,7 +309,7 @@ describe('Testing Agenda Categories Component', () => {
   });
   test('triggers search on clicking search button', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -333,7 +333,7 @@ describe('Testing Agenda Categories Component', () => {
   });
   test('Search categories by name and clear the input by backspace', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
