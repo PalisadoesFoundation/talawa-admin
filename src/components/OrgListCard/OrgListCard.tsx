@@ -52,7 +52,15 @@ export interface InterfaceOrgListCardPropsPG {
 }
 
 function OrgListCard({
-  data: { id, avatarURL, addressLine1, name, description, members },
+  data: {
+    id,
+    avatarURL,
+    addressLine1,
+    name,
+    description,
+    members,
+    membersCount,
+  },
 }: InterfaceOrgListCardPropsPG): JSX.Element {
   const navigate = useNavigate();
 
@@ -108,7 +116,8 @@ function OrgListCard({
               {/* Display the number of admins and members */}
               <h6 className={styles.orgadmin}>
                 <div>
-                  {tCommon('members')}: <span>{members.edges.length}</span>
+                  {tCommon('members')}:{' '}
+                  <span>{membersCount ?? members?.edges.length ?? 0}</span>
                 </div>
               </h6>
             </div>

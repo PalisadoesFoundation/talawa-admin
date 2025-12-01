@@ -541,7 +541,8 @@ export interface InterfaceOrgInfoTypePG {
   description: string;
   avatarURL: string | null;
   createdAt: string;
-  members: {
+  membersCount?: number;
+  members?: {
     edges: {
       node: {
         id: string;

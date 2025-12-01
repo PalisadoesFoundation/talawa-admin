@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationVenuesConnectionPg
 
-Defined in: [src/utils/interfaces.ts:1223](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1223)
+Defined in: [src/utils/interfaces.ts:1224](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1224)
 
 InterfaceOrganizationVenuesConnectionPg
 
@@ -18,7 +18,7 @@ Defines the structure for a connection of organization venues with PostgreSQL-sp
 
 > **edges**: [`InterfaceOrganizationVenuesConnectionEdgePg`](InterfaceOrganizationVenuesConnectionEdgePg.md)[]
 
-Defined in: [src/utils/interfaces.ts:1224](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1224)
+Defined in: [src/utils/interfaces.ts:1225](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1225)
 
 An array of edges, where each edge contains a cursor and a venue node.
 
@@ -28,6 +28,6 @@ An array of edges, where each edge contains a cursor and a venue node.
 
 > **pageInfo**: [`InterfacePageInfoPg`](InterfacePageInfoPg.md)
 
-Defined in: [src/utils/interfaces.ts:1225](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1225)
+Defined in: [src/utils/interfaces.ts:1226](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1226)
 
 Pagination information.

@@ -83,6 +83,9 @@ const baseOrgFields = {
   membersCount: 0,
   adminsCount: 0,
   createdAt: '1234567890',
+  members: {
+    edges: [],
+  },
 };
 
 const makeOrg = (overrides: Record<string, unknown> = {}) => ({
@@ -676,7 +679,7 @@ test('Mode is changed to created organizations', async () => {
   expect(screen.queryAllByText('createdOrganization')).not.toBe([]);
 });
 
-test('Join Now button renders correctly', async () => {
+test('Manage button renders correctly', async () => {
   const TEST_USER_ID = 'test-user-id';
   setItem('userId', TEST_USER_ID);
 
@@ -777,8 +780,8 @@ test('Join Now button renders correctly', async () => {
   expect(orgCards.length).toBe(2);
 
   await waitFor(() => {
-    const joinButtons = screen.getAllByTestId('joinBtn');
-    expect(joinButtons.length).toBe(2);
+    const manageButtons = screen.getAllByTestId('manageBtn');
+    expect(manageButtons.length).toBe(2);
   });
 });
 
@@ -999,7 +1002,7 @@ test('should correctly map joined organizations data ', async () => {
                   avatarURL: 'org1.jpg',
                   description: 'First joined organization',
                   addressLine1: 'Test Address',
-                  members: [{ _id: TEST_USER_ID }],
+                  members: { edges: [{ node: { id: TEST_USER_ID } }] },
                   membershipRequests: [],
                   userRegistrationRequired: false,
                   isMember: true,
@@ -1012,7 +1015,7 @@ test('should correctly map joined organizations data ', async () => {
                   avatarURL: 'org2.jpg',
                   description: 'Second joined organization',
                   addressLine1: 'Another Address',
-                  members: [{ _id: TEST_USER_ID }],
+                  members: { edges: [{ node: { id: TEST_USER_ID } }] },
                   membershipRequests: [],
                   userRegistrationRequired: true,
                   isMember: true,
