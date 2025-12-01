@@ -359,8 +359,6 @@ function orgList(): JSX.Element {
                 onClick={handleSearchByBtnClick}
                 data-testid="searchBtn"
                 title={t('search')}
-                role="button"
-                tabIndex={0}
                 aria-label={t('search')}
               >
                 <SearchOutlined className={styles.colorWhite} />
