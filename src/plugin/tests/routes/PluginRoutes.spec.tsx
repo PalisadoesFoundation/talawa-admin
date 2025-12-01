@@ -316,7 +316,7 @@ describe('PluginRoutes', () => {
       (await importer()) as { default: ComponentType };
 
     it('loads named export components when available', async () => {
-      renderWithRoute({
+      const initialRender = renderWithRoute({
         pluginId: 'test-plugin',
         path: '/test-plugin',
         component: 'TestComponent',
@@ -326,7 +326,11 @@ describe('PluginRoutes', () => {
       const importer = lazyImportFunctions[0];
       const result = await resolveImporter(importer);
 
-      expect(typeof result.default).toBe('function');
+      initialRender.unmount();
+
+      const NamedComponent = result.default;
+      const { getByText } = render(<NamedComponent />);
+      expect(getByText('Named Export Component')).toBeInTheDocument();
     });
 
     it('falls back to default export when named export is missing', async () => {
@@ -354,6 +358,7 @@ describe('PluginRoutes', () => {
         component: 'MissingComponent',
       });
 
+      expect(lazyImportFunctions).toHaveLength(1);
       const importer = lazyImportFunctions[0];
       const result = await resolveImporter(importer);
 
@@ -372,26 +377,29 @@ describe('PluginRoutes', () => {
         .spyOn(console, 'error')
         .mockImplementation(() => undefined);
 
-      const initialRender = renderWithRoute({
-        pluginId: 'error-plugin',
-        path: '/error-plugin',
-        component: 'ErrorComponent',
-      });
+      try {
+        const initialRender = renderWithRoute({
+          pluginId: 'error-plugin',
+          path: '/error-plugin',
+          component: 'ErrorComponent',
+        });
 
-      const importer = lazyImportFunctions[0];
-      const result = await resolveImporter(importer);
+        expect(lazyImportFunctions).toHaveLength(1);
+        const importer = lazyImportFunctions[0];
+        const result = await resolveImporter(importer);
 
-      initialRender.unmount();
+        initialRender.unmount();
 
-      const ErrorComponent = result.default;
-      const { getByText } = render(<ErrorComponent />);
-      expect(getByText('Plugin Error')).toBeInTheDocument();
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        "Failed to load plugin component 'ErrorComponent' from 'error-plugin':",
-        expect.any(Error),
-      );
-
-      consoleErrorSpy.mockRestore();
+        const ErrorComponent = result.default;
+        const { getByText } = render(<ErrorComponent />);
+        expect(getByText('Plugin Error')).toBeInTheDocument();
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          "Failed to load plugin component 'ErrorComponent' from 'error-plugin':",
+          expect.any(Error),
+        );
+      } finally {
+        consoleErrorSpy.mockRestore();
+      }
     });
 
     it('renders error details when pluginId is missing', async () => {
@@ -401,6 +409,7 @@ describe('PluginRoutes', () => {
         component: 'MissingComponent',
       });
 
+      expect(lazyImportFunctions).toHaveLength(1);
       const importer = lazyImportFunctions[0];
       const result = await resolveImporter(importer);
 
