@@ -396,10 +396,11 @@ const fundCampaignPledge = (): JSX.Element => {
   ];
 
   return (
-    <div>
-      <Breadcrumbs aria-label="breadcrumb" className="ms-1">
-        <Link
-          underline="hover"
+    <>
+      <div>
+        <Breadcrumbs aria-label="breadcrumb" className="ms-1">
+          <Link
+            underline="hover"
           color="inherit"
           component="button"
           onClick={() => history.go(-2)}
@@ -586,38 +587,32 @@ const fundCampaignPledge = (): JSX.Element => {
         pledge={pledge}
         refetchPledge={refetchPledge}
       />
-  <>
-  <div 
-    id={id} 
-    ref={(node) => {
-      if (node && !anchorEl) {
-        setAnchorEl(node);
-      }
-    }}
-    style={{ display: 'none' }}
-  />
-  
-  <Popover
-    open={open}
-    anchorEl={anchorEl}
-    onClose={() => setOpen(false)}
-    anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'center',
-    }}
-    transformOrigin={{
+      </div>
+       id={id} 
+      <div 
+      ref={(node) => {
+          if (node && !anchorEl) {
+           setAnchorEl(node);
+          }
+        }}
+        style={{ display: 'none' }}
+      />
+      <Popover
+        open={open}
+        anchorEl={anchorEl}
+        onClose={() => setOpen(false)}
+           transformOrigin={{
       vertical: 'top',
       horizontal: 'center',
     }}
-    className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
     data-testid="extra-users-popup"
     slotProps={{
       paper: {
         className: `${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`,
       }
     }}
-  >
-    <Box sx={{ p: 1 }}>
+      >
+        <Box sx={{ p: 1 }}>
       {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
         <div
           className={styles.pledgerContainer}
@@ -642,9 +637,9 @@ const fundCampaignPledge = (): JSX.Element => {
         </div>
       ))}
     </Box>
-  </Popover>
-</>
-    </div>
-  );
+      </Popover>
+    </>
+   );
 };
+
 export default fundCampaignPledge;

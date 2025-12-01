@@ -35,7 +35,7 @@
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Button, ProgressBar } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
@@ -540,7 +540,7 @@ const Pledges = (): JSX.Element => {
       {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
         <div
           className={styles.pledgerContainer}
-          key={index}
+         key={user.id}
           data-testid={`extra${index + 1}`}
         >
           {user.avatarURL ? (
