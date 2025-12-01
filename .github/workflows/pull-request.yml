@@ -442,11 +442,11 @@ jobs:
         Check-Mock-Isolation,
       ]
     env:
-      TOTAL_SHARDS: 4
+      TOTAL_SHARDS: 12
     strategy:
       fail-fast: false
       matrix:
-        shard: [1, 2, 3, 4]
+        shard: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     steps:
       - name: Checkout the Repository
         uses: actions/checkout@v4
@@ -499,9 +499,10 @@ jobs:
         if: steps.changed-files.outputs.any_changed == 'true'
         env:
           NODE_V8_COVERAGE: './coverage/vitest'
-          NODE_OPTIONS: '--max-old-space-size=4096'
+          NODE_OPTIONS: '--max-old-space-size=4096 --disable-warning=ExperimentalWarning'
           SHARD_INDEX: ${{ matrix.shard }}
           SHARD_COUNT: ${{ env.TOTAL_SHARDS }}
+          CI: true
         run: pnpm test:shard:coverage
       - name: Upload coverage artifact
         if: always() && steps.changed-files.outputs.any_changed == 'true'
