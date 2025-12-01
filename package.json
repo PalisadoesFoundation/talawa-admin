@@ -156,7 +156,7 @@
     "nyc": "^17.1.0",
     "prettier": "^3.6.2",
     "sass": "^1.93.3",
-    "tsx": "^4.19.1",
+    "tsx": "^4.21.0",
     "typedoc": "^0.28.1",
     "typedoc-plugin-markdown": "^4.5.0",
     "typescript": "^5.8.3",
