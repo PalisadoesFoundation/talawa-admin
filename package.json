@@ -8,7 +8,7 @@
     "@apollo/client": "3.14.0",
     "@apollo/link-error": "^2.0.0-beta.3",
     "@apollo/react-testing": "^4.0.0",
-    "@base-ui-components/react": "^1.0.0-beta.3",
+    "@base-ui-components/react": "^1.0.0-beta.7",
     "@dicebear/collection": "^9.2.2",
     "@dicebear/core": "^9.2.2",
     "@emotion/react": "^11.13.3",
