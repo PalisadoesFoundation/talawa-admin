@@ -2,7 +2,8 @@ import { useQuery, type ApolloQueryResult } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
-import { Popover } from '@base-ui-components/react/popover';
+import Popover from '@mui/material/Popover';
+import { Box } from '@mui/material';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
@@ -77,6 +78,7 @@ const fundCampaignPledge = (): JSX.Element => {
   );
   const [pledge, setPledge] = useState<InterfacePledgeInfo | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const [sortBy, setSortBy] = useState<
     'amount_ASC' | 'amount_DESC' | 'endDate_ASC' | 'endDate_DESC'
@@ -584,44 +586,64 @@ const fundCampaignPledge = (): JSX.Element => {
         pledge={pledge}
         refetchPledge={refetchPledge}
       />
-      <Popover.Root open={open} onOpenChange={setOpen}>
-        <Popover.Trigger>
-          <div id={id} />
-        </Popover.Trigger>
-
-        <Popover.Portal>
-          <Popover.Positioner
-            className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
-            data-testid="extra-users-popup"
-          >
-            <Popover.Popup>
-              {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
-                <div
-                  className={styles.pledgerContainer}
-                  key={user.id}
-                  data-testid={`extraUser-${index}`}
-                >
-                  {user.avatarURL ? (
-                    <img
-                      src={user.avatarURL}
-                      alt={user.name}
-                      className={styles.TableImagePledge}
-                    />
-                  ) : (
-                    <Avatar
-                      containerStyle={styles.imageContainerPledge}
-                      avatarStyle={styles.TableImagePledge}
-                      name={user.name}
-                      alt={user.name}
-                    />
-                  )}
-                  <span>{user.name}</span>
-                </div>
-              ))}
-            </Popover.Popup>
-          </Popover.Positioner>
-        </Popover.Portal>
-      </Popover.Root>
+  <>
+  <div 
+    id={id} 
+    ref={(node) => {
+      if (node && !anchorEl) {
+        setAnchorEl(node);
+      }
+    }}
+    style={{ display: 'none' }}
+  />
+  
+  <Popover
+    open={open}
+    anchorEl={anchorEl}
+    onClose={() => setOpen(false)}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'center',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'center',
+    }}
+    className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
+    data-testid="extra-users-popup"
+    slotProps={{
+      paper: {
+        className: `${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`,
+      }
+    }}
+  >
+    <Box sx={{ p: 1 }}>
+      {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
+        <div
+          className={styles.pledgerContainer}
+          key={user.id}
+          data-testid={`extraUser-${index}`}
+        >
+          {user.avatarURL ? (
+            <img
+              src={user.avatarURL}
+              alt={user.name}
+              className={styles.avatar}
+            />
+          ) : (
+            <Avatar
+              name={user.name}
+              alt={user.name}
+              size={30}
+              avatarStyle={styles.avatar}
+            />
+          )}
+          <p className={styles.pledgerName}>{user.name}</p>
+        </div>
+      ))}
+    </Box>
+  </Popover>
+</>
     </div>
   );
 };

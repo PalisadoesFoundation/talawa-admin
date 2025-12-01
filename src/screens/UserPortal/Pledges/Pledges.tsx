@@ -35,7 +35,7 @@
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { Button, ProgressBar } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
@@ -45,7 +45,8 @@ import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
 } from 'utils/interfaces';
-import { Popover } from '@base-ui-components/react/popover';
+import Popover from '@mui/material/Popover';
+import Box from '@mui/material/Box';
 import {
   type ApolloError,
   type ApolloQueryResult,
@@ -114,6 +115,7 @@ const Pledges = (): JSX.Element => {
   }>({ [ModalState.UPDATE]: false, [ModalState.DELETE]: false });
 
   const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null);
   const id = open ? 'simple-popup' : undefined;
 
   const {
@@ -468,7 +470,6 @@ const Pledges = (): JSX.Element => {
         }}
         sx={dataGridStyle}
         getRowClassName={() => `${styles.rowBackground}`}
-        autoHeight
         rowHeight={65}
         rows={pledges.map((pledge) => ({
           id: pledge.id,
@@ -504,50 +505,64 @@ const Pledges = (): JSX.Element => {
         pledge={pledge}
         refetchPledge={refetchPledge}
       />
-
-      <Popover.Root open={open} onOpenChange={setOpen}>
-        <Popover.Trigger>
-          <div id={id} />
-        </Popover.Trigger>
-
-        <Popover.Portal>
-          <Popover.Positioner
-            className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
-            data-testid="extra-users-popup"
-          >
-            <Popover.Popup>
-              {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
-                <div
-                  className={styles.pledgerContainer}
-                  key={index}
-                  data-testid={`extra${index + 1}`}
-                >
-                  {user.avatarURL ? (
-                    <img
-                      src={user.avatarURL}
-                      alt="pledger"
-                      data-testid={`extraImage${index + 1}`}
-                      className={styles.TableImage}
-                    />
-                  ) : (
-                    <div className={styles.avatarContainer}>
-                      <Avatar
-                        key={user.id + '1'}
-                        containerStyle={styles.imageContainer}
-                        avatarStyle={styles.TableImage}
-                        name={user.name}
-                        alt={user.name}
-                        dataTestId={`extraAvatar${index + 1}`}
-                      />
-                    </div>
-                  )}
-                  <span key={user.id + '2'}>{user.name}</span>
-                </div>
-              ))}
-            </Popover.Popup>
-          </Popover.Positioner>
-        </Popover.Portal>
-      </Popover.Root>
+<>
+  <div 
+    id={id} 
+    ref={(node) => {
+      if (node && !anchorEl) {
+        setAnchorEl(node);
+      }
+    }}
+    style={{ display: 'none' }}
+  />
+  
+  <Popover
+    open={open}
+    anchorEl={anchorEl}
+    onClose={() => setOpen(false)}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'center',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'center',
+    }}
+    className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
+    data-testid="extra-users-popup"
+    slotProps={{
+      paper: {
+        className: `${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`,
+      }
+    }}
+  >
+    <Box sx={{ p: 1 }}>
+      {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
+        <div
+          className={styles.pledgerContainer}
+          key={index}
+          data-testid={`extra${index + 1}`}
+        >
+          {user.avatarURL ? (
+            <img
+              src={user.avatarURL}
+              alt="pledger"
+              className={styles.avatar}
+            />
+          ) : (
+            <Avatar
+              name={user.name}
+              alt={user.name}
+              size={30}
+              avatarStyle={styles.avatar}
+            />
+          )}
+          <p className={styles.pledgerName}>{user.name}</p>
+        </div>
+      ))}
+    </Box>
+  </Popover>
+</>
     </div>
   );
 };
