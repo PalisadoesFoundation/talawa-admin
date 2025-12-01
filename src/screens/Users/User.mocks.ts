@@ -109,6 +109,77 @@ export const MOCKS = [
       },
     },
   },
+  // Mock for search functionality
+  {
+    request: {
+      query: USER_LIST,
+      variables: {
+        input: {
+          ids: '123',
+        },
+        firstName_contains: 'John',
+        lastName_contains: '',
+      },
+    },
+    result: {
+      data: {
+        usersByIds: [
+          {
+            id: 'user1',
+            name: 'John Doe',
+            emailAddress: 'john@example.com',
+            avatarURL: null,
+            createdAt: '2030-06-20T00:00:00.000Z',
+            city: 'Kingston',
+            state: 'Kingston Parish',
+            countryCode: 'JM',
+            postalCode: 'JM12345',
+            organizationsWhereMember: {
+              edges: [],
+            },
+            createdOrganizations: [],
+          },
+        ],
+      },
+    },
+  },
+  // Mock for reset functionality (empty search)
+  {
+    request: {
+      query: USER_LIST,
+      variables: {
+        input: {
+          ids: '123',
+        },
+        first: 12,
+        skip: 0,
+        firstName_contains: '',
+        lastName_contains: '',
+        order: 'createdAt_DESC',
+      },
+    },
+    result: {
+      data: {
+        usersByIds: [
+          {
+            id: 'user1',
+            name: 'John Doe',
+            emailAddress: 'john@example.com',
+            avatarURL: null,
+            createdAt: '2030-06-20T00:00:00.000Z',
+            city: 'Kingston',
+            state: 'Kingston Parish',
+            countryCode: 'JM',
+            postalCode: 'JM12345',
+            organizationsWhereMember: {
+              edges: [],
+            },
+            createdOrganizations: [],
+          },
+        ],
+      },
+    },
+  },
   {
     request: {
       query: ORGANIZATION_LIST,
