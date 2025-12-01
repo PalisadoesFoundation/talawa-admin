@@ -79,7 +79,7 @@ vi.mock('subComponents/SortingButton', () => ({
   ),
 }));
 
-vi.mock('subComponents/SearchBar', () => ({
+vi.mock('shared-components/SearchBar/SearchBar', () => ({
   default: ({
     onSearch,
     inputTestId,
@@ -324,7 +324,7 @@ const renderEventActionItems = (
   mocks: MockedResponse[] = MOCKS,
 ) => {
   return render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <Provider store={store}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -339,6 +339,9 @@ const renderEventActionItems = (
 };
 
 describe('EventActionItems', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   beforeEach(() => {
     vi.clearAllMocks();
   });

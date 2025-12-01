@@ -75,6 +75,7 @@ describe('InviteByEmailModal', () => {
       isRecurring: false,
       onInvitesSent: mockOnInvitesSent,
     };
+    vi.clearAllMocks();
   });
 
   afterEach(() => {

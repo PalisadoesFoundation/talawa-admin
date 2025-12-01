@@ -24,6 +24,7 @@ export const MOCKS_NULL_USERS_ASSIGNED_TO = [
     result: {
       data: {
         getAssignedUsers: {
+          __typename: 'UserTag',
           name: 'tag1',
           usersAssignedTo: null,
           ancestorTags: [],
@@ -143,6 +144,7 @@ export const MOCKS_UNDEFINED_DATA = [
     result: {
       data: {
         getAssignedUsers: {
+          __typename: 'UserTag',
           name: 'tag1',
           usersAssignedTo: undefined,
           ancestorTags: [],

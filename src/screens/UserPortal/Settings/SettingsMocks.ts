@@ -33,6 +33,7 @@ export const MOCKS = [
       result: {
         data: {
           updateCurrentUser: {
+            __typename: 'User',
             id: '65ba1621b7b00c20e5f1d8d2',
           },
         },
@@ -75,6 +76,7 @@ export const MOCKS1 = [
           updatedAt: '2025-02-06T03:22:17.808Z',
           workPhoneNumber: '+9999999998',
           __typename: 'User',
+          eventsAttended: [],
         },
       },
     },
@@ -115,6 +117,7 @@ export const MOCKS2 = [
           updatedAt: '',
           workPhoneNumber: '',
           __typename: 'User',
+          eventsAttended: [],
         },
       },
     },
@@ -134,6 +137,7 @@ export const UPDATE_MOCK = [
     result: {
       data: {
         updateCurrentUser: {
+          __typename: 'User',
           addressLine1: '',
           addressLine2: '',
           avatarMimeType: null,

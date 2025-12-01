@@ -1,7 +1,7 @@
-import { renderHook, act, waitFor } from '@testing-library/react';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { renderHook, act } from '@testing-library/react';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { usePluginFilters } from './usePluginFilters';
-import type { IPluginMeta } from 'plugin';
+import type { IPlugin } from 'plugin/graphql-service';
 
 // Mock the useTranslation hook
 const mockT = vi.fn((key: string) => key);
@@ -48,7 +48,6 @@ vi.mock('plugin/hooks', () => ({
 }));
 
 // Mock the useDebounce hook
-const mockDebouncedCallback = vi.fn();
 vi.mock('components/OrgListCard/useDebounce', () => ({
   default: vi.fn((callback) => ({
     debouncedCallback: (value: string) => {
@@ -59,38 +58,51 @@ vi.mock('components/OrgListCard/useDebounce', () => ({
 }));
 
 describe('usePluginFilters', () => {
-  const mockPluginData = {
-    getPlugins: [
-      {
-        id: 'db-plugin-1',
-        pluginId: 'graphql-plugin-1',
-        isInstalled: true,
-        isActivated: true,
-      },
-      {
-        id: 'db-plugin-2',
-        pluginId: 'graphql-plugin-2',
-        isInstalled: true,
-        isActivated: false,
-      },
-      {
-        id: 'db-plugin-3',
-        pluginId: 'graphql-plugin-3',
-        isInstalled: false,
-        isActivated: false,
-      },
-    ],
-  };
+  const mockPlugins: IPlugin[] = [
+    {
+      pluginId: 'graphql-plugin-1',
+      isInstalled: true,
+      isActivated: true,
+      id: 'db-plugin-1',
+      backup: false,
+      createdAt: '2023-01-01',
+      updatedAt: '2023-01-01',
+    },
+    {
+      pluginId: 'graphql-plugin-2',
+      isInstalled: true,
+      isActivated: false,
+      id: 'db-plugin-2',
+      backup: false,
+      createdAt: '2023-01-01',
+      updatedAt: '2023-01-01',
+    },
+    {
+      pluginId: 'graphql-plugin-3',
+      isInstalled: false,
+      isActivated: false,
+      id: 'db-plugin-3',
+      backup: false,
+      createdAt: '2023-01-01',
+      updatedAt: '2023-01-01',
+    },
+  ];
+
+  const stablePluginData = { getPlugins: mockPlugins };
 
   beforeEach(() => {
     vi.clearAllMocks();
     mockT.mockImplementation((key: string) => key);
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   describe('Initialization', () => {
     it('should initialize with correct default state', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       expect(result.current.searchTerm).toBe('');
@@ -145,7 +157,9 @@ describe('usePluginFilters', () => {
 
     it('should handle empty plugin data', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: null }),
+        usePluginFilters({
+          pluginData: null as unknown as { getPlugins: IPlugin[] },
+        }),
       );
 
       expect(result.current.filteredPlugins).toEqual(
@@ -164,7 +178,9 @@ describe('usePluginFilters', () => {
 
     it('should handle undefined plugin data', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: undefined }),
+        usePluginFilters({
+          pluginData: undefined as unknown as { getPlugins: IPlugin[] },
+        }),
       );
 
       expect(result.current.filteredPlugins).toEqual(
@@ -185,7 +201,7 @@ describe('usePluginFilters', () => {
   describe('Search Functionality', () => {
     it('should filter plugins by name', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -203,7 +219,7 @@ describe('usePluginFilters', () => {
 
     it('should filter plugins by description', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -222,7 +238,7 @@ describe('usePluginFilters', () => {
 
     it('should perform case-insensitive search', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -239,7 +255,7 @@ describe('usePluginFilters', () => {
 
     it('should return all plugins when search term is empty', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -252,7 +268,7 @@ describe('usePluginFilters', () => {
 
     it('should return empty array when no plugins match search', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -264,7 +280,7 @@ describe('usePluginFilters', () => {
 
     it('should search in both name and description', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -301,7 +317,7 @@ describe('usePluginFilters', () => {
   describe('Filter Functionality', () => {
     it('should show all plugins when filter is "all"', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -317,7 +333,7 @@ describe('usePluginFilters', () => {
 
     it('should show only installed plugins when filter is "installed"', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -360,7 +376,7 @@ describe('usePluginFilters', () => {
 
     it('should combine search and filter correctly', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       // Set filter to installed
@@ -383,7 +399,7 @@ describe('usePluginFilters', () => {
 
     it('should handle search with no matches in installed filter', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       // Set filter to installed
@@ -403,7 +419,7 @@ describe('usePluginFilters', () => {
   describe('isInstalled Function', () => {
     it('should return true for loaded plugins', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       expect(result.current.isInstalled('Loaded Plugin 1')).toBe(true);
@@ -412,7 +428,7 @@ describe('usePluginFilters', () => {
 
     it('should return true for installed GraphQL plugins', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       expect(result.current.isInstalled('graphql-plugin-1')).toBe(true);
@@ -421,7 +437,7 @@ describe('usePluginFilters', () => {
 
     it('should return false for non-installed GraphQL plugins', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       expect(result.current.isInstalled('graphql-plugin-3')).toBe(false);
@@ -429,7 +445,7 @@ describe('usePluginFilters', () => {
 
     it('should return false for non-existent plugins', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       expect(result.current.isInstalled('nonexistent-plugin')).toBe(false);
@@ -437,7 +453,9 @@ describe('usePluginFilters', () => {
 
     it('should handle empty plugin data', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: null }),
+        usePluginFilters({
+          pluginData: null as unknown as { getPlugins: IPlugin[] },
+        }),
       );
 
       expect(result.current.isInstalled('Loaded Plugin 1')).toBe(true);
@@ -448,7 +466,7 @@ describe('usePluginFilters', () => {
   describe('getInstalledPlugin Function', () => {
     it('should return GraphQL plugin data for installed GraphQL plugins', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       const plugin = result.current.getInstalledPlugin('graphql-plugin-1');
@@ -467,12 +485,14 @@ describe('usePluginFilters', () => {
         license: '',
         tags: [],
         status: 'active',
+        changelog: [],
+        features: [],
       });
     });
 
     it('should return loaded plugin data for loaded plugins', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       const plugin = result.current.getInstalledPlugin('Loaded Plugin 1');
@@ -491,12 +511,14 @@ describe('usePluginFilters', () => {
         license: 'MIT',
         tags: ['test', 'plugin'],
         status: 'active',
+        changelog: [],
+        features: [],
       });
     });
 
     it('should return undefined for non-installed plugins', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       const plugin = result.current.getInstalledPlugin('nonexistent-plugin');
@@ -506,20 +528,20 @@ describe('usePluginFilters', () => {
 
     it('should prioritize GraphQL data over loaded plugin data', () => {
       // Create a scenario where both GraphQL and loaded plugin exist for the same name
-      const mockPluginDataWithConflict = {
-        getPlugins: [
-          {
-            id: 'db-conflict-plugin',
-            pluginId: 'Loaded Plugin 1', // Same name as loaded plugin
-            isInstalled: true,
-            isActivated: false,
-          },
-        ],
-      };
+      const mockPluginsWithConflict: IPlugin[] = [
+        {
+          id: 'db-conflict-plugin',
+          pluginId: 'Loaded Plugin 1', // Same name as loaded plugin
+          isInstalled: true,
+          isActivated: false,
+          backup: false,
+          createdAt: '2023-01-01',
+          updatedAt: '2023-01-01',
+        },
+      ];
 
-      const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginDataWithConflict }),
-      );
+      const pluginData = { getPlugins: mockPluginsWithConflict };
+      const { result } = renderHook(() => usePluginFilters({ pluginData }));
 
       const plugin = result.current.getInstalledPlugin('Loaded Plugin 1');
 
@@ -538,6 +560,8 @@ describe('usePluginFilters', () => {
         license: '',
         tags: [],
         status: 'inactive',
+        changelog: [],
+        features: [],
       });
     });
   });
@@ -545,7 +569,7 @@ describe('usePluginFilters', () => {
   describe('Debouncing', () => {
     it('should update search term when debounced search is called', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -557,7 +581,7 @@ describe('usePluginFilters', () => {
 
     it('should handle multiple search calls', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -572,20 +596,20 @@ describe('usePluginFilters', () => {
 
   describe('Edge Cases', () => {
     it('should handle plugins with duplicate IDs in loaded and GraphQL data', () => {
-      const mockPluginDataWithDuplicate = {
-        getPlugins: [
-          {
-            id: 'loaded-plugin-1', // Same ID as loaded plugin
-            pluginId: 'loaded-plugin-1',
-            isInstalled: true,
-            isActivated: true,
-          },
-        ],
-      };
+      const mockPluginsWithDuplicate: IPlugin[] = [
+        {
+          pluginId: 'loaded-plugin-1', // Same ID as loaded plugin
+          isInstalled: true,
+          isActivated: true,
+          id: '1',
+          backup: false,
+          createdAt: '2023-01-01',
+          updatedAt: '2023-01-01',
+        },
+      ];
 
-      const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginDataWithDuplicate }),
-      );
+      const pluginData = { getPlugins: mockPluginsWithDuplicate };
+      const { result } = renderHook(() => usePluginFilters({ pluginData }));
 
       // Should not duplicate the plugin in the list
       const loadedPlugin = result.current.filteredPlugins.find(
@@ -600,20 +624,20 @@ describe('usePluginFilters', () => {
     });
 
     it('should handle plugins with special characters in names', () => {
-      const mockPluginDataWithSpecialChars = {
-        getPlugins: [
-          {
-            id: 'special-plugin',
-            pluginId: 'plugin-with-special-chars!@#$%',
-            isInstalled: true,
-            isActivated: true,
-          },
-        ],
-      };
+      const mockPluginsWithSpecialChars: IPlugin[] = [
+        {
+          id: 'special-plugin',
+          pluginId: 'plugin-with-special-chars!@#$%',
+          isInstalled: true,
+          isActivated: true,
+          backup: false,
+          createdAt: '2023-01-01',
+          updatedAt: '2023-01-01',
+        },
+      ];
 
-      const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginDataWithSpecialChars }),
-      );
+      const pluginData = { getPlugins: mockPluginsWithSpecialChars };
+      const { result } = renderHook(() => usePluginFilters({ pluginData }));
 
       act(() => {
         result.current.debouncedSearch('special');
@@ -629,7 +653,7 @@ describe('usePluginFilters', () => {
 
     it('should handle very long search terms', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       const longSearchTerm = 'a'.repeat(1000);
@@ -644,7 +668,7 @@ describe('usePluginFilters', () => {
 
     it('should handle empty string filter changes', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -659,22 +683,26 @@ describe('usePluginFilters', () => {
 
     it('should handle null/undefined plugin names in isInstalled', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
-      expect(result.current.isInstalled(null as any)).toBe(false);
-      expect(result.current.isInstalled(undefined as any)).toBe(false);
+      expect(result.current.isInstalled(null as unknown as string)).toBe(false);
+      expect(result.current.isInstalled(undefined as unknown as string)).toBe(
+        false,
+      );
       expect(result.current.isInstalled('')).toBe(false);
     });
 
     it('should handle null/undefined plugin names in getInstalledPlugin', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
-      expect(result.current.getInstalledPlugin(null as any)).toBeUndefined();
       expect(
-        result.current.getInstalledPlugin(undefined as any),
+        result.current.getInstalledPlugin(null as unknown as string),
+      ).toBeUndefined();
+      expect(
+        result.current.getInstalledPlugin(undefined as unknown as string),
       ).toBeUndefined();
       expect(result.current.getInstalledPlugin('')).toBeUndefined();
     });
@@ -682,14 +710,14 @@ describe('usePluginFilters', () => {
 
   describe('Translation Integration', () => {
     it('should use translation for filter options', () => {
-      renderHook(() => usePluginFilters({ pluginData: mockPluginData }));
+      renderHook(() => usePluginFilters({ pluginData: stablePluginData }));
 
       expect(mockT).toHaveBeenCalledWith('allPlugins');
     });
 
     it('should update translation when filter changes', () => {
       const { result } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       act(() => {
@@ -703,7 +731,7 @@ describe('usePluginFilters', () => {
   describe('Performance and Memory', () => {
     it('should not cause infinite re-renders', () => {
       const { result, rerender } = renderHook(() =>
-        usePluginFilters({ pluginData: mockPluginData }),
+        usePluginFilters({ pluginData: stablePluginData }),
       );
 
       const initialPlugins = result.current.filteredPlugins;
@@ -721,6 +749,9 @@ describe('usePluginFilters', () => {
           pluginId: `plugin-${i}`,
           isInstalled: i % 2 === 0,
           isActivated: i % 4 === 0,
+          backup: false,
+          createdAt: '2023-01-01',
+          updatedAt: '2023-01-01',
         })),
       };
 

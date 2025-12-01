@@ -69,11 +69,12 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     await act(async () => {
       await i18nForTest.changeLanguage('en');
     });
+    vi.restoreAllMocks();
   });
 
   it('Component should be rendered properly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -92,7 +93,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
   it('The language is switched to English', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -116,7 +117,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
   it('The language is switched to fr', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -140,7 +141,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
   it('The language is switched to hi', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -164,7 +165,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
   it('The language is switched to sp', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -188,7 +189,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
   it('The language is switched to zh', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -212,7 +213,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
   it('User can see and interact with the dropdown menu', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -232,7 +233,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
   it('User can navigate to the "Settings" page', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -253,7 +254,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     const clearSpy = vi.spyOn(Storage.prototype, 'clear');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

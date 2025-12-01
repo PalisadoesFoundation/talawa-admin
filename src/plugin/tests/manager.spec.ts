@@ -98,6 +98,7 @@ describe('PluginManager', () => {
 
   afterEach(() => {
     resetPluginManager();
+    vi.clearAllMocks();
   });
 
   describe('Constructor and Initialization', () => {

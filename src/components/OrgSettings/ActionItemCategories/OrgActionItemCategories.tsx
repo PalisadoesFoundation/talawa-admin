@@ -45,7 +45,7 @@ import dayjs from 'dayjs';
 import { Chip, Stack } from '@mui/material';
 import CategoryModal from './Modal/ActionItemCategoryModal';
 import CategoryViewModal from './Modal/ActionItemCategoryViewModal';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
 
 /** Modal state management */

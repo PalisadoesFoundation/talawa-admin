@@ -58,7 +58,6 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
   actionItem,
   actionItemsRefetch,
   eventId,
-  isRecurring,
 }) => {
   const { t: tCommon } = useTranslation('translation');
   const { t } = useTranslation('translation', {

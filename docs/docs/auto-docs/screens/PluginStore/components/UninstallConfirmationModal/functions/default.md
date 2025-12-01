@@ -12,7 +12,7 @@ Defined in: [src/screens/PluginStore/components/UninstallConfirmationModal.tsx:2
 
 ### \_\_namedParameters
 
-`UninstallConfirmationModalProps`
+`IUninstallConfirmationModalProps`
 
 ## Returns
 

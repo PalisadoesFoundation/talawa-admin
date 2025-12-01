@@ -8,12 +8,16 @@ import {
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { ApolloError } from '@apollo/client';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import PluginStore from './PluginStore';
 import * as pluginHooks from 'plugin/hooks';
 import * as pluginManager from 'plugin/manager';
 import * as adminPluginFileService from 'plugin/services/AdminPluginFileService';
 import userEvent from '@testing-library/user-event';
+
+const shared = vi.hoisted(() => ({
+  reload: vi.fn(),
+}));
 
 // Mock the plugin hooks and manager
 vi.mock('plugin/hooks');
@@ -45,11 +49,20 @@ vi.mock('react-i18next', () => ({
 }));
 
 // Mock GraphQL mutations and queries
-const mockCreatePlugin = vi.fn();
-const mockUpdatePlugin = vi.fn();
-const mockDeletePlugin = vi.fn();
-const mockGetAllPlugins = vi.fn();
-const mockRefetch = vi.fn();
+const {
+  mockCreatePlugin,
+  mockUpdatePlugin,
+  mockDeletePlugin,
+  mockGetAllPlugins,
+  mockRefetch,
+} = vi.hoisted(() => ({
+  mockCreatePlugin: vi.fn(),
+  mockUpdatePlugin: vi.fn(),
+  mockDeletePlugin: vi.fn(),
+  mockGetAllPlugins: vi.fn(),
+  mockRefetch: vi.fn(),
+}));
+
 let mockGraphQLError: ApolloError | null = null;
 
 vi.mock('plugin/graphql-service', () => ({
@@ -128,6 +141,27 @@ describe('PluginStore', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        ...window.location,
+        reload: shared.reload,
+      },
+    });
+
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: vi.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(), // deprecated
+        removeListener: vi.fn(), // deprecated
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    });
     // Reset mockGraphQLError to ensure test isolation
     mockGraphQLError = null;
 
@@ -158,6 +192,10 @@ describe('PluginStore', () => {
       .mockResolvedValue(true);
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   const renderPluginStore = () => {
     return render(
       <MockedProvider>
@@ -171,8 +209,8 @@ describe('PluginStore', () => {
       renderPluginStore();
 
       expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument();
-      expect(screen.getByTestId('plugin-store-searchbar')).toBeInTheDocument();
-      expect(screen.getByTestId('plugin-store-filters')).toBeInTheDocument();
+      expect(screen.getByTestId('searchPlugins')).toBeInTheDocument();
+      expect(screen.getByTestId('filterPlugins')).toBeInTheDocument();
       expect(screen.getByTestId('plugin-list-container')).toBeInTheDocument();
     });
 

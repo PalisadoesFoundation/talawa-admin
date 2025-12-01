@@ -121,9 +121,12 @@ vi.mock('react-router', async () => {
 });
 
 describe('Testing OrganizationSidebar Component [User Portal]', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   it('Component should be rendered properly when members and events list is empty', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -143,7 +146,7 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
   it('Component should be rendered properly when events list is not empty', async () => {
     mockId = 'events';
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -163,7 +166,7 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
   it('Component should be rendered properly when members list is not empty', async () => {
     mockId = 'members';
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -182,7 +185,7 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
   it('Handles GraphQL errors properly', async () => {
     mockId = 'error';
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -199,7 +202,7 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
 
   it('Should show Loading state initially', () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -215,7 +218,7 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
   it('Should render Member images properly', async () => {
     mockId = 'members';
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

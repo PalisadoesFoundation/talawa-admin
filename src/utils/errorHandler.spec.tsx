@@ -26,6 +26,10 @@ describe('Test if errorHandler is working properly', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should call toast.error with the correct message if error message is "Failed to fetch"', async () => {
     const error = new Error('Failed to fetch');
     errorHandler(t, error);

@@ -7,6 +7,10 @@ describe('urlToFile', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should successfully convert a URL to a File object', async () => {
     // Mock data
     const testUrl = 'https://example.com/image/test-image.jpg';

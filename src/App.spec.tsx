@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
-import { BrowserRouter, MemoryRouter } from 'react-router';
+import { MemoryRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import App from './App';
@@ -47,9 +47,9 @@ vi.mock('./plugin', () => ({
   PluginInjector: vi.fn(() => <div>Mock Plugin Injector</div>),
 }));
 
-// Mock console methods
-const originalConsoleLog = console.log;
-const originalConsoleError = console.error;
+vi.mock('screens/UserPortal/Settings/Settings', () => ({
+  default: () => <div data-testid="mock-settings">Mock Settings</div>,
+}));
 
 const MOCKS = [
   {
@@ -124,33 +124,15 @@ const ERROR_MOCKS = [
   },
 ];
 
-const LOADING_MOCKS = [
-  {
-    request: { query: CURRENT_USER },
-    delay: 1000, // Delay response to show loading state
-    result: {
-      data: {
-        currentUser: {
-          id: '123',
-          name: 'John Doe',
-          userType: 'USER',
-          appUserProfile: { adminFor: [] },
-        },
-      },
-    },
-  },
-];
-
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink([], true);
 const adminLink = new StaticMockLink(ADMIN_MOCKS, true);
 const superAdminLink = new StaticMockLink(SUPER_ADMIN_MOCKS, true);
 const errorLink = new StaticMockLink(ERROR_MOCKS, true);
-const loadingLink = new StaticMockLink(LOADING_MOCKS, true);
 
 const renderApp = (mockLink = link, initialRoute = '/') => {
   return render(
-    <MockedProvider addTypename={false} link={mockLink}>
+    <MockedProvider link={mockLink}>
       <MemoryRouter initialEntries={[initialRoute]}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -176,8 +158,7 @@ describe('Testing the App Component', () => {
   });
 
   afterEach(() => {
-    console.log = originalConsoleLog;
-    console.error = originalConsoleError;
+    vi.restoreAllMocks(); // Restores console spies automatically
   });
 
   it('Component should be rendered properly and user is logged in', async () => {
@@ -204,10 +185,6 @@ describe('Testing the App Component', () => {
       expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
       expect(mockPluginManager.initializePluginSystem).toHaveBeenCalled();
     });
-
-    expect(console.log).toHaveBeenCalledWith(
-      'Plugin system initialized successfully',
-    );
   });
 
   it('should handle plugin system initialization errors', async () => {
@@ -276,27 +253,6 @@ describe('Testing the App Component', () => {
     });
   });
 
-  it('should log user and plugin route debug information', async () => {
-    renderApp(adminLink);
-
-    await waitFor(() => {
-      expect(console.log).toHaveBeenCalledWith('=== APP.TSX ROUTE DEBUG ===');
-      expect(console.log).toHaveBeenCalledWith(
-        'Current user data:',
-        expect.objectContaining({
-          userType: 'ADMIN',
-          isAdmin: true,
-          isSuperAdmin: false,
-          userPermissions: 2,
-          userPermissionsArray: ['org1', 'org2'],
-        }),
-      );
-      expect(console.log).toHaveBeenCalledWith(
-        '=== END APP.TSX ROUTE DEBUG ===',
-      );
-    });
-  });
-
   it('should handle user data with no admin organizations', async () => {
     const noAdminMocks = [
       {
@@ -320,17 +276,13 @@ describe('Testing the App Component', () => {
     const noAdminLink = new StaticMockLink(noAdminMocks, true);
     renderApp(noAdminLink);
 
+    await wait();
+
+    // Should handle null adminFor gracefully
+    expect(document.body).toBeInTheDocument();
+    // Verify plugin system is initialized even with null adminFor
     await waitFor(() => {
-      expect(console.log).toHaveBeenCalledWith(
-        'Current user data:',
-        expect.objectContaining({
-          userType: 'USER',
-          isAdmin: false,
-          isSuperAdmin: false,
-          userPermissions: 0,
-          userPermissionsArray: [],
-        }),
-      );
+      expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
     });
   });
 
@@ -368,12 +320,6 @@ describe('Testing the App Component', () => {
       // Verify that usePluginRoutes was called, indicating plugin routes are being processed
       expect(usePluginRoutes).toHaveBeenCalled();
     });
-
-    // Verify the plugin routes were processed by checking console logs
-    expect(console.log).toHaveBeenCalledWith(
-      'Plugin routes loaded:',
-      expect.any(Object),
-    );
   });
 
   it('should handle missing user data gracefully', async () => {
@@ -395,10 +341,9 @@ describe('Testing the App Component', () => {
 
     // Should handle null user gracefully without crashing
     expect(document.body).toBeInTheDocument();
-
-    // Should log the debug information with null user handled
+    // Verify plugin system is initialized even with null user
     await waitFor(() => {
-      expect(console.log).toHaveBeenCalledWith('=== APP.TSX ROUTE DEBUG ===');
+      expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
     });
   });
 
@@ -423,17 +368,13 @@ describe('Testing the App Component', () => {
     const noProfileLink = new StaticMockLink(noProfileMocks, true);
     renderApp(noProfileLink);
 
+    await wait();
+
+    // Should handle missing appUserProfile gracefully
+    expect(document.body).toBeInTheDocument();
+    // Verify plugin system is initialized even without appUserProfile
     await waitFor(() => {
-      expect(console.log).toHaveBeenCalledWith(
-        'Current user data:',
-        expect.objectContaining({
-          userType: 'USER',
-          isAdmin: false,
-          isSuperAdmin: false,
-          userPermissions: 0,
-          userPermissionsArray: [],
-        }),
-      );
+      expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
     });
   });
 
@@ -464,25 +405,6 @@ describe('Testing the App Component', () => {
     await waitFor(() => {
       // Verify that usePluginRoutes was called 4 times for different route types
       expect(usePluginRoutes).toHaveBeenCalledTimes(4);
-
-      // Verify the plugin routes were logged
-      expect(console.log).toHaveBeenCalledWith(
-        'Plugin routes loaded:',
-        expect.objectContaining({
-          admin: expect.objectContaining({
-            count: 1,
-            routes: expect.arrayContaining([
-              expect.objectContaining({ pluginId: 'admin-org' }),
-            ]),
-          }),
-          user: expect.objectContaining({
-            count: 1,
-            routes: expect.arrayContaining([
-              expect.objectContaining({ pluginId: 'user-org' }),
-            ]),
-          }),
-        }),
-      );
     });
   });
 
@@ -490,25 +412,21 @@ describe('Testing the App Component', () => {
     // Mock React.lazy to simulate loading state
     const originalLazy = React.lazy;
 
-    React.lazy = vi
-      .fn()
-      .mockImplementation(
-        <T extends React.ComponentType<any>>(
-          _factory: () => Promise<{ default: T }>,
-        ): React.LazyExoticComponent<T> => {
-          const mockComponent = React.forwardRef(() => {
-            throw new Promise(() => {}); // Never resolves to keep loading
-          }) as React.LazyExoticComponent<T>;
+    React.lazy = vi.fn().mockImplementation(<
+      T extends React.ComponentType<unknown>,
+    >(): React.LazyExoticComponent<T> => {
+      const mockComponent = ((): React.ReactElement | null => {
+        throw new Promise(() => {}); // Never resolves to keep loading
+      }) as unknown as React.LazyExoticComponent<T>;
 
-          // Add the required _result property for TypeScript compliance
-          Object.defineProperty(mockComponent, '_result', {
-            value: null,
-            writable: true,
-          });
+      // Add the required _result property for TypeScript compliance
+      Object.defineProperty(mockComponent, '_result', {
+        value: null,
+        writable: true,
+      });
 
-          return mockComponent;
-        },
-      );
+      return mockComponent;
+    });
 
     try {
       renderApp();
@@ -547,14 +465,8 @@ describe('Testing the App Component', () => {
     renderApp(superAdminLink);
 
     await waitFor(() => {
-      expect(console.log).toHaveBeenCalledWith(
-        'Current user data:',
-        expect.objectContaining({
-          userType: 'SUPERADMIN',
-          isAdmin: true,
-          isSuperAdmin: true,
-        }),
-      );
+      // Verify plugin system is initialized
+      expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
     });
   });
 
@@ -562,14 +474,17 @@ describe('Testing the App Component', () => {
     renderApp(adminLink);
 
     await waitFor(() => {
-      expect(console.log).toHaveBeenCalledWith(
-        'Current user data:',
-        expect.objectContaining({
-          userType: 'ADMIN',
-          isAdmin: true,
-          isSuperAdmin: false,
-        }),
-      );
+      // Verify plugin system is initialized
+      expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
+    });
+  });
+
+  it('should navigate to user settings', async () => {
+    renderApp(link, '/user/settings');
+
+    await waitFor(() => {
+      // Should render user screen components
+      expect(screen.getByTestId('mock-settings')).toBeInTheDocument();
     });
   });
 });

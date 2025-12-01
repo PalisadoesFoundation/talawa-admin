@@ -4,7 +4,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import CommunityProfile from './CommunityProfile';
 import i18n from 'utils/i18nForTest';
@@ -17,16 +17,21 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 
-vi.mock('utils/errorHandler', () => ({
-  errorHandler: vi.fn(),
-}));
-
-vi.mock('react-toastify', () => ({
-  toast: {
+const { toastMocks, errorHandlerMock } = vi.hoisted(() => ({
+  toastMocks: {
     success: vi.fn(),
     warn: vi.fn(),
     error: vi.fn(),
   },
+  errorHandlerMock: vi.fn(),
+}));
+
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: errorHandlerMock,
+}));
+
+vi.mock('react-toastify', () => ({
+  toast: toastMocks,
 }));
 
 const MOCKS1 = [
@@ -319,11 +324,15 @@ describe('Testing Community Profile Screen', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   test('Components should render properly', async () => {
     window.location.assign('/communityProfile');
 
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -354,7 +363,7 @@ describe('Testing Community Profile Screen', () => {
 
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={link1}>
+        <MockedProvider link={link1}>
           <BrowserRouter>
             <I18nextProvider i18n={i18n}>
               <CommunityProfile />
@@ -414,7 +423,7 @@ describe('Testing Community Profile Screen', () => {
 
   test('If the queried data has some fields null then the input field should be empty', async () => {
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -438,7 +447,7 @@ describe('Testing Community Profile Screen', () => {
 
   test('Should clear out all the input field when click on Reset Changes button', async () => {
     render(
-      <MockedProvider addTypename={false} link={link3}>
+      <MockedProvider link={link3}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -467,7 +476,7 @@ describe('Testing Community Profile Screen', () => {
 
   test('Should have empty input fields when queried result is null', async () => {
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -490,7 +499,7 @@ describe('Testing Community Profile Screen', () => {
 
   test('should show loader while data is being fetched', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={LOADING_MOCK}>
+      <MockedProvider mocks={LOADING_MOCK}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -504,7 +513,7 @@ describe('Testing Community Profile Screen', () => {
 
   test('should handle mutation error correctly', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={ERROR_MOCK}>
+      <MockedProvider mocks={ERROR_MOCK}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -539,7 +548,7 @@ describe('Testing Community Profile Screen', () => {
     vi.spyOn(convertToBase64Module, 'default').mockResolvedValue(mockBase64);
 
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -566,7 +575,7 @@ describe('Testing Community Profile Screen', () => {
     vi.spyOn(convertToBase64Module, 'default').mockResolvedValue('');
 
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -593,7 +602,7 @@ describe('Testing Community Profile Screen', () => {
       .mockResolvedValue(mockBase64);
 
     const { container } = render(
-      <MockedProvider addTypename={false} mocks={UPDATE_SUCCESS_MOCKS}>
+      <MockedProvider mocks={UPDATE_SUCCESS_MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -653,7 +662,7 @@ describe('Testing Community Profile Screen', () => {
 
   test('should handle reset error correctly', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={RESET_ERROR_MOCK}>
+      <MockedProvider mocks={RESET_ERROR_MOCK}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -673,7 +682,7 @@ describe('Testing Community Profile Screen', () => {
 
   test('should enable buttons when only name is filled', async () => {
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -696,7 +705,7 @@ describe('Testing Community Profile Screen', () => {
 
   test('should enable buttons when only website is filled', async () => {
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -723,7 +732,7 @@ describe('Testing Community Profile Screen', () => {
     vi.spyOn(convertToBase64Module, 'default').mockResolvedValue(mockBase64);
 
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -756,7 +765,7 @@ describe('Testing Community Profile Screen', () => {
 
   test('should set document title correctly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -772,7 +781,7 @@ describe('Testing Community Profile Screen', () => {
 
   test('should populate form with existing community data', async () => {
     render(
-      <MockedProvider addTypename={false} link={link3}>
+      <MockedProvider link={link3}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -796,7 +805,7 @@ describe('Testing Community Profile Screen', () => {
 
   test('should handle file input without files', async () => {
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />
@@ -833,7 +842,7 @@ describe('Testing Community Profile Screen', () => {
     vi.spyOn(convertToBase64Module, 'default').mockResolvedValue(mockBase64);
 
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <CommunityProfile />

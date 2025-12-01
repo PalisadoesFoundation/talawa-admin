@@ -18,11 +18,15 @@ import GroupModal from './GroupModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 
-vi.mock('react-toastify', () => ({
+const sharedMocks = vi.hoisted(() => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
   },
+}));
+
+vi.mock('react-toastify', () => ({
+  toast: sharedMocks.toast,
 }));
 
 const link1 = new StaticMockLink(MOCKS);
@@ -130,7 +134,7 @@ const renderGroupModal = (
   props: InterfaceGroupModal,
 ): RenderResult => {
   return render(
-    <MockedProvider link={link} addTypename={false}>
+    <MockedProvider link={link}>
       <Provider store={store}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -145,6 +149,9 @@ const renderGroupModal = (
 };
 
 describe('Testing GroupModal', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
   it('GroupModal -> Requests -> Accept', async () => {
     renderGroupModal(link1, itemProps[0]);
     expect(screen.getByText(t.manageGroup)).toBeInTheDocument();

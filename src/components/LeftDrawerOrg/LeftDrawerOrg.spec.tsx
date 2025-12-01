@@ -333,7 +333,7 @@ describe('LeftDrawerOrg', () => {
     initialRoute = '/orgdash/org-123',
   ) => {
     return render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={[initialRoute]}>
           <LeftDrawerOrg {...defaultProps} {...props} />
         </MemoryRouter>
@@ -764,7 +764,7 @@ describe('LeftDrawerOrg', () => {
 
   it('should handle empty pathname via direct routing', () => {
     render(
-      <MockedProvider mocks={successMocks} addTypename={false}>
+      <MockedProvider mocks={successMocks}>
         <MemoryRouter initialEntries={['']}>
           <LeftDrawerOrg {...defaultProps} />
         </MemoryRouter>

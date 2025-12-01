@@ -22,7 +22,7 @@ import Actions from './Actions';
 import type { ApolloLink } from '@apollo/client';
 import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './Actions.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
-import { describe, it, beforeAll, beforeEach, afterAll, vi } from 'vitest';
+import { describe, it, beforeEach, afterEach, vi } from 'vitest';
 
 const { setItem } = useLocalStorage();
 
@@ -47,7 +47,15 @@ const debounceWait = async (ms = 300): Promise<void> => {
     });
   });
 };
-const mockNavigate = vi.fn();
+const mockNavigate = vi.hoisted(() => vi.fn());
+
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
 
 const expectVitestToBeInTheDocument = (element: HTMLElement): void => {
   expect(element).toBeInTheDocument();
@@ -62,7 +70,7 @@ const expectElementToHaveTextContent = (
 
 const renderActions = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/user/volunteer/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -83,30 +91,22 @@ const renderActions = (link: ApolloLink): RenderResult => {
 };
 
 describe('Testing Actions Screen', () => {
-  beforeAll(() => {
-    vi.mock('react-router', async () => {
-      const actual = await vi.importActual('react-router'); // Import the actual implementation
-      return {
-        ...actual,
-        useNavigate: () => mockNavigate, // Replace useNavigate hook with the mock
-      };
-    });
-  });
-
   beforeEach(() => {
     setItem('userId', 'userId');
     setItem('volunteerId', 'volunteerId1');
   });
 
-  afterAll(() => {
-    vi.restoreAllMocks();
+  afterEach(() => {
+    mockNavigate.mockReset();
+    vi.clearAllMocks();
+    localStorage.clear();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
     setItem('userId', null);
     setItem('volunteerId', null);
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/user/volunteer/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>

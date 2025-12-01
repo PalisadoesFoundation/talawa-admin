@@ -1,9 +1,11 @@
 import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 
 const rank1 = {
+  __typename: 'VolunteerRank',
   rank: 1,
   hoursVolunteered: 5,
   user: {
+    __typename: 'User',
     _id: 'userId1',
     lastName: 'Bradley',
     firstName: 'Teresa',
@@ -13,9 +15,11 @@ const rank1 = {
 };
 
 const rank2 = {
+  __typename: 'VolunteerRank',
   rank: 2,
   hoursVolunteered: 4,
   user: {
+    __typename: 'User',
     _id: 'userId2',
     lastName: 'Garza',
     firstName: 'Bruce',
@@ -25,9 +29,11 @@ const rank2 = {
 };
 
 const rank3 = {
+  __typename: 'VolunteerRank',
   rank: 3,
   hoursVolunteered: 3,
   user: {
+    __typename: 'User',
     _id: 'userId3',
     lastName: 'Doe',
     firstName: 'John',
@@ -37,9 +43,11 @@ const rank3 = {
 };
 
 const rank4 = {
+  __typename: 'VolunteerRank',
   rank: 4,
   hoursVolunteered: 2,
   user: {
+    __typename: 'User',
     _id: 'userId4',
     lastName: 'Doe',
     firstName: 'Jane',

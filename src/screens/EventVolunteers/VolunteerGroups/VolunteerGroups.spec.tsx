@@ -7,7 +7,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes, useParams } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
@@ -15,6 +15,25 @@ import VolunteerGroups from './VolunteerGroups';
 import type { ApolloLink } from '@apollo/client';
 import { MOCKS, MOCKS_EMPTY, MOCKS_ERROR } from './modal/VolunteerGroups.mocks';
 import { vi } from 'vitest';
+
+const { routerMocks } = vi.hoisted(() => {
+  const useParams = vi.fn();
+  useParams.mockReturnValue({ orgId: 'orgId', eventId: 'eventId' });
+  return {
+    routerMocks: {
+      useParams,
+    },
+  };
+});
+
+vi.mock('react-router', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-router')>('react-router');
+  return {
+    ...actual,
+    useParams: routerMocks.useParams,
+  };
+});
 
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(MOCKS_ERROR);
@@ -39,7 +58,7 @@ const debounceWait = async (ms = 300): Promise<void> => {
 
 const renderVolunteerGroups = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/event/orgId/eventId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -65,26 +84,27 @@ const renderVolunteerGroups = (link: ApolloLink): RenderResult => {
 /** Mock useParams to provide consistent test data */
 
 describe('Testing VolunteerGroups Screen', () => {
-  beforeAll(() => {
-    vi.mock('react-router', async () => {
-      const actualDom = await vi.importActual('react-router');
-      return { ...actualDom, useParams: vi.fn() };
+  beforeEach(() => {
+    vi.clearAllMocks();
+    routerMocks.useParams.mockReturnValue({
+      orgId: 'orgId',
+      eventId: 'eventId',
     });
   });
 
-  afterAll(() => {
+  afterEach(() => {
     vi.clearAllMocks();
   });
 
   const mockRouteParams = (orgId = 'orgId', eventId = 'eventId'): void => {
-    vi.mocked(useParams).mockReturnValue({ orgId, eventId });
+    routerMocks.useParams.mockReturnValue({ orgId, eventId });
   };
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
     /**  Mocking the useParams hook to return undefined parameters */
     mockRouteParams('', '');
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/event/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>

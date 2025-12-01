@@ -15,6 +15,10 @@ describe('askForTalawaApiUrl', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should return the provided endpoint when user enters it', async () => {
     const mockPrompt = vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
       endpoint: 'http://example.com/graphql',

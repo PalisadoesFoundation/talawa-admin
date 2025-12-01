@@ -25,13 +25,18 @@ import {
 } from './Invitations.mocks';
 import { toast } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi, expect } from 'vitest';
+import { vi, expect, beforeEach, afterEach } from 'vitest';
 
-vi.mock('react-toastify', () => ({
+const sharedMocks = vi.hoisted(() => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
   },
+  navigate: vi.fn(),
+}));
+
+vi.mock('react-toastify', () => ({
+  toast: sharedMocks.toast,
 }));
 
 vi.mock('react-router', async () => {
@@ -39,7 +44,7 @@ vi.mock('react-router', async () => {
   return {
     ...actual,
     useParams: () => ({ orgId: 'orgId' }),
-    useNavigate: vi.fn(),
+    useNavigate: () => sharedMocks.navigate,
   };
 });
 
@@ -69,7 +74,7 @@ const debounceWait = async (ms = 300): Promise<void> => {
 
 const renderInvitations = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/user/volunteer/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -94,17 +99,20 @@ const renderInvitations = (link: ApolloLink): RenderResult => {
 
 describe('Testing Invvitations Screen', () => {
   beforeEach(() => {
+    localStorage.clear();
     setItem('userId', 'userId');
   });
 
-  afterAll(() => {
+  afterEach(() => {
     vi.clearAllMocks();
+    sharedMocks.navigate.mockReset();
+    localStorage.clear();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
     setItem('userId', null);
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/user/volunteer/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>

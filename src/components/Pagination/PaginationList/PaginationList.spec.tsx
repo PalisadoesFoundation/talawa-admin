@@ -44,6 +44,9 @@ vi.mock('../Navigator/Pagination', () => ({
 }));
 
 describe('PaginationList', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const defaultProps = {
     count: 100,
     rowsPerPage: 10,

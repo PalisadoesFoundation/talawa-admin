@@ -14,7 +14,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
@@ -31,11 +31,13 @@ import {
 import { toast } from 'react-toastify';
 import { vi } from 'vitest';
 
+const toastMocks = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+}));
+
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: toastMocks,
 }));
 
 const debounceWait = async (ms = 300): Promise<void> => {
@@ -71,7 +73,7 @@ async function wait(ms = 100): Promise<void> {
 
 const renderRequests = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/event/orgId/eventId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -92,20 +94,17 @@ const renderRequests = (link: ApolloLink): RenderResult => {
 };
 
 describe('Testing Requests Screen', () => {
-  beforeAll(() => {
-    vi.mock('react-router', async () => ({
-      ...(await vi.importActual('react-router')),
-      useParams: () => ({ orgId: 'orgId', eventId: 'eventId' }),
-    }));
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
-  afterAll(() => {
-    vi.clearAllMocks();
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/event/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -337,17 +336,7 @@ describe('Testing Requests Screen', () => {
 
 describe('Requests Component CSS Styling', () => {
   const renderComponent = (): RenderResult => {
-    return render(
-      <MockedProvider addTypename={false} link={link1}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    return renderRequests(link1);
   };
 
   test('DataGrid should have correct styling', async () => {

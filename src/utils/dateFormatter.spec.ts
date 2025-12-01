@@ -1,6 +1,11 @@
+import { describe, test, expect, vi, afterEach } from 'vitest';
 import { formatDate } from './dateFormatter';
 
 describe('formatDate', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('formats date with st suffix', () => {
     expect(formatDate('2023-01-01')).toBe('1st Jan 2023');
     expect(formatDate('2023-05-21')).toBe('21st May 2023');

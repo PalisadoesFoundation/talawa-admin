@@ -1,5 +1,14 @@
 import { renderHook, act } from '@testing-library/react';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import {
+  vi,
+  describe,
+  it,
+  expect,
+  beforeEach,
+  afterEach,
+  beforeAll,
+  afterAll,
+} from 'vitest';
 import { usePluginActions } from './usePluginActions';
 import { getPluginManager } from 'plugin/manager';
 import type { IPluginMeta } from 'plugin';
@@ -10,10 +19,19 @@ vi.mock('plugin/manager', () => ({
 }));
 
 // Mock the GraphQL hooks
-const mockCreatePlugin = vi.fn();
-const mockUpdatePlugin = vi.fn();
-const mockDeletePlugin = vi.fn();
-const mockInstallPlugin = vi.fn();
+const {
+  mockCreatePlugin,
+  mockUpdatePlugin,
+  mockDeletePlugin,
+  mockInstallPlugin,
+  mockReload,
+} = vi.hoisted(() => ({
+  mockCreatePlugin: vi.fn(),
+  mockUpdatePlugin: vi.fn(),
+  mockDeletePlugin: vi.fn(),
+  mockInstallPlugin: vi.fn(),
+  mockReload: vi.fn(),
+}));
 
 vi.mock('plugin/graphql-service', () => ({
   useCreatePlugin: () => [mockCreatePlugin],
@@ -23,12 +41,22 @@ vi.mock('plugin/graphql-service', () => ({
 }));
 
 // Mock window.location.reload
-const mockReload = vi.fn();
-Object.defineProperty(window, 'location', {
-  value: {
-    reload: mockReload,
-  },
-  writable: true,
+const originalLocation = window.location;
+const locationStub = { reload: mockReload } as unknown as Location;
+
+beforeAll(() => {
+  Object.defineProperty(window, 'location', {
+    configurable: true,
+    value: locationStub,
+    writable: true,
+  });
+});
+
+afterAll(() => {
+  Object.defineProperty(window, 'location', {
+    configurable: true,
+    value: originalLocation,
+  });
 });
 
 describe('usePluginActions', () => {
@@ -47,6 +75,9 @@ describe('usePluginActions', () => {
         pluginId: 'test-plugin',
         isInstalled: true,
         isActivated: true,
+        backup: false,
+        createdAt: '2023-01-01',
+        updatedAt: '2023-01-01',
       },
     ],
   };
@@ -60,12 +91,19 @@ describe('usePluginActions', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (getPluginManager as any).mockReturnValue(mockPluginManager);
+    mockReload.mockReset();
+    (getPluginManager as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+      mockPluginManager,
+    );
     mockRefetch.mockResolvedValue({});
     mockCreatePlugin.mockResolvedValue({});
     mockUpdatePlugin.mockResolvedValue({});
     mockDeletePlugin.mockResolvedValue({});
     mockInstallPlugin.mockResolvedValue({});
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('should initialize with correct default state', () => {
@@ -375,7 +413,6 @@ describe('usePluginActions', () => {
     mockPluginManager.uninstallPlugin.mockResolvedValue(true);
 
     // Mock the import to throw an error
-    const originalImport = vi.fn();
     vi.doMock('../../../plugin/services/AdminPluginFileService', () => {
       throw new Error('Import failed');
     });

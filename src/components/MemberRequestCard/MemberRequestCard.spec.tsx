@@ -11,8 +11,6 @@ import { MOCKS, MOCKS2, MOCKS3 } from './MemberRequestMocks';
 
 // Optimized mock links - reused for performance
 const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS2, true);
-const link3 = new StaticMockLink(MOCKS3, true);
 
 // Performance-optimized wait function
 async function wait(ms = 100): Promise<void> {
@@ -43,7 +41,7 @@ describe('Testing Member Request Card', () => {
     vi.spyOn(window, 'confirm').mockReturnValue(true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <MemberRequestCard {...defaultProps} />
         </I18nextProvider>
@@ -80,7 +78,7 @@ describe('Testing Member Request Card', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <MemberRequestCard {...emptyProps} />
         </I18nextProvider>
@@ -135,7 +133,7 @@ describe('Testing Member Request Card', () => {
       vi.spyOn(window, 'confirm').mockReturnValue(true);
 
       render(
-        <MockedProvider addTypename={false} mocks={MOCKS2}>
+        <MockedProvider mocks={MOCKS2}>
           <I18nextProvider i18n={i18nForTest}>
             <MemberRequestCard {...testProps} />
           </I18nextProvider>
@@ -160,7 +158,7 @@ describe('Testing Member Request Card', () => {
       vi.spyOn(window, 'confirm').mockReturnValue(true);
 
       render(
-        <MockedProvider addTypename={false} mocks={MOCKS3}>
+        <MockedProvider mocks={MOCKS3}>
           <I18nextProvider i18n={i18nForTest}>
             <MemberRequestCard {...testProps} />
           </I18nextProvider>

@@ -7,13 +7,11 @@ export class PostsPage {
   private readonly _pinPostCheckbox = '[data-cy="pinPost"]';
   private readonly _createPostSubmit = '[data-cy="createPostBtn"]';
   private readonly _postCardContainer = '[data-cy="postCardContainer"]';
-  private readonly _moreOptionsIcon = '[data-testid="MoreVertIcon"]';
-  private readonly _editOption = '[data-cy="edit-option"]';
+  private readonly _moreOptionsIcon = '[data-testid="more-options-button"]';
+  private readonly _editOption = '[data-testid="edit-post-menu-item"]';
   private readonly _editCaptionInput = '[data-cy="editCaptionInput"]';
-  private readonly _editImageUploadInput = '[data-cy="image-upload-input"]';
-  private readonly _updatePostSubmit = '[data-cy="update-post-submit"]';
-  private readonly _deleteOption = '[data-testid="delete-option"]';
-  private readonly _deletePostBtn = '[data-testid="deletePostBtn"]';
+  private readonly _updatePostSubmit = '[data-testid="save-post-button"]';
+  private readonly _deleteOption = '[data-testid="delete-post-button"]';
 
   visitPostsPage() {
     cy.get(this._postsTabButton).should('be.visible').click();
@@ -34,24 +32,21 @@ export class PostsPage {
     return this;
   }
 
-  editFirstPost(newTitle: string, mediaPath: string) {
+  editFirstPost(newTitle: string) {
     cy.get(this._postCardContainer).first().click();
-    cy.get(this._moreOptionsIcon).should('be.visible').click();
+    cy.get(this._moreOptionsIcon).first().should('be.visible').click();
     cy.get(this._editOption).should('be.visible').click();
     cy.get(this._editCaptionInput).should('be.visible').clear().type(newTitle);
-    cy.get(this._editImageUploadInput)
-      .should('be.visible')
-      .selectFile(mediaPath, { force: true });
     cy.get(this._updatePostSubmit).should('be.visible').click();
-    cy.assertToast('Post Updated successfully.');
+    cy.assertToast('Post updated successfully');
     return this;
   }
 
   deleteFirstPost() {
     cy.get(this._postCardContainer).first().click();
-    cy.get(this._moreOptionsIcon).should('be.visible').click();
+    cy.get(this._moreOptionsIcon).first().should('be.visible').click();
     cy.get(this._deleteOption).should('be.visible').click();
-    cy.get(this._deletePostBtn).should('be.visible').click();
+    cy.assertToast('Post deleted successfully.');
     return this;
   }
 }

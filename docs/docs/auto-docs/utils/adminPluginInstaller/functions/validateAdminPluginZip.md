@@ -4,9 +4,9 @@
 
 # Function: validateAdminPluginZip()
 
-> **validateAdminPluginZip**(`zipFile`): `Promise`\<[`AdminPluginZipStructure`](../interfaces/AdminPluginZipStructure.md)\>
+> **validateAdminPluginZip**(`zipFile`): `Promise`\<[`IAdminPluginZipStructure`](../interfaces/IAdminPluginZipStructure.md)\>
 
-Defined in: [src/utils/adminPluginInstaller.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L53)
+Defined in: [src/utils/adminPluginInstaller.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L54)
 
 Validates the structure of a plugin zip file (supports both admin and API)
 
@@ -18,4 +18,4 @@ Validates the structure of a plugin zip file (supports both admin and API)
 
 ## Returns
 
-`Promise`\<[`AdminPluginZipStructure`](../interfaces/AdminPluginZipStructure.md)\>
+`Promise`\<[`IAdminPluginZipStructure`](../interfaces/IAdminPluginZipStructure.md)\>

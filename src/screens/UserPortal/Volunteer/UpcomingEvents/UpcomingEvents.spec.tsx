@@ -30,7 +30,7 @@ import {
 } from './UpcomingEvents.mocks';
 import { toast } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi } from 'vitest';
+import { vi, beforeEach, afterEach } from 'vitest';
 
 /**
  * Unit tests for the UpcomingEvents component.
@@ -40,12 +40,25 @@ import { vi } from 'vitest';
  * Mocked dependencies are used to ensure isolated testing of the component.
  */
 
-vi.mock('react-toastify', () => ({
+const sharedMocks = vi.hoisted(() => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
   },
+  useParams: vi.fn(() => ({ orgId: 'orgId' })),
 }));
+
+vi.mock('react-toastify', () => ({
+  toast: sharedMocks.toast,
+}));
+
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual('react-router');
+  return {
+    ...actual,
+    useParams: sharedMocks.useParams,
+  };
+});
 
 const { setItem } = useLocalStorage();
 
@@ -77,7 +90,7 @@ const debounceWait = async (ms = 300): Promise<void> => {
 
 const renderUpcomingEvents = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/user/volunteer/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -101,28 +114,21 @@ const renderUpcomingEvents = (link: ApolloLink): RenderResult => {
 };
 
 describe('Testing Upcoming Events Screen', () => {
-  beforeAll(() => {
-    vi.mock('react-router', async () => {
-      const actual = await vi.importActual('react-router');
-      return {
-        ...actual,
-        useParams: () => ({ orgId: 'orgId' }),
-      };
-    });
-  });
-
   beforeEach(() => {
+    localStorage.clear();
     setItem('userId', 'userId');
   });
 
-  afterAll(() => {
+  afterEach(() => {
     vi.clearAllMocks();
+    sharedMocks.useParams.mockReturnValue({ orgId: 'orgId' });
+    localStorage.clear();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
     setItem('userId', null);
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/user/volunteer/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>

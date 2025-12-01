@@ -14,6 +14,10 @@ describe('Storage Helper Functions', () => {
     localStorage.clear();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('generates correct storage key', () => {
     const key = 'testKey';
     const prefix = 'TestPrefix';

@@ -62,7 +62,7 @@ describe('SignOut Component', () => {
     });
 
     render(
-      <MockedProvider mocks={[mockRevokeRefreshToken]} addTypename={false}>
+      <MockedProvider mocks={[mockRevokeRefreshToken]}>
         <BrowserRouter>
           <SignOut />
         </BrowserRouter>
@@ -104,7 +104,7 @@ describe('SignOut Component', () => {
     });
 
     render(
-      <MockedProvider mocks={[mockErrorRevokeRefreshToken]} addTypename={false}>
+      <MockedProvider mocks={[mockErrorRevokeRefreshToken]}>
         <BrowserRouter>
           <SignOut />
         </BrowserRouter>
@@ -168,7 +168,7 @@ describe('SignOut Component', () => {
     ];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <SignOut />
         </BrowserRouter>
@@ -227,7 +227,7 @@ describe('SignOut Component', () => {
     ];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <SignOut />
         </BrowserRouter>
@@ -283,7 +283,7 @@ describe('SignOut Component', () => {
     ];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <SignOut />
         </BrowserRouter>
@@ -325,7 +325,7 @@ describe('SignOut Component', () => {
       });
 
       render(
-        <MockedProvider mocks={[mockRevokeRefreshToken]} addTypename={false}>
+        <MockedProvider mocks={[mockRevokeRefreshToken]}>
           <BrowserRouter>
             <SignOut />
           </BrowserRouter>
@@ -346,7 +346,7 @@ describe('SignOut Component', () => {
       });
 
       render(
-        <MockedProvider mocks={[mockRevokeRefreshToken]} addTypename={false}>
+        <MockedProvider mocks={[mockRevokeRefreshToken]}>
           <BrowserRouter>
             <SignOut />
           </BrowserRouter>
@@ -372,7 +372,7 @@ describe('SignOut Component', () => {
       });
 
       render(
-        <MockedProvider mocks={[mockRevokeRefreshToken]} addTypename={false}>
+        <MockedProvider mocks={[mockRevokeRefreshToken]}>
           <BrowserRouter>
             <SignOut />
           </BrowserRouter>
@@ -398,7 +398,7 @@ describe('SignOut Component', () => {
       });
 
       render(
-        <MockedProvider mocks={[mockRevokeRefreshToken]} addTypename={false}>
+        <MockedProvider mocks={[mockRevokeRefreshToken]}>
           <BrowserRouter>
             <SignOut />
           </BrowserRouter>
@@ -441,7 +441,7 @@ describe('SignOut Component', () => {
       ];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <BrowserRouter>
             <SignOut />
           </BrowserRouter>

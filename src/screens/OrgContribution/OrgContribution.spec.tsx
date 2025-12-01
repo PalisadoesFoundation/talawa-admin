@@ -18,6 +18,14 @@ async function wait(ms = 100): Promise<void> {
 }
 
 describe('Organisation Contribution Page', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('should render props and text elements test for the screen', async () => {
     Object.defineProperty(window, 'location', {
       value: {
@@ -29,7 +37,7 @@ describe('Organisation Contribution Page', () => {
     window.location.assign('/orglist');
 
     const { container } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

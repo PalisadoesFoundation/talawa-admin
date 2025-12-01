@@ -2,27 +2,30 @@ import { checkConnection } from './checkConnection';
 import { vi, describe, beforeEach, it, expect } from 'vitest';
 vi.mock('node-fetch');
 
-global.fetch = vi.fn((url) => {
-  if (url === 'http://example.com/graphql') {
-    const responseInit: ResponseInit = {
-      status: 200,
-      statusText: 'OK',
-      headers: new Headers({ 'Content-Type': 'application/json' }),
-    };
-    return Promise.resolve(new Response(JSON.stringify({}), responseInit));
-  } else {
-    const errorResponseInit: ResponseInit = {
-      status: 500,
-      statusText: 'Internal Server Error',
-      headers: new Headers({ 'Content-Type': 'text/plain' }),
-    };
-    return Promise.reject(new Response('Error', errorResponseInit));
-  }
-});
-
 describe('checkConnection', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    global.fetch = vi.fn((url) => {
+      if (url === 'http://example.com/graphql') {
+        const responseInit: ResponseInit = {
+          status: 200,
+          statusText: 'OK',
+          headers: new Headers({ 'Content-Type': 'application/json' }),
+        };
+        return Promise.resolve(new Response(JSON.stringify({}), responseInit));
+      } else {
+        const errorResponseInit: ResponseInit = {
+          status: 500,
+          statusText: 'Internal Server Error',
+          headers: new Headers({ 'Content-Type': 'text/plain' }),
+        };
+        return Promise.reject(new Response('Error', errorResponseInit));
+      }
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   test('should return true and log success message if the connection is successful', async () => {

@@ -93,6 +93,10 @@ describe('Testing CategoryViewModal Component', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should render modal with category details', () => {
     renderCategoryViewModal();
 

@@ -36,6 +36,10 @@ vi.mock('react-i18next', () => ({
 }));
 
 describe('DashboardStats Component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   const mockProps = {
     memberCount: 25,
     adminCount: 5,

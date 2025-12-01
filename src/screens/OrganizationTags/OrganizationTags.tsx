@@ -64,8 +64,7 @@ import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQuer
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
+import PageHeader from 'shared-components/Navbar/Navbar';
 
 function OrganizationTags(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -337,39 +336,36 @@ function OrganizationTags(): JSX.Element {
       <Row>
         <div>
           <div className={styles.btnsContainer}>
-            <SearchBar
-              placeholder={tCommon('searchByName')}
-              onSearch={(term) => setTagSearchName(term.trim())}
-              inputTestId="searchByName"
-              buttonTestId="searchBtn"
+            <PageHeader
+              search={{
+                placeholder: tCommon('searchByName'),
+                onSearch: (term) => setTagSearchName(term.trim()),
+                inputTestId: 'searchByName',
+                buttonTestId: 'searchBtn',
+              }}
+              sorting={[
+                {
+                  title: 'Sort Tags',
+                  options: [
+                    { label: tCommon('Latest'), value: 'latest' },
+                    { label: tCommon('Oldest'), value: 'oldest' },
+                  ],
+                  selected: tagSortOrder === 'DESCENDING' ? 'latest' : 'oldest',
+                  onChange: (value) => handleSortChange(value.toString()),
+                  testIdPrefix: 'sortedBy',
+                },
+              ]}
+              actions={
+                <Button
+                  onClick={showCreateTagModal}
+                  data-testid="createTagBtn"
+                  className={styles.createButton}
+                >
+                  <i className="fa fa-plus me-2" />
+                  {t('createTag')}
+                </Button>
+              }
             />
-            <div className={styles.btnsBlock}>
-              <SortingButton
-                title="Sort Tags"
-                sortingOptions={[
-                  { label: tCommon('Latest'), value: 'latest' },
-                  { label: tCommon('Oldest'), value: 'oldest' },
-                ]}
-                selectedOption={
-                  tagSortOrder === 'DESCENDING'
-                    ? tCommon('Latest')
-                    : tCommon('Oldest')
-                }
-                onSortChange={handleSortChange}
-                dataTestIdPrefix="sortTags"
-                className={styles.dropdown}
-              />
-            </div>
-            <div>
-              <Button
-                onClick={showCreateTagModal}
-                data-testid="createTagBtn"
-                className={`${styles.createButton}`}
-              >
-                <i className={'fa fa-plus me-2'} />
-                {t('createTag')}
-              </Button>
-            </div>
           </div>
 
           {orgUserTagsLoading || createUserTagLoading ? (

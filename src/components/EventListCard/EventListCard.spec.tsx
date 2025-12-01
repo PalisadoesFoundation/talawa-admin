@@ -55,7 +55,7 @@ const renderEventListCard = (
   const { key, ...restProps } = props; // Destructure the key and separate other props
 
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/orgevents/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -87,6 +87,9 @@ const renderEventListCard = (
 };
 
 describe('Testing Event List Card', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   beforeAll(() => {
     vi.mock('react-router', async () => ({
       ...(await vi.importActual('react-router')),
@@ -100,7 +103,7 @@ describe('Testing Event List Card', () => {
 
   it('Should navigate to "/" if orgId is not defined', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <I18nextProvider i18n={i18n}>
           <BrowserRouter>
             <EventListCard
@@ -239,7 +242,7 @@ describe('Testing Event List Card', () => {
     // Destructure key from props[1] and pass it separately to avoid spreading it
     const { key, ...otherProps } = props[4];
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <MemoryRouter initialEntries={['/orgevents/orgId']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>

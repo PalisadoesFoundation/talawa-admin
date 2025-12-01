@@ -1,11 +1,17 @@
 import React, { act } from 'react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import UserDetailsForm from './UserDetails';
 import { MOCKS, MOCKS1, MOCKS2, UPDATE_MOCK } from '../SettingsMocks';
 import { MockedProvider } from '@apollo/client/testing';
 import dayjs from 'dayjs';
+
+const handlerMocks = vi.hoisted(() => ({
+  handleFieldChange: vi.fn(),
+  handleResetChanges: vi.fn(),
+  handleUpdateUserDetails: vi.fn(),
+}));
 
 // Mock the dependencies
 vi.mock('sanitize-html', () => ({
@@ -28,9 +34,6 @@ vi.mock('components/UserPortal/UserProfile/UserAddressFields', () => ({
 }));
 
 describe('UserDetailsForm', () => {
-  const mockHandleFieldChange = vi.fn();
-  const mockHandleResetChanges = vi.fn();
-  const mockHandleUpdateUserDetails = vi.fn();
   const mockT = (key: string): string => key;
   const mockTCommon = (key: string): string => key;
 
@@ -39,10 +42,10 @@ describe('UserDetailsForm', () => {
       ...MOCKS1[0].result.data.currentUser,
       password: '', // Add a default password value
     },
-    handleFieldChange: mockHandleFieldChange,
+    handleFieldChange: handlerMocks.handleFieldChange,
     isUpdated: true,
-    handleResetChanges: mockHandleResetChanges,
-    handleUpdateUserDetails: mockHandleUpdateUserDetails,
+    handleResetChanges: handlerMocks.handleResetChanges,
+    handleUpdateUserDetails: handlerMocks.handleUpdateUserDetails,
     t: mockT,
     tCommon: mockTCommon,
   };
@@ -51,9 +54,13 @@ describe('UserDetailsForm', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders all form fields with correct initial values', () => {
     render(
-      <MockedProvider mocks={MOCKS1} addTypename={false}>
+      <MockedProvider mocks={MOCKS1}>
         <UserDetailsForm {...defaultProps} />
       </MockedProvider>,
     );
@@ -80,7 +87,7 @@ describe('UserDetailsForm', () => {
 
   it('handles password field changes', async () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} />
       </MockedProvider>,
     );
@@ -88,7 +95,7 @@ describe('UserDetailsForm', () => {
     const passwordInput = screen.getByTestId('inputPassword');
     await userEvent.type(passwordInput, 'newPassword123');
 
-    expect(mockHandleFieldChange).toHaveBeenCalledWith(
+    expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith(
       'password',
       'newPassword123',
     );
@@ -96,7 +103,7 @@ describe('UserDetailsForm', () => {
 
   it('disables email field', () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} />
       </MockedProvider>,
     );
@@ -106,7 +113,7 @@ describe('UserDetailsForm', () => {
 
   it('shows/hides action buttons based on isUpdated prop', () => {
     const { rerender } = render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} isUpdated={false} />
       </MockedProvider>,
     );
@@ -116,7 +123,7 @@ describe('UserDetailsForm', () => {
     expect(screen.queryByTestId('updateUserBtn')).not.toBeInTheDocument();
 
     rerender(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} isUpdated={true} />
       </MockedProvider>,
     );
@@ -128,7 +135,7 @@ describe('UserDetailsForm', () => {
 
   it('handles form submission correctly', async () => {
     render(
-      <MockedProvider mocks={UPDATE_MOCK} addTypename={false}>
+      <MockedProvider mocks={UPDATE_MOCK}>
         <UserDetailsForm {...defaultProps} isUpdated={true} />
       </MockedProvider>,
     );
@@ -136,12 +143,12 @@ describe('UserDetailsForm', () => {
     const updateButton = screen.getByTestId('updateUserBtn');
     await userEvent.click(updateButton);
 
-    expect(mockHandleUpdateUserDetails).toHaveBeenCalled();
+    expect(handlerMocks.handleUpdateUserDetails).toHaveBeenCalled();
   });
 
   it('handles reset changes correctly', async () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} isUpdated={true} />
       </MockedProvider>,
     );
@@ -149,12 +156,12 @@ describe('UserDetailsForm', () => {
     const resetButton = screen.getByTestId('resetChangesBtn');
     await userEvent.click(resetButton);
 
-    expect(mockHandleResetChanges).toHaveBeenCalled();
+    expect(handlerMocks.handleResetChanges).toHaveBeenCalled();
   });
 
   it('renders select fields with correct options', () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} />
       </MockedProvider>,
     );
@@ -180,14 +187,13 @@ describe('UserDetailsForm', () => {
 
   it('validates birth date to not be in the future', () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} />
       </MockedProvider>,
     );
 
     const birthDateInput = screen.getByLabelText(mockT('birthDate'));
-    const today = new Date();
-    const maxDate = today.toISOString().split('T')[0]; // This returns YYYY-MM-DD format
+    const maxDate = dayjs().format('YYYY-MM-DD');
 
     expect(birthDateInput).toHaveAttribute('max', maxDate);
   });
@@ -199,7 +205,7 @@ describe('UserDetailsForm', () => {
     };
 
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} userDetails={userDetailsWithHtml} />
       </MockedProvider>,
     );
@@ -210,7 +216,7 @@ describe('UserDetailsForm', () => {
 
   it('handles empty user details gracefully', () => {
     render(
-      <MockedProvider mocks={MOCKS2} addTypename={false}>
+      <MockedProvider mocks={MOCKS2}>
         <UserDetailsForm
           {...defaultProps}
           userDetails={{ ...MOCKS2[0].result.data.currentUser, password: '' }}
@@ -225,7 +231,7 @@ describe('UserDetailsForm', () => {
 
   it('handles address fields changes correctly', async () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} />
       </MockedProvider>,
     );
@@ -233,7 +239,7 @@ describe('UserDetailsForm', () => {
     const addressInput = screen.getByTestId('mock-address-input');
     await userEvent.type(addressInput, '123 Test St');
 
-    expect(mockHandleFieldChange).toHaveBeenCalledWith(
+    expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith(
       'addressLine1',
       '123 Test St',
     );
@@ -241,7 +247,7 @@ describe('UserDetailsForm', () => {
 
   it('handles all form field changes correctly', async () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} />
       </MockedProvider>,
     );
@@ -249,31 +255,37 @@ describe('UserDetailsForm', () => {
     // Test name field
     const nameInput = screen.getByTestId('inputName');
     fireEvent.change(nameInput, { target: { value: 'New Name' } });
-    expect(mockHandleFieldChange).toHaveBeenCalledWith('name', 'New Name');
+    expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith(
+      'name',
+      'New Name',
+    );
 
     // Test gender field
     const genderSelect = screen.getByTestId('inputGender');
     await userEvent.selectOptions(genderSelect, 'male');
-    expect(mockHandleFieldChange).toHaveBeenCalledWith('natalSex', 'male');
+    expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith(
+      'natalSex',
+      'male',
+    );
 
     // Test phone numbers
     const mobilePhone = screen.getByTestId('inputPhoneNumber');
     fireEvent.change(mobilePhone, { target: { value: '1234567890' } });
-    expect(mockHandleFieldChange).toHaveBeenCalledWith(
+    expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith(
       'mobilePhoneNumber',
       '1234567890',
     );
 
     const homePhone = screen.getByTestId('inputHomePhoneNumber');
     fireEvent.change(homePhone, { target: { value: '1234567890' } });
-    expect(mockHandleFieldChange).toHaveBeenCalledWith(
+    expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith(
       'homePhoneNumber',
       '1234567890',
     );
 
     const workPhone = screen.getByTestId('inputWorkPhoneNumber');
     fireEvent.change(workPhone, { target: { value: '1234567890' } });
-    expect(mockHandleFieldChange).toHaveBeenCalledWith(
+    expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith(
       'workPhoneNumber',
       '1234567890',
     );
@@ -301,7 +313,7 @@ describe('UserDetailsForm', () => {
         fireEvent.blur(dateInput);
       }
     });
-    expect(mockHandleFieldChange).toHaveBeenCalledWith(
+    expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith(
       'birthDate',
       '1990-01-01',
     );
@@ -323,12 +335,15 @@ describe('UserDetailsForm', () => {
         fireEvent.blur(dateInput);
       }
     });
-    expect(mockHandleFieldChange).toHaveBeenCalledWith('birthDate', '');
+    expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith(
+      'birthDate',
+      '',
+    );
 
     // Test education grade
     const gradeSelect = screen.getByTestId('inputGrade');
     await userEvent.selectOptions(gradeSelect, 'graduate');
-    expect(mockHandleFieldChange).toHaveBeenCalledWith(
+    expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith(
       'educationGrade',
       'graduate',
     );
@@ -336,7 +351,7 @@ describe('UserDetailsForm', () => {
     // // Test employment status
     const empStatusSelect = screen.getByTestId('inputEmpStatus');
     await userEvent.selectOptions(empStatusSelect, 'unemployed');
-    expect(mockHandleFieldChange).toHaveBeenCalledWith(
+    expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith(
       'employmentStatus',
       'unemployed',
     );
@@ -344,7 +359,7 @@ describe('UserDetailsForm', () => {
     // Test marital status
     const maritalStatusSelect = screen.getByTestId('inputMaritalStatus');
     await userEvent.selectOptions(maritalStatusSelect, 'single');
-    expect(mockHandleFieldChange).toHaveBeenCalledWith(
+    expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith(
       'maritalStatus',
       'single',
     );
@@ -352,7 +367,7 @@ describe('UserDetailsForm', () => {
     // Test description
     const description = screen.getByTestId('inputDescription');
     fireEvent.change(description, { target: { value: 'New description' } }); // Fixed the fireEvent.change syntax
-    expect(mockHandleFieldChange).toHaveBeenCalledWith(
+    expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith(
       'description',
       'New description',
     );
@@ -368,7 +383,7 @@ describe('UserDetailsForm', () => {
     };
 
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...propsWithNullBirthDate} />
       </MockedProvider>,
     );
@@ -379,7 +394,7 @@ describe('UserDetailsForm', () => {
 
   it('renders address section with correct heading', () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <UserDetailsForm {...defaultProps} />
       </MockedProvider>,
     );

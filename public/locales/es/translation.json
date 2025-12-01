@@ -713,7 +713,6 @@
     "raisedAmount": "Monto recaudado",
     "pledgedAmount": "Monto comprometido"
   },
-
   "orgPost": {
     "title": "Publicaciones de Talawa",
     "searchPost": "Buscar Publicación",
@@ -741,14 +740,19 @@
     "postCreatedSuccess": "¡Felicidades! Has publicado algo.",
     "pinPost": "Fijar publicación",
     "Next": "Siguiente página",
-    "Previous": "Página anterior"
+    "Previous": "Página anterior",
+    "messageTitleError": "¡El título de la publicación no puede estar vacío!",
+    "organizationIdMissing": "¡Falta el ID de la organización!",
+    "messageDescription": "Descripción de la publicación",
+    "addVideo": "Añadir video",
+    "creatingMessage": "Creando publicación..."
   },
   "postNotFound": {
-    "post": "Publicaciones",
-    "not found!": "Extraviado!",
+    "post": "Publicación",
+    "not found!": "¡No encontrado!",
     "organization": "Organización",
-    "post not found!": "Publicaciones Extraviado!",
-    "organization not found!": "Organización Extraviado!"
+    "post not found!": "¡Publicación no encontrada!",
+    "organization not found!": "¡Organización no encontrada!"
   },
   "userNotFound": {
     "user": "usuari(a/o)",
@@ -1080,9 +1084,14 @@
   "postCard": {
     "likes": "Gustos",
     "comments": "Comentarios",
+    "postDeletedSuccess": "Publicación eliminada con éxito.",
+    "postPinnedSuccess": "Publicación fijada con éxito.",
+    "postUnpinnedSuccess": "Publicación desfijada con éxito.",
     "addComment": "Agregar comentario",
     "viewPost": "Ver publicación",
     "editPost": "Editar publicación",
+    "pinPost": "Fijar publicación",
+    "unpinPost": "Desfijar publicación",
     "viewComments": "Ver {{count}} comentarios",
     "hideComments": "Ocultar comentarios",
     "loadingComments": "Cargando comentarios…",
@@ -1110,7 +1119,6 @@
     "article": "Artículo",
     "postNowVisibleInFeed": "Publicar ahora visible en el feed"
   },
-
   "eventAttendance": {
     "historical_statistics": "Estadísticas históricas",
     "Search member": "Buscar miembro",
@@ -1123,7 +1131,6 @@
     "loading": "Cargando...",
     "noAttendees": "No se encontraron asistentes"
   },
-
   "eventRegistrant": {
     "sort": "Ordenar",
     "allRegistrants": "Todos los registrados",

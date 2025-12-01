@@ -91,7 +91,17 @@ import EditUserTagModal from './editModal/EditUserTagModal';
 import RemoveUserTagModal from './removeModal/RemoveUserTagModal';
 import UnassignUserTagModal from './unassignModal/UnassignUserTagModal';
 import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
+
+export const getManageTagErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  if (typeof error === 'object' && error !== null) {
+    return JSON.stringify(error);
+  }
+  return String(error);
+};
 
 function ManageTag(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'manageTag' });
@@ -179,7 +189,7 @@ function ManageTag(): JSX.Element {
           };
         },
       ) => {
-        if (!fetchMoreResult) return prevResult;
+        if (!fetchMoreResult?.getAssignedUsers) return prevResult;
 
         return {
           getAssignedUsers: {
@@ -219,9 +229,7 @@ function ManageTag(): JSX.Element {
       toggleUnassignUserTagModal();
       toast.success(t('successfullyUnassigned') as string);
     } catch (error: unknown) {
-      // Apollo Client guarantees errors are Error instances, but we guard against unexpected cases
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
+      const errorMessage = getManageTagErrorMessage(error);
       toast.error(errorMessage);
     }
   };
@@ -247,19 +255,15 @@ function ManageTag(): JSX.Element {
     }
 
     try {
-      const { data } = await edit({
+      await edit({
         variables: { tagId: currentTagId, name: newTagName },
       });
 
-      if (data) {
-        toast.success(t('tagUpdationSuccess'));
-        userTagAssignedMembersRefetch();
-        setEditUserTagModalIsOpen(false);
-      }
+      toast.success(t('tagUpdationSuccess'));
+      userTagAssignedMembersRefetch();
+      setEditUserTagModalIsOpen(false);
     } catch (error: unknown) {
-      // Apollo Client guarantees errors are Error instances, but we guard against unexpected cases
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
+      const errorMessage = getManageTagErrorMessage(error);
       toast.error(errorMessage);
     }
   };
@@ -273,9 +277,7 @@ function ManageTag(): JSX.Element {
       toggleRemoveUserTagModal();
       toast.success(t('tagRemovalSuccess') as string);
     } catch (error: unknown) {
-      // Apollo Client guarantees errors are Error instances, but we guard against unexpected cases
-      const errorMessage =
-        error instanceof Error ? error.message : String(error);
+      const errorMessage = getManageTagErrorMessage(error);
       toast.error(errorMessage);
     }
   };
@@ -318,6 +320,15 @@ function ManageTag(): JSX.Element {
     setUnassignUserTagModalIsOpen(!unassignUserTagModalIsOpen);
   };
 
+  const getFullName = (
+    firstName?: string | null,
+    lastName?: string | null,
+  ): string => {
+    return [firstName, lastName]
+      .filter((name): name is string => Boolean(name))
+      .join(' ');
+  };
+
   const columns: GridColDef[] = [
     {
       field: 'id',
@@ -328,7 +339,7 @@ function ManageTag(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        return <div>{params.row?.id ?? ''}</div>;
+        return <div>{params.row?.id}</div>;
       },
     },
     {
@@ -341,7 +352,7 @@ function ManageTag(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return (
           <div data-testid="memberName">
-            {(params.row?.firstName ?? '') + ' ' + (params.row?.lastName ?? '')}
+            {getFullName(params.row?.firstName, params.row?.lastName)}
           </div>
         );
       },
@@ -386,6 +397,11 @@ function ManageTag(): JSX.Element {
       },
     },
   ];
+
+  const hasMoreAssignedMembers = Boolean(
+    userTagAssignedMembersData?.getAssignedUsers.usersAssignedTo?.pageInfo
+      ?.hasNextPage,
+  );
 
   return (
     <>
@@ -469,12 +485,9 @@ function ManageTag(): JSX.Element {
                   className={styles.manageTagScrollableDiv}
                 >
                   <InfiniteScroll
-                    dataLength={userTagAssignedMembers?.length ?? 0}
+                    dataLength={userTagAssignedMembers.length}
                     next={loadMoreAssignedMembers}
-                    hasMore={
-                      userTagAssignedMembersData?.getAssignedUsers
-                        .usersAssignedTo?.pageInfo?.hasNextPage ?? false
-                    }
+                    hasMore={hasMoreAssignedMembers}
                     loader={<InfiniteScrollLoader />}
                     scrollableTarget="manageTagScrollableDiv"
                   >
@@ -498,14 +511,12 @@ function ManageTag(): JSX.Element {
                       getRowClassName={() => `${styles.rowBackgrounds}`}
                       autoHeight
                       rowHeight={65}
-                      rows={
-                        userTagAssignedMembers?.map(
-                          (assignedMembers, index) => ({
-                            id: index + 1,
-                            ...assignedMembers,
-                          }),
-                        ) ?? []
-                      }
+                      rows={userTagAssignedMembers.map(
+                        (assignedMembers, index) => ({
+                          id: index + 1,
+                          ...assignedMembers,
+                        }),
+                      )}
                       columns={columns}
                       isRowSelectable={() => false}
                     />

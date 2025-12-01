@@ -1,13 +1,12 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ProfileImageSection from './ProfileImageSection';
 import { sanitizeAvatars } from 'utils/sanitizeAvatar';
 
-// Mock dependencies
-vi.mock('components/Avatar/Avatar', () => ({
-  default: ({
+const sharedMocks = vi.hoisted(() => ({
+  Avatar: ({
     name,
     size,
     dataTestId,
@@ -20,10 +19,18 @@ vi.mock('components/Avatar/Avatar', () => ({
       Mock Avatar: {name} (size: {size})
     </div>
   ),
+  sanitizeAvatars: vi.fn((file: File | null, url?: string | null) =>
+    file ? 'blob-url' : (url ?? null),
+  ),
+}));
+
+// Mock dependencies
+vi.mock('components/Avatar/Avatar', () => ({
+  default: sharedMocks.Avatar,
 }));
 
 vi.mock('utils/sanitizeAvatar', () => ({
-  sanitizeAvatars: vi.fn((file, url) => (file ? 'blob-url' : url)),
+  sanitizeAvatars: sharedMocks.sanitizeAvatars,
 }));
 
 describe('ProfileImageSection', () => {
@@ -40,7 +47,7 @@ describe('ProfileImageSection', () => {
     handleFileUpload: mockHandleFileUpload,
   };
 
-  beforeEach(() => {
+  afterEach(() => {
     vi.clearAllMocks();
   });
 

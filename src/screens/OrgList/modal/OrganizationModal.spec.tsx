@@ -15,20 +15,27 @@ import { I18nextProvider } from 'react-i18next';
 import OrganizationModal from './OrganizationModal';
 import i18nForTest from '../../../utils/i18nForTest'; // Update path based on your project structure
 
-// Mock toast
-const mockToastError = vi.fn();
-const mockToastSuccess = vi.fn();
+import { validateFile } from 'utils/fileValidation';
 
-vi.mock('react-toastify', () => ({
-  toast: {
-    error: (msg: string) => mockToastError(msg),
-    success: (msg: string) => mockToastSuccess(msg),
-  },
+// Mock toast
+const toastMocks = vi.hoisted(() => ({
+  error: vi.fn(),
+  success: vi.fn(),
 }));
 
-const mockUploadFileToMinio = vi
-  .fn()
-  .mockResolvedValue({ objectName: 'mocked-object-name' });
+vi.mock('react-toastify', () => ({
+  toast: toastMocks,
+}));
+
+vi.mock('utils/fileValidation', () => ({
+  validateFile: vi.fn(() => ({ isValid: true })),
+}));
+
+const { mockUploadFileToMinio } = vi.hoisted(() => ({
+  mockUploadFileToMinio: vi
+    .fn()
+    .mockResolvedValue({ objectName: 'mocked-object-name' }),
+}));
 
 vi.mock('utils/MinioUpload', () => ({
   useMinioUpload: () => ({ uploadFileToMinio: mockUploadFileToMinio }),
@@ -54,6 +61,18 @@ describe('OrganizationModal Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    (validateFile as unknown as ReturnType<typeof vi.fn>).mockImplementation(
+      () => ({
+        isValid: true,
+      }),
+    );
+    mockUploadFileToMinio.mockResolvedValue({
+      objectName: 'mocked-object-name',
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   vi.mock('utils/convertToBase64', () => ({
@@ -408,6 +427,11 @@ describe('OrganizationModal Component', () => {
   });
 
   test('should handle invalid file type', async () => {
+    (validateFile as unknown as ReturnType<typeof vi.fn>).mockReturnValueOnce({
+      isValid: false,
+      errorMessage:
+        'Invalid file type. Please upload a file of type: JPEG, PNG, GIF.',
+    });
     setup();
     const invalidFile = new File(['content'], 'test.txt', {
       type: 'text/plain',
@@ -417,7 +441,7 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [invalidFile] } });
 
     await waitFor(() => {
-      expect(mockToastError).toHaveBeenCalledWith(
+      expect(toastMocks.error).toHaveBeenCalledWith(
         'Invalid file type. Please upload a file of type: JPEG, PNG, GIF.',
       );
     });
@@ -549,6 +573,10 @@ describe('OrganizationModal Component', () => {
   });
 
   test('should handle file size exceeding 5MB', async () => {
+    (validateFile as unknown as ReturnType<typeof vi.fn>).mockReturnValueOnce({
+      isValid: false,
+      errorMessage: 'File is too large. Maximum size is 5MB.',
+    });
     setup();
     const largeFile = new File(['x'.repeat(6 * 1024 * 1024)], 'large.png', {
       type: 'image/png',
@@ -560,7 +588,7 @@ describe('OrganizationModal Component', () => {
     await userEvent.upload(fileInput, largeFile);
 
     await waitFor(() => {
-      expect(mockToastError).toHaveBeenCalledWith(
+      expect(toastMocks.error).toHaveBeenCalledWith(
         'File is too large. Maximum size is 5MB.',
       );
       expect(mockUploadFileToMinio).not.toHaveBeenCalled();
@@ -576,7 +604,7 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
-      expect(mockToastSuccess).toHaveBeenCalledWith('imageUploadSuccess');
+      expect(toastMocks.success).toHaveBeenCalledWith('imageUploadSuccess');
     });
     expect(mockSetFormState).toHaveBeenCalledWith(
       expect.objectContaining({ avatar: 'mocked-object-name' }),
@@ -592,7 +620,7 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
-      expect(mockToastError).toHaveBeenCalledWith('imageUploadError');
+      expect(toastMocks.error).toHaveBeenCalledWith('imageUploadError');
     });
     expect(mockSetFormState).not.toHaveBeenCalled();
   });

@@ -1,16 +1,21 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { toast } from 'react-toastify';
 import UploadPluginModal from './UploadPluginModal';
 
-// Mock dependencies
-vi.mock('react-toastify', () => ({
+const sharedMocks = vi.hoisted(() => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
   },
+}));
+
+// Mock dependencies
+vi.mock('react-toastify', () => ({
+  toast: sharedMocks.toast,
 }));
 
 vi.mock('jszip', () => ({
@@ -53,6 +58,10 @@ const getFileInput = () => {
 describe('UploadPluginModal Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   describe('Initial Render', () => {
@@ -725,7 +734,7 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -768,7 +777,7 @@ describe('UploadPluginModal Component', () => {
 
       // First render with file uploaded
       const { unmount } = render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <UploadPluginModal show={true} onHide={mockOnHide} />
         </MockedProvider>,
       );
@@ -788,7 +797,7 @@ describe('UploadPluginModal Component', () => {
 
       // Re-render the modal to verify state is reset
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <UploadPluginModal show={true} onHide={mockOnHide} />
         </MockedProvider>,
       );
@@ -820,7 +829,7 @@ describe('UploadPluginModal Component', () => {
     it('should handle close when modal is hidden', async () => {
       const mockOnHide = vi.fn();
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <UploadPluginModal show={false} onHide={mockOnHide} />
         </MockedProvider>,
       );
@@ -1609,7 +1618,7 @@ describe('UploadPluginModal Component', () => {
           // This should not be reached due to early return
           await installAdminPluginFromZip({
             zipFile: selectedFile,
-            apolloClient: {},
+            apolloClient: {} as unknown as ApolloClient<NormalizedCacheObject>,
           });
         };
 

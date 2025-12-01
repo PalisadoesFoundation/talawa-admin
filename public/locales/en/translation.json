@@ -740,7 +740,12 @@
     "pinPost": "Pin post",
     "Next": "Next Page",
     "Previous": "Previous Page",
-    "cancel": "cancel"
+    "cancel": "cancel",
+    "messageTitleError": "Post title cannot be empty!",
+    "organizationIdMissing": "Organization ID is missing!",
+    "messageDescription": "Post Description",
+    "addVideo": "Add Video",
+    "creatingMessage": "Creating Post..."
   },
   "postNotFound": {
     "post": "Post",
@@ -1122,7 +1127,12 @@
     "comments": "Comments",
     "addComment": "Add Comment",
     "viewPost": "View Post",
+    "postDeletedSuccess": "Post deleted successfully.",
+    "postPinnedSuccess": "Post pinned successfully.",
+    "postUnpinnedSuccess": "Post unpinned successfully.",
     "editPost": "Edit Post",
+    "pinPost": "Pin Post",
+    "unpinPost": "Unpin Post",
     "viewComments": "View {{count}} comments",
     "hideComments": "Hide comments",
     "loadingComments": "Loading comments…",

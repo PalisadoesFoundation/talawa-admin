@@ -17,7 +17,7 @@ If you are new to contributing to open source, please read the Open Source Guide
 
 ## General
 
-Please read the [Palisadoes Contributing Guidelines](https://github.com/PalisadoesFoundation/.github/blob/main/profile/CONTRIBUTING.md).
+Please read the [Palisadoes Contributing Guidelines](https://developer.palisadoes.org/docs/contributor-guide/contributing).
 
 ## Testing and Code Quality
 

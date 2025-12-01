@@ -20,12 +20,14 @@ import { vi, beforeEach, afterEach, expect, it, describe } from 'vitest';
 
 const { setItem, removeItem } = useLocalStorage();
 
+const toastMocks = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+  warn: vi.fn(),
+}));
+
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-    warn: vi.fn(),
-  },
+  toast: toastMocks,
 }));
 
 const MOCKS = [
@@ -110,10 +112,12 @@ const translations = {
 };
 
 beforeEach(() => {
+  vi.clearAllMocks();
   setItem('IsLoggedIn', 'FALSE');
 });
 afterEach(() => {
   localStorage.clear();
+  vi.restoreAllMocks();
 });
 
 describe('Testing Forgot Password screen', () => {
@@ -121,7 +125,7 @@ describe('Testing Forgot Password screen', () => {
     window.history.pushState({}, 'Test page', '/orglist');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -145,7 +149,7 @@ describe('Testing Forgot Password screen', () => {
     setItem('IsLoggedIn', 'TRUE');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -165,7 +169,7 @@ describe('Testing Forgot Password screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -198,7 +202,7 @@ describe('Testing Forgot Password screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -245,7 +249,7 @@ describe('Testing Forgot Password screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -292,7 +296,7 @@ describe('Testing Forgot Password screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -335,7 +339,7 @@ describe('Testing Forgot Password screen', () => {
     };
     // setItem('otpToken', '');
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -364,7 +368,7 @@ describe('Testing Forgot Password screen', () => {
       email: 'testuser@test.com',
     };
     render(
-      <MockedProvider addTypename={false} link={notWorkingLink}>
+      <MockedProvider link={notWorkingLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -391,7 +395,7 @@ describe('Testing Forgot Password screen', () => {
       email: 'johndoe@gmail.com',
     };
     render(
-      <MockedProvider addTypename={false} link={talawaApiUnavailableLink}>
+      <MockedProvider link={talawaApiUnavailableLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -427,7 +431,7 @@ describe('Testing Forgot Password screen', () => {
     setItem('otpToken', '');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>

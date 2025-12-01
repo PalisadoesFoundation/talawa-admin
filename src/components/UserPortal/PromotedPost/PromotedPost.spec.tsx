@@ -41,7 +41,7 @@ let props = {
 describe('Testing PromotedPost Test', () => {
   it('Component should be rendered properly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -62,7 +62,7 @@ describe('Testing PromotedPost Test', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -79,7 +79,7 @@ describe('Testing PromotedPost Test', () => {
 
 it('Component should display the icon correctly', async () => {
   const { queryByTestId } = render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -98,7 +98,7 @@ it('Component should display the icon correctly', async () => {
 
 it('Component should display the text correctly', async () => {
   const { queryAllByText } = render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -121,7 +121,7 @@ it('Component should display the image correctly', async () => {
     image: 'promotedPostImage',
   };
   const { queryByRole } = render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>

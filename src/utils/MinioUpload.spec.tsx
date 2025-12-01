@@ -1,7 +1,5 @@
 vi.resetModules();
-vi.mock('./filehash', () => ({
-  calculateFileHash: vi.fn().mockResolvedValue('mocked-file-hash'),
-}));
+vi.mock('./filehash');
 
 beforeAll(() => {
   Object.defineProperty(File.prototype, 'arrayBuffer', {
@@ -57,6 +55,7 @@ const TestComponent = ({
 
 describe('Minio Upload Integration', (): void => {
   beforeEach(() => {
+    vi.clearAllMocks();
     (calculateFileHash as Mock).mockResolvedValue('mocked-file-hash');
     global.fetch = vi.fn(() =>
       Promise.resolve({
@@ -67,7 +66,7 @@ describe('Minio Upload Integration', (): void => {
   });
 
   afterEach(() => {
-    vi.resetAllMocks();
+    vi.restoreAllMocks();
   });
 
   const successMocks = [
@@ -99,7 +98,7 @@ describe('Minio Upload Integration', (): void => {
     const handleComplete = vi.fn();
 
     render(
-      <MockedProvider mocks={successMocks} addTypename={false}>
+      <MockedProvider mocks={successMocks}>
         <TestComponent onUploadComplete={handleComplete} />
       </MockedProvider>,
     );
@@ -156,7 +155,7 @@ describe('Minio Upload Integration', (): void => {
     const handleComplete = vi.fn();
 
     render(
-      <MockedProvider mocks={missingUrlMocks} addTypename={false}>
+      <MockedProvider mocks={missingUrlMocks}>
         <TestComponent onUploadComplete={handleComplete} />
       </MockedProvider>,
     );
@@ -203,7 +202,7 @@ describe('Minio Upload Integration', (): void => {
     const handleComplete = vi.fn();
 
     render(
-      <MockedProvider mocks={errorMock} addTypename={false}>
+      <MockedProvider mocks={errorMock}>
         <TestComponent onUploadComplete={handleComplete} />
       </MockedProvider>,
     );
@@ -232,7 +231,7 @@ describe('Minio Upload Integration', (): void => {
     const handleComplete = vi.fn();
 
     render(
-      <MockedProvider mocks={successMocks} addTypename={false}>
+      <MockedProvider mocks={successMocks}>
         <TestComponent onUploadComplete={handleComplete} />
       </MockedProvider>,
     );
@@ -255,7 +254,7 @@ describe('Minio Upload Integration', (): void => {
   it('should log error "File upload failed" when file upload returns not ok', async () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     render(
-      <MockedProvider mocks={successMocks} addTypename={false}>
+      <MockedProvider mocks={successMocks}>
         <TestComponent onUploadComplete={vi.fn()} />
       </MockedProvider>,
     );

@@ -2,6 +2,10 @@ import { describe, it, expect, vi } from 'vitest';
 import convertToBase64 from './convertToBase64';
 
 describe('convertToBase64', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should return a base64-encoded string when given a file', async () => {
     const file = new File(['hello'], 'hello.txt', { type: 'text/plain' });
     const result = await convertToBase64(file);

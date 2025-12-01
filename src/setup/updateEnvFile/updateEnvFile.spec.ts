@@ -10,6 +10,10 @@ describe('updateEnvFile', () => {
     vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should create a new .env file if it does not exist', () => {
     vi.spyOn(fs, 'existsSync').mockReturnValueOnce(false);
     const writeFileMock = vi

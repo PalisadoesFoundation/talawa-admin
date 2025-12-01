@@ -9,7 +9,7 @@ interface InterfaceSortingOption {
   /** The label to display for the sorting option */
   label: string;
   /** The value associated with the sorting option */
-  value: string;
+  value: string | number;
 }
 
 interface InterfaceSortingButtonProps {
@@ -18,9 +18,9 @@ interface InterfaceSortingButtonProps {
   /** The list of sorting options to display in the Dropdown */
   sortingOptions: InterfaceSortingOption[];
   /** The currently selected sorting option */
-  selectedOption?: string;
+  selectedOption?: string | number;
   /** Callback function to handle sorting option change */
-  onSortChange: (value: string) => void;
+  onSortChange: (value: string | number) => void;
   /** The prefix for data-testid attributes for testing */
   dataTestIdPrefix: string;
   /** The data-testid attribute for the Dropdown */

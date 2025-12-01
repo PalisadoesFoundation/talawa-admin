@@ -16,7 +16,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import People from './People';
 import userEvent from '@testing-library/user-event';
-import { vi, it } from 'vitest';
+import { vi, it, beforeEach, afterEach } from 'vitest';
 /**
  * This file contains unit tests for the People component.
  *
@@ -37,7 +37,18 @@ const DEFAULT_SEARCH = '';
 const DEFAULT_FIRST = 5;
 
 // Helper for members edges
-const memberEdge = (props: any = {}) => ({
+interface InterfaceMemberEdgeProps {
+  cursor?: string;
+  id?: string;
+  name?: string;
+  role?: string;
+  avatarURL?: string | null;
+  emailAddress?: string | null;
+  node?: Record<string, unknown>;
+}
+
+// Helper for members edges
+const memberEdge = (props: InterfaceMemberEdgeProps = {}) => ({
   cursor: props.cursor || 'cursor1',
   node: {
     id: props.id || 'user-1',
@@ -306,15 +317,19 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+const sharedMocks = vi.hoisted(() => ({
+  useParams: vi.fn(() => ({ orgId: '' })),
+}));
+
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,
-    useParams: () => ({ orgId: '' }),
+    useParams: sharedMocks.useParams,
   };
 });
 
-describe('Testing People Screen [User Portal]', () => {
+const setMatchMediaStub = (): void => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: vi.fn().mockImplementation((query) => ({
@@ -326,10 +341,23 @@ describe('Testing People Screen [User Portal]', () => {
       dispatchEvent: vi.fn(),
     })),
   });
+};
 
+beforeEach(() => {
+  vi.clearAllMocks();
+  sharedMocks.useParams.mockReturnValue({ orgId: '' });
+  setMatchMediaStub();
+});
+
+afterEach(() => {
+  vi.clearAllMocks();
+  sharedMocks.useParams.mockReturnValue({ orgId: '' });
+});
+
+describe('Testing People Screen [User Portal]', () => {
   it('Screen should be rendered properly', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={[defaultQueryMock]}>
+      <MockedProvider mocks={[defaultQueryMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -346,10 +374,7 @@ describe('Testing People Screen [User Portal]', () => {
 
   it('Search works properly by pressing enter', async () => {
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[defaultQueryMock, adSearchMock]}
-      >
+      <MockedProvider mocks={[defaultQueryMock, adSearchMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -371,10 +396,7 @@ describe('Testing People Screen [User Portal]', () => {
 
   it('Search works properly by clicking search Btn', async () => {
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[defaultQueryMock, adminSearchMock]}
-      >
+      <MockedProvider mocks={[defaultQueryMock, adminSearchMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -399,10 +421,7 @@ describe('Testing People Screen [User Portal]', () => {
 
   it('Mode is changed to Admins', async () => {
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[defaultQueryMock, adminsOnlyMock]}
-      >
+      <MockedProvider mocks={[defaultQueryMock, adminsOnlyMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -425,7 +444,7 @@ describe('Testing People Screen [User Portal]', () => {
 
   it('Shows loading state while fetching data', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={[defaultQueryMock]}>
+      <MockedProvider mocks={[defaultQueryMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -442,10 +461,7 @@ describe('Testing People Screen [User Portal]', () => {
 
   it('pagination working', async () => {
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[fiveMembersMock, lotsOfMembersMock]}
-      >
+      <MockedProvider mocks={[fiveMembersMock, lotsOfMembersMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -464,10 +480,7 @@ describe('Testing People Screen [User Portal]', () => {
 describe('Testing People Screen Pagination [User Portal]', () => {
   const renderComponent = (): RenderResult => {
     return render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[fiveMembersMock, lotsOfMembersMock]}
-      >
+      <MockedProvider mocks={[fiveMembersMock, lotsOfMembersMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -478,22 +491,6 @@ describe('Testing People Screen Pagination [User Portal]', () => {
       </MockedProvider>,
     );
   };
-
-  beforeAll(() => {
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: vi.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      })),
-    });
-  });
 
   it('handles rows per page change and pagination navigation', async () => {
     renderComponent();
@@ -513,15 +510,42 @@ describe('Testing People Screen Pagination [User Portal]', () => {
     await userEvent.selectOptions(select, '5');
     await wait();
   });
+
+  it('handles backward pagination correctly', async () => {
+    // Use mocks that support forward and backward navigation
+    render(
+      <MockedProvider mocks={[defaultQueryMock, nextPageMock]}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    // Navigate to page 2
+    const nextButton = screen.getByTestId('nextPage');
+    await userEvent.click(nextButton);
+    await wait();
+
+    // Now navigate back to page 1 (this covers lines 158-161)
+    // This uses cached cursor, no new query needed
+    const prevButton = screen.getByTestId('previousPage');
+    await userEvent.click(prevButton);
+    await wait();
+
+    // Should be back on first page
+    expect(screen.getByText('Test User')).toBeInTheDocument();
+  });
 });
 
 describe('People Component Mode Switch and Search Coverage', () => {
   it('searches partial user name correctly and displays matching results', async (): Promise<void> => {
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[defaultQueryMock, adminSearchMock]}
-      >
+      <MockedProvider mocks={[defaultQueryMock, adminSearchMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -539,33 +563,11 @@ describe('People Component Mode Switch and Search Coverage', () => {
       expect(screen.getByText('Admin User')).toBeInTheDocument();
       expect(screen.queryByText('Test User')).not.toBeInTheDocument();
     });
-
-    // Mock router param with invalid tab to simulate edge case fallback
-    vi.resetModules();
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom');
-      return {
-        ...actual,
-        useParams: () => ({ tab: 'invalid' }), // simulate invalid mode/tab
-      };
-    });
-
-    // Force a re-render to trigger the useEffect with mocked state
-
-    // Verify the component still renders valid fallback data (e.g., Admin/User list)
-    await waitFor(() => {
-      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
-      // Fallback to 'All Members' or default view
-      expect(screen.getByText('Admin User')).toBeInTheDocument();
-    });
   });
 
   it('handles rowsPerPage = 0 case and edge cases', async () => {
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={[defaultQueryMock, nextPageMock]}
-      >
+      <MockedProvider mocks={[defaultQueryMock, nextPageMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -585,7 +587,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
 
   it('should not trigger search for non-Enter key press', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={[defaultQueryMock]}>
+      <MockedProvider mocks={[defaultQueryMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -605,7 +607,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
 
   it('should handle search with empty input value', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={[defaultQueryMock]}>
+      <MockedProvider mocks={[defaultQueryMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -629,7 +631,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
 describe('People Component Field Tests (Email, ID, Role)', () => {
   const renderComponentWithEmailMock = (): RenderResult => {
     return render(
-      <MockedProvider mocks={[defaultQueryMock]} addTypename={false}>
+      <MockedProvider mocks={[defaultQueryMock]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -640,22 +642,6 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
       </MockedProvider>,
     );
   };
-
-  beforeAll(() => {
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: vi.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      })),
-    });
-  });
 
   it('should display user email addresses correctly', async () => {
     renderComponentWithEmailMock();
@@ -725,5 +711,29 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
     expect(screen.getByText('Admin User')).toBeInTheDocument();
     expect(screen.queryByText('Test User')).not.toBeInTheDocument();
     expect(screen.queryByText('test@example.com')).not.toBeInTheDocument();
+  });
+
+  it('clears search input', async () => {
+    render(
+      <MockedProvider mocks={[defaultQueryMock]}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const searchInput = screen.getByTestId('searchInput');
+    await userEvent.type(searchInput, 'Test');
+    expect(searchInput).toHaveValue('Test');
+
+    // SearchBar renders a clear button when value is not empty
+    const clearBtn = screen.getByLabelText('Clear search');
+    await userEvent.click(clearBtn);
+
+    expect(searchInput).toHaveValue('');
   });
 });

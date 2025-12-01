@@ -1,14 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import {
-  BrowserRouter,
-  MemoryRouter,
-  Route,
-  Routes,
-  useNavigate,
-  useParams,
-} from 'react-router';
+import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
 import LeaveOrganization from './LeaveOrganization';
 import {
   ORGANIZATIONS_LIST_BASIC,
@@ -16,11 +9,19 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { getItem } from 'utils/useLocalstorage';
-import { toast } from 'react-toastify';
-import { vi } from 'vitest';
+import { vi, beforeEach, afterEach, describe, test } from 'vitest';
+
+const routerMocks = vi.hoisted(() => ({
+  params: vi.fn(),
+  navigate: vi.fn(),
+}));
+
+const toastMocks = vi.hoisted(() => ({
+  success: vi.fn(),
+}));
 
 vi.mock('react-toastify', () => ({
-  toast: { success: vi.fn() }, // Mock toast function
+  toast: toastMocks,
 }));
 
 Object.defineProperty(window, 'localStorage', {
@@ -36,11 +37,12 @@ Object.defineProperty(window, 'localStorage', {
 // Mock useParams to return a test organization ID
 
 vi.mock('react-router', async () => {
-  const actualDom = await vi.importActual('react-router');
+  const actualDom =
+    await vi.importActual<typeof import('react-router')>('react-router');
   return {
     ...actualDom,
-    useParams: vi.fn(),
-    useNavigate: vi.fn(),
+    useParams: routerMocks.params,
+    useNavigate: () => routerMocks.navigate,
   };
 });
 
@@ -180,18 +182,24 @@ const errorMocks = [
   },
 ];
 
-beforeEach(() => {
-  localStorage.clear();
-  vi.clearAllMocks();
-  (useParams as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-    orgId: 'test-org-id',
-  });
-});
-
 describe('LeaveOrganization Component', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    vi.clearAllMocks();
+    routerMocks.params.mockReset();
+    routerMocks.navigate.mockReset();
+    routerMocks.params.mockReturnValue({
+      orgId: 'test-org-id',
+    });
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   test('renders organization details and shows loading spinner', async () => {
     render(
-      <MockedProvider mocks={mocks.slice(0, 1)} addTypename={false}>
+      <MockedProvider mocks={mocks.slice(0, 1)}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -209,7 +217,7 @@ describe('LeaveOrganization Component', () => {
 
   test('renders organization details and displays content correctly', async () => {
     render(
-      <MockedProvider mocks={mocks.slice(0, 1)} addTypename={false}>
+      <MockedProvider mocks={mocks.slice(0, 1)}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -225,7 +233,7 @@ describe('LeaveOrganization Component', () => {
 
   test('shows error message when mutation fails', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={['/user/leaveOrg/test-org-id']}>
           <Routes>
             <Route
@@ -282,14 +290,8 @@ describe('LeaveOrganization Component', () => {
   });
 
   test('navigates and shows toast when email matches', async () => {
-    const mockNavigate = vi.fn();
-    (useNavigate as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
-      mockNavigate,
-    );
-    const toastSuccessMock = vi.fn();
-    toast.success = toastSuccessMock;
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -314,10 +316,10 @@ describe('LeaveOrganization Component', () => {
     });
     fireEvent.keyDown(emailInput, { key: 'Enter', code: 'Enter' });
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith(`/user/organizations`);
+      expect(routerMocks.navigate).toHaveBeenCalledWith(`/user/organizations`);
     });
     await waitFor(() => {
-      expect(toastSuccessMock).toHaveBeenCalledWith(
+      expect(toastMocks.success).toHaveBeenCalledWith(
         'You have successfully left the organization!',
       );
     });
@@ -325,7 +327,7 @@ describe('LeaveOrganization Component', () => {
 
   test('shows error when email is missing', async () => {
     render(
-      <MockedProvider mocks={mocks.slice(0, 2)} addTypename={false}>
+      <MockedProvider mocks={mocks.slice(0, 2)}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -357,7 +359,7 @@ describe('LeaveOrganization Component', () => {
 
   test('shows error when email does not match', async () => {
     render(
-      <MockedProvider mocks={mocks.slice(0, 2)} addTypename={false}>
+      <MockedProvider mocks={mocks.slice(0, 2)}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -389,7 +391,7 @@ describe('LeaveOrganization Component', () => {
 
   test('resets state when back button pressed', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -417,7 +419,7 @@ describe('LeaveOrganization Component', () => {
 
   test('resets state when modal is closed', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -433,12 +435,8 @@ describe('LeaveOrganization Component', () => {
   });
 
   test('closes modal and resets state when Esc key is pressed', async () => {
-    const mockNavigate = vi.fn();
-    (useNavigate as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
-      mockNavigate,
-    );
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -459,7 +457,7 @@ describe('LeaveOrganization Component', () => {
 
   test('displays an error alert when query fails', async () => {
     render(
-      <MockedProvider mocks={errorMocks} addTypename={false}>
+      <MockedProvider mocks={errorMocks}>
         <LeaveOrganization />
       </MockedProvider>,
     );
@@ -481,7 +479,7 @@ describe('LeaveOrganization Component', () => {
     const combinedMocks = [mocks[0], networkErrorMock];
 
     render(
-      <MockedProvider mocks={combinedMocks} addTypename={false}>
+      <MockedProvider mocks={combinedMocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -538,7 +536,7 @@ describe('LeaveOrganization Component', () => {
     const combinedMocks = [mocks[0], graphQLErrorMock];
 
     render(
-      <MockedProvider mocks={combinedMocks} addTypename={false}>
+      <MockedProvider mocks={combinedMocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -579,8 +577,8 @@ describe('LeaveOrganization Component', () => {
 
   test('handles missing organizationId or userId', async () => {
     // Mock useParams to return undefined orgId
-    (useParams as unknown as ReturnType<typeof vi.fn>).mockReturnValue({
-      orgId: undefined,
+    routerMocks.params.mockReturnValue({
+      orgId: undefined as string | undefined,
     });
 
     // Render with mocks that don't depend on specific orgId
@@ -605,7 +603,6 @@ describe('LeaveOrganization Component', () => {
             },
           },
         ]}
-        addTypename={false}
       >
         <BrowserRouter>
           <LeaveOrganization />
@@ -659,7 +656,7 @@ describe('LeaveOrganization Component', () => {
     };
 
     render(
-      <MockedProvider mocks={[emptyOrgMock]} addTypename={false}>
+      <MockedProvider mocks={[emptyOrgMock]}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>

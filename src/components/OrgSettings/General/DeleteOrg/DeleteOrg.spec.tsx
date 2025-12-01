@@ -75,6 +75,10 @@ describe('DeleteOrg Component', () => {
     });
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('renders delete button and opens confirmation modal', () => {
     render(<DeleteOrg />);
     fireEvent.click(screen.getByTestId('openDeleteModalBtn'));

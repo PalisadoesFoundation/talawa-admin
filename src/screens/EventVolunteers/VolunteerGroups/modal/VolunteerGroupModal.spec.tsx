@@ -24,11 +24,13 @@ import GroupModal from './VolunteerGroupModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 
+const toastMocks = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+}));
+
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: toastMocks,
 }));
 
 let successLink: StaticMockLink;
@@ -46,6 +48,7 @@ const t = {
 let modalProps: InterfaceVolunteerGroupModal[];
 
 beforeEach(() => {
+  vi.clearAllMocks();
   successLink = new StaticMockLink(MOCKS);
   errorLink = new StaticMockLink(MOCKS_ERROR);
 
@@ -137,12 +140,16 @@ beforeEach(() => {
   ];
 });
 
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
 const renderGroupModal = (
   link: ApolloLink,
   props: InterfaceVolunteerGroupModal,
 ): RenderResult => {
   return render(
-    <MockedProvider link={link} addTypename={false}>
+    <MockedProvider link={link}>
       <Provider store={store}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>

@@ -77,7 +77,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -114,7 +114,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -157,7 +157,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -188,7 +188,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -213,7 +213,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -259,7 +259,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={errorMocks} addTypename={false}>
+        <MockedProvider mocks={errorMocks}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -283,7 +283,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -306,7 +306,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={errorMocks} addTypename={false}>
+        <MockedProvider mocks={errorMocks}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -328,7 +328,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -361,7 +361,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -405,7 +405,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -454,7 +454,7 @@ describe('useSession Hook', () => {
 
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -478,7 +478,7 @@ test('should extend session when called directly', async () => {
 
   const { result } = renderHook(() => useSession(), {
     wrapper: ({ children }: { children?: ReactNode }) => (
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>{children}</BrowserRouter>
       </MockedProvider>
     ),
@@ -515,7 +515,7 @@ test('should properly clean up on unmount', () => {
 
   const { result, unmount } = renderHook(() => useSession(), {
     wrapper: ({ children }: { children?: ReactNode }) => (
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>{children}</BrowserRouter>
       </MockedProvider>
     ),
@@ -558,7 +558,7 @@ test('should handle missing community data', async () => {
 
   const { result } = renderHook(() => useSession(), {
     wrapper: ({ children }: { children?: ReactNode }) => (
-      <MockedProvider mocks={nullDataMocks} addTypename={false}>
+      <MockedProvider mocks={nullDataMocks}>
         <BrowserRouter>{children}</BrowserRouter>
       </MockedProvider>
     ),
@@ -611,7 +611,7 @@ test('should handle event listener errors gracefully', async () => {
   try {
     const { result } = renderHook(() => useSession(), {
       wrapper: ({ children }: { children?: ReactNode }) => (
-        <MockedProvider mocks={MOCKS} addTypename={false}>
+        <MockedProvider mocks={MOCKS}>
           <BrowserRouter>{children}</BrowserRouter>
         </MockedProvider>
       ),
@@ -648,7 +648,7 @@ test('should handle session timeout data updates', async () => {
 
   const { result } = renderHook(() => useSession(), {
     wrapper: ({ children }: { children?: ReactNode }) => (
-      <MockedProvider mocks={customMocks} addTypename={false}>
+      <MockedProvider mocks={customMocks}>
         <BrowserRouter>{children}</BrowserRouter>
       </MockedProvider>
     ),
@@ -691,7 +691,7 @@ test('should handle edge case when visibility state is neither visible nor hidde
 
   const { result } = renderHook(() => useSession(), {
     wrapper: ({ children }: { children?: ReactNode }) => (
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>{children}</BrowserRouter>
       </MockedProvider>
     ),

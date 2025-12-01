@@ -63,7 +63,7 @@ const renderActionItemCategories = (
   orgId: string,
 ): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <Provider store={store}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
@@ -76,6 +76,10 @@ const renderActionItemCategories = (
 };
 
 describe('Testing Organisation Action Item Categories', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should render the Action Item Categories Screen', async () => {
     renderActionItemCategories(link1, 'orgId');
     await waitFor(() => {

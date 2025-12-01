@@ -7,6 +7,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
+import { useMinioUpload } from 'utils/MinioUpload';
 import CreateGroupChat from './CreateGroupChat';
 import {
   CREATE_CHAT,
@@ -31,6 +32,29 @@ const mockUploadFileToMinio = vi
 vi.mock('utils/MinioUpload', () => ({
   useMinioUpload: vi.fn(() => ({ uploadFileToMinio: mockUploadFileToMinio })),
 }));
+
+const { mockLocalStorageStore } = vi.hoisted(() => ({
+  mockLocalStorageStore: {} as Record<string, unknown>,
+}));
+
+vi.mock('utils/useLocalstorage', () => {
+  return {
+    default: () => ({
+      getItem: (key: string) => mockLocalStorageStore[key] || null,
+      setItem: (key: string, value: unknown) => {
+        mockLocalStorageStore[key] =
+          typeof value === 'string' ? value : JSON.stringify(value);
+      },
+      removeItem: (key: string) => {
+        delete mockLocalStorageStore[key];
+      },
+      clear: () => {
+        for (const key in mockLocalStorageStore)
+          delete mockLocalStorageStore[key];
+      },
+    }),
+  };
+});
 
 const ORGANIZATION_MEMBERS_MOCK = {
   request: {
@@ -174,8 +198,8 @@ const CREATE_CHAT_MEMBERSHIP_ADMIN_MOCK = {
       createChatMembership: {
         __typename: 'ChatMembership',
         id: 'membership-admin',
-        role: 'administrator',
-        user: { __typename: 'User', id: '1' },
+        name: 'Test Group',
+        description: 'Test Description',
       },
     },
   },
@@ -197,8 +221,8 @@ const CREATE_CHAT_MEMBERSHIP_MEMBER_MOCK = {
       createChatMembership: {
         __typename: 'ChatMembership',
         id: 'membership-member-1',
-        role: 'regular',
-        user: { __typename: 'User', id: 'user-1' },
+        name: 'Test Group',
+        description: 'Test Description',
       },
     },
   },
@@ -213,11 +237,17 @@ const mocks = [
 ];
 
 describe('CreateGroupChat', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const { setItem } = useLocalStorage();
   const toggleCreateGroupChatModal = vi.fn();
   const chatsListRefetch = vi.fn();
 
   beforeEach(() => {
+    for (const key in mockLocalStorageStore) {
+      delete mockLocalStorageStore[key];
+    }
     setItem('userId', '1');
     vi.clearAllMocks();
   });
@@ -439,5 +469,105 @@ describe('CreateGroupChat', () => {
       expect(chatsListRefetch).toHaveBeenCalled();
     });
     expect(toggleCreateGroupChatModal).toHaveBeenCalled();
+  });
+
+  test('should handle image upload failure', async () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const mockUploadFileToMinioFailure = vi
+      .fn()
+      .mockRejectedValue(new Error('Upload failed'));
+
+    vi.mocked(useMinioUpload).mockReturnValue({
+      uploadFileToMinio: mockUploadFileToMinioFailure,
+    });
+
+    try {
+      render(
+        <MockedProvider mocks={mocks}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Provider store={store}>
+              <CreateGroupChat
+                createGroupChatModalisOpen={true}
+                toggleCreateGroupChatModal={toggleCreateGroupChatModal}
+                chatsListRefetch={chatsListRefetch}
+              />
+            </Provider>
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const fileInput = screen.getByTestId('fileInput');
+      const file = new File(['(⌐□_□)'], 'chucknorris.png', {
+        type: 'image/png',
+      });
+      fireEvent.change(fileInput, { target: { files: [file] } });
+
+      await waitFor(() => {
+        expect(consoleSpy).toHaveBeenCalledWith(
+          'Error uploading image to MinIO:',
+          expect.any(Error),
+        );
+      });
+    } finally {
+      consoleSpy.mockRestore();
+
+      // Restore the original mock implementation
+      vi.mocked(useMinioUpload).mockReturnValue({
+        uploadFileToMinio: mockUploadFileToMinio,
+      });
+    }
+  });
+
+  test('should handle edit image button click', () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Provider store={store}>
+            <CreateGroupChat
+              createGroupChatModalisOpen={true}
+              toggleCreateGroupChatModal={toggleCreateGroupChatModal}
+              chatsListRefetch={chatsListRefetch}
+            />
+          </Provider>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    const editBtn = screen.getByTestId('editImageBtn');
+    const fileInput = screen.getByTestId('fileInput');
+    const clickSpy = vi.spyOn(fileInput, 'click');
+
+    fireEvent.click(editBtn);
+    expect(clickSpy).toHaveBeenCalled();
+  });
+
+  test('should clear search input', async () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Provider store={store}>
+            <CreateGroupChat
+              createGroupChatModalisOpen={true}
+              toggleCreateGroupChatModal={toggleCreateGroupChatModal}
+              chatsListRefetch={chatsListRefetch}
+            />
+          </Provider>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    fireEvent.click(screen.getByTestId('nextBtn'));
+    await waitFor(() => {
+      expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchUser');
+    fireEvent.change(searchInput, { target: { value: 'Test User' } });
+    expect(searchInput).toHaveValue('Test User');
+
+    const clearBtn = screen.getByLabelText('Clear search');
+    fireEvent.click(clearBtn);
+
+    expect(searchInput).toHaveValue('');
   });
 });

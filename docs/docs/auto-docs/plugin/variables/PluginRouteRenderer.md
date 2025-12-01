@@ -4,7 +4,7 @@
 
 # Variable: PluginRouteRenderer
 
-> `const` **PluginRouteRenderer**: `React.FC`\<`PluginRouteRendererProps`\>
+> `const` **PluginRouteRenderer**: `React.FC`\<`IPluginRouteRendererProps`\>
 
 Defined in: [src/plugin/routes/PluginRouteRenderer.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/routes/PluginRouteRenderer.tsx#L20)
 

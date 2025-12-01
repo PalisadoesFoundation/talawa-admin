@@ -9,6 +9,9 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, vi, expect } from 'vitest';
 
 describe('Pagination component tests', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const mockOnPageChange = vi.fn();
 
   const defaultProps = {

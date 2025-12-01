@@ -173,7 +173,7 @@ describe('Testing UpdateTimeout Component', () => {
 
   it('Components should render properly', async () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <UpdateTimeout />
@@ -211,7 +211,7 @@ describe('Testing UpdateTimeout Component', () => {
     const toastSpy = vi.spyOn(toast, 'success');
 
     const { container } = render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <UpdateTimeout />
@@ -267,7 +267,7 @@ describe('Testing UpdateTimeout Component', () => {
     ];
 
     render(
-      <MockedProvider mocks={errorMocks} addTypename={false}>
+      <MockedProvider mocks={errorMocks}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <UpdateTimeout />
@@ -315,7 +315,7 @@ describe('Testing UpdateTimeout Component', () => {
     ];
 
     render(
-      <MockedProvider mocks={errorMocks} addTypename={false}>
+      <MockedProvider mocks={errorMocks}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <UpdateTimeout />
@@ -336,7 +336,7 @@ describe('Testing UpdateTimeout Component', () => {
 
   it('Should handle null community object gracefully', async () => {
     render(
-      <MockedProvider mocks={[MOCKS[1]]} addTypename={false}>
+      <MockedProvider mocks={[MOCKS[1]]}>
         <BrowserRouter>
           <I18nextProvider i18n={i18n}>
             <UpdateTimeout />

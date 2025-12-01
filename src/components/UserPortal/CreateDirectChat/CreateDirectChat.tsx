@@ -31,7 +31,7 @@
  */
 import { Paper, TableBody } from '@mui/material';
 import React, { useState } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import type {
   ApolloCache,
   ApolloQueryResult,
@@ -54,13 +54,13 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
 import Loader from 'components/Loader/Loader';
-import { Search } from '@mui/icons-material';
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import type { TFunction } from 'i18next';
 import { type GroupChat } from 'types/Chat/type';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 interface InterfaceOrganizationMember {
   id: string;
@@ -246,10 +246,8 @@ export default function createDirectChatModal({
 
   const currentUserName = currentUser?.name || 'You';
 
-  const handleUserModalSearchChange = (e: React.FormEvent): void => {
-    e.preventDefault();
-    const trimmedName = userName.trim();
-
+  const handleUserModalSearchChange = (value: string): void => {
+    const trimmedName = value.trim();
     allUsersRefetch({
       input: { id: organizationId },
       first: 20,
@@ -277,28 +275,19 @@ export default function createDirectChatModal({
           ) : (
             <>
               <div className={styles.inputContainer}>
-                <Form onSubmit={handleUserModalSearchChange}>
-                  <Form.Control
-                    type="name"
-                    id="searchUser"
-                    data-testid="searchUser"
-                    placeholder="searchFullName"
-                    autoComplete="off"
-                    className={styles.inputFieldModal}
-                    value={userName}
-                    onChange={(e): void => {
-                      const { value } = e.target;
-                      setUserName(value);
-                    }}
-                  />
-                  <Button
-                    type="submit"
-                    data-testid="submitBtn"
-                    className={styles.submitBtn}
-                  >
-                    <Search />
-                  </Button>
-                </Form>
+                <SearchBar
+                  placeholder="searchFullName"
+                  value={userName}
+                  onChange={(value) => setUserName(value)}
+                  onSearch={(value) => handleUserModalSearchChange(value)}
+                  onClear={() => {
+                    // Clearing the input is enough; SearchBar's clear action will
+                    // also trigger onSearch('') which performs the refetch.
+                    setUserName('');
+                  }}
+                  inputTestId="searchUser"
+                  buttonTestId="submitBtn"
+                />
               </div>
               <TableContainer
                 className={styles.tableContainer}

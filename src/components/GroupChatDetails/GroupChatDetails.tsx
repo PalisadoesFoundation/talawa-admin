@@ -44,7 +44,7 @@
  */
 import { Paper, TableBody } from '@mui/material';
 import React, { useRef, useState, useEffect } from 'react';
-import { Button, Form, ListGroup, Modal, Dropdown } from 'react-bootstrap';
+import { Button, ListGroup, Modal, Dropdown } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useMutation, useQuery } from '@apollo/client';
 import {
@@ -62,7 +62,7 @@ import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
-import { Search, Add } from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import Avatar from 'components/Avatar/Avatar';
 import { FiEdit } from 'react-icons/fi';
@@ -73,6 +73,7 @@ import { toast } from 'react-toastify';
 import type { InterfaceGroupChatDetailsProps } from 'types/Chat/interface';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -213,10 +214,8 @@ export default function groupChatDetails({
     });
   };
 
-  const handleUserModalSearchChange = (e: React.FormEvent): void => {
-    e.preventDefault();
-    const trimmedName = userName.trim();
-
+  const handleUserModalSearchChange = (value: string): void => {
+    const trimmedName = value.trim();
     allUsersRefetch({
       input: { id: chat.organization?.id },
       first: 20,
@@ -236,23 +235,30 @@ export default function groupChatDetails({
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file && chat.organization?.id) {
-      const { objectName } = await uploadFileToMinio(
-        file,
-        chat.organization.id,
-      );
-      const url = await getFileFromMinio(objectName, chat.organization.id);
-      setSelectedImage(url);
-      await updateChat({
-        variables: {
-          input: {
-            id: chat.id,
-            avatar: { uri: objectName },
-            name: chatName,
+      try {
+        const { objectName } = await uploadFileToMinio(
+          file,
+          chat.organization.id,
+        );
+        const url = await getFileFromMinio(objectName, chat.organization.id);
+        setSelectedImage(url);
+        await updateChat({
+          variables: {
+            input: {
+              id: chat.id,
+              avatar: { uri: objectName },
+              name: chatName,
+            },
           },
-        },
-      });
-      await chatRefetch({ input: { id: chat.id } });
-      setSelectedImage('');
+        });
+        await chatRefetch({ input: { id: chat.id } });
+        toast.success('Chat image updated successfully');
+        setSelectedImage('');
+      } catch (error) {
+        toast.error('Failed to update chat image');
+        console.error(error);
+        setSelectedImage('');
+      }
     } else {
       setSelectedImage('');
     }
@@ -331,18 +337,23 @@ export default function groupChatDetails({
                 />
                 <FaCheck
                   data-testid="updateTitleBtn"
-                  className={styles.checkIcon}
                   onClick={async () => {
-                    await updateChat({
-                      variables: {
-                        input: {
-                          id: chat.id,
-                          name: chatName,
+                    try {
+                      await updateChat({
+                        variables: {
+                          input: {
+                            id: chat.id,
+                            name: chatName,
+                          },
                         },
-                      },
-                    });
-                    setEditChatTitle(false);
-                    await chatRefetch({ input: { id: chat.id } });
+                      });
+                      setEditChatTitle(false);
+                      await chatRefetch({ input: { id: chat.id } });
+                      toast.success('Chat name updated successfully');
+                    } catch (error) {
+                      toast.error('Failed to update chat name');
+                      console.error(error);
+                    }
                   }}
                 />
                 <FaX
@@ -489,28 +500,24 @@ export default function groupChatDetails({
           ) : (
             <>
               <div className={styles.input}>
-                <Form onSubmit={handleUserModalSearchChange}>
-                  <Form.Control
-                    type="name"
-                    id="searchUser"
-                    data-testid="searchUser"
-                    placeholder="searchFullName"
-                    autoComplete="off"
-                    className={styles.inputFieldModal}
-                    value={userName}
-                    onChange={(e): void => {
-                      const { value } = e.target;
-                      setUserName(value);
-                    }}
-                  />
-                  <Button
-                    type="submit"
-                    data-testid="searchBtn"
-                    className={`position-absolute z-10 bottom-10 end-0  d-flex justify-content-center align-items-center `}
-                  >
-                    <Search />
-                  </Button>
-                </Form>
+                <SearchBar
+                  placeholder="searchFullName"
+                  value={userName}
+                  onChange={(value) => {
+                    setUserName(value);
+                    handleUserModalSearchChange(value);
+                  }}
+                  onSearch={(value) => {
+                    handleUserModalSearchChange(value);
+                  }}
+                  onClear={() => {
+                    // Reset local input; refetch with empty filter explicitly for clarity
+                    setUserName('');
+                    handleUserModalSearchChange('');
+                  }}
+                  inputTestId="searchUser"
+                  buttonTestId="searchBtn"
+                />
               </div>
 
               <TableContainer className={styles.userData} component={Paper}>

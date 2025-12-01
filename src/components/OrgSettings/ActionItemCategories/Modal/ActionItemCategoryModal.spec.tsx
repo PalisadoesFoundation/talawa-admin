@@ -139,6 +139,9 @@ const fillFormAndSubmit = async (
 };
 
 describe('Testing Action Item Category Modal', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   beforeEach(() => {
     vi.clearAllMocks();
   });

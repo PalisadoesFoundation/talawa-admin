@@ -34,6 +34,7 @@ describe('Plugin Hooks', () => {
 
   afterEach(() => {
     resetPluginManager();
+    vi.restoreAllMocks();
   });
 
   describe('usePluginDrawerItems', () => {

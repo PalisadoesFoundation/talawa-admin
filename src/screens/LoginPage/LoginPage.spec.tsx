@@ -175,6 +175,18 @@ const link = new StaticMockLink(MOCKS, true);
 const link3 = new StaticMockLink(MOCKS3, true);
 const link4 = new StaticMockLink(MOCKS4, true);
 
+const { toastMocks, routerMocks, resetReCAPTCHA } = vi.hoisted(() => ({
+  toastMocks: {
+    success: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+  },
+  routerMocks: {
+    navigate: vi.fn(),
+  },
+  resetReCAPTCHA: vi.fn(),
+}));
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -183,8 +195,31 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+const mockUseLocalStorage = {
+  getItem: vi.fn(),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  getStorageKey: vi.fn(),
+};
+
+beforeEach(() => {
+  vi.clearAllMocks();
+  routerMocks.navigate.mockReset();
+  mockUseLocalStorage.getItem.mockReset();
+  mockUseLocalStorage.setItem.mockReset();
+  mockUseLocalStorage.removeItem.mockReset();
+  mockUseLocalStorage.getStorageKey.mockReset();
+  (useLocalStorage as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
+    mockUseLocalStorage as InterfaceStorageHelper,
+  );
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
 vi.mock('react-toastify', () => ({
-  toast: { success: vi.fn(), warn: vi.fn(), error: vi.fn() },
+  toast: toastMocks,
 }));
 
 vi.mock('Constant/constant.ts', async () => ({
@@ -193,13 +228,11 @@ vi.mock('Constant/constant.ts', async () => ({
   RECAPTCHA_SITE_KEY: 'xxx',
 }));
 
-const mockNavigate = vi.fn();
 vi.mock('react-router', async () => ({
   ...(await vi.importActual('react-router')),
-  useNavigate: () => mockNavigate,
+  useNavigate: () => routerMocks.navigate,
 }));
 
-const resetReCAPTCHA = vi.fn();
 vi.mock('react-google-recaptcha', async () => {
   const react = await vi.importActual<typeof React>('react');
   const recaptcha = react.forwardRef(
@@ -251,7 +284,7 @@ describe('Testing Login Page Screen', () => {
       },
     });
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -269,7 +302,7 @@ describe('Testing Login Page Screen', () => {
 
   it('There should be default values of pre-login data when queried result is null', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -311,7 +344,7 @@ describe('Testing Login Page Screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -368,7 +401,7 @@ describe('Testing Login Page Screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -424,7 +457,7 @@ describe('Testing Login Page Screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -480,7 +513,7 @@ describe('Testing Login Page Screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -536,7 +569,7 @@ describe('Testing Login Page Screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -597,7 +630,7 @@ describe('Testing Login Page Screen', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -650,7 +683,7 @@ describe('Testing Login Page Screen', () => {
     });
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -680,7 +713,7 @@ describe('Testing Login Page Screen', () => {
     const formData = { email: 'johndoe@gmail.com', password: 'johndoe' };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -708,7 +741,7 @@ describe('Testing Login Page Screen', () => {
     const formData = { email: 'johndoe@gmail.com', password: 'johndoe1' };
 
     render(
-      <MockedProvider addTypename={false} link={link4}>
+      <MockedProvider link={link4}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -734,7 +767,7 @@ describe('Testing Login Page Screen', () => {
 
   it('Testing password preview feature for login', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -771,7 +804,7 @@ describe('Testing Login Page Screen', () => {
     });
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -813,7 +846,7 @@ describe('Testing Login Page Screen', () => {
     });
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -845,7 +878,7 @@ describe('Testing Login Page Screen', () => {
 
   it('Testing for the password error warning when user firsts lands on a page', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -874,7 +907,7 @@ describe('Testing Login Page Screen', () => {
     const password = { password: '7' };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -918,7 +951,7 @@ describe('Testing Login Page Screen', () => {
     const password = { password: '12345678' };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -962,7 +995,7 @@ describe('Testing Login Page Screen', () => {
     const password = { password: '1234567' };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1004,7 +1037,7 @@ describe('Testing Login Page Screen', () => {
     const password = { password: '12345678' };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1045,7 +1078,7 @@ describe('Testing Login Page Screen', () => {
       },
     });
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1072,7 +1105,7 @@ describe('Testing Login Page Screen', () => {
       },
     });
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1089,20 +1122,6 @@ describe('Testing Login Page Screen', () => {
   });
 });
 
-const mockUseLocalStorage = {
-  getItem: vi.fn(),
-  setItem: vi.fn(),
-  removeItem: vi.fn(),
-  getStorageKey: vi.fn(),
-};
-
-beforeEach(() => {
-  vi.clearAllMocks();
-  (useLocalStorage as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
-    mockUseLocalStorage as InterfaceStorageHelper,
-  );
-});
-
 describe('Testing redirect if already logged in', () => {
   it('Logged in as USER', async () => {
     mockUseLocalStorage.getItem.mockImplementation((key: string) => {
@@ -1112,7 +1131,7 @@ describe('Testing redirect if already logged in', () => {
     });
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1123,7 +1142,7 @@ describe('Testing redirect if already logged in', () => {
       </MockedProvider>,
     );
     await wait();
-    expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
+    expect(routerMocks.navigate).toHaveBeenCalledWith('/user/organizations');
   });
 
   it('Logged in as Admin or SuperAdmin', async () => {
@@ -1134,7 +1153,7 @@ describe('Testing redirect if already logged in', () => {
     });
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1145,7 +1164,7 @@ describe('Testing redirect if already logged in', () => {
       </MockedProvider>,
     );
     await wait();
-    expect(mockNavigate).toHaveBeenCalledWith('/orglist');
+    expect(routerMocks.navigate).toHaveBeenCalledWith('/orglist');
   });
 });
 
@@ -1175,7 +1194,7 @@ describe('Testing invitation functionality', () => {
     mockUseLocalStorage.removeItem = mockRemoveItem;
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1224,7 +1243,7 @@ describe('Testing invitation functionality', () => {
     });
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1280,7 +1299,7 @@ describe('Testing invitation functionality', () => {
     });
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1304,7 +1323,7 @@ describe('Testing invitation functionality', () => {
     await wait();
 
     // Verify normal navigation (no invitation redirect)
-    expect(mockNavigate).toHaveBeenCalledWith('/user/organizations');
+    expect(routerMocks.navigate).toHaveBeenCalledWith('/user/organizations');
     expect(window.location.href).toBe('http://localhost:3000/');
   });
 });
@@ -1322,7 +1341,7 @@ it('Render the Select Organization list and change the option', async () => {
   });
 
   render(
-    <MockedProvider addTypename={false} link={link3}>
+    <MockedProvider link={link3}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -1360,7 +1379,7 @@ describe('Talawa-API server fetch check', () => {
 
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -1381,7 +1400,7 @@ describe('Talawa-API server fetch check', () => {
 
     await act(async () => {
       render(
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>

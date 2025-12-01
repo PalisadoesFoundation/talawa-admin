@@ -2,11 +2,12 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { sanitizeAvatars } from './sanitizeAvatar';
 
 describe('sanitizeAvatars', () => {
-  const mockCreateObjectURL = vi.fn();
+  let mockCreateObjectURL: ReturnType<typeof vi.fn>;
   let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockCreateObjectURL = vi.fn();
     global.URL.createObjectURL = mockCreateObjectURL;
     mockCreateObjectURL.mockReturnValue('blob:mock-url');
 
@@ -21,6 +22,7 @@ describe('sanitizeAvatars', () => {
 
   afterEach(() => {
     consoleErrorSpy.mockRestore();
+    vi.restoreAllMocks();
   });
 
   it('should create object URL for valid image file', () => {

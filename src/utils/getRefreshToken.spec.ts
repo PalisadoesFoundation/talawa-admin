@@ -24,19 +24,20 @@ vi.mock('@apollo/client', async () => {
 });
 
 describe('refreshToken', () => {
-  const localStorageMock = {
-    getItem: vi.fn(),
-    setItem: vi.fn(),
-    clear: vi.fn(),
-    removeItem: vi.fn(),
-    length: 0,
-    key: vi.fn(),
-  };
-
-  let mockReload: any;
+  let localStorageMock: Storage;
+  let mockReload: () => void;
 
   beforeEach(() => {
     mockReload = vi.fn();
+
+    localStorageMock = {
+      getItem: vi.fn(),
+      setItem: vi.fn(),
+      clear: vi.fn(),
+      removeItem: vi.fn(),
+      length: 0,
+      key: vi.fn(),
+    };
 
     // Use Object.defineProperty for TypeScript compatibility
     Object.defineProperty(window, 'location', {

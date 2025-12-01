@@ -6,6 +6,7 @@
  * @module EventsSpec
  */
 
+// SKIP_LOCALSTORAGE_CHECK
 import React, { act } from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
@@ -26,18 +27,20 @@ import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import useLocalStorage from 'utils/useLocalstorage';
-import { vi } from 'vitest';
+import { vi, beforeEach, afterEach } from 'vitest';
 import { toast } from 'react-toastify';
 
-const { setItem } = useLocalStorage();
-
-vi.mock('react-toastify', () => ({
-  toast: {
+const { mockToast, mockUseParams } = vi.hoisted(() => ({
+  mockToast: {
     error: vi.fn(),
     info: vi.fn(),
     success: vi.fn(),
   },
+  mockUseParams: vi.fn(),
+}));
+
+vi.mock('react-toastify', () => ({
+  toast: mockToast,
 }));
 
 vi.mock('@mui/x-date-pickers/DatePicker', async () => {
@@ -62,7 +65,7 @@ vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,
-    useParams: () => ({ orgId: 'org123' }),
+    useParams: mockUseParams,
   };
 });
 
@@ -101,10 +104,14 @@ const MOCKS = [
     result: {
       data: {
         organization: {
+          __typename: 'Organization',
           events: {
+            __typename: 'EventConnection',
             edges: [
               {
+                __typename: 'EventEdge',
                 node: {
+                  __typename: 'Event',
                   id: 'event1',
                   name: 'Test Event 1',
                   description: 'Test Description 1',
@@ -123,11 +130,13 @@ const MOCKS = [
                   recurrenceDescription: null,
                   recurrenceRule: null,
                   creator: {
+                    __typename: 'User',
                     id: 'user1',
                     name: 'Test User',
                   },
                   attachments: [],
                   organization: {
+                    __typename: 'Organization',
                     id: 'org123',
                     name: 'Test Org',
                   },
@@ -135,7 +144,9 @@ const MOCKS = [
                 cursor: 'cursor1',
               },
               {
+                __typename: 'EventEdge',
                 node: {
+                  __typename: 'Event',
                   id: 'event2',
                   name: 'Test Event 2',
                   description: 'Test Description 2',
@@ -154,11 +165,13 @@ const MOCKS = [
                   recurrenceDescription: null,
                   recurrenceRule: null,
                   creator: {
+                    __typename: 'User',
                     id: 'user2',
                     name: 'Test User 2',
                   },
                   attachments: [],
                   organization: {
+                    __typename: 'Organization',
                     id: 'org123',
                     name: 'Test Org',
                   },
@@ -167,6 +180,7 @@ const MOCKS = [
               },
             ],
             pageInfo: {
+              __typename: 'PageInfo',
               hasNextPage: false,
               endCursor: 'cursor2',
             },
@@ -184,6 +198,7 @@ const MOCKS = [
       data: {
         organizations: [
           {
+            __typename: 'Organization',
             id: 'org123',
             name: 'Test Organization',
             description: 'Test Description',
@@ -197,11 +212,13 @@ const MOCKS = [
             createdAt: '2024-01-01T00:00:00.000Z',
             updatedAt: '2024-01-01T00:00:00.000Z',
             creator: {
+              __typename: 'User',
               id: 'user1',
               name: 'Creator User',
               emailAddress: 'creator@test.com',
             },
             updater: {
+              __typename: 'User',
               id: 'user1',
               name: 'Creator User',
               emailAddress: 'creator@test.com',
@@ -236,7 +253,41 @@ const MOCKS = [
     result: {
       data: {
         createEvent: {
+          __typename: 'Event',
           id: 'newEvent1',
+          name: 'New Test Event',
+          description: 'New Test Description',
+          startAt: dayjs(new Date())
+            .startOf('day')
+            .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          endAt: dayjs(new Date())
+            .endOf('day')
+            .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          allDay: true,
+          location: 'New Test Location',
+          isPublic: true,
+          isRegisterable: true,
+          createdAt: '2024-01-01T00:00:00.000Z',
+          updatedAt: '2024-01-01T00:00:00.000Z',
+          isRecurringEventTemplate: false,
+          hasExceptions: false,
+          sequenceNumber: null,
+          totalCount: null,
+          progressLabel: null,
+          recurrenceDescription: null,
+          recurrenceRule: null,
+          attachments: [],
+          creator: {
+            __typename: 'User',
+            id: 'user1',
+            name: 'Test User',
+          },
+          organization: {
+            __typename: 'Organization',
+            id: 'org123',
+            name: 'Test Org',
+          },
+          baseEvent: null,
         },
       },
     },
@@ -327,13 +378,10 @@ const CREATE_EVENT_ERROR_MOCKS = [
   },
 ];
 
-const link = new StaticMockLink(MOCKS, false);
-const errorLink = new StaticMockLink(ERROR_MOCKS, false);
-const rateLimitLink = new StaticMockLink(RATE_LIMIT_MOCKS, false);
-const createEventErrorLink = new StaticMockLink(
-  CREATE_EVENT_ERROR_MOCKS,
-  false,
-);
+const link = new StaticMockLink(MOCKS);
+const errorLink = new StaticMockLink(ERROR_MOCKS);
+const rateLimitLink = new StaticMockLink(RATE_LIMIT_MOCKS);
+const createEventErrorLink = new StaticMockLink(CREATE_EVENT_ERROR_MOCKS);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -359,14 +407,32 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   beforeEach(() => {
-    setItem('id', 'user123');
-    setItem('role', 'administrator');
-    vi.clearAllMocks();
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: vi.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    });
+    localStorage.setItem('id', 'user123');
+    localStorage.setItem('role', 'administrator');
+    mockUseParams.mockReturnValue({ orgId: 'org123' });
+  });
+
+  afterEach(() => {
+    localStorage.clear();
+    vi.restoreAllMocks();
   });
 
   it('Should render the Events screen properly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -390,7 +456,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should open and close the create event modal', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -426,7 +492,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should create an all-day event successfully', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -478,7 +544,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should handle create event error', async () => {
     render(
-      <MockedProvider addTypename={false} link={createEventErrorLink}>
+      <MockedProvider link={createEventErrorLink}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -530,7 +596,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should toggle all-day checkbox and enable/disable time pickers', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -573,7 +639,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should toggle public, registerable, recurring, and createChat checkboxes', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -615,7 +681,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should handle date picker changes', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -660,7 +726,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should handle time picker changes when all-day is disabled', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -711,7 +777,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should handle null date values gracefully', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -746,8 +812,6 @@ describe('Testing Events Screen [User Portal]', () => {
       target: { value: null },
     });
 
-    await wait();
-
     // Should handle null values without crashing
     expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
   });
@@ -758,7 +822,7 @@ describe('Testing Events Screen [User Portal]', () => {
       .mockImplementation(() => {});
 
     render(
-      <MockedProvider addTypename={false} link={errorLink}>
+      <MockedProvider link={errorLink}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -787,7 +851,7 @@ describe('Testing Events Screen [User Portal]', () => {
       .mockImplementation(() => {});
 
     render(
-      <MockedProvider addTypename={false} link={rateLimitLink}>
+      <MockedProvider link={rateLimitLink}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -822,7 +886,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should handle input changes for title, description, and location', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -862,10 +926,10 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should test userRole as administrator', async () => {
-    setItem('role', 'administrator');
+    localStorage.setItem('role', 'administrator');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -890,10 +954,10 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should test userRole as regular user', async () => {
-    setItem('role', 'user');
+    localStorage.setItem('role', 'user');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -915,5 +979,48 @@ describe('Testing Events Screen [User Portal]', () => {
     });
 
     // Component should render with regular user role
+  });
+
+  it('Should change view type', async () => {
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Initial view should be Month View
+    await waitFor(() => {
+      expect(screen.getByText('Month View')).toBeInTheDocument();
+    });
+
+    // Find the view type dropdown toggle
+    // SortingButton uses dataTestIdPrefix="selectViewType"
+    // The toggle has data-testid={`${dataTestIdPrefix}`} -> 'selectViewType'
+    const viewTypeToggle = screen.getByTestId('selectViewType');
+    await userEvent.click(viewTypeToggle);
+
+    // Select Day View
+    // SortingButton items have data-testid={`${option.value}`}
+    // Using getByText to be safer as test ID might vary based on ViewType enum
+    const dayViewOption = screen.getByText('Select Day');
+    await userEvent.click(dayViewOption);
+
+    // Verify view changed
+    // EventCalendar should render Day View (which has data-testid="hour")
+    await waitFor(() => {
+      expect(screen.getByTestId('hour')).toBeInTheDocument();
+    });
   });
 });
