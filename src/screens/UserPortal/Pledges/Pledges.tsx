@@ -505,63 +505,63 @@ const Pledges = (): JSX.Element => {
         pledge={pledge}
         refetchPledge={refetchPledge}
       />
-<>
-  <div 
-    id={id} 
-    ref={(node) => {
-      if (node && !anchorEl) {
-        setAnchorEl(node);
-      }
-    }}
-    style={{ display: 'none' }}
-  />
-  
-  <Popover
-    open={open}
-    anchorEl={anchorEl}
-    onClose={() => setOpen(false)}
-    anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-    transformOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
-    }}
-    data-testid="extra-users-popup"
-    slotProps={{
-      paper: {
-        className: `${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`,
-      }
-    }}
-  >
-    <Box sx={{ p: 1 }}>
-      {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
+      <>
         <div
-          className={styles.pledgerContainer}
-         key={user.id}
-          data-testid={`extra${index + 1}`}
+          id={id}
+          ref={(node) => {
+            if (node && !anchorEl) {
+              setAnchorEl(node);
+            }
+          }}
+          style={{ display: 'none' }}
+        />
+
+        <Popover
+          open={open}
+          anchorEl={anchorEl}
+          onClose={() => setOpen(false)}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          data-testid="extra-users-popup"
+          slotProps={{
+            paper: {
+              className: `${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`,
+            },
+          }}
         >
-          {user.avatarURL ? (
-            <img
-              src={user.avatarURL}
-              alt="pledger"
-              className={styles.avatar}
-            />
-          ) : (
-            <Avatar
-              name={user.name}
-              alt={user.name}
-              size={30}
-              avatarStyle={styles.avatar}
-            />
-          )}
-          <p className={styles.pledgerName}>{user.name}</p>
-        </div>
-      ))}
-    </Box>
-  </Popover>
-</>
+          <Box sx={{ p: 1 }}>
+            {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
+              <div
+                className={styles.pledgerContainer}
+                key={user.id}
+                data-testid={`extra${index + 1}`}
+              >
+                {user.avatarURL ? (
+                  <img
+                    src={user.avatarURL}
+                    alt="pledger"
+                    className={styles.avatar}
+                  />
+                ) : (
+                  <Avatar
+                    name={user.name}
+                    alt={user.name}
+                    size={30}
+                    avatarStyle={styles.avatar}
+                  />
+                )}
+                <p className={styles.pledgerName}>{user.name}</p>
+              </div>
+            ))}
+          </Box>
+        </Popover>
+      </>
     </div>
   );
 };
