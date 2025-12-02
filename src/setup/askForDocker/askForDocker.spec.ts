@@ -579,8 +579,6 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
     }
   });
 
-  // Add these assertions to your existing retry tests to achieve 100% coverage
-
   describe('askAndUpdateTalawaApiUrl - Retry Logic Coverage', () => {
     test('should execute retry loop when connection fails then succeeds', async () => {
       // Mock askForTalawaApiUrl to fail twice, then succeed
@@ -592,6 +590,8 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
       vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
         shouldSetTalawaApiUrlResponse: true,
       });
+
+      const consoleLogSpy = vi.spyOn(console, 'log');
 
       await askAndUpdateTalawaApiUrl();
 
@@ -607,11 +607,21 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
       // Verify multiple error logs (one per retry)
       expect(console.error).toHaveBeenCalledTimes(2);
 
+      // Verify retry attempt logging (covers line 62-63)
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        'Connection attempt 1/3 failed',
+      );
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        'Connection attempt 2/3 failed',
+      );
+
       // Eventually succeeded (covers success path after retries)
       expect(updateEnvFile).toHaveBeenCalledWith(
         'REACT_APP_TALAWA_URL',
         'https://api.example.com',
       );
+
+      consoleLogSpy.mockRestore();
     });
 
     test('should fail after MAX_RETRIES and log final error', async () => {
@@ -624,6 +634,8 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
         shouldSetTalawaApiUrlResponse: true,
       });
 
+      const consoleLogSpy = vi.spyOn(console, 'log');
+
       await askAndUpdateTalawaApiUrl();
 
       // Verify all 3 retry attempts exhausted (covers MAX_RETRIES check)
@@ -633,6 +645,17 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
       expect(console.error).toHaveBeenCalledWith(
         'Error checking connection:',
         expect.any(Error),
+      );
+
+      // Verify all 3 retry attempt messages (covers line 62-63)
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        'Connection attempt 1/3 failed',
+      );
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        'Connection attempt 2/3 failed',
+      );
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        'Connection attempt 3/3 failed',
       );
 
       // Verify final error thrown (covers lines 71-74)
@@ -646,6 +669,8 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
 
       // Verify no env update on failure
       expect(updateEnvFile).not.toHaveBeenCalled();
+
+      consoleLogSpy.mockRestore();
     });
 
     test('should execute retry logic when connection fails', async () => {
@@ -659,6 +684,8 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
         shouldSetTalawaApiUrlResponse: true,
       });
 
+      const consoleLogSpy = vi.spyOn(console, 'log');
+
       await askAndUpdateTalawaApiUrl();
 
       // Verify retry attempts occurred
@@ -670,11 +697,21 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
         expect.any(Error),
       );
 
+      // Verify retry logging (covers line 62-63)
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        'Connection attempt 1/3 failed',
+      );
+      expect(consoleLogSpy).toHaveBeenCalledWith(
+        'Connection attempt 2/3 failed',
+      );
+
       // Eventually succeeded
       expect(updateEnvFile).toHaveBeenCalledWith(
         'REACT_APP_TALAWA_URL',
         'https://api.example.com',
       );
+
+      consoleLogSpy.mockRestore();
     });
   });
 });
