@@ -481,7 +481,7 @@ const Pledges = (): JSX.Element => {
             amount: pledge.amount,
             campaign: pledge.campaign,
             pledger: pledge.pledger,
-            users: pledge.users, 
+            users: pledge.users,
             currency: pledge.campaign?.currencyCode,
             goalAmount: pledge.campaign?.goalAmount,
           }))}

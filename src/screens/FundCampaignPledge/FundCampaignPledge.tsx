@@ -3,7 +3,7 @@ import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import Popover from '@mui/material/Popover';
-import { Box } from '@mui/material';
+import { Box, Breadcrumbs, Link, Stack, Typography } from '@mui/material';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
@@ -13,7 +13,6 @@ import { currencySymbols } from 'utils/currency';
 import styles from 'style/app-fixed.module.css';
 import PledgeDeleteModal from './deleteModal/PledgeDeleteModal';
 import PledgeModal from './modal/PledgeModal';
-import { Breadcrumbs, Link, Stack, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -593,7 +592,7 @@ const fundCampaignPledge = (): JSX.Element => {
           refetchPledge={refetchPledge}
         />
       </div>
-      
+
       <div
         id={id}
         ref={(node) => {
@@ -603,7 +602,7 @@ const fundCampaignPledge = (): JSX.Element => {
         }}
         style={{ display: 'none' }}
       />
-      
+
       <Popover
         open={open}
         anchorEl={anchorEl}
