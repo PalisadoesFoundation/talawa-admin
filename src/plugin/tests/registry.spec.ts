@@ -28,26 +28,18 @@ vi.mock('../manager', () => ({
 
 // Mock fetch
 
+// Variable to capture the loader function passed to React.lazy
+let capturedLoader: (() => Promise<{ default: React.ComponentType }>) | null =
+  null;
+
 // Mock React.lazy
 vi.mock('react', async () => {
   const actual = await vi.importActual('react');
   return {
     ...actual,
-    lazy: vi.fn((loader) => {
-      return {
-        __vccOpts: {},
-        __v_isRef: true,
-        __v_isShallow: false,
-        dep: undefined,
-        effect: undefined,
-        _dirty: false,
-        _value: undefined,
-        _hasCachedValue: false,
-        _cachedValue: undefined,
-        _cachedError: undefined,
-        _cachedErrorInfo: undefined,
-        _load: loader,
-      };
+    lazy: vi.fn((loader: () => Promise<{ default: React.ComponentType }>) => {
+      capturedLoader = loader;
+      return vi.fn().mockReturnValue(null) as unknown as React.ComponentType;
     }),
   };
 });
@@ -93,12 +85,28 @@ describe('Plugin Registry', () => {
       expect(typeof ErrorComponent).toBe('function');
       expect(ErrorComponent).toBeDefined();
     });
+
+    it('should render error component with correct error message', () => {
+      const ErrorComponent = createErrorComponent(
+        'test-plugin',
+        'TestComponent',
+        'Test error message',
+      );
+
+      // Render the component to cover line 61 (the JSX return)
+      // Cast to function type since createErrorComponent returns a function component
+      const element = (ErrorComponent as () => React.ReactElement)();
+      expect(element).toBeDefined();
+      expect(element.type).toBe('div');
+      expect((element.props as { children: unknown }).children).toBeDefined();
+    });
   });
 
   describe('createLazyPluginComponent', () => {
     it('should create a lazy component that loads successfully', async () => {
-      const mockComponent = () =>
-        React.createElement('div', null, 'Test Component');
+      const mockComponent = vi
+        .fn()
+        .mockReturnValue(null) as React.ComponentType;
       const mockGetPluginManager = vi.mocked(
         await import('../manager'),
       ).getPluginManager;
@@ -111,9 +119,16 @@ describe('Plugin Registry', () => {
         'TestComponent',
       );
 
+      // Execute the captured loader to cover lines 82-103
+      expect(capturedLoader).not.toBeNull();
+      if (capturedLoader) {
+        const result = await capturedLoader();
+        expect(result.default).toBe(mockComponent);
+      }
+
       // The lazy component should be created
       expect(LazyComponent).toBeDefined();
-      expect(typeof LazyComponent).toBe('object');
+      expect(typeof LazyComponent).toBe('function');
     });
 
     it('should create a lazy component that handles component not found error', async () => {
@@ -130,6 +145,15 @@ describe('Plugin Registry', () => {
       );
 
       expect(LazyComponent).toBeDefined();
+
+      // Execute the captured loader to cover the error handling path
+      expect(capturedLoader).not.toBeNull();
+      if (capturedLoader) {
+        const result = await capturedLoader();
+        // Should return an error component
+        expect(result.default).toBeDefined();
+        expect(typeof result.default).toBe('function');
+      }
     });
 
     it('should create a lazy component that handles general errors', async () => {
@@ -148,6 +172,40 @@ describe('Plugin Registry', () => {
       );
 
       expect(LazyComponent).toBeDefined();
+
+      // Execute the captured loader to cover the error handling path
+      expect(capturedLoader).not.toBeNull();
+      if (capturedLoader) {
+        const result = await capturedLoader();
+        // Should return an error component
+        expect(result.default).toBeDefined();
+        expect(typeof result.default).toBe('function');
+      }
+    });
+
+    it('should handle non-Error exceptions', async () => {
+      const mockGetPluginManager = vi.mocked(
+        await import('../manager'),
+      ).getPluginManager;
+      mockGetPluginManager.mockReturnValue({
+        getPluginComponent: vi.fn().mockImplementation(() => {
+          throw 'String error'; // Non-Error exception
+        }),
+      } as unknown as PluginManager);
+
+      const LazyComponent = createLazyPluginComponent(
+        'test-plugin',
+        'StringErrorComponent',
+      );
+
+      expect(LazyComponent).toBeDefined();
+
+      // Execute the captured loader to cover the 'Unknown error' fallback
+      expect(capturedLoader).not.toBeNull();
+      if (capturedLoader) {
+        const result = await capturedLoader();
+        expect(result.default).toBeDefined();
+      }
     });
   });
 
