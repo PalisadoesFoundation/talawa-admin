@@ -579,6 +579,8 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
     }
   });
 
+  // Add these assertions to your existing retry tests to achieve 100% coverage
+
   describe('askAndUpdateTalawaApiUrl - Retry Logic Coverage', () => {
     test('should execute retry loop when connection fails then succeeds', async () => {
       // Mock askForTalawaApiUrl to fail twice, then succeed
@@ -602,6 +604,9 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
         expect.any(Error),
       );
 
+      // Verify multiple error logs (one per retry)
+      expect(console.error).toHaveBeenCalledTimes(2);
+
       // Eventually succeeded (covers success path after retries)
       expect(updateEnvFile).toHaveBeenCalledWith(
         'REACT_APP_TALAWA_URL',
@@ -624,6 +629,12 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
       // Verify all 3 retry attempts exhausted (covers MAX_RETRIES check)
       expect(askForTalawaApiUrl).toHaveBeenCalledTimes(3);
 
+      // Verify errors logged during each retry attempt
+      expect(console.error).toHaveBeenCalledWith(
+        'Error checking connection:',
+        expect.any(Error),
+      );
+
       // Verify final error thrown (covers lines 71-74)
       expect(console.error).toHaveBeenCalledWith(
         'Error setting up Talawa API URL:',
@@ -638,12 +649,6 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
     });
 
     test('should execute retry logic when connection fails', async () => {
-      // Restore console mocks for this test
-      vi.restoreAllMocks();
-      const consoleErrorSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
-
       // Mock askForTalawaApiUrl to throw errors for retries, then succeed
       (askForTalawaApiUrl as Mock)
         .mockRejectedValueOnce(new Error('Connection failed'))
@@ -660,7 +665,7 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
       expect(askForTalawaApiUrl).toHaveBeenCalledTimes(3);
 
       // Verify errors were logged during retries
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
+      expect(console.error).toHaveBeenCalledWith(
         'Error checking connection:',
         expect.any(Error),
       );
