@@ -426,43 +426,44 @@ const fundCampaignPledge = (): JSX.Element => {
           </div>
           <div className={styles.progressContainer}>
             <div className="d-flex justify-content-center">
-              <div
-                className={`btn-group ${styles.toggleGroup}`}
-                role="group"
-                aria-label="Toggle between Pledged and Raised amounts"
-              >
-                <input
-                  type="radio"
-                  className={`btn-check ${styles.toggleBtnPledge}`}
-                  name="btnradio"
-                  id="pledgedRadio"
-                  checked={progressIndicator === 'pledged'}
-                  onChange={() => {
-                    setProgressIndicator('pledged');
-                  }}
-                />
-                <label
-                  className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
-                  htmlFor="pledgedRadio"
-                >
-                  {t('pledgedAmount')}
-                </label>
+              <fieldset className={styles.toggleGroup}>
+                <legend className="visually-hidden">
+                  Toggle between Pledged and Raised amounts
+                </legend>
+                <div className="btn-group">
+                  <input
+                    type="radio"
+                    className={`btn-check ${styles.toggleBtnPledge}`}
+                    name="btnradio"
+                    id="pledgedRadio"
+                    checked={progressIndicator === 'pledged'}
+                    onChange={() => {
+                      setProgressIndicator('pledged');
+                    }}
+                  />
+                  <label
+                    className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
+                    htmlFor="pledgedRadio"
+                  >
+                    {t('pledgedAmount')}
+                  </label>
 
-                <input
-                  type="radio"
-                  className={`btn-check ${styles.toggleBtnPledge}`}
-                  name="btnradio"
-                  id="raisedRadio"
-                  onChange={() => setProgressIndicator('raised')}
-                  checked={progressIndicator === 'raised'}
-                />
-                <label
-                  className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
-                  htmlFor="raisedRadio"
-                >
-                  {t('raisedAmount')}
-                </label>
-              </div>
+                  <input
+                    type="radio"
+                    className={`btn-check ${styles.toggleBtnPledge}`}
+                    name="btnradio"
+                    id="raisedRadio"
+                    onChange={() => setProgressIndicator('raised')}
+                    checked={progressIndicator === 'raised'}
+                  />
+                  <label
+                    className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
+                    htmlFor="raisedRadio"
+                  >
+                    {t('raisedAmount')}
+                  </label>
+                </div>
+              </fieldset>
             </div>
 
             <div className={styles.progress}>
@@ -476,7 +477,11 @@ const fundCampaignPledge = (): JSX.Element => {
                   currencySymbols[
                     campaignInfo?.currency as keyof typeof currencySymbols
                   ] || '$'
-                }${progressIndicator === 'pledged' ? totalPledged.toLocaleString('en-US') : totalRaised.toLocaleString('en-US')}`}
+                }${
+                  progressIndicator === 'pledged'
+                    ? totalPledged.toLocaleString('en-US')
+                    : totalRaised.toLocaleString('en-US')
+                }`}
                 max={100}
                 style={{ height: '1.5rem', fontSize: '0.9rem' }}
                 data-testid="progressBar"
@@ -588,6 +593,7 @@ const fundCampaignPledge = (): JSX.Element => {
           refetchPledge={refetchPledge}
         />
       </div>
+      
       <div
         id={id}
         ref={(node) => {
@@ -597,10 +603,15 @@ const fundCampaignPledge = (): JSX.Element => {
         }}
         style={{ display: 'none' }}
       />
+      
       <Popover
         open={open}
         anchorEl={anchorEl}
         onClose={() => setOpen(false)}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
         transformOrigin={{
           vertical: 'top',
           horizontal: 'center',

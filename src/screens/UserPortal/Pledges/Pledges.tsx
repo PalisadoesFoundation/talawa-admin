@@ -408,161 +408,161 @@ const Pledges = (): JSX.Element => {
   ];
 
   return (
-    <div>
-      <div
-        className={`${styles.btnsContainer} gap-3 flex-column flex-lg-row align-items-stretch`}
-      >
-        <div className="flex-grow-1 w-100">
-          <SearchBar
-            placeholder={t('searchBy') + ' ' + t(searchBy)}
-            onSearch={setSearchTerm}
-            inputTestId="searchPledges"
-            buttonTestId="searchBtn"
-          />
-        </div>
-        <div className="d-flex gap-3 flex-wrap align-items-center">
-          <SortingButton
-            sortingOptions={[
-              { label: t('pledgers'), value: 'pledgers' },
-              { label: t('campaigns'), value: 'campaigns' },
-            ]}
-            selectedOption={searchBy}
-            onSortChange={(value) =>
-              setSearchBy(value as 'pledgers' | 'campaigns')
-            }
-            dataTestIdPrefix="searchByDrpdwn"
-            buttonLabel={t('searchBy')}
-          />
-          <SortingButton
-            sortingOptions={[
-              { label: t('lowestAmount'), value: 'amount_ASC' },
-              { label: t('highestAmount'), value: 'amount_DESC' },
-              { label: t('latestEndDate'), value: 'endDate_DESC' },
-              { label: t('earliestEndDate'), value: 'endDate_ASC' },
-            ]}
-            selectedOption={sortBy}
-            onSortChange={(value) =>
-              setSortBy(
-                value as
-                  | 'amount_ASC'
-                  | 'amount_DESC'
-                  | 'endDate_ASC'
-                  | 'endDate_DESC',
-              )
-            }
-            dataTestIdPrefix="filter"
-            buttonLabel={tCommon('sort')}
-          />
-        </div>
-      </div>
-
-      <DataGrid
-        disableColumnMenu
-        columnBufferPx={8}
-        hideFooter={true}
-        getRowId={(row) => row.id}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noPledges')}
-            </Stack>
-          ),
-        }}
-        sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackground}`}
-        rowHeight={65}
-        rows={pledges.map((pledge) => ({
-          id: pledge.id,
-          name: pledge.pledger?.name,
-          image: pledge.pledger?.avatarURL,
-          startDate: pledge.startDate,
-          endDate: pledge.campaign?.endAt,
-          amount: pledge.amount,
-          campaign: pledge.campaign,
-          pledger: pledge.pledger,
-          users: pledge.users, // Include users array for multiple pledgers functionality
-          currency: pledge.campaign?.currencyCode,
-          goalAmount: pledge.campaign?.goalAmount,
-        }))}
-        columns={columns}
-        isRowSelectable={() => false}
-      />
-
-      <PledgeModal
-        isOpen={modalState[ModalState.UPDATE]}
-        hide={() => closeModal(ModalState.UPDATE)}
-        campaignId={pledge?.campaign ? pledge?.campaign.id : ''}
-        userId={userId}
-        pledge={pledge}
-        refetchPledge={refetchPledge}
-        endDate={pledge?.campaign ? pledge?.campaign.endAt : new Date()}
-        mode={'edit'}
-      />
-
-      <PledgeDeleteModal
-        isOpen={modalState[ModalState.DELETE]}
-        hide={() => closeModal(ModalState.DELETE)}
-        pledge={pledge}
-        refetchPledge={refetchPledge}
-      />
-      <>
+    <>
+      <div>
         <div
-          id={id}
-          ref={(node) => {
-            if (node && !anchorEl) {
-              setAnchorEl(node);
-            }
+          className={`${styles.btnsContainer} gap-3 flex-column flex-lg-row align-items-stretch`}
+        >
+          <div className="flex-grow-1 w-100">
+            <SearchBar
+              placeholder={t('searchBy') + ' ' + t(searchBy)}
+              onSearch={setSearchTerm}
+              inputTestId="searchPledges"
+              buttonTestId="searchBtn"
+            />
+          </div>
+          <div className="d-flex gap-3 flex-wrap align-items-center">
+            <SortingButton
+              sortingOptions={[
+                { label: t('pledgers'), value: 'pledgers' },
+                { label: t('campaigns'), value: 'campaigns' },
+              ]}
+              selectedOption={searchBy}
+              onSortChange={(value) =>
+                setSearchBy(value as 'pledgers' | 'campaigns')
+              }
+              dataTestIdPrefix="searchByDrpdwn"
+              buttonLabel={t('searchBy')}
+            />
+            <SortingButton
+              sortingOptions={[
+                { label: t('lowestAmount'), value: 'amount_ASC' },
+                { label: t('highestAmount'), value: 'amount_DESC' },
+                { label: t('latestEndDate'), value: 'endDate_DESC' },
+                { label: t('earliestEndDate'), value: 'endDate_ASC' },
+              ]}
+              selectedOption={sortBy}
+              onSortChange={(value) =>
+                setSortBy(
+                  value as
+                    | 'amount_ASC'
+                    | 'amount_DESC'
+                    | 'endDate_ASC'
+                    | 'endDate_DESC',
+                )
+              }
+              dataTestIdPrefix="filter"
+              buttonLabel={tCommon('sort')}
+            />
+          </div>
+        </div>
+
+        <DataGrid
+          disableColumnMenu
+          columnBufferPx={8}
+          hideFooter={true}
+          getRowId={(row) => row.id}
+          slots={{
+            noRowsOverlay: () => (
+              <Stack height="100%" alignItems="center" justifyContent="center">
+                {t('noPledges')}
+              </Stack>
+            ),
           }}
-          style={{ display: 'none' }}
+          sx={dataGridStyle}
+          getRowClassName={() => `${styles.rowBackground}`}
+          rowHeight={65}
+          rows={pledges.map((pledge) => ({
+            id: pledge.id,
+            name: pledge.pledger?.name,
+            image: pledge.pledger?.avatarURL,
+            startDate: pledge.startDate,
+            endDate: pledge.campaign?.endAt,
+            amount: pledge.amount,
+            campaign: pledge.campaign,
+            pledger: pledge.pledger,
+            users: pledge.users, 
+            currency: pledge.campaign?.currencyCode,
+            goalAmount: pledge.campaign?.goalAmount,
+          }))}
+          columns={columns}
+          isRowSelectable={() => false}
         />
 
-        <Popover
-          open={open}
-          anchorEl={anchorEl}
-          onClose={() => setOpen(false)}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'center',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
-          data-testid="extra-users-popup"
-          slotProps={{
-            paper: {
-              className: `${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`,
-            },
-          }}
-        >
-          <Box sx={{ p: 1 }}>
-            {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
-              <div
-                className={styles.pledgerContainer}
-                key={user.id}
-                data-testid={`extra${index + 1}`}
-              >
-                {user.avatarURL ? (
-                  <img
-                    src={user.avatarURL}
-                    alt="pledger"
-                    className={styles.avatar}
-                  />
-                ) : (
-                  <Avatar
-                    name={user.name}
-                    alt={user.name}
-                    size={30}
-                    avatarStyle={styles.avatar}
-                  />
-                )}
-                <p className={styles.pledgerName}>{user.name}</p>
-              </div>
-            ))}
-          </Box>
-        </Popover>
-      </>
-    </div>
+        <PledgeModal
+          isOpen={modalState[ModalState.UPDATE]}
+          hide={() => closeModal(ModalState.UPDATE)}
+          campaignId={pledge?.campaign ? pledge?.campaign.id : ''}
+          userId={userId}
+          pledge={pledge}
+          refetchPledge={refetchPledge}
+          endDate={pledge?.campaign ? pledge?.campaign.endAt : new Date()}
+          mode={'edit'}
+        />
+
+        <PledgeDeleteModal
+          isOpen={modalState[ModalState.DELETE]}
+          hide={() => closeModal(ModalState.DELETE)}
+          pledge={pledge}
+          refetchPledge={refetchPledge}
+        />
+      </div>
+
+      <div
+        id={id}
+        ref={(node) => {
+          if (node && !anchorEl) {
+            setAnchorEl(node);
+          }
+        }}
+        style={{ display: 'none' }}
+      />
+      <Popover
+        open={open}
+        anchorEl={anchorEl}
+        onClose={() => setOpen(false)}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        data-testid="extra-users-popup"
+        slotProps={{
+          paper: {
+            className: `${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`,
+          },
+        }}
+      >
+        <Box sx={{ p: 1 }}>
+          {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
+            <div
+              className={styles.pledgerContainer}
+              key={user.id}
+              data-testid={`extraUser-${index}`}
+            >
+              {user.avatarURL ? (
+                <img
+                  src={user.avatarURL}
+                  alt={user.name}
+                  className={styles.avatar}
+                />
+              ) : (
+                <Avatar
+                  name={user.name}
+                  alt={user.name}
+                  size={30}
+                  avatarStyle={styles.avatar}
+                />
+              )}
+              <p className={styles.pledgerName}>{user.name}</p>
+            </div>
+          ))}
+        </Box>
+      </Popover>
+    </>
   );
 };
 
