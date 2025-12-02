@@ -53,7 +53,7 @@ describe('AgendaItemsUpdateModal', () => {
 
   test('renders modal correctly', () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -83,7 +83,7 @@ describe('AgendaItemsUpdateModal', () => {
 
   test('tests the condition for formState.title and formState.description', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -150,7 +150,7 @@ describe('AgendaItemsUpdateModal', () => {
 
   test('handleAddUrl correctly adds valid URL', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -185,7 +185,7 @@ describe('AgendaItemsUpdateModal', () => {
 
   test('shows error toast for invalid URL', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -219,7 +219,7 @@ describe('AgendaItemsUpdateModal', () => {
 
   test('shows error toast for file size exceeding limit', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -261,7 +261,7 @@ describe('AgendaItemsUpdateModal', () => {
     mockedConvertToBase64.mockResolvedValue('base64-file');
 
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -300,7 +300,7 @@ describe('AgendaItemsUpdateModal', () => {
   });
   test('renders autocomplete and selects categories correctly', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -342,7 +342,7 @@ describe('AgendaItemsUpdateModal', () => {
     };
 
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -382,7 +382,7 @@ describe('AgendaItemsUpdateModal', () => {
 
   test('handles empty URL input correctly', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -425,7 +425,7 @@ describe('AgendaItemsUpdateModal', () => {
 
   test('handles file input with no files selected', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -470,7 +470,7 @@ describe('AgendaItemsUpdateModal', () => {
     };
 
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -514,7 +514,7 @@ describe('AgendaItemsUpdateModal', () => {
     };
 
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -555,7 +555,7 @@ describe('AgendaItemsUpdateModal', () => {
     };
 
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -586,7 +586,7 @@ describe('AgendaItemsUpdateModal', () => {
 
   test('handles undefined agendaItemCategories correctly', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -613,7 +613,7 @@ describe('AgendaItemsUpdateModal', () => {
 
   test('handles undefined agendaItemCategories gracefully', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -644,7 +644,7 @@ describe('AgendaItemsUpdateModal', () => {
 
   test('handles file input with no files property', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -690,7 +690,7 @@ describe('AgendaItemsUpdateModal', () => {
     };
 
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>

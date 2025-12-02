@@ -2025,6 +2025,10 @@ form label,
   margin-top: 0.7rem;
 }
 
+.orgCard .innerContainer .content h6 > div > div {
+  margin-bottom: 0.3rem;
+}
+
 @media (max-width: 550px) {
   .orgCard {
     width: 100%;

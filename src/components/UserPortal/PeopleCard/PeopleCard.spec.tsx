@@ -44,7 +44,7 @@ let props = {
 describe('Testing PeopleCard Component [User Portal]', () => {
   it('Component should be rendered properly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -65,7 +65,7 @@ describe('Testing PeopleCard Component [User Portal]', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

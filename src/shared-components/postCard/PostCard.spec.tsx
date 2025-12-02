@@ -608,7 +608,7 @@ describe('PostCard', () => {
     const linkWithCustomMock = new StaticMockLink(mocksArray, true);
 
     return render(
-      <MockedProvider link={linkWithCustomMock} addTypename={true}>
+      <MockedProvider link={linkWithCustomMock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -648,7 +648,7 @@ describe('PostCard', () => {
     const linkWithCustomMock = new StaticMockLink(mocksArray, true);
 
     return render(
-      <MockedProvider link={linkWithCustomMock} addTypename={true}>
+      <MockedProvider link={linkWithCustomMock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

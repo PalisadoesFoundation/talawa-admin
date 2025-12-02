@@ -235,23 +235,30 @@ export default function groupChatDetails({
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file && chat.organization?.id) {
-      const { objectName } = await uploadFileToMinio(
-        file,
-        chat.organization.id,
-      );
-      const url = await getFileFromMinio(objectName, chat.organization.id);
-      setSelectedImage(url);
-      await updateChat({
-        variables: {
-          input: {
-            id: chat.id,
-            avatar: { uri: objectName },
-            name: chatName,
+      try {
+        const { objectName } = await uploadFileToMinio(
+          file,
+          chat.organization.id,
+        );
+        const url = await getFileFromMinio(objectName, chat.organization.id);
+        setSelectedImage(url);
+        await updateChat({
+          variables: {
+            input: {
+              id: chat.id,
+              avatar: { uri: objectName },
+              name: chatName,
+            },
           },
-        },
-      });
-      await chatRefetch({ input: { id: chat.id } });
-      setSelectedImage('');
+        });
+        await chatRefetch({ input: { id: chat.id } });
+        toast.success('Chat image updated successfully');
+        setSelectedImage('');
+      } catch (error) {
+        toast.error('Failed to update chat image');
+        console.error(error);
+        setSelectedImage('');
+      }
     } else {
       setSelectedImage('');
     }
@@ -330,18 +337,23 @@ export default function groupChatDetails({
                 />
                 <FaCheck
                   data-testid="updateTitleBtn"
-                  className={styles.checkIcon}
                   onClick={async () => {
-                    await updateChat({
-                      variables: {
-                        input: {
-                          id: chat.id,
-                          name: chatName,
+                    try {
+                      await updateChat({
+                        variables: {
+                          input: {
+                            id: chat.id,
+                            name: chatName,
+                          },
                         },
-                      },
-                    });
-                    setEditChatTitle(false);
-                    await chatRefetch({ input: { id: chat.id } });
+                      });
+                      setEditChatTitle(false);
+                      await chatRefetch({ input: { id: chat.id } });
+                      toast.success('Chat name updated successfully');
+                    } catch (error) {
+                      toast.error('Failed to update chat name');
+                      console.error(error);
+                    }
                   }}
                 />
                 <FaX
