@@ -313,20 +313,18 @@ const Users = (): JSX.Element => {
     return allUsers;
   };
 
-  if (UsersError) {
-    return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
-        <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
-          <h6 className="fw-bold text-danger text-center">
-            Error occurred while loading Users
-            <br />
-            {UsersError.message}
-          </h6>
-        </div>
+  const usersQueryErrorPanel = UsersError ? (
+    <div className={`${styles.container} bg-white rounded-4 my-3`}>
+      <div className={styles.message} data-testid="errorMsg">
+        <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+        <h6 className="fw-bold text-danger text-center">
+          Error occurred while loading Users
+          <br />
+          {UsersError.message}
+        </h6>
       </div>
-    );
-  }
+    </div>
+  ) : null;
 
   const headerTitles: string[] = [
     '#',
@@ -373,6 +371,9 @@ const Users = (): JSX.Element => {
           ]}
         />
       </div>
+
+      {/* Error Panel */}
+      {usersQueryErrorPanel}
 
       {isLoading == false &&
       usersData &&

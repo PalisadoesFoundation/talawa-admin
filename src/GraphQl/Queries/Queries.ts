@@ -214,13 +214,15 @@ export const USER_LIST_FOR_TABLE = gql`
             edges {
               node {
                 id
-                name
-                avatarURL
-                city
-                state
                 createdAt
-                creator {
+                organization {
                   name
+                  createdAt
+                  city
+                  avatarURL
+                  creator {
+                    name
+                  }
                 }
               }
             }

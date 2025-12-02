@@ -147,7 +147,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
       setBlockedUsers(blockedOrgs);
     } else {
       const filteredOrgs = blockedOrgs.filter((org) =>
-        org.name.toLowerCase().includes(value.toLowerCase()),
+        org.organization.name.toLowerCase().includes(value.toLowerCase()),
       );
       setBlockedUsers(filteredOrgs);
     }
@@ -487,15 +487,21 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             className="p-0"
                             onClick={() => goToOrg(org.id)}
                           >
-                            {org.avatarURL ? (
-                              <img src={org.avatarURL} alt="orgImage" />
+                            {org.organization.avatarURL ? (
+                              <img
+                                src={org.organization.avatarURL}
+                                alt="orgImage"
+                              />
                             ) : (
-                              <Avatar name={org.name} alt="orgImage" />
+                              <Avatar
+                                name={org.organization.name}
+                                alt="orgImage"
+                              />
                             )}
-                            {org.name}
+                            {org.organization.name}
                           </Button>
                         </td>
-                        <td>{org.city ?? ''}</td>
+                        <td>{org.organization.city ?? ''}</td>
                         <td>{dayjs(org.createdAt).format('DD-MM-YYYY')}</td>
                         <td>
                           <Button
@@ -504,12 +510,18 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             onClick={() => handleCreator()}
                             data-testid={`creator${org.id}`}
                           >
-                            {org.avatarURL ? (
-                              <img src={org.avatarURL} alt="creator" />
+                            {org.organization.avatarURL ? (
+                              <img
+                                src={org.organization.avatarURL}
+                                alt="creator"
+                              />
                             ) : (
-                              <Avatar name={org.name} alt="creator" />
+                              <Avatar
+                                name={org.organization.name}
+                                alt="creator"
+                              />
                             )}
-                            {org.creator.name}
+                            {org.organization.creator.name}
                           </Button>
                         </td>
                         <td> {isAdmin ? 'ADMIN' : 'USER'} </td>
@@ -521,7 +533,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             onClick={() => {
                               setremoveUserProps({
                                 orgId: org.id,
-                                orgName: org.name,
+                                orgName: org.organization.creator.name,
                                 setShowOnCancel: 'Blocked',
                               });
                               setShowBlockedOrganizations(false);
