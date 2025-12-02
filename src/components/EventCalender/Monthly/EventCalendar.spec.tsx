@@ -278,7 +278,11 @@ describe('Calendar', () => {
   });
 
   it('Should handle window resize in day view', async () => {
-    const date = new Date().toISOString().split('T')[0];
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const date = `${year}-${month}-${day}`;
     const multipleEventData = [
       {
         id: '1',
@@ -777,7 +781,12 @@ describe('Calendar', () => {
     };
 
     it('should return all events when user role is ADMINISTRATOR', async () => {
-      const currentDate = new Date().toISOString().split('T')[0];
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const currentDate = `${year}-${month}-${day}`;
+
       const adminTestEventData = [
         {
           id: 'event1',
@@ -859,7 +868,12 @@ describe('Calendar', () => {
     });
 
     it('should filter events for regular users who are organization members', async () => {
-      const currentDate = new Date().toISOString().split('T')[0];
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const currentDate = `${year}-${month}-${day}`;
+
       const memberTestEventData = [
         {
           id: 'event1',
@@ -923,7 +937,12 @@ describe('Calendar', () => {
     });
 
     it('should filter events for regular users who are NOT organization members', async () => {
-      const currentDate = new Date().toISOString().split('T')[0];
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const currentDate = `${year}-${month}-${day}`;
+
       // Test with 3 events: 2 public and 1 private to better test filtering
       const nonMemberTestEventData = [
         {
@@ -1030,7 +1049,12 @@ describe('Calendar', () => {
     });
 
     it('should only show public events when userRole is not provided', async () => {
-      const currentDate = new Date().toISOString().split('T')[0];
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const currentDate = `${year}-${month}-${day}`;
+
       const noRoleTestEventData = [
         {
           id: 'event1',
@@ -1116,7 +1140,12 @@ describe('Calendar', () => {
     });
 
     it('should only show public events when userId is not provided', async () => {
-      const currentDate = new Date().toISOString().split('T')[0];
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const currentDate = `${year}-${month}-${day}`;
+
       const noUserIdTestEventData = [
         {
           id: 'event1',
@@ -1202,7 +1231,12 @@ describe('Calendar', () => {
     });
 
     it('should handle empty organization data for private events', async () => {
-      const currentDate = new Date().toISOString().split('T')[0];
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const currentDate = `${year}-${month}-${day}`;
+
       const emptyOrgTestEventData = [
         {
           id: 'event1',
@@ -1299,7 +1333,12 @@ describe('Calendar', () => {
         },
       };
 
-      const currentDate = new Date().toISOString().split('T')[0];
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const currentDate = `${year}-${month}-${day}`;
+
       const emptyMembersTestEventData = [
         {
           id: 'event1',
@@ -1386,7 +1425,11 @@ describe('Calendar', () => {
     });
 
     it('should handle mixed public and private events correctly for organization members', async () => {
-      const currentDate = new Date().toISOString().split('T')[0]; // Use current date
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const currentDate = `${year}-${month}-${day}`;
       const mixedEventData = [
         {
           id: 'event1',
