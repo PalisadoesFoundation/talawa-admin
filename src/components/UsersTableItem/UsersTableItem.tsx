@@ -21,6 +21,7 @@ import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from '../../style/app-fixed.module.css';
+import { Search } from '@mui/icons-material';
 
 type Props = {
   user: InterfaceQueryUserListItem;
@@ -153,15 +154,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
     }
   };
 
-  const handleSearchJoinedOrgs = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-  ): void => {
-    if (e.key === 'Enter') {
-      const { value } = e.currentTarget;
-      searchJoinedOrgs(value);
-    }
-  };
-
   const handleSearchBlockedOrgs = (
     e: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
@@ -169,13 +161,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
       const { value } = e.currentTarget;
       searchBlockedOrgs(value);
     }
-  };
-
-  const handleSearchButtonClickJoinedOrgs = (): void => {
-    const inputValue =
-      (document.getElementById('orgname-joined-orgs') as HTMLInputElement)
-        ?.value || '';
-    searchJoinedOrgs(inputValue);
   };
 
   const handleSearchButtonClickBlockedOrgs = (): void => {
