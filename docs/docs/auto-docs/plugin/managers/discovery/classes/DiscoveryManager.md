@@ -142,7 +142,7 @@ Defined in: [src/plugin/managers/discovery.ts:45](https://github.com/PalisadoesF
 
 > **loadPluginManifest**(`pluginId`): `Promise`\<[`IPluginManifest`](../../../types/interfaces/IPluginManifest.md)\>
 
-Defined in: [src/plugin/managers/discovery.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/discovery.ts#L78)
+Defined in: [src/plugin/managers/discovery.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/discovery.ts#L79)
 
 #### Parameters
 

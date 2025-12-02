@@ -64,6 +64,7 @@ export class DiscoveryManager {
         const installedPlugins = plugins
           .filter((p) => p.isInstalled)
           .map((p) => p.pluginId);
+        // Deduplicate in case GraphQL returns duplicate plugin records
         discoveredPlugins = [...new Set(installedPlugins)];
       } catch (graphqlError) {
         console.error('GraphQL discovery failed:', graphqlError);
@@ -104,7 +105,6 @@ export class DiscoveryManager {
     }
   }
 
-  /* istanbul ignore next */
   // Wrapped dynamic import so tests can mock the import result
   // and verify component-loading behavior deterministically.
   private async importPluginModule(
