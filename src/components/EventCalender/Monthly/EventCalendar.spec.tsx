@@ -1471,7 +1471,6 @@ describe('Calendar', () => {
       expect(viewAllButton).toHaveTextContent('View all');
     });
   });
-
   describe('Additional Coverage Tests (Day View & Edge Cases)', () => {
     it('should toggle "View all" and "View less" specifically in DAY View', async () => {
       const today = new Date();
@@ -1498,7 +1497,7 @@ describe('Calendar', () => {
 
       render(
         <Router>
-          <MockedProvider addTypename={false} link={link}>
+          <MockedProvider link={link}>
             <I18nextProvider i18n={i18nForTest}>
               <Calendar
                 eventData={dayEvents}
@@ -1514,9 +1513,11 @@ describe('Calendar', () => {
 
       const viewAllBtn = await screen.findByText('View all');
       expect(viewAllBtn).toBeInTheDocument();
+
       fireEvent.click(viewAllBtn);
       const viewLessBtn = await screen.findByText('View less');
       expect(viewLessBtn).toBeInTheDocument();
+
       fireEvent.click(viewLessBtn);
       const viewAllBtnAgain = await screen.findByText('View all');
       expect(viewAllBtnAgain).toBeInTheDocument();
