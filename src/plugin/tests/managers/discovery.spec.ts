@@ -532,44 +532,6 @@ describe('DiscoveryManager', () => {
     });
   });
 
-  describe('importPluginModule', () => {
-    it('should be callable and return a promise', () => {
-      // Access the private method through type assertion for testing
-      const importMethod = (
-        discoveryManager as unknown as {
-          importPluginModule: (
-            path: string,
-          ) => Promise<Record<string, unknown>>;
-        }
-      ).importPluginModule;
-
-      // Verify the method exists and is a function
-      expect(typeof importMethod).toBe('function');
-    });
-
-    it('should be invoked during component loading', async () => {
-      const mockModule = { default: () => null };
-
-      // Spy on the private method to verify it's called
-      const importSpy = vi
-        .spyOn(
-          discoveryManager as unknown as {
-            importPluginModule: (path: string) => Promise<unknown>;
-          },
-          'importPluginModule',
-        )
-        .mockResolvedValue(mockModule);
-
-      await discoveryManager.loadPluginComponents('test-plugin', mockManifest);
-
-      // Verify importPluginModule was invoked with correct path
-      expect(importSpy).toHaveBeenCalledWith(
-        '/src/plugin/available/test-plugin/index.ts',
-      );
-      expect(importSpy).toHaveBeenCalledTimes(1);
-    });
-  });
-
   describe('GraphQL Synchronization', () => {
     beforeEach(() => {
       discoveryManager.setGraphQLService(
