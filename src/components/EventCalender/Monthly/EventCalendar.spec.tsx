@@ -10,6 +10,7 @@ import { weekdays, months } from 'types/Event/utils';
 import { BrowserRouter as Router } from 'react-router';
 import { vi, describe, it, expect, afterEach, test } from 'vitest';
 import { eventData, MOCKS } from '../EventCalenderMocks';
+import type { InterfaceEvent } from 'types/Event/interface';
 
 const link = new StaticMockLink(MOCKS, true);
 
@@ -1474,14 +1475,17 @@ describe('Calendar', () => {
   describe('Additional Coverage Tests (Day View & Edge Cases)', () => {
     it('should toggle "View all" and "View less" specifically in DAY View', async () => {
       const today = new Date();
-      // Create 3 events to trigger the "View all" button (limit is usually 2)
-      // Use proper type casting instead of 'any'
-      const dayEvents = [1, 2, 3].map((i) => ({
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+      const dateString = `${year}-${month}-${day}`;
+
+      const dayEvents: InterfaceEvent[] = [1, 2, 3].map((i) => ({
         id: `day-evt-${i}`,
         name: `Day Event ${i}`,
         description: 'Description',
-        startAt: today.toISOString(),
-        endAt: today.toISOString(),
+        startAt: `${dateString}T10:00:00Z`,
+        endAt: `${dateString}T11:00:00Z`,
         location: 'Location',
         startTime: '10:00',
         endTime: '11:00',
@@ -1489,15 +1493,7 @@ describe('Calendar', () => {
         isPublic: true,
         isRegisterable: true,
         attendees: [],
-        creator: { id: 'user-1', name: 'Test User' },
-        isRecurringEventTemplate: false,
-        baseEvent: { id: `base-${i}` },
-        sequenceNumber: 0,
-        totalCount: 0,
-        hasExceptions: false,
-        progressLabel: '',
-        recurrenceDescription: '',
-        recurrenceRule: '',
+        creator: { id: 'user-1' } as InterfaceEvent['creator'],
       }));
 
       render(
@@ -1505,8 +1501,6 @@ describe('Calendar', () => {
           <MockedProvider addTypename={false} link={link}>
             <I18nextProvider i18n={i18nForTest}>
               <Calendar
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
                 eventData={dayEvents}
                 viewType={ViewType.DAY}
                 onMonthChange={onMonthChange}
@@ -1518,30 +1512,25 @@ describe('Calendar', () => {
         </Router>,
       );
 
-      // Using findByText to wait for the element (async)
       const viewAllBtn = await screen.findByText('View all');
       expect(viewAllBtn).toBeInTheDocument();
-
-      // Click "View all"
       fireEvent.click(viewAllBtn);
       const viewLessBtn = await screen.findByText('View less');
       expect(viewLessBtn).toBeInTheDocument();
-
-      // Click "View less"
       fireEvent.click(viewLessBtn);
       const viewAllBtnAgain = await screen.findByText('View all');
       expect(viewAllBtnAgain).toBeInTheDocument();
     });
 
-    it('should render safely when eventData is undefined', () => {
+    it('should render safely with no events', () => {
+      const emptyEvents: InterfaceEvent[] = [];
+
       render(
         <Router>
           <MockedProvider addTypename={false} link={link}>
             <I18nextProvider i18n={i18nForTest}>
               <Calendar
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                eventData={undefined}
+                eventData={emptyEvents}
                 viewType={ViewType.MONTH}
                 onMonthChange={onMonthChange}
                 currentMonth={new Date().getMonth()}
