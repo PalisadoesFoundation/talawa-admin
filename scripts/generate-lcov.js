@@ -173,6 +173,12 @@ try {
   // Generate LCOV format
   const lcovContent = jsonToLcov(coverageData);
 
+  // Validate LCOV content is not empty
+  if (!lcovContent || lcovContent.trim().length === 0) {
+    console.error('Error: Generated LCOV content is empty!');
+    process.exit(1);
+  }
+
   // Ensure output directory exists
   const outputDir = path.dirname(outputFile);
   if (!fs.existsSync(outputDir)) {
@@ -182,10 +188,25 @@ try {
   // Write LCOV file
   fs.writeFileSync(outputFile, lcovContent, 'utf8');
 
+  // Verify the file was written correctly
+  if (!fs.existsSync(outputFile)) {
+    console.error(`Error: Output file was not created: ${outputFile}`);
+    process.exit(1);
+  }
+
+  const fileSize = fs.statSync(outputFile).size;
+  if (fileSize === 0) {
+    console.error(`Error: Output file is empty: ${outputFile}`);
+    process.exit(1);
+  }
+
   const fileCount = Object.keys(coverageData).length;
   console.log(`Successfully generated LCOV report from ${inputFile}`);
   console.log(`Coverage data contains ${fileCount} files`);
   console.log(`LCOV report written to ${outputFile}`);
+
+  // Exit with success
+  process.exit(0);
 } catch (error) {
   console.error(`Error generating LCOV report:`, error.message);
   process.exit(1);

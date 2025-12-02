@@ -82,7 +82,13 @@ function mergeCoverageFiles(coverageFiles) {
       }
     } catch (error) {
       console.error(`Error reading coverage file ${filePath}:`, error.message);
-      process.exit(1);
+      // Continue processing other files instead of exiting immediately
+      // Only exit if this is a critical error
+      if (error.code === 'ENOENT' || error.code === 'EACCES') {
+        // File system errors are critical
+        process.exit(1);
+      }
+      // JSON parse errors might be recoverable, continue with other files
     }
   }
 
@@ -132,10 +138,54 @@ if (!fs.existsSync(outputDir)) {
 }
 
 // Write merged coverage to output file
-fs.writeFileSync(outputFile, JSON.stringify(mergedCoverage, null, 2), 'utf8');
+try {
+  // Validate merged coverage is not empty
+  const fileCount = Object.keys(mergedCoverage).length;
+  if (fileCount === 0) {
+    console.error('Error: Merged coverage is empty!');
+    process.exit(1);
+  }
 
-const fileCount = Object.keys(mergedCoverage).length;
-console.log(
-  `Successfully merged coverage from ${coverageFiles.length} files into ${outputFile}`,
-);
-console.log(`Merged coverage contains ${fileCount} files`);
+  // Write the file
+  fs.writeFileSync(outputFile, JSON.stringify(mergedCoverage, null, 2), 'utf8');
+
+  // Verify the file was written correctly
+  if (!fs.existsSync(outputFile)) {
+    console.error(`Error: Output file was not created: ${outputFile}`);
+    process.exit(1);
+  }
+
+  const fileSize = fs.statSync(outputFile).size;
+  if (fileSize === 0) {
+    console.error(`Error: Output file is empty: ${outputFile}`);
+    process.exit(1);
+  }
+
+  // Verify it's valid JSON by reading it back
+  try {
+    const verifyContent = JSON.parse(fs.readFileSync(outputFile, 'utf8'));
+    if (Object.keys(verifyContent).length === 0) {
+      console.error(
+        'Error: Merged coverage file contains no data after verification',
+      );
+      process.exit(1);
+    }
+  } catch (parseError) {
+    console.error(
+      'Error: Merged coverage file is not valid JSON:',
+      parseError.message,
+    );
+    process.exit(1);
+  }
+
+  console.log(
+    `Successfully merged coverage from ${coverageFiles.length} files into ${outputFile}`,
+  );
+  console.log(`Merged coverage contains ${fileCount} files`);
+
+  // Exit with success code
+  process.exit(0);
+} catch (error) {
+  console.error(`Error writing merged coverage file:`, error.message);
+  process.exit(1);
+}

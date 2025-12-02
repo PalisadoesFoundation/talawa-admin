@@ -1,10 +1,9 @@
 import { defineConfig } from 'cypress';
 import fs from 'node:fs';
-import { createRequire } from 'node:module';
+import codeCoverageTask from '@cypress/code-coverage/task';
 import dotenv from 'dotenv';
 dotenv.config();
 
-const require = createRequire(import.meta.url);
 const PORT = process.env.PORT || '4321';
 
 export default defineConfig({
@@ -37,32 +36,7 @@ export default defineConfig({
       apiUrl: process.env.CYPRESS_API_URL || 'http://localhost:4000/graphql',
     },
     setupNodeEvents(on, config) {
-      // Setup code coverage task - must be called before other task registrations
-      // This registers the coverageReport task that @cypress/code-coverage/support uses
-      // Use require for CommonJS compatibility
-      try {
-        const codeCoverageTask = require('@cypress/code-coverage/task');
-        const taskFn = codeCoverageTask.default || codeCoverageTask;
-        if (typeof taskFn === 'function') {
-          taskFn(on, config);
-        }
-      } catch (error) {
-        console.warn('Failed to load @cypress/code-coverage/task:', error);
-
-        // Fallback: register minimal no-op implementations for all coverage tasks
-        on('task', {
-          resetCoverage() {
-            return null;
-          },
-          combineCoverage() {
-            return null;
-          },
-          coverageReport() {
-            return null;
-          },
-        });
-      }
-
+      codeCoverageTask(on, config);
       // Custom task to log messages and read files
       on('task', {
         log(message: string) {
