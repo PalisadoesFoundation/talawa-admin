@@ -43,6 +43,9 @@ import { act } from 'react-dom/test-utils';
 import { vi } from 'vitest';
 // Mock the imported modules
 describe('TestWrapper', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   it('renders without crashing', () => {
     render(
       <TestWrapper>

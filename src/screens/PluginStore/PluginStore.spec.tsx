@@ -49,11 +49,20 @@ vi.mock('react-i18next', () => ({
 }));
 
 // Mock GraphQL mutations and queries
-const mockCreatePlugin = vi.fn();
-const mockUpdatePlugin = vi.fn();
-const mockDeletePlugin = vi.fn();
-const mockGetAllPlugins = vi.fn();
-const mockRefetch = vi.fn();
+const {
+  mockCreatePlugin,
+  mockUpdatePlugin,
+  mockDeletePlugin,
+  mockGetAllPlugins,
+  mockRefetch,
+} = vi.hoisted(() => ({
+  mockCreatePlugin: vi.fn(),
+  mockUpdatePlugin: vi.fn(),
+  mockDeletePlugin: vi.fn(),
+  mockGetAllPlugins: vi.fn(),
+  mockRefetch: vi.fn(),
+}));
+
 let mockGraphQLError: ApolloError | null = null;
 
 vi.mock('plugin/graphql-service', () => ({
@@ -139,6 +148,20 @@ describe('PluginStore', () => {
         reload: shared.reload,
       },
     });
+
+    Object.defineProperty(window, 'matchMedia', {
+      writable: true,
+      value: vi.fn().mockImplementation((query) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(), // deprecated
+        removeListener: vi.fn(), // deprecated
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    });
     // Reset mockGraphQLError to ensure test isolation
     mockGraphQLError = null;
 
@@ -170,7 +193,7 @@ describe('PluginStore', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   const renderPluginStore = () => {

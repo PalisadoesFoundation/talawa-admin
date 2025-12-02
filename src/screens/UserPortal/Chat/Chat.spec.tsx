@@ -241,7 +241,7 @@ describe('Chat Component', () => {
 
   const renderComponent = (customMocks = mocks) =>
     render(
-      <MockedProvider mocks={customMocks} addTypename={false}>
+      <MockedProvider mocks={customMocks}>
         <I18nextProvider i18n={i18nForTest}>
           <Provider store={store}>
             <Chat />
@@ -272,7 +272,9 @@ describe('Chat Component', () => {
       expect(chatRoom).toHaveAttribute('data-selected-contact', 'chat-1');
     });
 
-    expect(setItemMock).toHaveBeenCalledWith('selectedChatId', 'chat-1');
+    await waitFor(() => {
+      expect(setItemMock).toHaveBeenCalledWith('selectedChatId', 'chat-1');
+    });
   });
 
   test('should select chat from local storage if it exists', async () => {

@@ -79,6 +79,10 @@ describe('Apollo Client Configuration', () => {
     createLocalStorageMock('valid');
   });
 
+  afterEach(() => {
+    vi.clearAllMocks(); // Only module mocks, no spies
+  });
+
   it('should create an Apollo Client with correct configuration', (): void => {
     const client = new ApolloClient({
       cache: new InMemoryCache(),

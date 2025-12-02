@@ -19,6 +19,7 @@ describe('AgendaItemsDeleteModal', () => {
   beforeEach(() => {
     mockToggleDeleteModal = vi.fn();
     mockDeleteAgendaItemHandler = vi.fn();
+    vi.clearAllMocks();
     // Reset any manual timers
     vi.useRealTimers();
   });

@@ -33,6 +33,7 @@ export const MOCKS = [
       result: {
         data: {
           updateCurrentUser: {
+            __typename: 'User',
             id: '65ba1621b7b00c20e5f1d8d2',
           },
         },
@@ -136,6 +137,7 @@ export const UPDATE_MOCK = [
     result: {
       data: {
         updateCurrentUser: {
+          __typename: 'User',
           addressLine1: '',
           addressLine2: '',
           avatarMimeType: null,

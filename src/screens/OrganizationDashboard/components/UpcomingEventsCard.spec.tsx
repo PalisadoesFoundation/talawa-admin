@@ -75,6 +75,10 @@ vi.mock(
 );
 
 describe('UpcomingEventsCard Component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   const mockEventData: TestInterfaceEvent[] = [
     {
       node: {

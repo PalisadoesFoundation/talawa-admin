@@ -18,6 +18,9 @@ import { vi } from 'vitest';
 const link = new StaticMockLink(checkInQueryMock, true);
 
 describe('Testing Check In Attendees Modal', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const props = {
     show: true,
     eventId: 'event123',
@@ -31,7 +34,7 @@ describe('Testing Check In Attendees Modal', () => {
 
   test('The modal should be rendered, and all the fetched users should be shown properly and user filtering should work', async () => {
     const { queryByText, getByPlaceholderText } = render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
@@ -122,7 +125,7 @@ describe('Testing Check In Attendees Modal', () => {
     const linkRecurring = new StaticMockLink(recurringMock, true);
 
     const { queryByText, findByText } = render(
-      <MockedProvider addTypename={false} link={linkRecurring}>
+      <MockedProvider link={linkRecurring}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
@@ -192,7 +195,7 @@ describe('Testing Check In Attendees Modal', () => {
     const linkUnknown = new StaticMockLink(unknownUserMock, true);
 
     const { findByText } = render(
-      <MockedProvider addTypename={false} link={linkUnknown}>
+      <MockedProvider link={linkUnknown}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
@@ -239,7 +242,7 @@ describe('Testing Check In Attendees Modal', () => {
     const linkNull = new StaticMockLink(nullDataMock, true);
 
     const { queryByText } = render(
-      <MockedProvider addTypename={false} link={linkNull}>
+      <MockedProvider link={linkNull}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
@@ -294,7 +297,7 @@ describe('Testing Check In Attendees Modal', () => {
     const linkNoAttendees = new StaticMockLink(noAttendeesMock, true);
 
     const { queryByText } = render(
-      <MockedProvider addTypename={false} link={linkNoAttendees}>
+      <MockedProvider link={linkNoAttendees}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>

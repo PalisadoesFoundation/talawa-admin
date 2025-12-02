@@ -15,7 +15,9 @@ vi.mock('react-chartjs-2', async () => ({
   Bar: () => null,
 }));
 
-const mockUseParams = vi.fn();
+const { mockUseParams } = vi.hoisted(() => ({
+  mockUseParams: vi.fn(),
+}));
 // Mock react-router-dom
 vi.mock('react-router', async () => ({
   ...(await vi.importActual('react-router')),
@@ -303,12 +305,15 @@ const mockStatistics = {
 };
 
 describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
     // Set default params for most tests
     mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event123' });
   });
-
   it('renders modal with correct initial state', async () => {
     render(
       <MockedProvider mocks={mocks}>
@@ -829,7 +834,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'template123' });
 
     render(
-      <MockedProvider mocks={recurringTemplateMocks} addTypename={false}>
+      <MockedProvider mocks={recurringTemplateMocks}>
         <AttendanceStatisticsModal
           show={true}
           handleClose={() => {}}

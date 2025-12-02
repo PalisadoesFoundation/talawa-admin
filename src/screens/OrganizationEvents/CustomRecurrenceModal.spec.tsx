@@ -91,6 +91,10 @@ describe('CustomRecurrenceModal', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   test('renders modal when open', () => {
     renderComponent();
 

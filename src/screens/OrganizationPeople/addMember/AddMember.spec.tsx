@@ -264,18 +264,10 @@ const renderAddMemberView = ({
   );
 
   if (link) {
-    return render(
-      <MockedProvider addTypename={false} link={link}>
-        {content}
-      </MockedProvider>,
-    );
+    return render(<MockedProvider link={link}>{content}</MockedProvider>);
   }
 
-  return render(
-    <MockedProvider addTypename={false} mocks={mocks}>
-      {content}
-    </MockedProvider>,
-  );
+  return render(<MockedProvider mocks={mocks}>{content}</MockedProvider>);
 };
 
 describe('AddMember Component', () => {
@@ -1106,7 +1098,7 @@ test('calls setUserName, resetPagination and fetchUsers on search', async () => 
   ];
 
   render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
         <I18nextProvider i18n={i18nForTest}>
           <AddMember />

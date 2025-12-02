@@ -2,7 +2,7 @@
 
 ***
 
-# Interface: InternalFileWriterPluginOptions
+# Interface: IInternalFileWriterPluginOptions
 
 Defined in: [src/plugin/vite/internalFileWriterPlugin.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/vite/internalFileWriterPlugin.ts#L12)
 

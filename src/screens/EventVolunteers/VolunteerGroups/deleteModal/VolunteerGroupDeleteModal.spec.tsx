@@ -93,7 +93,7 @@ const renderGroupDeleteModal = (
   props: InterfaceDeleteVolunteerGroupModal,
 ): RenderResult => {
   return render(
-    <MockedProvider link={link} addTypename={false}>
+    <MockedProvider link={link}>
       <Provider store={store}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>

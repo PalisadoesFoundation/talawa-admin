@@ -100,7 +100,7 @@ describe('ProfileDropdown Component', () => {
   test('renders with user information', () => {
     setItem('role', 'regular');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileCard />
@@ -119,7 +119,7 @@ describe('ProfileDropdown Component', () => {
   test('renders Admin', () => {
     setItem('AdminFor', ['123']);
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <ProfileCard />
         </BrowserRouter>
@@ -131,7 +131,7 @@ describe('ProfileDropdown Component', () => {
   test('handles image load error', () => {
     setItem('role', 'regular');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileCard />
@@ -153,7 +153,7 @@ describe('ProfileDropdown Component', () => {
     setItem('UserImage', 'null');
     setItem('role', 'regular');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileCard />
@@ -170,7 +170,7 @@ describe('ProfileDropdown Component', () => {
     setItem('name', 'This is a very long name that should be truncated');
     setItem('role', 'regular');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileCard />
@@ -193,7 +193,7 @@ describe('ProfileDropdown Component', () => {
     setItem('name', null);
     setItem('role', 'regular');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileCard />
@@ -213,7 +213,7 @@ describe('ProfileDropdown Component', () => {
     setItem('name', '');
     setItem('role', 'regular');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileCard />
@@ -233,7 +233,7 @@ describe('ProfileDropdown Component', () => {
     setItem('name', 'John');
     setItem('role', 'regular');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileCard />
@@ -256,7 +256,7 @@ describe('Member screen routing testing', () => {
     setItem('AdminFor', []);
     setItem('role', 'regular');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileCard />
@@ -278,7 +278,7 @@ describe('Member screen routing testing', () => {
     setItem('role', 'regular');
 
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileCard />
@@ -300,7 +300,7 @@ describe('Member screen routing testing', () => {
     setItem('id', '123');
 
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <Routes>
@@ -324,7 +324,7 @@ describe('Member screen routing testing', () => {
     setItem('id', '123');
 
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <Routes>
@@ -345,7 +345,7 @@ describe('Member screen routing testing', () => {
   test('navigates to /user/settings when admin is in user portal', async () => {
     setItem('role', 'administrator');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileCard portal="user" />

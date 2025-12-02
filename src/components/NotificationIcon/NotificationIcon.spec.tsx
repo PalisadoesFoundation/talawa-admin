@@ -80,7 +80,7 @@ describe('NotificationIcon Component', () => {
 
   it('should render loading state', async () => {
     render(
-      <MockedProvider mocks={mocks([])} addTypename={false}>
+      <MockedProvider mocks={mocks([])}>
         <MemoryRouter>
           <NotificationIcon />
         </MemoryRouter>
@@ -94,7 +94,7 @@ describe('NotificationIcon Component', () => {
 
   it('should render error state', async () => {
     render(
-      <MockedProvider mocks={mocks([], true)} addTypename={false}>
+      <MockedProvider mocks={mocks([], true)}>
         <MemoryRouter>
           <NotificationIcon />
         </MemoryRouter>
@@ -110,7 +110,7 @@ describe('NotificationIcon Component', () => {
 
   it('should render no new notifications message', async () => {
     render(
-      <MockedProvider mocks={mocks([])} addTypename={false}>
+      <MockedProvider mocks={mocks([])}>
         <MemoryRouter>
           <NotificationIcon />
         </MemoryRouter>
@@ -125,7 +125,7 @@ describe('NotificationIcon Component', () => {
   it('should display unread count badge', async () => {
     const notifications = generateNotifications(3, false);
     render(
-      <MockedProvider mocks={mocks(notifications)} addTypename={false}>
+      <MockedProvider mocks={mocks(notifications)}>
         <MemoryRouter>
           <NotificationIcon />
         </MemoryRouter>
@@ -139,7 +139,7 @@ describe('NotificationIcon Component', () => {
   it('should display 9+ when unread count is greater than 9', async () => {
     const notifications = generateNotifications(10, false);
     render(
-      <MockedProvider mocks={mocks(notifications)} addTypename={false}>
+      <MockedProvider mocks={mocks(notifications)}>
         <MemoryRouter>
           <NotificationIcon />
         </MemoryRouter>
@@ -153,7 +153,7 @@ describe('NotificationIcon Component', () => {
   it('should navigate to notification page on click', async () => {
     const notifications = generateNotifications(1, false);
     render(
-      <MockedProvider mocks={mocks(notifications)} addTypename={false}>
+      <MockedProvider mocks={mocks(notifications)}>
         <MemoryRouter>
           <NotificationIcon />
         </MemoryRouter>
@@ -168,7 +168,7 @@ describe('NotificationIcon Component', () => {
 
   it('should navigate to all notifications page', async () => {
     render(
-      <MockedProvider mocks={mocks([])} addTypename={false}>
+      <MockedProvider mocks={mocks([])}>
         <MemoryRouter initialEntries={['/admin/dashboard']}>
           <Routes>
             <Route path="/admin/dashboard" element={<NotificationIcon />} />
@@ -185,7 +185,7 @@ describe('NotificationIcon Component', () => {
 
   it('should navigate to user notification page from user portal', async () => {
     render(
-      <MockedProvider mocks={mocks([])} addTypename={false}>
+      <MockedProvider mocks={mocks([])}>
         <MemoryRouter initialEntries={['/user/dashboard']}>
           <Routes>
             <Route path="/user/dashboard" element={<NotificationIcon />} />
@@ -205,7 +205,7 @@ describe('NotificationIcon Component', () => {
       { id: '1', title: 'Test', body: 'Test body', isRead: false },
     ];
     render(
-      <MockedProvider mocks={mocks(notifications)} addTypename={false}>
+      <MockedProvider mocks={mocks(notifications)}>
         <MemoryRouter initialEntries={['/admin/dashboard']}>
           <Routes>
             <Route path="/admin/dashboard" element={<NotificationIcon />} />
@@ -227,7 +227,7 @@ describe('NotificationIcon Component', () => {
     ];
     notifications[1].id = '2';
     render(
-      <MockedProvider mocks={mocks(notifications)} addTypename={false}>
+      <MockedProvider mocks={mocks(notifications)}>
         <MemoryRouter>
           <NotificationIcon />
         </MemoryRouter>
@@ -242,7 +242,7 @@ describe('NotificationIcon Component', () => {
   it('should truncate long notification bodies', async () => {
     const notifications = generateNotifications(1, false, true);
     render(
-      <MockedProvider mocks={mocks(notifications)} addTypename={false}>
+      <MockedProvider mocks={mocks(notifications)}>
         <MemoryRouter>
           <NotificationIcon />
         </MemoryRouter>
@@ -258,7 +258,7 @@ describe('NotificationIcon Component', () => {
   it('should not truncate short notification bodies', async () => {
     const notifications = generateNotifications(1, false, false);
     render(
-      <MockedProvider mocks={mocks(notifications)} addTypename={false}>
+      <MockedProvider mocks={mocks(notifications)}>
         <MemoryRouter>
           <NotificationIcon />
         </MemoryRouter>
@@ -272,7 +272,7 @@ describe('NotificationIcon Component', () => {
 
   it('should navigate to user notification page from user portal root', async () => {
     render(
-      <MockedProvider mocks={mocks([])} addTypename={false}>
+      <MockedProvider mocks={mocks([])}>
         <MemoryRouter initialEntries={['/user']}>
           <Routes>
             <Route path="/user" element={<NotificationIcon />} />

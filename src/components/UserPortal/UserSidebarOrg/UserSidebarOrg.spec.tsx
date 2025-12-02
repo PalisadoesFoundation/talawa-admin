@@ -279,7 +279,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -301,7 +301,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   //   setItem('FirstName', 'John');
   //   setItem('LastName', 'Doe');
   //   render(
-  //     <MockedProvider addTypename={false} link={link}>
+  //     <MockedProvider link={link}>
   //       <BrowserRouter>
   //         <Provider store={store}>
   //           <I18nextProvider i18n={i18nForTest}>
@@ -321,7 +321,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -339,7 +339,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   it('Testing when screen size is less than 820px', async () => {
     setItem('SuperAdmin', true);
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -365,7 +365,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
     render(
-      <MockedProvider addTypename={false} link={linkImage}>
+      <MockedProvider link={linkImage}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -384,7 +384,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   //   setItem('FirstName', 'John');
   //   setItem('LastName', 'Doe');
   //   render(
-  //     <MockedProvider addTypename={false} link={linkEmpty}>
+  //     <MockedProvider link={linkEmpty}>
   //       <BrowserRouter>
   //         <Provider store={store}>
   //           <I18nextProvider i18n={i18nForTest}>
@@ -406,7 +406,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -424,7 +424,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -444,7 +444,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     setItem('LastName', 'Doe');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -475,7 +475,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     setItem('LastName', 'Doe');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -505,7 +505,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     setItem('LastName', 'Doe');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -535,7 +535,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     setItem('LastName', 'Doe');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -577,7 +577,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -620,7 +620,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -649,7 +649,7 @@ describe('Plugin System Integration', () => {
     setItem('SuperAdmin', true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -683,7 +683,7 @@ describe('Plugin System Integration', () => {
     setItem('SuperAdmin', true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -714,7 +714,7 @@ describe('Plugin System Integration', () => {
     setItem('SuperAdmin', true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -745,7 +745,7 @@ describe('Plugin System Integration', () => {
     setItem('SuperAdmin', true);
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -785,7 +785,7 @@ describe('Plugin System Integration', () => {
 
     const setHideDrawer = vi.fn();
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -804,7 +804,7 @@ describe('Plugin System Integration', () => {
 
   it('should call usePluginDrawerItems with correct parameters', () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -842,7 +842,7 @@ describe('Dropdown State Management', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -887,7 +887,7 @@ describe('Dropdown State Management', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

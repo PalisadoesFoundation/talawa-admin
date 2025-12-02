@@ -37,7 +37,10 @@ const link3 = new StaticMockLink(ERROR_MOCK, true);
 const link4 = new StaticMockLink(MOCK_FILE, true);
 const link5 = new StaticMockLink(UPDATE_MOCK, true);
 
-const mockReload = vi.fn();
+const { mockReload } = vi.hoisted(() => ({
+  mockReload: vi.fn(),
+}));
+
 Object.defineProperty(window, 'location', {
   value: {
     ...window.location,
@@ -75,7 +78,7 @@ const props = {
 
 const renderMemberDetailScreen = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/orgtags/123']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -99,8 +102,15 @@ const renderMemberDetailScreen = (link: ApolloLink): RenderResult => {
 describe('MemberDetail', () => {
   global.alert = vi.fn();
 
+  beforeEach(() => {
+    vi.spyOn(toast, 'success');
+    vi.spyOn(toast, 'error');
+    vi.spyOn(toast, 'info');
+    vi.spyOn(toast, 'warning');
+  });
+
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
     cleanup();
   });
 
@@ -233,7 +243,7 @@ describe('MemberDetail', () => {
     const dicebearUrl = 'mocked-data-uri';
 
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <BrowserRouter>
           <MemberDetail id="123" />
         </BrowserRouter>
@@ -276,7 +286,7 @@ describe('MemberDetail', () => {
 
   test('should be redirected to / if member id is undefined', async () => {
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -328,7 +338,6 @@ describe('MemberDetail', () => {
   });
 
   it('validates password', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
     renderMemberDetailScreen(link1);
     await waitFor(() => {
       expect(screen.getByTestId('inputPassword')).toBeInTheDocument();
@@ -339,7 +348,7 @@ describe('MemberDetail', () => {
 
     fireEvent.change(passwordInput, { target: { value: 'weak' } });
 
-    expect(toastErrorSpy).toHaveBeenCalledWith(
+    expect(toast.error).toHaveBeenCalledWith(
       'Password must be at least 8 characters long.',
     );
   });

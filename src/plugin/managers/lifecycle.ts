@@ -406,7 +406,7 @@ export class LifecycleManager {
         typeof defaultExport === 'object' &&
         'onInstall' in defaultExport
       ) {
-        const lifecycle = defaultExport as any;
+        const lifecycle = defaultExport as { onInstall?: () => Promise<void> };
         if (typeof lifecycle.onInstall === 'function') {
           await lifecycle.onInstall();
         }
@@ -437,7 +437,7 @@ export class LifecycleManager {
         typeof defaultExport === 'object' &&
         'onActivate' in defaultExport
       ) {
-        const lifecycle = defaultExport as any;
+        const lifecycle = defaultExport as { onActivate?: () => Promise<void> };
         if (typeof lifecycle.onActivate === 'function') {
           await lifecycle.onActivate();
         }
@@ -468,7 +468,9 @@ export class LifecycleManager {
         typeof defaultExport === 'object' &&
         'onDeactivate' in defaultExport
       ) {
-        const lifecycle = defaultExport as any;
+        const lifecycle = defaultExport as {
+          onDeactivate?: () => Promise<void>;
+        };
         if (typeof lifecycle.onDeactivate === 'function') {
           await lifecycle.onDeactivate();
         }
@@ -499,7 +501,9 @@ export class LifecycleManager {
         typeof defaultExport === 'object' &&
         'onUninstall' in defaultExport
       ) {
-        const lifecycle = defaultExport as any;
+        const lifecycle = defaultExport as {
+          onUninstall?: () => Promise<void>;
+        };
         if (typeof lifecycle.onUninstall === 'function') {
           await lifecycle.onUninstall();
         }

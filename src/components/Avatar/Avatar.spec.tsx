@@ -33,6 +33,9 @@ vi.mock('utils/i18nForTest', () => ({
 }));
 
 describe('Avatar component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   /**
    * Test: Verifies the `Avatar` component renders correctly with the `name` and `alt` attributes.
    *

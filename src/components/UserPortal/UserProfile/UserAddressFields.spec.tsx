@@ -17,6 +17,9 @@ import { vi } from 'vitest';
  */
 
 describe('UserAddressFields', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const mockProps = {
     t: (key: string) => `translated_${key}`,
     handleFieldChange: vi.fn(),

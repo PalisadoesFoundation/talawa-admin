@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_MOCK**: `object`[]
 
-Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Settings/SettingsMocks.ts#L126)
+Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:127](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Settings/SettingsMocks.ts#L127)
 
 ## Type Declaration
 
@@ -41,6 +41,10 @@ Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:126](https://githu
 #### result.data.updateCurrentUser
 
 > **updateCurrentUser**: `object`
+
+#### result.data.updateCurrentUser.\_\_typename
+
+> **\_\_typename**: `string` = `'User'`
 
 #### result.data.updateCurrentUser.addressLine1
 

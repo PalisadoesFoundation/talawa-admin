@@ -280,6 +280,32 @@ export const MOCK_RESPONSES = {
       { hasNextPage: true },
     ),
   ],
+
+  FETCHMORE_UNDEFINED: [
+    listMock(
+      {
+        input: { id: 'orgId' },
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+      [makeTagEdge(1)],
+      { hasNextPage: true },
+    ),
+    {
+      request: {
+        query: ORGANIZATION_USER_TAGS_LIST_PG,
+        variables: {
+          input: { id: 'orgId' },
+          first: TAGS_QUERY_DATA_CHUNK_SIZE,
+          after: '1',
+          where: { name: { starts_with: '' } },
+          sortedBy: { id: 'DESCENDING' },
+        },
+      },
+      result: { data: undefined },
+    },
+  ],
 };
 
 export const MOCKS = MOCK_RESPONSES.DEFAULT;
@@ -290,3 +316,4 @@ export const MOCKS_UNDEFINED_USER_TAGS = MOCK_RESPONSES.UNDEFINED_USER_TAGS;
 export const MOCKS_NULL_END_CURSOR = MOCK_RESPONSES.NULL_END_CURSOR;
 export const MOCKS_NO_MORE_PAGES = MOCK_RESPONSES.DEFAULT;
 export const MOCKS_ASCENDING_NO_SEARCH = MOCK_RESPONSES.ASCENDING_NO_SEARCH;
+export const MOCKS_FETCHMORE_UNDEFINED = MOCK_RESPONSES.FETCHMORE_UNDEFINED;

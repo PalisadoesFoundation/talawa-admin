@@ -1,5 +1,6 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi, afterEach } from 'vitest';
+import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import PluginRoutes from '../../routes/PluginRoutes';
 import { usePluginRoutes } from '../../hooks';
@@ -10,7 +11,10 @@ vi.mock('../../hooks', () => ({
 }));
 
 // Mock React.lazy and Suspense
-const mockLazyComponent = vi.fn();
+const { mockLazyComponent } = vi.hoisted(() => ({
+  mockLazyComponent: vi.fn(),
+}));
+
 vi.mock('react', async () => {
   const actual = await vi.importActual('react');
   return {
@@ -41,39 +45,29 @@ vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
   return {
     ...actual,
-    Route: ({ path, element }: { path: string; element: React.ReactNode }) => (
-      <div data-testid={`route-${path}`} data-path={path}>
-        {element}
-      </div>
+    Route: vi.fn(
+      ({ path, element }: { path: string; element: React.ReactNode }) =>
+        React.createElement(
+          'div',
+          { 'data-testid': `route-${path}`, 'data-path': path },
+          element,
+        ),
     ),
   };
 });
 
 const mockUsePluginRoutes = vi.mocked(usePluginRoutes);
 
-// Test wrapper component
-const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <BrowserRouter>{children}</BrowserRouter>
-);
-
 describe('PluginRoutes', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Basic Rendering', () => {
     it('should render without crashing', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
-      render(
-        <TestWrapper>
-          <PluginRoutes />
-        </TestWrapper>,
-      );
+      render(<PluginRoutes />, { wrapper: BrowserRouter });
 
       // Should render the component even with empty routes - just an empty div
       expect(document.body).toBeInTheDocument();
@@ -82,11 +76,7 @@ describe('PluginRoutes', () => {
     it('should render with default props', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
-      render(
-        <TestWrapper>
-          <PluginRoutes />
-        </TestWrapper>,
-      );
+      render(<PluginRoutes />, { wrapper: BrowserRouter });
 
       expect(mockUsePluginRoutes).toHaveBeenCalledWith([], false);
     });
@@ -97,9 +87,8 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
       render(
-        <TestWrapper>
-          <PluginRoutes userPermissions={userPermissions} isAdmin={isAdmin} />
-        </TestWrapper>,
+        <PluginRoutes userPermissions={userPermissions} isAdmin={isAdmin} />,
+        { wrapper: BrowserRouter },
       );
 
       expect(mockUsePluginRoutes).toHaveBeenCalledWith(
@@ -122,11 +111,7 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(
-        <TestWrapper>
-          <PluginRoutes />
-        </TestWrapper>,
-      );
+      render(<PluginRoutes />, { wrapper: BrowserRouter });
 
       expect(screen.getByTestId('route-/test')).toBeInTheDocument();
       expect(screen.getByTestId('route-/test')).toHaveAttribute(
@@ -154,11 +139,7 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(
-        <TestWrapper>
-          <PluginRoutes />
-        </TestWrapper>,
-      );
+      render(<PluginRoutes />, { wrapper: BrowserRouter });
 
       expect(screen.getByTestId('route-/plugin1')).toBeInTheDocument();
       expect(screen.getByTestId('route-/plugin2')).toBeInTheDocument();
@@ -167,24 +148,16 @@ describe('PluginRoutes', () => {
     it('should handle empty routes array', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
-      render(
-        <TestWrapper>
-          <PluginRoutes />
-        </TestWrapper>,
-      );
+      render(<PluginRoutes />, { wrapper: BrowserRouter });
 
       // Should render nothing when no routes are provided
       expect(screen.queryByTestId(/route-/)).not.toBeInTheDocument();
     });
 
     it('should handle null/undefined routes gracefully', () => {
-      mockUsePluginRoutes.mockReturnValue(null as any);
+      mockUsePluginRoutes.mockReturnValue(null as unknown as []);
 
-      render(
-        <TestWrapper>
-          <PluginRoutes />
-        </TestWrapper>,
-      );
+      render(<PluginRoutes />, { wrapper: BrowserRouter });
 
       // Should render nothing when routes are null/undefined
       expect(screen.queryByTestId(/route-/)).not.toBeInTheDocument();
@@ -204,11 +177,7 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(
-        <TestWrapper>
-          <PluginRoutes />
-        </TestWrapper>,
-      );
+      render(<PluginRoutes />, { wrapper: BrowserRouter });
 
       expect(screen.getByTestId('suspense')).toBeInTheDocument();
       expect(screen.getByText('Loading plugin...')).toBeInTheDocument();
@@ -229,11 +198,9 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(
-        <TestWrapper>
-          <PluginRoutes fallback={customFallback} />
-        </TestWrapper>,
-      );
+      render(<PluginRoutes fallback={customFallback} />, {
+        wrapper: BrowserRouter,
+      });
 
       expect(screen.getByTestId('custom-fallback')).toBeInTheDocument();
       expect(screen.getByText('Custom Loading...')).toBeInTheDocument();
@@ -251,11 +218,7 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(
-        <TestWrapper>
-          <PluginRoutes />
-        </TestWrapper>,
-      );
+      render(<PluginRoutes />, { wrapper: BrowserRouter });
 
       // The lazy component should be created and rendered
       expect(screen.getByTestId('lazy-component')).toBeInTheDocument();
@@ -275,11 +238,7 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(
-        <TestWrapper>
-          <PluginRoutes />
-        </TestWrapper>,
-      );
+      render(<PluginRoutes />, { wrapper: BrowserRouter });
 
       // Should render the route structure with suspense wrapper
       expect(screen.getByTestId('route-/error')).toBeInTheDocument();
@@ -299,11 +258,7 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(
-        <TestWrapper>
-          <PluginRoutes />
-        </TestWrapper>,
-      );
+      render(<PluginRoutes />, { wrapper: BrowserRouter });
 
       // Should still render the route structure
       expect(screen.getByTestId('route-/test')).toBeInTheDocument();
@@ -322,11 +277,7 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(
-        <TestWrapper>
-          <PluginRoutes />
-        </TestWrapper>,
-      );
+      render(<PluginRoutes />, { wrapper: BrowserRouter });
 
       // Should show loading state
       expect(screen.getByText('Loading plugin...')).toBeInTheDocument();
@@ -353,11 +304,7 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(
-        <TestWrapper>
-          <PluginRoutes />
-        </TestWrapper>,
-      );
+      render(<PluginRoutes />, { wrapper: BrowserRouter });
 
       const route1 = screen.getByTestId('route-/path1');
       const route2 = screen.getByTestId('route-/path2');
@@ -386,11 +333,7 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(
-        <TestWrapper>
-          <PluginRoutes />
-        </TestWrapper>,
-      );
+      render(<PluginRoutes />, { wrapper: BrowserRouter });
 
       expect(screen.getByTestId('route-/path1')).toBeInTheDocument();
       expect(screen.getByTestId('route-/path2')).toBeInTheDocument();
@@ -401,11 +344,9 @@ describe('PluginRoutes', () => {
     it('should handle undefined userPermissions', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
-      render(
-        <TestWrapper>
-          <PluginRoutes userPermissions={undefined} />
-        </TestWrapper>,
-      );
+      render(<PluginRoutes userPermissions={undefined} />, {
+        wrapper: BrowserRouter,
+      });
 
       expect(mockUsePluginRoutes).toHaveBeenCalledWith([], false);
     });
@@ -413,11 +354,7 @@ describe('PluginRoutes', () => {
     it('should handle undefined isAdmin', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
-      render(
-        <TestWrapper>
-          <PluginRoutes isAdmin={undefined} />
-        </TestWrapper>,
-      );
+      render(<PluginRoutes isAdmin={undefined} />, { wrapper: BrowserRouter });
 
       expect(mockUsePluginRoutes).toHaveBeenCalledWith([], false);
     });
@@ -425,11 +362,7 @@ describe('PluginRoutes', () => {
     it('should handle empty userPermissions array', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
-      render(
-        <TestWrapper>
-          <PluginRoutes userPermissions={[]} />
-        </TestWrapper>,
-      );
+      render(<PluginRoutes userPermissions={[]} />, { wrapper: BrowserRouter });
 
       expect(mockUsePluginRoutes).toHaveBeenCalledWith([], false);
     });
@@ -448,11 +381,7 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(
-        <TestWrapper>
-          <PluginRoutes />
-        </TestWrapper>,
-      );
+      render(<PluginRoutes />, { wrapper: BrowserRouter });
 
       expect(
         screen.getByTestId('route-/path/with-special_chars.and+symbols'),
@@ -471,11 +400,7 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(
-        <TestWrapper>
-          <PluginRoutes />
-        </TestWrapper>,
-      );
+      render(<PluginRoutes />, { wrapper: BrowserRouter });
 
       expect(screen.getByTestId('route-/empty')).toBeInTheDocument();
     });
@@ -493,11 +418,7 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(
-        <TestWrapper>
-          <PluginRoutes />
-        </TestWrapper>,
-      );
+      render(<PluginRoutes />, { wrapper: BrowserRouter });
 
       expect(screen.getByTestId('route-/long')).toBeInTheDocument();
     });

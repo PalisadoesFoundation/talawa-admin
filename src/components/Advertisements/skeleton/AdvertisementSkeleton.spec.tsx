@@ -19,7 +19,7 @@ describe('Testing Advertisement Component', () => {
       <Provider store={store}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
-            <MockedProvider addTypename={false}>
+            <MockedProvider>
               <AdvertisementSkeleton />
             </MockedProvider>
           </I18nextProvider>

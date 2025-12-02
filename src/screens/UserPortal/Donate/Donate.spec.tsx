@@ -187,7 +187,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
   test('Screen should be rendered properly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -206,7 +206,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
   test('Donation amount input should update state', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -224,7 +224,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
   test('Currency dropdown should update state', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -244,7 +244,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
   test('should handle search input changes', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -263,7 +263,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
   test('should render pagination list when donations are present', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -281,7 +281,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
   test('handles pagination changes for rows per page', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -322,7 +322,7 @@ describe('Testing Donate Screen [User Portal]', () => {
     const paginationLink = new StaticMockLink([multipleDonationsMock], true);
 
     render(
-      <MockedProvider addTypename={false} link={paginationLink}>
+      <MockedProvider link={paginationLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -341,7 +341,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
   test('search button is present and clickable', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -361,7 +361,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
   test('donation form elements are properly initialized', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -380,7 +380,7 @@ describe('Testing Donate Screen [User Portal]', () => {
   });
   test('displays loading state while fetching donations', async () => {
     render(
-      <MockedProvider addTypename={false} mocks={MOCKS}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -415,7 +415,7 @@ describe('Testing Donate Screen [User Portal]', () => {
     ];
 
     render(
-      <MockedProvider addTypename={false} mocks={emptyMocks}>
+      <MockedProvider mocks={emptyMocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -437,7 +437,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
   test('Currency is swtiched to USD', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -460,7 +460,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
   test('Currency is swtiched to INR', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -482,7 +482,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
   test('Currency is swtiched to EUR', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -504,7 +504,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
   test('Checking the existence of Donation Cards', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -524,7 +524,7 @@ describe('Testing Donate Screen [User Portal]', () => {
     setItem('userId', '123');
     setItem('name', 'name');
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -544,7 +544,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
   test('displays error toast for donation amount below minimum', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -569,7 +569,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
   test('displays error toast for donation amount above maximum', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -594,7 +594,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
   test('displays error toast for empty donation amount', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -618,7 +618,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
   test('displays error toast for invalid (non-numeric) donation amount', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -647,7 +647,7 @@ describe('Testing Donate Screen [User Portal]', () => {
     setItem('name', 'name');
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -686,7 +686,7 @@ describe('Testing Donate Screen [User Portal]', () => {
     );
 
     render(
-      <MockedProvider addTypename={false} link={nullDataLink}>
+      <MockedProvider link={nullDataLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -702,7 +702,7 @@ describe('Testing Donate Screen [User Portal]', () => {
   });
   test('handles zero rows per page in pagination', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -724,7 +724,7 @@ describe('Testing Donate Screen [User Portal]', () => {
   });
   test('donateToOrg validation - empty amount shows error toast', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -768,7 +768,7 @@ describe('Testing Donate Screen [User Portal]', () => {
     const paginationLink = new StaticMockLink([multipleDonationsMock], true);
 
     render(
-      <MockedProvider addTypename={false} link={paginationLink}>
+      <MockedProvider link={paginationLink}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -791,7 +791,7 @@ describe('Testing Donate Screen [User Portal]', () => {
   });
   test('donateToOrg validation - non-numeric amount shows error toast', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -814,7 +814,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
   test('donateToOrg validation - amount less than minimum shows error toast', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -837,7 +837,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
   test('donateToOrg validation - amount greater than maximum shows error toast', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -887,7 +887,7 @@ describe('Testing Donate Screen [User Portal]', () => {
     setItem('name', 'name');
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -941,7 +941,7 @@ describe('Testing Donate Screen [User Portal]', () => {
     setItem('name', 'name');
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

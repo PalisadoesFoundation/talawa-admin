@@ -78,6 +78,9 @@ const mockRecurringEventProps: InterfaceDeleteEventModalProps = {
 };
 
 describe('EventListCardDeleteModal', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   beforeEach(() => {
     vi.clearAllMocks();
   });

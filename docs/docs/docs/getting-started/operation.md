@@ -22,7 +22,6 @@ We use it to simplify installation
 Follow these steps to install Docker on your system:
 
 1. The steps are different for Windows/Mac versus Linux users:
-
    1. [Docker Desktop for Windows/Mac](https://www.docker.com/products/docker-desktop)
    2. [Docker Engine for Linux](https://docs.docker.com/engine/install/)
 
@@ -30,7 +29,7 @@ Follow these steps to install Docker on your system:
 
 The next steps will depend on whether you are:
 
-1. an end user installing our software (Production Environments) or 
+1. an end user installing our software (Production Environments) or
 2. one of our open source contributors (Development Environments).
 
 Please follow them closely.
@@ -41,7 +40,7 @@ This section describes how to setup the application in a production environment.
 
 1. Configure `nginx.conf` file located at `config/docker/setup`. Modify it to fit your preferences before running the application.
 
-3. Build and Run the Docker Image:
+2. Build and Run the Docker Image:
 
    Run the following command to run the Docker image:
 
@@ -49,17 +48,29 @@ This section describes how to setup the application in a production environment.
    docker-compose -f docker/docker-compose.prod.yaml --env-file .env up
    ```
 
-4. To stop the container run the following command:
+   or
+
+   ```bash
+   docker compose -f docker/docker-compose.prod.yaml --env-file .env up
+   ```
+
+3. To stop the container run the following command:
 
    ```bash
    docker-compose -f docker/docker-compose.prod.yaml down
    ```
 
-The application will be accessible at `http://localhost:4321`
+   or
+
+   ```bash
+   docker compose -f docker/docker-compose.prod.yaml down
+   ```
+
+   The application will be accessible at `http://localhost:4321`
 
 #### For Development Environments
 
-This section describes how to setup the application in a development  environment.
+This section describes how to setup the application in a development environment.
 
 1. Build and Run the Docker Image:
 
@@ -69,20 +80,31 @@ This section describes how to setup the application in a development  environmen
    docker-compose -f docker/docker-compose.dev.yaml --env-file .env up
    ```
 
+   or
+
+   ```bash
+   docker compose -f docker/docker-compose.dev.yaml --env-file .env up
+   ```
+
 2. To stop the container run the following command:
 
    ```bash
    docker-compose -f docker/docker-compose.dev.yaml down
    ```
 
-The application will be accessible at `http://localhost:4321`
+   or
 
+   ```bash
+   docker compose -f docker/docker-compose.dev.yaml down
+   ```
+
+The application will be accessible at `http://localhost:4321`
 
 ## Operation Without Docker
 
 If you are running Talawa-Admin natively then the next steps will depend on whether you are:
 
-1. an end user installing our software (Production Environments) or 
+1. an end user installing our software (Production Environments) or
 2. one of our open source contributors (Development Environments).
 
 Please follow them closely.
@@ -104,5 +126,3 @@ Run the following command to start the production server:
 pnpm run serve &
 
 ```
-
-

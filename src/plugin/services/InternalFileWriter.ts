@@ -6,7 +6,7 @@
  */
 
 import type { Dirent } from 'node:fs';
-import { AdminPluginManifest } from '../../utils/adminPluginInstaller';
+import { IAdminPluginManifest } from '../../utils/adminPluginInstaller';
 
 export interface IFileWriteResult {
   success: boolean;
@@ -164,7 +164,7 @@ export class InternalFileWriter {
   async readPluginFiles(pluginId: string): Promise<{
     success: boolean;
     files?: Record<string, string>;
-    manifest?: AdminPluginManifest;
+    manifest?: IAdminPluginManifest;
     error?: string;
   }> {
     try {
@@ -183,12 +183,12 @@ export class InternalFileWriter {
       const files = await this.readDirectoryRecursive(pluginPath);
 
       // Parse manifest if it exists
-      let manifest: AdminPluginManifest | undefined;
+      let manifest: IAdminPluginManifest | undefined;
       const raw = files['manifest.json'];
 
       if (raw) {
         try {
-          manifest = JSON.parse(raw) as AdminPluginManifest;
+          manifest = JSON.parse(raw) as IAdminPluginManifest;
         } catch (parseError) {
           console.error('Failed to parse manifest JSON:', parseError);
         }
@@ -210,7 +210,7 @@ export class InternalFileWriter {
     success: boolean;
     plugins?: Array<{
       pluginId: string;
-      manifest: AdminPluginManifest;
+      manifest: IAdminPluginManifest;
       installedAt: string;
     }>;
     error?: string;
@@ -221,7 +221,7 @@ export class InternalFileWriter {
       const pluginDirs = await this.listDirectories(this.pluginBasePath);
       const plugins: Array<{
         pluginId: string;
-        manifest: AdminPluginManifest;
+        manifest: IAdminPluginManifest;
         installedAt: string;
       }> = [];
 

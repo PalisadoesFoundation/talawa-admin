@@ -20,6 +20,7 @@ export const MOCKS = [
       data: {
         actionCategoriesByOrganization: [
           {
+            __typename: 'ActionItemCategory',
             id: 'categoryId1',
             name: 'Category 1',
             isDisabled: false,
@@ -28,6 +29,7 @@ export const MOCKS = [
             updatedAt: '2024-08-26',
           },
           {
+            __typename: 'ActionItemCategory',
             id: 'categoryId2',
             name: 'Category 2',
             isDisabled: true,
@@ -55,15 +57,18 @@ export const MOCKS = [
     result: {
       data: {
         createActionItemCategory: {
+          __typename: 'ActionItemCategory',
           id: 'newCategoryId1',
           name: 'New Category',
           description: 'New description',
           isDisabled: true,
           createdAt: '2044-01-01',
           creator: {
+            __typename: 'User',
             id: 'userId',
           },
           organization: {
+            __typename: 'Organization',
             id: 'orgId',
             name: 'Test Organization',
           },
@@ -86,15 +91,18 @@ export const MOCKS = [
     result: {
       data: {
         createActionItemCategory: {
+          __typename: 'ActionItemCategory',
           id: 'newCategoryId2',
           name: 'New Category',
           description: null,
           isDisabled: false,
           createdAt: '2044-01-01',
           creator: {
+            __typename: 'User',
             id: 'userId',
           },
           organization: {
+            __typename: 'Organization',
             id: 'orgId',
             name: 'Test Organization',
           },
@@ -117,15 +125,18 @@ export const MOCKS = [
     result: {
       data: {
         createActionItemCategory: {
+          __typename: 'ActionItemCategory',
           id: 'newCategoryId3',
           name: 'Minimal Category',
           description: null,
           isDisabled: false,
           createdAt: '2044-01-01',
           creator: {
+            __typename: 'User',
             id: 'userId',
           },
           organization: {
+            __typename: 'Organization',
             id: 'orgId',
             name: 'Test Organization',
           },
@@ -147,6 +158,7 @@ export const MOCKS = [
     result: {
       data: {
         updateActionItemCategory: {
+          __typename: 'ActionItemCategory',
           id: 'categoryId',
           name: 'Category 2',
           isDisabled: false,
@@ -168,6 +180,7 @@ export const MOCKS = [
     result: {
       data: {
         updateActionItemCategory: {
+          __typename: 'ActionItemCategory',
           id: 'categoryId',
           name: 'Category 1',
           isDisabled: false,
@@ -189,6 +202,7 @@ export const MOCKS = [
     result: {
       data: {
         updateActionItemCategory: {
+          __typename: 'ActionItemCategory',
           id: 'categoryId',
           name: 'Category 1',
           isDisabled: true,
@@ -210,6 +224,7 @@ export const MOCKS = [
     result: {
       data: {
         updateActionItemCategory: {
+          __typename: 'ActionItemCategory',
           id: 'categoryId',
           name: 'Category 1',
           description: null,
@@ -233,6 +248,7 @@ export const MOCKS = [
     result: {
       data: {
         updateActionItemCategory: {
+          __typename: 'ActionItemCategory',
           id: 'categoryId',
           name: 'Updated Name',
           isDisabled: false,
@@ -255,6 +271,7 @@ export const MOCKS = [
     result: {
       data: {
         updateActionItemCategory: {
+          __typename: 'ActionItemCategory',
           id: 'categoryId',
           name: 'Updated Name',
           isDisabled: true,
@@ -277,6 +294,7 @@ export const MOCKS = [
     result: {
       data: {
         updateActionItemCategory: {
+          __typename: 'ActionItemCategory',
           id: 'categoryId',
           name: 'Category 1',
           isDisabled: true,
@@ -300,6 +318,7 @@ export const MOCKS = [
     result: {
       data: {
         updateActionItemCategory: {
+          __typename: 'ActionItemCategory',
           id: 'categoryId',
           name: 'Completely New Name',
           isDisabled: true,
@@ -321,6 +340,7 @@ export const MOCKS = [
     result: {
       data: {
         deleteActionItemCategory: {
+          __typename: 'ActionItemCategory',
           id: 'categoryId',
           name: 'Category 1',
         },

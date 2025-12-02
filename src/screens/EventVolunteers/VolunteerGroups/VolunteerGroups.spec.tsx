@@ -58,7 +58,7 @@ const debounceWait = async (ms = 300): Promise<void> => {
 
 const renderVolunteerGroups = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/event/orgId/eventId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -104,7 +104,7 @@ describe('Testing VolunteerGroups Screen', () => {
     /**  Mocking the useParams hook to return undefined parameters */
     mockRouteParams('', '');
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/event/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>

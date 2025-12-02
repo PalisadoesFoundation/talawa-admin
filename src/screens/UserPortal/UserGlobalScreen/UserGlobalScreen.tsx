@@ -16,7 +16,7 @@
  * <Route path="/user/test/global" element={<UserGlobalScreen />} />
  * ```
  *
- * @property {boolean | null} hideDrawer - State to manage the visibility of the sidebar.
+ * @property {boolean} hideDrawer - State to manage the visibility of the sidebar.
  *
  * @function handleResize
  * Toggles the sidebar visibility based on the screen width.
@@ -40,7 +40,9 @@ const UserGlobalScreen = (): JSX.Element => {
    */
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
-      setHideDrawer(!hideDrawer);
+      setHideDrawer(true); // Hide on mobile
+    } else {
+      setHideDrawer(false); // Show on desktop
     }
   };
 
@@ -81,11 +83,7 @@ const UserGlobalScreen = (): JSX.Element => {
       </div>
       <div
         className={`${styles.pageContainer} ${
-          hideDrawer === null
-            ? ''
-            : hideDrawer
-              ? styles.expand
-              : styles.contract
+          hideDrawer ? styles.expand : styles.contract
         } `}
         data-testid="mainpageright"
       >

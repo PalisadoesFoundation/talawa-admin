@@ -16,6 +16,10 @@ describe('EventHeader Component', () => {
     showInviteModal = vi.fn();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks(); // Restores all spies including consoleSpy
+  });
+
   it('renders correctly with all elements', () => {
     const { getByTestId } = render(
       <I18nextProvider i18n={i18nForTest}>

@@ -159,6 +159,9 @@ const renderWithRouterAndPath = (
 };
 
 describe('Calendar Component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const mockRefetchEvents = vi.fn();
   const today = new Date();
 

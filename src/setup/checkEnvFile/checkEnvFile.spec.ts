@@ -13,6 +13,10 @@ describe('modifyEnvFile', () => {
     vi.resetAllMocks();
   });
 
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('should append missing keys to the .env file', () => {
     const envContent = 'EXISTING_KEY=existing_value\n';
     const envExampleContent =

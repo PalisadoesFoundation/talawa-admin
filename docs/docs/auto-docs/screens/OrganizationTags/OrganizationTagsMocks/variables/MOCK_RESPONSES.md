@@ -30,6 +30,10 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:107](https://
 
 > **ERROR\_ORG**: `ErrorMock`[]
 
+### FETCHMORE\_UNDEFINED
+
+> **FETCHMORE\_UNDEFINED**: `ListMock`[]
+
 ### NULL\_END\_CURSOR
 
 > **NULL\_END\_CURSOR**: (`ListMock` \| \{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after`: `any`; `first`: `number`; `input`: \{ `id`: `string`; \}; `sortedBy`: \{ `id`: `string`; \}; `where`: \{ `name`: \{ `starts_with`: `string`; \}; \}; \}; \}; \})[]
