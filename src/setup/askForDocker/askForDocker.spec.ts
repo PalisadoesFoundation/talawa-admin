@@ -578,4 +578,98 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
       global.URL = originalURL;
     }
   });
+
+  describe('askAndUpdateTalawaApiUrl - Retry Logic Coverage', () => {
+    test('should execute retry loop when connection fails then succeeds', async () => {
+      // Mock askForTalawaApiUrl to fail twice, then succeed
+      (askForTalawaApiUrl as Mock)
+        .mockRejectedValueOnce(new Error('Connection timeout'))
+        .mockRejectedValueOnce(new Error('Connection timeout'))
+        .mockResolvedValueOnce('https://api.example.com');
+
+      vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+        shouldSetTalawaApiUrlResponse: true,
+      });
+
+      await askAndUpdateTalawaApiUrl();
+
+      // Verify 3 retry attempts (covers the while loop)
+      expect(askForTalawaApiUrl).toHaveBeenCalledTimes(3);
+
+      // Verify error logging during retries (covers catch block)
+      expect(console.error).toHaveBeenCalledWith(
+        'Error checking connection:',
+        expect.any(Error),
+      );
+
+      // Eventually succeeded (covers success path after retries)
+      expect(updateEnvFile).toHaveBeenCalledWith(
+        'REACT_APP_TALAWA_URL',
+        'https://api.example.com',
+      );
+    });
+
+    test('should fail after MAX_RETRIES and log final error', async () => {
+      // Make all 3 attempts fail
+      (askForTalawaApiUrl as Mock).mockRejectedValue(
+        new Error('Persistent failure'),
+      );
+
+      vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+        shouldSetTalawaApiUrlResponse: true,
+      });
+
+      await askAndUpdateTalawaApiUrl();
+
+      // Verify all 3 retry attempts exhausted (covers MAX_RETRIES check)
+      expect(askForTalawaApiUrl).toHaveBeenCalledTimes(3);
+
+      // Verify final error thrown (covers lines 71-74)
+      expect(console.error).toHaveBeenCalledWith(
+        'Error setting up Talawa API URL:',
+        expect.objectContaining({
+          message:
+            'Failed to establish connection after maximum retry attempts',
+        }),
+      );
+
+      // Verify no env update on failure
+      expect(updateEnvFile).not.toHaveBeenCalled();
+    });
+
+    test('should execute retry logic when connection fails', async () => {
+      // Restore console mocks for this test
+      vi.restoreAllMocks();
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      // Mock askForTalawaApiUrl to throw errors for retries, then succeed
+      (askForTalawaApiUrl as Mock)
+        .mockRejectedValueOnce(new Error('Connection failed'))
+        .mockRejectedValueOnce(new Error('Connection failed'))
+        .mockResolvedValueOnce('https://api.example.com');
+
+      vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+        shouldSetTalawaApiUrlResponse: true,
+      });
+
+      await askAndUpdateTalawaApiUrl();
+
+      // Verify retry attempts occurred
+      expect(askForTalawaApiUrl).toHaveBeenCalledTimes(3);
+
+      // Verify errors were logged during retries
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Error checking connection:',
+        expect.any(Error),
+      );
+
+      // Eventually succeeded
+      expect(updateEnvFile).toHaveBeenCalledWith(
+        'REACT_APP_TALAWA_URL',
+        'https://api.example.com',
+      );
+    });
+  });
 });
