@@ -50,6 +50,7 @@ const organizations: InterfaceOrgInfoTypePG[] = [
       edges: [],
     },
     addressLine1: 'Texas, USA',
+    role: 'admin',
   },
 ];
 

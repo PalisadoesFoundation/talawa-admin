@@ -52,7 +52,6 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { ORGANIZATION_LIST, CURRENT_USER } from 'GraphQl/Queries/Queries';
 
-import OrgListCard from 'components/OrgListCard/OrgListCard';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
@@ -71,6 +70,7 @@ import { Form, InputGroup, Modal } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import SearchOutlined from '@mui/icons-material/SearchOutlined';
+import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 
 const { getItem } = useLocalStorage();
 
@@ -353,8 +353,9 @@ function orgList(): JSX.Element {
                 aria-label={t('searchOrganizations')}
               />
 
-              <Button
+              <InputGroup.Text
                 className={styles.searchButton}
+                role="button"
                 style={{ cursor: 'pointer' }}
                 onClick={handleSearchByBtnClick}
                 data-testid="searchBtn"
@@ -362,7 +363,7 @@ function orgList(): JSX.Element {
                 aria-label={t('search')}
               >
                 <SearchOutlined className={styles.colorWhite} />
-              </Button>
+              </InputGroup.Text>
             </InputGroup>
           </div>
 
@@ -452,7 +453,7 @@ function orgList(): JSX.Element {
             )?.map((item: InterfaceOrgInfoTypePG) => {
               return (
                 <div key={item.id} className={styles.itemCardOrgList}>
-                  <OrgListCard data={item} />
+                  <OrganizationCard data={{ ...item, role: 'admin' }} />
                 </div>
               );
             })}

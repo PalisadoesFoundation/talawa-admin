@@ -40,7 +40,6 @@ import {
   USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
 } from 'GraphQl/Queries/Queries';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
-import OrganizationCard from 'components/UserPortal/OrganizationCard/OrganizationCard';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import React, { useEffect, useState, useRef } from 'react';
 import { Dropdown } from 'react-bootstrap';
@@ -48,6 +47,7 @@ import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../../style/app-fixed.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 
 function useDebounce<T>(fn: (val: T) => void, delay: number) {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -67,7 +67,7 @@ function useDebounce<T>(fn: (val: T) => void, delay: number) {
 interface IOrganizationCardProps {
   id: string;
   name: string;
-  image: string;
+  avatarURL: string;
   description: string;
   admins: [];
   addressLine1: string;
@@ -82,6 +82,7 @@ interface IOrganizationCardProps {
   isJoined: boolean;
   membersCount: number; // Add this
   adminsCount: number; // Add this
+  role: string;
 }
 
 /**
@@ -105,7 +106,6 @@ interface IOrganization {
   isJoined: boolean;
   id: string;
   name: string;
-  image?: string;
   avatarURL?: string; // <-- add this
   addressLine1?: string; // <-- add this
   description: string;
@@ -337,7 +337,7 @@ export default function Organizations(): React.JSX.Element {
   };
 
   const isLoading = loadingAll || loadingJoined || loadingCreated;
-
+  const role = 'user';
   return (
     <>
       {/* {hideDrawer ? (
@@ -443,9 +443,9 @@ export default function Organizations(): React.JSX.Element {
                       ).map((organization: IOrganization, index) => {
                         const cardProps: IOrganizationCardProps = {
                           name: organization.name,
-                          image: organization.image ?? '',
                           id: organization.id,
                           description: organization.description,
+                          avatarURL: organization.avatarURL || '',
                           addressLine1: organization.addressLine1 || '',
                           admins: organization.admins,
                           membershipRequestStatus:
@@ -456,6 +456,7 @@ export default function Organizations(): React.JSX.Element {
                           isJoined: organization.isJoined,
                           membersCount: organization.membersCount || 0,
                           adminsCount: organization.adminsCount || 0,
+                          role: role,
                         };
                         return (
                           <div
@@ -474,7 +475,7 @@ export default function Organizations(): React.JSX.Element {
                               className="visually-hidden"
                             ></div>
 
-                            <OrganizationCard {...cardProps} />
+                            <OrganizationCard data={cardProps} />
                             {/* Add a hidden span with organization name for testing purposes */}
                             <span
                               data-testid={`org-name-${organization.name}`}

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAdvertisementAttachmentPg
 
-Defined in: [src/utils/interfaces.ts:743](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L743)
+Defined in: [src/utils/interfaces.ts:744](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L744)
 
 InterfaceAdvertisementAttachmentPg
 
@@ -18,7 +18,7 @@ Defines the structure for an advertisement attachment with PostgreSQL-specific f
 
 > **mimeType**: `string`
 
-Defined in: [src/utils/interfaces.ts:744](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L744)
+Defined in: [src/utils/interfaces.ts:745](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L745)
 
 The MIME type of the attachment.
 
@@ -28,6 +28,6 @@ The MIME type of the attachment.
 
 > **url**: `string`
 
-Defined in: [src/utils/interfaces.ts:745](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L745)
+Defined in: [src/utils/interfaces.ts:746](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L746)
 
 The URL of the attachment.

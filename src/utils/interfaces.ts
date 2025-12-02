@@ -549,6 +549,7 @@ export interface InterfaceOrgInfoTypePG {
       };
     }[];
   };
+  role: string;
 }
 
 /**

@@ -91,3 +91,11 @@ Defined in: [src/utils/interfaces.ts:544](https://github.com/PalisadoesFoundatio
 Defined in: [src/utils/interfaces.ts:539](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L539)
 
 The name of the organization.
+
+***
+
+### role
+
+> **role**: `string`
+
+Defined in: [src/utils/interfaces.ts:552](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L552)

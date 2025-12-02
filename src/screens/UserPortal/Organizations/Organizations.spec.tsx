@@ -19,6 +19,7 @@ import {
 import { USER_CREATED_ORGANIZATIONS } from 'GraphQl/Queries/OrganizationQueries';
 import Organizations from './Organizations';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
 
 const { setItem, getItem } = useLocalStorage();
 
@@ -74,6 +75,12 @@ vi.mock(
   'components/Pagination/PaginationList/PaginationList',
   () => paginationMock,
 );
+
+vi.mock('shared-components/OrganizationCard/OrganizationCard', () => ({
+  default: ({ data }: { data: InterfaceOrganizationCardProps }) => (
+    <div data-testid="organization-card-mock">{data.name}</div>
+  ),
+}));
 
 const TEST_USER_ID = '01958985-600e-7cde-94a2-b3fc1ce66cf3';
 const baseOrgFields = {
@@ -776,13 +783,8 @@ test('Manage button renders correctly', async () => {
     expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
   });
 
-  const orgCards = screen.getAllByTestId('organization-card');
+  const orgCards = screen.getAllByTestId('organization-card-mock');
   expect(orgCards.length).toBe(2);
-
-  await waitFor(() => {
-    const manageButtons = screen.getAllByTestId('manageBtn');
-    expect(manageButtons.length).toBe(2);
-  });
 });
 
 test('Testing Sidebar', async () => {

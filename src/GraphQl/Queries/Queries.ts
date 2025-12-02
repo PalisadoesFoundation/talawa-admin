@@ -122,34 +122,6 @@ export const USER_JOINED_ORGANIZATIONS_NO_MEMBERS = gql`
   ${ORG_FIELDS}
 `;
 
-export const USER_JOINED_ORGANIZATIONS_PG = gql`
-  query UserJoinedOrganizations($id: String!, $first: Int!) {
-    user(input: { id: $id }) {
-      organizationsWhereMember(first: $first) {
-        pageInfo {
-          hasNextPage
-        }
-        edges {
-          node {
-            id
-            name
-            addressLine1
-            description
-            avatarURL
-            members(first: 32) {
-              edges {
-                node {
-                  id
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
 export const ALL_ORGANIZATIONS_PG = gql`
   query UserJoinedOrganizations {
     organizations {

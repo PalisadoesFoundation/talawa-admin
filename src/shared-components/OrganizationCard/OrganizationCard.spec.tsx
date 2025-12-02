@@ -1,0 +1,429 @@
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import OrganizationCard from './OrganizationCard';
+import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
+import { MockedProvider } from '@apollo/client/testing';
+import {
+  SEND_MEMBERSHIP_REQUEST,
+  JOIN_PUBLIC_ORGANIZATION,
+  CANCEL_MEMBERSHIP_REQUEST,
+} from 'GraphQl/Mutations/OrganizationMutations';
+import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
+import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQueries';
+import { toast } from 'react-toastify';
+
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
+
+const mockNavigate = vi.fn();
+vi.mock('react-router', () => ({
+  useNavigate: () => mockNavigate,
+}));
+
+vi.mock('components/Avatar/Avatar', () => ({
+  default: ({ name }: { name: string }) => (
+    <div data-testid="mock-avatar">{name}</div>
+  ),
+}));
+
+vi.mock('components/OrgListCard/TruncatedText', () => ({
+  default: ({ text }: { text: string }) => <span>{text}</span>,
+}));
+
+vi.mock('react-toastify', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+  },
+}));
+
+vi.mock('screens/UserPortal/LeaveOrganization/LeaveOrganization', () => ({
+  userId: 'user123',
+}));
+
+describe('OrganizationCard', () => {
+  const mockData: InterfaceOrganizationCardProps = {
+    id: '123',
+    name: 'Test Org',
+    description: 'This is a test organization',
+    addressLine1: '123 Test St',
+    avatarURL: 'http://example.com/avatar.png',
+    members: { edges: [{ node: { id: '1' } }, { node: { id: '2' } }] },
+    membersCount: 10,
+    adminsCount: 2,
+    role: 'user',
+    isJoined: false,
+    userRegistrationRequired: false,
+    membershipRequestStatus: undefined,
+    membershipRequests: [],
+  };
+
+  const originalLocation = window.location;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { reload: vi.fn() },
+    });
+  });
+
+  afterEach(() => {
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: originalLocation,
+    });
+  });
+
+  it('renders organization details correctly', () => {
+    render(
+      <MockedProvider>
+        <OrganizationCard data={mockData} />
+      </MockedProvider>,
+    );
+
+    expect(
+      screen.getByRole('heading', { name: 'Test Org' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText('This is a test organization')).toBeInTheDocument();
+    expect(screen.getByText('123 Test St')).toBeInTheDocument();
+  });
+
+  it('renders avatar image when avatarURL is provided', () => {
+    render(
+      <MockedProvider>
+        <OrganizationCard data={mockData} />
+      </MockedProvider>,
+    );
+    const img = screen.getByAltText('Test Org image');
+    expect(img).toBeInTheDocument();
+    expect(img).toHaveAttribute('src', 'http://example.com/avatar.png');
+  });
+
+  it('renders Avatar component when avatarURL is missing', () => {
+    const dataWithoutAvatar = { ...mockData, avatarURL: null };
+    render(
+      <MockedProvider>
+        <OrganizationCard data={dataWithoutAvatar} />
+      </MockedProvider>,
+    );
+    expect(screen.getByTestId('mock-avatar')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Test Org' }),
+    ).toBeInTheDocument();
+  });
+
+  it('displays correct member and admin counts for admin role', () => {
+    const adminData = { ...mockData, role: 'admin' };
+    render(
+      <MockedProvider>
+        <OrganizationCard data={adminData} />
+      </MockedProvider>,
+    );
+
+    expect(screen.getByText('admins:')).toBeInTheDocument();
+    expect(screen.getByText('2')).toBeInTheDocument();
+    expect(screen.getByText('members:')).toBeInTheDocument();
+    expect(screen.getByText('10')).toBeInTheDocument();
+  });
+
+  it('displays correct member count for user role', () => {
+    render(
+      <MockedProvider>
+        <OrganizationCard data={mockData} />
+      </MockedProvider>,
+    );
+    expect(screen.getByText('members:')).toBeInTheDocument();
+    expect(screen.getByText('10')).toBeInTheDocument();
+    expect(screen.queryByText('admins:')).not.toBeInTheDocument();
+  });
+
+  it('renders "Manage" button and navigates correctly for admin role', () => {
+    const adminData = { ...mockData, role: 'admin' };
+    render(
+      <MockedProvider>
+        <OrganizationCard data={adminData} />
+      </MockedProvider>,
+    );
+
+    const button = screen.getByTestId('manageBtn');
+    expect(button).toHaveTextContent('Manage');
+
+    fireEvent.click(button);
+    expect(mockNavigate).toHaveBeenCalledWith('/orgdash/123');
+  });
+
+  it('renders "Visit" button and navigates correctly for joined user', () => {
+    const joinedData = { ...mockData, isJoined: true };
+    render(
+      <MockedProvider>
+        <OrganizationCard data={joinedData} />
+      </MockedProvider>,
+    );
+
+    const button = screen.getByTestId('manageBtn');
+    expect(button).toHaveTextContent('Visit');
+
+    fireEvent.click(button);
+    expect(mockNavigate).toHaveBeenCalledWith('/user/organization/123');
+  });
+
+  it('renders "Join" button for non-joined user', () => {
+    render(
+      <MockedProvider>
+        <OrganizationCard data={mockData} />
+      </MockedProvider>,
+    );
+
+    const button = screen.getByTestId('joinBtn');
+    expect(button).toHaveTextContent('joinNow');
+  });
+
+  it('joins public organization successfully', async () => {
+    const mocks = [
+      {
+        request: {
+          query: JOIN_PUBLIC_ORGANIZATION,
+          variables: { input: { organizationId: '123' } },
+        },
+        result: {
+          data: {
+            joinPublicOrganization: {
+              id: '123',
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: {},
+        },
+      },
+      {
+        request: {
+          query: USER_JOINED_ORGANIZATIONS_PG,
+          variables: { id: 'user123', first: 5 },
+        },
+        result: {
+          data: {},
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <OrganizationCard data={mockData} />
+      </MockedProvider>,
+    );
+
+    const button = screen.getByTestId('joinBtn');
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('orgJoined');
+      expect(window.location.reload).toHaveBeenCalled();
+    });
+  });
+
+  it('sends membership request when registration is required', async () => {
+    const dataWithRegistration = {
+      ...mockData,
+      userRegistrationRequired: true,
+    };
+    const mocks = [
+      {
+        request: {
+          query: SEND_MEMBERSHIP_REQUEST,
+          variables: { organizationId: '123' },
+        },
+        result: {
+          data: {
+            sendMembershipRequest: {
+              id: 'req123',
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <OrganizationCard data={dataWithRegistration} />
+      </MockedProvider>,
+    );
+
+    const button = screen.getByTestId('joinBtn');
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('MembershipRequestSent');
+    });
+  });
+
+  it('handles ALREADY_MEMBER error when joining', async () => {
+    const mocks = [
+      {
+        request: {
+          query: JOIN_PUBLIC_ORGANIZATION,
+          variables: { input: { organizationId: '123' } },
+        },
+        result: {
+          errors: [
+            {
+              message: 'Already a member',
+              extensions: { code: 'ALREADY_MEMBER' },
+            },
+          ],
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <OrganizationCard data={mockData} />
+      </MockedProvider>,
+    );
+
+    const button = screen.getByTestId('joinBtn');
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('AlreadyJoined');
+    });
+  });
+
+  it('handles generic error when joining', async () => {
+    const mocks = [
+      {
+        request: {
+          query: JOIN_PUBLIC_ORGANIZATION,
+          variables: { input: { organizationId: '123' } },
+        },
+        error: new Error('Network error'),
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <OrganizationCard data={mockData} />
+      </MockedProvider>,
+    );
+
+    const button = screen.getByTestId('joinBtn');
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('errorOccured');
+    });
+  });
+
+  it('renders "Withdraw" button when membership request is pending', () => {
+    const pendingData = { ...mockData, membershipRequestStatus: 'pending' };
+    render(
+      <MockedProvider>
+        <OrganizationCard data={pendingData} />
+      </MockedProvider>,
+    );
+
+    const button = screen.getByTestId('withdrawBtn');
+    expect(button).toHaveTextContent('withdraw');
+  });
+
+  it('withdraws membership request successfully', async () => {
+    const pendingData = {
+      ...mockData,
+      membershipRequestStatus: 'pending',
+      membershipRequests: [{ id: 'req123', user: { id: 'user123' } }],
+    };
+
+    const mocks = [
+      {
+        request: {
+          query: CANCEL_MEMBERSHIP_REQUEST,
+          variables: { membershipRequestId: 'req123' },
+        },
+        result: {
+          data: {
+            cancelMembershipRequest: {
+              id: 'req123',
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <OrganizationCard data={pendingData} />
+      </MockedProvider>,
+    );
+
+    const button = screen.getByTestId('withdrawBtn');
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalledWith('MembershipRequestWithdrawn');
+    });
+  });
+
+  it('shows error when withdrawing if membership request not found', async () => {
+    const pendingData = {
+      ...mockData,
+      membershipRequestStatus: 'pending',
+      membershipRequests: [],
+    };
+
+    render(
+      <MockedProvider>
+        <OrganizationCard data={pendingData} />
+      </MockedProvider>,
+    );
+
+    const button = screen.getByTestId('withdrawBtn');
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('MembershipRequestNotFound');
+    });
+  });
+
+  it('handles error when withdrawing membership request', async () => {
+    const pendingData = {
+      ...mockData,
+      membershipRequestStatus: 'pending',
+      membershipRequests: [{ id: 'req123', user: { id: 'user123' } }],
+    };
+
+    const mocks = [
+      {
+        request: {
+          query: CANCEL_MEMBERSHIP_REQUEST,
+          variables: { membershipRequestId: 'req123' },
+        },
+        error: new Error('Network error'),
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <OrganizationCard data={pendingData} />
+      </MockedProvider>,
+    );
+
+    const button = screen.getByTestId('withdrawBtn');
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+
+    expect(toast.error).toHaveBeenCalledWith('errorOccured');
+  });
+});

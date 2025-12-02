@@ -8,11 +8,31 @@ Defined in: [src/types/Organization/interface.ts:1](https://github.com/Palisadoe
 
 ## Properties
 
-### addressLine1
+### address
 
-> **addressLine1**: `string`
+> **address**: `object`
 
 Defined in: [src/types/Organization/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L9)
+
+#### city
+
+> **city**: `string`
+
+#### countryCode
+
+> **countryCode**: `string`
+
+#### line1
+
+> **line1**: `string`
+
+#### postalCode
+
+> **postalCode**: `string`
+
+#### state
+
+> **state**: `string`
 
 ***
 
@@ -20,7 +40,7 @@ Defined in: [src/types/Organization/interface.ts:9](https://github.com/Palisadoe
 
 > **adminsCount**: `number`
 
-Defined in: [src/types/Organization/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L11)
+Defined in: [src/types/Organization/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L17)
 
 ***
 
@@ -52,7 +72,7 @@ Defined in: [src/types/Organization/interface.ts:4](https://github.com/Palisadoe
 
 > `optional` **isJoined**: `boolean`
 
-Defined in: [src/types/Organization/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L20)
+Defined in: [src/types/Organization/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L26)
 
 ***
 
@@ -72,7 +92,7 @@ Defined in: [src/types/Organization/interface.ts:6](https://github.com/Palisadoe
 
 > **membersCount**: `number`
 
-Defined in: [src/types/Organization/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L10)
+Defined in: [src/types/Organization/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L16)
 
 ***
 
@@ -80,7 +100,7 @@ Defined in: [src/types/Organization/interface.ts:10](https://github.com/Palisado
 
 > **membershipRequests**: `object`[]
 
-Defined in: [src/types/Organization/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L14)
+Defined in: [src/types/Organization/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L20)
 
 #### id
 
@@ -100,7 +120,7 @@ Defined in: [src/types/Organization/interface.ts:14](https://github.com/Palisado
 
 > **membershipRequestStatus**: `string`
 
-Defined in: [src/types/Organization/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L12)
+Defined in: [src/types/Organization/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L18)
 
 ***
 
@@ -116,4 +136,4 @@ Defined in: [src/types/Organization/interface.ts:3](https://github.com/Palisadoe
 
 > **userRegistrationRequired**: `boolean`
 
-Defined in: [src/types/Organization/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L13)
+Defined in: [src/types/Organization/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L19)

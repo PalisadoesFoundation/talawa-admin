@@ -849,6 +849,16 @@
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
 
+/* Add Button */
+
+.addButton {
+  margin-bottom: 10px;
+  color: var(--addButton-font);
+  background-color: var(--light-blue);
+  border-color: var(--addButton-bg);
+  --bs-btn-focus-box-shadow: none;
+}
+
 .addButton:is(:hover, :active, :focus) {
   background-color: var(--addButton-bg-hover) !important;
   border-color: var(--addButton-border-hover);
@@ -3878,6 +3888,7 @@ form label,
   display: flex;
   align-items: start;
   flex-direction: column;
+  gap: 2rem;
 }
 
 .joinedBtn {
