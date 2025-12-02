@@ -150,7 +150,8 @@ function jsonToLcov(coverageData, basePath = process.cwd()) {
 // Parse command line arguments
 const args = process.argv.slice(2);
 if (args.length < 2) {
-  console.error('Usage: node generate-lcov.js <input-json> <output-lcov>');
+  const scriptName = path.basename(process.argv[1] || 'generate-lcov.js');
+  console.error(`Usage: node ${scriptName} <input-json> <output-lcov>`);
   console.error(
     'Example: node generate-lcov.js ./.nyc_output/coverage-final.json ./coverage/vitest/lcov.info',
   );
