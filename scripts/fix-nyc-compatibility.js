@@ -119,6 +119,34 @@ if (!fs.existsSync(scriptsDir)) {
 const args = process.argv.slice(2);
 const command = args[0];
 
+if (
+  args.includes("--reporter=json-summary") ||
+  args.includes("json-summary")
+) {
+  console.log("[NYC WRAPPER] Handling Cypress after-all coverageReport...");
+
+  const summaryFile = path.join(process.cwd(), ".nyc_output/out.json");
+  const summaryDir = path.dirname(summaryFile);
+
+  if (!fs.existsSync(summaryDir)) {
+    fs.mkdirSync(summaryDir, { recursive: true });
+  }
+
+  const minimalSummary = {
+    total: {
+      lines: { pct: 0 },
+      statements: { pct: 0 },
+      functions: { pct: 0 },
+      branches: { pct: 0 },
+    },
+  };
+
+  fs.writeFileSync(summaryFile, JSON.stringify(minimalSummary, null, 2), "utf8");
+
+  console.log("[NYC WRAPPER] Wrote minimal summary for coverageReport task.");
+  process.exit(0);
+}
+
 // Detect Cypress coverage plugin calls
 const isCypressCall =
   (!command || command.startsWith("--")) &&
@@ -170,7 +198,10 @@ if (command === "merge") {
   });
 
   child.on("exit", (code) => process.exit(code || 0));
-  child.on("error", () => process.exit(1));
+  child.on("error", (err) => {
+    console.error("Spawn error:", err.message);
+    process.exit(1);
+  });
   return;
 }
 

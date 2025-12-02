@@ -6,7 +6,6 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
 /**
  * Merges multiple coverage JSON files into a single coverage object
