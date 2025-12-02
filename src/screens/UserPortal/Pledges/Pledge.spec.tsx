@@ -1206,7 +1206,7 @@ describe('Testing User Pledge Screen', () => {
     expect(moreContainer).toHaveTextContent('+4 more...');
     await userEvent.click(moreContainer);
     await waitFor(() => {
-      expect(screen.getByRole('presentation')).toBeInTheDocument();
+      expect(screen.getByTestId('extra-users-popup')).toBeInTheDocument();
       expect(screen.getByText('Jane Smith')).toBeInTheDocument();
       expect(screen.getByText('Bob Wilson')).toBeInTheDocument();
     });
