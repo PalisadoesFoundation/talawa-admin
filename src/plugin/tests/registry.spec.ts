@@ -48,6 +48,8 @@ describe('Plugin Registry', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     global.fetch = vi.fn();
+    // Reset captured loader to ensure clean state for each test
+    capturedLoader = null;
     // Clear the registry before each test
     Object.keys(pluginRegistry).forEach((key) => {
       delete pluginRegistry[key];
