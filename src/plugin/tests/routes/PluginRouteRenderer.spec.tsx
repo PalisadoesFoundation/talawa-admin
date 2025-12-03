@@ -3,6 +3,7 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import PluginRouteRenderer from '../../routes/PluginRouteRenderer';
 import { getPluginComponents, isPluginRegistered } from '../../registry';
+import type { IRouteExtension } from '../../types';
 
 // Mock the registry
 vi.mock('../../registry', () => ({
@@ -33,12 +34,15 @@ vi.mock('react', async () => {
 });
 
 describe('PluginRouteRenderer', () => {
-  const MockComponent = vi.fn(() =>
-    React.createElement('div', null, 'Mock Component'),
-  );
-  const MockFallback = vi.fn(() =>
-    React.createElement('div', null, 'Mock Fallback'),
-  );
+  // Create mock components using React.createElement to avoid JSX component declarations
+  const createMockComponent = () =>
+    React.createElement('div', null, 'Mock Component');
+  const createMockFallback = () =>
+    React.createElement('div', null, 'Mock Fallback');
+
+  // Wrapper functions that act as components
+  const MockComponent = () => createMockComponent();
+  const MockFallback = () => createMockFallback();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -53,7 +57,7 @@ describe('PluginRouteRenderer', () => {
       TestComponent: MockComponent,
     };
 
-    const route = {
+    const route: IRouteExtension = {
       path: '/test',
       component: 'TestComponent',
       pluginId: 'test-plugin',
@@ -70,7 +74,7 @@ describe('PluginRouteRenderer', () => {
   });
 
   it('should render fallback when plugin is not registered', () => {
-    const route = {
+    const route: IRouteExtension = {
       path: '/test',
       component: 'TestComponent',
       pluginId: 'unregistered-plugin',
@@ -90,7 +94,7 @@ describe('PluginRouteRenderer', () => {
       OtherComponent: MockComponent,
     };
 
-    const route = {
+    const route: IRouteExtension = {
       path: '/test',
       component: 'NonExistentComponent',
       pluginId: 'test-plugin',
@@ -107,7 +111,7 @@ describe('PluginRouteRenderer', () => {
   });
 
   it('should render fallback when plugin components are null', () => {
-    const route = {
+    const route: IRouteExtension = {
       path: '/test',
       component: 'TestComponent',
       pluginId: 'test-plugin',
@@ -124,7 +128,7 @@ describe('PluginRouteRenderer', () => {
   });
 
   it('should render default fallback when no fallback provided', () => {
-    const route = {
+    const route: IRouteExtension = {
       path: '/test',
       component: 'TestComponent',
       pluginId: 'unregistered-plugin',
@@ -144,7 +148,7 @@ describe('PluginRouteRenderer', () => {
       Component2: MockComponent,
     };
 
-    const route = {
+    const route: IRouteExtension = {
       path: '/test',
       component: 'Component1',
       pluginId: 'test-plugin',
@@ -165,7 +169,7 @@ describe('PluginRouteRenderer', () => {
       TestComponent: MockComponent,
     };
 
-    const route = {
+    const route: IRouteExtension = {
       path: '/test',
       component: 'TestComponent',
       pluginId: 'test-plugin',
@@ -182,7 +186,7 @@ describe('PluginRouteRenderer', () => {
   });
 
   it('should handle empty plugin ID', () => {
-    const route = {
+    const route: IRouteExtension = {
       path: '/test',
       component: 'TestComponent',
       pluginId: '',
@@ -202,7 +206,7 @@ describe('PluginRouteRenderer', () => {
       TestComponent: MockComponent,
     };
 
-    const route = {
+    const route: IRouteExtension = {
       path: '/test',
       component: '',
       pluginId: 'test-plugin',
@@ -224,12 +228,7 @@ describe('PluginRouteRenderer', () => {
       component: 'TestComponent',
       pluginId: undefined,
       permissions: ['READ'],
-    } as unknown as {
-      path: string;
-      component: string;
-      pluginId: string | undefined;
-      permissions: string[];
-    };
+    } as unknown as IRouteExtension;
 
     vi.mocked(isPluginRegistered).mockReturnValue(false);
 
@@ -246,15 +245,10 @@ describe('PluginRouteRenderer', () => {
 
     const route = {
       path: '/test',
-      component: undefined as unknown as string,
+      component: undefined,
       pluginId: 'test-plugin',
       permissions: ['READ'],
-    } as unknown as {
-      path: string;
-      component: string;
-      pluginId: string;
-      permissions: string[];
-    };
+    } as unknown as IRouteExtension;
 
     vi.mocked(isPluginRegistered).mockReturnValue(true);
     vi.mocked(getPluginComponents).mockReturnValue(mockComponents);
@@ -266,7 +260,7 @@ describe('PluginRouteRenderer', () => {
   });
 
   it('should handle null plugin components', () => {
-    const route = {
+    const route: IRouteExtension = {
       path: '/test',
       component: 'TestComponent',
       pluginId: 'test-plugin',
@@ -283,7 +277,7 @@ describe('PluginRouteRenderer', () => {
   });
 
   it('should handle undefined plugin components', () => {
-    const route = {
+    const route: IRouteExtension = {
       path: '/test',
       component: 'TestComponent',
       pluginId: 'test-plugin',
