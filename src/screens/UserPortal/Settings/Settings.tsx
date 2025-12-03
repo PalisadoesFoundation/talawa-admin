@@ -49,6 +49,44 @@ import UserDetailsForm from './UserDetails/UserDetails';
 import { validatePassword } from 'utils/passwordValidator';
 import EventsAttendedByUser from 'components/UserPortal/UserProfile/EventsAttendedByUser';
 
+// Exported helper extracted from component to allow unit testing of reset logic.
+// Defensive checks used to avoid bypassing runtime null-safety.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type UserDetailsSetter = React.Dispatch<React.SetStateAction<any>>;
+
+export const resetUserDetails = (
+  currentUser: Record<string, unknown> | null | undefined,
+  fileInput: HTMLInputElement | null | undefined,
+  setSelectedAvatarFn: React.Dispatch<React.SetStateAction<File | null>>,
+  setIsUpdatedFn: React.Dispatch<React.SetStateAction<boolean>>,
+  setUserDetailsFn: UserDetailsSetter,
+  originalAvatar: string | null | undefined,
+): boolean => {
+  // always clear updated flags / selected avatar first
+  setIsUpdatedFn(false);
+  setSelectedAvatarFn(null);
+
+  // defensive: if there's no current user, bail out (no-op)
+  if (!currentUser) return false;
+
+  setUserDetailsFn({
+    ...currentUser,
+    avatar: originalAvatar,
+  });
+
+  // defensive: if file input ref missing, we're done
+  if (!fileInput) return true;
+
+  // clear file input value
+  try {
+    fileInput.value = '';
+  } catch {
+    // ignore - best effort to reset input
+  }
+
+  return true;
+};
+
 export default function Settings(): React.JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
   const { t: tCommon } = useTranslation('common');
@@ -239,16 +277,16 @@ export default function Settings(): React.JSX.Element {
   };
 
   // Reset the changes of form fields
-  // Note: This function is only called from the rendered form, so data.currentUser
-  // and fileInputRef.current are guaranteed to exist at this point
   const handleResetChanges = (): void => {
-    setIsUpdated(false);
-    setSelectedAvatar(null);
-    setUserDetails({
-      ...(data?.currentUser as NonNullable<typeof data.currentUser>),
-      avatar: originalImageState.current,
-    });
-    (fileInputRef.current as HTMLInputElement).value = '';
+    // call helper with current values
+    resetUserDetails(
+      data?.currentUser,
+      fileInputRef.current,
+      setSelectedAvatar,
+      setIsUpdated,
+      setUserDetails,
+      originalImageState.current,
+    );
   };
 
   return (

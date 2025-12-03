@@ -340,6 +340,64 @@ describe('Testing Settings Screen [User Portal]', () => {
     expect(sharedMocks.toast.error).not.toHaveBeenCalled();
   });
 
+  it('resetUserDetails helper is a no-op when currentUser is missing', async () => {
+    // import helper directly from component file
+    const { resetUserDetails } = await import('./Settings');
+
+    const setIsUpdated = vi.fn();
+    const setSelectedAvatar = vi.fn();
+    const setUserDetails = vi.fn();
+
+    const fakeInput = { value: 'file' } as HTMLInputElement;
+
+    const result = resetUserDetails(
+      undefined,
+      fakeInput,
+      setSelectedAvatar,
+      setIsUpdated,
+      setUserDetails,
+      'orig.png',
+    );
+
+    expect(result).toBe(false);
+    expect(setIsUpdated).toHaveBeenCalledWith(false);
+    expect(setSelectedAvatar).toHaveBeenCalledWith(null);
+    expect(setUserDetails).not.toHaveBeenCalled();
+    // file input should remain unchanged since helper returns early
+    expect(fakeInput.value).toBe('file');
+  });
+
+  it('resetUserDetails helper resets values when currentUser is present', async () => {
+    const { resetUserDetails } = await import('./Settings');
+
+    const setIsUpdated = vi.fn();
+    const setSelectedAvatar = vi.fn();
+    const setUserDetails = vi.fn();
+
+    const fakeInput = { value: 'file' } as unknown as HTMLInputElement;
+    const currentUser: Record<string, unknown> = {
+      id: '1',
+      name: 'a',
+      avatar: 'old',
+    };
+
+    const result = resetUserDetails(
+      currentUser,
+      fakeInput,
+      setSelectedAvatar,
+      setIsUpdated,
+      setUserDetails,
+      'orig.png',
+    );
+
+    expect(result).toBe(true);
+    expect(setUserDetails).toHaveBeenCalledWith({
+      ...currentUser,
+      avatar: 'orig.png',
+    });
+    expect(fakeInput.value).toBe('');
+  });
+
   it('updates user with newly uploaded avatar (selectedAvatar path)', async () => {
     const newAvatarFile = new File(['avatar'], 'newAvatar.png', {
       type: 'image/png',
