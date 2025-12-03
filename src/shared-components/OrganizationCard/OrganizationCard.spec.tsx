@@ -363,6 +363,58 @@ describe('OrganizationCard', () => {
     });
   });
 
+  it('handles non-ApolloError when joining', async () => {
+    const mocks = [
+      {
+        request: {
+          query: JOIN_PUBLIC_ORGANIZATION,
+          variables: { input: { organizationId: '123' } },
+        },
+        result: {
+          data: {
+            joinPublicOrganization: {
+              id: '123',
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: {},
+        },
+      },
+      {
+        request: {
+          query: USER_JOINED_ORGANIZATIONS_PG,
+          variables: { id: 'user123', first: 5 },
+        },
+        result: {
+          data: {},
+        },
+      },
+    ];
+
+    vi.mocked(toast.success).mockImplementationOnce(() => {
+      throw new Error('Generic error');
+    });
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <OrganizationCard data={mockData} />
+      </MockedProvider>,
+    );
+
+    const button = screen.getByTestId('joinBtn');
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('errorOccured');
+    });
+  });
+
   it('renders "Withdraw" button when membership request is pending', () => {
     const pendingData = { ...mockData, membershipRequestStatus: 'pending' };
     render(
@@ -508,26 +560,29 @@ describe('OrganizationCard', () => {
     ];
 
     const originalEnv = process.env;
-    process.env = { ...originalEnv, NODE_ENV: 'development' };
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
-    render(
-      <MockedProvider mocks={mocks}>
-        <OrganizationCard data={pendingData} />
-      </MockedProvider>,
-    );
+    try {
+      process.env = { ...originalEnv, NODE_ENV: 'development' };
 
-    const button = screen.getByTestId('withdrawBtn');
-    fireEvent.click(button);
-
-    await waitFor(() => {
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Failed to withdraw membership request:',
-        expect.any(Error),
+      render(
+        <MockedProvider mocks={mocks}>
+          <OrganizationCard data={pendingData} />
+        </MockedProvider>,
       );
-    });
 
-    consoleSpy.mockRestore();
-    process.env = originalEnv;
+      const button = screen.getByTestId('withdrawBtn');
+      fireEvent.click(button);
+
+      await waitFor(() => {
+        expect(consoleSpy).toHaveBeenCalledWith(
+          'Failed to withdraw membership request:',
+          expect.any(Error),
+        );
+      });
+    } finally {
+      consoleSpy.mockRestore();
+      process.env = originalEnv;
+    }
   });
 });

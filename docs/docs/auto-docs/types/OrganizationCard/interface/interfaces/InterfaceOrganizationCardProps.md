@@ -18,9 +18,13 @@ Defined in: [src/types/OrganizationCard/interface.ts:14](https://github.com/Pali
 
 ### admins?
 
-> `optional` **admins**: \[\]
+> `optional` **admins**: `object`[]
 
 Defined in: [src/types/OrganizationCard/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L13)
+
+#### id
+
+> **id**: `string`
 
 ***
 
