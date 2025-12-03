@@ -222,4 +222,11 @@ export default [
       'prettier/prettier': 'error',
     },
   },
+  // for Inline mock components
+  {
+    files: ['**/*.spec.ts', '**/*.spec.tsx', '**/*.test.ts', '**/*.test.tsx'],
+    rules: {
+      'react/no-multi-comp': 'off',
+    },
+  },
 ];

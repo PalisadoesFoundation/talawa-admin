@@ -34,15 +34,10 @@ vi.mock('react', async () => {
 });
 
 describe('PluginRouteRenderer', () => {
-  // Create mock components using React.createElement to avoid JSX component declarations
-  const createMockComponent = () =>
+  // Mock components using React.createElement to avoid JSX component declarations
+  const MockComponent = () =>
     React.createElement('div', null, 'Mock Component');
-  const createMockFallback = () =>
-    React.createElement('div', null, 'Mock Fallback');
-
-  // Wrapper functions that act as components
-  const MockComponent = () => createMockComponent();
-  const MockFallback = () => createMockFallback();
+  const MockFallback = () => React.createElement('div', null, 'Mock Fallback');
 
   beforeEach(() => {
     vi.clearAllMocks();
