@@ -149,9 +149,8 @@ function App(): React.ReactElement {
         await getPluginManager().initializePluginSystem();
 
         // Import and initialize plugin registry
-        const { discoverAndRegisterAllPlugins } = await import(
-          './plugin/registry'
-        );
+        const { discoverAndRegisterAllPlugins } =
+          await import('./plugin/registry');
         await discoverAndRegisterAllPlugins();
       } catch (error) {
         console.error('Failed to initialize plugin system:', error);

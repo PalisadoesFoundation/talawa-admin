@@ -1917,8 +1917,7 @@ export interface InterfaceUserInfoPG {
  * @property {boolean} isPublic - Indicates if the event is public.
  * @property {boolean} isRegisterable - Indicates if the event is registerable.
  */
-export interface InterfaceQueryOrganizationEventListItem
-  extends InterfaceBaseEvent {
+export interface InterfaceQueryOrganizationEventListItem extends InterfaceBaseEvent {
   isPublic: boolean;
   isRegisterable: boolean;
 }
