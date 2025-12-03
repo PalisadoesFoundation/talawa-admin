@@ -1,4 +1,3 @@
-import dayjs from 'dayjs';
 import type {
   InterfaceQueryFundCampaignsPledges,
   InterfaceCampaignInfoPG,
@@ -81,16 +80,6 @@ export const processPledgesData = (
     tCommon('Funds');
 
   return { pledges: sortedPledges, totalPledged, fundName };
-};
-
-export const isWithinCampaignDates = (
-  pledgeData: { fundCampaign: InterfaceQueryFundCampaignsPledges } | undefined,
-): boolean => {
-  if (!pledgeData?.fundCampaign) return false;
-  const now = dayjs();
-  let start = dayjs(pledgeData.fundCampaign.startAt);
-  let end = dayjs(pledgeData.fundCampaign.endAt);
-  return now.isAfter(start) && now.isBefore(end);
 };
 
 export const getCampaignInfo = (
