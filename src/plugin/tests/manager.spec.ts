@@ -161,27 +161,43 @@ describe('PluginManager', () => {
     });
 
     it('should install plugin successfully', async () => {
+      const lifecycleManager = pluginManager['lifecycleManager'];
       const result = await pluginManager.installPlugin('test-plugin');
-      expect(typeof result).toBe('boolean');
       expect(result).toBe(true);
+      expect(lifecycleManager.installPlugin).toHaveBeenCalledWith(
+        'test-plugin',
+      );
+      expect(lifecycleManager.installPlugin).toHaveBeenCalledTimes(1);
     });
 
     it('should uninstall plugin successfully', async () => {
+      const lifecycleManager = pluginManager['lifecycleManager'];
       const result = await pluginManager.uninstallPlugin('test-plugin');
-      expect(typeof result).toBe('boolean');
       expect(result).toBe(true);
+      expect(lifecycleManager.uninstallPlugin).toHaveBeenCalledWith(
+        'test-plugin',
+      );
+      expect(lifecycleManager.uninstallPlugin).toHaveBeenCalledTimes(1);
     });
 
     it('should activate plugin successfully', async () => {
+      const lifecycleManager = pluginManager['lifecycleManager'];
       const result = await pluginManager.activatePlugin('test-plugin');
-      expect(typeof result).toBe('boolean');
       expect(result).toBe(true);
+      expect(lifecycleManager.activatePlugin).toHaveBeenCalledWith(
+        'test-plugin',
+      );
+      expect(lifecycleManager.activatePlugin).toHaveBeenCalledTimes(1);
     });
 
     it('should deactivate plugin successfully', async () => {
+      const lifecycleManager = pluginManager['lifecycleManager'];
       const result = await pluginManager.deactivatePlugin('test-plugin');
-      expect(typeof result).toBe('boolean');
       expect(result).toBe(true);
+      expect(lifecycleManager.deactivatePlugin).toHaveBeenCalledWith(
+        'test-plugin',
+      );
+      expect(lifecycleManager.deactivatePlugin).toHaveBeenCalledTimes(1);
     });
 
     it('should toggle plugin status successfully', async () => {
