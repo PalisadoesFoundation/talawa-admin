@@ -4,15 +4,21 @@
 
 # Function: resetUserDetails()
 
-> **resetUserDetails**(`currentUser`, `fileInput`, `setSelectedAvatarFn`, `setIsUpdatedFn`, `setUserDetailsFn`, `originalAvatar`): `boolean`
+> **resetUserDetails**\<`T`\>(`currentUser`, `fileInput`, `setSelectedAvatarFn`, `setIsUpdatedFn`, `setUserDetailsFn`, `originalAvatar`): `boolean`
 
-Defined in: [src/screens/UserPortal/Settings/Settings.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Settings/Settings.tsx#L57)
+Defined in: [src/screens/UserPortal/Settings/Settings.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Settings/Settings.tsx#L54)
+
+## Type Parameters
+
+### T
+
+`T` *extends* `Record`\<`string`, `unknown`\>
 
 ## Parameters
 
 ### currentUser
 
-`Record`\<`string`, `unknown`\>
+`T`
 
 ### fileInput
 
@@ -20,15 +26,15 @@ Defined in: [src/screens/UserPortal/Settings/Settings.tsx:57](https://github.com
 
 ### setSelectedAvatarFn
 
-`Dispatch`\<`SetStateAction`\<`File`\>\>
+(`v`) => `void`
 
 ### setIsUpdatedFn
 
-`Dispatch`\<`SetStateAction`\<`boolean`\>\>
+(`v`) => `void`
 
 ### setUserDetailsFn
 
-`UserDetailsSetter`
+(`v`) => `void`
 
 ### originalAvatar
 

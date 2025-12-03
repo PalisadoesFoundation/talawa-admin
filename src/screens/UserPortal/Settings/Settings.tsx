@@ -51,15 +51,12 @@ import EventsAttendedByUser from 'components/UserPortal/UserProfile/EventsAttend
 
 // Exported helper extracted from component to allow unit testing of reset logic.
 // Defensive checks used to avoid bypassing runtime null-safety.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type UserDetailsSetter = React.Dispatch<React.SetStateAction<any>>;
-
-export const resetUserDetails = (
-  currentUser: Record<string, unknown> | null | undefined,
+export const resetUserDetails = <T extends Record<string, unknown>>(
+  currentUser: T | null | undefined,
   fileInput: HTMLInputElement | null | undefined,
-  setSelectedAvatarFn: React.Dispatch<React.SetStateAction<File | null>>,
-  setIsUpdatedFn: React.Dispatch<React.SetStateAction<boolean>>,
-  setUserDetailsFn: UserDetailsSetter,
+  setSelectedAvatarFn: (v: File | null) => void,
+  setIsUpdatedFn: (v: boolean) => void,
+  setUserDetailsFn: (v: T & { avatar?: string | null | undefined }) => void,
   originalAvatar: string | null | undefined,
 ): boolean => {
   // always clear updated flags / selected avatar first
