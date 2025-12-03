@@ -10,6 +10,7 @@ export interface InterfaceOrganizationCardProps {
       };
     }[];
   };
+  admins?: [];
   addressLine1: string;
   membersCount?: number;
   adminsCount?: number;

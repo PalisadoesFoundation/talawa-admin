@@ -6,7 +6,7 @@
  * A button is provided to navigate to the organization's dashboard for management.
  *
  * @component
- * @param {InterfaceOrgListCardPropsPG} props - The props for the component.
+ * @param {InterfaceOrganizationCardPropsPG} props - The props for the component.
  * @param {string} props.data.id - The unique identifier for the organization.
  * @param {string} props.data.avatarURL - The URL of the organization's avatar image.
  * @param {string} props.data.addressLine1 - The primary address of the organization.
@@ -25,14 +25,14 @@
  *
  * @example
  * ```tsx
- * <OrgListCard
+ * <OrganizationCard
  *   data={{
  *     id: '1',
  *     avatarURL: 'https://example.com/avatar.png',
  *     addressLine1: '123 Main St',
  *     name: 'Example Org',
  *     description: 'An example organization',
- *     members: { edges: [{ id: '1' }, { id: '2' }] },
+ *     members: { edges: [{ node: { id: '1' } }, { node: { id: '2' } }] },
  *   }}
  * />
  * ```
@@ -179,7 +179,7 @@ function OrganizationCard({
             {avatarURL ? (
               <img
                 src={avatarURL}
-                alt={`${name} image`}
+                alt={name}
                 crossOrigin="anonymous"
                 referrerPolicy="no-referrer"
                 loading="lazy"
@@ -188,7 +188,7 @@ function OrganizationCard({
             ) : (
               <Avatar
                 name={name}
-                alt={`${name} image`}
+                alt={name}
                 dataTestId="emptyContainerForImage"
               />
             )}

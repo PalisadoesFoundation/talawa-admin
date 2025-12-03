@@ -12,6 +12,14 @@ Defined in: [src/types/OrganizationCard/interface.ts:1](https://github.com/Palis
 
 > **addressLine1**: `string`
 
+Defined in: [src/types/OrganizationCard/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L14)
+
+***
+
+### admins?
+
+> `optional` **admins**: \[\]
+
 Defined in: [src/types/OrganizationCard/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L13)
 
 ***
@@ -20,7 +28,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:13](https://github.com/Pali
 
 > `optional` **adminsCount**: `number`
 
-Defined in: [src/types/OrganizationCard/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L15)
+Defined in: [src/types/OrganizationCard/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L16)
 
 ***
 
@@ -28,7 +36,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:15](https://github.com/Pali
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/OrganizationCard/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L25)
+Defined in: [src/types/OrganizationCard/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L26)
 
 ***
 
@@ -36,7 +44,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:25](https://github.com/Pali
 
 > `optional` **createdAt**: `string`
 
-Defined in: [src/types/OrganizationCard/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L26)
+Defined in: [src/types/OrganizationCard/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L27)
 
 ***
 
@@ -68,7 +76,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:4](https://github.com/Palis
 
 > `optional` **isJoined**: `boolean`
 
-Defined in: [src/types/OrganizationCard/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L24)
+Defined in: [src/types/OrganizationCard/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L25)
 
 ***
 
@@ -88,7 +96,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:6](https://github.com/Palis
 
 > `optional` **membersCount**: `number`
 
-Defined in: [src/types/OrganizationCard/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L14)
+Defined in: [src/types/OrganizationCard/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L15)
 
 ***
 
@@ -96,7 +104,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:14](https://github.com/Pali
 
 > `optional` **membershipRequests**: `object`[]
 
-Defined in: [src/types/OrganizationCard/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L18)
+Defined in: [src/types/OrganizationCard/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L19)
 
 #### id
 
@@ -116,7 +124,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:18](https://github.com/Pali
 
 > `optional` **membershipRequestStatus**: `string`
 
-Defined in: [src/types/OrganizationCard/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L16)
+Defined in: [src/types/OrganizationCard/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L17)
 
 ***
 
@@ -132,7 +140,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:3](https://github.com/Palis
 
 > **role**: `string`
 
-Defined in: [src/types/OrganizationCard/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L27)
+Defined in: [src/types/OrganizationCard/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L28)
 
 ***
 
@@ -140,4 +148,4 @@ Defined in: [src/types/OrganizationCard/interface.ts:27](https://github.com/Pali
 
 > `optional` **userRegistrationRequired**: `boolean`
 
-Defined in: [src/types/OrganizationCard/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L17)
+Defined in: [src/types/OrganizationCard/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L18)

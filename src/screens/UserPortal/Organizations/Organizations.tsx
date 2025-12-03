@@ -48,6 +48,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../../style/app-fixed.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
+import type { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
 
 function useDebounce<T>(fn: (val: T) => void, delay: number) {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -64,26 +65,7 @@ function useDebounce<T>(fn: (val: T) => void, delay: number) {
   return debouncedFn;
 }
 
-interface IOrganizationCardProps {
-  id: string;
-  name: string;
-  avatarURL: string;
-  description: string;
-  admins: [];
-  addressLine1: string;
-  membershipRequestStatus: string;
-  userRegistrationRequired: boolean;
-  membershipRequests: {
-    id: string;
-    user: {
-      id: string;
-    };
-  }[];
-  isJoined: boolean;
-  membersCount: number; // Add this
-  adminsCount: number; // Add this
-  role: string;
-}
+type IOrganizationCardProps = InterfaceOrganizationCardProps;
 
 /**
  * Interface defining the structure of organization properties.
@@ -264,7 +246,7 @@ export default function Organizations(): React.JSX.Element {
           return {
             id: org.id,
             name: org.name,
-            image: org.avatarURL || null,
+            avatarURL: org.avatarURL || '',
             description: org.description || '',
             addressLine1: org.addressLine1 || '',
             membersCount: org.membersCount || 0,

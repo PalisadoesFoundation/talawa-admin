@@ -107,7 +107,7 @@ describe('OrganizationCard', () => {
         <OrganizationCard data={mockData} />
       </MockedProvider>,
     );
-    const img = screen.getByAltText('Test Org image');
+    const img = screen.getByAltText('Test Org');
     expect(img).toBeInTheDocument();
     expect(img).toHaveAttribute('src', 'http://example.com/avatar.png');
   });
@@ -489,5 +489,45 @@ describe('OrganizationCard', () => {
     });
 
     expect(toast.error).toHaveBeenCalledWith('errorOccured');
+  });
+  it('logs error to console in development environment when withdrawing fails', async () => {
+    const pendingData = {
+      ...mockData,
+      membershipRequestStatus: 'pending',
+      membershipRequests: [{ id: 'req123', user: { id: 'user123' } }],
+    };
+
+    const mocks = [
+      {
+        request: {
+          query: CANCEL_MEMBERSHIP_REQUEST,
+          variables: { membershipRequestId: 'req123' },
+        },
+        error: new Error('Network error'),
+      },
+    ];
+
+    const originalEnv = process.env;
+    process.env = { ...originalEnv, NODE_ENV: 'development' };
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <OrganizationCard data={pendingData} />
+      </MockedProvider>,
+    );
+
+    const button = screen.getByTestId('withdrawBtn');
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Failed to withdraw membership request:',
+        expect.any(Error),
+      );
+    });
+
+    consoleSpy.mockRestore();
+    process.env = originalEnv;
   });
 });
