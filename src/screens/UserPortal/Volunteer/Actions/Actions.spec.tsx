@@ -454,17 +454,6 @@ describe('Testing Actions Screen', () => {
     });
   });
 
-  it('should render assignee with avatar URL when available', async () => {
-    // This test would require a mock with avatarURL
-    // Add a new mock in Actions.mocks.ts with avatarURL
-    renderActions(link1);
-
-    await waitFor(() => {
-      const searchInput = screen.getByTestId('searchBy');
-      expectVitestToBeInTheDocument(searchInput);
-    });
-  });
-
   it('should handle volunteer group assignee rendering', async () => {
     renderActions(link1);
 
