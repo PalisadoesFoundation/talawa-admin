@@ -10,10 +10,12 @@ export enum ModalState {
 
 export const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
+    outline: '2px solid #1976d2',
+    outlineOffset: '-2px',
   },
   '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
+    outline: '2px solid #1976d2',
+    outlineOffset: '-2px',
   },
   '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
   '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
@@ -72,6 +74,8 @@ export const processPledgesData = (
         return a.endDate.getTime() - b.endDate.getTime();
       case 'endDate_DESC':
         return b.endDate.getTime() - a.endDate.getTime();
+      default:
+        return 0;
     }
   });
 
