@@ -63,8 +63,8 @@ export interface IExtensionPoints {
 
 export interface IRouteExtension {
   pluginId?: string; // Optional in manifest, injected by plugin manager
-  path?: string;
-  component?: string;
+  path: string;
+  component: string;
   exact?: boolean;
   permissions?: string[];
 }

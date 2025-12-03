@@ -223,12 +223,12 @@ describe('PluginRouteRenderer', () => {
   });
 
   it('should handle undefined plugin ID', () => {
-    const route = {
+    const route: IRouteExtension = {
       path: '/test',
       component: 'TestComponent',
       pluginId: undefined,
       permissions: ['READ'],
-    } as unknown as IRouteExtension;
+    };
 
     vi.mocked(isPluginRegistered).mockReturnValue(false);
 
@@ -243,12 +243,12 @@ describe('PluginRouteRenderer', () => {
       TestComponent: MockComponent,
     };
 
-    const route = {
+    const route: IRouteExtension = {
       path: '/test',
-      component: undefined,
+      component: 'TestComponent',
       pluginId: 'test-plugin',
       permissions: ['READ'],
-    } as unknown as IRouteExtension;
+    };
 
     vi.mocked(isPluginRegistered).mockReturnValue(true);
     vi.mocked(getPluginComponents).mockReturnValue(mockComponents);
