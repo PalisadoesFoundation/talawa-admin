@@ -7,7 +7,7 @@ import prettier from 'eslint-plugin-prettier';
 import react from 'eslint-plugin-react';
 import vitest from '@vitest/eslint-plugin';
 import tsdoc from 'eslint-plugin-tsdoc';
-import vitestIsolation from './eslint-plugin-vitest-isolation/index.js';
+import vitestIsolation from './scripts/eslint-plugin-vitest-isolation/index.js';
 
 export default [
   {

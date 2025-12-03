@@ -68,9 +68,8 @@ export default defineConfig({
         'cypress/**',
         'cypress.config.ts',
         '.github/**', // Exclude GitHub workflows and scripts
-        'scripts/**', // Exclude build/setup scripts
+        'scripts/**', // Exclude build/setup scripts (includes eslint-plugin-vitest-isolation)
         'config/**', // Exclude configuration files
-        'eslint-plugin-vitest-isolation/**', // Exclude local ESLint plugin (infrastructure)
       ],
       reporter: ['lcov', 'json', 'text', 'text-summary'],
     },
