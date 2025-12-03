@@ -210,7 +210,7 @@ pnpm install
 Write-Host ""
 Write-Host "🔧 Step 2: Run installation script" -ForegroundColor Cyan
 Write-Host "   This will run: pnpm run install-deps"
-Write-Host "   This will check for: git, typescript, and optionally docker"
+Write-Host "   This will check for: typescript, and optionally docker"
 Write-Host ""
 $response = Read-Host "Do you want to continue? (y/n)"
 

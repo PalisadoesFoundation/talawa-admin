@@ -112,10 +112,12 @@ async function promptPackagesToInstall(
  * Check if a package is required
  */
 function isRequired(pkgName: string): boolean {
-  // Core required packages: git, typescript
+  // Core required packages: typescript
   // docker is required when useDocker is true (it only appears when selected)
+  // Git is required to clone the repo, so we don't check for it here
   // Node and fnm are now handled by shell installers
-  const required = ['git', 'typescript', 'docker'];
+  const required = ['typescript', 'docker'];
+  // const required = ['git', 'typescript', 'docker']; // git commented out - required to clone repo
   return required.includes(pkgName);
 }
 

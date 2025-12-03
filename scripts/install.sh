@@ -131,7 +131,7 @@ pnpm install
 echo ""
 echo "🔧 Step 2: Run installation script"
 echo "   This will run: pnpm run install-deps"
-echo "   This will check for: git, typescript, and optionally docker"
+echo "   This will check for: typescript, and optionally docker"
 echo ""
 read -p "Do you want to continue? (y/n) " -r
 

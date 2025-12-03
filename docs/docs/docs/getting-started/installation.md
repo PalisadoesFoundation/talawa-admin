@@ -5,6 +5,132 @@ slug: /installation
 sidebar_position: 1
 ---
 
+Talawa-Admin can be installed using either an [automated one-click installation script](#automated-installation) or [manually](#manual-installation). The automated installation is recommended for most users as it handles all prerequisites automatically.
+
+## Automated Installation
+
+The automated installation script provides a zero-prerequisite installation experience. It automatically installs Node.js (via fnm), pnpm, and all required dependencies.
+
+### Prerequisites
+
+The only prerequisite is having `git` installed on your system:
+
+- **Windows**: Download from [git-scm.com](https://git-scm.com/downloads)
+- **macOS/Linux**: Usually pre-installed, or install via your package manager
+
+### Setting up the repository
+
+First you need a local copy of `talawa-admin`. Run the following command in the directory of choice on your local system.
+
+1. On your computer, navigate to the folder where you want to setup the repository.
+2. Open a `cmd` (Windows) or `terminal` (Linux or MacOS) session in this folder.
+   1. An easy way to do this is to right-click and choose appropriate option based on your OS.
+
+The next steps will depend on whether you are:
+
+1. an end user installing our software (Production Environments) or
+2. one of our open source contributors (Development Environments).
+
+Please follow them closely.
+
+#### For Production Environments
+
+Clone the repository to your local computer:
+
+```bash
+git clone https://github.com/PalisadoesFoundation/talawa-admin.git
+```
+
+Proceed to the next section.
+
+#### For Development Environments
+
+If you are one of our open source software developer contributors then
+follow these steps carefully in forking and cloning the `talawa-admin` repository.
+
+1.  Follow the steps in our [Git Guide for Developers](https://developer.palisadoes.org/docs/git-guide/introduction/quickstart)
+2.  As a developer you will be working with our `develop` branch.
+3.  You will now have a local copy of the code files.
+4.  For more detailed instructions on contributing code, please review the following documents in the root directory of the code:
+    1. CONTRIBUTING.md
+    2. CODE_OF_CONDUCT.md
+    3. CODE_STYLE.md
+    4. DOCUMENTATION.md
+    5. INSTALLATION.md
+    6. ISSUE_GUIDELINES.md
+    7. PR_GUIDELINES.md
+
+#### Navigate to the repository directory
+
+```bash
+cd talawa-admin
+```
+
+### Running the automated installer
+
+The installer automatically handles:
+
+- Installing Node.js via fnm (Fast Node Manager) if not present
+- Installing pnpm via Corepack
+- Installing project dependencies
+- Checking and installing typescript, and optionally docker
+
+#### For macOS and Linux
+
+Run the installation script:
+
+```bash
+./scripts/install.sh
+```
+
+Or if the script is not executable:
+
+```bash
+bash scripts/install.sh
+```
+
+The script will:
+
+1. Check for pnpm, and if missing, automatically install Node.js (via fnm) and pnpm
+2. Prompt you to install project dependencies (`pnpm install`)
+3. Prompt you to run the environment installer (`pnpm run install-deps`) which checks for typescript and optionally docker
+
+#### For Windows
+
+Open PowerShell in the repository directory and run:
+
+```powershell
+.\scripts\install.ps1
+```
+
+If PowerShell blocks the script due to the execution policy, open PowerShell as Administrator and allow locally created scripts:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+
+Then run the installer again.
+
+The PowerShell script follows the same flow as the bash script, automatically installing Node.js and pnpm if needed.
+
+### What gets installed
+
+The automated installer handles:
+
+- **Node.js**: Installed automatically via fnm (Fast Node Manager) if not present
+- **pnpm**: Installed via Corepack, respecting the version specified in `package.json`
+- **Project dependencies**: Installed via `pnpm install`
+- **TypeScript**: Checked and can be installed if missing
+- **Docker**: Optional, can be installed if you choose to use Docker
+
+Note: **Git** must be installed before cloning the repository (see Prerequisites section above). It is not checked or installed by the automated installer.
+
+### Next steps
+
+After the automated installation completes, proceed to the [Configuration](./configuration.md) page to set up the application.
+
+## Manual Installation
+
 Installation is not difficult, but there are many steps. This is a brief explanation of what needs to be done:
 
 1. Install `git`
@@ -18,7 +144,7 @@ Installation is not difficult, but there are many steps. This is a brief explana
 
 These steps are explained in more detail in the sections that follow.
 
-## Prerequisites
+### Prerequisites
 
 In this section we'll explain how to set up all the prerequisite software packages to get you up and running.
 
