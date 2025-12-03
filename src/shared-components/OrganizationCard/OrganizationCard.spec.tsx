@@ -20,7 +20,7 @@ vi.mock('react-i18next', () => ({
 }));
 
 const mockNavigate = vi.fn();
-vi.mock('react-router', () => ({
+vi.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }));
 
@@ -41,11 +41,16 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+const mockUseLocalStorage = vi.fn(() => ({
+  getItem: (key: string): string | null =>
+    key === 'userId' ? 'user123' : null,
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  getStorageKey: vi.fn(),
+}));
+
 vi.mock('utils/useLocalstorage', () => ({
-  default: () => ({
-    getItem: (key: string) => (key === 'userId' ? 'user123' : null),
-    setItem: vi.fn(),
-  }),
+  default: () => mockUseLocalStorage(),
 }));
 
 describe('OrganizationCard', () => {
@@ -301,6 +306,38 @@ describe('OrganizationCard', () => {
     });
   });
 
+  it('handles ApolloError with different code when joining', async () => {
+    const mocks = [
+      {
+        request: {
+          query: JOIN_PUBLIC_ORGANIZATION,
+          variables: { input: { organizationId: '123' } },
+        },
+        result: {
+          errors: [
+            {
+              message: 'Some other error',
+              extensions: { code: 'SOME_OTHER_CODE' },
+            },
+          ],
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <OrganizationCard data={mockData} />
+      </MockedProvider>,
+    );
+
+    const button = screen.getByTestId('joinBtn');
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('errorOccured');
+    });
+  });
+
   it('handles generic error when joining', async () => {
     const mocks = [
       {
@@ -336,6 +373,31 @@ describe('OrganizationCard', () => {
 
     const button = screen.getByTestId('withdrawBtn');
     expect(button).toHaveTextContent('withdraw');
+  });
+
+  it('shows error when withdrawing if userId is not found', async () => {
+    const pendingData = { ...mockData, membershipRequestStatus: 'pending' };
+
+    // Mock getItem to return null for userId
+    mockUseLocalStorage.mockReturnValueOnce({
+      getItem: (key: string) => (key === 'userId' ? null : 'some-value'),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      getStorageKey: vi.fn(),
+    });
+
+    render(
+      <MockedProvider>
+        <OrganizationCard data={pendingData} />
+      </MockedProvider>,
+    );
+
+    const button = screen.getByTestId('withdrawBtn');
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('UserIdNotFound');
+    });
   });
 
   it('withdraws membership request successfully', async () => {

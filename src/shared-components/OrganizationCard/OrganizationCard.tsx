@@ -1,5 +1,5 @@
 /**
- * OrgListCard Component
+ * OrganizationCard Component
  *
  * This component represents a card displaying information about an organization.
  * It includes the organization's name, description, address, avatar, and the number of members.
@@ -44,7 +44,7 @@ import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import { Tooltip } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
 import { ApolloError, useMutation } from '@apollo/client';
 import {
