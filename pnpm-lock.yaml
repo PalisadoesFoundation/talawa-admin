@@ -20,9 +20,6 @@ importers:
       '@apollo/react-testing':
         specifier: ^4.0.0
         version: 4.0.0(@types/react@19.2.7)(graphql-ws@6.0.6(graphql@16.12.0)(ws@8.18.3))(graphql@16.12.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      '@base-ui-components/react':
-        specifier: ^1.0.0-beta.3
-        version: 1.0.0-beta.7(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@dicebear/collection':
         specifier: ^9.2.2
         version: 9.2.4(@dicebear/core@9.2.4)
@@ -922,27 +919,6 @@ packages:
   '@babel/types@7.28.5':
     resolution: {integrity: sha512-qQ5m48eI/MFLQ5PxQj4PFaprjyCTLI37ElWMmNs0K8Lk3dVeOdNpB3ks8jc7yM5CDmVC73eMVk/trk3fgmrUpA==}
     engines: {node: '>=6.9.0'}
-
-  '@base-ui-components/react@1.0.0-beta.7':
-    resolution: {integrity: sha512-jZoU6ZzPPDhiP62ToFpIZVkLDzYleL8NJhiw4Dm9Q+N7Q+/rOW+N6YN0URuQ9zMdcl8jvIks/8iY1cyD/VC87A==}
-    engines: {node: '>=14.0.0'}
-    peerDependencies:
-      '@types/react': ^17 || ^18 || ^19
-      react: ^17 || ^18 || ^19
-      react-dom: ^17 || ^18 || ^19
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-
-  '@base-ui-components/utils@0.2.1':
-    resolution: {integrity: sha512-6D3PNibMXWPxiXCW/aMTclTypNG/QPCUc5vwGS6yKIcoYGDmjLiG3VyJ7hlGAnXiMGJMWH2TVl335N+zkRAKZQ==}
-    peerDependencies:
-      '@types/react': ^17 || ^18 || ^19
-      react: ^17 || ^18 || ^19
-      react-dom: ^17 || ^18 || ^19
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
 
   '@commitlint/cli@19.8.1':
     resolution: {integrity: sha512-LXUdNIkspyxrlV6VDHWBmCZRtkEVRpBKxi2Gtw3J54cGWhLCTouVD/Q6ZSaSvd2YaDObWK8mDjrz3TIKtaQMAA==}
@@ -7993,31 +7969,6 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.27.1
       '@babel/helper-validator-identifier': 7.28.5
-
-  '@base-ui-components/react@1.0.0-beta.7(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
-    dependencies:
-      '@babel/runtime': 7.28.4
-      '@base-ui-components/utils': 0.2.1(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      '@floating-ui/react-dom': 2.1.6(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      '@floating-ui/utils': 0.2.10
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
-      reselect: 5.1.1
-      tabbable: 6.3.0
-      use-sync-external-store: 1.6.0(react@19.2.0)
-    optionalDependencies:
-      '@types/react': 19.2.7
-
-  '@base-ui-components/utils@0.2.1(@types/react@19.2.7)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
-    dependencies:
-      '@babel/runtime': 7.28.4
-      '@floating-ui/utils': 0.2.10
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
-      reselect: 5.1.1
-      use-sync-external-store: 1.6.0(react@19.2.0)
-    optionalDependencies:
-      '@types/react': 19.2.7
 
   '@commitlint/cli@19.8.1(@types/node@24.10.1)(typescript@5.9.3)':
     dependencies:
