@@ -157,28 +157,6 @@ module.exports = {
                 }
             },
 
-            // Check for cleanup in beforeEach as alternative
-            'CallExpression[callee.name="beforeEach"]'(node) {
-                const callback = node.arguments[0];
-                if (!callback) return;
-
-                if (callback.type === 'ArrowFunctionExpression' || callback.type === 'FunctionExpression') {
-                    const bodyNode = callback.body;
-
-                    if (bodyNode.type === 'BlockStatement') {
-                        const cleanupMethods = findCleanupInBody(bodyNode);
-
-                        if (cleanupMethods.clearAllMocks || cleanupMethods.restoreAllMocks ||
-                            cleanupMethods.resetModules || cleanupMethods.resetAllMocks) {
-                            hasCleanup = true;
-                        }
-
-                        if (cleanupMethods.resetAllMocks) {
-                            hasResetAllMocks = true;
-                        }
-                    }
-                }
-            },
 
             // At the end of the program, check if mocks were used and cleanup exists
             'Program:exit'(node) {
