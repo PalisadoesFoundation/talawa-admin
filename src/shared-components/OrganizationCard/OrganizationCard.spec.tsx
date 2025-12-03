@@ -231,7 +231,6 @@ describe('OrganizationCard', () => {
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith('orgJoined');
-      expect(window.location.reload).toHaveBeenCalled();
     });
   });
 
