@@ -8,7 +8,10 @@ import SaveIcon from '@mui/icons-material/Save';
 import type { ApolloError } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
-import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
+import {
+  GET_ORGANIZATION_BASIC_DATA,
+  ORGANIZATIONS_LIST_BASIC,
+} from 'GraphQl/Queries/Queries';
 import Loader from 'components/Loader/Loader';
 import { Col, Form, Row } from 'react-bootstrap';
 import { errorHandler } from 'utils/errorHandler';
@@ -116,6 +119,8 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     notifyOnNetworkStatusChange: true,
   });
 
+  const { data: allOrgsData } = useQuery(ORGANIZATIONS_LIST_BASIC);
+
   // Update form state when data changes
   useEffect(() => {
     let isMounted = true;
@@ -155,6 +160,17 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     try {
       if (!formState.orgName || !formState.orgDescrip) {
         toast.error('Name and description are required');
+        return;
+      }
+
+      const isNameDuplicate = allOrgsData?.organizations?.some(
+        (org: { id: string; name: string }) =>
+          org.name.trim().toLowerCase() ===
+            formState.orgName.trim().toLowerCase() && org.id !== orgId,
+      );
+
+      if (isNameDuplicate) {
+        toast.error('The given organization name already exists');
         return;
       }
 
