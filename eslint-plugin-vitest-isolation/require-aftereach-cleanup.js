@@ -18,9 +18,9 @@ module.exports = {
         schema: [],
         messages: {
             missingAfterEach:
-                'Test file uses mocks ({{mockTypes}}) but is missing afterEach cleanup. Add afterEach(() => { vi.restoreAllMocks(); }) to prevent mock leakage.',
+                'Test file uses mocks ({{mockTypes}}) but is missing afterEach cleanup. Add afterEach(() => { vi.clearAllMocks(); }) to prevent mock leakage.',
             missingCleanup:
-                'afterEach block exists but is missing mock cleanup. Add vi.restoreAllMocks() or vi.clearAllMocks().',
+                'afterEach block exists but is missing mock cleanup. Add vi.clearAllMocks() or vi.restoreAllMocks().',
             discouragedMethod:
                 'Using vi.resetAllMocks() is discouraged. Consider using vi.clearAllMocks() or vi.restoreAllMocks() instead.',
         },
@@ -171,6 +171,10 @@ module.exports = {
                         if (cleanupMethods.clearAllMocks || cleanupMethods.restoreAllMocks ||
                             cleanupMethods.resetModules || cleanupMethods.resetAllMocks) {
                             hasCleanupInAfterEach = true;
+                        }
+
+                        if (cleanupMethods.resetAllMocks) {
+                            hasResetAllMocks = true;
                         }
                     }
                 }

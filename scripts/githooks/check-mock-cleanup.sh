@@ -53,7 +53,7 @@ has_module_mocks() {
 }
 
 # Find all .spec.ts and .spec.tsx files in src/
-files_without_cleanup=$(find src/ \( -iname "*.spec.tsx" -o -iname "*.spec.ts" \) \
+files_without_cleanup=$(find src/ \( -iname "*.spec.tsx" -o -iname "*.spec.ts" -o -iname "*.test.tsx" -o -iname "*.test.ts" \) \
   | while read -r file; do
       # Check if file uses mocking functions (vi.fn, vi.mock, spyOn)
       # EXCLUDE commented lines to avoid false positives
@@ -146,7 +146,7 @@ files_without_cleanup=$(find src/ \( -iname "*.spec.tsx" -o -iname "*.spec.ts" \
 # Additional validation: Check for window/document manipulation without cleanup
 echo "Checking for window/document manipulation and timer usage..."
 
-files_with_global_issues=$(find src/ \( -iname "*.spec.tsx" -o -iname "*.spec.ts" \) \
+files_with_global_issues=$(find src/ \( -iname "*.spec.tsx" -o -iname "*.spec.ts" -o -iname "*.test.tsx" -o -iname "*.test.ts" \) \
   | while read -r file; do
       has_issue=false
       issue_data=""

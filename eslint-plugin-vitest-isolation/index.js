@@ -1,14 +1,12 @@
 /**
- * Custom ESLint plugin for enforcing Vitest mock isolation
- * 
- * This plugin provides rules to ensure proper test isolation by enforcing
- * cleanup of mocks, spies, and other test utilities.
+ * ESLint plugin for Vitest test isolation enforcement
+ * Ensures proper mock cleanup in test files
  */
 
-const requireAfterachCleanup = require('./require-aftereach-cleanup');
+const requireAfterEachCleanup = require('./require-aftereach-cleanup');
 
 module.exports = {
     rules: {
-        'require-aftereach-cleanup': requireAfterachCleanup,
+        'require-aftereach-cleanup': requireAfterEachCleanup,
     },
 };
