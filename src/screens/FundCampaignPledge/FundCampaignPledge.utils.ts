@@ -29,13 +29,11 @@ export const processPledgesData = (
   tCommon: (key: string) => string,
 ) => {
   let totalPledged = 0;
-  let totalRaised = 0;
 
   const pledgesList =
     pledgeData?.fundCampaign?.pledges?.edges.map((edge) => {
       const amount = edge.node.amount || 0;
       totalPledged += amount;
-      totalRaised += 0;
 
       const allUsers =
         'users' in edge.node && Array.isArray(edge.node.users)
@@ -82,7 +80,7 @@ export const processPledgesData = (
     pledgeData?.fundCampaign?.pledges?.edges[0]?.node?.campaign?.fund?.name ??
     tCommon('Funds');
 
-  return { pledges: sortedPledges, totalPledged, totalRaised, fundName };
+  return { pledges: sortedPledges, totalPledged, fundName };
 };
 
 export const isWithinCampaignDates = (
