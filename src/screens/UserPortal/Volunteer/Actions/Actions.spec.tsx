@@ -95,7 +95,7 @@ const expectElementToHaveTextContent = (
 
 const renderActions = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/user/volunteer/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -140,7 +140,7 @@ describe('Testing Actions Screen', () => {
     setItem('userId', '');
     setItem('volunteerId', '');
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/user/volunteer/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>

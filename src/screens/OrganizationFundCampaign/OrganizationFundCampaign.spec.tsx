@@ -46,7 +46,7 @@ const translations = JSON.parse(
 
 const renderFundCampaign = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/orgfundcampaign/orgId/fundId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -110,7 +110,7 @@ describe('FundCampaigns Screen', () => {
   it('should redirect to fallback URL if URL params are undefined', async () => {
     mockRouteParams('', '');
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/orgfundcampaign/']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>

@@ -2,8 +2,20 @@ import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import svgrPlugin from 'vite-plugin-svgr';
+import { cpus } from 'os';
 
 const isCI = !!process.env.CI;
+const cpuCount = cpus().length;
+
+const MAX_CI_THREADS = 12; // Reduced to leave headroom
+const MAX_LOCAL_THREADS = 16;
+
+const ciThreads = Math.min(
+  MAX_CI_THREADS,
+  Math.max(4, Math.floor(cpuCount * 0.85)) // Increased utilization
+);
+
+const localThreads = Math.min(MAX_LOCAL_THREADS, Math.max(4, cpuCount));
 
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), svgrPlugin()],
@@ -17,34 +29,30 @@ export default defineConfig({
     include: ['src/**/*.{spec,test}.{js,jsx,ts,tsx}'],
     globals: true,
     environment: 'jsdom',
+    css: false,
     setupFiles: 'vitest.setup.ts',
     testTimeout: 30000,
     hookTimeout: 10000,
     teardownTimeout: 10000,
-    // Use threads for better performance in CI
     pool: 'threads',
     poolOptions: {
       threads: {
         singleThread: false,
         minThreads: 1,
-        maxThreads: isCI ? 2 : 4, // Conservative in CI to avoid OOM
-        // Keep isolation enabled to prevent test interference
+        maxThreads: isCI ? ciThreads : localThreads,
         isolate: true,
       },
     },
-    // Lower concurrency in CI to avoid memory issues
-    maxConcurrency: isCI ? 1 : 2,
-    // Enable file parallelism for better performance
+    maxConcurrency: isCI ? ciThreads : localThreads,
     fileParallelism: true,
     sequence: {
       shuffle: false,
-      concurrent: false, // Disabled for test stability - files still run in parallel across shards
+      concurrent: false,
     },
     coverage: {
       enabled: true,
       provider: 'istanbul',
       reportsDirectory: './coverage/vitest',
-      // Don't use 'all: true' with sharding - let merge handle combining partial coverage
       exclude: [
         'node_modules',
         'dist',
@@ -63,7 +71,7 @@ export default defineConfig({
         'scripts/**', // Exclude build/setup scripts
         'config/**', // Exclude configuration files
       ],
-      reporter: ['lcov', 'json', 'text', 'text-summary'], // Use json for accurate merging, lcov for final report
+      reporter: ['lcov', 'json', 'text', 'text-summary'],
     },
   },
 });

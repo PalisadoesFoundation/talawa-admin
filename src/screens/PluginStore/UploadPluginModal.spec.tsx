@@ -734,7 +734,7 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -777,7 +777,7 @@ describe('UploadPluginModal Component', () => {
 
       // First render with file uploaded
       const { unmount } = render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <UploadPluginModal show={true} onHide={mockOnHide} />
         </MockedProvider>,
       );
@@ -797,7 +797,7 @@ describe('UploadPluginModal Component', () => {
 
       // Re-render the modal to verify state is reset
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <UploadPluginModal show={true} onHide={mockOnHide} />
         </MockedProvider>,
       );
@@ -829,7 +829,7 @@ describe('UploadPluginModal Component', () => {
     it('should handle close when modal is hidden', async () => {
       const mockOnHide = vi.fn();
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <UploadPluginModal show={false} onHide={mockOnHide} />
         </MockedProvider>,
       );

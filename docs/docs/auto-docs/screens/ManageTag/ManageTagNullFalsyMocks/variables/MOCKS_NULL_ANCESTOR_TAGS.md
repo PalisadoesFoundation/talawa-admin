@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_NULL\_ANCESTOR\_TAGS**: `object`[]
 
-Defined in: [src/screens/ManageTag/ManageTagNullFalsyMocks.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/ManageTagNullFalsyMocks.ts#L105)
+Defined in: [src/screens/ManageTag/ManageTagNullFalsyMocks.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/ManageTagNullFalsyMocks.ts#L106)
 
 ## Type Declaration
 
@@ -70,6 +70,10 @@ Defined in: [src/screens/ManageTag/ManageTagNullFalsyMocks.ts:105](https://githu
 
 > **getAssignedUsers**: `object`
 
+#### result.data.getAssignedUsers.\_\_typename
+
+> **\_\_typename**: `string` = `'UserTag'`
+
 #### result.data.getAssignedUsers.ancestorTags
 
 > **ancestorTags**: `object`[]
@@ -82,6 +86,10 @@ Defined in: [src/screens/ManageTag/ManageTagNullFalsyMocks.ts:105](https://githu
 
 > **usersAssignedTo**: `object`
 
+#### result.data.getAssignedUsers.usersAssignedTo.\_\_typename
+
+> **\_\_typename**: `string` = `'UserTagUsersAssignedToConnection'`
+
 #### result.data.getAssignedUsers.usersAssignedTo.edges
 
 > **edges**: `object`[]
@@ -89,6 +97,10 @@ Defined in: [src/screens/ManageTag/ManageTagNullFalsyMocks.ts:105](https://githu
 #### result.data.getAssignedUsers.usersAssignedTo.pageInfo
 
 > **pageInfo**: `object`
+
+#### result.data.getAssignedUsers.usersAssignedTo.pageInfo.\_\_typename
+
+> **\_\_typename**: `string` = `'PageInfo'`
 
 #### result.data.getAssignedUsers.usersAssignedTo.pageInfo.endCursor
 
