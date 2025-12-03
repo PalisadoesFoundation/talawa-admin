@@ -11,8 +11,8 @@ export interface InterfaceOrganizationCardProps {
     }[];
   };
   addressLine1: string;
-  membersCount?: number | undefined;
-  adminsCount?: number | undefined;
+  membersCount?: number;
+  adminsCount?: number;
   membershipRequestStatus?: string;
   userRegistrationRequired?: boolean;
   membershipRequests?: {

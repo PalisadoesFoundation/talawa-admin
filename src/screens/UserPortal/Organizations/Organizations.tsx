@@ -337,6 +337,8 @@ export default function Organizations(): React.JSX.Element {
   };
 
   const isLoading = loadingAll || loadingJoined || loadingCreated;
+
+  /** We are treating the viewer for this screen as an User always*/
   const role = 'user';
   return (
     <>

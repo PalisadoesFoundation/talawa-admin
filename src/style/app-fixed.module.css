@@ -7712,10 +7712,9 @@ form {
   align-items: center;
   margin-left: 6px;
   gap: 2px;
-  margin-top: -1.5px;
-  height: 50px;
 }
 
+/*OrgList search layour utility */
 .btnsContainerSearchBar .inputOrgList {
   flex: 1 1 640px;
   max-width: 760px;

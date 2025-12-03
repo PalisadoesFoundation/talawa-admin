@@ -54,8 +54,8 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQueries';
-import { userId } from 'screens/UserPortal/LeaveOrganization/LeaveOrganization';
 import { toast } from 'react-toastify';
+import useLocalStorage from 'utils/useLocalstorage';
 
 export interface InterfaceOrganizationCardPropsPG {
   data: InterfaceOrganizationCardProps;
@@ -82,6 +82,8 @@ function OrganizationCard({
 
   const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
+  const { getItem } = useLocalStorage();
+  const userId = getItem('userId');
 
   // Mutations for handling organization memberships
   const [sendMembershipRequest] = useMutation(SEND_MEMBERSHIP_REQUEST, {
@@ -119,14 +121,16 @@ function OrganizationCard({
         toast.success(t('orgJoined') as string);
       }
     } catch (error: unknown) {
-      if (error instanceof Error) {
-        const apolloError = error as ApolloError;
+      if (error instanceof ApolloError) {
+        const apolloError = error;
         const errorCode = apolloError.graphQLErrors?.[0]?.extensions?.code;
         if (errorCode === 'ALREADY_MEMBER') {
           toast.error(t('AlreadyJoined') as string);
         } else {
           toast.error(t('errorOccured') as string);
         }
+      } else {
+        toast.error(t('errorOccured') as string);
       }
     }
   }
@@ -135,13 +139,14 @@ function OrganizationCard({
    * Handles withdrawing a membership request. Finds the request for the current user and cancels it.
    */
   async function withdrawMembershipRequest(): Promise<void> {
-    if (!userId) {
+    const currentUserId = userId;
+    if (!currentUserId) {
       toast.error(t('UserIdNotFound') as string);
       return;
     }
 
     const membershipRequest = membershipRequests?.find(
-      (request) => request.user.id === userId,
+      (request) => request.user.id === currentUserId,
     );
 
     try {

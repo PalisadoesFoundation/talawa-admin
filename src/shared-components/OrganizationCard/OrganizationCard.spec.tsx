@@ -41,8 +41,11 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-vi.mock('screens/UserPortal/LeaveOrganization/LeaveOrganization', () => ({
-  userId: 'user123',
+vi.mock('utils/useLocalstorage', () => ({
+  default: () => ({
+    getItem: (key: string) => (key === 'userId' ? 'user123' : null),
+    setItem: vi.fn(),
+  }),
 }));
 
 describe('OrganizationCard', () => {
@@ -218,7 +221,7 @@ describe('OrganizationCard', () => {
     ];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <OrganizationCard data={mockData} />
       </MockedProvider>,
     );
@@ -254,7 +257,7 @@ describe('OrganizationCard', () => {
     ];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <OrganizationCard data={dataWithRegistration} />
       </MockedProvider>,
     );
@@ -286,7 +289,7 @@ describe('OrganizationCard', () => {
     ];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <OrganizationCard data={mockData} />
       </MockedProvider>,
     );
@@ -311,7 +314,7 @@ describe('OrganizationCard', () => {
     ];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <OrganizationCard data={mockData} />
       </MockedProvider>,
     );
@@ -360,7 +363,7 @@ describe('OrganizationCard', () => {
     ];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <OrganizationCard data={pendingData} />
       </MockedProvider>,
     );
@@ -412,7 +415,7 @@ describe('OrganizationCard', () => {
     ];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <OrganizationCard data={pendingData} />
       </MockedProvider>,
     );

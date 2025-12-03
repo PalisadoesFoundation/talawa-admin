@@ -1893,7 +1893,18 @@ describe('Advanced Component Functionality Tests', () => {
     await userEvent.click(earliestOption);
     await wait(300); // Give more time for re-render
 
-    // Verify sorting was applied
+    // Verify sorting was applied by checking the order of rendered cards
+    const sortedOrgs = [...mockOrgData.multipleOrgs].sort(
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    );
+    // Default pagination is 5, so we expect only the first 5 sorted items
+    const expectedNames = sortedOrgs.slice(0, 5).map((org) => org.name);
+
+    const renderedCards = screen.getAllByTestId('organization-card-mock');
+    const renderedNames = renderedCards.map((card) => card.textContent);
+
+    expect(renderedNames).toEqual(expectedNames);
     expect(sortDropdown).toHaveTextContent('Earliest');
   });
 

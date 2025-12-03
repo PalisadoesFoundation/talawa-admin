@@ -78,7 +78,13 @@ vi.mock(
 
 vi.mock('shared-components/OrganizationCard/OrganizationCard', () => ({
   default: ({ data }: { data: InterfaceOrganizationCardProps }) => (
-    <div data-testid="organization-card-mock">{data.name}</div>
+    <div
+      data-testid="organization-card-mock"
+      data-organization-name={data.name}
+      data-membership-status={data.membershipRequestStatus}
+    >
+      {data.name}
+    </div>
   ),
 }));
 

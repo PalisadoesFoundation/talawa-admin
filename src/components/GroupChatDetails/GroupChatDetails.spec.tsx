@@ -552,7 +552,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={failingMocks} addTypename={false}>
+        <MockedProvider mocks={failingMocks}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -611,7 +611,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={failingMocks} addTypename={false}>
+        <MockedProvider mocks={failingMocks}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -757,7 +757,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={failingMocks} addTypename={false}>
+        <MockedProvider mocks={failingMocks}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -797,7 +797,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={failingMocks} addTypename={false}>
+        <MockedProvider mocks={failingMocks}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
