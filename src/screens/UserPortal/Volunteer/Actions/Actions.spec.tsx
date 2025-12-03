@@ -20,12 +20,6 @@ import { describe, it, beforeEach, afterEach, beforeAll, vi } from 'vitest';
 
 const localStorageMock = createLocalStorageMock();
 
-// Define localStorage on global/window before importing useLocalStorage
-Object.defineProperty(global, 'localStorage', {
-  value: localStorageMock,
-  writable: true,
-});
-
 const { setItem } = useLocalStorage();
 
 const link1 = new StaticMockLink(MOCKS);
