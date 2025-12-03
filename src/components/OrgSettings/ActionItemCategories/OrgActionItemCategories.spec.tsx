@@ -212,7 +212,7 @@ describe('Testing Organisation Action Item Categories', () => {
 
     // Wait for categories to load
     const viewCategoryBtn = await screen.findByTestId('viewCategoryBtn1');
-    await waitFor(() => expect(viewCategoryBtn).toBeInTheDocument());
+    expect(viewCategoryBtn).toBeInTheDocument();
 
     // Open view modal
     await userEvent.click(viewCategoryBtn);
