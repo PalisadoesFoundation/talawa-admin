@@ -1284,5 +1284,21 @@ describe('Testing Advertisement Register Component', () => {
 
     useParamsMock.mockRestore();
   });
+  it('validates structure of exported mocks', () => {
+    expect(createAdvertisement).toBeDefined();
+    expect(Array.isArray(createAdvertisement)).toBe(true);
+    expect(createAdvertisement.length).toBe(4);
+    const newMockCase = createAdvertisement[3];
+    expect(newMockCase.request).toBeDefined();
+    expect(newMockCase.result).toBeDefined();
+    expect(createAdFailMock).toBeDefined();
+    expect(createAdFailMock.error).toBeDefined();
+    expect(updateAdFailMock).toBeDefined();
+    expect(updateAdFailMock.error).toBeDefined();
+    expect(dateConstants).toBeDefined();
+    expect(dateConstants.create).toBeDefined();
+    expect(mockFile).toBeInstanceOf(File);
+    expect(mockBigFile).toBeInstanceOf(File);
+  });
   vi.useRealTimers();
 });
