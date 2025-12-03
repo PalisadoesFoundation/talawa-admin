@@ -38,7 +38,7 @@ module.exports = {
 
         // Track afterEach blocks and their cleanup methods
         let hasAfterEach = false;
-        let hasCleanupInAfterEach = false;
+        let hasCleanup = false;
         let hasResetAllMocks = false;
 
         /**
@@ -137,18 +137,18 @@ module.exports = {
                         const cleanupMethods = findCleanupInBody(bodyNode);
 
                         if (cleanupMethods.clearAllMocks || cleanupMethods.restoreAllMocks || cleanupMethods.resetModules) {
-                            hasCleanupInAfterEach = true;
+                            hasCleanup = true;
                         }
 
                         if (cleanupMethods.resetAllMocks) {
-                            hasCleanupInAfterEach = true;
+                            hasCleanup = true;
                             hasResetAllMocks = true;
                         }
                     } else {
                         // Single expression arrow function
                         const cleanupMethod = isViCleanupCall(bodyNode);
                         if (cleanupMethod) {
-                            hasCleanupInAfterEach = true;
+                            hasCleanup = true;
                             if (cleanupMethod === 'resetAllMocks') {
                                 hasResetAllMocks = true;
                             }
@@ -170,7 +170,7 @@ module.exports = {
 
                         if (cleanupMethods.clearAllMocks || cleanupMethods.restoreAllMocks ||
                             cleanupMethods.resetModules || cleanupMethods.resetAllMocks) {
-                            hasCleanupInAfterEach = true;
+                            hasCleanup = true;
                         }
 
                         if (cleanupMethods.resetAllMocks) {
@@ -195,7 +195,7 @@ module.exports = {
                 if (mockUsage.hasMock) mockTypes.push('vi.mock()');
                 if (mockUsage.hasSpyOn) mockTypes.push('vi.spyOn()');
 
-                if (!hasAfterEach && !hasCleanupInAfterEach) {
+                if (!hasAfterEach && !hasCleanup) {
                     // No afterEach block at all
                     context.report({
                         node,
@@ -252,7 +252,7 @@ module.exports = {
                             return null;
                         },
                     });
-                } else if (hasAfterEach && !hasCleanupInAfterEach) {
+                } else if (hasAfterEach && !hasCleanup) {
                     // afterEach exists but doesn't have cleanup - find it and add cleanup
                     const afterEachNode = findAfterEachNode(node);
 
@@ -349,10 +349,6 @@ module.exports = {
             traverse(node);
             return afterEachNode;
         }
-
-        /**
-         * Find the first describe block in the AST
-         */
 
         /**
          * Find the first describe block in the AST
