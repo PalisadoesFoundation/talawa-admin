@@ -51,6 +51,10 @@ vi.mock('../managers/lifecycle', () => ({
   LifecycleManager: vi.fn().mockImplementation(() => ({
     loadPlugin: vi.fn().mockResolvedValue(true),
     unloadPlugin: vi.fn().mockResolvedValue(true),
+    installPlugin: vi.fn().mockResolvedValue(true),
+    uninstallPlugin: vi.fn().mockResolvedValue(true),
+    activatePlugin: vi.fn().mockResolvedValue(true),
+    deactivatePlugin: vi.fn().mockResolvedValue(true),
     togglePluginStatus: vi.fn().mockResolvedValue(true),
     getLoadedPlugins: vi.fn().mockReturnValue([]),
     getLoadedPlugin: vi.fn().mockReturnValue({
@@ -156,6 +160,30 @@ describe('PluginManager', () => {
       expect(typeof result).toBe('boolean');
     });
 
+    it('should install plugin successfully', async () => {
+      const result = await pluginManager.installPlugin('test-plugin');
+      expect(typeof result).toBe('boolean');
+      expect(result).toBe(true);
+    });
+
+    it('should uninstall plugin successfully', async () => {
+      const result = await pluginManager.uninstallPlugin('test-plugin');
+      expect(typeof result).toBe('boolean');
+      expect(result).toBe(true);
+    });
+
+    it('should activate plugin successfully', async () => {
+      const result = await pluginManager.activatePlugin('test-plugin');
+      expect(typeof result).toBe('boolean');
+      expect(result).toBe(true);
+    });
+
+    it('should deactivate plugin successfully', async () => {
+      const result = await pluginManager.deactivatePlugin('test-plugin');
+      expect(typeof result).toBe('boolean');
+      expect(result).toBe(true);
+    });
+
     it('should toggle plugin status successfully', async () => {
       const result = await pluginManager.togglePluginStatus(
         'test-plugin',
@@ -209,6 +237,18 @@ describe('PluginManager', () => {
     });
   });
 
+  describe('Plugin Discovery', () => {
+    beforeEach(() => {
+      pluginManager = new PluginManager();
+    });
+
+    it('should refresh plugin discovery successfully', async () => {
+      await expect(
+        pluginManager.refreshPluginDiscovery(),
+      ).resolves.not.toThrow();
+    });
+  });
+
   describe('Extension Points', () => {
     beforeEach(() => {
       pluginManager = new PluginManager();
@@ -257,10 +297,30 @@ describe('PluginManager', () => {
       pluginManager = new PluginManager();
     });
 
-    it('should initialize plugin system', async () => {
-      await expect(
-        pluginManager.initializePluginSystem(),
-      ).resolves.not.toThrow();
+    it('should initialize plugin system when not already initialized', async () => {
+      const { DiscoveryManager } = await import('../managers/discovery');
+
+      const mockDiscoveryInstance = {
+        loadPluginIndexFromGraphQL: vi.fn().mockResolvedValue(undefined),
+        discoverPlugins: vi.fn().mockResolvedValue([]),
+        setGraphQLService: vi.fn(),
+        isPluginActivated: vi.fn().mockReturnValue(false),
+        isPluginInstalled: vi.fn().mockReturnValue(false),
+      };
+
+      vi.mocked(DiscoveryManager).mockImplementation(
+        () =>
+          mockDiscoveryInstance as unknown as InstanceType<
+            typeof DiscoveryManager
+          >,
+      );
+
+      resetPluginManager();
+      const freshManager = new PluginManager();
+
+      await freshManager.initializePluginSystem();
+
+      expect(freshManager.isSystemInitialized()).toBe(true);
     });
 
     it('should check if system is initialized', () => {
@@ -269,10 +329,232 @@ describe('PluginManager', () => {
     });
 
     it('should not reinitialize if already initialized', async () => {
+      const consoleWarnSpy = vi
+        .spyOn(console, 'warn')
+        .mockImplementation(() => {});
+
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      expect(pluginManager.isSystemInitialized()).toBe(true);
+
       await pluginManager.initializePluginSystem();
-      await expect(
-        pluginManager.initializePluginSystem(),
-      ).resolves.not.toThrow();
+
+      expect(consoleWarnSpy).toHaveBeenCalledWith(
+        'Plugin system is already initialized',
+      );
+      consoleWarnSpy.mockRestore();
+    });
+  });
+
+  describe('Async Initialization with Plugins', () => {
+    it('should initialize successfully when plugins are discovered', async () => {
+      const { DiscoveryManager } = await import('../managers/discovery');
+      const { LifecycleManager } = await import('../managers/lifecycle');
+
+      const mockDiscoveryInstance = {
+        loadPluginIndexFromGraphQL: vi.fn().mockResolvedValue(undefined),
+        discoverPlugins: vi.fn().mockResolvedValue(['plugin1', 'plugin2']),
+        setGraphQLService: vi.fn(),
+        isPluginActivated: vi.fn().mockReturnValue(true),
+        isPluginInstalled: vi.fn().mockReturnValue(true),
+      };
+
+      const mockLifecycleInstance = {
+        loadPlugin: vi.fn().mockResolvedValue(true),
+        unloadPlugin: vi.fn().mockResolvedValue(true),
+        installPlugin: vi.fn().mockResolvedValue(true),
+        uninstallPlugin: vi.fn().mockResolvedValue(true),
+        activatePlugin: vi.fn().mockResolvedValue(true),
+        deactivatePlugin: vi.fn().mockResolvedValue(true),
+        togglePluginStatus: vi.fn().mockResolvedValue(true),
+        getLoadedPlugins: vi.fn().mockReturnValue([]),
+        getLoadedPlugin: vi.fn().mockReturnValue(undefined),
+        getPluginComponent: vi.fn().mockReturnValue(undefined),
+        getPluginCount: vi.fn().mockReturnValue(0),
+        getActivePluginCount: vi.fn().mockReturnValue(0),
+      };
+
+      vi.mocked(DiscoveryManager).mockImplementation(
+        () =>
+          mockDiscoveryInstance as unknown as InstanceType<
+            typeof DiscoveryManager
+          >,
+      );
+      vi.mocked(LifecycleManager).mockImplementation(
+        () =>
+          mockLifecycleInstance as unknown as InstanceType<
+            typeof LifecycleManager
+          >,
+      );
+
+      resetPluginManager();
+      new PluginManager();
+
+      // Wait for async initialization to complete
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      expect(mockDiscoveryInstance.discoverPlugins).toHaveBeenCalled();
+      expect(mockLifecycleInstance.loadPlugin).toHaveBeenCalledWith('plugin1');
+      expect(mockLifecycleInstance.loadPlugin).toHaveBeenCalledWith('plugin2');
+    });
+
+    it('should handle plugin load errors during initialization', async () => {
+      const { DiscoveryManager } = await import('../managers/discovery');
+      const { LifecycleManager } = await import('../managers/lifecycle');
+
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      const mockDiscoveryInstance = {
+        loadPluginIndexFromGraphQL: vi.fn().mockResolvedValue(undefined),
+        discoverPlugins: vi.fn().mockResolvedValue(['failing-plugin']),
+        setGraphQLService: vi.fn(),
+        isPluginActivated: vi.fn().mockReturnValue(true),
+        isPluginInstalled: vi.fn().mockReturnValue(true),
+      };
+
+      const mockLifecycleInstance = {
+        loadPlugin: vi.fn().mockRejectedValue(new Error('Plugin load failed')),
+        unloadPlugin: vi.fn().mockResolvedValue(true),
+        installPlugin: vi.fn().mockResolvedValue(true),
+        uninstallPlugin: vi.fn().mockResolvedValue(true),
+        activatePlugin: vi.fn().mockResolvedValue(true),
+        deactivatePlugin: vi.fn().mockResolvedValue(true),
+        togglePluginStatus: vi.fn().mockResolvedValue(true),
+        getLoadedPlugins: vi.fn().mockReturnValue([]),
+        getLoadedPlugin: vi.fn().mockReturnValue(undefined),
+        getPluginComponent: vi.fn().mockReturnValue(undefined),
+        getPluginCount: vi.fn().mockReturnValue(0),
+        getActivePluginCount: vi.fn().mockReturnValue(0),
+      };
+
+      vi.mocked(DiscoveryManager).mockImplementation(
+        () =>
+          mockDiscoveryInstance as unknown as InstanceType<
+            typeof DiscoveryManager
+          >,
+      );
+      vi.mocked(LifecycleManager).mockImplementation(
+        () =>
+          mockLifecycleInstance as unknown as InstanceType<
+            typeof LifecycleManager
+          >,
+      );
+
+      resetPluginManager();
+      new PluginManager();
+
+      // Wait for async initialization to complete
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Failed to load plugin failing-plugin'),
+        expect.any(Error),
+      );
+
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('should handle discovery errors during initialization', async () => {
+      const { DiscoveryManager } = await import('../managers/discovery');
+      const { LifecycleManager } = await import('../managers/lifecycle');
+
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      const mockDiscoveryInstance = {
+        loadPluginIndexFromGraphQL: vi
+          .fn()
+          .mockRejectedValue(new Error('GraphQL error')),
+        discoverPlugins: vi.fn().mockResolvedValue([]),
+        setGraphQLService: vi.fn(),
+        isPluginActivated: vi.fn().mockReturnValue(true),
+        isPluginInstalled: vi.fn().mockReturnValue(true),
+      };
+
+      const mockLifecycleInstance = {
+        loadPlugin: vi.fn().mockResolvedValue(true),
+        unloadPlugin: vi.fn().mockResolvedValue(true),
+        installPlugin: vi.fn().mockResolvedValue(true),
+        uninstallPlugin: vi.fn().mockResolvedValue(true),
+        activatePlugin: vi.fn().mockResolvedValue(true),
+        deactivatePlugin: vi.fn().mockResolvedValue(true),
+        togglePluginStatus: vi.fn().mockResolvedValue(true),
+        getLoadedPlugins: vi.fn().mockReturnValue([]),
+        getLoadedPlugin: vi.fn().mockReturnValue(undefined),
+        getPluginComponent: vi.fn().mockReturnValue(undefined),
+        getPluginCount: vi.fn().mockReturnValue(0),
+        getActivePluginCount: vi.fn().mockReturnValue(0),
+      };
+
+      vi.mocked(DiscoveryManager).mockImplementation(
+        () =>
+          mockDiscoveryInstance as unknown as InstanceType<
+            typeof DiscoveryManager
+          >,
+      );
+      vi.mocked(LifecycleManager).mockImplementation(
+        () =>
+          mockLifecycleInstance as unknown as InstanceType<
+            typeof LifecycleManager
+          >,
+      );
+
+      resetPluginManager();
+      new PluginManager();
+
+      // Wait for async initialization to complete
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Failed to initialize plugins:',
+        expect.any(Error),
+      );
+
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('should mark as initialized when no plugins are discovered', async () => {
+      const { DiscoveryManager } = await import('../managers/discovery');
+      const { EventManager } = await import('../managers/event-manager');
+
+      const mockEventInstance = {
+        emit: vi.fn(),
+        on: vi.fn(),
+        off: vi.fn(),
+      };
+
+      const mockDiscoveryInstance = {
+        loadPluginIndexFromGraphQL: vi.fn().mockResolvedValue(undefined),
+        discoverPlugins: vi.fn().mockResolvedValue([]),
+        setGraphQLService: vi.fn(),
+        isPluginActivated: vi.fn().mockReturnValue(true),
+        isPluginInstalled: vi.fn().mockReturnValue(true),
+      };
+
+      vi.mocked(EventManager).mockImplementation(
+        () => mockEventInstance as unknown as InstanceType<typeof EventManager>,
+      );
+      vi.mocked(DiscoveryManager).mockImplementation(
+        () =>
+          mockDiscoveryInstance as unknown as InstanceType<
+            typeof DiscoveryManager
+          >,
+      );
+
+      resetPluginManager();
+      const manager = new PluginManager();
+
+      // Wait for async initialization to complete
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      expect(mockDiscoveryInstance.discoverPlugins).toHaveBeenCalled();
+      expect(mockEventInstance.emit).toHaveBeenCalledWith(
+        'plugins:initialized',
+      );
+      expect(manager.isSystemInitialized()).toBe(true);
     });
   });
 });
