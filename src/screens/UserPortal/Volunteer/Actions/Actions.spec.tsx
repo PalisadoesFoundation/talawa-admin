@@ -1,10 +1,3 @@
-/**
- * Unit tests for the Actions component.
- *
- * This file contains tests for the Actions component to ensure it behaves as expected
- * under various scenarios.
- */
-
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -22,25 +15,10 @@ import Actions from './Actions';
 import type { ApolloLink } from '@apollo/client';
 import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './Actions.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
+import { createLocalStorageMock } from 'test-utils/localStorageMock';
 import { describe, it, beforeEach, afterEach, beforeAll, vi } from 'vitest';
 
-// Mock localStorage
-const localStorageMock = (() => {
-  let storage: Record<string, string> = {};
-
-  return {
-    getItem: (key: string) => storage[key] || null,
-    setItem: (key: string, value: string) => {
-      storage[key] = value.toString();
-    },
-    removeItem: (key: string) => {
-      delete storage[key];
-    },
-    clear: () => {
-      storage = {};
-    },
-  };
-})();
+const localStorageMock = createLocalStorageMock();
 
 // Define localStorage on global/window before importing useLocalStorage
 Object.defineProperty(global, 'localStorage', {
@@ -95,7 +73,7 @@ const expectElementToHaveTextContent = (
 
 const renderActions = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider link={link}>
+    <MockedProvider addTypename={false} link={link}>
       <MemoryRouter initialEntries={['/user/volunteer/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -117,10 +95,11 @@ const renderActions = (link: ApolloLink): RenderResult => {
 
 describe('Testing Actions Screen', () => {
   beforeAll(() => {
-    // Ensure localStorage is properly set up
-    Object.defineProperty(global, 'localStorage', {
+    Object.defineProperty(window, 'localStorage', {
+      // Use 'window' not 'global'
       value: localStorageMock,
       writable: true,
+      configurable: true,
     });
   });
 
@@ -165,7 +144,7 @@ describe('Testing Actions Screen', () => {
   it('should redirect to fallback URL if orgId is missing', async () => {
     setItem('userId', 'userId');
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/user/volunteer/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -191,7 +170,7 @@ describe('Testing Actions Screen', () => {
     localStorageMock.removeItem('Talawa-admin_userId');
     setItem('volunteerId', 'volunteerId1');
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/user/volunteer/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -406,7 +385,7 @@ describe('Testing Actions Screen', () => {
 
   it('should display loader while fetching data', async () => {
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/user/volunteer/orgId']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -628,7 +607,7 @@ describe('Testing Actions Screen', () => {
     setItem('volunteerId', '');
 
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/user/volunteer/orgId']}>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
