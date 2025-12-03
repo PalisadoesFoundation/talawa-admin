@@ -143,6 +143,81 @@ files_without_cleanup=$(find src/ \( -iname "*.spec.tsx" -o -iname "*.spec.ts" \
       fi
     done)
 
+# Additional validation: Check for window/document manipulation without cleanup
+echo "Checking for window/document manipulation and timer usage..."
+
+files_with_global_issues=$(find src/ \( -iname "*.spec.tsx" -o -iname "*.spec.ts" \) \
+  | while read -r file; do
+      has_issue=false
+      issue_data=""
+      
+      # Check for window manipulation (assignments like window.x = ...)
+      if grep -n -v "^[[:space:]]*//.*" "$file" | grep -E "window\.[a-zA-Z_][a-zA-Z0-9_]*[[:space:]]*=" > /dev/null; then
+        # Check for explicit cleanup patterns
+        has_cleanup=false
+        
+        # Look for window restoration patterns
+        if grep -q -E "(delete window\.|window\.[a-zA-Z_][a-zA-Z0-9_]*[[:space:]]*=[[:space:]]*(undefined|original|saved))" "$file" || \
+           grep -q -E "(const|let|var)[[:space:]]+original.*window" "$file" || \
+           grep -q -E "Object\.defineProperty\(window.*original" "$file"; then
+          # Check if cleanup is in afterEach/beforeEach
+          if grep -q "afterEach" "$file" || grep -q "beforeEach" "$file"; then
+            has_cleanup=true
+          fi
+        fi
+        
+        if [ "$has_cleanup" = false ]; then
+          # Get line numbers and snippets
+          line_info=$(grep -n -v "^[[:space:]]*//.*" "$file" | grep -E "window\.[a-zA-Z_][a-zA-Z0-9_]*[[:space:]]*=" | head -1)
+          line_num=$(echo "$line_info" | cut -d: -f1)
+          snippet=$(echo "$line_info" | cut -d: -f2- | sed 's/^[[:space:]]*//' | cut -c1-60)
+          has_issue=true
+          issue_data="${issue_data}window-manipulation|${line_num}|${snippet};"
+        fi
+      fi
+      
+      # Check for document.addEventListener without cleanup
+      if grep -n -v "^[[:space:]]*//.*" "$file" | grep "document\.addEventListener" > /dev/null; then
+        # Check for explicit removeEventListener or cleanup
+        has_cleanup=false
+        
+        if grep -q "document\.removeEventListener" "$file" || \
+           grep -q "removeEventListener" "$file" || \
+           (grep -q "afterEach" "$file" && grep -A 10 "afterEach" "$file" | grep -q "removeEventListener"); then
+          has_cleanup=true
+        fi
+        
+        if [ "$has_cleanup" = false ]; then
+          line_info=$(grep -n -v "^[[:space:]]*//.*" "$file" | grep "document\.addEventListener" | head -1)
+          line_num=$(echo "$line_info" | cut -d: -f1)
+          snippet=$(echo "$line_info" | cut -d: -f2- | sed 's/^[[:space:]]*//' | cut -c1-60)
+          has_issue=true
+          issue_data="${issue_data}document-listeners|${line_num}|${snippet};"
+        fi
+      fi
+      
+      # Check for fake timers usage
+      if grep -n -v "^[[:space:]]*//.*" "$file" | grep -E "vi\.useFakeTimers\(" > /dev/null; then
+        # Check for proper timer cleanup
+        aftereach_blocks=$(extract_aftereach_block "$file")
+        if ! echo "$aftereach_blocks" | grep -q "vi\.clearAllTimers\|vi\.useRealTimers"; then
+          line_info=$(grep -n -v "^[[:space:]]*//.*" "$file" | grep -E "vi\.useFakeTimers\(" | head -1)
+          line_num=$(echo "$line_info" | cut -d: -f1)
+          snippet=$(echo "$line_info" | cut -d: -f2- | sed 's/^[[:space:]]*//' | cut -c1-60)
+          has_issue=true
+          issue_data="${issue_data}fake-timers|${line_num}|${snippet};"
+        fi
+      fi
+      
+      # Report file if it has any issues
+      if [ "$has_issue" = true ]; then
+        echo "${file}::${issue_data}"
+      fi
+    done)
+
+# Report findings
+exit_code=0
+
 if [ -n "$files_without_cleanup" ]; then
   file_count=$(echo "$files_without_cleanup" | wc -l | tr -d ' ')
   echo ""
@@ -169,6 +244,92 @@ if [ -n "$files_without_cleanup" ]; then
   echo "Why this matters: Proper cleanup prevents mock leakage between tests,"
   echo "ensuring test isolation and avoiding flaky tests."
   echo ""
+  exit_code=1
+fi
+
+if [ -n "$files_with_global_issues" ]; then
+  echo ""
+  echo "WARNING: Found test file(s) with potential global state issues:"
+  echo ""
+  
+  # Parse and group issues by type with details
+  declare -a window_issues
+  declare -a listener_issues
+  declare -a timer_issues
+  
+  while IFS='::' read -r filepath issue_data; do
+    # Parse multiple issues from the same file
+    IFS=';' read -ra ISSUES <<< "$issue_data"
+    for issue in "${ISSUES[@]}"; do
+      if [ -z "$issue" ]; then continue; fi
+      
+      IFS='|' read -r issue_type line_num snippet <<< "$issue"
+      
+      case "$issue_type" in
+        window-manipulation)
+          window_issues+=("$filepath:$line_num|$snippet")
+          ;;
+        document-listeners)
+          listener_issues+=("$filepath:$line_num|$snippet")
+          ;;
+        fake-timers)
+          timer_issues+=("$filepath:$line_num|$snippet")
+          ;;
+      esac
+    done
+  done <<< "$files_with_global_issues"
+  
+  if [ ${#window_issues[@]} -gt 0 ]; then
+    echo "Files with window manipulation needing cleanup:"
+    for entry in "${window_issues[@]}"; do
+      IFS='|' read -r location snippet <<< "$entry"
+      echo "  - $location"
+      echo "      $snippet"
+    done
+    echo ""
+    echo "Fix: Save and restore window properties:"
+    echo "  const originalLocation = window.location;"
+    echo "  afterEach(() => { window.location = originalLocation; });"
+    echo ""
+  fi
+  
+  if [ ${#listener_issues[@]} -gt 0 ]; then
+    echo "Files with document event listeners needing cleanup:"
+    for entry in "${listener_issues[@]}"; do
+      IFS='|' read -r location snippet <<< "$entry"
+      echo "  - $location"
+      echo "      $snippet"
+    done
+    echo ""
+    echo "Fix: Remove event listeners in cleanup:"
+    echo "  afterEach(() => {"
+    echo "    document.removeEventListener('event', handler);"
+    echo "  });"
+    echo ""
+  fi
+  
+  if [ ${#timer_issues[@]} -gt 0 ]; then
+    echo "Files using fake timers without proper cleanup:"
+    for entry in "${timer_issues[@]}"; do
+      IFS='|' read -r location snippet <<< "$entry"
+      echo "  - $location"
+      echo "      $snippet"
+    done
+    echo ""
+    echo "Fix: Clear and restore timers:"
+    echo "  afterEach(() => {"
+    echo "    vi.clearAllTimers();"
+    echo "    vi.useRealTimers();"
+    echo "  });"
+    echo ""
+  fi
+  
+  echo "NOTE: These are warnings to improve test isolation."
+  echo "They won't fail the build but should be addressed for reliable tests."
+  echo ""
+fi
+
+if [ $exit_code -eq 1 ]; then
   echo "If you believe this is a false positive, please verify your test file"
   echo "has proper cleanup, or contact the maintainers for assistance."
   echo ""
