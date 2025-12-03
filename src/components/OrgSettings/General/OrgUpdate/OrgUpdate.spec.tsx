@@ -34,7 +34,6 @@ i18n.init({
           isUserRegistrationRequired: 'User registration required',
           isVisibleInSearch: 'Is visible in search',
           'Is Public': 'Is Public',
-          organizationNameExists: 'The given organization name already exists',
         },
       },
       common: {
@@ -702,7 +701,7 @@ describe('OrgUpdate Component', () => {
 
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
-          i18n.t('orgUpdate.organizationNameExists'),
+          'The given organization name already exists',
         );
       });
     });

@@ -170,7 +170,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
       );
 
       if (isNameDuplicate) {
-        toast.error(t('organizationNameExists'));
+        toast.error('The given organization name already exists');
         return;
       }
 
