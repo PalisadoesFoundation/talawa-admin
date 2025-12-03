@@ -239,18 +239,16 @@ export default function Settings(): React.JSX.Element {
   };
 
   // Reset the changes of form fields
+  // Note: This function is only called from the rendered form, so data.currentUser
+  // and fileInputRef.current are guaranteed to exist at this point
   const handleResetChanges = (): void => {
     setIsUpdated(false);
     setSelectedAvatar(null);
-    if (data?.currentUser) {
-      setUserDetails({
-        ...data.currentUser,
-        avatar: originalImageState.current,
-      });
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    }
+    setUserDetails({
+      ...(data?.currentUser as NonNullable<typeof data.currentUser>),
+      avatar: originalImageState.current,
+    });
+    (fileInputRef.current as HTMLInputElement).value = '';
   };
 
   return (
