@@ -972,6 +972,7 @@
     "isPublic": "Is Public",
     "isVisibleInSearch": "Visible in Search",
     "enterNameOrganization": "Enter Organization Name",
+    "organizationNameExists": "The given organization name already exists",
     "successfulUpdated": "Organization updated successfully",
     "name": "name",
     "description": "description",
