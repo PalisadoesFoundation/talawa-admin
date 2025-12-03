@@ -19,9 +19,7 @@ import { createLocalStorageMock } from 'test-utils/localStorageMock';
 import { describe, it, beforeEach, afterEach, beforeAll, vi } from 'vitest';
 
 const localStorageMock = createLocalStorageMock();
-
-const { setItem } = useLocalStorage();
-
+const { setItem, removeItem } = useLocalStorage();
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(ERROR_MOCKS);
 const link3 = new StaticMockLink(EMPTY_MOCKS);
@@ -161,7 +159,7 @@ describe('Testing Actions Screen', () => {
   });
 
   it('should redirect to fallback URL if userId is missing', async () => {
-    localStorageMock.removeItem('Talawa-admin_userId');
+    removeItem('userId');
     setItem('volunteerId', 'volunteerId1');
     render(
       <MockedProvider link={link1}>
@@ -396,8 +394,6 @@ describe('Testing Actions Screen', () => {
 
     // Loader should be present initially - use the correct data-testid
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    // Or alternatively:
-    // expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
   });
 
   it('Open and close ItemUpdateStatusModal', async () => {
