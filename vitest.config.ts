@@ -70,6 +70,7 @@ export default defineConfig({
         '.github/**', // Exclude GitHub workflows and scripts
         'scripts/**', // Exclude build/setup scripts
         'config/**', // Exclude configuration files
+        'eslint-plugin-vitest-isolation/**', // Exclude local ESLint plugin (infrastructure)
       ],
       reporter: ['lcov', 'json', 'text', 'text-summary'],
     },
