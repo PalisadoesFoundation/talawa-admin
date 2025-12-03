@@ -207,6 +207,30 @@ describe('Testing Organisation Action Item Categories', () => {
     );
   });
 
+  it('open and closes View Category modal', async () => {
+    renderActionItemCategories(link1, 'orgId');
+
+    // Wait for categories to load
+    const viewCategoryBtn = await screen.findByTestId('viewCategoryBtn1');
+    await waitFor(() => expect(viewCategoryBtn).toBeInTheDocument());
+
+    // Open view modal
+    await userEvent.click(viewCategoryBtn);
+
+    // Check modal is open by looking for the modal content
+    await waitFor(() =>
+      expect(
+        screen.getByTestId('categoryViewModalCloseBtn'),
+      ).toBeInTheDocument(),
+    );
+
+    // Close the view modal
+    await userEvent.click(screen.getByTestId('categoryViewModalCloseBtn'));
+    await waitFor(() =>
+      expect(screen.queryByTestId('categoryViewModalCloseBtn')).toBeNull(),
+    );
+  });
+
   it('Search categories by name', async () => {
     renderActionItemCategories(link1, 'orgId');
 
@@ -214,6 +238,21 @@ describe('Testing Organisation Action Item Categories', () => {
     expect(searchInput).toBeInTheDocument();
 
     await userEvent.type(searchInput, 'Category 1');
+    await userEvent.click(screen.getByTestId('searchBtn'));
+    await waitFor(() => {
+      expect(screen.getByText('Category 1')).toBeInTheDocument();
+      expect(screen.queryByText('Category 2')).toBeNull();
+    });
+  });
+
+  it('Search categories by description', async () => {
+    renderActionItemCategories(link1, 'orgId');
+
+    const searchInput = await screen.findByTestId('searchByName');
+    expect(searchInput).toBeInTheDocument();
+
+    // Search by description - "Test description" matches Category 1's description
+    await userEvent.type(searchInput, 'Test description');
     await userEvent.click(screen.getByTestId('searchBtn'));
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
