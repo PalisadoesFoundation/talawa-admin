@@ -19,7 +19,15 @@ import { createLocalStorageMock } from 'test-utils/localStorageMock';
 import { describe, it, beforeEach, afterEach, beforeAll, vi } from 'vitest';
 
 const localStorageMock = createLocalStorageMock();
-const { setItem, removeItem } = useLocalStorage();
+let setItem: ReturnType<typeof useLocalStorage>['setItem'];
+let removeItem: ReturnType<typeof useLocalStorage>['removeItem'];
+
+beforeAll(() => {
+  const storage = useLocalStorage();
+  setItem = storage.setItem;
+  removeItem = storage.removeItem;
+});
+
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(ERROR_MOCKS);
 const link3 = new StaticMockLink(EMPTY_MOCKS);
