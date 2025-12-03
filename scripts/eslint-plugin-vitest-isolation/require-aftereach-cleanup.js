@@ -216,7 +216,33 @@ module.exports = {
                                         ? describeBody[0].range[0]
                                         : callback.body.range[0] + 1;
 
-                                    const afterEachCode = `\n  afterEach(() => {\n    vi.clearAllMocks();\n  });\n\n`;
+                                    // Detect indentation from the first statement or describe block
+                                    let baseIndent = '  '; // Default to 2 spaces
+
+                                    if (describeBody.length > 0) {
+                                        // Get indentation from first statement in describe
+                                        const firstStmt = describeBody[0];
+                                        const lineStart = sourceCode.getIndexFromLoc({ line: firstStmt.loc.start.line, column: 0 });
+                                        const stmtStart = firstStmt.range[0];
+                                        const leadingText = sourceCode.text.substring(lineStart, stmtStart);
+                                        const match = leadingText.match(/^(\s+)/);
+                                        if (match) {
+                                            baseIndent = match[1];
+                                        }
+                                    } else {
+                                        // Get indentation from describe callback opening brace
+                                        const descLineStart = sourceCode.getIndexFromLoc({ line: callback.body.loc.start.line + 1, column: 0 });
+                                        const nextLineStart = sourceCode.text.indexOf('\n', callback.body.range[0]) + 1;
+                                        if (nextLineStart > 0 && nextLineStart < sourceCode.text.length) {
+                                            const leadingMatch = sourceCode.text.substring(nextLineStart).match(/^(\s+)/);
+                                            if (leadingMatch) {
+                                                baseIndent = leadingMatch[1];
+                                            }
+                                        }
+                                    }
+
+                                    // Build properly indented afterEach block
+                                    const afterEachCode = `\n${baseIndent}afterEach(() => {\n${baseIndent}  vi.clearAllMocks();\n${baseIndent}});\n\n`;
 
                                     return fixer.insertTextBeforeRange([insertPosition, insertPosition], afterEachCode);
                                 }
@@ -227,10 +253,52 @@ module.exports = {
                         },
                     });
                 } else if (hasAfterEach && !hasCleanupInAfterEach) {
-                    // afterEach exists but doesn't have cleanup
+                    // afterEach exists but doesn't have cleanup - find it and add cleanup
+                    const afterEachNode = findAfterEachNode(node);
+
                     context.report({
                         node,
                         messageId: 'missingCleanup',
+                        fix(fixer) {
+                            if (!afterEachNode) return null;
+
+                            const callback = afterEachNode.arguments[0];
+                            if (!callback) return null;
+
+                            // Handle different callback body types
+                            if (callback.type === 'ArrowFunctionExpression' || callback.type === 'FunctionExpression') {
+                                const bodyNode = callback.body;
+
+                                if (bodyNode.type === 'BlockStatement') {
+                                    // Insert cleanup at the end of the existing block
+                                    const closingBrace = bodyNode.range[1] - 1;
+                                    const bodyStatements = bodyNode.body;
+
+                                    // Detect indentation from existing statements or callback
+                                    let stmtIndent = '    '; // Default to 4 spaces
+
+                                    if (bodyStatements.length > 0) {
+                                        const firstStmt = bodyStatements[0];
+                                        const lineStart = sourceCode.getIndexFromLoc({ line: firstStmt.loc.start.line, column: 0 });
+                                        const stmtStart = firstStmt.range[0];
+                                        const leadingText = sourceCode.text.substring(lineStart, stmtStart);
+                                        const match = leadingText.match(/^(\s+)/);
+                                        if (match) {
+                                            stmtIndent = match[1];
+                                        }
+                                    }
+
+                                    const cleanupCode = `\n${stmtIndent}vi.clearAllMocks();`;
+                                    return fixer.insertTextBeforeRange([closingBrace, closingBrace], cleanupCode);
+                                } else {
+                                    // Single expression arrow function - would need to convert to block
+                                    // For now, skip autofix for this case as it's more complex
+                                    return null;
+                                }
+                            }
+
+                            return null;
+                        },
                     });
                 } else if (hasResetAllMocks) {
                     // Using discouraged method
@@ -241,6 +309,50 @@ module.exports = {
                 }
             },
         };
+
+        /**
+         * Find the first afterEach block in the AST
+         */
+        function findAfterEachNode(node) {
+            let afterEachNode = null;
+            const visited = new WeakSet();
+
+            function traverse(n) {
+                if (!n || typeof n !== 'object' || visited.has(n)) {
+                    return;
+                }
+                visited.add(n);
+
+                if (n.type === 'CallExpression' &&
+                    n.callee && n.callee.name === 'afterEach' &&
+                    !afterEachNode) {
+                    afterEachNode = n;
+                    return;
+                }
+
+                const keys = Object.keys(n).filter(key =>
+                    key !== 'parent' && key !== 'tokens' && key !== 'loc' &&
+                    key !== 'range' && key !== 'start' && key !== 'end' &&
+                    key !== 'comments'
+                );
+
+                for (const key of keys) {
+                    const child = n[key];
+                    if (Array.isArray(child)) {
+                        child.forEach(traverse);
+                    } else if (child && typeof child === 'object') {
+                        traverse(child);
+                    }
+                }
+            }
+
+            traverse(node);
+            return afterEachNode;
+        }
+
+        /**
+         * Find the first describe block in the AST
+         */
 
         /**
          * Find the first describe block in the AST
