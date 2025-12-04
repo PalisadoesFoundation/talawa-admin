@@ -27,6 +27,7 @@ import {
   CREATE_ORGANIZATION_MUTATION_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
 } from 'GraphQl/Mutations/mutations';
+import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
 
 vi.setConfig({ testTimeout: 30000 });
 
@@ -40,6 +41,12 @@ vi.mock('react-toastify', () => ({
   ToastContainer: vi
     .fn()
     .mockImplementation(() => <div data-testid="toast-container" />),
+}));
+
+vi.mock('shared-components/OrganizationCard/OrganizationCard', () => ({
+  default: ({ data }: { data: InterfaceOrganizationCardProps }) => (
+    <div data-testid="organization-card-mock">{data.name}</div>
+  ),
 }));
 
 const { setItem } = useLocalStorage();
@@ -1864,7 +1871,7 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Verify organizations are loaded by checking for one of them
-    const orgs = screen.queryAllByRole('img');
+    const orgs = screen.queryAllByTestId('organization-card-mock');
     expect(orgs.length).toBeGreaterThan(0);
 
     // Ensure no search filter is active - clear search input if it exists
@@ -1886,7 +1893,18 @@ describe('Advanced Component Functionality Tests', () => {
     await userEvent.click(earliestOption);
     await wait(300); // Give more time for re-render
 
-    // Verify sorting was applied
+    // Verify sorting was applied by checking the order of rendered cards
+    const sortedOrgs = [...mockOrgData.multipleOrgs].sort(
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    );
+    // Default pagination is 5, so we expect only the first 5 sorted items
+    const expectedNames = sortedOrgs.slice(0, 5).map((org) => org.name);
+
+    const renderedCards = screen.getAllByTestId('organization-card-mock');
+    const renderedNames = renderedCards.map((card) => card.textContent);
+
+    expect(renderedNames).toEqual(expectedNames);
     expect(sortDropdown).toHaveTextContent('Earliest');
   });
 
