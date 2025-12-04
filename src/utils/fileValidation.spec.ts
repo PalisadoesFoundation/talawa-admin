@@ -1,14 +1,10 @@
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { validateFile } from './fileValidation';
 
 describe('validateFile', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   it('should return isValid true for a valid file', () => {
     // Create a valid file: 1MB JPEG image
-    const validFile = new File(['a'.repeat(1024 * 1024)], 'test.jpg', {
+    const validFile = new File([new ArrayBuffer(1024 * 1024)], 'test.jpg', {
       type: 'image/jpeg',
     });
 
@@ -20,9 +16,13 @@ describe('validateFile', () => {
 
   it('should return isValid false when file size exceeds the maximum limit', () => {
     // Create a file larger than 5MB (default max size)
-    const largeFile = new File(['a'.repeat(6 * 1024 * 1024)], 'large.jpg', {
-      type: 'image/jpeg',
-    });
+    const largeFile = new File(
+      [new ArrayBuffer(6 * 1024 * 1024)],
+      'large.jpg',
+      {
+        type: 'image/jpeg',
+      },
+    );
 
     const result = validateFile(largeFile);
 
@@ -46,7 +46,7 @@ describe('validateFile', () => {
 
   it('should validate file size with custom maxSizeInMB parameter', () => {
     // Create a 3MB file
-    const file = new File(['a'.repeat(3 * 1024 * 1024)], 'test.png', {
+    const file = new File([new ArrayBuffer(3 * 1024 * 1024)], 'test.png', {
       type: 'image/png',
     });
 
@@ -79,7 +79,7 @@ describe('validateFile', () => {
 
   it('should accept a file exactly at the size limit', () => {
     // Create a file exactly 5MB
-    const file = new File(['a'.repeat(5 * 1024 * 1024)], 'test.gif', {
+    const file = new File([new ArrayBuffer(5 * 1024 * 1024)], 'test.gif', {
       type: 'image/gif',
     });
 
@@ -91,7 +91,7 @@ describe('validateFile', () => {
 
   it('should reject a file one byte over the size limit', () => {
     // Create a file 5MB + 1 byte
-    const file = new File(['a'.repeat(5 * 1024 * 1024 + 1)], 'test.jpg', {
+    const file = new File([new ArrayBuffer(5 * 1024 * 1024 + 1)], 'test.jpg', {
       type: 'image/jpeg',
     });
 
@@ -131,16 +131,17 @@ describe('validateFile', () => {
     );
   });
 
-  it('should handle file type with multiple slashes correctly', () => {
-    // Edge case: file type extraction from MIME type
-    const file = new File(['content'], 'test.svg', {
-      type: 'image/svg+xml',
+  it('should format MIME subtype with "+" correctly in error message', () => {
+    // Test MIME type with special characters (svg+xml)
+    const file = new File(['content'], 'test.txt', {
+      type: 'text/plain',
     });
 
-    const result = validateFile(file);
+    const result = validateFile(file, 5, ['image/svg+xml']);
 
     expect(result.isValid).toBe(false);
-    // The error message should extract 'svg+xml' from 'image/svg+xml'
-    expect(result.errorMessage).toContain('Invalid file type');
+    expect(result.errorMessage).toBe(
+      'Invalid file type. Please upload a file of type: SVG+XML.',
+    );
   });
 });
