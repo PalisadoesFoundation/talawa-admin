@@ -91,6 +91,7 @@ describe('Testing the Super Dash List', () => {
     expect(screen.getByAltText(/Dogs Care image/i)).toBeDefined();
     expect(screen.getByText(/Members:/i)).toBeDefined();
     expect(screen.getByText('Dogs Care')).toBeDefined();
+
     expect(screen.getByText(/Texas, USA/i)).toBeInTheDocument();
     expect(screen.getByTestId(/manageBtn/i)).toBeDefined();
 
