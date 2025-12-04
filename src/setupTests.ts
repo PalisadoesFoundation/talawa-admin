@@ -31,13 +31,3 @@ import { createLocalStorageMock } from './test-utils/localStorageMock';
 if (typeof globalThis.localStorage === 'undefined') {
   globalThis.localStorage = createLocalStorageMock() as unknown as Storage;
 }
-
-// Mock window.navigator for i18next-browser-languagedetector
-Object.defineProperty(window, 'navigator', {
-  value: {
-    language: 'en',
-    languages: ['en'],
-    userAgent: 'test-user-agent',
-  },
-  writable: true,
-});

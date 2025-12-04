@@ -81,6 +81,7 @@ describe('OrganizationCard', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: originalLocation,
