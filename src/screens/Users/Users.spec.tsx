@@ -17,7 +17,6 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Users from './Users';
 import { EMPTY_MOCKS, MOCKS_NEW, MOCKS_NEW_2 } from './UsersMocks.mocks';
-import { EMPTY_MOCKS, MOCKS_NEW, MOCKS_NEW_2 } from './UsersMocks.mocks';
 import { generateMockUser } from './Organization.mocks';
 import { MOCKS, MOCKS2 } from './User.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -30,10 +29,28 @@ import {
 let setItem: (key: string, value: unknown) => void;
 let removeItem: (key: string) => void;
 
+vi.mock('react-toastify', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-toastify')>();
+
+  return {
+    ...actual,
+    toast: {
+      ...actual.toast,
+      warning: vi.fn(),
+    },
+  };
+});
+
 const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(EMPTY_MOCKS, true);
-const link3 = new StaticMockLink(MOCKS2, true);
-const link5 = new StaticMockLink(MOCKS_NEW, true);
+
+const createLink = (
+  mocks:
+    | typeof MOCKS
+    | typeof EMPTY_MOCKS
+    | typeof MOCKS2
+    | typeof MOCKS_NEW
+    | typeof MOCKS_NEW_2,
+) => new StaticMockLink(mocks, true);
 
 async function wait(ms = 1000): Promise<void> {
   await act(() => {
@@ -519,7 +536,6 @@ describe('Testing Users screen', () => {
     });
 
     it('should show warning toast when no organizations exist', async () => {
-      vi.spyOn(toast, 'warning').mockImplementation(vi.fn());
       const noOrgsMock = [
         {
           request: {

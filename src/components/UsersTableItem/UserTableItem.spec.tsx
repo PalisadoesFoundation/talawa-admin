@@ -16,7 +16,9 @@ const link3 = new StaticMockLink(MOCKS_UPDATE, true);
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import type * as RouterTypes from 'react-router';
-const { setItem } = useLocalStorage();
+const { mockLocalStorageStore } = vi.hoisted(() => ({
+  mockLocalStorageStore: {} as Record<string, unknown>,
+}));
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -24,7 +26,6 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
-const resetAndRefetchMock = vi.fn();
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -39,7 +40,11 @@ Object.defineProperty(window, 'location', {
   },
   writable: true,
 });
-const mockNavgatePush = vi.fn();
+let mockNavgatePush: ReturnType<typeof vi.fn>;
+const setMockStorageItem = (key: string, value: unknown): void => {
+  mockLocalStorageStore[key] =
+    typeof value === 'string' ? value : JSON.stringify(value);
+};
 vi.mock('react-router', async () => {
   const actual = (await vi.importActual('react-router')) as typeof RouterTypes;
   return {
@@ -625,26 +630,32 @@ describe('Testing User Table Item', () => {
             {
               node: {
                 id: 'ghi',
-                name: 'Blocked Organization 1',
-                avatarURL: 'image.png',
-                city: 'Toronto',
-                state: 'ON',
                 createdAt: '2023-08-29T15:39:36.355Z',
-                creator: {
-                  name: 'Jane Smith',
+                organization: {
+                  name: 'Blocked Organization 1',
+                  avatarURL: 'image.png',
+                  city: 'Toronto',
+                  state: 'ON',
+                  createdAt: '2023-08-29T15:39:36.355Z',
+                  creator: {
+                    name: 'Jane Smith',
+                  },
                 },
               },
             },
             {
               node: {
                 id: 'jkl',
-                name: 'Blocked Organization 2',
-                avatarURL: 'image.png',
-                city: 'Toronto',
-                state: 'ON',
                 createdAt: '2023-09-29T15:39:36.355Z',
-                creator: {
-                  name: 'Jane Smith',
+                organization: {
+                  name: 'Blocked Organization 2',
+                  avatarURL: 'image.png',
+                  city: 'Toronto',
+                  state: 'ON',
+                  createdAt: '2023-09-29T15:39:36.355Z',
+                  creator: {
+                    name: 'Jane Smith',
+                  },
                 },
               },
             },
@@ -762,13 +773,16 @@ describe('Testing User Table Item', () => {
             {
               node: {
                 id: 'ghi',
-                name: 'Blocked Organization 1',
-                avatarURL: 'image.png',
-                city: 'Toronto',
-                state: 'ON',
                 createdAt: '2023-08-29T15:39:36.355Z',
-                creator: {
-                  name: 'Jane Smith',
+                organization: {
+                  name: 'Blocked Organization 1',
+                  avatarURL: 'image.png',
+                  city: 'Toronto',
+                  state: 'ON',
+                  createdAt: '2023-08-29T15:39:36.355Z',
+                  creator: {
+                    name: 'Jane Smith',
+                  },
                 },
               },
             },
@@ -1027,13 +1041,16 @@ describe('Testing User Table Item', () => {
             {
               node: {
                 id: 'ghi',
-                name: 'Blocked Organization 1',
-                avatarURL: 'image.png',
-                city: 'Toronto',
-                state: 'ON',
                 createdAt: '2023-08-29T15:39:36.355Z',
-                creator: {
-                  name: 'Jane Smith',
+                organization: {
+                  name: 'Blocked Organization 1',
+                  avatarURL: 'image.png',
+                  city: 'Toronto',
+                  state: 'ON',
+                  createdAt: '2023-08-29T15:39:36.355Z',
+                  creator: {
+                    name: 'Jane Smith',
+                  },
                 },
               },
             },
@@ -1269,13 +1286,16 @@ describe('Testing User Table Item', () => {
             {
               node: {
                 id: 'ghi',
-                name: 'Blocked Organization 1',
-                avatarURL: 'blocked-org.png',
-                city: 'Toronto',
-                state: 'Ontario',
                 createdAt: '2023-08-29T15:39:36.355Z',
-                creator: {
-                  name: 'Jane Smith',
+                organization: {
+                  name: 'Blocked Organization 1',
+                  avatarURL: 'blocked-org.png',
+                  city: 'Toronto',
+                  state: 'Ontario',
+                  createdAt: '2023-08-29T15:39:36.355Z',
+                  creator: {
+                    name: 'Jane Smith',
+                  },
                 },
               },
             },
