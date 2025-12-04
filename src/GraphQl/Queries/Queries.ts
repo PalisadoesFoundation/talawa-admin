@@ -247,7 +247,6 @@ export const USER_LIST_FOR_ADMIN = gql`
           role
           avatarURL
           emailAddress
-          avatarURL
           createdAt
           city
           state

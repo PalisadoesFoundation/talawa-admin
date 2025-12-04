@@ -1253,6 +1253,59 @@ describe('Testing User Table Item', () => {
     expect(screen.getByText(/Joined Organization 1/i)).toBeInTheDocument();
   });
 
+  test('should successfully unblock user and refetch data', async () => {
+    const props = {
+      user: {
+        id: '123',
+        name: 'John Doe',
+        emailAddress: 'john@example.com',
+        organizationsWhereMember: { edges: [] },
+        orgsWhereUserIsBlocked: {
+          edges: [
+            {
+              node: {
+                id: 'ghi',
+                createdAt: '2023-08-29T15:39:36.355Z',
+                organization: {
+                  name: 'Blocked Organization 1',
+                  avatarURL: 'image.png',
+                  city: 'Toronto',
+                  state: 'ON',
+                  createdAt: '2023-08-29T15:39:36.355Z',
+                  creator: { name: 'Jane Smith' },
+                },
+              },
+            },
+          ],
+        },
+      } as unknown as InterfaceQueryUserListItemForAdmin,
+      index: 0,
+      loggedInUserId: '123',
+      resetAndRefetch: resetAndRefetchMock,
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    fireEvent.click(screen.getByTestId(`showBlockedOrgsBtn${123}`));
+    fireEvent.click(screen.getByTestId(`unblockUserFromOrgBtnghi`));
+    fireEvent.click(screen.getByTestId(`confirmUnblockUser${123}`));
+
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalled();
+      expect(resetAndRefetchMock).toHaveBeenCalled();
+    });
+  });
+
   test('Should handle cancel unblock user and reopen blocked organizations modal', async () => {
     const props = {
       user: {
