@@ -574,7 +574,7 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
 
-      await wait(2000);
+      await wait();
       expect(toast.warning).toHaveBeenCalledWith(expect.any(String));
     });
 
@@ -660,8 +660,6 @@ describe('Testing Users screen', () => {
       // Same search again
       await userEvent.click(screen.getByTestId('searchButton'));
       await wait();
-      // Assuming refetch not called twice, but for coverage, the early return branch is hit if value === searchByName
-      // Hard to assert without spy, but rendering covers the function call
     });
   });
 });

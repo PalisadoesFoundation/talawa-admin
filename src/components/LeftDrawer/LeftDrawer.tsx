@@ -40,7 +40,9 @@ const leftDrawer = ({
   const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
-  const storedRole = (getItem<string>('role') ?? 'regular').toLowerCase();
+  const rawRole = getItem<string>('role');
+  const storedRole =
+    typeof rawRole === 'string' ? rawRole.trim().toLowerCase() : 'regular';
   const isAdmin = storedRole === 'administrator';
 
   const handleLinkClick = useCallback((): void => {
