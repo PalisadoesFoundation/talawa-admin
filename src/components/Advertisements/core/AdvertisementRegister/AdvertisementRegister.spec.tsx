@@ -1284,13 +1284,30 @@ describe('Testing Advertisement Register Component', () => {
 
     useParamsMock.mockRestore();
   });
+
   it('validates structure of exported mocks', () => {
     expect(createAdvertisement).toBeDefined();
     expect(Array.isArray(createAdvertisement)).toBe(true);
-    expect(createAdvertisement.length).toBe(4);
-    const newMockCase = createAdvertisement[3];
+    expect(createAdvertisement.length).toBeGreaterThanOrEqual(4);
+
+    const newMockCase = createAdvertisement[createAdvertisement.length - 1];
     expect(newMockCase.request).toBeDefined();
     expect(newMockCase.result).toBeDefined();
+    expect(newMockCase.request.query).toBe(ORGANIZATION_ADVERTISEMENT_LIST);
+    expect(newMockCase.request.variables).toMatchObject({
+      id: '1',
+      first: 6,
+      after: null,
+      where: { isCompleted: false },
+    });
+
+    const data = (newMockCase.result as any)?.data; // eslint-disable-line @typescript-eslint/no-explicit-any
+
+    expect(data?.organization?.advertisements?.edges).toEqual([]);
+    expect(data?.organization?.advertisements?.pageInfo?.hasNextPage).toBe(
+      false,
+    );
+
     expect(createAdFailMock).toBeDefined();
     expect(createAdFailMock.error).toBeDefined();
     expect(updateAdFailMock).toBeDefined();
