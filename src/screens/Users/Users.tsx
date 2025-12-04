@@ -338,7 +338,6 @@ const Users = (): JSX.Element => {
       {/* Buttons Container */}
       <div className={styles.btnsContainer} data-testid="testcomp">
         <PageHeader
-          title={t('title')}
           search={{
             placeholder: t('enterName'),
             onSearch: handleSearch,
