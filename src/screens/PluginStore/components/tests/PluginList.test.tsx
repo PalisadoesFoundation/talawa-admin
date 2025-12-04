@@ -60,6 +60,10 @@ vi.mock('react-i18next', () => ({
 }));
 
 describe('PluginList', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   // Complete mock plugins with all required properties from IPluginMeta
   const mockPlugins: IPluginMeta[] = [
     {

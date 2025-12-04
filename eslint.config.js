@@ -7,6 +7,7 @@ import prettier from 'eslint-plugin-prettier';
 import react from 'eslint-plugin-react';
 import vitest from '@vitest/eslint-plugin';
 import tsdoc from 'eslint-plugin-tsdoc';
+import vitestIsolation from './scripts/eslint-plugin-vitest-isolation/index.js';
 
 export default [
   {
@@ -220,6 +221,16 @@ export default [
       ...ts.configs.recommended.rules,
       'no-undef': 'error',
       'prettier/prettier': 'error',
+    },
+  },
+  // Test file-specific configuration for mock isolation
+  {
+    files: ['**/*.spec.ts', '**/*.spec.tsx', '**/*.test.ts', '**/*.test.tsx'],
+    plugins: {
+      'vitest-isolation': vitestIsolation,
+    },
+    rules: {
+      'vitest-isolation/require-aftereach-cleanup': 'error',
     },
   },
 ];

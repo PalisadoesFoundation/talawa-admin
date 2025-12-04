@@ -49,6 +49,41 @@ import UserDetailsForm from './UserDetails/UserDetails';
 import { validatePassword } from 'utils/passwordValidator';
 import EventsAttendedByUser from 'components/UserPortal/UserProfile/EventsAttendedByUser';
 
+// Exported helper extracted from component to allow unit testing of reset logic.
+// Defensive checks used to avoid bypassing runtime null-safety.
+export const resetUserDetails = <T extends Record<string, unknown>>(
+  currentUser: T | null | undefined,
+  fileInput: HTMLInputElement | null | undefined,
+  setSelectedAvatarFn: (v: File | null) => void,
+  setIsUpdatedFn: (v: boolean) => void,
+  setUserDetailsFn: (v: T & { avatar?: string | null | undefined }) => void,
+  originalAvatar: string | null | undefined,
+): boolean => {
+  // always clear updated flags / selected avatar first
+  setIsUpdatedFn(false);
+  setSelectedAvatarFn(null);
+
+  // defensive: if there's no current user, bail out (no-op)
+  if (!currentUser) return false;
+
+  setUserDetailsFn({
+    ...currentUser,
+    avatar: originalAvatar,
+  });
+
+  // defensive: if file input ref missing, we're done
+  if (!fileInput) return true;
+
+  // clear file input value
+  try {
+    fileInput.value = '';
+  } catch {
+    // ignore - best effort to reset input
+  }
+
+  return true;
+};
+
 export default function Settings(): React.JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
   const { t: tCommon } = useTranslation('common');
@@ -240,17 +275,15 @@ export default function Settings(): React.JSX.Element {
 
   // Reset the changes of form fields
   const handleResetChanges = (): void => {
-    setIsUpdated(false);
-    setSelectedAvatar(null);
-    if (data?.currentUser) {
-      setUserDetails({
-        ...data.currentUser,
-        avatar: originalImageState.current,
-      });
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    }
+    // call helper with current values
+    resetUserDetails(
+      data?.currentUser,
+      fileInputRef.current,
+      setSelectedAvatar,
+      setIsUpdated,
+      setUserDetails,
+      originalImageState.current,
+    );
   };
 
   return (
