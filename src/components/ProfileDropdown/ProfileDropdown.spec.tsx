@@ -96,6 +96,65 @@ describe('ProfileDropdown Component', () => {
     expect(screen.getByAltText('profile picture')).toBeInTheDocument();
   });
 
+  test('truncates long names to MAX_NAME_LENGTH characters with ellipsis', () => {
+    localStorage.clear();
+    setItem('name', 'ThisIsAVeryLongNameThatExceedsTwentyCharacters');
+    setItem('UserImage', 'https://example.com/image.jpg');
+    setItem('role', 'regular');
+
+    render(
+      <MockedProvider mocks={MOCKS}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileDropdown />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const displayedName = screen.getByTestId('display-name').textContent;
+    expect(displayedName).toBe('ThisIsAVeryLongNa...');
+    expect(displayedName).toHaveLength(20);
+  });
+
+  test('renders Avatar component when no user image is available', () => {
+    localStorage.clear();
+    setItem('name', 'John Doe');
+    setItem('role', 'regular');
+    // UserImage not set, should show Avatar fallback
+
+    render(
+      <MockedProvider mocks={MOCKS}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileDropdown />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByAltText('dummy picture')).toBeInTheDocument();
+  });
+
+  test('renders Avatar component when user image is null string', () => {
+    localStorage.clear();
+    setItem('name', 'John Doe');
+    setItem('UserImage', 'null');
+    setItem('role', 'regular');
+
+    render(
+      <MockedProvider mocks={MOCKS}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileDropdown />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByAltText('dummy picture')).toBeInTheDocument();
+  });
+
   test('renders Super admin', () => {
     setItem('role', 'API Administrator');
     render(
@@ -264,5 +323,42 @@ describe('ProfileDropdown Component', () => {
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
+  });
+
+  test('handles error when revokeRefreshToken fails during logout', async () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const errorMocks = [
+      {
+        request: { query: REVOKE_REFRESH_TOKEN },
+        error: new Error('Network error'),
+      },
+      {
+        request: { query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG },
+        result: { data: { community: { inactivityTimeoutDuration: 1800 } } },
+        delay: 1000,
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={errorMocks}>
+        <BrowserRouter>
+          <ProfileDropdown />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('togDrop'));
+    });
+
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('logoutBtn'));
+    });
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'Error revoking refresh token:',
+      expect.any(Error),
+    );
+    consoleSpy.mockRestore();
   });
 });
