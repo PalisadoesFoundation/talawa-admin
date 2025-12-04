@@ -9,7 +9,7 @@ import {
 import { toast } from 'react-toastify';
 import i18n from './utils/i18n';
 import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
-import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
+import createUploadLink from 'apollo-upload-client';
 
 // Define types for mocked modules
 interface InterfaceToastMock {
@@ -96,7 +96,7 @@ describe('Apollo Client Configuration', () => {
   });
 
   it('should configure upload link with correct URI', (): void => {
-    const uploadLink = createUploadLink({
+    const uploadLink = (createUploadLink as any)({
       uri: BACKEND_URL,
       headers: {
         'Apollo-Require-Preflight': 'true',

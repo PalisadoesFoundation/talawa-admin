@@ -16,7 +16,7 @@ import './assets/css/app.css';
 import 'bootstrap/dist/js/bootstrap.min.js'; // Bootstrap JS (ensure Bootstrap is installed)
 import 'react-datepicker/dist/react-datepicker.css'; // React Datepicker Styles
 import 'flag-icons/css/flag-icons.min.css'; // Flag Icons Styles
-import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
+import createUploadLink from 'apollo-upload-client';
 import { Provider } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -75,7 +75,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
 });
 
-const uploadLink = createUploadLink({
+const uploadLink = (createUploadLink as any)({
   uri: BACKEND_URL,
   headers: { 'Apollo-Require-Preflight': 'true' },
   credentials: 'include',
