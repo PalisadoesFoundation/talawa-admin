@@ -7,6 +7,7 @@ import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/Secur
 import OrganizaitionFundCampiagn from 'screens/OrganizationFundCampaign/OrganizationFundCampagins';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import LoginPage from 'screens/LoginPage/LoginPage';
+import RegisterPage from 'screens/RegisterPage/RegisterPage';
 import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
 import { getPluginManager } from 'plugin/manager';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
@@ -177,8 +178,9 @@ function App(): React.ReactElement {
       <Suspense fallback={<Loader />}>
         <Routes>
           <Route path="/" element={<LoginPage />} />
-          <Route path="/register" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="/admin" element={<LoginPage />} />
+          <Route path="/admin/register" element={<RegisterPage />} />
           <Route element={<SecuredRoute />}>
             <Route element={<SuperAdminScreen />}>
               <Route path="/orglist" element={<OrgList />} />
