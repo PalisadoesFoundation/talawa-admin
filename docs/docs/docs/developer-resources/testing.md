@@ -126,12 +126,38 @@ describe('YourComponent', () => {
 > - Hard-to-debug test failures in CI
 > - False positives/negatives
 
-#### CI Enforcement
+#### Multi-Layer Enforcement
 
-A GitHub Action checker runs on every PR to ensure all test files have proper cleanup. If your PR fails the `Check Mock Cleanup` step, add `afterEach` with `vi.restoreAllMocks()`.
+We enforce mock isolation through **three layers** to catch issues as early as possible:
 
+##### 1. ESLint (Real-time IDE Feedback)
+
+A custom ESLint rule (`vitest-isolation/require-aftereach-cleanup`) detects missing mock cleanup **as you type**. Your IDE will show inline errors when:
+- Test files use `vi.fn()`, `vi.mock()`, or `vi.spyOn()` without `afterEach` cleanup
+- `afterEach` exists but is missing cleanup methods
+
+The rule provides **autofix** capability - your IDE can automatically insert the proper `afterEach` block.
+
+##### 2. Pre-commit Hook
+
+Before each commit, the pre-commit hook runs `check-mock-cleanup.sh` to validate:
+- All test files with mocks have proper cleanup
+- Files using `vi.useFakeTimers()` include timer cleanup
+- Window/document manipulation is properly cleaned up (warnings)
+
+If violations are found, the commit is blocked with clear fix instructions.
+
+**Bypass if needed:**
 ```bash
-# Run the checker locally before committing:
+git commit -m "message" --no-verify
+```
+
+##### 3. CI Check (GitHub Actions)
+
+The `Check-Mock-Isolation` job runs on every PR to ensure repository-wide compliance.
+
+**Run locally before pushing:**
+```bash
 pnpm run check-mock-cleanup
 ```
 
@@ -266,18 +292,69 @@ describe('MyComponent', () => {
 
 > **Rule of Thumb:** Use `vi.restoreAllMocks()` in `afterEach` for 99% of cases.
 
+#### Advanced: Global State Cleanup
+
+**Timer Cleanup:**
+```typescript
+describe('Component with timers', () => {
+  afterEach(() => {
+    vi.clearAllTimers();
+    vi.useRealTimers();
+  });
+  
+  it('uses fake timers', () => {
+    vi.useFakeTimers();
+    // test code
+  });
+});
+```
+
+**Window/Document Cleanup:**
+```typescript
+describe('Component modifying globals', () => {
+  const originalLocation = window.location;
+  
+  afterEach(() => {
+    window.location = originalLocation;
+    // Remove any added event listeners
+    document.removeEventListener('click', handler);
+  });
+  
+  it('modifies window', () => {
+    window.location.href = 'test';
+  });
+});
+```
+
 #### Troubleshooting
 
-**Error: "Check Mock Cleanup failed"**
-- Add `afterEach(() => { vi.restoreAllMocks(); })` to your test file
+**ESLint Error: "Test file uses mocks but is missing afterEach cleanup"**
+- Your IDE detected missing cleanup in real-time
+- Apply ESLint autofix or manually add `afterEach(() => { vi.restoreAllMocks(); })`
+
+**Pre-commit Hook Failed: "Check Mock Cleanup"**
+- The script found test files with missing cleanup
+- Review the error output for specific files and fix suggestions
+- Bypass if absolutely needed: `git commit --no-verify`
+
+**CI Error: "Check Mock Isolation failed"**
+- Same validation as pre-commit but caught in CI
+- Add `afterEach(() => { vi.restoreAllMocks(); })` to flagged files
 
 **Tests pass locally but fail in CI:**
 - Likely mock leakage - ensure all test files have `afterEach` cleanup
 - Run tests in shuffle mode: `pnpm run test -- --sequence.shuffle`
+- Check for window/document/timer manipulation without cleanup
 
 **Tests fail in different order or when run together:**
 - Classic sign of mock leakage
 - Add `afterEach(() => { vi.restoreAllMocks(); })` to affected files
+- If using fake timers, add `vi.clearAllTimers()` and `vi.useRealTimers()`
+
+**Warning about window/document/timer usage:**
+- These are non-blocking warnings to improve test isolation
+- While they don't fail builds, addressing them prevents flaky tests
+- Follow the fix suggestions in the warning output
 
 ### Code Coverage Standards
 
@@ -308,13 +385,23 @@ We are using the package `Husky` to run git hooks that run according to differen
 
 ### pre-commit hook
 
-We run a pre-commit hook which automatically runs code quality checks each time you make a commit and also fixes some of the issues. This way you don't have to run them manually each time.
+We run a pre-commit hook which automatically runs code quality checks each time you make a commit and also fixes some of the issues. This includes:
+
+- Documentation generation
+- Code formatting and linting
+- Type checking
+- **Mock isolation validation** (`check-mock-cleanup.sh`)
+- Unused file/dependency detection
+
+The mock isolation check ensures all test files with mocks have proper cleanup before you commit. This catches issues early, before they reach CI.
 
 If you don't want these pre-commit checks running on each commit, you can manually opt out of it using the `--no-verify` flag with your commit message as shown:-
 
 ```bash
 git commit -m "commit message" --no-verify
 ```
+
+> **Note:** Only bypass the pre-commit hook if absolutely necessary. It's designed to catch common issues and save CI time.
 
 ### post-merge hook
 
