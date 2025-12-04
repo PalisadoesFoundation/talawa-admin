@@ -4,7 +4,7 @@
 
 # Interface: VoteType
 
-Defined in: [src/utils/interfaces.ts:2169](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2169)
+Defined in: [src/utils/interfaces.ts:2227](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2227)
 
 InterfacePostCard
 

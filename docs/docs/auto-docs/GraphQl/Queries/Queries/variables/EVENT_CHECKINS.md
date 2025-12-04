@@ -6,4 +6,4 @@
 
 > `const` **EVENT\_CHECKINS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/Queries.ts:393](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L393)
+Defined in: [src/GraphQl/Queries/Queries.ts:436](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L436)

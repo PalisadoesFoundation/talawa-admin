@@ -18,7 +18,7 @@ Defines the structure for a user list item returned from a query.
 
 > `optional` **appUserProfile**: `object`
 
-Defined in: [src/utils/interfaces.ts:2067](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2067)
+Defined in: [src/utils/interfaces.ts:2048](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2048)
 
 The application user profile.
 
@@ -185,18 +185,6 @@ Defined in: [src/utils/interfaces.ts:2013](https://github.com/PalisadoesFoundati
 > **organizationsWhereMember**: `object`
 
 Defined in: [src/utils/interfaces.ts:2025](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2025)
-
-#### edges
-
-> **edges**: `object`[]
-
-***
-
-### orgsWhereUserIsBlocked?
-
-> `optional` **orgsWhereUserIsBlocked**: `object`
-
-Defined in: [src/utils/interfaces.ts:2045](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2045)
 
 #### edges
 
