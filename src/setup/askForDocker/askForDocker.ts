@@ -57,13 +57,11 @@ export const askAndUpdateTalawaApiUrl = async (
             throw new Error('Invalid URL protocol. Must be http or https');
           }
           isConnected = await checkConnection();
-          if (!isConnected) {
-            console.log(
-              `Connection attempt ${retryCount + 1}/${MAX_RETRIES} failed`,
-            );
-          }
         } catch (error) {
           console.error('Error checking connection:', error);
+          console.log(
+            `Connection attempt ${retryCount + 1}/${MAX_RETRIES} failed`,
+          ); // ← Move here
           isConnected = false;
         }
         retryCount++;
