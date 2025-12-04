@@ -23,7 +23,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
 import {
   ORGANIZATION_LIST,
-  USER_LIST_FOR_TABLE,
+  USER_LIST_FOR_ADMIN,
 } from 'GraphQl/Queries/Queries';
 
 let setItem: (key: string, value: unknown) => void;
@@ -447,7 +447,7 @@ describe('Testing Users screen', () => {
       const errorMock = [
         {
           request: {
-            query: USER_LIST_FOR_TABLE,
+            query: USER_LIST_FOR_ADMIN,
             variables: {
               first: 12,
               after: null,
@@ -549,7 +549,7 @@ describe('Testing Users screen', () => {
         },
         {
           request: {
-            query: USER_LIST_FOR_TABLE,
+            query: USER_LIST_FOR_ADMIN,
           },
           result: {
             data: {
@@ -582,7 +582,7 @@ describe('Testing Users screen', () => {
       const endMock = [
         {
           request: {
-            query: USER_LIST_FOR_TABLE,
+            query: USER_LIST_FOR_ADMIN,
             variables: {
               first: 12,
               after: null,

@@ -1,6 +1,6 @@
 import {
   ORGANIZATION_LIST,
-  USER_LIST_FOR_TABLE,
+  USER_LIST_FOR_ADMIN,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 
@@ -23,7 +23,7 @@ export const MOCKS = [
 
   {
     request: {
-      query: USER_LIST_FOR_TABLE,
+      query: USER_LIST_FOR_ADMIN,
       variables: {
         input: {
           ids: '123',
@@ -145,7 +145,7 @@ export const MOCKS = [
   },
   {
     request: {
-      query: USER_LIST_FOR_TABLE,
+      query: USER_LIST_FOR_ADMIN,
       variables: {
         first: 12,
         after: null,
@@ -187,7 +187,7 @@ export const MOCKS = [
 
   {
     request: {
-      query: USER_LIST_FOR_TABLE,
+      query: USER_LIST_FOR_ADMIN,
       variables: {
         first: 12,
         after: null,
@@ -248,7 +248,7 @@ export const MOCKS2 = [
   },
   {
     request: {
-      query: USER_LIST_FOR_TABLE,
+      query: USER_LIST_FOR_ADMIN,
       variables: {
         input: {
           ids: '123', // Match loggedInUserId from beforeEach

@@ -1,7 +1,7 @@
 import {
   ORGANIZATION_LIST,
   USER_LIST,
-  USER_LIST_FOR_TABLE,
+  USER_LIST_FOR_ADMIN,
 } from 'GraphQl/Queries/Queries';
 import { MOCK_USERS } from './Organization.mocks';
 
@@ -26,7 +26,7 @@ const loadMoreVariables = {
 export const EMPTY_MOCKS = [
   {
     request: {
-      query: USER_LIST_FOR_TABLE,
+      query: USER_LIST_FOR_ADMIN,
       variables: {
         first: 12,
         after: null,
@@ -50,7 +50,7 @@ export const EMPTY_MOCKS = [
   },
   {
     request: {
-      query: USER_LIST_FOR_TABLE,
+      query: USER_LIST_FOR_ADMIN,
       variables: {
         first: 12,
         after: null,
@@ -141,7 +141,7 @@ export const MOCKS_NEW_2 = [
 export const MOCKS_NEW = [
   {
     request: {
-      query: USER_LIST_FOR_TABLE,
+      query: USER_LIST_FOR_ADMIN,
       variables: {
         first: 12,
         after: null,

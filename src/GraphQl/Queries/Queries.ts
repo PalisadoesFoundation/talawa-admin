@@ -186,10 +186,53 @@ export const USER_LIST_FOR_TABLE = gql`
   query allUsers(
     $first: Int
     $after: String
-    $orgFirst: Int
+    $last: Int
+    $before: String
     $where: QueryAllUsersWhereInput
   ) {
-    allUsers(first: $first, after: $after, where: $where) {
+    allUsers(
+      first: $first
+      after: $after
+      last: $last
+      before: $before
+      where: $where
+    ) {
+      pageInfo {
+        endCursor
+        hasPreviousPage
+        hasNextPage
+        startCursor
+      }
+      edges {
+        cursor
+        node {
+          id
+          name
+          role
+          avatarURL
+          emailAddress
+        }
+      }
+    }
+  }
+`;
+
+export const USER_LIST_FOR_ADMIN = gql`
+  query allUsers(
+    $first: Int
+    $after: String
+    $orgFirst: Int
+    $last: Int
+    $before: String
+    $where: QueryAllUsersWhereInput
+  ) {
+    allUsers(
+      first: $first
+      after: $after
+      where: $where
+      last: $last
+      before: $before
+    ) {
       pageInfo {
         endCursor
         hasPreviousPage

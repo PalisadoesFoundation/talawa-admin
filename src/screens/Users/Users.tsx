@@ -68,7 +68,7 @@ import { toast } from 'react-toastify';
 
 import {
   ORGANIZATION_LIST,
-  USER_LIST_FOR_TABLE,
+  USER_LIST_FOR_ADMIN,
 } from 'GraphQl/Queries/Queries';
 import TableLoader from 'components/TableLoader/TableLoader';
 import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
@@ -137,7 +137,7 @@ const Users = (): JSX.Element => {
     }>;
     refetch: (variables?: Record<string, unknown>) => void;
     error?: ApolloError;
-  } = useQuery(USER_LIST_FOR_TABLE, {
+  } = useQuery(USER_LIST_FOR_ADMIN, {
     variables: {
       first: perPageResult,
       after: null,

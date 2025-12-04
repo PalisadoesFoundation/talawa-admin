@@ -19,12 +19,12 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
-import type { InterfaceQueryUserListItem } from 'utils/interfaces';
+import type { InterfaceQueryUserListItemForAdmin } from 'utils/interfaces';
 import styles from '../../style/app-fixed.module.css';
 import { Search } from '@mui/icons-material';
 
 type Props = {
-  user: InterfaceQueryUserListItem;
+  user: InterfaceQueryUserListItemForAdmin;
   index: number;
   loggedInUserId: string;
   resetAndRefetch: () => void;

@@ -5,7 +5,7 @@ import { I18nextProvider } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
-import type { InterfaceQueryUserListItem } from 'utils/interfaces';
+import type { InterfaceQueryUserListItemForAdmin } from 'utils/interfaces';
 import { MOCKS, MOCKS2, MOCKS_UPDATE } from './UserTableItemMocks';
 import UsersTableItem from './UsersTableItem';
 import { BrowserRouter } from 'react-router';
@@ -79,7 +79,7 @@ describe('Testing User Table Item', () => {
   });
   test('Should render props and text elements test for the page component', async () => {
     const props: {
-      user: InterfaceQueryUserListItem;
+      user: InterfaceQueryUserListItemForAdmin;
       index: number;
       loggedInUserId: string;
       resetAndRefetch: () => void;
@@ -163,7 +163,7 @@ describe('Testing User Table Item', () => {
   });
   test('Should render props and text elements test for the Joined Organizations Modal properly', async () => {
     const props: {
-      user: InterfaceQueryUserListItem;
+      user: InterfaceQueryUserListItemForAdmin;
       index: number;
       loggedInUserId: string;
       resetAndRefetch: () => void;
@@ -304,7 +304,7 @@ describe('Testing User Table Item', () => {
   });
   test('Remove user from Organization should function properly in Organizations Joined Modal', async () => {
     const props: {
-      user: InterfaceQueryUserListItem;
+      user: InterfaceQueryUserListItemForAdmin;
       index: number;
       loggedInUserId: string;
       resetAndRefetch: () => void;
@@ -416,7 +416,7 @@ describe('Testing User Table Item', () => {
   });
   test('handles errors in removeUser mutation', async () => {
     const props: {
-      user: InterfaceQueryUserListItem;
+      user: InterfaceQueryUserListItemForAdmin;
       index: number;
       loggedInUserId: string;
       resetAndRefetch: () => void;
@@ -503,7 +503,7 @@ describe('Testing User Table Item', () => {
   });
   test('change role button should function properly', async () => {
     const props: {
-      user: InterfaceQueryUserListItem;
+      user: InterfaceQueryUserListItemForAdmin;
       index: number;
       loggedInUserId: string;
       resetAndRefetch: () => void;
@@ -594,7 +594,7 @@ describe('Testing User Table Item', () => {
   });
   test('Should render Blocked Organizations Modal properly', async () => {
     const props: {
-      user: InterfaceQueryUserListItem;
+      user: InterfaceQueryUserListItemForAdmin;
       index: number;
       loggedInUserId: string;
       resetAndRefetch: () => void;
@@ -737,7 +737,7 @@ describe('Testing User Table Item', () => {
   });
   test('handles errors in unblockUser mutation', async () => {
     const props: {
-      user: InterfaceQueryUserListItem;
+      user: InterfaceQueryUserListItemForAdmin;
       index: number;
       loggedInUserId: string;
       resetAndRefetch: () => void;
@@ -814,7 +814,7 @@ describe('Testing User Table Item', () => {
   });
   test('handles errors in updateUserRole mutation', async () => {
     const props: {
-      user: InterfaceQueryUserListItem;
+      user: InterfaceQueryUserListItemForAdmin;
       index: number;
       loggedInUserId: string;
       resetAndRefetch: () => void;
@@ -888,7 +888,7 @@ describe('Testing User Table Item', () => {
   });
   test('Should handle no joined organizations', async () => {
     const props: {
-      user: InterfaceQueryUserListItem;
+      user: InterfaceQueryUserListItemForAdmin;
       index: number;
       loggedInUserId: string;
       resetAndRefetch: () => void;
@@ -945,7 +945,7 @@ describe('Testing User Table Item', () => {
   });
   test('Should handle no blocked organizations', async () => {
     const props: {
-      user: InterfaceQueryUserListItem;
+      user: InterfaceQueryUserListItemForAdmin;
       index: number;
       loggedInUserId: string;
       resetAndRefetch: () => void;
@@ -1005,7 +1005,7 @@ describe('Testing User Table Item', () => {
   });
   test('Should handle admin role in blocked organizations modal', async () => {
     const props: {
-      user: InterfaceQueryUserListItem;
+      user: InterfaceQueryUserListItemForAdmin;
       index: number;
       loggedInUserId: string;
       resetAndRefetch: () => void;
@@ -1099,7 +1099,7 @@ describe('Testing User Table Item', () => {
             },
           ],
         },
-      } as InterfaceQueryUserListItem,
+      } as InterfaceQueryUserListItemForAdmin,
       index: 0,
       loggedInUserId: '123',
       resetAndRefetch: resetAndRefetchMock,
@@ -1146,7 +1146,7 @@ describe('Testing User Table Item', () => {
             },
           ],
         },
-      } as InterfaceQueryUserListItem,
+      } as InterfaceQueryUserListItemForAdmin,
       index: 0,
       loggedInUserId: '123',
       resetAndRefetch: resetAndRefetchMock,
@@ -1222,7 +1222,7 @@ describe('Testing User Table Item', () => {
         orgsWhereUserIsBlocked: {
           edges: [],
         },
-      } as InterfaceQueryUserListItem,
+      } as InterfaceQueryUserListItemForAdmin,
       index: 0,
       loggedInUserId: '123',
       resetAndRefetch: resetAndRefetchMock,
@@ -1301,7 +1301,7 @@ describe('Testing User Table Item', () => {
             },
           ],
         },
-      } as InterfaceQueryUserListItem,
+      } as InterfaceQueryUserListItemForAdmin,
       index: 0,
       loggedInUserId: '123',
       resetAndRefetch: resetAndRefetchMock,
