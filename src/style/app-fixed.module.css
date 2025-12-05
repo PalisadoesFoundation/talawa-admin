@@ -7213,6 +7213,13 @@ form {
   box-shadow: var(--hover-shadow);
 }
 
+.fromPalisadoes {
+  color: var(--primaryText-color);
+  text-align: center;
+  margin-top: -80px;
+  margin-bottom: 40px;
+}
+
 .socialIcons {
   display: flex;
   gap: 16px;
@@ -7265,7 +7272,7 @@ form {
 }
 
 .talawa_logo {
-  height: clamp(3rem, 8vw, 5rem);
+  height: clamp(3rem, 20vw, 8rem);
   width: auto;
   aspect-ratio: 1;
   display: block;
@@ -7297,6 +7304,12 @@ form {
   margin-bottom: var(--spacing-lg, 1.25rem);
 }
 
+.forgot_link {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: var(--secondText-color);
+}
+
 .reg_btn {
   font-weight: bold;
   background-color: var(--register-button-bg);
@@ -7307,7 +7320,7 @@ form {
   --bs-btn-active-bg: var(--register-button-bg-active);
   --bs-btn-active-border-color: var(--register-button-border-active);
   margin-top: 1rem;
-  color: var(--register-button-color);
+  color: var(--secondText-color);
   margin-bottom: 1rem;
   width: 100%;
   transition: background-color 0.2s ease;
@@ -7315,7 +7328,7 @@ form {
 }
 
 .reg_btn:hover {
-  color: var(--register-button-color-hover) !important;
+  color: var(--secondText-color) !important;
   box-shadow: var(--hover-shadow);
 }
 
@@ -7601,8 +7614,8 @@ form {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  height: 49px;
-  width: 160px;
+  height: 40px;
+  width: 150px;
   font-size: 0.8rem;
 }
 
@@ -7618,8 +7631,8 @@ form {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  height: 49px;
-  width: 160px;
+  height: 40px;
+  width: 150px;
   font-size: 0.8rem;
   box-shadow: 1.5px 1.5px 1.5px var(--actionsButton-box-shadow-hover);
 }

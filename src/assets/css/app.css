@@ -1,5 +1,6 @@
 @charset "UTF-8";
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 /*!
  * Bootstrap  v5.3.0 (https://getbootstrap.com/)
@@ -108,10 +109,10 @@
   --bs-tertiary-bg-rgb: 248, 249, 250;
   --bs-heading-color: inherit;
   --bs-link-color: #0d6efd;
-  --bs-link-color-rgb: 13, 110, 253;
+  --bs-link-color-rgb: #555555;
   --bs-link-decoration: none;
   --bs-link-hover-color: #0a58ca;
-  --bs-link-hover-color-rgb: 10, 88, 202;
+  --bs-link-hover-color-rgb: #555555;
   --bs-code-color: #d63384;
   --bs-highlight-bg: #fff3cd;
   --bs-border-width: 1px;
@@ -207,7 +208,7 @@
   --bs-heading-color: inherit;
   --bs-link-color: #83d6a6;
   --bs-link-hover-color: #9cdeb8;
-  --bs-link-color-rgb: 131, 214, 166;
+  --bs-link-color-rgb: #555555;
   --bs-link-hover-color-rgb: 156, 222, 184;
   --bs-code-color: #e685b5;
   --bs-border-color: #495057;
@@ -415,7 +416,7 @@ a {
 }
 
 a:hover {
-  --bs-link-color-rgb: var(--bs-link-hover-color-rgb);
+  color: var(--bs-link-hover-color-rgb);
 }
 
 a:not([href]):not([class]),
@@ -14173,7 +14174,7 @@ fieldset:disabled .btn {
    
    */
 :root {
-  --bs-body-font-family: Arial, Helvetica, sans-serif;
+  --bs-body-font-family: 'Inter', Arial, Helvetica, sans-serif;
 }
 
 * {

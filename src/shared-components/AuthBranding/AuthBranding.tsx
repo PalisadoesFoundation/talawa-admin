@@ -122,7 +122,7 @@ const AuthBranding: React.FC<InterfaceAuthBrandingProps> = ({
             className={styles.palisadoes_logo}
             data-testid="PalisadoesLogo"
           />
-          <p className="text-center">{t('fromPalisadoes')}</p>
+          <p className={styles.fromPalisadoes}>{t('fromPalisadoes')}</p>
         </a>
       )}
 

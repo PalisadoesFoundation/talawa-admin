@@ -148,7 +148,7 @@ const RegistrationForm: React.FC<InterfaceRegistrationFormProps> = ({
                 type="text"
                 id="signFirstName"
                 className="mb-3"
-                placeholder={tCommon('firstName')}
+                placeholder={tCommon('Enter firstname')}
                 required
                 value={formState.firstName}
                 onChange={(e): void => {
@@ -169,7 +169,7 @@ const RegistrationForm: React.FC<InterfaceRegistrationFormProps> = ({
                 type="text"
                 id="signSecondName"
                 className="mb-3"
-                placeholder={tCommon('lastName')}
+                placeholder={tCommon('Enter lastname')}
                 required
                 value={formState.lastName}
                 onChange={(e): void => {
@@ -184,14 +184,14 @@ const RegistrationForm: React.FC<InterfaceRegistrationFormProps> = ({
         </Row>
 
         <div className="position-relative">
-          <Form.Label>{tCommon('email')}</Form.Label>
+          <Form.Label>{tCommon('Email Address')}</Form.Label>
           <div className="position-relative">
             <Form.Control
               disabled={isLoading}
               type="email"
               data-testid="signInEmail"
               className="mb-3"
-              placeholder={tCommon('email')}
+              placeholder={tCommon('Enter your email')}
               autoComplete="username"
               required
               value={formState.email}
@@ -220,7 +220,7 @@ const RegistrationForm: React.FC<InterfaceRegistrationFormProps> = ({
               handlePasswordCheck(value);
             }}
             disabled={isLoading}
-            placeholder={tCommon('password')}
+            placeholder={tCommon('Enter your password')}
             testId="passwordField"
             autoComplete="new-password"
             onFocus={(): void => setIsInputFocused(true)}
@@ -244,7 +244,7 @@ const RegistrationForm: React.FC<InterfaceRegistrationFormProps> = ({
               });
             }}
             disabled={isLoading}
-            placeholder={tCommon('confirmPassword')}
+            placeholder={tCommon('Confirm your password')}
             testId="cpassword"
             autoComplete="new-password"
           />

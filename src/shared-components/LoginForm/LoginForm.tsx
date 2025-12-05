@@ -48,13 +48,14 @@ const LoginForm: React.FC<InterfaceLoginFormProps> = ({
         <h1 className="fs-2 fw-bold text-dark mb-3">
           {role === 'admin' ? t('adminLogin') : t('userLogin')}
         </h1>
+        <p>{t('loginSubHead')}</p>
 
-        <Form.Label>{tCommon('email')}</Form.Label>
+        <Form.Label>{t('email')}</Form.Label>
         <div className="position-relative">
           <Form.Control
             type="email"
             disabled={isLoading}
-            placeholder={tCommon('enterEmail')}
+            placeholder={tCommon('Enter Your Email')}
             required
             value={formState.email}
             onChange={(e): void => {
@@ -80,14 +81,18 @@ const LoginForm: React.FC<InterfaceLoginFormProps> = ({
               setFormState({ ...formState, password: value })
             }
             disabled={isLoading}
-            placeholder={tCommon('enterPassword')}
+            placeholder={tCommon('Enter Your Password')}
             testId="password"
             autoComplete="current-password"
           />
         </div>
 
         <div className="text-end mt-3">
-          <Link to="/forgotPassword" className="text-secondary" tabIndex={-1}>
+          <Link
+            to="/forgotPassword"
+            className={styles.forgot_link}
+            tabIndex={-1}
+          >
             {tCommon('forgotPassword')}
           </Link>
         </div>
