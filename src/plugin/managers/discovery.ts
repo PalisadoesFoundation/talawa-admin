@@ -54,32 +54,26 @@ export class DiscoveryManager {
   }
 
   async discoverPlugins(): Promise<string[]> {
-    try {
-      let discoveredPlugins: string[] = [];
+    let discoveredPlugins: string[] = [];
 
-      if (this.graphqlService) {
-        try {
-          const plugins = await this.graphqlService.getAllPlugins();
-          this.pluginIndex = plugins;
-          // Only discover plugins that are actually installed
-          const installedPlugins = plugins
-            .filter((p) => p.isInstalled)
-            .map((p) => p.pluginId);
-          discoveredPlugins = [
-            ...new Set([...discoveredPlugins, ...installedPlugins]),
-          ];
-        } catch (graphqlError) {
-          console.error('GraphQL discovery failed:', graphqlError);
-        }
-      } else {
-        console.warn('No GraphQL service available for plugin discovery');
+    if (this.graphqlService) {
+      try {
+        const plugins = await this.graphqlService.getAllPlugins();
+        this.pluginIndex = plugins;
+        // Only discover plugins that are actually installed
+        const installedPlugins = plugins
+          .filter((p) => p.isInstalled)
+          .map((p) => p.pluginId);
+        // Deduplicate in case GraphQL returns duplicate plugin records
+        discoveredPlugins = [...new Set(installedPlugins)];
+      } catch (graphqlError) {
+        console.error('GraphQL discovery failed:', graphqlError);
       }
-
-      return discoveredPlugins;
-    } catch (error) {
-      console.error('Could not discover plugins:', error);
-      return [];
+    } else {
+      console.warn('No GraphQL service available for plugin discovery');
     }
+
+    return discoveredPlugins;
   }
 
   async loadPluginManifest(pluginId: string): Promise<IPluginManifest> {
@@ -111,6 +105,14 @@ export class DiscoveryManager {
     }
   }
 
+  // Wrapped dynamic import so tests can mock the import result
+  // and verify component-loading behavior deterministically.
+  private async importPluginModule(
+    importPath: string,
+  ): Promise<Record<string, unknown>> {
+    return await import(/* @vite-ignore */ importPath);
+  }
+
   async loadPluginComponents(
     pluginId: string,
     manifest: IPluginManifest,
@@ -119,13 +121,13 @@ export class DiscoveryManager {
       const mainFile = this.normalizeMainFile(manifest.main);
       const importPath = `/src/plugin/available/${pluginId}/${mainFile}`;
 
-      const pluginModule = await import(/* @vite-ignore */ importPath);
+      const pluginModule = await this.importPluginModule(importPath);
 
       const result = pluginModule.default
         ? { [pluginId]: pluginModule.default, ...pluginModule }
         : pluginModule;
 
-      return result;
+      return result as Record<string, React.ComponentType>;
     } catch (error) {
       console.error(`Failed to load components for plugin ${pluginId}:`, error);
       throw new Error(
