@@ -208,4 +208,5 @@ export const createAdvertisement = [
   ]),
 
   createAdvertisementListResponse(true),
+  createAdvertisementListResponse(false, [], { hasNextPage: false }),
 ];
