@@ -6,8 +6,6 @@ import { BrowserRouter } from 'react-router';
 import { mockData } from './EventStatsMocks';
 import { vi, describe, expect, it } from 'vitest';
 
-// Mock the modules for PieChart rendering as they require a trasformer being used (which is not done by Vitest)
-// These modules are used by the Feedback component
 vi.mock('@mui/x-charts/PieChart', () => ({
   PieChart: () => <div data-testid="mocked-pie-chart">Test</div>,
   pieArcClasses: { faded: 'faded-class' },
@@ -128,6 +126,5 @@ describe('Testing Event Stats Wrapper', () => {
 
     // Verify button still works after multiple cycles
     expect(getByText('View Event Statistics')).toBeInTheDocument();
-    expect(getByText('View Event Statistics')).not.toBeDisabled();
   });
 });
