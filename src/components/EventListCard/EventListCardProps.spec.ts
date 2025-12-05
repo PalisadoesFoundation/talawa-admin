@@ -56,7 +56,7 @@ describe('EventListCardProps', () => {
 
   it('should verify user roles are either REGULAR, ADMINISTRATOR, or undefined', () => {
     props.forEach((prop) => {
-      if (prop.userRole) {
+      if (prop.userRole !== undefined) {
         expect(['REGULAR', 'ADMINISTRATOR']).toContain(prop.userRole);
       }
     });
