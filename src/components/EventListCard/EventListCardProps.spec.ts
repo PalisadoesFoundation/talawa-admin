@@ -37,7 +37,6 @@ describe('EventListCardProps', () => {
       expect(typeof prop.refetchEvents).toBe('function');
       // Execute the function to ensure codecov coverage
       expect(() => prop.refetchEvents?.()).not.toThrow();
-      prop.refetchEvents?.();
     });
   });
 
