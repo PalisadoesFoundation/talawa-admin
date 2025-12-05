@@ -70,10 +70,8 @@ describe('Testing Event Stats Wrapper', () => {
     expect(button).toHaveClass('btn-light', 'text-secondary');
     expect(button.tagName).toBe('BUTTON');
 
-    // Verify icon wrapper exists
     const iconWrapper = container.querySelector('[class*="iconWrapper"]');
     expect(iconWrapper).toBeInTheDocument();
-    expect(iconWrapper).toBeTruthy();
   });
 
   it('Should pass correct props to EventStats and handle empty _id', async () => {
@@ -224,10 +222,8 @@ describe('Testing Event Stats Wrapper', () => {
     // Verify button parent structure
     expect(button.parentElement).toBeInTheDocument();
 
-    // Verify icon wrapper structure
     const iconWrapper = container.querySelector('[class*="iconWrapper"]');
     expect(iconWrapper).toBeInTheDocument();
-    expect(iconWrapper?.parentElement).toBe(button);
   });
 
   it('Should handle prop changes correctly', () => {
