@@ -1120,6 +1120,146 @@ describe('Testing Login Page Screen', () => {
     expect(screen.getByTestId('register-text')).toBeInTheDocument();
     expect(window.location.pathname).toBe('/register');
   });
+  it('shows unauthorized warning when non-admin logs in on admin portal', async () => {
+    mockUseLocalStorage.getItem.mockImplementation(() => null);
+
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: { pathname: '/admin' },
+    });
+
+    const mockNonAdminSignin = [
+      {
+        request: {
+          query: SIGNIN_QUERY,
+          variables: { email: 'user@gmail.com', password: 'pass' },
+        },
+        result: {
+          data: {
+            signIn: {
+              user: {
+                id: '10',
+                role: 'regular',
+                name: 'User',
+                emailAddress: 'user@gmail.com',
+                countryCode: 'US',
+                avatarURL: null,
+              },
+              authenticationToken: 'dummy',
+            },
+          },
+        },
+      },
+    ];
+
+    const linkUnauthorized = new StaticMockLink(mockNonAdminSignin, true);
+
+    render(
+      <MockedProvider addTypename={false} link={linkUnauthorized}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await userEvent.type(screen.getByTestId('loginEmail'), 'user@gmail.com');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'pass',
+    );
+    await userEvent.click(screen.getByTestId('loginBtn'));
+
+    await wait();
+
+    expect(toastMocks.error).toHaveBeenCalled();
+  });
+
+  it('stores admin ID when logging in from admin portal', async () => {
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        reload: vi.fn(),
+        href: 'https://localhost:4321/admin',
+        origin: 'https://localhost:4321',
+        pathname: '/admin',
+      },
+    });
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await userEvent.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'johndoe',
+    );
+    await userEvent.click(screen.getByTestId('loginBtn'));
+
+    await wait();
+
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith('id', '1');
+  });
+
+  it('shows not found message when login query returns null', async () => {
+    mockUseLocalStorage.getItem.mockImplementation(() => null);
+
+    const nullSigninMock = [
+      {
+        request: {
+          query: SIGNIN_QUERY,
+          variables: { email: 'missing@gmail.com', password: 'test' },
+        },
+        result: {
+          data: null,
+        },
+      },
+    ];
+
+    const linkNull = new StaticMockLink(nullSigninMock, true);
+
+    render(
+      <MockedProvider addTypename={false} link={linkNull}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await userEvent.type(screen.getByTestId('loginEmail'), 'missing@gmail.com');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'test',
+    );
+
+    await userEvent.click(screen.getByTestId('loginBtn'));
+
+    await wait();
+
+    expect(toastMocks.error).toHaveBeenCalled();
+  });
 });
 
 describe('Testing redirect if already logged in', () => {
