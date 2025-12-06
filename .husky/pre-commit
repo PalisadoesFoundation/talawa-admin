@@ -4,6 +4,10 @@ pnpm run format:fix
 # pnpm run lint:fix
 pnpm run lint-staged
 pnpm run typecheck
+STAGED_SRC=$(git diff --cached --name-only --diff-filter=ACMRT | grep -E '^src/.*\.(ts|tsx|js|jsx)$' | tr '\n' ' ')
+if [ -n "$STAGED_SRC" ]; then
+  pnpm run check-i18n -- $STAGED_SRC
+fi
 pnpm run update:toc
 pnpm run check:pom
 npx knip --include files,exports
