@@ -560,15 +560,15 @@ describe('LeftDrawerOrg', () => {
     it('should apply active styles when on corresponding route', () => {
       renderComponent({}, successMocks, '/orgpeople/org-123');
 
-      const membersButton = screen.getByText('Members').closest('button');
-      expect(membersButton).toHaveClass('leftDrawerActiveButton');
+      const membersLink = screen.getByText('Members').closest('a');
+      expect(membersLink).toHaveClass('leftDrawerActiveButton');
     });
 
     it('should apply inactive styles when not on corresponding route', () => {
       renderComponent({}, successMocks, '/orgdash/org-123');
 
-      const membersButton = screen.getByText('Members').closest('button');
-      expect(membersButton).toHaveClass('leftDrawerInactiveButton');
+      const membersLink = screen.getByText('Members').closest('a');
+      expect(membersLink).toHaveClass('leftDrawerInactiveButton');
     });
 
     it('should render icon components with correct props', () => {

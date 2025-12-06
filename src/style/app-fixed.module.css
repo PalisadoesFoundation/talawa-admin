@@ -6208,6 +6208,7 @@ form {
   background-color: var(--leftDrawer-fixedModule-bg) !important;
   transition: 0.5s;
   font-family: var(--bs-leftDrawer-font-family);
+  overflow-x: hidden !important;
 }
 
 .activeDrawer {
@@ -6229,6 +6230,7 @@ form {
 
 .leftDrawer .sidebarcompheight {
   flex-grow: 1;
+  overflow-x: hidden !important;
 }
 
 .leftDrawer .brandingContainer {
@@ -6273,6 +6275,7 @@ form {
 .leftDrawer .optionList {
   /* height: 75%; */
   overflow-y: hidden;
+  overflow-x: hidden !important;
   scrollbar-width: thin;
   scrollbar-color: var(--leftDrawer-scrollbar-color) transparent;
   transition: overflow 0.3s ease-in-out;
@@ -6303,6 +6306,7 @@ form {
   display: flex;
   align-items: center;
   width: 100%;
+  max-width: 100%;
   text-align: start;
   margin-bottom: 0.8rem;
   border-radius: 12px;
@@ -6311,6 +6315,7 @@ form {
   padding-left: 0.8rem;
   outline: none;
   border: none;
+  overflow: hidden;
 }
 
 .leftDrawer button .iconWrapper {
@@ -9779,6 +9784,7 @@ form {
 
 .collapsedDrawer {
   width: var(--sidebar-collapsed-width);
+  overflow-x: hidden !important;
 }
 
 .sidebarText {
@@ -9790,6 +9796,7 @@ form {
 
 .expandedDrawer {
   width: var(--sidebar-expanded-width);
+  overflow-x: hidden !important;
 }
 
 .venueimage {

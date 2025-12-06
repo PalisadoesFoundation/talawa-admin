@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, it, vi, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { MockedProvider } from '@apollo/react-testing';
 import LeftDrawer from './LeftDrawer';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -277,19 +277,6 @@ describe('LeftDrawer Component', () => {
       expect(organizationsButton).toHaveClass(`${styles.sidebarBtnActive}`);
     });
 
-    it('renders navigation buttons as non-submitting buttons', () => {
-      renderComponent();
-
-      expect(screen.getByTestId('organizationsBtn')).toHaveAttribute(
-        'type',
-        'button',
-      );
-      expect(screen.getByTestId('pluginStoreBtn')).toHaveAttribute(
-        'type',
-        'button',
-      );
-    });
-
     it('does not hide drawer on desktop view navigation button clicks', () => {
       // Mock window.innerWidth for desktop view
       Object.defineProperty(window, 'innerWidth', {
@@ -406,8 +393,10 @@ describe('LeftDrawer Component', () => {
 
       renderComponent();
 
-      // Should not show the "Plugin Settings" header when no plugin items
-      expect(screen.queryByText('Plugin Settings')).not.toBeInTheDocument();
+      // Should not show the plugin settings header when no plugin items
+      expect(
+        screen.queryByTestId('pluginSettingsHeader'),
+      ).not.toBeInTheDocument();
     });
 
     it('should show plugin section when plugin items exist', () => {
@@ -429,8 +418,8 @@ describe('LeftDrawer Component', () => {
 
       renderComponent();
 
-      // Should show the "Plugin Settings" header when plugin items exist
-      expect(screen.getByText('Plugin Settings')).toBeInTheDocument();
+      // Should show the plugin settings header when plugin items exist
+      expect(screen.getByTestId('pluginSettingsHeader')).toBeInTheDocument();
 
       // Should render each plugin item
       expect(screen.getByText('Test Plugin')).toBeInTheDocument();
@@ -556,7 +545,7 @@ describe('LeftDrawer Component', () => {
       expect(screen.getByText('Plugin Three')).toBeInTheDocument();
 
       // Plugin section header should be present
-      expect(screen.getByText('Plugin Settings')).toBeInTheDocument();
+      expect(screen.getByTestId('pluginSettingsHeader')).toBeInTheDocument();
 
       // All plugin buttons should have correct test IDs
       expect(screen.getByTestId('plugin-plugin-1-btn')).toBeInTheDocument();

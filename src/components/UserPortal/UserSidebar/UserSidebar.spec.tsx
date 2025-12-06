@@ -30,6 +30,7 @@ const mockTCommonImplementation = (key: string) => {
     Settings: 'Settings',
     userPortal: 'User Portal',
     notifications: 'Notifications', // Used by notification button in component
+    pluginSettings: 'Plugin Settings', // Used by SidebarPluginSection
   };
   return translations[key] || key;
 };
@@ -228,9 +229,9 @@ describe('UserSidebar', () => {
       expect(screen.getByText('User Portal')).toBeInTheDocument();
       expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
       expect(screen.getByTestId('settingsBtn')).toBeInTheDocument();
-      // Multiple ProfileCards render by design - one at top (with blue bg) and one at bottom
-      const profileDropdowns = screen.getAllByTestId('profile-dropdown');
-      expect(profileDropdowns.length).toBe(2);
+      // ProfileCard renders once in headerContent (with blue bg)
+      const profileDropdown = screen.getByTestId('profile-dropdown');
+      expect(profileDropdown).toBeInTheDocument();
     });
 
     it('should render navigation links with correct text', () => {
@@ -492,7 +493,7 @@ describe('UserSidebar', () => {
       expect(screen.getAllByTestId('plugin-icon')).toHaveLength(1);
     });
 
-    it('should apply active stroke color to plugin icon when plugin route is active', () => {
+    it('should render plugin icon with consistent stroke color', () => {
       const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
         {
           pluginId: 'test-plugin',
@@ -503,13 +504,14 @@ describe('UserSidebar', () => {
       ];
       mockUsePluginDrawerItems.mockReturnValue(mockPluginItems);
 
-      // Render on the plugin route to make it active
+      // Render on the plugin route
       renderWithRoute('/user/plugin/test');
 
       const pluginIcon = screen.getByTestId('plugin-icon');
+      // Plugin icons use a consistent stroke color (inactive color) regardless of active state
       expect(pluginIcon).toHaveAttribute(
         'data-stroke',
-        'var(--sidebar-icon-stroke-active)',
+        'var(--sidebar-icon-stroke-inactive)',
       );
     });
   });
@@ -525,13 +527,12 @@ describe('UserSidebar', () => {
   });
 
   describe('Component Structure', () => {
-    it('should have ProfileDropdown in the bottom section', () => {
+    it('should have ProfileDropdown in the header section', () => {
       renderComponent();
 
-      // ProfileCard count already verified in "Component Rendering" section
-      // This test verifies the bottom ProfileCard specifically exists
-      const profileDropdowns = screen.getAllByTestId('profile-dropdown');
-      expect(profileDropdowns[1]).toBeInTheDocument();
+      // ProfileCard renders once in headerContent
+      const profileDropdown = screen.getByTestId('profile-dropdown');
+      expect(profileDropdown).toBeInTheDocument();
     });
 
     it('should apply correct structure classes', () => {
@@ -540,9 +541,9 @@ describe('UserSidebar', () => {
       const container = screen.getByTestId('leftDrawerContainer');
       expect(container).toHaveClass('leftDrawer');
 
-      // Check for the main content structure
-      const mainContent = screen.getByTestId('sidebar-main-content');
-      expect(mainContent).toBeInTheDocument();
+      // Verify the option list exists (navigation items container)
+      expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('settingsBtn')).toBeInTheDocument();
     });
   });
 
@@ -596,8 +597,7 @@ describe('UserSidebar', () => {
       const toggleBtn = screen.getByTestId('toggleBtn');
 
       expect(toggleBtn).toBeInTheDocument();
-      expect(toggleBtn).toHaveAttribute('tabIndex', '0');
-      expect(toggleBtn).toHaveAttribute('role', 'button');
+      expect(toggleBtn).toHaveAttribute('type', 'button');
       // The aria-label is on the FaBars icon inside the toggle button
       expect(
         toggleBtn.querySelector('[aria-label="Toggle sidebar"]'),

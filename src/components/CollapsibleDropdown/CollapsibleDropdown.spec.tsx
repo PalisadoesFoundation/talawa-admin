@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 
 import CollapsibleDropdown from './CollapsibleDropdown';
 import type { InterfaceCollapsibleDropdown } from 'types/DropDown/interface';
