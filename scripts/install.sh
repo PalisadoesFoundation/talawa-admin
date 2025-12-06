@@ -40,11 +40,13 @@ install_node() {
         exit 1
     fi
     
-    # Install and activate LTS Node
-    if fnm install --lts && fnm use --install-if-missing lts-latest; then
+    # Install and activate Node.js v22.x (repository standard)
+    if fnm install 22 && fnm use --install-if-missing 22; then
         NODE_VERSION=$(node --version 2>/dev/null || echo "unknown")
         echo "✅ Node.js installed successfully (version: $NODE_VERSION)"
         echo "⚠️  Add to your shell config (~/.bashrc, ~/.zshrc, etc.):"
+        # shellcheck disable=SC2016
+        # Intentional: single quotes preserve literal string for user to copy-paste
         echo '    eval "$(fnm env --use-on-cd)"'
         return 0
     else

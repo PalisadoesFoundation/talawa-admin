@@ -58,10 +58,10 @@ function Install-Node {
         exit 1
     }
     
-    # Install and activate LTS Node
+    # Install and activate Node.js v22.x (repository standard)
     try {
-        fnm install --lts | Out-Null
-        fnm use --install-if-missing lts-latest | Out-Null
+        fnm install 22 | Out-Null
+        fnm use --install-if-missing 22 | Out-Null
         
         $nodeVersion = node --version 2>$null
         Write-Host "✅ Node.js installed successfully (version: $nodeVersion)" -ForegroundColor Green
