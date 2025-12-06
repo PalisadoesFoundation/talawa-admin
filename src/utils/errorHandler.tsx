@@ -23,6 +23,8 @@ export const errorHandler = (a: unknown, error: unknown): void => {
       toast.error(tErrors('invalidMaritalStatus'));
     } else if (errorMessage.match(/status code 400/i)) {
       toast.error(tErrors('error400'));
+    } else if (errorMessage.match(/organization name already exists/i)) {
+      toast.error(tErrors('organizationNameAlreadyExists'));
     } else {
       toast.error(errorMessage);
     }
