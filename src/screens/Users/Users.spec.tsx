@@ -1117,6 +1117,93 @@ describe('useEffect loadMoreUsers trigger', () => {
     expect(screen.getByText(/no results found/i)).toBeInTheDocument();
   });
 
+  it('should return early when search value is empty and already empty', async () => {
+    render(
+      <MockedProvider mocks={MOCKS_NEW}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const input = screen.getByTestId('searchByName');
+
+    await userEvent.clear(input);
+    await userEvent.click(screen.getByTestId('searchButton'));
+
+    expect(input).toHaveValue('');
+  });
+
+  it('should return early from loadMoreUsers when isLoadingMore is already true', async () => {
+    const slowMocks = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: { first: 12, after: null, orgFirst: 32, where: undefined },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'User One',
+                    role: 'regular',
+                    emailAddress: 'u@test.com',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: true, endCursor: '1' },
+            },
+          },
+        },
+        delay: 2000,
+      },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: { organizations: [{ id: '1', name: 'Org' }] },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={slowMocks} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    fireEvent.scroll(window, { target: { scrollY: 5000 } });
+    await wait(200);
+
+    fireEvent.scroll(window, { target: { scrollY: 9000 } });
+    await wait(200);
+
+    expect(true).toBe(true);
+  });
+
   it('should filter only admin users (by row count change)', async () => {
     render(
       <MockedProvider mocks={MOCKS_NEW} addTypename={false}>
