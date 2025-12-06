@@ -119,9 +119,6 @@ html[data-theme='dark'] {
 
 /* stylelint-disable docusaurus/copyright-header */
 
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
-
 .container > div > div:first-child {
   padding: 1rem 5rem;
 }
