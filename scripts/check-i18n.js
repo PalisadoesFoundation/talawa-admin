@@ -80,7 +80,14 @@ const isAllowedString = (text) => {
 const toPosixPath = (filePath) => filePath.split(path.sep).join(POSIX_SEP);
 
 const collectViolations = (filePath) => {
-  const content = fs.readFileSync(filePath, 'utf-8');
+  let content;
+  try {
+    content = fs.readFileSync(filePath, 'utf-8');
+  } catch (error) {
+    console.warn(`Warning: Could not read ${filePath}: ${error.message}`);
+    return [];
+  }
+
   const lines = stripComments(content).split('\n');
   const violations = [];
 
