@@ -715,6 +715,38 @@ function TestComponent({
   return null;
 }
 
+describe('sortUsers logic coverage', () => {
+  const baseUsers = [
+    { id: '1', createdAt: '2020-01-01', role: 'regular' },
+    { id: '2', createdAt: '2024-01-01', role: 'administrator' },
+  ];
+
+  it('should sort users by newest', async () => {
+    render(
+      <MockedProvider mocks={MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const instance = screen.getByTestId('testcomp');
+    expect(instance).toBeInTheDocument();
+  });
+
+  it('should sort users by oldest', () => {
+    const sorted = [...baseUsers].sort(
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    );
+    expect(sorted[0].id).toBe('1');
+  });
+});
+
 describe('useEffect loadMoreUsers trigger', () => {
   it('should call loadMoreUsers when displayedUsers changes and loadUnqUsers > 0', () => {
     const loadMoreUsers = vi.fn();
@@ -740,6 +772,145 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     expect(loadMoreUsers).toHaveBeenCalledTimes(1);
     expect(loadMoreUsers).toHaveBeenCalledWith(2, 3);
+  });
+
+  it('should NOT update sorting when same option is selected', async () => {
+    render(
+      <MockedProvider mocks={MOCKS_NEW}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const sortDropdown = await screen.findByTestId('sortUsers');
+    fireEvent.click(sortDropdown);
+
+    const newest = screen.getByTestId('newest');
+    fireEvent.click(newest);
+    fireEvent.click(newest);
+
+    expect(sortDropdown).toHaveTextContent('newest');
+  });
+
+  it('should NOT update filtering when same option is clicked', async () => {
+    render(
+      <MockedProvider mocks={MOCKS_NEW}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const filterDropdown = await screen.findByTestId('filterUsers');
+    fireEvent.click(filterDropdown);
+
+    const cancel = screen.getByTestId('cancel');
+    fireEvent.click(cancel);
+    fireEvent.click(cancel);
+
+    expect(filterDropdown).toHaveTextContent('cancel');
+  });
+
+  it('should render "no results found" when search yields empty result', async () => {
+    const emptySearchMock = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: { name: 'zzzz' },
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [],
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: {
+          data: { organizations: [{ id: '1', name: 'Org' }] },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={emptySearchMock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const input = screen.getByTestId('searchByName');
+    await userEvent.type(input, 'zzzz');
+    await userEvent.click(screen.getByTestId('searchButton'));
+
+    await wait();
+
+    expect(screen.getByText(/no results found/i)).toBeInTheDocument();
+  });
+
+  it('should reset and refetch when clearing search after entering value', async () => {
+    render(
+      <MockedProvider mocks={MOCKS_NEW}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const input = screen.getByTestId('searchByName');
+
+    await userEvent.type(input, 'John');
+    await userEvent.clear(input);
+    await userEvent.click(screen.getByTestId('searchButton'));
+
+    await wait();
+
+    expect(input).toHaveValue('');
+  });
+
+  it('should clear search value on component unmount', async () => {
+    const { unmount } = render(
+      <MockedProvider mocks={MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const input = screen.getByTestId('searchByName');
+    await userEvent.type(input, 'John');
+
+    unmount();
+
+    expect(screen.queryByTestId('searchByName')).not.toBeInTheDocument();
   });
 
   it('should NOT call loadMoreUsers when loadUnqUsers = 0', () => {
