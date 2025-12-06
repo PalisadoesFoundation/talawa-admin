@@ -19,7 +19,10 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgList from './OrgList';
 import { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY } from './OrgListMocks';
-import { ORGANIZATION_LIST, CURRENT_USER } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATION_FILTER_LIST,
+  CURRENT_USER,
+} from 'GraphQl/Queries/Queries';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
@@ -122,7 +125,7 @@ const renderWithMocks = (mocks: MockedResponse[]) => {
 const createOrgMock = (organizations: unknown[]) => {
   const orgListMock = {
     request: {
-      query: ORGANIZATION_LIST,
+      query: ORGANIZATION_FILTER_LIST,
       variables: { filter: '' },
     },
     result: {
@@ -132,9 +135,9 @@ const createOrgMock = (organizations: unknown[]) => {
     },
   };
 
-  // Filter out any ORGANIZATION_LIST mocks from MOCKS to avoid conflicts
+  // Filter out any ORGANIZATION_FILTER_LIST mocks from MOCKS to avoid conflicts
   const mocksWithoutOrgList = MOCKS.filter(
-    (mock) => mock.request.query !== ORGANIZATION_LIST,
+    (mock) => mock.request.query !== ORGANIZATION_FILTER_LIST,
   );
 
   return [orgListMock, ...mocksWithoutOrgList];
@@ -402,7 +405,7 @@ const mockConfigurations = {
     ...MOCKS,
     {
       request: {
-        query: ORGANIZATION_LIST,
+        query: ORGANIZATION_FILTER_LIST,
         variables: { filter: '' },
       },
       result: {
@@ -413,7 +416,7 @@ const mockConfigurations = {
     },
     {
       request: {
-        query: ORGANIZATION_LIST,
+        query: ORGANIZATION_FILTER_LIST,
         variables: { filter: 'Dog' },
       },
       result: {
@@ -487,7 +490,7 @@ const mockConfigurations = {
     },
     {
       request: {
-        query: ORGANIZATION_LIST,
+        query: ORGANIZATION_FILTER_LIST,
         variables: { filter: '' },
       },
       result: {
@@ -501,7 +504,7 @@ const mockConfigurations = {
     ...MOCKS,
     {
       request: {
-        query: ORGANIZATION_LIST,
+        query: ORGANIZATION_FILTER_LIST,
         variables: { filter: '' },
       },
       result: {
@@ -881,7 +884,7 @@ describe('Advanced Component Functionality Tests', () => {
       ...MOCKS,
       {
         request: {
-          query: ORGANIZATION_LIST,
+          query: ORGANIZATION_FILTER_LIST,
           variables: { filter: '' },
         },
         result: {
@@ -1225,7 +1228,7 @@ describe('Advanced Component Functionality Tests', () => {
       ...MOCKS,
       {
         request: {
-          query: ORGANIZATION_LIST,
+          query: ORGANIZATION_FILTER_LIST,
           variables: { filter: '' },
         },
         result: {
@@ -1319,7 +1322,7 @@ describe('Advanced Component Functionality Tests', () => {
       ...MOCKS,
       {
         request: {
-          query: ORGANIZATION_LIST,
+          query: ORGANIZATION_FILTER_LIST,
           variables: { filter: '' },
         },
         result: {
@@ -1330,7 +1333,7 @@ describe('Advanced Component Functionality Tests', () => {
       },
       {
         request: {
-          query: ORGANIZATION_LIST,
+          query: ORGANIZATION_FILTER_LIST,
           variables: { filter: 'NonexistentOrg' },
         },
         result: {
@@ -1511,7 +1514,7 @@ describe('Advanced Component Functionality Tests', () => {
     const errorMocks = [
       {
         request: {
-          query: ORGANIZATION_LIST,
+          query: ORGANIZATION_FILTER_LIST,
           variables: {
             id: '123',
             filter: '',
@@ -1626,7 +1629,7 @@ describe('Advanced Component Functionality Tests', () => {
       },
       {
         request: {
-          query: ORGANIZATION_LIST,
+          query: ORGANIZATION_FILTER_LIST,
           variables: { filter: '' },
         },
         result: {
@@ -1727,7 +1730,7 @@ describe('Advanced Component Functionality Tests', () => {
       },
       {
         request: {
-          query: ORGANIZATION_LIST,
+          query: ORGANIZATION_FILTER_LIST,
           variables: { filter: '' },
         },
         result: {
@@ -2128,5 +2131,123 @@ describe('Advanced Component Functionality Tests', () => {
     } catch {
       // If modal doesn't appear, test still passes
     }
+  });
+
+  test('Testing organization creation when CREATE_ORGANIZATION_MUTATION returns null data', async () => {
+    setItem('id', '123');
+    setItem('role', 'administrator');
+
+    // Mock with null data response
+    const mockWithNullData = [
+      ...MOCKS,
+      {
+        request: {
+          query: ORGANIZATION_FILTER_LIST,
+          variables: { filter: '' },
+        },
+        result: {
+          data: {
+            organizations: mockOrgData.singleOrg,
+          },
+        },
+      },
+      {
+        request: {
+          query: CREATE_ORGANIZATION_MUTATION_PG,
+          variables: {
+            name: 'Test Organization',
+            description: 'Test Description',
+            addressLine1: '123 Test St',
+            addressLine2: '',
+            city: 'Test City',
+            countryCode: 'af',
+            postalCode: '12345',
+            state: 'Test State',
+            avatar: null,
+          },
+        },
+        result: {
+          data: null,
+        },
+      },
+      {
+        request: {
+          query: CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
+          variables: {
+            memberId: '123',
+            organizationId: undefined,
+            role: 'administrator',
+          },
+        },
+        result: {
+          data: {
+            createOrganizationMembership: {
+              id: 'membership-id',
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mockWithNullData}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ThemeProvider theme={createTheme()}>
+                <OrgList />
+              </ThemeProvider>
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Open organization creation modal
+    await userEvent.click(screen.getByTestId('createOrganizationBtn'));
+
+    // Fill form
+    await userEvent.type(
+      screen.getByTestId('modalOrganizationName'),
+      'Test Organization',
+    );
+    await userEvent.type(
+      screen.getByTestId('modalOrganizationDescription'),
+      'Test Description',
+    );
+    await userEvent.type(
+      screen.getByTestId('modalOrganizationAddressLine1'),
+      '123 Test St',
+    );
+    await userEvent.type(
+      screen.getByTestId('modalOrganizationCity'),
+      'Test City',
+    );
+    await userEvent.type(
+      screen.getByTestId('modalOrganizationState'),
+      'Test State',
+    );
+    await userEvent.type(
+      screen.getByTestId('modalOrganizationPostalCode'),
+      '12345',
+    );
+    await userEvent.selectOptions(
+      screen.getByTestId('modalOrganizationCountryCode'),
+      'Afghanistan',
+    );
+
+    // Submit form
+    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+
+    // Wait for form submission to complete
+    await wait();
+
+    // Verify that toast.success was NOT called since data is null
+    expect(mockToast.success).not.toHaveBeenCalled();
+
+    // Verify that the modal should still be open since the success path wasn't taken
+    expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
   });
 });
