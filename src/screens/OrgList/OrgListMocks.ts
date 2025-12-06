@@ -327,13 +327,7 @@ const MOCKS_ADMIN = [
   {
     request: {
       query: ORGANIZATION_FILTER_LIST,
-      variables: {
-        first: 8,
-        skip: 0,
-        filter: '',
-        orderBy: 'createdAt_ASC',
-      },
-      notifyOnNetworkStatusChange: true,
+      variables: { filter: '' },
     },
     result: {
       data: {
