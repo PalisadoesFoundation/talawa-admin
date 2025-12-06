@@ -68,22 +68,22 @@ const PasswordValidator: React.FC<InterfacePasswordValidatorProps> = ({
       {isInputFocused && (
         <>
           <ValidationItem
-            isValid={validation.lowercaseChar}
+            failed={!validation.lowercaseChar}
             text={t('lowercase_check')}
             className={styles.password_check_element}
           />
           <ValidationItem
-            isValid={validation.uppercaseChar}
+            failed={!validation.lowercaseChar}
             text={t('uppercase_check')}
             className={styles.password_check_element}
           />
           <ValidationItem
-            isValid={validation.numericValue}
+            failed={!validation.lowercaseChar}
             text={t('numeric_value_check')}
             className={styles.password_check_element}
           />
           <ValidationItem
-            isValid={validation.specialChar}
+            failed={!validation.lowercaseChar}
             text={t('special_char_check')}
             className={`${styles.password_check_element} ${styles.password_check_element_bottom}`}
           />

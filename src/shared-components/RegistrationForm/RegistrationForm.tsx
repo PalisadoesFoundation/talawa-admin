@@ -118,9 +118,8 @@ const RegistrationForm: React.FC<InterfaceRegistrationFormProps> = ({
 
       signupRecaptchaRef.current?.reset();
     }
-  }; // CLOSE handleSubmit HERE - REMOVE THE 'return' THAT WAS HERE
+  };
 
-  // COMPONENT RETURN - THIS SHOULD BE AT THE COMPONENT LEVEL
   return (
     <Form onSubmit={handleSubmit}>
       <h1 className="fs-2 fw-bold text-dark mb-3" data-testid="register-text">
@@ -239,7 +238,7 @@ const RegistrationForm: React.FC<InterfaceRegistrationFormProps> = ({
         {formState.confirmPassword.length > 0 &&
           formState.password !== formState.confirmPassword && (
             <div className="form-text text-danger" data-testid="passwordCheck">
-              {t('Password_and_Confirm_password_mismatches.')}
+              {t('Password_and_Confirm_password_mismatches')}
             </div>
           )}
       </div>
@@ -278,7 +277,7 @@ const RegistrationForm: React.FC<InterfaceRegistrationFormProps> = ({
       </Button>
 
       {showLoginLink && (
-        <div className="text-center">
+        <div className="text-center" data-testid="goToLoginPortion">
           {t('alreadyhaveAnAccount')}{' '}
           <Link
             to={role === 'admin' ? '/admin' : '/'}

@@ -2,7 +2,7 @@ import React from 'react';
 import { Check, Clear } from '@mui/icons-material';
 
 interface IValidationItemProps {
-  failed: boolean;
+  isValid: boolean;
   text: string;
   className?: string;
 }
@@ -11,11 +11,12 @@ interface IValidationItemProps {
  * ValidationItem Component
  * Displays individual password validation check
  */
-const ValidationItem = ({ failed, text, className }: IValidationItemProps) => (
+const ValidationItem = ({ isValid, text, className }: IValidationItemProps) => (
   <p
-    className={`form-text ${failed ? 'text-danger' : 'text-success'} ${className || ''}`}
+    className={`form-text ${isValid ? 'text-success' : 'text-danger'} ${className || ''}`}
+    data-testid="validation-item"
   >
-    <span>{failed ? <Clear /> : <Check />}</span>
+    <span>{isValid ? <Check /> : <Clear />}</span>
     {text}
   </p>
 );

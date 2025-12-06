@@ -32,8 +32,9 @@ const LoginPage = (): JSX.Element => {
   const { getItem, setItem, removeItem } = useLocalStorage();
   const { startSession, extendSession } = useSession();
 
-  document.title = t('title');
-
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
   const [role, setRole] = useState<'admin' | 'user'>('user');
   const [pendingInvitationToken] = useState(() =>
     getItem('pendingInvitationToken'),
@@ -131,9 +132,6 @@ const LoginPage = (): JSX.Element => {
           window.location.href = `/event/invitation/${pendingInvitationToken}`;
           return;
         }
-
-        startSession();
-        navigate(role === 'admin' ? '/orglist' : '/user/organizations');
       } else {
         toast.warn(tErrors('notFound') as string);
       }

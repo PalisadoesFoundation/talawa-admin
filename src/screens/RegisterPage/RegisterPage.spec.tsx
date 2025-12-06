@@ -47,7 +47,9 @@ const mocks = [
     result: {
       data: {
         community: {
+          id: 'community-1',
           logoURL: 'https://example.com/logo.png',
+          logoMimeType: 'image/png',
           name: 'Test Community',
           websiteURL: 'https://example.com',
         },
@@ -69,8 +71,7 @@ const mocks = [
         signUp: {
           authenticationToken: 'test-token',
           user: {
-            name: 'John Doe',
-            emailAddress: 'john@example.com',
+            id: 'user-123',
           },
         },
       },

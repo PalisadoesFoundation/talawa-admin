@@ -48,7 +48,7 @@ describe('RegistrationForm Component', () => {
     const passwordInput = screen.getByTestId('passwordField');
     const confirmPasswordInput = screen.getByTestId('cpassword');
 
-    fireEvent.change(passwordInput, { target: { value: 'Test@123' } });
+    fireEvent.change(passwordInput, { target: { value: 'Test123!' } });
     fireEvent.change(confirmPasswordInput, { target: { value: 'Test456!' } });
 
     await waitFor(() => {
@@ -71,8 +71,8 @@ describe('RegistrationForm Component', () => {
     fireEvent.change(firstNameInput, { target: { value: 'John' } });
     fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
     fireEvent.change(emailInput, { target: { value: 'john@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'Test@123' } });
-    fireEvent.change(confirmPasswordInput, { target: { value: 'Test@123' } });
+    fireEvent.change(passwordInput, { target: { value: 'Test123!' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'Test123!' } });
 
     const orgSelector = screen.getByRole('combobox');
     fireEvent.change(orgSelector, {
@@ -88,8 +88,8 @@ describe('RegistrationForm Component', () => {
           firstName: 'John',
           lastName: 'Doe',
           email: 'john@example.com',
-          password: 'Test@123',
-          confirmPassword: 'Test@123',
+          password: 'Test123!',
+          confirmPassword: 'Test123!',
           organizationId: mockOrganizations[0].id,
         },
         null,
@@ -110,8 +110,8 @@ describe('RegistrationForm Component', () => {
     fireEvent.change(firstNameInput, { target: { value: 'John' } });
     fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
     fireEvent.change(emailInput, { target: { value: 'john@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'Test@123' } });
-    fireEvent.change(confirmPasswordInput, { target: { value: 'Test@123' } });
+    fireEvent.change(passwordInput, { target: { value: 'Test123!' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'Test123!' } });
 
     const submitButton = screen.getByTestId('registrationBtn');
     fireEvent.click(submitButton);
@@ -138,8 +138,8 @@ describe('RegistrationForm Component', () => {
     fireEvent.change(firstNameInput, { target: { value: 'John' } });
     fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
     fireEvent.change(emailInput, { target: { value: 'john@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'Test@123' } });
-    fireEvent.change(confirmPasswordInput, { target: { value: 'Test@123' } });
+    fireEvent.change(passwordInput, { target: { value: 'Test123!' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'Test123!' } });
 
     const submitButton = screen.getByTestId('registrationBtn');
     fireEvent.click(submitButton);
@@ -151,22 +151,18 @@ describe('RegistrationForm Component', () => {
     expect(firstNameInput).toHaveValue('John');
     expect(lastNameInput).toHaveValue('Doe');
     expect(emailInput).toHaveValue('john@example.com');
-    expect(passwordInput).toHaveValue('Test@123');
-    expect(confirmPasswordInput).toHaveValue('Test@123');
+    expect(passwordInput).toHaveValue('Test123!');
+    expect(confirmPasswordInput).toHaveValue('Test123!');
   });
 
   it('should render login link when showLoginLink is true', () => {
     renderComponent({ showLoginLink: true });
-    expect(screen.getByText(/login/i)).toBeInTheDocument();
+    expect(screen.getByTestId('goToLoginPortion')).toBeInTheDocument();
   });
 
   it('should not render login link when showLoginLink is false', () => {
     renderComponent({ showLoginLink: false });
-    const loginLinks = screen.queryAllByText(/login/i);
-    const actualLoginLinks = loginLinks.filter(
-      (link) => link.tagName === 'U' || link.closest('a'),
-    );
-    expect(actualLoginLinks).toHaveLength(0);
+    expect(screen.queryByTestId('goToLoginPortion')).not.toBeInTheDocument();
   });
 
   it('should disable form inputs when isLoading is true', () => {

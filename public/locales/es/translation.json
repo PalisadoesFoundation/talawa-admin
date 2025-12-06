@@ -986,6 +986,12 @@
     "nothingToShow": "Nada que mostrar aquí."
   },
   "userRegister": {
+    "firstName_invalid": "El nombre debe contener solo letras minúsculas y mayúsculas.",
+    "lastName_invalid": "El apellido debe contener solo letras minúsculas y mayúsculas.",
+    "password_invalid": "La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un valor numérico y un carácter especial.",
+    "email_invalid": "El correo electrónico debe tener al menos 8 caracteres.",
+    "passwordMismatches": "Contraseña y Confirmar contraseña no coinciden.",
+    "Password_and_Confirm_password_mismatches.": "Contraseña y Confirmar contraseña no coinciden.",
     "register": "Registro",
     "firstName": "Nombre de pila",
     "enterFirstName": "Ponga su primer nombre",
