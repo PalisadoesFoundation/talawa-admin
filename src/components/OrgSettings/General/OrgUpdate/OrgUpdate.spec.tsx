@@ -47,6 +47,10 @@ i18n.init({
         Location: 'Location',
         'Enter Organization location': 'Enter Organization location',
       },
+      errors: {
+        organizationNameAlreadyExists:
+          'The given organization name already exists',
+      },
     },
   },
 });
@@ -678,9 +682,35 @@ describe('OrgUpdate Component', () => {
         },
       };
 
+      const duplicateNameMock = {
+        request: {
+          query: UPDATE_ORGANIZATION_MUTATION,
+          variables: {
+            input: {
+              id: '1',
+              name: 'Existing Org',
+              description: 'Test Description',
+              addressLine1: '123 Test St',
+              addressLine2: 'Suite 100',
+              city: 'Test City',
+              state: 'Test State',
+              postalCode: '12345',
+              countryCode: 'US',
+              isUserRegistrationRequired: false,
+            },
+          },
+        },
+        error: new Error('The given organization name already exists'),
+      };
+
       render(
         <MockedProvider
-          mocks={[...mocks, existingOrgMock, organizationsListMock]}
+          mocks={[
+            ...mocks,
+            existingOrgMock,
+            organizationsListMock,
+            duplicateNameMock,
+          ]}
         >
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
