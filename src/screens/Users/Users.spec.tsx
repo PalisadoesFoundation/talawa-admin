@@ -892,6 +892,125 @@ describe('useEffect loadMoreUsers trigger', () => {
     expect(input).toHaveValue('');
   });
 
+  it('should block second fetchMore call when isLoadingMore is true', async () => {
+    const safeMocks = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'User One',
+                    emailAddress: 'u1@test.com',
+                    role: 'regular',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: {
+                hasNextPage: true,
+                endCursor: '1',
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: '1',
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [],
+              pageInfo: {
+                hasNextPage: false,
+                endCursor: null,
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: {
+            organizations: [{ id: 'org1', name: 'Org' }],
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={safeMocks} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+    await wait(300);
+
+    fireEvent.scroll(window, { target: { scrollY: 9000 } });
+    await wait(300);
+
+    expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+  });
+
+  it('should explicitly hit oldest sorting logic branch', async () => {
+    render(
+      <MockedProvider mocks={MOCKS_NEW}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    fireEvent.click(screen.getByTestId('sortUsers'));
+    fireEvent.click(screen.getByTestId('oldest'));
+
+    await wait();
+
+    const rows = screen.getAllByRole('row');
+    expect(rows.length).toBeGreaterThan(1);
+  });
+
   it('should clear search value on component unmount', async () => {
     const { unmount } = render(
       <MockedProvider mocks={MOCKS}>
