@@ -1,4 +1,5 @@
 import inquirer from 'inquirer';
+import { fileURLToPath } from 'url';
 import { detectOS } from './os/detector';
 import { installPackage } from './packages';
 import type { IPackageStatus, PackageName } from './types';
@@ -129,8 +130,9 @@ function displaySuccessMessage(packagesInstalled: string[]): void {
 }
 
 // Run main if this file is executed directly
+const currentFilePath = fileURLToPath(import.meta.url);
 if (
-  import.meta.url.endsWith(process.argv[1]) ||
+  process.argv[1] === currentFilePath ||
   process.argv[1]?.includes('install/index.ts')
 ) {
   main().catch((error) => {
