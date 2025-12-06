@@ -1117,6 +1117,32 @@ describe('useEffect loadMoreUsers trigger', () => {
     expect(screen.getByText(/no results found/i)).toBeInTheDocument();
   });
 
+  it('should filter only admin users (by row count change)', async () => {
+    render(
+      <MockedProvider mocks={MOCKS_NEW} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const rowsBefore = screen.getAllByRole('row').length;
+
+    fireEvent.click(screen.getByTestId('filterUsers'));
+    fireEvent.click(screen.getByTestId('admin'));
+
+    await wait();
+
+    const rowsAfter = screen.getAllByRole('row').length;
+
+    expect(rowsAfter).toBeLessThan(rowsBefore);
+    expect(rowsAfter).toBeGreaterThan(0);
+  });
+
   it('should reset and refetch when clearing search after entering value', async () => {
     render(
       <MockedProvider mocks={MOCKS_NEW}>
