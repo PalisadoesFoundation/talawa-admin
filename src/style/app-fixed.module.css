@@ -5709,7 +5709,6 @@ form {
 }
 
 .updateTimeoutCardTitle {
-  font-family: 'Lato', sans-serif;
   font-weight: 600;
   font-size: 24px;
   color: var(--updateTimeoutCardTitle-color);
@@ -5720,7 +5719,6 @@ form {
 }
 
 .updateTimeoutCurrent {
-  font-family: 'Lato', sans-serif;
   font-weight: 400;
   font-size: 16px;
   color: var(--updateTimeoutCurrent-color);
@@ -5728,7 +5726,6 @@ form {
 }
 
 .updateTimeoutLabel {
-  font-family: 'Lato', sans-serif;
   font-weight: 400;
   font-size: 16px;
   color: var(--updateTimeoutLabel-color);
@@ -5764,7 +5761,6 @@ form {
   height: 36px;
   background: var(--updateTimeoutButton-bg);
   border-radius: 6px;
-  font-family: 'Lato', sans-serif;
   font-weight: 500;
   font-size: 16px;
   color: var(--updateTimeoutButton-color);

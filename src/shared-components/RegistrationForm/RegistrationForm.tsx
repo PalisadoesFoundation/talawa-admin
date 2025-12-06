@@ -80,12 +80,12 @@ const RegistrationForm: React.FC<InterfaceRegistrationFormProps> = ({
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!isValidName(formState.firstName)) {
-      toast.warn(t('firstname_invalid') as string);
+      toast.warn(t('firstName_invalid') as string);
       return;
     }
 
     if (!isValidName(formState.lastName)) {
-      toast.warn(t('lastname_invalid') as string);
+      toast.warn(t('lastName_invalid') as string);
       return;
     }
 
@@ -100,7 +100,7 @@ const RegistrationForm: React.FC<InterfaceRegistrationFormProps> = ({
     }
 
     if (formState.confirmPassword !== formState.password) {
-      toast.warn(t('passwordMismatches') as string);
+      toast.warn(t('Password_and_Confirm_password_mismatches') as string);
       return;
     }
 
