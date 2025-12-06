@@ -13,13 +13,6 @@ export interface IPackageStatus {
   version?: string;
 }
 
-export const PACKAGE_NAMES = [
-  // 'git', // This is a prerequisite for the project
-  // 'node', // Handled by shell installers (install.sh/install.ps1)
-  // 'fnm', // Handled by shell installers (install.sh/install.ps1)
-  // 'pnpm',
-  'typescript',
-  'docker',
-] as const;
+export const PACKAGE_NAMES = ['typescript', 'docker'] as const;
 
 export type PackageName = (typeof PACKAGE_NAMES)[number];

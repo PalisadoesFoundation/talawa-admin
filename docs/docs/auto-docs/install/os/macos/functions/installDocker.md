@@ -6,7 +6,7 @@
 
 > **installDocker**(): `Promise`\<`void`\>
 
-Defined in: [src/install/os/macos.ts:184](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/os/macos.ts#L184)
+Defined in: [src/install/os/macos.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/os/macos.ts#L20)
 
 ## Returns
 

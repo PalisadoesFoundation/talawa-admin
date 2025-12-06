@@ -92,7 +92,7 @@ async function promptPackagesToInstall(
   const choices = missing.map((pkg) => ({
     name: `${pkg.name}${pkg.version ? ` (${pkg.version})` : ''}`,
     value: pkg.name,
-    checked: isRequired(pkg.name),
+    checked: true,
   }));
 
   const { packages } = await inquirer.prompt([
@@ -105,19 +105,6 @@ async function promptPackagesToInstall(
   ]);
 
   return packages;
-}
-
-/**
- * Check if a package is required
- */
-function isRequired(pkgName: string): boolean {
-  // Core required packages: typescript
-  // docker is required when useDocker is true (it only appears when selected)
-  // Git is required to clone the repo, so we don't check for it here
-  // Node and fnm are now handled by shell installers
-  const required = ['typescript', 'docker'];
-  // const required = ['git', 'typescript', 'docker']; // git commented out - required to clone repo
-  return required.includes(pkgName);
 }
 
 /**
@@ -135,18 +122,14 @@ function displaySuccessMessage(packagesInstalled: string[]): void {
     packagesInstalled.forEach((pkg) => {
       logSuccess(`  ✓ ${pkg}`);
     });
-    console.log('');
   }
 
   console.log('Next steps:');
   console.log('  1. Run the setup script to configure Talawa Admin:');
   console.log('     $ pnpm run setup');
   console.log('');
-  console.log('  2. After setup, start the application:');
-  console.log('     $ pnpm run serve');
-  console.log('');
   console.log('For more information, visit:');
-  console.log('  https://docs-admin.talawa.io/docs/installation\n');
+  console.log('  https://docs-admin.talawa.io/docs/installation');
 }
 
 // Run main if this file is executed directly

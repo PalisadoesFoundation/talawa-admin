@@ -106,7 +106,4 @@ describe('macOS installers', () => {
       );
     });
   });
-
-  // installNode and installFnm are deprecated in favor of shell installers
-  // and are intentionally not tested here.
 });

@@ -32,9 +32,6 @@ describe('Windows installers', () => {
     vi.restoreAllMocks();
   });
 
-  // installGit/installFnm/installNode are deprecated in favor of shell installers
-  // and are intentionally not tested here.
-
   describe('installTypeScript', () => {
     it('uses pnpm when available', async () => {
       // First dynamic commandExists for pnpm inside installTypeScript
