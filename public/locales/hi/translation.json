@@ -235,6 +235,8 @@
     "visit": "यात्रा",
     "withdraw": "वापस लें",
     "removeUserFrom": "{{org}} से उपयोगकर्ता को हटाएं",
+    "unblockUserFrom": "{{org}} से उपयोगकर्ता को अनब्लॉक करें?",
+    "unblockConfirmation": "क्या आप वाकई {{name}} को {{org}} से अनब्लॉक करना चाहते हैं?",
     "removeConfirmation": "क्या आप वाकई '{{name}}' को संगठन '{{org}}' से हटाना चाहते हैं?",
     "searchByName": "नाम से खोजें",
     "users": "उपयोगकर्ता",

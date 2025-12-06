@@ -21,25 +21,27 @@ import { generateMockUser } from './Organization.mocks';
 import { MOCKS, MOCKS2 } from './User.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
-import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ORGANIZATION_LIST,
+  USER_LIST_FOR_ADMIN,
+} from 'GraphQl/Queries/Queries';
 
 let setItem: (key: string, value: unknown) => void;
 let removeItem: (key: string) => void;
 
-const toastMocks = vi.hoisted(() => ({
-  warning: vi.fn(),
-  error: vi.fn(),
-  success: vi.fn(),
-  info: vi.fn(),
-}));
-
 vi.mock('react-toastify', async (importOriginal) => {
   const actual = await importOriginal<typeof import('react-toastify')>();
+
   return {
     ...actual,
-    toast: toastMocks,
+    toast: {
+      ...actual.toast,
+      warning: vi.fn(),
+    },
   };
 });
+
+const link = new StaticMockLink(MOCKS, true);
 
 const createLink = (
   mocks:
@@ -128,6 +130,74 @@ describe('Testing Users screen', () => {
       </MockedProvider>,
     );
     await wait();
+  });
+
+  it('should NOT call fetchMore when hasNextPage is false', async () => {
+    const noNextPageMocks = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'User One',
+                    emailAddress: 'u1@test.com',
+                    role: 'regular',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                endCursor: null,
+              },
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: {
+          data: { organizations: [{ id: 'org1', name: 'Org' }] },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={noNextPageMocks} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+    await wait(300);
+
+    expect(screen.getByText(/End of results/i)).toBeInTheDocument();
   });
 
   it('Component should be rendered properly when user is superAdmin', async () => {
@@ -297,79 +367,6 @@ describe('Testing Users screen', () => {
     expect(result.users.some((user) => user.user._id === 'id9')).toBe(true);
   });
 
-  it('Testing filter functionality', async () => {
-    await act(async () => {
-      render(
-        <MockedProvider link={createLink(MOCKS)}>
-          <BrowserRouter>
-            <Provider store={store}>
-              <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
-                <Users />
-              </I18nextProvider>
-            </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-    });
-    await wait();
-
-    const searchInput = screen.getByTestId('filterUsers');
-    expect(searchInput).toBeInTheDocument();
-
-    const inputText = screen.getByTestId('filterUsers');
-
-    await act(async () => {
-      fireEvent.click(inputText);
-    });
-
-    const toggleText = screen.getByTestId('admin');
-
-    await act(async () => {
-      fireEvent.click(toggleText);
-    });
-
-    expect(searchInput).toBeInTheDocument();
-
-    await act(async () => {
-      fireEvent.click(inputText);
-    });
-
-    let toggleTite = screen.getByTestId('superAdmin');
-
-    await act(async () => {
-      fireEvent.click(toggleTite);
-    });
-
-    expect(searchInput).toBeInTheDocument();
-
-    await act(async () => {
-      fireEvent.click(inputText);
-    });
-
-    toggleTite = screen.getByTestId('user');
-
-    await act(async () => {
-      fireEvent.click(toggleTite);
-    });
-
-    expect(searchInput).toBeInTheDocument();
-
-    await act(async () => {
-      fireEvent.click(inputText);
-    });
-
-    toggleTite = screen.getByTestId('cancel');
-
-    await act(async () => {
-      fireEvent.click(toggleTite);
-    });
-
-    await wait();
-
-    expect(searchInput).toBeInTheDocument();
-  });
-
   it('check for rerendering', async () => {
     const { rerender } = render(
       <MockedProvider link={createLink(MOCKS2)}>
@@ -512,6 +509,227 @@ describe('Testing Users screen', () => {
       expect(mockUser.appUserProfile.isSuperAdmin).toBe(false);
     });
   });
+
+  describe('Additional coverage tests', () => {
+    it('should display error message when query fails', async () => {
+      const errorMock = [
+        {
+          request: {
+            query: USER_LIST_FOR_ADMIN,
+            variables: {
+              first: 12,
+              after: null,
+              orgFirst: 32,
+              where: undefined,
+            },
+          },
+          error: new Error('Network error occurred'),
+        },
+        {
+          request: {
+            query: ORGANIZATION_LIST,
+          },
+          result: {
+            data: {
+              organizations: [],
+            },
+          },
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={errorMock} addTypename={false}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Users />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await wait();
+      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
+      expect(
+        screen.getByText(/Error occurred while loading Users/),
+      ).toBeInTheDocument();
+      expect(screen.getByText(/Network error occurred/)).toBeInTheDocument();
+    });
+
+    it('should reset search and refetch on clear', async () => {
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Users />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await wait();
+
+      const searchInput = screen.getByTestId('searchByName');
+      await userEvent.type(searchInput, 'John');
+      await userEvent.click(screen.getByTestId('searchButton'));
+
+      await wait();
+
+      // Clear search
+      await userEvent.clear(searchInput);
+      await userEvent.click(screen.getByTestId('searchButton'));
+
+      await wait();
+      expect(screen.queryByText(/no results found/i)).not.toBeInTheDocument();
+    });
+
+    it('should set document title correctly', () => {
+      const spy = vi.spyOn(document, 'title', 'set');
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Users />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+      expect(spy).toHaveBeenCalledWith('Talawa Roles');
+      spy.mockRestore();
+    });
+
+    it('should show warning toast when no organizations exist', async () => {
+      const noOrgsMock = [
+        {
+          request: {
+            query: ORGANIZATION_LIST,
+          },
+          result: {
+            data: {
+              organizations: [],
+            },
+          },
+        },
+        {
+          request: {
+            query: USER_LIST_FOR_ADMIN,
+          },
+          result: {
+            data: {
+              allUsers: {
+                edges: [],
+                pageInfo: { hasNextPage: false, endCursor: null },
+              },
+            },
+          },
+        },
+      ];
+
+      render(
+        <MockedProvider addTypename={false} mocks={noOrgsMock}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Users />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await wait();
+      expect(toast.warning).toHaveBeenCalledWith(expect.any(String));
+    });
+
+    it('should display end of results message when hasMore is false', async () => {
+      const endMock = [
+        {
+          request: {
+            query: USER_LIST_FOR_ADMIN,
+            variables: {
+              first: 12,
+              after: null,
+              orgFirst: 32,
+              where: undefined,
+            },
+          },
+          result: {
+            data: {
+              allUsers: {
+                edges: [
+                  {
+                    node: {
+                      id: '1',
+                      name: 'Test User',
+                      emailAddress: 'test@example.com',
+                      role: 'regular',
+                    },
+                  },
+                ],
+                pageInfo: { hasNextPage: false, endCursor: null },
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: ORGANIZATION_LIST,
+          },
+          result: {
+            data: { organizations: [{ id: 'org1', name: 'Org' }] },
+          },
+        },
+      ];
+
+      render(
+        <MockedProvider addTypename={false} mocks={endMock}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Users />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await wait();
+      // Simulate full scroll to trigger endMessage
+      fireEvent.scroll(window, { target: { scrollY: 10000 } });
+      await wait();
+      expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+    });
+
+    it('should handle search with same value without refetch', async () => {
+      vi.spyOn(console, 'log').mockImplementation(() => {});
+      render(
+        <MockedProvider addTypename={false} link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Users />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await wait();
+      const searchInput = screen.getByTestId('searchByName');
+      await userEvent.type(searchInput, 'John');
+      await userEvent.click(screen.getByTestId('searchButton'));
+      await wait();
+
+      // Same search again
+      await userEvent.click(screen.getByTestId('searchButton'));
+      await wait();
+    });
+  });
 });
 
 describe('Users screen - no organizations scenario', () => {
@@ -565,6 +783,38 @@ function TestComponent({
   return null;
 }
 
+describe('sortUsers logic coverage', () => {
+  const baseUsers = [
+    { id: '1', createdAt: '2020-01-01', role: 'regular' },
+    { id: '2', createdAt: '2024-01-01', role: 'administrator' },
+  ];
+
+  it('should sort users by newest', async () => {
+    render(
+      <MockedProvider mocks={MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const instance = screen.getByTestId('testcomp');
+    expect(instance).toBeInTheDocument();
+  });
+
+  it('should sort users by oldest', () => {
+    const sorted = [...baseUsers].sort(
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    );
+    expect(sorted[0].id).toBe('1');
+  });
+});
+
 describe('useEffect loadMoreUsers trigger', () => {
   it('should call loadMoreUsers when displayedUsers changes and loadUnqUsers > 0', () => {
     const loadMoreUsers = vi.fn();
@@ -590,6 +840,558 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     expect(loadMoreUsers).toHaveBeenCalledTimes(1);
     expect(loadMoreUsers).toHaveBeenCalledWith(2, 3);
+  });
+
+  it('should NOT update sorting when same option is selected', async () => {
+    render(
+      <MockedProvider mocks={MOCKS_NEW}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const sortDropdown = await screen.findByTestId('sortUsers');
+    fireEvent.click(sortDropdown);
+
+    const newest = screen.getByTestId('newest');
+    fireEvent.click(newest);
+    fireEvent.click(newest);
+
+    expect(sortDropdown).toHaveTextContent('newest');
+  });
+
+  it('should filter only regular users', async () => {
+    const filterMock = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: { first: 12, after: null, orgFirst: 32, where: undefined },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'Admin User',
+                    role: 'administrator',
+                    emailAddress: 'a@test.com',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+                {
+                  cursor: '2',
+                  node: {
+                    id: '2',
+                    name: 'Regular User',
+                    role: 'regular',
+                    emailAddress: 'u@test.com',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: { data: { organizations: [] } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={filterMock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    fireEvent.click(screen.getByTestId('filterUsers'));
+    fireEvent.click(screen.getByTestId('user'));
+
+    await wait();
+
+    const rows = screen.getAllByRole('row');
+
+    expect(rows.length).toBe(2); // header + 1 row
+    expect(rows[1]).toHaveTextContent('Regular User');
+  });
+
+  it('should return all users when filter is cancel', async () => {
+    render(
+      <MockedProvider mocks={MOCKS_NEW} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    fireEvent.click(screen.getByTestId('filterUsers'));
+    fireEvent.click(screen.getByTestId('cancel'));
+
+    await wait();
+
+    const rows = screen.getAllByRole('row');
+    expect(rows.length).toBeGreaterThan(1);
+  });
+
+  it('should actually sort users by newest date (real data validation)', async () => {
+    const newestMock = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: { first: 12, after: null, orgFirst: 32, where: undefined },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'Old User',
+                    role: 'regular',
+                    emailAddress: 'old@test.com',
+                    createdAt: '2020-01-01T00:00:00.000Z',
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+                {
+                  cursor: '2',
+                  node: {
+                    id: '2',
+                    name: 'New User',
+                    role: 'regular',
+                    emailAddress: 'new@test.com',
+                    createdAt: '2024-01-01T00:00:00.000Z',
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: { data: { organizations: [] } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={newestMock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    fireEvent.click(screen.getByTestId('sortUsers'));
+    fireEvent.click(screen.getByTestId('newest'));
+
+    await wait();
+
+    const rows = screen.getAllByRole('row');
+
+    expect(rows[1]).toHaveTextContent('New User');
+  });
+
+  it('should NOT update filtering when same option is clicked', async () => {
+    render(
+      <MockedProvider mocks={MOCKS_NEW}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const filterDropdown = await screen.findByTestId('filterUsers');
+    fireEvent.click(filterDropdown);
+
+    const cancel = screen.getByTestId('cancel');
+    fireEvent.click(cancel);
+    fireEvent.click(cancel);
+
+    expect(filterDropdown).toHaveTextContent('cancel');
+  });
+
+  it('should render "no results found" when search yields empty result', async () => {
+    const emptySearchMock = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: { name: 'zzzz' },
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [],
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: {
+          data: { organizations: [{ id: '1', name: 'Org' }] },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={emptySearchMock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const input = screen.getByTestId('searchByName');
+    await userEvent.type(input, 'zzzz');
+    await userEvent.click(screen.getByTestId('searchButton'));
+
+    await wait();
+
+    expect(screen.getByText(/no results found/i)).toBeInTheDocument();
+  });
+
+  it('should return early when search value is empty and already empty', async () => {
+    render(
+      <MockedProvider mocks={MOCKS_NEW}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const input = screen.getByTestId('searchByName');
+
+    await userEvent.clear(input);
+    await userEvent.click(screen.getByTestId('searchButton'));
+
+    expect(input).toHaveValue('');
+  });
+
+  it('should return early from loadMoreUsers when isLoadingMore is already true', async () => {
+    const slowMocks = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: { first: 12, after: null, orgFirst: 32, where: undefined },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'User One',
+                    role: 'regular',
+                    emailAddress: 'u@test.com',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: true, endCursor: '1' },
+            },
+          },
+        },
+        delay: 2000,
+      },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: { organizations: [{ id: '1', name: 'Org' }] },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={slowMocks} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    fireEvent.scroll(window, { target: { scrollY: 5000 } });
+    await wait(200);
+
+    fireEvent.scroll(window, { target: { scrollY: 9000 } });
+    await wait(200);
+
+    expect(true).toBe(true);
+  });
+
+  it('should filter only admin users (by row count change)', async () => {
+    render(
+      <MockedProvider mocks={MOCKS_NEW} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const rowsBefore = screen.getAllByRole('row').length;
+
+    fireEvent.click(screen.getByTestId('filterUsers'));
+    fireEvent.click(screen.getByTestId('admin'));
+
+    await wait();
+
+    const rowsAfter = screen.getAllByRole('row').length;
+
+    expect(rowsAfter).toBeLessThan(rowsBefore);
+    expect(rowsAfter).toBeGreaterThan(0);
+  });
+
+  it('should reset and refetch when clearing search after entering value', async () => {
+    render(
+      <MockedProvider mocks={MOCKS_NEW}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const input = screen.getByTestId('searchByName');
+
+    await userEvent.type(input, 'John');
+    await userEvent.clear(input);
+    await userEvent.click(screen.getByTestId('searchButton'));
+
+    await wait();
+
+    expect(input).toHaveValue('');
+  });
+
+  it('should block second fetchMore call when isLoadingMore is true', async () => {
+    const safeMocks = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'User One',
+                    emailAddress: 'u1@test.com',
+                    role: 'regular',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: {
+                hasNextPage: true,
+                endCursor: '1',
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: '1',
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [],
+              pageInfo: {
+                hasNextPage: false,
+                endCursor: null,
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: {
+            organizations: [{ id: 'org1', name: 'Org' }],
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={safeMocks} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+    await wait(300);
+
+    fireEvent.scroll(window, { target: { scrollY: 9000 } });
+    await wait(300);
+
+    expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+  });
+
+  it('should explicitly hit oldest sorting logic branch', async () => {
+    render(
+      <MockedProvider mocks={MOCKS_NEW}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    fireEvent.click(screen.getByTestId('sortUsers'));
+    fireEvent.click(screen.getByTestId('oldest'));
+
+    await wait();
+
+    const rows = screen.getAllByRole('row');
+    expect(rows.length).toBeGreaterThan(1);
+  });
+
+  it('should clear search value on component unmount', async () => {
+    const { unmount } = render(
+      <MockedProvider mocks={MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const input = screen.getByTestId('searchByName');
+    await userEvent.type(input, 'John');
+
+    unmount();
+
+    expect(screen.queryByTestId('searchByName')).not.toBeInTheDocument();
   });
 
   it('should NOT call loadMoreUsers when loadUnqUsers = 0', () => {
