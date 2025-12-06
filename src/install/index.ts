@@ -47,10 +47,6 @@ export async function main(): Promise<void> {
       }
     }
 
-    // Skip project dependencies installation - already handled by shell installer
-    logInfo('Project dependencies already installed by shell installer.');
-    console.log('');
-
     displaySuccessMessage(packagesToInstall);
   } catch (error) {
     logError(`Installation failed: ${error}`);
