@@ -45,6 +45,8 @@ import { useTranslation } from 'react-i18next';
 import useSession from 'utils/useSession';
 import { resolveProfileNavigation } from 'utils/profileNavigation';
 
+export const MAX_NAME_LENGTH = 20;
+
 interface InterfaceProfileDropdownProps {
   portal?: 'admin' | 'user';
 }
@@ -72,7 +74,6 @@ const ProfileDropdown = ({
     endSession();
     navigate('/');
   };
-  const MAX_NAME_LENGTH = 20;
   const displayedName =
     name.length > MAX_NAME_LENGTH
       ? name.substring(0, MAX_NAME_LENGTH - 3) + '...'
