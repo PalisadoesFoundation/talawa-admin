@@ -42,7 +42,7 @@
  *   setAfter={setAfterCallback}
  * />
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import styles from 'style/app-fixed.module.css';
 import { Button, Form, Modal } from 'react-bootstrap';
 import {
@@ -64,7 +64,8 @@ import type {
   InterfaceFormStateTypes,
 } from 'types/Advertisement/interface';
 import { FaTrashCan } from 'react-icons/fa6';
-import PageNotFound from 'screens/PageNotFound/PageNotFound';
+import Loader from 'components/Loader/Loader';
+const PageNotFound = lazy(() => import('screens/PageNotFound/PageNotFound'));
 
 function AdvertisementRegister({
   formStatus = 'register',
@@ -84,9 +85,6 @@ function AdvertisementRegister({
   const { orgId: currentOrg } = useParams();
   const [show, setShow] = useState(false);
 
-  if (currentOrg === undefined) {
-    return <PageNotFound />;
-  }
   /*
    * Mutation to add advertisement and refetch the advertisement list
    */
@@ -203,6 +201,14 @@ function AdvertisementRegister({
     endAtEdit,
     currentOrg,
   ]);
+
+  if (currentOrg === undefined) {
+    return (
+      <Suspense fallback={<Loader />}>
+        <PageNotFound />
+      </Suspense>
+    );
+  }
 
   // Validates the date range and performs the mutation to create an advertisement.
   const handleRegister = async (): Promise<void> => {

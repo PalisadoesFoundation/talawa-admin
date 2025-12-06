@@ -25,18 +25,26 @@ vi.mock('/src/assets/svgs/talawa.svg?react', () => ({
   default: () => <svg>Mocked SVG</svg>,
 }));
 
-// Mock the plugin system
-const mockPluginManager = {
-  setApolloClient: vi.fn(),
-  initializePluginSystem: vi.fn().mockResolvedValue(undefined),
-};
+// Mock the plugin system - use vi.hoisted to properly hoist mocks
+const { mockPluginManager, mockDiscoverAndRegisterAllPlugins } = vi.hoisted(
+  () => {
+    const mockPluginManager = {
+      setApolloClient: vi.fn(),
+      initializePluginSystem: vi.fn().mockResolvedValue(undefined),
+    };
+    const mockDiscoverAndRegisterAllPlugins = vi
+      .fn()
+      .mockResolvedValue(undefined);
+    return { mockPluginManager, mockDiscoverAndRegisterAllPlugins };
+  },
+);
 
 vi.mock('./plugin/manager', () => ({
   getPluginManager: vi.fn(() => mockPluginManager),
 }));
 
 vi.mock('./plugin/registry', () => ({
-  discoverAndRegisterAllPlugins: vi.fn().mockResolvedValue(undefined),
+  discoverAndRegisterAllPlugins: mockDiscoverAndRegisterAllPlugins,
 }));
 
 vi.mock('./plugin', () => ({
@@ -443,13 +451,7 @@ describe('Testing the App Component', () => {
     const registryError = new Error('Registry import failed');
 
     // Mock the registry import function to fail
-    const mockDiscoverAndRegisterAllPlugins = vi
-      .fn()
-      .mockRejectedValue(registryError);
-
-    vi.doMock('./plugin/registry', () => ({
-      discoverAndRegisterAllPlugins: mockDiscoverAndRegisterAllPlugins,
-    }));
+    mockDiscoverAndRegisterAllPlugins.mockRejectedValueOnce(registryError);
 
     renderApp();
 
@@ -459,6 +461,9 @@ describe('Testing the App Component', () => {
         registryError,
       );
     });
+
+    // Reset mock for other tests
+    mockDiscoverAndRegisterAllPlugins.mockResolvedValue(undefined);
   });
 
   it('should correctly determine isAdmin and isSuperAdmin flags', async () => {

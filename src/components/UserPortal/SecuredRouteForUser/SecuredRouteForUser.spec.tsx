@@ -6,6 +6,7 @@ import {
   fireEvent,
   act,
   cleanup,
+  waitFor,
 } from '@testing-library/react';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 import { toast } from 'react-toastify';
@@ -105,6 +106,11 @@ describe('SecuredRouteForUser', () => {
 
       renderWithRouter();
 
+      // Ensure component has rendered by running pending timers
+      act(() => {
+        vi.runOnlyPendingTimers();
+      });
+
       expect(screen.getByTestId('protected-content')).toBeInTheDocument();
     });
 
@@ -125,16 +131,29 @@ describe('SecuredRouteForUser', () => {
       expect(screen.getByTestId('home-page')).toBeInTheDocument();
     });
 
-    it('shows PageNotFound when logged-in user has admin role', () => {
+    it('shows PageNotFound when logged-in user has admin role', async () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       mockStorage['Talawa-admin_AdminFor'] = JSON.stringify([
         { _id: 'org-123' },
       ]);
 
+      // Use real timers for this test since lazy loading needs real async behavior
+      vi.useRealTimers();
+
       renderWithRouter();
 
-      expect(screen.getByTestId('page-not-found')).toBeInTheDocument();
+      // Wait for lazy-loaded PageNotFound to finish loading
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('page-not-found')).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
+
       expect(screen.queryByTestId('protected-content')).not.toBeInTheDocument();
+
+      // Restore fake timers for other tests
+      vi.useFakeTimers();
     });
 
     it('shows PageNotFound when AdminFor is an empty array', () => {
@@ -153,6 +172,11 @@ describe('SecuredRouteForUser', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
 
+      // Ensure component has rendered
+      act(() => {
+        vi.runOnlyPendingTimers();
+      });
+
       act(() => {
         fireEvent.mouseMove(document);
       });
@@ -163,6 +187,11 @@ describe('SecuredRouteForUser', () => {
     it('updates lastActive on keydown event', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
+
+      // Ensure component has rendered
+      act(() => {
+        vi.runOnlyPendingTimers();
+      });
 
       act(() => {
         fireEvent.keyDown(document, { key: 'a' });
@@ -175,6 +204,11 @@ describe('SecuredRouteForUser', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
 
+      // Ensure component has rendered
+      act(() => {
+        vi.runOnlyPendingTimers();
+      });
+
       act(() => {
         fireEvent.click(document);
       });
@@ -185,6 +219,11 @@ describe('SecuredRouteForUser', () => {
     it('updates lastActive on scroll event', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
+
+      // Ensure component has rendered
+      act(() => {
+        vi.runOnlyPendingTimers();
+      });
 
       act(() => {
         fireEvent.scroll(document);
@@ -267,6 +306,11 @@ describe('SecuredRouteForUser', () => {
     it('resets inactivity timer on user activity', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
+
+      // Ensure component has rendered
+      act(() => {
+        vi.runOnlyPendingTimers();
+      });
 
       // Advance time but not past timeout
       act(() => {
@@ -362,6 +406,11 @@ describe('SecuredRouteForUser', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
 
+      // Ensure component has rendered
+      act(() => {
+        vi.runOnlyPendingTimers();
+      });
+
       act(() => {
         fireEvent.mouseMove(document);
         fireEvent.keyDown(document, { key: 'Enter' });
@@ -413,6 +462,11 @@ describe('SecuredRouteForUser', () => {
     it('remains logged in with continuous activity before timeout', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
+
+      // Ensure component has rendered
+      act(() => {
+        vi.runOnlyPendingTimers();
+      });
 
       // Simulate activity every 5 minutes for 30 minutes
       for (let i = 0; i < 6; i++) {

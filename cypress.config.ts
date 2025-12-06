@@ -83,9 +83,6 @@ export default defineConfig({
         return launchOptions;
       });
 
-      // Custom plugins can be registered here
-      // Example: require('@cypress/code-coverage/task')(on, config);
-
       return config;
     },
   },

@@ -421,10 +421,11 @@ describe('LifecycleManager', () => {
       const consoleSpy = vi
         .spyOn(console, 'error')
         .mockImplementation(() => {});
+      const registrationError = new Error('Registration failed');
       (
         mockExtensionRegistry.registerExtensionPoints as Mock
       ).mockImplementation(() => {
-        throw new Error('Registration failed');
+        throw registrationError;
       });
 
       const result = await lifecycleManager.togglePluginStatus(
@@ -435,7 +436,7 @@ describe('LifecycleManager', () => {
       expect(result).toBe(false); // Should fail
       expect(consoleSpy).toHaveBeenCalledWith(
         'Failed to activate plugin testPlugin:',
-        new Error('Registration failed'),
+        registrationError,
       );
 
       consoleSpy.mockRestore();
@@ -1163,13 +1164,8 @@ describe('LifecycleManager', () => {
     });
 
     it('should handle dynamic registration success', async () => {
-      // Mock the dynamic import
-      const mockRegisterPluginDynamically = vi
-        .fn()
-        .mockResolvedValue(undefined);
-      vi.doMock('../../registry', () => ({
-        registerPluginDynamically: mockRegisterPluginDynamically,
-      }));
+      // Mock the static import (now using static import, not dynamic)
+      registryMocks.registerPluginDynamically.mockResolvedValueOnce(undefined);
 
       await lifecycleManager.activatePlugin('testPlugin');
 
@@ -1182,19 +1178,22 @@ describe('LifecycleManager', () => {
     it('should handle dynamic registration failure gracefully', async () => {
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-      // Mock the dynamic import to fail
-      vi.doMock('../../registry', () => {
-        throw new Error('Dynamic import failed');
-      });
+      // Mock the static import to fail (now using static import, not dynamic)
+      const registrationError = new Error('Registration failed');
+      registryMocks.registerPluginDynamically.mockRejectedValueOnce(
+        registrationError,
+      );
 
       await lifecycleManager.activatePlugin('testPlugin');
 
       expect(consoleSpy).toHaveBeenCalledWith(
         'Failed to register plugin testPlugin dynamically:',
-        expect.any(Error),
+        registrationError,
       );
 
       consoleSpy.mockRestore();
+      // Reset mock for other tests
+      registryMocks.registerPluginDynamically.mockResolvedValue(undefined);
     });
   });
 
