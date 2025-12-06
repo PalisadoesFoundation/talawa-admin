@@ -10,7 +10,6 @@ export async function checkInstalledPackages(
   // Git is required to clone the repo, so we don't check for it here
   // Node and fnm are now handled by shell installers
   const packages: PackageName[] = [];
-  // const packages: PackageName[] = ['git']; // Commented out - git is required to clone repo
 
   if (useDocker) {
     packages.push('docker');
@@ -44,14 +43,14 @@ export async function checkInstalledPackages(
   return results;
 }
 
-async function checkPackage(pkg: PackageName): Promise<IPackageStatus> {
+export async function checkPackage(pkg: PackageName): Promise<IPackageStatus> {
   switch (pkg) {
-    case 'git':
-      return await checkers.checkGit();
-    case 'node':
-      return await checkers.checkNode();
-    case 'fnm':
-      return await checkers.checkFnm();
+    // case 'git':
+    //   return await checkers.checkGit();
+    // case 'node':
+    //   return await checkers.checkNode();
+    // case 'fnm':
+    //   return await checkers.checkFnm();
     // case 'pnpm':
     //   return await checkers.checkPnpm();
     case 'typescript':
@@ -59,6 +58,8 @@ async function checkPackage(pkg: PackageName): Promise<IPackageStatus> {
     case 'docker':
       return await checkers.checkDocker();
     default:
-      return { name: pkg, installed: false };
+      throw new Error(
+        `Unknown package type: ${pkg}. This is a programming error.`,
+      );
   }
 }

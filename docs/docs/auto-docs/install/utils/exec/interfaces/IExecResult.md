@@ -4,7 +4,7 @@
 
 # Interface: IExecResult
 
-Defined in: [src/install/utils/exec.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L12)
+Defined in: [src/install/utils/exec.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L15)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/install/utils/exec.ts:12](https://github.com/PalisadoesFoundati
 
 > **stderr**: `string`
 
-Defined in: [src/install/utils/exec.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L14)
+Defined in: [src/install/utils/exec.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L17)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/install/utils/exec.ts:14](https://github.com/PalisadoesFoundati
 
 > **stdout**: `string`
 
-Defined in: [src/install/utils/exec.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L13)
+Defined in: [src/install/utils/exec.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L16)

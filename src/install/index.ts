@@ -51,7 +51,6 @@ export async function main(): Promise<void> {
     logInfo('Project dependencies already installed by shell installer.');
     console.log('');
 
-    // Phase 7: Final instructions
     displaySuccessMessage(packagesToInstall);
   } catch (error) {
     logError(`Installation failed: ${error}`);

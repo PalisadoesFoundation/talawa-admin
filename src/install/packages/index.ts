@@ -1,7 +1,7 @@
-import type { IOSInfo, PackageName } from '../types';
-import * as windows from '../os/windows';
 import * as linux from '../os/linux';
 import * as macos from '../os/macos';
+import * as windows from '../os/windows';
+import type { IOSInfo, PackageName } from '../types';
 
 /**
  * Install a package based on OS
@@ -10,12 +10,13 @@ export async function installPackage(
   pkg: PackageName,
   os: IOSInfo,
 ): Promise<void> {
-  if (pkg === 'node' || pkg === 'fnm') {
-    throw new Error(
-      `${pkg} installation should be handled by shell installers (install.sh/install.ps1). ` +
-        'Please run the shell installer first.',
-    );
-  }
+  // We no longer handle git/node/fnm here. Those are installed via other flows.
+  // if (pkg === 'node' || pkg === 'fnm') {
+  //   throw new Error(
+  //     `${pkg} installation should be handled by shell installers (install.sh/install.ps1). ` +
+  //       'Please run the shell installer first.',
+  //   );
+  // }
 
   switch (os.name) {
     case 'windows':
@@ -31,12 +32,13 @@ export async function installPackage(
 
 async function installWindowsPackage(pkg: PackageName): Promise<void> {
   switch (pkg) {
-    case 'git':
-      return windows.installGit();
-    case 'node':
-      return windows.installNode();
-    case 'fnm':
-      return windows.installFnm();
+    // We no longer install git/node/fnm from here.
+    // case 'git':
+    //   return windows.installGit();
+    // case 'node':
+    //   return windows.installNode();
+    // case 'fnm':
+    //   return windows.installFnm();
     // case 'pnpm':
     //   return windows.installPnpm();
     case 'typescript':
@@ -53,12 +55,13 @@ async function installLinuxPackage(
   os: IOSInfo,
 ): Promise<void> {
   switch (pkg) {
-    case 'git':
-      return linux.installGit(os);
-    case 'node':
-      return linux.installNode();
-    case 'fnm':
-      return linux.installFnm();
+    // We no longer install git/node/fnm from here.
+    // case 'git':
+    //   return linux.installGit(os);
+    // case 'node':
+    //   return linux.installNode();
+    // case 'fnm':
+    //   return linux.installFnm();
     // case 'pnpm':
     //   return linux.installPnpm();
     case 'typescript':
@@ -72,12 +75,13 @@ async function installLinuxPackage(
 
 async function installMacOSPackage(pkg: PackageName): Promise<void> {
   switch (pkg) {
-    case 'git':
-      return macos.installGit();
-    case 'node':
-      return macos.installNode();
-    case 'fnm':
-      return macos.installFnm();
+    // We no longer install git/node/fnm from here.
+    // case 'git':
+    //   return macos.installGit();
+    // case 'node':
+    //   return macos.installNode();
+    // case 'fnm':
+    //   return macos.installFnm();
     // case 'pnpm':
     //   return macos.installPnpm();
     case 'typescript':
