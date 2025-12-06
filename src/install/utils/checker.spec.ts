@@ -1,6 +1,7 @@
 import { PackageName } from 'install/types';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { checkInstalledPackages } from './checker';
+import { checkDocker } from './checkers';
 import * as execModule from './exec';
 
 vi.mock('./exec');
@@ -89,6 +90,45 @@ describe('checker', () => {
       expect(result).toBeDefined();
       expect(result.length).toBe(1);
       expect(result[0].installed).toBe(false);
+    });
+  });
+
+  describe('checkDocker', () => {
+    it('returns not installed when docker command is missing', async () => {
+      vi.mocked(execModule.commandExists).mockResolvedValue(false);
+
+      const result = await checkDocker();
+
+      expect(result).toEqual({
+        name: 'docker',
+        installed: false,
+      });
+    });
+
+    it('returns installed with version when docker is available', async () => {
+      vi.mocked(execModule.commandExists).mockResolvedValue(true);
+      vi.mocked(execModule.checkVersion).mockResolvedValue('v1.2.3');
+
+      const result = await checkDocker();
+
+      expect(result).toEqual({
+        name: 'docker',
+        installed: true,
+        version: 'v1.2.3',
+      });
+    });
+
+    it('returns installed without version when docker version is not available', async () => {
+      vi.mocked(execModule.commandExists).mockResolvedValue(true);
+      vi.mocked(execModule.checkVersion).mockResolvedValue(null);
+
+      const result = await checkDocker();
+
+      expect(result).toEqual({
+        name: 'docker',
+        installed: true,
+        version: undefined,
+      });
     });
   });
 });
