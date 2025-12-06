@@ -90,7 +90,7 @@ const collectViolations = (filePath) => {
     if (importLike) return;
 
     // JSX text between tags
-    const jsxRegex = />\\s*([^<>{}\\n]+?)\\s*</g;
+    const jsxRegex = />\s*([^<>{}\n]+?)\s*</g;
     let jsxMatch;
     while ((jsxMatch = jsxRegex.exec(line)) !== null) {
       const text = jsxMatch[1].trim();
