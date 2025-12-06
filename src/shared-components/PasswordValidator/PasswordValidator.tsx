@@ -59,7 +59,7 @@ const PasswordValidator: React.FC<InterfacePasswordValidatorProps> = ({
           data-testid="passwordCheck"
         >
           <span>
-            <Check className="size-sm" />
+            <Clear className="size-sm" />
           </span>
           {t('atleast_6_char_long')}
         </div>

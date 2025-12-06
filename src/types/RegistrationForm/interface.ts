@@ -7,7 +7,7 @@ export interface InterfaceRegistrationFormProps {
   onSubmit: (
     userData: IRegistrationData,
     recaptchaToken: string | null,
-  ) => Promise<void>;
+  ) => Promise<boolean>;
   showLoginLink?: boolean;
   organizations: Array<{ label: string; id: string }>;
 }

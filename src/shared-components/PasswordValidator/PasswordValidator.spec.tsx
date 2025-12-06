@@ -24,6 +24,11 @@ describe('PasswordValidator Component', () => {
     );
   };
 
+  it('should not display validation when password is short but input is not focused', () => {
+    renderComponent({ isInputFocused: false, password: 'abc' });
+    expect(screen.queryByTestId('passwordCheck')).not.toBeInTheDocument();
+  });
+
   it('should not display validation when input is not focused', () => {
     renderComponent();
     expect(screen.queryByText(/atleast_6_char_long/i)).not.toBeInTheDocument();
@@ -35,7 +40,7 @@ describe('PasswordValidator Component', () => {
   });
 
   it('should show all validations when focused', () => {
-    renderComponent({ isInputFocused: true, password: 'Test123!' });
+    renderComponent({ isInputFocused: true, password: 'Test@123' });
     expect(screen.getByText(/lowercase_check/i)).toBeInTheDocument();
     expect(screen.getByText(/uppercase_check/i)).toBeInTheDocument();
     expect(screen.getByText(/numeric_value_check/i)).toBeInTheDocument();

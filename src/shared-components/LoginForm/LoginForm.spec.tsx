@@ -27,10 +27,6 @@ const renderComponent = (props = {}) => {
 };
 
 describe('LoginForm Component', () => {
-  beforeEach(() => {
-    mockOnSubmit.mockClear();
-  });
-
   it('should render login form', () => {
     renderComponent();
     expect(screen.getByTestId('loginEmail')).toBeInTheDocument();

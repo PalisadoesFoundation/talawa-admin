@@ -16,6 +16,8 @@ vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
     warn: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
   },
 }));
 

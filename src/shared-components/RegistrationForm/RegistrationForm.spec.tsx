@@ -34,11 +34,6 @@ const renderComponent = (props = {}) => {
 };
 
 describe('RegistrationForm Component', () => {
-  beforeEach(() => {
-    mockOnSubmit.mockClear();
-    vi.clearAllMocks();
-  });
-
   it('should render registration form', () => {
     renderComponent();
     expect(screen.getByTestId('register-text')).toBeInTheDocument();
@@ -53,7 +48,7 @@ describe('RegistrationForm Component', () => {
     const passwordInput = screen.getByTestId('passwordField');
     const confirmPasswordInput = screen.getByTestId('cpassword');
 
-    fireEvent.change(passwordInput, { target: { value: 'Test123!' } });
+    fireEvent.change(passwordInput, { target: { value: 'Test@123' } });
     fireEvent.change(confirmPasswordInput, { target: { value: 'Test456!' } });
 
     await waitFor(() => {
@@ -63,23 +58,137 @@ describe('RegistrationForm Component', () => {
     });
   });
 
-  it('should call onSubmit with valid data', async () => {
+  it('should call onSubmit with valid data including organization selection', async () => {
+    mockOnSubmit.mockResolvedValue(true);
     renderComponent();
 
-    const nameInput = screen.getByPlaceholderText(/Name/i);
+    const firstNameInput = screen.getByPlaceholderText(/Enter firstname/i);
+    const lastNameInput = screen.getByPlaceholderText(/Enter lastname/i);
     const emailInput = screen.getByTestId('signInEmail');
     const passwordInput = screen.getByTestId('passwordField');
     const confirmPasswordInput = screen.getByTestId('cpassword');
-    const submitButton = screen.getByTestId('registrationBtn');
 
-    fireEvent.change(nameInput, { target: { value: 'John Doe' } });
+    fireEvent.change(firstNameInput, { target: { value: 'John' } });
+    fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
     fireEvent.change(emailInput, { target: { value: 'john@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'Test123!' } });
-    fireEvent.change(confirmPasswordInput, { target: { value: 'Test123!' } });
+    fireEvent.change(passwordInput, { target: { value: 'Test@123' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'Test@123' } });
+
+    const orgSelector = screen.getByRole('combobox');
+    fireEvent.change(orgSelector, {
+      target: { value: mockOrganizations[0].id },
+    });
+
+    const submitButton = screen.getByTestId('registrationBtn');
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(mockOnSubmit).toHaveBeenCalledWith(
+        {
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john@example.com',
+          password: 'Test@123',
+          confirmPassword: 'Test@123',
+          organizationId: mockOrganizations[0].id,
+        },
+        null,
+      );
+    });
+  });
+
+  it('should reset form after successful submission', async () => {
+    mockOnSubmit.mockResolvedValue(true);
+    renderComponent();
+
+    const firstNameInput = screen.getByPlaceholderText(/Enter firstname/i);
+    const lastNameInput = screen.getByPlaceholderText(/Enter lastname/i);
+    const emailInput = screen.getByTestId('signInEmail');
+    const passwordInput = screen.getByTestId('passwordField');
+    const confirmPasswordInput = screen.getByTestId('cpassword');
+
+    fireEvent.change(firstNameInput, { target: { value: 'John' } });
+    fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
+    fireEvent.change(emailInput, { target: { value: 'john@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'Test@123' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'Test@123' } });
+
+    const submitButton = screen.getByTestId('registrationBtn');
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(firstNameInput).toHaveValue('');
+      expect(lastNameInput).toHaveValue('');
+      expect(emailInput).toHaveValue('');
+      expect(passwordInput).toHaveValue('');
+      expect(confirmPasswordInput).toHaveValue('');
+    });
+  });
+
+  it('should not reset form after failed submission', async () => {
+    mockOnSubmit.mockResolvedValue(false);
+    renderComponent();
+
+    const firstNameInput = screen.getByPlaceholderText(/Enter firstname/i);
+    const lastNameInput = screen.getByPlaceholderText(/Enter lastname/i);
+    const emailInput = screen.getByTestId('signInEmail');
+    const passwordInput = screen.getByTestId('passwordField');
+    const confirmPasswordInput = screen.getByTestId('cpassword');
+
+    fireEvent.change(firstNameInput, { target: { value: 'John' } });
+    fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
+    fireEvent.change(emailInput, { target: { value: 'john@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'Test@123' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'Test@123' } });
+
+    const submitButton = screen.getByTestId('registrationBtn');
     fireEvent.click(submitButton);
 
     await waitFor(() => {
       expect(mockOnSubmit).toHaveBeenCalled();
     });
+
+    expect(firstNameInput).toHaveValue('John');
+    expect(lastNameInput).toHaveValue('Doe');
+    expect(emailInput).toHaveValue('john@example.com');
+    expect(passwordInput).toHaveValue('Test@123');
+    expect(confirmPasswordInput).toHaveValue('Test@123');
+  });
+
+  it('should render login link when showLoginLink is true', () => {
+    renderComponent({ showLoginLink: true });
+    expect(screen.getByText(/login/i)).toBeInTheDocument();
+  });
+
+  it('should not render login link when showLoginLink is false', () => {
+    renderComponent({ showLoginLink: false });
+    const loginLinks = screen.queryAllByText(/login/i);
+    const actualLoginLinks = loginLinks.filter(
+      (link) => link.tagName === 'U' || link.closest('a'),
+    );
+    expect(actualLoginLinks).toHaveLength(0);
+  });
+
+  it('should disable form inputs when isLoading is true', () => {
+    renderComponent({ isLoading: true });
+
+    const firstNameInput = screen.getByPlaceholderText(/Enter firstname/i);
+    const lastNameInput = screen.getByPlaceholderText(/Enter lastname/i);
+    const emailInput = screen.getByTestId('signInEmail');
+    const submitButton = screen.getByTestId('registrationBtn');
+
+    expect(firstNameInput).toBeDisabled();
+    expect(lastNameInput).toBeDisabled();
+    expect(emailInput).toBeDisabled();
+    expect(submitButton).toBeDisabled();
+  });
+
+  it('should convert email to lowercase', () => {
+    renderComponent();
+
+    const emailInput = screen.getByTestId('signInEmail');
+    fireEvent.change(emailInput, { target: { value: 'JOHN@EXAMPLE.COM' } });
+
+    expect(emailInput).toHaveValue('john@example.com');
   });
 });

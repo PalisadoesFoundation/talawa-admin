@@ -102,7 +102,7 @@ const LoginForm: React.FC<InterfaceLoginFormProps> = ({
             <ReCAPTCHA
               ref={loginRecaptchaRef}
               className="mt-2"
-              sitekey={RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'}
+              sitekey={RECAPTCHA_SITE_KEY || ''}
               onChange={handleCaptcha}
             />
           </div>
@@ -125,16 +125,13 @@ const LoginForm: React.FC<InterfaceLoginFormProps> = ({
               <hr />
               <span className={styles.orText}>{tCommon('OR')}</span>
             </div>
-            <Button
-              variant="outline-secondary"
-              value="Register"
-              className={styles.reg_btn}
+            <Link
+              to={'/register'}
+              className={`btn btn-outline-secondary ${styles.reg_btn} text-decoration-none`}
               data-testid="goToRegisterPortion"
             >
-              <Link to={'/register'} className="text-decoration-none">
-                {tCommon('register')}
-              </Link>
-            </Button>
+              {tCommon('register')}
+            </Link>
           </div>
         )}
       </form>

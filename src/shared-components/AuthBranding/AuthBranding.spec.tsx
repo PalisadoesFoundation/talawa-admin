@@ -18,16 +18,19 @@ describe('AuthBranding Component', () => {
     expect(screen.getByTestId('PalisadoesLogo')).toBeInTheDocument();
   });
 
-  it('should render community logo when community data provided', () => {
+  it('should render community social link when communityData provides one', () => {
     const communityData = {
       logoURL: 'https://example.com/logo.png',
       name: 'Test Community',
       websiteURL: 'https://example.com',
+      facebookURL: 'https://facebook.com/customCommunity',
     };
 
     render(<AuthBranding communityData={communityData} />);
 
-    expect(screen.getByTestId('preLoginLogo')).toBeInTheDocument();
-    expect(screen.getByAltText('Community Logo')).toBeInTheDocument();
+    const socialLink = screen.getByTestId('preLoginSocialMedia');
+
+    expect(socialLink).toBeInTheDocument();
+    expect(socialLink).toHaveAttribute('href', communityData.facebookURL);
   });
 });

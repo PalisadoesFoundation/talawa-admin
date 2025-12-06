@@ -37,7 +37,9 @@ const RegisterPage = (): JSX.Element => {
   const { startSession } = useSession();
   const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
 
-  document.title = t('title');
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
 
   const [role, setRole] = useState<'admin' | 'user'>('user');
   const [organizations, setOrganizations] = useState<
@@ -73,13 +75,13 @@ const RegisterPage = (): JSX.Element => {
   const handleRegistration = async (
     userData: IRegistrationData,
     recaptchaToken: string | null,
-  ): Promise<void> => {
+  ): Promise<boolean> => {
     try {
       // Verify reCAPTCHA if enabled
       if (REACT_APP_USE_RECAPTCHA === 'yes') {
         if (!recaptchaToken) {
           toast.error(t('Please_check_the_captcha') as string);
-          return;
+          return false;
         }
 
         try {
@@ -89,18 +91,17 @@ const RegisterPage = (): JSX.Element => {
 
           if (!recaptchaData?.recaptcha) {
             toast.error(t('captchaError') as string);
-            return;
+            return false;
           }
         } catch {
           toast.error(t('captchaError') as string);
-          return;
+          return false;
         }
       }
       const { data: signUpData } = await signup({
         variables: {
           ID: userData.organizationId,
-          firstname: userData.firstName,
-          lastname: userData.lastName,
+          name: `${userData.firstName} ${userData.lastName}`,
           email: userData.email,
           password: userData.password,
         },
@@ -118,22 +119,25 @@ const RegisterPage = (): JSX.Element => {
           const authToken = signUpData.signUp.authenticationToken;
           setItem('token', authToken);
           setItem('IsLoggedIn', 'TRUE');
-          setItem('name', signUpData.signUp.user?.name || '');
-          setItem('email', signUpData.signUp.user?.emailAddress || '');
+          setItem('name', `${userData.firstName} ${userData.lastName}`);
+          setItem('email', userData.email);
 
           if (pendingInvitationToken) {
             removeItem('pendingInvitationToken');
             startSession();
             window.location.href = `/event/invitation/${pendingInvitationToken}`;
-            return;
+            return true;
           }
         }
 
         // Navigate to login
         navigate(role === 'admin' ? '/admin' : '/');
+        return true;
       }
+      return false;
     } catch (error) {
       errorHandler(t, error);
+      return false;
     }
   };
 

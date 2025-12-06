@@ -39,13 +39,9 @@ const LoginPage = (): JSX.Element => {
     getItem('pendingInvitationToken'),
   );
 
-  const { data: communityData, refetch } = useQuery(GET_COMMUNITY_DATA_PG);
+  const { data: communityData } = useQuery(GET_COMMUNITY_DATA_PG);
   const [signin, { loading: loginLoading }] = useLazyQuery(SIGNIN_QUERY);
   const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
-
-  useEffect(() => {
-    refetch();
-  }, [communityData]);
 
   useEffect(() => {
     const isAdmin = location.pathname === '/admin';

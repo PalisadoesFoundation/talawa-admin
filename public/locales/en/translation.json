@@ -15,7 +15,7 @@
     "title": "Talawa Admin",
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
     "userLogin": "Login",
-    "loginSubHead": "Login into your account",
+    "loginSubHead": "Log in to your account",
     "adminLogin": "Admin Login",
     "atleast_8_char_long": "Atleast 8 Character long",
     "atleast_6_char_long": "Atleast 6 Character long",
@@ -1014,7 +1014,7 @@
   },
   "userLogin": {
     "login": "Login",
-    "loginIntoYourAccount": "Login into your account",
+    "loginIntoYourAccount": "Log in to your account",
     "invalidDetailsMessage": "Please enter a valid email and password.",
     "notAuthorised": "Sorry! you are not Authorised!",
     "invalidCredentials": "Entered credentials are incorrect. Please enter valid credentials.",

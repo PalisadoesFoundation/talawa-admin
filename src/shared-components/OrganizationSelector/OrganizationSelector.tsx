@@ -1,5 +1,4 @@
 import React from 'react';
-import { Form } from 'react-bootstrap';
 import { Autocomplete, TextField } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { InterfaceOrganizationSelectorProps } from 'types/OrganizationSelector/interface';
@@ -33,10 +32,6 @@ const OrganizationSelector: React.FC<InterfaceOrganizationSelectorProps> = ({
 
   return (
     <div className="position-relative my-2">
-      <Form.Label>
-        {t('selectOrg')}
-        {required && <span className="text-danger"> *</span>}
-      </Form.Label>
       <div className="position-relative">
         <Autocomplete
           disablePortal
@@ -47,8 +42,23 @@ const OrganizationSelector: React.FC<InterfaceOrganizationSelectorProps> = ({
           }}
           options={organizations}
           disabled={disabled}
+          getOptionLabel={(option) => option.label}
+          isOptionEqualToValue={(option, value) => option.id === value.id}
           renderInput={(params) => (
-            <TextField {...params} label={t('selectOrg')} required={required} />
+            <TextField
+              {...params}
+              inputProps={{
+                ...params.inputProps,
+                'data-testid': 'orgInput',
+              }}
+              label={
+                <>
+                  {t('selectOrg')}
+                  {required && <span className="text-danger"> *</span>}
+                </>
+              }
+              required={required}
+            />
           )}
         />
       </div>
