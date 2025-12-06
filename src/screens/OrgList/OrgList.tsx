@@ -50,7 +50,10 @@ import {
   CREATE_ORGANIZATION_MUTATION_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
 } from 'GraphQl/Mutations/mutations';
-import { ORGANIZATION_LIST, CURRENT_USER } from 'GraphQl/Queries/Queries';
+import {
+  CURRENT_USER,
+  ORGANIZATION_FILTER_LIST,
+} from 'GraphQl/Queries/Queries';
 
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import { useTranslation } from 'react-i18next';
@@ -176,7 +179,7 @@ function orgList(): JSX.Element {
     data: allOrganizationsData,
     loading: loadingAll,
     refetch: refetchOrgs,
-  } = useQuery(ORGANIZATION_LIST, {
+  } = useQuery(ORGANIZATION_FILTER_LIST, {
     variables: { filter: filterName },
     fetchPolicy: 'network-only',
     errorPolicy: 'all',
