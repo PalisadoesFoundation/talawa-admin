@@ -1,9 +1,12 @@
-import { describe, it, expect, vi, afterEach } from 'vitest';
-import React from 'react';
+/* eslint-disable react/no-multi-comp */
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import type { ComponentType } from 'react';
 import PluginRoutes from '../../routes/PluginRoutes';
 import { usePluginRoutes } from '../../hooks';
+
+const lazyImportFunctions: Array<() => Promise<unknown>> = [];
 
 // Mock the hooks
 vi.mock('../../hooks', () => ({
@@ -11,16 +14,12 @@ vi.mock('../../hooks', () => ({
 }));
 
 // Mock React.lazy and Suspense
-const { mockLazyComponent } = vi.hoisted(() => ({
-  mockLazyComponent: vi.fn(),
-}));
-
 vi.mock('react', async () => {
   const actual = await vi.importActual('react');
   return {
     ...actual,
     lazy: vi.fn((importFn) => {
-      mockLazyComponent.mockImplementation(importFn);
+      lazyImportFunctions.push(importFn);
       return vi.fn(() => (
         <div data-testid="lazy-component">Lazy Component</div>
       ));
@@ -40,18 +39,46 @@ vi.mock('react', async () => {
   };
 });
 
+const NamedExportComponent = () => (
+  <div data-testid="named-component">Named Export Component</div>
+);
+
+const DefaultExportComponent = () => (
+  <div data-testid="default-component">Plugin Default Component</div>
+);
+
+vi.mock('/plugins/test-plugin/index.ts', () => ({
+  TestComponent: NamedExportComponent,
+}));
+
+vi.mock('/plugins/default-plugin/index.ts', () => ({
+  NonExistentComponent: undefined,
+  default: DefaultExportComponent,
+}));
+
+vi.mock('/plugins/missing-component/index.ts', () => ({
+  MissingComponent: undefined,
+  default: undefined,
+  AnotherComponent: () => <div>Another Component</div>,
+}));
+
+vi.mock('/plugins/error-plugin/index.ts', () => {
+  throw new Error('Import failed from error plugin');
+});
+
+vi.mock('/plugins/undefined/index.ts', () => {
+  throw new Error('Missing pluginId');
+});
+
 // Mock Route component
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
   return {
     ...actual,
-    Route: vi.fn(
-      ({ path, element }: { path: string; element: React.ReactNode }) =>
-        React.createElement(
-          'div',
-          { 'data-testid': `route-${path}`, 'data-path': path },
-          element,
-        ),
+    Route: ({ path, element }: { path: string; element: React.ReactNode }) => (
+      <div data-testid={`route-${path}`} data-path={path}>
+        {element}
+      </div>
     ),
   };
 });
@@ -59,15 +86,19 @@ vi.mock('react-router-dom', async () => {
 const mockUsePluginRoutes = vi.mocked(usePluginRoutes);
 
 describe('PluginRoutes', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
+  beforeEach(() => {
+    lazyImportFunctions.length = 0;
   });
 
   describe('Basic Rendering', () => {
     it('should render without crashing', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
-      render(<PluginRoutes />, { wrapper: BrowserRouter });
+      render(
+        <BrowserRouter>
+          <PluginRoutes />
+        </BrowserRouter>,
+      );
 
       // Should render the component even with empty routes - just an empty div
       expect(document.body).toBeInTheDocument();
@@ -76,7 +107,11 @@ describe('PluginRoutes', () => {
     it('should render with default props', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
-      render(<PluginRoutes />, { wrapper: BrowserRouter });
+      render(
+        <BrowserRouter>
+          <PluginRoutes />
+        </BrowserRouter>,
+      );
 
       expect(mockUsePluginRoutes).toHaveBeenCalledWith([], false);
     });
@@ -87,8 +122,9 @@ describe('PluginRoutes', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
       render(
-        <PluginRoutes userPermissions={userPermissions} isAdmin={isAdmin} />,
-        { wrapper: BrowserRouter },
+        <BrowserRouter>
+          <PluginRoutes userPermissions={userPermissions} isAdmin={isAdmin} />
+        </BrowserRouter>,
       );
 
       expect(mockUsePluginRoutes).toHaveBeenCalledWith(
@@ -111,7 +147,11 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(<PluginRoutes />, { wrapper: BrowserRouter });
+      render(
+        <BrowserRouter>
+          <PluginRoutes />
+        </BrowserRouter>,
+      );
 
       expect(screen.getByTestId('route-/test')).toBeInTheDocument();
       expect(screen.getByTestId('route-/test')).toHaveAttribute(
@@ -139,7 +179,11 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(<PluginRoutes />, { wrapper: BrowserRouter });
+      render(
+        <BrowserRouter>
+          <PluginRoutes />
+        </BrowserRouter>,
+      );
 
       expect(screen.getByTestId('route-/plugin1')).toBeInTheDocument();
       expect(screen.getByTestId('route-/plugin2')).toBeInTheDocument();
@@ -148,16 +192,25 @@ describe('PluginRoutes', () => {
     it('should handle empty routes array', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
-      render(<PluginRoutes />, { wrapper: BrowserRouter });
+      render(
+        <BrowserRouter>
+          <PluginRoutes />
+        </BrowserRouter>,
+      );
 
       // Should render nothing when no routes are provided
       expect(screen.queryByTestId(/route-/)).not.toBeInTheDocument();
     });
 
     it('should handle null/undefined routes gracefully', () => {
-      mockUsePluginRoutes.mockReturnValue(null as unknown as []);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      mockUsePluginRoutes.mockReturnValue(null as any);
 
-      render(<PluginRoutes />, { wrapper: BrowserRouter });
+      render(
+        <BrowserRouter>
+          <PluginRoutes />
+        </BrowserRouter>,
+      );
 
       // Should render nothing when routes are null/undefined
       expect(screen.queryByTestId(/route-/)).not.toBeInTheDocument();
@@ -177,7 +230,11 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(<PluginRoutes />, { wrapper: BrowserRouter });
+      render(
+        <BrowserRouter>
+          <PluginRoutes />
+        </BrowserRouter>,
+      );
 
       expect(screen.getByTestId('suspense')).toBeInTheDocument();
       expect(screen.getByText('Loading plugin...')).toBeInTheDocument();
@@ -198,9 +255,11 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(<PluginRoutes fallback={customFallback} />, {
-        wrapper: BrowserRouter,
-      });
+      render(
+        <BrowserRouter>
+          <PluginRoutes fallback={customFallback} />
+        </BrowserRouter>,
+      );
 
       expect(screen.getByTestId('custom-fallback')).toBeInTheDocument();
       expect(screen.getByText('Custom Loading...')).toBeInTheDocument();
@@ -218,10 +277,151 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(<PluginRoutes />, { wrapper: BrowserRouter });
+      render(
+        <BrowserRouter>
+          <PluginRoutes />
+        </BrowserRouter>,
+      );
 
       // The lazy component should be created and rendered
       expect(screen.getByTestId('lazy-component')).toBeInTheDocument();
+    });
+  });
+
+  describe('Module Loading Logic', () => {
+    const renderWithRoute = (route: {
+      pluginId?: string;
+      path: string;
+      component: string;
+    }) => {
+      mockUsePluginRoutes.mockReturnValue([
+        {
+          pluginId: route.pluginId,
+          path: route.path,
+          component: route.component,
+          permissions: ['user'],
+        },
+      ]);
+
+      return render(
+        <BrowserRouter>
+          <PluginRoutes />
+        </BrowserRouter>,
+      );
+    };
+
+    const resolveImporter = async (
+      importer: () => Promise<unknown>,
+    ): Promise<{ default: ComponentType }> =>
+      (await importer()) as { default: ComponentType };
+
+    it('loads named export components when available', async () => {
+      const initialRender = renderWithRoute({
+        pluginId: 'test-plugin',
+        path: '/test-plugin',
+        component: 'TestComponent',
+      });
+
+      expect(lazyImportFunctions).toHaveLength(1);
+      const importer = lazyImportFunctions[0];
+      const result = await resolveImporter(importer);
+
+      initialRender.unmount();
+
+      const NamedComponent = result.default;
+      const { getByText } = render(<NamedComponent />);
+      expect(getByText('Named Export Component')).toBeInTheDocument();
+    });
+
+    it('falls back to default export when named export is missing', async () => {
+      const initialRender = renderWithRoute({
+        pluginId: 'default-plugin',
+        path: '/default-plugin',
+        component: 'NonExistentComponent',
+      });
+
+      expect(lazyImportFunctions).toHaveLength(1);
+      const importer = lazyImportFunctions[0];
+      const result = await resolveImporter(importer);
+
+      initialRender.unmount();
+
+      const DefaultComponent = result.default;
+      const { getByText } = render(<DefaultComponent />);
+      expect(getByText('Plugin Default Component')).toBeInTheDocument();
+    });
+
+    it('returns error component when requested component does not exist', async () => {
+      const initialRender = renderWithRoute({
+        pluginId: 'missing-component',
+        path: '/missing-component',
+        component: 'MissingComponent',
+      });
+
+      expect(lazyImportFunctions).toHaveLength(1);
+      const importer = lazyImportFunctions[0];
+      const result = await resolveImporter(importer);
+
+      initialRender.unmount();
+
+      const ErrorComponent = result.default;
+      const { getByText } = render(<ErrorComponent />);
+      expect(getByText('Plugin Error')).toBeInTheDocument();
+      expect(getByText(/Failed to load component/)).toHaveTextContent(
+        'MissingComponent',
+      );
+    });
+
+    it('surfaces error fallback when import throws', async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => undefined);
+
+      try {
+        const initialRender = renderWithRoute({
+          pluginId: 'error-plugin',
+          path: '/error-plugin',
+          component: 'ErrorComponent',
+        });
+
+        expect(lazyImportFunctions).toHaveLength(1);
+        const importer = lazyImportFunctions[0];
+        const result = await resolveImporter(importer);
+
+        initialRender.unmount();
+
+        const ErrorComponent = result.default;
+        const { getByText } = render(<ErrorComponent />);
+        expect(getByText('Plugin Error')).toBeInTheDocument();
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          "Failed to load plugin component 'ErrorComponent' from 'error-plugin':",
+          expect.any(Error),
+        );
+      } finally {
+        consoleErrorSpy.mockRestore();
+      }
+    });
+
+    it('renders error details when pluginId is missing', async () => {
+      const initialRender = renderWithRoute({
+        pluginId: undefined,
+        path: '/missing-plugin',
+        component: 'MissingComponent',
+      });
+
+      expect(lazyImportFunctions).toHaveLength(1);
+      const importer = lazyImportFunctions[0];
+      const result = await resolveImporter(importer);
+
+      initialRender.unmount();
+
+      const ErrorComponent = result.default;
+      const { getByText } = render(<ErrorComponent />);
+      expect(getByText('Plugin Error')).toBeInTheDocument();
+      const pluginDetail = getByText((content, node) => {
+        return node?.textContent?.trim().startsWith('Plugin:') ?? false;
+      });
+      expect(pluginDetail).toHaveTextContent('Plugin:');
     });
   });
 
@@ -238,7 +438,11 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(<PluginRoutes />, { wrapper: BrowserRouter });
+      render(
+        <BrowserRouter>
+          <PluginRoutes />
+        </BrowserRouter>,
+      );
 
       // Should render the route structure with suspense wrapper
       expect(screen.getByTestId('route-/error')).toBeInTheDocument();
@@ -258,7 +462,11 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(<PluginRoutes />, { wrapper: BrowserRouter });
+      render(
+        <BrowserRouter>
+          <PluginRoutes />
+        </BrowserRouter>,
+      );
 
       // Should still render the route structure
       expect(screen.getByTestId('route-/test')).toBeInTheDocument();
@@ -277,7 +485,11 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(<PluginRoutes />, { wrapper: BrowserRouter });
+      render(
+        <BrowserRouter>
+          <PluginRoutes />
+        </BrowserRouter>,
+      );
 
       // Should show loading state
       expect(screen.getByText('Loading plugin...')).toBeInTheDocument();
@@ -304,7 +516,11 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(<PluginRoutes />, { wrapper: BrowserRouter });
+      render(
+        <BrowserRouter>
+          <PluginRoutes />
+        </BrowserRouter>,
+      );
 
       const route1 = screen.getByTestId('route-/path1');
       const route2 = screen.getByTestId('route-/path2');
@@ -333,7 +549,11 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(<PluginRoutes />, { wrapper: BrowserRouter });
+      render(
+        <BrowserRouter>
+          <PluginRoutes />
+        </BrowserRouter>,
+      );
 
       expect(screen.getByTestId('route-/path1')).toBeInTheDocument();
       expect(screen.getByTestId('route-/path2')).toBeInTheDocument();
@@ -344,9 +564,11 @@ describe('PluginRoutes', () => {
     it('should handle undefined userPermissions', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
-      render(<PluginRoutes userPermissions={undefined} />, {
-        wrapper: BrowserRouter,
-      });
+      render(
+        <BrowserRouter>
+          <PluginRoutes userPermissions={undefined} />
+        </BrowserRouter>,
+      );
 
       expect(mockUsePluginRoutes).toHaveBeenCalledWith([], false);
     });
@@ -354,7 +576,11 @@ describe('PluginRoutes', () => {
     it('should handle undefined isAdmin', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
-      render(<PluginRoutes isAdmin={undefined} />, { wrapper: BrowserRouter });
+      render(
+        <BrowserRouter>
+          <PluginRoutes isAdmin={undefined} />
+        </BrowserRouter>,
+      );
 
       expect(mockUsePluginRoutes).toHaveBeenCalledWith([], false);
     });
@@ -362,7 +588,11 @@ describe('PluginRoutes', () => {
     it('should handle empty userPermissions array', () => {
       mockUsePluginRoutes.mockReturnValue([]);
 
-      render(<PluginRoutes userPermissions={[]} />, { wrapper: BrowserRouter });
+      render(
+        <BrowserRouter>
+          <PluginRoutes userPermissions={[]} />
+        </BrowserRouter>,
+      );
 
       expect(mockUsePluginRoutes).toHaveBeenCalledWith([], false);
     });
@@ -381,7 +611,11 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(<PluginRoutes />, { wrapper: BrowserRouter });
+      render(
+        <BrowserRouter>
+          <PluginRoutes />
+        </BrowserRouter>,
+      );
 
       expect(
         screen.getByTestId('route-/path/with-special_chars.and+symbols'),
@@ -400,7 +634,11 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(<PluginRoutes />, { wrapper: BrowserRouter });
+      render(
+        <BrowserRouter>
+          <PluginRoutes />
+        </BrowserRouter>,
+      );
 
       expect(screen.getByTestId('route-/empty')).toBeInTheDocument();
     });
@@ -418,7 +656,11 @@ describe('PluginRoutes', () => {
       ];
       mockUsePluginRoutes.mockReturnValue(mockRoutes);
 
-      render(<PluginRoutes />, { wrapper: BrowserRouter });
+      render(
+        <BrowserRouter>
+          <PluginRoutes />
+        </BrowserRouter>,
+      );
 
       expect(screen.getByTestId('route-/long')).toBeInTheDocument();
     });
