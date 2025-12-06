@@ -132,6 +132,74 @@ describe('Testing Users screen', () => {
     await wait();
   });
 
+  it('should NOT call fetchMore when hasNextPage is false', async () => {
+    const noNextPageMocks = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'User One',
+                    emailAddress: 'u1@test.com',
+                    role: 'regular',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                endCursor: null,
+              },
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: {
+          data: { organizations: [{ id: 'org1', name: 'Org' }] },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={noNextPageMocks} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+    await wait(300);
+
+    expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+  });
+
   it('Component should be rendered properly when user is superAdmin', async () => {
     render(
       <MockedProvider link={createLink(MOCKS)}>
@@ -793,6 +861,187 @@ describe('useEffect loadMoreUsers trigger', () => {
     fireEvent.click(newest);
 
     expect(sortDropdown).toHaveTextContent('newest');
+  });
+
+  it('should filter only regular users', async () => {
+    const filterMock = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: { first: 12, after: null, orgFirst: 32, where: undefined },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'Admin User',
+                    role: 'administrator',
+                    emailAddress: 'a@test.com',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+                {
+                  cursor: '2',
+                  node: {
+                    id: '2',
+                    name: 'Regular User',
+                    role: 'regular',
+                    emailAddress: 'u@test.com',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: { data: { organizations: [] } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={filterMock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    fireEvent.click(screen.getByTestId('filterUsers'));
+    fireEvent.click(screen.getByTestId('user'));
+
+    await wait();
+
+    const rows = screen.getAllByRole('row');
+
+    expect(rows.length).toBe(2); // header + 1 row
+    expect(rows[1]).toHaveTextContent('Regular User');
+  });
+
+  it('should return all users when filter is cancel', async () => {
+    render(
+      <MockedProvider mocks={MOCKS_NEW} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    fireEvent.click(screen.getByTestId('filterUsers'));
+    fireEvent.click(screen.getByTestId('cancel'));
+
+    await wait();
+
+    const rows = screen.getAllByRole('row');
+    expect(rows.length).toBeGreaterThan(1);
+  });
+
+  it('should actually sort users by newest date (real data validation)', async () => {
+    const newestMock = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: { first: 12, after: null, orgFirst: 32, where: undefined },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'Old User',
+                    role: 'regular',
+                    emailAddress: 'old@test.com',
+                    createdAt: '2020-01-01T00:00:00.000Z',
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+                {
+                  cursor: '2',
+                  node: {
+                    id: '2',
+                    name: 'New User',
+                    role: 'regular',
+                    emailAddress: 'new@test.com',
+                    createdAt: '2024-01-01T00:00:00.000Z',
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: { data: { organizations: [] } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={newestMock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    fireEvent.click(screen.getByTestId('sortUsers'));
+    fireEvent.click(screen.getByTestId('newest'));
+
+    await wait();
+
+    const rows = screen.getAllByRole('row');
+
+    expect(rows[1]).toHaveTextContent('New User');
   });
 
   it('should NOT update filtering when same option is clicked', async () => {
