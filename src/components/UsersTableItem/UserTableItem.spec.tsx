@@ -1392,6 +1392,92 @@ describe('Testing User Table Item', () => {
     expect(screen.getByText(/Blocked Org/i)).toBeInTheDocument();
   });
 
+  test('should reopen blocked org modal when cancel unblock (Blocked path)', async () => {
+    const props: {
+      user: InterfaceQueryUserListItemForAdmin;
+      index: number;
+      loggedInUserId: string;
+      resetAndRefetch: () => void;
+    } = {
+      user: {
+        id: '123',
+        name: 'John',
+        emailAddress: 'john@test.com',
+
+        avatarURL: null,
+        birthDate: null,
+        city: null,
+        state: null,
+        countryCode: null,
+        postalCode: null,
+        mobilePhoneNumber: null,
+        homePhoneNumber: null,
+        workPhoneNumber: null,
+
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+
+        educationGrade: null,
+        employmentStatus: null,
+        maritalStatus: null,
+        natalSex: null,
+        naturalLanguageCode: null,
+        isEmailAddressVerified: true,
+
+        createdOrganizations: [],
+
+        role: null,
+
+        organizationsWhereMember: {
+          edges: [],
+        },
+
+        orgsWhereUserIsBlocked: {
+          edges: [
+            {
+              node: {
+                id: 'ghi',
+                createdAt: new Date().toISOString(),
+                organization: {
+                  name: 'Blocked Org',
+                  city: '',
+                  state: '',
+                  createdAt: new Date().toISOString(),
+                  creator: {
+                    name: 'A',
+                  },
+                },
+              },
+            },
+          ],
+        },
+      },
+
+      index: 0,
+      loggedInUserId: '123',
+      resetAndRefetch: vi.fn(),
+    };
+
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    fireEvent.click(screen.getByTestId(`showBlockedOrgsBtn123`));
+    fireEvent.click(screen.getByTestId(`unblockUserFromOrgBtnghi`));
+
+    fireEvent.click(screen.getByTestId(`closeUnblockUserModal123`));
+
+    // ✅ Confirms: setShowBlockedOrganizations(true)
+    expect(screen.getByTestId(`modal-blocked-org-123`)).toBeInTheDocument();
+  });
+
   test('Should handle cancel unblock user and reopen blocked organizations modal', async () => {
     const props = {
       user: {
