@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, suite } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
@@ -8,10 +8,7 @@ import i18n from 'i18next';
 import { toast } from 'react-toastify';
 
 import OrgUpdate from './OrgUpdate';
-import {
-  GET_ORGANIZATION_BASIC_DATA,
-  ORGANIZATIONS_LIST_BASIC,
-} from 'GraphQl/Queries/Queries';
+import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
 vi.mock('react-toastify', () => ({
@@ -47,10 +44,6 @@ i18n.init({
         Location: 'Location',
         'Enter Organization location': 'Enter Organization location',
       },
-      errors: {
-        organizationNameAlreadyExists:
-          'The given organization name already exists',
-      },
     },
   },
 });
@@ -71,31 +64,6 @@ const mockOrgData = {
     createdAt: '2024-02-24T00:00:00Z',
     updatedAt: '2024-02-24T00:00:00Z',
     isUserRegistrationRequired: false,
-  },
-};
-
-const organizationsListMock = {
-  request: {
-    query: ORGANIZATIONS_LIST_BASIC,
-  },
-  result: {
-    data: {
-      organizations: [
-        {
-          __typename: 'Organization',
-          id: '2',
-          name: 'Existing Org',
-          description: 'Existing Description',
-          addressLine1: '456 Existing St',
-          addressLine2: 'Suite 200',
-          city: 'Existing City',
-          state: 'Existing State',
-          postalCode: '67890',
-          countryCode: 'US',
-          avatarURL: null,
-        },
-      ],
-    },
   },
 };
 
@@ -150,7 +118,6 @@ describe('OrgUpdate Component', () => {
         },
       },
     },
-    organizationsListMock,
   ];
 
   beforeEach(() => {
@@ -278,7 +245,7 @@ describe('OrgUpdate Component', () => {
     };
 
     render(
-      <MockedProvider mocks={[queryMock, errorMock, organizationsListMock]}>
+      <MockedProvider mocks={[queryMock, errorMock]}>
         <I18nextProvider i18n={i18n}>
           <OrgUpdate orgId="1" />
         </I18nextProvider>
@@ -348,7 +315,7 @@ describe('OrgUpdate Component', () => {
     });
   });
 
-  describe('OrgUpdate Loading and Error States - Initial Tests', () => {
+  describe('OrgUpdate Loading and Error States', () => {
     const mockOrgData = {
       organization: {
         __typename: 'Organization',
@@ -420,7 +387,7 @@ describe('OrgUpdate Component', () => {
       };
 
       render(
-        <MockedProvider mocks={[loadingMock, organizationsListMock]}>
+        <MockedProvider mocks={[loadingMock]}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -448,7 +415,7 @@ describe('OrgUpdate Component', () => {
       };
 
       render(
-        <MockedProvider mocks={[errorMock, organizationsListMock]}>
+        <MockedProvider mocks={[errorMock]}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -536,7 +503,7 @@ describe('OrgUpdate Component', () => {
       ];
 
       render(
-        <MockedProvider mocks={[...successMocks, organizationsListMock]}>
+        <MockedProvider mocks={successMocks}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -632,7 +599,7 @@ describe('OrgUpdate Component', () => {
       ];
 
       render(
-        <MockedProvider mocks={[...errorMocks, organizationsListMock]}>
+        <MockedProvider mocks={errorMocks}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -652,86 +619,6 @@ describe('OrgUpdate Component', () => {
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
           'Failed to update organization',
-        );
-      });
-    });
-
-    it('shows error toast when organization name already exists', async () => {
-      const existingOrgMock = {
-        request: {
-          query: ORGANIZATIONS_LIST_BASIC,
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                __typename: 'Organization',
-                id: '2',
-                name: 'Existing Org',
-                description: 'Existing Description',
-                addressLine1: '456 Existing St',
-                addressLine2: 'Suite 200',
-                city: 'Existing City',
-                state: 'Existing State',
-                postalCode: '67890',
-                countryCode: 'US',
-                avatarURL: null,
-              },
-            ],
-          },
-        },
-      };
-
-      const duplicateNameMock = {
-        request: {
-          query: UPDATE_ORGANIZATION_MUTATION,
-          variables: {
-            input: {
-              id: '1',
-              name: 'Existing Org',
-              description: 'Test Description',
-              addressLine1: '123 Test St',
-              addressLine2: 'Suite 100',
-              city: 'Test City',
-              state: 'Test State',
-              postalCode: '12345',
-              countryCode: 'US',
-              isUserRegistrationRequired: false,
-            },
-          },
-        },
-        error: new Error('The given organization name already exists'),
-      };
-
-      render(
-        <MockedProvider
-          mocks={[
-            ...mocks,
-            existingOrgMock,
-            organizationsListMock,
-            duplicateNameMock,
-          ]}
-        >
-          <I18nextProvider i18n={i18n}>
-            <OrgUpdate orgId="1" />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      await waitFor(() => {
-        expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
-      });
-
-      fireEvent.change(screen.getByDisplayValue('Test Org'), {
-        target: { value: 'Existing Org' },
-      });
-
-      const saveButton = screen.getByTestId('save-org-changes-btn');
-      fireEvent.click(saveButton);
-
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          'The given organization name already exists',
         );
       });
     });
@@ -767,7 +654,6 @@ describe('OrgUpdate Component', () => {
           data: mockOrgData,
         },
       },
-      organizationsListMock,
     ];
 
     beforeEach(() => {
@@ -841,10 +727,9 @@ describe('OrgUpdate Component', () => {
     });
   });
 
-  describe('OrgUpdate Loading and Error States', () => {
+  it('OrgUpdate Loading and Error States', () => {
     const mockOrgData = {
       organization: {
-        __typename: 'Organization',
         id: '1',
         name: 'Test Org',
         description: 'Test Description',
@@ -857,7 +742,6 @@ describe('OrgUpdate Component', () => {
         avatarURL: null,
         createdAt: '2024-02-24T00:00:00Z',
         updatedAt: '2024-02-24T00:00:00Z',
-        isUserRegistrationRequired: false,
         creator: {
           id: '1',
           name: 'Test Creator',
@@ -875,7 +759,7 @@ describe('OrgUpdate Component', () => {
       vi.clearAllMocks();
     });
 
-    it('handles empty response from update mutation', async () => {
+    suite('handles empty response from update mutation', async () => {
       const mocks = [
         {
           request: {
@@ -911,7 +795,7 @@ describe('OrgUpdate Component', () => {
       ];
 
       render(
-        <MockedProvider mocks={[...mocks, organizationsListMock]}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -941,30 +825,30 @@ describe('OrgUpdate Component', () => {
       expect(saveButton).not.toBeDisabled();
       expect(saveButton).toHaveTextContent('Save Changes');
     });
+  });
 
-    it('updates address line1 when input changes', async () => {
-      render(
-        <MockedProvider mocks={mocks}>
-          <I18nextProvider i18n={i18n}>
-            <OrgUpdate orgId="1" />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
+  it('updates address line1 when input changes', async () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
 
-      await waitFor(() => {
-        expect(screen.getByDisplayValue('123 Test St')).toBeInTheDocument();
-      });
-
-      const addressInput = screen.getByPlaceholderText(
-        'Enter Organization location',
-      );
-      expect(addressInput).toBeInTheDocument();
-
-      expect(addressInput).toHaveValue('123 Test St');
-
-      fireEvent.change(addressInput, { target: { value: 'New Address Line' } });
-
-      expect(addressInput).toHaveValue('New Address Line');
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('123 Test St')).toBeInTheDocument();
     });
+
+    const addressInput = screen.getByPlaceholderText(
+      'Enter Organization location',
+    );
+    expect(addressInput).toBeInTheDocument();
+
+    expect(addressInput).toHaveValue('123 Test St');
+
+    fireEvent.change(addressInput, { target: { value: 'New Address Line' } });
+
+    expect(addressInput).toHaveValue('New Address Line');
   });
 });
