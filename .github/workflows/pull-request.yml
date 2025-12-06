@@ -102,6 +102,25 @@ jobs:
           chmod +x .github/workflows/scripts/compare_translations.py
           python .github/workflows/scripts/compare_translations.py --directory public/locales
 
+      - name: Get changed source files
+        id: changed-src
+        run: |
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          CHANGED=$(git diff --name-only --diff-filter=ACMRT "$BASE_SHA" ${{ github.event.pull_request.head.sha }} \
+            | grep -E '^src/.*\.(ts|tsx|js|jsx)$' | tr '\n' ' ' || true)
+          echo "files=$CHANGED" >> $GITHUB_OUTPUT
+          if [ -z "$CHANGED" ]; then
+            echo "none=true" >> $GITHUB_OUTPUT
+          else
+            echo "none=false" >> $GITHUB_OUTPUT
+          fi
+
+      # TODO: Re-enable after fixing existing i18n violations in all necessary files
+      # See: scripts/check-i18n.js for the detection script
+      # - name: Check for non-internationalized text
+      #   if: steps.changed-src.outputs.none != 'true'
+      #   run: pnpm run check-i18n -- ${{ steps.changed-src.outputs.files }}
+
       - name: Check if the source and target branches are different
         if: ${{ github.event.pull_request.base.ref == github.event.pull_request.head.ref }}
         run: |
