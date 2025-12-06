@@ -217,6 +217,83 @@ export const USER_LIST_FOR_TABLE = gql`
   }
 `;
 
+export const USER_LIST_FOR_ADMIN = gql`
+  query allUsers(
+    $first: Int
+    $after: String
+    $orgFirst: Int
+    $last: Int
+    $before: String
+    $where: QueryAllUsersWhereInput
+  ) {
+    allUsers(
+      first: $first
+      after: $after
+      where: $where
+      last: $last
+      before: $before
+    ) {
+      pageInfo {
+        endCursor
+        hasPreviousPage
+        hasNextPage
+        startCursor
+      }
+      edges {
+        cursor
+        node {
+          id
+          name
+          role
+          avatarURL
+          emailAddress
+          createdAt
+          city
+          state
+          countryCode
+          postalCode
+          orgsWhereUserIsBlocked(first: 16) {
+            edges {
+              node {
+                id
+                createdAt
+                organization {
+                  name
+                  createdAt
+                  city
+                  avatarURL
+                  creator {
+                    name
+                  }
+                }
+              }
+            }
+          }
+          organizationsWhereMember(first: $orgFirst) {
+            edges {
+              node {
+                id
+                name
+                avatarURL
+                createdAt
+                city
+                state
+                countryCode
+                creator {
+                  id
+                  name
+                  emailAddress
+                  avatarURL
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const EVENT_DETAILS = gql`
   query GetEvent($eventId: String!) {
     event(input: { id: $eventId }) {
