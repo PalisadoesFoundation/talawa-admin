@@ -1,7 +1,10 @@
 import { exec as execCallback } from 'child_process';
 import { promisify } from 'util';
 
-const exec = promisify(execCallback);
+const promisifiedExec = promisify(execCallback);
+
+// Type for the exec function
+type ExecFunction = typeof promisifiedExec;
 
 export interface IExecOptions {
   sudo?: boolean;
@@ -13,6 +16,11 @@ export interface IExecResult {
   stdout: string;
   stderr: string;
 }
+
+// Internal dependency - can be overridden for testing
+export const deps = {
+  exec: promisifiedExec as ExecFunction,
+};
 
 export async function execCommand(
   command: string,
@@ -39,7 +47,7 @@ export async function execCommand(
       console.log(`Running: ${fullCommand}`);
     }
 
-    const { stdout, stderr } = await exec(fullCommand, {
+    const { stdout, stderr } = await deps.exec(fullCommand, {
       cwd,
       maxBuffer: 10 * 1024 * 1024, // 10MB buffer
     });

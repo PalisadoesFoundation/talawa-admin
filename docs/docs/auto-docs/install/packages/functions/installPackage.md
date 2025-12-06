@@ -14,7 +14,7 @@ Install a package based on OS
 
 ### pkg
 
-`"git"` | `"node"` | `"fnm"` | `"typescript"` | `"docker"`
+`"typescript"` | `"docker"`
 
 ### os
 

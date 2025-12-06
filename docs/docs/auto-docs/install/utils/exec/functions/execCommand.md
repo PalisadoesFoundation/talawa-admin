@@ -6,7 +6,7 @@
 
 > **execCommand**(`command`, `args`, `options`): `Promise`\<[`IExecResult`](../interfaces/IExecResult.md)\>
 
-Defined in: [src/install/utils/exec.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L17)
+Defined in: [src/install/utils/exec.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L25)
 
 ## Parameters
 

@@ -4,7 +4,7 @@
 
 # Interface: IExecOptions
 
-Defined in: [src/install/utils/exec.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L6)
+Defined in: [src/install/utils/exec.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L9)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/install/utils/exec.ts:6](https://github.com/PalisadoesFoundatio
 
 > `optional` **cwd**: `string`
 
-Defined in: [src/install/utils/exec.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L8)
+Defined in: [src/install/utils/exec.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L11)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/install/utils/exec.ts:8](https://github.com/PalisadoesFoundatio
 
 > `optional` **silent**: `boolean`
 
-Defined in: [src/install/utils/exec.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L9)
+Defined in: [src/install/utils/exec.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L12)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/install/utils/exec.ts:9](https://github.com/PalisadoesFoundatio
 
 > `optional` **sudo**: `boolean`
 
-Defined in: [src/install/utils/exec.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L7)
+Defined in: [src/install/utils/exec.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L10)

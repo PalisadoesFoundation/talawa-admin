@@ -1,105 +1,105 @@
-import { execCommand, commandExists, checkVersion } from '../utils/exec';
-import { createSpinner, logError, logInfo, logWarning } from '../utils/logger';
 import type { IOSInfo } from '../types';
+import { execCommand } from '../utils/exec';
+import { createSpinner, logError, logInfo, logWarning } from '../utils/logger';
 
-export async function installGit(os: IOSInfo): Promise<void> {
-  const spinner = createSpinner('Installing Git...');
-  spinner.start();
-
-  try {
-    if (os.distro === 'ubuntu' || os.distro === 'debian') {
-      await execCommand('apt', ['update'], { sudo: true, silent: true });
-      await execCommand('apt', ['install', '-y', 'git'], {
-        sudo: true,
-        silent: true,
-      });
-    } else {
-      // Try common package managers
-      try {
-        await execCommand('yum', ['install', '-y', 'git'], {
-          sudo: true,
-          silent: true,
-        });
-      } catch {
-        await execCommand('dnf', ['install', '-y', 'git'], {
-          sudo: true,
-          silent: true,
-        });
-      }
-    }
-    spinner.succeed('Git installed successfully');
-  } catch (error) {
-    spinner.fail('Failed to install Git');
-    logError(`Git installation failed: ${error}`);
-    logInfo('Please install Git manually from https://git-scm.com/install/');
-    throw error;
-  }
-}
-
-export async function installNode(): Promise<void> {
-  // NOTE: Node/fnm installation is now handled by shell installers (install.sh/install.ps1)
-  // This function is kept for backward compatibility but should not be called in normal flow
-  const spinner = createSpinner('Installing Node.js...');
-  spinner.start();
-
-  try {
-    // Install fnm first, then use it to install Node.js
-    await installFnm();
-
-    spinner.succeed('Node.js installation initiated');
-    logWarning(
-      'Please run: fnm install --lts && fnm use --install-if-missing lts-latest',
-    );
-    logWarning(
-      'Then restart your terminal or run: eval "$(fnm env --use-on-cd)"',
-    );
-  } catch (error) {
-    spinner.fail('Failed to install Node.js');
-    logError(`Node.js installation failed: ${error}`);
-    throw error;
-  }
-}
-
-export async function installFnm(): Promise<void> {
-  // NOTE: Node/fnm installation is now handled by shell installers (install.sh/install.ps1)
-  // This function is kept for backward compatibility but should not be called in normal flow
-  // Check if fnm is already installed, because this function is also called from installNode() above.
-  const fnmExists = await commandExists('fnm');
-  if (fnmExists) {
-    logInfo('fnm is already installed');
-    const version = await checkVersion('fnm');
-    if (version) {
-      logInfo(`fnm version: ${version}`);
-    }
-    return; // Skip installation if already installed
-  }
-
-  const spinner = createSpinner('Installing fnm...');
-  spinner.start();
-
-  try {
-    // Try curl installer first (standard method)
-    await execCommand(
-      'bash',
-      [
-        '-c',
-        'curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir "$HOME/.fnm" --skip-shell',
-      ],
-      {
-        silent: true,
-      },
-    );
-    spinner.succeed('fnm installed successfully');
-    logWarning(
-      'Please restart your terminal or run: eval "$(fnm env --use-on-cd)"',
-    );
-  } catch (error) {
-    spinner.fail('Failed to install fnm');
-    logError(`fnm installation failed: ${error}`);
-    logInfo('Please install fnm manually from https://github.com/Schniz/fnm');
-    throw error;
-  }
-}
+// NOTE: Git/Node/fnm installation is now handled by shell installers
+// (scripts/install.sh / scripts/install.ps1). The TypeScript-level helpers
+// below are intentionally commented out to avoid duplicate logic and are kept
+// only for historical/reference purposes.
+//
+// export async function installGit(os: IOSInfo): Promise<void> {
+//   const spinner = createSpinner('Installing Git...');
+//   spinner.start();
+//
+//   try {
+//     if (os.distro === 'ubuntu' || os.distro === 'debian') {
+//       await execCommand('apt', ['update'], { sudo: true, silent: true });
+//       await execCommand('apt', ['install', '-y', 'git'], {
+//         sudo: true,
+//         silent: true,
+//       });
+//     } else {
+//       // Try common package managers
+//       try {
+//         await execCommand('yum', ['install', '-y', 'git'], {
+//           sudo: true,
+//           silent: true,
+//         });
+//       } catch {
+//         await execCommand('dnf', ['install', '-y', 'git'], {
+//           sudo: true,
+//           silent: true,
+//         });
+//       }
+//     }
+//     spinner.succeed('Git installed successfully');
+//   } catch (error) {
+//     spinner.fail('Failed to install Git');
+//     logError(`Git installation failed: ${error}`);
+//     logInfo('Please install Git manually from https://git-scm.com/install/');
+//     throw error;
+//   }
+// }
+//
+// The Node/fnm helpers are also deprecated in favor of the shell installers.
+//
+// export async function installNode(): Promise<void> {
+//   const spinner = createSpinner('Installing Node.js...');
+//   spinner.start();
+//
+//   try {
+//     await installFnm();
+//
+//     spinner.succeed('Node.js installation initiated');
+//     logWarning(
+//       'Please run: fnm install --lts && fnm use --install-if-missing lts-latest',
+//     );
+//     logWarning(
+//       'Then restart your terminal or run: eval "$(fnm env --use-on-cd)"',
+//     );
+//   } catch (error) {
+//     spinner.fail('Failed to install Node.js');
+//     logError(`Node.js installation failed: ${error}`);
+//     throw error;
+//   }
+// }
+//
+// export async function installFnm(): Promise<void> {
+//   const fnmExists = await commandExists('fnm');
+//   if (fnmExists) {
+//     logInfo('fnm is already installed');
+//     const version = await checkVersion('fnm');
+//     if (version) {
+//       logInfo(`fnm version: ${version}`);
+//     }
+//     return;
+//   }
+//
+//   const spinner = createSpinner('Installing fnm...');
+//   spinner.start();
+//
+//   try {
+//     await execCommand(
+//       'bash',
+//       [
+//         '-c',
+//         'curl -fsSL https://fnm.vercel.app/install | bash -s -- --install-dir "$HOME/.fnm" --skip-shell',
+//       ],
+//       {
+//         silent: true,
+//       },
+//     );
+//     spinner.succeed('fnm installed successfully');
+//     logWarning(
+//       'Please restart your terminal or run: eval "$(fnm env --use-on-cd)"',
+//     );
+//   } catch (error) {
+//     spinner.fail('Failed to install fnm');
+//     logError(`fnm installation failed: ${error}`);
+//     logInfo('Please install fnm manually from https://github.com/Schniz/fnm');
+//     throw error;
+//   }
+// }
 
 export async function installTypeScript(): Promise<void> {
   const spinner = createSpinner('Installing TypeScript...');
