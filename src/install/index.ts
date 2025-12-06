@@ -86,7 +86,7 @@ async function promptPackagesToInstall(
   }
 
   const choices = missing.map((pkg) => ({
-    name: `${pkg.name}${pkg.version ? ` (${pkg.version})` : ''}`,
+    name: pkg.name,
     value: pkg.name,
     checked: true,
   }));
