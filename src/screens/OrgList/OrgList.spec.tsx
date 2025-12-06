@@ -135,7 +135,7 @@ const createOrgMock = (organizations: unknown[]) => {
     },
   };
 
-  // Filter out any ORGANIZATION_LIST mocks from MOCKS to avoid conflicts
+  // Filter out any ORGANIZATION_FILTER_LIST mocks from MOCKS to avoid conflicts
   const mocksWithoutOrgList = MOCKS.filter(
     (mock) => mock.request.query !== ORGANIZATION_FILTER_LIST,
   );
