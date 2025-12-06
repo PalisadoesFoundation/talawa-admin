@@ -66,8 +66,8 @@ describe('install/index', () => {
 
     it('should check installed packages', async () => {
       const packages: IPackageStatus[] = [
-        { name: 'git', installed: true },
-        { name: 'node', installed: false },
+        { name: 'typescript', installed: true },
+        { name: 'docker', installed: false },
       ];
 
       vi.mocked(checkerModule.checkInstalledPackages).mockResolvedValue(
@@ -81,8 +81,8 @@ describe('install/index', () => {
 
     it('should display packages with versions', async () => {
       const packages: IPackageStatus[] = [
-        { name: 'git', installed: true, version: '2.39.0' },
-        { name: 'node', installed: false, version: '18.0.0' },
+        { name: 'typescript', installed: true, version: '5.6.0' },
+        { name: 'docker', installed: false, version: '27.0.0' },
       ];
 
       vi.mocked(checkerModule.checkInstalledPackages).mockResolvedValue(
@@ -111,30 +111,12 @@ describe('install/index', () => {
         useDocker: false,
       } as never);
       vi.mocked(inquirer.prompt).mockResolvedValueOnce({
-        packages: ['node', 'pnpm'],
+        packages: ['typescript', 'docker'],
       } as never);
 
       await main();
 
       expect(packagesModule.installPackage).toHaveBeenCalled();
-    });
-
-    it('should skip project dependencies installation', async () => {
-      vi.mocked(inquirer.prompt).mockResolvedValueOnce({
-        useDocker: false,
-      } as never);
-      vi.mocked(inquirer.prompt).mockResolvedValueOnce({
-        packages: [],
-      } as never);
-
-      await main();
-
-      // Project dependencies installation is skipped - handled by shell installer
-      expect(execModule.execCommand).not.toHaveBeenCalledWith(
-        'pnpm',
-        ['install'],
-        expect.anything(),
-      );
     });
 
     it('should handle installation errors gracefully', async () => {

@@ -7,8 +7,6 @@ export async function checkInstalledPackages(
 ): Promise<IPackageStatus[]> {
   // Build packages array in correct order:
   // docker (if useDocker), typescript
-  // Git is required to clone the repo, so we don't check for it here
-  // Node and fnm are now handled by shell installers
   const packages: PackageName[] = [];
 
   if (useDocker) {
@@ -45,14 +43,6 @@ export async function checkInstalledPackages(
 
 export async function checkPackage(pkg: PackageName): Promise<IPackageStatus> {
   switch (pkg) {
-    // case 'git':
-    //   return await checkers.checkGit();
-    // case 'node':
-    //   return await checkers.checkNode();
-    // case 'fnm':
-    //   return await checkers.checkFnm();
-    // case 'pnpm':
-    //   return await checkers.checkPnpm();
     case 'typescript':
       return await checkers.checkTypeScript();
     case 'docker':

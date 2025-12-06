@@ -6,7 +6,7 @@
 
 > **checkPackage**(`pkg`): `Promise`\<[`IPackageStatus`](../../../types/interfaces/IPackageStatus.md)\>
 
-Defined in: [src/install/utils/checker.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/checker.ts#L46)
+Defined in: [src/install/utils/checker.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/checker.ts#L44)
 
 ## Parameters
 
