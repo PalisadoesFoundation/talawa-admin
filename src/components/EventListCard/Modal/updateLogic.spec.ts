@@ -1,4 +1,4 @@
-import { vi, describe, it, expect, beforeEach, afterEach, Mock } from 'vitest';
+import { vi, describe, it, expect, beforeEach, Mock } from 'vitest';
 import { useUpdateEventHandler } from './updateLogic';
 import { useMutation } from '@apollo/client';
 import {
@@ -37,9 +37,7 @@ vi.mock('utils/errorHandler', async () => ({
 const mockUseMutation = useMutation as Mock;
 const mockT = (key: string) => key;
 
-type MockEventListCardProps = InterfaceEvent & {
-  refetchEvents: Mock;
-};
+type MockEventListCardProps = InterfaceEvent;
 
 const mockEventListCardProps: MockEventListCardProps = {
   id: 'event1',
@@ -64,7 +62,6 @@ const mockEventListCardProps: MockEventListCardProps = {
   baseEvent: null,
   recurrenceRule: null,
   recurrenceDescription: null,
-  refetchEvents: vi.fn() as Mock,
 };
 
 const mockFormState = {
@@ -109,9 +106,6 @@ const buildHandlerInput = (overrides: HandlerOverrides = {}): HandlerArgs => ({
 });
 
 describe('useUpdateEventHandler', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
 
   let mockUpdateStandaloneEvent: Mock;
   let mockUpdateSingleRecurringEventInstance: Mock;
@@ -119,7 +113,6 @@ describe('useUpdateEventHandler', () => {
   let mockUpdateEntireRecurringEventSeries: Mock;
 
   beforeEach(() => {
-    vi.clearAllMocks();
 
     mockUpdateStandaloneEvent = vi.fn();
     mockUpdateSingleRecurringEventInstance = vi.fn();
