@@ -10,10 +10,15 @@ import { REACT_APP_USE_RECAPTCHA, RECAPTCHA_SITE_KEY } from 'Constant/constant';
 import styles from 'style/app-fixed.module.css';
 
 /**
- * LoginForm Component
- * Reusable login form for both admin and user portals
- * @param {InterfaceLoginFormProps} props - Component props
- * @returns {JSX.Element} The rendered login form
+ * LoginForm
+ * Reusable login form for both admin and user portals.
+ * @param {InterfaceLoginFormProps} props
+ * @param {'admin' | 'user'} props.role
+ * @param {boolean} props.isLoading
+ * @param {Function} props.onSubmit
+ * @param {string} [props.initialEmail='']
+ * @param {boolean} [props.showRegisterLink=true]
+ * @returns {JSX.Element}
  */
 const LoginForm: React.FC<InterfaceLoginFormProps> = ({
   role,
@@ -97,12 +102,12 @@ const LoginForm: React.FC<InterfaceLoginFormProps> = ({
           </Link>
         </div>
 
-        {REACT_APP_USE_RECAPTCHA === 'yes' && (
+        {REACT_APP_USE_RECAPTCHA === 'yes' && RECAPTCHA_SITE_KEY && (
           <div className="googleRecaptcha">
             <ReCAPTCHA
-              ref={loginRecaptchaRef}
               className="mt-2"
-              sitekey={RECAPTCHA_SITE_KEY || ''}
+              ref={loginRecaptchaRef}
+              sitekey={RECAPTCHA_SITE_KEY}
               onChange={handleCaptcha}
             />
           </div>

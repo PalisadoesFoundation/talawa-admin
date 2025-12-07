@@ -141,7 +141,7 @@ const LoginPage = (): JSX.Element => {
   };
 
   return (
-    <section className={styles.login_background}>
+    <section className={`${styles.login_background} auth-theme`}>
       <Row className={styles.row}>
         <Col sm={0} md={6} lg={7} className={styles.left_portion}>
           <AuthBranding communityData={communityData?.community} />

@@ -11,3 +11,9 @@ export interface InterfacePasswordValidatorProps {
     specialChar: boolean;
   };
 }
+
+export interface InterfaceValidationItemProps {
+  isValid: boolean;
+  text: string;
+  className?: string;
+}

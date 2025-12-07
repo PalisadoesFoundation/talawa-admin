@@ -107,7 +107,7 @@
   --bs-link-color: #83d6a6;
   --bs-link-color-rgb: 131, 214, 166;
   --bs-link-decoration: none;
-  --bs-link-hover-color: #555555;
+  --bs-link-hover-color: #9cdeb8;
   --bs-link-hover-color-rgb: 156, 222, 184;
   --bs-code-color: #d63384;
   --bs-highlight-bg: #fff3cd;
@@ -14237,5 +14237,16 @@ input[type='file']::file-selector-button {
     6. COLORS
 
 */
+
+/*
+    7. AUTH PAGES THEME
+*/
+
+.auth-theme {
+  --bs-link-color: #555555;
+  --bs-link-color-rgb: 85, 85, 85;
+  --bs-link-hover-color: #555555;
+  --bs-link-hover-color-rgb: 85, 85, 85;
+}
 
 /*# sourceMappingURL=app.css.map */

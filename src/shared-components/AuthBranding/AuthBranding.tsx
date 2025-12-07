@@ -9,7 +9,6 @@ import {
   InstagramLogo,
   XLogo,
   YoutubeLogo,
-  RedditLogo,
   SlackLogo,
 } from 'assets/svgs/social-icons';
 import { useTranslation } from 'react-i18next';
@@ -50,16 +49,14 @@ const socialMediaLinks = [
     href: 'https://www.instagram.com/palisadoes/',
     logo: InstagramLogo,
   },
-  {
-    tag: 'redditURL',
-    href: '',
-    logo: RedditLogo,
-  },
 ];
 
 /**
- * AuthBranding Component
- * Displays organization branding and social media links on login/register pages.
+ * AuthBranding
+ * Displays organization branding and social media links on authentication pages.
+ * @param {InterfaceAuthBrandingProps} props
+ * @param {Object} props.communityData
+ * @returns {JSX.Element}
  */
 const AuthBranding: React.FC<InterfaceAuthBrandingProps> = ({
   communityData,

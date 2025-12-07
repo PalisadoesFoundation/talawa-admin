@@ -14,15 +14,21 @@ import {
 } from 'types/RegistrationForm/interface';
 import { REACT_APP_USE_RECAPTCHA, RECAPTCHA_SITE_KEY } from 'Constant/constant';
 import styles from 'style/app-fixed.module.css';
-import { validatePassword } from '../../utils/passwordValidator';
+import {
+  getPasswordValidationRules,
+  validatePassword,
+} from '../../utils/passwordValidator';
 
 /**
- * RegistrationForm Component
- *
- * Reusable registration form for both admin and user portals
- *
- * @param {InterfaceRegistrationFormProps} props - Component props
- * @returns {JSX.Element} The rendered registration form
+ * RegistrationForm
+ * Reusable registration form for both admin and user portals.
+ * @param {InterfaceRegistrationFormProps} props
+ * @param {'admin' | 'user'} props.role
+ * @param {boolean} props.isLoading
+ * @param {Function} props.onSubmit
+ * @param {boolean} [props.showLoginLink=true]
+ * @param {Array} props.organizations
+ * @returns {JSX.Element}
  */
 const RegistrationForm: React.FC<InterfaceRegistrationFormProps> = ({
   role,
@@ -55,11 +61,12 @@ const RegistrationForm: React.FC<InterfaceRegistrationFormProps> = ({
   });
 
   const handlePasswordCheck = (pass: string): void => {
+    const rules = getPasswordValidationRules(pass);
     setShowAlert({
-      lowercaseChar: !/[a-z]/.test(pass),
-      uppercaseChar: !/[A-Z]/.test(pass),
-      numericValue: !/\d/.test(pass),
-      specialChar: !/[!@#$%^&*(),.?":{}|<>]/.test(pass),
+      lowercaseChar: !rules.lowercaseChar,
+      uppercaseChar: !rules.uppercaseChar,
+      numericValue: !rules.numericValue,
+      specialChar: !rules.specialChar,
     });
   };
 
@@ -256,11 +263,12 @@ const RegistrationForm: React.FC<InterfaceRegistrationFormProps> = ({
         required={false}
       />
 
-      {REACT_APP_USE_RECAPTCHA === 'yes' && (
-        <div className="mt-3">
+      {REACT_APP_USE_RECAPTCHA === 'yes' && RECAPTCHA_SITE_KEY && (
+        <div className="googleRecaptcha">
           <ReCAPTCHA
+            className="mt-2"
             ref={signupRecaptchaRef}
-            sitekey={RECAPTCHA_SITE_KEY || ''}
+            sitekey={RECAPTCHA_SITE_KEY}
             onChange={handleCaptcha}
           />
         </div>

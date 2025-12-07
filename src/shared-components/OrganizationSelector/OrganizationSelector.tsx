@@ -4,20 +4,15 @@ import { useTranslation } from 'react-i18next';
 import { InterfaceOrganizationSelectorProps } from 'types/OrganizationSelector/interface';
 
 /**
- * OrganizationSelector Component
- *
- * Autocomplete selector for choosing an organization
- *
- * @param {InterfaceOrganizationSelectorProps} props - Component props
- * @returns {JSX.Element} The rendered organization selector
- *
- * @example
- * <OrganizationSelector
- *   organizations={orgs}
- *   value={selectedOrg}
- *   onChange={setSelectedOrg}
- *   required={true}
- * />
+ * OrganizationSelector
+ * Autocomplete dropdown for selecting an organization from a list.
+ * @param {InterfaceOrganizationSelectorProps}
+ * @param {Array} props.organizations
+ * @param {string} props.value
+ * @param {Function} props.onChange
+ * @param {boolean} [props.disabled=false]
+ * @param {boolean} [props.required=false]
+ * @returns {JSX.Element}
  */
 const OrganizationSelector: React.FC<InterfaceOrganizationSelectorProps> = ({
   organizations,
@@ -35,7 +30,7 @@ const OrganizationSelector: React.FC<InterfaceOrganizationSelectorProps> = ({
       <div className="position-relative">
         <Autocomplete
           disablePortal
-          data-testid="selectOrg"
+          data-testid="organizationSelect"
           value={selectedOrg}
           onChange={(event, newValue) => {
             onChange(newValue?.id ?? '');

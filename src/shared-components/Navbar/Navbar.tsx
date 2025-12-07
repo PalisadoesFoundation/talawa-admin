@@ -62,25 +62,7 @@ import React from 'react';
 import styles from 'style/app-fixed.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
-
-interface InterfacePageHeaderProps {
-  title?: string;
-  search?: {
-    placeholder: string;
-    onSearch: (value: string) => void;
-    inputTestId?: string;
-    buttonTestId?: string;
-  };
-  sorting?: Array<{
-    title: string;
-    options: { label: string; value: string | number }[];
-    selected: string | number;
-    onChange: (value: string | number) => void;
-    testIdPrefix: string;
-  }>;
-  showEventTypeFilter?: boolean;
-  actions?: React.ReactNode;
-}
+import { InterfacePageHeaderProps } from 'types/Navbar/interface';
 
 export default function PageHeader({
   title,

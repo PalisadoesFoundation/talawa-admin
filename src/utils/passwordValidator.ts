@@ -12,3 +12,10 @@ export const validatePassword = (password: string): boolean => {
     hasLowerCase
   );
 };
+
+export const getPasswordValidationRules = (password: string) => ({
+  lowercaseChar: /[a-z]/.test(password),
+  uppercaseChar: /[A-Z]/.test(password),
+  numericValue: /\d/.test(password),
+  specialChar: /[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]/.test(password),
+});

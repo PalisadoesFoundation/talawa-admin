@@ -74,7 +74,7 @@ describe('RegistrationForm Component', () => {
     fireEvent.change(passwordInput, { target: { value: 'Test123!' } });
     fireEvent.change(confirmPasswordInput, { target: { value: 'Test123!' } });
 
-    const orgSelector = screen.getByRole('combobox');
+    const orgSelector = screen.getByTestId('organizationSelect');
     fireEvent.change(orgSelector, {
       target: { value: mockOrganizations[0].id },
     });

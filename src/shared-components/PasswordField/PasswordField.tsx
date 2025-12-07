@@ -4,19 +4,19 @@ import { InterfacePasswordFieldProps } from 'types/PasswordField/interface';
 import styles from 'style/app-fixed.module.css';
 
 /**
- * PasswordField Component
- *
- * Reusable password input field with show/hide toggle
- *
- * @param {InterfacePasswordFieldProps} props - Component props
- * @returns {JSX.Element} The rendered password field
- *
- * @example
- * <PasswordField
- *   label="Password"
- *   value={password}
- *   onChange={setPassword}
- * />
+ * PasswordField
+ * Reusable password input field with visibility toggle (show/hide).
+ * @param {InterfacePasswordFieldProps} props
+ * @param {string} props.label
+ * @param {string} props.value
+ * @param {Function} props.onChange
+ * @param {boolean} [props.disabled=false]
+ * @param {string} [props.placeholder='']
+ * @param {Function} [props.onFocus]
+ * @param {Function} [props.onBlur]
+ * @param {string} [props.testId='passwordField']
+ * @param {string} [props.autoComplete='current-password']
+ * @returns {JSX.Element}
  */
 const PasswordField: React.FC<InterfacePasswordFieldProps> = ({
   label,
