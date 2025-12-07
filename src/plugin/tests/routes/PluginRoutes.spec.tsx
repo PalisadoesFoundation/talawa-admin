@@ -1,12 +1,35 @@
-/* eslint-disable react/no-multi-comp */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import type { ComponentType } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 import PluginRoutes from '../../routes/PluginRoutes';
 import { usePluginRoutes } from '../../hooks';
 
 const lazyImportFunctions: Array<() => Promise<unknown>> = [];
+
+function createStubComponent(testId: string, label: string) {
+  const component = () => <div data-testid={testId}>{label}</div>;
+
+  component.displayName = `Stub(${testId})`;
+  return component;
+}
+
+function createRouteRenderer() {
+  const component = ({
+    path,
+    element,
+  }: {
+    path: string;
+    element: ReactNode;
+  }) => (
+    <div data-testid={`route-${path}`} data-path={path}>
+      {element}
+    </div>
+  );
+
+  component.displayName = 'MockRoute';
+  return component;
+}
 
 // Mock the hooks
 vi.mock('../../hooks', () => ({
@@ -28,8 +51,8 @@ vi.mock('react', async () => {
       children,
       fallback,
     }: {
-      children: React.ReactNode;
-      fallback: React.ReactNode;
+      children: ReactNode;
+      fallback: ReactNode;
     }) => (
       <div data-testid="suspense">
         {fallback}
@@ -39,27 +62,25 @@ vi.mock('react', async () => {
   };
 });
 
-const NamedExportComponent = () => (
-  <div data-testid="named-component">Named Export Component</div>
-);
-
-const DefaultExportComponent = () => (
-  <div data-testid="default-component">Plugin Default Component</div>
-);
-
 vi.mock('/plugins/test-plugin/index.ts', () => ({
-  TestComponent: NamedExportComponent,
+  TestComponent: createStubComponent(
+    'named-component',
+    'Named Export Component',
+  ),
 }));
 
 vi.mock('/plugins/default-plugin/index.ts', () => ({
   NonExistentComponent: undefined,
-  default: DefaultExportComponent,
+  default: createStubComponent('default-component', 'Plugin Default Component'),
 }));
 
 vi.mock('/plugins/missing-component/index.ts', () => ({
   MissingComponent: undefined,
   default: undefined,
-  AnotherComponent: () => <div>Another Component</div>,
+  AnotherComponent: createStubComponent(
+    'another-component',
+    'Another Component',
+  ),
 }));
 
 vi.mock('/plugins/error-plugin/index.ts', () => {
@@ -75,11 +96,7 @@ vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
   return {
     ...actual,
-    Route: ({ path, element }: { path: string; element: React.ReactNode }) => (
-      <div data-testid={`route-${path}`} data-path={path}>
-        {element}
-      </div>
-    ),
+    Route: createRouteRenderer(),
   };
 });
 
@@ -88,6 +105,11 @@ const mockUsePluginRoutes = vi.mocked(usePluginRoutes);
 describe('PluginRoutes', () => {
   beforeEach(() => {
     lazyImportFunctions.length = 0;
+  });
+
+  // Required by vitest-isolation and CI mock cleanup rules
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   describe('Basic Rendering', () => {
@@ -203,8 +225,7 @@ describe('PluginRoutes', () => {
     });
 
     it('should handle null/undefined routes gracefully', () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      mockUsePluginRoutes.mockReturnValue(null as any);
+      mockUsePluginRoutes.mockReturnValue(null as unknown as []);
 
       render(
         <BrowserRouter>
