@@ -309,27 +309,7 @@ const BASE_SUB_TAGS_QUERY = {
       getChildTags: {
         name: 'userTag 1',
         childTags: {
-          edges: [
-            {
-              node: {
-                _id: 'subTag1',
-                name: 'subTag 1',
-                usersAssignedTo: {
-                  totalCount: 5,
-                },
-                childTags: {
-                  totalCount: 5,
-                },
-                ancestorTags: [
-                  {
-                    _id: '1',
-                    name: 'userTag 1',
-                  },
-                ],
-              },
-              cursor: 'subTag1',
-            },
-          ],
+          edges: [createTagNode('subTag1', 'subTag 1', 5, 5, ANCESTOR_TAG_1)],
           pageInfo: {
             startCursor: 'subTag1',
             endCursor: 'subTag1',
@@ -387,27 +367,7 @@ export const MOCKS_FETCH_MORE_UNDEFINED = [
         getChildTags: {
           name: 'userTag 1',
           childTags: {
-            edges: [
-              {
-                node: {
-                  _id: 'subTag1',
-                  name: 'subTag 1',
-                  usersAssignedTo: {
-                    totalCount: 5,
-                  },
-                  childTags: {
-                    totalCount: 5,
-                  },
-                  ancestorTags: [
-                    {
-                      _id: '1',
-                      name: 'userTag 1',
-                    },
-                  ],
-                },
-                cursor: 'subTag1',
-              },
-            ],
+            edges: [createTagNode('subTag1', 'subTag 1', 5, 5, ANCESTOR_TAG_1)],
             pageInfo: {
               startCursor: 'subTag1',
               endCursor: 'subTag1',
