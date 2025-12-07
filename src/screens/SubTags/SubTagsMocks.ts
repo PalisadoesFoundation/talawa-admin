@@ -281,6 +281,7 @@ export const MOCKS_EMPTY_SUB_TAGS = [
               hasNextPage: false,
               hasPreviousPage: false,
             },
+            totalCount: 0,
           },
           ancestorTags: [],
         },
@@ -345,7 +346,7 @@ const BASE_SUB_TAGS_QUERY = {
 /**
  * Helper function to create CREATE_USER_TAG mutation mocks.
  * @param tagName - The name of the tag to create
- * @param response - The mock response (data, error, or null)
+ * @param response - The mock response (data and/or error)
  * @returns Mock for CREATE_USER_TAG mutation
  */
 const createTagMutationMock = (

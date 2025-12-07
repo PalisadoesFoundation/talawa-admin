@@ -94,6 +94,10 @@ Defined in: [src/screens/SubTags/SubTagsMocks.ts:261](https://github.com/Palisad
 
 > **startCursor**: `any` = `null`
 
+#### result.data.getChildTags.childTags.totalCount
+
+> **totalCount**: `number` = `0`
+
 #### result.data.getChildTags.name
 
 > **name**: `string` = `'userTag 1'`
