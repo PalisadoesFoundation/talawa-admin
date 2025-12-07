@@ -1,0 +1,687 @@
+import { vi, describe, it, expect, beforeEach, afterEach, Mock } from 'vitest';
+import { useUpdateEventHandler } from './updateLogic';
+import { useMutation } from '@apollo/client';
+import {
+  UPDATE_EVENT_MUTATION,
+  UPDATE_SINGLE_RECURRING_EVENT_INSTANCE_MUTATION,
+  UPDATE_THIS_AND_FOLLOWING_EVENTS_MUTATION,
+  UPDATE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION,
+} from 'GraphQl/Mutations/EventMutations';
+import { toast } from 'react-toastify';
+import { errorHandler } from 'utils/errorHandler';
+import type { InterfaceEvent } from 'types/Event/interface';
+import { UserRole } from 'types/Event/interface';
+import { Frequency, InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
+
+// Mock dependencies
+vi.mock('@apollo/client', async () => {
+  const original = await vi.importActual('@apollo/client');
+  return {
+    ...original,
+    useMutation: vi.fn(),
+  };
+});
+
+vi.mock('react-toastify', async () => ({
+  toast: {
+    info: vi.fn(),
+    error: vi.fn(),
+    success: vi.fn(),
+  },
+}));
+
+vi.mock('utils/errorHandler', async () => ({
+  errorHandler: vi.fn(),
+}));
+
+const mockUseMutation = useMutation as Mock;
+const mockT = (key: string) => key;
+
+type MockEventListCardProps = InterfaceEvent & {
+  refetchEvents: Mock;
+};
+
+const mockEventListCardProps: MockEventListCardProps = {
+  id: 'event1',
+  name: 'Test Event',
+  description: 'Test Description',
+  location: 'Test Location',
+  startAt: '2024-01-01T10:00:00.000Z',
+  endAt: '2024-01-01T12:00:00.000Z',
+  startTime: '10:00:00',
+  endTime: '12:00:00',
+  allDay: false,
+  isPublic: true,
+  isRegisterable: true,
+  attendees: [],
+  creator: {
+    id: 'user1',
+    name: 'User 1',
+    emailAddress: 'user1@example.com',
+  },
+  userRole: UserRole.ADMINISTRATOR,
+  isRecurringEventTemplate: false,
+  baseEvent: null,
+  recurrenceRule: null,
+  recurrenceDescription: null,
+  refetchEvents: vi.fn() as Mock,
+};
+
+const mockFormState = {
+  name: mockEventListCardProps.name,
+  eventdescrip: mockEventListCardProps.description,
+  location: mockEventListCardProps.location,
+  startTime: mockEventListCardProps.startTime as string,
+  endTime: mockEventListCardProps.endTime as string,
+};
+
+const buildRecurringEventProps = (
+  overrides: Partial<MockEventListCardProps> = {},
+): MockEventListCardProps => ({
+  ...mockEventListCardProps,
+  isRecurringEventTemplate: false,
+  baseEvent: { id: 'baseEvent1' },
+  ...overrides,
+});
+
+type HandlerArgs = Parameters<
+  ReturnType<typeof useUpdateEventHandler>['updateEventHandler']
+>[0];
+
+type HandlerOverrides = Partial<HandlerArgs>;
+
+const buildHandlerInput = (overrides: HandlerOverrides = {}): HandlerArgs => ({
+  eventListCardProps: mockEventListCardProps,
+  formState: mockFormState,
+  alldaychecked: mockEventListCardProps.allDay,
+  publicchecked: mockEventListCardProps.isPublic,
+  registrablechecked: mockEventListCardProps.isRegisterable,
+  eventStartDate: new Date(mockEventListCardProps.startAt),
+  eventEndDate: new Date(mockEventListCardProps.endAt),
+  recurrence: null as InterfaceRecurrenceRule | null,
+  updateOption: 'single',
+  hasRecurrenceChanged: false,
+  t: mockT,
+  hideViewModal: vi.fn(),
+  setEventUpdateModalIsOpen: vi.fn(),
+  refetchEvents: vi.fn(),
+  ...overrides,
+});
+
+describe('useUpdateEventHandler', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  let mockUpdateStandaloneEvent: Mock;
+  let mockUpdateSingleRecurringEventInstance: Mock;
+  let mockUpdateThisAndFollowingEvents: Mock;
+  let mockUpdateEntireRecurringEventSeries: Mock;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+
+    mockUpdateStandaloneEvent = vi.fn();
+    mockUpdateSingleRecurringEventInstance = vi.fn();
+    mockUpdateThisAndFollowingEvents = vi.fn();
+    mockUpdateEntireRecurringEventSeries = vi.fn();
+
+    mockUseMutation.mockImplementation((mutation) => {
+      if (mutation === UPDATE_EVENT_MUTATION) {
+        return [mockUpdateStandaloneEvent, { loading: false }];
+      }
+      if (mutation === UPDATE_SINGLE_RECURRING_EVENT_INSTANCE_MUTATION) {
+        return [mockUpdateSingleRecurringEventInstance, { loading: false }];
+      }
+      if (mutation === UPDATE_THIS_AND_FOLLOWING_EVENTS_MUTATION) {
+        return [mockUpdateThisAndFollowingEvents, { loading: false }];
+      }
+      if (mutation === UPDATE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION) {
+        return [mockUpdateEntireRecurringEventSeries, { loading: false }];
+      }
+      return [vi.fn(), { loading: false }];
+    });
+  });
+
+  it('initializes updateEventHandler function correctly', () => {
+    const { updateEventHandler } = useUpdateEventHandler();
+    expect(updateEventHandler).toBeInstanceOf(Function);
+  });
+
+  it('calls info toast when no changes are made', async () => {
+    const { updateEventHandler } = useUpdateEventHandler();
+    await updateEventHandler(buildHandlerInput());
+
+    expect(toast.info).toHaveBeenCalledWith('eventListCard.noChangesToUpdate');
+    expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
+    expect(mockUpdateSingleRecurringEventInstance).not.toHaveBeenCalled();
+    expect(mockUpdateThisAndFollowingEvents).not.toHaveBeenCalled();
+    expect(mockUpdateEntireRecurringEventSeries).not.toHaveBeenCalled();
+  });
+
+  describe('standalone event updates', () => {
+    it('handles standalone event update with name change', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+          },
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
+      const calledInputs =
+        mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
+      expect(calledInputs.name).toContain('Changed Name');
+      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+    });
+
+    it('handles standalone event update with description change', async () => {
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          formState: {
+            ...mockFormState,
+            eventdescrip: 'Changed Event',
+          },
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toBeCalledTimes(1);
+      const calledInputs =
+        mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
+      expect(calledInputs.description).toContain('Changed Event');
+    });
+
+    it('handles standalone event update with location change', async () => {
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          formState: {
+            ...mockFormState,
+            location: 'Changed location',
+          },
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toBeCalledTimes(1);
+      const calledInputs =
+        mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
+      expect(calledInputs.location).toContain('Changed location');
+    });
+
+    it('handles standalone event update with isPublic change', async () => {
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          publicchecked: false,
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toBeCalledTimes(1);
+      const calledInputs =
+        mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
+      expect(calledInputs.isPublic).toBe(false);
+    });
+
+    it('handles standalone event update with isRegisterable change', async () => {
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          registrablechecked: false,
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toBeCalledTimes(1);
+      const calledInputs =
+        mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
+      expect(calledInputs.isRegisterable).toBe(false);
+    });
+
+    it('shows success toast, closes modals and refetches on successful update', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      const hideViewModal = vi.fn();
+      const setEventUpdateModalIsOpen = vi.fn();
+      const refetchEvents = vi.fn();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+          },
+          hideViewModal,
+          setEventUpdateModalIsOpen,
+          refetchEvents,
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
+      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+      expect(setEventUpdateModalIsOpen).toHaveBeenCalledWith(false);
+      expect(hideViewModal).toHaveBeenCalled();
+      expect(refetchEvents).toHaveBeenCalled();
+    });
+
+    it('calls errorHandler when mutation throws', async () => {
+      const error = new Error('network');
+      mockUpdateStandaloneEvent.mockRejectedValueOnce(error);
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+          },
+        }),
+      );
+
+      expect(errorHandler).toHaveBeenCalledWith(mockT, error);
+    });
+  });
+
+  describe('recurring event updates', () => {
+    it('calls updateSingleRecurringEventInstance mutation', async () => {
+      mockUpdateSingleRecurringEventInstance.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: buildRecurringEventProps(),
+          updateOption: 'single',
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+          },
+        }),
+      );
+
+      expect(mockUpdateSingleRecurringEventInstance).toBeCalledTimes(1);
+      const calledInputs =
+        mockUpdateSingleRecurringEventInstance.mock.calls[0][0].variables.input;
+      expect(calledInputs.name).toContain('Changed Name');
+    });
+
+    it('calls updateThisAndFollowingEvents mutation', async () => {
+      mockUpdateThisAndFollowingEvents.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: buildRecurringEventProps(),
+          updateOption: 'following',
+          formState: {
+            ...mockFormState,
+            name: 'Changed name',
+          },
+          recurrence: { frequency: Frequency.DAILY, interval: 1 },
+          hasRecurrenceChanged: undefined,
+        }),
+      );
+
+      expect(mockUpdateThisAndFollowingEvents).toHaveBeenCalledTimes(1);
+      const calledInputs =
+        mockUpdateThisAndFollowingEvents.mock.calls[0][0].variables.input;
+      expect(calledInputs.name).toContain('Changed name');
+      expect(calledInputs.recurrence).toBeUndefined();
+    });
+
+    it('includes recurrence in input when hasRecurrenceChanged is true', async () => {
+      mockUpdateThisAndFollowingEvents.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      const recurrenceRule: InterfaceRecurrenceRule = {
+        frequency: Frequency.DAILY,
+        interval: 1,
+      };
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: buildRecurringEventProps(),
+          updateOption: 'following',
+          formState: {
+            ...mockFormState,
+            name: 'Changed name',
+          },
+          recurrence: recurrenceRule,
+          hasRecurrenceChanged: true,
+        }),
+      );
+
+      expect(mockUpdateThisAndFollowingEvents).toHaveBeenCalledTimes(1);
+      const calledInputs =
+        mockUpdateThisAndFollowingEvents.mock.calls[0][0].variables.input;
+      expect(calledInputs.name).toContain('Changed name');
+      expect(calledInputs.recurrence).toEqual(recurrenceRule);
+    });
+
+    it('calls updateEntireRecurringEventSeries when name is changed', async () => {
+      mockUpdateEntireRecurringEventSeries.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: buildRecurringEventProps(),
+          updateOption: 'entireSeries',
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+          },
+        }),
+      );
+
+      expect(mockUpdateEntireRecurringEventSeries).toBeCalledTimes(1);
+      const calledInputs =
+        mockUpdateEntireRecurringEventSeries.mock.calls[0][0].variables.input;
+      expect(calledInputs.name).toContain('Changed Name');
+    });
+
+    it('calls updateEntireRecurringEventSeries when description is changed', async () => {
+      mockUpdateEntireRecurringEventSeries.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: buildRecurringEventProps(),
+          updateOption: 'entireSeries',
+          formState: {
+            ...mockFormState,
+            eventdescrip: 'Changed event description',
+          },
+        }),
+      );
+
+      expect(mockUpdateEntireRecurringEventSeries).toBeCalledTimes(1);
+      const calledInputs =
+        mockUpdateEntireRecurringEventSeries.mock.calls[0][0].variables.input;
+      expect(calledInputs.description).toContain('Changed event description');
+    });
+  });
+
+  describe('date validation and handling', () => {
+    it('computes all-day startAt and endAt correctly', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: {
+            ...mockEventListCardProps,
+            allDay: false,
+            startAt: '2024-04-20T10:00:00.000Z',
+            endAt: '2024-04-21T12:00:00.000Z',
+          },
+          alldaychecked: true,
+          eventStartDate: new Date('2024-04-22T00:00:00.000Z'),
+          eventEndDate: new Date('2024-04-23T00:00:00.000Z'),
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
+      const calledInputs =
+        mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
+      expect(calledInputs.startAt).toContain('2024-04-22T00:00:00');
+      expect(calledInputs.endAt).toContain('2024-04-23T23:59');
+      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+    });
+
+    it('shows error toast when computed dates are invalid', async () => {
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventStartDate: new Date('invalid'),
+          eventEndDate: new Date('invalid'),
+        }),
+      );
+
+      expect(toast.error).toHaveBeenCalledWith('invalidDate');
+      expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
+    });
+
+    it('shows error toast when all-day eventStartDate is invalid', async () => {
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          alldaychecked: true,
+          eventStartDate: new Date('invalid'),
+          eventEndDate: new Date('2024-04-23T00:00:00.000Z'),
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+          },
+        }),
+      );
+
+      expect(toast.error).toHaveBeenCalledWith('invalidDate');
+      expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
+    });
+
+    it('shows error toast when all-day eventEndDate is invalid', async () => {
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          alldaychecked: true,
+          eventStartDate: new Date('2024-04-22T00:00:00.000Z'),
+          eventEndDate: new Date('invalid'),
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+          },
+        }),
+      );
+
+      expect(toast.error).toHaveBeenCalledWith('invalidDate');
+      expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
+    });
+
+    it('handles originalStartAt calculation when event is all-day but startAt is invalid', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: {
+            ...mockEventListCardProps,
+            allDay: true,
+            startAt: 'invalid-date',
+            endAt: '2024-01-01T12:00:00.000Z',
+          },
+          alldaychecked: true,
+          eventStartDate: new Date('2024-04-22T00:00:00.000Z'),
+          eventEndDate: new Date('2024-04-23T00:00:00.000Z'),
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+          },
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
+      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+    });
+
+    it('handles originalEndAt calculation when event is all-day but endAt is invalid', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: {
+            ...mockEventListCardProps,
+            allDay: true,
+            startAt: '2024-01-01T10:00:00.000Z',
+            endAt: 'invalid-date',
+          },
+          alldaychecked: true,
+          eventStartDate: new Date('2024-04-22T00:00:00.000Z'),
+          eventEndDate: new Date('2024-04-23T00:00:00.000Z'),
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+          },
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
+      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+    });
+
+    it('handles originalStartAt calculation when event is not all-day but constructed date is invalid', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: {
+            ...mockEventListCardProps,
+            allDay: false,
+            startAt: '2024-01-01T10:00:00.000Z',
+            endAt: '2024-01-01T12:00:00.000Z',
+            startTime: 'invalid-time',
+            endTime: '12:00:00',
+          },
+          alldaychecked: false,
+          eventStartDate: new Date('2024-04-22T11:00:00.000Z'),
+          eventEndDate: new Date('2024-04-22T13:00:00.000Z'),
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+            startTime: '11:00:00',
+            endTime: '13:00:00',
+          },
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
+      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+    });
+
+    it('handles originalEndAt calculation when event is not all-day but constructed date is invalid', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: {
+            ...mockEventListCardProps,
+            allDay: false,
+            startAt: '2024-01-01T10:00:00.000Z',
+            endAt: '2024-01-01T12:00:00.000Z',
+            startTime: '10:00:00',
+            endTime: 'invalid-time',
+          },
+          alldaychecked: false,
+          eventStartDate: new Date('2024-04-22T10:00:00.000Z'),
+          eventEndDate: new Date('2024-04-22T14:00:00.000Z'),
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+            startTime: '10:00:00',
+            endTime: '14:00:00',
+          },
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
+      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+    });
+  });
+
+  describe('edge cases', () => {
+    it('does not show success toast or close modals when data is falsy', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: null,
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      const hideViewModal = vi.fn();
+      const setEventUpdateModalIsOpen = vi.fn();
+      const refetchEvents = vi.fn();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+          },
+          hideViewModal,
+          setEventUpdateModalIsOpen,
+          refetchEvents,
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
+      expect(toast.success).not.toHaveBeenCalled();
+      expect(setEventUpdateModalIsOpen).not.toHaveBeenCalled();
+      expect(hideViewModal).not.toHaveBeenCalled();
+      expect(refetchEvents).not.toHaveBeenCalled();
+    });
+
+    it('does not call refetchEvents when it is not provided', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      const hideViewModal = vi.fn();
+      const setEventUpdateModalIsOpen = vi.fn();
+      const refetchEvents = vi.fn();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+          },
+          hideViewModal,
+          setEventUpdateModalIsOpen,
+          refetchEvents: undefined,
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
+      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+      expect(setEventUpdateModalIsOpen).toHaveBeenCalledWith(false);
+      expect(hideViewModal).toHaveBeenCalled();
+      expect(refetchEvents).not.toHaveBeenCalled();
+    });
+  });
+});
