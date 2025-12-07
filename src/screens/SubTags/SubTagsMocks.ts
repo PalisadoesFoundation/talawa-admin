@@ -500,3 +500,177 @@ export const MOCKS_ERROR_SUB_TAGS = [
     error: new Error('Mock Graphql Error'),
   },
 ];
+
+export const MOCKS_EMPTY_SUB_TAGS = [
+  {
+    request: {
+      query: USER_TAG_SUB_TAGS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        getChildTags: {
+          name: 'userTag 1',
+          childTags: {
+            edges: [],
+            pageInfo: {
+              startCursor: null,
+              endCursor: null,
+              hasNextPage: false,
+              hasPreviousPage: false,
+            },
+          },
+          ancestorTags: [],
+        },
+      },
+    },
+  },
+];
+
+/**
+ * Base query mock for sub-tags list.
+ * Used as foundation for various test scenarios.
+ */
+const BASE_SUB_TAGS_QUERY = {
+  request: {
+    query: USER_TAG_SUB_TAGS,
+    variables: {
+      id: '1',
+      first: TAGS_QUERY_DATA_CHUNK_SIZE,
+      where: { name: { starts_with: '' } },
+      sortedBy: { id: 'DESCENDING' },
+    },
+  },
+  result: {
+    data: {
+      getChildTags: {
+        name: 'userTag 1',
+        childTags: {
+          edges: [
+            {
+              node: {
+                _id: 'subTag1',
+                name: 'subTag 1',
+                usersAssignedTo: {
+                  totalCount: 5,
+                },
+                childTags: {
+                  totalCount: 5,
+                },
+                ancestorTags: [
+                  {
+                    _id: '1',
+                    name: 'userTag 1',
+                  },
+                ],
+              },
+              cursor: 'subTag1',
+            },
+          ],
+          pageInfo: {
+            startCursor: 'subTag1',
+            endCursor: 'subTag1',
+            hasNextPage: false,
+            hasPreviousPage: false,
+          },
+        },
+        ancestorTags: [],
+      },
+    },
+  },
+};
+
+/**
+ * Helper function to create CREATE_USER_TAG mutation mocks.
+ * @param tagName - The name of the tag to create
+ * @param response - The mock response (data, error, or null)
+ * @returns Mock for CREATE_USER_TAG mutation
+ */
+const createTagMutationMock = (
+  tagName: string,
+  response: { data?: { createUserTag: { _id: string } }; error?: Error },
+) => ({
+  request: {
+    query: CREATE_USER_TAG,
+    variables: {
+      name: tagName,
+      organizationId: '123',
+      parentTagId: '1',
+    },
+  },
+  ...response,
+});
+
+export const MOCKS_ERROR_CREATE_SUB_TAG = [
+  BASE_SUB_TAGS_QUERY,
+  createTagMutationMock('errorTag', {
+    error: new Error('Failed to create tag'),
+  }),
+];
+
+export const MOCKS_FETCH_MORE_UNDEFINED = [
+  {
+    request: {
+      query: USER_TAG_SUB_TAGS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        getChildTags: {
+          name: 'userTag 1',
+          childTags: {
+            edges: [
+              {
+                node: {
+                  _id: 'subTag1',
+                  name: 'subTag 1',
+                  usersAssignedTo: {
+                    totalCount: 5,
+                  },
+                  childTags: {
+                    totalCount: 5,
+                  },
+                  ancestorTags: [
+                    {
+                      _id: '1',
+                      name: 'userTag 1',
+                    },
+                  ],
+                },
+                cursor: 'subTag1',
+              },
+            ],
+            pageInfo: {
+              startCursor: 'subTag1',
+              endCursor: 'subTag1',
+              hasNextPage: true,
+              hasPreviousPage: false,
+            },
+          },
+          ancestorTags: [],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_TAG_SUB_TAGS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: 'subTag1',
+      },
+    },
+    result: { data: undefined },
+  },
+];
