@@ -19,6 +19,7 @@ import Pledges from './Pledges';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, expect, describe, it } from 'vitest';
+import styles from 'style/app-fixed.module.css';
 
 type MockStorage = Storage & { resetStore: () => void };
 
@@ -1313,7 +1314,7 @@ describe('Testing User Pledge Screen', () => {
 
     const popup = await screen.findByTestId('extra-users-popup');
     expect(popup).toBeInTheDocument();
-    expect(popup.className).toContain('popupExtra');
+    expect(popup).toHaveClass(styles.popupExtra);
 
     await userEvent.keyboard('{Escape}');
     await waitFor(() => {

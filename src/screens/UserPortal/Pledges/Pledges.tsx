@@ -535,7 +535,6 @@ const Pledges = (): JSX.Element => {
               ) : (
                 <div className={styles.avatarContainer}>
                   <Avatar
-                    key={user.id + '1'}
                     containerStyle={styles.imageContainer}
                     avatarStyle={styles.TableImage}
                     name={user.name}
@@ -544,7 +543,7 @@ const Pledges = (): JSX.Element => {
                   />
                 </div>
               )}
-              <span key={user.id + '2'}>{user.name}</span>
+              <span>{user.name}</span>
             </div>
           ))}
         </div>
