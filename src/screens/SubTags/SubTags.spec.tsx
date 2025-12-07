@@ -419,6 +419,10 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByText('subTag 1')).toBeInTheDocument();
     });
 
+    // Get initial tag count before scroll
+    const initialTagCount = screen.getAllByTestId('manageTagBtn').length;
+    expect(initialTagCount).toBe(1);
+
     // Trigger infinite scroll
     const scrollableDiv = screen.getByTestId('subTagsScrollableDiv');
     fireEvent.scroll(scrollableDiv, {
@@ -427,7 +431,13 @@ describe('Organisation Tags Page', () => {
 
     await wait();
 
-    // Should still show the original tag (fetchMore returned undefined)
+    // Verify component remained stable after fetchMore returned undefined
     expect(screen.getByText('subTag 1')).toBeInTheDocument();
+
+    // Verify no additional tags were incorrectly added
+    expect(screen.getAllByTestId('manageTagBtn')).toHaveLength(initialTagCount);
+
+    // Verify no error toast was shown
+    expect(toast.error).not.toHaveBeenCalled();
   });
 });
