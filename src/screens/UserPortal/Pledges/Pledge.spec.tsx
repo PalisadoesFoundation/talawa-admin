@@ -1216,6 +1216,111 @@ describe('Testing User Pledge Screen', () => {
     });
   });
 
+  it('should show popup with many extra users (adds popupExtra class)', async () => {
+    const manyExtrasMock = new StaticMockLink([
+      {
+        request: {
+          query: USER_PLEDGES,
+          variables: {
+            userId: { id: 'userId' },
+            where: {},
+            orderBy: 'endDate_DESC',
+          },
+        },
+        result: {
+          data: {
+            getPledgesByUserId: [
+              {
+                id: 'manyExtrasId',
+                amount: 100,
+                note: 'note',
+                updatedAt: '2024-07-28T10:00:00.000Z',
+                campaign: {
+                  id: 'campaignId',
+                  name: 'Campaign',
+                  startAt: '2024-07-01T00:00:00.000Z',
+                  endAt: '2024-09-30T23:59:59.000Z',
+                  currencyCode: 'USD',
+                  goalAmount: 5000,
+                  __typename: 'FundraisingCampaign',
+                },
+                pledger: {
+                  id: 'userId',
+                  name: 'Main User',
+                  avatarURL: null,
+                  __typename: 'User',
+                },
+                users: [
+                  {
+                    id: 'u1',
+                    name: 'Main User',
+                    avatarURL: null,
+                    __typename: 'User',
+                  },
+                  {
+                    id: 'u2',
+                    name: 'Extra 1',
+                    avatarURL: null,
+                    __typename: 'User',
+                  },
+                  {
+                    id: 'u3',
+                    name: 'Extra 2',
+                    avatarURL: null,
+                    __typename: 'User',
+                  },
+                  {
+                    id: 'u4',
+                    name: 'Extra 3',
+                    avatarURL: null,
+                    __typename: 'User',
+                  },
+                  {
+                    id: 'u5',
+                    name: 'Extra 4',
+                    avatarURL: null,
+                    __typename: 'User',
+                  },
+                  {
+                    id: 'u6',
+                    name: 'Extra 5',
+                    avatarURL: null,
+                    __typename: 'User',
+                  },
+                  {
+                    id: 'u7',
+                    name: 'Extra 6',
+                    avatarURL: null,
+                    __typename: 'User',
+                  },
+                ],
+                updater: { id: 'userId', __typename: 'User' },
+                __typename: 'FundraisingCampaignPledge',
+              },
+            ],
+          },
+        },
+      },
+    ]);
+
+    renderMyPledges(manyExtrasMock);
+
+    const moreContainer = await screen.findByTestId(
+      'moreContainer-manyExtrasId',
+    );
+    expect(moreContainer).toHaveTextContent('+5 more...');
+    await userEvent.click(moreContainer);
+
+    const popup = await screen.findByTestId('extra-users-popup');
+    expect(popup).toBeInTheDocument();
+    expect(popup.className).toContain('popupExtra');
+
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => {
+      expect(screen.queryByTestId('extra-users-popup')).not.toBeInTheDocument();
+    });
+  });
+
   it('should handle missing campaign data', async () => {
     renderMyPledges(link8);
     await waitFor(() => {
@@ -1607,6 +1712,284 @@ describe('Testing User Pledge Screen', () => {
     // Verify the pledge row renders with missing campaign handled appropriately
     await waitFor(() => {
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
+    });
+  });
+
+  it('should render extra users with avatarURL in popup', async () => {
+    const mockWithExtraAvatarUsers = new StaticMockLink([
+      {
+        request: {
+          query: USER_PLEDGES,
+          variables: {
+            userId: { id: 'userId' },
+            where: {},
+            orderBy: 'endDate_DESC',
+          },
+        },
+        result: {
+          data: {
+            getPledgesByUserId: [
+              {
+                id: 'extraAvatarPledgeId',
+                amount: 500,
+                note: 'Test pledge',
+                updatedAt: '2024-07-28T10:00:00.000Z',
+                campaign: {
+                  id: 'campaignId1',
+                  name: 'Test Campaign',
+                  startAt: '2024-07-01T00:00:00.000Z',
+                  endAt: '2024-08-30T23:59:59.000Z',
+                  currencyCode: 'USD',
+                  goalAmount: 10000,
+                  __typename: 'FundraisingCampaign',
+                },
+                pledger: {
+                  id: 'mainUserId',
+                  name: 'Main User',
+                  avatarURL: null,
+                  __typename: 'User',
+                },
+                users: [
+                  {
+                    id: 'mainUserId',
+                    name: 'Main User',
+                    avatarURL: null,
+                    __typename: 'User',
+                  },
+                  {
+                    id: 'secondUserId',
+                    name: 'Second User',
+                    avatarURL: null,
+                    __typename: 'User',
+                  },
+                  {
+                    id: 'extraUserWithAvatarId',
+                    name: 'Extra With Avatar',
+                    avatarURL: 'https://example.com/extra-avatar.jpg',
+                    __typename: 'User',
+                  },
+                ],
+                updater: {
+                  id: 'mainUserId',
+                  __typename: 'User',
+                },
+                __typename: 'FundraisingCampaignPledge',
+              },
+            ],
+          },
+        },
+      },
+    ]);
+
+    renderMyPledges(mockWithExtraAvatarUsers);
+
+    await waitFor(() => {
+      expect(screen.getByText('Main User')).toBeInTheDocument();
+    });
+
+    // Click on more container to open popup
+    const moreContainer = screen.getByTestId(
+      'moreContainer-extraAvatarPledgeId',
+    );
+    expect(moreContainer).toHaveTextContent('+1 more...');
+    await userEvent.click(moreContainer);
+
+    // Check popup is open and extra user with avatar is rendered
+    const popup = await screen.findByTestId('extra-users-popup');
+    expect(popup).toBeInTheDocument();
+
+    // Check that the extra user with avatarURL has an img element
+    const extraUserImage = screen.getByTestId('extraImage1');
+    expect(extraUserImage).toHaveAttribute(
+      'src',
+      'https://example.com/extra-avatar.jpg',
+    );
+    expect(extraUserImage).toHaveAttribute('alt', 'Extra With Avatar');
+
+    await userEvent.keyboard('{Escape}');
+  });
+
+  it('should render empty users array with null pledger gracefully', async () => {
+    const mockWithNullPledger = new StaticMockLink([
+      {
+        request: {
+          query: USER_PLEDGES,
+          variables: {
+            userId: { id: 'userId' },
+            where: {},
+            orderBy: 'endDate_DESC',
+          },
+        },
+        result: {
+          data: {
+            getPledgesByUserId: [
+              {
+                id: 'nullPledgerPledgeId',
+                amount: 300,
+                note: 'Null pledger test',
+                updatedAt: '2024-07-28T10:00:00.000Z',
+                campaign: {
+                  id: 'campaignId1',
+                  name: 'Test Campaign',
+                  startAt: '2024-07-01T00:00:00.000Z',
+                  endAt: '2024-08-30T23:59:59.000Z',
+                  currencyCode: 'USD',
+                  goalAmount: 10000,
+                  __typename: 'FundraisingCampaign',
+                },
+                pledger: null,
+                users: null,
+                updater: {
+                  id: 'userId',
+                  __typename: 'User',
+                },
+                __typename: 'FundraisingCampaignPledge',
+              },
+            ],
+          },
+        },
+      },
+    ]);
+
+    renderMyPledges(mockWithNullPledger);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+    });
+
+    // The component should render without crashing even with null pledger and users
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  it('should render pledger with avatarURL in main row', async () => {
+    const mockWithPledgerAvatar = new StaticMockLink([
+      {
+        request: {
+          query: USER_PLEDGES,
+          variables: {
+            userId: { id: 'userId' },
+            where: {},
+            orderBy: 'endDate_DESC',
+          },
+        },
+        result: {
+          data: {
+            getPledgesByUserId: [
+              {
+                id: 'avatarPledgerId',
+                amount: 400,
+                note: 'Avatar pledger test',
+                updatedAt: '2024-07-28T10:00:00.000Z',
+                campaign: {
+                  id: 'campaignId1',
+                  name: 'Test Campaign',
+                  startAt: '2024-07-01T00:00:00.000Z',
+                  endAt: '2024-08-30T23:59:59.000Z',
+                  currencyCode: 'USD',
+                  goalAmount: 10000,
+                  __typename: 'FundraisingCampaign',
+                },
+                pledger: {
+                  id: 'avatarPledgerUserId',
+                  name: 'Avatar Pledger',
+                  avatarURL: 'https://example.com/pledger-avatar.jpg',
+                  __typename: 'User',
+                },
+                users: [
+                  {
+                    id: 'avatarPledgerUserId',
+                    name: 'Avatar Pledger',
+                    avatarURL: 'https://example.com/pledger-avatar.jpg',
+                    __typename: 'User',
+                  },
+                ],
+                updater: {
+                  id: 'avatarPledgerUserId',
+                  __typename: 'User',
+                },
+                __typename: 'FundraisingCampaignPledge',
+              },
+            ],
+          },
+        },
+      },
+    ]);
+
+    renderMyPledges(mockWithPledgerAvatar);
+
+    await waitFor(() => {
+      expect(screen.getByText('Avatar Pledger')).toBeInTheDocument();
+    });
+
+    // Check that the pledger image is rendered with the avatarURL
+    const pledgerImage = screen.getByTestId(
+      'image-pledger-avatarPledgerUserId',
+    );
+    expect(pledgerImage).toHaveAttribute(
+      'src',
+      'https://example.com/pledger-avatar.jpg',
+    );
+  });
+
+  it('should fallback to pledger when users array is undefined', async () => {
+    const mockWithUndefinedUsersArray = new StaticMockLink([
+      {
+        request: {
+          query: USER_PLEDGES,
+          variables: {
+            userId: { id: 'userId' },
+            where: {},
+            orderBy: 'endDate_DESC',
+          },
+        },
+        result: {
+          data: {
+            getPledgesByUserId: [
+              {
+                id: 'undefinedUsersArrayPledgeId',
+                amount: 250,
+                note: 'Undefined users array test',
+                updatedAt: '2024-07-28T10:00:00.000Z',
+                campaign: {
+                  id: 'campaignId1',
+                  name: 'Test Campaign',
+                  startAt: '2024-07-01T00:00:00.000Z',
+                  endAt: '2024-08-30T23:59:59.000Z',
+                  currencyCode: 'USD',
+                  goalAmount: 10000,
+                  __typename: 'FundraisingCampaign',
+                },
+                pledger: {
+                  id: 'fallbackPledgerId',
+                  name: 'Fallback Pledger User',
+                  avatarURL: null,
+                  __typename: 'User',
+                },
+                // users is undefined - should fallback to pledger
+                updater: {
+                  id: 'fallbackPledgerId',
+                  __typename: 'User',
+                },
+                __typename: 'FundraisingCampaignPledge',
+              },
+            ],
+          },
+        },
+      },
+    ]);
+
+    renderMyPledges(mockWithUndefinedUsersArray);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+    });
+
+    // The component should render without crashing
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+
+    // Check that fallback pledger is rendered when users is undefined
+    await waitFor(() => {
+      expect(screen.getByText('Fallback Pledger User')).toBeInTheDocument();
     });
   });
 });

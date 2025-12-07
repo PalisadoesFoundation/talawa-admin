@@ -105,7 +105,7 @@ const updatedMocks = {
                   __typename: 'User',
                   id: '1',
                   name: 'John Doe',
-                  image: 'img-url',
+                  avatarURL: 'img-url',
                 },
               },
             },
@@ -119,7 +119,7 @@ const updatedMocks = {
                   __typename: 'User',
                   id: '2',
                   name: 'Jane Doe',
-                  image: null,
+                  avatarURL: null,
                 },
               },
             },
@@ -133,7 +133,7 @@ const updatedMocks = {
                   __typename: 'User',
                   id: '3',
                   name: 'John Doe3',
-                  image: 'img-url3',
+                  avatarURL: 'img-url3',
                 },
               },
             },
@@ -147,7 +147,7 @@ const updatedMocks = {
                   __typename: 'User',
                   id: '4',
                   name: 'John Doe4',
-                  image: null,
+                  avatarURL: null,
                 },
               },
             },
@@ -241,8 +241,22 @@ const mockWithExtraUsers = {
                   __typename: 'User',
                   id: '1',
                   name: 'Main User 1',
-                  image: 'img-url1',
+                  avatarURL: 'img-url1',
                 },
+                users: [
+                  {
+                    __typename: 'User',
+                    id: '1',
+                    name: 'Main User 1',
+                    avatarURL: 'img-url1',
+                  },
+                  {
+                    __typename: 'User',
+                    id: '2',
+                    name: 'Extra User 1',
+                    avatarURL: null,
+                  },
+                ],
               },
             },
           ],
@@ -298,7 +312,6 @@ const renderFundCampaignPledge = (link: ApolloLink): RenderResult => {
 
 describe('Testing Campaign Pledge Screen', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
     mockParamsState.orgId = 'orgId';
     mockParamsState.fundCampaignId = 'fundCampaignId';
     routerMocks.navigate.mockReset();
@@ -307,6 +320,8 @@ describe('Testing Campaign Pledge Screen', () => {
 
   afterEach(() => {
     vi.useRealTimers();
+
+    vi.clearAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
@@ -520,6 +535,16 @@ describe('Testing Campaign Pledge Screen', () => {
     await waitFor(() => {
       expect(screen.getByText('Main User 1')).toBeInTheDocument();
     });
+
+    // Popup should render without popupExtra for small lists
+    const moreContainer = await screen.findByTestId('moreContainer-1');
+    await userEvent.click(moreContainer);
+    const popup = await screen.findByTestId('extra-users-popup');
+    expect(popup.className).not.toContain('popupExtra');
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => {
+      expect(screen.queryByTestId('extra-users-popup')).not.toBeInTheDocument();
+    });
   });
 
   it('should handle popup styling when there are many extra users', async () => {
@@ -560,50 +585,50 @@ describe('Testing Campaign Pledge Screen', () => {
                       __typename: 'User',
                       id: '1',
                       name: 'Main User 1',
-                      image: null,
+                      avatarURL: null,
                     },
                     users: [
                       {
                         __typename: 'User',
                         id: '1',
                         name: 'Main User 1',
-                        image: null,
+                        avatarURL: null,
                       },
                       {
                         __typename: 'User',
                         id: '2',
                         name: 'Extra User 1',
-                        image: null,
+                        avatarURL: null,
                       },
                       {
                         __typename: 'User',
                         id: '3',
                         name: 'Extra User 2',
-                        image: null,
+                        avatarURL: null,
                       },
                       {
                         __typename: 'User',
                         id: '4',
                         name: 'Extra User 3',
-                        image: null,
+                        avatarURL: null,
                       },
                       {
                         __typename: 'User',
                         id: '5',
                         name: 'Extra User 4',
-                        image: null,
+                        avatarURL: null,
                       },
                       {
                         __typename: 'User',
                         id: '6',
                         name: 'Extra User 5',
-                        image: null,
+                        avatarURL: null,
                       },
                       {
                         __typename: 'User',
                         id: '7',
                         name: 'Extra User 6',
-                        image: null,
+                        avatarURL: null,
                       },
                     ],
                   },
@@ -639,6 +664,198 @@ describe('Testing Campaign Pledge Screen', () => {
     for (let i = 1; i <= 6; i++) {
       expect(screen.getByText(`Extra User ${i}`)).toBeInTheDocument();
     }
+
+    // Close the popup via Escape to cover Popover onClose path
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => {
+      expect(screen.queryByTestId('extra-users-popup')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should render pledger without extra users (no moreContainer)', async () => {
+    const noExtraUsersMock = {
+      request: {
+        query: FUND_CAMPAIGN_PLEDGE,
+        variables: {
+          input: { id: 'fundCampaignId' },
+        },
+      },
+      result: {
+        data: {
+          fundCampaign: {
+            __typename: 'FundCampaign',
+            id: 'single',
+            name: 'Solo Campaign',
+            startAt: '2023-01-01T00:00:00Z',
+            endAt: '2024-12-31T23:59:59Z',
+            currencyCode: 'USD',
+            goalAmount: 500,
+            pledges: {
+              __typename: 'PledgeConnection',
+              edges: [
+                {
+                  __typename: 'PledgeEdge',
+                  node: {
+                    __typename: 'Pledge',
+                    id: 'singlePledge',
+                    amount: 50,
+                    createdAt: '2024-01-02T00:00:00Z',
+                    pledger: {
+                      __typename: 'User',
+                      id: 'solo',
+                      name: 'Solo User',
+                      avatarURL: null,
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    };
+
+    const noExtraLink = new StaticMockLink([noExtraUsersMock]);
+    renderFundCampaignPledge(noExtraLink);
+
+    await waitFor(() => {
+      expect(screen.getByText('Solo User')).toBeInTheDocument();
+    });
+    expect(
+      screen.queryByTestId('moreContainer-singlePledge'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('should use fallback values when dates/currency are missing', async () => {
+    const missingDatesMock = {
+      request: {
+        query: FUND_CAMPAIGN_PLEDGE,
+        variables: {
+          input: { id: 'fundCampaignId' },
+        },
+      },
+      result: {
+        data: {
+          fundCampaign: {
+            __typename: 'FundCampaign',
+            id: 'missingDates',
+            name: 'No Dates Campaign',
+            startAt: null,
+            endAt: null,
+            currencyCode: null,
+            goalAmount: 0,
+            pledges: {
+              __typename: 'PledgeConnection',
+              edges: [
+                {
+                  __typename: 'PledgeEdge',
+                  node: {
+                    __typename: 'Pledge',
+                    id: 'md1',
+                    amount: 75,
+                    createdAt: null,
+                    pledger: {
+                      __typename: 'User',
+                      id: 'md-user',
+                      name: 'Missing Dates User',
+                      avatarURL: null,
+                    },
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    };
+
+    const missingDatesLink = new StaticMockLink([missingDatesMock]);
+    renderFundCampaignPledge(missingDatesLink);
+
+    await waitFor(() => {
+      expect(screen.getByText('Missing Dates User')).toBeInTheDocument();
+      // Amount should still render with default currency fallback $
+      expect(screen.getByTestId('amountCell')).toHaveTextContent('$75');
+    });
+  });
+
+  it('should handle null fundCampaign gracefully', async () => {
+    const nullCampaignMock = {
+      request: {
+        query: FUND_CAMPAIGN_PLEDGE,
+        variables: {
+          input: { id: 'fundCampaignId' },
+        },
+      },
+      result: {
+        data: {
+          fundCampaign: null,
+        },
+      },
+    };
+
+    const nullCampaignLink = new StaticMockLink([nullCampaignMock]);
+    renderFundCampaignPledge(nullCampaignLink);
+
+    await waitFor(() => {
+      // Both conditions belong here
+      expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
+      expect(screen.getByText(translations.noPledges)).toBeInTheDocument();
+    });
+  });
+
+  it('should render zero-amount pledge with no users and fallback currency', async () => {
+    const zeroAmountNoUsersMock = {
+      request: {
+        query: FUND_CAMPAIGN_PLEDGE,
+        variables: {
+          input: { id: 'fundCampaignId' },
+        },
+      },
+      result: {
+        data: {
+          fundCampaign: {
+            __typename: 'FundCampaign',
+            id: 'zero',
+            name: 'Zero Campaign',
+            startAt: '2023-01-01T00:00:00Z',
+            endAt: '2024-12-31T23:59:59Z',
+            currencyCode: null,
+            goalAmount: 0,
+            pledges: {
+              __typename: 'PledgeConnection',
+              edges: [
+                {
+                  __typename: 'PledgeEdge',
+                  node: {
+                    __typename: 'Pledge',
+                    id: 'zeroPledge',
+                    amount: null,
+                    createdAt: null,
+                    pledger: null,
+                    users: [],
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    };
+
+    const zeroLink = new StaticMockLink([zeroAmountNoUsersMock]);
+    renderFundCampaignPledge(zeroLink);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
+    });
+
+    // Amount falls back to 0 with default currency symbol
+    expect(screen.getByTestId('amountCell')).toHaveTextContent('$0');
+    // No extra users link since users array is empty
+    expect(
+      screen.queryByTestId('moreContainer-zeroPledge'),
+    ).not.toBeInTheDocument();
   });
 
   it('should render Progress Bar with Raised amount (CONSTANT) & Pledged Amount', async () => {
@@ -841,5 +1058,214 @@ describe('Testing Campaign Pledge Screen', () => {
         // Note: endDate sorting tests are already covered in previous tests
       });
     }
+  });
+
+  it('should render main user with avatar image when avatarURL is provided', async () => {
+    const mockWithAvatarUser = {
+      request: {
+        query: FUND_CAMPAIGN_PLEDGE,
+        variables: {
+          input: { id: 'fundCampaignId' },
+        },
+      },
+      result: {
+        data: {
+          fundCampaign: {
+            __typename: 'FundCampaign',
+            id: '1',
+            name: 'Test Campaign',
+            startAt: '2023-01-01T00:00:00Z',
+            endAt: '2024-12-31T23:59:59Z',
+            currencyCode: 'USD',
+            goalAmount: 1000,
+            pledges: {
+              __typename: 'PledgeConnection',
+              edges: [
+                {
+                  __typename: 'PledgeEdge',
+                  node: {
+                    __typename: 'Pledge',
+                    id: 'avatarPledge',
+                    amount: 100,
+                    createdAt: '2024-01-01T00:00:00Z',
+                    pledger: {
+                      __typename: 'User',
+                      id: 'avatarUser',
+                      name: 'Avatar User',
+                      avatarURL: 'https://example.com/avatar.jpg',
+                    },
+                    users: [
+                      {
+                        __typename: 'User',
+                        id: 'avatarUser',
+                        name: 'Avatar User',
+                        avatarURL: 'https://example.com/avatar.jpg',
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    };
+
+    const avatarLink = new StaticMockLink([mockWithAvatarUser]);
+    renderFundCampaignPledge(avatarLink);
+
+    await waitFor(() => {
+      expect(screen.getByText('Avatar User')).toBeInTheDocument();
+    });
+
+    const avatarImg = screen.getByRole('img', { name: 'Avatar User' });
+
+    expect(avatarImg).toHaveAttribute('src', 'https://example.com/avatar.jpg');
+    expect(avatarImg).toHaveAttribute('alt', 'Avatar User');
+  });
+
+  it('should render extra users with avatarURL in popup', async () => {
+    const mockWithExtraAvatarUsers = {
+      request: {
+        query: FUND_CAMPAIGN_PLEDGE,
+        variables: {
+          input: { id: 'fundCampaignId' },
+        },
+      },
+      result: {
+        data: {
+          fundCampaign: {
+            __typename: 'FundCampaign',
+            id: '1',
+            name: 'Test Campaign',
+            startAt: '2023-01-01T00:00:00Z',
+            endAt: '2024-12-31T23:59:59Z',
+            currencyCode: 'USD',
+            goalAmount: 1000,
+            pledges: {
+              __typename: 'PledgeConnection',
+              edges: [
+                {
+                  __typename: 'PledgeEdge',
+                  node: {
+                    __typename: 'Pledge',
+                    id: 'extraAvatarPledge',
+                    amount: 100,
+                    createdAt: '2024-01-01T00:00:00Z',
+                    pledger: {
+                      __typename: 'User',
+                      id: 'mainUser',
+                      name: 'Main User',
+                      avatarURL: null,
+                    },
+                    users: [
+                      {
+                        __typename: 'User',
+                        id: 'mainUser',
+                        name: 'Main User',
+                        avatarURL: null,
+                      },
+                      {
+                        __typename: 'User',
+                        id: 'extraUserWithAvatar',
+                        name: 'Extra With Avatar',
+                        avatarURL: 'https://example.com/extra-avatar.jpg',
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    };
+
+    const extraAvatarLink = new StaticMockLink([mockWithExtraAvatarUsers]);
+    renderFundCampaignPledge(extraAvatarLink);
+
+    await waitFor(() => {
+      expect(screen.getByText('Main User')).toBeInTheDocument();
+    });
+
+    // Click on more container to open popup
+    const moreContainer = screen.getByTestId('moreContainer-extraAvatarPledge');
+    expect(moreContainer).toHaveTextContent('+1 more...');
+    await userEvent.click(moreContainer);
+
+    // Check popup is open and extra user with avatar is rendered
+    const popup = await screen.findByTestId('extra-users-popup');
+    expect(popup).toBeInTheDocument();
+
+    // Check that the extra user with avatarURL has an img element
+    const extraUserContainer = screen.getByTestId('extraUser-0');
+    expect(extraUserContainer).toBeInTheDocument();
+    const img = extraUserContainer.querySelector('img');
+    expect(img).toHaveAttribute('src', 'https://example.com/extra-avatar.jpg');
+    expect(img).toHaveAttribute('alt', 'Extra With Avatar');
+
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => {
+      expect(screen.queryByTestId('extra-users-popup')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should fallback to pledger when users array is not present', async () => {
+    const mockWithoutUsersArray = {
+      request: {
+        query: FUND_CAMPAIGN_PLEDGE,
+        variables: {
+          input: { id: 'fundCampaignId' },
+        },
+      },
+      result: {
+        data: {
+          fundCampaign: {
+            __typename: 'FundCampaign',
+            id: '1',
+            name: 'Test Campaign',
+            startAt: '2023-01-01T00:00:00Z',
+            endAt: '2024-12-31T23:59:59Z',
+            currencyCode: 'USD',
+            goalAmount: 1000,
+            pledges: {
+              __typename: 'PledgeConnection',
+              edges: [
+                {
+                  __typename: 'PledgeEdge',
+                  node: {
+                    __typename: 'Pledge',
+                    id: 'noUsersArrayPledge',
+                    amount: 150,
+                    createdAt: '2024-01-01T00:00:00Z',
+                    pledger: {
+                      __typename: 'User',
+                      id: 'fallbackPledger',
+                      name: 'Fallback Pledger',
+                      avatarURL: null,
+                    },
+                    // No users array - should fallback to pledger
+                  },
+                },
+              ],
+            },
+          },
+        },
+      },
+    };
+
+    const noUsersArrayLink = new StaticMockLink([mockWithoutUsersArray]);
+    renderFundCampaignPledge(noUsersArrayLink);
+
+    await waitFor(() => {
+      expect(screen.getByText('Fallback Pledger')).toBeInTheDocument();
+    });
+
+    // Verify the pledger is rendered as the main user
+    const mainUserContainer = screen.getByTestId(
+      'mainUser-noUsersArrayPledge-0',
+    );
+    expect(mainUserContainer).toBeInTheDocument();
+    expect(mainUserContainer).toHaveTextContent('Fallback Pledger');
   });
 });

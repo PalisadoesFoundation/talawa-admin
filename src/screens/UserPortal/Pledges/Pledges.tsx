@@ -45,7 +45,6 @@ import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
 } from 'utils/interfaces';
-import { Popover } from '@base-ui-components/react/popover';
 import {
   type ApolloError,
   type ApolloQueryResult,
@@ -58,7 +57,7 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Stack } from '@mui/material';
+import { Popover, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import dayjs from 'dayjs';
 import { currencySymbols } from 'utils/currency';
@@ -113,7 +112,8 @@ const Pledges = (): JSX.Element => {
     [key in ModalState]: boolean;
   }>({ [ModalState.UPDATE]: false, [ModalState.DELETE]: false });
 
-  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const open = Boolean(anchorEl);
   const id = open ? 'simple-popup' : undefined;
 
   const {
@@ -165,9 +165,12 @@ const Pledges = (): JSX.Element => {
     [openModal],
   );
 
-  const handleClick = (users: InterfaceUserInfoPG[]): void => {
+  const handleClick = (
+    event: React.MouseEvent<HTMLDivElement>,
+    users: InterfaceUserInfoPG[],
+  ): void => {
     setExtraUsers(users);
-    setOpen(true);
+    setAnchorEl(event.currentTarget);
   };
 
   const isNoPledgesFoundError =
@@ -253,7 +256,7 @@ const Pledges = (): JSX.Element => {
                 className={styles.moreContainer}
                 aria-describedby={id}
                 data-testid={`moreContainer-${params.row.id}`}
-                onClick={() => handleClick(users.slice(2))}
+                onClick={(event) => handleClick(event, users.slice(2))}
               >
                 +{users.length - 2} more...
               </div>
@@ -505,49 +508,47 @@ const Pledges = (): JSX.Element => {
         refetchPledge={refetchPledge}
       />
 
-      <Popover.Root open={open} onOpenChange={setOpen}>
-        <Popover.Trigger>
-          <div id={id} />
-        </Popover.Trigger>
-
-        <Popover.Portal>
-          <Popover.Positioner
-            className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
-            data-testid="extra-users-popup"
-          >
-            <Popover.Popup>
-              {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
-                <div
-                  className={styles.pledgerContainer}
-                  key={index}
-                  data-testid={`extra${index + 1}`}
-                >
-                  {user.avatarURL ? (
-                    <img
-                      src={user.avatarURL}
-                      alt="pledger"
-                      data-testid={`extraImage${index + 1}`}
-                      className={styles.TableImage}
-                    />
-                  ) : (
-                    <div className={styles.avatarContainer}>
-                      <Avatar
-                        key={user.id + '1'}
-                        containerStyle={styles.imageContainer}
-                        avatarStyle={styles.TableImage}
-                        name={user.name}
-                        alt={user.name}
-                        dataTestId={`extraAvatar${index + 1}`}
-                      />
-                    </div>
-                  )}
-                  <span key={user.id + '2'}>{user.name}</span>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={() => setAnchorEl(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <div
+          className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
+          data-testid="extra-users-popup"
+        >
+          {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
+            <div
+              className={styles.pledgerContainer}
+              key={user.id ?? index}
+              data-testid={`extra${index + 1}`}
+            >
+              {user.avatarURL ? (
+                <img
+                  src={user.avatarURL}
+                  alt={user.name}
+                  data-testid={`extraImage${index + 1}`}
+                  className={styles.TableImage}
+                />
+              ) : (
+                <div className={styles.avatarContainer}>
+                  <Avatar
+                    key={user.id + '1'}
+                    containerStyle={styles.imageContainer}
+                    avatarStyle={styles.TableImage}
+                    name={user.name}
+                    alt={user.name}
+                    dataTestId={`extraAvatar${index + 1}`}
+                  />
                 </div>
-              ))}
-            </Popover.Popup>
-          </Popover.Positioner>
-        </Popover.Portal>
-      </Popover.Root>
+              )}
+              <span key={user.id + '2'}>{user.name}</span>
+            </div>
+          ))}
+        </div>
+      </Popover>
     </div>
   );
 };
