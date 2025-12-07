@@ -107,7 +107,8 @@ describe('PluginRoutes', () => {
     lazyImportFunctions.length = 0;
   });
 
-  // Required by vitest-isolation and CI mock cleanup rules
+  // Restore console spy used in the 'surfaces error fallback when import throws' test.
+  // This relies on vi.restoreAllMocks() to clean up spies only, not a full mock reset.
   afterEach(() => {
     vi.restoreAllMocks();
   });
