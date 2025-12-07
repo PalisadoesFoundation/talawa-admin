@@ -232,7 +232,7 @@ const Pledges = (): JSX.Element => {
                   {user.avatarURL ? (
                     <img
                       src={user.avatarURL}
-                      alt={user.avatarURL}
+                      alt={user.name}
                       data-testid={`image-pledger-${user.id}`}
                       className={styles.TableImage}
                     />
