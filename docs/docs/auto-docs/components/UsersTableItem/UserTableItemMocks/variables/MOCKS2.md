@@ -4,32 +4,6 @@
 
 # Variable: MOCKS2
 
-> `const` **MOCKS2**: `object`[]
+> `const` **MOCKS2**: (\{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `organizationId?`: `undefined`; `orgid`: `string`; `userid`: `string`; `userId?`: `undefined`; \}; \}; \} \| \{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `organizationId`: `string`; `orgid?`: `undefined`; `userid?`: `undefined`; `userId`: `string`; \}; \}; \})[]
 
-Defined in: [src/components/UsersTableItem/UserTableItemMocks.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UsersTableItem/UserTableItemMocks.ts#L42)
-
-## Type Declaration
-
-### error
-
-> **error**: `Error`
-
-### request
-
-> **request**: `object`
-
-#### request.query
-
-> **query**: `DocumentNode` = `REMOVE_MEMBER_MUTATION`
-
-#### request.variables
-
-> **variables**: `object`
-
-#### request.variables.orgid
-
-> **orgid**: `string` = `'abc'`
-
-#### request.variables.userid
-
-> **userid**: `string` = `'123'`
+Defined in: [src/components/UsersTableItem/UserTableItemMocks.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UsersTableItem/UserTableItemMocks.ts#L57)

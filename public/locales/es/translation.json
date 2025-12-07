@@ -221,6 +221,8 @@
     "AlreadyJoined": "Ya eres miembro de esta organización.",
     "errorOccured": "Se produjo un error. Por favor, inténtalo de nuevo más tarde.",
     "removeUserFrom": "Eliminar Usuario de {{org}}",
+    "unblockUserFrom": "¿Desbloquear al usuario de {{org}}?",
+    "unblockConfirmation": "¿Estás seguro de que deseas desbloquear a {{name}} de {{org}}?",
     "removeConfirmation": "¿Está seguro de que desea eliminar a '{{name}}' de la organización '{{org}}'?",
     "noOrgError": "Error sin organización"
   },

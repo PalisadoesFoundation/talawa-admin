@@ -574,13 +574,10 @@ const CREATOR_NULL_MOCKS = (() => {
   return [baseGet, MOCKS[1]];
 })();
 
-const link = new StaticMockLink(MOCKS, false);
-const errorLink = new StaticMockLink(ERROR_MOCKS, false);
-const rateLimitLink = new StaticMockLink(RATE_LIMIT_MOCKS, false);
-const createEventErrorLink = new StaticMockLink(
-  CREATE_EVENT_ERROR_MOCKS,
-  false,
-);
+const link = new StaticMockLink(MOCKS, true);
+const errorLink = new StaticMockLink(ERROR_MOCKS, true);
+const rateLimitLink = new StaticMockLink(RATE_LIMIT_MOCKS, true);
+const createEventErrorLink = new StaticMockLink(CREATE_EVENT_ERROR_MOCKS, true);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -631,7 +628,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should render the Events screen properly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -655,7 +652,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should open and close the create event modal', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -691,7 +688,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should create an all-day event successfully', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -787,10 +784,10 @@ describe('Testing Events Screen [User Portal]', () => {
       },
     };
 
-    const testLink = new StaticMockLink([...MOCKS, nonAllDayMock], false);
+    const testLink = new StaticMockLink([...MOCKS, nonAllDayMock], true);
 
     render(
-      <MockedProvider addTypename={false} link={testLink}>
+      <MockedProvider link={testLink}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -859,7 +856,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should handle create event error', async () => {
     render(
-      <MockedProvider addTypename={false} link={createEventErrorLink}>
+      <MockedProvider link={createEventErrorLink}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -911,7 +908,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should toggle all-day checkbox and enable/disable time pickers', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -954,7 +951,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should toggle public, registerable, recurring, and createChat checkboxes', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -996,7 +993,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should handle date picker changes', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1041,7 +1038,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should handle time picker changes when all-day is disabled', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1092,7 +1089,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should handle null date values gracefully', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1139,7 +1136,7 @@ describe('Testing Events Screen [User Portal]', () => {
       .mockImplementation(() => {});
 
     render(
-      <MockedProvider addTypename={false} link={errorLink}>
+      <MockedProvider link={errorLink}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1168,7 +1165,7 @@ describe('Testing Events Screen [User Portal]', () => {
       .mockImplementation(() => {});
 
     render(
-      <MockedProvider addTypename={false} link={rateLimitLink}>
+      <MockedProvider link={rateLimitLink}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1203,7 +1200,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should handle input changes for title, description, and location', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1246,7 +1243,7 @@ describe('Testing Events Screen [User Portal]', () => {
     localStorage.setItem('Talawa-admin_role', JSON.stringify('administrator'));
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1274,7 +1271,7 @@ describe('Testing Events Screen [User Portal]', () => {
     localStorage.setItem('Talawa-admin_role', JSON.stringify('user'));
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1300,7 +1297,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should change view type', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1334,7 +1331,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should not change viewType when handleChangeView is called with null', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1369,7 +1366,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should call onMonthChange callback from EventCalendar', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1395,11 +1392,11 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle create event returning null (no data) gracefully', async () => {
-    const testLink = new StaticMockLink(CREATE_EVENT_NULL_MOCKS, false);
+    const testLink = new StaticMockLink(CREATE_EVENT_NULL_MOCKS, true);
     mockToast.success.mockClear();
     mockToast.error.mockClear();
     render(
-      <MockedProvider addTypename={false} link={testLink}>
+      <MockedProvider link={testLink}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -1450,9 +1447,9 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should map missing creator to default (fallback) in eventData mapping', async () => {
-    const testLink = new StaticMockLink(CREATOR_NULL_MOCKS, false);
+    const testLink = new StaticMockLink(CREATOR_NULL_MOCKS, true);
     render(
-      <MockedProvider addTypename={false} link={testLink}>
+      <MockedProvider link={testLink}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>

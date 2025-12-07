@@ -123,7 +123,7 @@ export default [
       'react/no-this-in-sfc': 'error',
       'react/no-unstable-nested-components': ['error', { allowAsProps: true }],
       'prettier/prettier': 'error',
-      'vitest/no-disabled-tests': 'warn',
+      'vitest/no-disabled-tests': 'error',
       'vitest/no-focused-tests': 'error',
       'vitest/no-identical-title': 'error',
       '@typescript-eslint/no-unused-expressions': 'error',

@@ -50,9 +50,11 @@ import {
   CREATE_ORGANIZATION_MUTATION_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
 } from 'GraphQl/Mutations/mutations';
-import { ORGANIZATION_LIST, CURRENT_USER } from 'GraphQl/Queries/Queries';
+import {
+  CURRENT_USER,
+  ORGANIZATION_FILTER_LIST,
+} from 'GraphQl/Queries/Queries';
 
-import OrgListCard from 'components/OrgListCard/OrgListCard';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
@@ -71,6 +73,7 @@ import { Form, InputGroup, Modal } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import SearchOutlined from '@mui/icons-material/SearchOutlined';
+import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 
 const { getItem } = useLocalStorage();
 
@@ -176,7 +179,7 @@ function orgList(): JSX.Element {
     data: allOrganizationsData,
     loading: loadingAll,
     refetch: refetchOrgs,
-  } = useQuery(ORGANIZATION_LIST, {
+  } = useQuery(ORGANIZATION_FILTER_LIST, {
     variables: { filter: filterName },
     fetchPolicy: 'network-only',
     errorPolicy: 'all',
@@ -335,64 +338,69 @@ function orgList(): JSX.Element {
   };
 
   return (
-    <>
+    <div style={{ paddingLeft: '40px', paddingRight: '30px' }}>
       {/* Buttons Container */}
       <div className={styles.btnsContainerSearchBar}>
-        <div className={styles.inputOrgList}>
-          <InputGroup className={styles.maxWidth}>
-            <Form.Control
-              placeholder={t('searchOrganizations')}
-              id="searchUserOrgs"
-              type="text"
-              className={styles.inputField}
-              value={typedValue}
-              onChange={handleChangeFilter}
-              onKeyUp={handleSearchByEnter}
-              data-testid="searchInput"
-            />
-          </InputGroup>
-        </div>
-
-        <div className={styles.btnsBlock}>
-          <InputGroup.Text
-            className={styles.searchButton}
-            style={{ cursor: 'pointer' }}
-            onClick={handleSearchByBtnClick}
-            data-testid="searchBtn"
-            title={t('search')}
-          >
-            <SearchOutlined className={styles.colorWhite} />
-          </InputGroup.Text>
-
-          <NotificationIcon />
-
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <div className={styles.btnsBlockSearchBar}>
-              <SortingButton
-                title={t('sortOrganizations')}
-                sortingOptions={[
-                  { label: t('Latest'), value: 'Latest' },
-                  { label: t('Earliest'), value: 'Earliest' },
-                ]}
-                selectedOption={sortingState.selectedOption}
-                onSortChange={handleSortChange}
-                dataTestIdPrefix="sortOrgs"
-                dropdownTestId="sort"
+        <div className={styles.searchWrapper}>
+          <div className={styles.inputOrgList}>
+            <InputGroup className={styles.maxWidth}>
+              <Form.Control
+                placeholder={t('searchOrganizations')}
+                id="searchUserOrgs"
+                type="text"
+                className={styles.inputField}
+                value={typedValue}
+                onChange={handleChangeFilter}
+                onKeyUp={handleSearchByEnter}
+                data-testid="searchInput"
+                aria-label={t('searchOrganizations')}
               />
-            </div>
 
-            {role === 'administrator' && (
-              <div className={styles.btnsBlock}>
-                <Button
-                  className={`${styles.dropdown} ${styles.createorgdropdown}`}
-                  onClick={toggleModal}
-                  data-testid="createOrganizationBtn"
-                >
-                  <i className="fa fa-plus me-2" />
-                  {t('createOrganization')}
-                </Button>
+              <InputGroup.Text
+                className={styles.searchButton}
+                role="button"
+                style={{ cursor: 'pointer' }}
+                onClick={handleSearchByBtnClick}
+                data-testid="searchBtn"
+                title={t('search')}
+                aria-label={t('search')}
+              >
+                <SearchOutlined className={styles.colorWhite} />
+              </InputGroup.Text>
+            </InputGroup>
+          </div>
+
+          <div className={styles.btnsBlock}>
+            <NotificationIcon />
+
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <div className={styles.btnsBlockSearchBar}>
+                <SortingButton
+                  title={t('sortOrganizations')}
+                  sortingOptions={[
+                    { label: t('Latest'), value: 'Latest' },
+                    { label: t('Earliest'), value: 'Earliest' },
+                  ]}
+                  selectedOption={sortingState.selectedOption}
+                  onSortChange={handleSortChange}
+                  dataTestIdPrefix="sortOrgs"
+                  dropdownTestId="sort"
+                />
               </div>
-            )}
+
+              {role === 'administrator' && (
+                <div className={styles.btnsBlock}>
+                  <Button
+                    className={`${styles.dropdown} ${styles.createorgdropdown}`}
+                    onClick={toggleModal}
+                    data-testid="createOrganizationBtn"
+                  >
+                    <i className="fa fa-plus me-2" />
+                    {t('createOrganization')}
+                  </Button>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -448,7 +456,7 @@ function orgList(): JSX.Element {
             )?.map((item: InterfaceOrgInfoTypePG) => {
               return (
                 <div key={item.id} className={styles.itemCardOrgList}>
-                  <OrgListCard data={item} />
+                  <OrganizationCard data={{ ...item, role: 'admin' }} />
                 </div>
               );
             })}
@@ -533,7 +541,7 @@ function orgList(): JSX.Element {
           </section>
         </Modal.Body>
       </Modal>
-    </>
+    </div>
   );
 }
 export default orgList;

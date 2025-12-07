@@ -59,7 +59,10 @@ const userSidebar = ({
   const userPermissions = React.useMemo(() => [], []);
   const isAdmin = React.useMemo(() => false, []);
   const isOrg = React.useMemo(() => false, []);
-  const { setItem } = useLocalStorage();
+  const { setItem, getItem } = useLocalStorage();
+  const role = getItem<string>('role');
+  const userRole = role != 'regular' ? 'Admin' : 'User';
+  const portal = userRole == 'Admin' ? 'admin' : 'user';
 
   // Get plugin drawer items for user global (no orgId required)
   const pluginDrawerItems = usePluginDrawerItems(
@@ -219,7 +222,7 @@ const userSidebar = ({
               margin: '10px',
             }}
           >
-            <ProfileCard portal="user" />
+            <ProfileCard portal={portal} />
           </div>
         )}
 
@@ -270,7 +273,7 @@ const userSidebar = ({
         </div>
         <div className={styles.userSidebarOrgFooter}>
           <div style={{ display: hideDrawer ? 'none' : 'flex' }}>
-            <ProfileCard portal="user" />
+            <ProfileCard portal={portal} />
           </div>
           <SignOut hideDrawer={hideDrawer} />
         </div>

@@ -203,6 +203,8 @@
     "joinNow": "Adhérer maintenant",
     "visit": "Visite",
     "withdraw": "Largeur de tirage",
+    "unblockUserFrom": "Débloquer l'utilisateur de {{org}} ?",
+    "unblockConfirmation": "Êtes-vous sûr de vouloir débloquer {{name}} de {{org}} ?",
     "removeUserFrom": "Supprimer l'Utilisateur de {{org}}",
     "removeConfirmation": "Êtes-vous sûr de vouloir supprimer '{{name}}' de l'organisation '{{org}}' ?",
     "searchByName": "Rechercher par nom",
