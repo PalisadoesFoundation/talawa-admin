@@ -1788,7 +1788,7 @@ describe('Testing User Pledge Screen', () => {
     });
 
     // Click on more container to open popup
-    const moreContainer = screen.getByTestId(
+    const moreContainer = await screen.findByTestId(
       'moreContainer-extraAvatarPledgeId',
     );
     expect(moreContainer).toHaveTextContent('+1 more...');

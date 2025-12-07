@@ -658,7 +658,7 @@ describe('Testing Campaign Pledge Screen', () => {
     // Check popup styling and content
     const popup = await screen.findByTestId('extra-users-popup');
     expect(popup).toBeInTheDocument();
-    expect(popup.className).toContain('popupExtra'); // Modified to check class name directly
+    expect(popup).toHaveClass(styles.popupExtra);
 
     // Verify all extra users are shown
     for (let i = 1; i <= 6; i++) {
