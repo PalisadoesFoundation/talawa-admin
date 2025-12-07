@@ -106,14 +106,16 @@ const buildHandlerInput = (overrides: HandlerOverrides = {}): HandlerArgs => ({
 });
 
 describe('useUpdateEventHandler', () => {
-
   let mockUpdateStandaloneEvent: Mock;
   let mockUpdateSingleRecurringEventInstance: Mock;
   let mockUpdateThisAndFollowingEvents: Mock;
   let mockUpdateEntireRecurringEventSeries: Mock;
 
-  beforeEach(() => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
 
+  beforeEach(() => {
     mockUpdateStandaloneEvent = vi.fn();
     mockUpdateSingleRecurringEventInstance = vi.fn();
     mockUpdateThisAndFollowingEvents = vi.fn();
@@ -176,6 +178,9 @@ describe('useUpdateEventHandler', () => {
     });
 
     it('handles standalone event update with description change', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
       const { updateEventHandler } = useUpdateEventHandler();
 
       await updateEventHandler(
@@ -194,6 +199,9 @@ describe('useUpdateEventHandler', () => {
     });
 
     it('handles standalone event update with location change', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
       const { updateEventHandler } = useUpdateEventHandler();
 
       await updateEventHandler(
@@ -212,6 +220,9 @@ describe('useUpdateEventHandler', () => {
     });
 
     it('handles standalone event update with isPublic change', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
       const { updateEventHandler } = useUpdateEventHandler();
 
       await updateEventHandler(
@@ -227,6 +238,9 @@ describe('useUpdateEventHandler', () => {
     });
 
     it('handles standalone event update with isRegisterable change', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
       const { updateEventHandler } = useUpdateEventHandler();
 
       await updateEventHandler(
@@ -445,6 +459,24 @@ describe('useUpdateEventHandler', () => {
       expect(toast.success).toHaveBeenCalledWith('eventUpdated');
     });
 
+    it('handles standalone event update with allDay change only', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          alldaychecked: true, // Changed from false
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
+      const calledInputs =
+        mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
+      expect(calledInputs.allDay).toBe(true);
+    });
+
     it('shows error toast when computed dates are invalid', async () => {
       const { updateEventHandler } = useUpdateEventHandler();
 
@@ -656,7 +688,6 @@ describe('useUpdateEventHandler', () => {
 
       const hideViewModal = vi.fn();
       const setEventUpdateModalIsOpen = vi.fn();
-      const refetchEvents = vi.fn();
 
       await updateEventHandler(
         buildHandlerInput({
@@ -674,7 +705,6 @@ describe('useUpdateEventHandler', () => {
       expect(toast.success).toHaveBeenCalledWith('eventUpdated');
       expect(setEventUpdateModalIsOpen).toHaveBeenCalledWith(false);
       expect(hideViewModal).toHaveBeenCalled();
-      expect(refetchEvents).not.toHaveBeenCalled();
     });
   });
 });
