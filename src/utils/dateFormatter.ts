@@ -31,3 +31,19 @@ export function formatDate(dateString: string): string {
 
   return `${day}${suffix} ${monthName} ${year}`;
 }
+
+export function formatTime(dateString: string): string {
+  if (!dateString) {
+    throw new Error('Date string is required');
+  }
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) {
+    throw new Error('Invalid date string provided');
+  }
+
+  return date.toLocaleTimeString('en-US', {
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  });
+}
