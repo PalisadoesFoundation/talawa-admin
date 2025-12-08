@@ -6,11 +6,11 @@ describe('formatDate', () => {
     vi.clearAllMocks();
   });
 
-  // test('formats date with st suffix', () => {
-  //   expect(formatDate('2023-01-01')).toBe('1st Jan 2023');
-  //   expect(formatDate('2023-05-21')).toBe('21st May 2023');
-  //   expect(formatDate('2023-10-31')).toBe('31st Oct 2023');
-  // });
+  test('formats date with st suffix', () => {
+    expect(formatDate('2023-01-01')).toBe('1st Jan 2023');
+    expect(formatDate('2023-05-21')).toBe('21st May 2023');
+    expect(formatDate('2023-10-31')).toBe('31st Oct 2023');
+  });
 
   test('formats date with nd suffix', () => {
     expect(formatDate('2023-06-02')).toBe('2nd Jun 2023');
