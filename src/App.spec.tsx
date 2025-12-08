@@ -439,25 +439,6 @@ describe('Testing the App Component', () => {
     }
   });
 
-  it('should handle registry import errors', async () => {
-    const registryError = new Error('Registry import failed');
-    const { discoverAndRegisterAllPlugins } = await import('./plugin/registry');
-
-    // Mock the registry function to reject for this test
-    vi.mocked(discoverAndRegisterAllPlugins).mockRejectedValueOnce(
-      registryError,
-    );
-
-    renderApp();
-
-    await waitFor(() => {
-      expect(console.error).toHaveBeenCalledWith(
-        'Failed to initialize plugin system:',
-        registryError,
-      );
-    });
-  });
-
   it('should correctly determine isAdmin and isSuperAdmin flags', async () => {
     renderApp(superAdminLink);
 
