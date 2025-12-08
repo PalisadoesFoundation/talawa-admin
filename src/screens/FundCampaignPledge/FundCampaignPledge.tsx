@@ -2,7 +2,6 @@ import { useQuery, type ApolloQueryResult } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
-import { Popover } from '@base-ui-components/react/popover';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
@@ -12,7 +11,7 @@ import { currencySymbols } from 'utils/currency';
 import styles from 'style/app-fixed.module.css';
 import PledgeDeleteModal from './deleteModal/PledgeDeleteModal';
 import PledgeModal from './modal/PledgeModal';
-import { Breadcrumbs, Link, Stack, Typography } from '@mui/material';
+import { Breadcrumbs, Link, Popover, Stack, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -70,7 +69,8 @@ const fundCampaignPledge = (): JSX.Element => {
   const [progressIndicator, setProgressIndicator] = useState<
     'raised' | 'pledged'
   >('pledged');
-  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const open = Boolean(anchorEl);
   const id = open ? 'simple-popup' : undefined;
   const [pledgeModalMode, setPledgeModalMode] = useState<'edit' | 'create'>(
     'create',
@@ -204,9 +204,12 @@ const fundCampaignPledge = (): JSX.Element => {
     [openModal],
   );
 
-  const handleClick = (users: InterfaceUserInfoPG[]): void => {
+  const handleClick = (
+    event: React.MouseEvent<HTMLDivElement>,
+    users: InterfaceUserInfoPG[],
+  ): void => {
     setExtraUsers(users);
-    setOpen(true);
+    setAnchorEl(event.currentTarget);
   };
 
   const isWithinCampaignDates = useMemo(() => {
@@ -279,7 +282,7 @@ const fundCampaignPledge = (): JSX.Element => {
               <div
                 className={styles.moreContainer}
                 aria-describedby={id}
-                onClick={() => handleClick(extraUsers)}
+                onClick={(event) => handleClick(event, extraUsers)}
                 data-testid={`moreContainer-${params.row.id}`}
               >
                 +{extraUsers.length} more...
@@ -584,44 +587,42 @@ const fundCampaignPledge = (): JSX.Element => {
         pledge={pledge}
         refetchPledge={refetchPledge}
       />
-      <Popover.Root open={open} onOpenChange={setOpen}>
-        <Popover.Trigger>
-          <div id={id} />
-        </Popover.Trigger>
-
-        <Popover.Portal>
-          <Popover.Positioner
-            className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
-            data-testid="extra-users-popup"
-          >
-            <Popover.Popup>
-              {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
-                <div
-                  className={styles.pledgerContainer}
-                  key={user.id}
-                  data-testid={`extraUser-${index}`}
-                >
-                  {user.avatarURL ? (
-                    <img
-                      src={user.avatarURL}
-                      alt={user.name}
-                      className={styles.TableImagePledge}
-                    />
-                  ) : (
-                    <Avatar
-                      containerStyle={styles.imageContainerPledge}
-                      avatarStyle={styles.TableImagePledge}
-                      name={user.name}
-                      alt={user.name}
-                    />
-                  )}
-                  <span>{user.name}</span>
-                </div>
-              ))}
-            </Popover.Popup>
-          </Popover.Positioner>
-        </Popover.Portal>
-      </Popover.Root>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={() => setAnchorEl(null)}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+      >
+        <div
+          className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
+          data-testid="extra-users-popup"
+        >
+          {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
+            <div
+              className={styles.pledgerContainer}
+              key={user.id}
+              data-testid={`extraUser-${index}`}
+            >
+              {user.avatarURL ? (
+                <img
+                  src={user.avatarURL}
+                  alt={user.name}
+                  className={styles.TableImagePledge}
+                />
+              ) : (
+                <Avatar
+                  containerStyle={styles.imageContainerPledge}
+                  avatarStyle={styles.TableImagePledge}
+                  name={user.name}
+                  alt={user.name}
+                />
+              )}
+              <span>{user.name}</span>
+            </div>
+          ))}
+        </div>
+      </Popover>
     </div>
   );
 };
