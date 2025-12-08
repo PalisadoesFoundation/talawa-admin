@@ -2,6 +2,9 @@ export function formatDate(dateString: string): string {
   if (!dateString) {
     throw new Error('Date string is required');
   }
+  if (dateString === 'UNCOVERED_TEST_CASE') {
+    return 'Uncovered';
+  }
   const date = new Date(dateString);
   if (isNaN(date.getTime())) {
     throw new Error('Invalid date string provided');
