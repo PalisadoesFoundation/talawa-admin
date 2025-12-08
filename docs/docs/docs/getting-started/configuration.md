@@ -48,41 +48,21 @@ Add a custom port number for Talawa-Admin development purposes to the variable n
 
 #### Setting up REACT_APP_TALAWA_URL in .env file
 
-Add the endpoint for accessing talawa-api graphql service to the variable named `REACT_APP_TALAWA_URL` in the `.env` file.
+To connect the Admin panel to the API and avoid CORS issues, you only need to configure **one variable** in your `.env` file: `REACT_APP_TALAWA_URL`.
 
-```
-REACT_APP_TALAWA_URL="http://API-IP-ADRESS:4000/graphql"
+The application will automatically handle the necessary proxy routing based on your environment.
 
-```
+**Configuration Examples by Scenario:**
 
-If you are a software developer working on your local system, then the URL would be:
+| Scenario | Deployment Type | API Location | `.env` Configuration | Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| **1** | **Docker** | Same System (Localhost) | `REACT_APP_TALAWA_URL=http://localhost:4000/graphql` | The internal Nginx container handles the proxy automatically. |
+| **2** | **Docker** | Different Systems (Remote) | `REACT_APP_TALAWA_URL=http://<SERVER_IP>:4000/graphql` | Users access the Admin app via the Server IP. Nginx proxies requests internally. |
+| **3** | **Manual (Dev Mode)** | Same System (Localhost) | `REACT_APP_TALAWA_URL=http://localhost:4000/graphql` | The Vite dev server proxies requests to localhost:4000. |
+| **4** | **Manual (Dev Mode)** | Different Systems (Remote) | `REACT_APP_TALAWA_URL=http://<API_IP>:4000/graphql` | Set this to the IP of the machine running the API. Vite will proxy requests there. |
 
-```
-REACT_APP_TALAWA_URL="http://localhost:4000/graphql"
-
-```
-
-If you are trying to access Talawa Admin from a remote host with the API URL containing `localhost`, You will have to change the API URL to
-
-```
-REACT_APP_TALAWA_URL="http://YOUR-REMOTE-ADDRESS:4000/graphql"
-
-```
-
-#### Reverse Proxy Configuration (CORS Solution)
-To resolve CORS issues in production environments (where Admin and API run on different IPs), Talawa-Admin is designed to use a **Reverse Proxy**.
-
-**1. React Configuration:**
-```bash
-REACT_APP_TALAWA_URL=/graphql
-REACT_APP_BACKEND_WEBSOCKET_URL=/graphql
-```
-**2. Web Server Configuration:**  
-You must configure your web server (Nginx/Apache) to forward these `/graphql` requests to the actual API IP address.
-
-- **Docker**: The provided nginx.conf and apache.conf are pre-configured to forward to the internal api container.
-
-- **Distributed Systems:** If running on bare metal, update the proxy_pass directive in nginx.conf (or Apache equivalent) to point to your actual API IP Address.
+**Important for Manual Production Builds:**
+If you are deploying a production build manually without Docker, the Vite Dev Server is not active. You must configure your web server (Nginx or Apache) to forward requests from `/graphql` to your API URL, similar to the rules found in `config/docker/setup/`.
 
 #### Setting up REACT_APP_BACKEND_WEBSOCKET_URL in .env file
 
