@@ -691,9 +691,6 @@ jobs:
         if: steps.check-artifacts.outputs.artifacts_found == 'true'
         id: get-merge-base
         run: |
-          # Fetch the base branch to ensure we can find the common ancestor
-          git fetch origin ${{ github.base_ref }} --depth=1
-
           # Calculate the merge base
           MERGE_BASE=$(git merge-base origin/${{ github.base_ref }} HEAD)
           echo "Merge base commit: $MERGE_BASE"
