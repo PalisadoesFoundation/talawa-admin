@@ -53,7 +53,7 @@ vi.mock('@hello-pangea/dnd', () => ({
     children: (
       provided: {
         droppableProps: Record<string, unknown>;
-        innerRef: React.RefObject<null>;
+        innerRef: (el: HTMLElement | null) => void;
       },
       snapshot: { isDraggingOver: boolean },
     ) => React.ReactNode;
@@ -62,7 +62,7 @@ vi.mock('@hello-pangea/dnd', () => ({
     return children(
       {
         droppableProps: {},
-        innerRef: { current: null },
+        innerRef: () => {},
       },
       { isDraggingOver: false },
     );
@@ -74,7 +74,7 @@ vi.mock('@hello-pangea/dnd', () => ({
       provided: {
         draggableProps: Record<string, unknown>;
         dragHandleProps: Record<string, unknown>;
-        innerRef: React.RefObject<null>;
+        innerRef: (el: HTMLElement | null) => void;
       },
       snapshot: { isDragging: boolean },
     ) => React.ReactNode;
@@ -85,7 +85,7 @@ vi.mock('@hello-pangea/dnd', () => ({
       {
         draggableProps: {},
         dragHandleProps: {},
-        innerRef: { current: null },
+        innerRef: () => {},
       },
       { isDragging: false },
     );
@@ -793,7 +793,7 @@ describe('Testing Agenda Items components', () => {
     });
   });
 
-  test('does not update sequence when item position has not changed', async () => {
+  test('calls refetch when drag ends with no position change', async () => {
     const mockRefetch = vi.fn();
     const baseAgendaItemData = props.agendaItemData ?? [];
     // Create props with items whose sequence already matches their index + 1
