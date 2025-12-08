@@ -619,6 +619,10 @@ jobs:
             # Validate merged JSON
             MERGED_FILE_COUNT=$(jq 'keys | length' ./.nyc_output/coverage-final.json 2>/dev/null || echo "0")
             echo "Merged coverage contains $MERGED_FILE_COUNT files"
+          else
+            echo "ERROR: No JSON coverage files found! We expect coverage-final.json from shards."
+            exit 1
+          fi
       - name: Validate merged coverage integrity
         if: steps.check-artifacts.outputs.artifacts_found == 'true'
         run: |
