@@ -2,6 +2,28 @@ import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 
+/**
+ * Helper to create tag node structure
+ */
+const createTagNode = (
+  id: string,
+  name: string,
+  usersCount: number,
+  childCount: number,
+  ancestorTags: Array<{ _id: string; name: string }>,
+) => ({
+  node: {
+    _id: id,
+    name,
+    usersAssignedTo: { totalCount: usersCount },
+    childTags: { totalCount: childCount },
+    ancestorTags,
+  },
+  cursor: id,
+});
+
+const ANCESTOR_TAG_1 = [{ _id: '1', name: 'userTag 1' }];
+
 export const MOCKS = [
   {
     request: {
@@ -19,196 +41,16 @@ export const MOCKS = [
           name: 'userTag 1',
           childTags: {
             edges: [
-              {
-                node: {
-                  _id: 'subTag1',
-                  name: 'subTag 1',
-                  usersAssignedTo: {
-                    totalCount: 5,
-                  },
-                  childTags: {
-                    totalCount: 5,
-                  },
-                  ancestorTags: [
-                    {
-                      _id: '1',
-                      name: 'userTag 1',
-                    },
-                  ],
-                },
-                cursor: 'subTag1',
-              },
-              {
-                node: {
-                  _id: 'subTag2',
-                  name: 'subTag 2',
-                  usersAssignedTo: {
-                    totalCount: 5,
-                  },
-                  childTags: {
-                    totalCount: 0,
-                  },
-                  ancestorTags: [
-                    {
-                      _id: '1',
-                      name: 'userTag 1',
-                    },
-                  ],
-                },
-                cursor: 'subTag2',
-              },
-              {
-                node: {
-                  _id: 'subTag3',
-                  name: 'subTag 3',
-                  usersAssignedTo: {
-                    totalCount: 0,
-                  },
-                  childTags: {
-                    totalCount: 5,
-                  },
-                  ancestorTags: [
-                    {
-                      _id: '1',
-                      name: 'userTag 1',
-                    },
-                  ],
-                },
-                cursor: 'subTag3',
-              },
-              {
-                node: {
-                  _id: 'subTag4',
-                  name: 'subTag 4',
-                  usersAssignedTo: {
-                    totalCount: 0,
-                  },
-                  childTags: {
-                    totalCount: 0,
-                  },
-                  ancestorTags: [
-                    {
-                      _id: '1',
-                      name: 'userTag 1',
-                    },
-                  ],
-                },
-                cursor: 'subTag4',
-              },
-              {
-                node: {
-                  _id: 'subTag5',
-                  name: 'subTag 5',
-                  usersAssignedTo: {
-                    totalCount: 5,
-                  },
-                  childTags: {
-                    totalCount: 5,
-                  },
-                  ancestorTags: [
-                    {
-                      _id: '1',
-                      name: 'userTag 1',
-                    },
-                  ],
-                },
-                cursor: 'subTag5',
-              },
-              {
-                node: {
-                  _id: 'subTag6',
-                  name: 'subTag 6',
-                  usersAssignedTo: {
-                    totalCount: 5,
-                  },
-                  childTags: {
-                    totalCount: 5,
-                  },
-                  ancestorTags: [
-                    {
-                      _id: '1',
-                      name: 'userTag 1',
-                    },
-                  ],
-                },
-                cursor: 'subTag6',
-              },
-              {
-                node: {
-                  _id: 'subTag7',
-                  name: 'subTag 7',
-                  usersAssignedTo: {
-                    totalCount: 5,
-                  },
-                  childTags: {
-                    totalCount: 5,
-                  },
-                  ancestorTags: [
-                    {
-                      _id: '1',
-                      name: 'userTag 1',
-                    },
-                  ],
-                },
-                cursor: 'subTag7',
-              },
-              {
-                node: {
-                  _id: 'subTag8',
-                  name: 'subTag 8',
-                  usersAssignedTo: {
-                    totalCount: 5,
-                  },
-                  childTags: {
-                    totalCount: 5,
-                  },
-                  ancestorTags: [
-                    {
-                      _id: '1',
-                      name: 'userTag 1',
-                    },
-                  ],
-                },
-                cursor: 'subTag8',
-              },
-              {
-                node: {
-                  _id: 'subTag9',
-                  name: 'subTag 9',
-                  usersAssignedTo: {
-                    totalCount: 5,
-                  },
-                  childTags: {
-                    totalCount: 5,
-                  },
-                  ancestorTags: [
-                    {
-                      _id: '1',
-                      name: 'userTag 1',
-                    },
-                  ],
-                },
-                cursor: 'subTag9',
-              },
-              {
-                node: {
-                  _id: 'subTag10',
-                  name: 'subTag 10',
-                  usersAssignedTo: {
-                    totalCount: 5,
-                  },
-                  childTags: {
-                    totalCount: 5,
-                  },
-                  ancestorTags: [
-                    {
-                      _id: '1',
-                      name: 'userTag 1',
-                    },
-                  ],
-                },
-                cursor: 'subTag10',
-              },
+              createTagNode('subTag1', 'subTag 1', 5, 5, ANCESTOR_TAG_1),
+              createTagNode('subTag2', 'subTag 2', 5, 0, ANCESTOR_TAG_1),
+              createTagNode('subTag3', 'subTag 3', 0, 5, ANCESTOR_TAG_1),
+              createTagNode('subTag4', 'subTag 4', 0, 0, ANCESTOR_TAG_1),
+              createTagNode('subTag5', 'subTag 5', 5, 5, ANCESTOR_TAG_1),
+              createTagNode('subTag6', 'subTag 6', 5, 5, ANCESTOR_TAG_1),
+              createTagNode('subTag7', 'subTag 7', 5, 5, ANCESTOR_TAG_1),
+              createTagNode('subTag8', 'subTag 8', 5, 5, ANCESTOR_TAG_1),
+              createTagNode('subTag9', 'subTag 9', 5, 5, ANCESTOR_TAG_1),
+              createTagNode('subTag10', 'subTag 10', 5, 5, ANCESTOR_TAG_1),
             ],
             pageInfo: {
               startCursor: '1',
@@ -240,25 +82,7 @@ export const MOCKS = [
           name: 'userTag 1',
           childTags: {
             edges: [
-              {
-                node: {
-                  _id: 'subTag11',
-                  name: 'subTag 11',
-                  usersAssignedTo: {
-                    totalCount: 0,
-                  },
-                  childTags: {
-                    totalCount: 0,
-                  },
-                  ancestorTags: [
-                    {
-                      _id: '1',
-                      name: 'userTag 1',
-                    },
-                  ],
-                },
-                cursor: 'subTag11',
-              },
+              createTagNode('subTag11', 'subTag 11', 0, 0, ANCESTOR_TAG_1),
             ],
             pageInfo: {
               startCursor: '11',
@@ -289,29 +113,10 @@ export const MOCKS = [
           name: 'subTag 1',
           childTags: {
             edges: [
-              {
-                node: {
-                  _id: 'subTag1.1',
-                  name: 'subTag 1.1',
-                  usersAssignedTo: {
-                    totalCount: 5,
-                  },
-                  childTags: {
-                    totalCount: 5,
-                  },
-                  ancestorTags: [
-                    {
-                      _id: '1',
-                      name: 'userTag 1',
-                    },
-                    {
-                      _id: 'subTag1',
-                      name: 'subTag 1',
-                    },
-                  ],
-                },
-                cursor: 'subTag1.1',
-              },
+              createTagNode('subTag1.1', 'subTag 1.1', 5, 5, [
+                { _id: '1', name: 'userTag 1' },
+                { _id: 'subTag1', name: 'subTag 1' },
+              ]),
             ],
             pageInfo: {
               startCursor: 'subTag1.1',
@@ -347,44 +152,20 @@ export const MOCKS = [
           name: 'userTag 1',
           childTags: {
             edges: [
-              {
-                node: {
-                  _id: 'searchSubTag1',
-                  name: 'searchSubTag 1',
-                  usersAssignedTo: {
-                    totalCount: 0,
-                  },
-                  childTags: {
-                    totalCount: 0,
-                  },
-                  ancestorTags: [
-                    {
-                      _id: '1',
-                      name: 'userTag 1',
-                    },
-                  ],
-                },
-                cursor: 'searchSubTag1',
-              },
-              {
-                node: {
-                  _id: 'searchSubTag2',
-                  name: 'searchSubTag 2',
-                  usersAssignedTo: {
-                    totalCount: 0,
-                  },
-                  childTags: {
-                    totalCount: 0,
-                  },
-                  ancestorTags: [
-                    {
-                      _id: '1',
-                      name: 'userTag 1',
-                    },
-                  ],
-                },
-                cursor: 'searchSubTag2',
-              },
+              createTagNode(
+                'searchSubTag1',
+                'searchSubTag 1',
+                0,
+                0,
+                ANCESTOR_TAG_1,
+              ),
+              createTagNode(
+                'searchSubTag2',
+                'searchSubTag 2',
+                0,
+                0,
+                ANCESTOR_TAG_1,
+              ),
             ],
             pageInfo: {
               startCursor: 'searchSubTag1',
@@ -415,44 +196,20 @@ export const MOCKS = [
           name: 'userTag 1',
           childTags: {
             edges: [
-              {
-                node: {
-                  _id: 'searchSubTag2',
-                  name: 'searchSubTag 2',
-                  usersAssignedTo: {
-                    totalCount: 0,
-                  },
-                  childTags: {
-                    totalCount: 0,
-                  },
-                  ancestorTags: [
-                    {
-                      _id: '1',
-                      name: 'userTag 1',
-                    },
-                  ],
-                },
-                cursor: 'searchSubTag2',
-              },
-              {
-                node: {
-                  _id: 'searchSubTag1',
-                  name: 'searchSubTag 1',
-                  usersAssignedTo: {
-                    totalCount: 0,
-                  },
-                  childTags: {
-                    totalCount: 0,
-                  },
-                  ancestorTags: [
-                    {
-                      _id: '1',
-                      name: 'userTag 1',
-                    },
-                  ],
-                },
-                cursor: 'searchSubTag1',
-              },
+              createTagNode(
+                'searchSubTag2',
+                'searchSubTag 2',
+                0,
+                0,
+                ANCESTOR_TAG_1,
+              ),
+              createTagNode(
+                'searchSubTag1',
+                'searchSubTag 1',
+                0,
+                0,
+                ANCESTOR_TAG_1,
+              ),
             ],
             pageInfo: {
               startCursor: 'searchSubTag2',
@@ -498,5 +255,144 @@ export const MOCKS_ERROR_SUB_TAGS = [
       },
     },
     error: new Error('Mock Graphql Error'),
+  },
+];
+
+export const MOCKS_EMPTY_SUB_TAGS = [
+  {
+    request: {
+      query: USER_TAG_SUB_TAGS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        getChildTags: {
+          name: 'userTag 1',
+          childTags: {
+            edges: [],
+            pageInfo: {
+              startCursor: null,
+              endCursor: null,
+              hasNextPage: false,
+              hasPreviousPage: false,
+            },
+            totalCount: 0,
+          },
+          ancestorTags: [],
+        },
+      },
+    },
+  },
+];
+
+/**
+ * Base query mock for sub-tags list.
+ * Used as foundation for various test scenarios.
+ */
+const BASE_SUB_TAGS_QUERY = {
+  request: {
+    query: USER_TAG_SUB_TAGS,
+    variables: {
+      id: '1',
+      first: TAGS_QUERY_DATA_CHUNK_SIZE,
+      where: { name: { starts_with: '' } },
+      sortedBy: { id: 'DESCENDING' },
+    },
+  },
+  result: {
+    data: {
+      getChildTags: {
+        name: 'userTag 1',
+        childTags: {
+          edges: [createTagNode('subTag1', 'subTag 1', 5, 5, ANCESTOR_TAG_1)],
+          pageInfo: {
+            startCursor: 'subTag1',
+            endCursor: 'subTag1',
+            hasNextPage: false,
+            hasPreviousPage: false,
+          },
+          totalCount: 1,
+        },
+        ancestorTags: [],
+      },
+    },
+  },
+};
+
+/**
+ * Helper function to create CREATE_USER_TAG mutation mocks.
+ * @param tagName - The name of the tag to create
+ * @param response - The mock response (data and/or error)
+ * @returns Mock for CREATE_USER_TAG mutation
+ */
+const createTagMutationMock = (
+  tagName: string,
+  response: { data?: { createUserTag: { _id: string } }; error?: Error },
+) => ({
+  request: {
+    query: CREATE_USER_TAG,
+    variables: {
+      name: tagName,
+      organizationId: '123',
+      parentTagId: '1',
+    },
+  },
+  ...response,
+});
+
+export const MOCKS_ERROR_CREATE_SUB_TAG = [
+  BASE_SUB_TAGS_QUERY,
+  createTagMutationMock('errorTag', {
+    error: new Error('Failed to create tag'),
+  }),
+];
+
+export const MOCKS_FETCH_MORE_UNDEFINED = [
+  {
+    request: {
+      query: USER_TAG_SUB_TAGS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        getChildTags: {
+          name: 'userTag 1',
+          childTags: {
+            edges: [createTagNode('subTag1', 'subTag 1', 5, 5, ANCESTOR_TAG_1)],
+            pageInfo: {
+              startCursor: 'subTag1',
+              endCursor: 'subTag1',
+              hasNextPage: true,
+              hasPreviousPage: false,
+            },
+            totalCount: 1,
+          },
+          ancestorTags: [],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_TAG_SUB_TAGS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: 'subTag1',
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: { data: undefined },
   },
 ];
