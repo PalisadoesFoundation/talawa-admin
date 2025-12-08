@@ -137,8 +137,8 @@ const config: Config = {
             items: [
               {
                 label: 'Forums',
-                to: "https://community.talawa.io/",
-                className: "footer__icon footer__news",
+                to: 'https://community.talawa.io/',
+                className: 'footer__icon footer__news',
               },
               {
                 label: 'News',
