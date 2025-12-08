@@ -16,7 +16,7 @@ import FundModal from './modal/FundModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
-import PageHeader from 'shared-components/Navbar/Navbar';
+import PageHeader from 'shared-components/Navbar/PageHeader';
 
 const dataGridStyle = {
   borderRadius: 'var(--table-head-radius)',

@@ -52,9 +52,7 @@ describe('RegistrationForm Component', () => {
     fireEvent.change(confirmPasswordInput, { target: { value: 'Test456!' } });
 
     await waitFor(() => {
-      expect(
-        screen.getByText(/Password_and_Confirm_password_mismatches/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/passwordMismatches/i)).toBeInTheDocument();
     });
   });
 

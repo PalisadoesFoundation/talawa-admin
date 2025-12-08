@@ -71,7 +71,7 @@ import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import Avatar from 'components/Avatar/Avatar';
 import { TablePagination } from '@mui/material';
-import PageHeader from 'shared-components/Navbar/Navbar';
+import PageHeader from 'shared-components/Navbar/PageHeader';
 import type { IEdge, IUserDetails, IQueryVariable } from './types';
 
 const StyledTableCell = styled(TableCell)(() => ({

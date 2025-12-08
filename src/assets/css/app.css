@@ -411,7 +411,7 @@ a {
   text-decoration: none;
 }
 
-a:hover {
+a:focus-visible {
   color: var(--bs-link-hover-color);
 }
 

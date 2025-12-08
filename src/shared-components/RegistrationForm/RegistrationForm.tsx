@@ -107,7 +107,7 @@ const RegistrationForm: React.FC<InterfaceRegistrationFormProps> = ({
     }
 
     if (formState.confirmPassword !== formState.password) {
-      toast.warn(t('Password_and_Confirm_password_mismatches') as string);
+      toast.warn(t('passwordMismatches') as string);
       return;
     }
 
@@ -245,7 +245,7 @@ const RegistrationForm: React.FC<InterfaceRegistrationFormProps> = ({
         {formState.confirmPassword.length > 0 &&
           formState.password !== formState.confirmPassword && (
             <div className="form-text text-danger" data-testid="passwordCheck">
-              {t('Password_and_Confirm_password_mismatches')}
+              {t('passwordMismatches')}
             </div>
           )}
       </div>

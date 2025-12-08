@@ -46,7 +46,7 @@ import type { Advertisement } from 'types/Advertisement/type';
 import Loader from 'components/Loader/Loader';
 import { AdvertisementSkeleton } from './skeleton/AdvertisementSkeleton';
 import { toast } from 'react-toastify';
-import PageHeader from 'shared-components/Navbar/Navbar';
+import PageHeader from 'shared-components/Navbar/PageHeader';
 
 export default function Advertisements(): JSX.Element {
   const { orgId: currentOrgId } = useParams<{ orgId: string }>();

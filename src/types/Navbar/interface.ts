@@ -1,3 +1,8 @@
+/**
+ * Props for the PageHeader component.
+ */
+import { ReactNode } from 'react';
+
 export interface InterfacePageHeaderProps {
   title?: string;
   search?: {
@@ -14,5 +19,5 @@ export interface InterfacePageHeaderProps {
     testIdPrefix: string;
   }>;
   showEventTypeFilter?: boolean;
-  actions?: React.ReactNode;
+  actions?: ReactNode;
 }

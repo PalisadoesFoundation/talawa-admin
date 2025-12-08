@@ -59,7 +59,7 @@ import VenueModal from 'components/Venues/Modal/VenueModal';
 import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/Venues/VenueCard';
-import PageHeader from 'shared-components/Navbar/Navbar';
+import PageHeader from 'shared-components/Navbar/PageHeader';
 
 function organizationVenues(): JSX.Element {
   // Translation hooks for i18n support

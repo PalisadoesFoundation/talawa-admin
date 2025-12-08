@@ -64,7 +64,7 @@ import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQuer
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
-import PageHeader from 'shared-components/Navbar/Navbar';
+import PageHeader from 'shared-components/Navbar/PageHeader';
 
 function OrganizationTags(): JSX.Element {
   const { t } = useTranslation('translation', {

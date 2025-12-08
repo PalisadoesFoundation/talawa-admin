@@ -22,7 +22,7 @@ import type {
 } from '../../types/Post/interface';
 
 import CreatePostModal from './CreatePostModal';
-import PageHeader from 'shared-components/Navbar/Navbar';
+import PageHeader from 'shared-components/Navbar/PageHeader';
 import { Add } from '@mui/icons-material';
 
 /**

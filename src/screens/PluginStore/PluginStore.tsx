@@ -14,7 +14,7 @@ import { PluginList, UninstallConfirmationModal } from './components';
 import { usePluginActions, usePluginFilters } from './hooks';
 import { useGetAllPlugins } from 'plugin/graphql-service';
 import type { IPluginMeta } from 'plugin';
-import PageHeader from 'shared-components/Navbar/Navbar';
+import PageHeader from 'shared-components/Navbar/PageHeader';
 
 export default function PluginStore() {
   const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
