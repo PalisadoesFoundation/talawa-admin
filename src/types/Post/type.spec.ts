@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect } from 'vitest';
 import type {
   Post,
@@ -23,7 +24,15 @@ describe('Post Type Definitions Tests', () => {
         organization: {
           _id: 'org123',
           name: 'Test Organization',
+          description: 'Test description',
+          apiUrl: 'https://example.com',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          customFields: [],
+          userRegistrationRequired: false,
+          visibleInSearch: true,
         },
+
         title: 'Sample Title',
         imageUrl: 'https://example.com/image.jpg',
         videoUrl: 'https://example.com/video.mp4',
@@ -44,7 +53,14 @@ describe('Post Type Definitions Tests', () => {
         updatedAt: new Date(),
         organization: {
           _id: 'org123',
-          name: 'Test Org',
+          name: 'Test Organization',
+          description: 'Test description',
+          apiUrl: 'https://example.com',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          customFields: [],
+          userRegistrationRequired: false,
+          visibleInSearch: true,
         },
       };
 
@@ -59,13 +75,22 @@ describe('Post Type Definitions Tests', () => {
         updatedAt: new Date(),
         organization: {
           _id: 'org123',
-          name: 'Test Org',
+          name: 'Test Organization',
+          description: 'Test description',
+          apiUrl: 'https://example.com',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          customFields: [],
+          userRegistrationRequired: false,
+          visibleInSearch: true,
         },
+
         creator: {
           _id: 'user123',
           firstName: 'John',
           lastName: 'Doe',
           email: 'john@example.com',
+          createdAt: new Date(),
         },
       };
 
@@ -250,7 +275,7 @@ describe('Post Type Definitions Tests', () => {
           name: 'John Doe',
           emailAddress: 'john@example.com',
         },
-        hasUserVoted: 'UPVOTE',
+        hasUserVoted: 'UPVOTE' as any,
         upVotesCount: 10,
         downVotesCount: 2,
         pinnedAt: null,
@@ -275,7 +300,7 @@ describe('Post Type Definitions Tests', () => {
           name: 'Test User',
           emailAddress: 'test@example.com',
         },
-        hasUserVoted: 'NONE',
+        hasUserVoted: 'NONE' as any,
         upVotesCount: 0,
         downVotesCount: 0,
         downVoters: { edges: [] },
@@ -298,7 +323,7 @@ describe('Post Type Definitions Tests', () => {
           name: 'Test User',
           emailAddress: 'test@test.com',
         },
-        hasUserVoted: 'NONE',
+        hasUserVoted: 'NONE' as any,
         upVotesCount: 0,
         downVotesCount: 0,
         pinnedAt: null,
@@ -316,7 +341,7 @@ describe('Post Type Definitions Tests', () => {
                   name: 'Commenter',
                   emailAddress: 'commenter@test.com',
                 },
-                hasUserVoted: 'NONE',
+                hasUserVoted: 'NONE' as any,
                 downVotesCount: 0,
                 upVotesCount: 0,
                 text: 'Comment text',
