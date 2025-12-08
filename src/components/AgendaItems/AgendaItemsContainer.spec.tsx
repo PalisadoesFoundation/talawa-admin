@@ -796,6 +796,14 @@ describe('Testing Agenda Items components', () => {
   test('calls refetch when drag ends with no position change', async () => {
     const mockRefetch = vi.fn();
     const baseAgendaItemData = props.agendaItemData ?? [];
+
+    // Defensive check: ensure mock data has at least 2 items for this test
+    if (!baseAgendaItemData || baseAgendaItemData.length < 2) {
+      throw new Error(
+        'Test setup: baseAgendaItemData must contain at least 2 items',
+      );
+    }
+
     // Create props with items whose sequence already matches their index + 1
     const propsWithMatchingSequence = {
       ...props,
