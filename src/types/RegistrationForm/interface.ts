@@ -2,7 +2,7 @@
  * Props for the RegistrationForm component
  */
 export interface InterfaceRegistrationFormProps {
-  role: 'admin' | 'user';
+  userType: 'admin' | 'user';
   isLoading: boolean;
   onSubmit: (
     userData: IRegistrationData,

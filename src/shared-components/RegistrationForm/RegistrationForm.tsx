@@ -23,7 +23,7 @@ import {
  * RegistrationForm
  * Reusable registration form for both admin and user portals.
  * @param {InterfaceRegistrationFormProps} props
- * @param {'admin' | 'user'} props.role
+ * @param {'admin' | 'user'} props.userType
  * @param {boolean} props.isLoading
  * @param {Function} props.onSubmit
  * @param {boolean} [props.showLoginLink=true]
@@ -31,7 +31,7 @@ import {
  * @returns {JSX.Element}
  */
 const RegistrationForm: React.FC<InterfaceRegistrationFormProps> = ({
-  role,
+  userType,
   isLoading,
   onSubmit,
   showLoginLink = true,
@@ -288,7 +288,7 @@ const RegistrationForm: React.FC<InterfaceRegistrationFormProps> = ({
         <div className="text-center" data-testid="goToLoginPortion">
           {t('alreadyhaveAnAccount')}{' '}
           <Link
-            to={role === 'admin' ? '/admin' : '/'}
+            to={userType === 'admin' ? '/admin' : '/'}
             className={styles.loginText}
           >
             <u>{tCommon('login')}</u>

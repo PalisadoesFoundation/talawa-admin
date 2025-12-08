@@ -158,7 +158,7 @@ const RegisterPage = (): JSX.Element => {
             />
 
             <RegistrationForm
-              role={role}
+              userType={role}
               isLoading={signinLoading}
               onSubmit={handleRegistration}
               showLoginLink={true}

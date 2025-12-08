@@ -22,7 +22,7 @@ const renderComponent = (props = {}) => {
     <BrowserRouter>
       <I18nextProvider i18n={i18nForTest}>
         <RegistrationForm
-          role="user"
+          userType="user"
           isLoading={false}
           onSubmit={mockOnSubmit}
           organizations={mockOrganizations}
