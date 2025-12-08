@@ -4,3 +4,4 @@ src/components/CheckIn/tagTemplate.ts
 vitest.config.ts
 docs/pnpm-lock.yaml
 pnpm-lock.yaml
+docs/docusaurus.config.ts
