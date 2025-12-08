@@ -60,7 +60,7 @@ const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
-        getUserTag: {
+        getChildTags: {
           merge(existing = {}, incoming) {
             const merged = {
               ...existing,
