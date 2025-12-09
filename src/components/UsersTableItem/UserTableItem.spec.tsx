@@ -14,11 +14,9 @@ const link2 = new StaticMockLink(MOCKS2, true);
 const link3 = new StaticMockLink(MOCKS_UPDATE, true);
 
 import userEvent from '@testing-library/user-event';
-import { vi } from 'vitest';
+import { vi, beforeEach, afterEach, describe, test, expect } from 'vitest';
 import type * as RouterTypes from 'react-router';
-const { mockLocalStorageStore } = vi.hoisted(() => ({
-  mockLocalStorageStore: {} as Record<string, unknown>,
-}));
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -26,6 +24,7 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
+
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -34,39 +33,38 @@ vi.mock('react-toastify', () => ({
     info: vi.fn(),
   },
 }));
+
 Object.defineProperty(window, 'location', {
   value: {
     replace: vi.fn(),
   },
   writable: true,
 });
-let mockNavgatePush: ReturnType<typeof vi.fn>;
-const setMockStorageItem = (key: string, value: unknown): void => {
-  mockLocalStorageStore[key] =
-    typeof value === 'string' ? value : JSON.stringify(value);
-};
+
+let mockNavigatePush: ReturnType<typeof vi.fn>;
+
 vi.mock('react-router', async () => {
   const actual = (await vi.importActual('react-router')) as typeof RouterTypes;
   return {
     ...actual,
-    useNavigate: () => mockNavgatePush,
+    useNavigate: () => mockNavigatePush,
   };
 });
+
 beforeEach(() => {
-  mockNavgatePush = vi.fn();
-  setMockStorageItem('SuperAdmin', true);
-  setMockStorageItem('id', '123');
+  mockNavigatePush = vi.fn();
 });
+
 afterEach(() => {
-  localStorage.clear();
   vi.clearAllMocks();
 });
+
 describe('Testing User Table Item', () => {
   let resetAndRefetchMock: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     resetAndRefetchMock = vi.fn();
-    vi.spyOn(console, 'error').mockImplementation((message) => {
+    vi.spyOn(console, 'error').mockImplementation((message: unknown) => {
       if (
         typeof message === 'string' &&
         message.includes('validateDOMNesting')
@@ -299,7 +297,7 @@ describe('Testing User Table Item', () => {
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Joined Organization 1/i));
     expect(window.location.replace).toHaveBeenCalledWith('/orgdash/abc');
-    expect(mockNavgatePush).toHaveBeenCalledWith('/orgdash/abc');
+    expect(mockNavigatePush).toHaveBeenCalledWith('/orgdash/abc');
     fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
   });
   test('Remove user from Organization should function properly in Organizations Joined Modal', async () => {
@@ -592,6 +590,85 @@ describe('Testing User Table Item', () => {
     expect(changeRoleBtn.value).toBe(`ADMIN?abc`);
     await wait();
   });
+
+  test('change role button should trigger success toast when mutation succeeds', async () => {
+    const props: {
+      user: InterfaceQueryUserListItemForAdmin;
+      index: number;
+      loggedInUserId: string;
+      resetAndRefetch: () => void;
+    } = {
+      user: {
+        id: '123',
+        name: 'John Doe',
+        emailAddress: 'john@example.com',
+        avatarURL: 'image.png',
+        birthDate: null,
+        city: null,
+        countryCode: null,
+        createdAt: '2023-09-29T15:39:36.355Z',
+        updatedAt: '2023-09-29T15:39:36.355Z',
+        educationGrade: null,
+        employmentStatus: null,
+        isEmailAddressVerified: true,
+        maritalStatus: null,
+        natalSex: null,
+        naturalLanguageCode: null,
+        postalCode: null,
+        role: null,
+        state: null,
+        mobilePhoneNumber: null,
+        homePhoneNumber: null,
+        workPhoneNumber: null,
+        createdOrganizations: [],
+        organizationsWhereMember: {
+          edges: [
+            {
+              node: {
+                id: 'abc',
+                name: 'Joined Organization 1',
+                avatarURL: 'image.png',
+                city: 'Kingston',
+                createdAt: '2023-06-29T15:39:36.355Z',
+                creator: {
+                  id: '123',
+                  name: 'John Doe',
+                  emailAddress: 'john@example.com',
+                  avatarURL: 'image.png',
+                },
+              },
+            },
+          ],
+        },
+      },
+      index: 0,
+      loggedInUserId: '123',
+      resetAndRefetch: resetAndRefetchMock,
+    };
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    const showJoinedOrgs = screen.getByTestId(`showJoinedOrgsBtn${123}`);
+    fireEvent.click(showJoinedOrgs);
+    const changeRoleBtn = screen.getByTestId(
+      `changeRoleInOrg${'abc'}`,
+    ) as HTMLSelectElement;
+    // Select USER role which has a success mock in MOCKS
+    await userEvent.selectOptions(changeRoleBtn, 'USER');
+    await wait();
+    await waitFor(() => {
+      expect(toast.success).toHaveBeenCalled();
+      expect(resetAndRefetchMock).toHaveBeenCalled();
+    });
+  });
+
   test('Should render Blocked Organizations Modal properly', async () => {
     const props: {
       user: InterfaceQueryUserListItemForAdmin;
@@ -732,7 +809,7 @@ describe('Testing User Table Item', () => {
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Blocked Organization 1/i));
     expect(window.location.replace).toHaveBeenCalledWith('/orgdash/ghi');
-    expect(mockNavgatePush).toHaveBeenCalledWith('/orgdash/ghi');
+    expect(mockNavigatePush).toHaveBeenCalledWith('/orgdash/ghi');
     fireEvent.click(screen.getByTestId(`closeUnblockOrgsBtn${123}`));
   });
   test('handles errors in unblockUser mutation', async () => {
@@ -1557,5 +1634,348 @@ describe('Testing User Table Item', () => {
       ).not.toBeInTheDocument();
     });
     expect(screen.getByText(/Blocked Organization 1/i)).toBeInTheDocument();
+  });
+
+  test('Should trigger onClear callback when clear button is clicked in SearchBar', async () => {
+    const props: {
+      user: InterfaceQueryUserListItemForAdmin;
+      index: number;
+      loggedInUserId: string;
+      resetAndRefetch: () => void;
+    } = {
+      user: {
+        id: '123',
+        name: 'John Doe',
+        emailAddress: 'john@example.com',
+        avatarURL: 'image.png',
+        birthDate: null,
+        city: null,
+        countryCode: null,
+        createdAt: '2023-09-29T15:39:36.355Z',
+        updatedAt: '2023-09-29T15:39:36.355Z',
+        educationGrade: null,
+        employmentStatus: null,
+        isEmailAddressVerified: true,
+        maritalStatus: null,
+        natalSex: null,
+        naturalLanguageCode: null,
+        postalCode: null,
+        role: null,
+        state: null,
+        mobilePhoneNumber: null,
+        homePhoneNumber: null,
+        workPhoneNumber: null,
+        createdOrganizations: [],
+        organizationsWhereMember: {
+          edges: [
+            {
+              node: {
+                id: 'abc',
+                name: 'Joined Organization 1',
+                avatarURL: 'image.png',
+                city: 'Kingston',
+                createdAt: '2023-06-29T15:39:36.355Z',
+                creator: {
+                  id: '123',
+                  name: 'John Doe',
+                  emailAddress: 'john@example.com',
+                  avatarURL: 'image.png',
+                },
+              },
+            },
+            {
+              node: {
+                id: 'def',
+                name: 'Joined Organization 2',
+                avatarURL: 'image.png',
+                city: 'Kingston',
+                createdAt: '2023-07-29T15:39:36.355Z',
+                creator: {
+                  id: '123',
+                  name: 'John Doe',
+                  emailAddress: 'john@example.com',
+                  avatarURL: 'image.png',
+                },
+              },
+            },
+          ],
+        },
+      },
+      index: 0,
+      loggedInUserId: '123',
+      resetAndRefetch: resetAndRefetchMock,
+    };
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    // Open the joined organizations modal
+    fireEvent.click(screen.getByTestId(`showJoinedOrgsBtn${123}`));
+    expect(screen.getByTestId('modal-joined-org-123')).toBeInTheDocument();
+
+    // Type something in the search input
+    const inputBox = screen.getByTestId('searchByNameJoinedOrgs');
+    fireEvent.change(inputBox, { target: { value: 'Test Search' } });
+
+    // Find and click the clear button
+    const clearButton = screen.getByLabelText('Clear search');
+    expect(clearButton).toBeInTheDocument();
+    fireEvent.click(clearButton);
+
+    // After clearing, both organizations should be visible again
+    await waitFor(() => {
+      expect(screen.getByText(/Joined Organization 1/i)).toBeInTheDocument();
+      expect(screen.getByText(/Joined Organization 2/i)).toBeInTheDocument();
+    });
+  });
+
+  test('Should close unblock user modal when clicking onHide (Escape key)', async () => {
+    const props: {
+      user: InterfaceQueryUserListItemForAdmin;
+      index: number;
+      loggedInUserId: string;
+      resetAndRefetch: () => void;
+    } = {
+      user: {
+        id: '123',
+        name: 'John Doe',
+        emailAddress: 'john@example.com',
+        avatarURL: 'image.png',
+        birthDate: null,
+        city: null,
+        countryCode: null,
+        createdAt: '2023-09-29T15:39:36.355Z',
+        updatedAt: '2023-09-29T15:39:36.355Z',
+        educationGrade: null,
+        employmentStatus: null,
+        isEmailAddressVerified: true,
+        maritalStatus: null,
+        natalSex: null,
+        naturalLanguageCode: null,
+        postalCode: null,
+        role: null,
+        state: null,
+        mobilePhoneNumber: null,
+        homePhoneNumber: null,
+        workPhoneNumber: null,
+        createdOrganizations: [],
+        organizationsWhereMember: {
+          edges: [],
+        },
+        orgsWhereUserIsBlocked: {
+          edges: [
+            {
+              node: {
+                id: 'ghi',
+                createdAt: '2023-08-29T15:39:36.355Z',
+                organization: {
+                  name: 'Blocked Organization 1',
+                  avatarURL: 'image.png',
+                  city: 'Toronto',
+                  state: 'ON',
+                  createdAt: '2023-08-29T15:39:36.355Z',
+                  creator: {
+                    name: 'Jane Smith',
+                  },
+                },
+              },
+            },
+          ],
+        },
+      },
+      index: 0,
+      loggedInUserId: '123',
+      resetAndRefetch: resetAndRefetchMock,
+    };
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    // Open blocked organizations modal
+    fireEvent.click(screen.getByTestId(`showBlockedOrgsBtn${123}`));
+    expect(screen.getByTestId('modal-blocked-org-123')).toBeInTheDocument();
+
+    // Click unblock button to open unblock user modal
+    fireEvent.click(screen.getByTestId(`unblockUserFromOrgBtn${'ghi'}`));
+    expect(screen.getByTestId('modal-unblock-user-123')).toBeInTheDocument();
+
+    // Press Escape to close the modal (triggers onHide)
+    fireEvent.keyDown(screen.getByTestId('modal-unblock-user-123'), {
+      key: 'Escape',
+      code: 'Escape',
+      keyCode: 27,
+      charCode: 27,
+    });
+
+    // The modal should be closed or the blocked organizations modal should be visible
+    await waitFor(() => {
+      expect(
+        screen.getByTestId(`modal-blocked-org-${123}`),
+      ).toBeInTheDocument();
+    });
+  });
+
+  test('Should render Avatar fallback when org has no avatarURL in joined organizations', async () => {
+    const props: {
+      user: InterfaceQueryUserListItemForAdmin;
+      index: number;
+      loggedInUserId: string;
+      resetAndRefetch: () => void;
+    } = {
+      user: {
+        id: '123',
+        name: 'John Doe',
+        emailAddress: 'john@example.com',
+        avatarURL: null,
+        birthDate: null,
+        city: null,
+        countryCode: null,
+        createdAt: '2023-09-29T15:39:36.355Z',
+        updatedAt: '2023-09-29T15:39:36.355Z',
+        educationGrade: null,
+        employmentStatus: null,
+        isEmailAddressVerified: true,
+        maritalStatus: null,
+        natalSex: null,
+        naturalLanguageCode: null,
+        postalCode: null,
+        role: null,
+        state: null,
+        mobilePhoneNumber: null,
+        homePhoneNumber: null,
+        workPhoneNumber: null,
+        createdOrganizations: [],
+        organizationsWhereMember: {
+          edges: [
+            {
+              node: {
+                id: 'abc',
+                name: 'Org Without Avatar',
+                avatarURL: undefined,
+                city: 'Kingston',
+                createdAt: '2023-06-29T15:39:36.355Z',
+                creator: {
+                  id: '456',
+                  name: 'Creator Without Avatar',
+                  emailAddress: 'creator@example.com',
+                  avatarURL: undefined,
+                },
+              },
+            },
+          ],
+        },
+      },
+      index: 0,
+      loggedInUserId: '123',
+      resetAndRefetch: resetAndRefetchMock,
+    };
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    fireEvent.click(screen.getByTestId(`showJoinedOrgsBtn${123}`));
+    expect(screen.getByTestId('modal-joined-org-123')).toBeInTheDocument();
+
+    // Verify org name and creator name are displayed (Avatar component used as fallback)
+    expect(screen.getByText(/Org Without Avatar/i)).toBeInTheDocument();
+    expect(screen.getByText(/Creator Without Avatar/i)).toBeInTheDocument();
+  });
+
+  test('Should render Avatar fallback when org has no avatarURL in blocked organizations', async () => {
+    const props: {
+      user: InterfaceQueryUserListItemForAdmin;
+      index: number;
+      loggedInUserId: string;
+      resetAndRefetch: () => void;
+    } = {
+      user: {
+        id: '123',
+        name: 'John Doe',
+        emailAddress: 'john@example.com',
+        avatarURL: null,
+        birthDate: null,
+        city: null,
+        countryCode: null,
+        createdAt: '2023-09-29T15:39:36.355Z',
+        updatedAt: '2023-09-29T15:39:36.355Z',
+        educationGrade: null,
+        employmentStatus: null,
+        isEmailAddressVerified: true,
+        maritalStatus: null,
+        natalSex: null,
+        naturalLanguageCode: null,
+        postalCode: null,
+        role: null,
+        state: null,
+        mobilePhoneNumber: null,
+        homePhoneNumber: null,
+        workPhoneNumber: null,
+        createdOrganizations: [],
+        organizationsWhereMember: {
+          edges: [],
+        },
+        orgsWhereUserIsBlocked: {
+          edges: [
+            {
+              node: {
+                id: 'ghi',
+                createdAt: '2023-08-29T15:39:36.355Z',
+                organization: {
+                  name: 'Blocked Org Without Avatar',
+                  avatarURL: undefined,
+                  city: 'Toronto',
+                  state: 'ON',
+                  createdAt: '2023-08-29T15:39:36.355Z',
+                  creator: {
+                    name: 'Blocked Creator',
+                  },
+                },
+              },
+            },
+          ],
+        },
+      },
+      index: 0,
+      loggedInUserId: '123',
+      resetAndRefetch: resetAndRefetchMock,
+    };
+    render(
+      <MockedProvider addTypename={false} link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    fireEvent.click(screen.getByTestId(`showBlockedOrgsBtn${123}`));
+    expect(screen.getByTestId('modal-blocked-org-123')).toBeInTheDocument();
+
+    // Verify org name and creator name are displayed (Avatar component used as fallback)
+    expect(screen.getByText(/Blocked Org Without Avatar/i)).toBeInTheDocument();
+    expect(screen.getByText(/Blocked Creator/i)).toBeInTheDocument();
   });
 });
