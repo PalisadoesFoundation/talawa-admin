@@ -173,7 +173,7 @@ If you are running Talawa-Admin natively then the next steps will depend on whet
 
 Please follow them closely.
 
-#### For Production Environments
+### For Production Environments
 
 Run the following command to start the development server:
 
@@ -182,7 +182,7 @@ pnpm run serve
 
 ```
 
-#### For Development Environments
+### For Development Environments
 
 Run the following command to start the production server:
 
