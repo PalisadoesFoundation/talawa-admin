@@ -10,6 +10,7 @@
  * @property {() => void} [onClick] - Optional click handler
  * @property {boolean} [useSimpleButton] - Use simple button style (for org drawers)
  * @property {'react-icon' | 'svg'} [iconType] - Type of icon being passed. Use 'react-icon' for icons from react-icons library, 'svg' for SVG components. Defaults to 'svg' if not specified.
+ * @property {string} [dataCy] - Cypress E2E test selector (data-cy attribute)
  */
 export interface ISidebarNavItemProps {
   to: string;
@@ -20,4 +21,5 @@ export interface ISidebarNavItemProps {
   onClick?: () => void;
   useSimpleButton?: boolean;
   iconType?: 'react-icon' | 'svg';
+  dataCy?: string;
 }

@@ -125,6 +125,7 @@ const LeftDrawerOrg = ({
               }
               label={tCommon(name)}
               testId={name}
+              dataCy={`leftDrawerButton-${name}`}
               hideDrawer={hideDrawer}
               onClick={handleLinkClick}
               useSimpleButton={true}

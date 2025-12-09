@@ -54,6 +54,7 @@ const SidebarNavItem = ({
   onClick,
   useSimpleButton = false,
   iconType,
+  dataCy,
 }: ISidebarNavItemProps): React.ReactElement => {
   const renderIcon = useCallback(
     (isActive: boolean): React.ReactNode => {
@@ -113,6 +114,7 @@ const SidebarNavItem = ({
             : styles.sidebarBtn
       }
       data-testid={testId}
+      data-cy={dataCy}
       style={useSimpleButton ? { height: '40px' } : undefined}
     >
       {({ isActive }) => (
