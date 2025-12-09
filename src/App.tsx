@@ -9,9 +9,11 @@ import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import LoginPage from 'screens/LoginPage/LoginPage';
 import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
 import { getPluginManager } from 'plugin/manager';
+import { discoverAndRegisterAllPlugins } from 'plugin/registry';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
 import Loader from 'components/Loader/Loader';
+import PageNotFound from 'screens/PageNotFound/PageNotFound';
 
 const OrganizationScreen = lazy(
   () => import('components/OrganizationScreen/OrganizationScreen'),
@@ -55,7 +57,6 @@ const OrganizationTags = lazy(
 );
 const ManageTag = lazy(() => import('screens/ManageTag/ManageTag'));
 const SubTags = lazy(() => import('screens/SubTags/SubTags'));
-const PageNotFound = lazy(() => import('screens/PageNotFound/PageNotFound'));
 const Requests = lazy(() => import('screens/Requests/Requests'));
 const Users = lazy(() => import('screens/Users/Users'));
 const CommunityProfile = lazy(
@@ -137,10 +138,7 @@ function App(): React.ReactElement {
         // Initialize plugin manager
         await getPluginManager().initializePluginSystem();
 
-        // Import and initialize plugin registry
-        const { discoverAndRegisterAllPlugins } = await import(
-          './plugin/registry'
-        );
+        // Initialize plugin registry
         await discoverAndRegisterAllPlugins();
       } catch (error) {
         console.error('Failed to initialize plugin system:', error);

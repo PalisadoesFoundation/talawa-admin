@@ -33,7 +33,8 @@
 import { useMutation, useQuery } from '@apollo/client';
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Button } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { useParams } from 'react-router';
 import type {
   InterfaceQueryOrganizationUserTags,
@@ -334,16 +335,16 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
               )}
             </div>
 
-            <div className="mt-3 position-relative">
-              <i className="fa fa-search position-absolute text-body-tertiary end-0 top-50 translate-middle" />
-              <Form.Control
-                type="text"
-                id="userName"
-                className={styles.inputField}
+            <div className="mt-3">
+              <SearchBar
+                value={tagSearchName}
+                onChange={(val) => setTagSearchName(val.trim())}
                 placeholder={tCommon('searchByName')}
-                onChange={(e) => setTagSearchName(e.target.value.trim())}
-                data-testid="searchByName"
+                inputTestId="searchByName"
                 autoComplete="off"
+                showSearchButton={false}
+                showLeadingIcon={true}
+                inputClassName={styles.inputField}
               />
             </div>
 
