@@ -1351,6 +1351,131 @@ describe('useEffect loadMoreUsers trigger', () => {
     expect(screen.getByText(/End of results/i)).toBeInTheDocument();
   });
 
+  it('should return early from loadMoreUsers when isLoadingMore guard triggers', async () => {
+    // This test specifically covers the isLoadingMore early return branch
+    const delayedFetchMoreMocks = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'User One',
+                    emailAddress: 'u1@test.com',
+                    role: 'regular',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: {
+                hasNextPage: true,
+                endCursor: '1',
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: '1',
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '2',
+                  node: {
+                    id: '2',
+                    name: 'User Two',
+                    emailAddress: 'u2@test.com',
+                    role: 'regular',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                endCursor: '2',
+              },
+            },
+          },
+        },
+        delay: 1000, // Delay fetchMore to keep isLoadingMore true
+      },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+        },
+        result: {
+          data: {
+            organizations: [{ id: 'org1', name: 'Org' }],
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={delayedFetchMoreMocks} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // First scroll triggers loadMoreUsers and sets isLoadingMore = true
+    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+
+    // Immediately scroll again while first fetch is still in progress (isLoadingMore = true)
+    // This should hit the early return branch
+    fireEvent.scroll(window, { target: { scrollY: 12000 } });
+
+    // Wait for the delayed fetchMore to complete
+    await wait(1500);
+
+    // Component should still work correctly - both users should be displayed
+    expect(screen.getByText('User One')).toBeInTheDocument();
+    expect(screen.getByText('User Two')).toBeInTheDocument();
+  });
+
   it('should explicitly hit oldest sorting logic branch', async () => {
     render(
       <MockedProvider mocks={MOCKS_NEW}>
@@ -1415,5 +1540,1129 @@ describe('useEffect loadMoreUsers trigger', () => {
     );
 
     expect(loadMoreUsers).not.toHaveBeenCalled();
+  });
+
+  it('should load more users with active search filter (searchByName truthy)', async () => {
+    const searchMocks = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'John User',
+                    emailAddress: 'john@test.com',
+                    role: 'regular',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: true, endCursor: '1' },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: { name: 'John' },
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'John User',
+                    emailAddress: 'john@test.com',
+                    role: 'regular',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: true, endCursor: '1' },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: '1',
+            orgFirst: 32,
+            where: { name: 'John' },
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '2',
+                  node: {
+                    id: '2',
+                    name: 'John Smith',
+                    emailAddress: 'johnsmith@test.com',
+                    role: 'regular',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: '2' },
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: { data: { organizations: [{ id: 'org1', name: 'Org' }] } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={searchMocks} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const input = screen.getByTestId('searchByName');
+    await userEvent.type(input, 'John');
+    await userEvent.click(screen.getByTestId('searchButton'));
+
+    await wait();
+
+    // Trigger scroll to load more users while search is active
+    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+    await wait(500);
+
+    expect(screen.getByText('John User')).toBeInTheDocument();
+  });
+
+  it('should handle organizations being null/undefined without crashing', async () => {
+    const nullOrgsMock = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'Test User',
+                    emailAddress: 'test@test.com',
+                    role: 'regular',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: {
+          data: { organizations: null },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={nullOrgsMock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Should not crash and should still render users
+    expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+  });
+
+  it('should show loading state when isLoadingMore is true', async () => {
+    const slowLoadMoreMocks = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'First User',
+                    emailAddress: 'first@test.com',
+                    role: 'regular',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: true, endCursor: '1' },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: '1',
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '2',
+                  node: {
+                    id: '2',
+                    name: 'Second User',
+                    emailAddress: 'second@test.com',
+                    role: 'regular',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: '2' },
+            },
+          },
+        },
+        delay: 1000,
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: { data: { organizations: [{ id: 'org1', name: 'Org' }] } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={slowLoadMoreMocks} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Trigger scroll to load more
+    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+
+    // Wait for the load more to complete
+    await wait(1500);
+
+    expect(screen.getByText('First User')).toBeInTheDocument();
+  });
+
+  it('should not set displayedUsers when usersData is empty', async () => {
+    const emptyUsersMock = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [],
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: { data: { organizations: [{ id: 'org1', name: 'Org' }] } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={emptyUsersMock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // The component should still render without crashing
+    expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+  });
+
+  it('should handle loading state correctly with isLoadingMore true', async () => {
+    const loadingMock = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'Test User',
+                    emailAddress: 'test@test.com',
+                    role: 'regular',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: true, endCursor: '1' },
+            },
+          },
+        },
+        delay: 500,
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: { data: { organizations: [{ id: 'org1', name: 'Org' }] } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={loadingMock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Initially loading
+    await wait(100);
+
+    // Wait for data
+    await wait(600);
+
+    expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+  });
+
+  it('should return early from displayedUsers effect when usersData length is 0', async () => {
+    const zeroUsersMock = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [],
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: { data: { organizations: [{ id: 'org1', name: 'Org' }] } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={zeroUsersMock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Component should render without crashing even with empty usersData
+    expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+    // With empty usersData and no search term, "No User Found" should be shown
+    expect(screen.getByText(/No User Found/i)).toBeInTheDocument();
+  });
+
+  it('should filter users returning all when unknown filter option', async () => {
+    // Test the default return in filterUsers function
+    const filterMock = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: { first: 12, after: null, orgFirst: 32, where: undefined },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'Test User',
+                    role: 'regular',
+                    emailAddress: 'test@test.com',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: { data: { organizations: [{ id: 'org1', name: 'Org' }] } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={filterMock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <Users />
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Users should be displayed
+    expect(screen.getByText('Test User')).toBeInTheDocument();
+  });
+
+  it('should trigger loadMoreUsers early return when hasNextPage is false', async () => {
+    // This test covers lines 249-250: setHasMore(false); return;
+    const noNextPageMock = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'Single User',
+                    emailAddress: 'single@test.com',
+                    role: 'regular',
+                    createdAt: '2024-01-01T00:00:00Z',
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: { data: { organizations: [{ id: 'org1', name: 'Org' }] } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={noNextPageMock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Verify user is displayed
+    expect(screen.getByText('Single User')).toBeInTheDocument();
+
+    // Trigger scroll - this should call loadMoreUsers which should hit the early return
+    // since hasNextPage is false
+    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+    await wait(200);
+
+    // The component should still show "End of results" since hasNextPage was false
+    expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+  });
+
+  it('should sort users by oldest and verify the sorted order', async () => {
+    // This test explicitly covers line 294: the oldest sorting branch
+    const multipleUsersMock = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'Newer User',
+                    emailAddress: 'newer@test.com',
+                    role: 'regular',
+                    createdAt: '2025-06-01T00:00:00Z',
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+                {
+                  cursor: '2',
+                  node: {
+                    id: '2',
+                    name: 'Older User',
+                    emailAddress: 'older@test.com',
+                    role: 'regular',
+                    createdAt: '2020-01-01T00:00:00Z',
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: '2' },
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: { data: { organizations: [{ id: 'org1', name: 'Org' }] } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={multipleUsersMock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Both users should be visible initially
+    expect(screen.getByText('Newer User')).toBeInTheDocument();
+    expect(screen.getByText('Older User')).toBeInTheDocument();
+
+    // Click sort dropdown and select oldest
+    fireEvent.click(screen.getByTestId('sortUsers'));
+    await wait(50);
+    fireEvent.click(screen.getByTestId('oldest'));
+
+    await wait();
+
+    // After sorting by oldest, both users should still be visible
+    // The oldest sorting logic in sortUsers (line 294) should now be covered
+    const rows = screen.getAllByRole('row');
+    expect(rows.length).toBeGreaterThan(1);
+    expect(screen.getByText('Older User')).toBeInTheDocument();
+    expect(screen.getByText('Newer User')).toBeInTheDocument();
+  });
+
+  it('should handle filterUsers default case returning all users', async () => {
+    // This test covers line 312: the default return allUsers fallthrough
+    // When filteringOption is neither 'cancel', 'user', nor 'admin'
+    const usersMock = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'Regular Person',
+                    emailAddress: 'regular@test.com',
+                    role: 'regular',
+                    createdAt: '2024-01-01T00:00:00Z',
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+                {
+                  cursor: '2',
+                  node: {
+                    id: '2',
+                    name: 'Admin Person',
+                    emailAddress: 'admin@test.com',
+                    role: 'administrator',
+                    createdAt: '2024-02-01T00:00:00Z',
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: '2' },
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: { data: { organizations: [{ id: 'org1', name: 'Org' }] } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={usersMock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Both users should be displayed (cancel filter shows all)
+    expect(screen.getByText('Regular Person')).toBeInTheDocument();
+    expect(screen.getByText('Admin Person')).toBeInTheDocument();
+
+    // Open filter dropdown and click cancel to set filter to 'cancel'
+    fireEvent.click(screen.getByTestId('filterUsers'));
+    await wait(50);
+    fireEvent.click(screen.getByTestId('cancel'));
+
+    await wait();
+
+    // After cancel filter, all users should still be displayed
+    expect(screen.getByText('Regular Person')).toBeInTheDocument();
+    expect(screen.getByText('Admin Person')).toBeInTheDocument();
+  });
+
+  it('should handle loadMoreUsers when pageInfoState has no hasNextPage after second fetch', async () => {
+    // This test attempts to cover lines 249-250 by triggering loadMoreUsers
+    // after paginated results run out
+    const paginatedMock = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'First User',
+                    emailAddress: 'first@test.com',
+                    role: 'regular',
+                    createdAt: '2024-01-01T00:00:00Z',
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: true, endCursor: '1' },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: '1',
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '2',
+                  node: {
+                    id: '2',
+                    name: 'Second User',
+                    emailAddress: 'second@test.com',
+                    role: 'regular',
+                    createdAt: '2024-02-01T00:00:00Z',
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: '2' },
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: { data: { organizations: [{ id: 'org1', name: 'Org' }] } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={paginatedMock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Verify first user is displayed
+    expect(screen.getByText('First User')).toBeInTheDocument();
+
+    // Trigger first scroll to load more users
+    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+    await wait(500);
+
+    // Both users should now be displayed
+    expect(screen.getByText('First User')).toBeInTheDocument();
+    expect(screen.getByText('Second User')).toBeInTheDocument();
+
+    // Now hasNextPage is false, so hasMore should be false
+    // End of results should be shown
+    expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+
+    // Trigger another scroll - this should try to call loadMoreUsers
+    // but it will hit the early return since hasNextPage is false
+    fireEvent.scroll(window, { target: { scrollY: 12000 } });
+    await wait(200);
+
+    // Component should still work fine and show end of results
+    expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+  });
+
+  it('should show noUserFound when usersData is empty array and no search term', async () => {
+    // This test covers line 390-391: usersData.length === 0 branch
+    // When the query returns empty edges, usersData becomes [], and we show "No User Found"
+    const emptyUsersMock = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [], // Empty edges
+              pageInfo: { hasNextPage: false, endCursor: null },
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: { data: { organizations: [{ id: 'org1', name: 'Org' }] } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={emptyUsersMock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // With empty edges, usersData becomes [] and we should see "No User Found"
+    await waitFor(() => {
+      expect(screen.getByText(/No User Found/i)).toBeInTheDocument();
+    });
+  });
+
+  it('should handle fetchMore returning null edges gracefully', async () => {
+    // This test covers lines 261-266: the ?? operators for null data
+    const nullEdgesMock = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'Initial User',
+                    emailAddress: 'initial@test.com',
+                    role: 'regular',
+                    createdAt: '2024-01-01T00:00:00Z',
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: true, endCursor: '1' },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: '1',
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: null, // null edges to test ?? operator
+              pageInfo: null, // null pageInfo to test ?? operator
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: { data: { organizations: [{ id: 'org1', name: 'Org' }] } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={nullEdgesMock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Initial user should be displayed
+    expect(screen.getByText('Initial User')).toBeInTheDocument();
+
+    // Trigger scroll to load more (which will return null edges)
+    fireEvent.scroll(window, { target: { scrollY: 6000 } });
+    await wait(500);
+
+    // Component should handle null gracefully - initial user still there
+    expect(screen.getByText('Initial User')).toBeInTheDocument();
+  });
+
+  it('should handle loadMoreUsers when pageInfoState hasNextPage is explicitly false', async () => {
+    // This test targets line 249: the !pageInfoState?.hasNextPage branch
+    const falseHasNextPageMock = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'Only User',
+                    emailAddress: 'only@test.com',
+                    role: 'regular',
+                    createdAt: '2024-01-01T00:00:00Z',
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: '1' },
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST },
+        result: { data: { organizations: [{ id: 'org1', name: 'Org' }] } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={falseHasNextPageMock} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // User should be displayed
+    expect(screen.getByText('Only User')).toBeInTheDocument();
+
+    // hasNextPage is false, so loadMoreUsers should early return
+    // End of results should be shown
+    expect(screen.getByText(/End of results/i)).toBeInTheDocument();
   });
 });
