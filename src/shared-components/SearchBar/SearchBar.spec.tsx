@@ -161,6 +161,7 @@ describe('SearchBar', () => {
   });
 
   it('triggers onSearch with empty string when clearing without onClear prop', async () => {
+    const user = userEvent.setup();
     const handleSearch = vi.fn();
     render(
       <SearchBar
@@ -171,8 +172,8 @@ describe('SearchBar', () => {
     );
 
     const input = screen.getByTestId('search-input');
-    await userEvent.type(input, 'query');
-    await userEvent.click(screen.getByTestId('clear-search'));
+    await user.type(input, 'query');
+    await user.click(screen.getByTestId('clear-search'));
 
     expect(handleSearch).toHaveBeenCalledWith(
       '',
@@ -236,28 +237,5 @@ describe('SearchBar', () => {
     const input = screen.getByTestId('search-input');
     await user.type(input, 'test{enter}');
     // Should not throw
-  });
-
-  it('clears the input value without onClear prop', async () => {
-    const user = userEvent.setup();
-    const handleSearch = vi.fn();
-    render(
-      <SearchBar
-        onSearch={handleSearch}
-        inputTestId="search-input"
-        clearButtonTestId="clear-search"
-      />,
-    );
-
-    const input = screen.getByTestId('search-input');
-    await user.type(input, 'pledge');
-    await user.click(screen.getByTestId('clear-search'));
-
-    expect(input).toHaveValue('');
-    // When onClear is NOT provided, it should trigger search with empty string
-    expect(handleSearch).toHaveBeenCalledWith(
-      '',
-      expect.objectContaining({ trigger: 'clear' }),
-    );
   });
 });
