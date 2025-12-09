@@ -137,18 +137,23 @@ describe('SearchBar', () => {
     );
 
     expect(ref.current).toBeDefined();
+    const input = screen.getByTestId('search-input');
 
     // Test focus
-    ref.current?.focus();
-    const input = screen.getByTestId('search-input');
+    act(() => {
+      ref.current?.focus();
+    });
     expect(input).toHaveFocus();
 
     // Test blur
-    ref.current?.blur();
+    act(() => {
+      ref.current?.blur();
+    });
     expect(input).not.toHaveFocus();
 
     // Test clear
     await user.type(input, 'orgs');
+    expect(input).toHaveValue('orgs');
     await act(async () => {
       ref.current?.clear();
     });
@@ -156,6 +161,7 @@ describe('SearchBar', () => {
   });
 
   it('triggers onSearch with empty string when clearing without onClear prop', async () => {
+    const user = userEvent.setup();
     const handleSearch = vi.fn();
     render(
       <SearchBar
@@ -166,8 +172,8 @@ describe('SearchBar', () => {
     );
 
     const input = screen.getByTestId('search-input');
-    await userEvent.type(input, 'query');
-    await userEvent.click(screen.getByTestId('clear-search'));
+    await user.type(input, 'query');
+    await user.click(screen.getByTestId('clear-search'));
 
     expect(handleSearch).toHaveBeenCalledWith(
       '',

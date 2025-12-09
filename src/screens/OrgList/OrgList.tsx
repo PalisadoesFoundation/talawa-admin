@@ -69,11 +69,11 @@ import { Button } from '@mui/material';
 import OrganizationModal from './modal/OrganizationModal';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router';
-import { Form, InputGroup, Modal } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
-import SearchOutlined from '@mui/icons-material/SearchOutlined';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 const { getItem } = useLocalStorage();
 
@@ -298,21 +298,10 @@ function orgList(): JSX.Element {
 
   const debouncedSearch = useDebounce(doSearch, 300);
 
-  const handleChangeFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newVal = e.target.value;
-    setTypedValue(newVal);
-    setSearchByName(newVal);
-    debouncedSearch(newVal);
-  };
-
-  const handleSearchByEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      doSearch(typedValue);
-    }
-  };
-
-  const handleSearchByBtnClick = () => {
-    doSearch(typedValue);
+  const handleChangeFilter = (val: string) => {
+    setTypedValue(val);
+    setSearchByName(val);
+    debouncedSearch(val);
   };
 
   const handleSortChange = (value: string | number): void => {
@@ -343,31 +332,16 @@ function orgList(): JSX.Element {
       <div className={styles.btnsContainerSearchBar}>
         <div className={styles.searchWrapper}>
           <div className={styles.inputOrgList}>
-            <InputGroup className={styles.maxWidth}>
-              <Form.Control
-                placeholder={t('searchOrganizations')}
-                id="searchUserOrgs"
-                type="text"
-                className={styles.inputField}
-                value={typedValue}
-                onChange={handleChangeFilter}
-                onKeyUp={handleSearchByEnter}
-                data-testid="searchInput"
-                aria-label={t('searchOrganizations')}
-              />
-
-              <InputGroup.Text
-                className={styles.searchButton}
-                role="button"
-                style={{ cursor: 'pointer' }}
-                onClick={handleSearchByBtnClick}
-                data-testid="searchBtn"
-                title={t('search')}
-                aria-label={t('search')}
-              >
-                <SearchOutlined className={styles.colorWhite} />
-              </InputGroup.Text>
-            </InputGroup>
+            <SearchBar
+              placeholder={t('searchOrganizations')}
+              value={typedValue}
+              onChange={handleChangeFilter}
+              onSearch={doSearch}
+              className={styles.maxWidth}
+              inputTestId="searchInput"
+              buttonTestId="searchBtn"
+              buttonAriaLabel={t('search')}
+            />
           </div>
 
           <div className={styles.btnsBlock}>
