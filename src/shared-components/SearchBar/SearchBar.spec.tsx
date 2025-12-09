@@ -137,18 +137,23 @@ describe('SearchBar', () => {
     );
 
     expect(ref.current).toBeDefined();
+    const input = screen.getByTestId('search-input');
 
     // Test focus
-    ref.current?.focus();
-    const input = screen.getByTestId('search-input');
+    act(() => {
+      ref.current?.focus();
+    });
     expect(input).toHaveFocus();
 
     // Test blur
-    ref.current?.blur();
+    act(() => {
+      ref.current?.blur();
+    });
     expect(input).not.toHaveFocus();
 
     // Test clear
     await user.type(input, 'orgs');
+    expect(input).toHaveValue('orgs');
     await act(async () => {
       ref.current?.clear();
     });
@@ -254,40 +259,5 @@ describe('SearchBar', () => {
       '',
       expect.objectContaining({ trigger: 'clear' }),
     );
-  });
-
-  it('exposes imperative handle methods', async () => {
-    const user = userEvent.setup();
-    const ref = React.createRef<InterfaceSearchBarRef>();
-    const handleSearch = vi.fn();
-    render(
-      <SearchBar
-        ref={ref}
-        onSearch={handleSearch}
-        inputTestId="search-input"
-      />,
-    );
-
-    const input = screen.getByTestId('search-input');
-
-    // Test focus
-    act(() => {
-      ref.current?.focus();
-    });
-    expect(input).toHaveFocus();
-
-    // Test blur
-    act(() => {
-      ref.current?.blur();
-    });
-    expect(input).not.toHaveFocus();
-
-    // Test clear
-    await user.type(input, 'test');
-    expect(input).toHaveValue('test');
-    act(() => {
-      ref.current?.clear();
-    });
-    expect(input).toHaveValue('');
   });
 });
