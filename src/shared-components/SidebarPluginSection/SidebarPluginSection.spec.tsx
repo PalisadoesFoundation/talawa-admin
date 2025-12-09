@@ -1,11 +1,15 @@
 import React from 'react';
-import { describe, it, vi, expect } from 'vitest';
+import { describe, it, vi, expect, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
 import SidebarPluginSection from './SidebarPluginSection';
 import type { IDrawerExtension } from 'plugin';
+
+afterEach(() => {
+  vi.clearAllMocks();
+});
 
 // Mock translations
 vi.mock('react-i18next', async () => {

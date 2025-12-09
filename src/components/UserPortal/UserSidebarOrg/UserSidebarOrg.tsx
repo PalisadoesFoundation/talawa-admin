@@ -87,42 +87,40 @@ const UserSidebarOrg = ({
   const drawerContent = useMemo(
     () => (
       <div className={styles.optionList}>
-        {Array.isArray(targets) &&
-          targets.map((target) => {
-            if (!target) return null;
-            const { name, url, subTargets } = target;
+        {targets.map((target) => {
+          const { name, url, subTargets } = target;
 
-            // Render navigation item if URL exists
-            if (url) {
-              return (
-                <SidebarNavItem
-                  key={name}
-                  to={url}
-                  icon={<IconComponent name={name} fill="var(--bs-black)" />}
-                  label={tCommon(name)}
-                  testId={name}
-                  hideDrawer={hideDrawer}
-                  onClick={handleLinkClick}
-                  useSimpleButton={true}
-                />
-              );
-            }
+          // Render navigation item if URL exists
+          if (url) {
+            return (
+              <SidebarNavItem
+                key={name}
+                to={url}
+                icon={<IconComponent name={name} fill="var(--bs-black)" />}
+                label={tCommon(name)}
+                testId={name}
+                hideDrawer={hideDrawer}
+                onClick={handleLinkClick}
+                useSimpleButton={true}
+              />
+            );
+          }
 
-            // Only render CollapsibleDropdown if subTargets exists and has items
-            if (subTargets && subTargets.length > 0) {
-              return (
-                <CollapsibleDropdown
-                  key={name}
-                  target={target}
-                  showDropdown={showDropdown}
-                  setShowDropdown={setShowDropdown}
-                />
-              );
-            }
+          // Only render CollapsibleDropdown if subTargets exists and has items
+          if (subTargets && subTargets.length > 0) {
+            return (
+              <CollapsibleDropdown
+                key={name}
+                target={target}
+                showDropdown={showDropdown}
+                setShowDropdown={setShowDropdown}
+              />
+            );
+          }
 
-            // Skip rendering if neither url nor subTargets
-            return null;
-          })}
+          // Skip rendering if neither url nor subTargets
+          return null;
+        })}
 
         {/* Plugin Routes Section */}
         <SidebarPluginSection

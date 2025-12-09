@@ -1,8 +1,12 @@
 import React from 'react';
-import { describe, it, vi, expect } from 'vitest';
+import { describe, it, vi, expect, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import SidebarNavItem from './SidebarNavItem';
+
+afterEach(() => {
+  vi.clearAllMocks();
+});
 
 // Mock icon element for testing
 const mockIconElement = <div data-testid="mock-icon" />;
