@@ -101,6 +101,8 @@
   "searchBy": "Buscar por {{item}}",
   "plugins": "Complementos",
   "pluginSettings": "Configuración de Complementos",
+  "unblock": "Desbloquear",
+  "unblockedSuccessfully": "{{item}} desbloqueado correctamente",
   "save": "Guardar",
   "saving": "Guardando..."
 }

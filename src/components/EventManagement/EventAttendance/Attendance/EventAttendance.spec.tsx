@@ -30,7 +30,7 @@ vi.mock('react-chartjs-2', async () => ({
 
 const renderEventAttendance = (): RenderResult => {
   return render(
-    <MockedProvider mocks={MOCKS} addTypename={false}>
+    <MockedProvider mocks={MOCKS}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>

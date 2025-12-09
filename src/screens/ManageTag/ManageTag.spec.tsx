@@ -71,29 +71,26 @@ vi.mock('react-infinite-scroll-component', () => ({
   },
 }));
 
-const link = new StaticMockLink(MOCKS, false);
-const link2 = new StaticMockLink(MOCKS_ERROR_ASSIGNED_MEMBERS, false);
-const link3 = new StaticMockLink(MOCKS_SUCCESS_UNASSIGN_USER_TAG, false);
-const link4 = new StaticMockLink(MOCKS_SUCCESS_UPDATE_USER_TAG, false);
-const link5 = new StaticMockLink(MOCKS_SUCCESS_REMOVE_USER_TAG, false);
-const link6 = new StaticMockLink(MOCKS_WITH_ANCESTOR_TAGS, false);
-const link7 = new StaticMockLink(MOCKS_INFINITE_SCROLL_PAGINATION, false);
-const link8 = new StaticMockLink(MOCKS_ERROR_OBJECT, false);
-const link9 = new StaticMockLink(MOCKS_NULL_USERS_ASSIGNED_TO, false);
-const link10 = new StaticMockLink(MOCKS_EMPTY_ASSIGNED_MEMBERS_ARRAY, false);
-const link11 = new StaticMockLink(MOCKS_EMPTY_EDGES_ARRAY, false);
-const link12 = new StaticMockLink(MOCKS_EMPTY_PAGE_INFO, false);
-const link13 = new StaticMockLink(MOCKS_NULL_ANCESTOR_TAGS, false);
-const link14 = new StaticMockLink(MOCKS_UNDEFINED_DATA, false);
-const link15 = new StaticMockLink(MOCKS_NULL_DATA, false);
-const link16 = new StaticMockLink(MOCKS_ERROR_UNASSIGN_USER_TAG, false);
-const link17 = new StaticMockLink(MOCKS_ERROR_UPDATE_USER_TAG, false);
-const link18 = new StaticMockLink(MOCKS_ERROR_REMOVE_USER_TAG, false);
-const link19 = new StaticMockLink(MOCKS_INFINITE_SCROLL_NULL_EDGES, false);
-const link20 = new StaticMockLink(
-  MOCKS_INFINITE_SCROLL_NULL_FETCH_RESULT,
-  false,
-);
+const link = new StaticMockLink(MOCKS);
+const link2 = new StaticMockLink(MOCKS_ERROR_ASSIGNED_MEMBERS);
+const link3 = new StaticMockLink(MOCKS_SUCCESS_UNASSIGN_USER_TAG);
+const link4 = new StaticMockLink(MOCKS_SUCCESS_UPDATE_USER_TAG);
+const link5 = new StaticMockLink(MOCKS_SUCCESS_REMOVE_USER_TAG);
+const link6 = new StaticMockLink(MOCKS_WITH_ANCESTOR_TAGS);
+const link7 = new StaticMockLink(MOCKS_INFINITE_SCROLL_PAGINATION);
+const link8 = new StaticMockLink(MOCKS_ERROR_OBJECT);
+const link9 = new StaticMockLink(MOCKS_NULL_USERS_ASSIGNED_TO);
+const link10 = new StaticMockLink(MOCKS_EMPTY_ASSIGNED_MEMBERS_ARRAY);
+const link11 = new StaticMockLink(MOCKS_EMPTY_EDGES_ARRAY);
+const link12 = new StaticMockLink(MOCKS_EMPTY_PAGE_INFO);
+const link13 = new StaticMockLink(MOCKS_NULL_ANCESTOR_TAGS);
+const link14 = new StaticMockLink(MOCKS_UNDEFINED_DATA);
+const link15 = new StaticMockLink(MOCKS_NULL_DATA);
+const link16 = new StaticMockLink(MOCKS_ERROR_UNASSIGN_USER_TAG);
+const link17 = new StaticMockLink(MOCKS_ERROR_UPDATE_USER_TAG);
+const link18 = new StaticMockLink(MOCKS_ERROR_REMOVE_USER_TAG);
+const link19 = new StaticMockLink(MOCKS_INFINITE_SCROLL_NULL_EDGES);
+const link20 = new StaticMockLink(MOCKS_INFINITE_SCROLL_NULL_FETCH_RESULT);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -121,7 +118,7 @@ vi.mock('../../components/TagActions/TagActions', async () => {
 
 const renderManageTag = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/orgtags/123/manageTag/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
@@ -512,7 +509,7 @@ describe('Manage Tag Page', () => {
     };
 
     const mocks = [initialMock, searchMock];
-    const searchLink = new StaticMockLink(mocks, false);
+    const searchLink = new StaticMockLink(mocks);
 
     renderManageTag(searchLink);
 
@@ -662,7 +659,7 @@ describe('Manage Tag Page', () => {
     };
 
     const mocks = [initialMock, searchMock];
-    const searchLink = new StaticMockLink(mocks, false);
+    const searchLink = new StaticMockLink(mocks);
 
     renderManageTag(searchLink);
 
@@ -1181,7 +1178,7 @@ describe('Manage Tag Page', () => {
     ];
 
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={['/orgtags/org-123/manageTag/tag-123']}>
           <Routes>
             <Route

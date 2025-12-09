@@ -102,5 +102,7 @@
   "plugins": "प्लगइन्स",
   "pluginSettings": "प्लगइन सेटिंग्स",
   "save": "सहेजें",
-  "saving": "सहेज रहे हैं..."
+  "saving": "सहेज रहे हैं...",
+  "unblock": "अनब्लॉक करें",
+  "unblockedSuccessfully": "{{item}} सफलतापूर्वक अनब्लॉक किया गया"
 }

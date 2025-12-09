@@ -101,6 +101,8 @@
   "searchBy": "Rechercher par {{item}}",
   "plugins": "Extensions",
   "pluginSettings": "Paramètres des Extensions",
+  "unblock": "Débloquer",
+  "unblockedSuccessfully": "{{item}} débloqué avec succès",
   "save": "Enregistrer",
   "saving": "Enregistrement..."
 }

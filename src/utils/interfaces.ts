@@ -541,13 +541,15 @@ export interface InterfaceOrgInfoTypePG {
   description: string;
   avatarURL: string | null;
   createdAt: string;
-  members: {
+  membersCount?: number;
+  members?: {
     edges: {
       node: {
         id: string;
       };
     }[];
   };
+  role: string;
 }
 
 /**
@@ -2037,6 +2039,83 @@ export interface InterfaceQueryUserListItem {
           name: string;
           emailAddress: string;
           avatarURL?: string;
+        };
+      };
+    }[];
+  };
+  /**
+   * Optional app user profile with administrative metadata.
+   * Note: This field is present in several GraphQL responses and is optional.
+   */
+  appUserProfile?: {
+    isSuperAdmin?: boolean;
+    adminFor?: Array<{ _id: string }>;
+  };
+}
+
+export interface InterfaceQueryUserListItemForAdmin {
+  id: string;
+  name: string;
+  emailAddress: string;
+  avatarURL: string | null;
+  birthDate: string | null;
+  city: string | null;
+  countryCode: string | null;
+  createdAt: string;
+  updatedAt: string;
+  educationGrade: string | null;
+  employmentStatus: string | null;
+  isEmailAddressVerified: boolean;
+  maritalStatus: string | null;
+  natalSex: string | null;
+  naturalLanguageCode: string | null;
+  postalCode: string | null;
+  role: string | null;
+  state: string | null;
+  mobilePhoneNumber: string | null;
+  homePhoneNumber: string | null;
+  workPhoneNumber: string | null;
+
+  createdOrganizations: {
+    id: string;
+    name: string;
+    avatarURL?: string;
+  }[];
+
+  organizationsWhereMember: {
+    edges: {
+      node: {
+        id: string;
+        name: string;
+        avatarURL?: string;
+        createdAt: string;
+        city?: string;
+        state?: string;
+        countryCode?: string;
+        creator: {
+          id: string;
+          name: string;
+          emailAddress: string;
+          avatarURL?: string;
+        };
+      };
+    }[];
+  };
+
+  orgsWhereUserIsBlocked?: {
+    edges: {
+      node: {
+        id: string;
+        createdAt: string;
+        organization: {
+          name: string;
+          avatarURL?: string;
+          city: string;
+          state: string;
+          createdAt: string;
+          creator: {
+            name: string;
+          };
         };
       };
     }[];

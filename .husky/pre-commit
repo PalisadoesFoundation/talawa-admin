@@ -8,5 +8,6 @@ pnpm run update:toc
 pnpm run check:pom
 npx knip --include files,exports
 npx knip --config knip.deps.json --include dependencies
+pnpm run check-mock-cleanup
 
 git add .

@@ -47,7 +47,7 @@ describe('AgendaCategoryUpdateModal', () => {
 
   it('renders modal correctly', () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -76,7 +76,7 @@ describe('AgendaCategoryUpdateModal', () => {
 
   it('calls hideUpdateModal when close button is clicked', async () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -109,7 +109,7 @@ describe('AgendaCategoryUpdateModal', () => {
       createdBy: 'Test User',
     };
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -148,7 +148,7 @@ describe('AgendaCategoryUpdateModal', () => {
 
   it('calls updateAgendaCategoryHandler when form is submitted', () => {
     render(
-      <MockedProvider addTypename={false}>
+      <MockedProvider>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>

@@ -60,6 +60,15 @@ describe('Test if errorHandler is working properly', () => {
     expect(toast.error).toHaveBeenCalledWith(tErrors('error400'));
   });
 
+  it('should call toast.error with the correct message if error message contains this substring "organization name already exists"', () => {
+    const error = new Error('organization name already exists');
+    errorHandler(t, error);
+
+    expect(toast.error).toHaveBeenCalledWith(
+      tErrors('organizationNameAlreadyExists'),
+    );
+  });
+
   it('should handle error messages with different cases', () => {
     errorHandler(t, new Error('VALUE IS NOT A VALID PHONE NUMBER'));
     expect(toast.error).toHaveBeenCalledWith(tErrors('invalidPhoneNumber'));

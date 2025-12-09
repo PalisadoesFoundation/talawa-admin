@@ -50,9 +50,13 @@ const UserSidebar = ({
   const { t: tCommon } = useTranslation('common');
 
   // Memoize the parameters to prevent infinite re-renders
-  const userPermissions = useMemo(() => [], []);
-  const isAdmin = false;
-  const isOrg = false;
+  const userPermissions = React.useMemo(() => [], []);
+  const isAdmin = React.useMemo(() => false, []);
+  const isOrg = React.useMemo(() => false, []);
+  const { setItem, getItem } = useLocalStorage();
+  const role = getItem<string>('role');
+  const userRole = role != 'regular' ? 'Admin' : 'User';
+  const portal = userRole == 'Admin' ? 'admin' : 'user';
 
   // Get plugin drawer items for user global (no orgId required)
   const pluginDrawerItems = usePluginDrawerItems(
@@ -126,17 +130,128 @@ const UserSidebar = ({
   );
 
   return (
-    <SidebarBase
-      hideDrawer={hideDrawer}
-      setHideDrawer={setHideDrawer}
-      portalType="user"
-      backgroundColor="#f0f7fb"
-      persistToggleState={true}
-      headerContent={headerContent}
-      footerContent={<SignOut hideDrawer={hideDrawer} />}
-    >
-      {drawerContent}
-    </SidebarBase>
+    <>
+      <div
+        className={`${styles.leftDrawer} 
+        ${hideDrawer ? styles.collapsedDrawer : styles.expandedDrawer}`}
+        style={{ backgroundColor: '#f0f7fb' }}
+        data-testid="leftDrawerContainer"
+      >
+        <div
+          className={`d-flex align-items-center ${hideDrawer ? 'justify-content-center' : 'justify-content-between'}`}
+        >
+          <button
+            className={`d-flex align-items-center btn p-0 border-0 bg-transparent`}
+            data-testid="toggleBtn"
+            onClick={() => {
+              const newState = !hideDrawer;
+              setItem('sidebar', newState.toString());
+              setHideDrawer(newState);
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                const newState = !hideDrawer;
+                setItem('sidebar', newState.toString());
+                setHideDrawer(newState);
+              }
+            }}
+            role="button"
+            tabIndex={0}
+          >
+            <FaBars
+              className={styles.hamburgerIcon}
+              aria-label="Toggle sidebar"
+              size={22}
+              style={{
+                cursor: 'pointer',
+                height: '38px',
+                marginLeft: hideDrawer ? '0px' : '10px',
+              }}
+            />
+          </button>
+          <div
+            style={{
+              display: hideDrawer ? 'none' : 'flex',
+              alignItems: 'center',
+              marginRight: 'auto',
+              paddingLeft: '5px',
+            }}
+          >
+            <TalawaLogo className={styles.talawaLogo} />
+            <div className={`${styles.talawaText} ${styles.sidebarText}`}>
+              {tCommon('userPortal')}
+            </div>
+          </div>
+        </div>
+
+        {/* User Profile Section - Top position like Admin Portal */}
+        {!hideDrawer && (
+          <div
+            style={{
+              backgroundColor: '#e8f4f8',
+              padding: '10px',
+              borderRadius: '8px',
+              margin: '10px',
+            }}
+          >
+            <ProfileCard portal={portal} />
+          </div>
+        )}
+
+        <div
+          className={`d-flex flex-column ${styles.sidebarcompheight}`}
+          data-testid="sidebar-main-content"
+        >
+          <div className={styles.optionList}>
+            {renderDrawerItem(
+              '/user/organizations',
+              <IconComponent name="My Organizations" />,
+              t('my organizations'),
+              'orgsBtn',
+            )}
+
+            {renderDrawerItem(
+              '/user/notification',
+              <FaBell />,
+              tCommon('notifications'),
+              'userNotificationBtn',
+            )}
+
+            {renderDrawerItem(
+              '/user/settings',
+              <IconComponent name="Settings" />,
+              tCommon('Settings'),
+              'settingsBtn',
+            )}
+
+            {/* Plugin Global Features Section */}
+            {pluginDrawerItems?.length > 0 && (
+              <>
+                <h4
+                  className={styles.titleHeader}
+                  style={{
+                    fontSize: '1.1rem',
+                    marginTop: '1.5rem',
+                    marginBottom: '0.75rem',
+                    color: 'var(--bs-secondary)',
+                  }}
+                >
+                  Plugin Settings
+                </h4>
+                {pluginDrawerItems?.map((item) => renderPluginDrawerItem(item))}
+              </>
+            )}
+          </div>
+        </div>
+        <div className={styles.userSidebarOrgFooter}>
+          <div style={{ display: hideDrawer ? 'none' : 'flex' }}>
+            <ProfileCard portal={portal} />
+          </div>
+          <SignOut hideDrawer={hideDrawer} />
+        </div>
+      </div>
+    </>
   );
 };
 
