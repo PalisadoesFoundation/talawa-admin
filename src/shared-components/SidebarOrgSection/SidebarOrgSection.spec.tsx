@@ -1,10 +1,11 @@
 import React from 'react';
 import { describe, it, vi, expect } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider, type MockedResponse } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
 import SidebarOrgSection from './SidebarOrgSection';
+import type { ISidebarOrgSectionProps } from 'types/SidebarOrgSection/interface';
 import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
 
 // Mock Avatar component
@@ -34,7 +35,6 @@ vi.mock('react-i18next', async () => {
     }),
   };
 });
-
 describe('SidebarOrgSection Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -144,8 +144,10 @@ describe('SidebarOrgSection Component', () => {
     },
   ];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const renderComponent = (props = {}, mocks: any[] = successMocks) => {
+  const renderComponent = (
+    props: Partial<ISidebarOrgSectionProps> = {},
+    mocks: ReadonlyArray<MockedResponse> = successMocks,
+  ) => {
     const defaultProps = {
       orgId: mockOrgId,
       hideDrawer: false,
