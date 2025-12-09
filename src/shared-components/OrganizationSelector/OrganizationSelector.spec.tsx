@@ -46,6 +46,7 @@ describe('OrganizationSelector Component', () => {
     const autocomplete = screen.getByTestId('organizationSelect');
 
     const clearButton = autocomplete.querySelector('[aria-label="Clear"]');
+    expect(clearButton).toBeInTheDocument();
     if (clearButton) {
       fireEvent.click(clearButton);
     }
@@ -59,6 +60,7 @@ describe('OrganizationSelector Component', () => {
     renderComponent();
     const input = screen.getByTestId('orgInput');
     fireEvent.change(input, { target: { value: 'Org 1' } });
+    expect(mockOnChange).toHaveBeenCalled();
   });
 
   it('should handle organizations array being empty', () => {

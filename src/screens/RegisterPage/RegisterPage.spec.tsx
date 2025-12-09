@@ -456,4 +456,161 @@ describe('RegisterPage Component', () => {
       expect(mockSetItem).not.toHaveBeenCalledWith('token', expect.anything());
     });
   });
+
+  it('should show error when passwords do not match', async () => {
+    renderComponent();
+
+    const firstNameInput = await screen.findByPlaceholderText(/First Name/i);
+    fireEvent.change(firstNameInput, { target: { value: 'John' } });
+
+    const lastNameInput = await screen.findByPlaceholderText(/Last Name/i);
+    fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
+
+    const emailInput = screen.getByPlaceholderText(/Email/i);
+    fireEvent.change(emailInput, { target: { value: 'john@example.com' } });
+
+    const passwordInput = screen.getByTestId('passwordField');
+    const pwdNativeInput = passwordInput.querySelector('input');
+    if (pwdNativeInput) {
+      fireEvent.change(pwdNativeInput, { target: { value: 'Abc@1234' } });
+    }
+
+    const confirmPasswordInput = screen.getByTestId('cpassword');
+    const confirmNativeInput = confirmPasswordInput.querySelector('input');
+    if (confirmNativeInput) {
+      fireEvent.change(confirmNativeInput, {
+        target: { value: 'Different@1234' },
+      });
+    }
+
+    const orgSelector = await screen.findByText('Org 1(Address 1)');
+    fireEvent.click(orgSelector);
+
+    const submitBtn = screen.getByTestId('registrationBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        expect.stringMatching(/password.*match/i),
+      );
+    });
+  });
+
+  it('should show error when password is weak', async () => {
+    renderComponent();
+
+    const firstNameInput = await screen.findByPlaceholderText(/First Name/i);
+    fireEvent.change(firstNameInput, { target: { value: 'John' } });
+
+    const lastNameInput = await screen.findByPlaceholderText(/Last Name/i);
+    fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
+
+    const emailInput = screen.getByPlaceholderText(/Email/i);
+    fireEvent.change(emailInput, { target: { value: 'john@example.com' } });
+
+    const passwordInput = screen.getByTestId('passwordField');
+    const pwdNativeInput = passwordInput.querySelector('input');
+    if (pwdNativeInput) {
+      fireEvent.change(pwdNativeInput, { target: { value: 'weak' } });
+    }
+
+    const confirmPasswordInput = screen.getByTestId('cpassword');
+    const confirmNativeInput = confirmPasswordInput.querySelector('input');
+    if (confirmNativeInput) {
+      fireEvent.change(confirmNativeInput, { target: { value: 'weak' } });
+    }
+
+    const orgSelector = await screen.findByText('Org 1(Address 1)');
+    fireEvent.click(orgSelector);
+
+    const submitBtn = screen.getByTestId('registrationBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+  });
+
+  it('should show error when email format is invalid', async () => {
+    renderComponent();
+
+    const firstNameInput = await screen.findByPlaceholderText(/First Name/i);
+    fireEvent.change(firstNameInput, { target: { value: 'John' } });
+
+    const lastNameInput = await screen.findByPlaceholderText(/Last Name/i);
+    fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
+
+    const emailInput = screen.getByPlaceholderText(/Email/i);
+    fireEvent.change(emailInput, { target: { value: 'invalid-email' } });
+
+    const passwordInput = screen.getByTestId('passwordField');
+    const pwdNativeInput = passwordInput.querySelector('input');
+    if (pwdNativeInput) {
+      fireEvent.change(pwdNativeInput, { target: { value: 'Abc@1234' } });
+    }
+
+    const confirmPasswordInput = screen.getByTestId('cpassword');
+    const confirmNativeInput = confirmPasswordInput.querySelector('input');
+    if (confirmNativeInput) {
+      fireEvent.change(confirmNativeInput, { target: { value: 'Abc@1234' } });
+    }
+
+    const submitBtn = screen.getByTestId('registrationBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+  });
+
+  it('should show error when first name is missing', async () => {
+    renderComponent();
+
+    const lastNameInput = await screen.findByPlaceholderText(/Last Name/i);
+    fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
+
+    const emailInput = screen.getByPlaceholderText(/Email/i);
+    fireEvent.change(emailInput, { target: { value: 'john@example.com' } });
+
+    const submitBtn = screen.getByTestId('registrationBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(toast.warn).toHaveBeenCalledWith(
+        expect.stringContaining('firstName'),
+      );
+    });
+  });
+
+  it('should show error when organization is not selected', async () => {
+    renderComponent();
+
+    const firstNameInput = await screen.findByPlaceholderText(/First Name/i);
+    fireEvent.change(firstNameInput, { target: { value: 'John' } });
+
+    const lastNameInput = await screen.findByPlaceholderText(/Last Name/i);
+    fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
+
+    const emailInput = screen.getByPlaceholderText(/Email/i);
+    fireEvent.change(emailInput, { target: { value: 'john@example.com' } });
+
+    const passwordInput = screen.getByTestId('passwordField');
+    const pwdNativeInput = passwordInput.querySelector('input');
+    if (pwdNativeInput) {
+      fireEvent.change(pwdNativeInput, { target: { value: 'Abc@1234' } });
+    }
+
+    const confirmPasswordInput = screen.getByTestId('cpassword');
+    const confirmNativeInput = confirmPasswordInput.querySelector('input');
+    if (confirmNativeInput) {
+      fireEvent.change(confirmNativeInput, { target: { value: 'Abc@1234' } });
+    }
+
+    const submitBtn = screen.getByTestId('registrationBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+  });
 });
