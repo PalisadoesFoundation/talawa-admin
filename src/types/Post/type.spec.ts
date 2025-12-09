@@ -7,7 +7,7 @@ import type {
   PostOrderByInput,
   PostComments,
   PostLikes,
-  PostNode
+  PostNode,
 } from './type';
 import { PostOrderByInputEnum } from './type';
 
