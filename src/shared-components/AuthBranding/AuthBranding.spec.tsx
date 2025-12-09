@@ -76,7 +76,7 @@ describe('AuthBranding Component', () => {
     expect(customLink).toHaveAttribute('href', communityData.facebookURL);
 
     const fallbackLinks = screen.getAllByTestId('PalisadoesSocialMedia');
-    expect(fallbackLinks.length).toBeGreaterThan(0);
+    expect(fallbackLinks).toHaveLength(6);
   });
 
   it('should handle missing social media URLs in communityData gracefully', () => {

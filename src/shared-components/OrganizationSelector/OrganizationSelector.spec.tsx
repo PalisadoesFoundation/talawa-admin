@@ -68,9 +68,9 @@ describe('OrganizationSelector Component', () => {
     expect(autocomplete).toBeInTheDocument();
   });
 
-  it('should show required asterisk when required prop is true', () => {
+  it('should mark the organization selector as required when required prop is true', () => {
     renderComponent({ required: true });
-    const asterisks = screen.getAllByText('*');
-    expect(asterisks.length).toBeGreaterThan(0);
+    const input = screen.getByTestId('orgInput');
+    expect(input).toBeRequired();
   });
 });

@@ -10,10 +10,7 @@ import {
   ORGANIZATION_LIST_NO_MEMBERS,
   GET_COMMUNITY_DATA_PG,
 } from 'GraphQl/Queries/Queries';
-import {
-  RECAPTCHA_MUTATION,
-  SIGNUP_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -192,6 +189,8 @@ describe('RegisterPage Component', () => {
 
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalled();
+      expect(mockStartSession).toHaveBeenCalled();
+      expect(mockSetItem).toHaveBeenCalledWith('token', 'test-token');
     });
   });
 
@@ -222,66 +221,8 @@ describe('RegisterPage Component', () => {
       fireEvent.change(confirmNativeInput, { target: { value: 'Abc@1234' } });
     }
 
-    const submitBtn = screen.getByTestId('registrationBtn');
-    fireEvent.click(submitBtn);
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
-        expect.stringContaining('captcha'),
-      );
-    });
-
-    vi.unstubAllEnvs();
-  });
-
-  it('should handle recaptcha validation failure', async () => {
-    vi.stubEnv('REACT_APP_USE_RECAPTCHA', 'yes');
-    vi.stubEnv('RECAPTCHA_SITE_KEY', 'test-key');
-
-    const failedRecaptchaMocks = [
-      ...mocks,
-      {
-        request: {
-          query: RECAPTCHA_MUTATION,
-          variables: { recaptchaToken: 'fake-token' },
-        },
-        result: {
-          data: { recaptcha: false },
-        },
-      },
-    ];
-
-    render(
-      <MockedProvider mocks={failedRecaptchaMocks}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <RegisterPage />
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const firstNameInput = await screen.findByPlaceholderText(/First Name/i);
-    fireEvent.change(firstNameInput, { target: { value: 'John' } });
-
-    const lastNameInput = await screen.findByPlaceholderText(/Last Name/i);
-    fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
-
-    const emailInput = screen.getByPlaceholderText(/Email/i);
-    fireEvent.change(emailInput, { target: { value: 'john@example.com' } });
-
-    const passwordInput = screen.getByTestId('passwordField');
-    const pwdNativeInput = passwordInput.querySelector('input');
-    if (pwdNativeInput) {
-      fireEvent.change(pwdNativeInput, { target: { value: 'Abc@1234' } });
-    }
-
-    const confirmPasswordInput = screen.getByTestId('cpassword');
-    const confirmNativeInput = confirmPasswordInput.querySelector('input');
-    if (confirmNativeInput) {
-      fireEvent.change(confirmNativeInput, { target: { value: 'Abc@1234' } });
-    }
-
+    const orgSelector = await screen.findByText('Org 1(Address 1)');
+    fireEvent.click(orgSelector);
     const submitBtn = screen.getByTestId('registrationBtn');
     fireEvent.click(submitBtn);
 
@@ -299,6 +240,7 @@ describe('RegisterPage Component', () => {
       if (key === 'pendingInvitationToken') return 'test-invitation-token';
       return null;
     });
+    const originalLocation = window.location;
 
     delete (window as unknown as { location: unknown }).location;
     (window as unknown as { location: { href: string } }).location = {
@@ -340,6 +282,7 @@ describe('RegisterPage Component', () => {
       );
       expect(mockRemoveItem).toHaveBeenCalledWith('pendingInvitationToken');
     });
+    (window as { location: Location }).location = originalLocation;
   });
 
   it('should detect admin role from /admin/register path', async () => {

@@ -252,39 +252,34 @@ describe('RegistrationForm Component', () => {
     renderComponent();
 
     const passwordInput = screen.getByTestId('passwordField');
-    const nativeInput = passwordInput.querySelector('input');
 
-    if (!nativeInput) {
-      throw new Error('Native input not found');
-    }
-
-    fireEvent.change(nativeInput, { target: { value: 'a' } });
-    fireEvent.focus(nativeInput);
+    fireEvent.change(passwordInput, { target: { value: 'a' } });
+    fireEvent.focus(passwordInput);
 
     await waitFor(() => {
       const validators = screen.getAllByTestId('validation-item');
       expect(validators.length).toBeGreaterThan(0);
     });
 
-    fireEvent.change(nativeInput, { target: { value: 'aA' } });
+    fireEvent.change(passwordInput, { target: { value: 'aA' } });
     await waitFor(() => {
       const validators = screen.getAllByTestId('validation-item');
       expect(validators.length).toBeGreaterThan(0);
     });
 
-    fireEvent.change(nativeInput, { target: { value: 'aA1' } });
+    fireEvent.change(passwordInput, { target: { value: 'aA1' } });
     await waitFor(() => {
       const validators = screen.getAllByTestId('validation-item');
       expect(validators.length).toBeGreaterThan(0);
     });
 
-    fireEvent.change(nativeInput, { target: { value: 'aA1!' } });
+    fireEvent.change(passwordInput, { target: { value: 'aA1!' } });
     await waitFor(() => {
       const validators = screen.getAllByTestId('validation-item');
       expect(validators.length).toBeGreaterThan(0);
     });
 
-    fireEvent.blur(nativeInput);
+    fireEvent.blur(passwordInput);
   });
 
   it('should handle recaptcha token correctly in onSubmit', async () => {

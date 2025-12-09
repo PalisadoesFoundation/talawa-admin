@@ -76,7 +76,7 @@ describe('LoginForm Component', () => {
     vi.unstubAllEnvs();
   });
 
-  it('should capture recaptcha token via handleCaptcha', async () => {
+  it('should submit successfully when recaptcha is enabled', async () => {
     vi.stubEnv('REACT_APP_USE_RECAPTCHA', 'yes');
     vi.stubEnv('RECAPTCHA_SITE_KEY', 'test-site-key');
 

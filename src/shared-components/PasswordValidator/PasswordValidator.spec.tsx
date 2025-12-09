@@ -34,7 +34,7 @@ describe('PasswordValidator Component', () => {
 
   it('should display validation when input is focused', () => {
     renderComponent({ isInputFocused: true, password: 'abc' });
-    expect(screen.getByTestId('passwordValidator')).toBeInTheDocument();
+    expect(screen.getByTestId('passwordCheck')).toBeInTheDocument();
   });
 
   it('should display validation when password has value even if not focused', () => {
