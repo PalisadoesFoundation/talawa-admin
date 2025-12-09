@@ -289,6 +289,38 @@ describe('LeaveOrganization Component', () => {
     consoleErrorSpy.mockRestore();
   });
 
+  test('does not submit when non-Enter key is pressed on email input', async () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <LeaveOrganization />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    const leaveButton = await screen.findByRole('button', {
+      name: /Leave Organization/i,
+    });
+    fireEvent.click(leaveButton);
+    await waitFor(() =>
+      expect(
+        screen.getByText(/Are you sure you want to leave this organization?/i),
+      ).toBeInTheDocument(),
+    );
+    await screen.findByText('Continue');
+    fireEvent.click(screen.getByText('Continue'));
+    const emailInput = screen.getByPlaceholderText(/Enter your email/i);
+    fireEvent.change(emailInput, {
+      target: { value: 'test@example.com' },
+    });
+    // Press a non-Enter key - should not trigger verification
+    fireEvent.keyDown(emailInput, { key: 'Tab', code: 'Tab' });
+    // Verify the modal is still open and no navigation happened
+    expect(
+      screen.getByPlaceholderText(/Enter your email/i),
+    ).toBeInTheDocument();
+    expect(routerMocks.navigate).not.toHaveBeenCalled();
+  });
+
   test('navigates and shows toast when email matches', async () => {
     render(
       <MockedProvider mocks={mocks}>
