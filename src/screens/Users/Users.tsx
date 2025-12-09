@@ -148,6 +148,7 @@ const Users = (): JSX.Element => {
   });
 
   type Edge = { cursor: string; node: InterfaceQueryUserListItem };
+  // edges defaults to [] so .map() always returns an array (newUser is never undefined)
   const edges = (data?.allUsers?.edges ?? []) as Edge[];
   const pageInfo = data?.allUsers?.pageInfo;
 

@@ -1351,8 +1351,10 @@ describe('useEffect loadMoreUsers trigger', () => {
     expect(screen.getByText(/End of results/i)).toBeInTheDocument();
   });
 
-  it('should return early from loadMoreUsers when isLoadingMore guard triggers', async () => {
-    // This test specifically covers the isLoadingMore early return branch
+  it('should handle rapid consecutive scroll events gracefully', async () => {
+    // Smoke test: verifies component remains stable when multiple scroll events
+    // fire in quick succession. The isLoadingMore guard (covered by istanbul ignore)
+    // prevents duplicate fetches, but we only verify correct end-state behavior here.
     const delayedFetchMoreMocks = [
       {
         request: {
@@ -1464,14 +1466,13 @@ describe('useEffect loadMoreUsers trigger', () => {
     // First scroll triggers loadMoreUsers and sets isLoadingMore = true
     fireEvent.scroll(window, { target: { scrollY: 6000 } });
 
-    // Immediately scroll again while first fetch is still in progress (isLoadingMore = true)
-    // This should hit the early return branch
+    // Second scroll while first fetch is still in progress
     fireEvent.scroll(window, { target: { scrollY: 12000 } });
 
     // Wait for the delayed fetchMore to complete
     await wait(1500);
 
-    // Component should still work correctly - both users should be displayed
+    // Verify component remains stable - both users should be displayed after fetch completes
     expect(screen.getByText('User One')).toBeInTheDocument();
     expect(screen.getByText('User Two')).toBeInTheDocument();
   });
@@ -1681,11 +1682,17 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
+    // Verify initial state: John User exists, John Smith (second page) does not
+    expect(screen.getByText('John User')).toBeInTheDocument();
+    expect(screen.queryByText('John Smith')).not.toBeInTheDocument();
+
     // Trigger scroll to load more users while search is active
     fireEvent.scroll(window, { target: { scrollY: 6000 } });
     await wait(500);
 
+    // Verify pagination worked: both first and second page results are now present
     expect(screen.getByText('John User')).toBeInTheDocument();
+    expect(screen.getByText('John Smith')).toBeInTheDocument();
   });
 
   it('should handle organizations being null/undefined without crashing', async () => {
@@ -1850,16 +1857,30 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
+    // Verify initial state: First User exists, Second User does not
+    expect(screen.getByText('First User')).toBeInTheDocument();
+    expect(screen.queryByText('Second User')).not.toBeInTheDocument();
+
     // Trigger scroll to load more
     fireEvent.scroll(window, { target: { scrollY: 6000 } });
 
-    // Wait for the load more to complete
+    // Allow a brief moment for the loading state to be set
+    await wait(100);
+
+    // Verify loading indicator is shown while fetchMore is in progress
+    // The InfiniteScroll loader prop renders TableLoader when isLoadingMore is true
+    const loaders = screen.getAllByTestId('TableLoader');
+    expect(loaders.length).toBeGreaterThan(0);
+
+    // Wait for the delayed fetchMore to complete
     await wait(1500);
 
+    // Verify loading is complete and both users are displayed
     expect(screen.getByText('First User')).toBeInTheDocument();
+    expect(screen.getByText('Second User')).toBeInTheDocument();
   });
 
-  it('should not set displayedUsers when usersData is empty', async () => {
+  it('should render empty state when usersData returns no users', async () => {
     const emptyUsersMock = [
       {
         request: {
@@ -1900,11 +1921,17 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    // The component should still render without crashing
+    // Component should render without crashing
     expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+
+    // Verify the "No User Found" message is displayed, confirming displayedUsers is empty
+    expect(screen.getByText(/No User Found/i)).toBeInTheDocument();
+
+    // Verify no user table rows are rendered
+    expect(screen.queryByTestId('user-row')).not.toBeInTheDocument();
   });
 
-  it('should handle loading state correctly with isLoadingMore true', async () => {
+  it('should show initial loading state then display user data after fetch completes', async () => {
     const loadingMock = [
       {
         request: {
@@ -1938,11 +1965,11 @@ describe('useEffect loadMoreUsers trigger', () => {
                   },
                 },
               ],
-              pageInfo: { hasNextPage: true, endCursor: '1' },
+              pageInfo: { hasNextPage: false, endCursor: '1' },
             },
           },
         },
-        delay: 500,
+        delay: 100,
       },
       {
         request: { query: ORGANIZATION_LIST },
@@ -1962,13 +1989,19 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
-    // Initially loading
-    await wait(100);
+    // Verify loading indicator is shown during initial fetch
+    expect(screen.getByTestId('TableLoader')).toBeInTheDocument();
 
-    // Wait for data
-    await wait(600);
+    // User should not be visible yet
+    expect(screen.queryByText('Test User')).not.toBeInTheDocument();
 
-    expect(screen.getByTestId('testcomp')).toBeInTheDocument();
+    // Wait for data to load
+    await waitFor(() => {
+      expect(screen.getByText('Test User')).toBeInTheDocument();
+    });
+
+    // Verify "No User Found" is not shown since we have data
+    expect(screen.queryByText(/No User Found/i)).not.toBeInTheDocument();
   });
 
   it('should return early from displayedUsers effect when usersData length is 0', async () => {
@@ -2018,7 +2051,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     expect(screen.getByText(/No User Found/i)).toBeInTheDocument();
   });
 
-  it('should filter users returning all when unknown filter option', async () => {
+  it('should leave results unchanged for cancel/default filter option', async () => {
     // Test the default return in filterUsers function
     const filterMock = [
       {
@@ -2075,8 +2108,9 @@ describe('useEffect loadMoreUsers trigger', () => {
     expect(screen.getByText('Test User')).toBeInTheDocument();
   });
 
-  it('should trigger loadMoreUsers early return when hasNextPage is false', async () => {
-    // This test covers lines 249-250: setHasMore(false); return;
+  it('should show "End of results" when initial response has no more pages', async () => {
+    // Verifies the UI displays "End of results" when pageInfo.hasNextPage is false
+    // from the first response, indicating InfiniteScroll has reached pagination end
     const noNextPageMock = [
       {
         request: {
@@ -2138,12 +2172,11 @@ describe('useEffect loadMoreUsers trigger', () => {
     // Verify user is displayed
     expect(screen.getByText('Single User')).toBeInTheDocument();
 
-    // Trigger scroll - this should call loadMoreUsers which should hit the early return
-    // since hasNextPage is false
+    // Trigger scroll - InfiniteScroll should not fetch more since hasNextPage is false
     fireEvent.scroll(window, { target: { scrollY: 6000 } });
     await wait(200);
 
-    // The component should still show "End of results" since hasNextPage was false
+    // The component should show "End of results" since there are no more pages
     expect(screen.getByText(/End of results/i)).toBeInTheDocument();
   });
 
@@ -2235,12 +2268,18 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    // After sorting by oldest, both users should still be visible
-    // The oldest sorting logic in sortUsers (line 294) should now be covered
-    const rows = screen.getAllByRole('row');
-    expect(rows.length).toBeGreaterThan(1);
+    // Verify both users are still visible after sorting
     expect(screen.getByText('Older User')).toBeInTheDocument();
     expect(screen.getByText('Newer User')).toBeInTheDocument();
+
+    // Verify the sort order: "Older User" should appear before "Newer User" in the DOM
+    const olderUserElement = screen.getByText('Older User');
+    const newerUserElement = screen.getByText('Newer User');
+
+    // compareDocumentPosition returns a bitmask; if olderUser precedes newerUser,
+    // the DOCUMENT_POSITION_FOLLOWING bit (4) will be set
+    const position = olderUserElement.compareDocumentPosition(newerUserElement);
+    expect(position & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
   it('should handle filterUsers default case returning all users', async () => {
@@ -2338,8 +2377,9 @@ describe('useEffect loadMoreUsers trigger', () => {
   });
 
   it('should handle loadMoreUsers when pageInfoState has no hasNextPage after second fetch', async () => {
-    // This test attempts to cover lines 249-250 by triggering loadMoreUsers
-    // after paginated results run out
+    // Verifies pagination exhausts correctly: first page has hasNextPage:true,
+    // second page has hasNextPage:false. Both users render, "End of results" is shown,
+    // and further scrolls do not trigger additional fetches.
     const paginatedMock = [
       {
         request: {
@@ -2447,15 +2487,14 @@ describe('useEffect loadMoreUsers trigger', () => {
     expect(screen.getByText('Second User')).toBeInTheDocument();
 
     // Now hasNextPage is false, so hasMore should be false
-    // End of results should be shown
+    // "End of results" should be shown
     expect(screen.getByText(/End of results/i)).toBeInTheDocument();
 
-    // Trigger another scroll - this should try to call loadMoreUsers
-    // but it will hit the early return since hasNextPage is false
+    // Trigger another scroll - pagination is exhausted so no additional fetch occurs
     fireEvent.scroll(window, { target: { scrollY: 12000 } });
     await wait(200);
 
-    // Component should still work fine and show end of results
+    // "End of results" remains visible
     expect(screen.getByText(/End of results/i)).toBeInTheDocument();
   });
 
@@ -2599,7 +2638,8 @@ describe('useEffect loadMoreUsers trigger', () => {
   });
 
   it('should handle loadMoreUsers when pageInfoState hasNextPage is explicitly false', async () => {
-    // This test targets line 249: the !pageInfoState?.hasNextPage branch
+    // Verifies that a single-page response with pageInfo.hasNextPage === false
+    // displays "End of results" and no further pagination occurs.
     const falseHasNextPageMock = [
       {
         request: {
@@ -2661,8 +2701,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     // User should be displayed
     expect(screen.getByText('Only User')).toBeInTheDocument();
 
-    // hasNextPage is false, so loadMoreUsers should early return
-    // End of results should be shown
+    // With hasNextPage false, pagination is complete and "End of results" is shown
     expect(screen.getByText(/End of results/i)).toBeInTheDocument();
   });
 });
