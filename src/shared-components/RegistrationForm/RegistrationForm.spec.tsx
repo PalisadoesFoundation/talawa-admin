@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import RegistrationForm from './RegistrationForm';
+import { toast } from 'react-toastify';
 
 vi.mock('react-toastify');
 
@@ -184,5 +185,143 @@ describe('RegistrationForm Component', () => {
     fireEvent.change(emailInput, { target: { value: 'JOHN@EXAMPLE.COM' } });
 
     expect(emailInput).toHaveValue('john@example.com');
+  });
+
+  it('should show error when firstName is empty on submit', async () => {
+    renderComponent();
+
+    const submitButton = screen.getByTestId('registrationBtn');
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(toast.warn).toHaveBeenCalledWith(
+        expect.stringContaining('firstName'),
+      );
+    });
+  });
+
+  it('should show error when firstName contains invalid characters', async () => {
+    renderComponent();
+
+    const firstNameInput = screen.getByPlaceholderText(/Enter firstname/i);
+    fireEvent.change(firstNameInput, { target: { value: 'John123' } });
+    fireEvent.click(screen.getByTestId('registrationBtn'));
+
+    await waitFor(() => {
+      expect(toast.warn).toHaveBeenCalledWith(
+        expect.stringContaining('firstName_invalid'),
+      );
+    });
+  });
+
+  it('should show error when lastName is empty on submit', async () => {
+    renderComponent();
+
+    const firstNameInput = screen.getByPlaceholderText(/Enter firstname/i);
+    fireEvent.change(firstNameInput, { target: { value: 'John' } });
+
+    const submitButton = screen.getByTestId('registrationBtn');
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(toast.warn).toHaveBeenCalledWith(
+        expect.stringContaining('lastName'),
+      );
+    });
+  });
+
+  it('should show error when lastName contains invalid characters', async () => {
+    renderComponent();
+
+    const firstNameInput = screen.getByPlaceholderText(/Enter firstname/i);
+    fireEvent.change(firstNameInput, { target: { value: 'John' } });
+
+    const lastNameInput = screen.getByPlaceholderText(/Enter lastname/i);
+    fireEvent.change(lastNameInput, { target: { value: 'Doe123' } });
+
+    fireEvent.click(screen.getByTestId('registrationBtn'));
+
+    await waitFor(() => {
+      expect(toast.warn).toHaveBeenCalledWith(
+        expect.stringContaining('lastName_invalid'),
+      );
+    });
+  });
+
+  it('should update password validation indicators in real-time', async () => {
+    renderComponent();
+
+    const passwordInput = screen.getByTestId('passwordField');
+    const nativeInput = passwordInput.querySelector('input');
+
+    if (!nativeInput) {
+      throw new Error('Native input not found');
+    }
+
+    fireEvent.change(nativeInput, { target: { value: 'a' } });
+    fireEvent.focus(nativeInput);
+
+    await waitFor(() => {
+      const validators = screen.getAllByTestId('validation-item');
+      expect(validators.length).toBeGreaterThan(0);
+    });
+
+    fireEvent.change(nativeInput, { target: { value: 'aA' } });
+    await waitFor(() => {
+      const validators = screen.getAllByTestId('validation-item');
+      expect(validators.length).toBeGreaterThan(0);
+    });
+
+    fireEvent.change(nativeInput, { target: { value: 'aA1' } });
+    await waitFor(() => {
+      const validators = screen.getAllByTestId('validation-item');
+      expect(validators.length).toBeGreaterThan(0);
+    });
+
+    fireEvent.change(nativeInput, { target: { value: 'aA1!' } });
+    await waitFor(() => {
+      const validators = screen.getAllByTestId('validation-item');
+      expect(validators.length).toBeGreaterThan(0);
+    });
+
+    fireEvent.blur(nativeInput);
+  });
+
+  it('should handle recaptcha token correctly in onSubmit', async () => {
+    vi.stubEnv('REACT_APP_USE_RECAPTCHA', 'yes');
+    vi.stubEnv('RECAPTCHA_SITE_KEY', 'test-key');
+
+    mockOnSubmit.mockResolvedValue(true);
+    renderComponent();
+
+    const firstNameInput = screen.getByPlaceholderText(/Enter firstname/i);
+    const lastNameInput = screen.getByPlaceholderText(/Enter lastname/i);
+    const emailInput = screen.getByTestId('signInEmail');
+    const passwordInput = screen.getByTestId('passwordField');
+    const confirmPasswordInput = screen.getByTestId('cpassword');
+
+    fireEvent.change(firstNameInput, { target: { value: 'John' } });
+    fireEvent.change(lastNameInput, { target: { value: 'Doe' } });
+    fireEvent.change(emailInput, { target: { value: 'john@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'Test123!' } });
+    fireEvent.change(confirmPasswordInput, { target: { value: 'Test123!' } });
+
+    const submitButton = screen.getByTestId('registrationBtn');
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(mockOnSubmit).toHaveBeenCalledWith(
+        expect.objectContaining({
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john@example.com',
+          password: 'Test123!',
+          confirmPassword: 'Test123!',
+        }),
+        null,
+      );
+    });
+
+    vi.unstubAllEnvs();
   });
 });

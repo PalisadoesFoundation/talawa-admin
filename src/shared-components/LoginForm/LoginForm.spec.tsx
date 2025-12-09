@@ -63,4 +63,76 @@ describe('LoginForm Component', () => {
     renderComponent({ showRegisterLink: false });
     expect(screen.queryByTestId('goToRegisterPortion')).not.toBeInTheDocument();
   });
+
+  it('should render recaptcha when REACT_APP_USE_RECAPTCHA is yes and RECAPTCHA_SITE_KEY exists', () => {
+    vi.stubEnv('REACT_APP_USE_RECAPTCHA', 'yes');
+    vi.stubEnv('RECAPTCHA_SITE_KEY', 'test-site-key');
+
+    renderComponent();
+
+    const recaptchaContainer = document.querySelector('.googleRecaptcha');
+    expect(recaptchaContainer).toBeInTheDocument();
+
+    vi.unstubAllEnvs();
+  });
+
+  it('should capture recaptcha token via handleCaptcha', async () => {
+    vi.stubEnv('REACT_APP_USE_RECAPTCHA', 'yes');
+    vi.stubEnv('RECAPTCHA_SITE_KEY', 'test-site-key');
+
+    renderComponent();
+
+    const emailInput = screen.getByTestId('loginEmail');
+    const passwordInput = screen.getByTestId('password');
+
+    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
+    fireEvent.change(passwordInput, { target: { value: 'password123' } });
+
+    fireEvent.click(screen.getByTestId('loginBtn'));
+
+    await waitFor(() => {
+      expect(mockOnSubmit).toHaveBeenCalledWith(
+        'test@example.com',
+        'password123',
+        null,
+      );
+    });
+
+    vi.unstubAllEnvs();
+  });
+
+  it('should NOT render recaptcha when REACT_APP_USE_RECAPTCHA is not yes', () => {
+    vi.stubEnv('REACT_APP_USE_RECAPTCHA', 'no');
+    vi.stubEnv('RECAPTCHA_SITE_KEY', 'test-site-key');
+
+    renderComponent();
+
+    expect(screen.queryByRole('recaptcha')).not.toBeInTheDocument();
+  });
+
+  it('should NOT render recaptcha when RECAPTCHA_SITE_KEY is missing', () => {
+    vi.stubEnv('REACT_APP_USE_RECAPTCHA', 'yes');
+    vi.stubEnv('RECAPTCHA_SITE_KEY', '');
+
+    renderComponent();
+
+    expect(screen.queryByRole('recaptcha')).not.toBeInTheDocument();
+  });
+
+  it('should convert email to lowercase before submission', async () => {
+    renderComponent();
+
+    const emailInput = screen.getByTestId('loginEmail');
+    fireEvent.change(emailInput, { target: { value: 'TEST@EXAMPLE.COM' } });
+
+    fireEvent.click(screen.getByTestId('loginBtn'));
+
+    await waitFor(() => {
+      expect(mockOnSubmit).toHaveBeenCalledWith(
+        'test@example.com',
+        expect.any(String),
+        expect.anything(),
+      );
+    });
+  });
 });

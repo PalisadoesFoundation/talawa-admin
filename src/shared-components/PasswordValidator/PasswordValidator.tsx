@@ -28,7 +28,7 @@ const PasswordValidator: React.FC<InterfacePasswordValidatorProps> = ({
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
 
   return (
-    <div className={styles.password_checks}>
+    <div className={styles.password_checks} data-testid="passwordValidator">
       {isInputFocused ? (
         password.length < 6 ? (
           <div data-testid="passwordCheck">
