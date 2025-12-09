@@ -75,6 +75,17 @@ const MOCKS2 = [
     },
     error: new Error('Failed to unblock user'),
   },
+  {
+    request: {
+      query: UPDATE_USER_ROLE_IN_ORG_MUTATION,
+      variables: {
+        userId: '123',
+        organizationId: 'abc',
+        role: 'ADMIN',
+      },
+    },
+    error: new Error('Failed to update user role in organization'),
+  },
 ];
 
 const MOCKS_UPDATE = [

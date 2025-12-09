@@ -196,7 +196,13 @@
   "pnpm": {
     "overrides": {
       "@apollo/client": "3.14.0"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "core-js",
+      "cypress",
+      "esbuild"
+    ]
   },
   "engines": {
     "node": ">=24.x"

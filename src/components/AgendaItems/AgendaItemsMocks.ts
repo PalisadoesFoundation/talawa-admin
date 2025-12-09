@@ -115,6 +115,10 @@ export const MOCKS = [
         input: {
           title: 'AgendaItem 1 Edited',
           description: 'AgendaItem 1 Description Edited',
+          duration: '2h',
+          categories: ['category1'],
+          attachments: ['attachment1'],
+          urls: [],
         },
       },
     },
@@ -135,6 +139,10 @@ export const MOCKS = [
         input: {
           title: 'AgendaItem 1',
           description: 'AgendaItem 1 Description',
+          duration: '2h',
+          categories: ['category1'],
+          attachments: ['attachment1'],
+          urls: [],
         },
       },
     },
@@ -155,6 +163,10 @@ export const MOCKS = [
         input: {
           title: 'AgendaItem 2 edited',
           description: 'AgendaItem 2 Description',
+          duration: '1h',
+          categories: ['category2'],
+          attachments: ['attachment3'],
+          urls: ['http://example.com'],
         },
       },
     },
@@ -210,6 +222,10 @@ export const MOCKS_ERROR = [
         input: {
           title: 'AgendaItem 1 Edited',
           description: 'AgendaItem 1 Description Edited',
+          duration: '2h',
+          categories: ['category1'],
+          attachments: ['attachment1'],
+          urls: [],
         },
       },
     },
@@ -223,6 +239,63 @@ export const MOCKS_ERROR = [
       },
     },
     error: new Error('An error occurred'),
+  },
+];
+
+// Mocks for drag-and-drop reordering
+export const MOCKS_DRAG_DROP = [
+  {
+    request: {
+      query: UPDATE_AGENDA_ITEM_MUTATION,
+      variables: {
+        updateAgendaItemId: 'agendaItem1',
+        input: {
+          sequence: 2,
+        },
+      },
+    },
+    result: {
+      data: {
+        updateAgendaItem: {
+          __typename: 'AgendaItem',
+          _id: 'agendaItem1',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_AGENDA_ITEM_MUTATION,
+      variables: {
+        updateAgendaItemId: 'agendaItem2',
+        input: {
+          sequence: 1,
+        },
+      },
+    },
+    result: {
+      data: {
+        updateAgendaItem: {
+          __typename: 'AgendaItem',
+          _id: 'agendaItem2',
+        },
+      },
+    },
+  },
+];
+
+export const MOCKS_DRAG_DROP_ERROR = [
+  {
+    request: {
+      query: UPDATE_AGENDA_ITEM_MUTATION,
+      variables: {
+        updateAgendaItemId: 'agendaItem1',
+        input: {
+          sequence: 2,
+        },
+      },
+    },
+    error: new Error('Failed to update sequence'),
   },
 ];
 
