@@ -125,14 +125,6 @@ export const mocks = [
         users: [
           {
             user: createUser('user3', 'Disha', 'Smith', 'disha@example.com'),
-            appUserProfile: {
-              _id: 'profile1',
-              adminFor: [],
-              isSuperAdmin: false,
-              createdOrganizations: [],
-              createdEvents: [],
-              eventAdmin: [],
-            },
           },
         ],
       },

@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useEffect, useMemo } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { Route, Routes } from 'react-router';
 import { useQuery, useApolloClient } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -16,9 +16,7 @@ import Loader from 'components/Loader/Loader';
 const OrganizationScreen = lazy(
   () => import('components/OrganizationScreen/OrganizationScreen'),
 );
-const SuperAdminScreen = lazy(
-  () => import('components/SuperAdminScreen/SuperAdminScreen'),
-);
+const AdminScreen = lazy(() => import('components/AdminScreen/AdminScreen'));
 const BlockUser = lazy(() => import('screens/BlockUser/BlockUser'));
 const EventManagement = lazy(
   () => import('screens/EventManagement/EventManagement'),
@@ -123,20 +121,11 @@ function App(): React.ReactElement {
   const { data, loading } = useQuery(CURRENT_USER);
   const apolloClient = useApolloClient();
 
-  // Get user permissions and admin status (memoized to prevent infinite loops)
-  const userPermissions = useMemo(() => {
-    return (
-      data?.currentUser?.appUserProfile?.adminFor?.map(
-        (org: { _id: string }) => org._id,
-      ) || []
-    );
-  }, [data?.currentUser?.appUserProfile?.adminFor]);
-
   // Get plugin routes
-  const adminGlobalPluginRoutes = usePluginRoutes(userPermissions, true, false);
-  const adminOrgPluginRoutes = usePluginRoutes(userPermissions, true, true);
-  const userOrgPluginRoutes = usePluginRoutes(userPermissions, false, true);
-  const userGlobalPluginRoutes = usePluginRoutes(userPermissions, false, false);
+  const adminGlobalPluginRoutes = usePluginRoutes(true, false);
+  const adminOrgPluginRoutes = usePluginRoutes(true, true);
+  const userOrgPluginRoutes = usePluginRoutes(false, true);
+  const userGlobalPluginRoutes = usePluginRoutes(false, false);
 
   // Initialize plugin system on app startup
   useEffect(() => {
@@ -180,7 +169,7 @@ function App(): React.ReactElement {
           <Route path="/register" element={<LoginPage />} />
           <Route path="/admin" element={<LoginPage />} />
           <Route element={<SecuredRoute />}>
-            <Route element={<SuperAdminScreen />}>
+            <Route element={<AdminScreen />}>
               <Route path="/orglist" element={<OrgList />} />
               <Route path="/notification" element={<Notification />} />
               <Route path="/member" element={<MemberDetail />} />

@@ -56,7 +56,6 @@ const userSidebar = ({
   const { t: tCommon } = useTranslation('common');
 
   // Memoize the parameters to prevent infinite re-renders
-  const userPermissions = React.useMemo(() => [], []);
   const isAdmin = React.useMemo(() => false, []);
   const isOrg = React.useMemo(() => false, []);
   const { setItem, getItem } = useLocalStorage();
@@ -65,11 +64,7 @@ const userSidebar = ({
   const portal = userRole == 'Admin' ? 'admin' : 'user';
 
   // Get plugin drawer items for user global (no orgId required)
-  const pluginDrawerItems = usePluginDrawerItems(
-    userPermissions,
-    isAdmin,
-    isOrg,
-  );
+  const pluginDrawerItems = usePluginDrawerItems(isAdmin, isOrg);
 
   const handleLinkClick = useCallback((): void => {
     if (window.innerWidth <= 820) {

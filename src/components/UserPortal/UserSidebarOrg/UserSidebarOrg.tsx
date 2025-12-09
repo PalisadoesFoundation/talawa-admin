@@ -71,16 +71,10 @@ const UserSidebarOrg = ({
   // State for managing dropdown visibility
   const [showDropdown, setShowDropdown] = React.useState(false);
 
-  // Memoize the user permissions and admin status
-  const userPermissions = useMemo(() => [], []);
   const isAdmin = useMemo(() => false, []);
 
   // Get plugin drawer items for user org (org-specific only)
-  const pluginDrawerItems = usePluginDrawerItems(
-    userPermissions,
-    isAdmin,
-    true,
-  );
+  const pluginDrawerItems = usePluginDrawerItems(isAdmin, true);
 
   const handleLinkClick = useCallback((): void => {
     if (window.innerWidth <= 820) {

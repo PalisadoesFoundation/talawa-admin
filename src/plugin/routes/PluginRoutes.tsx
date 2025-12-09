@@ -20,11 +20,10 @@ interface IPluginRoutesProps {
  * Component that renders plugin routes dynamically
  */
 const PluginRoutes: React.FC<IPluginRoutesProps> = ({
-  userPermissions = [],
   isAdmin = false,
   fallback = <div>Loading plugin...</div>,
 }) => {
-  const routes = usePluginRoutes(userPermissions, isAdmin);
+  const routes = usePluginRoutes(isAdmin);
   const safeRoutes = Array.isArray(routes) ? routes : [];
 
   const renderPluginRoute = (route: IRouteExtension) => {

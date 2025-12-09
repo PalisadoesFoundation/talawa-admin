@@ -272,10 +272,10 @@ const link = new StaticMockLink(MOCKS, true);
 const linkImage = new StaticMockLink(MOCKS_WITH_IMAGE, true);
 // const linkEmpty = new StaticMockLink(MOCKS_EMPTY, true);
 
-describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
+describe('Testing LeftDrawerOrg component for ADMIN', () => {
   it('Component should be rendered properly', async () => {
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
     render(
@@ -297,7 +297,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
 
   // it('Testing Profile Page & Organization Detail Modal', async () => {
   //   setItem('UserImage', '');
-  //   setItem('SuperAdmin', true);
+  //   setItem('Admin', true);
   //   setItem('FirstName', 'John');
   //   setItem('LastName', 'Doe');
   //   render(
@@ -317,7 +317,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
 
   it('Testing Menu Buttons', async () => {
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
     render(
@@ -337,7 +337,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   });
 
   it('Testing when screen size is less than 820px', async () => {
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
@@ -361,7 +361,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
 
   it('Testing when image is present for Organization', async () => {
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
     render(
@@ -380,7 +380,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
 
   // it('Testing when Organization does not exists', async () => {
   //   setItem('UserImage', '');
-  //   setItem('SuperAdmin', true);
+  //   setItem('Admin', true);
   //   setItem('FirstName', 'John');
   //   setItem('LastName', 'Doe');
   //   render(
@@ -402,7 +402,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
 
   it('Testing Drawer when hideDrawer is null', () => {
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
     render(
@@ -420,7 +420,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
 
   it('Testing Drawer when hideDrawer is true', () => {
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
     render(
@@ -439,7 +439,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   it('Testing toggle button click functionality', async () => {
     const mockSetHideDrawer = vi.fn();
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
 
@@ -470,7 +470,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   it('Testing toggle button keyboard navigation with Enter key', async () => {
     const mockSetHideDrawer = vi.fn();
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
 
@@ -500,7 +500,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   it('Testing toggle button keyboard navigation with Space key', async () => {
     const mockSetHideDrawer = vi.fn();
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
 
@@ -530,7 +530,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
   it('Testing toggle button keyboard navigation ignores other keys', async () => {
     const mockSetHideDrawer = vi.fn();
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
 
@@ -562,7 +562,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
 
   it('Testing conditional rendering with URL - renders NavLink', async () => {
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
 
@@ -596,7 +596,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
 
   it('Testing conditional rendering without URL - renders CollapsibleDropdown', async () => {
     setItem('UserImage', '');
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     setItem('FirstName', 'John');
     setItem('LastName', 'Doe');
 
@@ -646,7 +646,7 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
 describe('Plugin System Integration', () => {
   it('should not show plugin section when no plugin items', () => {
     vi.mocked(usePluginDrawerItems).mockReturnValue([]);
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
 
     render(
       <MockedProvider link={link}>
@@ -680,7 +680,7 @@ describe('Plugin System Integration', () => {
       },
     ];
     vi.mocked(usePluginDrawerItems).mockReturnValue(mockPluginItems);
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
 
     render(
       <MockedProvider link={link}>
@@ -711,7 +711,7 @@ describe('Plugin System Integration', () => {
       },
     ];
     vi.mocked(usePluginDrawerItems).mockReturnValue(mockPluginItems);
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
 
     render(
       <MockedProvider link={link}>
@@ -742,7 +742,7 @@ describe('Plugin System Integration', () => {
       },
     ];
     vi.mocked(usePluginDrawerItems).mockReturnValue(mockPluginItems);
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
 
     render(
       <MockedProvider link={link}>
@@ -774,7 +774,7 @@ describe('Plugin System Integration', () => {
       },
     ];
     vi.mocked(usePluginDrawerItems).mockReturnValue(mockPluginItems);
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
 
     // Mock mobile view
     Object.defineProperty(window, 'innerWidth', {

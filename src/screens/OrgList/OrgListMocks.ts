@@ -5,7 +5,6 @@ import {
 import {
   CURRENT_USER,
   ORGANIZATION_FILTER_LIST,
-  USER_ORGANIZATION_LIST,
   ALL_ORGANIZATIONS_PG,
 } from 'GraphQl/Queries/Queries';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
@@ -15,7 +14,7 @@ import type {
   InterfaceCurrentUserTypePG,
 } from 'utils/interfaces';
 
-const superAdminCurrentUser: InterfaceCurrentUserTypePG = {
+const AdminCurrentUser: InterfaceCurrentUserTypePG = {
   currentUser: {
     id: '123',
     name: 'John Doe',
@@ -24,18 +23,12 @@ const superAdminCurrentUser: InterfaceCurrentUserTypePG = {
   },
 };
 
-const superAdminUser: InterfaceUserType = {
+const AdminUser: InterfaceUserType = {
   user: {
     firstName: 'John',
     lastName: 'Doe',
     email: 'john.doe@akatsuki.com',
     image: null,
-  },
-};
-
-const adminUser: InterfaceUserType = {
-  user: {
-    ...superAdminUser.user,
   },
 };
 
@@ -54,7 +47,7 @@ const organizations: InterfaceOrgInfoTypePG[] = [
   },
 ];
 
-// MOCKS FOR SUPERADMIN
+// MOCKS FOR ADMIN
 const MOCKS = [
   {
     request: {
@@ -63,8 +56,8 @@ const MOCKS = [
     },
     result: {
       data: {
-        user: superAdminUser,
-        currentUser: superAdminCurrentUser.currentUser,
+        user: AdminUser,
+        currentUser: AdminCurrentUser.currentUser,
       },
     },
   },
@@ -249,7 +242,7 @@ const MOCKS_EMPTY = [
       variables: { userId: '123' },
     },
     result: {
-      data: { user: superAdminUser },
+      data: { user: AdminUser },
     },
   },
   {
@@ -291,7 +284,7 @@ const MOCKS_WITH_ERROR = [
       variables: { userId: '123' },
     },
     result: {
-      data: { user: superAdminUser },
+      data: { user: AdminUser },
     },
   },
   {
@@ -302,62 +295,4 @@ const MOCKS_WITH_ERROR = [
   },
 ];
 
-// MOCKS FOR ADMIN
-const MOCKS_ADMIN = [
-  {
-    request: {
-      query: ORGANIZATION_FILTER_LIST,
-      variables: { filter: '' },
-    },
-    result: {
-      data: {
-        organizations: organizations,
-      },
-    },
-  },
-  {
-    request: {
-      query: CURRENT_USER,
-      variables: { userId: '123' },
-    },
-    result: {
-      data: { user: adminUser },
-    },
-  },
-  {
-    request: {
-      query: ORGANIZATION_FILTER_LIST,
-      variables: { filter: '' },
-    },
-    result: {
-      data: {
-        organizations: organizations,
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_ORGANIZATION_LIST,
-      variables: { userId: '123' },
-    },
-    result: {
-      data: { user: adminUser },
-    },
-  },
-  {
-    request: {
-      query: GET_USER_NOTIFICATIONS,
-      variables: { userId: '123', input: { first: 5, skip: 0 } },
-    },
-    result: {
-      data: {
-        user: {
-          __typename: 'User',
-          notifications: [],
-        },
-      },
-    },
-  },
-];
-
-export { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY, MOCKS_WITH_ERROR };
+export { MOCKS, MOCKS_EMPTY, MOCKS_WITH_ERROR };

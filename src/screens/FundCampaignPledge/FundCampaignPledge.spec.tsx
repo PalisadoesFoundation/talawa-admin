@@ -12,7 +12,6 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from '../../utils/i18nForTest';
 import FundCampaignPledge from './FundCampaignPledge';
 import { MOCKS_FUND_CAMPAIGN_PLEDGE_ERROR } from './PledgesMocks';
-import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';

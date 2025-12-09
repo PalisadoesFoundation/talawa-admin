@@ -1145,7 +1145,7 @@ describe('Testing redirect if already logged in', () => {
     expect(routerMocks.navigate).toHaveBeenCalledWith('/user/organizations');
   });
 
-  it('Logged in as Admin or SuperAdmin', async () => {
+  it('Logged in as Admin', async () => {
     mockUseLocalStorage.getItem.mockImplementation((key: string) => {
       if (key === 'IsLoggedIn') return 'TRUE';
       if (key === 'userId') return null;

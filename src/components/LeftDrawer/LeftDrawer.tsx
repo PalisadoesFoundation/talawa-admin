@@ -4,7 +4,7 @@
  * @remarks
  * - Uses `useTranslation` for i18n.
  * - Automatically hides on screen widths ≤ 820px after clicking a link.
- * - Conditionally renders the "Users" section based on SuperAdmin status.
+ * - Conditionally renders the "Users" section based on Admin status.
  * - Includes dynamic plugin drawer items for admin routes.
  *
  * @param props - Props including drawer visibility state and setter function.
@@ -115,11 +115,8 @@ const leftDrawer = ({
     [renderDrawerItem],
   );
 
-  // Memoize the user permissions and admin status
-  const userPermissions = useMemo(() => [], []);
-
   // Get plugin drawer items for admin global (settings only)
-  const pluginDrawerItems = usePluginDrawerItems(userPermissions, true, false);
+  const pluginDrawerItems = usePluginDrawerItems(true, false);
 
   // Memoize the main content to prevent unnecessary re-renders
   const drawerContent = useMemo(

@@ -1,7 +1,7 @@
 import { LoginPage } from '../../pageObjects/auth/LoginPage';
 
 describe('Admin Login Functionality', () => {
-  const rolesToTest = ['superAdmin', 'admin'];
+  const rolesToTest = ['admin'];
 
   rolesToTest.forEach((role) => {
     it(`logs in as ${role}`, () => {

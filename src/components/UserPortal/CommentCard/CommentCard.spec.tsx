@@ -177,6 +177,8 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await act(async () => {
       await i18nForTest.changeLanguage('en');
     });
+
+    vi.clearAllMocks();
   });
 
   it('Component should be rendered properly if comment is already liked by the user.', async () => {

@@ -244,7 +244,6 @@
     "email": "电子邮件",
     "endOfResults": "结果结束",
     "admin": "管理员",
-    "superAdmin": "超级管理员",
     "user": "用户",
     "filter": "筛选",
     "noResultsFoundFor": "未找到结果",
@@ -897,7 +896,6 @@
     "email": "电子邮件",
     "password": "密码",
     "admin": "管理员",
-    "superAdmin": "超级管理员",
     "displayImage": "显示图像",
     "saveChanges": "保存更改",
     "cancel": "取消"

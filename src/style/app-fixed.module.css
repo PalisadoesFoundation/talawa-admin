@@ -4254,7 +4254,7 @@ form label,
 
 /* -- OrganizationScreen.tsx -- */
 
-/* -- SuperAdminScreen.tsx -- */
+/* -- AdminScreen.tsx -- */
 
 .navContainer {
   display: flex;
@@ -7786,7 +7786,8 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 12px; /* bring controls closer together */
+  margin-left: 12px;
+  /* bring controls closer together */
   gap: 12px;
 }
 
@@ -7798,12 +7799,14 @@ form {
 }
 
 .btnsContainerSearchBar .inputOrgList {
-  flex: 1 1 640px; /* make input wider and flexible */
+  flex: 1 1 640px;
+  /* make input wider and flexible */
   max-width: 760px;
   position: relative;
   display: flex;
   align-items: center;
-  margin-left: 18px; /* gap from left */
+  margin-left: 18px;
+  /* gap from left */
 }
 
 .btnsContainerSearchBar input {
@@ -7811,7 +7814,8 @@ form {
 }
 
 .btnsContainerSearchBar .inputOrgList button {
-  width: 44px; /* slightly smaller square button */
+  width: 44px;
+  /* slightly smaller square button */
   height: 38px;
   margin-left: 8px;
   flex: 0 0 44px;

@@ -6,7 +6,7 @@
 
 > **useLoadedPlugins**(): [`ILoadedPlugin`](../../types/interfaces/ILoadedPlugin.md)[]
 
-Defined in: [src/plugin/hooks.ts:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/hooks.ts#L129)
+Defined in: [src/plugin/hooks.ts:131](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/hooks.ts#L131)
 
 Hook to get all loaded plugins with their status
 

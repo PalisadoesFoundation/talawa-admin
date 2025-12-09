@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCommentEdge
 
-Defined in: [src/utils/interfaces.ts:2270](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2270)
+Defined in: [src/utils/interfaces.ts:2243](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2243)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:2270](https://github.com/PalisadoesFoundati
 
 > **node**: `object`
 
-Defined in: [src/utils/interfaces.ts:2271](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2271)
+Defined in: [src/utils/interfaces.ts:2244](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2244)
 
 #### body
 

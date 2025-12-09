@@ -7,9 +7,10 @@ import { getPluginManager } from './manager';
 import { IDrawerExtension, IRouteExtension, IInjectorExtension } from './types';
 
 export function usePluginDrawerItems(
-  userPermissions: string[] = [],
   isAdmin: boolean = false,
   isOrg?: boolean,
+  // this is not been used for filtering drawer items at the moment in future it will be used for filtering drawer items based on user permissions
+  userPermissions: string[] = [],
 ): IDrawerExtension[] {
   const [drawerItems, setDrawerItems] = useState<IDrawerExtension[]>([]);
 
@@ -67,9 +68,10 @@ export function usePluginDrawerItems(
  * Hook to get plugin routes
  */
 export function usePluginRoutes(
-  userPermissions: string[] = [],
   isAdmin: boolean = false,
   isOrg?: boolean,
+  // this is not been used for filtering routes at the moment in future it will be used for filtering routes based on user permissions
+  userPermissions: string[] = [],
 ): IRouteExtension[] {
   const [routes, setRoutes] = useState<IRouteExtension[]>([]);
 

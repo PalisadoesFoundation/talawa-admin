@@ -93,7 +93,7 @@ Displays a list of membership requests for an organization. Includes search,
 - Uses Apollo Client's `useQuery` for fetching data.
 - Implements infinite scrolling using `react-infinite-scroll-component`.
 - Displays a search bar for filtering requests by user name.
-- Handles role-based access control for `ADMIN` and `SUPERADMIN` roles.
+- Handles role-based access control for `ADMIN`.
 - Displays appropriate messages when no data is available.
 
 ## Functions

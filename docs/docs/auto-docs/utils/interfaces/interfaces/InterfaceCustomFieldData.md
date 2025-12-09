@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCustomFieldData
 
-Defined in: [src/utils/interfaces.ts:2481](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2481)
+Defined in: [src/utils/interfaces.ts:2454](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2454)
 
 InterfaceCustomFieldData
 
@@ -18,7 +18,7 @@ Defines the structure for custom field data.
 
 > `optional` **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:2482](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2482)
+Defined in: [src/utils/interfaces.ts:2455](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2455)
 
 The unique identifier of the custom field (optional).
 
@@ -28,7 +28,7 @@ The unique identifier of the custom field (optional).
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:2483](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2483)
+Defined in: [src/utils/interfaces.ts:2456](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2456)
 
 The name of the custom field.
 
@@ -38,7 +38,7 @@ The name of the custom field.
 
 > `optional` **organizationId**: `string`
 
-Defined in: [src/utils/interfaces.ts:2485](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2485)
+Defined in: [src/utils/interfaces.ts:2458](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2458)
 
 The unique identifier of the associated organization (optional).
 
@@ -48,6 +48,6 @@ The unique identifier of the associated organization (optional).
 
 > **type**: `string`
 
-Defined in: [src/utils/interfaces.ts:2484](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2484)
+Defined in: [src/utils/interfaces.ts:2457](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2457)
 
 The type of the custom field.

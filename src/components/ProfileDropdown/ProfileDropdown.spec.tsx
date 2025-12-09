@@ -63,7 +63,7 @@ beforeEach(() => {
     'UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
   );
-  setItem('SuperAdmin', false);
+  setItem('Admin', false);
   setItem('AdminFor', []);
   setItem('id', '123');
 });
@@ -96,7 +96,7 @@ describe('ProfileDropdown Component', () => {
     expect(screen.getByAltText('profile picture')).toBeInTheDocument();
   });
 
-  test('renders Super admin', () => {
+  test('renders admin', () => {
     setItem('role', 'API Administrator');
     render(
       <MockedProvider mocks={MOCKS}>
@@ -189,7 +189,7 @@ describe('ProfileDropdown Component', () => {
 
   test('navigates to /member/:orgId for non-user roles when orgId is not present', async () => {
     window.history.pushState({}, 'Test page', '/orglist');
-    setItem('SuperAdmin', true); // Set as admin
+    setItem('Admin', true); // Set as admin
     setItem('id', '123');
 
     render(
@@ -217,7 +217,7 @@ describe('ProfileDropdown Component', () => {
 
   test('navigates to /member/:userID for non-user roles', async () => {
     window.history.pushState({}, 'Test page', '/321');
-    setItem('SuperAdmin', true); // Set as admin
+    setItem('Admin', true); // Set as admin
     setItem('id', '123');
 
     render(

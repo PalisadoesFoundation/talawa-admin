@@ -552,6 +552,8 @@ describe('VenueModal', () => {
     afterEach(() => {
       // Restore console.error after each test
       consoleErrorSpy.mockRestore();
+
+      vi.clearAllMocks();
     });
 
     test('displays image preview and clear button when an image is selected', async () => {

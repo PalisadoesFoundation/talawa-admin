@@ -48,7 +48,7 @@ describe('Plugin Hooks', () => {
       mockPluginManager.getExtensionPoints.mockReturnValue(mockItems);
 
       const { result } = renderHook(() =>
-        usePluginDrawerItems(['ADMIN'], true, false),
+        usePluginDrawerItems(true, false, ['ADMIN']),
       );
       expect(result.current).toEqual(mockItems);
       expect(mockPluginManager.getExtensionPoints).toHaveBeenCalled();
@@ -61,7 +61,7 @@ describe('Plugin Hooks', () => {
       mockPluginManager.getExtensionPoints.mockReturnValue(mockItems);
 
       const { result } = renderHook(() =>
-        usePluginDrawerItems(['ADMIN'], true, true),
+        usePluginDrawerItems(true, true, ['ADMIN']),
       );
       expect(result.current).toEqual(mockItems);
       expect(mockPluginManager.getExtensionPoints).toHaveBeenCalled();
@@ -74,7 +74,7 @@ describe('Plugin Hooks', () => {
       mockPluginManager.getExtensionPoints.mockReturnValue(mockItems);
 
       const { result } = renderHook(() =>
-        usePluginDrawerItems(['USER'], false, true),
+        usePluginDrawerItems(false, true, ['USER']),
       );
       expect(result.current).toEqual(mockItems);
       expect(mockPluginManager.getExtensionPoints).toHaveBeenCalled();
@@ -87,7 +87,7 @@ describe('Plugin Hooks', () => {
       mockPluginManager.getExtensionPoints.mockReturnValue(mockItems);
 
       const { result } = renderHook(() =>
-        usePluginDrawerItems(['USER'], false, false),
+        usePluginDrawerItems(false, false, ['USER']),
       );
       expect(result.current).toEqual(mockItems);
       expect(mockPluginManager.getExtensionPoints).toHaveBeenCalled();
@@ -102,7 +102,7 @@ describe('Plugin Hooks', () => {
       mockPluginManager.getExtensionPoints.mockReturnValue(mockItems);
 
       const { result } = renderHook(() =>
-        usePluginDrawerItems([], false, false),
+        usePluginDrawerItems(false, false, []),
       );
       expect(result.current).toEqual(mockItems);
     });
@@ -114,7 +114,7 @@ describe('Plugin Hooks', () => {
       mockPluginManager.getExtensionPoints.mockReturnValue(mockItems);
 
       const { result } = renderHook(() =>
-        usePluginDrawerItems(undefined as unknown as string[], false, false),
+        usePluginDrawerItems(false, false, undefined as unknown as string[]),
       );
       expect(result.current).toEqual(mockItems);
     });
@@ -244,7 +244,7 @@ describe('Plugin Hooks', () => {
       mockPluginManager.getExtensionPoints.mockReturnValue(mockRoutes);
 
       const { result } = renderHook(() =>
-        usePluginRoutes(['ADMIN'], true, false),
+        usePluginRoutes(true, false, ['ADMIN']),
       );
       expect(result.current).toEqual(mockRoutes);
       expect(mockPluginManager.getExtensionPoints).toHaveBeenCalled();
@@ -259,7 +259,7 @@ describe('Plugin Hooks', () => {
       mockPluginManager.getExtensionPoints.mockReturnValue(mockRoutes);
 
       const { result } = renderHook(() =>
-        usePluginRoutes(['ADMIN'], true, true),
+        usePluginRoutes(true, true, ['ADMIN']),
       );
       expect(result.current).toEqual(mockRoutes);
       expect(mockPluginManager.getExtensionPoints).toHaveBeenCalled();
@@ -272,7 +272,7 @@ describe('Plugin Hooks', () => {
       mockPluginManager.getExtensionPoints.mockReturnValue(mockRoutes);
 
       const { result } = renderHook(() =>
-        usePluginRoutes(['USER'], false, true),
+        usePluginRoutes(false, true, ['USER']),
       );
       expect(result.current).toEqual(mockRoutes);
       expect(mockPluginManager.getExtensionPoints).toHaveBeenCalled();
@@ -287,7 +287,7 @@ describe('Plugin Hooks', () => {
       mockPluginManager.getExtensionPoints.mockReturnValue(mockRoutes);
 
       const { result } = renderHook(() =>
-        usePluginRoutes(['USER'], false, false),
+        usePluginRoutes(false, false, ['USER']),
       );
       expect(result.current).toEqual(mockRoutes);
       expect(mockPluginManager.getExtensionPoints).toHaveBeenCalled();
@@ -301,7 +301,7 @@ describe('Plugin Hooks', () => {
       ];
       mockPluginManager.getExtensionPoints.mockReturnValue(mockRoutes);
 
-      const { result } = renderHook(() => usePluginRoutes([], false, false));
+      const { result } = renderHook(() => usePluginRoutes(false, false, []));
       expect(result.current).toEqual(mockRoutes);
     });
 
@@ -315,7 +315,7 @@ describe('Plugin Hooks', () => {
       mockPluginManager.getExtensionPoints.mockReturnValue(mockRoutes);
 
       const { result } = renderHook(() =>
-        usePluginRoutes(undefined as unknown as string[], false, false),
+        usePluginRoutes(false, false, undefined as unknown as string[]),
       );
       expect(result.current).toEqual(mockRoutes);
     });

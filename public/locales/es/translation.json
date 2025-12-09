@@ -229,7 +229,6 @@
     "searchByOrgName": "Buscar por nombre de organización",
     "view": "Ver",
     "admin": "ADMINISTRACIÓN",
-    "superAdmin": "SUPERADMIN",
     "user": "USUARIO",
     "enterName": "Ingrese su nombre",
     "loadingUsers": "Cargando usuarios ...",
@@ -897,7 +896,6 @@
     "appLanguageCode": "Idioma predeterminado",
     "userType": "Tipo de usuario",
     "admin": "Administración",
-    "superAdmin": "Superadministrador",
     "displayImage": "Mostrar imagen",
     "saveChanges": "Guardar cambios",
     "cancel": "Cancelar"

@@ -44,7 +44,7 @@
  * - Uses Apollo Client's `useQuery` for fetching data.
  * - Implements infinite scrolling using `react-infinite-scroll-component`.
  * - Displays a search bar for filtering requests by user name.
- * - Handles role-based access control for `ADMIN` and `SUPERADMIN` roles.
+ * - Handles role-based access control for `ADMIN`.
  * - Displays appropriate messages when no data is available.
  *
  */
@@ -163,9 +163,8 @@ const Requests = (): JSX.Element => {
 
   // Check authorization
   useEffect(() => {
-    const isSuperAdmin = getItem('SuperAdmin');
-    const isAdmin = userRole?.toLowerCase() === 'administrator';
-    if (!(isAdmin || isSuperAdmin)) {
+    const isAdmin = getItem('Admin');
+    if (!isAdmin) {
       window.location.assign('/orglist');
     }
   }, [userRole]);

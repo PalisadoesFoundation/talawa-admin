@@ -1141,22 +1141,6 @@ export const USERS_CONNECTION_LIST = gql`
           }
         }
       }
-      appUserProfile {
-        _id
-        adminFor {
-          _id
-        }
-        isSuperAdmin
-        createdOrganizations {
-          _id
-        }
-        createdEvents {
-          _id
-        }
-        eventAdmin {
-          _id
-        }
-      }
     }
   }
 `;

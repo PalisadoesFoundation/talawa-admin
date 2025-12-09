@@ -196,7 +196,7 @@ describe('Calendar', () => {
           <I18nextProvider i18n={i18nForTest}>
             <Calendar
               eventData={currentDayEventMock}
-              userRole={'SUPERADMIN'}
+              userRole={'ADMIN'}
               onMonthChange={onMonthChange}
               currentMonth={new Date().getMonth()}
               currentYear={new Date().getFullYear()}
@@ -208,14 +208,14 @@ describe('Calendar', () => {
     );
   });
 
-  it('Test for superadmin case', () => {
+  it('Test for admin case', () => {
     render(
       <Router>
         <MockedProvider addTypename={false} link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar
               eventData={eventData}
-              userRole={'SUPERADMIN'}
+              userRole={'ADMIN'}
               onMonthChange={onMonthChange}
               currentMonth={new Date().getMonth()}
               currentYear={new Date().getFullYear()}
@@ -234,7 +234,7 @@ describe('Calendar', () => {
           <I18nextProvider i18n={i18nForTest}>
             <Calendar
               eventData={eventData}
-              userRole={'SUPERADMIN'}
+              userRole={'ADMIN'}
               onMonthChange={onMonthChange}
               currentMonth={new Date().getMonth()}
               currentYear={new Date().getFullYear()}
@@ -256,7 +256,7 @@ describe('Calendar', () => {
           <I18nextProvider i18n={i18nForTest}>
             <Calendar
               eventData={eventData}
-              userRole={'SUPERADMIN'}
+              userRole={'ADMIN'}
               onMonthChange={onMonthChange}
               currentMonth={new Date().getMonth()}
               currentYear={new Date().getFullYear()}

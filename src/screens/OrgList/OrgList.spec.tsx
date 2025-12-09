@@ -18,7 +18,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import OrgList from './OrgList';
-import { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY } from './OrgListMocks';
+import { MOCKS, MOCKS_EMPTY } from './OrgListMocks';
 import {
   ORGANIZATION_FILTER_LIST,
   CURRENT_USER,
@@ -55,22 +55,16 @@ vi.mock('shared-components/OrganizationCard/OrganizationCard', () => ({
 const { setItem } = useLocalStorage();
 
 const mockLinks = {
-  superAdmin: new StaticMockLink(MOCKS, true),
-  admin: new StaticMockLink(MOCKS_ADMIN, true),
+  Admin: new StaticMockLink(MOCKS, true),
   empty: new StaticMockLink(MOCKS_EMPTY, true),
 };
 
 // Common test user configurations
 const mockUsers = {
-  superAdmin: {
+  Admin: {
     id: '123',
-    SuperAdmin: true,
+    Admin: true,
     AdminFor: [{ name: 'adi', _id: '1234', image: '' }],
-  },
-  admin: {
-    id: '123',
-    SuperAdmin: false,
-    AdminFor: [{ name: 'adi', _id: 'a0', image: '' }],
   },
   basic: {
     id: '123',
@@ -82,13 +76,13 @@ const mockUsers = {
 const setupUser = (userType: keyof typeof mockUsers) => {
   const user = mockUsers[userType];
   setItem('id', user.id);
-  if ('SuperAdmin' in user) setItem('SuperAdmin', user.SuperAdmin);
+  if ('Admin' in user) setItem('Admin', user.Admin);
   if ('AdminFor' in user) setItem('AdminFor', user.AdminFor);
   if ('role' in user) setItem('role', user.role);
 };
 
 // Helper function to render component with common providers.
-const renderWithProviders = (link = mockLinks.superAdmin) => {
+const renderWithProviders = (link = mockLinks.Admin) => {
   return render(
     <MockedProvider link={link}>
       <BrowserRouter>
@@ -575,9 +569,9 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-describe('Organisations Page testing as SuperAdmin', () => {
+describe('Organisations Page testing as Admin', () => {
   test('Testing search functionality by pressing enter', async () => {
-    setupUser('superAdmin');
+    setupUser('Admin');
 
     renderWithProviders();
     await wait();
@@ -589,7 +583,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing search functionality by Btn click', async () => {
-    setupUser('superAdmin');
+    setupUser('Admin');
 
     renderWithProviders();
     await wait();
@@ -613,7 +607,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing debounced search functionality', async () => {
-    setupUser('superAdmin');
+    setupUser('Admin');
 
     renderWithProviders();
     await wait();
@@ -631,7 +625,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing immediate search on Enter key press', async () => {
-    setupUser('superAdmin');
+    setupUser('Admin');
 
     renderWithProviders();
     await wait();
@@ -645,7 +639,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing pagination component presence', async () => {
-    setupUser('superAdmin');
+    setupUser('Admin');
     setItem('role', 'administrator');
 
     const mockWithOrgData = createOrgMock(mockOrgData.singleOrg);
@@ -658,7 +652,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing pagination functionality with multiple organizations', async () => {
-    setupUser('superAdmin');
+    setupUser('Admin');
 
     const mockWithMultipleOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithMultipleOrgs);
@@ -674,7 +668,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing pagination page change functionality', async () => {
-    setupUser('superAdmin');
+    setupUser('Admin');
     setItem('role', 'administrator');
 
     const mockWithManyOrgs = createOrgMock(mockOrgData.multipleOrgs);
@@ -687,7 +681,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing pagination rows per page change functionality', async () => {
-    setupUser('superAdmin');
+    setupUser('Admin');
     setItem('role', 'administrator');
 
     const mockWithManyOrgs = createOrgMock(mockOrgData.multipleOrgs);
@@ -705,7 +699,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing pagination with search integration', async () => {
-    setupUser('superAdmin');
+    setupUser('Admin');
     setItem('role', 'administrator');
 
     renderWithMocks(mockConfigurations.searchableMocks);
@@ -751,7 +745,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('testing scroll', async () => {
-    setupUser('superAdmin');
+    setupUser('Admin');
     setItem('role', 'administrator');
 
     renderWithMocks(mockConfigurations.scrollMocks);
@@ -765,45 +759,6 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(await screen.findByText('Organization 2')).toBeInTheDocument();
 
     fireEvent.scroll(window, { target: { scrollY: 1000 } });
-  });
-});
-
-describe('Organisations Page testing as Admin', () => {
-  test('Testing sort latest and oldest toggle', async () => {
-    setupUser('admin');
-
-    renderWithProviders(mockLinks.admin);
-
-    await wait();
-
-    const sortDropdown = screen.getByTestId('sort');
-    expect(sortDropdown).toBeInTheDocument();
-
-    const sortToggle = screen.getByTestId('sortOrgs');
-
-    await act(async () => {
-      fireEvent.click(sortToggle);
-    });
-
-    const latestOption = screen.getByTestId('Latest');
-
-    await act(async () => {
-      fireEvent.click(latestOption);
-    });
-
-    expect(sortDropdown).toBeInTheDocument();
-
-    await act(async () => {
-      fireEvent.click(sortToggle);
-    });
-
-    const oldestOption = await waitFor(() => screen.getByTestId('Earliest'));
-
-    await act(async () => {
-      fireEvent.click(oldestOption);
-    });
-
-    expect(sortDropdown).toBeInTheDocument();
   });
 });
 
@@ -875,7 +830,7 @@ describe('Plugin Modal Tests', () => {
 describe('Advanced Component Functionality Tests', () => {
   test('Testing pagination edge cases', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
@@ -931,7 +886,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing handleChangePage pagination navigation', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
@@ -956,7 +911,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing sorting organizations by Latest with multiple orgs', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
@@ -981,7 +936,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing sorting organizations by Earliest with multiple orgs', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
@@ -1071,7 +1026,7 @@ describe('Advanced Component Functionality Tests', () => {
   test('Testing create organization modal opens and closes', async () => {
     setItem('id', '123');
     setItem('role', 'administrator');
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
     const mockWithOrgs = createOrgMock(mockOrgData.singleOrg);
@@ -1315,7 +1270,7 @@ describe('Advanced Component Functionality Tests', () => {
   });
 
   test('Testing no results found message when search returns empty', async () => {
-    setupUser('superAdmin');
+    setupUser('Admin');
     setItem('role', 'administrator');
 
     const mocksWithSearch = [
@@ -1361,47 +1316,9 @@ describe('Advanced Component Functionality Tests', () => {
     expect(screen.getByTestId('noResultFound')).toBeInTheDocument();
   });
 
-  test('Testing sort by Earliest functionality', async () => {
-    setItem('id', '123');
-    setItem('SuperAdmin', false);
-    setItem('role', 'admin');
-    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
-
-    render(
-      <MockedProvider mocks={MOCKS_ADMIN}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ThemeProvider theme={createTheme()}>
-                <OrgList />
-              </ThemeProvider>
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    const sortDropdown = screen.getByTestId('sortOrgs');
-    expect(sortDropdown).toBeInTheDocument();
-
-    // Click to open dropdown
-    await userEvent.click(sortDropdown);
-
-    // Select Earliest option - use the exact test ID from the component
-    const earliestOption = screen.getByTestId('Earliest');
-    await userEvent.click(earliestOption);
-
-    await wait();
-
-    // Verify sorting changed
-    expect(sortDropdown).toHaveTextContent('Earliest');
-  });
-
   test('Testing sort by Latest functionality', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', false);
+    setItem('Admin', false);
     setItem('role', 'admin');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
@@ -1431,7 +1348,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing date-based sorting with Latest and Earliest', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', false);
+    setItem('Admin', false);
     setItem('role', 'admin');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
@@ -1457,7 +1374,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing handleChangeRowsPerPage functionality', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
@@ -1492,7 +1409,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing error handler clears localStorage and redirects', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     setItem('role', 'administrator');
 
     // Mock localStorage.clear and window.location.assign
@@ -1588,7 +1505,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing pagination navigation functionality', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
@@ -1865,7 +1782,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing Earliest sorting functionality', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', false); // Set to false so it uses multipleOrgs data
+    setItem('Admin', false); // Set to false so it uses multipleOrgs data
     setItem('role', 'admin'); // Use 'admin' not 'administrator'
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
@@ -1913,7 +1830,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing closeDialogModal functionality', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', false);
+    setItem('Admin', false);
     setItem('role', 'administrator'); // Must be 'administrator' to see create button
     setItem('AdminFor', [{ name: 'Dogs Care', _id: 'xyz', image: '' }]);
 
@@ -2020,7 +1937,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing toggleDialogModal functionality', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', false);
+    setItem('Admin', false);
     setItem('role', 'administrator'); // Must be 'administrator' to see create button
     setItem('AdminFor', [{ name: 'Dogs Care', _id: 'xyz', image: '' }]);
 

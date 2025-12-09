@@ -244,7 +244,6 @@
     "email": "E-mail",
     "endOfResults": "Fin des résultats",
     "admin": "Administrateur",
-    "superAdmin": "Super Administrateur",
     "user": "Utilisateur",
     "filter": "Filtrer",
     "noResultsFoundFor": "Aucun résultat trouvé pour",
@@ -897,7 +896,6 @@
     "email": "Email",
     "password": "Mot de passe",
     "admin": "Admin",
-    "superAdmin": "Super Admin",
     "displayImage": "Image d'affichage",
     "saveChanges": "Enregistrer les modifications",
     "cancel": "Annuler"

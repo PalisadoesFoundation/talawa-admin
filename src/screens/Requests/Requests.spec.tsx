@@ -239,7 +239,7 @@ async function wait(ms = 100): Promise<void> {
 beforeEach(() => {
   setItem('id', 'user1');
   setItem('role', 'administrator');
-  setItem('SuperAdmin', false);
+  setItem('Admin', false);
   vi.clearAllMocks();
 });
 
@@ -273,7 +273,7 @@ describe('Testing Requests screen', () => {
   and or userId does not exists in localstorage`, async () => {
     setItem('id', '');
     removeItem('AdminFor');
-    removeItem('SuperAdmin');
+    removeItem('Admin');
     setItem('role', 'user');
 
     render(
@@ -293,26 +293,8 @@ describe('Testing Requests screen', () => {
     expect(window.location.assign).toHaveBeenCalledWith('/orglist');
   });
 
-  test('Component should be rendered properly when user is Admin', async () => {
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-
-    expect(screen.getByTestId('searchByName')).toBeInTheDocument();
-  });
-
   test('Redirecting on error', async () => {
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     render(
       <MockedProvider link={link5}>
         <BrowserRouter>
@@ -817,8 +799,8 @@ describe('Testing Requests screen', () => {
     expect(screen.getByTestId('testComp')).toBeInTheDocument();
   });
 
-  test('Component should be rendered properly when user is SuperAdmin', async () => {
-    setItem('SuperAdmin', true);
+  test('Component should be rendered properly when user is Admin', async () => {
+    setItem('Admin', true);
     removeItem('AdminFor');
 
     render(

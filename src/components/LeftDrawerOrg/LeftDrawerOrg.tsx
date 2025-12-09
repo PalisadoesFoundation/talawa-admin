@@ -108,16 +108,10 @@ const leftDrawerOrg = ({
   const [showDropdown, setShowDropdown] = useState(false);
   const { setItem } = useLocalStorage();
 
-  // Memoize the user permissions and admin status
-  const userPermissions = useMemo(() => [], []);
   const isAdmin = useMemo(() => true, []); // Organization admins are always admin
 
   // Get plugin drawer items for org admin (org-specific only)
-  const pluginDrawerItems = usePluginDrawerItems(
-    userPermissions,
-    isAdmin,
-    true,
-  );
+  const pluginDrawerItems = usePluginDrawerItems(isAdmin, true);
 
   const { data, loading } = useQuery<{
     organization: IOrganizationData;

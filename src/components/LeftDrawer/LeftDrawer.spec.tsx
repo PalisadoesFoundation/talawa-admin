@@ -566,7 +566,7 @@ describe('LeftDrawer Component', () => {
 
     it('should handle non-admin users correctly for plugins', () => {
       vi.mocked(useLocalStorage).mockImplementation(() => ({
-        getItem: vi.fn((key) => (key === 'role' ? 'administrator' : null)), // Non-admin user (SuperAdmin is null)
+        getItem: vi.fn((key) => (key === 'role' ? 'administrator' : null)), // Non-admin user (Admin is null)
         setItem: vi.fn(),
         removeItem: vi.fn(),
         getStorageKey: vi.fn(() => ''),

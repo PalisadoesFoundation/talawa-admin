@@ -54,7 +54,7 @@ vi.mock('react-router', async () => {
 });
 beforeEach(() => {
   mockNavgatePush = vi.fn();
-  setMockStorageItem('SuperAdmin', true);
+  setMockStorageItem('Admin', true);
   setMockStorageItem('id', '123');
 });
 afterEach(() => {

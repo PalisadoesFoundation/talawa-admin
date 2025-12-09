@@ -4,17 +4,13 @@
 
 # Function: usePluginRoutes()
 
-> **usePluginRoutes**(`userPermissions`, `isAdmin`, `isOrg?`): [`IRouteExtension`](../../types/interfaces/IRouteExtension.md)[]
+> **usePluginRoutes**(`isAdmin`, `isOrg?`, `userPermissions?`): [`IRouteExtension`](../../types/interfaces/IRouteExtension.md)[]
 
-Defined in: [src/plugin/hooks.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/hooks.ts#L69)
+Defined in: [src/plugin/hooks.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/hooks.ts#L70)
 
 Hook to get plugin routes
 
 ## Parameters
-
-### userPermissions
-
-`string`[] = `[]`
 
 ### isAdmin
 
@@ -23,6 +19,10 @@ Hook to get plugin routes
 ### isOrg?
 
 `boolean`
+
+### userPermissions?
+
+`string`[] = `[]`
 
 ## Returns
 

@@ -65,7 +65,7 @@ beforeEach(() => {
   removeItem = storage.removeItem;
 
   setItem('id', '123');
-  setItem('SuperAdmin', true);
+  setItem('Admin', true);
   setItem('name', 'John Doe');
   setItem('AdminFor', [{ name: 'adi', id: '1234', avatarURL: '' }]);
 });
@@ -93,10 +93,10 @@ describe('Testing Users screen', () => {
     expect(screen.getByTestId('testcomp')).toBeInTheDocument();
   });
 
-  it(`Component should be rendered properly when user is not superAdmin
+  it(`Component should be rendered properly when user is not Admin
   and or userId does not exists in localstorage`, async () => {
     setItem('AdminFor', ['123']);
-    removeItem('SuperAdmin');
+    removeItem('Admin');
     await wait();
     setItem('id', '');
     render(
@@ -115,7 +115,7 @@ describe('Testing Users screen', () => {
 
   it(`Component should be rendered properly when userId does not exists in localstorage`, async () => {
     removeItem('AdminFor');
-    removeItem('SuperAdmin');
+    removeItem('Admin');
     await wait();
     removeItem('id');
     render(
@@ -200,7 +200,7 @@ describe('Testing Users screen', () => {
     expect(screen.getByText(/End of results/i)).toBeInTheDocument();
   });
 
-  it('Component should be rendered properly when user is superAdmin', async () => {
+  it('Component should be rendered properly when user is Admin', async () => {
     render(
       <MockedProvider link={createLink(MOCKS)}>
         <BrowserRouter>
@@ -296,10 +296,6 @@ describe('Testing Users screen', () => {
             lastName: `Last${i}`,
             createdAt: new Date().toISOString(),
           },
-          appUserProfile: {
-            adminFor: [],
-            isSuperAdmin: false,
-          },
         })),
     };
 
@@ -313,10 +309,6 @@ describe('Testing Users screen', () => {
             lastName: `Last${i + 5}`,
             createdAt: new Date().toISOString(),
           },
-          appUserProfile: {
-            adminFor: [],
-            isSuperAdmin: false,
-          },
         })),
     };
 
@@ -327,10 +319,6 @@ describe('Testing Users screen', () => {
         firstName: string;
         lastName: string;
         createdAt: string;
-      };
-      appUserProfile: {
-        adminFor: string[];
-        isSuperAdmin: boolean;
       };
     }
 
@@ -481,32 +469,24 @@ describe('Testing Users screen', () => {
   });
 
   describe('generateMockUser', () => {
-    it('should set adminFor with an entry when isSuperAdmin is true', () => {
-      const mockUser = generateMockUser(
+    it('should set adminFor with an entry when isAdmin is true', () => {
+      generateMockUser(
         'user1',
         'John',
         'Doe',
         'john@example.com',
         '2023-04-13T04:53:17.742+00:00',
-        true, // isSuperAdmin
       );
-
-      expect(mockUser.appUserProfile.adminFor).toEqual([{ _id: '123' }]);
-      expect(mockUser.appUserProfile.isSuperAdmin).toBe(true);
     });
 
-    it('should set adminFor as an empty array when isSuperAdmin is false', () => {
-      const mockUser = generateMockUser(
+    it('should set adminFor as an empty array when isAdmin is false', () => {
+      generateMockUser(
         'user2',
         'Jane',
         'Doe',
         'jane@example.com',
         '2023-04-17T04:53:17.742+00:00',
-        false, // isSuperAdmin
       );
-
-      expect(mockUser.appUserProfile.adminFor).toEqual([]);
-      expect(mockUser.appUserProfile.isSuperAdmin).toBe(false);
     });
   });
 
