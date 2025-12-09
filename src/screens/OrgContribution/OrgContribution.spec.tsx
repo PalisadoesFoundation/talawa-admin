@@ -60,7 +60,7 @@ describe('Organisation Contribution Page', () => {
     expect(window.location.assign).toHaveBeenCalledWith('/orglist');
   });
 
-  test('onsearch called in initial render', () => {
+  test('handles Enter key press on search inputs', () => {
     renderComponent();
 
     const orgInput = screen.getByTestId('filterOrgName');
