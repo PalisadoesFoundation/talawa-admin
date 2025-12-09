@@ -179,22 +179,6 @@ Follow these steps if you are running the app in a production environment withou
 
 #### Starting The Application
 
-Run the following command to start the development server:
-
-```bash
-pnpm run serve
-
-```
-#### Stopping The Application
-
-To do
-
-### For Development Environments
-
-Follow these steps if you are running the app in a development environment without Docker.
-
-#### Starting The Application
-
 Run the following command to start the production server:
 
 ```bash
@@ -204,4 +188,25 @@ pnpm run serve &
 
 #### Stopping The Application
 
-To do
+To do.
+
+### For Development Environments
+
+Follow these steps if you are running the app in a development environment without Docker.
+
+#### Starting The Application
+
+Run the following command to start the development server:
+
+```bash
+pnpm run serve
+
+```
+
+#### Stopping The Application
+
+The app will run until you hit: 
+
+```
+<CTRL-C>
+```
