@@ -7,7 +7,7 @@ import type {
   PostOrderByInput,
   PostComments,
   PostLikes,
-  PostNode,
+  PostNode
 } from './type';
 import { PostOrderByInputEnum } from './type';
 
@@ -274,7 +274,7 @@ describe('Post Type Definitions Tests', () => {
           name: 'John Doe',
           emailAddress: 'john@example.com',
         },
-        hasUserVoted: 'UPVOTE' as any,
+        hasUserVoted: 'UPVOTE' as PostNode['hasUserVoted'],
         upVotesCount: 10,
         downVotesCount: 2,
         pinnedAt: null,
@@ -299,7 +299,7 @@ describe('Post Type Definitions Tests', () => {
           name: 'Test User',
           emailAddress: 'test@example.com',
         },
-        hasUserVoted: 'NONE' as any,
+        hasUserVoted: 'UPVOTE' as PostNode['hasUserVoted'],
         upVotesCount: 0,
         downVotesCount: 0,
         downVoters: { edges: [] },
@@ -322,7 +322,7 @@ describe('Post Type Definitions Tests', () => {
           name: 'Test User',
           emailAddress: 'test@test.com',
         },
-        hasUserVoted: 'NONE' as any,
+        hasUserVoted: 'UPVOTE' as PostNode['hasUserVoted'],
         upVotesCount: 0,
         downVotesCount: 0,
         pinnedAt: null,
@@ -340,7 +340,7 @@ describe('Post Type Definitions Tests', () => {
                   name: 'Commenter',
                   emailAddress: 'commenter@test.com',
                 },
-                hasUserVoted: 'NONE' as any,
+                hasUserVoted: 'UPVOTE' as PostNode['hasUserVoted'],
                 downVotesCount: 0,
                 upVotesCount: 0,
                 text: 'Comment text',
