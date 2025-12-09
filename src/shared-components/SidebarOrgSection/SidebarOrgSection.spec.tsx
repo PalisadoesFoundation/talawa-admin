@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, it, vi, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, vi, expect } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -36,6 +36,10 @@ vi.mock('react-i18next', async () => {
 });
 
 describe('SidebarOrgSection Component', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   const mockOrgId = '123456';
 
   const mockOrganizationData = {
@@ -104,14 +108,14 @@ describe('SidebarOrgSection Component', () => {
     },
   ];
 
-  const errorMocks: typeof successMocks = [
+  const errorMocks = [
     {
       request: {
         query: GET_ORGANIZATION_DATA_PG,
         variables: { id: mockOrgId, first: 10, after: null },
       },
       result: {
-        data: { organization: null } as unknown as typeof mockOrganizationData,
+        data: { organization: null },
       },
     },
   ];
@@ -123,10 +127,10 @@ describe('SidebarOrgSection Component', () => {
         variables: { id: mockOrgId, first: 10, after: null },
       },
       result: {
-        data: mockOrganizationWithoutAvatar as unknown as typeof mockOrganizationData,
+        data: mockOrganizationWithoutAvatar,
       },
     },
-  ] as typeof successMocks;
+  ];
 
   const noCityMocks = [
     {
@@ -135,12 +139,13 @@ describe('SidebarOrgSection Component', () => {
         variables: { id: mockOrgId, first: 10, after: null },
       },
       result: {
-        data: mockOrganizationWithoutCity as unknown as typeof mockOrganizationData,
+        data: mockOrganizationWithoutCity,
       },
     },
-  ] as typeof successMocks;
+  ];
 
-  const renderComponent = (props = {}, mocks = successMocks) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const renderComponent = (props = {}, mocks: any[] = successMocks) => {
     const defaultProps = {
       orgId: mockOrgId,
       hideDrawer: false,
@@ -155,14 +160,6 @@ describe('SidebarOrgSection Component', () => {
       </MockedProvider>,
     );
   };
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
 
   describe('Visibility', () => {
     it('returns null when drawer is hidden', () => {
@@ -359,22 +356,6 @@ describe('SidebarOrgSection Component', () => {
       await waitFor(() => {
         // Verify both name and city are present
         expect(screen.getByText('Test Organization')).toBeInTheDocument();
-        expect(screen.getByText('Test City')).toBeInTheDocument();
-      });
-    });
-
-    it('primary text has correct styling', async () => {
-      renderComponent();
-      await waitFor(() => {
-        // Just verify the text content is rendered correctly
-        expect(screen.getByText('Test Organization')).toBeInTheDocument();
-      });
-    });
-
-    it('secondary text has correct styling', async () => {
-      renderComponent();
-      await waitFor(() => {
-        // Just verify the text content is rendered correctly
         expect(screen.getByText('Test City')).toBeInTheDocument();
       });
     });

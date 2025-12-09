@@ -68,18 +68,22 @@ const UserSidebar = ({
   }, [setHideDrawer]);
 
   // User Profile Section at top (only when drawer is not hidden)
-  const headerContent = !hideDrawer ? (
-    <div
-      style={{
-        backgroundColor: '#e8f4f8',
-        padding: '10px',
-        borderRadius: '8px',
-        margin: '10px',
-      }}
-    >
-      <ProfileCard />
-    </div>
-  ) : null;
+  const headerContent = useMemo(
+    () =>
+      !hideDrawer ? (
+        <div
+          style={{
+            backgroundColor: '#e8f4f8',
+            padding: '10px',
+            borderRadius: '8px',
+            margin: '10px',
+          }}
+        >
+          <ProfileCard />
+        </div>
+      ) : null,
+    [hideDrawer],
+  );
 
   const drawerContent = useMemo(
     () => (

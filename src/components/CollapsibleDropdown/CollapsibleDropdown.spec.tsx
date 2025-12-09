@@ -385,14 +385,11 @@ describe('Testing CollapsibleDropdown component', () => {
       renderComponent(props);
 
       // Each subTarget has an icon element
-      const buttons = screen.getAllByRole('button');
-      // Filter out the parent dropdown button
-      const subTargetButtons = buttons.filter(
-        (btn) => btn.getAttribute('data-testid') !== 'collapsible-dropdown',
-      );
+      const subTargetLinks = screen.getAllByRole('link');
 
-      subTargetButtons.forEach((button) => {
-        const iconElement = button.querySelector('i.fa');
+      expect(subTargetLinks.length).toBeGreaterThan(0);
+      subTargetLinks.forEach((link) => {
+        const iconElement = link.querySelector('i.fa');
         expect(iconElement).toBeInTheDocument();
       });
     });
