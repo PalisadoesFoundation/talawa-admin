@@ -175,14 +175,25 @@ Please follow them closely.
 
 ### For Production Environments
 
+Follow these steps if you are running the app in a production environment without Docker.
+
+#### Starting The Application
+
 Run the following command to start the development server:
 
 ```bash
 pnpm run serve
 
 ```
+#### Stopping The Application
+
+To do
 
 ### For Development Environments
+
+Follow these steps if you are running the app in a development environment without Docker.
+
+#### Starting The Application
 
 Run the following command to start the production server:
 
@@ -190,3 +201,7 @@ Run the following command to start the production server:
 pnpm run serve &
 
 ```
+
+#### Stopping The Application
+
+To do
