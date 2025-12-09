@@ -47,9 +47,7 @@ describe('OrganizationSelector Component', () => {
 
     const clearButton = autocomplete.querySelector('[aria-label="Clear"]');
     expect(clearButton).toBeInTheDocument();
-    if (clearButton) {
-      fireEvent.click(clearButton);
-    }
+    fireEvent.click(screen.getByLabelText('Clear'));
 
     await waitFor(() => {
       expect(mockOnChange).toHaveBeenCalledWith('');
@@ -60,7 +58,7 @@ describe('OrganizationSelector Component', () => {
     renderComponent();
     const input = screen.getByTestId('orgInput');
     fireEvent.change(input, { target: { value: 'Org 1' } });
-    expect(mockOnChange).toHaveBeenCalled();
+    expect(mockOnChange).toHaveBeenCalledWith('1');
   });
 
   it('should handle organizations array being empty', () => {
@@ -68,11 +66,40 @@ describe('OrganizationSelector Component', () => {
 
     const autocomplete = screen.getByTestId('organizationSelect');
     expect(autocomplete).toBeInTheDocument();
+
+    const input = screen.getByTestId('orgInput');
+    fireEvent.click(input);
+    const noOptionsText = screen.queryByText(/no options/i);
+    expect(noOptionsText).toBeInTheDocument();
   });
 
   it('should mark the organization selector as required when required prop is true', () => {
     renderComponent({ required: true });
     const input = screen.getByTestId('orgInput');
     expect(input).toBeRequired();
+  });
+
+  it('should display the selected organization when value prop is provided', () => {
+    renderComponent({ value: '1' });
+    const input = screen.getByTestId('orgInput') as HTMLInputElement;
+    expect(input.value).toBe('Org 1');
+  });
+
+  it('should render all organizations as options', () => {
+    renderComponent();
+
+    const input = screen.getByTestId('orgInput');
+    fireEvent.click(input);
+
+    expect(screen.getByText('Org 1')).toBeInTheDocument();
+    expect(screen.getByText('Org 2')).toBeInTheDocument();
+  });
+
+  it('should handle invalid value gracefully', () => {
+    renderComponent({ value: '999' });
+
+    const input = screen.getByTestId('orgInput') as HTMLInputElement;
+
+    expect(input.value).toBe('');
   });
 });

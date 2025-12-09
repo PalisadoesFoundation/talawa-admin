@@ -116,4 +116,36 @@ describe('PasswordValidator Component', () => {
 
     expect(screen.getAllByTestId('validation-item')).toHaveLength(4);
   });
+
+  it('should validate password length (minimum 6 characters)', () => {
+    const { rerender } = renderComponent({
+      isInputFocused: true,
+      password: 'abc',
+      validation: {
+        lowercaseChar: false,
+        uppercaseChar: false,
+        numericValue: false,
+        specialChar: false,
+      },
+    });
+
+    expect(screen.getByText(/at least 6 characters/i)).toBeInTheDocument();
+
+    rerender(
+      <I18nextProvider i18n={i18nForTest}>
+        <PasswordValidator
+          password="abcdef"
+          isInputFocused={true}
+          validation={{
+            lowercaseChar: true,
+            uppercaseChar: true,
+            numericValue: true,
+            specialChar: true,
+          }}
+        />
+      </I18nextProvider>,
+    );
+
+    expect(screen.getByText(/at least 6 characters/i)).toBeInTheDocument();
+  });
 });
