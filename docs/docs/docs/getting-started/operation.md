@@ -183,7 +183,6 @@ Run the following command to start the production server:
 
 ```bash
 pnpm run serve &
-
 ```
 
 #### Stopping The Application
@@ -200,7 +199,6 @@ Run the following command to start the development server:
 
 ```bash
 pnpm run serve
-
 ```
 
 #### Stopping The Application
