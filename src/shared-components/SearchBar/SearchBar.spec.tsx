@@ -232,4 +232,62 @@ describe('SearchBar', () => {
     await user.type(input, 'test{enter}');
     // Should not throw
   });
+
+  it('clears the input value without onClear prop', async () => {
+    const user = userEvent.setup();
+    const handleSearch = vi.fn();
+    render(
+      <SearchBar
+        onSearch={handleSearch}
+        inputTestId="search-input"
+        clearButtonTestId="clear-search"
+      />,
+    );
+
+    const input = screen.getByTestId('search-input');
+    await user.type(input, 'pledge');
+    await user.click(screen.getByTestId('clear-search'));
+
+    expect(input).toHaveValue('');
+    // When onClear is NOT provided, it should trigger search with empty string
+    expect(handleSearch).toHaveBeenCalledWith(
+      '',
+      expect.objectContaining({ trigger: 'clear' }),
+    );
+  });
+
+  it('exposes imperative handle methods', async () => {
+    const user = userEvent.setup();
+    const ref = React.createRef<InterfaceSearchBarRef>();
+    const handleSearch = vi.fn();
+    render(
+      <SearchBar
+        ref={ref}
+        onSearch={handleSearch}
+        inputTestId="search-input"
+      />,
+    );
+
+    const input = screen.getByTestId('search-input');
+
+    // Test focus
+    act(() => {
+      ref.current?.focus();
+    });
+    expect(input).toHaveFocus();
+
+    // Test blur
+    act(() => {
+      ref.current?.blur();
+    });
+    expect(input).not.toHaveFocus();
+
+    // Test clear
+    await user.type(input, 'test');
+    expect(input).toHaveValue('test');
+    act(() => {
+      ref.current?.clear();
+    });
+    expect(input).toHaveValue('');
+  });
 });
