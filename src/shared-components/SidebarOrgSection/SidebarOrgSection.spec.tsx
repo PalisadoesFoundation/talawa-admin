@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, it, vi, expect, beforeEach } from 'vitest';
+import { describe, it, vi, expect, beforeEach, afterEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -157,6 +157,10 @@ describe('SidebarOrgSection Component', () => {
   };
 
   beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
     vi.clearAllMocks();
   });
 

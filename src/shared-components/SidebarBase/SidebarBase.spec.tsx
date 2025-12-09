@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, it, vi, expect, beforeEach } from 'vitest';
+import { describe, it, vi, expect, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
@@ -59,6 +59,10 @@ describe('SidebarBase Component', () => {
   };
 
   beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
     vi.clearAllMocks();
   });
 

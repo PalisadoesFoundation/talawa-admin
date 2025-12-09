@@ -38,15 +38,22 @@ vi.mock('plugin', () => ({
   usePluginDrawerItems: vi.fn(() => []),
 }));
 
-// Mock react-router-dom hooks
-vi.mock('react-router-dom', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('react-router-dom')>();
-  return {
-    ...actual,
-    useNavigate: vi.fn(() => vi.fn()),
-    useLocation: vi.fn(() => ({ pathname: '/' })),
-  };
-});
+// Mock ProfileCard component to avoid router hook errors
+vi.mock('components/ProfileCard/ProfileCard', () => ({
+  default: () => <div data-testid="profile-card">Profile Card Mock</div>,
+}));
+
+// Mock SignOut component to avoid router hook errors
+vi.mock('components/SignOut/SignOut', () => ({
+  default: ({ hideDrawer }: { hideDrawer?: boolean }) => (
+    <div
+      data-testid="sign-out-component"
+      style={{ display: hideDrawer ? 'none' : 'block' }}
+    >
+      Sign Out Mock
+    </div>
+  ),
+}));
 
 // Mock useSession to prevent router hook errors in SignOut component
 vi.mock('utils/useSession', () => ({

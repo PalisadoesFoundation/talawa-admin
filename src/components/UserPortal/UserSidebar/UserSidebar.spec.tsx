@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter } from 'react-router';
+import { MemoryRouter } from 'react-router-dom';
 import type { FetchResult } from '@apollo/client';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { type MockedResponse } from '@apollo/client/testing';
@@ -58,12 +58,19 @@ vi.mock('components/ProfileCard/ProfileCard', () => ({
   )),
 }));
 
-vi.mock('components/UserPortal/SignOut/SignOut', () => ({
+vi.mock('components/SignOut/SignOut', () => ({
   default: vi.fn(() => (
     <button data-testid="signOutBtn" type="button">
       Sign Out
     </button>
   )),
+}));
+
+// Mock useSession to prevent router hook errors
+vi.mock('utils/useSession', () => ({
+  default: vi.fn(() => ({
+    endSession: vi.fn(),
+  })),
 }));
 
 type DrawerItems = import('plugin/types').IDrawerExtension[] | undefined;
@@ -601,10 +608,8 @@ describe('UserSidebar', () => {
 
       expect(toggleBtn).toBeInTheDocument();
       expect(toggleBtn).toHaveAttribute('type', 'button');
-      // The aria-label is on the FaBars icon inside the toggle button
-      expect(
-        toggleBtn.querySelector('[aria-label="Toggle sidebar"]'),
-      ).toBeInTheDocument();
+      // The aria-label is on the toggle button itself
+      expect(toggleBtn).toHaveAttribute('aria-label', 'Toggle sidebar');
     });
 
     it('should toggle drawer when toggle button is clicked', () => {
@@ -620,7 +625,7 @@ describe('UserSidebar', () => {
       fireEvent.click(toggleBtn);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
-      expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'true');
+      expect(mockSetItem).toHaveBeenCalledWith('sidebar', true);
     });
 
     it('should toggle drawer when Enter key is pressed on toggle button', () => {
@@ -636,7 +641,7 @@ describe('UserSidebar', () => {
       fireEvent.keyDown(toggleBtn, { key: 'Enter' });
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
-      expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'true');
+      expect(mockSetItem).toHaveBeenCalledWith('sidebar', true);
     });
 
     it('should toggle drawer when Space key is pressed on toggle button', () => {
@@ -652,7 +657,7 @@ describe('UserSidebar', () => {
       fireEvent.keyDown(toggleBtn, { key: ' ' });
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
-      expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'true');
+      expect(mockSetItem).toHaveBeenCalledWith('sidebar', true);
     });
 
     it('should not toggle drawer when other keys are pressed on toggle button', () => {
@@ -686,7 +691,7 @@ describe('UserSidebar', () => {
       fireEvent.click(toggleBtn);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
-      expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'false');
+      expect(mockSetItem).toHaveBeenCalledWith('sidebar', false);
     });
   });
 });

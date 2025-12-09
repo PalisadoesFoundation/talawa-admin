@@ -32,6 +32,15 @@ vi.mock('react-router', async (importOriginal) => {
   };
 });
 
+// Mock IconComponent to expose fill prop for testing
+vi.mock('components/IconComponent/IconComponent', () => ({
+  default: ({ name, fill }: { name: string; fill?: string }) => (
+    <div data-testid="mocked-icon-component" data-name={name} data-fill={fill}>
+      {name}Icon
+    </div>
+  ),
+}));
+
 const createProps = (
   overrides: Partial<InterfaceCollapsibleDropdown> = {},
 ): InterfaceCollapsibleDropdown => ({
@@ -194,8 +203,10 @@ describe('Testing CollapsibleDropdown component', () => {
         '[class*="collapsibleDropdownIconWrapper"]',
       );
       expect(iconWrapper).toBeInTheDocument();
-      // When showDropdown is true, icon should have fill='var(--bs-black)'
-      // The IconComponent is rendered with the fill prop
+
+      // Verify the IconComponent receives the correct fill prop
+      const iconElement = screen.getByTestId('mocked-icon-component');
+      expect(iconElement).toHaveAttribute('data-fill', 'var(--bs-black)');
     });
 
     test('applies correct icon color when dropdown is hidden', () => {
@@ -207,7 +218,10 @@ describe('Testing CollapsibleDropdown component', () => {
         '[class*="collapsibleDropdownIconWrapper"]',
       );
       expect(iconWrapper).toBeInTheDocument();
-      // When showDropdown is false, icon should have fill='var(--bs-secondary)'
+
+      // Verify the IconComponent receives the correct fill prop
+      const iconElement = screen.getByTestId('mocked-icon-component');
+      expect(iconElement).toHaveAttribute('data-fill', 'var(--bs-secondary)');
     });
   });
 

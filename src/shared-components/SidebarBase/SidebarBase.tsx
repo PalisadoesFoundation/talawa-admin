@@ -60,6 +60,13 @@ const SidebarBase = ({
     setHideDrawer(newState);
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent): void => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      handleToggle();
+    }
+  };
+
   const portalText = portalType === 'admin' ? 'adminPortal' : 'userPortal';
 
   return (
@@ -80,6 +87,7 @@ const SidebarBase = ({
           className="d-flex align-items-center btn p-0 border-0 bg-transparent"
           data-testid="toggleBtn"
           onClick={handleToggle}
+          onKeyDown={handleKeyDown}
           type="button"
           aria-label="Toggle sidebar"
         >
