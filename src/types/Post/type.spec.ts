@@ -10,6 +10,7 @@ import type {
   PostNode,
 } from './type';
 import { PostOrderByInputEnum } from './type';
+import type { VoteState } from 'utils/interfaces';
 
 describe('Post Type Definitions Tests', () => {
   // Test 1: Post type
@@ -274,7 +275,7 @@ describe('Post Type Definitions Tests', () => {
           name: 'John Doe',
           emailAddress: 'john@example.com',
         },
-        hasUserVoted: 'UPVOTE' as PostNode['hasUserVoted'],
+        hasUserVoted: 'UPVOTE' as unknown as VoteState,
         upVotesCount: 10,
         downVotesCount: 2,
         pinnedAt: null,
@@ -299,7 +300,7 @@ describe('Post Type Definitions Tests', () => {
           name: 'Test User',
           emailAddress: 'test@example.com',
         },
-        hasUserVoted: 'UPVOTE' as PostNode['hasUserVoted'],
+        hasUserVoted: 'UPVOTE' as unknown as VoteState,
         upVotesCount: 0,
         downVotesCount: 0,
         downVoters: { edges: [] },
@@ -322,7 +323,7 @@ describe('Post Type Definitions Tests', () => {
           name: 'Test User',
           emailAddress: 'test@test.com',
         },
-        hasUserVoted: 'UPVOTE' as PostNode['hasUserVoted'],
+        hasUserVoted: 'UPVOTE' as unknown as VoteState,
         upVotesCount: 0,
         downVotesCount: 0,
         pinnedAt: null,
@@ -340,7 +341,7 @@ describe('Post Type Definitions Tests', () => {
                   name: 'Commenter',
                   emailAddress: 'commenter@test.com',
                 },
-                hasUserVoted: 'UPVOTE' as PostNode['hasUserVoted'],
+                hasUserVoted: 'UPVOTE' as unknown as VoteState,
                 downVotesCount: 0,
                 upVotesCount: 0,
                 text: 'Comment text',
