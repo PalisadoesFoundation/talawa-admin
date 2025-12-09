@@ -18,7 +18,8 @@ describe('LeaveOrganization localStorage error handling', () => {
   afterEach(() => {
     // Restore console.error
     console.error = originalConsoleError;
-    vi.restoreAllMocks();
+
+    vi.clearAllMocks();
   });
 
   test('userEmail defaults to empty string when localStorage throws error', async () => {
