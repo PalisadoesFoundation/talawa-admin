@@ -40,15 +40,6 @@ describe('Organisation Contribution Page', () => {
   });
 
   test('should render props and text elements test for the screen', async () => {
-    Object.defineProperty(window, 'location', {
-      value: {
-        assign: vi.fn(),
-      },
-      writable: true,
-    });
-
-    window.location.assign('/orglist');
-
     const { container } = renderComponent();
 
     expect(document.title).toBe('Talawa Contributions');
@@ -58,7 +49,6 @@ describe('Organisation Contribution Page', () => {
     expect(container.textContent).toMatch('Filter by Trans. ID');
     expect(container.textContent).toMatch('Recent Stats');
     expect(container.textContent).toMatch('Contribution');
-    expect(window.location.assign).toHaveBeenCalledWith('/orglist');
   });
 
   test('renders ContriStats with correct props', () => {
@@ -86,11 +76,9 @@ describe('Organisation Contribution Page', () => {
     const orgInput = screen.getByTestId('filterOrgName');
     fireEvent.input(orgInput, { target: { value: 'Test Org' } });
     fireEvent.keyDown(orgInput, { key: 'Enter' });
-
     const txnInput = screen.getByTestId('filterTransaction');
     fireEvent.input(txnInput, { target: { value: 'TXN123' } });
     fireEvent.keyDown(txnInput, { key: 'Enter' });
-
     expect(orgInput).toHaveValue('Test Org');
     expect(txnInput).toHaveValue('TXN123');
   });
