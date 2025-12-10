@@ -1409,5 +1409,4 @@ describe('Testing Advertisement Register Component', () => {
     });
     vi.useRealTimers();
   });
-  vi.useRealTimers();
 });
