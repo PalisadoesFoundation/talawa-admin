@@ -119,9 +119,11 @@ export async function installDocker(os: IOSInfo): Promise<void> {
   } catch (error) {
     spinner.fail('Failed to install Docker');
     logError(`Docker installation failed: ${error}`);
-    logInfo(
-      'Automatic Docker installation in this script is currently implemented only for Ubuntu and Debian. For other Linux distributions, please install Docker manually: https://docs.docker.com/engine/install/',
-    );
+    if (os.distro !== 'ubuntu' && os.distro !== 'debian') {
+      logInfo(
+        'Automatic Docker installation in this script is currently implemented only for Ubuntu and Debian. For other Linux distributions, please install Docker manually: https://docs.docker.com/engine/install/',
+      );
+    }
     throw error;
   }
 }
