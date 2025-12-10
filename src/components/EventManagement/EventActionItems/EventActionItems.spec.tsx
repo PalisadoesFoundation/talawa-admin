@@ -320,9 +320,9 @@ const MOCKS_ERROR = [
 ];
 
 const renderEventActionItems = (
-  eventId: string = 'eventId1',
+  eventId = 'eventId1',
   mocks: MockedResponse[] = MOCKS,
-) => {
+): ReturnType<typeof render> => {
   return render(
     <MockedProvider mocks={mocks}>
       <Provider store={store}>
@@ -388,7 +388,7 @@ describe('EventActionItems', () => {
       renderEventActionItems();
 
       await waitFor(() => {
-        expect(screen.getAllByText('27/08/2024')).toHaveLength(2); // Data grid and date display
+        expect(screen.getAllByText('27/08/2024')).toHaveLength(2);
       });
     });
 
@@ -441,7 +441,6 @@ describe('EventActionItems', () => {
         expect(screen.getByText('Category 2')).toBeInTheDocument();
       });
 
-      // Switch to category search
       const searchToggleBtn = screen.getByTestId('searchByToggleBtn');
       fireEvent.click(searchToggleBtn);
 
@@ -449,7 +448,6 @@ describe('EventActionItems', () => {
       fireEvent.change(searchInput, { target: { value: 'Category' } });
 
       await waitFor(() => {
-        // Should show both categories since both contain "Category"
         expect(screen.getByText('Category 1')).toBeInTheDocument();
         expect(screen.getByText('Category 2')).toBeInTheDocument();
       });
@@ -459,17 +457,14 @@ describe('EventActionItems', () => {
       renderEventActionItems();
 
       await waitFor(() => {
-        // Initially should show both items
-        expect(screen.getAllByText('John Doe')).toHaveLength(2); // avatar and grid
-        expect(screen.getAllByText('Bob Wilson')).toHaveLength(2); // avatar and grid
+        expect(screen.getAllByText('John Doe')).toHaveLength(2);
+        expect(screen.getAllByText('Bob Wilson')).toHaveLength(2);
       });
 
-      // Search by assignee (default)
       const searchInput = screen.getByTestId('searchBy');
       fireEvent.change(searchInput, { target: { value: 'John' } });
 
       await waitFor(() => {
-        // Should only show John Doe
         expect(screen.getAllByText('John Doe')).toHaveLength(2);
         expect(screen.queryByText('Bob Wilson')).not.toBeInTheDocument();
       });
@@ -483,7 +478,6 @@ describe('EventActionItems', () => {
         expect(screen.getByText('Category 2')).toBeInTheDocument();
       });
 
-      // Switch to category search
       const searchToggleBtn = screen.getByTestId('searchByToggleBtn');
       fireEvent.click(searchToggleBtn);
 
@@ -491,7 +485,6 @@ describe('EventActionItems', () => {
       fireEvent.change(searchInput, { target: { value: 'Category 2' } });
 
       await waitFor(() => {
-        // Should only show Category 2
         expect(screen.getByText('Category 2')).toBeInTheDocument();
         expect(screen.queryByText('Category 1')).not.toBeInTheDocument();
       });
@@ -505,7 +498,7 @@ describe('EventActionItems', () => {
       });
 
       const searchInput = screen.getByTestId('searchBy');
-      fireEvent.change(searchInput, { target: { value: 'JOHN' } }); // uppercase
+      fireEvent.change(searchInput, { target: { value: 'JOHN' } });
 
       await waitFor(() => {
         expect(screen.getAllByText('John Doe')).toHaveLength(2);
@@ -521,7 +514,6 @@ describe('EventActionItems', () => {
         expect(screen.getAllByText('Bob Wilson')).toHaveLength(2);
       });
 
-      // Search for something specific
       const searchInput = screen.getByTestId('searchBy');
       fireEvent.change(searchInput, { target: { value: 'John' } });
 
@@ -530,7 +522,6 @@ describe('EventActionItems', () => {
         expect(screen.queryByText('Bob Wilson')).not.toBeInTheDocument();
       });
 
-      // Clear search
       fireEvent.change(searchInput, { target: { value: '' } });
 
       await waitFor(() => {
@@ -550,7 +541,6 @@ describe('EventActionItems', () => {
       fireEvent.change(searchInput, { target: { value: 'nonexistent' } });
 
       await waitFor(() => {
-        // Should show no items or empty state
         expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
         expect(screen.queryByText('Bob Wilson')).not.toBeInTheDocument();
       });
@@ -559,7 +549,6 @@ describe('EventActionItems', () => {
 
   describe('Sorting Functionality', () => {
     it('should sort items by assigned date in descending order', async () => {
-      // Create mock data with different dates
       const mockDataWithDates = {
         event: {
           ...mockEventData.event,
@@ -605,19 +594,16 @@ describe('EventActionItems', () => {
         expect(screen.getByText('27/08/2024')).toBeInTheDocument();
       });
 
-      // Click sort button to sort by latest assigned (DESC)
       const sortBtn = screen.getByTestId('sortBtn');
       fireEvent.click(sortBtn);
 
       await waitFor(() => {
-        // Should maintain the same display since dates are already in DESC order
         expect(screen.getByText('25/08/2024')).toBeInTheDocument();
         expect(screen.getByText('27/08/2024')).toBeInTheDocument();
       });
     });
 
     it('should sort items by assigned date in ascending order', async () => {
-      // Create mock data with different dates
       const mockDataWithDates = {
         event: {
           ...mockEventData.event,
@@ -634,7 +620,7 @@ describe('EventActionItems', () => {
                 node: {
                   ...mockActionItem,
                   id: 'item2',
-                  assignedAt: '2024-08-25', // Earlier date
+                  assignedAt: new Date('2024-08-25'),
                 },
               },
             ],
@@ -663,20 +649,17 @@ describe('EventActionItems', () => {
         expect(screen.getByText('25/08/2024')).toBeInTheDocument();
       });
 
-      // Click sort button twice to sort by earliest assigned (ASC)
       const sortBtn = screen.getByTestId('sortBtn');
-      fireEvent.click(sortBtn); // First click - DESC
-      fireEvent.click(sortBtn); // Second click - ASC
+      fireEvent.click(sortBtn);
+      fireEvent.click(sortBtn);
 
       await waitFor(() => {
-        // Should maintain the same display since dates are already in ASC order
         expect(screen.getByText('27/08/2024')).toBeInTheDocument();
         expect(screen.getByText('25/08/2024')).toBeInTheDocument();
       });
     });
 
     it('should handle sorting with same dates', async () => {
-      // Create mock data with same dates
       const mockDataWithSameDates = {
         event: {
           ...mockEventData.event,
@@ -693,7 +676,7 @@ describe('EventActionItems', () => {
                 node: {
                   ...mockActionItem,
                   id: 'item2',
-                  assignedAt: '2024-08-27', // Same date
+                  assignedAt: new Date('2024-08-27'),
                 },
               },
             ],
@@ -721,18 +704,15 @@ describe('EventActionItems', () => {
         expect(screen.getAllByText('27/08/2024')).toHaveLength(2);
       });
 
-      // Click sort button
       const sortBtn = screen.getByTestId('sortBtn');
       fireEvent.click(sortBtn);
 
       await waitFor(() => {
-        // Should still show both items with same date
         expect(screen.getAllByText('27/08/2024')).toHaveLength(2);
       });
     });
 
     it('should handle sorting with invalid dates gracefully', () => {
-      // Test the sorting logic directly with invalid dates
       const mockItems: IActionItemInfo[] = [
         {
           ...mockActionItem,
@@ -764,9 +744,7 @@ describe('EventActionItems', () => {
         );
       }
 
-      // Should handle invalid dates without crashing
       expect(filteredItems).toHaveLength(2);
-      // The sorting behavior with NaN can be unpredictable, so we just check that both items are present
       const itemIds = filteredItems.map((item) => item.id);
       expect(itemIds).toContain('item1');
       expect(itemIds).toContain('item2');
@@ -810,7 +788,6 @@ describe('EventActionItems', () => {
       }
 
       expect(filteredItems).toHaveLength(3);
-      // Check that all items are present, regardless of exact order due to NaN sorting behavior
       const itemIds = filteredItems.map((item) => item.id);
       expect(itemIds).toContain('item1');
       expect(itemIds).toContain('item2');
@@ -849,7 +826,6 @@ describe('EventActionItems', () => {
         );
       }
 
-      // Should return original order when sortBy is null
       expect(filteredItems).toHaveLength(2);
       expect(filteredItems[0].id).toBe('item1');
       expect(filteredItems[1].id).toBe('item2');
@@ -967,9 +943,6 @@ describe('EventActionItems', () => {
       await waitFor(() => {
         expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
       });
-
-      // The component should pass isRecurring=true to the modal
-      // This is tested implicitly through the modal props
     });
 
     it('should set isRecurring to false for non-recurring events', async () => {
@@ -978,8 +951,6 @@ describe('EventActionItems', () => {
       await waitFor(() => {
         expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
       });
-
-      // The component should pass isRecurring=false to the modal
     });
 
     it('should pass baseEvent for recurring events', async () => {
@@ -988,8 +959,6 @@ describe('EventActionItems', () => {
       await waitFor(() => {
         expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
       });
-
-      // The component should pass baseEvent to the modal
     });
   });
 
@@ -1043,7 +1012,6 @@ describe('EventActionItems', () => {
       renderEventActionItems();
 
       await waitFor(() => {
-        // The DataGrid should be configured with disableColumnMenu and disableColumnResize
         const dataGrid = document.querySelector('.MuiDataGrid-root');
         expect(dataGrid).toBeInTheDocument();
       });
@@ -1088,6 +1056,149 @@ describe('EventActionItems', () => {
         expect(screen.getByTestId('searchByToggleBtn')).toBeInTheDocument();
         expect(screen.getByTestId('sortBtn')).toBeInTheDocument();
         expect(screen.getByTestId('filterBtn')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Additional Coverage Tests', () => {
+    it('should handle volunteer group assignments correctly', async () => {
+      const mockDataWithVolunteerGroup = {
+        event: {
+          ...mockEventData.event,
+          actionItems: {
+            edges: [
+              {
+                node: {
+                  ...mockActionItem,
+                  volunteerId: null,
+                  volunteerGroupId: 'groupId1',
+                  volunteer: null,
+                  volunteerGroup: {
+                    id: 'groupId1',
+                    name: 'Volunteer Group A',
+                    description: 'Test group',
+                    leaderUser: {
+                      id: 'leaderId1',
+                      name: 'Group Leader',
+                      avatarURL: '',
+                    },
+                  },
+                },
+              },
+            ],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: null,
+            },
+          },
+        },
+      };
+
+      const mocksWithGroup = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockDataWithVolunteerGroup },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocksWithGroup);
+
+      await waitFor(() => {
+        const groupNameElements = screen.getAllByText('Volunteer Group A');
+        expect(groupNameElements.length).toBeGreaterThan(0);
+      });
+    });
+
+    it('should toggle between completed and pending filters correctly', async () => {
+      renderEventActionItems();
+
+      await waitFor(() => {
+        expect(screen.getAllByText('Pending').length).toBeGreaterThan(0);
+        expect(screen.getAllByText('Completed').length).toBeGreaterThan(0);
+      });
+
+      const filterBtn = screen.getByTestId('filterBtn');
+
+      fireEvent.click(filterBtn);
+
+      await waitFor(() => {
+        expect(filterBtn).toBeInTheDocument();
+      });
+
+      fireEvent.click(filterBtn);
+
+      await waitFor(() => {
+        expect(filterBtn).toBeInTheDocument();
+      });
+
+      fireEvent.click(filterBtn);
+
+      await waitFor(() => {
+        expect(screen.getAllByText('Pending').length).toBeGreaterThan(0);
+        expect(screen.getAllByText('Completed').length).toBeGreaterThan(0);
+      });
+    });
+
+    it('should handle action items with completion dates correctly', async () => {
+      const mockDataWithCompletionDates = {
+        event: {
+          ...mockEventData.event,
+          actionItems: {
+            edges: [
+              {
+                node: {
+                  ...mockActionItem,
+                  id: 'completedItem1',
+                  isCompleted: true,
+                  completionAt: new Date('2024-09-01'),
+                  postCompletionNotes: 'Task completed successfully',
+                },
+              },
+              {
+                node: {
+                  ...mockActionItem,
+                  id: 'incompleteItem1',
+                  isCompleted: false,
+                  completionAt: new Date('2044-09-15'),
+                  postCompletionNotes: null,
+                },
+              },
+            ],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: null,
+            },
+          },
+        },
+      };
+
+      const mocksWithCompletionDates = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockDataWithCompletionDates },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocksWithCompletionDates);
+
+      await waitFor(() => {
+        const completedElements = screen.getAllByText('Completed');
+        const pendingElements = screen.getAllByText('Pending');
+        expect(completedElements.length).toBeGreaterThan(0);
+        expect(pendingElements.length).toBeGreaterThan(0);
+      });
+
+      const viewBtn = screen.getByTestId('viewItemBtncompletedItem1');
+      fireEvent.click(viewBtn);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('view-modal')).toBeInTheDocument();
       });
     });
   });
