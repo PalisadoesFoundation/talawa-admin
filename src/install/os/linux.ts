@@ -49,7 +49,6 @@ export async function installDocker(os: IOSInfo): Promise<void> {
         { sudo: true, silent: true },
       );
 
-      // 3. Add Docker’s official GPG key
       await execCommand('install', ['-m', '0755', '-d', '/etc/apt/keyrings'], {
         sudo: true,
         silent: true,
