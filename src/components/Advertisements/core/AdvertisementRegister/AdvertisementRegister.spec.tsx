@@ -1354,6 +1354,12 @@ describe('Testing Advertisement Register Component', () => {
       expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
       expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);
     });
+    expect(
+      screen.queryByRole('button', { name: /next/i }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /previous/i }),
+    ).not.toBeInTheDocument();
     vi.useRealTimers();
   });
 
