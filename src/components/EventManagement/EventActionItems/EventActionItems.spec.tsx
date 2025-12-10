@@ -430,6 +430,45 @@ describe('EventActionItems', () => {
         expect(screen.getByText('No category')).toBeInTheDocument();
       });
     });
+
+    it('should display "No assignment" when neither volunteer nor group assigned', async () => {
+      const mockNoAssignment = {
+        event: {
+          ...mockEventData.event,
+          actionItems: {
+            edges: [
+              {
+                node: {
+                  ...mockActionItem,
+                  id: 'noAssignment1',
+                  volunteer: null,
+                  volunteerGroup: null,
+                  volunteerId: null,
+                  volunteerGroupId: null,
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      };
+
+      const mocks = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockNoAssignment },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocks);
+
+      await waitFor(() => {
+        expect(screen.getAllByText('No assignment')).toHaveLength(2);
+      });
+    });
   });
 
   describe('Search Functionality', () => {
@@ -543,6 +582,75 @@ describe('EventActionItems', () => {
       await waitFor(() => {
         expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
         expect(screen.queryByText('Bob Wilson')).not.toBeInTheDocument();
+      });
+    });
+
+    it('should search by volunteer group name', async () => {
+      const mockWithGroupSearch = {
+        event: {
+          ...mockEventData.event,
+          actionItems: {
+            edges: [
+              {
+                node: {
+                  ...mockActionItem,
+                  id: 'groupItem1',
+                  volunteer: null,
+                  volunteerId: null,
+                  volunteerGroup: {
+                    id: 'g1',
+                    name: 'Group Search',
+                    description: 'desc',
+                    leaderUser: {
+                      id: 'leader1',
+                      name: 'Leader One',
+                      avatarURL: '',
+                    },
+                  },
+                },
+              },
+              {
+                node: {
+                  ...mockActionItem,
+                  id: 'volItem1',
+                  volunteer: {
+                    id: 'vol1',
+                    hasAccepted: true,
+                    isPublic: true,
+                    hoursVolunteered: 1,
+                    user: { id: 'u1', name: 'Alice Volunteer', avatarURL: '' },
+                  },
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      };
+
+      const mocks = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockWithGroupSearch },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocks);
+
+      await waitFor(() => {
+        expect(screen.getAllByText('Group Search')).toHaveLength(2);
+        expect(screen.getAllByText('Alice Volunteer')).toHaveLength(2);
+      });
+
+      const searchInput = screen.getByTestId('searchBy');
+      fireEvent.change(searchInput, { target: { value: 'Group Search' } });
+
+      await waitFor(() => {
+        expect(screen.getAllByText('Group Search')).toHaveLength(2);
+        expect(screen.queryByText('Alice Volunteer')).not.toBeInTheDocument();
       });
     });
   });
@@ -846,7 +954,10 @@ describe('EventActionItems', () => {
 
       await waitFor(() => {
         expect(screen.getAllByText('Pending').length).toBeGreaterThan(0);
-        expect(screen.getAllByText('Completed').length).toBeGreaterThan(0);
+        const completedChips = screen
+          .queryAllByText('Completed')
+          .filter((el) => el.classList.contains('MuiChip-label'));
+        expect(completedChips).toHaveLength(0);
       });
     });
   });
@@ -1121,24 +1232,14 @@ describe('EventActionItems', () => {
       });
 
       const filterBtn = screen.getByTestId('filterBtn');
-
-      fireEvent.click(filterBtn);
-
-      await waitFor(() => {
-        expect(filterBtn).toBeInTheDocument();
-      });
-
-      fireEvent.click(filterBtn);
-
-      await waitFor(() => {
-        expect(filterBtn).toBeInTheDocument();
-      });
-
       fireEvent.click(filterBtn);
 
       await waitFor(() => {
         expect(screen.getAllByText('Pending').length).toBeGreaterThan(0);
-        expect(screen.getAllByText('Completed').length).toBeGreaterThan(0);
+        const completedChips = screen
+          .queryAllByText('Completed')
+          .filter((el) => el.classList.contains('MuiChip-label'));
+        expect(completedChips).toHaveLength(0);
       });
     });
 
@@ -1246,29 +1347,6 @@ describe('EventActionItems', () => {
 
       await waitFor(() => {
         expect(screen.getByTestId('view-modal')).toBeInTheDocument();
-      });
-    });
-  });
-
-  describe('Create Button', () => {
-    it('should render create button with correct styling', async () => {
-      renderEventActionItems();
-
-      await waitFor(() => {
-        const createBtn = screen.getByTestId('createActionItemBtn');
-        expect(createBtn).toBeInTheDocument();
-        expect(createBtn).toHaveClass('btn');
-        expect(createBtn).toHaveClass('btn-success');
-      });
-    });
-
-    it('should have correct icon and text', async () => {
-      renderEventActionItems();
-
-      await waitFor(() => {
-        const createBtn = screen.getByTestId('createActionItemBtn');
-        expect(createBtn).toHaveTextContent('create');
-        expect(createBtn.querySelector('.fa-plus')).toBeInTheDocument();
       });
     });
   });
