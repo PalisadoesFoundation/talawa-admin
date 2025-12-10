@@ -1,7 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { type IOSInfo } from '../types';
 import { execCommand } from '../utils/exec';
-import { createSpinner, logError, logInfo, logWarning } from '../utils/logger';
+import { createSpinner, logError, logInfo } from '../utils/logger';
 import { installDocker, installTypeScript } from './linux';
 
 vi.mock('../utils/exec');
@@ -94,7 +94,7 @@ describe('linux OS installers', () => {
       expect(spinnerMock.succeed).toHaveBeenCalledWith(
         'Docker installed successfully',
       );
-      expect(logWarning).toHaveBeenCalledWith(
+      expect(logInfo).toHaveBeenCalledWith(
         expect.stringContaining('Add your user to the docker group'),
       );
     });

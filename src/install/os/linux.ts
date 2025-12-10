@@ -1,6 +1,6 @@
 import type { IOSInfo } from '../types';
 import { execCommand } from '../utils/exec';
-import { createSpinner, logError, logInfo, logWarning } from '../utils/logger';
+import { createSpinner, logError, logInfo } from '../utils/logger';
 
 export async function installTypeScript(): Promise<void> {
   const spinner = createSpinner('Installing TypeScript...');
@@ -106,10 +106,10 @@ export async function installDocker(os: IOSInfo): Promise<void> {
       );
 
       spinner.succeed('Docker installed successfully');
-      logWarning(
+      logInfo(
         'Add your user to the docker group: sudo usermod -aG docker $USER',
       );
-      logWarning('Then log out and log back in for changes to take effect.');
+      logInfo('Then log out and log back in for changes to take effect.');
     } else {
       throw new Error(
         'Automatic Docker installation in this script is currently implemented only for Ubuntu and Debian. For other Linux distributions, please install Docker manually: https://docs.docker.com/engine/install/',
