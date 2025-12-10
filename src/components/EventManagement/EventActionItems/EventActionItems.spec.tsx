@@ -320,7 +320,7 @@ const MOCKS_ERROR = [
 ];
 
 const renderEventActionItems = (
-  eventId = 'eventId1',
+  eventId: string = 'eventId1',
   mocks: MockedResponse[] = MOCKS,
 ): ReturnType<typeof render> => {
   return render(
@@ -1139,6 +1139,53 @@ describe('EventActionItems', () => {
       await waitFor(() => {
         expect(screen.getAllByText('Pending').length).toBeGreaterThan(0);
         expect(screen.getAllByText('Completed').length).toBeGreaterThan(0);
+      });
+    });
+
+    it('should display group icon when action item is assigned to volunteer group', async () => {
+      const mockDataWithGroup = {
+        event: {
+          ...mockEventData.event,
+          actionItems: {
+            edges: [
+              {
+                node: {
+                  ...mockActionItem,
+                  volunteerId: null,
+                  volunteerGroupId: 'groupId1',
+                  volunteer: null,
+                  volunteerGroup: {
+                    id: 'groupId1',
+                    name: 'Test Group',
+                    description: 'Test',
+                    leaderUser: {
+                      id: 'leaderId',
+                      name: 'Leader',
+                      avatarURL: '',
+                    },
+                  },
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      };
+
+      const mocks = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockDataWithGroup },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocks);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('groupIcon')).toBeInTheDocument();
       });
     });
 
