@@ -240,16 +240,12 @@ export const createAdvertisementNoPagination = [
       ),
     ],
     {
-      startCursor: null,
-      endCursor: null,
       hasNextPage: false,
       hasPreviousPage: false,
     },
   ),
 
   createAdvertisementListResponse(true, [], {
-    startCursor: null,
-    endCursor: null,
     hasNextPage: false,
     hasPreviousPage: false,
   }),
