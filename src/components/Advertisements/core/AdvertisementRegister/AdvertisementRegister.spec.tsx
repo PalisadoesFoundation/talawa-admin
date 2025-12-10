@@ -21,6 +21,7 @@ import {
   mockBigFile,
   mockFile,
   updateAdFailMock,
+  createAdvertisementNoPagination,
 } from './AdvertisementRegisterMocks';
 
 vi.mock('react-router', async () => {
@@ -1283,6 +1284,130 @@ describe('Testing Advertisement Register Component', () => {
     ).toBeInTheDocument();
 
     useParamsMock.mockRestore();
+  });
+
+  it('create advertisement with no pagination', async () => {
+    const createAdMock = vi.fn();
+    mockUseMutation.mockReturnValue([createAdMock]);
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={createAdvertisementNoPagination}>
+                <AdvertisementRegister
+                  setAfterActive={vi.fn()}
+                  setAfterCompleted={vi.fn()}
+                />
+              </MockedProvider>
+            </I18nextProvider>
+          </router.BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    expect(
+      screen.getByText(translations.createAdvertisement),
+    ).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.createAdvertisement));
+    });
+
+    expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rname), {
+        target: { value: 'Ad1' },
+      });
+    });
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rtype), {
+        target: { value: 'banner' },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+        target: { value: dateConstants.create.startAtISO.split('T')[0] },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.RendDate), {
+        target: { value: dateConstants.create.endAtISO.split('T')[0] },
+      });
+    });
+
+    expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.register));
+    });
+
+    await waitFor(() => {
+      const mockCall = createAdMock.mock.calls[0][0];
+      expect(mockCall.variables).toMatchObject({
+        organizationId: '1',
+        name: 'Ad1',
+        type: 'banner',
+      });
+      expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
+      expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);
+    });
+    vi.useRealTimers();
+  });
+
+  it('handles empty completed advertisements list with no pagination', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <MockedProvider mocks={createAdvertisementNoPagination}>
+                <AdvertisementRegister
+                  setAfterActive={vi.fn()}
+                  setAfterCompleted={vi.fn()}
+                />
+              </MockedProvider>
+            </I18nextProvider>
+          </router.BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    expect(
+      screen.getByText(translations.createAdvertisement),
+    ).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.createAdvertisement));
+    });
+
+    await act(async () => {
+      fireEvent.change(screen.getByLabelText(translations.Rname), {
+        target: { value: 'Ad1' },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+        target: { value: dateConstants.create.startAtISO.split('T')[0] },
+      });
+
+      fireEvent.change(screen.getByLabelText(translations.RendDate), {
+        target: { value: dateConstants.create.endAtISO.split('T')[0] },
+      });
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByText(translations.register));
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.createAdvertisement),
+      ).toBeInTheDocument();
+    });
+    vi.useRealTimers();
   });
   vi.useRealTimers();
 });

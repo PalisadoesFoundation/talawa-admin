@@ -209,3 +209,48 @@ export const createAdvertisement = [
 
   createAdvertisementListResponse(true),
 ];
+
+export const createAdvertisementNoPagination = [
+  createMockResponse(
+    ADD_ADVERTISEMENT_MUTATION,
+    {
+      organizationId: '1',
+      name: 'Ad1',
+      description: 'this is a banner',
+      type: 'banner',
+      startAt: dateConstants.create.startAtCalledWith,
+      endAt: dateConstants.create.endAtCalledWith,
+    },
+    {
+      createAdvertisement: {
+        id: '125',
+      },
+    },
+  ),
+
+  createAdvertisementListResponse(
+    false,
+    [
+      createAdvertisementNode(
+        '1',
+        'Ad1',
+        'This is a new advertisement created for testing.',
+        dateConstants.create.startAtISO,
+        dateConstants.create.endAtISO,
+      ),
+    ],
+    {
+      startCursor: null,
+      endCursor: null,
+      hasNextPage: false,
+      hasPreviousPage: false,
+    },
+  ),
+
+  createAdvertisementListResponse(true, [], {
+    startCursor: null,
+    endCursor: null,
+    hasNextPage: false,
+    hasPreviousPage: false,
+  }),
+];
