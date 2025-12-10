@@ -27,8 +27,9 @@ export default defineConfig(({ mode }) => {
     apiTarget = 'http://localhost:4000';
   }
 
-  // Override environment variables for client-side builds to use relative paths
-  process.env.REACT_APP_TALAWA_URL = '/graphql';
+  // Override environment variables to force relative proxy paths.
+  // These mutations must occur before EnvironmentPlugin('all') processes them,
+  // ensuring the client code receives '/graphql' for both dev proxy and production builds.  process.env.REACT_APP_TALAWA_URL = '/graphql';
   process.env.REACT_APP_BACKEND_WEBSOCKET_URL = '/graphql';
 
   return {
@@ -89,11 +90,41 @@ export default defineConfig(({ mode }) => {
       host: '0.0.0.0',
       // Uses PORT environment variable, defaults to 4321
       port: PORT,
+      headers: {
+        Connection: 'keep-alive',
+      },
       proxy: {
         '/graphql': {
           target: apiTarget,
           changeOrigin: true,
+          secure: false, // Add this - allows proxying to http when dev server might be https
           ws: true,
+          rewrite: (path) => path, // Explicitly preserve the path
+          configure: (proxy, options) => {
+            // Add logging to debug what's being proxied
+            proxy.on('proxyReq', (proxyReq, req, res) => {
+              console.log(
+                '[Proxy Request]',
+                req.method,
+                req.url,
+                '→',
+                options.target + req.url,
+              );
+              console.log('[Headers]', JSON.stringify(req.headers, null, 2));
+            });
+            proxy.on('proxyRes', (proxyRes, req, res) => {
+              console.log(
+                '[Proxy Response]',
+                req.method,
+                req.url,
+                '←',
+                proxyRes.statusCode,
+              );
+            });
+            proxy.on('error', (err, req, res) => {
+              console.error('[Proxy Error]', err.message);
+            });
+          },
         },
       },
     },
