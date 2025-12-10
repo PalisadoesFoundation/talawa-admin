@@ -1,6 +1,8 @@
 Write-Host "🚀 Starting Talawa installation..."
 Write-Host ""
 
+$ErrorActionPreference = 'Stop'
+
 # Function to install fnm (Fast Node Manager)
 function Install-Fnm {
     Write-Host "📦 Installing fnm (Fast Node Manager)..." -ForegroundColor Yellow
