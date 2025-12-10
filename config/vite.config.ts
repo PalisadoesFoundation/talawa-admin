@@ -7,35 +7,42 @@ import createInternalFileWriterPlugin from '../src/plugin/vite/internalFileWrite
 import istanbul from 'vite-plugin-istanbul';
 
 export default defineConfig(({ mode }) => {
+  // Load environment variables
   const env = loadEnv(mode, process.cwd(), '');
+
   const parsed = parseInt(env.PORT || '', 10);
   const PORT =
     !isNaN(parsed) && parsed >= 1024 && parsed <= 65535 ? parsed : 4321;
-  // 1. Get the Full Backend URL from the standard env var
+
+  // Determine full backend GraphQL URL
   const fullBackendUrl =
     env.REACT_APP_TALAWA_URL || 'http://localhost:4000/graphql';
 
-  // 2. Extract the Origin (e.g., "http://192.168.1.100:4000")
+  // Extract backend origin for proxy target
   let apiTarget = 'http://localhost:4000';
   try {
-    // We only want the protocol and host (not the /graphql path)
     const urlObj = new URL(fullBackendUrl);
     apiTarget = urlObj.origin;
   } catch {
-    // Safe fallback if the URL is empty or invalid
     apiTarget = 'http://localhost:4000';
   }
 
+  // Override environment variables for client-side builds to use relative paths
+  process.env.REACT_APP_TALAWA_URL = '/graphql';
+  process.env.REACT_APP_BACKEND_WEBSOCKET_URL = '/graphql';
+
   return {
-    // depending on your application, base can also be "/"
+    // Production build configuration
     build: {
       outDir: 'build',
     },
+    // Global build definitions
     define: {
-      // Force React to use relative paths so requests go through the Proxy
+      // Backup build definitions (process.env overrides take precedence)
       'process.env.REACT_APP_TALAWA_URL': JSON.stringify('/graphql'),
       'process.env.REACT_APP_BACKEND_WEBSOCKET_URL': JSON.stringify('/graphql'),
     },
+    // Vite plugins configuration
     plugins: [
       react(),
       viteTsconfigPaths(),
@@ -70,6 +77,7 @@ export default defineConfig(({ mode }) => {
         ],
       }),
     ],
+    // Development server configuration
     server: {
       // Allow all hosts for flexibility as Talawa runs on multiple domains
       allowedHosts: true,

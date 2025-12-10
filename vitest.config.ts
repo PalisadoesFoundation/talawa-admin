@@ -14,7 +14,16 @@ export default defineConfig({
     sourcemap: false, // Disable sourcemaps for faster tests
   },
   test: {
-    include: ['src/**/*.{spec,test}.{js,jsx,ts,tsx}'],
+    include: [
+      'src/**/*.{spec,test}.{js,jsx,ts,tsx}',
+      'config/**/*.{spec,test}.{js,jsx,ts,tsx}'
+    ],
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/cypress/**',
+      '**/.{idea,git,cache,output,temp}/**',
+    ],
     globals: true,
     environment: 'jsdom',
     setupFiles: 'vitest.setup.ts',

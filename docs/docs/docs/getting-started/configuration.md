@@ -38,6 +38,7 @@ This `.env` file must be populated with the following environment variables for 
 | ------------------------------- | ------------------------------------------------- |
 | PORT                            | Custom port for Talawa-Admin development purposes |
 | REACT_APP_TALAWA_URL            | URL endpoint for talawa-api graphql service       |
+| REACT_APP_BACKEND_WEBSOCKET_URL | URL endpoint for websocket end point (Optional)   |
 | REACT_APP_USE_RECAPTCHA         | Whether you want to use reCAPTCHA or not          |
 | REACT_APP_RECAPTCHA_SITE_KEY    | Site key for authentication using reCAPTCHA       |
 
@@ -62,6 +63,13 @@ The application will automatically handle the necessary proxy routing based on y
 
 **Important for Manual Production Builds:**
 If you are deploying a production build manually without Docker, the Vite Dev Server is not active. You must configure your web server (Nginx or Apache) to forward requests from `/graphql` to your API URL, similar to the rules found in `config/docker/setup/`.
+
+#### Setting up REACT_APP_BACKEND_WEBSOCKET_URL in .env file
+
+**Optional.** This variable configures the WebSocket endpoint for subscriptions.
+
+* **Standard Behavior:** Set this to your full WebSocket URL (e.g., `ws://localhost:4000/graphql` or `ws://<SERVER_IP>:4000/graphql`). The application automatically **derives** the correct relative path (`/graphql`) from this URL to ensure requests go through the Reverse Proxy.
+* **Default:** If left blank, it defaults to `/graphql`.
 
 #### Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file
 
