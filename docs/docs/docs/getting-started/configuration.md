@@ -42,9 +42,20 @@ This `.env` file must be populated with the following environment variables for 
 | REACT_APP_USE_RECAPTCHA         | Whether you want to use reCAPTCHA or not          |
 | REACT_APP_RECAPTCHA_SITE_KEY    | Site key for authentication using reCAPTCHA       |
 
+> **Note:** In previous versions, `REACT_APP_BACKEND_WEBSOCKET_URL` was required as a separate variable. This is no longer needed - WebSocket connections are now automatically proxied through the same `/graphql` endpoint as HTTP requests.
 #### Setting up PORT in .env file
 
 Add a custom port number for Talawa-Admin development purposes to the variable named `PORT` in the `.env` file.
+
+### Deployment & Configuration Scenarios
+
+Choose the scenario that matches your setup to configure `REACT_APP_TALAWA_URL` correctly.
+
+| Scenario | Setup Type | .env Configuration | Detailed Notes |
+| :--- | :--- | :--- | :--- |
+| **1. Docker (Local & LAN)** | Running via `docker compose`. | `http://talawa-api:4000/graphql` | **Critical:** Inside Docker, `localhost` does not work. You must use the **Service Name** defined in `docker-compose.yml` (e.g., `talawa-api`). This works even if accessing the app from other devices on the network. |
+| **2. Manual (Local & LAN)** | Running `pnpm start` on your machine. | `http://localhost:4000/graphql` | The Vite proxy (running on your host machine) forwards requests to the API. **Do not change to IP.** Even when accessing from other devices, the proxy handles the internal connection to localhost. |
+| **3. Production (Manual)** | Deploying static build files. | `https://api.yourdomain.com/graphql` | **Important:** The Vite proxy is **OFF** in production. You must configure your web server (Nginx/Apache) to handle CORS or serve the API on the same domain. ||
 
 #### Setting up REACT_APP_TALAWA_URL in .env file
 
@@ -55,7 +66,7 @@ The application will automatically handle the necessary proxy routing based on y
 **Configuration Examples by Scenario:**
 
 | Scenario | Deployment Type | API Location | `.env` Configuration | Notes |
-| :--- | :--- | :   --- | :--- | :--- |
+| :--- | :--- | :--- | :--- | :--- |
 | **1** | **Docker** | Same System (Localhost) | `REACT_APP_TALAWA_URL=http://localhost:4000/graphql` | The internal Nginx container handles the proxy automatically. |
 | **2** | **Docker** | Different Systems (Remote) | `REACT_APP_TALAWA_URL=http://<SERVER_IP>:4000/graphql` | Users access the Admin app via the Server IP. Nginx proxies requests internally. |
 | **3** | **Manual (Dev Mode)** | Same System (Localhost) | `REACT_APP_TALAWA_URL=http://localhost:4000/graphql` | The Vite dev server proxies requests to localhost:4000. |
@@ -68,8 +79,11 @@ If you are deploying a production build manually without Docker, the Vite Dev Se
 
 **Optional.** This variable configures the WebSocket endpoint for subscriptions.
 
-* **Standard Behavior:** Set this to your full WebSocket URL (e.g., `ws://localhost:4000/graphql` or `ws://<SERVER_IP>:4000/graphql`). The application automatically **derives** the correct relative path (`/graphql`) from this URL to ensure requests go through the Reverse Proxy.
-* **Default:** If left blank, it defaults to `/graphql`.
+The Vite configuration automatically converts your `REACT_APP_TALAWA_URL` to the appropriate WebSocket URL format (replacing `http://` with `ws://` or `https://` with `wss://`). This ensures WebSocket connections use the correct protocol without requiring separate configuration.
+
+* **When to set it:** Only set this variable if you need a WebSocket endpoint different from your main API endpoint.
+* **Format:** Use the full WebSocket URL (e.g., `ws://localhost:4000/graphql` or `ws://<SERVER_IP>:4000/graphql`).
+* **Default:** If left blank, the application derives the WebSocket URL from `REACT_APP_TALAWA_URL`.
 
 #### Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file
 
@@ -122,9 +136,8 @@ If the connection fails, use this table to identify the cause based on the error
 
 | Error Message | Probable Cause | Solution |
 | :--- | :--- | :--- |
-| **CORS Error** (Blocked by CORS policy) | The browser is bypassing the proxy and hitting the API directly. | 1. **Check `.env`**: Ensure `REACT_APP_TALAWA_URL` is set to **Full URL:** `http://localhost:4000/graphql` (not a full URL).<br>2. **Verify** `vite.config.ts` has the `changeOrigin: true` setting or manually sets the **Origin header**." |
-| **"Unknown query"** (400 Bad Request) | **Proxy Issue.** The Backend received the request, but the data payload arrived empty. | The proxy is incorrectly "dropping" the request body while forwarding it. Check your proxy middleware configuration. |
+| **CORS Error** (Blocked by CORS policy) | The browser is bypassing the proxy and hitting the API directly. | 1. **Check `.env`**: Ensure `REACT_APP_TALAWA_URL` is set to the **full backend URL** (e.g., `http://localhost:4000/graphql` or `http://192.168.x.x:4000/graphql`).<br>2. **Verify** `vite.config.ts` has `changeOrigin: true` in the proxy configuration.<br>3. **Restart** the dev server after changing `.env` files. |
+| **"Unknown query"** (400 Bad Request) | **Proxy Issue.** The Backend received the request, but the data payload arrived empty. | The proxy is incorrectly "dropping" the request body while forwarding it. Check your proxy middleware configuration in `vite.config.ts`. |
 | **"Cannot query field..."** (400 Bad Request) | **Success (Proxy Working).** The backend received the query but rejected the syntax. | The proxy is working correctly. This is an application logic issue (e.g., database schema mismatch or a bug in the specific GraphQL query). |
 | **500 Internal Server Error** | The Backend crashed while processing the request. | Check the `talawa-api` logs for the stack trace. <br>• **Docker Compose:** Run `docker logs talawa-api-1` <br>• **Manual Start:** Check the terminal window where you ran the server command.|
 | **"You must be authenticated..."** | **Success (Proxy Working).** | The connection is successful, but the user is not logged in. |
-
