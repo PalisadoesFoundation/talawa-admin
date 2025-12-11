@@ -74,7 +74,11 @@ describe('Testing User List Card', () => {
       console.log('window.location.reload called');
     });
     Object.defineProperty(window, 'location', {
-      value: { reload: reloadMock },
+      value: {
+        ...window.location,
+        reload: reloadMock,
+        pathname: '/',
+      },
       writable: true,
     });
     // Clear all mocks before each test
