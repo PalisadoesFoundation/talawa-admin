@@ -641,7 +641,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
 
     // Type and press Enter to test immediate search
     await userEvent.type(searchBar, 'Dogs');
-    fireEvent.keyUp(searchBar, { key: 'Enter', code: 'Enter' });
+    fireEvent.keyDown(searchBar, { key: 'Enter', code: 'Enter' });
   });
 
   test('Testing pagination component presence', async () => {
