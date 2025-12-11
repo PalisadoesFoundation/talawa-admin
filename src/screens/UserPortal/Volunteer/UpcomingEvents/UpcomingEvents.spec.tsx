@@ -30,7 +30,7 @@ import {
 } from './UpcomingEvents.mocks';
 import { toast } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi, beforeEach, afterEach } from 'vitest';
+import { vi, beforeEach, afterEach, beforeAll, afterAll } from 'vitest';
 
 /**
  * Unit tests for the UpcomingEvents component.
@@ -114,6 +114,21 @@ const renderUpcomingEvents = (link: ApolloLink): RenderResult => {
 };
 
 describe('Testing Upcoming Events Screen', () => {
+  const originalToLocaleDateString = Date.prototype.toLocaleDateString;
+
+  beforeAll(() => {
+    // Force toLocaleDateString to use en-US locale for consistent testing
+    vi.spyOn(Date.prototype, 'toLocaleDateString').mockImplementation(function (
+      this: Date,
+    ) {
+      return originalToLocaleDateString.call(this, 'en-US');
+    });
+  });
+
+  afterAll(() => {
+    vi.restoreAllMocks();
+  });
+
   beforeEach(() => {
     localStorage.clear();
     setItem('userId', 'userId');

@@ -8,7 +8,6 @@
     "@apollo/client": "3.14.0",
     "@apollo/link-error": "^2.0.0-beta.3",
     "@apollo/react-testing": "^4.0.0",
-    "@base-ui-components/react": "^1.0.0-beta.3",
     "@dicebear/collection": "^9.2.2",
     "@dicebear/core": "^9.2.2",
     "@emotion/react": "^11.13.3",
@@ -51,7 +50,7 @@
     "react-datepicker": "^7.5.0",
     "react-dom": "^19.1.0",
     "react-google-recaptcha": "^3.1.0",
-    "react-i18next": "^15.7.3",
+    "react-i18next": "^16.3.5",
     "react-icons": "^5.2.1",
     "react-infinite-scroll-component": "^6.1.0",
     "react-multi-carousel": "^2.8.5",
@@ -198,7 +197,13 @@
   "pnpm": {
     "overrides": {
       "@apollo/client": "3.14.0"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "@parcel/watcher",
+      "core-js",
+      "cypress",
+      "esbuild"
+    ]
   },
   "engines": {
     "node": ">=24.x"
