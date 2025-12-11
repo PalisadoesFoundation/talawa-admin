@@ -1,3 +1,4 @@
+import React from 'react';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -62,21 +63,32 @@ vi.mock('subComponents/SortingButton', () => ({
     onSortChange: (value: string) => void;
     dataTestIdPrefix: string;
     buttonLabel: string;
-  }) => (
-    <button
-      data-testid={`${dataTestIdPrefix}Btn`}
-      onClick={() => {
-        if (dataTestIdPrefix === 'searchByToggle') {
-          // Switch to category for testing
-          onSortChange('category');
-        } else {
-          onSortChange('test-value');
-        }
-      }}
-    >
-      {buttonLabel}
-    </button>
-  ),
+  }) => {
+    const [filterClickCount, setFilterClickCount] = React.useState(0);
+
+    return (
+      <button
+        data-testid={`${dataTestIdPrefix}Btn`}
+        onClick={() => {
+          if (dataTestIdPrefix === 'searchByToggle') {
+            // Switch to category for testing
+            onSortChange('category');
+          } else if (dataTestIdPrefix === 'filter') {
+            // Cycle through filter states: all -> pending -> completed -> all
+            const nextCount = filterClickCount + 1;
+            setFilterClickCount(nextCount);
+            const filterStates = ['pending', 'completed', 'all'];
+            const currentState = filterStates[(nextCount - 1) % 3];
+            onSortChange(currentState);
+          } else {
+            onSortChange('test-value');
+          }
+        }}
+      >
+        {buttonLabel}
+      </button>
+    );
+  },
 }));
 
 vi.mock('shared-components/SearchBar/SearchBar', () => ({
@@ -941,24 +953,86 @@ describe('EventActionItems', () => {
   });
 
   describe('Filtering Functionality', () => {
-    it('should show all items when filter is cleared', async () => {
+    it('should filter to show only pending items', async () => {
       renderEventActionItems();
 
+      // Initially both items visible
       await waitFor(() => {
-        expect(screen.getAllByText('Pending').length).toBeGreaterThan(0);
-        expect(screen.getAllByText('Completed').length).toBeGreaterThan(0);
+        expect(screen.getAllByText('John Doe')).toHaveLength(2);
+        expect(screen.getAllByText('Bob Wilson')).toHaveLength(2);
       });
 
+      // Click filter button once to filter by Pending
       const filterBtn = screen.getByTestId('filterBtn');
       fireEvent.click(filterBtn);
 
+      // Verify only pending item (John Doe) is visible
       await waitFor(() => {
-        expect(screen.getAllByText('Pending').length).toBeGreaterThan(0);
-        const completedChips = screen
-          .queryAllByText('Completed')
-          .filter((el) => el.classList.contains('MuiChip-label'));
-        expect(completedChips).toHaveLength(0);
+        expect(screen.getAllByText('John Doe')).toHaveLength(2);
       });
+
+      expect(screen.queryByText('Bob Wilson')).not.toBeInTheDocument();
+    });
+
+    it('should filter to show only completed items', async () => {
+      renderEventActionItems();
+
+      // Initially both items visible
+      await waitFor(() => {
+        expect(screen.getAllByText('John Doe')).toHaveLength(2);
+        expect(screen.getAllByText('Bob Wilson')).toHaveLength(2);
+      });
+
+      const filterBtn = screen.getByTestId('filterBtn');
+
+      // Click twice to get to Completed filter
+      fireEvent.click(filterBtn);
+
+      // Small delay between clicks to ensure state updates
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      fireEvent.click(filterBtn);
+
+      // Verify only completed item (Bob Wilson) is visible
+      await waitFor(
+        () => {
+          const bobElements = screen.queryAllByText('Bob Wilson');
+          expect(bobElements).toHaveLength(2);
+        },
+        { timeout: 3000 },
+      );
+
+      expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+    });
+
+    it('should show all items when filter is cleared', async () => {
+      renderEventActionItems();
+
+      // Initially both items visible
+      await waitFor(() => {
+        expect(screen.getAllByText('John Doe')).toHaveLength(2);
+        expect(screen.getAllByText('Bob Wilson')).toHaveLength(2);
+      });
+
+      const filterBtn = screen.getByTestId('filterBtn');
+
+      // Click three times to cycle through all states
+      fireEvent.click(filterBtn);
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      fireEvent.click(filterBtn);
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      fireEvent.click(filterBtn);
+
+      // Both items should be visible again
+      await waitFor(
+        () => {
+          expect(screen.getAllByText('John Doe')).toHaveLength(2);
+          expect(screen.getAllByText('Bob Wilson')).toHaveLength(2);
+        },
+        { timeout: 3000 },
+      );
     });
   });
 
