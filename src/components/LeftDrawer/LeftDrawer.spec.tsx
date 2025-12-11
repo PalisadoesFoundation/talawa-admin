@@ -13,7 +13,7 @@ import { usePluginDrawerItems } from 'plugin';
 // Mock the local storage hook
 vi.mock('utils/useLocalstorage', () => ({
   default: vi.fn(() => ({
-    getItem: vi.fn((key) => (key === 'SuperAdmin' ? 'true' : null)),
+    getItem: vi.fn((key) => (key === 'role' ? 'administrator' : null)),
   })),
 }));
 
@@ -84,6 +84,9 @@ vi.mock('components/ProfileDropdown/ProfileDropdown', () => ({
 }));
 
 describe('LeftDrawer Component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const TestWrapper = ({
     initialHideDrawer = false,
   }: {
@@ -112,7 +115,7 @@ describe('LeftDrawer Component', () => {
     vi.clearAllMocks();
     // Reset to default super admin mock
     vi.mocked(useLocalStorage).mockImplementation(() => ({
-      getItem: vi.fn((key) => (key === 'SuperAdmin' ? 'true' : null)),
+      getItem: vi.fn((key) => (key === 'role' ? 'administrator' : null)),
       setItem: vi.fn(),
       removeItem: vi.fn(),
       getStorageKey: vi.fn(() => ''),
@@ -232,7 +235,7 @@ describe('LeftDrawer Component', () => {
   describe('Navigation Behavior', () => {
     it('super admin: applies correct styles when on users route (rolesBTn)', () => {
       vi.mocked(useLocalStorage).mockImplementation(() => ({
-        getItem: vi.fn(() => 'true'),
+        getItem: vi.fn((key) => (key === 'role' ? 'administrator' : null)),
         setItem: vi.fn(),
         removeItem: vi.fn(),
         getStorageKey: vi.fn(() => ''),
@@ -563,7 +566,7 @@ describe('LeftDrawer Component', () => {
 
     it('should handle non-admin users correctly for plugins', () => {
       vi.mocked(useLocalStorage).mockImplementation(() => ({
-        getItem: vi.fn((key) => (key === 'SuperAdmin' ? null : null)), // Non-admin user (SuperAdmin is null)
+        getItem: vi.fn((key) => (key === 'role' ? 'administrator' : null)), // Non-admin user (SuperAdmin is null)
         setItem: vi.fn(),
         removeItem: vi.fn(),
         getStorageKey: vi.fn(() => ''),

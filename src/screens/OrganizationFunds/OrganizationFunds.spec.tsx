@@ -54,7 +54,7 @@ const translations = JSON.parse(
 
 const renderOrganizationFunds = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider link={link} addTypename={false}>
+    <MockedProvider link={link}>
       <Provider store={store}>
         <MemoryRouter initialEntries={['/orgfunds/orgId']}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -106,7 +106,7 @@ describe('OrganizationFunds Screen =>', () => {
       orgId: undefined,
     });
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/orgfunds/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

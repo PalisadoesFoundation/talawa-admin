@@ -112,7 +112,7 @@
     "notification": "Notifications",
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "menu",
-    "users": "users",
+    "users": "Users",
     "logout": "logout"
   },
   "leftDrawerOrg": {
@@ -235,7 +235,9 @@
     "visit": "Visit",
     "withdraw": "Widthdraw",
     "removeUserFrom": "Remove User from {{org}}",
+    "unblockUserFrom": "Unblock User from {{org}}",
     "removeConfirmation": "Are you sure you want to remove '{{name}}' from organization '{{org}}'?",
+    "unblockConfirmation": "Are you sure you want to unblock '{{name}}' from organization '{{org}}'?",
     "searchByName": "searchByName",
     "users": "users",
     "name": "name",

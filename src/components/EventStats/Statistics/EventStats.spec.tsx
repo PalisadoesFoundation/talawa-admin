@@ -15,6 +15,9 @@ vi.mock('@mui/x-charts/PieChart', async () => ({
 }));
 
 describe('Testing Event Stats', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const props = {
     eventId: 'eventStats123',
     show: true,
@@ -23,7 +26,7 @@ describe('Testing Event Stats', () => {
 
   it('The stats should be rendered properly', async () => {
     const { queryByText } = render(
-      <MockedProvider mocks={mockData} addTypename={false}>
+      <MockedProvider mocks={mockData}>
         <BrowserRouter>
           <EventStats {...props} />
         </BrowserRouter>

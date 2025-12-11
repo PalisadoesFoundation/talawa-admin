@@ -74,7 +74,7 @@ const ERROR_MOCKS = [
 
 const renderAddOnSpotAttendee = (): RenderResult => {
   return render(
-    <MockedProvider mocks={MOCKS} addTypename={false}>
+    <MockedProvider mocks={MOCKS}>
       <Provider store={store}>
         <I18nextProvider i18n={i18nForTest}>
           <BrowserRouter>
@@ -87,6 +87,9 @@ const renderAddOnSpotAttendee = (): RenderResult => {
 };
 
 describe('AddOnSpotAttendee Component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   beforeEach(() => {
     vi.clearAllMocks();
   });
@@ -124,7 +127,7 @@ describe('AddOnSpotAttendee Component', () => {
     ];
 
     render(
-      <MockedProvider mocks={mockWithoutSignUp} addTypename={false}>
+      <MockedProvider mocks={mockWithoutSignUp}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
             <BrowserRouter>
@@ -154,7 +157,7 @@ describe('AddOnSpotAttendee Component', () => {
 
   it('handles error during form submission', async () => {
     render(
-      <MockedProvider mocks={ERROR_MOCKS} addTypename={false}>
+      <MockedProvider mocks={ERROR_MOCKS}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
             <BrowserRouter>
@@ -204,7 +207,7 @@ describe('AddOnSpotAttendee Component', () => {
 
   it('displays error when organization ID is missing', async () => {
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <BrowserRouter>
           <AddOnSpotAttendee {...mockProps} />
         </BrowserRouter>
@@ -229,7 +232,7 @@ describe('AddOnSpotAttendee Component', () => {
 
   it('handles mutation error appropriately', async () => {
     render(
-      <MockedProvider mocks={ERROR_MOCKS} addTypename={false}>
+      <MockedProvider mocks={ERROR_MOCKS}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
             <BrowserRouter>

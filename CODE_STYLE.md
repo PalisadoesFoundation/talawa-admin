@@ -37,7 +37,7 @@ code style should not be changed and must be followed.
 
 - GraphQL
 
-- Jest & React Testing Library for testing
+- Vitest & React Testing Library for testing
 
 ## Component Structure
 

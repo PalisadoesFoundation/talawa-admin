@@ -6,13 +6,13 @@
 
 > **usePluginFilters**(`__namedParameters`): `object`
 
-Defined in: [src/screens/PluginStore/hooks/usePluginFilters.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/PluginStore/hooks/usePluginFilters.ts#L14)
+Defined in: [src/screens/PluginStore/hooks/usePluginFilters.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/PluginStore/hooks/usePluginFilters.ts#L16)
 
 ## Parameters
 
 ### \_\_namedParameters
 
-`UsePluginFiltersProps`
+`IUsePluginFiltersProps`
 
 ## Returns
 
@@ -50,7 +50,7 @@ Defined in: [src/screens/PluginStore/hooks/usePluginFilters.ts:14](https://githu
 
 ### getInstalledPlugin()
 
-> **getInstalledPlugin**: (`pluginName`) => `any`
+> **getInstalledPlugin**: (`pluginName`) => [`IInstalledPlugin`](../../../../../plugin/types/interfaces/IInstalledPlugin.md)
 
 #### Parameters
 
@@ -60,7 +60,7 @@ Defined in: [src/screens/PluginStore/hooks/usePluginFilters.ts:14](https://githu
 
 #### Returns
 
-`any`
+[`IInstalledPlugin`](../../../../../plugin/types/interfaces/IInstalledPlugin.md)
 
 ### handleFilterChange()
 
