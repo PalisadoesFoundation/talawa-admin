@@ -121,15 +121,15 @@ describe('Testing Settings Screen [User Portal]', () => {
   it('Screen should be rendered properly', async () => {
     await act(async () => {
       render(
-        <MockedProvider link={link}>
-          <BrowserRouter>
+        <BrowserRouter>
+          <MockedProvider link={link}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <Settings />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
+          </MockedProvider>
+        </BrowserRouter>,
       );
     });
 
@@ -150,15 +150,15 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     await act(async () => {
       render(
-        <MockedProvider link={errorLink}>
-          <BrowserRouter>
+        <BrowserRouter>
+          <MockedProvider link={errorLink}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <Settings />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
+          </MockedProvider>
+        </BrowserRouter>,
       );
     });
 
@@ -170,15 +170,15 @@ describe('Testing Settings Screen [User Portal]', () => {
   it('sidebar', async () => {
     await act(async () => {
       render(
-        <MockedProvider link={link2}>
-          <BrowserRouter>
+        <BrowserRouter>
+          <MockedProvider link={link2}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <Settings />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
+          </MockedProvider>
+        </BrowserRouter>,
       );
     });
 
@@ -193,15 +193,15 @@ describe('Testing Settings Screen [User Portal]', () => {
     resizeWindow(800);
     await act(async () => {
       render(
-        <MockedProvider link={link2}>
-          <BrowserRouter>
+        <BrowserRouter>
+          <MockedProvider link={link2}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <Settings />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
+          </MockedProvider>
+        </BrowserRouter>,
       );
     });
 
@@ -216,15 +216,15 @@ describe('Testing Settings Screen [User Portal]', () => {
     const toastSpy = vi.spyOn(toast, 'error');
     await act(async () => {
       render(
-        <MockedProvider link={link1}>
-          <BrowserRouter>
+        <BrowserRouter>
+          <MockedProvider link={link1}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <Settings />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
+          </MockedProvider>
+        </BrowserRouter>,
       );
     });
 
@@ -252,15 +252,15 @@ describe('Testing Settings Screen [User Portal]', () => {
   it('validates birth date correctly', async () => {
     await act(async () => {
       render(
-        <MockedProvider link={link1}>
-          <BrowserRouter>
+        <BrowserRouter>
+          <MockedProvider link={link1}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <Settings />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
+          </MockedProvider>
+        </BrowserRouter>,
       );
     });
 
@@ -279,15 +279,15 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     await act(async () => {
       render(
-        <MockedProvider link={link1}>
-          <BrowserRouter>
+        <BrowserRouter>
+          <MockedProvider link={link1}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <Settings />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
+          </MockedProvider>
+        </BrowserRouter>,
       );
     });
 
@@ -312,15 +312,15 @@ describe('Testing Settings Screen [User Portal]', () => {
     const toastSpy = vi.spyOn(toast, 'error');
     await act(async () => {
       render(
-        <MockedProvider link={link1}>
-          <BrowserRouter>
+        <BrowserRouter>
+          <MockedProvider link={link1}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <Settings />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
+          </MockedProvider>
+        </BrowserRouter>,
       );
     });
 
@@ -345,15 +345,15 @@ describe('Testing Settings Screen [User Portal]', () => {
   it('handles file change with no file selected', async () => {
     await act(async () => {
       render(
-        <MockedProvider link={link1}>
-          <BrowserRouter>
+        <BrowserRouter>
+          <MockedProvider link={link1}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <Settings />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
+          </MockedProvider>
+        </BrowserRouter>,
       );
     });
 
@@ -465,15 +465,15 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     await act(async () => {
       render(
-        <MockedProvider link={avatarUpdateLink}>
-          <BrowserRouter>
+        <BrowserRouter>
+          <MockedProvider link={avatarUpdateLink}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <Settings />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
+          </MockedProvider>
+        </BrowserRouter>,
       );
     });
 
@@ -504,15 +504,15 @@ describe('Testing Settings Screen [User Portal]', () => {
   it('resets changes correctly', async () => {
     await act(async () => {
       render(
-        <MockedProvider link={link1}>
-          <BrowserRouter>
+        <BrowserRouter>
+          <MockedProvider link={link1}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <Settings />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
+          </MockedProvider>
+        </BrowserRouter>,
       );
     });
 
@@ -558,15 +558,15 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     await act(async () => {
       render(
-        <MockedProvider link={updateLink}>
-          <BrowserRouter>
+        <BrowserRouter>
+          <MockedProvider link={updateLink}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <Settings />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
+          </MockedProvider>
+        </BrowserRouter>,
       );
     });
 
@@ -613,15 +613,15 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     await act(async () => {
       render(
-        <MockedProvider link={nullDataLink}>
-          <BrowserRouter>
+        <BrowserRouter>
+          <MockedProvider link={nullDataLink}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <Settings />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
+          </MockedProvider>
+        </BrowserRouter>,
       );
     });
 
@@ -647,15 +647,15 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     await act(async () => {
       render(
-        <MockedProvider link={link1}>
-          <BrowserRouter>
+        <BrowserRouter>
+          <MockedProvider link={link1}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <Settings />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
+          </MockedProvider>
+        </BrowserRouter>,
       );
     });
 
@@ -701,15 +701,15 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     await act(async () => {
       render(
-        <MockedProvider link={errorLink}>
-          <BrowserRouter>
+        <BrowserRouter>
+          <MockedProvider link={errorLink}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <Settings />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
+          </MockedProvider>
+        </BrowserRouter>,
       );
     });
 
@@ -733,15 +733,15 @@ describe('Testing Settings Screen [User Portal]', () => {
   it('resets file input value when reset button is clicked after file upload', async () => {
     await act(async () => {
       render(
-        <MockedProvider link={link1}>
-          <BrowserRouter>
+        <BrowserRouter>
+          <MockedProvider link={link1}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <Settings />
               </I18nextProvider>
             </Provider>
-          </BrowserRouter>
-        </MockedProvider>,
+          </MockedProvider>
+        </BrowserRouter>,
       );
     });
 

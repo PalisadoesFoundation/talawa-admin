@@ -4,7 +4,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 
 import UserListCard from './UserListCard';
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -13,7 +13,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { vi, describe, it, beforeEach, expect } from 'vitest';
 import * as errorHandlerModule from 'utils/errorHandler';
 
-// Mock react-router-dom
+// Mock react-router (useParams comes from here in the component)
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
@@ -88,13 +88,13 @@ describe('Testing User List Card', () => {
     };
 
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <BrowserRouter>
+        <MockedProvider link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={123} {...props} />
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+      </BrowserRouter>,
     );
 
     console.log('Component rendered');
@@ -141,13 +141,13 @@ describe('Testing User List Card', () => {
     };
 
     render(
-      <MockedProvider link={errorLink}>
-        <BrowserRouter>
+      <BrowserRouter>
+        <MockedProvider link={errorLink}>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={123} {...props} />
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+      </BrowserRouter>,
     );
 
     await wait();
@@ -181,13 +181,13 @@ describe('Testing User List Card', () => {
     };
 
     render(
-      <MockedProvider link={errorLink}>
-        <BrowserRouter>
+      <BrowserRouter>
+        <MockedProvider link={errorLink}>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={456} {...props} />
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+      </BrowserRouter>,
     );
 
     await wait();
@@ -231,13 +231,13 @@ describe('Testing User List Card', () => {
     };
 
     render(
-      <MockedProvider link={nullDataLink}>
-        <BrowserRouter>
+      <BrowserRouter>
+        <MockedProvider link={nullDataLink}>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={789} {...props} />
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+      </BrowserRouter>,
     );
 
     await wait();
@@ -275,13 +275,13 @@ describe('Testing User List Card', () => {
     };
 
     render(
-      <MockedProvider link={undefinedDataLink}>
-        <BrowserRouter>
+      <BrowserRouter>
+        <MockedProvider link={undefinedDataLink}>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={101} {...props} />
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+      </BrowserRouter>,
     );
 
     await wait();
@@ -303,13 +303,13 @@ describe('Testing User List Card', () => {
     };
 
     render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
+      <BrowserRouter>
+        <MockedProvider link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={999} {...props} />
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+      </BrowserRouter>,
     );
 
     const button = screen.getByText(/Add Admin/i);
@@ -350,13 +350,13 @@ describe('Testing User List Card', () => {
     };
 
     render(
-      <MockedProvider link={linkWithVariables}>
-        <BrowserRouter>
+      <BrowserRouter>
+        <MockedProvider link={linkWithVariables}>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={202} {...props} />
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+      </BrowserRouter>,
     );
 
     await wait();
@@ -390,13 +390,13 @@ describe('Testing User List Card', () => {
     };
 
     render(
-      <MockedProvider link={graphQLErrorLink}>
-        <BrowserRouter>
+      <BrowserRouter>
+        <MockedProvider link={graphQLErrorLink}>
           <I18nextProvider i18n={i18nForTest}>
             <UserListCard key={303} {...props} />
           </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
+        </MockedProvider>
+      </BrowserRouter>,
     );
 
     await wait();
