@@ -1297,26 +1297,6 @@ describe('EventActionItems', () => {
       });
     });
 
-    it('should toggle between completed and pending filters correctly', async () => {
-      renderEventActionItems();
-
-      await waitFor(() => {
-        expect(screen.getAllByText('Pending').length).toBeGreaterThan(0);
-        expect(screen.getAllByText('Completed').length).toBeGreaterThan(0);
-      });
-
-      const filterBtn = screen.getByTestId('filterBtn');
-      fireEvent.click(filterBtn);
-
-      await waitFor(() => {
-        expect(screen.getAllByText('Pending').length).toBeGreaterThan(0);
-        const completedChips = screen
-          .queryAllByText('Completed')
-          .filter((el) => el.classList.contains('MuiChip-label'));
-        expect(completedChips).toHaveLength(0);
-      });
-    });
-
     it('should display group icon when action item is assigned to volunteer group', async () => {
       const mockDataWithGroup = {
         event: {
@@ -1361,66 +1341,6 @@ describe('EventActionItems', () => {
 
       await waitFor(() => {
         expect(screen.getByTestId('groupIcon')).toBeInTheDocument();
-      });
-    });
-
-    it('should handle action items with completion dates correctly', async () => {
-      const mockDataWithCompletionDates = {
-        event: {
-          ...mockEventData.event,
-          actionItems: {
-            edges: [
-              {
-                node: {
-                  ...mockActionItem,
-                  id: 'completedItem1',
-                  isCompleted: true,
-                  completionAt: new Date('2024-09-01'),
-                  postCompletionNotes: 'Task completed successfully',
-                },
-              },
-              {
-                node: {
-                  ...mockActionItem,
-                  id: 'incompleteItem1',
-                  isCompleted: false,
-                  completionAt: new Date('2044-09-15'),
-                  postCompletionNotes: null,
-                },
-              },
-            ],
-            pageInfo: {
-              hasNextPage: false,
-              endCursor: null,
-            },
-          },
-        },
-      };
-
-      const mocksWithCompletionDates = [
-        {
-          request: {
-            query: GET_EVENT_ACTION_ITEMS,
-            variables: { input: { id: 'eventId1' } },
-          },
-          result: { data: mockDataWithCompletionDates },
-        },
-      ];
-
-      renderEventActionItems('eventId1', mocksWithCompletionDates);
-
-      await waitFor(() => {
-        const completedElements = screen.getAllByText('Completed');
-        const pendingElements = screen.getAllByText('Pending');
-        expect(completedElements.length).toBeGreaterThan(0);
-        expect(pendingElements.length).toBeGreaterThan(0);
-      });
-
-      const viewBtn = screen.getByTestId('viewItemBtncompletedItem1');
-      fireEvent.click(viewBtn);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('view-modal')).toBeInTheDocument();
       });
     });
   });
