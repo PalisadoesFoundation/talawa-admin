@@ -96,9 +96,9 @@ export default defineConfig(({ mode }) => {
           changeOrigin: true,
           secure: false,
           ws: true,
-          configure: (proxy, _options) => {
+          configure: (proxy) => {
             // Log outgoing request
-            proxy.on('proxyReq', (proxyReq, req, _res) => {
+            proxy.on('proxyReq', (proxyReq, req) => {
               console.log('\n[PROXY REQUEST]');
               console.log('Method:', req.method);
               console.log('URL:', req.url);
@@ -118,7 +118,7 @@ export default defineConfig(({ mode }) => {
             });
 
             // Log response
-            proxy.on('proxyRes', (proxyRes, req, _res) => {
+            proxy.on('proxyRes', (proxyRes, req) => {
               console.log('\n[PROXY RESPONSE]');
               console.log('Status:', proxyRes.statusCode);
               console.log('URL:', req.url);
@@ -134,7 +134,7 @@ export default defineConfig(({ mode }) => {
               });
             });
 
-            proxy.on('error', (err, _req, _res) => {
+            proxy.on('error', (err) => {
               console.error('\n[PROXY ERROR]', err.message);
             });
           },
