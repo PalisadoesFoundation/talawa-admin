@@ -56,7 +56,9 @@ vi.mock('components/ProfileCard/ProfileCard', () => ({
     <div data-testid="profile-dropdown">
       <div data-testid="display-name">Test User</div>
       <div data-testid="display-type">User</div>
-      <button data-testid="profileBtn">Profile Button</button>
+      <button data-testid="profileBtn" type="button">
+        Profile Button
+      </button>
     </div>
   )),
 }));

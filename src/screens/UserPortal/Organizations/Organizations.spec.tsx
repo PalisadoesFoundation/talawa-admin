@@ -113,7 +113,9 @@ vi.mock('components/ProfileCard/ProfileCard', () => ({
     <div data-testid="profile-dropdown">
       <div data-testid="display-name">Test User</div>
       <div data-testid="display-type">User</div>
-      <button data-testid="profileBtn">Profile Button</button>
+      <button data-testid="profileBtn" type="button">
+        Profile Button
+      </button>
     </div>
   )),
 }));
@@ -123,8 +125,12 @@ vi.mock('components/UserPortal/UserSidebar/UserSidebar', () => ({
   default: vi.fn(({ hideDrawer }: { hideDrawer: boolean }) => (
     <div data-testid="user-sidebar" data-hide-drawer={hideDrawer}>
       <span>User Portal</span>
-      <button data-testid="orgsBtn">Organizations</button>
-      <button data-testid="settingsBtn">Settings</button>
+      <button data-testid="orgsBtn" type="button">
+        Organizations
+      </button>
+      <button data-testid="settingsBtn" type="button">
+        Settings
+      </button>
     </div>
   )),
 }));

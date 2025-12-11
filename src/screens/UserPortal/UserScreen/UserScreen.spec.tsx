@@ -45,7 +45,9 @@ vi.mock('components/UserPortal/UserSidebarOrg/UserSidebarOrg', () => ({
   default: vi.fn(({ hideDrawer }: { hideDrawer: boolean }) => (
     <div data-testid="leftDrawerContainer" data-hide-drawer={hideDrawer}>
       <span>User Org Menu</span>
-      <button data-testid="OrgBtn">Organization</button>
+      <button data-testid="OrgBtn" type="button">
+        Organization
+      </button>
     </div>
   )),
 }));
