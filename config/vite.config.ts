@@ -29,7 +29,8 @@ export default defineConfig(({ mode }) => {
 
   // Override environment variables to force relative proxy paths.
   // These mutations must occur before EnvironmentPlugin('all') processes them,
-  // ensuring the client code receives '/graphql' for both dev proxy and production builds.  process.env.REACT_APP_TALAWA_URL = '/graphql';
+  // ensuring the client code receives '/graphql' for both dev proxy and production builds.
+  process.env.REACT_APP_TALAWA_URL = '/graphql';
   process.env.REACT_APP_BACKEND_WEBSOCKET_URL = '/graphql';
 
   return {
@@ -80,15 +81,11 @@ export default defineConfig(({ mode }) => {
     ],
     // Development server configuration
     server: {
-      // Allow all hosts for flexibility as Talawa runs on multiple domains
-      allowedHosts: true,
+      host: '0.0.0.0',
       watch: {
         ignored: ['**/coverage/**', '**/.nyc_output/**'],
       },
-      // this ensures that the browser opens upon server start
       open: false,
-      host: '0.0.0.0',
-      // Uses PORT environment variable, defaults to 4321
       port: PORT,
       headers: {
         Connection: 'keep-alive',
@@ -97,32 +94,48 @@ export default defineConfig(({ mode }) => {
         '/graphql': {
           target: apiTarget,
           changeOrigin: true,
-          secure: false, // Add this - allows proxying to http when dev server might be https
+          secure: false,
           ws: true,
-          rewrite: (path) => path, // Explicitly preserve the path
-          configure: (proxy, options) => {
-            // Add logging to debug what's being proxied
-            proxy.on('proxyReq', (proxyReq, req, res) => {
-              console.log(
-                '[Proxy Request]',
-                req.method,
-                req.url,
-                '→',
-                options.target + req.url,
-              );
-              console.log('[Headers]', JSON.stringify(req.headers, null, 2));
+          configure: (proxy, _options) => {
+            // Log outgoing request
+            proxy.on('proxyReq', (proxyReq, req, _res) => {
+              console.log('\n[PROXY REQUEST]');
+              console.log('Method:', req.method);
+              console.log('URL:', req.url);
+              console.log('Target:', apiTarget + req.url);
+              console.log('Headers:', JSON.stringify(req.headers, null, 2));
+
+              // Check if body exists and log it
+              let body = '';
+              req.on('data', (chunk) => {
+                body += chunk.toString();
+              });
+              req.on('end', () => {
+                if (body) {
+                  console.log('Body:', body);
+                }
+              });
             });
-            proxy.on('proxyRes', (proxyRes, req, res) => {
-              console.log(
-                '[Proxy Response]',
-                req.method,
-                req.url,
-                '←',
-                proxyRes.statusCode,
-              );
+
+            // Log response
+            proxy.on('proxyRes', (proxyRes, req, _res) => {
+              console.log('\n[PROXY RESPONSE]');
+              console.log('Status:', proxyRes.statusCode);
+              console.log('URL:', req.url);
+
+              let responseBody = '';
+              proxyRes.on('data', (chunk) => {
+                responseBody += chunk.toString();
+              });
+              proxyRes.on('end', () => {
+                if (responseBody) {
+                  console.log('Response Body:', responseBody);
+                }
+              });
             });
-            proxy.on('error', (err, req, res) => {
-              console.error('[Proxy Error]', err.message);
+
+            proxy.on('error', (err, _req, _res) => {
+              console.error('\n[PROXY ERROR]', err.message);
             });
           },
         },
