@@ -1371,12 +1371,23 @@ it('Render the Select Organization list and change the option', async () => {
 
 describe('Talawa-API server fetch check', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.spyOn(global, 'fetch').mockResolvedValue(
+      new Response(JSON.stringify({ data: { __typename: 'Query' } })),
+    );
   });
 
-  it('Checks if Talawa-API resource is loaded successfully', async () => {
-    global.fetch = vi.fn(() => Promise.resolve({} as unknown as Response));
+  const expectApiHealthCheckFetchCalled = () => {
+    expect(fetch).toHaveBeenCalledWith(
+      BACKEND_URL,
+      expect.objectContaining({
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: '{ __typename }' }),
+      }),
+    );
+  };
 
+  it('Checks if Talawa-API resource is loaded successfully', async () => {
     await act(async () => {
       render(
         <MockedProvider link={link}>
@@ -1391,12 +1402,12 @@ describe('Talawa-API server fetch check', () => {
       );
     });
 
-    expect(fetch).toHaveBeenCalledWith(BACKEND_URL);
+    expectApiHealthCheckFetchCalled();
   });
 
   it('displays warning message when resource loading fails', async () => {
     const mockError = new Error('Network error');
-    global.fetch = vi.fn(() => Promise.reject(mockError));
+    vi.spyOn(global, 'fetch').mockRejectedValue(mockError);
 
     await act(async () => {
       render(
@@ -1412,6 +1423,6 @@ describe('Talawa-API server fetch check', () => {
       );
     });
 
-    expect(fetch).toHaveBeenCalledWith(BACKEND_URL);
+    expectApiHealthCheckFetchCalled();
   });
 });
