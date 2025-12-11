@@ -4,7 +4,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import {
   CURRENT_USER,
-  ORGANIZATION_LIST,
+  ORGANIZATION_FILTER_LIST,
   USER_ORGANIZATION_LIST,
   ALL_ORGANIZATIONS_PG,
 } from 'GraphQl/Queries/Queries';
@@ -50,6 +50,7 @@ const organizations: InterfaceOrgInfoTypePG[] = [
       edges: [],
     },
     addressLine1: 'Texas, USA',
+    role: 'admin',
   },
 ];
 
@@ -83,7 +84,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: ORGANIZATION_LIST,
+      query: ORGANIZATION_FILTER_LIST,
       variables: { filter: '' },
     },
     result: {
@@ -216,7 +217,7 @@ const MOCKS = [
 const MOCKS_EMPTY = [
   {
     request: {
-      query: ORGANIZATION_LIST,
+      query: ORGANIZATION_FILTER_LIST,
       variables: { filter: '' },
     },
     result: {
@@ -305,7 +306,7 @@ const MOCKS_WITH_ERROR = [
 const MOCKS_ADMIN = [
   {
     request: {
-      query: ORGANIZATION_LIST,
+      query: ORGANIZATION_FILTER_LIST,
       variables: { filter: '' },
     },
     result: {
@@ -325,14 +326,8 @@ const MOCKS_ADMIN = [
   },
   {
     request: {
-      query: ORGANIZATION_LIST,
-      variables: {
-        first: 8,
-        skip: 0,
-        filter: '',
-        orderBy: 'createdAt_ASC',
-      },
-      notifyOnNetworkStatusChange: true,
+      query: ORGANIZATION_FILTER_LIST,
+      variables: { filter: '' },
     },
     result: {
       data: {

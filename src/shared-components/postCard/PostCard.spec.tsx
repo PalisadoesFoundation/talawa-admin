@@ -1052,14 +1052,12 @@ describe('PostCard', () => {
       mockOverrides?: Partial<InterfacePostCard>;
       customMocks?: MockedResponse[];
       fetchMoreMock?: MockedResponse;
-      addTypename?: boolean;
     } = {},
   ) => {
     const {
       mockOverrides = {},
       customMocks = [],
       fetchMoreMock = fetchMoreCommentsMock,
-      addTypename = true,
     } = options;
 
     const mocksWithPagination = [
@@ -1072,7 +1070,7 @@ describe('PostCard', () => {
     const linkWithPagination = new StaticMockLink(mocksWithPagination, true);
 
     return render(
-      <MockedProvider link={linkWithPagination} addTypename={addTypename}>
+      <MockedProvider link={linkWithPagination}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1151,7 +1149,6 @@ describe('PostCard', () => {
     renderPostCardWithPagination({
       customMocks: [createCommentMock],
       mockOverrides: { fetchPosts: mockFetchPosts },
-      addTypename: false,
     });
 
     await waitFor(() => {

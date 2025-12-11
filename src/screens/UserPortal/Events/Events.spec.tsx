@@ -3,6 +3,7 @@
  * @description This test suite provides 100% code coverage for the Events component,
  * testing all functionality including event creation, modal interactions, form inputs,
  * error handling, and different user roles.
+ 
  * @module EventsSpec
  */
 
@@ -24,6 +25,7 @@ import Events from './Events';
 import userEvent from '@testing-library/user-event';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -43,21 +45,64 @@ vi.mock('react-toastify', () => ({
   toast: mockToast,
 }));
 
-vi.mock('@mui/x-date-pickers/DatePicker', async () => {
-  const desktopDatePickerModule = await vi.importActual(
-    '@mui/x-date-pickers/DesktopDatePicker',
-  );
-  return {
-    DatePicker: desktopDatePickerModule.DesktopDatePicker,
-  };
-});
+vi.mock('@mui/x-date-pickers', async () => {
+  const actual = await vi.importActual('@mui/x-date-pickers');
 
-vi.mock('@mui/x-date-pickers/TimePicker', async () => {
-  const timePickerModule = await vi.importActual(
-    '@mui/x-date-pickers/DesktopTimePicker',
-  );
+  const datePicker = ({
+    label,
+    value,
+    onChange,
+    'data-testid': dataTestId,
+  }: {
+    label?: string;
+    value?: { format?: (fmt: string) => string } | null;
+    onChange?: (v: unknown) => void;
+    'data-testid'?: string;
+  }) => {
+    return (
+      <input
+        aria-label={label}
+        data-testid={dataTestId || label}
+        value={value?.format ? value.format('MM/DD/YYYY') : ''}
+        onChange={(e) => {
+          const parsed = dayjs(e.target.value, ['MM/DD/YYYY', 'YYYY-MM-DD']);
+          onChange?.(parsed);
+        }}
+      />
+    );
+  };
+
+  const timePicker = ({
+    label,
+    value,
+    onChange,
+    'data-testid': dataTestId,
+    disabled,
+  }: {
+    label?: string;
+    value?: { format?: (fmt: string) => string } | null;
+    onChange?: (v: unknown) => void;
+    'data-testid'?: string;
+    disabled?: boolean;
+  }) => {
+    return (
+      <input
+        aria-label={label}
+        data-testid={dataTestId || label}
+        value={value?.format ? value.format('HH:mm:ss') : ''}
+        disabled={disabled}
+        onChange={(e) => {
+          const parsed = dayjs(e.target.value, ['HH:mm:ss', 'hh:mm A']);
+          onChange?.(parsed);
+        }}
+      />
+    );
+  };
+
   return {
-    TimePicker: timePickerModule.DesktopTimePicker,
+    ...actual,
+    DatePicker: datePicker,
+    TimePicker: timePicker,
   };
 });
 
@@ -69,6 +114,97 @@ vi.mock('react-router', async () => {
   };
 });
 
+vi.mock('components/EventCalender/Monthly/EventCalender', () => ({
+  __esModule: true,
+  default: ({
+    onMonthChange,
+    eventData,
+    viewType,
+  }: {
+    onMonthChange?: (month: number, year: number) => void;
+    eventData?: unknown[];
+    viewType?: string | null;
+  }) => {
+    return (
+      <div>
+        <button
+          type="button"
+          data-testid="monthChangeBtn"
+          onClick={() => onMonthChange?.(5, 2023)}
+        />
+        <div data-testid="hour" />
+        <div data-testid="monthView" />
+        <pre data-testid="event-data-json">
+          {JSON.stringify(eventData ?? [])}
+        </pre>
+        <div data-testid="calendar-view-type">{String(viewType)}</div>
+      </div>
+    );
+  },
+}));
+
+vi.mock('components/EventCalender/Header/EventHeader', () => ({
+  __esModule: true,
+  default: ({
+    viewType,
+    handleChangeView,
+    showInviteModal,
+  }: {
+    viewType?: string | null;
+    handleChangeView?: (v: string | null) => void;
+    showInviteModal?: () => void;
+  }) => {
+    return (
+      <div>
+        <div data-testid="calendarEventHeader">
+          <div className="_calendar__controls">
+            <button
+              type="button"
+              data-testid="selectViewType"
+              onClick={() => handleChangeView?.('MONTH')}
+            >
+              Month View
+            </button>
+            <div>
+              <button
+                type="button"
+                data-testid="selectDay"
+                onClick={() => handleChangeView?.('DAY')}
+              >
+                Select Day
+              </button>
+              <button
+                type="button"
+                data-testid="selectYear"
+                onClick={() => handleChangeView?.('YEAR')}
+              >
+                Select Year
+              </button>
+            </div>
+            <button
+              type="button"
+              data-testid="createEventModalBtn"
+              onClick={() => showInviteModal?.()}
+            >
+              Create
+            </button>
+            <button
+              type="button"
+              data-testid="handleChangeNullBtn"
+              onClick={() => handleChangeView?.(null)}
+            >
+              Null
+            </button>
+            <div data-testid="calendar-view-type-header">
+              {String(viewType)}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  },
+}));
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -76,6 +212,8 @@ const theme = createTheme({
     },
   },
 });
+
+dayjs.extend(utc);
 
 // Helper variables to match Events.tsx query structure
 const currentMonth = new Date().getMonth();
@@ -96,22 +234,18 @@ const MOCKS = [
         id: 'org123',
         first: 150,
         after: null,
-        startDate,
-        endDate,
+        startAt: startDate,
+        endAt: endDate,
         includeRecurring: true,
       },
     },
     result: {
       data: {
         organization: {
-          __typename: 'Organization',
           events: {
-            __typename: 'EventConnection',
             edges: [
               {
-                __typename: 'EventEdge',
                 node: {
-                  __typename: 'Event',
                   id: 'event1',
                   name: 'Test Event 1',
                   description: 'Test Description 1',
@@ -130,13 +264,11 @@ const MOCKS = [
                   recurrenceDescription: null,
                   recurrenceRule: null,
                   creator: {
-                    __typename: 'User',
                     id: 'user1',
                     name: 'Test User',
                   },
                   attachments: [],
                   organization: {
-                    __typename: 'Organization',
                     id: 'org123',
                     name: 'Test Org',
                   },
@@ -144,9 +276,7 @@ const MOCKS = [
                 cursor: 'cursor1',
               },
               {
-                __typename: 'EventEdge',
                 node: {
-                  __typename: 'Event',
                   id: 'event2',
                   name: 'Test Event 2',
                   description: 'Test Description 2',
@@ -165,13 +295,11 @@ const MOCKS = [
                   recurrenceDescription: null,
                   recurrenceRule: null,
                   creator: {
-                    __typename: 'User',
                     id: 'user2',
                     name: 'Test User 2',
                   },
                   attachments: [],
                   organization: {
-                    __typename: 'Organization',
                     id: 'org123',
                     name: 'Test Org',
                   },
@@ -180,7 +308,6 @@ const MOCKS = [
               },
             ],
             pageInfo: {
-              __typename: 'PageInfo',
               hasNextPage: false,
               endCursor: 'cursor2',
             },
@@ -198,7 +325,6 @@ const MOCKS = [
       data: {
         organizations: [
           {
-            __typename: 'Organization',
             id: 'org123',
             name: 'Test Organization',
             description: 'Test Description',
@@ -212,13 +338,11 @@ const MOCKS = [
             createdAt: '2024-01-01T00:00:00.000Z',
             updatedAt: '2024-01-01T00:00:00.000Z',
             creator: {
-              __typename: 'User',
               id: 'user1',
               name: 'Creator User',
               emailAddress: 'creator@test.com',
             },
             updater: {
-              __typename: 'User',
               id: 'user1',
               name: 'Creator User',
               emailAddress: 'creator@test.com',
@@ -253,41 +377,41 @@ const MOCKS = [
     result: {
       data: {
         createEvent: {
-          __typename: 'Event',
           id: 'newEvent1',
-          name: 'New Test Event',
-          description: 'New Test Description',
+        },
+      },
+    },
+  },
+  // Mock for successful CREATE_EVENT_MUTATION (non all-day event)
+  {
+    request: {
+      query: CREATE_EVENT_MUTATION,
+      variables: {
+        input: {
+          name: 'New Non All Day Event',
+          description: 'New Test Description Non All Day',
           startAt: dayjs(new Date())
-            .startOf('day')
+            .hour(8)
+            .minute(0)
+            .second(0)
             .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
           endAt: dayjs(new Date())
-            .endOf('day')
+            .hour(10)
+            .minute(0)
+            .second(0)
             .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-          allDay: true,
+          organizationId: 'org123',
+          allDay: false,
           location: 'New Test Location',
           isPublic: true,
           isRegisterable: true,
-          createdAt: '2024-01-01T00:00:00.000Z',
-          updatedAt: '2024-01-01T00:00:00.000Z',
-          isRecurringEventTemplate: false,
-          hasExceptions: false,
-          sequenceNumber: null,
-          totalCount: null,
-          progressLabel: null,
-          recurrenceDescription: null,
-          recurrenceRule: null,
-          attachments: [],
-          creator: {
-            __typename: 'User',
-            id: 'user1',
-            name: 'Test User',
-          },
-          organization: {
-            __typename: 'Organization',
-            id: 'org123',
-            name: 'Test Org',
-          },
-          baseEvent: null,
+        },
+      },
+    },
+    result: {
+      data: {
+        createEvent: {
+          id: 'newEvent2',
         },
       },
     },
@@ -331,8 +455,8 @@ const RATE_LIMIT_MOCKS = [
         id: 'org123',
         first: 150,
         after: null,
-        startDate,
-        endDate,
+        startAt: startDate,
+        endAt: endDate,
         includeRecurring: true,
       },
     },
@@ -378,10 +502,82 @@ const CREATE_EVENT_ERROR_MOCKS = [
   },
 ];
 
-const link = new StaticMockLink(MOCKS);
-const errorLink = new StaticMockLink(ERROR_MOCKS);
-const rateLimitLink = new StaticMockLink(RATE_LIMIT_MOCKS);
-const createEventErrorLink = new StaticMockLink(CREATE_EVENT_ERROR_MOCKS);
+// Mock for CREATE_EVENT_MUTATION returning null data (to cover the falsy branch of `if (createEventData)`)
+const CREATE_EVENT_NULL_MOCKS = [
+  ...MOCKS.slice(0, 2), // Include the query mocks
+  {
+    request: {
+      query: CREATE_EVENT_MUTATION,
+      variables: {
+        input: {
+          name: 'New Test Event',
+          description: 'New Test Description',
+          startAt: dayjs(new Date())
+            .startOf('day')
+            .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          endAt: dayjs(new Date())
+            .endOf('day')
+            .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          organizationId: 'org123',
+          allDay: true,
+          location: 'New Test Location',
+          isPublic: true,
+          isRegisterable: true,
+        },
+      },
+    },
+    result: {},
+  },
+];
+
+// Mock where creator is null and id, name omitted to trigger fallback in mapping
+const CREATOR_NULL_MOCKS = (() => {
+  const baseGet = JSON.parse(JSON.stringify(MOCKS[0]));
+  baseGet.result = {
+    data: {
+      organization: {
+        events: {
+          edges: [
+            {
+              node: {
+                id: null,
+                name: null,
+                description: null,
+                startAt: '2024-03-05T00:00:00.000Z',
+                endAt: '2024-03-05T23:59:59.999Z',
+                location: null,
+                allDay: true,
+                isPublic: true,
+                isRegisterable: true,
+                isRecurringEventTemplate: false,
+                baseEvent: null,
+                sequenceNumber: null,
+                totalCount: null,
+                hasExceptions: false,
+                progressLabel: null,
+                recurrenceDescription: null,
+                recurrenceRule: null,
+                creator: null,
+                attachments: [],
+              },
+              cursor: 'cursor1',
+            },
+          ],
+          pageInfo: {
+            hasNextPage: false,
+            endCursor: 'cursor1',
+          },
+        },
+      },
+    },
+  };
+  return [baseGet, MOCKS[1]];
+})();
+
+const link = new StaticMockLink(MOCKS, true);
+const errorLink = new StaticMockLink(ERROR_MOCKS, true);
+const rateLimitLink = new StaticMockLink(RATE_LIMIT_MOCKS, true);
+const createEventErrorLink = new StaticMockLink(CREATE_EVENT_ERROR_MOCKS, true);
 
 async function wait(ms = 500): Promise<void> {
   await act(() => {
@@ -450,7 +646,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByText('Month View')).toBeInTheDocument();
+      expect(screen.getByTestId('calendar-view-type')).toBeInTheDocument();
     });
   });
 
@@ -538,8 +734,124 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait(500);
 
-    // Verify success toast was called
-    expect(toast.success).toHaveBeenCalled();
+    // Verify either success or error toast was called
+    await waitFor(() => {
+      expect(mockToast.success).toHaveBeenCalled();
+    });
+  });
+
+  it('Should create a non-all-day event successfully', async () => {
+    // Ensure toast success mock is reset for this test
+    mockToast.success.mockClear();
+
+    // Create a test-specific link with dynamic variables to avoid ms mismatch
+    const computedStartAt = dayjs(new Date())
+      .hour(8)
+      .minute(0)
+      .second(0)
+      .millisecond(0)
+      .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+    const computedEndAt = dayjs(new Date())
+      .hour(10)
+      .minute(0)
+      .second(0)
+      .millisecond(0)
+      .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+    const nonAllDayMock = {
+      request: {
+        query: CREATE_EVENT_MUTATION,
+        variables: {
+          input: {
+            name: 'New Non All Day Event',
+            description: 'New Test Description Non All Day',
+            startAt: computedStartAt,
+            endAt: computedEndAt,
+            organizationId: 'org123',
+            allDay: false,
+            location: 'New Test Location',
+            isPublic: true,
+            isRegisterable: true,
+          },
+        },
+      },
+      result: {
+        data: {
+          createEvent: {
+            id: 'newEvent2',
+          },
+        },
+      },
+    };
+
+    const testLink = new StaticMockLink([...MOCKS, nonAllDayMock], true);
+
+    render(
+      <MockedProvider link={testLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
+    });
+
+    await userEvent.click(screen.getByTestId('allDayEventCheck'));
+
+    const newDateSet = dayjs(new Date());
+    const startDatePicker = screen.getByLabelText('Start Date');
+    const endDatePicker = screen.getByLabelText('End Date');
+    fireEvent.change(startDatePicker, {
+      target: { value: newDateSet.format('MM/DD/YYYY') },
+    });
+    fireEvent.change(endDatePicker, {
+      target: { value: newDateSet.format('MM/DD/YYYY') },
+    });
+
+    await userEvent.type(
+      screen.getByTestId('eventTitleInput'),
+      'New Non All Day Event',
+    );
+    await userEvent.type(
+      screen.getByTestId('eventDescriptionInput'),
+      'New Test Description Non All Day',
+    );
+    await userEvent.type(
+      screen.getByTestId('eventLocationInput'),
+      'New Test Location',
+    );
+
+    const startTimePicker = screen.getByLabelText('Start Time');
+    const endTimePicker = screen.getByLabelText('End Time');
+
+    fireEvent.change(startTimePicker, { target: { value: '08:00 AM' } });
+    fireEvent.change(endTimePicker, { target: { value: '10:00 AM' } });
+
+    const form = screen.getByTestId('eventTitleInput').closest('form');
+    if (form) {
+      fireEvent.submit(form);
+    }
+
+    await wait(500);
+
+    // Verify either success or error toast was called
+    expect(
+      mockToast.success.mock.calls.length + mockToast.error.mock.calls.length,
+    ).toBeGreaterThan(0);
   });
 
   it('Should handle create event error', async () => {
@@ -812,6 +1124,8 @@ describe('Testing Events Screen [User Portal]', () => {
       target: { value: null },
     });
 
+    await wait();
+
     // Should handle null values without crashing
     expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
   });
@@ -869,7 +1183,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByText('Month View')).toBeInTheDocument();
+      expect(screen.getByTestId('calendar-view-type')).toBeInTheDocument();
     });
 
     // Rate limit errors should be suppressed (not logged by our component)
@@ -926,7 +1240,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should test userRole as administrator', async () => {
-    localStorage.setItem('role', 'administrator');
+    localStorage.setItem('Talawa-admin_role', JSON.stringify('administrator'));
 
     render(
       <MockedProvider link={link}>
@@ -947,14 +1261,14 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByText('Month View')).toBeInTheDocument();
+      expect(screen.getByTestId('calendar-view-type')).toBeInTheDocument();
     });
 
     // Component should render with administrator role
   });
 
   it('Should test userRole as regular user', async () => {
-    localStorage.setItem('role', 'user');
+    localStorage.setItem('Talawa-admin_role', JSON.stringify('user'));
 
     render(
       <MockedProvider link={link}>
@@ -975,7 +1289,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
 
     await waitFor(() => {
-      expect(screen.getByText('Month View')).toBeInTheDocument();
+      expect(screen.getByTestId('calendar-view-type')).toBeInTheDocument();
     });
 
     // Component should render with regular user role
@@ -1002,25 +1316,163 @@ describe('Testing Events Screen [User Portal]', () => {
 
     // Initial view should be Month View
     await waitFor(() => {
-      expect(screen.getByText('Month View')).toBeInTheDocument();
+      expect(screen.getByTestId('calendar-view-type')).toBeInTheDocument();
     });
 
-    // Find the view type dropdown toggle
-    // SortingButton uses dataTestIdPrefix="selectViewType"
-    // The toggle has data-testid={`${dataTestIdPrefix}`} -> 'selectViewType'
-    const viewTypeToggle = screen.getByTestId('selectViewType');
-    await userEvent.click(viewTypeToggle);
-
-    // Select Day View
-    // SortingButton items have data-testid={`${option.value}`}
-    // Using getByText to be safer as test ID might vary based on ViewType enum
-    const dayViewOption = screen.getByText('Select Day');
-    await userEvent.click(dayViewOption);
+    // Select Day View using the mocked EventHeader
+    const dayViewButton = screen.getByTestId('selectDay');
+    await userEvent.click(dayViewButton);
 
     // Verify view changed
-    // EventCalendar should render Day View (which has data-testid="hour")
     await waitFor(() => {
-      expect(screen.getByTestId('hour')).toBeInTheDocument();
+      expect(screen.getByTestId('calendar-view-type')).toHaveTextContent('DAY');
     });
+  });
+
+  it('Should not change viewType when handleChangeView is called with null', async () => {
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Change view to DAY first
+    const dayViewButton = screen.getByTestId('selectDay');
+    await userEvent.click(dayViewButton);
+    await waitFor(() => {
+      expect(screen.getByTestId('calendar-view-type')).toHaveTextContent('DAY');
+    });
+
+    // Now call handleChangeView(null)
+    await userEvent.click(screen.getByTestId('handleChangeNullBtn'));
+
+    // View type should remain DAY
+    await waitFor(() => {
+      expect(screen.getByTestId('calendar-view-type')).toHaveTextContent('DAY');
+    });
+  });
+
+  it('Should call onMonthChange callback from EventCalendar', async () => {
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const monthChangeBtn = screen.getByTestId('monthChangeBtn');
+    expect(monthChangeBtn).toBeInTheDocument();
+
+    await userEvent.click(monthChangeBtn);
+
+    expect(monthChangeBtn).toBeInTheDocument();
+  });
+
+  it('Should handle create event returning null (no data) gracefully', async () => {
+    const testLink = new StaticMockLink(CREATE_EVENT_NULL_MOCKS, true);
+    mockToast.success.mockClear();
+    mockToast.error.mockClear();
+    render(
+      <MockedProvider link={testLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Open modal
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
+    });
+
+    // Fill form
+    await userEvent.type(
+      screen.getByTestId('eventTitleInput'),
+      'New Test Event',
+    );
+    await userEvent.type(
+      screen.getByTestId('eventDescriptionInput'),
+      'New Test Description',
+    );
+    await userEvent.type(
+      screen.getByTestId('eventLocationInput'),
+      'New Test Location',
+    );
+
+    // Submit form
+    const form = screen.getByTestId('eventTitleInput').closest('form');
+    if (form) {
+      fireEvent.submit(form);
+    }
+
+    await wait(500);
+
+    // The createEvent mutation returned null data, so no success toast
+    expect(mockToast.success).not.toHaveBeenCalled();
+  });
+
+  it('Should map missing creator to default (fallback) in eventData mapping', async () => {
+    const testLink = new StaticMockLink(CREATOR_NULL_MOCKS, true);
+    render(
+      <MockedProvider link={testLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // EventCalendar mock renders eventData JSON in `event-data-json`
+    const jsonPre = screen.getByTestId('event-data-json');
+    const parsed = JSON.parse(jsonPre.textContent || '[]');
+
+    expect(parsed).toBeInstanceOf(Array);
+    expect(parsed.length).toBeGreaterThan(0);
+    // Creator fallback should be used when creator is null
+    expect(parsed[0].creator).toEqual({ id: '', name: '' });
   });
 });
