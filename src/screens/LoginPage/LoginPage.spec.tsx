@@ -1391,7 +1391,14 @@ describe('Talawa-API server fetch check', () => {
       );
     });
 
-    expect(fetch).toHaveBeenCalledWith(BACKEND_URL);
+    expect(fetch).toHaveBeenCalledWith(
+      BACKEND_URL,
+      expect.objectContaining({
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: '{ __typename }' }),
+      }),
+    );
   });
 
   it('displays warning message when resource loading fails', async () => {
@@ -1412,6 +1419,13 @@ describe('Talawa-API server fetch check', () => {
       );
     });
 
-    expect(fetch).toHaveBeenCalledWith(BACKEND_URL);
+    expect(fetch).toHaveBeenCalledWith(
+      BACKEND_URL,
+      expect.objectContaining({
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: '{ __typename }' }),
+      }),
+    );
   });
 });
