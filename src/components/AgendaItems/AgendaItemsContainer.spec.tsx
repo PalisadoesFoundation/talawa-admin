@@ -9,15 +9,93 @@ import i18nForTest from 'utils/i18nForTest';
 import { toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import type { DropResult } from '@hello-pangea/dnd';
 
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
-import { MOCKS, MOCKS_ERROR, props, props2 } from './AgendaItemsMocks';
+import {
+  MOCKS,
+  MOCKS_ERROR,
+  MOCKS_DRAG_DROP,
+  MOCKS_DRAG_DROP_ERROR,
+  props,
+  props2,
+} from './AgendaItemsMocks';
 import AgendaItemsContainer from './AgendaItemsContainer';
-import { describe, test, expect, vi } from 'vitest';
+import { describe, test, expect, vi, beforeEach } from 'vitest';
+
+// Store the onDragEnd callback to call it directly in tests
+let capturedOnDragEnd: ((result: DropResult) => void) | null = null;
+
+// Helper function to safely call capturedOnDragEnd
+const callOnDragEnd = (result: DropResult): void => {
+  if (capturedOnDragEnd) {
+    capturedOnDragEnd(result);
+  }
+};
+
+// Mock @hello-pangea/dnd to capture onDragEnd callback
+vi.mock('@hello-pangea/dnd', () => ({
+  DragDropContext: ({
+    children,
+    onDragEnd,
+  }: {
+    children: React.ReactNode;
+    onDragEnd: (result: DropResult) => void;
+  }) => {
+    capturedOnDragEnd = onDragEnd;
+    return <div data-testid="drag-drop-context">{children}</div>;
+  },
+  Droppable: ({
+    children,
+  }: {
+    children: (
+      provided: {
+        droppableProps: Record<string, unknown>;
+        innerRef: (el: HTMLElement | null) => void;
+      },
+      snapshot: { isDraggingOver: boolean },
+    ) => React.ReactNode;
+    droppableId: string;
+  }) => {
+    return children(
+      {
+        droppableProps: {},
+        innerRef: () => {},
+      },
+      { isDraggingOver: false },
+    );
+  },
+  Draggable: ({
+    children,
+  }: {
+    children: (
+      provided: {
+        draggableProps: Record<string, unknown>;
+        dragHandleProps: Record<string, unknown>;
+        innerRef: (el: HTMLElement | null) => void;
+      },
+      snapshot: { isDragging: boolean },
+    ) => React.ReactNode;
+    draggableId: string;
+    index: number;
+  }) => {
+    return children(
+      {
+        draggableProps: {},
+        dragHandleProps: {},
+        innerRef: () => {},
+      },
+      { isDragging: false },
+    );
+  },
+}));
+
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR, true);
+const linkDragDrop = new StaticMockLink(MOCKS_DRAG_DROP, true);
+const linkDragDropError = new StaticMockLink(MOCKS_DRAG_DROP_ERROR, true);
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -46,6 +124,14 @@ const translations = JSON.parse(
 );
 
 describe('Testing Agenda Items components', () => {
+  beforeEach(() => {
+    capturedOnDragEnd = null;
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   const formData = {
     title: 'AgendaItem 1 Edited',
     description: 'AgendaItem 1 Description Edited',
@@ -53,7 +139,7 @@ describe('Testing Agenda Items components', () => {
 
   test('component loads correctly with items', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -75,7 +161,7 @@ describe('Testing Agenda Items components', () => {
 
   test('component loads correctly with no agenda items', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -97,7 +183,7 @@ describe('Testing Agenda Items components', () => {
 
   test('opens and closes the update modal correctly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -133,7 +219,7 @@ describe('Testing Agenda Items components', () => {
 
   test('opens and closes the preview modal correctly', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -171,7 +257,7 @@ describe('Testing Agenda Items components', () => {
 
   test('opens and closes the update and delete modals through the preview modal', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -246,7 +332,7 @@ describe('Testing Agenda Items components', () => {
 
   test('updates an agenda Items and toasts success', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -291,7 +377,7 @@ describe('Testing Agenda Items components', () => {
 
   test('toasts error on unsuccessful updation', async () => {
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -334,7 +420,7 @@ describe('Testing Agenda Items components', () => {
 
   test('deletes the agenda item and toasts success', async () => {
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <Provider store={store}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -390,7 +476,7 @@ describe('Testing Agenda Items components', () => {
 
   test('toasts error on unsuccessful deletion', async () => {
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -439,5 +525,339 @@ describe('Testing Agenda Items components', () => {
     });
   });
 
-  // write test case for drag and drop line:- 172-202
+  test('handles drag and drop to reorder agenda items', async () => {
+    const mockRefetch = vi.fn();
+    const propsWithMockRefetch = {
+      ...props,
+      agendaItemRefetch: mockRefetch,
+    };
+
+    render(
+      <MockedProvider link={linkDragDrop}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AgendaItemsContainer {...propsWithMockRefetch} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Verify agenda items are rendered
+    await waitFor(() => {
+      expect(screen.getByText('AgendaItem 1')).toBeInTheDocument();
+      expect(screen.getByText('AgendaItem 2')).toBeInTheDocument();
+    });
+
+    // Verify the drag-drop context is rendered and callback is captured
+    expect(capturedOnDragEnd).not.toBeNull();
+
+    // Simulate a drag from index 0 to index 1 (swap items)
+    await act(async () => {
+      callOnDragEnd({
+        source: { index: 0, droppableId: 'agendaItems' },
+        destination: { index: 1, droppableId: 'agendaItems' },
+        draggableId: 'agendaItem1',
+        type: 'DEFAULT',
+        mode: 'FLUID',
+        reason: 'DROP',
+        combine: null,
+      });
+    });
+
+    await wait(200);
+
+    // Verify refetch was called after successful reorder
+    await waitFor(() => {
+      expect(mockRefetch).toHaveBeenCalled();
+    });
+  });
+
+  test('handles drag end with no destination (cancelled drag)', async () => {
+    const mockRefetch = vi.fn();
+    const propsWithMockRefetch = {
+      ...props,
+      agendaItemRefetch: mockRefetch,
+    };
+
+    render(
+      <MockedProvider link={linkDragDrop}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AgendaItemsContainer {...propsWithMockRefetch} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Verify items are rendered
+    await waitFor(() => {
+      expect(screen.getByText('AgendaItem 1')).toBeInTheDocument();
+    });
+
+    expect(capturedOnDragEnd).not.toBeNull();
+
+    // Simulate a cancelled drag (no destination)
+    await act(async () => {
+      callOnDragEnd({
+        source: { index: 0, droppableId: 'agendaItems' },
+        destination: null,
+        draggableId: 'agendaItem1',
+        type: 'DEFAULT',
+        mode: 'FLUID',
+        reason: 'CANCEL',
+        combine: null,
+      });
+    });
+
+    await wait();
+
+    // When drag is cancelled (no destination), refetch should not be called
+    expect(mockRefetch).not.toHaveBeenCalled();
+  });
+
+  test('handles drag end with undefined agendaItemData', async () => {
+    const mockRefetch = vi.fn();
+    const propsWithUndefinedData = {
+      ...props,
+      agendaItemData: undefined,
+      agendaItemRefetch: mockRefetch,
+    };
+
+    render(
+      <MockedProvider link={linkDragDrop}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AgendaItemsContainer {...propsWithUndefinedData} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    expect(capturedOnDragEnd).not.toBeNull();
+
+    // Simulate a drag when agendaItemData is undefined
+    await act(async () => {
+      callOnDragEnd({
+        source: { index: 0, droppableId: 'agendaItems' },
+        destination: { index: 1, droppableId: 'agendaItems' },
+        draggableId: 'agendaItem1',
+        type: 'DEFAULT',
+        mode: 'FLUID',
+        reason: 'DROP',
+        combine: null,
+      });
+    });
+
+    await wait();
+
+    // When agendaItemData is undefined, onDragEnd should exit early without calling refetch
+    expect(mockRefetch).not.toHaveBeenCalled();
+  });
+
+  test('displays categories correctly with multiple categories', async () => {
+    const propsWithMultipleCategories = {
+      ...props,
+      agendaItemData: [
+        {
+          _id: 'agendaItem1',
+          title: 'AgendaItem 1',
+          description: 'Description 1',
+          duration: '2h',
+          attachments: [],
+          createdBy: { _id: 'user0', firstName: 'John', lastName: 'Doe' },
+          urls: [],
+          users: [],
+          sequence: 1,
+          categories: [
+            { _id: 'cat1', name: 'Category 1' },
+            { _id: 'cat2', name: 'Category 2' },
+          ],
+          organization: { _id: 'org1', name: 'Org 1' },
+          relatedEvent: { _id: 'event1', title: 'Event 1' },
+        },
+      ],
+    };
+
+    render(
+      <MockedProvider link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AgendaItemsContainer {...propsWithMultipleCategories} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByText(/Category 1/)).toBeInTheDocument();
+      expect(screen.getByText(/Category 2/)).toBeInTheDocument();
+    });
+  });
+
+  test('displays "No Category" when agenda item has no categories', async () => {
+    const propsWithNoCategories = {
+      ...props,
+      agendaItemData: [
+        {
+          _id: 'agendaItem1',
+          title: 'AgendaItem Without Category',
+          description: 'Description',
+          duration: '1h',
+          attachments: [],
+          createdBy: { _id: 'user0', firstName: 'John', lastName: 'Doe' },
+          urls: [],
+          users: [],
+          sequence: 1,
+          categories: [],
+          organization: { _id: 'org1', name: 'Org 1' },
+          relatedEvent: { _id: 'event1', title: 'Event 1' },
+        },
+      ],
+    };
+
+    render(
+      <MockedProvider link={link}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AgendaItemsContainer {...propsWithNoCategories} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByText('No Category')).toBeInTheDocument();
+    });
+  });
+
+  test('toasts error when drag and drop reorder fails', async () => {
+    render(
+      <MockedProvider link={linkDragDropError}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AgendaItemsContainer {...props} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Verify items are rendered
+    await waitFor(() => {
+      expect(screen.getByText('AgendaItem 1')).toBeInTheDocument();
+    });
+
+    expect(capturedOnDragEnd).not.toBeNull();
+
+    // Simulate a drag that will trigger an error from the mock
+    await act(async () => {
+      callOnDragEnd({
+        source: { index: 0, droppableId: 'agendaItems' },
+        destination: { index: 1, droppableId: 'agendaItems' },
+        draggableId: 'agendaItem1',
+        type: 'DEFAULT',
+        mode: 'FLUID',
+        reason: 'DROP',
+        combine: null,
+      });
+    });
+
+    await wait(200);
+
+    // Should toast an error
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+  });
+
+  test('calls refetch when drag ends with no position change', async () => {
+    const mockRefetch = vi.fn();
+    const baseAgendaItemData = props.agendaItemData ?? [];
+
+    // Defensive check: ensure mock data has at least 2 items for this test
+    if (!baseAgendaItemData || baseAgendaItemData.length < 2) {
+      throw new Error(
+        'Test setup: baseAgendaItemData must contain at least 2 items',
+      );
+    }
+
+    // Create props with items whose sequence already matches their index + 1
+    const propsWithMatchingSequence = {
+      ...props,
+      agendaItemRefetch: mockRefetch,
+      agendaItemData: [
+        {
+          ...baseAgendaItemData[0],
+          sequence: 1, // Already at correct position
+        },
+        {
+          ...baseAgendaItemData[1],
+          sequence: 2, // Already at correct position
+        },
+      ],
+    };
+
+    render(
+      <MockedProvider link={linkDragDrop}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AgendaItemsContainer {...propsWithMatchingSequence} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByText('AgendaItem 1')).toBeInTheDocument();
+    });
+
+    expect(capturedOnDragEnd).not.toBeNull();
+
+    // Simulate a drag to the same position (no change)
+    await act(async () => {
+      callOnDragEnd({
+        source: { index: 0, droppableId: 'agendaItems' },
+        destination: { index: 0, droppableId: 'agendaItems' },
+        draggableId: 'agendaItem1',
+        type: 'DEFAULT',
+        mode: 'FLUID',
+        reason: 'DROP',
+        combine: null,
+      });
+    });
+
+    await wait(100);
+
+    // Refetch should still be called even when no sequence updates occur
+    await waitFor(() => {
+      expect(mockRefetch).toHaveBeenCalled();
+    });
+  });
 });

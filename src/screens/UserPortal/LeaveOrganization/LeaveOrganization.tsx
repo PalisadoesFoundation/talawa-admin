@@ -139,18 +139,16 @@ const LeaveOrganization = (): JSX.Element => {
   };
 
   /**
-   * Handles the 'Enter' key press.
+   * Handles the 'Enter' key press on the email input to submit verification.
+   * This handler is only attached to the email input which only renders
+   * when verificationStep is true, so we can directly call handleVerifyAndLeave.
    */
   const handleKeyPress = (
     event: React.KeyboardEvent<HTMLInputElement>,
   ): void => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      if (verificationStep) {
-        handleVerifyAndLeave();
-      } else {
-        setVerificationStep(true);
-      }
+      handleVerifyAndLeave();
     }
   };
 

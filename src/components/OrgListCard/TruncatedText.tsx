@@ -26,7 +26,7 @@
  * - useDebounce: A custom hook for debouncing the resize event handler.
  *
  */
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import useDebounce from './useDebounce';
 
 interface InterfaceTruncatedTextProps {
@@ -43,40 +43,43 @@ const TruncatedText: React.FC<InterfaceTruncatedTextProps> = ({
   const [truncatedText, setTruncatedText] = useState<string>('');
   const textRef = useRef<HTMLHeadingElement>(null);
 
-  const { debouncedCallback, cancel } = useDebounce(() => {
-    truncateText();
-  }, 100);
-
   /**
-   * Truncate the text based on the available width or the `maxWidthOverride` value.
+   * Stable truncateText wrapped in useCallback (fixes unstable dependency issue flagged by CodeRabbit)
    */
-  const truncateText = (): void => {
+  const truncateText = useCallback((): void => {
     const element = textRef.current;
-    if (element) {
-      const maxWidth = maxWidthOverride || element.offsetWidth;
-      const fullText = text;
+    if (!element) return;
 
-      const computedStyle = getComputedStyle(element);
-      const fontSize = parseFloat(computedStyle.fontSize);
-      const charPerPx = 0.065 + fontSize * 0.002;
-      const maxChars = Math.floor(maxWidth * charPerPx);
+    const maxWidth =
+      typeof maxWidthOverride === 'number'
+        ? maxWidthOverride
+        : element.offsetWidth;
 
-      setTruncatedText(
-        fullText.length > maxChars
-          ? `${fullText.slice(0, maxChars - 3)}...`
-          : fullText,
-      );
-    }
-  };
+    const computedStyle = window.getComputedStyle(element);
+    const fontSize = parseFloat(computedStyle.fontSize);
+
+    // Character-per-pixel estimation
+    const charPerPx = 0.065 + fontSize * 0.002;
+    const maxChars = Math.floor(maxWidth * charPerPx);
+
+    setTruncatedText(
+      text.length > maxChars
+        ? `${text.slice(0, Math.max(0, maxChars - 3))}...`
+        : text,
+    );
+  }, [text, maxWidthOverride]);
+
+  const { debouncedCallback, cancel } = useDebounce(truncateText, 100);
 
   useEffect(() => {
     truncateText();
     window.addEventListener('resize', debouncedCallback);
+
     return () => {
       cancel();
       window.removeEventListener('resize', debouncedCallback);
     };
-  }, [text, maxWidthOverride, debouncedCallback, cancel]);
+  }, [truncateText, debouncedCallback, cancel]);
 
   return (
     <h6 ref={textRef} className="text-secondary">

@@ -1,5 +1,5 @@
 import { expect } from 'vitest';
-import reducer from './routesReducer';
+import reducer, { ComponentType, generateRoutes } from './routesReducer';
 
 describe('Testing Routes reducer', () => {
   it('should return the initial state', () => {
@@ -181,5 +181,57 @@ describe('Testing Routes reducer', () => {
         { name: '', comp_id: 'member', component: 'MemberDetail' },
       ],
     });
+  });
+
+  it('should handle components with subTargets', () => {
+    const testComponents: ComponentType[] = [
+      {
+        name: 'Parent Component',
+        comp_id: null,
+        component: null,
+        subTargets: [
+          {
+            name: 'Sub Component 1',
+            comp_id: 'sub1',
+            component: 'SubComponent1',
+            icon: 'icon1',
+          },
+          {
+            name: 'Sub Component 2',
+            comp_id: 'sub2',
+            component: 'SubComponent2',
+          },
+        ],
+      },
+      {
+        name: 'Regular Component',
+        comp_id: 'regular',
+        component: 'RegularComponent',
+      },
+    ];
+
+    const result = generateRoutes(testComponents, 'orgId');
+
+    expect(result).toEqual([
+      {
+        name: 'Parent Component',
+        subTargets: [
+          {
+            name: 'Sub Component 1',
+            url: '/sub1/orgId',
+            icon: 'icon1',
+          },
+          {
+            name: 'Sub Component 2',
+            url: '/sub2/orgId',
+            icon: undefined,
+          },
+        ],
+      },
+      {
+        name: 'Regular Component',
+        url: '/regular/orgId',
+      },
+    ]);
   });
 });

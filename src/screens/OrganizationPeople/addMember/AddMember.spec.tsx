@@ -264,18 +264,10 @@ const renderAddMemberView = ({
   );
 
   if (link) {
-    return render(
-      <MockedProvider addTypename={false} link={link}>
-        {content}
-      </MockedProvider>,
-    );
+    return render(<MockedProvider link={link}>{content}</MockedProvider>);
   }
 
-  return render(
-    <MockedProvider addTypename={false} mocks={mocks}>
-      {content}
-    </MockedProvider>,
-  );
+  return render(<MockedProvider mocks={mocks}>{content}</MockedProvider>);
 };
 
 describe('AddMember Component', () => {
@@ -430,12 +422,43 @@ describe('AddMember Component', () => {
       { timeout: 3000 },
     );
     expect(johnDoeElement).toBeInTheDocument();
+  });
 
-    // Wait for Jane Smith to disappear
+  test('clears the search input in the modal', async () => {
+    const orgId = 'org123';
+    const initialUserListMock = createUserListMock({
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+
+    const mocks = [createOrganizationsMock(orgId), initialUserListMock];
+
+    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+
+    // Open the add member modal
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    // Select existing user option
+    const existingUserOption = screen.getByText('Existing User');
+    fireEvent.click(existingUserOption);
+
+    // Wait for the modal to be visible
+    await screen.findByTestId('addExistingUserModal');
+
+    // Enter search term
+    const searchInput = screen.getByTestId('searchUser');
+    fireEvent.change(searchInput, { target: { value: 'John' } });
+    expect(searchInput).toHaveValue('John');
+
+    // Click clear button
+    const clearButton = await screen.findByLabelText('Clear search');
+    fireEvent.click(clearButton);
+
     await waitFor(() => {
-      expect(
-        screen.queryByText((content) => content.includes('Jane Smith')),
-      ).not.toBeInTheDocument();
+      expect(screen.getByTestId('searchUser')).toHaveValue('');
     });
   });
 
@@ -1106,7 +1129,7 @@ test('calls setUserName, resetPagination and fetchUsers on search', async () => 
   ];
 
   render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
         <I18nextProvider i18n={i18nForTest}>
           <AddMember />

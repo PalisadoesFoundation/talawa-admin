@@ -20,15 +20,22 @@ Use the following path structure for shared components.
 src/
 │
 ├── shared-components/
-│   ├── Component/
-│   │   ├── Component.tsx
-│   │   ├── Component.spec.tsx
-│   │   └── ComponentMocks.ts
-│   │
+│   ├── ComponentOne/
+│   |   ├── ComponentOne.tsx
+│   |   ├── ComponentOne.spec.tsx
+│   |   └── ComponentOneMocks.ts
+│   └── ComponentTwo/
+│       ├── ComponentTwo.tsx
+│       ├── ComponentTwo.spec.tsx
+│       └── ComponentTwoMocks.ts
+│
 └── types/
-    └── Component/
-       ├── interface.ts
-       └── type.ts
+    ├── ComponentOne/
+    |   ├── interface.ts
+    |   └── type.ts
+    └── ComponentTwo/
+        ├── interface.ts
+        └── type.ts
 ```
 
 #### Naming Conventions

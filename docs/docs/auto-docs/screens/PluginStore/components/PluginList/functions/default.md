@@ -12,7 +12,7 @@ Defined in: [src/screens/PluginStore/components/PluginList.tsx:16](https://githu
 
 ### \_\_namedParameters
 
-`PluginListProps`
+`IPluginListProps`
 
 ## Returns
 

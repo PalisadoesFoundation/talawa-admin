@@ -55,6 +55,7 @@ import {
 
 // Mock data
 export const mockChatData = {
+  __typename: 'Chat',
   id: 'chat123',
   name: 'Test Chat',
   description: 'Test Description',
@@ -64,17 +65,20 @@ export const mockChatData = {
   updatedAt: '2023-01-01T00:00:00Z',
   isGroup: false,
   organization: {
+    __typename: 'Organization',
     id: 'org123',
     name: 'Test Org',
     countryCode: 'US',
   },
   creator: {
+    __typename: 'User',
     id: 'creator123',
     name: 'Creator Name',
     avatarMimeType: 'image/jpeg',
     avatarURL: 'https://example.com/creator.jpg',
   },
   updater: {
+    __typename: 'User',
     id: 'updater123',
     name: 'Updater Name',
     avatarMimeType: 'image/jpeg',
@@ -85,7 +89,9 @@ export const mockChatData = {
       {
         cursor: 'cursor1',
         node: {
+          __typename: 'ChatMember',
           user: {
+            __typename: 'User',
             id: 'user123',
             name: 'Current User',
             avatarMimeType: 'image/jpeg',
@@ -97,7 +103,9 @@ export const mockChatData = {
       {
         cursor: 'cursor2',
         node: {
+          __typename: 'ChatMember',
           user: {
+            __typename: 'User',
             id: 'otherUser123',
             name: 'Other User',
             avatarMimeType: 'image/jpeg',
@@ -109,7 +117,9 @@ export const mockChatData = {
       {
         cursor: 'cursor3',
         node: {
+          __typename: 'ChatMember',
           user: {
+            __typename: 'User',
             id: 'user3',
             name: 'User 3',
             avatarMimeType: 'image/jpeg',
@@ -125,11 +135,13 @@ export const mockChatData = {
       {
         cursor: 'msgCursor1',
         node: {
+          __typename: 'ChatMessage',
           id: 'msg1',
           body: 'Hello World',
           createdAt: '2023-01-01T00:00:00Z',
           updatedAt: '2023-01-01T00:00:00Z',
           creator: {
+            __typename: 'User',
             id: 'user123',
             name: 'Current User',
             avatarMimeType: 'image/jpeg',
@@ -233,11 +245,13 @@ export const SEND_MESSAGE_MOCK = {
   result: {
     data: {
       createChatMessage: {
+        __typename: 'ChatMessage',
         id: 'newMsg123',
         body: 'Test message',
         createdAt: '2023-01-01T00:00:00Z',
         updatedAt: '2023-01-01T00:00:00Z',
         creator: {
+          __typename: 'User',
           id: 'user123',
           name: 'Current User',
           avatarMimeType: 'image/jpeg',
@@ -263,11 +277,13 @@ export const SEND_MESSAGE_UPLOADED_MOCK = {
   result: {
     data: {
       createChatMessage: {
+        __typename: 'ChatMessage',
         id: 'newMsgUploaded',
         body: 'uploaded_obj',
         createdAt: '2023-01-01T00:00:00Z',
         updatedAt: '2023-01-01T00:00:00Z',
         creator: {
+          __typename: 'User',
           id: 'user123',
           name: 'Current User',
           avatarMimeType: 'image/jpeg',
@@ -292,11 +308,13 @@ export const EDIT_MESSAGE_MOCK = {
   result: {
     data: {
       updateChatMessage: {
+        __typename: 'ChatMessage',
         id: 'msg1',
         body: 'Edited message',
         createdAt: '2023-01-01T00:00:00Z',
         updatedAt: '2023-01-01T00:00:00Z',
         creator: {
+          __typename: 'User',
           id: 'user123',
           name: 'Current User',
           avatarMimeType: 'image/jpeg',
@@ -320,6 +338,7 @@ export const DELETE_MESSAGE_MOCK = {
   result: {
     data: {
       deleteChatMessage: {
+        __typename: 'ChatMessage',
         id: 'msg1',
         body: 'Hello World',
         createdAt: '2023-01-01T00:00:00Z',
@@ -391,14 +410,17 @@ export const MESSAGE_SENT_SUBSCRIPTION_MOCK = {
   result: {
     data: {
       chatMessageCreate: {
+        __typename: 'ChatMessage',
         id: 'subMsg123',
         body: 'New message from subscription',
         createdAt: '2023-01-01T00:00:00Z',
         updatedAt: '2023-01-01T00:00:00Z',
         chat: {
+          __typename: 'Chat',
           id: 'chat123',
         },
         creator: {
+          __typename: 'User',
           id: 'otherUser123',
           name: 'Other User',
           avatarMimeType: 'image/jpeg',
@@ -707,7 +729,7 @@ const renderChatRoom = (mocks: MockedResponse[] = []) => {
   setItem('userId', 'user123');
   const allMocks = [...mocks, ...defaultMocks];
   const renderResult = render(
-    <MockedProvider mocks={allMocks} addTypename={false}>
+    <MockedProvider mocks={allMocks}>
       <Provider store={store}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
@@ -1814,7 +1836,7 @@ describe('ChatRoom Component', () => {
     const { setItem } = useLocalStorage();
     setItem('userId', 'user123');
     render(
-      <MockedProvider mocks={[]} addTypename={false}>
+      <MockedProvider mocks={[]}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
@@ -2793,7 +2815,6 @@ describe('ChatRoom Component', () => {
     render(
       <MockedProvider
         mocks={[EARLY_SUBSCRIPTION_MOCK, CHAT_BY_ID_MOCK, UNREAD_CHATS_MOCK]}
-        addTypename={false}
       >
         <Provider store={store}>
           <BrowserRouter>
@@ -2822,10 +2843,7 @@ describe('ChatRoom Component', () => {
     setItem('userId', 'user123');
 
     render(
-      <MockedProvider
-        mocks={[CHAT_BY_ID_MOCK, UNREAD_CHATS_MOCK]}
-        addTypename={false}
-      >
+      <MockedProvider mocks={[CHAT_BY_ID_MOCK, UNREAD_CHATS_MOCK]}>
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>

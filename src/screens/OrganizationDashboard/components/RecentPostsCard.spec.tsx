@@ -71,6 +71,10 @@ vi.mock(
 );
 
 describe('RecentPostsCard Component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   const mockPostData: TestInterfacePostData = {
     organization: {
       posts: {
