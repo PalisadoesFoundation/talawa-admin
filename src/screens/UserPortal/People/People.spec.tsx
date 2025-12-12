@@ -712,15 +712,10 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
     );
     await wait();
 
-    const emailCells = document.querySelectorAll(
-      '.MuiDataGrid-cell[data-field="email"]',
-    );
-    expect(emailCells.length).toBeGreaterThan(0);
-    expect(
-      Array.from(emailCells).some((cell) =>
-        cell.textContent?.includes('***********************'),
-      ),
-    ).toBe(true);
+    const grid = await screen.findByRole('grid');
+    const maskedEmail = '***********************';
+    const maskedEmailMatches = await within(grid).findAllByText(maskedEmail);
+    expect(maskedEmailMatches.length).toBeGreaterThan(0);
   });
 
   it('renders an avatar image cell when avatarURL is present', async () => {
