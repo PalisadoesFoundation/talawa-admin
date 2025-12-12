@@ -1,4 +1,4 @@
-import {
+import type {
   GridCallbackDetails,
   GridColDef,
   GridPaginationModel,
@@ -21,4 +21,7 @@ export interface IPeopleTableProps {
   ) => void;
   pageSizeOptions?: number[];
   slots?: Partial<GridSlots>;
+  paginationMeta?: {
+    hasNextPage?: boolean;
+  };
 }

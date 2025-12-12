@@ -56,6 +56,18 @@ Defined in: [src/types/PeopleTable/interface.ts:22](https://github.com/Palisadoe
 
 ***
 
+### paginationMeta?
+
+> `optional` **paginationMeta**: `object`
+
+Defined in: [src/types/PeopleTable/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTable/interface.ts#L24)
+
+#### hasNextPage?
+
+> `optional` **hasNextPage**: `boolean`
+
+***
+
 ### paginationModel
 
 > **paginationModel**: `GridPaginationModel`

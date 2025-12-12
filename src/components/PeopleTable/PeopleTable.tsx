@@ -23,6 +23,7 @@ const PeopleTable: React.FC<IPeopleTableProps> = ({
   onPaginationModelChange,
   pageSizeOptions = [5, 10, 20],
   slots,
+  paginationMeta,
 }) => {
   return (
     <div className={styles.tableContainer}>
@@ -33,6 +34,7 @@ const PeopleTable: React.FC<IPeopleTableProps> = ({
         rowCount={rowCount}
         paginationModel={paginationModel}
         paginationMode="server"
+        paginationMeta={paginationMeta}
         onPaginationModelChange={onPaginationModelChange}
         pageSizeOptions={pageSizeOptions}
         getRowId={(row) => row._id || row.id}

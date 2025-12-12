@@ -339,11 +339,8 @@ export default function People(): React.JSX.Element {
             rows={rows}
             columns={columns}
             loading={loading}
-            rowCount={
-              pageInfo?.hasNextPage
-                ? (currentPage + 1) * rowsPerPage + 1
-                : currentPage * rowsPerPage + members.length
-            }
+            rowCount={-1}
+            paginationMeta={{ hasNextPage: Boolean(pageInfo?.hasNextPage) }}
             paginationModel={{ page: currentPage, pageSize: rowsPerPage }}
             onPaginationModelChange={handlePaginationModelChange}
             pageSizeOptions={[5, 10, 25]}
