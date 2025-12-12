@@ -513,13 +513,10 @@ function OrganizationPeople(): JSX.Element {
           rows={filteredRows}
           columns={columns}
           loading={memberLoading || userLoading}
-          rowCount={
-            paginationModel.page * PAGE_SIZE +
-            currentRows.length +
-            (paginationMeta.hasNextPage ? PAGE_SIZE : 0)
-          }
+          rowCount={-1}
           paginationModel={paginationModel}
           onPaginationModelChange={handlePaginationModelChange}
+          paginationMeta={paginationMeta}
           pageSizeOptions={[PAGE_SIZE]}
           slots={{
             noRowsOverlay: () => (
