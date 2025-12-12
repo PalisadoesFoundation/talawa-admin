@@ -18,6 +18,66 @@ import { vi } from 'vitest';
 import type { IPeopleTableProps } from 'types/PeopleTable/interface';
 import type { GridCallbackDetails } from '@mui/x-data-grid';
 import type { MockedResponse } from '@apollo/react-testing';
+import type {
+  DefinitionNode,
+  DocumentNode,
+  FieldNode,
+  SelectionNode,
+} from 'graphql';
+
+const documentContainsField = (
+  document: DocumentNode | undefined,
+  fieldName: string,
+): boolean => {
+  if (!document) return false;
+
+  const visitSelections = (selections: readonly SelectionNode[]): boolean => {
+    for (const selection of selections) {
+      if (selection.kind === 'Field') {
+        const field = selection as FieldNode;
+        if (field.name.value === fieldName) return true;
+        if (
+          field.selectionSet &&
+          visitSelections(field.selectionSet.selections)
+        ) {
+          return true;
+        }
+      } else if (
+        selection.kind === 'InlineFragment' &&
+        selection.selectionSet &&
+        visitSelections(selection.selectionSet.selections)
+      ) {
+        return true;
+      } else if (
+        selection.kind === 'FragmentSpread'
+        // Fragment spreads require fragment definitions to be resolved; skip.
+      ) {
+        continue;
+      }
+    }
+    return false;
+  };
+
+  return document.definitions.some((definition: DefinitionNode) => {
+    if (definition.kind !== 'OperationDefinition') return false;
+    return visitSelections(definition.selectionSet.selections);
+  });
+};
+
+const isMemberConnectionOperation = (operation: {
+  operationName?: string;
+  query?: DocumentNode;
+}): boolean => {
+  // Prefer strict identity match when possible.
+  if (operation.query === ORGANIZATIONS_MEMBER_CONNECTION_LIST) return true;
+
+  // Fallback: match by operation name if present.
+  if (operation.operationName === 'OrganizationsMemberConnectionList')
+    return true;
+
+  // Last resort: detect the expected field in the query.
+  return documentContainsField(operation.query, 'members');
+};
 
 vi.mock('components/PeopleTable/PeopleTable', () => ({
   default: ({
@@ -28,6 +88,12 @@ vi.mock('components/PeopleTable/PeopleTable', () => ({
     IPeopleTableProps,
     'rows' | 'paginationModel' | 'onPaginationModelChange'
   >) => {
+    if (!onPaginationModelChange) {
+      throw new Error(
+        'PeopleTable mock: expected `onPaginationModelChange` to be provided by OrganizationPeople',
+      );
+    }
+
     const safeRows = rows ?? [];
     const safePaginationModel = paginationModel ?? { page: 0, pageSize: 10 };
 
@@ -37,7 +103,7 @@ vi.mock('components/PeopleTable/PeopleTable', () => ({
           type="button"
           aria-label="next page"
           onClick={() =>
-            onPaginationModelChange?.(
+            onPaginationModelChange(
               {
                 page: safePaginationModel.page + 1,
                 pageSize: safePaginationModel.pageSize,
@@ -145,7 +211,9 @@ describe('OrganizationPeople pagination guards', () => {
 
     const mockLink = mockSingleLink(singlePageMock);
     const operationCountLink = new ApolloLink((operation, forward) => {
-      operationCount += 1;
+      if (isMemberConnectionOperation(operation)) {
+        operationCount += 1;
+      }
       return forward ? forward(operation) : null;
     });
 
