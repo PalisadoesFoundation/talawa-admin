@@ -124,7 +124,7 @@ describe('PeopleTable Component', () => {
     consoleErrorSpy.mockRestore();
   });
 
-  it('renders with custom slots', async () => {
+  it('renders with custom slots', () => {
     const CustomNoRowsOverlay = () => <div>No Data Available</div>;
     render(
       <PeopleTable
@@ -135,8 +135,6 @@ describe('PeopleTable Component', () => {
       />,
     );
 
-    await waitFor(() => {
-      expect(screen.getByText('No Data Available')).toBeInTheDocument();
-    });
+    expect(screen.getByText('No Data Available')).toBeInTheDocument();
   });
 });
