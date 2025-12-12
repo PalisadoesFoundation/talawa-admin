@@ -1433,11 +1433,15 @@ describe('Talawa-API server fetch check', () => {
 
 // Helper functions to reduce code duplication
 const renderLoginPage = (
-  mocks: typeof MOCKS = MOCKS,
-  link?: StaticMockLink,
+  mocksOrLink: typeof MOCKS | StaticMockLink = MOCKS,
 ): ReturnType<typeof render> => {
+  const isLink = mocksOrLink instanceof StaticMockLink;
+
   return render(
-    <MockedProvider mocks={mocks} link={link} addTypename={false}>
+    <MockedProvider
+      {...(isLink ? { link: mocksOrLink } : { mocks: mocksOrLink })}
+      addTypename={false}
+    >
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -1464,7 +1468,6 @@ const setLocationPath = (pathname: string): void => {
 describe('Extra coverage for 100 %', () => {
   afterEach(() => {
     vi.doUnmock('Constant/constant.ts');
-    vi.resetModules();
   });
 
   /* 1.  bypass recaptcha when feature is off (UI path) */
@@ -1575,7 +1578,7 @@ describe('Extra coverage for 100 %', () => {
 
   /* 5.  component renders after mount (was refetch test) */
   it('renders component after mount', async () => {
-    renderLoginPage(MOCKS, link);
+    renderLoginPage(link);
     await wait();
     expect(screen.getByTestId('loginBtn')).toBeInTheDocument();
   });
