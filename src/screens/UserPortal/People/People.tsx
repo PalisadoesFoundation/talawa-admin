@@ -148,9 +148,14 @@ export default function People(): React.JSX.Element {
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    eventOrValue:
+      | React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+      | number,
   ): void => {
-    const newRowsPerPage = parseInt(event.target.value, 10);
+    const newRowsPerPage =
+      typeof eventOrValue === 'number'
+        ? eventOrValue
+        : parseInt(eventOrValue.target.value, 10);
     setRowsPerPage(newRowsPerPage);
     setPageCursors(['']); // Reset pagination
     setCurrentPage(0);
@@ -279,10 +284,7 @@ export default function People(): React.JSX.Element {
 
   const handlePaginationModelChange = (model: GridPaginationModel) => {
     if (model.pageSize !== rowsPerPage) {
-      const event = {
-        target: { value: model.pageSize.toString() },
-      } as React.ChangeEvent<HTMLInputElement>;
-      handleChangeRowsPerPage(event);
+      handleChangeRowsPerPage(model.pageSize);
     } else if (model.page !== currentPage) {
       handleChangePage(null, model.page);
     }
