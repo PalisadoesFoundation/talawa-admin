@@ -1,12 +1,6 @@
 import React from 'react';
-import {
-  DataGrid,
-  GridColDef,
-  GridPaginationModel,
-  GridSlots,
-  GridRowsProp,
-  GridCallbackDetails,
-} from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
+import { IPeopleTableProps } from '../../types/PeopleTable/interface';
 import styles from './PeopleTable.module.css';
 
 /**
@@ -19,22 +13,6 @@ import styles from './PeopleTable.module.css';
  * @param {IPeopleTableProps} props - The props for the PeopleTable component.
  * @returns {JSX.Element} The rendered PeopleTable component.
  */
-/**
- * Interface representing the props for the PeopleTable component.
- */
-export interface IPeopleTableProps {
-  rows: GridRowsProp;
-  columns: GridColDef[];
-  loading: boolean;
-  rowCount: number;
-  paginationModel: GridPaginationModel;
-  onPaginationModelChange: (
-    model: GridPaginationModel,
-    details: GridCallbackDetails,
-  ) => void;
-  pageSizeOptions?: number[];
-  slots?: Partial<GridSlots>;
-}
 
 const PeopleTable: React.FC<IPeopleTableProps> = ({
   rows,
