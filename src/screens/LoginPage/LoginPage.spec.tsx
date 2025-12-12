@@ -1472,7 +1472,7 @@ describe('Extra coverage for 100 %', () => {
 
   /* 1.  bypass recaptcha when feature is off (UI path) */
   it('bypasses recaptcha when feature is off', async () => {
-    await vi.resetModules();
+    vi.resetModules();
     vi.doMock('Constant/constant.ts', async () => ({
       ...(await vi.importActual('Constant/constant.ts')),
       REACT_APP_USE_RECAPTCHA: 'no',
@@ -1738,7 +1738,7 @@ describe('Extra coverage for 100 %', () => {
       },
       {
         request: { query: SIGNIN_QUERY, variables: { email: 'test@test.com', password: 'pass' } },
-        result: { data: { signIn: null } },
+        result: { data: null },
       },
       { request: { query: GET_COMMUNITY_DATA_PG }, result: { data: { community: null } } },
     ];
