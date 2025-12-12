@@ -1088,6 +1088,7 @@
     "comments": "टिप्पणियाँ",
     "addComment": "टिप्पणी जोड़ें",
     "viewPost": "पोस्ट देखें",
+    "view": "देखें",
     "postDeletedSuccess": "पोस्ट सफलतापूर्वक हटा दी गई।",
     "postPinnedSuccess": "पोस्ट सफलतापूर्वक पिन किया गया।",
     "postUnpinnedSuccess": "पोस्ट सफलतापूर्वक अनपिन किया गया।",
@@ -1111,7 +1112,9 @@
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "noMorePosts": "और कोई पोस्ट नहीं है",
     "createPost": "पोस्ट बनाएं",
-    "searchTitle": "शीर्षक से खोजें"
+    "searchTitle": "शीर्षक से खोजें",
+    "noPostsFoundMatching": "मिलान करने वाली कोई पोस्ट नहीं मिली",
+    "errorLoadingPosts": "पोस्ट लोड करने में त्रुटि हुई। कृपया बाद में पुनः प्रयास करें।"
   },
 
   "home": {

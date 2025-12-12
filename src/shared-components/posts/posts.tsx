@@ -1,3 +1,44 @@
+/**
+ * Posts Component
+ *
+ * This component manages and displays organization posts with comprehensive functionality
+ * including pagination, search, sorting, pinning, and infinite scroll. It renders both
+ * pinned posts in a carousel layout and regular posts in a paginated list with interactive
+ * features for post management.
+ *
+ * @returns {JSX.Element} A JSX element representing the complete posts interface with:
+ * - Header with search and sorting controls
+ * - Pinned posts carousel section
+ * - Paginated posts list with infinite scroll
+ * - Modal for viewing individual pinned posts
+ * - Loading states and error handling
+ *
+ * @remarks
+ * - Uses Apollo Client for GraphQL queries (ORGANIZATION_POST_LIST_WITH_VOTES, ORGANIZATION_PINNED_POST_LIST)
+ * - Implements search functionality that filters posts by caption text
+ * - Supports sorting by creation date (oldest/newest) with local state management
+ * - Features infinite scroll pagination for better performance with large post lists
+ * - Handles pinned posts separately in a carousel layout at the top
+ * - Provides modal view for detailed pinned post interaction
+ * - Includes comprehensive error handling and loading states
+ * - Uses React hooks for state management and side effects
+ * - Supports both admin and user role-based interactions
+ * - Implements proper data formatting for PostCard components
+ *
+ * @dependencies
+ * - Apollo Client for GraphQL operations
+ * - React Router for URL parameters
+ * - React i18n for internationalization
+ * - React Toastify for notifications
+ * - Local storage utilities for user session data
+ *
+ * @example
+ * ```tsx
+ * // Used in organization routes
+ * <Posts />
+ * ```
+ */
+
 import { useQuery } from '@apollo/client';
 import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
@@ -24,6 +65,7 @@ import { Box, Typography } from '@mui/material';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import { Modal } from 'react-bootstrap';
+import { formatDate } from 'utils/dateFormatter';
 
 export default function PostsPage() {
   const { t } = useTranslation('translation', { keyPrefix: 'posts' });
@@ -174,10 +216,6 @@ export default function PostsPage() {
         const newEdges = fetchMoreResult.organization.posts.edges;
         const pageInfo = fetchMoreResult.organization.posts.pageInfo;
 
-        // Update cursor and hasMore state
-        setHasMore(pageInfo?.hasNextPage ?? false);
-        setAfter(pageInfo?.endCursor ?? null);
-
         // Merge the new posts with existing ones
         return {
           organization: {
@@ -193,9 +231,15 @@ export default function PostsPage() {
           },
         };
       },
-    }).catch(() => {
-      toast.error('Error loading more posts');
-    });
+    })
+      .then((res) => {
+        const pageInfo = res.data?.organization?.posts?.pageInfo;
+        setHasMore(pageInfo?.hasNextPage ?? false);
+        setAfter(pageInfo?.endCursor ?? null);
+      })
+      .catch(() => {
+        toast.error('Error loading more posts');
+      });
   }, [hasMore, sortingOption, fetchMore, currentUrl, userId, after, first]);
 
   const handleSearch = async (term: string): Promise<void> => {
@@ -264,7 +308,7 @@ export default function PostsPage() {
       avatarURL: post.creator?.avatarURL,
     },
     hasUserVoted: post.hasUserVoted ?? { hasVoted: false, voteType: null },
-    postedAt: new Date(post.createdAt).toLocaleDateString(),
+    postedAt: formatDate(post.createdAt),
     pinnedAt: post.pinnedAt ?? null,
     image: post.imageUrl ?? post.attachments?.[0]?.url ?? null,
     video: post.videoUrl ?? null,
@@ -331,7 +375,7 @@ export default function PostsPage() {
               id="posts-scroll-container"
             >
               {orgPostListError && (
-                <div data-testid="not-found">Error loading posts</div>
+                <div data-testid="not-found">{t('errorLoadingPosts')}</div>
               )}
 
               {/* Pinned Posts Carousel */}
@@ -351,7 +395,7 @@ export default function PostsPage() {
               {isFiltering && filteredPosts.length === 0 && searchTerm && (
                 <Box sx={{ textAlign: 'center', py: 4 }}>
                   <Typography color="text.secondary">
-                    No posts found matching "{searchTerm}"
+                    {t('noPostsFoundMatching')} "{searchTerm}"
                   </Typography>
                 </Box>
               )}

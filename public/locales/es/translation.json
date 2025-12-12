@@ -1086,6 +1086,7 @@
   "postCard": {
     "likes": "Gustos",
     "comments": "Comentarios",
+    "view": "Ver",
     "postDeletedSuccess": "Publicación eliminada con éxito.",
     "postPinnedSuccess": "Publicación fijada con éxito.",
     "postUnpinnedSuccess": "Publicación desfijada con éxito.",
@@ -1111,7 +1112,9 @@
     "nothingToShow": "Nada que mostrar aquí.",
     "noMorePosts": "No hay más publicaciones para cargar.",
     "createPost": "Crear publicación",
-    "searchTitle": "Buscar por Título"
+    "searchTitle": "Buscar por Título",
+    "noPostsFoundMatching": "No se encontraron publicaciones que coincidan con ",
+    "errorLoadingPosts": "Error al cargar publicaciones. Por favor, inténtelo de nuevo más tarde."
   },
 
   "home": {

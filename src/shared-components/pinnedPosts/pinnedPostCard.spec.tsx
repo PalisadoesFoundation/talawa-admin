@@ -18,7 +18,23 @@ vi.mock('react-toastify', () => ({
 // Mock useTranslation
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string) => key,
+    t: (key: string, options?: { date?: string }) => {
+      const translations: Record<string, string> = {
+        postedOn: options?.date
+          ? `Posted on: ${options.date}`
+          : 'Posted on: {{date}}',
+        untitledPost: 'Untitled Post',
+        noContentAvailable: 'No content available',
+        view: 'view',
+        postDeletedSuccess: 'Post deleted successfully',
+        postPinnedSuccess: 'Post pinned successfully',
+        postUnpinnedSuccess: 'Post unpinned successfully',
+        editPost: 'Edit Post',
+        pinPost: 'Pin Post',
+        unpinPost: 'Unpin Post',
+      };
+      return translations[key] || key;
+    },
   }),
 }));
 
@@ -153,14 +169,13 @@ describe('PinnedPostCard Component', () => {
       ).toBeTruthy();
 
       // Check date
-      expect(screen.getByText(/Posted on:/)).toBeInTheDocument();
-      expect(screen.getByText(/15th Jan 2024/)).toBeInTheDocument();
+      expect(screen.getByText(/Posted on: 15th Jan 2024/)).toBeInTheDocument();
 
       // Check view button
       expect(screen.getByRole('button', { name: /view/i })).toBeInTheDocument();
 
       // Check image
-      const image = screen.getByAltText('Post image');
+      const image = screen.getByAltText('postImageAlt');
       expect(image).toBeInTheDocument();
       expect(image).toHaveAttribute('src', 'https://example.com/image.jpg');
     });
@@ -183,7 +198,7 @@ describe('PinnedPostCard Component', () => {
         </MockedProvider>,
       );
 
-      const image = screen.getByAltText('Post image');
+      const image = screen.getByAltText('postImageAlt');
       expect(image).toHaveAttribute('src', '/src/assets/images/defaultImg.png');
     });
 

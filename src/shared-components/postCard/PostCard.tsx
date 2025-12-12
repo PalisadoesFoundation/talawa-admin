@@ -190,7 +190,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const [editPost] = useMutation(UPDATE_POST_MUTATION);
   const [deletePost] = useMutation(DELETE_POST_MUTATION);
   const [togglePinPost] = useMutation(TOGGLE_PINNED_POST);
-  let isPinned = Boolean(props.pinnedAt !== null);
+  const isPinned = Boolean(props.pinnedAt !== null);
 
   const handlePostInput = (e: React.ChangeEvent<HTMLInputElement>): void =>
     setPostContent(e.target.value);

@@ -1126,9 +1126,7 @@ describe('PostsPage Component', () => {
       // Should show "No posts found matching" message
       await waitFor(
         () => {
-          expect(
-            screen.getByText(/No posts found matching/i),
-          ).toBeInTheDocument();
+          expect(screen.getByText(/noPostsFoundMatching/i)).toBeInTheDocument();
         },
         { timeout: 5000 },
       );

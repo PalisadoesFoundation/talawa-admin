@@ -787,7 +787,9 @@
     "no": "no",
     "yes": "yes",
     "close": "close",
-    "talawaApiUnavailable": "talawaApiUnavailable"
+    "talawaApiUnavailable": "talawaApiUnavailable",
+    "untitledPost": "Untitled Post",
+    "noContentAvailable": "No Content Available"
   },
   "blockUnblockUser": {
     "title": "Block/Unblock User",
@@ -1129,6 +1131,7 @@
     "comments": "Comments",
     "addComment": "Add Comment",
     "viewPost": "View Post",
+    "view": "View",
     "postDeletedSuccess": "Post deleted successfully.",
     "postPinnedSuccess": "Post pinned successfully.",
     "postUnpinnedSuccess": "Post unpinned successfully.",
@@ -1152,7 +1155,9 @@
     "nothingToShow": "Nothing to show here.",
     "noMorePosts": "No more posts to load.",
     "createPost": "Create Post",
-    "searchTitle": "Search By Title"
+    "searchTitle": "Search By Title",
+    "noPostsFoundMatching": "No posts found matching",
+    "errorLoadingPosts": "Error loading posts"
   },
 
   "home": {

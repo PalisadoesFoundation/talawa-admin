@@ -1087,6 +1087,7 @@
     "likes": "喜欢",
     "comments": "评论",
     "addComment": "添加评论",
+    "view": "查看",
     "postDeletedSuccess": "帖子删除成功。",
     "postPinnedSuccess": "帖子置顶成功。",
     "postUnpinnedSuccess": "帖子取消置顶成功。",
@@ -1110,7 +1111,9 @@
     "nothingToShow": "这里没有可显示的内容。",
     "noMorePosts": "没有更多帖子了",
     "createPost": "创建帖子",
-    "searchTitle": "按标题搜索"
+    "searchTitle": "按标题搜索",
+    "noPostsFoundMatching": "未找到匹配的帖子",
+    "errorLoadingPosts": "加载帖子时出错。请重试。"
   },
   "home": {
     "title": "帖子",

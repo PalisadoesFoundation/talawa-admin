@@ -1,3 +1,34 @@
+/**
+ * Pinned Post Card Component
+ *
+ * This component renders a pinned post card with interactive features including viewing,
+ * editing, deleting, and toggling pin status. It displays post content, creator information,
+ * and provides admin/creator-specific actions through a dropdown menu.
+ *
+ * @param props - The properties for the PinnedPostCard component.
+ * @param props.pinnedPost - The pinned post data containing id, caption, creator, etc.
+ * @param props.onStoryClick - Callback function triggered when the post story is clicked.
+ * @param props.onPostUpdate - Optional callback function triggered after post updates.
+ *
+ * @returns {JSX.Element} A JSX element representing the pinned post card.
+ *
+ * @remarks
+ * - Only administrators can pin/unpin posts
+ * - Post creators and administrators can edit/delete posts
+ * - The component handles post updates, deletions, and pin status changes
+ * - Toast notifications are shown for success/error states
+ * - Uses Apollo Client mutations for backend operations
+ *
+ * @example
+ * ```tsx
+ * <PinnedPostCard
+ *   pinnedPost={postData}
+ *   onStoryClick={handleStoryClick}
+ *   onPostUpdate={handlePostUpdate}
+ * />
+ * ```
+ */
+
 import React from 'react';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
@@ -52,6 +83,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
   const userId = getItem('userId') ?? getItem('id');
   const isAdmin = getItem('role') === 'administrator';
   const isPostCreator = pinnedPost.node?.creator?.id === userId;
+  const canManage = Boolean(isAdmin || isPostCreator);
   const isPinned =
     Boolean(pinnedPost.node?.pinned) || pinnedPost.node?.pinnedAt != null;
 
@@ -130,73 +162,70 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
           </Box>
 
           <Box sx={{ display: 'flex', gap: 0.5 }}>
-            <IconButton size="small" aria-label="share">
+            <IconButton size="small" aria-label={t('pinnedPost')}>
               <PushPin sx={{ fontSize: 20 }} />
             </IconButton>
-            <IconButton
-              size="small"
-              aria-label="more options"
-              onClick={handleDropdownOpen}
-              data-testid="more-options-button"
-            >
-              <MoreVert sx={{ fontSize: 20 }} />
-            </IconButton>
-            <Menu
-              anchorEl={dropdownAnchor}
-              open={Boolean(dropdownAnchor)}
-              onClose={handleDropdownClose}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              PaperProps={{
-                sx: {
-                  minWidth: '150px',
-                  '& .MuiMenuItem-root': {
-                    px: 2,
-                    py: 1,
-                  },
-                },
-              }}
-            >
-              {isAdmin && (
-                <MenuItem
-                  onClick={handleTogglePin}
-                  data-testid="pin-post-menu-item"
+            {canManage && (
+              <>
+                <IconButton
+                  size="small"
+                  aria-label="more options"
+                  onClick={handleDropdownOpen}
+                  data-testid="more-options-button"
+                  aria-haspopup="menu"
+                  aria-expanded={Boolean(dropdownAnchor)}
                 >
-                  <ListItemIcon>
-                    {isPinned ? (
-                      <PushPinOutlined fontSize="small" />
-                    ) : (
-                      <PushPin fontSize="small" />
-                    )}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={isPinned ? t('unpinPost') : t('pinPost')}
-                  />
-                </MenuItem>
-              )}
+                  <MoreVert sx={{ fontSize: 20 }} />
+                </IconButton>
+                <Menu
+                  anchorEl={dropdownAnchor}
+                  open={Boolean(dropdownAnchor)}
+                  onClose={handleDropdownClose}
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                  transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                  PaperProps={{
+                    sx: {
+                      minWidth: '150px',
+                      '& .MuiMenuItem-root': { px: 2, py: 1 },
+                    },
+                  }}
+                >
+                  {isAdmin && (
+                    <MenuItem
+                      onClick={handleTogglePin}
+                      data-testid="pin-post-menu-item"
+                    >
+                      <ListItemIcon>
+                        {isPinned ? (
+                          <PushPinOutlined fontSize="small" />
+                        ) : (
+                          <PushPin fontSize="small" />
+                        )}
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={isPinned ? t('unpinPost') : t('pinPost')}
+                      />
+                    </MenuItem>
+                  )}
 
-              {(isAdmin || isPostCreator) && (
-                <MenuItem
-                  onClick={handleDeletePost}
-                  data-testid="delete-post-menu-item"
-                >
-                  <ListItemIcon>
-                    <DeleteOutline fontSize="small" color="error" />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={tCommon('delete')}
-                    data-testid="delete-post-button"
-                    primaryTypographyProps={{ color: 'error' }}
-                  />
-                </MenuItem>
-              )}
-            </Menu>
+                  {(isAdmin || isPostCreator) && (
+                    <MenuItem
+                      onClick={handleDeletePost}
+                      data-testid="delete-post-menu-item"
+                    >
+                      <ListItemIcon>
+                        <DeleteOutline fontSize="small" color="error" />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={tCommon('delete')}
+                        data-testid="delete-post-button"
+                        primaryTypographyProps={{ color: 'error' }}
+                      />
+                    </MenuItem>
+                  )}
+                </Menu>
+              </>
+            )}
           </Box>
         </Box>
 
@@ -206,7 +235,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
           component="img"
           height="175"
           image={pinnedPost.node?.imageUrl ?? defaultImg}
-          alt="Post image"
+          alt={t('postImageAlt')}
           sx={{ objectFit: 'cover' }}
           draggable={false}
         />
@@ -224,7 +253,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
               textOverflow: 'ellipsis',
             }}
           >
-            {pinnedPost.node?.caption || 'Untitled Post'}
+            {pinnedPost.node?.caption || t('untitledPost')}
           </Typography>
 
           <Typography
@@ -234,7 +263,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
               fontSize: '12px',
             }}
           >
-            Posted on: {formatDate(pinnedPost.node.createdAt)}
+            {t('postedOn', { date: formatDate(pinnedPost.node.createdAt) })}
           </Typography>
 
           <Typography
@@ -250,7 +279,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
               lineHeight: 1.4,
             }}
           >
-            {pinnedPost.node?.caption || 'No content available'}
+            {pinnedPost.node?.caption || t('noContentAvailable')}
           </Typography>
 
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -259,8 +288,8 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
               startIcon={<Visibility />}
               onClick={() => onStoryClick(pinnedPost.node)}
               sx={{
-                backgroundColor: '#a8c8ec',
-                color: 'white',
+                backgroundColor: '#A8C7FA',
+                color: 'black',
                 textTransform: 'none',
                 borderRadius: 2,
                 px: 3,
@@ -272,7 +301,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
                 },
               }}
             >
-              View
+              {t('view')}
             </Button>
           </Box>
         </CardContent>

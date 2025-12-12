@@ -1087,6 +1087,7 @@
     "likes": "J'aime",
     "comments": "Commentaires",
     "addComment": "Ajouter un commentaire",
+    "view": "Voir",
     "postDeletedSuccess": "Message supprimé avec succès.",
     "postPinnedSuccess": "Message épinglé avec succès.",
     "postUnpinnedSuccess": "Message désépinglé avec succès.",
@@ -1111,7 +1112,9 @@
     "nothingToShow": "Rien à montrer ici.",
     "noMorePosts": "Plus de messages à charger",
     "createPost": "Créer un message",
-    "searchTitle": "Recherche par titre"
+    "searchTitle": "Recherche par titre",
+    "noPostsFoundMatching": "Aucun message trouvé correspondant à",
+    "errorLoadingPosts": "Erreur lors du chargement des messages. Veuillez réessayer."
   },
 
   "home": {
