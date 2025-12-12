@@ -81,6 +81,7 @@ export const ORGANIZATION_PINNED_POST_LIST = gql`
     $before: String
     $first: Int
     $last: Int
+    $userId: ID!
   ) {
     organization(input: $input) {
       id
@@ -94,33 +95,16 @@ export const ORGANIZATION_PINNED_POST_LIST = gql`
             pinnedAt
             downVotesCount
             upVotesCount
+            hasUserVoted(userId: $userId) {
+              hasVoted
+              voteType
+            }
             creator {
               id
               name
               avatarURL
             }
             createdAt
-            comments(first: 10) {
-              edges {
-                node {
-                  id
-                  body
-                  creator {
-                    id
-                    name
-                    avatarURL
-                  }
-                  downVotesCount
-                  upVotesCount
-                }
-              }
-              pageInfo {
-                startCursor
-                endCursor
-                hasNextPage
-                hasPreviousPage
-              }
-            }
           }
           cursor
         }

@@ -94,4 +94,11 @@ export interface InterfacePost {
   attachments?: InterfaceAttachment[];
   imageUrl?: string | null;
   videoUrl?: string | null;
+  hasUserVoted: {
+    hasVoted: boolean;
+    voteType: 'up_vote' | 'down_vote' | null;
+  };
+  upVotesCount: number;
+  downVotesCount: number;
+  commentsCount: number;
 }

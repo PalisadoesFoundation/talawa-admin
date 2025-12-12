@@ -1144,6 +1144,17 @@
     "emptyCommentError": "Please enter a comment before submitting.",
     "unexpectedError": "An unexpected error occurred. Please try again."
   },
+
+  "posts": {
+    "pinnedPosts": "Pinned Posts",
+    "title": "Posts",
+    "searchPosts": "Search posts",
+    "nothingToShow": "Nothing to show here.",
+    "noMorePosts": "No more posts to load.",
+    "createPost": "Create Post",
+    "searchTitle": "Search By Title"
+  },
+
   "home": {
     "posts": "Posts",
     "post": "Post",

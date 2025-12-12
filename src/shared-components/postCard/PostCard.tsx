@@ -20,7 +20,7 @@
  *
  * @returns A JSX.Element representing the post card.
  */
-import React from 'react';
+import React, { useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -76,8 +76,10 @@ import useLocalStorage from '../../utils/useLocalstorage';
 export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
   const { t: tCommon } = useTranslation('common');
-  const isLikedByUser = props.hasUserVoted?.voteType === 'up_vote';
-
+  const [isLikedByUser, setIsLikedByUser] = useState<boolean>(
+    props.hasUserVoted?.voteType === 'up_vote',
+  );
+  const [likeCount, setLikeCount] = useState<number>(props.upVoteCount);
   const [commentInput, setCommentInput] = React.useState('');
   const [showEditPost, setShowEditPost] = React.useState(false);
   const [postContent, setPostContent] = React.useState(props.text);
@@ -206,6 +208,8 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         },
       });
       props.fetchPosts();
+      setIsLikedByUser(!isLikedByUser);
+      setLikeCount(isLikedByUser ? likeCount - 1 : likeCount + 1);
     } catch (error) {
       toast.error(error as string);
     }
@@ -467,7 +471,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       {/* Post Content */}
       <Box className={postCardStyles.postContent}>
         <Typography variant="subtitle2" fontWeight="bold">
-          {props.upVoteCount} {t('likes')}
+          {likeCount} {t('likes')}
         </Typography>
         <Typography variant="body2" className={postCardStyles.caption}>
           <Typography component="span" fontWeight="bold">
@@ -492,7 +496,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             pinnedAt: props.pinnedAt,
             image: props.image,
             video: props.video,
-            hasUserVoted: props.hasUserVoted,
+            hasUserVoted: props.hasUserVoted?.hasVoted,
           }}
         />
       </Box>

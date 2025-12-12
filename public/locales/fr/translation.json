@@ -1103,6 +1103,17 @@
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
     "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer."
   },
+
+  "posts": {
+    "pinnedPosts": "Messages épinglés",
+    "title": "Des postes",
+    "searchPosts": "Rechercher des messages",
+    "nothingToShow": "Rien à montrer ici.",
+    "noMorePosts": "Plus de messages à charger",
+    "createPost": "Créer un message",
+    "searchTitle": "Recherche par titre"
+  },
+
   "home": {
     "posts": "Des postes",
     "post": "Poste",

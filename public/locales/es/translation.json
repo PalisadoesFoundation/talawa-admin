@@ -1103,6 +1103,17 @@
     "emptyCommentError": "Por favor ingrese un comentario antes de enviarlo.",
     "unexpectedError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo."
   },
+
+  "posts": {
+    "pinnedPosts": "Publicaciones fijadas",
+    "title": "Publicaciones",
+    "searchPosts": "Buscar publicaciones",
+    "nothingToShow": "Nada que mostrar aquí.",
+    "noMorePosts": "No hay más publicaciones para cargar.",
+    "createPost": "Crear publicación",
+    "searchTitle": "Buscar por Título"
+  },
+
   "home": {
     "posts": "Publicaciones",
     "post": "Publicación",

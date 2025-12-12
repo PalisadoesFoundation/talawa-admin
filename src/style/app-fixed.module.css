@@ -992,6 +992,7 @@
   min-width: 240px;
   width: auto;
   max-width: 100%;
+  height: fit-content;
 }
 
 .searchBarContainerWithButton {
@@ -2712,7 +2713,7 @@ form label,
 
 .calendar__header {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   justify-content: flex-start;
   gap: 0.75rem;
   flex-wrap: wrap;
@@ -8105,7 +8106,6 @@ form {
 }
 
 .list_box {
-  height: 70vh;
   overflow-y: auto;
   width: auto;
 }

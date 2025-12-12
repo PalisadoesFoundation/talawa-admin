@@ -24,6 +24,14 @@ Defined in: [src/types/Post/interface.ts:89](https://github.com/PalisadoesFounda
 
 ***
 
+### commentsCount
+
+> **commentsCount**: `number`
+
+Defined in: [src/types/Post/interface.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L103)
+
+***
+
 ### createdAt
 
 > **createdAt**: `string`
@@ -37,6 +45,30 @@ Defined in: [src/types/Post/interface.ts:90](https://github.com/PalisadoesFounda
 > `optional` **creator**: [`InterfaceCreator`](InterfaceCreator.md)
 
 Defined in: [src/types/Post/interface.ts:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L93)
+
+***
+
+### downVotesCount
+
+> **downVotesCount**: `number`
+
+Defined in: [src/types/Post/interface.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L102)
+
+***
+
+### hasUserVoted
+
+> **hasUserVoted**: `object`
+
+Defined in: [src/types/Post/interface.ts:97](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L97)
+
+#### hasVoted
+
+> **hasVoted**: `boolean`
+
+#### voteType
+
+> **voteType**: `"up_vote"` \| `"down_vote"`
 
 ***
 
@@ -69,6 +101,14 @@ Defined in: [src/types/Post/interface.ts:92](https://github.com/PalisadoesFounda
 > `optional` **pinnedAt**: `string`
 
 Defined in: [src/types/Post/interface.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L91)
+
+***
+
+### upVotesCount
+
+> **upVotesCount**: `number`
+
+Defined in: [src/types/Post/interface.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L101)
 
 ***
 
