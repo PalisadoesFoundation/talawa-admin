@@ -20,7 +20,7 @@
  *
  * @returns A JSX.Element representing the post card.
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -91,6 +91,11 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const [dropdownAnchor, setDropdownAnchor] =
     React.useState<null | HTMLElement>(null);
 
+  useEffect(() => {
+    setIsLikedByUser(props.hasUserVoted?.voteType === 'up_vote');
+    setLikeCount(props.upVoteCount);
+  }, [props.hasUserVoted?.voteType, props.upVoteCount]);
+
   const commentCount = props.commentCount;
   const { getItem } = useLocalStorage();
   const userId = getItem('userId') ?? getItem('id');
@@ -117,9 +122,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   });
 
   React.useEffect(() => {
-    if (!commentsData?.post?.comments) {
-      return;
-    }
+    if (!commentsData?.post?.comments) return;
 
     const { edges, pageInfo } = commentsData.post.comments;
     setComments(edges.map((edge: InterfaceCommentEdge) => edge.node));
@@ -187,12 +190,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const [editPost] = useMutation(UPDATE_POST_MUTATION);
   const [deletePost] = useMutation(DELETE_POST_MUTATION);
   const [togglePinPost] = useMutation(TOGGLE_PINNED_POST);
-  let isPinned = false;
-
-  // Check if the post is pinned
-  if (props.pinnedAt !== null) {
-    isPinned = true;
-  }
+  let isPinned = Boolean(props.pinnedAt !== null);
 
   const handlePostInput = (e: React.ChangeEvent<HTMLInputElement>): void =>
     setPostContent(e.target.value);
@@ -287,9 +285,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       };
 
       // Only include isPinned if it's changed
-      if (isPinned !== !!props.pinnedAt) {
-        input.isPinned = isPinned;
-      }
+      if (isPinned !== !!props.pinnedAt) input.isPinned = isPinned;
 
       await editPost({
         variables: {
@@ -414,7 +410,6 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                 <ListItemText
                   primary={tCommon('delete')}
                   data-testid="delete-post-button"
-                  primaryTypographyProps={{ color: 'error' }}
                 />
               </MenuItem>
             )}
@@ -488,7 +483,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             postId: props.id,
             text: props.text,
             creator: props.creator,
-            upVoteCount: props.upVoteCount,
+            upVoteCount: likeCount,
             downVoteCount: props.downVoteCount,
             comments: comments,
             commentCount: props.commentCount,
@@ -496,7 +491,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             pinnedAt: props.pinnedAt,
             image: props.image,
             video: props.video,
-            hasUserVoted: props.hasUserVoted?.hasVoted,
+            hasUserVoted: isLikedByUser,
           }}
         />
       </Box>

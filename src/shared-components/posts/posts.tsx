@@ -1,9 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
-import {
-  GET_POSTS_BY_ORG,
-  ORGANIZATION_POST_LIST_WITH_VOTES,
-} from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
@@ -43,7 +40,7 @@ export default function PostsPage() {
     useState<InterfacePost | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const { getItem } = useLocalStorage();
-  const userId = getItem('id');
+  const userId = getItem('userId') ?? getItem('id');
   const [showPinnedPostModal, setShowPinnedPostModal] = useState(false);
 
   const showCreatePostModal = (): void => {
@@ -65,16 +62,6 @@ export default function PostsPage() {
   };
 
   const {
-    data,
-    loading,
-    error,
-    refetch: refetchPosts,
-  } = useQuery(GET_POSTS_BY_ORG, {
-    variables: { input: { organizationId: currentUrl } },
-    fetchPolicy: 'network-only',
-  });
-
-  const {
     data: orgPostListData,
     loading: orgPostListLoading,
     error: orgPostListError,
@@ -83,6 +70,7 @@ export default function PostsPage() {
   } = useQuery<InterfaceOrganizationPostListData>(
     ORGANIZATION_POST_LIST_WITH_VOTES,
     {
+      skip: !currentUrl || !userId,
       variables: {
         input: { id: currentUrl as string },
         userId: userId,
@@ -133,19 +121,32 @@ export default function PostsPage() {
     if (orgPinnedPostListError) toast.error(t('pinnedPostsLoadError'));
   }, [orgPinnedPostListError, t]);
 
-  // Sort posts when data or sorting option changes
+  // Sort posts when allPosts or sorting option changes
   useEffect(() => {
-    if (sortingOption !== 'None' && data?.postsByOrganization) {
-      const posts = [...data.postsByOrganization];
+    if (sortingOption !== 'None' && allPosts.length > 0) {
+      const posts = [...allPosts];
       const sorted = posts.sort((a, b) => {
         const dateA = new Date(a.createdAt).getTime();
         const dateB = new Date(b.createdAt).getTime();
         return sortingOption === 'oldest' ? dateA - dateB : dateB - dateA;
       });
       setAllPosts(sorted);
-      setHasMore(false); // When sorting, we have all posts loaded
+      // When sorting, disable infinite scroll since we're reordering
+      setHasMore(false);
+    } else if (
+      sortingOption === 'None' &&
+      orgPostListData?.organization?.posts?.edges
+    ) {
+      // Reset to original order when 'None' is selected
+      const posts = orgPostListData.organization.posts.edges.map(
+        (edge: InterfacePostEdge) => edge.node,
+      );
+      setAllPosts(posts);
+      setHasMore(
+        orgPostListData.organization.posts.pageInfo?.hasNextPage ?? false,
+      );
     }
-  }, [data, sortingOption]);
+  }, [allPosts.length, sortingOption, orgPostListData]);
 
   // Infinite scroll - load more posts
   const loadMorePosts = useCallback((): void => {
@@ -201,24 +202,17 @@ export default function PostsPage() {
     setSearchTerm(term);
 
     try {
-      const { data: searchData } = await refetchPosts({
-        input: { organizationId: currentUrl },
-      });
-
       if (!term.trim()) {
         setIsFiltering(false);
         setFilteredPosts([]);
         return;
       }
 
-      if (searchData?.postsByOrganization) {
-        setIsFiltering(true);
-        const filtered = searchData.postsByOrganization.filter(
-          (post: InterfacePost) =>
-            post.caption?.toLowerCase().includes(term.toLowerCase()),
-        );
-        setFilteredPosts(filtered);
-      }
+      setIsFiltering(true);
+      const filtered = allPosts.filter((post: InterfacePost) =>
+        post.caption?.toLowerCase().includes(term.toLowerCase()),
+      );
+      setFilteredPosts(filtered);
     } catch {
       toast.error('Error searching posts');
       setIsFiltering(false);
@@ -229,16 +223,24 @@ export default function PostsPage() {
     setSortingOption(option as string);
 
     if (option === 'None') {
-      // Reset to paginated data
-      refetch();
+      // Reset to original paginated order
+      if (orgPostListData?.organization?.posts?.edges) {
+        const posts = orgPostListData.organization.posts.edges.map(
+          (edge: InterfacePostEdge) => edge.node,
+        );
+        setAllPosts(posts);
+        setHasMore(
+          orgPostListData.organization.posts.pageInfo?.hasNextPage ?? false,
+        );
+      }
       return;
     }
 
-    if (!data?.postsByOrganization) {
+    if (allPosts.length === 0) {
       return;
     }
 
-    const posts = [...data.postsByOrganization];
+    const posts = [...allPosts];
     const sorted = posts.sort((a, b) => {
       const dateA = new Date(a.createdAt).getTime();
       const dateB = new Date(b.createdAt).getTime();
@@ -251,7 +253,6 @@ export default function PostsPage() {
 
   const handleRefetch = async (): Promise<void> => {
     await refetch();
-    await refetchPosts({ input: { organizationId: currentUrl } });
   };
 
   // Helper function to format post data for PostCard
@@ -262,16 +263,16 @@ export default function PostsPage() {
       name: post.creator?.name ?? 'Unknown User',
       avatarURL: post.creator?.avatarURL,
     },
-    hasUserVoted: post.hasUserVoted,
+    hasUserVoted: post.hasUserVoted ?? { hasVoted: false, voteType: null },
     postedAt: new Date(post.createdAt).toLocaleDateString(),
     pinnedAt: post.pinnedAt ?? null,
     image: post.imageUrl ?? post.attachments?.[0]?.url ?? null,
     video: post.videoUrl ?? null,
     title: post.caption ?? '',
     text: post.caption ?? '',
-    commentCount: post.commentsCount,
-    upVoteCount: post.upVotesCount,
-    downVoteCount: post.downVotesCount,
+    commentCount: post.commentsCount ?? 0,
+    upVoteCount: post.upVotesCount ?? 0,
+    downVoteCount: post.downVotesCount ?? 0,
     fetchPosts: handleRefetch,
   });
 
@@ -324,12 +325,14 @@ export default function PostsPage() {
           <div className={`row ${styles.list_box}`}>
             <div
               data-testid="posts-renderer"
-              data-loading={String(loading)}
+              data-loading={String(orgPostListLoading)}
               data-is-filtering={String(isFiltering)}
               data-sorting-option={sortingOption}
               id="posts-scroll-container"
             >
-              {error && <div data-testid="not-found">Error loading posts</div>}
+              {orgPostListError && (
+                <div data-testid="not-found">Error loading posts</div>
+              )}
 
               {/* Pinned Posts Carousel */}
               {pinnedPosts.length > 0 && !isFiltering && (
@@ -391,11 +394,15 @@ export default function PostsPage() {
               )}
 
               {/* Empty State */}
-              {postsToDisplay.length === 0 && !loading && !isFiltering && (
-                <Box sx={{ textAlign: 'center', py: 4 }}>
-                  <Typography color="text.secondary">{t('noPosts')}</Typography>
-                </Box>
-              )}
+              {postsToDisplay.length === 0 &&
+                !orgPostListLoading &&
+                !isFiltering && (
+                  <Box sx={{ textAlign: 'center', py: 4 }}>
+                    <Typography color="text.secondary">
+                      {t('noPosts')}
+                    </Typography>
+                  </Box>
+                )}
             </div>
           </div>
         </div>

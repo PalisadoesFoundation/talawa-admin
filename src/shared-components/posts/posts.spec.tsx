@@ -100,7 +100,11 @@ vi.mock('shared-components/postCard/PostCard', () => ({
     <div data-testid="post-card" data-post-id={id}>
       <span data-testid="post-title">{title}</span>
       <span data-testid="creator-name">{creator?.name}</span>
-      <button data-testid={`refetch-btn-${id}`} onClick={fetchPosts}>
+      <button
+        type="button"
+        data-testid={`refetch-btn-${id}`}
+        onClick={fetchPosts}
+      >
         Refetch
       </button>
     </div>
@@ -119,6 +123,7 @@ vi.mock('shared-components/pinnedPosts/pinnedPostsLayout', () => ({
     <div data-testid="pinned-posts-layout">
       {pinnedPosts.map((edge) => (
         <button
+          type="button"
           key={edge.node.id}
           data-testid={`pinned-post-${edge.node.id}`}
           onClick={() => onStoryClick(edge.node)}
@@ -194,7 +199,7 @@ vi.mock('screens/OrgPost/CreatePostModal', () => ({
   }) =>
     show ? (
       <div data-testid="create-post-modal">
-        <button data-testid="close-create-modal" onClick={onHide}>
+        <button type="button" data-testid="close-create-modal" onClick={onHide}>
           Close
         </button>
       </div>
@@ -223,12 +228,16 @@ vi.mock('react-infinite-scroll-component', () => ({
       {children}
       {hasMore && loader}
       {!hasMore && endMessage}
-      <button data-testid="load-more-btn" onClick={next}>
+      <button type="button" data-testid="load-more-btn" onClick={next}>
         Load More
       </button>
     </div>
   ),
 }));
+
+// Deterministic values for stable testing
+let nextId = 1;
+const FIXED_TIMESTAMP = '2024-01-15T12:00:00.000Z';
 
 // Helper function to enrich post node
 const enrichPostNode = (
@@ -249,10 +258,10 @@ const enrichPostNode = (
     videoUrl: string | null;
   }>,
 ) => ({
-  id: post.id ?? `post-${Math.random()}`,
+  id: post.id ?? `post-${nextId++}`,
   caption: post.caption ?? 'Test Caption',
-  createdAt: post.createdAt ?? new Date().toISOString(),
-  updatedAt: post.createdAt ?? new Date().toISOString(),
+  createdAt: post.createdAt ?? FIXED_TIMESTAMP,
+  updatedAt: post.createdAt ?? FIXED_TIMESTAMP,
   pinnedAt: post.pinnedAt ?? null,
   pinned: post.pinned ?? false,
   attachments: post.attachments ?? [],

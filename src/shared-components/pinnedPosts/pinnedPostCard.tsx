@@ -28,7 +28,9 @@ import { InterfacePost, InterfacePostEdge } from 'types/Post/interface';
 import { DELETE_POST_MUTATION } from '../../GraphQl/Mutations/mutations';
 import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutations';
 import { errorHandler } from '../../utils/errorHandler';
+import { formatDate } from '../../utils/dateFormatter';
 import useLocalStorage from '../../utils/useLocalstorage';
+import defaultImg from '../../assets/images/defaultImg.png';
 
 interface InterfacePinnedPostCardProps {
   pinnedPost: InterfacePostEdge;
@@ -44,7 +46,6 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
   const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
   const { t: tCommon } = useTranslation('common');
   const { getItem } = useLocalStorage();
-  console.log('pinnedPost.node', pinnedPost.node);
   const [dropdownAnchor, setDropdownAnchor] =
     React.useState<null | HTMLElement>(null);
 
@@ -52,21 +53,10 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
   const isAdmin = getItem('role') === 'administrator';
   const isPostCreator = pinnedPost.node?.creator?.id === userId;
   const isPinned =
-    pinnedPost.node?.pinned || pinnedPost.node?.pinnedAt !== null;
+    Boolean(pinnedPost.node?.pinned) || pinnedPost.node?.pinnedAt != null;
 
   const [deletePost] = useMutation(DELETE_POST_MUTATION);
   const [togglePinPost] = useMutation(TOGGLE_PINNED_POST);
-
-  // Format date
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const options: Intl.DateTimeFormatOptions = {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    };
-    return date.toLocaleDateString('en-US', options);
-  };
 
   // Dropdown menu handlers
   const handleDropdownOpen = (event: React.MouseEvent<HTMLElement>): void => {
@@ -215,9 +205,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
         <CardMedia
           component="img"
           height="175"
-          image={
-            pinnedPost.node?.imageUrl ?? '/src/assets/images/defaultImg.png'
-          }
+          image={pinnedPost.node?.imageUrl ?? defaultImg}
           alt="Post image"
           sx={{ objectFit: 'cover' }}
           draggable={false}
@@ -246,7 +234,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
               fontSize: '12px',
             }}
           >
-            Posted on: {formatDate(pinnedPost.node?.createdAt)}
+            Posted on: {formatDate(pinnedPost.node.createdAt)}
           </Typography>
 
           <Typography

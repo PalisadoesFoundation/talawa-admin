@@ -25,7 +25,6 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
   onStoryClick,
   onPostUpdate,
 }) => {
-  console.log(pinnedPosts);
   return (
     <Carousel
       responsive={storiesResponsive}
@@ -35,8 +34,8 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
       infinite={false}
       keyBoardControl
     >
-      {pinnedPosts.map((pinnedPost, index) => (
-        <div key={pinnedPost.node.id || index}>
+      {pinnedPosts.map((pinnedPost) => (
+        <div key={pinnedPost.node.id}>
           <PinnedPostCard
             pinnedPost={pinnedPost}
             onStoryClick={onStoryClick}

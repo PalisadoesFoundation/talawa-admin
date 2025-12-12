@@ -54,7 +54,7 @@ const deletePostMock = {
   },
   result: {
     data: {
-      removePost: {
+      deletePost: {
         id: 'post-1',
       },
     },
@@ -154,7 +154,7 @@ describe('PinnedPostCard Component', () => {
 
       // Check date
       expect(screen.getByText(/Posted on:/)).toBeInTheDocument();
-      expect(screen.getByText(/January 15, 2024/)).toBeInTheDocument();
+      expect(screen.getByText(/15th Jan 2024/)).toBeInTheDocument();
 
       // Check view button
       expect(screen.getByRole('button', { name: /view/i })).toBeInTheDocument();

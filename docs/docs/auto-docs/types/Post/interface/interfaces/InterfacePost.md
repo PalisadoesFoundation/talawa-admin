@@ -24,9 +24,9 @@ Defined in: [src/types/Post/interface.ts:89](https://github.com/PalisadoesFounda
 
 ***
 
-### commentsCount
+### commentsCount?
 
-> **commentsCount**: `number`
+> `optional` **commentsCount**: `number`
 
 Defined in: [src/types/Post/interface.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L103)
 
@@ -48,17 +48,17 @@ Defined in: [src/types/Post/interface.ts:93](https://github.com/PalisadoesFounda
 
 ***
 
-### downVotesCount
+### downVotesCount?
 
-> **downVotesCount**: `number`
+> `optional` **downVotesCount**: `number`
 
 Defined in: [src/types/Post/interface.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L102)
 
 ***
 
-### hasUserVoted
+### hasUserVoted?
 
-> **hasUserVoted**: `object`
+> `optional` **hasUserVoted**: `object`
 
 Defined in: [src/types/Post/interface.ts:97](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L97)
 
@@ -104,9 +104,9 @@ Defined in: [src/types/Post/interface.ts:91](https://github.com/PalisadoesFounda
 
 ***
 
-### upVotesCount
+### upVotesCount?
 
-> **upVotesCount**: `number`
+> `optional` **upVotesCount**: `number`
 
 Defined in: [src/types/Post/interface.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L101)
 
