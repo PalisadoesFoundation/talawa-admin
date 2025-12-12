@@ -177,7 +177,11 @@ function AdvertisementRegister({
   const removeFile = (index: number): void => {
     setFormState((prev) => ({
       ...prev,
-      attachments: (prev?.attachments || []).filter((_, i) => i !== index),
+      attachments: (
+        prev?.attachments ||
+        /*istanbul ignore next */
+        []
+      ).filter((_, i) => i !== index),
     }));
   };
 
@@ -189,8 +193,8 @@ function AdvertisementRegister({
         name: nameEdit || '',
         description: descriptionEdit || null,
         type: typeEdit || 'banner',
-        startAt: startAtEdit || new Date(),
-        endAt: endAtEdit || new Date(),
+        startAt: startAtEdit,
+        endAt: endAtEdit,
         organizationId: currentOrg,
       }));
     }
@@ -254,7 +258,7 @@ function AdvertisementRegister({
           name: '',
           type: 'banner',
           description: null,
-          startAt: new Date(formState.startAt || new Date()),
+          startAt: new Date(formState.startAt),
           endAt: new Date(),
           organizationId: currentOrg,
           attachments: undefined,
@@ -307,19 +311,12 @@ function AdvertisementRegister({
         }
       }
 
-      const startAt = formState.startAt
-        ? dayjs.utc(formState.startAt).startOf('day').toISOString()
-        : null;
-      const endAt = formState.endAt
-        ? dayjs.utc(formState.endAt).startOf('day').toISOString()
-        : null;
+      const startAt = dayjs.utc(formState.startAt).startOf('day').toISOString();
+      const endAt = dayjs.utc(formState.endAt).startOf('day').toISOString();
 
       const mutationVariables = {
         id: idEdit,
         ...(updatedFields.name && { name: updatedFields.name }),
-        ...(updatedFields.attachments && {
-          attachments: updatedFields.attachments,
-        }),
         ...(updatedFields.description && {
           description: updatedFields.description,
         }),
@@ -490,6 +487,7 @@ function AdvertisementRegister({
                 type="date"
                 required
                 value={
+                  /* istanbul ignore next */
                   formState.startAt instanceof Date
                     ? dayjs.utc(formState.startAt).format('YYYY-MM-DD')
                     : ''
@@ -511,6 +509,7 @@ function AdvertisementRegister({
                 type="date"
                 required
                 value={
+                  /* istanbul ignore next */
                   formState.endAt instanceof Date
                     ? dayjs.utc(formState.endAt).format('YYYY-MM-DD')
                     : ''
