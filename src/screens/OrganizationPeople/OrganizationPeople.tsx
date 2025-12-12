@@ -250,7 +250,16 @@ function OrganizationPeople(): JSX.Element {
   const handlePaginationModelChange = async (
     newPaginationModel: GridPaginationModel,
   ) => {
-    const isForwardNavigation = newPaginationModel.page > paginationModel.page;
+    const currentPage = paginationModel.page;
+    const targetPage = newPaginationModel.page;
+
+    // Page size changes (or no-op page changes) should not attempt cursor navigation.
+    if (targetPage === currentPage) {
+      setPaginationModel(newPaginationModel);
+      return;
+    }
+
+    const isForwardNavigation = targetPage > currentPage;
 
     // Check if navigation is allowed
     if (isForwardNavigation && !paginationMeta.hasNextPage) {
@@ -260,21 +269,38 @@ function OrganizationPeople(): JSX.Element {
       return; // Prevent navigation if there's no previous page
     }
 
-    const currentPage = paginationModel.page;
-    const currentPageCursors = pageCursors.current[currentPage];
-
     const variables: IQueryVariable = { orgId: currentUrl };
 
     if (isForwardNavigation) {
-      // Forward navigation uses "after" with the endCursor of the current page
+      // Forward navigation uses "after" with the endCursor of the page just before the target.
+      // This supports a single-step next-page navigation and optionally a jump *only* when we
+      // already have cursor state for the page preceding the target.
+      const cursorSourcePage =
+        targetPage === currentPage + 1 ? currentPage : targetPage - 1;
+      const afterCursor = pageCursors.current[cursorSourcePage]?.endCursor;
+
+      if (afterCursor == null) {
+        // Prevent navigation if we don't have a cursor chain for the requested page.
+        return;
+      }
+
       variables.first = PAGE_SIZE;
-      variables.after = currentPageCursors?.endCursor;
+      variables.after = afterCursor;
       variables.last = null;
       variables.before = null;
     } else {
-      // Backward navigation uses "before" with the startCursor of the current page
+      // Backward navigation uses "before" with the startCursor of the page just after the target.
+      const cursorSourcePage =
+        targetPage === currentPage - 1 ? currentPage : targetPage + 1;
+      const beforeCursor = pageCursors.current[cursorSourcePage]?.startCursor;
+
+      if (beforeCursor == null) {
+        // Prevent navigation if we don't have a cursor chain for the requested page.
+        return;
+      }
+
       variables.last = PAGE_SIZE;
-      variables.before = currentPageCursors?.startCursor;
+      variables.before = beforeCursor;
       variables.first = null;
       variables.after = null;
     }

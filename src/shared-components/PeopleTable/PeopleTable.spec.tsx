@@ -138,16 +138,18 @@ describe('PeopleTable Component', () => {
     const expectedErrorMessage =
       'PeopleTable: Row is missing a unique identifier (_id or id).';
 
-    expect(() =>
-      render(
-        <PeopleTable
-          {...defaultProps}
-          rows={[{ name: 'No Id User', email: 'noid@example.com' }]}
-        />,
-      ),
-    ).toThrow(expectedErrorMessage);
-
-    consoleErrorSpy.mockRestore();
+    try {
+      expect(() =>
+        render(
+          <PeopleTable
+            {...defaultProps}
+            rows={[{ name: 'No Id User', email: 'noid@example.com' }]}
+          />,
+        ),
+      ).toThrow(expectedErrorMessage);
+    } finally {
+      consoleErrorSpy.mockRestore();
+    }
   });
 
   it('renders with custom slots', () => {
