@@ -195,7 +195,7 @@ export default function People(): React.JSX.Element {
     () => [
       {
         field: 'sno',
-        headerName: 'S.No', // Using string directly or tCommon if available. tCommon is available.
+        headerName: tCommon('sNo'),
         width: 70,
         sortable: false,
         align: 'center',
@@ -203,7 +203,7 @@ export default function People(): React.JSX.Element {
       },
       {
         field: 'image',
-        headerName: 'Avatar',
+        headerName: tCommon('avatar'),
         width: 100,
         sortable: false,
         align: 'center',
@@ -238,7 +238,7 @@ export default function People(): React.JSX.Element {
       },
       {
         field: 'name',
-        headerName: 'Name',
+        headerName: tCommon('name'),
         flex: 1,
         sortable: false,
         align: 'center',
@@ -246,7 +246,7 @@ export default function People(): React.JSX.Element {
       },
       {
         field: 'email',
-        headerName: 'Email',
+        headerName: tCommon('email'),
         flex: 1,
         sortable: false,
         align: 'center',
@@ -254,7 +254,7 @@ export default function People(): React.JSX.Element {
       },
       {
         field: 'role',
-        headerName: 'Role',
+        headerName: tCommon('role'),
         flex: 1,
         sortable: false,
         align: 'center',
@@ -266,7 +266,7 @@ export default function People(): React.JSX.Element {
         ),
       },
     ],
-    [],
+    [tCommon],
   );
 
   const rows = useMemo(

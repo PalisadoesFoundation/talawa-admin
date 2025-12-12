@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`IPeopleTableProps`](../../../../types/PeopleTable/interface/interfaces/IPeopleTableProps.md)\>
 
-Defined in: [src/components/PeopleTable/PeopleTable.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/PeopleTable/PeopleTable.tsx#L17)
+Defined in: [src/components/PeopleTable/PeopleTable.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/PeopleTable/PeopleTable.tsx#L18)
 
 PeopleTable Component
 

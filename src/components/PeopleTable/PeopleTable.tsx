@@ -1,4 +1,5 @@
 import React from 'react';
+import { alpha } from '@mui/material/styles';
 import { DataGrid } from '@mui/x-data-grid';
 import { IPeopleTableProps } from '../../types/PeopleTable/interface';
 import styles from './PeopleTable.module.css';
@@ -24,6 +25,7 @@ const PeopleTable: React.FC<IPeopleTableProps> = ({
   pageSizeOptions = [5, 10, 20],
   slots,
   paginationMeta,
+  getRowId,
 }) => {
   return (
     <div className={styles.tableContainer}>
@@ -37,12 +39,23 @@ const PeopleTable: React.FC<IPeopleTableProps> = ({
         paginationMeta={paginationMeta}
         onPaginationModelChange={onPaginationModelChange}
         pageSizeOptions={pageSizeOptions}
-        getRowId={(row) => row._id || row.id}
+        getRowId={
+          getRowId ||
+          ((row) => {
+            const id = row._id || row.id;
+            if (!id) {
+              throw new Error(
+                'PeopleTable: Row is missing a unique identifier (_id or id).',
+              );
+            }
+            return id;
+          })
+        }
         disableRowSelectionOnClick
         autoHeight
         slots={slots}
         disableColumnMenu
-        sx={{
+        sx={(theme) => ({
           border: 0,
           '& .MuiDataGrid-columnHeaders': {
             backgroundColor: 'var(--tableHeader-bg)',
@@ -50,22 +63,22 @@ const PeopleTable: React.FC<IPeopleTableProps> = ({
             fontSize: 'var(--font-size-header)',
           },
           '& .MuiDataGrid-cell': {
-            borderBottom: '1px solid #f0f0f0',
+            borderBottom: `1px solid ${theme.palette.divider}`,
             display: 'flex',
             alignItems: 'center',
           },
           '& .MuiDataGrid-row': {
             backgroundColor: 'var(--tablerow-bg-color)',
             '&:focus-within': {
-              outline: '2px solid #000',
+              outline: `2px solid ${theme.palette.text.primary}`,
               outlineOffset: '-2px',
             },
           },
           '& .MuiDataGrid-row:hover': {
             backgroundColor: 'var(--grey-bg-color)',
-            boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
+            boxShadow: `0 0 0 1px ${alpha(theme.palette.text.primary, 0.1)}`,
           },
-        }}
+        })}
       />
     </div>
   );
