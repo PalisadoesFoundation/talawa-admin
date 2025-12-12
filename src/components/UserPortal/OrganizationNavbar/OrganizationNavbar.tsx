@@ -47,7 +47,7 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
-import { Link, useNavigate, useParams } from 'react-router';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 interface InterfaceNavbarProps {
   currentPage: string | null;

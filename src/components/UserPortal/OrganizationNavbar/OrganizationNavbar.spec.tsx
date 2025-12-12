@@ -3,7 +3,11 @@ import { MockedProvider } from '@apollo/react-testing';
 import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Router } from 'react-router';
+import {
+  BrowserRouter,
+  RouterProvider,
+  createMemoryRouter,
+} from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import cookies from 'js-cookie';
@@ -13,7 +17,6 @@ import OrganizationNavbar from './OrganizationNavbar';
 import userEvent from '@testing-library/user-event';
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 
-import { createMemoryHistory } from 'history';
 import { vi } from 'vitest';
 
 /**
@@ -100,8 +103,8 @@ const navbarProps = {
   currentPage: 'home',
 };
 
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
   return {
     ...actual,
     useParams: () => ({ orgId: organizationId }),
@@ -127,11 +130,13 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     await act(async () => {
       await i18nForTest.changeLanguage('en');
     });
+
+    vi.clearAllMocks();
   });
 
   it('Component should be rendered properly', async () => {
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -152,7 +157,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
   it('The language is switched to English', async () => {
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -179,7 +184,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
   it('The language is switched to fr', async () => {
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -203,7 +208,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
   it('The language is switched to hi', async () => {
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -227,7 +232,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
   it('The language is switched to es', async () => {
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -251,7 +256,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
 
   it('The language is switched to zh', async () => {
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -298,7 +303,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
       writable: true,
     });
     render(
-      <MockedProvider link={link}>
+      <MockedProvider addTypename={false} link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -316,25 +321,35 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
   });
 
   it('Should navigate to home page on home link click', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/initial'],
-    });
-    render(
-      <MockedProvider link={link}>
-        <Router location={history.location} navigator={history}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrganizationNavbar {...navbarProps} />
-            </I18nextProvider>
-          </Provider>
-        </Router>
-      </MockedProvider>,
+    const router = createMemoryRouter(
+      [
+        {
+          path: '/user/organization/:orgId',
+          element: (
+            <MockedProvider addTypename={false} link={link}>
+              <Provider store={store}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <OrganizationNavbar {...navbarProps} />
+                </I18nextProvider>
+              </Provider>
+            </MockedProvider>
+          ),
+        },
+      ],
+      {
+        initialEntries: [`/user/organization/${organizationId}`],
+      },
     );
+
+    render(<RouterProvider router={router} />);
+
     const homeLink = screen.getByText('Home');
     expect(homeLink).toBeInTheDocument();
+
     await userEvent.click(homeLink);
+
     await wait();
-    expect(history.location.pathname).toBe(
+    expect(router.state.location.pathname).toBe(
       `/user/organization/${organizationId}`,
     );
   });
