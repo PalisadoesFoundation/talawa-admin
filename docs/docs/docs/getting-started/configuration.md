@@ -12,15 +12,14 @@ It's important to configure Talawa-Admin. Here's how to do it.
 You can use our interactive setup script for the configuration. Use the following command for the same.
 
 ```bash
-pnpm run setup
+npm run setup
 ```
 
 All the options in "setup" can be done manually as well and this is covered in a section below.
 
 ## Manual Setup
 
-The setup script only modifies the most common configuration parameters. This section explains how to manually edit these values.
-
+The setup script only modifies the most common configuration parameters. This section explains how to manually edit these values.                               
 ### The .env Configuration File
 
 A file named .env is required in the root directory of talawa-admin for storing environment variables used at runtime. It is not a part of the repo and you will have to create it. For a sample of `.env` file there is a file named `.env.example` in the root directory. Create a new `.env` file by copying the contents of the `.env.example` into `.env` file. Use this command:
@@ -37,14 +36,33 @@ This `.env` file must be populated with the following environment variables for 
 | Variable                        | Description                                       |
 | ------------------------------- | ------------------------------------------------- |
 | PORT                            | Custom port for Talawa-Admin development purposes |
+| USE_DOCKER                      | Whether you want to use Docker or not             |
+| DOCKER_PORT                     | Port to use when running with Docker              |
 | REACT_APP_TALAWA_URL            | URL endpoint for talawa-api graphql service       |
 | REACT_APP_BACKEND_WEBSOCKET_URL | URL endpoint for websocket end point              |
 | REACT_APP_USE_RECAPTCHA         | Whether you want to use reCAPTCHA or not          |
 | REACT_APP_RECAPTCHA_SITE_KEY    | Site key for authentication using reCAPTCHA       |
+| ALLOW_LOGS                      | Whether you want to see logs in the console       |
 
 #### Setting up PORT in .env file
 
-Add a custom port number for Talawa-Admin development purposes to the variable named `PORT` in the `.env` file.
+Add a custom port number for Talawa-Admin development purposes to the variable named `PORT` in the `.env` file. This is skipped if `USE_DOCKER` is set to "YES".
+
+#### Setting up USE_DOCKER in .env file
+
+Set `USE_DOCKER` to "YES" if you want to run the application using Docker. Otherwise, set it to "NO".
+
+```
+USE_DOCKER="YES"
+```
+
+#### Setting up DOCKER_PORT in .env file
+
+If `USE_DOCKER` is enabled, specifying the port number for the Docker container in the `DOCKER_PORT` variable is required.
+
+```
+DOCKER_PORT="3000"
+```
 
 #### Setting up REACT_APP_TALAWA_URL in .env file
 
