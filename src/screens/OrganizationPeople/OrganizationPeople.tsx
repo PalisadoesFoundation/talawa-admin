@@ -550,11 +550,6 @@ function OrganizationPeople(): JSX.Element {
                 {t('notFound')}
               </Stack>
             ),
-            noResultsOverlay: () => (
-              <Stack height="100%" alignItems="center" justifyContent="center">
-                {t('notFound')}
-              </Stack>
-            ),
           }}
         />
       </div>

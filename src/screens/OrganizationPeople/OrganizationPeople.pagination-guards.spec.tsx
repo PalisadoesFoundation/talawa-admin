@@ -116,6 +116,21 @@ vi.mock('shared-components/PeopleTable/PeopleTable', () => ({
         </button>
         <button
           type="button"
+          aria-label="same page"
+          onClick={() =>
+            onPaginationModelChange(
+              {
+                page: safePaginationModel.page,
+                pageSize: safePaginationModel.pageSize,
+              },
+              {} as GridCallbackDetails<'pagination'>,
+            )
+          }
+        >
+          same page
+        </button>
+        <button
+          type="button"
           aria-label="next page"
           onClick={() =>
             onPaginationModelChange(
@@ -128,6 +143,36 @@ vi.mock('shared-components/PeopleTable/PeopleTable', () => ({
           }
         >
           next page
+        </button>
+        <button
+          type="button"
+          aria-label="jump forward"
+          onClick={() =>
+            onPaginationModelChange(
+              {
+                page: safePaginationModel.page + 2,
+                pageSize: safePaginationModel.pageSize,
+              },
+              {} as GridCallbackDetails<'pagination'>,
+            )
+          }
+        >
+          jump forward
+        </button>
+        <button
+          type="button"
+          aria-label="jump backward"
+          onClick={() =>
+            onPaginationModelChange(
+              {
+                page: safePaginationModel.page - 2,
+                pageSize: safePaginationModel.pageSize,
+              },
+              {} as GridCallbackDetails<'pagination'>,
+            )
+          }
+        >
+          jump backward
         </button>
         {safeRows.map((row, index) => {
           const typedRow = row as { _id?: string; id?: string; name?: string };
@@ -204,6 +249,183 @@ const createMemberConnectionMock = (
 describe('OrganizationPeople pagination guards', () => {
   afterEach(() => {
     vi.clearAllMocks();
+  });
+
+  test('does not refetch on no-op page change', async () => {
+    let operationCount = 0;
+    const singlePageMock = createMemberConnectionMock(
+      {
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      },
+      {
+        hasNextPage: true,
+        hasPreviousPage: false,
+        startCursor: 'cursor1',
+        endCursor: 'cursor1',
+      },
+    );
+
+    const mockLink = mockSingleLink(singlePageMock);
+    const operationCountLink = new ApolloLink((operation, forward) => {
+      if (isMemberConnectionOperation(operation)) {
+        operationCount += 1;
+      }
+      return forward ? forward(operation) : null;
+    });
+
+    const client = new ApolloClient({
+      cache: new InMemoryCache(),
+      link: ApolloLink.from([operationCountLink, mockLink]),
+    });
+
+    render(
+      <ApolloProvider client={client}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </ApolloProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const operationCountAfterInitialLoad = operationCount;
+
+    fireEvent.click(screen.getByRole('button', { name: /same page/i }));
+
+    expect(operationCount).toBe(operationCountAfterInitialLoad);
+  });
+
+  test('blocks forward jumps when cursor chain is missing', async () => {
+    let operationCount = 0;
+    const initialMock = createMemberConnectionMock(
+      {
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      },
+      {
+        hasNextPage: true,
+        hasPreviousPage: false,
+        startCursor: 'cursor1',
+        endCursor: 'cursor1',
+      },
+    );
+
+    const mockLink = mockSingleLink(initialMock);
+    const operationCountLink = new ApolloLink((operation, forward) => {
+      if (isMemberConnectionOperation(operation)) {
+        operationCount += 1;
+      }
+      return forward ? forward(operation) : null;
+    });
+
+    const client = new ApolloClient({
+      cache: new InMemoryCache(),
+      link: ApolloLink.from([operationCountLink, mockLink]),
+    });
+
+    render(
+      <ApolloProvider client={client}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </ApolloProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const operationCountAfterInitialLoad = operationCount;
+
+    fireEvent.click(screen.getByRole('button', { name: /jump forward/i }));
+
+    expect(operationCount).toBe(operationCountAfterInitialLoad);
+  });
+
+  test('blocks backward jumps when cursor chain is missing', async () => {
+    let operationCount = 0;
+    const initialMock = createMemberConnectionMock(
+      {
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      },
+      {
+        hasNextPage: false,
+        hasPreviousPage: true,
+        startCursor: 'cursor1',
+        endCursor: 'cursor1',
+      },
+    );
+
+    const mockLink = mockSingleLink(initialMock);
+    const operationCountLink = new ApolloLink((operation, forward) => {
+      if (isMemberConnectionOperation(operation)) {
+        operationCount += 1;
+      }
+      return forward ? forward(operation) : null;
+    });
+
+    const client = new ApolloClient({
+      cache: new InMemoryCache(),
+      link: ApolloLink.from([operationCountLink, mockLink]),
+    });
+
+    render(
+      <ApolloProvider client={client}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </ApolloProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const operationCountAfterInitialLoad = operationCount;
+
+    fireEvent.click(screen.getByRole('button', { name: /jump backward/i }));
+
+    expect(operationCount).toBe(operationCountAfterInitialLoad);
   });
 
   test('blocks forward pagination when hasNextPage is false', async () => {
