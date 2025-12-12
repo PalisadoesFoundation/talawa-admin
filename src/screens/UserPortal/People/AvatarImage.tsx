@@ -2,6 +2,16 @@ import React, { useState } from 'react';
 import Avatar from '../../../components/Avatar/Avatar';
 
 /**
+ * Styles for the avatar image.
+ */
+export const IMAGE_STYLES: React.CSSProperties = {
+  width: '40px',
+  height: '40px',
+  borderRadius: '50%',
+  objectFit: 'cover',
+};
+
+/**
  * Interface for the AvatarImage component props.
  */
 export interface IAvatarImageProps {
@@ -31,14 +41,8 @@ export const AvatarImage: React.FC<IAvatarImageProps> = ({
       <img
         src={src}
         alt={alt}
-        className="people_img"
         onError={() => setImgError(true)}
-        style={{
-          width: '40px',
-          height: '40px',
-          borderRadius: '50%',
-          objectFit: 'cover',
-        }}
+        style={IMAGE_STYLES}
       />
     );
   }

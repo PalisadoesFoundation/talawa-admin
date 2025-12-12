@@ -6,7 +6,7 @@
 
 > `const` **AvatarImage**: `React.FC`\<[`IAvatarImageProps`](../interfaces/IAvatarImageProps.md)\>
 
-Defined in: [src/screens/UserPortal/People/AvatarImage.tsx:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/People/AvatarImage.tsx#L22)
+Defined in: [src/screens/UserPortal/People/AvatarImage.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/People/AvatarImage.tsx#L32)
 
 AvatarImage component to display user avatar with fallback.
 

@@ -4,7 +4,7 @@
 
 # Interface: IAvatarImageProps
 
-Defined in: [src/screens/UserPortal/People/AvatarImage.tsx:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/People/AvatarImage.tsx#L7)
+Defined in: [src/screens/UserPortal/People/AvatarImage.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/People/AvatarImage.tsx#L17)
 
 Interface for the AvatarImage component props.
 
@@ -14,7 +14,7 @@ Interface for the AvatarImage component props.
 
 > **alt**: `string`
 
-Defined in: [src/screens/UserPortal/People/AvatarImage.tsx:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/People/AvatarImage.tsx#L9)
+Defined in: [src/screens/UserPortal/People/AvatarImage.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/People/AvatarImage.tsx#L19)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/screens/UserPortal/People/AvatarImage.tsx:9](https://github.com
 
 > **name**: `string`
 
-Defined in: [src/screens/UserPortal/People/AvatarImage.tsx:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/People/AvatarImage.tsx#L10)
+Defined in: [src/screens/UserPortal/People/AvatarImage.tsx:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/People/AvatarImage.tsx#L20)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/screens/UserPortal/People/AvatarImage.tsx:10](https://github.co
 
 > **src**: `string`
 
-Defined in: [src/screens/UserPortal/People/AvatarImage.tsx:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/People/AvatarImage.tsx#L8)
+Defined in: [src/screens/UserPortal/People/AvatarImage.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/People/AvatarImage.tsx#L18)
