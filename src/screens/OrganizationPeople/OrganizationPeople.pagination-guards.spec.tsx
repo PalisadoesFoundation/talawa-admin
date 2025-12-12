@@ -72,8 +72,8 @@ const isMemberConnectionOperation = (operation: {
   if (operation.query === ORGANIZATIONS_MEMBER_CONNECTION_LIST) return true;
 
   // Fallback: match by operation name if present.
-  if (operation.operationName === 'OrganizationsMemberConnectionList')
-    return true;
+  // Note: the named operation in this query is `Organizations`.
+  if (operation.operationName === 'Organizations') return true;
 
   // Last resort: detect the expected field in the query.
   return documentContainsField(operation.query, 'members');
@@ -99,6 +99,11 @@ vi.mock('shared-components/PeopleTable/PeopleTable', () => ({
 
     return (
       <div>
+        {/*
+          NOTE: This test mock intentionally does not emulate DataGrid's UI-level clamping/disablement.
+          Some actions below can emit negative page numbers to ensure OrganizationPeople's
+          handlePaginationModelChange is defensively guarded at the handler level.
+        */}
         <button
           type="button"
           aria-label="previous page"

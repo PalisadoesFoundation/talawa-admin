@@ -64,7 +64,9 @@ describe('PeopleTable Component', () => {
     const user = userEvent.setup();
     render(<PeopleTable {...defaultProps} />);
 
-    const nextButton = screen.getByLabelText('Go to next page');
+    const nextButton = screen.getByRole('button', {
+      name: /go to next page/i,
+    });
     await user.click(nextButton);
 
     await waitFor(() => {
