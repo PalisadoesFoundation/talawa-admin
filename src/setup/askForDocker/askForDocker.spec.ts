@@ -278,17 +278,14 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
     });
 
     const originalURL = global.URL;
-    let callCount = 0;
 
     try {
       global.URL = class extends originalURL {
-        constructor(url: string) {
-          callCount++;
-          // Fail on the Docker URL transformation (2nd call: validation, docker URL)
-          if (callCount === 2) {
+        toString(): string {
+          if (this.hostname === 'host.docker.internal') {
             throw new Error('Invalid URL for Docker');
           }
-          super(url);
+          return super.toString();
         }
       } as typeof URL;
 
@@ -312,16 +309,14 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
     });
 
     const originalURL = global.URL;
-    let callCount = 0;
 
     try {
       global.URL = class extends originalURL {
-        constructor(url: string) {
-          callCount++;
-          if (callCount === 2) {
+        toString(): string {
+          if (this.hostname === 'host.docker.internal') {
             throw 'String error'; // Non-Error object
           }
-          super(url);
+          return super.toString();
         }
       } as typeof URL;
 
