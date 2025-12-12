@@ -329,7 +329,8 @@
     "profile": "प्रोफ़ाइल",
     "create": "बनाएं",
     "cancel": "रद्द करें",
-    "createUser": "उपयोगकर्ता बनाएं"
+    "createUser": "उपयोगकर्ता बनाएं",
+    "notFound": "नहीं मिला"
   },
   "organizationTags": {
     "title": "संस्थान टैग",

@@ -329,7 +329,8 @@
     "create": "创建",
     "user": "用户",
     "profile": "个人资料",
-    "createUser": "创建用户"
+    "createUser": "创建用户",
+    "notFound": "未找到"
   },
   "organizationTags": {
     "title": "组织标签",

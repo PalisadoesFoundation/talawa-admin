@@ -329,7 +329,8 @@
     "searchFullName": "Ingrese el nombre completo",
     "user": "Usuario",
     "profile": "Perfil",
-    "createUser": "Crear usuario"
+    "createUser": "Crear usuario",
+    "notFound": "No encontrado"
   },
   "organizationTags": {
     "title": "Etiquetas de Organización",

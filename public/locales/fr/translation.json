@@ -329,7 +329,8 @@
     "confirmPassword": "Confirmer le mot de passe",
     "create": "Créer",
     "cancel": "Annuler",
-    "createUser": "Créer un utilisateur"
+    "createUser": "Créer un utilisateur",
+    "notFound": "Introuvable"
   },
   "organizationTags": {
     "title": "Étiquettes d'Organisation",
