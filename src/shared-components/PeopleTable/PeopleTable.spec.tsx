@@ -183,83 +183,90 @@ describe('PeopleTable Component', () => {
     expect(screen.getByRole('option', { name: '20' })).toBeInTheDocument();
   });
 
-  it('passes server pagination mode and paginationMeta through to DataGrid', async () => {
-    let capturedProps: Record<string, unknown> | undefined;
-
-    vi.resetModules();
-    vi.doMock('@mui/x-data-grid', () => {
-      const mockDataGrid = (props: Record<string, unknown>) => {
-        capturedProps = props;
-        return null;
-      };
-
-      return { DataGrid: mockDataGrid };
+  describe('DataGrid prop passthrough (module-mocked)', () => {
+    afterEach(() => {
+      vi.doUnmock('@mui/x-data-grid');
+      vi.resetModules();
     });
 
-    const { default: IsolatedPeopleTable } = await import('./PeopleTable');
+    it('passes server pagination mode and paginationMeta through to DataGrid', async () => {
+      let capturedProps: Record<string, unknown> | undefined;
 
-    render(
-      <IsolatedPeopleTable
-        rows={mockRows}
-        columns={mockColumns as unknown as GridColDef[]}
-        loading={false}
-        rowCount={10}
-        paginationModel={{ page: 0, pageSize: 5 }}
-        onPaginationModelChange={vi.fn()}
-        paginationMeta={{ hasNextPage: false }}
-      />,
-    );
+      vi.resetModules();
+      vi.doMock('@mui/x-data-grid', () => {
+        const mockDataGrid = (props: Record<string, unknown>) => {
+          capturedProps = props;
+          return null;
+        };
 
-    expect(capturedProps).toBeTruthy();
-    expect(capturedProps?.paginationMode).toBe('server');
-    expect(capturedProps?.paginationMeta).toEqual({ hasNextPage: false });
-  });
+        return { DataGrid: mockDataGrid };
+      });
 
-  it('provides a theme-based sx styling function to DataGrid', async () => {
-    let capturedProps: Record<string, unknown> | undefined;
+      const { default: IsolatedPeopleTable } = await import('./PeopleTable');
 
-    vi.resetModules();
-    vi.doMock('@mui/x-data-grid', () => {
-      const mockDataGrid = (props: Record<string, unknown>) => {
-        capturedProps = props;
-        return null;
-      };
+      render(
+        <IsolatedPeopleTable
+          rows={mockRows}
+          columns={mockColumns as unknown as GridColDef[]}
+          loading={false}
+          rowCount={10}
+          paginationModel={{ page: 0, pageSize: 5 }}
+          onPaginationModelChange={vi.fn()}
+          paginationMeta={{ hasNextPage: false }}
+        />,
+      );
 
-      return { DataGrid: mockDataGrid };
+      expect(capturedProps).toBeTruthy();
+      expect(capturedProps?.paginationMode).toBe('server');
+      expect(capturedProps?.paginationMeta).toEqual({ hasNextPage: false });
     });
 
-    const { default: IsolatedPeopleTable } = await import('./PeopleTable');
+    it('provides a theme-based sx styling function to DataGrid', async () => {
+      let capturedProps: Record<string, unknown> | undefined;
 
-    render(
-      <IsolatedPeopleTable
-        rows={mockRows}
-        columns={mockColumns as unknown as GridColDef[]}
-        loading={false}
-        rowCount={10}
-        paginationModel={{ page: 0, pageSize: 5 }}
-        onPaginationModelChange={vi.fn()}
-      />,
-    );
+      vi.resetModules();
+      vi.doMock('@mui/x-data-grid', () => {
+        const mockDataGrid = (props: Record<string, unknown>) => {
+          capturedProps = props;
+          return null;
+        };
 
-    const sx = capturedProps?.sx as
-      | undefined
-      | ((theme: {
-          palette: { divider: string; text: { primary: string } };
-        }) => Record<string, unknown>);
-    expect(typeof sx).toBe('function');
+        return { DataGrid: mockDataGrid };
+      });
 
-    const styleObject = sx?.({
-      palette: { divider: '#ddd', text: { primary: '#111' } },
+      const { default: IsolatedPeopleTable } = await import('./PeopleTable');
+
+      render(
+        <IsolatedPeopleTable
+          rows={mockRows}
+          columns={mockColumns as unknown as GridColDef[]}
+          loading={false}
+          rowCount={10}
+          paginationModel={{ page: 0, pageSize: 5 }}
+          onPaginationModelChange={vi.fn()}
+        />,
+      );
+
+      const sx = capturedProps?.sx as
+        | undefined
+        | ((theme: {
+            palette: { divider: string; text: { primary: string } };
+          }) => Record<string, unknown>);
+      expect(typeof sx).toBe('function');
+
+      const styleObject = sx?.({
+        palette: { divider: '#ddd', text: { primary: '#111' } },
+      });
+
+      expect(styleObject).toEqual(
+        expect.objectContaining({
+          border: 0,
+          '& .MuiDataGrid-columnHeaders': expect.any(Object),
+          '& .MuiDataGrid-cell': expect.any(Object),
+          '& .MuiDataGrid-row': expect.any(Object),
+          '& .MuiDataGrid-row:hover': expect.any(Object),
+        }),
+      );
     });
-
-    expect(styleObject).toEqual(
-      expect.objectContaining({
-        border: 0,
-        '& .MuiDataGrid-columnHeaders': expect.any(Object),
-        '& .MuiDataGrid-cell': expect.any(Object),
-        '& .MuiDataGrid-row': expect.any(Object),
-        '& .MuiDataGrid-row:hover': expect.any(Object),
-      }),
-    );
   });
 });
