@@ -11,6 +11,10 @@ export const deriveBackendWebsocketUrl = (
 
   try {
     const url = new URL(httpUrl);
+    if (url.protocol !== 'http:' && url.protocol !== 'https:') {
+      return '';
+    }
+
     const protocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
     return `${protocol}//${url.host}${url.pathname}${url.search}`;
   } catch {

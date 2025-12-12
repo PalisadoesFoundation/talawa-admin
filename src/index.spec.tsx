@@ -131,6 +131,7 @@ describe('Apollo Client Configuration', () => {
     );
 
     expect(deriveBackendWebsocketUrl('not-a-url')).toBe('');
+    expect(deriveBackendWebsocketUrl('ftp://example.com/graphql')).toBe('');
     expect(deriveBackendWebsocketUrl(undefined)).toBe('');
   });
 
