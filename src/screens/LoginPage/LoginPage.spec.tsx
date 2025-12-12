@@ -1431,7 +1431,42 @@ describe('Talawa-API server fetch check', () => {
 /*  NEW TESTS TO HIT 100 % COVERAGE FOR LoginPage.tsx                 */
 /* ------------------------------------------------------------------ */
 
+// Helper functions to reduce code duplication
+const renderLoginPage = (
+  mocks: typeof MOCKS = MOCKS,
+  link?: StaticMockLink,
+): ReturnType<typeof render> => {
+  return render(
+    <MockedProvider mocks={mocks} link={link} addTypename={false}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <LoginPage />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+};
+
+const setLocationPath = (pathname: string): void => {
+  Object.defineProperty(window, 'location', {
+    configurable: true,
+    value: {
+      reload: vi.fn(),
+      href: `https://localhost:4321${pathname}`,
+      origin: 'https://localhost:4321',
+      pathname,
+    },
+  });
+};
+
 describe('Extra coverage for 100 %', () => {
+  afterEach(() => {
+    vi.doUnmock('Constant/constant.ts');
+    vi.resetModules();
+  });
+
   /* 1.  bypass recaptcha when feature is off (UI path) */
   it('bypasses recaptcha when feature is off', async () => {
     await vi.resetModules();
@@ -1441,7 +1476,7 @@ describe('Extra coverage for 100 %', () => {
       RECAPTCHA_SITE_KEY: 'xxx',
     }));
     // re-import component so mock applies
-    const { default: LoginPageFresh } = await vi.importActual('./LoginPage');
+    const { default: LoginPageFresh } = await import('./LoginPage');
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
@@ -1460,14 +1495,18 @@ describe('Extra coverage for 100 %', () => {
 
   /* 2.  Invalid name toast */
   it('shows toast for invalid name during registration', async () => {
-    Object.defineProperty(window, 'location', { configurable: true, value: { reload: vi.fn(), href: 'https://localhost:4321/', origin: 'https://localhost:4321', pathname: '/' } });
-    render(<MockedProvider mocks={MOCKS} addTypename={false}><BrowserRouter><Provider store={store}><I18nextProvider i18n={i18nForTest}><LoginPage /></I18nextProvider></Provider></BrowserRouter></MockedProvider>);
+    setLocationPath('/');
+    renderLoginPage();
     await wait();
     await userEvent.click(screen.getByTestId('goToRegisterPortion'));
     await userEvent.type(screen.getByPlaceholderText(/Name/i), '123'); // invalid
     await userEvent.type(screen.getByTestId('signInEmail'), 'valid@email.com');
     await userEvent.type(screen.getByPlaceholderText('Password'), 'Valid@123');
-    await userEvent.type(screen.getByPlaceholderText('Confirm Password'), 'Valid@123');
+    await userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      'Valid@123',
+    );
+    await userEvent.type(screen.getByTestId('mock-recaptcha'), 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenCalled();
@@ -1475,14 +1514,15 @@ describe('Extra coverage for 100 %', () => {
 
   /* 3.  Invalid password toast */
   it('shows toast for weak password', async () => {
-    Object.defineProperty(window, 'location', { configurable: true, value: { reload: vi.fn(), href: 'https://localhost:4321/', origin: 'https://localhost:4321', pathname: '/' } });
-    render(<MockedProvider mocks={MOCKS} addTypename={false}><BrowserRouter><Provider store={store}><I18nextProvider i18n={i18nForTest}><LoginPage /></I18nextProvider></Provider></BrowserRouter></MockedProvider>);
+    setLocationPath('/');
+    renderLoginPage();
     await wait();
     await userEvent.click(screen.getByTestId('goToRegisterPortion'));
     await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
     await userEvent.type(screen.getByTestId('signInEmail'), 'valid@email.com');
     await userEvent.type(screen.getByPlaceholderText('Password'), 'weak');
     await userEvent.type(screen.getByPlaceholderText('Confirm Password'), 'weak');
+    await userEvent.type(screen.getByTestId('mock-recaptcha'), 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenCalled();
@@ -1490,15 +1530,44 @@ describe('Extra coverage for 100 %', () => {
 
   /* 4.  Non-admin tries to log in on /admin */
   it('warns when non-admin logs in from admin portal', async () => {
-    Object.defineProperty(window, 'location', { configurable: true, value: { reload: vi.fn(), href: 'https://localhost:4321/admin', origin: 'https://localhost:4321', pathname: '/admin' } });
+    setLocationPath('/admin');
     const NON_ADMIN_MOCK = [
-      { request: { query: SIGNIN_QUERY, variables: { email: 'user@example.com', password: 'pass' } }, result: { data: { signIn: { user: { id: '1', role: 'user', name: 'U', emailAddress: 'user@example.com', countryCode: null, avatarURL: null }, authenticationToken: 'token' } } } },
-      ...MOCKS.filter(m => m.request.query !== SIGNIN_QUERY),
+      ...MOCKS.filter(
+        (m) =>
+          m.request.query !== SIGNIN_QUERY &&
+          m.request.query !== RECAPTCHA_MUTATION,
+      ),
+      {
+        request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: 'token' } },
+        result: { data: { recaptcha: true } },
+      },
+      {
+        request: {
+          query: SIGNIN_QUERY,
+          variables: { email: 'user@example.com', password: 'pass' },
+        },
+        result: {
+          data: {
+            signIn: {
+              user: {
+                id: '1',
+                role: 'user',
+                name: 'U',
+                emailAddress: 'user@example.com',
+                countryCode: null,
+                avatarURL: null,
+              },
+              authenticationToken: 'token',
+            },
+          },
+        },
+      },
     ];
-    render(<MockedProvider mocks={NON_ADMIN_MOCK} addTypename={false}><BrowserRouter><Provider store={store}><I18nextProvider i18n={i18nForTest}><LoginPage /></I18nextProvider></Provider></BrowserRouter></MockedProvider>);
+    renderLoginPage(NON_ADMIN_MOCK);
     await wait();
     await userEvent.type(screen.getByTestId('loginEmail'), 'user@example.com');
     await userEvent.type(screen.getByPlaceholderText(/Enter Password/i), 'pass');
+    await userEvent.type(screen.getByTestId('mock-recaptcha'), 'token');
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenCalled();
@@ -1506,7 +1575,7 @@ describe('Extra coverage for 100 %', () => {
 
   /* 5.  component renders after mount (was refetch test) */
   it('renders component after mount', async () => {
-    render(<MockedProvider mocks={MOCKS} addTypename={false}><BrowserRouter><Provider store={store}><I18nextProvider i18n={i18nForTest}><LoginPage /></I18nextProvider></Provider></BrowserRouter></MockedProvider>);
+    renderLoginPage(MOCKS, link);
     await wait();
     expect(screen.getByTestId('loginBtn')).toBeInTheDocument();
   });
@@ -1516,7 +1585,7 @@ describe('Extra coverage for 100 %', () => {
     vi.spyOn(global, 'fetch').mockRejectedValueOnce(new Error('Network error'));
     const errorHandlerMod = await import('utils/errorHandler');
     const errorHandlerSpy = vi.spyOn(errorHandlerMod, 'errorHandler');
-    render(<MockedProvider mocks={MOCKS} addTypename={false}><BrowserRouter><Provider store={store}><I18nextProvider i18n={i18nForTest}><LoginPage /></I18nextProvider></Provider></BrowserRouter></MockedProvider>);
+    renderLoginPage();
     await wait();
     expect(errorHandlerSpy).toHaveBeenCalled();
   });
@@ -1524,18 +1593,35 @@ describe('Extra coverage for 100 %', () => {
   /* 7.  reset signup recaptcha on error */
   it('resets signup recaptcha when signup fails', async () => {
     const FAIL_MOCK = [
-      { request: { query: SIGNUP_MUTATION, variables: { ID: '', name: 'John', email: 'john@doe.com', password: 'John@123' } }, error: new Error('Signup failed') },
+      {
+        request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: 'token' } },
+        result: { data: { recaptcha: true } },
+      },
+      {
+        request: {
+          query: SIGNUP_MUTATION,
+          variables: { ID: '', name: 'John', email: 'john@doe.com', password: 'John@123' },
+        },
+        error: new Error('Signup failed'),
+      },
       { request: { query: GET_COMMUNITY_DATA_PG }, result: { data: { community: null } } },
-      { request: { query: ORGANIZATION_LIST_NO_MEMBERS }, result: { data: { organizations: [] } } },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: { data: { organizations: [] } },
+      },
     ];
-    Object.defineProperty(window, 'location', { configurable: true, value: { reload: vi.fn(), href: 'https://localhost:4321/', origin: 'https://localhost:4321', pathname: '/' } });
-    render(<MockedProvider mocks={FAIL_MOCK} addTypename={false}><BrowserRouter><Provider store={store}><I18nextProvider i18n={i18nForTest}><LoginPage /></I18nextProvider></Provider></BrowserRouter></MockedProvider>);
+    setLocationPath('/');
+    renderLoginPage(FAIL_MOCK);
     await wait();
     await userEvent.click(screen.getByTestId('goToRegisterPortion'));
     await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John');
     await userEvent.type(screen.getByTestId('signInEmail'), 'john@doe.com');
     await userEvent.type(screen.getByPlaceholderText('Password'), 'John@123');
-    await userEvent.type(screen.getByPlaceholderText('Confirm Password'), 'John@123');
+    await userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      'John@123',
+    );
+    await userEvent.type(screen.getByTestId('mock-recaptcha'), 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(resetReCAPTCHA).toHaveBeenCalled();
@@ -1544,18 +1630,28 @@ describe('Extra coverage for 100 %', () => {
   /* 8. recaptcha mutation failure */
   it('shows error toast when recaptcha verification mutation fails', async () => {
     const RECAPTCHA_ERROR_MOCK = [
-      { request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: 'token' } }, error: new Error('Recaptcha service unavailable') },
+      {
+        request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: 'token' } },
+        error: new Error('Recaptcha service unavailable'),
+      },
       { request: { query: GET_COMMUNITY_DATA_PG }, result: { data: { community: null } } },
-      { request: { query: ORGANIZATION_LIST_NO_MEMBERS }, result: { data: { organizations: [] } } },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: { data: { organizations: [] } },
+      },
     ];
-    Object.defineProperty(window, 'location', { configurable: true, value: { reload: vi.fn(), href: 'https://localhost:4321/', origin: 'https://localhost:4321', pathname: '/' } });
-    render(<MockedProvider mocks={RECAPTCHA_ERROR_MOCK} addTypename={false}><BrowserRouter><Provider store={store}><I18nextProvider i18n={i18nForTest}><LoginPage /></I18nextProvider></Provider></BrowserRouter></MockedProvider>);
+    setLocationPath('/');
+    renderLoginPage(RECAPTCHA_ERROR_MOCK);
     await wait();
     await userEvent.click(screen.getByTestId('goToRegisterPortion'));
     await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John');
     await userEvent.type(screen.getByTestId('signInEmail'), 'john@doe.com');
     await userEvent.type(screen.getByPlaceholderText('Password'), 'John@123');
-    await userEvent.type(screen.getByPlaceholderText('Confirm Password'), 'John@123');
+    await userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      'John@123',
+    );
+    await userEvent.type(screen.getByTestId('mock-recaptcha'), 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.error).toHaveBeenCalled();
@@ -1564,18 +1660,28 @@ describe('Extra coverage for 100 %', () => {
   /* 9. signup captcha verification returns false */
   it('shows captcha error when verification returns false on signup', async () => {
     const RECAPTCHA_FALSE_MOCK = [
-      { request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: 'bad-token' } }, result: { data: { recaptcha: false } } },
+      {
+        request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: 'bad-token' } },
+        result: { data: { recaptcha: false } },
+      },
       { request: { query: GET_COMMUNITY_DATA_PG }, result: { data: { community: null } } },
-      { request: { query: ORGANIZATION_LIST_NO_MEMBERS }, result: { data: { organizations: [] } } },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: { data: { organizations: [] } },
+      },
     ];
-    Object.defineProperty(window, 'location', { configurable: true, value: { reload: vi.fn(), href: 'https://localhost:4321/', origin: 'https://localhost:4321', pathname: '/' } });
-    render(<MockedProvider mocks={RECAPTCHA_FALSE_MOCK} addTypename={false}><BrowserRouter><Provider store={store}><I18nextProvider i18n={i18nForTest}><LoginPage /></I18nextProvider></Provider></BrowserRouter></MockedProvider>);
+    setLocationPath('/');
+    renderLoginPage(RECAPTCHA_FALSE_MOCK);
     await wait();
     await userEvent.click(screen.getByTestId('goToRegisterPortion'));
     await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John');
     await userEvent.type(screen.getByTestId('signInEmail'), 'john@doe.com');
     await userEvent.type(screen.getByPlaceholderText('Password'), 'John@123');
-    await userEvent.type(screen.getByPlaceholderText('Confirm Password'), 'John@123');
+    await userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      'John@123',
+    );
+    await userEvent.type(screen.getByTestId('mock-recaptcha'), 'bad-token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.error).toHaveBeenCalledWith('Please_check_the_captcha');
@@ -1584,14 +1690,18 @@ describe('Extra coverage for 100 %', () => {
   /* 10. login captcha verification returns false */
   it('shows captcha error when verification returns false on login', async () => {
     const RECAPTCHA_FALSE_LOGIN = [
-      { request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: 'bad-token' } }, result: { data: { recaptcha: false } } },
+      {
+        request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: 'bad-token' } },
+        result: { data: { recaptcha: false } },
+      },
       { request: { query: GET_COMMUNITY_DATA_PG }, result: { data: { community: null } } },
     ];
-    Object.defineProperty(window, 'location', { configurable: true, value: { reload: vi.fn(), href: 'https://localhost:4321/', origin: 'https://localhost:4321', pathname: '/' } });
-    render(<MockedProvider mocks={RECAPTCHA_FALSE_LOGIN} addTypename={false}><BrowserRouter><Provider store={store}><I18nextProvider i18n={i18nForTest}><LoginPage /></I18nextProvider></Provider></BrowserRouter></MockedProvider>);
+    setLocationPath('/');
+    renderLoginPage(RECAPTCHA_FALSE_LOGIN);
     await wait();
     await userEvent.type(screen.getByTestId('loginEmail'), 'user@example.com');
     await userEvent.type(screen.getByPlaceholderText(/Enter Password/i), 'pass');
+    await userEvent.type(screen.getByTestId('mock-recaptcha'), 'bad-token');
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
     expect(toastMocks.error).toHaveBeenCalledWith('Please_check_the_captcha');
@@ -1599,14 +1709,18 @@ describe('Extra coverage for 100 %', () => {
 
   /* 11. email too short validation */
   it('shows email invalid toast when email is too short', async () => {
-    Object.defineProperty(window, 'location', { configurable: true, value: { reload: vi.fn(), href: 'https://localhost:4321/', origin: 'https://localhost:4321', pathname: '/' } });
-    render(<MockedProvider mocks={MOCKS} addTypename={false}><BrowserRouter><Provider store={store}><I18nextProvider i18n={i18nForTest}><LoginPage /></I18nextProvider></Provider></BrowserRouter></MockedProvider>);
+    setLocationPath('/');
+    renderLoginPage();
     await wait();
     await userEvent.click(screen.getByTestId('goToRegisterPortion'));
     await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John');
     await userEvent.type(screen.getByTestId('signInEmail'), 'a@b.co'); // length 6
     await userEvent.type(screen.getByPlaceholderText('Password'), 'John@123');
-    await userEvent.type(screen.getByPlaceholderText('Confirm Password'), 'John@123');
+    await userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      'John@123',
+    );
+    await userEvent.type(screen.getByTestId('mock-recaptcha'), 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenCalledWith('email_invalid');
@@ -1615,14 +1729,22 @@ describe('Extra coverage for 100 %', () => {
   /* 12. signIn returns null */
   it('shows not found warning when signIn returns null', async () => {
     const NULL_SIGNIN_MOCK = [
-      { request: { query: SIGNIN_QUERY, variables: { email: 'test@test.com', password: 'pass' } }, result: { data: null } },
+      {
+        request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: 'token' } },
+        result: { data: { recaptcha: true } },
+      },
+      {
+        request: { query: SIGNIN_QUERY, variables: { email: 'test@test.com', password: 'pass' } },
+        result: { data: { signIn: null } },
+      },
       { request: { query: GET_COMMUNITY_DATA_PG }, result: { data: { community: null } } },
     ];
-    Object.defineProperty(window, 'location', { configurable: true, value: { reload: vi.fn(), href: 'https://localhost:4321/', origin: 'https://localhost:4321', pathname: '/' } });
-    render(<MockedProvider mocks={NULL_SIGNIN_MOCK} addTypename={false}><BrowserRouter><Provider store={store}><I18nextProvider i18n={i18nForTest}><LoginPage /></I18nextProvider></Provider></BrowserRouter></MockedProvider>);
+    setLocationPath('/');
+    renderLoginPage(NULL_SIGNIN_MOCK);
     await wait();
     await userEvent.type(screen.getByTestId('loginEmail'), 'test@test.com');
     await userEvent.type(screen.getByPlaceholderText(/Enter Password/i), 'pass');
+    await userEvent.type(screen.getByTestId('mock-recaptcha'), 'token');
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenCalledWith('notFound');
