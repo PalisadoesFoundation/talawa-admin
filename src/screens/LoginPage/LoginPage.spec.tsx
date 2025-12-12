@@ -1512,7 +1512,7 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.type(screen.getByTestId('mock-recaptcha'), 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
-    expect(toastMocks.warn).toHaveBeenCalled();
+    expect(toastMocks.warn).toHaveBeenCalledWith('name_invalid');
   });
 
   /* 3.  Invalid password toast */
@@ -1531,7 +1531,7 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.type(screen.getByTestId('mock-recaptcha'), 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
-    expect(toastMocks.warn).toHaveBeenCalled();
+    expect(toastMocks.warn).toHaveBeenCalledWith('password_invalid');
   });
 
   /* 4.  Non-admin tries to log in on /admin */
