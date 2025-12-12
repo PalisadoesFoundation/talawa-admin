@@ -107,6 +107,23 @@ describe('PeopleTable Component', () => {
     expect(screen.getByText('Alice')).toBeInTheDocument();
   });
 
+  it('uses a custom getRowId when provided', () => {
+    const getRowId = vi.fn((row: { customId: string }) => row.customId);
+
+    render(
+      <PeopleTable
+        {...defaultProps}
+        rows={[
+          { customId: 'c1', name: 'Custom User', email: 'c1@example.com' },
+        ]}
+        getRowId={getRowId}
+      />,
+    );
+
+    expect(screen.getByText('Custom User')).toBeInTheDocument();
+    expect(getRowId).toHaveBeenCalled();
+  });
+
   it('throws when a row is missing both id and _id', () => {
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
@@ -136,5 +153,25 @@ describe('PeopleTable Component', () => {
     );
 
     expect(screen.getByText('No Data Available')).toBeInTheDocument();
+  });
+
+  it('uses default pageSizeOptions when not provided', async () => {
+    const user = userEvent.setup();
+
+    // Intentionally omit `pageSizeOptions` to use the component default.
+    const {
+      pageSizeOptions: omittedPageSizeOptions,
+      ...propsWithoutPageSizeOptions
+    } = defaultProps;
+    void omittedPageSizeOptions;
+
+    render(<PeopleTable {...propsWithoutPageSizeOptions} />);
+
+    const pageSizeSelect = screen.getByRole('combobox', {
+      name: /rows per page/i,
+    });
+    await user.click(pageSizeSelect);
+
+    expect(screen.getByRole('option', { name: '20' })).toBeInTheDocument();
   });
 });
