@@ -1524,7 +1524,10 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
     await userEvent.type(screen.getByTestId('signInEmail'), 'valid@email.com');
     await userEvent.type(screen.getByPlaceholderText('Password'), 'weak');
-    await userEvent.type(screen.getByPlaceholderText('Confirm Password'), 'weak');
+    await userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      'weak',
+    );
     await userEvent.type(screen.getByTestId('mock-recaptcha'), 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
@@ -1541,7 +1544,10 @@ describe('Extra coverage for 100 %', () => {
           m.request.query !== RECAPTCHA_MUTATION,
       ),
       {
-        request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: 'token' } },
+        request: {
+          query: RECAPTCHA_MUTATION,
+          variables: { recaptchaToken: 'token' },
+        },
         result: { data: { recaptcha: true } },
       },
       {
@@ -1569,7 +1575,10 @@ describe('Extra coverage for 100 %', () => {
     renderLoginPage(NON_ADMIN_MOCK);
     await wait();
     await userEvent.type(screen.getByTestId('loginEmail'), 'user@example.com');
-    await userEvent.type(screen.getByPlaceholderText(/Enter Password/i), 'pass');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'pass',
+    );
     await userEvent.type(screen.getByTestId('mock-recaptcha'), 'token');
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
@@ -1597,17 +1606,28 @@ describe('Extra coverage for 100 %', () => {
   it('resets signup recaptcha when signup fails', async () => {
     const FAIL_MOCK = [
       {
-        request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: 'token' } },
+        request: {
+          query: RECAPTCHA_MUTATION,
+          variables: { recaptchaToken: 'token' },
+        },
         result: { data: { recaptcha: true } },
       },
       {
         request: {
           query: SIGNUP_MUTATION,
-          variables: { ID: '', name: 'John', email: 'john@doe.com', password: 'John@123' },
+          variables: {
+            ID: '',
+            name: 'John',
+            email: 'john@doe.com',
+            password: 'John@123',
+          },
         },
         error: new Error('Signup failed'),
       },
-      { request: { query: GET_COMMUNITY_DATA_PG }, result: { data: { community: null } } },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
       {
         request: { query: ORGANIZATION_LIST_NO_MEMBERS },
         result: { data: { organizations: [] } },
@@ -1634,10 +1654,16 @@ describe('Extra coverage for 100 %', () => {
   it('shows error toast when recaptcha verification mutation fails', async () => {
     const RECAPTCHA_ERROR_MOCK = [
       {
-        request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: 'token' } },
+        request: {
+          query: RECAPTCHA_MUTATION,
+          variables: { recaptchaToken: 'token' },
+        },
         error: new Error('Recaptcha service unavailable'),
       },
-      { request: { query: GET_COMMUNITY_DATA_PG }, result: { data: { community: null } } },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
       {
         request: { query: ORGANIZATION_LIST_NO_MEMBERS },
         result: { data: { organizations: [] } },
@@ -1664,10 +1690,16 @@ describe('Extra coverage for 100 %', () => {
   it('shows captcha error when verification returns false on signup', async () => {
     const RECAPTCHA_FALSE_MOCK = [
       {
-        request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: 'bad-token' } },
+        request: {
+          query: RECAPTCHA_MUTATION,
+          variables: { recaptchaToken: 'bad-token' },
+        },
         result: { data: { recaptcha: false } },
       },
-      { request: { query: GET_COMMUNITY_DATA_PG }, result: { data: { community: null } } },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
       {
         request: { query: ORGANIZATION_LIST_NO_MEMBERS },
         result: { data: { organizations: [] } },
@@ -1694,16 +1726,25 @@ describe('Extra coverage for 100 %', () => {
   it('shows captcha error when verification returns false on login', async () => {
     const RECAPTCHA_FALSE_LOGIN = [
       {
-        request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: 'bad-token' } },
+        request: {
+          query: RECAPTCHA_MUTATION,
+          variables: { recaptchaToken: 'bad-token' },
+        },
         result: { data: { recaptcha: false } },
       },
-      { request: { query: GET_COMMUNITY_DATA_PG }, result: { data: { community: null } } },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
     ];
     setLocationPath('/');
     renderLoginPage(RECAPTCHA_FALSE_LOGIN);
     await wait();
     await userEvent.type(screen.getByTestId('loginEmail'), 'user@example.com');
-    await userEvent.type(screen.getByPlaceholderText(/Enter Password/i), 'pass');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'pass',
+    );
     await userEvent.type(screen.getByTestId('mock-recaptcha'), 'bad-token');
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
@@ -1733,20 +1774,32 @@ describe('Extra coverage for 100 %', () => {
   it('shows not found warning when signIn returns null', async () => {
     const NULL_SIGNIN_MOCK = [
       {
-        request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: 'token' } },
+        request: {
+          query: RECAPTCHA_MUTATION,
+          variables: { recaptchaToken: 'token' },
+        },
         result: { data: { recaptcha: true } },
       },
       {
-        request: { query: SIGNIN_QUERY, variables: { email: 'test@test.com', password: 'pass' } },
+        request: {
+          query: SIGNIN_QUERY,
+          variables: { email: 'test@test.com', password: 'pass' },
+        },
         result: { data: null },
       },
-      { request: { query: GET_COMMUNITY_DATA_PG }, result: { data: { community: null } } },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
     ];
     setLocationPath('/');
     renderLoginPage(NULL_SIGNIN_MOCK);
     await wait();
     await userEvent.type(screen.getByTestId('loginEmail'), 'test@test.com');
-    await userEvent.type(screen.getByPlaceholderText(/Enter Password/i), 'pass');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'pass',
+    );
     await userEvent.type(screen.getByTestId('mock-recaptcha'), 'token');
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();

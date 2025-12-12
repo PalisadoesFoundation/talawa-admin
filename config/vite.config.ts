@@ -82,7 +82,7 @@ export default defineConfig(({ mode }) => {
     // Development server configuration
     server: {
       // ---------------------------------------
-      // Important: Required for testing in a 
+      // Important: Required for testing in a
       // lab environment where the API and Admin
       // apps run on separate servers.
       // This simulates a production environment
