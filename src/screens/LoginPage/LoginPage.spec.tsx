@@ -1540,4 +1540,91 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     expect(resetReCAPTCHA).toHaveBeenCalled();
   });
+
+  /* 8. recaptcha mutation failure */
+  it('shows error toast when recaptcha verification mutation fails', async () => {
+    const RECAPTCHA_ERROR_MOCK = [
+      { request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: 'token' } }, error: new Error('Recaptcha service unavailable') },
+      { request: { query: GET_COMMUNITY_DATA_PG }, result: { data: { community: null } } },
+      { request: { query: ORGANIZATION_LIST_NO_MEMBERS }, result: { data: { organizations: [] } } },
+    ];
+    Object.defineProperty(window, 'location', { configurable: true, value: { reload: vi.fn(), href: 'https://localhost:4321/', origin: 'https://localhost:4321', pathname: '/' } });
+    render(<MockedProvider mocks={RECAPTCHA_ERROR_MOCK} addTypename={false}><BrowserRouter><Provider store={store}><I18nextProvider i18n={i18nForTest}><LoginPage /></I18nextProvider></Provider></BrowserRouter></MockedProvider>);
+    await wait();
+    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
+    await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John');
+    await userEvent.type(screen.getByTestId('signInEmail'), 'john@doe.com');
+    await userEvent.type(screen.getByPlaceholderText('Password'), 'John@123');
+    await userEvent.type(screen.getByPlaceholderText('Confirm Password'), 'John@123');
+    await userEvent.click(screen.getByTestId('registrationBtn'));
+    await wait();
+    expect(toastMocks.error).toHaveBeenCalled();
+  });
+
+  /* 9. signup captcha verification returns false */
+  it('shows captcha error when verification returns false on signup', async () => {
+    const RECAPTCHA_FALSE_MOCK = [
+      { request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: 'bad-token' } }, result: { data: { recaptcha: false } } },
+      { request: { query: GET_COMMUNITY_DATA_PG }, result: { data: { community: null } } },
+      { request: { query: ORGANIZATION_LIST_NO_MEMBERS }, result: { data: { organizations: [] } } },
+    ];
+    Object.defineProperty(window, 'location', { configurable: true, value: { reload: vi.fn(), href: 'https://localhost:4321/', origin: 'https://localhost:4321', pathname: '/' } });
+    render(<MockedProvider mocks={RECAPTCHA_FALSE_MOCK} addTypename={false}><BrowserRouter><Provider store={store}><I18nextProvider i18n={i18nForTest}><LoginPage /></I18nextProvider></Provider></BrowserRouter></MockedProvider>);
+    await wait();
+    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
+    await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John');
+    await userEvent.type(screen.getByTestId('signInEmail'), 'john@doe.com');
+    await userEvent.type(screen.getByPlaceholderText('Password'), 'John@123');
+    await userEvent.type(screen.getByPlaceholderText('Confirm Password'), 'John@123');
+    await userEvent.click(screen.getByTestId('registrationBtn'));
+    await wait();
+    expect(toastMocks.error).toHaveBeenCalledWith('Please_check_the_captcha');
+  });
+
+  /* 10. login captcha verification returns false */
+  it('shows captcha error when verification returns false on login', async () => {
+    const RECAPTCHA_FALSE_LOGIN = [
+      { request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: 'bad-token' } }, result: { data: { recaptcha: false } } },
+      { request: { query: GET_COMMUNITY_DATA_PG }, result: { data: { community: null } } },
+    ];
+    Object.defineProperty(window, 'location', { configurable: true, value: { reload: vi.fn(), href: 'https://localhost:4321/', origin: 'https://localhost:4321', pathname: '/' } });
+    render(<MockedProvider mocks={RECAPTCHA_FALSE_LOGIN} addTypename={false}><BrowserRouter><Provider store={store}><I18nextProvider i18n={i18nForTest}><LoginPage /></I18nextProvider></Provider></BrowserRouter></MockedProvider>);
+    await wait();
+    await userEvent.type(screen.getByTestId('loginEmail'), 'user@example.com');
+    await userEvent.type(screen.getByPlaceholderText(/Enter Password/i), 'pass');
+    await userEvent.click(screen.getByTestId('loginBtn'));
+    await wait();
+    expect(toastMocks.error).toHaveBeenCalledWith('Please_check_the_captcha');
+  });
+
+  /* 11. email too short validation */
+  it('shows email invalid toast when email is too short', async () => {
+    Object.defineProperty(window, 'location', { configurable: true, value: { reload: vi.fn(), href: 'https://localhost:4321/', origin: 'https://localhost:4321', pathname: '/' } });
+    render(<MockedProvider mocks={MOCKS} addTypename={false}><BrowserRouter><Provider store={store}><I18nextProvider i18n={i18nForTest}><LoginPage /></I18nextProvider></Provider></BrowserRouter></MockedProvider>);
+    await wait();
+    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
+    await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John');
+    await userEvent.type(screen.getByTestId('signInEmail'), 'a@b.co'); // length 6
+    await userEvent.type(screen.getByPlaceholderText('Password'), 'John@123');
+    await userEvent.type(screen.getByPlaceholderText('Confirm Password'), 'John@123');
+    await userEvent.click(screen.getByTestId('registrationBtn'));
+    await wait();
+    expect(toastMocks.warn).toHaveBeenCalledWith('email_invalid');
+  });
+
+  /* 12. signIn returns null */
+  it('shows not found warning when signIn returns null', async () => {
+    const NULL_SIGNIN_MOCK = [
+      { request: { query: SIGNIN_QUERY, variables: { email: 'test@test.com', password: 'pass' } }, result: { data: null } },
+      { request: { query: GET_COMMUNITY_DATA_PG }, result: { data: { community: null } } },
+    ];
+    Object.defineProperty(window, 'location', { configurable: true, value: { reload: vi.fn(), href: 'https://localhost:4321/', origin: 'https://localhost:4321', pathname: '/' } });
+    render(<MockedProvider mocks={NULL_SIGNIN_MOCK} addTypename={false}><BrowserRouter><Provider store={store}><I18nextProvider i18n={i18nForTest}><LoginPage /></I18nextProvider></Provider></BrowserRouter></MockedProvider>);
+    await wait();
+    await userEvent.type(screen.getByTestId('loginEmail'), 'test@test.com');
+    await userEvent.type(screen.getByPlaceholderText(/Enter Password/i), 'pass');
+    await userEvent.click(screen.getByTestId('loginBtn'));
+    await wait();
+    expect(toastMocks.warn).toHaveBeenCalledWith('notFound');
+  });
 });
