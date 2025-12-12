@@ -53,7 +53,6 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
 import { useLazyQuery } from '@apollo/client';
 import {
-  DataGrid,
   GridColDef,
   GridCellParams,
   GridPaginationModel,
@@ -72,6 +71,7 @@ import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import Avatar from 'components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
 import PageHeader from 'shared-components/Navbar/Navbar';
+import PeopleTable from 'components/PeopleTable/PeopleTable';
 
 const PAGE_SIZE = 10;
 interface IProcessedRow {
@@ -509,22 +509,18 @@ function OrganizationPeople(): JSX.Element {
         </div>
       </Row>
       <div className="datatable">
-        <DataGrid
-          disableColumnMenu
-          columnBufferPx={5}
-          getRowId={(row) => row._id}
+        <PeopleTable
           rows={filteredRows}
           columns={columns}
+          loading={memberLoading || userLoading}
           rowCount={
             paginationModel.page * PAGE_SIZE +
             currentRows.length +
             (paginationMeta.hasNextPage ? PAGE_SIZE : 0)
           }
-          paginationMode="server"
           paginationModel={paginationModel}
           onPaginationModelChange={handlePaginationModelChange}
           pageSizeOptions={[PAGE_SIZE]}
-          loading={memberLoading || userLoading}
           slots={{
             noRowsOverlay: () => (
               <Stack height="100%" alignItems="center" justifyContent="center">
@@ -532,32 +528,6 @@ function OrganizationPeople(): JSX.Element {
               </Stack>
             ),
           }}
-          sx={{
-            borderRadius: 'var(--table-head-radius)',
-            backgroundColor: 'var(--grey-bg-color)',
-            '& .MuiDataGrid-row': {
-              backgroundColor: 'var(--tablerow-bg-color)',
-              '&:focus-within': {
-                outline: '2px solid #000',
-                outlineOffset: '-2px',
-              },
-            },
-            '& .MuiDataGrid-row:hover': {
-              backgroundColor: 'var(--grey-bg-color)',
-              boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-            },
-            '& .MuiDataGrid-row.Mui-hovered': {
-              backgroundColor: 'var(--grey-bg-color)',
-              boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-            },
-            '& .MuiDataGrid-cell:focus': {
-              outline: '2px solid #000',
-              outlineOffset: '-2px',
-            },
-          }}
-          getRowClassName={() => `${styles.rowBackground}`}
-          rowHeight={70}
-          isRowSelectable={() => false}
         />
       </div>
       {showRemoveModal && selectedMemId && (

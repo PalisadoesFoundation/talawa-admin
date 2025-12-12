@@ -45,18 +45,22 @@
  * @param mode - The current filter mode (0 for "All Members", 1 for "Admins").
  * @param organizationId - The ID of the organization extracted from URL parameters.
  */
-import React, { useEffect, useState } from 'react';
-import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
+import React, { useEffect, useState, useMemo } from 'react';
 import { Dropdown } from 'react-bootstrap';
-import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import { FilterAltOutlined } from '@mui/icons-material';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useParams } from 'react-router';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import PeopleTable from 'components/PeopleTable/PeopleTable';
+import {
+  GridColDef,
+  GridPaginationModel,
+  GridCellParams,
+} from '@mui/x-data-grid';
+import Avatar from 'components/Avatar/Avatar';
 
 interface IMemberNode {
   id: string;
@@ -76,15 +80,6 @@ interface IMemberWithUserType extends IMemberEdge {
   userType: string;
 }
 
-interface IOrganizationCardProps {
-  id: string;
-  name: string;
-  image: string;
-  email: string;
-  role: string;
-  sno: string;
-}
-
 export default function People(): React.JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'people' });
   const { t: tCommon } = useTranslation('common');
@@ -99,7 +94,7 @@ export default function People(): React.JSX.Element {
   const modes = ['All Members', 'Admins'];
 
   // Query the current page of members
-  const { data, loading, fetchMore, refetch } = useQuery(
+  const { data, loading, refetch } = useQuery(
     ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     {
       variables: {
@@ -139,16 +134,6 @@ export default function People(): React.JSX.Element {
     // If moving forward, fetch next page
     if (newPage > currentPage && pageInfo?.hasNextPage) {
       const afterCursor = pageInfo.endCursor;
-      // fetchMore returns next page data
-      await fetchMore({
-        variables: {
-          orgId: organizationId,
-          firstName_contains: searchTerm,
-          first: rowsPerPage,
-          after: afterCursor,
-        },
-        updateQuery: (prev, { fetchMoreResult }) => fetchMoreResult,
-      });
       setPageCursors((prev) => {
         const next = [...prev];
         next[newPage] = afterCursor;
@@ -201,6 +186,108 @@ export default function People(): React.JSX.Element {
     });
   }, [mode, organizationId, rowsPerPage]); // intentionally not including searchTerm (it's handled above)
 
+  const columns: GridColDef[] = useMemo(
+    () => [
+      {
+        field: 'sno',
+        headerName: 'S.No', // Using string directly or tCommon if available. tCommon is available.
+        width: 70,
+        sortable: false,
+        align: 'center',
+        headerAlign: 'center',
+      },
+      {
+        field: 'image',
+        headerName: 'Avatar',
+        width: 100,
+        sortable: false,
+        align: 'center',
+        headerAlign: 'center',
+        renderCell: (params: GridCellParams) => (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              width: '100%',
+              height: '100%',
+            }}
+          >
+            {params.value ? (
+              <img
+                src={params.value as string}
+                alt="avatar"
+                style={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                }}
+                crossOrigin="anonymous"
+              />
+            ) : (
+              <Avatar name={params.row.name} />
+            )}
+          </div>
+        ),
+      },
+      {
+        field: 'name',
+        headerName: 'Name',
+        flex: 1,
+        sortable: false,
+        align: 'center',
+        headerAlign: 'center',
+      },
+      {
+        field: 'email',
+        headerName: 'Email',
+        flex: 1,
+        sortable: false,
+        align: 'center',
+        headerAlign: 'center',
+      },
+      {
+        field: 'role',
+        headerName: 'Role',
+        flex: 1,
+        sortable: false,
+        align: 'center',
+        headerAlign: 'center',
+        renderCell: (params: GridCellParams) => (
+          <div className={styles.people_role}>
+            <span>{params.value as string}</span>
+          </div>
+        ),
+      },
+    ],
+    [],
+  );
+
+  const rows = useMemo(
+    () =>
+      members.map((member, index) => ({
+        id: member.node.id,
+        sno: currentPage * rowsPerPage + index + 1,
+        image: member.node.avatarURL,
+        name: member.node.name,
+        email: member.node.emailAddress ?? '***********************',
+        role: member.userType,
+      })),
+    [members, currentPage, rowsPerPage],
+  );
+
+  const handlePaginationModelChange = (model: GridPaginationModel) => {
+    if (model.pageSize !== rowsPerPage) {
+      const event = {
+        target: { value: model.pageSize.toString() },
+      } as React.ChangeEvent<HTMLInputElement>;
+      handleChangeRowsPerPage(event);
+    } else if (model.page !== currentPage) {
+      handleChangePage(null, model.page);
+    }
+  };
+
   return (
     <>
       <div className={`${styles.mainContainer_people}`}>
@@ -246,53 +333,18 @@ export default function People(): React.JSX.Element {
           </Dropdown>
         </div>
         <div className={styles.people_content}>
-          <div className={styles.people_card_header}>
-            <span style={{ flex: '1' }} className={styles.display_flex}>
-              <span style={{ flex: '1' }}>S.No</span>
-              <span style={{ flex: '1' }}>Avatar</span>
-            </span>
-            <span style={{ flex: '2' }}>Name</span>
-            <span style={{ flex: '2' }}>Email</span>
-            <span style={{ flex: '2' }}>Role</span>
-          </div>
-
-          <div className={styles.people_card_main_container}>
-            {loading ? (
-              <div className={styles.custom_row_center}>
-                <HourglassBottomIcon /> <span>Loading...</span>
-              </div>
-            ) : (
-              <>
-                {members && members.length > 0 ? (
-                  members.map((member: IMemberWithUserType, index) => {
-                    const name = `${member.node.name}`;
-                    const cardProps: IOrganizationCardProps = {
-                      name,
-                      image: member.node.avatarURL ?? '',
-                      id: member.node.id ?? '',
-                      email:
-                        member.node.emailAddress ?? '***********************',
-                      role: member.userType ?? '',
-                      sno: (index + 1 + currentPage * rowsPerPage).toString(),
-                    };
-                    return <PeopleCard key={index} {...cardProps} />;
-                  })
-                ) : (
-                  <span>{t('nothingToShow')}</span>
-                )}
-              </>
-            )}
-          </div>
-          <PaginationList
-            count={
+          <PeopleTable
+            rows={rows}
+            columns={columns}
+            loading={loading}
+            rowCount={
               pageInfo?.hasNextPage
                 ? (currentPage + 1) * rowsPerPage + 1
                 : currentPage * rowsPerPage + members.length
             }
-            rowsPerPage={rowsPerPage}
-            page={currentPage}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
+            paginationModel={{ page: currentPage, pageSize: rowsPerPage }}
+            onPaginationModelChange={handlePaginationModelChange}
+            pageSizeOptions={[5, 10, 25]}
           />
         </div>
       </div>
