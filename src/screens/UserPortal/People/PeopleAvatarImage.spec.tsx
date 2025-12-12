@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { AvatarImage } from './AvatarImage';
+import { PeopleAvatarImage, IMAGE_STYLES } from './PeopleAvatarImage';
 import { vi, describe, it, expect } from 'vitest';
 
 // Mock the Avatar component
@@ -10,7 +10,7 @@ vi.mock('../../../components/Avatar/Avatar', () => ({
   ),
 }));
 
-describe('AvatarImage', () => {
+describe('PeopleAvatarImage', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -22,15 +22,30 @@ describe('AvatarImage', () => {
   };
 
   it('renders the image when src is provided and no error occurs', () => {
-    render(<AvatarImage {...defaultProps} />);
+    render(<PeopleAvatarImage {...defaultProps} />);
     const img = screen.getByRole('img');
     expect(img).toBeInTheDocument();
     expect(img).toHaveAttribute('src', defaultProps.src);
     expect(img).toHaveAttribute('alt', defaultProps.alt);
+    expect(img).toHaveStyle({
+      width: IMAGE_STYLES.width as string,
+      height: IMAGE_STYLES.height as string,
+      borderRadius: IMAGE_STYLES.borderRadius as string,
+      objectFit: IMAGE_STYLES.objectFit as string,
+    });
+  });
+
+  it('exports IMAGE_STYLES with expected properties', () => {
+    expect(IMAGE_STYLES).toEqual({
+      width: '40px',
+      height: '40px',
+      borderRadius: '50%',
+      objectFit: 'cover',
+    });
   });
 
   it('renders the Avatar fallback when src is null', () => {
-    render(<AvatarImage {...defaultProps} src={null} />);
+    render(<PeopleAvatarImage {...defaultProps} src={null} />);
     expect(screen.queryByRole('img')).not.toBeInTheDocument();
     expect(screen.getByTestId('mock-avatar')).toBeInTheDocument();
     expect(screen.getByTestId('mock-avatar')).toHaveTextContent(
@@ -39,7 +54,7 @@ describe('AvatarImage', () => {
   });
 
   it('renders the Avatar fallback when image fails to load', () => {
-    render(<AvatarImage {...defaultProps} />);
+    render(<PeopleAvatarImage {...defaultProps} />);
     const img = screen.getByRole('img');
 
     // Simulate error

@@ -71,7 +71,7 @@ import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import Avatar from 'components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
 import PageHeader from 'shared-components/Navbar/Navbar';
-import PeopleTable from 'components/PeopleTable/PeopleTable';
+import PeopleTable from 'shared-components/PeopleTable/PeopleTable';
 
 const PAGE_SIZE = 10;
 interface IProcessedRow {
@@ -523,6 +523,11 @@ function OrganizationPeople(): JSX.Element {
           pageSizeOptions={[PAGE_SIZE]}
           slots={{
             noRowsOverlay: () => (
+              <Stack height="100%" alignItems="center" justifyContent="center">
+                {t('notFound')}
+              </Stack>
+            ),
+            noResultsOverlay: () => (
               <Stack height="100%" alignItems="center" justifyContent="center">
                 {t('notFound')}
               </Stack>

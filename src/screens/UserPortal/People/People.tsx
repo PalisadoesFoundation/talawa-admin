@@ -54,13 +54,13 @@ import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import PeopleTable from 'components/PeopleTable/PeopleTable';
+import PeopleTable from 'shared-components/PeopleTable/PeopleTable';
 import {
   GridColDef,
   GridPaginationModel,
   GridCellParams,
 } from '@mui/x-data-grid';
-import { AvatarImage } from './AvatarImage';
+import { PeopleAvatarImage } from './PeopleAvatarImage';
 
 interface IMemberNode {
   id: string;
@@ -218,8 +218,8 @@ export default function People(): React.JSX.Element {
               height: '100%',
             }}
           >
-            <AvatarImage
-              src={params.value as string}
+            <PeopleAvatarImage
+              src={(params.value as string | null | undefined) ?? null}
               name={params.row.name}
               alt={params.row.name}
             />

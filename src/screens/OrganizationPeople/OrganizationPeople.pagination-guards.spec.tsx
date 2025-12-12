@@ -79,7 +79,7 @@ const isMemberConnectionOperation = (operation: {
   return documentContainsField(operation.query, 'members');
 };
 
-vi.mock('components/PeopleTable/PeopleTable', () => ({
+vi.mock('shared-components/PeopleTable/PeopleTable', () => ({
   default: ({
     rows,
     paginationModel,
@@ -99,6 +99,21 @@ vi.mock('components/PeopleTable/PeopleTable', () => ({
 
     return (
       <div>
+        <button
+          type="button"
+          aria-label="previous page"
+          onClick={() =>
+            onPaginationModelChange(
+              {
+                page: safePaginationModel.page - 1,
+                pageSize: safePaginationModel.pageSize,
+              },
+              {} as GridCallbackDetails<'pagination'>,
+            )
+          }
+        >
+          previous page
+        </button>
         <button
           type="button"
           aria-label="next page"
@@ -252,5 +267,66 @@ describe('OrganizationPeople pagination guards', () => {
     expect(operationCount).toBe(operationCountAfterInitialLoad);
 
     expect(screen.getByText('John Doe')).toBeInTheDocument();
+  });
+
+  test('blocks backward pagination when hasPreviousPage is false', async () => {
+    let operationCount = 0;
+    const singlePageMock = createMemberConnectionMock(
+      {
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      },
+      {
+        hasNextPage: true,
+        hasPreviousPage: false,
+        startCursor: 'cursor1',
+        endCursor: 'cursor1',
+      },
+    );
+
+    const mockLink = mockSingleLink(singlePageMock);
+    const operationCountLink = new ApolloLink((operation, forward) => {
+      if (isMemberConnectionOperation(operation)) {
+        operationCount += 1;
+      }
+      return forward ? forward(operation) : null;
+    });
+
+    const client = new ApolloClient({
+      cache: new InMemoryCache(),
+      link: ApolloLink.from([operationCountLink, mockLink]),
+    });
+
+    render(
+      <ApolloProvider client={client}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </ApolloProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const operationCountAfterInitialLoad = operationCount;
+
+    // This triggers OrganizationPeople.handlePaginationModelChange with a backward navigation.
+    fireEvent.click(screen.getByRole('button', { name: /previous page/i }));
+
+    // Explicit assertion: the backward-navigation guard prevents any follow-up query.
+    expect(operationCount).toBe(operationCountAfterInitialLoad);
   });
 });

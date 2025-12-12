@@ -6,6 +6,7 @@ import {
   fireEvent,
   waitFor,
   act,
+  within,
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -17,6 +18,7 @@ import i18nForTest from 'utils/i18nForTest';
 import People from './People';
 import userEvent from '@testing-library/user-event';
 import { vi, it, beforeEach, afterEach } from 'vitest';
+import styles from 'style/app-fixed.module.css';
 /**
  * This file contains unit tests for the People component.
  *
@@ -55,7 +57,10 @@ const memberEdge = (props: InterfaceMemberEdgeProps = {}) => ({
     name: props.name || 'User 1',
     role: props.role || 'member',
     avatarURL: props.avatarURL || null,
-    emailAddress: props.emailAddress || 'user1@example.com',
+    emailAddress:
+      props.emailAddress === undefined
+        ? 'user1@example.com'
+        : props.emailAddress,
     createdAt: '2023-03-02T03:22:08.101Z',
     ...props.node,
   },
@@ -666,6 +671,110 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
 
     expect(screen.getByText('test@example.com')).toBeInTheDocument();
     expect(screen.getByText('admin@example.com')).toBeInTheDocument();
+  });
+
+  it('displays masked email when emailAddress is null', async () => {
+    const maskedEmailMock = {
+      ...defaultQueryMock,
+      result: {
+        data: {
+          organization: {
+            members: {
+              edges: [
+                memberEdge({
+                  id: 'masked-email-user',
+                  name: 'Masked Email User',
+                  emailAddress: null,
+                }),
+              ],
+              pageInfo: {
+                endCursor: 'cursor1',
+                hasPreviousPage: false,
+                hasNextPage: false,
+                startCursor: 'cursor1',
+              },
+            },
+          },
+        },
+      },
+    };
+
+    render(
+      <MockedProvider mocks={[maskedEmailMock]}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+
+    const emailCells = document.querySelectorAll(
+      '.MuiDataGrid-cell[data-field="email"]',
+    );
+    expect(emailCells.length).toBeGreaterThan(0);
+    expect(
+      Array.from(emailCells).some((cell) =>
+        cell.textContent?.includes('***********************'),
+      ),
+    ).toBe(true);
+  });
+
+  it('renders an avatar image cell when avatarURL is present', async () => {
+    const withAvatarMock = {
+      ...defaultQueryMock,
+      result: {
+        data: {
+          organization: {
+            members: {
+              edges: [
+                memberEdge({
+                  id: '1',
+                  name: 'Test User',
+                  avatarURL: 'https://example.com/test-user.png',
+                }),
+              ],
+              pageInfo: {
+                endCursor: 'cursor1',
+                hasPreviousPage: false,
+                hasNextPage: false,
+                startCursor: 'cursor1',
+              },
+            },
+          },
+        },
+      },
+    };
+
+    render(
+      <MockedProvider mocks={[withAvatarMock]}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    expect(screen.getByRole('img', { name: 'Test User' })).toBeInTheDocument();
+  });
+
+  it('renders the role cell with the expected styling wrapper', async () => {
+    renderComponentWithEmailMock();
+    await wait();
+
+    const gridRoot = document.querySelector('.MuiDataGrid-root');
+    expect(gridRoot).toBeTruthy();
+
+    const adminRole = within(gridRoot as HTMLElement).getByText('Admin');
+    expect(adminRole.closest('div')).toHaveClass(styles.people_role);
   });
 
   it('should handle users with different ID formats', async () => {

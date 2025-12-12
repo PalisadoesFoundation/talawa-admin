@@ -4,6 +4,7 @@ import { vi } from 'vitest';
 import PeopleTable from './PeopleTable';
 import { GridColDef } from '@mui/x-data-grid';
 import userEvent from '@testing-library/user-event';
+import styles from './PeopleTable.module.css';
 
 describe('PeopleTable Component', () => {
   afterEach(() => {
@@ -47,6 +48,11 @@ describe('PeopleTable Component', () => {
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Jane Smith')).toBeInTheDocument();
     expect(screen.getByText('john@example.com')).toBeInTheDocument();
+  });
+
+  it('applies the tableContainer CSS class', () => {
+    const { container } = render(<PeopleTable {...defaultProps} />);
+    expect(container.querySelector(`.${styles.tableContainer}`)).toBeTruthy();
   });
 
   it('displays loading state', () => {
@@ -129,6 +135,9 @@ describe('PeopleTable Component', () => {
       .spyOn(console, 'error')
       .mockImplementation(() => undefined);
 
+    const expectedErrorMessage =
+      'PeopleTable: Row is missing a unique identifier (_id or id).';
+
     expect(() =>
       render(
         <PeopleTable
@@ -136,19 +145,18 @@ describe('PeopleTable Component', () => {
           rows={[{ name: 'No Id User', email: 'noid@example.com' }]}
         />,
       ),
-    ).toThrow(/missing a unique identifier/i);
+    ).toThrow(expectedErrorMessage);
 
     consoleErrorSpy.mockRestore();
   });
 
   it('renders with custom slots', () => {
-    const CustomNoRowsOverlay = () => <div>No Data Available</div>;
     render(
       <PeopleTable
         {...defaultProps}
         rows={[]}
         rowCount={0}
-        slots={{ noRowsOverlay: CustomNoRowsOverlay }}
+        slots={{ noRowsOverlay: () => <div>No Data Available</div> }}
       />,
     );
 
@@ -173,5 +181,85 @@ describe('PeopleTable Component', () => {
     await user.click(pageSizeSelect);
 
     expect(screen.getByRole('option', { name: '20' })).toBeInTheDocument();
+  });
+
+  it('passes server pagination mode and paginationMeta through to DataGrid', async () => {
+    let capturedProps: Record<string, unknown> | undefined;
+
+    vi.resetModules();
+    vi.doMock('@mui/x-data-grid', () => {
+      const mockDataGrid = (props: Record<string, unknown>) => {
+        capturedProps = props;
+        return null;
+      };
+
+      return { DataGrid: mockDataGrid };
+    });
+
+    const { default: IsolatedPeopleTable } = await import('./PeopleTable');
+
+    render(
+      <IsolatedPeopleTable
+        rows={mockRows}
+        columns={mockColumns as unknown as GridColDef[]}
+        loading={false}
+        rowCount={10}
+        paginationModel={{ page: 0, pageSize: 5 }}
+        onPaginationModelChange={vi.fn()}
+        paginationMeta={{ hasNextPage: false }}
+      />,
+    );
+
+    expect(capturedProps).toBeTruthy();
+    expect(capturedProps?.paginationMode).toBe('server');
+    expect(capturedProps?.paginationMeta).toEqual({ hasNextPage: false });
+  });
+
+  it('provides a theme-based sx styling function to DataGrid', async () => {
+    let capturedProps: Record<string, unknown> | undefined;
+
+    vi.resetModules();
+    vi.doMock('@mui/x-data-grid', () => {
+      const mockDataGrid = (props: Record<string, unknown>) => {
+        capturedProps = props;
+        return null;
+      };
+
+      return { DataGrid: mockDataGrid };
+    });
+
+    const { default: IsolatedPeopleTable } = await import('./PeopleTable');
+
+    render(
+      <IsolatedPeopleTable
+        rows={mockRows}
+        columns={mockColumns as unknown as GridColDef[]}
+        loading={false}
+        rowCount={10}
+        paginationModel={{ page: 0, pageSize: 5 }}
+        onPaginationModelChange={vi.fn()}
+      />,
+    );
+
+    const sx = capturedProps?.sx as
+      | undefined
+      | ((theme: {
+          palette: { divider: string; text: { primary: string } };
+        }) => Record<string, unknown>);
+    expect(typeof sx).toBe('function');
+
+    const styleObject = sx?.({
+      palette: { divider: '#ddd', text: { primary: '#111' } },
+    });
+
+    expect(styleObject).toEqual(
+      expect.objectContaining({
+        border: 0,
+        '& .MuiDataGrid-columnHeaders': expect.any(Object),
+        '& .MuiDataGrid-cell': expect.any(Object),
+        '& .MuiDataGrid-row': expect.any(Object),
+        '& .MuiDataGrid-row:hover': expect.any(Object),
+      }),
+    );
   });
 });

@@ -14,7 +14,7 @@ export const IMAGE_STYLES: React.CSSProperties = {
 /**
  * Interface for the AvatarImage component props.
  */
-export interface IAvatarImageProps {
+export interface IPeopleAvatarImageProps {
   src: string | null;
   alt: string;
   name: string;
@@ -29,7 +29,7 @@ export interface IAvatarImageProps {
  * @param props.name - The name of the user (used for the fallback Avatar).
  * @returns The rendered AvatarImage component.
  */
-export const AvatarImage: React.FC<IAvatarImageProps> = ({
+export const PeopleAvatarImage: React.FC<IPeopleAvatarImageProps> = ({
   src,
   alt,
   name,

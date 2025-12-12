@@ -329,7 +329,8 @@
     "create": "create",
     "cancel": "cancel",
     "user": "user",
-    "profile": "profile"
+    "profile": "profile",
+    "notFound": "Not found"
   },
   "organizationTags": {
     "title": "Organization Tags",

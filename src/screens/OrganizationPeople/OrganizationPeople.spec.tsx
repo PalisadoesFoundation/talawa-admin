@@ -490,6 +490,52 @@ describe('OrganizationPeople', () => {
     });
   });
 
+  test('shows notFound overlay when local search returns no rows', async () => {
+    const mocks = [
+      createMemberConnectionMock({
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      }),
+    ];
+
+    const link = new StaticMockLink(mocks, true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByPlaceholderText(/Enter Full Name/i);
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 'zzzz-no-match');
+
+    const searchButton = screen.getByTestId('searchbtn');
+    fireEvent.click(searchButton);
+
+    await waitFor(() => {
+      expect(screen.getByText(/not found/i)).toBeInTheDocument();
+    });
+  });
+
   test('handles tab switching between members, admins, and users', async () => {
     const initialMock = createMemberConnectionMock({
       orgId: 'orgid',
@@ -588,6 +634,62 @@ describe('OrganizationPeople', () => {
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+  });
+
+  test('disables remove button on users tab', async () => {
+    const initialMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+
+    const usersMock = createUserListMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+
+    const mocks = [initialMock, usersMock];
+    const link = new StaticMockLink(mocks, true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const sortingButton = screen.getByTestId('sort');
+    fireEvent.click(sortingButton);
+    const usersOption = screen.getByText(/users/i);
+    fireEvent.click(usersOption);
+
+    await waitFor(() => {
+      expect(screen.getByText('User One')).toBeInTheDocument();
+    });
+
+    const removeButtons = screen.getAllByTestId('removeMemberModalBtn');
+    removeButtons.forEach((button) => {
+      expect(button).toBeDisabled();
     });
   });
 
