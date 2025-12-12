@@ -1434,20 +1434,21 @@ describe('Talawa-API server fetch check', () => {
 describe('Extra coverage for 100 %', () => {
   /* 1.  verifyRecaptcha early-return when REACT_APP_USE_RECAPTCHA === 'no' */
   it('bypasses recaptcha when feature is off', async () => {
+    await vi.resetModules();
     vi.doMock('Constant/constant.ts', async () => ({
       ...(await vi.importActual('Constant/constant.ts')),
       REACT_APP_USE_RECAPTCHA: 'no',
       RECAPTCHA_SITE_KEY: 'xxx',
     }));
 
-    const { verifyRecaptcha } = await vi.importActual('../LoginPage');
+    const { verifyRecaptcha } = await vi.importActual('./LoginPage');
     const result = await verifyRecaptcha(null);
     expect(result).toBe(true);
   });
 
   /* 2.  Invalid name toast */
   it('shows toast for invalid name during registration', async () => {
-    Object.defineProperty(window, 'location', { value: { pathname: '/' } });
+    Object.defineProperty(window, 'location', { configurable: true, value: { pathname: '/' } });
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
@@ -1461,23 +1462,20 @@ describe('Extra coverage for 100 %', () => {
     );
     await wait();
 
-    const regBtn = screen.queryByTestId('goToRegisterPortion');
-    if (regBtn) await userEvent.click(regBtn);
-
+    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
     await userEvent.type(screen.getByPlaceholderText(/Name/i), '123'); // invalid
     await userEvent.type(screen.getByTestId('signInEmail'), 'valid@email.com');
     await userEvent.type(screen.getByPlaceholderText('Password'), 'Valid@123');
     await userEvent.type(screen.getByPlaceholderText('Confirm Password'), 'Valid@123');
-
     await userEvent.click(screen.getByTestId('registrationBtn'));
-
     await wait();
-    expect(toast.warn).toHaveBeenCalled(); // we only care that warn was fired
+
+    expect(toastMocks.warn).toHaveBeenCalled();
   });
 
   /* 3.  Invalid password toast */
   it('shows toast for weak password', async () => {
-    Object.defineProperty(window, 'location', { value: { pathname: '/' } });
+    Object.defineProperty(window, 'location', { configurable: true, value: { pathname: '/' } });
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
@@ -1491,23 +1489,20 @@ describe('Extra coverage for 100 %', () => {
     );
     await wait();
 
-    const regBtn = screen.queryByTestId('goToRegisterPortion');
-    if (regBtn) await userEvent.click(regBtn);
-
+    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
     await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
     await userEvent.type(screen.getByTestId('signInEmail'), 'valid@email.com');
     await userEvent.type(screen.getByPlaceholderText('Password'), 'weak'); // invalid
     await userEvent.type(screen.getByPlaceholderText('Confirm Password'), 'weak');
-
     await userEvent.click(screen.getByTestId('registrationBtn'));
-
     await wait();
-    expect(toast.warn).toHaveBeenCalled();
+
+    expect(toastMocks.warn).toHaveBeenCalled();
   });
 
   /* 4.  Non-admin tries to log in on /admin */
   it('warns when non-admin logs in from admin portal', async () => {
-    Object.defineProperty(window, 'location', { value: { pathname: '/admin' } });
+    Object.defineProperty(window, 'location', { configurable: true, value: { pathname: '/admin' } });
     const NON_ADMIN_MOCK = [
       {
         request: { query: SIGNIN_QUERY, variables: { email: 'user@example.com', password: 'pass' } },
@@ -1539,17 +1534,14 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.type(screen.getByTestId('loginEmail'), 'user@example.com');
     await userEvent.type(screen.getByPlaceholderText(/Enter Password/i), 'pass');
     await userEvent.click(screen.getByTestId('loginBtn'));
-
     await wait();
-    expect(toast.warn).toHaveBeenCalled();
+
+    expect(toastMocks.warn).toHaveBeenCalled();
   });
 
   /* 5.  refetch called after GET_COMMUNITY_DATA_PG mount */
   it('refetches community data on mount', async () => {
     const mockRefetch = vi.fn();
-    vi.spyOn(require('@apollo/client'), 'useQuery')
-      .mockReturnValueOnce({ data: null, refetch: mockRefetch });
-
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
@@ -1561,15 +1553,15 @@ describe('Extra coverage for 100 %', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
     await wait();
     expect(mockRefetch).toHaveBeenCalled();
   });
 
   /* 6.  fetch(BACKEND_URL) catch block */
   it('handles Talawa-API unreachable', async () => {
-    global.fetch = vi.fn(() => Promise.reject(new Error('Network error')));
-    const errorHandlerSpy = vi.spyOn(await import('utils/errorHandler'), 'errorHandler');
+    vi.spyOn(global, 'fetch').mockRejectedValueOnce(new Error('Network error'));
+    const errorHandlerMod = await import('utils/errorHandler');
+    const errorHandlerSpy = vi.spyOn(errorHandlerMod, 'errorHandler');
 
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
@@ -1582,7 +1574,6 @@ describe('Extra coverage for 100 %', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-
     await wait();
     expect(errorHandlerSpy).toHaveBeenCalled();
   });
@@ -1591,15 +1582,14 @@ describe('Extra coverage for 100 %', () => {
   it('resets signup recaptcha when signup fails', async () => {
     const FAIL_MOCK = [
       {
-        request: {
-          query: SIGNUP_MUTATION,
-          variables: { ID: '', name: 'John', email: 'john@doe.com', password: 'John@123' },
-        },
+        request: { query: SIGNUP_MUTATION, variables: { ID: '', name: 'John', email: 'john@doe.com', password: 'John@123' } },
         error: new Error('Signup failed'),
       },
+      { request: { query: GET_COMMUNITY_DATA_PG }, result: { data: { community: null } } },
+      { request: { query: ORGANIZATION_LIST_NO_MEMBERS }, result: { data: { organizations: [] } } },
     ];
 
-    Object.defineProperty(window, 'location', { value: { pathname: '/' } });
+    Object.defineProperty(window, 'location', { configurable: true, value: { pathname: '/' } });
     render(
       <MockedProvider mocks={FAIL_MOCK} addTypename={false}>
         <BrowserRouter>
@@ -1613,17 +1603,14 @@ describe('Extra coverage for 100 %', () => {
     );
     await wait();
 
-    const regBtn = screen.queryByTestId('goToRegisterPortion');
-    if (regBtn) await userEvent.click(regBtn);
-
+    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
     await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John');
     await userEvent.type(screen.getByTestId('signInEmail'), 'john@doe.com');
     await userEvent.type(screen.getByPlaceholderText('Password'), 'John@123');
     await userEvent.type(screen.getByPlaceholderText('Confirm Password'), 'John@123');
-
     await userEvent.click(screen.getByTestId('registrationBtn'));
-
     await wait();
+
     expect(resetReCAPTCHA).toHaveBeenCalled();
   });
 });
