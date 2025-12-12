@@ -78,7 +78,9 @@ describe('PeopleTable Component', () => {
     render(<PeopleTable {...defaultProps} />);
 
     // Open the page size dropdown
-    const pageSizeSelect = screen.getByLabelText('Rows per page:');
+    const pageSizeSelect = screen.getByRole('combobox', {
+      name: /rows per page/i,
+    });
     await user.click(pageSizeSelect);
 
     // Select a new page size (e.g., 10)
