@@ -1,16 +1,23 @@
 import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import {
+  ApolloClient,
+  ApolloLink,
+  ApolloProvider,
+  InMemoryCache,
+} from '@apollo/client';
 import { MemoryRouter, Routes, Route } from 'react-router';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
+import { mockSingleLink } from 'utils/StaticMockLink';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import OrganizationPeople from './OrganizationPeople';
 import { vi } from 'vitest';
 import type { IPeopleTableProps } from 'types/PeopleTable/interface';
 import type { GridCallbackDetails } from '@mui/x-data-grid';
+import type { MockedResponse } from '@apollo/react-testing';
 
 vi.mock('components/PeopleTable/PeopleTable', () => ({
   default: ({
@@ -75,7 +82,7 @@ const createMemberConnectionMock = (
     startCursor: string;
     endCursor: string;
   },
-) => {
+): MockedResponse => {
   return {
     request: {
       query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
@@ -119,6 +126,7 @@ describe('OrganizationPeople pagination guards', () => {
   });
 
   test('blocks forward pagination when hasNextPage is false', async () => {
+    let operationCount = 0;
     const singlePageMock = createMemberConnectionMock(
       {
         orgId: 'orgid',
@@ -135,8 +143,19 @@ describe('OrganizationPeople pagination guards', () => {
       },
     );
 
+    const mockLink = mockSingleLink(singlePageMock);
+    const operationCountLink = new ApolloLink((operation, forward) => {
+      operationCount += 1;
+      return forward ? forward(operation) : null;
+    });
+
+    const client = new ApolloClient({
+      cache: new InMemoryCache(),
+      link: ApolloLink.from([operationCountLink, mockLink]),
+    });
+
     render(
-      <MockedProvider mocks={[singlePageMock]}>
+      <ApolloProvider client={client}>
         <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -149,17 +168,21 @@ describe('OrganizationPeople pagination guards', () => {
             </I18nextProvider>
           </Provider>
         </MemoryRouter>
-      </MockedProvider>,
+      </ApolloProvider>,
     );
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
+    const operationCountAfterInitialLoad = operationCount;
+
     // This triggers OrganizationPeople.handlePaginationModelChange with a forward navigation.
     fireEvent.click(screen.getByRole('button', { name: /next page/i }));
 
-    // If a follow-up query is executed, MockedProvider will throw due to missing mocks.
+    // Explicit assertion: the forward-navigation guard prevents any follow-up query.
+    expect(operationCount).toBe(operationCountAfterInitialLoad);
+
     expect(screen.getByText('John Doe')).toBeInTheDocument();
   });
 });
