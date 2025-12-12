@@ -468,7 +468,7 @@ describe('Testing Advertisement Register Component', () => {
         name: 'Ad1',
         type: 'banner',
         description: 'this is a banner',
-        attachments: undefined,
+        attachments: [],
       });
       expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
       expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);

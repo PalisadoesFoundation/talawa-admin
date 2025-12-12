@@ -127,7 +127,7 @@ function AdvertisementRegister({
     type: 'banner',
     startAt: new Date(),
     endAt: dayjs().add(1, 'day').toDate(),
-    attachments: undefined,
+    attachments: [],
   });
 
   const handleClose = (): void => {
@@ -137,7 +137,7 @@ function AdvertisementRegister({
       description: null,
       startAt: new Date(),
       endAt: dayjs().add(1, 'day').toDate(),
-      attachments: undefined,
+      attachments: [],
     });
     setShow(false);
   };
@@ -167,7 +167,7 @@ function AdvertisementRegister({
       if (validFiles.length > 0) {
         setFormState((prev) => ({
           ...prev,
-          attachments: [...(prev.attachments || []), ...validFiles],
+          attachments: [...prev.attachments, ...validFiles],
         }));
       }
     }
@@ -177,11 +177,7 @@ function AdvertisementRegister({
   const removeFile = (index: number): void => {
     setFormState((prev) => ({
       ...prev,
-      attachments: (
-        prev?.attachments ||
-        /*istanbul ignore next */
-        []
-      ).filter((_, i) => i !== index),
+      attachments: prev.attachments.filter((_, i) => i !== index),
     }));
   };
 
@@ -261,7 +257,7 @@ function AdvertisementRegister({
           startAt: new Date(formState.startAt),
           endAt: new Date(),
           organizationId: currentOrg,
-          attachments: undefined,
+          attachments: [],
           existingAttachments: undefined,
         });
         setAfterActive(null);
@@ -426,7 +422,7 @@ function AdvertisementRegister({
                   data-cy="advertisementMediaInput"
                 />
                 {/* Preview section */}
-                {(formState.attachments || []).map((file, index) => (
+                {formState.attachments.map((file, index) => (
                   <div key={index}>
                     {file.type.startsWith('video/') ? (
                       <video
@@ -486,12 +482,7 @@ function AdvertisementRegister({
               <Form.Control
                 type="date"
                 required
-                value={
-                  /* istanbul ignore next */
-                  formState.startAt instanceof Date
-                    ? dayjs.utc(formState.startAt).format('YYYY-MM-DD')
-                    : ''
-                }
+                value={dayjs.utc(formState.startAt).format('YYYY-MM-DD')}
                 onChange={(e): void => {
                   // Create UTC date from date input to avoid timezone issues
                   const newDate = dayjs.utc(e.target.value).toDate();
@@ -508,12 +499,7 @@ function AdvertisementRegister({
               <Form.Control
                 type="date"
                 required
-                value={
-                  /* istanbul ignore next */
-                  formState.endAt instanceof Date
-                    ? dayjs.utc(formState.endAt).format('YYYY-MM-DD')
-                    : ''
-                }
+                value={dayjs.utc(formState.endAt).format('YYYY-MM-DD')}
                 onChange={(e): void => {
                   // Create UTC date from date input to avoid timezone issues
                   const newDate = dayjs.utc(e.target.value).toDate();
