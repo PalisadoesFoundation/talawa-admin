@@ -133,6 +133,32 @@ describe('Apollo Client Configuration', () => {
     expect(deriveBackendWebsocketUrl('not-a-url')).toBe('');
     expect(deriveBackendWebsocketUrl('ftp://example.com/graphql')).toBe('');
     expect(deriveBackendWebsocketUrl(undefined)).toBe('');
+
+    // Test null input
+    expect(deriveBackendWebsocketUrl(null)).toBe('');
+
+    // Test empty string
+    expect(deriveBackendWebsocketUrl('')).toBe('');
+
+    // Test URL with port
+    expect(deriveBackendWebsocketUrl('https://example.com:8080/graphql')).toBe(
+      'wss://example.com:8080/graphql',
+    );
+
+    // Test URL with path
+    expect(deriveBackendWebsocketUrl('http://example.com/api/graphql')).toBe(
+      'ws://example.com/api/graphql',
+    );
+
+    // Test URL with query parameters
+    expect(
+      deriveBackendWebsocketUrl('https://example.com/graphql?token=abc'),
+    ).toBe('wss://example.com/graphql?token=abc');
+
+    // Test URL with fragment (should be excluded)
+    expect(
+      deriveBackendWebsocketUrl('https://example.com/graphql#section'),
+    ).toBe('wss://example.com/graphql');
   });
 
   describe('Authorization Headers', () => {
