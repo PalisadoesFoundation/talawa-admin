@@ -8,6 +8,16 @@ import {
 } from '@mui/x-data-grid';
 import styles from './PeopleTable.module.css';
 
+/**
+ * PeopleTable Component
+ *
+ * A reusable component that renders a data grid for displaying a list of people.
+ * It wraps the MUI DataGrid component and provides standard styling and pagination handling.
+ *
+ * @component
+ * @param {IPeopleTableProps} props - The props for the PeopleTable component.
+ * @returns {JSX.Element} The rendered PeopleTable component.
+ */
 interface IPeopleTableProps {
   rows: GridRowsProp;
   columns: GridColDef[];
