@@ -60,7 +60,7 @@ import {
   GridPaginationModel,
   GridCellParams,
 } from '@mui/x-data-grid';
-import Avatar from 'components/Avatar/Avatar';
+import { AvatarImage } from './AvatarImage';
 
 interface IMemberNode {
   id: string;
@@ -218,21 +218,11 @@ export default function People(): React.JSX.Element {
               height: '100%',
             }}
           >
-            {params.value ? (
-              <img
-                src={params.value as string}
-                alt="avatar"
-                style={{
-                  width: 40,
-                  height: 40,
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                }}
-                crossOrigin="anonymous"
-              />
-            ) : (
-              <Avatar name={params.row.name} />
-            )}
+            <AvatarImage
+              src={params.value as string}
+              name={params.row.name}
+              alt={params.row.name}
+            />
           </div>
         ),
       },
