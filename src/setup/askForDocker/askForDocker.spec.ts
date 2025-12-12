@@ -257,7 +257,6 @@ describe('askAndUpdateTalawaApiUrl', () => {
 describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
   test('should transform localhost to host.docker.internal and not error', async () => {
     (askForTalawaApiUrl as Mock).mockResolvedValue('http://localhost:3000');
-
     vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
       shouldSetTalawaApiUrlResponse: true,
     });
