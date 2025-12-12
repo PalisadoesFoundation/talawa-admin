@@ -107,6 +107,23 @@ describe('PeopleTable Component', () => {
     expect(screen.getByText('Alice')).toBeInTheDocument();
   });
 
+  it('throws when a row is missing both id and _id', () => {
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
+
+    expect(() =>
+      render(
+        <PeopleTable
+          {...defaultProps}
+          rows={[{ name: 'No Id User', email: 'noid@example.com' }]}
+        />,
+      ),
+    ).toThrow(/missing a unique identifier/i);
+
+    consoleErrorSpy.mockRestore();
+  });
+
   it('renders with custom slots', async () => {
     const CustomNoRowsOverlay = () => <div>No Data Available</div>;
     render(

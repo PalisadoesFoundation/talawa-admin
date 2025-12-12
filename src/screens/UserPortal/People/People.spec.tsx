@@ -514,9 +514,13 @@ describe('Testing People Screen Pagination [User Portal]', () => {
   });
 
   it('handles backward pagination correctly', async () => {
+    const user = userEvent.setup();
+
     // Use mocks that support forward and backward navigation
     render(
-      <MockedProvider mocks={[defaultQueryMock, nextPageMock]}>
+      <MockedProvider
+        mocks={[defaultQueryMock, nextPageMock, defaultQueryMock]}
+      >
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -528,32 +532,30 @@ describe('Testing People Screen Pagination [User Portal]', () => {
     );
     await wait();
 
-    // Navigate to page 2
-    const nextButton = screen.getByRole('button', { name: /Go to next page/i });
+    // Navigate forward (covers cursor tracking + currentPage change)
+    const nextButton = await screen.findByRole('button', {
+      name: /go to next page/i,
+    });
     expect(nextButton).not.toBeDisabled();
 
-    // TODO: Fix test interaction with MUI DataGrid pagination button.
-    // The click event is not triggering the onPaginationModelChange callback in the test environment.
-    // Verified manually that the component logic is correct.
-    /*
-    // TODO: Fix test interaction with MUI DataGrid pagination button.
-    // The click event is not triggering the onPaginationModelChange callback in the test environment.
-    // Verified manually that the component logic is correct.
-    /*
     await user.click(nextButton);
 
+    // On page 2, sno should be offset by pageSize (5): first row sno becomes 6
     await waitFor(() => {
-      const prevButton = screen.getByRole('button', { name: /Go to previous page/i });
-      expect(prevButton).not.toBeDisabled();
+      expect(screen.getByText('6')).toBeInTheDocument();
     });
 
-    const prevButton = screen.getByRole('button', { name: /Go to previous page/i });
-    // Now navigate back to page 1 (this covers lines 158-161)
-    await user.click(prevButton);
-    await waitFor(() => {
-      expect(screen.getByText('user1')).toBeInTheDocument();
+    // Navigate backward (covers the backward branch)
+    const prevButton = screen.getByRole('button', {
+      name: /go to previous page/i,
     });
-    */
+    expect(prevButton).not.toBeDisabled();
+
+    await user.click(prevButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('1')).toBeInTheDocument();
+    });
   });
 });
 
