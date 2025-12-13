@@ -48,27 +48,39 @@
  * - Displays appropriate messages when no data is available.
  *
  */
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
-import { Table } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { MEMBERSHIP_REQUEST, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
+import {
+  ACCEPT_ORGANIZATION_REQUEST_MUTATION,
+  REJECT_ORGANIZATION_REQUEST_MUTATION,
+} from 'GraphQl/Mutations/mutations';
+import { errorHandler } from 'utils/errorHandler';
+import {
+  MEMBERSHIP_REQUEST_PG,
+  ORGANIZATION_LIST,
+} from 'GraphQl/Queries/Queries';
 import TableLoader from 'components/TableLoader/TableLoader';
-import RequestsTableItem from 'components/RequestsTableItem/RequestsTableItem';
+import { DataGrid, GridCellParams } from '@mui/x-data-grid';
+import type {
+  ReportingTableColumn,
+  ReportingTableGridProps,
+  InfiniteScrollProps,
+} from '../../types/ReportingTable/interface';
+import Avatar from 'components/Avatar/Avatar';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import styles from '../../style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router';
-import {
-  Paper,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@mui/material';
+import { Stack } from '@mui/material';
 import PageHeader from 'shared-components/Navbar/Navbar';
+import {
+  dataGridStyle,
+  PAGE_SIZE,
+  ROW_HEIGHT,
+} from '../../types/ReportingTable/utils';
 
 interface InterfaceRequestsListItem {
   membershipRequestId: string;
@@ -93,7 +105,6 @@ const Requests = (): JSX.Element => {
   const { getItem } = useLocalStorage();
 
   // Define constants and state variables
-  const perPageResult = 8;
   const [isLoading, setIsLoading] = useState(true);
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -103,17 +114,20 @@ const Requests = (): JSX.Element => {
   const organizationId = orgId;
 
   // Query to fetch membership requests
-  const { data, loading, fetchMore, refetch } = useQuery(MEMBERSHIP_REQUEST, {
-    variables: {
-      input: {
-        id: organizationId,
+  const { data, loading, fetchMore, refetch } = useQuery(
+    MEMBERSHIP_REQUEST_PG,
+    {
+      variables: {
+        input: {
+          id: organizationId,
+        },
+        first: PAGE_SIZE,
+        skip: 0,
+        name_contains: '',
       },
-      first: perPageResult,
-      skip: 0,
-      name_contains: '',
+      notifyOnNetworkStatusChange: true,
     },
-    notifyOnNetworkStatusChange: true,
-  });
+  );
 
   const { data: orgsData } = useQuery(ORGANIZATION_LIST);
   const [displayedRequests, setDisplayedRequests] = useState<
@@ -135,12 +149,12 @@ const Requests = (): JSX.Element => {
     setDisplayedRequests(pendingRequests);
 
     // Update hasMore based on whether we have a full page of results
-    if (allRequests.length < perPageResult) {
+    if (allRequests.length < PAGE_SIZE) {
       setHasMore(false);
     } else {
       setHasMore(true);
     }
-  }, [data, perPageResult]);
+  }, [data, PAGE_SIZE]);
 
   // Clear search on unmount
   useEffect(() => {
@@ -194,7 +208,7 @@ const Requests = (): JSX.Element => {
       input: {
         id: organizationId,
       },
-      first: perPageResult,
+      first: PAGE_SIZE,
       skip: 0,
       name_contains: value,
       // Later on we can add several search and filter options
@@ -209,7 +223,7 @@ const Requests = (): JSX.Element => {
       input: {
         id: organizationId,
       },
-      first: perPageResult,
+      first: PAGE_SIZE,
       skip: 0,
       name_contains: '',
     });
@@ -228,7 +242,7 @@ const Requests = (): JSX.Element => {
     fetchMore({
       variables: {
         input: { id: organizationId },
-        first: perPageResult,
+        first: PAGE_SIZE,
         skip: currentLength,
         name_contains: searchByName,
       },
@@ -243,7 +257,7 @@ const Requests = (): JSX.Element => {
         const newRequests = fetchMoreResult.organization.membershipRequests;
 
         // If we got fewer results than requested, we've reached the end
-        if (newRequests.length < perPageResult) {
+        if (newRequests.length < PAGE_SIZE) {
           setHasMore(false);
         }
         return {
@@ -269,6 +283,186 @@ const Requests = (): JSX.Element => {
     t('accept'),
     t('reject'),
   ];
+
+  // Columns for ReportingTable (DataGrid)
+  const columns: ReportingTableColumn[] = [
+    {
+      field: 'sl_no',
+      headerName: t('sl_no'),
+      flex: 0.5,
+      minWidth: 50,
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params: any) =>
+        (params.api?.getRowIndex?.(params.row.membershipRequestId) ?? 0) + 1,
+    },
+    {
+      field: 'profile',
+      headerName: t('profile'),
+      flex: 1,
+      minWidth: 80,
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params: GridCellParams) => {
+        const user = params.row.user || {};
+        if (user.avatarURL) {
+          return (
+            <img
+              src={user.avatarURL}
+              alt="avatar"
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: '50%',
+                objectFit: 'cover',
+              }}
+              crossOrigin="anonymous"
+            />
+          );
+        }
+        return (
+          <div style={{ width: 40, height: 40 }} data-testid="avatar">
+            <Avatar name={user.name || ''} />
+          </div>
+        );
+      },
+    },
+    {
+      field: 'name',
+      headerName: tCommon('name'),
+      flex: 2,
+      minWidth: 150,
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      align: 'center',
+      headerAlign: 'center',
+      valueGetter: (params: GridCellParams) => params?.row?.user?.name || '',
+    },
+    {
+      field: 'email',
+      headerName: tCommon('email'),
+      flex: 2,
+      minWidth: 150,
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      align: 'center',
+      headerAlign: 'center',
+      valueGetter: (params: GridCellParams) => params?.row?.user?.emailAddress || '',
+    },
+    {
+      field: 'accept',
+      headerName: t('accept'),
+      flex: 1,
+      minWidth: 100,
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params: GridCellParams) => (
+        <Button
+          variant="success"
+          size="sm"
+          onClick={async () => {
+            if (params?.row?.membershipRequestId) {
+              await handleAcceptUser(params.row.membershipRequestId);
+            }
+          }}
+          data-testid={`accept-${params?.row?.membershipRequestId ?? 'unknown'}`}
+        >
+          {t('accept')}
+        </Button>
+      ),
+    },
+    {
+      field: 'reject',
+      headerName: t('reject'),
+      flex: 1,
+      minWidth: 100,
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params: GridCellParams) => (
+        <Button
+          variant="danger"
+          size="sm"
+          onClick={async () => {
+            if (params?.row?.membershipRequestId) {
+              await handleRejectUser(params.row.membershipRequestId);
+            }
+          }}
+          data-testid={`reject-${params?.row?.membershipRequestId ?? 'unknown'}`}
+        >
+          {t('reject')}
+        </Button>
+      ),
+    },
+  ];
+
+  const gridProps: ReportingTableGridProps = {
+    sx: { ...dataGridStyle },
+    paginationMode: 'client',
+    getRowId: (row: any) => row.membershipRequestId,
+    rowCount: displayedRequests.length,
+    pageSizeOptions: [PAGE_SIZE],
+    loading: isLoading || isLoadingMore,
+    hideFooter: true,
+    slots: {
+      noRowsOverlay: () => (
+        <Stack height="100%" alignItems="center" justifyContent="center">
+          {t('notFound')}
+        </Stack>
+      ),
+    },
+    getRowClassName: () => `${styles.rowBackground}`,
+    isRowSelectable: () => false,
+    disableColumnMenu: true,
+    rowHeight: ROW_HEIGHT,
+    autoHeight: true,
+    style: { overflow: 'visible' },
+  };
+
+  const infiniteProps: InfiniteScrollProps = {
+    dataLength: displayedRequests.length,
+    next: loadMoreRequests,
+    hasMore,
+  };
+
+  // Mutations for accept/reject
+  const [acceptUser] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
+  const [rejectUser] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
+
+  const handleAcceptUser = async (membershipRequestId: string) => {
+    try {
+      const { data: acceptData } = await acceptUser({
+        variables: { input: { membershipRequestId } },
+      });
+      if (acceptData) {
+        toast.success(t('acceptedSuccessfully') as string);
+        resetAndRefetch();
+      }
+    } catch (error: unknown) {
+      errorHandler(t, error);
+    }
+  };
+
+  const handleRejectUser = async (membershipRequestId: string) => {
+    try {
+      const { data: rejectData } = await rejectUser({
+        variables: { input: { membershipRequestId } },
+      });
+      if (rejectData) {
+        toast.success(t('rejectedSuccessfully') as string);
+        resetAndRefetch();
+      }
+    } catch (error: unknown) {
+      errorHandler(t, error);
+    }
+  };
 
   return (
     <>
@@ -308,13 +502,11 @@ const Requests = (): JSX.Element => {
       ) : (
         <div className={styles.listBox}>
           {isLoading ? (
-            <TableLoader headerTitles={headerTitles} noOfRows={perPageResult} />
+            <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
           ) : (
             <InfiniteScroll
-              dataLength={displayedRequests.length}
-              next={loadMoreRequests}
+              {...infiniteProps}
               loader={<TableLoader noOfCols={6} noOfRows={2} />}
-              hasMore={hasMore}
               className={styles.listTable}
               data-testid="requests-list"
               scrollThreshold={0.9}
@@ -327,46 +519,13 @@ const Requests = (): JSX.Element => {
                 ) : null
               }
             >
-              <TableContainer
-                component={Paper}
-                className="mt-3"
-                sx={{ borderRadius: '16px' }}
-              >
-                <Table aria-label={t('membershipRequestsTable')} role="grid">
-                  <TableHead>
-                    <TableRow>
-                      {headerTitles.map((title: string, index: number) => {
-                        return (
-                          <TableCell
-                            key={index}
-                            data-testid="table-header-serial"
-                            role="columnheader"
-                            aria-sort="none"
-                            className={styles.customcell}
-                            scope="col"
-                          >
-                            {title}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {displayedRequests.map(
-                      (request: InterfaceRequestsListItem, index: number) => {
-                        return (
-                          <RequestsTableItem
-                            key={request?.membershipRequestId}
-                            index={index}
-                            resetAndRefetch={resetAndRefetch}
-                            request={request}
-                          />
-                        );
-                      },
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              <div className="datatable">
+                <DataGrid
+                  {...gridProps}
+                  rows={displayedRequests}
+                  columns={columns}
+                />
+              </div>
             </InfiniteScroll>
           )}
         </div>

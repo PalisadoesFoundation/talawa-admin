@@ -1023,6 +1023,36 @@ export const MEMBERSHIP_REQUEST = gql`
   }
 `;
 
+export const MEMBERSHIP_REQUEST_PG = gql`
+  query Organization(
+    $input: QueryOrganizationInput!
+    $skip: Int
+    $first: Int
+    $name_contains: String
+  ) {
+    organization(input: $input) {
+      id
+      # membershipRequestsCount
+      membershipRequests(
+        skip: $skip
+        first: $first
+        where: { user: { name_contains: $name_contains } }
+      ) {
+        membershipRequestId
+        createdAt
+        status
+        user {
+          avatarURL
+          id
+          name
+          emailAddress
+          avatarURL
+        }
+      }
+    }
+  }
+`;
+
 export const USERS_CONNECTION_LIST = gql`
   query usersConnection(
     $id_not_in: [ID!]

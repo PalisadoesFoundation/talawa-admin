@@ -1,4 +1,4 @@
-import { MEMBERSHIP_REQUEST, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
+import { MEMBERSHIP_REQUEST_PG, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 
 export const EMPTY_REQUEST_MOCKS = [
   {
@@ -33,11 +33,11 @@ export const EMPTY_REQUEST_MOCKS = [
   },
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: '' },
         skip: 0,
-        first: 8,
+        first: 10,
         name_contains: '',
       },
     },
@@ -85,7 +85,7 @@ export const MOCKS = [
   },
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: '' },
         skip: 0,
@@ -158,7 +158,7 @@ export const MOCKS4 = [
   },
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: '' },
         skip: 0,
@@ -258,7 +258,7 @@ export const MOCKS4 = [
   },
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: '' },
         skip: 8,
@@ -362,52 +362,48 @@ export const UPDATED_MOCKS = [
   ...MOCKS,
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
-        id: '',
+        input: { id: '' },
         skip: 0,
         first: 8,
-        firstName_contains: '',
+        name_contains: '',
       },
     },
     result: {
       data: {
-        organizations: [
-          {
-            _id: '',
-            membershipRequests: Array.from({ length: 8 }, (_, i) => ({
-              membershipRequestId: `${i + 1}`,
-              createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
-              status: 'pending',
-              user: {
-                id: `user${i + 1}`,
-                name: `Test User ${i + 1}`,
-                emailAddress: `testuser${i + 1}@example.com`,
-              },
-            })),
-          },
-        ],
+        organization: {
+          id: '',
+          membershipRequests: Array.from({ length: 8 }, (_, i) => ({
+            membershipRequestId: `${i + 1}`,
+            createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+            status: 'pending',
+            user: {
+              id: `user${i + 1}`,
+              name: `Test User ${i + 1}`,
+              emailAddress: `testuser${i + 1}@example.com`,
+            },
+          })),
+        },
       },
     },
   },
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
-        id: '',
+        input: { id: '' },
         skip: 8,
         first: 8,
-        firstName_contains: '',
+        name_contains: '',
       },
     },
     result: {
       data: {
-        organizations: [
-          {
-            _id: '',
-            membershipRequests: null,
-          },
-        ],
+        organization: {
+          id: '',
+          membershipRequests: null,
+        },
       },
     },
   },
@@ -446,7 +442,7 @@ export const MOCKS2 = [
   },
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: 'org1' },
         skip: 0,
@@ -509,7 +505,7 @@ export const MOCKS3 = [
   },
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: 'org1' },
         skip: 0,
@@ -528,7 +524,7 @@ export const MOCKS3 = [
 export const EMPTY_MOCKS = [
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: 'org1' },
         skip: 0,
@@ -560,7 +556,7 @@ export const EMPTY_MOCKS = [
 export const MOCKS_WITH_ERROR = [
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: '1' },
         first: 0,
