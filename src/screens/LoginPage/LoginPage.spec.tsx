@@ -1444,7 +1444,6 @@ const renderLoginPage = (
         ? { link: mocksOrLink }
         : {
             mocks: mocksOrLink as ReadonlyArray<MockedResponse>,
-            addTypename: false,
           })}
     >
       <BrowserRouter>
@@ -1487,7 +1486,7 @@ describe('Extra coverage for 100 %', () => {
     // re-import component so mock applies
     const { default: LoginPageFresh } = await import('./LoginPage');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1517,7 +1516,7 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     await userEvent.click(screen.getByTestId('goToRegisterPortion'));
     await userEvent.type(screen.getByPlaceholderText(/Name/i), '123'); // invalid - contains numbers
-    await userEvent.type(screen.getByTestId('signInEmail'), 'valid@email.com');
+    await userEvent.type(screen.getByTestId('signInEmail'), 'a@b.co'); // too short to pass validation
     await userEvent.type(screen.getByPlaceholderText('Password'), 'Valid@123');
     await userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
@@ -1538,7 +1537,7 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     await userEvent.click(screen.getByTestId('goToRegisterPortion'));
     await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
-    await userEvent.type(screen.getByTestId('signInEmail'), 'valid@email.com');
+    await userEvent.type(screen.getByTestId('signInEmail'), 'short'); // invalid email
     await userEvent.type(screen.getByPlaceholderText('Password'), 'weak');
     await userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
@@ -1614,19 +1613,19 @@ describe('Extra coverage for 100 %', () => {
 
   /* 6.  fetch(BACKEND_URL) catch block */
   it('handles Talawa-API unreachable', async () => {
+    // Mock fetch to reject before rendering
+    const fetchSpy = vi
+      .spyOn(global, 'fetch')
+      .mockRejectedValue(new Error('Network error'));
+
     // Import and spy on errorHandler before rendering
     const errorHandlerMod = await import('utils/errorHandler');
     const errorHandlerSpy = vi.spyOn(errorHandlerMod, 'errorHandler');
 
-    // Mock fetch to reject
-    const fetchSpy = vi
-      .spyOn(global, 'fetch')
-      .mockRejectedValueOnce(new Error('Network error'));
-
     renderLoginPage();
 
-    // Wait for the async loadResource() to complete
-    await wait(200);
+    // Wait longer for the async loadResource() to complete
+    await wait(500);
 
     expect(fetchSpy).toHaveBeenCalledWith(
       'http://localhost:4000/graphql',
@@ -1814,10 +1813,10 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.click(screen.getByTestId('goToRegisterPortion'));
     await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John');
     await userEvent.type(screen.getByTestId('signInEmail'), 'a@b.co'); // length 6
-    await userEvent.type(screen.getByPlaceholderText('Password'), 'John@123');
+    await userEvent.type(screen.getByPlaceholderText('Password'), 'weak'); // invalid password
     await userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
-      'John@123',
+      'weak',
     );
     await userEvent.type(screen.getAllByTestId('mock-recaptcha')[1], 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
