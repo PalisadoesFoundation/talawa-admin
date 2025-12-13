@@ -284,9 +284,6 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         caption: postContent,
       };
 
-      // Only include isPinned if it's changed
-      if (isPinned !== !!props.pinnedAt) input.isPinned = isPinned;
-
       await editPost({
         variables: {
           input,

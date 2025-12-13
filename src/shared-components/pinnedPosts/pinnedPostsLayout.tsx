@@ -2,7 +2,7 @@
  * Pinned Posts Layout Component
  *
  * This component renders a horizontal carousel layout for displaying pinned posts.
- * It uses custom scroll function create a responsive, scrollable container that
+ * It uses custom scroll functions to create a responsive, scrollable container that
  * shows multiple pinned post cards in a carousel format.
  *
  * @param props - The properties for the PinnedPostsLayout component.
@@ -13,12 +13,10 @@
  * @returns {JSX.Element} A JSX element representing the pinned posts carousel layout.
  *
  * @remarks
- * - Uses custom scroll for responsive carousel functionality
- * - Responsive breakpoints are configured for different screen sizes
+ * - Implements horizontal scrolling with left/right navigation buttons
+ * - Buttons appear/disappear based on scroll position
  * - Each carousel item contains a PinnedPostCard component
- * - Supports swipe, drag, and keyboard navigation
- * - Navigation dots are currently disabled
- * - Infinite scrolling is currently disabled
+ * - Scroll increment is based on container width for responsive behavior
  *
  * @example
  * ```tsx

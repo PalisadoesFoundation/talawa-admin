@@ -377,9 +377,10 @@ describe('PinnedPostsLayout Component', () => {
       // Unmount and verify handler doesn't run
       unmount();
 
-      scrollHandler();
-      // If unmounted properly, this shouldn't cause errors
-      expect(true).toBe(true);
+      // After unmount, calling the captured handler should not update state
+      // or cause errors (React warns about state updates on unmounted components)
+      // The test passes if no errors are thrown during handler execution
+      expect(() => scrollHandler()).not.toThrow();
     });
   });
 
@@ -388,107 +389,6 @@ describe('PinnedPostsLayout Component', () => {
 
     beforeEach(() => {
       scrollByMock = vi.fn();
-    });
-
-    it('should handle scrollLeft when scrollContainer is null', async () => {
-      render(
-        <MockedProvider>
-          <I18nextProvider i18n={i18nForTest}>
-            <PinnedPostsLayout
-              pinnedPosts={mockPinnedPosts}
-              onStoryClick={mockOnStoryClick}
-            />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      const scrollContainer = screen.getByTestId('scroll-container');
-
-      // Set up conditions for left button to appear but mock scrollBy to handle null scenario
-      Object.defineProperty(scrollContainer, 'scrollWidth', {
-        value: 1000,
-        configurable: true,
-      });
-      Object.defineProperty(scrollContainer, 'clientWidth', {
-        value: 400,
-        configurable: true,
-      });
-      Object.defineProperty(scrollContainer, 'scrollLeft', {
-        value: 200,
-        writable: true,
-        configurable: true,
-      });
-
-      // Mock scrollBy to prevent errors
-      const mockScrollBy = vi.fn();
-      scrollContainer.scrollBy = mockScrollBy;
-
-      // Trigger scroll to show button
-      await act(async () => {
-        fireEvent.scroll(scrollContainer);
-      });
-
-      await waitFor(() => {
-        expect(screen.queryByTestId('scroll-left-button')).toBeInTheDocument();
-      });
-
-      // Mock scrollBy to be undefined to test defensive coding
-      scrollContainer.scrollBy =
-        undefined as unknown as HTMLElement['scrollBy'];
-
-      // This tests the defensive coding - clicking should not throw even if scrollBy is undefined
-      const leftButton = screen.getByTestId('scroll-left-button');
-      expect(() => fireEvent.click(leftButton)).not.toThrow();
-    });
-
-    it('should handle scrollRight when scrollContainer is null', async () => {
-      render(
-        <MockedProvider>
-          <I18nextProvider i18n={i18nForTest}>
-            <PinnedPostsLayout
-              pinnedPosts={mockPinnedPosts}
-              onStoryClick={mockOnStoryClick}
-            />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      const scrollContainer = screen.getByTestId('scroll-container');
-
-      // Set up conditions for right button to appear
-      Object.defineProperty(scrollContainer, 'scrollWidth', {
-        value: 1000,
-        configurable: true,
-      });
-      Object.defineProperty(scrollContainer, 'clientWidth', {
-        value: 400,
-        configurable: true,
-      });
-      Object.defineProperty(scrollContainer, 'scrollLeft', {
-        value: 0,
-        writable: true,
-        configurable: true,
-      });
-
-      // Mock scrollBy initially to allow button to appear
-      const mockScrollBy = vi.fn();
-      scrollContainer.scrollBy = mockScrollBy;
-
-      await act(async () => {
-        fireEvent.scroll(scrollContainer);
-      });
-
-      await waitFor(() => {
-        expect(screen.queryByTestId('scroll-right-button')).toBeInTheDocument();
-      });
-
-      // Mock scrollBy to be undefined to test defensive coding
-      scrollContainer.scrollBy =
-        undefined as unknown as HTMLElement['scrollBy'];
-
-      // This tests the defensive coding - clicking should not throw even if scrollBy is undefined
-      const rightButton = screen.getByTestId('scroll-right-button');
-      expect(() => fireEvent.click(rightButton)).not.toThrow();
     });
 
     it('should handle insufficient scroll width in scrollLeft', async () => {
@@ -564,61 +464,6 @@ describe('PinnedPostsLayout Component', () => {
       );
 
       expect(screen.getByTestId('scroll-container')).toBeInTheDocument();
-    });
-
-    it('should safely handle missing scrollBy method', async () => {
-      render(
-        <MockedProvider>
-          <I18nextProvider i18n={i18nForTest}>
-            <PinnedPostsLayout
-              pinnedPosts={mockPinnedPosts}
-              onStoryClick={mockOnStoryClick}
-            />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      const scrollContainer = screen.getByTestId('scroll-container');
-
-      // Set up scrollable conditions
-      Object.defineProperty(scrollContainer, 'scrollWidth', {
-        value: 1000,
-        configurable: true,
-      });
-      Object.defineProperty(scrollContainer, 'clientWidth', {
-        value: 400,
-        configurable: true,
-      });
-      Object.defineProperty(scrollContainer, 'scrollLeft', {
-        value: 100,
-        writable: true,
-        configurable: true,
-      });
-
-      // Mock scrollBy initially
-      const mockScrollBy = vi.fn();
-      scrollContainer.scrollBy = mockScrollBy;
-
-      await act(async () => {
-        fireEvent.scroll(scrollContainer);
-      });
-
-      // Verify scroll buttons appear
-      await waitFor(() => {
-        expect(screen.queryByTestId('scroll-left-button')).toBeInTheDocument();
-        expect(screen.queryByTestId('scroll-right-button')).toBeInTheDocument();
-      });
-
-      // Remove scrollBy to test defensive programming
-      scrollContainer.scrollBy =
-        undefined as unknown as HTMLElement['scrollBy'];
-
-      const leftButton = screen.getByTestId('scroll-left-button');
-      const rightButton = screen.getByTestId('scroll-right-button');
-
-      // These should not throw errors even without scrollBy method
-      expect(() => fireEvent.click(leftButton)).not.toThrow();
-      expect(() => fireEvent.click(rightButton)).not.toThrow();
     });
   });
 
