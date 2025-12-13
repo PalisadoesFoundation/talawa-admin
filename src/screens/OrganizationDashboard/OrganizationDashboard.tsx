@@ -100,6 +100,8 @@ function OrganizationDashboard(): JSX.Element {
         skip: 0,
         firstName_contains: '',
       },
+      fetchPolicy: 'cache-and-network',
+      notifyOnNetworkStatusChange: true,
     });
 
   const {
@@ -108,6 +110,8 @@ function OrganizationDashboard(): JSX.Element {
     error: orgMemberError,
   } = useQuery<InterfaceOrganizationPg>(ORGANIZATION_MEMBER_ADMIN_COUNT, {
     variables: { id: orgId },
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network',
   });
 
   useEffect(() => {
@@ -121,7 +125,11 @@ function OrganizationDashboard(): JSX.Element {
     data: orgPostsData,
     loading: orgPostsLoading,
     error: orgPostsError,
-  } = useQuery(GET_ORGANIZATION_POSTS_COUNT_PG, { variables: { id: orgId } });
+  } = useQuery(GET_ORGANIZATION_POSTS_COUNT_PG, {
+    variables: { id: orgId },
+    fetchPolicy: 'cache-and-network',
+    notifyOnNetworkStatusChange: true,
+  });
 
   const {
     data: orgEventsData,
@@ -129,6 +137,8 @@ function OrganizationDashboard(): JSX.Element {
     error: orgEventsError,
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
     variables: { id: orgId, first: 8, after: null },
+    fetchPolicy: 'cache-and-network',
+    notifyOnNetworkStatusChange: true,
   });
 
   const {
@@ -137,6 +147,7 @@ function OrganizationDashboard(): JSX.Element {
     error: orgBlockedUsersError,
   } = useQuery(GET_ORGANIZATION_BLOCKED_USERS_COUNT, {
     variables: { id: orgId },
+    fetchPolicy: 'cache-and-network',
     notifyOnNetworkStatusChange: true,
   });
 
@@ -147,6 +158,7 @@ function OrganizationDashboard(): JSX.Element {
   } = useQuery(GET_ORGANIZATION_VENUES_COUNT, {
     variables: { id: orgId },
     notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network',
   });
 
   useEffect(() => {
@@ -220,6 +232,8 @@ function OrganizationDashboard(): JSX.Element {
     error: errorPost,
   } = useQuery(GET_ORGANIZATION_POSTS_PG, {
     variables: { id: orgId, first: 5 },
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network',
   });
 
   /**
