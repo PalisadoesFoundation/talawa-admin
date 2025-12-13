@@ -3,10 +3,12 @@ import { toast } from 'react-toastify';
 
 // Single component containing all violations (JSX text, attrs, toasts)
 export function ViolationsFixture() {
-  toast.error('Something went wrong');
-  toast.success('Operation completed successfully');
-  toast.warning('Please check your input');
-  toast.info('New update available');
+  React.useEffect(() => {
+    toast.error('Something went wrong');
+    toast.success('Operation completed successfully');
+    toast.warning('Please check your input');
+    toast.info('New update available');
+  }, []);
 
   return (
     <div>

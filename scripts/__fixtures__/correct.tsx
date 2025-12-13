@@ -6,10 +6,12 @@ import { toast } from 'react-toastify';
 export function CorrectFixture() {
   const { t } = useTranslation();
 
-  toast.error(t('errors.somethingWrong'));
-  toast.success(t('success.operationCompleted'));
-  toast.warning(t('warnings.checkInput'));
-  toast.info(t('info.updateAvailable'));
+  React.useEffect(() => {
+    toast.error(t('errors.somethingWrong'));
+    toast.success(t('success.operationCompleted'));
+    toast.warning(t('warnings.checkInput'));
+    toast.info(t('info.updateAvailable'));
+  }, [t]);
 
   return (
     <div>
