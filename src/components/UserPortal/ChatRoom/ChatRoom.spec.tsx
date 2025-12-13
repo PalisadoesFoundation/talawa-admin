@@ -2918,7 +2918,7 @@ describe('ChatRoom Component', () => {
       const mocks: MockedResponse[] = [];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <Provider store={store}>
             <BrowserRouter>
               <I18nextProvider i18n={i18nForTest}>
@@ -2952,7 +2952,7 @@ describe('ChatRoom Component', () => {
       const mocks: MockedResponse[] = [];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <Provider store={store}>
             <BrowserRouter>
               <I18nextProvider i18n={i18nForTest}>
@@ -3007,7 +3007,7 @@ describe('ChatRoom Component', () => {
       ];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <Provider store={store}>
             <BrowserRouter>
               <I18nextProvider i18n={i18nForTest}>
@@ -3038,7 +3038,7 @@ describe('ChatRoom Component', () => {
       setItem('userId', 'user123');
 
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <Provider store={store}>
             <BrowserRouter>
               <I18nextProvider i18n={i18nForTest}>
@@ -3062,7 +3062,7 @@ describe('ChatRoom Component', () => {
       setItem('userId', 'user123');
 
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <Provider store={store}>
             <BrowserRouter>
               <I18nextProvider i18n={i18nForTest}>
@@ -3091,7 +3091,7 @@ describe('ChatRoom Component', () => {
         .mockImplementation(() => {});
 
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <Provider store={store}>
             <BrowserRouter>
               <I18nextProvider i18n={i18nForTest}>
@@ -3142,7 +3142,7 @@ describe('ChatRoom Component', () => {
       ];
 
       const { rerender } = render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <Provider store={store}>
             <BrowserRouter>
               <I18nextProvider i18n={i18nForTest}>
@@ -3161,7 +3161,7 @@ describe('ChatRoom Component', () => {
 
       // Update to valid chat ID
       rerender(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <Provider store={store}>
             <BrowserRouter>
               <I18nextProvider i18n={i18nForTest}>
@@ -3200,7 +3200,7 @@ describe('ChatRoom Component', () => {
       ];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <Provider store={store}>
             <BrowserRouter>
               <I18nextProvider i18n={i18nForTest}>
@@ -3236,7 +3236,7 @@ describe('ChatRoom Component', () => {
       const mocks: MockedResponse[] = [];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <Provider store={store}>
             <BrowserRouter>
               <I18nextProvider i18n={i18nForTest}>
@@ -3273,7 +3273,7 @@ describe('ChatRoom Component', () => {
         .mockImplementation(() => {});
 
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider mocks={[]}>
           <Provider store={store}>
             <BrowserRouter>
               <I18nextProvider i18n={i18nForTest}>
