@@ -1,6 +1,5 @@
 import React, { act } from 'react';
-import { MockedProvider } from '@apollo/react-testing';
-import type { MockedResponse } from '@apollo/client/testing';
+import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import {
   render,
   screen,
@@ -1442,8 +1441,10 @@ const renderLoginPage = (
     <MockedProvider
       {...(isLink
         ? { link: mocksOrLink }
-        : { mocks: mocksOrLink as ReadonlyArray<MockedResponse> })}
-      addTypename={false}
+        : {
+            mocks: mocksOrLink as ReadonlyArray<MockedResponse>,
+            addTypename: false,
+          })}
     >
       <BrowserRouter>
         <Provider store={store}>
@@ -1459,6 +1460,7 @@ const renderLoginPage = (
 const setLocationPath = (pathname: string): void => {
   Object.defineProperty(window, 'location', {
     configurable: true,
+    writable: true,
     value: {
       reload: vi.fn(),
       href: `https://localhost:4321${pathname}`,
