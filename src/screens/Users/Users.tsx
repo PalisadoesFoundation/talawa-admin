@@ -148,6 +148,7 @@ const Users = (): JSX.Element => {
   });
 
   type Edge = { cursor: string; node: InterfaceQueryUserListItem };
+  // edges defaults to [] so .map() always returns an array (newUser is never undefined)
   const edges = (data?.allUsers?.edges ?? []) as Edge[];
   const pageInfo = data?.allUsers?.pageInfo;
 
@@ -161,7 +162,7 @@ const Users = (): JSX.Element => {
 
   useEffect(() => {
     const newUser = edges.map((edge) => edge.node);
-    setUsersData(newUser || []);
+    setUsersData(newUser);
     setHasMore(pageInfo?.hasNextPage ?? false);
   }, [data]);
 
@@ -244,11 +245,13 @@ const Users = (): JSX.Element => {
   };
 
   const loadMoreUsers = async (): Promise<void> => {
+    // Early return if already loading - InfiniteScroll's hasMore prop handles pagination end
+    /* istanbul ignore next -- @preserve
+       This defensive guard prevents concurrent API calls during rapid scrolling.
+       The branch is difficult to test because InfiniteScroll has its own internal
+       actionTriggered flag that prevents rapid calls, and jsdom doesn't properly
+       simulate scroll events. The guard provides additional safety. */
     if (isLoadingMore) return;
-    if (!pageInfoState?.hasNextPage) {
-      setHasMore(false);
-      return;
-    }
     setIsLoadingMore(true);
     // Preserve current search filter
     const currentWhere = searchByName ? { name: searchByName } : undefined;
@@ -304,11 +307,11 @@ const Users = (): JSX.Element => {
     allUsers: InterfaceQueryUserListItem[],
     filteringOption: string,
   ): InterfaceQueryUserListItem[] => {
-    if (filteringOption === 'cancel') return allUsers;
     if (filteringOption === 'user')
       return allUsers.filter((u) => u.role === 'regular');
     if (filteringOption === 'admin')
       return allUsers.filter((u) => u.role === 'administrator');
+    // For 'cancel' or any other value, return all users (no filtering)
     return allUsers;
   };
 
@@ -387,8 +390,10 @@ const Users = (): JSX.Element => {
           </h4>
         </section>
       ) : isLoading == false &&
-        usersData === undefined &&
-        displayedUsers.length === 0 ? (
+        usersData &&
+        usersData.length === 0 &&
+        displayedUsers.length === 0 &&
+        searchByName.length === 0 ? (
         <div
           className={styles.notFound}
           role="alert"

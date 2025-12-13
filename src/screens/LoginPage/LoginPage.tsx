@@ -57,9 +57,57 @@ const LoginPage = (): JSX.Element => {
     }
   }, []);
 
-  /**
-   * Verifies reCAPTCHA token if enabled
-   */
+  const togglePassword = (): void => setShowPassword(!showPassword);
+  const toggleConfirmPassword = (): void =>
+    setShowConfirmPassword(!showConfirmPassword);
+
+  const { data, refetch } = useQuery(GET_COMMUNITY_DATA_PG);
+  useEffect(() => {
+    refetch();
+  }, [data]);
+  const [signin, { loading: loginLoading }] = useLazyQuery(SIGNIN_QUERY);
+  const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
+  const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
+  const { data: orgData } = useQuery(ORGANIZATION_LIST_NO_MEMBERS);
+  const { startSession, extendSession } = useSession();
+  useEffect(() => {
+    if (orgData) {
+      const options = orgData.organizations.map(
+        (org: InterfaceQueryOrganizationListObject) => {
+          const tempObj: { label: string; id: string } | null = {} as {
+            label: string;
+            id: string;
+          };
+          tempObj['label'] = `${org.name}(${org.addressLine1})`;
+          tempObj['id'] = org.id;
+          return tempObj;
+        },
+      );
+      setOrganizations(options);
+    }
+  }, [orgData]);
+
+  useEffect(() => {
+    async function loadResource(): Promise<void> {
+      try {
+        // Use a proper GraphQL introspection query instead of plain fetch
+        await fetch(BACKEND_URL as string, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: '{ __typename }',
+          }),
+        });
+      } catch (error) {
+        errorHandler(t, error);
+      }
+    }
+
+    loadResource();
+  }, []);
+
   const verifyRecaptcha = async (
     recaptchaToken: string | null,
   ): Promise<boolean> => {

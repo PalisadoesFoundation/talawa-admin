@@ -8,7 +8,6 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { getItem } from 'utils/useLocalstorage';
 import { vi, beforeEach, afterEach, describe, test } from 'vitest';
 
 const routerMocks = vi.hoisted(() => ({
@@ -53,8 +52,6 @@ vi.mock('utils/useLocalstorage', () => {
       if (prefix === 'Talawa-admin' && key === 'email')
         return 'test@example.com';
       if (prefix === 'Talawa-admin' && key === 'userId') return '12345';
-      if (prefix === 'Talawa-admin-error' && key === 'user-email-error')
-        throw new Error();
       return null;
     }),
   };
@@ -260,33 +257,39 @@ describe('LeaveOrganization Component', () => {
     expect(screen.queryByText(/An error occurred!/i)).not.toBeInTheDocument();
   });
 
-  test('logs an error when unable to access localStorage', () => {
-    const consoleErrorSpy = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
-    const userEmail = (() => {
-      try {
-        return getItem('Talawa-admin-error', 'user-email-error') ?? '';
-      } catch (e) {
-        console.error('Failed to access localStorage:', e);
-        return '';
-      }
-    })();
-    const userId = (() => {
-      try {
-        return getItem('Talawa-admin-error', 'user-email-error') ?? '';
-      } catch (e) {
-        console.error('Failed to access localStorage:', e);
-        return '';
-      }
-    })();
-    expect(userEmail).toBe('');
-    expect(userId).toBe('');
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Failed to access localStorage:',
-      expect.any(Error),
+  // Note: localStorage error/null/undefined handling is comprehensively tested
+  // in LeaveOrganization.localStorage.spec.tsx using vi.resetModules() and dynamic imports
+
+  test('does not submit when non-Enter key is pressed on email input', async () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <LeaveOrganization />
+        </BrowserRouter>
+      </MockedProvider>,
     );
-    consoleErrorSpy.mockRestore();
+    const leaveButton = await screen.findByRole('button', {
+      name: /Leave Organization/i,
+    });
+    fireEvent.click(leaveButton);
+    await waitFor(() =>
+      expect(
+        screen.getByText(/Are you sure you want to leave this organization?/i),
+      ).toBeInTheDocument(),
+    );
+    await screen.findByText('Continue');
+    fireEvent.click(screen.getByText('Continue'));
+    const emailInput = screen.getByPlaceholderText(/Enter your email/i);
+    fireEvent.change(emailInput, {
+      target: { value: 'test@example.com' },
+    });
+    // Press a non-Enter key - should not trigger verification
+    fireEvent.keyDown(emailInput, { key: 'Tab', code: 'Tab' });
+    // Verify the modal is still open and no navigation happened
+    expect(
+      screen.getByPlaceholderText(/Enter your email/i),
+    ).toBeInTheDocument();
+    expect(routerMocks.navigate).not.toHaveBeenCalled();
   });
 
   test('navigates and shows toast when email matches', async () => {

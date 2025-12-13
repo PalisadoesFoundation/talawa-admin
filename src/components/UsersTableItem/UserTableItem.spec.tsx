@@ -785,7 +785,7 @@ describe('Testing User Table Item', () => {
     expect(screen.getByTestId('unblockUserFromOrgBtnghi')).toBeInTheDocument();
     expect(screen.getByTestId('unblockUserFromOrgBtnjkl')).toBeInTheDocument();
     const searchBtn = screen.getByTestId(`searchBtnBlockedOrgs`);
-    fireEvent.keyUp(inputBox, {
+    fireEvent.change(inputBox, {
       target: { value: 'Blocked Organization 1' },
     });
     fireEvent.click(searchBtn);
@@ -793,15 +793,18 @@ describe('Testing User Table Item', () => {
     expect(
       screen.queryByText(/Blocked Organization 2/i),
     ).not.toBeInTheDocument();
-    fireEvent.keyUp(inputBox, {
-      key: 'Enter',
+    fireEvent.change(inputBox, {
       target: { value: 'Blocked Organization 3' },
+    });
+    fireEvent.keyDown(inputBox, {
+      key: 'Enter',
     });
     expect(
       screen.getByText(`No results found for "Blocked Organization 3"`),
     ).toBeInTheDocument();
-    fireEvent.keyUp(inputBox, { key: 'Enter', target: { value: '' } });
-    fireEvent.keyUp(inputBox, { target: { value: '' } });
+    fireEvent.change(inputBox, { target: { value: '' } });
+    fireEvent.keyDown(inputBox, { key: 'Enter' });
+    fireEvent.change(inputBox, { target: { value: '' } });
     fireEvent.click(searchBtn);
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorghi`));
@@ -1463,7 +1466,7 @@ describe('Testing User Table Item', () => {
     fireEvent.click(screen.getByTestId(`showBlockedOrgsBtn123`));
 
     const input = screen.getByTestId('searchByNameBlockedOrgs');
-    fireEvent.keyUp(input, { target: { value: '' } });
+    fireEvent.change(input, { target: { value: '' } });
     fireEvent.click(screen.getByTestId('searchBtnBlockedOrgs'));
 
     expect(screen.getByText(/Blocked Org/i)).toBeInTheDocument();
