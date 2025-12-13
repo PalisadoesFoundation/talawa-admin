@@ -1433,13 +1433,15 @@ describe('Talawa-API server fetch check', () => {
 
 // Helper functions to reduce code duplication
 const renderLoginPage = (
-  mocksOrLink: StaticMockLink | any[] = MOCKS as any[],
+  mocksOrLink: StaticMockLink | ReadonlyArray<unknown> = MOCKS,
 ): ReturnType<typeof render> => {
   const isLink = mocksOrLink instanceof StaticMockLink;
 
   return render(
     <MockedProvider
-      {...(isLink ? { link: mocksOrLink } : { mocks: mocksOrLink as any })}
+      {...(isLink
+        ? { link: mocksOrLink }
+        : { mocks: mocksOrLink as ReadonlyArray<unknown> })}
       addTypename={false}
     >
       <BrowserRouter>
