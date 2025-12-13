@@ -1,4 +1,7 @@
-import { MEMBERSHIP_REQUEST_PG, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
+import {
+  MEMBERSHIP_REQUEST_PG,
+  ORGANIZATION_LIST,
+} from 'GraphQl/Queries/Queries';
 
 export const EMPTY_REQUEST_MOCKS = [
   {

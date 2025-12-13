@@ -92,6 +92,7 @@ interface InterfaceRequestsListItem {
     name: string;
     emailAddress: string;
   };
+  [key: string]: unknown;
 }
 
 const Requests = (): JSX.Element => {
@@ -295,8 +296,8 @@ const Requests = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (params: any) =>
-        (params.api?.getRowIndex?.(params.row.membershipRequestId) ?? 0) + 1,
+      renderCell: (params: GridCellParams) =>
+        (params.row.membershipRequestId ?? 0) + 1,
     },
     {
       field: 'profile',
@@ -351,7 +352,8 @@ const Requests = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       align: 'center',
       headerAlign: 'center',
-      valueGetter: (params: GridCellParams) => params?.row?.user?.emailAddress || '',
+      valueGetter: (params: GridCellParams) =>
+        params?.row?.user?.emailAddress || '',
     },
     {
       field: 'accept',
@@ -406,7 +408,7 @@ const Requests = (): JSX.Element => {
   const gridProps: ReportingTableGridProps = {
     sx: { ...dataGridStyle },
     paginationMode: 'client',
-    getRowId: (row: any) => row.membershipRequestId,
+    getRowId: (row: InterfaceRequestsListItem) => row.membershipRequestId,
     rowCount: displayedRequests.length,
     pageSizeOptions: [PAGE_SIZE],
     loading: isLoading || isLoadingMore,
