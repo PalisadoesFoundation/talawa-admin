@@ -13,12 +13,7 @@ import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import OrganizationDashboard from './OrganizationDashboard';
-import {
-  MOCKS,
-  EMPTY_MOCKS,
-  ERROR_MOCKS,
-  MIXED_REQUESTS_MOCK,
-} from './OrganizationDashboardMocks';
+import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './OrganizationDashboardMocks';
 import { MOCKS_ORG2 } from './OrganizationDashboardSecondaryMocks';
 import {
   MEMBERSHIP_REQUEST,
