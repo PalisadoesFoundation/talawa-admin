@@ -18,8 +18,8 @@ import {
   EMPTY_MOCKS,
   ERROR_MOCKS,
   MIXED_REQUESTS_MOCK,
-  MOCKS_ORG2,
 } from './OrganizationDashboardMocks';
+import { MOCKS_ORG2 } from './OrganizationDashboardSecondaryMocks';
 import {
   MEMBERSHIP_REQUEST,
   GET_ORGANIZATION_BLOCKED_USERS_PG,
