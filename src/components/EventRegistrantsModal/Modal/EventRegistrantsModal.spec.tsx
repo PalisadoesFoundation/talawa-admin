@@ -259,6 +259,9 @@ const renderWithProviders = (
   );
 
 describe('EventRegistrantsModal', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   test('renders modal with basic elements', async () => {
     const { queryByText, getByTestId } = renderWithProviders([
       makeEventDetailsNonRecurringMock(),

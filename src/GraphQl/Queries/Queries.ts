@@ -122,34 +122,6 @@ export const USER_JOINED_ORGANIZATIONS_NO_MEMBERS = gql`
   ${ORG_FIELDS}
 `;
 
-export const USER_JOINED_ORGANIZATIONS_PG = gql`
-  query UserJoinedOrganizations($id: String!, $first: Int!) {
-    user(input: { id: $id }) {
-      organizationsWhereMember(first: $first) {
-        pageInfo {
-          hasNextPage
-        }
-        edges {
-          node {
-            id
-            name
-            addressLine1
-            description
-            avatarURL
-            members(first: 32) {
-              edges {
-                node {
-                  id
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
 export const ALL_ORGANIZATIONS_PG = gql`
   query UserJoinedOrganizations {
     organizations {
@@ -239,6 +211,83 @@ export const USER_LIST_FOR_TABLE = gql`
           role
           avatarURL
           emailAddress
+        }
+      }
+    }
+  }
+`;
+
+export const USER_LIST_FOR_ADMIN = gql`
+  query allUsers(
+    $first: Int
+    $after: String
+    $orgFirst: Int
+    $last: Int
+    $before: String
+    $where: QueryAllUsersWhereInput
+  ) {
+    allUsers(
+      first: $first
+      after: $after
+      where: $where
+      last: $last
+      before: $before
+    ) {
+      pageInfo {
+        endCursor
+        hasPreviousPage
+        hasNextPage
+        startCursor
+      }
+      edges {
+        cursor
+        node {
+          id
+          name
+          role
+          avatarURL
+          emailAddress
+          createdAt
+          city
+          state
+          countryCode
+          postalCode
+          orgsWhereUserIsBlocked(first: 16) {
+            edges {
+              node {
+                id
+                createdAt
+                organization {
+                  name
+                  createdAt
+                  city
+                  avatarURL
+                  creator {
+                    name
+                  }
+                }
+              }
+            }
+          }
+          organizationsWhereMember(first: $orgFirst) {
+            edges {
+              node {
+                id
+                name
+                avatarURL
+                createdAt
+                city
+                state
+                countryCode
+                creator {
+                  id
+                  name
+                  emailAddress
+                  avatarURL
+                }
+              }
+            }
+          }
         }
       }
     }

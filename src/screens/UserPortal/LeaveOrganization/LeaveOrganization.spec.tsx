@@ -8,7 +8,6 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { getItem } from 'utils/useLocalstorage';
 import { vi, beforeEach, afterEach, describe, test } from 'vitest';
 
 const routerMocks = vi.hoisted(() => ({
@@ -53,8 +52,6 @@ vi.mock('utils/useLocalstorage', () => {
       if (prefix === 'Talawa-admin' && key === 'email')
         return 'test@example.com';
       if (prefix === 'Talawa-admin' && key === 'userId') return '12345';
-      if (prefix === 'Talawa-admin-error' && key === 'user-email-error')
-        throw new Error();
       return null;
     }),
   };
@@ -199,7 +196,7 @@ describe('LeaveOrganization Component', () => {
 
   test('renders organization details and shows loading spinner', async () => {
     render(
-      <MockedProvider mocks={mocks.slice(0, 1)} addTypename={false}>
+      <MockedProvider mocks={mocks.slice(0, 1)}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -217,7 +214,7 @@ describe('LeaveOrganization Component', () => {
 
   test('renders organization details and displays content correctly', async () => {
     render(
-      <MockedProvider mocks={mocks.slice(0, 1)} addTypename={false}>
+      <MockedProvider mocks={mocks.slice(0, 1)}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -233,7 +230,7 @@ describe('LeaveOrganization Component', () => {
 
   test('shows error message when mutation fails', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={['/user/leaveOrg/test-org-id']}>
           <Routes>
             <Route
@@ -260,38 +257,44 @@ describe('LeaveOrganization Component', () => {
     expect(screen.queryByText(/An error occurred!/i)).not.toBeInTheDocument();
   });
 
-  test('logs an error when unable to access localStorage', () => {
-    const consoleErrorSpy = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
-    const userEmail = (() => {
-      try {
-        return getItem('Talawa-admin-error', 'user-email-error') ?? '';
-      } catch (e) {
-        console.error('Failed to access localStorage:', e);
-        return '';
-      }
-    })();
-    const userId = (() => {
-      try {
-        return getItem('Talawa-admin-error', 'user-email-error') ?? '';
-      } catch (e) {
-        console.error('Failed to access localStorage:', e);
-        return '';
-      }
-    })();
-    expect(userEmail).toBe('');
-    expect(userId).toBe('');
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Failed to access localStorage:',
-      expect.any(Error),
+  // Note: localStorage error/null/undefined handling is comprehensively tested
+  // in LeaveOrganization.localStorage.spec.tsx using vi.resetModules() and dynamic imports
+
+  test('does not submit when non-Enter key is pressed on email input', async () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <BrowserRouter>
+          <LeaveOrganization />
+        </BrowserRouter>
+      </MockedProvider>,
     );
-    consoleErrorSpy.mockRestore();
+    const leaveButton = await screen.findByRole('button', {
+      name: /Leave Organization/i,
+    });
+    fireEvent.click(leaveButton);
+    await waitFor(() =>
+      expect(
+        screen.getByText(/Are you sure you want to leave this organization?/i),
+      ).toBeInTheDocument(),
+    );
+    await screen.findByText('Continue');
+    fireEvent.click(screen.getByText('Continue'));
+    const emailInput = screen.getByPlaceholderText(/Enter your email/i);
+    fireEvent.change(emailInput, {
+      target: { value: 'test@example.com' },
+    });
+    // Press a non-Enter key - should not trigger verification
+    fireEvent.keyDown(emailInput, { key: 'Tab', code: 'Tab' });
+    // Verify the modal is still open and no navigation happened
+    expect(
+      screen.getByPlaceholderText(/Enter your email/i),
+    ).toBeInTheDocument();
+    expect(routerMocks.navigate).not.toHaveBeenCalled();
   });
 
   test('navigates and shows toast when email matches', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -327,7 +330,7 @@ describe('LeaveOrganization Component', () => {
 
   test('shows error when email is missing', async () => {
     render(
-      <MockedProvider mocks={mocks.slice(0, 2)} addTypename={false}>
+      <MockedProvider mocks={mocks.slice(0, 2)}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -359,7 +362,7 @@ describe('LeaveOrganization Component', () => {
 
   test('shows error when email does not match', async () => {
     render(
-      <MockedProvider mocks={mocks.slice(0, 2)} addTypename={false}>
+      <MockedProvider mocks={mocks.slice(0, 2)}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -391,7 +394,7 @@ describe('LeaveOrganization Component', () => {
 
   test('resets state when back button pressed', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -419,7 +422,7 @@ describe('LeaveOrganization Component', () => {
 
   test('resets state when modal is closed', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -436,7 +439,7 @@ describe('LeaveOrganization Component', () => {
 
   test('closes modal and resets state when Esc key is pressed', async () => {
     render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -457,7 +460,7 @@ describe('LeaveOrganization Component', () => {
 
   test('displays an error alert when query fails', async () => {
     render(
-      <MockedProvider mocks={errorMocks} addTypename={false}>
+      <MockedProvider mocks={errorMocks}>
         <LeaveOrganization />
       </MockedProvider>,
     );
@@ -479,7 +482,7 @@ describe('LeaveOrganization Component', () => {
     const combinedMocks = [mocks[0], networkErrorMock];
 
     render(
-      <MockedProvider mocks={combinedMocks} addTypename={false}>
+      <MockedProvider mocks={combinedMocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -536,7 +539,7 @@ describe('LeaveOrganization Component', () => {
     const combinedMocks = [mocks[0], graphQLErrorMock];
 
     render(
-      <MockedProvider mocks={combinedMocks} addTypename={false}>
+      <MockedProvider mocks={combinedMocks}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>
@@ -603,7 +606,6 @@ describe('LeaveOrganization Component', () => {
             },
           },
         ]}
-        addTypename={false}
       >
         <BrowserRouter>
           <LeaveOrganization />
@@ -657,7 +659,7 @@ describe('LeaveOrganization Component', () => {
     };
 
     render(
-      <MockedProvider mocks={[emptyOrgMock]} addTypename={false}>
+      <MockedProvider mocks={[emptyOrgMock]}>
         <BrowserRouter>
           <LeaveOrganization />
         </BrowserRouter>

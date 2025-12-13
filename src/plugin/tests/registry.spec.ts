@@ -14,6 +14,8 @@ import {
   extractComponentNames,
   manifestCache,
 } from '../registry';
+import { IPluginManifest } from '../types';
+import { PluginManager } from '../manager';
 
 // Mock the plugin manager
 vi.mock('../manager', () => ({
@@ -25,28 +27,19 @@ vi.mock('../manager', () => ({
 }));
 
 // Mock fetch
-global.fetch = vi.fn();
+
+// Variable to capture the loader function passed to React.lazy
+let capturedLoader: (() => Promise<{ default: React.ComponentType }>) | null =
+  null;
 
 // Mock React.lazy
 vi.mock('react', async () => {
   const actual = await vi.importActual('react');
   return {
     ...actual,
-    lazy: vi.fn((loader) => {
-      return {
-        __vccOpts: {},
-        __v_isRef: true,
-        __v_isShallow: false,
-        dep: undefined,
-        effect: undefined,
-        _dirty: false,
-        _value: undefined,
-        _hasCachedValue: false,
-        _cachedValue: undefined,
-        _cachedError: undefined,
-        _cachedErrorInfo: undefined,
-        _load: loader,
-      };
+    lazy: vi.fn((loader: () => Promise<{ default: React.ComponentType }>) => {
+      capturedLoader = loader;
+      return vi.fn().mockReturnValue(null) as unknown as React.ComponentType;
     }),
   };
 });
@@ -54,6 +47,9 @@ vi.mock('react', async () => {
 describe('Plugin Registry', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    global.fetch = vi.fn();
+    // Reset captured loader to ensure clean state for each test
+    capturedLoader = null;
     // Clear the registry before each test
     Object.keys(pluginRegistry).forEach((key) => {
       delete pluginRegistry[key];
@@ -91,27 +87,50 @@ describe('Plugin Registry', () => {
       expect(typeof ErrorComponent).toBe('function');
       expect(ErrorComponent).toBeDefined();
     });
+
+    it('should render error component with correct error message', () => {
+      const ErrorComponent = createErrorComponent(
+        'test-plugin',
+        'TestComponent',
+        'Test error message',
+      );
+
+      // Render the component to cover line 61 (the JSX return)
+      // Cast to function type since createErrorComponent returns a function component
+      const element = (ErrorComponent as () => React.ReactElement)();
+      expect(element).toBeDefined();
+      expect(element.type).toBe('div');
+      expect((element.props as { children: unknown }).children).toBeDefined();
+    });
   });
 
   describe('createLazyPluginComponent', () => {
     it('should create a lazy component that loads successfully', async () => {
-      const mockComponent = () =>
-        React.createElement('div', null, 'Test Component');
+      const mockComponent = vi
+        .fn()
+        .mockReturnValue(null) as React.ComponentType;
       const mockGetPluginManager = vi.mocked(
         await import('../manager'),
       ).getPluginManager;
       mockGetPluginManager.mockReturnValue({
         getPluginComponent: vi.fn().mockReturnValue(mockComponent),
-      } as any);
+      } as unknown as PluginManager);
 
       const LazyComponent = createLazyPluginComponent(
         'test-plugin',
         'TestComponent',
       );
 
+      // Execute the captured loader to cover lines 82-103
+      expect(capturedLoader).not.toBeNull();
+      if (capturedLoader) {
+        const result = await capturedLoader();
+        expect(result.default).toBe(mockComponent);
+      }
+
       // The lazy component should be created
       expect(LazyComponent).toBeDefined();
-      expect(typeof LazyComponent).toBe('object');
+      expect(typeof LazyComponent).toBe('function');
     });
 
     it('should create a lazy component that handles component not found error', async () => {
@@ -120,7 +139,7 @@ describe('Plugin Registry', () => {
       ).getPluginManager;
       mockGetPluginManager.mockReturnValue({
         getPluginComponent: vi.fn().mockReturnValue(null),
-      } as any);
+      } as unknown as PluginManager);
 
       const LazyComponent = createLazyPluginComponent(
         'test-plugin',
@@ -128,6 +147,15 @@ describe('Plugin Registry', () => {
       );
 
       expect(LazyComponent).toBeDefined();
+
+      // Execute the captured loader to cover the error handling path
+      expect(capturedLoader).not.toBeNull();
+      if (capturedLoader) {
+        const result = await capturedLoader();
+        // Should return an error component
+        expect(result.default).toBeDefined();
+        expect(typeof result.default).toBe('function');
+      }
     });
 
     it('should create a lazy component that handles general errors', async () => {
@@ -138,7 +166,7 @@ describe('Plugin Registry', () => {
         getPluginComponent: vi.fn().mockImplementation(() => {
           throw new Error('Network error');
         }),
-      } as any);
+      } as unknown as PluginManager);
 
       const LazyComponent = createLazyPluginComponent(
         'test-plugin',
@@ -146,6 +174,40 @@ describe('Plugin Registry', () => {
       );
 
       expect(LazyComponent).toBeDefined();
+
+      // Execute the captured loader to cover the error handling path
+      expect(capturedLoader).not.toBeNull();
+      if (capturedLoader) {
+        const result = await capturedLoader();
+        // Should return an error component
+        expect(result.default).toBeDefined();
+        expect(typeof result.default).toBe('function');
+      }
+    });
+
+    it('should handle non-Error exceptions', async () => {
+      const mockGetPluginManager = vi.mocked(
+        await import('../manager'),
+      ).getPluginManager;
+      mockGetPluginManager.mockReturnValue({
+        getPluginComponent: vi.fn().mockImplementation(() => {
+          throw 'String error'; // Non-Error exception
+        }),
+      } as unknown as PluginManager);
+
+      const LazyComponent = createLazyPluginComponent(
+        'test-plugin',
+        'StringErrorComponent',
+      );
+
+      expect(LazyComponent).toBeDefined();
+
+      // Execute the captured loader to cover the 'Unknown error' fallback
+      expect(capturedLoader).not.toBeNull();
+      if (capturedLoader) {
+        const result = await capturedLoader();
+        expect(result.default).toBeDefined();
+      }
     });
   });
 
@@ -180,7 +242,7 @@ describe('Plugin Registry', () => {
         ok: true,
         json: vi.fn().mockResolvedValue(mockManifest),
       };
-      vi.mocked(fetch).mockResolvedValue(mockResponse as any);
+      vi.mocked(fetch).mockResolvedValue(mockResponse as unknown as Response);
 
       const result = await getPluginManifest('test-plugin');
 
@@ -193,7 +255,7 @@ describe('Plugin Registry', () => {
 
     it('should handle HTTP error responses', async () => {
       const mockResponse = { ok: false, status: 404 };
-      vi.mocked(fetch).mockResolvedValue(mockResponse as any);
+      vi.mocked(fetch).mockResolvedValue(mockResponse as unknown as Response);
 
       const result = await getPluginManifest('test-plugin');
 
@@ -213,7 +275,7 @@ describe('Plugin Registry', () => {
         ok: true,
         json: vi.fn().mockRejectedValue(new Error('Invalid JSON')),
       };
-      vi.mocked(fetch).mockResolvedValue(mockResponse as any);
+      vi.mocked(fetch).mockResolvedValue(mockResponse as unknown as Response);
 
       const result = await getPluginManifest('test-plugin');
 
@@ -240,7 +302,7 @@ describe('Plugin Registry', () => {
           RU1: [{ component: 'RU1Component1' }],
           RU2: [{ component: 'RU2Component1' }],
         },
-      } as any;
+      } as unknown as IPluginManifest;
 
       const result = extractComponentNames(manifest);
 
@@ -265,7 +327,7 @@ describe('Plugin Registry', () => {
           G2: [{ injector: 'G2Injector1' }],
           G3: [{ injector: 'G3Injector1' }],
         },
-      } as any;
+      } as unknown as IPluginManifest;
 
       const result = extractComponentNames(manifest);
 
@@ -282,7 +344,7 @@ describe('Plugin Registry', () => {
         description: 'A test plugin',
         author: 'Test Author',
         main: 'index.js',
-      } as any;
+      } as unknown as IPluginManifest;
 
       const result = extractComponentNames(manifest);
 
@@ -301,7 +363,7 @@ describe('Plugin Registry', () => {
           routes: [],
           G1: [],
         },
-      } as any;
+      } as unknown as IPluginManifest;
 
       const result = extractComponentNames(manifest);
 
@@ -320,7 +382,7 @@ describe('Plugin Registry', () => {
           routes: undefined,
           G1: undefined,
         },
-      } as any;
+      } as unknown as IPluginManifest;
 
       const result = extractComponentNames(manifest);
 
@@ -339,7 +401,7 @@ describe('Plugin Registry', () => {
           routes: [{ otherProperty: 'value' }],
           G1: [{ otherProperty: 'value' }],
         },
-      } as any;
+      } as unknown as IPluginManifest;
 
       const result = extractComponentNames(manifest);
 
@@ -350,8 +412,12 @@ describe('Plugin Registry', () => {
   describe('registerPluginDynamically', () => {
     it('should register plugin with components successfully', async () => {
       const mockComponents = {
-        Component1: () => React.createElement('div', null, 'Component 1'),
-        Component2: () => React.createElement('div', null, 'Component 2'),
+        Component1: vi.fn(() =>
+          React.createElement('div', null, 'Component 1'),
+        ),
+        Component2: vi.fn(() =>
+          React.createElement('div', null, 'Component 2'),
+        ),
       };
 
       const mockGetPluginManager = vi.mocked(
@@ -363,7 +429,7 @@ describe('Plugin Registry', () => {
           status: 'active',
           components: mockComponents,
         }),
-      } as any);
+      } as unknown as PluginManager);
 
       await registerPluginDynamically('test-plugin');
 
@@ -384,7 +450,7 @@ describe('Plugin Registry', () => {
           status: 'active',
           components: { new: () => React.createElement('div', null, 'New') },
         }),
-      } as any);
+      } as unknown as PluginManager);
 
       await registerPluginDynamically('test-plugin');
 
@@ -400,7 +466,7 @@ describe('Plugin Registry', () => {
       ).getPluginManager;
       mockGetPluginManager.mockReturnValue({
         getLoadedPlugin: vi.fn().mockReturnValue(null),
-      } as any);
+      } as unknown as PluginManager);
 
       await registerPluginDynamically('test-plugin');
 
@@ -417,7 +483,7 @@ describe('Plugin Registry', () => {
           status: 'inactive',
           components: { test: () => React.createElement('div', null, 'Test') },
         }),
-      } as any);
+      } as unknown as PluginManager);
 
       await registerPluginDynamically('test-plugin');
 
@@ -434,7 +500,7 @@ describe('Plugin Registry', () => {
           status: 'active',
           components: {},
         }),
-      } as any);
+      } as unknown as PluginManager);
 
       await registerPluginDynamically('test-plugin');
 
@@ -449,7 +515,7 @@ describe('Plugin Registry', () => {
         getLoadedPlugin: vi.fn().mockImplementation(() => {
           throw new Error('Plugin manager error');
         }),
-      } as any);
+      } as unknown as PluginManager);
 
       // Should not throw
       await expect(
@@ -475,10 +541,12 @@ describe('Plugin Registry', () => {
           id,
           status: 'active',
           components: {
-            [`${id}Component`]: () => React.createElement('div', null, id),
+            [`${id}Component`]: vi.fn(() =>
+              React.createElement('div', null, id),
+            ),
           },
         })),
-      } as any);
+      } as unknown as PluginManager);
 
       await discoverAndRegisterAllPlugins();
 
@@ -493,7 +561,7 @@ describe('Plugin Registry', () => {
       ).getPluginManager;
       mockGetPluginManager.mockReturnValue({
         getLoadedPlugins: vi.fn().mockReturnValue([]),
-      } as any);
+      } as unknown as PluginManager);
 
       await discoverAndRegisterAllPlugins();
 
@@ -506,7 +574,7 @@ describe('Plugin Registry', () => {
       ).getPluginManager;
       mockGetPluginManager.mockReturnValue({
         getLoadedPlugins: vi.fn().mockReturnValue(null),
-      } as any);
+      } as unknown as PluginManager);
 
       await discoverAndRegisterAllPlugins();
 
@@ -521,7 +589,7 @@ describe('Plugin Registry', () => {
         getLoadedPlugins: vi.fn().mockImplementation(() => {
           throw new Error('Discovery error');
         }),
-      } as any);
+      } as unknown as PluginManager);
 
       // Should not throw
       await expect(discoverAndRegisterAllPlugins()).resolves.not.toThrow();
@@ -545,8 +613,12 @@ describe('Plugin Registry', () => {
   describe('getPluginComponents', () => {
     it('should return components for registered plugin', () => {
       const mockComponents = {
-        Component1: () => React.createElement('div', null, 'Component 1'),
-        Component2: () => React.createElement('div', null, 'Component 2'),
+        Component1: vi.fn(() =>
+          React.createElement('div', null, 'Component 1'),
+        ),
+        Component2: vi.fn(() =>
+          React.createElement('div', null, 'Component 2'),
+        ),
       };
       pluginRegistry['test-plugin'] = mockComponents;
 
@@ -577,7 +649,7 @@ describe('Plugin Registry', () => {
       ).getPluginManager;
       mockGetPluginManager.mockReturnValue({
         getPluginComponent: vi.fn().mockReturnValue(mockComponent),
-      } as any);
+      } as unknown as PluginManager);
 
       expect(getPluginComponent('test-plugin', 'ManagerComponent')).toBe(
         mockComponent,
@@ -590,7 +662,7 @@ describe('Plugin Registry', () => {
       ).getPluginManager;
       mockGetPluginManager.mockReturnValue({
         getPluginComponent: vi.fn().mockReturnValue(null),
-      } as any);
+      } as unknown as PluginManager);
 
       expect(
         getPluginComponent('test-plugin', 'NonExistentComponent'),
@@ -605,7 +677,7 @@ describe('Plugin Registry', () => {
       ).getPluginManager;
       mockGetPluginManager.mockReturnValue({
         getLoadedPlugins: vi.fn().mockReturnValue([]),
-      } as any);
+      } as unknown as PluginManager);
 
       await initializePluginSystem();
 
@@ -620,7 +692,7 @@ describe('Plugin Registry', () => {
         getLoadedPlugins: vi.fn().mockImplementation(() => {
           throw new Error('Initialization error');
         }),
-      } as any);
+      } as unknown as PluginManager);
 
       // Should not throw
       await expect(initializePluginSystem()).resolves.not.toThrow();
@@ -644,7 +716,7 @@ describe('Plugin Registry', () => {
           ],
           G1: [{ injector: 'ValidInjector' }, { otherProperty: 'value' }],
         },
-      } as any;
+      } as unknown as IPluginManifest;
 
       const result = extractComponentNames(manifest);
 
@@ -664,7 +736,7 @@ describe('Plugin Registry', () => {
           status: 'active',
           components: null,
         }),
-      } as any);
+      } as unknown as PluginManager);
 
       await registerPluginDynamically('test-plugin');
 
@@ -681,7 +753,7 @@ describe('Plugin Registry', () => {
           status: 'active',
           components: undefined,
         }),
-      } as any);
+      } as unknown as PluginManager);
 
       await registerPluginDynamically('test-plugin');
 
@@ -701,7 +773,7 @@ describe('Plugin Registry', () => {
         ok: true,
         json: vi.fn().mockResolvedValue('invalid json'),
       };
-      vi.mocked(fetch).mockResolvedValue(mockResponse as any);
+      vi.mocked(fetch).mockResolvedValue(mockResponse as unknown as Response);
 
       const result = await getPluginManifest('test-plugin');
 

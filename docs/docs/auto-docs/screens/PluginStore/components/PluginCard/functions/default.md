@@ -12,7 +12,7 @@ Defined in: [src/screens/PluginStore/components/PluginCard.tsx:13](https://githu
 
 ### \_\_namedParameters
 
-`PluginCardProps`
+`IPluginCardProps`
 
 ## Returns
 

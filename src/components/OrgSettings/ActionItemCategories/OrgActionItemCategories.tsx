@@ -171,10 +171,8 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
         filteredCategories = filteredCategories.filter((cat) => {
           if (status === CategoryStatus.Active) {
             return !cat.isDisabled;
-          } else if (status === CategoryStatus.Disabled) {
-            return cat.isDisabled;
           }
-          return true;
+          return cat.isDisabled;
         });
       }
 

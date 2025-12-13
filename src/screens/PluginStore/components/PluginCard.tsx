@@ -5,12 +5,12 @@ import React from 'react';
 import { Button } from '@mui/material';
 import type { IPluginMeta } from 'plugin';
 
-interface PluginCardProps {
+interface IPluginCardProps {
   plugin: IPluginMeta;
   onManage: (plugin: IPluginMeta) => void;
 }
 
-export default function PluginCard({ plugin, onManage }: PluginCardProps) {
+export default function PluginCard({ plugin, onManage }: IPluginCardProps) {
   return (
     <div
       style={{

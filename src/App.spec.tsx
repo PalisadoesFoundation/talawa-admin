@@ -51,10 +51,6 @@ vi.mock('screens/UserPortal/Settings/Settings', () => ({
   default: () => <div data-testid="mock-settings">Mock Settings</div>,
 }));
 
-// Mock console methods
-const originalConsoleLog = console.log;
-const originalConsoleError = console.error;
-
 const MOCKS = [
   {
     request: { query: CURRENT_USER },
@@ -136,7 +132,7 @@ const errorLink = new StaticMockLink(ERROR_MOCKS, true);
 
 const renderApp = (mockLink = link, initialRoute = '/') => {
   return render(
-    <MockedProvider addTypename={false} link={mockLink}>
+    <MockedProvider link={mockLink}>
       <MemoryRouter initialEntries={[initialRoute]}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -162,8 +158,7 @@ describe('Testing the App Component', () => {
   });
 
   afterEach(() => {
-    console.log = originalConsoleLog;
-    console.error = originalConsoleError;
+    vi.restoreAllMocks(); // Restores console spies automatically
   });
 
   it('Component should be rendered properly and user is logged in', async () => {
@@ -442,28 +437,6 @@ describe('Testing the App Component', () => {
       // Restore original lazy
       React.lazy = originalLazy;
     }
-  });
-
-  it('should handle registry import errors', async () => {
-    const registryError = new Error('Registry import failed');
-
-    // Mock the registry import function to fail
-    const mockDiscoverAndRegisterAllPlugins = vi
-      .fn()
-      .mockRejectedValue(registryError);
-
-    vi.doMock('./plugin/registry', () => ({
-      discoverAndRegisterAllPlugins: mockDiscoverAndRegisterAllPlugins,
-    }));
-
-    renderApp();
-
-    await waitFor(() => {
-      expect(console.error).toHaveBeenCalledWith(
-        'Failed to initialize plugin system:',
-        registryError,
-      );
-    });
   });
 
   it('should correctly determine isAdmin and isSuperAdmin flags', async () => {

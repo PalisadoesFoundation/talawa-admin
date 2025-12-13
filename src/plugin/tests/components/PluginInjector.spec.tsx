@@ -40,7 +40,7 @@ describe('PluginInjector', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('should render plugin injectors', () => {

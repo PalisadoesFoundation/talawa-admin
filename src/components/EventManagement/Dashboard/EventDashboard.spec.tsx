@@ -89,11 +89,7 @@ vi.mock('react-router', async () => ({
 const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
   return render(
     <BrowserRouter>
-      <MockedProvider
-        addTypename={false}
-        link={mockLink}
-        defaultOptions={defaultOptions}
-      >
+      <MockedProvider link={mockLink} defaultOptions={defaultOptions}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18nForTest}>
             <ToastContainer />
@@ -121,6 +117,7 @@ describe('Testing Event Dashboard Screen', () => {
   afterEach(() => {
     // Clean up after each test
     localStorageMock.clear();
+    vi.restoreAllMocks();
   });
 
   it('The page should display event details correctly and also show the time if provided', async () => {

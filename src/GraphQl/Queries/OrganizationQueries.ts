@@ -329,6 +329,7 @@ export const USER_CREATED_ORGANIZATIONS = gql`
         id
         name
         description
+        addressLine1
         createdAt
         avatarMimeType
         isMember
