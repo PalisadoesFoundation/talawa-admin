@@ -366,7 +366,87 @@ describe('OrganizationDashboard', () => {
   });
 
   it('correctly displays pending membership requests and filters out non-pending ones', async () => {
-    renderWithProviders({ mocks: MIXED_REQUESTS_MOCK });
+    // Define a local mock with unique user IDs to avoid cache collision with Post mocks
+    const SAFE_MIXED_REQUESTS_MOCK = [
+      {
+        request: {
+          query: MEMBERSHIP_REQUEST,
+          variables: {
+            input: { id: 'orgId' },
+            skip: 0,
+            first: 8,
+            firstName_contains: '',
+          },
+        },
+        maxUsageCount: 3,
+        result: {
+          data: {
+            organization: {
+              id: 'orgId',
+              membershipRequestsCount: 3,
+              membershipRequests: [
+                {
+                  membershipRequestId: 'request1',
+                  createdAt: '2023-01-01T00:00:00Z',
+                  status: 'pending',
+                  user: {
+                    id: 'pendingUser1',
+                    name: 'Pending User 1',
+                    emailAddress: 'user1@example.com',
+                    avatarURL: 'https://example.com/avatar1.jpg',
+                    __typename: 'User',
+                  },
+                  __typename: 'MembershipRequest',
+                },
+                {
+                  membershipRequestId: 'request2',
+                  createdAt: '2023-01-02T00:00:00Z',
+                  status: 'pending',
+                  user: {
+                    id: 'pendingUser2',
+                    name: 'Pending User 2',
+                    emailAddress: 'user2@example.com',
+                    avatarURL: 'https://example.com/avatar1.jpg',
+                    __typename: 'User',
+                  },
+                  __typename: 'MembershipRequest',
+                },
+                {
+                  membershipRequestId: 'request3',
+                  createdAt: '2023-01-03T00:00:00Z',
+                  status: 'pending',
+                  user: {
+                    id: 'pendingUser3',
+                    name: 'Pending User 3',
+                    emailAddress: 'user3@example.com',
+                    avatarURL: null,
+                    __typename: 'User',
+                  },
+                  __typename: 'MembershipRequest',
+                },
+                {
+                  membershipRequestId: 'request4',
+                  createdAt: '2023-01-04T00:00:00Z',
+                  status: 'rejected',
+                  user: {
+                    id: 'rejectedUser4',
+                    name: 'Rejected User',
+                    emailAddress: 'rejected@example.com',
+                    avatarURL: null,
+                    __typename: 'User',
+                  },
+                  __typename: 'MembershipRequest',
+                },
+              ],
+              __typename: 'Organization',
+            },
+          },
+        },
+      },
+      ...MOCKS.filter((mock) => mock.request.query !== MEMBERSHIP_REQUEST),
+    ];
+
+    renderWithProviders({ mocks: SAFE_MIXED_REQUESTS_MOCK });
 
     await waitFor(() => {
       expect(screen.queryAllByTestId('fallback-ui').length).toBe(0);
@@ -630,7 +710,19 @@ describe('OrganizationDashboard', () => {
       // Verify org1 data is loaded
       await waitFor(() => {
         expect(screen.getByTestId('membersCount')).toHaveTextContent('2');
+        expect(screen.getByTestId('adminsCount')).toHaveTextContent('1');
+        expect(screen.getByTestId('eventsCount')).toHaveTextContent('1');
+        expect(screen.getByTestId('venuesCount')).toHaveTextContent('10');
+        expect(screen.getByTestId('blockedUsersCount')).toHaveTextContent('2');
         expect(screen.getByTestId('postsCount')).toHaveTextContent('10');
+
+        expect(screen.getByText('members')).toBeInTheDocument();
+        expect(screen.getByText('admins')).toBeInTheDocument();
+        expect(screen.getByText('events')).toBeInTheDocument();
+        expect(screen.getByText('venues')).toBeInTheDocument();
+        expect(screen.getByText('blockedUsers')).toBeInTheDocument();
+        expect(screen.getByText('posts')).toBeInTheDocument();
+        expect(screen.getByText('membershipRequests')).toBeInTheDocument();
       });
 
       unmount();
@@ -646,7 +738,19 @@ describe('OrganizationDashboard', () => {
       // Verify org2 data is loaded
       await waitFor(() => {
         expect(screen.getByTestId('membersCount')).toHaveTextContent('5');
+        expect(screen.getByTestId('adminsCount')).toHaveTextContent('2');
+        expect(screen.getByTestId('eventsCount')).toHaveTextContent('3');
+        expect(screen.getByTestId('venuesCount')).toHaveTextContent('5');
+        expect(screen.getByTestId('blockedUsersCount')).toHaveTextContent('0');
         expect(screen.getByTestId('postsCount')).toHaveTextContent('20');
+
+        expect(screen.getByText('members')).toBeInTheDocument();
+        expect(screen.getByText('admins')).toBeInTheDocument();
+        expect(screen.getByText('events')).toBeInTheDocument();
+        expect(screen.getByText('venues')).toBeInTheDocument();
+        expect(screen.getByText('blockedUsers')).toBeInTheDocument();
+        expect(screen.getByText('posts')).toBeInTheDocument();
+        expect(screen.getByText('noMembershipRequests')).toBeInTheDocument();
       });
     });
 
@@ -661,7 +765,19 @@ describe('OrganizationDashboard', () => {
       // Verify org1 data is loaded
       await waitFor(() => {
         expect(screen.getByTestId('membersCount')).toHaveTextContent('2');
+        expect(screen.getByTestId('adminsCount')).toHaveTextContent('1');
+        expect(screen.getByTestId('eventsCount')).toHaveTextContent('1');
+        expect(screen.getByTestId('venuesCount')).toHaveTextContent('10');
+        expect(screen.getByTestId('blockedUsersCount')).toHaveTextContent('2');
         expect(screen.getByTestId('postsCount')).toHaveTextContent('10');
+
+        expect(screen.getByText('members')).toBeInTheDocument();
+        expect(screen.getByText('admins')).toBeInTheDocument();
+        expect(screen.getByText('events')).toBeInTheDocument();
+        expect(screen.getByText('venues')).toBeInTheDocument();
+        expect(screen.getByText('blockedUsers')).toBeInTheDocument();
+        expect(screen.getByText('posts')).toBeInTheDocument();
+        expect(screen.getByText('membershipRequests')).toBeInTheDocument();
       });
 
       // Update params to simulate route change
@@ -685,7 +801,19 @@ describe('OrganizationDashboard', () => {
       // Verify org2 data is loaded
       await waitFor(() => {
         expect(screen.getByTestId('membersCount')).toHaveTextContent('5');
+        expect(screen.getByTestId('adminsCount')).toHaveTextContent('2');
+        expect(screen.getByTestId('eventsCount')).toHaveTextContent('3');
+        expect(screen.getByTestId('venuesCount')).toHaveTextContent('5');
+        expect(screen.getByTestId('blockedUsersCount')).toHaveTextContent('0');
         expect(screen.getByTestId('postsCount')).toHaveTextContent('20');
+
+        expect(screen.getByText('members')).toBeInTheDocument();
+        expect(screen.getByText('admins')).toBeInTheDocument();
+        expect(screen.getByText('events')).toBeInTheDocument();
+        expect(screen.getByText('venues')).toBeInTheDocument();
+        expect(screen.getByText('blockedUsers')).toBeInTheDocument();
+        expect(screen.getByText('posts')).toBeInTheDocument();
+        expect(screen.getByText('noMembershipRequests')).toBeInTheDocument();
       });
     });
   });
