@@ -1522,7 +1522,7 @@ describe('Extra coverage for 100 %', () => {
       screen.getByPlaceholderText('Confirm Password'),
       'Valid@123',
     );
-    await userEvent.type(screen.getByTestId('mock-recaptcha'), 'token');
+    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[1], 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenCalledWith('name_invalid');
@@ -1541,7 +1541,7 @@ describe('Extra coverage for 100 %', () => {
       screen.getByPlaceholderText('Confirm Password'),
       'weak',
     );
-    await userEvent.type(screen.getByTestId('mock-recaptcha'), 'token');
+    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[1], 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenCalledWith('password_invalid');
@@ -1592,7 +1592,7 @@ describe('Extra coverage for 100 %', () => {
       screen.getByPlaceholderText(/Enter Password/i),
       'pass',
     );
-    await userEvent.type(screen.getByTestId('mock-recaptcha'), 'token');
+    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[0], 'token');
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenCalledWith('notAuthorised');
@@ -1607,11 +1607,14 @@ describe('Extra coverage for 100 %', () => {
 
   /* 6.  fetch(BACKEND_URL) catch block */
   it('handles Talawa-API unreachable', async () => {
-    vi.spyOn(global, 'fetch').mockRejectedValueOnce(new Error('Network error'));
     const errorHandlerMod = await import('utils/errorHandler');
     const errorHandlerSpy = vi.spyOn(errorHandlerMod, 'errorHandler');
+    const fetchSpy = vi
+      .spyOn(global, 'fetch')
+      .mockRejectedValueOnce(new Error('Network error'));
     renderLoginPage();
     await wait();
+    expect(fetchSpy).toHaveBeenCalled();
     expect(errorHandlerSpy).toHaveBeenCalled();
   });
 
@@ -1657,7 +1660,7 @@ describe('Extra coverage for 100 %', () => {
       screen.getByPlaceholderText('Confirm Password'),
       'John@123',
     );
-    await userEvent.type(screen.getByTestId('mock-recaptcha'), 'token');
+    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[1], 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(resetReCAPTCHA).toHaveBeenCalled();
@@ -1693,7 +1696,7 @@ describe('Extra coverage for 100 %', () => {
       screen.getByPlaceholderText('Confirm Password'),
       'John@123',
     );
-    await userEvent.type(screen.getByTestId('mock-recaptcha'), 'token');
+    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[1], 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.error).toHaveBeenCalled();
@@ -1729,7 +1732,10 @@ describe('Extra coverage for 100 %', () => {
       screen.getByPlaceholderText('Confirm Password'),
       'John@123',
     );
-    await userEvent.type(screen.getByTestId('mock-recaptcha'), 'bad-token');
+    await userEvent.type(
+      screen.getAllByTestId('mock-recaptcha')[1],
+      'bad-token',
+    );
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.error).toHaveBeenCalledWith('Please_check_the_captcha');
@@ -1762,7 +1768,10 @@ describe('Extra coverage for 100 %', () => {
       screen.getByPlaceholderText(/Enter Password/i),
       'pass',
     );
-    await userEvent.type(screen.getByTestId('mock-recaptcha'), 'bad-token');
+    await userEvent.type(
+      screen.getAllByTestId('mock-recaptcha')[0],
+      'bad-token',
+    );
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
     expect(toastMocks.error).toHaveBeenCalledWith('Please_check_the_captcha');
@@ -1781,7 +1790,7 @@ describe('Extra coverage for 100 %', () => {
       screen.getByPlaceholderText('Confirm Password'),
       'John@123',
     );
-    await userEvent.type(screen.getByTestId('mock-recaptcha'), 'token');
+    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[1], 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenCalledWith('email_invalid');
@@ -1821,7 +1830,7 @@ describe('Extra coverage for 100 %', () => {
       screen.getByPlaceholderText(/Enter Password/i),
       'pass',
     );
-    await userEvent.type(screen.getByTestId('mock-recaptcha'), 'token');
+    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[0], 'token');
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenCalledWith('notFound');
