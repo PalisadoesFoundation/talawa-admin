@@ -68,7 +68,9 @@ import type {
   ReportingTableColumn,
   ReportingTableGridProps,
   InfiniteScrollProps,
+  ReportingRow,
 } from '../../types/ReportingTable/interface';
+
 import Avatar from 'components/Avatar/Avatar';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import styles from '../../style/app-fixed.module.css';
@@ -341,12 +343,8 @@ const Requests = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       align: 'center',
       headerAlign: 'center',
-      valueGetter: (
-        _value: unknown,
-        row: any,
-        _column: unknown,
-        _apiRef: unknown,
-      ) => (row as InterfaceRequestsListItem)?.user?.name || '',
+      valueGetter: (_value: unknown, row: ReportingRow) =>
+        (row as InterfaceRequestsListItem)?.user?.name || '',
     },
     {
       field: 'email',
@@ -357,12 +355,8 @@ const Requests = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       align: 'center',
       headerAlign: 'center',
-      valueGetter: (
-        _value: unknown,
-        row: any,
-        _column: unknown,
-        _apiRef: unknown,
-      ) => (row as InterfaceRequestsListItem)?.user?.emailAddress || '',
+      valueGetter: (_value: unknown, row: ReportingRow) =>
+        (row as InterfaceRequestsListItem)?.user?.emailAddress || '',
     },
     {
       field: 'accept',

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import type { GridColDef, GridCellParams } from '@mui/x-data-grid';
 
-type ReportingRow = Record<string, unknown>;
+export type ReportingRow = Record<string, unknown>;
 type ReportingCellParams = GridCellParams<ReportingRow, ReportingRow, string>;
 
 /**
