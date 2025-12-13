@@ -127,23 +127,6 @@ export default [
       'vitest/no-focused-tests': 'error',
       'vitest/no-identical-title': 'error',
       '@typescript-eslint/no-unused-expressions': 'error',
-      'no-restricted-imports': [
-        "error",
-        {
-          "paths": [
-            {
-              "name": "react-router",
-              "message": "Use MemoryRouter from 'react-router-dom' in tests instead."
-            }
-          ],
-          "patterns": [
-            {
-              "group": ["react-router"],
-              "message": "Do not import from 'react-router'. Use 'react-router-dom' instead."
-            }
-          ]
-        }
-      ]
     },
   },
   {
@@ -248,6 +231,25 @@ export default [
     },
     rules: {
       'vitest-isolation/require-aftereach-cleanup': 'error',
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'react-router',
+              message:
+                "Use MemoryRouter from 'react-router-dom' in tests instead.",
+            },
+          ],
+          patterns: [
+            {
+              group: ['react-router', 'react-router/*'],
+              message:
+                "Do not import from 'react-router'. Use 'react-router-dom' instead.",
+            },
+          ],
+        },
+      ],
     },
   },
 ];
