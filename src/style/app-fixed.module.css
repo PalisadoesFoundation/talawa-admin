@@ -1177,24 +1177,17 @@
   --bs-btn-active-color: var(--searchButton-bg);
   --bs-btn-active-bg: var(--searchButton-bg);
   --bs-btn-active-border-color: var(--searchButton-border);
+  margin-bottom: 10px;
   background-color: var(--searchButton-bg) !important;
   border-color: var(--searchButton-border) !important;
   color: var(--searchButton-color);
   position: absolute;
-  transform: translateY(-3%);
-  right: 8px;
-  top: 0;
-  width: 44px;
-  bottom: 0;
-  margin: auto;
-  height: 45px;
   z-index: 10;
+  bottom: 0;
+  right: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0 12px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
   transition:
     box-shadow 0.2s ease,
     transform 0.2s ease;
@@ -1223,7 +1216,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 52.5px;
+  height: 40px;
 }
 
 /* Modal Header*/
@@ -1259,6 +1252,15 @@ form label,
   padding-bottom: 0;
   font-size: 1rem;
   margin-top: 10px;
+}
+
+/* Input Fields - Update the existing inputField class */
+.inputField {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: var(--eventManagement-button-bg);
+  border: 1px solid var(--input-shadow);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Placeholder styling */
@@ -1334,6 +1336,12 @@ form label,
   align-items: center;
 }
 
+.btnsContainer {
+  display: flex;
+  margin: 2.5rem 0;
+  align-items: center;
+}
+
 /* Table Header */
 
 .tableHeader {
@@ -1356,11 +1364,26 @@ form label,
   display: flex;
   margin: 2.5rem 0;
   align-items: stretch;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btnsContainer > :first-child {
+  flex: 1 1 320px;
+  min-width: 240px;
+  max-width: 100%;
 }
 
 .searchBarWrapper {
   flex-grow: 1;
   max-width: 600px;
+}
+
+.btnsContainer .btnsBlock {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 @media (max-width: 520px) {
@@ -1374,10 +1397,9 @@ form label,
   }
 
   .btnsContainer .btnsBlock {
-    height: 100%;
-    padding-bottom: 4px;
-    display: flex;
-    align-items: center;
+    display: block;
+    margin-top: 1rem;
+    margin-right: 0;
   }
 
   .btnsContainer .btnsBlock div {
@@ -1392,10 +1414,6 @@ form label,
     margin-bottom: 1rem;
     margin-right: 0;
     width: 100%;
-  }
-
-  .largeBtnsWrapper {
-    flex-direction: column;
   }
 }
 
@@ -1416,6 +1434,12 @@ form label,
     box-sizing: border-box;
   }
 
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin: 1.5rem 0 0 0;
+    justify-content: space-between;
+  }
+
   .btnsContainer .btnsBlock button {
     margin-bottom: 1rem;
     margin-right: 0;
@@ -1432,6 +1456,7 @@ form label,
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 1rem;
 }
 
 @media (max-width: 1020px) {
@@ -1441,12 +1466,12 @@ form label,
   }
 
   .btnsContainer .input {
-    flex: 1 1 640px;
-    max-width: 760px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    margin-left: 18px;
+    width: 100%;
+  }
+
+  .btnsContainer .btnsBlock {
+    margin: 1.5rem 0 0 0;
+    justify-content: space-between;
   }
 
   .btnsContainer .btnsBlock button {
@@ -1460,6 +1485,40 @@ form label,
   .btnsContainer .btnsBlock button {
     margin-left: 0;
   }
+}
+
+@media (max-width: 520px) {
+  .btnsContainer {
+    margin-bottom: 0;
+  }
+
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin-top: 1rem;
+    margin-right: 0;
+  }
+
+  .largeBtnsWrapper {
+    flex-direction: column;
+  }
+
+  .btnsContainer .btnsBlock div {
+    flex: 1;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin-bottom: 1rem;
+    margin-right: 0;
+    width: 100%;
+  }
+}
+
+.inputField {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: var(--eventManagement-button-bg);
+  border: 1px solid var(--input-shadow);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .removeMemberCancel {
@@ -1476,10 +1535,7 @@ form label,
   border: 1px solid var(--dropdown-border);
   color: var(--dropdown-font-color) !important;
   position: relative;
-  display: inline-flex;
-  height: 50px;
-  align-items: center;
-  justify-content: space-between;
+  display: inline-block;
 }
 
 .customDropdown {
@@ -1588,12 +1644,11 @@ form label,
 /* Input */
 
 .input {
-  flex: 1 1 640px;
-  max-width: 760px;
+  flex: 1;
   position: relative;
-  display: flex;
-  align-items: center;
-  margin-left: 18px;
+  padding-right: 30px;
+  padding-inline-end: 30px;
+  width: 425px;
 }
 
 .input:active {
@@ -1612,8 +1667,34 @@ form label,
   width: 52px;
 }
 
+.btnsContainer .input {
+  flex: 1;
+  position: relative;
+  max-width: 60%;
+  justify-content: space-between;
+}
+
+.btncon .btnsContainer .input {
+  flex: 1;
+  min-width: 18rem;
+  position: relative;
+}
+
 .btncon .btnsContainer input {
   outline: 1px solid var(--btncon-input);
+}
+
+.btncon .btnsContainer .input button {
+  width: 52px;
+}
+
+/* Input Field */
+
+.inputField {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: var(--inputField-bg);
+  border: 1px solid var(--inputField-border);
 }
 
 .inputField:focus {
@@ -2023,10 +2104,6 @@ form label,
   margin-left: 1rem;
   width: 70%;
   margin-top: 0.7rem;
-}
-
-.orgCard .innerContainer .content h6 > div > div {
-  margin-bottom: 0.3rem;
 }
 
 @media (max-width: 550px) {
@@ -3892,7 +3969,6 @@ form label,
   display: flex;
   align-items: start;
   flex-direction: column;
-  gap: 2rem;
 }
 
 .joinedBtn {
@@ -7688,8 +7764,8 @@ form {
   display: flex;
   width: 100%;
   justify-content: space-between;
-  margin: 1.8rem 0 3.5rem 0;
-  align-items: center;
+  margin: 1.8rem 0 1.8rem 0;
+  align-items: stretch;
   gap: 0.75rem;
   flex-wrap: wrap;
 }
@@ -7710,27 +7786,24 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 6px;
-  gap: 2px;
+  margin-left: 12px; /* bring controls closer together */
+  gap: 12px;
 }
 
-/*OrgList search layour utility */
+.btnsContainerSearchBar .btnsBlockSearchBar button {
+  margin-left: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .btnsContainerSearchBar .inputOrgList {
-  flex: 1 1 640px;
+  flex: 1 1 640px; /* make input wider and flexible */
   max-width: 760px;
   position: relative;
   display: flex;
   align-items: center;
-  margin-left: 18px;
-}
-
-.btnsContainer .inputOrgList {
-  flex: 1 1 640px;
-  max-width: 760px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  margin-left: 18px;
+  margin-left: 18px; /* gap from left */
 }
 
 .btnsContainerSearchBar input {
@@ -7738,48 +7811,21 @@ form {
 }
 
 .btnsContainerSearchBar .inputOrgList button {
-  width: 44px;
-  /* slightly smaller square button */
+  width: 44px; /* slightly smaller square button */
   height: 38px;
   margin-left: 8px;
   flex: 0 0 44px;
 }
 
-.btnsContainerSearchBar .inputOrgList .maxWidth {
-  position: relative;
-}
-
-.btnsContainerSearchBar .inputOrgList .inputField {
-  margin-top: 0;
-  margin-bottom: 0;
-  height: 50px;
-}
-
 /* When search button is placed in the header controls (btnsBlock), make it visually consistent */
 .btnsContainerSearchBar .btnsBlock .searchButton {
-  width: 48px;
+  width: 44px;
   height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 6px;
   box-shadow: var(--hover-shadow);
-}
-
-.searchWrapper {
-  padding-right: 40px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  width: 100%;
-}
-
-.searchIconInside {
-  position: absolute;
-  right: 10px;
-  color: var(--searchIcon-color);
-  cursor: pointer;
-  z-index: 10;
 }
 
 @media (max-width: 1020px) {
@@ -8996,7 +9042,7 @@ form {
 }
 
 .maxWidth {
-  max-width: 700px;
+  max-width: 800px;
 }
 
 .content {
@@ -9463,10 +9509,6 @@ form {
 }
 
 @media (max-height: 900px) {
-  .pageContainer {
-    padding: 1rem 1.5rem 0 calc(300px + 2rem);
-  }
-
   .collapseSidebarButton {
     height: 30px;
     width: calc(300px + 1rem);

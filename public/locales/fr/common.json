@@ -100,6 +100,8 @@
   "createdEarliest": "Créé le plus tôt",
   "searchBy": "Rechercher par {{item}}",
   "plugins": "Extensions",
+  "unblock": "Débloquer",
+  "unblockedSuccessfully": "{{item}} débloqué avec succès",
   "save": "Enregistrer",
   "saving": "Enregistrement..."
 }
