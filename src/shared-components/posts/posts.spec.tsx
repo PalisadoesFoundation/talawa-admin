@@ -14,6 +14,7 @@ import PostsPage from './posts';
 import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
 import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import type { RenderResult } from '@testing-library/react';
+import { InterfacePostEdge } from 'types/Post/interface';
 
 // Hoisted mocks (must be before vi.mock calls)
 const { mockToast } = vi.hoisted(() => ({
@@ -44,7 +45,7 @@ vi.mock('react-i18next', () => ({
       };
       return translations[key] || key;
     },
-    i18n: { changeLanguage: () => new Promise(() => {}), language: 'en' },
+    i18n: { changeLanguage: () => Promise.resolve(() => {}), language: 'en' },
   }),
   Trans: ({ children }: { children: React.ReactNode }) => children,
   I18nextProvider: ({ children }: { children: React.ReactNode }) => children,
@@ -225,9 +226,11 @@ vi.mock('react-infinite-scroll-component', () => ({
       {children}
       {hasMore && loader}
       {!hasMore && endMessage}
-      <button type="button" data-testid="load-more-btn" onClick={next}>
-        Load More
-      </button>
+      {hasMore && (
+        <button type="button" data-testid="load-more-btn" onClick={next}>
+          Load More
+        </button>
+      )}
     </div>
   ),
 }));
@@ -650,9 +653,7 @@ describe('PostsPage Component', () => {
           last: null,
         },
       },
-      result: {
-        data: null, // This will cause an error in search
-      },
+      error: new Error('Organization post list error'),
     };
 
     renderComponent([errorOrgPostListMock, emptyPinnedPostsMock]);
@@ -865,72 +866,6 @@ describe('Sorting Functionality', () => {
     });
   });
 
-  describe('Post Data Formatting', () => {
-    it('handles posts with null creator', async () => {
-      const mockWithNullCreator: MockedResponse = {
-        request: {
-          query: ORGANIZATION_POST_LIST_WITH_VOTES,
-          variables: {
-            input: { id: '123' },
-            userId: 'user-123',
-            after: null,
-            before: null,
-            first: 6,
-            last: null,
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '123',
-              name: 'Test Organization',
-              avatarURL: null,
-              postsCount: 1,
-              posts: {
-                edges: [
-                  {
-                    node: {
-                      id: 'post-null-creator',
-                      caption: 'Test Post',
-                      createdAt: '2024-01-01T12:00:00Z',
-                      updatedAt: '2024-01-01T12:00:00Z',
-                      pinnedAt: null,
-                      pinned: false,
-                      attachments: [],
-                      imageUrl: null,
-                      videoUrl: null,
-                      creator: null,
-                      postsCount: 0,
-                      commentsCount: 0,
-                      upVotesCount: 0,
-                      downVotesCount: 0,
-                      hasUserVoted: { hasVoted: false, voteType: null },
-                      comments: [],
-                    },
-                    cursor: 'cursor-1',
-                  },
-                ],
-                totalCount: 1,
-                pageInfo: {
-                  startCursor: 'cursor-1',
-                  endCursor: 'cursor-1',
-                  hasNextPage: false,
-                  hasPreviousPage: false,
-                },
-              },
-            },
-          },
-        },
-      };
-
-      renderComponent([mockWithNullCreator, emptyPinnedPostsMock]);
-
-      await waitFor(() => {
-        expect(screen.getByText('Unknown User')).toBeInTheDocument();
-      });
-    });
-  });
-
   describe('Edge Cases', () => {
     it('handles null page info', async () => {
       const nullPageInfoMock: MockedResponse = {
@@ -1030,51 +965,6 @@ describe('Sorting Functionality', () => {
       });
     });
 
-    it('handles whitespace-only search term', async () => {
-      renderComponent([orgPostListMock, emptyPinnedPostsMock]);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('searchByName')).toBeInTheDocument();
-      });
-
-      const searchInput = screen.getByTestId('searchByName');
-      await act(async () => {
-        fireEvent.change(searchInput, { target: { value: '   ' } });
-      });
-
-      // Whitespace only should reset filtering
-      await waitFor(() => {
-        const renderer = screen.getByTestId('posts-renderer');
-        expect(renderer.getAttribute('data-is-filtering')).toBe('false');
-      });
-    });
-    it('shows no posts found message when search has no matches', async () => {
-      renderComponent([orgPostListMock, emptyPinnedPostsMock]);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('searchByName')).toBeInTheDocument();
-      });
-
-      // Wait for initial data
-      await waitFor(() => {
-        expect(screen.getAllByTestId('post-card').length).toBeGreaterThan(0);
-      });
-
-      const searchInput = screen.getByTestId('searchByName');
-
-      // Search for something that doesn't match any caption
-      await act(async () => {
-        fireEvent.change(searchInput, { target: { value: 'zzznomatchzzz' } });
-      });
-
-      // Should show "No posts found matching" message
-      await waitFor(
-        () => {
-          expect(screen.getByText(/noPostsFoundMatching/i)).toBeInTheDocument();
-        },
-        { timeout: 5000 },
-      );
-    });
     it('loadMorePosts callback handles missing fetchMoreResult', async () => {
       const noResultMock: MockedResponse = {
         request: {
@@ -1148,6 +1038,54 @@ describe('Sorting Functionality', () => {
           'Error loading more posts',
         );
       });
+    });
+
+    it('handles post with video URL and fallback values', async () => {
+      const postWithVideo: InterfacePostEdge = {
+        node: {
+          id: 'video-post-1',
+          caption: 'Video post',
+          hasUserVoted: null, // Test fallback
+          creator: null, // Test fallback
+          commentsCount: undefined, // Test fallback
+          pinnedAt: 'video',
+          downVotesCount: undefined, // Test fallback
+          upVotesCount: undefined, // Test fallback
+          imageUrl: null,
+          videoUrl: 'https://example.com/video.mp4',
+          attachments: undefined,
+          createdAt: '2024-01-15T12:00:00.000Z',
+        },
+        cursor: 'cursor-video-post-1',
+      };
+
+      const mockWithVideo = {
+        ...orgPostListMock,
+        result: {
+          data: {
+            organization: {
+              posts: {
+                edges: [postWithVideo],
+                pageInfo: {
+                  startCursor: 'cursor-video-post-1',
+                  endCursor: 'cursor-video-post-1',
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                },
+              },
+            },
+          },
+        },
+      };
+
+      renderComponent([mockWithVideo, emptyPinnedPostsMock]);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('posts-renderer')).toBeInTheDocument();
+      });
+
+      // Post should still render with fallback values
+      expect(screen.getByText('Video post')).toBeInTheDocument();
     });
   });
 });

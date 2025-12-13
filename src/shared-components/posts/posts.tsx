@@ -42,7 +42,7 @@
 import { useQuery } from '@apollo/client';
 import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
 import {
@@ -164,35 +164,9 @@ export default function PostsPage() {
     if (orgPinnedPostListError) toast.error(t('pinnedPostsLoadError'));
   }, [orgPinnedPostListError, t]);
 
-  // Sort posts when allPosts or sorting option changes
-  useEffect(() => {
-    if (sortingOption !== 'None' && allPosts.length > 0) {
-      const posts = [...allPosts];
-      const sorted = posts.sort((a, b) => {
-        const dateA = new Date(a.createdAt).getTime();
-        const dateB = new Date(b.createdAt).getTime();
-        return sortingOption === 'oldest' ? dateA - dateB : dateB - dateA;
-      });
-      setAllPosts(sorted);
-      // When sorting, disable infinite scroll since we're reordering
-      setHasMore(false);
-    } else if (
-      sortingOption === 'None' &&
-      orgPostListData?.organization?.posts?.edges
-    ) {
-      // Reset to original order when 'None' is selected
-      const posts = orgPostListData.organization.posts.edges.map(
-        (edge: InterfacePostEdge) => edge.node,
-      );
-      setAllPosts(posts);
-      setHasMore(
-        orgPostListData.organization.posts.pageInfo?.hasNextPage ?? false,
-      );
-    }
-  }, [allPosts.length, sortingOption, orgPostListData]);
-
   // Infinite scroll - load more posts
   const loadMorePosts = useCallback((): void => {
+    if (!currentUrl || !userId) return;
     if (!hasMore || sortingOption !== 'None') return;
 
     fetchMore({
@@ -246,54 +220,26 @@ export default function PostsPage() {
   const handleSearch = async (term: string): Promise<void> => {
     setSearchTerm(term);
 
-    try {
-      if (!term.trim()) {
-        setIsFiltering(false);
-        setFilteredPosts([]);
-        return;
-      }
-
-      setIsFiltering(true);
-      const filtered = allPosts.filter((post: InterfacePost) =>
-        post.caption?.toLowerCase().includes(term.toLowerCase()),
-      );
-      setFilteredPosts(filtered);
-    } catch {
-      toast.error('Error searching posts');
+    if (!term.trim()) {
       setIsFiltering(false);
+      setFilteredPosts([]);
+      return;
     }
+
+    setIsFiltering(true);
+    const filtered = allPosts.filter((post: InterfacePost) =>
+      post.caption?.toLowerCase().includes(term.toLowerCase()),
+    );
+    setFilteredPosts(filtered);
   };
 
   const handleSorting = (option: string | number): void => {
     setSortingOption(option as string);
-
-    if (option === 'None') {
-      // Reset to original paginated order
-      if (orgPostListData?.organization?.posts?.edges) {
-        const posts = orgPostListData.organization.posts.edges.map(
-          (edge: InterfacePostEdge) => edge.node,
-        );
-        setAllPosts(posts);
-        setHasMore(
-          orgPostListData.organization.posts.pageInfo?.hasNextPage ?? false,
-        );
-      }
-      return;
+    if (option !== 'None') {
+      setHasMore(false);
+    } else if (orgPostListData?.organization?.posts?.pageInfo?.hasNextPage) {
+      setHasMore(true);
     }
-
-    if (allPosts.length === 0) {
-      return;
-    }
-
-    const posts = [...allPosts];
-    const sorted = posts.sort((a, b) => {
-      const dateA = new Date(a.createdAt).getTime();
-      const dateB = new Date(b.createdAt).getTime();
-      return option === 'oldest' ? dateA - dateB : dateB - dateA;
-    });
-
-    setAllPosts(sorted);
-    setHasMore(false);
   };
 
   const handleRefetch = async (): Promise<void> => {
@@ -321,13 +267,28 @@ export default function PostsPage() {
     fetchPosts: handleRefetch,
   });
 
+  // Derive postsToDisplay from allPosts with sorting and filtering
+  const postsToDisplay = useMemo(() => {
+    let posts = isFiltering ? filteredPosts : allPosts;
+
+    // Apply sorting if not 'None'
+    if (sortingOption !== 'None' && posts.length > 0) {
+      posts = [...posts].sort((a, b) => {
+        const dateA = new Date(a.createdAt).getTime();
+        const dateB = new Date(b.createdAt).getTime();
+        return sortingOption === 'oldest' ? dateA - dateB : dateB - dateA;
+      });
+    }
+
+    return posts;
+  }, [allPosts, filteredPosts, isFiltering, sortingOption]);
+
   if (orgPostListLoading || orgPinnedPostListLoading) {
     return <Loader />;
   }
 
   const pinnedPosts =
     orgPinnedPostListData?.organization?.pinnedPosts?.edges ?? [];
-  const postsToDisplay = isFiltering ? filteredPosts : allPosts;
 
   return (
     <>

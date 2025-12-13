@@ -6,7 +6,7 @@
 
 > `const` **ORGANIZATION\_MEMBERS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:385](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L385)
+Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:324](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L324)
 
 GraphQL query to fetch organization members with pagination and filtering.
 This query uses the new connection-based schema with input objects.

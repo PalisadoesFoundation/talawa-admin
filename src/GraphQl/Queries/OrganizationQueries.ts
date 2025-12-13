@@ -13,67 +13,6 @@ import gql from 'graphql-tag';
  * @returns The list of organizations based on the applied filters.
  */
 
-export const ORGANIZATION_POST_LIST = gql`
-  query OrganizationPostList(
-    $input: QueryOrganizationInput!
-    $after: String
-    $before: String
-    $first: Int
-    $last: Int
-  ) {
-    organization(input: $input) {
-      id
-      postsCount
-      posts(after: $after, before: $before, first: $first, last: $last) {
-        edges {
-          node {
-            id
-            caption
-            commentsCount
-            pinnedAt
-            downVotesCount
-            upVotesCount
-            creator {
-              id
-              name
-              avatarURL
-            }
-            createdAt
-            comments(first: 10) {
-              edges {
-                node {
-                  id
-                  body
-                  creator {
-                    id
-                    name
-                    avatarURL
-                  }
-                  downVotesCount
-                  upVotesCount
-                }
-              }
-              pageInfo {
-                startCursor
-                endCursor
-                hasNextPage
-                hasPreviousPage
-              }
-            }
-          }
-          cursor
-        }
-        pageInfo {
-          startCursor
-          endCursor
-          hasNextPage
-          hasPreviousPage
-        }
-      }
-    }
-  }
-`;
-
 export const ORGANIZATION_PINNED_POST_LIST = gql`
   query OrganizationpinnedPosts(
     $input: QueryOrganizationInput!

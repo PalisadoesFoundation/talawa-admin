@@ -2,7 +2,7 @@
  * Pinned Post Card Component
  *
  * This component renders a pinned post card with interactive features including viewing,
- * editing, deleting, and toggling pin status. It displays post content, creator information,
+ * deleting and toggling pin status. It displays post content, creator information,
  * and provides admin/creator-specific actions through a dropdown menu.
  *
  * @param props - The properties for the PinnedPostCard component.
@@ -281,6 +281,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
               variant="contained"
               startIcon={<Visibility />}
               onClick={() => onStoryClick(pinnedPost.node)}
+              data-testid="view-post-btn"
               sx={{
                 backgroundColor: '#A8C7FA',
                 color: 'black',

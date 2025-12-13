@@ -86,3 +86,21 @@
     height: 56px;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .scrollContainer {
+    scroll-behavior: auto;
+    -webkit-overflow-scrolling: auto;
+  }
+
+  .navButton,
+  .navButton:hover,
+  .navButton:active {
+    transition: none;
+    transform: none;
+  }
+
+  .navButton {
+    transform: translateY(-50%);
+  }
+}

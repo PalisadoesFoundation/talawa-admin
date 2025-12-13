@@ -67,17 +67,19 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
   }, [pinnedPosts]);
 
   const scrollLeft = () => {
-    const cardWidth = 350; // Approximate card width + gap
-    scrollContainerRef.current?.scrollBy({
-      left: -cardWidth,
+    if (!scrollContainerRef.current) return;
+
+    const scrollAmount = scrollContainerRef.current.clientWidth;
+    scrollContainerRef.current.scrollBy({
+      left: -scrollAmount,
       behavior: 'smooth',
     });
   };
 
   const scrollRight = () => {
-    const cardWidth = 350; // Approximate card width + gap
+    const scrollAmount = scrollContainerRef.current?.clientWidth;
     scrollContainerRef.current?.scrollBy({
-      left: cardWidth,
+      left: scrollAmount,
       behavior: 'smooth',
     });
   };
@@ -86,6 +88,7 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
     <div className={styles.carouselWrapper} data-testid="pinned-posts-layout">
       {canScrollLeft && (
         <button
+          type="button"
           className={`${styles.navButton} ${styles.navButtonLeft}`}
           onClick={scrollLeft}
           aria-label="Scroll left"
@@ -119,6 +122,7 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
 
       {canScrollRight && (
         <button
+          type="button"
           className={`${styles.navButton} ${styles.navButtonRight}`}
           onClick={scrollRight}
           aria-label="Scroll right"
