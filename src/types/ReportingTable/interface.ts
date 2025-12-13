@@ -29,7 +29,12 @@ export type ReportingTableColumn = Partial<GridColDef> & {
   /** Custom renderer for the cell */
   renderCell?: (params: ReportingCellParams) => ReactNode;
   /** Custom value getter for the cell */
-  valueGetter?: (params: ReportingCellParams) => unknown;
+  valueGetter?: (
+    value: unknown,
+    row: ReportingRow,
+    column: GridColDef,
+    apiRef: unknown,
+  ) => unknown;
   [key: string]: unknown;
 };
 

@@ -341,7 +341,12 @@ const Requests = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       align: 'center',
       headerAlign: 'center',
-      valueGetter: (params: GridCellParams) => params?.row?.user?.name || '',
+      valueGetter: (
+        _value: unknown,
+        row: any,
+        _column: unknown,
+        _apiRef: unknown,
+      ) => (row as InterfaceRequestsListItem)?.user?.name || '',
     },
     {
       field: 'email',
@@ -352,8 +357,12 @@ const Requests = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       align: 'center',
       headerAlign: 'center',
-      valueGetter: (params: GridCellParams) =>
-        params?.row?.user?.emailAddress || '',
+      valueGetter: (
+        _value: unknown,
+        row: any,
+        _column: unknown,
+        _apiRef: unknown,
+      ) => (row as InterfaceRequestsListItem)?.user?.emailAddress || '',
     },
     {
       field: 'accept',

@@ -1095,7 +1095,6 @@ export const MEMBERSHIP_REQUEST_PG = gql`
           id
           name
           emailAddress
-          avatarURL
         }
       }
     }
