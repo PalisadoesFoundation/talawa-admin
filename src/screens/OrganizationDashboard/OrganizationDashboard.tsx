@@ -125,7 +125,11 @@ function OrganizationDashboard(): JSX.Element {
     data: orgPostsData,
     loading: orgPostsLoading,
     error: orgPostsError,
-  } = useQuery(GET_ORGANIZATION_POSTS_COUNT_PG, { variables: { id: orgId } });
+  } = useQuery(GET_ORGANIZATION_POSTS_COUNT_PG, {
+    variables: { id: orgId },
+    fetchPolicy: 'cache-and-network',
+    notifyOnNetworkStatusChange: true,
+  });
 
   const {
     data: orgEventsData,

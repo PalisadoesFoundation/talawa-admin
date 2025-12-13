@@ -36,6 +36,7 @@ vi.mock('react-i18next', () => ({
 const { routerMocks, toastMocks } = vi.hoisted(() => ({
   routerMocks: {
     navigate: vi.fn(),
+    params: { orgId: 'orgId' },
   },
   toastMocks: {
     error: vi.fn(),
@@ -48,6 +49,7 @@ vi.mock('react-router', async () => {
   return {
     ...actual,
     useNavigate: () => routerMocks.navigate,
+    useParams: () => routerMocks.params,
   };
 });
 
@@ -58,12 +60,17 @@ vi.mock('react-toastify', () => ({
 interface InterfaceRenderOptions {
   mocks: MockedResponse[];
   initialRoute?: string;
+  initialParams?: { orgId: string };
 }
 
 function renderWithProviders({
   mocks,
   initialRoute = '/orgdash/orgId',
+  initialParams,
 }: InterfaceRenderOptions): RenderResult {
+  if (initialParams) {
+    routerMocks.params = initialParams;
+  }
   return render(
     <MockedProvider mocks={mocks}>
       <MemoryRouter initialEntries={[initialRoute]}>
@@ -81,11 +88,14 @@ describe('OrganizationDashboard', () => {
     routerMocks.navigate.mockReset();
     toastMocks.error.mockReset();
     toastMocks.success.mockReset();
+    routerMocks.params = { orgId: 'orgId' };
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
+    routerMocks.params = { orgId: 'orgId' };
   });
+  // ... existing tests ...
 
   it('navigates to requests page when clicking on membership requests card', async () => {
     renderWithProviders({ mocks: MOCKS });
@@ -195,6 +205,7 @@ describe('OrganizationDashboard', () => {
   });
 
   it('redirects to "/" when orgId is missing from URL params', () => {
+    routerMocks.params = { orgId: '' };
     render(
       <MockedProvider mocks={MOCKS}>
         <MemoryRouter initialEntries={['/orgdash/']}>
@@ -213,6 +224,7 @@ describe('OrganizationDashboard', () => {
   });
 
   it('redirects to "/" when orgId is undefined', () => {
+    routerMocks.params = { orgId: '' };
     render(
       <MockedProvider mocks={MOCKS}>
         <MemoryRouter initialEntries={['/orgdash']}>
@@ -628,7 +640,47 @@ describe('OrganizationDashboard', () => {
       renderWithProviders({
         mocks: combinedMocks,
         initialRoute: '/orgdash/orgId2',
+        initialParams: { orgId: 'orgId2' },
       });
+
+      // Verify org2 data is loaded
+      await waitFor(() => {
+        expect(screen.getByTestId('membersCount')).toHaveTextContent('5');
+        expect(screen.getByTestId('postsCount')).toHaveTextContent('20');
+      });
+    });
+
+    it('updates dashboard data when route parameter changes without unmounting', async () => {
+      const combinedMocks = [...MOCKS, ...MOCKS_ORG2];
+
+      const { rerender } = renderWithProviders({
+        mocks: combinedMocks,
+        initialRoute: '/orgdash/orgId',
+      });
+
+      // Verify org1 data is loaded
+      await waitFor(() => {
+        expect(screen.getByTestId('membersCount')).toHaveTextContent('2');
+        expect(screen.getByTestId('postsCount')).toHaveTextContent('10');
+      });
+
+      // Update params to simulate route change
+      routerMocks.params = { orgId: 'orgId2' };
+
+      // Rerender with new route to trigger update
+      rerender(
+        <MockedProvider mocks={combinedMocks}>
+          <MemoryRouter initialEntries={['/orgdash/orgId2']}>
+            <Routes>
+              <Route
+                path="/orgdash/:orgId"
+                element={<OrganizationDashboard />}
+              />
+              <Route path="/orglist" element={<div>Home Page</div>} />
+            </Routes>
+          </MemoryRouter>
+        </MockedProvider>,
+      );
 
       // Verify org2 data is loaded
       await waitFor(() => {
