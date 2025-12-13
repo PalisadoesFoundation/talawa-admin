@@ -1494,8 +1494,16 @@ describe('Extra coverage for 100 %', () => {
       </MockedProvider>,
     );
     await wait();
-    // if recaptcha is off the form should still render normally
-    expect(screen.getByTestId('loginBtn')).toBeInTheDocument();
+    // Verify recaptcha is bypassed by submitting login without token
+    await userEvent.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'johndoe',
+    );
+    await userEvent.click(screen.getByTestId('loginBtn'));
+    await wait();
+    // Should succeed without recaptcha interaction
+    expect(routerMocks.navigate).toHaveBeenCalledWith('/user/organizations');
   });
 
   /* 2.  Invalid name toast */
