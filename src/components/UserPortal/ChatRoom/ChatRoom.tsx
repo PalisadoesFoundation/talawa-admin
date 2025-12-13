@@ -360,6 +360,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       lastMessages: 10,
       beforeMessages: null,
     },
+    skip: !props.selectedContact,
   });
 
   const loadMoreMessages = async (): Promise<void> => {
@@ -545,6 +546,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
         id: props.selectedContact,
       },
     },
+    skip: !props.selectedContact,
     onData: async (messageSubscriptionData) => {
       if (
         messageSubscriptionData?.data.data.chatMessageCreate &&
