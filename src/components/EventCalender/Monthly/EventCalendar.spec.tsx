@@ -7,7 +7,7 @@ import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { weekdays, months } from 'types/Event/utils';
-import { BrowserRouter as Router } from 'react-router';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { vi, describe, it, expect, afterEach, test } from 'vitest';
 import { eventData, MOCKS } from '../EventCalenderMocks';
 import type { InterfaceEvent } from 'types/Event/interface';

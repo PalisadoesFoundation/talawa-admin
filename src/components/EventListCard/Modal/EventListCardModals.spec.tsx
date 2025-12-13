@@ -7,7 +7,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { describe, test, expect, vi, beforeEach, Mock } from 'vitest';
 import { useMutation } from '@apollo/client';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';

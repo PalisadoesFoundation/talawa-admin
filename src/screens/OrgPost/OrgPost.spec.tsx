@@ -9,7 +9,7 @@ import {
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
-import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
+import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import OrgPost from './OrgPost';
 import {
   GET_POSTS_BY_ORG,

@@ -10,7 +10,7 @@ import {
 import { GraphQLError } from 'graphql';
 import { Provider } from 'react-redux';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';

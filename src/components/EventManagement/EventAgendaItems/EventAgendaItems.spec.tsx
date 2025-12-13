@@ -5,7 +5,7 @@ import * as apolloClient from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import i18n from 'utils/i18nForTest';
 import { toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';

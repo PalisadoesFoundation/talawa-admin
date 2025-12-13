@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import EventsAttendedByMember from './EventsAttendedByMember';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';
 import { mocks, errorMocks } from './MemberActivityMocks';
 

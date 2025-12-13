@@ -7,7 +7,7 @@ import { I18nextProvider } from 'react-i18next';
 import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import OrgAdminListCard from './OrgAdminListCard';
 import i18nForTest from 'utils/i18nForTest';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { vi, beforeEach, afterEach, expect, it, describe } from 'vitest';
 import { errorHandler } from 'utils/errorHandler'; // Make sure this import is available

@@ -11,7 +11,7 @@ import {
 
 import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import OrganizationDashboard from './OrganizationDashboard';
 import {
   MOCKS,

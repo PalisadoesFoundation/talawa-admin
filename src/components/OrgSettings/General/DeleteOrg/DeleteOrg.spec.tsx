@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { useParams, useNavigate } from 'react-router';
+import { useParams, useNavigate } from 'react-router-dom';
 import type { DocumentNode } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';

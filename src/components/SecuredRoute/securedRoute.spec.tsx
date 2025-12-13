@@ -1,5 +1,5 @@
 import React from 'react';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 import SecuredRoute from './SecuredRoute';

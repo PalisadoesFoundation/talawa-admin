@@ -3,7 +3,7 @@ import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import type { RenderResult } from '@testing-library/react';
 import { render, act, fireEvent, waitFor } from '@testing-library/react';
 import EventDashboard from './EventDashboard';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';

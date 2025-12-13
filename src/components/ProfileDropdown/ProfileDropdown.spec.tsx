@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter, Route, Routes } from 'react-router';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ProfileDropdown, { MAX_NAME_LENGTH } from './ProfileDropdown';
 import { MockedProvider } from '@apollo/react-testing';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';

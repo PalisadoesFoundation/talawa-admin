@@ -1,7 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import i18nForTest from 'utils/i18nForTest';
 import EventCard from './EventCard';

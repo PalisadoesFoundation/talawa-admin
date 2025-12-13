@@ -9,7 +9,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import EventAttendance from './EventAttendance';
 import { store } from 'state/store';

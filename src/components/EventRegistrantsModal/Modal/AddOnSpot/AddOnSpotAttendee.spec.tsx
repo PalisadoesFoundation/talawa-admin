@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import AddOnSpotAttendee from './AddOnSpotAttendee';
 import userEvent from '@testing-library/user-event';

@@ -13,7 +13,7 @@ import { client, wait } from 'components/Advertisements/AdvertisementsMocks';
 import { UPDATE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
-import * as router from 'react-router';
+import * as router from 'react-router-dom';
 import {
   createAdFailMock,
   createAdvertisement,

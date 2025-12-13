@@ -6,7 +6,7 @@ import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import type { InterfaceDeletePledgeModal } from './PledgeDeleteModal';
 import PledgeDeleteModal from './PledgeDeleteModal';

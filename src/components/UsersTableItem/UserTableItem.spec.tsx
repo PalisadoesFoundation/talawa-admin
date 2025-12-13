@@ -8,14 +8,14 @@ import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceQueryUserListItemForAdmin } from 'utils/interfaces';
 import { MOCKS, MOCKS2, MOCKS_UPDATE } from './UserTableItemMocks';
 import UsersTableItem from './UsersTableItem';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS2, true);
 const link3 = new StaticMockLink(MOCKS_UPDATE, true);
 
 import userEvent from '@testing-library/user-event';
 import { vi, beforeEach, afterEach, describe, test, expect } from 'vitest';
-import type * as RouterTypes from 'react-router';
+import type * as RouterTypes from 'react-router-dom';
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {

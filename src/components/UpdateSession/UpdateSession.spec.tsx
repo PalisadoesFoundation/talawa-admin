@@ -12,7 +12,7 @@ import {
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import UpdateTimeout from './UpdateSession';
 

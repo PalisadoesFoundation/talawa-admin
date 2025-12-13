@@ -3,7 +3,7 @@ import { EVENT_DETAILS, EVENT_CHECKINS } from 'GraphQl/Queries/Queries';
 import { fireEvent, render, waitFor, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { CheckInModal } from './CheckInModal';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';

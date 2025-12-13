@@ -4,7 +4,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import { MemoryRouter, Route, Routes, useParams } from 'react-router';
+import { MemoryRouter, Route, Routes, useParams } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import EventManagement from './EventManagement';

@@ -17,7 +17,7 @@ import {
   BLOCK_USER_MUTATION_PG,
   UNBLOCK_USER_MUTATION_PG,
 } from 'GraphQl/Mutations/mutations';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { DocumentNode } from 'graphql';

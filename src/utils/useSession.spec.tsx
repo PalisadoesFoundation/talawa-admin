@@ -8,7 +8,7 @@ import useSession from './useSession';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 
 vi.mock('react-toastify', () => ({
   toast: {

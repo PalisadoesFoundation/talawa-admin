@@ -21,7 +21,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import OrganizationVenues from './OrganizationVenues';
 import { store } from 'state/store';

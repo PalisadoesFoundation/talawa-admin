@@ -4,7 +4,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 
 import UserListCard from './UserListCard';
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';

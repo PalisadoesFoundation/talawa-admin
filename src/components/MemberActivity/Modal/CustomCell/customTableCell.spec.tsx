@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { CustomTableCell } from './customTableCell';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { vi } from 'vitest';

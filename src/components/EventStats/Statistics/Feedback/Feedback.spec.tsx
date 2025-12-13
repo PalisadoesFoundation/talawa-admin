@@ -2,7 +2,7 @@ import { PieChart } from '@mui/x-charts/PieChart';
 import { render, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';

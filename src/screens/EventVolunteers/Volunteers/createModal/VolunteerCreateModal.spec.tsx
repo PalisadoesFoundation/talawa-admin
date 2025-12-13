@@ -12,7 +12,7 @@ import {
 } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18n from 'utils/i18nForTest';

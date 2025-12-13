@@ -4,7 +4,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import SuperAdminScreen from './SuperAdminScreen';

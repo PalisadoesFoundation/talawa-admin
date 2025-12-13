@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
-import { MemoryRouter } from 'react-router';
+import { MemoryRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import App from './App';

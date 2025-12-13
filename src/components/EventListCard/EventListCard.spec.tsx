@@ -8,7 +8,7 @@ import type { InterfaceEvent } from 'types/Event/interface';
 import EventListCard from './EventListCard';
 import i18n from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
+import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { toast } from 'react-toastify';

@@ -6,7 +6,7 @@ import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';

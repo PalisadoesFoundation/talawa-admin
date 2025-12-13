@@ -10,7 +10,7 @@ import {
 } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
+import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
