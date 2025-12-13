@@ -31,7 +31,13 @@ const USER_VISIBLE_ATTRS = [
 const POSIX_SEP = path.posix.sep;
 
 const walk = (dir) => {
-  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  let entries;
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch {
+    return [];
+  }
+
   const files = [];
   for (const entry of entries) {
     const resolved = path.join(dir, entry.name);
@@ -71,7 +77,10 @@ const looksLikeUrl = (text) => /^(https?:\/\/|\/|data:)/i.test(text.trim());
 const isAllowedString = (text) => {
   const value = text.trim();
   if (!value) return true;
-  if (value.includes('${')) return true; // skip template literals with vars
+  if (value.includes('${')) {
+    const staticText = value.replace(/\${.*?}/g, '').trim();
+    return countWords(staticText) === 0;
+  }
   if (looksLikeUrl(value)) return true;
   // Flag if there is at least one word (single-word UI text should be translated)
   return countWords(value) === 0;
@@ -100,15 +109,29 @@ const collectViolations = (filePath) => {
     const jsxRegex = />\s*([^<>{}\n]+?)\s*</g;
     let jsxMatch;
     while ((jsxMatch = jsxRegex.exec(line)) !== null) {
-      const text = jsxMatch[1].trim();
+      const text = jsxMatch[1];
       if (!isAllowedString(text)) {
         violations.push({ line: lineNumber, text });
       }
     }
 
+    // Template literals in JSX expressions with hardcoded text
+    const templateLiteralRegex = /\{`([^`]*)`\}/g;
+    let templateMatch;
+    while ((templateMatch = templateLiteralRegex.exec(line)) !== null) {
+      const fullText = templateMatch[1]; // e.g., "Hello ${name}"
+
+      // Strip out variables FIRST
+      const staticText = fullText.replace(/\$\{[^}]*\}/g, '').trim();
+      if (staticText && !isAllowedString(staticText)) {
+        violations.push({ line: lineNumber, text: fullText });
+      }
+    }
+
     // Attribute values likely user-visible
     const attrRegex = new RegExp(
-      `\\b(${USER_VISIBLE_ATTRS.join('|')})\\s*=\\s*(['"\`])([^'"\\\`]+)\\2`,
+      // Allow empty strings and basic escaped characters
+      `\\b(${USER_VISIBLE_ATTRS.join('|')})\\s*=\\s*(['"\`])((?:\\\\.|(?!\\2)[^\\\\])*)\\2`,
       'gi',
     );
     let attrMatch;
@@ -121,10 +144,10 @@ const collectViolations = (filePath) => {
 
     // Toast messages
     const toastRegex =
-      /toast\.(error|success|warning|info)\s*\(\s*(['"`])([^'"\\`]+)\2/gi;
+      /toast\.(error|success|warning|info)\s*\(\s*(['"`])((?:\\.|(?!\2).)*?)\2/gi;
     let toastMatch;
     while ((toastMatch = toastRegex.exec(line)) !== null) {
-      const text = toastMatch[3].trim();
+      const text = toastMatch[3];
       if (!isAllowedString(text)) {
         violations.push({ line: lineNumber, text });
       }
@@ -143,6 +166,11 @@ const collectViolations = (filePath) => {
 
 const main = () => {
   const cliFiles = process.argv.slice(2);
+  if (cliFiles.length === 0 && !fs.existsSync(SRC_DIR)) {
+    console.log('No files to scan for i18n violations.');
+    process.exit(0);
+  }
+
   const allFiles =
     cliFiles.length > 0
       ? cliFiles
@@ -178,7 +206,9 @@ const main = () => {
   filesWithIssues.forEach((file) => {
     const relativePath = toPosixPath(path.relative(process.cwd(), file));
     results[file].forEach((violation) => {
-      console.log(`${relativePath}:${violation.line} -> "${violation.text}"`);
+      console.log(
+        `${relativePath}:${violation.line} -> ${JSON.stringify(violation.text)}`,
+      );
     });
     console.log();
   });
