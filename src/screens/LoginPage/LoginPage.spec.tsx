@@ -1728,7 +1728,7 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.error).toHaveBeenCalledWith(
-      expect.stringContaining('error'),
+      expect.stringContaining('Recaptcha'),
     );
   });
 
@@ -1815,10 +1815,10 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.click(screen.getByTestId('goToRegisterPortion'));
     await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John');
     await userEvent.type(screen.getByTestId('signInEmail'), 'a@b.co'); // length 6
-    await userEvent.type(screen.getByPlaceholderText('Password'), 'weak'); // invalid password
+    await userEvent.type(screen.getByPlaceholderText('Password'), 'Test@123');
     await userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
-      'weak',
+      'Test@123',
     );
     await userEvent.type(screen.getAllByTestId('mock-recaptcha')[1], 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
