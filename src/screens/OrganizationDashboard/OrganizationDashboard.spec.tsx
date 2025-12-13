@@ -18,6 +18,7 @@ import {
   EMPTY_MOCKS,
   ERROR_MOCKS,
   MIXED_REQUESTS_MOCK,
+  MOCKS_ORG2,
 } from './OrganizationDashboardMocks';
 import {
   MEMBERSHIP_REQUEST,
@@ -601,6 +602,38 @@ describe('OrganizationDashboard', () => {
         fireEvent.click(viewAllRequestsButton);
         await new Promise((resolve) => setTimeout(resolve, 0));
         expect(routerMocks.navigate).toHaveBeenCalledWith('/requests/orgId');
+      });
+    });
+  });
+
+  describe('Organization Navigation', () => {
+    it('updates dashboard data when navigating from one organization to another', async () => {
+      const combinedMocks = [...MOCKS, ...MOCKS_ORG2];
+
+      const { unmount } = renderWithProviders({
+        mocks: combinedMocks,
+        initialRoute: '/orgdash/orgId',
+      });
+
+      // Verify org1 data is loaded
+      await waitFor(() => {
+        expect(screen.getByTestId('membersCount')).toHaveTextContent('2');
+        expect(screen.getByTestId('postsCount')).toHaveTextContent('10');
+      });
+
+      unmount();
+
+      // Render again with new organization ID
+      // This simulates visiting the page for a different organization
+      renderWithProviders({
+        mocks: combinedMocks,
+        initialRoute: '/orgdash/orgId2',
+      });
+
+      // Verify org2 data is loaded
+      await waitFor(() => {
+        expect(screen.getByTestId('membersCount')).toHaveTextContent('5');
+        expect(screen.getByTestId('postsCount')).toHaveTextContent('20');
       });
     });
   });

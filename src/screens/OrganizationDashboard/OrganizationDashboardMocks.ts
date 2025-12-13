@@ -451,3 +451,162 @@ export const ERROR_MOCKS = [
     error: new Error('Mock GraphQL GET_ORGANIZATION_VENUES_COUNT Error'),
   },
 ];
+
+export const MOCKS_ORG2 = [
+  {
+    request: {
+      query: ORGANIZATION_MEMBER_ADMIN_COUNT,
+      variables: { id: 'orgId2' },
+    },
+    maxUsageCount: 2,
+    result: {
+      data: {
+        organization: {
+          id: 'orgId2',
+          membersCount: 5,
+          adminsCount: 2,
+        },
+      },
+      loading: false,
+    },
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_POSTS_COUNT_PG,
+      variables: { id: 'orgId2' },
+    },
+    maxUsageCount: 5,
+    result: {
+      data: {
+        organization: { id: 'orgId2', postsCount: 20 },
+      },
+      loading: false,
+    },
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_EVENTS_PG,
+      variables: { id: 'orgId2', first: 8, after: null },
+    },
+    maxUsageCount: 5,
+    result: {
+      data: {
+        organization: {
+          eventsCount: 3,
+          events: {
+            edges: [
+              {
+                node: {
+                  id: 'event2',
+                  name: 'Event Two',
+                  description: 'Description for Event Two',
+                  startAt: '2025-11-29T00:00:00.000Z',
+                  endAt: '2025-11-30T00:00:00.000Z',
+                  allDay: false,
+                  location: 'Test Location 2',
+                  isPublic: true,
+                  isRegisterable: true,
+                  isRecurringEventTemplate: false,
+                  baseEvent: null,
+                  sequenceNumber: null,
+                  totalCount: 1,
+                  hasExceptions: false,
+                  progressLabel: null,
+                  recurrenceDescription: null,
+                  recurrenceRule: null,
+                  attachments: [],
+                  creator: { id: 'creator2', name: 'Jane Doe' },
+                  organization: { id: 'orgId2', name: 'Test Organization 2' },
+                  createdAt: '2025-10-28T00:00:00.000Z',
+                  updatedAt: '2025-10-28T00:00:00.000Z',
+                },
+                cursor: 'cursor2',
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: 'cursor2' },
+          },
+        },
+      },
+      loading: false,
+    },
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_POSTS_PG,
+      variables: { id: 'orgId2', first: 5 },
+    },
+    maxUsageCount: 5,
+    result: {
+      data: {
+        organization: {
+          posts: {
+            edges: [
+              {
+                node: {
+                  id: 'post2',
+                  caption: 'Second Org Post',
+                  createdAt: '2025-01-02T12:00:00.000Z',
+                  creator: { id: 'user2', name: 'Jane Doe' },
+                },
+                cursor: 'cursor2',
+              },
+            ],
+          },
+        },
+      },
+      loading: false,
+    },
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_VENUES_COUNT,
+      variables: { id: 'orgId2' },
+    },
+    maxUsageCount: 5,
+    result: {
+      data: {
+        organization: {
+          venuesCount: 5,
+        },
+      },
+      loading: false,
+    },
+  },
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST,
+      variables: {
+        input: { id: 'orgId2' },
+        skip: 0,
+        first: 8,
+        firstName_contains: '',
+      },
+    },
+    maxUsageCount: 5,
+    result: {
+      data: {
+        organization: {
+          membershipRequestsCount: 0,
+          id: 'orgId2',
+          membershipRequests: [],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_BLOCKED_USERS_COUNT,
+      variables: { id: 'orgId2' },
+    },
+    maxUsageCount: 5,
+    result: {
+      data: {
+        organization: {
+          id: 'orgId2',
+          blockedUsersCount: 0,
+        },
+      },
+      loading: false,
+    },
+  },
+];
