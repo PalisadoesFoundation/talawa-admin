@@ -768,6 +768,8 @@
   "orgPostCard": {
     "author": "Autor",
     "imageURL": "URL de la Imagen",
+    "untitledPost": "Publicación sin título",
+    "noContentAvailable": "No hay contenido disponible",
     "videoURL": "URL del Video",
     "edit": "Editar Publicación",
     "deletePost": "Eliminar Publicación",

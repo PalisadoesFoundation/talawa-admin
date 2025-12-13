@@ -768,6 +768,8 @@
   "orgPostCard": {
     "author": "作者",
     "imageURL": "图片网址",
+    "untitledPost": "无标题帖子",
+    "noContentAvailable": "无可用内容",
     "videoURL": "视频网址",
     "deletePost": "删除帖子",
     "deletePostMsg": "您想删除此帖子吗？",

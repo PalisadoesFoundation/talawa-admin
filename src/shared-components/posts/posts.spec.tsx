@@ -11,10 +11,7 @@ import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import PostsPage from './posts';
-import {
-  GET_POSTS_BY_ORG,
-  ORGANIZATION_POST_LIST_WITH_VOTES,
-} from 'GraphQl/Queries/Queries';
+import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
 import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import type { RenderResult } from '@testing-library/react';
 
@@ -335,19 +332,6 @@ const samplePosts = [
   },
 ];
 
-// Mock for GET_POSTS_BY_ORG
-const getPostsByOrgMock: MockedResponse = {
-  request: {
-    query: GET_POSTS_BY_ORG,
-    variables: { input: { organizationId: '123' } },
-  },
-  result: {
-    data: {
-      postsByOrganization: samplePosts.map(enrichPostNode),
-    },
-  },
-};
-
 // Mock for ORGANIZATION_POST_LIST_WITH_VOTES
 const orgPostListMock: MockedResponse = {
   request: {
@@ -561,11 +545,7 @@ describe('PostsPage Component', () => {
 
   describe('Error Handling', () => {
     it('shows error toast when organization post list query fails', async () => {
-      renderComponent([
-        orgPostListErrorMock,
-        getPostsByOrgMock,
-        emptyPinnedPostsMock,
-      ]);
+      renderComponent([orgPostListErrorMock, emptyPinnedPostsMock]);
 
       await waitFor(() => {
         expect(mockToast.error).toHaveBeenCalledWith(
@@ -575,11 +555,7 @@ describe('PostsPage Component', () => {
     });
 
     it('shows error toast when pinned posts query fails', async () => {
-      renderComponent([
-        orgPostListMock,
-        getPostsByOrgMock,
-        pinnedPostsErrorMock,
-      ]);
+      renderComponent([orgPostListMock, pinnedPostsErrorMock]);
 
       await waitFor(() => {
         expect(mockToast.error).toHaveBeenCalledWith(
@@ -591,11 +567,7 @@ describe('PostsPage Component', () => {
 
   describe('Pinned Posts', () => {
     it('closes pinned post modal when close button is clicked', async () => {
-      renderComponent([
-        orgPostListMock,
-        getPostsByOrgMock,
-        orgPinnedPostListMock,
-      ]);
+      renderComponent([orgPostListMock, orgPinnedPostListMock]);
 
       await waitFor(() => {
         expect(screen.getByTestId('pinned-posts-layout')).toBeInTheDocument();
@@ -627,36 +599,7 @@ describe('PostsPage Component', () => {
 
   describe('Search Functionality', () => {
     it('resets filtering when search term is cleared', async () => {
-      const searchMock1: MockedResponse = {
-        request: {
-          query: GET_POSTS_BY_ORG,
-          variables: { input: { organizationId: '123' } },
-        },
-        result: {
-          data: {
-            postsByOrganization: samplePosts.map(enrichPostNode),
-          },
-        },
-      };
-
-      const searchMock2: MockedResponse = {
-        request: {
-          query: GET_POSTS_BY_ORG,
-          variables: { input: { organizationId: '123' } },
-        },
-        result: {
-          data: {
-            postsByOrganization: samplePosts.map(enrichPostNode),
-          },
-        },
-      };
-
-      renderComponent([
-        orgPostListMock,
-        searchMock1,
-        searchMock2,
-        emptyPinnedPostsMock,
-      ]);
+      renderComponent([orgPostListMock, emptyPinnedPostsMock]);
 
       await waitFor(() => {
         expect(screen.getByTestId('searchByName')).toBeInTheDocument();
@@ -692,13 +635,110 @@ describe('PostsPage Component', () => {
       );
     });
   });
+
+  it('handles search error gracefully', async () => {
+    // Create a component where search will fail by not providing proper initial data
+    const errorOrgPostListMock: MockedResponse = {
+      request: {
+        query: ORGANIZATION_POST_LIST_WITH_VOTES,
+        variables: {
+          input: { id: '123' },
+          userId: 'user-123',
+          after: null,
+          before: null,
+          first: 6,
+          last: null,
+        },
+      },
+      result: {
+        data: null, // This will cause an error in search
+      },
+    };
+
+    renderComponent([errorOrgPostListMock, emptyPinnedPostsMock]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchByName')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByName');
+    await act(async () => {
+      fireEvent.change(searchInput, { target: { value: 'test search' } });
+    });
+
+    // Should show error toast for GraphQL error
+    await waitFor(() => {
+      expect(mockToast.error).toHaveBeenCalledWith(
+        'Organization post list error',
+      );
+    });
+
+    // For GraphQL errors, the filtering state should remain as is
+    // since the error is not in the search function itself
+    await waitFor(() => {
+      const renderer = screen.getByTestId('posts-renderer');
+      expect(renderer.getAttribute('data-is-filtering')).toBe('true');
+    });
+  });
+});
+
+describe('Sorting Functionality', () => {
+  it('handles sorting when allPosts is empty', async () => {
+    const emptyPostsMock: MockedResponse = {
+      request: {
+        query: ORGANIZATION_POST_LIST_WITH_VOTES,
+        variables: {
+          input: { id: '123' },
+          userId: 'user-123',
+          after: null,
+          before: null,
+          first: 6,
+          last: null,
+        },
+      },
+      result: {
+        data: {
+          organization: {
+            id: '123',
+            name: 'Test Organization',
+            avatarURL: null,
+            postsCount: 0,
+            posts: {
+              edges: [],
+              totalCount: 0,
+              pageInfo: {
+                startCursor: null,
+                endCursor: null,
+                hasNextPage: false,
+                hasPreviousPage: false,
+              },
+            },
+          },
+        },
+      },
+    };
+
+    renderComponent([emptyPostsMock, emptyPinnedPostsMock]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('sortpost-toggle-select')).toBeInTheDocument();
+    });
+
+    const sortSelect = screen.getByTestId('sortpost-toggle-select');
+    await act(async () => {
+      fireEvent.change(sortSelect, { target: { value: 'latest' } });
+    });
+
+    // Should handle empty posts gracefully and not crash
+    await waitFor(() => {
+      const renderer = screen.getByTestId('posts-renderer');
+      expect(renderer.getAttribute('data-sorting-option')).toBe('latest');
+    });
+  });
+
   describe('Sorting Functionality', () => {
     it('sorts posts by oldest when selected', async () => {
-      renderComponent([
-        orgPostListMock,
-        getPostsByOrgMock,
-        emptyPinnedPostsMock,
-      ]);
+      renderComponent([orgPostListMock, emptyPinnedPostsMock]);
 
       await waitFor(() => {
         expect(
@@ -721,7 +761,6 @@ describe('PostsPage Component', () => {
       renderComponent([
         orgPostListMock,
         orgPostListMock, // Additional mock for refetch
-        getPostsByOrgMock,
         emptyPinnedPostsMock,
       ]);
 
@@ -748,45 +787,11 @@ describe('PostsPage Component', () => {
         expect(renderer.getAttribute('data-sorting-option')).toBe('None');
       });
     });
-
-    it('handles sorting when no posts data is available', async () => {
-      const noDataMock: MockedResponse = {
-        request: {
-          query: GET_POSTS_BY_ORG,
-          variables: { input: { organizationId: '123' } },
-        },
-        result: {
-          data: {
-            postsByOrganization: null,
-          },
-        },
-      };
-
-      renderComponent([orgPostListMock, noDataMock, emptyPinnedPostsMock]);
-
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('sortpost-toggle-select'),
-        ).toBeInTheDocument();
-      });
-
-      const sortSelect = screen.getByTestId('sortpost-toggle-select');
-      await act(async () => {
-        fireEvent.change(sortSelect, { target: { value: 'latest' } });
-      });
-
-      // Should not crash - early return when data is unavailable
-      expect(screen.getByTestId('posts-renderer')).toBeInTheDocument();
-    });
   });
 
   describe('Create Post Modal', () => {
     it('closes create post modal when close button is clicked', async () => {
-      renderComponent([
-        orgPostListMock,
-        getPostsByOrgMock,
-        emptyPinnedPostsMock,
-      ]);
+      renderComponent([orgPostListMock, emptyPinnedPostsMock]);
 
       await waitFor(() => {
         expect(screen.getByTestId('createPostModalBtn')).toBeInTheDocument();
@@ -818,12 +823,7 @@ describe('PostsPage Component', () => {
 
   describe('Infinite Scroll', () => {
     it('loads more posts when load more is triggered', async () => {
-      renderComponent([
-        orgPostListMock,
-        nextPageMock,
-        getPostsByOrgMock,
-        emptyPinnedPostsMock,
-      ]);
+      renderComponent([orgPostListMock, nextPageMock, emptyPinnedPostsMock]);
 
       await waitFor(() => {
         expect(screen.getByTestId('load-more-btn')).toBeInTheDocument();
@@ -846,8 +846,6 @@ describe('PostsPage Component', () => {
       renderComponent([
         orgPostListMock,
         orgPostListMock, // Additional mock for refetch
-        getPostsByOrgMock,
-        getPostsByOrgMock, // Additional mock for refetch
         emptyPinnedPostsMock,
       ]);
 
@@ -925,11 +923,7 @@ describe('PostsPage Component', () => {
         },
       };
 
-      renderComponent([
-        mockWithNullCreator,
-        getPostsByOrgMock,
-        emptyPinnedPostsMock,
-      ]);
+      renderComponent([mockWithNullCreator, emptyPinnedPostsMock]);
 
       await waitFor(() => {
         expect(screen.getByText('Unknown User')).toBeInTheDocument();
@@ -973,11 +967,7 @@ describe('PostsPage Component', () => {
         },
       };
 
-      renderComponent([
-        nullPageInfoMock,
-        getPostsByOrgMock,
-        emptyPinnedPostsMock,
-      ]);
+      renderComponent([nullPageInfoMock, emptyPinnedPostsMock]);
 
       await waitFor(() => {
         expect(screen.getAllByTestId('post-card').length).toBe(1);
@@ -1033,11 +1023,7 @@ describe('PostsPage Component', () => {
         },
       };
 
-      renderComponent([
-        mockWithUndefinedCaption,
-        getPostsByOrgMock,
-        emptyPinnedPostsMock,
-      ]);
+      renderComponent([mockWithUndefinedCaption, emptyPinnedPostsMock]);
 
       await waitFor(() => {
         expect(screen.getAllByTestId('post-card').length).toBe(1);
@@ -1045,12 +1031,7 @@ describe('PostsPage Component', () => {
     });
 
     it('handles whitespace-only search term', async () => {
-      renderComponent([
-        orgPostListMock,
-        getPostsByOrgMock,
-        getPostsByOrgMock, // Additional mock for refetch
-        emptyPinnedPostsMock,
-      ]);
+      renderComponent([orgPostListMock, emptyPinnedPostsMock]);
 
       await waitFor(() => {
         expect(screen.getByTestId('searchByName')).toBeInTheDocument();
@@ -1068,44 +1049,7 @@ describe('PostsPage Component', () => {
       });
     });
     it('shows no posts found message when search has no matches', async () => {
-      // Initial load mock - consumed on component mount
-      const initialMock: MockedResponse = {
-        request: {
-          query: GET_POSTS_BY_ORG,
-          variables: { input: { organizationId: '123' } },
-        },
-        result: {
-          data: {
-            postsByOrganization: samplePosts.map(enrichPostNode),
-          },
-        },
-      };
-
-      // Refetch returns posts, but none match the search term
-      const searchMock: MockedResponse = {
-        request: {
-          query: GET_POSTS_BY_ORG,
-          variables: { input: { organizationId: '123' } },
-        },
-        result: {
-          data: {
-            postsByOrganization: [
-              enrichPostNode({
-                id: 'no-match-post',
-                caption: 'Completely Different Content',
-                createdAt: '2024-01-01T12:00:00Z',
-              }),
-            ],
-          },
-        },
-      };
-
-      renderComponent([
-        orgPostListMock,
-        initialMock,
-        searchMock,
-        emptyPinnedPostsMock,
-      ]);
+      renderComponent([orgPostListMock, emptyPinnedPostsMock]);
 
       await waitFor(() => {
         expect(screen.getByTestId('searchByName')).toBeInTheDocument();
@@ -1151,12 +1095,7 @@ describe('PostsPage Component', () => {
         },
       };
 
-      renderComponent([
-        orgPostListMock,
-        noResultMock,
-        getPostsByOrgMock,
-        emptyPinnedPostsMock,
-      ]);
+      renderComponent([orgPostListMock, noResultMock, emptyPinnedPostsMock]);
 
       await waitFor(() => {
         expect(screen.getByTestId('load-more-btn')).toBeInTheDocument();
@@ -1192,7 +1131,6 @@ describe('PostsPage Component', () => {
       renderComponent([
         orgPostListMock,
         fetchMoreErrorMock,
-        getPostsByOrgMock,
         emptyPinnedPostsMock,
       ]);
 

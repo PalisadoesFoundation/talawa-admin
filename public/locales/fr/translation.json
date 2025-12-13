@@ -767,6 +767,8 @@
   },
   "orgPostCard": {
     "author": "Auteur",
+    "untitledPost": "Message sans titre",
+    "noContentAvailable": "Aucun contenu disponible",
     "imageURL": "URL de l'image",
     "videoURL": "URL de la vidéo",
     "deletePost": "Supprimer le message",

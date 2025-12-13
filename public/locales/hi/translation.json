@@ -767,6 +767,8 @@
   },
   "orgPostCard": {
     "author": "लेखक",
+    "untitledPost": "शीर्षक रहित पोस्ट",
+    "noContentAvailable": "कोई सामग्री उपलब्ध नहीं",
     "imageURL": "छवि यूआरएल",
     "videoURL": "वीडियो यूआरएल",
     "deletePost": "पोस्ट को हटाएं",

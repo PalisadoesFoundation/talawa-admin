@@ -1,232 +1,354 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { MockedProvider } from '@apollo/client/testing';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from '../../utils/i18nForTest';
 import PinnedPostsLayout from './pinnedPostsLayout';
-import { InterfacePostEdge, InterfacePost } from 'types/Post/interface';
+import type { InterfacePostEdge } from 'types/Post/interface';
+import { DELETE_POST_MUTATION } from '../../GraphQl/Mutations/mutations';
+import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutations';
 
-// Mock the PinnedPostCard component
-vi.mock('./pinnedPostCard', () => ({
-  default: ({
-    pinnedPost,
-    onStoryClick,
-  }: {
-    pinnedPost: InterfacePostEdge;
-    onStoryClick: (post: InterfacePost) => void;
-  }) => (
-    <div
-      data-testid={`pinned-post-card-${pinnedPost.node.id}`}
-      onClick={() => onStoryClick(pinnedPost.node)}
-    >
-      <div data-testid="post-title">
-        {pinnedPost.node.caption || 'Untitled'}
-      </div>
-      <div data-testid="creator-name">
-        {pinnedPost.node.creator?.name || 'Anonymous'}
-      </div>
-    </div>
-  ),
+// Mock react-toastify
+vi.mock('react-toastify', () => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+  },
 }));
 
-// Mock the react-multi-carousel component
-vi.mock('react-multi-carousel', () => ({
-  default: ({
-    children,
-    responsive,
-    swipeable,
-    draggable,
-    showDots,
-    infinite,
-    keyBoardControl,
-  }: {
-    children?: React.ReactNode;
-    responsive?: Record<string, unknown>;
-    swipeable?: boolean;
-    draggable?: boolean;
-    showDots?: boolean;
-    infinite?: boolean;
-    keyBoardControl?: boolean;
-  }) => (
-    <div
-      data-testid="carousel-container"
-      data-responsive={JSON.stringify(responsive)}
-      data-swipeable={swipeable}
-      data-draggable={draggable}
-      data-show-dots={showDots}
-      data-infinite={infinite}
-      data-keyboard-control={keyBoardControl}
-    >
-      {children}
-    </div>
-  ),
+// Mock useLocalStorage
+vi.mock('../../utils/useLocalstorage', () => ({
+  default: () => ({
+    getItem: (key: string) => {
+      if (key === 'role') return 'administrator';
+      if (key === 'userId' || key === 'id') return 'user-1';
+      return null;
+    },
+  }),
 }));
 
-// Mock CSS imports
-vi.mock('react-multi-carousel/lib/styles.css', () => ({}));
-vi.mock('./postStyles.module.css', () => ({
-  default: {},
+// Mock errorHandler
+vi.mock('../../utils/errorHandler', () => ({
+  errorHandler: vi.fn(),
 }));
 
-// Mock console.log to test it's being called
-const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+const mockOnStoryClick = vi.fn();
 
-describe('PinnedPostsLayout', () => {
+const createMockPinnedPost = (
+  id: string,
+  caption: string,
+): InterfacePostEdge => ({
+  node: {
+    id,
+    caption,
+    createdAt: '2024-01-15T12:00:00Z',
+    imageUrl: 'https://example.com/image.jpg',
+    videoUrl: null,
+    pinnedAt: '2024-01-15T12:00:00Z',
+    pinned: true,
+    attachments: [],
+    creator: {
+      id: 'user-1',
+      name: 'John Doe',
+      avatarURL: 'https://example.com/avatar.jpg',
+      email: 'user@testmail.com',
+    },
+    commentsCount: 5,
+    upVotesCount: 10,
+    downVotesCount: 2,
+    hasUserVoted: { hasVoted: false, voteType: null },
+  },
+  cursor: `cursor-${id}`,
+});
+
+const mockPinnedPosts: InterfacePostEdge[] = [
+  createMockPinnedPost('post-1', 'First pinned post'),
+  createMockPinnedPost('post-2', 'Second pinned post'),
+  createMockPinnedPost('post-3', 'Third pinned post'),
+];
+
+// GraphQL mocks for DELETE_POST_MUTATION
+const deletePostMock = {
+  request: {
+    query: DELETE_POST_MUTATION,
+    variables: { input: { id: 'post-1' } },
+  },
+  result: {
+    data: {
+      deletePost: { id: 'post-1' },
+    },
+  },
+};
+
+// GraphQL mocks for TOGGLE_PINNED_POST
+const togglePinPostMock = {
+  request: {
+    query: TOGGLE_PINNED_POST,
+    variables: { input: { id: 'post-1', isPinned: false } },
+  },
+  result: {
+    data: {
+      togglePostPin: { id: 'post-1', pinned: false },
+    },
+  },
+};
+
+const mocks = [deletePostMock, togglePinPostMock];
+
+describe('PinnedPostsLayout Component', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  const mockOnStoryClick = vi.fn();
-
-  const mockPinnedPosts: InterfacePostEdge[] = [
-    {
-      node: {
-        id: '1',
-        caption: 'First pinned post',
-        createdAt: '2023-06-15T10:30:00Z',
-        creator: {
-          id: 'user1',
-          name: 'John Doe',
-          email: 'john@example.com',
-        },
-        hasUserVoted: {
-          hasVoted: false,
-          voteType: null,
-        },
-      } as InterfacePost,
-      cursor: 'cursor1',
-    },
-    {
-      node: {
-        id: '2',
-        caption: 'Second pinned post',
-        createdAt: '2023-06-16T14:45:00Z',
-        creator: {
-          id: 'user2',
-          name: 'Jane Smith',
-          email: 'jane@example.com',
-        },
-        hasUserVoted: {
-          hasVoted: true,
-          voteType: 'up_vote',
-        },
-      } as InterfacePost,
-      cursor: 'cursor2',
-    },
-  ];
-
-  const mockPostWithoutId: InterfacePostEdge[] = [
-    {
-      node: {
-        id: '',
-        caption: 'Post without ID',
-        createdAt: '2023-06-17T09:15:00Z',
-        creator: {
-          id: 'user3',
-          name: 'Bob Johnson',
-          email: 'bob@example.com',
-        },
-        hasUserVoted: {
-          hasVoted: false,
-          voteType: null,
-        },
-      } as InterfacePost,
-      cursor: 'cursor3',
-    },
-  ];
-
-  const emptyPinnedPosts: InterfacePostEdge[] = [];
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-    consoleSpy.mockClear();
-  });
-
-  describe('Component Rendering', () => {
-    it('renders the component with pinned posts', () => {
+  describe('Rendering', () => {
+    it('renders the pinned posts layout container', () => {
       render(
-        <PinnedPostsLayout
-          pinnedPosts={mockPinnedPosts}
-          onStoryClick={mockOnStoryClick}
-        />,
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
       );
 
-      expect(screen.getByTestId('carousel-container')).toBeInTheDocument();
-      expect(screen.getByTestId('pinned-post-card-1')).toBeInTheDocument();
-      expect(screen.getByTestId('pinned-post-card-2')).toBeInTheDocument();
+      expect(screen.getByTestId('pinned-posts-layout')).toBeInTheDocument();
+      expect(screen.getByTestId('scroll-container')).toBeInTheDocument();
     });
 
-    it('renders empty carousel when no pinned posts', () => {
+    it('renders all pinned post cards with their captions', () => {
       render(
-        <PinnedPostsLayout
-          pinnedPosts={emptyPinnedPosts}
-          onStoryClick={mockOnStoryClick}
-        />,
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
       );
 
-      expect(screen.getByTestId('carousel-container')).toBeInTheDocument();
-      expect(screen.queryByTestId(/pinned-post-card/)).not.toBeInTheDocument();
+      // Check that all post captions are rendered
+      expect(screen.getAllByText('First pinned post').length).toBeGreaterThan(
+        0,
+      );
+      expect(screen.getAllByText('Second pinned post').length).toBeGreaterThan(
+        0,
+      );
+      expect(screen.getAllByText('Third pinned post').length).toBeGreaterThan(
+        0,
+      );
     });
 
-    it('handles posts without IDs using index as fallback key', () => {
+    it('renders creator names for all posts', () => {
       render(
-        <PinnedPostsLayout
-          pinnedPosts={mockPostWithoutId}
-          onStoryClick={mockOnStoryClick}
-        />,
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
       );
 
-      expect(screen.getByTestId('carousel-container')).toBeInTheDocument();
-      expect(screen.getByTestId('pinned-post-card-')).toBeInTheDocument();
+      // All posts have the same creator 'John Doe'
+      const creatorNames = screen.getAllByText('John Doe');
+      expect(creatorNames.length).toBe(3);
+    });
+
+    it('renders view buttons for all posts', () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const viewButtons = screen.getAllByRole('button', { name: /view/i });
+      expect(viewButtons.length).toBe(3);
+    });
+
+    it('renders empty state when no pinned posts', () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={[]}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      expect(screen.getByTestId('pinned-posts-layout')).toBeInTheDocument();
+      expect(screen.queryByText('First pinned post')).not.toBeInTheDocument();
     });
   });
 
-  describe('Carousel Configuration', () => {
-    it('configures carousel with correct responsive settings', () => {
+  describe('Interactions', () => {
+    it('calls onStoryClick when view button is clicked', () => {
       render(
-        <PinnedPostsLayout
-          pinnedPosts={mockPinnedPosts}
-          onStoryClick={mockOnStoryClick}
-        />,
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
       );
 
-      const carousel = screen.getByTestId('carousel-container');
-      const responsiveData = JSON.parse(
-        carousel.getAttribute('data-responsive') || '{}',
+      const viewButtons = screen.getAllByRole('button', { name: /view/i });
+      fireEvent.click(viewButtons[0]);
+
+      expect(mockOnStoryClick).toHaveBeenCalledWith(mockPinnedPosts[0].node);
+    });
+
+    it('shows more options menu when more options button is clicked', async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
       );
 
-      expect(responsiveData).toEqual({
-        desktop: {
-          breakpoint: { max: 3000, min: 1024 },
-          items: 3.5,
-          slidesToSlide: 2,
-        },
-        tablet: {
-          breakpoint: { max: 1024, min: 464 },
-          items: 2,
-          slidesToSlide: 1,
-        },
-        mobile: {
-          breakpoint: { max: 464, min: 0 },
-          items: 1,
-          slidesToSlide: 1,
-        },
+      const moreOptionsButtons = screen.getAllByTestId('more-options-button');
+      fireEvent.click(moreOptionsButtons[0]);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('pin-post-menu-item')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Navigation Buttons', () => {
+    let scrollByMock: ReturnType<typeof vi.fn>;
+
+    beforeEach(() => {
+      scrollByMock = vi.fn();
+    });
+
+    it('calls scrollBy when left navigation button is clicked', async () => {
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const scrollContainer = screen.getByTestId('scroll-container');
+
+      // Mock scroll properties and scrollBy
+      Object.defineProperty(scrollContainer, 'scrollWidth', {
+        value: 1000,
+        configurable: true,
+      });
+      Object.defineProperty(scrollContainer, 'clientWidth', {
+        value: 400,
+        configurable: true,
+      });
+      Object.defineProperty(scrollContainer, 'scrollLeft', {
+        value: 200,
+        writable: true,
+        configurable: true,
+      });
+      scrollContainer.scrollBy = scrollByMock;
+
+      // Trigger scroll event to show buttons
+      await act(async () => {
+        fireEvent.scroll(scrollContainer);
+      });
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('button', { name: 'Scroll left' }),
+        ).toBeInTheDocument();
+      });
+
+      // Click left button
+      const leftButton = screen.getByRole('button', { name: 'Scroll left' });
+      fireEvent.click(leftButton);
+
+      expect(scrollByMock).toHaveBeenCalledWith({
+        left: -350,
+        behavior: 'smooth',
       });
     });
 
-    it('configures carousel with correct boolean properties', () => {
+    it('calls scrollBy when right navigation button is clicked', async () => {
       render(
-        <PinnedPostsLayout
-          pinnedPosts={mockPinnedPosts}
-          onStoryClick={mockOnStoryClick}
-        />,
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
       );
 
-      const carousel = screen.getByTestId('carousel-container');
+      const scrollContainer = screen.getByTestId('scroll-container');
 
-      expect(carousel).toHaveAttribute('data-swipeable', 'true');
-      expect(carousel).toHaveAttribute('data-draggable', 'true');
-      expect(carousel).toHaveAttribute('data-show-dots', 'false');
-      expect(carousel).toHaveAttribute('data-infinite', 'false');
-      expect(carousel).toHaveAttribute('data-keyboard-control', 'true');
+      // Mock scroll properties and scrollBy
+      Object.defineProperty(scrollContainer, 'scrollWidth', {
+        value: 1000,
+        configurable: true,
+      });
+      Object.defineProperty(scrollContainer, 'clientWidth', {
+        value: 400,
+        configurable: true,
+      });
+      Object.defineProperty(scrollContainer, 'scrollLeft', {
+        value: 200,
+        writable: true,
+        configurable: true,
+      });
+      scrollContainer.scrollBy = scrollByMock;
+
+      // Trigger scroll event to show buttons
+      await act(async () => {
+        fireEvent.scroll(scrollContainer);
+      });
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('button', { name: 'Scroll right' }),
+        ).toBeInTheDocument();
+      });
+
+      // Click right button
+      const rightButton = screen.getByRole('button', { name: 'Scroll right' });
+      fireEvent.click(rightButton);
+
+      expect(scrollByMock).toHaveBeenCalledWith({
+        left: 350,
+        behavior: 'smooth',
+      });
     });
   });
 });

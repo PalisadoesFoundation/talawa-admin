@@ -55,19 +55,13 @@ import {
   DeleteOutline,
   PushPinOutlined,
 } from '@mui/icons-material';
-import { InterfacePost, InterfacePostEdge } from 'types/Post/interface';
+import { InterfacePinnedPostCardProps } from 'types/Post/interface';
 import { DELETE_POST_MUTATION } from '../../GraphQl/Mutations/mutations';
 import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutations';
 import { errorHandler } from '../../utils/errorHandler';
 import { formatDate } from '../../utils/dateFormatter';
 import useLocalStorage from '../../utils/useLocalstorage';
 import defaultImg from '../../assets/images/defaultImg.png';
-
-interface InterfacePinnedPostCardProps {
-  pinnedPost: InterfacePostEdge;
-  onStoryClick: (post: InterfacePost) => void;
-  onPostUpdate?: () => void;
-}
 
 const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
   pinnedPost,

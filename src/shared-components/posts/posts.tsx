@@ -131,6 +131,7 @@ export default function PostsPage() {
   } = useQuery<InterfaceOrganizationPostListData>(
     ORGANIZATION_PINNED_POST_LIST,
     {
+      skip: !currentUrl || !userId,
       variables: {
         input: { id: currentUrl as string },
         first: 10,

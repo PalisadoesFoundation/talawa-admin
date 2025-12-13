@@ -16,9 +16,9 @@
  * - Uses react-multi-carousel for responsive carousel functionality
  * - Responsive breakpoints are configured for different screen sizes
  * - Each carousel item contains a PinnedPostCard component
- * - Supports swipe, drag, keyboard navigation, and infinite scrolling
- * - Shows navigation dots for better user experience
- * - Logs carousel configuration for debugging purposes
+ * - Supports swipe, drag, and keyboard navigation
+ * - Navigation dots are currently disabled
+ * - Infinite scrolling is currently disabled
  *
  * @example
  * ```tsx
@@ -30,54 +30,103 @@
  * ```
  */
 
-import React from 'react';
-import { InterfacePost, InterfacePostEdge } from 'types/Post/interface';
+import React, { useRef, useState, useEffect } from 'react';
+import {
+  InterfacePinnedPostsLayoutProps,
+  InterfacePost,
+  InterfacePostEdge,
+} from 'types/Post/interface';
 import PinnedPostCard from './pinnedPostCard';
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
-
-interface InterfacePinnedPostsLayoutProps {
-  pinnedPosts: InterfacePostEdge[];
-  onStoryClick: (post: InterfacePost) => void;
-  onPostUpdate?: () => void;
-}
-
-const storiesResponsive = {
-  desktop: {
-    breakpoint: { max: 3000, min: 1024 },
-    items: 3.5,
-    slidesToSlide: 2,
-  },
-  tablet: { breakpoint: { max: 1024, min: 464 }, items: 2, slidesToSlide: 1 },
-  mobile: { breakpoint: { max: 464, min: 0 }, items: 1, slidesToSlide: 1 },
-};
+import styles from './pinnedPostsLayout.module.css';
+import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 
 const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
   pinnedPosts,
   onStoryClick,
   onPostUpdate,
 }) => {
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const checkScrollability = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } =
+        scrollContainerRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+    }
+  };
+
+  useEffect(() => {
+    checkScrollability();
+    const scrollContainer = scrollContainerRef.current;
+    scrollContainer?.addEventListener('scroll', checkScrollability);
+    return () =>
+      scrollContainer?.removeEventListener('scroll', checkScrollability);
+  }, [pinnedPosts]);
+
+  const scrollLeft = () => {
+    const cardWidth = 350; // Approximate card width + gap
+    scrollContainerRef.current?.scrollBy({
+      left: -cardWidth,
+      behavior: 'smooth',
+    });
+  };
+
+  const scrollRight = () => {
+    const cardWidth = 350; // Approximate card width + gap
+    scrollContainerRef.current?.scrollBy({
+      left: cardWidth,
+      behavior: 'smooth',
+    });
+  };
+
   return (
-    <Carousel
-      responsive={storiesResponsive}
-      swipeable
-      draggable
-      showDots={false}
-      infinite={false}
-      keyBoardControl
-    >
-      {pinnedPosts
-        .filter((pinnedPost) => pinnedPost.node)
-        .map((pinnedPost) => (
-          <div key={pinnedPost.node.id}>
-            <PinnedPostCard
-              pinnedPost={pinnedPost}
-              onStoryClick={onStoryClick}
-              onPostUpdate={onPostUpdate}
-            />
-          </div>
-        ))}
-    </Carousel>
+    <div className={styles.carouselWrapper} data-testid="pinned-posts-layout">
+      {canScrollLeft && (
+        <button
+          className={`${styles.navButton} ${styles.navButtonLeft}`}
+          onClick={scrollLeft}
+          aria-label="Scroll left"
+        >
+          <ChevronLeft />
+        </button>
+      )}
+
+      <div
+        ref={scrollContainerRef}
+        className={styles.scrollContainer}
+        data-testid="scroll-container"
+      >
+        {pinnedPosts
+          .filter(
+            (
+              pinnedPost,
+            ): pinnedPost is InterfacePostEdge & { node: InterfacePost } =>
+              Boolean(pinnedPost.node),
+          )
+          .map((pinnedPost) => (
+            <div key={pinnedPost.node.id} className={styles.cardWrapper}>
+              <PinnedPostCard
+                pinnedPost={pinnedPost}
+                onStoryClick={onStoryClick}
+                onPostUpdate={onPostUpdate}
+              />
+            </div>
+          ))}
+      </div>
+
+      {canScrollRight && (
+        <button
+          className={`${styles.navButton} ${styles.navButtonRight}`}
+          onClick={scrollRight}
+          aria-label="Scroll right"
+        >
+          <ChevronRight />
+        </button>
+      )}
+    </div>
   );
 };
 

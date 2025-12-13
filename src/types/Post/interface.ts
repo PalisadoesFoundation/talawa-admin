@@ -102,3 +102,15 @@ export interface InterfacePost {
   downVotesCount?: number;
   commentsCount?: number;
 }
+
+export interface InterfacePinnedPostsLayoutProps {
+  pinnedPosts: InterfacePostEdge[];
+  onStoryClick: (post: InterfacePost) => void;
+  onPostUpdate?: () => void;
+}
+
+export interface InterfacePinnedPostCardProps {
+  pinnedPost: InterfacePostEdge;
+  onStoryClick: (post: InterfacePost) => void;
+  onPostUpdate?: () => void;
+}

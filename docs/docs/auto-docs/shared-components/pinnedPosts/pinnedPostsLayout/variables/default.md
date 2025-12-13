@@ -4,6 +4,6 @@
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<`InterfacePinnedPostsLayoutProps`\>
+> `const` **default**: `React.FC`\<[`InterfacePinnedPostsLayoutProps`](../../../../types/Post/interface/interfaces/InterfacePinnedPostsLayoutProps.md)\>
 
-Defined in: [src/shared-components/pinnedPosts/pinnedPostsLayout.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/pinnedPosts/pinnedPostsLayout.tsx#L55)
+Defined in: [src/shared-components/pinnedPosts/pinnedPostsLayout.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/pinnedPosts/pinnedPostsLayout.tsx#L39)
