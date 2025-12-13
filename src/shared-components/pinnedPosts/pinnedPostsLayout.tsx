@@ -99,6 +99,7 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
           className={`${styles.navButton} ${styles.navButtonLeft}`}
           onClick={scrollLeft}
           aria-label="Scroll left"
+          data-testid="scroll-left-button"
         >
           <ChevronLeft />
         </button>
@@ -133,6 +134,7 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
           className={`${styles.navButton} ${styles.navButtonRight}`}
           onClick={scrollRight}
           aria-label="Scroll right"
+          data-testid="scroll-right-button"
         >
           <ChevronRight />
         </button>

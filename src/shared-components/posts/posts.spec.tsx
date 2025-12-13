@@ -737,355 +737,349 @@ describe('Sorting Functionality', () => {
     });
   });
 
-  describe('Sorting Functionality', () => {
-    it('sorts posts by oldest when selected', async () => {
-      renderComponent([orgPostListMock, emptyPinnedPostsMock]);
+  it('sorts posts by oldest when selected', async () => {
+    renderComponent([orgPostListMock, emptyPinnedPostsMock]);
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('sortpost-toggle-select'),
-        ).toBeInTheDocument();
-      });
-
-      const sortSelect = screen.getByTestId('sortpost-toggle-select');
-      await act(async () => {
-        fireEvent.change(sortSelect, { target: { value: 'oldest' } });
-      });
-
-      await waitFor(() => {
-        const renderer = screen.getByTestId('posts-renderer');
-        expect(renderer.getAttribute('data-sorting-option')).toBe('oldest');
-      });
+    await waitFor(() => {
+      expect(screen.getByTestId('sortpost-toggle-select')).toBeInTheDocument();
     });
 
-    it('resets to paginated data when sorting is set to None', async () => {
-      renderComponent([
-        orgPostListMock,
-        orgPostListMock, // Additional mock for refetch
-        emptyPinnedPostsMock,
-      ]);
+    const sortSelect = screen.getByTestId('sortpost-toggle-select');
+    await act(async () => {
+      fireEvent.change(sortSelect, { target: { value: 'oldest' } });
+    });
 
-      await waitFor(() => {
-        expect(
-          screen.getByTestId('sortpost-toggle-select'),
-        ).toBeInTheDocument();
-      });
-
-      const sortSelect = screen.getByTestId('sortpost-toggle-select');
-
-      // Sort by latest first
-      await act(async () => {
-        fireEvent.change(sortSelect, { target: { value: 'latest' } });
-      });
-
-      // Reset to None
-      await act(async () => {
-        fireEvent.change(sortSelect, { target: { value: 'None' } });
-      });
-
-      await waitFor(() => {
-        const renderer = screen.getByTestId('posts-renderer');
-        expect(renderer.getAttribute('data-sorting-option')).toBe('None');
-      });
+    await waitFor(() => {
+      const renderer = screen.getByTestId('posts-renderer');
+      expect(renderer.getAttribute('data-sorting-option')).toBe('oldest');
     });
   });
 
-  describe('Create Post Modal', () => {
-    it('closes create post modal when close button is clicked', async () => {
-      renderComponent([orgPostListMock, emptyPinnedPostsMock]);
+  it('resets to paginated data when sorting is set to None', async () => {
+    renderComponent([
+      orgPostListMock,
+      orgPostListMock, // Additional mock for refetch
+      emptyPinnedPostsMock,
+    ]);
 
-      await waitFor(() => {
-        expect(screen.getByTestId('createPostModalBtn')).toBeInTheDocument();
-      });
+    await waitFor(() => {
+      expect(screen.getByTestId('sortpost-toggle-select')).toBeInTheDocument();
+    });
 
-      // Open modal
-      const createButton = screen.getByTestId('createPostModalBtn');
-      await act(async () => {
-        fireEvent.click(createButton);
-      });
+    const sortSelect = screen.getByTestId('sortpost-toggle-select');
 
-      await waitFor(() => {
-        expect(screen.getByTestId('create-post-modal')).toBeInTheDocument();
-      });
+    // Sort by latest first
+    await act(async () => {
+      fireEvent.change(sortSelect, { target: { value: 'latest' } });
+    });
 
-      // Close modal
-      const closeButton = screen.getByTestId('close-create-modal');
-      await act(async () => {
-        fireEvent.click(closeButton);
-      });
+    // Reset to None
+    await act(async () => {
+      fireEvent.change(sortSelect, { target: { value: 'None' } });
+    });
 
-      await waitFor(() => {
-        expect(
-          screen.queryByTestId('create-post-modal'),
-        ).not.toBeInTheDocument();
-      });
+    await waitFor(() => {
+      const renderer = screen.getByTestId('posts-renderer');
+      expect(renderer.getAttribute('data-sorting-option')).toBe('None');
     });
   });
+});
 
-  describe('Infinite Scroll', () => {
-    it('loads more posts when load more is triggered', async () => {
-      renderComponent([orgPostListMock, nextPageMock, emptyPinnedPostsMock]);
+describe('Create Post Modal', () => {
+  it('closes create post modal when close button is clicked', async () => {
+    renderComponent([orgPostListMock, emptyPinnedPostsMock]);
 
-      await waitFor(() => {
-        expect(screen.getByTestId('load-more-btn')).toBeInTheDocument();
-      });
+    await waitFor(() => {
+      expect(screen.getByTestId('createPostModalBtn')).toBeInTheDocument();
+    });
 
-      const loadMoreButton = screen.getByTestId('load-more-btn');
-      await act(async () => {
-        fireEvent.click(loadMoreButton);
-      });
+    // Open modal
+    const createButton = screen.getByTestId('createPostModalBtn');
+    await act(async () => {
+      fireEvent.click(createButton);
+    });
 
-      // After loading more, posts should be updated
-      await waitFor(() => {
-        expect(screen.getByTestId('infinite-scroll')).toBeInTheDocument();
-      });
+    await waitFor(() => {
+      expect(screen.getByTestId('create-post-modal')).toBeInTheDocument();
+    });
+
+    // Close modal
+    const closeButton = screen.getByTestId('close-create-modal');
+    await act(async () => {
+      fireEvent.click(closeButton);
+    });
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('create-post-modal')).not.toBeInTheDocument();
     });
   });
+});
 
-  describe('Refetch Functionality', () => {
-    it('calls refetch when post card refetch button is clicked', async () => {
-      renderComponent([
-        orgPostListMock,
-        orgPostListMock, // Additional mock for refetch
-        emptyPinnedPostsMock,
-      ]);
+describe('Infinite Scroll', () => {
+  it('loads more posts when load more is triggered', async () => {
+    renderComponent([orgPostListMock, nextPageMock, emptyPinnedPostsMock]);
 
-      await waitFor(() => {
-        expect(screen.getAllByTestId('post-card').length).toBeGreaterThan(0);
-      });
+    await waitFor(() => {
+      expect(screen.getByTestId('load-more-btn')).toBeInTheDocument();
+    });
 
-      const refetchButton = screen.getByTestId('refetch-btn-post-1');
-      await act(async () => {
-        fireEvent.click(refetchButton);
-      });
+    const loadMoreButton = screen.getByTestId('load-more-btn');
+    await act(async () => {
+      fireEvent.click(loadMoreButton);
+    });
 
-      // Should trigger handleRefetch which refetches both queries
-      await waitFor(() => {
-        expect(screen.getAllByTestId('post-card').length).toBeGreaterThan(0);
-      });
+    // After loading more, posts should be updated
+    await waitFor(() => {
+      expect(screen.getByTestId('infinite-scroll')).toBeInTheDocument();
     });
   });
+});
 
-  describe('Edge Cases', () => {
-    it('handles null page info', async () => {
-      const nullPageInfoMock: MockedResponse = {
-        request: {
-          query: ORGANIZATION_POST_LIST_WITH_VOTES,
-          variables: {
-            input: { id: '123' },
-            userId: 'user-123',
-            after: null,
-            before: null,
-            first: 6,
-            last: null,
-          },
+describe('Refetch Functionality', () => {
+  it('calls refetch when post card refetch button is clicked', async () => {
+    renderComponent([
+      orgPostListMock,
+      orgPostListMock, // Additional mock for refetch
+      emptyPinnedPostsMock,
+    ]);
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('post-card').length).toBeGreaterThan(0);
+    });
+
+    const refetchButton = screen.getByTestId('refetch-btn-post-1');
+    await act(async () => {
+      fireEvent.click(refetchButton);
+    });
+
+    // Should trigger handleRefetch which refetches both queries
+    await waitFor(() => {
+      expect(screen.getAllByTestId('post-card').length).toBeGreaterThan(0);
+    });
+  });
+});
+
+describe('Edge Cases', () => {
+  it('handles null page info', async () => {
+    const nullPageInfoMock: MockedResponse = {
+      request: {
+        query: ORGANIZATION_POST_LIST_WITH_VOTES,
+        variables: {
+          input: { id: '123' },
+          userId: 'user-123',
+          after: null,
+          before: null,
+          first: 6,
+          last: null,
         },
-        result: {
-          data: {
-            organization: {
-              id: '123',
-              name: 'Test Organization',
-              avatarURL: null,
-              postsCount: 1,
-              posts: {
-                edges: [
-                  {
-                    node: enrichPostNode(samplePosts[0]),
-                    cursor: 'cursor-1',
-                  },
-                ],
-                totalCount: 1,
-                pageInfo: null,
-              },
-            },
-          },
-        },
-      };
-
-      renderComponent([nullPageInfoMock, emptyPinnedPostsMock]);
-
-      await waitFor(() => {
-        expect(screen.getAllByTestId('post-card').length).toBe(1);
-      });
-    });
-
-    it('handles posts with undefined caption', async () => {
-      const postWithUndefinedCaption = {
-        ...samplePosts[0],
-        id: 'post-undefined-caption',
-        caption: undefined,
-      };
-
-      const mockWithUndefinedCaption: MockedResponse = {
-        request: {
-          query: ORGANIZATION_POST_LIST_WITH_VOTES,
-          variables: {
-            input: { id: '123' },
-            userId: 'user-123',
-            after: null,
-            before: null,
-            first: 6,
-            last: null,
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '123',
-              name: 'Test Organization',
-              avatarURL: null,
-              postsCount: 1,
-              posts: {
-                edges: [
-                  {
-                    node: {
-                      ...enrichPostNode(postWithUndefinedCaption),
-                      caption: null,
-                    },
-                    cursor: 'cursor-1',
-                  },
-                ],
-                totalCount: 1,
-                pageInfo: {
-                  startCursor: 'cursor-1',
-                  endCursor: 'cursor-1',
-                  hasNextPage: false,
-                  hasPreviousPage: false,
+      },
+      result: {
+        data: {
+          organization: {
+            id: '123',
+            name: 'Test Organization',
+            avatarURL: null,
+            postsCount: 1,
+            posts: {
+              edges: [
+                {
+                  node: enrichPostNode(samplePosts[0]),
+                  cursor: 'cursor-1',
                 },
-              },
+              ],
+              totalCount: 1,
+              pageInfo: null,
             },
           },
         },
-      };
+      },
+    };
 
-      renderComponent([mockWithUndefinedCaption, emptyPinnedPostsMock]);
+    renderComponent([nullPageInfoMock, emptyPinnedPostsMock]);
 
-      await waitFor(() => {
-        expect(screen.getAllByTestId('post-card').length).toBe(1);
-      });
+    await waitFor(() => {
+      expect(screen.getAllByTestId('post-card').length).toBe(1);
     });
+  });
 
-    it('loadMorePosts callback handles missing fetchMoreResult', async () => {
-      const noResultMock: MockedResponse = {
-        request: {
-          query: ORGANIZATION_POST_LIST_WITH_VOTES,
-          variables: {
-            input: { id: '123' },
-            userId: 'user-123',
-            after: 'cursor-post-3',
-            before: null,
-            first: 6,
-            last: null,
-          },
+  it('handles posts with undefined caption', async () => {
+    const postWithUndefinedCaption = {
+      ...samplePosts[0],
+      id: 'post-undefined-caption',
+      caption: undefined,
+    };
+
+    const mockWithUndefinedCaption: MockedResponse = {
+      request: {
+        query: ORGANIZATION_POST_LIST_WITH_VOTES,
+        variables: {
+          input: { id: '123' },
+          userId: 'user-123',
+          after: null,
+          before: null,
+          first: 6,
+          last: null,
         },
-        result: {
-          data: {
-            organization: null,
-          },
-        },
-      };
-
-      renderComponent([orgPostListMock, noResultMock, emptyPinnedPostsMock]);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('load-more-btn')).toBeInTheDocument();
-      });
-
-      const loadMoreButton = screen.getByTestId('load-more-btn');
-      await act(async () => {
-        fireEvent.click(loadMoreButton);
-      });
-
-      // Should not crash and maintain current state
-      await waitFor(() => {
-        expect(screen.getByTestId('posts-renderer')).toBeInTheDocument();
-      });
-    });
-
-    it('shows error toast when fetchMore fails', async () => {
-      const fetchMoreErrorMock: MockedResponse = {
-        request: {
-          query: ORGANIZATION_POST_LIST_WITH_VOTES,
-          variables: {
-            input: { id: '123' },
-            userId: 'user-123',
-            after: 'cursor-post-3',
-            before: null,
-            first: 6,
-            last: null,
-          },
-        },
-        error: new Error('Error loading more posts'),
-      };
-
-      renderComponent([
-        orgPostListMock,
-        fetchMoreErrorMock,
-        emptyPinnedPostsMock,
-      ]);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('load-more-btn')).toBeInTheDocument();
-      });
-
-      const loadMoreButton = screen.getByTestId('load-more-btn');
-      await act(async () => {
-        fireEvent.click(loadMoreButton);
-      });
-
-      await waitFor(() => {
-        expect(mockToast.error).toHaveBeenCalledWith(
-          'Error loading more posts',
-        );
-      });
-    });
-
-    it('handles post with video URL and fallback values', async () => {
-      const postWithVideo: InterfacePostEdge = {
-        node: {
-          id: 'video-post-1',
-          caption: 'Video post',
-          hasUserVoted: null, // Test fallback
-          creator: null, // Test fallback
-          commentsCount: undefined, // Test fallback
-          pinnedAt: 'video',
-          downVotesCount: undefined, // Test fallback
-          upVotesCount: undefined, // Test fallback
-          imageUrl: null,
-          videoUrl: 'https://example.com/video.mp4',
-          attachments: undefined,
-          createdAt: '2024-01-15T12:00:00.000Z',
-        },
-        cursor: 'cursor-video-post-1',
-      };
-
-      const mockWithVideo = {
-        ...orgPostListMock,
-        result: {
-          data: {
-            organization: {
-              posts: {
-                edges: [postWithVideo],
-                pageInfo: {
-                  startCursor: 'cursor-video-post-1',
-                  endCursor: 'cursor-video-post-1',
-                  hasNextPage: false,
-                  hasPreviousPage: false,
+      },
+      result: {
+        data: {
+          organization: {
+            id: '123',
+            name: 'Test Organization',
+            avatarURL: null,
+            postsCount: 1,
+            posts: {
+              edges: [
+                {
+                  node: {
+                    ...enrichPostNode(postWithUndefinedCaption),
+                    caption: null,
+                  },
+                  cursor: 'cursor-1',
                 },
+              ],
+              totalCount: 1,
+              pageInfo: {
+                startCursor: 'cursor-1',
+                endCursor: 'cursor-1',
+                hasNextPage: false,
+                hasPreviousPage: false,
               },
             },
           },
         },
-      };
+      },
+    };
 
-      renderComponent([mockWithVideo, emptyPinnedPostsMock]);
+    renderComponent([mockWithUndefinedCaption, emptyPinnedPostsMock]);
 
-      await waitFor(() => {
-        expect(screen.getByTestId('posts-renderer')).toBeInTheDocument();
-      });
-
-      // Post should still render with fallback values
-      expect(screen.getByText('Video post')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getAllByTestId('post-card').length).toBe(1);
     });
+  });
+
+  it('loadMorePosts callback handles missing fetchMoreResult', async () => {
+    const noResultMock: MockedResponse = {
+      request: {
+        query: ORGANIZATION_POST_LIST_WITH_VOTES,
+        variables: {
+          input: { id: '123' },
+          userId: 'user-123',
+          after: 'cursor-post-3',
+          before: null,
+          first: 6,
+          last: null,
+        },
+      },
+      result: {
+        data: {
+          organization: null,
+        },
+      },
+    };
+
+    renderComponent([orgPostListMock, noResultMock, emptyPinnedPostsMock]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('load-more-btn')).toBeInTheDocument();
+    });
+
+    const loadMoreButton = screen.getByTestId('load-more-btn');
+    await act(async () => {
+      fireEvent.click(loadMoreButton);
+    });
+
+    // Should not crash and maintain current state
+    await waitFor(() => {
+      expect(screen.getByTestId('posts-renderer')).toBeInTheDocument();
+    });
+  });
+
+  it('shows error toast when fetchMore fails', async () => {
+    const fetchMoreErrorMock: MockedResponse = {
+      request: {
+        query: ORGANIZATION_POST_LIST_WITH_VOTES,
+        variables: {
+          input: { id: '123' },
+          userId: 'user-123',
+          after: 'cursor-post-3',
+          before: null,
+          first: 6,
+          last: null,
+        },
+      },
+      error: new Error('Error loading more posts'),
+    };
+
+    renderComponent([
+      orgPostListMock,
+      fetchMoreErrorMock,
+      emptyPinnedPostsMock,
+    ]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('load-more-btn')).toBeInTheDocument();
+    });
+
+    const loadMoreButton = screen.getByTestId('load-more-btn');
+    await act(async () => {
+      fireEvent.click(loadMoreButton);
+    });
+
+    await waitFor(() => {
+      expect(mockToast.error).toHaveBeenCalledWith('Error loading more posts');
+    });
+  });
+
+  it('handles post with video URL and fallback values', async () => {
+    const postWithVideo: InterfacePostEdge = {
+      node: {
+        id: 'video-post-1',
+        caption: 'Video post',
+        hasUserVoted: null, // Test fallback
+        creator: null, // Test fallback
+        commentsCount: undefined, // Test fallback
+        pinnedAt: 'video',
+        downVotesCount: undefined, // Test fallback
+        upVotesCount: undefined, // Test fallback
+        imageUrl: null,
+        videoUrl: 'https://example.com/video.mp4',
+        attachments: undefined,
+        createdAt: '2024-01-15T12:00:00.000Z',
+      },
+      cursor: 'cursor-video-post-1',
+    };
+
+    const mockWithVideo = {
+      ...orgPostListMock,
+      result: {
+        data: {
+          organization: {
+            id: '123',
+            name: 'Test Organization',
+            avatarURL: null,
+            postsCount: 1,
+            posts: {
+              edges: [postWithVideo],
+              pageInfo: {
+                startCursor: 'cursor-video-post-1',
+                endCursor: 'cursor-video-post-1',
+                hasNextPage: false,
+                hasPreviousPage: false,
+              },
+            },
+          },
+        },
+      },
+    };
+
+    renderComponent([mockWithVideo, emptyPinnedPostsMock]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('posts-renderer')).toBeInTheDocument();
+    });
+
+    // Post should still render with fallback values
+    expect(screen.getByText('Video post')).toBeInTheDocument();
   });
 });

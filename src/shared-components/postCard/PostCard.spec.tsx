@@ -673,7 +673,7 @@ describe('PostCard', () => {
   test('opens and closes edit modal', async () => {
     renderPostCard();
 
-    const moreButton = screen.getByTestId('more-options-button');
+    const moreButton = screen.getByTestId('post-more-options-button');
     await userEvent.click(moreButton);
 
     const editButton = await screen.findByTestId('edit-post-menu-item');
@@ -692,7 +692,7 @@ describe('PostCard', () => {
   test('deletes post when delete button is clicked', async () => {
     renderPostCard();
 
-    const moreButton = screen.getByTestId('more-options-button');
+    const moreButton = screen.getByTestId('post-more-options-button');
     await userEvent.click(moreButton);
     const deleteButton = await screen.findByTestId('delete-post-menu-item');
     await userEvent.click(deleteButton);
@@ -916,7 +916,7 @@ describe('PostCard', () => {
   it('handles edit post with pinned status change', async () => {
     renderPostCard({ pinnedAt: null });
 
-    const moreButton = screen.getByTestId('more-options-button');
+    const moreButton = screen.getByTestId('post-more-options-button');
     fireEvent.click(moreButton);
 
     const editButton = await screen.findByTestId('edit-post-menu-item');
@@ -943,7 +943,7 @@ describe('PostCard', () => {
 
     renderPostCard();
 
-    const moreButton = screen.getByTestId('more-options-button');
+    const moreButton = screen.getByTestId('post-more-options-button');
     fireEvent.click(moreButton);
 
     await waitFor(() => {
@@ -986,7 +986,7 @@ describe('PostCard', () => {
       </MockedProvider>,
     );
 
-    const moreButton = screen.getByTestId('more-options-button');
+    const moreButton = screen.getByTestId('post-more-options-button');
     fireEvent.click(moreButton);
 
     // Wait for the modal to open
@@ -1337,7 +1337,7 @@ describe('PostCard', () => {
     await screen.findByText('Test Post');
 
     // Open dropdown
-    const dropdownButton = screen.getByTestId('more-options-button');
+    const dropdownButton = screen.getByTestId('post-more-options-button');
     await userEvent.click(dropdownButton);
 
     // Wait for menu to appear, then click pin option
@@ -1383,7 +1383,7 @@ describe('PostCard', () => {
     await screen.findByText('Test Post');
 
     // Open dropdown
-    const dropdownButton = screen.getByTestId('more-options-button');
+    const dropdownButton = screen.getByTestId('post-more-options-button');
     await userEvent.click(dropdownButton);
 
     // Wait for menu to appear, then click unpin option (uses same test ID)
@@ -1423,7 +1423,7 @@ describe('PostCard', () => {
     await screen.findByText('Test Post');
 
     // Open dropdown
-    const dropdownButton = screen.getByTestId('more-options-button');
+    const dropdownButton = screen.getByTestId('post-more-options-button');
     await userEvent.click(dropdownButton);
 
     // Wait for menu to appear and check that dropdown is open

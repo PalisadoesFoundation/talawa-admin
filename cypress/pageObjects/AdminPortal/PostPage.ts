@@ -6,8 +6,8 @@ export class PostsPage {
   private readonly _addMediaField = '[data-cy="addMediaField"]';
   private readonly _pinPostCheckbox = '[data-cy="pinPost"]';
   private readonly _createPostSubmit = '[data-cy="createPostBtn"]';
-  private readonly _postCardContainer = '[data-cy="postCardContainer"]';
-  private readonly _moreOptionsIcon = '[data-testid="more-options-button"]';
+  private readonly _moreOptionsIcon =
+    '[data-testid="post-more-options-button"]';
   private readonly _editOption = '[data-testid="edit-post-menu-item"]';
   private readonly _editCaptionInput = '[data-cy="editCaptionInput"]';
   private readonly _updatePostSubmit = '[data-testid="save-post-button"]';
@@ -33,7 +33,6 @@ export class PostsPage {
   }
 
   editFirstPost(newTitle: string) {
-    cy.get(this._postCardContainer).first().click();
     cy.get(this._moreOptionsIcon).first().should('be.visible').click();
     cy.get(this._editOption).should('be.visible').click();
     cy.get(this._editCaptionInput).should('be.visible').clear().type(newTitle);
@@ -43,7 +42,6 @@ export class PostsPage {
   }
 
   deleteFirstPost() {
-    cy.get(this._postCardContainer).first().click();
     cy.get(this._moreOptionsIcon).first().should('be.visible').click();
     cy.get(this._deleteOption).should('be.visible').click();
     cy.assertToast('Post deleted successfully.');

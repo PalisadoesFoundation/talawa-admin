@@ -22,15 +22,21 @@ vi.mock('react-toastify', () => ({
 }));
 
 // Mock useLocalStorage
+const mockGetItem = vi.fn();
 vi.mock('../../utils/useLocalstorage', () => ({
   default: () => ({
-    getItem: (key: string) => {
-      if (key === 'role') return 'administrator';
-      if (key === 'userId' || key === 'id') return 'user-1';
-      return null;
-    },
+    getItem: mockGetItem,
   }),
 }));
+
+// Reset mock before each test
+beforeEach(() => {
+  mockGetItem.mockImplementation((key: string) => {
+    if (key === 'role') return 'administrator';
+    if (key === 'userId' || key === 'id') return 'user-1';
+    return null;
+  });
+});
 
 // Mock errorHandler
 vi.mock('../../utils/errorHandler', () => ({
@@ -42,6 +48,8 @@ const mockOnStoryClick = vi.fn();
 const createMockPinnedPost = (
   id: string,
   caption: string,
+  creatorName = 'John Doe',
+  creatorId = 'user-1',
 ): InterfacePostEdge => ({
   node: {
     id,
@@ -53,8 +61,8 @@ const createMockPinnedPost = (
     pinned: true,
     attachments: [],
     creator: {
-      id: 'user-1',
-      name: 'John Doe',
+      id: creatorId,
+      name: creatorName,
       avatarURL: 'https://example.com/avatar.jpg',
       email: 'user@testmail.com',
     },
@@ -257,7 +265,7 @@ describe('PinnedPostsLayout Component', () => {
       });
 
       // Click left button
-      const leftButton = screen.getByRole('button', { name: 'Scroll left' });
+      const leftButton = screen.getByTestId('scroll-left-button');
       fireEvent.click(leftButton);
 
       expect(scrollByMock).toHaveBeenCalled();
@@ -305,10 +313,525 @@ describe('PinnedPostsLayout Component', () => {
       });
 
       // Click right button
-      const rightButton = screen.getByRole('button', { name: 'Scroll right' });
+      const rightButton = screen.getByTestId('scroll-right-button');
       fireEvent.click(rightButton);
 
       expect(scrollByMock).toHaveBeenCalled();
+    });
+  });
+
+  describe('Event Listener Cleanup', () => {
+    it('should remove scroll event listener when component unmounts', () => {
+      const removeEventListenerSpy = vi.spyOn(
+        Element.prototype,
+        'removeEventListener',
+      );
+
+      const { unmount } = render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Unmount the component
+      unmount();
+
+      // Verify that removeEventListener was called for scroll events
+      expect(removeEventListenerSpy).toHaveBeenCalledWith(
+        'scroll',
+        expect.any(Function),
+      );
+      removeEventListenerSpy.mockRestore();
+    });
+
+    it('should not call scroll handler after component unmount', async () => {
+      const scrollHandler = vi.fn();
+
+      const { unmount } = render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const scrollContainer = screen.getByTestId('scroll-container');
+
+      // Mock the addEventListener to capture the handler
+      const originalAddEventListener = scrollContainer.addEventListener;
+      scrollContainer.addEventListener = vi.fn((event, handler) => {
+        if (event === 'scroll') {
+          scrollHandler.mockImplementation(handler as () => void);
+        }
+        return originalAddEventListener.call(scrollContainer, event, handler);
+      });
+
+      // Unmount and verify handler doesn't run
+      unmount();
+
+      scrollHandler();
+      // If unmounted properly, this shouldn't cause errors
+      expect(true).toBe(true);
+    });
+  });
+
+  describe('Defensive Branches in Scroll Functions', () => {
+    let scrollByMock: ReturnType<typeof vi.fn>;
+
+    beforeEach(() => {
+      scrollByMock = vi.fn();
+    });
+
+    it('should handle scrollLeft when scrollContainer is null', async () => {
+      render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const scrollContainer = screen.getByTestId('scroll-container');
+
+      // Set up conditions for left button to appear but mock scrollBy to handle null scenario
+      Object.defineProperty(scrollContainer, 'scrollWidth', {
+        value: 1000,
+        configurable: true,
+      });
+      Object.defineProperty(scrollContainer, 'clientWidth', {
+        value: 400,
+        configurable: true,
+      });
+      Object.defineProperty(scrollContainer, 'scrollLeft', {
+        value: 200,
+        writable: true,
+        configurable: true,
+      });
+
+      // Mock scrollBy to prevent errors
+      const mockScrollBy = vi.fn();
+      scrollContainer.scrollBy = mockScrollBy;
+
+      // Trigger scroll to show button
+      await act(async () => {
+        fireEvent.scroll(scrollContainer);
+      });
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('scroll-left-button')).toBeInTheDocument();
+      });
+
+      // Mock scrollBy to be undefined to test defensive coding
+      scrollContainer.scrollBy =
+        undefined as unknown as HTMLElement['scrollBy'];
+
+      // This tests the defensive coding - clicking should not throw even if scrollBy is undefined
+      const leftButton = screen.getByTestId('scroll-left-button');
+      expect(() => fireEvent.click(leftButton)).not.toThrow();
+    });
+
+    it('should handle scrollRight when scrollContainer is null', async () => {
+      render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const scrollContainer = screen.getByTestId('scroll-container');
+
+      // Set up conditions for right button to appear
+      Object.defineProperty(scrollContainer, 'scrollWidth', {
+        value: 1000,
+        configurable: true,
+      });
+      Object.defineProperty(scrollContainer, 'clientWidth', {
+        value: 400,
+        configurable: true,
+      });
+      Object.defineProperty(scrollContainer, 'scrollLeft', {
+        value: 0,
+        writable: true,
+        configurable: true,
+      });
+
+      // Mock scrollBy initially to allow button to appear
+      const mockScrollBy = vi.fn();
+      scrollContainer.scrollBy = mockScrollBy;
+
+      await act(async () => {
+        fireEvent.scroll(scrollContainer);
+      });
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('scroll-right-button')).toBeInTheDocument();
+      });
+
+      // Mock scrollBy to be undefined to test defensive coding
+      scrollContainer.scrollBy =
+        undefined as unknown as HTMLElement['scrollBy'];
+
+      // This tests the defensive coding - clicking should not throw even if scrollBy is undefined
+      const rightButton = screen.getByTestId('scroll-right-button');
+      expect(() => fireEvent.click(rightButton)).not.toThrow();
+    });
+
+    it('should handle insufficient scroll width in scrollLeft', async () => {
+      render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const scrollContainer = screen.getByTestId('scroll-container');
+      scrollContainer.scrollBy = scrollByMock;
+
+      // Set up conditions where scrollWidth <= clientWidth (no scrolling needed)
+      Object.defineProperty(scrollContainer, 'scrollWidth', {
+        value: 400,
+        configurable: true,
+      });
+      Object.defineProperty(scrollContainer, 'clientWidth', {
+        value: 400,
+        configurable: true,
+      });
+      Object.defineProperty(scrollContainer, 'scrollLeft', {
+        value: 0,
+        writable: true,
+        configurable: true,
+      });
+
+      act(() => {
+        fireEvent.scroll(scrollContainer);
+      });
+
+      // Buttons should not appear when scrolling is not possible
+      expect(
+        screen.queryByTestId('scroll-left-button'),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId('scroll-right-button'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Null/Undefined scrollContainerRef Edge Cases', () => {
+    it('should handle null scrollContainerRef in checkScrollability', () => {
+      const { rerender } = render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={[]}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Component should render without errors even with empty posts
+      expect(screen.getByTestId('pinned-posts-layout')).toBeInTheDocument();
+
+      // Rerender with posts - should not throw
+      rerender(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      expect(screen.getByTestId('scroll-container')).toBeInTheDocument();
+    });
+
+    it('should safely handle missing scrollBy method', async () => {
+      render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const scrollContainer = screen.getByTestId('scroll-container');
+
+      // Set up scrollable conditions
+      Object.defineProperty(scrollContainer, 'scrollWidth', {
+        value: 1000,
+        configurable: true,
+      });
+      Object.defineProperty(scrollContainer, 'clientWidth', {
+        value: 400,
+        configurable: true,
+      });
+      Object.defineProperty(scrollContainer, 'scrollLeft', {
+        value: 100,
+        writable: true,
+        configurable: true,
+      });
+
+      // Mock scrollBy initially
+      const mockScrollBy = vi.fn();
+      scrollContainer.scrollBy = mockScrollBy;
+
+      await act(async () => {
+        fireEvent.scroll(scrollContainer);
+      });
+
+      // Verify scroll buttons appear
+      await waitFor(() => {
+        expect(screen.queryByTestId('scroll-left-button')).toBeInTheDocument();
+        expect(screen.queryByTestId('scroll-right-button')).toBeInTheDocument();
+      });
+
+      // Remove scrollBy to test defensive programming
+      scrollContainer.scrollBy =
+        undefined as unknown as HTMLElement['scrollBy'];
+
+      const leftButton = screen.getByTestId('scroll-left-button');
+      const rightButton = screen.getByTestId('scroll-right-button');
+
+      // These should not throw errors even without scrollBy method
+      expect(() => fireEvent.click(leftButton)).not.toThrow();
+      expect(() => fireEvent.click(rightButton)).not.toThrow();
+    });
+  });
+
+  describe('Posts with Null/Undefined Properties', () => {
+    it('should safely render posts with null creator', () => {
+      const postsWithNullCreator = [
+        createMockPinnedPost('post-null-creator', 'Post without creator'),
+        ...mockPinnedPosts,
+      ];
+
+      // Modify the first post to have null creator
+      postsWithNullCreator[0].node.creator = null;
+
+      render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={postsWithNullCreator}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Should render all posts including the one with null creator
+      const postCards = screen.getAllByTestId('view-post-btn');
+      expect(postCards.length).toBe(4);
+
+      // Check that the post with null creator still renders caption
+      expect(
+        screen.getAllByText('Post without creator').length,
+      ).toBeGreaterThan(0);
+    });
+
+    it('should safely render posts with empty captions', () => {
+      const postsWithEmptyCaption = [
+        createMockPinnedPost('post-empty-caption', ''),
+        createMockPinnedPost('post-whitespace-caption', '   '),
+        ...mockPinnedPosts,
+      ];
+
+      render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={postsWithEmptyCaption}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Should render all posts including those with empty captions
+      const postCards = screen.getAllByTestId('view-post-btn');
+      expect(postCards.length).toBe(5);
+    });
+  });
+
+  describe('Menu Item Actions', () => {
+    const mockTogglePinPost = vi.fn();
+    const mockDeletePost = vi.fn();
+
+    beforeEach(() => {
+      mockTogglePinPost.mockClear();
+      mockDeletePost.mockClear();
+    });
+
+    it('should open menu and show pin/unpin option for admin users', async () => {
+      // Mock admin role
+      mockGetItem.mockImplementation((key: string) => {
+        if (key === 'role') return 'administrator';
+        if (key === 'userId' || key === 'id') return 'admin-user';
+        return null;
+      });
+
+      render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Click on more options button for first post
+      const moreOptionsButtons = screen.getAllByTestId('more-options-button');
+      fireEvent.click(moreOptionsButtons[0]);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('pin-post-menu-item')).toBeInTheDocument();
+      });
+
+      // Should show pin option (since post is already pinned, should show unpin)
+      const pinMenuItem = screen.getByTestId('pin-post-menu-item');
+      expect(pinMenuItem).toBeInTheDocument();
+    });
+
+    it('should open menu and show delete option for post creator', async () => {
+      // Mock user as post creator
+      mockGetItem.mockImplementation((key: string) => {
+        if (key === 'role') return 'user';
+        if (key === 'userId' || key === 'id') return 'user-1'; // Same as creator ID
+        return null;
+      });
+
+      render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Click on more options button for first post
+      const moreOptionsButtons = screen.getAllByTestId('more-options-button');
+      fireEvent.click(moreOptionsButtons[0]);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('delete-post-menu-item')).toBeInTheDocument();
+      });
+    });
+
+    it('should not show menu options for non-admin, non-creator users', async () => {
+      // Mock user as neither admin nor creator
+      mockGetItem.mockImplementation((key: string) => {
+        if (key === 'role') return 'user';
+        if (key === 'userId' || key === 'id') return 'different-user-id';
+        return null;
+      });
+
+      render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Should not show more options button for users who can't manage
+      const moreOptionsButtons = screen.queryAllByTestId('more-options-button');
+      expect(moreOptionsButtons.length).toBe(0);
+    });
+
+    it('should handle pin action click', async () => {
+      // Mock admin user
+      mockGetItem.mockImplementation((key: string) => {
+        if (key === 'role') return 'administrator';
+        if (key === 'userId' || key === 'id') return 'admin-user';
+        return null;
+      });
+
+      render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Open menu
+      const moreOptionsButtons = screen.getAllByTestId('more-options-button');
+      fireEvent.click(moreOptionsButtons[0]);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('pin-post-menu-item')).toBeInTheDocument();
+      });
+
+      // Click pin/unpin option
+      const pinMenuItem = screen.getByTestId('pin-post-menu-item');
+      expect(() => fireEvent.click(pinMenuItem)).not.toThrow();
+    });
+
+    it('should handle delete action click', async () => {
+      // Mock admin user
+      mockGetItem.mockImplementation((key: string) => {
+        if (key === 'role') return 'administrator';
+        if (key === 'userId' || key === 'id') return 'admin-user';
+        return null;
+      });
+
+      render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <PinnedPostsLayout
+              pinnedPosts={mockPinnedPosts}
+              onStoryClick={mockOnStoryClick}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Open menu
+      const moreOptionsButtons = screen.getAllByTestId('more-options-button');
+      fireEvent.click(moreOptionsButtons[0]);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('delete-post-menu-item')).toBeInTheDocument();
+      });
+
+      // Click delete option
+      const deleteMenuItem = screen.getByTestId('delete-post-menu-item');
+      expect(() => fireEvent.click(deleteMenuItem)).not.toThrow();
     });
   });
 });

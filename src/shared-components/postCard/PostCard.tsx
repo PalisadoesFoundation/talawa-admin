@@ -340,7 +340,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             onClick={handleDropdownOpen}
             size="small"
             aria-label="more options"
-            data-testid="more-options-button"
+            data-testid="post-more-options-button"
           >
             <MoreHoriz />
           </IconButton>
