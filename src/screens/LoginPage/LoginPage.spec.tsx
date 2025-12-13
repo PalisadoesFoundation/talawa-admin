@@ -226,6 +226,7 @@ vi.mock('Constant/constant.ts', async () => ({
   ...(await vi.importActual('Constant/constant.ts')),
   REACT_APP_USE_RECAPTCHA: 'yes',
   RECAPTCHA_SITE_KEY: 'xxx',
+  BACKEND_URL: 'http://localhost:4000/graphql',
 }));
 
 vi.mock('react-router', async () => ({
@@ -1515,7 +1516,7 @@ describe('Extra coverage for 100 %', () => {
     renderLoginPage();
     await wait();
     await userEvent.click(screen.getByTestId('goToRegisterPortion'));
-    await userEvent.type(screen.getByPlaceholderText(/Name/i), '123'); // invalid
+    await userEvent.type(screen.getByPlaceholderText(/Name/i), '123'); // invalid - contains numbers
     await userEvent.type(screen.getByTestId('signInEmail'), 'valid@email.com');
     await userEvent.type(screen.getByPlaceholderText('Password'), 'Valid@123');
     await userEvent.type(
@@ -1525,7 +1526,9 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.type(screen.getAllByTestId('mock-recaptcha')[1], 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
-    expect(toastMocks.warn).toHaveBeenCalledWith('name_invalid');
+    expect(toastMocks.warn).toHaveBeenCalledWith(
+      'Name should contain only letters, spaces, and hyphens',
+    );
   });
 
   /* 3.  Invalid password toast */
@@ -1544,7 +1547,9 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.type(screen.getAllByTestId('mock-recaptcha')[1], 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
-    expect(toastMocks.warn).toHaveBeenCalledWith('password_invalid');
+    expect(toastMocks.warn).toHaveBeenCalledWith(
+      'Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character',
+    );
   });
 
   /* 4.  Non-admin tries to log in on /admin */
@@ -1595,7 +1600,9 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.type(screen.getAllByTestId('mock-recaptcha')[0], 'token');
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
-    expect(toastMocks.warn).toHaveBeenCalledWith('notAuthorised');
+    expect(toastMocks.warn).toHaveBeenCalledWith(
+      'Sorry! you are not Authorised!',
+    );
   });
 
   /* 5.  component renders after mount (was refetch test) */
@@ -1607,15 +1614,37 @@ describe('Extra coverage for 100 %', () => {
 
   /* 6.  fetch(BACKEND_URL) catch block */
   it('handles Talawa-API unreachable', async () => {
+    // Import and spy on errorHandler before rendering
     const errorHandlerMod = await import('utils/errorHandler');
     const errorHandlerSpy = vi.spyOn(errorHandlerMod, 'errorHandler');
+
+    // Mock fetch to reject
     const fetchSpy = vi
       .spyOn(global, 'fetch')
       .mockRejectedValueOnce(new Error('Network error'));
+
     renderLoginPage();
-    await wait();
-    expect(fetchSpy).toHaveBeenCalled();
-    expect(errorHandlerSpy).toHaveBeenCalled();
+
+    // Wait for the async loadResource() to complete
+    await wait(200);
+
+    expect(fetchSpy).toHaveBeenCalledWith(
+      'http://localhost:4000/graphql',
+      expect.objectContaining({
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }),
+    );
+    expect(errorHandlerSpy).toHaveBeenCalledWith(
+      expect.anything(), // t function
+      expect.any(Error),
+    );
+
+    // Clean up
+    errorHandlerSpy.mockRestore();
+    fetchSpy.mockRestore();
   });
 
   /* 7.  reset signup recaptcha on error */
@@ -1738,7 +1767,7 @@ describe('Extra coverage for 100 %', () => {
     );
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
-    expect(toastMocks.error).toHaveBeenCalledWith('Please_check_the_captcha');
+    expect(toastMocks.error).toHaveBeenCalledWith('Please, check the captcha.');
   });
 
   /* 10. login captcha verification returns false */
@@ -1774,7 +1803,7 @@ describe('Extra coverage for 100 %', () => {
     );
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
-    expect(toastMocks.error).toHaveBeenCalledWith('Please_check_the_captcha');
+    expect(toastMocks.error).toHaveBeenCalledWith('Please, check the captcha.');
   });
 
   /* 11. email too short validation */
@@ -1793,7 +1822,9 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.type(screen.getAllByTestId('mock-recaptcha')[1], 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
-    expect(toastMocks.warn).toHaveBeenCalledWith('email_invalid');
+    expect(toastMocks.warn).toHaveBeenCalledWith(
+      'Email should have atleast 8 characters',
+    );
   });
 
   /* 12. signIn returns null */
@@ -1833,6 +1864,6 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.type(screen.getAllByTestId('mock-recaptcha')[0], 'token');
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
-    expect(toastMocks.warn).toHaveBeenCalledWith('notFound');
+    expect(toastMocks.warn).toHaveBeenCalledWith('Not found');
   });
 });
