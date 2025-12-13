@@ -1,5 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
+import type { MockedResponse } from '@apollo/client/testing';
 import {
   render,
   screen,
@@ -1433,7 +1434,7 @@ describe('Talawa-API server fetch check', () => {
 
 // Helper functions to reduce code duplication
 const renderLoginPage = (
-  mocksOrLink: StaticMockLink | ReadonlyArray<unknown> = MOCKS,
+  mocksOrLink: StaticMockLink | ReadonlyArray<MockedResponse> = MOCKS,
 ): ReturnType<typeof render> => {
   const isLink = mocksOrLink instanceof StaticMockLink;
 
@@ -1441,7 +1442,7 @@ const renderLoginPage = (
     <MockedProvider
       {...(isLink
         ? { link: mocksOrLink }
-        : { mocks: mocksOrLink as ReadonlyArray<unknown> })}
+        : { mocks: mocksOrLink as ReadonlyArray<MockedResponse> })}
       addTypename={false}
     >
       <BrowserRouter>
