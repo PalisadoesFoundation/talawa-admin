@@ -1727,7 +1727,9 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.type(screen.getAllByTestId('mock-recaptcha')[1], 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
-    expect(toastMocks.error).toHaveBeenCalled();
+    expect(toastMocks.error).toHaveBeenCalledWith(
+      expect.stringContaining('error'),
+    );
   });
 
   /* 9. signup captcha verification returns false */
