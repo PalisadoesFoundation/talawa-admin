@@ -1,13 +1,9 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import {
-  BrowserRouter,
-  RouterProvider,
-  createMemoryRouter,
-} from 'react-router-dom';
+import { BrowserRouter, MemoryRouter, useLocation } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import cookies from 'js-cookie';
@@ -110,6 +106,11 @@ vi.mock('react-router-dom', async () => {
     useParams: () => ({ orgId: organizationId }),
   };
 });
+
+function LocationDisplay() {
+  const location = useLocation();
+  return <div data-testid="location">{location.pathname}</div>;
+}
 
 describe('Testing OrganizationNavbar Component [User Portal]', () => {
   Object.defineProperty(window, 'matchMedia', {
@@ -321,36 +322,29 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
   });
 
   it('Should navigate to home page on home link click', async () => {
-    const router = createMemoryRouter(
-      [
-        {
-          path: '/user/organization/:orgId',
-          element: (
-            <MockedProvider addTypename={false} link={link}>
-              <Provider store={store}>
-                <I18nextProvider i18n={i18nForTest}>
-                  <OrganizationNavbar {...navbarProps} />
-                </I18nextProvider>
-              </Provider>
-            </MockedProvider>
-          ),
-        },
-      ],
-      {
-        initialEntries: [`/user/organization/${organizationId}`],
-      },
+    render(
+      <MemoryRouter initialEntries={['/initial']}>
+        <MockedProvider addTypename={false} link={link}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <>
+                <OrganizationNavbar currentPage="initial" />
+                <LocationDisplay />
+              </>
+            </I18nextProvider>
+          </Provider>
+        </MockedProvider>
+      </MemoryRouter>,
     );
 
-    render(<RouterProvider router={router} />);
+    // click Home
+    await userEvent.click(screen.getByText('Home'));
 
-    const homeLink = screen.getByText('Home');
-    expect(homeLink).toBeInTheDocument();
-
-    await userEvent.click(homeLink);
-
-    await wait();
-    expect(router.state.location.pathname).toBe(
-      `/user/organization/${organizationId}`,
+    // assert navigation happened
+    await waitFor(() =>
+      expect(screen.getByTestId('location')).toHaveTextContent(
+        '/user/organization/org1234',
+      ),
     );
   });
 });
