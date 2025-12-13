@@ -74,47 +74,11 @@ const mockPinnedPosts: InterfacePostEdge[] = [
   createMockPinnedPost('post-3', 'Third pinned post'),
 ];
 
-// GraphQL mocks for DELETE_POST_MUTATION
-const deletePostMock = {
-  request: {
-    query: DELETE_POST_MUTATION,
-    variables: { input: { id: 'post-1' } },
-  },
-  result: {
-    data: {
-      deletePost: { id: 'post-1' },
-    },
-  },
-};
-
-// GraphQL mocks for TOGGLE_PINNED_POST
-const togglePinPostMock = {
-  request: {
-    query: TOGGLE_PINNED_POST,
-    variables: { input: { id: 'post-1', isPinned: false } },
-  },
-  result: {
-    data: {
-      togglePostPin: { id: 'post-1', pinned: false },
-    },
-  },
-};
-
-const mocks = [deletePostMock, togglePinPostMock];
-
 describe('PinnedPostsLayout Component', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   describe('Rendering', () => {
     it('renders the pinned posts layout container', () => {
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -130,7 +94,7 @@ describe('PinnedPostsLayout Component', () => {
 
     it('renders all pinned post cards with their captions', () => {
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -154,7 +118,7 @@ describe('PinnedPostsLayout Component', () => {
 
     it('renders creator names for all posts', () => {
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -171,7 +135,7 @@ describe('PinnedPostsLayout Component', () => {
 
     it('renders view buttons for all posts', () => {
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -187,7 +151,7 @@ describe('PinnedPostsLayout Component', () => {
 
     it('renders empty state when no pinned posts', () => {
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={[]}
@@ -205,7 +169,7 @@ describe('PinnedPostsLayout Component', () => {
   describe('Interactions', () => {
     it('calls onStoryClick when view button is clicked', () => {
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -223,7 +187,7 @@ describe('PinnedPostsLayout Component', () => {
 
     it('shows more options menu when more options button is clicked', async () => {
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -251,7 +215,7 @@ describe('PinnedPostsLayout Component', () => {
 
     it('calls scrollBy when left navigation button is clicked', async () => {
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -299,7 +263,7 @@ describe('PinnedPostsLayout Component', () => {
 
     it('calls scrollBy when right navigation button is clicked', async () => {
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}

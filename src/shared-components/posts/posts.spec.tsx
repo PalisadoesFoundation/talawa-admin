@@ -45,7 +45,7 @@ vi.mock('react-i18next', () => ({
       };
       return translations[key] || key;
     },
-    i18n: { changeLanguage: () => Promise.resolve(() => {}), language: 'en' },
+    i18n: { changeLanguage: () => Promise.resolve(), language: 'en' },
   }),
   Trans: ({ children }: { children: React.ReactNode }) => children,
   I18nextProvider: ({ children }: { children: React.ReactNode }) => children,
@@ -540,10 +540,6 @@ describe('PostsPage Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
   });
 
   describe('Error Handling', () => {

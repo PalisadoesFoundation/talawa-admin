@@ -61,9 +61,16 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
   useEffect(() => {
     checkScrollability();
     const scrollContainer = scrollContainerRef.current;
-    scrollContainer?.addEventListener('scroll', checkScrollability);
-    return () =>
-      scrollContainer?.removeEventListener('scroll', checkScrollability);
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', checkScrollability);
+      return () => {
+        scrollContainer.removeEventListener('scroll', checkScrollability);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
+    checkScrollability();
   }, [pinnedPosts]);
 
   const scrollLeft = () => {
