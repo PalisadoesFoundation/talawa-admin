@@ -753,6 +753,7 @@ describe('ChatRoom Component', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+    window.localStorage.clear();
   });
 
   it('renders loading state initially', () => {
