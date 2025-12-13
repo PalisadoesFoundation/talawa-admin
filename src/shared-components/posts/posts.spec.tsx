@@ -542,6 +542,10 @@ describe('PostsPage Component', () => {
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('Error Handling', () => {
     it('shows error toast when organization post list query fails', async () => {
       renderComponent([orgPostListErrorMock, emptyPinnedPostsMock]);

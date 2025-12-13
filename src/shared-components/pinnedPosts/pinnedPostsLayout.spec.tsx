@@ -12,8 +12,6 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from '../../utils/i18nForTest';
 import PinnedPostsLayout from './pinnedPostsLayout';
 import type { InterfacePostEdge } from 'types/Post/interface';
-import { DELETE_POST_MUTATION } from '../../GraphQl/Mutations/mutations';
-import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutations';
 
 // Mock react-toastify
 vi.mock('react-toastify', () => ({
@@ -75,6 +73,10 @@ const mockPinnedPosts: InterfacePostEdge[] = [
 ];
 
 describe('PinnedPostsLayout Component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   describe('Rendering', () => {
     it('renders the pinned posts layout container', () => {
       render(

@@ -158,7 +158,6 @@ export default function PostsPage() {
   // Handle error toasts
   useEffect(() => {
     if (orgPostListError) {
-      console.error('Post list error:', orgPostListError);
       toast.error('Organization post list error');
     }
   }, [orgPostListError]);
