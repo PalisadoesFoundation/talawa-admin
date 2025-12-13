@@ -1584,7 +1584,7 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.type(screen.getByTestId('mock-recaptcha'), 'token');
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
-    expect(toastMocks.warn).toHaveBeenCalled();
+    expect(toastMocks.warn).toHaveBeenCalledWith('notAuthorised');
   });
 
   /* 5.  component renders after mount (was refetch test) */
@@ -1738,6 +1738,10 @@ describe('Extra coverage for 100 %', () => {
         request: { query: GET_COMMUNITY_DATA_PG },
         result: { data: { community: null } },
       },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: { data: { organizations: [] } },
+      },
     ];
     setLocationPath('/');
     renderLoginPage(RECAPTCHA_FALSE_LOGIN);
@@ -1792,6 +1796,10 @@ describe('Extra coverage for 100 %', () => {
       {
         request: { query: GET_COMMUNITY_DATA_PG },
         result: { data: { community: null } },
+      },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: { data: { organizations: [] } },
       },
     ];
     setLocationPath('/');
