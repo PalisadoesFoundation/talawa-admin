@@ -12,7 +12,7 @@ It's important to configure Talawa-Admin. Here's how to do it.
 You can use our interactive setup script for the configuration. Use the following command for the same.
 
 ```bash
-npm run setup
+pnpm run setup
 ```
 
 All the options in "setup" can be done manually as well and this is covered in a section below.
