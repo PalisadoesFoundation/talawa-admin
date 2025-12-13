@@ -81,13 +81,6 @@ export default defineConfig(({ mode }) => {
     ],
     // Development server configuration
     server: {
-      // ---------------------------------------
-      // Important: Required for testing in a
-      // lab environment where the API and Admin
-      // apps run on separate servers.
-      // This simulates a production environment
-      allowedHosts: true,
-      // ---------------------------------------
       host: '0.0.0.0',
       watch: {
         ignored: ['**/coverage/**', '**/.nyc_output/**'],
