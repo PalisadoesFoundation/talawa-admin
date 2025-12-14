@@ -26,12 +26,7 @@ import type {
   InterfaceComment,
 } from '../../utils/interfaces';
 import { errorHandler } from '../../utils/errorHandler';
-import type {
-  ApolloQueryResult,
-  FetchMoreQueryOptions,
-  OperationVariables,
-  QueryFunctionOptions,
-} from '@apollo/client';
+import type { ApolloQueryResult, FetchMoreQueryOptions } from '@apollo/client';
 
 // Define proper types for GraphQL response
 /**
