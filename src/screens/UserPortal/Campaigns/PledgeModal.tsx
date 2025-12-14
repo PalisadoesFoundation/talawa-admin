@@ -140,7 +140,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     if (userData) {
       setPledgers([
         {
-          id: userData.user._id,
+          id: userData.user.id,
           firstName: userData.user.firstName,
           lastName: userData.user.lastName,
           name: `${userData.user.firstName} ${userData.user.lastName}`,
