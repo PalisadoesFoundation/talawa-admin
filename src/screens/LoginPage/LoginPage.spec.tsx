@@ -87,10 +87,7 @@ const MOCKS = [
     request: { query: GET_COMMUNITY_DATA_PG },
     result: {
       data: {
-        community: {
-          inactivityTimeoutDuration: null,
-          __typename: 'Community',
-        },
+        community: null,
       },
     },
   },
@@ -217,12 +214,18 @@ const mockUseLocalStorage = {
 };
 
 beforeEach(() => {
-  vi.clearAllMocks();
-  routerMocks.navigate.mockReset();
-  mockUseLocalStorage.getItem.mockReset();
-  mockUseLocalStorage.setItem.mockReset();
-  mockUseLocalStorage.removeItem.mockReset();
-  mockUseLocalStorage.getStorageKey.mockReset();
+  // Don't use vi.clearAllMocks() - it breaks hoisted mocks
+  routerMocks.navigate.mockClear();
+  mockUseLocalStorage.getItem.mockClear();
+  mockUseLocalStorage.setItem.mockClear();
+  mockUseLocalStorage.removeItem.mockClear();
+  mockUseLocalStorage.getStorageKey.mockClear();
+
+  // Clear toast mocks individually
+  toastMocks.success.mockClear();
+  toastMocks.warn.mockClear();
+  toastMocks.error.mockClear();
+
   (useLocalStorage as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
     mockUseLocalStorage as InterfaceStorageHelper,
   );
@@ -1661,9 +1664,9 @@ describe('Extra coverage for 100 %', () => {
       expect.any(Error),
     );
 
-    // Clean up
-    errorHandlerSpy.mockRestore();
+    // Clean up spies after assertions
     fetchSpy.mockRestore();
+    errorHandlerSpy.mockRestore();
   });
 
   /* 7.  reset signup recaptcha on error */
@@ -1762,7 +1765,7 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.error).toHaveBeenCalledWith(
-      expect.stringContaining('Recaptcha'),
+      expect.stringContaining('Captcha'),
     );
   });
 
