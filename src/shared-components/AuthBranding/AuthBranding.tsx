@@ -21,12 +21,13 @@ const AuthBranding: React.FC<InterfaceAuthBrandingProps> = ({
 
   const renderSocialLinks = () =>
     socialMediaLinks
+      .filter(({ tag }) => tag !== 'redditURL')
       .map(({ href, logo, tag }) => ({
         tag,
         logo,
         finalHref: (communityData?.[tag] as string | undefined) ?? href,
       }))
-      .filter(({ finalHref }) => Boolean(finalHref))
+      .filter(({ finalHref }) => Boolean(finalHref?.trim()))
       .map(({ finalHref, logo, tag }) => {
         const testId = communityData?.[tag]
           ? 'preLoginSocialMedia'
