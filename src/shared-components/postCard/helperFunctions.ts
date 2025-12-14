@@ -20,7 +20,7 @@
  * @throws Will call errorHandler if the GraphQL request fails
  */
 
-import React from 'react';
+import type React from 'react';
 import type {
   InterfaceCommentEdge,
   InterfaceComment,
@@ -31,7 +31,7 @@ import { errorHandler } from '../../utils/errorHandler';
 /**
  * Represents a connection of comments with pagination information.
  */
-interface CommentConnection {
+interface InterfaceCommentConnection {
   edges: InterfaceCommentEdge[];
   pageInfo: {
     startCursor: string | null;
@@ -44,27 +44,27 @@ interface CommentConnection {
 /**
  * Represents the GraphQL response data structure for post comments.
  */
-interface PostCommentsData {
+interface InterfacePostCommentsData {
   post: {
     id: string;
     caption: string;
-    comments: CommentConnection;
+    comments: InterfaceCommentConnection;
   };
 }
 
 /**
  * Represents the result structure from fetchMore operation.
  */
-interface FetchMoreResult {
+interface InterfaceFetchMoreResult {
   post?: {
-    comments?: CommentConnection;
+    comments?: InterfaceCommentConnection;
   };
 }
 
 /**
  * Parameters required for the handleLoadMoreComments function.
  */
-interface HandleLoadMoreCommentsParams {
+interface InterfaceHandleLoadMoreCommentsParams {
   fetchMoreComments: (options: {
     variables: {
       postId: string;
@@ -73,9 +73,9 @@ interface HandleLoadMoreCommentsParams {
       after: string | null;
     };
     updateQuery: (
-      prev: PostCommentsData,
-      { fetchMoreResult }: { fetchMoreResult?: FetchMoreResult },
-    ) => PostCommentsData;
+      prev: InterfacePostCommentsData,
+      { fetchMoreResult }: { fetchMoreResult?: InterfaceFetchMoreResult },
+    ) => InterfacePostCommentsData;
   }) => Promise<unknown>;
   postId: string;
   userId: string;
@@ -97,7 +97,7 @@ export const handleLoadMoreComments = async ({
   setHasNextPage,
   setLoadingMoreComments,
   t,
-}: HandleLoadMoreCommentsParams): Promise<void> => {
+}: InterfaceHandleLoadMoreCommentsParams): Promise<void> => {
   setLoadingMoreComments(true);
   try {
     await fetchMoreComments({
