@@ -75,6 +75,10 @@ vi.mock(
 );
 
 describe('UpcomingEventsCard Component', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   const mockEventData: TestInterfaceEvent[] = [
     {
       node: {
@@ -192,5 +196,17 @@ describe('UpcomingEventsCard Component', () => {
     // Should only show first 10 events
     const cardItems = screen.getAllByTestId('card-item');
     expect(cardItems).toHaveLength(10);
+  });
+
+  it('uses default empty array when upcomingEvents is undefined', () => {
+    const propsWithUndefined = {
+      upcomingEvents: undefined as unknown as IEvent[],
+      eventLoading: false,
+      onViewAllEventsClick: vi.fn(),
+    };
+
+    render(<UpcomingEventsCard {...propsWithUndefined} />);
+
+    expect(screen.getByText('noUpcomingEvents')).toBeInTheDocument();
   });
 });

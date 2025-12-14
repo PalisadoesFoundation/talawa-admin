@@ -47,7 +47,7 @@ import type {
 } from 'types/CheckIn/interface';
 import type { GridColDef, GridRowHeightReturnValue } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
-import TextField from '@mui/material/TextField';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 export const CheckInModal = ({
   show,
@@ -159,24 +159,32 @@ export const CheckInModal = ({
         </Modal.Header>
         <Modal.Body>
           <div className="p-2">
-            <TextField
-              id="searchAttendees"
-              label="Search Attendees"
-              variant="outlined"
+            <SearchBar
+              placeholder="Search Attendees"
               value={userFilterQuery}
-              onChange={(e): void => {
-                setUserFilterQuery(e.target.value);
+              onChange={(value) => {
+                setUserFilterQuery(value);
                 setFilterQueryModel({
                   items: [
                     {
                       field: 'userName',
                       operator: 'contains',
-                      value: e.target.value,
+                      value,
                     },
                   ],
                 });
               }}
-              fullWidth
+              onClear={() => {
+                setUserFilterQuery('');
+                setFilterQueryModel({
+                  items: [
+                    { field: 'userName', operator: 'contains', value: '' },
+                  ],
+                });
+              }}
+              showSearchButton={false}
+              inputTestId="searchAttendees"
+              clearButtonTestId="clearSearchAttendees"
             />
           </div>
           <div style={{ height: 500, width: '100%' }}>

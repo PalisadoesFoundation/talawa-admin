@@ -975,6 +975,202 @@
   align-items: center;
 }
 
+/* Search Bar */
+
+.searchBarContainer {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--search-border-color, #d0d5dd);
+  border-radius: 8px;
+  background-color: var(--search-background-color, #fcfcfc);
+  box-shadow: 0 15px 35px rgba(149, 156, 202, 0.2);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  overflow: hidden;
+  flex: 1 1 320px;
+  min-width: 240px;
+  width: auto;
+  max-width: 100%;
+}
+
+.searchBarContainerWithButton {
+  padding-right: 0;
+}
+
+.searchBarContainer:focus-within {
+  border-color: var(--search-border-focus-color, #6e94ff);
+  box-shadow: 0 0 0 2px rgba(110, 148, 255, 0.25);
+}
+
+.searchBarInputWrapper {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  min-height: 55px;
+  padding: 0.75rem 2.5rem 0.75rem 1.25rem;
+  background-color: transparent;
+}
+
+.searchBarVariantFilled {
+  border-color: transparent;
+  background-color: var(--search-filled-bg, #f4f6fb);
+}
+
+.searchBarVariantGhost {
+  border-color: transparent;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.searchBarInputWrapperWithButton {
+  padding-right: 1.5rem;
+}
+
+.searchBarInput {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-size: 0.95rem;
+  color: var(--search-text-color, #1e293b);
+  outline: none;
+}
+
+.searchBarInput::-webkit-search-cancel-button,
+.searchBarInput::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.searchBarInput::-ms-clear {
+  display: none;
+}
+
+.searchBarInput::placeholder {
+  color: #9aa5b5;
+}
+
+.searchBarInputSm {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.searchBarInputLg {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: 1.05rem;
+}
+
+.searchBarNoIcon {
+  padding-left: 1.25rem;
+}
+
+.searchBarIcon {
+  position: absolute;
+  left: 1rem;
+  color: var(--search-icon-color, #a0aec0);
+  display: inline-flex;
+  font-size: 1rem;
+}
+
+.searchBarClearButton {
+  position: absolute;
+  right: 0.5rem;
+  border: none;
+  background: transparent;
+  color: var(--search-clear-color, #94a3b8);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem;
+}
+
+.searchBarClearButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(110, 148, 255, 0.35);
+  border-radius: 999px;
+}
+
+.searchBarButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: none;
+  border-radius: 0;
+  background-color: var(--search-button-bg, #b3ceff);
+  color: #2f3f5f;
+  width: 55px;
+  height: 55px;
+  font-weight: 600;
+  transition:
+    background-color 0.2s ease,
+    transform 0.1s ease;
+  border-left: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.searchBarButton:hover:not(:disabled) {
+  background-color: var(--search-button-bg-hover, #b6cbff);
+}
+
+.searchBarButton:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.searchBarButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+}
+
+.searchBarButtonSm {
+  width: 48px;
+  height: 48px;
+  font-size: 0.85rem;
+}
+
+.searchBarButtonLg {
+  width: 64px;
+  height: 64px;
+  font-size: 1rem;
+}
+
+.searchBarIconButton {
+  width: 55px;
+  height: 55px;
+  padding: 0;
+}
+
+.searchBarSpinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: searchBarSpin 0.8s linear infinite;
+}
+
+@keyframes searchBarSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.searchBarSrOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
 /* Search Button */
 
 .searchButton {
@@ -1167,8 +1363,15 @@ form label,
 .btnsContainer {
   display: flex;
   margin: 2.5rem 0;
-  align-items: center;
-  /* gap: 10px; */
+  align-items: stretch;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btnsContainer > :first-child {
+  flex: 1 1 320px;
+  min-width: 240px;
+  max-width: 100%;
 }
 
 .searchBarWrapper {
@@ -1177,10 +1380,10 @@ form label,
 }
 
 .btnsContainer .btnsBlock {
-  padding-right: 30px;
-  padding-inline-end: 30px;
   display: flex;
-  width: max-content;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 @media (max-width: 520px) {
@@ -2509,9 +2712,24 @@ form label,
 
 .calendar__header {
   display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-right: 0;
+}
+
+.calendar__search {
+  flex: 1 1 360px;
+  min-width: 260px;
+  max-width: 100%;
+}
+
+.calendar__controls {
+  display: flex;
+  gap: 0.75rem;
   align-items: center;
-  justify-content: space-between;
-  margin-right: 50px;
+  flex-wrap: wrap;
 }
 
 @media (max-width: 520px) {
@@ -4457,6 +4675,9 @@ form label,
 .btnsContainerOrgActionItemCategories {
   display: flex;
   margin: 0.5rem 0 1.5rem 0;
+  align-items: stretch;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .btnsContainerOrgActionItemCategories .input {
@@ -6910,6 +7131,8 @@ form {
   display: flex;
   gap: 0.8rem;
   margin: 2.2rem 0 0.8rem 0;
+  align-items: stretch;
+  flex-wrap: wrap;
 }
 
 .btnsContainerPledge .inputPledge {
@@ -7542,7 +7765,15 @@ form {
   width: 100%;
   justify-content: space-between;
   margin: 1.8rem 0 1.8rem 0;
-  align-items: center;
+  align-items: stretch;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btnsContainerSearchBar > :first-child {
+  flex: 1 1 360px;
+  min-width: 260px;
+  max-width: 100%;
 }
 
 .btnsContainerSearchBar .btnsBlockSearchBar {
@@ -7791,6 +8022,9 @@ form {
 .btnsContainerOrgPost {
   display: flex;
   margin: 2.5rem 0 2.5rem 0;
+  align-items: stretch;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .btnsContainerOrgPost .btnsBlockOrgPost {
@@ -9275,10 +9509,6 @@ form {
 }
 
 @media (max-height: 900px) {
-  .pageContainer {
-    padding: 1rem 1.5rem 0 calc(300px + 2rem);
-  }
-
   .collapseSidebarButton {
     height: 30px;
     width: calc(300px + 1rem);

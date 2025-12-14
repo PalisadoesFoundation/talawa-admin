@@ -9,7 +9,7 @@ import { describe, it, expect } from 'vitest';
 
 const renderWithProviders = (ui: React.ReactElement) =>
   render(
-    <MockedProvider addTypename={false}>
+    <MockedProvider>
       <BrowserRouter>
         <I18nextProvider i18n={i18nForTest}>{ui}</I18nextProvider>
       </BrowserRouter>

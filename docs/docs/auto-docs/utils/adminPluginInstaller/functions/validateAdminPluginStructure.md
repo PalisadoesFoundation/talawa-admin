@@ -6,7 +6,7 @@
 
 > **validateAdminPluginStructure**(`files`): `object`
 
-Defined in: [src/utils/adminPluginInstaller.ts:197](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L197)
+Defined in: [src/utils/adminPluginInstaller.ts:198](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L198)
 
 Validates admin plugin structure
 

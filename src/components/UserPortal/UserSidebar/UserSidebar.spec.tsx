@@ -72,7 +72,10 @@ const { mockUsePluginDrawerItems } = vi.hoisted(() => ({
 }));
 
 const { mockUseLocalStorage } = vi.hoisted(() => ({
-  mockUseLocalStorage: vi.fn(() => ({ setItem: vi.fn() })),
+  mockUseLocalStorage: vi.fn(() => ({
+    setItem: vi.fn(),
+    getItem: vi.fn(() => 'regular'),
+  })),
 }));
 
 vi.mock('plugin', () => ({
@@ -176,7 +179,7 @@ describe('UserSidebar', () => {
   const createApolloClient = () =>
     new ApolloClient({
       cache: new InMemoryCache(),
-      link: new StaticMockLink(createCommunityMocks(), false),
+      link: new StaticMockLink(createCommunityMocks()),
     });
 
   beforeEach(() => {
@@ -606,7 +609,10 @@ describe('UserSidebar', () => {
 
     it('should toggle drawer when toggle button is clicked', () => {
       const mockSetItem = vi.fn();
-      mockUseLocalStorage.mockReturnValue({ setItem: mockSetItem });
+      mockUseLocalStorage.mockReturnValue({
+        setItem: mockSetItem,
+        getItem: vi.fn(() => 'regular'),
+      });
 
       renderComponent();
       const toggleBtn = screen.getByTestId('toggleBtn');
@@ -619,7 +625,10 @@ describe('UserSidebar', () => {
 
     it('should toggle drawer when Enter key is pressed on toggle button', () => {
       const mockSetItem = vi.fn();
-      mockUseLocalStorage.mockReturnValue({ setItem: mockSetItem });
+      mockUseLocalStorage.mockReturnValue({
+        setItem: mockSetItem,
+        getItem: vi.fn(() => 'regular'),
+      });
 
       renderComponent();
       const toggleBtn = screen.getByTestId('toggleBtn');
@@ -632,7 +641,10 @@ describe('UserSidebar', () => {
 
     it('should toggle drawer when Space key is pressed on toggle button', () => {
       const mockSetItem = vi.fn();
-      mockUseLocalStorage.mockReturnValue({ setItem: mockSetItem });
+      mockUseLocalStorage.mockReturnValue({
+        setItem: mockSetItem,
+        getItem: vi.fn(() => 'regular'),
+      });
 
       renderComponent();
       const toggleBtn = screen.getByTestId('toggleBtn');
@@ -645,7 +657,10 @@ describe('UserSidebar', () => {
 
     it('should not toggle drawer when other keys are pressed on toggle button', () => {
       const mockSetItem = vi.fn();
-      mockUseLocalStorage.mockReturnValue({ setItem: mockSetItem });
+      mockUseLocalStorage.mockReturnValue({
+        setItem: mockSetItem,
+        getItem: vi.fn(() => 'regular'),
+      });
 
       renderComponent();
       const toggleBtn = screen.getByTestId('toggleBtn');
@@ -660,7 +675,10 @@ describe('UserSidebar', () => {
 
     it('should toggle from expanded to collapsed state', () => {
       const mockSetItem = vi.fn();
-      mockUseLocalStorage.mockReturnValue({ setItem: mockSetItem });
+      mockUseLocalStorage.mockReturnValue({
+        setItem: mockSetItem,
+        getItem: vi.fn(() => 'regular'),
+      });
 
       renderComponent({ hideDrawer: true });
       const toggleBtn = screen.getByTestId('toggleBtn');
