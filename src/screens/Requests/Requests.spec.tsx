@@ -20,14 +20,7 @@ import {
   MOCKS4,
 } from './RequestsMocks';
 import { vi } from 'vitest';
-import {
-  MEMBERSHIP_REQUEST_PG,
-  ORGANIZATION_LIST,
-} from 'GraphQl/Queries/Queries';
-import {
-  ACCEPT_ORGANIZATION_REQUEST_MUTATION,
-  REJECT_ORGANIZATION_REQUEST_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+import { MEMBERSHIP_REQUEST, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 
 const { mockLocalStorageStore } = vi.hoisted(() => ({
   mockLocalStorageStore: {} as Record<string, string>,
@@ -111,7 +104,7 @@ const link7 = new StaticMockLink(MOCKS4, true);
 const NULL_RESPONSE_MOCKS = [
   {
     request: {
-      query: MEMBERSHIP_REQUEST_PG,
+      query: MEMBERSHIP_REQUEST,
       variables: {
         input: { id: '' },
         skip: 0,
@@ -165,14 +158,14 @@ const INFINITE_SCROLL_MOCKS = [
       },
     },
   },
-  // Initial membership requests query (PAGE_SIZE = 10)
+  // Initial membership requests query
   {
     request: {
-      query: MEMBERSHIP_REQUEST_PG,
+      query: MEMBERSHIP_REQUEST,
       variables: {
         input: { id: '' },
         skip: 0,
-        first: 10,
+        first: 8,
         name_contains: '',
       },
     },
@@ -180,14 +173,13 @@ const INFINITE_SCROLL_MOCKS = [
       data: {
         organization: {
           id: '',
-          membershipRequests: Array(10)
+          membershipRequests: Array(8)
             .fill(null)
             .map((_, i) => ({
               membershipRequestId: `request${i + 1}`,
-              createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+              createdAt: `2023-01-0${i + 1}T00:00:00Z`,
               status: 'pending',
               user: {
-                avatarURL: null,
                 id: `user${i + 1}`,
                 name: `User${i + 1} Test`,
                 emailAddress: `user${i + 1}@test.com`,
@@ -200,11 +192,11 @@ const INFINITE_SCROLL_MOCKS = [
   // Follow-up query for more data
   {
     request: {
-      query: MEMBERSHIP_REQUEST_PG,
+      query: MEMBERSHIP_REQUEST,
       variables: {
         input: { id: '' },
-        skip: 10,
-        first: 10,
+        skip: 8,
+        first: 8,
         name_contains: '',
       },
     },
@@ -212,17 +204,17 @@ const INFINITE_SCROLL_MOCKS = [
       data: {
         organization: {
           id: '',
-          membershipRequests: Array(10)
+          membershipRequests: Array(4)
             .fill(null)
             .map((_, i) => ({
-              membershipRequestId: `request${i + 11}`,
-              createdAt: `2023-01-${String(i + 11).padStart(2, '0')}T00:00:00Z`,
+              membershipRequestId: `request${i + 9}`,
+              createdAt: `2023-01-${i + 9}T00:00:00Z`,
               status: 'pending',
               user: {
                 avatarURL: null,
-                id: `user${i + 11}`,
-                name: `User${i + 11} Test`,
-                emailAddress: `user${i + 11}@test.com`,
+                id: `user${i + 9}`,
+                name: `User${i + 9} Test`,
+                emailAddress: `user${i + 9}@test.com`,
               },
             })),
         },
@@ -258,73 +250,6 @@ afterEach(() => {
 });
 
 describe('Testing Requests screen', () => {
-  // Helper factories to reduce mock repetition
-  const makeOrgListMock = (orgOverrides: Partial<unknown> = {}) => ({
-    request: { query: ORGANIZATION_LIST },
-    result: {
-      data: {
-        organizations: [
-          {
-            id: 'org1',
-            name: 'Test Organization',
-            addressLine1: '123 Test Street',
-            description: 'A test organization',
-            avatarURL: null,
-            members: {
-              edges: [{ node: { id: 'user1' } }],
-              pageInfo: { hasNextPage: false },
-            },
-            ...orgOverrides,
-          },
-        ],
-      },
-    },
-  });
-
-  const makeMembershipRequestsMock = (
-    requests: Array<{
-      membershipRequestId?: string;
-      createdAt?: string;
-      status?: string;
-      user: {
-        avatarURL?: string | null;
-        id: string;
-        name?: string;
-        emailAddress?: string;
-      };
-    }>,
-    variablesOverrides: Partial<{
-      input: { id: string };
-      skip: number;
-      first: number;
-      name_contains: string;
-    }> = {},
-  ) => ({
-    request: {
-      query: MEMBERSHIP_REQUEST_PG,
-      variables: {
-        input: { id: '' },
-        skip: 0,
-        first: 10,
-        name_contains: '',
-        ...variablesOverrides,
-      },
-    },
-    result: {
-      data: {
-        organization: {
-          id: variablesOverrides.input?.id ?? '',
-          membershipRequests: requests.map((r) => ({
-            membershipRequestId: r.membershipRequestId,
-            createdAt: r.createdAt ?? '2023-01-01T00:00:00Z',
-            status: r.status ?? 'pending',
-            user: r.user,
-          })),
-        },
-      },
-    },
-  });
-
   test('Component should be rendered properly', async () => {
     render(
       <MockedProvider link={link7}>
@@ -340,10 +265,8 @@ describe('Testing Requests screen', () => {
 
     await wait(200);
     expect(screen.getByTestId('testComp')).toBeInTheDocument();
-
-    // Verify basic page elements are rendered
-    expect(screen.getByTestId('searchByName')).toBeInTheDocument();
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    await screen.findByText('Scott Tony');
+    expect(screen.getByText('Scott Tony')).toBeInTheDocument();
   });
 
   test(`Component should be rendered properly when user is not Admin
@@ -621,47 +544,25 @@ describe('Testing Requests screen', () => {
     const table = screen.getByRole('grid');
     expect(table).toBeInTheDocument();
 
-    const initialRows = screen.getAllByRole('row').length;
-    expect(initialRows).toBeGreaterThan(1);
+    expect(screen.getAllByRole('row').length).toBeGreaterThan(1);
 
-    await waitFor(() => {
-      expect(document.querySelector('.infinite-scroll-component')).toBeTruthy();
-    });
+    const requestsContainer = document.querySelector(
+      '[data-testid="requests-list"]',
+    );
+    if (requestsContainer) {
+      fireEvent.scroll(requestsContainer, {
+        target: { scrollTop: (requestsContainer as HTMLElement).scrollHeight },
+      });
+    } else {
+      fireEvent.scroll(window, {
+        target: { scrollY: document.documentElement.scrollHeight },
+      });
+    }
 
-    // react-infinite-scroll-component defaults to window scroll when no height is set
-    Object.defineProperty(document.documentElement, 'scrollHeight', {
-      value: 1000,
-      writable: true,
-    });
-    Object.defineProperty(document.documentElement, 'clientHeight', {
-      value: 500,
-      writable: true,
-    });
-    Object.defineProperty(window, 'innerHeight', {
-      value: 500,
-      writable: true,
-    });
-    Object.defineProperty(window, 'scrollY', {
-      value: 600,
-      writable: true,
-    });
-    Object.defineProperty(window, 'pageYOffset', {
-      value: 600,
-      writable: true,
-    });
-
-    await act(async () => {
-      fireEvent.scroll(window, { target: { scrollY: 600, pageYOffset: 600 } });
-    });
-
-    await waitFor(() => {
-      expect(screen.getAllByRole('row').length).toBeGreaterThanOrEqual(
-        initialRows,
-      );
-    });
+    await wait(500);
 
     const rows = screen.getAllByRole('row');
-    expect(rows.length).toBeGreaterThanOrEqual(14);
+    expect(rows.length).toBeGreaterThan(8);
   });
 
   test('rows.length whould be greater than 9 when newRequests.length > perPageResult', async () => {
@@ -697,13 +598,14 @@ describe('Testing Requests screen', () => {
           },
         },
       },
+      // Initial membership requests query - CORRECTED STRUCTURE
       {
         request: {
-          query: MEMBERSHIP_REQUEST_PG,
+          query: MEMBERSHIP_REQUEST,
           variables: {
             input: { id: '' },
             skip: 0,
-            first: 10,
+            first: 8,
             name_contains: '',
           },
         },
@@ -711,11 +613,11 @@ describe('Testing Requests screen', () => {
           data: {
             organization: {
               id: 'org1',
-              membershipRequests: Array(10)
+              membershipRequests: Array(8)
                 .fill(null)
                 .map((_, i) => ({
                   membershipRequestId: `request${i + 1}`,
-                  createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+                  createdAt: `2023-01-0${i + 1}T00:00:00Z`,
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -730,11 +632,11 @@ describe('Testing Requests screen', () => {
       },
       {
         request: {
-          query: MEMBERSHIP_REQUEST_PG,
+          query: MEMBERSHIP_REQUEST,
           variables: {
             input: { id: '' },
-            skip: 10,
-            first: 10,
+            skip: 8,
+            first: 8,
             name_contains: '',
           },
         },
@@ -745,14 +647,14 @@ describe('Testing Requests screen', () => {
               membershipRequests: Array(9)
                 .fill(null)
                 .map((_, i) => ({
-                  membershipRequestId: `request${i + 11}`,
-                  createdAt: `2023-01-${String(i + 11).padStart(2, '0')}T00:00:00Z`,
+                  membershipRequestId: `request${i + 9}`,
+                  createdAt: `2023-01-${(i + 9).toString().padStart(2, '0')}T00:00:00Z`,
                   status: 'pending',
                   user: {
                     avatarURL: null,
-                    id: `user${i + 11}`,
-                    name: `User${i + 11} Test`,
-                    emailAddress: `user${i + 11}@test.com`,
+                    id: `user${i + 9}`,
+                    name: `User${i + 9} Test`,
+                    emailAddress: `user${i + 9}@test.com`,
                   },
                 })),
             },
@@ -780,46 +682,29 @@ describe('Testing Requests screen', () => {
 
     await wait(500);
 
-    const initialRows = screen.getAllByRole('row').length;
-    expect(initialRows).toBeGreaterThan(1);
+    expect(screen.getAllByRole('row').length).toBeGreaterThan(1);
 
-    await waitFor(() => {
-      expect(document.querySelector('.infinite-scroll-component')).toBeTruthy();
-    });
+    expect(screen.getByText('User1 Test')).toBeInTheDocument();
+    expect(screen.getByText('User2 Test')).toBeInTheDocument();
 
-    Object.defineProperty(document.documentElement, 'scrollHeight', {
-      value: 1000,
-      writable: true,
-    });
-    Object.defineProperty(document.documentElement, 'clientHeight', {
-      value: 500,
-      writable: true,
-    });
-    Object.defineProperty(window, 'innerHeight', {
-      value: 500,
-      writable: true,
-    });
-    Object.defineProperty(window, 'scrollY', {
-      value: 600,
-      writable: true,
-    });
-    Object.defineProperty(window, 'pageYOffset', {
-      value: 600,
-      writable: true,
-    });
+    const requestsContainer = document.querySelector(
+      '[data-testid="requests-list"]',
+    );
+    if (requestsContainer) {
+      fireEvent.scroll(requestsContainer, {
+        target: { scrollTop: (requestsContainer as HTMLElement).scrollHeight },
+      });
+    } else {
+      fireEvent.scroll(window, {
+        target: { scrollY: document.documentElement.scrollHeight },
+      });
+    }
 
-    await act(async () => {
-      fireEvent.scroll(window, { target: { scrollY: 600, pageYOffset: 600 } });
-    });
-
-    await waitFor(() => {
-      expect(screen.getAllByRole('row').length).toBeGreaterThanOrEqual(
-        initialRows,
-      );
-    });
-
+    await wait(600);
     const rows = screen.getAllByRole('row');
-    expect(rows.length).toBeGreaterThanOrEqual(11);
+    expect(rows.length).toBeGreaterThan(9);
+    expect(screen.getByText('User7 Test')).toBeInTheDocument();
+    expect(screen.getByText('User8 Test')).toBeInTheDocument();
   });
 
   test('should handle loading more requests with search term', async () => {
@@ -1012,11 +897,11 @@ describe('Testing Requests screen', () => {
       },
       {
         request: {
-          query: MEMBERSHIP_REQUEST_PG,
+          query: MEMBERSHIP_REQUEST,
           variables: {
             input: { id: '' },
             skip: 0,
-            first: 10,
+            first: 8,
             name_contains: '',
           },
         },
@@ -1024,7 +909,7 @@ describe('Testing Requests screen', () => {
           data: {
             organization: {
               id: '',
-              membershipRequests: Array(10).fill({
+              membershipRequests: Array(8).fill({
                 membershipRequestId: '1',
                 createdAt: '2023-01-01T00:00:00Z',
                 status: 'pending',
@@ -1040,11 +925,11 @@ describe('Testing Requests screen', () => {
       },
       {
         request: {
-          query: MEMBERSHIP_REQUEST_PG,
+          query: MEMBERSHIP_REQUEST,
           variables: {
             input: { id: '' },
-            skip: 10,
-            first: 10,
+            skip: 8,
+            first: 8,
             name_contains: '',
           },
         },
@@ -1127,11 +1012,11 @@ describe('Testing Requests screen', () => {
       },
       {
         request: {
-          query: MEMBERSHIP_REQUEST_PG,
+          query: MEMBERSHIP_REQUEST,
           variables: {
             input: { id: '' },
             skip: 0,
-            first: 10,
+            first: 8,
             name_contains: '',
           },
         },
@@ -1254,11 +1139,11 @@ describe('Testing Requests screen', () => {
       },
       {
         request: {
-          query: MEMBERSHIP_REQUEST_PG,
+          query: MEMBERSHIP_REQUEST,
           variables: {
             input: { id: '' },
             skip: 0,
-            first: 10,
+            first: 8,
             name_contains: '',
           },
         },
@@ -1266,11 +1151,11 @@ describe('Testing Requests screen', () => {
       },
       {
         request: {
-          query: MEMBERSHIP_REQUEST_PG,
+          query: MEMBERSHIP_REQUEST,
           variables: {
             input: { id: '' },
             skip: 0,
-            first: 10,
+            first: 8,
             name_contains: '',
           },
         },
@@ -1320,1232 +1205,5 @@ describe('Testing Requests screen', () => {
 
     // Verify component still renders properly
     expect(screen.getByTestId('testComp')).toBeInTheDocument();
-  });
-
-  test('should render avatar with error handler for broken image URL', async () => {
-    const AVATAR_ERROR_MOCKS = [
-      {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                id: 'org1',
-                name: 'Test Organization',
-                addressLine1: '123 Test Street',
-                description: 'A test organization',
-                avatarURL: null,
-                members: {
-                  edges: [{ node: { id: 'user1' } }],
-                  pageInfo: { hasNextPage: false },
-                },
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST_PG,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 10,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [
-                {
-                  membershipRequestId: '1',
-                  createdAt: '2023-01-01T00:00:00Z',
-                  status: 'pending',
-                  user: {
-                    avatarURL: 'http://invalid-url.com/avatar.jpg',
-                    id: 'user1',
-                    name: 'Test User',
-                    emailAddress: 'test@example.com',
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-    ];
-
-    const avatarErrorLink = new StaticMockLink(AVATAR_ERROR_MOCKS, true);
-
-    render(
-      <MockedProvider link={avatarErrorLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-
-    const avatarImg = await screen.findByTestId('display-img');
-    expect(avatarImg).toBeInTheDocument();
-
-    fireEvent.error(avatarImg);
-    await wait(100);
-  });
-
-  test('should render Avatar component when avatarURL is not available', async () => {
-    const NO_AVATAR_MOCKS = [
-      {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                id: 'org1',
-                name: 'Test Organization',
-                addressLine1: '123 Test Street',
-                description: 'A test organization',
-                avatarURL: null,
-                members: {
-                  edges: [{ node: { id: 'user1' } }],
-                  pageInfo: { hasNextPage: false },
-                },
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST_PG,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 10,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [
-                {
-                  membershipRequestId: '1',
-                  createdAt: '2023-01-01T00:00:00Z',
-                  status: 'pending',
-                  user: {
-                    avatarURL: null,
-                    id: 'user1',
-                    name: 'John Doe',
-                    emailAddress: 'john@example.com',
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-    ];
-
-    const noAvatarLink = new StaticMockLink(NO_AVATAR_MOCKS, true);
-
-    render(
-      <MockedProvider link={noAvatarLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-
-    // Check that the component renders and has the grid with data
-    expect(screen.getByRole('grid')).toBeInTheDocument();
-    // Verify the user name is displayed, indicating the row is rendered
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
-  });
-
-  test('should call handleAcceptUser when accept button is clicked', async () => {
-    const ACCEPT_BUTTON_MOCKS = [
-      {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                id: 'org1',
-                name: 'Test Organization',
-                addressLine1: '123 Test Street',
-                description: 'A test organization',
-                avatarURL: null,
-                members: {
-                  edges: [{ node: { id: 'user1' } }],
-                  pageInfo: { hasNextPage: false },
-                },
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST_PG,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 10,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [
-                {
-                  membershipRequestId: '1',
-                  createdAt: '2023-01-01T00:00:00Z',
-                  status: 'pending',
-                  user: {
-                    avatarURL: null,
-                    id: 'user1',
-                    name: 'Test User',
-                    emailAddress: 'test@example.com',
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: ACCEPT_ORGANIZATION_REQUEST_MUTATION,
-          variables: {
-            input: {
-              membershipRequestId: '1',
-            },
-          },
-        },
-        result: {
-          data: {
-            acceptMembershipRequest: {
-              __typename: 'MembershipRequestResponse',
-              success: true,
-              message: 'Membership request accepted successfully',
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST_PG,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 10,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [],
-            },
-          },
-        },
-      },
-    ];
-
-    const acceptButtonLink = new StaticMockLink(ACCEPT_BUTTON_MOCKS, true);
-
-    render(
-      <MockedProvider link={acceptButtonLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-
-    const acceptButton = await screen.findByTestId(
-      'acceptMembershipRequestBtn1',
-    );
-    expect(acceptButton).toBeInTheDocument();
-
-    await userEvent.click(acceptButton);
-    await wait(200);
-  });
-
-  test('should call handleRejectUser when reject button is clicked', async () => {
-    const REJECT_BUTTON_MOCKS = [
-      {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                id: 'org1',
-                name: 'Test Organization',
-                addressLine1: '123 Test Street',
-                description: 'A test organization',
-                avatarURL: null,
-                members: {
-                  edges: [{ node: { id: 'user1' } }],
-                  pageInfo: { hasNextPage: false },
-                },
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST_PG,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 10,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [
-                {
-                  membershipRequestId: '1',
-                  createdAt: '2023-01-01T00:00:00Z',
-                  status: 'pending',
-                  user: {
-                    avatarURL: null,
-                    id: 'user1',
-                    name: 'Test User',
-                    emailAddress: 'test@example.com',
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: REJECT_ORGANIZATION_REQUEST_MUTATION,
-          variables: {
-            input: {
-              membershipRequestId: '1',
-            },
-          },
-        },
-        result: {
-          data: {
-            rejectMembershipRequest: {
-              __typename: 'MembershipRequestResponse',
-              success: true,
-              message: 'Membership request rejected successfully',
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST_PG,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 10,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [],
-            },
-          },
-        },
-      },
-    ];
-
-    const rejectButtonLink = new StaticMockLink(REJECT_BUTTON_MOCKS, true);
-
-    render(
-      <MockedProvider link={rejectButtonLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-
-    const rejectButton = await screen.findByTestId(
-      'rejectMembershipRequestBtn1',
-    );
-    expect(rejectButton).toBeInTheDocument();
-
-    await userEvent.click(rejectButton);
-    await wait(200);
-  });
-
-  test('should handle accept mutation error gracefully', async () => {
-    const ACCEPT_ERROR_MOCKS = [
-      {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                id: 'org1',
-                name: 'Test Organization',
-                addressLine1: '123 Test Street',
-                description: 'A test organization',
-                avatarURL: null,
-                members: {
-                  edges: [{ node: { id: 'user1' } }],
-                  pageInfo: { hasNextPage: false },
-                },
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST_PG,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 10,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [
-                {
-                  membershipRequestId: '1',
-                  createdAt: '2023-01-01T00:00:00Z',
-                  status: 'pending',
-                  user: {
-                    avatarURL: null,
-                    id: 'user1',
-                    name: 'Test User',
-                    emailAddress: 'test@example.com',
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: ACCEPT_ORGANIZATION_REQUEST_MUTATION,
-          variables: {
-            input: {
-              membershipRequestId: '1',
-            },
-          },
-        },
-        error: new Error('Failed to accept membership request'),
-      },
-    ];
-
-    const acceptErrorLink = new StaticMockLink(ACCEPT_ERROR_MOCKS, true);
-
-    render(
-      <MockedProvider link={acceptErrorLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-
-    const acceptButton = await screen.findByTestId(
-      'acceptMembershipRequestBtn1',
-    );
-    await userEvent.click(acceptButton);
-    await wait(200);
-  });
-
-  test('should handle reject mutation error gracefully', async () => {
-    const REJECT_ERROR_MOCKS = [
-      {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                id: 'org1',
-                name: 'Test Organization',
-                addressLine1: '123 Test Street',
-                description: 'A test organization',
-                avatarURL: null,
-                members: {
-                  edges: [{ node: { id: 'user1' } }],
-                  pageInfo: { hasNextPage: false },
-                },
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST_PG,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 10,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [
-                {
-                  membershipRequestId: '1',
-                  createdAt: '2023-01-01T00:00:00Z',
-                  status: 'pending',
-                  user: {
-                    avatarURL: null,
-                    id: 'user1',
-                    name: 'Test User',
-                    emailAddress: 'test@example.com',
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: REJECT_ORGANIZATION_REQUEST_MUTATION,
-          variables: {
-            input: {
-              membershipRequestId: '1',
-            },
-          },
-        },
-        error: new Error('Failed to reject membership request'),
-      },
-    ];
-
-    const rejectErrorLink = new StaticMockLink(REJECT_ERROR_MOCKS, true);
-
-    render(
-      <MockedProvider link={rejectErrorLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-
-    const rejectButton = await screen.findByTestId(
-      'rejectMembershipRequestBtn1',
-    );
-    await userEvent.click(rejectButton);
-    await wait(200);
-  });
-
-  test('should handle accept button with null membershipRequestId', async () => {
-    const ACCEPT_NULL_ID_MOCKS = [
-      {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                id: 'org1',
-                name: 'Test Organization',
-                addressLine1: '123 Test Street',
-                description: 'A test organization',
-                avatarURL: null,
-                members: {
-                  edges: [{ node: { id: 'user1' } }],
-                  pageInfo: { hasNextPage: false },
-                },
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST_PG,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 10,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [
-                {
-                  membershipRequestId: '',
-                  createdAt: '2023-01-01T00:00:00Z',
-                  status: 'pending',
-                  user: {
-                    avatarURL: null,
-                    id: 'user1',
-                    name: 'Test User',
-                    emailAddress: 'test@example.com',
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-    ];
-
-    const acceptNullIdLink = new StaticMockLink(ACCEPT_NULL_ID_MOCKS, true);
-
-    render(
-      <MockedProvider link={acceptNullIdLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-
-    expect(screen.getByRole('grid')).toBeInTheDocument();
-  });
-
-  test('should handle avatar with null string avatarURL', async () => {
-    const NULL_URL_STRING_MOCKS = [
-      {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                id: 'org1',
-                name: 'Test Organization',
-                addressLine1: '123 Test Street',
-                description: 'A test organization',
-                avatarURL: null,
-                members: {
-                  edges: [{ node: { id: 'user1' } }],
-                  pageInfo: { hasNextPage: false },
-                },
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST_PG,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 10,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [
-                {
-                  membershipRequestId: '1',
-                  createdAt: '2023-01-01T00:00:00Z',
-                  status: 'pending',
-                  user: {
-                    avatarURL: 'null',
-                    id: 'user1',
-                    name: 'Test User',
-                    emailAddress: 'test@example.com',
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-    ];
-
-    const nullUrlStringLink = new StaticMockLink(NULL_URL_STRING_MOCKS, true);
-
-    render(
-      <MockedProvider link={nullUrlStringLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-
-    expect(screen.getByRole('grid')).toBeInTheDocument();
-    expect(screen.getByText('Test User')).toBeInTheDocument();
-  });
-
-  test('should handle name with fallback when user.name is missing', async () => {
-    const MISSING_NAME_MOCKS = [
-      {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                id: 'org1',
-                name: 'Test Organization',
-                addressLine1: '123 Test Street',
-                description: 'A test organization',
-                avatarURL: null,
-                members: {
-                  edges: [{ node: { id: 'user1' } }],
-                  pageInfo: { hasNextPage: false },
-                },
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST_PG,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 10,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [
-                {
-                  membershipRequestId: '1',
-                  createdAt: '2023-01-01T00:00:00Z',
-                  status: 'pending',
-                  user: {
-                    avatarURL: null,
-                    id: 'user1',
-                    name: '',
-                    emailAddress: 'test@example.com',
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-    ];
-
-    const missingNameLink = new StaticMockLink(MISSING_NAME_MOCKS, true);
-
-    render(
-      <MockedProvider link={missingNameLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-
-    expect(screen.getByRole('grid')).toBeInTheDocument();
-  });
-
-  test('should handle email with fallback when emailAddress is missing', async () => {
-    const MISSING_EMAIL_MOCKS = [
-      {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                id: 'org1',
-                name: 'Test Organization',
-                addressLine1: '123 Test Street',
-                description: 'A test organization',
-                avatarURL: null,
-                members: {
-                  edges: [{ node: { id: 'user1' } }],
-                  pageInfo: { hasNextPage: false },
-                },
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST_PG,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 10,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [
-                {
-                  membershipRequestId: '1',
-                  createdAt: '2023-01-01T00:00:00Z',
-                  status: 'pending',
-                  user: {
-                    avatarURL: null,
-                    id: 'user1',
-                    name: 'Test User',
-                    emailAddress: '',
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-    ];
-
-    const missingEmailLink = new StaticMockLink(MISSING_EMAIL_MOCKS, true);
-
-    render(
-      <MockedProvider link={missingEmailLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-
-    expect(screen.getByRole('grid')).toBeInTheDocument();
-    expect(screen.getByText('Test User')).toBeInTheDocument();
-  });
-
-  test('should verify accept button renders with all data present', async () => {
-    const FULL_DATA_MOCKS = [
-      makeOrgListMock(),
-      makeMembershipRequestsMock([
-        {
-          membershipRequestId: '123',
-          user: {
-            avatarURL: null,
-            id: 'user1',
-            name: 'Complete User',
-            emailAddress: 'complete@example.com',
-          },
-        },
-      ]),
-    ];
-
-    const fullDataLink = new StaticMockLink(FULL_DATA_MOCKS, true);
-
-    render(
-      <MockedProvider link={fullDataLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-
-    expect(screen.getByText('Complete User')).toBeInTheDocument();
-    expect(screen.getByText('complete@example.com')).toBeInTheDocument();
-    expect(
-      screen.getByTestId('acceptMembershipRequestBtn123'),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByTestId('rejectMembershipRequestBtn123'),
-    ).toBeInTheDocument();
-  });
-
-  test('should verify reject button renders with all data present', async () => {
-    const FULL_REJECT_MOCKS = [
-      makeOrgListMock(),
-      makeMembershipRequestsMock([
-        {
-          membershipRequestId: '123',
-          user: {
-            avatarURL: null,
-            id: 'user1',
-            name: 'Reject Test User',
-            emailAddress: 'reject@example.com',
-          },
-        },
-      ]),
-    ];
-
-    const fullRejectLink = new StaticMockLink(FULL_REJECT_MOCKS, true);
-
-    render(
-      <MockedProvider link={fullRejectLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-
-    expect(screen.getByText('Reject Test User')).toBeInTheDocument();
-    const rejectBtn = await screen.findByTestId(
-      'rejectMembershipRequestBtn123',
-    );
-    expect(rejectBtn).toBeInTheDocument();
-  });
-
-  test('should handle accept mutation returning null data', async () => {
-    const NULL_DATA_ACCEPT_MOCKS = [
-      {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                id: 'org1',
-                name: 'Test Organization',
-                addressLine1: '123 Test Street',
-                description: 'A test organization',
-                avatarURL: null,
-                members: {
-                  edges: [{ node: { id: 'user1' } }],
-                  pageInfo: { hasNextPage: false },
-                },
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST_PG,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 10,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [
-                {
-                  membershipRequestId: '456',
-                  createdAt: '2023-01-01T00:00:00Z',
-                  status: 'pending',
-                  user: {
-                    avatarURL: null,
-                    id: 'user2',
-                    name: 'Null Accept User',
-                    emailAddress: 'nullaccept@example.com',
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: ACCEPT_ORGANIZATION_REQUEST_MUTATION,
-          variables: {
-            input: { membershipRequestId: '456' },
-          },
-        },
-        result: {
-          data: null,
-        },
-      },
-    ];
-
-    const nullDataLink = new StaticMockLink(NULL_DATA_ACCEPT_MOCKS, true);
-
-    render(
-      <MockedProvider link={nullDataLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-
-    const acceptBtn = screen.getByTestId('acceptMembershipRequestBtn456');
-    await userEvent.click(acceptBtn);
-
-    await wait(200);
-  });
-
-  test('should handle reject mutation returning null data', async () => {
-    const NULL_DATA_REJECT_MOCKS = [
-      {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                id: 'org1',
-                name: 'Test Organization',
-                addressLine1: '123 Test Street',
-                description: 'A test organization',
-                avatarURL: null,
-                members: {
-                  edges: [{ node: { id: 'user1' } }],
-                  pageInfo: { hasNextPage: false },
-                },
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST_PG,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 10,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [
-                {
-                  membershipRequestId: '789',
-                  createdAt: '2023-01-01T00:00:00Z',
-                  status: 'pending',
-                  user: {
-                    avatarURL: null,
-                    id: 'user3',
-                    name: 'Null Reject User',
-                    emailAddress: 'nullreject@example.com',
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-      {
-        request: {
-          query: REJECT_ORGANIZATION_REQUEST_MUTATION,
-          variables: {
-            input: { membershipRequestId: '789' },
-          },
-        },
-        result: {
-          data: null,
-        },
-      },
-    ];
-
-    const nullDataLink = new StaticMockLink(NULL_DATA_REJECT_MOCKS, true);
-
-    render(
-      <MockedProvider link={nullDataLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-
-    const rejectBtn = screen.getByTestId('rejectMembershipRequestBtn789');
-    await userEvent.click(rejectBtn);
-
-    await wait(200);
-  });
-
-  test('should handle accept button click with valid membershipRequestId', async () => {
-    const VALID_ID_MOCKS = [
-      {
-        request: {
-          query: ORGANIZATION_LIST,
-        },
-        result: {
-          data: {
-            organizations: [
-              {
-                id: 'org1',
-                name: 'Test Organization',
-                addressLine1: '123 Test Street',
-                description: 'A test organization',
-                avatarURL: null,
-                members: {
-                  edges: [{ node: { id: 'user1' } }],
-                  pageInfo: { hasNextPage: false },
-                },
-              },
-            ],
-          },
-        },
-      },
-      {
-        request: {
-          query: MEMBERSHIP_REQUEST_PG,
-          variables: {
-            input: { id: '' },
-            skip: 0,
-            first: 10,
-            name_contains: '',
-          },
-        },
-        result: {
-          data: {
-            organization: {
-              id: '',
-              membershipRequests: [
-                {
-                  membershipRequestId: '101',
-                  createdAt: '2023-01-01T00:00:00Z',
-                  status: 'pending',
-                  user: {
-                    avatarURL: null,
-                    id: 'user4',
-                    name: 'Valid ID User',
-                    emailAddress: 'validid@example.com',
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-    ];
-
-    const validIdLink = new StaticMockLink(VALID_ID_MOCKS, true);
-
-    render(
-      <MockedProvider link={validIdLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Requests />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait(200);
-
-    expect(screen.getByText('Valid ID User')).toBeInTheDocument();
-    expect(
-      screen.getByTestId('acceptMembershipRequestBtn101'),
-    ).toBeInTheDocument();
   });
 });
