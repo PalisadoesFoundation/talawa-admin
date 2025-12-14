@@ -20,29 +20,23 @@ const AuthBranding: React.FC<InterfaceAuthBrandingProps> = ({
 
   const renderSocialLinks = () =>
     socialMediaLinks
-      .filter(({ href }) => href !== '')
-      .map(({ href, logo, tag }, index) => {
-        if (communityData && communityData[tag]) {
-          return (
-            <a
-              key={index}
-              href={communityData[tag] as string}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-testid="preLoginSocialMedia"
-            >
-              <img src={logo} alt={tag} />
-            </a>
-          );
-        }
-
+      .map(({ href, logo, tag }) => ({
+        tag,
+        logo,
+        finalHref: (communityData?.[tag] as string | undefined) ?? href,
+      }))
+      .filter(({ finalHref }) => Boolean(finalHref))
+      .map(({ finalHref, logo, tag }) => {
+        const testId = communityData?.[tag]
+          ? 'preLoginSocialMedia'
+          : 'PalisadoesSocialMedia';
         return (
           <a
-            key={index}
-            href={href}
+            key={tag}
+            href={finalHref}
             target="_blank"
             rel="noopener noreferrer"
-            data-testid="PalisadoesSocialMedia"
+            data-testid={testId}
           >
             <img src={logo} alt={tag} />
           </a>
@@ -61,7 +55,7 @@ const AuthBranding: React.FC<InterfaceAuthBrandingProps> = ({
         >
           <img
             src={communityData.logoURL}
-            alt="Community Logo"
+            alt={`${communityData.name} logo`}
             data-testid="preLoginLogo"
           />
           <p className="text-center">{communityData.name}</p>

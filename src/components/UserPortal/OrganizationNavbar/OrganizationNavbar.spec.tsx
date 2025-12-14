@@ -3,7 +3,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Router } from 'react-router';
+import { BrowserRouter, MemoryRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import cookies from 'js-cookie';
@@ -13,7 +13,6 @@ import OrganizationNavbar from './OrganizationNavbar';
 import userEvent from '@testing-library/user-event';
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 
-import { createMemoryHistory } from 'history';
 import { vi } from 'vitest';
 
 /**
@@ -318,29 +317,25 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
   });
 
   it('Should navigate to home page on home link click', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/initial'],
-    });
     render(
       <MockedProvider link={link}>
-        <Router
-          location={history.location}
-          navigator={history}
-          unstable_useTransitions={false}
-        >
+        <MemoryRouter initialEntries={['/initial']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <OrganizationNavbar {...navbarProps} />
             </I18nextProvider>
           </Provider>
-        </Router>
+        </MemoryRouter>
       </MockedProvider>,
     );
+
     const homeLink = screen.getByText('Home');
     expect(homeLink).toBeInTheDocument();
+
     await userEvent.click(homeLink);
     await wait();
-    expect(history.location.pathname).toBe(
+
+    expect(window.location.pathname).toBe(
       `/user/organization/${organizationId}`,
     );
   });
