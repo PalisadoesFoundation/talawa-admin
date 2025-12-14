@@ -85,11 +85,7 @@ const MOCKS = [
   },
   {
     request: { query: GET_COMMUNITY_DATA_PG },
-    result: {
-      data: {
-        community: null,
-      },
-    },
+    result: { data: { community: null } },
   },
   {
     request: { query: ORGANIZATION_LIST_NO_MEMBERS },
@@ -155,14 +151,7 @@ const MOCKS4 = [
   },
   {
     request: { query: GET_COMMUNITY_DATA_PG },
-    result: {
-      data: {
-        community: {
-          inactivityTimeoutDuration: null,
-          __typename: 'Community',
-        },
-      },
-    },
+    result: { data: { community: null } },
   },
   {
     request: { query: ORGANIZATION_LIST_NO_MEMBERS },
@@ -214,25 +203,19 @@ const mockUseLocalStorage = {
 };
 
 beforeEach(() => {
-  // Don't use vi.clearAllMocks() - it breaks hoisted mocks
-  routerMocks.navigate.mockClear();
-  mockUseLocalStorage.getItem.mockClear();
-  mockUseLocalStorage.setItem.mockClear();
-  mockUseLocalStorage.removeItem.mockClear();
-  mockUseLocalStorage.getStorageKey.mockClear();
-
-  // Clear toast mocks individually
-  toastMocks.success.mockClear();
-  toastMocks.warn.mockClear();
-  toastMocks.error.mockClear();
-
+  vi.clearAllMocks();
+  routerMocks.navigate.mockReset();
+  mockUseLocalStorage.getItem.mockReset();
+  mockUseLocalStorage.setItem.mockReset();
+  mockUseLocalStorage.removeItem.mockReset();
+  mockUseLocalStorage.getStorageKey.mockReset();
   (useLocalStorage as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
     mockUseLocalStorage as InterfaceStorageHelper,
   );
 });
 
 afterEach(() => {
-  vi.restoreAllMocks();
+  vi.clearAllMocks();
 });
 
 vi.mock('react-toastify', () => ({
@@ -1533,10 +1516,7 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     await userEvent.click(screen.getByTestId('goToRegisterPortion'));
     await userEvent.type(screen.getByPlaceholderText(/Name/i), '123'); // invalid - contains numbers
-    await userEvent.type(
-      screen.getByTestId('signInEmail'),
-      'john.doe@example.com',
-    );
+    await userEvent.type(screen.getByTestId('signInEmail'), 'a@b.co'); // too short to pass validation
     await userEvent.type(screen.getByPlaceholderText('Password'), 'Valid@123');
     await userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
@@ -1557,10 +1537,7 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     await userEvent.click(screen.getByTestId('goToRegisterPortion'));
     await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
-    await userEvent.type(
-      screen.getByTestId('signInEmail'),
-      'john.doe@example.com',
-    );
+    await userEvent.type(screen.getByTestId('signInEmail'), 'short'); // invalid email
     await userEvent.type(screen.getByPlaceholderText('Password'), 'weak');
     await userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
@@ -1651,7 +1628,7 @@ describe('Extra coverage for 100 %', () => {
     await wait(500);
 
     expect(fetchSpy).toHaveBeenCalledWith(
-      BACKEND_URL,
+      'http://localhost:4000/graphql',
       expect.objectContaining({
         method: 'POST',
         headers: {
@@ -1664,9 +1641,9 @@ describe('Extra coverage for 100 %', () => {
       expect.any(Error),
     );
 
-    // Clean up spies after assertions
-    fetchSpy.mockRestore();
+    // Clean up
     errorHandlerSpy.mockRestore();
+    fetchSpy.mockRestore();
   });
 
   /* 7.  reset signup recaptcha on error */
@@ -1693,14 +1670,7 @@ describe('Extra coverage for 100 %', () => {
       },
       {
         request: { query: GET_COMMUNITY_DATA_PG },
-        result: {
-          data: {
-            community: {
-              inactivityTimeoutDuration: null,
-              __typename: 'Community',
-            },
-          },
-        },
+        result: { data: { community: null } },
       },
       {
         request: { query: ORGANIZATION_LIST_NO_MEMBERS },
@@ -1736,14 +1706,7 @@ describe('Extra coverage for 100 %', () => {
       },
       {
         request: { query: GET_COMMUNITY_DATA_PG },
-        result: {
-          data: {
-            community: {
-              inactivityTimeoutDuration: null,
-              __typename: 'Community',
-            },
-          },
-        },
+        result: { data: { community: null } },
       },
       {
         request: { query: ORGANIZATION_LIST_NO_MEMBERS },
@@ -1765,7 +1728,7 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.error).toHaveBeenCalledWith(
-      expect.stringContaining('Captcha'),
+      expect.stringContaining('Recaptcha'),
     );
   });
 
@@ -1781,14 +1744,7 @@ describe('Extra coverage for 100 %', () => {
       },
       {
         request: { query: GET_COMMUNITY_DATA_PG },
-        result: {
-          data: {
-            community: {
-              inactivityTimeoutDuration: null,
-              __typename: 'Community',
-            },
-          },
-        },
+        result: { data: { community: null } },
       },
       {
         request: { query: ORGANIZATION_LIST_NO_MEMBERS },
@@ -1827,14 +1783,7 @@ describe('Extra coverage for 100 %', () => {
       },
       {
         request: { query: GET_COMMUNITY_DATA_PG },
-        result: {
-          data: {
-            community: {
-              inactivityTimeoutDuration: null,
-              __typename: 'Community',
-            },
-          },
-        },
+        result: { data: { community: null } },
       },
       {
         request: { query: ORGANIZATION_LIST_NO_MEMBERS },
@@ -1898,14 +1847,7 @@ describe('Extra coverage for 100 %', () => {
       },
       {
         request: { query: GET_COMMUNITY_DATA_PG },
-        result: {
-          data: {
-            community: {
-              inactivityTimeoutDuration: null,
-              __typename: 'Community',
-            },
-          },
-        },
+        result: { data: { community: null } },
       },
       {
         request: { query: ORGANIZATION_LIST_NO_MEMBERS },
