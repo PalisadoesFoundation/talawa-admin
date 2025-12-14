@@ -594,7 +594,7 @@ async function wait(ms = 500): Promise<void> {
 }
 
 const getPickerInputByLabel = (label: string) =>
-  screen.getByRole('group', { name: label, hidden: true });
+  screen.getByLabelText(label, { selector: 'input' }) as HTMLElement;
 
 const waitForClickable = async (el: HTMLElement) => {
   await waitFor(() => {
@@ -1067,15 +1067,8 @@ describe('Testing Events Screen [User Portal]', () => {
       expect(getPickerInputByLabel('Start Date')).toBeInTheDocument();
     });
 
-    const startDateGroup = getPickerInputByLabel('Start Date');
-    const startDatePicker = within(startDateGroup).getByRole('textbox', {
-      hidden: true,
-    });
-    const endDateGroup = getPickerInputByLabel('End Date');
-    const endDatePicker = within(endDateGroup).getByRole('textbox', {
-      hidden: true,
-    });
-
+    const startDatePicker = getPickerInputByLabel('Start Date');
+    const endDatePicker = getPickerInputByLabel('End Date');
     const newDate = dayjs().add(1, 'day');
 
     fireEvent.change(startDatePicker, {
@@ -1126,15 +1119,8 @@ describe('Testing Events Screen [User Portal]', () => {
       expect(startTimePicker).not.toBeDisabled();
     });
 
-    const startTimeGroup = getPickerInputByLabel('Start Time');
-    const startTimePicker = within(startTimeGroup).getByRole('textbox', {
-      hidden: true,
-    });
-    const endTimeGroup = getPickerInputByLabel('End Time');
-    const endTimePicker = within(endTimeGroup).getByRole('textbox', {
-      hidden: true,
-    });
-
+    const startTimePicker = getPickerInputByLabel('Start Time');
+    const endTimePicker = getPickerInputByLabel('End Time');
     fireEvent.change(startTimePicker, {
       target: { value: '09:00 AM' },
     });
@@ -1175,20 +1161,14 @@ describe('Testing Events Screen [User Portal]', () => {
       expect(getPickerInputByLabel('Start Date')).toBeInTheDocument();
     });
 
-    const startDateGroup = getPickerInputByLabel('Start Date');
-    const startDatePicker = within(startDateGroup).getByRole('textbox', {
-      hidden: true,
-    });
-    const endDateGroup = getPickerInputByLabel('End Date');
-    const endDatePicker = within(endDateGroup).getByRole('textbox', {
-      hidden: true,
-    });
+    const startDatePicker = getPickerInputByLabel('Start Date');
+    const endDatePicker = getPickerInputByLabel('End Date');
     fireEvent.change(startDatePicker, {
-      target: { value: null },
+      target: { value: '' },
     });
 
     fireEvent.change(endDatePicker, {
-      target: { value: null },
+      target: { value: '' },
     });
 
     await wait();

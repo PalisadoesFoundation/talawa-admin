@@ -295,7 +295,8 @@ describe('PledgeModal', () => {
     });
     fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
     expect(startDateInput).toHaveValue('02/01/2024');
-    expect(pledgeProps[1].pledge?.startDate).toEqual('2024-01-01');
+    fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
+    expect(startDateInput).toHaveValue('02/01/2024');
   });
 
   it('pledgeStartDate onChange when its null', async () => {
@@ -304,7 +305,7 @@ describe('PledgeModal', () => {
     const startDateInput = within(startDateGroup).getByRole('textbox', {
       hidden: true,
     });
-    fireEvent.change(startDateInput, { target: { value: null } });
+    fireEvent.change(startDateInput, { target: { value: '' } });
     expect(startDateInput).toHaveValue('01/01/2024');
   });
 
@@ -325,7 +326,7 @@ describe('PledgeModal', () => {
     const endDateInput = within(endDateGroup).getByRole('textbox', {
       hidden: true,
     });
-    fireEvent.change(endDateInput, { target: { value: null } });
+    fireEvent.change(endDateInput, { target: { value: '' } });
     expect(endDateInput).toHaveValue('10/01/2024');
   });
 

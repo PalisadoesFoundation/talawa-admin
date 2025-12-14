@@ -628,6 +628,7 @@ describe('EventListCardPreviewModal', () => {
     });
 
     const startDateInput = getPickerInputByLabel('startDate');
+    expect(startDateInput.parentElement).toBeTruthy();
     const startDatePicker = startDateInput.parentElement;
     const calendarButton = within(
       startDatePicker as HTMLElement,
@@ -653,6 +654,7 @@ describe('EventListCardPreviewModal', () => {
     });
 
     const endDateInput = getPickerInputByLabel('endDate');
+    expect(endDateInput.parentElement).toBeTruthy();
     const endDatePicker = endDateInput.parentElement;
     const calendarButton = within(endDatePicker as HTMLElement).getByLabelText(
       /choose date/i,
@@ -678,6 +680,7 @@ describe('EventListCardPreviewModal', () => {
     });
 
     const startTimeInput = getPickerInputByLabel('startTime');
+    expect(startTimeInput.parentElement).toBeTruthy();
     const startTimePicker = startTimeInput.parentElement;
     const clockButton = within(startTimePicker as HTMLElement).getByLabelText(
       /choose time/i,
@@ -706,6 +709,7 @@ describe('EventListCardPreviewModal', () => {
     });
 
     const endTimeInput = getPickerInputByLabel('endTime');
+    expect(endTimeInput.parentElement).toBeTruthy();
     const endTimePicker = endTimeInput.parentElement;
     const clockButton = within(endTimePicker as HTMLElement).getByLabelText(
       /choose time/i,
@@ -1068,7 +1072,7 @@ describe('EventListCardPreviewModal', () => {
   });
 
   describe('Date and Time Picker onChange handlers', () => {
-    test('updates end date if new start date is later', () => {
+    test('updates end date if new start date is later', async () => {
       const mockSetEventStartDate = vi.fn();
       const mockSetEventEndDate = vi.fn();
       renderComponent({
@@ -1079,13 +1083,14 @@ describe('EventListCardPreviewModal', () => {
       });
 
       const dateInput = getPickerInputByLabel('startDate');
+      expect(dateInput.parentElement).toBeDefined();
       const datePicker = dateInput?.parentElement;
       const calendarButton = within(datePicker as HTMLElement).getByLabelText(
         /choose date/i,
       );
       fireEvent.click(calendarButton);
 
-      waitFor(() => {
+      await waitFor(() => {
         const dateToSelect = screen.getByText('20');
         fireEvent.click(dateToSelect);
         expect(mockSetEventStartDate).toHaveBeenCalled();
@@ -1093,7 +1098,7 @@ describe('EventListCardPreviewModal', () => {
       });
     });
 
-    test('updates end time if new start time is later', () => {
+    test('updates end time if new start time is later', async () => {
       const mockSetFormState = vi.fn();
       renderComponent({
         formState: {
@@ -1105,13 +1110,14 @@ describe('EventListCardPreviewModal', () => {
       });
 
       const timeInput = getPickerInputByLabel('startTime');
+      expect(timeInput.parentElement).toBeTruthy();
       const timePicker = timeInput?.parentElement;
       const clockButton = within(timePicker as HTMLElement).getByLabelText(
         /choose time/i,
       );
       fireEvent.click(clockButton);
 
-      waitFor(() => {
+      await waitFor(() => {
         const timeToSelect = screen.getByText('12');
         fireEvent.click(timeToSelect);
         expect(mockSetFormState).toHaveBeenCalledWith(
