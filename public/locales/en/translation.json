@@ -13,7 +13,6 @@
   },
   "loginPage": {
     "title": "Talawa Admin",
-    "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
     "userLogin": "Login",
     "loginSubHead": "Log in to your account",
     "adminLogin": "Admin Login",
@@ -54,6 +53,9 @@
     "admin": "admin",
     "user": "user",
     "loading": "loading"
+  },
+  "authBranding": {
+    "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers"
   },
   "latestEvents": {
     "eventCardTitle": "Upcoming Events",

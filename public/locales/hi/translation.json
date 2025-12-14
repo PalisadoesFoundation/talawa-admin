@@ -13,7 +13,6 @@
   },
   "loginPage": {
     "title": "तालावा व्यवस्थापक",
-    "fromPalisadoes": "Palisadoes फाउंडेशन स्वयंसेवकों द्वारा विकसित एक ओपन-सोर्स एप्लिकेशन",
     "userLogin": "लॉगिन",
     "loginSubHead": "अपने खाते में लॉगिन करें",
     "adminLogin": "एडमिन लॉगिन",
@@ -54,6 +53,9 @@
     "admin": "व्यवस्थापक",
     "user": "उपयोगकर्ता",
     "loading": "लोड हो रहा है"
+  },
+  "authBranding": {
+    "fromPalisadoes": "Palisadoes फाउंडेशन स्वयंसेवकों द्वारा विकसित एक ओपन-सोर्स एप्लिकेशन"
   },
   "latestEvents": {
     "eventCardTitle": "आगामी घटनाएँ",

@@ -13,7 +13,6 @@
   },
   "loginPage": {
     "title": "Administrateur Talawa",
-    "fromPalisadoes": "Une application open source réalisée par les bénévoles de la Fondation Palisadoes",
     "userLogin": "Connexion",
     "loginSubHead": "Connexion à votre compte",
     "adminLogin": "Connexion administrateur",
@@ -54,6 +53,9 @@
     "admin": "Administrateur",
     "user": "Utilisateur",
     "loading": "Chargement"
+  },
+  "authBranding": {
+    "fromPalisadoes": "Une application open source réalisée par les bénévoles de la Fondation Palisadoes"
   },
   "latestEvents": {
     "eventCardTitle": "évènements à venir",

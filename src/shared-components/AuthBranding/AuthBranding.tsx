@@ -16,7 +16,8 @@ import { socialMediaLinks } from '../../constants';
 const AuthBranding: React.FC<InterfaceAuthBrandingProps> = ({
   communityData,
 }) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
+  const { t } = useTranslation('translation', { keyPrefix: 'authBranding' });
+  const communityWebsiteURL = communityData?.websiteURL?.trim();
 
   const renderSocialLinks = () =>
     socialMediaLinks
@@ -47,19 +48,38 @@ const AuthBranding: React.FC<InterfaceAuthBrandingProps> = ({
     <div className={styles.inner}>
       {/* Branding Block */}
       {communityData ? (
-        <a
-          href={communityData.websiteURL}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.communityLogo}
-        >
-          <img
-            src={communityData.logoURL}
-            alt={`${communityData.name} logo`}
-            data-testid="preLoginLogo"
-          />
-          <p className="text-center">{communityData.name}</p>
-        </a>
+        communityWebsiteURL ? (
+          <a
+            href={communityWebsiteURL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.communityLogo}
+          >
+            <img
+              src={communityData.logoURL}
+              alt={
+                communityData.name
+                  ? `${communityData.name} logo`
+                  : 'Community logo'
+              }
+              data-testid="preLoginLogo"
+            />
+            <p className="text-center">{communityData.name}</p>
+          </a>
+        ) : (
+          <div className={styles.communityLogo}>
+            <img
+              src={communityData.logoURL}
+              alt={
+                communityData.name
+                  ? `${communityData.name} logo`
+                  : 'Community logo'
+              }
+              data-testid="preLoginLogo"
+            />
+            <p className="text-center">{communityData.name}</p>
+          </div>
+        )
       ) : (
         <a
           href="https://www.palisadoes.org/"

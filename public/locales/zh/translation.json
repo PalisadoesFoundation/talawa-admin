@@ -13,7 +13,6 @@
   },
   "loginPage": {
     "title": "塔拉瓦管理员",
-    "fromPalisadoes": "Palisadoes 基金会志愿者开发的开源应用程序",
     "userLogin": "登录",
     "loginSubHead": "登录你的账户",
     "adminLogin": "管理员登录",
@@ -54,6 +53,9 @@
     "admin": "管理员",
     "user": "用户",
     "loading": "加载中"
+  },
+  "authBranding": {
+    "fromPalisadoes": "Palisadoes 基金会志愿者开发的开源应用程序"
   },
   "latestEvents": {
     "eventCardTitle": "即将举行的活动",

@@ -13,7 +13,6 @@
   },
   "loginPage": {
     "title": "Administrador Talawa",
-    "fromPalisadoes": "Una aplicación de código abierto de los voluntarios de la Fundación palisados",
     "talawa_portal": "Portal De Administración Talawa",
     "login": "Acceso",
     "userLogin": "Inicia sesión en tu cuenta",
@@ -54,6 +53,9 @@
     "loading": "Cargando...",
     "selectOrg": "Seleccione una organización",
     "afterRegister": "Registro exitoso. Por favor, espere a que el administrador apruebe su solicitud."
+  },
+  "authBranding": {
+    "fromPalisadoes": "Una aplicación de código abierto de los voluntarios de la Fundación palisados"
   },
   "latestEvents": {
     "eventCardTitle": "Próximos Eventos",

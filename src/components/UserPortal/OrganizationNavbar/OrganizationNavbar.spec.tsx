@@ -3,7 +3,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter, MemoryRouter } from 'react-router';
+import { BrowserRouter, MemoryRouter, useLocation } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import cookies from 'js-cookie';
@@ -92,6 +92,11 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
+
+const LocationDisplay = () => {
+  const location = useLocation();
+  return <div data-testid="location-display">{location.pathname}</div>;
+};
 
 const link = new StaticMockLink(MOCKS, true);
 
@@ -323,6 +328,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <OrganizationNavbar {...navbarProps} />
+              <LocationDisplay />
             </I18nextProvider>
           </Provider>
         </MemoryRouter>
@@ -335,7 +341,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     await userEvent.click(homeLink);
     await wait();
 
-    expect(window.location.pathname).toBe(
+    expect(screen.getByTestId('location-display')).toHaveTextContent(
       `/user/organization/${organizationId}`,
     );
   });
