@@ -8045,6 +8045,15 @@ form {
   outline: none;
   box-shadow: none;
   padding: 2px 5px;
+}
+
+.dateboxOrganizationEvents {
+  width: 90%;
+  border-radius: 7px;
+  border-color: var(--dateboxOrganizationEvents-border);
+  outline: none;
+  box-shadow: none;
+  padding: 2px 5px;
   margin-right: 5px;
   margin-left: 5px;
 }
@@ -8076,6 +8085,10 @@ form {
   border: none;
   box-shadow: none;
   margin-top: 5px;
+}
+
+:global(.form-switch .form-check-input) {
+  margin-left: -1.7em !important;
 }
 
 .dispflex {
@@ -8743,6 +8756,17 @@ form {
   padding-left: 5px;
   margin-right: 5px;
   margin-left: 5px;
+}
+
+.datediv {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 15px;
+}
+
+.datediv > div {
+  flex: 1;
 }
 
 @media only screen and (max-width: 600px) {
