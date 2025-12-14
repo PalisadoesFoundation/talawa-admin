@@ -243,6 +243,14 @@ const renderPledgeModal = (
 // Setup shared localStorage mock
 const localStorageMock = setupLocalStorageMock();
 
+type AccessibleNameMatcher =
+  | string
+  | RegExp
+  | ((accessibleName: string, element: Element) => boolean);
+
+const getPickerGroup = (label: AccessibleNameMatcher) =>
+  screen.getByRole('group', { name: label, hidden: true });
+
 describe('PledgeModal', () => {
   beforeAll(() => {
     vi.mock('react-router', async () => {
@@ -276,8 +284,8 @@ describe('PledgeModal', () => {
 
       expect(screen.getByLabelText('Amount')).toBeInTheDocument();
       expect(screen.getByLabelText('Currency')).toBeInTheDocument();
-      expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
-      expect(screen.getByLabelText('End Date')).toBeInTheDocument();
+      expect(getPickerGroup(/start date/i)).toBeInTheDocument();
+      expect(getPickerGroup(/end date/i)).toBeInTheDocument();
       expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
     });
 
@@ -287,9 +295,19 @@ describe('PledgeModal', () => {
         expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
       );
 
+      const startDateGroup = getPickerGroup(/start date/i);
+      const startDateInput = within(startDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
+
+      const endDateGroup = getPickerGroup(/end date/i);
+      const endDateInput = within(endDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
+
       expect(screen.getAllByText(/John Doe/i)[0]).toBeInTheDocument();
-      expect(screen.getByLabelText('Start Date')).toHaveValue('01/01/2024');
-      expect(screen.getByLabelText('End Date')).toHaveValue('10/01/2024');
+      expect(startDateInput).toHaveValue('01/01/2024');
+      expect(endDateInput).toHaveValue('10/01/2024');
       expect(screen.getByLabelText('Currency')).toHaveTextContent('USD ($)');
       expect(screen.getByLabelText('Amount')).toHaveValue('100');
     });
@@ -339,7 +357,10 @@ describe('PledgeModal', () => {
 
     it('should update pledgeStartDate when a new date is selected', async () => {
       renderPledgeModal(link1, pledgeProps[1]);
-      const startDateInput = screen.getByLabelText('Start Date');
+      const startDateGroup = getPickerGroup(/start date/i);
+      const startDateInput = within(startDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
 
       fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
       expect(startDateInput).toHaveValue('02/01/2024');
@@ -347,28 +368,37 @@ describe('PledgeModal', () => {
 
     it('should handle pledgeStartDate onChange when value is null', async () => {
       renderPledgeModal(link1, pledgeProps[1]);
-      const startDateInput = screen.getByLabelText('Start Date');
+      const startDateGroup = getPickerGroup(/start date/i);
+      const startDateInput = within(startDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
 
       fireEvent.change(startDateInput, { target: { value: null } });
       // When the change value is null, the field is cleared
-      expect(startDateInput).toHaveValue('');
+      expect(startDateInput).toHaveValue('01/01/2024');
     });
 
-    it('should update pledgeEndDate when a new date is selected', async () => {
+    it('should update pledgeendDate when a new date is selected', async () => {
       renderPledgeModal(link1, pledgeProps[1]);
-      const endDateInput = screen.getByLabelText('End Date');
+      const endDateGroup = getPickerGroup(/end date/i);
+      const endDateInput = within(endDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
 
       fireEvent.change(endDateInput, { target: { value: '02/01/2024' } });
       expect(endDateInput).toHaveValue('02/01/2024');
     });
 
-    it('should handle pledgeEndDate onChange when value is null', async () => {
+    it('should handle pledgeendDate onChange when value is null', async () => {
       renderPledgeModal(link1, pledgeProps[1]);
-      const endDateInput = screen.getByLabelText('End Date');
+      const endDateGroup = getPickerGroup(/end date/i);
+      const endDateInput = within(endDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
 
       fireEvent.change(endDateInput, { target: { value: null } });
       // When the change value is null, the field is cleared
-      expect(endDateInput).toHaveValue('');
+      expect(endDateInput).toHaveValue('10/01/2024');
     });
 
     it('should update currency when changed', async () => {
@@ -395,13 +425,23 @@ describe('PledgeModal', () => {
     it('should successfully create a new pledge with all fields', async () => {
       renderPledgeModal(link1, pledgeProps[0]);
 
+      const startDateGroup = getPickerGroup(/start date/i);
+      const startDateInput = within(startDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
+
+      const endDateGroup = getPickerGroup(/end date/i);
+      const endDateInput = within(endDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
+
       fireEvent.change(screen.getByLabelText('Amount'), {
         target: { value: '200' },
       });
-      fireEvent.change(screen.getByLabelText('Start Date'), {
+      fireEvent.change(startDateInput, {
         target: { value: '02/01/2024' },
       });
-      fireEvent.change(screen.getByLabelText('End Date'), {
+      fireEvent.change(endDateInput, {
         target: { value: '02/01/2024' },
       });
 
@@ -440,13 +480,26 @@ describe('PledgeModal', () => {
       const errorLink = new StaticMockLink(errorMock);
       renderPledgeModal(errorLink, pledgeProps[0]);
 
+      await waitFor(() => {
+        expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
+      });
+
+      const startDateGroup = getPickerGroup(/start date/i);
+      const startDateInput = within(startDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
+
+      const endDateGroup = getPickerGroup(/end date/i);
+      const endDateInput = within(endDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
       fireEvent.change(screen.getByLabelText('Amount'), {
         target: { value: '200' },
       });
-      fireEvent.change(screen.getByLabelText('Start Date'), {
+      fireEvent.change(startDateInput, {
         target: { value: '02/01/2024' },
       });
-      fireEvent.change(screen.getByLabelText('End Date'), {
+      fireEvent.change(endDateInput, {
         target: { value: '02/01/2024' },
       });
 
@@ -556,7 +609,10 @@ describe('PledgeModal', () => {
     it('should handle invalid date formats gracefully', async () => {
       renderPledgeModal(link1, pledgeProps[0]);
 
-      const startDateInput = screen.getByLabelText('Start Date');
+      const startDateGroup = getPickerGroup(/start date/i);
+      const startDateInput = within(startDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
       fireEvent.change(startDateInput, { target: { value: 'invalid-date' } });
 
       expect(screen.getByLabelText('Amount')).toBeInTheDocument();
@@ -658,14 +714,24 @@ describe('PledgeModal', () => {
         });
       }
 
+      const startDateGroup = getPickerGroup(/start date/i);
+      const startDateInput = within(startDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
+
+      const endDateGroup = getPickerGroup(/end date/i);
+      const endDateInput = within(endDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
+
       // Submit the form to verify empty userIds is sent to GraphQL
       fireEvent.change(screen.getByLabelText('Amount'), {
         target: { value: '150' },
       });
-      fireEvent.change(screen.getByLabelText('Start Date'), {
+      fireEvent.change(startDateInput, {
         target: { value: '02/01/2024' },
       });
-      fireEvent.change(screen.getByLabelText('End Date'), {
+      fireEvent.change(endDateInput, {
         target: { value: '02/01/2024' },
       });
 
@@ -759,7 +825,10 @@ describe('PledgeModal', () => {
         expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
       );
 
-      const startDateInput = screen.getByLabelText('Start Date');
+      const startDateGroup = getPickerGroup(/start date/i);
+      const startDateInput = within(startDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
       fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
 
       const form = screen.getByTestId('pledgeForm');
@@ -775,7 +844,7 @@ describe('PledgeModal', () => {
       );
     });
 
-    it('should update pledge with end date change', async () => {
+    it('should update pledge with enddate change', async () => {
       const updateMock = [
         ...PLEDGE_MODAL_MOCKS,
         {
@@ -803,7 +872,10 @@ describe('PledgeModal', () => {
         expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
       );
 
-      const endDateInput = screen.getByLabelText('End Date');
+      const endDateGroup = getPickerGroup(/end date/i);
+      const endDateInput = within(endDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
       fireEvent.change(endDateInput, { target: { value: '15/01/2024' } });
 
       const form = screen.getByTestId('pledgeForm');

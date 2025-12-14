@@ -8,7 +8,13 @@
 
 // SKIP_LOCALSTORAGE_CHECK
 import React, { act } from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import {
@@ -346,6 +352,15 @@ async function wait(ms = 500): Promise<void> {
   });
 }
 
+const getPickerInputByLabel = (label: string) =>
+  screen.getByRole('group', { name: new RegExp(label, 'i') });
+
+const waitForClickable = async (el: HTMLElement) => {
+  await waitFor(() => {
+    expect(el).not.toHaveStyle({ pointerEvents: 'none' });
+  });
+};
+
 describe('Testing Events Screen [User Portal]', () => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
@@ -576,19 +591,42 @@ describe('Testing Events Screen [User Portal]', () => {
     });
 
     const allDayCheckbox = screen.getByTestId('allDayEventCheck');
-    const startTimePicker = screen.getByLabelText('Start Time');
-    const endTimePicker = screen.getByLabelText('End Time');
+    const startTimeGroup = getPickerInputByLabel('Start Time');
+    const endTimeGroup = getPickerInputByLabel('End Time');
 
-    // Initially all-day is true, time pickers should be disabled
-    expect(startTimePicker).toBeDisabled();
-    expect(endTimePicker).toBeDisabled();
+    const startTimeToggle =
+      within(startTimeGroup).getByLabelText(/choose time/i);
+    const endTimeToggle = within(endTimeGroup).getByLabelText(/choose time/i);
+    // BEFORE toggle: time pickers should be non-interactive
+    expect(startTimeToggle).toHaveStyle({ pointerEvents: 'none' });
+    expect(endTimeToggle).toHaveStyle({ pointerEvents: 'none' });
+    expect(
+      screen.queryByRole('listbox', { name: /select hours/i }),
+    ).not.toBeInTheDocument();
 
-    // Toggle all-day off
+    // === Toggle all-day off ===
     await userEvent.click(allDayCheckbox);
-
+    // wait until pickers become clickable
+    await waitForClickable(startTimeToggle);
+    await waitForClickable(endTimeToggle);
+    // === AFTER toggling: clicking should open the hours listbox ===
+    await userEvent.click(startTimeToggle);
     await waitFor(() => {
-      expect(startTimePicker).not.toBeDisabled();
-      expect(endTimePicker).not.toBeDisabled();
+      expect(
+        screen.getByRole('listbox', { name: /select hours/i }),
+      ).toBeInTheDocument();
+    });
+
+    // close the listbox (optional cleanup)
+    const hoursListbox = screen.getByRole('listbox', { name: /select hours/i });
+    await userEvent.click(within(hoursListbox).getByText('12')); // pick an hour to close
+
+    // verify end time also opens
+    await userEvent.click(endTimeToggle);
+    await waitFor(() => {
+      expect(
+        screen.getByRole('listbox', { name: /select hours/i }),
+      ).toBeInTheDocument();
     });
   });
 
@@ -657,11 +695,17 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
-      expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
+      expect(getPickerInputByLabel('Start Date')).toBeInTheDocument();
     });
 
-    const startDatePicker = screen.getByLabelText('Start Date');
-    const endDatePicker = screen.getByLabelText('End Date');
+    const startDateGroup = getPickerInputByLabel('Start Date');
+    const startDatePicker = within(startDateGroup).getByRole('textbox', {
+      hidden: true,
+    });
+    const endDateGroup = getPickerInputByLabel('End Date');
+    const endDatePicker = within(endDateGroup).getByRole('textbox', {
+      hidden: true,
+    });
 
     const newDate = dayjs().add(1, 'day');
 
@@ -709,12 +753,18 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('allDayEventCheck'));
 
     await waitFor(() => {
-      const startTimePicker = screen.getByLabelText('Start Time');
+      const startTimePicker = getPickerInputByLabel('Start Time');
       expect(startTimePicker).not.toBeDisabled();
     });
 
-    const startTimePicker = screen.getByLabelText('Start Time');
-    const endTimePicker = screen.getByLabelText('End Time');
+    const startTimeGroup = getPickerInputByLabel('Start Time');
+    const startTimePicker = within(startTimeGroup).getByRole('textbox', {
+      hidden: true,
+    });
+    const endTimeGroup = getPickerInputByLabel('End Time');
+    const endTimePicker = within(endTimeGroup).getByRole('textbox', {
+      hidden: true,
+    });
 
     fireEvent.change(startTimePicker, {
       target: { value: '09:00 AM' },
@@ -753,12 +803,17 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
-      expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
+      expect(getPickerInputByLabel('Start Date')).toBeInTheDocument();
     });
 
-    const startDatePicker = screen.getByLabelText('Start Date');
-    const endDatePicker = screen.getByLabelText('End Date');
-
+    const startDateGroup = getPickerInputByLabel('Start Date');
+    const startDatePicker = within(startDateGroup).getByRole('textbox', {
+      hidden: true,
+    });
+    const endDateGroup = getPickerInputByLabel('End Date');
+    const endDatePicker = within(endDateGroup).getByRole('textbox', {
+      hidden: true,
+    });
     fireEvent.change(startDatePicker, {
       target: { value: null },
     });
@@ -770,7 +825,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
 
     // Should handle null values without crashing
-    expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
+    expect(getPickerInputByLabel('Start Date')).toBeInTheDocument();
   });
 
   it('Should handle network error gracefully', async () => {

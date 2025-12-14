@@ -18,6 +18,12 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: 'vitest.setup.ts',
+    // Inline specific dependencies to avoid vitest issues
+    server:{
+      deps:{
+        inline:["@mui/x-charts", "@mui/x-data-grid", "@mui/x-date-pickers"] 
+      }
+    },
     testTimeout: 30000,
     hookTimeout: 10000,
     teardownTimeout: 10000,

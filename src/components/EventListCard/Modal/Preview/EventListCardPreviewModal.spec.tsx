@@ -111,6 +111,9 @@ const renderComponent = (props = {}) => {
   );
 };
 
+const getPickerInputByLabel = (label: string) =>
+  screen.getByRole('group', { name: new RegExp(label, 'i') });
+
 describe('EventListCardPreviewModal', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -621,7 +624,8 @@ describe('EventListCardPreviewModal', () => {
       setEventEndDate: mockSetEventEndDate,
     });
 
-    const startDatePicker = screen.getByLabelText('startDate').parentElement;
+    const startDateInput = getPickerInputByLabel('startDate');
+    const startDatePicker = startDateInput.parentElement;
     const calendarButton = within(
       startDatePicker as HTMLElement,
     ).getByLabelText(/choose date/i);
@@ -645,7 +649,8 @@ describe('EventListCardPreviewModal', () => {
       setEventEndDate: mockSetEventEndDate,
     });
 
-    const endDatePicker = screen.getByLabelText('endDate').parentElement;
+    const endDateInput = getPickerInputByLabel('endDate');
+    const endDatePicker = endDateInput.parentElement;
     const calendarButton = within(endDatePicker as HTMLElement).getByLabelText(
       /choose date/i,
     );
@@ -669,7 +674,8 @@ describe('EventListCardPreviewModal', () => {
       setFormState: mockSetFormState,
     });
 
-    const startTimePicker = screen.getByLabelText('startTime').parentElement;
+    const startTimeInput = getPickerInputByLabel('startTime');
+    const startTimePicker = startTimeInput.parentElement;
     const clockButton = within(startTimePicker as HTMLElement).getByLabelText(
       /choose time/i,
     );
@@ -696,7 +702,8 @@ describe('EventListCardPreviewModal', () => {
       setFormState: mockSetFormState,
     });
 
-    const endTimePicker = screen.getByLabelText('endTime').parentElement;
+    const endTimeInput = getPickerInputByLabel('endTime');
+    const endTimePicker = endTimeInput.parentElement;
     const clockButton = within(endTimePicker as HTMLElement).getByLabelText(
       /choose time/i,
     );
@@ -1068,7 +1075,8 @@ describe('EventListCardPreviewModal', () => {
         setEventEndDate: mockSetEventEndDate,
       });
 
-      const datePicker = screen.getByLabelText('startDate').parentElement;
+      const dateInput = getPickerInputByLabel('startDate');
+      const datePicker = dateInput?.parentElement;
       const calendarButton = within(datePicker as HTMLElement).getByLabelText(
         /choose date/i,
       );
@@ -1093,7 +1101,8 @@ describe('EventListCardPreviewModal', () => {
         setFormState: mockSetFormState,
       });
 
-      const timePicker = screen.getByLabelText('startTime').parentElement;
+      const timeInput = getPickerInputByLabel('startTime');
+      const timePicker = timeInput?.parentElement;
       const clockButton = within(timePicker as HTMLElement).getByLabelText(
         /choose time/i,
       );
