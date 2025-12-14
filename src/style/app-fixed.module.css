@@ -8045,15 +8045,6 @@ form {
   outline: none;
   box-shadow: none;
   padding: 2px 5px;
-}
-
-.dateboxOrganizationEvents {
-  width: 90%;
-  border-radius: 7px;
-  border-color: var(--dateboxOrganizationEvents-border);
-  outline: none;
-  box-shadow: none;
-  padding: 2px 5px;
   margin-right: 5px;
   margin-left: 5px;
 }
@@ -8087,10 +8078,9 @@ form {
   margin-top: 5px;
 }
 
-:global(.form-switch .form-check-input) {
-  margin-left: -1.7em !important;
+.switch :global(.form-check-input) {
+  margin-inline-start: -1.7em;
 }
-
 .dispflex {
   display: flex;
 }
