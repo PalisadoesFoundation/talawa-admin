@@ -68,10 +68,11 @@ import type {
   ReportingTableColumn,
   ReportingTableGridProps,
   InfiniteScrollProps,
-  ReportingRow,
 } from '../../types/ReportingTable/interface';
 
 import Avatar from 'components/Avatar/Avatar';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import DeleteIcon from '@mui/icons-material/Delete';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import styles from '../../style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -157,7 +158,7 @@ const Requests = (): JSX.Element => {
     } else {
       setHasMore(true);
     }
-  }, [data, PAGE_SIZE]);
+  }, [data]);
 
   // Clear search on unmount
   useEffect(() => {
@@ -292,18 +293,26 @@ const Requests = (): JSX.Element => {
     {
       field: 'sl_no',
       headerName: t('sl_no'),
+      display: 'flex',
       flex: 0.5,
       minWidth: 50,
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (params: GridCellParams) =>
-        (params.row.membershipRequestId ?? 0) + 1,
+      renderCell: (params: GridCellParams) => (
+        <span className={styles.requestsTableItemIndex}>
+          {params.api.getRowIndexRelativeToVisibleRows(
+            params.row.membershipRequestId,
+          ) + 1}
+          .
+        </span>
+      ),
     },
     {
       field: 'profile',
       headerName: t('profile'),
+      display: 'flex',
       flex: 1,
       minWidth: 80,
       sortable: false,
@@ -312,55 +321,68 @@ const Requests = (): JSX.Element => {
       headerAlign: 'center',
       renderCell: (params: GridCellParams) => {
         const user = params.row.user || {};
-        if (user.avatarURL) {
+        if (user.avatarURL && user.avatarURL !== 'null') {
           return (
             <img
               src={user.avatarURL}
-              alt="avatar"
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: '50%',
-                objectFit: 'cover',
-              }}
+              className={styles.userAvatar}
+              alt="profile picture"
+              data-testid="display-img"
               crossOrigin="anonymous"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.style.display = 'none';
+              }}
             />
           );
         }
         return (
-          <div style={{ width: 40, height: 40 }} data-testid="avatar">
-            <Avatar name={user.name || ''} />
-          </div>
+          <Avatar
+            data-testid="display-img"
+            size={45}
+            avatarStyle={styles.avatarStyle}
+            name={user.name || ''}
+            alt="dummy picture"
+          />
         );
       },
     },
     {
       field: 'name',
       headerName: tCommon('name'),
+      display: 'flex',
       flex: 2,
       minWidth: 150,
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       align: 'center',
       headerAlign: 'center',
-      valueGetter: (_value: unknown, row: ReportingRow) =>
-        (row as InterfaceRequestsListItem)?.user?.name || '',
+      renderCell: (params: GridCellParams) => (
+        <span className={styles.requestsTableItemName}>
+          {params.row.user?.name || ''}
+        </span>
+      ),
     },
     {
       field: 'email',
       headerName: tCommon('email'),
+      display: 'flex',
       flex: 2,
       minWidth: 150,
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       align: 'center',
       headerAlign: 'center',
-      valueGetter: (_value: unknown, row: ReportingRow) =>
-        (row as InterfaceRequestsListItem)?.user?.emailAddress || '',
+      renderCell: (params: GridCellParams) => (
+        <span className={styles.requestsTableItemEmail}>
+          {params.row.user?.emailAddress || ''}
+        </span>
+      ),
     },
     {
       field: 'accept',
       headerName: t('accept'),
+      display: 'flex',
       flex: 1,
       minWidth: 100,
       sortable: false,
@@ -368,23 +390,26 @@ const Requests = (): JSX.Element => {
       align: 'center',
       headerAlign: 'center',
       renderCell: (params: GridCellParams) => (
-        <Button
-          variant="success"
-          size="sm"
-          onClick={async () => {
-            if (params?.row?.membershipRequestId) {
-              await handleAcceptUser(params.row.membershipRequestId);
-            }
-          }}
-          data-testid={`accept-${params?.row?.membershipRequestId ?? 'unknown'}`}
-        >
+        <Stack alignItems="center" spacing={0.5}>
+          <Button
+            className={`btn ${styles.requestsAcceptButton} ${styles.hoverShadowOnly}`}
+            data-testid={`acceptMembershipRequestBtn${params?.row?.membershipRequestId ?? ''}`}
+            onClick={async () => {
+              if (params?.row?.membershipRequestId) {
+                await handleAcceptUser(params.row.membershipRequestId);
+              }
+            }}
+          >
+            <GroupAddIcon />
+          </Button>
           {t('accept')}
-        </Button>
+        </Stack>
       ),
     },
     {
       field: 'reject',
       headerName: t('reject'),
+      display: 'flex',
       flex: 1,
       minWidth: 100,
       sortable: false,
@@ -392,18 +417,20 @@ const Requests = (): JSX.Element => {
       align: 'center',
       headerAlign: 'center',
       renderCell: (params: GridCellParams) => (
-        <Button
-          variant="danger"
-          size="sm"
-          onClick={async () => {
-            if (params?.row?.membershipRequestId) {
-              await handleRejectUser(params.row.membershipRequestId);
-            }
-          }}
-          data-testid={`reject-${params?.row?.membershipRequestId ?? 'unknown'}`}
-        >
+        <Stack alignItems="center" spacing={0.5}>
+          <Button
+            className={`btn ${styles.requestsRejectButton} ${styles.hoverShadowOnly}`}
+            data-testid={`rejectMembershipRequestBtn${params?.row?.membershipRequestId ?? ''}`}
+            onClick={async () => {
+              if (params?.row?.membershipRequestId) {
+                await handleRejectUser(params.row.membershipRequestId);
+              }
+            }}
+          >
+            <DeleteIcon />
+          </Button>
           {t('reject')}
-        </Button>
+        </Stack>
       ),
     },
   ];
