@@ -95,13 +95,13 @@ vi.mock('react-router', async () => {
 });
 
 describe('Testing Leaderboard Screen', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   beforeEach(() => {
     vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
