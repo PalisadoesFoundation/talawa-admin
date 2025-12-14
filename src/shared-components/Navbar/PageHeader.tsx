@@ -107,6 +107,7 @@ export default function PageHeader({
         {/*  Optional Event Type dropdown */}
         {showEventTypeFilter && (
           <div className={styles.btnsBlock}>
+            {/* TODO: Implement event type filtering functionality */}
             <SortingButton
               title="Event Type"
               sortingOptions={[

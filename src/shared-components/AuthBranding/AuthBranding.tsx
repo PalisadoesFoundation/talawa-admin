@@ -8,8 +8,9 @@ import { socialMediaLinks } from '../../constants';
 /**
  * AuthBranding
  * Displays organization branding and social media links on authentication pages.
+ * Shows custom community branding when communityData is provided; otherwise displays Palisadoes branding.
  * @param {InterfaceAuthBrandingProps} props
- * @param {Object} props.communityData
+ * @param {Object} [props.communityData] - Optional community data containing logoURL, name, websiteURL, and social media URLs
  * @returns {JSX.Element}
  */
 const AuthBranding: React.FC<InterfaceAuthBrandingProps> = ({
@@ -18,33 +19,35 @@ const AuthBranding: React.FC<InterfaceAuthBrandingProps> = ({
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
 
   const renderSocialLinks = () =>
-    socialMediaLinks.map(({ href, logo, tag }, index) => {
-      if (communityData && communityData[tag]) {
+    socialMediaLinks
+      .filter(({ href }) => href !== '')
+      .map(({ href, logo, tag }, index) => {
+        if (communityData && communityData[tag]) {
+          return (
+            <a
+              key={index}
+              href={communityData[tag] as string}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-testid="preLoginSocialMedia"
+            >
+              <img src={logo} alt={tag} />
+            </a>
+          );
+        }
+
         return (
           <a
             key={index}
-            href={communityData[tag] as string}
+            href={href}
             target="_blank"
             rel="noopener noreferrer"
-            data-testid="preLoginSocialMedia"
+            data-testid="PalisadoesSocialMedia"
           >
             <img src={logo} alt={tag} />
           </a>
         );
-      }
-
-      return (
-        <a
-          key={index}
-          href={href}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-testid="PalisadoesSocialMedia"
-        >
-          <img src={logo} alt={tag} />
-        </a>
-      );
-    });
+      });
 
   return (
     <div className={styles.inner}>
