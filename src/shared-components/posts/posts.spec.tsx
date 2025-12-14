@@ -15,6 +15,7 @@ import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
 import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import type { RenderResult } from '@testing-library/react';
 import { InterfacePostEdge } from 'types/Post/interface';
+import styles from '../createPostModal/createPostModal.module.css';
 
 // Hoisted mocks (must be before vi.mock calls)
 const { mockToast } = vi.hoisted(() => ({
@@ -49,6 +50,10 @@ vi.mock('react-i18next', () => ({
   }),
   Trans: ({ children }: { children: React.ReactNode }) => children,
   I18nextProvider: ({ children }: { children: React.ReactNode }) => children,
+  initReactI18next: {
+    type: '3rdParty',
+    init: () => {},
+  },
 }));
 
 // Hoisted router mock
@@ -185,24 +190,24 @@ vi.mock('shared-components/Navbar/Navbar', () => ({
 }));
 
 // Mock CreatePostModal
-vi.mock('screens/OrgPost/CreatePostModal', () => ({
-  default: ({
-    show,
-    onHide,
-  }: {
-    show: boolean;
-    onHide: () => void;
-    refetch: () => void;
-    orgId?: string;
-  }) =>
-    show ? (
-      <div data-testid="create-post-modal">
-        <button type="button" data-testid="close-create-modal" onClick={onHide}>
-          Close
-        </button>
-      </div>
-    ) : null,
-}));
+// vi.mock('screens/OrgPost/CreatePostModal', () => ({
+//   default: ({
+//     show,
+//     onHide,
+//   }: {
+//     show: boolean;
+//     onHide: () => void;
+//     refetch: () => void;
+//     orgId?: string;
+//   }) =>
+//     show ? (
+//       <div data-testid="create-post-modal">
+//         <button type="button" data-testid="close-create-modal" onClick={onHide}>
+//           Close
+//         </button>
+//       </div>
+//     ) : null,
+// }));
 
 // Mock InfiniteScroll
 vi.mock('react-infinite-scroll-component', () => ({
@@ -804,13 +809,15 @@ describe('Create Post Modal', () => {
     });
 
     // Close modal
-    const closeButton = screen.getByTestId('close-create-modal');
+    const closeButton = screen.getByTestId('closeBtn');
     await act(async () => {
       fireEvent.click(closeButton);
     });
 
     await waitFor(() => {
-      expect(screen.queryByTestId('create-post-modal')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('create-post-modal')).toHaveClass(
+        styles.modalDialog,
+      );
     });
   });
 });

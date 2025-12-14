@@ -79,7 +79,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const [isLikedByUser, setIsLikedByUser] = useState<boolean>(
     props.hasUserVoted?.voteType === 'up_vote',
   );
-  const [likeCount, setLikeCount] = useState<number>(props.upVoteCount);
+  const [likeCount, setLikeCount] = useState<number>(props.upVoteCount ?? 0);
   const [commentInput, setCommentInput] = React.useState('');
   const [showEditPost, setShowEditPost] = React.useState(false);
   const [postContent, setPostContent] = React.useState(props.text);
@@ -93,7 +93,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
 
   useEffect(() => {
     setIsLikedByUser(props.hasUserVoted?.voteType === 'up_vote');
-    setLikeCount(props.upVoteCount);
+    setLikeCount(props.upVoteCount ?? 0);
   }, [props.hasUserVoted?.voteType, props.upVoteCount]);
 
   const commentCount = props.commentCount;
@@ -190,7 +190,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const [editPost] = useMutation(UPDATE_POST_MUTATION);
   const [deletePost] = useMutation(DELETE_POST_MUTATION);
   const [togglePinPost] = useMutation(TOGGLE_PINNED_POST);
-  const isPinned = Boolean(props.pinnedAt !== null);
+  const isPinned = props.pinnedAt != null;
 
   const handlePostInput = (e: React.ChangeEvent<HTMLInputElement>): void =>
     setPostContent(e.target.value);

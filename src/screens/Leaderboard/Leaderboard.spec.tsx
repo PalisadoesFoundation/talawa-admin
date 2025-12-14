@@ -102,6 +102,8 @@ describe('Testing Leaderboard Screen', () => {
 
   afterEach(() => {
     routerMocks.useParams.mockReset();
+
+    vi.clearAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {

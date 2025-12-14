@@ -715,8 +715,11 @@
     "startDate": "Date de début",
     "endDate": "Date de fin"
   },
-  "orgPost": {
+  "createPostModal": {
     "title": "Des postes",
+    "titleOfPost": "Titre de votre post...",
+    "bodyOfPost": "Corps de votre post...",
+    "post": "Poste",
     "searchPost": "Rechercher un article",
     "posts": "Des postes",
     "createPost": "Créer un message",
@@ -740,6 +743,9 @@
     "tag": " Votre navigateur ne prend pas en charge la balise vidéo",
     "postCreatedSuccess": "Toutes nos félicitations! ",
     "pinPost": "Épingler le message",
+    "unpinPost": "Désépingler le message",
+    "postToAnyone": "poster à n'importe qui",
+    "unsupportedFileType": "Type de fichier non pris en charge",
     "Next": "Page suivante",
     "Previous": "Page précédente",
     "cancel": "Annuler",

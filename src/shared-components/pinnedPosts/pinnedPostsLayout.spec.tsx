@@ -377,10 +377,19 @@ describe('PinnedPostsLayout Component', () => {
       // Unmount and verify handler doesn't run
       unmount();
 
-      // After unmount, calling the captured handler should not update state
-      // or cause errors (React warns about state updates on unmounted components)
-      // The test passes if no errors are thrown during handler execution
-      expect(() => scrollHandler()).not.toThrow();
+      // Spy on console.error to catch React warnings about state updates on unmounted components
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      // Trigger scroll which would update state if listener wasn't removed
+      scrollHandler();
+
+      // Should not see React warning about updating unmounted component
+      expect(consoleErrorSpy).not.toHaveBeenCalledWith(
+        expect.stringContaining('unmounted component'),
+      );
+      consoleErrorSpy.mockRestore();
     });
   });
 

@@ -57,7 +57,6 @@ import Row from 'react-bootstrap/Row';
 import { Add, Close } from '@mui/icons-material';
 import Loader from 'components/Loader/Loader';
 import PageHeader from 'shared-components/Navbar/Navbar';
-import CreatePostModal from 'screens/OrgPost/CreatePostModal';
 import PinnedPostsLayout from 'shared-components/pinnedPosts/pinnedPostsLayout';
 import PostCard from 'shared-components/postCard/PostCard';
 import styles from 'style/app-fixed.module.css';
@@ -66,6 +65,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import { Modal } from 'react-bootstrap';
 import { formatDate } from 'utils/dateFormatter';
+import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
 
 export default function PostsPage() {
   const { t } = useTranslation('translation', { keyPrefix: 'posts' });
@@ -415,13 +415,14 @@ export default function PostsPage() {
           </div>
         </div>
       </Row>
-
-      <CreatePostModal
-        show={postModalIsOpen}
-        onHide={hideCreatePostModal}
-        refetch={refetch}
-        orgId={currentUrl}
-      />
+      <div style={{ position: 'absolute' }}>
+        <CreatePostModal
+          show={postModalIsOpen}
+          onHide={hideCreatePostModal}
+          refetch={refetch}
+          orgId={currentUrl}
+        />
+      </div>
 
       {/* Pinned Post Modal */}
       {selectedPinnedPost && (
