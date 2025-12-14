@@ -72,6 +72,7 @@ import CommentCard from '../../components/UserPortal/CommentCard/CommentCard';
 import styles from '../../style/app-fixed.module.css';
 import { PluginInjector } from '../../plugin';
 import useLocalStorage from '../../utils/useLocalstorage';
+import { handleLoadMoreComments as handleLoadMoreCommentsHelper } from './helperFunctions';
 
 export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
@@ -141,47 +142,17 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   };
 
   const handleLoadMoreComments = async (): Promise<void> => {
-    setLoadingMoreComments(true);
-    try {
-      await fetchMoreComments({
-        variables: {
-          postId: props.id,
-          userId: userId as string,
-          first: 10,
-          after: endCursor,
-        },
-        updateQuery: (prev, { fetchMoreResult }) => {
-          if (!fetchMoreResult?.post?.comments) return prev;
-
-          const newEdges = fetchMoreResult.post.comments.edges;
-          const newPageInfo = fetchMoreResult.post.comments.pageInfo;
-
-          // Update local state
-          setComments((prevComments) => [
-            ...prevComments,
-            ...newEdges.map((edge: InterfaceCommentEdge) => edge.node),
-          ]);
-          setEndCursor(newPageInfo.endCursor);
-          setHasNextPage(newPageInfo.hasNextPage);
-
-          return {
-            ...prev,
-            post: {
-              ...prev.post,
-              comments: {
-                ...prev.post.comments,
-                edges: [...prev.post.comments.edges, ...newEdges],
-                pageInfo: newPageInfo,
-              },
-            },
-          };
-        },
-      });
-    } catch (error) {
-      errorHandler(t, error);
-    } finally {
-      setLoadingMoreComments(false);
-    }
+    await handleLoadMoreCommentsHelper({
+      fetchMoreComments,
+      postId: props.id,
+      userId: userId as string,
+      endCursor,
+      setComments,
+      setEndCursor,
+      setHasNextPage,
+      setLoadingMoreComments,
+      t,
+    });
   };
 
   const [likePost, { loading: likeLoading }] = useMutation(UPDATE_POST_VOTE);
@@ -242,13 +213,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
     setDropdownAnchor(event.currentTarget);
   };
 
-  const handleDropdownClose = (): void => {
-    setDropdownAnchor(null);
-  };
-
   const toggleEditPost = (): void => {
     setShowEditPost(!showEditPost);
-    handleDropdownClose();
+    setDropdownAnchor(null);
   };
 
   // Toggle pin/unpin functionality
@@ -266,7 +233,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       toast.success(
         isPinned ? t('postUnpinnedSuccess') : t('postPinnedSuccess'),
       );
-      handleDropdownClose();
+      setDropdownAnchor(null);
     } catch (error) {
       errorHandler(t, error);
     }
@@ -302,7 +269,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       await deletePost({ variables: { input: { id: props.id } } });
       props.fetchPosts();
       toast.success(t('postDeletedSuccess'));
-      handleDropdownClose();
+      setDropdownAnchor(null);
     } catch (error) {
       errorHandler(t, error);
     }
@@ -344,7 +311,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           <Menu
             anchorEl={dropdownAnchor}
             open={Boolean(dropdownAnchor)}
-            onClose={handleDropdownClose}
+            onClose={() => setDropdownAnchor(null)}
             anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'right',

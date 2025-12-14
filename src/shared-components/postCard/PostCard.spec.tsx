@@ -23,7 +23,6 @@ import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutation
 import { GET_POST_COMMENTS, CURRENT_USER } from '../../GraphQl/Queries/Queries';
 import useLocalStorage from '../../utils/useLocalstorage';
 import { errorHandler } from '../../utils/errorHandler';
-import { number } from 'prop-types';
 
 // ===== MODULE MOCKS =====
 vi.mock('react-toastify', () => ({
@@ -995,6 +994,9 @@ describe('PostCard', () => {
         expect.any(Object),
       );
     });
+
+    // Ensure modal stays open after error to prevent UX regression
+    expect(screen.getByText('Edit Post')).toBeInTheDocument();
   });
 
   it('handles delete post error', async () => {
@@ -1033,6 +1035,9 @@ describe('PostCard', () => {
         expect.any(Object),
       );
     });
+
+    // Ensure modal stays open after error to prevent UX regression
+    expect(screen.getByText('Edit Post')).toBeInTheDocument();
   });
 
   it('renders loading state for like button', async () => {
