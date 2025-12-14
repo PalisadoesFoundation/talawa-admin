@@ -187,7 +187,27 @@ pnpm run serve &
 
 #### Stopping The Application
 
-To do.
+Since the production server runs in the background, you need to find and stop the process:
+
+1. Find the process ID:
+
+   ```bash
+   pgrep -f "pnpm run serve"
+   ```
+
+2. Stop the process using the process ID from step 1:
+
+   ```bash
+   kill <process_id>
+   ```
+
+   Replace `<process_id>` with the actual process ID number.
+
+Alternatively, you can use a single command:
+
+```bash
+pkill -f "pnpm run serve"
+```
 
 ### For Development Environments
 
@@ -206,127 +226,6 @@ The app will run until you hit:
 ```
 <CTRL-C>
 ```
-<!-- add -->
 
-## Stopping the Application (Non-Docker Production Server)
 
-When running Talawa Admin in a non-Docker production environment, you have several options to stop the application depending on how it was started.
 
-### Method 1: If Running in Terminal Foreground
-
-If you started the application directly in your terminal window:
-
-```bash
-# Simply press Ctrl+C in the terminal
-Ctrl + C
-```
-
-This sends a SIGINT signal to gracefully stop the Node.js process.
-
-### Method 2: Using PM2 Process Manager
-
-If you're using PM2 to manage your application:
-
-```bash
-# Stop the application
-pm2 stop talawa-admin
-
-# Stop and remove from PM2 process list
-pm2 delete talawa-admin
-
-# Stop all PM2 processes
-pm2 stop all
-
-# View all running processes
-pm2 list
-
-# View detailed process information
-pm2 show talawa-admin
-```
-
-### Method 3: Using systemd Service (Linux)
-
-If you configured Talawa Admin as a systemd service:
-
-```bash
-# Stop the service
-sudo systemctl stop talawa-admin
-
-# Check service status
-sudo systemctl status talawa-admin
-
-# Disable service from starting automatically on boot
-sudo systemctl disable talawa-admin
-
-# Stop and disable in one command
-sudo systemctl disable --now talawa-admin
-```
-
-### Method 4: Using NSSM (Windows Service)
-
-If you're running as a Windows service using NSSM:
-
-```cmd
-# Stop the service
-nssm stop talawa-admin
-
-# Check service status
-nssm status talawa-admin
-
-# Remove the service completely
-nssm remove talawa-admin confirm
-```
-
-### Method 5: Finding and Killing the Process Manually
-
-If you're unsure how the application was started:
-
-**On Windows:**
-```cmd
-# Find the process using the application port (e.g., 4321)
-netstat -ano | findstr :4321
-
-# Note the PID (Process ID) from the output, then kill it
-taskkill /PID <PID> /F
-
-# Example:
-taskkill /PID 12345 /F
-```
-
-**On Linux/Mac:**
-```bash
-# Find the process using the port
-lsof -i :4321
-
-# Kill the process using its PID
-kill -9 <PID>
-
-# Or find and kill Node processes
-pkill -f "node.*talawa"
-```
-
-### Verifying the Application Has Stopped
-
-After stopping the application, verify it's no longer running:
-
-**Windows:**
-```cmd
-netstat -ano | findstr :4321
-# Should return nothing if stopped successfully
-```
-
-**Linux/Mac:**
-```bash
-lsof -i :4321
-# Should return nothing if stopped successfully
-
-# Or check for Node processes
-ps aux | grep talawa
-```
-
-### Important Notes
-
-- Always use graceful shutdown methods (Ctrl+C, PM2 stop, systemctl stop) before resorting to force kill
-- If using a process manager like PM2, always use PM2 commands to maintain proper process tracking
-- Make sure to stop any related services (like MongoDB, Redis) if they were started separately
-- Check that no zombie processes remain after stopping the application
