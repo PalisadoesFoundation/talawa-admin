@@ -68,7 +68,7 @@ const MOCKS_WITH_MULTIPLE_PLEDGERS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {},
         orderBy: 'endDate_DESC',
       },
@@ -153,7 +153,7 @@ const MOCKS_WITH_MISSING_CAMPAIGN = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {},
         orderBy: 'endDate_DESC',
       },
@@ -191,7 +191,7 @@ const MOCKS_WITH_INVALID_DATE = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {},
         orderBy: 'endDate_DESC',
       },
@@ -237,7 +237,7 @@ const MOCKS_WITH_MORE_USERS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {},
         orderBy: 'endDate_DESC',
       },
@@ -360,7 +360,7 @@ const MOCKS_WITH_SINGLE_PLEDGER = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {},
         orderBy: 'endDate_DESC',
       },
@@ -405,7 +405,7 @@ const MOCKS_WITH_DIFFERENT_CURRENCIES = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {},
         orderBy: 'endDate_DESC',
       },
@@ -450,7 +450,7 @@ const MOCKS_WITH_ZERO_GOAL = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {},
         orderBy: 'endDate_DESC',
       },
@@ -495,7 +495,7 @@ const EMPTY_MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {},
         orderBy: 'endDate_DESC',
       },
@@ -568,7 +568,7 @@ const USER_PLEDGES_ERROR = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {},
         orderBy: 'endDate_DESC',
       },
@@ -582,7 +582,7 @@ const USER_PLEDGES_NO_ASSOCIATED_RESOURCES_ERROR = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {},
         orderBy: 'endDate_DESC',
       },
@@ -610,7 +610,7 @@ const SEARCH_MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {
           firstName_contains: 'Harve',
           name_contains: undefined,
@@ -655,7 +655,7 @@ const SEARCH_MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {
           firstName_contains: '',
           name_contains: 'School',
@@ -700,7 +700,7 @@ const SEARCH_MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {
           name_contains: 'School',
         },
@@ -744,7 +744,7 @@ const SEARCH_MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {},
         orderBy: 'endDate_DESC',
       },
@@ -812,7 +812,7 @@ const SEARCH_MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {
           name_contains: '',
         },
@@ -882,7 +882,7 @@ const SEARCH_MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {},
         orderBy: 'amount_ASC',
       },
@@ -950,7 +950,7 @@ const SEARCH_MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {},
         orderBy: 'amount_DESC',
       },
@@ -1018,7 +1018,7 @@ const SEARCH_MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {},
         orderBy: 'endDate_ASC',
       },
@@ -1223,7 +1223,7 @@ describe('Testing User Pledge Screen', () => {
         request: {
           query: USER_PLEDGES,
           variables: {
-            userId: { id: 'userId' },
+            input: { userId: 'userId' },
             where: {},
             orderBy: 'endDate_DESC',
           },
@@ -1722,7 +1722,7 @@ describe('Testing User Pledge Screen', () => {
         request: {
           query: USER_PLEDGES,
           variables: {
-            userId: { id: 'userId' },
+            input: { userId: 'userId' },
             where: {},
             orderBy: 'endDate_DESC',
           },
@@ -1816,7 +1816,7 @@ describe('Testing User Pledge Screen', () => {
         request: {
           query: USER_PLEDGES,
           variables: {
-            userId: { id: 'userId' },
+            input: { userId: 'userId' },
             where: {},
             orderBy: 'endDate_DESC',
           },
@@ -1868,7 +1868,7 @@ describe('Testing User Pledge Screen', () => {
         request: {
           query: USER_PLEDGES,
           variables: {
-            userId: { id: 'userId' },
+            input: { userId: 'userId' },
             where: {},
             orderBy: 'endDate_DESC',
           },
@@ -1938,7 +1938,7 @@ describe('Testing User Pledge Screen', () => {
         request: {
           query: USER_PLEDGES,
           variables: {
-            userId: { id: 'userId' },
+            input: { userId: 'userId' },
             where: {},
             orderBy: 'endDate_DESC',
           },

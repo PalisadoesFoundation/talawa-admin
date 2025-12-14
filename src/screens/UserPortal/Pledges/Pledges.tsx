@@ -130,7 +130,7 @@ const Pledges = (): JSX.Element => {
     >;
   } = useQuery(USER_PLEDGES, {
     variables: {
-      userId: { id: userId },
+      input: { userId: userId },
       where: searchTerm
         ? {
             ...(searchBy === 'pledgers' && { firstName_contains: searchTerm }),
