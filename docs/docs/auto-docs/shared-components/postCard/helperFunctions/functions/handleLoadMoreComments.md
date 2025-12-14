@@ -6,7 +6,7 @@
 
 > **handleLoadMoreComments**(`__namedParameters`): `Promise`\<`void`\>
 
-Defined in: [src/shared-components/postCard/helperFunctions.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/postCard/helperFunctions.ts#L90)
+Defined in: [src/shared-components/postCard/helperFunctions.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/postCard/helperFunctions.ts#L108)
 
 ## Parameters
 

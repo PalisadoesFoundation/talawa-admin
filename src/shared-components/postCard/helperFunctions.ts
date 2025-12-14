@@ -13,11 +13,11 @@
  * @param params.setEndCursor - State setter for updating the pagination cursor
  * @param params.setHasNextPage - State setter for updating pagination flag
  * @param params.setLoadingMoreComments - State setter for loading state
- * @param params.t - Translation function for error messages
+ * @param params.t - Translation function (passed through to errorHandler for consistency)
  *
  * @returns Promise that resolves when the operation is complete
  *
- * @throws Will call errorHandler if the GraphQL request fails
+ * * Errors are handled via `errorHandler`; this function does not throw
  */
 
 import type React from 'react';
@@ -26,6 +26,12 @@ import type {
   InterfaceComment,
 } from '../../utils/interfaces';
 import { errorHandler } from '../../utils/errorHandler';
+import type {
+  ApolloQueryResult,
+  FetchMoreQueryOptions,
+  OperationVariables,
+  QueryFunctionOptions,
+} from '@apollo/client';
 
 // Define proper types for GraphQL response
 /**
@@ -34,10 +40,10 @@ import { errorHandler } from '../../utils/errorHandler';
 interface InterfaceCommentConnection {
   edges: InterfaceCommentEdge[];
   pageInfo: {
-    startCursor: string | null;
-    endCursor: string | null;
-    hasNextPage: boolean;
-    hasPreviousPage: boolean;
+    startCursor?: string | null;
+    endCursor?: string | null;
+    hasNextPage?: boolean;
+    hasPreviousPage?: boolean;
   };
 }
 
@@ -47,7 +53,7 @@ interface InterfaceCommentConnection {
 interface InterfacePostCommentsData {
   post: {
     id: string;
-    caption: string;
+    caption?: string;
     comments: InterfaceCommentConnection;
   };
 }
@@ -65,18 +71,30 @@ interface InterfaceFetchMoreResult {
  * Parameters required for the handleLoadMoreComments function.
  */
 interface InterfaceHandleLoadMoreCommentsParams {
-  fetchMoreComments: (options: {
-    variables: {
-      postId: string;
-      userId: string;
-      first: number;
-      after: string | null;
-    };
-    updateQuery: (
-      prev: InterfacePostCommentsData,
-      { fetchMoreResult }: { fetchMoreResult?: InterfaceFetchMoreResult },
-    ) => InterfacePostCommentsData;
-  }) => Promise<unknown>;
+  fetchMoreComments: (
+    options: FetchMoreQueryOptions<
+      {
+        postId: string;
+        userId: string;
+        first: number;
+        after: string | null;
+      },
+      InterfacePostCommentsData
+    > & {
+      updateQuery: (
+        previousQueryResult: InterfacePostCommentsData,
+        options: {
+          fetchMoreResult?: InterfaceFetchMoreResult;
+          variables?: {
+            postId: string;
+            userId: string;
+            first: number;
+            after: string | null;
+          };
+        },
+      ) => InterfacePostCommentsData;
+    },
+  ) => Promise<ApolloQueryResult<InterfacePostCommentsData>>;
   postId: string;
   userId: string;
   endCursor: string | null;
@@ -100,40 +118,51 @@ export const handleLoadMoreComments = async ({
 }: InterfaceHandleLoadMoreCommentsParams): Promise<void> => {
   setLoadingMoreComments(true);
   try {
-    await fetchMoreComments({
+    const result = await fetchMoreComments({
       variables: {
         postId,
         userId,
         first: 10,
         after: endCursor,
       },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        if (!fetchMoreResult?.post?.comments) return prev;
+      updateQuery: (previousQueryResult, { fetchMoreResult }) => {
+        if (!fetchMoreResult?.post?.comments) return previousQueryResult;
 
         const newEdges = fetchMoreResult.post.comments.edges;
         const newPageInfo = fetchMoreResult.post.comments.pageInfo;
 
-        // Update local state
-        setComments((prevComments) => [
-          ...prevComments,
-          ...newEdges.map((edge: InterfaceCommentEdge) => edge.node),
-        ]);
-        setEndCursor(newPageInfo.endCursor);
-        setHasNextPage(newPageInfo.hasNextPage);
-
         return {
-          ...prev,
+          ...previousQueryResult,
           post: {
-            ...prev.post,
+            ...previousQueryResult.post,
             comments: {
-              ...prev.post.comments,
-              edges: [...prev.post.comments.edges, ...newEdges],
-              pageInfo: newPageInfo,
+              ...previousQueryResult.post.comments,
+              edges: [
+                ...(previousQueryResult.post.comments.edges || []),
+                ...newEdges,
+              ],
+              pageInfo: {
+                ...previousQueryResult.post.comments.pageInfo,
+                ...newPageInfo,
+              },
             },
           },
         };
       },
     });
+
+    const newEdges = result.data?.post?.comments?.edges ?? [];
+    const newPageInfo = result.data?.post?.comments?.pageInfo;
+    if (newEdges.length) {
+      setComments((prevComments) => [
+        ...prevComments,
+        ...newEdges.map((edge: InterfaceCommentEdge) => edge.node),
+      ]);
+    }
+    if (newPageInfo) {
+      setEndCursor(newPageInfo.endCursor ?? null);
+      setHasNextPage(newPageInfo.hasNextPage ?? false);
+    }
   } catch (error) {
     errorHandler(t, error);
   } finally {
