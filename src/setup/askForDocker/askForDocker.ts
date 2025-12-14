@@ -51,7 +51,7 @@ export const askAndUpdateTalawaApiUrl = async (
       const MAX_RETRIES = 3;
       while (!isConnected && retryCount < MAX_RETRIES) {
         try {
-          endpoint = await askForTalawaApiUrl();
+          endpoint = await askForTalawaApiUrl(useDocker);
           const url = new URL(endpoint);
           if (!['http:', 'https:'].includes(url.protocol)) {
             throw new Error('Invalid URL protocol. Must be http or https');
@@ -90,7 +90,9 @@ export const askAndUpdateTalawaApiUrl = async (
           if (localHosts.has(parsed.hostname)) {
             parsed.hostname = 'host.docker.internal';
             const dockerUrl = parsed.toString();
-            updateEnvFile('REACT_APP_DOCKER_TALAWA_URL', dockerUrl);
+            updateEnvFile('REACT_APP_TALAWA_URL', dockerUrl);
+            const dockerWsUrl = dockerUrl.replace(/^http(s)?:\/\//, 'ws$1://');
+            updateEnvFile('REACT_APP_BACKEND_WEBSOCKET_URL', dockerWsUrl);
           }
         } catch (error) {
           throw new Error(
