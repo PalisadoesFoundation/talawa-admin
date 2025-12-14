@@ -85,7 +85,14 @@ const MOCKS = [
   },
   {
     request: { query: GET_COMMUNITY_DATA_PG },
-    result: { data: { community: null } },
+    result: {
+      data: {
+        community: {
+          inactivityTimeoutDuration: null,
+          __typename: 'Community',
+        },
+      },
+    },
   },
   {
     request: { query: ORGANIZATION_LIST_NO_MEMBERS },
@@ -151,7 +158,14 @@ const MOCKS4 = [
   },
   {
     request: { query: GET_COMMUNITY_DATA_PG },
-    result: { data: { community: null } },
+    result: {
+      data: {
+        community: {
+          inactivityTimeoutDuration: null,
+          __typename: 'Community',
+        },
+      },
+    },
   },
   {
     request: { query: ORGANIZATION_LIST_NO_MEMBERS },
@@ -1670,7 +1684,14 @@ describe('Extra coverage for 100 %', () => {
       },
       {
         request: { query: GET_COMMUNITY_DATA_PG },
-        result: { data: { community: null } },
+        result: {
+          data: {
+            community: {
+              inactivityTimeoutDuration: null,
+              __typename: 'Community',
+            },
+          },
+        },
       },
       {
         request: { query: ORGANIZATION_LIST_NO_MEMBERS },
@@ -1706,7 +1727,14 @@ describe('Extra coverage for 100 %', () => {
       },
       {
         request: { query: GET_COMMUNITY_DATA_PG },
-        result: { data: { community: null } },
+        result: {
+          data: {
+            community: {
+              inactivityTimeoutDuration: null,
+              __typename: 'Community',
+            },
+          },
+        },
       },
       {
         request: { query: ORGANIZATION_LIST_NO_MEMBERS },
@@ -1744,7 +1772,14 @@ describe('Extra coverage for 100 %', () => {
       },
       {
         request: { query: GET_COMMUNITY_DATA_PG },
-        result: { data: { community: null } },
+        result: {
+          data: {
+            community: {
+              inactivityTimeoutDuration: null,
+              __typename: 'Community',
+            },
+          },
+        },
       },
       {
         request: { query: ORGANIZATION_LIST_NO_MEMBERS },
@@ -1783,7 +1818,14 @@ describe('Extra coverage for 100 %', () => {
       },
       {
         request: { query: GET_COMMUNITY_DATA_PG },
-        result: { data: { community: null } },
+        result: {
+          data: {
+            community: {
+              inactivityTimeoutDuration: null,
+              __typename: 'Community',
+            },
+          },
+        },
       },
       {
         request: { query: ORGANIZATION_LIST_NO_MEMBERS },
@@ -1847,7 +1889,14 @@ describe('Extra coverage for 100 %', () => {
       },
       {
         request: { query: GET_COMMUNITY_DATA_PG },
-        result: { data: { community: null } },
+        result: {
+          data: {
+            community: {
+              inactivityTimeoutDuration: null,
+              __typename: 'Community',
+            },
+          },
+        },
       },
       {
         request: { query: ORGANIZATION_LIST_NO_MEMBERS },
