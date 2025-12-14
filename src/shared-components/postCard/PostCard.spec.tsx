@@ -23,6 +23,7 @@ import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutation
 import { GET_POST_COMMENTS, CURRENT_USER } from '../../GraphQl/Queries/Queries';
 import useLocalStorage from '../../utils/useLocalstorage';
 import { errorHandler } from '../../utils/errorHandler';
+import { number } from 'prop-types';
 
 // ===== MODULE MOCKS =====
 vi.mock('react-toastify', () => ({
@@ -1469,5 +1470,75 @@ describe('PostCard', () => {
         screen.queryByTestId('pin-post-menu-item'),
       ).not.toBeInTheDocument();
     });
+  });
+
+  it('synchronizes isLikedByUser state when hasUserVoted prop changes', () => {
+    const { rerender } = render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard
+                {...defaultProps}
+                hasUserVoted={{ hasVoted: false, voteType: null }}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Check initial state - should not be liked
+    expect(screen.queryByTestId('liked')).not.toBeInTheDocument();
+    expect(screen.getByTestId('unliked')).toBeInTheDocument();
+
+    rerender(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard
+                {...defaultProps}
+                hasUserVoted={{ hasVoted: true, voteType: 'up_vote' }}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Check that the button now shows as liked
+    expect(screen.getByTestId('liked')).toBeInTheDocument();
+    expect(screen.queryByTestId('unliked')).not.toBeInTheDocument();
+  });
+
+  it('synchronizes likeCount state when upVoteCount prop changes', () => {
+    const { rerender } = render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...defaultProps} upVoteCount={5} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByTestId('like-count')).toHaveTextContent('5');
+
+    rerender(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...defaultProps} upVoteCount={10} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByTestId('like-count')).toHaveTextContent('10');
   });
 });

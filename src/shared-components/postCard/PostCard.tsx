@@ -438,9 +438,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             {likeLoading ? (
               <CircularProgress size={20} />
             ) : isLikedByUser ? (
-              <Favorite color="error" fontSize="small" />
+              <Favorite color="error" fontSize="small" data-testid="liked" />
             ) : (
-              <Favorite fontSize="small" />
+              <Favorite fontSize="small" data-testid="unliked" />
             )}
           </IconButton>
           <IconButton onClick={toggleComments} size="small">
@@ -462,7 +462,11 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
 
       {/* Post Content */}
       <Box className={postCardStyles.postContent}>
-        <Typography variant="subtitle2" fontWeight="bold">
+        <Typography
+          variant="subtitle2"
+          fontWeight="bold"
+          data-testid="like-count"
+        >
           {likeCount} {t('likes')}
         </Typography>
         <Typography variant="body2" className={postCardStyles.caption}>
