@@ -124,6 +124,8 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
   });
 
   afterEach(async () => {
+    vi.clearAllMocks();
+
     await act(async () => {
       await i18nForTest.changeLanguage('en');
     });
@@ -321,7 +323,11 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     });
     render(
       <MockedProvider link={link}>
-        <Router location={history.location} navigator={history}>
+        <Router
+          location={history.location}
+          navigator={history}
+          unstable_useTransitions={false}
+        >
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <OrganizationNavbar {...navbarProps} />

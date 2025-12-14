@@ -47,7 +47,7 @@ describe('OrganizationSelector Component', () => {
 
     const clearButton = autocomplete.querySelector('[aria-label="Clear"]');
     expect(clearButton).toBeInTheDocument();
-    fireEvent.click(screen.getByLabelText('Clear'));
+    fireEvent.click(clearButton as Element);
 
     await waitFor(() => {
       expect(mockOnChange).toHaveBeenCalledWith('');

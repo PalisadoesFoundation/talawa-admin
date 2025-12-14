@@ -2,54 +2,8 @@ import React from 'react';
 import PalisadoesLogo from 'assets/svgs/palisadoes.svg?react';
 import { InterfaceAuthBrandingProps } from 'types/AuthBranding/interface';
 import styles from 'style/app-fixed.module.css';
-import {
-  FacebookLogo,
-  LinkedInLogo,
-  GithubLogo,
-  InstagramLogo,
-  XLogo,
-  YoutubeLogo,
-  SlackLogo,
-} from 'assets/svgs/social-icons';
 import { useTranslation } from 'react-i18next';
-
-const socialMediaLinks = [
-  {
-    tag: 'facebookURL',
-    href: 'https://www.facebook.com/palisadoesproject',
-    logo: FacebookLogo,
-  },
-  {
-    tag: 'xURL',
-    href: 'https://X.com/palisadoesorg?lang=en',
-    logo: XLogo,
-  },
-  {
-    tag: 'linkedInURL',
-    href: 'https://www.linkedin.com/company/palisadoes/',
-    logo: LinkedInLogo,
-  },
-  {
-    tag: 'githubURL',
-    href: 'https://github.com/PalisadoesFoundation',
-    logo: GithubLogo,
-  },
-  {
-    tag: 'youtubeURL',
-    href: 'https://www.youtube.com/@PalisadoesOrganization',
-    logo: YoutubeLogo,
-  },
-  {
-    tag: 'slackURL',
-    href: 'https://www.palisadoes.org/slack',
-    logo: SlackLogo,
-  },
-  {
-    tag: 'instagramURL',
-    href: 'https://www.instagram.com/palisadoes/',
-    logo: InstagramLogo,
-  },
-];
+import { socialMediaLinks } from '../../constants';
 
 /**
  * AuthBranding
