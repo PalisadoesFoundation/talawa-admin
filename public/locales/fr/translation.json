@@ -1119,6 +1119,8 @@
     "latest": "Dernier",
     "oldest": "Le plus ancien",
     "none": "Aucun",
+    "closePinnedPost": "Fermer le message épinglé",
+    "unknownUser": "Utilisateur inconnu",
     "searchPosts": "Rechercher des messages",
     "nothingToShow": "Rien à montrer ici.",
     "noMorePosts": "Plus de messages à charger",

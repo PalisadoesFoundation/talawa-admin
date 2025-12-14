@@ -197,7 +197,7 @@ beforeEach(() => {
     configurable: true,
   });
 
-  global.URL.createObjectURL = vi.fn(() => 'mock-url');
+  global.URL.createObjectURL = vi.fn(() => 'blob:mock-url');
   global.URL.revokeObjectURL = vi.fn();
 
   Object.defineProperty(File.prototype, 'arrayBuffer', {

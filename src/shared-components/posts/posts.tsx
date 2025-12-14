@@ -75,14 +75,14 @@ export default function PostsPage() {
   const { orgId: currentUrl } = useParams();
   const [sortingOption, setSortingOption] = useState('None');
   const [allPosts, setAllPosts] = useState<InterfacePost[]>([]);
-  const [after, setAfter] = useState<string | null | undefined>(null);
-  const [first] = useState<number | null>(6);
+  const [after, setAfter] = useState<string | null>(null);
+  const first = 6;
   const [postModalIsOpen, setPostModalIsOpen] = useState(false);
   const [selectedPinnedPost, setSelectedPinnedPost] =
     useState<InterfacePost | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId') ?? getItem('id');
+  const userId = getItem<string>('userId') ?? getItem<string>('id') ?? null;
   const [showPinnedPostModal, setShowPinnedPostModal] = useState(false);
 
   const showCreatePostModal = (): void => {
@@ -219,7 +219,7 @@ export default function PostsPage() {
       });
   }, [hasMore, sortingOption, fetchMore, currentUrl, userId, after, first]);
 
-  const handleSearch = async (term: string): Promise<void> => {
+  const handleSearch = (term: string): void => {
     setSearchTerm(term);
 
     if (!term.trim()) {
@@ -253,7 +253,7 @@ export default function PostsPage() {
     id: post.id,
     creator: {
       id: post.creator?.id ?? 'unknown',
-      name: post.creator?.name ?? 'Unknown User',
+      name: post.creator?.name ?? t('unknownUser'),
       avatarURL: post.creator?.avatarURL,
     },
     hasUserVoted: post.hasUserVoted ?? { hasVoted: false, voteType: null },
@@ -281,15 +281,22 @@ export default function PostsPage() {
 
     // Apply sorting if not 'None'
     if (sortingOption !== 'None' && posts.length > 0) {
-      posts = [...posts].sort((a, b) => {
-        const dateA = Number.isFinite(new Date(a.createdAt).getTime())
-          ? new Date(a.createdAt).getTime()
-          : 0;
-        const dateB = Number.isFinite(new Date(b.createdAt).getTime())
-          ? new Date(b.createdAt).getTime()
-          : 0;
-        return sortingOption === 'oldest' ? dateA - dateB : dateB - dateA;
+      // Precompute timestamps to avoid duplicate Date creation
+      const postsWithTimestamps = posts.map((post) => {
+        const time = new Date(post.createdAt).getTime();
+        return {
+          post,
+          timestamp: Number.isFinite(time) ? time : 0,
+        };
       });
+
+      postsWithTimestamps.sort((a, b) =>
+        sortingOption === 'oldest'
+          ? a.timestamp - b.timestamp
+          : b.timestamp - a.timestamp,
+      );
+
+      posts = postsWithTimestamps.map(({ post }) => post);
     }
 
     return posts;
@@ -330,6 +337,7 @@ export default function PostsPage() {
               <Button
                 variant="success"
                 onClick={showCreatePostModal}
+                disabled={!userId}
                 data-testid="createPostModalBtn"
                 data-cy="createPostModalBtn"
                 className={`${styles.createButton} mb-2`}
@@ -369,7 +377,7 @@ export default function PostsPage() {
               {isFiltering && filteredPosts.length === 0 && searchTerm && (
                 <Box sx={{ textAlign: 'center', py: 4 }}>
                   <Typography color="text.secondary">
-                    {t('noPostsFoundMatching')} "{searchTerm}"
+                    {t('noPostsFoundMatching', { term: searchTerm })}
                   </Typography>
                 </Box>
               )}
@@ -425,14 +433,16 @@ export default function PostsPage() {
           </div>
         </div>
       </Row>
-      <div style={{ position: 'absolute' }}>
-        <CreatePostModal
-          show={postModalIsOpen}
-          onHide={hideCreatePostModal}
-          refetch={refetch}
-          orgId={currentUrl}
-        />
-      </div>
+      {userId && (
+        <div style={{ position: 'absolute' }}>
+          <CreatePostModal
+            show={postModalIsOpen}
+            onHide={hideCreatePostModal}
+            refetch={refetch}
+            orgId={currentUrl}
+          />
+        </div>
+      )}
 
       {/* Pinned Post Modal */}
       {selectedPinnedPost && (
@@ -472,7 +482,7 @@ export default function PostsPage() {
                 justifyContent: 'center',
               }}
             >
-              <Close sx={{ fontSize: 20 }} />
+              <Close sx={{ fontSize: 20 }} aria-hidden="true" />
             </Button>
             {/* Render the pinned post */}
             <PostCard {...formatPostForCard(selectedPinnedPost)} />

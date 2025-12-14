@@ -138,7 +138,7 @@ function CreatePostModal({
     }
     if (file.type.startsWith('image/')) {
       setPreviewType('image');
-    } else if (file.type.startsWith('video/')) {
+    } else {
       setPreviewType('video');
     }
     setFile(file);
@@ -158,14 +158,16 @@ function CreatePostModal({
       const mediaFile = file;
 
       if (mediaFile) {
-        const fileName = mediaFile.name.split('/').pop() || 'defaultFileName';
-        const objectName = 'uploads/' + fileName;
+        // Sanitize filename by handling both forward and backward slashes
+        const sanitizedFileName =
+          mediaFile.name.split(/[/\\]/).pop() || 'defaultFileName';
+        const objectName = 'uploads/' + sanitizedFileName;
         const fileHash = await getFileHashFromFile(mediaFile);
 
         attachment = {
           fileHash,
           mimetype: getMimeTypeEnum(mediaFile.type),
-          name: fileName,
+          name: sanitizedFileName,
           objectName,
         };
       }
@@ -278,27 +280,37 @@ function CreatePostModal({
             }}
             data-testid="postBodyInput"
           />
-          {preview && previewType && (
-            <div className={styles.imagePreviewContainer}>
-              {previewType === 'image' && (
-                <img
-                  src={preview}
-                  alt="Selected"
-                  className={styles.imagePreview}
-                  data-testid="imagePreview"
-                />
-              )}
+          {(() => {
+            const isSafePreviewUrl =
+              typeof preview === 'string' && preview.startsWith('blob:');
+            return (
+              preview &&
+              previewType &&
+              isSafePreviewUrl && (
+                <div className={styles.imagePreviewContainer}>
+                  {previewType === 'image' && (
+                    <img
+                      src={preview}
+                      alt="Selected"
+                      className={styles.imagePreview}
+                      data-testid="imagePreview"
+                    />
+                  )}
 
-              {previewType === 'video' && (
-                <video
-                  src={preview}
-                  controls
-                  className={styles.videoPreview}
-                  data-testid="videoPreview"
-                />
-              )}
-            </div>
-          )}
+                  {previewType === 'video' && (
+                    <video
+                      src={preview}
+                      controls
+                      className={styles.videoPreview}
+                      data-testid="videoPreview"
+                    >
+                      <track kind="captions" />
+                    </video>
+                  )}
+                </div>
+              )
+            );
+          })()}
         </div>
 
         {/* Footer */}

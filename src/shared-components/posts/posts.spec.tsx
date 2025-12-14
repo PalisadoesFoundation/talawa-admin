@@ -305,7 +305,7 @@ const samplePosts = [
     attachments: [],
   },
   {
-    id: 'post-3',
+    id: 'post-4-invalid-date',
     caption: 'Third Post Content',
     createdAt: '2024-01-03T12:00:00Z',
     creator: {
@@ -538,7 +538,6 @@ const renderComponent = (mocks: MockedResponse[]): RenderResult =>
           </Routes>
         </MemoryRouter>
       </MockedProvider>
-      ,
     </I18nextProvider>,
   );
 
@@ -1274,5 +1273,93 @@ describe('Missing User ID', () => {
 
     // Error toasts should not be called since queries are skipped, not failed
     expect(mockToast.error).not.toHaveBeenCalled();
+  });
+
+  it('does not execute loadMorePosts when userId is missing', async () => {
+    // Mock localStorage to return null for userId
+    localStorageMocks.getItem.mockReturnValue(null);
+
+    renderComponent([]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('page-header')).toBeInTheDocument();
+    });
+
+    // Try to trigger loadMorePosts via the load more button, but it shouldn't work
+    const loadMoreButton = screen.queryByTestId('load-more-btn');
+    if (loadMoreButton) {
+      fireEvent.click(loadMoreButton);
+    }
+
+    expect(mockToast.error).not.toHaveBeenCalled();
+  });
+});
+
+describe('HandleSorting Edge Case', () => {
+  beforeEach(() => {
+    nextId = 1;
+    vi.clearAllMocks();
+    routerMocks.useParams.mockReturnValue({ orgId: '123' });
+    localStorageMocks.getItem.mockReturnValue('user-123');
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('handle sorting when has hasNextPage is false', async () => {
+    const mockWithMorePages = {
+      ...orgPostListMock,
+      result: {
+        data: {
+          organization: {
+            id: '123',
+            name: 'Test Organization',
+            avatarURL: null,
+            postsCount: 10,
+            posts: {
+              edges: [
+                {
+                  node: enrichPostNode(samplePosts[0]),
+                  cursor: 'cursor-post-1',
+                },
+                {
+                  node: enrichPostNode(samplePosts[1]),
+                  cursor: 'cursor-post-2',
+                },
+              ],
+              pageInfo: {
+                startCursor: 'cursor-post-1',
+                endCursor: 'cursor-post-2',
+                hasNextPage: false, // More pages not
+                hasPreviousPage: false,
+              },
+            },
+          },
+        },
+      },
+    };
+
+    renderComponent([mockWithMorePages, emptyPinnedPostsMock]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('infinite-scroll')).toBeInTheDocument();
+    });
+
+    const sortSelect = screen.getByTestId('sortpost-toggle-select');
+
+    // Verify hasMore is false when sorting is applied
+    let infiniteScroll = screen.getByTestId('infinite-scroll');
+    expect(infiniteScroll).toHaveAttribute('data-has-more', 'false');
+
+    fireEvent.change(sortSelect, { target: { value: 'None' } });
+
+    await waitFor(() => {
+      expect(sortSelect).toHaveValue('None');
+    });
+
+    // Verify hasMore is now false because hasNextPage is false
+    infiniteScroll = screen.getByTestId('infinite-scroll');
+    expect(infiniteScroll).toHaveAttribute('data-has-more', 'false');
   });
 });

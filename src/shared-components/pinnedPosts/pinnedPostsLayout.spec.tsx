@@ -591,14 +591,6 @@ describe('PinnedPostsLayout Component', () => {
   });
 
   describe('Menu Item Actions', () => {
-    const mockTogglePinPost = vi.fn();
-    const mockDeletePost = vi.fn();
-
-    beforeEach(() => {
-      mockTogglePinPost.mockClear();
-      mockDeletePost.mockClear();
-    });
-
     it('should open menu and show pin/unpin option for admin users', async () => {
       // Mock admin role
       mockGetItem.mockImplementation((key: string) => {

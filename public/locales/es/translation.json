@@ -1119,6 +1119,8 @@
     "latest": "El Más Reciente",
     "oldest": "El Más Antiguo",
     "none": "Ninguno",
+    "unknownUser": "Usuario Desconocido",
+    "closePinnedPost": "Cerrar publicación fijada",
     "searchPosts": "Buscar publicaciones",
     "nothingToShow": "Nada que mostrar aquí.",
     "noPosts": "No hay publicaciones para mostrar.",

@@ -1119,6 +1119,8 @@
     "latest": "最新",
     "oldest": "最旧的",
     "none": "无",
+    "unknownUser": "未知用户",
+    "closePinnedPost": "关闭置顶帖子",
     "searchPosts": "搜索帖子",
     "nothingToShow": "这里没有可显示的内容。",
     "noMorePosts": "没有更多帖子了",
