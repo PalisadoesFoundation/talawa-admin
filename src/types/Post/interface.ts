@@ -114,3 +114,10 @@ export interface InterfacePinnedPostCardProps {
   onStoryClick: (post: InterfacePost) => void;
   onPostUpdate?: () => void;
 }
+
+export interface ICreatePostModalProps {
+  show: boolean;
+  onHide: () => void;
+  refetch: () => Promise<unknown>;
+  orgId: string | undefined;
+}

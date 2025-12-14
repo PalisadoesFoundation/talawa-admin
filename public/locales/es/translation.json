@@ -718,6 +718,9 @@
   "createPostModal": {
     "title": "Publicaciones de Talawa",
     "titleOfPost": "Título de tu publicación...",
+    "closeCreatePost": "Cerrar Crear Publicación",
+    "close": "Cerca",
+    "selectedImage": "Imagen seleccionada",
     "bodyOfPost": "Contenido de tu publicación...",
     "post": "Publicación",
     "addAttachment": "Agregar archivo adjunto",

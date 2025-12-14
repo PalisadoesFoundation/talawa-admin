@@ -513,9 +513,6 @@ describe('CreatePostModal Integration Tests', () => {
           expect.any(ArrayBuffer),
         );
       });
-
-      digestSpy.mockRestore();
-      arrayBufferSpy.mockRestore();
     });
 
     it('tests MIME type conversion functionality', async () => {

@@ -328,6 +328,20 @@ const deletePostErrorMock = {
   error: new Error('Failed to delete post'),
 };
 
+// Edit post error mock
+const editPostErrorMock = {
+  request: {
+    query: UPDATE_POST_MUTATION,
+    variables: {
+      input: {
+        id: '1',
+        caption: 'Updated content',
+      },
+    },
+  },
+  error: new Error('Failed to update post'),
+};
+
 // Current user mock for permission checks
 const currentUserMock = {
   request: {
@@ -935,13 +949,22 @@ describe('PostCard', () => {
   });
 
   it('handles edit post error', async () => {
-    // Use a mock that will actually cause an error
-    const originalEdit = defaultProps.fetchPosts;
-    defaultProps.fetchPosts = vi
-      .fn()
-      .mockRejectedValue(new Error('Failed to update'));
+    const linkWithEditError = new StaticMockLink(
+      [editPostErrorMock, ...mocks],
+      true,
+    );
 
-    renderPostCard();
+    render(
+      <MockedProvider link={linkWithEditError}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...defaultProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
     const moreButton = screen.getByTestId('post-more-options-button');
     fireEvent.click(moreButton);
@@ -964,8 +987,13 @@ describe('PostCard', () => {
     const saveButton = screen.getByTestId('save-post-button');
     fireEvent.click(saveButton);
 
-    // Reset the mock
-    defaultProps.fetchPosts = originalEdit;
+    // Wait for error handler to be called
+    await waitFor(() => {
+      expect(errorHandler).toHaveBeenCalledWith(
+        expect.any(Function),
+        expect.any(Object),
+      );
+    });
   });
 
   it('handles delete post error', async () => {

@@ -6,13 +6,13 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/shared-components/posts/createPostModal/createPostModal.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/posts/createPostModal/createPostModal.tsx#L61)
+Defined in: [src/shared-components/posts/createPostModal/createPostModal.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/posts/createPostModal/createPostModal.tsx#L55)
 
 ## Parameters
 
 ### \_\_namedParameters
 
-`ICreatePostModalProps`
+[`ICreatePostModalProps`](../../../../../types/Post/interface/interfaces/ICreatePostModalProps.md)
 
 ## Returns
 

@@ -81,6 +81,7 @@ export default function PostsPage() {
   const [selectedPinnedPost, setSelectedPinnedPost] =
     useState<InterfacePost | null>(null);
   const [hasMore, setHasMore] = useState(true);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
   const { getItem } = useLocalStorage();
   const userId = getItem<string>('userId') ?? getItem<string>('id') ?? null;
   const [showPinnedPostModal, setShowPinnedPostModal] = useState(false);
@@ -170,6 +171,9 @@ export default function PostsPage() {
   const loadMorePosts = useCallback((): void => {
     if (!currentUrl || !userId) return;
     if (!hasMore || sortingOption !== 'None') return;
+    if (isFetchingMore) return; // Guard against concurrent requests
+
+    setIsFetchingMore(true);
 
     fetchMore({
       variables: {
@@ -213,11 +217,23 @@ export default function PostsPage() {
         const pageInfo = res.data?.organization?.posts?.pageInfo;
         setHasMore(pageInfo?.hasNextPage ?? false);
         setAfter(pageInfo?.endCursor ?? null);
+        setIsFetchingMore(false);
       })
       .catch(() => {
         toast.error(t('loadMorePostsError'));
+        setIsFetchingMore(false);
       });
-  }, [hasMore, sortingOption, fetchMore, currentUrl, userId, after, first]);
+  }, [
+    hasMore,
+    sortingOption,
+    fetchMore,
+    currentUrl,
+    userId,
+    after,
+    first,
+    isFetchingMore,
+    setIsFetchingMore,
+  ]);
 
   const handleSearch = (term: string): void => {
     setSearchTerm(term);

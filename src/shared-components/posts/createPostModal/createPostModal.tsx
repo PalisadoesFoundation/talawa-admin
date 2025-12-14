@@ -50,13 +50,7 @@ import {
   ICreatePostInput,
   IFileMetadataInput,
 } from 'types/Post/type';
-
-interface ICreatePostModalProps {
-  show: boolean;
-  onHide: () => void;
-  refetch: () => Promise<unknown>;
-  orgId: string | undefined;
-}
+import { ICreatePostModalProps } from 'types/Post/interface';
 
 function CreatePostModal({
   show,
@@ -86,6 +80,12 @@ function CreatePostModal({
     setPreview(null);
     onHide();
   };
+
+  useEffect(() => {
+    return () => {
+      if (preview?.startsWith('blob:')) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -224,7 +224,7 @@ function CreatePostModal({
         onClick={handleClose}
         data-testid="modalBackdrop"
         type="button"
-        aria-label="Close modal backdrop"
+        aria-label={t('closeCreatePost')}
       />
       <div
         className={`${styles.modalDialog} ${show ? styles.modalShow : ''}`}
@@ -250,7 +250,7 @@ function CreatePostModal({
           <button
             className={styles.closeButton}
             onClick={handleClose}
-            aria-label="Close"
+            aria-label={t('close')}
             data-testid="closeBtn"
             type="button"
           >
@@ -291,7 +291,7 @@ function CreatePostModal({
                   {previewType === 'image' && (
                     <img
                       src={preview}
-                      alt="Selected"
+                      alt={t('selectedImage')}
                       className={styles.imagePreview}
                       data-testid="imagePreview"
                     />

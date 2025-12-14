@@ -718,6 +718,9 @@
   "createPostModal": {
     "title": "Des postes",
     "titleOfPost": "Titre de votre post...",
+    "closeCreatePost": "Fermer la création de message",
+    "close": "Fermer",
+    "selectedImage": "Image sélectionnée",
     "bodyOfPost": "Corps de votre post...",
     "post": "Poste",
     "searchPost": "Rechercher un article",
