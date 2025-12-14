@@ -158,9 +158,9 @@ export default function PostsPage() {
   // Handle error toasts
   useEffect(() => {
     if (orgPostListError) {
-      toast.error('Organization post list error');
+      toast.error(t('errorLoadingPosts'));
     }
-  }, [orgPostListError]);
+  }, [orgPostListError, t]);
 
   useEffect(() => {
     if (orgPinnedPostListError) toast.error(t('pinnedPostsLoadError'));
@@ -215,7 +215,7 @@ export default function PostsPage() {
         setAfter(pageInfo?.endCursor ?? null);
       })
       .catch(() => {
-        toast.error('Error loading more posts');
+        toast.error(t('loadMorePostsError'));
       });
   }, [hasMore, sortingOption, fetchMore, currentUrl, userId, after, first]);
 
@@ -282,8 +282,12 @@ export default function PostsPage() {
     // Apply sorting if not 'None'
     if (sortingOption !== 'None' && posts.length > 0) {
       posts = [...posts].sort((a, b) => {
-        const dateA = new Date(a.createdAt).getTime();
-        const dateB = new Date(b.createdAt).getTime();
+        const dateA = Number.isFinite(new Date(a.createdAt).getTime())
+          ? new Date(a.createdAt).getTime()
+          : 0;
+        const dateB = Number.isFinite(new Date(b.createdAt).getTime())
+          ? new Date(b.createdAt).getTime()
+          : 0;
         return sortingOption === 'oldest' ? dateA - dateB : dateB - dateA;
       });
     }
@@ -310,11 +314,11 @@ export default function PostsPage() {
             }}
             sorting={[
               {
-                title: 'Sort Post',
+                title: t('sortPost'),
                 options: [
-                  { label: 'Latest', value: 'latest' },
-                  { label: 'Oldest', value: 'oldest' },
-                  { label: 'None', value: 'None' },
+                  { label: t('latest'), value: 'latest' },
+                  { label: t('oldest'), value: 'oldest' },
+                  { label: t('none'), value: 'None' },
                 ],
                 selected: sortingOption,
                 onChange: handleSorting,
@@ -455,6 +459,7 @@ export default function PostsPage() {
               variant="light"
               onClick={handleClosePinnedModal}
               data-testid="close-pinned-post-button"
+              aria-label={t('closePinnedPost')}
               className="position-absolute top-0 end-0 m-2 btn-close-custom"
               style={{
                 backgroundColor: 'rgba(0,0,0,0.1)',

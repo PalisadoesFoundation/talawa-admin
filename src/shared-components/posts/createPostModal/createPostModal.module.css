@@ -14,6 +14,10 @@
   transition:
     opacity 0.2s ease,
     visibility 0.2s ease;
+  border: 0;
+  padding: 0;
+  -webkit-appearance: none;
+  appearance: none;
 }
 
 .backdrop.backdropShow {
@@ -159,6 +163,10 @@
 }
 
 .imagePreview {
+  max-width: 100%;
+}
+
+.videoPreview {
   max-width: 100%;
 }
 

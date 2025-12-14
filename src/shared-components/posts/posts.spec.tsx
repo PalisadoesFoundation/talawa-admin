@@ -15,6 +15,8 @@ import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
 import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import type { RenderResult } from '@testing-library/react';
 import { InterfacePostEdge } from 'types/Post/interface';
+import i18nForTest from 'utils/i18nForTest';
+import { I18nextProvider } from 'components/test-utils/I18nextProviderMock';
 
 // Hoisted mocks (must be before vi.mock calls)
 const { mockToast } = vi.hoisted(() => ({
@@ -31,33 +33,14 @@ vi.mock('react-toastify', () => ({
   ),
 }));
 
-// Mock translations
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => {
-      const translations: Record<string, string> = {
-        searchTitle: 'Search by title',
-        createPost: 'Create Post',
-        pinnedPosts: 'Pinned Posts',
-        pinnedPostsLoadError: 'Error loading pinned posts',
-        noMorePosts: 'No more posts to load',
-        noPosts: 'No posts yet. Create the first one!',
-      };
-      return translations[key] || key;
-    },
-    i18n: { changeLanguage: () => Promise.resolve(), language: 'en' },
-  }),
-  Trans: ({ children }: { children: React.ReactNode }) => children,
-  I18nextProvider: ({ children }: { children: React.ReactNode }) => children,
-  initReactI18next: {
-    type: '3rdParty',
-    init: () => {},
-  },
-}));
-
 // Hoisted router mock
 const routerMocks = vi.hoisted(() => ({
   useParams: vi.fn(() => ({ orgId: '123' })),
+}));
+
+// Hoisted localStorage mock
+const localStorageMocks = vi.hoisted(() => ({
+  getItem: vi.fn((): string | null => 'user-123'),
 }));
 
 vi.mock('react-router', async () => {
@@ -68,7 +51,7 @@ vi.mock('react-router', async () => {
 // Mock useLocalStorage
 vi.mock('utils/useLocalstorage', () => ({
   default: () => ({
-    getItem: vi.fn(() => 'user-123'),
+    getItem: localStorageMocks.getItem,
     setItem: vi.fn(),
     removeItem: vi.fn(),
   }),
@@ -337,6 +320,22 @@ const samplePosts = [
     videoUrl: null,
     attachments: [],
   },
+  {
+    id: 'post-3',
+    caption: 'Fourth Post Content',
+    createdAt: 'invalid-date-string',
+    creator: {
+      id: 'user-1',
+      name: 'John Doe',
+      avatarURL: null,
+      emailAddress: 'john@example.com',
+    },
+    pinned: false,
+    pinnedAt: null,
+    imageUrl: null,
+    videoUrl: null,
+    attachments: [],
+  },
 ];
 
 // Mock for ORGANIZATION_POST_LIST_WITH_VOTES
@@ -531,17 +530,21 @@ const nextPageMock: MockedResponse = {
 // Helper render function
 const renderComponent = (mocks: MockedResponse[]): RenderResult =>
   render(
-    <MockedProvider mocks={mocks} addTypename={false}>
-      <MemoryRouter initialEntries={['/orgpost/123']}>
-        <Routes>
-          <Route path="/orgpost/:orgId" element={<PostsPage />} />
-        </Routes>
-      </MemoryRouter>
-    </MockedProvider>,
+    <I18nextProvider i18n={i18nForTest}>
+      <MockedProvider mocks={mocks} addTypename={false}>
+        <MemoryRouter initialEntries={['/orgpost/123']}>
+          <Routes>
+            <Route path="/orgpost/:orgId" element={<PostsPage />} />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>
+      ,
+    </I18nextProvider>,
   );
 
 describe('PostsPage Component', () => {
   beforeEach(() => {
+    nextId = 1;
     vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
@@ -555,9 +558,7 @@ describe('PostsPage Component', () => {
       renderComponent([orgPostListErrorMock, emptyPinnedPostsMock]);
 
       await waitFor(() => {
-        expect(mockToast.error).toHaveBeenCalledWith(
-          'Organization post list error',
-        );
+        expect(mockToast.error).toHaveBeenCalledWith('Error loading posts');
       });
     });
 
@@ -673,9 +674,7 @@ describe('PostsPage Component', () => {
 
     // Should show error toast for GraphQL error
     await waitFor(() => {
-      expect(mockToast.error).toHaveBeenCalledWith(
-        'Organization post list error',
-      );
+      expect(mockToast.error).toHaveBeenCalledWith('Error loading posts');
     });
 
     // For GraphQL errors, the filtering state should remain as is
@@ -689,6 +688,7 @@ describe('PostsPage Component', () => {
 
 describe('Sorting Functionality', () => {
   beforeEach(() => {
+    nextId = 1;
     vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
@@ -800,6 +800,7 @@ describe('Sorting Functionality', () => {
 
 describe('Create Post Modal', () => {
   beforeEach(() => {
+    nextId = 1;
     vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
@@ -837,6 +838,7 @@ describe('Create Post Modal', () => {
 
 describe('Infinite Scroll', () => {
   beforeEach(() => {
+    nextId = 1;
     vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
@@ -861,7 +863,7 @@ describe('Infinite Scroll', () => {
     renderComponent([orgPostListMock, nextPageMock, emptyPinnedPostsMock]);
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('post-card')).toHaveLength(3);
+      expect(screen.getAllByTestId('post-card')).toHaveLength(4);
     });
 
     const loadMoreButton = screen.getByTestId('load-more-btn');
@@ -974,6 +976,7 @@ describe('Infinite Scroll', () => {
 
 describe('Refetch Functionality', () => {
   beforeEach(() => {
+    nextId = 1;
     vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
@@ -1007,6 +1010,7 @@ describe('Refetch Functionality', () => {
 
 describe('Edge Cases', () => {
   beforeEach(() => {
+    nextId = 1;
     vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: '123' });
   });
@@ -1236,5 +1240,39 @@ describe('Edge Cases', () => {
 
     // Post should still render with fallback values
     expect(screen.getByText('Video post')).toBeInTheDocument();
+  });
+});
+
+describe('Missing User ID', () => {
+  beforeEach(() => {
+    nextId = 1;
+    vi.clearAllMocks();
+    routerMocks.useParams.mockReturnValue({ orgId: '123' });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    // Reset localStorage mock to default value
+    localStorageMocks.getItem.mockReturnValue('user-123');
+  });
+
+  it('does not execute queries when userId is missing from localStorage', async () => {
+    // Mock localStorage to return null for userId
+    localStorageMocks.getItem.mockReturnValue(null);
+
+    renderComponent([]);
+
+    // Queries should be skipped, so no posts should be loaded
+    // and no loading state should appear after initial mount
+    await waitFor(() => {
+      expect(screen.getByTestId('page-header')).toBeInTheDocument();
+    });
+
+    // Since queries are skipped, allPosts should remain empty
+    // and no post cards should be rendered
+    expect(screen.queryAllByTestId('post-card')).toHaveLength(0);
+
+    // Error toasts should not be called since queries are skipped, not failed
+    expect(mockToast.error).not.toHaveBeenCalled();
   });
 });

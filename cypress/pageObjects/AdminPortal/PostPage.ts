@@ -2,7 +2,8 @@ export class PostsPage {
   private readonly _postsTabButton = '[data-cy="leftDrawerButton-Posts"]';
   private readonly _createPostButton = '[data-cy="createPostModalBtn"]';
   private readonly _postTitleInput = '[data-cy="modalTitle"]';
-  private readonly _postDescriptionInput = '[data-cy="modalBody"]';
+  private readonly _postDescriptionInput =
+    '[data-cy="create-post-description"]';
   private readonly _addMediaField = '[data-cy="addMediaField"]';
   private readonly _pinPostCheckbox = '[data-cy="pinPost"]';
   private readonly _createPostSubmit = '[data-cy="createPostBtn"]';

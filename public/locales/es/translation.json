@@ -720,6 +720,7 @@
     "titleOfPost": "Título de tu publicación...",
     "bodyOfPost": "Contenido de tu publicación...",
     "post": "Publicación",
+    "addAttachment": "Agregar archivo adjunto",
     "searchPost": "Buscar Publicación",
     "posts": "Publicaciones",
     "createPost": "Crear Publicación",
@@ -1112,10 +1113,12 @@
     "emptyCommentError": "Por favor ingrese un comentario antes de enviarlo.",
     "unexpectedError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo."
   },
-
   "posts": {
     "pinnedPosts": "Publicaciones fijadas",
     "title": "Publicaciones",
+    "latest": "El Más Reciente",
+    "oldest": "El Más Antiguo",
+    "none": "Ninguno",
     "searchPosts": "Buscar publicaciones",
     "nothingToShow": "Nada que mostrar aquí.",
     "noPosts": "No hay publicaciones para mostrar.",
@@ -1124,9 +1127,10 @@
     "searchTitle": "Buscar por Título",
     "noPostsFoundMatching": "No se encontraron publicaciones que coincidan con ",
     "pinnedPostsLoadError": "Error al cargar publicaciones fijadas. Por favor, inténtelo de nuevo más tarde.",
-    "errorLoadingPosts": "Error al cargar publicaciones. Por favor, inténtelo de nuevo más tarde."
+    "errorLoadingPosts": "Error al cargar publicaciones. Por favor, inténtelo de nuevo más tarde.",
+    "loadMorePostsError": "Error al cargar más publicaciones. Por favor, inténtelo de nuevo más tarde.",
+    "sortPost": "Ordenar Publicaciones"
   },
-
   "home": {
     "posts": "Publicaciones",
     "post": "Publicación",

@@ -368,6 +368,29 @@ describe('PinnedPostsLayout Component', () => {
 
   describe('Event Listener Cleanup', () => {
     it('should remove scroll event listener when component unmounts', () => {
+      // Capture the scroll handler when addEventListener is called
+      let capturedScrollHandler: EventListener | undefined;
+
+      // Save the original methods before spying
+      const originalAddEventListener = Element.prototype.addEventListener;
+
+      const addEventListenerSpy = vi.spyOn(
+        Element.prototype,
+        'addEventListener',
+      );
+      addEventListenerSpy.mockImplementation(function (
+        this: Element,
+        type: string,
+        listener: EventListenerOrEventListenerObject,
+        options?: boolean | AddEventListenerOptions,
+      ) {
+        if (type === 'scroll' && typeof listener === 'function') {
+          capturedScrollHandler = listener;
+        }
+        // Call original implementation
+        return originalAddEventListener.call(this, type, listener, options);
+      });
+
       const removeEventListenerSpy = vi.spyOn(
         Element.prototype,
         'removeEventListener',
@@ -384,15 +407,17 @@ describe('PinnedPostsLayout Component', () => {
         </MockedProvider>,
       );
 
+      // Ensure the scroll handler was captured
+      expect(capturedScrollHandler).toBeDefined();
+
       // Unmount the component
       unmount();
 
-      // Verify that removeEventListener was called for scroll events
+      // Verify that removeEventListener was called with the exact same handler reference
       expect(removeEventListenerSpy).toHaveBeenCalledWith(
         'scroll',
-        expect.any(Function),
+        capturedScrollHandler,
       );
-      removeEventListenerSpy.mockRestore();
     });
 
     it('should not call scroll handler after component unmount', async () => {
@@ -424,7 +449,6 @@ describe('PinnedPostsLayout Component', () => {
       expect(consoleErrorSpy).not.toHaveBeenCalledWith(
         expect.stringContaining('unmounted component'),
       );
-      consoleErrorSpy.mockRestore();
     });
   });
 

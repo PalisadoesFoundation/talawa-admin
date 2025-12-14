@@ -11,50 +11,15 @@ import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
 import styles from './createPostModal.module.css';
 
-// Mock crypto.subtle for file hashing
-Object.defineProperty(global, 'crypto', {
-  value: {
-    subtle: {
-      digest: vi.fn().mockImplementation(async () => {
-        // Mock hash generation - create a simple mock hash (32 bytes for SHA-256)
-        const mockHash = new Uint8Array([
-          0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc, 0xde, 0xf0, 0x11, 0x22, 0x33,
-          0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee,
-          0xff, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88,
-        ]);
-        return mockHash.buffer;
-      }),
-    },
-  },
-});
-
-// Mock URL.createObjectURL
-global.URL.createObjectURL = vi.fn().mockReturnValue('mock-object-url');
-global.URL.revokeObjectURL = vi.fn();
-
-// Mock File.prototype.arrayBuffer for file upload tests
-Object.defineProperty(File.prototype, 'arrayBuffer', {
-  value: vi.fn().mockImplementation(async function () {
-    // Return a mock ArrayBuffer
-    const buffer = new ArrayBuffer(8);
-    const view = new Uint8Array(buffer);
-    view.set([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]); // PNG signature
-    return buffer;
-  }),
-  writable: true,
-  configurable: true,
-});
-
-// Mock file input to allow video files for testing
-Object.defineProperty(HTMLInputElement.prototype, 'accept', {
-  get: function () {
-    return this.getAttribute('accept') || '';
-  },
-  set: function (value) {
-    this.setAttribute('accept', value);
-  },
-  configurable: true,
-});
+// Capture originals before mocking
+const originalCrypto = global.crypto;
+const originalCreateObjectURL = global.URL.createObjectURL;
+const originalRevokeObjectURL = global.URL.revokeObjectURL;
+const originalArrayBuffer = File.prototype.arrayBuffer;
+const originalAcceptDescriptor = Object.getOwnPropertyDescriptor(
+  HTMLInputElement.prototype,
+  'accept',
+);
 
 // Mock react-toastify
 vi.mock('react-toastify', () => ({
@@ -215,14 +180,73 @@ const createPostErrorMock = {
   },
   error: new Error('GraphQL error occurred'),
 };
-const originalCreateObjectURL = global.URL.createObjectURL;
-
 beforeEach(() => {
+  Object.defineProperty(global, 'crypto', {
+    value: {
+      subtle: {
+        digest: vi.fn().mockImplementation(async () => {
+          const mockHash = new Uint8Array([
+            0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc, 0xde, 0xf0, 0x11, 0x22, 0x33,
+            0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee,
+            0xff, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88,
+          ]);
+          return mockHash.buffer;
+        }),
+      },
+    },
+    configurable: true,
+  });
+
   global.URL.createObjectURL = vi.fn(() => 'mock-url');
+  global.URL.revokeObjectURL = vi.fn();
+
+  Object.defineProperty(File.prototype, 'arrayBuffer', {
+    value: vi.fn().mockImplementation(async function () {
+      const buffer = new ArrayBuffer(8);
+      new Uint8Array(buffer).set([
+        0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a,
+      ]);
+      return buffer;
+    }),
+    writable: true,
+    configurable: true,
+  });
+
+  Object.defineProperty(HTMLInputElement.prototype, 'accept', {
+    get() {
+      return this.getAttribute('accept') || '';
+    },
+    set(value) {
+      this.setAttribute('accept', value);
+    },
+    configurable: true,
+  });
 });
 
 afterEach(() => {
+  Object.defineProperty(global, 'crypto', {
+    value: originalCrypto,
+    configurable: true,
+  });
   global.URL.createObjectURL = originalCreateObjectURL;
+  global.URL.revokeObjectURL = originalRevokeObjectURL;
+
+  Object.defineProperty(File.prototype, 'arrayBuffer', {
+    value: originalArrayBuffer,
+    writable: true,
+    configurable: true,
+  });
+
+  if (originalAcceptDescriptor) {
+    Object.defineProperty(
+      HTMLInputElement.prototype,
+      'accept',
+      originalAcceptDescriptor,
+    );
+  } else {
+    Reflect.deleteProperty(HTMLInputElement.prototype, 'accept');
+  }
+
   vi.clearAllMocks();
 });
 
@@ -321,7 +345,7 @@ describe('CreatePostModal Integration Tests', () => {
 
       const postButton = screen.getByTestId('createPostBtn');
       expect(postButton).not.toBeDisabled();
-      expect(postButton).not.toHaveClass('_postButtonDisabled_5b06fc');
+      expect(postButton).not.toHaveClass(styles.postButtonDisabled);
     });
 
     it('disables post button when title contains only whitespace', async () => {
@@ -517,6 +541,9 @@ describe('CreatePostModal Integration Tests', () => {
       const aviFile = new File(['video-content'], 'test.avi', {
         type: 'video/avi',
       });
+      const movFile = new File(['video-content'], 'test.mov', {
+        type: 'video/quicktime',
+      });
 
       renderComponent({}, [createPostWithAttachmentMock]);
 
@@ -553,14 +580,21 @@ describe('CreatePostModal Integration Tests', () => {
       fireEvent.change(fileInput, { target: { files: null } });
       await userEvent.upload(fileInput, videoFile);
       await waitFor(() => {
-        expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
+        expect(screen.getByTestId('videoPreview')).toBeInTheDocument();
       });
 
       // Clear and test another type
       fireEvent.change(fileInput, { target: { files: null } });
       await userEvent.upload(fileInput, webmVideoFile);
       await waitFor(() => {
-        expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
+        expect(screen.getByTestId('videoPreview')).toBeInTheDocument();
+      });
+
+      // Clear and test another type
+      fireEvent.change(fileInput, { target: { files: null } });
+      await userEvent.upload(fileInput, movFile);
+      await waitFor(() => {
+        expect(screen.getByTestId('videoPreview')).toBeInTheDocument();
       });
 
       // Clear and test another type

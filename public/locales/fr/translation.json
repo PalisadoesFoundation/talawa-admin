@@ -722,6 +722,7 @@
     "post": "Poste",
     "searchPost": "Rechercher un article",
     "posts": "Des postes",
+    "addAttachment": "Ajouter une pièce jointe",
     "createPost": "Créer un message",
     "postDetails": "Détails du message",
     "postTitle1": "Écrivez le titre du message",
@@ -1112,10 +1113,12 @@
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
     "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer."
   },
-
   "posts": {
     "pinnedPosts": "Messages épinglés",
     "title": "Des postes",
+    "latest": "Dernier",
+    "oldest": "Le plus ancien",
+    "none": "Aucun",
     "searchPosts": "Rechercher des messages",
     "nothingToShow": "Rien à montrer ici.",
     "noMorePosts": "Plus de messages à charger",
@@ -1124,9 +1127,10 @@
     "searchTitle": "Recherche par titre",
     "noPostsFoundMatching": "Aucun message trouvé correspondant à",
     "pinnedPostsLoadError": "Erreur lors du chargement des messages épinglés",
-    "errorLoadingPosts": "Erreur lors du chargement des messages. Veuillez réessayer."
+    "errorLoadingPosts": "Erreur lors du chargement des messages. Veuillez réessayer.",
+    "loadMorePostsError": "Erreur lors du chargement de plus de messages. Veuillez réessayer.",
+    "sortPost": "Trier le message"
   },
-
   "home": {
     "posts": "Des postes",
     "post": "Poste",

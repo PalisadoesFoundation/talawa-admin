@@ -719,6 +719,7 @@
     "title": "帖子",
     "titleOfPost": "您的帖子标题...",
     "bodyOfPost": "您的帖子内容...",
+    "addAttachment": "添加附件",
     "post": "邮政",
     "searchPost": "搜索帖子",
     "posts": "帖子",
@@ -1115,6 +1116,9 @@
   "posts": {
     "pinnedPosts": "置顶帖子",
     "title": "帖子",
+    "latest": "最新",
+    "oldest": "最旧的",
+    "none": "无",
     "searchPosts": "搜索帖子",
     "nothingToShow": "这里没有可显示的内容。",
     "noMorePosts": "没有更多帖子了",
@@ -1123,7 +1127,9 @@
     "searchTitle": "按标题搜索",
     "noPostsFoundMatching": "未找到匹配的帖子",
     "pinnedPostsLoadError": "加载置顶帖子时出错。请重试。",
-    "errorLoadingPosts": "加载帖子时出错。请重试。"
+    "errorLoadingPosts": "加载帖子时出错。请重试。",
+    "loadMorePostsError": "加载更多帖子时出错。请重试。",
+    "sortPost": "排序帖子"
   },
   "home": {
     "title": "帖子",

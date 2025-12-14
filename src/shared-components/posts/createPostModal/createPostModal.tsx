@@ -73,6 +73,9 @@ function CreatePostModal({
   const [preview, setPreview] = useState<string | null>(null);
   const [isPinned, setIspinned] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [previewType, setPreviewType] = useState<'image' | 'video' | null>(
+    null,
+  );
   const isPostDisabled = postTitle.trim().length === 0;
 
   const handleClose = (): void => {
@@ -117,6 +120,8 @@ function CreatePostModal({
         return 'VIDEO_MP4';
       case 'video/webm':
         return 'VIDEO_WEBM';
+      case 'video/quicktime':
+        return 'VIDEO_QUICKTIME';
       default:
         return '0';
     }
@@ -129,6 +134,12 @@ function CreatePostModal({
       setFile(null);
       setPreview(null);
       toast.error(t('unsupportedFileType'));
+      return;
+    }
+    if (file.type.startsWith('image/')) {
+      setPreviewType('image');
+    } else if (file.type.startsWith('video/')) {
+      setPreviewType('video');
     }
     setFile(file);
 
@@ -216,6 +227,9 @@ function CreatePostModal({
       <div
         className={`${styles.modalDialog} ${show ? styles.modalShow : ''}`}
         data-testid="create-post-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-label={t('createPost')}
       >
         {/* Header */}
         <div className={styles.modalHeader}>
@@ -256,22 +270,33 @@ function CreatePostModal({
           />
           <textarea
             className={styles.postBodyTextarea}
-            placeholder="Body of your post..."
-            data-cy="modalBody"
+            placeholder={t('bodyOfPost')}
+            data-cy="create-post-description"
             value={postBody}
             onChange={(e) => {
               setPostBody((e.target as HTMLTextAreaElement).value);
             }}
             data-testid="postBodyInput"
           />
-          {preview && (
+          {preview && previewType && (
             <div className={styles.imagePreviewContainer}>
-              <img
-                src={preview}
-                alt="Selected"
-                className={styles.imagePreview}
-                data-testid="imagePreview"
-              />
+              {previewType === 'image' && (
+                <img
+                  src={preview}
+                  alt="Selected"
+                  className={styles.imagePreview}
+                  data-testid="imagePreview"
+                />
+              )}
+
+              {previewType === 'video' && (
+                <video
+                  src={preview}
+                  controls
+                  className={styles.videoPreview}
+                  data-testid="videoPreview"
+                />
+              )}
             </div>
           )}
         </div>

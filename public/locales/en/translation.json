@@ -720,6 +720,7 @@
     "titleOfPost": "Title of your post...",
     "bodyOfPost": "Body of your post...",
     "post": "Post",
+    "addMedia": "Add Media",
     "searchPost": "Search Post",
     "posts": "Posts",
     "createPost": "Create Post",
@@ -1153,10 +1154,12 @@
     "emptyCommentError": "Please enter a comment before submitting.",
     "unexpectedError": "An unexpected error occurred. Please try again."
   },
-
   "posts": {
     "pinnedPosts": "Pinned Posts",
     "title": "Posts",
+    "latest": "Latest",
+    "oldest": "Oldest",
+    "none": "None",
     "searchPosts": "Search posts",
     "nothingToShow": "Nothing to show here.",
     "noMorePosts": "No more posts to load.",
@@ -1165,9 +1168,10 @@
     "searchTitle": "Search By Title",
     "noPostsFoundMatching": "No posts found matching",
     "pinnedPostsLoadError": "Error loading pinned posts",
-    "errorLoadingPosts": "Error loading posts"
+    "errorLoadingPosts": "Error loading posts",
+    "loadMorePostsError": "Error loading more posts",
+    "sortPost": "Sort Post"
   },
-
   "home": {
     "posts": "Posts",
     "post": "Post",
