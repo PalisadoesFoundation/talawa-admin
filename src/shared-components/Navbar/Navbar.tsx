@@ -60,7 +60,7 @@
  */
 import React from 'react';
 import styles from 'style/app-fixed.module.css';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
 
 interface InterfacePageHeaderProps {

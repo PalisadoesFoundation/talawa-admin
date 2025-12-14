@@ -104,4 +104,5 @@ const INITIAL_STATE = {
   components,
 };
 
+export { generateRoutes };
 export default reducer;

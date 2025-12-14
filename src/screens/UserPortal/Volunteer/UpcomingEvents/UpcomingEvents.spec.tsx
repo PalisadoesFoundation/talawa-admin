@@ -30,7 +30,7 @@ import {
 } from './UpcomingEvents.mocks';
 import { toast } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi, beforeEach, afterEach } from 'vitest';
+import { vi, beforeEach, afterEach, beforeAll, afterAll } from 'vitest';
 
 /**
  * Unit tests for the UpcomingEvents component.
@@ -90,7 +90,7 @@ const debounceWait = async (ms = 300): Promise<void> => {
 
 const renderUpcomingEvents = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/user/volunteer/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -114,6 +114,21 @@ const renderUpcomingEvents = (link: ApolloLink): RenderResult => {
 };
 
 describe('Testing Upcoming Events Screen', () => {
+  const originalToLocaleDateString = Date.prototype.toLocaleDateString;
+
+  beforeAll(() => {
+    // Force toLocaleDateString to use en-US locale for consistent testing
+    vi.spyOn(Date.prototype, 'toLocaleDateString').mockImplementation(function (
+      this: Date,
+    ) {
+      return originalToLocaleDateString.call(this, 'en-US');
+    });
+  });
+
+  afterAll(() => {
+    vi.restoreAllMocks();
+  });
+
   beforeEach(() => {
     localStorage.clear();
     setItem('userId', 'userId');
@@ -128,7 +143,7 @@ describe('Testing Upcoming Events Screen', () => {
   it('should redirect to fallback URL if URL params are undefined', async () => {
     setItem('userId', null);
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/user/volunteer/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>

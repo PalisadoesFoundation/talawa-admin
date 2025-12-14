@@ -2,7 +2,7 @@ import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter, Route, Routes } from 'react-router';
-import ProfileDropdown from './ProfileDropdown';
+import ProfileDropdown, { MAX_NAME_LENGTH } from './ProfileDropdown';
 import { MockedProvider } from '@apollo/react-testing';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -10,6 +10,24 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { vi } from 'vitest';
+
+const createLocalStorageMock = () => {
+  let store: Record<string, string> = {};
+  return {
+    getItem: (key: string) => store[key] ?? null,
+    setItem: (key: string, value: unknown) => {
+      store[key] = String(value);
+    },
+    removeItem: (key: string) => {
+      delete store[key];
+    },
+    clear: () => {
+      store = {};
+    },
+  };
+};
+
+vi.stubGlobal('localStorage', createLocalStorageMock());
 
 const { setItem } = useLocalStorage();
 
@@ -55,11 +73,15 @@ afterEach(() => {
   vi.restoreAllMocks();
   localStorage.clear();
 });
+afterAll(() => {
+  // Ensure any global stubs are cleaned up for other test files
+  vi.unstubAllGlobals();
+});
 
 describe('ProfileDropdown Component', () => {
   test('renders with user information', () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileDropdown />
@@ -74,10 +96,70 @@ describe('ProfileDropdown Component', () => {
     expect(screen.getByAltText('profile picture')).toBeInTheDocument();
   });
 
+  test('truncates long names to MAX_NAME_LENGTH characters with ellipsis', () => {
+    localStorage.clear();
+    const longName = 'ThisIsAVeryLongNameThatExceedsTwentyCharacters';
+    setItem('name', longName);
+    setItem('UserImage', 'https://example.com/image.jpg');
+    setItem('role', 'regular');
+
+    render(
+      <MockedProvider mocks={MOCKS}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileDropdown />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const expectedName = longName.substring(0, MAX_NAME_LENGTH - 3) + '...';
+    const displayedName = screen.getByTestId('display-name').textContent;
+    expect(displayedName).toBe(expectedName);
+  });
+
+  test('renders Avatar component when no user image is available', () => {
+    localStorage.clear();
+    setItem('name', 'John Doe');
+    setItem('role', 'regular');
+    // UserImage not set, should show Avatar fallback
+
+    render(
+      <MockedProvider mocks={MOCKS}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileDropdown />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByAltText('dummy picture')).toBeInTheDocument();
+  });
+
+  test('renders Avatar component when user image is null string', () => {
+    localStorage.clear();
+    setItem('name', 'John Doe');
+    setItem('UserImage', 'null');
+    setItem('role', 'regular');
+
+    render(
+      <MockedProvider mocks={MOCKS}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileDropdown />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByAltText('dummy picture')).toBeInTheDocument();
+  });
+
   test('renders Super admin', () => {
     setItem('role', 'API Administrator');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <ProfileDropdown />
         </BrowserRouter>
@@ -88,7 +170,7 @@ describe('ProfileDropdown Component', () => {
   test('renders Admin', () => {
     setItem('role', 'administrator');
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <ProfileDropdown />
         </BrowserRouter>
@@ -99,7 +181,7 @@ describe('ProfileDropdown Component', () => {
 
   test('logout functionality clears local storage and redirects to home', async () => {
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <ProfileDropdown />
         </BrowserRouter>
@@ -115,37 +197,11 @@ describe('ProfileDropdown Component', () => {
     expect(global.window.location.pathname).toBe('/');
   });
 
-  describe('Member screen routing testing', () => {
-    test('member screen', async () => {
-      setItem('role', 'regular');
-
-      render(
-        <MockedProvider mocks={MOCKS} addTypename={false}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <ProfileDropdown />
-            </I18nextProvider>
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      await act(async () => {
-        await userEvent.click(screen.getByTestId('togDrop'));
-      });
-
-      await act(async () => {
-        await userEvent.click(screen.getByTestId('profileBtn'));
-      });
-
-      expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
-    });
-  });
-
   test('navigates to /user/settings for a user', async () => {
     setItem('role', 'regular');
 
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <ProfileDropdown />
@@ -171,7 +227,7 @@ describe('ProfileDropdown Component', () => {
     setItem('id', '123');
 
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <Routes>
@@ -190,7 +246,7 @@ describe('ProfileDropdown Component', () => {
       await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
-    expect(mockNavigate).toHaveBeenCalledWith('/member/');
+    expect(mockNavigate).toHaveBeenCalledWith('/member');
   });
 
   test('navigates to /member/:userID for non-user roles', async () => {
@@ -199,7 +255,7 @@ describe('ProfileDropdown Component', () => {
     setItem('id', '123');
 
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <Routes>
@@ -219,5 +275,67 @@ describe('ProfileDropdown Component', () => {
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/member/321');
+  });
+
+  test('uses user settings route for admin when portal is user', async () => {
+    setItem('role', 'administrator');
+    render(
+      <MockedProvider mocks={MOCKS}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileDropdown portal="user" />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('togDrop'));
+    });
+
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('profileBtn'));
+    });
+
+    expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
+  });
+
+  test('handles error when revokeRefreshToken fails during logout', async () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const errorMocks = [
+      {
+        request: { query: REVOKE_REFRESH_TOKEN },
+        error: new Error('Network error'),
+      },
+      {
+        request: { query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG },
+        result: { data: { community: { inactivityTimeoutDuration: 1800 } } },
+        delay: 1000,
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={errorMocks}>
+        <BrowserRouter>
+          <ProfileDropdown />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('togDrop'));
+    });
+
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('logoutBtn'));
+    });
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'Error revoking refresh token:',
+      expect.any(Error),
+    );
+    // Verify that navigation still happens even when revokeRefreshToken fails
+    expect(mockNavigate).toHaveBeenCalledWith('/');
+    consoleSpy.mockRestore();
   });
 });

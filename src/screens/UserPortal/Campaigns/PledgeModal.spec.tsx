@@ -226,7 +226,7 @@ const renderPledgeModal = (
   props: InterfacePledgeModal,
 ): RenderResult => {
   return render(
-    <MockedProvider link={link} addTypename={false}>
+    <MockedProvider link={link}>
       <Provider store={store}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -270,7 +270,20 @@ describe('PledgeModal', () => {
   afterEach(() => {
     cleanup();
     localStorageMock.clear();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
+  });
+
+  it('should populate form fields with correct values in edit mode', async () => {
+    renderPledgeModal(link1, pledgeProps[1]);
+    await waitFor(() =>
+      expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
+    );
+    // Use getAllByText to find the text content anywhere in the component
+    expect(screen.getAllByText(/John Doe/i)[0]).toBeInTheDocument();
+    expect(screen.getByLabelText('Start Date')).toHaveValue('01/01/2024');
+    expect(screen.getByLabelText('End Date')).toHaveValue('10/01/2024');
+    expect(screen.getByLabelText('Currency')).toHaveTextContent('USD ($)');
+    expect(screen.getByLabelText('Amount')).toHaveValue('100');
   });
 
   describe('Rendering and Basic UI', () => {

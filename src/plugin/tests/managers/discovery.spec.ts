@@ -3,14 +3,12 @@ import { DiscoveryManager } from '../../managers/discovery';
 import { PluginGraphQLService, IPlugin } from '../../graphql-service';
 import { IPluginManifest } from '../../types';
 import { validatePluginManifest } from '../../utils';
-import React from 'react';
 
 // Mock the dependencies
 vi.mock('../../graphql-service');
 vi.mock('../../utils');
 
 // Mock fetch globally
-global.fetch = vi.fn();
 
 describe('DiscoveryManager', () => {
   let discoveryManager: DiscoveryManager;
@@ -35,13 +33,9 @@ describe('DiscoveryManager', () => {
     main: 'index.ts',
   };
 
-  const mockComponents = {
-    TestComponent: React.createElement('div'),
-    AnotherComponent: React.createElement('span'),
-  };
-
   beforeEach(() => {
     vi.clearAllMocks();
+    global.fetch = vi.fn();
 
     // Setup mock GraphQL service
     mockGraphQLService = {
@@ -52,6 +46,10 @@ describe('DiscoveryManager', () => {
     };
 
     discoveryManager = new DiscoveryManager();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   describe('Constructor and GraphQL Service Management', () => {
@@ -120,6 +118,23 @@ describe('DiscoveryManager', () => {
     it('should return false for non-existent plugin activation status', () => {
       expect(discoveryManager.isPluginActivated('non-existent')).toBe(false);
     });
+
+    it('should check if plugin is installed', () => {
+      discoveryManager.setPluginIndex([mockPlugin]);
+
+      expect(discoveryManager.isPluginInstalled('test-plugin')).toBe(true);
+    });
+
+    it('should return false for non-installed plugin', () => {
+      const uninstalledPlugin: IPlugin = { ...mockPlugin, isInstalled: false };
+      discoveryManager.setPluginIndex([uninstalledPlugin]);
+
+      expect(discoveryManager.isPluginInstalled('test-plugin')).toBe(false);
+    });
+
+    it('should return false for non-existent plugin installation status', () => {
+      expect(discoveryManager.isPluginInstalled('non-existent')).toBe(false);
+    });
   });
 
   describe('Plugin Discovery', () => {
@@ -182,6 +197,23 @@ describe('DiscoveryManager', () => {
       const discovered = await discoveryManager.discoverPlugins();
 
       expect(discovered).toEqual(['test-plugin']); // Should deduplicate
+    });
+
+    it('should filter only installed plugins', async () => {
+      const plugins: IPlugin[] = [
+        mockPlugin,
+        {
+          ...mockPlugin,
+          id: '2',
+          pluginId: 'uninstalled-plugin',
+          isInstalled: false,
+        },
+      ];
+      (mockGraphQLService.getAllPlugins as Mock).mockResolvedValue(plugins);
+
+      const discovered = await discoveryManager.discoverPlugins();
+
+      expect(discovered).toEqual(['test-plugin']);
     });
 
     it('should handle general discovery errors', async () => {
@@ -334,12 +366,68 @@ describe('DiscoveryManager', () => {
       vi.restoreAllMocks();
     });
 
+    it('should load plugin components successfully with default export', async () => {
+      const mockComponent = () => null;
+      const mockModule = {
+        default: mockComponent,
+        SomeNamedExport: () => null,
+      };
+
+      const importSpy = vi
+        .spyOn(
+          discoveryManager as unknown as {
+            importPluginModule: (path: string) => Promise<unknown>;
+          },
+          'importPluginModule',
+        )
+        .mockResolvedValue(mockModule);
+
+      const result = await discoveryManager.loadPluginComponents(
+        'test-plugin',
+        mockManifest,
+      );
+
+      expect(result).toEqual({
+        'test-plugin': mockComponent,
+        default: mockComponent,
+        SomeNamedExport: mockModule.SomeNamedExport,
+      });
+      expect(importSpy).toHaveBeenCalledWith(
+        '/src/plugin/available/test-plugin/index.ts',
+      );
+    });
+
+    it('should load plugin components successfully without default export', async () => {
+      const mockModule = {
+        Component1: () => null,
+        Component2: () => null,
+      };
+
+      const importSpy = vi
+        .spyOn(
+          discoveryManager as unknown as {
+            importPluginModule: (path: string) => Promise<unknown>;
+          },
+          'importPluginModule',
+        )
+        .mockResolvedValue(mockModule);
+
+      const result = await discoveryManager.loadPluginComponents(
+        'test-plugin',
+        mockManifest,
+      );
+
+      expect(result).toEqual(mockModule);
+      expect(importSpy).toHaveBeenCalledWith(
+        '/src/plugin/available/test-plugin/index.ts',
+      );
+    });
+
     it('should handle component loading errors gracefully', async () => {
       const consoleSpy = vi
         .spyOn(console, 'error')
         .mockImplementation(() => {});
 
-      // Test with a non-existent plugin that will fail to load
       await expect(
         discoveryManager.loadPluginComponents(
           'non-existent-plugin',
@@ -357,46 +445,90 @@ describe('DiscoveryManager', () => {
       consoleSpy.mockRestore();
     });
 
-    it('should handle different main file configurations', async () => {
+    it('should handle non-Error exceptions in component loading', async () => {
       const consoleSpy = vi
         .spyOn(console, 'error')
         .mockImplementation(() => {});
 
+      vi.spyOn(
+        discoveryManager as unknown as {
+          importPluginModule: (path: string) => Promise<unknown>;
+        },
+        'importPluginModule',
+      ).mockRejectedValue('String error');
+
+      await expect(
+        discoveryManager.loadPluginComponents('test-plugin', mockManifest),
+      ).rejects.toThrow(
+        'Component loading failed for plugin test-plugin: Unknown error',
+      );
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Failed to load components for plugin test-plugin:',
+        'String error',
+      );
+
+      consoleSpy.mockRestore();
+    });
+
+    it('should handle different main file configurations', async () => {
       const manifestWithJsFile: IPluginManifest = {
         ...mockManifest,
         main: 'index.js',
       };
 
-      // This will fail but we're testing the path construction
-      await expect(
-        discoveryManager.loadPluginComponents(
-          'test-plugin',
-          manifestWithJsFile,
-        ),
-      ).rejects.toThrow();
+      const mockModule = {
+        default: () => null,
+      };
 
-      consoleSpy.mockRestore();
+      const importSpy = vi
+        .spyOn(
+          discoveryManager as unknown as {
+            importPluginModule: (path: string) => Promise<unknown>;
+          },
+          'importPluginModule',
+        )
+        .mockResolvedValue(mockModule);
+
+      const result = await discoveryManager.loadPluginComponents(
+        'test-plugin',
+        manifestWithJsFile,
+      );
+
+      expect(importSpy).toHaveBeenCalledWith(
+        '/src/plugin/available/test-plugin/index.js',
+      );
+      expect(result).toBeDefined();
     });
 
     it('should handle main file without extension', async () => {
-      const consoleSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
-
       const manifestWithoutExt: IPluginManifest = {
         ...mockManifest,
         main: 'index',
       };
 
-      // This will fail but we're testing the extension normalization
-      await expect(
-        discoveryManager.loadPluginComponents(
-          'test-plugin',
-          manifestWithoutExt,
-        ),
-      ).rejects.toThrow();
+      const mockModule = {
+        default: () => null,
+      };
 
-      consoleSpy.mockRestore();
+      const importSpy = vi
+        .spyOn(
+          discoveryManager as unknown as {
+            importPluginModule: (path: string) => Promise<unknown>;
+          },
+          'importPluginModule',
+        )
+        .mockResolvedValue(mockModule);
+
+      const result = await discoveryManager.loadPluginComponents(
+        'test-plugin',
+        manifestWithoutExt,
+      );
+
+      expect(importSpy).toHaveBeenCalledWith(
+        '/src/plugin/available/test-plugin/index.js',
+      );
+      expect(result).toBeDefined();
     });
   });
 
@@ -611,7 +743,9 @@ describe('DiscoveryManager', () => {
     it('should normalize main file with .js extension', () => {
       // Access private method through type assertion
       const normalizeMainFile = (
-        discoveryManager as any
+        discoveryManager as unknown as {
+          normalizeMainFile: (file: string) => string;
+        }
       ).normalizeMainFile.bind(discoveryManager);
 
       expect(normalizeMainFile('index.js')).toBe('index.js');
@@ -619,7 +753,9 @@ describe('DiscoveryManager', () => {
 
     it('should normalize main file with .ts extension', () => {
       const normalizeMainFile = (
-        discoveryManager as any
+        discoveryManager as unknown as {
+          normalizeMainFile: (file: string) => string;
+        }
       ).normalizeMainFile.bind(discoveryManager);
 
       expect(normalizeMainFile('index.ts')).toBe('index.ts');
@@ -627,7 +763,9 @@ describe('DiscoveryManager', () => {
 
     it('should normalize main file with .tsx extension', () => {
       const normalizeMainFile = (
-        discoveryManager as any
+        discoveryManager as unknown as {
+          normalizeMainFile: (file: string) => string;
+        }
       ).normalizeMainFile.bind(discoveryManager);
 
       expect(normalizeMainFile('index.tsx')).toBe('index.tsx');
@@ -635,7 +773,9 @@ describe('DiscoveryManager', () => {
 
     it('should add .js extension to main file without extension', () => {
       const normalizeMainFile = (
-        discoveryManager as any
+        discoveryManager as unknown as {
+          normalizeMainFile: (file: string) => string;
+        }
       ).normalizeMainFile.bind(discoveryManager);
 
       expect(normalizeMainFile('index')).toBe('index.js');
@@ -643,7 +783,9 @@ describe('DiscoveryManager', () => {
 
     it('should add .js extension to main file with invalid extension', () => {
       const normalizeMainFile = (
-        discoveryManager as any
+        discoveryManager as unknown as {
+          normalizeMainFile: (file: string) => string;
+        }
       ).normalizeMainFile.bind(discoveryManager);
 
       expect(normalizeMainFile('index.txt')).toBe('index.txt.js');

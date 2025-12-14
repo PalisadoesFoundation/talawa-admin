@@ -40,7 +40,7 @@ import styles from 'style/app-fixed.module.css';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { useTranslation } from 'react-i18next';
 import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 import type { InterfaceEventHeaderProps } from 'types/Event/interface';
 
 function eventHeader({
@@ -58,13 +58,15 @@ function eventHeader({
       data-testid="calendarEventHeader"
     >
       <div className={styles.calendar__header}>
-        <SearchBar
-          placeholder={t('searchEventName')}
-          onSearch={(term) => console.log(`Search term: ${term}`)}
-          inputTestId="searchEvent"
-          buttonTestId="searchButton"
-        />
-        <div className={styles.space}>
+        <div className={styles.calendar__search}>
+          <SearchBar
+            placeholder={t('searchEventName')}
+            onSearch={() => {}}
+            inputTestId="searchEvent"
+            buttonTestId="searchButton"
+          />
+        </div>
+        <div className={styles.calendar__controls}>
           <SortingButton
             title={t('viewType')}
             sortingOptions={[
@@ -77,8 +79,6 @@ function eventHeader({
             dataTestIdPrefix="selectViewType"
             className={styles.dropdown}
           />
-        </div>
-        <div className={styles.btnsBlock}>
           <SortingButton
             title={t('eventType')}
             sortingOptions={[
@@ -86,13 +86,11 @@ function eventHeader({
               { label: 'Workshops', value: 'Workshops' },
             ]}
             selectedOption={t('eventType')}
-            onSortChange={(value) => console.log(`Selected: ${value}`)}
+            onSortChange={() => {}}
             dataTestIdPrefix="eventType"
             className={styles.dropdown}
             buttonLabel={t('eventType')}
           />
-        </div>
-        <div className={styles.btnsBlock}>
           <div className={styles.selectTypeEventHeader}>
             <Button
               className={styles.dropdown}
@@ -100,7 +98,7 @@ function eventHeader({
               data-testid="createEventModalBtn"
               data-cy="createEventModalBtn"
             >
-              <div className="">
+              <div>
                 <AddIcon
                   sx={{
                     fontSize: '25px',

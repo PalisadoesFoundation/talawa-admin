@@ -169,7 +169,7 @@ describe('Organisation Events Page', () => {
 
   const renderWithLink = (link: StaticMockLink) =>
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -819,7 +819,7 @@ describe('OrganizationEvents - Additional Coverage Tests', () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     render(
-      <MockedProvider link={errorLink} addTypename={false}>
+      <MockedProvider link={errorLink}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
@@ -873,7 +873,7 @@ describe('OrganizationEvents - Additional Coverage Tests', () => {
     const emptyLink = new StaticMockLink(emptyEventsMock, true);
 
     render(
-      <MockedProvider link={emptyLink} addTypename={false}>
+      <MockedProvider link={emptyLink}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
@@ -914,7 +914,7 @@ describe('OrganizationEvents - Additional Coverage Tests', () => {
     const nullLink = new StaticMockLink(nullDataMock, true);
 
     render(
-      <MockedProvider link={nullLink} addTypename={false}>
+      <MockedProvider link={nullLink}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>

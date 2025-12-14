@@ -1,31 +1,3 @@
-export interface InterfaceOrganizationCardProps {
-  id: string;
-  name: string;
-  image: string;
-  description: string;
-  members?: {
-    id: string;
-  }[];
-  address: {
-    city: string;
-    countryCode: string;
-    line1: string;
-    postalCode: string;
-    state: string;
-  };
-  membersCount: number;
-  adminsCount: number;
-  membershipRequestStatus: string;
-  userRegistrationRequired: boolean;
-  membershipRequests: {
-    id: string;
-    user: {
-      id: string;
-    };
-  }[];
-  isJoined?: boolean;
-}
-
 export interface InterfaceOrgPeopleListCardProps {
   id: string | undefined;
   toggleRemoveModal: () => void;

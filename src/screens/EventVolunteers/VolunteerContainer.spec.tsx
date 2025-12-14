@@ -59,7 +59,7 @@ vi.mock('react-router', async () => {
 
 const renderVolunteerContainer = (): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={new StaticMockLink(MOCKS)}>
+    <MockedProvider link={new StaticMockLink(MOCKS)}>
       <MemoryRouter initialEntries={['/event/orgId/eventId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>

@@ -14,7 +14,7 @@ Vite plugin for internal file operations
 
 ### options
 
-[`InternalFileWriterPluginOptions`](../interfaces/InternalFileWriterPluginOptions.md) = `{}`
+[`IInternalFileWriterPluginOptions`](../interfaces/IInternalFileWriterPluginOptions.md) = `{}`
 
 ## Returns
 

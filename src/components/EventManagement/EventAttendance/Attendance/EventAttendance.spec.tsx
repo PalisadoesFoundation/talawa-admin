@@ -30,7 +30,7 @@ vi.mock('react-chartjs-2', async () => ({
 
 const renderEventAttendance = (): RenderResult => {
   return render(
-    <MockedProvider mocks={MOCKS} addTypename={false}>
+    <MockedProvider mocks={MOCKS}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
@@ -130,6 +130,20 @@ describe('Event Attendance Component', () => {
       const attendees = screen.getAllByTestId(/^attendee-name-/);
       expect(attendees).toHaveLength(3); // All mock attendees contain example.com
     });
+  });
+
+  it('Clears search input', async () => {
+    renderEventAttendance();
+
+    const searchInput = await screen.findByTestId('searchByName');
+    fireEvent.change(searchInput, { target: { value: 'Bruce' } });
+    expect(searchInput).toHaveValue('Bruce');
+
+    // SearchBar renders a clear button when value is not empty
+    const clearBtn = screen.getByLabelText('Clear search');
+    fireEvent.click(clearBtn);
+
+    expect(searchInput).toHaveValue('');
   });
 
   it('Sort functionality changes attendee order (ascending)', async () => {

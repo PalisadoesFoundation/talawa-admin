@@ -97,7 +97,7 @@ const mockDefaultProps = {
 const renderComponent = (props = {}) => {
   const finalProps = { ...mockDefaultProps, ...props };
   return render(
-    <MockedProvider addTypename={false}>
+    <MockedProvider>
       <Provider store={store}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
@@ -115,6 +115,9 @@ const getPickerInputByLabel = (label: string) =>
   screen.getByRole('group', { name: new RegExp(label, 'i') });
 
 describe('EventListCardPreviewModal', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
   beforeEach(() => {
     vi.clearAllMocks();
     (CustomRecurrenceModal as Mock).mockImplementation(() => (

@@ -63,12 +63,12 @@ import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
-import { Search } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import Avatar from 'components/Avatar/Avatar';
 import { FiEdit } from 'react-icons/fi';
 import { useMinioUpload } from 'utils/MinioUpload';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
@@ -205,10 +205,8 @@ export default function CreateGroupChat({
     },
   });
 
-  const handleUserModalSearchChange = (e: React.FormEvent): void => {
-    e.preventDefault();
-    const trimmedName = userName.trim();
-
+  const handleUserModalSearchChange = (value: string): void => {
+    const trimmedName = value.trim();
     allUsersRefetch({
       input: { id: currentOrg },
       first: 20,
@@ -326,28 +324,18 @@ export default function CreateGroupChat({
           ) : (
             <>
               <div className={styles.input}>
-                <Form onSubmit={handleUserModalSearchChange}>
-                  <Form.Control
-                    type="name"
-                    id="searchUser"
-                    data-testid="searchUser"
-                    placeholder="searchFullName"
-                    autoComplete="off"
-                    className={styles.inputField}
-                    value={userName}
-                    onChange={(e): void => {
-                      const { value } = e.target;
-                      setUserName(value);
-                    }}
-                  />
-                  <Button
-                    type="submit"
-                    data-testid="submitBtn"
-                    className={styles.searchButton}
-                  >
-                    <Search />
-                  </Button>
-                </Form>
+                <SearchBar
+                  placeholder={t('searchFullName')}
+                  value={userName}
+                  onChange={(value) => setUserName(value)}
+                  onSearch={(value) => handleUserModalSearchChange(value)}
+                  onClear={() => {
+                    setUserName('');
+                    handleUserModalSearchChange('');
+                  }}
+                  inputTestId="searchUser"
+                  buttonTestId="submitBtn"
+                />
               </div>
 
               <StyledTableContainer component={Paper}>

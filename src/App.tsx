@@ -9,9 +9,11 @@ import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import LoginPage from 'screens/LoginPage/LoginPage';
 import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
 import { getPluginManager } from 'plugin/manager';
+import { discoverAndRegisterAllPlugins } from 'plugin/registry';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
 import Loader from 'components/Loader/Loader';
+import PageNotFound from 'screens/PageNotFound/PageNotFound';
 
 const OrganizationScreen = lazy(
   () => import('components/OrganizationScreen/OrganizationScreen'),
@@ -57,7 +59,6 @@ const OrganizationTags = lazy(
 );
 const ManageTag = lazy(() => import('screens/ManageTag/ManageTag'));
 const SubTags = lazy(() => import('screens/SubTags/SubTags'));
-const PageNotFound = lazy(() => import('screens/PageNotFound/PageNotFound'));
 const Requests = lazy(() => import('screens/Requests/Requests'));
 const Users = lazy(() => import('screens/Users/Users'));
 const CommunityProfile = lazy(
@@ -132,44 +133,11 @@ function App(): React.ReactElement {
     );
   }, [data?.currentUser?.appUserProfile?.adminFor]);
 
-  const isAdmin =
-    data?.currentUser?.userType === 'ADMIN' ||
-    data?.currentUser?.userType === 'SUPERADMIN';
-  const isSuperAdmin = data?.currentUser?.userType === 'SUPERADMIN';
-
   // Get plugin routes
   const adminGlobalPluginRoutes = usePluginRoutes(userPermissions, true, false);
   const adminOrgPluginRoutes = usePluginRoutes(userPermissions, true, true);
   const userOrgPluginRoutes = usePluginRoutes(userPermissions, false, true);
   const userGlobalPluginRoutes = usePluginRoutes(userPermissions, false, false);
-
-  console.log('=== APP.TSX ROUTE DEBUG ===');
-  console.log('Current user data:', {
-    userType: data?.currentUser?.userType,
-    isAdmin,
-    isSuperAdmin,
-    userPermissions: userPermissions.length,
-    userPermissionsArray: userPermissions,
-  });
-  console.log('Plugin routes loaded:', {
-    admin: {
-      count: adminOrgPluginRoutes.length,
-      routes: adminOrgPluginRoutes.map((r) => ({
-        path: r.path,
-        component: r.component,
-        pluginId: r.pluginId,
-      })),
-    },
-    user: {
-      count: userOrgPluginRoutes.length,
-      routes: userOrgPluginRoutes.map((r) => ({
-        path: r.path,
-        component: r.component,
-        pluginId: r.pluginId,
-      })),
-    },
-  });
-  console.log('=== END APP.TSX ROUTE DEBUG ===');
 
   // Initialize plugin system on app startup
   useEffect(() => {
@@ -181,13 +149,8 @@ function App(): React.ReactElement {
         // Initialize plugin manager
         await getPluginManager().initializePluginSystem();
 
-        // Import and initialize plugin registry
-        const { discoverAndRegisterAllPlugins } = await import(
-          './plugin/registry'
-        );
+        // Initialize plugin registry
         await discoverAndRegisterAllPlugins();
-
-        console.log('Plugin system initialized successfully');
       } catch (error) {
         console.error('Failed to initialize plugin system:', error);
       }

@@ -7,27 +7,31 @@ import Modal from 'react-bootstrap/Modal';
 import { Button } from '@mui/material';
 import { FaUpload, FaExclamationTriangle, FaCheck } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import { useApolloClient } from '@apollo/client';
+import {
+  useApolloClient,
+  type ApolloClient,
+  type NormalizedCacheObject,
+} from '@apollo/client';
 import {
   installAdminPluginFromZip,
   validateAdminPluginZip,
-  type AdminPluginManifest,
-  type AdminPluginZipStructure,
+  type IAdminPluginManifest,
+  type IAdminPluginZipStructure,
 } from '../../utils/adminPluginInstaller';
 
-interface UploadPluginModalProps {
+interface IUploadPluginModalProps {
   show: boolean;
   onHide: () => void;
 }
 
-const UploadPluginModal: React.FC<UploadPluginModalProps> = ({
+const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
   show,
   onHide,
 }) => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [manifest, setManifest] = useState<AdminPluginManifest | null>(null);
+  const [manifest, setManifest] = useState<IAdminPluginManifest | null>(null);
   const [pluginStructure, setPluginStructure] =
-    useState<AdminPluginZipStructure | null>(null);
+    useState<IAdminPluginZipStructure | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pluginFiles, setPluginFiles] = useState<string[]>([]);
   const [isInstalling, setIsInstalling] = useState(false);
@@ -74,7 +78,7 @@ const UploadPluginModal: React.FC<UploadPluginModalProps> = ({
 
         setPluginFiles(filesList);
         setPluginStructure(structure);
-        setManifest(structure.adminManifest || structure.apiManifest!);
+        setManifest(structure.adminManifest || structure.apiManifest || null);
       } catch (err) {
         setError(
           err instanceof Error ? err.message : 'Failed to parse plugin ZIP',
@@ -97,7 +101,7 @@ const UploadPluginModal: React.FC<UploadPluginModalProps> = ({
     try {
       const result = await installAdminPluginFromZip({
         zipFile: selectedFile,
-        apolloClient,
+        apolloClient: apolloClient as ApolloClient<NormalizedCacheObject>,
       });
 
       if (result.success) {
