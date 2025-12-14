@@ -35,7 +35,13 @@
  * ```
  */
 
-import React, { FormEvent, useEffect, useRef, useState } from 'react';
+import React, {
+  FormEvent,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { Close, InsertPhotoOutlined, PushPin } from '@mui/icons-material';
 import Avatar from 'components/Avatar/Avatar';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -59,7 +65,7 @@ function CreatePostModal({
   orgId,
 }: ICreatePostModalProps): JSX.Element {
   const { getItem } = useLocalStorage();
-  const name = getItem('name') as string;
+  const name = (getItem('name') as string | null) ?? '';
   const { t } = useTranslation('translation', { keyPrefix: 'createPostModal' });
   const [postTitle, setPostTitle] = useState('');
   const [postBody, setPostBody] = useState('');
@@ -72,14 +78,14 @@ function CreatePostModal({
   );
   const isPostDisabled = postTitle.trim().length === 0;
 
-  const handleClose = (): void => {
+  const handleClose = useCallback((): void => {
     setPostTitle('');
     setPostBody('');
     setIspinned(false);
     setFile(null);
     setPreview(null);
     onHide();
-  };
+  }, [onHide]);
 
   useEffect(() => {
     return () => {
@@ -319,7 +325,7 @@ function CreatePostModal({
             <button
               type="button"
               className={styles.mediaButton}
-              aria-label="Add photo"
+              aria-label={t('addAttachment')}
               data-testid="addPhotoBtn"
               onClick={() => fileInputRef.current?.click()}
               title={t('addAttachment')}
@@ -339,7 +345,7 @@ function CreatePostModal({
             <button
               type="button"
               className={styles.mediaButton}
-              aria-label="pin post"
+              aria-label={isPinned ? t('unpinPost') : t('pinPost')}
               data-cy="pinPost"
               data-testid="pinPostButton"
               onClick={() => setIspinned(!isPinned)}

@@ -138,7 +138,7 @@ const createPostWithAttachmentMock = {
         attachments: [
           {
             fileHash:
-              '123456789abcdef011223344556677889aaabbccddeeff00112233445566778899',
+              '123456789abcdef0112233445566778899aabbccddeeff001122334455667788',
             mimetype: 'IMAGE_JPEG',
             name: 'test-image.jpg',
             objectName: 'uploads/test-image.jpg',
@@ -156,7 +156,7 @@ const createPostWithAttachmentMock = {
         attachments: [
           {
             fileHash:
-              '123456789abcdef011223344556677889aaabbccddeeff00112233445566778899',
+              '123456789abcdef0112233445566778899aabbccddeeff001122334455667788',
             mimeType: 'IMAGE_JPEG',
             name: 'test-image.jpg',
             objectName: 'uploads/test-image.jpg',
@@ -677,7 +677,7 @@ describe('CreatePostModal Integration Tests', () => {
     });
   });
 
-  describe('File Selection Edge Cases', () => {
+  describe('Edge Cases', () => {
     it('handles file selection when no file is selected', async () => {
       renderComponent();
 
@@ -696,6 +696,74 @@ describe('CreatePostModal Integration Tests', () => {
       // Should not show any preview
       expect(screen.queryByAltText('Selected')).not.toBeInTheDocument();
     });
+
+    it('handles null name from localStorage', () => {
+      // Temporarily change the mock to return null
+      mockLocalStorage.mockImplementation((key: string) => {
+        if (key === 'name') return null; // This will trigger the ?? fallback
+        return null;
+      });
+
+      renderComponent();
+
+      // Component should render properly with fallback empty string
+      expect(screen.getByTestId('modalBackdrop')).toBeInTheDocument();
+      expect(screen.getByTestId('user-avatar')).toBeInTheDocument();
+
+      // Reset the mock back to original behavior
+      mockLocalStorage.mockImplementation((key: string) => {
+        if (key === 'name') return 'John Doe';
+        return null;
+      });
+    });
+
+    it('handles case when createPost mutation succeeds but returns no data', async () => {
+      const { toast } = await import('react-toastify');
+
+      const noDataMock = {
+        request: {
+          query: CREATE_POST_MUTATION,
+          variables: {
+            input: {
+              caption: 'Test Post',
+              organizationId: 'test-org-id',
+              isPinned: false,
+            },
+          },
+        },
+        result: {
+          data: {
+            createPost: null, // Mutation succeeds but createPost field is null
+          },
+        },
+      };
+
+      renderComponent({}, [noDataMock]);
+
+      const titleInput = screen.getByPlaceholderText('Title of your post...');
+      const postButton = screen.getByTestId('createPostBtn');
+
+      await user.type(titleInput, 'Test Post');
+      await user.click(postButton);
+
+      // Should not show success toast or call refetch when data.createPost is null
+      await waitFor(() => {
+        expect(toast.success).not.toHaveBeenCalled();
+        expect(defaultProps.refetch).not.toHaveBeenCalled();
+        expect(defaultProps.onHide).not.toHaveBeenCalled();
+      });
+    });
+
+    it('renders with correct CSS classes when show is false', () => {
+      renderComponent({ show: false });
+
+      const backdrop = screen.getByTestId('modalBackdrop');
+      const modal = screen.getByTestId('create-post-modal');
+
+      // Should not have the show classes when show is false
+      expect(backdrop).not.toHaveClass(styles.backdropShow);
+      expect(modal).not.toHaveClass(styles.modalShow);
+    });
   });
 
   describe('Keyboard Navigation and Accessibility', () => {
@@ -710,13 +778,13 @@ describe('CreatePostModal Integration Tests', () => {
       renderComponent();
 
       const closeButton = screen.getByTestId('closeBtn');
-      expect(closeButton).toHaveAttribute('aria-label', 'Close');
+      expect(closeButton).toHaveAttribute('aria-label', 'close');
 
       const photoButton = screen.getByTestId('addPhotoBtn');
-      expect(photoButton).toHaveAttribute('aria-label', 'Add photo');
+      expect(photoButton).toHaveAttribute('aria-label', 'Add Attachment');
 
       const pinButton = screen.getByTestId('pinPostButton');
-      expect(pinButton).toHaveAttribute('aria-label', 'pin post');
+      expect(pinButton).toHaveAttribute('aria-label', 'Pin post');
     });
   });
 
