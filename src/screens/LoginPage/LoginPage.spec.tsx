@@ -1530,7 +1530,10 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     await userEvent.click(screen.getByTestId('goToRegisterPortion'));
     await userEvent.type(screen.getByPlaceholderText(/Name/i), '123'); // invalid - contains numbers
-    await userEvent.type(screen.getByTestId('signInEmail'), 'a@b.co'); // too short to pass validation
+    await userEvent.type(
+      screen.getByTestId('signInEmail'),
+      'john.doe@example.com',
+    );
     await userEvent.type(screen.getByPlaceholderText('Password'), 'Valid@123');
     await userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
@@ -1551,7 +1554,10 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     await userEvent.click(screen.getByTestId('goToRegisterPortion'));
     await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
-    await userEvent.type(screen.getByTestId('signInEmail'), 'short'); // invalid email
+    await userEvent.type(
+      screen.getByTestId('signInEmail'),
+      'john.doe@example.com',
+    );
     await userEvent.type(screen.getByPlaceholderText('Password'), 'weak');
     await userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
@@ -1642,7 +1648,7 @@ describe('Extra coverage for 100 %', () => {
     await wait(500);
 
     expect(fetchSpy).toHaveBeenCalledWith(
-      'http://localhost:4000/graphql',
+      BACKEND_URL,
       expect.objectContaining({
         method: 'POST',
         headers: {
