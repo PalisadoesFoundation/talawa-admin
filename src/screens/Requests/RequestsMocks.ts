@@ -1,45 +1,84 @@
-import { MEMBERSHIP_REQUEST, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
+import {
+  MEMBERSHIP_REQUEST_PG,
+  ORGANIZATION_LIST,
+} from 'GraphQl/Queries/Queries';
+import { PAGE_SIZE } from '../../types/ReportingTable/utils';
 
-export const EMPTY_REQUEST_MOCKS = [
-  {
-    request: {
-      query: ORGANIZATION_LIST,
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            id: 'org1',
-            name: 'Palisadoes',
-            addressLine1: '123 Jamaica Street',
-            description: 'A community organization',
-            avatarURL: null,
-            members: {
-              edges: [
-                {
-                  node: {
-                    id: 'user1',
-                  },
-                },
-              ],
-              pageInfo: {
-                hasNextPage: false,
-              },
-            },
+// Helper functions for mocks
+
+const createRequestVars = (skip = 0, first = PAGE_SIZE, nameContains = '') => ({
+  input: { id: '' },
+  skip,
+  first,
+  name_contains: nameContains,
+});
+
+const createMembershipRequestMock = (
+  skip: number,
+  first: number,
+  count: number,
+  startId = 1,
+) => ({
+  request: {
+    query: MEMBERSHIP_REQUEST_PG,
+    variables: createRequestVars(skip, first),
+  },
+  result: {
+    data: {
+      organization: {
+        id: '',
+        membershipRequests: Array.from({ length: count }, (_, i) => ({
+          membershipRequestId: `${startId + i}`,
+          createdAt: `2023-01-${String(startId + i).padStart(2, '0')}T00:00:00Z`,
+          status: 'pending',
+          user: {
+            id: `user${startId + i}`,
+            name: `Test User ${startId + i}`,
+            emailAddress: `testuser${startId + i}@example.com`,
           },
-        ],
+        })),
       },
     },
   },
+});
+
+const createOrgListMock = () => ({
+  request: {
+    query: ORGANIZATION_LIST,
+  },
+  result: {
+    data: {
+      organizations: [
+        {
+          id: 'org1',
+          name: 'Palisadoes',
+          addressLine1: '123 Jamaica Street',
+          description: 'A community organization',
+          avatarURL: null,
+          members: {
+            edges: [
+              {
+                node: {
+                  id: 'user1',
+                },
+              },
+            ],
+            pageInfo: {
+              hasNextPage: false,
+            },
+          },
+        },
+      ],
+    },
+  },
+});
+
+export const EMPTY_REQUEST_MOCKS = [
+  createOrgListMock(),
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
-      variables: {
-        input: { id: '' },
-        skip: 0,
-        first: 8,
-        name_contains: '',
-      },
+      query: MEMBERSHIP_REQUEST_PG,
+      variables: createRequestVars(),
     },
     result: {
       data: {
@@ -53,45 +92,11 @@ export const EMPTY_REQUEST_MOCKS = [
 ];
 
 export const MOCKS = [
+  createOrgListMock(),
   {
     request: {
-      query: ORGANIZATION_LIST,
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            id: 'org1',
-            name: 'Palisadoes',
-            addressLine1: '123 Jamaica Street',
-            description: 'A community organization',
-            avatarURL: null,
-            members: {
-              edges: [
-                {
-                  node: {
-                    id: 'user1',
-                  },
-                },
-              ],
-              pageInfo: {
-                hasNextPage: false,
-              },
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: MEMBERSHIP_REQUEST,
-      variables: {
-        input: { id: '' },
-        skip: 0,
-        first: 8,
-        name_contains: '',
-      },
+      query: MEMBERSHIP_REQUEST_PG,
+      variables: createRequestVars(),
     },
     result: {
       data: {
@@ -126,45 +131,11 @@ export const MOCKS = [
 ];
 
 export const MOCKS4 = [
+  createOrgListMock(),
   {
     request: {
-      query: ORGANIZATION_LIST,
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            id: 'org1',
-            name: 'Palisadoes',
-            addressLine1: '123 Jamaica Street',
-            description: 'A community organization',
-            avatarURL: null,
-            members: {
-              edges: [
-                {
-                  node: {
-                    id: 'user1',
-                  },
-                },
-              ],
-              pageInfo: {
-                hasNextPage: false,
-              },
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: MEMBERSHIP_REQUEST,
-      variables: {
-        input: { id: '' },
-        skip: 0,
-        first: 8,
-        name_contains: '',
-      },
+      query: MEMBERSHIP_REQUEST_PG,
+      variables: createRequestVars(),
     },
     result: {
       data: {
@@ -258,11 +229,11 @@ export const MOCKS4 = [
   },
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: '' },
-        skip: 8,
-        first: 8,
+        skip: PAGE_SIZE,
+        first: PAGE_SIZE,
         name_contains: '',
       },
     },
@@ -362,95 +333,112 @@ export const UPDATED_MOCKS = [
   ...MOCKS,
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
-      variables: {
-        id: '',
-        skip: 0,
-        first: 8,
-        firstName_contains: '',
-      },
+      query: MEMBERSHIP_REQUEST_PG,
+      variables: createRequestVars(),
     },
     result: {
       data: {
-        organizations: [
-          {
-            _id: '',
-            membershipRequests: Array.from({ length: 8 }, (_, i) => ({
-              membershipRequestId: `${i + 1}`,
-              createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
-              status: 'pending',
-              user: {
-                id: `user${i + 1}`,
-                name: `Test User ${i + 1}`,
-                emailAddress: `testuser${i + 1}@example.com`,
-              },
-            })),
-          },
-        ],
+        organization: {
+          id: '',
+          membershipRequests: Array.from({ length: 8 }, (_, i) => ({
+            membershipRequestId: `${i + 1}`,
+            createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+            status: 'pending',
+            user: {
+              id: `user${i + 1}`,
+              name: `Test User ${i + 1}`,
+              emailAddress: `testuser${i + 1}@example.com`,
+            },
+          })),
+        },
       },
     },
   },
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
+      variables: createRequestVars(PAGE_SIZE),
+    },
+    result: {
+      data: {
+        organization: {
+          id: '',
+          membershipRequests: null,
+        },
+      },
+    },
+  },
+  // Additional mocks for first: 10 (using helper function for compactness)
+  ...Array(10)
+    .fill(null)
+    .map(() => createMembershipRequestMock(0, 10, 10)),
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
-        id: '',
-        skip: 8,
-        first: 8,
-        firstName_contains: '',
+        input: { id: '' },
+        skip: 0,
+        first: 10,
+        name_contains: '',
       },
     },
     result: {
       data: {
-        organizations: [
-          {
-            _id: '',
-            membershipRequests: null,
-          },
-        ],
+        organization: {
+          id: '',
+          membershipRequests: Array.from({ length: 10 }, (_, i) => ({
+            membershipRequestId: `${i + 1}`,
+            createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+            status: 'pending',
+            user: {
+              id: `user${i + 1}`,
+              name: `Test User ${i + 1}`,
+              emailAddress: `testuser${i + 1}@example.com`,
+            },
+          })),
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST_PG,
+      variables: {
+        input: { id: '' },
+        skip: 0,
+        first: 10,
+        name_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          id: '',
+          membershipRequests: Array.from({ length: 10 }, (_, i) => ({
+            membershipRequestId: `${i + 1}`,
+            createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+            status: 'pending',
+            user: {
+              id: `user${i + 1}`,
+              name: `Test User ${i + 1}`,
+              emailAddress: `testuser${i + 1}@example.com`,
+            },
+          })),
+        },
       },
     },
   },
 ];
 
 export const MOCKS2 = [
+  createOrgListMock(),
   {
     request: {
-      query: ORGANIZATION_LIST,
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            id: 'org1',
-            name: 'Palisadoes',
-            addressLine1: '123 Jamaica Street',
-            description: 'A community organization',
-            avatarURL: null,
-            members: {
-              edges: [
-                {
-                  node: {
-                    id: 'user1',
-                  },
-                },
-              ],
-              pageInfo: {
-                hasNextPage: false,
-              },
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: 'org1' },
         skip: 0,
-        first: 8,
+        first: PAGE_SIZE,
         name_contains: '',
       },
     },
@@ -477,43 +465,14 @@ export const MOCKS2 = [
 ];
 
 export const MOCKS3 = [
+  createOrgListMock(),
   {
     request: {
-      query: ORGANIZATION_LIST,
-    },
-    result: {
-      data: {
-        organizations: [
-          {
-            id: 'org1',
-            name: 'Palisadoes',
-            addressLine1: '123 Jamaica Street',
-            description: 'A community organization',
-            avatarURL: null,
-            members: {
-              edges: [
-                {
-                  node: {
-                    id: 'user1',
-                  },
-                },
-              ],
-              pageInfo: {
-                hasNextPage: false,
-              },
-            },
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: 'org1' },
         skip: 0,
-        first: 8,
+        first: PAGE_SIZE,
         name_contains: '',
       },
     },
@@ -528,11 +487,11 @@ export const MOCKS3 = [
 export const EMPTY_MOCKS = [
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: 'org1' },
         skip: 0,
-        first: 8,
+        first: PAGE_SIZE,
         name_contains: '',
       },
     },
@@ -560,7 +519,7 @@ export const EMPTY_MOCKS = [
 export const MOCKS_WITH_ERROR = [
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: '1' },
         first: 0,
