@@ -112,7 +112,7 @@ const renderComponent = (props = {}) => {
 };
 
 const getPickerInputByLabel = (label: string) =>
-  screen.getByRole('group', { name: new RegExp(label, 'i') });
+  screen.getByRole('group', { name: label, hidden: true });
 
 describe('EventListCardPreviewModal', () => {
   beforeEach(() => {

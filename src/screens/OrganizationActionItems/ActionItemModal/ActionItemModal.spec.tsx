@@ -618,7 +618,7 @@ const mockActionItemWithGroup = {
 };
 
 const getPickerInputByLabel = (label: string) =>
-  screen.getByRole('group', { name: new RegExp(label, 'i') });
+  screen.getByLabelText(label, { selector: 'input' });
 
 // Additional test cases for ItemModal component
 describe('ItemModal - Additional Test Cases', () => {
@@ -1342,12 +1342,12 @@ describe('ItemModal - Specific Test Coverage', () => {
       });
 
       // Find date picker input
-      const dateGroup = getPickerInputByLabel('assignmentDate');
-      expect(dateGroup).toBeInTheDocument();
+      const dateInput = getPickerInputByLabel('assignmentDate');
+      expect(dateInput).toBeInTheDocument();
 
       // The date picker should be accessible and allow interaction
-      await userEvent.click(dateGroup);
-      expect(dateGroup).toBeInTheDocument();
+      await userEvent.click(dateInput);
+      expect(dateInput).toBeInTheDocument();
     });
 
     it('should clear field values when handleFormChange is called with empty values', async () => {

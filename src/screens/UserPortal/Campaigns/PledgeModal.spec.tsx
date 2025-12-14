@@ -373,12 +373,12 @@ describe('PledgeModal', () => {
         hidden: true,
       });
 
-      fireEvent.change(startDateInput, { target: { value: null } });
-      // When the change value is null, the field is cleared
+      fireEvent.change(startDateInput, { target: { value: '' } });
+      // MUI X v8: clearing is prevented; last valid value remains
       expect(startDateInput).toHaveValue('01/01/2024');
     });
 
-    it('should update pledgeendDate when a new date is selected', async () => {
+    it('should update pledgeEndDate when a new date is selected', async () => {
       renderPledgeModal(link1, pledgeProps[1]);
       const endDateGroup = getPickerGroup(/end date/i);
       const endDateInput = within(endDateGroup).getByRole('textbox', {
@@ -389,15 +389,15 @@ describe('PledgeModal', () => {
       expect(endDateInput).toHaveValue('02/01/2024');
     });
 
-    it('should handle pledgeendDate onChange when value is null', async () => {
+    it('should handle pledgeEndDate onChange when value is null', async () => {
       renderPledgeModal(link1, pledgeProps[1]);
       const endDateGroup = getPickerGroup(/end date/i);
       const endDateInput = within(endDateGroup).getByRole('textbox', {
         hidden: true,
       });
 
-      fireEvent.change(endDateInput, { target: { value: null } });
-      // When the change value is null, the field is cleared
+      fireEvent.change(endDateInput, { target: { value: '' } });
+      // MUI X v8: clearing is prevented; last valid value remains
       expect(endDateInput).toHaveValue('10/01/2024');
     });
 
@@ -844,7 +844,7 @@ describe('PledgeModal', () => {
       );
     });
 
-    it('should update pledge with enddate change', async () => {
+    it('should update pledge with endDate change', async () => {
       const updateMock = [
         ...PLEDGE_MODAL_MOCKS,
         {

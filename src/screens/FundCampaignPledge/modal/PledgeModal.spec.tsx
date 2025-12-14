@@ -183,7 +183,7 @@ const NO_CHANGE_MOCK = {
 };
 
 const getPickerInputByLabel = (label: string) =>
-  screen.getByRole('group', { name: new RegExp(label, 'i') });
+  screen.getByRole('group', { name: label, hidden: true });
 
 describe('PledgeModal', () => {
   beforeAll(() => {
@@ -296,7 +296,7 @@ describe('PledgeModal', () => {
       hidden: true,
     });
     fireEvent.change(startDateInput, { target: { value: null } });
-    expect(pledgeProps[1].pledge?.startDate).toEqual('2024-01-01');
+    expect(startDateInput).toHaveValue('01/01/2024');
   });
 
   it('should update pledgeEndDate when a new date is selected', async () => {
@@ -317,7 +317,7 @@ describe('PledgeModal', () => {
       hidden: true,
     });
     fireEvent.change(endDateInput, { target: { value: null } });
-    expect(pledgeProps[1].pledge?.endDate).toEqual('2024-01-10');
+    expect(endDateInput).toHaveValue('10/01/2024');
   });
 
   it('should update end date if start date is after current end date', () => {

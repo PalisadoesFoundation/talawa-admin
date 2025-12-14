@@ -204,8 +204,12 @@ const renderItemViewModal = (
   );
 };
 
+const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
 const getPickerInputByLabel = (label: string) =>
-  screen.getByRole('group', { name: new RegExp(label, 'i') });
+  screen.getByRole('group', {
+    name: new RegExp(`^${escapeRegExp(label)}$`, 'i'),
+  });
 
 describe('Testing ItemViewModal', () => {
   beforeEach(() => {

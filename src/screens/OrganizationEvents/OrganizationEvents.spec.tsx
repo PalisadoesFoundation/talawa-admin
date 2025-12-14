@@ -6,7 +6,6 @@ import {
   screen,
   fireEvent,
   waitFor,
-  within,
 } from '@testing-library/react';
 import { GraphQLError } from 'graphql';
 import { Provider } from 'react-redux';
@@ -145,7 +144,7 @@ vi.mock('react-toastify', () => ({
 }));
 
 const getPickerInputByLabel = (label: string) =>
-  screen.getByRole('group', { name: new RegExp(label, 'i') });
+  screen.getByLabelText(label, { selector: 'input' }) as HTMLInputElement;
 
 describe('Organisation Events Page', () => {
   const formData = {
@@ -258,14 +257,8 @@ describe('Organisation Events Page', () => {
       formData.location,
     );
 
-    const endDateGroup = getPickerInputByLabel('End Date');
-    const endDatePicker = within(endDateGroup).getByRole('textbox', {
-      hidden: true,
-    });
-    const startDateGroup = getPickerInputByLabel('Start Date');
-    const startDatePicker = within(startDateGroup).getByRole('textbox', {
-      hidden: true,
-    });
+    const endDatePicker = getPickerInputByLabel('End Date');
+    const startDatePicker = getPickerInputByLabel('Start Date');
 
     fireEvent.change(endDatePicker, {
       target: { value: formData.endDate },
@@ -353,14 +346,8 @@ describe('Organisation Events Page', () => {
       formData.location,
     );
 
-    const endDateGroup = getPickerInputByLabel('End Date');
-    const endDatePicker = within(endDateGroup).getByRole('textbox', {
-      hidden: true,
-    });
-    const startDateGroup = getPickerInputByLabel('Start Date');
-    const startDatePicker = within(startDateGroup).getByRole('textbox', {
-      hidden: true,
-    });
+    const endDatePicker = getPickerInputByLabel('End Date');
+    const startDatePicker = getPickerInputByLabel('Start Date');
 
     fireEvent.change(endDatePicker, {
       target: { value: formData.endDate },
@@ -375,14 +362,8 @@ describe('Organisation Events Page', () => {
       expect(getPickerInputByLabel(translations.startTime)).toBeInTheDocument(),
     );
 
-    const startTimeGroup = getPickerInputByLabel(translations.startTime);
-    const startTimePicker = within(startTimeGroup).getByRole('textbox', {
-      hidden: true,
-    });
-    const endTimeGroup = getPickerInputByLabel(translations.endTime);
-    const endTimePicker = within(endTimeGroup).getByRole('textbox', {
-      hidden: true,
-    });
+    const startTimePicker = getPickerInputByLabel(translations.startTime);
+    const endTimePicker = getPickerInputByLabel(translations.endTime);
 
     fireEvent.change(startTimePicker, {
       target: { value: formData.startTime },

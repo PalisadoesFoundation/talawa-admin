@@ -353,7 +353,7 @@ async function wait(ms = 500): Promise<void> {
 }
 
 const getPickerInputByLabel = (label: string) =>
-  screen.getByRole('group', { name: new RegExp(label, 'i') });
+  screen.getByRole('group', { name: label, hidden: true });
 
 const waitForClickable = async (el: HTMLElement) => {
   await waitFor(() => {
@@ -368,8 +368,6 @@ describe('Testing Events Screen [User Portal]', () => {
       matches: false,
       media: query,
       onchange: null,
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
       dispatchEvent: vi.fn(),
@@ -383,8 +381,6 @@ describe('Testing Events Screen [User Portal]', () => {
         matches: false,
         media: query,
         onchange: null,
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
         addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
         dispatchEvent: vi.fn(),
@@ -598,11 +594,27 @@ describe('Testing Events Screen [User Portal]', () => {
       within(startTimeGroup).getByLabelText(/choose time/i);
     const endTimeToggle = within(endTimeGroup).getByLabelText(/choose time/i);
     // BEFORE toggle: time pickers should be non-interactive
-    expect(startTimeToggle).toHaveStyle({ pointerEvents: 'none' });
-    expect(endTimeToggle).toHaveStyle({ pointerEvents: 'none' });
-    expect(
-      screen.queryByRole('listbox', { name: /select hours/i }),
-    ).not.toBeInTheDocument();
+    const assertDisabledOrNonInteractive = async (toggle: HTMLElement) => {
+      if (toggle.hasAttribute('aria-disabled')) {
+        expect(toggle).toHaveAttribute('aria-disabled', 'true');
+        return;
+      }
+
+      // Some MUI buttons expose disabled directly
+      try {
+        expect(toggle).toBeDisabled();
+        return;
+      } catch {
+        // Fallback: clicking should NOT open the listbox
+        await userEvent.click(toggle);
+        expect(
+          screen.queryByRole('listbox', { name: /select hours/i }),
+        ).not.toBeInTheDocument();
+      }
+    };
+
+    await assertDisabledOrNonInteractive(startTimeToggle);
+    await assertDisabledOrNonInteractive(endTimeToggle);
 
     // === Toggle all-day off ===
     await userEvent.click(allDayCheckbox);
