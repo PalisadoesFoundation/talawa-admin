@@ -945,7 +945,7 @@ describe('Testing Requests screen', () => {
           variables: {
             input: { id: '' },
             skip: 0,
-            first: 8,
+            first: 10,
             name_contains: '',
           },
         },
@@ -953,7 +953,7 @@ describe('Testing Requests screen', () => {
           data: {
             organization: {
               id: '',
-              membershipRequests: Array(8).fill({
+              membershipRequests: Array(10).fill({
                 membershipRequestId: '1',
                 createdAt: '2023-01-01T00:00:00Z',
                 status: 'pending',
@@ -972,8 +972,8 @@ describe('Testing Requests screen', () => {
           query: MEMBERSHIP_REQUEST_PG,
           variables: {
             input: { id: '' },
-            skip: 8,
-            first: 8,
+            skip: 10,
+            first: 10,
             name_contains: '',
           },
         },
@@ -1187,7 +1187,7 @@ describe('Testing Requests screen', () => {
           variables: {
             input: { id: '' },
             skip: 0,
-            first: 8,
+            first: 10,
             name_contains: '',
           },
         },
@@ -1199,7 +1199,7 @@ describe('Testing Requests screen', () => {
           variables: {
             input: { id: '' },
             skip: 0,
-            first: 8,
+            first: 10,
             name_contains: '',
           },
         },

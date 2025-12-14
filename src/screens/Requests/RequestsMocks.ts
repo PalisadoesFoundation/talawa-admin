@@ -2,6 +2,7 @@ import {
   MEMBERSHIP_REQUEST_PG,
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
+import { PAGE_SIZE } from '../../types/ReportingTable/utils';
 
 export const EMPTY_REQUEST_MOCKS = [
   {
@@ -40,7 +41,7 @@ export const EMPTY_REQUEST_MOCKS = [
       variables: {
         input: { id: '' },
         skip: 0,
-        first: 10,
+        first: PAGE_SIZE,
         name_contains: '',
       },
     },
@@ -92,7 +93,7 @@ export const MOCKS = [
       variables: {
         input: { id: '' },
         skip: 0,
-        first: 8,
+        first: PAGE_SIZE,
         name_contains: '',
       },
     },
@@ -165,7 +166,7 @@ export const MOCKS4 = [
       variables: {
         input: { id: '' },
         skip: 0,
-        first: 8,
+        first: PAGE_SIZE,
         name_contains: '',
       },
     },
@@ -264,8 +265,8 @@ export const MOCKS4 = [
       query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: '' },
-        skip: 8,
-        first: 8,
+        skip: PAGE_SIZE,
+        first: PAGE_SIZE,
         name_contains: '',
       },
     },
@@ -369,7 +370,7 @@ export const UPDATED_MOCKS = [
       variables: {
         input: { id: '' },
         skip: 0,
-        first: 8,
+        first: PAGE_SIZE,
         name_contains: '',
       },
     },
@@ -396,8 +397,8 @@ export const UPDATED_MOCKS = [
       query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: '' },
-        skip: 8,
-        first: 8,
+        skip: PAGE_SIZE,
+        first: PAGE_SIZE,
         name_contains: '',
       },
     },
@@ -406,6 +407,316 @@ export const UPDATED_MOCKS = [
         organization: {
           id: '',
           membershipRequests: null,
+        },
+      },
+    },
+  },
+  // Additional mocks to satisfy tests issuing first: 10
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST_PG,
+      variables: {
+        input: { id: '' },
+        skip: 0,
+        first: 10,
+        name_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          id: '',
+          membershipRequests: Array.from({ length: 10 }, (_, i) => ({
+            membershipRequestId: `${i + 1}`,
+            createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+            status: 'pending',
+            user: {
+              id: `user${i + 1}`,
+              name: `Test User ${i + 1}`,
+              emailAddress: `testuser${i + 1}@example.com`,
+            },
+          })),
+        },
+      },
+    },
+  },
+  // Duplicate mocks to satisfy multiple invocations with identical variables
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST_PG,
+      variables: {
+        input: { id: '' },
+        skip: 0,
+        first: 10,
+        name_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          id: '',
+          membershipRequests: Array.from({ length: 10 }, (_, i) => ({
+            membershipRequestId: `${i + 1}`,
+            createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+            status: 'pending',
+            user: {
+              id: `user${i + 1}`,
+              name: `Test User ${i + 1}`,
+              emailAddress: `testuser${i + 1}@example.com`,
+            },
+          })),
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST_PG,
+      variables: {
+        input: { id: '' },
+        skip: 0,
+        first: 10,
+        name_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          id: '',
+          membershipRequests: Array.from({ length: 10 }, (_, i) => ({
+            membershipRequestId: `${i + 1}`,
+            createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+            status: 'pending',
+            user: {
+              id: `user${i + 1}`,
+              name: `Test User ${i + 1}`,
+              emailAddress: `testuser${i + 1}@example.com`,
+            },
+          })),
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST_PG,
+      variables: {
+        input: { id: '' },
+        skip: 0,
+        first: 10,
+        name_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          id: '',
+          membershipRequests: Array.from({ length: 10 }, (_, i) => ({
+            membershipRequestId: `${i + 1}`,
+            createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+            status: 'pending',
+            user: {
+              id: `user${i + 1}`,
+              name: `Test User ${i + 1}`,
+              emailAddress: `testuser${i + 1}@example.com`,
+            },
+          })),
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST_PG,
+      variables: {
+        input: { id: '' },
+        skip: 0,
+        first: 10,
+        name_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          id: '',
+          membershipRequests: Array.from({ length: 10 }, (_, i) => ({
+            membershipRequestId: `${i + 1}`,
+            createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+            status: 'pending',
+            user: {
+              id: `user${i + 1}`,
+              name: `Test User ${i + 1}`,
+              emailAddress: `testuser${i + 1}@example.com`,
+            },
+          })),
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST_PG,
+      variables: {
+        input: { id: '' },
+        skip: 0,
+        first: 10,
+        name_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          id: '',
+          membershipRequests: Array.from({ length: 10 }, (_, i) => ({
+            membershipRequestId: `${i + 1}`,
+            createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+            status: 'pending',
+            user: {
+              id: `user${i + 1}`,
+              name: `Test User ${i + 1}`,
+              emailAddress: `testuser${i + 1}@example.com`,
+            },
+          })),
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST_PG,
+      variables: {
+        input: { id: '' },
+        skip: 0,
+        first: 10,
+        name_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          id: '',
+          membershipRequests: Array.from({ length: 10 }, (_, i) => ({
+            membershipRequestId: `${i + 1}`,
+            createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+            status: 'pending',
+            user: {
+              id: `user${i + 1}`,
+              name: `Test User ${i + 1}`,
+              emailAddress: `testuser${i + 1}@example.com`,
+            },
+          })),
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST_PG,
+      variables: {
+        input: { id: '' },
+        skip: 0,
+        first: 10,
+        name_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          id: '',
+          membershipRequests: Array.from({ length: 10 }, (_, i) => ({
+            membershipRequestId: `${i + 1}`,
+            createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+            status: 'pending',
+            user: {
+              id: `user${i + 1}`,
+              name: `Test User ${i + 1}`,
+              emailAddress: `testuser${i + 1}@example.com`,
+            },
+          })),
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST_PG,
+      variables: {
+        input: { id: '' },
+        skip: 0,
+        first: 10,
+        name_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          id: '',
+          membershipRequests: Array.from({ length: 10 }, (_, i) => ({
+            membershipRequestId: `${i + 1}`,
+            createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+            status: 'pending',
+            user: {
+              id: `user${i + 1}`,
+              name: `Test User ${i + 1}`,
+              emailAddress: `testuser${i + 1}@example.com`,
+            },
+          })),
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST_PG,
+      variables: {
+        input: { id: '' },
+        skip: 0,
+        first: 10,
+        name_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          id: '',
+          membershipRequests: Array.from({ length: 10 }, (_, i) => ({
+            membershipRequestId: `${i + 1}`,
+            createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+            status: 'pending',
+            user: {
+              id: `user${i + 1}`,
+              name: `Test User ${i + 1}`,
+              emailAddress: `testuser${i + 1}@example.com`,
+            },
+          })),
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: MEMBERSHIP_REQUEST_PG,
+      variables: {
+        input: { id: '' },
+        skip: 0,
+        first: 10,
+        name_contains: '',
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          id: '',
+          membershipRequests: Array.from({ length: 10 }, (_, i) => ({
+            membershipRequestId: `${i + 1}`,
+            createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+            status: 'pending',
+            user: {
+              id: `user${i + 1}`,
+              name: `Test User ${i + 1}`,
+              emailAddress: `testuser${i + 1}@example.com`,
+            },
+          })),
         },
       },
     },
@@ -449,7 +760,7 @@ export const MOCKS2 = [
       variables: {
         input: { id: 'org1' },
         skip: 0,
-        first: 8,
+        first: PAGE_SIZE,
         name_contains: '',
       },
     },
@@ -512,7 +823,7 @@ export const MOCKS3 = [
       variables: {
         input: { id: 'org1' },
         skip: 0,
-        first: 8,
+        first: PAGE_SIZE,
         name_contains: '',
       },
     },
@@ -531,7 +842,7 @@ export const EMPTY_MOCKS = [
       variables: {
         input: { id: 'org1' },
         skip: 0,
-        first: 8,
+        first: PAGE_SIZE,
         name_contains: '',
       },
     },

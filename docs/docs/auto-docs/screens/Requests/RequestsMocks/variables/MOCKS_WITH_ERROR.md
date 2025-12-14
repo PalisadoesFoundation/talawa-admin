@@ -6,4 +6,4 @@
 
 > `const` **MOCKS\_WITH\_ERROR**: (\{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `first`: `number`; `input`: \{ `id`: `string`; \}; `name_contains`: `string`; `skip`: `number`; \}; \}; \} \| \{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables?`: `undefined`; \}; \})[]
 
-Defined in: [src/screens/Requests/RequestsMocks.ts:559](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Requests/RequestsMocks.ts#L559)
+Defined in: [src/screens/Requests/RequestsMocks.ts:870](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Requests/RequestsMocks.ts#L870)
