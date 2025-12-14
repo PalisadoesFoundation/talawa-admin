@@ -1119,9 +1119,11 @@
     "searchPosts": "Rechercher des messages",
     "nothingToShow": "Rien à montrer ici.",
     "noMorePosts": "Plus de messages à charger",
+    "noPosts": "Aucun message pour le moment. Créez le premier !",
     "createPost": "Créer un message",
     "searchTitle": "Recherche par titre",
     "noPostsFoundMatching": "Aucun message trouvé correspondant à",
+    "pinnedPostsLoadError": "Erreur lors du chargement des messages épinglés",
     "errorLoadingPosts": "Erreur lors du chargement des messages. Veuillez réessayer."
   },
 

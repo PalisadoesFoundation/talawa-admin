@@ -1118,9 +1118,11 @@
     "searchPosts": "搜索帖子",
     "nothingToShow": "这里没有可显示的内容。",
     "noMorePosts": "没有更多帖子了",
+    "noPosts": "未找到帖子",
     "createPost": "创建帖子",
     "searchTitle": "按标题搜索",
     "noPostsFoundMatching": "未找到匹配的帖子",
+    "pinnedPostsLoadError": "加载置顶帖子时出错。请重试。",
     "errorLoadingPosts": "加载帖子时出错。请重试。"
   },
   "home": {

@@ -1118,10 +1118,12 @@
     "title": "Publicaciones",
     "searchPosts": "Buscar publicaciones",
     "nothingToShow": "Nada que mostrar aquí.",
+    "noPosts": "No hay publicaciones para mostrar.",
     "noMorePosts": "No hay más publicaciones para cargar.",
     "createPost": "Crear publicación",
     "searchTitle": "Buscar por Título",
     "noPostsFoundMatching": "No se encontraron publicaciones que coincidan con ",
+    "pinnedPostsLoadError": "Error al cargar publicaciones fijadas. Por favor, inténtelo de nuevo más tarde.",
     "errorLoadingPosts": "Error al cargar publicaciones. Por favor, inténtelo de nuevo más tarde."
   },
 

@@ -240,13 +240,6 @@
     height: 100%;
   }
 
-  .modalContent {
-    border-radius: 0;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
-
   .modalBody {
     flex: 1;
   }

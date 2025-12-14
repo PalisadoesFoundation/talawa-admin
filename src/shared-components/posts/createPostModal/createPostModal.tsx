@@ -75,13 +75,22 @@ function CreatePostModal({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const isPostDisabled = postTitle.trim().length === 0;
 
+  const handleClose = (): void => {
+    setPostTitle('');
+    setPostBody('');
+    setIspinned(false);
+    setFile(null);
+    setPreview(null);
+    onHide();
+  };
+
   useEffect(() => {
-    addEventListener('keydown', (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && show) {
-        handleClose();
-      }
-    });
-  }, []);
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && show) handleClose();
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [show, handleClose]);
 
   const [create] = useMutation<ICreatePostData, { input: ICreatePostInput }>(
     CREATE_POST_MUTATION,
@@ -113,16 +122,10 @@ function CreatePostModal({
     }
   }
 
-  const handleClose = (): void => {
-    setPostTitle('');
-    setPostBody('');
-    onHide();
-  };
-
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (getMimeTypeEnum(file.type) == '0') {
+    if (getMimeTypeEnum(file.type) === '0') {
       setFile(null);
       setPreview(null);
       toast.error(t('unsupportedFileType'));
@@ -196,7 +199,6 @@ function CreatePostModal({
         onHide();
       }
     } catch (error: unknown) {
-      console.log('ernfjkgfdgfdror', error);
       errorHandler(t, error);
     }
   };
@@ -204,10 +206,12 @@ function CreatePostModal({
   return (
     <>
       {/* Backdrop overlay */}
-      <div
+      <button
         className={`${styles.backdrop} ${show ? styles.backdropShow : ''}`}
         onClick={handleClose}
         data-testid="modalBackdrop"
+        type="button"
+        aria-label="Close modal backdrop"
       />
       <div
         className={`${styles.modalDialog} ${show ? styles.modalShow : ''}`}
@@ -232,6 +236,7 @@ function CreatePostModal({
             onClick={handleClose}
             aria-label="Close"
             data-testid="closeBtn"
+            type="button"
           >
             <Close />
           </button>
@@ -242,6 +247,7 @@ function CreatePostModal({
           <textarea
             className={styles.postTextarea}
             placeholder={t('titleOfPost')}
+            data-cy="modalTitle"
             value={postTitle}
             onChange={(e) => {
               setPostTitle((e.target as HTMLTextAreaElement).value);
@@ -251,6 +257,7 @@ function CreatePostModal({
           <textarea
             className={styles.postBodyTextarea}
             placeholder="Body of your post..."
+            data-cy="modalBody"
             value={postBody}
             onChange={(e) => {
               setPostBody((e.target as HTMLTextAreaElement).value);
@@ -287,6 +294,7 @@ function CreatePostModal({
                 type="file"
                 accept="image/*, video/*"
                 data-testid="addMedia"
+                data-cy="addMediaField"
                 hidden
                 onChange={handleImageSelect}
               />
@@ -295,6 +303,7 @@ function CreatePostModal({
               type="button"
               className={styles.mediaButton}
               aria-label="pin post"
+              data-cy="pinPost"
               data-testid="pinPostButton"
               onClick={() => setIspinned(!isPinned)}
               title={isPinned ? t('unpinPost') : t('pinPost')}
@@ -315,6 +324,7 @@ function CreatePostModal({
                 type="submit"
                 disabled={isPostDisabled}
                 data-testid="createPostBtn"
+                data-cy="createPostBtn"
               >
                 {t('post')}
               </button>

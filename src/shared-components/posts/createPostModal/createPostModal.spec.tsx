@@ -9,17 +9,18 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from '../../../utils/i18nForTest';
 import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
+import styles from './createPostModal.module.css';
 
 // Mock crypto.subtle for file hashing
 Object.defineProperty(global, 'crypto', {
   value: {
     subtle: {
       digest: vi.fn().mockImplementation(async () => {
-        // Mock hash generation - create a simple mock hash
+        // Mock hash generation - create a simple mock hash (32 bytes for SHA-256)
         const mockHash = new Uint8Array([
           0x12, 0x34, 0x56, 0x78, 0x9a, 0xbc, 0xde, 0xf0, 0x11, 0x22, 0x33,
-          0x44, 0x55, 0x66, 0x77, 0x88, 0xaa, 0xbb, 0xcc, 0xdd, 0xee, 0xff,
-          0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88, 0x99,
+          0x44, 0x55, 0x66, 0x77, 0x88, 0x99, 0xaa, 0xbb, 0xcc, 0xdd, 0xee,
+          0xff, 0x00, 0x11, 0x22, 0x33, 0x44, 0x55, 0x66, 0x77, 0x88,
         ]);
         return mockHash.buffer;
       }),
@@ -71,19 +72,19 @@ const mockLocalStorage = vi.fn<(key: string) => string | null>(
   },
 );
 
-vi.mock('../../utils/useLocalstorage', () => ({
+vi.mock('utils/useLocalstorage', () => ({
   default: () => ({
     getItem: mockLocalStorage,
   }),
 }));
 
 // Mock errorHandler
-vi.mock('../../utils/errorHandler', () => ({
+vi.mock('utils/errorHandler', () => ({
   errorHandler: vi.fn(),
 }));
 
 // Mock Avatar component
-vi.mock('../../components/Avatar/Avatar', () => ({
+vi.mock('components/Avatar/Avatar', () => ({
   default: ({
     name,
     size,
@@ -172,7 +173,7 @@ const createPostWithAttachmentMock = {
         attachments: [
           {
             fileHash:
-              '123456789abcdef0112233445566778899aabbccddeeff00112233445566778899',
+              '123456789abcdef011223344556677889aaabbccddeeff00112233445566778899',
             mimetype: 'IMAGE_JPEG',
             name: 'test-image.jpg',
             objectName: 'uploads/test-image.jpg',
@@ -190,7 +191,7 @@ const createPostWithAttachmentMock = {
         attachments: [
           {
             fileHash:
-              '123456789abcdef0112233445566778899aabbccddeeff00112233445566778899',
+              '123456789abcdef011223344556677889aaabbccddeeff00112233445566778899',
             mimeType: 'IMAGE_JPEG',
             name: 'test-image.jpg',
             objectName: 'uploads/test-image.jpg',
@@ -221,8 +222,8 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  vi.clearAllMocks();
   global.URL.createObjectURL = originalCreateObjectURL;
+  vi.clearAllMocks();
 });
 
 describe('CreatePostModal Integration Tests', () => {
@@ -230,12 +231,6 @@ describe('CreatePostModal Integration Tests', () => {
 
   beforeEach(() => {
     user = userEvent.setup();
-    vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   const renderComponent = (
@@ -315,7 +310,7 @@ describe('CreatePostModal Integration Tests', () => {
 
       const postButton = screen.getByTestId('createPostBtn');
       expect(postButton).toBeDisabled();
-      expect(postButton).toHaveClass('_postButtonDisabled_5b06fc');
+      expect(postButton).toHaveClass(styles.postButtonDisabled);
     });
 
     it('enables post button when title has content', async () => {
@@ -469,6 +464,8 @@ describe('CreatePostModal Integration Tests', () => {
     it('tests file hash generation functionality', async () => {
       // Spy on crypto.subtle.digest to verify it's called
       const digestSpy = vi.spyOn(global.crypto.subtle, 'digest');
+      // Spy on File.prototype.arrayBuffer to track the ArrayBuffer being passed
+      const arrayBufferSpy = vi.spyOn(File.prototype, 'arrayBuffer');
 
       renderComponent({}, [createPostWithAttachmentMock]);
 
@@ -484,12 +481,17 @@ describe('CreatePostModal Integration Tests', () => {
       await user.type(titleInput, 'Post with Image');
       await user.click(postButton);
 
-      // Check if the function is called - the second param is undefined due to mock
+      // Verify that arrayBuffer was called and digest was called with the returned ArrayBuffer
       await waitFor(() => {
-        expect(digestSpy).toHaveBeenCalledWith('SHA-256', undefined);
+        expect(arrayBufferSpy).toHaveBeenCalled();
+        expect(digestSpy).toHaveBeenCalledWith(
+          'SHA-256',
+          expect.any(ArrayBuffer),
+        );
       });
 
       digestSpy.mockRestore();
+      arrayBufferSpy.mockRestore();
     });
 
     it('tests MIME type conversion functionality', async () => {
@@ -577,12 +579,6 @@ describe('CreatePostModal Integration Tests', () => {
       const postButton = screen.getByTestId('createPostBtn');
 
       await user.type(titleInput, 'Test Post');
-
-      // Force enable the button
-      Object.defineProperty(postButton, 'disabled', {
-        value: false,
-        writable: true,
-      });
 
       await user.click(postButton);
 

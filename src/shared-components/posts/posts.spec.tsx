@@ -15,7 +15,6 @@ import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
 import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import type { RenderResult } from '@testing-library/react';
 import { InterfacePostEdge } from 'types/Post/interface';
-import styles from '../createPostModal/createPostModal.module.css';
 
 // Hoisted mocks (must be before vi.mock calls)
 const { mockToast } = vi.hoisted(() => ({
@@ -190,24 +189,24 @@ vi.mock('shared-components/Navbar/Navbar', () => ({
 }));
 
 // Mock CreatePostModal
-// vi.mock('screens/OrgPost/CreatePostModal', () => ({
-//   default: ({
-//     show,
-//     onHide,
-//   }: {
-//     show: boolean;
-//     onHide: () => void;
-//     refetch: () => void;
-//     orgId?: string;
-//   }) =>
-//     show ? (
-//       <div data-testid="create-post-modal">
-//         <button type="button" data-testid="close-create-modal" onClick={onHide}>
-//           Close
-//         </button>
-//       </div>
-//     ) : null,
-// }));
+vi.mock('shared-components/posts/createPostModal/createPostModal', () => ({
+  default: ({
+    show,
+    onHide,
+  }: {
+    show: boolean;
+    onHide: () => void;
+    refetch: () => void;
+    orgId?: string;
+  }) =>
+    show ? (
+      <div data-testid="create-post-modal">
+        <button type="button" data-testid="close-create-modal" onClick={onHide}>
+          Close
+        </button>
+      </div>
+    ) : null,
+}));
 
 // Mock InfiniteScroll
 vi.mock('react-infinite-scroll-component', () => ({
@@ -689,6 +688,15 @@ describe('PostsPage Component', () => {
 });
 
 describe('Sorting Functionality', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    routerMocks.useParams.mockReturnValue({ orgId: '123' });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('handles sorting when allPosts is empty', async () => {
     const emptyPostsMock: MockedResponse = {
       request: {
@@ -791,6 +799,15 @@ describe('Sorting Functionality', () => {
 });
 
 describe('Create Post Modal', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    routerMocks.useParams.mockReturnValue({ orgId: '123' });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('closes create post modal when close button is clicked', async () => {
     renderComponent([orgPostListMock, emptyPinnedPostsMock]);
 
@@ -809,25 +826,42 @@ describe('Create Post Modal', () => {
     });
 
     // Close modal
-    const closeButton = screen.getByTestId('closeBtn');
+    const closeButton = screen.getByTestId('close-create-modal');
     await act(async () => {
       fireEvent.click(closeButton);
     });
 
-    await waitFor(() => {
-      expect(screen.queryByTestId('create-post-modal')).toHaveClass(
-        styles.modalDialog,
-      );
-    });
+    expect(screen.queryByTestId('create-post-modal')).not.toBeInTheDocument();
   });
 });
 
 describe('Infinite Scroll', () => {
-  it('loads more posts when load more is triggered', async () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    routerMocks.useParams.mockReturnValue({ orgId: '123' });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('renders infinite scroll component with hasMore=true initially', async () => {
+    renderComponent([orgPostListMock, emptyPinnedPostsMock]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('infinite-scroll')).toBeInTheDocument();
+    });
+
+    const infiniteScroll = screen.getByTestId('infinite-scroll');
+    expect(infiniteScroll.getAttribute('data-has-more')).toBe('true');
+    expect(screen.getByTestId('load-more-btn')).toBeInTheDocument();
+  });
+
+  it('loads more posts when load more button is clicked', async () => {
     renderComponent([orgPostListMock, nextPageMock, emptyPinnedPostsMock]);
 
     await waitFor(() => {
-      expect(screen.getByTestId('load-more-btn')).toBeInTheDocument();
+      expect(screen.getAllByTestId('post-card')).toHaveLength(3);
     });
 
     const loadMoreButton = screen.getByTestId('load-more-btn');
@@ -835,14 +869,119 @@ describe('Infinite Scroll', () => {
       fireEvent.click(loadMoreButton);
     });
 
-    // After loading more, posts should be updated
+    // Check that new posts are loaded
+    await waitFor(() => {
+      expect(screen.getByText('Fourth Post')).toBeInTheDocument();
+      expect(screen.getByText('Fifth Post')).toBeInTheDocument();
+    });
+  });
+
+  it('shows end message when hasMore=false', async () => {
+    const noMorePostsMock: MockedResponse = {
+      request: {
+        query: ORGANIZATION_POST_LIST_WITH_VOTES,
+        variables: {
+          input: { id: '123' },
+          userId: 'user-123',
+          after: null,
+          before: null,
+          first: 6,
+          last: null,
+        },
+      },
+      result: {
+        data: {
+          organization: {
+            id: '123',
+            name: 'Test Organization',
+            avatarURL: null,
+            postsCount: 3,
+            posts: {
+              edges: samplePosts.map((post) => ({
+                node: enrichPostNode(post),
+                cursor: `cursor-${post.id}`,
+              })),
+              totalCount: samplePosts.length,
+              pageInfo: {
+                startCursor: 'cursor-post-1',
+                endCursor: 'cursor-post-3',
+                hasNextPage: false,
+                hasPreviousPage: false,
+              },
+            },
+          },
+        },
+      },
+    };
+
+    renderComponent([noMorePostsMock, emptyPinnedPostsMock]);
+
+    await waitFor(() => {
+      const infiniteScroll = screen.getByTestId('infinite-scroll');
+      expect(infiniteScroll.getAttribute('data-has-more')).toBe('false');
+    });
+
+    expect(screen.queryByTestId('load-more-btn')).not.toBeInTheDocument();
+  });
+
+  it('displays infinite scroll loader when loading more posts', async () => {
+    renderComponent([orgPostListMock, emptyPinnedPostsMock]);
+
     await waitFor(() => {
       expect(screen.getByTestId('infinite-scroll')).toBeInTheDocument();
     });
+
+    // When hasMore is true, the loader should be visible
+    const infiniteScroll = screen.getByTestId('infinite-scroll');
+    expect(infiniteScroll.getAttribute('data-has-more')).toBe('true');
+    expect(screen.getByTestId('infinite-scroll-loader')).toBeInTheDocument();
+  });
+
+  it('resets infinite scroll when switching from filtered to paginated view', async () => {
+    renderComponent([orgPostListMock, emptyPinnedPostsMock]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchByName')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByName');
+
+    // Enter search term to activate filtering
+    await act(async () => {
+      fireEvent.change(searchInput, { target: { value: 'test' } });
+    });
+
+    await waitFor(() => {
+      const renderer = screen.getByTestId('posts-renderer');
+      expect(renderer.getAttribute('data-is-filtering')).toBe('true');
+    });
+
+    // Clear search to return to paginated view
+    await act(async () => {
+      fireEvent.change(searchInput, { target: { value: '' } });
+    });
+
+    await waitFor(() => {
+      const renderer = screen.getByTestId('posts-renderer');
+      expect(renderer.getAttribute('data-is-filtering')).toBe('false');
+    });
+
+    // Infinite scroll should be back to normal state
+    const infiniteScroll = screen.getByTestId('infinite-scroll');
+    expect(infiniteScroll.getAttribute('data-has-more')).toBe('true');
   });
 });
 
 describe('Refetch Functionality', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    routerMocks.useParams.mockReturnValue({ orgId: '123' });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('calls refetch when post card refetch button is clicked', async () => {
     renderComponent([
       orgPostListMock,
@@ -867,6 +1006,15 @@ describe('Refetch Functionality', () => {
 });
 
 describe('Edge Cases', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    routerMocks.useParams.mockReturnValue({ orgId: '123' });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('handles null page info', async () => {
     const nullPageInfoMock: MockedResponse = {
       request: {

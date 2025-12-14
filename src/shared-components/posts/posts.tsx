@@ -257,7 +257,13 @@ export default function PostsPage() {
       avatarURL: post.creator?.avatarURL,
     },
     hasUserVoted: post.hasUserVoted ?? { hasVoted: false, voteType: null },
-    postedAt: formatDate(post.createdAt),
+    postedAt: (() => {
+      try {
+        return formatDate(post.createdAt);
+      } catch {
+        return '';
+      }
+    })(),
     pinnedAt: post.pinnedAt ?? null,
     image: post.imageUrl ?? post.attachments?.[0]?.url ?? null,
     video: post.videoUrl ?? null,
@@ -368,7 +374,7 @@ export default function PostsPage() {
               {isFiltering ? (
                 // Display filtered posts without infinite scroll
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                  {filteredPosts.map((post) => (
+                  {postsToDisplay.map((post) => (
                     <PostCard key={post.id} {...formatPostForCard(post)} />
                   ))}
                 </Box>

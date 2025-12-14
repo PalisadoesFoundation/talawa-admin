@@ -2,7 +2,7 @@ export class PostsPage {
   private readonly _postsTabButton = '[data-cy="leftDrawerButton-Posts"]';
   private readonly _createPostButton = '[data-cy="createPostModalBtn"]';
   private readonly _postTitleInput = '[data-cy="modalTitle"]';
-  private readonly _postDescriptionInput = '[data-cy="modalinfo"]';
+  private readonly _postDescriptionInput = '[data-cy="modalBody"]';
   private readonly _addMediaField = '[data-cy="addMediaField"]';
   private readonly _pinPostCheckbox = '[data-cy="pinPost"]';
   private readonly _createPostSubmit = '[data-cy="createPostBtn"]';
@@ -23,9 +23,7 @@ export class PostsPage {
     cy.get(this._createPostButton).should('be.visible').click();
     cy.get(this._postTitleInput).should('be.visible').type(title);
     cy.get(this._postDescriptionInput).should('be.visible').type(description);
-    cy.get(this._addMediaField)
-      .should('be.visible')
-      .selectFile(mediaPath, { force: true });
+    cy.get(this._addMediaField).selectFile(mediaPath, { force: true });
     cy.get(this._pinPostCheckbox).should('be.visible').click();
     cy.get(this._createPostSubmit).should('be.visible').click();
     cy.assertToast('Congratulations! You have Posted Something.');

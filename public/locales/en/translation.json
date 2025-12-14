@@ -1160,9 +1160,11 @@
     "searchPosts": "Search posts",
     "nothingToShow": "Nothing to show here.",
     "noMorePosts": "No more posts to load.",
+    "noPosts": "No posts available.",
     "createPost": "Create Post",
     "searchTitle": "Search By Title",
     "noPostsFoundMatching": "No posts found matching",
+    "pinnedPostsLoadError": "Error loading pinned posts",
     "errorLoadingPosts": "Error loading posts"
   },
 
