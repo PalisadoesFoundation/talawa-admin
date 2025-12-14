@@ -12,7 +12,7 @@ const userDetailsQuery = {
   result: {
     data: {
       user: {
-        _id: 'userId',
+        id: 'userId',
         joinedOrganizations: [
           {
             id: '6537904485008f171cf29924',
