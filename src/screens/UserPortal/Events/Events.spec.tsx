@@ -587,6 +587,9 @@ async function wait(ms = 500): Promise<void> {
   });
 }
 
+const getPickerInputByLabel = (label: string) =>
+  screen.getByLabelText(label, { selector: 'input' }) as HTMLElement;
+
 describe('Testing Events Screen [User Portal]', () => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
@@ -594,8 +597,6 @@ describe('Testing Events Screen [User Portal]', () => {
       matches: false,
       media: query,
       onchange: null,
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
       dispatchEvent: vi.fn(),
@@ -609,8 +610,6 @@ describe('Testing Events Screen [User Portal]', () => {
         matches: false,
         media: query,
         onchange: null,
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
         addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
         dispatchEvent: vi.fn(),
@@ -906,7 +905,7 @@ describe('Testing Events Screen [User Portal]', () => {
     expect(toast.success).not.toHaveBeenCalled();
   });
 
-  it('Should toggle all-day checkbox and enable/disable time pickers', async () => {
+  it('Should toggle all-day checkbox and enable/disable time inputs', async () => {
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
@@ -928,25 +927,29 @@ describe('Testing Events Screen [User Portal]', () => {
     // Open modal
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('allDayEventCheck')).toBeInTheDocument();
-    });
+    const allDayCheckbox = await screen.findByTestId('allDayEventCheck');
 
-    const allDayCheckbox = screen.getByTestId('allDayEventCheck');
-    const startTimePicker = screen.getByLabelText('Start Time');
-    const endTimePicker = screen.getByLabelText('End Time');
+    const startTimeInput = screen.getByLabelText(
+      'Start Time',
+    ) as HTMLInputElement;
+    const endTimeInput = screen.getByLabelText('End Time') as HTMLInputElement;
 
-    // Initially all-day is true, time pickers should be disabled
-    expect(startTimePicker).toBeDisabled();
-    expect(endTimePicker).toBeDisabled();
+    // BEFORE toggle → disabled
+    expect(startTimeInput).toBeDisabled();
+    expect(endTimeInput).toBeDisabled();
 
-    // Toggle all-day off
+    // Toggle all-day OFF
     await userEvent.click(allDayCheckbox);
 
+    // AFTER toggle → enabled
     await waitFor(() => {
-      expect(startTimePicker).not.toBeDisabled();
-      expect(endTimePicker).not.toBeDisabled();
+      expect(startTimeInput).not.toBeDisabled();
+      expect(endTimeInput).not.toBeDisabled();
     });
+
+    // Optional sanity: values unchanged
+    expect(startTimeInput.value).toBe('08:00:00');
+    expect(endTimeInput.value).toBe('10:00:00');
   });
 
   it('Should toggle public, registerable, recurring, and createChat checkboxes', async () => {
@@ -1014,12 +1017,11 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
-      expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
+      expect(getPickerInputByLabel('Start Date')).toBeInTheDocument();
     });
 
-    const startDatePicker = screen.getByLabelText('Start Date');
-    const endDatePicker = screen.getByLabelText('End Date');
-
+    const startDatePicker = getPickerInputByLabel('Start Date');
+    const endDatePicker = getPickerInputByLabel('End Date');
     const newDate = dayjs().add(1, 'day');
 
     fireEvent.change(startDatePicker, {
@@ -1066,13 +1068,12 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('allDayEventCheck'));
 
     await waitFor(() => {
-      const startTimePicker = screen.getByLabelText('Start Time');
+      const startTimePicker = getPickerInputByLabel('Start Time');
       expect(startTimePicker).not.toBeDisabled();
     });
 
-    const startTimePicker = screen.getByLabelText('Start Time');
-    const endTimePicker = screen.getByLabelText('End Time');
-
+    const startTimePicker = getPickerInputByLabel('Start Time');
+    const endTimePicker = getPickerInputByLabel('End Time');
     fireEvent.change(startTimePicker, {
       target: { value: '09:00 AM' },
     });
@@ -1110,24 +1111,23 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
-      expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
+      expect(getPickerInputByLabel('Start Date')).toBeInTheDocument();
     });
 
-    const startDatePicker = screen.getByLabelText('Start Date');
-    const endDatePicker = screen.getByLabelText('End Date');
-
+    const startDatePicker = getPickerInputByLabel('Start Date');
+    const endDatePicker = getPickerInputByLabel('End Date');
     fireEvent.change(startDatePicker, {
-      target: { value: null },
+      target: { value: '' },
     });
 
     fireEvent.change(endDatePicker, {
-      target: { value: null },
+      target: { value: '' },
     });
 
     await wait();
 
     // Should handle null values without crashing
-    expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
+    expect(getPickerInputByLabel('Start Date')).toBeInTheDocument();
   });
 
   it('Should handle network error gracefully', async () => {
