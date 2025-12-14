@@ -280,8 +280,17 @@ describe('PledgeModal', () => {
     );
     // Use getAllByText to find the text content anywhere in the component
     expect(screen.getAllByText(/John Doe/i)[0]).toBeInTheDocument();
-    expect(screen.getByLabelText('Start Date')).toHaveValue('01/01/2024');
-    expect(screen.getByLabelText('End Date')).toHaveValue('10/01/2024');
+    const startDateGroup = getPickerGroup('Start Date');
+    const startDateInput = within(startDateGroup).getByRole('textbox', {
+      hidden: true,
+    });
+    const endDateGroup = getPickerGroup('End Date');
+    const endDateInput = within(endDateGroup).getByRole('textbox', {
+      hidden: true,
+    });
+
+    expect(endDateInput).toHaveValue('10/01/2024');
+    expect(startDateInput).toHaveValue('01/01/2024');
     expect(screen.getByLabelText('Currency')).toHaveTextContent('USD ($)');
     expect(screen.getByLabelText('Amount')).toHaveValue('100');
   });

@@ -9,13 +9,7 @@
 
 // SKIP_LOCALSTORAGE_CHECK
 import React, { act } from 'react';
-import {
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  within,
-} from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import {
@@ -596,12 +590,6 @@ async function wait(ms = 500): Promise<void> {
 const getPickerInputByLabel = (label: string) =>
   screen.getByLabelText(label, { selector: 'input' }) as HTMLElement;
 
-const waitForClickable = async (el: HTMLElement) => {
-  await waitFor(() => {
-    expect(el).not.toHaveStyle({ pointerEvents: 'none' });
-  });
-};
-
 describe('Testing Events Screen [User Portal]', () => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
@@ -917,7 +905,7 @@ describe('Testing Events Screen [User Portal]', () => {
     expect(toast.success).not.toHaveBeenCalled();
   });
 
-  it('Should toggle all-day checkbox and enable/disable time pickers', async () => {
+  it('Should toggle all-day checkbox and enable/disable time inputs', async () => {
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
@@ -939,64 +927,29 @@ describe('Testing Events Screen [User Portal]', () => {
     // Open modal
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('allDayEventCheck')).toBeInTheDocument();
-    });
+    const allDayCheckbox = await screen.findByTestId('allDayEventCheck');
 
-    const allDayCheckbox = screen.getByTestId('allDayEventCheck');
-    const startTimeGroup = getPickerInputByLabel('Start Time');
-    const endTimeGroup = getPickerInputByLabel('End Time');
+    const startTimeInput = screen.getByLabelText(
+      'Start Time',
+    ) as HTMLInputElement;
+    const endTimeInput = screen.getByLabelText('End Time') as HTMLInputElement;
 
-    const startTimeToggle =
-      within(startTimeGroup).getByLabelText(/choose time/i);
-    const endTimeToggle = within(endTimeGroup).getByLabelText(/choose time/i);
-    // BEFORE toggle: time pickers should be non-interactive
-    const assertDisabledOrNonInteractive = async (toggle: HTMLElement) => {
-      if (toggle.hasAttribute('aria-disabled')) {
-        expect(toggle).toHaveAttribute('aria-disabled', 'true');
-        return;
-      }
+    // BEFORE toggle → disabled
+    expect(startTimeInput).toBeDisabled();
+    expect(endTimeInput).toBeDisabled();
 
-      // Some MUI buttons expose disabled directly
-      try {
-        expect(toggle).toBeDisabled();
-        return;
-      } catch {
-        // Fallback: clicking should NOT open the listbox
-        await userEvent.click(toggle);
-        expect(
-          screen.queryByRole('listbox', { name: /select hours/i }),
-        ).not.toBeInTheDocument();
-      }
-    };
-
-    await assertDisabledOrNonInteractive(startTimeToggle);
-    await assertDisabledOrNonInteractive(endTimeToggle);
-
-    // === Toggle all-day off ===
+    // Toggle all-day OFF
     await userEvent.click(allDayCheckbox);
-    // wait until pickers become clickable
-    await waitForClickable(startTimeToggle);
-    await waitForClickable(endTimeToggle);
-    // === AFTER toggling: clicking should open the hours listbox ===
-    await userEvent.click(startTimeToggle);
+
+    // AFTER toggle → enabled
     await waitFor(() => {
-      expect(
-        screen.getByRole('listbox', { name: /select hours/i }),
-      ).toBeInTheDocument();
+      expect(startTimeInput).not.toBeDisabled();
+      expect(endTimeInput).not.toBeDisabled();
     });
 
-    // close the listbox (optional cleanup)
-    const hoursListbox = screen.getByRole('listbox', { name: /select hours/i });
-    await userEvent.click(within(hoursListbox).getByText('12')); // pick an hour to close
-
-    // verify end time also opens
-    await userEvent.click(endTimeToggle);
-    await waitFor(() => {
-      expect(
-        screen.getByRole('listbox', { name: /select hours/i }),
-      ).toBeInTheDocument();
-    });
+    // Optional sanity: values unchanged
+    expect(startTimeInput.value).toBe('08:00:00');
+    expect(endTimeInput.value).toBe('10:00:00');
   });
 
   it('Should toggle public, registerable, recurring, and createChat checkboxes', async () => {

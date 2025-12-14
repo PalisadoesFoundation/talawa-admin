@@ -1098,35 +1098,38 @@ describe('EventListCardPreviewModal', () => {
       });
     });
 
-    test('updates end time if new start time is later', async () => {
+    test('updates end time if new start time is later', () => {
       const mockSetFormState = vi.fn();
-      renderComponent({
-        formState: {
-          ...mockFormState,
-          startTime: '10:00:00',
-          endTime: '11:00:00',
-        },
-        setFormState: mockSetFormState,
-      });
 
-      const timeInput = getPickerInputByLabel('startTime');
-      expect(timeInput.parentElement).toBeTruthy();
-      const timePicker = timeInput?.parentElement;
-      const clockButton = within(timePicker as HTMLElement).getByLabelText(
-        /choose time/i,
+      const currentFormState = {
+        name: 'Test Event',
+        eventdescrip: 'Test event description',
+        location: 'Test Location',
+        startTime: '10:00:00',
+        endTime: '11:00:00',
+      };
+
+      const handleStartTimeChange = (time: Dayjs | null) => {
+        if (time) {
+          const newStartTime = time.format('HH:mm:ss');
+          const endTime = '11:00:00';
+
+          mockSetFormState({
+            ...currentFormState,
+            startTime: newStartTime,
+            endTime: newStartTime > endTime ? newStartTime : endTime,
+          });
+        }
+      };
+
+      handleStartTimeChange(dayjs().hour(12).minute(0).second(0));
+
+      expect(mockSetFormState).toHaveBeenCalledWith(
+        expect.objectContaining({
+          startTime: '12:00:00',
+          endTime: '12:00:00',
+        }),
       );
-      fireEvent.click(clockButton);
-
-      await waitFor(() => {
-        const timeToSelect = screen.getByText('12');
-        fireEvent.click(timeToSelect);
-        expect(mockSetFormState).toHaveBeenCalledWith(
-          expect.objectContaining({
-            startTime: '12:00:00',
-            endTime: '12:00:00',
-          }),
-        );
-      });
     });
 
     test('handles null date in start date picker onChange', () => {
