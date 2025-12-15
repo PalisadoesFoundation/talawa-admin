@@ -1,4 +1,4 @@
-﻿import React, { act } from 'react';
+import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';

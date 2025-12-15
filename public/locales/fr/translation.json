@@ -212,7 +212,7 @@
     "name": "Nom",
     "email": "E-mail",
     "profilePictureAlt": "Image de profil de {{name}}",
-    "placeholderAvatarAlt": "Avatar de marqueur de position"
+    "placeholderAvatarAlt": "Avatar par défaut"
   },
   "users": {
     "title": "Rôles Talawa",

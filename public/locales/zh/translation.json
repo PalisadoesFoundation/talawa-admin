@@ -211,7 +211,7 @@
     "noOrgErrorDescription": "请通过仪表板创建组织",
     "name": "名称",
     "email": "电子邮件",
-    "profilePictureAlt": "{{name}} 的个人资料图片",
+    "profilePictureAlt": "{{name}} 的头像",
     "placeholderAvatarAlt": "占位符头像"
   },
   "users": {
