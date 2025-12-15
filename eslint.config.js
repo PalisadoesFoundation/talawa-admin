@@ -147,6 +147,15 @@ export default [
       '@graphql-eslint/no-unreachable-types': 'off',
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
       'tsdoc/syntax': 'error',
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector:
+            "Property[key.name='authorization'] CallExpression[callee.name='getItem'][arguments.0.value='token']",
+          message:
+            "Security Risk: Do not use getItem('token') directly inside authorization headers. Extract it to a variable first to handle null values.",
+        },
+      ],
     },
   },
   // Cypress-specific configuration
