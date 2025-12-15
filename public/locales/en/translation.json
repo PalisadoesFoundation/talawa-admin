@@ -833,7 +833,18 @@
     "Member": "Member",
     "Admin": "Admin",
     "loading": "Loading...",
-    "noAttendees": "Attendees not Found"
+    "noAttendees": "Attendees not Found",
+    "attendeeCount": "Attendee Count",
+    "maleAttendees": "Male Attendees",
+    "femaleAttendees": "Female Attendees",
+    "otherAttendees": "Other Attendees",
+    "currentEvent": "Current Event",
+    "chartPageNavigation": "Chart page navigation",
+    "previousPage": "Previous Page",
+    "nextPage": "Next Page",
+    "goToToday": "Go to today",
+    "genderDistribution": "Gender Distribution",
+    "ageDistribution": "Age Distribution"
   },
   "eventRegistrant": {
     "sort": "Sort",

@@ -307,7 +307,7 @@ const mockStatistics = {
 
 describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   beforeEach(() => {
@@ -1201,7 +1201,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     // Test next page button at boundary
     await waitFor(
       () => {
-        const nextButton = screen.getByLabelText('Next page');
+        const nextButton = screen.getByLabelText('nextPage');
         expect(nextButton).not.toBeDisabled();
       },
       { timeout: 3000 },
@@ -1209,13 +1209,13 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
 
     // Click next to reach last page
     await act(async () => {
-      const nextButton = screen.getByLabelText('Next page');
+      const nextButton = screen.getByLabelText('nextPage');
       await userEvent.click(nextButton);
     });
 
     // Verify next button is disabled at last page
     await waitFor(() => {
-      const nextButton = screen.getByLabelText('Next page');
+      const nextButton = screen.getByLabelText('nextPage');
       expect(nextButton).toBeDisabled();
     });
   });
@@ -1315,7 +1315,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
 
     // Current page should reset to 0
     await waitFor(() => {
-      const prevButton = screen.getByLabelText('Previous page');
+      const prevButton = screen.getByLabelText('previousPage');
       expect(prevButton).toBeDisabled();
     });
   });

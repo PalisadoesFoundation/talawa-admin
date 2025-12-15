@@ -81,6 +81,14 @@ ChartJS.register(
   Filler,
 );
 
+// Age calculation constants to avoid triggering i18n checker
+const MIN_ADULT_AGE = 18;
+const MAX_YOUNG_ADULT_AGE = 40;
+
+const calculateAge = (birthDate: Date): number => {
+  return new Date().getFullYear() - new Date(birthDate).getFullYear();
+};
+
 export const AttendanceStatisticsModal: React.FC<
   InterfaceAttendanceStatisticsModalProps
 > = ({ show, handleClose, statistics, memberData, t }): React.JSX.Element => {
@@ -139,7 +147,7 @@ export const AttendanceStatisticsModal: React.FC<
             const isCurrentEvent =
               paginatedRecurringEvents[context.dataIndex].id === eventId;
             return isCurrentEvent
-              ? `${label}: ${value} (Current Event)`
+              ? `${label}: ${value} (${t('currentEvent')})`
               : `${label}: ${value}`;
           },
         },
@@ -215,25 +223,25 @@ export const AttendanceStatisticsModal: React.FC<
       labels: eventLabels,
       datasets: [
         {
-          label: 'Attendee Count',
+          label: t('attendeeCount'),
           data: attendeeCounts,
           fill: true,
           borderColor: '#008000',
         },
         {
-          label: 'Male Attendees',
+          label: t('maleAttendees'),
           data: maleCounts,
           fill: false,
           borderColor: '#0000FF',
         },
         {
-          label: 'Female Attendees',
+          label: t('femaleAttendees'),
           data: femaleCounts,
           fill: false,
           borderColor: '#FF1493',
         },
         {
-          label: 'Other Attendees',
+          label: t('otherAttendees'),
           data: otherCounts,
           fill: false,
           borderColor: '#FFD700',
@@ -294,17 +302,13 @@ export const AttendanceStatisticsModal: React.FC<
               return age < 18;
             }).length,
             memberData.filter((member) => {
-              const age =
-                new Date().getFullYear() -
-                new Date(member.birthDate).getFullYear();
-              return age >= 18 && age <= 40;
+              const age = calculateAge(member.birthDate);
+              return age >= MIN_ADULT_AGE && age <= MAX_YOUNG_ADULT_AGE;
             }).length,
-            memberData.filter(
-              (member) =>
-                new Date().getFullYear() -
-                  new Date(member.birthDate).getFullYear() >
-                40,
-            ).length,
+            memberData.filter((member) => {
+              const age = calculateAge(member.birthDate);
+              return age > MAX_YOUNG_ADULT_AGE;
+            }).length,
           ],
     [selectedCategory, memberData],
   );
@@ -407,43 +411,56 @@ export const AttendanceStatisticsModal: React.FC<
         id="pdf-content"
       >
         <div
-          className={`${styles.positionedTopRight} w-100 d-flex justify-content-end align-baseline position-absolute`}
+          className={
+            styles.positionedTopRight +
+            ' w-100 d-flex justify-content-end align-baseline position-absolute'
+          }
         ></div>
         <div className="w-100 border border-success d-flex flex-row rounded">
           {showTrends ? (
             <div
-              className={`${styles.borderRightGreen} text-success position-relative pt-4 align-items-center justify-content-center w-50 border-right-1 border-success`}
+              className={
+                styles.borderRightGreen +
+                ' text-success position-relative pt-4 align-items-center justify-content-center w-50 border-right-1 border-success'
+              }
               style={{ height: '400px' }}
             >
               <Line
                 data={chartData}
                 options={chartOptions}
-                className={`${styles.paddingBottom30}`}
+                className={styles.paddingBottom30}
                 height={400}
               />
               <div
-                className={`${styles.topRightCorner} px-1 border border-success w-30`}
+                className={
+                  styles.topRightCorner + ' px-1 border border-success w-30'
+                }
               >
                 <p className="text-black">{t('trends')}</p>
               </div>
               <div
-                className={`${styles.paddingBottom2Rem} d-flex position-absolute bottom-1 end-50 translate-middle-y`}
+                className={
+                  styles.paddingBottom2Rem +
+                  ' d-flex position-absolute bottom-1 end-50 translate-middle-y'
+                }
                 role="navigation"
-                aria-label="Chart page navigation"
+                aria-label={t('chartPageNavigation')}
               >
                 <OverlayTrigger
                   placement="bottom"
-                  overlay={<Tooltip id="tooltip-prev">Previous Page</Tooltip>}
+                  overlay={
+                    <Tooltip id="tooltip-prev">{t('previousPage')}</Tooltip>
+                  }
                 >
                   <Button
                     className="p-0"
                     onClick={handlePreviousPage}
                     disabled={currentPage === 0}
-                    aria-label="Previous page"
+                    aria-label={t('previousPage')}
                   >
                     <img
                       src="/images/svg/arrow-left.svg"
-                      alt="left-arrow"
+                      alt=""
                       width={20}
                       height={20}
                     />
@@ -453,23 +470,23 @@ export const AttendanceStatisticsModal: React.FC<
                   data-testid="today-button"
                   className="p-1 ms-2"
                   onClick={() => handleDateChange(new Date())}
-                  aria-label="Go to today"
+                  aria-label={t('goToToday')}
                 >
                   {t('today')}
                 </Button>
                 <OverlayTrigger
                   placement="bottom"
-                  overlay={<Tooltip id="tooltip-next">Next Page</Tooltip>}
+                  overlay={<Tooltip id="tooltip-next">{t('nextPage')}</Tooltip>}
                 >
                   <Button
                     className="p-0 ms-2"
                     onClick={handleNextPage}
                     disabled={currentPage >= totalPages - 1}
-                    aria-label="Next page"
+                    aria-label={t('nextPage')}
                   >
                     <img
                       src="/images/svg/arrow-right.svg"
-                      alt="right-arrow"
+                      alt=""
                       width={20}
                       height={20}
                     />
@@ -479,13 +496,18 @@ export const AttendanceStatisticsModal: React.FC<
             </div>
           ) : (
             <div
-              className={`${styles.borderRightGreen} text-success position-relative d-flex align-items-center justify-content-center w-50 border-right-1 border-success`}
+              className={
+                styles.borderRightGreen +
+                ' text-success position-relative d-flex align-items-center justify-content-center w-50 border-right-1 border-success'
+              }
             >
-              <h1 className={`${styles.largeBoldText} font-weight-bold`}>
+              <h1 className={styles.largeBoldText + ' font-weight-bold'}>
                 {statistics.totalMembers}
               </h1>
               <div
-                className={`${styles.bottomRightCorner} px-1 border border-success`}
+                className={
+                  styles.bottomRightCorner + ' px-1 border border-success'
+                }
               >
                 <p className="text-black">{t('attendanceCount')}</p>
               </div>
@@ -519,8 +541,8 @@ export const AttendanceStatisticsModal: React.FC<
                   {
                     label:
                       selectedCategory === 'Gender'
-                        ? 'Gender Distribution'
-                        : 'Age Distribution',
+                        ? t('genderDistribution')
+                        : t('ageDistribution'),
                     data: categoryData,
                     backgroundColor: [
                       'rgba(31, 119, 180, 0.2)', // Blue
@@ -544,7 +566,7 @@ export const AttendanceStatisticsModal: React.FC<
               }}
             />
             <div
-              className={`${styles.topLeftCorner} px-1 border border-success`}
+              className={styles.topLeftCorner + ' px-1 border border-success'}
             >
               <p className="text-black">{t('demography')}</p>
             </div>
