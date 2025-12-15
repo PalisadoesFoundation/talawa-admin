@@ -20,6 +20,7 @@
     "atleast_6_char_long": "Atleast 6 Character long",
     "firstName_invalid": "First name should contain only lower and upper case letters",
     "lastName_invalid": "Last name should contain only lower and upper case letters",
+    "name_invalid": "Name should contain only letters, spaces, and hyphens",
     "password_invalid": "Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character",
     "email_invalid": "Email should have atleast 8 characters",
     "Password_and_Confirm_password_mismatches.": "Password and Confirm password mismatches.",
@@ -1276,6 +1277,7 @@
     "errorLoadingTransactions": "Error loading transactions"
   },
   "userEvents": {
+    "title": "Events",
     "name": "Events",
     "nothingToShow": "Nothing to show here.",
     "createEvent": "Create Event",
