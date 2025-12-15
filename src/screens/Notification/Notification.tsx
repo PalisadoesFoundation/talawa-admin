@@ -152,23 +152,24 @@ const Notification: React.FC = () => {
             })
           )}
         </ListGroup>
-
-        <div className={styles.paginationFooter}>
-          <button
-            className={styles.paginationButton}
-            onClick={handlePrev}
-            disabled={page === 0}
-          >
-            Prev
-          </button>
-          <button
-            className={styles.paginationButton}
-            onClick={handleNext}
-            disabled={notifications.length < pageSize}
-          >
-            Next
-          </button>
-        </div>
+        {notifications.length <= 1 ? null : (
+          <div className={styles.paginationFooter}>
+            <button
+              className={styles.paginationButton}
+              onClick={handlePrev}
+              disabled={page === 0}
+            >
+              Prev
+            </button>
+            <button
+              className={styles.paginationButton}
+              onClick={handleNext}
+              disabled={notifications.length < pageSize}
+            >
+              Next
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
