@@ -1,12 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
-import {
-  render,
-  screen,
-  fireEvent,
-  within,
-  // waitFor,
-} from '@testing-library/react';
+import { render, screen, fireEvent, within } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import userEvent from '@testing-library/user-event';
@@ -81,6 +75,13 @@ const MOCKS = [
   },
   {
     request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: null } },
+    result: { data: { recaptcha: true } },
+  },
+  {
+    request: {
+      query: RECAPTCHA_MUTATION,
+      variables: { recaptchaToken: 'token' },
+    },
     result: { data: { recaptcha: true } },
   },
   {
@@ -1516,7 +1517,7 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     await userEvent.click(screen.getByTestId('goToRegisterPortion'));
     await userEvent.type(screen.getByPlaceholderText(/Name/i), '123'); // invalid - contains numbers
-    await userEvent.type(screen.getByTestId('signInEmail'), 'a@b.co'); // too short to pass validation
+    await userEvent.type(screen.getByTestId('signInEmail'), 'a@b.co'); // invalid email (too short)
     await userEvent.type(screen.getByPlaceholderText('Password'), 'Valid@123');
     await userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
@@ -1537,7 +1538,7 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     await userEvent.click(screen.getByTestId('goToRegisterPortion'));
     await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
-    await userEvent.type(screen.getByTestId('signInEmail'), 'short'); // invalid email
+    await userEvent.type(screen.getByTestId('signInEmail'), 'short'); // invalid email (too short)
     await userEvent.type(screen.getByPlaceholderText('Password'), 'weak');
     await userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
@@ -1623,8 +1624,6 @@ describe('Extra coverage for 100 %', () => {
     const errorHandlerSpy = vi.spyOn(errorHandlerMod, 'errorHandler');
 
     renderLoginPage();
-
-    // Wait longer for the async loadResource() to complete
     await wait(500);
 
     expect(fetchSpy).toHaveBeenCalledWith(
