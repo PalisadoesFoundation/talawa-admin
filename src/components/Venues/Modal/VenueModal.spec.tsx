@@ -299,6 +299,10 @@ describe('VenueModal', () => {
     vi.resetModules();
   });
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('creates a new venue successfully', async () => {
     render(
       <MockedProvider mocks={MOCKS}>
@@ -546,13 +550,12 @@ describe('VenueModal', () => {
     beforeEach(() => {
       vi.clearAllMocks();
       // Use a spy instead of overriding console.error
-      consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
     });
 
     afterEach(() => {
       // Restore console.error after each test
       consoleErrorSpy.mockRestore();
-
       vi.clearAllMocks();
     });
 
