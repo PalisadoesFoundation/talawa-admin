@@ -550,7 +550,7 @@ describe('VenueModal', () => {
     beforeEach(() => {
       vi.clearAllMocks();
       // Use a spy instead of overriding console.error
-      consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+      consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     });
 
     afterEach(() => {
