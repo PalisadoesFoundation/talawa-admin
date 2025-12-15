@@ -2287,4 +2287,17 @@ describe('Advanced Component Functionality Tests', () => {
 
     expect(screen.getByTestId('searchInput')).toBeInTheDocument();
   });
+
+  test('Testing CURRENT_USER query without token in localStorage', async () => {
+    setItem('id', '123');
+    setItem('SuperAdmin', true);
+    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
+    // Explicitly do NOT set token to test the else branch
+
+    renderWithProviders();
+    await wait();
+
+    // Verify component renders without authorization header
+    expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+  });
 });
