@@ -29,7 +29,7 @@ vi.mock('components/NotFound/NotFound', () => ({
   ),
 }));
 
-vi.mock('shared-components/postCard/PostCard', () => ({
+vi.mock('shared-components/PostCard/PostCard', () => ({
   default: ({
     id,
     title,
