@@ -464,7 +464,7 @@ jobs:
       ]
     steps:
       - name: This job intentionally does nothing
-        run: echo "This job runs and does nothing."
+        run: echo "This job intentionally does nothing"
 
   Test-Application:
     name: Test Application (Shard ${{ matrix.shard }})
