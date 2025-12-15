@@ -223,7 +223,7 @@ function orgList(): JSX.Element {
     setIsLoading(loadingAll);
   }, [loadingAll]);
 
-  const createOrg = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+  const createOrg = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const {
@@ -329,6 +329,11 @@ function orgList(): JSX.Element {
     setPage(0);
   };
 
+  const shimmerClass = `${styles.orgImgContainer} shimmer`;
+  const shimmerBtnClass = `shimmer ${styles.button}`;
+  const pluginBtnClass = `btn  btn-primary ${styles.pluginStoreBtn}`;
+  const storeUrl = `orgstore/id=${dialogRedirectOrgId}`;
+
   return (
     <div style={{ paddingLeft: '40px', paddingRight: '30px' }}>
       {/* Buttons Container */}
@@ -408,8 +413,7 @@ function orgList(): JSX.Element {
                 <div key={index} className={styles.itemCardOrgList}>
                   <div className={styles.loadingWrapper}>
                     <div className={styles.innerContainer}>
-                      {/* // i18n-ignore-line */}
-                      <div className={`${styles.orgImgContainer} shimmer`} />
+                      <div className={shimmerClass} />
 
                       <div className={styles.content}>
                         <h5 className="shimmer" title={t('orgName')}></h5>
@@ -418,8 +422,7 @@ function orgList(): JSX.Element {
                         <h6 className="shimmer" title={t('members')}></h6>
                       </div>
                     </div>
-                    {/* // i18n-ignore-line */}
-                    <div className={`shimmer ${styles.button}`} />
+                    <div className={shimmerBtnClass} />
                   </div>
                 </div>
               ))}
@@ -500,11 +503,9 @@ function orgList(): JSX.Element {
 
               <div className={styles.pluginStoreBtnContainer}>
                 <Link
-                  // i18n-ignore-line
-                  className={`btn  btn-primary ${styles.pluginStoreBtn}`}
+                  className={pluginBtnClass}
                   data-testid="goToStore"
-                  // i18n-ignore-line
-                  to={`orgstore/id=${dialogRedirectOrgId}`}
+                  to={storeUrl}
                 >
                   {t('goToStore')}
                 </Link>
