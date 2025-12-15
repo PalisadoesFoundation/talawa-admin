@@ -172,7 +172,9 @@ function OrganizationCard({
   }
 
   return (
-    <div className={styles.orgCard}>
+    <div className={`${styles.orgCard} d-flex flex-column h-100`}>
+      {' '}
+      {/* Enables flex for bottom button */}
       <div className={styles.innerContainer}>
         <div className={styles.orgImgContainer}>
           {image ? (
@@ -181,7 +183,7 @@ function OrganizationCard({
               alt={`${name} image`}
               crossOrigin="anonymous"
               referrerPolicy="no-referrer"
-            ></img>
+            />
           ) : (
             <Avatar
               name={name}
@@ -216,14 +218,12 @@ function OrganizationCard({
           </h6>
         </div>
       </div>
-
       <div className={styles.buttonContainer}>
         {isJoined ? (
           <Button
             data-testid="manageBtn"
             className={styles.addButton}
             onClick={() => navigate(`/user/organization/${id}`)}
-            style={{ width: '8rem' }}
             data-cy="manageBtn"
           >
             {t('visit')}
@@ -242,7 +242,6 @@ function OrganizationCard({
             onClick={joinOrganization}
             data-testid="joinBtn"
             className={styles.outlineBtn}
-            style={{ width: '8rem' }}
           >
             {t('joinNow')}
           </Button>

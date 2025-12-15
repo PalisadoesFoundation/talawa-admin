@@ -847,27 +847,86 @@
   --input-bg: #f2f7ff;
 }
 
-/* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
+/* Global Classes (reusable across components; add new ones here per methodology) */
 
-/* Add Button */
+/* Button Container for consistent alignment (e.g., org cards) */
+.buttonContainer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 1rem 1rem 0;
+  margin-top: auto;
+  border-top: 1px solid #e9ecef;
+}
 
+/* Shared Button Normalization (Visit/Join Now/Withdraw) */
+.addButton,
+.outlineBtn,
+.withdrawBtn {
+  margin-bottom: 0 !important;
+  display: flex;
+  justify-content: center;
+}
+
+/* Add Button (Visit - filled blue) */
 .addButton {
-  margin-bottom: 10px;
   color: var(--addButton-font);
-  background-color: var(--light-blue);
-  border-color: var(--addButton-bg);
+  background-color: var(--addButton-bg);
+  border-color: var(--addButton-border);
   --bs-btn-focus-box-shadow: none;
 }
 
-.addButton:is(:hover, :active, :focus) {
+.addButton:hover,
+.addButton:active,
+.addButton:focus {
   background-color: var(--addButton-bg-hover) !important;
   border-color: var(--addButton-border-hover);
+  color: #ffffff !important;
 }
 
 .addButton:disabled {
-  margin-bottom: 10px;
   background-color: var(--disabled-btn);
   border-color: var(--addButton-bg);
+  color: var(--addButton-font);
+}
+
+.outlineBtn {
+  background-color: transparent;
+  color: var(--addButton-font);
+  border-color: var(--addButton-border);
+}
+
+.outlineBtn:hover,
+.outlineBtn:active {
+  background-color: var(--addButton-bg-hover) !important;
+  border-color: var(--addButton-border-hover);
+  color: #ffffff !important;
+}
+
+.outlineBtn:disabled {
+  background-color: transparent;
+  color: #6c757d;
+  border-color: #dee2e6;
+}
+
+.withdrawBtn {
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color);
+  border-color: var(--removeButton-border);
+}
+
+.withdrawBtn:hover,
+.withdrawBtn:active {
+  background-color: var(--removeButton-bg-hover) !important;
+  border-color: var(--removeButton-border-hover);
+  color: var(--removeButton-color-hover) !important;
+}
+
+/* Hover Enhancement for All Buttons in Container */
+.buttonContainer button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--hover-shadow);
 }
 
 /* Unblock Button */
