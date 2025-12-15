@@ -135,6 +135,7 @@ jobs:
 
   Check-Mock-Isolation:
     name: Check for proper mock cleanup in test files
+    needs: [Code-Quality-Checks]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the Repository
