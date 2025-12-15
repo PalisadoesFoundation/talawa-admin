@@ -8298,6 +8298,12 @@ form {
   margin-left: 5px;
 }
 
+/* Additional left offset required to visually align Bootstrap switches
+   with their labels in the Create Event modal.
+   Verified against Bootstrap 5.3.x + react-bootstrap Form.Switch rendering. */
+.switch :global(.form-check-input) {
+  margin-inline-start: -1.7em;
+}
 .checkboxdiv {
   display: flex;
   margin-bottom: 5px;
@@ -8992,6 +8998,17 @@ form {
   padding-left: 5px;
   margin-right: 5px;
   margin-left: 5px;
+}
+
+.datediv {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 15px;
+}
+
+.datediv > div {
+  flex: 1;
 }
 
 @media only screen and (max-width: 600px) {

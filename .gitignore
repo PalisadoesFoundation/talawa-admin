@@ -59,3 +59,8 @@ cypress/screenshots
 
 # Redis related
 dump.rdb
+
+# Ignore log files in the root directory
+/*.log
+config/node_modules/
+**/.vite/

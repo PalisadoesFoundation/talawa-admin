@@ -1251,6 +1251,7 @@
     "errorLoadingTransactions": "Error loading transactions"
   },
   "userEvents": {
+    "title": "Events",
     "name": "Events",
     "nothingToShow": "Nothing to show here.",
     "createEvent": "Create Event",
