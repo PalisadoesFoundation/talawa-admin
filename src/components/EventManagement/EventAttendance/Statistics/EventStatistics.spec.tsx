@@ -1195,6 +1195,18 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
       },
       { timeout: 3000 },
     );
+
+    // Click next to reach last page
+    await act(async () => {
+      const nextButton = screen.getByLabelText('Next page');
+      await userEvent.click(nextButton);
+    });
+
+    // Verify next button is disabled at last page
+    await waitFor(() => {
+      const nextButton = screen.getByLabelText('Next page');
+      expect(nextButton).toBeDisabled();
+    });
   });
 
   it('handles base event ID determination for recurring template', async () => {
