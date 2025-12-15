@@ -212,7 +212,9 @@
     "name": "Nom",
     "email": "E-mail",
     "endOfResults": "Fin des résultats",
-    "noResultsFoundFor": "Aucun résultat trouvé pour"
+    "noResultsFoundFor": "Aucun résultat trouvé pour",
+    "profilePictureAlt": "Image de profil de {{name}}",
+    "placeholderAvatarAlt": "Avatar de marqueur de position"
   },
   "users": {
     "title": "Rôles Talawa",

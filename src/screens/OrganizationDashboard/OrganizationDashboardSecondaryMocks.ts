@@ -167,7 +167,7 @@ export const MOCKS_ORG2 = [
         input: { id: 'orgId2' },
         skip: 0,
         first: 8,
-        firstName_contains: '',
+        name_contains: '',
       },
     },
     maxUsageCount: 5,

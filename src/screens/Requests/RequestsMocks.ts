@@ -13,35 +13,6 @@ const createRequestVars = (skip = 0, first = PAGE_SIZE, nameContains = '') => ({
   name_contains: nameContains,
 });
 
-const createMembershipRequestMock = (
-  skip: number,
-  first: number,
-  count: number,
-  startId = 1,
-) => ({
-  request: {
-    query: MEMBERSHIP_REQUEST_PG,
-    variables: createRequestVars(skip, first),
-  },
-  result: {
-    data: {
-      organization: {
-        id: '',
-        membershipRequests: Array.from({ length: count }, (_, i) => ({
-          membershipRequestId: `${startId + i}`,
-          createdAt: `2023-01-${String(startId + i).padStart(2, '0')}T00:00:00Z`,
-          status: 'pending',
-          user: {
-            id: `user${startId + i}`,
-            name: `Test User ${startId + i}`,
-            emailAddress: `testuser${startId + i}@example.com`,
-          },
-        })),
-      },
-    },
-  },
-});
-
 const createOrgListMock = () => ({
   request: {
     query: ORGANIZATION_LIST,
@@ -108,6 +79,7 @@ export const MOCKS = [
               createdAt: '2023-01-01T00:00:00Z',
               status: 'pending',
               user: {
+                avatarURL: null,
                 id: 'user2',
                 name: 'Scott Tony',
                 emailAddress: 'testuser3@example.com',
@@ -118,6 +90,7 @@ export const MOCKS = [
               createdAt: '2023-01-02T00:00:00Z',
               status: 'pending',
               user: {
+                avatarURL: null,
                 id: 'user3',
                 name: 'Teresa Bradley',
                 emailAddress: 'testuser4@example.com',
@@ -147,6 +120,7 @@ export const MOCKS4 = [
               createdAt: '2023-01-01T00:00:00Z',
               status: 'pending',
               user: {
+                avatarURL: null,
                 id: 'user2',
                 name: 'Scott Tony',
                 emailAddress: 'testuser3@example.com',
@@ -157,6 +131,7 @@ export const MOCKS4 = [
               createdAt: '2023-01-02T00:00:00Z',
               status: 'pending',
               user: {
+                avatarURL: null,
                 id: 'user3',
                 name: 'Teresa Bradley',
                 emailAddress: 'testuser4@example.com',
@@ -167,6 +142,7 @@ export const MOCKS4 = [
               createdAt: '2023-01-03T00:00:00Z',
               status: 'pending',
               user: {
+                avatarURL: null,
                 id: 'user4',
                 name: 'Jesse Hart',
                 emailAddress: 'testuser5@example.com',
@@ -177,6 +153,7 @@ export const MOCKS4 = [
               createdAt: '2023-01-04T00:00:00Z',
               status: 'pending',
               user: {
+                avatarURL: null,
                 id: 'user5',
                 name: 'Lena Mcdonald',
                 emailAddress: 'testuser6@example.com',
@@ -187,6 +164,7 @@ export const MOCKS4 = [
               createdAt: '2023-01-05T00:00:00Z',
               status: 'pending',
               user: {
+                avatarURL: null,
                 id: 'user6',
                 name: 'David Smith',
                 emailAddress: 'testuser7@example.com',
@@ -197,6 +175,7 @@ export const MOCKS4 = [
               createdAt: '2023-01-06T00:00:00Z',
               status: 'pending',
               user: {
+                avatarURL: null,
                 id: 'user7',
                 name: 'Emily Johnson',
                 emailAddress: 'testuser8@example.com',
@@ -207,6 +186,7 @@ export const MOCKS4 = [
               createdAt: '2023-01-07T00:00:00Z',
               status: 'pending',
               user: {
+                avatarURL: null,
                 id: 'user8',
                 name: 'Michael Davis',
                 emailAddress: 'testuser9@example.com',
@@ -217,6 +197,7 @@ export const MOCKS4 = [
               createdAt: '2023-01-08T00:00:00Z',
               status: 'pending',
               user: {
+                avatarURL: null,
                 id: 'user9',
                 name: 'Sarah Wilson',
                 emailAddress: 'testuser10@example.com',
@@ -247,6 +228,7 @@ export const MOCKS4 = [
               createdAt: '2023-01-09T00:00:00Z',
               status: 'pending',
               user: {
+                avatarURL: null,
                 id: 'user10',
                 name: 'Daniel Brown',
                 emailAddress: 'testuser11@example.com',
@@ -257,6 +239,7 @@ export const MOCKS4 = [
               createdAt: '2023-01-10T00:00:00Z',
               status: 'pending',
               user: {
+                avatarURL: null,
                 id: 'user11',
                 name: 'Jessica Martinez',
                 emailAddress: 'testuser12@example.com',
@@ -267,6 +250,7 @@ export const MOCKS4 = [
               createdAt: '2023-01-11T00:00:00Z',
               status: 'pending',
               user: {
+                avatarURL: null,
                 id: 'user12',
                 name: 'Matthew Taylor',
                 emailAddress: 'testuser13@example.com',
@@ -277,6 +261,7 @@ export const MOCKS4 = [
               createdAt: '2023-01-12T00:00:00Z',
               status: 'pending',
               user: {
+                avatarURL: null,
                 id: 'user13',
                 name: 'Amanda Anderson',
                 emailAddress: 'testuser14@example.com',
@@ -287,6 +272,7 @@ export const MOCKS4 = [
               createdAt: '2023-01-13T00:00:00Z',
               status: 'pending',
               user: {
+                avatarURL: null,
                 id: 'user14',
                 name: 'Christopher Thomas',
                 emailAddress: 'testuser15@example.com',
@@ -297,6 +283,7 @@ export const MOCKS4 = [
               createdAt: '2023-01-14T00:00:00Z',
               status: 'pending',
               user: {
+                avatarURL: null,
                 id: 'user15',
                 name: 'Ashley Hernandez',
                 emailAddress: 'testuser16@example.com',
@@ -307,6 +294,7 @@ export const MOCKS4 = [
               createdAt: '2023-01-15T00:00:00Z',
               status: 'pending',
               user: {
+                avatarURL: null,
                 id: 'user16',
                 name: 'Andrew Young',
                 emailAddress: 'testuser17@example.com',
@@ -317,6 +305,7 @@ export const MOCKS4 = [
               createdAt: '2023-01-16T00:00:00Z',
               status: 'pending',
               user: {
+                avatarURL: null,
                 id: 'user17',
                 name: 'Nicole Garcia',
                 emailAddress: 'testuser18@example.com',
@@ -345,6 +334,7 @@ export const UPDATED_MOCKS = [
             createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
             status: 'pending',
             user: {
+              avatarURL: null,
               id: `user${i + 1}`,
               name: `Test User ${i + 1}`,
               emailAddress: `testuser${i + 1}@example.com`,
@@ -368,10 +358,7 @@ export const UPDATED_MOCKS = [
       },
     },
   },
-  // Additional mocks for first: 10 (using helper function for compactness)
-  ...Array(10)
-    .fill(null)
-    .map(() => createMembershipRequestMock(0, 10, 10)),
+  // Additional mock for first: 10 consolidated with maxUsageCount
   {
     request: {
       query: MEMBERSHIP_REQUEST_PG,
@@ -382,6 +369,7 @@ export const UPDATED_MOCKS = [
         name_contains: '',
       },
     },
+    maxUsageCount: 12,
     result: {
       data: {
         organization: {
@@ -391,34 +379,7 @@ export const UPDATED_MOCKS = [
             createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
             status: 'pending',
             user: {
-              id: `user${i + 1}`,
-              name: `Test User ${i + 1}`,
-              emailAddress: `testuser${i + 1}@example.com`,
-            },
-          })),
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: MEMBERSHIP_REQUEST_PG,
-      variables: {
-        input: { id: '' },
-        skip: 0,
-        first: 10,
-        name_contains: '',
-      },
-    },
-    result: {
-      data: {
-        organization: {
-          id: '',
-          membershipRequests: Array.from({ length: 10 }, (_, i) => ({
-            membershipRequestId: `${i + 1}`,
-            createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
-            status: 'pending',
-            user: {
+              avatarURL: null,
               id: `user${i + 1}`,
               name: `Test User ${i + 1}`,
               emailAddress: `testuser${i + 1}@example.com`,
@@ -452,6 +413,7 @@ export const MOCKS2 = [
               createdAt: '2023-01-01T00:00:00Z',
               status: 'pending',
               user: {
+                avatarURL: null,
                 id: 'user2',
                 name: 'Scott Tony',
                 emailAddress: 'testuser3@example.com',

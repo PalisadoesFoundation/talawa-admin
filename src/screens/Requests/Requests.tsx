@@ -68,6 +68,7 @@ import type {
   ReportingTableColumn,
   ReportingTableGridProps,
   InfiniteScrollProps,
+  ReportingRow,
 } from '../../types/ReportingTable/interface';
 
 import Avatar from 'components/Avatar/Avatar';
@@ -95,7 +96,6 @@ interface InterfaceRequestsListItem {
     name: string;
     emailAddress: string;
   };
-  [key: string]: unknown;
 }
 
 const Requests = (): JSX.Element => {
@@ -103,7 +103,9 @@ const Requests = (): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
 
   // Set the document title to the translated title for the requests page
-  document.title = t('title');
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
 
   // Hook for managing local storage
   const { getItem } = useLocalStorage();
@@ -181,7 +183,11 @@ const Requests = (): JSX.Element => {
 
   // Check authorization
   useEffect(() => {
-    const isSuperAdmin = getItem('SuperAdmin');
+    const rawSuperAdmin = getItem('SuperAdmin');
+    const isSuperAdmin =
+      rawSuperAdmin === true ||
+      rawSuperAdmin === 'true' ||
+      rawSuperAdmin === 'True';
     const isAdmin = userRole?.toLowerCase() === 'administrator';
     if (!(isAdmin || isSuperAdmin)) {
       window.location.assign('/orglist');
@@ -326,7 +332,7 @@ const Requests = (): JSX.Element => {
             <img
               src={user.avatarURL}
               className={styles.userAvatar}
-              alt="profile picture"
+              alt={t('profilePictureAlt')}
               data-testid="display-img"
               crossOrigin="anonymous"
               onError={(e) => {
@@ -342,7 +348,7 @@ const Requests = (): JSX.Element => {
             size={45}
             avatarStyle={styles.avatarStyle}
             name={user.name || ''}
-            alt="dummy picture"
+            alt={t('placeholderAvatarAlt')}
           />
         );
       },
@@ -392,8 +398,17 @@ const Requests = (): JSX.Element => {
       renderCell: (params: GridCellParams) => (
         <Stack alignItems="center" spacing={0.5}>
           <Button
-            className={`btn ${styles.requestsAcceptButton} ${styles.hoverShadowOnly}`}
-            data-testid={`acceptMembershipRequestBtn${params?.row?.membershipRequestId ?? ''}`}
+            className={
+              'btn ' +
+              styles.requestsAcceptButton +
+              ' ' +
+              styles.hoverShadowOnly
+            }
+            data-testid={
+              'acceptMembershipRequestBtn' +
+              (params?.row?.membershipRequestId ?? '')
+            }
+            aria-label={t('accept')}
             onClick={async () => {
               if (params?.row?.membershipRequestId) {
                 await handleAcceptUser(params.row.membershipRequestId);
@@ -419,8 +434,17 @@ const Requests = (): JSX.Element => {
       renderCell: (params: GridCellParams) => (
         <Stack alignItems="center" spacing={0.5}>
           <Button
-            className={`btn ${styles.requestsRejectButton} ${styles.hoverShadowOnly}`}
-            data-testid={`rejectMembershipRequestBtn${params?.row?.membershipRequestId ?? ''}`}
+            className={
+              'btn ' +
+              styles.requestsRejectButton +
+              ' ' +
+              styles.hoverShadowOnly
+            }
+            data-testid={
+              'rejectMembershipRequestBtn' +
+              (params?.row?.membershipRequestId ?? '')
+            }
+            aria-label={t('reject')}
             onClick={async () => {
               if (params?.row?.membershipRequestId) {
                 await handleRejectUser(params.row.membershipRequestId);
@@ -500,7 +524,7 @@ const Requests = (): JSX.Element => {
     <>
       {/* Buttons Container */}
       <div
-        className={`${styles.btnsContainer} gap-4 flex-wrap`}
+        className={styles.btnsContainer + ' gap-4 flex-wrap'}
         data-testid="testComp"
       >
         <PageHeader
@@ -537,7 +561,9 @@ const Requests = (): JSX.Element => {
             <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
           ) : (
             <ReportingTable
-              rows={displayedRequests}
+              rows={
+                displayedRequests.map((req) => ({ ...req })) as ReportingRow[]
+              }
               columns={columns}
               gridProps={gridProps}
               infiniteProps={infiniteProps}

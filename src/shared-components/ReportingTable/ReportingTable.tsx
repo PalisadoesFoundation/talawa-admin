@@ -1,29 +1,7 @@
 import React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import type {
-  ReportingTableColumn,
-  ReportingRow,
-  ReportingTableGridProps,
-  InfiniteScrollProps,
-} from '../../types/ReportingTable/interface';
-
-export type ReportingTableProps = {
-  rows: readonly ReportingRow[];
-  columns: ReportingTableColumn[];
-  gridProps?: ReportingTableGridProps;
-  /** Optional InfiniteScroll behavior; when provided, wraps the grid */
-  infiniteProps?: InfiniteScrollProps;
-  /** Optional props applied to the InfiniteScroll container */
-  listProps?: {
-    className?: string;
-    style?: React.CSSProperties;
-    ['data-testid']?: string;
-    scrollThreshold?: number;
-    loader?: React.ReactNode;
-    endMessage?: React.ReactNode;
-  };
-};
+import type { ReportingTableProps } from '../../types/ReportingTable/interface';
 
 const ReportingTable: React.FC<ReportingTableProps> = ({
   rows,

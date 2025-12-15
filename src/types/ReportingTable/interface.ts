@@ -42,19 +42,38 @@ export type ReportingTableColumn = Partial<GridColDef> & {
  * Props for the InfiniteScroll component used in ReportingTable
  *
  */
-export interface IInfiniteScrollProps {
+export type InfiniteScrollProps = {
   dataLength: number;
   next: () => void;
   hasMore: boolean;
-}
-export type InfiniteScrollProps = IInfiniteScrollProps;
+};
 
 /**
  *  Props for the ReportingTableGrid component
  */
-export interface IReportingTableGridProps {
+export type ReportingTableGridProps = {
   rows?: readonly ReportingRow[];
   columns?: ReportingTableColumn[];
   [key: string]: unknown;
-}
-export type ReportingTableGridProps = IReportingTableGridProps;
+};
+
+/**
+ *  Props for the ReportingTable component
+ */
+
+export type ReportingTableProps = {
+  rows: readonly ReportingRow[];
+  columns: ReportingTableColumn[];
+  gridProps?: ReportingTableGridProps;
+  /** Optional InfiniteScroll behavior; when provided, wraps the grid */
+  infiniteProps?: InfiniteScrollProps;
+  /** Optional props applied to the InfiniteScroll container */
+  listProps?: {
+    className?: string;
+    style?: React.CSSProperties;
+    ['data-testid']?: string;
+    scrollThreshold?: number;
+    loader?: React.ReactNode;
+    endMessage?: React.ReactNode;
+  };
+};

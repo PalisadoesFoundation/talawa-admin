@@ -370,7 +370,7 @@ describe('OrganizationDashboard', () => {
             input: { id: 'orgId' },
             skip: 0,
             first: 8,
-            firstName_contains: '',
+            name_contains: '',
           },
         },
         maxUsageCount: 3,
@@ -460,10 +460,6 @@ describe('OrganizationDashboard', () => {
 
       const { getAllByTestId } = within(membershipRequestsCard as HTMLElement);
       const membershipCardItems = getAllByTestId('cardItem');
-
-      membershipCardItems.forEach((item, i) => {
-        console.log(`Membership Card ${i + 1}:`, item.textContent);
-      });
 
       expect(membershipCardItems.length).toBe(3);
 

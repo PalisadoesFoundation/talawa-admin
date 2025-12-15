@@ -212,7 +212,9 @@
     "name": "名称",
     "email": "电子邮件",
     "endOfResults": "结果结束",
-    "noResultsFoundFor": "未找到结果"
+    "noResultsFoundFor": "未找到结果",
+    "profilePictureAlt": "{{name}} 的个人资料图片",
+    "placeholderAvatarAlt": "占位符头像"
   },
   "users": {
     "title": "塔拉瓦角色",
