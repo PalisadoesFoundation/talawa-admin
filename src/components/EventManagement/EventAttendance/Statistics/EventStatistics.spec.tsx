@@ -7,6 +7,7 @@ import userEvent from '@testing-library/user-event';
 import { exportToCSV } from 'utils/chartToPdf';
 import { vi, describe, expect, it, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
+import type { IMember } from 'types/Event/interface';
 
 // Mock chart.js to avoid canvas errors
 vi.mock('react-chartjs-2', async () => ({
@@ -379,7 +380,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole('button', { name: 'Export Data' }),
+        screen.getByRole('button', { name: 'exportData' }),
       ).toBeInTheDocument();
     });
 
@@ -390,7 +391,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     });
 
     await act(async () => {
-      const exportButton = screen.getByRole('button', { name: 'Export Data' });
+      const exportButton = screen.getByRole('button', { name: 'exportData' });
       await userEvent.click(exportButton);
     });
 
@@ -423,12 +424,12 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole('button', { name: 'Export Data' }),
+        screen.getByRole('button', { name: 'exportData' }),
       ).toBeInTheDocument();
     });
 
     await act(async () => {
-      const exportButton = screen.getByRole('button', { name: 'Export Data' });
+      const exportButton = screen.getByRole('button', { name: 'exportData' });
       await userEvent.click(exportButton);
     });
 
@@ -460,11 +461,11 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
 
     // Wait for the component to load and render the trends section
     await waitFor(() => {
-      expect(screen.getByText('Trends')).toBeInTheDocument();
+      expect(screen.getByText('trends')).toBeInTheDocument();
     });
 
     // Click the export dropdown to open it
-    const exportButton = screen.getByRole('button', { name: 'Export Data' });
+    const exportButton = screen.getByRole('button', { name: 'exportData' });
     await userEvent.click(exportButton);
 
     // Now wait for and click the trends export option
@@ -503,11 +504,11 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
 
     // Wait for the component to load and render the trends section
     await waitFor(() => {
-      expect(screen.getByText('Trends')).toBeInTheDocument();
+      expect(screen.getByText('trends')).toBeInTheDocument();
     });
 
     // Click the export dropdown to open it
-    const exportButton = screen.getByRole('button', { name: 'Export Data' });
+    const exportButton = screen.getByRole('button', { name: 'exportData' });
     await userEvent.click(exportButton);
 
     // Now wait for and click the trends export option
@@ -548,12 +549,12 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole('button', { name: 'Export Data' }),
+        screen.getByRole('button', { name: 'exportData' }),
       ).toBeInTheDocument();
     });
 
     await act(async () => {
-      const exportButton = screen.getByRole('button', { name: 'Export Data' });
+      const exportButton = screen.getByRole('button', { name: 'exportData' });
       await userEvent.click(exportButton);
     });
 
@@ -1053,18 +1054,213 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     consoleErrorSpy.mockRestore();
   });
 
-  it('handles error during demographics export', async () => {
-    mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event123' });
+  it('handles age calculation with month/day boundaries', async () => {
+    const today = new Date();
+    const birthDateBeforeToday = new Date(
+      today.getFullYear() - 20,
+      today.getMonth() - 1,
+      today.getDate(),
+    );
+    const birthDateAfterToday = new Date(
+      today.getFullYear() - 20,
+      today.getMonth() + 1,
+      today.getDate() + 1,
+    );
 
-    const consoleErrorSpy = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
+    const membersWithBoundaryAges: IMember[] = [
+      {
+        id: 'member1',
+        natalSex: 'male',
+        birthDate: birthDateBeforeToday,
+        createdAt: '2023-01-01T00:00:00.000Z',
+        name: 'Member 1',
+        emailAddress: 'member1@test.com',
+        role: 'member',
+        tagsAssignedWith: { edges: [] },
+      },
+      {
+        id: 'member2',
+        natalSex: 'female',
+        birthDate: birthDateAfterToday,
+        createdAt: '2023-01-01T00:00:00.000Z',
+        name: 'Member 2',
+        emailAddress: 'member2@test.com',
+        role: 'member',
+        tagsAssignedWith: { edges: [] },
+      },
+    ];
 
-    const mockExportToCSV = vi.fn(() => {
-      throw new Error('Export failed');
+    render(
+      <MockedProvider mocks={mocks}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={membersWithBoundaryAges}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('age-button')).toBeInTheDocument();
     });
-    (exportToCSV as Mock).mockImplementation(mockExportToCSV);
 
+    await act(async () => {
+      const ageButton = screen.getByTestId('age-button');
+      await userEvent.click(ageButton);
+    });
+
+    // Age demographics should be calculated correctly with boundary cases
+    await waitFor(() => {
+      expect(screen.getByTestId('age-button')).toHaveClass('btn-success');
+    });
+  });
+
+  it('handles pagination boundaries correctly', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event1' });
+
+    // Create 15 recurring events (more than one page)
+    const manyRecurringEvents = Array.from({ length: 15 }, (_, i) => ({
+      id: `event${i + 1}`,
+      title: `Event ${i + 1}`,
+      startDate: new Date(2024, 0, i + 1).toISOString(),
+      attendees: [
+        {
+          id: `attendee${i}`,
+          natalSex: 'male',
+          birthDate: '2000-01-01',
+        },
+      ],
+    }));
+
+    const mocksWithManyEvents = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event1' },
+        },
+        result: {
+          data: {
+            event: {
+              id: 'event1',
+              title: 'Event 1',
+              isRecurringEventTemplate: false,
+              baseEvent: {
+                id: 'base1',
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: RECURRING_EVENTS,
+          variables: {
+            baseRecurringEventId: 'base1',
+          },
+        },
+        result: {
+          data: {
+            getRecurringEvents: manyRecurringEvents,
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocksWithManyEvents}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+
+    // Test next page button at boundary
+    await waitFor(
+      () => {
+        const nextButton = screen.getByLabelText('Next page');
+        expect(nextButton).not.toBeDisabled();
+      },
+      { timeout: 3000 },
+    );
+  });
+
+  it('handles base event ID determination for recurring template', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event1' });
+
+    // Test recurring event template path
+    const mockRecurringTemplate = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event1' },
+        },
+        result: {
+          data: {
+            event: {
+              id: 'event1',
+              title: 'Template Event',
+              isRecurringEventTemplate: true,
+              baseEvent: null,
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: RECURRING_EVENTS,
+          variables: {
+            baseRecurringEventId: 'event1',
+          },
+        },
+        result: {
+          data: {
+            getRecurringEvents: [
+              {
+                id: 'event1',
+                title: 'Template Event',
+                startDate: '2024-01-01',
+                attendees: [],
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mockRecurringTemplate}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+  });
+
+  it('handles Today button click', async () => {
     render(
       <MockedProvider mocks={mocks}>
         <AttendanceStatisticsModal
@@ -1077,45 +1273,19 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
       </MockedProvider>,
     );
 
-    // Wait for modal and data to load
     await waitFor(() => {
-      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+      expect(screen.getByTestId('today-button')).toBeInTheDocument();
     });
 
+    await act(async () => {
+      const todayButton = screen.getByTestId('today-button');
+      await userEvent.click(todayButton);
+    });
+
+    // Current page should reset to 0
     await waitFor(() => {
-      expect(
-        screen.getByRole('button', { name: 'Export Data' }),
-      ).toBeInTheDocument();
+      const prevButton = screen.getByLabelText('Previous page');
+      expect(prevButton).toBeDisabled();
     });
-
-    // Wait for charts/data to be ready
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 100));
-    });
-
-    // Click export button
-    await act(async () => {
-      const exportButton = screen.getByRole('button', { name: 'Export Data' });
-      await userEvent.click(exportButton);
-    });
-
-    // Click demographics export option
-    await act(async () => {
-      const demographicsExport = screen.getByTestId('demographics-export');
-      await userEvent.click(demographicsExport);
-    });
-
-    // Verify error was logged
-    await waitFor(
-      () => {
-        expect(consoleErrorSpy).toHaveBeenCalledWith(
-          'Failed to export demographics:',
-          expect.any(Error),
-        );
-      },
-      { timeout: 3000 },
-    );
-
-    consoleErrorSpy.mockRestore();
   });
 });

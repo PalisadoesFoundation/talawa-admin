@@ -261,9 +261,9 @@ export const AttendanceStatisticsModal: React.FC<
   const categoryLabels = useMemo(
     () =>
       selectedCategory === 'Gender'
-        ? ['Male', 'Female', 'Other']
-        : ['Under 18', '18-40', 'Over 40'],
-    [selectedCategory],
+        ? [t('male'), t('female'), t('other')]
+        : [t('under18'), t('age18to40'), t('over40')],
+    [selectedCategory, t],
   );
 
   const categoryData = useMemo(
@@ -424,7 +424,7 @@ export const AttendanceStatisticsModal: React.FC<
               <div
                 className={`${styles.topRightCorner} px-1 border border-success w-30`}
               >
-                <p className="text-black">Trends</p>
+                <p className="text-black">{t('trends')}</p>
               </div>
               <div
                 className={`${styles.paddingBottom2Rem} d-flex position-absolute bottom-1 end-50 translate-middle-y`}
@@ -455,7 +455,7 @@ export const AttendanceStatisticsModal: React.FC<
                   onClick={() => handleDateChange(new Date())}
                   aria-label="Go to today"
                 >
-                  Today
+                  {t('today')}
                 </Button>
                 <OverlayTrigger
                   placement="bottom"
@@ -487,7 +487,7 @@ export const AttendanceStatisticsModal: React.FC<
               <div
                 className={`${styles.bottomRightCorner} px-1 border border-success`}
               >
-                <p className="text-black">Attendance Count</p>
+                <p className="text-black">{t('attendanceCount')}</p>
               </div>
             </div>
           )}
@@ -499,7 +499,7 @@ export const AttendanceStatisticsModal: React.FC<
                 className="border border-success p-2 pl-2"
                 onClick={() => handleCategoryChange('Gender')}
               >
-                Gender
+                {t('gender')}
               </Button>
               <Button
                 data-testid="age-button"
@@ -507,7 +507,7 @@ export const AttendanceStatisticsModal: React.FC<
                 className="border border-success border-left-0 p-2"
                 onClick={() => handleCategoryChange('Age')}
               >
-                Age
+                {t('age')}
               </Button>
             </ButtonGroup>
             <Bar
@@ -546,7 +546,7 @@ export const AttendanceStatisticsModal: React.FC<
             <div
               className={`${styles.topLeftCorner} px-1 border border-success`}
             >
-              <p className="text-black">Demography</p>
+              <p className="text-black">{t('demography')}</p>
             </div>
           </div>
         </div>
@@ -558,19 +558,19 @@ export const AttendanceStatisticsModal: React.FC<
             variant="info"
             id="export-dropdown"
           >
-            Export Data
+            {t('exportData')}
           </Dropdown.Toggle>
           <Dropdown.Menu>
             {showTrends && (
               <Dropdown.Item data-testid="trends-export" eventKey="trends">
-                Trends
+                {t('trends')}
               </Dropdown.Item>
             )}
             <Dropdown.Item
               data-testid="demographics-export"
               eventKey="demographics"
             >
-              Demographics
+              {t('demographics')}
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
@@ -580,7 +580,7 @@ export const AttendanceStatisticsModal: React.FC<
           onClick={handleClose}
           data-testid="close-button"
         >
-          Close
+          {t('close')}
         </Button>
       </Modal.Footer>
     </Modal>
