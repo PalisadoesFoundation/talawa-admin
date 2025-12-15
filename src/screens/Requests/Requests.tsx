@@ -72,7 +72,7 @@ import type {
 } from '../../types/ReportingTable/interface';
 
 import Avatar from 'components/Avatar/Avatar';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import styles from '../../style/app-fixed.module.css';
@@ -396,29 +396,23 @@ const Requests = (): JSX.Element => {
       align: 'center',
       headerAlign: 'center',
       renderCell: (params: GridCellParams) => (
-        <Stack alignItems="center" spacing={0.5}>
-          <Button
-            className={
-              'btn ' +
-              styles.requestsAcceptButton +
-              ' ' +
-              styles.hoverShadowOnly
+        <Button
+          className={
+            'btn ' + styles.requestsAcceptButton + ' ' + styles.hoverShadowOnly
+          }
+          data-testid={
+            'acceptMembershipRequestBtn' +
+            (params?.row?.membershipRequestId ?? '')
+          }
+          aria-label={t('accept')}
+          onClick={async () => {
+            if (params?.row?.membershipRequestId) {
+              await handleAcceptUser(params.row.membershipRequestId);
             }
-            data-testid={
-              'acceptMembershipRequestBtn' +
-              (params?.row?.membershipRequestId ?? '')
-            }
-            aria-label={t('accept')}
-            onClick={async () => {
-              if (params?.row?.membershipRequestId) {
-                await handleAcceptUser(params.row.membershipRequestId);
-              }
-            }}
-          >
-            <GroupAddIcon />
-          </Button>
-          {t('accept')}
-        </Stack>
+          }}
+        >
+          <CheckCircleIcon />
+        </Button>
       ),
     },
     {
@@ -432,29 +426,23 @@ const Requests = (): JSX.Element => {
       align: 'center',
       headerAlign: 'center',
       renderCell: (params: GridCellParams) => (
-        <Stack alignItems="center" spacing={0.5}>
-          <Button
-            className={
-              'btn ' +
-              styles.requestsRejectButton +
-              ' ' +
-              styles.hoverShadowOnly
+        <Button
+          className={
+            'btn ' + styles.requestsRejectButton + ' ' + styles.hoverShadowOnly
+          }
+          data-testid={
+            'rejectMembershipRequestBtn' +
+            (params?.row?.membershipRequestId ?? '')
+          }
+          aria-label={t('reject')}
+          onClick={async () => {
+            if (params?.row?.membershipRequestId) {
+              await handleRejectUser(params.row.membershipRequestId);
             }
-            data-testid={
-              'rejectMembershipRequestBtn' +
-              (params?.row?.membershipRequestId ?? '')
-            }
-            aria-label={t('reject')}
-            onClick={async () => {
-              if (params?.row?.membershipRequestId) {
-                await handleRejectUser(params.row.membershipRequestId);
-              }
-            }}
-          >
-            <DeleteIcon />
-          </Button>
-          {t('reject')}
-        </Stack>
+          }}
+        >
+          <DeleteIcon />
+        </Button>
       ),
     },
   ];
