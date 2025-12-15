@@ -159,7 +159,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
    */
 
   const updatePledgeHandler = useCallback(
-    async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+    async (e: ChangeEvent<HTMLFormElement>) => {
       e.preventDefault();
       const startDate = dayjs(pledgeStartDate).format('YYYY-MM-DD');
       const endDate = dayjs(pledgeEndDate).format('YYYY-MM-DD');
@@ -202,7 +202,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
    * @returns A promise that resolves when the pledge is successfully created.
    */
   const createPledgeHandler = useCallback(
-    async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+    async (e: ChangeEvent<HTMLFormElement>) => {
       try {
         e.preventDefault();
         await createPledge({
@@ -259,7 +259,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           <Form.Group className="d-flex mb-3 w-100">
             <Autocomplete
               multiple
-              className={`${styles.noOutline} w-100`}
+              className={styles.noOutline + ' w-100'}
               limitTags={2}
               data-testid="pledgerSelect"
               options={[...pledgers, ...pledgeUsers]}
@@ -274,7 +274,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 setFormState({ ...formState, pledgeUsers: newPledgers });
               }}
               renderInput={(params) => (
-                <TextField {...params} label="Pledgers" />
+                <TextField {...params} label={t('pledgers')} />
               )}
             />
           </Form.Group>
