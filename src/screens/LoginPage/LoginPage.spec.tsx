@@ -1,6 +1,12 @@
 import React, { act } from 'react';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  within,
+  waitFor,
+} from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import userEvent from '@testing-library/user-event';
@@ -1619,29 +1625,28 @@ describe('Extra coverage for 100 %', () => {
       .spyOn(global, 'fetch')
       .mockRejectedValue(new Error('Network error'));
 
-    // Import and spy on errorHandler before rendering
-    const errorHandlerMod = await import('utils/errorHandler');
-    const errorHandlerSpy = vi.spyOn(errorHandlerMod, 'errorHandler');
+    await act(async () => {
+      renderLoginPage();
+    });
 
-    renderLoginPage();
-    await wait(1000); // Increased wait time for async useEffect to complete
+    // Wait for fetch to be called and errorHandler to show toast
+    await waitFor(() => {
+      expect(fetchSpy).toHaveBeenCalledWith(
+        'http://localhost:4000/graphql',
+        expect.objectContaining({
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }),
+      );
+    });
 
-    expect(fetchSpy).toHaveBeenCalledWith(
-      'http://localhost:4000/graphql',
-      expect.objectContaining({
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }),
-    );
-    expect(errorHandlerSpy).toHaveBeenCalledWith(
-      expect.anything(), // t function
-      expect.any(Error),
-    );
+    // errorHandler should call toast.error with the error message
+    await waitFor(() => {
+      expect(toastMocks.error).toHaveBeenCalledWith('Network error');
+    });
 
-    // Clean up
-    errorHandlerSpy.mockRestore();
     fetchSpy.mockRestore();
   });
 
