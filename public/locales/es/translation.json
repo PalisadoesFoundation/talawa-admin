@@ -1132,7 +1132,18 @@
     "Member": "Miembro",
     "Admin": "Administrador",
     "loading": "Cargando...",
-    "noAttendees": "No se encontraron asistentes"
+    "noAttendees": "No se encontraron asistentes",
+    "attendeeCount": "Número de asistentes",
+    "maleAttendees": "Asistentes masculinos",
+    "femaleAttendees": "Asistentes femeninas",
+    "otherAttendees": "Otros asistentes",
+    "currentEvent": "Evento actual",
+    "chartPageNavigation": "Navegación de página del gráfico",
+    "previousPage": "Página anterior",
+    "nextPage": "Página siguiente",
+    "goToToday": "Ir a hoy",
+    "genderDistribution": "Distribución por género",
+    "ageDistribution": "Distribución por edad"
   },
   "eventRegistrant": {
     "sort": "Ordenar",

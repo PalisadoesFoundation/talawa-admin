@@ -81,14 +81,6 @@ ChartJS.register(
   Filler,
 );
 
-// Age calculation constants to avoid triggering i18n checker
-const MIN_ADULT_AGE = 18;
-const MAX_YOUNG_ADULT_AGE = 40;
-
-const calculateAge = (birthDate: Date): number => {
-  return new Date().getFullYear() - new Date(birthDate).getFullYear();
-};
-
 export const AttendanceStatisticsModal: React.FC<
   InterfaceAttendanceStatisticsModalProps
 > = ({ show, handleClose, statistics, memberData, t }): React.JSX.Element => {
@@ -302,13 +294,17 @@ export const AttendanceStatisticsModal: React.FC<
               return age < 18;
             }).length,
             memberData.filter((member) => {
-              const age = calculateAge(member.birthDate);
-              return age >= MIN_ADULT_AGE && age <= MAX_YOUNG_ADULT_AGE;
+              const age =
+                new Date().getFullYear() -
+                new Date(member.birthDate).getFullYear();
+              return age >= 18 && age <= 40;
             }).length,
-            memberData.filter((member) => {
-              const age = calculateAge(member.birthDate);
-              return age > MAX_YOUNG_ADULT_AGE;
-            }).length,
+            memberData.filter(
+              (member) =>
+                new Date().getFullYear() -
+                  new Date(member.birthDate).getFullYear() >
+                40,
+            ).length,
           ],
     [selectedCategory, memberData],
   );
@@ -398,10 +394,7 @@ export const AttendanceStatisticsModal: React.FC<
       size={showTrends ? 'xl' : 'lg'}
       data-testid="attendance-modal"
     >
-      <Modal.Header
-        closeButton
-        style={{ backgroundColor: 'var(--tableHeader-bg)' }}
-      >
+      <Modal.Header closeButton className={styles.modalHeader}>
         <Modal.Title data-testid="modal-title">
           {t('historical_statistics')}
         </Modal.Title>
