@@ -39,7 +39,8 @@
  *
  * @returns {JSX.Element} The ForgotPassword component.
  */
-import { useMutation } from '@apollo/client';
+
+import { useMutation } from '@apollo/client/react';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router';

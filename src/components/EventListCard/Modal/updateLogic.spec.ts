@@ -1,6 +1,6 @@
 import { vi, describe, it, expect, beforeEach, Mock } from 'vitest';
 import { useUpdateEventHandler } from './updateLogic';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import {
   UPDATE_EVENT_MUTATION,
   UPDATE_SINGLE_RECURRING_EVENT_INSTANCE_MUTATION,
@@ -14,7 +14,7 @@ import { UserRole } from 'types/Event/interface';
 import { Frequency, InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 
 // Mock dependencies
-vi.mock('@apollo/client', async () => {
+vi.mock('@apollo/client/react', async () => {
   const original = await vi.importActual('@apollo/client');
   return {
     ...original,
@@ -34,7 +34,7 @@ vi.mock('utils/errorHandler', async () => ({
   errorHandler: vi.fn(),
 }));
 
-const mockUseMutation = useMutation as Mock;
+const mockUseMutation = useMutation as unknown as Mock;
 const mockT = (key: string) => key;
 
 type MockEventListCardProps = InterfaceEvent;

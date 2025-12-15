@@ -37,7 +37,7 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import styles from '../../../style/app-fixed.module.css';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import {
   CREATE_VENUE_MUTATION,
   UPDATE_VENUE_MUTATION,

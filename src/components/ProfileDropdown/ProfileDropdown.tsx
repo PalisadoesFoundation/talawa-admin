@@ -40,7 +40,7 @@ import { useNavigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import useSession from 'utils/useSession';
 import { resolveProfileNavigation } from 'utils/profileNavigation';

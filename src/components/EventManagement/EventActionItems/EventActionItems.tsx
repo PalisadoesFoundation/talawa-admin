@@ -25,7 +25,7 @@ import { Navigate, useParams } from 'react-router';
 import { Circle, WarningAmberRounded, Group } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
 
 import type { IActionItemInfo } from 'types/ActionItems/interface';

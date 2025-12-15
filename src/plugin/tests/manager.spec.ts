@@ -90,7 +90,7 @@ vi.mock('../graphql-service', () => ({
 const mockApolloClient = {
   query: vi.fn(),
   mutate: vi.fn(),
-} as unknown as ApolloClient<unknown>;
+} as unknown as ApolloClient;
 
 describe('PluginManager', () => {
   let pluginManager: PluginManager;

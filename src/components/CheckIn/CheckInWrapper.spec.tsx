@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { CheckInWrapper } from './CheckInWrapper';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';

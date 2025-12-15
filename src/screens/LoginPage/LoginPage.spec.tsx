@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import {
   render,
   screen,
@@ -98,6 +98,7 @@ const MOCKS = [
             addressLine1: '123 Random Street',
             description: 'Unity Foundation for community development',
             avatarURL: null,
+            isMember: false,
           },
           {
             id: 'db1d5caad2ade57ab811e681',
@@ -105,6 +106,7 @@ const MOCKS = [
             addressLine1: '5112 Dare Centers',
             description: 'Mills Group organization',
             avatarURL: null,
+            isMember: false,
           },
         ],
       },

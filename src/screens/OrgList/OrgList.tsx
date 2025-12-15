@@ -45,7 +45,7 @@
  * - `Modal` - For managing features after organization creation.
  */
 import React, { useEffect, useState, useRef, useMemo } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import {
   CREATE_ORGANIZATION_MUTATION_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,

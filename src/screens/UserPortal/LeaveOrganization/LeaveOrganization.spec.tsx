@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
 import LeaveOrganization from './LeaveOrganization';
 import {

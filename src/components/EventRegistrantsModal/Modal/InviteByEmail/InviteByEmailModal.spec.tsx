@@ -5,7 +5,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import InviteByEmailModal from './InviteByEmailModal';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from '../../../../utils/i18nForTest';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MockLink } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { SEND_EVENT_INVITATIONS } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 
@@ -53,7 +54,7 @@ const mocks = [
 
 const renderComponent = (
   props = {},
-  customMocks: MockedResponse[] = mocks as MockedResponse[],
+  customMocks: MockLink.MockedResponse[] = mocks as MockLink.MockedResponse[],
 ) => {
   return render(
     <MockedProvider mocks={customMocks}>
@@ -168,7 +169,7 @@ describe('InviteByEmailModal', () => {
     });
 
     it('submits the form, shows success toast, and closes on valid submission', async () => {
-      const successMock: MockedResponse = {
+      const successMock: MockLink.MockedResponse = {
         request: {
           query: SEND_EVENT_INVITATIONS,
           variables: {
@@ -207,7 +208,7 @@ describe('InviteByEmailModal', () => {
     });
 
     it('handles recurring event submission correctly', async () => {
-      const recurringMock: MockedResponse = {
+      const recurringMock: MockLink.MockedResponse = {
         request: {
           query: SEND_EVENT_INVITATIONS,
           variables: {
@@ -239,7 +240,7 @@ describe('InviteByEmailModal', () => {
     });
 
     it('handles API error on submission', async () => {
-      const errorMock: MockedResponse = {
+      const errorMock: MockLink.MockedResponse = {
         request: {
           query: SEND_EVENT_INVITATIONS,
           variables: {

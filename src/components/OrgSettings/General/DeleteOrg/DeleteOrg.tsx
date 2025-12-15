@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Card, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
 import {
@@ -13,6 +13,12 @@ import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
 import styles from 'style/app-fixed.module.css';
 import { useNavigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
+
+interface IsSampleOrganizationData {
+  organization: {
+    isSampleOrganization: boolean;
+  };
+}
 
 /**
  * A component for deleting an organization.
@@ -54,7 +60,7 @@ function deleteOrg(): JSX.Element {
   );
 
   // Query to check if the organization is a sample organization
-  const { data } = useQuery(IS_SAMPLE_ORGANIZATION_QUERY, {
+  const { data } = useQuery<IsSampleOrganizationData>(IS_SAMPLE_ORGANIZATION_QUERY, {
     variables: { id: currentUrl },
   });
 
@@ -63,7 +69,7 @@ function deleteOrg(): JSX.Element {
    * Displays success or error messages based on the operation result.
    */
   const deleteOrg = async (): Promise<void> => {
-    if (data && data.isSampleOrganization) {
+    if (data?.organization?.isSampleOrganization) {
       // If it's a sample organization, use a specific mutation
       removeSampleOrganization()
         .then(() => {
@@ -102,7 +108,7 @@ function deleteOrg(): JSX.Element {
               data-testid="openDeleteModalBtn"
             >
               <DeleteIcon className={styles.icon} />
-              {data?.isSampleOrganization
+              {data?.organization?.isSampleOrganization
                 ? t('deleteSampleOrganization')
                 : t('delete')}
             </Button>

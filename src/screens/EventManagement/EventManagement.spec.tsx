@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { MemoryRouter, Route, Routes, useParams } from 'react-router';
@@ -88,6 +88,36 @@ describe('Event Management', () => {
       __esModule: true,
       default: () => <div data-testid="event-list-card-modals" />,
     }));
+    vi.mock('components/EventManagement/Dashboard/EventDashboard', () => ({
+      default: () => <div data-testid="eventDashboardMock" />,
+    }));
+    vi.mock(
+      'components/EventManagement/EventActionItems/EventActionItems',
+      () => ({
+        default: () => <div data-testid="eventActionItemsMock" />,
+      }),
+    );
+    vi.mock('screens/EventVolunteers/VolunteerContainer', () => ({
+      default: () => <div data-testid="volunteerContainerMock" />,
+    }));
+    vi.mock(
+      'components/EventManagement/EventAgendaItems/EventAgendaItems',
+      () => ({
+        default: () => <div data-testid="eventAgendaItemsMock" />,
+      }),
+    );
+    vi.mock(
+      'components/EventManagement/EventAttendance/Attendance/EventAttendance',
+      () => ({
+        default: () => <div data-testid="eventAttendanceMock" />,
+      }),
+    );
+    vi.mock(
+      'components/EventManagement/EventRegistrant/EventRegistrants',
+      () => ({
+        default: () => <div data-testid="eventRegistrantsMock" />,
+      }),
+    );
   });
 
   afterEach(() => {

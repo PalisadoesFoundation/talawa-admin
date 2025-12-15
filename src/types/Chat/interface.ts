@@ -1,4 +1,4 @@
-import type { ApolloQueryResult } from '@apollo/client';
+import type { ObservableQuery } from '@apollo/client';
 
 export type NewChatType = {
   id: string;
@@ -111,7 +111,7 @@ export interface InterfaceGroupChatDetailsProps {
           beforeMessages?: string | null;
         }>
       | undefined,
-  ) => Promise<ApolloQueryResult<{ chat: NewChatType }>>;
+  ) => Promise<ObservableQuery.Result<{ chat: NewChatType }>>;
 }
 
 export interface InterfaceContactCardProps {

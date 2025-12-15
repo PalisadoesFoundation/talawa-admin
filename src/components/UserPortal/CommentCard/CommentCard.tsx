@@ -38,7 +38,7 @@ import {
   EditOutlined,
   DeleteOutline,
 } from '@mui/icons-material';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
@@ -111,6 +111,18 @@ interface InterfaceCommentCardProps {
   refetchComments?: () => void;
 }
 
+interface InterfaceLikeCommentResponse {
+  createCommentVote: {
+    id: string;
+  } | null;
+}
+
+interface InterfaceUnlikeCommentResponse {
+  deleteCommentVote: {
+    id: string;
+  } | null;
+}
+
 function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
   const { id, creator, hasUserVoted, upVoteCount, text, refetchComments } =
     props;
@@ -125,8 +137,10 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
   const [showEditComment, setShowEditComment] = React.useState(false);
   const [editedCommentText, setEditedCommentText] = React.useState(text);
   const menuAnchorRef = React.useRef<HTMLButtonElement>(null);
-  const [likeComment, { loading: liking }] = useMutation(LIKE_COMMENT);
-  const [unlikeComment, { loading: unliking }] = useMutation(UNLIKE_COMMENT);
+  const [likeComment, { loading: liking }] =
+    useMutation<InterfaceLikeCommentResponse>(LIKE_COMMENT);
+  const [unlikeComment, { loading: unliking }] =
+    useMutation<InterfaceUnlikeCommentResponse>(UNLIKE_COMMENT);
   const [deleteComment, { loading: deletingComment }] =
     useMutation(DELETE_COMMENT);
   const [updateComment, { loading: updatingComment }] =

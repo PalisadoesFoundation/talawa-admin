@@ -48,7 +48,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { useQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import SendIcon from '@mui/icons-material/Send';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useTranslation } from 'react-i18next';

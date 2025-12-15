@@ -35,7 +35,7 @@ import { Button } from 'react-bootstrap';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { AGENDA_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_AGENDA_ITEM_CATEGORY_MUTATION } from 'GraphQl/Mutations/mutations';
 

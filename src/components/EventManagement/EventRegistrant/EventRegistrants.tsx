@@ -47,7 +47,7 @@ import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import styles from 'style/app-fixed.module.css';
-import { useLazyQuery, useQuery, useMutation } from '@apollo/client';
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client/react';
 import {
   EVENT_REGISTRANTS,
   EVENT_DETAILS,
@@ -73,7 +73,7 @@ function EventRegistrants(): JSX.Element {
   const [removeRegistrantMutation] = useMutation(REMOVE_EVENT_ATTENDEE);
 
   // First, get event details to determine if it's recurring or standalone
-  const { data: eventData } = useQuery(EVENT_DETAILS, {
+  const { data: eventData } = useQuery<any>(EVENT_DETAILS, {
     variables: { eventId: eventId },
     fetchPolicy: 'cache-first',
   });
@@ -89,49 +89,52 @@ function EventRegistrants(): JSX.Element {
     ? { recurringEventInstanceId: eventId }
     : { eventId: eventId };
 
-  const [getEventRegistrants] = useLazyQuery(EVENT_REGISTRANTS, {
-    variables: registrantVariables,
+  const [getEventRegistrants] = useLazyQuery<any>(EVENT_REGISTRANTS, {
     fetchPolicy: 'cache-and-network',
-    onCompleted: (data) => {
-      if (data?.getEventAttendeesByEventId) {
-        const mappedData = data.getEventAttendeesByEventId.map(
-          (attendee: {
-            id: string;
-            user: { id: string; name: string; emailAddress: string };
-            isRegistered: boolean;
-            createdAt: string;
-          }) => ({
-            id: attendee.id,
-            userId: attendee.user?.id,
-            isRegistered: attendee.isRegistered,
-            user: attendee.user,
-            createdAt: attendee.createdAt,
-            time: '', // Will be processed in useEffect
-          }),
-        );
-        setRegistrants(mappedData);
-      }
-    },
   });
 
   // Fetch check-in status
-  const [getEventCheckIns] = useLazyQuery(EVENT_CHECKINS, {
-    variables: { eventId: eventId },
+  const [getEventCheckIns] = useLazyQuery<any>(EVENT_CHECKINS, {
     fetchPolicy: 'cache-and-network',
-    onCompleted: (data) => {
+  });
+  // callback function to refresh the data
+  const refreshData = useCallback(() => {
+    getEventRegistrants({ variables: registrantVariables })
+      .then((res) => {
+        const data = res.data;
+        if (data?.getEventAttendeesByEventId) {
+          const mappedData = data.getEventAttendeesByEventId.map(
+            (attendee: {
+              id: string;
+              user: { id: string; name: string; emailAddress: string };
+              isRegistered: boolean;
+              createdAt: string;
+            }) => ({
+              id: attendee.id,
+              userId: attendee.user?.id,
+              isRegistered: attendee.isRegistered,
+              user: attendee.user,
+              createdAt: attendee.createdAt,
+              time: '', // Will be processed in useEffect
+            }),
+          );
+          setRegistrants(mappedData);
+        }
+      })
+      .catch((error) => {
+        // Silent catch or simple log if needed, but removing debug log
+      });
+
+    getEventCheckIns({ variables: { eventId: eventId } }).then((res) => {
+      const data = res.data;
       if (data?.event?.attendeesCheckInStatus) {
         const checkedInUserIds = data.event.attendeesCheckInStatus
           .filter((status: { isCheckedIn: boolean }) => status.isCheckedIn)
           .map((status: { user: { id: string } }) => status.user.id);
         setCheckedInUsers(checkedInUserIds);
       }
-    },
-  });
-  // callback function to refresh the data
-  const refreshData = useCallback(() => {
-    getEventRegistrants();
-    getEventCheckIns();
-  }, [getEventRegistrants, getEventCheckIns]);
+    });
+  }, [getEventRegistrants, getEventCheckIns, registrantVariables, eventId]);
 
   // Function to remove a registrant from the event
   const deleteRegistrant = useCallback(

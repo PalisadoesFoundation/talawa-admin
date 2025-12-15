@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { ApolloClient, InMemoryCache, ApolloLink } from '@apollo/client';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
@@ -9,15 +9,14 @@ import {
 import { toast } from 'react-toastify';
 import i18n from './utils/i18n';
 import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
-import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
+import UploadHttpLink from 'apollo-upload-client/UploadHttpLink.mjs';
 
 // Define types for mocked modules
 interface InterfaceToastMock {
+  success: ReturnType<typeof vi.fn>;
   error: ReturnType<typeof vi.fn>;
-}
-
-interface InterfaceLocalStorageMock {
-  getItem: ReturnType<typeof vi.fn>;
+  info: ReturnType<typeof vi.fn>;
+  warning: ReturnType<typeof vi.fn>;
 }
 
 interface InterfaceHeaders {
@@ -30,21 +29,62 @@ interface InterfaceErrorCallbackParams {
 }
 
 // Load test environment variables
-const getTestToken = (): string => process.env.VITE_TEST_AUTH_TOKEN || '';
+const getTestToken = (): string =>
+  process.env.VITE_TEST_AUTH_TOKEN || 'valid-token';
 const getTestExpiredToken = (): string =>
-  process.env.VITE_TEST_EXPIRED_TOKEN || '';
+  process.env.VITE_TEST_EXPIRED_TOKEN || 'expired-token';
 
-// Mock external dependencies
-vi.mock('react-toastify', (): { toast: InterfaceToastMock } => ({
+// Mock external modules
+const mockToast: InterfaceToastMock = {
+  success: vi.fn(),
+  error: vi.fn(),
+  info: vi.fn(),
+  warning: vi.fn(),
+};
+
+vi.mock('react-toastify', () => ({
+  ToastContainer: (): JSX.Element => <div>ToastContainer</div>,
   toast: {
+    success: vi.fn(),
     error: vi.fn(),
+    info: vi.fn(),
+    warning: vi.fn(),
   },
 }));
 
-// Create a factory function for localStorage mock that uses environment variables
+vi.mock('Constant/constant', () => ({
+  BACKEND_URL: 'http://localhost:4000/graphql',
+  REACT_APP_BACKEND_WEBSOCKET_URL: 'ws://localhost:4000/graphql',
+}));
+
+// Mutable mock for localStorage
+const mockGetItem = vi.fn();
+vi.mock('utils/useLocalstorage', () => ({
+  default: () => ({
+    getItem: mockGetItem,
+    setItem: vi.fn(),
+    removeItem: vi.fn(),
+  }),
+}));
+
+vi.mock('utils/i18n', () => ({
+  default: {
+    language: 'en',
+    changeLanguage: vi.fn(),
+    use: vi.fn().mockReturnThis(),
+    init: vi.fn(),
+  },
+}));
+
+vi.mock('utils/timezoneUtils', () => ({
+  requestMiddleware: vi.fn((op) => op),
+  responseMiddleware: vi.fn((op) => op),
+}));
+
+// Helper to configure localStorage mock
 const createLocalStorageMock = (
   tokenType: 'valid' | 'expired' | 'empty' = 'valid',
-): ReturnType<typeof vi.mock> => {
+) => {
   let token = '';
 
   switch (tokenType) {
@@ -59,39 +99,28 @@ const createLocalStorageMock = (
       break;
   }
 
-  return vi.mock('utils/useLocalstorage', () => ({
-    default: (): { getItem: InterfaceLocalStorageMock['getItem'] } => ({
-      getItem: vi.fn(() => token),
-    }),
-  }));
+  mockGetItem.mockReturnValue(token);
 };
 
-vi.mock('./utils/i18n', () => ({
-  default: {
-    language: 'en',
-  },
-}));
-
-describe('Apollo Client Configuration', () => {
-  beforeEach((): void => {
+describe('Apollo Client Setup', () => {
+  beforeEach(() => {
     vi.clearAllMocks();
-    // Reset localStorage mock with default test token
     createLocalStorageMock('valid');
   });
 
   afterEach(() => {
-    vi.clearAllMocks(); // Only module mocks, no spies
+    vi.clearAllMocks();
   });
 
-  it('should create an Apollo Client with correct configuration', (): void => {
+  it('should create Apollo Client instance with correct links', () => {
     const client = new ApolloClient({
-      cache: new InMemoryCache(),
+      cache: new InMemoryCache({
+        addTypename: false,
+      }),
       link: ApolloLink.from([
-        vi.fn() as unknown as ApolloLink,
-        vi.fn() as unknown as ApolloLink,
         requestMiddleware,
         responseMiddleware,
-        vi.fn() as unknown as ApolloLink,
+        new UploadHttpLink({ uri: 'http://localhost:4000/graphql' }),
       ]),
     });
 
@@ -100,7 +129,7 @@ describe('Apollo Client Configuration', () => {
   });
 
   it('should configure upload link with correct URI', (): void => {
-    const uploadLink = createUploadLink({
+    const uploadLink = new UploadHttpLink({
       uri: BACKEND_URL,
       headers: {
         'Apollo-Require-Preflight': 'true',
@@ -111,6 +140,7 @@ describe('Apollo Client Configuration', () => {
   });
 
   it('should configure WebSocket link with correct URL', (): void => {
+    // @ts-ignore - Ignoring type check for createClient mock
     const wsLink = new GraphQLWsLink(
       createClient({
         url: REACT_APP_BACKEND_WEBSOCKET_URL,

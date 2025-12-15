@@ -27,7 +27,8 @@
  * @internal
  * This component is part of the Talawa Admin Portal and is styled using `styles` imported from a CSS module.
  */
-import { useQuery } from '@apollo/client';
+
+import { useQuery } from '@apollo/client/react';
 import { WarningAmberOutlined } from '@mui/icons-material';
 import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';

@@ -44,7 +44,8 @@
  * <Events />
  * ```
  */
-import { useMutation, useQuery } from '@apollo/client';
+
+import { useMutation, useQuery } from '@apollo/client/react';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import {

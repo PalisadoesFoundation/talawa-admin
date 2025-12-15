@@ -31,7 +31,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
 import type { IActionItemCategoryInfo } from 'types/ActionItems/interface';
 import Loader from 'components/Loader/Loader';

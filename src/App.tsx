@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, useEffect, useMemo } from 'react';
 import { Route, Routes } from 'react-router';
-import { useQuery, useApolloClient } from '@apollo/client';
+import { useApolloClient, useQuery } from '@apollo/client/react';
 import useLocalStorage from 'utils/useLocalstorage';
 import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
@@ -120,7 +120,7 @@ const { setItem } = useLocalStorage();
  */
 
 function App(): React.ReactElement {
-  const { data, loading } = useQuery(CURRENT_USER);
+  const { data, loading } = useQuery<any>(CURRENT_USER);
   const apolloClient = useApolloClient();
 
   // Get user permissions and admin status (memoized to prevent infinite loops)
@@ -149,9 +149,8 @@ function App(): React.ReactElement {
         await getPluginManager().initializePluginSystem();
 
         // Import and initialize plugin registry
-        const { discoverAndRegisterAllPlugins } = await import(
-          './plugin/registry'
-        );
+        const { discoverAndRegisterAllPlugins } =
+          await import('./plugin/registry');
         await discoverAndRegisterAllPlugins();
       } catch (error) {
         console.error('Failed to initialize plugin system:', error);

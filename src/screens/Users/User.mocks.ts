@@ -1,5 +1,6 @@
 import {
   ORGANIZATION_LIST,
+  USER_LIST,
   USER_LIST_FOR_ADMIN,
   USER_ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
@@ -23,7 +24,7 @@ export const MOCKS = [
 
   {
     request: {
-      query: USER_LIST_FOR_ADMIN,
+      query: USER_LIST,
       variables: {
         input: {
           ids: '123',
@@ -44,6 +45,12 @@ export const MOCKS = [
             countryCode: 'JM',
             postalCode: 'JM12345',
             organizationsWhereMember: {
+              pageInfo: {
+                hasNextPage: false,
+                endCursor: null,
+                startCursor: null,
+                hasPreviousPage: false,
+              },
               edges: [
                 {
                   node: {
@@ -83,6 +90,12 @@ export const MOCKS = [
             countryCode: 'JM',
             postalCode: 'JM12345',
             organizationsWhereMember: {
+              pageInfo: {
+                hasNextPage: false,
+                endCursor: null,
+                startCursor: null,
+                hasPreviousPage: false,
+              },
               edges: [
                 {
                   node: {
@@ -175,8 +188,14 @@ export const MOCKS = [
                 state: 'Kingston Parish',
                 countryCode: 'JM',
                 postalCode: 'JM12345',
-                orgsWhereUserIsBlocked: { edges: [] },
-                organizationsWhereMember: { edges: [] },
+                orgsWhereUserIsBlocked: {
+                  pageInfo: { hasNextPage: false },
+                  edges: [],
+                },
+                organizationsWhereMember: {
+                  pageInfo: { hasNextPage: false },
+                  edges: [],
+                },
               },
             },
           ],
@@ -218,8 +237,14 @@ export const MOCKS = [
                 state: 'Kingston Parish',
                 countryCode: 'JM',
                 postalCode: 'JM12345',
-                orgsWhereUserIsBlocked: { edges: [] },
-                organizationsWhereMember: { edges: [] },
+                orgsWhereUserIsBlocked: {
+                  pageInfo: { hasNextPage: false },
+                  edges: [],
+                },
+                organizationsWhereMember: {
+                  pageInfo: { hasNextPage: false },
+                  edges: [],
+                },
               },
             },
           ],
@@ -270,6 +295,12 @@ export const MOCKS2 = [
             countryCode: 'JM',
             postalCode: 'JM12345',
             organizationsWhereMember: {
+              pageInfo: {
+                hasNextPage: false,
+                endCursor: null,
+                startCursor: null,
+                hasPreviousPage: false,
+              },
               edges: [
                 {
                   node: {

@@ -32,7 +32,7 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';

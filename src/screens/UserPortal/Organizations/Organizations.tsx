@@ -32,7 +32,7 @@
  *
  */
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import {
   USER_CREATED_ORGANIZATIONS,
@@ -93,9 +93,9 @@ interface IOrganization {
   description: string;
   adminsCount?: number;
   membersCount?: number;
-  admins: [];
+  admins: any[];
   members?: InterfaceMembersConnection; // <-- update this
-  address: {
+  address?: {
     city: string;
     countryCode: string;
     line1: string;
@@ -132,6 +132,26 @@ interface IOrgData {
   description: string;
   __typename: string;
   name: string;
+}
+
+interface InterfaceAllOrganizationsData {
+  organizations: IOrgData[];
+}
+
+interface InterfaceJoinedOrganizationsData {
+  user: {
+    organizationsWhereMember: {
+      edges: {
+        node: IOrganization;
+      }[];
+    };
+  };
+}
+
+interface InterfaceCreatedOrganizationsData {
+  user: {
+    createdOrganizations: IOrganization[];
+  };
 }
 
 /**
@@ -186,29 +206,48 @@ export default function Organizations(): React.JSX.Element {
     data: allOrganizationsData,
     loading: loadingAll,
     refetch: refetchAll,
-  } = useQuery(ORGANIZATION_FILTER_LIST, {
+    error: errorAll,
+  } = useQuery<InterfaceAllOrganizationsData>(ORGANIZATION_FILTER_LIST, {
     variables: { filter: filterName },
     fetchPolicy: 'network-only',
     errorPolicy: 'all',
     skip: mode !== 0,
     notifyOnNetworkStatusChange: true,
-    onError: (error) => console.error('All orgs error:', error),
   });
+
+  useEffect(() => {
+    if (errorAll) {
+      console.error('All orgs error:', errorAll);
+    }
+  }, [errorAll]);
+
+  useEffect(() => {
+    if (
+      allOrganizationsData &&
+      !loadingAll &&
+      !allOrganizationsData.organizations
+    ) {
+      console.error('All orgs error: No organizations found');
+    }
+  }, [allOrganizationsData, loadingAll]);
 
   const {
     data: joinedOrganizationsData,
     loading: loadingJoined,
     refetch: refetchJoined,
-  } = useQuery(USER_JOINED_ORGANIZATIONS_NO_MEMBERS, {
-    variables: { id: userId, first: rowsPerPage, filter: filterName },
-    skip: mode !== 1,
-  });
+  } = useQuery<InterfaceJoinedOrganizationsData>(
+    USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
+    {
+      variables: { id: userId, first: rowsPerPage, filter: filterName },
+      skip: mode !== 1,
+    },
+  );
 
   const {
     data: createdOrganizationsData,
     loading: loadingCreated,
     refetch: refetchCreated,
-  } = useQuery(USER_CREATED_ORGANIZATIONS, {
+  } = useQuery<InterfaceCreatedOrganizationsData>(USER_CREATED_ORGANIZATIONS, {
     variables: { id: userId, filter: filterName },
     skip: mode !== 2,
   });
@@ -239,7 +278,7 @@ export default function Organizations(): React.JSX.Element {
   useEffect(() => {
     if (mode === 0) {
       if (allOrganizationsData?.organizations) {
-        const orgs = allOrganizationsData.organizations.map((org: IOrgData) => {
+        const orgs = allOrganizationsData.organizations.map((org) => {
           // Check if current user is a member
           const isMember = org.isMember;
 

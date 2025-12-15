@@ -30,7 +30,8 @@
  * ```
  *
  */
-import { useMutation, useQuery } from '@apollo/client';
+
+import { useMutation, useQuery } from '@apollo/client/react';
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';

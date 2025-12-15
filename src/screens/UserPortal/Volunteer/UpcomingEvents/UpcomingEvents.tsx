@@ -51,7 +51,7 @@ import { Circle, WarningAmberRounded } from '@mui/icons-material';
 
 import { GridExpandMoreIcon } from '@mui/x-data-grid';
 import useLocalStorage from 'utils/useLocalstorage';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import type {
   InterfaceVolunteerMembership,
   InterfaceVolunteerData,

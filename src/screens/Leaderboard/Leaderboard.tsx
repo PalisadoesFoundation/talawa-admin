@@ -64,7 +64,7 @@ import {
 import { debounce, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 

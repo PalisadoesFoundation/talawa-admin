@@ -31,7 +31,7 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { FormControl, TextField } from '@mui/material';
 import styles from 'style/app-fixed.module.css';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import {
   UPDATE_ACTION_ITEM_MUTATION,
   MARK_ACTION_ITEM_AS_PENDING_MUTATION,

@@ -6,7 +6,8 @@ import {
   waitFor,
   within,
 } from '@testing-library/react';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MockLink } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -702,7 +703,7 @@ vi.mock('react-router-dom', async () => {
   };
 });
 
-const renderChatRoom = (mocks: MockedResponse[] = []) => {
+const renderChatRoom = (mocks: MockLink.MockedResponse[] = []) => {
   const defaultMocks = [
     CHAT_BY_ID_MOCK,
     CHAT_BY_ID_MOCK,

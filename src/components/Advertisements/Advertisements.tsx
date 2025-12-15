@@ -34,7 +34,7 @@
 
 import React, { useEffect, useState } from 'react';
 import styles from 'style/app-fixed.module.css';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import { Col, Row, Tab, Tabs } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -47,6 +47,20 @@ import Loader from 'components/Loader/Loader';
 import { AdvertisementSkeleton } from './skeleton/AdvertisementSkeleton';
 import { toast } from 'react-toastify';
 import PageHeader from 'shared-components/Navbar/Navbar';
+
+interface OrganizationAdvertisementListData {
+  organization: {
+    advertisements: {
+      edges: {
+        node: Advertisement;
+      }[];
+      pageInfo: {
+        endCursor: string;
+        hasNextPage: boolean;
+      };
+    };
+  };
+}
 
 export default function Advertisements(): JSX.Element {
   const { orgId: currentOrgId } = useParams<{ orgId: string }>();
@@ -65,7 +79,7 @@ export default function Advertisements(): JSX.Element {
     data: orgCompletedAdvertisementListData,
     loading: completedLoading,
     error: completedError,
-  } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
+  } = useQuery<OrganizationAdvertisementListData>(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: {
       id: currentOrgId,
       after: afterCompleted,
@@ -79,7 +93,7 @@ export default function Advertisements(): JSX.Element {
     data: orgActiveAdvertisementListData,
     loading: activeLoading,
     error: activeError,
-  } = useQuery(ORGANIZATION_ADVERTISEMENT_LIST, {
+  } = useQuery<OrganizationAdvertisementListData>(ORGANIZATION_ADVERTISEMENT_LIST, {
     variables: {
       id: currentOrgId,
       after: afterActive,

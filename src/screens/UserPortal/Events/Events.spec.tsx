@@ -10,7 +10,7 @@
 // SKIP_LOCALSTORAGE_CHECK
 import React, { act } from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import {
   GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,

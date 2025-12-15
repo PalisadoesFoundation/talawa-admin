@@ -1,4 +1,5 @@
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MockLink } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
@@ -321,7 +322,7 @@ const MOCKS_ERROR = [
 
 const renderEventActionItems = (
   eventId: string = 'eventId1',
-  mocks: MockedResponse[] = MOCKS,
+  mocks: MockLink.MockedResponse[] = MOCKS,
 ) => {
   return render(
     <MockedProvider mocks={mocks}>

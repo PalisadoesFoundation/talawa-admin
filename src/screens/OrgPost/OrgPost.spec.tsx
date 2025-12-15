@@ -7,8 +7,8 @@ import {
   act,
 } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import type { MockedResponse } from '@apollo/client/testing';
-import { MockedProvider } from '@apollo/client/testing';
+import type { MockLink } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
 import OrgPost from './OrgPost';
 import {
@@ -522,7 +522,7 @@ describe('OrgPost Component', () => {
 
   it('handles no file selected', async () => {
     // Add pinned posts mock to avoid error calls
-    const mockPinnedPostsForTest: MockedResponse = {
+    const mockPinnedPostsForTest: MockLink.MockedResponse = {
       request: {
         query: ORGANIZATION_PINNED_POST_LIST,
         variables: {
@@ -824,7 +824,7 @@ describe('OrgPost SearchBar functionality', () => {
   });
 
   // Helper function to render the component with specified mocks
-  const renderWithMocks = (mocks: MockedResponse[]): RenderResult => {
+  const renderWithMocks = (mocks: MockLink.MockedResponse[]): RenderResult => {
     // For error tests, only use the provided mocks
     // For other tests, include baseMocks and pinned posts mock
     const mocksWithPinnedPosts = mocks.some((mock) => mock.error)
@@ -902,7 +902,7 @@ describe('OrgPost SearchBar functionality', () => {
   it('should handle errors during search gracefully', async () => {
     const toastErrorSpy = vi.spyOn(mockToast, 'error');
 
-    const getPostsByOrgErrorMock: MockedResponse = {
+    const getPostsByOrgErrorMock: MockLink.MockedResponse = {
       request: {
         query: GET_POSTS_BY_ORG,
         variables: { input: { organizationId: '123' } },
@@ -965,7 +965,7 @@ describe('OrgPost component - Post Creation Tests', () => {
 
   const mockOrgId = '123';
 
-  const createPostMock: MockedResponse = {
+  const createPostMock: MockLink.MockedResponse = {
     request: {
       query: CREATE_POST_MUTATION,
       variables: {
@@ -1271,7 +1271,7 @@ describe('OrgPost component - Post Creation Tests', () => {
 // Add these tests to your OrgPost.spec.tsx
 describe('OrgPost Edge Cases', () => {
   it('handles undefined organization in orgPostListData and shows pinned posts load error', async () => {
-    const undefinedOrgMocks: MockedResponse[] = [
+    const undefinedOrgMocks: MockLink.MockedResponse[] = [
       ...baseMocks,
       {
         request: {
@@ -1309,7 +1309,7 @@ describe('OrgPost Edge Cases', () => {
   });
 
   it('handles empty posts array in organization', async () => {
-    const emptyPostsMocks: MockedResponse[] = [
+    const emptyPostsMocks: MockLink.MockedResponse[] = [
       ...baseMocks,
       {
         request: {
@@ -1364,7 +1364,7 @@ describe('OrgPost Edge Cases', () => {
   });
 
   it('handles error in organization post list query and shows pinned posts load error', async () => {
-    const errorMocks: MockedResponse[] = [
+    const errorMocks: MockLink.MockedResponse[] = [
       ...baseMocks,
       {
         request: {
@@ -1466,7 +1466,7 @@ describe('OrgPost Edge Cases', () => {
   });
 
   it('handles sorting when no data is available', async () => {
-    const emptyMocks: MockedResponse[] = [
+    const emptyMocks: MockLink.MockedResponse[] = [
       ...baseMocks,
       {
         request: {
@@ -1597,7 +1597,7 @@ describe('OrgPost Edge Cases', () => {
       pinned: false,
     }));
 
-    const largeDataMocks: MockedResponse[] = [
+    const largeDataMocks: MockLink.MockedResponse[] = [
       {
         request: {
           query: GET_POSTS_BY_ORG,
@@ -2355,13 +2355,11 @@ describe('OrgPost Pinned Posts Functionality', () => {
   ];
 
   // Mock for ORGANIZATION_PINNED_POST_LIST query
-  const orgPinnedPostListMock: MockedResponse = {
+  const orgPinnedPostListMock: MockLink.MockedResponse = {
     request: {
       query: ORGANIZATION_PINNED_POST_LIST,
       variables: {
         input: { id: mockOrgId },
-        after: null,
-        before: null,
         first: 6,
         last: null,
       },
@@ -2389,13 +2387,11 @@ describe('OrgPost Pinned Posts Functionality', () => {
   };
 
   // Mock for empty pinned posts
-  const emptyPinnedPostListMock: MockedResponse = {
+  const emptyPinnedPostListMock: MockLink.MockedResponse = {
     request: {
       query: ORGANIZATION_PINNED_POST_LIST,
       variables: {
         input: { id: mockOrgId },
-        after: null,
-        before: null,
         first: 6,
         last: null,
       },
@@ -2420,13 +2416,11 @@ describe('OrgPost Pinned Posts Functionality', () => {
   };
 
   // Mock for pinned posts error
-  const pinnedPostsErrorMock: MockedResponse = {
+  const pinnedPostsErrorMock: MockLink.MockedResponse = {
     request: {
       query: ORGANIZATION_PINNED_POST_LIST,
       variables: {
         input: { id: mockOrgId },
-        after: null,
-        before: null,
         first: 6,
         last: null,
       },
@@ -2435,7 +2429,7 @@ describe('OrgPost Pinned Posts Functionality', () => {
   };
 
   // Create proper mocks that work with pinned posts
-  const orgPostListWithPostsMock: MockedResponse = {
+  const orgPostListWithPostsMock: MockLink.MockedResponse = {
     request: {
       query: ORGANIZATION_POST_LIST_WITH_VOTES,
       variables: {
@@ -2528,7 +2522,7 @@ describe('OrgPost Pinned Posts Functionality', () => {
   });
 
   it('should create a pinned post when pin toggle is enabled', async () => {
-    const createPinnedPostMock: MockedResponse = {
+    const createPinnedPostMock: MockLink.MockedResponse = {
       request: {
         query: CREATE_POST_MUTATION,
         variables: {
@@ -2607,13 +2601,11 @@ describe('OrgPost Pinned Posts Functionality', () => {
   });
 
   it('should handle pinned posts loading state', async () => {
-    const loadingPinnedPostsMock: MockedResponse = {
+    const loadingPinnedPostsMock: MockLink.MockedResponse = {
       request: {
         query: ORGANIZATION_PINNED_POST_LIST,
         variables: {
           input: { id: mockOrgId },
-          after: null,
-          before: null,
           first: 6,
           last: null,
         },
@@ -2669,13 +2661,11 @@ describe('OrgPost Pinned Posts Functionality', () => {
   });
 
   it('should handle undefined pinnedPosts data gracefully', async () => {
-    const undefinedPinnedPostsMock: MockedResponse = {
+    const undefinedPinnedPostsMock: MockLink.MockedResponse = {
       request: {
         query: ORGANIZATION_PINNED_POST_LIST,
         variables: {
           input: { id: mockOrgId },
-          after: null,
-          before: null,
           first: 6,
           last: null,
         },
@@ -2704,13 +2694,11 @@ describe('OrgPost Pinned Posts Functionality', () => {
 
   it('should verify orgPinnedPostListLoading variable is used', async () => {
     // Test that the loading state from pinned posts query is handled
-    const slowPinnedPostsMock: MockedResponse = {
+    const slowPinnedPostsMock: MockLink.MockedResponse = {
       request: {
         query: ORGANIZATION_PINNED_POST_LIST,
         variables: {
           input: { id: mockOrgId },
-          after: null,
-          before: null,
           first: 6,
           last: null,
         },
@@ -2735,7 +2723,7 @@ describe('OrgPost Pinned Posts Functionality', () => {
       delay: 1000,
     };
 
-    const slowOrgPostListMock: MockedResponse = {
+    const slowOrgPostListMock: MockLink.MockedResponse = {
       request: {
         query: ORGANIZATION_POST_LIST_WITH_VOTES,
         variables: {
@@ -2817,13 +2805,11 @@ describe('OrgPost Pinned Posts Functionality', () => {
   });
 
   it('should handle pagination with pinned posts', async () => {
-    const paginationPinnedPostsMock: MockedResponse = {
+    const paginationPinnedPostsMock: MockLink.MockedResponse = {
       request: {
         query: ORGANIZATION_PINNED_POST_LIST,
         variables: {
           input: { id: mockOrgId },
-          after: null,
-          before: null,
           first: 6,
           last: null,
         },

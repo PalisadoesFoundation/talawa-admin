@@ -36,7 +36,7 @@ import type { InterfaceUserInfo } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import React, { useCallback, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { toast } from 'react-toastify';
 import { Autocomplete, TextField } from '@mui/material';
 

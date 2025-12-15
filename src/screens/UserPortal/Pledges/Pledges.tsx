@@ -45,11 +45,9 @@ import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
 } from 'utils/interfaces';
-import {
-  type ApolloError,
-  type ApolloQueryResult,
-  useQuery,
-} from '@apollo/client';
+import { type ObservableQuery, CombinedGraphQLErrors } from '@apollo/client';
+
+import { useQuery } from '@apollo/client/react';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import {
@@ -121,14 +119,7 @@ const Pledges = (): JSX.Element => {
     loading: pledgeLoading,
     error: pledgeError,
     refetch: refetchPledge,
-  }: {
-    data?: { getPledgesByUserId: InterfacePledgeInfo[] };
-    loading: boolean;
-    error?: ApolloError;
-    refetch: () => Promise<
-      ApolloQueryResult<{ getPledgesByUserId: InterfacePledgeInfo[] }>
-    >;
-  } = useQuery(USER_PLEDGES, {
+  } = useQuery<{ getPledgesByUserId: InterfacePledgeInfo[] }>(USER_PLEDGES, {
     variables: {
       userId: { id: userId },
       where: searchTerm
@@ -174,11 +165,13 @@ const Pledges = (): JSX.Element => {
   };
 
   const isNoPledgesFoundError =
-    pledgeError?.graphQLErrors.some((graphQLError) => {
-      const code = (graphQLError.extensions as { code?: string } | undefined)
-        ?.code;
-      return code === 'arguments_associated_resources_not_found';
-    }) ?? false;
+    (pledgeError instanceof CombinedGraphQLErrors &&
+      pledgeError.errors.some((graphQLError) => {
+        const code = (graphQLError.extensions as { code?: string } | undefined)
+          ?.code;
+        return code === 'arguments_associated_resources_not_found';
+      })) ??
+    false;
 
   useEffect(() => {
     if (pledgeData?.getPledgesByUserId) {

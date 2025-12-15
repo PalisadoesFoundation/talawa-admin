@@ -111,8 +111,9 @@ export const incompleteMockChat = createGroupChat(
   [MockDirectMessageNR, MockDirectMessage],
 );
 
-export const mocks = [
+export const getMocks = () => [
   {
+    maxUsageCount: Number.MAX_SAFE_INTEGER,
     request: {
       query: USERS_CONNECTION_LIST,
       variables: {
@@ -140,6 +141,7 @@ export const mocks = [
   },
   // Organization members mock for name search 'Disha'
   {
+    maxUsageCount: Number.MAX_SAFE_INTEGER,
     request: {
       query: ORGANIZATION_MEMBERS,
       variables: {
@@ -171,6 +173,7 @@ export const mocks = [
   },
   // Organization members mock for name search 'Smith'
   {
+    maxUsageCount: Number.MAX_SAFE_INTEGER,
     request: {
       query: ORGANIZATION_MEMBERS,
       variables: {
@@ -201,6 +204,57 @@ export const mocks = [
     },
   },
   // Mock for ORGANIZATION_MEMBERS used by GroupChatDetails when opening the add-user modal
+  // Copy 1
+  {
+    request: {
+      query: ORGANIZATION_MEMBERS,
+      variables: { input: { id: 'org123' }, first: 20, after: null, where: {} },
+    },
+    result: {
+      data: {
+        organization: {
+          members: {
+            edges: [
+              {
+                node: {
+                  id: 'user3',
+                  name: 'Disha Smith',
+                  avatarURL: null,
+                  role: 'Member',
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  // Copy 2
+  {
+    request: {
+      query: ORGANIZATION_MEMBERS,
+      variables: { input: { id: 'org123' }, first: 20, after: null, where: {} },
+    },
+    result: {
+      data: {
+        organization: {
+          members: {
+            edges: [
+              {
+                node: {
+                  id: 'user3',
+                  name: 'Disha Smith',
+                  avatarURL: null,
+                  role: 'Member',
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  // Copy 3
   {
     request: {
       query: ORGANIZATION_MEMBERS,
@@ -313,6 +367,8 @@ export const mocks = [
     result: { data: { deleteChat: { id: 'chat1', success: true } } },
   },
 ];
+
+export const mocks = getMocks();
 
 export const failingMocks = [
   // Mock for role update failure

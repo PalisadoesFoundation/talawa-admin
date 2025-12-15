@@ -35,7 +35,7 @@ import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import { Card, Col, Row } from 'react-bootstrap';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';

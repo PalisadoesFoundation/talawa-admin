@@ -48,7 +48,7 @@ import { GridExpandMoreIcon } from '@mui/x-data-grid';
 import useLocalStorage from 'utils/useLocalstorage';
 import PledgeModal from './PledgeModal';
 import { USER_FUND_CAMPAIGNS } from 'GraphQl/Queries/fundQueries';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import type { InterfaceUserCampaign } from 'utils/interfaces';
 import { currencySymbols } from 'utils/currency';
 import Loader from 'components/Loader/Loader';

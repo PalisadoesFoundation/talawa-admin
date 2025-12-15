@@ -1,4 +1,5 @@
 import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
+
 import { BACKEND_URL } from 'Constant/constant';
 import { REFRESH_TOKEN_MUTATION } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from './useLocalstorage';
@@ -16,7 +17,7 @@ export async function refreshToken(): Promise<boolean> {
   const refreshToken = getItem('refreshToken');
 
   try {
-    const { data } = await client.mutate({
+    const { data } = await client.mutate<any>({
       mutation: REFRESH_TOKEN_MUTATION,
       variables: {
         refreshToken: refreshToken,

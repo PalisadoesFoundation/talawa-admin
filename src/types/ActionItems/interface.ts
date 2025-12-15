@@ -8,7 +8,13 @@ export interface IActionItemCategoryInfo {
   createdAt: string;
   updatedAt?: string;
   creatorId?: string;
+  creator?: {
+    id: string;
+    name?: string;
+    __typename?: string;
+  };
   organizationId: string;
+  __typename?: string;
 }
 
 export interface IActionItemCategoryList {
@@ -140,6 +146,7 @@ export interface IItemModalProps {
   editMode: boolean;
   isRecurring?: boolean;
   baseEvent?: { id: string } | null;
+  initialDate?: Date;
 }
 
 export interface IUpdateActionItemForInstanceInput {

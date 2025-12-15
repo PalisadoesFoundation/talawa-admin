@@ -1,5 +1,6 @@
 import type { ApolloLink } from '@apollo/client';
-import { MockedProvider, type MockedResponse } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
+import { type MockedResponse } from '@apollo/client/testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import type { RenderResult } from '@testing-library/react';
 import {

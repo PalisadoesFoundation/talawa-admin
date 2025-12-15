@@ -27,7 +27,8 @@
  *
  * @returns A JSX element representing a table row with membership request details and actions.
  */
-import { useMutation } from '@apollo/client';
+
+import { useMutation } from '@apollo/client/react';
 import {
   ACCEPT_ORGANIZATION_REQUEST_MUTATION,
   REJECT_ORGANIZATION_REQUEST_MUTATION,

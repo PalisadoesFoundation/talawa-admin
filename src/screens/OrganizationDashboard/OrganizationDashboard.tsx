@@ -24,7 +24,8 @@
  *
 
  */
-import { useQuery } from '@apollo/client';
+
+import { useQuery } from '@apollo/client/react';
 import React, { useEffect, useState, JSX } from 'react';
 import { Button, Card } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
@@ -90,8 +91,30 @@ function OrganizationDashboard(): JSX.Element {
    * Query to fetch organization data.
    */
 
+  /**
+   * Query to fetch organization data.
+   */
+
+  interface InterfaceMembershipRequestData {
+    organization: {
+      id: string;
+      membershipRequestsCount: number;
+      membershipRequests: {
+        membershipRequestId: string;
+        createdAt: string;
+        status: string;
+        user: {
+          avatarURL?: string;
+          id: string;
+          name: string;
+          emailAddress: string;
+        };
+      }[];
+    };
+  }
+
   const { data: membershipRequestData, loading: loadingMembershipRequests } =
-    useQuery(MEMBERSHIP_REQUEST, {
+    useQuery<InterfaceMembershipRequestData>(MEMBERSHIP_REQUEST, {
       variables: {
         input: {
           id: orgId,
@@ -117,34 +140,69 @@ function OrganizationDashboard(): JSX.Element {
     }
   }, [orgMemberData, orgId]);
 
+  interface InterfaceOrganizationPostsCountData {
+    organization: {
+      id: string;
+      postsCount: number;
+    };
+  }
+
   const {
     data: orgPostsData,
     loading: orgPostsLoading,
     error: orgPostsError,
-  } = useQuery(GET_ORGANIZATION_POSTS_COUNT_PG, { variables: { id: orgId } });
+  } = useQuery<InterfaceOrganizationPostsCountData>(
+    GET_ORGANIZATION_POSTS_COUNT_PG,
+    { variables: { id: orgId } },
+  );
+
+  interface InterfaceOrganizationEventsData {
+    organization: {
+      eventsCount: number;
+      events: {
+        edges: IEvent[];
+      };
+    };
+  }
 
   const {
     data: orgEventsData,
     loading: orgEventsLoading,
     error: orgEventsError,
-  } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
+  } = useQuery<InterfaceOrganizationEventsData>(GET_ORGANIZATION_EVENTS_PG, {
     variables: { id: orgId, first: 8, after: null },
   });
+
+  interface InterfaceBlockedUsersCountData {
+    organization: {
+      id: string;
+      blockedUsersCount: number;
+    };
+  }
 
   const {
     data: orgBlockedUsersData,
     loading: orgBlockedUsersLoading,
     error: orgBlockedUsersError,
-  } = useQuery(GET_ORGANIZATION_BLOCKED_USERS_COUNT, {
-    variables: { id: orgId },
-    notifyOnNetworkStatusChange: true,
-  });
+  } = useQuery<InterfaceBlockedUsersCountData>(
+    GET_ORGANIZATION_BLOCKED_USERS_COUNT,
+    {
+      variables: { id: orgId },
+      notifyOnNetworkStatusChange: true,
+    },
+  );
 
+  interface InterfaceVenuesCountData {
+    organization: {
+      id: string;
+      venuesCount: number;
+    };
+  }
   const {
     data: orgVenuesData,
     loading: orgVenuesLoading,
     error: orgVenuesError,
-  } = useQuery(GET_ORGANIZATION_VENUES_COUNT, {
+  } = useQuery<InterfaceVenuesCountData>(GET_ORGANIZATION_VENUES_COUNT, {
     variables: { id: orgId },
     notifyOnNetworkStatusChange: true,
   });
@@ -214,11 +272,20 @@ function OrganizationDashboard(): JSX.Element {
   /**
    * Query to fetch posts for the organization.
    */
+
+  interface InterfaceOrganizationPostsData {
+    organization: {
+      posts: {
+        edges: InterfaceOrganizationPostsConnectionEdgePg[];
+      };
+    };
+  }
+
   const {
     data: postData,
     loading: loadingPost,
     error: errorPost,
-  } = useQuery(GET_ORGANIZATION_POSTS_PG, {
+  } = useQuery<InterfaceOrganizationPostsData>(GET_ORGANIZATION_POSTS_PG, {
     variables: { id: orgId, first: 5 },
   });
 
@@ -285,7 +352,7 @@ function OrganizationDashboard(): JSX.Element {
           />
           {membershipRequestData?.organization &&
             membershipRequestData?.organization?.membershipRequestsCount >
-              0 && (
+            0 && (
               <Row>
                 <Col xs={6} sm={4} className="mb-4">
                   <button
@@ -393,9 +460,9 @@ function OrganizationDashboard(): JSX.Element {
                     <CardItemLoading key={`requestsLoading_${index}`} />
                   ))
                 ) : membershipRequestData?.organization?.membershipRequests?.filter(
-                    (request: { status: string }) =>
-                      request.status === 'pending',
-                  ).length === 0 ? (
+                  (request: { status: string }) =>
+                    request.status === 'pending',
+                ).length === 0 ? (
                   <div
                     className={styles.emptyContainer}
                     style={{ height: '150px' }}

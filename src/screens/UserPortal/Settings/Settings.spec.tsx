@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, expect, vi, it, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';

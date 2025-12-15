@@ -24,15 +24,29 @@
  * ```
  *
  */
-import { useQuery } from '@apollo/client';
+
+import { useQuery } from '@apollo/client/react';
 import { CircularProgress, TableCell, TableRow } from '@mui/material';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import React from 'react';
 import styles from 'style/app-fixed.module.css';
 import { Link } from 'react-router';
 
+interface EventDetailsData {
+  event: {
+    id: string;
+    name: string;
+    startAt: string;
+    isRecurringEventTemplate: boolean;
+    organization: {
+      id: string;
+    };
+    attendees?: unknown[];
+  };
+}
+
 export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
-  const { data, loading, error } = useQuery(EVENT_DETAILS, {
+  const { data, loading, error } = useQuery<EventDetailsData>(EVENT_DETAILS, {
     variables: { eventId: eventId },
     errorPolicy: 'all',
     fetchPolicy: 'cache-first',

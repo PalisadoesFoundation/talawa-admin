@@ -2,23 +2,16 @@ import { print } from 'graphql';
 import { equal } from '@wry/equality';
 import { invariant } from 'ts-invariant';
 
-import type { Operation, FetchResult } from '@apollo/client/link/core';
-import { ApolloLink } from '@apollo/client/link/core';
+import { ApolloLink } from '@apollo/client';
 
-import {
-  Observable,
-  addTypenameToDocument,
-  removeClientSetsFromDocument,
-  removeConnectionDirectiveFromDocument,
-  cloneDeep,
-} from '@apollo/client/utilities';
+import { Observable, addTypenameToDocument } from '@apollo/client/utilities';
 
-import type { MockedResponse, ResultFunction } from '@apollo/react-testing';
+import { cloneDeep } from '@apollo/client/utilities/internal';
+
+import type { MockedResponse, ResultFunction } from '@apollo/client/testing';
 
 function requestToKey(
-  request:
-    | Operation
-    | import('@apollo/client/core').GraphQLRequest<Record<string, unknown>>,
+  request: ApolloLink.Operation | import('@apollo/client').GraphQLRequest,
   addTypename: boolean,
 ): string {
   const queryString =
@@ -33,7 +26,7 @@ function requestToKey(
  * when it is used allowing it to be used in places like Storybook.
  */
 export class StaticMockLink extends ApolloLink {
-  public operation?: Operation;
+  public operation?: ApolloLink.Operation;
   public addTypename = true;
   private _mockedResponsesByKey: { [key: string]: MockedResponse[] } = {};
 
@@ -62,7 +55,17 @@ export class StaticMockLink extends ApolloLink {
     mockedResponses.push(normalizedMockedResponse);
   }
 
-  public request(operation: Operation): Observable<FetchResult> | null {
+  public onError(error: Error | any, observer: any): boolean {
+    // eslint-disable-line @typescript-eslint/no-explicit-any
+    if (observer) {
+      observer.error(error);
+    }
+    return false;
+  }
+
+  public request(
+    operation: ApolloLink.Operation,
+  ): Observable<ApolloLink.Result> {
     this.operation = operation;
     const key = requestToKey(operation, this.addTypename);
     let responseIndex = 0;
@@ -87,7 +90,7 @@ export class StaticMockLink extends ApolloLink {
         )}, variables: ${JSON.stringify(operation.variables)}`,
       );
     } else {
-      const { newData } = response;
+      const { newData } = response as any;
       if (newData) {
         response.result = newData(operation.variables);
         this._mockedResponsesByKey[key].push(response);
@@ -123,9 +126,9 @@ export class StaticMockLink extends ApolloLink {
               if (response.result) {
                 observer.next(
                   typeof response.result === 'function'
-                    ? (response.result as ResultFunction<FetchResult>)(
-                        operation.variables,
-                      )
+                    ? (response.result as ResultFunction<ApolloLink.Result>)(
+                      operation.variables,
+                    )
                     : response.result,
                 );
               }
@@ -133,7 +136,7 @@ export class StaticMockLink extends ApolloLink {
             }
           }
         },
-        (response && response.delay) || 0,
+        (response && typeof response.delay === 'number' && response.delay) || 0,
       );
 
       return () => {
@@ -146,21 +149,12 @@ export class StaticMockLink extends ApolloLink {
     mockedResponse: MockedResponse,
   ): MockedResponse {
     const newMockedResponse = cloneDeep(mockedResponse);
-    const queryWithoutConnection = removeConnectionDirectiveFromDocument(
-      newMockedResponse.request.query,
-    );
-    invariant(queryWithoutConnection, 'query is required');
-    newMockedResponse.request.query = queryWithoutConnection;
-    const query = removeClientSetsFromDocument(newMockedResponse.request.query);
-    if (query) {
-      newMockedResponse.request.query = query;
-    }
     return newMockedResponse;
   }
 }
 
 export interface InterfaceMockApolloLink extends ApolloLink {
-  operation?: Operation;
+  operation?: ApolloLink.Operation;
 }
 
 // Pass in multiple mocked responses, so that you can test flows that end up

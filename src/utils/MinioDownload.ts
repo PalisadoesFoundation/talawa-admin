@@ -1,5 +1,5 @@
 import { GET_FILE_PRESIGNEDURL } from 'GraphQl/Mutations/mutations';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 
 interface InterfaceMinioDownload {
   getFileFromMinio: (

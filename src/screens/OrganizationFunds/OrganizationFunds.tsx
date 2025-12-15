@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { Stack } from '@mui/material';
 import {

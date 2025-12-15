@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import {
   act,
   fireEvent,
@@ -161,8 +161,14 @@ describe('Testing Users screen', () => {
                     countryCode: '',
                     postalCode: '',
                     avatarURL: '',
-                    orgsWhereUserIsBlocked: { edges: [] },
-                    organizationsWhereMember: { edges: [] },
+                    orgsWhereUserIsBlocked: {
+                      pageInfo: { hasNextPage: false },
+                      edges: [],
+                    },
+                    organizationsWhereMember: {
+                      pageInfo: { hasNextPage: false },
+                      edges: [],
+                    },
                   },
                 },
               ],
@@ -177,7 +183,15 @@ describe('Testing Users screen', () => {
       {
         request: { query: ORGANIZATION_LIST },
         result: {
-          data: { organizations: [{ id: 'org1', name: 'Org' }] },
+          data: {
+            organizations: [
+              {
+                id: 'org1',
+                name: 'Org',
+                members: { pageInfo: { hasNextPage: false }, edges: [] },
+              },
+            ],
+          },
         },
       },
     ];
@@ -681,7 +695,15 @@ describe('Testing Users screen', () => {
             query: ORGANIZATION_LIST,
           },
           result: {
-            data: { organizations: [{ id: 'org1', name: 'Org' }] },
+            data: {
+              organizations: [
+                {
+                  id: 'org1',
+                  name: 'Org',
+                  members: { pageInfo: { hasNextPage: false }, edges: [] },
+                },
+              ],
+            },
           },
         },
       ];

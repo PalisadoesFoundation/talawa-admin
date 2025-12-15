@@ -1,5 +1,6 @@
 import React, { act } from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
+
 import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -555,16 +556,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
           },
         },
       },
-      result: {
-        errors: [
-          {
-            message: 'GraphQL Error',
-            extensions: {
-              code: 'forbidden_action_on_arguments_associated_resources',
-            },
-          },
-        ],
-      },
+      error: apolloError,
     };
 
     const forbiddenLink = new StaticMockLink([forbiddenErrorMock], true);
@@ -601,6 +593,17 @@ describe('Testing CommentCard Component [User Portal]', () => {
   });
 
   it('should handle resource not found GraphQL error code correctly', async () => {
+    const apolloErrorNotFound = new Error(
+      'GraphQL Error',
+    ) as InterfaceGraphQLErrorWithCode;
+    apolloErrorNotFound.graphQLErrors = [
+      {
+        extensions: {
+          code: 'arguments_associated_resources_not_found',
+        },
+      },
+    ];
+
     const notFoundErrorMock = {
       request: {
         query: UNLIKE_COMMENT,
@@ -611,16 +614,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
           },
         },
       },
-      result: {
-        errors: [
-          {
-            message: 'GraphQL Error',
-            extensions: {
-              code: 'arguments_associated_resources_not_found',
-            },
-          },
-        ],
-      },
+      error: apolloErrorNotFound,
     };
 
     const notFoundLink = new StaticMockLink([notFoundErrorMock], true);

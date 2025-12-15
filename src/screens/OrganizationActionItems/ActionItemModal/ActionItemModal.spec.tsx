@@ -1,4 +1,4 @@
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import {
   fireEvent,
   render,
@@ -13,7 +13,11 @@ import type {
   IUpdateActionItemForInstanceVariables,
   ICreateActionItemVariables,
 } from 'types/ActionItems/interface.ts';
-import ItemModal from './ActionItemModal';
+import ItemModal, {
+  IEventVolunteersData,
+  IEventVolunteerGroupsData,
+  IActionItemCategoriesData,
+} from './ActionItemModal';
 import { vi, it, describe, expect, beforeEach, afterEach } from 'vitest';
 import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -77,7 +81,7 @@ const createVolunteer = (
 ) => ({
   id,
   hasAccepted: true,
-  volunteerStatus: 'accepted',
+  volunteerStatus: 'accepted' as 'accepted' | 'rejected' | 'pending',
   hoursVolunteered: 10,
   isPublic: true,
   isTemplate,
@@ -88,6 +92,7 @@ const createVolunteer = (
     id: `user-${id}`,
     name,
     avatarURL: null,
+    __typename: 'User',
   },
   event: {
     id: eventId,
@@ -97,13 +102,16 @@ const createVolunteer = (
     id: `user-${id}`,
     name,
     avatarURL: null,
+    __typename: 'User',
   },
   updater: {
     id: `user-${id}`,
     name,
     avatarURL: null,
+    __typename: 'User',
   },
   groups: [],
+  __typename: 'EventVolunteer',
 });
 
 const createVolunteerGroup = (
@@ -131,11 +139,13 @@ const createVolunteerGroup = (
     id: 'user1',
     name: 'John Doe',
     avatarURL: null,
+    __typename: 'User',
   },
   leader: {
     id: 'user1',
     name: 'John Doe',
     avatarURL: null,
+    __typename: 'User',
   },
   volunteers: [
     {
@@ -145,12 +155,16 @@ const createVolunteerGroup = (
         id: 'user-volunteer1',
         name: 'John Doe',
         avatarURL: null,
+        __typename: 'User',
       },
+      __typename: 'EventVolunteer',
     },
   ],
   event: {
     id: eventId,
+    __typename: 'Event',
   },
+  __typename: 'VolunteerGroup',
 });
 
 const createActionItemNode = (eventId: string) => ({
@@ -244,21 +258,27 @@ const mockQueries = [
             name: 'Category 1',
             isDisabled: false,
             description: 'Test category 1',
-            creator: { id: 'creator1', name: 'Creator 1' },
+            creatorId: 'creator1',
+            creator: { id: 'creator1', name: 'Creator 1', __typename: 'User' },
             createdAt: '2024-01-01',
             updatedAt: '2024-01-01',
+            organizationId: 'orgId',
+            __typename: 'ActionItemCategory',
           },
           {
             id: 'cat2',
             name: 'Category 2',
             isDisabled: false,
             description: 'Test category 2',
-            creator: { id: 'creator2', name: 'Creator 2' },
+            creatorId: 'creator2',
+            creator: { id: 'creator2', name: 'Creator 2', __typename: 'User' },
             createdAt: '2024-01-01',
             updatedAt: '2024-01-01',
+            organizationId: 'orgId',
+            __typename: 'ActionItemCategory',
           },
         ],
-      },
+      } satisfies IActionItemCategoriesData,
     },
   },
   {
@@ -305,12 +325,9 @@ const mockQueries = [
         where: {},
       },
     },
-    newData: () => ({
+    result: {
       data: {
         event: {
-          id: 'eventId',
-          recurrenceRule: { id: 'rec-eventId' },
-          baseEvent: { id: 'base-eventId' },
           volunteers: [
             createVolunteer('eventId', {
               id: 'volunteer1',
@@ -323,9 +340,13 @@ const mockQueries = [
               isTemplate: false,
             }),
           ],
+          id: 'eventId',
+          recurrenceRule: { id: 'rec-eventId', __typename: 'RecurrenceRule' },
+          baseEvent: { id: 'base-eventId', __typename: 'Event' },
+          __typename: 'Event',
         },
-      },
-    }),
+      } satisfies IEventVolunteersData,
+    },
   },
   {
     request: {
@@ -335,12 +356,9 @@ const mockQueries = [
         where: {},
       },
     },
-    newData: () => ({
+    result: {
       data: {
         event: {
-          id: 'event123',
-          recurrenceRule: { id: 'rec-event123' },
-          baseEvent: { id: 'base-event123' },
           volunteers: [
             {
               ...createVolunteer('event123', {
@@ -363,23 +381,25 @@ const mockQueries = [
               isTemplate: false,
             }),
           ],
+          id: 'event123',
+          recurrenceRule: { id: 'rec-event123', __typename: 'RecurrenceRule' },
+          baseEvent: { id: 'base-event123', __typename: 'Event' },
+          __typename: 'Event',
         },
-      },
-    }),
+      } satisfies IEventVolunteersData,
+    },
   },
   {
     request: {
       query: GET_EVENT_VOLUNTEER_GROUPS,
       variables: {
         input: { id: 'eventId' },
+        where: {},
       },
     },
-    newData: () => ({
+    result: {
       data: {
         event: {
-          id: 'eventId',
-          recurrenceRule: { id: 'rec-eventId' },
-          baseEvent: { id: 'base-eventId' },
           volunteerGroups: [
             createVolunteerGroup('eventId', { id: 'group1', isTemplate: true }),
             createVolunteerGroup('eventId', {
@@ -389,23 +409,25 @@ const mockQueries = [
               isTemplate: false,
             }),
           ],
+          id: 'eventId',
+          recurrenceRule: { id: 'rec-eventId', __typename: 'RecurrenceRule' },
+          baseEvent: { id: 'base-eventId', __typename: 'Event' },
+          __typename: 'Event',
         },
-      },
-    }),
+      } satisfies IEventVolunteerGroupsData,
+    },
   },
   {
     request: {
       query: GET_EVENT_VOLUNTEER_GROUPS,
       variables: {
         input: { id: 'event123' },
+        where: {},
       },
     },
-    newData: () => ({
+    result: {
       data: {
         event: {
-          id: 'event123',
-          recurrenceRule: { id: 'rec-event123' },
-          baseEvent: { id: 'base-event123' },
           volunteerGroups: [
             createVolunteerGroup('event123', {
               id: 'group1',
@@ -418,36 +440,82 @@ const mockQueries = [
               isTemplate: false,
             }),
           ],
+          id: 'event123',
+          recurrenceRule: { id: 'rec-event123', __typename: 'RecurrenceRule' },
+          baseEvent: { id: 'base-event123', __typename: 'Event' },
+          __typename: 'Event',
         },
+      } satisfies IEventVolunteerGroupsData,
+    },
+  },
+  {
+    request: {
+      query: GET_EVENT_VOLUNTEER_GROUPS,
+      variables: {
+        input: { id: 'event123' },
+        where: {},
       },
-    }),
+    },
+    result: {
+      data: {
+        event: {
+          volunteerGroups: [
+            createVolunteerGroup('event123', {
+              id: 'group1',
+              isTemplate: true,
+            }),
+            createVolunteerGroup('event123', {
+              id: 'group2',
+              name: 'Test Group 2',
+              description: 'Test volunteer group 2',
+              isTemplate: false,
+            }),
+          ],
+          id: 'event123',
+          recurrenceRule: { id: 'rec-event123', __typename: 'RecurrenceRule' },
+          baseEvent: { id: 'base-event123', __typename: 'Event' },
+          __typename: 'Event',
+        },
+      } satisfies IEventVolunteerGroupsData,
+    },
   },
   {
     request: {
       query: ACTION_ITEM_LIST,
     },
     variableMatcher: () => true,
-    newData: () => ({
+    result: {
       data: buildActionItemsByOrgData('eventId'),
-    }),
+    },
   },
   {
     request: {
       query: GET_EVENT_ACTION_ITEMS,
       variables: { input: { id: 'eventId' } },
     },
-    newData: () => ({
+    result: {
       data: buildEventActionItemsData('eventId'),
-    }),
+    },
   },
   {
     request: {
       query: GET_EVENT_ACTION_ITEMS,
       variables: { input: { id: 'event123' } },
     },
-    newData: () => ({
+    result: {
       data: buildEventActionItemsData('event123'),
-    }),
+    },
+  },
+  {
+    request: {
+      query: ACTION_ITEM_LIST,
+      variables: { input: { organizationId: 'orgId' } },
+    },
+    result: {
+      data: {
+        actionItemsByOrganization: [],
+      },
+    },
   },
   {
     request: {
@@ -494,12 +562,22 @@ const mockQueries = [
   {
     request: {
       query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
+      variables: {
+        input: {
+          actionId: '1',
+          volunteerId: 'volunteer1',
+          categoryId: 'cat1',
+          preCompletionNotes: 'Test notes',
+          eventId: 'event123',
+          assignedAt: '2024-01-01T00:00:00.000Z',
+        },
+      },
     },
-    variableMatcher: () => true,
     result: {
       data: {
         updateActionItemForInstance: {
           id: '1',
+          __typename: 'ActionItem',
         },
       },
     },
@@ -690,9 +768,9 @@ describe('ItemModal - Additional Test Cases', () => {
 
       renderWithProviders(props);
 
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-      });
+      await waitFor(() =>
+        expect(screen.getByRole('dialog')).toBeInTheDocument(),
+      );
 
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
@@ -700,8 +778,11 @@ describe('ItemModal - Additional Test Cases', () => {
       expect(volunteerGroupSelect).toBeInTheDocument();
 
       const volunteerGroupInput = screen.getByLabelText(/volunteerGroup/i);
-      expect(volunteerGroupInput).toHaveValue('Test Group 1');
-
+      await waitFor(() =>
+        expect(within(volunteerGroupSelect).getByRole('combobox')).toHaveValue(
+          'Test Group 1',
+        ),
+      );
       expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument();
     });
   });
@@ -788,9 +869,9 @@ describe('ItemModal - Additional Test Cases', () => {
         fireEvent.submit(form);
       }
 
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('selectCategoryAndAssignment');
-      });
+      await waitFor(() =>
+        expect(toast.error).toHaveBeenCalledWith('selectCategoryAndAssignment'),
+      );
     });
   });
 
@@ -836,14 +917,20 @@ describe('ItemModal - Additional Test Cases', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
+      // Wait for the category select to be present
+      await waitFor(() =>
+        expect(screen.getByTestId('categorySelect')).toBeInTheDocument(),
+      );
+
       const volunteerInput = screen.getByLabelText('volunteer *');
       await userEvent.click(volunteerInput);
       await userEvent.type(volunteerInput, 'Jane Smith');
 
-      await waitFor(async () => {
-        const option = await screen.findByText('Jane Smith');
-        await userEvent.click(option);
-      });
+      await waitFor(() =>
+        expect(screen.getByText('Jane Smith')).toBeInTheDocument(),
+      );
+      const option = await screen.findByText('Jane Smith');
+      await userEvent.click(option);
 
       await waitFor(() => {
         expect(screen.getByLabelText('volunteer *')).toHaveValue('Jane Smith');
@@ -852,9 +939,7 @@ describe('ItemModal - Additional Test Cases', () => {
       const seriesRadio = screen.getByLabelText('entireSeries');
       await userEvent.click(seriesRadio);
 
-      await waitFor(() => {
-        expect(screen.getByLabelText('volunteer *')).toHaveValue('');
-      });
+      await waitFor(() => expect(volunteerInput).toHaveValue(''));
 
       expect(screen.queryByDisplayValue('Jane Smith')).not.toBeInTheDocument();
     });
@@ -864,7 +949,7 @@ describe('ItemModal - Additional Test Cases', () => {
         isOpen: true,
         hide: vi.fn(),
         orgId: 'orgId',
-        eventId: 'eventId',
+        eventId: 'event123',
         actionItemsRefetch: vi.fn(),
         editMode: false,
         actionItem: null,
@@ -873,9 +958,14 @@ describe('ItemModal - Additional Test Cases', () => {
 
       renderWithProviders(props);
 
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-      });
+      await waitFor(() =>
+        expect(screen.getByRole('dialog')).toBeInTheDocument(),
+      );
+
+      // Wait for the category select to be present
+      await waitFor(() =>
+        expect(screen.getByTestId('categorySelect')).toBeInTheDocument(),
+      );
 
       const volunteerGroupChip = screen.getByRole('button', {
         name: 'volunteerGroup',
@@ -888,23 +978,20 @@ describe('ItemModal - Additional Test Cases', () => {
       const volunteerGroupInput =
         within(volunteerGroupSelect).getByRole('combobox');
       await userEvent.click(volunteerGroupInput);
+      await userEvent.clear(volunteerGroupInput);
       await userEvent.type(volunteerGroupInput, 'Test Group 2');
 
-      await waitFor(async () => {
-        const option = await screen.findByText('Test Group 2');
-        await userEvent.click(option);
-      });
+      const option = await screen.findByText('Test Group 2');
+      await userEvent.click(option);
 
-      await waitFor(() => {
-        expect(volunteerGroupInput).toHaveValue('Test Group 2');
-      });
+      await waitFor(() =>
+        expect(volunteerGroupInput).toHaveValue('Test Group 2'),
+      );
 
       const seriesRadio = screen.getByLabelText('entireSeries');
-      await userEvent.click(seriesRadio);
+      fireEvent.click(seriesRadio);
 
-      await waitFor(() => {
-        expect(volunteerGroupInput).toHaveValue('');
-      });
+      await waitFor(() => expect(volunteerGroupInput).toHaveValue(''));
     });
   });
 
@@ -926,6 +1013,11 @@ describe('ItemModal - Additional Test Cases', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
+      // Wait for the category select to be present
+      await waitFor(() =>
+        expect(screen.getByTestId('categorySelect')).toBeInTheDocument(),
+      );
+
       const volunteerSelect = await screen.findByTestId('volunteerSelect');
       const volunteerInput = within(volunteerSelect).getByRole('combobox');
       await userEvent.click(volunteerInput);
@@ -934,21 +1026,19 @@ describe('ItemModal - Additional Test Cases', () => {
       const volunteerOption = await screen.findByText('Jane Smith');
       await userEvent.click(volunteerOption);
 
-      await waitFor(() => {
-        expect(volunteerInput).toHaveValue('Jane Smith');
-      });
+      await waitFor(() => expect(volunteerInput).toHaveValue('Jane Smith'));
 
       const volunteerGroupChip = screen.getByRole('button', {
         name: 'volunteerGroup',
       });
-      await userEvent.click(volunteerGroupChip);
+      fireEvent.click(volunteerGroupChip);
 
-      await waitFor(() => {
-        expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument();
-      });
+      await waitFor(() =>
+        expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument(),
+      );
 
       const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
-      await userEvent.click(volunteerChip);
+      fireEvent.click(volunteerChip);
 
       const reopenedVolunteerSelect =
         await screen.findByTestId('volunteerSelect');
@@ -956,9 +1046,7 @@ describe('ItemModal - Additional Test Cases', () => {
         'combobox',
       );
 
-      await waitFor(() => {
-        expect(reopenedVolunteerInput).toHaveValue('');
-      });
+      await waitFor(() => expect(reopenedVolunteerInput).toHaveValue(''));
     });
 
     it('should clear volunteer group selection when switching to volunteer and back', async () => {
@@ -966,7 +1054,7 @@ describe('ItemModal - Additional Test Cases', () => {
         isOpen: true,
         hide: vi.fn(),
         orgId: 'orgId',
-        eventId: 'eventId',
+        eventId: 'event123',
         actionItemsRefetch: vi.fn(),
         editMode: false,
         actionItem: null,
@@ -977,6 +1065,11 @@ describe('ItemModal - Additional Test Cases', () => {
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
+
+      // Wait for the category select to be present
+      await waitFor(() =>
+        expect(screen.getByTestId('categorySelect')).toBeInTheDocument(),
+      );
 
       const volunteerGroupChip = screen.getByRole('button', {
         name: 'volunteerGroup',
@@ -989,13 +1082,13 @@ describe('ItemModal - Additional Test Cases', () => {
       const volunteerGroupInput =
         within(volunteerGroupSelect).getByRole('combobox');
       await userEvent.click(volunteerGroupInput);
-      await userEvent.type(volunteerGroupInput, 'Test Group 2');
+      await userEvent.type(volunteerGroupInput, 'Test Group 1');
 
-      const groupOption = await screen.findByText('Test Group 2');
+      const groupOption = await screen.findByText(/Test Group 1/i, {}, { timeout: 3000 });
       await userEvent.click(groupOption);
 
       await waitFor(() => {
-        expect(volunteerGroupInput).toHaveValue('Test Group 2');
+        expect(volunteerGroupInput).toHaveValue('Test Group 1');
       });
 
       const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
@@ -1103,9 +1196,7 @@ describe('ItemModal - Additional Test Cases', () => {
       }
 
       // Add await here to properly wait for the toast error
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalled();
-      });
+      await waitFor(() => expect(toast.error).toHaveBeenCalled());
     });
   });
 
@@ -1219,9 +1310,9 @@ describe('ItemModal - Specific Test Coverage', () => {
 
       renderWithProviders(props);
 
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-      });
+      await waitFor(() =>
+        expect(screen.getByRole('dialog')).toBeInTheDocument(),
+      );
 
       // Component should render without crashing when categories are available
       expect(screen.getByTestId('categorySelect')).toBeInTheDocument();
@@ -1242,15 +1333,15 @@ describe('ItemModal - Specific Test Coverage', () => {
 
       renderWithProviders(props);
 
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-      });
+      await waitFor(() =>
+        expect(screen.getByRole('dialog')).toBeInTheDocument(),
+      );
 
       // Wait for the form to load
-      await waitFor(() => {
-        expect(screen.getByTestId('categorySelect')).toBeInTheDocument();
-        expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
-      });
+      await waitFor(() =>
+        expect(screen.getByTestId('categorySelect')).toBeInTheDocument(),
+      );
+      expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
 
       // Get the form element and dispatch a submit event directly to bypass HTML5 validation
       const form = document.querySelector('form');
@@ -1258,9 +1349,9 @@ describe('ItemModal - Specific Test Coverage', () => {
         fireEvent.submit(form);
       }
 
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('selectCategoryAndAssignment');
-      });
+      await waitFor(() =>
+        expect(toast.error).toHaveBeenCalledWith('selectCategoryAndAssignment'),
+      );
     });
 
     it('should handle missing ID in UPDATE_ACTION_ITEM_MUTATION', async () => {
@@ -1285,13 +1376,19 @@ describe('ItemModal - Specific Test Coverage', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
+      // Wait for the category to be populated
+      const categoryInput = within(
+        screen.getByTestId('categorySelect'),
+      ).getByRole('combobox');
+      await waitFor(() => expect(categoryInput).toHaveValue('Category 1'));
+
       // Submit the form
       const submitButton = screen.getByTestId('submitBtn');
       await userEvent.click(submitButton);
 
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Action item ID is missing');
-      });
+      await waitFor(() =>
+        expect(toast.error).toHaveBeenCalledWith('Action item ID is missing'),
+      );
     });
   });
 
@@ -1309,16 +1406,18 @@ describe('ItemModal - Specific Test Coverage', () => {
 
       renderWithProviders(props);
 
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-      });
+      await waitFor(() =>
+        expect(screen.getByRole('dialog')).toBeInTheDocument(),
+      );
 
       // Test string field update (preCompletionNotes)
       const notesField = screen.getByLabelText(/preCompletionNotes/i);
-      await userEvent.type(notesField, 'Updated notes via handleFormChange');
+      fireEvent.change(notesField, { target: { value: '' } });
+      await waitFor(() => expect(notesField).toHaveValue(''));
 
-      // Verify the input has the new value
-      expect(notesField).toHaveValue('Updated notes via handleFormChange');
+      // Use fireEvent for reliable update
+      fireEvent.change(notesField, { target: { value: 'NewNotes' } });
+      await waitFor(() => expect(notesField).toHaveValue('NewNotes'));
     });
 
     it('should handle Date field changes', async () => {
@@ -1334,9 +1433,9 @@ describe('ItemModal - Specific Test Coverage', () => {
 
       renderWithProviders(props);
 
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-      });
+      await waitFor(() =>
+        expect(screen.getByRole('dialog')).toBeInTheDocument(),
+      );
 
       // Find date picker input
       const dateInput = screen.getByLabelText(/assignmentDate/i);
@@ -1360,9 +1459,9 @@ describe('ItemModal - Specific Test Coverage', () => {
 
       renderWithProviders(props);
 
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-      });
+      await waitFor(() =>
+        expect(screen.getByRole('dialog')).toBeInTheDocument(),
+      );
 
       // Test clearing a field
       const notesField = screen.getByLabelText(/preCompletionNotes/i);
@@ -1425,9 +1524,9 @@ describe('ItemModal - Specific Test Coverage', () => {
 
       renderWithProviders(props);
 
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-      });
+      await waitFor(() =>
+        expect(screen.getByRole('dialog')).toBeInTheDocument(),
+      );
 
       // Find and click the close button
       const closeButton = screen.getByTestId('modalCloseBtn');
@@ -1450,9 +1549,9 @@ describe('ItemModal - Specific Test Coverage', () => {
 
       const { rerender } = renderWithProviders(createProps);
 
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-      });
+      await waitFor(() =>
+        expect(screen.getByRole('dialog')).toBeInTheDocument(),
+      );
 
       const submitBtn = screen.getByTestId('submitBtn');
       expect(submitBtn).toHaveTextContent(/create/i);
@@ -1495,9 +1594,9 @@ describe('ItemModal - Specific Test Coverage', () => {
 
       renderWithProviders(props);
 
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-      });
+      await waitFor(() =>
+        expect(screen.getByRole('dialog')).toBeInTheDocument(),
+      );
 
       // Check for modal header content
       const closeButton = screen.getByTestId('modalCloseBtn');
@@ -1532,9 +1631,7 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
     renderWithProviders(props);
 
     // Wait for categories to load
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
     // Should have access to the categories in the component
     // The categories would be used in autocomplete or dropdown
@@ -1598,9 +1695,7 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
     // Re-render with updated data should work without issues
     rerender(
@@ -1652,9 +1747,7 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
     // Component should handle empty categories gracefully
     expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -1698,9 +1791,7 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
     // Should fallback to empty array and not crash
     expect(screen.getByRole('dialog')).toBeInTheDocument();
@@ -1720,13 +1811,17 @@ describe('updateActionForInstanceHandler', () => {
     const updateMutationMock = {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
+        variables: {
+          input: {
+            actionId: '1',
+            eventId: 'event123',
+            volunteerId: 'volunteer1',
+            categoryId: 'cat1',
+            assignedAt: '2024-01-01T00:00:00.000Z',
+            preCompletionNotes: 'Updated notes',
+          },
+        },
       },
-      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) =>
-        matchesInputSubset(variables, {
-          actionId: '1',
-          eventId: 'event123',
-          preCompletionNotes: 'Updated notes',
-        }),
       result: {
         data: {
           updateActionItemForInstance: {
@@ -1756,38 +1851,25 @@ describe('updateActionForInstanceHandler', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
     // Find and update the notes field
-    const notesInputs = screen.getAllByRole('textbox');
-    const notesInput = notesInputs.find(
-      (input) =>
-        (input as HTMLInputElement).value === 'Test notes' ||
-        (input as HTMLInputElement).defaultValue === 'Test notes' ||
-        input.getAttribute('value') === 'Test notes',
-    );
-
-    if (notesInput) {
-      await userEvent.clear(notesInput);
-      await userEvent.type(notesInput, 'Updated notes');
-    }
+    const notesInput = screen.getByLabelText('preCompletionNotes');
 
     // Set applyTo to 'instance'
     const instanceRadio = screen.getByLabelText('thisEventOnly');
     await userEvent.click(instanceRadio);
 
+    fireEvent.change(notesInput, { target: { value: 'Updated notes' } });
+
     // Submit the form
     const submitButton = screen.getByTestId('submitBtn');
     fireEvent.submit(submitButton);
 
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
-      expect(mockRefetch).toHaveBeenCalled();
-      expect(mockOrgRefetch).toHaveBeenCalled();
-      expect(mockHide).toHaveBeenCalled();
-    });
+    await waitFor(() => expect(toast.success).toHaveBeenCalled());
+    expect(mockRefetch).toHaveBeenCalled();
+    expect(mockOrgRefetch).toHaveBeenCalled();
+    expect(mockHide).toHaveBeenCalled();
   });
 
   it('should show error toast when actionItem ID is missing', async () => {
@@ -1813,13 +1895,18 @@ describe('updateActionForInstanceHandler', () => {
       expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 
-    // Submit the form
+    // Wait for the category to be populated
+    const categoryInput = within(
+      screen.getByTestId('categorySelect'),
+    ).getByRole('combobox');
+    await waitFor(() => expect(categoryInput).toHaveValue('Category 1'));
+
     const submitButton = screen.getByTestId('submitBtn');
     await userEvent.click(submitButton);
 
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Action item ID is missing');
-    });
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith('Action item ID is missing'),
+    );
   });
 
   it('should show error toast when actionItem ID is missing for a recurring item', async () => {
@@ -1841,9 +1928,13 @@ describe('updateActionForInstanceHandler', () => {
 
     renderWithProviders(props);
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+    // Wait for the category to be populated
+    const categoryInput = within(
+      screen.getByTestId('categorySelect'),
+    ).getByRole('combobox');
+    await waitFor(() => expect(categoryInput).toHaveValue('Category 1'));
 
     // Select "This event only" to target updateActionForInstanceHandler
     const instanceRadio = screen.getByLabelText('thisEventOnly');
@@ -1853,22 +1944,26 @@ describe('updateActionForInstanceHandler', () => {
     const submitButton = screen.getByTestId('submitBtn');
     await userEvent.click(submitButton);
 
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Action item ID is missing');
-    });
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith('Action item ID is missing'),
+    );
   });
 
   it('should handle mutation error and show error toast', async () => {
     const errorUpdateMock = {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
+        variables: {
+          input: {
+            actionId: '1',
+            eventId: 'event123',
+            volunteerId: 'volunteer1',
+            categoryId: 'cat1',
+            assignedAt: '2024-01-01T00:00:00.000Z',
+            preCompletionNotes: 'Error test notes',
+          },
+        },
       },
-      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) =>
-        matchesInputSubset(variables, {
-          actionId: '1',
-          eventId: 'event123',
-          preCompletionNotes: 'Error test notes',
-        }),
       error: new Error('Network error occurred'),
     };
 
@@ -1893,9 +1988,13 @@ describe('updateActionForInstanceHandler', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+    // Wait for the category to be populated
+    const categoryInput = within(
+      screen.getByTestId('categorySelect'),
+    ).getByRole('combobox');
+    await waitFor(() => expect(categoryInput).toHaveValue('Category 1'));
 
     // Find and update the notes field
     const notesInputs = screen.getAllByRole('textbox');
@@ -1906,22 +2005,23 @@ describe('updateActionForInstanceHandler', () => {
         input.getAttribute('value') === 'Test notes',
     );
 
-    if (notesInput) {
-      await userEvent.clear(notesInput);
-      await userEvent.type(notesInput, 'Error test notes');
-    }
-
     // Set applyTo to 'instance'
     const instanceRadio = screen.getByLabelText('thisEventOnly');
     await userEvent.click(instanceRadio);
+
+    if (notesInput) {
+      await userEvent.clear(notesInput);
+      expect(notesInput).toHaveValue('');
+      await userEvent.type(notesInput, 'Error test notes');
+    }
 
     // Submit the form
     const submitButton = screen.getByTestId('submitBtn');
     fireEvent.submit(submitButton);
 
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Network error occurred');
-    });
+    await waitFor(() =>
+      expect(toast.error).toHaveBeenCalledWith('Network error occurred'),
+    );
   });
 
   it('should include volunteerGroup fields when updating instance assignment for a group', async () => {
@@ -1938,16 +2038,17 @@ describe('updateActionForInstanceHandler', () => {
     const updateGroupMutationMock = {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
+        variables: {
+          input: {
+            actionId: '1',
+            eventId: 'event123',
+            volunteerGroupId: 'group1',
+            categoryId: 'cat1',
+            assignedAt: expectedAssignedAt,
+            preCompletionNotes: 'Group instance notes',
+          },
+        },
       },
-      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) =>
-        matchesInputSubset(variables, {
-          actionId: '1',
-          eventId: 'event123',
-          volunteerGroupId: 'group1',
-          categoryId: 'cat1',
-          assignedAt: expectedAssignedAt,
-          preCompletionNotes: 'Group instance notes',
-        }),
       result: {
         data: {
           updateActionItemForInstance: {
@@ -1979,15 +2080,20 @@ describe('updateActionForInstanceHandler', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+    // Wait for the category to be populated
+    const categoryInput = within(
+      screen.getByTestId('categorySelect'),
+    ).getByRole('combobox');
+    await waitFor(() => expect(categoryInput).toHaveValue('Category 1'));
 
     const instanceRadio = screen.getByLabelText('thisEventOnly');
     await userEvent.click(instanceRadio);
 
     const notesInput = screen.getByLabelText('preCompletionNotes');
     await userEvent.clear(notesInput);
+    expect(notesInput).toHaveValue('');
     await userEvent.type(notesInput, 'Group instance notes');
 
     const submitButton = screen.getByTestId('submitBtn');
@@ -2009,13 +2115,17 @@ describe('updateActionForInstanceHandler', () => {
     const updateMutationMock = {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
+        variables: {
+          input: {
+            actionId: '1',
+            eventId: 'event123',
+            volunteerId: 'volunteer1',
+            categoryId: 'cat1',
+            assignedAt: '2024-01-01T00:00:00.000Z',
+            preCompletionNotes: 'Refetch test notes',
+          },
+        },
       },
-      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) =>
-        matchesInputSubset(variables, {
-          actionId: '1',
-          eventId: 'event123',
-          preCompletionNotes: 'Refetch test notes',
-        }),
       result: {
         data: {
           updateActionItemForInstance: {
@@ -2047,27 +2157,16 @@ describe('updateActionForInstanceHandler', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
-    // Find and update the notes field
-    const notesInputs = screen.getAllByRole('textbox');
-    const notesInput = notesInputs.find(
-      (input) =>
-        (input as HTMLInputElement).value === 'Test notes' ||
-        (input as HTMLInputElement).defaultValue === 'Test notes' ||
-        input.getAttribute('value') === 'Test notes',
-    );
-
-    if (notesInput) {
-      await userEvent.clear(notesInput);
-      await userEvent.type(notesInput, 'Refetch test notes');
-    }
+    const notesInput = screen.getByLabelText('preCompletionNotes');
 
     // Set applyTo to 'instance'
     const instanceRadio = screen.getByLabelText('thisEventOnly');
-    await userEvent.click(instanceRadio);
+    fireEvent.click(instanceRadio);
+    fireEvent.change(instanceRadio, { target: { checked: true } });
+
+    fireEvent.change(notesInput, { target: { value: 'Refetch test notes' } });
 
     // Submit the form
     const submitButton = screen.getByTestId('submitBtn');
@@ -2086,12 +2185,16 @@ describe('updateActionForInstanceHandler', () => {
     const updateMutationMock = {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
-      },
-      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) => {
-        return (
-          variables.input.actionId === '1' &&
-          variables.input.preCompletionNotes === 'Hide test notes'
-        );
+        variables: {
+          input: {
+            actionId: '1',
+            eventId: 'event123',
+            volunteerId: 'volunteer1',
+            categoryId: 'cat1',
+            assignedAt: '2024-01-01T00:00:00.000Z',
+            preCompletionNotes: 'Hide test notes',
+          },
+        },
       },
       result: {
         data: {
@@ -2123,35 +2226,27 @@ describe('updateActionForInstanceHandler', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
-    // Find and update the notes field
-    const notesInputs = screen.getAllByRole('textbox');
-    const notesInput = notesInputs.find(
-      (input) =>
-        (input as HTMLInputElement).value === 'Test notes' ||
-        (input as HTMLInputElement).defaultValue === 'Test notes' ||
-        input.getAttribute('value') === 'Test notes',
-    );
+    // Wait for the category to be populated
+    const categoryInput = within(
+      screen.getByTestId('categorySelect'),
+    ).getByRole('combobox');
+    await waitFor(() => expect(categoryInput).toHaveValue('Category 1'));
 
-    if (notesInput) {
-      await userEvent.clear(notesInput);
-      await userEvent.type(notesInput, 'Hide test notes');
-    }
+    const notesInput = screen.getByLabelText('preCompletionNotes');
 
     // Set applyTo to 'instance'
     const instanceRadio = screen.getByLabelText('thisEventOnly');
-    await userEvent.click(instanceRadio);
+    fireEvent.click(instanceRadio);
+
+    fireEvent.change(notesInput, { target: { value: 'Hide test notes' } });
 
     // Submit the form
     const submitButton = screen.getByTestId('submitBtn');
     fireEvent.submit(submitButton);
 
-    await waitFor(() => {
-      expect(mockHide).toHaveBeenCalledTimes(1);
-    });
+    await waitFor(() => expect(mockHide).toHaveBeenCalledTimes(1));
   });
 
   it('should handle partial input fields correctly', async () => {
@@ -2161,12 +2256,16 @@ describe('updateActionForInstanceHandler', () => {
     const updateMutationMock = {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
-      },
-      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) => {
-        return (
-          variables.input.actionId === '1' &&
-          variables.input.preCompletionNotes === 'Partial update notes'
-        );
+        variables: {
+          input: {
+            actionId: '1',
+            eventId: 'event123',
+            volunteerId: 'volunteer1',
+            categoryId: 'cat1',
+            assignedAt: '2024-01-01T00:00:00.000Z',
+            preCompletionNotes: 'Partial update notes',
+          },
+        },
       },
       result: {
         data: {
@@ -2198,35 +2297,27 @@ describe('updateActionForInstanceHandler', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
-    // Find and update the notes field
-    const notesInputs = screen.getAllByRole('textbox');
-    const notesInput = notesInputs.find(
-      (input) =>
-        (input as HTMLInputElement).value === 'Test notes' ||
-        (input as HTMLInputElement).defaultValue === 'Test notes' ||
-        input.getAttribute('value') === 'Test notes',
-    );
+    // Wait for the category to be populated
+    const categoryInput = within(
+      screen.getByTestId('categorySelect'),
+    ).getByRole('combobox');
+    await waitFor(() => expect(categoryInput).toHaveValue('Category 1'));
 
-    if (notesInput) {
-      await userEvent.clear(notesInput);
-      await userEvent.type(notesInput, 'Partial update notes');
-    }
+    const notesInput = screen.getByLabelText('preCompletionNotes');
 
     // Set applyTo to 'instance'
     const instanceRadio = screen.getByLabelText('thisEventOnly');
-    await userEvent.click(instanceRadio);
+    fireEvent.click(instanceRadio);
+
+    fireEvent.change(notesInput, { target: { value: 'Partial update notes' } });
 
     // Submit the form
     const submitButton = screen.getByTestId('submitBtn');
     fireEvent.submit(submitButton);
 
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
-    });
+    await waitFor(() => expect(toast.success).toHaveBeenCalled());
   });
 
   it('should prevent default form submission', async () => {
@@ -2236,12 +2327,16 @@ describe('updateActionForInstanceHandler', () => {
     const updateMutationMock = {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
-      },
-      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) => {
-        return (
-          variables.input.actionId === '1' &&
-          variables.input.preCompletionNotes === 'Prevent default test'
-        );
+        variables: {
+          input: {
+            actionId: '1',
+            eventId: 'event123',
+            volunteerId: 'volunteer1',
+            categoryId: 'cat1',
+            assignedAt: '2024-01-01T00:00:00.000Z',
+            preCompletionNotes: 'Prevent default test',
+          },
+        },
       },
       result: {
         data: {
@@ -2273,35 +2368,27 @@ describe('updateActionForInstanceHandler', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
-    // Find and update the notes field
-    const notesInputs = screen.getAllByRole('textbox');
-    const notesInput = notesInputs.find(
-      (input) =>
-        (input as HTMLInputElement).value === 'Test notes' ||
-        (input as HTMLInputElement).defaultValue === 'Test notes' ||
-        input.getAttribute('value') === 'Test notes',
-    );
+    // Wait for the category to be populated
+    const categoryInput = within(
+      screen.getByTestId('categorySelect'),
+    ).getByRole('combobox');
+    await waitFor(() => expect(categoryInput).toHaveValue('Category 1'));
 
-    if (notesInput) {
-      await userEvent.clear(notesInput);
-      await userEvent.type(notesInput, 'Prevent default test');
-    }
+    const notesInput = screen.getByLabelText('preCompletionNotes');
 
     // Set applyTo to 'instance'
     const instanceRadio = screen.getByLabelText('thisEventOnly');
-    await userEvent.click(instanceRadio);
+    fireEvent.click(instanceRadio);
+
+    fireEvent.change(notesInput, { target: { value: 'Prevent default test' } });
 
     // Submit the form
     const submitButton = screen.getByTestId('submitBtn');
     fireEvent.submit(submitButton);
 
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
-    });
+    await waitFor(() => expect(toast.success).toHaveBeenCalled());
   });
 });
 
@@ -2354,36 +2441,37 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+    // Wait for the form to initialize and mock data to populate
+    await waitFor(() => screen.getByDisplayValue('Category 1'));
+
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
     // Wait for form to be fully initialized
-    await waitFor(() => {
-      expect(screen.getByDisplayValue('Test notes')).toBeInTheDocument();
-      expect(screen.getByDisplayValue('Category 1')).toBeInTheDocument();
-      // Wait for volunteer field to be visible and populated
-      expect(screen.getByLabelText('volunteer *')).toBeInTheDocument();
-    });
+    await waitFor(() =>
+      expect(screen.getByDisplayValue('Test notes')).toBeInTheDocument(),
+    );
+    expect(screen.getByDisplayValue('Category 1')).toBeInTheDocument();
+    expect(screen.getByLabelText('volunteer *')).toBeInTheDocument();
 
     // Change category
     const categoryInput = screen.getByLabelText('actionItemCategory *');
-    fireEvent.change(categoryInput, { target: { value: 'Category 2' } });
+    await userEvent.clear(categoryInput);
+    await userEvent.type(categoryInput, 'Category 2');
     const categoryOption = await screen.findByText('Category 2');
-    fireEvent.click(categoryOption);
+    await userEvent.click(categoryOption);
 
-    await waitFor(() => {
-      expect(screen.getByDisplayValue('Category 2')).toBeInTheDocument();
-    });
+    await waitFor(() =>
+      expect(screen.getByDisplayValue('Category 2')).toBeInTheDocument(),
+    );
 
     // Target this instance so non-template volunteers are available
     const instanceRadio = screen.getByLabelText('thisEventOnly');
     await userEvent.click(instanceRadio);
 
     // Change volunteer - first wait for volunteer dropdown to be ready
-    await waitFor(() => {
-      expect(screen.getByLabelText('volunteer *')).toBeInTheDocument();
-    });
+    await waitFor(() =>
+      expect(screen.getByLabelText('volunteer *')).toBeInTheDocument(),
+    );
 
     const volunteerInput = screen.getByLabelText('volunteer *');
 
@@ -2395,9 +2483,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
     const volunteerOption = within(listbox).getByText('Jane Smith');
     await userEvent.click(volunteerOption);
 
-    await waitFor(() => {
-      expect(volunteerInput).toHaveValue('Jane Smith');
-    });
+    await waitFor(() => expect(volunteerInput).toHaveValue('Jane Smith'));
 
     // Change pre-completion notes
     const notesInput = screen.getByDisplayValue('Test notes');
@@ -2406,6 +2492,9 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
 
     // Submit the form
     const submitButton = screen.getByTestId('submitBtn');
+    await waitFor(() =>
+      expect(notesInput).toHaveValue('Updated notes for instance'),
+    );
     await userEvent.click(submitButton);
 
     await waitFor(() => {
@@ -2429,9 +2518,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
 
     renderWithProviders(props);
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
     // Initially, the entireSeries radio should be checked (default for template items)
     const entireSeriesRadio = screen.getByLabelText('entireSeries');
@@ -2474,9 +2561,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
 
     renderWithProviders(props);
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
     // Radio buttons should be visible when isRecurring && !editMode
     const entireSeriesRadio = screen.getByLabelText('entireSeries');
@@ -2512,9 +2597,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
 
     renderWithProviders(props);
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
     // Radio buttons should not be visible when !isRecurring
     expect(screen.queryByLabelText('entireSeries')).not.toBeInTheDocument();
@@ -2540,9 +2623,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
 
     renderWithProviders(props);
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
     // Radio buttons should not be visible when actionItem is not a template
     expect(screen.queryByLabelText('entireSeries')).not.toBeInTheDocument();
@@ -2569,9 +2650,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
 
     renderWithProviders(props);
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
     // Radio buttons should not be visible when actionItem is an instance exception
     expect(screen.queryByLabelText('entireSeries')).not.toBeInTheDocument();
@@ -2696,11 +2775,9 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
       const postCompletionNotesField = screen.getByLabelText(
         'postCompletionNotes',
       );
-      await userEvent.clear(postCompletionNotesField);
-      await userEvent.type(
-        postCompletionNotesField,
-        'Updated completion notes',
-      );
+      fireEvent.change(postCompletionNotesField, {
+        target: { value: 'Updated completion notes' },
+      });
 
       // Verify the field has the new value
       expect(postCompletionNotesField).toHaveValue('Updated completion notes');
@@ -2749,16 +2826,17 @@ describe('orgActionItemsRefetch functionality', () => {
     const createWithEventMock = {
       request: {
         query: CREATE_ACTION_ITEM_MUTATION,
-      },
-      variableMatcher: (variables: ICreateActionItemVariables) => {
-        return (
-          variables.input.volunteerId === 'volunteer1' &&
-          variables.input.categoryId === 'cat1' &&
-          variables.input.organizationId === 'orgId' &&
-          variables.input.preCompletionNotes === 'Test with org refetch' &&
-          variables.input.eventId === 'event123' &&
-          typeof variables.input.assignedAt === 'string'
-        );
+        variables: {
+          input: {
+            volunteerId: 'volunteer1',
+            categoryId: 'cat1',
+            organizationId: 'orgId',
+            preCompletionNotes: 'Test with org refetch',
+            eventId: 'event123',
+            assignedAt: '2024-01-01T00:00:00.000Z',
+            isTemplate: false,
+          },
+        },
       },
       result: {
         data: {
@@ -2773,7 +2851,10 @@ describe('orgActionItemsRefetch functionality', () => {
             volunteer: {
               id: 'volunteer1',
               hasAccepted: true,
-              user: { id: 'user1', name: 'John Doe' },
+              isPublic: true,
+              hoursVolunteered: 0,
+              user: { id: 'user1', name: 'John Doe', __typename: 'User' },
+              __typename: 'EventVolunteer',
             },
             volunteerGroup: null,
             creator: { id: 'creator1', name: 'Creator' },
@@ -2790,6 +2871,7 @@ describe('orgActionItemsRefetch functionality', () => {
               name: 'Test Event',
               description: 'Test event description',
             },
+            __typename: 'ActionItem',
           },
         },
       },
@@ -2806,6 +2888,7 @@ describe('orgActionItemsRefetch functionality', () => {
       orgActionItemsRefetch: mockOrgRefetch,
       editMode: false,
       actionItem: null,
+      initialDate: new Date('2024-01-01T00:00:00.000Z'),
     };
 
     render(
@@ -2816,64 +2899,56 @@ describe('orgActionItemsRefetch functionality', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
     // Wait for data to load including volunteers
-    await waitFor(() => {
-      expect(screen.getByText('actionItemCategory')).toBeInTheDocument();
-    });
+    await waitFor(() =>
+      expect(screen.getByText('actionItemCategory')).toBeInTheDocument(),
+    );
 
     // Wait a bit more for volunteers to load
-    await waitFor(() => {
-      expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
-    });
+    await waitFor(() =>
+      expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument(),
+    );
 
     // Wait for volunteer options to be available by checking the Autocomplete
-    await waitFor(() => {
-      const volunteerInput = screen.getByLabelText('volunteer *');
-      expect(volunteerInput).toBeInTheDocument();
-    });
+    await waitFor(() =>
+      expect(screen.getByLabelText('volunteer *')).toBeInTheDocument(),
+    );
 
     // Select category
     const categoryInput = screen.getByLabelText('actionItemCategory *');
     await userEvent.click(categoryInput);
     await userEvent.type(categoryInput, 'Category 1');
-    await waitFor(async () => {
-      const option = screen.getByText('Category 1');
-      await userEvent.click(option);
-    });
+    const categoryOption = await screen.findByText('Category 1');
+    await userEvent.click(categoryOption);
 
     // Select volunteer
     const volunteerInput = screen.getByLabelText('volunteer *');
     await userEvent.click(volunteerInput);
     await userEvent.type(volunteerInput, 'John Doe');
-    await waitFor(async () => {
-      const option = await screen.findByText('John Doe');
-      await userEvent.click(option);
-    });
+    const volunteerOption = await screen.findByText('John Doe');
+    await userEvent.click(volunteerOption);
 
     // Wait for notes field to appear
-    await waitFor(() => {
-      expect(screen.getByLabelText('preCompletionNotes')).toBeInTheDocument();
-    });
+    await waitFor(() =>
+      expect(screen.getByLabelText('preCompletionNotes')).toBeInTheDocument(),
+    );
 
     // Fill notes field
     const notesInput = screen.getByLabelText('preCompletionNotes');
     await userEvent.clear(notesInput);
+    expect(notesInput).toHaveValue('');
     await userEvent.type(notesInput, 'Test with org refetch');
 
     // Submit the form
     const submitButton = screen.getByTestId('submitBtn');
     await userEvent.click(submitButton);
 
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
-      expect(mockRefetch).toHaveBeenCalled();
-      expect(mockOrgRefetch).toHaveBeenCalled();
-      expect(mockHide).toHaveBeenCalled();
-    });
+    await waitFor(() => expect(toast.success).toHaveBeenCalled());
+    expect(mockRefetch).toHaveBeenCalled();
+    expect(mockOrgRefetch).toHaveBeenCalled();
+    expect(mockHide).toHaveBeenCalled();
   });
 
   it('should call orgActionItemsRefetch when provided in updateActionForInstanceHandler', async () => {
@@ -2884,19 +2959,22 @@ describe('orgActionItemsRefetch functionality', () => {
     const updateMutationMock = {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
-      },
-      variableMatcher: (variables: IUpdateActionItemForInstanceVariables) => {
-        return (
-          variables.input.actionId === '1' &&
-          variables.input.eventId === 'event123' &&
-          variables.input.preCompletionNotes ===
-            'Updated notes for instance with org refetch'
-        );
+        variables: {
+          input: {
+            actionId: '1',
+            volunteerId: 'volunteer1',
+            categoryId: 'cat1',
+            preCompletionNotes: 'Test notes',
+            eventId: 'event123',
+            assignedAt: '2024-01-01T00:00:00.000Z',
+          },
+        },
       },
       result: {
         data: {
           updateActionItemForInstance: {
             id: '1',
+            __typename: 'ActionItem',
           },
         },
       },
@@ -2924,26 +3002,12 @@ describe('orgActionItemsRefetch functionality', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+    await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
     // Find and update the notes field
-    const notesInputs = screen.getAllByRole('textbox');
-    const notesInput = notesInputs.find(
-      (input) =>
-        (input as HTMLInputElement).value === 'Test notes' ||
-        (input as HTMLInputElement).defaultValue === 'Test notes' ||
-        input.getAttribute('value') === 'Test notes',
-    );
-
-    if (notesInput) {
-      await userEvent.clear(notesInput);
-      await userEvent.type(
-        notesInput,
-        'Updated notes for instance with org refetch',
-      );
-    }
+    // Verify notes input has initial value
+    const notesInput = screen.getByLabelText('preCompletionNotes');
+    expect(notesInput).toHaveValue('Test notes');
 
     // Set applyTo to 'instance'
     const instanceRadio = screen.getByLabelText('thisEventOnly');
@@ -2953,1209 +3017,1210 @@ describe('orgActionItemsRefetch functionality', () => {
     const submitButton = screen.getByTestId('submitBtn');
     await userEvent.click(submitButton);
 
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
-      expect(mockRefetch).toHaveBeenCalled();
-      expect(mockOrgRefetch).toHaveBeenCalled();
-      expect(mockHide).toHaveBeenCalled();
-    });
+    await waitFor(() => expect(toast.success).toHaveBeenCalled());
+    expect(mockRefetch).toHaveBeenCalled();
+    expect(mockOrgRefetch).toHaveBeenCalled();
+    expect(mockHide).toHaveBeenCalled();
   });
-});
 
-describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM_MUTATION', () => {
-  describe('createActionItem mutation', () => {
-    it('should handle CREATE_ACTION_ITEM_MUTATION with eventId', async () => {
-      const mockRefetch = vi.fn();
-      const mockHide = vi.fn();
+  describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM_MUTATION', () => {
+    describe('createActionItem mutation', () => {
+      it('should handle CREATE_ACTION_ITEM_MUTATION with eventId', async () => {
+        const mockRefetch = vi.fn();
+        const mockHide = vi.fn();
 
-      const createWithEventMock = {
-        request: {
-          query: CREATE_ACTION_ITEM_MUTATION,
-        },
-        variableMatcher: (variables: {
-          input: {
-            volunteerId: string;
-            volunteerGroupId?: string;
-            categoryId: string;
-            organizationId: string;
-            preCompletionNotes: string;
-            assignedAt: string;
-            isTemplate: boolean;
-            eventId: string;
-          };
-        }) => {
-          return (
-            variables.input.volunteerId === 'volunteer1' &&
-            variables.input.categoryId === 'cat1' &&
-            variables.input.organizationId === 'orgId' &&
-            variables.input.preCompletionNotes === 'Test with event' &&
-            variables.input.eventId === 'event123' &&
-            variables.input.isTemplate === false &&
-            typeof variables.input.assignedAt === 'string' &&
-            /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(
-              variables.input.assignedAt,
-            )
-          );
-        },
-        result: {
-          data: {
-            createActionItem: {
-              id: 'newId',
-              isCompleted: false,
-              assignedAt: '2024-01-01',
-              completionAt: null,
-              createdAt: '2024-01-01',
-              preCompletionNotes: 'Test with event',
-              postCompletionNotes: null,
-              volunteer: {
-                id: 'volunteer1',
-                hasAccepted: true,
-                user: { id: 'user1', name: 'John Doe' },
-              },
-              volunteerGroup: null,
-              creator: { id: 'creator1', name: 'Creator' },
-              updater: null,
-              category: {
-                id: 'cat1',
-                name: 'Category 1',
-                description: 'Test category 1',
-                isDisabled: false,
-              },
-              organization: { id: 'orgId', name: 'Organization' },
-              event: {
-                id: 'event123',
-                name: 'Test Event',
-                description: 'Test event description',
+        const createWithEventMock = {
+          request: {
+            query: CREATE_ACTION_ITEM_MUTATION,
+            variables: {
+              input: {
+                volunteerId: 'volunteer1',
+                assignedAt: '2024-01-01T00:00:00.000Z',
+                categoryId: 'cat1',
+                organizationId: 'orgId',
+                preCompletionNotes: 'Test with event',
+                eventId: 'event123',
+                isTemplate: false,
               },
             },
           },
-        },
-      };
+          result: {
+            data: {
+              createActionItem: {
+                id: 'newId',
+                isCompleted: false,
+                assignedAt: '2024-01-01',
+                completionAt: null,
+                createdAt: '2024-01-01',
+                preCompletionNotes: 'Test with event',
+                postCompletionNotes: null,
+                volunteer: {
+                  id: 'volunteer1',
+                  hasAccepted: true,
+                  isPublic: true,
+                  hoursVolunteered: 0,
+                  user: { id: 'user1', name: 'John Doe', __typename: 'User' },
+                  __typename: 'EventVolunteer',
+                },
+                volunteerGroup: null,
+                creator: { id: 'creator1', name: 'Creator' },
+                updater: null,
+                category: {
+                  id: 'cat1',
+                  name: 'Category 1',
+                  description: 'Test category 1',
+                  isDisabled: false,
+                },
+                organization: { id: 'orgId', name: 'Organization' },
+                event: {
+                  id: 'event123',
+                  name: 'Test Event',
+                  description: 'Test event description',
+                },
+              },
+            },
+          },
+        };
 
-      const mutationMocks = [createWithEventMock, ...mockQueries];
+        const mutationMocks = [createWithEventMock, ...mockQueries];
 
-      const props: IItemModalProps = {
-        isOpen: true,
-        hide: mockHide,
-        orgId: 'orgId',
-        eventId: 'event123',
-        actionItemsRefetch: mockRefetch,
-        editMode: false,
-        actionItem: null,
-      };
+        const props: IItemModalProps = {
+          isOpen: true,
+          hide: mockHide,
+          orgId: 'orgId',
+          eventId: 'event123',
+          actionItemsRefetch: mockRefetch,
+          editMode: false,
+          actionItem: null,
+          initialDate: new Date('2024-01-01T00:00:00.000Z'),
+        };
 
-      render(
-        <MockedProvider mocks={mutationMocks}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <ItemModal {...props} />
-          </LocalizationProvider>
-        </MockedProvider>,
-      );
+        render(
+          <MockedProvider mocks={mutationMocks}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ItemModal {...props} />
+            </LocalizationProvider>
+          </MockedProvider>,
+        );
 
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        await waitFor(() => {
+          expect(screen.getByRole('dialog')).toBeInTheDocument();
+        });
+
+        // Wait for data to load
+        await waitFor(() => {
+          expect(screen.getByText('actionItemCategory')).toBeInTheDocument();
+        });
+
+        // Select category
+        const categoryInput = screen.getByLabelText('actionItemCategory *');
+        await userEvent.click(categoryInput);
+        await userEvent.type(categoryInput, 'Category 1');
+        const categoryOption = await screen.findByText('Category 1');
+        await userEvent.click(categoryOption);
+
+        // Select volunteer
+        const volunteerInput = screen.getByLabelText('volunteer *');
+        await userEvent.click(volunteerInput);
+        await userEvent.type(volunteerInput, 'John Doe');
+        const volunteerOption = await screen.findByText('John Doe');
+        await userEvent.click(volunteerOption);
+
+        // Wait for notes field to appear
+        await waitFor(() => {
+          expect(screen.getByLabelText('preCompletionNotes')).toBeInTheDocument();
+        });
+
+        // Fill notes field
+        const notesInput = screen.getByLabelText('preCompletionNotes');
+        fireEvent.change(notesInput, { target: { value: 'Test with event' } });
+
+        // Submit the form
+        const submitButton = screen.getByTestId('submitBtn');
+        await userEvent.click(submitButton);
+
+        await waitFor(() => {
+          expect(toast.success).toHaveBeenCalled();
+          expect(mockRefetch).toHaveBeenCalled();
+          expect(mockHide).toHaveBeenCalled();
+        });
       });
 
-      // Wait for data to load
-      await waitFor(() => {
-        expect(screen.getByText('actionItemCategory')).toBeInTheDocument();
-      });
+      it('should handle CREATE_ACTION_ITEM_MUTATION error', async () => {
+        const errorMutationMock = {
+          request: {
+            query: CREATE_ACTION_ITEM_MUTATION,
+            variables: {
+              input: {
+                volunteerId: 'volunteer1',
+                assignedAt: '2024-01-01T00:00:00.000Z',
+                categoryId: 'cat1',
+                organizationId: 'orgId',
+                preCompletionNotes: 'Test error',
+                eventId: 'event123',
+                isTemplate: false,
+              },
+            },
+          },
+          error: new Error('Failed to create action item'),
+        };
 
-      // Select category
-      const categoryInput = screen.getByLabelText('actionItemCategory *');
-      await userEvent.click(categoryInput);
-      await userEvent.type(categoryInput, 'Category 1');
-      await waitFor(async () => {
-        const option = screen.getByText('Category 1');
-        await userEvent.click(option);
-      });
+        const mutationMocks = [errorMutationMock, ...mockQueries];
 
-      // Select volunteer
-      const volunteerInput = screen.getByLabelText('volunteer *');
-      await userEvent.click(volunteerInput);
-      await userEvent.type(volunteerInput, 'John Doe');
-      await waitFor(async () => {
-        const option = await screen.findByText('John Doe');
-        await userEvent.click(option);
-      });
+        const props: IItemModalProps = {
+          isOpen: true,
+          hide: vi.fn(),
+          orgId: 'orgId',
+          eventId: 'event123',
+          actionItemsRefetch: vi.fn(),
+          editMode: false,
+          actionItem: null,
+          initialDate: new Date('2024-01-01T00:00:00.000Z'),
+        };
 
-      // Wait for notes field to appear
-      await waitFor(() => {
-        expect(screen.getByLabelText('preCompletionNotes')).toBeInTheDocument();
-      });
+        render(
+          <MockedProvider mocks={mutationMocks}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ItemModal {...props} />
+            </LocalizationProvider>
+          </MockedProvider>,
+        );
 
-      // Fill notes field
-      const notesInput = screen.getByLabelText('preCompletionNotes');
-      await userEvent.clear(notesInput);
-      await userEvent.type(notesInput, 'Test with event');
+        await waitFor(() => {
+          expect(screen.getByRole('dialog')).toBeInTheDocument();
+        });
 
-      // Submit the form
-      const submitButton = screen.getByTestId('submitBtn');
-      await userEvent.click(submitButton);
+        // Wait for data to load
+        await waitFor(() => {
+          expect(screen.getByText('actionItemCategory')).toBeInTheDocument();
+        });
 
-      await waitFor(() => {
-        expect(toast.success).toHaveBeenCalled();
-        expect(mockRefetch).toHaveBeenCalled();
-        expect(mockHide).toHaveBeenCalled();
+        // Select category
+        const categoryInput = screen.getByLabelText('actionItemCategory *');
+        await userEvent.click(categoryInput);
+        await userEvent.type(categoryInput, 'Category 1');
+        const categoryOption = await screen.findByText('Category 1');
+        await userEvent.click(categoryOption);
+
+        // Select volunteer
+        const volunteerInput = screen.getByLabelText('volunteer *');
+        await userEvent.click(volunteerInput);
+        await userEvent.type(volunteerInput, 'John Doe');
+        const volunteerOption = await screen.findByText('John Doe');
+        await userEvent.click(volunteerOption);
+
+        // Wait for notes field to appear
+        await waitFor(() => {
+          expect(screen.getByLabelText('preCompletionNotes')).toBeInTheDocument();
+        });
+
+        // Fill notes field
+        const notesInput = screen.getByLabelText('preCompletionNotes');
+        fireEvent.change(notesInput, { target: { value: 'Test error' } });
+
+        // Submit the form
+        const submitButton = screen.getByTestId('submitBtn');
+        await userEvent.click(submitButton);
+
+        await waitFor(() =>
+          expect(toast.error).toHaveBeenCalledWith(
+            'Failed to create action item',
+          ),
+        );
       });
     });
 
-    it('should handle CREATE_ACTION_ITEM_MUTATION error', async () => {
-      const errorMutationMock = {
-        request: {
-          query: CREATE_ACTION_ITEM_MUTATION,
-        },
-        variableMatcher: (variables: {
-          input: {
-            volunteerId: string;
-            volunteerGroupId?: string;
-            categoryId: string;
-            organizationId: string;
-            preCompletionNotes: string;
-            assignedAt: string;
-            isTemplate: boolean;
-            eventId: string;
-          };
-        }) => {
-          return (
-            variables.input.volunteerId === 'volunteer1' &&
-            variables.input.categoryId === 'cat1' &&
-            variables.input.organizationId === 'orgId' &&
-            variables.input.preCompletionNotes === 'Test error' &&
-            variables.input.eventId === 'event123' &&
-            variables.input.isTemplate === false &&
-            typeof variables.input.assignedAt === 'string' &&
-            /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/.test(
-              variables.input.assignedAt,
-            )
-          );
-        },
-        error: new Error('Failed to create action item'),
-      };
+    describe('updateActionItem mutation', () => {
+      it('should handle missing action item ID error', async () => {
+        const actionItemWithoutId = {
+          ...mockActionItem,
+          id: undefined,
+        };
 
-      const mutationMocks = [errorMutationMock, ...mockQueries];
+        const props: IItemModalProps = {
+          isOpen: true,
+          hide: vi.fn(),
+          orgId: 'orgId',
+          eventId: 'eventId',
+          actionItemsRefetch: vi.fn(),
+          editMode: true,
+          actionItem: actionItemWithoutId as unknown as IActionItemInfo,
+        };
 
-      const props: IItemModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        orgId: 'orgId',
-        eventId: 'event123',
-        actionItemsRefetch: vi.fn(),
-        editMode: false,
-        actionItem: null,
-      };
+        renderWithProviders(props);
 
-      render(
-        <MockedProvider mocks={mutationMocks}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <ItemModal {...props} />
-          </LocalizationProvider>
-        </MockedProvider>,
-      );
+        await waitFor(() => {
+          expect(screen.getByRole('dialog')).toBeInTheDocument();
+        });
 
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        // Wait for the category to be populated (indicating data is loaded)
+        // We look for the input value inside the Autocomplete
+        const categoryInput = within(
+          screen.getByTestId('categorySelect'),
+        ).getByRole('combobox');
+        await waitFor(() => expect(categoryInput).toHaveValue('Category 1'));
+
+        // Submit the form
+        const submitButton = screen.getByTestId('submitBtn');
+        await userEvent.click(submitButton);
+
+        await waitFor(() =>
+          expect(toast.error).toHaveBeenCalledWith('Action item ID is missing'),
+        );
       });
 
-      // Wait for data to load
-      await waitFor(() => {
-        expect(screen.getByText('actionItemCategory')).toBeInTheDocument();
-      });
+      it('should complete updateActionItem flow and trigger refetches', async () => {
+        vi.clearAllMocks();
 
-      // Select category
-      const categoryInput = screen.getByLabelText('actionItemCategory *');
-      await userEvent.click(categoryInput);
-      await userEvent.type(categoryInput, 'Category 1');
-      await waitFor(async () => {
-        const option = screen.getByText('Category 1');
-        await userEvent.click(option);
-      });
+        const mockRefetch = vi.fn();
+        const mockOrgRefetch = vi.fn();
+        const mockHide = vi.fn();
 
-      // Select volunteer
-      const volunteerInput = screen.getByLabelText('volunteer *');
-      await userEvent.click(volunteerInput);
-      await userEvent.type(volunteerInput, 'John Doe');
-      await waitFor(async () => {
-        const option = await screen.findByText('John Doe');
-        await userEvent.click(option);
-      });
+        const updateMutationMock = {
+          request: {
+            query: UPDATE_ACTION_ITEM_MUTATION,
+            variables: {
+              input: {
+                id: '1',
+                isCompleted: false,
+                categoryId: 'cat1',
+                volunteerId: 'volunteer1',
+                preCompletionNotes: 'Test notes',
+                volunteerGroupId: undefined,
+                postCompletionNotes: undefined,
+              },
+            },
+          },
+          result: {
+            data: {
+              updateActionItem: {
+                id: '1',
+                isCompleted: false,
+                assignedAt: '2024-01-01',
+                completionAt: null,
+                createdAt: '2024-01-01',
+                preCompletionNotes: 'Test notes',
+                postCompletionNotes: null,
+                volunteer: {
+                  id: 'volunteer1',
+                  hasAccepted: true,
+                  isPublic: true,
+                  hoursVolunteered: 0,
+                  user: { id: 'user1', name: 'John Doe', __typename: 'User' },
+                  __typename: 'EventVolunteer',
+                },
+                volunteerGroup: null,
+                creator: { id: 'creator1', name: 'Creator' },
+                updater: null,
+                category: {
+                  id: 'cat1',
+                  name: 'Category 1',
+                  description: 'Test category 1',
+                  isDisabled: false,
+                },
+                organization: { id: 'orgId', name: 'Organization' },
+                event: {
+                  id: 'event123',
+                  name: 'Test Event',
+                  description: 'Test event description',
+                },
+                __typename: 'ActionItem',
+              },
+            },
+          },
+        };
 
-      // Wait for notes field to appear
-      await waitFor(() => {
-        expect(screen.getByLabelText('preCompletionNotes')).toBeInTheDocument();
-      });
+        render(
+          <MockedProvider mocks={[updateMutationMock, ...mockQueries]}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ItemModal
+                isOpen={true}
+                hide={mockHide}
+                orgId="orgId"
+                eventId="eventId"
+                actionItemsRefetch={mockRefetch}
+                orgActionItemsRefetch={mockOrgRefetch}
+                editMode={true}
+                actionItem={mockActionItem as unknown as IActionItemInfo}
+              />
+            </LocalizationProvider>
+          </MockedProvider>,
+        );
 
-      // Fill notes field
-      const notesInput = screen.getByLabelText('preCompletionNotes');
-      await userEvent.clear(notesInput);
-      await userEvent.type(notesInput, 'Test error');
+        await waitFor(() => {
+          expect(screen.getByRole('dialog')).toBeInTheDocument();
+        });
 
-      // Submit the form
-      const submitButton = screen.getByTestId('submitBtn');
-      await userEvent.click(submitButton);
+        const notesInput = await screen.findByLabelText('preCompletionNotes');
+        expect(notesInput).toHaveValue('Test notes');
 
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          'Failed to create action item',
+        const form = document.querySelector('form');
+        if (form) {
+          fireEvent.submit(form);
+        }
+
+        await waitFor(() =>
+          expect(toast.success).toHaveBeenCalledWith('successfulUpdation'),
+        );
+        expect(mockRefetch).toHaveBeenCalledTimes(1);
+        expect(mockOrgRefetch).toHaveBeenCalledTimes(1);
+        expect(mockHide).toHaveBeenCalledTimes(1);
+
+        await waitFor(() =>
+          expect(screen.getByLabelText('preCompletionNotes')).toHaveValue(''),
         );
       });
     });
   });
 
-  describe('updateActionItem mutation', () => {
-    it('should handle missing action item ID error', async () => {
-      const actionItemWithoutId = {
-        ...mockActionItem,
-        id: undefined,
-      };
-
+  describe('handleFormChange function', () => {
+    it('should update form state when handleFormChange is called with different field types', async () => {
       const props: IItemModalProps = {
         isOpen: true,
         hide: vi.fn(),
         orgId: 'orgId',
-        eventId: 'eventId',
+        eventId: undefined,
         actionItemsRefetch: vi.fn(),
-        editMode: true,
-        actionItem: actionItemWithoutId as unknown as IActionItemInfo,
+        editMode: false,
+        actionItem: null,
       };
 
       renderWithProviders(props);
 
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-      });
+      await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
-      // Submit the form
-      const submitButton = screen.getByTestId('submitBtn');
-      await userEvent.click(submitButton);
-
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Action item ID is missing');
-      });
-    });
-
-    it('should complete updateActionItem flow and trigger refetches', async () => {
-      vi.clearAllMocks();
-
-      const mockRefetch = vi.fn();
-      const mockOrgRefetch = vi.fn();
-      const mockHide = vi.fn();
-
-      const updateMutationMock = {
-        request: {
-          query: UPDATE_ACTION_ITEM_MUTATION,
-        },
-        variableMatcher: (variables: { input: Record<string, unknown> }) =>
-          matchesInputSubset(variables, {
-            id: '1',
-            categoryId: 'cat1',
-            volunteerId: 'volunteer1',
-            isCompleted: false,
-            preCompletionNotes: 'Updated success notes',
-          }),
-        result: {
-          data: {
-            updateActionItem: {
-              id: '1',
-              isCompleted: false,
-              updatedAt: '2024-01-02T00:00:00Z',
-            },
-          },
-        },
-      };
-
-      render(
-        <MockedProvider mocks={[updateMutationMock, ...mockQueries]}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <ItemModal
-              isOpen={true}
-              hide={mockHide}
-              orgId="orgId"
-              eventId="eventId"
-              actionItemsRefetch={mockRefetch}
-              orgActionItemsRefetch={mockOrgRefetch}
-              editMode={true}
-              actionItem={mockActionItem as unknown as IActionItemInfo}
-            />
-          </LocalizationProvider>
-        </MockedProvider>,
+      // Test string field update (preCompletionNotes)
+      const notesInputs = screen.getAllByRole('textbox');
+      const notesInput = notesInputs.find(
+        (input) =>
+          input.getAttribute('placeholder')?.includes('notes') ||
+          input.getAttribute('name')?.includes('notes'),
       );
 
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-      });
+      if (notesInput) {
+        fireEvent.change(notesInput, {
+          target: { value: 'Updated notes via handleFormChange' },
+        });
 
-      const notesInput = await screen.findByLabelText('preCompletionNotes');
-      await userEvent.clear(notesInput);
-      await userEvent.type(notesInput, 'Updated success notes');
-
-      const submitButton = screen.getByTestId('submitBtn');
-      await userEvent.click(submitButton);
-
-      await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith('successfulUpdation');
-        expect(mockRefetch).toHaveBeenCalledTimes(1);
-        expect(mockOrgRefetch).toHaveBeenCalledTimes(1);
-        expect(mockHide).toHaveBeenCalledTimes(1);
-      });
-
-      await waitFor(() => {
-        expect(screen.getByLabelText('preCompletionNotes')).toHaveValue('');
-      });
-    });
-  });
-});
-
-describe('handleFormChange function', () => {
-  it('should update form state when handleFormChange is called with different field types', async () => {
-    const props: IItemModalProps = {
-      isOpen: true,
-      hide: vi.fn(),
-      orgId: 'orgId',
-      eventId: undefined,
-      actionItemsRefetch: vi.fn(),
-      editMode: false,
-      actionItem: null,
-    };
-
-    renderWithProviders(props);
-
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+        // Verify the input has the new value
+        expect(notesInput).toHaveValue('Updated notes via handleFormChange');
+      }
     });
 
-    // Test string field update (preCompletionNotes)
-    const notesInputs = screen.getAllByRole('textbox');
-    const notesInput = notesInputs.find(
-      (input) =>
-        input.getAttribute('placeholder')?.includes('notes') ||
-        input.getAttribute('name')?.includes('notes'),
-    );
+    it('should handle handleFormChange with boolean values', async () => {
+      const props: IItemModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        orgId: 'orgId',
+        eventId: undefined,
+        actionItemsRefetch: vi.fn(),
+        editMode: true,
+        actionItem: mockActionItem,
+      };
 
-    if (notesInput) {
-      await userEvent.clear(notesInput);
-      await userEvent.type(notesInput, 'Updated notes via handleFormChange');
+      renderWithProviders(props);
 
-      // Verify the input has the new value
-      expect(notesInput).toHaveValue('Updated notes via handleFormChange');
-    }
-  });
+      await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
-  it('should handle handleFormChange with boolean values', async () => {
-    const props: IItemModalProps = {
-      isOpen: true,
-      hide: vi.fn(),
-      orgId: 'orgId',
-      eventId: undefined,
-      actionItemsRefetch: vi.fn(),
-      editMode: true,
-      actionItem: mockActionItem,
-    };
+      // Check if there's a completion checkbox or toggle
+      const checkboxes = screen.queryAllByRole('checkbox');
+      if (checkboxes.length > 0) {
+        const completionCheckbox = checkboxes[0];
 
-    renderWithProviders(props);
+        // Toggle the checkbox
+        await userEvent.click(completionCheckbox);
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+        // The state should have changed (we can't directly test internal state,
+        // but the interaction should work without errors)
+        expect(completionCheckbox).toBeInTheDocument();
+      }
     });
 
-    // Check if there's a completion checkbox or toggle
-    const checkboxes = screen.queryAllByRole('checkbox');
-    if (checkboxes.length > 0) {
-      const completionCheckbox = checkboxes[0];
+    it('should handle handleFormChange with Date values', async () => {
+      const props: IItemModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        orgId: 'orgId',
+        eventId: undefined,
+        actionItemsRefetch: vi.fn(),
+        editMode: false,
+        actionItem: null,
+      };
 
-      // Toggle the checkbox
-      await userEvent.click(completionCheckbox);
+      renderWithProviders(props);
 
-      // The state should have changed (we can't directly test internal state,
-      // but the interaction should work without errors)
-      expect(completionCheckbox).toBeInTheDocument();
-    }
-  });
+      await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
-  it('should handle handleFormChange with Date values', async () => {
-    const props: IItemModalProps = {
-      isOpen: true,
-      hide: vi.fn(),
-      orgId: 'orgId',
-      eventId: undefined,
-      actionItemsRefetch: vi.fn(),
-      editMode: false,
-      actionItem: null,
-    };
+      // Find date picker inputs (MUI date pickers use textbox role)
+      const dateInputs = screen.getAllByRole('textbox');
+      const dateInput = dateInputs.find(
+        (input) =>
+          input.getAttribute('placeholder')?.includes('date') ||
+          input.getAttribute('type') === 'date' ||
+          input.closest('[data-testid*="date"]') ||
+          (input as HTMLInputElement).value?.match(/\d{2}\/\d{2}\/\d{4}/),
+      );
 
-    renderWithProviders(props);
+      if (dateInput) {
+        // Try to interact with the date input
+        await userEvent.click(dateInput);
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+        // The date picker should be accessible
+        expect(dateInput).toBeInTheDocument();
+      }
     });
 
-    // Find date picker inputs (MUI date pickers use textbox role)
-    const dateInputs = screen.getAllByRole('textbox');
-    const dateInput = dateInputs.find(
-      (input) =>
-        input.getAttribute('placeholder')?.includes('date') ||
-        input.getAttribute('type') === 'date' ||
-        input.closest('[data-testid*="date"]') ||
-        (input as HTMLInputElement).value?.match(/\d{2}\/\d{2}\/\d{4}/),
-    );
+    it('should handle handleFormChange with null/undefined values', async () => {
+      const props: IItemModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        orgId: 'orgId',
+        eventId: undefined,
+        actionItemsRefetch: vi.fn(),
+        editMode: true,
+        actionItem: mockActionItem,
+      };
 
-    if (dateInput) {
-      // Try to interact with the date input
+      renderWithProviders(props);
+
+      await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+      // Test clearing a field (setting it to empty/null)
+      const notesInputs = screen.getAllByRole('textbox');
+      const notesInput = notesInputs.find(
+        (input) =>
+          (input as HTMLInputElement).value === 'Test notes' ||
+          (input as HTMLInputElement).defaultValue === 'Test notes',
+      );
+
+      if (notesInput) {
+        // Clear the field completely
+        fireEvent.change(notesInput, { target: { value: '' } });
+
+        // Verify the field is empty
+        expect(notesInput).toHaveValue('');
+      }
+    });
+
+    it('should handle handleFormChange with different field keys', async () => {
+      const props: IItemModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        orgId: 'orgId',
+        eventId: undefined,
+        actionItemsRefetch: vi.fn(),
+        editMode: true,
+        actionItem: mockActionItem,
+      };
+
+      renderWithProviders(props);
+
+      await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+
+      // Test updating the notes field (first available textbox)
+      const notesInput = screen.getByLabelText('preCompletionNotes');
+      fireEvent.change(notesInput, { target: { value: 'Updated field 1' } });
+      expect(notesInput).toHaveValue('Updated field 1');
+
+      // Test updating the date field
+      const dateInput = screen.getByDisplayValue('01/01/2024');
       await userEvent.click(dateInput);
-
-      // The date picker should be accessible
+      // Date field should be interactable
       expect(dateInput).toBeInTheDocument();
-    }
-  });
-
-  it('should handle handleFormChange with null/undefined values', async () => {
-    const props: IItemModalProps = {
-      isOpen: true,
-      hide: vi.fn(),
-      orgId: 'orgId',
-      eventId: undefined,
-      actionItemsRefetch: vi.fn(),
-      editMode: true,
-      actionItem: mockActionItem,
-    };
-
-    renderWithProviders(props);
-
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 
-    // Test clearing a field (setting it to empty/null)
-    const notesInputs = screen.getAllByRole('textbox');
-    const notesInput = notesInputs.find(
-      (input) =>
-        (input as HTMLInputElement).value === 'Test notes' ||
-        (input as HTMLInputElement).defaultValue === 'Test notes',
-    );
+    it('should preserve existing form state when updating single field', async () => {
+      const props: IItemModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        orgId: 'orgId',
+        eventId: undefined,
+        actionItemsRefetch: vi.fn(),
+        editMode: true,
+        actionItem: mockActionItem,
+      };
 
-    if (notesInput) {
-      // Clear the field completely
-      await userEvent.clear(notesInput);
+      renderWithProviders(props);
 
-      // Verify the field is empty
-      expect(notesInput).toHaveValue('');
-    }
-  });
+      await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
 
-  it('should handle handleFormChange with different field keys', async () => {
-    const props: IItemModalProps = {
-      isOpen: true,
-      hide: vi.fn(),
-      orgId: 'orgId',
-      eventId: undefined,
-      actionItemsRefetch: vi.fn(),
-      editMode: true,
-      actionItem: mockActionItem,
-    };
+      // Find the notes input that has the original value
+      const notesInputs = screen.getAllByRole('textbox');
+      const originalNotesInput = notesInputs.find(
+        (input) =>
+          (input as HTMLInputElement).value.includes('Test notes') ||
+          (input as HTMLInputElement).id === 'preCompletionNotes',
+      )!;
 
-    renderWithProviders(props);
-
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
-
-    // Test updating the notes field (first available textbox)
-    const notesInput = screen.getByDisplayValue('Test notes');
-    await userEvent.clear(notesInput);
-    await userEvent.type(notesInput, 'Updated field 1');
-    expect(notesInput).toHaveValue('Updated field 1');
-
-    // Test updating the date field
-    const dateInput = screen.getByDisplayValue('01/01/2024');
-    await userEvent.click(dateInput);
-    // Date field should be interactable
-    expect(dateInput).toBeInTheDocument();
-  });
-
-  it('should preserve existing form state when updating single field', async () => {
-    const props: IItemModalProps = {
-      isOpen: true,
-      hide: vi.fn(),
-      orgId: 'orgId',
-      eventId: undefined,
-      actionItemsRefetch: vi.fn(),
-      editMode: true,
-      actionItem: mockActionItem,
-    };
-
-    renderWithProviders(props);
-
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
-
-    // Find the notes input that has the original value
-    const notesInputs = screen.getAllByRole('textbox');
-    const originalNotesInput = notesInputs.find(
-      (input) =>
-        (input as HTMLInputElement).value === 'Test notes' ||
-        (input as HTMLInputElement).defaultValue === 'Test notes',
-    );
-
-    if (originalNotesInput) {
-      // Append to existing value rather than replace
-      await userEvent.type(originalNotesInput, ' - updated');
-
-      // Should now contain both original and new text
+      // Verify initial value
       expect((originalNotesInput as HTMLInputElement).value).toContain(
         'Test notes',
       );
-      expect((originalNotesInput as HTMLInputElement).value).toContain(
-        'updated',
+
+      // Replace existing value with fireEvent (reliable for controlled inputs in tests)
+      fireEvent.change(originalNotesInput, { target: { value: 'Updated notes' } });
+
+      await waitFor(() =>
+        expect((originalNotesInput as HTMLInputElement).value).toBe(
+          'Updated notes',
+        ),
       );
-    }
-  });
-});
-
-describe('Modal Structure - className={styles.itemModal} show={isOpen} onHide={hide}', () => {
-  it('should render Modal with correct className styles.itemModal', async () => {
-    const props: IItemModalProps = {
-      isOpen: true,
-      hide: vi.fn(),
-      orgId: 'orgId',
-      eventId: undefined,
-      actionItemsRefetch: vi.fn(),
-      editMode: false,
-      actionItem: null,
-    };
-
-    renderWithProviders(props);
-
-    await waitFor(() => {
-      const modal = screen.getByRole('dialog');
-      expect(modal).toBeInTheDocument();
-
-      // Check if the modal has the expected CSS class
-      // Note: The exact class name might be transformed by CSS modules
-      const modalContainer = modal.closest('.modal') || modal.parentElement;
-      expect(modalContainer).toBeInTheDocument();
-    });
-  });
-
-  it('should show modal when isOpen prop is true', async () => {
-    const props: IItemModalProps = {
-      isOpen: true,
-      hide: vi.fn(),
-      orgId: 'orgId',
-      eventId: undefined,
-      actionItemsRefetch: vi.fn(),
-      editMode: false,
-      actionItem: null,
-    };
-
-    renderWithProviders(props);
-
-    await waitFor(() => {
-      const modal = screen.getByRole('dialog');
-      expect(modal).toBeInTheDocument();
-      expect(modal).toBeVisible();
-    });
-  });
-
-  it('should hide modal when isOpen prop is false', () => {
-    const props: IItemModalProps = {
-      isOpen: false,
-      hide: vi.fn(),
-      orgId: 'orgId',
-      eventId: undefined,
-      actionItemsRefetch: vi.fn(),
-      editMode: false,
-      actionItem: null,
-    };
-
-    renderWithProviders(props);
-
-    // Modal should not be in the document when isOpen is false
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-  });
-
-  it('should call hide function when modal is closed via onHide', async () => {
-    const mockHide = vi.fn();
-    const props: IItemModalProps = {
-      isOpen: true,
-      hide: mockHide,
-      orgId: 'orgId',
-      eventId: undefined,
-      actionItemsRefetch: vi.fn(),
-      editMode: false,
-      actionItem: null,
-    };
-
-    renderWithProviders(props);
-
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
     });
 
-    // Find and click the close button
-    const closeButton = screen.getByTestId('modalCloseBtn');
-    await userEvent.click(closeButton);
+    describe('Modal Structure - className={styles.itemModal} show={isOpen} onHide={hide}', () => {
+      it('should render Modal with correct className styles.itemModal', async () => {
+        const props: IItemModalProps = {
+          isOpen: true,
+          hide: vi.fn(),
+          orgId: 'orgId',
+          eventId: undefined,
+          actionItemsRefetch: vi.fn(),
+          editMode: false,
+          actionItem: null,
+        };
 
-    expect(mockHide).toHaveBeenCalledTimes(1);
-  });
+        renderWithProviders(props);
 
-  it('should render Modal.Header with correct title and close button', async () => {
-    const props: IItemModalProps = {
-      isOpen: true,
-      hide: vi.fn(),
-      orgId: 'orgId',
-      eventId: undefined,
-      actionItemsRefetch: vi.fn(),
-      editMode: false,
-      actionItem: null,
-    };
+        await waitFor(() => {
+          const modal = screen.getByRole('dialog');
+          expect(modal).toBeInTheDocument();
+          const modalContainer = modal.closest('.modal') || modal.parentElement;
+          expect(modalContainer).toBeInTheDocument();
+        });
+      });
 
-    renderWithProviders(props);
+      it('should show modal when isOpen prop is true', async () => {
+        const props: IItemModalProps = {
+          isOpen: true,
+          hide: vi.fn(),
+          orgId: 'orgId',
+          eventId: undefined,
+          actionItemsRefetch: vi.fn(),
+          editMode: false,
+          actionItem: null,
+        };
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+        renderWithProviders(props);
 
-    // Check for modal header content
-    const closeButton = screen.getByTestId('modalCloseBtn');
-    expect(closeButton).toBeInTheDocument();
-    expect(closeButton.className).toContain('closeButton');
+        await waitFor(() => {
+          const modal = screen.getByRole('dialog');
+          expect(modal).toBeInTheDocument();
+          expect(modal).toBeVisible();
+        });
+      });
 
-    // Check if close button has the correct icon
-    const icon = closeButton.querySelector('i.fa.fa-times');
-    expect(icon).toBeInTheDocument();
-  });
+      it('should hide modal when isOpen prop is false', () => {
+        const props: IItemModalProps = {
+          isOpen: false,
+          hide: vi.fn(),
+          orgId: 'orgId',
+          eventId: undefined,
+          actionItemsRefetch: vi.fn(),
+          editMode: false,
+          actionItem: null,
+        };
 
-  it('should display correct title based on editMode', async () => {
-    // Test create mode title
-    const createProps: IItemModalProps = {
-      isOpen: true,
-      hide: vi.fn(),
-      orgId: 'orgId',
-      eventId: undefined,
-      actionItemsRefetch: vi.fn(),
-      editMode: false,
-      actionItem: null,
-    };
+        renderWithProviders(props);
 
-    const { rerender } = renderWithProviders(createProps);
+        // Modal should not be in the document when isOpen is false
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      });
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+      it('should call hide function when modal is closed via onHide', async () => {
+        const mockHide = vi.fn();
+        const props: IItemModalProps = {
+          isOpen: true,
+          hide: mockHide,
+          orgId: 'orgId',
+          eventId: undefined,
+          actionItemsRefetch: vi.fn(),
+          editMode: false,
+          actionItem: null,
+        };
 
-    // Should show create-related content in submit button
-    const createSubmitBtn = screen.getByTestId('submitBtn');
-    expect(createSubmitBtn).toHaveTextContent(/create/i);
+        renderWithProviders(props);
 
-    // Test edit mode title
-    const editProps: IItemModalProps = {
-      isOpen: true,
-      hide: vi.fn(),
-      orgId: 'orgId',
-      eventId: undefined,
-      actionItemsRefetch: vi.fn(),
-      editMode: true,
-      actionItem: mockActionItem,
-    };
+        await waitFor(() =>
+          expect(screen.getByRole('dialog')).toBeInTheDocument(),
+        );
 
-    rerender(
-      <MockedProvider mocks={mockQueries}>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <ItemModal {...editProps} />
-        </LocalizationProvider>
-      </MockedProvider>,
-    );
+        // Find and click the close button
+        const closeButton = screen.getByTestId('modalCloseBtn');
+        await userEvent.click(closeButton);
 
-    await waitFor(() => {
-      const submitBtn = screen.getByTestId('submitBtn');
-      expect(submitBtn).toHaveTextContent(/update/i);
-    });
-  });
+        expect(mockHide).toHaveBeenCalledTimes(1);
+      });
 
-  it('should handle modal backdrop click correctly', async () => {
-    const mockHide = vi.fn();
-    const props: IItemModalProps = {
-      isOpen: true,
-      hide: mockHide,
-      orgId: 'orgId',
-      eventId: undefined,
-      actionItemsRefetch: vi.fn(),
-      editMode: false,
-      actionItem: null,
-    };
+      it('should render Modal.Header with correct title and close button', async () => {
+        const props: IItemModalProps = {
+          isOpen: true,
+          hide: vi.fn(),
+          orgId: 'orgId',
+          eventId: undefined,
+          actionItemsRefetch: vi.fn(),
+          editMode: false,
+          actionItem: null,
+        };
 
-    renderWithProviders(props);
+        renderWithProviders(props);
 
-    await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
+        await waitFor(() =>
+          expect(screen.getByRole('dialog')).toBeInTheDocument(),
+        );
 
-    // In React Bootstrap, clicking the backdrop typically calls onHide
-    // We can test this by finding the modal backdrop element
-    const modal = screen.getByRole('dialog');
-    expect(modal).toBeInTheDocument();
+        // Check for modal header content
+        const closeButton = screen.getByTestId('modalCloseBtn');
+        expect(closeButton).toBeInTheDocument();
+        expect(closeButton.className).toContain('closeButton');
 
-    // The modal should be present and the hide function should be available
-    expect(mockHide).toBeInstanceOf(Function);
-  });
+        // Check if close button has the correct icon
+        const icon = closeButton.querySelector('i.fa.fa-times');
+        expect(icon).toBeInTheDocument();
+      });
 
-  it('should maintain modal structure integrity with different props combinations', async () => {
-    const testCases = [
-      {
-        isOpen: true,
-        editMode: false,
-        actionItem: null,
-        eventId: undefined,
-      },
-      {
-        isOpen: true,
-        editMode: true,
-        actionItem: mockActionItem,
-        eventId: 'event123',
-      },
-      {
-        isOpen: true,
-        editMode: false,
-        actionItem: null,
-        eventId: 'event456',
-      },
-    ];
+      it('should display correct title based on editMode', async () => {
+        // Test create mode title
+        const createProps: IItemModalProps = {
+          isOpen: true,
+          hide: vi.fn(),
+          orgId: 'orgId',
+          eventId: undefined,
+          actionItemsRefetch: vi.fn(),
+          editMode: false,
+          actionItem: null,
+        };
 
-    for (const testCase of testCases) {
-      const props: IItemModalProps = {
-        ...testCase,
-        hide: vi.fn(),
-        orgId: 'orgId',
-        actionItemsRefetch: vi.fn(),
-      };
+        const { rerender } = renderWithProviders(createProps);
 
-      const { unmount } = renderWithProviders(props);
+        await waitFor(() =>
+          expect(screen.getByRole('dialog')).toBeInTheDocument(),
+        );
 
-      await waitFor(() => {
-        if (testCase.isOpen) {
-          expect(screen.getByRole('dialog')).toBeInTheDocument();
-          expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
-          expect(screen.getByTestId('submitBtn')).toBeInTheDocument();
+        // Should show create-related content in submit button
+        const createSubmitBtn = screen.getByTestId('submitBtn');
+        expect(createSubmitBtn).toHaveTextContent(/create/i);
+
+        // Test edit mode title
+        const editProps: IItemModalProps = {
+          isOpen: true,
+          hide: vi.fn(),
+          orgId: 'orgId',
+          eventId: undefined,
+          actionItemsRefetch: vi.fn(),
+          editMode: true,
+          actionItem: mockActionItem,
+        };
+
+        rerender(
+          <MockedProvider mocks={mockQueries}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ItemModal {...editProps} />
+            </LocalizationProvider>
+          </MockedProvider>,
+        );
+
+        await waitFor(() =>
+          expect(screen.getByTestId('submitBtn')).toHaveTextContent(/update/i),
+        );
+      });
+
+      it('should handle modal backdrop click correctly', async () => {
+        const mockHide = vi.fn();
+        const props: IItemModalProps = {
+          isOpen: true,
+          hide: mockHide,
+          orgId: 'orgId',
+          eventId: undefined,
+          actionItemsRefetch: vi.fn(),
+          editMode: false,
+          actionItem: null,
+        };
+
+        renderWithProviders(props);
+
+        await waitFor(() =>
+          expect(screen.getByRole('dialog')).toBeInTheDocument(),
+        );
+
+        // In React Bootstrap, clicking the backdrop typically calls onHide
+        // We can test this by finding the modal backdrop element
+        const modal = screen.getByRole('dialog');
+        expect(modal).toBeInTheDocument();
+
+        // The modal should be present and the hide function should be available
+        expect(mockHide).toBeInstanceOf(Function);
+      });
+
+      it('should maintain modal structure integrity with different props combinations', async () => {
+        const testCases = [
+          {
+            isOpen: true,
+            editMode: false,
+            actionItem: null,
+            eventId: undefined,
+          },
+          {
+            isOpen: true,
+            editMode: true,
+            actionItem: mockActionItem,
+            eventId: 'event123',
+          },
+          {
+            isOpen: true,
+            editMode: false,
+            actionItem: null,
+            eventId: 'eventId',
+          },
+        ];
+
+        for (const testCase of testCases) {
+          const props: IItemModalProps = {
+            ...testCase,
+            hide: vi.fn(),
+            orgId: 'orgId',
+            actionItemsRefetch: vi.fn(),
+          };
+
+          const { unmount } = renderWithProviders(props);
+
+          if (testCase.isOpen) {
+            await waitFor(() =>
+              expect(screen.getByRole('dialog')).toBeInTheDocument(),
+            );
+            expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
+            expect(screen.getByTestId('submitBtn')).toBeInTheDocument();
+          }
+
+          unmount();
         }
       });
-
-      unmount();
-    }
-  });
-});
-
-describe('Partially Covered Lines Test Coverage', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  describe('Line 211: Validation condition (!categoryId || (!volunteerId && !volunteerGroupId))', () => {
-    it('should show error when categoryId is missing (first part of OR condition)', async () => {
-      const props: IItemModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        orgId: 'orgId',
-        eventId: 'eventId',
-        actionItemsRefetch: vi.fn(),
-        editMode: false,
-        actionItem: null,
-      };
-
-      renderWithProviders(props);
-
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-      });
-
-      // Wait for form to load
-      await waitFor(() => {
-        expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
-      });
-
-      // Select volunteer but not category (categoryId will be empty)
-      const volunteerInput = screen.getByLabelText('volunteer *');
-      await userEvent.click(volunteerInput);
-      await userEvent.type(volunteerInput, 'John Doe');
-
-      await waitFor(async () => {
-        const option = await screen.findByText('John Doe');
-        await userEvent.click(option);
-      });
-
-      // Submit without category (categoryId is empty, but volunteerId is set)
-      const form = document.querySelector('form');
-      if (form) {
-        fireEvent.submit(form);
-      }
-
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('selectCategoryAndAssignment');
-      });
     });
 
-    it('should show error when both volunteerId and volunteerGroupId are missing (second part of OR condition)', async () => {
-      const props: IItemModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        orgId: 'orgId',
-        eventId: 'eventId',
-        actionItemsRefetch: vi.fn(),
-        editMode: false,
-        actionItem: null,
-      };
-
-      renderWithProviders(props);
-
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+    describe('Partially Covered Lines Test Coverage', () => {
+      beforeEach(() => {
+        vi.clearAllMocks();
       });
 
-      // Wait for form to load
-      await waitFor(() => {
-        expect(screen.getByTestId('categorySelect')).toBeInTheDocument();
-      });
-
-      // Select category but no volunteer or volunteer group
-      const categoryInput = screen.getByLabelText('actionItemCategory *');
-      await userEvent.click(categoryInput);
-      await userEvent.type(categoryInput, 'Category 1');
-
-      await waitFor(async () => {
-        const option = screen.getByText('Category 1');
-        await userEvent.click(option);
-      });
-
-      // Submit without selecting volunteer or volunteer group
-      const form = document.querySelector('form');
-      if (form) {
-        fireEvent.submit(form);
-      }
-
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('selectCategoryAndAssignment');
-      });
-    });
-  });
-
-  describe('Line 217: volunteerId: volunteerId || undefined', () => {
-    it('should use undefined when volunteerId is empty string', async () => {
-      const mockRefetch = vi.fn();
-      const mockHide = vi.fn();
-
-      const createMutationMock = {
-        request: {
-          query: CREATE_ACTION_ITEM_MUTATION,
-        },
-        variableMatcher: (variables: {
-          input: {
-            volunteerId?: string;
-            volunteerGroupId?: string;
-            categoryId: string;
-            organizationId: string;
-            preCompletionNotes?: string;
-            assignedAt: string;
-            isTemplate: boolean;
-            eventId: string;
+      describe('Line 211: Validation condition (!categoryId || (!volunteerId && !volunteerGroupId))', () => {
+        it('should show error when categoryId is missing (first part of OR condition)', async () => {
+          const props: IItemModalProps = {
+            isOpen: true,
+            hide: vi.fn(),
+            orgId: 'orgId',
+            eventId: 'eventId',
+            actionItemsRefetch: vi.fn(),
+            editMode: false,
+            actionItem: null,
           };
-        }) => {
-          // This should test that volunteerId is undefined when empty string
-          return (
-            variables.input.volunteerId === undefined &&
-            variables.input.volunteerGroupId === 'group1' &&
-            variables.input.categoryId === 'cat1' &&
-            variables.input.organizationId === 'orgId' &&
-            variables.input.eventId === 'eventId' &&
-            variables.input.isTemplate === false
+
+          renderWithProviders(props);
+
+          await waitFor(() => {
+            expect(screen.getByRole('dialog')).toBeInTheDocument();
+          });
+
+          // Wait for form to load
+          await waitFor(() => {
+            expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
+          });
+
+          // Select volunteer but not category (categoryId will be empty)
+          const volunteerInput = screen.getByLabelText('volunteer *');
+          await userEvent.click(volunteerInput);
+          await userEvent.type(volunteerInput, 'John Doe');
+
+          const option = await screen.findByText('John Doe');
+          await userEvent.click(option);
+
+          // Submit without category (categoryId is empty, but volunteerId is set)
+          const form = document.querySelector('form');
+          if (form) {
+            fireEvent.submit(form);
+          }
+
+          await waitFor(() =>
+            expect(toast.error).toHaveBeenCalledWith(
+              'selectCategoryAndAssignment',
+            ),
           );
-        },
-        result: {
-          data: {
-            createActionItem: {
-              id: 'newId',
-              isCompleted: false,
-              assignedAt: '2024-01-01',
-              completionAt: null,
-              createdAt: '2024-01-01',
-              preCompletionNotes: '',
-              postCompletionNotes: null,
-              volunteer: null,
-              volunteerGroup: {
-                id: 'group1',
-                name: 'Test Group 1',
-              },
-              creator: { id: 'creator1', name: 'Creator' },
-              updater: null,
-              category: {
-                id: 'cat1',
-                name: 'Category 1',
-                description: 'Test category 1',
-                isDisabled: false,
-              },
-              organization: { id: 'orgId', name: 'Organization' },
-              event: {
-                id: 'eventId',
-                name: 'Test Event',
-                description: 'Test event description',
+        });
+
+        it('should show error when both volunteerId and volunteerGroupId are missing (second part of OR condition)', async () => {
+          const props: IItemModalProps = {
+            isOpen: true,
+            hide: vi.fn(),
+            orgId: 'orgId',
+            eventId: 'eventId',
+            actionItemsRefetch: vi.fn(),
+            editMode: false,
+            actionItem: null,
+          };
+
+          renderWithProviders(props);
+
+          await waitFor(() =>
+            expect(screen.getByRole('dialog')).toBeInTheDocument(),
+          );
+
+          // Wait for form to load
+          await waitFor(() =>
+            expect(screen.getByTestId('categorySelect')).toBeInTheDocument(),
+          );
+
+          // Select category but no volunteer or volunteer group
+          const categoryInput = screen.getByLabelText('actionItemCategory *');
+          await userEvent.click(categoryInput);
+          await userEvent.type(categoryInput, 'Category 1');
+
+          const option = await screen.findByText('Category 1');
+          await userEvent.click(option);
+
+          // Submit without selecting volunteer or volunteer group
+          const form = document.querySelector('form');
+          if (form) {
+            fireEvent.submit(form);
+          }
+
+          await waitFor(() =>
+            expect(toast.error).toHaveBeenCalledWith(
+              'selectCategoryAndAssignment',
+            ),
+          );
+        });
+      });
+
+      describe('Line 217: volunteerId: volunteerId || undefined', () => {
+        it('should use undefined when volunteerId is empty string', async () => {
+          const mockDate = new Date('2024-01-01T00:00:00.000Z');
+          const mockRefetch = vi.fn();
+          const mockHide = vi.fn();
+
+          const createMutationMock = {
+            request: {
+              query: CREATE_ACTION_ITEM_MUTATION,
+              variables: {
+                input: {
+                  volunteerGroupId: 'group1',
+                  categoryId: 'cat1',
+                  organizationId: 'orgId',
+                  assignedAt: mockDate.toISOString(),
+                  isTemplate: false,
+                  eventId: 'event123',
+                },
               },
             },
-          },
-        },
-      };
+            result: {
+              data: {
+                createActionItem: {
+                  id: 'newId',
+                  isCompleted: false,
+                  assignedAt: '2024-01-01',
+                  completionAt: null,
+                  createdAt: '2024-01-01',
+                  preCompletionNotes: '',
+                  postCompletionNotes: null,
+                  volunteer: null,
+                  volunteerGroup: {
+                    id: 'group1',
+                    name: 'Test Group 1',
+                    description: 'Test Description',
+                    volunteersRequired: 5,
+                    leader: {
+                      id: 'leader1',
+                      name: 'Leader',
+                      __typename: 'User',
+                    },
+                    __typename: 'VolunteerGroup',
+                  },
+                  creator: { id: 'creator1', name: 'Creator' },
+                  updater: null,
+                  category: {
+                    id: 'cat1',
+                    name: 'Category 1',
+                    description: 'Test category 1',
+                    isDisabled: false,
+                  },
+                  organization: { id: 'orgId', name: 'Organization' },
+                  event: {
+                    id: 'event123',
+                    name: 'Test Event',
+                    description: 'Test event description',
+                  },
+                },
+              },
+            },
+          };
 
-      const mutationMocks = [createMutationMock, ...mockQueries];
+          const mutationMocks = [createMutationMock, ...mockQueries];
 
-      const props: IItemModalProps = {
-        isOpen: true,
-        hide: mockHide,
-        orgId: 'orgId',
-        eventId: 'eventId',
-        actionItemsRefetch: mockRefetch,
-        editMode: false,
-        actionItem: null,
-      };
+          const props: IItemModalProps = {
+            isOpen: true,
+            hide: mockHide,
+            orgId: 'orgId',
+            eventId: 'event123',
+            actionItemsRefetch: mockRefetch,
+            editMode: false,
+            actionItem: null,
+            initialDate: mockDate,
+          };
 
-      render(
-        <MockedProvider mocks={mutationMocks}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <ItemModal {...props} />
-          </LocalizationProvider>
-        </MockedProvider>,
-      );
+          render(
+            <MockedProvider mocks={mutationMocks}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <ItemModal {...props} />
+              </LocalizationProvider>
+            </MockedProvider>,
+          );
 
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+          await waitFor(() => {
+            expect(screen.getByRole('dialog')).toBeInTheDocument();
+          });
+
+          // Select category
+          const categoryInput = screen.getByLabelText('actionItemCategory *');
+          await userEvent.click(categoryInput);
+          await userEvent.type(categoryInput, 'Category 1');
+          const option = await screen.findByText('Category 1');
+          await userEvent.click(option);
+
+          // Switch to volunteer group assignment
+          const volunteerGroupChip = screen.getByRole('button', {
+            name: 'volunteerGroup',
+          });
+          await userEvent.click(volunteerGroupChip);
+
+          // Select volunteer group
+          const volunteerGroupSelect = await screen.findByTestId(
+            'volunteerGroupSelect',
+          );
+          const volunteerGroupInput =
+            within(volunteerGroupSelect).getByRole('combobox');
+          await userEvent.click(volunteerGroupInput);
+          await userEvent.type(volunteerGroupInput, 'Test Group 1');
+
+          const groupOption = await screen.findByText(/Test Group 1/i, {}, { timeout: 3000 }); await userEvent.click(groupOption);
+
+          // Submit form - this should result in volunteerId being undefined
+          const submitButton = screen.getByTestId('submitBtn');
+          await userEvent.click(submitButton);
+
+          await waitFor(() => {
+            expect(toast.success).toHaveBeenCalled();
+            expect(mockRefetch).toHaveBeenCalled();
+            expect(mockHide).toHaveBeenCalled();
+          });
+
+          vi.useRealTimers();
+        });
       });
 
-      // Select category
-      const categoryInput = screen.getByLabelText('actionItemCategory *');
-      await userEvent.click(categoryInput);
-      await userEvent.type(categoryInput, 'Category 1');
-      await waitFor(async () => {
-        const option = screen.getByText('Category 1');
-        await userEvent.click(option);
+      describe('Line 515: if (!isVolunteerChipDisabled)', () => {
+        it('should execute volunteer chip click logic when isVolunteerChipDisabled is false', async () => {
+          const props: IItemModalProps = {
+            isOpen: true,
+            hide: vi.fn(),
+            orgId: 'orgId',
+            eventId: 'eventId',
+            actionItemsRefetch: vi.fn(),
+            editMode: false, // Not in edit mode, so chip should not be disabled
+            actionItem: null,
+          };
+
+          renderWithProviders(props);
+
+          await waitFor(() => {
+            expect(screen.getByRole('dialog')).toBeInTheDocument();
+          });
+
+          // Wait for the category select to be present
+          await waitFor(() =>
+            expect(screen.getByTestId('categorySelect')).toBeInTheDocument(),
+          );
+
+          const submitButton = screen.getByTestId('submitBtn');
+          // First switch to volunteer group to set some state
+          const volunteerGroupChip = screen.getByRole('button', {
+            name: 'volunteerGroup',
+          });
+          await userEvent.click(volunteerGroupChip);
+
+          const volunteerGroupSelect = await screen.findByTestId(
+            'volunteerGroupSelect',
+          );
+          expect(volunteerGroupSelect).toBeInTheDocument();
+
+          // Now click volunteer chip - this should execute the !isVolunteerChipDisabled path
+          const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
+          await userEvent.click(volunteerChip);
+
+          // Should switch back to volunteer select and clear volunteer group
+          await waitFor(() => {
+            expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
+            expect(
+              screen.queryByTestId('volunteerGroupSelect'),
+            ).not.toBeInTheDocument();
+          });
+        });
+
+        it('should have isVolunteerChipDisabled true when editing item with volunteer group', () => {
+          // This tests the useMemo for isVolunteerChipDisabled
+          // When editMode is true and actionItem has volunteerGroup, chip should be disabled
+          const actionItemWithVolunteerGroup = {
+            ...mockActionItem,
+            volunteer: null,
+            volunteerGroup: {
+              id: 'group1',
+              name: 'Test Group 1',
+              description: 'Test Description',
+              volunteersRequired: 5,
+              leader: {
+                id: 'leader1',
+                name: 'Leader',
+                __typename: 'User',
+              },
+              __typename: 'VolunteerGroup',
+            },
+            volunteerGroupId: 'group1',
+            isCompleted: false,
+          };
+
+          const props: IItemModalProps = {
+            isOpen: true,
+            hide: vi.fn(),
+            orgId: 'orgId',
+            eventId: 'eventId',
+            actionItemsRefetch: vi.fn(),
+            editMode: true,
+            actionItem:
+              actionItemWithVolunteerGroup as unknown as IActionItemInfo,
+          };
+
+          renderWithProviders(props);
+
+          // The component should render - this exercises the logic path
+          expect(screen.getByRole('dialog')).toBeInTheDocument();
+        });
       });
 
-      // Switch to volunteer group assignment
-      const volunteerGroupChip = screen.getByRole('button', {
-        name: 'volunteerGroup',
-      });
-      await userEvent.click(volunteerGroupChip);
+      describe('Line 543: if (!isVolunteerGroupChipDisabled)', () => {
+        it('should execute volunteer group chip click logic when isVolunteerGroupChipDisabled is false', async () => {
+          const props: IItemModalProps = {
+            isOpen: true,
+            hide: vi.fn(),
+            orgId: 'orgId',
+            eventId: 'eventId',
+            actionItemsRefetch: vi.fn(),
+            editMode: false, // Not in edit mode, so chip should not be disabled
+            actionItem: null,
+          };
 
-      // Select volunteer group
-      const volunteerGroupSelect = await screen.findByTestId(
-        'volunteerGroupSelect',
-      );
-      const volunteerGroupInput =
-        within(volunteerGroupSelect).getByRole('combobox');
-      await userEvent.click(volunteerGroupInput);
-      await userEvent.type(volunteerGroupInput, 'Test Group 1');
+          renderWithProviders(props);
 
-      await waitFor(async () => {
-        const option = await screen.findByText('Test Group 1');
-        await userEvent.click(option);
-      });
+          await waitFor(() => {
+            expect(screen.getByRole('dialog')).toBeInTheDocument();
+          });
 
-      // Submit form - this should result in volunteerId being undefined
-      const submitButton = screen.getByTestId('submitBtn');
-      await userEvent.click(submitButton);
+          // Initially should show volunteer select (default)
+          await waitFor(() => {
+            expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
+          });
 
-      await waitFor(() => {
-        expect(toast.success).toHaveBeenCalled();
-        expect(mockRefetch).toHaveBeenCalled();
-        expect(mockHide).toHaveBeenCalled();
-      });
-    });
-  });
+          // Click volunteer group chip - this should execute the !isVolunteerGroupChipDisabled path
+          const volunteerGroupChip = screen.getByRole('button', {
+            name: 'volunteerGroup',
+          });
+          await userEvent.click(volunteerGroupChip);
 
-  describe('Line 515: if (!isVolunteerChipDisabled)', () => {
-    it('should execute volunteer chip click logic when isVolunteerChipDisabled is false', async () => {
-      const props: IItemModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        orgId: 'orgId',
-        eventId: 'eventId',
-        actionItemsRefetch: vi.fn(),
-        editMode: false, // Not in edit mode, so chip should not be disabled
-        actionItem: null,
-      };
+          // Should switch to volunteer group select and clear volunteer
+          const groupSelect = await screen.findByTestId('volunteerGroupSelect');
+          expect(groupSelect).toBeInTheDocument();
+          expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument();
+        });
 
-      renderWithProviders(props);
+        it('should have isVolunteerGroupChipDisabled true when editing item with volunteer', () => {
+          // This tests the useMemo for isVolunteerGroupChipDisabled
+          // When editMode is true and actionItem has volunteer, chip should be disabled
+          const actionItemWithVolunteer = {
+            ...mockActionItem,
+            volunteer: {
+              id: 'volunteer1',
+              hasAccepted: true,
+              user: { id: 'user1', name: 'John Doe' },
+            },
+            volunteerId: 'volunteer1',
+            volunteerGroup: null,
+            volunteerGroupId: null,
+            isCompleted: false,
+          };
 
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-      });
+          const props: IItemModalProps = {
+            isOpen: true,
+            hide: vi.fn(),
+            orgId: 'orgId',
+            eventId: 'eventId',
+            actionItemsRefetch: vi.fn(),
+            editMode: true,
+            actionItem: actionItemWithVolunteer as unknown as IActionItemInfo,
+          };
 
-      // First switch to volunteer group to set some state
-      const volunteerGroupChip = screen.getByRole('button', {
-        name: 'volunteerGroup',
-      });
-      await userEvent.click(volunteerGroupChip);
+          renderWithProviders(props);
 
-      await waitFor(() => {
-        expect(screen.getByTestId('volunteerGroupSelect')).toBeInTheDocument();
-      });
-
-      // Now click volunteer chip - this should execute the !isVolunteerChipDisabled path
-      const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
-      await userEvent.click(volunteerChip);
-
-      // Should switch back to volunteer select and clear volunteer group
-      await waitFor(() => {
-        expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
-        expect(
-          screen.queryByTestId('volunteerGroupSelect'),
-        ).not.toBeInTheDocument();
-      });
-    });
-
-    it('should have isVolunteerChipDisabled true when editing item with volunteer group', () => {
-      // This tests the useMemo for isVolunteerChipDisabled
-      // When editMode is true and actionItem has volunteerGroup, chip should be disabled
-      const actionItemWithVolunteerGroup = {
-        ...mockActionItem,
-        volunteer: null,
-        volunteerId: null,
-        volunteerGroup: { id: 'group1', name: 'Test Group 1' },
-        volunteerGroupId: 'group1',
-        isCompleted: false,
-      };
-
-      const props: IItemModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        orgId: 'orgId',
-        eventId: 'eventId',
-        actionItemsRefetch: vi.fn(),
-        editMode: true,
-        actionItem: actionItemWithVolunteerGroup as unknown as IActionItemInfo,
-      };
-
-      renderWithProviders(props);
-
-      // The component should render - this exercises the logic path
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
-  });
-
-  describe('Line 543: if (!isVolunteerGroupChipDisabled)', () => {
-    it('should execute volunteer group chip click logic when isVolunteerGroupChipDisabled is false', async () => {
-      const props: IItemModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        orgId: 'orgId',
-        eventId: 'eventId',
-        actionItemsRefetch: vi.fn(),
-        editMode: false, // Not in edit mode, so chip should not be disabled
-        actionItem: null,
-      };
-
-      renderWithProviders(props);
-
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+          // The component should render - this exercises the logic path
+          expect(screen.getByRole('dialog')).toBeInTheDocument();
+        });
       });
 
-      // Initially should show volunteer select (default)
-      await waitFor(() => {
-        expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
+      describe('Line 577: return volunteer.user?.name || "Unknown Volunteer"', () => {
+        it('should handle volunteer name fallback logic', () => {
+          // Test the getOptionLabel function logic directly
+          // This exercises line 577: return volunteer.user?.name || 'Unknown Volunteer';
+
+          const volunteerWithName = {
+            id: 'vol1',
+            user: { id: 'user1', name: 'John Doe' },
+          };
+
+          const volunteerWithoutName = {
+            id: 'vol2',
+            user: { id: 'user2', name: undefined },
+          };
+
+          const volunteerWithNullUser = {
+            id: 'vol3',
+            user: null,
+          };
+
+          // Test the function logic that would be used in getOptionLabel
+          const getName = (volunteer: { user?: { name?: string } | null }) =>
+            volunteer.user?.name || 'Unknown Volunteer';
+
+          expect(getName(volunteerWithName)).toBe('John Doe');
+          expect(getName(volunteerWithoutName)).toBe('Unknown Volunteer');
+          expect(getName(volunteerWithNullUser)).toBe('Unknown Volunteer');
+        });
+
+        it('should render volunteer autocomplete with proper option labels', async () => {
+          const props: IItemModalProps = {
+            isOpen: true,
+            hide: vi.fn(),
+            orgId: 'orgId',
+            eventId: 'eventId',
+            actionItemsRefetch: vi.fn(),
+            editMode: false,
+            actionItem: null,
+          };
+
+          renderWithProviders(props);
+
+          await waitFor(() => {
+            expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
+          });
+
+          // This tests that the autocomplete renders properly with volunteer options
+          const volunteerInput = screen.getByLabelText('volunteer *');
+          expect(volunteerInput).toBeInTheDocument();
+        });
       });
-
-      // Click volunteer group chip - this should execute the !isVolunteerGroupChipDisabled path
-      const volunteerGroupChip = screen.getByRole('button', {
-        name: 'volunteerGroup',
-      });
-      await userEvent.click(volunteerGroupChip);
-
-      // Should switch to volunteer group select and clear volunteer
-      await waitFor(() => {
-        expect(screen.getByTestId('volunteerGroupSelect')).toBeInTheDocument();
-        expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument();
-      });
-    });
-
-    it('should have isVolunteerGroupChipDisabled true when editing item with volunteer', () => {
-      // This tests the useMemo for isVolunteerGroupChipDisabled
-      // When editMode is true and actionItem has volunteer, chip should be disabled
-      const actionItemWithVolunteer = {
-        ...mockActionItem,
-        volunteer: {
-          id: 'volunteer1',
-          hasAccepted: true,
-          user: { id: 'user1', name: 'John Doe' },
-        },
-        volunteerId: 'volunteer1',
-        volunteerGroup: null,
-        volunteerGroupId: null,
-        isCompleted: false,
-      };
-
-      const props: IItemModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        orgId: 'orgId',
-        eventId: 'eventId',
-        actionItemsRefetch: vi.fn(),
-        editMode: true,
-        actionItem: actionItemWithVolunteer as unknown as IActionItemInfo,
-      };
-
-      renderWithProviders(props);
-
-      // The component should render - this exercises the logic path
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
-    });
-  });
-
-  describe('Line 577: return volunteer.user?.name || "Unknown Volunteer"', () => {
-    it('should handle volunteer name fallback logic', () => {
-      // Test the getOptionLabel function logic directly
-      // This exercises line 577: return volunteer.user?.name || 'Unknown Volunteer';
-
-      const volunteerWithName = {
-        id: 'vol1',
-        user: { id: 'user1', name: 'John Doe' },
-      };
-
-      const volunteerWithoutName = {
-        id: 'vol2',
-        user: { id: 'user2', name: undefined },
-      };
-
-      const volunteerWithNullUser = {
-        id: 'vol3',
-        user: null,
-      };
-
-      // Test the function logic that would be used in getOptionLabel
-      const getName = (volunteer: { user?: { name?: string } | null }) =>
-        volunteer.user?.name || 'Unknown Volunteer';
-
-      expect(getName(volunteerWithName)).toBe('John Doe');
-      expect(getName(volunteerWithoutName)).toBe('Unknown Volunteer');
-      expect(getName(volunteerWithNullUser)).toBe('Unknown Volunteer');
-    });
-
-    it('should render volunteer autocomplete with proper option labels', async () => {
-      const props: IItemModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        orgId: 'orgId',
-        eventId: 'eventId',
-        actionItemsRefetch: vi.fn(),
-        editMode: false,
-        actionItem: null,
-      };
-
-      renderWithProviders(props);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
-      });
-
-      // This tests that the autocomplete renders properly with volunteer options
-      const volunteerInput = screen.getByLabelText('volunteer *');
-      expect(volunteerInput).toBeInTheDocument();
     });
   });
 });

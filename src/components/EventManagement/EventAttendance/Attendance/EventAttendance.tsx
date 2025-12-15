@@ -44,7 +44,7 @@ import {
 } from '@mui/material';
 import { Button, Table } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client/react';
 import { EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
 import { useParams, Link } from 'react-router';
 import { useTranslation } from 'react-i18next';

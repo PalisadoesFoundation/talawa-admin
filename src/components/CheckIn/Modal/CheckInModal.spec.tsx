@@ -1,9 +1,10 @@
 import React from 'react';
 import { EVENT_DETAILS, EVENT_CHECKINS } from 'GraphQl/Queries/Queries';
 import { fireEvent, render, waitFor, screen } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
+import { InMemoryCache } from '@apollo/client';
 import { CheckInModal } from './CheckInModal';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
@@ -21,6 +22,20 @@ describe('Testing Check In Attendees Modal', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
+
+  const createCache = () =>
+    new InMemoryCache({
+      typePolicies: {
+        Query: {
+          fields: {
+            event: {
+              merge: true,
+            },
+          },
+        },
+      },
+    });
+
   const props = {
     show: true,
     eventId: 'event123',
@@ -34,7 +49,7 @@ describe('Testing Check In Attendees Modal', () => {
 
   test('The modal should be rendered, and all the fetched users should be shown properly and user filtering should work', async () => {
     const { queryByText, getByPlaceholderText } = render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={createCache()}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
@@ -86,7 +101,38 @@ describe('Testing Check In Attendees Modal', () => {
           data: {
             event: {
               id: 'eventRecurring',
+              __typename: 'Event',
+              name: 'Test Event',
+              description: 'Test Description',
+              location: 'Test Location',
+              allDay: false,
+              isPublic: true,
+              isRegisterable: true,
+              startAt: '2023-01-01T10:00:00Z',
+              endAt: '2023-01-01T12:00:00Z',
+              createdAt: '2023-01-01T09:00:00Z',
+              updatedAt: '2023-01-01T09:00:00Z',
+              isRecurringEventTemplate: false,
+              baseEvent: null,
+              creator: {
+                __typename: 'User',
+                id: 'creator1',
+                name: 'Creator',
+                emailAddress: 'creator@example.com',
+              },
+              updater: {
+                __typename: 'User',
+                id: 'updater1',
+                name: 'Updater',
+                emailAddress: 'updater@example.com',
+              },
+              organization: {
+                __typename: 'Organization',
+                id: 'org1',
+                name: 'Test Org',
+              },
               recurrenceRule: {
+                __typename: 'RecurrenceRule',
                 id: 'FREQ=DAILY',
               },
             },
@@ -101,11 +147,14 @@ describe('Testing Check In Attendees Modal', () => {
         result: {
           data: {
             event: {
+              __typename: 'Event',
               id: 'eventRecurring',
               attendeesCheckInStatus: [
                 {
+                  __typename: 'AttendeeCheckInStatus',
                   id: 'checkIn1',
                   user: {
+                    __typename: 'User',
                     id: 'user1',
                     name: 'Test User',
                     emailAddress: 'test@example.com',
@@ -125,7 +174,7 @@ describe('Testing Check In Attendees Modal', () => {
     const linkRecurring = new StaticMockLink(recurringMock, true);
 
     const { queryByText, findByText } = render(
-      <MockedProvider link={linkRecurring}>
+      <MockedProvider link={linkRecurring} cache={createCache()}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
@@ -158,6 +207,36 @@ describe('Testing Check In Attendees Modal', () => {
           data: {
             event: {
               id: 'eventUnknown',
+              __typename: 'Event',
+              name: 'Test Event',
+              description: 'Test Description',
+              location: 'Test Location',
+              allDay: false,
+              isPublic: true,
+              isRegisterable: true,
+              startAt: '2023-01-01T10:00:00Z',
+              endAt: '2023-01-01T12:00:00Z',
+              createdAt: '2023-01-01T09:00:00Z',
+              updatedAt: '2023-01-01T09:00:00Z',
+              isRecurringEventTemplate: false,
+              baseEvent: null,
+              creator: {
+                __typename: 'User',
+                id: 'creator1',
+                name: 'Creator',
+                emailAddress: 'creator@example.com',
+              },
+              updater: {
+                __typename: 'User',
+                id: 'updater1',
+                name: 'Updater',
+                emailAddress: 'updater@example.com',
+              },
+              organization: {
+                __typename: 'Organization',
+                id: 'org1',
+                name: 'Test Org',
+              },
               recurrenceRule: null,
             },
           },
@@ -171,11 +250,14 @@ describe('Testing Check In Attendees Modal', () => {
         result: {
           data: {
             event: {
+              __typename: 'Event',
               id: 'eventUnknown',
               attendeesCheckInStatus: [
                 {
+                  __typename: 'AttendeeCheckInStatus',
                   id: 'checkIn2',
                   user: {
+                    __typename: 'User',
                     id: 'user2',
                     name: null, // No name
                     emailAddress: 'unknown@example.com',
@@ -195,7 +277,7 @@ describe('Testing Check In Attendees Modal', () => {
     const linkUnknown = new StaticMockLink(unknownUserMock, true);
 
     const { findByText } = render(
-      <MockedProvider link={linkUnknown}>
+      <MockedProvider link={linkUnknown} cache={createCache()}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
@@ -223,6 +305,36 @@ describe('Testing Check In Attendees Modal', () => {
           data: {
             event: {
               id: 'eventNull',
+              __typename: 'Event',
+              name: 'Test Event',
+              description: 'Test Description',
+              location: 'Test Location',
+              allDay: false,
+              isPublic: true,
+              isRegisterable: true,
+              startAt: '2023-01-01T10:00:00Z',
+              endAt: '2023-01-01T12:00:00Z',
+              createdAt: '2023-01-01T09:00:00Z',
+              updatedAt: '2023-01-01T09:00:00Z',
+              isRecurringEventTemplate: false,
+              baseEvent: null,
+              creator: {
+                __typename: 'User',
+                id: 'creator1',
+                name: 'Creator',
+                emailAddress: 'creator@example.com',
+              },
+              updater: {
+                __typename: 'User',
+                id: 'updater1',
+                name: 'Updater',
+                emailAddress: 'updater@example.com',
+              },
+              organization: {
+                __typename: 'Organization',
+                id: 'org1',
+                name: 'Test Org',
+              },
               recurrenceRule: null,
             },
           },
@@ -242,7 +354,7 @@ describe('Testing Check In Attendees Modal', () => {
     const linkNull = new StaticMockLink(nullDataMock, true);
 
     const { queryByText } = render(
-      <MockedProvider link={linkNull}>
+      <MockedProvider link={linkNull} cache={createCache()}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
@@ -273,6 +385,36 @@ describe('Testing Check In Attendees Modal', () => {
           data: {
             event: {
               id: 'eventNoAttendees',
+              __typename: 'Event',
+              name: 'Test Event',
+              description: 'Test Description',
+              location: 'Test Location',
+              allDay: false,
+              isPublic: true,
+              isRegisterable: true,
+              startAt: '2023-01-01T10:00:00Z',
+              endAt: '2023-01-01T12:00:00Z',
+              createdAt: '2023-01-01T09:00:00Z',
+              updatedAt: '2023-01-01T09:00:00Z',
+              isRecurringEventTemplate: false,
+              baseEvent: null,
+              creator: {
+                __typename: 'User',
+                id: 'creator1',
+                name: 'Creator',
+                emailAddress: 'creator@example.com',
+              },
+              updater: {
+                __typename: 'User',
+                id: 'updater1',
+                name: 'Updater',
+                emailAddress: 'updater@example.com',
+              },
+              organization: {
+                __typename: 'Organization',
+                id: 'org1',
+                name: 'Test Org',
+              },
               recurrenceRule: null,
             },
           },
@@ -286,6 +428,7 @@ describe('Testing Check In Attendees Modal', () => {
         result: {
           data: {
             event: {
+              __typename: 'Event',
               id: 'eventNoAttendees',
               attendeesCheckInStatus: null,
             },
@@ -297,7 +440,7 @@ describe('Testing Check In Attendees Modal', () => {
     const linkNoAttendees = new StaticMockLink(noAttendeesMock, true);
 
     const { queryByText } = render(
-      <MockedProvider link={linkNoAttendees}>
+      <MockedProvider link={linkNoAttendees} cache={createCache()}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>

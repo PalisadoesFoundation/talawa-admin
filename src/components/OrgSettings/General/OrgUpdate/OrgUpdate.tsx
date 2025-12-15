@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import SyncIcon from '@mui/icons-material/Sync';
 import SaveIcon from '@mui/icons-material/Save';
-import type { ApolloError } from '@apollo/client';
+
 import { WarningAmberRounded } from '@mui/icons-material';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
@@ -101,17 +101,9 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     isUserRegistrationRequired: boolean | null;
   }
 
-  const {
-    data,
-    loading,
-    refetch,
-    error,
-  }: {
-    data?: { organization: InterfaceOrganization };
-    loading: boolean;
-    refetch: (variables: { id: string }) => void;
-    error?: ApolloError;
-  } = useQuery(GET_ORGANIZATION_BASIC_DATA, {
+  const { data, loading, refetch, error } = useQuery<{
+    organization: InterfaceOrganization;
+  }>(GET_ORGANIZATION_BASIC_DATA, {
     variables: { id: orgId },
     notifyOnNetworkStatusChange: true,
   });

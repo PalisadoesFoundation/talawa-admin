@@ -8,6 +8,7 @@ import {
   ApolloLink,
   HttpLink,
 } from '@apollo/client';
+
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import {
   ADD_ADVERTISEMENT_MUTATION,
@@ -20,6 +21,7 @@ type AdvertisementType = 'banner' | 'pop_up' | 'menu';
 interface IAttachment {
   mimeType: string;
   url: string;
+  __typename?: string;
 }
 
 interface IAdvertisementNode {
@@ -29,11 +31,13 @@ interface IAdvertisementNode {
   endAt: string;
   organization: {
     id: string;
+    __typename?: string;
   };
   name: string;
   startAt: string;
   type: AdvertisementType;
   attachments: IAttachment[];
+  __typename?: string;
 }
 
 interface IPageInfo {
@@ -41,10 +45,12 @@ interface IPageInfo {
   endCursor: string | null;
   hasNextPage: boolean;
   hasPreviousPage: boolean;
+  __typename?: string;
 }
 
 interface IEdge {
   node: IAdvertisementNode;
+  __typename?: string;
 }
 
 interface IAdvertisementListMock {
@@ -62,7 +68,9 @@ interface IAdvertisementListMock {
   result: {
     data: {
       organization: {
+        __typename?: string;
         advertisements: {
+          __typename?: string;
           edges: IEdge[];
           pageInfo: IPageInfo;
         };
@@ -140,7 +148,7 @@ export const httpLink = new HttpLink({
   headers: { authorization: 'Bearer ' + getItem('token') || '' },
 });
 
-export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+export const client: ApolloClient = new ApolloClient({
   cache: new InMemoryCache(),
   link: ApolloLink.from([httpLink]),
 });
@@ -171,17 +179,20 @@ const createAdvertisementNode = ({
 }: IAdvertisementNodeParams): IEdge => ({
   node: {
     id,
+    __typename: 'Advertisement',
     createdAt,
     description,
     endAt,
     organization: {
       id: organizationId,
+      __typename: 'Organization',
     },
     name,
     startAt,
     type,
-    attachments,
+    attachments: (attachments || []).map((a) => ({ ...a, __typename: 'AdvertisementAttachment' })),
   },
+  __typename: 'AdvertisementEdge',
 });
 
 const createAdvertisementListMock = ({
@@ -209,13 +220,16 @@ const createAdvertisementListMock = ({
   result: {
     data: {
       organization: {
+        __typename: 'Organization',
         advertisements: {
+          __typename: 'AdvertisementConnection',
           edges,
           pageInfo: {
             startCursor,
             endCursor,
             hasNextPage,
             hasPreviousPage,
+            __typename: 'PageInfo',
           } as IPageInfo,
         },
       },
@@ -438,6 +452,7 @@ export const createAdvertisement = [
 ];
 
 export const createAdvertisementWithoutName = [
+  ...getActiveAdvertisementMocks,
   createMutationMock(
     ADD_ADVERTISEMENT_MUTATION,
     {
@@ -451,6 +466,7 @@ export const createAdvertisementWithoutName = [
 ];
 
 export const createAdvertisementWithEndDateBeforeStart = [
+  ...getActiveAdvertisementMocks,
   createMutationMock(
     ADD_ADVERTISEMENT_MUTATION,
     {
@@ -464,6 +480,7 @@ export const createAdvertisementWithEndDateBeforeStart = [
 ];
 
 export const createAdvertisementError = [
+  ...getActiveAdvertisementMocks,
   createMutationMock(
     ADD_ADVERTISEMENT_MUTATION,
     {
@@ -478,6 +495,18 @@ export const createAdvertisementError = [
 ];
 
 export const updateAdMocks = [
+  createAdvertisementListMock({
+    edges: [
+      createAdvertisementNode({
+        id: '1',
+        name: 'Ad1',
+        description: 'This is a new advertisement created for testing.',
+        startAt: updateDates.startAtISO,
+        endAt: updateDates.endAtISO,
+      }),
+    ],
+  }),
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
   createAdvertisementListMock({
     edges: [
       createAdvertisementNode({

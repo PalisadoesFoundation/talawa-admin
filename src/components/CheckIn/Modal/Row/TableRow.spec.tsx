@@ -9,7 +9,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { ToastContainer } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import {
   checkInMutationSuccess,
   checkInMutationUnsuccess,

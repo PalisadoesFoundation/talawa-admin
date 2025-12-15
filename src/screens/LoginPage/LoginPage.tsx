@@ -48,7 +48,8 @@
  * export default App;
  * ```
  */
-import { useQuery, useMutation, useLazyQuery } from '@apollo/client';
+
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client/react';
 import { Check, Clear } from '@mui/icons-material';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
@@ -131,7 +132,9 @@ const loginPage = (): JSX.Element => {
     numericValue: true,
     specialChar: true,
   });
-  const [organizations, setOrganizations] = useState([]);
+  const [organizations, setOrganizations] = useState<
+    { label: string; id: string }[]
+  >([]);
   const [pendingInvitationToken] = useState(() =>
     getItem('pendingInvitationToken'),
   );
@@ -177,14 +180,17 @@ const loginPage = (): JSX.Element => {
   const toggleConfirmPassword = (): void =>
     setShowConfirmPassword(!showConfirmPassword);
 
-  const { data, refetch } = useQuery(GET_COMMUNITY_DATA_PG);
+  const { data, refetch } = useQuery<any>(GET_COMMUNITY_DATA_PG);
   useEffect(() => {
     refetch();
   }, [data]);
-  const [signin, { loading: loginLoading }] = useLazyQuery(SIGNIN_QUERY);
-  const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
-  const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
-  const { data: orgData } = useQuery(ORGANIZATION_LIST_NO_MEMBERS);
+  const [signin, { loading: loginLoading }] = useLazyQuery<any>(SIGNIN_QUERY);
+  const [signup, { loading: signinLoading }] =
+    useMutation<any>(SIGNUP_MUTATION);
+  const [recaptcha] = useMutation<any>(RECAPTCHA_MUTATION);
+  const { data: orgData } = useQuery<{
+    organizations: InterfaceQueryOrganizationListObject[];
+  }>(ORGANIZATION_LIST_NO_MEMBERS);
   const { startSession, extendSession } = useSession();
   useEffect(() => {
     if (orgData) {

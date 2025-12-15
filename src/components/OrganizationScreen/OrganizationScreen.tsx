@@ -36,7 +36,7 @@ import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceMapType } from 'utils/interfaces';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import type { InterfaceEvent } from 'types/Event/interface';
 import useLocalStorage from 'utils/useLocalstorage';

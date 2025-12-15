@@ -9,8 +9,8 @@ import {
   fireEvent,
 } from '@testing-library/react';
 
-import type { MockedResponse } from '@apollo/client/testing';
-import { MockedProvider } from '@apollo/client/testing';
+import type { MockLink } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import OrganizationDashboard from './OrganizationDashboard';
 import {
@@ -55,7 +55,7 @@ vi.mock('react-toastify', () => ({
 }));
 
 interface InterfaceRenderOptions {
-  mocks: MockedResponse[];
+  mocks: MockLink.MockedResponse[];
   initialRoute?: string;
 }
 

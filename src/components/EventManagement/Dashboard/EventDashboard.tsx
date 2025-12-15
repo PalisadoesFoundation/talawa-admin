@@ -29,7 +29,7 @@ import { Col, Row } from 'react-bootstrap';
 import styles from '../../../style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import Loader from 'components/Loader/Loader';
 import { Edit } from '@mui/icons-material';
 import EventListCardModals from 'components/EventListCard/Modal/EventListCardModals';

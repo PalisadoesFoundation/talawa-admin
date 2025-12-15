@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import type { RenderResult } from '@testing-library/react';
 import {
   render,
@@ -9,57 +9,86 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { MemoryRouter, Routes, Route } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import EventAttendance from './EventAttendance';
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
 import i18n from 'utils/i18nForTest';
-import { MOCKS } from '../EventAttendanceMocks';
+import { MOCKS, MOCKDETAIL } from '../EventAttendanceMocks';
 import { vi, describe, afterEach, expect, it } from 'vitest';
 import styles from 'style/app-fixed.module.css';
-import { ApolloError, useLazyQuery } from '@apollo/client';
-import * as ApolloClientModule from '@apollo/client';
+
+import { useLazyQuery } from '@apollo/client/react';
+
+vi.mock('@apollo/client/react', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@apollo/client/react')>();
+  return {
+    ...actual,
+    useLazyQuery: vi.fn().mockImplementation(actual.useLazyQuery),
+  };
+});
+
+vi.mock('react-router', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-router')>();
+  return {
+    ...actual,
+    useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
+  };
+});
 
 // Mock chart.js to avoid canvas errors
 vi.mock('react-chartjs-2', async () => ({
   ...(await vi.importActual('react-chartjs-2')),
   Line: () => null,
   Bar: () => null,
+  Doughnut: () => null,
+  Pie: () => null,
+}));
+
+const MOCKS_NO_VARS = MOCKS.map((m) => ({
+  ...m,
+  request: { ...m.request, variables: {} },
+}));
+const MOCKDETAIL_NO_VARS = MOCKDETAIL.map((m) => ({
+  ...m,
+  request: { ...m.request, variables: {} },
 }));
 
 const renderEventAttendance = (): RenderResult => {
   return render(
-    <MockedProvider mocks={MOCKS}>
-      <BrowserRouter>
+    <MockedProvider
+      mocks={[...MOCKS, ...MOCKDETAIL, ...MOCKS_NO_VARS, ...MOCKDETAIL_NO_VARS]}
+    >
+      <MemoryRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <EventAttendance />
           </I18nextProvider>
         </Provider>
-      </BrowserRouter>
+      </MemoryRouter>
     </MockedProvider>,
   );
 };
 
 const renderEventAttendanceWithSpy = (): RenderResult => {
   return render(
-    <BrowserRouter>
+    <MemoryRouter>
       <Provider store={store}>
         <I18nextProvider i18n={i18n}>
           <EventAttendance />
         </I18nextProvider>
       </Provider>
-    </BrowserRouter>,
+    </MemoryRouter>,
   );
 };
 
 function mockLazyQuery(returned: {
   data?: unknown;
   loading?: boolean;
-  error?: ApolloError | null;
+  error?: Error | null;
 }) {
-  vi.spyOn(ApolloClientModule, 'useLazyQuery').mockReturnValue([
+  (useLazyQuery as unknown as ReturnType<typeof vi.fn>).mockReturnValue([
     () => {},
     {
       data: returned.data,
@@ -69,21 +98,27 @@ function mockLazyQuery(returned: {
       client: undefined,
       networkStatus: 7,
       refetch: vi.fn(),
+      fetchMore: vi.fn(),
+      variables: {},
     },
-  ] as unknown as ReturnType<typeof useLazyQuery>);
+  ]);
 }
 
 describe('Event Attendance Component', () => {
   beforeEach(() => {
-    vi.mock('react-router', async () => ({
-      ...(await vi.importActual('react-router')),
-      useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
-    }));
+    beforeEach(() => {
+      // Setup if needed
+    });
   });
 
-  afterEach(() => {
-    vi.restoreAllMocks();
+  afterEach(async () => {
     cleanup();
+    const actual = await vi.importActual<typeof import('@apollo/client/react')>(
+      '@apollo/client/react',
+    );
+    (useLazyQuery as unknown as ReturnType<typeof vi.fn>).mockImplementation(
+      actual.useLazyQuery,
+    );
   });
 
   it('Component loads correctly with table headers', async () => {
@@ -305,7 +340,7 @@ describe('Event Attendance Component', () => {
     mockLazyQuery({
       loading: false,
       data: undefined,
-      error: new ApolloError({ errorMessage: 'Network Error' }),
+      error: new Error('Network Error'),
     });
 
     renderEventAttendanceWithSpy();

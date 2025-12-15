@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { MockedResponse } from '@apollo/client/testing';
+import type { MockLink } from '@apollo/client/testing';
 import { I18nextProvider } from './I18nextProviderMock';
 import { TestErrorBoundary } from './TestErrorBoundary';
 import AsyncComponent from './AsyncComponent';
@@ -14,7 +14,7 @@ vi.mock('@apollo/client/testing', async () => {
       mocks = [],
     }: {
       children: ReactNode;
-      mocks?: MockedResponse[];
+      mocks?: MockLink.MockedResponse[];
     }) => (
       <div data-testid="mocked-provider" data-mocks={JSON.stringify(mocks)}>
         {children}

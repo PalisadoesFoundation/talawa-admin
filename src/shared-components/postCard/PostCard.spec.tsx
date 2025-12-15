@@ -1,5 +1,6 @@
 import React from 'react';
-import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
+import { type MockLink } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -593,7 +594,7 @@ describe('PostCard', () => {
   };
 
   const renderPostCardWithCustomMockAndProps = (
-    customMock: MockedResponse,
+    customMock: MockLink.MockedResponse,
     propsOverrides: Partial<InterfacePostCard> = {},
   ) => {
     const { setItem } = useLocalStorage();
@@ -634,7 +635,9 @@ describe('PostCard', () => {
     );
   };
 
-  const renderPostCardWithCustomMock = (customMock: MockedResponse) => {
+  const renderPostCardWithCustomMock = (
+    customMock: MockLink.MockedResponse,
+  ) => {
     const { setItem } = useLocalStorage();
     setItem('userId', '1');
     setItem('role', 'administrator'); // Set admin role for pin/unpin tests
@@ -1050,8 +1053,8 @@ describe('PostCard', () => {
   const renderPostCardWithPagination = (
     options: {
       mockOverrides?: Partial<InterfacePostCard>;
-      customMocks?: MockedResponse[];
-      fetchMoreMock?: MockedResponse;
+      customMocks?: MockLink.MockedResponse[];
+      fetchMoreMock?: MockLink.MockedResponse;
     } = {},
   ) => {
     const {

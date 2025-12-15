@@ -1,4 +1,5 @@
-import { useQuery, type ApolloQueryResult } from '@apollo/client';
+import { type ObservableQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
@@ -92,7 +93,7 @@ const fundCampaignPledge = (): JSX.Element => {
     loading: boolean;
     error?: Error | undefined;
     refetch: () => Promise<
-      ApolloQueryResult<{
+      ObservableQuery.Result<{
         fundCampaign: InterfaceQueryFundCampaignsPledges;
       }>
     >;

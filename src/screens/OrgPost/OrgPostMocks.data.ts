@@ -4,7 +4,7 @@ import {
   ORGANIZATION_POST_LIST_WITH_VOTES,
 } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-import type { MockedResponse } from '@apollo/client/testing';
+import type { MockLink } from '@apollo/client/testing';
 import { enrichPostNode } from './OrgPostMocks.helpers';
 
 export const getUserByIdMock = {
@@ -70,6 +70,11 @@ export const samplePosts = [
     imageUrl: 'image1.jpg',
     videoUrl: null,
     pinned: false,
+    hasUserVoted: { hasVoted: false, voteType: 'none' },
+    commentsCount: 0,
+    upVotesCount: 1,
+    downVotesCount: 0,
+    postsCount: 5,
   },
   {
     id: '2',
@@ -84,6 +89,11 @@ export const samplePosts = [
     imageUrl: null,
     videoUrl: 'video2.mp4',
     pinned: true,
+    hasUserVoted: { hasVoted: true, voteType: 'UP' },
+    commentsCount: 5,
+    upVotesCount: 10,
+    downVotesCount: 1,
+    postsCount: 20,
   },
   {
     id: '3',
@@ -98,6 +108,11 @@ export const samplePosts = [
     imageUrl: 'image3.jpg',
     videoUrl: null,
     pinned: false,
+    hasUserVoted: { hasVoted: false, voteType: 'none' },
+    commentsCount: 2,
+    upVotesCount: 5,
+    downVotesCount: 0,
+    postsCount: 10,
   },
 ];
 
@@ -134,52 +149,49 @@ export const orgPinnedPostListMockBasic = {
 export const ORGANIZATION_PINNED_POST_LIST_EMPTY_MOCK =
   orgPinnedPostListMockBasic;
 
-export const ORGANIZATION_PINNED_POST_LIST_INITIAL_MOCK: MockedResponse = {
-  request: {
-    query: ORGANIZATION_PINNED_POST_LIST,
-    variables: {
-      input: { id: '123' },
-      after: null,
-      before: null,
-      first: 6,
-      last: null,
+export const ORGANIZATION_PINNED_POST_LIST_INITIAL_MOCK: MockLink.MockedResponse =
+  {
+    request: {
+      query: ORGANIZATION_PINNED_POST_LIST,
+      variables: {
+        input: { id: '123' },
+        first: 6,
+        last: null,
+      },
     },
-  },
-  result: {
-    data: {
-      organization: {
-        id: '123',
-        postsCount: 2,
-        pinnedPosts: {
-          edges: [
-            {
-              node: enrichPostNode(samplePosts[0]),
-              cursor: 'cursor1',
+    result: {
+      data: {
+        organization: {
+          id: '123',
+          postsCount: 2,
+          pinnedPosts: {
+            edges: [
+              {
+                node: enrichPostNode(samplePosts[0]),
+                cursor: 'cursor1',
+              },
+              {
+                node: enrichPostNode(samplePosts[1]),
+                cursor: 'cursor2',
+              },
+            ],
+            pageInfo: {
+              startCursor: 'cursor1',
+              endCursor: 'cursor2',
+              hasNextPage: true,
+              hasPreviousPage: false,
             },
-            {
-              node: enrichPostNode(samplePosts[1]),
-              cursor: 'cursor2',
-            },
-          ],
-          pageInfo: {
-            startCursor: 'cursor1',
-            endCursor: 'cursor2',
-            hasNextPage: true,
-            hasPreviousPage: false,
           },
         },
       },
     },
-  },
-};
+  };
 
 export const ORGANIZATION_PINNED_POST_LIST_WITH_PAGINATION_MOCK = {
   request: {
     query: ORGANIZATION_PINNED_POST_LIST,
     variables: {
       input: { id: '123' },
-      after: null,
-      before: null,
       first: 6,
       last: null,
     },
@@ -277,6 +289,11 @@ export const mockPosts = {
         emailAddress: 'user1@example.com',
       },
       comments: [],
+      hasUserVoted: { hasVoted: false, voteType: 'none' },
+      commentsCount: 0,
+      upVotesCount: 0,
+      downVotesCount: 0,
+      postsCount: 0,
     },
     {
       id: '2',
@@ -295,6 +312,11 @@ export const mockPosts = {
       pinnedAt: '2024-02-23T12:00:00Z',
       attachments: [],
       comments: [],
+      hasUserVoted: { hasVoted: true, voteType: 'UP' },
+      commentsCount: 1,
+      upVotesCount: 2,
+      downVotesCount: 0,
+      postsCount: 2,
     },
   ],
 };
@@ -342,6 +364,11 @@ export const mockPosts1 = {
       pinnedAt: null,
       attachments: [],
       comments: [],
+      hasUserVoted: { hasVoted: false, voteType: 'none' },
+      commentsCount: 0,
+      upVotesCount: 0,
+      downVotesCount: 0,
+      postsCount: 0,
     },
     {
       id: '2',
@@ -362,6 +389,11 @@ export const mockPosts1 = {
       pinnedAt: null,
       attachments: [],
       comments: [],
+      hasUserVoted: { hasVoted: false, voteType: 'none' },
+      commentsCount: 0,
+      upVotesCount: 0,
+      downVotesCount: 0,
+      postsCount: 0,
     },
   ],
 };
@@ -405,6 +437,11 @@ export const mockPosts2 = {
         emailAddress: 'u3@example.com',
       },
       comments: [],
+      hasUserVoted: { hasVoted: false, voteType: 'none' },
+      commentsCount: 0,
+      upVotesCount: 0,
+      downVotesCount: 0,
+      postsCount: 0,
     },
     {
       id: 'p4',
@@ -421,6 +458,11 @@ export const mockPosts2 = {
         emailAddress: 'u4@example.com',
       },
       comments: [],
+      hasUserVoted: { hasVoted: false, voteType: 'none' },
+      commentsCount: 0,
+      upVotesCount: 0,
+      downVotesCount: 0,
+      postsCount: 0,
     },
   ],
 };
@@ -447,7 +489,7 @@ export const mockOrgPostList2 = {
   },
 };
 
-export const loadingMocks: MockedResponse[] = [
+export const loadingMocks: MockLink.MockedResponse[] = [
   {
     request: {
       query: GET_POSTS_BY_ORG,
@@ -477,7 +519,7 @@ export const loadingMocks: MockedResponse[] = [
   },
 ];
 
-export const createPostSuccessMock: MockedResponse = {
+export const createPostSuccessMock: MockLink.MockedResponse = {
   request: {
     query: CREATE_POST_MUTATION,
     variables: {
@@ -510,7 +552,7 @@ export const createPostSuccessMock: MockedResponse = {
   },
 };
 
-export const NoOrgId: MockedResponse = {
+export const NoOrgId: MockLink.MockedResponse = {
   request: {
     query: CREATE_POST_MUTATION,
     variables: {

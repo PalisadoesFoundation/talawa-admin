@@ -19,7 +19,7 @@
  */
 
 import React, { useState, useEffect, useRef, JSX } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
 import styles from '../../style/app-fixed.module.css';
@@ -31,7 +31,7 @@ import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams, useNavigate } from 'react-router';
-import type { InterfaceEvent } from 'types/Event/interface';
+import type { InterfaceEvent, InterfaceIOrgList } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
 import CreateEventModal from './CreateEventModal';
@@ -117,11 +117,19 @@ function organizationEvents(): JSX.Element {
     // No manual refetch - let useQuery handle it automatically with cache-first policy
   };
 
+  interface InterfaceOrganizationEventsData {
+    organization: {
+      events: {
+        edges: IEventEdge[];
+      };
+    };
+  }
+
   const {
     data: eventData,
     error: eventDataError,
     refetch: refetchEvents,
-  } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
+  } = useQuery<InterfaceOrganizationEventsData>(GET_ORGANIZATION_EVENTS_PG, {
     variables: {
       id: currentUrl,
       first: 150,
@@ -139,11 +147,15 @@ function organizationEvents(): JSX.Element {
     fetchPolicy: 'cache-and-network',
   });
 
+  interface InterfaceOrganizationData {
+    organization: InterfaceIOrgList;
+  }
+
   const {
     data: orgData,
     loading: orgLoading,
     error: orgDataError,
-  } = useQuery(GET_ORGANIZATION_DATA_PG, {
+  } = useQuery<InterfaceOrganizationData>(GET_ORGANIZATION_DATA_PG, {
     variables: {
       id: currentUrl,
       first: 10,

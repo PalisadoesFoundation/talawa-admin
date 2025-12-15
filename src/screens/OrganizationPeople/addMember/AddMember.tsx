@@ -40,7 +40,8 @@
  *
  * @returns {JSX.Element} The rendered AddMember component.
  */
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client/react';
 import { Check, Close, Search } from '@mui/icons-material';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import Paper from '@mui/material/Paper';

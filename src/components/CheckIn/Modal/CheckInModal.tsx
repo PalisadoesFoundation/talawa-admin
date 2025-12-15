@@ -37,14 +37,16 @@
  */
 import React, { useState, useEffect } from 'react';
 import { Modal } from 'react-bootstrap';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { EVENT_CHECKINS, EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { TableRow } from './Row/TableRow';
 import type {
   InterfaceAttendeeCheckIn,
   InterfaceModalProp,
   InterfaceTableData,
+  InterfaceAttendeeQueryResponse,
 } from 'types/CheckIn/interface';
+import type { InterfaceEvent } from 'types/Event/interface';
 import type { GridColDef, GridRowHeightReturnValue } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
@@ -68,7 +70,7 @@ export const CheckInModal = ({
   });
 
   // First, get event details to determine if it's recurring or standalone
-  const { data: eventData } = useQuery(EVENT_DETAILS, {
+  const { data: eventData } = useQuery<{ event: InterfaceEvent }>(EVENT_DETAILS, {
     variables: { eventId: eventId },
     fetchPolicy: 'cache-first',
   });
@@ -78,7 +80,7 @@ export const CheckInModal = ({
     data: checkInData,
     loading: checkInLoading,
     refetch: checkInRefetch,
-  } = useQuery(EVENT_CHECKINS, {
+  } = useQuery<InterfaceAttendeeQueryResponse>(EVENT_CHECKINS, {
     variables: { eventId: eventId },
   });
 
@@ -91,7 +93,6 @@ export const CheckInModal = ({
 
   // Effect runs whenever checkInData, eventId, or checkInLoading changes
   useEffect(() => {
-    checkInRefetch(); // Refetch data when component mounts or updates
     if (checkInLoading) {
       setTableData([]); // Clear table data while loading
     } else if (checkInData?.event?.attendeesCheckInStatus) {
@@ -131,7 +132,7 @@ export const CheckInModal = ({
           data={props.value}
           refetch={checkInRefetch}
           onCheckInUpdate={onCheckInUpdate}
-          // isRecurring={isRecurring}
+        // isRecurring={isRecurring}
         />
       ),
     },

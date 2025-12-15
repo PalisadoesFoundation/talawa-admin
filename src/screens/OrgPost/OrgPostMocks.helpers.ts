@@ -21,6 +21,7 @@ export const enrichPostNode = (post: IPostNode) => {
     updatedAt: post.updatedAt ?? post.createdAt ?? new Date().toISOString(),
     pinnedAt: post.pinnedAt ?? null,
     pinned: post.pinned ?? false,
+    hasUserVoted: post.hasUserVoted ?? { hasVoted: false, voteType: 'none' },
     attachments: post.attachments ?? [],
     imageUrl: post.imageUrl ?? null,
     videoUrl: post.videoUrl ?? null,

@@ -1,6 +1,7 @@
 // SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
-import { MockedProvider, MockedResponse } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
+import { MockedResponse } from '@apollo/client/testing';
 import {
   act,
   render,

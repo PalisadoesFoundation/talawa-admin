@@ -202,9 +202,8 @@ describe('Talawa Admin Setup', () => {
   };
 
   it('should test the validation function for reCAPTCHA site key with valid input', async () => {
-    const { validateRecaptcha } = await import(
-      './validateRecaptcha/validateRecaptcha'
-    );
+    const { validateRecaptcha } =
+      await import('./validateRecaptcha/validateRecaptcha');
 
     // Mock validateRecaptcha to return true for valid input
     vi.mocked(validateRecaptcha).mockReturnValue(true);
@@ -232,9 +231,8 @@ describe('Talawa Admin Setup', () => {
   });
 
   it('should test the validation function for reCAPTCHA site key with invalid input', async () => {
-    const { validateRecaptcha } = await import(
-      './validateRecaptcha/validateRecaptcha'
-    );
+    const { validateRecaptcha } =
+      await import('./validateRecaptcha/validateRecaptcha');
 
     // Mock validateRecaptcha to return false for invalid input
     vi.mocked(validateRecaptcha).mockReturnValue(false);

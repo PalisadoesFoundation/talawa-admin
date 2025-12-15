@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import type { RenderResult } from '@testing-library/react';
 import {
   render,
@@ -11,7 +11,7 @@ import {
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
-import type { MockedResponse } from '@apollo/react-testing';
+import type { MockedResponse } from '@apollo/client/testing';
 import EventRegistrants from './EventRegistrants';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -255,11 +255,11 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
 
     await waitFor(() => {
       const deleteButton = screen.getByTestId('delete-registrant-0');
-      // Simulate programmatic attempt to delete
-      if (!deleteButton.hasAttribute('disabled')) {
-        fireEvent.click(deleteButton);
-      }
+      expect(deleteButton).toBeDisabled();
     });
+
+    const deleteButton = screen.getByTestId('delete-registrant-0');
+    fireEvent.click(deleteButton);
 
     // Should not show warning toast since button is disabled
     expect(toast.warn).not.toHaveBeenCalled();

@@ -48,8 +48,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Paper, TableBody } from '@mui/material';
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from '../../../style/app-fixed.module.css';
-import type { ApolloQueryResult } from '@apollo/client';
-import { useMutation, useQuery } from '@apollo/client';
+import type { ObservableQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
   CREATE_CHAT,
@@ -75,7 +75,7 @@ interface InterfaceCreateGroupChatProps {
   createGroupChatModalisOpen: boolean;
   chatsListRefetch: (
     variables?: Partial<{ id: string }> | undefined,
-  ) => Promise<ApolloQueryResult<unknown>>;
+  ) => Promise<ObservableQuery.Result<unknown>>;
 }
 
 /**

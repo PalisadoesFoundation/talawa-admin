@@ -39,7 +39,7 @@ import styles from 'style/app-fixed.module.css';
 import LogoutIcon from '@mui/icons-material/Logout';
 import useSession from 'utils/useSession';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { useNavigate } from 'react-router';
 
 interface ISignOutProps {

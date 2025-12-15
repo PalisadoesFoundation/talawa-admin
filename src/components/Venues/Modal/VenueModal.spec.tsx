@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
@@ -447,7 +447,10 @@ describe('VenueModal', () => {
       const mockLink = new ApolloLink((operation) => {
         // This will capture the actual variables being sent
         mutationSpy(operation);
-        return Observable.of({ data: { createVenue: { id: 'newVenue' } } });
+        return new Observable((observer) => {
+          observer.next({ data: { createVenue: { id: 'newVenue' } } });
+          observer.complete();
+        });
       });
 
       // Create a component with the spy link
@@ -2846,15 +2849,18 @@ describe('VenueModal', () => {
 
     // Create a flexible mock using ApolloLink
     const mutationSpy = vi.fn().mockReturnValue(
-      Observable.of({
-        data: {
-          updateVenue: {
-            id: 'venue1',
-            name: 'New Venue Name',
-            description: 'Updated description for venue 1',
-            capacity: 100,
+      new Observable((observer) => {
+        observer.next({
+          data: {
+            updateVenue: {
+              id: 'venue1',
+              name: 'New Venue Name',
+              description: 'Updated description for venue 1',
+              capacity: 100,
+            },
           },
-        },
+        });
+        observer.complete();
       }),
     );
 
@@ -2905,15 +2911,18 @@ describe('VenueModal', () => {
     const file = new File(['test'], 'test.png', { type: 'image/png' });
 
     const mutationSpy = vi.fn().mockReturnValue(
-      Observable.of({
-        data: {
-          createVenue: {
-            id: 'newVenue',
-            name: 'New Venue',
-            description: 'Test Description',
-            capacity: 100,
+      new Observable((observer) => {
+        observer.next({
+          data: {
+            createVenue: {
+              id: 'newVenue',
+              name: 'New Venue',
+              description: 'Test Description',
+              capacity: 100,
+            },
           },
-        },
+        });
+        observer.complete();
       }),
     );
 

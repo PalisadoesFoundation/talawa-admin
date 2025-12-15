@@ -6,7 +6,7 @@
  * users can quickly preview or navigate to them.
  */
 import React, { useState, useEffect } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
 import { Dropdown } from 'react-bootstrap';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -22,28 +22,39 @@ interface InterfaceNotification {
   navigation?: string;
 }
 
+interface NotificationsData {
+  user: {
+    id: string;
+    name: string;
+    notifications: InterfaceNotification[];
+  };
+}
+
 const NotificationIcon = () => {
   const [notifications, setNotifications] = useState<InterfaceNotification[]>(
     [],
   );
   const { getItem } = useLocalStorage();
   const userId = getItem('id');
-  const { loading, error, data } = useQuery(GET_USER_NOTIFICATIONS, {
-    variables: {
-      userId: userId,
-      input: {
-        first: 5,
-        skip: 0,
+  const { loading, error, data } = useQuery<NotificationsData>(
+    GET_USER_NOTIFICATIONS,
+    {
+      variables: {
+        userId: userId,
+        input: {
+          first: 5,
+          skip: 0,
+        },
       },
+      skip: !userId,
     },
-    skip: !userId,
-  });
+  );
   const navigate = useNavigate();
   const location = useLocation();
 
-  const unreadCount: number = (
-    (data?.user?.notifications as InterfaceNotification[]) || []
-  ).filter((n: InterfaceNotification) => !n.isRead).length;
+  const unreadCount: number = (data?.user?.notifications || []).filter(
+    (n) => !n.isRead,
+  ).length;
   useEffect(() => {
     setNotifications(data?.user?.notifications?.slice(0, 5) || []);
   }, [data]);

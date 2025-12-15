@@ -46,7 +46,7 @@ import { Tooltip } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import { useNavigate } from 'react-router-dom';
 import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
-import { ApolloError, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import {
   CANCEL_MEMBERSHIP_REQUEST,
   JOIN_PUBLIC_ORGANIZATION,
@@ -56,6 +56,7 @@ import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { toast } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalstorage';
+import { CombinedGraphQLErrors } from '@apollo/client';
 
 export interface InterfaceOrganizationCardPropsPG {
   data: InterfaceOrganizationCardProps;
@@ -122,9 +123,9 @@ function OrganizationCard({
         toast.success(t('orgJoined') as string);
       }
     } catch (error: unknown) {
-      if (error instanceof ApolloError) {
+      if (CombinedGraphQLErrors.is(error)) {
         const apolloError = error;
-        const errorCode = apolloError.graphQLErrors?.[0]?.extensions?.code;
+        const errorCode = apolloError.errors?.[0]?.extensions?.code;
         if (errorCode === 'ALREADY_MEMBER') {
           toast.error(t('AlreadyJoined') as string);
         } else {

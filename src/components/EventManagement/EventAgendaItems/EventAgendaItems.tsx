@@ -42,7 +42,7 @@ import { Button } from 'react-bootstrap';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import {
   AGENDA_ITEM_CATEGORY_LIST,
   AgendaItemByEvent,
@@ -58,6 +58,7 @@ import AgendaItemsCreateModal from 'components/AgendaItems/Create/AgendaItemsCre
 
 import styles from 'style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
+import { InterfaceAgendaItemCategoryInfo } from 'types/Agenda/interface';
 
 function EventAgendaItems(props: { eventId: string }): JSX.Element {
   const { eventId } = props;
@@ -92,7 +93,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
     data: InterfaceAgendaItemCategoryList | undefined;
     loading: boolean;
     error?: Error | undefined;
-  } = useQuery(AGENDA_ITEM_CATEGORY_LIST, {
+  } = useQuery<InterfaceAgendaItemCategoryList>(AGENDA_ITEM_CATEGORY_LIST, {
     variables: { organizationId: orgId },
     notifyOnNetworkStatusChange: true,
   });
@@ -108,7 +109,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
     loading: boolean;
     error?: unknown | undefined;
     refetch: () => void;
-  } = useQuery(AgendaItemByEvent, {
+  } = useQuery<InterfaceAgendaItemList>(AgendaItemByEvent, {
     variables: { relatedEventId: eventId }, //eventId
     notifyOnNetworkStatusChange: true,
   });

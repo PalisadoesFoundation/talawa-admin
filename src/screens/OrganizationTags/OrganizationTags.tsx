@@ -34,7 +34,8 @@
  * @function redirectToSubTags - Navigates to the sub-tags page for a specific tag.
  * @function handleSortChange - Updates the sorting order of tags.
  */
-import { useMutation, useQuery } from '@apollo/client';
+
+import { useMutation, useQuery } from '@apollo/client/react';
 import { WarningAmberRounded } from '@mui/icons-material';
 import Loader from 'components/Loader/Loader';
 import { useNavigate, useParams, Link } from 'react-router';
@@ -60,7 +61,7 @@ import type {
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
-import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
+import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
@@ -97,9 +98,9 @@ function OrganizationTags(): JSX.Element {
     error: orgUserTagsError,
     refetch: orgUserTagsRefetch,
     fetchMore: orgUserTagsFetchMore,
-  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST_PG, {
+  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST, {
     variables: {
-      input: { id: orgId },
+      id: orgId,
       first: TAGS_QUERY_DATA_CHUNK_SIZE,
       where: { name: { starts_with: tagSearchName } },
       sortedBy: { id: tagSortOrder },

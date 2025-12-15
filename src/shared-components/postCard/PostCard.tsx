@@ -21,7 +21,7 @@
  * @returns A JSX.Element representing the post card.
  */
 import React from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import {

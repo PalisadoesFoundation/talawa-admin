@@ -51,7 +51,7 @@ import { Navigate, useParams } from 'react-router';
 
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,

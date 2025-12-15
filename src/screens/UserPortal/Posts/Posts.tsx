@@ -47,7 +47,7 @@
  * - Redirecting to the user page if the organization ID is missing.
  */
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { HourglassBottom } from '@mui/icons-material';
 import {
   ORGANIZATION_ADVERTISEMENT_LIST,

@@ -1,7 +1,7 @@
 import React from 'react';
 import Calendar from './EventCalender';
 import { render, screen, fireEvent, act } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import i18nForTest from 'utils/i18nForTest';

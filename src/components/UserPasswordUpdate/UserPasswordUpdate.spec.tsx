@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
@@ -191,7 +191,7 @@ describe('Testing User Password Update', () => {
 
     await waitFor(() =>
       expect(mockToast.error).toHaveBeenCalledWith(
-        'ApolloError: Invalid previous password',
+        'CombinedGraphQLErrors: Invalid previous password',
       ),
     );
   });
@@ -236,9 +236,7 @@ describe('Testing User Password Update', () => {
 
     await waitFor(
       () => {
-        expect(mockToast.error).toHaveBeenCalledWith(
-          'ApolloError: Network error',
-        );
+        expect(mockToast.error).toHaveBeenCalledWith('Error: Network error');
       },
       { timeout: 3000 },
     );

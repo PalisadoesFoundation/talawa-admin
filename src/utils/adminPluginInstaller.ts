@@ -45,7 +45,7 @@ export interface IAdminPluginInstallationResult {
 export interface IAdminPluginInstallationOptions {
   zipFile: File;
   backup?: boolean;
-  apolloClient?: ApolloClient<NormalizedCacheObject>;
+  apolloClient?: ApolloClient;
 }
 
 /**

@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { useParams, useNavigate } from 'react-router';
 import type { DocumentNode } from '@apollo/client';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import useLocalStorage from 'utils/useLocalstorage';
 import DeleteOrg from './DeleteOrg';
 import { toast } from 'react-toastify';
@@ -26,9 +26,10 @@ vi.mock('react-router', () => ({
   useNavigate: vi.fn(),
 }));
 
-vi.mock('@apollo/client', () => ({
-  useMutation: vi.fn(),
+vi.mock('@apollo/client/react', () => ({
   useQuery: vi.fn(),
+  useMutation: vi.fn(),
+  gql: vi.fn(),
 }));
 
 vi.mock('utils/useLocalstorage', () => ({
@@ -61,11 +62,11 @@ describe('DeleteOrg Component', () => {
     (useLocalStorage as Mock).mockReturnValue({
       getItem: vi.fn().mockReturnValue('true'),
     });
-    (useQuery as Mock).mockReturnValue({
-      data: { isSampleOrganization: false },
+    (useQuery as unknown as Mock).mockReturnValue({
+      data: { organization: { isSampleOrganization: false } },
       loading: false,
     });
-    (useMutation as Mock).mockImplementation((mutation: DocumentNode) => {
+    (useMutation as unknown as Mock).mockImplementation((mutation: DocumentNode) => {
       if (mutation === DELETE_ORGANIZATION_MUTATION) {
         return [deleteOrgMutationMock, { loading: false }];
       } else if (mutation === REMOVE_SAMPLE_ORGANIZATION_MUTATION) {
@@ -114,8 +115,8 @@ describe('DeleteOrg Component', () => {
   });
 
   it('handles error during sample organization deletion', async () => {
-    (useQuery as Mock).mockReturnValue({
-      data: { isSampleOrganization: true },
+    (useQuery as unknown as Mock).mockReturnValue({
+      data: { organization: { isSampleOrganization: true } },
       loading: false,
     });
     const error = new Error('Sample deletion failed');
@@ -131,8 +132,8 @@ describe('DeleteOrg Component', () => {
   });
 
   it('deletes sample organization successfully', async () => {
-    (useQuery as Mock).mockReturnValue({
-      data: { isSampleOrganization: true },
+    (useQuery as unknown as Mock).mockReturnValue({
+      data: { organization: { isSampleOrganization: true } },
       loading: false,
     });
     removeSampleOrgMutationMock.mockResolvedValue({});
@@ -154,8 +155,8 @@ describe('DeleteOrg Component', () => {
   });
 
   it('renders delete button with different text for sample organization', () => {
-    (useQuery as Mock).mockReturnValue({
-      data: { isSampleOrganization: true },
+    (useQuery as unknown as Mock).mockReturnValue({
+      data: { organization: { isSampleOrganization: true } },
       loading: false,
     });
 
@@ -202,7 +203,7 @@ describe('DeleteOrg Component', () => {
   });
 
   it('handles query loading state', () => {
-    (useQuery as Mock).mockReturnValue({
+    (useQuery as unknown as Mock).mockReturnValue({
       data: undefined,
       loading: true,
     });

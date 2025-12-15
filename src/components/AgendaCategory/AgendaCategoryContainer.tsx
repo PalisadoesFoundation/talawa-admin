@@ -35,7 +35,7 @@ import type { ChangeEvent } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 
 import {
   DELETE_AGENDA_ITEM_CATEGORY_MUTATION,

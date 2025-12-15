@@ -34,7 +34,7 @@
  * ```
  */
 import React from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
@@ -75,12 +75,14 @@ export const UserUpdate: React.FC<
       !formState.newPassword ||
       !formState.confirmNewPassword
     ) {
-      toast.error(t('passCantBeEmpty') as string);
+      const error = new Error('passCantBeEmpty');
+      toast.error(t(error.message) as string);
       return;
     }
 
     if (formState.newPassword !== formState.confirmNewPassword) {
-      toast.error(t('passNoMatch') as string);
+      const error = new Error('passNoMatch');
+      toast.error(t(error.message) as string);
       return;
     }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { describe, it, expect, vi } from 'vitest';
 import TagNode from './TagNode';
 import type { InterfaceTagData } from '../../../utils/interfaces';
@@ -422,6 +422,10 @@ describe('Edge Cases and Coverage Improvements', () => {
     fireEvent.click(expandIcon);
 
     await waitFor(() => {
+      expect(screen.queryByTestId('subTagsLoader')).not.toBeInTheDocument();
+    });
+
+    await waitFor(() => {
       // When subTagsList is an empty array, the InfiniteScroll component is not rendered
       // because of the condition: {expanded && subTagsList?.length && (...)}
       // This test verifies behavior when subTagsList.length === 0 (empty array case)
@@ -548,6 +552,10 @@ describe('Edge Cases and Coverage Improvements', () => {
 
     const expandIcon = screen.getByTestId(`expandSubTags${mockTag._id}`);
     fireEvent.click(expandIcon);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('subTagsLoader')).not.toBeInTheDocument();
+    });
 
     await waitFor(() => {
       // When data is null, subTagsList will be [] (empty array), so the InfiniteScroll won't render
