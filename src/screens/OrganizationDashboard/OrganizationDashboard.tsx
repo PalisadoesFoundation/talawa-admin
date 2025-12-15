@@ -34,7 +34,7 @@ import {
   GET_ORGANIZATION_POSTS_COUNT_PG,
   GET_ORGANIZATION_EVENTS_PG,
   GET_ORGANIZATION_POSTS_PG,
-  MEMBERSHIP_REQUEST,
+  MEMBERSHIP_REQUEST_PG,
   ORGANIZATION_MEMBER_ADMIN_COUNT,
   GET_ORGANIZATION_BLOCKED_USERS_COUNT,
   GET_ORGANIZATION_VENUES_COUNT,
@@ -91,7 +91,7 @@ function OrganizationDashboard(): JSX.Element {
    */
 
   const { data: membershipRequestData, loading: loadingMembershipRequests } =
-    useQuery(MEMBERSHIP_REQUEST, {
+    useQuery(MEMBERSHIP_REQUEST_PG, {
       variables: {
         input: {
           id: orgId,
@@ -260,6 +260,12 @@ function OrganizationDashboard(): JSX.Element {
     orgVenuesError,
   ]);
 
+  const membershipRequests =
+    membershipRequestData?.organization?.membershipRequests ?? [];
+  const pendingMembershipRequests = membershipRequests.filter(
+    (request: { status: string }) => request.status === 'pending',
+  );
+
   return (
     <>
       <Row className="mt-4">
@@ -298,8 +304,7 @@ function OrganizationDashboard(): JSX.Element {
             }}
           />
           {membershipRequestData?.organization &&
-            membershipRequestData?.organization?.membershipRequestsCount >
-              0 && (
+            pendingMembershipRequests.length > 0 && (
               <Row>
                 <Col xs={6} sm={4} className="mb-4">
                   <button
@@ -311,10 +316,7 @@ function OrganizationDashboard(): JSX.Element {
                     aria-label={tCommon('requests')}
                   >
                     <DashBoardCard
-                      count={
-                        membershipRequestData?.organization
-                          ?.membershipRequestsCount
-                      }
+                      count={pendingMembershipRequests.length}
                       title={tCommon('requests')}
                       icon={<UsersIcon fill="#555555" />}
                     />
@@ -406,10 +408,7 @@ function OrganizationDashboard(): JSX.Element {
                   [...Array(4)].map((_, index) => (
                     <CardItemLoading key={`requestsLoading_${index}`} />
                   ))
-                ) : membershipRequestData?.organization?.membershipRequests?.filter(
-                    (request: { status: string }) =>
-                      request.status === 'pending',
-                  ).length === 0 ? (
+                ) : pendingMembershipRequests.length === 0 ? (
                   <div
                     className={styles.emptyContainer}
                     style={{ height: '150px' }}
@@ -417,11 +416,7 @@ function OrganizationDashboard(): JSX.Element {
                     <h6>{t('noMembershipRequests')}</h6>
                   </div>
                 ) : (
-                  membershipRequestData?.organization?.membershipRequests
-                    .filter(
-                      (request: { status: string }) =>
-                        request.status === 'pending',
-                    )
+                  pendingMembershipRequests
                     .slice(0, 8)
                     .map(
                       (request: {

@@ -1,4 +1,4 @@
-import React, { act } from 'react';
+﻿import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
@@ -28,6 +28,7 @@ import {
   ACCEPT_ORGANIZATION_REQUEST_MUTATION,
   REJECT_ORGANIZATION_REQUEST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import { PAGE_SIZE } from 'types/ReportingTable/utils';
 
 const { mockLocalStorageStore } = vi.hoisted(() => ({
   mockLocalStorageStore: {} as Record<string, string>,
@@ -52,6 +53,11 @@ vi.mock('utils/useLocalstorage', () => {
     // Removed unused named exports
   };
 });
+
+// Mock errorHandler
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: vi.fn(),
+}));
 
 // We don't need to mock global localStorage anymore for the hook
 // But we might need it if the component uses localStorage directly
@@ -2547,5 +2553,369 @@ describe('Testing Requests screen', () => {
     expect(
       screen.getByTestId('acceptMembershipRequestBtn101'),
     ).toBeInTheDocument();
+  });
+
+  describe('Accept request - success flow', () => {
+    test('should call toast.success and refetch after successful accept', async () => {
+      const { toast } = await import('react-toastify');
+      const ACCEPT_SUCCESS_MOCKS = [
+        makeOrgListMock(),
+        makeMembershipRequestsMock([
+          {
+            membershipRequestId: 'req123',
+            user: {
+              avatarURL: null,
+              id: 'user1',
+              name: 'Test User',
+              emailAddress: 'test@example.com',
+            },
+          },
+        ]),
+        {
+          request: {
+            query: ACCEPT_ORGANIZATION_REQUEST_MUTATION,
+            variables: {
+              input: { membershipRequestId: 'req123' },
+            },
+          },
+          result: {
+            data: {
+              acceptMembershipRequest: {
+                membershipRequest: {
+                  membershipRequestId: 'req123',
+                },
+              },
+            },
+          },
+        },
+        makeMembershipRequestsMock([]),
+      ];
+
+      const acceptLink = new StaticMockLink(ACCEPT_SUCCESS_MOCKS, true);
+
+      render(
+        <MockedProvider link={acceptLink}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Requests />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await wait(200);
+
+      const acceptBtn = await screen.findByTestId(
+        'acceptMembershipRequestBtnreq123',
+      );
+      await userEvent.click(acceptBtn);
+
+      await waitFor(
+        () => {
+          expect(toast.success).toHaveBeenCalled();
+        },
+        { timeout: 3000 },
+      );
+    });
+  });
+
+  describe('Reject request - success flow', () => {
+    test('should call toast.success and refetch after successful reject', async () => {
+      const { toast } = await import('react-toastify');
+      const REJECT_SUCCESS_MOCKS = [
+        makeOrgListMock(),
+        makeMembershipRequestsMock([
+          {
+            membershipRequestId: 'req789',
+            user: {
+              avatarURL: null,
+              id: 'user3',
+              name: 'Reject User',
+              emailAddress: 'reject@example.com',
+            },
+          },
+        ]),
+        {
+          request: {
+            query: REJECT_ORGANIZATION_REQUEST_MUTATION,
+            variables: {
+              input: { membershipRequestId: 'req789' },
+            },
+          },
+          result: {
+            data: {
+              rejectMembershipRequest: {
+                membershipRequest: {
+                  membershipRequestId: 'req789',
+                },
+              },
+            },
+          },
+        },
+        makeMembershipRequestsMock([]),
+      ];
+
+      const rejectLink = new StaticMockLink(REJECT_SUCCESS_MOCKS, true);
+
+      render(
+        <MockedProvider link={rejectLink}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Requests />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await wait(200);
+
+      const rejectBtn = await screen.findByTestId(
+        'rejectMembershipRequestBtnreq789',
+      );
+      await userEvent.click(rejectBtn);
+
+      await waitFor(
+        () => {
+          expect(toast.success).toHaveBeenCalled();
+        },
+        { timeout: 3000 },
+      );
+    });
+  });
+
+  describe('Error handling', () => {
+    test('should call errorHandler when accept mutation fails', async () => {
+      const { errorHandler } = await import('utils/errorHandler');
+      const ACCEPT_ERROR_MOCKS = [
+        makeOrgListMock(),
+        makeMembershipRequestsMock([
+          {
+            membershipRequestId: 'reqError1',
+            user: {
+              avatarURL: null,
+              id: 'user5',
+              name: 'Error User',
+              emailAddress: 'error@example.com',
+            },
+          },
+        ]),
+        {
+          request: {
+            query: ACCEPT_ORGANIZATION_REQUEST_MUTATION,
+            variables: {
+              input: { membershipRequestId: 'reqError1' },
+            },
+          },
+          error: new Error('Accept mutation failed'),
+        },
+      ];
+
+      const errorLink = new StaticMockLink(ACCEPT_ERROR_MOCKS, true);
+
+      render(
+        <MockedProvider link={errorLink}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Requests />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await wait(200);
+
+      const acceptBtn = await screen.findByTestId(
+        'acceptMembershipRequestBtnreqError1',
+      );
+      await userEvent.click(acceptBtn);
+
+      await waitFor(
+        () => {
+          expect(errorHandler).toHaveBeenCalled();
+        },
+        { timeout: 3000 },
+      );
+    });
+
+    test('should call errorHandler when reject mutation fails', async () => {
+      const { errorHandler } = await import('utils/errorHandler');
+      const REJECT_ERROR_MOCKS = [
+        makeOrgListMock(),
+        makeMembershipRequestsMock([
+          {
+            membershipRequestId: 'reqError2',
+            user: {
+              avatarURL: null,
+              id: 'user6',
+              name: 'Reject Error User',
+              emailAddress: 'rejecterror@example.com',
+            },
+          },
+        ]),
+        {
+          request: {
+            query: REJECT_ORGANIZATION_REQUEST_MUTATION,
+            variables: {
+              input: { membershipRequestId: 'reqError2' },
+            },
+          },
+          error: new Error('Reject mutation failed'),
+        },
+      ];
+
+      const rejectErrorLink = new StaticMockLink(REJECT_ERROR_MOCKS, true);
+
+      render(
+        <MockedProvider link={rejectErrorLink}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Requests />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await wait(200);
+
+      const rejectBtn = await screen.findByTestId(
+        'rejectMembershipRequestBtnreqError2',
+      );
+      await userEvent.click(rejectBtn);
+
+      await waitFor(
+        () => {
+          expect(errorHandler).toHaveBeenCalled();
+        },
+        { timeout: 3000 },
+      );
+    });
+  });
+
+  describe('Column rendering', () => {
+    test('should render all column headers with correct data-field attributes', async () => {
+      render(
+        <MockedProvider link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Requests />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await wait(200);
+
+      // Check that DataGrid columns exist by their data-field attributes
+      const columnHeaders = document.querySelectorAll('[data-field]');
+      const fields = Array.from(columnHeaders).map((el) =>
+        el.getAttribute('data-field'),
+      );
+
+      // Assert expected columns are present
+      expect(fields).toContain('sl_no');
+      expect(fields).toContain('profile');
+      expect(fields).toContain('name');
+      expect(fields).toContain('email');
+      expect(fields).toContain('accept');
+      expect(fields).toContain('reject');
+    });
+
+    test('should render accept and reject buttons in action column', async () => {
+      render(
+        <MockedProvider link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Requests />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await wait(200);
+
+      // Verify accept and reject buttons exist
+      await waitFor(() => {
+        const acceptButtons = screen.getAllByTestId(
+          /acceptMembershipRequestBtn/i,
+        );
+        const rejectButtons = screen.getAllByTestId(
+          /rejectMembershipRequestBtn/i,
+        );
+
+        expect(acceptButtons.length).toBeGreaterThan(0);
+        expect(rejectButtons.length).toBeGreaterThan(0);
+      });
+    });
+  });
+
+  describe('Serial number column', () => {
+    test('should render serial number "1." for the first visible row', async () => {
+      const SERIAL_MOCKS = [
+        makeOrgListMock(),
+        makeMembershipRequestsMock([
+          {
+            membershipRequestId: 'serial1',
+            user: {
+              avatarURL: null,
+              id: 'userSerial1',
+              name: 'First User',
+              emailAddress: 'first@example.com',
+            },
+          },
+        ]),
+      ];
+
+      const serialLink = new StaticMockLink(SERIAL_MOCKS, true);
+
+      render(
+        <MockedProvider link={serialLink}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Requests />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await wait(200);
+
+      await waitFor(() => {
+        expect(screen.getByText('1.')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Pagination consistency', () => {
+    test('should use PAGE_SIZE constant in mocks', () => {
+      expect(PAGE_SIZE).toBe(10);
+
+      const mockRequest = makeMembershipRequestsMock([
+        {
+          membershipRequestId: 'test1',
+          user: {
+            avatarURL: null,
+            id: 'userTest1',
+            name: 'Test User',
+            emailAddress: 'test@example.com',
+          },
+        },
+      ]);
+
+      expect(mockRequest.request.variables.first).toBe(PAGE_SIZE);
+    });
   });
 });

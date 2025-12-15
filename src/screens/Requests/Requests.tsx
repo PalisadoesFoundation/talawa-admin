@@ -63,7 +63,7 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import TableLoader from 'components/TableLoader/TableLoader';
-import { DataGrid, GridCellParams } from '@mui/x-data-grid';
+import { GridCellParams } from '@mui/x-data-grid';
 import type {
   ReportingTableColumn,
   ReportingTableGridProps,
@@ -73,7 +73,7 @@ import type {
 import Avatar from 'components/Avatar/Avatar';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import DeleteIcon from '@mui/icons-material/Delete';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import styles from '../../style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router';
@@ -536,29 +536,25 @@ const Requests = (): JSX.Element => {
           {isLoading ? (
             <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
           ) : (
-            <InfiniteScroll
-              {...infiniteProps}
-              loader={<TableLoader noOfCols={6} noOfRows={2} />}
-              className={styles.listTable}
-              data-testid="requests-list"
-              scrollThreshold={0.9}
-              style={{ overflow: 'visible' }}
-              endMessage={
-                displayedRequests.length > 0 ? (
-                  <div className={'w-100 text-center my-4'}>
-                    <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
-                  </div>
-                ) : null
-              }
-            >
-              <div className="datatable">
-                <DataGrid
-                  {...gridProps}
-                  rows={displayedRequests}
-                  columns={columns}
-                />
-              </div>
-            </InfiniteScroll>
+            <ReportingTable
+              rows={displayedRequests}
+              columns={columns}
+              gridProps={gridProps}
+              infiniteProps={infiniteProps}
+              listProps={{
+                loader: <TableLoader noOfCols={6} noOfRows={2} />,
+                className: styles.listTable,
+                ['data-testid']: 'requests-list',
+                scrollThreshold: 0.9,
+                style: { overflow: 'visible' },
+                endMessage:
+                  displayedRequests.length > 0 ? (
+                    <div className={'w-100 text-center my-4'}>
+                      <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
+                    </div>
+                  ) : null,
+              }}
+            />
           )}
         </div>
       )}

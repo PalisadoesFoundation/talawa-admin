@@ -16,7 +16,7 @@ import OrganizationDashboard from './OrganizationDashboard';
 import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './OrganizationDashboardMocks';
 import { MOCKS_ORG2 } from './OrganizationDashboardSecondaryMocks';
 import {
-  MEMBERSHIP_REQUEST,
+  MEMBERSHIP_REQUEST_PG,
   GET_ORGANIZATION_BLOCKED_USERS_PG,
 } from 'GraphQl/Queries/Queries';
 
@@ -311,7 +311,7 @@ describe('OrganizationDashboard', () => {
 
   it('renders membership requests section with proper states', async () => {
     const LOADING_MOCKS = MOCKS.map((mock) =>
-      mock.request.query === MEMBERSHIP_REQUEST
+      mock.request.query === MEMBERSHIP_REQUEST_PG
         ? { ...mock, delay: 500 }
         : mock,
     );
@@ -324,7 +324,7 @@ describe('OrganizationDashboard', () => {
     });
 
     const EMPTY_REQUESTS_MOCK = MOCKS.map((mock) =>
-      mock.request.query === MEMBERSHIP_REQUEST
+      mock.request.query === MEMBERSHIP_REQUEST_PG
         ? {
             ...mock,
             result: {
@@ -365,7 +365,7 @@ describe('OrganizationDashboard', () => {
     const SAFE_MIXED_REQUESTS_MOCK = [
       {
         request: {
-          query: MEMBERSHIP_REQUEST,
+          query: MEMBERSHIP_REQUEST_PG,
           variables: {
             input: { id: 'orgId' },
             skip: 0,
@@ -378,7 +378,6 @@ describe('OrganizationDashboard', () => {
           data: {
             organization: {
               id: 'orgId',
-              membershipRequestsCount: 3,
               membershipRequests: [
                 {
                   membershipRequestId: 'request1',
@@ -438,7 +437,7 @@ describe('OrganizationDashboard', () => {
           },
         },
       },
-      ...MOCKS.filter((mock) => mock.request.query !== MEMBERSHIP_REQUEST),
+      ...MOCKS.filter((mock) => mock.request.query !== MEMBERSHIP_REQUEST_PG),
     ];
 
     renderWithProviders({ mocks: SAFE_MIXED_REQUESTS_MOCK });
