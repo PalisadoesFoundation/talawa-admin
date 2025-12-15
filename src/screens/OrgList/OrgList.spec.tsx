@@ -2251,4 +2251,40 @@ describe('Advanced Component Functionality Tests', () => {
     // Verify that the modal should still be open since the success path wasn't taken
     expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
   });
+
+  test('Testing missing token scenario', async () => {
+    setItem('id', '123');
+    setItem('role', 'administrator');
+    setItem('SuperAdmin', true);
+    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
+
+    const missingTokenMocks = [
+      {
+        request: {
+          query: CURRENT_USER,
+          variables: { userId: '123' },
+        },
+        error: new Error('Unauthorized: Missing or invalid token'),
+      },
+      {
+        request: {
+          query: GET_USER_NOTIFICATIONS,
+          variables: { userId: '123', input: { first: 5, skip: 0 } },
+        },
+        error: new Error('Unauthorized: Missing or invalid token'),
+      },
+      {
+        request: {
+          query: ORGANIZATION_FILTER_LIST,
+          variables: { filter: '' },
+        },
+        error: new Error('Unauthorized: Missing or invalid token'),
+      },
+    ];
+
+    renderWithMocks(missingTokenMocks);
+    await wait();
+
+    expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+  });
 });
