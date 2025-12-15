@@ -1632,7 +1632,7 @@ describe('Extra coverage for 100 %', () => {
     // Wait for fetch to be called and errorHandler to show toast
     await waitFor(() => {
       expect(fetchSpy).toHaveBeenCalledWith(
-        'http://localhost:4000/graphql',
+        BACKEND_URL,
         expect.objectContaining({
           method: 'POST',
           headers: {
@@ -1732,7 +1732,7 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.error).toHaveBeenCalledWith(
-      expect.stringMatching(/captcha/i), // Match 'Captcha' or 'captcha' case-insensitively
+      expect.stringMatching(/captcha/i),
     );
   });
 
