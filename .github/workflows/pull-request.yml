@@ -334,8 +334,8 @@ jobs:
           echo "- Source branch may be incorrect please use develop as source branch."
           exit 1
 
-  Check-ESlint-Disable:
-    name: Check for eslint-disable
+  Check-Disable-Statements:
+    name: Check for disable statements
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -360,75 +360,12 @@ jobs:
 
       - name: Run Python script
         run: |
-          python .github/workflows/scripts/eslint_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
-
-  Check-Code-Coverage-Disable:
-    name: Check for code coverage disable
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Fetch all history for all branches and tags
-
-      - name: Get changed files
-        id: changed-files
-        run: |
-          # Get the base branch ref
-          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
-
-          # Get all changed files
-          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
-          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.9
-
-      - name: Run Python script
-        run: |
-          python .github/workflows/scripts/code_coverage_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
-
-  Check-ItSkip-Disable:
-    name: Check for it.skip commands
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Fetch all history for all branches and tags
-
-      - name: Get changed files
-        id: changed-files
-        run: |
-          # Get the base branch ref
-          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
-
-          # Get all changed files
-          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
-          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.9
-
-      - name: Run Python script
-        run: |
-          python .github/workflows/scripts/itskip_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
+          python .github/workflows/scripts/disable_statements_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
   Test-Application:
     name: Test Application (Shard ${{ matrix.shard }})
     runs-on: ubuntu-latest
-    needs:
-      [
-        Code-Quality-Checks,
-        Check-AutoDocs,
-        Check-ESlint-Disable,
-        Check-Code-Coverage-Disable,
-        Check-ItSkip-Disable,
-      ]
+    needs: [Code-Quality-Checks, Check-AutoDocs, Check-Disable-Statements]
     env:
       TOTAL_SHARDS: 4
     strategy:
@@ -959,14 +896,7 @@ jobs:
   Test-Application-E2E:
     timeout-minutes: 35
     runs-on: ubuntu-latest
-    needs:
-      [
-        Code-Quality-Checks,
-        Check-AutoDocs,
-        Check-ESlint-Disable,
-        Check-Code-Coverage-Disable,
-        Check-ItSkip-Disable,
-      ]
+    needs: [Code-Quality-Checks, Check-AutoDocs, Check-Disable-Statements]
     env:
       REACT_APP_TALAWA_URL: http://127.0.0.1:4000/graphql
     steps:
