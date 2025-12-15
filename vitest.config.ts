@@ -41,8 +41,10 @@ export default defineConfig({
     css: false,
     setupFiles: 'vitest.setup.ts',
     // Inline specific dependencies to avoid vitest issues
-      deps:{
-        inline:["@mui/x-charts", "@mui/x-data-grid", "@mui/x-date-pickers"] 
+      server: {
+        deps: {
+          inline: ["@mui/x-charts", "@mui/x-data-grid", "@mui/x-date-pickers"]
+        }
       },
     testTimeout: 30000,
     hookTimeout: 10000,
