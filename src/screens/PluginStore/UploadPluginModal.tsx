@@ -138,6 +138,21 @@ const UploadPluginModal: React.FC<UploadPluginModalProps> = ({
           borderRadius: 12,
         }}
       >
+        <Button
+          onClick={handleClose}
+          area-label="Close"
+          style={{
+            position: 'absolute',
+            top: 16,
+            right: 16,
+            background: 'transparent',
+            fontsize: 24,
+            cursor: 'pointer',
+            color: #666,
+          }}
+        >
+          x
+        </Button>
         {/* Left Panel - Upload */}
         <div
           style={{
@@ -258,13 +273,26 @@ const UploadPluginModal: React.FC<UploadPluginModalProps> = ({
             </div>
           )}
 
-          <div style={{ marginTop: 32 }}>
+          <div style={{ marginTop: 32,
+            display: 'flex',
+            gap: 12,
+           }}>
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={handleClose}
+              disabled={isInstalling}
+              style={{ flex: 1 }}
+              data-testid="cancel-upload-plugin-button"
+            >
+              Cancel
+            </Button>
             <Button
               variant="contained"
               color="primary"
               onClick={handleAddPlugin}
               disabled={!selectedFile || !manifest || isInstalling}
-              style={{ width: '100%' }}
+              style={{ flex : 1 }}
               data-testid="upload-plugin-button"
             >
               {isInstalling ? 'Uploading...' : 'Upload Plugin'}
