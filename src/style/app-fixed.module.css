@@ -2100,10 +2100,19 @@ form label,
 }
 
 .orgCard .innerContainer .content {
+  display: flex; /* i added this  */
+  flex-direction: column; /* i added this  */
   flex: 1;
   margin-left: 1rem;
   width: 70%;
   margin-top: 0.7rem;
+}
+
+/* i added this  */
+.manageBtn,
+.outlineBtn,
+.withdrawBtn {
+  width: 8rem;
 }
 
 @media (max-width: 550px) {
@@ -9926,6 +9935,13 @@ form {
   width: 4px;
   height: 100%;
   background: linear-gradient(135deg, #a8c7fa 0%, #a8c7fa 100%);
+}
+
+/* i added this  */
+.buttonContainer {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
 }
 
 /* ----------------------------------------------------- */

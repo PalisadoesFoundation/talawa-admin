@@ -114,24 +114,24 @@ function OrganizationCard({
     try {
       if (userRegistrationRequired) {
         await sendMembershipRequest({ variables: { organizationId: id } });
-        toast.success(t('MembershipRequestSent') as string);
+        toast.success(t('users.MembershipRequestSent') as string);
       } else {
         await joinPublicOrganization({
           variables: { input: { organizationId: id } },
         });
-        toast.success(t('orgJoined') as string);
+        toast.success(t('users.orgJoined') as string);
       }
     } catch (error: unknown) {
       if (error instanceof ApolloError) {
         const apolloError = error;
         const errorCode = apolloError.graphQLErrors?.[0]?.extensions?.code;
         if (errorCode === 'ALREADY_MEMBER') {
-          toast.error(t('AlreadyJoined') as string);
+          toast.error(t('users.AlreadyJoined') as string);
         } else {
-          toast.error(t('errorOccured') as string);
+          toast.error(t('users.errorOccured') as string);
         }
       } else {
-        toast.error(t('errorOccured') as string);
+        toast.error(t('users.errorOccured') as string);
       }
     }
   }
@@ -142,7 +142,7 @@ function OrganizationCard({
   async function withdrawMembershipRequest(): Promise<void> {
     const currentUserId = userId;
     if (!currentUserId) {
-      toast.error(t('UserIdNotFound') as string);
+      toast.error(t('users.errorOccured') as string);
       return;
     }
 
@@ -152,7 +152,7 @@ function OrganizationCard({
 
     try {
       if (!membershipRequest) {
-        toast.error(t('MembershipRequestNotFound') as string);
+        toast.error(t('users.errorOccured') as string);
         return;
       }
 
@@ -165,7 +165,7 @@ function OrganizationCard({
       if (process.env.NODE_ENV === 'development') {
         console.error('Failed to withdraw membership request:', error);
       }
-      toast.error(t('errorOccured') as string);
+      toast.error(t('users.errorOccured') as string);
     }
   }
 
@@ -197,10 +197,12 @@ function OrganizationCard({
             <div>
               {/* Tooltip for the organization name */}
               <Tooltip title={name} placement="top-end">
-                <h4 className={`${styles.orgName} fw-semibold`}>{name}</h4>
+                <h4 className={[styles.orgName, 'fw-semibold'].join(' ')}>
+                  {name}
+                </h4>
               </Tooltip>
               {/* Description of the organization */}
-              <div className={`${styles.orgdesc} fw-semibold`}>
+              <div className={[styles.orgdesc, 'fw-semibold'].join(' ')}>
                 <TruncatedText text={description} />
               </div>
 
@@ -239,7 +241,7 @@ function OrganizationCard({
                 data-cy="manageBtn"
                 className={styles.manageBtn}
               >
-                {t('Manage')}
+                {t('orgListCard.manage')}
               </Button>
             ) : (
               <div className={styles.buttonContainer}>
@@ -251,7 +253,7 @@ function OrganizationCard({
                     style={{ width: '8rem' }}
                     data-cy="manageBtn"
                   >
-                    {t('Visit')}
+                    {t('users.visit')}
                   </Button>
                 ) : membershipRequestStatus === 'pending' ? (
                   <Button
@@ -260,7 +262,7 @@ function OrganizationCard({
                     data-testid="withdrawBtn"
                     className={styles.withdrawBtn}
                   >
-                    {t('withdraw')}
+                    {t('users.withdraw')}
                   </Button>
                 ) : (
                   <Button
@@ -269,7 +271,7 @@ function OrganizationCard({
                     className={styles.outlineBtn}
                     style={{ width: '8rem' }}
                   >
-                    {t('joinNow')}
+                    {t('users.joinNow')}
                   </Button>
                 )}
               </div>
