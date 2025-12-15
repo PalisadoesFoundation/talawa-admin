@@ -849,4 +849,278 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
       expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
     });
   });
+
+  it('handles invalid date format (NaN) in event data', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event123' });
+
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    const mocksWithInvalidDate = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event123' },
+        },
+        result: {
+          data: {
+            event: {
+              id: 'event123',
+              name: 'Test Event',
+              description: 'Test',
+              location: 'Test',
+              allDay: false,
+              isPublic: true,
+              isRegisterable: true,
+              startAt: '2023-01-01T09:00:00Z',
+              endAt: '2023-01-02T17:00:00Z',
+              createdAt: '2023-01-01T00:00:00Z',
+              updatedAt: '2023-01-01T00:00:00Z',
+              isRecurringEventTemplate: false,
+              baseEvent: { id: 'base123' },
+              recurrenceRule: null,
+              creator: {
+                id: 'creator1',
+                name: 'Creator',
+                emailAddress: 'creator@example.com',
+              },
+              updater: {
+                id: 'updater1',
+                name: 'Updater',
+                emailAddress: 'updater@example.com',
+              },
+              organization: { id: 'org123', name: 'Test Org' },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: RECURRING_EVENTS,
+          variables: { baseRecurringEventId: 'base123' },
+        },
+        result: {
+          data: {
+            getRecurringEvents: [
+              {
+                id: 'event1',
+                startAt: 'invalid-date-string',
+                attendees: [{ id: 'user1', natalSex: 'male' }],
+              },
+              {
+                id: 'event2',
+                startAt: '2023-02-01T09:00:00Z',
+                attendees: [{ id: 'user2', natalSex: 'female' }],
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocksWithInvalidDate}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+    });
+
+    // Wait for chart to render with invalid date
+    await waitFor(
+      () => {
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          expect.stringContaining('Invalid date for event:'),
+        );
+      },
+      { timeout: 3000 },
+    );
+
+    consoleErrorSpy.mockRestore();
+  });
+
+  it('handles error during date formatting', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event123' });
+
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    const mocksWithDateError = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event123' },
+        },
+        result: {
+          data: {
+            event: {
+              id: 'event123',
+              name: 'Test Event',
+              description: 'Test',
+              location: 'Test',
+              allDay: false,
+              isPublic: true,
+              isRegisterable: true,
+              startAt: '2023-01-01T09:00:00Z',
+              endAt: '2023-01-02T17:00:00Z',
+              createdAt: '2023-01-01T00:00:00Z',
+              updatedAt: '2023-01-01T00:00:00Z',
+              isRecurringEventTemplate: false,
+              baseEvent: { id: 'base123' },
+              recurrenceRule: null,
+              creator: {
+                id: 'creator1',
+                name: 'Creator',
+                emailAddress: 'creator@example.com',
+              },
+              updater: {
+                id: 'updater1',
+                name: 'Updater',
+                emailAddress: 'updater@example.com',
+              },
+              organization: { id: 'org123', name: 'Test Org' },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: RECURRING_EVENTS,
+          variables: { baseRecurringEventId: 'base123' },
+        },
+        result: {
+          data: {
+            getRecurringEvents: [
+              {
+                id: 'event1',
+                startAt: '2023-01-01T09:00:00Z',
+                attendees: [{ id: 'user1', natalSex: 'male' }],
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    // Mock Date constructor to throw error when called with argument
+    const originalDate = global.Date;
+    const DateMock = function (this: Date, ...args: unknown[]): Date {
+      if (args.length > 0 && typeof args[0] === 'string') {
+        throw new Error('Date formatting error');
+      }
+      return new originalDate() as Date;
+    } as unknown as DateConstructor;
+    DateMock.now = originalDate.now;
+    DateMock.parse = originalDate.parse;
+    DateMock.UTC = originalDate.UTC;
+    Object.setPrototypeOf(DateMock, originalDate);
+    global.Date = DateMock;
+
+    render(
+      <MockedProvider mocks={mocksWithDateError}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+    });
+
+    // Wait for error to be logged
+    await waitFor(
+      () => {
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          expect.stringContaining('Error formatting date for event:'),
+          expect.any(Error),
+        );
+      },
+      { timeout: 3000 },
+    );
+
+    // Restore original Date
+    global.Date = originalDate;
+    consoleErrorSpy.mockRestore();
+  });
+
+  it('handles error during demographics export', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event123' });
+
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    const mockExportToCSV = vi.fn(() => {
+      throw new Error('Export failed');
+    });
+    (exportToCSV as Mock).mockImplementation(mockExportToCSV);
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    // Wait for modal and data to load
+    await waitFor(() => {
+      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole('button', { name: 'Export Data' }),
+      ).toBeInTheDocument();
+    });
+
+    // Wait for charts/data to be ready
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+
+    // Click export button
+    await act(async () => {
+      const exportButton = screen.getByRole('button', { name: 'Export Data' });
+      await userEvent.click(exportButton);
+    });
+
+    // Click demographics export option
+    await act(async () => {
+      const demographicsExport = screen.getByTestId('demographics-export');
+      await userEvent.click(demographicsExport);
+    });
+
+    // Verify error was logged
+    await waitFor(
+      () => {
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          'Failed to export demographics:',
+          expect.any(Error),
+        );
+      },
+      { timeout: 3000 },
+    );
+
+    consoleErrorSpy.mockRestore();
+  });
 });
