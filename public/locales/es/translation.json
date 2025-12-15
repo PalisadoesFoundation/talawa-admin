@@ -1277,6 +1277,7 @@
     "errorLoadingTransactions": "Error al cargar transacciones"
   },
   "userEvents": {
+    "title": "Eventos",
     "name": "Eventos",
     "nothingToShow": "No hay nada que mostrar aquí.",
     "search": "Buscar",
