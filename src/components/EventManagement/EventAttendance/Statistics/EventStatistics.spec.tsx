@@ -1013,14 +1013,15 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
       },
     ];
 
-    // Mock Date constructor to throw error when called with argument
+    // Capture original Date constructor before spying to avoid infinite recursion
+    const OriginalDate = Date;
     const dateSpy = vi.spyOn(global, 'Date' as never).mockImplementation(((
-      ...args: unknown[]
+      ...args: ConstructorParameters<typeof Date>
     ) => {
       if (args.length > 0 && typeof args[0] === 'string') {
         throw new Error('Date formatting error');
       }
-      return new Date();
+      return new OriginalDate(...args) as Date;
     }) as never);
 
     render(
@@ -1154,7 +1155,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
           data: {
             event: {
               id: 'event1',
-              title: 'Event 1',
+              name: 'Event 1',
               isRecurringEventTemplate: false,
               baseEvent: {
                 id: 'base1',
