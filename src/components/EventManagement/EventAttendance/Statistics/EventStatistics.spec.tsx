@@ -672,13 +672,13 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
 
     // Test next page
     await act(async () => {
-      const nextButton = screen.getByAltText('right-arrow');
+      const nextButton = screen.getByLabelText('nextPage');
       await userEvent.click(nextButton);
     });
 
     // Test previous page
     await act(async () => {
-      const prevButton = screen.getByAltText('left-arrow');
+      const prevButton = screen.getByLabelText('previousPage');
       await userEvent.click(prevButton);
     });
 
@@ -705,7 +705,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     );
 
     await waitFor(() => {
-      const prevButton = screen.getByAltText('left-arrow').closest('button');
+      const prevButton = screen.getByLabelText('previousPage');
       expect(prevButton).toBeDisabled();
     });
   });

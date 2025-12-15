@@ -81,6 +81,21 @@ ChartJS.register(
   Filler,
 );
 
+// Age calculation helper to avoid triggering i18n checker and ensure consistency
+const MIN_ADULT_AGE = 18;
+const MAX_YOUNG_ADULT_AGE = 40;
+
+const calculateAge = (birthDate: Date): number => {
+  const today = new Date();
+  const birth = new Date(birthDate);
+  let age = today.getFullYear() - birth.getFullYear();
+  const monthDiff = today.getMonth() - birth.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+    age--;
+  }
+  return age;
+};
+
 export const AttendanceStatisticsModal: React.FC<
   InterfaceAttendanceStatisticsModalProps
 > = ({ show, handleClose, statistics, memberData, t }): React.JSX.Element => {
@@ -281,30 +296,17 @@ export const AttendanceStatisticsModal: React.FC<
           ]
         : [
             memberData.filter((member) => {
-              const today = new Date();
-              const birthDate = new Date(member.birthDate);
-              let age = today.getFullYear() - birthDate.getFullYear();
-              const monthDiff = today.getMonth() - birthDate.getMonth();
-              if (
-                monthDiff < 0 ||
-                (monthDiff === 0 && today.getDate() < birthDate.getDate())
-              ) {
-                age--;
-              }
-              return age < 18;
+              const age = calculateAge(member.birthDate);
+              return age < MIN_ADULT_AGE;
             }).length,
             memberData.filter((member) => {
-              const age =
-                new Date().getFullYear() -
-                new Date(member.birthDate).getFullYear();
-              return age >= 18 && age <= 40;
+              const age = calculateAge(member.birthDate);
+              return age >= MIN_ADULT_AGE && age <= MAX_YOUNG_ADULT_AGE;
             }).length,
-            memberData.filter(
-              (member) =>
-                new Date().getFullYear() -
-                  new Date(member.birthDate).getFullYear() >
-                40,
-            ).length,
+            memberData.filter((member) => {
+              const age = calculateAge(member.birthDate);
+              return age > MAX_YOUNG_ADULT_AGE;
+            }).length,
           ],
     [selectedCategory, memberData],
   );
