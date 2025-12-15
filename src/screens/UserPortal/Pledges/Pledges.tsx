@@ -93,10 +93,7 @@ const Pledges = (): JSX.Element => {
   const { getItem } = useLocalStorage();
   const userIdFromStorage = getItem('userId');
   const { orgId } = useParams();
-  if (!orgId || !userIdFromStorage) {
-    return <Navigate to={'/'} replace />;
-  }
-  const userId: string = userIdFromStorage as string;
+  const userId = (userIdFromStorage as string | null) ?? null;
 
   const [extraUsers, setExtraUsers] = useState<InterfaceUserInfoPG[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -133,17 +130,26 @@ const Pledges = (): JSX.Element => {
     error?: ApolloError;
     refetch: IPledgeRefetchFn;
   } = useQuery(USER_PLEDGES, {
-    variables: {
-      input: { userId: userId },
-      where: searchTerm
-        ? {
-            ...(searchBy === 'pledgers' && { firstName_contains: searchTerm }),
-            ...(searchBy === 'campaigns' && { name_contains: searchTerm }),
-          }
-        : {},
-      orderBy: sortBy,
-    },
+    skip: !orgId || !userId,
+    variables: userId
+      ? {
+          input: { userId },
+          where: searchTerm
+            ? {
+                ...(searchBy === 'pledgers' && {
+                  firstName_contains: searchTerm,
+                }),
+                ...(searchBy === 'campaigns' && { name_contains: searchTerm }),
+              }
+            : {},
+          orderBy: sortBy,
+        }
+      : undefined,
   });
+
+  if (!orgId || !userId) {
+    return <Navigate to="/" replace />;
+  }
 
   const openModal = (modal: ModalState): void => {
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
@@ -258,9 +264,22 @@ const Pledges = (): JSX.Element => {
             {users.length > 2 && (
               <div
                 className={styles.moreContainer}
+                role="button"
+                tabIndex={0}
                 aria-describedby={id}
                 data-testid={'moreContainer-' + params.row.id}
                 onClick={(event) => handleClick(event, users.slice(2))}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    if (event.key === ' ') {
+                      event.preventDefault();
+                    }
+                    handleClick(
+                      event as unknown as React.MouseEvent<HTMLDivElement>,
+                      users.slice(2),
+                    );
+                  }
+                }}
               >
                 +{users.length - 2} {t('more')}...
               </div>
