@@ -1258,7 +1258,9 @@ describe('Testing User Pledge Screen', () => {
     const deletePledgeBtn = await screen.findAllByTestId('deletePledgeBtn');
     await userEvent.click(deletePledgeBtn[0]);
     await waitFor(() => {
-      expect(screen.getByText('Delete Pledge')).toBeInTheDocument();
+      expect(
+        screen.getByText(translations.pledges.deletePledge),
+      ).toBeInTheDocument();
     });
 
     await userEvent.click(screen.getByTestId('deletePledgeCloseBtn'));
@@ -1278,7 +1280,9 @@ describe('Testing User Pledge Screen', () => {
     const editPledgeBtn = await screen.findAllByTestId('editPledgeBtn');
     await userEvent.click(editPledgeBtn[0]);
     await waitFor(() => {
-      expect(screen.getByText('Edit Pledge')).toBeInTheDocument();
+      expect(
+        screen.getByText(translations.pledges.editPledge),
+      ).toBeInTheDocument();
     });
 
     await userEvent.click(screen.getByTestId('pledgeModalCloseBtn'));
@@ -1366,7 +1370,9 @@ describe('Testing User Pledge Screen', () => {
     unmount();
     renderMyPledges(link3);
     await waitFor(() => {
-      expect(screen.getByText('No Pledges Found')).toBeInTheDocument();
+      expect(
+        screen.getByText(translations.userCampaigns.noPledges),
+      ).toBeInTheDocument();
       expect(screen.queryByText('Harve Lance')).not.toBeInTheDocument();
       expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
     });
