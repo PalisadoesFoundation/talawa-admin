@@ -1013,18 +1013,14 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     ];
 
     // Mock Date constructor to throw error when called with argument
-    const originalDate = global.Date;
-    const DateMock = function (this: Date, ...args: unknown[]): Date {
+    const dateSpy = vi.spyOn(global, 'Date' as never).mockImplementation(((
+      ...args: unknown[]
+    ) => {
       if (args.length > 0 && typeof args[0] === 'string') {
         throw new Error('Date formatting error');
       }
-      return new originalDate() as Date;
-    } as unknown as DateConstructor;
-    DateMock.now = originalDate.now;
-    DateMock.parse = originalDate.parse;
-    DateMock.UTC = originalDate.UTC;
-    Object.setPrototypeOf(DateMock, originalDate);
-    global.Date = DateMock;
+      return new Date();
+    }) as never);
 
     render(
       <MockedProvider mocks={mocksWithDateError}>
@@ -1053,8 +1049,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
       { timeout: 3000 },
     );
 
-    // Restore original Date
-    global.Date = originalDate;
+    dateSpy.mockRestore();
     consoleErrorSpy.mockRestore();
   });
 
