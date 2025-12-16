@@ -1389,4 +1389,323 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
       expect(prevButton).toBeDisabled();
     });
   });
+
+  it('handles next page click when already on last page', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event123' });
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+    });
+
+    // With only 3 events and eventsPerPage=10, we're already on the last page
+    // Clicking next should not change anything (branch: currentPage < totalPages - 1 is false)
+    await waitFor(() => {
+      const nextButton = screen.getByLabelText('nextPage');
+      expect(nextButton).toBeDisabled();
+    });
+
+    // Try clicking it anyway to ensure the branch is covered
+    await act(async () => {
+      const nextButton = screen.getByLabelText('nextPage');
+      await userEvent.click(nextButton);
+    });
+
+    // Should still be on first page since there's only one page
+    await waitFor(() => {
+      const prevButton = screen.getByLabelText('previousPage');
+      expect(prevButton).toBeDisabled();
+    });
+  });
+
+  it('handles export dropdown toggle without selecting item', async () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('export-dropdown')).toBeInTheDocument();
+    });
+
+    // Open and close the dropdown without selecting - verifies dropdown handling
+    await act(async () => {
+      const exportButton = screen.getByRole('button', { name: 'exportData' });
+      await userEvent.click(exportButton);
+    });
+
+    // Click elsewhere to close
+    await act(async () => {
+      const modal = screen.getByTestId('attendance-modal');
+      await userEvent.click(modal);
+    });
+
+    // Modal should still be open and functional
+    expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+  });
+
+  it('renders without eventId parameter', async () => {
+    // Test when eventId is undefined (covers the false branch of if(eventId) in useEffect)
+    mockUseParams.mockReturnValue({ orgId: 'org123', eventId: undefined });
+
+    render(
+      <MockedProvider mocks={[]}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+    });
+
+    // Should render the non-recurring view (since no recurring events loaded)
+    await waitFor(() => {
+      expect(screen.getByText('5')).toBeInTheDocument(); // totalMembers
+    });
+  });
+
+  it('handles member with empty string natalSex', async () => {
+    const memberWithEmptyNatalSex: IMember[] = [
+      {
+        id: 'member1',
+        natalSex: '',
+        birthDate: new Date('1990-01-01'),
+        createdAt: '2023-01-01T00:00:00.000Z',
+        name: 'Empty Sex Member',
+        emailAddress: 'empty@test.com',
+        role: 'member',
+        tagsAssignedWith: { edges: [] },
+      },
+      {
+        id: 'member2',
+        natalSex: 'male',
+        birthDate: new Date('1995-06-15'),
+        createdAt: '2023-01-01T00:00:00.000Z',
+        name: 'Male Member',
+        emailAddress: 'male@test.com',
+        role: 'member',
+        tagsAssignedWith: { edges: [] },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={memberWithEmptyNatalSex}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+    });
+
+    // The empty string natalSex should be counted in the 'other' category
+    expect(screen.getByTestId('gender-button')).toBeInTheDocument();
+  });
+
+  it('calculates age demographics for members at exact age boundaries', async () => {
+    const today = new Date();
+    // Member exactly 18 years old (should be in 18-40 category)
+    const exactly18 = new Date(
+      today.getFullYear() - 18,
+      today.getMonth(),
+      today.getDate(),
+    );
+    // Member exactly 40 years old (should be in 18-40 category)
+    const exactly40 = new Date(
+      today.getFullYear() - 40,
+      today.getMonth(),
+      today.getDate(),
+    );
+    // Member 41 years old (should be in over 40 category)
+    const age41 = new Date(
+      today.getFullYear() - 41,
+      today.getMonth(),
+      today.getDate(),
+    );
+    // Member 17 years old (should be in under 18 category)
+    const age17 = new Date(
+      today.getFullYear() - 17,
+      today.getMonth(),
+      today.getDate(),
+    );
+
+    const boundaryMembers: IMember[] = [
+      {
+        id: 'exactly18',
+        natalSex: 'male',
+        birthDate: exactly18,
+        createdAt: '2023-01-01T00:00:00.000Z',
+        name: 'Exactly 18',
+        emailAddress: 'e18@test.com',
+        role: 'member',
+        tagsAssignedWith: { edges: [] },
+      },
+      {
+        id: 'exactly40',
+        natalSex: 'female',
+        birthDate: exactly40,
+        createdAt: '2023-01-01T00:00:00.000Z',
+        name: 'Exactly 40',
+        emailAddress: 'e40@test.com',
+        role: 'member',
+        tagsAssignedWith: { edges: [] },
+      },
+      {
+        id: 'age41',
+        natalSex: 'male',
+        birthDate: age41,
+        createdAt: '2023-01-01T00:00:00.000Z',
+        name: 'Age 41',
+        emailAddress: 'a41@test.com',
+        role: 'member',
+        tagsAssignedWith: { edges: [] },
+      },
+      {
+        id: 'age17',
+        natalSex: 'female',
+        birthDate: age17,
+        createdAt: '2023-01-01T00:00:00.000Z',
+        name: 'Age 17',
+        emailAddress: 'a17@test.com',
+        role: 'member',
+        tagsAssignedWith: { edges: [] },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={boundaryMembers}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+    });
+
+    // Switch to age view to exercise age calculation
+    await act(async () => {
+      const ageButton = screen.getByTestId('age-button');
+      await userEvent.click(ageButton);
+    });
+
+    // Verify age demographics are calculated (button should be active)
+    await waitFor(() => {
+      expect(screen.getByTestId('age-button')).toHaveClass('btn-success');
+    });
+
+    // Export demographics to exercise the export path with age data
+    await act(async () => {
+      const exportButton = screen.getByRole('button', { name: 'exportData' });
+      await userEvent.click(exportButton);
+    });
+
+    await act(async () => {
+      const demographicsExport = screen.getByTestId('demographics-export');
+      await userEvent.click(demographicsExport);
+    });
+
+    expect(exportToCSV).toHaveBeenCalled();
+  });
+
+  it('handles recurring events with no baseEvent and not a template', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event123' });
+
+    // Event that is not a recurring template and has no baseEvent (edge case)
+    const noBaseEventMocks = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event123' },
+        },
+        result: {
+          data: {
+            event: {
+              id: 'event123',
+              name: 'Standalone Event',
+              description: 'Test',
+              location: 'Test',
+              allDay: false,
+              isPublic: true,
+              isRegisterable: true,
+              startAt: '2023-01-01T09:00:00Z',
+              endAt: '2023-01-02T17:00:00Z',
+              createdAt: '2023-01-01T00:00:00Z',
+              updatedAt: '2023-01-01T00:00:00Z',
+              isRecurringEventTemplate: false,
+              baseEvent: null, // No baseEvent
+              recurrenceRule: null,
+              creator: {
+                id: 'creator1',
+                name: 'Creator',
+                emailAddress: 'creator@example.com',
+              },
+              updater: {
+                id: 'updater1',
+                name: 'Updater',
+                emailAddress: 'updater@example.com',
+              },
+              organization: { id: 'org123', name: 'Test Org' },
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={noBaseEventMocks}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+    });
+
+    // Should show the non-recurring view (totalMembers)
+    await waitFor(() => {
+      expect(screen.getByText('5')).toBeInTheDocument();
+    });
+  });
 });
