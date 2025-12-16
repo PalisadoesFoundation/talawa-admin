@@ -142,7 +142,7 @@ function OrganizationCard({
   async function withdrawMembershipRequest(): Promise<void> {
     const currentUserId = userId;
     if (!currentUserId) {
-      toast.error(t('UserIdNotFound') as string);
+      toast.error(t('users.UserIdNotFound') as string);
       return;
     }
 
@@ -152,7 +152,7 @@ function OrganizationCard({
 
     try {
       if (!membershipRequest) {
-        toast.error(t('MembershipRequestNotFound') as string);
+        toast.error(t('users.MembershipRequestNotFound') as string);
         return;
       }
 
@@ -160,7 +160,7 @@ function OrganizationCard({
         variables: { membershipRequestId: membershipRequest.id },
       });
 
-      toast.success(t('MembershipRequestWithdrawn') as string);
+      toast.success(t('users.MembershipRequestWithdrawn') as string);
     } catch (error: unknown) {
       if (process.env.NODE_ENV === 'development') {
         console.error('Failed to withdraw membership request:', error);
