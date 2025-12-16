@@ -24,7 +24,6 @@ computed keys are not matched.
 """
 
 from __future__ import annotations
-
 import argparse
 import fnmatch
 import json
@@ -45,6 +44,7 @@ _DEFAULT_EXTENSIONS = {".ts", ".tsx", ".js", ".jsx"}
 
 def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     """Parse command-line arguments.
+
     Args:
         argv: Optional sequence of arguments to parse. If None, uses sys.argv.
 
@@ -108,7 +108,7 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     return parser.parse_args(list(argv) if argv is not None else None)
 
 
-def is_ignored(path: Path, ignore_patterns: List[str]) -> bool:
+def is_ignored(path: Path, ignore_patterns: list[str]) -> bool:
     """Return True if `path` matches any ignore pattern."""
     str_path = str(path)
     for pat in ignore_patterns:
@@ -118,15 +118,15 @@ def is_ignored(path: Path, ignore_patterns: List[str]) -> bool:
 
 
 def collect_files(
-    files: List[str] | None,
-    directories: List[str] | None,
-    extensions: Set[str],
-    ignore_patterns: List[str],
+    files: list[str] | None,
+    directories: list[str] | None,
+    extensions: set[str],
+    ignore_patterns: list[str],
     verbose: bool = False,
 ) -> list[Path]:
     # pylint: disable=too-many-locals, too-many-branches
     """Collect target files from the provided file paths and directories."""
-    collected: List[Path] = []
+    collected: list[Path] = []
 
     if files:
         for f in files:
@@ -162,7 +162,7 @@ def collect_files(
                         collected.append(path)
 
     seen = set()
-    deduped: List[Path] = []
+    deduped: list[Path] = []
     for p in collected:
         resolved = p.resolve()
         if resolved not in seen:
@@ -175,9 +175,9 @@ def collect_files(
     return deduped
 
 
-def extract_keys_from_text(text: str) -> Set[str]:
+def extract_keys_from_text(text: str) -> set[str]:
     """Extract translation keys from a text blob using regex."""
-    keys: Set[str] = set()
+    keys: set[str] = set()
     for match in _TRANSLATION_CALL_RE.finditer(text):
         key = match.group(2).strip()
         if key:
@@ -185,7 +185,7 @@ def extract_keys_from_text(text: str) -> Set[str]:
     return keys
 
 
-def extract_keys_from_file(path: Path) -> Set[str]:
+def extract_keys_from_file(path: Path) -> set[str]:
     """Extract translation keys from a file."""
     try:
         raw = path.read_text(encoding="utf-8")
@@ -194,9 +194,9 @@ def extract_keys_from_file(path: Path) -> Set[str]:
     return extract_keys_from_text(raw)
 
 
-def flatten_json(obj: object, prefix: str = "") -> Set[str]:
+def flatten_json(obj: object, prefix: str = "") -> set[str]:
     """Flatten nested JSON-like dict into dot notation keys."""
-    keys: Set[str] = set()
+    keys: set[str] = set()
     if isinstance(obj, dict):
         for k, v in obj.items():
             new_prefix = f"{prefix}.{k}" if prefix else k
@@ -209,6 +209,7 @@ def flatten_json(obj: object, prefix: str = "") -> Set[str]:
 def load_locales(
     locales_dir: str,
     verbose: bool = False,
+    allow_missing: bool = False,
 ) -> dict[str, set[str]]:
     """Load all locales from locales_dir."""
     base = Path(locales_dir)
@@ -217,7 +218,7 @@ def load_locales(
             f"Locales directory not found: {locales_dir!s}"
         )
 
-    locales: Dict[str, Set[str]] = {}
+    locales: dict[str, set[str]] = {}
     for child in sorted(base.iterdir()):
         if child.is_dir():
             translation_file = child / "translation.json"
@@ -229,6 +230,8 @@ def load_locales(
                 print(f"Loaded locale '{child.name}'")
 
     if not locales:
+        if allow_missing:
+            return {}
         raise FileNotFoundError(
             f"No locales with translation.json found under: {locales_dir!s}"
         )
@@ -237,11 +240,11 @@ def load_locales(
 
 
 def compare_keys(
-    used_keys: Set[str],
-    locales: Dict[str, Set[str]],
+    used_keys: set[str],
+    locales: dict[str, set[str]],
 ) -> dict[str, list[str]]:
     """Compare used keys against locale keys."""
-    missing: Dict[str, List[str]] = {}
+    missing: dict[str, list[str]] = {}
     for key in sorted(used_keys):
         missing_langs = [
             lang for lang, keys in locales.items() if key not in keys
@@ -252,7 +255,7 @@ def compare_keys(
 
 
 def print_report(
-    missing: Dict[str, List[str]],
+    missing: dict[str, list[str]],
     verbose: bool = False,
 ) -> None:
     """Print a human-friendly missing-translation report."""
@@ -300,7 +303,7 @@ def main(argv: Iterable[str] | None = None) -> int:
         )
         return 2
 
-    used_keys: Set[str] = set()
+    used_keys: set[str] = set()
     for p in targets:
         used_keys.update(extract_keys_from_file(p))
 
@@ -308,7 +311,15 @@ def main(argv: Iterable[str] | None = None) -> int:
         print("No translation keys found in scanned files.")
         return 0
 
-    locales = load_locales(args.locales_dir, verbose=args.verbose)
+    try:
+        locales = load_locales(
+            args.locales_dir,
+            verbose=args.verbose,
+            allow_missing=args.allow_missing_locales
+        )
+    except FileNotFoundError as exc:
+        print(f"Error: {exc}")
+        return 2
     missing = compare_keys(used_keys, locales)
     print_report(missing, verbose=args.verbose)
 
