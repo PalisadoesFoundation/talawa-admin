@@ -23,9 +23,6 @@ from typing import Optional
 class DisableStatementsChecker:
     """Checker for various disable statements in code files."""
 
-    def __init__(self) -> None:
-        """Initialize the checker."""
-
     def check_eslint_disable(self, content: str, file_path: str) -> list[str]:
         """Check for eslint-disable comments."""
         violations = []
