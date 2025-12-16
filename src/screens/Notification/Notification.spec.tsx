@@ -8,6 +8,8 @@ import {
   MARK_NOTIFICATION_AS_READ,
 } from 'GraphQl/Queries/NotificationQueries';
 import { describe, it, expect, vi, afterEach } from 'vitest';
+import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 vi.mock('utils/useLocalstorage', () => ({
   __esModule: true,
@@ -292,10 +294,12 @@ describe('Notification Component', () => {
   });
 
   it('should handle error when marking notification as read', async () => {
+    const { t } = useTranslation('translation', { keyPrefix: 'notification' });
+    const { t: tErrors } = useTranslation('errors');
     const notifications = generateNotifications(1, false);
-    const consoleErrorSpy = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
+    const toastErrorSpy = vi
+      .spyOn(toast, 'error')
+      .mockImplementation(() => 1 as unknown as string);
 
     render(
       <MockedProvider mocks={mocks(notifications, true)}>
@@ -306,18 +310,92 @@ describe('Notification Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Mark as Read')).toBeInTheDocument();
+      expect(screen.getByText(t('markAsRead'))).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Mark as Read'));
+    fireEvent.click(screen.getByText(t('markAsRead')));
 
     await waitFor(() => {
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'Error marking notifications as read:',
-        expect.any(Error),
+      expect(toastErrorSpy).toHaveBeenCalledWith(
+        expect.stringContaining(tErrors('markAsReadError')), // or the exact message from tErrors
       );
     });
 
-    consoleErrorSpy.mockRestore();
+    toastErrorSpy.mockRestore();
+  });
+});
+
+describe('Pagination Visibility', () => {
+  it('should hide pagination when there are 0 notifications', async () => {
+    render(
+      <MockedProvider mocks={mocks([])}>
+        <MemoryRouter>
+          <Notification />
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText("You're all caught up!")).toBeInTheDocument();
+    });
+
+    expect(screen.queryByText('Prev')).not.toBeInTheDocument();
+    expect(screen.queryByText('Next')).not.toBeInTheDocument();
+  });
+
+  it('should hide pagination when there is exactly 1 notification and page is 0', async () => {
+    const notifications = generateNotifications(1, false);
+    render(
+      <MockedProvider mocks={mocks(notifications)}>
+        <MemoryRouter>
+          <Notification />
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Notification 1')).toBeInTheDocument();
+    });
+
+    expect(screen.queryByText('Prev')).not.toBeInTheDocument();
+    expect(screen.queryByText('Next')).not.toBeInTheDocument();
+  });
+
+  it('should show pagination when there are more than 1 notifications', async () => {
+    const notifications = generateNotifications(3, false);
+    render(
+      <MockedProvider mocks={mocks(notifications)}>
+        <MemoryRouter>
+          <Notification />
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Notification 1')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText('Prev')).toBeInTheDocument();
+    expect(screen.getByText('Next')).toBeInTheDocument();
+  });
+
+  it('should show pagination when page > 0 even with 0 or 1 notifications on current page', async () => {
+    const notifications = generateNotifications(10, false);
+    render(
+      <MockedProvider mocks={mocks(notifications)}>
+        <MemoryRouter>
+          <Notification />
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Navigate to page 2
+    await screen.findByText('Notification 1');
+    fireEvent.click(await screen.findByText('Next'));
+    await screen.findByText('Notification 7');
+
+    // Pagination should still be visible
+    expect(screen.getByText('Prev')).toBeInTheDocument();
+    expect(screen.getByText('Next')).toBeInTheDocument();
   });
 });
