@@ -142,10 +142,10 @@
   },
   "notification": {
     "title": "Notifications",
-    "markAsReadError": "Erreur lors du marquage des notifications comme lues",
     "allCaughtUp": "Vous êtes à jour !",
     "prev": "Précédent",
-    "next": "Suivant"
+    "next": "Suivant",
+    "markAsRead": "Marquer comme lues"
   },
   "orgList": {
     "title": "Organisations Talawa",
