@@ -18,6 +18,8 @@ vi.mock('react-i18next', () => ({
       const translations: Record<string, string> = {
         'orgListCard.manage': 'Manage',
         'users.visit': 'Visit',
+        'users.joinNow': 'joinNow',
+        'users.withdraw': 'withdraw',
         'users.orgJoined': 'orgJoined',
         'users.errorOccured': 'errorOccured',
         'users.AlreadyJoined': 'AlreadyJoined',
