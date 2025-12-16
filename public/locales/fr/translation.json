@@ -1136,7 +1136,18 @@
     "Member": "Membre",
     "Admin": "Administrateur",
     "loading": "Chargement...",
-    "noAttendees": "Aucun participant trouvé"
+    "noAttendees": "Aucun participant trouvé",
+    "attendeeCount": "Nombre de participants",
+    "maleAttendees": "Participants masculins",
+    "femaleAttendees": "Participantes féminines",
+    "otherAttendees": "Autres participants",
+    "currentEvent": "Événement actuel",
+    "chartPageNavigation": "Navigation de la page du graphique",
+    "previousPage": "Page précédente",
+    "nextPage": "Page suivante",
+    "goToToday": "Aller à aujourd'hui",
+    "genderDistribution": "Distribution par sexe",
+    "ageDistribution": "Distribution par âge"
   },
   "eventRegistrant": {
     "sort": "Trier",
