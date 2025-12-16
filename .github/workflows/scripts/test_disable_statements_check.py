@@ -2,6 +2,7 @@
 """Test suite for disable_statements_check.py."""
 
 import os
+import re
 import sys
 import tempfile
 import unittest
@@ -47,12 +48,14 @@ class TestDisableStatementsChecker(unittest.TestCase):
             f.flush()
             temp_name = f.name
             
-        with patch('builtins.print') as mock_print:
-            self.checker.check_istanbul_ignore(temp_name)
-            
-        self.assertTrue(self.checker.violations_found)
-        mock_print.assert_called_once()
-        os.unlink(temp_name)
+        try:
+            with patch('builtins.print') as mock_print:
+                self.checker.check_istanbul_ignore(temp_name)
+                
+            self.assertTrue(self.checker.violations_found)
+            mock_print.assert_called_once()
+        finally:
+            os.unlink(temp_name)
 
     def test_it_skip_detection(self):
         """Test it.skip pattern detection."""
@@ -61,12 +64,14 @@ class TestDisableStatementsChecker(unittest.TestCase):
             f.flush()
             temp_name = f.name
             
-        with patch('builtins.print') as mock_print:
-            self.checker.check_it_skip(temp_name)
-            
-        self.assertTrue(self.checker.violations_found)
-        mock_print.assert_called_once()
-        os.unlink(temp_name)
+        try:
+            with patch('builtins.print') as mock_print:
+                self.checker.check_it_skip(temp_name)
+                
+            self.assertTrue(self.checker.violations_found)
+            mock_print.assert_called_once()
+        finally:
+            os.unlink(temp_name)
 
     def test_it_skip_at_start_of_line(self):
         """Test it.skip at column 0."""
@@ -75,12 +80,14 @@ class TestDisableStatementsChecker(unittest.TestCase):
             f.flush()
             temp_name = f.name
             
-        with patch('builtins.print') as mock_print:
-            self.checker.check_it_skip(temp_name)
-            
-        self.assertTrue(self.checker.violations_found)
-        mock_print.assert_called_once()
-        os.unlink(temp_name)
+        try:
+            with patch('builtins.print') as mock_print:
+                self.checker.check_it_skip(temp_name)
+                
+            self.assertTrue(self.checker.violations_found)
+            mock_print.assert_called_once()
+        finally:
+            os.unlink(temp_name)
 
     def test_clean_file(self):
         """Test file with no violations."""
@@ -89,10 +96,12 @@ class TestDisableStatementsChecker(unittest.TestCase):
             f.flush()
             temp_name = f.name
             
-        self.checker._run_all_checks(temp_name)
-        
-        self.assertFalse(self.checker.violations_found)
-        os.unlink(temp_name)
+        try:
+            self.checker._run_all_checks(temp_name)
+            
+            self.assertFalse(self.checker.violations_found)
+        finally:
+            os.unlink(temp_name)
 
     def test_is_typescript_file(self):
         """Test TypeScript file detection."""
@@ -104,10 +113,11 @@ class TestDisableStatementsChecker(unittest.TestCase):
 
     def test_auto_discovery(self):
         """Test automatic method discovery."""
-        methods = []
-        for name, method in self.checker.__class__.__dict__.items():
-            if name.startswith('check_') and callable(method):
-                methods.append(name)
+        import inspect
+        methods = [
+            name for name, _ in inspect.getmembers(self.checker, predicate=inspect.ismethod)
+            if name.startswith('check_') and not name.startswith('check_files')
+        ]
         
         expected_methods = ['check_eslint_disable', 'check_istanbul_ignore', 'check_it_skip']
         for expected in expected_methods:
@@ -115,7 +125,6 @@ class TestDisableStatementsChecker(unittest.TestCase):
 
     def test_file_not_found_error(self):
         """Test handling of non-existent files."""
-        import re
         pattern = re.compile(r"test")
         with patch('builtins.print') as mock_print:
             self.checker._check_pattern('nonexistent.ts', pattern, 'test')
@@ -172,12 +181,14 @@ class TestMainFunction(unittest.TestCase):
             f.flush()
             temp_name = f.name
             
-        with patch('sys.argv', ['script.py', '--files', temp_name]):
-            with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
-                main()
-                
-        self.assertIn('completed successfully', mock_stdout.getvalue())
-        os.unlink(temp_name)
+        try:
+            with patch('sys.argv', ['script.py', '--files', temp_name]):
+                with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+                    main()
+                    
+            self.assertIn('completed successfully', mock_stdout.getvalue())
+        finally:
+            os.unlink(temp_name)
 
     def test_main_failure(self):
         """Test main function with violations."""
@@ -186,12 +197,14 @@ class TestMainFunction(unittest.TestCase):
             f.flush()
             temp_name = f.name
             
-        with patch('sys.argv', ['script.py', '--files', temp_name]):
-            with self.assertRaises(SystemExit) as cm:
-                main()
-                
-        self.assertEqual(cm.exception.code, 1)
-        os.unlink(temp_name)
+        try:
+            with patch('sys.argv', ['script.py', '--files', temp_name]):
+                with self.assertRaises(SystemExit) as cm:
+                    main()
+                    
+            self.assertEqual(cm.exception.code, 1)
+        finally:
+            os.unlink(temp_name)
 
 
 if __name__ == '__main__':
