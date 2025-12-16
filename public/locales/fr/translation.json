@@ -256,7 +256,10 @@
     "orgJoined": "Organisation Rejointe",
     "MembershipRequestSent": "Demande d'adhésion envoyée",
     "AlreadyJoined": "Déjà rejoint",
-    "errorOccured": "Une erreur s'est produite"
+    "errorOccurred": "Une erreur s'est produite. Veuillez réessayer.",
+    "UserIdNotFound": "ID utilisateur non trouvée",
+    "MembershipRequestNotFound": "Demande d'adhésion non trouvée",
+    "MembershipRequestWithdrawn": "Demande d'adhésion annulée avec succès"
   },
   "communityProfile": {
     "title": "Profil de la communauté",

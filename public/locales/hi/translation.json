@@ -256,7 +256,10 @@
     "orgJoined": "संगठन में शामिल",
     "MembershipRequestSent": "सदस्यता अनुरोध भेजा गया",
     "AlreadyJoined": "पहले से शामिल",
-    "errorOccured": "त्रुटि हुई"
+    "errorOccurred": "एक त्रुटि हुई। कृपया पुनः प्रयास करें",
+    "UserIdNotFound": "उपयोगकर्ता ID नहीं मिली",
+    "MembershipRequestNotFound": "सदस्यता अनुरोध नहीं मिला",
+    "MembershipRequestWithdrawn": "सदस्यता अनुरोध सफलतापूर्वक वापस लिया गया"
   },
   "communityProfile": {
     "title": "समुदाय प्रोफ़ाइल",
