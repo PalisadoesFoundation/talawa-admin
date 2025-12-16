@@ -315,7 +315,7 @@ def main(argv: Iterable[str] | None = None) -> int:
         locales = load_locales(
             args.locales_dir,
             verbose=args.verbose,
-            allow_missing=args.allow_missing_locales
+            allow_missing=args.allow_missing_locales,
         )
     except FileNotFoundError as exc:
         print(f"Error: {exc}")
