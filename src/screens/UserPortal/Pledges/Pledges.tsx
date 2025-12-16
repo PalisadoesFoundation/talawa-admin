@@ -57,7 +57,7 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Popover, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import dayjs from 'dayjs';
 import { currencySymbols } from 'utils/currency';
@@ -95,7 +95,6 @@ const Pledges = (): JSX.Element => {
   const { orgId } = useParams();
   const userId = (userIdFromStorage as string | null) ?? null;
 
-  const [extraUsers, setExtraUsers] = useState<InterfaceUserInfoPG[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [pledges, setPledges] = useState<InterfacePledgeInfo[]>([]);
   const [pledge, setPledge] = useState<InterfacePledgeInfo | null>(null);
@@ -108,10 +107,6 @@ const Pledges = (): JSX.Element => {
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
   }>({ [ModalState.UPDATE]: false, [ModalState.DELETE]: false });
-
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popup' : undefined;
 
   type PledgeQueryResult = ApolloQueryResult<{
     getPledgesByUserId: InterfacePledgeInfo[];
@@ -174,14 +169,6 @@ const Pledges = (): JSX.Element => {
     },
     [openModal],
   );
-
-  const handleClick = (
-    event: React.MouseEvent<HTMLDivElement>,
-    users: InterfaceUserInfoPG[],
-  ): void => {
-    setExtraUsers(users);
-    setAnchorEl(event.currentTarget);
-  };
 
   const isNoPledgesFoundError =
     pledgeError?.graphQLErrors.some((graphQLError) => {
@@ -261,29 +248,6 @@ const Pledges = (): JSX.Element => {
                   <span key={user.id + '-name'}>{user.name}</span>
                 </div>
               ))}
-            {users.length > 2 && (
-              <div
-                className={styles.moreContainer}
-                role="button"
-                tabIndex={0}
-                aria-describedby={id}
-                data-testid={'moreContainer-' + params.row.id}
-                onClick={(event) => handleClick(event, users.slice(2))}
-                onKeyDown={(event) => {
-                  if (event.key === 'Enter' || event.key === ' ') {
-                    if (event.key === ' ') {
-                      event.preventDefault();
-                    }
-                    handleClick(
-                      event as unknown as React.MouseEvent<HTMLDivElement>,
-                      users.slice(2),
-                    );
-                  }
-                }}
-              >
-                +{users.length - 2} {t('more')}...
-              </div>
-            )}
           </div>
         );
       },
@@ -533,47 +497,6 @@ const Pledges = (): JSX.Element => {
         pledge={pledge}
         refetchPledge={refetchPledge}
       />
-
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={() => setAnchorEl(null)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-      >
-        <div
-          className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
-          data-testid="extra-users-popup"
-        >
-          {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
-            <div
-              className={styles.pledgerContainer}
-              key={user.id ?? index}
-              data-testid={'extra' + (index + 1)}
-            >
-              {user.avatarURL ? (
-                <img
-                  src={user.avatarURL}
-                  alt={user.name}
-                  data-testid={'extraImage' + (index + 1)}
-                  className={styles.TableImage}
-                />
-              ) : (
-                <div className={styles.avatarContainer}>
-                  <Avatar
-                    containerStyle={styles.imageContainer}
-                    avatarStyle={styles.TableImage}
-                    name={user.name}
-                    alt={user.name}
-                    dataTestId={'extraAvatar' + (index + 1)}
-                  />
-                </div>
-              )}
-              <span>{user.name}</span>
-            </div>
-          ))}
-        </div>
-      </Popover>
     </div>
   );
 };
