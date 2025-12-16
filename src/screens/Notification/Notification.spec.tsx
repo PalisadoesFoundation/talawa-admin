@@ -314,7 +314,9 @@ describe('Notification Component', () => {
     fireEvent.click(screen.getByText('Mark as Read'));
 
     await waitFor(() => {
-      expect(toastErrorSpy).toHaveBeenCalledWith(i18nForTest.t('markAsReadError'));
+      expect(toastErrorSpy).toHaveBeenCalledWith(
+        i18nForTest.t('markAsReadError'),
+      );
     });
 
     toastErrorSpy.mockRestore();
