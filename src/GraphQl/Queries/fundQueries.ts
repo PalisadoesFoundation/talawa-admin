@@ -131,16 +131,8 @@ export const USER_PLEDGES = gql`
     $input: QueryFundCampaignPledgesByUserInput!
     $where: QueryPledgeWhereInput
     $orderBy: QueryPledgeOrderByInput
-    $limit: Int
-    $offset: Int
   ) {
-    getPledgesByUserId(
-      input: $input
-      where: $where
-      orderBy: $orderBy
-      limit: $limit
-      offset: $offset
-    ) {
+    getPledgesByUserId(input: $input, where: $where, orderBy: $orderBy) {
       id
       amount
       note
