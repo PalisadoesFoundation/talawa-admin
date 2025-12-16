@@ -27,6 +27,7 @@
     "atleast_6_char_long": "Al menos 6 caracteres de largo",
     "firstName_invalid": "El nombre debe contener solo letras minúsculas y mayúsculas.",
     "lastName_invalid": "El apellido debe contener solo letras minúsculas y mayúsculas.",
+    "name_invalid": "El nombre solo debe contener letras, espacios y guiones.",
     "password_invalid": "La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un valor numérico y un carácter especial.",
     "email_invalid": "El correo electrónico debe tener al menos 8 caracteres.",
     "Password_and_Confirm_password_mismatches.": "Contraseña y Confirmar contraseña no coinciden.",
@@ -204,14 +205,14 @@
     "accept": "Aceptar",
     "reject": "Rechazar",
     "searchRequests": "Buscar solicitudes",
-    "endOfResults": "Fin de los resultados",
     "noOrgError": "Organizaciones no encontradas, por favor crea una organización a través del panel",
-    "noResultsFoundFor": "No se encontraron resultados para ",
     "noRequestsFound": "No se encontraron solicitudes",
     "acceptedSuccessfully": "Solicitud aceptada exitosamente",
     "rejectedSuccessfully": "Solicitud rechazada exitosamente",
     "noOrgErrorTitle": "Organizaciones no encontradas",
-    "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control"
+    "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
+    "profilePictureAlt": "Imagen de perfil de {{name}}",
+    "placeholderAvatarAlt": "Avatar predeterminado"
   },
   "users": {
     "title": "Roles Talawa",
