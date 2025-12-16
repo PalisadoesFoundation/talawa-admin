@@ -29,50 +29,68 @@ class TestDisableStatementsChecker(unittest.TestCase):
         with tempfile.NamedTemporaryFile(mode='w', suffix='.ts', delete=False) as f:
             f.write('// eslint-disable-next-line\nconst x = 1;')
             f.flush()
+            temp_name = f.name
             
-            with patch('builtins.print') as mock_print:
-                self.checker.check_eslint_disable(f.name)
-                
-            self.assertTrue(self.checker.violations_found)
-            mock_print.assert_called_once()
-            os.unlink(f.name)
+        with patch('builtins.print') as mock_print:
+            self.checker.check_eslint_disable(temp_name)
+            
+        self.assertTrue(self.checker.violations_found)
+        mock_print.assert_called_once()
+        os.unlink(temp_name)
 
     def test_istanbul_ignore_detection(self):
         """Test istanbul ignore pattern detection."""
         with tempfile.NamedTemporaryFile(mode='w', suffix='.ts', delete=False) as f:
             f.write('/* istanbul ignore next */\nconst x = 1;')
             f.flush()
+            temp_name = f.name
             
-            with patch('builtins.print') as mock_print:
-                self.checker.check_istanbul_ignore(f.name)
-                
-            self.assertTrue(self.checker.violations_found)
-            mock_print.assert_called_once()
-            os.unlink(f.name)
+        with patch('builtins.print') as mock_print:
+            self.checker.check_istanbul_ignore(temp_name)
+            
+        self.assertTrue(self.checker.violations_found)
+        mock_print.assert_called_once()
+        os.unlink(temp_name)
 
     def test_it_skip_detection(self):
         """Test it.skip pattern detection."""
         with tempfile.NamedTemporaryFile(mode='w', suffix='.ts', delete=False) as f:
             f.write('  it.skip("test", () => {});')
             f.flush()
+            temp_name = f.name
             
-            with patch('builtins.print') as mock_print:
-                self.checker.check_it_skip(f.name)
-                
-            self.assertTrue(self.checker.violations_found)
-            mock_print.assert_called_once()
-            os.unlink(f.name)
+        with patch('builtins.print') as mock_print:
+            self.checker.check_it_skip(temp_name)
+            
+        self.assertTrue(self.checker.violations_found)
+        mock_print.assert_called_once()
+        os.unlink(temp_name)
+
+    def test_it_skip_at_start_of_line(self):
+        """Test it.skip at column 0."""
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.ts', delete=False) as f:
+            f.write('it.skip("test", () => {});')
+            f.flush()
+            temp_name = f.name
+            
+        with patch('builtins.print') as mock_print:
+            self.checker.check_it_skip(temp_name)
+            
+        self.assertTrue(self.checker.violations_found)
+        mock_print.assert_called_once()
+        os.unlink(temp_name)
 
     def test_clean_file(self):
         """Test file with no violations."""
         with tempfile.NamedTemporaryFile(mode='w', suffix='.ts', delete=False) as f:
             f.write('const x = 1;\nfunction test() { return x; }')
             f.flush()
+            temp_name = f.name
             
-            self.checker._run_all_checks(f.name)
-            
-            self.assertFalse(self.checker.violations_found)
-            os.unlink(f.name)
+        self.checker._run_all_checks(temp_name)
+        
+        self.assertFalse(self.checker.violations_found)
+        os.unlink(temp_name)
 
     def test_is_typescript_file(self):
         """Test TypeScript file detection."""
@@ -148,26 +166,28 @@ class TestMainFunction(unittest.TestCase):
         with tempfile.NamedTemporaryFile(mode='w', suffix='.ts', delete=False) as f:
             f.write('const x = 1;')
             f.flush()
+            temp_name = f.name
             
-            with patch('sys.argv', ['script.py', '--files', f.name]):
-                with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
-                    main()
-                    
-            self.assertIn('completed successfully', mock_stdout.getvalue())
-            os.unlink(f.name)
+        with patch('sys.argv', ['script.py', '--files', temp_name]):
+            with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+                main()
+                
+        self.assertIn('completed successfully', mock_stdout.getvalue())
+        os.unlink(temp_name)
 
     def test_main_failure(self):
         """Test main function with violations."""
         with tempfile.NamedTemporaryFile(mode='w', suffix='.ts', delete=False) as f:
             f.write('// eslint-disable')
             f.flush()
+            temp_name = f.name
             
-            with patch('sys.argv', ['script.py', '--files', f.name]):
-                with self.assertRaises(SystemExit) as cm:
-                    main()
-                    
-            self.assertEqual(cm.exception.code, 1)
-            os.unlink(f.name)
+        with patch('sys.argv', ['script.py', '--files', temp_name]):
+            with self.assertRaises(SystemExit) as cm:
+                main()
+                
+        self.assertEqual(cm.exception.code, 1)
+        os.unlink(temp_name)
 
 
 if __name__ == '__main__':

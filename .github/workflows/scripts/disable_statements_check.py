@@ -70,7 +70,7 @@ class DisableStatementsChecker:
         pattern = re.compile(r"\bit\.skip\s*\(", re.IGNORECASE)
         self._check_pattern(file_path, pattern, "it.skip")
 
-    def _check_pattern(self, file_path, pattern, disable_type):
+    def _check_pattern(self, file_path, pattern, disable_type) -> None:
         """Check file for pattern and report violations.
 
         Args:
@@ -96,7 +96,7 @@ class DisableStatementsChecker:
         except (IOError, OSError) as e:
             print(f"Error reading file {file_path}: {e}")
 
-    def check_files_or_directories(self, files_or_dirs):
+    def check_files_or_directories(self, files_or_dirs) -> None:
         """Check files or directories for disable statements.
 
         Args:
@@ -114,7 +114,7 @@ class DisableStatementsChecker:
             elif os.path.isfile(item) and self._is_typescript_file(item):
                 self._run_all_checks(item)
 
-    def _is_typescript_file(self, filename):
+    def _is_typescript_file(self, filename) -> bool:
         """Check if file is a TypeScript file (excluding test files).
 
         Args:
@@ -130,7 +130,7 @@ class DisableStatementsChecker:
             ))
         )
 
-    def _run_all_checks(self, file_path):
+    def _run_all_checks(self, file_path) -> None:
         """Automatically run all check methods on a file.
 
         Args:
@@ -141,7 +141,7 @@ class DisableStatementsChecker:
                 method(file_path)
 
 
-def arg_parser_resolver():
+def arg_parser_resolver() -> argparse.Namespace:
     """Resolve the CLI arguments provided by the user.
 
     Returns:
@@ -167,7 +167,7 @@ def arg_parser_resolver():
     return parser.parse_args()
 
 
-def main():
+def main() -> None:
     """Execute the script's main functionality.
 
     This function serves as the entry point for the script. It performs
