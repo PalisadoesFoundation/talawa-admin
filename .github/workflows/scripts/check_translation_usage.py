@@ -49,12 +49,13 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
         argv: Optional sequence of arguments to parse. If None, uses sys.argv.
 
     Returns:
-        Parsed argument namespace containing all CLI arguments.
+        argparse.Namespace: Parsed arguments namespace
+            containing all CLI arguments.
     """
     parser = argparse.ArgumentParser(
         description=(
             "Validate that translation keys used in source files "
-            "exist in locale JSON files."
+            "exist in all locale JSON files."
         )
     )
 
@@ -79,7 +80,8 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
         default=list(_DEFAULT_EXTENSIONS),
         help=(
             "File extensions to scan "
-            f"(default: {' '.join(sorted(_DEFAULT_EXTENSIONS))})."
+            "(default: "
+            f"{' '.join(sorted(_DEFAULT_EXTENSIONS))})."
         ),
     )
     parser.add_argument(
@@ -109,7 +111,15 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
 
 
 def is_ignored(path: Path, ignore_patterns: list[str]) -> bool:
-    """Return True if path matches any ignore pattern."""
+    """Check if the given path matches any ignore pattern.
+
+    Args:
+        path: Path to a file or directory.
+        ignore_patterns: List of glob patterns or directory names to ignore.
+
+    Returns:
+        bool: True if the path should be ignored, False otherwise.
+    """
     str_path = str(path)
     for pat in ignore_patterns:
         if fnmatch.fnmatch(str_path, pat) or pat in path.parts:
@@ -126,7 +136,18 @@ def collect_files(
     verbose: bool = False,
 ) -> list[Path]:
     # pylint: disable=too-many-locals, too-many-branches
-    """Collect target files from the provided file paths and directories."""
+    """Collect files from paths and directories matching the given extensions.
+
+    Args:
+        files: List of specific file paths to scan.
+        directories: List of directories to recursively scan.
+        extensions: Set of file extensions to include.
+        ignore_patterns: List of glob patterns or directory names to ignore.
+        verbose: Enable verbose output.
+
+    Returns:
+        list[Path]: List of collected file paths.
+    """
     collected: list[Path] = []
 
     if files:
@@ -141,8 +162,7 @@ def collect_files(
                 elif verbose:
                     print(f"Skipping ignored file {p}")
             elif verbose:
-                print(f"Skipping file with unsupported extension {p}")
-
+                print(f"Skipping file with unsupported extension: {p}")
     if directories:
         for d in directories:
             root = Path(d)
@@ -177,7 +197,14 @@ def collect_files(
 
 
 def extract_keys_from_text(text: str) -> set[str]:
-    """Extract translation keys from a text blob using regex."""
+    """Extract translation keys from a text blob using regex.
+
+    Args:
+        text: The text content to scan for translation keys.
+
+    Returns:
+        set[str]: Set of translation keys found.
+    """
     keys: set[str] = set()
     for match in _TRANSLATION_CALL_RE.finditer(text):
         key = match.group(2).strip()
@@ -187,7 +214,14 @@ def extract_keys_from_text(text: str) -> set[str]:
 
 
 def extract_keys_from_file(path: Path) -> set[str]:
-    """Extract translation keys from a file."""
+    """Extract translation keys from a file.
+
+    Args:
+        path: Path to the file to scan.
+
+    Returns:
+        set[str]: Set of translation keys found.
+    """
     try:
         raw = path.read_text(encoding="utf-8")
     except UnicodeDecodeError:
@@ -196,7 +230,15 @@ def extract_keys_from_file(path: Path) -> set[str]:
 
 
 def flatten_json(obj: object, prefix: str = "") -> set[str]:
-    """Flatten nested JSON-like dict into dot notation keys."""
+    """Flatten nested JSON-like dict into dot notation keys.
+
+    Args:
+        obj: JSON-like dictionary object to flatten.
+        prefix: Prefix to prepend to keys (used for recursion).
+
+    Returns:
+        set[str]: Set of flattened keys in dot notation.
+    """
     keys: set[str] = set()
     if isinstance(obj, dict):
         for k, v in obj.items():
@@ -209,10 +251,23 @@ def flatten_json(obj: object, prefix: str = "") -> set[str]:
 
 def load_locales(
     locales_dir: str,
+    *,
     verbose: bool = False,
     allow_missing: bool = False,
 ) -> dict[str, set[str]]:
-    """Load all locales from locales_dir."""
+    """Load all locales from the specified directory.
+
+    Args:
+        locales_dir: Path to the locales directory.
+        verbose: Enable verbose output.
+        allow_missing: If True, return empty dict if no locales are found.
+
+    Returns:
+        dict[str, set[str]]: Dictionary mapping locale names to sets of keys.
+
+    Raises:
+        FileNotFoundError: Raised if directory or translation.json is missing.
+    """
     base = Path(locales_dir)
     if not base.exists() or not base.is_dir():
         raise FileNotFoundError(
@@ -244,7 +299,15 @@ def compare_keys(
     used_keys: set[str],
     locales: dict[str, set[str]],
 ) -> dict[str, list[str]]:
-    """Compare used keys against locale keys."""
+    """Compare used translation keys against available locale keys.
+
+    Args:
+        used_keys: Set of translation keys found in source code.
+        locales: Dictionary of locale names to sets of keys.
+
+    Returns:
+        dict[str, list[str]]: Keys missing in each locale.
+    """
     missing: dict[str, list[str]] = {}
     for key in sorted(used_keys):
         missing_langs = [
@@ -257,9 +320,18 @@ def compare_keys(
 
 def print_report(
     missing: dict[str, list[str]],
+    *,
     verbose: bool = False,
 ) -> None:
-    """Print a human-friendly missing-translation report."""
+    """Print a human-friendly report of missing translation keys.
+
+    Args:
+        missing: Dictionary of missing keys per locale.
+        verbose: Enable verbose summary output.
+
+    Returns:
+        None
+    """
     if not missing:
         print(
             "✅ All translation keys used in source files are present "
@@ -282,7 +354,14 @@ def print_report(
 
 
 def main(argv: Iterable[str] | None = None) -> int:
-    """Run the main entry point of the script."""
+    """Run the main entry point to check translation usage in source files.
+
+    Args:
+        argv: Optional sequence of arguments to parse.
+
+    Returns:
+        int: Exit code (0=success, 1=missing translations, 2=config/usage error)
+    """
     args = parse_args(argv)
 
     extensions = {
