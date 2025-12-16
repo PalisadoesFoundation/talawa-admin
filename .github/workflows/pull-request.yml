@@ -102,6 +102,13 @@ jobs:
           chmod +x .github/workflows/scripts/compare_translations.py
           python .github/workflows/scripts/compare_translations.py --directory public/locales
 
+      - name: Check translation usage
+        run: |
+          python .github/workflows/scripts/check_translation_usage.py \
+            --directories src \
+            --locales-dir public/locales \
+            --extensions .ts .tsx .js .jsx
+
       - name: Get changed source files
         id: changed-src
         run: |
