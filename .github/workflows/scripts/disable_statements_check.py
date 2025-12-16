@@ -17,7 +17,6 @@ import inspect
 import re
 import sys
 from pathlib import Path
-from typing import Optional
 
 
 class DisableStatementsChecker:
