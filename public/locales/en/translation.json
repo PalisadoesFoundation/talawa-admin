@@ -211,8 +211,8 @@
     "noOrgErrorDescription": "Please create an organization through dashboard",
     "name": "name",
     "email": "email",
-    "endOfResults": "endOfResults",
-    "noResultsFoundFor": "noResultsFoundFor"
+    "profilePictureAlt": "User profile picture",
+    "placeholderAvatarAlt": "Placeholder avatar"
   },
   "users": {
     "title": "Talawa Roles",

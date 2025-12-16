@@ -205,14 +205,14 @@
     "accept": "Aceptar",
     "reject": "Rechazar",
     "searchRequests": "Buscar solicitudes",
-    "endOfResults": "Fin de los resultados",
     "noOrgError": "Organizaciones no encontradas, por favor crea una organización a través del panel",
-    "noResultsFoundFor": "No se encontraron resultados para ",
     "noRequestsFound": "No se encontraron solicitudes",
     "acceptedSuccessfully": "Solicitud aceptada exitosamente",
     "rejectedSuccessfully": "Solicitud rechazada exitosamente",
     "noOrgErrorTitle": "Organizaciones no encontradas",
-    "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control"
+    "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
+    "profilePictureAlt": "Imagen de perfil de {{name}}",
+    "placeholderAvatarAlt": "Avatar predeterminado"
   },
   "users": {
     "title": "Roles Talawa",

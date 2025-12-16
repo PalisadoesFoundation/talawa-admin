@@ -211,8 +211,8 @@
     "noOrgErrorDescription": "Veuillez créer une organisation via le tableau de bord",
     "name": "Nom",
     "email": "E-mail",
-    "endOfResults": "Fin des résultats",
-    "noResultsFoundFor": "Aucun résultat trouvé pour"
+    "profilePictureAlt": "Image de profil de {{name}}",
+    "placeholderAvatarAlt": "Avatar par défaut"
   },
   "users": {
     "title": "Rôles Talawa",
