@@ -9,12 +9,43 @@ import { vi, describe, expect, it, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
 import type { IMember } from 'types/Event/interface';
 
-// Mock chart.js to avoid canvas errors
+// Store the last Line chart options for tooltip callback testing
+let lastLineChartOptions: Record<string, unknown> | null = null;
+
+// Mock chart.js to avoid canvas errors but capture options for testing
 vi.mock('react-chartjs-2', async () => ({
   ...(await vi.importActual('react-chartjs-2')),
-  Line: () => null,
+  Line: ({ options }: { options: Record<string, unknown> }) => {
+    lastLineChartOptions = options;
+    return null;
+  },
   Bar: () => null,
 }));
+
+// Helper to get the tooltip label callback from last rendered Line chart
+const getTooltipLabelCallback = ():
+  | ((context: {
+      dataset: { label?: string };
+      parsed: { y: number };
+      dataIndex: number;
+    }) => string)
+  | null => {
+  if (!lastLineChartOptions) return null;
+  const plugins = lastLineChartOptions.plugins as
+    | {
+        tooltip?: {
+          callbacks?: {
+            label?: (context: {
+              dataset: { label?: string };
+              parsed: { y: number };
+              dataIndex: number;
+            }) => string;
+          };
+        };
+      }
+    | undefined;
+  return plugins?.tooltip?.callbacks?.label ?? null;
+};
 
 const { mockUseParams } = vi.hoisted(() => ({
   mockUseParams: vi.fn(),
@@ -1728,5 +1759,56 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     await waitFor(() => {
       expect(screen.getByText('5')).toBeInTheDocument();
     });
+  });
+
+  it('tooltip label callback returns correct format for current and non-current events', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event123' });
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    // Wait for the chart to render and capture the options
+    await waitFor(() => {
+      expect(screen.getByText('trends')).toBeInTheDocument();
+    });
+
+    // Get the tooltip callback from the captured options
+    const labelCallback = getTooltipLabelCallback();
+    expect(labelCallback).not.toBeNull();
+
+    if (labelCallback) {
+      // Test for the current event (dataIndex 0 corresponds to event123)
+      const currentEventResult = labelCallback({
+        dataset: { label: 'Attendee Count' },
+        parsed: { y: 10 },
+        dataIndex: 0,
+      });
+      expect(currentEventResult).toBe('Attendee Count: 10 (currentEvent)');
+
+      // Test for a non-current event (dataIndex 1 corresponds to event456)
+      const otherEventResult = labelCallback({
+        dataset: { label: 'Male Attendees' },
+        parsed: { y: 5 },
+        dataIndex: 1,
+      });
+      expect(otherEventResult).toBe('Male Attendees: 5');
+
+      // Test with empty label
+      const emptyLabelResult = labelCallback({
+        dataset: {},
+        parsed: { y: 3 },
+        dataIndex: 2,
+      });
+      expect(emptyLabelResult).toBe(': 3');
+    }
   });
 });
