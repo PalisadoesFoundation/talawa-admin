@@ -20,6 +20,7 @@
     "atleast_6_char_long": "至少 6 个字符长",
     "firstName_invalid": "名字只能包含小写和大写字母",
     "lastName_invalid": "姓氏只能包含小写和大写字母",
+    "name_invalid": "姓名只能包含字母、空格和连字符",
     "password_invalid": "密码应至少包含1个小写字母、1个大写字母、1个数字和1个特殊字符",
     "email_invalid": "电子邮件应至少包含 8 个字符",
     "Password_and_Confirm_password_mismatches.": "密码和确认密码不匹配。",
@@ -210,8 +211,8 @@
     "noOrgErrorDescription": "请通过仪表板创建组织",
     "name": "名称",
     "email": "电子邮件",
-    "endOfResults": "结果结束",
-    "noResultsFoundFor": "未找到结果"
+    "profilePictureAlt": "{{name}} 的头像",
+    "placeholderAvatarAlt": "占位符头像"
   },
   "users": {
     "title": "塔拉瓦角色",
@@ -255,7 +256,10 @@
     "orgJoined": "已加入组织",
     "MembershipRequestSent": "会员请求已发送",
     "AlreadyJoined": "已加入",
-    "errorOccured": "发生错误"
+    "errorOccurred": "发生错误，请重试",
+    "UserIdNotFound": "未找到用户ID",
+    "MembershipRequestNotFound": "未找到会员请求",
+    "MembershipRequestWithdrawn": "会员请求已成功撤回"
   },
   "communityProfile": {
     "title": "社区简介",
@@ -703,6 +707,7 @@
     "deletePledgeMsg": "您确定要删除此承诺吗？",
     "noPledges": "未找到承诺",
     "searchPledger": "按承诺搜索",
+    "pledgers": "承诺者",
     "highestAmount": "最高金额",
     "lowestAmount": "最低金额",
     "latestEndDate": "最新结束日期",
@@ -1131,7 +1136,18 @@
     "Member": "成员",
     "Admin": "管理员",
     "loading": "加载中...",
-    "noAttendees": "未找到参与者"
+    "noAttendees": "未找到参与者",
+    "attendeeCount": "参与人数",
+    "maleAttendees": "男性参与者",
+    "femaleAttendees": "女性参与者",
+    "otherAttendees": "其他参与者",
+    "currentEvent": "当前活动",
+    "chartPageNavigation": "图表页面导航",
+    "previousPage": "上一页",
+    "nextPage": "下一页",
+    "goToToday": "转到今天",
+    "genderDistribution": "性别分布",
+    "ageDistribution": "年龄分布"
   },
   "eventRegistrant": {
     "sort": "排序",
@@ -1484,7 +1500,13 @@
     "searchByName": "按名字搜索...",
     "searchBy": "按...搜索",
     "pledgers": "承诺者",
+    "pledger": "承诺者",
     "campaigns": "活动",
+    "associatedCampaign": "关联活动",
+    "pledged": "已承诺",
+    "donated": "已捐赠",
+    "progress": "进度",
+    "more": "更多",
     "myPledges": "我的承诺",
     "lowestAmount": "最低金额",
     "highestAmount": "最高金额",
