@@ -198,10 +198,12 @@ const looksLikeDateFormat = (text) => {
 // Check if text looks like a regular expression pattern
 const looksLikeRegexPattern = (text) => {
   const trimmed = text.trim();
-  // Common regex patterns (character classes, quantifiers, anchors, etc.)
+  // Only pure regex syntax (no alphabetic characters)
   if (/^[.*+?^${}()|[\]\\\/\-]+$/.test(trimmed)) return true;
-  // Patterns with common regex syntax
-  if (/[\^$.*+?{}()[\]|\\]/.test(trimmed)) return true;
+  // Character classes like [a-z], [A-Z0-9], etc.
+  if (/\[[^\]]*[a-z]-[a-z][^\]]*\]/i.test(trimmed)) return true;
+  // Regex quantifiers attached to patterns like \d{4}, \w+
+  if (/\\[dDwWsS][*+?{]/.test(trimmed)) return true;
   return false;
 };
 
