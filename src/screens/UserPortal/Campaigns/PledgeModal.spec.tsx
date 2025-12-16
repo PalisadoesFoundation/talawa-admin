@@ -242,8 +242,9 @@ describe('PledgeModal', () => {
     );
     // Use getAllByText to find the text content anywhere in the component
     expect(screen.getAllByText(/John Doe/i)[0]).toBeInTheDocument();
-    const startDateInput = screen.getByLabelText(/start date/i);
-    const endDateInput = screen.getByLabelText(/end date/i);
+    const startDateInput = screen.getAllByLabelText(/start date/i)[0];
+    const endDateInput = screen.getAllByLabelText(/end date/i)[0];
+
 
     expect(endDateInput).toHaveValue('10/01/2024');
     expect(startDateInput).toHaveValue('01/01/2024');
@@ -273,8 +274,9 @@ describe('PledgeModal', () => {
         expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
       );
 
-      const startDateInput = screen.getByLabelText(/start date/i);
-      const endDateInput = screen.getByLabelText(/end date/i);
+      const startDateInput = screen.getAllByLabelText(/start date/i)[0];
+      const endDateInput = screen.getAllByLabelText(/end date/i)[0];
+
 
       expect(screen.getAllByText(/John Doe/i)[0]).toBeInTheDocument();
       expect(startDateInput).toHaveValue('01/01/2024');
@@ -328,7 +330,7 @@ describe('PledgeModal', () => {
 
     it('should update pledgeStartDate when a new date is selected', async () => {
       renderPledgeModal(link1, pledgeProps[1]);
-      const startDateInput = screen.getByLabelText(/start date/i);
+      const startDateInput = screen.getAllByLabelText(/start date/i)[0];
 
       fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
       expect(startDateInput).toHaveValue('02/01/2024');
@@ -336,7 +338,7 @@ describe('PledgeModal', () => {
 
     it('should handle pledgeStartDate onChange when value is null', async () => {
       renderPledgeModal(link1, pledgeProps[1]);
-      const startDateInput = screen.getByLabelText(/start date/i);
+      const startDateInput = screen.getAllByLabelText(/start date/i)[0];
 
       fireEvent.change(startDateInput, { target: { value: '' } });
 
@@ -348,7 +350,8 @@ describe('PledgeModal', () => {
 
     it('should update pledgeEndDate when a new date is selected', async () => {
       renderPledgeModal(link1, pledgeProps[1]);
-      const endDateInput = screen.getByLabelText(/end date/i);
+      const endDateInput = screen.getAllByLabelText(/end date/i)[0];
+
 
       fireEvent.change(endDateInput, { target: { value: '02/01/2024' } });
       expect(endDateInput).toHaveValue('02/01/2024');
@@ -356,7 +359,8 @@ describe('PledgeModal', () => {
 
     it('should handle pledgeEndDate onChange when value is null', async () => {
       renderPledgeModal(link1, pledgeProps[1]);
-      const endDateInput = screen.getByLabelText(/end date/i);
+      const endDateInput = screen.getAllByLabelText(/end date/i)[0];
+
 
       fireEvent.change(endDateInput, { target: { value: '' } });
 
@@ -388,8 +392,8 @@ describe('PledgeModal', () => {
     it('falls back to previous pledgeEndDate when computeAdjustedEndDate returns undefined', async () => {
       renderPledgeModal(link1, pledgeProps[1]);
 
-      const startDateInput = screen.getByLabelText(/start date/i);
-      const endDateInput = screen.getByLabelText(/end date/i);
+      const startDateInput = screen.getAllByLabelText(/start date/i)[0];
+      const endDateInput = screen.getAllByLabelText(/end date/i)[0];
 
       expect(endDateInput).toHaveValue('10/01/2024');
       fireEvent.change(startDateInput, { target: { value: '01/01/2024' } });
@@ -413,14 +417,20 @@ describe('PledgeModal', () => {
       expect(screen.getByText(/John Doe/i)).toBeInTheDocument(); 
     });
   });
+  
+  describe('computeAdjustedEndDate', () => {
+    it('should return undefined when pledgeEndDate is undefined', () => {
+      const result = computeAdjustedEndDate(undefined, dayjs());
+      expect(result).toBeUndefined();
+    });
+  });
 
   describe('Pledge Creation', () => {
     it('should successfully create a new pledge with all fields', async () => {
       renderPledgeModal(link1, pledgeProps[0]);
 
-      const startDateInput = screen.getByLabelText(/start date/i);
-
-      const endDateInput = screen.getByLabelText(/end date/i);
+     const startDateInput = screen.getAllByLabelText(/start date/i)[0];
+     const endDateInput = screen.getAllByLabelText(/end date/i)[0];
 
       fireEvent.change(screen.getByLabelText('Amount'), {
         target: { value: '200' },
@@ -471,8 +481,9 @@ describe('PledgeModal', () => {
         expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
       });
 
-      const startDateInput = screen.getByLabelText(/start date/i);
-      const endDateInput = screen.getByLabelText(/end date/i);
+      const startDateInput = screen.getAllByLabelText(/start date/i)[0];
+      const endDateInput = screen.getAllByLabelText(/end date/i)[0];
+
 
       fireEvent.change(screen.getByLabelText('Amount'), {
         target: { value: '200' },
@@ -590,7 +601,7 @@ describe('PledgeModal', () => {
     it('should handle invalid date formats gracefully', async () => {
       renderPledgeModal(link1, pledgeProps[0]);
 
-      const startDateInput = screen.getByLabelText(/start date/i);
+      const startDateInput = screen.getAllByLabelText(/start date/i)[0];
       fireEvent.change(startDateInput, { target: { value: 'invalid-date' } });
 
       expect(screen.getByLabelText('Amount')).toBeInTheDocument();
@@ -694,8 +705,9 @@ describe('PledgeModal', () => {
         });
       }
 
-      const startDateInput = screen.getByLabelText(/start date/i);
-      const endDateInput = screen.getByLabelText(/end date/i);
+      const startDateInput = screen.getAllByLabelText(/start date/i)[0];
+      const endDateInput = screen.getAllByLabelText(/end date/i)[0];
+
 
       // Submit the form to verify empty userIds is sent to GraphQL
       fireEvent.change(screen.getByLabelText('Amount'), {
@@ -798,7 +810,7 @@ describe('PledgeModal', () => {
         expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
       );
 
-      const startDateInput = screen.getByLabelText(/start date/i);
+      const startDateInput = screen.getAllByLabelText(/start date/i)[0];
 
       fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
 
@@ -843,7 +855,8 @@ describe('PledgeModal', () => {
         expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
       );
 
-      const endDateInput = screen.getByLabelText(/end date/i);
+      const endDateInput = screen.getAllByLabelText(/end date/i)[0];
+
 
       fireEvent.change(endDateInput, { target: { value: '15/01/2024' } });
 
