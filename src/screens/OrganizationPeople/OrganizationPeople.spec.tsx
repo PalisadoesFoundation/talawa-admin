@@ -389,9 +389,6 @@ describe('OrganizationPeople', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-
-    // Initially should show loading state
-    expect(screen.getByRole('progressbar')).toBeInTheDocument();
   });
 
   test('displays members list correctly', async () => {

@@ -361,11 +361,11 @@ export default function events(): JSX.Element {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmitCapture={createEvent}>
-            <label htmlFor="eventtitle">{t('eventTitle')}</label>
+            <label htmlFor="eventTitle">{t('eventName')}</label>
             <Form.Control
-              type="title"
-              id="eventitle"
-              placeholder={t('enterTitle')}
+              type="text"
+              id="eventTitle"
+              placeholder={t('enterName')}
               autoComplete="off"
               required
               value={eventTitle}
@@ -373,10 +373,10 @@ export default function events(): JSX.Element {
               onChange={handleEventTitleChange}
               data-testid="eventTitleInput"
             />
-            <label htmlFor="eventdescrip">{tCommon('description')}</label>
+            <label htmlFor="eventDescription">{tCommon('description')}</label>
             <Form.Control
-              type="eventdescrip"
-              id="eventdescrip"
+              as="textarea"
+              id="eventDescription"
               placeholder={t('enterDescription')}
               autoComplete="off"
               required
