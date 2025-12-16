@@ -2100,6 +2100,8 @@ form label,
 }
 
 .orgCard .innerContainer .content {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   margin-left: 1rem;
   width: 70%;
@@ -3974,7 +3976,6 @@ form label,
 .joinedBtn {
   display: flex;
   justify-content: space-around;
-  width: 8rem;
 }
 
 .joinedBtn {
@@ -9926,6 +9927,12 @@ form {
   width: 4px;
   height: 100%;
   background: linear-gradient(135deg, #a8c7fa 0%, #a8c7fa 100%);
+}
+
+.buttonContainer {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
 }
 
 /* ----------------------------------------------------- */

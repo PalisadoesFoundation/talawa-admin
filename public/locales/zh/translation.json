@@ -256,7 +256,10 @@
     "orgJoined": "已加入组织",
     "MembershipRequestSent": "会员请求已发送",
     "AlreadyJoined": "已加入",
-    "errorOccured": "发生错误"
+    "errorOccurred": "发生错误，请重试",
+    "UserIdNotFound": "未找到用户ID",
+    "MembershipRequestNotFound": "未找到会员请求",
+    "MembershipRequestWithdrawn": "会员请求已成功撤回"
   },
   "communityProfile": {
     "title": "社区简介",
