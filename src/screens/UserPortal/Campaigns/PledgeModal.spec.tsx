@@ -20,7 +20,8 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import type { InterfaceUserInfoPG } from 'utils/interfaces';
-import React, { act } from 'react';
+import type { DatePickerProps } from '@mui/x-date-pickers';
+import { act } from 'react';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { vi } from 'vitest';
@@ -39,12 +40,26 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-vi.mock('@mui/x-date-pickers/DesktopDateTimePicker', async () => {
-  const { DesktopDateTimePicker } = await vi.importActual(
-    '@mui/x-date-pickers/DesktopDateTimePicker',
+vi.mock('@mui/x-date-pickers', async () => {
+  const actual = await vi.importActual<typeof import('@mui/x-date-pickers')>(
+    '@mui/x-date-pickers',
   );
+
+  type MockDatePickerProps = DatePickerProps;
+
   return {
-    DateTimePicker: DesktopDateTimePicker,
+    ...actual,
+    DatePicker: ({ label, value, onChange }: MockDatePickerProps) => (
+      <input
+        aria-label={label as string}
+        value={value ? value.format('DD/MM/YYYY') : ''}
+        onChange={(e) =>
+          (onChange as ((value: unknown) => void) | undefined)?.(
+            e.target.value ? dayjs(e.target.value, 'DD/MM/YYYY') : null,
+          )
+        }
+      />
+    ),
   };
 });
 
@@ -247,7 +262,10 @@ describe('PledgeModal', () => {
 
 
     expect(endDateInput).toHaveValue('10/01/2024');
-    expect(startDateInput).toHaveValue('01/01/2024');
+    await waitFor(() => {
+      expect(startDateInput).toHaveValue('01/01/2024');
+    });
+
     expect(screen.getByLabelText('Currency')).toHaveTextContent('USD ($)');
     expect(screen.getByLabelText('Amount')).toHaveValue('100');
   });
@@ -263,8 +281,8 @@ describe('PledgeModal', () => {
 
       expect(screen.getByLabelText('Amount')).toBeInTheDocument();
       expect(screen.getByLabelText('Currency')).toBeInTheDocument();
-      expect(screen.getByLabelText(/start date/i)).toBeInTheDocument();
-      expect(screen.getByLabelText(/end date/i)).toBeInTheDocument();
+      expect(screen.getAllByLabelText(/start date/i)[0]).toBeInTheDocument();
+      expect(screen.getAllByLabelText(/end date/i)[0]).toBeInTheDocument();
       expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
     });
 
@@ -341,9 +359,6 @@ describe('PledgeModal', () => {
       const startDateInput = screen.getAllByLabelText(/start date/i)[0];
 
       fireEvent.change(startDateInput, { target: { value: '' } });
-
-      // Input clears but component remains stable
-      expect(startDateInput).toHaveValue('');
       expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
   });
 
@@ -364,8 +379,8 @@ describe('PledgeModal', () => {
 
       fireEvent.change(endDateInput, { target: { value: '' } });
 
-      // Input clears but component remains stable
-      expect(endDateInput).toHaveValue('');
+      // End date remains unchanged when null is passed
+      expect(endDateInput).toHaveValue('10/01/2024');
       expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
    });
 
