@@ -109,7 +109,7 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
 
 
 def is_ignored(path: Path, ignore_patterns: list[str]) -> bool:
-    """Return True if `path` matches any ignore pattern."""
+    """Return True if path matches any ignore pattern."""
     str_path = str(path)
     for pat in ignore_patterns:
         if fnmatch.fnmatch(str_path, pat) or pat in path.parts:
@@ -122,6 +122,7 @@ def collect_files(
     directories: list[str] | None,
     extensions: set[str],
     ignore_patterns: list[str],
+    *,
     verbose: bool = False,
 ) -> list[Path]:
     # pylint: disable=too-many-locals, too-many-branches
@@ -281,7 +282,7 @@ def print_report(
 
 
 def main(argv: Iterable[str] | None = None) -> int:
-    """Run the main entrypoint."""
+    """Run the main entry point of the script."""
     args = parse_args(argv)
 
     extensions = {
