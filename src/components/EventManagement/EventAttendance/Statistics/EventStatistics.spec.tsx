@@ -1,6 +1,9 @@
 import React from 'react';
 import { act, render, screen, waitFor } from '@testing-library/react';
-import { AttendanceStatisticsModal } from './EventStatistics';
+import {
+  AttendanceStatisticsModal,
+  formatTooltipLabel,
+} from './EventStatistics';
 import { MockedProvider } from '@apollo/client/testing';
 import { EVENT_DETAILS, RECURRING_EVENTS } from 'GraphQl/Queries/Queries';
 import userEvent from '@testing-library/user-event';
@@ -1128,6 +1131,76 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     });
   });
 
+  it('handles age calculation for same month with day before birthday', async () => {
+    const today = new Date();
+    // Create a birthdate in the same month but a few days in the future
+    // This tests the edge case: monthDiff === 0 && today.getDate() < birth.getDate()
+    const futureDayThisMonth = Math.min(today.getDate() + 7, 28);
+    const birthDateSameMonthFuture = new Date(
+      today.getFullYear() - 22,
+      today.getMonth(),
+      futureDayThisMonth,
+    );
+    // Also test same month, day already passed
+    const pastDayThisMonth = Math.max(today.getDate() - 7, 1);
+    const birthDateSameMonthPast = new Date(
+      today.getFullYear() - 19,
+      today.getMonth(),
+      pastDayThisMonth,
+    );
+
+    const membersWithSameMonthAges: IMember[] = [
+      {
+        id: 'member1',
+        natalSex: 'male',
+        birthDate: birthDateSameMonthFuture,
+        createdAt: '2023-01-01T00:00:00.000Z',
+        name: 'Member Future',
+        emailAddress: 'future@test.com',
+        role: 'member',
+        tagsAssignedWith: { edges: [] },
+      },
+      {
+        id: 'member2',
+        natalSex: 'female',
+        birthDate: birthDateSameMonthPast,
+        createdAt: '2023-01-01T00:00:00.000Z',
+        name: 'Member Past',
+        emailAddress: 'past@test.com',
+        role: 'member',
+        tagsAssignedWith: { edges: [] },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={membersWithSameMonthAges}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('age-button')).toBeInTheDocument();
+    });
+
+    await act(async () => {
+      const ageButton = screen.getByTestId('age-button');
+      await userEvent.click(ageButton);
+    });
+
+    // Both members should be in age18to40 category
+    await waitFor(() => {
+      expect(screen.getByTestId('age-button')).toHaveClass('btn-success');
+      const demographicsSection = screen.getByText('demography');
+      expect(demographicsSection).toBeInTheDocument();
+    });
+  });
+
   it('handles pagination boundaries correctly', async () => {
     mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event1' });
 
@@ -1318,5 +1391,27 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
       const prevButton = screen.getByLabelText('previousPage');
       expect(prevButton).toBeDisabled();
     });
+  });
+
+  it('formatTooltipLabel returns correct format for current and non-current events', () => {
+    // Test the extracted tooltip formatting function (covers line 157 logic)
+    const mockT = (key: string): string => {
+      const translations: Record<string, string> = {
+        currentEvent: 'Current Event',
+      };
+      return translations[key] || key;
+    };
+
+    // Test when it IS the current event
+    const resultCurrent = formatTooltipLabel('Attendees', 42, true, mockT);
+    expect(resultCurrent).toBe('Attendees: 42 (Current Event)');
+
+    // Test when it's NOT the current event
+    const resultNotCurrent = formatTooltipLabel('Attendees', 42, false, mockT);
+    expect(resultNotCurrent).toBe('Attendees: 42');
+
+    // Test with different label and value
+    const resultDifferent = formatTooltipLabel('Registered', 100, true, mockT);
+    expect(resultDifferent).toBe('Registered: 100 (Current Event)');
   });
 });

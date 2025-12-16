@@ -96,6 +96,18 @@ const calculateAge = (birthDate: Date): number => {
   return age;
 };
 
+// Tooltip formatting helper - extracted for testability
+export const formatTooltipLabel = (
+  label: string,
+  value: number,
+  isCurrentEvent: boolean,
+  t: (key: string) => string,
+): string => {
+  return isCurrentEvent
+    ? `${label}: ${value} (${t('currentEvent')})`
+    : `${label}: ${value}`;
+};
+
 export const AttendanceStatisticsModal: React.FC<
   InterfaceAttendanceStatisticsModalProps
 > = ({ show, handleClose, statistics, memberData, t }): React.JSX.Element => {
@@ -150,12 +162,10 @@ export const AttendanceStatisticsModal: React.FC<
         callbacks: {
           label: (context: TooltipItem<'line'>) => {
             const label = context.dataset.label || '';
-            const value = context.parsed.y;
+            const value = context.parsed.y ?? 0;
             const isCurrentEvent =
               paginatedRecurringEvents[context.dataIndex].id === eventId;
-            return isCurrentEvent
-              ? `${label}: ${value} (${t('currentEvent')})`
-              : `${label}: ${value}`;
+            return formatTooltipLabel(label, value, isCurrentEvent, t);
           },
         },
       },
@@ -300,8 +310,10 @@ export const AttendanceStatisticsModal: React.FC<
               return age < MIN_ADULT_AGE;
             }).length,
             memberData.filter((member) => {
-              const age = calculateAge(member.birthDate);
-              return age >= MIN_ADULT_AGE && age <= MAX_YOUNG_ADULT_AGE;
+              const memberAge = calculateAge(member.birthDate);
+              const isAtLeastAdult = memberAge >= MIN_ADULT_AGE;
+              const isAtMostYoungAdult = memberAge <= MAX_YOUNG_ADULT_AGE;
+              return isAtLeastAdult && isAtMostYoungAdult;
             }).length,
             memberData.filter((member) => {
               const age = calculateAge(member.birthDate);
