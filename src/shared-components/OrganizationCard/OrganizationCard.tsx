@@ -128,10 +128,10 @@ function OrganizationCard({
         if (errorCode === 'ALREADY_MEMBER') {
           toast.error(t('users.AlreadyJoined') as string);
         } else {
-          toast.error(t('users.errorOccured') as string);
+          toast.error(t('users.errorOccurred') as string);
         }
       } else {
-        toast.error(t('users.errorOccured') as string);
+        toast.error(t('users.errorOccurred') as string);
       }
     }
   }
@@ -165,7 +165,7 @@ function OrganizationCard({
       if (process.env.NODE_ENV === 'development') {
         console.error('Failed to withdraw membership request:', error);
       }
-      toast.error(t('users.errorOccured') as string);
+      toast.error(t('users.errorOccurred') as string);
     }
   }
 

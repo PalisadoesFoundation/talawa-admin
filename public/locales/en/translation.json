@@ -256,7 +256,7 @@
     "orgJoined": "Successfully joined organization",
     "MembershipRequestSent": "Membership request sent successfully",
     "AlreadyJoined": "You have already joined this organization",
-    "errorOccured": "An error occurred. Please try again",
+    "errorOccurred": "An error occurred. Please try again",
     "UserIdNotFound": "User ID not found",
     "MembershipRequestNotFound": "Membership request not found",
     "MembershipRequestWithdrawn": "Membership request withdrawn successfully"
