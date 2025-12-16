@@ -67,7 +67,7 @@ class DisableStatementsChecker:
         Args:
             file_path (str): Path to the TypeScript file to check.
         """
-        pattern = re.compile(r"\s+it\.skip\(", re.IGNORECASE | re.DOTALL)
+        pattern = re.compile(r"\bit\.skip\s*\(", re.IGNORECASE)
         self._check_pattern(file_path, pattern, "it.skip")
 
     def _check_pattern(self, file_path, pattern, disable_type):
@@ -80,15 +80,15 @@ class DisableStatementsChecker:
         """
         try:
             with open(file_path, "r", encoding="utf-8") as file:
-                lines = file.readlines()
+                content = file.read()
 
-            for line_num, line in enumerate(lines, 1):
-                if pattern.search(line):
-                    print(
-                        f"Error: File {file_path} contains {disable_type} "
-                        f"statement at line {line_num}."
-                    )
-                    self.violations_found = True
+            for match in pattern.finditer(content):
+                line_num = content.count("\n", 0, match.start()) + 1
+                print(
+                    f"Error: File {file_path} contains {disable_type} "
+                    f"statement at line {line_num}."
+                )
+                self.violations_found = True
         except FileNotFoundError:
             print(f"File not found: {file_path}")
         except PermissionError:
