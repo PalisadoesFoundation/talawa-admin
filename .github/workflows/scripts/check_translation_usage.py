@@ -32,7 +32,7 @@ import os
 import re
 import sys
 from pathlib import Path
-from typing import Dict, Iterable, List, Set
+from collections.abc import Iterable
 
 
 _TRANSLATION_CALL_RE = re.compile(
@@ -44,7 +44,13 @@ _DEFAULT_EXTENSIONS = {".ts", ".tsx", ".js", ".jsx"}
 
 
 def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
-    """Parse command-line arguments."""
+    """Parse command-line arguments.
+    Args:
+        argv: Optional sequence of arguments to parse. If None, uses sys.argv.
+
+    Returns:
+        Parsed argument namespace containing all CLI arguments.
+    """
     parser = argparse.ArgumentParser(
         description=(
             "Validate that translation keys used in source files "
@@ -117,7 +123,7 @@ def collect_files(
     extensions: Set[str],
     ignore_patterns: List[str],
     verbose: bool = False,
-) -> List[Path]:
+) -> list[Path]:
     # pylint: disable=too-many-locals, too-many-branches
     """Collect target files from the provided file paths and directories."""
     collected: List[Path] = []
@@ -183,7 +189,7 @@ def extract_keys_from_file(path: Path) -> Set[str]:
     """Extract translation keys from a file."""
     try:
         raw = path.read_text(encoding="utf-8")
-    except Exception:  # pylint: disable=broad-exception-caught
+    except UnicodeDecodeError:
         raw = path.read_text(encoding="utf-8", errors="ignore")
     return extract_keys_from_text(raw)
 
@@ -203,7 +209,7 @@ def flatten_json(obj: object, prefix: str = "") -> Set[str]:
 def load_locales(
     locales_dir: str,
     verbose: bool = False,
-) -> Dict[str, Set[str]]:
+) -> dict[str, set[str]]:
     """Load all locales from locales_dir."""
     base = Path(locales_dir)
     if not base.exists() or not base.is_dir():
@@ -233,7 +239,7 @@ def load_locales(
 def compare_keys(
     used_keys: Set[str],
     locales: Dict[str, Set[str]],
-) -> Dict[str, List[str]]:
+) -> dict[str, list[str]]:
     """Compare used keys against locale keys."""
     missing: Dict[str, List[str]] = {}
     for key in sorted(used_keys):
