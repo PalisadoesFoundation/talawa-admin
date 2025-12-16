@@ -142,7 +142,7 @@ function OrganizationCard({
   async function withdrawMembershipRequest(): Promise<void> {
     const currentUserId = userId;
     if (!currentUserId) {
-      toast.error(t('users.errorOccured') as string);
+      toast.error(t('UserIdNotFound') as string);
       return;
     }
 
@@ -152,7 +152,7 @@ function OrganizationCard({
 
     try {
       if (!membershipRequest) {
-        toast.error(t('users.errorOccured') as string);
+        toast.error(t('MembershipRequestNotFound') as string);
         return;
       }
 

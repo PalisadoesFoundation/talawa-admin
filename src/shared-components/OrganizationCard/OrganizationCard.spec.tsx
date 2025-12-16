@@ -12,10 +12,20 @@ import {
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { toast } from 'react-toastify';
-
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string) => key,
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        'orgListCard.manage': 'Manage',
+        'users.visit': 'Visit',
+        'users.orgJoined': 'orgJoined',
+        'users.errorOccured': 'errorOccured',
+        'users.AlreadyJoined': 'AlreadyJoined',
+        'users.MembershipRequestSent': 'MembershipRequestSent',
+      };
+
+      return translations[key] || key;
+    },
   }),
 }));
 
