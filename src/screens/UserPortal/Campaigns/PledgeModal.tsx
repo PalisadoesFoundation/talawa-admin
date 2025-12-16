@@ -132,7 +132,8 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
 
   // Query to get the user details based on the userId prop
   const { data: userData } = useQuery(USER_DETAILS, {
-    variables: { id: userId },
+    skip: !isOpen || !userId,
+    variables: userId ? { input: { id: userId } } : undefined,
   });
 
   // Effect to update the pledgers state when user data is fetched
@@ -140,11 +141,11 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     if (userData) {
       setPledgers([
         {
-          id: userData.user.user._id,
-          firstName: userData.user.user.firstName,
-          lastName: userData.user.user.lastName,
-          name: `${userData.user.user.firstName} ${userData.user.user.lastName}`,
-          avatarURL: userData.user.user.image,
+          id: userData.user.id,
+          firstName: userData.user.firstName,
+          lastName: userData.user.lastName,
+          name: `${userData.user.firstName} ${userData.user.lastName}`,
+          avatarURL: userData.user.image,
         },
       ]);
     }
@@ -159,7 +160,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
    */
 
   const updatePledgeHandler = useCallback(
-    async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+    async (e: ChangeEvent<HTMLFormElement>) => {
       e.preventDefault();
       const startDate = dayjs(pledgeStartDate).format('YYYY-MM-DD');
       const endDate = dayjs(pledgeEndDate).format('YYYY-MM-DD');
@@ -202,7 +203,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
    * @returns A promise that resolves when the pledge is successfully created.
    */
   const createPledgeHandler = useCallback(
-    async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+    async (e: ChangeEvent<HTMLFormElement>) => {
       try {
         e.preventDefault();
         await createPledge({
@@ -259,7 +260,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           <Form.Group className="d-flex mb-3 w-100">
             <Autocomplete
               multiple
-              className={`${styles.noOutline} w-100`}
+              className={styles.noOutline + ' w-100'}
               limitTags={2}
               data-testid="pledgerSelect"
               options={[...pledgers, ...pledgeUsers]}
@@ -268,13 +269,14 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               isOptionEqualToValue={(option, value) => option.id === value.id}
               filterSelectedOptions={true}
               getOptionLabel={(member: InterfaceUserInfoPG): string =>
-                `${member.firstName} ${member.lastName}`
+                member.name ||
+                [member.firstName, member.lastName].filter(Boolean).join(' ')
               }
               onChange={(_, newPledgers): void => {
                 setFormState({ ...formState, pledgeUsers: newPledgers });
               }}
               renderInput={(params) => (
-                <TextField {...params} label="Pledgers" />
+                <TextField {...params} label={t('pledgers')} />
               )}
             />
           </Form.Group>

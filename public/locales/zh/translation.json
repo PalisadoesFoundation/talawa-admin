@@ -211,8 +211,8 @@
     "noOrgErrorDescription": "请通过仪表板创建组织",
     "name": "名称",
     "email": "电子邮件",
-    "endOfResults": "结果结束",
-    "noResultsFoundFor": "未找到结果"
+    "profilePictureAlt": "{{name}} 的头像",
+    "placeholderAvatarAlt": "占位符头像"
   },
   "users": {
     "title": "塔拉瓦角色",
@@ -256,7 +256,10 @@
     "orgJoined": "已加入组织",
     "MembershipRequestSent": "会员请求已发送",
     "AlreadyJoined": "已加入",
-    "errorOccured": "发生错误"
+    "errorOccurred": "发生错误，请重试",
+    "UserIdNotFound": "未找到用户ID",
+    "MembershipRequestNotFound": "未找到会员请求",
+    "MembershipRequestWithdrawn": "会员请求已成功撤回"
   },
   "communityProfile": {
     "title": "社区简介",
@@ -704,6 +707,7 @@
     "deletePledgeMsg": "您确定要删除此承诺吗？",
     "noPledges": "未找到承诺",
     "searchPledger": "按承诺搜索",
+    "pledgers": "承诺者",
     "highestAmount": "最高金额",
     "lowestAmount": "最低金额",
     "latestEndDate": "最新结束日期",
@@ -1496,7 +1500,13 @@
     "searchByName": "按名字搜索...",
     "searchBy": "按...搜索",
     "pledgers": "承诺者",
+    "pledger": "承诺者",
     "campaigns": "活动",
+    "associatedCampaign": "关联活动",
+    "pledged": "已承诺",
+    "donated": "已捐赠",
+    "progress": "进度",
+    "more": "更多",
     "myPledges": "我的承诺",
     "lowestAmount": "最低金额",
     "highestAmount": "最高金额",

@@ -211,8 +211,8 @@
     "noOrgErrorDescription": "Veuillez créer une organisation via le tableau de bord",
     "name": "Nom",
     "email": "E-mail",
-    "endOfResults": "Fin des résultats",
-    "noResultsFoundFor": "Aucun résultat trouvé pour"
+    "profilePictureAlt": "Image de profil de {{name}}",
+    "placeholderAvatarAlt": "Avatar par défaut"
   },
   "users": {
     "title": "Rôles Talawa",
@@ -256,7 +256,10 @@
     "orgJoined": "Organisation Rejointe",
     "MembershipRequestSent": "Demande d'adhésion envoyée",
     "AlreadyJoined": "Déjà rejoint",
-    "errorOccured": "Une erreur s'est produite"
+    "errorOccurred": "Une erreur s'est produite. Veuillez réessayer.",
+    "UserIdNotFound": "ID utilisateur non trouvée",
+    "MembershipRequestNotFound": "Demande d'adhésion non trouvée",
+    "MembershipRequestWithdrawn": "Demande d'adhésion annulée avec succès"
   },
   "communityProfile": {
     "title": "Profil de la communauté",
@@ -704,6 +707,7 @@
     "deletePledgeMsg": "Etes-vous sûr de vouloir supprimer cet engagement ?",
     "noPledges": "Aucun engagement trouvé",
     "searchPledger": "Rechercher par les bailleurs de fonds",
+    "pledgers": "Prometteurs",
     "highestAmount": "Montant le plus élevé",
     "lowestAmount": "Montant le plus bas",
     "latestEndDate": "Date de fin la plus récente",
@@ -1496,7 +1500,13 @@
     "searchByName": "Rechercher par nom...",
     "searchBy": "Rechercher par",
     "pledgers": "Contributeurs",
+    "pledger": "Prometteur",
     "campaigns": "Campagnes",
+    "associatedCampaign": "Campagne associée",
+    "pledged": "Promis",
+    "donated": "Donné",
+    "progress": "Progrès",
+    "more": "plus",
     "myPledges": "Mes Promesses",
     "lowestAmount": "Montant le plus bas",
     "highestAmount": "Montant le plus élevé",
