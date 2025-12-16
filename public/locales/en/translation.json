@@ -211,8 +211,8 @@
     "noOrgErrorDescription": "Please create an organization through dashboard",
     "name": "name",
     "email": "email",
-    "endOfResults": "endOfResults",
-    "noResultsFoundFor": "noResultsFoundFor"
+    "profilePictureAlt": "User profile picture",
+    "placeholderAvatarAlt": "Placeholder avatar"
   },
   "users": {
     "title": "Talawa Roles",
@@ -704,6 +704,7 @@
     "deletePledgeMsg": "Are you sure you want to delete this pledge?",
     "noPledges": "No Pledges Found",
     "searchPledger": "Search By Pledgers",
+    "pledgers": "Pledgers",
     "highestAmount": "Highest Amount",
     "lowestAmount": "Lowest Amount",
     "latestEndDate": "Latest End Date",
@@ -1485,7 +1486,13 @@
     "searchByName": "Search by Name...",
     "searchBy": "Search by",
     "pledgers": "Pledgers",
+    "pledger": "Pledger",
     "campaigns": "Campaigns",
+    "associatedCampaign": "Associated Campaign",
+    "pledged": "Pledged",
+    "donated": "Donated",
+    "progress": "Progress",
+    "more": "more",
     "myPledges": "My Pledges",
     "lowestAmount": "Lowest Amount",
     "highestAmount": "Highest Amount",

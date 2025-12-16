@@ -211,8 +211,8 @@
     "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से संगठन बनाएं",
     "name": "नाम",
     "email": "ईमेल",
-    "endOfResults": "परिणाम समाप्त",
-    "noResultsFoundFor": "कोई परिणाम नहीं मिला"
+    "profilePictureAlt": "{{name}} की प्रोफ़ाइल छवि",
+    "placeholderAvatarAlt": "प्लेसहोल्डर अवतार"
   },
   "users": {
     "title": "तालावा भूमिकाएँ",
@@ -704,6 +704,7 @@
     "deletePledgeMsg": "क्या आप वाकई इस प्रतिज्ञा को हटाना चाहते हैं?",
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",
     "searchPledger": "प्लेजर्स के द्वारा खोजें",
+    "pledgers": "प्रतिज्ञाकर्ता",
     "highestAmount": "सबसे अधिक राशि",
     "lowestAmount": "सबसे कम राशि",
     "latestEndDate": "नवीनतम समाप्ति तिथि",
@@ -1485,7 +1486,13 @@
     "searchByName": "नाम से खोजें...",
     "searchBy": "द्वारा खोजें",
     "pledgers": "प्रतिज्ञाकर्ता",
+    "pledger": "प्रतिज्ञाकर्ता",
     "campaigns": "अभियान",
+    "associatedCampaign": "संबद्ध अभियान",
+    "pledged": "प्रतिबद्ध",
+    "donated": "दान किया",
+    "progress": "प्रगति",
+    "more": "अधिक",
     "myPledges": "मेरी प्रतिज्ञाएँ",
     "lowestAmount": "सबसे कम राशि",
     "highestAmount": "सबसे अधिक राशि",
