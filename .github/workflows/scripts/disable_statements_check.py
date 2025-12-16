@@ -32,7 +32,7 @@ import sys
 class DisableStatementsChecker:
     """Check for disable statements in TypeScript files."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize checker with violations tracking."""
         self.violations_found = False
 
@@ -79,7 +79,7 @@ class DisableStatementsChecker:
             disable_type (str): Type of disable statement being checked.
         """
         try:
-            with open(file_path, "r", encoding="utf-8") as file:
+            with open(file_path, encoding="utf-8") as file:
                 content = file.read()
 
             for match in pattern.finditer(content):
@@ -93,7 +93,7 @@ class DisableStatementsChecker:
             print(f"File not found: {file_path}")
         except PermissionError:
             print(f"Permission denied: {file_path}")
-        except (IOError, OSError) as e:
+        except OSError as e:
             print(f"Error reading file {file_path}: {e}")
 
     def check_files_or_directories(self, files_or_dirs) -> None:

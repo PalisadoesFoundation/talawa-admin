@@ -31,12 +31,14 @@ class TestDisableStatementsChecker(unittest.TestCase):
             f.flush()
             temp_name = f.name
             
-        with patch('builtins.print') as mock_print:
-            self.checker.check_eslint_disable(temp_name)
-            
-        self.assertTrue(self.checker.violations_found)
-        mock_print.assert_called_once()
-        os.unlink(temp_name)
+        try:
+            with patch('builtins.print') as mock_print:
+                self.checker.check_eslint_disable(temp_name)
+                
+            self.assertTrue(self.checker.violations_found)
+            mock_print.assert_called_once()
+        finally:
+            os.unlink(temp_name)
 
     def test_istanbul_ignore_detection(self):
         """Test istanbul ignore pattern detection."""
@@ -113,8 +115,10 @@ class TestDisableStatementsChecker(unittest.TestCase):
 
     def test_file_not_found_error(self):
         """Test handling of non-existent files."""
+        import re
+        pattern = re.compile(r"test")
         with patch('builtins.print') as mock_print:
-            self.checker._check_pattern('nonexistent.ts', None, 'test')
+            self.checker._check_pattern('nonexistent.ts', pattern, 'test')
             mock_print.assert_called_with('File not found: nonexistent.ts')
 
     def test_directory_processing(self):
