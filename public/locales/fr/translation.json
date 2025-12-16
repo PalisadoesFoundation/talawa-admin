@@ -256,7 +256,10 @@
     "orgJoined": "Organisation Rejointe",
     "MembershipRequestSent": "Demande d'adhésion envoyée",
     "AlreadyJoined": "Déjà rejoint",
-    "errorOccured": "Une erreur s'est produite"
+    "errorOccurred": "Une erreur s'est produite. Veuillez réessayer.",
+    "UserIdNotFound": "ID utilisateur non trouvée",
+    "MembershipRequestNotFound": "Demande d'adhésion non trouvée",
+    "MembershipRequestWithdrawn": "Demande d'adhésion annulée avec succès"
   },
   "communityProfile": {
     "title": "Profil de la communauté",
@@ -1133,7 +1136,18 @@
     "Member": "Membre",
     "Admin": "Administrateur",
     "loading": "Chargement...",
-    "noAttendees": "Aucun participant trouvé"
+    "noAttendees": "Aucun participant trouvé",
+    "attendeeCount": "Nombre de participants",
+    "maleAttendees": "Participants masculins",
+    "femaleAttendees": "Participantes féminines",
+    "otherAttendees": "Autres participants",
+    "currentEvent": "Événement actuel",
+    "chartPageNavigation": "Navigation de la page du graphique",
+    "previousPage": "Page précédente",
+    "nextPage": "Page suivante",
+    "goToToday": "Aller à aujourd'hui",
+    "genderDistribution": "Distribution par sexe",
+    "ageDistribution": "Distribution par âge"
   },
   "eventRegistrant": {
     "sort": "Trier",

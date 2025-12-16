@@ -256,7 +256,10 @@
     "orgJoined": "已加入组织",
     "MembershipRequestSent": "会员请求已发送",
     "AlreadyJoined": "已加入",
-    "errorOccured": "发生错误"
+    "errorOccurred": "发生错误，请重试",
+    "UserIdNotFound": "未找到用户ID",
+    "MembershipRequestNotFound": "未找到会员请求",
+    "MembershipRequestWithdrawn": "会员请求已成功撤回"
   },
   "communityProfile": {
     "title": "社区简介",
@@ -1133,7 +1136,18 @@
     "Member": "成员",
     "Admin": "管理员",
     "loading": "加载中...",
-    "noAttendees": "未找到参与者"
+    "noAttendees": "未找到参与者",
+    "attendeeCount": "参与人数",
+    "maleAttendees": "男性参与者",
+    "femaleAttendees": "女性参与者",
+    "otherAttendees": "其他参与者",
+    "currentEvent": "当前活动",
+    "chartPageNavigation": "图表页面导航",
+    "previousPage": "上一页",
+    "nextPage": "下一页",
+    "goToToday": "转到今天",
+    "genderDistribution": "性别分布",
+    "ageDistribution": "年龄分布"
   },
   "eventRegistrant": {
     "sort": "排序",
