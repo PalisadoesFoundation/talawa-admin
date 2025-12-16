@@ -127,7 +127,6 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     await act(async () => {
       await i18nForTest.changeLanguage('en');
     });
-
     vi.clearAllMocks();
   });
 
