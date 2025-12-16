@@ -2,6 +2,7 @@ import type { ApolloLink } from '@apollo/client';
 import { MockedProvider, type MockedResponse } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import type { RenderResult } from '@testing-library/react';
+import dayjs from 'dayjs';
 import {
   cleanup,
   fireEvent,
@@ -18,13 +19,18 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
-import type { InterfacePledgeModal } from './PledgeModal';
-import PledgeModal from './PledgeModal';
+import type { InterfaceUserInfoPG } from 'utils/interfaces';
 import React, { act } from 'react';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { vi } from 'vitest';
 import { setupLocalStorageMock } from 'test-utils/localStorageMock';
+import PledgeModal, {
+  type InterfacePledgeModal,
+  areOptionsEqual,
+  getMemberLabel,
+  computeAdjustedEndDate,
+} from './PledgeModal';
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -1038,5 +1044,55 @@ describe('PledgeModal', () => {
         expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
       }
     });
+  });
+});
+
+describe('PledgeModal helper logic (coverage)', () => {
+  it('areOptionsEqual returns true when ids match', () => {
+    const option = {
+      id: '1',
+      firstName: 'Alice',
+      lastName: 'Smith',
+    };
+
+    const value = {
+      id: '1',
+      firstName: 'Bob',
+      lastName: 'Jones',
+    };
+
+    expect(
+      areOptionsEqual(
+        option as InterfaceUserInfoPG,
+        value as InterfaceUserInfoPG,
+      ),
+    ).toBe(true);
+  });
+
+  it('getMemberLabel builds full name correctly', () => {
+    const member = {
+      id: '2',
+      firstName: 'John',
+      lastName: 'Doe',
+    };
+
+    expect(getMemberLabel(member as InterfaceUserInfoPG)).toBe('John Doe');
+  });
+
+  it('computeAdjustedEndDate returns later date when start exceeds end', () => {
+    const existingEndDate = new Date('2024-01-01');
+    const newStartDate = dayjs('2025-01-01');
+
+    const result = computeAdjustedEndDate(existingEndDate, newStartDate);
+
+    expect(result?.toISOString()).toBe(newStartDate.toDate().toISOString());
+  });
+
+  it('computeAdjustedEndDate returns original end date when date is null', () => {
+    const existingEndDate = new Date('2024-01-01');
+
+    const result = computeAdjustedEndDate(existingEndDate, null);
+
+    expect(result).toBe(existingEndDate);
   });
 });
