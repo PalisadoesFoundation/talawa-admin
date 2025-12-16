@@ -148,6 +148,10 @@ export const AttendanceStatisticsModal: React.FC<
     plugins: {
       tooltip: {
         callbacks: {
+          /* istanbul ignore next -- @preserve
+           * Chart.js tooltip callbacks cannot be tested in jsdom environment
+           * as they require actual canvas rendering and user hover interactions
+           */
           label: (context: TooltipItem<'line'>) => {
             const label = context.dataset.label || '';
             const value = context.parsed.y;
