@@ -1136,7 +1136,18 @@
     "Member": "成员",
     "Admin": "管理员",
     "loading": "加载中...",
-    "noAttendees": "未找到参与者"
+    "noAttendees": "未找到参与者",
+    "attendeeCount": "参与人数",
+    "maleAttendees": "男性参与者",
+    "femaleAttendees": "女性参与者",
+    "otherAttendees": "其他参与者",
+    "currentEvent": "当前活动",
+    "chartPageNavigation": "图表页面导航",
+    "previousPage": "上一页",
+    "nextPage": "下一页",
+    "goToToday": "转到今天",
+    "genderDistribution": "性别分布",
+    "ageDistribution": "年龄分布"
   },
   "eventRegistrant": {
     "sort": "排序",
