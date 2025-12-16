@@ -1136,7 +1136,18 @@
     "Member": "सदस्य",
     "Admin": "व्यवस्थापक",
     "loading": "लोड हो रहा है",
-    "noAttendees": "कोई प्रतिभागी नहीं मिला"
+    "noAttendees": "कोई प्रतिभागी नहीं मिला",
+    "attendeeCount": "उपस्थित लोगों की संख्या",
+    "maleAttendees": "पुरुष उपस्थित",
+    "femaleAttendees": "महिला उपस्थित",
+    "otherAttendees": "अन्य उपस्थित",
+    "currentEvent": "वर्तमान कार्यक्रम",
+    "chartPageNavigation": "चार्ट पृष्ठ नेविगेशन",
+    "previousPage": "पिछला पृष्ठ",
+    "nextPage": "अगला पृष्ठ",
+    "goToToday": "आज पर जाएं",
+    "genderDistribution": "लिंग वितरण",
+    "ageDistribution": "आयु वितरण"
   },
   "eventRegistrant": {
     "sort": "छांटें",
