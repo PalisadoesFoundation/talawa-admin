@@ -6,7 +6,7 @@
 
 > **writeTempFile**(`dir`, `relPath`, `content`): `string`
 
-Defined in: [src/check-i18n.test-utils.js:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/check-i18n.test-utils.js#L43)
+Defined in: [src/test-utils/check-i18n.test-utils.js:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/check-i18n.test-utils.js#L45)
 
 ## Parameters
 

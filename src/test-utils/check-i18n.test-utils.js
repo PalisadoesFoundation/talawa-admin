@@ -10,11 +10,13 @@ const __dirname = path.dirname(__filename);
 export const scriptPath = path.resolve(
   __dirname,
   '..',
+  '..',
   'scripts',
   'check-i18n.js',
 );
 export const fixturesDir = path.resolve(
   __dirname,
+  '..',
   '..',
   'scripts',
   '__fixtures__',

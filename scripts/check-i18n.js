@@ -189,7 +189,7 @@ const looksLikeDateFormat = (text) => {
   // Common date format patterns
   const dateFormatPatterns = [
     /^[YMDHmsS]+([\/\-\s:\.][YMDHmsS]+)+$/i, // YYYY-MM-DD, MM/DD/YYYY, HH:mm:ss
-    /^[YMDHmsS]+\[[^\]]+\][YMDHmsS]*$/i, // YYYY-MM-DDTHH:mm:ss.SSS[Z]
+    /^[YMDHmsS]+([\/\-\s:\.T][YMDHmsS]+)*\[[^\]]+\][YMDHmsS]*$/i, // YYYY-MM-DDTHH:mm:ss.SSS[Z]
     /^(short|long|narrow|numeric|2-digit|full|medium)$/i, // Intl.DateTimeFormat tokens
   ];
   return dateFormatPatterns.some((pattern) => pattern.test(trimmed));
@@ -549,10 +549,10 @@ const collectViolations = (filePath) => {
       // Strip out variables FIRST (including nested template literals)
       // Remove ${...} patterns, but be careful with nested backticks
       let staticText = fullText;
-      // Remove simple ${var} patterns
-      staticText = staticText.replace(/\$\{[^}]*\}/g, '');
       // Remove nested template literals ${`...`}
       staticText = staticText.replace(/\$\{[^`]*`[^`]*`[^}]*\}/g, '');
+      // Remove simple ${var} patterns
+      staticText = staticText.replace(/\$\{[^}]*\}/g, '');
       staticText = staticText.trim();
 
       // If it's a URL-like pattern, allow it
