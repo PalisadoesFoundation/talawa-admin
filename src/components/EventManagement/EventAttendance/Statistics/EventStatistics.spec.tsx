@@ -1,9 +1,6 @@
 import React from 'react';
 import { act, render, screen, waitFor } from '@testing-library/react';
-import {
-  AttendanceStatisticsModal,
-  formatTooltipLabel,
-} from './EventStatistics';
+import { AttendanceStatisticsModal } from './EventStatistics';
 import { MockedProvider } from '@apollo/client/testing';
 import { EVENT_DETAILS, RECURRING_EVENTS } from 'GraphQl/Queries/Queries';
 import userEvent from '@testing-library/user-event';
@@ -1391,27 +1388,5 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
       const prevButton = screen.getByLabelText('previousPage');
       expect(prevButton).toBeDisabled();
     });
-  });
-
-  it('formatTooltipLabel returns correct format for current and non-current events', () => {
-    // Test the extracted tooltip formatting function (covers line 157 logic)
-    const mockT = (key: string): string => {
-      const translations: Record<string, string> = {
-        currentEvent: 'Current Event',
-      };
-      return translations[key] || key;
-    };
-
-    // Test when it IS the current event
-    const resultCurrent = formatTooltipLabel('Attendees', 42, true, mockT);
-    expect(resultCurrent).toBe('Attendees: 42 (Current Event)');
-
-    // Test when it's NOT the current event
-    const resultNotCurrent = formatTooltipLabel('Attendees', 42, false, mockT);
-    expect(resultNotCurrent).toBe('Attendees: 42');
-
-    // Test with different label and value
-    const resultDifferent = formatTooltipLabel('Registered', 100, true, mockT);
-    expect(resultDifferent).toBe('Registered: 100 (Current Event)');
   });
 });

@@ -96,18 +96,6 @@ const calculateAge = (birthDate: Date): number => {
   return age;
 };
 
-// Tooltip formatting helper - extracted for testability
-export const formatTooltipLabel = (
-  label: string,
-  value: number,
-  isCurrentEvent: boolean,
-  t: (key: string) => string,
-): string => {
-  return isCurrentEvent
-    ? `${label}: ${value} (${t('currentEvent')})`
-    : `${label}: ${value}`;
-};
-
 export const AttendanceStatisticsModal: React.FC<
   InterfaceAttendanceStatisticsModalProps
 > = ({ show, handleClose, statistics, memberData, t }): React.JSX.Element => {
@@ -162,10 +150,12 @@ export const AttendanceStatisticsModal: React.FC<
         callbacks: {
           label: (context: TooltipItem<'line'>) => {
             const label = context.dataset.label || '';
-            const value = context.parsed.y ?? 0;
+            const value = context.parsed.y;
             const isCurrentEvent =
               paginatedRecurringEvents[context.dataIndex].id === eventId;
-            return formatTooltipLabel(label, value, isCurrentEvent, t);
+            return isCurrentEvent
+              ? `${label}: ${value} (${t('currentEvent')})`
+              : `${label}: ${value}`;
           },
         },
       },
