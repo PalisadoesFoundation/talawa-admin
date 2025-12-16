@@ -369,9 +369,6 @@ describe('VenueModal', () => {
       // Should use the fallback message
       expect(toast.error).toHaveBeenCalled();
     });
-
-    // Restore original implementation
-    vi.restoreAllMocks();
   });
 
   test('clears image input correctly', async () => {
@@ -612,9 +609,6 @@ describe('VenueModal', () => {
         screen.queryByAltText('Venue Image Preview'),
       ).not.toBeInTheDocument();
       expect(screen.queryByTestId('closeimage')).not.toBeInTheDocument();
-
-      // Restore original
-      vi.restoreAllMocks();
     });
 
     test('shows error when uploading file larger than 5MB', async () => {
