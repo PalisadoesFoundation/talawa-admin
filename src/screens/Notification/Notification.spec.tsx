@@ -9,6 +9,7 @@ import {
 } from 'GraphQl/Queries/NotificationQueries';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { toast } from 'react-toastify';
+import i18nForTest from '../../utils/i18nForTest';
 
 vi.mock('utils/useLocalstorage', () => ({
   __esModule: true,
@@ -133,7 +134,7 @@ const generateNotifications = (
   }));
 
 afterEach(() => {
-  vi.restoreAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('Notification Component', () => {
@@ -313,9 +314,7 @@ describe('Notification Component', () => {
     fireEvent.click(screen.getByText('Mark as Read'));
 
     await waitFor(() => {
-      expect(toastErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Error marking notifications as read'), // or the exact message from tErrors
-      );
+      expect(toastErrorSpy).toHaveBeenCalledWith(i18nForTest.t('markAsReadError'));
     });
 
     toastErrorSpy.mockRestore();
