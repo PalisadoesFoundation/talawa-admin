@@ -234,7 +234,7 @@
     "roleUpdated": "Role Updated.",
     "joinNow": "Join Now",
     "visit": "Visit",
-    "withdraw": "Widthdraw",
+    "withdraw": "Withdraw",
     "removeUserFrom": "Remove User from {{org}}",
     "unblockUserFrom": "Unblock User from {{org}}",
     "removeConfirmation": "Are you sure you want to remove '{{name}}' from organization '{{org}}'?",
@@ -253,10 +253,13 @@
     "cancel": "cancel",
     "admins": "admins",
     "members": "members",
-    "orgJoined": "orgJoined",
-    "MembershipRequestSent": "MembershipRequestSent",
-    "AlreadyJoined": "AlreadyJoined",
-    "errorOccured": "errorOccured"
+    "orgJoined": "Successfully joined organization",
+    "MembershipRequestSent": "Membership request sent successfully",
+    "AlreadyJoined": "You have already joined this organization",
+    "errorOccurred": "An error occurred. Please try again",
+    "UserIdNotFound": "User ID not found",
+    "MembershipRequestNotFound": "Membership request not found",
+    "MembershipRequestWithdrawn": "Membership request withdrawn successfully"
   },
   "communityProfile": {
     "title": "Community Profile",
