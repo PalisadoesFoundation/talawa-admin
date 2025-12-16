@@ -75,15 +75,49 @@ export interface InterfacePledgeModal {
   endDate: Date;
   mode: 'create' | 'edit';
 }
-
+/**
+ * Compares two user options by ID.
+ * Used by MUI Autocomplete to determine equality.
+ *
+ * @param option - Option from the Autocomplete list
+ * @param value - Currently selected value
+ * @returns True if both options refer to the same user
+ *
+ * @example
+ * areOptionsEqual({ id: '1' } as InterfaceUserInfoPG, { id: '1' } as InterfaceUserInfoPG);
+ * // returns true
+ */
 export const areOptionsEqual = (
   option: InterfaceUserInfoPG,
   value: InterfaceUserInfoPG,
 ): boolean => option.id === value.id;
 
+/**
+ * Builds a display label for a member.
+ * Empty name parts are safely ignored.
+ *
+ * @param member - User object containing name fields
+ * @returns Full name string constructed from available name parts
+ *
+ * @example
+ * getMemberLabel({ firstName: 'John', lastName: 'Doe' } as InterfaceUserInfoPG);
+ * // returns "John Doe"
+ */
 export const getMemberLabel = (member: InterfaceUserInfoPG): string =>
   [member.firstName, member.lastName].filter(Boolean).join(' ');
 
+/**
+ * Ensures pledge end date is not before the selected start date.
+ * Returns the later of the two dates.
+ *
+ * @param pledgeEndDate - Current pledge end date
+ * @param date - Newly selected start date
+ * @returns Adjusted end date or the original end date if no adjustment is needed
+ *
+ * @example
+ * computeAdjustedEndDate(new Date('2024-01-01'), dayjs('2024-02-01'));
+ * // returns Date('2024-02-01')
+ */
 export const computeAdjustedEndDate = (
   pledgeEndDate: Date | undefined,
   date: Dayjs | null,
@@ -92,6 +126,7 @@ export const computeAdjustedEndDate = (
   const newDate = date.toDate();
   return pledgeEndDate < newDate ? newDate : pledgeEndDate;
 };
+
 
 const PledgeModal: React.FC<InterfacePledgeModal> = ({
   isOpen,
@@ -308,8 +343,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                     ...formState,
                     pledgeStartDate: date.toDate(),
                     pledgeEndDate:
-                      computeAdjustedEndDate(pledgeEndDate, date) ??
-                      pledgeEndDate,
+                       computeAdjustedEndDate(pledgeEndDate, date) ?? pledgeEndDate,
                   });
                 }
               }}
