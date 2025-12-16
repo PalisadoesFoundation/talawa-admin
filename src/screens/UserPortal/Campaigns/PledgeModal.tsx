@@ -127,7 +127,6 @@ export const computeAdjustedEndDate = (
   return pledgeEndDate < newDate ? newDate : pledgeEndDate;
 };
 
-
 const PledgeModal: React.FC<InterfacePledgeModal> = ({
   isOpen,
   hide,
@@ -321,7 +320,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               isOptionEqualToValue={areOptionsEqual}
               filterSelectedOptions={true}
               getOptionLabel={(member: InterfaceUserInfoPG): string =>
-                    getMemberLabel(member)
+                getMemberLabel(member)
               }
               onChange={(_, newPledgers): void => {
                 setFormState({ ...formState, pledgeUsers: newPledgers });
@@ -343,7 +342,8 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                     ...formState,
                     pledgeStartDate: date.toDate(),
                     pledgeEndDate:
-                       computeAdjustedEndDate(pledgeEndDate, date) ?? pledgeEndDate,
+                      computeAdjustedEndDate(pledgeEndDate, date) ??
+                      pledgeEndDate,
                   });
                 }
               }}
