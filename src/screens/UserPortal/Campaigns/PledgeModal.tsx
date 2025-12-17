@@ -341,9 +341,10 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                   setFormState({
                     ...formState,
                     pledgeStartDate: date.toDate(),
-                    pledgeEndDate:
-                      computeAdjustedEndDate(pledgeEndDate, date) ??
+                    pledgeEndDate: computeAdjustedEndDate(
                       pledgeEndDate,
+                      date,
+                    ) as Date,
                   });
                 }
               }}
