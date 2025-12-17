@@ -217,7 +217,6 @@ const hasIgnoreComment = (originalLines, lineIndex) => {
  * countWords('こんにちは'); // 1
  * countWords('123-456'); // 0 (no letter characters)
  */
-
 const countWords = (text) => {
   // Unicode-aware word detection: sequences of letters in any script
   const words = text.match(/\p{L}+/gu);
