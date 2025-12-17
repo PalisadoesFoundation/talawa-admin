@@ -294,7 +294,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       });
       props.fetchPosts();
       toggleEditPost();
-      toast.success('Post updated successfully');
+      toast.success(t('postUpdatedSuccess'));
     } catch (error) {
       errorHandler(t, error);
     }
@@ -335,87 +335,90 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             {props.creator.name}
           </Typography>
         </Box>
-        <>
-          <IconButton
-            onClick={handleDropdownOpen}
-            size="small"
-            aria-label="more options"
-            data-testid="more-options-button"
-          >
-            <MoreHoriz />
-          </IconButton>
-          <Menu
-            anchorEl={dropdownAnchor}
-            open={Boolean(dropdownAnchor)}
-            onClose={handleDropdownClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            PaperProps={{
-              sx: {
-                minWidth: '150px',
-                '& .MuiMenuItem-root': {
-                  px: 2,
-                  py: 1,
-                },
-              },
-            }}
-          >
-            {(isPostCreator || isAdmin) && (
-              <MenuItem
-                onClick={toggleEditPost}
-                data-testid="edit-post-menu-item"
+        {isAdmin ||
+          (isPostCreator && (
+            <>
+              <IconButton
+                onClick={handleDropdownOpen}
+                size="small"
+                aria-label={t('moreOptions')}
+                data-testid="more-options-button"
               >
-                <ListItemIcon>
-                  <EditOutlined fontSize="small" />
-                </ListItemIcon>
-                <ListItemText
-                  primary={t('editPost')}
-                  data-testid="edit-post-button"
-                />
-              </MenuItem>
-            )}
+                <MoreHoriz />
+              </IconButton>
+              <Menu
+                anchorEl={dropdownAnchor}
+                open={Boolean(dropdownAnchor)}
+                onClose={handleDropdownClose}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'right',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                PaperProps={{
+                  sx: {
+                    minWidth: '150px',
+                    '& .MuiMenuItem-root': {
+                      px: 2,
+                      py: 1,
+                    },
+                  },
+                }}
+              >
+                {(isPostCreator || isAdmin) && (
+                  <MenuItem
+                    onClick={toggleEditPost}
+                    data-testid="edit-post-menu-item"
+                  >
+                    <ListItemIcon>
+                      <EditOutlined fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={t('editPost')}
+                      data-testid="edit-post-button"
+                    />
+                  </MenuItem>
+                )}
 
-            {isAdmin && (
-              <MenuItem
-                onClick={handleTogglePin}
-                data-testid="pin-post-menu-item"
-              >
-                <ListItemIcon>
-                  {isPinned ? (
-                    <PushPinOutlined fontSize="small" />
-                  ) : (
-                    <PushPin fontSize="small" />
-                  )}
-                </ListItemIcon>
-                <ListItemText
-                  primary={isPinned ? t('unpinPost') : t('pinPost')}
-                />
-              </MenuItem>
-            )}
+                {isAdmin && (
+                  <MenuItem
+                    onClick={handleTogglePin}
+                    data-testid="pin-post-menu-item"
+                  >
+                    <ListItemIcon>
+                      {isPinned ? (
+                        <PushPinOutlined fontSize="small" />
+                      ) : (
+                        <PushPin fontSize="small" />
+                      )}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={isPinned ? t('unpinPost') : t('pinPost')}
+                    />
+                  </MenuItem>
+                )}
 
-            {(isAdmin || isPostCreator) && (
-              <MenuItem
-                onClick={handleDeletePost}
-                data-testid="delete-post-menu-item"
-              >
-                <ListItemIcon>
-                  <DeleteOutline fontSize="small" color="error" />
-                </ListItemIcon>
-                <ListItemText
-                  primary={tCommon('delete')}
-                  data-testid="delete-post-button"
-                  primaryTypographyProps={{ color: 'error' }}
-                />
-              </MenuItem>
-            )}
-          </Menu>
-        </>
+                {(isAdmin || isPostCreator) && (
+                  <MenuItem
+                    onClick={handleDeletePost}
+                    data-testid="delete-post-menu-item"
+                  >
+                    <ListItemIcon>
+                      <DeleteOutline fontSize="small" color="error" />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={tCommon('delete')}
+                      data-testid="delete-post-button"
+                      primaryTypographyProps={{ color: 'error' }}
+                    />
+                  </MenuItem>
+                )}
+              </Menu>
+            </>
+          ))}
       </Box>
 
       {/* Post Media */}
