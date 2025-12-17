@@ -398,7 +398,7 @@ describe('PledgeModal', () => {
       });
     });
 
-    it('preserves pledgeEndDate when start date does not exceed end date', async () => {
+    it('preserves end date when start date does not exceed end date', async () => {
       renderPledgeModal(link1, pledgeProps[1]);
 
       const startDateInput = screen.getAllByLabelText(/start date/i)[0];
@@ -872,7 +872,7 @@ describe('PledgeModal', () => {
       );
     });
 
-    it('uses previous pledgeEndDate when computeAdjustedEndDate returns undefined', async () => {
+    it('preserves pledgeEndDate when start date does not exceed end date', async () => {
       const existingPledge = pledgeProps[1].pledge;
 
       if (!existingPledge) {
