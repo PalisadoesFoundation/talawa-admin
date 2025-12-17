@@ -165,10 +165,10 @@ line 4"""
         /* istanbul ignore next */
         it.skip('test', () => {});
         """
-        violations = self.check_file_content_for_testing(content, 'test.js')
+        violations = self.check_file_content_for_testing(content)
         self.assertEqual(len(violations), 3)
 
-    def check_file_content_for_testing(self, content: str, file_path: str) -> list:
+    def check_file_content_for_testing(self, content: str) -> list:
         """Helper method to test file content directly."""
         temp_file = None
         try:
@@ -250,15 +250,8 @@ line 4"""
             
             with patch.object(sys, 'argv', ['disable_statements_check.py', '--files', temp_file]):
                 from disable_statements_check import main
-                # Should return normally (no exception) when no violations
-                try:
-                    main()
-                    # If we reach here, main() returned normally (success)
-                    success = True
-                except SystemExit as e:
-                    # If main() calls sys.exit(), check the code
-                    success = (e.code == 0)
-                self.assertTrue(success)
+                # Should return normally (no sys.exit call) when no violations
+                main()  # Will raise SystemExit if exit code != 0
         finally:
             if temp_file and os.path.exists(temp_file):
                 os.unlink(temp_file)
