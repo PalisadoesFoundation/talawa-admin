@@ -160,7 +160,7 @@ describe('Notification Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("You're all caught up!")).toBeInTheDocument();
+      expect(screen.getByText(/allCaughtUp/i)).toBeInTheDocument();
     });
   });
 
@@ -224,10 +224,10 @@ describe('Notification Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Mark as Read')).toBeInTheDocument();
+      expect(screen.getByText(/markAsRead/i)).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Mark as Read'));
+    fireEvent.click(screen.getByText(/markAsRead/i));
 
     await waitFor(() => {
       expect(screen.queryByText('Mark as Read')).not.toBeInTheDocument();
@@ -246,12 +246,12 @@ describe('Notification Component', () => {
     // wait for first page to load
     await screen.findByText('Notification 1');
 
-    fireEvent.click(await screen.findByText('Next'));
+    fireEvent.click(await screen.findByText(/next/i));
 
     // second page should contain Notification 8 (index 6)
     await screen.findByText('Notification 8');
 
-    fireEvent.click(await screen.findByText('Prev'));
+    fireEvent.click(await screen.findByText(/prev/i));
 
     await screen.findByText('Notification 1');
   });
@@ -267,8 +267,8 @@ describe('Notification Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Prev')).toBeDisabled();
-      expect(screen.getByText('Next')).toBeDisabled();
+      expect(screen.getByText(/prev/i)).toBeDisabled();
+      expect(screen.getByText(/next/i)).toBeDisabled();
     });
   });
 
@@ -307,15 +307,14 @@ describe('Notification Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Mark as Read')).toBeInTheDocument();
+      expect(screen.getByText(/markAsRead/i)).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Mark as Read'));
+    fireEvent.click(screen.getByText(/markAsRead/i));
 
     await waitFor(() => {
       expect(toastErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Error marking notifications as read'),
-      );
+        expect.stringContaining('markAsReadError'))
     });
 
     toastErrorSpy.mockRestore();
@@ -333,7 +332,7 @@ describe('Pagination Visibility', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("You're all caught up!")).toBeInTheDocument();
+      expect(screen.getByText(/allCaughtUp/i)).toBeInTheDocument();
     });
 
     expect(screen.queryByText('Prev')).not.toBeInTheDocument();
@@ -372,8 +371,8 @@ describe('Pagination Visibility', () => {
       expect(screen.getByText('Notification 1')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('Prev')).toBeInTheDocument();
-    expect(screen.getByText('Next')).toBeInTheDocument();
+    expect(screen.getByText(/prev/i)).toBeInTheDocument();
+    expect(screen.getByText(/next/i)).toBeInTheDocument();
   });
 
   it('should show pagination when page > 0 even with 0 or 1 notifications on current page', async () => {
@@ -388,11 +387,11 @@ describe('Pagination Visibility', () => {
 
     // Navigate to page 2
     await screen.findByText('Notification 1');
-    fireEvent.click(await screen.findByText('Next'));
+    fireEvent.click(await screen.findByText(/next/i));
     await screen.findByText('Notification 7');
 
     // Pagination should still be visible
-    expect(screen.getByText('Prev')).toBeInTheDocument();
-    expect(screen.getByText('Next')).toBeInTheDocument();
+    expect(screen.getByText(/prev/i)).toBeInTheDocument();
+    expect(screen.getByText(/next/i)).toBeInTheDocument();
   });
 });
