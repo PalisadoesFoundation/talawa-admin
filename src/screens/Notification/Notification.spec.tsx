@@ -161,7 +161,7 @@ describe('Notification Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/you\'re all caught up!/i)).toBeInTheDocument();
+      expect(screen.getByText(/you're all caught up!/i)).toBeInTheDocument();
     });
   });
 
@@ -334,7 +334,7 @@ describe('Pagination Visibility', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/you\'re all caught up!/i)).toBeInTheDocument();
+      expect(screen.getByText(/you're all caught up!/i)).toBeInTheDocument();
     });
 
     expect(screen.queryByText(/prev/i)).not.toBeInTheDocument();
@@ -377,7 +377,7 @@ describe('Pagination Visibility', () => {
     expect(screen.getByText(/next/i)).toBeInTheDocument();
   });
 
-  it('should show pagination when page > 0 even with 0 or 1 notifications on current page', async () => {
+  it('should keep pagination visible when navigating beyond first page', async () => {
     const notifications = generateNotifications(10, false);
     render(
       <MockedProvider mocks={mocks(notifications)}>
@@ -393,6 +393,24 @@ describe('Pagination Visibility', () => {
     await screen.findByText('Notification 7');
 
     // Pagination should still be visible
+    expect(screen.getByText(/prev/i)).toBeInTheDocument();
+    expect(screen.getByText(/next/i)).toBeInTheDocument();
+  });
+
+  it('should show pagination when there are exactly 2 notifications', async () => {
+    const notifications = generateNotifications(2, false);
+    render(
+      <MockedProvider mocks={mocks(notifications)}>
+        <MemoryRouter>
+          <Notification />
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Notification 1')).toBeInTheDocument();
+    });
+
     expect(screen.getByText(/prev/i)).toBeInTheDocument();
     expect(screen.getByText(/next/i)).toBeInTheDocument();
   });
