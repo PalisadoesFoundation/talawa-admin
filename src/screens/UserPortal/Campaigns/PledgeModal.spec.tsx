@@ -316,6 +316,41 @@ describe('PledgeModal', () => {
     });
   });
 
+  it('handles USER_DETAILS loading state', async () => {
+    const loadingMock = {
+      request: {
+        query: USER_DETAILS,
+        variables: { input: { id: 'userId' } },
+      },
+      result: {
+        data: {
+          user: null,
+        },
+      },
+    };
+
+    const link = new StaticMockLink([loadingMock]);
+    renderPledgeModal(link, pledgeProps[0]);
+
+    expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
+  });
+
+  it('handles USER_DETAILS error state gracefully', async () => {
+    const errorMock = {
+      request: {
+        query: USER_DETAILS,
+        variables: { input: { id: 'userId' } },
+      },
+      error: new Error('USER_DETAILS failed'),
+    };
+
+    const link = new StaticMockLink([errorMock]);
+
+    renderPledgeModal(link, pledgeProps[0]);
+
+    expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
+  });
+
   describe('Form Field Updates', () => {
     it('should update pledgeAmount when input value changes to valid positive number', async () => {
       renderPledgeModal(link1, pledgeProps[1]);
@@ -350,6 +385,29 @@ describe('PledgeModal', () => {
 
       fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
       expect(startDateInput).toHaveValue('02/01/2024');
+    });
+
+    it('keeps form stable when endDate is empty and start date changes', async () => {
+      const existingPledge = pledgeProps[1].pledge;
+
+      if (!existingPledge) {
+        throw new Error('Expected pledge to be defined for this test');
+      }
+
+      renderPledgeModal(link1, {
+        ...pledgeProps[1],
+        pledge: {
+          ...existingPledge,
+          endDate: '',
+        },
+      });
+
+      const startDateInput = screen.getAllByLabelText(/start date/i)[0];
+
+      fireEvent.change(startDateInput, {
+        target: { value: '02/01/2024' },
+      });
+      expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
     });
 
     it('should handle pledgeStartDate onChange when value is null', async () => {
@@ -872,30 +930,6 @@ describe('PledgeModal', () => {
       );
     });
 
-    it('preserves pledgeEndDate when start date does not exceed end date', async () => {
-      const existingPledge = pledgeProps[1].pledge;
-
-      if (!existingPledge) {
-        throw new Error('Expected pledge to be defined for this test');
-      }
-
-      renderPledgeModal(link1, {
-        ...pledgeProps[1],
-        pledge: {
-          ...existingPledge,
-          endDate: '',
-        },
-      });
-
-      const startDateInput = screen.getAllByLabelText(/start date/i)[0];
-
-      fireEvent.change(startDateInput, {
-        target: { value: '2024-01-01' },
-      });
-
-      expect(true).toBe(true);
-    });
-
     it('should cover remaining edge cases for 100% coverage', async () => {
       renderPledgeModal(link1, pledgeProps[0]);
 
@@ -910,98 +944,91 @@ describe('PledgeModal', () => {
       expect(autocomplete).toBeInTheDocument();
     });
   });
-});
 
-describe('PledgeModal helper logic (coverage)', () => {
-  it('areOptionsEqual returns true when ids match', () => {
-    const option: InterfaceUserInfoPG = {
-      id: '1',
-      firstName: 'Alice',
-      lastName: 'Smith',
-      name: 'Alice Smith',
-    };
+  describe('PledgeModal helper logic (coverage)', () => {
+    it('areOptionsEqual returns true when ids match', () => {
+      const option: InterfaceUserInfoPG = {
+        id: '1',
+        firstName: 'Alice',
+        lastName: 'Smith',
+        name: 'Alice Smith',
+      };
 
-    const value: InterfaceUserInfoPG = {
-      id: '1',
-      firstName: 'Bob',
-      lastName: 'Jones',
-      name: 'Bob Jones',
-    };
+      const value: InterfaceUserInfoPG = {
+        id: '1',
+        firstName: 'Bob',
+        lastName: 'Jones',
+        name: 'Bob Jones',
+      };
 
-    expect(areOptionsEqual(option, value)).toBe(true);
-  });
+      expect(areOptionsEqual(option, value)).toBe(true);
+    });
 
-  it('getMemberLabel builds full name correctly', () => {
-    const member = {
-      id: '2',
-      firstName: 'John',
-      lastName: 'Doe',
-    };
+    it('getMemberLabel builds full name correctly', () => {
+      const member = {
+        id: '2',
+        firstName: 'John',
+        lastName: 'Doe',
+      };
 
-    expect(getMemberLabel(member as InterfaceUserInfoPG)).toBe('John Doe');
-  });
+      expect(getMemberLabel(member as InterfaceUserInfoPG)).toBe('John Doe');
+    });
 
-  it('computeAdjustedEndDate returns later date when start exceeds end', () => {
-    const existingEndDate = new Date('2024-01-01');
-    const newStartDate = dayjs('2025-01-01');
+    it('computeAdjustedEndDate returns later date when start exceeds end', () => {
+      const existingEndDate = new Date('2024-01-01');
+      const newStartDate = dayjs('2025-01-01');
 
-    const result = computeAdjustedEndDate(existingEndDate, newStartDate);
+      const result = computeAdjustedEndDate(existingEndDate, newStartDate);
 
-    expect(result?.toISOString()).toBe(newStartDate.toDate().toISOString());
-  });
+      expect(result?.toISOString()).toBe(newStartDate.toDate().toISOString());
+    });
 
-  it('computeAdjustedEndDate returns original end date when date is null', () => {
-    const existingEndDate = new Date('2024-01-01');
+    it('computeAdjustedEndDate returns original end date when date is null', () => {
+      const existingEndDate = new Date('2024-01-01');
 
-    const result = computeAdjustedEndDate(existingEndDate, null);
+      const result = computeAdjustedEndDate(existingEndDate, null);
 
-    expect(result).toBe(existingEndDate);
-  });
+      expect(result).toBe(existingEndDate);
+    });
 
-  it('areOptionsEqual returns false when ids do not match', () => {
-    const option: InterfaceUserInfoPG = {
-      id: '1',
-      firstName: 'A',
-      lastName: 'B',
-      name: 'A B',
-    };
-    const value: InterfaceUserInfoPG = {
-      id: '2',
-      firstName: 'A',
-      lastName: 'B',
-      name: 'A B',
-    };
+    it('areOptionsEqual returns false when ids do not match', () => {
+      const option: InterfaceUserInfoPG = {
+        id: '1',
+        firstName: 'A',
+        lastName: 'B',
+        name: 'A B',
+      };
+      const value: InterfaceUserInfoPG = {
+        id: '2',
+        firstName: 'A',
+        lastName: 'B',
+        name: 'A B',
+      };
 
-    expect(areOptionsEqual(option, value)).toBe(false);
-  });
+      expect(areOptionsEqual(option, value)).toBe(false);
+    });
 
-  it('getMemberLabel handles missing firstName', () => {
-    const member = { id: '1', firstName: '', lastName: 'Doe' };
-    expect(getMemberLabel(member as InterfaceUserInfoPG)).toBe('Doe');
-  });
+    it('getMemberLabel handles missing firstName', () => {
+      const member = { id: '1', firstName: '', lastName: 'Doe' };
+      expect(getMemberLabel(member as InterfaceUserInfoPG)).toBe('Doe');
+    });
 
-  it('getMemberLabel handles missing lastName', () => {
-    const member = { id: '2', firstName: 'John', lastName: '' };
-    expect(getMemberLabel(member as InterfaceUserInfoPG)).toBe('John');
-  });
+    it('getMemberLabel handles missing lastName', () => {
+      const member = { id: '2', firstName: 'John', lastName: '' };
+      expect(getMemberLabel(member as InterfaceUserInfoPG)).toBe('John');
+    });
 
-  it('computeAdjustedEndDate returns undefined when pledgeEndDate is undefined', () => {
-    const newStartDate = dayjs('2024-01-01');
-    const result = computeAdjustedEndDate(undefined, newStartDate);
-    expect(result).toBeUndefined();
-  });
+    it('computeAdjustedEndDate returns undefined when pledgeEndDate is undefined', () => {
+      const newStartDate = dayjs('2024-01-01');
+      const result = computeAdjustedEndDate(undefined, newStartDate);
+      expect(result).toBeUndefined();
+    });
 
-  it('computeAdjustedEndDate keeps end date when start is before end', () => {
-    const end = new Date('2025-12-31');
-    const start = dayjs('2025-01-01');
-    const result = computeAdjustedEndDate(end, start);
-    expect(result).toBe(end);
-  });
-
-  it('computeAdjustedEndDate returns original end date when end >= start', () => {
-    const existingEndDate = new Date('2025-01-01');
-    const newStartDate = dayjs('2024-01-01');
-    const result = computeAdjustedEndDate(existingEndDate, newStartDate);
-    expect(result).toBe(existingEndDate);
+    it('computeAdjustedEndDate keeps end date when start is before end', () => {
+      const end = new Date('2025-12-31');
+      const start = dayjs('2025-01-01');
+      const result = computeAdjustedEndDate(end, start);
+      expect(result).toBe(end);
+    });
   });
 });
