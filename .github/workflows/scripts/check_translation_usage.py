@@ -147,7 +147,7 @@ def collect_files(
         verbose: Enable verbose output.
 
     Returns:
-        A list of collected file paths.
+        list[Path]: A list of collected file paths.
     """
     collected: list[Path] = []
 
@@ -264,7 +264,8 @@ def load_locales(
         allow_missing: If True, allow no locale files to exist.
 
     Returns:
-        A mapping of locale names to sets of flattened translation keys.
+        dict[str, set[str]]: A mapping of locale names to sets of
+            flattened translation keys.
 
     Raises:
         FileNotFoundError: If the locales directory is missing, no locale files
@@ -310,8 +311,9 @@ def compare_keys(
     """Compare used translation keys against locale translation keys.
 
     Args:
-        used_keys: Set of translation keys found in source code.
-        locales: Mapping of locale names to available translation keys.
+        used_keys (set[str]): Set of translation keys found in source code.
+        locales (dict[str, set[str]]): Mapping of locale names to available
+            translation keys.
 
     Returns:
         dict[str, list[str]]: Mapping of translation keys to the locales
@@ -335,10 +337,13 @@ def print_report(
     """Print a report of missing translation keys.
 
     Args:
-        missing: Mapping of translation keys to lists of locales where they
-            are missing.
-        verbose: Enable verbose summary output.
-    """
+        missing (dict[str, list[str]]): Mapping of translation keys to lists of
+            locales where they are missing.
+        verbose (bool): Enable verbose summary output.
+
+    Returns:
+        None
+    """  # pylint: disable=redundant-returns-doc, differing-param-doc
     if not missing:
         print(
             "✅ All translation keys used in source files are present "
