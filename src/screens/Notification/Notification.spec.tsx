@@ -231,7 +231,7 @@ describe('Notification Component', () => {
     fireEvent.click(screen.getByText(/mark as read/i));
 
     await waitFor(() => {
-      expect(screen.queryByText('Mark as Read')).not.toBeInTheDocument();
+      expect(screen.queryByText(/mark as read/i)).not.toBeInTheDocument();
     });
   });
 
