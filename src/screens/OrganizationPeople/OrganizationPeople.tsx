@@ -53,7 +53,6 @@ import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
 import { useLazyQuery } from '@apollo/client';
 import {
-  DataGrid,
   GridColDef,
   GridCellParams,
   GridPaginationModel,
@@ -72,6 +71,7 @@ import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import Avatar from 'components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
 import PageHeader from 'shared-components/Navbar/Navbar';
+import PeopleTable from 'shared-components/PeopleTable/PeopleTable';
 
 const PAGE_SIZE = 10;
 interface IProcessedRow {
@@ -250,7 +250,16 @@ function OrganizationPeople(): JSX.Element {
   const handlePaginationModelChange = async (
     newPaginationModel: GridPaginationModel,
   ) => {
-    const isForwardNavigation = newPaginationModel.page > paginationModel.page;
+    const currentPage = paginationModel.page;
+    const targetPage = newPaginationModel.page;
+
+    // Page size changes (or no-op page changes) should not attempt cursor navigation.
+    if (targetPage === currentPage) {
+      setPaginationModel(newPaginationModel);
+      return;
+    }
+
+    const isForwardNavigation = targetPage > currentPage;
 
     // Check if navigation is allowed
     if (isForwardNavigation && !paginationMeta.hasNextPage) {
@@ -260,21 +269,38 @@ function OrganizationPeople(): JSX.Element {
       return; // Prevent navigation if there's no previous page
     }
 
-    const currentPage = paginationModel.page;
-    const currentPageCursors = pageCursors.current[currentPage];
-
     const variables: IQueryVariable = { orgId: currentUrl };
 
     if (isForwardNavigation) {
-      // Forward navigation uses "after" with the endCursor of the current page
+      // Forward navigation uses "after" with the endCursor of the page just before the target.
+      // This supports a single-step next-page navigation and optionally a jump *only* when we
+      // already have cursor state for the page preceding the target.
+      const cursorSourcePage =
+        targetPage === currentPage + 1 ? currentPage : targetPage - 1;
+      const afterCursor = pageCursors.current[cursorSourcePage]?.endCursor;
+
+      if (afterCursor == null) {
+        // Prevent navigation if we don't have a cursor chain for the requested page.
+        return;
+      }
+
       variables.first = PAGE_SIZE;
-      variables.after = currentPageCursors?.endCursor;
+      variables.after = afterCursor;
       variables.last = null;
       variables.before = null;
     } else {
-      // Backward navigation uses "before" with the startCursor of the current page
+      // Backward navigation uses "before" with the startCursor of the page just after the target.
+      const cursorSourcePage =
+        targetPage === currentPage - 1 ? currentPage : targetPage + 1;
+      const beforeCursor = pageCursors.current[cursorSourcePage]?.startCursor;
+
+      if (beforeCursor == null) {
+        // Prevent navigation if we don't have a cursor chain for the requested page.
+        return;
+      }
+
       variables.last = PAGE_SIZE;
-      variables.before = currentPageCursors?.startCursor;
+      variables.before = beforeCursor;
       variables.first = null;
       variables.after = null;
     }
@@ -509,22 +535,15 @@ function OrganizationPeople(): JSX.Element {
         </div>
       </Row>
       <div className="datatable">
-        <DataGrid
-          disableColumnMenu
-          columnBufferPx={5}
-          getRowId={(row) => row._id}
+        <PeopleTable
           rows={filteredRows}
           columns={columns}
-          rowCount={
-            paginationModel.page * PAGE_SIZE +
-            currentRows.length +
-            (paginationMeta.hasNextPage ? PAGE_SIZE : 0)
-          }
-          paginationMode="server"
+          loading={memberLoading || userLoading}
+          rowCount={-1}
           paginationModel={paginationModel}
           onPaginationModelChange={handlePaginationModelChange}
+          paginationMeta={paginationMeta}
           pageSizeOptions={[PAGE_SIZE]}
-          loading={memberLoading || userLoading}
           slots={{
             noRowsOverlay: () => (
               <Stack height="100%" alignItems="center" justifyContent="center">
@@ -532,32 +551,6 @@ function OrganizationPeople(): JSX.Element {
               </Stack>
             ),
           }}
-          sx={{
-            borderRadius: 'var(--table-head-radius)',
-            backgroundColor: 'var(--grey-bg-color)',
-            '& .MuiDataGrid-row': {
-              backgroundColor: 'var(--tablerow-bg-color)',
-              '&:focus-within': {
-                outline: '2px solid #000',
-                outlineOffset: '-2px',
-              },
-            },
-            '& .MuiDataGrid-row:hover': {
-              backgroundColor: 'var(--grey-bg-color)',
-              boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-            },
-            '& .MuiDataGrid-row.Mui-hovered': {
-              backgroundColor: 'var(--grey-bg-color)',
-              boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-            },
-            '& .MuiDataGrid-cell:focus': {
-              outline: '2px solid #000',
-              outlineOffset: '-2px',
-            },
-          }}
-          getRowClassName={() => `${styles.rowBackground}`}
-          rowHeight={70}
-          isRowSelectable={() => false}
         />
       </div>
       {showRemoveModal && selectedMemId && (
