@@ -17,6 +17,11 @@ class TestDisableStatementsChecker(unittest.TestCase):
         """Set up test fixtures."""
         self.checker = DisableStatementsChecker()
 
+    def tearDown(self) -> None:
+        """Clean up after each test."""
+        # Clean up any temporary files or mocks if needed
+        pass
+
     def test_eslint_disable_detection(self) -> None:
         """Test detection of eslint-disable comments."""
         disable_comment = "// eslint" + "-disable no-console"
