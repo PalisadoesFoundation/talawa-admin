@@ -332,6 +332,8 @@
     "create": "create",
     "cancel": "cancel",
     "user": "user",
+    "actions": "Actions",
+    "profile": "Profile",
     "notFound": "No Members Found"
   },
   "organizationTags": {
@@ -668,7 +670,8 @@
     "createdEarliest": "Created Earliest",
     "viewCampaigns": "View Campaigns",
     "searchByName": "searchByName",
-    "assocCampaigns": "Associated Campaigns"
+    "assocCampaigns": "Associated Campaigns",
+    "errorLoadingTagsData": "Error loading tags data"
   },
   "fundCampaign": {
     "title": "Fundraising Campaigns",
