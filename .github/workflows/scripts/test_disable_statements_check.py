@@ -170,11 +170,20 @@ line 4"""
 
     def check_file_content_for_testing(self, content: str, file_path: str) -> list:
         """Helper method to test file content directly."""
-        violations = []
-        for name, method in inspect.getmembers(self.checker, predicate=inspect.ismethod):
-            if name.startswith('check_') and name not in ('check_file', 'check_files', 'check_directory'):
-                violations.extend(method(content, file_path))
-        return violations
+        temp_file = None
+        try:
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.js', delete=False) as f:
+                temp_file = f.name
+                f.write(content)
+            return self.checker.check_file(temp_file)
+        finally:
+            if temp_file and os.path.exists(temp_file):
+                os.unlink(temp_file)
+
+    def test_self_referential_skip(self) -> None:
+        """Test that test_disable_statements_check.py is skipped."""
+        violations = self.checker.check_file('test_disable_statements_check.py')
+        self.assertEqual(len(violations), 0)
 
     def test_empty_file(self) -> None:
         """Test handling of empty files."""
