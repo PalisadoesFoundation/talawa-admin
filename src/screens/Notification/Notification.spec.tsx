@@ -315,7 +315,7 @@ describe('Notification Component', () => {
 
     await waitFor(() => {
       expect(toastErrorSpy).toHaveBeenCalledWith(
-        i18nForTest.t('markAsReadError', { ns: 'errors' })
+        i18nForTest.t('markAsReadError', { ns: 'errors' }),
       );
     });
 
