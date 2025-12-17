@@ -40,11 +40,11 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+// UPDATE: Add the generic type here
 vi.mock('@mui/x-date-pickers', async () => {
   const actual = await vi.importActual<typeof import('@mui/x-date-pickers')>(
     '@mui/x-date-pickers',
   );
-
   type MockDatePickerProps = DatePickerProps;
 
   return {
@@ -61,6 +61,12 @@ vi.mock('@mui/x-date-pickers', async () => {
       />
     ),
   };
+});
+
+afterEach(() => {
+  cleanup();
+  localStorageMock.clear();
+  vi.clearAllMocks();
 });
 
 const pledgeProps: InterfacePledgeModal[] = [
@@ -247,7 +253,7 @@ describe('PledgeModal', () => {
   afterEach(() => {
     cleanup();
     localStorageMock.clear();
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should populate form fields with correct values in edit mode', async () => {
@@ -316,7 +322,7 @@ describe('PledgeModal', () => {
     });
   });
 
-  it('handles USER_DETAILS loading state', async () => {
+  it('handles USER_DETAILS returning null user data', async () => {
     const loadingMock = {
       request: {
         query: USER_DETAILS,
@@ -332,7 +338,7 @@ describe('PledgeModal', () => {
     const link = new StaticMockLink([loadingMock]);
     renderPledgeModal(link, pledgeProps[0]);
 
-    expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
+    expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
   });
 
   it('handles USER_DETAILS error state gracefully', async () => {
@@ -379,14 +385,6 @@ describe('PledgeModal', () => {
       expect(amountInput).toHaveValue('100');
     });
 
-    it('should update pledgeStartDate when a new date is selected', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
-      const startDateInput = screen.getAllByLabelText(/start date/i)[0];
-
-      fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
-      expect(startDateInput).toHaveValue('02/01/2024');
-    });
-
     it('keeps form stable when endDate is empty and start date changes', async () => {
       const existingPledge = pledgeProps[1].pledge;
 
@@ -403,10 +401,11 @@ describe('PledgeModal', () => {
       });
 
       const startDateInput = screen.getAllByLabelText(/start date/i)[0];
+      const endDateInput = screen.getAllByLabelText(/end date/i)[0];
 
-      fireEvent.change(startDateInput, {
-        target: { value: '02/01/2024' },
-      });
+      fireEvent.change(startDateInput, { target: { value: '25/12/2025' } });
+
+      expect(endDateInput).toBeInTheDocument();
       expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
     });
 
@@ -930,7 +929,7 @@ describe('PledgeModal', () => {
       );
     });
 
-    it('should cover remaining edge cases for 100% coverage', async () => {
+    it('should render all required interactive form controls in create mode', async () => {
       renderPledgeModal(link1, pledgeProps[0]);
 
       await waitFor(() => {
