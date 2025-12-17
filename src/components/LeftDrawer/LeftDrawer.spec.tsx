@@ -133,15 +133,15 @@ describe('LeftDrawer Component', () => {
       expect(screen.getByTestId('talawa-logo')).toBeInTheDocument();
     });
 
-    it('renders all navigation buttons for super admin', () => {
+    it('renders all navigation buttons', () => {
       renderComponent();
       expect(screen.getByTestId('organizationsBtn')).toBeInTheDocument();
-      expect(screen.getByTestId('rolesBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('usersBtn')).toBeInTheDocument();
       expect(screen.getByTestId('communityProfileBtn')).toBeInTheDocument();
       expect(screen.getByTestId('pluginStoreBtn')).toBeInTheDocument();
     });
 
-    it('hides roles button for non-super admin users', () => {
+    it('renders users button for all users', () => {
       vi.mocked(useLocalStorage).mockImplementation(() => ({
         getItem: vi.fn(() => null),
         setItem: vi.fn(),
@@ -151,7 +151,7 @@ describe('LeftDrawer Component', () => {
 
       renderComponent();
       expect(screen.getByTestId('organizationsBtn')).toBeInTheDocument();
-      expect(screen.queryByTestId('rolesBtn')).not.toBeInTheDocument();
+      expect(screen.getByTestId('usersBtn')).toBeInTheDocument();
       expect(screen.getByTestId('communityProfileBtn')).toBeInTheDocument();
     });
   });
@@ -233,7 +233,7 @@ describe('LeftDrawer Component', () => {
   });
 
   describe('Navigation Behavior', () => {
-    it('super admin: applies correct styles when on users route (rolesBTn)', () => {
+    it('applies correct styles when on users route', () => {
       vi.mocked(useLocalStorage).mockImplementation(() => ({
         getItem: vi.fn((key) => (key === 'SuperAdmin' ? 'true' : null)),
         setItem: vi.fn(),
@@ -244,7 +244,7 @@ describe('LeftDrawer Component', () => {
       window.history.pushState({}, '', '/users');
 
       renderComponent();
-      const element = screen.getByTestId('rolesBtn');
+      const element = screen.getByTestId('usersBtn');
       expect(element.className).toContain('sidebarBtnActive');
     });
 
@@ -331,12 +331,10 @@ describe('LeftDrawer Component', () => {
       expect(setHideDrawer).toHaveBeenCalledWith(true);
       setHideDrawer.mockClear();
 
-      // Test for super admin - roles button
-      if (screen.queryByTestId('rolesBtn')) {
-        const rolesButton = screen.getByTestId('rolesBtn');
-        fireEvent.click(rolesButton);
-        expect(setHideDrawer).toHaveBeenCalledWith(true);
-      }
+      // Test users button
+      const usersButton = screen.getByTestId('usersBtn');
+      fireEvent.click(usersButton);
+      expect(setHideDrawer).toHaveBeenCalledWith(true);
     });
 
     it('simulates different viewport widths for responsive behavior', () => {
@@ -371,11 +369,9 @@ describe('LeftDrawer Component', () => {
       const orgButton = screen.getByTestId('organizationsBtn');
       expect(orgButton.textContent).toContain('my organizations');
 
-      // Check users button text content (for super admin)
-      if (screen.queryByTestId('rolesBtn')) {
-        const usersButton = screen.getByTestId('rolesBtn');
-        expect(usersButton.textContent).toContain('users');
-      }
+      // Check users button text content
+      const usersButton = screen.getByTestId('usersBtn');
+      expect(usersButton.textContent).toContain('users');
 
       // Check community profile button text content
       const profileButton = screen.getByTestId('communityProfileBtn');

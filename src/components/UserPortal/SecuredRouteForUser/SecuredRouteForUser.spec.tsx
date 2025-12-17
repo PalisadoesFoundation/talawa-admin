@@ -125,7 +125,7 @@ describe('SecuredRouteForUser', () => {
       expect(screen.getByTestId('home-page')).toBeInTheDocument();
     });
 
-    it('shows PageNotFound when logged-in user has admin role', () => {
+    it('renders protected content when user is logged in with admin role', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       mockStorage['Talawa-admin_AdminFor'] = JSON.stringify([
         { _id: 'org-123' },
@@ -133,18 +133,19 @@ describe('SecuredRouteForUser', () => {
 
       renderWithRouter();
 
-      expect(screen.getByTestId('page-not-found')).toBeInTheDocument();
-      expect(screen.queryByTestId('protected-content')).not.toBeInTheDocument();
+      // Component now allows all logged-in users, regardless of admin status
+      expect(screen.getByTestId('protected-content')).toBeInTheDocument();
+      expect(screen.queryByTestId('page-not-found')).not.toBeInTheDocument();
     });
 
-    it('shows PageNotFound when AdminFor is an empty array', () => {
+    it('renders protected content when AdminFor is an empty array', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       mockStorage['Talawa-admin_AdminFor'] = JSON.stringify([]);
 
       renderWithRouter();
 
-      // Empty array is still defined, so PageNotFound should show
-      expect(screen.getByTestId('page-not-found')).toBeInTheDocument();
+      // Component now allows all logged-in users
+      expect(screen.getByTestId('protected-content')).toBeInTheDocument();
     });
   });
 
@@ -400,14 +401,14 @@ describe('SecuredRouteForUser', () => {
       expect(toast.warn).not.toHaveBeenCalled();
     });
 
-    it('handles AdminFor being a string value', () => {
+    it('renders protected content when AdminFor is a string value', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       mockStorage['Talawa-admin_AdminFor'] = 'some-org-id';
 
       renderWithRouter();
 
-      // String is defined, so PageNotFound should show
-      expect(screen.getByTestId('page-not-found')).toBeInTheDocument();
+      // Component now allows all logged-in users, regardless of admin status
+      expect(screen.getByTestId('protected-content')).toBeInTheDocument();
     });
 
     it('remains logged in with continuous activity before timeout', () => {

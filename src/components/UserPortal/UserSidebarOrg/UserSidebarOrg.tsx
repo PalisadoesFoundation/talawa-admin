@@ -35,13 +35,14 @@ import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from 'style/app-fixed.module.css';
-import componentStyles from './UserSidebarOrg.module.css';
+
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
 import { usePluginDrawerItems } from 'plugin';
 import SidebarBase from 'shared-components/SidebarBase/SidebarBase';
 import SidebarNavItem from 'shared-components/SidebarNavItem/SidebarNavItem';
 import SidebarPluginSection from 'shared-components/SidebarPluginSection/SidebarPluginSection';
+import SidebarOrgSection from 'shared-components/SidebarOrgSection/SidebarOrgSection';
 
 export interface InterfaceUserSidebarOrgProps {
   orgId: string;
@@ -77,11 +78,9 @@ const UserSidebarOrg = ({
     }
   }, [setHideDrawer]);
 
-  // User Profile Section at top (only when drawer is not hidden)
+  // Organization Section at top (only when drawer is not hidden)
   const headerContent = !hideDrawer ? (
-    <div className={componentStyles.profileCardContainer}>
-      <ProfileCard />
-    </div>
+    <SidebarOrgSection orgId={orgId} hideDrawer={hideDrawer} />
   ) : null;
 
   const drawerContent = useMemo(
@@ -151,7 +150,16 @@ const UserSidebarOrg = ({
       backgroundColor="#f0f7fb"
       persistToggleState={false}
       headerContent={headerContent}
-      footerContent={<SignOut hideDrawer={hideDrawer} />}
+      footerContent={
+        <>
+          {!hideDrawer && (
+            <div>
+              <ProfileCard portal="user" />
+            </div>
+          )}
+          <SignOut hideDrawer={hideDrawer} />
+        </>
+      }
     >
       {drawerContent}
     </SidebarBase>

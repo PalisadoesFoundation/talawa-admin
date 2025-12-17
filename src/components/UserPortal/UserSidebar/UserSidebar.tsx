@@ -67,23 +67,8 @@ const UserSidebar = ({
     }
   }, [setHideDrawer]);
 
-  // User Profile Section at top (only when drawer is not hidden)
-  const headerContent = useMemo(
-    () =>
-      !hideDrawer ? (
-        <div
-          style={{
-            backgroundColor: '#e8f4f8',
-            padding: '10px',
-            borderRadius: '8px',
-            margin: '10px',
-          }}
-        >
-          <ProfileCard />
-        </div>
-      ) : null,
-    [hideDrawer],
-  );
+  // Header content - no profile card at top anymore
+  const headerContent = null;
 
   const drawerContent = useMemo(
     () => (
@@ -137,7 +122,16 @@ const UserSidebar = ({
       backgroundColor="#f0f7fb"
       persistToggleState={true}
       headerContent={headerContent}
-      footerContent={<SignOut hideDrawer={hideDrawer} />}
+      footerContent={
+        <>
+          {!hideDrawer && (
+            <div>
+              <ProfileCard portal="user" />
+            </div>
+          )}
+          <SignOut hideDrawer={hideDrawer} />
+        </>
+      }
     >
       {drawerContent}
     </SidebarBase>

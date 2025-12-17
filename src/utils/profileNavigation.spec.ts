@@ -22,7 +22,7 @@ describe('resolveProfileNavigation', () => {
     ).toBe('/user/settings');
   });
 
-  it('returns member route with org id for admin roles', () => {
+  it('returns member route with orgId for admin roles', () => {
     expect(
       resolveProfileNavigation({
         portal: 'admin',
@@ -32,7 +32,7 @@ describe('resolveProfileNavigation', () => {
     ).toBe('/member/999');
   });
 
-  it('falls back to generic member route when org id is missing', () => {
+  it('returns member route when org id is missing for admin', () => {
     expect(
       resolveProfileNavigation({
         portal: 'admin',
@@ -52,7 +52,7 @@ describe('resolveProfileNavigation', () => {
     ).toBe('/member/123');
   });
 
-  it('handles null orgId gracefully for admin', () => {
+  it('returns member route when orgId is null for admin', () => {
     expect(
       resolveProfileNavigation({
         portal: 'admin',
@@ -62,7 +62,7 @@ describe('resolveProfileNavigation', () => {
     ).toBe('/member');
   });
 
-  it('handles case-insensitive role values', () => {
+  it('handles case-insensitive role values and returns user settings for regular', () => {
     expect(
       resolveProfileNavigation({
         portal: 'admin',
@@ -82,7 +82,7 @@ describe('resolveProfileNavigation', () => {
     ).toBe('/user/settings');
   });
 
-  it('normalizes Administrator role and routes to member by org', () => {
+  it('routes to member route for Administrator role', () => {
     expect(
       resolveProfileNavigation({
         portal: 'admin',
@@ -92,7 +92,7 @@ describe('resolveProfileNavigation', () => {
     ).toBe('/member/42');
   });
 
-  it('defaults portal to admin when undefined', () => {
+  it('defaults portal to admin and returns member route', () => {
     expect(
       resolveProfileNavigation({
         // portal omitted to use default

@@ -6379,12 +6379,14 @@ form {
   background-color: var(--leftDrawer-optionList-bg);
 }
 
-.leftDrawer .optionList button {
+.leftDrawer .optionList button,
+.leftDrawer .optionList a {
   display: flex;
   align-items: center;
   width: 100%;
   max-width: 100%;
   text-align: start;
+  text-decoration: none;
   margin-bottom: 0.8rem;
   border-radius: 12px;
   font-size: 16px;
@@ -6395,8 +6397,13 @@ form {
   overflow: hidden;
 }
 
-.leftDrawer button .iconWrapper {
+.leftDrawer button .iconWrapper,
+.leftDrawer a .iconWrapper {
   width: 36px;
+  min-width: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .leftDrawer .optionList .collapseBtn {

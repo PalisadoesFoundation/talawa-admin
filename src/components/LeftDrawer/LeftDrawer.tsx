@@ -14,13 +14,12 @@
 
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaBell } from 'react-icons/fa';
+import { FaBell, FaUsers } from 'react-icons/fa';
 import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
-import RolesIcon from 'assets/svgs/roles.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import PluginLogo from 'assets/svgs/plugins.svg?react';
 import styles from 'style/app-fixed.module.css';
-import useLocalStorage from 'utils/useLocalstorage';
+
 import { usePluginDrawerItems } from 'plugin';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
@@ -38,9 +37,6 @@ const LeftDrawer = ({
   setHideDrawer,
 }: ILeftDrawerProps): React.ReactElement => {
   const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
-
-  const { getItem } = useLocalStorage();
-  const superAdmin = getItem('SuperAdmin') === 'true';
 
   const handleLinkClick = useCallback((): void => {
     if (window.innerWidth <= 820) {
@@ -68,6 +64,16 @@ const LeftDrawer = ({
         />
 
         <SidebarNavItem
+          to="/users"
+          icon={<FaUsers />}
+          label={t('users')}
+          testId="usersBtn"
+          hideDrawer={hideDrawer}
+          onClick={handleLinkClick}
+          iconType="react-icon"
+        />
+
+        <SidebarNavItem
           to="/pluginstore"
           icon={<PluginLogo />}
           label={t('plugin store')}
@@ -75,17 +81,6 @@ const LeftDrawer = ({
           hideDrawer={hideDrawer}
           onClick={handleLinkClick}
         />
-
-        {superAdmin && (
-          <SidebarNavItem
-            to="/users"
-            icon={<RolesIcon />}
-            label={t('users')}
-            testId="rolesBtn"
-            hideDrawer={hideDrawer}
-            onClick={handleLinkClick}
-          />
-        )}
 
         <SidebarNavItem
           to="/communityProfile"
@@ -114,7 +109,7 @@ const LeftDrawer = ({
         />
       </div>
     ),
-    [pluginDrawerItems, superAdmin, t, hideDrawer, handleLinkClick],
+    [pluginDrawerItems, t, hideDrawer, handleLinkClick],
   );
 
   return (

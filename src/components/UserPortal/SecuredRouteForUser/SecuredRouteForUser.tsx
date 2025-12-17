@@ -31,7 +31,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Navigate, Outlet } from 'react-router';
 import { toast } from 'react-toastify';
-import PageNotFound from 'screens/PageNotFound/PageNotFound';
+
 import useLocalStorage from 'utils/useLocalstorage';
 
 // Time constants for session timeout and inactivity interval
@@ -49,7 +49,6 @@ const SecuredRouteForUser = (): JSX.Element => {
 
   // Check if the user is logged in and the role of the user
   const isLoggedIn = getItem('IsLoggedIn');
-  const adminFor = getItem('AdminFor');
 
   const updateLastActive = () => {
     lastActiveRef.current = Date.now();
@@ -102,11 +101,7 @@ const SecuredRouteForUser = (): JSX.Element => {
   }, [isLoggedIn, setItem, removeItem]);
 
   // Conditional rendering based on authentication status and role
-  return isLoggedIn === 'TRUE' ? (
-    <>{adminFor == undefined ? <Outlet /> : <PageNotFound />}</>
-  ) : (
-    <Navigate to="/" replace />
-  );
+  return isLoggedIn === 'TRUE' ? <Outlet /> : <Navigate to="/" replace />;
 };
 
 export default SecuredRouteForUser;
