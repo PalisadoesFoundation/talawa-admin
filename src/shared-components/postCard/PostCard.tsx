@@ -387,9 +387,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                 >
                   <ListItemIcon>
                     {isPinned ? (
-                      <PushPinOutlined fontSize="small" />
-                    ) : (
                       <PushPin fontSize="small" />
+                    ) : (
+                      <PushPinOutlined fontSize="small" />
                     )}
                   </ListItemIcon>
                   <ListItemText

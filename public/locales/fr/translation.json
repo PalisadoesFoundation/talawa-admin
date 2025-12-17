@@ -1095,7 +1095,7 @@
     "postDeletedSuccess": "Message supprimé avec succès.",
     "postPinnedSuccess": "Message épinglé avec succès.",
     "postUnpinnedSuccess": "Message désépinglé avec succès.",
-    "postUpdatedSuccess": "Publication mise à jour avec succès.",
+    "postUpdatedSuccess": "Message mise à jour avec succès.",
     "viewPost": "Voir le message",
     "editPost": "Modifier le message",
     "pinPost": "Épingler le message",
