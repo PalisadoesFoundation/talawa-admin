@@ -196,6 +196,73 @@ line 4"""
         violations = self.checker.check_eslint_disable(content, 'test.js')
         self.assertEqual(len(violations), 2)
 
+    def test_main_with_files_argument(self) -> None:
+        """Test main() with --files argument."""
+        import sys
+        from unittest.mock import patch
+        temp_file = None
+        try:
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.js', delete=False) as f:
+                temp_file = f.name
+                f.write('// eslint-disable no-console')
+            
+            with patch.object(sys, 'argv', ['disable_statements_check.py', '--files', temp_file]):
+                with patch('sys.exit') as mock_exit:
+                    from disable_statements_check import main
+                    main()
+                    mock_exit.assert_called_with(1)
+        finally:
+            if temp_file and os.path.exists(temp_file):
+                os.unlink(temp_file)
+
+    def test_main_with_directory_argument(self) -> None:
+        """Test main() with --directory argument."""
+        import sys
+        from unittest.mock import patch
+        temp_dir = None
+        temp_file = None
+        try:
+            temp_dir = tempfile.mkdtemp()
+            temp_file = os.path.join(temp_dir, 'test.js')
+            with open(temp_file, 'w') as f:
+                f.write('it.skip("test", () => {});')
+            
+            with patch.object(sys, 'argv', ['disable_statements_check.py', '--directory', temp_dir]):
+                with patch('sys.exit') as mock_exit:
+                    from disable_statements_check import main
+                    main()
+                    mock_exit.assert_called_with(1)
+        finally:
+            if temp_file and os.path.exists(temp_file):
+                os.unlink(temp_file)
+            if temp_dir and os.path.exists(temp_dir):
+                os.rmdir(temp_dir)
+
+    def test_main_no_violations_exit_zero(self) -> None:
+        """Test main() exits 0 when no violations found."""
+        import sys
+        from unittest.mock import patch
+        temp_file = None
+        try:
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.js', delete=False) as f:
+                temp_file = f.name
+                f.write('console.log("clean code");')
+            
+            with patch.object(sys, 'argv', ['disable_statements_check.py', '--files', temp_file]):
+                from disable_statements_check import main
+                # Should return normally (no exception) when no violations
+                try:
+                    main()
+                    # If we reach here, main() returned normally (success)
+                    success = True
+                except SystemExit as e:
+                    # If main() calls sys.exit(), check the code
+                    success = (e.code == 0)
+                self.assertTrue(success)
+        finally:
+            if temp_file and os.path.exists(temp_file):
+                os.unlink(temp_file)
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
