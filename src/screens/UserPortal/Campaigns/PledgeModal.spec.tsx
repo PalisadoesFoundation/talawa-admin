@@ -1062,5 +1062,16 @@ describe('PledgeModal', () => {
       const result = computeAdjustedEndDate(end, start);
       expect(result).toBe(end);
     });
+    it('getMemberLabel falls back to name when first and last names are missing', () => {
+      const member = {
+        id: '3',
+        firstName: '',
+        lastName: '',
+        name: 'Fallback Name',
+      };
+      expect(getMemberLabel(member as InterfaceUserInfoPG)).toBe(
+        'Fallback Name',
+      );
+    });
   });
 });
