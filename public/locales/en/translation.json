@@ -224,6 +224,9 @@
     "placeholderAvatarAlt": "Placeholder avatar"
   },
   "users": {
+    "member": "Member",
+    "pending": "Pending",
+    "notMember": "Not a member",
     "title": "Talawa Roles",
     "joined_organizations": "Joined Organizations",
     "blocked_organizations": "Blocked Organizations",

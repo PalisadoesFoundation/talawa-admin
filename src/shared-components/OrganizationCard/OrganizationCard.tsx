@@ -85,6 +85,14 @@ function OrganizationCard({
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
 
+  type MembershipState = 'member' | 'pending' | 'not_member';
+
+  const membershipState: MembershipState = isJoined
+    ? 'member'
+    : membershipRequestStatus === 'pending'
+      ? 'pending'
+      : 'not_member';
+
   // Mutations for handling organization memberships
   const [sendMembershipRequest] = useMutation(SEND_MEMBERSHIP_REQUEST, {
     refetchQueries: [{ query: ORGANIZATION_LIST }],
@@ -201,6 +209,25 @@ function OrganizationCard({
                   {name}
                 </h4>
               </Tooltip>
+
+              <div
+                className={[
+                  styles.statusChip,
+                  membershipState === 'member'
+                    ? styles.member
+                    : membershipState === 'pending'
+                      ? styles.pending
+                      : styles.notMember,
+                ].join(' ')}
+                data-testid="membershipStatus"
+              >
+                {membershipState === 'member'
+                  ? t('users.member')
+                  : membershipState === 'pending'
+                    ? t('users.pending')
+                    : t('users.notMember')}
+              </div>
+
               {/* Description of the organization */}
               <div className={[styles.orgdesc, 'fw-semibold'].join(' ')}>
                 <TruncatedText text={description} />
@@ -245,17 +272,16 @@ function OrganizationCard({
               </Button>
             ) : (
               <div className={styles.buttonContainer}>
-                {isJoined ? (
+                {membershipState === 'member' ? (
                   <Button
                     data-testid="manageBtn"
                     className={styles.manageBtn}
                     onClick={() => navigate(`/user/organization/${id}`)}
                     style={{ width: '8rem' }}
-                    data-cy="manageBtn"
                   >
                     {t('users.visit')}
                   </Button>
-                ) : membershipRequestStatus === 'pending' ? (
+                ) : membershipState === 'pending' ? (
                   <Button
                     variant="danger"
                     onClick={withdrawMembershipRequest}
