@@ -104,7 +104,7 @@ export const areOptionsEqual = (
  * // returns "John Doe"
  */
 export const getMemberLabel = (member: InterfaceUserInfoPG): string =>
-  [member.firstName, member.lastName].filter(Boolean).join(' ');
+  [member.firstName, member.lastName].filter(Boolean).join(' ') || member.name;
 
 /**
  * Ensures pledge end date is not before the selected start date.

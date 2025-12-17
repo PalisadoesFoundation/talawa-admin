@@ -1062,6 +1062,7 @@ describe('PledgeModal', () => {
       const result = computeAdjustedEndDate(end, start);
       expect(result).toBe(end);
     });
+
     it('getMemberLabel falls back to name when first and last names are missing', () => {
       const member = {
         id: '3',
