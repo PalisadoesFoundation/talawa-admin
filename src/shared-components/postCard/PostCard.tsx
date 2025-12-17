@@ -335,90 +335,85 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             {props.creator.name}
           </Typography>
         </Box>
-        {isAdmin ||
-          (isPostCreator && (
-            <>
-              <IconButton
-                onClick={handleDropdownOpen}
-                size="small"
-                aria-label={t('moreOptions')}
-                data-testid="more-options-button"
-              >
-                <MoreHoriz />
-              </IconButton>
-              <Menu
-                anchorEl={dropdownAnchor}
-                open={Boolean(dropdownAnchor)}
-                onClose={handleDropdownClose}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right',
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                PaperProps={{
-                  sx: {
-                    minWidth: '150px',
-                    '& .MuiMenuItem-root': {
-                      px: 2,
-                      py: 1,
-                    },
+        {(isAdmin || isPostCreator) && (
+          <>
+            <IconButton
+              onClick={handleDropdownOpen}
+              size="small"
+              aria-label={t('moreOptions')}
+              data-testid="more-options-button"
+            >
+              <MoreHoriz />
+            </IconButton>
+            <Menu
+              anchorEl={dropdownAnchor}
+              open={Boolean(dropdownAnchor)}
+              onClose={handleDropdownClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              PaperProps={{
+                sx: {
+                  minWidth: '150px',
+                  '& .MuiMenuItem-root': {
+                    px: 2,
+                    py: 1,
                   },
-                }}
+                },
+              }}
+            >
+              <MenuItem
+                onClick={toggleEditPost}
+                data-testid="edit-post-menu-item"
               >
-                {(isPostCreator || isAdmin) && (
-                  <MenuItem
-                    onClick={toggleEditPost}
-                    data-testid="edit-post-menu-item"
-                  >
-                    <ListItemIcon>
-                      <EditOutlined fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={t('editPost')}
-                      data-testid="edit-post-button"
-                    />
-                  </MenuItem>
-                )}
+                <ListItemIcon>
+                  <EditOutlined fontSize="small" />
+                </ListItemIcon>
+                <ListItemText
+                  primary={t('editPost')}
+                  data-testid="edit-post-button"
+                />
+              </MenuItem>
 
-                {isAdmin && (
-                  <MenuItem
-                    onClick={handleTogglePin}
-                    data-testid="pin-post-menu-item"
-                  >
-                    <ListItemIcon>
-                      {isPinned ? (
-                        <PushPinOutlined fontSize="small" />
-                      ) : (
-                        <PushPin fontSize="small" />
-                      )}
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={isPinned ? t('unpinPost') : t('pinPost')}
-                    />
-                  </MenuItem>
-                )}
+              {isAdmin && (
+                <MenuItem
+                  onClick={handleTogglePin}
+                  data-testid="pin-post-menu-item"
+                >
+                  <ListItemIcon>
+                    {isPinned ? (
+                      <PushPinOutlined fontSize="small" />
+                    ) : (
+                      <PushPin fontSize="small" />
+                    )}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={isPinned ? t('unpinPost') : t('pinPost')}
+                  />
+                </MenuItem>
+              )}
 
-                {(isAdmin || isPostCreator) && (
-                  <MenuItem
-                    onClick={handleDeletePost}
-                    data-testid="delete-post-menu-item"
-                  >
-                    <ListItemIcon>
-                      <DeleteOutline fontSize="small" color="error" />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary={tCommon('delete')}
-                      data-testid="delete-post-button"
-                      primaryTypographyProps={{ color: 'error' }}
-                    />
-                  </MenuItem>
-                )}
-              </Menu>
-            </>
-          ))}
+              <MenuItem
+                onClick={handleDeletePost}
+                data-testid="delete-post-menu-item"
+              >
+                <ListItemIcon>
+                  <DeleteOutline fontSize="small" color="error" />
+                </ListItemIcon>
+                <ListItemText
+                  primary={tCommon('delete')}
+                  data-testid="delete-post-button"
+                  primaryTypographyProps={{ color: 'error' }}
+                />
+              </MenuItem>
+            </Menu>
+          </>
+        )}
       </Box>
 
       {/* Post Media */}

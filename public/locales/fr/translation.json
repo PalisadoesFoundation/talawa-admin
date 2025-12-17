@@ -1108,7 +1108,7 @@
     "postedOn": "Publié le {{date}}",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
     "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer.",
-    "moreOptions": "plus d'options"
+    "moreOptions": "Plus d'options"
   },
   "home": {
     "posts": "Des postes",

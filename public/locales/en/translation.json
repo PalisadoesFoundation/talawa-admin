@@ -1160,7 +1160,7 @@
     "postedOn": "Posted on {{date}}",
     "emptyCommentError": "Please enter a comment before submitting.",
     "unexpectedError": "An unexpected error occurred. Please try again.",
-    "moreOptions": "more option"
+    "moreOptions": "More options"
   },
   "home": {
     "posts": "Posts",
