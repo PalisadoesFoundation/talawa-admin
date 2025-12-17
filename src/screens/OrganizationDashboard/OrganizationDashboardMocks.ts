@@ -2,7 +2,7 @@ import {
   GET_ORGANIZATION_POSTS_COUNT_PG,
   GET_ORGANIZATION_EVENTS_PG,
   GET_ORGANIZATION_POSTS_PG,
-  MEMBERSHIP_REQUEST,
+  MEMBERSHIP_REQUEST_PG,
   ORGANIZATION_MEMBER_ADMIN_COUNT,
   GET_ORGANIZATION_BLOCKED_USERS_COUNT,
   GET_ORGANIZATION_VENUES_COUNT,
@@ -187,19 +187,18 @@ export const MOCKS = [
 
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: 'orgId' },
         skip: 0,
         first: 8,
-        firstName_contains: '',
+        name_contains: '',
       },
     },
     maxUsageCount: 5,
     result: {
       data: {
         organization: {
-          membershipRequestsCount: 1,
           id: 'orgId',
           membershipRequests: [
             {
@@ -299,18 +298,17 @@ export const EMPTY_MOCKS = [
 
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: 'orgId' },
         skip: 0,
         first: 8,
-        firstName_contains: '',
+        name_contains: '',
       },
     },
     result: {
       data: {
         organization: {
-          membershipRequestsCount: 0,
           id: 'orgId',
           membershipRequests: [],
           __typename: 'Organization',
@@ -404,15 +402,15 @@ export const ERROR_MOCKS = [
   },
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: 'orgId' },
         skip: 0,
         first: 8,
-        firstName_contains: '',
+        name_contains: '',
       },
     },
-    error: new Error('Mock GraphQL MEMBERSHIP_REQUEST Error'),
+    error: new Error('Mock GraphQL MEMBERSHIP_REQUEST_PG Error'),
   },
 
   {
