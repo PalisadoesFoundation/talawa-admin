@@ -66,6 +66,7 @@ vi.mock('@mui/x-date-pickers', async () => {
 afterEach(() => {
   cleanup();
   localStorageMock.clear();
+
   vi.clearAllMocks();
 });
 
@@ -144,7 +145,13 @@ const BASE_PLEDGE_MODAL_MOCKS = [USER_DETAILS_MOCK];
 
 // Helper to create UPDATE_PLEDGE mock with custom variables
 const createUpdatePledgeMock = (
-  variables: { id: string; amount: number },
+  variables: {
+    id: string;
+    amount?: number;
+    currency?: string;
+    startDate?: string;
+    endDate?: string;
+  },
   isError = false,
 ): MockedResponse => ({
   request: {
@@ -247,12 +254,6 @@ describe('PledgeModal', () => {
   });
 
   afterAll(() => {
-    vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    cleanup();
-    localStorageMock.clear();
     vi.clearAllMocks();
   });
 
@@ -389,15 +390,20 @@ describe('PledgeModal', () => {
       const existingPledge = pledgeProps[1].pledge;
 
       if (!existingPledge) {
-        throw new Error('Expected pledge to be defined for this test');
+        throw new Error('Existing pledge data is missing for test');
       }
 
       renderPledgeModal(link1, {
         ...pledgeProps[1],
         pledge: {
           ...existingPledge,
-          endDate: '',
+
+          endDate: undefined as unknown as string,
         },
+      });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
       });
 
       const startDateInput = screen.getAllByLabelText(/start date/i)[0];
@@ -405,7 +411,7 @@ describe('PledgeModal', () => {
 
       fireEvent.change(startDateInput, { target: { value: '25/12/2025' } });
 
-      expect(endDateInput).toBeInTheDocument();
+      expect(endDateInput).toHaveValue('25/12/2025');
       expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
     });
 
@@ -649,6 +655,33 @@ describe('PledgeModal', () => {
       await waitFor(
         () => {
           expect(toast.error).toHaveBeenCalled();
+        },
+        { timeout: 2000 },
+      );
+    });
+
+    it('should submit update with only ID if no fields are changed', async () => {
+      const updateMock = [
+        ...BASE_PLEDGE_MODAL_MOCKS,
+        createUpdatePledgeMock({ id: '1' }),
+      ];
+
+      const updateLink = new StaticMockLink(updateMock);
+      renderPledgeModal(updateLink, pledgeProps[1]);
+
+      await waitFor(() =>
+        expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
+      );
+
+      // Change: Submit immediately without editing any fields
+      const form = screen.getByTestId('pledgeForm');
+      fireEvent.submit(form);
+
+      await waitFor(
+        () => {
+          expect(toast.success).toHaveBeenCalledWith(
+            translations.pledgeUpdated,
+          );
         },
         { timeout: 2000 },
       );
