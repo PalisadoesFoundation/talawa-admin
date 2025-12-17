@@ -36,7 +36,6 @@
  */
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
-import Loader from 'components/Loader/Loader';
 import { useNavigate, useParams, Link } from 'react-router';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
@@ -47,23 +46,28 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import IconComponent from 'components/IconComponent/IconComponent';
-import type {
-  InterfaceQueryOrganizationUserTags,
-  InterfaceTagData,
-} from 'utils/interfaces';
+import TableLoader from 'components/TableLoader/TableLoader';
+import type { InterfaceTagDataPG } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
-import { DataGrid } from '@mui/x-data-grid';
+import type { GridCellParams } from '@mui/x-data-grid';
 import type {
-  InterfaceOrganizationTagsQuery,
+  InterfaceOrganizationTagsQueryPG,
   SortedByType,
 } from 'utils/organizationTagsUtils';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
-import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
+import type {
+  ReportingRow,
+  ReportingTableColumn,
+} from '../../types/ReportingTable/interface';
+import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import { Stack } from '@mui/material';
+import {
+  dataGridStyle,
+  COLUMN_BUFFER_PX,
+  PAGE_SIZE,
+} from '../../types/ReportingTable/utils';
 import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import PageHeader from 'shared-components/Navbar/Navbar';
 
 function OrganizationTags(): JSX.Element {
@@ -93,76 +97,27 @@ function OrganizationTags(): JSX.Element {
 
   const {
     data: orgUserTagsData,
-    loading: orgUserTagsLoading,
     error: orgUserTagsError,
     refetch: orgUserTagsRefetch,
-    fetchMore: orgUserTagsFetchMore,
-  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST_PG, {
-    variables: {
-      input: { id: orgId },
-      first: TAGS_QUERY_DATA_CHUNK_SIZE,
-      where: { name: { starts_with: tagSearchName } },
-      sortedBy: { id: tagSortOrder },
-    },
-  });
-
-  const loadMoreUserTags = (): void => {
-    orgUserTagsFetchMore({
+  }: InterfaceOrganizationTagsQueryPG = useQuery(
+    ORGANIZATION_USER_TAGS_LIST_PG,
+    {
       variables: {
+        input: { id: orgId },
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after:
-          orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo?.endCursor ??
-          null,
+        where: { name: { starts_with: tagSearchName } },
+        sortedBy: { id: tagSortOrder },
       },
-      updateQuery: (
-        prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
-        {
-          fetchMoreResult,
-        }: {
-          fetchMoreResult?: {
-            organizations: InterfaceQueryOrganizationUserTags[];
-          };
-        },
-      ) => {
-        if (!fetchMoreResult) {
-          return prevResult;
-        }
-
-        // Check if organizations exists in both prevResult and fetchMoreResult
-        if (
-          !prevResult.organizations?.[0] ||
-          !fetchMoreResult.organizations?.[0]
-        ) {
-          return prevResult;
-        }
-
-        return {
-          organizations: [
-            {
-              ...prevResult.organizations[0],
-              userTags: {
-                ...prevResult.organizations[0].userTags,
-                edges: [
-                  ...prevResult.organizations[0].userTags.edges,
-                  ...fetchMoreResult.organizations[0].userTags.edges,
-                ],
-                pageInfo: fetchMoreResult.organizations[0].userTags.pageInfo,
-              },
-            },
-          ],
-        };
-      },
-    });
-  };
+    },
+  );
 
   useEffect(() => {
     orgUserTagsRefetch();
   }, []);
 
-  const [create, { loading: createUserTagLoading }] =
-    useMutation(CREATE_USER_TAG);
+  const [create] = useMutation(CREATE_USER_TAG);
 
-  const createTag = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+  const createTag = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!tagName.trim()) {
@@ -180,7 +135,7 @@ function OrganizationTags(): JSX.Element {
         setTagName('');
         setCreateTagModalIsOpen(false);
       } else {
-        toast.error('Tag creation failed');
+        toast.error(t('tagCreationFailed'));
       }
     } catch (error: unknown) {
       toast.error((error as Error).message);
@@ -189,11 +144,11 @@ function OrganizationTags(): JSX.Element {
 
   const showErrorMessage = (message: string): JSX.Element => {
     return (
-      <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
+      <div className={styles.errorContainer + ' bg-white rounded-4 my-3'}>
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occurred while loading Organization Tags Data
+            {t('errorLoadingTagsData')}
             <br />
             {message}
           </h6>
@@ -203,8 +158,8 @@ function OrganizationTags(): JSX.Element {
   };
 
   const userTagsList =
-    orgUserTagsData?.organizations?.[0]?.userTags?.edges?.map(
-      (edge: { node: InterfaceTagData }) => edge.node,
+    orgUserTagsData?.organization?.tags?.edges?.map(
+      (edge: { node: InterfaceTagDataPG }) => edge.node,
     ) || [];
 
   const redirectToManageTag = (tagId: string): void => {
@@ -214,34 +169,56 @@ function OrganizationTags(): JSX.Element {
   const redirectToSubTags = (tagId: string): void => {
     navigate(`/orgtags/${orgId}/subTags/${tagId}`);
   };
+  const headerTitles: string[] = [
+    tCommon('sl_no'),
+    t('tagName'),
+    t('totalSubTags'),
+    t('totalAssignedUsers'),
+    tCommon('actions'),
+  ];
 
-  const columns: GridColDef[] = [
+  const renderCountLink = (
+    params: GridCellParams,
+    buildPath: (id: string) => string,
+    count: number | undefined,
+  ) => (
+    <Link className="text-secondary" to={buildPath(params.row.id)}>
+      {count ?? 0}
+    </Link>
+  );
+
+  const columns: ReportingTableColumn[] = [
     {
       field: 'id',
-      headerName: '#',
-      minWidth: 100,
+      headerName: tCommon('sl_no'),
+      flex: 0.5,
+      minWidth: 60,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return <div>{params.row.id}</div>;
-      },
+      renderCell: (params: GridCellParams) => (
+        <span className={styles.tableItemIndex}>
+          {params.api.getRowIndexRelativeToVisibleRows(params.row.id) + 1}.
+        </span>
+      ),
     },
     {
-      field: 'tagName',
-      headerName: 'Tag Name',
-      flex: 1,
-      minWidth: 100,
+      field: 'name',
+      headerName: t('tagName'),
+      flex: 2,
+      minWidth: 150,
+      align: 'left',
+      headerAlign: 'left',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams<InterfaceTagData>) => {
+      renderCell: (params: GridCellParams) => {
         return (
           <div className="d-flex">
             {params.row.parentTag &&
-              params.row.ancestorTags?.map((tag) => (
+              params.row.ancestorTags?.map((tag: InterfaceTagDataPG) => (
                 <div
-                  key={tag._id}
+                  key={tag.id}
                   className={styles.tagsBreadCrumbs}
                   data-testid="ancestorTagsBreadCrumbs"
                 >
@@ -253,7 +230,7 @@ function OrganizationTags(): JSX.Element {
             <div
               className={styles.subTagsLink}
               data-testid="tagName"
-              onClick={() => redirectToSubTags(params.row._id)}
+              onClick={() => redirectToSubTags(params.row.id)}
             >
               {params.row.name}
               <i className={'ms-2 fa fa-caret-right'} />
@@ -264,50 +241,44 @@ function OrganizationTags(): JSX.Element {
     },
     {
       field: 'totalSubTags',
-      headerName: 'Total Sub Tags',
+      headerName: t('totalSubTags'),
       flex: 1,
+      minWidth: 120,
       align: 'center',
-      minWidth: 100,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return (
-          <Link
-            className="text-secondary"
-            to={`/orgtags/${orgId}/subTags/${params.row._id}`}
-          >
-            {params.row.childTags?.totalCount || 0}
-          </Link>
+        return renderCountLink(
+          params,
+          (id) => `/orgtags/${orgId}/subTags/${id}`,
+          params.row.childTags?.totalCount,
         );
       },
     },
     {
       field: 'totalAssignedUsers',
-      headerName: 'Total Assigned Users',
+      headerName: t('totalAssignedUsers'),
       flex: 1,
+      minWidth: 120,
       align: 'center',
-      minWidth: 100,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return (
-          <Link
-            className="text-secondary"
-            to={`/orgtags/${orgId}/manageTag/${params.row._id}`}
-          >
-            {params.row.usersAssignedTo?.totalCount || 0}
-          </Link>
+        return renderCountLink(
+          params,
+          (id) => `/orgtags/${orgId}/manageTag/${id}`,
+          params.row.usersAssignedTo?.totalCount,
         );
       },
     },
     {
       field: 'actions',
-      headerName: 'Actions',
+      headerName: tCommon('actions'),
       flex: 1,
+      minWidth: 120,
       align: 'center',
-      minWidth: 100,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
@@ -316,7 +287,7 @@ function OrganizationTags(): JSX.Element {
           <Button
             size="sm"
             variant="outline-primary"
-            onClick={() => redirectToManageTag(params.row._id)}
+            onClick={() => redirectToManageTag(params.row.id)}
             data-testid="manageTagBtn"
             className={styles.editButton}
           >
@@ -329,6 +300,29 @@ function OrganizationTags(): JSX.Element {
 
   const handleSortChange = (value: string): void => {
     setTagSortOrder(value === 'latest' ? 'DESCENDING' : 'ASCENDING');
+  };
+
+  const gridProps = {
+    disableColumnMenu: true,
+    columnBufferPx: COLUMN_BUFFER_PX,
+    hideFooter: true,
+    getRowId: (row: InterfaceTagDataPG & { id: number }) => row.id,
+    slots: {
+      noRowsOverlay: () => (
+        <Stack height="100%" alignItems="center" justifyContent="center">
+          {t('noTagsFound')}
+        </Stack>
+      ),
+      loadingOverlay: () => (
+        <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
+      ),
+    },
+    sx: { ...dataGridStyle },
+    getRowClassName: () => `${styles.rowBackground}`,
+    autoHeight: false,
+    height: 500,
+    rowHeight: 65,
+    isRowSelectable: () => false,
   };
 
   return (
@@ -345,7 +339,7 @@ function OrganizationTags(): JSX.Element {
               }}
               sorting={[
                 {
-                  title: 'Sort Tags',
+                  title: t('sortTags'),
                   options: [
                     { label: tCommon('Latest'), value: 'latest' },
                     { label: tCommon('Oldest'), value: 'oldest' },
@@ -368,9 +362,7 @@ function OrganizationTags(): JSX.Element {
             />
           </div>
 
-          {orgUserTagsLoading || createUserTagLoading ? (
-            <Loader />
-          ) : orgUserTagsError ? (
+          {orgUserTagsError ? (
             showErrorMessage(orgUserTagsError.message)
           ) : (
             <div className="mb-4">
@@ -379,8 +371,8 @@ function OrganizationTags(): JSX.Element {
                   <IconComponent name="Tag" />
                 </div>
 
-                <div className={`fs-4 ms-3 my-1 ${styles.tagsBreadCrumbs}`}>
-                  {'Tags'}
+                <div className={'fs-4 ms-3 my-1 ' + styles.tagsBreadCrumbs}>
+                  {t('tags')}
                 </div>
               </div>
 
@@ -389,67 +381,13 @@ function OrganizationTags(): JSX.Element {
                 data-testid="orgUserTagsScrollableDiv"
                 className={styles.orgUserTagsScrollableDiv}
               >
-                <InfiniteScroll
-                  dataLength={userTagsList?.length}
-                  next={loadMoreUserTags}
-                  hasMore={
-                    orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo
-                      ?.hasNextPage ?? false
+                <ReportingTable
+                  rows={
+                    userTagsList?.map((req) => ({ ...req })) as ReportingRow[]
                   }
-                  loader={<InfiniteScrollLoader />}
-                  scrollableTarget="orgUserTagsScrollableDiv"
-                  data-testid="infinite-scroll"
-                >
-                  <DataGrid
-                    disableColumnMenu
-                    columnBufferPx={7}
-                    hideFooter={true}
-                    getRowId={(row) => row.id}
-                    slots={{
-                      noRowsOverlay: () => (
-                        <Stack
-                          height="100%"
-                          alignItems="center"
-                          justifyContent="center"
-                        >
-                          {t('noTagsFound')}
-                        </Stack>
-                      ),
-                    }}
-                    sx={{
-                      borderRadius: 'var(--table-head-radius)',
-                      backgroundColor: 'var(--grey-bg-color)',
-                      '& .MuiDataGrid-row': {
-                        backgroundColor: 'var(--tablerow-bg-color)',
-                        '&:focus-within': {
-                          outline: '2px solid #000',
-                          outlineOffset: '-2px',
-                        },
-                      },
-                      '& .MuiDataGrid-row:hover': {
-                        backgroundColor: 'var(--grey-bg-color)',
-                        boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-                      },
-                      '& .MuiDataGrid-row.Mui-hovered': {
-                        backgroundColor: 'var(--grey-bg-color)',
-                        boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-                      },
-                      '& .MuiDataGrid-cell:focus': {
-                        outline: '2px solid #000',
-                        outlineOffset: '-2px',
-                      },
-                    }}
-                    getRowClassName={() => `${styles.rowBackground}`}
-                    autoHeight
-                    rowHeight={65}
-                    rows={userTagsList?.map((userTag, index) => ({
-                      id: index + 1,
-                      ...userTag,
-                    }))}
-                    columns={columns}
-                    isRowSelectable={() => false}
-                  />
-                </InfiniteScroll>
+                  columns={columns}
+                  gridProps={{ ...gridProps }}
+                />
               </div>
             </div>
           )}
@@ -477,7 +415,7 @@ function OrganizationTags(): JSX.Element {
             <Form.Control
               type="name"
               id="orgname"
-              className={`mb-3 ${styles.inputField}`}
+              className={'mb-3 ' + styles.inputField}
               placeholder={t('tagNamePlaceholder')}
               data-testid="tagNameInput"
               autoComplete="off"

@@ -309,7 +309,6 @@
     "createUser": "Create User",
     "people": "People",
     "sort": "Search by Role",
-    "actions": "Actions",
     "addMembers": "Add Members",
     "existingUser": "Existing User",
     "newUser": "New User",
@@ -333,7 +332,7 @@
     "create": "create",
     "cancel": "cancel",
     "user": "user",
-    "profile": "profile"
+    "notFound": "No Members Found"
   },
   "organizationTags": {
     "title": "Organization Tags",
@@ -352,7 +351,12 @@
     "removeUserTag": "Delete Tag",
     "removeUserTagMessage": "Do you want to delete this tag?",
     "addChildTag": "Add a Sub Tag",
-    "enterTagName": "Enter Tag Name"
+    "enterTagName": "Enter Tag Name",
+    "totalSubTags": "Total Sub Tags",
+    "totalAssignedUsers": "Total Assigned Users",
+    "tagCreationFailed": "Tag creation failed",
+    "errorLoadingTagsData": "Error occurred while loading Organization Tags Data",
+    "sortTags": "Sort Tags"
   },
   "manageTag": {
     "title": "Tag Details",
@@ -663,7 +667,8 @@
     "createdLatest": "Created Latest",
     "createdEarliest": "Created Earliest",
     "viewCampaigns": "View Campaigns",
-    "searchByName": "searchByName"
+    "searchByName": "searchByName",
+    "assocCampaigns": "Associated Campaigns"
   },
   "fundCampaign": {
     "title": "Fundraising Campaigns",

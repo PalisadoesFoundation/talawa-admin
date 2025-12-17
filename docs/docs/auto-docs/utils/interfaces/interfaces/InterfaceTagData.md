@@ -20,8 +20,6 @@ Defines the structure for tag data.
 
 Defined in: [src/utils/interfaces.ts:1458](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1458)
 
-The unique identifier of the tag.
-
 ***
 
 ### ancestorTags

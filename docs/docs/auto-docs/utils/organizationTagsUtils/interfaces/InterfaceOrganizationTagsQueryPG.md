@@ -2,9 +2,9 @@
 
 ***
 
-# Interface: InterfaceTagAssignedMembersQuery
+# Interface: InterfaceOrganizationTagsQueryPG
 
-Defined in: [src/utils/organizationTagsUtils.ts:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L114)
+Defined in: [src/utils/organizationTagsUtils.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L90)
 
 ## Extends
 
@@ -16,11 +16,11 @@ Defined in: [src/utils/organizationTagsUtils.ts:114](https://github.com/Palisado
 
 > `optional` **data**: `object`
 
-Defined in: [src/utils/organizationTagsUtils.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L116)
+Defined in: [src/utils/organizationTagsUtils.ts:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L92)
 
-#### getAssignedUsers
+#### organization
 
-> **getAssignedUsers**: [`InterfaceQueryUserTagsAssignedMembers`](../../interfaces/interfaces/InterfaceQueryUserTagsAssignedMembers.md)
+> **organization**: [`InterfaceQueryOrganizationUserTagsPG`](../../interfaces/interfaces/InterfaceQueryOrganizationUserTagsPG.md)
 
 ***
 
@@ -40,13 +40,13 @@ Defined in: [src/utils/organizationTagsUtils.ts:61](https://github.com/Palisadoe
 
 > **fetchMore**: (`options`) => `void`
 
-Defined in: [src/utils/organizationTagsUtils.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L119)
+Defined in: [src/utils/organizationTagsUtils.ts:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L95)
 
 #### Parameters
 
 ##### options
 
-`InterfaceBaseFetchMoreOptions`\<\{ `getAssignedUsers`: [`InterfaceQueryUserTagsAssignedMembers`](../../interfaces/interfaces/InterfaceQueryUserTagsAssignedMembers.md); \}\>
+`InterfaceBaseFetchMoreOptions`\<\{ `organization`: [`InterfaceQueryOrganizationUserTagsPG`](../../interfaces/interfaces/InterfaceQueryOrganizationUserTagsPG.md); \}\>
 
 #### Returns
 

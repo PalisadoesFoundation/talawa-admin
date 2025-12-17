@@ -103,5 +103,8 @@
   "unblock": "Débloquer",
   "unblockedSuccessfully": "{{item}} débloqué avec succès",
   "save": "Enregistrer",
-  "saving": "Enregistrement..."
+  "saving": "Enregistrement...",
+  "sl_no": "N° de série",
+  "actions": "Actions",
+  "notFound": "Non trouvé"
 }

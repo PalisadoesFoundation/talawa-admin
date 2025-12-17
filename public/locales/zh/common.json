@@ -103,5 +103,8 @@
   "unblock": "解除封锁",
   "unblockedSuccessfully": "{{item}} 已成功解除封锁",
   "save": "保存",
-  "saving": "保存中..."
+  "saving": "保存中...",
+  "sl_no": "序号",
+  "actions": "操作",
+  "notFound": "未找到"
 }

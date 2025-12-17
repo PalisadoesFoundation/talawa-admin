@@ -103,5 +103,8 @@
   "searchBy": "Search by {{item}}",
   "plugins": "Plugins",
   "save": "Save",
-  "saving": "Saving..."
+  "saving": "Saving...",
+  "sl_no": "Sl. No.",
+  "actions": "Actions",
+  "notFound": "Not Found"
 }
