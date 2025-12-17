@@ -206,7 +206,9 @@ line 4"""
                 temp_file = f.name
                 f.write('// eslint-disable no-console')
             
-            with patch.object(sys, 'argv', ['disable_statements_check.py', '--files', temp_file]):
+            with patch.object(sys, 'argv', [
+                'disable_statements_check.py', '--files', temp_file
+            ]):
                 with patch('sys.exit') as mock_exit:
                     from disable_statements_check import main
                     main()
@@ -227,7 +229,9 @@ line 4"""
             with open(temp_file, 'w') as f:
                 f.write('it.skip("test", () => {});')
             
-            with patch.object(sys, 'argv', ['disable_statements_check.py', '--directory', temp_dir]):
+            with patch.object(sys, 'argv', [
+                'disable_statements_check.py', '--directory', temp_dir
+            ]):
                 with patch('sys.exit') as mock_exit:
                     from disable_statements_check import main
                     main()
@@ -248,7 +252,9 @@ line 4"""
                 temp_file = f.name
                 f.write('console.log("clean code");')
             
-            with patch.object(sys, 'argv', ['disable_statements_check.py', '--files', temp_file]):
+            with patch.object(sys, 'argv', [
+                'disable_statements_check.py', '--files', temp_file
+            ]):
                 from disable_statements_check import main
                 # Should return normally (no sys.exit call) when no violations
                 main()  # Will raise SystemExit if exit code != 0
