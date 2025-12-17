@@ -24,12 +24,10 @@ class TestDisableStatementsChecker(unittest.TestCase):
 
     def test_eslint_disable_detection(self) -> None:
         """Test detection of eslint-disable comments."""
-        disable_comment = "// eslint" + "-disable no-console"
-        next_line_comment = "// eslint" + "-disable-next-line no-unused-vars"
-        content = f"""
-        {disable_comment}
+        content = """
+        // eslint-disable no-console
         console.log('test');
-        {next_line_comment}
+        // eslint-disable-next-line no-unused-vars
         """
         violations = self.checker.check_eslint_disable(content, 'test.js')
         self.assertEqual(len(violations), 2)
@@ -38,22 +36,19 @@ class TestDisableStatementsChecker(unittest.TestCase):
 
     def test_istanbul_ignore_detection(self) -> None:
         """Test detection of istanbul ignore comments."""
-        ignore_next = "/* istanbul" + " ignore next */"
-        ignore_if = "/* istanbul" + " ignore if */"
-        content = f"""
-        {ignore_next}
-        function uncovered() {{}}
-        {ignore_if}
+        content = """
+        /* istanbul ignore next */
+        function uncovered() {}
+        /* istanbul ignore if */
         """
         violations = self.checker.check_istanbul_ignore(content, 'test.js')
         self.assertEqual(len(violations), 2)
 
     def test_it_skip_detection(self) -> None:
         """Test detection of it.skip statements."""
-        skip_statement = "it.s" + "kip('disabled test', () => {});"
-        content = f"""
-        it('should work', () => {{}});
-        {skip_statement}
+        content = """
+        it('should work', () => {});
+        it.skip('disabled test', () => {});
         """
         violations = self.checker.check_it_skip(content, 'test.spec.js')
         self.assertEqual(len(violations), 1)
@@ -89,12 +84,11 @@ class TestDisableStatementsChecker(unittest.TestCase):
         try:
             with tempfile.NamedTemporaryFile(mode='w', suffix='.js', delete=False) as f:
                 temp_file = f.name
-                disable_comment = '// eslint' + '-disable no-console'
-                f.write(f'{disable_comment}\nconsole.log("test");')
+                f.write('// eslint-disable no-console\nconsole.log("test");')
             
             violations = self.checker.check_file(temp_file)
             self.assertEqual(len(violations), 1)
-            self.assertIn('eslint' + '-disable', violations[0])
+            self.assertIn('eslint-disable', violations[0])
         finally:
             if temp_file and os.path.exists(temp_file):
                 os.unlink(temp_file)
@@ -112,14 +106,12 @@ class TestDisableStatementsChecker(unittest.TestCase):
             # Create first temp file
             with tempfile.NamedTemporaryFile(mode='w', suffix='.js', delete=False) as f:
                 temp_files.append(f.name)
-                disable_comment = '// eslint' + '-disable no-console'
-                f.write(disable_comment)
+                f.write('// eslint-disable no-console')
             
             # Create second temp file
             with tempfile.NamedTemporaryFile(mode='w', suffix='.js', delete=False) as f:
                 temp_files.append(f.name)
-                skip_statement = 'it.s' + 'kip("test", () => {});'
-                f.write(skip_statement)
+                f.write('it.skip("test", () => {});')
             
             violations = self.checker.check_files(temp_files)
             self.assertEqual(len(violations), 2)
@@ -137,8 +129,7 @@ class TestDisableStatementsChecker(unittest.TestCase):
             temp_file = os.path.join(temp_dir, 'test.js')
             
             with open(temp_file, 'w') as f:
-                disable_comment = '// eslint' + '-disable no-console'
-                f.write(disable_comment)
+                f.write('// eslint-disable no-console')
             
             violations = self.checker.check_directory(temp_dir)
             self.assertEqual(len(violations), 1)
@@ -164,10 +155,9 @@ class TestDisableStatementsChecker(unittest.TestCase):
 
     def test_line_number_accuracy(self) -> None:
         """Test accurate line number reporting."""
-        disable_comment = '// eslint' + '-disable no-console'
-        content = f"""line 1
+        content = """line 1
 line 2
-{disable_comment}
+// eslint-disable no-console
 line 4"""
         violations = self.checker.check_eslint_disable(content, 'test.js')
         self.assertEqual(len(violations), 1)
@@ -175,13 +165,10 @@ line 4"""
 
     def test_multiple_violations_same_file(self) -> None:
         """Test multiple violations in the same file."""
-        disable_comment = '// eslint' + '-disable no-console'
-        ignore_comment = '/* istanbul ' + 'ignore next */'
-        skip_statement = 'it.s' + 'kip(\'test\', () => {});'
-        content = f"""
-        {disable_comment}
-        {ignore_comment}
-        {skip_statement}
+        content = """
+        // eslint-disable no-console
+        /* istanbul ignore next */
+        it.skip('test', () => {});
         """
         violations = self.check_file_content_for_testing(content, 'test.js')
         self.assertEqual(len(violations), 3)
@@ -201,9 +188,7 @@ line 4"""
 
     def test_whitespace_variations(self) -> None:
         """Test detection with various whitespace patterns."""
-        disable1 = '//eslint' + '-disable'
-        disable2 = '//  eslint' + '-disable  '
-        content = f"{disable1}\n{disable2}\n"
+        content = "//eslint-disable\n//  eslint-disable  \n"
         violations = self.checker.check_eslint_disable(content, 'test.js')
         self.assertEqual(len(violations), 2)
 

@@ -57,6 +57,10 @@ class DisableStatementsChecker:
 
     def check_file(self, file_path: str) -> list[str]:
         """Check a single file for disable statements."""
+        # Skip checking the test file to avoid self-referential issues
+        if file_path.endswith('test_disable_statements_check.py'):
+            return []
+            
         try:
             with open(file_path, encoding='utf-8') as f:
                 content = f.read()
