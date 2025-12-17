@@ -140,11 +140,13 @@ def collect_files(
     """Collect files from paths and directories matching the given extensions.
 
     Args:
-        files: Optional list of specific file paths to scan.
-        directories: Optional list of directories to recursively scan.
-        extensions: Set of file extensions to include.
-        ignore_patterns: List of glob patterns or directory names to ignore.
-        verbose: Enable verbose output.
+        files (list[str] | None): Optional list of specific file paths to scan.
+        directories (list[str] | None): Optional list of directories to
+            recursively scan.
+        extensions (set[str]): Set of file extensions to include.
+        ignore_patterns (list[str]): List of glob patterns or directory names
+            to ignore.
+        verbose (bool): Enable verbose output.
 
     Returns:
         list[Path]: A list of collected file paths.
@@ -259,9 +261,9 @@ def load_locales(
     """Load all locale translation keys from the specified directory.
 
     Args:
-        locales_dir: Path to the locales directory.
-        verbose: Whether to enable verbose output.
-        allow_missing: If True, allow no locale files to exist.
+        locales_dir (str): Path to the locales directory.
+        verbose (bool): Whether to enable verbose output.
+        allow_missing (bool): If True, allow no locale files to exist.
 
     Returns:
         dict[str, set[str]]: A mapping of locale names to sets of
@@ -337,12 +339,9 @@ def print_report(
     """Print a report of missing translation keys.
 
     Args:
-        missing (dict[str, list[str]]): Mapping of translation keys to lists of
+        missing: Mapping of translation keys to lists of
             locales where they are missing.
-        verbose (bool): Enable verbose summary output.
-
-    Returns:
-        None
+        verbose: Enable verbose summary output.
     """  # pylint: disable=redundant-returns-doc, differing-param-doc
     if not missing:
         print(
