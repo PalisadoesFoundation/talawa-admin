@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""
-Consolidated script to check for disable statements in code files.
+"""Consolidated script to check for disable statements in code files.
 
 This script checks for:
 - eslint-disable comments

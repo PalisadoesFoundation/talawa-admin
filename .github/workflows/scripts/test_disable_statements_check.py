@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
-"""
-Comprehensive test suite for disable_statements_check.py
-"""
+"""Comprehensive test suite for disable_statements_check.py."""
 
 import inspect
 import os
+import sys
 import tempfile
 import unittest
-from disable_statements_check import DisableStatementsChecker
+from unittest.mock import patch
+
+from disable_statements_check import DisableStatementsChecker, main
 
 
-class TestDisableStatementsChecker(unittest.TestCase):
+class TestDisableStatementsChecker(
+    unittest.TestCase
+):  # pylint: disable=too-many-public-methods
     """Test cases for DisableStatementsChecker class."""
 
     def setUp(self) -> None:
@@ -129,7 +132,7 @@ class TestDisableStatementsChecker(unittest.TestCase):
             temp_dir = tempfile.mkdtemp()
             temp_file = os.path.join(temp_dir, "test.js")
 
-            with open(temp_file, "w") as f:
+            with open(temp_file, "w", encoding="utf-8") as f:
                 f.write("// eslint-disable no-console")
 
             violations = self.checker.check_directory(temp_dir)
@@ -218,9 +221,6 @@ line 4"""
 
     def test_main_with_files_argument(self) -> None:
         """Test main() with --files argument."""
-        import sys
-        from unittest.mock import patch
-
         temp_file = None
         try:
             with tempfile.NamedTemporaryFile(
@@ -235,8 +235,6 @@ line 4"""
                 ["disable_statements_check.py", "--files", temp_file],
             ):
                 with patch("sys.exit") as mock_exit:
-                    from disable_statements_check import main
-
                     main()
                     mock_exit.assert_called_with(1)
         finally:
@@ -245,15 +243,12 @@ line 4"""
 
     def test_main_with_directory_argument(self) -> None:
         """Test main() with --directory argument."""
-        import sys
-        from unittest.mock import patch
-
         temp_dir = None
         temp_file = None
         try:
             temp_dir = tempfile.mkdtemp()
             temp_file = os.path.join(temp_dir, "test.js")
-            with open(temp_file, "w") as f:
+            with open(temp_file, "w", encoding="utf-8") as f:
                 f.write('it.skip("test", () => {});')
 
             with patch.object(
@@ -262,8 +257,6 @@ line 4"""
                 ["disable_statements_check.py", "--directory", temp_dir],
             ):
                 with patch("sys.exit") as mock_exit:
-                    from disable_statements_check import main
-
                     main()
                     mock_exit.assert_called_with(1)
         finally:
@@ -274,9 +267,6 @@ line 4"""
 
     def test_main_no_violations_exit_zero(self) -> None:
         """Test main() exits 0 when no violations found."""
-        import sys
-        from unittest.mock import patch
-
         temp_file = None
         try:
             with tempfile.NamedTemporaryFile(
@@ -290,8 +280,6 @@ line 4"""
                 "argv",
                 ["disable_statements_check.py", "--files", temp_file],
             ):
-                from disable_statements_check import main
-
                 # Should return normally (no sys.exit call) when no violations
                 main()  # Will raise SystemExit if exit code != 0
         finally:
