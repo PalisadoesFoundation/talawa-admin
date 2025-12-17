@@ -125,21 +125,18 @@ const Pledges = (): JSX.Element => {
     error?: ApolloError;
     refetch: IPledgeRefetchFn;
   } = useQuery(USER_PLEDGES, {
-    skip: !orgId || !userId,
-    variables: userId
-      ? {
-          input: { userId },
-          where: searchTerm
-            ? {
-                ...(searchBy === 'pledgers' && {
-                  firstName_contains: searchTerm,
-                }),
-                ...(searchBy === 'campaigns' && { name_contains: searchTerm }),
-              }
-            : {},
-          orderBy: sortBy,
-        }
-      : undefined,
+    variables: {
+      input: {
+        userId: userId,
+      },
+      where: searchTerm
+        ? {
+            ...(searchBy === 'pledgers' && { firstName_contains: searchTerm }),
+            ...(searchBy === 'campaigns' && { name_contains: searchTerm }),
+          }
+        : {},
+      orderBy: sortBy,
+    },
   });
 
   if (!orgId || !userId) {
