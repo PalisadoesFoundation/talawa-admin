@@ -97,6 +97,11 @@ jobs:
       - name: Check for localStorage Usage
         run: pnpm exec tsx scripts/githooks/check-localstorage-usage.ts --scan-entire-repo
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
       - name: Compare translation files
         run: |
           chmod +x .github/workflows/scripts/compare_translations.py

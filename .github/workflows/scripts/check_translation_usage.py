@@ -6,11 +6,10 @@ This script scans specified files and/or directories for translation tags
 validates that every key found in source code exists in all locale files
 found under the provided locales directory.
 
-Exit codes
-----------
-0  : success (no missing translations)
-1  : missing translations found
-2  : configuration / usage error (bad args, no locale files, etc.)
+Exit Codes:
+    0: Success (no missing translations).
+    1: Missing translations found.
+    2: Configuration or usage error (bad args, no locale files, etc.).
 
 Example:
     python .github/workflows/scripts/check_translation_usage.py \
@@ -18,10 +17,12 @@ Example:
         --locales-dir public/locales \
         --extensions .ts .tsx .js .jsx
 
-The script is intentionally conservative: it only extracts literal string keys
-passed as the first argument to `t(...)` or `i18n.t(...)`. Template-literal or
-computed keys are not matched.
+Notes:
+    This script is intentionally conservative: it only extracts literal string
+    keys passed as the first argument to ``t(...)`` or ``i18n.t(...)``.
+    Template-literal or computed keys are not matched.
 """
+
 
 from __future__ import annotations
 import argparse
@@ -139,14 +140,14 @@ def collect_files(
     """Collect files from paths and directories matching the given extensions.
 
     Args:
-        files: List of specific file paths to scan.
-        directories: List of directories to recursively scan.
+        files: Optional list of specific file paths to scan.
+        directories: Optional list of directories to recursively scan.
         extensions: Set of file extensions to include.
         ignore_patterns: List of glob patterns or directory names to ignore.
         verbose: Enable verbose output.
 
     Returns:
-        list[Path]: List of collected file paths.
+        A list of collected file paths.
     """
     collected: list[Path] = []
 
@@ -255,18 +256,20 @@ def load_locales(
     verbose: bool = False,
     allow_missing: bool = False,
 ) -> dict[str, set[str]]:
-    """Load all locales from the specified directory.
+    """Load all locale translation keys from the specified directory.
 
     Args:
         locales_dir: Path to the locales directory.
-        verbose: Enable verbose output.
-        allow_missing: If True, return empty dict if no locales are found.
+        verbose: Whether to enable verbose output.
+        allow_missing: If True, allow no locale files to exist.
 
     Returns:
-        dict[str, set[str]]: Dictionary mapping locale names to sets of keys.
+        A mapping of locale names to sets of flattened translation keys.
 
     Raises:
-        FileNotFoundError: Raised if directory or translation.json is missing.
+        FileNotFoundError: If the locales directory is missing, no locale files
+            are found, or a translation.json file contains invalid JSON and
+            allow_missing is False.
     """
     base = Path(locales_dir)
     if not base.exists() or not base.is_dir():
@@ -280,7 +283,12 @@ def load_locales(
             translation_file = child / "translation.json"
             if not translation_file.exists():
                 continue
-            data = json.loads(translation_file.read_text(encoding="utf-8"))
+            try:
+                data = json.loads(translation_file.read_text(encoding="utf-8"))
+            except json.JSONDecodeError as exc:
+                raise FileNotFoundError(
+                    f"Invalid JSON in {translation_file}: {exc}"
+                ) from exc
             locales[child.name] = flatten_json(data)
             if verbose:
                 print(f"Loaded locale '{child.name}'")
@@ -299,14 +307,15 @@ def compare_keys(
     used_keys: set[str],
     locales: dict[str, set[str]],
 ) -> dict[str, list[str]]:
-    """Compare used translation keys against available locale keys.
+    """Compare used translation keys against locale translation keys.
 
     Args:
         used_keys: Set of translation keys found in source code.
-        locales: Dictionary of locale names to sets of keys.
+        locales: Mapping of locale names to available translation keys.
 
     Returns:
-        dict[str, list[str]]: Keys missing in each locale.
+        dict[str, list[str]]: Mapping of translation keys to the locales
+        in which they are missing.
     """
     missing: dict[str, list[str]] = {}
     for key in sorted(used_keys):
@@ -323,14 +332,12 @@ def print_report(
     *,
     verbose: bool = False,
 ) -> None:
-    """Print a human-friendly report of missing translation keys.
+    """Print a report of missing translation keys.
 
     Args:
-        missing: Dictionary of missing keys per locale.
+        missing: Mapping of translation keys to lists of locales where they
+            are missing.
         verbose: Enable verbose summary output.
-
-    Returns:
-        None
     """
     if not missing:
         print(
@@ -397,7 +404,7 @@ def main(argv: Iterable[str] | None = None) -> int:
             verbose=args.verbose,
             allow_missing=args.allow_missing_locales,
         )
-    except FileNotFoundError as exc:
+    except (FileNotFoundError, ValueError) as exc:
         print(f"Error: {exc}")
         return 2
     missing = compare_keys(used_keys, locales)
