@@ -127,12 +127,8 @@ export const USER_FUND_CAMPAIGNS = gql`
 `;
 
 export const USER_PLEDGES = gql`
-  query GetPledgesByUserId(
-    $input: QueryFundCampaignPledgesByUserInput!
-    $where: QueryPledgeWhereInput
-    $orderBy: QueryPledgeOrderByInput
-  ) {
-    getPledgesByUserId(input: $input, where: $where, orderBy: $orderBy) {
+  query GetPledgesByUserId($input: QueryFundCampaignPledgesByUserInput!) {
+    getPledgesByUserId(input: $input) {
       id
       amount
       note
