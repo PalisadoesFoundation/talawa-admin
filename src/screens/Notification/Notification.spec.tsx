@@ -9,6 +9,7 @@ import {
 } from 'GraphQl/Queries/NotificationQueries';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { toast } from 'react-toastify';
+import i18nForTest from 'utils/i18nForTest';
 
 vi.mock('utils/useLocalstorage', () => ({
   __esModule: true,
@@ -160,7 +161,7 @@ describe('Notification Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/allCaughtUp/i)).toBeInTheDocument();
+      expect(screen.getByText(/you\'re all caught up!/i)).toBeInTheDocument();
     });
   });
 
@@ -224,10 +225,10 @@ describe('Notification Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/markAsRead/i)).toBeInTheDocument();
+      expect(screen.getByText(/mark as read/i)).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText(/markAsRead/i));
+    fireEvent.click(screen.getByText(/mark as read/i));
 
     await waitFor(() => {
       expect(screen.queryByText('Mark as Read')).not.toBeInTheDocument();
@@ -307,14 +308,15 @@ describe('Notification Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/markAsRead/i)).toBeInTheDocument();
+      expect(screen.getByText(/mark as read/i)).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText(/markAsRead/i));
+    fireEvent.click(screen.getByText(/mark as read/i));
 
     await waitFor(() => {
       expect(toastErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining('markAsReadError'))
+        i18nForTest.t('markAsReadError', { ns: 'errors' })
+      );
     });
 
     toastErrorSpy.mockRestore();
@@ -332,11 +334,11 @@ describe('Pagination Visibility', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/allCaughtUp/i)).toBeInTheDocument();
+      expect(screen.getByText(/you\'re all caught up!/i)).toBeInTheDocument();
     });
 
-    expect(screen.queryByText('Prev')).not.toBeInTheDocument();
-    expect(screen.queryByText('Next')).not.toBeInTheDocument();
+    expect(screen.queryByText(/prev/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/next/i)).not.toBeInTheDocument();
   });
 
   it('should hide pagination when there is exactly 1 notification and page is 0', async () => {
@@ -353,8 +355,8 @@ describe('Pagination Visibility', () => {
       expect(screen.getByText('Notification 1')).toBeInTheDocument();
     });
 
-    expect(screen.queryByText('Prev')).not.toBeInTheDocument();
-    expect(screen.queryByText('Next')).not.toBeInTheDocument();
+    expect(screen.queryByText(/prev/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/next/i)).not.toBeInTheDocument();
   });
 
   it('should show pagination when there are more than 1 notifications', async () => {
