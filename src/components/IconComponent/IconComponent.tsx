@@ -93,7 +93,12 @@ const iconComponent = (props: IIconComponent): JSX.Element => {
       return <ChatIcon {...props} data-testid="Icon-Component-ChatIcon" />;
     case 'Requests':
       return (
-        <RequestsIcon {...props} data-testid="Icon-Component-RequestsIcon" />
+        <RequestsIcon
+          width={20}
+          height={20}
+          fill={props.fill || 'currentColor'}
+          data-testid="Icon-Component-RequestsIcon"
+        />
       );
     case 'Events':
       return <EventsIcon {...props} data-testid="Icon-Component-EventsIcon" />;
@@ -136,11 +141,17 @@ const iconComponent = (props: IIconComponent): JSX.Element => {
         />
       );
     case 'Funds':
+      return (
+        <FundsIcon data-testid="Icon-Component-Funds" stroke={props.fill} />
+      );
     case 'Donate':
+      return (
+        <FundsIcon data-testid="Icon-Component-Donate" stroke={props.fill} />
+      );
     case 'Transactions':
       return (
         <FundsIcon
-          data-testid={`Icon-Component-${props.name}`}
+          data-testid="Icon-Component-Transactions"
           stroke={props.fill}
         />
       );
