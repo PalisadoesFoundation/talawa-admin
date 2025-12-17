@@ -105,6 +105,16 @@ const NON_USER_VISIBLE_ATTRS = [
 
 const POSIX_SEP = path.posix.sep;
 
+/**
+ * Recursively walks a directory tree and returns all file paths.
+ * Silently ignores directories that cannot be read.
+ *
+ * @param {string} dir - The directory path to traverse
+ * @returns {string[]} Array of absolute file paths found in the directory tree
+ * @example
+ * const files = walk('/path/to/src');
+ * // Returns: ['/path/to/src/file1.js', '/path/to/src/sub/file2.tsx', ...]
+ */
 const walk = (dir) => {
   let entries;
   try {
@@ -125,6 +135,17 @@ const walk = (dir) => {
   return files;
 };
 
+/**
+ * Determines whether a file should be analyzed for i18n violations.
+ * Filters out non-source files (wrong extension) and test/mock files.
+ *
+ * @param {string} filePath - The file path to check
+ * @returns {boolean} True if the file should be analyzed, false otherwise
+ * @example
+ * shouldAnalyzeFile('src/component.tsx'); // true
+ * shouldAnalyzeFile('src/component.test.tsx'); // false
+ * shouldAnalyzeFile('README.md'); // false
+ */
 const shouldAnalyzeFile = (filePath) => {
   const ext = path.extname(filePath);
   if (!FILE_EXTENSIONS.includes(ext)) return false;
@@ -134,6 +155,18 @@ const shouldAnalyzeFile = (filePath) => {
   return !TEST_PATTERNS.some((pattern) => pattern.test(normalizedPath));
 };
 
+/**
+ * Removes JavaScript/TypeScript comments from source code while preserving
+ * line numbers (replaces block comment content with newlines).
+ * This ensures that line numbers in violation reports remain accurate.
+ *
+ * @param {string} content - The source code content to process
+ * @returns {string} The content with comments removed, line numbers preserved
+ * @example
+ * const code = 'const x = 1; // comment\n/* block *\/';
+ * const stripped = stripComments(code);
+ * // Returns: 'const x = 1; \n          '
+ */
 const stripComments = (content) =>
   content
     // block comments – strip text but preserve newlines so line numbers stay stable
@@ -141,7 +174,19 @@ const stripComments = (content) =>
     // line comments – drop everything after `//` but keep leading whitespace/newline
     .replace(/(^|\s)\/\/.*$/gm, '$1');
 
-// Check if a line has an ignore comment
+/**
+ * Checks if a specific line should be ignored based on i18n-ignore directives.
+ * Supports two ignore patterns:
+ * - `// i18n-ignore-line` on the current line
+ * - `// i18n-ignore-next-line` on the previous line
+ *
+ * @param {string[]} originalLines - Array of original source code lines (before comment stripping)
+ * @param {number} lineIndex - Zero-based index of the line to check
+ * @returns {boolean} True if the line should be ignored, false otherwise
+ * @example
+ * const lines = ['// i18n-ignore-next-line', '<div>Hello</div>'];
+ * hasIgnoreComment(lines, 1); // true
+ */
 const hasIgnoreComment = (originalLines, lineIndex) => {
   // Check current line
   if (lineIndex < originalLines.length) {
@@ -161,12 +206,37 @@ const hasIgnoreComment = (originalLines, lineIndex) => {
   return false;
 };
 
+/**
+ * Counts words in text using Unicode-aware regex patterns.
+ * A "word" is defined as any sequence of letter characters in any script (Latin, Cyrillic, CJK, etc.).
+ *
+ * @param {string} text - The text to analyze
+ * @returns {number} The number of words found
+ * @example
+ * countWords('Hello world'); // 2
+ * countWords('こんにちは'); // 1
+ * countWords('123-456'); // 0 (no letter characters)
+ */
+
 const countWords = (text) => {
   // Unicode-aware word detection: sequences of letters in any script
   const words = text.match(/\p{L}+/gu);
   return words ? words.length : 0;
 };
 
+/**
+ * Determines if text appears to be a URL or URL-like pattern.
+ * Matches absolute URLs (http/https), relative paths (/path), data URLs,
+ * and common API/routing patterns (e.g., "api/v1/users", "id=123").
+ *
+ * @param {string} text - The text to check
+ * @returns {boolean} True if the text looks like a URL, false otherwise
+ * @example
+ * looksLikeUrl('https://example.com'); // true
+ * looksLikeUrl('/home'); // true
+ * looksLikeUrl('api/v1/users'); // true
+ * looksLikeUrl('Hello'); // false
+ */
 const looksLikeUrl = (text) => {
   const trimmed = text.trim();
   // Check for URLs starting with http://, https://, /, data:, or common URL patterns
@@ -183,7 +253,20 @@ const looksLikeUrl = (text) => {
   return false;
 };
 
-// Check if text looks like a date format string (e.g., "MM/DD/YYYY", "YYYY-MM-DD", "HH:mm:ss")
+/**
+ * Determines if text appears to be a date/time format string.
+ * Matches common date format patterns like "YYYY-MM-DD", "HH:mm:ss",
+ * complex formats with brackets like "YYYY-MM-DD[Z]", and Intl.DateTimeFormat
+ * tokens like "full", "medium", "numeric", "2-digit".
+ *
+ * @param {string} text - The text to check
+ * @returns {boolean} True if the text looks like a date format, false otherwise
+ * @example
+ * looksLikeDateFormat('YYYY-MM-DD'); // true
+ * looksLikeDateFormat('HH:mm:ss.SSS[Z]'); // true
+ * looksLikeDateFormat('full'); // true (Intl token)
+ * looksLikeDateFormat('Hello'); // false
+ */
 const looksLikeDateFormat = (text) => {
   const trimmed = text.trim();
   // Common date format patterns
@@ -195,7 +278,19 @@ const looksLikeDateFormat = (text) => {
   return dateFormatPatterns.some((pattern) => pattern.test(trimmed));
 };
 
-// Check if text looks like a regular expression pattern
+/**
+ * Determines if text appears to be a regular expression pattern.
+ * Matches pure regex syntax (e.g., "^$.*+?") or text containing common
+ * regex metacharacters (brackets, quantifiers, anchors, etc.).
+ *
+ * @param {string} text - The text to check
+ * @returns {boolean} True if the text looks like a regex pattern, false otherwise
+ * @example
+ * looksLikeRegexPattern('[a-z]+'); // true
+ * looksLikeRegexPattern('\\d{4}'); // true
+ * looksLikeRegexPattern('^start'); // true
+ * looksLikeRegexPattern('Hello'); // false
+ */
 const looksLikeRegexPattern = (text) => {
   const trimmed = text.trim();
   // Only pure regex syntax (no alphabetic characters)
@@ -207,7 +302,25 @@ const looksLikeRegexPattern = (text) => {
   return false;
 };
 
-// Check if text is in a context that should be skipped
+/**
+ * Determines if a match is within a code context that should be skipped
+ * (not flagged as an i18n violation). Skips developer-facing contexts like:
+ * - console.* calls
+ * - throw Error statements
+ * - GraphQL queries (gql)
+ * - RegExp constructors and regex literals
+ * - JSON.stringify/parse
+ * - Date formatting calls (.format)
+ * - String method calls (.match, .replace, .search, .split)
+ * - TypeScript type annotations
+ *
+ * @param {string} line - The full line of code containing the match
+ * @param {number} matchIndex - The character index where the match starts in the line
+ * @returns {boolean} True if the match is in a skip context, false otherwise
+ * @example
+ * isInSkipContext('console.log("debug")', 12); // true
+ * isInSkipContext('<div>Hello</div>', 5); // false
+ */
 const isInSkipContext = (line, matchIndex) => {
   const beforeMatch = line.substring(0, matchIndex);
   const afterMatch = line.substring(matchIndex);
@@ -274,6 +387,19 @@ const isInSkipContext = (line, matchIndex) => {
   return false;
 };
 
+/**
+ * Determines if a string is allowed (should not be flagged as a violation).
+ * Allows empty strings, strings with only template variables, URLs,
+ * date formats, regex patterns, and strings with zero words.
+ *
+ * @param {string} text - The text to check
+ * @returns {boolean} True if the string is allowed (skip it), false if it should be flagged
+ * @example
+ * isAllowedString(''); // true (empty)
+ * isAllowedString('${variable}'); // true (only variable)
+ * isAllowedString('https://example.com'); // true (URL)
+ * isAllowedString('Hello world'); // false (should be translated)
+ */
 const isAllowedString = (text) => {
   const value = text.trim();
   if (!value) return true;
@@ -288,9 +414,33 @@ const isAllowedString = (text) => {
   return countWords(value) === 0;
 };
 
+/**
+ * Converts a file path to POSIX format (forward slashes) for consistent
+ * cross-platform output. This ensures Windows paths (C:\path\to\file)
+ * are displayed with forward slashes (C:/path/to/file).
+ *
+ * @param {string} filePath - The file path to convert
+ * @returns {string} The path with POSIX-style separators
+ * @example
+ * toPosixPath('C:\\Users\\name\\file.tsx'); // 'C:/Users/name/file.tsx'
+ * toPosixPath('src/component.tsx'); // 'src/component.tsx' (unchanged)
+ */
 const toPosixPath = (filePath) => filePath.split(path.sep).join(POSIX_SEP);
 
-// Extract attribute name from a line containing an attribute
+/**
+ * Extracts the attribute name from a line of code at a specific position.
+ * Finds the most recent attribute assignment (attr=) before the match index.
+ * Handles standard HTML attributes (placeholder, title) and hyphenated
+ * attributes (data-testid, aria-label).
+ *
+ * @param {string} line - The line of code to analyze
+ * @param {number} matchIndex - The character index to look backwards from
+ * @returns {string|null} The lowercase attribute name, or null if no attribute found
+ * @example
+ * getAttributeName('<div title="text" placeholder="...">', 30); // 'placeholder'
+ * getAttributeName('<input data-testid="search">', 20); // 'data-testid'
+ * getAttributeName('<div>text</div>', 5); // null
+ */
 const getAttributeName = (line, matchIndex) => {
   // Look backwards from the match to find the attribute name
   const beforeMatch = line.substring(0, matchIndex);
@@ -307,6 +457,27 @@ const getAttributeName = (line, matchIndex) => {
   return null;
 };
 
+/**
+ * Scans a file for non-internationalized user-visible text violations.
+ * Detects hardcoded text in:
+ * - JSX text nodes (between tags)
+ * - User-visible attributes (placeholder, title, aria-label, alt, label)
+ * - Template literals in JSX expressions
+ * - Toast messages
+ *
+ * Respects i18n-ignore directives and skips various technical contexts
+ * (TypeScript types, CSS classes, URLs, date formats, regex patterns, etc.).
+ *
+ * @param {string} filePath - Absolute path to the file to scan
+ * @returns {Array<{line: number, text: string}>} Array of violations found,
+ *          each containing the line number and the violating text
+ * @example
+ * const violations = collectViolations('/path/to/Component.tsx');
+ * // Returns: [
+ * //   { line: 10, text: 'Hello World' },
+ * //   { line: 15, text: 'Click here' }
+ * // ]
+ */
 const collectViolations = (filePath) => {
   let content;
   try {
@@ -613,6 +784,18 @@ const collectViolations = (filePath) => {
   return violations;
 };
 
+/**
+ * Main entry point for the i18n detection script.
+ * Processes command-line arguments or scans the entire src/ directory.
+ * Collects violations from all applicable files and outputs results.
+ * Exits with code 0 if no violations found, or code 1 if violations exist.
+ *
+ * @returns {void} Does not return; exits the process with appropriate exit code
+ * @example
+ * // From command line:
+ * // node check-i18n.js src/Component.tsx
+ * // node check-i18n.js (scans entire src/ directory)
+ */
 const main = () => {
   const cliFiles = process.argv.slice(2);
   if (cliFiles.length === 0 && !fs.existsSync(SRC_DIR)) {
