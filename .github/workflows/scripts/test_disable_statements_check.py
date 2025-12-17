@@ -24,10 +24,10 @@ class TestDisableStatementsChecker(unittest.TestCase):
         console.log('test');
         // eslint-disable-next-line no-unused-vars
         """
-        violations = self.checker.check_eslint_disable(content, 'test.js')
+        violations = self.checker.check_eslint_disable(content, "test.js")
         self.assertEqual(len(violations), 2)
-        self.assertIn('test.js:2', violations[0])
-        self.assertIn('test.js:4', violations[1])
+        self.assertIn("test.js:2", violations[0])
+        self.assertIn("test.js:4", violations[1])
 
     def test_istanbul_ignore_detection(self) -> None:
         """Test detection of istanbul ignore comments."""
@@ -36,7 +36,7 @@ class TestDisableStatementsChecker(unittest.TestCase):
         function uncovered() {}
         /* istanbul ignore if */
         """
-        violations = self.checker.check_istanbul_ignore(content, 'test.js')
+        violations = self.checker.check_istanbul_ignore(content, "test.js")
         self.assertEqual(len(violations), 2)
 
     def test_it_skip_detection(self) -> None:
@@ -45,14 +45,14 @@ class TestDisableStatementsChecker(unittest.TestCase):
         it('should work', () => {});
         it.skip('disabled test', () => {});
         """
-        violations = self.checker.check_it_skip(content, 'test.spec.js')
+        violations = self.checker.check_it_skip(content, "test.spec.js")
         self.assertEqual(len(violations), 1)
-        self.assertIn('test.spec.js:3', violations[0])
+        self.assertIn("test.spec.js:3", violations[0])
 
     def test_case_insensitive_detection(self) -> None:
         """Test case-insensitive pattern matching."""
         content = "// ESLINT" + "-DISABLE no-console"
-        violations = self.checker.check_eslint_disable(content, 'test.js')
+        violations = self.checker.check_eslint_disable(content, "test.js")
         self.assertEqual(len(violations), 1)
 
     def test_multi_line_istanbul_comments(self) -> None:
@@ -64,50 +64,56 @@ class TestDisableStatementsChecker(unittest.TestCase):
         */
         function test() {{}}
         """
-        violations = self.checker.check_istanbul_ignore(content, 'test.js')
+        violations = self.checker.check_istanbul_ignore(content, "test.js")
         self.assertEqual(len(violations), 1)
 
     def test_no_violations(self) -> None:
         """Test files with no disable statements."""
         content = "console.log('clean code');"
-        violations = self.checker.check_eslint_disable(content, 'test.js')
+        violations = self.checker.check_eslint_disable(content, "test.js")
         self.assertEqual(len(violations), 0)
 
     def test_check_file_success(self) -> None:
         """Test successful file checking."""
         temp_file = None
         try:
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.js', delete=False) as f:
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".js", delete=False
+            ) as f:
                 temp_file = f.name
                 f.write('// eslint-disable no-console\nconsole.log("test");')
-            
+
             violations = self.checker.check_file(temp_file)
             self.assertEqual(len(violations), 1)
-            self.assertIn('eslint-disable', violations[0])
+            self.assertIn("eslint-disable", violations[0])
         finally:
             if temp_file and os.path.exists(temp_file):
                 os.unlink(temp_file)
 
     def test_check_file_error(self) -> None:
         """Test file reading error handling."""
-        violations = self.checker.check_file('nonexistent_file.js')
+        violations = self.checker.check_file("nonexistent_file.js")
         self.assertEqual(len(violations), 1)
-        self.assertIn('Error reading file', violations[0])
+        self.assertIn("Error reading file", violations[0])
 
     def test_check_multiple_files(self) -> None:
         """Test checking multiple files."""
         temp_files = []
         try:
             # Create first temp file
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.js', delete=False) as f:
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".js", delete=False
+            ) as f:
                 temp_files.append(f.name)
-                f.write('// eslint-disable no-console')
-            
+                f.write("// eslint-disable no-console")
+
             # Create second temp file
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.js', delete=False) as f:
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".js", delete=False
+            ) as f:
                 temp_files.append(f.name)
                 f.write('it.skip("test", () => {});')
-            
+
             violations = self.checker.check_files(temp_files)
             self.assertEqual(len(violations), 2)
         finally:
@@ -121,11 +127,11 @@ class TestDisableStatementsChecker(unittest.TestCase):
         temp_file = None
         try:
             temp_dir = tempfile.mkdtemp()
-            temp_file = os.path.join(temp_dir, 'test.js')
-            
-            with open(temp_file, 'w') as f:
-                f.write('// eslint-disable no-console')
-            
+            temp_file = os.path.join(temp_dir, "test.js")
+
+            with open(temp_file, "w") as f:
+                f.write("// eslint-disable no-console")
+
             violations = self.checker.check_directory(temp_dir)
             self.assertEqual(len(violations), 1)
         finally:
@@ -136,17 +142,27 @@ class TestDisableStatementsChecker(unittest.TestCase):
 
     def test_auto_discovery_mechanism(self) -> None:
         """Test that check methods are auto-discovered."""
-        check_methods = [name for name, method in inspect.getmembers(self.checker, predicate=inspect.ismethod)
-                        if name.startswith('check_') and name not in ('check_file', 'check_files', 'check_directory')]
-        
-        expected_methods = {'check_eslint_disable', 'check_istanbul_ignore', 'check_it_skip'}
+        check_methods = [
+            name
+            for name, method in inspect.getmembers(
+                self.checker, predicate=inspect.ismethod
+            )
+            if name.startswith("check_")
+            and name not in ("check_file", "check_files", "check_directory")
+        ]
+
+        expected_methods = {
+            "check_eslint_disable",
+            "check_istanbul_ignore",
+            "check_it_skip",
+        }
         for method in expected_methods:
             self.assertIn(method, check_methods)
-        
+
         # Verify orchestration methods are NOT in the auto-discovered list
-        self.assertNotIn('check_file', check_methods)
-        self.assertNotIn('check_files', check_methods)
-        self.assertNotIn('check_directory', check_methods)
+        self.assertNotIn("check_file", check_methods)
+        self.assertNotIn("check_files", check_methods)
+        self.assertNotIn("check_directory", check_methods)
 
     def test_line_number_accuracy(self) -> None:
         """Test accurate line number reporting."""
@@ -154,9 +170,9 @@ class TestDisableStatementsChecker(unittest.TestCase):
 line 2
 // eslint-disable no-console
 line 4"""
-        violations = self.checker.check_eslint_disable(content, 'test.js')
+        violations = self.checker.check_eslint_disable(content, "test.js")
         self.assertEqual(len(violations), 1)
-        self.assertIn('test.js:3', violations[0])
+        self.assertIn("test.js:3", violations[0])
 
     def test_multiple_violations_same_file(self) -> None:
         """Test multiple violations in the same file."""
@@ -172,7 +188,9 @@ line 4"""
         """Helper method to test file content directly."""
         temp_file = None
         try:
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.js', delete=False) as f:
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".js", delete=False
+            ) as f:
                 temp_file = f.name
                 f.write(content)
             return self.checker.check_file(temp_file)
@@ -182,35 +200,43 @@ line 4"""
 
     def test_self_referential_skip(self) -> None:
         """Test that test_disable_statements_check.py is skipped."""
-        violations = self.checker.check_file('test_disable_statements_check.py')
+        violations = self.checker.check_file(
+            "test_disable_statements_check.py"
+        )
         self.assertEqual(len(violations), 0)
 
     def test_empty_file(self) -> None:
         """Test handling of empty files."""
-        violations = self.checker.check_eslint_disable('', 'empty.js')
+        violations = self.checker.check_eslint_disable("", "empty.js")
         self.assertEqual(len(violations), 0)
 
     def test_whitespace_variations(self) -> None:
         """Test detection with various whitespace patterns."""
         content = "//eslint-disable\n//  eslint-disable  \n"
-        violations = self.checker.check_eslint_disable(content, 'test.js')
+        violations = self.checker.check_eslint_disable(content, "test.js")
         self.assertEqual(len(violations), 2)
 
     def test_main_with_files_argument(self) -> None:
         """Test main() with --files argument."""
         import sys
         from unittest.mock import patch
+
         temp_file = None
         try:
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.js', delete=False) as f:
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".js", delete=False
+            ) as f:
                 temp_file = f.name
-                f.write('// eslint-disable no-console')
-            
-            with patch.object(sys, 'argv', [
-                'disable_statements_check.py', '--files', temp_file
-            ]):
-                with patch('sys.exit') as mock_exit:
+                f.write("// eslint-disable no-console")
+
+            with patch.object(
+                sys,
+                "argv",
+                ["disable_statements_check.py", "--files", temp_file],
+            ):
+                with patch("sys.exit") as mock_exit:
                     from disable_statements_check import main
+
                     main()
                     mock_exit.assert_called_with(1)
         finally:
@@ -221,19 +247,23 @@ line 4"""
         """Test main() with --directory argument."""
         import sys
         from unittest.mock import patch
+
         temp_dir = None
         temp_file = None
         try:
             temp_dir = tempfile.mkdtemp()
-            temp_file = os.path.join(temp_dir, 'test.js')
-            with open(temp_file, 'w') as f:
+            temp_file = os.path.join(temp_dir, "test.js")
+            with open(temp_file, "w") as f:
                 f.write('it.skip("test", () => {});')
-            
-            with patch.object(sys, 'argv', [
-                'disable_statements_check.py', '--directory', temp_dir
-            ]):
-                with patch('sys.exit') as mock_exit:
+
+            with patch.object(
+                sys,
+                "argv",
+                ["disable_statements_check.py", "--directory", temp_dir],
+            ):
+                with patch("sys.exit") as mock_exit:
                     from disable_statements_check import main
+
                     main()
                     mock_exit.assert_called_with(1)
         finally:
@@ -246,16 +276,22 @@ line 4"""
         """Test main() exits 0 when no violations found."""
         import sys
         from unittest.mock import patch
+
         temp_file = None
         try:
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.js', delete=False) as f:
+            with tempfile.NamedTemporaryFile(
+                mode="w", suffix=".js", delete=False
+            ) as f:
                 temp_file = f.name
                 f.write('console.log("clean code");')
-            
-            with patch.object(sys, 'argv', [
-                'disable_statements_check.py', '--files', temp_file
-            ]):
+
+            with patch.object(
+                sys,
+                "argv",
+                ["disable_statements_check.py", "--files", temp_file],
+            ):
                 from disable_statements_check import main
+
                 # Should return normally (no sys.exit call) when no violations
                 main()  # Will raise SystemExit if exit code != 0
         finally:
@@ -263,5 +299,5 @@ line 4"""
                 os.unlink(temp_file)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main(verbosity=2)
