@@ -133,24 +133,23 @@ def collect_files(
     directories: list[str] | None,
     extensions: set[str],
     ignore_patterns: list[str],
-    *,
     verbose: bool = False,
 ) -> list[Path]:
-    # pylint: disable=too-many-locals, too-many-branches
     """Collect files from paths and directories matching the given extensions.
 
     Args:
-        files: Optional list of specific file paths to scan.
-        directories: Optional list of directories to
-            recursively scan.
-        extensions: Set of file extensions to include.
-        ignore_patterns: List of glob patterns or directory names
+        files (list[str] | None): Optional list of specific file paths to scan.
+        directories (list[str] | None): Optional list of directories
+            to recursively scan.
+        extensions (set[str]): Set of file extensions to include.
+        ignore_patterns (list[str]): List of glob patterns or directory names
             to ignore.
-        verbose: Enable verbose output.
+        verbose (bool, optional): Enable verbose output. Defaults to False.
 
     Returns:
         list[Path]: A list of collected file paths.
     """
+    # pylint: disable=too-many-locals, too-many-branches
     collected: list[Path] = []
 
     if files:
@@ -254,10 +253,9 @@ def flatten_json(obj: object, prefix: str = "") -> set[str]:
 
 def load_locales(
     locales_dir: str,
-    *,
     verbose: bool = False,
     allow_missing: bool = False,
-) -> dict[str, set[str]]:
+) -> dict:
     """Load all locale translation keys from the specified directory.
 
     Args:
@@ -266,8 +264,7 @@ def load_locales(
         allow_missing: If True, allow no locale files to exist.
 
     Returns:
-        dict[str, set[str]]: A mapping of locale names to sets of
-            flattened translation keys.
+        dict: Mapping of locale name -> set of flattened translation keys.
 
     Raises:
         FileNotFoundError: If the locales directory is missing, no locale files
@@ -307,19 +304,17 @@ def load_locales(
 
 
 def compare_keys(
-    used_keys: set[str],
-    locales: dict[str, set[str]],
-) -> dict[str, list[str]]:
+    used_keys: set,
+    locales: dict,
+) -> dict:
     """Compare used translation keys against locale translation keys.
 
     Args:
-        used_keys (set[str]): Set of translation keys found in source code.
-        locales (dict[str, set[str]]): Mapping of locale names to available
-            translation keys.
+        used_keys: Set of translation keys found in source code.
+        locales: Mapping of locale names to available translation keys.
 
     Returns:
-        dict[str, list[str]]: Mapping of translation keys to the locales
-        in which they are missing.
+        dict: Mapping of translation keys to locales where they are missing.
     """
     missing: dict[str, list[str]] = {}
     for key in sorted(used_keys):
@@ -332,8 +327,7 @@ def compare_keys(
 
 
 def print_report(
-    missing: dict[str, list[str]],
-    *,
+    missing: dict,
     verbose: bool = False,
 ) -> None:
     """Print a report of missing translation keys.
