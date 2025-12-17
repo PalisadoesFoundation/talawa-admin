@@ -9,7 +9,6 @@ import {
 } from 'GraphQl/Queries/NotificationQueries';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { toast } from 'react-toastify';
-import i18nForTest from '../../utils/i18nForTest';
 
 vi.mock('utils/useLocalstorage', () => ({
   __esModule: true,
@@ -315,7 +314,7 @@ describe('Notification Component', () => {
 
     await waitFor(() => {
       expect(toastErrorSpy).toHaveBeenCalledWith(
-        i18nForTest.t('markAsReadError'),
+        expect.stringContaining('Error marking notifications as read'),
       );
     });
 
