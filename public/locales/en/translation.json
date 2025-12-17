@@ -1105,6 +1105,7 @@
     "addComment": "Add Comment",
     "viewPost": "View Post",
     "postDeletedSuccess": "Post deleted successfully.",
+    "postUpdatedSuccess": "Post updated successfully.",
     "postPinnedSuccess": "Post pinned successfully.",
     "postUnpinnedSuccess": "Post unpinned successfully.",
     "editPost": "Edit Post",
@@ -1117,7 +1118,8 @@
     "noMoreComments": "No more comments",
     "postedOn": "Posted on {{date}}",
     "emptyCommentError": "Please enter a comment before submitting.",
-    "unexpectedError": "An unexpected error occurred. Please try again."
+    "unexpectedError": "An unexpected error occurred. Please try again.",
+    "moreOptions": "More Options"
   },
   "home": {
     "posts": "Posts",

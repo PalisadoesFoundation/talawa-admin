@@ -1063,6 +1063,7 @@
     "comments": "Commentaires",
     "addComment": "Ajouter un commentaire",
     "postDeletedSuccess": "Message supprimé avec succès.",
+    "postUpdatedSuccess": "Publication mise à jour avec succès.",
     "postPinnedSuccess": "Message épinglé avec succès.",
     "postUnpinnedSuccess": "Message désépinglé avec succès.",
     "viewPost": "Voir le message",
@@ -1076,7 +1077,8 @@
     "noMoreComments": "Plus de commentaires à charger",
     "postedOn": "Publié le {{date}}",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
-    "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer."
+    "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer.",
+    "moreOptions": "Plus d’options"
   },
   "home": {
     "posts": "Des postes",

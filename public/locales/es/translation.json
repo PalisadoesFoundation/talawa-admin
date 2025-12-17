@@ -1062,6 +1062,7 @@
     "likes": "Gustos",
     "comments": "Comentarios",
     "postDeletedSuccess": "Publicación eliminada con éxito.",
+    "postUpdatedSuccess": "Publicación actualizada correctamente.",
     "postPinnedSuccess": "Publicación fijada con éxito.",
     "postUnpinnedSuccess": "Publicación desfijada con éxito.",
     "addComment": "Agregar comentario",
@@ -1076,7 +1077,8 @@
     "noMoreComments": "No hay más comentarios",
     "postedOn": "Publicado el {{date}}",
     "emptyCommentError": "Por favor ingrese un comentario antes de enviarlo.",
-    "unexpectedError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo."
+    "unexpectedError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo.",
+    "moreOptions": "Más opciones"
   },
   "home": {
     "posts": "Publicaciones",
