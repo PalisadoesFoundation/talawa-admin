@@ -5,6 +5,7 @@
 import React, { useRef, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Button } from '@mui/material';
+import styles from '../../style/app-fixed.module.css';
 import { FaUpload, FaExclamationTriangle, FaCheck } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import {
@@ -262,13 +263,31 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
             </div>
           )}
 
-          <div style={{ marginTop: 32 }}>
+          <div style={{
+            marginTop: 32,
+            display: 'flex',
+            gap: 12,
+          }}>
+
+            <Button
+              variant="outlined"
+              color="secondary"
+              className={styles.removeButton}
+              onClick={handleClose}
+              disabled={isInstalling}
+              style={{
+                flex: 1,
+              }}
+              data-testid="cancel-upload-plugin-button"
+            >
+              Cancel
+            </Button>
             <Button
               variant="contained"
               color="primary"
               onClick={handleAddPlugin}
               disabled={!selectedFile || !manifest || isInstalling}
-              style={{ width: '100%' }}
+              style={{ flex: 1 }}
               data-testid="upload-plugin-button"
             >
               {isInstalling ? 'Uploading...' : 'Upload Plugin'}
