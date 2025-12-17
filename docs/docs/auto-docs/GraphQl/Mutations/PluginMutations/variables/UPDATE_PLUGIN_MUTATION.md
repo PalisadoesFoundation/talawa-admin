@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_PLUGIN\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/PluginMutations.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/PluginMutations.ts#L52)
+Defined in: src/GraphQl/Mutations/PluginMutations.ts:52
 
 GraphQL mutation to update a plugin.
 

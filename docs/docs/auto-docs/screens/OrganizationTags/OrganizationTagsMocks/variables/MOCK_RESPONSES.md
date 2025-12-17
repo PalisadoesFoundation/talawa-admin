@@ -6,7 +6,7 @@
 
 > `const` **MOCK\_RESPONSES**: `object`
 
-Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L107)
+Defined in: src/screens/OrganizationTags/OrganizationTagsMocks.ts:107
 
 ## Type Declaration
 

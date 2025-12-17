@@ -16,7 +16,7 @@ import { toast } from 'react-toastify';
 import type { InterfaceDeleteVolunteerModal } from './VolunteerDeleteModal';
 import VolunteerDeleteModal from './VolunteerDeleteModal';
 import userEvent from '@testing-library/user-event';
-import { vi } from 'vitest';
+import { vi, type Mock } from 'vitest';
 import { DELETE_VOLUNTEER_FOR_INSTANCE } from 'GraphQl/Mutations/EventVolunteerMutation';
 
 /**
@@ -99,8 +99,8 @@ const itemProps: InterfaceDeleteVolunteerModal[] = [
 ];
 
 let recurringItemProps: InterfaceDeleteVolunteerModal;
-let recurringItemPropsHide: ReturnType<typeof vi.fn>;
-let recurringItemPropsRefetch: ReturnType<typeof vi.fn>;
+let recurringItemPropsHide: Mock<() => void>;
+let recurringItemPropsRefetch: Mock<() => void>;
 
 beforeEach(() => {
   vi.clearAllMocks();

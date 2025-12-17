@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
-import JSZip from 'jszip';
+
 import {
   validateAdminPluginZip,
   installAdminPluginFromZip,
@@ -14,18 +14,30 @@ import {
 } from '../plugin/services/AdminPluginFileService';
 // import { toast } from 'react-toastify';
 
-// Mock dependencies
-vi.mock('jszip');
+// Create hoisted mock class for JSZip that Vitest 4.0 can use as a constructor
+const { MockJSZip, mockLoadAsync, mockFile, mockFiles } = vi.hoisted(() => {
+  const mockLoadAsync = vi.fn();
+  const mockFile = vi.fn();
+  const mockFiles: Record<string, unknown> = {};
+
+  class MockJSZip {
+    loadAsync = mockLoadAsync;
+    file = mockFile;
+    files = mockFiles;
+  }
+
+  return { MockJSZip, mockLoadAsync, mockFile, mockFiles };
+});
+
+vi.mock('jszip', () => ({
+  default: MockJSZip,
+}));
 vi.mock('react-toastify');
 vi.mock('../plugin/services/AdminPluginFileService');
 vi.mock('../GraphQl/Mutations/PluginMutations', () => ({
   UPLOAD_PLUGIN_ZIP_MUTATION: 'UPLOAD_PLUGIN_ZIP_MUTATION',
   CREATE_PLUGIN_MUTATION: 'CREATE_PLUGIN_MUTATION',
 }));
-
-const mockJSZip = vi.mocked(JSZip);
-// const mockToast = vi.mocked(toast);
-const mockAdminPluginFileService = vi.mocked(adminPluginFileService);
 
 // Type definitions for mocks
 interface IMockZipFile {
@@ -41,28 +53,24 @@ interface IMockApolloClient {
   mutate: ReturnType<typeof vi.fn>;
 }
 
+// Create mocked references for typed access
+const mockAdminPluginFileService = vi.mocked(adminPluginFileService);
+
 describe('adminPluginInstaller', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
-  let mockZip: {
-    loadAsync: ReturnType<typeof vi.fn>;
-    file: ReturnType<typeof vi.fn>;
-    files: Record<string, unknown>;
-  };
   let mockApolloClient: IMockApolloClient;
 
   beforeEach(() => {
     vi.clearAllMocks();
 
-    // Setup mock JSZip with proper structure
-    mockZip = {
-      loadAsync: vi.fn(),
-      file: vi.fn(),
-      files: {},
-    };
-    mockJSZip.mockImplementation(() => mockZip as unknown as JSZip);
+    // Reset hoisted mock functions
+    mockLoadAsync.mockReset();
+    mockFile.mockReset();
+    // Clear mockFiles object
+    Object.keys(mockFiles).forEach((key) => delete mockFiles[key]);
 
     // Setup mock Apollo client
     mockApolloClient = {
@@ -122,7 +130,7 @@ describe('adminPluginInstaller', () => {
         'api/api.js': 'console.log("API");',
       });
 
-      mockZip.loadAsync.mockResolvedValue(mockZipContent);
+      mockLoadAsync.mockResolvedValue(mockZipContent);
 
       const result = await validateAdminPluginZip(mockFile);
 
@@ -137,7 +145,7 @@ describe('adminPluginInstaller', () => {
 
     it('should throw when admin manifest is missing required fields', async () => {
       const mockFile = new File([''], 'test.zip');
-      mockZip.loadAsync.mockResolvedValue(
+      mockLoadAsync.mockResolvedValue(
         createMockZipContent({
           'admin/manifest.json': JSON.stringify({ name: 'Test' }),
         }),
@@ -153,7 +161,7 @@ describe('adminPluginInstaller', () => {
     it('should throw if admin folder exists but admin/manifest.json is missing', async () => {
       const mockFile = new File([''], 'test.zip');
 
-      mockZip.loadAsync.mockResolvedValue(
+      mockLoadAsync.mockResolvedValue(
         createMockZipContent({
           'admin/index.js': 'console.log("no manifest")',
         }),
@@ -168,7 +176,7 @@ describe('adminPluginInstaller', () => {
     it('should throw if api folder exists but api/manifest.json is missing', async () => {
       const mockFile = new File([''], 'test.zip');
 
-      mockZip.loadAsync.mockResolvedValue(
+      mockLoadAsync.mockResolvedValue(
         createMockZipContent({
           'api/api.js': 'console.log("no manifest")',
         }),
@@ -181,7 +189,7 @@ describe('adminPluginInstaller', () => {
 
     it('should throw when api manifest is missing required fields', async () => {
       const mockFile = new File([''], 'test.zip');
-      mockZip.loadAsync.mockResolvedValue(
+      mockLoadAsync.mockResolvedValue(
         createMockZipContent({
           'api/manifest.json': JSON.stringify({ name: 'Test API' }),
         }),
@@ -196,7 +204,7 @@ describe('adminPluginInstaller', () => {
 
     it('should return flags false when no admin or API folder exists', async () => {
       const mockFile = new File([''], 'test.zip');
-      mockZip.loadAsync.mockResolvedValue(
+      mockLoadAsync.mockResolvedValue(
         createMockZipContent({
           'other/file.txt': 'some content',
         }),
@@ -230,7 +238,7 @@ describe('adminPluginInstaller', () => {
         pluginId: 'TestPlugin',
       };
 
-      mockZip.loadAsync.mockResolvedValue(
+      mockLoadAsync.mockResolvedValue(
         createMockZipContent({
           'admin/manifest.json': JSON.stringify(mockAdminManifest),
           'admin/index.js': 'console.log("Hello")',
@@ -278,7 +286,7 @@ describe('adminPluginInstaller', () => {
         pluginId: 'TestPlugin',
       };
 
-      mockZip.loadAsync.mockResolvedValue(
+      mockLoadAsync.mockResolvedValue(
         createMockZipContent({
           'admin/manifest.json': JSON.stringify(manifest),
           'admin/index.js': 'console.log("Hello")',
@@ -310,7 +318,7 @@ describe('adminPluginInstaller', () => {
         pluginId: 'TestPlugin',
       };
 
-      mockZip.loadAsync.mockResolvedValue(
+      mockLoadAsync.mockResolvedValue(
         createMockZipContent({
           'admin/manifest.json': JSON.stringify(mockManifest),
         }),
@@ -345,7 +353,7 @@ describe('adminPluginInstaller', () => {
         pluginId: 'TestPlugin',
       };
 
-      mockZip.loadAsync.mockResolvedValue(
+      mockLoadAsync.mockResolvedValue(
         createMockZipContent({
           'admin/manifest.json': JSON.stringify(mockManifest),
           'admin/index.js': 'console.log("Hello")',
@@ -385,7 +393,7 @@ describe('adminPluginInstaller', () => {
       };
 
       // Only API folder exists
-      mockZip.loadAsync.mockResolvedValue(
+      mockLoadAsync.mockResolvedValue(
         createMockZipContent({
           'api/manifest.json': JSON.stringify(mockApiManifest),
           'api/api.js': 'console.log("api")',
@@ -415,7 +423,7 @@ describe('adminPluginInstaller', () => {
     });
 
     it('should fail installation when zip has neither admin nor api folder', async () => {
-      mockZip.loadAsync.mockResolvedValue(
+      mockLoadAsync.mockResolvedValue(
         createMockZipContent({
           'random.txt': 'some content',
         }),
@@ -439,7 +447,7 @@ describe('adminPluginInstaller', () => {
         pluginId: 'APITest',
       };
 
-      mockZip.loadAsync.mockResolvedValue(
+      mockLoadAsync.mockResolvedValue(
         createMockZipContent({
           'api/manifest.json': JSON.stringify(mockApiManifest),
           'api/api.js': "console.log('api');",
@@ -653,7 +661,7 @@ describe('adminPluginInstaller', () => {
         pluginId: 'TestPlugin',
       };
 
-      mockZip.loadAsync.mockResolvedValue(
+      mockLoadAsync.mockResolvedValue(
         createMockZipContent({
           'admin/manifest.json': JSON.stringify(mockAdminManifest),
           'admin/index.js': 'console.log("Hello");',
@@ -700,7 +708,7 @@ describe('adminPluginInstaller', () => {
         pluginId: 'TestPlugin',
       };
 
-      mockZip.loadAsync.mockResolvedValue(
+      mockLoadAsync.mockResolvedValue(
         createMockZipContent({
           'admin/manifest.json': JSON.stringify(manifest),
           'admin/index.js': 'console.log("Hello");',
@@ -780,7 +788,7 @@ describe('adminPluginInstaller', () => {
         pluginId: 'TestPlugin',
       };
 
-      mockZip.loadAsync.mockResolvedValue(
+      mockLoadAsync.mockResolvedValue(
         createMockZipContent({
           'admin/manifest.json': JSON.stringify(mockManifest),
           'admin/index.js': 'console.log("Hello");',
@@ -807,7 +815,7 @@ describe('adminPluginInstaller', () => {
         pluginId: 'API123',
       };
 
-      mockZip.loadAsync.mockResolvedValue(
+      mockLoadAsync.mockResolvedValue(
         createMockZipContent({
           'api/manifest.json': JSON.stringify(mockApiManifest),
           'api/api.js': 'console.log("api")',
@@ -842,7 +850,7 @@ describe('adminPluginInstaller', () => {
         pluginId: 'ABC',
       };
 
-      mockZip.loadAsync.mockResolvedValue(
+      mockLoadAsync.mockResolvedValue(
         createMockZipContent({
           'admin/manifest.json': JSON.stringify(mockAdminManifest),
           'admin/index.js': 'console.log("Hello")',
@@ -878,7 +886,7 @@ describe('adminPluginInstaller', () => {
         pluginId: 'XYZ123',
       };
 
-      mockZip.loadAsync.mockResolvedValue(
+      mockLoadAsync.mockResolvedValue(
         createMockZipContent({
           'admin/manifest.json': JSON.stringify(mockAdminManifest),
           'api/manifest.json': JSON.stringify(mockApiManifest),

@@ -147,13 +147,15 @@ describe('CSV Export Functions', () => {
       [123, 'String', 0],
     ];
 
-    // Capture the CSV content by mocking Blob
+    // Capture the CSV content by mocking Blob as a class
     let capturedCsvContent = '';
-    const mockBlob = new Blob([''], { type: 'text/csv' });
-    global.Blob = vi.fn().mockImplementation((content) => {
-      capturedCsvContent = content[0];
-      return mockBlob;
-    });
+    const OriginalBlob = global.Blob;
+    class MockBlob {
+      constructor(content: BlobPart[]) {
+        capturedCsvContent = content[0] as string;
+      }
+    }
+    global.Blob = MockBlob as unknown as typeof Blob;
 
     // Test the actual production behavior by passing the raw data
     // The production code will convert boolean using String(cell)
@@ -168,6 +170,9 @@ describe('CSV Export Functions', () => {
     expect(capturedCsvContent).toContain('false');
     expect(capturedCsvContent).toContain('Header1,Header2,Header3');
     expect(capturedCsvContent).toContain('123,String,0');
+
+    // Restore original Blob
+    global.Blob = OriginalBlob;
   });
 
   test('handles data with special characters and newlines', () => {
@@ -176,13 +181,15 @@ describe('CSV Export Functions', () => {
       ['Value with, comma', 'Value with "quotes" and\nnewline'],
     ];
 
-    // Capture the CSV content by mocking Blob
+    // Capture the CSV content by mocking Blob as a class
     let capturedCsvContent = '';
-    const mockBlob = new Blob([''], { type: 'text/csv' });
-    global.Blob = vi.fn().mockImplementation((content) => {
-      capturedCsvContent = content[0];
-      return mockBlob;
-    });
+    const OriginalBlob = global.Blob;
+    class MockBlob {
+      constructor(content: BlobPart[]) {
+        capturedCsvContent = content[0] as string;
+      }
+    }
+    global.Blob = MockBlob as unknown as typeof Blob;
 
     exportToCSV(data, 'test.csv');
 
@@ -197,6 +204,9 @@ describe('CSV Export Functions', () => {
     expect(capturedCsvContent).toContain(
       '"Value with, comma","Value with ""quotes"" and\nnewline"',
     );
+
+    // Restore original Blob
+    global.Blob = OriginalBlob;
   });
 
   test('throws error if data is null', () => {

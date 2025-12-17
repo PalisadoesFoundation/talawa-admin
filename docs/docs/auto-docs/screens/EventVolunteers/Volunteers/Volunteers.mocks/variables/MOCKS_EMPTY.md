@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_EMPTY**: `object`[]
 
-Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:394](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts#L394)
+Defined in: src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:394
 
 ## Type Declaration
 

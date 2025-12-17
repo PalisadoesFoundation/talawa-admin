@@ -6,7 +6,7 @@
 
 > **TagEdge** = `object`
 
-Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L9)
+Defined in: src/screens/OrganizationTags/OrganizationTagsMocks.ts:9
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:9](https://gi
 
 > **cursor**: `string`
 
-Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L18)
+Defined in: src/screens/OrganizationTags/OrganizationTagsMocks.ts:18
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:18](https://g
 
 > **node**: `object`
 
-Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L10)
+Defined in: src/screens/OrganizationTags/OrganizationTagsMocks.ts:10
 
 #### \_id
 

@@ -6,7 +6,7 @@
 
 > **updateTargets**(`orgId`): (`dispatch`) => `void`
 
-Defined in: [src/state/action-creators/index.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/action-creators/index.ts#L3)
+Defined in: src/state/action-creators/index.ts:3
 
 ## Parameters
 

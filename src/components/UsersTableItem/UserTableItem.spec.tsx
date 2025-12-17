@@ -14,7 +14,15 @@ const link2 = new StaticMockLink(MOCKS2, true);
 const link3 = new StaticMockLink(MOCKS_UPDATE, true);
 
 import userEvent from '@testing-library/user-event';
-import { vi, beforeEach, afterEach, describe, test, expect } from 'vitest';
+import {
+  vi,
+  beforeEach,
+  afterEach,
+  describe,
+  test,
+  expect,
+  type Mock,
+} from 'vitest';
 import type * as RouterTypes from 'react-router';
 
 async function wait(ms = 100): Promise<void> {
@@ -41,7 +49,7 @@ Object.defineProperty(window, 'location', {
   writable: true,
 });
 
-let mockNavigatePush: ReturnType<typeof vi.fn>;
+let mockNavigatePush: Mock<() => void>;
 
 vi.mock('react-router', async () => {
   const actual = (await vi.importActual('react-router')) as typeof RouterTypes;
@@ -60,7 +68,7 @@ afterEach(() => {
 });
 
 describe('Testing User Table Item', () => {
-  let resetAndRefetchMock: ReturnType<typeof vi.fn>;
+  let resetAndRefetchMock: Mock<() => void>;
 
   beforeEach(() => {
     resetAndRefetchMock = vi.fn();

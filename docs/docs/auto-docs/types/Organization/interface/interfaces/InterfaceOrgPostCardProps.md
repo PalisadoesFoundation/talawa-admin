@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrgPostCardProps
 
-Defined in: [src/types/Organization/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L12)
+Defined in: src/types/Organization/interface.ts:12
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Organization/interface.ts:12](https://github.com/Palisado
 
 > **id**: `string`
 
-Defined in: [src/types/Organization/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L14)
+Defined in: src/types/Organization/interface.ts:14
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Organization/interface.ts:14](https://github.com/Palisado
 
 > **pinned**: `boolean`
 
-Defined in: [src/types/Organization/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L20)
+Defined in: src/types/Organization/interface.ts:20
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Organization/interface.ts:20](https://github.com/Palisado
 
 > **postAuthor**: `string`
 
-Defined in: [src/types/Organization/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L17)
+Defined in: src/types/Organization/interface.ts:17
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Organization/interface.ts:17](https://github.com/Palisado
 
 > **postID**: `string`
 
-Defined in: [src/types/Organization/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L13)
+Defined in: src/types/Organization/interface.ts:13
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Organization/interface.ts:13](https://github.com/Palisado
 
 > **postInfo**: `string`
 
-Defined in: [src/types/Organization/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L16)
+Defined in: src/types/Organization/interface.ts:16
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Organization/interface.ts:16](https://github.com/Palisado
 
 > **postPhoto**: `string`
 
-Defined in: [src/types/Organization/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L18)
+Defined in: src/types/Organization/interface.ts:18
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Organization/interface.ts:18](https://github.com/Palisado
 
 > **postTitle**: `string`
 
-Defined in: [src/types/Organization/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L15)
+Defined in: src/types/Organization/interface.ts:15
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/types/Organization/interface.ts:15](https://github.com/Palisado
 
 > **postVideo**: `string`
 
-Defined in: [src/types/Organization/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L19)
+Defined in: src/types/Organization/interface.ts:19

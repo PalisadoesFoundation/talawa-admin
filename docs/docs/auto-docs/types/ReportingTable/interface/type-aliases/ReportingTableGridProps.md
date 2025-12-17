@@ -6,7 +6,7 @@
 
 > **ReportingTableGridProps** = `object`
 
-Defined in: [src/types/ReportingTable/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L54)
+Defined in: src/types/ReportingTable/interface.ts:54
 
 Props for the ReportingTableGrid component
 
@@ -20,7 +20,7 @@ Props for the ReportingTableGrid component
 
 > `optional` **columns**: [`ReportingTableColumn`](ReportingTableColumn.md)[]
 
-Defined in: [src/types/ReportingTable/interface.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L56)
+Defined in: src/types/ReportingTable/interface.ts:56
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/types/ReportingTable/interface.ts:56](https://github.com/Palisa
 
 > `optional` **rows**: readonly [`ReportingRow`](ReportingRow.md)[]
 
-Defined in: [src/types/ReportingTable/interface.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L55)
+Defined in: src/types/ReportingTable/interface.ts:55

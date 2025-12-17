@@ -488,8 +488,11 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
 
     await askAndUpdateTalawaApiUrl();
 
+    // When askForTalawaApiUrl throws, it's caught in the retry loop first
+    // and logged as 'Error checking connection:', then after MAX_RETRIES
+    // the final error is thrown and caught by the outer handler
     expect(console.error).toHaveBeenCalledWith(
-      'Error setting up Talawa API URL:',
+      'Error checking connection:',
       expect.any(Error),
     );
   });

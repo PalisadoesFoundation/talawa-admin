@@ -6,4 +6,4 @@
 
 > `const` **MOCKS3**: (\{ `request`: \{ `query`: `DocumentNode`; \}; `result`: \{ `data`: \{ `organizations`: `object`[]; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `first`: `number`; `input`: \{ `id`: `string`; \}; `name_contains`: `string`; `skip`: `number`; \}; \}; `result`: \{ `data`: \{ `organization`: `any`; \}; \}; \})[]
 
-Defined in: [src/screens/Requests/RequestsMocks.ts:429](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Requests/RequestsMocks.ts#L429)
+Defined in: src/screens/Requests/RequestsMocks.ts:429

@@ -1044,16 +1044,24 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
       },
     ];
 
-    // Capture original Date constructor before spying to avoid infinite recursion
-    const OriginalDate = Date;
-    const dateSpy = vi.spyOn(global, 'Date' as never).mockImplementation(((
-      ...args: ConstructorParameters<typeof Date>
-    ) => {
-      if (args.length > 0 && typeof args[0] === 'string') {
-        throw new Error('Date formatting error');
+    // Capture original Date constructor before mocking
+    const OriginalDate = globalThis.Date;
+
+    // Create a class-based mock that throws on string arguments
+    class MockDate extends OriginalDate {
+      constructor(...args: ConstructorParameters<typeof Date> | []) {
+        if (args.length > 0 && typeof args[0] === 'string') {
+          throw new Error('Date formatting error');
+        }
+        if (args.length === 0) {
+          super();
+        } else {
+          super(...args);
+        }
       }
-      return new OriginalDate(...args) as Date;
-    }) as never);
+    }
+
+    globalThis.Date = MockDate as typeof Date;
 
     render(
       <MockedProvider mocks={mocksWithDateError}>
@@ -1082,7 +1090,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
       { timeout: 3000 },
     );
 
-    dateSpy.mockRestore();
+    globalThis.Date = OriginalDate;
     consoleErrorSpy.mockRestore();
   });
 

@@ -1,13 +1,13 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest';
 import { sanitizeAvatars } from './sanitizeAvatar';
 
 describe('sanitizeAvatars', () => {
-  let mockCreateObjectURL: ReturnType<typeof vi.fn>;
+  let mockCreateObjectURL: Mock<(obj: Blob | MediaSource) => string>;
   let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockCreateObjectURL = vi.fn();
+    mockCreateObjectURL = vi.fn<(obj: Blob | MediaSource) => string>();
     global.URL.createObjectURL = mockCreateObjectURL;
     mockCreateObjectURL.mockReturnValue('blob:mock-url');
 

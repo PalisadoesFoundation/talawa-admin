@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, type Mock } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
@@ -31,14 +31,14 @@ vi.mock('utils/fieldTypes', () => ({
 }));
 
 describe('EditOrgCustomFieldDropDown Component', () => {
-  let mockSetCustomFieldData: ReturnType<typeof vi.fn>;
+  let mockSetCustomFieldData: Mock;
   let defaultProps: {
     customFieldData: {
       type: string;
       name: string;
       required: boolean;
     };
-    setCustomFieldData: ReturnType<typeof vi.fn>;
+    setCustomFieldData: Mock;
     variant: 'outline-success';
   };
 

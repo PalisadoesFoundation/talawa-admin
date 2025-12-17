@@ -6,7 +6,7 @@
 
 > **Organization** = `object`
 
-Defined in: [src/types/Organization/type.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L24)
+Defined in: src/types/Organization/type.ts:24
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Organization/type.ts:24](https://github.com/PalisadoesFou
 
 > **\_id**: `string`
 
-Defined in: [src/types/Organization/type.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L25)
+Defined in: src/types/Organization/type.ts:25
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Organization/type.ts:25](https://github.com/PalisadoesFou
 
 > `optional` **actionItemCategories**: [`ActionItemCategory`](../../../actionItem/type-aliases/ActionItemCategory.md)[]
 
-Defined in: [src/types/Organization/type.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L26)
+Defined in: src/types/Organization/type.ts:26
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Organization/type.ts:26](https://github.com/PalisadoesFou
 
 > `optional` **address**: [`Address`](../../../address/type-aliases/Address.md)
 
-Defined in: [src/types/Organization/type.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L27)
+Defined in: src/types/Organization/type.ts:27
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Organization/type.ts:27](https://github.com/PalisadoesFou
 
 > `optional` **admins**: [`User`](../../../User/type/type-aliases/User.md)[]
 
-Defined in: [src/types/Organization/type.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L28)
+Defined in: src/types/Organization/type.ts:28
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Organization/type.ts:28](https://github.com/PalisadoesFou
 
 > `optional` **agendaCategories**: [`AgendaCategory`](../../../Agenda/type/type-aliases/AgendaCategory.md)[]
 
-Defined in: [src/types/Organization/type.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L29)
+Defined in: src/types/Organization/type.ts:29
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Organization/type.ts:29](https://github.com/PalisadoesFou
 
 > **apiUrl**: `string`
 
-Defined in: [src/types/Organization/type.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L30)
+Defined in: src/types/Organization/type.ts:30
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Organization/type.ts:30](https://github.com/PalisadoesFou
 
 > `optional` **blockedUsers**: [`User`](../../../User/type/type-aliases/User.md)[]
 
-Defined in: [src/types/Organization/type.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L31)
+Defined in: src/types/Organization/type.ts:31
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/types/Organization/type.ts:31](https://github.com/PalisadoesFou
 
 > **createdAt**: `Date`
 
-Defined in: [src/types/Organization/type.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L32)
+Defined in: src/types/Organization/type.ts:32
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [src/types/Organization/type.ts:32](https://github.com/PalisadoesFou
 
 > `optional` **creator**: [`User`](../../../User/type/type-aliases/User.md)
 
-Defined in: [src/types/Organization/type.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L33)
+Defined in: src/types/Organization/type.ts:33
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [src/types/Organization/type.ts:33](https://github.com/PalisadoesFou
 
 > **customFields**: [`OrganizationCustomField`](OrganizationCustomField.md)[]
 
-Defined in: [src/types/Organization/type.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L34)
+Defined in: src/types/Organization/type.ts:34
 
 ***
 
@@ -94,7 +94,7 @@ Defined in: [src/types/Organization/type.ts:34](https://github.com/PalisadoesFou
 
 > **description**: `string`
 
-Defined in: [src/types/Organization/type.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L35)
+Defined in: src/types/Organization/type.ts:35
 
 ***
 
@@ -102,7 +102,7 @@ Defined in: [src/types/Organization/type.ts:35](https://github.com/PalisadoesFou
 
 > `optional` **image**: `string`
 
-Defined in: [src/types/Organization/type.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L36)
+Defined in: src/types/Organization/type.ts:36
 
 ***
 
@@ -110,7 +110,7 @@ Defined in: [src/types/Organization/type.ts:36](https://github.com/PalisadoesFou
 
 > `optional` **members**: [`User`](../../../User/type/type-aliases/User.md)[]
 
-Defined in: [src/types/Organization/type.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L37)
+Defined in: src/types/Organization/type.ts:37
 
 ***
 
@@ -118,7 +118,7 @@ Defined in: [src/types/Organization/type.ts:37](https://github.com/PalisadoesFou
 
 > `optional` **membershipRequests**: [`MembershipRequest`](../../../membership/type-aliases/MembershipRequest.md)[]
 
-Defined in: [src/types/Organization/type.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L38)
+Defined in: src/types/Organization/type.ts:38
 
 ***
 
@@ -126,7 +126,7 @@ Defined in: [src/types/Organization/type.ts:38](https://github.com/PalisadoesFou
 
 > **name**: `string`
 
-Defined in: [src/types/Organization/type.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L39)
+Defined in: src/types/Organization/type.ts:39
 
 ***
 
@@ -134,7 +134,7 @@ Defined in: [src/types/Organization/type.ts:39](https://github.com/PalisadoesFou
 
 > `optional` **pinnedPosts**: [`Post`](../../../Post/type/type-aliases/Post.md)[]
 
-Defined in: [src/types/Organization/type.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L40)
+Defined in: src/types/Organization/type.ts:40
 
 ***
 
@@ -142,7 +142,7 @@ Defined in: [src/types/Organization/type.ts:40](https://github.com/PalisadoesFou
 
 > **updatedAt**: `Date`
 
-Defined in: [src/types/Organization/type.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L41)
+Defined in: src/types/Organization/type.ts:41
 
 ***
 
@@ -150,7 +150,7 @@ Defined in: [src/types/Organization/type.ts:41](https://github.com/PalisadoesFou
 
 > **userRegistrationRequired**: `boolean`
 
-Defined in: [src/types/Organization/type.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L42)
+Defined in: src/types/Organization/type.ts:42
 
 ***
 
@@ -158,7 +158,7 @@ Defined in: [src/types/Organization/type.ts:42](https://github.com/PalisadoesFou
 
 > `optional` **venues**: [`Venue`](../../../venue/type-aliases/Venue.md)[]
 
-Defined in: [src/types/Organization/type.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L44)
+Defined in: src/types/Organization/type.ts:44
 
 ***
 
@@ -166,4 +166,4 @@ Defined in: [src/types/Organization/type.ts:44](https://github.com/PalisadoesFou
 
 > **visibleInSearch**: `boolean`
 
-Defined in: [src/types/Organization/type.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L43)
+Defined in: src/types/Organization/type.ts:43

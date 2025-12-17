@@ -6,7 +6,7 @@
 
 > `const` **USER\_TAGS\_ASSIGNED\_MEMBERS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/userTagQueries.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/userTagQueries.ts#L10)
+Defined in: src/GraphQl/Queries/userTagQueries.ts:10
 
 GraphQL query to retrieve organization members assigned a certain tag.
 

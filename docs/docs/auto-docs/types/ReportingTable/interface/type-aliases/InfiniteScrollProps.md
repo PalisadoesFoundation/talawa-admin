@@ -6,7 +6,7 @@
 
 > **InfiniteScrollProps** = `object`
 
-Defined in: [src/types/ReportingTable/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L45)
+Defined in: src/types/ReportingTable/interface.ts:45
 
 Props for the InfiniteScroll component used in ReportingTable
 
@@ -16,7 +16,7 @@ Props for the InfiniteScroll component used in ReportingTable
 
 > **dataLength**: `number`
 
-Defined in: [src/types/ReportingTable/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L46)
+Defined in: src/types/ReportingTable/interface.ts:46
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/types/ReportingTable/interface.ts:46](https://github.com/Palisa
 
 > **hasMore**: `boolean`
 
-Defined in: [src/types/ReportingTable/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L48)
+Defined in: src/types/ReportingTable/interface.ts:48
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/types/ReportingTable/interface.ts:48](https://github.com/Palisa
 
 > **next**: () => `void`
 
-Defined in: [src/types/ReportingTable/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L47)
+Defined in: src/types/ReportingTable/interface.ts:47
 
 #### Returns
 

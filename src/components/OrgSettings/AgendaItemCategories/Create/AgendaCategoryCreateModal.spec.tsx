@@ -9,7 +9,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AgendaCategoryCreateModal from './AgendaCategoryCreateModal';
-import { vi } from 'vitest';
+import { vi, type Mock } from 'vitest';
 /**
  * This file contains unit tests for the `AgendaCategoryCreateModal` component.
  *
@@ -28,9 +28,9 @@ const mockFormState = {
   description: 'Test Description',
   createdBy: 'Test User',
 };
-let mockHideCreateModal: ReturnType<typeof vi.fn>;
-let mockSetFormState: ReturnType<typeof vi.fn>;
-let mockCreateAgendaCategoryHandler: ReturnType<typeof vi.fn>;
+let mockHideCreateModal: Mock<() => void>;
+let mockSetFormState: Mock;
+let mockCreateAgendaCategoryHandler: Mock<() => Promise<void>>;
 const mockT = (key: string): string => key;
 
 describe('AgendaCategoryCreateModal', () => {

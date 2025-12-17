@@ -10,7 +10,15 @@ import { I18nextProvider } from 'react-i18next';
 import { MockedProvider } from '@apollo/client/testing';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
 import { DELETE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/AdvertisementMutations';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  beforeEach,
+  afterEach,
+  type Mock,
+} from 'vitest';
 import { client } from 'components/Advertisements/AdvertisementsMocks';
 import { AdvertisementType } from 'types/Advertisement/type';
 
@@ -20,7 +28,7 @@ const translations = JSON.parse(
   ),
 );
 
-let mockUseMutation: ReturnType<typeof vi.fn>;
+let mockUseMutation: Mock<() => unknown[]>;
 vi.mock('@apollo/client', async () => {
   const actual = await vi.importActual('@apollo/client');
   return {

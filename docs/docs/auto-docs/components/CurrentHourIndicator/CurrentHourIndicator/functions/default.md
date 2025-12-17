@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/components/CurrentHourIndicator/CurrentHourIndicator.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CurrentHourIndicator/CurrentHourIndicator.tsx#L31)
+Defined in: src/components/CurrentHourIndicator/CurrentHourIndicator.tsx:31
 
 CurrentHourIndicator Component
 

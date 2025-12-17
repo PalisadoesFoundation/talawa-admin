@@ -6,7 +6,7 @@
 
 > **makeUserTags**(`edges`, `pageInfo`): `UserTags`
 
-Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L71)
+Defined in: src/screens/OrganizationTags/OrganizationTagsMocks.ts:71
 
 ## Parameters
 

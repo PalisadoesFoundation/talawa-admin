@@ -19,7 +19,9 @@ vi.mock('@apollo/client', async () => {
   const actual = await vi.importActual('@apollo/client');
   return {
     ...actual,
-    ApolloClient: vi.fn(() => mockApolloClient),
+    ApolloClient: class MockApolloClient {
+      mutate = mockApolloClient.mutate;
+    },
   };
 });
 

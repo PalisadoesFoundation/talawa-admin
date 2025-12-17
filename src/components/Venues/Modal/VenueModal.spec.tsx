@@ -551,6 +551,7 @@ describe('VenueModal', () => {
     });
 
     afterEach(() => {
+      vi.clearAllMocks();
       // Restore console.error after each test
       consoleErrorSpy.mockRestore();
       vi.clearAllMocks();

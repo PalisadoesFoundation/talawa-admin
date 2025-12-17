@@ -8,7 +8,7 @@ import { I18nextProvider } from 'react-i18next';
 import { MockedProvider } from '@apollo/client/testing';
 import { toast } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
-import { vi, it } from 'vitest';
+import { vi, it, type Mock } from 'vitest';
 import { client, wait } from 'components/Advertisements/AdvertisementsMocks';
 import { UPDATE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
@@ -42,7 +42,7 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-let mockUseMutation: ReturnType<typeof vi.fn>;
+let mockUseMutation: Mock<() => unknown[]>;
 vi.mock('@apollo/client', async () => {
   const actual = await vi.importActual('@apollo/client');
   return {

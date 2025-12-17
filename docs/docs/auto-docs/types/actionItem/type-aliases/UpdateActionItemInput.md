@@ -6,7 +6,7 @@
 
 > **UpdateActionItemInput** = `object`
 
-Defined in: [src/types/actionItem.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L39)
+Defined in: src/types/actionItem.ts:39
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/actionItem.ts:39](https://github.com/PalisadoesFoundation
 
 > `optional` **assigneeId**: `string`
 
-Defined in: [src/types/actionItem.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L40)
+Defined in: src/types/actionItem.ts:40
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/actionItem.ts:40](https://github.com/PalisadoesFoundation
 
 > `optional` **completionDate**: `Date`
 
-Defined in: [src/types/actionItem.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L41)
+Defined in: src/types/actionItem.ts:41
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/actionItem.ts:41](https://github.com/PalisadoesFoundation
 
 > `optional` **dueDate**: `Date`
 
-Defined in: [src/types/actionItem.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L42)
+Defined in: src/types/actionItem.ts:42
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/actionItem.ts:42](https://github.com/PalisadoesFoundation
 
 > `optional` **isCompleted**: `boolean`
 
-Defined in: [src/types/actionItem.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L43)
+Defined in: src/types/actionItem.ts:43
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/actionItem.ts:43](https://github.com/PalisadoesFoundation
 
 > `optional` **postCompletionNotes**: `string`
 
-Defined in: [src/types/actionItem.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L44)
+Defined in: src/types/actionItem.ts:44
 
 ***
 
@@ -54,4 +54,4 @@ Defined in: [src/types/actionItem.ts:44](https://github.com/PalisadoesFoundation
 
 > `optional` **preCompletionNotes**: `string`
 
-Defined in: [src/types/actionItem.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L45)
+Defined in: src/types/actionItem.ts:45

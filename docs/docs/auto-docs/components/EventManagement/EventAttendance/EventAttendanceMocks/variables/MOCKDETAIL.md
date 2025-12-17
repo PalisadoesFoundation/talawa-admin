@@ -6,7 +6,7 @@
 
 > `const` **MOCKDETAIL**: `object`[]
 
-Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L34)
+Defined in: src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:34
 
 ## Type Declaration
 

@@ -6,7 +6,7 @@
 
 > **setupLocalStorageMock**(): `Storage`
 
-Defined in: [src/test-utils/localStorageMock.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/localStorageMock.ts#L54)
+Defined in: src/test-utils/localStorageMock.ts:54
 
 Setup localStorage mock for tests
 Configures window.localStorage with a mock implementation for test isolation

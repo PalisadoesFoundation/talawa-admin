@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUser
 
-Defined in: [src/types/CheckIn/interface.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L1)
+Defined in: src/types/CheckIn/interface.ts:1
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/CheckIn/interface.ts:1](https://github.com/PalisadoesFoun
 
 > **emailAddress**: `string`
 
-Defined in: [src/types/CheckIn/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L4)
+Defined in: src/types/CheckIn/interface.ts:4
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/CheckIn/interface.ts:4](https://github.com/PalisadoesFoun
 
 > **id**: `string`
 
-Defined in: [src/types/CheckIn/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L2)
+Defined in: src/types/CheckIn/interface.ts:2
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/types/CheckIn/interface.ts:2](https://github.com/PalisadoesFoun
 
 > **name**: `string`
 
-Defined in: [src/types/CheckIn/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/interface.ts#L3)
+Defined in: src/types/CheckIn/interface.ts:3

@@ -6,4 +6,4 @@
 
 > `const` **ORGANIZATION\_PINNED\_POST\_LIST\_INITIAL\_MOCK**: `MockedResponse`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:137](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L137)
+Defined in: src/screens/OrgPost/OrgPostMocks.data.ts:137

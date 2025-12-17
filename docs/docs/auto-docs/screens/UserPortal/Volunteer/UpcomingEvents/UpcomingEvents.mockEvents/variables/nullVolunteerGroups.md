@@ -6,7 +6,7 @@
 
 > `const` **nullVolunteerGroups**: `object`
 
-Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts#L111)
+Defined in: src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts:111
 
 ## Type Declaration
 

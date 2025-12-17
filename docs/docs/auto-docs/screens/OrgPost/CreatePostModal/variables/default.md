@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<`ICreatePostModalProps`\>
 
-Defined in: [src/screens/OrgPost/CreatePostModal.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/CreatePostModal.tsx#L54)
+Defined in: src/screens/OrgPost/CreatePostModal.tsx:54
 
 Modal component for creating posts within an organization.
 

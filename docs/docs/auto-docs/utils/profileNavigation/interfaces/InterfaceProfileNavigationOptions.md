@@ -4,7 +4,7 @@
 
 # Interface: InterfaceProfileNavigationOptions
 
-Defined in: [src/utils/profileNavigation.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/profileNavigation.ts#L3)
+Defined in: src/utils/profileNavigation.ts:3
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/profileNavigation.ts:3](https://github.com/PalisadoesFoun
 
 > `optional` **orgId**: `string`
 
-Defined in: [src/utils/profileNavigation.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/profileNavigation.ts#L6)
+Defined in: src/utils/profileNavigation.ts:6
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/profileNavigation.ts:6](https://github.com/PalisadoesFoun
 
 > `optional` **portal**: [`ProfilePortal`](../type-aliases/ProfilePortal.md)
 
-Defined in: [src/utils/profileNavigation.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/profileNavigation.ts#L4)
+Defined in: src/utils/profileNavigation.ts:4
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/utils/profileNavigation.ts:4](https://github.com/PalisadoesFoun
 
 > `optional` **role**: `string`
 
-Defined in: [src/utils/profileNavigation.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/profileNavigation.ts#L5)
+Defined in: src/utils/profileNavigation.ts:5

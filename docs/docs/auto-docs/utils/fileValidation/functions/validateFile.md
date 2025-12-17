@@ -6,7 +6,7 @@
 
 > **validateFile**(`file`, `maxSizeInMB`, `allowedTypes`): `IFileValidationResult`
 
-Defined in: [src/utils/fileValidation.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/fileValidation.ts#L23)
+Defined in: src/utils/fileValidation.ts:23
 
 Validates a file for size and type
 

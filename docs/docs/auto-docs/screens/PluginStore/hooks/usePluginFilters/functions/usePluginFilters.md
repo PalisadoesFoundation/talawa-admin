@@ -6,7 +6,7 @@
 
 > **usePluginFilters**(`__namedParameters`): `object`
 
-Defined in: [src/screens/PluginStore/hooks/usePluginFilters.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/PluginStore/hooks/usePluginFilters.ts#L16)
+Defined in: src/screens/PluginStore/hooks/usePluginFilters.ts:16
 
 ## Parameters
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, type Mock } from 'vitest';
 import TagNode from './TagNode';
 import type { InterfaceTagData } from '../../../utils/interfaces';
 import type { TFunction } from 'i18next';
@@ -24,7 +24,9 @@ const mockTag: InterfaceTagData = {
 };
 
 const mockCheckedTags: Set<string> = new Set<string>();
-let mockToggleTagSelection: ReturnType<typeof vi.fn>;
+let mockToggleTagSelection: Mock<
+  (tag: InterfaceTagData, isSelected: boolean) => void
+>;
 const mockT: TFunction<'translation', 'manageTag'> = ((key: string) =>
   key) as TFunction<'translation', 'manageTag'>;
 

@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_UNDEFINED\_DATA**: `object`[]
 
-Defined in: [src/screens/ManageTag/ManageTagNullFalsyMocks.ts:130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/ManageTagNullFalsyMocks.ts#L130)
+Defined in: src/screens/ManageTag/ManageTagNullFalsyMocks.ts:130
 
 ## Type Declaration
 

@@ -6,7 +6,7 @@
 
 > `const` **event2**: `object`
 
-Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts#L50)
+Defined in: src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts:50
 
 ## Type Declaration
 

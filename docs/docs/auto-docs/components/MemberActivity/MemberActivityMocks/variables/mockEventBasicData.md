@@ -6,7 +6,7 @@
 
 > `const` **mockEventBasicData**: `object`
 
-Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/MemberActivityMocks.ts#L41)
+Defined in: src/components/MemberActivity/MemberActivityMocks.ts:41
 
 ## Type Declaration
 

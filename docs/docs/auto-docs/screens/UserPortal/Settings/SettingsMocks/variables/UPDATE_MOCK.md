@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_MOCK**: `object`[]
 
-Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:127](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Settings/SettingsMocks.ts#L127)
+Defined in: src/screens/UserPortal/Settings/SettingsMocks.ts:127
 
 ## Type Declaration
 

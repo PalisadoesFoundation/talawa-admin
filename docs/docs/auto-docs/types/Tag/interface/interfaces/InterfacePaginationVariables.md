@@ -4,7 +4,7 @@
 
 # Interface: InterfacePaginationVariables
 
-Defined in: [src/types/Tag/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L35)
+Defined in: src/types/Tag/interface.ts:35
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Tag/interface.ts:35](https://github.com/PalisadoesFoundat
 
 > `optional` **after**: `string`
 
-Defined in: [src/types/Tag/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L36)
+Defined in: src/types/Tag/interface.ts:36
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/types/Tag/interface.ts:36](https://github.com/PalisadoesFoundat
 
 > `optional` **first**: `number`
 
-Defined in: [src/types/Tag/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L37)
+Defined in: src/types/Tag/interface.ts:37

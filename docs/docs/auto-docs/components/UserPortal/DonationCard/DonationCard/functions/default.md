@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/UserPortal/DonationCard/DonationCard.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/DonationCard/DonationCard.tsx#L34)
+Defined in: src/components/UserPortal/DonationCard/DonationCard.tsx:34
 
 ## Parameters
 

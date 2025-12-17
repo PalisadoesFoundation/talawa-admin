@@ -6,7 +6,7 @@
 
 > `const` **DELETE\_VOLUNTEER\_GROUP**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/EventVolunteerMutation.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventVolunteerMutation.ts#L103)
+Defined in: src/GraphQl/Mutations/EventVolunteerMutation.ts:103
 
 GraphQL mutation to delete an event volunteer group.
 

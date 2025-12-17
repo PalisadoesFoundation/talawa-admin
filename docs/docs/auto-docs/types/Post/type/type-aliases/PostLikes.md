@@ -6,7 +6,7 @@
 
 > **PostLikes** = `object`[]
 
-Defined in: [src/types/Post/type.ts:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L96)
+Defined in: src/types/Post/type.ts:96
 
 ## Type Declaration
 

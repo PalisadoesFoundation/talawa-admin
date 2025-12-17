@@ -19,13 +19,13 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AgendaItemsCreateModal from './AgendaItemsCreateModal';
 import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
-import type { MockedFunction } from 'vitest';
+import type { MockedFunction, Mock } from 'vitest';
 import { describe, test, expect, vi } from 'vitest';
 import { mockFormState1, mockAgendaItemCategories } from '../AgendaItemsMocks';
 
-let mockHideCreateModal: ReturnType<typeof vi.fn>;
-let mockSetFormState: ReturnType<typeof vi.fn>;
-let mockCreateAgendaItemHandler: ReturnType<typeof vi.fn>;
+let mockHideCreateModal: Mock<() => void>;
+let mockSetFormState: Mock;
+let mockCreateAgendaItemHandler: Mock<() => Promise<void>>;
 const mockT = (key: string): string => key;
 
 vi.mock('react-toastify', () => ({

@@ -6,7 +6,7 @@
 
 > **CheckInInput** = `object`
 
-Defined in: [src/types/CheckIn/type.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/type.ts#L16)
+Defined in: src/types/CheckIn/type.ts:16
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/CheckIn/type.ts:16](https://github.com/PalisadoesFoundati
 
 > `optional` **allotedRoom**: `string`
 
-Defined in: [src/types/CheckIn/type.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/type.ts#L17)
+Defined in: src/types/CheckIn/type.ts:17
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/CheckIn/type.ts:17](https://github.com/PalisadoesFoundati
 
 > `optional` **allotedSeat**: `string`
 
-Defined in: [src/types/CheckIn/type.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/type.ts#L18)
+Defined in: src/types/CheckIn/type.ts:18
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/CheckIn/type.ts:18](https://github.com/PalisadoesFoundati
 
 > **eventId**: `string`
 
-Defined in: [src/types/CheckIn/type.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/type.ts#L19)
+Defined in: src/types/CheckIn/type.ts:19
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/types/CheckIn/type.ts:19](https://github.com/PalisadoesFoundati
 
 > **userId**: `string`
 
-Defined in: [src/types/CheckIn/type.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/type.ts#L20)
+Defined in: src/types/CheckIn/type.ts:20

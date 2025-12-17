@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_USER\_ROLE\_IN\_ORG\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L12)
+Defined in: src/GraphQl/Mutations/OrganizationMutations.ts:12
 
 GraphQL mutation to update the role of a user in an organization.
 

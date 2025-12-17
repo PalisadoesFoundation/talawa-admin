@@ -6,7 +6,7 @@
 
 > `const` **ACTION\_ITEM\_LIST**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/ActionItemQueries.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/ActionItemQueries.ts#L14)
+Defined in: src/GraphQl/Queries/ActionItemQueries.ts:14
 
 GraphQL query to retrieve action item categories by organization.
 

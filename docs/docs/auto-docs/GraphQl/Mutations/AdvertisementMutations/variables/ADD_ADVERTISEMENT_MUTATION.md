@@ -6,7 +6,7 @@
 
 > `const` **ADD\_ADVERTISEMENT\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/AdvertisementMutations.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/AdvertisementMutations.ts#L14)
+Defined in: src/GraphQl/Mutations/AdvertisementMutations.ts:14
 
 GraphQL mutation to create an advertisement.
 

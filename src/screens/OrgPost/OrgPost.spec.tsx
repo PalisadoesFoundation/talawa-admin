@@ -6,7 +6,16 @@ import {
   waitFor,
   act,
 } from '@testing-library/react';
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import {
+  describe,
+  it,
+  expect,
+  beforeEach,
+  afterEach,
+  vi,
+  type Mock,
+  type MockedFunction,
+} from 'vitest';
 import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
@@ -23,7 +32,6 @@ import i18n from 'utils/i18n';
 import type { RenderResult } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import convertToBase64 from 'utils/convertToBase64';
-import type { MockedFunction } from 'vitest';
 import * as convertToBase64Module from 'utils/convertToBase64';
 
 const { mockToast, mockConvertToBase64, mockErrorHandler } = vi.hoisted(() => ({
@@ -1775,11 +1783,11 @@ describe('OrgPost Edge Cases', () => {
 });
 
 describe('handlePreviousPage', () => {
-  let setBefore: ReturnType<typeof vi.fn>;
-  let setAfter: ReturnType<typeof vi.fn>;
-  let setFirst: ReturnType<typeof vi.fn>;
-  let setLast: ReturnType<typeof vi.fn>;
-  let setCurrentPage: ReturnType<typeof vi.fn>;
+  let setBefore: Mock<(v: string | null) => void>;
+  let setAfter: Mock<(v: string | null) => void>;
+  let setFirst: Mock<(v: number | null) => void>;
+  let setLast: Mock<(v: number | null) => void>;
+  let setCurrentPage: Mock<(fn: (prev: number) => number) => void>;
   const postsPerPage = 10;
 
   const orgPostListData = {
@@ -1846,11 +1854,11 @@ describe('handlePreviousPage', () => {
 });
 
 describe('handleNextPage', () => {
-  let setBefore: ReturnType<typeof vi.fn>;
-  let setAfter: ReturnType<typeof vi.fn>;
-  let setFirst: ReturnType<typeof vi.fn>;
-  let setLast: ReturnType<typeof vi.fn>;
-  let setCurrentPage: ReturnType<typeof vi.fn>;
+  let setBefore: Mock<(v: string | null) => void>;
+  let setAfter: Mock<(v: string | null) => void>;
+  let setFirst: Mock<(v: number | null) => void>;
+  let setLast: Mock<(v: number | null) => void>;
+  let setCurrentPage: Mock<(fn: (prev: number) => number) => void>;
   const postsPerPage = 10;
 
   const orgPostListData = {
@@ -1923,11 +1931,11 @@ describe('handleNextPage', () => {
 });
 
 describe('pagination handlers', () => {
-  let setAfter: ReturnType<typeof vi.fn>;
-  let setBefore: ReturnType<typeof vi.fn>;
-  let setFirst: ReturnType<typeof vi.fn>;
-  let setLast: ReturnType<typeof vi.fn>;
-  let setCurrentPage: ReturnType<typeof vi.fn>;
+  let setAfter: Mock<(v: string | null) => void>;
+  let setBefore: Mock<(v: string | null) => void>;
+  let setFirst: Mock<(v: number | null) => void>;
+  let setLast: Mock<(v: number | null) => void>;
+  let setCurrentPage: Mock<(fn: (prev: number) => number) => number>;
 
   let postsPerPage: number;
   let orgPostListData: unknown;

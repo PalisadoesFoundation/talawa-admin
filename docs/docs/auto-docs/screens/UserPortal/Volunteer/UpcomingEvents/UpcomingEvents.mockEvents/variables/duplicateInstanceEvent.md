@@ -6,7 +6,7 @@
 
 > `const` **duplicateInstanceEvent**: `object`
 
-Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts:149](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts#L149)
+Defined in: src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts:149
 
 ## Type Declaration
 

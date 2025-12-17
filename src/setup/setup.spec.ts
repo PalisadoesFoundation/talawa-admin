@@ -1,7 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-import dotenv from 'dotenv';
-import fs from 'fs';
 import { main, askAndSetRecaptcha } from './setup';
 import { checkEnvFile, modifyEnvFile } from './checkEnvFile/checkEnvFile';
 import askAndSetDockerOption from './askAndSetDockerOption/askAndSetDockerOption';
@@ -10,12 +8,29 @@ import askAndUpdatePort from './askAndUpdatePort/askAndUpdatePort';
 import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
 import inquirer from 'inquirer';
 
+// Create hoisted mocks for fs and dotenv
+const { mockReadFileSync, mockParse } = vi.hoisted(() => ({
+  mockReadFileSync: vi.fn(),
+  mockParse: vi.fn(),
+}));
+
 vi.mock('./backupEnvFile/backupEnvFile', () => ({
   backupEnvFile: vi.fn().mockResolvedValue(undefined),
 }));
 vi.mock('inquirer');
-vi.mock('dotenv');
-vi.mock('fs');
+vi.mock('dotenv', () => ({
+  default: { parse: mockParse, config: vi.fn() },
+  parse: mockParse,
+  config: vi.fn(),
+}));
+vi.mock('fs', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('fs')>();
+  return {
+    ...actual,
+    default: { ...actual, readFileSync: mockReadFileSync },
+    readFileSync: mockReadFileSync,
+  };
+});
 vi.mock('./checkEnvFile/checkEnvFile');
 vi.mock('./validateRecaptcha/validateRecaptcha');
 vi.mock('./askAndSetDockerOption/askAndSetDockerOption');
@@ -31,8 +46,8 @@ describe('Talawa Admin Setup', () => {
     vi.mocked(checkEnvFile).mockReturnValue(true);
 
     // default fs content says NO docker
-    vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=NO');
-    vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'NO' });
+    mockReadFileSync.mockReturnValue('USE_DOCKER=NO');
+    mockParse.mockReturnValue({ USE_DOCKER: 'NO' });
 
     // mock external functions to resolve normally
     vi.mocked(askAndSetDockerOption).mockResolvedValue(undefined);
@@ -57,8 +72,8 @@ describe('Talawa Admin Setup', () => {
   // ADD THESE NEW TEST BLOCKS
   it('should call API setup with false when Docker is disabled', async () => {
     // Setup environment for NO Docker
-    vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=NO');
-    vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'NO' });
+    mockReadFileSync.mockReturnValue('USE_DOCKER=NO');
+    mockParse.mockReturnValue({ USE_DOCKER: 'NO' });
 
     vi.mocked(inquirer.prompt)
       .mockResolvedValueOnce({ shouldUseRecaptcha: false })
@@ -71,8 +86,8 @@ describe('Talawa Admin Setup', () => {
 
   it('should call API setup with true when Docker is enabled', async () => {
     // Setup environment for YES Docker
-    vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=YES');
-    vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'YES' });
+    mockReadFileSync.mockReturnValue('USE_DOCKER=YES');
+    mockParse.mockReturnValue({ USE_DOCKER: 'YES' });
 
     vi.mocked(inquirer.prompt)
       .mockResolvedValueOnce({ shouldUseRecaptcha: false })
@@ -96,8 +111,8 @@ describe('Talawa Admin Setup', () => {
   });
 
   it('should call askAndUpdateTalawaApiUrl when Docker is used and skip port setup', async () => {
-    vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=YES');
-    vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'YES' });
+    mockReadFileSync.mockReturnValue('USE_DOCKER=YES');
+    mockParse.mockReturnValue({ USE_DOCKER: 'YES' });
 
     vi.mocked(inquirer.prompt)
       .mockResolvedValueOnce({ shouldUseRecaptcha: false })

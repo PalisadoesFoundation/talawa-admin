@@ -10,7 +10,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AgendaCategoryUpdateModal from './AgendaCategoryUpdateModal';
-import { vi } from 'vitest';
+import { vi, type Mock } from 'vitest';
 
 /**
  * Unit tests for `AgendaCategoryUpdateModal`:
@@ -30,9 +30,9 @@ const mockFormState = {
   description: 'Test Description',
   createdBy: 'Test User',
 };
-let mockHideUpdateModal: ReturnType<typeof vi.fn>;
-let mockSetFormState: ReturnType<typeof vi.fn>;
-let mockUpdateAgendaCategoryHandler: ReturnType<typeof vi.fn>;
+let mockHideUpdateModal: Mock<() => void>;
+let mockSetFormState: Mock;
+let mockUpdateAgendaCategoryHandler: Mock<() => Promise<void>>;
 const mockT = (key: string): string => key;
 
 describe('AgendaCategoryUpdateModal', () => {

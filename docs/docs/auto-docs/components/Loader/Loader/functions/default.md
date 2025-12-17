@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/Loader/Loader.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Loader/Loader.tsx#L43)
+Defined in: src/components/Loader/Loader.tsx:43
 
 ## Parameters
 

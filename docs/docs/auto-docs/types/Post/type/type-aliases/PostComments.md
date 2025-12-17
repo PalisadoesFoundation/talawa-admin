@@ -6,7 +6,7 @@
 
 > **PostComments** = `object`[]
 
-Defined in: [src/types/Post/type.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L83)
+Defined in: src/types/Post/type.ts:83
 
 ## Type Declaration
 

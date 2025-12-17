@@ -4,7 +4,7 @@
 
 # Class: StaticMockLink
 
-Defined in: [src/utils/StaticMockLink.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L35)
+Defined in: src/utils/StaticMockLink.ts:35
 
 Similar to the standard Apollo MockLink, but doesn't consume a mock
 when it is used allowing it to be used in places like Storybook.
@@ -19,7 +19,7 @@ when it is used allowing it to be used in places like Storybook.
 
 > **new StaticMockLink**(`mockedResponses`, `addTypename`): `StaticMockLink`
 
-Defined in: [src/utils/StaticMockLink.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L40)
+Defined in: src/utils/StaticMockLink.ts:40
 
 #### Parameters
 
@@ -45,7 +45,7 @@ readonly `MockedResponse`\<`Record`\<`string`, `any`\>, `Record`\<`string`, `any
 
 > **addTypename**: `boolean` = `true`
 
-Defined in: [src/utils/StaticMockLink.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L37)
+Defined in: src/utils/StaticMockLink.ts:37
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [src/utils/StaticMockLink.ts:37](https://github.com/PalisadoesFounda
 
 > `optional` **operation**: `Operation`
 
-Defined in: [src/utils/StaticMockLink.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L36)
+Defined in: src/utils/StaticMockLink.ts:36
 
 ## Methods
 
@@ -61,7 +61,7 @@ Defined in: [src/utils/StaticMockLink.ts:36](https://github.com/PalisadoesFounda
 
 > **addMockedResponse**(`mockedResponse`): `void`
 
-Defined in: [src/utils/StaticMockLink.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L50)
+Defined in: src/utils/StaticMockLink.ts:50
 
 #### Parameters
 
@@ -79,7 +79,7 @@ Defined in: [src/utils/StaticMockLink.ts:50](https://github.com/PalisadoesFounda
 
 > **request**(`operation`): `Observable`\<`FetchResult`\>
 
-Defined in: [src/utils/StaticMockLink.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L65)
+Defined in: src/utils/StaticMockLink.ts:65
 
 #### Parameters
 

@@ -6,7 +6,7 @@
 
 > **getEndTypeFromRecurrence**(`recurrence`): [`RecurrenceEndOptionType`](../../recurrenceTypes/type-aliases/RecurrenceEndOptionType.md)
 
-Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:260](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L260)
+Defined in: src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:260
 
 Determines the end type from a recurrence rule
 

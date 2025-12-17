@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, type Mock } from 'vitest';
 import InviteByEmailModal from './InviteByEmailModal';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from '../../../../utils/i18nForTest';
@@ -16,15 +16,15 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-let mockHandleClose: ReturnType<typeof vi.fn>;
-let mockOnInvitesSent: ReturnType<typeof vi.fn>;
+let mockHandleClose: Mock<() => void>;
+let mockOnInvitesSent: Mock<() => void>;
 
 let defaultProps: {
   show: boolean;
-  handleClose: ReturnType<typeof vi.fn>;
+  handleClose: Mock<() => void>;
   eventId: string;
   isRecurring: boolean;
-  onInvitesSent: ReturnType<typeof vi.fn>;
+  onInvitesSent: Mock<() => void>;
 };
 
 const mocks = [

@@ -6,7 +6,7 @@
 
 > **ReportingTableProps** = `object`
 
-Defined in: [src/types/ReportingTable/interface.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L64)
+Defined in: src/types/ReportingTable/interface.ts:64
 
 Props for the ReportingTable component
 
@@ -16,7 +16,7 @@ Props for the ReportingTable component
 
 > **columns**: [`ReportingTableColumn`](ReportingTableColumn.md)[]
 
-Defined in: [src/types/ReportingTable/interface.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L66)
+Defined in: src/types/ReportingTable/interface.ts:66
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/types/ReportingTable/interface.ts:66](https://github.com/Palisa
 
 > `optional` **gridProps**: [`ReportingTableGridProps`](ReportingTableGridProps.md)
 
-Defined in: [src/types/ReportingTable/interface.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L67)
+Defined in: src/types/ReportingTable/interface.ts:67
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/types/ReportingTable/interface.ts:67](https://github.com/Palisa
 
 > `optional` **infiniteProps**: [`InfiniteScrollProps`](InfiniteScrollProps.md)
 
-Defined in: [src/types/ReportingTable/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L69)
+Defined in: src/types/ReportingTable/interface.ts:69
 
 Optional InfiniteScroll behavior; when provided, wraps the grid
 
@@ -42,7 +42,7 @@ Optional InfiniteScroll behavior; when provided, wraps the grid
 
 > `optional` **listProps**: `object`
 
-Defined in: [src/types/ReportingTable/interface.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L71)
+Defined in: src/types/ReportingTable/interface.ts:71
 
 Optional props applied to the InfiniteScroll container
 
@@ -76,4 +76,4 @@ Optional props applied to the InfiniteScroll container
 
 > **rows**: readonly [`ReportingRow`](ReportingRow.md)[]
 
-Defined in: [src/types/ReportingTable/interface.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L65)
+Defined in: src/types/ReportingTable/interface.ts:65

@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/ContriStats/ContriStats.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/ContriStats/ContriStats.tsx#L34)
+Defined in: src/components/ContriStats/ContriStats.tsx:34
 
 ## Parameters
 

@@ -831,7 +831,7 @@ describe('PostCard', () => {
       }
       // For other mutations, return the normal mock
       return [vi.fn().mockResolvedValue({}), { loading: false }];
-    }) as ReturnType<typeof vi.fn>;
+    }) as unknown as typeof apolloMock.useMutation;
 
     try {
       renderPostCard();

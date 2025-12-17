@@ -6,7 +6,7 @@
 
 > `const` **CREATE\_PLEDGE**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/PledgeMutation.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/PledgeMutation.ts#L12)
+Defined in: src/GraphQl/Mutations/PledgeMutation.ts:12
 
 GraphQL mutation to create a pledge.
 

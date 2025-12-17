@@ -7,11 +7,11 @@ import { I18nextProvider } from 'react-i18next';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import AgendaItemsDeleteModal from './AgendaItemsDeleteModal';
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach, type Mock } from 'vitest';
 import userEvent from '@testing-library/user-event';
 
-let mockToggleDeleteModal: ReturnType<typeof vi.fn>;
-let mockDeleteAgendaItemHandler: ReturnType<typeof vi.fn>;
+let mockToggleDeleteModal: Mock<() => void>;
+let mockDeleteAgendaItemHandler: Mock<() => Promise<void>>;
 const mockT = (key: string): string => key;
 const mockTCommon = (key: string): string => key;
 

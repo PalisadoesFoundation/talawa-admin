@@ -6,7 +6,7 @@
 
 > **createLocalStorageMock**(): `Storage`
 
-Defined in: [src/test-utils/localStorageMock.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/localStorageMock.ts#L12)
+Defined in: src/test-utils/localStorageMock.ts:12
 
 Creates an in-memory localStorage mock for test isolation
 Prevents tests from interfering with each other or real browser storage

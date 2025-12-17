@@ -6,7 +6,7 @@
 
 > **AdvertisementSkeleton**(): `Element`[]
 
-Defined in: [src/components/Advertisements/skeleton/AdvertisementSkeleton.tsx:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/skeleton/AdvertisementSkeleton.tsx#L22)
+Defined in: src/components/Advertisements/skeleton/AdvertisementSkeleton.tsx:22
 
 AdvertisementSkeleton Component
 

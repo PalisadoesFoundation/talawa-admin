@@ -4,7 +4,7 @@
 
 # Interface: IQueryVariable
 
-Defined in: [src/screens/OrganizationPeople/addMember/types.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/addMember/types.ts#L20)
+Defined in: src/screens/OrganizationPeople/addMember/types.ts:20
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/OrganizationPeople/addMember/types.ts:20](https://githu
 
 > `optional` **after**: `string`
 
-Defined in: [src/screens/OrganizationPeople/addMember/types.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/addMember/types.ts#L23)
+Defined in: src/screens/OrganizationPeople/addMember/types.ts:23
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/OrganizationPeople/addMember/types.ts:23](https://githu
 
 > `optional` **before**: `string`
 
-Defined in: [src/screens/OrganizationPeople/addMember/types.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/addMember/types.ts#L25)
+Defined in: src/screens/OrganizationPeople/addMember/types.ts:25
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/screens/OrganizationPeople/addMember/types.ts:25](https://githu
 
 > `optional` **first**: `number`
 
-Defined in: [src/screens/OrganizationPeople/addMember/types.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/addMember/types.ts#L22)
+Defined in: src/screens/OrganizationPeople/addMember/types.ts:22
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/screens/OrganizationPeople/addMember/types.ts:22](https://githu
 
 > `optional` **last**: `number`
 
-Defined in: [src/screens/OrganizationPeople/addMember/types.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/addMember/types.ts#L24)
+Defined in: src/screens/OrganizationPeople/addMember/types.ts:24
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/screens/OrganizationPeople/addMember/types.ts:24](https://githu
 
 > `optional` **orgId**: `string`
 
-Defined in: [src/screens/OrganizationPeople/addMember/types.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/addMember/types.ts#L21)
+Defined in: src/screens/OrganizationPeople/addMember/types.ts:21
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/screens/OrganizationPeople/addMember/types.ts:21](https://githu
 
 > `optional` **where**: `object`
 
-Defined in: [src/screens/OrganizationPeople/addMember/types.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/addMember/types.ts#L26)
+Defined in: src/screens/OrganizationPeople/addMember/types.ts:26
 
 #### role
 

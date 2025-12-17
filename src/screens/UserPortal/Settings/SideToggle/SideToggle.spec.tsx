@@ -1,4 +1,12 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  beforeEach,
+  afterEach,
+  type Mock,
+} from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -6,7 +14,7 @@ import SidebarToggle from './SideToggle';
 import styles from 'style/app-fixed.module.css';
 
 describe('SidebarToggle', () => {
-  let mockSetHideDrawer: ReturnType<typeof vi.fn>;
+  let mockSetHideDrawer: Mock<(value: boolean) => void>;
 
   beforeEach(() => {
     mockSetHideDrawer = vi.fn();

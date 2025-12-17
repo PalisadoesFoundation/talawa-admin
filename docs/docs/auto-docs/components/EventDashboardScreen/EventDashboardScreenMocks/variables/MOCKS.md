@@ -6,7 +6,7 @@
 
 > `const` **MOCKS**: `object`[]
 
-Defined in: [src/components/EventDashboardScreen/EventDashboardScreenMocks.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventDashboardScreen/EventDashboardScreenMocks.ts#L3)
+Defined in: src/components/EventDashboardScreen/EventDashboardScreenMocks.ts:3
 
 ## Type Declaration
 

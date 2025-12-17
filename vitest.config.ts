@@ -50,14 +50,9 @@ export default defineConfig({
     hookTimeout: 10000,
     teardownTimeout: 10000,
     pool: 'threads',
-    poolOptions: {
-      threads: {
-        singleThread: false,
-        minThreads: 1,
-        maxThreads: isCI ? ciThreads : localThreads,
-        isolate: true,
-      },
-    },
+    // Vitest v4: poolOptions removed, options now at top level
+    maxWorkers: isCI ? ciThreads : localThreads,
+    isolate: true,
     maxConcurrency: isCI ? ciThreads : localThreads,
     fileParallelism: true,
     sequence: {

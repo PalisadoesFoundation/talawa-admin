@@ -4,12 +4,12 @@ import EventHeader from './EventHeader';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import { vi } from 'vitest';
+import { vi, type Mock } from 'vitest';
 
 describe('EventHeader Component', () => {
   const viewType = ViewType.MONTH;
-  let handleChangeView: ReturnType<typeof vi.fn>;
-  let showInviteModal: ReturnType<typeof vi.fn>;
+  let handleChangeView: Mock<() => void>;
+  let showInviteModal: Mock<() => void>;
 
   beforeEach(() => {
     handleChangeView = vi.fn();

@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_DRAG\_DROP\_ERROR**: `object`[]
 
-Defined in: [src/components/AgendaItems/AgendaItemsMocks.ts:287](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaItems/AgendaItemsMocks.ts#L287)
+Defined in: src/components/AgendaItems/AgendaItemsMocks.ts:287
 
 ## Type Declaration
 

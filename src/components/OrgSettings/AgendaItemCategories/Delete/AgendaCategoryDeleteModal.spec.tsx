@@ -9,7 +9,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import AgendaCategoryDeleteModal from './AgendaCategoryDeleteModal';
-import { vi } from 'vitest'; // Use Vitest's mocking utility
+import { vi, type Mock } from 'vitest'; // Use Vitest's mocking utility
 
 /**
  * This file contains unit tests for the `AgendaCategoryDeleteModal` component.
@@ -22,8 +22,8 @@ import { vi } from 'vitest'; // Use Vitest's mocking utility
  */
 
 // Mock functions
-let mockToggleDeleteModal: ReturnType<typeof vi.fn>;
-let mockDeleteAgendaCategoryHandler: ReturnType<typeof vi.fn>;
+let mockToggleDeleteModal: Mock<() => void>;
+let mockDeleteAgendaCategoryHandler: Mock<() => Promise<void>>;
 const mockT = (key: string): string => key;
 
 const renderComponent = (isOpen: boolean): ReturnType<typeof render> => {

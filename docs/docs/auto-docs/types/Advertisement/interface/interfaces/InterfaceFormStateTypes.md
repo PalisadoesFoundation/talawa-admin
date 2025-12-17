@@ -4,7 +4,7 @@
 
 # Interface: InterfaceFormStateTypes
 
-Defined in: [src/types/Advertisement/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L21)
+Defined in: src/types/Advertisement/interface.ts:21
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Advertisement/interface.ts:21](https://github.com/Palisad
 
 > **attachments**: `File`[]
 
-Defined in: [src/types/Advertisement/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L28)
+Defined in: src/types/Advertisement/interface.ts:28
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Advertisement/interface.ts:28](https://github.com/Palisad
 
 > **description**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L25)
+Defined in: src/types/Advertisement/interface.ts:25
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Advertisement/interface.ts:25](https://github.com/Palisad
 
 > **endAt**: `Date`
 
-Defined in: [src/types/Advertisement/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L26)
+Defined in: src/types/Advertisement/interface.ts:26
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Advertisement/interface.ts:26](https://github.com/Palisad
 
 > `optional` **existingAttachments**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L29)
+Defined in: src/types/Advertisement/interface.ts:29
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Advertisement/interface.ts:29](https://github.com/Palisad
 
 > **name**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L22)
+Defined in: src/types/Advertisement/interface.ts:22
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Advertisement/interface.ts:22](https://github.com/Palisad
 
 > `optional` **organizationId**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L27)
+Defined in: src/types/Advertisement/interface.ts:27
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Advertisement/interface.ts:27](https://github.com/Palisad
 
 > **startAt**: `Date`
 
-Defined in: [src/types/Advertisement/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L24)
+Defined in: src/types/Advertisement/interface.ts:24
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/types/Advertisement/interface.ts:24](https://github.com/Palisad
 
 > **type**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L23)
+Defined in: src/types/Advertisement/interface.ts:23

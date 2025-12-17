@@ -6,14 +6,22 @@ import { I18nextProvider } from 'react-i18next';
 import LoginPortalToggle from './LoginPortalToggle';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
+import {
+  describe,
+  test,
+  expect,
+  vi,
+  beforeEach,
+  afterEach,
+  type Mock,
+} from 'vitest';
 
 /**
  * Helper function to render the LoginPortalToggle component with all required providers.
  * @param onToggle - Mock function to track toggle callbacks
  * @returns The rendered component utilities
  */
-const renderComponent = (onToggle: ReturnType<typeof vi.fn>) => {
+const renderComponent = (onToggle: Mock<() => void>) => {
   return render(
     <BrowserRouter>
       <Provider store={store}>
@@ -26,7 +34,7 @@ const renderComponent = (onToggle: ReturnType<typeof vi.fn>) => {
 };
 
 describe('Testing LoginPortalToggle component', () => {
-  let mockOnToggle: ReturnType<typeof vi.fn>;
+  let mockOnToggle: Mock<() => void>;
 
   beforeEach(() => {
     mockOnToggle = vi.fn();

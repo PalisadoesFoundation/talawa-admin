@@ -174,6 +174,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
   });
 
   afterEach(async () => {
+    vi.clearAllMocks();
     await act(async () => {
       await i18nForTest.changeLanguage('en');
     });

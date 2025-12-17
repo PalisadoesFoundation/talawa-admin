@@ -6,7 +6,7 @@
 
 > `const` **GET\_POST\_COMMENTS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/CommentQueries.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/CommentQueries.ts#L14)
+Defined in: src/GraphQl/Queries/CommentQueries.ts:14
 
 GraphQL query to retrieve post comments with cursor-based pagination.
 

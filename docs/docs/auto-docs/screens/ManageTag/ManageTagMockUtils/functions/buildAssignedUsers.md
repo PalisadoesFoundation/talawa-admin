@@ -6,7 +6,7 @@
 
 > **buildAssignedUsers**(`overrides?`): `object`
 
-Defined in: [src/screens/ManageTag/ManageTagMockUtils.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/ManageTagMockUtils.ts#L4)
+Defined in: src/screens/ManageTag/ManageTagMockUtils.ts:4
 
 ## Parameters
 

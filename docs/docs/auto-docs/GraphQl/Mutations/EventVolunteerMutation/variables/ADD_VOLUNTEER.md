@@ -6,7 +6,7 @@
 
 > `const` **ADD\_VOLUNTEER**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/EventVolunteerMutation.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventVolunteerMutation.ts#L11)
+Defined in: src/GraphQl/Mutations/EventVolunteerMutation.ts:11
 
 GraphQL mutation to create an event volunteer.
 

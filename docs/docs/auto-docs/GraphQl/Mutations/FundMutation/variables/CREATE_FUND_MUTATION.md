@@ -6,7 +6,7 @@
 
 > `const` **CREATE\_FUND\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/FundMutation.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/FundMutation.ts#L11)
+Defined in: src/GraphQl/Mutations/FundMutation.ts:11
 
 GraphQL mutation to create a new fund.
 

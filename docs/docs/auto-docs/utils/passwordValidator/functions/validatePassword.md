@@ -6,7 +6,7 @@
 
 > **validatePassword**(`password`): `boolean`
 
-Defined in: [src/utils/passwordValidator.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/passwordValidator.ts#L1)
+Defined in: src/utils/passwordValidator.ts:1
 
 ## Parameters
 

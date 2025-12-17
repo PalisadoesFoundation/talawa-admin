@@ -6,7 +6,7 @@
 
 > **SubTargetType** = `object`
 
-Defined in: [src/state/reducers/routesReducer.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L9)
+Defined in: src/state/reducers/routesReducer.ts:9
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/state/reducers/routesReducer.ts:9](https://github.com/Palisadoe
 
 > `optional` **comp\_id**: `string`
 
-Defined in: [src/state/reducers/routesReducer.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L13)
+Defined in: src/state/reducers/routesReducer.ts:13
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/state/reducers/routesReducer.ts:13](https://github.com/Palisado
 
 > `optional` **icon**: `string`
 
-Defined in: [src/state/reducers/routesReducer.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L12)
+Defined in: src/state/reducers/routesReducer.ts:12
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/state/reducers/routesReducer.ts:12](https://github.com/Palisado
 
 > `optional` **name**: `string`
 
-Defined in: [src/state/reducers/routesReducer.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L10)
+Defined in: src/state/reducers/routesReducer.ts:10
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/state/reducers/routesReducer.ts:10](https://github.com/Palisado
 
 > **url**: `string`
 
-Defined in: [src/state/reducers/routesReducer.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L11)
+Defined in: src/state/reducers/routesReducer.ts:11

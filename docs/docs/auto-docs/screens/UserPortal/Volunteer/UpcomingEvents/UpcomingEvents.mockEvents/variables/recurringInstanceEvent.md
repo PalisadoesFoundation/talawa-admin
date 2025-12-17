@@ -6,7 +6,7 @@
 
 > `const` **recurringInstanceEvent**: `object`
 
-Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts:179](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts#L179)
+Defined in: src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts:179
 
 ## Type Declaration
 

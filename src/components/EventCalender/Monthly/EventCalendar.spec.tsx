@@ -551,15 +551,23 @@ describe('Calendar', () => {
 
     // Mock today's date to be January 1st to ensure currentDate starts at 1
     const originalDate = globalThis.Date;
-    globalThis.Date = vi.fn((...args: unknown[]) => {
-      if (args.length === 0) {
-        return new originalDate(2024, 0, 1); // January 1st, 2024
+    const mockDate = new originalDate(2024, 0, 1); // January 1st, 2024
+
+    class MockDate extends originalDate {
+      constructor(...args: ConstructorParameters<typeof Date> | []) {
+        if (args.length === 0) {
+          super(mockDate.getTime());
+        } else {
+          super(...args);
+        }
       }
-      return new originalDate(...(args as ConstructorParameters<typeof Date>));
-    }) as unknown as DateConstructor;
-    globalThis.Date.now = originalDate.now;
-    globalThis.Date.parse = originalDate.parse;
-    globalThis.Date.UTC = originalDate.UTC;
+    }
+
+    // Copy static methods
+    MockDate.now = originalDate.now;
+    MockDate.parse = originalDate.parse;
+    MockDate.UTC = originalDate.UTC;
+    globalThis.Date = MockDate as typeof Date;
 
     render(
       <Router>
@@ -601,19 +609,21 @@ describe('Calendar', () => {
 
     // Mock today's date to be June 1st to ensure currentDate starts at 1
     const originalDate = globalThis.Date;
-    function MockDate(...args: unknown[]) {
-      if (args.length === 0) {
-        return new originalDate(2024, 5, 1); // June 1st, 2024
+    const mockDate = new originalDate(2024, 5, 1); // June 1st, 2024
+
+    class MockDate extends originalDate {
+      constructor(...args: ConstructorParameters<typeof Date> | []) {
+        if (args.length === 0) {
+          super(mockDate.getTime());
+        } else {
+          super(...args);
+        }
       }
-      return new (originalDate as unknown as typeof Date)(
-        ...(args as ConstructorParameters<typeof Date>),
-      );
     }
     MockDate.now = originalDate.now;
     MockDate.parse = originalDate.parse;
     MockDate.UTC = originalDate.UTC;
-    MockDate.prototype = originalDate.prototype;
-    globalThis.Date = MockDate as unknown as DateConstructor;
+    globalThis.Date = MockDate as typeof Date;
 
     render(
       <Router>
@@ -654,19 +664,21 @@ describe('Calendar', () => {
 
     // Mock today's date to be December 31st to ensure currentDate starts at 31
     const originalDate = globalThis.Date;
-    function MockDate(...args: unknown[]) {
-      if (args.length === 0) {
-        return new originalDate(2024, 11, 31); // December 31st, 2024
+    const mockDate = new originalDate(2024, 11, 31); // December 31st, 2024
+
+    class MockDate extends originalDate {
+      constructor(...args: ConstructorParameters<typeof Date> | []) {
+        if (args.length === 0) {
+          super(mockDate.getTime());
+        } else {
+          super(...args);
+        }
       }
-      return new (originalDate as unknown as typeof Date)(
-        ...(args as ConstructorParameters<typeof Date>),
-      );
     }
     MockDate.now = originalDate.now;
     MockDate.parse = originalDate.parse;
     MockDate.UTC = originalDate.UTC;
-    MockDate.prototype = originalDate.prototype;
-    globalThis.Date = MockDate as unknown as DateConstructor;
+    globalThis.Date = MockDate as typeof Date;
 
     render(
       <Router>
@@ -707,19 +719,21 @@ describe('Calendar', () => {
 
     // Mock today's date to be June 30th to ensure currentDate starts at 30
     const originalDate = globalThis.Date;
-    function MockDate(...args: unknown[]) {
-      if (args.length === 0) {
-        return new originalDate(2024, 5, 30); // June 30th, 2024
+    const mockDate = new originalDate(2024, 5, 30); // June 30th, 2024
+
+    class MockDate extends originalDate {
+      constructor(...args: ConstructorParameters<typeof Date> | []) {
+        if (args.length === 0) {
+          super(mockDate.getTime());
+        } else {
+          super(...args);
+        }
       }
-      return new (originalDate as unknown as typeof Date)(
-        ...(args as ConstructorParameters<typeof Date>),
-      );
     }
     MockDate.now = originalDate.now;
     MockDate.parse = originalDate.parse;
     MockDate.UTC = originalDate.UTC;
-    MockDate.prototype = originalDate.prototype;
-    globalThis.Date = MockDate as unknown as DateConstructor;
+    globalThis.Date = MockDate as typeof Date;
 
     render(
       <Router>

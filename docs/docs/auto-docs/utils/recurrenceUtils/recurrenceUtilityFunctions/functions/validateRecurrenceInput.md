@@ -6,7 +6,7 @@
 
 > **validateRecurrenceInput**(`recurrence`, `startDate`): `object`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L20)
+Defined in: src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:20
 
 Validates recurrence input data
 

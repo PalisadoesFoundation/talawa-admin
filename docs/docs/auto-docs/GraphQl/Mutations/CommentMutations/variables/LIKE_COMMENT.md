@@ -6,7 +6,7 @@
 
 > `const` **LIKE\_COMMENT**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/CommentMutations.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/CommentMutations.ts#L39)
+Defined in: src/GraphQl/Mutations/CommentMutations.ts:39
 
 GraphQL mutation to like a comment.
 

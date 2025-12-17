@@ -6,7 +6,7 @@
 
 > `const` **ORGANIZATION\_PINNED\_POST\_LIST\_WITH\_PAGINATION\_MOCK**: `object`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L176)
+Defined in: src/screens/OrgPost/OrgPostMocks.data.ts:176
 
 ## Type Declaration
 
