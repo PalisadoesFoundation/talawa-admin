@@ -103,9 +103,30 @@ const USER_DETAILS_MOCK = {
     data: {
       user: {
         id: 'userId',
-        firstName: 'Harve',
-        lastName: 'Lance',
-        image: null,
+        name: 'Harve Lance',
+        avatarURL: null,
+        role: 'regular',
+        __typename: 'User',
+      },
+    },
+  },
+};
+
+// Admin user details mock for tests that need autocomplete visible
+const USER_DETAILS_ADMIN_MOCK = {
+  request: {
+    query: USER_DETAILS,
+    variables: {
+      input: { id: 'userId' },
+    },
+  },
+  result: {
+    data: {
+      user: {
+        id: 'userId',
+        name: 'Harve Lance',
+        avatarURL: null,
+        role: 'admin',
         __typename: 'User',
       },
     },
@@ -114,6 +135,7 @@ const USER_DETAILS_MOCK = {
 
 // Base mocks shared across all tests
 const BASE_PLEDGE_MODAL_MOCKS = [USER_DETAILS_MOCK];
+const BASE_PLEDGE_MODAL_ADMIN_MOCKS = [USER_DETAILS_ADMIN_MOCK];
 
 // Helper to create UPDATE_PLEDGE mock with custom variables
 const createUpdatePledgeMock = (
@@ -142,10 +164,7 @@ const createCreatePledgeMock = (
   variables: {
     campaignId: string;
     amount: number;
-    currency: string;
-    startDate: string;
-    endDate: string;
-    userIds: string[];
+    pledgerId: string;
   },
   isError = false,
 ): MockedResponse => ({
@@ -173,10 +192,7 @@ const PLEDGE_MODAL_MOCKS = [
   createCreatePledgeMock({
     campaignId: 'campaignId',
     amount: 200,
-    currency: 'USD',
-    startDate: '2024-01-02',
-    endDate: '2024-01-02',
-    userIds: ['1'],
+    pledgerId: '1',
   }),
 ];
 
@@ -424,10 +440,7 @@ describe('PledgeModal', () => {
           {
             campaignId: 'campaignId',
             amount: 200,
-            currency: 'USD',
-            startDate: '2024-01-02',
-            endDate: '2024-01-02',
-            userIds: ['1'],
+            pledgerId: '1',
           },
           true,
         ),
@@ -599,7 +612,8 @@ describe('PledgeModal', () => {
 
   describe('User Autocomplete', () => {
     it('should display pledgers autocomplete field', async () => {
-      renderPledgeModal(link1, pledgeProps[0]);
+      const adminLink = new StaticMockLink([...BASE_PLEDGE_MODAL_ADMIN_MOCKS]);
+      renderPledgeModal(adminLink, pledgeProps[0]);
 
       await waitFor(() => {
         expect(screen.getByLabelText('Pledger')).toBeInTheDocument();
@@ -607,7 +621,8 @@ describe('PledgeModal', () => {
     });
 
     it('should show current pledger in edit mode', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
+      const adminLink = new StaticMockLink([...BASE_PLEDGE_MODAL_ADMIN_MOCKS]);
+      renderPledgeModal(adminLink, pledgeProps[1]);
 
       await waitFor(() => {
         const pledgerInput = screen.getByRole('combobox', { name: /pledger/i });
@@ -616,7 +631,8 @@ describe('PledgeModal', () => {
     });
 
     it('should have readonly input in edit mode autocomplete', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
+      const adminLink = new StaticMockLink([...BASE_PLEDGE_MODAL_ADMIN_MOCKS]);
+      renderPledgeModal(adminLink, pledgeProps[1]);
 
       await waitFor(() => {
         const autocomplete = screen.getByTestId('pledgerSelect');
@@ -626,19 +642,16 @@ describe('PledgeModal', () => {
     });
 
     it('should trigger onChange when autocomplete selection changes in create mode', async () => {
-      const createMockWithEmptyUsers = [
-        ...BASE_PLEDGE_MODAL_MOCKS,
+      const createMockWithAdminUser = [
+        ...BASE_PLEDGE_MODAL_ADMIN_MOCKS,
         createCreatePledgeMock({
           campaignId: 'campaignId',
           amount: 150,
-          currency: 'USD',
-          startDate: '2024-01-02',
-          endDate: '2024-01-02',
-          userIds: [],
+          pledgerId: 'userId',
         }),
       ];
 
-      const link = new StaticMockLink(createMockWithEmptyUsers);
+      const link = new StaticMockLink(createMockWithAdminUser);
       renderPledgeModal(link, pledgeProps[0]);
 
       await waitFor(() => {
@@ -646,27 +659,38 @@ describe('PledgeModal', () => {
       });
 
       const autocomplete = screen.getByTestId('pledgerSelect');
-      const clearButton = within(autocomplete).queryByLabelText('Clear');
+      const input = within(autocomplete).getByRole('combobox');
 
-      if (clearButton) {
-        await act(async () => {
-          fireEvent.click(clearButton);
-        });
+      // Open the autocomplete to select a pledger
+      await act(async () => {
+        input.focus();
+        fireEvent.mouseDown(input);
+      });
 
-        // Verify that clearing the autocomplete removes the selected users
-        await waitFor(() => {
-          const chips = within(autocomplete).queryAllByRole('button', {
-            name: /remove/i,
-          });
-          expect(chips).toHaveLength(0);
-        });
-      }
+      // Wait for options to appear
+      await waitFor(
+        () => {
+          const options = screen.queryAllByRole('option');
+          expect(options.length).toBeGreaterThan(0);
+        },
+        { timeout: 2000 },
+      );
+
+      // Select the first option (Harve Lance - admin user)
+      const options = screen.getAllByRole('option');
+      await act(async () => {
+        fireEvent.click(options[0]);
+      });
+
+      // Wait for selection to be applied
+      await waitFor(() => {
+        expect(input).toHaveValue('Harve Lance');
+      });
 
       const startDateInput = getDatePickerInput('Start Date');
-
       const endDateInput = getDatePickerInput('End Date');
 
-      // Submit the form to verify empty userIds is sent to GraphQL
+      // Submit the form with selected pledger
       fireEvent.change(screen.getByLabelText('Amount'), {
         target: { value: '150' },
       });
@@ -828,7 +852,8 @@ describe('PledgeModal', () => {
     });
 
     it('should cover remaining edge cases for 100% coverage', async () => {
-      renderPledgeModal(link1, pledgeProps[0]);
+      const adminLink = new StaticMockLink([...BASE_PLEDGE_MODAL_ADMIN_MOCKS]);
+      renderPledgeModal(adminLink, pledgeProps[0]);
 
       await waitFor(() => {
         expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
@@ -842,7 +867,8 @@ describe('PledgeModal', () => {
     });
 
     it('should trigger autocomplete onChange handler in create mode', async () => {
-      renderPledgeModal(link1, pledgeProps[0]);
+      const adminLink = new StaticMockLink([...BASE_PLEDGE_MODAL_ADMIN_MOCKS]);
+      renderPledgeModal(adminLink, pledgeProps[0]);
 
       await waitFor(() => {
         expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
@@ -866,7 +892,8 @@ describe('PledgeModal', () => {
 
     it('should properly trigger autocomplete onChange with new pledger data (cover line 279)', async () => {
       // Test to cover line 279: setFormState({ ...formState, pledgeUsers: newPledgers })
-      renderPledgeModal(link1, pledgeProps[0]);
+      const adminLink = new StaticMockLink([...BASE_PLEDGE_MODAL_ADMIN_MOCKS]);
+      renderPledgeModal(adminLink, pledgeProps[0]);
 
       await waitFor(() => {
         expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
@@ -932,7 +959,8 @@ describe('PledgeModal', () => {
       // Targets line 279 in PledgeModal.tsx: setFormState({ ...formState, pledgeUsers: newPledgers })
       // The onChange callback updates pledgeUsers in form state when users are selected/deselected
 
-      renderPledgeModal(link1, pledgeProps[0]);
+      const adminLink = new StaticMockLink([...BASE_PLEDGE_MODAL_ADMIN_MOCKS]);
+      renderPledgeModal(adminLink, pledgeProps[0]);
 
       await waitFor(() => {
         expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
