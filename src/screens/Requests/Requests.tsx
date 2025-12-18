@@ -78,15 +78,13 @@ import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import styles from '../../style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router';
-import {
-  Paper,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from '@mui/material';
 import PageHeader from 'shared-components/Navbar/PageHeader';
+import {
+  dataGridStyle,
+  PAGE_SIZE,
+  ROW_HEIGHT,
+} from '../../types/ReportingTable/utils';
+import { Stack } from '@mui/system';
 
 interface InterfaceRequestsListItem {
   membershipRequestId: string;
