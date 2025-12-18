@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { InterfaceProfileAvatarDisplayProps } from 'types/shared-components/ProfileAvatarDisplay/interface';
 import Avatar from 'components/Avatar/Avatar';
-import { useTranslation } from 'react-i18next';
 
 /**
  * ProfileAvatarDisplay component renders a profile avatar based on the provided properties.
@@ -47,7 +46,6 @@ export const ProfileAvatarDisplay = ({
   objectFit = 'cover',
 }: InterfaceProfileAvatarDisplayProps): JSX.Element => {
   const [imgError, setImgError] = useState(false);
-  const { t } = useTranslation();
   useEffect(() => {
     setImgError(false);
   }, [avatarUrl]);
@@ -122,7 +120,7 @@ export const ProfileAvatarDisplay = ({
         size={finalSize}
         radius={shape === 'circle' ? 50 : shape === 'rounded' ? 10 : 0} // Approximate radius for Avatar component
         alt={altText}
-        dataTestId={`${dataTestId}${t('fallbacktest')}`}
+        dataTestId={dataTestId + '-fallback'}
       />
     </div>
   );
