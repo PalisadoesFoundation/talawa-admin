@@ -92,7 +92,7 @@ const ProfileDropdown = ({
           {userImage && userImage !== 'null' ? (
             <img
               src={userImage}
-              alt={tCommon(`profile picture`)}
+              alt={tCommon(`profilePicture`)}
               data-testid="display-img"
               crossOrigin="anonymous"
             />
@@ -102,7 +102,7 @@ const ProfileDropdown = ({
               data-testid="display-img"
               size={45}
               name={name}
-              alt={tCommon(`dummy picture`)}
+              alt={tCommon(`profilePicturePlaceholder`)}
             />
           )}
         </div>
@@ -121,13 +121,13 @@ const ProfileDropdown = ({
         data-testid="togDrop"
         id="dropdown-split-basic"
         className={styles.dropdownToggle}
-        aria-label={tCommon('User Profile Menu')}
+        aria-label={tCommon('userProfileMenu')}
       />
       <Dropdown.Menu>
         <Dropdown.Item
           data-testid="profileBtn"
           onClick={() => navigate(profileDestination)}
-          aria-label={tCommon('View Profile')}
+          aria-label={tCommon('viewProfile')}
         >
           {tCommon('viewProfile')}
         </Dropdown.Item>

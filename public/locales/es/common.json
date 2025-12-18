@@ -104,5 +104,8 @@
   "unblock": "Desbloquear",
   "unblockedSuccessfully": "{{item}} desbloqueado correctamente",
   "save": "Guardar",
-  "saving": "Guardando..."
+  "saving": "Guardando...",
+  "profilePicture": "Foto de perfil",
+  "profilePicturePlaceholder": "Imagen de prueba",
+  "userProfileMenu": "Menú de perfil de usuario"
 }

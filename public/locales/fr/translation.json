@@ -56,6 +56,11 @@
     "user": "Utilisateur",
     "loading": "Chargement"
   },
+  "signOut": {
+    "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
+    "signingOut": "Déconnexion en cours...",
+    "signOut": "Se déconnecter"
+  },
   "userLoginPage": {
     "title": "Administrateur Talawa",
     "fromPalisadoes": "Une application open source réalisée par les bénévoles de la Fondation Palisadoes",
@@ -1052,7 +1057,8 @@
     "language": "Langue",
     "settings": "Paramètres",
     "logout": "Déconnexion",
-    "close": "Fermer"
+    "close": "Fermer",
+    "talawaBranding": "Image de marque Talawa"
   },
   "userOrganizations": {
     "allOrganizations": "Toutes les organisations",

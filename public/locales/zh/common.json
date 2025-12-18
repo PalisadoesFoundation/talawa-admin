@@ -104,5 +104,8 @@
   "unblock": "解除封锁",
   "unblockedSuccessfully": "{{item}} 已成功解除封锁",
   "save": "保存",
-  "saving": "保存中..."
+  "saving": "保存中...",
+  "profilePicture": "個人頭像",
+  "profilePicturePlaceholder": "佔位圖片",
+  "userProfileMenu": "使用者個人資料選單"
 }

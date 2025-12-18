@@ -56,6 +56,11 @@
     "user": "उपयोगकर्ता",
     "loading": "लोड हो रहा है"
   },
+  "signOut": {
+    "retryPrompt": "सेशन रद्द करने में विफल। पुनः प्रयास करें?",
+    "signingOut": "साइन आउट हो रहा है...",
+    "signOut": "साइन आउट"
+  },
   "userLoginPage": {
     "title": "तालावा व्यवस्थापक",
     "fromPalisadoes": "Palisadoes फाउंडेशन स्वयंसेवकों द्वारा विकसित एक ओपन-सोर्स एप्लिकेशन",
@@ -1052,7 +1057,8 @@
     "language": "भाषा",
     "settings": "समायोजन",
     "logout": "लॉग आउट करें",
-    "close": "बंद करें"
+    "close": "बंद करें",
+    "talawaBranding": "तालावा ब्रांडिंग"
   },
   "userOrganizations": {
     "allOrganizations": "सभी संगठन",
