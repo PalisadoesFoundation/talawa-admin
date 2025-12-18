@@ -90,6 +90,18 @@ Optional CSS object-fit value for the image.
 
 ***
 
+### onClick()?
+
+> `optional` **onClick**: () => `void`
+
+Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L30)
+
+#### Returns
+
+`void`
+
+***
+
 ### shape?
 
 > `optional` **shape**: `"circle"` \| `"square"` \| `"rounded"`

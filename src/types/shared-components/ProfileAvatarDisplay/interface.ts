@@ -1,5 +1,4 @@
 import React from 'react';
-
 /**
  * Props for the ProfileAvatarDisplay component.
  *
@@ -27,4 +26,5 @@ export interface InterfaceProfileAvatarDisplayProps {
   name: string;
   dataTestId?: string;
   objectFit?: 'cover' | 'contain' | 'fill' | 'none' | 'scale-down';
+  onClick?: () => void;
 }

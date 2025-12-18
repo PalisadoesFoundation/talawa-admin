@@ -7,6 +7,7 @@ import Avatar from 'components/Avatar/Avatar';
  * It handles image loading errors and falls back to an initial-based avatar.
  * @param {InterfaceProfileAvatarDisplayProps} props - The properties of the profile avatar display.
  * @param {string} props.avatarUrl - The URL of the avatar image.
+ * @param {string} props.name - The name of the user.
  * @param {string} props.altText - The alt text for the avatar image.
  * @param {"small" | "medium" | "large" | "custom"} props.size - The size of the avatar.
  * @param {"circle" | "square" | "rounded"} props.shape - The shape of the avatar.
@@ -44,6 +45,7 @@ export const ProfileAvatarDisplay = ({
   style,
   dataTestId,
   objectFit = 'cover',
+  onClick,
 }: InterfaceProfileAvatarDisplayProps): JSX.Element => {
   const [imgError, setImgError] = useState(false);
   useEffect(() => {
@@ -103,6 +105,7 @@ export const ProfileAvatarDisplay = ({
           style={imgStyle}
           onError={() => setImgError(true)}
           crossOrigin="anonymous"
+          onClick={onClick}
         />
       </div>
     );
@@ -114,6 +117,7 @@ export const ProfileAvatarDisplay = ({
       className={className}
       style={{ ...containerStyle }}
       data-testid={dataTestId}
+      onClick={onClick}
     >
       <Avatar
         name={name}
