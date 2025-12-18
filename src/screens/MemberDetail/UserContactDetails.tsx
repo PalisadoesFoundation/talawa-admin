@@ -1,3 +1,45 @@
+/**
+ * UserContactDetails Component
+ *
+ * This component renders a comprehensive profile view for a user, allowing them to
+ * view and update their personal and contact information. It supports profile picture
+ * upload, form validation, and controlled updates with reset functionality.
+ *
+ * The component fetches user data by ID, populates editable form fields, and submits
+ * updates via GraphQL mutations. Changes are tracked to prevent unnecessary updates.
+ *
+ * @component
+ * @param {MemberDetailProps} props - The props for the component.
+ * @param {string} [props.id] - Optional user ID used to fetch profile details.
+ *                            If not provided, the ID is resolved from route state
+ *                            or local storage.
+ *
+ * @returns {JSX.Element} The rendered UserContactDetails component.
+ *
+ * @remarks
+ * - Uses Apollo Client's `useQuery` to fetch user data and `useMutation` to update it.
+ * - Supports avatar upload with file type and size validation.
+ * - Tracks unsaved changes and conditionally displays Save/Reset actions.
+ * - Converts existing avatar URLs to File objects when required.
+ * - Prevents invalid password updates using custom validation logic.
+ * - Uses `react-i18next` for localization and translations.
+ * - Stores updated user details in local storage after a successful update.
+ *
+ * @example
+ * ```tsx
+ * <UserContactDetails id="12345" />
+ * ```
+ *
+ * @dependencies
+ * - `@apollo/client` for GraphQL queries and mutations
+ * - `react-bootstrap` for layout and form components
+ * - `@mui/x-date-pickers` for date selection
+ * - `react-toastify` for user notifications
+ * - `dayjs` for date handling
+ * - Custom utilities for password validation, avatar sanitization,
+ *   local storage handling, and error processing
+ *
+ */
 import React, { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';

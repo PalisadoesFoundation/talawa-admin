@@ -1,3 +1,41 @@
+/**
+ * UserEvents Component
+ *
+ * This component displays a list of events associated with a user, providing
+ * search and sorting capabilities for better discoverability. Events are rendered
+ * using the `PeopleTabUserEvents` card component and are displayed within a
+ * structured page layout.
+ *
+ * The component currently uses mock event data and performs client-side filtering
+ * and sorting based on user input from the page header.
+ *
+ * @component
+ * @param {PeopleTabUserEventsProps} props - The props for the component.
+ * @param {string} [props.id] - Optional user ID for future integration with
+ *                            user-specific event fetching.
+ *
+ * @returns {JSX.Element} The rendered UserEvents component.
+ *
+ * @remarks
+ * - Uses React state hooks to manage search input and sorting order.
+ * - Applies memoization via `useMemo` to efficiently filter and sort event data.
+ * - Integrates a reusable `PageHeader` component for search and sort controls.
+ * - Displays an empty state message when no events match the search criteria.
+ * - Uses `react-i18next` for localization of UI text.
+ * - Designed to be easily extended to support API-driven event data.
+ *
+ * @example
+ * ```tsx
+ * <UserEvents />
+ * ```
+ *
+ * @dependencies
+ * - `react-bootstrap` for layout and card structure
+ * - `@mui/material` and `@mui/icons-material` for action icons
+ * - `react-i18next` for translations
+ * - Shared UI components such as `PageHeader` and `PeopleTabUserEvents`
+ *
+ */
 import React, { useState, useMemo } from 'react';
 import { Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';

@@ -1,3 +1,37 @@
+/**
+ * UserTags Component
+ *
+ * This component displays a list of tags associated with a user. It provides
+ * client-side sorting and searching functionality to help users quickly
+ * locate specific tags.
+ *
+ * Tags are currently rendered from a static dataset and displayed in a
+ * tabular format with metadata such as assignment count, creation date,
+ * and creator information.
+ *
+ * @component
+ *
+ * @returns {JSX.Element} The rendered UserTags component.
+ *
+ * @remarks
+ * - Uses React state to manage sorting and search input.
+ * - Supports sorting tags by latest or oldest creation time.
+ * - Supports searching tags by tag name or creator name.
+ * - Uses a reusable `PageHeader` component for search and sort controls.
+ * - Applies client-side filtering and sorting before rendering.
+ * - Displays tags in a semantic HTML table for structured data presentation.
+ *
+ * @example
+ * ```tsx
+ * <UserTags />
+ * ```
+ *
+ * @dependencies
+ * - `react` for component state management
+ * - Custom CSS modules for layout and styling
+ * - Shared `PageHeader` component for search and sorting controls
+ *
+ */
 import React, { useState } from 'react';
 import styles from 'style/app-fixed.module.css';
 // import { useTranslation } from 'react-i18next';

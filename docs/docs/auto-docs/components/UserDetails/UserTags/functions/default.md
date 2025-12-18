@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/components/UserDetails/UserTags.tsx:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserDetails/UserTags.tsx#L6)
+Defined in: [src/components/UserDetails/UserTags.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserDetails/UserTags.tsx#L40)
 
 ## Returns
 

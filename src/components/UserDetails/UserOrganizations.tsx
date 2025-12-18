@@ -1,3 +1,45 @@
+/**
+ * UserOrganizations Component
+ *
+ * This component displays a list of organizations associated with a user,
+ * including organizations they have created, belong to, or joined. It provides
+ * search, sorting, and filtering capabilities to help users easily navigate
+ * through their organizations.
+ *
+ * Organization data is fetched using GraphQL queries and normalized into a
+ * unified structure before being filtered and rendered.
+ *
+ * @component
+ * @param {MemberDetailProps} props - The props for the component.
+ * @param {string} [props.id] - Optional user ID used to fetch organization data.
+ *                            If not provided, the ID is resolved from route state
+ *                            or local storage.
+ *
+ * @returns {JSX.Element} The rendered UserOrganizations component.
+ *
+ * @remarks
+ * - Uses Apollo Client's `useQuery` to fetch user details and joined organizations.
+ * - Combines multiple organization relationships (created, belong-to, joined)
+ *   into a single normalized list.
+ * - Supports client-side search, sorting, and filtering by organization type.
+ * - Uses `useMemo` to optimize derived organization lists and avoid unnecessary
+ *   recalculations.
+ * - Integrates a reusable `PageHeader` component for search, sort, and filter controls.
+ * - Displays an empty state message when no organizations match the criteria.
+ *
+ * @example
+ * ```tsx
+ * <UserOrganizations id="12345" />
+ * ```
+ *
+ * @dependencies
+ * - `@apollo/client` for GraphQL queries
+ * - `react-router` for resolving route-based user IDs
+ * - `react-bootstrap` and custom CSS modules for layout
+ * - `@mui/material` and `@mui/icons-material` for action icons
+ * - Shared UI components such as `PageHeader` and `PeopleTabUserOrganizations`
+ *
+ */
 import React, { useMemo, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import PeopleTabUserOrganizations from 'shared-components/PeopleTabUserOrganizations/PeopleTabUserOrganizations';
@@ -19,11 +61,20 @@ type UserOrg = {
   id: string;
   name: string;
   relation: OrgRelationType;
+  adminsCount: number;
+  membersCount: number;
+  description?: string;
+  avatarUrl?: string;
 };
+
 interface InterfaceJoinedOrgEdge {
   node: {
     id: string;
     name: string;
+    adminsCount: number;
+    membersCount: number;
+    description?: string;
+    avatarUrl?: string;
   };
 }
 
@@ -59,43 +110,85 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
   });
 
   const allUserOrgs: UserOrg[] = useMemo(() => {
-    if (!userData?.user) {
+    if (!userData?.user && !joinedOrganizationsData?.user) {
       return [];
     }
 
-    const created =
-      userData.user.createdOrganizations?.map(
-        (org: { id: string; name: string }) => ({
+    const created: UserOrg[] =
+      userData?.user?.createdOrganizations?.map(
+        (org: {
+          id: string;
+          name: string;
+          adminsCount: number;
+          membersCount: number;
+          description?: string;
+          avatarUrl?: string;
+        }) => ({
           id: org.id,
           name: org.name,
-          relation: 'CREATED' as OrgRelationType,
+          relation: 'CREATED' as const,
+          adminsCount: org.adminsCount ?? 0,
+          membersCount: org.membersCount ?? 0,
+          description: org.description || 'No Description',
+          avatarUrl: org.avatarUrl || '',
         }),
       ) || [];
 
     const belongTo: UserOrg[] =
-      userData.user.organizationsWhereMember?.edges?.map(
-        (edge: { node: { id: string; name: string } }) => ({
+      userData?.user?.organizationsWhereMember?.edges?.map(
+        (edge: {
+          node: {
+            id: string;
+            name: string;
+            adminsCount: number;
+            membersCount: number;
+            description?: string;
+            avatarUrl?: string;
+          };
+        }) => ({
           id: edge.node.id,
           name: edge.node.name,
-          relation: 'BELONG_TO',
+          relation: 'BELONG_TO' as const,
+          adminsCount: edge.node.adminsCount ?? 0,
+          membersCount: edge.node.membersCount ?? 0,
+          description: edge.node.description || 'No Description',
+          avatarUrl: edge.node.avatarUrl || '',
         }),
       ) || [];
 
     const joined: UserOrg[] =
       joinedOrganizationsData?.user?.organizationsWhereMember?.edges?.map(
-        (edge: InterfaceJoinedOrgEdge) => ({
+        (edge: {
+          node: {
+            id: string;
+            name: string;
+            adminsCount: number;
+            membersCount: number;
+            description?: string;
+            avatarUrl?: string;
+          };
+        }) => ({
           id: edge.node.id,
           name: edge.node.name,
           relation: 'JOINED' as const,
+          adminsCount: edge.node.adminsCount ?? 0,
+          membersCount: edge.node.membersCount ?? 0,
+          description: edge.node.description || 'No Description',
+          avatarUrl: edge.node.avatarUrl || '',
         }),
       ) || [];
 
-    return [...created, ...belongTo, ...joined];
-  }, [userData]);
+    // Merge and remove duplicates
+    const allOrgs = [...created, ...belongTo, ...joined];
+    const uniqueOrgs = allOrgs.filter(
+      (org, index, self) => index === self.findIndex((o) => o.id === org.id),
+    );
+
+    return uniqueOrgs;
+  }, [userData, joinedOrganizationsData]);
 
   const [searchValue, setSearchValue] = useState('');
   const [sortOption, setSortOption] = useState<'ASC' | 'DESC'>('ASC');
-  searchValue.trim().toLowerCase();
 
   const filteredOrgs = useMemo(() => {
     let list = [...allUserOrgs];
@@ -120,85 +213,6 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
 
     return list;
   }, [allUserOrgs, searchValue, sortOption, orgFilter]);
-
-  // const DUMMY_ORGANIZATIONS = [
-  //   {
-  //     id: 1,
-  //     title: 'Alpha Organization',
-  //     description: 'This is Alpha organization description.',
-  //     adminCount: 3,
-  //     membersCount: 25,
-  //   },
-  //   {
-  //     id: 2,
-  //     title: 'Beta Organization',
-  //     description: 'This is Beta organization description.',
-  //     adminCount: 5,
-  //     membersCount: 40,
-  //   },
-  //   {
-  //     id: 3,
-  //     title: 'Gamma Organization',
-  //     description: 'This is Gamma organization description.',
-  //     adminCount: 2,
-  //     membersCount: 18,
-  //   },
-  //   {
-  //     id: 4,
-  //     title: 'Delta Tech Group',
-  //     description:
-  //       'A technology-focused organization working on scalable systems.',
-  //     adminCount: 4,
-  //     membersCount: 60,
-  //   },
-  //   {
-  //     id: 5,
-  //     title: 'Epsilon Innovations',
-  //     description:
-  //       'Innovation-driven organization fostering creative solutions.',
-  //     adminCount: 6,
-  //     membersCount: 80,
-  //   },
-  //   {
-  //     id: 6,
-  //     title: 'Zeta Community',
-  //     description: 'A community-based organization for collaborative growth.',
-  //     adminCount: 2,
-  //     membersCount: 15,
-  //   },
-  //   {
-  //     id: 7,
-  //     title: 'Omega Enterprises',
-  //     description:
-  //       'Enterprise-level organization managing large-scale operations.',
-  //     adminCount: 8,
-  //     membersCount: 120,
-  //   },
-  //   {
-  //     id: 8,
-  //     title: 'Nova Labs',
-  //     description:
-  //       'Research and development lab focused on emerging technologies.',
-  //     adminCount: 3,
-  //     membersCount: 35,
-  //   },
-  //   {
-  //     id: 9,
-  //     title: 'Vertex Solutions',
-  //     description:
-  //       'Solutions-oriented organization delivering high-impact products.',
-  //     adminCount: 5,
-  //     membersCount: 55,
-  //   },
-  //   {
-  //     id: 10,
-  //     title: 'Horizon Collective',
-  //     description:
-  //       'A collective aiming to build long-term sustainable initiatives.',
-  //     adminCount: 4,
-  //     membersCount: 45,
-  //   },
-  // ];
 
   return (
     <div className={styles.peopleTabUserOrganizationsContainer}>
@@ -238,23 +252,19 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
 
       {/* ===== Organizations Grid ===== */}
       <div className={styles.peopleTabUserOrganizationsGrid}>
-        {filteredOrgs.length === 0 ? (
+        {!userData?.user && !joinedOrganizationsData?.user ? (
+          <p>Loading organizations...</p>
+        ) : filteredOrgs.length === 0 ? (
           <p>No organizations found.</p>
         ) : (
           filteredOrgs.map((org) => (
             <PeopleTabUserOrganizations
               key={org.id}
               title={org.name}
-              description={
-                org.relation === 'CREATED'
-                  ? 'Created by user'
-                  : org.relation === 'BELONG_TO'
-                    ? 'Member of organization'
-                    : 'Joined organization'
-              }
-              adminCount={0}
-              membersCount={0}
-              img={''}
+              description={org.description || 'No Description'}
+              adminCount={org.adminsCount}
+              membersCount={org.membersCount}
+              img={org.avatarUrl || ''}
               actionIcon={
                 <IconButton size="small">
                   <EditIcon />
