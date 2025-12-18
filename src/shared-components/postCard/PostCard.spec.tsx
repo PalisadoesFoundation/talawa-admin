@@ -601,10 +601,6 @@ describe('PostCard', () => {
     customMock: MockedResponse,
     propsOverrides: Partial<InterfacePostCard> = {},
   ) => {
-    const { setItem } = useLocalStorage();
-    setItem('userId', '1');
-    setItem('role', 'administrator');
-
     const mocksArray = [
       customMock,
       ...mocks.filter((m) => m.request.query !== GET_POST_COMMENTS),
@@ -640,10 +636,6 @@ describe('PostCard', () => {
   };
 
   const renderPostCardWithCustomMock = (customMock: MockedResponse) => {
-    const { setItem } = useLocalStorage();
-    setItem('userId', '1');
-    setItem('role', 'administrator'); // Set admin role for pin/unpin tests
-
     // Only include the custom mock and base mocks, NOT commentsWithPaginationMock
     const mocksArray = [
       customMock,
@@ -1098,8 +1090,6 @@ describe('PostCard', () => {
   };
 
   it('should load more comments successfully when button is clicked', async () => {
-    const { setItem } = useLocalStorage();
-    setItem('userId', '1');
     renderPostCardWithPagination();
 
     // Open comments section
@@ -1129,9 +1119,6 @@ describe('PostCard', () => {
   });
 
   it('should handle error when loading more comments fails', async () => {
-    const { setItem } = useLocalStorage();
-    setItem('userId', '1');
-
     renderPostCardWithPagination({
       fetchMoreMock: fetchMoreCommentsErrorMock,
     });
@@ -1191,9 +1178,6 @@ describe('PostCard', () => {
   });
 
   it('should handle onCompleted callback when data.post.comments is null', async () => {
-    const { setItem } = useLocalStorage();
-    setItem('userId', '1');
-
     renderPostCardWithPagination({
       customMocks: [nullCommentsMock],
     });
@@ -1209,9 +1193,6 @@ describe('PostCard', () => {
   });
 
   it('should handle fetchMoreResult with null comments in updateQuery', async () => {
-    const { setItem } = useLocalStorage();
-    setItem('userId', '1');
-
     renderPostCardWithPagination({
       fetchMoreMock: nullFetchMoreMock,
     });
@@ -1242,9 +1223,6 @@ describe('PostCard', () => {
   };
 
   it('should not display comments section when commentCount is 0', () => {
-    const { setItem } = useLocalStorage();
-    setItem('userId', '1');
-
     render(
       <MockedProvider mocks={mocks} link={link}>
         <BrowserRouter>
@@ -1262,9 +1240,6 @@ describe('PostCard', () => {
   });
 
   it('should render avatar with UserDefault fallback when avatarURL is null', () => {
-    const { setItem } = useLocalStorage();
-    setItem('userId', '1');
-
     // Post props with null avatarURL to test the fallback
     const postWithNullAvatar = {
       ...defaultProps,
@@ -1419,10 +1394,6 @@ describe('PostCard', () => {
   });
 
   it('should close dropdown when clicking pin/unpin', async () => {
-    const { setItem } = useLocalStorage();
-    setItem('userId', '1');
-    setItem('role', 'administrator'); // Set admin role for pin/unpin tests
-
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
