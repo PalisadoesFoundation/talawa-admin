@@ -16,7 +16,6 @@ import { toast } from 'react-toastify';
 import styles from 'style/app-fixed.module.css';
 import PostsRenderer from './Posts';
 import type {
-  InterfacePostEdge,
   InterfaceOrganizationPostListData,
   InterfacePost,
 } from '../../types/Post/interface';
@@ -47,7 +46,6 @@ function OrgPost(): JSX.Element {
   const [first, setFirst] = useState<number | null>(6);
   const [last, setLast] = useState<number | null>(null);
   const [sortedPosts, setSortedPosts] = useState<InterfacePost[]>([]);
-  const [filteredPosts, setFilteredPosts] = useState<InterfacePostEdge[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [isFiltering, setIsFiltering] = useState(false);
   const {
@@ -112,7 +110,7 @@ function OrgPost(): JSX.Element {
   }, [currentPage, sortingOption, sortedPosts]);
 
   useEffect(() => {
-    if (orgPostListError) toast.error('Organization post list error:');
+    if (orgPostListError) toast.error(t('orgPostListError') as string);
   }, [orgPostListError]);
 
   useEffect(() => {
@@ -145,7 +143,7 @@ function OrgPost(): JSX.Element {
       data-is-filtering={String(isFiltering)}
       data-sorting-option={sortingOption}
     >
-      {error && <div data-testid="not-found">Error loading post</div>}
+      {error && <div data-testid="not-found">{t('errorLoadingPosts')}</div>}
       <PostsRenderer
         loading={loading}
         error={error}
@@ -194,24 +192,16 @@ function OrgPost(): JSX.Element {
       const { data: searchData } = await refetchPosts({
         input: { organizationId: currentUrl },
       });
-      console.log(filteredPosts);
       if (!term.trim()) {
         setIsFiltering(false);
-        setFilteredPosts([]);
         return;
       }
 
       if (searchData?.postsByOrganization) {
         setIsFiltering(true);
-
-        const filtered = searchData.postsByOrganization.filter(
-          (post: InterfacePost) =>
-            post.caption?.toLowerCase().includes(term.toLowerCase()),
-        );
-        setFilteredPosts(filtered);
       }
     } catch {
-      toast.error('Error searching posts');
+      toast.error(t('searchError'));
       setIsFiltering(false);
     }
   };
@@ -320,7 +310,7 @@ function OrgPost(): JSX.Element {
               disabled={!hasPreviousPage}
               data-testid="previous-page-button"
             >
-              Previous
+              {t('previous')}
             </Button>
           </div>
           <div className="col-auto"></div>
@@ -330,7 +320,7 @@ function OrgPost(): JSX.Element {
               disabled={!hasNextPage}
               data-testid="next-page-button"
             >
-              Next
+              {t('next')}
             </Button>
           </div>
         </div>

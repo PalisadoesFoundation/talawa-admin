@@ -721,7 +721,13 @@
     "organizationIdMissing": "组织ID 缺失！",
     "messageDescription": "帖子描述",
     "addVideo": "添加视频",
-    "creatingMessage": "正在创建帖子..."
+    "creatingMessage": "正在创建帖子...",
+    "errorLoadingPosts": "加载帖子时出错。",
+    "orgPostListError": "加载组织帖子时出错。",
+    "searchError": "搜索帖子时出错。",
+    "previous": "上一页",
+    "next": "下一页",
+    "post": "发布"
   },
   "postNotFound": {
     "post": "邮政",

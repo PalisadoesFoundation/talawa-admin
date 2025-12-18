@@ -26,6 +26,7 @@ import type { PostNode } from 'types/Post/type';
 import type { InterfacePostCard } from 'utils/interfaces';
 import PinnedPostsStory from './PinnedPostsStory';
 import { Close } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceOrganizationData {
   organization?: {
@@ -66,9 +67,11 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
   const [selectedPinnedPost, setSelectedPinnedPost] =
     useState<InterfacePost | null>(null);
   const [showPinnedPostModal, setShowPinnedPostModal] = useState(false);
+  const { t } = useTranslation('translation', { keyPrefix: 'orgPost' });
 
   if (loading) return <Loader />;
-  if (error) return <div data-testid="error-message">Error loading posts</div>;
+  if (error)
+    return <div data-testid="error-message">{t('errorLoadingPosts')}</div>;
 
   const renderPostCard = (
     post: InterfacePost | PostNode,
@@ -133,7 +136,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
 
   if (isFiltering) {
     if (!data?.postsByOrganization || data.postsByOrganization.length === 0) {
-      return <NotFound title="post" keyPrefix="postNotFound" />;
+      return <NotFound title={t('post')} keyPrefix="postNotFound" />;
     }
 
     const filtered = data.postsByOrganization
@@ -149,7 +152,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
       })) as InterfacePostEdge[];
 
     if (filtered.length === 0) {
-      return <NotFound title="post" keyPrefix="postNotFound" />;
+      return <NotFound title={t('post')} keyPrefix="postNotFound" />;
     }
 
     return (
@@ -174,7 +177,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
 
   if (sortingOption !== 'None') {
     if (!displayPosts.length) {
-      return <NotFound title="post" keyPrefix="postNotFound" />;
+      return <NotFound title={t('post')} keyPrefix="postNotFound" />;
     }
 
     return (
@@ -187,7 +190,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
   }
 
   if (!data?.organization?.posts?.edges?.length) {
-    return <NotFound title="post" keyPrefix="postNotFound" />;
+    return <NotFound title={t('post')} keyPrefix="postNotFound" />;
   }
 
   return (

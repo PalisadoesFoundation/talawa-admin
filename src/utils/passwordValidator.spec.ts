@@ -1,5 +1,8 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { validatePassword } from './passwordValidator';
+import {
+  getPasswordValidationRules,
+  validatePassword,
+} from './passwordValidator';
 
 describe('validatePassword', () => {
   afterEach(() => {
@@ -73,6 +76,45 @@ describe('validatePassword', () => {
 
     passwordsWithSpaces.forEach((password) => {
       expect(validatePassword(password)).toBe(true);
+    });
+  });
+});
+
+describe('getPasswordValidationRules', () => {
+  it('should detect all rule combinations correctly', () => {
+    expect(getPasswordValidationRules('a')).toEqual({
+      lowercaseChar: true,
+      uppercaseChar: false,
+      numericValue: false,
+      specialChar: false,
+    });
+
+    expect(getPasswordValidationRules('A')).toEqual({
+      lowercaseChar: false,
+      uppercaseChar: true,
+      numericValue: false,
+      specialChar: false,
+    });
+
+    expect(getPasswordValidationRules('1')).toEqual({
+      lowercaseChar: false,
+      uppercaseChar: false,
+      numericValue: true,
+      specialChar: false,
+    });
+
+    expect(getPasswordValidationRules('!')).toEqual({
+      lowercaseChar: false,
+      uppercaseChar: false,
+      numericValue: false,
+      specialChar: true,
+    });
+
+    expect(getPasswordValidationRules('aA1!')).toEqual({
+      lowercaseChar: true,
+      uppercaseChar: true,
+      numericValue: true,
+      specialChar: true,
     });
   });
 });

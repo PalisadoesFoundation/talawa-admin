@@ -721,7 +721,13 @@
     "organizationIdMissing": "संगठन आईडी गायब है!",
     "messageDescription": "पोस्ट विवरण",
     "addVideo": "वीडियो जोड़ें",
-    "creatingMessage": "पोस्ट बनाई जा रही है..."
+    "creatingMessage": "पोस्ट बनाई जा रही है...",
+    "errorLoadingPosts": "पोस्ट लोड करने में त्रुटि।",
+    "orgPostListError": "संगठन की पोस्ट लोड करने में त्रुटि।",
+    "searchError": "पोस्ट खोजने में त्रुटि।",
+    "previous": "पिछला",
+    "next": "अगला",
+    "post": "पोस्ट करें"
   },
   "postNotFound": {
     "post": "डाक",

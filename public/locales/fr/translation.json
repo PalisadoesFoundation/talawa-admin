@@ -721,7 +721,13 @@
     "organizationIdMissing": "L'ID de l'organisation est manquant !",
     "messageDescription": "Description du message",
     "addVideo": "Ajouter une vidéo",
-    "creatingMessage": "Création du message..."
+    "creatingMessage": "Création du message...",
+    "errorLoadingPosts": "Erreur lors du chargement des publications.",
+    "orgPostListError": "Erreur lors du chargement des publications de l’organisation.",
+    "searchError": "Erreur lors de la recherche de publications.",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "post": "Publier"
   },
   "postNotFound": {
     "post": "Poste",

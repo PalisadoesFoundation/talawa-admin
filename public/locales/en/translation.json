@@ -721,7 +721,13 @@
     "organizationIdMissing": "Organization ID is missing!",
     "messageDescription": "Post Description",
     "addVideo": "Add Video",
-    "creatingMessage": "Creating Post..."
+    "creatingMessage": "Creating Post...",
+    "errorLoadingPosts": "Error loading posts.",
+    "orgPostListError": "Error loading organization posts.",
+    "searchError": "Error searching posts.",
+    "previous": "Previous",
+    "next": "Next",
+    "post": "Post"
   },
   "postNotFound": {
     "post": "Post",

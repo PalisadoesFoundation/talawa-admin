@@ -100,6 +100,7 @@ function organizationEvents(): JSX.Element {
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const [search, setSearch] = useState<string>('');
   const { orgId: currentUrl } = useParams();
   const navigate = useNavigate();
   const queryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -126,6 +127,7 @@ function organizationEvents(): JSX.Element {
       id: currentUrl,
       first: 150,
       after: null,
+      search: search || null,
       startDate: dayjs(new Date(currentYear, currentMonth, 1))
         .startOf('month')
         .toISOString(),
@@ -204,12 +206,6 @@ function organizationEvents(): JSX.Element {
         // Just suppress rate limit errors silently
         return;
       }
-
-      // For other errors (like empty results), just log them but don't redirect
-      console.warn('Non-critical error in events page:', {
-        eventDataError: eventDataError?.message,
-        orgDataError: orgDataError?.message,
-      });
     }
   }, [eventDataError, orgDataError, navigate]);
 
@@ -231,7 +227,9 @@ function organizationEvents(): JSX.Element {
           <PageHeader
             search={{
               placeholder: t('searchEventName'),
-              onSearch: (value) => console.log(`Search: ${value}`),
+              onSearch: (value: string) => {
+                setSearch(value.trim());
+              },
               inputTestId: 'searchEvent',
               buttonTestId: 'searchButton',
             }}

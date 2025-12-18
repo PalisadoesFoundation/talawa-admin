@@ -721,7 +721,13 @@
     "organizationIdMissing": "¡Falta el ID de la organización!",
     "messageDescription": "Descripción de la publicación",
     "addVideo": "Añadir video",
-    "creatingMessage": "Creando publicación..."
+    "creatingMessage": "Creando publicación...",
+    "errorLoadingPosts": "Error al cargar las publicaciones.",
+    "orgPostListError": "Error al cargar las publicaciones de la organización.",
+    "searchError": "Error al buscar publicaciones.",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "post": "Publicar"
   },
   "postNotFound": {
     "post": "Publicación",
