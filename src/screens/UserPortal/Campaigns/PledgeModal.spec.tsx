@@ -20,7 +20,6 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import type { InterfaceUserInfoPG } from 'utils/interfaces';
-import type { DatePickerProps } from '@mui/x-date-pickers';
 import React, { act } from 'react';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
@@ -45,11 +44,15 @@ vi.mock('@mui/x-date-pickers', async () => {
   const actual = await vi.importActual<typeof import('@mui/x-date-pickers')>(
     '@mui/x-date-pickers',
   );
-  type MockDatePickerProps = DatePickerProps<dayjs.Dayjs>;
+  interface InterfaceTestDatePickerProps {
+    label?: React.ReactNode;
+    value?: dayjs.Dayjs | null;
+    onChange?: (value: dayjs.Dayjs | null) => void;
+  }
 
   return {
     ...actual,
-    DatePicker: ({ label, value, onChange }: MockDatePickerProps) => (
+    DatePicker: ({ label, value, onChange }: InterfaceTestDatePickerProps) => (
       <div role="group" aria-label={label as string}>
         <input
           aria-label={label as string}
