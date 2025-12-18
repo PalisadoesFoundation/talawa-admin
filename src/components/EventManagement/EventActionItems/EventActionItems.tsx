@@ -68,9 +68,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
   eventId,
   orgActionItemsRefetch,
 }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'organizationActionItems',
-  });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -417,11 +415,16 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
           <SortingButton
             title={tCommon('searchBy')}
             sortingOptions={[
-              { label: t('assignedTo'), value: 'assignee' },
-              { label: t('category'), value: 'category' },
+              {
+                label: t('organizationActionItems.assignedTo'),
+                value: 'assignee',
+              },
+              { label: t('agendaItems.category'), value: 'category' },
             ]}
             selectedOption={
-              searchBy === 'assignee' ? t('assignedTo') : t('category')
+              searchBy === 'assignee'
+                ? t('organizationActionItems.assignedTo')
+                : t('agendaItems.category')
             }
             onSortChange={(value) =>
               setSearchBy(value as 'assignee' | 'category')
@@ -433,14 +436,20 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
           <SortingButton
             title={tCommon('sort')}
             sortingOptions={[
-              { label: t('latestAssigned'), value: 'assignedAt_DESC' },
-              { label: t('earliestAssigned'), value: 'assignedAt_ASC' },
+              {
+                label: t('organizationActionItems.latestAssigned'),
+                value: 'assignedAt_DESC',
+              },
+              {
+                label: t('organizationActionItems.earliestAssigned'),
+                value: 'assignedAt_ASC',
+              },
             ]}
             selectedOption={
               sortBy === 'assignedAt_DESC'
-                ? t('latestAssigned')
+                ? t('organizationActionItems.latestAssigned')
                 : sortBy === 'assignedAt_ASC'
-                  ? t('earliestAssigned')
+                  ? t('organizationActionItems.earliestAssigned')
                   : tCommon('sort')
             }
             onSortChange={(value) =>
@@ -451,7 +460,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
             className={styles.dropdown}
           />
           <SortingButton
-            title={t('status')}
+            title={t('eventVolunteers.status')}
             sortingOptions={[
               { label: tCommon('all'), value: 'all' },
               { label: tCommon('pending'), value: ItemStatus.Pending },
@@ -468,7 +477,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
               setStatus(value === 'all' ? null : (value as ItemStatus))
             }
             dataTestIdPrefix="filter"
-            buttonLabel={t('status')}
+            buttonLabel={t('eventVolunteers.status')}
             className={styles.dropdown}
           />
           <Button
@@ -500,7 +509,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noActionItems')}
+              {t('organizationActionItems.noActionItems')}
             </Stack>
           ),
         }}

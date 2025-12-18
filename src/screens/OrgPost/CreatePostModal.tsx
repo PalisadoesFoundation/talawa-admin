@@ -57,7 +57,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
   refetch,
   orgId,
 }) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'orgPost' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   const [postformState, setPostFormState] = useState({
@@ -109,7 +109,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
 
       // Validate that title is not empty after trimming
       if (trimmedTitle === '') {
-        toast.error(t('messageTitleError'));
+        toast.error(t('orgPost.messageTitleError'));
         return;
       }
 
@@ -130,7 +130,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
       }
 
       if (!orgId) {
-        toast.error(t('organizationIdMissing'));
+        toast.error(t('orgPost.organizationIdMissing'));
         return;
       }
 
@@ -146,7 +146,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
       });
 
       if (data?.createPost) {
-        toast.success(t('postCreatedSuccess') as string);
+        toast.success(t('orgPost.postCreatedSuccess') as string);
         await refetch();
 
         // Reset all state
@@ -273,16 +273,20 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
       centered
     >
       <Modal.Header data-testid="modalOrganizationHeader" closeButton>
-        <Modal.Title id="createPostModalTitle">{t('postDetails')}</Modal.Title>
+        <Modal.Title id="createPostModalTitle">
+          {t('orgPost.postDetails')}
+        </Modal.Title>
       </Modal.Header>
       <Form onSubmit={createPost} data-testid="createPostForm">
         <Modal.Body>
-          <Form.Label htmlFor="posttitle">{t('postTitle')}</Form.Label>
+          <Form.Label htmlFor="posttitle">
+            {t('orgPostCard.postTitle')}
+          </Form.Label>
           <Form.Control
             type="text"
             id="posttitle"
             className={`mb-3 ${styles.inputField}`}
-            placeholder={t('postTitle1')}
+            placeholder={t('orgPostCard.postTitle1')}
             data-testid="modalTitle"
             data-cy="modalTitle"
             autoComplete="off"
@@ -296,12 +300,14 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
             }}
           />
 
-          <Form.Label htmlFor="postInfo">{t('messageDescription')}</Form.Label>
+          <Form.Label htmlFor="postInfo">
+            {t('orgPost.messageDescription')}
+          </Form.Label>
           <Form.Control
             as="textarea"
             id="postInfo"
             className={`mb-3 ${styles.inputField}`}
-            placeholder={t('messageDescription')}
+            placeholder={t('orgPost.messageDescription')}
             data-testid="modalinfo"
             data-cy="modalinfo"
             rows={3}
@@ -315,13 +321,13 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
           />
         </Modal.Body>
         <Modal.Body data-testid="modalOrganizationUpload">
-          <Form.Label htmlFor="addMedia">{t('addMedia')}</Form.Label>
+          <Form.Label htmlFor="addMedia">{t('orgPost.addMedia')}</Form.Label>
           <Form.Control
             id="addMedia"
             name="addMedia"
             type="file"
             accept="image/*,video/*"
-            placeholder={t('addMedia')}
+            placeholder={t('orgPost.addMedia')}
             multiple={false}
             onChange={handleAddMediaChange}
             data-testid="addMediaField"
@@ -334,7 +340,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
             name="videoAddMedia"
             type="file"
             accept="video/*"
-            placeholder={t('addVideo')}
+            placeholder={t('orgPost.addVideo')}
             onChange={handleVideoAddMediaChange}
             data-testid="addVideoField"
             className={`mb-3 ${styles.inputField}`}
@@ -352,7 +358,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
                 <video controls data-testid="videoPreview">
                   <source src={postformState.addMedia} type={file.type} />
                   {/* TODO: add captions (track src) for accessibility */}(
-                  {t('tag')})
+                  {t('orgPostCard.tag')})
                 </video>
               )}
               <button
@@ -383,7 +389,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
               <video controls data-testid="videoPreview">
                 <source src={videoPreview} type={videoFile.type} />
                 {/* TODO: add captions (track src) for accessibility */}(
-                {t('tag')})
+                {t('orgPostCard.tag')})
               </video>
               <button
                 type="button"
@@ -405,7 +411,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
             </div>
           )}
           <Form.Label htmlFor="pinPost" className="mt-3">
-            {t('pinPost')}
+            {t('postCard.pinPost')}
           </Form.Label>
           <Form.Switch
             id="pinPost"
@@ -440,7 +446,9 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
             className={`${styles.addButton} mt-2`}
             disabled={createPostLoading}
           >
-            {createPostLoading ? t('creatingMessage') : t('addPost')}
+            {createPostLoading
+              ? t('orgPost.creatingMessage')
+              : t('home.addPost')}
           </Button>
         </Modal.Footer>
       </Form>

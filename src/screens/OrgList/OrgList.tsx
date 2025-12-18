@@ -105,7 +105,7 @@ interface InterfaceFormStateType {
 }
 
 function orgList(): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
@@ -128,7 +128,7 @@ function orgList(): JSX.Element {
   const toggleDialogModal = (): void =>
     setdialogModalIsOpen(!dialogModalisOpen);
 
-  document.title = t('title');
+  document.title = t('orgList.title');
 
   const perPageResult = 8;
   const [page, setPage] = useState(0);
@@ -138,7 +138,7 @@ function orgList(): JSX.Element {
   const [filterName, setFilterName] = useState('');
   const [sortingState, setSortingState] = useState({
     option: '',
-    selectedOption: t('sort'),
+    selectedOption: t('organizationVenues.sort'),
   });
 
   // const [hasMore, sethasMore] = useState(true);
@@ -341,14 +341,14 @@ function orgList(): JSX.Element {
         <div className={styles.searchWrapper}>
           <div className={styles.inputOrgList}>
             <SearchBar
-              placeholder={t('searchOrganizations')}
+              placeholder={t('userOrganizations.searchOrganizations')}
               value={typedValue}
               onChange={handleChangeFilter}
               onSearch={doSearch}
               className={styles.maxWidth}
               inputTestId="searchInput"
               buttonTestId="searchBtn"
-              buttonAriaLabel={t('search')}
+              buttonAriaLabel={t('userChat.search')}
             />
           </div>
 
@@ -360,8 +360,8 @@ function orgList(): JSX.Element {
                 <SortingButton
                   title={t('sortOrganizations')}
                   sortingOptions={[
-                    { label: t('Latest'), value: 'Latest' },
-                    { label: t('Earliest'), value: 'Earliest' },
+                    { label: t('eventVolunteers.latest'), value: 'Latest' },
+                    { label: t('eventVolunteers.earliest'), value: 'Earliest' },
                   ]}
                   selectedOption={sortingState.selectedOption}
                   onSortChange={handleSortChange}
@@ -378,7 +378,7 @@ function orgList(): JSX.Element {
                     data-testid="createOrganizationBtn"
                   >
                     <i className="fa fa-plus me-2" />
-                    {t('createOrganization')}
+                    {t('orgList.createOrganization')}
                   </Button>
                 </div>
               )}
@@ -394,8 +394,10 @@ function orgList(): JSX.Element {
       searchByName.length === 0 &&
       (!userData || adminFor.length === 0) ? (
         <div className={styles.notFound}>
-          <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
-          <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
+          <h3 className="m-0">{t('requests.noOrgErrorTitle')}</h3>
+          <h6 className="text-secondary">
+            {t('requests.noOrgErrorDescription')}
+          </h6>
         </div>
       ) : !isLoading &&
         sortedOrganizations?.length == 0 &&
@@ -416,10 +418,22 @@ function orgList(): JSX.Element {
                       <div className={shimmerClass} />
 
                       <div className={styles.content}>
-                        <h5 className="shimmer" title={t('orgName')}></h5>
-                        <h6 className="shimmer" title={t('location')}></h6>
-                        <h6 className="shimmer" title={t('admins')}></h6>
-                        <h6 className="shimmer" title={t('members')}></h6>
+                        <h5
+                          className="shimmer"
+                          title={t('orgContribution.orgname')}
+                        ></h5>
+                        <h6
+                          className="shimmer"
+                          title={t('userEventCard.location')}
+                        ></h6>
+                        <h6
+                          className="shimmer"
+                          title={t('orgListCard.admins')}
+                        ></h6>
+                        <h6
+                          className="shimmer"
+                          title={t('userChat.members')}
+                        ></h6>
                       </div>
                     </div>
                     <div className={shimmerBtnClass} />
@@ -491,7 +505,7 @@ function orgList(): JSX.Element {
           data-testid="pluginNotificationHeader"
         >
           <Modal.Title className="text-white">
-            {t('manageFeatures')}
+            {t('orgList.manageFeatures')}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -516,7 +530,7 @@ function orgList(): JSX.Element {
                   value="invite"
                   data-testid="enableEverythingForm"
                 >
-                  {t('enableEverything')}
+                  {t('orgList.enableEverything')}
                 </Button>
               </div>
             </div>

@@ -87,7 +87,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   mode,
 }) => {
   // Translation functions to support internationalization
-  const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   // State to manage the form inputs for the pledge
@@ -185,7 +185,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         await updatePledge({
           variables: { id: pledge?.id, ...updatedFields },
         });
-        toast.success(t('pledgeUpdated') as string);
+        toast.success(t('pledges.pledgeUpdated') as string);
         refetchPledge();
         hide();
       } catch (error: unknown) {
@@ -217,7 +217,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           },
         });
 
-        toast.success(t('pledgeCreated') as string);
+        toast.success(t('pledges.pledgeCreated') as string);
         refetchPledge();
         setFormState({
           pledgeUsers: [],
@@ -276,7 +276,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 setFormState({ ...formState, pledgeUsers: newPledgers });
               }}
               renderInput={(params) => (
-                <TextField {...params} label={t('pledgers')} />
+                <TextField {...params} label={t('userCampaigns.pledgers')} />
               )}
             />
           </Form.Group>
@@ -319,12 +319,12 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           <Form.Group className="d-flex gap-3 mb-4">
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">
-                {t('currency')}
+                {t('pledges.currency')}
               </InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 value={pledgeCurrency}
-                label={t('currency')}
+                label={t('pledges.currency')}
                 data-testid="currencySelect"
                 onChange={(e) => {
                   setFormState({
@@ -342,7 +342,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             </FormControl>
             <FormControl fullWidth>
               <TextField
-                label={t('amount')}
+                label={t('transactions.amount')}
                 variant="outlined"
                 className={styles.noOutline}
                 value={pledgeAmount}

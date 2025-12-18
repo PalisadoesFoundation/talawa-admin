@@ -74,7 +74,7 @@ const timeToDayJs = (time: string): Dayjs => {
 };
 
 export default function events(): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'userEvents' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
@@ -184,7 +184,7 @@ export default function events(): JSX.Element {
         variables: { input },
       });
       if (createEventData) {
-        toast.success(t('eventCreated') as string);
+        toast.success(t('userEvents.eventCreated') as string);
         refetch();
         setEventTitle('');
         setEventDescription('');
@@ -349,7 +349,7 @@ export default function events(): JSX.Element {
       <Modal show={createEventModal} onHide={toggleCreateEventModal}>
         <Modal.Header>
           <p className={styles.titlemodalOrganizationEvents}>
-            {t('eventDetails')}
+            {t('userEvents.eventDetails')}
           </p>
           <Button
             variant="danger"
@@ -361,11 +361,11 @@ export default function events(): JSX.Element {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmitCapture={createEvent}>
-            <label htmlFor="eventTitle">{t('eventName')}</label>
+            <label htmlFor="eventTitle">{t('userEvents.eventName')}</label>
             <Form.Control
               type="text"
               id="eventTitle"
-              placeholder={t('enterName')}
+              placeholder={t('addMember.enterName')}
               autoComplete="off"
               required
               value={eventTitle}
@@ -377,7 +377,7 @@ export default function events(): JSX.Element {
             <Form.Control
               as="textarea"
               id="eventDescription"
-              placeholder={t('enterDescription')}
+              placeholder={t('userEvents.eventNenterDescriptioname')}
               autoComplete="off"
               required
               value={eventDescription}
@@ -461,7 +461,7 @@ export default function events(): JSX.Element {
             </div>
             <div className={styles.checkboxdivEvents}>
               <div className={styles.dispflexEvents}>
-                <label htmlFor="allday">{t('allDay')}?</label>
+                <label htmlFor="allday">{t('userEvents.allDay')}?</label>
                 <Form.Switch
                   className={`me-4 ${styles.switch}`}
                   id="allday"
@@ -472,7 +472,9 @@ export default function events(): JSX.Element {
                 />
               </div>
               <div className={styles.dispflexEvents}>
-                <label htmlFor="recurring">{t('recurring')}:</label>
+                <label htmlFor="recurring">
+                  {t('userVolunteer.recurring')}:
+                </label>
                 <Form.Switch
                   className={`me-4 ${styles.switch}`}
                   id="recurring"
@@ -485,7 +487,7 @@ export default function events(): JSX.Element {
             </div>
             <div className={styles.checkboxdivEvents}>
               <div className={styles.dispflexEvents}>
-                <label htmlFor="ispublic">{t('publicEvent')}?</label>
+                <label htmlFor="ispublic">{t('userEvents.publicEvent')}?</label>
                 <Form.Switch
                   className={`me-4 ${styles.switch}`}
                   id="ispublic"
@@ -496,7 +498,9 @@ export default function events(): JSX.Element {
                 />
               </div>
               <div className={styles.dispflexEvents}>
-                <label htmlFor="registrable">{t('registerable')}?</label>
+                <label htmlFor="registrable">
+                  {t('userEvents.registerable')}?
+                </label>
                 <Form.Switch
                   className={`me-4 ${styles.switch}`}
                   id="registrable"
@@ -509,7 +513,9 @@ export default function events(): JSX.Element {
             </div>
             <div>
               <div className={styles.dispflex}>
-                <label htmlFor="createChat">{t('createChat')}?</label>
+                <label htmlFor="createChat">
+                  {t('userEvents.createChat')}?
+                </label>
                 <Form.Switch
                   className={`me-4 ${styles.switch}`}
                   id="chat"
@@ -526,7 +532,7 @@ export default function events(): JSX.Element {
               value="createevent"
               data-testid="createEventBtn"
             >
-              {t('createEvent')}
+              {t('userEvents.createEvent')}
             </Button>
           </Form>
         </Modal.Body>

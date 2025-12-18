@@ -65,7 +65,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   mode,
   campaign,
 }) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'fundCampaign' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   const [formState, setFormState] = useState({
@@ -118,7 +118,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
           fundId,
         },
       });
-      toast.success(t('createdCampaign') as string);
+      toast.success(t('fundCampaign.createdCampaign') as string);
       setFormState({
         campaignName: '',
         campaignCurrency: 'USD',
@@ -178,7 +178,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       });
       refetchCampaign();
       hide();
-      toast.success(t('updatedCampaign') as string);
+      toast.success(t('fundCampaign.updatedCampaign') as string);
     } catch (error: unknown) {
       toast.error((error as Error).message);
     }
@@ -210,7 +210,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
             <Form.Group className="d-flex mb-3 w-100">
               <FormControl fullWidth>
                 <TextField
-                  label={t('campaignName')}
+                  label={t('fundCampaign.campaignName')}
                   variant="outlined"
                   className={`${styles.noOutline} w-100`}
                   value={campaignName}
@@ -265,12 +265,12 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
               {/* Dropdown to select the currency for funding goal of the campaign*/}
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">
-                  {t('currency')}
+                  {t('pledges.currency')}
                 </InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
                   value={campaignCurrency}
-                  label={t('currency')}
+                  label={t('pledges.currency')}
                   data-testid="currencySelect"
                   onChange={(e) => {
                     setFormState({
@@ -289,7 +289,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
               {/* Input field to enter funding goal for the campaign */}
               <FormControl fullWidth>
                 <TextField
-                  label={t('fundingGoal')}
+                  label={t('fundCampaign.fundingGoal')}
                   variant="outlined"
                   className={styles.noOutline}
                   value={campaignGoal}

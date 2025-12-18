@@ -56,9 +56,7 @@ const INITIAL_FORM_STATE = {
 export const UserUpdate: React.FC<
   InterfaceUserPasswordUpdateProps
 > = (): JSX.Element => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userPasswordUpdate',
-  });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   const [formState, setFormState] = React.useState(INITIAL_FORM_STATE);
@@ -75,12 +73,12 @@ export const UserUpdate: React.FC<
       !formState.newPassword ||
       !formState.confirmNewPassword
     ) {
-      toast.error(t('passCantBeEmpty') as string);
+      toast.error(t('userPasswordUpdate.passCantBeEmpty') as string);
       return;
     }
 
     if (formState.newPassword !== formState.confirmNewPassword) {
-      toast.error(t('passNoMatch') as string);
+      toast.error(t('userPasswordUpdate.passNoMatch') as string);
       return;
     }
 
@@ -121,11 +119,11 @@ export const UserUpdate: React.FC<
           {/* <h3 className={styles.settingstitle}>Update Your Details</h3> */}
           <div className={styles.dispflexUserPasswordUpdate}>
             <div>
-              <label>{t('previousPassword')}</label>
+              <label>{t('userPasswordUpdate.previousPassword')}</label>
               <Form.Control
                 type="password"
                 id="previousPassword"
-                placeholder={t('previousPassword')}
+                placeholder={t('userPasswordUpdate.previousPassword')}
                 autoComplete="off"
                 required
                 value={formState.previousPassword}
@@ -140,11 +138,11 @@ export const UserUpdate: React.FC<
           </div>
           <div className={styles.dispflexUserPasswordUpdate}>
             <div>
-              <label>{t('newPassword')}</label>
+              <label>{t('userPasswordUpdate.newPassword')}</label>
               <Form.Control
                 type="password"
                 id="newPassword"
-                placeholder={t('newPassword')}
+                placeholder={t('userPasswordUpdate.newPassword')}
                 autoComplete="off"
                 required
                 value={formState.newPassword}
@@ -156,11 +154,11 @@ export const UserUpdate: React.FC<
           </div>
           <div className={styles.dispflexUserPasswordUpdate}>
             <div>
-              <label>{t('confirmNewPassword')}</label>
+              <label>{t('userPasswordUpdate.confirmNewPassword')}</label>
               <Form.Control
                 type="password"
                 id="confirmNewPassword"
-                placeholder={t('confirmNewPassword')}
+                placeholder={t('userPasswordUpdate.confirmNewPassword')}
                 autoComplete="off"
                 required
                 value={formState.confirmNewPassword}

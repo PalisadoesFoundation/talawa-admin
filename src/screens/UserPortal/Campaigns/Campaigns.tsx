@@ -57,7 +57,7 @@ import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 const Campaigns = (): JSX.Element => {
   // Retrieves translation functions for various namespaces
-  const { t } = useTranslation('translation', { keyPrefix: 'userCampaigns' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -203,7 +203,7 @@ const Campaigns = (): JSX.Element => {
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         {/* Search input field and button */}
         <SearchBar
-          placeholder={t('searchByName')}
+          placeholder={t('userVolunteer.searchByName')}
           onSearch={setSearchTerm}
           inputTestId="searchCampaigns"
           buttonTestId="searchBtn"
@@ -212,10 +212,22 @@ const Campaigns = (): JSX.Element => {
           <div className="d-flex justify-space-between">
             <SortingButton
               sortingOptions={[
-                { label: t('lowestGoal'), value: 'fundingGoal_ASC' },
-                { label: t('highestGoal'), value: 'fundingGoal_DESC' },
-                { label: t('latestEndDate'), value: 'endDate_DESC' },
-                { label: t('earliestEndDate'), value: 'endDate_ASC' },
+                {
+                  label: t('userCampaigns.lowestGoal'),
+                  value: 'fundingGoal_ASC',
+                },
+                {
+                  label: t('userCampaigns.highestGoal'),
+                  value: 'fundingGoal_DESC',
+                },
+                {
+                  label: t('userVolunteer.latestEndDate'),
+                  value: 'endDate_DESC',
+                },
+                {
+                  label: t('userVolunteer.earliestEndDate'),
+                  value: 'endDate_ASC',
+                },
               ]}
               selectedOption={sortBy}
               onSortChange={(value) =>
@@ -240,7 +252,7 @@ const Campaigns = (): JSX.Element => {
                 navigate(`/user/pledges/${orgId}`, { replace: true })
               }
             >
-              {t('myPledges')}
+              {t('userCampaigns.myPledges')}
               <i className="fa fa-angle-right ms-2" />
             </Button>
           </div>
@@ -249,7 +261,7 @@ const Campaigns = (): JSX.Element => {
       {campaigns.length < 1 ? (
         <Stack height="100%" alignItems="center" justifyContent="center">
           {/* Displayed if no campaigns are found */}
-          {t('noCampaigns')}
+          {t('userCampaigns.noCampaigns')}
         </Stack>
       ) : (
         campaigns.map((campaign: InterfaceUserCampaign, index: number) => (
@@ -313,7 +325,7 @@ const Campaigns = (): JSX.Element => {
                     className={styles.outlineBtn}
                   >
                     <i className={'fa fa-plus me-2'} />
-                    {t('addPledge')}
+                    {t('userCampaigns.addPledge')}
                   </Button>
                 </div>
               </div>

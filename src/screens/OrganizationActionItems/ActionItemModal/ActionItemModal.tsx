@@ -76,9 +76,7 @@ const ItemModal: FC<IItemModalProps> = ({
   baseEvent,
   orgActionItemsRefetch,
 }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'organizationActionItems',
-  });
+  const { t } = useTranslation('translation');
 
   const [actionItemCategory, setActionItemCategory] =
     useState<IActionItemCategoryInfo | null>(null);
@@ -209,7 +207,7 @@ const ItemModal: FC<IItemModalProps> = ({
     e.preventDefault();
     try {
       if (!categoryId || (!volunteerId && !volunteerGroupId)) {
-        toast.error(t('selectCategoryAndAssignment'));
+        toast.error(t('organizationActionItems.selectCategoryAndAssignment'));
         return;
       }
 
@@ -240,7 +238,7 @@ const ItemModal: FC<IItemModalProps> = ({
 
       runRefetches();
       hide();
-      toast.success(t('successfulCreation'));
+      toast.success(t('eventActionItems.successfulCreation'));
     } catch (error: unknown) {
       toast.error((error as Error).message);
     }
@@ -271,7 +269,7 @@ const ItemModal: FC<IItemModalProps> = ({
       setFormState(initializeFormState(null));
       runRefetches();
       hide();
-      toast.success(t('successfulUpdation'));
+      toast.success(t('eventActionItems.successfulUpdation'));
     } catch (error: unknown) {
       toast.error((error as Error).message);
     }
@@ -307,7 +305,7 @@ const ItemModal: FC<IItemModalProps> = ({
       setFormState(initializeFormState(null));
       runRefetches();
       hide();
-      toast.success(t('successfulUpdation'));
+      toast.success(t('eventActionItems.successfulUpdation'));
     } catch (error: unknown) {
       toast.error((error as Error).message);
     }
@@ -401,7 +399,9 @@ const ItemModal: FC<IItemModalProps> = ({
     <Modal className={styles.itemModal} show={isOpen} onHide={hide}>
       <Modal.Header>
         <p className={styles.titlemodal}>
-          {editMode ? t('updateActionItem') : t('createActionItem')}
+          {editMode
+            ? t('organizationActionItems.updateActionItem')
+            : t('eventActionItems.createActionItem')}
         </p>
         <Button
           variant="danger"
@@ -427,10 +427,10 @@ const ItemModal: FC<IItemModalProps> = ({
         >
           {isRecurring && !editMode ? (
             <Form.Group className="mb-3">
-              <Form.Label>{t('applyTo')}</Form.Label>
+              <Form.Label>{t('eventVolunteers.applyTo')}</Form.Label>
               <Form.Check
                 type="radio"
-                label={t('entireSeries')}
+                label={t('eventVolunteers.entireSeries')}
                 name="applyTo"
                 id="applyToSeries"
                 checked={applyTo === 'series'}
@@ -438,7 +438,7 @@ const ItemModal: FC<IItemModalProps> = ({
               />
               <Form.Check
                 type="radio"
-                label={t('thisEventOnly')}
+                label={t('eventVolunteers.thisEventOnly')}
                 name="applyTo"
                 id="applyToInstance"
                 checked={applyTo === 'instance'}
@@ -450,10 +450,10 @@ const ItemModal: FC<IItemModalProps> = ({
             actionItem?.isTemplate &&
             !actionItem.isInstanceException && (
               <Form.Group className="mb-3">
-                <Form.Label>{t('applyTo')}</Form.Label>
+                <Form.Label>{t('eventVolunteers.applyTo')}</Form.Label>
                 <Form.Check
                   type="radio"
-                  label={t('entireSeries')}
+                  label={t('eventVolunteers.entireSeries')}
                   name="applyTo"
                   id="applyToSeries"
                   checked={applyTo === 'series'}
@@ -461,7 +461,7 @@ const ItemModal: FC<IItemModalProps> = ({
                 />
                 <Form.Check
                   type="radio"
-                  label={t('thisEventOnly')}
+                  label={t('eventVolunteers.thisEventOnly')}
                   name="applyTo"
                   id="applyToInstance"
                   checked={applyTo === 'instance'}
@@ -488,7 +488,7 @@ const ItemModal: FC<IItemModalProps> = ({
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label={t('actionItemCategory')}
+                  label={t('eventActionItems.actionItemCategory')}
                   required
                 />
               )}
@@ -500,11 +500,11 @@ const ItemModal: FC<IItemModalProps> = ({
               {/* Assignment Type Selection */}
               <Box className="mb-3">
                 <Typography variant="subtitle2" className="mb-2">
-                  {t('assignTo')}
+                  {t('organizationActionItems.assignTo')}
                 </Typography>
                 <Box className="d-flex gap-2">
                   <Chip
-                    label={t('volunteer')}
+                    label={t('eventVolunteers.volunteer')}
                     variant={
                       assignmentType === 'volunteer' ? 'filled' : 'outlined'
                     }
@@ -528,7 +528,7 @@ const ItemModal: FC<IItemModalProps> = ({
                     }}
                   />
                   <Chip
-                    label={t('volunteerGroup')}
+                    label={t('organizationActionItems.volunteerGroup')}
                     variant={
                       assignmentType === 'volunteerGroup'
                         ? 'filled'
@@ -584,7 +584,11 @@ const ItemModal: FC<IItemModalProps> = ({
                       setSelectedVolunteerGroup(null);
                     }}
                     renderInput={(params) => (
-                      <TextField {...params} label={t('volunteer')} required />
+                      <TextField
+                        {...params}
+                        label={t('eventVolunteers.volunteer')}
+                        required
+                      />
                     )}
                   />
                 </Form.Group>
@@ -616,7 +620,7 @@ const ItemModal: FC<IItemModalProps> = ({
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label={t('volunteerGroup')}
+                        label={t('organizationActionItems.volunteerGroup')}
                         required
                       />
                     )}
@@ -627,7 +631,7 @@ const ItemModal: FC<IItemModalProps> = ({
               <Form.Group className="d-flex gap-3 mx-auto mb-3">
                 <DatePicker
                   format="DD/MM/YYYY"
-                  label={t('assignmentDate')}
+                  label={t('eventActionItems.assignmentDate')}
                   className={styles.noOutline}
                   value={dayjs(assignedAt)}
                   disabled={editMode}
@@ -641,7 +645,7 @@ const ItemModal: FC<IItemModalProps> = ({
 
               <FormControl fullWidth className="mb-2">
                 <TextField
-                  label={t('preCompletionNotes')}
+                  label={t('eventActionItems.preCompletionNotes')}
                   variant="outlined"
                   data-cy="preCompletionNotes"
                   className={styles.noOutline}
@@ -657,7 +661,7 @@ const ItemModal: FC<IItemModalProps> = ({
           {isCompleted && (
             <FormControl fullWidth className="mb-2">
               <TextField
-                label={t('postCompletionNotes')}
+                label={t('eventActionItems.postCompletionNotes')}
                 className={styles.noOutline}
                 value={postCompletionNotes || ''}
                 multiline
@@ -675,7 +679,9 @@ const ItemModal: FC<IItemModalProps> = ({
             data-testid="submitBtn"
             data-cy="submitBtn"
           >
-            {editMode ? t('updateActionItem') : t('createActionItem')}
+            {editMode
+              ? t('organizationActionItems.updateActionItem')
+              : t('eventActionItems.createActionItem')}
           </Button>
         </Form>
       </Modal.Body>

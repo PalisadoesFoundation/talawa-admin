@@ -89,7 +89,7 @@ const dataGridStyle = {
 };
 
 function leaderboard(): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'leaderboard' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -271,7 +271,7 @@ function leaderboard(): JSX.Element {
       {/* Header with search, filter  and Create Button */}
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         <SearchBar
-          placeholder={t('searchByVolunteer')}
+          placeholder={t('leaderboard.searchByVolunteer')}
           onSearch={debouncedSearch}
           inputTestId="searchBy"
           buttonTestId="searchBtn"
@@ -280,8 +280,8 @@ function leaderboard(): JSX.Element {
           <div className="d-flex justify-space-between align-items-center gap-3">
             <SortingButton
               sortingOptions={[
-                { label: t('mostHours'), value: 'hours_DESC' },
-                { label: t('leastHours'), value: 'hours_ASC' },
+                { label: t('leaderboard.mostHours'), value: 'hours_DESC' },
+                { label: t('leaderboard.leastHours'), value: 'hours_ASC' },
               ]}
               selectedOption={sortBy}
               onSortChange={(value) =>
@@ -292,15 +292,15 @@ function leaderboard(): JSX.Element {
             />
             <SortingButton
               sortingOptions={[
-                { label: t('allTime'), value: TimeFrame.All },
-                { label: t('weekly'), value: TimeFrame.Weekly },
-                { label: t('monthly'), value: TimeFrame.Monthly },
-                { label: t('yearly'), value: TimeFrame.Yearly },
+                { label: t('leaderboard.allTime'), value: TimeFrame.All },
+                { label: t('leaderboard.weekly'), value: TimeFrame.Weekly },
+                { label: t('leaderboard.monthly'), value: TimeFrame.Monthly },
+                { label: t('leaderboard.yearly'), value: TimeFrame.Yearly },
               ]}
               selectedOption={timeFrame}
               onSortChange={(value) => setTimeFrame(value as TimeFrame)}
               dataTestIdPrefix="timeFrame"
-              buttonLabel={t('timeFrame')}
+              buttonLabel={t('leaderboard.timeFrame')}
               type="filter"
             />
           </div>
@@ -316,7 +316,7 @@ function leaderboard(): JSX.Element {
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noVolunteers')}
+              {t('eventVolunteers.noVolunteers')}
             </Stack>
           ),
         }}

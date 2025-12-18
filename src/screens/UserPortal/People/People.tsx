@@ -86,7 +86,7 @@ interface IOrganizationCardProps {
 }
 
 export default function People(): React.JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'people' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -207,7 +207,7 @@ export default function People(): React.JSX.Element {
         <div className={styles.people__header}>
           <div className={styles.input}>
             <SearchBar
-              placeholder={t('searchUsers')}
+              placeholder={t('userOrganizations.searchUsers')}
               onSearch={handleSearch}
               onClear={() => handleSearch('')}
               inputTestId="searchInput"
@@ -278,7 +278,7 @@ export default function People(): React.JSX.Element {
                     return <PeopleCard key={index} {...cardProps} />;
                   })
                 ) : (
-                  <span>{t('nothingToShow')}</span>
+                  <span>{t('userEvents.nothingToShow')}</span>
                 )}
               </>
             )}

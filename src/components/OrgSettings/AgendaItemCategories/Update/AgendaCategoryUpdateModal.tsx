@@ -70,7 +70,7 @@ const AgendaCategoryUpdateModal: React.FC<
     >
       <Modal.Header>
         <p className={styles.titlemodalOrganizationEvents}>
-          {t('updateAgendaCategory')}
+          {t('organizationAgendaCategory.updateAgendaCategory')}
         </p>
         <Button
           onClick={hideUpdateModal}
@@ -82,10 +82,10 @@ const AgendaCategoryUpdateModal: React.FC<
       <Modal.Body>
         <Form onSubmit={updateAgendaCategoryHandler}>
           <Form.Group className="mb-3" controlId="name">
-            <Form.Label>{t('name')}</Form.Label>
+            <Form.Label>{t('userVolunteer.name')}</Form.Label>
             <Form.Control
               type="text"
-              placeholder={t('name')}
+              placeholder={t('userVolunteer.name')}
               value={formState.name}
               onChange={(e) =>
                 setFormState({ ...formState, name: e.target.value })
@@ -93,10 +93,10 @@ const AgendaCategoryUpdateModal: React.FC<
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="description">
-            <Form.Label>{t('description')}</Form.Label>
+            <Form.Label>{t('organizationVenues.description')}</Form.Label>
             <Form.Control
               type="text"
-              placeholder={t('description')}
+              placeholder={t('organizationVenues.description')}
               value={formState.description}
               onChange={(e) =>
                 setFormState({ ...formState, description: e.target.value })
@@ -108,7 +108,7 @@ const AgendaCategoryUpdateModal: React.FC<
             className={styles.regBtn}
             data-testid="editAgendaCategoryBtn"
           >
-            {t('update')}
+            {t('agendaItems.update')}
           </Button>
         </Form>
       </Modal.Body>

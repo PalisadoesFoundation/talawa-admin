@@ -85,7 +85,7 @@ export const resetUserDetails = <T extends Record<string, unknown>>(
 };
 
 export default function Settings(): React.JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'settings' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const [isUpdated, setIsUpdated] = useState<boolean>(false);
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
@@ -304,7 +304,9 @@ export default function Settings(): React.JSX.Element {
             <Col lg={7}>
               <Card border="0" className="rounded-4 mb-4">
                 <div className={styles.cardHeader}>
-                  <div className={styles.cardTitle}>{t('profileSettings')}</div>
+                  <div className={styles.cardTitle}>
+                    {t('settings.profileSettings')}
+                  </div>
                 </div>
 
                 <Card.Body className={styles.userCardBody}>

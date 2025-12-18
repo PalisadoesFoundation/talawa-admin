@@ -95,7 +95,7 @@ const AgendaItemsUpdateModal: React.FC<
       });
       setNewUrl('');
     } else {
-      toast.error(t('invalidUrl'));
+      toast.error(t('agendaItems.invalidUrl'));
     }
   };
 
@@ -129,7 +129,7 @@ const AgendaItemsUpdateModal: React.FC<
         totalSize += file.size;
       });
       if (totalSize > 10 * 1024 * 1024) {
-        toast.error(t('fileSizeExceedsLimit'));
+        toast.error(t('agendaItems.fileSizeExceedsLimit'));
         return;
       }
       const base64Files = await Promise.all(
@@ -161,7 +161,9 @@ const AgendaItemsUpdateModal: React.FC<
       onHide={hideUpdateModal}
     >
       <Modal.Header>
-        <p className={styles.titlemodalAgendaItems}>{t('updateAgendaItem')}</p>
+        <p className={styles.titlemodalAgendaItems}>
+          {t('agendaItems.updateAgendaItem')}
+        </p>
         <Button
           onClick={hideUpdateModal}
           data-testid="updateAgendaItemModalCloseBtn"
@@ -196,7 +198,7 @@ const AgendaItemsUpdateModal: React.FC<
                 });
               }}
               renderInput={(params) => (
-                <TextField {...params} label={t('category')} />
+                <TextField {...params} label={t('agendaItems.category')} />
               )}
             />
           </Form.Group>
@@ -204,10 +206,10 @@ const AgendaItemsUpdateModal: React.FC<
           <Row className="mb-3">
             <Col>
               <Form.Group className="mb-3" controlId="title">
-                <Form.Label>{t('title')}</Form.Label>
+                <Form.Label>{t('agendaItems.title')}</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder={t('enterTitle')}
+                  placeholder={t('agendaItems.enterTitle')}
                   value={formState.title}
                   onChange={(e) =>
                     setFormState({ ...formState, title: e.target.value })
@@ -217,10 +219,10 @@ const AgendaItemsUpdateModal: React.FC<
             </Col>
             <Col>
               <Form.Group controlId="duration">
-                <Form.Label>{t('duration')}</Form.Label>
+                <Form.Label>{t('agendaItems.duration')}</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder={t('enterDuration')}
+                  placeholder={t('agendaItems.enterDuration')}
                   value={formState.duration}
                   required
                   onChange={(e) =>
@@ -232,11 +234,11 @@ const AgendaItemsUpdateModal: React.FC<
           </Row>
 
           <Form.Group className="mb-3" controlId="description">
-            <Form.Label>{t('description')}</Form.Label>
+            <Form.Label>{t('organizationVenues.description')}</Form.Label>
             <Form.Control
               as="textarea"
               rows={1}
-              placeholder={t('enterDescription')}
+              placeholder={t('userEvents.eventNenterDescriptioname')}
               value={formState.description}
               onChange={(e) =>
                 setFormState({ ...formState, description: e.target.value })
@@ -245,18 +247,18 @@ const AgendaItemsUpdateModal: React.FC<
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>{t('url')}</Form.Label>
+            <Form.Label>{t('agendaItems.url')}</Form.Label>
             <div className="d-flex">
               <Form.Control
                 type="text"
-                placeholder={t('enterUrl')}
+                placeholder={t('agendaItems.enterUrl')}
                 id="basic-url"
                 data-testid="urlInput"
                 value={newUrl}
                 onChange={(e) => setNewUrl(e.target.value)}
               />
               <Button onClick={handleAddUrl} data-testid="linkBtn">
-                {t('link')}
+                {t('agendaItems.link')}
               </Button>
             </div>
 
@@ -279,7 +281,7 @@ const AgendaItemsUpdateModal: React.FC<
             ))}
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>{t('attachments')}</Form.Label>
+            <Form.Label>{t('agendaItems.attachments')}</Form.Label>
             <Form.Control
               accept="image/*, video/*"
               data-testid="attachment"
@@ -289,7 +291,7 @@ const AgendaItemsUpdateModal: React.FC<
               multiple={true}
               onChange={handleFileChange}
             />
-            <Form.Text>{t('attachmentLimit')}</Form.Text>
+            <Form.Text>{t('agendaItems.attachmentLimit')}</Form.Text>
           </Form.Group>
           {formState.attachments && (
             <div className={styles.previewFile} data-testid="mediaPreview">
@@ -327,7 +329,7 @@ const AgendaItemsUpdateModal: React.FC<
             className={styles.greenregbtnAgendaItems}
             data-testid="updateAgendaItemBtn"
           >
-            {t('update')}
+            {t('agendaItems.update')}
           </Button>
         </Form>
       </Modal.Body>

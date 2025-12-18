@@ -217,7 +217,7 @@ export default function createDirectChatModal({
   chatsListRefetch,
   chats,
 }: InterfaceCreateDirectChatProps): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
+  const { t } = useTranslation('translation');
   const { orgId: organizationId } = useParams();
 
   // Support both 'userId' (for regular users) and 'id' (for admins)
@@ -350,7 +350,7 @@ export default function createDirectChatModal({
                                   }}
                                   data-testid="addBtn"
                                 >
-                                  {t('add')}
+                                  {t('eventVolunteers.add')}
                                 </Button>
                               </StyledTableCell>
                             </StyledTableRow>

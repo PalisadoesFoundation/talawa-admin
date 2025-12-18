@@ -36,7 +36,7 @@ const leftDrawer = ({
   hideDrawer,
   setHideDrawer,
 }: ILeftDrawerProps): React.ReactElement => {
-  const { t } = useTranslation('translation', { keyPrefix: 'leftDrawer' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
@@ -128,7 +128,7 @@ const leftDrawer = ({
         {renderDrawerItem(
           '/orglist',
           <OrganizationsIcon />,
-          t('my organizations'),
+          t('userSidebarOrg.my organizations'),
           'organizationsBtn',
         )}
 
@@ -158,7 +158,7 @@ const leftDrawer = ({
                   type="button"
                 >
                   <div className={styles.iconWrapper}>{styledRolesIcon}</div>
-                  {!hideDrawer && t('users')}
+                  {!hideDrawer && t('userSidebarOrg.users')}
                 </button>
               );
             }}
@@ -168,21 +168,21 @@ const leftDrawer = ({
         {renderDrawerItem(
           '/pluginstore',
           <PluginLogo />,
-          t('plugin store'),
+          t('leftDrawer.plugin store'),
           'pluginStoreBtn',
         )}
 
         {renderDrawerItem(
           '/communityProfile',
           <SettingsIcon />,
-          t('communityProfile'),
+          t('userSidebarOrg.communityProfile'),
           'communityProfileBtn',
         )}
 
         {renderDrawerItem(
           '/notification',
           <SettingsIcon />,
-          t('notification'),
+          t('leftDrawerOrg.notification'),
           'notificationBtn',
         )}
 

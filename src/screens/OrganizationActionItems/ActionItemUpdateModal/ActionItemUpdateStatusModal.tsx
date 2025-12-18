@@ -61,9 +61,7 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
   actionItem,
   eventId,
 }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'organizationActionItems',
-  });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   const { id, isCompleted } = actionItem;
@@ -124,7 +122,7 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
       } else {
         // Mark as completed
         if (!postCompletionNotes.trim()) {
-          toast.error(t('postCompletionNotesRequired'));
+          toast.error(t('organizationActionItems.postCompletionNotesRequired'));
           return;
         }
 
@@ -138,7 +136,7 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
           variables: { input },
         });
 
-        toast.success(t('isCompleted'));
+        toast.success(t('organizationActionItems.isCompleted'));
       }
 
       actionItemsRefetch();
@@ -151,7 +149,7 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
   const completeActionForInstanceHandler = async (): Promise<void> => {
     try {
       if (!postCompletionNotes.trim()) {
-        toast.error(t('postCompletionNotesRequired'));
+        toast.error(t('organizationActionItems.postCompletionNotesRequired'));
         return;
       }
 
@@ -165,7 +163,7 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
         },
       });
 
-      toast.success(t('isCompleted'));
+      toast.success(t('organizationActionItems.isCompleted'));
       actionItemsRefetch();
       hide();
     } catch (error: unknown) {
@@ -199,7 +197,9 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
   return (
     <Modal className={styles.itemModal} show={isOpen} onHide={hide}>
       <Modal.Header>
-        <p className={styles.titlemodal}>{t('actionItemStatus')}</p>
+        <p className={styles.titlemodal}>
+          {t('eventActionItems.actionItemStatus')}
+        </p>
         <Button
           variant="danger"
           onClick={hide}
@@ -214,7 +214,7 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
           {!isCompleted ? (
             <FormControl fullWidth className="mb-2">
               <TextField
-                label={t('postCompletionNotes')}
+                label={t('eventActionItems.postCompletionNotes')}
                 data-cy="postCompletionNotes"
                 variant="outlined"
                 className={styles.noOutline}
@@ -226,7 +226,7 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
               />
             </FormControl>
           ) : (
-            <p>{t('updateStatusMsg')}</p>
+            <p>{t('organizationActionItems.updateStatusMsg')}</p>
           )}
 
           {isCompleted ? (
@@ -237,12 +237,12 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
                     onClick={markActionAsPendingForInstanceHandler}
                     className={styles.addButton}
                   >
-                    {t('pendingForInstance')}
+                    {t('organizationActionItems.pendingForInstance')}
                   </Button>
                   {/* Only show 'pending for series' if this action item is not showing instance exception data */}
                   {!actionItem.isInstanceException && (
                     <Button type="submit" className={styles.addButton}>
-                      {t('pendingForSeries')}
+                      {t('organizationActionItems.pendingForSeries')}
                     </Button>
                   )}
                 </div>
@@ -272,12 +272,12 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
                     onClick={completeActionForInstanceHandler}
                     className={styles.addButton}
                   >
-                    {t('completeForInstance')}
+                    {t('organizationActionItems.completeForInstance')}
                   </Button>
                   {/* Only show 'complete for series' if this action item is not showing instance exception data */}
                   {!actionItem.isInstanceException && (
                     <Button type="submit" className={styles.addButton}>
-                      {t('completeForSeries')}
+                      {t('organizationActionItems.completeForSeries')}
                     </Button>
                   )}
                 </div>
@@ -288,7 +288,7 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
                   data-testid="createBtn"
                   data-cy="markCompletionForSeries"
                 >
-                  {t('markCompletion')}
+                  {t('eventActionItems.markCompletion')}
                 </Button>
               )}
             </>

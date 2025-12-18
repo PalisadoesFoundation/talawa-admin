@@ -62,12 +62,12 @@ import useLocalStorage from 'utils/useLocalstorage';
 
 const ForgotPassword = (): JSX.Element => {
   // Translation hook for internationalization
-  const { t } = useTranslation('translation', { keyPrefix: 'forgotPassword' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
   // Set the page title
-  document.title = t('title');
+  document.title = t('forgotPassword.title');
 
   // Custom hook for accessing local storage
   const { getItem, removeItem, setItem } = useLocalStorage();
@@ -112,7 +112,7 @@ const ForgotPassword = (): JSX.Element => {
       const { data } = await otp({ variables: { email: registeredEmail } });
 
       setItem('otpToken', data.otp.otpToken);
-      toast.success(t('OTPsent'));
+      toast.success(t('forgotPassword.OTPsent'));
       setShowEnterEmail(false);
     } catch (error: unknown) {
       if ((error as Error).message === 'User not found') {
@@ -137,7 +137,7 @@ const ForgotPassword = (): JSX.Element => {
     const { userOtp, newPassword, confirmNewPassword } = forgotPassFormData;
 
     if (newPassword !== confirmNewPassword) {
-      toast.error(t('passwordMismatches') as string);
+      toast.error(t('forgotPassword.passwordMismatches') as string);
       return;
     }
 
@@ -192,14 +192,14 @@ const ForgotPassword = (): JSX.Element => {
                 <div className="mt-4">
                   <Form onSubmit={getOTP}>
                     <Form.Label htmlFor="registeredEmail">
-                      {t('registeredEmail')}:
+                      {t('forgotPassword.registeredEmail')}:
                     </Form.Label>
                     <div className="position-relative">
                       <Form.Control
                         type="email"
                         className="form-control"
                         id="registeredEmail"
-                        placeholder={t('registeredEmail')}
+                        placeholder={t('forgotPassword.registeredEmail')}
                         value={registeredEmail}
                         name="registeredEmail"
                         required
@@ -213,19 +213,21 @@ const ForgotPassword = (): JSX.Element => {
                       className={`mt-4 w-100 ${styles.login_btn}`}
                       data-testid="getOtpBtn"
                     >
-                      {t('getOtp')}
+                      {t('forgotPassword.getOtp')}
                     </Button>
                   </Form>
                 </div>
               ) : (
                 <div className="mt-4">
                   <Form onSubmit={submitForgotPassword}>
-                    <Form.Label htmlFor="userOtp">{t('enterOtp')}:</Form.Label>
+                    <Form.Label htmlFor="userOtp">
+                      {t('forgotPassword.enterOtp')}:
+                    </Form.Label>
                     <Form.Control
                       type="number"
                       className="form-control"
                       id="userOtp"
-                      placeholder={t('userOtp')}
+                      placeholder={t('forgotPassword.userOtp')}
                       name="userOtp"
                       value={forgotPassFormData.userOtp}
                       required
@@ -237,7 +239,7 @@ const ForgotPassword = (): JSX.Element => {
                       }
                     />
                     <Form.Label htmlFor="newPassword">
-                      {t('enterNewPassword')}:
+                      {t('forgotPassword.enterNewPassword')}:
                     </Form.Label>
                     <Form.Control
                       type="password"
@@ -256,13 +258,13 @@ const ForgotPassword = (): JSX.Element => {
                       }
                     />
                     <Form.Label htmlFor="confirmNewPassword">
-                      {t('cofirmNewPassword')}:
+                      {t('forgotPassword.cofirmNewPassword')}:
                     </Form.Label>
                     <Form.Control
                       type="password"
                       className="form-control"
                       id="confirmNewPassword"
-                      placeholder={t('cofirmNewPassword')}
+                      placeholder={t('forgotPassword.cofirmNewPassword')}
                       data-testid="confirmNewPassword"
                       name="confirmNewPassword"
                       value={forgotPassFormData.confirmNewPassword}
@@ -275,7 +277,7 @@ const ForgotPassword = (): JSX.Element => {
                       }
                     />
                     <Button type="submit" className="mt-2 w-100">
-                      {t('changePassword')}
+                      {t('forgotPassword.changePassword')}
                     </Button>
                   </Form>
                 </div>
@@ -289,7 +291,7 @@ const ForgotPassword = (): JSX.Element => {
                     fontSize="medium"
                     style={{ transform: 'rotate(180deg)' }}
                   />
-                  {t('backToLogin')}
+                  {t('forgotPassword.changePassword')}
                 </Link>
               </div>
             </div>

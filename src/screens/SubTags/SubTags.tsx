@@ -73,9 +73,7 @@ import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 function SubTags(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'organizationTags',
-  });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   const [addSubTagModalIsOpen, setAddSubTagModalIsOpen] = useState(false);
@@ -157,7 +155,7 @@ function SubTags(): JSX.Element {
       });
 
       if (data) {
-        toast.success(t('tagCreationSuccess') as string);
+        toast.success(t('organizationTags.tagCreationSuccess') as string);
         subTagsRefetch();
         setTagName('');
         setAddSubTagModalIsOpen(false);
@@ -293,7 +291,7 @@ function SubTags(): JSX.Element {
             data-testid="manageTagBtn"
             className={styles.editButton}
           >
-            {t('manageTag')}
+            {t('organizationTags.manageTag')}
           </Button>
         );
       },
@@ -328,7 +326,7 @@ function SubTags(): JSX.Element {
               data-testid="manageCurrentTagBtn"
               className={`${styles.createButton} mb-3`}
             >
-              {`${t('manageTag')} ${subTagsData?.getChildTags.name}`}
+              {`${t('organizationTags.manageTag')} ${subTagsData?.getChildTags.name}`}
             </Button>
 
             <Button
@@ -338,7 +336,7 @@ function SubTags(): JSX.Element {
               className={`${styles.createButton} mb-3`}
             >
               <i className={'fa fa-plus me-2'} />
-              {t('addChildTag')}
+              {t('organizationTags.addChildTag')}
             </Button>
           </div>
 
@@ -402,7 +400,7 @@ function SubTags(): JSX.Element {
                           alignItems="center"
                           justifyContent="center"
                         >
-                          {t('noTagsFound')}
+                          {t('organizationTags.noTagsFound')}
                         </Stack>
                       ),
                     }}
@@ -437,16 +435,16 @@ function SubTags(): JSX.Element {
           data-testid="tagHeader"
           closeButton
         >
-          <Modal.Title>{t('tagDetails')}</Modal.Title>
+          <Modal.Title>{t('manageTag.tagDetails')}</Modal.Title>
         </Modal.Header>
         <Form onSubmitCapture={addSubTag}>
           <Modal.Body>
-            <Form.Label htmlFor="tagName">{t('tagName')}</Form.Label>
+            <Form.Label htmlFor="tagName">{t('manageTag.tagName')}</Form.Label>
             <Form.Control
               type="name"
               id="tagname"
               className={`mb-3 ${styles.inputField}`}
-              placeholder={t('tagNamePlaceholder')}
+              placeholder={t('manageTag.tagNamePlaceholder')}
               data-testid="modalTitle"
               autoComplete="off"
               required

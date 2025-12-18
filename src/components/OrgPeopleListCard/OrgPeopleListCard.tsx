@@ -56,9 +56,7 @@ function orgPeopleListCard(
   // Mutation to remove a member from the organization
   const [remove] = useMutation(REMOVE_MEMBER_MUTATION_PG);
 
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'orgPeopleListCard',
-  });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   // Function to remove a member and handle success or error
@@ -68,7 +66,7 @@ function orgPeopleListCard(
         variables: { memberId: props.id, organizationId: currentUrl },
       });
       if (data) {
-        toast.success(t('memberRemoved') as string);
+        toast.success(t('orgPeopleListCard.memberRemoved') as string);
         props.toggleRemoveModal();
       }
     } catch (error: unknown) {
@@ -81,7 +79,9 @@ function orgPeopleListCard(
       {/* Modal to confirm member removal */}
       <Modal show={true} onHide={props.toggleRemoveModal}>
         <Modal.Header>
-          <h5 data-testid="removeMemberModal">{t('removeMember')}</h5>
+          <h5 data-testid="removeMemberModal">
+            {t('orgPeopleListCard.removeMember')}
+          </h5>
           {/* Button to close the modal */}
           <Button
             variant="danger"
@@ -91,7 +91,7 @@ function orgPeopleListCard(
             <Close className={styles.closeButton} />
           </Button>
         </Modal.Header>
-        <Modal.Body>{t('removeMemberMsg')}</Modal.Body>
+        <Modal.Body>{t('orgPeopleListCard.removeMemberMsg')}</Modal.Body>
         <Modal.Footer>
           <Button
             type="button"

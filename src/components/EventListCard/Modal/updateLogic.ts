@@ -232,7 +232,7 @@ export const useUpdateEventHandler = () => {
       }
 
       if (data) {
-        toast.success(t('eventUpdated') as string);
+        toast.success(t('eventListCard.eventUpdated') as string);
         setEventUpdateModalIsOpen(false);
         hideViewModal();
         if (refetchEvents) {

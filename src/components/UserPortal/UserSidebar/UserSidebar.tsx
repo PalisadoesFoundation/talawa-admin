@@ -52,7 +52,7 @@ const userSidebar = ({
   setHideDrawer,
 }: InterfaceUserSidebarProps): JSX.Element => {
   // Translation hook for internationalization
-  const { t } = useTranslation('translation', { keyPrefix: 'userSidebarOrg' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   // Memoize the parameters to prevent infinite re-renders
@@ -234,7 +234,7 @@ const userSidebar = ({
             {renderDrawerItem(
               '/user/organizations',
               <IconComponent name="My Organizations" />,
-              t('my organizations'),
+              t('userSidebarOrg.my organizations'),
               'orgsBtn',
             )}
 

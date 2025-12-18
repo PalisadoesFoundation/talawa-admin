@@ -54,9 +54,7 @@ interface InterfaceNavbarProps {
 }
 
 function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userNavbar',
-  });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   const navigate = useNavigate();
@@ -126,7 +124,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
                   await navigate(homeLink);
                 }}
               >
-                {t('home')}
+                {t('userNavbar.home')}
               </Nav.Link>
             </Nav>
             <Navbar.Collapse className="justify-content-end">

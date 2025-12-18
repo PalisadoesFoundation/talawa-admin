@@ -17,7 +17,7 @@ import type { IPluginMeta } from 'plugin';
 import PageHeader from 'shared-components/Navbar/Navbar';
 
 export default function PluginStore() {
-  const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
+  const { t } = useTranslation('translation');
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
   const [selectedPluginId, setSelectedPluginId] = useState<string | null>(null);
@@ -115,9 +115,9 @@ export default function PluginStore() {
       data-testid="plugin-store-page"
     >
       <PageHeader
-        title={t('title')}
+        title={t('pluginStore.title')}
         search={{
-          placeholder: t('searchPlaceholder'),
+          placeholder: t('pluginStore.searchPlaceholder'),
           onSearch: debouncedSearch,
           inputTestId: 'searchPlugins',
           buttonTestId: 'searchPluginsBtn',
@@ -126,8 +126,8 @@ export default function PluginStore() {
           {
             title: 'Filter Plugins',
             options: [
-              { label: t('allPlugins'), value: 'all' },
-              { label: t('installedPlugins'), value: 'installed' },
+              { label: t('pluginStore.allPlugins'), value: 'all' },
+              { label: t('pluginStore.installedPlugins'), value: 'installed' },
             ],
             selected: filterState.selectedOption,
             onChange: (value) => handleFilterChange(value.toString()),

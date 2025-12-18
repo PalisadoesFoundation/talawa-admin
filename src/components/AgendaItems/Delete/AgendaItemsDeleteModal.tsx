@@ -55,11 +55,11 @@ const AgendaItemsDeleteModal: React.FC<
     >
       <Modal.Header closeButton className="bg-primary">
         <Modal.Title className="text-white" id={`deleteAgendaItem`}>
-          {t('deleteAgendaItem')}
+          {t('agendaItems.deleteAgendaItem')}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>{t('deleteAgendaItemMsg')}</p>
+        <p>{t('agendaItems.deleteAgendaItemMsg')}</p>
       </Modal.Body>
       <Modal.Footer>
         <Button

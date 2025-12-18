@@ -69,22 +69,22 @@ const UpcomingEventsCard: React.FC<InterfaceUpcomingEventsCardProps> = ({
   eventLoading,
   onViewAllEventsClick,
 }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'dashboard',
-  });
+  const { t } = useTranslation('translation');
 
   return (
     <Col lg={6} className="mb-4 ">
       <Card border="0" className="rounded-4 ">
         <div className={styles.cardHeader}>
-          <div className={styles.cardTitle}>{t('upcomingEvents')}</div>
+          <div className={styles.cardTitle}>
+            {t('userVolunteer.upcomingEvents')}
+          </div>
           <Button
             size="sm"
             variant="light"
             data-testid="viewAllEvents"
             onClick={onViewAllEventsClick}
           >
-            {t('viewAll')}
+            {t('organizationSidebar.viewAll')}
           </Button>
         </div>
         <Card.Body className={styles.containerBody}>
@@ -94,7 +94,7 @@ const UpcomingEventsCard: React.FC<InterfaceUpcomingEventsCardProps> = ({
             ))
           ) : !upcomingEvents.length ? (
             <div className={styles.emptyContainer}>
-              <h6>{t('noUpcomingEvents')}</h6>
+              <h6>{t('dashboard.noUpcomingEvents')}</h6>
             </div>
           ) : (
             [...upcomingEvents]

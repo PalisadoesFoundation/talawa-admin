@@ -74,9 +74,7 @@ const dataGridStyle = {
 };
 
 function actions(): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'organizationActionItems',
-  });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -405,8 +403,8 @@ function actions(): JSX.Element {
           <div className="d-flex justify-space-between align-items-center gap-3">
             <SortingButton
               sortingOptions={[
-                { label: t('assignee'), value: 'assignee' },
-                { label: t('category'), value: 'category' },
+                { label: t('eventActionItems.assignee'), value: 'assignee' },
+                { label: t('agendaItems.category'), value: 'category' },
               ]}
               selectedOption={searchBy}
               onSortChange={(value) =>
@@ -417,8 +415,14 @@ function actions(): JSX.Element {
             />
             <SortingButton
               sortingOptions={[
-                { label: t('latestAssigned'), value: 'dueDate_DESC' },
-                { label: t('earliestAssigned'), value: 'dueDate_ASC' },
+                {
+                  label: t('organizationActionItems.latestAssigned'),
+                  value: 'dueDate_DESC',
+                },
+                {
+                  label: t('organizationActionItems.earliestAssigned'),
+                  value: 'dueDate_ASC',
+                },
               ]}
               onSortChange={(value) =>
                 setSortBy(value as 'dueDate_DESC' | 'dueDate_ASC')
@@ -439,7 +443,7 @@ function actions(): JSX.Element {
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noActionItems')}
+              {t('organizationActionItems.noActionItems')}
             </Stack>
           ),
         }}

@@ -26,7 +26,7 @@ import useLocalStorage from 'utils/useLocalstorage';
  */
 function deleteOrg(): JSX.Element {
   // Translation hook for localization
-  const { t } = useTranslation('translation', { keyPrefix: 'deleteOrg' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   // Get the current organization ID from the URL
@@ -67,7 +67,9 @@ function deleteOrg(): JSX.Element {
       // If it's a sample organization, use a specific mutation
       removeSampleOrganization()
         .then(() => {
-          toast.success(t('successfullyDeletedSampleOrganization') as string);
+          toast.success(
+            t('deleteOrg.successfullyDeletedSampleOrganization') as string,
+          );
           setTimeout(() => {
             navigate('/orglist');
           }, 1000);
@@ -91,10 +93,12 @@ function deleteOrg(): JSX.Element {
       {canDelete && (
         <Card className={styles.DeleteOrgCard}>
           <Card.Header className={styles.deleteCardHeader}>
-            <h5 className="mb-0 fw-semibold">{t('deleteOrganization')}</h5>
+            <h5 className="mb-0 fw-semibold">
+              {t('deleteOrg.deleteOrganization')}
+            </h5>
           </Card.Header>
           <Card.Body className="p-4">
-            <div className={styles.textBox}>{t('longDelOrgMsg')}</div>
+            <div className={styles.textBox}>{t('deleteOrg.longDelOrgMsg')}</div>
             <Button
               variant="danger"
               className={styles.deleteButton}
@@ -104,7 +108,7 @@ function deleteOrg(): JSX.Element {
               <DeleteIcon className={styles.icon} />
               {data?.isSampleOrganization
                 ? t('deleteSampleOrganization')
-                : t('delete')}
+                : t('organizationVenues.delete')}
             </Button>
           </Card.Body>
         </Card>
@@ -117,9 +121,11 @@ function deleteOrg(): JSX.Element {
           data-testid="orgDeleteModal"
         >
           <Modal.Header className={styles.modelHeaderDelete} closeButton>
-            <h5 className="text-white fw-bold">{t('deleteOrganization')}</h5>
+            <h5 className="text-white fw-bold">
+              {t('deleteOrg.deleteOrganization')}
+            </h5>
           </Modal.Header>
-          <Modal.Body>{t('deleteMsg')}</Modal.Body>
+          <Modal.Body>{t('deleteOrg.deleteMsg')}</Modal.Body>
           <Modal.Footer>
             <Button
               onClick={toggleDeleteModal}
@@ -133,7 +139,7 @@ function deleteOrg(): JSX.Element {
               onClick={deleteOrg}
               data-testid="deleteOrganizationBtn"
             >
-              {t('confirmDelete')}
+              {t('deleteOrg.confirmDelete')}
             </Button>
           </Modal.Footer>
         </Modal>

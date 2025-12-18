@@ -115,8 +115,7 @@ export default function CreateGroupChat({
   chatsListRefetch,
 }: InterfaceCreateGroupChatProps): JSX.Element {
   const userId: string | null = getItem('userId') || getItem('id');
-  const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
-
+  const { t } = useTranslation('translation');
   const [createChat] = useMutation(CREATE_CHAT);
   const [createChatMembership] = useMutation(CREATE_CHAT_MEMBERSHIP);
 
@@ -325,7 +324,7 @@ export default function CreateGroupChat({
             <>
               <div className={styles.input}>
                 <SearchBar
-                  placeholder={t('searchFullName')}
+                  placeholder={t('addMember.searchFullName')}
                   value={userName}
                   onChange={(value) => setUserName(value)}
                   onSearch={(value) => handleUserModalSearchChange(value)}
@@ -411,7 +410,7 @@ export default function CreateGroupChat({
                                     }}
                                     data-testid="addBtn"
                                   >
-                                    {t('add')}
+                                    {t('eventVolunteers.add')}
                                   </Button>
                                 )}
                               </StyledTableCell>
@@ -429,7 +428,7 @@ export default function CreateGroupChat({
             onClick={handleCreateGroupChat}
             data-testid="createBtn"
           >
-            {t('create')}
+            {t('addMember.create')}
           </Button>
         </Modal.Body>
       </Modal>

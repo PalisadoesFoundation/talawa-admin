@@ -50,9 +50,9 @@ import PageHeader from 'shared-components/Navbar/Navbar';
 
 export default function Advertisements(): JSX.Element {
   const { orgId: currentOrgId } = useParams<{ orgId: string }>();
-  const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
+  const { t } = useTranslation('translation');
 
-  document.title = t('title');
+  document.title = t('advertisement.title');
 
   const [afterActive, setAfterActive] = useState<string | null | undefined>(
     null,
@@ -228,12 +228,12 @@ export default function Advertisements(): JSX.Element {
           >
             <Tab
               eventKey="activeAds"
-              title={t('activeAds')}
+              title={t('advertisement.activeAds')}
               className="pt-4 m-2"
             >
               {activeAdvertisements.length === 0 ? (
                 <div className={styles.pMessageAdvertisement}>
-                  {t('pMessage')}
+                  {t('advertisement.pMessage')}
                 </div>
               ) : (
                 <InfiniteScroll
@@ -264,12 +264,12 @@ export default function Advertisements(): JSX.Element {
 
             <Tab
               eventKey="archivedAds"
-              title={t('archivedAds')}
+              title={t('advertisement.archivedAds')}
               className="pt-4 m-2"
             >
               {completedAdvertisements.length === 0 ? (
                 <div className={styles.pMessageAdvertisement}>
-                  {t('pMessage')}
+                  {t('advertisement.pMessage')}
                 </div>
               ) : (
                 <InfiniteScroll

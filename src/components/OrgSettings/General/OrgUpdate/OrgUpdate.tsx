@@ -84,7 +84,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     { input: InterfaceMutationUpdateOrganizationInput }
   >(UPDATE_ORGANIZATION_MUTATION);
 
-  const { t } = useTranslation('translation', { keyPrefix: 'orgUpdate' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   interface InterfaceOrganization {
@@ -198,7 +198,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
 
       if (data) {
         refetch({ id: orgId });
-        toast.success(t('successfulUpdated') as string);
+        toast.success(t('orgUpdate.successfulUpdated') as string);
         // Clear avatar from state and file input after successful upload
         setFormState((prev) => ({ ...prev, avatar: undefined }));
         if (fileInputRef.current) fileInputRef.current.value = '';
@@ -238,7 +238,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           </Form.Label>
           <Form.Control
             className={styles.textFields}
-            placeholder={t('enterNameOrganization')}
+            placeholder={t('orgUpdate.enterNameOrganization')}
             autoComplete="off"
             required
             value={formState.orgName}
@@ -252,7 +252,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           <Form.Control
             as="textarea"
             className={styles.descriptionTextField}
-            placeholder={t('enterOrganizationDescription')}
+            placeholder={t('orgUpdate.enterOrganizationDescription')}
             autoComplete="off"
             required
             value={formState.orgDescrip}
@@ -299,7 +299,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           <Row>
             <Col sm={6} className="d-flex mb-4 mt-4 align-items-center">
               <Form.Label className="me-3 mb-0 fw-normal text-black">
-                {t('isPublic')}:
+                {t('orgUpdate.isPublic')}:
               </Form.Label>
               <Form.Switch
                 className="custom-switch"
@@ -314,11 +314,11 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
             </Col>
             <Col sm={6} className="d-flex mb-4 mt-4 align-items-center">
               <Form.Label className="me-3 mb-0 fw-normal text-black">
-                {t('isVisibleInSearch')}:
+                {t('orgUpdate.isVisibleInSearch')}:
               </Form.Label>
               <Form.Switch
                 className="custom-switch"
-                placeholder={t('isVisibleInSearch')}
+                placeholder={t('orgUpdate.isVisibleInSearch')}
                 checked={visiblechecked}
                 onChange={(): void => setVisibleChecked(!visiblechecked)}
               />

@@ -79,7 +79,7 @@ const UserScreen = (): React.JSX.Element => {
   // instead of redirecting to home.
 
   const titleKey: string | undefined = map[location.pathname.split('/')[2]];
-  const { t } = useTranslation('translation', { keyPrefix: titleKey });
+  const { t } = useTranslation('translation');
 
   const userRoutes: { targets: TargetsType[] } = useSelector(
     (state: RootState) => state.userRoutes,
@@ -169,7 +169,7 @@ const UserScreen = (): React.JSX.Element => {
       >
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
-            <h1>{t('title')}</h1>
+            <h1>{t('users.title')}</h1>
           </div>
           {/* <ProfileDropdown /> */}
         </div>

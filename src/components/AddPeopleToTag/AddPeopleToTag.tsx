@@ -180,7 +180,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     e.preventDefault();
 
     if (!assignToMembers.length) {
-      toast.error(t('noOneSelected'));
+      toast.error(t('manageTag.noOneSelected'));
       return;
     }
 
@@ -193,7 +193,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       });
 
       if (data) {
-        toast.success(t('successfullyAssignedToPeople'));
+        toast.success(t('manageTag.successfullyAssignedToPeople'));
         refetchAssignedMembersData();
         hideAddPeopleToTagModal();
         setAssignToMembers([]);
@@ -211,7 +211,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            {t('errorOccurredWhileLoadingMembers')}
+            {t('manageTag.errorOccurredWhileLoadingMembers')}
             <br />
             {userTagsMembersToAssignToError.message}
           </h6>
@@ -235,7 +235,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     },
     {
       field: 'userName',
-      headerName: t('userName'),
+      headerName: t('manageTag.userName'),
       flex: 2,
       minWidth: 100,
       sortable: false,
@@ -250,7 +250,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     },
     {
       field: 'actions',
-      headerName: t('actions'),
+      headerName: t('userVolunteer.actions'),
       flex: 1,
       align: 'center',
       minWidth: 100,
@@ -295,7 +295,9 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
           data-testid="modalOrganizationHeader"
           closeButton
         >
-          <Modal.Title className="text-white">{t('addPeople')}</Modal.Title>
+          <Modal.Title className="text-white">
+            {t('manageTag.addPeople')}
+          </Modal.Title>
         </Modal.Header>
         <Form onSubmitCapture={addPeopleToCurrentTag}>
           <Modal.Body>
@@ -304,7 +306,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
             >
               {assignToMembers.length === 0 ? (
                 <div className="text-body-tertiary mx-auto">
-                  {t('noOneSelected')}
+                  {t('manageTag.noOneSelected')}
                 </div>
               ) : (
                 assignToMembers.map((member) => (
@@ -385,7 +387,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                             alignItems="center"
                             justifyContent="center"
                           >
-                            {t('noMoreMembersFound')}
+                            {t('manageTag.noMoreMembersFound')}
                           </Stack>
                         ),
                       }}
@@ -428,7 +430,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
               data-testid="assignPeopleBtn"
               className={styles.addButton}
             >
-              {t('assign')}
+              {t('manageTag.assign')}
             </Button>
           </Modal.Footer>
         </Form>

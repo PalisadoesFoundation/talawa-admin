@@ -60,9 +60,7 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
   eventId,
 }) => {
   const { t: tCommon } = useTranslation('translation');
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'organizationActionItems',
-  });
+  const { t } = useTranslation('translation');
 
   const [applyTo, setApplyTo] = useState<'series' | 'instance'>('series');
 
@@ -102,7 +100,7 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
 
       actionItemsRefetch();
       hide();
-      toast.success(t('successfulDeletion'));
+      toast.success(t('eventActionItems.successfulDeletion'));
     } catch (error: unknown) {
       toast.error((error as Error).message);
     }
@@ -111,17 +109,17 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
   return (
     <Modal show={isOpen} onHide={hide} centered>
       <Modal.Header closeButton>
-        <Modal.Title>{t('deleteActionItem')}</Modal.Title>
+        <Modal.Title>{t('eventActionItems.deleteActionItem')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>{t('deleteActionItemMsg')}</p>
+        <p>{t('eventActionItems.deleteActionItemMsg')}</p>
 
         {actionItem.isTemplate && !actionItem.isInstanceException && (
           <Form.Group className="mt-3">
-            <Form.Label>{t('applyTo')}</Form.Label>
+            <Form.Label>{t('eventVolunteers.applyTo')}</Form.Label>
             <Form.Check
               type="radio"
-              label={t('entireSeries')}
+              label={t('eventVolunteers.entireSeries')}
               name="applyTo"
               id="deleteApplyToSeries"
               data-testid="deleteApplyToSeries"
@@ -130,7 +128,7 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
             />
             <Form.Check
               type="radio"
-              label={t('thisEventOnly')}
+              label={t('eventVolunteers.thisEventOnly')}
               name="applyTo"
               id="deleteApplyToInstance"
               data-testid="deleteApplyToInstance"

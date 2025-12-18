@@ -48,9 +48,7 @@ const EditOrgCustomFieldDropDown = ({
   parentContainerStyle,
   btnStyle,
 }: InterfaceEditCustomFieldDropDownProps): JSX.Element => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'orgProfileField',
-  });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   return (

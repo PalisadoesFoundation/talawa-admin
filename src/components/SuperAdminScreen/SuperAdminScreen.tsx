@@ -32,7 +32,7 @@ const superAdminScreen = (): React.ReactElement => {
   const location = useLocation();
   const { getItem, setItem } = useLocalStorage();
   const titleKey = map[location.pathname.split('/')[1]];
-  const { t } = useTranslation('translation', { keyPrefix: titleKey });
+  const { t } = useTranslation('translation');
   const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
     const stored = getItem('sidebar');
     return stored === 'true';
@@ -91,7 +91,7 @@ const superAdminScreen = (): React.ReactElement => {
       >
         <div>
           <div className={`${styles.navContainer}`}>
-            <h1>{t('title')}</h1>
+            <h1>{t('dashboard.title')}</h1>
           </div>
         </div>
         <Outlet />

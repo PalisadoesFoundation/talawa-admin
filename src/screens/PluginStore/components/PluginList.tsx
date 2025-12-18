@@ -19,8 +19,7 @@ export default function PluginList({
   filterOption,
   onManagePlugin,
 }: IPluginListProps) {
-  const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
-
+  const { t } = useTranslation('translation');
   if (plugins.length === 0) {
     return (
       <div
@@ -35,15 +34,15 @@ export default function PluginList({
       >
         <div style={{ fontSize: 18, color: '#666', marginBottom: 8 }}>
           {plugins.length === 0 && searchTerm
-            ? t('noPluginsFound')
+            ? t('pluginStore.noPluginsFound')
             : filterOption === 'installed'
-              ? t('noInstalledPlugins')
-              : t('noPluginsAvailable')}
+              ? t('pluginStore.noInstalledPlugins')
+              : t('pluginStore.noPluginsAvailable')}
         </div>
         <div style={{ fontSize: 14, color: '#888' }}>
           {filterOption === 'installed'
-            ? t('installPluginsToSeeHere')
-            : t('checkBackLater')}
+            ? t('pluginStore.installPluginsToSeeHere')
+            : t('pluginStore.checkBackLater')}
         </div>
       </div>
     );

@@ -95,7 +95,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   refetchPledge,
   mode,
 }) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   const [formState, setFormState] = useState<InterfaceCreatePledge>({
@@ -167,7 +167,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         await updatePledge({
           variables,
         });
-        toast.success(t('pledgeUpdated'));
+        toast.success(t('pledges.pledgeUpdated'));
         refetchPledge();
         hide();
       } catch (error: unknown) {
@@ -193,7 +193,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           },
         });
 
-        toast.success(t('pledgeCreated') as string);
+        toast.success(t('pledges.pledgeCreated') as string);
         refetchPledge();
         setFormState({
           pledgeUsers: [],
@@ -224,7 +224,9 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     <Modal className={styles.pledgeModal} onHide={hide} show={isOpen}>
       <Modal.Header>
         <Modal.Title data-testid="createPledgeTitle">
-          {mode === 'create' ? t('createPledge') : t('editPledge')}
+          {mode === 'create'
+            ? t('pledges.createPledge')
+            : t('pledges.editPledge')}
         </Modal.Title>
         <Button
           variant="danger"
@@ -312,7 +314,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             {/* Dropdown to select the currency in which amount is to be pledged */}
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">
-                {t('currency')}
+                {t('pledges.currency')}
               </InputLabel>
               <Select
                 value={formState.pledgeCurrency || ''}
@@ -333,7 +335,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             {/* Input field to enter amount to be pledged */}
             <FormControl fullWidth>
               <TextField
-                label={t('amount')}
+                label={t('transactions.amount')}
                 variant="outlined"
                 type="number"
                 inputProps={{

@@ -14,14 +14,14 @@ interface IUsePluginFiltersProps {
 }
 
 export function usePluginFilters({ pluginData }: IUsePluginFiltersProps) {
-  const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
+  const { t } = useTranslation('translation');
   const loadedPlugins = useLoadedPlugins();
 
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredPlugins, setFilteredPlugins] = useState<IPluginMeta[]>([]);
   const [filterState, setFilterState] = useState({
     option: 'all',
-    selectedOption: t('allPlugins'),
+    selectedOption: t('pluginStore.allPlugins'),
   });
 
   const isInstalled = useCallback(
@@ -150,7 +150,9 @@ export function usePluginFilters({ pluginData }: IUsePluginFiltersProps) {
       setFilterState({
         option: value,
         selectedOption:
-          value === 'all' ? t('allPlugins') : t('installedPlugins'),
+          value === 'all'
+            ? t('pluginStore.allPlugins')
+            : t('pluginStore.installedPlugins'),
       });
     },
     [t],

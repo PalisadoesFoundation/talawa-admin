@@ -341,7 +341,9 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
         centered
       >
         <Modal.Header>
-          <p className={styles.titlemodal}>{t('customRecurrence')}</p>
+          <p className={styles.titlemodal}>
+            {t('eventListCard.customRecurrence')}
+          </p>
           <Button
             variant="danger"
             onClick={hideCustomRecurrenceModal}
@@ -353,7 +355,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
         <Modal.Body className="pb-2">
           <div className="mb-4">
             <span className="fw-semibold text-secondary">
-              {t('repeatsEvery')}
+              {t('eventListCard.repeatsEvery')}
             </span>{' '}
             <FormControl
               type="number"
@@ -419,7 +421,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
           {frequency === Frequency.WEEKLY && (
             <div className="mb-4">
               <span className="fw-semibold text-secondary">
-                {t('repeatsOn')}
+                {t('eventListCard.repeatsOn')}
               </span>
               <br />
               <div className="mx-2 mt-3 d-flex gap-1">
@@ -441,7 +443,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
           {frequency === Frequency.MONTHLY && (
             <div className="mb-4">
               <span className="fw-semibold text-secondary">
-                {t('monthlyOn')}
+                {t('organizationEvents.monthlyOn')}
               </span>
               <br />
               <div className="mx-2 mt-3">
@@ -480,7 +482,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
           {frequency === Frequency.YEARLY && (
             <div className="mb-4">
               <span className="fw-semibold text-secondary">
-                {t('yearlyOn')}
+                {t('organizationEvents.yearlyOn')}
               </span>
               <br />
               <div className="mx-2 mt-3">
@@ -489,14 +491,16 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                   {new Date(startDate).getDate()}
                 </span>
                 <p className="small mt-1 text-muted mb-0">
-                  {t('yearlyRecurrenceDesc')}
+                  {t('organizationEvents.yearlyRecurrenceDesc')}
                 </p>
               </div>
             </div>
           )}
 
           <div className="mb-3">
-            <span className="fw-semibold text-secondary">{t('ends')}</span>
+            <span className="fw-semibold text-secondary">
+              {t('userEventCard.ends')}
+            </span>
             <div className="ms-3 mt-3">
               <Form>
                 {recurrenceEndOptions
@@ -567,7 +571,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
                             data-testid="customRecurrenceCountInput"
                             placeholder="1"
                           />{' '}
-                          {t('occurences')}
+                          {t('eventListCard.occurences')}
                         </>
                       )}
                     </div>
@@ -584,7 +588,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
               data-testid="customRecurrenceSubmitBtn"
               onClick={handleCustomRecurrenceSubmit}
             >
-              {t('done')}
+              {t('eventListCard.done')}
             </Button>
           </div>
         </Modal.Body>

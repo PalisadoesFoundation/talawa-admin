@@ -101,7 +101,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
         data-testid="modalOrganizationHeader"
       >
         <Modal.Title className="text-white">
-          {t('createOrganization')}
+          {t('orgList.createOrganization')}
         </Modal.Title>
       </Modal.Header>
       <Form onSubmitCapture={createOrg}>
@@ -111,7 +111,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             type="name"
             id="orgname"
             className={`mb-3 ${styles.inputField}`}
-            placeholder={t('enterName')}
+            placeholder={t('addMember.enterName')}
             data-testid="modalOrganizationName"
             autoComplete="off"
             required
@@ -174,7 +174,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             </Col>
             <Col sm={6} className="mb-1">
               <Form.Control
-                placeholder={t('state')}
+                placeholder={t('settings.state')}
                 data-testid="modalOrganizationState"
                 autoComplete="off"
                 required
@@ -192,7 +192,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           <Row className="mb-1">
             <Col sm={6} className="mb-1">
               <Form.Control
-                placeholder={t('city')}
+                placeholder={t('settings.city')}
                 data-testid="modalOrganizationCity"
                 autoComplete="off"
                 required
@@ -208,7 +208,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             </Col>
             <Col sm={6} className="mb-1">
               <Form.Control
-                placeholder={t('postalCode')}
+                placeholder={t('settings.postalCode')}
                 data-testid="modalOrganizationPostalCode"
                 autoComplete="off"
                 value={formState.postalCode}
@@ -225,7 +225,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           <Row className="mb-1">
             <Col sm={6} className="mb-1">
               <Form.Control
-                placeholder={t('addressLine1')}
+                placeholder={t('settings.addressLine1')}
                 data-testid="modalOrganizationAddressLine1"
                 autoComplete="off"
                 required
@@ -244,7 +244,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             </Col>
             <Col sm={6} className="mb-1">
               <Form.Control
-                placeholder={t('addressLine2')}
+                placeholder={t('settings.addressLine2')}
                 data-testid="modalOrganizationAddressLine2"
                 autoComplete="off"
                 value={formState.addressLine2}
@@ -302,7 +302,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               value="invite"
               data-testid="submitOrganizationForm"
             >
-              {t('createOrganization')}
+              {t('orgList.createOrganization')}
             </Button>
           </Col>
         </Modal.Body>

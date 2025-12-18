@@ -45,10 +45,9 @@ import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 function OrgContribution(): JSX.Element {
   // Hook to get translation functions and translation text
-  const { t } = useTranslation('translation', { keyPrefix: 'orgContribution' });
-
+  const { t } = useTranslation('translation');
   // Set the document title based on the translated title for this page
-  document.title = t('title');
+  document.title = t('orgContribution.title');
 
   // Local filters (wired for future list filtering)
   const [, setOrgNameFilter] = useState<string>('');
@@ -61,25 +60,31 @@ function OrgContribution(): JSX.Element {
           <div className={styles.sidebar}>
             <div className={styles.sidebarsticky}>
               {/* Input for filtering by organization name */}
-              <h6 className={styles.searchtitle}>{t('filterByName')}</h6>
+              <h6 className={styles.searchtitle}>
+                {t('orgContribution.filterByName')}
+              </h6>
               <SearchBar
-                placeholder={t('orgname')}
+                placeholder={t('orgContribution.orgname')}
                 showSearchButton={false}
                 onSearch={(term) => setOrgNameFilter(term)}
                 inputTestId="filterOrgName"
               />
 
               {/* Input for filtering by transaction ID */}
-              <h6 className={styles.searchtitle}>{t('filterByTransId')}</h6>
+              <h6 className={styles.searchtitle}>
+                {t('orgContribution.filterByTransId')}
+              </h6>
               <SearchBar
-                placeholder={t('searchtransaction')}
+                placeholder={t('orgContribution.searchtransaction')}
                 showSearchButton={false}
                 onSearch={(term) => setTransactionFilter(term)}
                 inputTestId="filterTransaction"
               />
 
               {/* Section displaying recent contribution statistics */}
-              <h6 className={styles.searchtitle}>{t('recentStats')}</h6>
+              <h6 className={styles.searchtitle}>
+                {t('orgContribution.recentStats')}
+              </h6>
               <ContriStats
                 key="129"
                 id="21"
@@ -93,7 +98,9 @@ function OrgContribution(): JSX.Element {
         <Col sm={8}>
           <div className={styles.mainpageright}>
             <Row className={styles.justifysp}>
-              <p className={styles.logintitle}>{t('contribution')}</p>
+              <p className={styles.logintitle}>
+                {t('orgContribution.contribution')}
+              </p>
             </Row>
             {/* Section displaying a list of contribution cards */}
             <OrgContriCards

@@ -71,9 +71,7 @@ const VenueModal = ({
   venueData,
 }: InterfaceVenueModalProps): JSX.Element => {
   // Translation hooks for different languages
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'organizationVenues',
-  });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   // State to manage image preview and form data
@@ -106,7 +104,7 @@ const VenueModal = ({
   const handleSubmit = useCallback(async () => {
     // Validate name
     if (formState.name.trim().length === 0) {
-      toast.error(t('venueTitleError') as string);
+      toast.error(t('organizationVenues.venueTitleError') as string);
       return;
     }
 
@@ -115,7 +113,7 @@ const VenueModal = ({
       // If name hasn't changed, validate capacity and update other fields
       const capacityNum = parseInt(formState.capacity, 10);
       if (Number.isNaN(capacityNum) || capacityNum <= 0) {
-        toast.error(t('venueCapacityError') as string);
+        toast.error(t('organizationVenues.venueCapacityError') as string);
         return;
       }
 
@@ -132,7 +130,7 @@ const VenueModal = ({
         const result = await mutate({ variables });
 
         if (result?.data?.updateVenue) {
-          toast.success(t('venueUpdated'));
+          toast.success(t('organizationVenues.venueUpdated'));
           refetchVenues();
           onHide();
         }
@@ -146,7 +144,7 @@ const VenueModal = ({
     // Validate capacity
     const capacityNum = parseInt(formState.capacity, 10);
     if (Number.isNaN(capacityNum) || capacityNum <= 0) {
-      toast.error(t('venueCapacityError') as string);
+      toast.error(t('organizationVenues.venueCapacityError') as string);
       return;
     }
 
@@ -167,7 +165,7 @@ const VenueModal = ({
         const result = await mutate({ variables });
 
         if (result?.data?.updateVenue) {
-          toast.success(t('venueUpdated'));
+          toast.success(t('organizationVenues.venueUpdated'));
           refetchVenues();
           onHide();
         }
@@ -302,7 +300,9 @@ const VenueModal = ({
   return (
     <Modal show={show} onHide={onHide}>
       <Modal.Header className="d-flex align-items-start">
-        <p className={styles.titlemodal}>{t('venueDetails')}</p>
+        <p className={styles.titlemodal}>
+          {t('organizationVenues.venueDetails')}
+        </p>
         <Button
           variant="danger"
           onClick={onHide}
@@ -314,11 +314,13 @@ const VenueModal = ({
       </Modal.Header>
       <Modal.Body>
         <Form data-testid="venueForm">
-          <label htmlFor="venuetitle">{t('venueName')}</label>
+          <label htmlFor="venuetitle">
+            {t('organizationVenues.venueName')}
+          </label>
           <Form.Control
             type="title"
             id="venuetitle"
-            placeholder={t('enterVenueName')}
+            placeholder={t('organizationVenues.enterVenueName')}
             autoComplete="off"
             required
             value={name}
@@ -332,7 +334,7 @@ const VenueModal = ({
             type="text"
             id="venuedescrip"
             as="textarea"
-            placeholder={t('enterVenueDesc')}
+            placeholder={t('organizationVenues.enterVenueDesc')}
             autoComplete="off"
             required
             maxLength={500}
@@ -342,11 +344,13 @@ const VenueModal = ({
             }}
             className={styles.inputField}
           />
-          <label htmlFor="venuecapacity">{t('capacity')}</label>
+          <label htmlFor="venuecapacity">
+            {t('organizationVenues.capacity')}
+          </label>
           <Form.Control
             type="text"
             id="venuecapacity"
-            placeholder={t('enterVenueCapacity')}
+            placeholder={t('organizationVenues.enterVenueCapacity')}
             autoComplete="off"
             required
             value={capacity}
@@ -355,14 +359,16 @@ const VenueModal = ({
             }}
             className={styles.inputField}
           />
-          <Form.Label htmlFor="venueImg">{t('image')}</Form.Label>
+          <Form.Label htmlFor="venueImg">
+            {t('organizationVenues.image')}
+          </Form.Label>
           <Form.Control
             accept="image/*"
             id="venueImgUrl"
             data-testid="venueImgUrl"
             name="venueImg"
             type="file"
-            placeholder={t('uploadVenueImage')}
+            placeholder={t('organizationVenues.uploadVenueImage')}
             multiple={false}
             ref={fileInputRef}
             onChange={handleFileUpload}
@@ -389,7 +395,9 @@ const VenueModal = ({
             onClick={handleSubmit}
             disabled={loading}
           >
-            {edit ? t('editVenue') : t('createVenue')}
+            {edit
+              ? t('organizationVenues.editVenue')
+              : t('organizationVenues.createVenue')}
           </Button>
         </Form>
       </Modal.Body>

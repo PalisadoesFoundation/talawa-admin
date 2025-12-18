@@ -72,8 +72,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
   isRecurring = false,
   baseEvent = null,
 }) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
-
+  const { t } = useTranslation('translation');
   const [userId, setUserId] = useState<string>('');
   const [applyTo, setApplyTo] = useState<'series' | 'instance'>('series');
   const [addVolunteer] = useMutation(ADD_VOLUNTEER);
@@ -114,7 +113,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
 
         await addVolunteer({ variables: { data: mutationData } });
 
-        toast.success(t('volunteerAdded'));
+        toast.success(t('eventVolunteers.volunteerAdded'));
         refetchVolunteers();
         setUserId('');
         setApplyTo('series'); // Reset to default
@@ -129,7 +128,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
   return (
     <Modal className={styles.volunteerCreateModal} onHide={hide} show={isOpen}>
       <Modal.Header>
-        <p className={styles.titlemodal}>{t('addVolunteer')}</p>
+        <p className={styles.titlemodal}>{t('eventVolunteers.addVolunteer')}</p>
         <Button
           variant="danger"
           onClick={hide}
@@ -148,10 +147,10 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
           {/* Radio buttons for recurring events */}
           {isRecurring ? (
             <Form.Group className="mb-3">
-              <Form.Label>{t('applyTo')}</Form.Label>
+              <Form.Label>{t('eventVolunteers.applyTo')}</Form.Label>
               <Form.Check
                 type="radio"
-                label={t('entireSeries')}
+                label={t('eventVolunteers.entireSeries')}
                 name="applyTo"
                 id="applyToSeries"
                 checked={applyTo === 'series'}
@@ -159,7 +158,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
               />
               <Form.Check
                 type="radio"
-                label={t('thisEventOnly')}
+                label={t('eventVolunteers.thisEventOnly')}
                 name="applyTo"
                 id="applyToInstance"
                 checked={applyTo === 'instance'}
@@ -193,7 +192,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
             className={styles.regBtn}
             data-testid="submitBtn"
           >
-            {t('addVolunteer')}
+            {t('eventVolunteers.addVolunteer')}
           </Button>
         </Form>
       </Modal.Body>

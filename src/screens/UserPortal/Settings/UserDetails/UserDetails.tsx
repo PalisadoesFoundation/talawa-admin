@@ -111,7 +111,7 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
       </Col>
       <Col lg={4}>
         <Form.Label htmlFor="gender" className={styles.cardLabel}>
-          {t('gender')}
+          {t('settings.gender')}
         </Form.Label>
         <Form.Control
           as="select"
@@ -122,7 +122,7 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
           data-testid="inputGender"
         >
           <option value="" disabled>
-            {t('sgender')}
+            {t('settings.sgender')}
           </option>
           {genderEnum.map((g) => (
             <option key={g.value.toLowerCase()} value={g.value}>
@@ -161,12 +161,12 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
       </Col>
       <Col lg={4}>
         <Form.Label htmlFor="phoneNo" className={styles.cardLabel}>
-          {t('phoneNumber')}
+          {t('settings.phoneNumber')}
         </Form.Label>
         <Form.Control
           type="tel"
           id="phoneNo"
-          placeholder={t('enterPhoneNo')}
+          placeholder={t('settings.enterPhoneNo')}
           value={userDetails.mobilePhoneNumber}
           onChange={(e) =>
             handleFieldChange('mobilePhoneNumber', e.target.value)
@@ -177,12 +177,12 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
       </Col>
       <Col lg={4}>
         <Form.Label htmlFor="homePhoneNo" className={styles.cardLabel}>
-          {t('homePhoneNumber')}
+          {t('settings.homePhoneNumber')}
         </Form.Label>
         <Form.Control
           type="tel"
           id="homePhoneNo"
-          placeholder={t('enterPhoneNo')}
+          placeholder={t('settings.enterPhoneNo')}
           value={userDetails.homePhoneNumber}
           onChange={(e) => handleFieldChange('homePhoneNumber', e.target.value)}
           className={styles.cardControl}
@@ -191,12 +191,12 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
       </Col>
       <Col lg={4}>
         <Form.Label htmlFor="workPhoneNo" className={styles.cardLabel}>
-          {t('workPhoneNumber')}
+          {t('memberDetail.workPhoneNumber')}
         </Form.Label>
         <Form.Control
           type="tel"
           id="workPhoneNo"
-          placeholder={t('enterPhoneNo')}
+          placeholder={t('settings.enterPhoneNo')}
           value={userDetails.workPhoneNumber}
           onChange={(e) => handleFieldChange('workPhoneNumber', e.target.value)}
           className={styles.cardControl}
@@ -205,7 +205,7 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
       </Col>
       <Col lg={4}>
         <Form.Label htmlFor="birthDate" className={styles.cardLabel}>
-          {t('birthDate')}
+          {t('settings.birthDate')}
         </Form.Label>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DatePicker
@@ -223,7 +223,7 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
               textField: {
                 inputProps: {
                   'data-testid': 'birth-date-input',
-                  'aria-label': t('birthDate'),
+                  'aria-label': t('settings.birthDate'),
                   max: dayjs().format('YYYY-MM-DD'),
                 },
               },
@@ -233,7 +233,7 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
       </Col>
       <Col lg={4}>
         <Form.Label htmlFor="grade" className={styles.cardLabel}>
-          {t('grade')}
+          {t('settings.grade')}
         </Form.Label>
         <Form.Control
           as="select"
@@ -244,7 +244,7 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
           data-testid="inputGrade"
         >
           <option value="" disabled>
-            {t('gradePlaceholder')}
+            {t('settings.gradePlaceholder')}
           </option>
           {educationGradeEnum.map((grade) => (
             <option key={grade.value.toLowerCase()} value={grade.value}>
@@ -257,7 +257,7 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
     <Row className="mb-1">
       <Col lg={4}>
         <Form.Label htmlFor="empStatus" className={styles.cardLabel}>
-          {t('empStatus')}
+          {t('settings.empStatus')}
         </Form.Label>
         <Form.Control
           as="select"
@@ -270,7 +270,7 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
           data-testid="inputEmpStatus"
         >
           <option value="" disabled>
-            {t('sEmpStatus')}
+            {t('settings.sEmpStatus')}
           </option>
           {employmentStatusEnum.map((status) => (
             <option key={status.value.toLowerCase()} value={status.value}>
@@ -281,7 +281,7 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
       </Col>
       <Col lg={4}>
         <Form.Label htmlFor="maritalStatus" className={styles.cardLabel}>
-          {t('maritalStatus')}
+          {t('settings.maritalStatus')}
         </Form.Label>
         <Form.Control
           as="select"
@@ -312,12 +312,12 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
     <Row className="mb-1">
       <Col lg={12}>
         <Form.Label htmlFor="description" className={styles.cardLabel}>
-          {t('description')}
+          {t('organizationVenues.description')}
         </Form.Label>
         <Form.Control
           as="textarea"
           id="description"
-          placeholder={t('enterDescription')}
+          placeholder={t('userEvents.eventNenterDescriptioname')}
           value={sanitizeHtml(userDetails.description)}
           onChange={(e) => handleFieldChange('description', e.target.value)}
           className={styles.cardControl}

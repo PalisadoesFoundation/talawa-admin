@@ -53,9 +53,7 @@ interface InterfaceAgendaCategoryProps {
 const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
   orgId,
 }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'organizationAgendaCategory',
-  });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   // State for managing modal visibility and form data
   const [agendaCategoryCreateModalIsOpen, setAgendaCategoryCreateModalIsOpen] =
@@ -112,7 +110,9 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
           },
         },
       });
-      toast.success(t('agendaCategoryCreated') as string);
+      toast.success(
+        t('organizationAgendaCategory.agendaCategoryCreated') as string,
+      );
       setFormState({ name: '', description: '', createdBy: '' });
       refetchAgendaCategory();
       hideCreateModal();
@@ -175,7 +175,7 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
               className={styles.addButton}
             >
               <i className={'fa fa-plus me-2'} />
-              {t('createAgendaCategory')}
+              {t('organizationAgendaCategory.createAgendaCategory')}
             </Button>
           </div>
         </div>

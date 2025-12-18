@@ -94,7 +94,9 @@ const AgendaItemsPreviewModal: React.FC<
       onHide={hidePreviewModal}
     >
       <Modal.Header>
-        <p className={styles.titlemodalAgendaItems}>{t('agendaItemDetails')}</p>
+        <p className={styles.titlemodalAgendaItems}>
+          {t('agendaItems.agendaItemDetails')}
+        </p>
         <Button
           onClick={hidePreviewModal}
           data-testid="previewAgendaItemModalCloseBtn"
@@ -106,35 +108,35 @@ const AgendaItemsPreviewModal: React.FC<
         <Form>
           <div>
             <div className={styles.preview}>
-              <p>{t('category')}</p>
+              <p>{t('agendaItems.category')}</p>
               <span className={styles.view}>
                 {formState.agendaItemCategoryNames.join(', ')}
               </span>
             </div>
             <div className={styles.preview}>
-              <p>{t('title')}</p>
+              <p>{t('agendaItems.title')}</p>
               <span className={styles.view}>{formState.title}</span>
             </div>
             <div className={styles.preview}>
-              <p>{t('description')}</p>
+              <p>{t('organizationVenues.description')}</p>
               <span className={styles.view}>{formState.description}</span>
             </div>
             <div className={styles.preview}>
-              <p>{t('duration')}</p>
+              <p>{t('agendaItems.duration')}</p>
               <span className={styles.view}>{formState.duration}</span>
             </div>
             <div className={styles.preview}>
-              <p>{t('createdBy')}</p>
+              <p>{t('funds.createdBy')}</p>
               <span className={styles.view}>
                 {`${formState.createdBy.firstName} ${formState.createdBy.lastName}`}
               </span>
             </div>
             <div className={styles.preview}>
-              <p>{t('urls')}</p>
+              <p>{t('agendaItems.urls')}</p>
               <span className={styles.view}>{renderUrls()}</span>
             </div>
             <div className={styles.preview}>
-              <p>{t('attachments')}</p>
+              <p>{t('agendaItems.attachments')}</p>
               <span className={styles.view}>{renderAttachments()}</span>
             </div>
           </div>

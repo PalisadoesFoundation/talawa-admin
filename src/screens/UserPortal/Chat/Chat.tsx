@@ -69,7 +69,7 @@ interface InterfaceContactCardProps {
 }
 
 export default function chat(): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { getItem, setItem } = useLocalStorage();
   const { orgId } = useParams<{ orgId: string }>();
@@ -228,7 +228,7 @@ export default function chat(): JSX.Element {
             <div
               className={`d-flex justify-content-between ${styles.addChatContainer}`}
             >
-              <h4>{t('messages')}</h4>
+              <h4>{t('userChat.messages')}</h4>
               <Dropdown style={{ cursor: 'pointer' }}>
                 <Dropdown.Toggle
                   className={styles.customToggle}
@@ -241,13 +241,13 @@ export default function chat(): JSX.Element {
                     onClick={openCreateDirectChatModal}
                     data-testid="newDirectChat"
                   >
-                    {t('newChat')}
+                    {t('userChat.newChat')}
                   </Dropdown.Item>
                   <Dropdown.Item
                     onClick={openCreateGroupChatModal}
                     data-testid="newGroupChat"
                   >
-                    {t('newGroupChat')}
+                    {t('userChat.newGroupChat')}
                   </Dropdown.Item>
                   <Dropdown.Item href="#/action-3">
                     Starred Messages

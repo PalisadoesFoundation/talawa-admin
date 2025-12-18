@@ -104,7 +104,7 @@ export const getManageTagErrorMessage = (error: unknown): string => {
 };
 
 function ManageTag(): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'manageTag' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { orgId, tagId: currentTagId } = useParams();
   const navigate = useNavigate();
@@ -227,7 +227,7 @@ function ManageTag(): JSX.Element {
 
       userTagAssignedMembersRefetch();
       toggleUnassignUserTagModal();
-      toast.success(t('successfullyUnassigned') as string);
+      toast.success(t('memberDetail.successfullyUnassigned') as string);
     } catch (error: unknown) {
       const errorMessage = getManageTagErrorMessage(error);
       toast.error(errorMessage);
@@ -250,7 +250,7 @@ function ManageTag(): JSX.Element {
     e.preventDefault();
 
     if (newTagName === currentTagName) {
-      toast.info(t('changeNameToEdit'));
+      toast.info(t('manageTag.changeNameToEdit'));
       return;
     }
 
@@ -259,7 +259,7 @@ function ManageTag(): JSX.Element {
         variables: { tagId: currentTagId, name: newTagName },
       });
 
-      toast.success(t('tagUpdationSuccess'));
+      toast.success(t('manageTag.tagUpdationSuccess'));
       userTagAssignedMembersRefetch();
       setEditUserTagModalIsOpen(false);
     } catch (error: unknown) {
@@ -275,7 +275,7 @@ function ManageTag(): JSX.Element {
 
       navigate(`/orgtags/${orgId}`);
       toggleRemoveUserTagModal();
-      toast.success(t('tagRemovalSuccess') as string);
+      toast.success(t('manageTag.tagRemovalSuccess') as string);
     } catch (error: unknown) {
       const errorMessage = getManageTagErrorMessage(error);
       toast.error(errorMessage);
@@ -377,7 +377,7 @@ function ManageTag(): JSX.Element {
               <div
                 className={`btn btn-sm btn-primary me-3 ${styles.editButton}`}
               >
-                {t('viewProfile')}
+                {t('manageTag.viewProfile')}
               </div>
             </Link>
 
@@ -434,7 +434,7 @@ function ManageTag(): JSX.Element {
                 className={`${styles.createButton} mb-2`}
                 data-testid="subTagsBtn"
               >
-                {t('subTags')}
+                {t('manageTag.subTags')}
               </Button>
             </div>
             <Button
@@ -444,7 +444,7 @@ function ManageTag(): JSX.Element {
               className={`${styles.createButton} mb-2 ms-3`}
             >
               <i className={'fa fa-plus me-2'} />
-              {t('addPeopleToTag')}
+              {t('manageTag.addPeopleToTag')}
             </Button>
           </div>
 
@@ -503,7 +503,7 @@ function ManageTag(): JSX.Element {
                             alignItems="center"
                             justifyContent="center"
                           >
-                            {t('noAssignedMembersFound')}
+                            {t('manageTag.noAssignedMembersFound')}
                           </Stack>
                         ),
                       }}
@@ -536,7 +536,7 @@ function ManageTag(): JSX.Element {
                     className={`my-2 btn btn-primary btn-sm w-75 ${styles.editButton}`}
                     data-testid="assignToTags"
                   >
-                    {t('assignToTags')}
+                    {t('manageTag.assignToTags')}
                   </div>
                   <div
                     onClick={() => {
@@ -546,7 +546,7 @@ function ManageTag(): JSX.Element {
                     className="mb-1 btn btn-danger btn-sm w-75"
                     data-testid="removeFromTags"
                   >
-                    {t('removeFromTags')}
+                    {t('manageTag.removeFromTags')}
                   </div>
                   <hr
                     style={{

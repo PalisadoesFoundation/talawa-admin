@@ -57,9 +57,7 @@ function agendaCategoryContainer({
   agendaCategoryData: InterfaceAgendaItemCategoryInfo[] | undefined;
   agendaCategoryRefetch: () => void;
 }): JSX.Element {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'organizationAgendaCategory',
-  });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   // State management for modals and form data
@@ -143,7 +141,9 @@ function agendaCategoryContainer({
 
       agendaCategoryRefetch();
       hideUpdateModal();
-      toast.success(t('agendaCategoryUpdated') as string);
+      toast.success(
+        t('organizationAgendaCategory.agendaCategoryUpdated') as string,
+      );
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(`Agenda Category Update Failed ${error.message}`);
@@ -165,7 +165,9 @@ function agendaCategoryContainer({
       });
       agendaCategoryRefetch();
       toggleDeleteModal();
-      toast.success(t('agendaCategoryDeleted') as string);
+      toast.success(
+        t('organizationAgendaCategory.agendaCategoryUpdated') as string,
+      );
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(`Agenda Category Delete Failed, ${error.message}`);
@@ -220,20 +222,20 @@ function agendaCategoryContainer({
               lg={2}
               className="align-self-center ps-3 fw-bold"
             >
-              <div className="ms-3">{t('name')}</div>
+              <div className="ms-3">{t('userVolunteer.name')}</div>
             </Col>
             <Col
               className={`  align-self-center  fw-bold d-none d-md-block`}
               md={6}
               lg={6}
             >
-              {t('description')}
+              {t('organizationVenues.description')}
             </Col>
             <Col className="d-none d-lg-block fw-bold align-self-center" lg={2}>
-              <div className="ms-1">{t('createdBy')}</div>
+              <div className="ms-1">{t('funds.createdBy')}</div>
             </Col>
             <Col xs={5} sm={3} lg={2} className="fw-bold align-self-center">
-              <div className="ms-2">{t('options')}</div>
+              <div className="ms-2">{t('eventRegistrant.options')}</div>
             </Col>
           </Row>
         </div>
@@ -297,7 +299,7 @@ function agendaCategoryContainer({
           ))}
           {agendaCategoryData?.length === 0 && (
             <div className="lh-lg text-center fw-semibold text-body-tertiary">
-              {t('noAgendaCategories')}
+              {t('organizationAgendaCategory.noAgendaCategories')}
             </div>
           )}
         </div>

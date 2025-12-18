@@ -33,13 +33,13 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 function orgDelete(): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'orgDelete' });
+  const { t } = useTranslation('translation');
 
   return (
     <>
       {/* Container for the organization deletion message */}
       <div id="OrgDelete" className="search-OrgDelete">
-        {t('deleteOrg')}
+        {t('orgDelete.deleteOrg')}
       </div>
     </>
   );

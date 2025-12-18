@@ -30,9 +30,7 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
   orgId,
 }) => {
   const { t: tCommon } = useTranslation('common');
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'orgActionItemCategories',
-  });
+  const { t } = useTranslation('translation');
 
   const [formState, setFormState] = useState({
     name: category?.name ?? '',
@@ -83,7 +81,7 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
       refetchCategories();
       hide();
       setFormState({ name: '', description: '', isDisabled: false });
-      toast.success(t('successfulCreation'));
+      toast.success(t('eventActionItems.successfulCreation'));
     } catch (error: unknown) {
       toast.error((error as Error).message);
     }
@@ -99,7 +97,7 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
       description === category?.description &&
       isDisabled === category?.isDisabled
     ) {
-      toast.error(t('sameNameConflict'));
+      toast.error(t('orgActionItemCategories.sameNameConflict'));
       return;
     }
 
@@ -134,7 +132,7 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
       setFormState({ name: '', description: '', isDisabled: false });
       refetchCategories();
       hide();
-      toast.success(t('successfulUpdation'));
+      toast.success(t('eventActionItems.successfulUpdation'));
     } catch (error: unknown) {
       toast.error((error as Error).message);
     }
@@ -157,7 +155,7 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
 
       refetchCategories();
       hide();
-      toast.success(t('categoryDeleted'));
+      toast.success(t('orgActionItemCategories.categoryDeleted'));
     } catch (error: unknown) {
       toast.error((error as Error).message);
     }
@@ -166,7 +164,9 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
   return (
     <Modal className={styles.createModal} show={isOpen} onHide={hide}>
       <Modal.Header>
-        <p className={`${styles.titlemodal}`}>{t('categoryDetails')}</p>
+        <p className={`${styles.titlemodal}`}>
+          {t('orgActionItemCategories.categoryDetails')}
+        </p>
         <Button
           variant="danger"
           onClick={hide}
@@ -184,7 +184,7 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
           {/* Category Name Input */}
           <FormControl fullWidth className="mb-3">
             <TextField
-              label={t('actionItemCategoryName')}
+              label={t('orgActionItemCategories.actionItemCategoryName')}
               type="text"
               variant="outlined"
               autoComplete="off"
@@ -201,7 +201,7 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
           {/* Category Description Input */}
           <FormControl fullWidth className="mb-3">
             <TextField
-              label={t('actionItemCategoryDescription')}
+              label={t('orgActionItemCategories.actionItemCategoryDescription')}
               type="text"
               variant="outlined"
               autoComplete="off"
@@ -254,7 +254,7 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
             >
               {mode === 'create'
                 ? tCommon('create')
-                : t('updateActionItemCategory')}
+                : t('orgActionItemCategories.updateActionItemCategory')}
             </Button>
           </div>
         </Form>

@@ -21,8 +21,7 @@ interface InterfaceGeneralSettingsProps {
  */
 
 const GeneralSettings: FC<InterfaceGeneralSettingsProps> = ({ orgId }) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'orgSettings' });
-
+  const { t } = useTranslation('translation');
   return (
     <Row className={`${styles.settingsBody} mt-3`}>
       <Col xxl={7} xl={12} className="mb-4">
@@ -48,14 +47,14 @@ const GeneralSettings: FC<InterfaceGeneralSettingsProps> = ({ orgId }) => {
           <Card.Header className={styles.deleteCardHeader}>
             <div className={styles.cardTitle}>
               <h5 className={`mb-0 fw-semibold ${styles.cardHeading} `}>
-                {t('otherSettings')}
+                {t('settings.otherSettings')}
               </h5>
             </div>
           </Card.Header>
           <Card.Body className={styles.cardBody}>
             <div className={styles.textBox}>
               <Form.Label className={'text-secondary fw-bold'}>
-                {t('changeLanguage')}
+                {t('settings.changeLanguage')}
               </Form.Label>
               <ChangeLanguageDropDown />
             </div>

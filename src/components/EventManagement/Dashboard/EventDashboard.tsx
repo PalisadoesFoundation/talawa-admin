@@ -195,7 +195,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                   {formatDate(eventData.event.startAt)}{' '}
                 </span>
               </p>
-              <p className={styles.to}>{t('to')}</p>
+              <p className={styles.to}>{t('eventManagement.to')}</p>
               <p>
                 <b className={styles.endTime} data-testid="end-time">
                   {!eventData.event.allDay && eventData.event.endAt

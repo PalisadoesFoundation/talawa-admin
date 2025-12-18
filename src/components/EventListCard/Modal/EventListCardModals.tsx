@@ -335,7 +335,7 @@ function EventListCardModals({
       }
 
       if (data) {
-        toast.success(t('eventDeleted') as string);
+        toast.success(t('eventListCard.eventDeleted') as string);
         setEventDeleteModalIsOpen(false);
         hideViewModal();
         if (refetchEvents) {
@@ -446,12 +446,12 @@ function EventListCardModals({
             className="text-white"
             id={`updateEventModalLabel${eventListCardProps.id}`}
           >
-            {t('updateEvent')}
+            {t('eventListCard.updateEvent')}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div>
-            <p>{t('updateRecurringEventMsg')}</p>
+            <p>{t('eventListCard.updateRecurringEventMsg')}</p>
             <Form>
               {/* Only show "update this instance" option if recurrence rule hasn't changed */}
               {availableUpdateOptions.single && (
@@ -462,7 +462,7 @@ function EventListCardModals({
                   value="single"
                   checked={updateOption === 'single'}
                   onChange={() => setUpdateOption('single')}
-                  label={t('updateThisInstance')}
+                  label={t('eventListCard.updateThisInstance')}
                   className="mb-2"
                 />
               )}
@@ -474,7 +474,7 @@ function EventListCardModals({
                   value="following"
                   checked={updateOption === 'following'}
                   onChange={() => setUpdateOption('following')}
-                  label={t('updateThisAndFollowing')}
+                  label={t('eventListCard.updateThisAndFollowing')}
                   className="mb-2"
                 />
               )}
@@ -487,7 +487,7 @@ function EventListCardModals({
                   value="entireSeries"
                   checked={updateOption === 'entireSeries'}
                   onChange={() => setUpdateOption('entireSeries')}
-                  label={t('updateEntireSeries')}
+                  label={t('eventListCard.updateEntireSeries')}
                   className="mb-2"
                 />
               )}
@@ -527,7 +527,7 @@ function EventListCardModals({
             }
             data-testid="confirmUpdateEventBtn"
           >
-            {t('updateEvent')}
+            {t('eventListCard.updateEvent')}
           </Button>
         </Modal.Footer>
       </Modal>

@@ -63,13 +63,11 @@ import PageHeader from 'shared-components/Navbar/Navbar';
 
 function organizationVenues(): JSX.Element {
   // Translation hooks for i18n support
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'organizationVenues',
-  });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   // Setting the document title using the translation hook
-  document.title = t('title');
+  document.title = t('organizationVenues.title');
 
   // State hooks for managing component state
   const [venueModal, setVenueModal] = useState<boolean>(false);
@@ -215,7 +213,7 @@ function organizationVenues(): JSX.Element {
       <div className={`${styles.btnsContainer} gap-3 flex-wrap`}>
         <PageHeader
           search={{
-            placeholder: `${t('searchBy')} ${tCommon(searchBy)}`,
+            placeholder: `${t('userCampaigns.searchBy')} ${tCommon(searchBy)}`,
             onSearch: handleSearch,
             inputTestId: 'searchBy',
             buttonTestId: 'searchBtn',
@@ -234,8 +232,14 @@ function organizationVenues(): JSX.Element {
             {
               title: 'Sort Venues',
               options: [
-                { label: t('highestCapacity'), value: 'highest' },
-                { label: t('lowestCapacity'), value: 'lowest' },
+                {
+                  label: t('organizationVenues.highestCapacity'),
+                  value: 'highest',
+                },
+                {
+                  label: t('organizationVenues.lowestCapacity'),
+                  value: 'lowest',
+                },
               ],
               selected: sortOrder,
               onChange: (value) => handleSortChange(value as string),
@@ -249,7 +253,8 @@ function organizationVenues(): JSX.Element {
               onClick={showCreateVenueModal}
               data-testid="createVenueBtn"
             >
-              <i className="fa fa-plus me-1"></i> {t('addVenue')}
+              <i className="fa fa-plus me-1"></i>{' '}
+              {t('organizationVenues.addVenue')}
             </Button>
           }
         />
@@ -279,7 +284,7 @@ function organizationVenues(): JSX.Element {
                   ),
                 )
               ) : (
-                <h6>{t('noVenues')}</h6>
+                <h6>{t('organizationVenues.noVenues')}</h6>
               )}
             </div>
           )}

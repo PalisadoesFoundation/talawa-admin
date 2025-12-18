@@ -58,8 +58,7 @@ const startPostModal = ({
   img,
 }: InterfaceStartPostModalProps): JSX.Element => {
   // Translation hook for internationalization
-  const { t } = useTranslation('translation', { keyPrefix: 'home' });
-
+  const { t } = useTranslation('translation');
   // State to manage the content of the post
   const [postContent, setPostContent] = useState<string>('');
 
@@ -179,7 +178,7 @@ const startPostModal = ({
 
       if (data) {
         toast.dismiss();
-        toast.success(t('postNowVisibleInFeed') as string);
+        toast.success(t('home.postNowVisibleInFeed') as string);
         fetchPosts();
         handleHide();
       }
@@ -231,7 +230,7 @@ const startPostModal = ({
             autoComplete="off"
             required
             onChange={handlePostInput}
-            placeholder={t('somethingOnYourMind')}
+            placeholder={t('home.somethingOnYourMind')}
             value={postContent}
           />
           {img && (
@@ -248,7 +247,7 @@ const startPostModal = ({
             data-testid="createPostBtn"
             onClick={handlePost}
           >
-            {t('addPost')}
+            {t('home.addPost')}
           </Button>
         </Modal.Footer>
       </Form>

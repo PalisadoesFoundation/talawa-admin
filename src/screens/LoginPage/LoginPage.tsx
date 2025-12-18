@@ -88,7 +88,7 @@ import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
 
 const loginPage = (): JSX.Element => {
-  const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -96,7 +96,7 @@ const loginPage = (): JSX.Element => {
 
   const { getItem, setItem, removeItem } = useLocalStorage();
 
-  document.title = t('title');
+  document.title = t('loginPage.title');
 
   type PasswordValidation = {
     lowercaseChar: boolean;
@@ -239,7 +239,7 @@ const loginPage = (): JSX.Element => {
 
       return data.recaptcha;
     } catch {
-      toast.error(t('captchaError') as string);
+      toast.error(t('userLoginPage.captchaError') as string);
     }
   };
 
@@ -255,7 +255,7 @@ const loginPage = (): JSX.Element => {
     const isVerified = await verifyRecaptcha(recaptchaToken);
 
     if (!isVerified) {
-      toast.error(t('Please_check_the_captcha') as string);
+      toast.error(t('userLoginPage.Please_check_the_captcha') as string);
       return;
     }
 
@@ -328,17 +328,17 @@ const loginPage = (): JSX.Element => {
           SignupRecaptchaRef.current?.reset();
         }
       } else {
-        toast.warn(t('passwordMismatches') as string);
+        toast.warn(t('forgotPassword.passwordMismatches') as string);
       }
     } else {
       if (!isValidName(signName)) {
-        toast.warn(t('name_invalid') as string);
+        toast.warn(t('loginPage.name_invalid') as string);
       }
       if (!validatePassword(signPassword)) {
-        toast.warn(t('password_invalid') as string);
+        toast.warn(t('loginPage.password_invalid') as string);
       }
       if (signEmail.length < 8) {
-        toast.warn(t('email_invalid') as string);
+        toast.warn(t('loginPage.email_invalid') as string);
       }
     }
   };
@@ -348,7 +348,7 @@ const loginPage = (): JSX.Element => {
     const isVerified = await verifyRecaptcha(recaptchaToken);
 
     if (!isVerified) {
-      toast.error(t('Please_check_the_captcha') as string);
+      toast.error(t('userLoginPage.Please_check_the_captcha') as string);
       return;
     }
 
@@ -463,7 +463,9 @@ const loginPage = (): JSX.Element => {
                     className={styles.palisadoes_logo}
                     data-testid="PalisadoesLogo"
                   />
-                  <p className="text-center">{t('fromPalisadoes')}</p>
+                  <p className="text-center">
+                    {t('userLoginPage.fromPalisadoes')}
+                  </p>
                 </a>
               )}
             </div>
@@ -488,8 +490,10 @@ const loginPage = (): JSX.Element => {
               >
                 <form onSubmit={loginLink}>
                   <h1 className="fs-2 fw-bold text-dark mb-3">
-                    {/* {role === 'admin' ? tCommon('login') : t('userLogin')} */}
-                    {role === 'admin' ? t('adminLogin') : t('userLogin')}
+                    {/* {role === 'admin' ? tCommon('login') : t('userLoginPage.userLogin')} */}
+                    {role === 'admin'
+                      ? t('loginPage.adminLogin')
+                      : t('userLoginPage.userLogin')}
                   </h1>
                   <Form.Label>{tCommon('email')}</Form.Label>
                   <div className="position-relative">
@@ -729,7 +733,7 @@ const loginPage = (): JSX.Element => {
                               <span>
                                 <Clear className="" />
                               </span>
-                              {t('atleast_6_char_long')}
+                              {t('loginPage.atleast_6_char_long')}
                             </p>
                           </div>
                         ) : (
@@ -739,7 +743,7 @@ const loginPage = (): JSX.Element => {
                             <span>
                               <Check />
                             </span>
-                            {t('atleast_6_char_long')}
+                            {t('loginPage.atleast_6_char_long')}
                           </p>
                         )
                       ) : null}
@@ -754,7 +758,7 @@ const loginPage = (): JSX.Element => {
                             <span>
                               <Check className="size-sm" />
                             </span>
-                            {t('atleast_6_char_long')}
+                            {t('loginPage.atleast_6_char_long')}
                           </div>
                         )}
                       {isInputFocused && (
@@ -774,7 +778,7 @@ const loginPage = (): JSX.Element => {
                               <Check />
                             </span>
                           )}
-                          {t('lowercase_check')}
+                          {t('loginPage.lowercase_check')}
                         </p>
                       )}
                       {isInputFocused && (
@@ -794,7 +798,7 @@ const loginPage = (): JSX.Element => {
                               <Check />
                             </span>
                           )}
-                          {t('uppercase_check')}
+                          {t('loginPage.uppercase_check')}
                         </p>
                       )}
                       {isInputFocused && (
@@ -814,7 +818,7 @@ const loginPage = (): JSX.Element => {
                               <Check />
                             </span>
                           )}
-                          {t('numeric_value_check')}
+                          {t('loginPage.numeric_value_check')}
                         </p>
                       )}
                       {isInputFocused && (
@@ -836,7 +840,7 @@ const loginPage = (): JSX.Element => {
                               <Check />
                             </span>
                           )}
-                          {t('special_char_check')}
+                          {t('loginPage.special_char_check')}
                         </p>
                       )}
                     </div>
@@ -883,7 +887,7 @@ const loginPage = (): JSX.Element => {
                       )}
                   </div>
                   <div className="position-relative  my-2">
-                    <Form.Label>{t('selectOrg')}</Form.Label>
+                    <Form.Label>{t('userLoginPage.selectOrg')}</Form.Label>
                     <div className="position-relative">
                       <Autocomplete
                         disablePortal

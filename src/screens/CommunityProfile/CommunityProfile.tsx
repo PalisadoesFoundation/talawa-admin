@@ -63,12 +63,10 @@ import UpdateSession from '../../components/UpdateSession/UpdateSession';
 
 const CommunityProfile = (): JSX.Element => {
   // Translation hooks for internationalization
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'communityProfile',
-  });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
-  document.title = t('title'); // Set document title
+  document.title = t('communityProfile.title'); // Set document title
 
   // Define the type for pre-login imagery data
   type PreLoginImageryDataType = {
@@ -165,7 +163,7 @@ const CommunityProfile = (): JSX.Element => {
           slackURL: profileVariable.slackURL || undefined,
         },
       });
-      toast.success(t('profileChangedMsg') as string);
+      toast.success(t('communityProfile.profileChangedMsg') as string);
     } catch (error: unknown) {
       errorHandler(t, error as Error);
     }
@@ -226,14 +224,18 @@ const CommunityProfile = (): JSX.Element => {
     <>
       <Card border="0" className={`${styles.card} "rounded-4 my-4 shadow-sm"`}>
         <div className={styles.cardHeader}>
-          <div className={styles.cardTitle}>{t('editProfile')}</div>
+          <div className={styles.cardTitle}>
+            {t('communityProfile.resetData')}
+          </div>
         </div>
         <Card.Body>
-          <div className="mb-3">{t('communityProfileInfo')}</div>
+          <div className="mb-3">
+            {t('communityProfile.communityProfileInfo')}
+          </div>
           <Form onSubmit={handleOnSubmit}>
             <Form.Group>
               <Form.Label className={styles.formLabel}>
-                {t('communityName')}
+                {t('communityProfile.communityName')}
               </Form.Label>
               <Form.Control
                 type="text"
@@ -242,14 +244,14 @@ const CommunityProfile = (): JSX.Element => {
                 value={profileVariable.name}
                 onChange={handleOnChange}
                 className={`mb-3 ${styles.inputField}`}
-                placeholder={t('communityName')}
+                placeholder={t('communityProfile.communityName')}
                 autoComplete="off"
                 required
               />
             </Form.Group>
             <Form.Group>
               <Form.Label className={styles.formLabel}>
-                {t('wesiteLink')}
+                {t('communityProfile.wesiteLink')}
               </Form.Label>
               <Form.Control
                 type="url"
@@ -258,13 +260,15 @@ const CommunityProfile = (): JSX.Element => {
                 value={profileVariable.websiteURL}
                 onChange={handleOnChange}
                 className={`mb-3 ${styles.inputField}`}
-                placeholder={t('wesiteLink')}
+                placeholder={t('communityProfile.wesiteLink')}
                 autoComplete="off"
                 required
               />
             </Form.Group>
             <Form.Group>
-              <Form.Label className={styles.formLabel}>{t('logo')}</Form.Label>
+              <Form.Label className={styles.formLabel}>
+                {t('communityProfile.logo')}
+              </Form.Label>
               <Form.Control
                 accept="image/*"
                 multiple={false}
@@ -294,7 +298,7 @@ const CommunityProfile = (): JSX.Element => {
             </Form.Group>
             <Form.Group>
               <Form.Label className={styles.formLabel}>
-                {t('social')}
+                {t('communityProfile.social')}
               </Form.Label>
               {/* Social media inputs */}
               <div className="mb-3 d-flex align-items-center gap-3">
@@ -307,7 +311,7 @@ const CommunityProfile = (): JSX.Element => {
                   className={`mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.facebookURL}
                   onChange={handleOnChange}
-                  placeholder={t('url')}
+                  placeholder={t('agendaItems.url')}
                   autoComplete="off"
                 />
               </div>
@@ -321,7 +325,7 @@ const CommunityProfile = (): JSX.Element => {
                   className={`mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.instagramURL}
                   onChange={handleOnChange}
-                  placeholder={t('url')}
+                  placeholder={t('agendaItems.url')}
                   autoComplete="off"
                 />
               </div>
@@ -335,7 +339,7 @@ const CommunityProfile = (): JSX.Element => {
                   className={`mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.xURL}
                   onChange={handleOnChange}
-                  placeholder={t('url')}
+                  placeholder={t('agendaItems.url')}
                   autoComplete="off"
                 />
               </div>
@@ -349,7 +353,7 @@ const CommunityProfile = (): JSX.Element => {
                   className={`mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.linkedInURL}
                   onChange={handleOnChange}
-                  placeholder={t('url')}
+                  placeholder={t('agendaItems.url')}
                   autoComplete="off"
                 />
               </div>
@@ -363,7 +367,7 @@ const CommunityProfile = (): JSX.Element => {
                   className={`mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.githubURL}
                   onChange={handleOnChange}
-                  placeholder={t('url')}
+                  placeholder={t('agendaItems.url')}
                   autoComplete="off"
                 />
               </div>
@@ -377,7 +381,7 @@ const CommunityProfile = (): JSX.Element => {
                   className={`mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.youtubeURL}
                   onChange={handleOnChange}
-                  placeholder={t('url')}
+                  placeholder={t('agendaItems.url')}
                   autoComplete="off"
                 />
               </div>
@@ -391,7 +395,7 @@ const CommunityProfile = (): JSX.Element => {
                   className={`mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.redditURL}
                   onChange={handleOnChange}
-                  placeholder={t('url')}
+                  placeholder={t('agendaItems.url')}
                   autoComplete="off"
                 />
               </div>
@@ -405,7 +409,7 @@ const CommunityProfile = (): JSX.Element => {
                   className={`mb-0 mt-0 ${styles.inputField}`}
                   value={profileVariable.slackURL}
                   onChange={handleOnChange}
-                  placeholder={t('url')}
+                  placeholder={t('agendaItems.url')}
                   autoComplete="off"
                 />
               </div>

@@ -91,11 +91,11 @@ const dataGridStyle = {
  * For more details on the reusable classes, refer to the global CSS file.
  */
 const organizationFunds = (): JSX.Element => {
-  const { t } = useTranslation('translation', { keyPrefix: 'funds' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   // Set the document title based on the translation
-  document.title = t('title');
+  document.title = t('funds.title');
 
   const { orgId } = useParams();
   const navigate = useNavigate();
@@ -324,7 +324,7 @@ const organizationFunds = (): JSX.Element => {
             data-testid="viewBtn"
           >
             <i className="fa fa-eye me-1" />
-            {t('viewCampaigns')}
+            {t('funds.viewCampaigns')}
           </Button>
         );
       },
@@ -346,8 +346,8 @@ const organizationFunds = (): JSX.Element => {
               {
                 title: tCommon('sort'),
                 options: [
-                  { label: t('createdLatest'), value: 'createdAt_DESC' },
-                  { label: t('createdEarliest'), value: 'createdAt_ASC' },
+                  { label: t('funds.createdLatest'), value: 'createdAt_DESC' },
+                  { label: t('funds.createdEarliest'), value: 'createdAt_ASC' },
                 ],
                 selected: sortBy,
                 onChange: (value) =>
@@ -363,7 +363,7 @@ const organizationFunds = (): JSX.Element => {
                 data-testid="createFundBtn"
               >
                 <i className="fa fa-plus me-2" />
-                {t('createFund')}
+                {t('funds.createFund')}
               </Button>
             }
           />
@@ -378,7 +378,7 @@ const organizationFunds = (): JSX.Element => {
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noFundsFound')}
+              {t('funds.noFundsFound')}
             </Stack>
           ),
         }}

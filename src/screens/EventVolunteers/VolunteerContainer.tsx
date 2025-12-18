@@ -40,8 +40,7 @@ import { FaRegFile } from 'react-icons/fa6';
 import Requests from './Requests/Requests';
 
 function volunteerContainer(): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
-
+  const { t } = useTranslation('translation');
   // Get the organization ID and event ID from URL parameters
   const { orgId, eventId } = useParams();
 
@@ -76,7 +75,7 @@ function volunteerContainer(): JSX.Element {
               data-testid="individualRadio"
             >
               <HiUser className="me-1" />
-              {t('individuals')}
+              {t('eventVolunteers.individuals')}
             </label>
 
             <input
@@ -93,7 +92,7 @@ function volunteerContainer(): JSX.Element {
               data-testid="groupsRadio"
             >
               <HiUserGroup className="me-1" />
-              {t('groups')}
+              {t('eventVolunteers.groups')}
             </label>
 
             <input
@@ -110,7 +109,7 @@ function volunteerContainer(): JSX.Element {
               data-testid="requestsRadio"
             >
               <FaRegFile className="me-1 mb-1" />
-              {t('requests')}
+              {t('eventVolunteers.requests')}
             </label>
           </div>
         </div>

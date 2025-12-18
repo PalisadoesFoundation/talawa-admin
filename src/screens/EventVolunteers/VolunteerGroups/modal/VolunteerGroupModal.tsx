@@ -115,9 +115,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
   isRecurring = false,
   baseEvent = null,
 }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'eventVolunteers',
-  });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   const [formState, setFormState] = useState<InterfaceCreateVolunteerGroup>({
@@ -180,7 +178,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             data: { ...updatedFields, eventId },
           },
         });
-        toast.success(t('volunteerGroupUpdated'));
+        toast.success(t('eventVolunteers.volunteerGroupUpdated'));
         refetchGroups();
         hide();
       } catch (error: unknown) {
@@ -225,7 +223,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           },
         });
 
-        toast.success(t('volunteerGroupCreated'));
+        toast.success(t('eventVolunteers.volunteerGroupCreated'));
         refetchGroups();
         setFormState({
           name: '',
@@ -268,10 +266,10 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           {/* Radio buttons for recurring events - only show in create mode */}
           {isRecurring && mode === 'create' ? (
             <Form.Group className="mb-3">
-              <Form.Label>{t('applyTo')}</Form.Label>
+              <Form.Label>{t('eventVolunteers.applyTo')}</Form.Label>
               <Form.Check
                 type="radio"
-                label={t('entireSeries')}
+                label={t('eventVolunteers.entireSeries')}
                 name="applyTo"
                 id="applyToSeries"
                 checked={applyTo === 'series'}
@@ -279,7 +277,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               />
               <Form.Check
                 type="radio"
-                label={t('thisEventOnly')}
+                label={t('eventVolunteers.thisEventOnly')}
                 name="applyTo"
                 id="applyToInstance"
                 checked={applyTo === 'instance'}
@@ -385,7 +383,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           <Form.Group className="mb-3">
             <FormControl fullWidth>
               <TextField
-                label={t('volunteersRequired')}
+                label={t('organizationActionItems.volunteersRequired')}
                 variant="outlined"
                 className={styles.noOutline}
                 value={volunteersRequired ?? ''}

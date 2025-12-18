@@ -21,9 +21,7 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
   hide,
   category,
 }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'orgActionItemCategories',
-  });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   if (!category) return null;
@@ -31,7 +29,9 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
   return (
     <Modal className={styles.itemModal} onHide={hide} show={isOpen}>
       <Modal.Header>
-        <p className={styles.titlemodal}>{t('categoryDetails')}</p>
+        <p className={styles.titlemodal}>
+          {t('orgActionItemCategories.categoryDetails')}
+        </p>
         <Button
           variant="danger"
           onClick={hide}
@@ -47,7 +47,7 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
           <Form.Group className="d-flex mb-3 w-100">
             <FormControl fullWidth>
               <TextField
-                label={t('actionItemCategoryName')}
+                label={t('orgActionItemCategories.actionItemCategoryName')}
                 variant="outlined"
                 className={styles.noOutline}
                 value={category.name}
@@ -61,7 +61,9 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
           <Form.Group className="d-flex mb-3 w-100">
             <FormControl fullWidth>
               <TextField
-                label={t('actionItemCategoryDescription')}
+                label={t(
+                  'orgActionItemCategories.actionItemCategoryDescription',
+                )}
                 variant="outlined"
                 className={styles.noOutline}
                 value={category.description || 'No description provided'}
@@ -77,7 +79,7 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
           <Form.Group className="d-flex gap-3 mb-3">
             {/* Status */}
             <TextField
-              label={t('status')}
+              label={t('eventVolunteers.status')}
               fullWidth
               value={
                 category.isDisabled ? tCommon('disabled') : tCommon('active')

@@ -60,9 +60,7 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
   isLoading,
   onViewAllClick,
 }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'dashboard',
-  });
+  const { t } = useTranslation('translation');
 
   const pendingRequests =
     membershipRequestData?.organization?.membershipRequests?.filter(
@@ -74,14 +72,16 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
       <Row className="mb-4">
         <Card border="0" className="rounded-4" style={{ height: '220px' }}>
           <div className={styles.cardHeader}>
-            <div className={styles.cardTitle}>{t('membershipRequests')}</div>
+            <div className={styles.cardTitle}>
+              {t('dashboard.membershipRequests')}
+            </div>
             <Button
               size="sm"
               variant="light"
               data-testid="viewAllMembershipRequests"
               onClick={onViewAllClick}
             >
-              {t('viewAll')}
+              {t('organizationSidebar.viewAll')}
             </Button>
           </div>
           <Card.Body
@@ -97,7 +97,7 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
                 className={styles.emptyContainer}
                 style={{ height: '150px' }}
               >
-                <h6>{t('noMembershipRequests')}</h6>
+                <h6>{t('dashboard.noMembershipRequests')}</h6>
               </div>
             ) : (
               pendingRequests
@@ -122,16 +122,18 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
       <Row>
         <Card border="0" className="rounded-4">
           <div className={styles.cardHeader}>
-            <div className={styles.cardTitle}>{t('volunteerRankings')}</div>
+            <div className={styles.cardTitle}>
+              {t('dashboard.volunteerRankings')}
+            </div>
             <Button
               size="sm"
               variant="light"
               data-testid="viewAllLeaderboard"
               onClick={() => {
-                toast.success(t('comingSoon'));
+                toast.success(t('dashboard.comingSoon'));
               }}
             >
-              {t('viewAll')}
+              {t('organizationSidebar.viewAll')}
             </Button>
           </div>
           <Card.Body
@@ -139,7 +141,7 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
             style={{ padding: '0px' }}
           >
             <div className={styles.emptyContainer}>
-              <h6>{t('comingSoon')}</h6>
+              <h6>{t('dashboard.comingSoon')}</h6>
             </div>
           </Card.Body>
         </Card>

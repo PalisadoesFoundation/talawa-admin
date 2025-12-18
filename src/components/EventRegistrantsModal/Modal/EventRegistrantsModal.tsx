@@ -73,9 +73,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   const [addRegistrantMutation] = useMutation(ADD_EVENT_ATTENDEE);
 
   // Translation hooks
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'eventRegistrantsModal',
-  });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   // First, get event details to determine if it's recurring or standalone
@@ -121,7 +119,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
         attendeesRefetch(); // Refresh the list of attendees
       })
       .catch((err) => {
-        toast.error(t('errorAddingAttendee') as string);
+        toast.error(t('eventRegistrantsModal.errorAddingAttendee') as string);
         toast.error(err.message);
       });
   };

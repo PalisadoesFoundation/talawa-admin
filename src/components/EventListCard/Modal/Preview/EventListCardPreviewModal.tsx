@@ -225,7 +225,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
     <>
       <Modal show={eventModalIsOpen} centered dialogClassName="" scrollable>
         <Modal.Header>
-          <p className={styles.titlemodal}>{t('eventDetails')}</p>
+          <p className={styles.titlemodal}>{t('userEvents.eventDetails')}</p>
           <Button
             variant="danger"
             onClick={hideViewModal}
@@ -237,7 +237,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
         <Modal.Body>
           <Form>
             <p className={styles.previewEventListCardModals}>
-              {t('eventName')}
+              {t('userEvents.eventName')}
             </p>
             <Form.Control
               type="name"
@@ -374,7 +374,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             )}
             <div className={styles.checkboxdiv}>
               <div className={styles.dispflexOrganizationEvents}>
-                <label htmlFor="allday">{t('allDay')}?</label>
+                <label htmlFor="allday">{t('userEvents.allDay')}?</label>
                 <Form.Switch
                   id="allday"
                   type="checkbox"
@@ -388,7 +388,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 />
               </div>
               <div className={styles.dispflexOrganizationEvents}>
-                <label htmlFor="ispublic">{t('isPublic')}?</label>
+                <label htmlFor="ispublic">{t('orgUpdate.isPublic')}?</label>
                 <Form.Switch
                   id="ispublic"
                   type="checkbox"
@@ -402,7 +402,9 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 />
               </div>
               <div className={styles.dispflexOrganizationEvents}>
-                <label htmlFor="registrable">{t('isRegistrable')}?</label>
+                <label htmlFor="registrable">
+                  {t('eventListCard.isRegistrable')}?
+                </label>
                 <Form.Switch
                   id="registrable"
                   type="checkbox"
@@ -471,7 +473,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
               data-cy="previewUpdateEventBtn"
               onClick={handleEventUpdate}
             >
-              {t('editEvent')}
+              {t('eventListCard.editEvent')}
             </Button>
           )}
           {canEditEvent && (
@@ -482,14 +484,14 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
               className={styles.removeButton}
               onClick={toggleDeleteModal}
             >
-              {t('deleteEvent')}
+              {t('eventListCard.deleteEvent')}
             </Button>
           )}
           {eventListCardProps.userRole === UserRole.REGULAR &&
             !(eventListCardProps.creator?.id === userId) &&
             (isRegistered ? (
               <Button className={styles.addButton} variant="success" disabled>
-                {t('alreadyRegistered')}
+                {t('userEventCard.alreadyRegistered')}
               </Button>
             ) : (
               <Button

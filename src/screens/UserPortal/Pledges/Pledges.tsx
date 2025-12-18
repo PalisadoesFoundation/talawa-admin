@@ -86,7 +86,7 @@ enum ModalState {
 }
 
 const Pledges = (): JSX.Element => {
-  const { t } = useTranslation('translation', { keyPrefix: 'userCampaigns' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -207,7 +207,7 @@ const Pledges = (): JSX.Element => {
   const columns: GridColDef[] = [
     {
       field: 'pledger',
-      headerName: t('pledger'),
+      headerName: t('userCampaigns.pledger'),
       flex: 4,
       minWidth: 50,
       align: 'left',
@@ -254,7 +254,7 @@ const Pledges = (): JSX.Element => {
     },
     {
       field: 'associatedCampaign',
-      headerName: t('associatedCampaign'),
+      headerName: t('userCampaigns.associatedCampaign'),
       flex: 2,
       minWidth: 100,
       align: 'left',
@@ -279,7 +279,7 @@ const Pledges = (): JSX.Element => {
     },
     {
       field: 'amount',
-      headerName: t('pledged'),
+      headerName: t('userCampaigns.pledged'),
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -303,7 +303,7 @@ const Pledges = (): JSX.Element => {
     },
     {
       field: 'donated',
-      headerName: t('donated'),
+      headerName: t('userCampaigns.donated'),
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -327,7 +327,7 @@ const Pledges = (): JSX.Element => {
     },
     {
       field: 'progress',
-      headerName: t('progress'),
+      headerName: t('userCampaigns.progress'),
       flex: 2,
       minWidth: 100,
       align: 'center',
@@ -405,7 +405,7 @@ const Pledges = (): JSX.Element => {
       >
         <div className="flex-grow-1 w-100">
           <SearchBar
-            placeholder={t('searchBy') + ' ' + t(searchBy)}
+            placeholder={t('userCampaigns.searchBy') + ' ' + t(searchBy)}
             onSearch={setSearchTerm}
             inputTestId="searchPledges"
             buttonTestId="searchBtn"
@@ -414,22 +414,28 @@ const Pledges = (): JSX.Element => {
         <div className="d-flex gap-3 flex-wrap align-items-center">
           <SortingButton
             sortingOptions={[
-              { label: t('pledgers'), value: 'pledgers' },
-              { label: t('campaigns'), value: 'campaigns' },
+              { label: t('userCampaigns.pledgers'), value: 'pledgers' },
+              { label: t('userCampaigns.campaigns'), value: 'campaigns' },
             ]}
             selectedOption={searchBy}
             onSortChange={(value) =>
               setSearchBy(value as 'pledgers' | 'campaigns')
             }
             dataTestIdPrefix="searchByDrpdwn"
-            buttonLabel={t('searchBy')}
+            buttonLabel={t('userCampaigns.searchBy')}
           />
           <SortingButton
             sortingOptions={[
-              { label: t('lowestAmount'), value: 'amount_ASC' },
-              { label: t('highestAmount'), value: 'amount_DESC' },
-              { label: t('latestEndDate'), value: 'endDate_DESC' },
-              { label: t('earliestEndDate'), value: 'endDate_ASC' },
+              { label: t('userCampaigns.lowestAmount'), value: 'amount_ASC' },
+              { label: t('userCampaigns.highestAmount'), value: 'amount_DESC' },
+              {
+                label: t('userVolunteer.latestEndDate'),
+                value: 'endDate_DESC',
+              },
+              {
+                label: t('userVolunteer.earliestEndDate'),
+                value: 'endDate_ASC',
+              },
             ]}
             selectedOption={sortBy}
             onSortChange={(value) =>
@@ -455,7 +461,7 @@ const Pledges = (): JSX.Element => {
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noPledges')}
+              {t('userCampaigns.noPledges')}
             </Stack>
           ),
         }}

@@ -85,9 +85,7 @@ const dataGridStyle = {
  * This component allows creating, updating, enabling, and disabling action item categories.
  */
 const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'orgActionItemCategories',
-  });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -364,7 +362,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
 
             {/* Filter by status */}
             <SortingButton
-              title={t('status')}
+              title={t('eventVolunteers.status')}
               sortingOptions={[
                 { label: tCommon('all'), value: 'all' },
                 { label: tCommon('active'), value: CategoryStatus.Active },
@@ -381,7 +379,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
                 setStatus(value === 'all' ? null : (value as CategoryStatus))
               }
               dataTestIdPrefix="filter"
-              buttonLabel={t('status')}
+              buttonLabel={t('eventVolunteers.status')}
               className={styles.dropdown}
             />
           </div>
@@ -411,7 +409,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noActionItemCategories')}
+              {t('orgActionItemCategories.noActionItemCategories')}
             </Stack>
           ),
         }}

@@ -51,9 +51,7 @@ function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
   const { orgId: currentUrl } = useParams();
   const [remove] = useMutation(REMOVE_ADMIN_MUTATION);
 
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'orgAdminListCard',
-  });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   /**
@@ -69,7 +67,7 @@ function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
         },
       });
       if (data) {
-        toast.success(t('adminRemoved') as string);
+        toast.success(t('orgAdminListCard.adminRemoved') as string);
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -82,12 +80,14 @@ function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
     <>
       <Modal show={true} onHide={props.toggleRemoveModal}>
         <Modal.Header>
-          <h5 id={`removeAdminModalLabel${props.id}`}>{t('removeAdmin')}</h5>
+          <h5 id={`removeAdminModalLabel${props.id}`}>
+            {t('orgAdminListCard.removeAdmin')}
+          </h5>
           <Button variant="danger" onClick={props.toggleRemoveModal}>
             <i className="fas fa-times"></i>
           </Button>
         </Modal.Header>
-        <Modal.Body>{t('removeAdminMsg')}</Modal.Body>
+        <Modal.Body>{t('orgAdminListCard.removeAdminMsg')}</Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={props.toggleRemoveModal}>
             {tCommon('no')}

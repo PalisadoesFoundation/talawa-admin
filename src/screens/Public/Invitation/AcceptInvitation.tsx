@@ -21,9 +21,7 @@ const AUTH_TOKEN_KEY = 'token';
 const AcceptInvitation = (): JSX.Element => {
   const { token } = useParams<{ token: string }>();
   const navigate = useNavigate();
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'public.invitation',
-  });
+  const { t } = useTranslation('translation');
 
   const { getItem, setItem, removeItem } = useLocalStorage();
 
