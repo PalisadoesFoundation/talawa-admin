@@ -65,11 +65,7 @@ type UserOrg = {
   adminsCount: number;
   membersCount: number;
   description?: string;
-<<<<<<< HEAD
   avatarURL?: string;
-=======
-  avatarUrl?: string;
->>>>>>> 2f65f24650 (fix: updated tests)
 };
 
 interface InterfaceJoinedOrgEdge {
@@ -79,11 +75,7 @@ interface InterfaceJoinedOrgEdge {
     adminsCount: number;
     membersCount: number;
     description?: string;
-<<<<<<< HEAD
     avatarURL?: string;
-=======
-    avatarUrl?: string;
->>>>>>> 2f65f24650 (fix: updated tests)
   };
 }
 
@@ -132,11 +124,7 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
           adminsCount: number;
           membersCount: number;
           description?: string;
-<<<<<<< HEAD
           avatarURL?: string;
-=======
-          avatarUrl?: string;
->>>>>>> 2f65f24650 (fix: updated tests)
         }) => ({
           id: org.id,
           name: org.name,
@@ -144,11 +132,7 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
           adminsCount: org.adminsCount ?? 0,
           membersCount: org.membersCount ?? 0,
           description: org.description || 'No Description',
-<<<<<<< HEAD
           avatarURL: org.avatarURL || '',
-=======
-          avatarUrl: org.avatarUrl || '',
->>>>>>> 2f65f24650 (fix: updated tests)
         }),
       ) || [];
 
@@ -161,11 +145,7 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
             adminsCount: number;
             membersCount: number;
             description?: string;
-<<<<<<< HEAD
             avatarURL?: string;
-=======
-            avatarUrl?: string;
->>>>>>> 2f65f24650 (fix: updated tests)
           };
         }) => ({
           id: edge.node.id,
@@ -174,11 +154,7 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
           adminsCount: edge.node.adminsCount ?? 0,
           membersCount: edge.node.membersCount ?? 0,
           description: edge.node.description || 'No Description',
-<<<<<<< HEAD
           avatarURL: edge.node.avatarURL || '',
-=======
-          avatarUrl: edge.node.avatarUrl || '',
->>>>>>> 2f65f24650 (fix: updated tests)
         }),
       ) || [];
 
@@ -191,11 +167,7 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
             adminsCount: number;
             membersCount: number;
             description?: string;
-<<<<<<< HEAD
             avatarURL?: string;
-=======
-            avatarUrl?: string;
->>>>>>> 2f65f24650 (fix: updated tests)
           };
         }) => ({
           id: edge.node.id,
@@ -204,11 +176,7 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
           adminsCount: edge.node.adminsCount ?? 0,
           membersCount: edge.node.membersCount ?? 0,
           description: edge.node.description || 'No Description',
-<<<<<<< HEAD
           avatarURL: edge.node.avatarURL || '',
-=======
-          avatarUrl: edge.node.avatarUrl || '',
->>>>>>> 2f65f24650 (fix: updated tests)
         }),
       ) || [];
 
@@ -287,15 +255,9 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
       {/* ===== Organizations Grid ===== */}
       <div className={styles.peopleTabUserOrganizationsGrid}>
         {!userData?.user && !joinedOrganizationsData?.user ? (
-<<<<<<< HEAD
           <p>{tCommon('loadingOrganizations')}</p>
         ) : filteredOrgs.length === 0 ? (
           <p>{tCommon('noOrganizationsFound.')}</p>
-=======
-          <p>Loading organizations...</p>
-        ) : filteredOrgs.length === 0 ? (
-          <p>No organizations found.</p>
->>>>>>> 2f65f24650 (fix: updated tests)
         ) : (
           filteredOrgs.map((org) => (
             <PeopleTabUserOrganizations
@@ -304,11 +266,7 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
               description={org.description || 'No Description'}
               adminCount={org.adminsCount}
               membersCount={org.membersCount}
-<<<<<<< HEAD
               img={org.avatarURL || ''}
-=======
-              img={org.avatarUrl || ''}
->>>>>>> 2f65f24650 (fix: updated tests)
               actionIcon={
                 <IconButton size="small">
                   <EditIcon />
