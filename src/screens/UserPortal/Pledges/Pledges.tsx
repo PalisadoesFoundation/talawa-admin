@@ -204,7 +204,7 @@ const Pledges = (): JSX.Element => {
   const columns: GridColDef[] = [
     {
       field: 'pledger',
-      headerName: t('pledger'),
+      headerName: t('pledgers'),
       flex: 4,
       minWidth: 50,
       align: 'left',

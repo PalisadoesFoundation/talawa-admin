@@ -358,7 +358,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                   });
                 }}
                 renderInput={(params) => (
-                  <TextField {...params} label={t('pledger')} />
+                  <TextField {...params} label={t('pledgers')} />
                 )}
               />
             </Form.Group>
