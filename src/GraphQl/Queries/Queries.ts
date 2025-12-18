@@ -398,6 +398,26 @@ export const GET_USER_BY_ID = gql`
     user(input: $input) {
       id
       name
+      emailAddress
+
+      addressLine1
+      addressLine2
+      birthDate
+      city
+
+      avatarURL
+      countryCode
+      description
+      educationGrade
+      employmentStatus
+      homePhoneNumber
+      maritalStatus
+      mobilePhoneNumber
+      natalSex
+      naturalLanguageCode
+      postalCode
+      state
+      workPhoneNumber
     }
   }
 `;

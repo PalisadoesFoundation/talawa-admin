@@ -339,7 +339,7 @@ function OrganizationTags(): JSX.Element {
             <PageHeader
               search={{
                 placeholder: tCommon('searchByName'),
-                onSearch: (term) => setTagSearchName(term.trim()),
+                onSearch: (term: string) => setTagSearchName(term.trim()),
                 inputTestId: 'searchByName',
                 buttonTestId: 'searchBtn',
               }}
@@ -351,7 +351,8 @@ function OrganizationTags(): JSX.Element {
                     { label: tCommon('Oldest'), value: 'oldest' },
                   ],
                   selected: tagSortOrder === 'DESCENDING' ? 'latest' : 'oldest',
-                  onChange: (value) => handleSortChange(value.toString()),
+                  onChange: (value: { toString: () => string }) =>
+                    handleSortChange(value.toString()),
                   testIdPrefix: 'sortedBy',
                 },
               ]}

@@ -88,13 +88,13 @@ interface IOrganization {
   isJoined: boolean;
   id: string;
   name: string;
-  avatarURL?: string; // <-- add this
-  addressLine1?: string; // <-- add this
+  avatarURL?: string;
+  addressLine1?: string;
   description: string;
   adminsCount?: number;
   membersCount?: number;
   admins: [];
-  members?: InterfaceMembersConnection; // <-- update this
+  members?: InterfaceMembersConnection;
   address: {
     city: string;
     countryCode: string;
