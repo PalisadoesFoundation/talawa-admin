@@ -141,7 +141,11 @@
     "close": "close"
   },
   "notification": {
-    "title": "Notifications"
+    "title": "Notifications",
+    "allCaughtUp": "You're all caught up!",
+    "prev": "Prev",
+    "next": "Next",
+    "markAsRead": "Mark as Read"
   },
   "orgList": {
     "title": "Organizations",
