@@ -24,6 +24,12 @@ vi.mock('react-bootstrap', async () => {
   return { ...actual, ...mocks };
 });
 
+vi.mock('@mui/icons-material', () => ({
+  MoreVert: vi.fn(() => null),
+  Close: vi.fn(() => null),
+  Add: vi.fn(() => null),
+}));
+
 const mockUploadFileToMinio = vi.fn(async () => ({
   objectName: 'uploaded_obj',
 }));
@@ -752,8 +758,9 @@ describe('ChatRoom Component', () => {
   });
 
   afterEach(() => {
+    const { clearAllItems } = useLocalStorage();
     vi.restoreAllMocks();
-    window.localStorage.clear();
+    clearAllItems();
   });
 
   it('renders loading state initially', () => {
