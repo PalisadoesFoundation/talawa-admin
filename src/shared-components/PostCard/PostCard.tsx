@@ -424,13 +424,8 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         {props.video && (
           <video controls style={{ width: '100%' }}>
             <source src={props.video} type="video/mp4" />
-            <track
-              kind="captions"
-              srcLang="en"
-              src=""
-              label={t('englishCaptions')}
-              default={false}
-            />
+            {/* TODO: Provide captions source (.vtt) once backend supports video transcripts */}
+            <track kind="captions" srcLang="en" label={t('englishCaptions')} />
           </video>
         )}
       </Box>
