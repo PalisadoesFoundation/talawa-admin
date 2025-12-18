@@ -40,9 +40,7 @@ vi.mock('react-toastify', () => ({
 }));
 
 vi.mock('@mui/icons-material', () => ({
-  WarningAmberRounded: () => (
-    <span data-test-id="warning-amber-icon">WarningAmberRounded</span>
-  ),
+  WarningAmberRounded: vi.fn(() => null),
 }));
 
 vi.mock('react-router', async () => {

@@ -27,9 +27,7 @@ vi.mock('react-toastify', () => ({
 
 // Mock MUI icons to prevent "too many open files" error on Windows
 vi.mock('@mui/icons-material', () => ({
-  SettingsInputComposite: () => (
-    <span data-test-id="settings-icon">SettingsInputComposit</span>
-  ),
+  SettingsInputComposite: vi.fn(() => null),
 }));
 
 vi.mock('utils/errorHandler', () => ({

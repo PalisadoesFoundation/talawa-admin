@@ -35,11 +35,8 @@ import { usePluginDrawerItems } from 'plugin';
 const { setItem, clearAllItems } = useLocalStorage();
 
 vi.mock('@mui/icons-material', () => ({
-  // LogoutIcon: () => <span data-test-id="logout-icon">LogoutIcon</span>,
-  // ChevronRightIcon: () => <span data-test-id="chevron-icon">ChevronRight</span>,
-  QuestionMarkOutlined: () => (
-    <span data-test-id="question-icon">QuestionMarkOutlined</span>
-  ),
+  QuestionMarkOutlined: vi.fn(() => null),
+  WarningAmberOutlined: vi.fn(() => null),
 }));
 
 vi.mock('plugin', () => ({

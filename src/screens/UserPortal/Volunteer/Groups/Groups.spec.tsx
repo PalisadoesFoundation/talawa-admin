@@ -30,9 +30,7 @@ const routerMocks = vi.hoisted(() => ({
 }));
 
 vi.mock('@mui/icons-material', () => ({
-  WarningAmberRounded: () => (
-    <span data-test-id="warning-icon">WarningAmberRounded</span>
-  ),
+  WarningAmberRounded: vi.fn(() => null),
 }));
 
 vi.mock('react-router', async () => {
