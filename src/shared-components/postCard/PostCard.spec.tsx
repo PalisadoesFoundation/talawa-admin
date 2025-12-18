@@ -44,6 +44,11 @@ vi.mock('../../plugin', () => ({
   )),
 }));
 
+vi.mock('../../utils/useLocalstorage', () => ({
+  __esModule: true,
+  default: vi.fn(),
+}));
+
 // ===== FUNCTION MOCKS =====
 
 // ===== APOLLO GRAPHQL MOCKS =====
@@ -662,12 +667,22 @@ describe('PostCard', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    const { setItem } = useLocalStorage();
-    setItem('userId', '1');
+    // Configure the useLocalStorage mock
+    vi.mocked(useLocalStorage).mockImplementation(() => ({
+      getItem: vi.fn((key: string) => {
+        if (key === 'userId') return '1';
+        if (key === 'role') return 'administrator';
+        return null;
+      }),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      clearAllItems: vi.fn(),
+      getStorageKey: vi.fn((key: string) => key),
+    }));
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   test('opens and closes edit modal', async () => {
@@ -930,7 +945,7 @@ describe('PostCard', () => {
 
     await waitFor(() => {
       expect(defaultProps.fetchPosts).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith('Post updated successfully');
+      expect(toast.success).toHaveBeenCalledWith('Post updated successfully.');
     });
   });
 
