@@ -9,8 +9,7 @@
  *
  * @remarks
  * - Utilizes Apollo Client's `useQuery` and `useMutation` hooks for data fetching and mutations.
- * - Implements infinite scrolling for loading tags in chunks.
- * - Uses Material-UI's `DataGrid` for displaying tags in a tabular format.
+ * - Uses ReportingTable for displaying tags in a tabular format with pagination support.
  * - Includes a modal for creating new tags.
  *
  *
@@ -54,7 +53,6 @@ import type {
   InterfaceOrganizationTagsQueryPG,
   SortedByType,
 } from 'utils/organizationTagsUtils';
-import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import type {
   ReportingRow,
   ReportingTableColumn,
@@ -104,7 +102,7 @@ function OrganizationTags(): JSX.Element {
     {
       variables: {
         input: { id: orgId },
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        first: PAGE_SIZE,
         where: { name: { starts_with: tagSearchName } },
         sortedBy: { id: tagSortOrder },
       },
@@ -115,7 +113,7 @@ function OrganizationTags(): JSX.Element {
     orgUserTagsRefetch();
   }, []);
 
-  const [create] = useMutation(CREATE_USER_TAG);
+  const [create, { loading: createTagLoading }] = useMutation(CREATE_USER_TAG);
 
   const createTag = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -306,7 +304,7 @@ function OrganizationTags(): JSX.Element {
     disableColumnMenu: true,
     columnBufferPx: COLUMN_BUFFER_PX,
     hideFooter: true,
-    getRowId: (row: InterfaceTagDataPG & { id: number }) => row.id,
+    getRowId: (row: InterfaceTagDataPG) => row.id,
     slots: {
       noRowsOverlay: () => (
         <Stack height="100%" alignItems="center" justifyContent="center">
@@ -441,6 +439,7 @@ function OrganizationTags(): JSX.Element {
               value="invite"
               data-testid="createTagSubmitBtn"
               className={styles.addButton}
+              disabled={createTagLoading}
             >
               {tCommon('create')}
             </Button>

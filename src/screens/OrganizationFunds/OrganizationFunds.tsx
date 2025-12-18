@@ -91,15 +91,8 @@ const organizationFunds = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'funds' });
   const { t: tCommon } = useTranslation('common');
 
-  // Set the document title based on the translation
-  document.title = t('title');
-
   const { orgId } = useParams();
   const navigate = useNavigate();
-
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
 
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
   // const [searchTerm, setSearchTerm] = useState<string>('');
@@ -148,12 +141,20 @@ const organizationFunds = (): JSX.Element => {
     error?: Error | undefined;
     refetch: () => void;
   } = useQuery(FUND_LIST, {
+    skip: !orgId,
     variables: {
       input: {
-        id: orgId,
+        id: orgId ?? '',
       },
     },
   });
+
+  // Set the document title based on the translation
+  document.title = t('title');
+
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   const funds = useMemo(() => {
     return (
