@@ -6,60 +6,194 @@ sidebar_position: 35
 ---
 
 Shared components are UI and functional elements used across multiple sections of the application.
+
 This guide outlines how to create and manage these components to ensure a unified design system and efficient code reuse.
 
-## Before You Begin
+## Quick reference
+
+1. Admin UI:
+   ```
+   components/AdminPortal/**
+   types/AdminPortal/**
+   ```
+1. User UI
+   ```
+   components/UserPortal/**
+   types/UserPortal/**
+   ```
+1. Shared UI
+   ```
+   shared-components/**
+   types/shared-components/**
+   ```
+1. Props definitions
+   - interface.ts only (no inline interfaces)
+1. Exports
+   - PascalCase, name matches folder/file
+1. Tests
+   - colocated .spec.tsx
+   - target 100% test code coverage
+1. i18n
+   - all user-visible text uses keys
+
+1. TSDoc
+   - brief headers on components and interfaces
+
+## Component Architecture
 
 It's important to understand structure and behavior of shared components before creating or refactoring them.
 
-### Shared Component Directory Structure and Paths
+### Folder Layout
 
 Use the following path structure for shared components.
 
 ```
 src/
-│
-├── shared-components/
-│   ├── ComponentOne/
-│   |   ├── ComponentOne.tsx
-│   |   ├── ComponentOne.spec.tsx
-│   |   └── ComponentOneMocks.ts
-│   └── ComponentTwo/
-│       ├── ComponentTwo.tsx
-│       ├── ComponentTwo.spec.tsx
-│       └── ComponentTwoMocks.ts
-│
-└── types/
-    ├── ComponentOne/
-    |   ├── interface.ts
-    |   └── type.ts
-    └── ComponentTwo/
-        ├── interface.ts
-        └── type.ts
+  components/
+    AdminPortal/                    # Admin-only UI and hooks
+      UserTableRow/
+        UserTableRow.tsx
+        UserTableRow.spec.tsx
+      hooks/
+        useCursorPagination.ts
+        useCursorPagination.spec.ts
+    UserPortal/                     # User-only UI and hooks
+      ...
+  shared-components/                # Shared UI (kebab-case base, PascalCase children)
+    ProfileAvatarDisplay/
+      ProfileAvatarDisplay.tsx
+      ProfileAvatarDisplay.spec.tsx
+    BaseModal/
+      BaseModal.tsx
+      BaseModal.spec.tsx
+    EmptyState/
+      EmptyState.tsx
+      EmptyState.spec.tsx
+    LoadingState/
+      LoadingState.tsx
+      LoadingState.spec.tsx
+  types/
+    AdminPortal/                    # Admin-only types
+      UserTableRow/
+        interface.ts
+      Pagination/
+        interface.ts
+    UserPortal/                     # User-only types (as needed)
+      ...
+    shared-components/              # Shared types mirror components
+      ProfileAvatarDisplay/
+        interface.ts
+      BaseModal/
+        interface.ts
+      EmptyState/
+        interface.ts
+      LoadingState/
+        interface.ts
 ```
 
-#### Naming Conventions
+### Rationale
 
-- Use **PascalCase** for component and folder names (e.g., `OrgCard`, `Button`).
-- The component files name should match the component (e.g., `OrgCard.tsx`, `Button.tsx`).
-- Tests should be named `Component.spec.tsx`.
-- Mock files should follow `ComponentMock.ts`.
-- Type interface should be defined in corresponding interface / type file.
+There are many reasons for this structure:
 
+1. Clear ownership: Admin vs User portal code is easy to find.
+
+2. Reuse with intent: Truly shared UI lives in one place.
+
+3. Safer changes: Portal-specific changes can’t silently affect the other portal.
+
+4. Faster onboarding and reviews: Predictable paths and conventions.
+
+### Placement Rules
+
+1. Admin-only UI
+
+   ```
+   src/components/AdminPortal/** (types in src/types/AdminPortal/**).
+   ```
+
+2. User-only UI
+   ```
+   src/components/UserPortal/** (types in src/types/UserPortal/**).
+   ```
+3. Shared UI used by both portals
+   ```
+   src/shared-components/** (types in src/types/shared-components/**).
+   ```
+4. Portal-specific hooks live under that portal (e.g., AdminPortal/hooks). Promote to shared only when used by both portals.
+
+### Naming Conventions
+
+1. Use PascalCase for component and folder names (e.g., `OrgCard`, `Button`).
+   1. The `types/shared-components` folder is the sole exception
+2. The component files should be PascalCase and the name should match the component (e.g., `OrgCard.tsx`, `Button.tsx`).
+3. Tests should be named `Component.spec.tsx`.
+4. Mock files should follow `ComponentMock.ts`.
+5. Type interface should be defined in corresponding interface / type file.
+   - For example: `src/types/\<Portal or shared-components\>/\<Component\>/interface.ts` (single source of truth for props; no inline prop interfaces).
+
+     ```
+     src/
+     │
+     ├── types/
+         └── AdminPortal
+             ├── Component
+                 └── interface.ts
+                 └── type.ts
+     ```
+
+### Imports (examples)
+
+```ts
+// shared
+import { ProfileAvatarDisplay } from 'components/shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
+
+// admin
+import { UserTableRow } from 'components/AdminPortal/UserTableRow/UserTableRow';
 ```
-src/
-│
-├── types/
-    ├── Component
-        └── interface.ts
-        └── type.ts
+
+### i18n
+
+1. All screen-visible text must use translation keys. No hardcoded strings.
+1. Provide alt text and aria labels via i18n where user-facing.
+
+Example:
+
+```tsx
+<BaseModal
+  title={t('members.remove_title')}
+  confirmLabel={t('common.confirm')}
+  cancelLabel={t('common.cancel')}
+/>
 ```
 
-### Understanding Components Reuse
+### TSDoc Documentation
+
+Add a brief TSDoc header to:
+
+1. Each component: what it does, key behaviors, important a11y notes.
+1. Each interface.ts: props with short descriptions and defaults.
+
+Example:
+
+```ts
+/**
+ * ProfileAvatarDisplay renders a user’s image or initials fallback.
+ * - Sizes: small | medium | large | custom
+ * - A11y: always sets meaningful alt; handles broken image fallback
+ */
+```
+
+### Accessibility (a11y) essentials
+
+1. Images: meaningful alt; fallback to initials when URL is empty/invalid.
+1. Modals: role="dialog", aria-modal, labelled by title; focus trap; Escape to close.
+1. Buttons/links: accessible names; keyboard operable.
+
+## Understanding Components Reuse
 
 Learn how shared components are integrated and reused across different areas of the application.
 
-#### Props Driven Design
+### Props Driven Design
 
 Props-driven design focuses on building components that adapt their behavior, appearance, and content based on the props rather than hardcoded values. This approach increases flexibility and reusability, allowing the same component to serve multiple purposes across the application. By passing data, event handlers, and configuration options through props.
 
@@ -73,12 +207,19 @@ interface ButtonProps {
   variant?: 'primary' | 'secondary';
 }
 
-const Button: React.FC<ButtonProps> = ({ label, onClick, variant = 'primary' }) => {
+const Button: React.FC<ButtonProps> = ({
+  label,
+  onClick,
+  variant = 'primary',
+}) => {
   const variantStyle =
     variant === 'primary' ? styles.primaryButton : styles.secondaryButton;
 
   return (
-    <button onClick={onClick} className={`${styles.buttonStyle} ${variantStyle}`}>
+    <button
+      onClick={onClick}
+      className={`${styles.buttonStyle} ${variantStyle}`}
+    >
       {label}
     </button>
   );
@@ -87,7 +228,7 @@ const Button: React.FC<ButtonProps> = ({ label, onClick, variant = 'primary' }) 
 export default Button;
 ```
 
-#### Handling Role Based Differences
+### Handling Role Based Differences
 
 In some cases, a shared component needs to behave differently depending on the user's role. Instead of creating separate components for each role, you can handle variations through props. This ensures a single, maintainable source while keeping the UI consistent.
 
@@ -121,10 +262,7 @@ const OrgCard: React.FC<InterfaceOrgCardProps> = ({
         <p className="text-sm text-gray-500">{address}</p>
       </div>
 
-      <button
-        onClick={handleClick}
-        className={styles.orgCardButton}
-      >
+      <button onClick={handleClick} className={styles.orgCardButton}>
         {role === 'admin' ? 'Manage' : isMember ? 'Visit' : 'Join'}
       </button>
     </div>
@@ -134,7 +272,9 @@ const OrgCard: React.FC<InterfaceOrgCardProps> = ({
 export default OrgCard;
 ```
 
-## Creating Shared Component
+## Creating Shared Components
+
+This section provides guidance on our shared components policy.
 
 ### When Not to Create a Shared Component
 
@@ -173,57 +313,52 @@ It also ensures that any changes in shared components are propagated safely, wit
 - Each prop should serve a single purpose (data, action, or style control).
 - Use clear, descriptive prop names like `isMember`, `variant`, or `role` instead of generic terms like `flag` or `type`.
 
-#### Example
+#### Examples
 
-- **Role based props**
+1. **Role based props:** When a component behaves differently for user types (admin / user), define a `role` prop to handle that difference cleanly.
 
-  When a component behaves differently for user types (admin / user), define a `role` prop to handle that difference cleanly.
+   ```typescript
+   interface InterfaceOrgCardProps {
+     name: string;
+     address: string;
+     membersCount: number;
+     adminsCount?: number;
+     role: 'admin' | 'user';
+     isMember?: boolean;
+   }
+   ```
 
-  ```typescript
-  interface InterfaceOrgCardProps {
-    name: string;
-    address: string;
-    membersCount: number;
-    adminsCount?: number;
-    role: 'admin' | 'user';
-    isMember?: boolean;
-  }
-  ```
+1. **Variant based props:** For components with multiple design or behavior styles (like buttons or cards), define a `variant` prop.
 
-- **Variant based props**
+   ```typescript
+   interface ButtonProps {
+     label: string;
+     onClick: () => void;
+     variant?: 'primary' | 'secondary' | 'outlined';
+   }
+   ```
 
-  For components with multiple design or behavior styles (like buttons or cards), define a `variant` prop.
-
-  ```typescript
-  interface ButtonProps {
-    label: string;
-    onClick: () => void;
-    variant?: 'primary' | 'secondary' | 'outlined';
-  }
-  ```
-
-  The `variant` prop helps the component adapt its appearance dynamically:
-
-  1. `primary` → For main action on a page (example: Save, Submit).
-  2. `secondary` → For supporting action (example: Cancel, Edit).
-  3. `outlined` → For neutral or optional actions (example: Learn more, Back).
+   - The `variant` prop helps the component adapt its appearance dynamically:
+     1. `primary` → For main action on a page (example: Save, Submit).
+     2. `secondary` → For supporting action (example: Cancel, Edit).
+     3. `outlined` → For neutral or optional actions (example: Learn more, Back).
 
 ### Styling Guidelines
 
-- Use existing global or shared CSS modules whenever possible to maintain consistency.
-- Avoid inline styles unles necessary for dynamic cases.
-- When defining styles, prefer semantic class names (e.g., `buttonPrimary`, `cardHeader`).
+1. Use existing global or shared CSS modules whenever possible to maintain consistency.
+1. Avoid inline styles unles necessary for dynamic cases.
+1. When defining styles, prefer semantic class names (e.g., `buttonPrimary`, `cardHeader`).
 
 ### Testing Shared Component
 
-- Each shared component must include a corresponding test file (`Component.spec.tsx`)
-- Refer to the [testing page of the documentation website](https://docs-admin.talawa.io/docs/developer-resources/testing)
+1. Each shared component must include a corresponding test file (`Component.spec.tsx`)
+1. Refer to the [testing page of the documentation website](https://docs-admin.talawa.io/docs/developer-resources/testing)
 
 ### Document Your Code
 
 Use TSDoc comments to document functions, classes, and interfaces within reusable components. Clearly describe the component's purpose, its props and any return value. This practice not only improves readability but also helps maintain consistency across shared components, especially when they are used by multiple developers or teams. Well-documented props and behavior makes it easier for others to quickly understand how to use, extend, or debug the component without needing to inspect its internal implementation.
 
-``` ts
+```ts
 /**
  * Button Component
  *

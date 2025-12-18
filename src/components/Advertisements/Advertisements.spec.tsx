@@ -1135,4 +1135,59 @@ describe('Testing Advertisement Component', () => {
       expect(screen.queryByText(translations.addNew)).not.toBeInTheDocument();
     });
   });
+
+  it('authLink adds authorization header when token exists in localStorage', async () => {
+    const mockToken = 'test-token-123';
+
+    const getItemSpy = vi
+      .spyOn(Storage.prototype, 'getItem')
+      .mockImplementation((key: string) => {
+        if (key === 'Talawa-admin_token') return mockToken;
+        return null;
+      });
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <Advertisement />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+
+    expect(getItemSpy).toHaveBeenCalledWith('Talawa-admin_token');
+    expect(getItemSpy).toHaveReturnedWith(mockToken);
+
+    getItemSpy.mockRestore();
+  });
+
+  it('authLink does not add authorization header when token is null in localStorage', async () => {
+    const getItemSpy = vi
+      .spyOn(Storage.prototype, 'getItem')
+      .mockImplementation(() => null);
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <Advertisement />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+
+    expect(getItemSpy).toHaveBeenCalledWith('Talawa-admin_token');
+    expect(getItemSpy).toHaveReturnedWith(null);
+
+    getItemSpy.mockRestore();
+  });
 });

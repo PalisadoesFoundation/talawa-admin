@@ -2,7 +2,7 @@ import {
   GET_ORGANIZATION_POSTS_COUNT_PG,
   GET_ORGANIZATION_EVENTS_PG,
   GET_ORGANIZATION_POSTS_PG,
-  MEMBERSHIP_REQUEST,
+  MEMBERSHIP_REQUEST_PG,
   ORGANIZATION_MEMBER_ADMIN_COUNT,
   GET_ORGANIZATION_BLOCKED_USERS_COUNT,
   GET_ORGANIZATION_VENUES_COUNT,
@@ -162,19 +162,18 @@ export const MOCKS_ORG2 = [
   },
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: 'orgId2' },
         skip: 0,
         first: 8,
-        firstName_contains: '',
+        name_contains: '',
       },
     },
     maxUsageCount: 5,
     result: {
       data: {
         organization: {
-          membershipRequestsCount: 0,
           id: 'orgId2',
           membershipRequests: [],
           __typename: 'Organization',

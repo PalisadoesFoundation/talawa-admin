@@ -34,7 +34,7 @@
  * }
  * ```
  */
-import React from 'react';
+import React, { useState } from 'react';
 import styles from 'style/app-fixed.module.css';
 import LogoutIcon from '@mui/icons-material/Logout';
 import useSession from 'utils/useSession';
@@ -50,8 +50,11 @@ const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
   const { endSession } = useSession();
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const navigate = useNavigate();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const logout = async (): Promise<void> => {
+    if (isLoggingOut) return; // Prevent multiple clicks
+    setIsLoggingOut(true);
     const handleSignOut = (): void => {
       localStorage.clear();
       endSession();
@@ -93,13 +96,19 @@ const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
       role="button"
       tabIndex={0}
       aria-label="Sign out"
+      aria-disabled={isLoggingOut}
       data-testid="signOutBtn"
+      style={{
+        opacity: isLoggingOut ? 0.5 : 1,
+        pointerEvents: isLoggingOut ? 'none' : 'auto',
+        cursor: isLoggingOut ? 'not-allowed' : 'pointer',
+      }}
     >
       <div data-testid="LogoutIconid">
         <LogoutIcon />
       </div>
       <div className={`${styles.signOutButton} ${styles.sidebarText}`}>
-        {hideDrawer ? '' : 'Sign Out'}
+        {hideDrawer ? '' : isLoggingOut ? 'Signing out...' : 'Sign Out'}
       </div>
     </div>
   );
