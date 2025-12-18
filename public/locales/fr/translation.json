@@ -331,6 +331,8 @@
     "confirmPassword": "Confirmer le mot de passe",
     "create": "Créer",
     "cancel": "Annuler",
+    "actions": "Actions",
+    "profile": "Profil",
     "createUser": "Créer un utilisateur",
     "notFound": "Aucun membre trouvé"
   },
@@ -668,7 +670,8 @@
     "createdLatest": "Créé le plus récemment",
     "createdEarliest": "Créé le plus tôt",
     "viewCampaigns": "Voir les campagnes",
-    "assocCampaigns": "Campagnes associées"
+    "assocCampaigns": "Campagnes associées",
+    "errorLoadingTagsData": "Erreur lors du chargement des données des balises"
   },
   "fundCampaign": {
     "title": "Campagnes de collecte de fonds",

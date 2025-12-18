@@ -331,6 +331,8 @@
     "cancel": "取消",
     "create": "创建",
     "user": "用户",
+    "actions": "操作",
+    "profile": "配置文件",
     "createUser": "创建用户",
     "notFound": "未找到成员"
   },
