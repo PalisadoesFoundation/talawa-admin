@@ -121,13 +121,13 @@ const ProfileDropdown = ({
         data-testid="togDrop"
         id="dropdown-split-basic"
         className={styles.dropdownToggle}
-        aria-label={tCommon("User Profile Menu")}
+        aria-label={tCommon('User Profile Menu')}
       />
       <Dropdown.Menu>
         <Dropdown.Item
           data-testid="profileBtn"
           onClick={() => navigate(profileDestination)}
-          aria-label={tCommon("View Profile")}
+          aria-label={tCommon('View Profile')}
         >
           {tCommon('viewProfile')}
         </Dropdown.Item>

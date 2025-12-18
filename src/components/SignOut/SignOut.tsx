@@ -49,8 +49,8 @@ interface ISignOutProps {
 }
 
 const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
-  const { t } = useTranslation('translation', { 
-    keyPrefix: 'signOut', 
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'signOut',
   });
   const { endSession } = useSession();
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
@@ -72,9 +72,7 @@ const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
       handleSignOut();
     } catch (error) {
       console.error('Error revoking refresh token:', error);
-      const retryRevocation = window.confirm(
-        t('retryPrompt'),
-      );
+      const retryRevocation = window.confirm(t('retryPrompt'));
       if (retryRevocation) {
         try {
           await revokeRefreshToken();
@@ -101,7 +99,7 @@ const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
       }}
       role="button"
       tabIndex={0}
-      aria-label={t("signOut")}
+      aria-label={t('signOut')}
       aria-disabled={isLoggingOut}
       data-testid="signOutBtn"
       style={{
