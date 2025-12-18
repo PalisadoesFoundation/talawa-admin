@@ -61,7 +61,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 
 function userNavbar(): JSX.Element {
   // Hook for local storage operations
-  const { getItem } = useLocalStorage();
+  const { getItem, clearAllItems } = useLocalStorage();
 
   // Hook for programmatic navigation
   const navigate = useNavigate();
@@ -84,13 +84,13 @@ function userNavbar(): JSX.Element {
   const userName = getItem('name') as string;
 
   /**
-   * Handles user logout by revoking the refresh token and clearing local storage.
+   * Handles user logout by revoking the refresh token and clearing the local storage.
    * Redirects to the home page after logout.
    */
 
   const handleLogout = (): void => {
     revokeRefreshToken();
-    localStorage.clear();
+    clearAllItems();
     navigate('/');
   };
 

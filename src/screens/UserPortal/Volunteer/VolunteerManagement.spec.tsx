@@ -27,7 +27,13 @@ vi.mock('react-router', async () => {
   };
 });
 
-const { setItem } = useLocalStorage();
+vi.mock('@mui/icons-material', () => ({
+  SettingsInputComponentSharp: vi.fn(() => null),
+  Circle: vi.fn(() => null),
+  WarningAmberRounded: vi.fn(() => null),
+}));
+
+const { setItem, clearAllItems } = useLocalStorage();
 
 const link1 = new StaticMockLink(MOCKS);
 
@@ -57,7 +63,7 @@ const renderVolunteerManagement = (): RenderResult => {
 
 describe('Volunteer Management', () => {
   beforeEach(() => {
-    localStorage.clear();
+    clearAllItems();
     sharedMocks.useParams.mockReturnValue({ orgId: 'orgId' });
     setItem('userId', 'userId');
   });

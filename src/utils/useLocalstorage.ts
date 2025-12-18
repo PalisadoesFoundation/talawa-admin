@@ -6,6 +6,7 @@ interface InterfaceStorageHelper {
   setItem: (key: string, value: unknown) => void;
   removeItem: (key: string) => void;
   getStorageKey: (key: string) => string;
+  clearAllItems: () => void;
 }
 
 const PREFIX = 'Talawa-admin';
@@ -54,6 +55,21 @@ export const removeItem = (prefix: string, key: string): void => {
 };
 
 /**
+ * Removes all the values associated with the prefix key from local storage
+ * @param prefix - Prefix to identify all the organization keys
+ */
+export const clearAllItems = (prefix: string): void => {
+  const allPrefixedKeys = Object.keys(localStorage).filter((key) =>
+    key.startsWith(prefix),
+  );
+
+  let size = allPrefixedKeys.length;
+  for (let i = 0; i < size; i++) {
+    localStorage.removeItem(allPrefixedKeys[i]);
+  }
+};
+
+/**
  * Custom hook for simplified localStorage operations.
  * @param prefix - Prefix to be added to the key, common for all keys. Default is 'Talawa-admin'.
  * @returns - Functions to getItem, setItem, removeItem, and getStorageKey.
@@ -66,6 +82,7 @@ export const useLocalStorage = (
     setItem: (key: string, value: unknown) => setItem(prefix, key, value),
     removeItem: (key: string) => removeItem(prefix, key),
     getStorageKey: (key: string) => getStorageKey(prefix, key),
+    clearAllItems: () => clearAllItems(prefix),
   };
 };
 

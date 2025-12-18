@@ -19,7 +19,7 @@ import { props } from './EventListCardProps';
 import { ERROR_MOCKS, MOCKS } from './Modal/EventListCardMocks';
 import { vi, beforeAll, afterAll, expect, it } from 'vitest';
 
-const { setItem } = useLocalStorage();
+const { setItem, clearAllItems } = useLocalStorage();
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(ERROR_MOCKS, true);
@@ -97,7 +97,7 @@ describe('Testing Event List Card', () => {
   });
 
   afterAll(() => {
-    localStorage.clear();
+    clearAllItems();
     vi.clearAllMocks();
   });
 

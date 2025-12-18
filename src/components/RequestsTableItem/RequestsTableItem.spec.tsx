@@ -13,7 +13,6 @@ import {
   REJECT_ORGANIZATION_REQUEST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 const link = new StaticMockLink(MOCKS, true);
-import useLocalStorage from 'utils/useLocalstorage';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 
@@ -32,8 +31,6 @@ vi.mock('utils/errorHandler', () => ({
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 
-const { setItem } = useLocalStorage();
-
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -41,12 +38,8 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
-beforeEach(() => {
-  setItem('id', '123');
-});
 
 afterEach(() => {
-  localStorage.clear();
   vi.restoreAllMocks();
 });
 

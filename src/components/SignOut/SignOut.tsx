@@ -41,6 +41,7 @@ import useSession from 'utils/useSession';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router';
+import useLocalStorage from 'utils/useLocalstorage';
 
 interface ISignOutProps {
   hideDrawer?: boolean; // Optional prop to conditionally render the button
@@ -50,10 +51,11 @@ const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
   const { endSession } = useSession();
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const navigate = useNavigate();
+  const { clearAllItems } = useLocalStorage();
 
   const logout = async (): Promise<void> => {
     const handleSignOut = (): void => {
-      localStorage.clear();
+      clearAllItems();
       endSession();
       navigate('/');
     };

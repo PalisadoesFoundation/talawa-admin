@@ -11,7 +11,7 @@ import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import styles from '../../style/app-fixed.module.css';
 import { vi } from 'vitest';
-import { setItem } from 'utils/useLocalstorage';
+import useLocalStorage from 'utils/useLocalstorage';
 
 // Create mocks for the router hooks
 let mockUseParams: ReturnType<typeof vi.fn>;
@@ -31,6 +31,14 @@ vi.mock('react-router', async () => {
     },
   };
 });
+
+// Mock MUI icon to prevent "too many open files" error on Windows
+// Mock only WarningAmberOutlined as LeftDrawerOrg is importing only that
+vi.mock('@mui/icons-material', () => ({
+  WarningAmberOutlined: () => (
+    <span data-testid="warning-icon">WarningAmberOutlined</span>
+  ),
+}));
 
 const MOCKS = [
   {
@@ -58,14 +66,15 @@ const MOCKS = [
 ];
 
 const link = new StaticMockLink(MOCKS, true);
+const { setItem, clearAllItems } = useLocalStorage();
 
 describe('Testing OrganizationScreen', () => {
   beforeAll(() => {
-    setItem('name', 'John Doe', 3600);
+    setItem('name', 'John Doe');
   });
 
   afterAll(() => {
-    localStorage.clear();
+    clearAllItems();
   });
 
   beforeEach(() => {

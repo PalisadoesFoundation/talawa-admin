@@ -52,7 +52,7 @@ vi.mock('shared-components/OrganizationCard/OrganizationCard', () => ({
   ),
 }));
 
-const { setItem } = useLocalStorage();
+const { setItem, clearAllItems } = useLocalStorage();
 
 const mockLinks = {
   superAdmin: new StaticMockLink(MOCKS, true),
@@ -570,7 +570,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  localStorage.clear();
+  clearAllItems();
   cleanup();
   vi.clearAllMocks();
 });
@@ -1495,8 +1495,9 @@ describe('Advanced Component Functionality Tests', () => {
     setItem('SuperAdmin', true);
     setItem('role', 'administrator');
 
-    // Mock localStorage.clear and window.location.assign
-    const clearSpy = vi.spyOn(Storage.prototype, 'clear');
+    // Mock clearAllItems function and window.location.assign
+    const storageHelper = useLocalStorage();
+    const clearSpy = vi.spyOn(storageHelper, 'clearAllItems');
     const assignMock = vi.fn();
     const originalLocation = window.location;
     const originalDescriptor = Object.getOwnPropertyDescriptor(

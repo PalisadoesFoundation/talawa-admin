@@ -8,6 +8,7 @@ import { vi } from 'vitest';
 import SignOut from './SignOut';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useSession from 'utils/useSession';
+import useLocalStorage from 'utils/useLocalstorage';
 
 // Mock dependencies
 vi.mock('utils/useSession', () => ({
@@ -25,7 +26,22 @@ vi.mock('react-router', async () => {
   };
 });
 
-let mockLocalStorage: { clear: ReturnType<typeof vi.fn> };
+vi.mock('utils/useLocalstorage', () => ({
+  default: vi.fn(() => ({
+    clearAllItems: vi.fn(),
+  })),
+}));
+
+const createMock = () => {
+  const mockClearAllItems = vi.fn();
+  (useLocalStorage as Mock).mockReturnValue({
+    clearAllItems: mockClearAllItems,
+  });
+
+  return {
+    mockClearAllItems,
+  };
+};
 
 describe('SignOut Component', () => {
   const mockRevokeRefreshToken = {
@@ -41,13 +57,6 @@ describe('SignOut Component', () => {
 
   beforeEach(() => {
     mockNavigate = vi.fn();
-    mockLocalStorage = {
-      clear: vi.fn(),
-    };
-    Object.defineProperty(window, 'localStorage', {
-      value: mockLocalStorage,
-      configurable: true,
-    });
     vi.clearAllMocks();
   });
 
@@ -60,6 +69,8 @@ describe('SignOut Component', () => {
     (useSession as Mock).mockReturnValue({
       endSession: mockEndSession,
     });
+
+    const { mockClearAllItems } = createMock();
 
     render(
       <MockedProvider mocks={[mockRevokeRefreshToken]}>
@@ -77,7 +88,7 @@ describe('SignOut Component', () => {
       expect(mockRevokeRefreshToken.result).toBeTruthy();
 
       // Verify localStorage was cleared
-      expect(mockLocalStorage.clear).toHaveBeenCalled();
+      expect(mockClearAllItems).toHaveBeenCalled();
 
       // Verify endSession was called
       expect(mockEndSession).toHaveBeenCalled();
@@ -103,6 +114,8 @@ describe('SignOut Component', () => {
       endSession: mockEndSession,
     });
 
+    const { mockClearAllItems } = createMock();
+
     render(
       <MockedProvider mocks={[mockErrorRevokeRefreshToken]}>
         <BrowserRouter>
@@ -122,7 +135,7 @@ describe('SignOut Component', () => {
       );
 
       // Verify localStorage was cleared
-      expect(mockLocalStorage.clear).toHaveBeenCalled();
+      expect(mockClearAllItems).toHaveBeenCalled();
 
       // Verify endSession was called
       expect(mockEndSession).toHaveBeenCalled();
@@ -146,6 +159,8 @@ describe('SignOut Component', () => {
     (useSession as Mock).mockReturnValue({
       endSession: mockEndSession,
     });
+
+    const { mockClearAllItems } = createMock();
 
     // First call fails, second call succeeds
     const mocks = [
@@ -185,7 +200,7 @@ describe('SignOut Component', () => {
       );
 
       // Verify localStorage was cleared
-      expect(mockLocalStorage.clear).toHaveBeenCalled();
+      expect(mockClearAllItems).toHaveBeenCalled();
 
       // Verify endSession was called
       expect(mockEndSession).toHaveBeenCalled();
@@ -209,6 +224,8 @@ describe('SignOut Component', () => {
     (useSession as Mock).mockReturnValue({
       endSession: mockEndSession,
     });
+
+    const { mockClearAllItems } = createMock();
 
     // Both calls fail
     const mocks = [
@@ -248,7 +265,7 @@ describe('SignOut Component', () => {
       );
 
       // Verify localStorage was cleared
-      expect(mockLocalStorage.clear).toHaveBeenCalled();
+      expect(mockClearAllItems).toHaveBeenCalled();
 
       // Verify endSession was called
       expect(mockEndSession).toHaveBeenCalled();
@@ -272,6 +289,8 @@ describe('SignOut Component', () => {
     (useSession as Mock).mockReturnValue({
       endSession: mockEndSession,
     });
+
+    const { mockClearAllItems } = createMock();
 
     const mocks = [
       {
@@ -305,7 +324,7 @@ describe('SignOut Component', () => {
       );
 
       // Verify localStorage was cleared
-      expect(mockLocalStorage.clear).toHaveBeenCalled();
+      expect(mockClearAllItems).toHaveBeenCalled();
 
       // Verify endSession was called
       expect(mockEndSession).toHaveBeenCalled();
@@ -345,6 +364,8 @@ describe('SignOut Component', () => {
         endSession: mockEndSession,
       });
 
+      const { mockClearAllItems } = createMock();
+
       render(
         <MockedProvider mocks={[mockRevokeRefreshToken]}>
           <BrowserRouter>
@@ -359,7 +380,7 @@ describe('SignOut Component', () => {
       await userEvent.keyboard('{Enter}');
 
       await waitFor(() => {
-        expect(mockLocalStorage.clear).toHaveBeenCalled();
+        expect(mockClearAllItems).toHaveBeenCalled();
         expect(mockEndSession).toHaveBeenCalled();
         expect(mockNavigate).toHaveBeenCalledWith('/');
       });
@@ -370,6 +391,8 @@ describe('SignOut Component', () => {
       (useSession as Mock).mockReturnValue({
         endSession: mockEndSession,
       });
+
+      const { mockClearAllItems } = createMock();
 
       render(
         <MockedProvider mocks={[mockRevokeRefreshToken]}>
@@ -385,7 +408,7 @@ describe('SignOut Component', () => {
       await userEvent.keyboard(' ');
 
       await waitFor(() => {
-        expect(mockLocalStorage.clear).toHaveBeenCalled();
+        expect(mockClearAllItems).toHaveBeenCalled();
         expect(mockEndSession).toHaveBeenCalled();
         expect(mockNavigate).toHaveBeenCalledWith('/');
       });
@@ -396,6 +419,8 @@ describe('SignOut Component', () => {
       (useSession as Mock).mockReturnValue({
         endSession: mockEndSession,
       });
+
+      const { mockClearAllItems } = createMock();
 
       render(
         <MockedProvider mocks={[mockRevokeRefreshToken]}>
@@ -414,7 +439,7 @@ describe('SignOut Component', () => {
 
       await new Promise((resolve) => setTimeout(resolve, 100));
 
-      expect(mockLocalStorage.clear).not.toHaveBeenCalled();
+      expect(mockClearAllItems).not.toHaveBeenCalled();
       expect(mockEndSession).not.toHaveBeenCalled();
       expect(mockNavigate).not.toHaveBeenCalled();
     });
@@ -430,6 +455,8 @@ describe('SignOut Component', () => {
       (useSession as Mock).mockReturnValue({
         endSession: mockEndSession,
       });
+
+      const { mockClearAllItems } = createMock();
 
       const mocks = [
         {
@@ -457,7 +484,7 @@ describe('SignOut Component', () => {
         expect(window.confirm).toHaveBeenCalledWith(
           'Failed to revoke session. Retry?',
         );
-        expect(mockLocalStorage.clear).toHaveBeenCalled();
+        expect(mockClearAllItems).toHaveBeenCalled();
         expect(mockEndSession).toHaveBeenCalled();
         expect(mockNavigate).toHaveBeenCalledWith('/');
       });

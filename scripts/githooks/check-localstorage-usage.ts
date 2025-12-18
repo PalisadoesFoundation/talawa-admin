@@ -39,7 +39,6 @@ const getModifiedFiles = (): string[] => {
     );
     process.exit(1);
   }
-  return [];
 };
 
 const files: string[] = getModifiedFiles();
@@ -74,7 +73,8 @@ const checkLocalStorageUsage = (file: string): void => {
       if (
         content.includes('localStorage.getItem') ||
         content.includes('localStorage.setItem') ||
-        content.includes('localStorage.removeItem')
+        content.includes('localStorage.removeItem') ||
+        content.includes('localStorage.clear')
       ) {
         filesWithLocalStorage.push(file);
       }
@@ -101,7 +101,7 @@ if (filesWithLocalStorage.length > 0) {
     '\nInfo: Consider using custom hook functions.',
   );
   console.info(
-    'Please use the getItem, setItem, and removeItem functions provided by the custom hook useLocalStorage.\n',
+    'Please use the getItem, setItem, removeItem and clearAllItems functions provided by the custom hook useLocalStorage.\n',
   );
 
   process.exit(1);

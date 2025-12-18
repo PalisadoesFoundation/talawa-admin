@@ -57,7 +57,7 @@ const ProfileDropdown = ({
   const { endSession } = useSession();
   const { t: tCommon } = useTranslation('common');
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
-  const { getItem } = useLocalStorage();
+  const { getItem, clearAllItems } = useLocalStorage();
   const userRole = getItem<string>('role');
   const name: string = getItem<string>('name') || '';
   const userImage: string = getItem<string>('UserImage') || '';
@@ -70,7 +70,7 @@ const ProfileDropdown = ({
     } catch (error) {
       console.error('Error revoking refresh token:', error);
     }
-    localStorage.clear();
+    clearAllItems();
     endSession();
     navigate('/');
   };

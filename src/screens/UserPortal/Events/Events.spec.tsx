@@ -31,6 +31,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { vi, beforeEach, afterEach } from 'vitest';
 import { toast } from 'react-toastify';
+import useLocalStorage from 'utils/useLocalstorage';
+
+const { setItem, clearAllItems } = useLocalStorage();
 
 const { mockToast, mockUseParams } = vi.hoisted(() => ({
   mockToast: {
@@ -616,13 +619,13 @@ describe('Testing Events Screen [User Portal]', () => {
         dispatchEvent: vi.fn(),
       })),
     });
-    localStorage.setItem('id', 'user123');
-    localStorage.setItem('role', 'administrator');
+    setItem('id', 'user123');
+    setItem('role', 'administrator');
     mockUseParams.mockReturnValue({ orgId: 'org123' });
   });
 
   afterEach(() => {
-    localStorage.clear();
+    clearAllItems();
     vi.restoreAllMocks();
   });
 
@@ -1240,7 +1243,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should test userRole as administrator', async () => {
-    localStorage.setItem('Talawa-admin_role', JSON.stringify('administrator'));
+    setItem('role', JSON.stringify('administrator'));
 
     render(
       <MockedProvider link={link}>
@@ -1268,7 +1271,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should test userRole as regular user', async () => {
-    localStorage.setItem('Talawa-admin_role', JSON.stringify('user'));
+    setItem('role', JSON.stringify('user'));
 
     render(
       <MockedProvider link={link}>

@@ -11,7 +11,7 @@ import SuperAdminScreen from './SuperAdminScreen';
 import { describe, test, expect } from 'vitest';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
-const { setItem } = useLocalStorage();
+const { setItem, clearAllItems } = useLocalStorage();
 
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
@@ -23,7 +23,7 @@ describe('Testing LeftDrawer in SuperAdminScreen', () => {
     setItem('name', 'John Doe');
   });
   afterAll(() => {
-    localStorage.clear();
+    clearAllItems();
   });
   test('Testing LeftDrawer in page functionality', async () => {
     render(

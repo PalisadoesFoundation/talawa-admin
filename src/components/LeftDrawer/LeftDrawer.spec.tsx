@@ -119,6 +119,7 @@ describe('LeftDrawer Component', () => {
       setItem: vi.fn(),
       removeItem: vi.fn(),
       getStorageKey: vi.fn(() => ''),
+      clearAllItems: vi.fn(),
     }));
   });
 
@@ -147,6 +148,7 @@ describe('LeftDrawer Component', () => {
         setItem: vi.fn(),
         removeItem: vi.fn(),
         getStorageKey: vi.fn(() => ''),
+        clearAllItems: vi.fn(),
       }));
 
       renderComponent();
@@ -239,6 +241,7 @@ describe('LeftDrawer Component', () => {
         setItem: vi.fn(),
         removeItem: vi.fn(),
         getStorageKey: vi.fn(() => ''),
+        clearAllItems: vi.fn(),
       }));
 
       window.history.pushState({}, '', '/users');
@@ -570,6 +573,7 @@ describe('LeftDrawer Component', () => {
         setItem: vi.fn(),
         removeItem: vi.fn(),
         getStorageKey: vi.fn(() => ''),
+        clearAllItems: vi.fn(),
       }));
 
       renderComponent();
