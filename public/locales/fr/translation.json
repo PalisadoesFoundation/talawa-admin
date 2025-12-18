@@ -141,7 +141,11 @@
     "close": "Fermer"
   },
   "notification": {
-    "title": "Notifications"
+    "title": "Notifications",
+    "allCaughtUp": "Vous êtes à jour !",
+    "prev": "Précédent",
+    "next": "Suivant",
+    "markAsRead": "Marquer comme lues"
   },
   "orgList": {
     "title": "Organisations Talawa",

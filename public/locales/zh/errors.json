@@ -13,5 +13,6 @@
   "invalidEmploymentStatus": "请选择有效的就业状况",
   "invalidMaritalStatus": "请选择有效的婚姻状况",
   "error400": "响应不成功. 从服务器收到状态代码 400",
-  "organizationNameAlreadyExists": "具有此名称的组织已存在"
+  "organizationNameAlreadyExists": "具有此名称的组织已存在",
+  "markAsReadError": "标记通知为已读时出错"
 }

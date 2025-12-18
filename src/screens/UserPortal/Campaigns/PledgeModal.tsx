@@ -75,6 +75,57 @@ export interface InterfacePledgeModal {
   endDate: Date;
   mode: 'create' | 'edit';
 }
+/**
+ * Compares two user options by ID.
+ * Used by MUI Autocomplete to determine equality.
+ *
+ * @param option - Option from the Autocomplete list
+ * @param value - Currently selected value
+ * @returns True if both options refer to the same user
+ *
+ * @example
+ * areOptionsEqual({ id: '1' } as InterfaceUserInfoPG, { id: '1' } as InterfaceUserInfoPG);
+ * // returns true
+ */
+export const areOptionsEqual = (
+  option: InterfaceUserInfoPG,
+  value: InterfaceUserInfoPG,
+): boolean => option.id === value.id;
+
+/**
+ * Builds a display label for a member.
+ * Empty name parts are safely ignored.
+ *
+ * @param member - User object containing name fields
+ * @returns Full name string constructed from available name parts
+ *
+ * @example
+ * getMemberLabel({ firstName: 'John', lastName: 'Doe' } as InterfaceUserInfoPG);
+ * // returns "John Doe"
+ */
+export const getMemberLabel = (member: InterfaceUserInfoPG): string =>
+  [member.firstName, member.lastName].filter(Boolean).join(' ') || member.name;
+
+/**
+ * Ensures pledge end date is not before the selected start date.
+ * Returns the later of the two dates.
+ *
+ * @param pledgeEndDate - Current pledge end date
+ * @param date - Newly selected start date
+ * @returns Adjusted end date or the original end date if no adjustment is needed
+ *
+ * @example
+ * computeAdjustedEndDate(new Date('2024-01-01'), dayjs('2024-02-01'));
+ * // returns Date('2024-02-01')
+ */
+export const computeAdjustedEndDate = (
+  pledgeEndDate: Date | undefined,
+  date: Dayjs | null,
+): Date | undefined => {
+  if (!pledgeEndDate || !date) return pledgeEndDate;
+  const newDate = date.toDate();
+  return pledgeEndDate < newDate ? newDate : pledgeEndDate;
+};
 
 const PledgeModal: React.FC<InterfacePledgeModal> = ({
   isOpen,
@@ -266,11 +317,10 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               options={[...pledgers, ...pledgeUsers]}
               value={pledgeUsers}
               readOnly={mode === 'edit'}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
+              isOptionEqualToValue={areOptionsEqual}
               filterSelectedOptions={true}
               getOptionLabel={(member: InterfaceUserInfoPG): string =>
-                member.name ||
-                [member.firstName, member.lastName].filter(Boolean).join(' ')
+                getMemberLabel(member)
               }
               onChange={(_, newPledgers): void => {
                 setFormState({ ...formState, pledgeUsers: newPledgers });
@@ -291,11 +341,10 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                   setFormState({
                     ...formState,
                     pledgeStartDate: date.toDate(),
-                    pledgeEndDate:
-                      pledgeEndDate &&
-                      (pledgeEndDate < date?.toDate()
-                        ? date.toDate()
-                        : pledgeEndDate),
+                    pledgeEndDate: computeAdjustedEndDate(
+                      pledgeEndDate,
+                      date,
+                    ) as Date,
                   });
                 }
               }}
