@@ -45,7 +45,7 @@ vi.mock('@mui/x-date-pickers', async () => {
   const actual = await vi.importActual<typeof import('@mui/x-date-pickers')>(
     '@mui/x-date-pickers',
   );
-  type MockDatePickerProps = DatePickerProps;
+  type MockDatePickerProps = DatePickerProps<dayjs.Dayjs>;
 
   return {
     ...actual,

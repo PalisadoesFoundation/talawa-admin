@@ -1645,5 +1645,8 @@
     "deleteComment": "Delete Comment",
     "deleting": "Deleting…",
     "emptyCommentError": "Please enter a comment before submitting."
+  },
+  "profileAvatarDisplay": {
+    "fallbacktest": "-fallback"
   }
 }
