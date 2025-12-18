@@ -7225,7 +7225,7 @@ form {
 .fromPalisadoes {
   color: var(--primaryText-color);
   text-align: center;
-  margin-top: -80px;
+  margin-top: 10px;
   margin-bottom: 40px;
 }
 

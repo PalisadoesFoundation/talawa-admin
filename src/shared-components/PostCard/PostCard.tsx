@@ -12,9 +12,6 @@
  * @param props.text - Content of the post.
  * @param props.image - URL of the post's image.
  * @param props.postedAt - Date when the post was created.
- * @param props.likeCount - Number of likes on the post.
- * @param props.likedBy - Array of users who liked the post.
- * @param props.comments - Array of comments on the post.
  * @param props.commentCount - Total number of comments on the post.
  * @param props.fetchPosts - Function to refresh the list of posts.
  *
@@ -427,6 +424,13 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         {props.video && (
           <video controls style={{ width: '100%' }}>
             <source src={props.video} type="video/mp4" />
+            <track
+              kind="captions"
+              srcLang="en"
+              src=""
+              label={t('englishCaptions')}
+              default={false}
+            />
           </video>
         )}
       </Box>

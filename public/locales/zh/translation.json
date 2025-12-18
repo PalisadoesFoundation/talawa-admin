@@ -18,16 +18,11 @@
     "adminLogin": "管理员登录",
     "atleast_8_char_long": "至少 8 个字符长",
     "atleast_6_char_long": "至少 6 个字符长",
-    "firstName_invalid": "名字只能包含小写和大写字母",
-    "lastName_invalid": "姓氏只能包含小写和大写字母",
     "name_invalid": "姓名只能包含字母、空格和连字符",
-    "password_invalid": "密码应至少包含1个小写字母、1个大写字母、1个数字和1个特殊字符",
-    "email_invalid": "电子邮件应至少包含 8 个字符",
     "doNotOwnAnAccount": "没有帐户？",
     "captchaError": "验证码错误！",
     "Please_check_the_captcha": "请检查验证码。",
     "Something_went_wrong": "出了点问题，请稍后再试。",
-    "passwordMismatches": "密码和确认密码不匹配。",
     "fillCorrectly": "正确填写所有详细信息。",
     "successfullyRegistered": "注册成功。",
     "lowercase_check": "至少一个小写字母",
@@ -1087,7 +1082,8 @@
     "postedOn": "发布于 {{date}}",
     "emptyCommentError": "请在提交前输入评论。",
     "unexpectedError": "发生了意外错误。请重试。",
-    "moreOptions": "更多选项"
+    "moreOptions": "更多选项",
+    "englishCaptions": "英文字幕"
   },
   "home": {
     "title": "帖子",

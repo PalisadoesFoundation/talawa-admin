@@ -84,7 +84,7 @@ import {
   PAGE_SIZE,
   ROW_HEIGHT,
 } from '../../types/ReportingTable/utils';
-import { Stack } from '@mui/system';
+import { Stack } from '@mui/material';
 
 interface InterfaceRequestsListItem {
   membershipRequestId: string;

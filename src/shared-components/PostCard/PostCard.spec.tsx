@@ -430,7 +430,6 @@ const nullFetchMoreMock = {
 };
 
 // ===== BASE MOCKS ARRAY =====
-// ===== BASE MOCKS ARRAY =====
 const mocks = [
   {
     request: {
@@ -667,7 +666,7 @@ describe('PostCard', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   test('opens and closes edit modal', async () => {
@@ -775,43 +774,46 @@ describe('PostCard', () => {
     });
   });
 
+  const likePostErrorMock = {
+    request: {
+      query: UPDATE_POST_VOTE,
+      variables: {
+        input: {
+          postId: '1',
+          type: 'up_vote',
+        },
+      },
+    },
+    error: new Error('Network error occurred'),
+  };
+
   it('shows error when like action fails', async () => {
-    // Create a mock mutation function that rejects
-    const mockLikePost = vi
-      .fn()
-      .mockRejectedValue(new Error('Network error occurred'));
+    const linkWithError = new StaticMockLink(
+      [likePostErrorMock, ...mocks],
+      true,
+    );
 
-    // Temporarily mock useMutation for this test only
-    const apolloMock = await import('@apollo/client');
-    const originalUseMutation = apolloMock.useMutation;
+    render(
+      <MockedProvider link={linkWithError}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard
+                {...defaultProps}
+                hasUserVoted={{ hasVoted: false, voteType: null }}
+                upVoteCount={0}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
-    // Override just for this test
-    apolloMock.useMutation = vi
-      .fn()
-      .mockReturnValue([mockLikePost, { loading: false }]);
+    fireEvent.click(screen.getByTestId('like-btn'));
 
-    try {
-      renderPostCard({
-        hasUserVoted: { hasVoted: false, voteType: null },
-        upVoteCount: 0,
-      });
-
-      const likeButton = screen.getByTestId('like-btn');
-      fireEvent.click(likeButton);
-
-      // Wait for the mutation to be called and the error to be handled
-      await waitFor(() => {
-        expect(mockLikePost).toHaveBeenCalled();
-      });
-
-      // Wait for the error toast to be shown - component casts error to string
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalled();
-      });
-    } finally {
-      // Always restore the original mock
-      apolloMock.useMutation = originalUseMutation;
-    }
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
   });
 
   it('handles comment creation error and calls errorHandler', async () => {
@@ -935,13 +937,10 @@ describe('PostCard', () => {
   });
 
   it('handles edit post error', async () => {
-    // Use a mock that will actually cause an error
-    const originalEdit = defaultProps.fetchPosts;
-    defaultProps.fetchPosts = vi
+    const errorFetchPosts = vi
       .fn()
       .mockRejectedValue(new Error('Failed to update'));
-
-    renderPostCard();
+    renderPostCard({ fetchPosts: errorFetchPosts });
 
     const moreButton = screen.getByTestId('more-options-button');
     fireEvent.click(moreButton);
@@ -963,9 +962,6 @@ describe('PostCard', () => {
 
     const saveButton = screen.getByTestId('save-post-button');
     fireEvent.click(saveButton);
-
-    // Reset the mock
-    defaultProps.fetchPosts = originalEdit;
   });
 
   it('handles delete post error', async () => {
