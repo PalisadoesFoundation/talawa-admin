@@ -60,6 +60,10 @@ describe('Volunteer Management', () => {
     setItem('userId', 'userId');
   });
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should redirect to fallback URL if URL params are undefined', async () => {
     const link = new StaticMockLink(MOCKS);
     render(
