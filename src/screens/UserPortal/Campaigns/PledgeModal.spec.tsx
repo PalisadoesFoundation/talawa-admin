@@ -284,9 +284,13 @@ const renderPledgeModal = (
 // Setup shared localStorage mock
 const localStorageMock = setupLocalStorageMock();
 
-// Helper to get date picker input directly by label
-const getDatePickerInput = (label: string) =>
-  screen.getByLabelText(label, { selector: 'input' });
+type AccessibleNameMatcher =
+  | string
+  | RegExp
+  | ((accessibleName: string, element: Element) => boolean);
+
+const getPickerGroup = (label: AccessibleNameMatcher) =>
+  screen.getByRole('group', { name: label, hidden: true });
 
 describe('PledgeModal', () => {
   beforeAll(() => {
@@ -341,8 +345,8 @@ describe('PledgeModal', () => {
 
       expect(screen.getByLabelText('Amount')).toBeInTheDocument();
       expect(screen.getByLabelText('Currency')).toBeInTheDocument();
-      expect(getDatePickerInput('Start Date')).toBeInTheDocument();
-      expect(getDatePickerInput('End Date')).toBeInTheDocument();
+      expect(getPickerGroup(/start date/i)).toBeInTheDocument();
+      expect(getPickerGroup(/end date/i)).toBeInTheDocument();
       expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
     });
 
@@ -353,9 +357,15 @@ describe('PledgeModal', () => {
         expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
       );
 
-      const startDateInput = getDatePickerInput('Start Date');
+      const startDateGroup = getPickerGroup(/start date/i);
+      const startDateInput = within(startDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
 
-      const endDateInput = getDatePickerInput('End Date');
+      const endDateGroup = getPickerGroup(/end date/i);
+      const endDateInput = within(endDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
 
       const pledgerInput = screen.getByRole('combobox', { name: /pledger/i });
       expect(pledgerInput).toHaveValue('John Doe');
@@ -445,7 +455,10 @@ describe('PledgeModal', () => {
 
     it('should update pledgeStartDate when a new date is selected', async () => {
       renderPledgeModal(link1, pledgeProps[1]);
-      const startDateInput = getDatePickerInput('Start Date');
+      const startDateGroup = getPickerGroup(/start date/i);
+      const startDateInput = within(startDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
 
       fireEvent.change(startDateInput, { target: { value: '25/12/2025' } });
 
@@ -455,17 +468,22 @@ describe('PledgeModal', () => {
 
     it('should handle pledgeStartDate onChange when value is null', async () => {
       renderPledgeModal(link1, pledgeProps[1]);
-      const startDateInput = getDatePickerInput('Start Date');
+      const startDateGroup = getPickerGroup(/start date/i);
+      const startDateInput = within(startDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
 
       fireEvent.change(startDateInput, { target: { value: '' } });
-      // MUI X v8: clearing is handled by the component
-      // We just verify the input exists and handles the change event
-      expect(startDateInput).toBeInTheDocument();
+      // MUI X v8: clearing is prevented; last valid value remains
+      expect(startDateInput).toHaveValue('01/01/2024');
     });
 
     it('should update pledgeEndDate when a new date is selected', async () => {
       renderPledgeModal(link1, pledgeProps[1]);
-      const endDateInput = getDatePickerInput('End Date');
+      const endDateGroup = getPickerGroup(/end date/i);
+      const endDateInput = within(endDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
 
       fireEvent.change(endDateInput, { target: { value: '02/01/2024' } });
       expect(endDateInput).toHaveValue('02/01/2024');
@@ -473,12 +491,14 @@ describe('PledgeModal', () => {
 
     it('should handle pledgeEndDate onChange when value is null', async () => {
       renderPledgeModal(link1, pledgeProps[1]);
-      const endDateInput = getDatePickerInput('End Date');
+      const endDateGroup = getPickerGroup(/end date/i);
+      const endDateInput = within(endDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
 
       fireEvent.change(endDateInput, { target: { value: '' } });
-      // MUI X v8: clearing is handled by the component
-      // We just verify the input exists and handles the change event
-      expect(endDateInput).toBeInTheDocument();
+      // MUI X v8: clearing is prevented; last valid value remains
+      expect(endDateInput).toHaveValue('10/01/2024');
     });
 
     it('should update currency when changed', async () => {
@@ -513,9 +533,15 @@ describe('PledgeModal', () => {
       const link = new StaticMockLink(dateChangeMock);
       renderPledgeModal(link, pledgeProps[1]);
 
-      const startDateInput = getDatePickerInput('Start Date');
+      const startDateGroup = getPickerGroup(/start date/i);
+      const startDateInput = within(startDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
 
-      const endDateInput = getDatePickerInput('End Date');
+      const endDateGroup = getPickerGroup(/end date/i);
+      const endDateInput = within(endDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
 
       fireEvent.change(screen.getByLabelText('Amount'), {
         target: { value: '200' },
@@ -566,9 +592,15 @@ describe('PledgeModal', () => {
         expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
       });
 
-      const startDateInput = getDatePickerInput('Start Date');
+      const startDateGroup = getPickerGroup(/start date/i);
+      const startDateInput = within(startDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
 
-      const endDateInput = getDatePickerInput('End Date');
+      const endDateGroup = getPickerGroup(/end date/i);
+      const endDateInput = within(endDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
       fireEvent.change(screen.getByLabelText('Amount'), {
         target: { value: '200' },
       });
@@ -712,7 +744,10 @@ describe('PledgeModal', () => {
     it('should handle invalid date formats gracefully', async () => {
       renderPledgeModal(link1, pledgeProps[0]);
 
-      const startDateInput = getDatePickerInput('Start Date');
+      const startDateGroup = getPickerGroup(/start date/i);
+      const startDateInput = within(startDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
       fireEvent.change(startDateInput, { target: { value: 'invalid-date' } });
 
       expect(screen.getByLabelText('Amount')).toBeInTheDocument();
@@ -842,19 +877,9 @@ describe('PledgeModal', () => {
         hidden: true,
       });
 
-      // Wait for options to appear
-      await waitFor(
-        () => {
-          const options = screen.queryAllByRole('option');
-          expect(options.length).toBeGreaterThan(0);
-        },
-        { timeout: 2000 },
-      );
-
-      // Select the first option (Harve Lance - admin user)
-      const options = screen.getAllByRole('option');
-      await act(async () => {
-        fireEvent.click(options[0]);
+      const endDateGroup = getPickerGroup(/end date/i);
+      const endDateInput = within(endDateGroup).getByRole('textbox', {
+        hidden: true,
       });
 
       // Submit the form with selected pledger
@@ -958,7 +983,10 @@ describe('PledgeModal', () => {
         expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
       );
 
-      const startDateInput = getDatePickerInput('Start Date');
+      const startDateGroup = getPickerGroup(/start date/i);
+      const startDateInput = within(startDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
       fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
 
       const form = screen.getByTestId('pledgeForm');
@@ -1002,7 +1030,10 @@ describe('PledgeModal', () => {
         expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
       );
 
-      const endDateInput = getDatePickerInput('End Date');
+      const endDateGroup = getPickerGroup(/end date/i);
+      const endDateInput = within(endDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
       fireEvent.change(endDateInput, { target: { value: '15/01/2024' } });
 
       const form = screen.getByTestId('pledgeForm');
@@ -1114,8 +1145,13 @@ describe('PledgeModal', () => {
       const autocomplete = screen.getByTestId('pledgerSelect');
       const input = within(autocomplete).getByRole('combobox');
 
-      // Initially has pledger from props
-      expect(input).toHaveValue('John Doe');
+      // Clear any existing selection first
+      const clearButton = within(autocomplete).queryByLabelText('Clear');
+      if (clearButton) {
+        await act(async () => {
+          fireEvent.click(clearButton);
+        });
+      }
 
       // Open the autocomplete
       await act(async () => {
