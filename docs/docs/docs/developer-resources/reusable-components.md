@@ -9,6 +9,36 @@ Shared components are UI and functional elements used across multiple sections o
 
 This guide outlines how to create and manage these components to ensure a unified design system and efficient code reuse.
 
+## Quick reference
+
+1. Admin UI:
+   ```
+   components/AdminPortal/**
+   types/AdminPortal/**
+   ```
+1. User UI
+   ```
+   components/UserPortal/**
+   types/UserPortal/**
+   ```
+1. Shared UI
+   ```
+   shared-components/**
+   types/shared-components/**
+   ```
+1. Props definitions
+   - interface.ts only (no inline interfaces)
+1. Exports
+   - PascalCase, name matches folder/file
+1. Tests
+   - colocated .spec.tsx
+   - target 100% test code coverage
+1. i18n
+   - all user-visible text uses keys
+
+1. TSDoc
+   - brief headers on components and interfaces
+
 ## Component Architecture
 
 It's important to understand structure and behavior of shared components before creating or refactoring them.
