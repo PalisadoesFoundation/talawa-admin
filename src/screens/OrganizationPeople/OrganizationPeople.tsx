@@ -74,11 +74,13 @@ import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
-import { Row, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import Avatar from 'components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
-import PageHeader from 'shared-components/Navbar/Navbar';
+// Imports added for manual header construction
+import SearchBar from 'shared-components/SearchBar/SearchBar';
+import SortingButton from 'subComponents/SortingButton';
 
 interface IProcessedRow {
   id: string;
@@ -396,7 +398,7 @@ function OrganizationPeople(): JSX.Element {
             {params.row?.image ? (
               <img
                 src={params.row.image}
-                alt={tCommon('avatar')}
+                alt={tCommon('avatar') || 'avatar'}
                 style={{
                   width: `${imageSize}px`,
                   height: `${imageSize}px`,
@@ -485,7 +487,7 @@ function OrganizationPeople(): JSX.Element {
           variant="danger"
           disabled={state === 2}
           onClick={() => toggleRemoveMemberModal(params.row.id)}
-          aria-label={tCommon('remove_member')}
+          aria-label={tCommon('removeMember') || 'Remove member'}
           data-testid="removeMemberModalBtn"
         >
           <Delete />
@@ -526,34 +528,41 @@ function OrganizationPeople(): JSX.Element {
 
   return (
     <>
-      <Row className={styles.head}>
-        <div className={styles.mainpageright}>
-          <div className={styles.btnsContainer}>
-            <PageHeader
-              search={{
-                placeholder: t('searchFullName'),
-                onSearch: (term: string) => setSearchTerm(term),
-                buttonTestId: 'searchbtn',
-              }}
-              sorting={[
-                {
-                  title: tCommon('sort'),
-                  options: [
-                    { label: tCommon('members'), value: 'members' },
-                    { label: tCommon('admin'), value: 'admin' },
-                    { label: tCommon('users'), value: 'users' },
-                  ],
-                  selected:
-                    state === 2 ? 'Users' : state === 1 ? 'Admin' : 'Members',
-                  onChange: (value) => handleSortChange(value.toString()),
-                  testIdPrefix: 'sort',
-                },
-              ]}
-              actions={<AddMember />}
-            />
-          </div>
+      {/* --- FIX START: Standardized Header using manual structure --- */}
+      {/* This structure uses the global 'calendar__header' and 'btnsBlock' which we fixed in CSS to ensure perfect alignment. */}
+      <div className={styles.calendar__header} style={{ marginBottom: '2rem' }}>
+        <SearchBar
+          placeholder={t('searchFullName')}
+          value={searchTerm}
+          onChange={(val) => setSearchTerm(val)}
+          onSearch={(term) => setSearchTerm(term)}
+          inputTestId="searchbtn"
+          // Standard Props for consistency
+          showSearchButton={true}
+          showLeadingIcon={true}
+          showClearButton={true}
+        />
+
+        <div className={styles.btnsBlock}>
+          <SortingButton
+            title={tCommon('sort')}
+            sortingOptions={[
+              { label: tCommon('members'), value: 'members' },
+              { label: tCommon('admin'), value: 'admin' },
+              { label: tCommon('users'), value: 'users' },
+            ]}
+            selectedOption={
+              state === 2 ? 'Users' : state === 1 ? 'Admin' : 'Members'
+            }
+            onSortChange={(value) => handleSortChange(value.toString())}
+            dataTestIdPrefix="sort"
+          />
+          {/* AddMember placed directly in the flex container for correct alignment */}
+          <AddMember />
         </div>
-      </Row>
+      </div>
+      {/* --- FIX END --- */}
+
       <ReportingTable
         rows={filteredRows.map((req) => ({ ...req })) as ReportingRow[]}
         columns={columns}
