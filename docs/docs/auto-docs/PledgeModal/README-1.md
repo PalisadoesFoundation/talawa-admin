@@ -21,3 +21,9 @@ This file defines the `PledgeModal` component, which provides a modal interface 
 ## Variables
 
 - [default](variables/default-1.md)
+
+## Functions
+
+- [areOptionsEqual](functions/areOptionsEqual.md)
+- [computeAdjustedEndDate](functions/computeAdjustedEndDate.md)
+- [getMemberLabel](functions/getMemberLabel.md)
