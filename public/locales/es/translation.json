@@ -57,7 +57,7 @@
     "afterRegister": "Registro exitoso. Por favor, espere a que el administrador apruebe su solicitud."
   },
   "signOut": {
-    "retryPrompt": "Error al revocar la sesión. ¿Reintentar?",
+    "retryPrompt": "Error al cerrar sesión. ¿Reintentar?",
     "signingOut": "Cerrando sesión...",
     "signOut": "Cerrar sesión"
   },

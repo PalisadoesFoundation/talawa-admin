@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/SignOut/SignOut.tsx:51](https://github.com/Ritz-Bansal/talawa-admin/blob/a0c73c8f8730e8b46e1a29ddb01b822fea5321b1/src/components/SignOut/SignOut.tsx#L51)
+Defined in: [src/components/SignOut/SignOut.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/SignOut/SignOut.tsx#L51)
 
 ## Parameters
 
