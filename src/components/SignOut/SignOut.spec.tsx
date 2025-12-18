@@ -492,4 +492,128 @@ describe('SignOut Component', () => {
       consoleErrorMock.mockRestore();
     });
   });
+
+  describe('Disabled State and Spam Prevention', () => {
+    test('button shows disabled state when logout is in progress', async () => {
+      const mockEndSession = vi.fn();
+      (useSession as Mock).mockReturnValue({
+        endSession: mockEndSession,
+      });
+
+      render(
+        <MockedProvider mocks={[mockRevokeRefreshToken]} addTypename={false}>
+          <BrowserRouter>
+            <SignOut />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      const signOutButton = screen.getByTestId('signOutBtn');
+
+      // Verify initial state
+      expect(signOutButton).toHaveStyle({ opacity: '1' });
+      expect(signOutButton).toHaveAttribute('aria-disabled', 'false');
+      expect(screen.getByText('Sign Out')).toBeInTheDocument();
+
+      // Click the button
+      fireEvent.click(signOutButton);
+
+      // Immediately check disabled state
+      expect(signOutButton).toHaveStyle({ opacity: '0.5' });
+      expect(signOutButton).toHaveAttribute('aria-disabled', 'true');
+
+      // Check for "Signing out..." text
+      await waitFor(() => {
+        expect(screen.getByText('Signing out...')).toBeInTheDocument();
+      });
+    });
+
+    test('prevents multiple clicks during logout', async () => {
+      const mockEndSession = vi.fn();
+      (useSession as Mock).mockReturnValue({
+        endSession: mockEndSession,
+      });
+
+      render(
+        <MockedProvider mocks={[mockRevokeRefreshToken]} addTypename={false}>
+          <BrowserRouter>
+            <SignOut />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      const signOutButton = screen.getByTestId('signOutBtn');
+
+      // Click multiple times rapidly
+      fireEvent.click(signOutButton);
+      fireEvent.click(signOutButton);
+      fireEvent.click(signOutButton);
+
+      await waitFor(() => {
+        // Verify logout was only called once
+        expect(mockEndSession).toHaveBeenCalledTimes(1);
+        expect(mockNavigate).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    test('button style prevents pointer events when disabled', async () => {
+      const mockEndSession = vi.fn();
+      (useSession as Mock).mockReturnValue({
+        endSession: mockEndSession,
+      });
+
+      render(
+        <MockedProvider mocks={[mockRevokeRefreshToken]} addTypename={false}>
+          <BrowserRouter>
+            <SignOut />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      const signOutButton = screen.getByTestId('signOutBtn');
+
+      // Click the button
+      fireEvent.click(signOutButton);
+
+      // Check that pointer events are none and cursor is not-allowed
+      await waitFor(() => {
+        expect(signOutButton).toHaveStyle({
+          pointerEvents: 'none',
+          cursor: 'not-allowed',
+        });
+      });
+    });
+
+    test('hideDrawer prop hides text but maintains disabled state', async () => {
+      const mockEndSession = vi.fn();
+      (useSession as Mock).mockReturnValue({
+        endSession: mockEndSession,
+      });
+
+      render(
+        <MockedProvider mocks={[mockRevokeRefreshToken]} addTypename={false}>
+          <BrowserRouter>
+            <SignOut hideDrawer={true} />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      const signOutButton = screen.getByTestId('signOutBtn');
+
+      // Initially, label text should be hidden when hideDrawer is true
+      expect(screen.queryByText('Sign Out')).not.toBeInTheDocument();
+      expect(screen.queryByText('Signing out...')).not.toBeInTheDocument();
+
+      // Click the button
+      fireEvent.click(signOutButton);
+
+      // Verify disabled state is still applied and text remains hidden
+      await waitFor(() => {
+        expect(signOutButton).toHaveStyle({ opacity: '0.5' });
+        expect(signOutButton).toHaveAttribute('aria-disabled', 'true');
+        expect(screen.queryByText('Sign Out')).not.toBeInTheDocument();
+        expect(screen.queryByText('Signing out...')).not.toBeInTheDocument();
+      });
+    });
+  });
 });

@@ -2,7 +2,7 @@ import {
   GET_ORGANIZATION_POSTS_COUNT_PG,
   GET_ORGANIZATION_EVENTS_PG,
   GET_ORGANIZATION_POSTS_PG,
-  MEMBERSHIP_REQUEST,
+  MEMBERSHIP_REQUEST_PG,
   ORGANIZATION_MEMBER_ADMIN_COUNT,
   GET_ORGANIZATION_BLOCKED_USERS_COUNT,
   GET_ORGANIZATION_VENUES_COUNT,
@@ -21,6 +21,7 @@ export const MOCKS = [
           id: '01960b81-bfed-7369-ae96-689dbd4281ba',
           membersCount: 2,
           adminsCount: 1,
+          __typename: 'Organization',
         },
       },
       loading: false,
@@ -36,7 +37,11 @@ export const MOCKS = [
     maxUsageCount: 5,
     result: {
       data: {
-        organization: { id: 'orgId', postsCount: 10 },
+        organization: {
+          id: 'orgId',
+          postsCount: 10,
+          __typename: 'Organization',
+        },
       },
       loading: false,
     },
@@ -52,6 +57,7 @@ export const MOCKS = [
     result: {
       data: {
         organization: {
+          id: 'orgId',
           eventsCount: 1,
           events: {
             edges: [
@@ -83,20 +89,41 @@ export const MOCKS = [
                     byDay: null,
                     byMonth: null,
                     byMonthDay: null,
+                    __typename: 'RecurrenceRule',
                   },
                   attachments: [
-                    { url: 'https://example.com', mimeType: 'pdf' },
+                    {
+                      url: 'https://example.com',
+                      mimeType: 'pdf',
+                      __typename: 'Attachment',
+                    },
                   ],
-                  creator: { id: 'creator1', name: 'John Doe' },
-                  organization: { id: 'orgId', name: 'Test Organization' },
+                  creator: {
+                    id: 'creator1',
+                    name: 'John Doe',
+                    __typename: 'User',
+                  },
+                  organization: {
+                    id: 'orgId',
+                    name: 'Test Organization',
+                    __typename: 'Organization',
+                  },
                   createdAt: '2025-10-28T00:00:00.000Z',
                   updatedAt: '2025-10-28T00:00:00.000Z',
+                  __typename: 'Event',
                 },
                 cursor: 'cursor1',
+                __typename: 'OrganizationEventsConnectionEdge',
               },
             ],
-            pageInfo: { hasNextPage: true, endCursor: 'cursor2' },
+            pageInfo: {
+              hasNextPage: true,
+              endCursor: 'cursor2',
+              __typename: 'PageInfo',
+            },
+            __typename: 'OrganizationEventsConnection',
           },
+          __typename: 'Organization',
         },
       },
       loading: false,
@@ -112,6 +139,7 @@ export const MOCKS = [
     result: {
       data: {
         organization: {
+          id: 'orgId',
           posts: {
             edges: [
               {
@@ -119,12 +147,20 @@ export const MOCKS = [
                   id: 'post1',
                   caption: 'First Post',
                   createdAt: '2025-01-01T12:00:00.000Z',
-                  creator: { id: 'user1', name: 'John Doe' },
+                  creator: {
+                    id: 'user1',
+                    name: 'John Doe',
+                    __typename: 'User',
+                  },
+                  __typename: 'Post',
                 },
                 cursor: 'cursor1',
+                __typename: 'OrganizationPostsConnectionEdge',
               },
             ],
+            __typename: 'OrganizationPostsConnection',
           },
+          __typename: 'Organization',
         },
       },
       loading: false,
@@ -140,7 +176,9 @@ export const MOCKS = [
     result: {
       data: {
         organization: {
+          id: 'orgId',
           venuesCount: 10,
+          __typename: 'Organization',
         },
       },
       loading: false,
@@ -149,19 +187,18 @@ export const MOCKS = [
 
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: 'orgId' },
         skip: 0,
         first: 8,
-        firstName_contains: '',
+        name_contains: '',
       },
     },
     maxUsageCount: 5,
     result: {
       data: {
         organization: {
-          membershipRequestsCount: 1,
           id: 'orgId',
           membershipRequests: [
             {
@@ -173,7 +210,9 @@ export const MOCKS = [
                 name: 'Pending User 1',
                 emailAddress: 'user1@example.com',
                 avatarURL: 'https://example.com/avatar1.jpg',
+                __typename: 'User',
               },
+              __typename: 'MembershipRequest',
             },
             {
               membershipRequestId: 'request2',
@@ -184,9 +223,12 @@ export const MOCKS = [
                 name: 'Pending User 2',
                 emailAddress: 'user2@example.com',
                 avatarURL: null,
+                __typename: 'User',
               },
+              __typename: 'MembershipRequest',
             },
           ],
+          __typename: 'Organization',
         },
       },
     },
@@ -203,6 +245,7 @@ export const MOCKS = [
         organization: {
           id: '01960b81-bfed-7369-ae96-689dbd4281ba',
           blockedUsersCount: 2,
+          __typename: 'Organization',
         },
       },
       loading: false,
@@ -219,7 +262,11 @@ export const EMPTY_MOCKS = [
     maxUsageCount: 5,
     result: {
       data: {
-        organization: { id: 'orgId', postsCount: 0 },
+        organization: {
+          id: 'orgId',
+          postsCount: 0,
+          __typename: 'Organization',
+        },
       },
     },
   },
@@ -236,8 +283,14 @@ export const EMPTY_MOCKS = [
           eventsCount: 0,
           events: {
             edges: [],
-            pageInfo: { hasNextPage: false, endCursor: null },
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: null,
+              __typename: 'PageInfo',
+            },
+            __typename: 'OrganizationEventsConnection',
           },
+          __typename: 'Organization',
         },
       },
     },
@@ -245,20 +298,20 @@ export const EMPTY_MOCKS = [
 
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: 'orgId' },
         skip: 0,
         first: 8,
-        firstName_contains: '',
+        name_contains: '',
       },
     },
     result: {
       data: {
         organization: {
-          membershipRequestsCount: 0,
           id: 'orgId',
           membershipRequests: [],
+          __typename: 'Organization',
         },
       },
     },
@@ -271,7 +324,10 @@ export const EMPTY_MOCKS = [
     },
     result: {
       data: {
-        organization: { posts: { edges: [] } },
+        organization: {
+          posts: { edges: [], __typename: 'OrganizationPostsConnection' },
+          __typename: 'Organization',
+        },
       },
     },
   },
@@ -287,6 +343,7 @@ export const EMPTY_MOCKS = [
           id: '01960b81-bfed-7369-ae96-689dbd4281ba',
           membersCount: 0,
           adminsCount: 0,
+          __typename: 'Organization',
         },
       },
       loading: false,
@@ -303,6 +360,7 @@ export const EMPTY_MOCKS = [
         organization: {
           id: '01960b81-bfed-7369-ae96-689dbd4281ba',
           blockedUsersCount: 0,
+          __typename: 'Organization',
         },
       },
       loading: false,
@@ -317,81 +375,14 @@ export const EMPTY_MOCKS = [
     result: {
       data: {
         organization: {
+          id: 'orgId',
           venuesCount: 0,
+          __typename: 'Organization',
         },
       },
       loading: false,
     },
   },
-];
-
-export const MIXED_REQUESTS_MOCK = [
-  {
-    request: {
-      query: MEMBERSHIP_REQUEST,
-      variables: {
-        input: { id: 'orgId' },
-        skip: 0,
-        first: 8,
-        firstName_contains: '',
-      },
-    },
-    maxUsageCount: 3,
-    result: {
-      data: {
-        organization: {
-          id: 'orgId',
-          membershipRequests: [
-            {
-              membershipRequestId: 'request1',
-              createdAt: '2023-01-01T00:00:00Z',
-              status: 'pending',
-              user: {
-                id: 'user1',
-                name: 'Pending User 1',
-                emailAddress: 'user1@example.com',
-                avatarURL: 'https://example.com/avatar1.jpg',
-              },
-            },
-            {
-              membershipRequestId: 'request2',
-              createdAt: '2023-01-02T00:00:00Z',
-              status: 'pending',
-              user: {
-                id: 'user2',
-                name: 'Pending User 2',
-                emailAddress: 'user2@example.com',
-                avatarURL: 'https://example.com/avatar2.jpg',
-              },
-            },
-            {
-              membershipRequestId: 'request3',
-              createdAt: '2023-01-03T00:00:00Z',
-              status: 'pending',
-              user: {
-                id: 'user3',
-                name: 'Pending User 3',
-                emailAddress: 'user3@example.com',
-                avatarURL: null,
-              },
-            },
-            {
-              membershipRequestId: 'request4',
-              createdAt: '2023-01-04T00:00:00Z',
-              status: 'rejected',
-              user: {
-                id: 'user4',
-                name: 'Rejected User',
-                emailAddress: 'rejected@example.com',
-                avatarURL: null,
-              },
-            },
-          ],
-        },
-      },
-    },
-  },
-  ...MOCKS.filter((mock) => mock.request.query !== MEMBERSHIP_REQUEST),
 ];
 
 export const ERROR_MOCKS = [
@@ -411,15 +402,15 @@ export const ERROR_MOCKS = [
   },
   {
     request: {
-      query: MEMBERSHIP_REQUEST,
+      query: MEMBERSHIP_REQUEST_PG,
       variables: {
         input: { id: 'orgId' },
         skip: 0,
         first: 8,
-        firstName_contains: '',
+        name_contains: '',
       },
     },
-    error: new Error('Mock GraphQL MEMBERSHIP_REQUEST Error'),
+    error: new Error('Mock GraphQL MEMBERSHIP_REQUEST_PG Error'),
   },
 
   {

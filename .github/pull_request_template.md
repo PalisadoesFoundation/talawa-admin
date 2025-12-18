@@ -23,7 +23,8 @@ Thanks for submitting a pull request! Please provide enough information so that 
 
 **Issue Number:**
 
-Fixes #<!--Add related issue number here.-->
+<!--Add related issue number here.-->
+Fixes #
 
 **Snapshots/Videos:**
 

@@ -127,6 +127,15 @@ export default [
       'vitest/no-focused-tests': 'error',
       'vitest/no-identical-title': 'error',
       '@typescript-eslint/no-unused-expressions': 'error',
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector:
+            "Property[key.name='authorization'] CallExpression[callee.name='getItem'][arguments.0.value='token']",
+          message:
+            "Security Risk: Do not use getItem('token') directly inside authorization headers. Extract it to a variable first to handle null values.",
+        },
+      ],
     },
   },
   {

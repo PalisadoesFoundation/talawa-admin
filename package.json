@@ -19,9 +19,9 @@
     "@mui/icons-material": "7.3.4",
     "@mui/material": "7.3.4",
     "@mui/system": "7.3.5",
-    "@mui/x-charts": "^8.20.0",
-    "@mui/x-data-grid": "^7.28.3",
-    "@mui/x-date-pickers": "^7.28.3",
+    "@mui/x-charts": "^8.14.0",
+    "@mui/x-data-grid": "^8.22.0",
+    "@mui/x-date-pickers": "^8.14.0",
     "@pdfme/common": "^5.2.11",
     "@pdfme/generator": "^5.2.3",
     "@pdfme/schemas": "^5.1.6",
@@ -95,7 +95,8 @@
     "cy:open": "pnpm run start-server cypress:open",
     "cy:run": "cross-env CYPRESS_COVERAGE=true pnpm run start-server cypress:run",
     "check-mock-cleanup": "bash scripts/githooks/check-mock-cleanup.sh",
-    "check:pom": "node scripts/githooks/check_pom.js"
+    "check:pom": "node scripts/githooks/check_pom.js",
+    "check-i18n": "node scripts/check-i18n.js"
   },
   "eslintConfig": {
     "extends": [

@@ -1,7 +1,7 @@
 import React from 'react';
 import { describe, it, vi, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { MockedProvider } from '@apollo/react-testing';
 import LeftDrawer from './LeftDrawer';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -13,7 +13,7 @@ import { usePluginDrawerItems } from 'plugin';
 // Mock the local storage hook
 vi.mock('utils/useLocalstorage', () => ({
   default: vi.fn(() => ({
-    getItem: vi.fn((key) => (key === 'role' ? 'administrator' : null)),
+    getItem: vi.fn((key) => (key === 'SuperAdmin' ? 'true' : null)),
   })),
 }));
 
@@ -115,7 +115,7 @@ describe('LeftDrawer Component', () => {
     vi.clearAllMocks();
     // Reset to default super admin mock
     vi.mocked(useLocalStorage).mockImplementation(() => ({
-      getItem: vi.fn((key) => (key === 'role' ? 'administrator' : null)),
+      getItem: vi.fn((key) => (key === 'SuperAdmin' ? 'true' : null)),
       setItem: vi.fn(),
       removeItem: vi.fn(),
       getStorageKey: vi.fn(() => ''),
@@ -134,15 +134,15 @@ describe('LeftDrawer Component', () => {
       expect(screen.getByTestId('talawa-logo')).toBeInTheDocument();
     });
 
-    it('renders all navigation buttons for super admin', () => {
+    it('renders all navigation buttons', () => {
       renderComponent();
       expect(screen.getByTestId('organizationsBtn')).toBeInTheDocument();
-      expect(screen.getByTestId('rolesBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('usersBtn')).toBeInTheDocument();
       expect(screen.getByTestId('communityProfileBtn')).toBeInTheDocument();
       expect(screen.getByTestId('pluginStoreBtn')).toBeInTheDocument();
     });
 
-    it('hides roles button for non-super admin users', () => {
+    it('renders users button for all users', () => {
       vi.mocked(useLocalStorage).mockImplementation(() => ({
         getItem: vi.fn(() => null),
         setItem: vi.fn(),
@@ -153,7 +153,7 @@ describe('LeftDrawer Component', () => {
 
       renderComponent();
       expect(screen.getByTestId('organizationsBtn')).toBeInTheDocument();
-      expect(screen.queryByTestId('rolesBtn')).not.toBeInTheDocument();
+      expect(screen.getByTestId('usersBtn')).toBeInTheDocument();
       expect(screen.getByTestId('communityProfileBtn')).toBeInTheDocument();
     });
   });
@@ -235,9 +235,9 @@ describe('LeftDrawer Component', () => {
   });
 
   describe('Navigation Behavior', () => {
-    it('super admin: applies correct styles when on users route (rolesBTn)', () => {
+    it('applies correct styles when on users route', () => {
       vi.mocked(useLocalStorage).mockImplementation(() => ({
-        getItem: vi.fn((key) => (key === 'role' ? 'administrator' : null)),
+        getItem: vi.fn((key) => (key === 'SuperAdmin' ? 'true' : null)),
         setItem: vi.fn(),
         removeItem: vi.fn(),
         getStorageKey: vi.fn(() => ''),
@@ -247,7 +247,7 @@ describe('LeftDrawer Component', () => {
       window.history.pushState({}, '', '/users');
 
       renderComponent();
-      const element = screen.getByTestId('rolesBtn');
+      const element = screen.getByTestId('usersBtn');
       expect(element.className).toContain('sidebarBtnActive');
     });
 
@@ -278,19 +278,6 @@ describe('LeftDrawer Component', () => {
       window.history.pushState({}, '', '/orglist');
 
       expect(organizationsButton).toHaveClass(`${styles.sidebarBtnActive}`);
-    });
-
-    it('renders navigation buttons as non-submitting buttons', () => {
-      renderComponent();
-
-      expect(screen.getByTestId('organizationsBtn')).toHaveAttribute(
-        'type',
-        'button',
-      );
-      expect(screen.getByTestId('pluginStoreBtn')).toHaveAttribute(
-        'type',
-        'button',
-      );
     });
 
     it('does not hide drawer on desktop view navigation button clicks', () => {
@@ -347,12 +334,10 @@ describe('LeftDrawer Component', () => {
       expect(setHideDrawer).toHaveBeenCalledWith(true);
       setHideDrawer.mockClear();
 
-      // Test for super admin - roles button
-      if (screen.queryByTestId('rolesBtn')) {
-        const rolesButton = screen.getByTestId('rolesBtn');
-        fireEvent.click(rolesButton);
-        expect(setHideDrawer).toHaveBeenCalledWith(true);
-      }
+      // Test users button
+      const usersButton = screen.getByTestId('usersBtn');
+      fireEvent.click(usersButton);
+      expect(setHideDrawer).toHaveBeenCalledWith(true);
     });
 
     it('simulates different viewport widths for responsive behavior', () => {
@@ -387,11 +372,9 @@ describe('LeftDrawer Component', () => {
       const orgButton = screen.getByTestId('organizationsBtn');
       expect(orgButton.textContent).toContain('my organizations');
 
-      // Check users button text content (for super admin)
-      if (screen.queryByTestId('rolesBtn')) {
-        const usersButton = screen.getByTestId('rolesBtn');
-        expect(usersButton.textContent).toContain('users');
-      }
+      // Check users button text content
+      const usersButton = screen.getByTestId('usersBtn');
+      expect(usersButton.textContent).toContain('users');
 
       // Check community profile button text content
       const profileButton = screen.getByTestId('communityProfileBtn');
@@ -409,8 +392,10 @@ describe('LeftDrawer Component', () => {
 
       renderComponent();
 
-      // Should not show the "Plugin Settings" header when no plugin items
-      expect(screen.queryByText('Plugin Settings')).not.toBeInTheDocument();
+      // Should not show the plugin settings header when no plugin items
+      expect(
+        screen.queryByTestId('pluginSettingsHeader'),
+      ).not.toBeInTheDocument();
     });
 
     it('should show plugin section when plugin items exist', () => {
@@ -432,8 +417,8 @@ describe('LeftDrawer Component', () => {
 
       renderComponent();
 
-      // Should show the "Plugin Settings" header when plugin items exist
-      expect(screen.getByText('Plugin Settings')).toBeInTheDocument();
+      // Should show the plugin settings header when plugin items exist
+      expect(screen.getByTestId('pluginSettingsHeader')).toBeInTheDocument();
 
       // Should render each plugin item
       expect(screen.getByText('Test Plugin')).toBeInTheDocument();
@@ -559,7 +544,7 @@ describe('LeftDrawer Component', () => {
       expect(screen.getByText('Plugin Three')).toBeInTheDocument();
 
       // Plugin section header should be present
-      expect(screen.getByText('Plugin Settings')).toBeInTheDocument();
+      expect(screen.getByTestId('pluginSettingsHeader')).toBeInTheDocument();
 
       // All plugin buttons should have correct test IDs
       expect(screen.getByTestId('plugin-plugin-1-btn')).toBeInTheDocument();
@@ -569,7 +554,7 @@ describe('LeftDrawer Component', () => {
 
     it('should handle non-admin users correctly for plugins', () => {
       vi.mocked(useLocalStorage).mockImplementation(() => ({
-        getItem: vi.fn((key) => (key === 'role' ? 'administrator' : null)), // Non-admin user (SuperAdmin is null)
+        getItem: vi.fn(() => null), // Non-admin user (SuperAdmin is null)
         setItem: vi.fn(),
         removeItem: vi.fn(),
         getStorageKey: vi.fn(() => ''),

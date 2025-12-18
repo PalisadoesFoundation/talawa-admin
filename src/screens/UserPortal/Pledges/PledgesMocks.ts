@@ -6,53 +6,40 @@ const userDetailsQuery = {
   request: {
     query: USER_DETAILS,
     variables: {
-      id: 'userId',
+      input: { id: 'userId' },
     },
   },
   result: {
     data: {
       user: {
-        user: {
-          id: 'userId',
-          joinedOrganizations: [
-            {
-              id: '6537904485008f171cf29924',
-              __typename: 'Organization',
-            },
-          ],
-          firstName: 'Harve',
-          lastName: 'Lance',
-          email: 'testuser1@example.com',
-          image: null,
-          createdAt: '2023-04-13T04:53:17.742Z',
-          birthDate: null,
-          educationGrade: null,
-          employmentStatus: null,
-          gender: null,
-          maritalStatus: null,
-          phone: null,
-          address: {
-            line1: 'Line1',
-            countryCode: 'CountryCode',
-            city: 'CityName',
-            state: 'State',
-            __typename: 'Address',
+        id: 'userId',
+        joinedOrganizations: [
+          {
+            id: '6537904485008f171cf29924',
+            __typename: 'Organization',
           },
-          registeredEvents: [],
-          membershipRequests: [],
-          __typename: 'User',
+        ],
+        firstName: 'Harve',
+        lastName: 'Lance',
+        email: 'testuser1@example.com',
+        image: null,
+        createdAt: '2023-04-13T04:53:17.742Z',
+        birthDate: null,
+        educationGrade: null,
+        employmentStatus: null,
+        gender: null,
+        maritalStatus: null,
+        phone: null,
+        address: {
+          line1: 'Line1',
+          countryCode: 'CountryCode',
+          city: 'CityName',
+          state: 'State',
+          __typename: 'Address',
         },
-        appUserProfile: {
-          id: '67078abd85008f171cf2991d',
-          adminFor: [],
-          isSuperAdmin: false,
-          appLanguageCode: 'en',
-          createdOrganizations: [],
-          createdEvents: [],
-          eventAdmin: [],
-          __typename: 'AppUserProfile',
-        },
-        __typename: 'UserData',
+        registeredEvents: [],
+        membershipRequests: [],
+        __typename: 'User',
       },
     },
   },
@@ -64,7 +51,7 @@ export const MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {},
         orderBy: 'endDate_DESC',
       },
@@ -135,7 +122,7 @@ export const MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {
           firstName_contains: 'Harve',
           name_contains: undefined,
@@ -182,7 +169,7 @@ export const MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {
           firstName_contains: '',
           name_contains: 'School',
@@ -229,7 +216,7 @@ export const MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {
           name_contains: 'School',
         },
@@ -275,7 +262,7 @@ export const MOCKS = [
     request: {
       query: USER_PLEDGES,
       variables: {
-        userId: { id: 'userId' },
+        input: { userId: 'userId' },
         where: {},
         orderBy: 'amount_ASC',
       },

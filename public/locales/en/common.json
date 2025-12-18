@@ -102,6 +102,7 @@
   "createdEarliest": "Created Earliest",
   "searchBy": "Search by {{item}}",
   "plugins": "Plugins",
+  "pluginSettings": "Plugin Settings",
   "save": "Save",
   "saving": "Saving..."
 }

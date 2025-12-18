@@ -17,6 +17,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 let mockUseParams: ReturnType<typeof vi.fn>;
 let mockUseMatch: ReturnType<typeof vi.fn>;
 let mockNavigate: ReturnType<typeof vi.fn>;
+let mockUseLocation: ReturnType<typeof vi.fn>;
 
 // Mock the router hooks
 vi.mock('react-router', async () => {
@@ -25,6 +26,7 @@ vi.mock('react-router', async () => {
     ...actual,
     useParams: () => mockUseParams(),
     useMatch: () => mockUseMatch(),
+    useLocation: () => mockUseLocation(),
     Navigate: (props: import('react-router').NavigateProps) => {
       mockNavigate(props);
       return null;
@@ -35,9 +37,44 @@ vi.mock('react-router', async () => {
 // Mock MUI icon to prevent "too many open files" error on Windows
 // Mock only WarningAmberOutlined as LeftDrawerOrg is importing only that
 vi.mock('@mui/icons-material', () => ({
-  WarningAmberOutlined: () => (
-    <span data-testid="warning-icon">WarningAmberOutlined</span>
-  ),
+  WarningAmberOutlined: vi.fn(() => null),
+}))
+
+// Mock LeftDrawerOrg to prevent router-related errors from NavLink, useLocation, etc.
+vi.mock('components/LeftDrawerOrg/LeftDrawerOrg', () => ({
+  default: vi.fn(({ hideDrawer }: { hideDrawer: boolean }) => (
+    <div data-testid="left-drawer-org" data-hide-drawer={hideDrawer}>
+      <span>Organization Menu</span>
+    </div>
+  )),
+}));
+
+// Mock SignOut component to prevent useNavigate() error from Router context
+vi.mock('components/SignOut/SignOut', () => ({
+  default: vi.fn(() => (
+    <button data-testid="signOutBtn" type="button">
+      Sign Out
+    </button>
+  )),
+}));
+
+// Mock useSession to prevent router hook errors
+vi.mock('utils/useSession', () => ({
+  default: vi.fn(() => ({
+    endSession: vi.fn(),
+    startSession: vi.fn(),
+    handleLogout: vi.fn(),
+    extendSession: vi.fn(),
+  })),
+}));
+
+// Mock ProfileCard component to prevent useNavigate() error from Router context
+vi.mock('components/ProfileCard/ProfileCard', () => ({
+  default: vi.fn(() => (
+    <div data-testid="profile-dropdown">
+      <div data-testid="display-name">Test User</div>
+    </div>
+  )),
 }));
 
 const MOCKS = [
@@ -82,6 +119,7 @@ describe('Testing OrganizationScreen', () => {
     mockUseParams = vi.fn();
     mockUseMatch = vi.fn();
     mockNavigate = vi.fn();
+    mockUseLocation = vi.fn().mockReturnValue({ pathname: '/orgdash/123' });
     mockUseParams.mockReset();
     mockUseMatch.mockReset();
     mockNavigate.mockReset();
