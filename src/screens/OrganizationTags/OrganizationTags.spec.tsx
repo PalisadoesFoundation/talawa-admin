@@ -126,6 +126,7 @@ describe('Organisation Tags Page', () => {
   });
   afterEach(() => {
     vi.clearAllMocks();
+    vi.restoreAllMocks();
     cleanup();
   });
   test('component loads correctly', async () => {

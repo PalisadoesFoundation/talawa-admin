@@ -56,6 +56,7 @@ import type {
 import type {
   ReportingRow,
   ReportingTableColumn,
+  ReportingTableGridProps,
 } from '../../types/ReportingTable/interface';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import { Stack } from '@mui/material';
@@ -288,6 +289,7 @@ function OrganizationTags(): JSX.Element {
             onClick={() => redirectToManageTag(params.row.id)}
             data-testid="manageTagBtn"
             className={styles.editButton}
+            aria-label={`${t('manageTag')} ${params.row.name ?? ''}`.trim()}
           >
             {t('manageTag')}
           </Button>
@@ -300,7 +302,7 @@ function OrganizationTags(): JSX.Element {
     setTagSortOrder(value === 'latest' ? 'DESCENDING' : 'ASCENDING');
   };
 
-  const gridProps = {
+  const gridProps: ReportingTableGridProps = {
     disableColumnMenu: true,
     columnBufferPx: COLUMN_BUFFER_PX,
     hideFooter: true,
@@ -352,6 +354,7 @@ function OrganizationTags(): JSX.Element {
                   onClick={showCreateTagModal}
                   data-testid="createTagBtn"
                   className={styles.createButton}
+                  aria-label={t('createTag')}
                 >
                   <i className="fa fa-plus me-2" />
                   {t('createTag')}
@@ -431,6 +434,7 @@ function OrganizationTags(): JSX.Element {
               onClick={(): void => hideCreateTagModal()}
               data-testid="closeCreateTagModal"
               className={styles.removeButton}
+              aria-label={tCommon('cancel')}
             >
               {tCommon('cancel')}
             </Button>
@@ -440,6 +444,7 @@ function OrganizationTags(): JSX.Element {
               data-testid="createTagSubmitBtn"
               className={styles.addButton}
               disabled={createTagLoading}
+              aria-label={tCommon('create')}
             >
               {tCommon('create')}
             </Button>

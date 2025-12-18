@@ -197,7 +197,7 @@ const organizationFunds = (): JSX.Element => {
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading Funds
+            {t('errorLoadingTagsData')}
             <br />
             {fundError.message}
           </h6>
