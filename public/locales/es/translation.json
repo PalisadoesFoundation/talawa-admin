@@ -671,7 +671,7 @@
     "createdEarliest": "Creado más temprano",
     "viewCampaigns": "Ver campañas",
     "assocCampaigns": "Campañas asociadas",
-    "errorLoadingTagsData": "Error al cargar los datos de etiquetas"
+    "errorLoadingFundsData": "Error al cargar los datos de fondos"
   },
   "fundCampaign": {
     "title": "Campañas de recaudación de fondos",

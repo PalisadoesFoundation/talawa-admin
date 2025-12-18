@@ -14,7 +14,7 @@ import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
 import TableLoader from 'components/TableLoader/TableLoader';
@@ -150,7 +150,9 @@ const organizationFunds = (): JSX.Element => {
   });
 
   // Set the document title based on the translation
-  document.title = t('title');
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
 
   if (!orgId) {
     return <Navigate to={'/'} replace />;
@@ -197,7 +199,7 @@ const organizationFunds = (): JSX.Element => {
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            {t('errorLoadingTagsData')}
+            {t('errorLoadingFundsData')}
             <br />
             {fundError.message}
           </h6>

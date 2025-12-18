@@ -671,7 +671,7 @@
     "createdEarliest": "Créé le plus tôt",
     "viewCampaigns": "Voir les campagnes",
     "assocCampaigns": "Campagnes associées",
-    "errorLoadingTagsData": "Erreur lors du chargement des données des balises"
+    "errorLoadingFundsData": "Erreur lors du chargement des données des fonds"
   },
   "fundCampaign": {
     "title": "Campagnes de collecte de fonds",

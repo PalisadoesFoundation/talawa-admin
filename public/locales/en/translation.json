@@ -239,7 +239,7 @@
     "unblockUserFrom": "Unblock User from {{org}}",
     "removeConfirmation": "Are you sure you want to remove '{{name}}' from organization '{{org}}'?",
     "unblockConfirmation": "Are you sure you want to unblock '{{name}}' from organization '{{org}}'?",
-    "searchByName": "searchByName",
+    "searchByName": "Search by Name",
     "users": "users",
     "name": "name",
     "email": "email",
@@ -669,9 +669,9 @@
     "createdLatest": "Created Latest",
     "createdEarliest": "Created Earliest",
     "viewCampaigns": "View Campaigns",
-    "searchByName": "searchByName",
+    "searchByName": "Search by Name",
     "assocCampaigns": "Associated Campaigns",
-    "errorLoadingTagsData": "Error loading tags data"
+    "errorLoadingFundsData": "Error loading funds data"
   },
   "fundCampaign": {
     "title": "Fundraising Campaigns",
@@ -1124,7 +1124,7 @@
     "organizations": "Organizations",
     "search": "search",
     "filter": "filter",
-    "searchByName": "searchByName",
+    "searchByName": "Search by Name",
     "searchOrganizations": "Search Organization"
   },
   "userSidebarOrg": {
