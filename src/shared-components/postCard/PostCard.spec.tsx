@@ -728,6 +728,91 @@ describe('PostCard', () => {
     renderPostCard();
     expect(screen.getByTestId('plugin-injector-g4')).toBeInTheDocument();
   });
+
+  test('shows menu when user is admin but not post creator', async () => {
+    // Mock: Admin role, different userId than creator
+    vi.mocked(useLocalStorage).mockImplementation(() => ({
+      getItem: vi.fn((key: string) => {
+        if (key === 'userId') return '999'; // Different from creator.id='1'
+        if (key === 'role') return 'administrator';
+        return null;
+      }),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      clearAllItems: vi.fn(),
+      getStorageKey: vi.fn((key: string) => key),
+    }));
+
+    renderPostCard();
+
+    // Menu button should be visible for admin
+    const moreButton = screen.getByTestId('more-options-button');
+    expect(moreButton).toBeInTheDocument();
+  });
+
+  test('shows menu when user is post creator but not admin', async () => {
+    // Mock: Non-admin role, same userId as creator
+    vi.mocked(useLocalStorage).mockImplementation(() => ({
+      getItem: vi.fn((key: string) => {
+        if (key === 'userId') return '1'; // Same as creator.id='1'
+        if (key === 'role') return 'user'; // Not administrator
+        return null;
+      }),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      clearAllItems: vi.fn(),
+      getStorageKey: vi.fn((key: string) => key),
+    }));
+
+    renderPostCard();
+
+    // Menu button should be visible for post creator
+    const moreButton = screen.getByTestId('more-options-button');
+    expect(moreButton).toBeInTheDocument();
+  });
+
+  test('shows menu when user is both admin and post creator', async () => {
+    // Mock: Admin role AND same userId as creator
+    vi.mocked(useLocalStorage).mockImplementation(() => ({
+      getItem: vi.fn((key: string) => {
+        if (key === 'userId') return '1'; // Same as creator.id='1'
+        if (key === 'role') return 'administrator';
+        return null;
+      }),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      clearAllItems: vi.fn(),
+      getStorageKey: vi.fn((key: string) => key),
+    }));
+
+    renderPostCard();
+
+    // Menu button should be visible
+    const moreButton = screen.getByTestId('more-options-button');
+    expect(moreButton).toBeInTheDocument();
+  });
+
+  test('hides menu when user is neither admin nor post creator', async () => {
+    // Mock: Non-admin role, different userId than creator
+    vi.mocked(useLocalStorage).mockImplementation(() => ({
+      getItem: vi.fn((key: string) => {
+        if (key === 'userId') return '999'; // Different from creator.id='1'
+        if (key === 'role') return 'user'; // Not administrator
+        return null;
+      }),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      clearAllItems: vi.fn(),
+      getStorageKey: vi.fn((key: string) => key),
+    }));
+
+    renderPostCard();
+
+    // Menu button should NOT be visible for normal users
+    const moreButton = screen.queryByTestId('more-options-button');
+    expect(moreButton).not.toBeInTheDocument();
+  });
+
   it('creates comment and clears input', async () => {
     renderPostCard();
     const input = screen.getByPlaceholderText(/add comment/i);
