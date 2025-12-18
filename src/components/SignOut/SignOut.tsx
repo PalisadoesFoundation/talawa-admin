@@ -42,12 +42,16 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
+import { useTranslation } from 'react-i18next';
 
 interface ISignOutProps {
   hideDrawer?: boolean; // Optional prop to conditionally render the button
 }
 
 const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
+  const { t } = useTranslation('translation', { 
+    keyPrefix: 'signOut', 
+  });
   const { endSession } = useSession();
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const navigate = useNavigate();
@@ -69,7 +73,7 @@ const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
     } catch (error) {
       console.error('Error revoking refresh token:', error);
       const retryRevocation = window.confirm(
-        'Failed to revoke session. Retry?',
+        t('retryPrompt'),
       );
       if (retryRevocation) {
         try {
@@ -97,7 +101,7 @@ const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
       }}
       role="button"
       tabIndex={0}
-      aria-label="Sign out"
+      aria-label={t("signOut")}
       aria-disabled={isLoggingOut}
       data-testid="signOutBtn"
       style={{
@@ -110,7 +114,7 @@ const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
         <LogoutIcon />
       </div>
       <div className={`${styles.signOutButton} ${styles.sidebarText}`}>
-        {hideDrawer ? '' : isLoggingOut ? 'Signing out...' : 'Sign Out'}
+        {hideDrawer ? '' : isLoggingOut ? t('signingOut') : t('signOut')}
       </div>
     </div>
   );

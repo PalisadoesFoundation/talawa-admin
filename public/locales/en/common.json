@@ -104,5 +104,8 @@
   "plugins": "Plugins",
   "pluginSettings": "Plugin Settings",
   "save": "Save",
-  "saving": "Saving..."
+  "saving": "Saving...",
+  "profilePicture": "profile picture",
+  "profilePicturePlaceholder": "dummy picture",
+  "userProfileMenu": "User Profile Menu"
 }
