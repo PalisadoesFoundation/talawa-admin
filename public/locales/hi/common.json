@@ -104,5 +104,8 @@
   "save": "सहेजें",
   "saving": "सहेज रहे हैं...",
   "unblock": "अनब्लॉक करें",
-  "unblockedSuccessfully": "{{item}} सफलतापूर्वक अनब्लॉक किया गया"
+  "unblockedSuccessfully": "{{item}} सफलतापूर्वक अनब्लॉक किया गया",
+  "sl_no": "क्रम संख्या",
+  "actions": "क्रियाएं",
+  "notFound": "नहीं मिला"
 }

@@ -316,7 +316,6 @@
     "searchLastName": "Introduzca el apellido",
     "people": "Personas",
     "sort": "Ordenar por Rol",
-    "actions": "Acciones",
     "existingUser": "Usuario existente",
     "newUser": "Nuevo usuario",
     "firstName": "Nombre de pila",
@@ -336,7 +335,9 @@
     "addMembers": "Agregar miembros",
     "searchFullName": "Ingrese el nombre completo",
     "user": "Usuario",
+    "actions": "Acciones",
     "profile": "Perfil",
+    "notFound": "No se encontraron miembros",
     "createUser": "Crear usuario"
   },
   "organizationTags": {
@@ -356,7 +357,12 @@
     "removeUserTag": "Eliminar Etiqueta",
     "removeUserTagMessage": "¿Desea eliminar esta etiqueta?",
     "addChildTag": "Agregar una Sub Etiqueta",
-    "enterTagName": "Ingrese el nombre de la etiqueta"
+    "enterTagName": "Ingrese el nombre de la etiqueta",
+    "totalSubTags": "Total de sub-etiquetas",
+    "totalAssignedUsers": "Total de usuarios asignados",
+    "tagCreationFailed": "Error al crear la etiqueta",
+    "errorLoadingTagsData": "Se produjo un error al cargar los datos de las etiquetas de la organización",
+    "sortTags": "Ordenar Etiquetas"
   },
   "manageTag": {
     "title": "Detalles de la Etiqueta",
@@ -667,7 +673,10 @@
     "deleteFundMsg": "¿Está seguro de que desea eliminar este fondo?",
     "createdLatest": "Creado más reciente",
     "createdEarliest": "Creado más temprano",
-    "viewCampaigns": "Ver campañas"
+    "viewCampaigns": "Ver campañas",
+    "assocCampaigns": "Campañas asociadas",
+    "errorLoadingFundsData": "Error al cargar los datos de fondos",
+    "editFund": "Editar fondo"
   },
   "fundCampaign": {
     "title": "Campañas de recaudación de fondos",
