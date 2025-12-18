@@ -38,7 +38,7 @@ vi.mock('react-router', async () => {
 // Mock only WarningAmberOutlined as LeftDrawerOrg is importing only that
 vi.mock('@mui/icons-material', () => ({
   WarningAmberOutlined: vi.fn(() => null),
-}))
+}));
 
 // Mock LeftDrawerOrg to prevent router-related errors from NavLink, useLocation, etc.
 vi.mock('components/LeftDrawerOrg/LeftDrawerOrg', () => ({
