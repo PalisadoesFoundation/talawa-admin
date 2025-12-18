@@ -295,9 +295,7 @@ describe('Notification Component', () => {
 
   it('should handle error when marking notification as read', async () => {
     const notifications = generateNotifications(1, false);
-    const toastErrorSpy = vi
-      .spyOn(toast, 'error')
-      .mockImplementation(() => 1 as unknown as string);
+    const toastErrorSpy = vi.spyOn(toast, 'error').mockImplementation(() => 1);
 
     render(
       <MockedProvider mocks={mocks(notifications, true)}>
