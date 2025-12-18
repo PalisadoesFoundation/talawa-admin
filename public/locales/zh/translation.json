@@ -671,7 +671,8 @@
     "createdEarliest": "最早创建",
     "viewCampaigns": "查看活动",
     "assocCampaigns": "相关活动",
-    "errorLoadingFundsData": "加载基金数据时出错"
+    "errorLoadingFundsData": "加载基金数据时出错",
+    "editFund": "编辑基金"
   },
   "fundCampaign": {
     "title": "募捐活动",

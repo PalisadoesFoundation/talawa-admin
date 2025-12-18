@@ -671,7 +671,8 @@
     "viewCampaigns": "View Campaigns",
     "searchByName": "Search by Name",
     "assocCampaigns": "Associated Campaigns",
-    "errorLoadingFundsData": "Error loading funds data"
+    "errorLoadingFundsData": "Error loading funds data",
+    "editFund": "Edit Fund"
   },
   "fundCampaign": {
     "title": "Fundraising Campaigns",

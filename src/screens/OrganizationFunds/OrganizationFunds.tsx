@@ -319,6 +319,7 @@ const organizationFunds = (): JSX.Element => {
               // className="me-2 rounded"
               className={styles.editButton}
               data-testid="editFundBtn"
+              aria-label={t('editFund')}
               onClick={() =>
                 handleOpenModal(params.row as InterfaceFundInfo, 'edit')
               }
@@ -343,6 +344,7 @@ const organizationFunds = (): JSX.Element => {
           <Button
             size="sm"
             className={styles.editButton}
+            aria-label={t('viewCampaigns')}
             onClick={() => handleClick(params.row.id as string)}
             data-testid="viewBtn"
           >

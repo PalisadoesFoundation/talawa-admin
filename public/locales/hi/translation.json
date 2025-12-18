@@ -671,7 +671,8 @@
     "createdEarliest": "सबसे जल्दी बनाया",
     "viewCampaigns": "कैम्पेंस देखें",
     "assocCampaigns": "संबद्ध अभियान",
-    "errorLoadingFundsData": "फंड डेटा लोड करते समय त्रुटि हुई"
+    "errorLoadingFundsData": "फंड डेटा लोड करते समय त्रुटि हुई",
+    "editFund": "फंड संपादित करें"
   },
   "fundCampaign": {
     "title": "फंडरेजिंग कैंपेन",
