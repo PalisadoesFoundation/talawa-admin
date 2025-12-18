@@ -24,7 +24,7 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:315](https://
 
 #### request.variables.first
 
-> **first**: `number` = `TAGS_QUERY_DATA_CHUNK_SIZE`
+> **first**: `number` = `PAGE_SIZE`
 
 #### request.variables.input
 
@@ -62,6 +62,10 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:315](https://
 
 > **data**: `object`
 
-#### result.data.organizations
+#### result.data.organization
 
-> **organizations**: `object`[]
+> **organization**: `object`
+
+#### result.data.organization.tags
+
+> **tags**: `UserTags`
