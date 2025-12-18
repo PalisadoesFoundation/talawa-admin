@@ -64,7 +64,7 @@ type UserOrg = {
   adminsCount: number;
   membersCount: number;
   description?: string;
-  avatarUrl?: string;
+  avatarURL?: string;
 };
 
 interface InterfaceJoinedOrgEdge {
@@ -74,7 +74,7 @@ interface InterfaceJoinedOrgEdge {
     adminsCount: number;
     membersCount: number;
     description?: string;
-    avatarUrl?: string;
+    avatarURL?: string;
   };
 }
 
@@ -122,7 +122,7 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
           adminsCount: number;
           membersCount: number;
           description?: string;
-          avatarUrl?: string;
+          avatarURL?: string;
         }) => ({
           id: org.id,
           name: org.name,
@@ -130,7 +130,7 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
           adminsCount: org.adminsCount ?? 0,
           membersCount: org.membersCount ?? 0,
           description: org.description || 'No Description',
-          avatarUrl: org.avatarUrl || '',
+          avatarURL: org.avatarURL || '',
         }),
       ) || [];
 
@@ -143,7 +143,7 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
             adminsCount: number;
             membersCount: number;
             description?: string;
-            avatarUrl?: string;
+            avatarURL?: string;
           };
         }) => ({
           id: edge.node.id,
@@ -152,7 +152,7 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
           adminsCount: edge.node.adminsCount ?? 0,
           membersCount: edge.node.membersCount ?? 0,
           description: edge.node.description || 'No Description',
-          avatarUrl: edge.node.avatarUrl || '',
+          avatarURL: edge.node.avatarURL || '',
         }),
       ) || [];
 
@@ -165,7 +165,7 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
             adminsCount: number;
             membersCount: number;
             description?: string;
-            avatarUrl?: string;
+            avatarURL?: string;
           };
         }) => ({
           id: edge.node.id,
@@ -174,7 +174,7 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
           adminsCount: edge.node.adminsCount ?? 0,
           membersCount: edge.node.membersCount ?? 0,
           description: edge.node.description || 'No Description',
-          avatarUrl: edge.node.avatarUrl || '',
+          avatarURL: edge.node.avatarURL || '',
         }),
       ) || [];
 
@@ -264,7 +264,7 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
               description={org.description || 'No Description'}
               adminCount={org.adminsCount}
               membersCount={org.membersCount}
-              img={org.avatarUrl || ''}
+              img={org.avatarURL || ''}
               actionIcon={
                 <IconButton size="small">
                   <EditIcon />
