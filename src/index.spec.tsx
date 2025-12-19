@@ -4,7 +4,8 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import {
   BACKEND_URL,
-  REACT_APP_BACKEND_WEBSOCKET_URL,
+  BACKEND_WEBSOCKET_URL,
+  deriveBackendWebsocketUrl,
 } from 'Constant/constant';
 import { toast } from 'react-toastify';
 import i18n from './utils/i18n';
@@ -113,11 +114,24 @@ describe('Apollo Client Configuration', () => {
   it('should configure WebSocket link with correct URL', (): void => {
     const wsLink = new GraphQLWsLink(
       createClient({
-        url: REACT_APP_BACKEND_WEBSOCKET_URL,
+        url: BACKEND_WEBSOCKET_URL,
       }),
     );
 
     expect(wsLink).toBeDefined();
+  });
+
+  it('should derive websocket URLs from HTTP endpoints', () => {
+    expect(deriveBackendWebsocketUrl('https://example.com/graphql')).toBe(
+      'wss://example.com/graphql',
+    );
+
+    expect(deriveBackendWebsocketUrl('http://example.com/graphql')).toBe(
+      'ws://example.com/graphql',
+    );
+
+    expect(deriveBackendWebsocketUrl('not-a-url')).toBe('');
+    expect(deriveBackendWebsocketUrl(undefined)).toBe('');
   });
 
   describe('Authorization Headers', () => {

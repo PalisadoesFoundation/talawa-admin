@@ -72,16 +72,6 @@ export const askAndUpdateTalawaApiUrl = async (
         );
       }
       updateEnvFile('REACT_APP_TALAWA_URL', endpoint);
-      const websocketUrl = endpoint.replace(/^http(s)?:\/\//, 'ws$1://');
-      try {
-        const wsUrl = new URL(websocketUrl);
-        if (!['ws:', 'wss:'].includes(wsUrl.protocol)) {
-          throw new Error('Invalid WebSocket protocol');
-        }
-        updateEnvFile('REACT_APP_BACKEND_WEBSOCKET_URL', websocketUrl);
-      } catch {
-        throw new Error('Invalid WebSocket URL generated: ');
-      }
       if (useDocker && endpoint) {
         const raw = endpoint.includes('://') ? endpoint : `http://${endpoint}`;
         try {
@@ -91,8 +81,6 @@ export const askAndUpdateTalawaApiUrl = async (
             parsed.hostname = 'host.docker.internal';
             const dockerUrl = parsed.toString();
             updateEnvFile('REACT_APP_TALAWA_URL', dockerUrl);
-            const dockerWsUrl = dockerUrl.replace(/^http(s)?:\/\//, 'ws$1://');
-            updateEnvFile('REACT_APP_BACKEND_WEBSOCKET_URL', dockerWsUrl);
           }
         } catch (error) {
           throw new Error(

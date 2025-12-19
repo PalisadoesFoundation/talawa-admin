@@ -138,13 +138,11 @@ describe('askAndUpdateTalawaApiUrl - extended coverage', () => {
 
     await askAndUpdateTalawaApiUrl(true);
 
+    // Should only update normal URLs, not Docker URL
+    expect(updateEnvFile).toHaveBeenCalledTimes(1);
     expect(updateEnvFile).toHaveBeenCalledWith(
       'REACT_APP_TALAWA_URL',
       'https://example.com',
-    );
-    expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_BACKEND_WEBSOCKET_URL',
-      'wss://example.com',
     );
     expect(updateEnvFile).not.toHaveBeenCalledWith(
       'REACT_APP_DOCKER_TALAWA_URL',
@@ -165,13 +163,10 @@ describe('askAndUpdateTalawaApiUrl', () => {
     await askAndUpdateTalawaApiUrl();
 
     expect(askForTalawaApiUrl).toHaveBeenCalled();
+    expect(updateEnvFile).toHaveBeenCalledTimes(1);
     expect(updateEnvFile).toHaveBeenCalledWith(
       'REACT_APP_TALAWA_URL',
       'https://talawa-api.example.com',
-    );
-    expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_BACKEND_WEBSOCKET_URL',
-      'wss://talawa-api.example.com',
     );
   });
 
@@ -198,14 +193,12 @@ describe('askAndUpdateTalawaApiUrl', () => {
     await askAndUpdateTalawaApiUrl(true);
 
     expect(askForTalawaApiUrl).toHaveBeenCalledWith(true);
-    expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_TALAWA_URL',
-      expect.stringContaining('host.docker.internal'),
+    const talawaUrlCalls = (updateEnvFile as Mock).mock.calls.filter(
+      (call) => call[0] === 'REACT_APP_TALAWA_URL',
     );
-    expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_BACKEND_WEBSOCKET_URL',
-      expect.stringContaining('host.docker.internal'),
-    );
+    expect(talawaUrlCalls).toHaveLength(2);
+    expect(talawaUrlCalls[0][1]).toBe('https://localhost:3000');
+    expect(talawaUrlCalls[1][1]).toBe('https://host.docker.internal:3000/');
   });
 
   test('should write Docker URL for 127.0.0.1 when useDocker=true', async () => {
@@ -217,14 +210,12 @@ describe('askAndUpdateTalawaApiUrl', () => {
     await askAndUpdateTalawaApiUrl(true);
 
     expect(askForTalawaApiUrl).toHaveBeenCalledWith(true);
-    expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_TALAWA_URL',
-      expect.stringContaining('host.docker.internal'),
+    const talawaUrlCalls = (updateEnvFile as Mock).mock.calls.filter(
+      (call) => call[0] === 'REACT_APP_TALAWA_URL',
     );
-    expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_BACKEND_WEBSOCKET_URL',
-      expect.stringContaining('host.docker.internal'),
-    );
+    expect(talawaUrlCalls).toHaveLength(2);
+    expect(talawaUrlCalls[0][1]).toBe('http://127.0.0.1:3000');
+    expect(talawaUrlCalls[1][1]).toBe('http://host.docker.internal:3000/');
   });
 
   test('should write Docker URL for ::1 (IPv6 localhost) when useDocker=true', async () => {
@@ -235,25 +226,12 @@ describe('askAndUpdateTalawaApiUrl', () => {
 
     await askAndUpdateTalawaApiUrl(true);
 
-    // Updated expectation: IPv6 localhost might not be transformed to host.docker.internal
-    // Check if either the Docker URL was set OR the regular URL was set
-    const dockerUrlCall = (updateEnvFile as Mock).mock.calls.find(
-      (call) => call[0] === 'REACT_APP_DOCKER_TALAWA_URL',
+    const talawaUrlCalls = (updateEnvFile as Mock).mock.calls.filter(
+      (call) => call[0] === 'REACT_APP_TALAWA_URL',
     );
-
-    if (dockerUrlCall) {
-      // If Docker URL is set, it should contain host.docker.internal
-      expect(updateEnvFile).toHaveBeenCalledWith(
-        'REACT_APP_DOCKER_TALAWA_URL',
-        expect.stringContaining('host.docker.internal'),
-      );
-    } else {
-      // Otherwise, regular URL should be set (IPv6 not detected as localhost)
-      expect(updateEnvFile).toHaveBeenCalledWith(
-        'REACT_APP_TALAWA_URL',
-        expect.stringContaining('[::1]'),
-      );
-    }
+    expect(talawaUrlCalls).toHaveLength(2);
+    expect(talawaUrlCalls[0][1]).toBe('http://[::1]:3000');
+    expect(talawaUrlCalls[1][1]).toBe('http://host.docker.internal:3000/');
   });
 
   test('should handle URL without protocol and add http://', async () => {
@@ -264,95 +242,20 @@ describe('askAndUpdateTalawaApiUrl', () => {
 
     await askAndUpdateTalawaApiUrl(true);
 
-    // Updated expectation: URL without protocol might cause an error
-    // Check if either Docker URL was set OR an error was logged
-    const dockerUrlCall = (updateEnvFile as Mock).mock.calls.find(
-      (call) => call[0] === 'REACT_APP_DOCKER_TALAWA_URL',
+    const talawaUrlCalls = (updateEnvFile as Mock).mock.calls.filter(
+      (call) => call[0] === 'REACT_APP_TALAWA_URL',
     );
 
-    if (dockerUrlCall) {
-      expect(updateEnvFile).toHaveBeenCalledWith(
-        'REACT_APP_DOCKER_TALAWA_URL',
-        expect.stringContaining('host.docker.internal'),
-      );
+    if (talawaUrlCalls.length >= 2) {
+      expect(talawaUrlCalls[0][1]).toBe('localhost:3000');
+      expect(talawaUrlCalls[1][1]).toBe('http://host.docker.internal:3000/');
     } else {
-      // If no Docker URL was set, an error should have been logged
       expect(console.error).toHaveBeenCalled();
     }
   });
-
-  test('should convert http to ws for WebSocket URL', async () => {
-    (askForTalawaApiUrl as Mock).mockResolvedValue('http://example.com');
-    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
-      shouldSetTalawaApiUrlResponse: true,
-    });
-
-    await askAndUpdateTalawaApiUrl();
-
-    expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_BACKEND_WEBSOCKET_URL',
-      'ws://example.com',
-    );
-  });
-
-  test('should convert https to wss for WebSocket URL', async () => {
-    (askForTalawaApiUrl as Mock).mockResolvedValue('https://example.com');
-    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
-      shouldSetTalawaApiUrlResponse: true,
-    });
-
-    await askAndUpdateTalawaApiUrl();
-
-    expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_BACKEND_WEBSOCKET_URL',
-      'wss://example.com',
-    );
-  });
 });
-
 describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
-  test('should handle WebSocket URL with invalid protocol', async () => {
-    (askForTalawaApiUrl as Mock).mockResolvedValue('https://example.com');
-    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
-      shouldSetTalawaApiUrlResponse: true,
-    });
-
-    const originalURL = global.URL;
-
-    try {
-      global.URL = class extends originalURL {
-        constructor(url: string) {
-          super(url);
-          if (
-            typeof url === 'string' &&
-            (url.startsWith('ws:') ||
-              url.startsWith('wss:') ||
-              url.includes('ws://') ||
-              url.includes('wss://'))
-          ) {
-            Object.defineProperty(this, 'protocol', {
-              get: () => 'invalid:',
-              configurable: true,
-            });
-          }
-        }
-      } as typeof URL;
-
-      await askAndUpdateTalawaApiUrl();
-
-      expect(console.error).toHaveBeenCalledWith(
-        'Error setting up Talawa API URL:',
-        expect.objectContaining({
-          message: expect.stringContaining('Invalid WebSocket URL generated'),
-        }),
-      );
-    } finally {
-      global.URL = originalURL;
-    }
-  });
-
-  test('should transform localhost to host.docker.internal and update WebSocket URL', async () => {
-    // Mock the helper function to return localhost
+  test('should transform localhost to host.docker.internal and not error', async () => {
     (askForTalawaApiUrl as Mock).mockResolvedValue('http://localhost:3000');
 
     vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
@@ -361,17 +264,12 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
 
     await askAndUpdateTalawaApiUrl(true);
 
-    // Expect MAIN URL to be updated
-    expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_TALAWA_URL',
-      'http://host.docker.internal:3000/',
+    const talawaUrlCalls = (updateEnvFile as Mock).mock.calls.filter(
+      (call) => call[0] === 'REACT_APP_TALAWA_URL',
     );
-
-    // Expect WEBSOCKET URL to be updated
-    expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_BACKEND_WEBSOCKET_URL',
-      'ws://host.docker.internal:3000/',
-    );
+    expect(talawaUrlCalls).toHaveLength(2);
+    expect(talawaUrlCalls[0][1]).toBe('http://localhost:3000');
+    expect(talawaUrlCalls[1][1]).toBe('http://host.docker.internal:3000/');
   });
 
   test('should handle Docker URL transformation error', async () => {
@@ -387,8 +285,8 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
       global.URL = class extends originalURL {
         constructor(url: string) {
           callCount++;
-          // Fail on the Docker URL transformation (3rd call: original URL, websocket URL, docker URL)
-          if (callCount === 3) {
+          // Fail on the Docker URL transformation (2nd call: validation, docker URL)
+          if (callCount === 2) {
             throw new Error('Invalid URL for Docker');
           }
           super(url);
@@ -421,7 +319,7 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
       global.URL = class extends originalURL {
         constructor(url: string) {
           callCount++;
-          if (callCount === 3) {
+          if (callCount === 2) {
             throw 'String error'; // Non-Error object
           }
           super(url);
@@ -436,40 +334,6 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
           message: expect.stringContaining(
             'Docker URL transformation failed: String error',
           ),
-        }),
-      );
-    } finally {
-      global.URL = originalURL;
-    }
-  });
-
-  test('should handle WebSocket URL creation error in catch block', async () => {
-    (askForTalawaApiUrl as Mock).mockResolvedValue('https://example.com');
-    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
-      shouldSetTalawaApiUrlResponse: true,
-    });
-
-    const originalURL = global.URL;
-    let callCount = 0;
-
-    try {
-      global.URL = class extends originalURL {
-        constructor(url: string) {
-          callCount++;
-          // Fail on the WebSocket URL creation (2nd call)
-          if (callCount === 2) {
-            throw new Error('WebSocket URL creation failed');
-          }
-          super(url);
-        }
-      } as typeof URL;
-
-      await askAndUpdateTalawaApiUrl();
-
-      expect(console.error).toHaveBeenCalledWith(
-        'Error setting up Talawa API URL:',
-        expect.objectContaining({
-          message: 'Invalid WebSocket URL generated: ',
         }),
       );
     } finally {
@@ -538,55 +402,6 @@ describe('askAndUpdateTalawaApiUrl - Additional Coverage', () => {
 
     // Verify updateEnvFile was not called due to error
     expect(updateEnvFile).not.toHaveBeenCalled();
-  });
-
-  test('should handle multiple URL construction errors in sequence', async () => {
-    // Return URL that causes error in WebSocket URL creation
-    (askForTalawaApiUrl as Mock).mockResolvedValue('https://example.com');
-
-    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
-      shouldSetTalawaApiUrlResponse: true,
-    });
-
-    const originalURL = global.URL;
-    let callCount = 0;
-
-    try {
-      // Mock URL constructor to fail on WebSocket URL creation
-      global.URL = class extends originalURL {
-        constructor(url: string) {
-          callCount++;
-          if (callCount === 2) {
-            throw new Error('WebSocket URL creation failed');
-          }
-          super(url);
-        }
-      } as typeof URL;
-
-      await askAndUpdateTalawaApiUrl();
-
-      // Verify error was caught and logged
-      expect(console.error).toHaveBeenCalledWith(
-        'Error setting up Talawa API URL:',
-        expect.objectContaining({
-          message: 'Invalid WebSocket URL generated: ',
-        }),
-      );
-
-      // Verify REACT_APP_TALAWA_URL was set before error occurred
-      expect(updateEnvFile).toHaveBeenCalledWith(
-        'REACT_APP_TALAWA_URL',
-        'https://example.com',
-      );
-
-      // Verify WebSocket URL was NOT set due to error
-      expect(updateEnvFile).not.toHaveBeenCalledWith(
-        'REACT_APP_BACKEND_WEBSOCKET_URL',
-        expect.anything(),
-      );
-    } finally {
-      global.URL = originalURL;
-    }
   });
 
   describe('askAndUpdateTalawaApiUrl - Retry Logic Coverage', () => {
