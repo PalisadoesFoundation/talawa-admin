@@ -1238,61 +1238,50 @@ describe('PluginStore', () => {
 
   describe('Upload Modal Close with Reload', () => {
     it('should execute closeUploadModal async operations correctly', async () => {
-      // This test specifically targets the closeUploadModal function (lines 105-109)
       const reloadMock = vi.fn();
+      const originalLocation = global.location;
 
       try {
-        // Use vi.stubGlobal to mock location.reload
-        vi.stubGlobal('location', {
-          ...window.location,
-          reload: reloadMock,
-        });
+        // Stub only what we use, and restore it explicitly
+        vi.stubGlobal('location', { ...originalLocation, reload: reloadMock });
 
         mockRefetch.mockClear();
         mockRefetch.mockResolvedValue({});
 
         renderPluginStore();
 
-        await waitFor(() => {
-          expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument();
-        });
+        await waitFor(() =>
+          expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument(),
+        );
 
         // Open the upload modal
         const uploadButton = screen.getByTestId('uploadPluginBtn');
+        // If you switch to userEvent, remember to await:
+        // await userEvent.click(uploadButton);
         fireEvent.click(uploadButton);
 
-        await waitFor(() => {
-          expect(screen.getByTestId('upload-plugin-modal')).toBeInTheDocument();
-        });
-
-        // The closeUploadModal function (lines 105-109) performs:
-        // 1. setShowUploadModal(false)
-        // 2. await refetch()
-        // 3. window.location.reload()
+        await waitFor(() =>
+          expect(screen.getByTestId('upload-plugin-modal')).toBeInTheDocument(),
+        );
 
         // Trigger closeUploadModal by clicking the close button
         const closeButton = screen.getByTestId('mock-close-upload-modal');
+        // await userEvent.click(closeButton);
         fireEvent.click(closeButton);
 
-        // Verify refetch was called
-        await waitFor(() => {
-          expect(mockRefetch).toHaveBeenCalled();
-        });
+        // Verify the async steps performed by closeUploadModal
+        await waitFor(() => expect(mockRefetch).toHaveBeenCalled());
+        await waitFor(() => expect(reloadMock).toHaveBeenCalled());
 
-        // Verify reload was called
-        await waitFor(() => {
-          expect(reloadMock).toHaveBeenCalled();
-        });
-
-        // Verify modal is closed
-        await waitFor(() => {
+        // Modal should be closed
+        await waitFor(() =>
           expect(
             screen.queryByTestId('upload-plugin-modal'),
-          ).not.toBeInTheDocument();
-        });
+          ).not.toBeInTheDocument(),
+        );
       } finally {
-        // Restore original location even if test fails
-        vi.unstubAllGlobals();
+        // Restore only the global we stubbed
+        vi.stubGlobal('location', originalLocation);
       }
     });
   });

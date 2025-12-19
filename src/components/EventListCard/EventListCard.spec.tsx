@@ -309,11 +309,7 @@ describe('Testing Event List Card', () => {
     );
 
     await waitFor(() => {
-      expect(
-        screen.getByText((text) =>
-          text.includes(translations.alreadyRegistered),
-        ),
-      ).toBeInTheDocument();
+      screen.getByText((text) => text.includes(translations.alreadyRegistered));
     });
   });
 });

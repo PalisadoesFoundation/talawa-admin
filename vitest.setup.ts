@@ -1,6 +1,6 @@
 import { TextEncoder, TextDecoder } from 'util';
 import { cleanup } from '@testing-library/react';
-import { afterAll, afterEach, beforeAll, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 
 // Simple console error handler for React 18 warnings
@@ -53,11 +53,18 @@ beforeAll(() => {
   };
 });
 
+// Basic cleanup before each test
+beforeEach(() => {
+  if (globalThis.localStorage.localStorage !== localStorageMock) {
+    vi.stubGlobal('localStorage', localStorageMock);
+  }
+});
+
 // Basic cleanup after each test
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
-  localStorage.clear();
+  localStorageMock.clear();
 });
 
 // Global mocks for URL API (needed for file upload tests)
