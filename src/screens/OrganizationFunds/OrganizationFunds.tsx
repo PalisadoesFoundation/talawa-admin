@@ -1,11 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { Stack } from '@mui/material';
-import {
-  DataGrid,
-  type GridCellParams,
-  type GridColDef,
-} from '@mui/x-data-grid';
+import { type GridCellParams } from '@mui/x-data-grid';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
@@ -18,8 +14,11 @@ import FundModal from './modal/FundModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
-import PageHeader from 'shared-components/Navbar/Navbar';
-import { ReportingRow, ReportingTableColumn, ReportingTableGridProps } from 'types/ReportingTable/interface';
+import {
+  ReportingRow,
+  ReportingTableColumn,
+  ReportingTableGridProps,
+} from 'types/ReportingTable/interface';
 import { PAGE_SIZE, ROW_HEIGHT } from 'types/ReportingTable/utils';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 
@@ -113,10 +112,6 @@ const organizationFunds = (): JSX.Element => {
   }
 
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
-  // const [searchTerm, setSearchTerm] = useState<string>('');
-  const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
-    'createdAt_DESC',
-  );
 
   const [modalState, setModalState] = useState<boolean>(false);
   const [fundModalMode, setFundModalMode] = useState<'edit' | 'create'>(
@@ -124,8 +119,6 @@ const organizationFunds = (): JSX.Element => {
   );
 
   const [searchText, setSearchText] = useState('');
-  const [hasMore, setHasMore] = useState(true);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const handleOpenModal = useCallback(
     (fund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
@@ -168,12 +161,6 @@ const organizationFunds = (): JSX.Element => {
     );
   }, [fundData]);
 
-  // Client-side pagination - no more data to load since we get all 32 at once
-  const loadMoreFunds = (): void => {
-    // No-op since backend doesn't support pagination
-    setHasMore(false);
-  };
-
   const filteredAndSortedFunds = useMemo(() => {
     let result = [...funds];
 
@@ -189,10 +176,10 @@ const organizationFunds = (): JSX.Element => {
       const dateA = new Date(a.createdAt).getTime();
       const dateB = new Date(b.createdAt).getTime();
 
-      const sortMultiplier = sortBy === 'createdAt_DESC' ? -1 : 1;
+      const sortMultiplier = -1; // Default to createdAt_DESC
       return (dateA - dateB) * sortMultiplier;
     });
-  }, [funds, searchText, sortBy]);
+  }, [funds, searchText]);
 
   const handleClick = (fundId: string): void => {
     navigate(`/orgfundcampaign/${orgId}/${fundId}`);
@@ -203,7 +190,7 @@ const organizationFunds = (): JSX.Element => {
   }
   if (fundError) {
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+      <div className={styles.container + ' bg-white rounded-4 my-3'}>
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
@@ -252,20 +239,17 @@ const organizationFunds = (): JSX.Element => {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return (
-          <div data-testid="fundName">
-            {params.row.name}
-          </div>
-        );
+        return <div data-testid="fundName">{params.row.name}</div>;
       },
     },
     {
-      field: 'createdOn',
+      field: 'createdAt',
       headerName: 'Created On',
       align: 'center',
       minWidth: 100,
       headerAlign: 'center',
-      sortable: false,
+      sortable: true,
+      sortComparator: (v1, v2) => dayjs(v1).valueOf() - dayjs(v2).valueOf(),
       headerClassName: `${styles.tableHeader}`,
       flex: 2,
       renderCell: (params: GridCellParams) => {
@@ -328,9 +312,10 @@ const organizationFunds = (): JSX.Element => {
             // className="me-2 rounded"
             className={styles.editButton}
             data-testid="editFundBtn"
-            onClick={() =>
-              handleOpenModal(params.row as InterfaceFundInfo, 'edit')
-            }
+            onClick={(e) => {
+              e.stopPropagation();
+              handleOpenModal(params.row as InterfaceFundInfo, 'edit');
+            }}
           >
             <i className="fa fa-edit me-1" />
             {t('editFund')}
@@ -339,7 +324,6 @@ const organizationFunds = (): JSX.Element => {
       },
     },
   ];
-
 
   const gridProps: ReportingTableGridProps = {
     sx: { ...dataGridStyle },
@@ -368,7 +352,14 @@ const organizationFunds = (): JSX.Element => {
 
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '1rem' }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '16px',
+          marginBottom: '1rem',
+        }}
+      >
         <div style={{ margin: 0 }}>
           <SearchBar
             placeholder={t('searchFunds')}
@@ -393,7 +384,10 @@ const organizationFunds = (): JSX.Element => {
         </Button>
       </div>
 
-      {!fundLoading && fundData && filteredAndSortedFunds.length === 0 && searchText.length > 0 ? (
+      {!fundLoading &&
+      fundData &&
+      filteredAndSortedFunds.length === 0 &&
+      searchText.length > 0 ? (
         <div className={styles.notFound}>
           <h4 className="m-0">
             {tCommon('noResultsFoundFor')} &quot;{searchText}&quot;
@@ -410,7 +404,9 @@ const organizationFunds = (): JSX.Element => {
           ) : (
             <ReportingTable
               rows={
-                filteredAndSortedFunds.map((fund) => ({ ...fund })) as ReportingRow[]
+                filteredAndSortedFunds.map((fund) => ({
+                  ...fund,
+                })) as ReportingRow[]
               }
               columns={columns}
               gridProps={gridProps}

@@ -163,6 +163,8 @@ describe('FundCampaigns Screen', () => {
 
     const editCampaignBtn = await screen.findAllByTestId('editCampaignBtn');
     await waitFor(() => expect(editCampaignBtn[0]).toBeInTheDocument());
+
+    // The edit button needs stopPropagation test in component or just verify modal opens
     await userEvent.click(editCampaignBtn[0]);
 
     await waitFor(() =>
@@ -180,10 +182,11 @@ describe('FundCampaigns Screen', () => {
     mockRouteParams();
     renderFundCampaign(link1);
     const searchField = await screen.findByTestId('searchFullName');
+
+    // SearchBar now uses onChange instead of searchBtn
     fireEvent.change(searchField, {
       target: { value: '2' },
     });
-    fireEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       expect(screen.getByText('Campaign 2')).toBeInTheDocument();
@@ -209,100 +212,37 @@ describe('FundCampaigns Screen', () => {
     );
   });
 
-  it('Sort the Campaigns list by Latest end Date', async () => {
+  it('Displays campaigns with dates correctly', async () => {
     mockRouteParams();
     renderFundCampaign(link1);
 
-    const sortBtn = await screen.findByTestId('filter');
-    expect(sortBtn).toBeInTheDocument();
-
-    fireEvent.click(sortBtn);
-    const latestEndDateOption = screen.getByTestId('endAt_DESC');
-    expect(latestEndDateOption).toBeInTheDocument();
-
-    fireEvent.click(latestEndDateOption);
-
+    // Wait for campaigns to load
     await waitFor(() => {
       expect(screen.getByText('Campaign 1')).toBeInTheDocument();
-      expect(screen.queryByText('Campaign 2')).toBeInTheDocument();
+      expect(screen.getByText('Campaign 2')).toBeInTheDocument();
     });
 
-    // Update expected date to match what's actually in the UI
+    // Verify end date cells are rendered (sorting now via DataGrid column headers)
     await waitFor(() => {
       const endDateCells = screen.getAllByTestId('endDateCell');
-      expect(endDateCells[0]).toHaveTextContent('01/01/2026');
+      expect(endDateCells.length).toBeGreaterThan(0);
     });
   });
 
-  it('Sort the Campaigns list by Earliest end Date', async () => {
+  it('Displays goal cells correctly', async () => {
     mockRouteParams();
     renderFundCampaign(link1);
 
-    const sortBtn = await screen.findByTestId('filter');
-    expect(sortBtn).toBeInTheDocument();
-
-    fireEvent.click(sortBtn);
-    const earliestEndDateOption = screen.getByTestId('endAt_ASC');
-    expect(earliestEndDateOption).toBeInTheDocument();
-
-    fireEvent.click(earliestEndDateOption);
-
+    // Wait for campaigns to load
     await waitFor(() => {
       expect(screen.getByText('Campaign 1')).toBeInTheDocument();
-      expect(screen.queryByText('Campaign 2')).toBeInTheDocument();
     });
 
-    // Update expected date to match what's actually in the UI
-    await waitFor(() => {
-      const endDateCells = screen.getAllByTestId('endDateCell');
-      expect(endDateCells[0]).toHaveTextContent('01/01/2026');
-    });
-  });
-
-  it('should set sort by goalAmount_ASC when Lowest Goal is selected', async () => {
-    mockRouteParams();
-    renderFundCampaign(link1);
-
-    const sortBtn = await screen.findByTestId('filter');
-    expect(sortBtn).toBeInTheDocument();
-
-    fireEvent.click(sortBtn);
-    const lowestGoalOption = screen.getByTestId('goalAmount_ASC');
-    expect(lowestGoalOption).toBeInTheDocument();
-
-    fireEvent.click(lowestGoalOption);
-
-    // Verify that campaigns are still displayed after sorting
+    // Verify goal cells are rendered (sorting now via DataGrid column headers)
     await waitFor(() => {
       const goalCells = screen.getAllByTestId('goalCell');
       expect(goalCells.length).toBeGreaterThan(0);
     });
-
-    // Just verify that setting sort by lowest goal doesn't break the component
-    expect(screen.getByText('Campaign 1')).toBeInTheDocument();
-  });
-
-  it('should set sort by goalAmount_DESC when Highest Goal is selected', async () => {
-    mockRouteParams();
-    renderFundCampaign(link1);
-
-    const sortBtn = await screen.findByTestId('filter');
-    expect(sortBtn).toBeInTheDocument();
-
-    fireEvent.click(sortBtn);
-    const highestGoalOption = screen.getByTestId('goalAmount_DESC');
-    expect(highestGoalOption).toBeInTheDocument();
-
-    fireEvent.click(highestGoalOption);
-
-    // Verify that campaigns are still displayed after sorting
-    await waitFor(() => {
-      const goalCells = screen.getAllByTestId('goalCell');
-      expect(goalCells.length).toBeGreaterThan(0);
-    });
-
-    // Just verify that setting sort by highest goal doesn't break the component
-    expect(screen.getByText('Campaign 1')).toBeInTheDocument();
   });
 
   it('Click on Campaign Name', async () => {
@@ -318,13 +258,15 @@ describe('FundCampaigns Screen', () => {
     });
   });
 
-  it('Click on View Pledge', async () => {
+  it('Click on View Pledge (via row click)', async () => {
     mockRouteParams();
     renderFundCampaign(link1);
 
-    const viewBtn = await screen.findAllByTestId('viewBtn');
-    expect(viewBtn[0]).toBeInTheDocument();
-    fireEvent.click(viewBtn[0]);
+    const campaignName = await screen.findAllByTestId('campaignName');
+    expect(campaignName[0]).toBeInTheDocument();
+
+    // Row click navigates to pledge screen
+    fireEvent.click(campaignName[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('pledgeScreen')).toBeInTheDocument();

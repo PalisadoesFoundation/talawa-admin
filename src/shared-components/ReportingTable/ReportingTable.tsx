@@ -114,4 +114,3 @@ const ReportingTable: React.FC<ReportingTableProps> = ({
 };
 
 export default ReportingTable;
-

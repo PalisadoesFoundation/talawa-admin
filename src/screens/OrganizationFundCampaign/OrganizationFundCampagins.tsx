@@ -154,7 +154,7 @@ const orgFundCampaign = (): JSX.Element => {
   }
   if (campaignError) {
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+      <div className={styles.container + ' bg-white rounded-4 my-3'}>
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
@@ -204,9 +204,7 @@ const orgFundCampaign = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => (
-        <div data-testid="campaignName">
-          {params.row.name}
-        </div>
+        <div data-testid="campaignName">{params.row.name}</div>
       ),
     },
     {
@@ -255,7 +253,7 @@ const orgFundCampaign = (): JSX.Element => {
           >
             {
               currencySymbols[
-              params.row.currencyCode as keyof typeof currencySymbols
+                params.row.currencyCode as keyof typeof currencySymbols
               ]
             }
             {params.row.goalAmount as number}
@@ -280,7 +278,7 @@ const orgFundCampaign = (): JSX.Element => {
           >
             {
               currencySymbols[
-              params.row.currencyCode as keyof typeof currencySymbols
+                params.row.currencyCode as keyof typeof currencySymbols
               ]
             }
             0
@@ -360,9 +358,10 @@ const orgFundCampaign = (): JSX.Element => {
           size="sm"
           className={styles.editButton}
           data-testid="editCampaignBtn"
-          onClick={() =>
-            handleOpenModal(params.row as InterfaceCampaignInfo, 'edit')
-          }
+          onClick={(e) => {
+            e.stopPropagation();
+            handleOpenModal(params.row as InterfaceCampaignInfo, 'edit');
+          }}
         >
           <i className="fa fa-edit me-1" />
           {t('editCampaign')}
@@ -399,7 +398,11 @@ const orgFundCampaign = (): JSX.Element => {
 
   return (
     <div className={styles.organizationFundCampaignContainer}>
-      <Breadcrumbs aria-label="breadcrumb" className="ms-1" style={{ marginTop: '0.5rem' }}>
+      <Breadcrumbs
+        aria-label={tCommon('breadcrumb')}
+        className="ms-1"
+        style={{ marginTop: '0.5rem' }}
+      >
         <Link
           underline="hover"
           color="inherit"
@@ -447,17 +450,15 @@ const orgFundCampaign = (): JSX.Element => {
       </div>
 
       {!campaignLoading &&
-        campaignData &&
-        filteredCampaigns.length === 0 &&
-        searchText.length > 0 ? (
+      campaignData &&
+      filteredCampaigns.length === 0 &&
+      searchText.length > 0 ? (
         <div className={styles.notFound}>
           <h4 className="m-0">
             {tCommon('noResultsFoundFor')} &quot;{searchText}&quot;
           </h4>
         </div>
-      ) : !campaignLoading &&
-        campaignData &&
-        filteredCampaigns.length === 0 ? (
+      ) : !campaignLoading && campaignData && filteredCampaigns.length === 0 ? (
         <div className={styles.notFound}>
           <h4>{t('noCampaignsFound')}</h4>
         </div>

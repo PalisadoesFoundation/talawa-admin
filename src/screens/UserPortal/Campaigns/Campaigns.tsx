@@ -13,12 +13,7 @@ import styles from '../../../style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import { WarningAmberRounded } from '@mui/icons-material';
-import {
-  Stack,
-  Box,
-  CircularProgress,
-  Typography,
-} from '@mui/material';
+import { Stack, Box, CircularProgress, Typography } from '@mui/material';
 import { type GridCellParams } from '@mui/x-data-grid';
 import useLocalStorage from 'utils/useLocalstorage';
 import PledgeModal from './PledgeModal';
@@ -43,14 +38,13 @@ const dataGridStyle = {
   backgroundColor: 'var(--row-background)',
   '& .MuiDataGrid-row': {
     backgroundColor: 'var(--row-background)',
-    cursor: 'pointer',
     '&:focus-within': { outline: 'none' },
   },
   '& .MuiDataGrid-row:hover': {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: 'var(--row-background)',
   },
   '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: 'var(--row-background)',
   },
   '& .MuiDataGrid-cell:focus': { outline: 'none' },
   '& .MuiDataGrid-cell:focus-within': { outline: 'none' },
@@ -141,20 +135,13 @@ const Campaigns = (): JSX.Element => {
     );
   }, [campaigns, searchText]);
 
-  const handleRowClick = useCallback(
-    (campaignId: string): void => {
-      navigate(`/user/pledges/${orgId}/${campaignId}`);
-    },
-    [navigate, orgId],
-  );
-
   if (campaignLoading) {
     return <Loader size="xl" />;
   }
 
   if (campaignError) {
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+      <div className={styles.container + ' bg-white rounded-4 my-3'}>
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
@@ -250,7 +237,7 @@ const Campaigns = (): JSX.Element => {
           >
             {
               currencySymbols[
-              params.row.currency as keyof typeof currencySymbols
+                params.row.currency as keyof typeof currencySymbols
               ]
             }
             {params.row.fundingGoal as number}
@@ -275,7 +262,7 @@ const Campaigns = (): JSX.Element => {
           >
             {
               currencySymbols[
-              params.row.currency as keyof typeof currencySymbols
+                params.row.currency as keyof typeof currencySymbols
               ]
             }
             0
@@ -396,8 +383,6 @@ const Campaigns = (): JSX.Element => {
     rowHeight: ROW_HEIGHT,
     autoHeight: true,
     style: { overflow: 'visible' },
-    onRowClick: (params: { row: { _id: string } }) =>
-      handleRowClick(params.row._id as string),
   };
 
   return (
@@ -434,9 +419,9 @@ const Campaigns = (): JSX.Element => {
       </div>
 
       {!campaignLoading &&
-        campaignData &&
-        filteredCampaigns.length === 0 &&
-        searchText.length > 0 ? (
+      campaignData &&
+      filteredCampaigns.length === 0 &&
+      searchText.length > 0 ? (
         <div className={styles.notFound}>
           <h4 className="m-0">
             {tCommon('noResultsFoundFor')} &quot;{searchText}&quot;

@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`ReportingTableProps`](../../../../types/ReportingTable/interface/type-aliases/ReportingTableProps.md)\>
 
-Defined in: [src/shared-components/ReportingTable/ReportingTable.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ReportingTable/ReportingTable.tsx#L40)
+Defined in: [src/shared-components/ReportingTable/ReportingTable.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ReportingTable/ReportingTable.tsx#L44)
 
 A flexible reporting table component that wraps MUI DataGrid with optional infinite scroll.
 
@@ -16,6 +16,7 @@ This component provides a consistent table interface across the application with
 - Standard DataGrid rendering for static data
 - Infinite scroll wrapper for paginated/lazy-loaded data
 - Customizable grid and scroll container properties
+- Compact column mode for tables with many columns (7+)
 
 ## Param
 

@@ -103,5 +103,7 @@
   "searchBy": "Search by {{item}}",
   "plugins": "Plugins",
   "save": "Save",
-  "saving": "Saving..."
+  "saving": "Saving...",
+  "breadcrumb": "Breadcrumb",
+  "clearSearch": "Clear search"
 }

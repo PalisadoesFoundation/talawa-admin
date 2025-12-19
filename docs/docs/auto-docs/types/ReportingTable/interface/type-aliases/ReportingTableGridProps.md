@@ -24,6 +24,16 @@ Defined in: [src/types/ReportingTable/interface.ts:56](https://github.com/Palisa
 
 ***
 
+### compactColumns?
+
+> `optional` **compactColumns**: `boolean`
+
+Defined in: [src/types/ReportingTable/interface.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L58)
+
+When true, applies tighter column widths for tables with many columns (7+)
+
+***
+
 ### rows?
 
 > `optional` **rows**: readonly [`ReportingRow`](ReportingRow.md)[]
