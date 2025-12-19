@@ -133,6 +133,23 @@ jobs:
       - name: Check for unused files and exports in src/ and docs/src
         run: pnpm knip --include files,exports
 
+  CSS-Policy-Check:
+    name: CSS Policy Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+
+      - name: Run CSS policy enforcement
+        run: |
+          python .github/workflows/scripts/css_check.py
+
   Check-Mock-Isolation:
     name: Check for proper mock cleanup in test files
     needs: [Code-Quality-Checks]
@@ -461,6 +478,7 @@ jobs:
         Check-Code-Coverage-Disable,
         Check-ItSkip-Disable,
         Check-Mock-Isolation,
+        CSS-Policy-Check,
         Python-Compliance,
       ]
     steps:
