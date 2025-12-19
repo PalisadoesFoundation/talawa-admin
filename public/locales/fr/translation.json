@@ -277,7 +277,6 @@
     "searchFullName": "Entrez le nom complet",
     "people": "Personnes",
     "sort": "Recherche par rôle",
-    "actions": "Actions",
     "addMembers": "Ajouter des membres",
     "existingUser": "Utilisateur existant",
     "newUser": "Nouvel utilisateur",
@@ -286,7 +285,6 @@
     "enterConfirmPassword": "Entrez votre mot de passe pour confirmer",
     "organization": "Organisation",
     "user": "Utilisateur",
-    "profile": "Profil",
     "invalidDetailsMessage": "Veuillez saisir des informations valides.",
     "members": "Membres",
     "admins": "Administrateurs",
@@ -302,7 +300,10 @@
     "confirmPassword": "Confirmer le mot de passe",
     "create": "Créer",
     "cancel": "Annuler",
-    "createUser": "Créer un utilisateur"
+    "actions": "Actions",
+    "profile": "Profil",
+    "createUser": "Créer un utilisateur",
+    "notFound": "Aucun membre trouvé"
   },
   "organizationTags": {
     "title": "Étiquettes d'Organisation",
@@ -321,7 +322,12 @@
     "removeUserTag": "Supprimer l'Étiquette",
     "removeUserTagMessage": "Voulez-vous supprimer cette étiquette ?",
     "addChildTag": "Ajouter une Sous-Étiquette",
-    "enterTagName": "Entrez le nom de l'étiquette"
+    "enterTagName": "Entrez le nom de l'étiquette",
+    "totalSubTags": "Total des sous-étiquettes",
+    "totalAssignedUsers": "Total des utilisateurs assignés",
+    "tagCreationFailed": "Échec de la création de l'étiquette",
+    "errorLoadingTagsData": "Une erreur s'est produite lors du chargement des données des étiquettes de l'organisation",
+    "sortTags": "Trier les étiquettes"
   },
   "manageTag": {
     "title": "Détails de l'étiquette",
@@ -632,7 +638,10 @@
     "deleteFundMsg": "Êtes-vous sûr de vouloir supprimer ce fonds ?",
     "createdLatest": "Créé le plus récemment",
     "createdEarliest": "Créé le plus tôt",
-    "viewCampaigns": "Voir les campagnes"
+    "viewCampaigns": "Voir les campagnes",
+    "assocCampaigns": "Campagnes associées",
+    "errorLoadingFundsData": "Erreur lors du chargement des données des fonds",
+    "editFund": "Modifier le fonds"
   },
   "fundCampaign": {
     "title": "Campagnes de collecte de fonds",

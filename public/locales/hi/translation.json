@@ -302,7 +302,8 @@
     "profile": "प्रोफ़ाइल",
     "create": "बनाएं",
     "cancel": "रद्द करें",
-    "createUser": "उपयोगकर्ता बनाएं"
+    "createUser": "उपयोगकर्ता बनाएं",
+    "notFound": "कोई सदस्य नहीं मिले"
   },
   "organizationTags": {
     "title": "संस्थान टैग",
@@ -321,7 +322,12 @@
     "removeUserTag": "टैग हटाएँ",
     "removeUserTagMessage": "क्या आप इस टैग को हटाना चाहते हैं?",
     "addChildTag": "उप-टैग जोड़ें",
-    "enterTagName": "टैग का नाम दर्ज करें"
+    "enterTagName": "टैग का नाम दर्ज करें",
+    "totalSubTags": "कुल उप-टैग",
+    "totalAssignedUsers": "कुल नियुक्त उपयोगकर्ता",
+    "tagCreationFailed": "टैग निर्माण विफल",
+    "errorLoadingTagsData": "संगठन टैग डेटा लोड करते समय त्रुटि हुई",
+    "sortTags": "टैग सॉर्ट करें"
   },
   "manageTag": {
     "title": "टैग विवरण",
@@ -632,7 +638,10 @@
     "deleteFundMsg": "क्या आप वाकई इस फंड को हटाना चाहते हैं?",
     "createdLatest": "सबसे पहले बनाया",
     "createdEarliest": "सबसे जल्दी बनाया",
-    "viewCampaigns": "कैम्पेंस देखें"
+    "viewCampaigns": "कैम्पेंस देखें",
+    "assocCampaigns": "संबद्ध अभियान",
+    "errorLoadingFundsData": "फंड डेटा लोड करते समय त्रुटि हुई",
+    "editFund": "फंड संपादित करें"
   },
   "fundCampaign": {
     "title": "फंडरेजिंग कैंपेन",

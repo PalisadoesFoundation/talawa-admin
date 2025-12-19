@@ -52,17 +52,24 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
 import { useLazyQuery } from '@apollo/client';
-import {
-  DataGrid,
-  GridColDef,
-  GridCellParams,
-  GridPaginationModel,
-} from '@mui/x-data-grid';
+import { GridCellParams, GridPaginationModel } from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import { Delete } from '@mui/icons-material';
+import type {
+  ReportingRow,
+  ReportingTableColumn,
+  ReportingTableGridProps,
+} from '../../types/ReportingTable/interface';
+import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
+import {
+  dataGridStyle,
+  COLUMN_BUFFER_PX,
+  PAGE_SIZE,
+} from '../../types/ReportingTable/utils';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import styles from 'style/app-fixed.module.css';
+import TableLoader from 'components/TableLoader/TableLoader';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
@@ -73,9 +80,8 @@ import Avatar from 'components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
 import PageHeader from 'shared-components/Navbar/PageHeader';
 
-const PAGE_SIZE = 10;
 interface IProcessedRow {
-  _id: string;
+  id: string;
   name: string;
   email: string;
   image: string;
@@ -174,7 +180,7 @@ function OrganizationPeople(): JSX.Element {
       const baseIndex = paginationModel.page * PAGE_SIZE;
       const processedRows = edges.map(
         (edge: IEdges, index: number): IProcessedRow => ({
-          _id: edge.node.id,
+          id: edge.node.id,
           name: edge.node.name,
           email: edge.node.emailAddress,
           image: edge.node.avatarURL,
@@ -327,11 +333,21 @@ function OrganizationPeople(): JSX.Element {
     setState(value === 'users' ? 2 : value === 'members' ? 0 : 1);
   };
 
+  // Header titles for the table
+  const headerTitles: string[] = [
+    tCommon('sl_no'),
+    tCommon('profile'),
+    tCommon('name'),
+    tCommon('email'),
+    tCommon('joined on'),
+    tCommon('action'),
+  ];
+
   // Column definitions
-  const columns: GridColDef[] = [
+  const columns: ReportingTableColumn[] = [
     {
-      field: 'rowNumber',
-      headerName: tCommon('#'),
+      field: 'sl_no',
+      headerName: tCommon('sl_no'),
       flex: 1,
       minWidth: 50,
       align: 'center',
@@ -380,7 +396,7 @@ function OrganizationPeople(): JSX.Element {
             {params.row?.image ? (
               <img
                 src={params.row.image}
-                alt="avatar"
+                alt={tCommon('avatar')}
                 style={{
                   width: `${imageSize}px`,
                   height: `${imageSize}px`,
@@ -423,7 +439,7 @@ function OrganizationPeople(): JSX.Element {
         return (
           <Link
             to={`/member/${currentUrl}`}
-            state={{ id: params.row._id }}
+            state={{ id: params.row.id }}
             style={{ fontSize: '15px' }}
             className={`${styles.membername} ${styles.subtleBlueGrey}`}
           >
@@ -468,8 +484,8 @@ function OrganizationPeople(): JSX.Element {
           className={`${styles.removeButton}`}
           variant="danger"
           disabled={state === 2}
-          onClick={() => toggleRemoveMemberModal(params.row._id)}
-          aria-label="Remove member"
+          onClick={() => toggleRemoveMemberModal(params.row.id)}
+          aria-label={tCommon('remove_member')}
           data-testid="removeMemberModalBtn"
         >
           <Delete />
@@ -477,6 +493,36 @@ function OrganizationPeople(): JSX.Element {
       ),
     },
   ];
+
+  const gridProps: ReportingTableGridProps = {
+    disableColumnMenu: true,
+    columnBufferPx: COLUMN_BUFFER_PX,
+    getRowId: (row: IProcessedRow) => row.id,
+    rowCount:
+      paginationModel.page * PAGE_SIZE +
+      currentRows.length +
+      (paginationMeta.hasNextPage ? PAGE_SIZE : 0),
+    paginationMode: 'server',
+    pagination: true,
+    paginationModel,
+    onPaginationModelChange: handlePaginationModelChange,
+    pageSizeOptions: [PAGE_SIZE],
+    loading: memberLoading || userLoading,
+    slots: {
+      noRowsOverlay: () => (
+        <Stack height="100%" alignItems="center" justifyContent="center">
+          {tCommon('notFound')}
+        </Stack>
+      ),
+      loadingOverlay: () => (
+        <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
+      ),
+    },
+    sx: { ...dataGridStyle },
+    getRowClassName: () => `${styles.rowBackground}`,
+    rowHeight: 70,
+    isRowSelectable: () => false,
+  };
 
   return (
     <>
@@ -508,58 +554,11 @@ function OrganizationPeople(): JSX.Element {
           </div>
         </div>
       </Row>
-      <div className="datatable">
-        <DataGrid
-          disableColumnMenu
-          columnBufferPx={5}
-          getRowId={(row) => row._id}
-          rows={filteredRows}
-          columns={columns}
-          rowCount={
-            paginationModel.page * PAGE_SIZE +
-            currentRows.length +
-            (paginationMeta.hasNextPage ? PAGE_SIZE : 0)
-          }
-          paginationMode="server"
-          paginationModel={paginationModel}
-          onPaginationModelChange={handlePaginationModelChange}
-          pageSizeOptions={[PAGE_SIZE]}
-          loading={memberLoading || userLoading}
-          slots={{
-            noRowsOverlay: () => (
-              <Stack height="100%" alignItems="center" justifyContent="center">
-                {t('notFound')}
-              </Stack>
-            ),
-          }}
-          sx={{
-            borderRadius: 'var(--table-head-radius)',
-            backgroundColor: 'var(--grey-bg-color)',
-            '& .MuiDataGrid-row': {
-              backgroundColor: 'var(--tablerow-bg-color)',
-              '&:focus-within': {
-                outline: '2px solid #000',
-                outlineOffset: '-2px',
-              },
-            },
-            '& .MuiDataGrid-row:hover': {
-              backgroundColor: 'var(--grey-bg-color)',
-              boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-            },
-            '& .MuiDataGrid-row.Mui-hovered': {
-              backgroundColor: 'var(--grey-bg-color)',
-              boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-            },
-            '& .MuiDataGrid-cell:focus': {
-              outline: '2px solid #000',
-              outlineOffset: '-2px',
-            },
-          }}
-          getRowClassName={() => `${styles.rowBackground}`}
-          rowHeight={70}
-          isRowSelectable={() => false}
-        />
-      </div>
+      <ReportingTable
+        rows={filteredRows.map((req) => ({ ...req })) as ReportingRow[]}
+        columns={columns}
+        gridProps={{ ...gridProps }}
+      />
       {showRemoveModal && selectedMemId && (
         <OrgPeopleListCard
           id={selectedMemId}

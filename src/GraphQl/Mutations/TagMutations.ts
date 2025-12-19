@@ -24,7 +24,7 @@ export const CREATE_USER_TAG = gql`
         tagColor: $tagColor
       }
     ) {
-      _id
+      id
     }
   }
 `;

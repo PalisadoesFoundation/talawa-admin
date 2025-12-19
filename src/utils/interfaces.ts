@@ -1442,10 +1442,10 @@ export interface InterfaceQueryOrganizationPostListItem {
 /**
  * @interface InterfaceTagData
  * @description Defines the structure for tag data.
- * @property {string} _id - The unique identifier of the tag.
+ * @property {string} id - The unique identifier of the tag.
  * @property {string} name - The name of the tag.
  * @property {object} parentTag - The parent tag object.
- * @property {string} parentTag._id - The unique identifier of the parent tag.
+ * @property {string} parentTag.id - The unique identifier of the parent tag.
  * @property {object} usersAssignedTo - Information about users assigned to this tag.
  * @property {number} usersAssignedTo.totalCount - The total count of users assigned to this tag.
  * @property {object} childTags - Information about child tags.
@@ -1470,6 +1470,22 @@ export interface InterfaceTagData {
   }[];
 }
 
+export interface InterfaceTagDataPG {
+  id: string;
+  name: string;
+  parentTag: { id: string };
+  usersAssignedTo: {
+    totalCount: number;
+  };
+  childTags: {
+    totalCount: number;
+  };
+  ancestorTags: {
+    id: string;
+    name: string;
+  }[];
+}
+
 /**
  * @interface InterfaceTagNodeData
  * @description Defines the structure for tag node data, typically used in connections.
@@ -1486,6 +1502,20 @@ export interface InterfaceTagData {
 interface InterfaceTagNodeData {
   edges: {
     node: InterfaceTagData;
+    cursor: string;
+  }[];
+  pageInfo: {
+    startCursor: string;
+    endCursor: string;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+  totalCount: number;
+}
+
+interface InterfaceTagNodeDataPG {
+  edges: {
+    node: InterfaceTagDataPG;
     cursor: string;
   }[];
   pageInfo: {
@@ -1532,10 +1562,18 @@ interface InterfaceTagMembersData {
 /**
  * @interface InterfaceQueryOrganizationUserTags
  * @description Defines the structure for a query result containing organization user tags.
- * @property {InterfaceTagNodeData} userTags - The user tags data.
+ * @property {InterfaceTagNodeData} tags - The tags data.
+ * @property {string} id - The organization ID.
+ * @property {string} name - The organization name.
  */
 export interface InterfaceQueryOrganizationUserTags {
   userTags: InterfaceTagNodeData;
+}
+
+export interface InterfaceQueryOrganizationUserTagsPG {
+  id: string;
+  name: string;
+  tags: InterfaceTagNodeDataPG;
 }
 
 /**
