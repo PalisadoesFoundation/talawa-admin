@@ -19,6 +19,17 @@ vi.mock('utils/useSession', () => ({
   })),
 }));
 
+vi.mock('utils/useLocalstorage', () => ({
+  default: vi.fn(() => ({
+    getItem: vi.fn((key: string) => {
+      if (key === 'refreshToken') return 'test-refresh-token';
+      return null;
+    }),
+    setItem: vi.fn(),
+    removeItem: vi.fn(),
+  })),
+}));
+
 let mockNavigate: ReturnType<typeof vi.fn>;
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
@@ -63,6 +74,7 @@ describe('SignOut Component', () => {
   const mockRevokeRefreshToken = {
     request: {
       query: REVOKE_REFRESH_TOKEN,
+      variables: { refreshToken: 'test-refresh-token' },
     },
     result: {
       data: {
@@ -115,6 +127,7 @@ describe('SignOut Component', () => {
     const mockErrorRevokeRefreshToken = {
       request: {
         query: REVOKE_REFRESH_TOKEN,
+        variables: { refreshToken: 'test-refresh-token' },
       },
       error: new Error('Failed to revoke refresh token'),
     };
@@ -171,12 +184,14 @@ describe('SignOut Component', () => {
       {
         request: {
           query: REVOKE_REFRESH_TOKEN,
+          variables: { refreshToken: 'test-refresh-token' },
         },
         error: new Error('Failed to revoke refresh token'),
       },
       {
         request: {
           query: REVOKE_REFRESH_TOKEN,
+          variables: { refreshToken: 'test-refresh-token' },
         },
         result: {
           data: {
@@ -230,12 +245,14 @@ describe('SignOut Component', () => {
       {
         request: {
           query: REVOKE_REFRESH_TOKEN,
+          variables: { refreshToken: 'test-refresh-token' },
         },
         error: new Error('First failure'),
       },
       {
         request: {
           query: REVOKE_REFRESH_TOKEN,
+          variables: { refreshToken: 'test-refresh-token' },
         },
         error: new Error('Retry failure'),
       },
@@ -288,6 +305,7 @@ describe('SignOut Component', () => {
       {
         request: {
           query: REVOKE_REFRESH_TOKEN,
+          variables: { refreshToken: 'test-refresh-token' },
         },
         error: new Error('Failed to revoke refresh token'),
       },

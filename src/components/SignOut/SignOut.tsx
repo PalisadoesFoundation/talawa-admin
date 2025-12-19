@@ -26,13 +26,13 @@
  * @returns A React component that renders a sign-out button with an icon.
  *
  * @example
- * ```tsx
+ * \`\`\`tsx
  * import SignOut from './SignOut';
  *
  * function App() {
  *   return <SignOut />;
  * }
- * ```
+ * \`\`\`
  */
 import React, { useState } from 'react';
 import styles from 'style/app-fixed.module.css';
@@ -57,6 +57,7 @@ const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
   const navigate = useNavigate();
   const { clearAllItems } = useLocalStorage();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const { getItem } = useLocalStorage();
 
   const logout = async (): Promise<void> => {
     if (isLoggingOut) return; // Prevent multiple clicks
@@ -67,15 +68,27 @@ const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
       navigate('/');
     };
 
+    const storedRefreshToken = getItem('refreshToken');
+
+    // If no refresh token, just do local logout
+    if (!storedRefreshToken) {
+      handleSignOut();
+      return;
+    }
+
     try {
-      await revokeRefreshToken();
+      await revokeRefreshToken({
+        variables: { refreshToken: storedRefreshToken },
+      });
       handleSignOut();
     } catch (error) {
       console.error('Error revoking refresh token:', error);
       const retryRevocation = window.confirm(t('retryPrompt'));
       if (retryRevocation) {
         try {
-          await revokeRefreshToken();
+          await revokeRefreshToken({
+            variables: { refreshToken: storedRefreshToken },
+          });
           handleSignOut();
         } catch {
           // Proceed with local logout if retry fails
@@ -111,7 +124,7 @@ const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
       <div data-testid="LogoutIconid">
         <LogoutIcon />
       </div>
-      <div className={`${styles.signOutButton} ${styles.sidebarText}`}>
+      <div className={\`\${styles.signOutButton} \${styles.sidebarText}\`}>
         {hideDrawer ? '' : isLoggingOut ? t('signingOut') : t('signOut')}
       </div>
     </div>

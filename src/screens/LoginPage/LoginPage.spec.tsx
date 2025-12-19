@@ -56,6 +56,7 @@ const MOCKS = [
             avatarURL: 'https://example.com/avatar.jpg',
           },
           authenticationToken: 'authenticationToken',
+          refreshToken: 'refreshToken',
         },
       },
     },
@@ -75,6 +76,7 @@ const MOCKS = [
         signUp: {
           user: { id: '1' },
           authenticationToken: 'authenticationToken',
+          refreshToken: 'refreshToken',
         },
       },
     },
@@ -1591,6 +1593,7 @@ describe('Extra coverage for 100 %', () => {
                 avatarURL: null,
               },
               authenticationToken: 'token',
+              refreshToken: 'refreshToken',
             },
           },
         },

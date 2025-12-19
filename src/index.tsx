@@ -7,6 +7,8 @@ import {
   ApolloProvider,
   InMemoryCache,
   split,
+  Observable,
+  fromPromise,
 } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
@@ -45,8 +47,19 @@ const theme = createTheme({
 import useLocalStorage from 'utils/useLocalstorage';
 import i18n from './utils/i18n';
 import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
+import { refreshToken } from 'utils/getRefreshToken';
 
-const { getItem, clearAllItems } = useLocalStorage();
+const { getItem } = useLocalStorage();
+
+// Track if we're currently refreshing to avoid multiple simultaneous refresh attempts
+let isRefreshing = false;
+let pendingRequests: Array<() => void> = [];
+
+const resolvePendingRequests = (): void => {
+  pendingRequests.forEach((callback) => callback());
+  pendingRequests = [];
+};
+
 const authLink = setContext((_, { headers }) => {
   const lng = i18n.language;
   const token = getItem('token');
@@ -61,21 +74,92 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors) {
-    graphQLErrors.map(({ message }) => {
-      if (message === 'You must be authenticated to perform this action.') {
-        clearAllItems();
+const errorLink = onError(
+  ({ graphQLErrors, networkError, operation, forward }) => {
+    if (graphQLErrors) {
+      for (const error of graphQLErrors) {
+        const errorCode = error.extensions?.code;
+
+        // Check for unauthenticated error (token expired)
+        if (
+          errorCode === 'unauthenticated' ||
+          error.message === 'You must be authenticated to perform this action.'
+        ) {
+          // Don't try to refresh if we don't have a refresh token
+          const storedRefreshToken = getItem('refreshToken');
+          if (!storedRefreshToken) {
+            localStorage.clear();
+            window.location.href = '/';
+            return;
+          }
+
+          // If already refreshing, queue this request
+          if (isRefreshing) {
+            return new Observable((observer) => {
+              pendingRequests.push(() => {
+                const subscriber = {
+                  next: observer.next.bind(observer),
+                  error: observer.error.bind(observer),
+                  complete: observer.complete.bind(observer),
+                };
+                forward(operation).subscribe(subscriber);
+              });
+            });
+          }
+
+          isRefreshing = true;
+
+          return fromPromise(
+            refreshToken()
+              .then((success) => {
+                if (success) {
+                  resolvePendingRequests();
+                  return true;
+                } else {
+                  // Refresh failed, clear storage and redirect
+                  localStorage.clear();
+                  window.location.href = '/';
+                  return false;
+                }
+              })
+              .catch(() => {
+                localStorage.clear();
+                window.location.href = '/';
+                return false;
+              })
+              .finally(() => {
+                isRefreshing = false;
+              }),
+          ).flatMap((success) => {
+            if (success) {
+              // Retry the original request with new token
+              const oldHeaders = operation.getContext().headers;
+              const newToken = getItem('token');
+              operation.setContext({
+                headers: {
+                  ...oldHeaders,
+                  authorization: newToken ? `Bearer ${newToken}` : '',
+                },
+              });
+              return forward(operation);
+            }
+            return new Observable((observer) => {
+              observer.error(error);
+            });
+          });
+        }
       }
-    });
-  } else if (networkError) {
-    console.log(`[Network error]: ${networkError}`);
-    toast.error(
-      'API server unavailable. Check your connection or try again later',
-      { toastId: 'apiServer' },
-    );
-  }
-});
+    }
+
+    if (networkError) {
+      console.log(`[Network error]: ${networkError}`);
+      toast.error(
+        'API server unavailable. Check your connection or try again later',
+        { toastId: 'apiServer' },
+      );
+    }
+  },
+);
 
 const uploadLink = createUploadLink({
   uri: BACKEND_URL,
