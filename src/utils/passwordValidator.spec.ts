@@ -81,40 +81,75 @@ describe('validatePassword', () => {
 });
 
 describe('getPasswordValidationRules', () => {
-  it('should detect all rule combinations correctly', () => {
-    expect(getPasswordValidationRules('a')).toEqual({
-      lowercaseChar: true,
-      uppercaseChar: false,
-      numericValue: false,
-      specialChar: false,
-    });
+  it('should correctly detect individual rule satisfaction', () => {
+    const cases = [
+      {
+        input: '',
+        expected: {
+          lowercaseChar: false,
+          uppercaseChar: false,
+          numericValue: false,
+          specialChar: false,
+        },
+      },
+      {
+        input: '   ',
+        expected: {
+          lowercaseChar: false,
+          uppercaseChar: false,
+          numericValue: false,
+          specialChar: false,
+        },
+      },
+      {
+        input: 'abc',
+        expected: {
+          lowercaseChar: true,
+          uppercaseChar: false,
+          numericValue: false,
+          specialChar: false,
+        },
+      },
+      {
+        input: 'ABC123',
+        expected: {
+          lowercaseChar: false,
+          uppercaseChar: true,
+          numericValue: true,
+          specialChar: false,
+        },
+      },
+      {
+        input: '@#$',
+        expected: {
+          lowercaseChar: false,
+          uppercaseChar: false,
+          numericValue: false,
+          specialChar: true,
+        },
+      },
+      {
+        input: 'aA1!',
+        expected: {
+          lowercaseChar: true,
+          uppercaseChar: true,
+          numericValue: true,
+          specialChar: true,
+        },
+      },
+      {
+        input: 'éÉ1!',
+        expected: {
+          lowercaseChar: false,
+          uppercaseChar: false,
+          numericValue: true,
+          specialChar: true,
+        },
+      },
+    ];
 
-    expect(getPasswordValidationRules('A')).toEqual({
-      lowercaseChar: false,
-      uppercaseChar: true,
-      numericValue: false,
-      specialChar: false,
-    });
-
-    expect(getPasswordValidationRules('1')).toEqual({
-      lowercaseChar: false,
-      uppercaseChar: false,
-      numericValue: true,
-      specialChar: false,
-    });
-
-    expect(getPasswordValidationRules('!')).toEqual({
-      lowercaseChar: false,
-      uppercaseChar: false,
-      numericValue: false,
-      specialChar: true,
-    });
-
-    expect(getPasswordValidationRules('aA1!')).toEqual({
-      lowercaseChar: true,
-      uppercaseChar: true,
-      numericValue: true,
-      specialChar: true,
+    cases.forEach(({ input, expected }) => {
+      expect(getPasswordValidationRules(input)).toEqual(expected);
     });
   });
 });

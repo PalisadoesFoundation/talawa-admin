@@ -1008,10 +1008,10 @@
     "nothingToShow": "这里没有可显示的内容。"
   },
   "userRegister": {
-    "firstName_invalid": "名字只能包含小写和大写字母",
-    "lastName_invalid": "姓氏只能包含小写和大写字母",
+    "firstName_invalid": "名字只能包含字母、空格和连字符",
+    "lastName_invalid": "姓氏只能包含字母、空格和连字符",
+    "email_invalid": "电子邮件必须是有效格式（例如：user@domain.com）",
     "password_invalid": "密码应至少包含1个小写字母、1个大写字母、1个数字和1个特殊字符",
-    "email_invalid": "电子邮件应至少包含 8 个字符",
     "passwordMismatches": "密码和确认密码不匹配。",
     "enterFirstName": "输入您的名字",
     "enterLastName": "输入您的姓氏",
