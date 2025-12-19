@@ -51,7 +51,7 @@ function EventHeader({
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationEvents',
   });
-
+  const { t: tCommon } = useTranslation('common');
   return (
     <div
       className={styles.calendarEventHeader}
@@ -111,7 +111,7 @@ function EventHeader({
                 marginRight: '2px',
               }}
             />
-            <span>{t('create')}</span>
+            <span>{tCommon('create')}</span>
           </Button>
         </div>
       </div>
