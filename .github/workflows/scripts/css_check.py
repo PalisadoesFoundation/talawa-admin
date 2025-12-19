@@ -181,7 +181,7 @@ def process_typescript_file(
         None: This function modifies the provided list.
     """
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             content = f.read()
     except (IOError, UnicodeDecodeError) as e:
         print(f"Error reading file {file_path}: {e}", file=sys.stderr)
@@ -347,12 +347,13 @@ def format_violation_output(violations: list[DetailedViolation]) -> str:
 
 def main():
     """Main function to run the CSS check.
-
     This function serves as the entry point to run the CSS check. It processes
     directories and files, checks for CSS violations, and prints the results.
-    """
+    
 
-    """Returns: None"""
+    Returns: 
+        None
+    """
 
     parser = argparse.ArgumentParser(
         description="""Check for embedded CSS and
