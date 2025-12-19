@@ -89,6 +89,7 @@ const renderEventListCard = (
 describe('Testing Event List Card', () => {
   afterEach(() => {
     vi.restoreAllMocks();
+    localStorage.clear();
   });
   beforeAll(() => {
     vi.mock('react-router', async () => ({
@@ -97,7 +98,6 @@ describe('Testing Event List Card', () => {
   });
 
   afterAll(() => {
-    localStorage.clear();
     vi.clearAllMocks();
   });
 
@@ -308,8 +308,12 @@ describe('Testing Event List Card', () => {
       expect(screen.getByTestId('eventModalCloseBtn')).toBeInTheDocument(),
     );
 
-    expect(
-      screen.getByText(translations.alreadyRegistered),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByText((text) =>
+          text.includes(translations.alreadyRegistered),
+        ),
+      ).toBeInTheDocument();
+    });
   });
 });

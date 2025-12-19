@@ -460,10 +460,8 @@ describe('Testing the App Component', () => {
 
   it('should navigate to user settings', async () => {
     const { setItem, removeItem } = useLocalStorage();
-
     setItem('IsLoggedIn', 'TRUE'); // string "TRUE"
     removeItem('AdminFor');
-
     renderApp(link, '/user/settings');
 
     expect(await screen.findByTestId('mock-settings')).toBeInTheDocument();
