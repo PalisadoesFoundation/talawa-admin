@@ -67,7 +67,7 @@ const AgendaCategoryPreviewModal: React.FC<
     >
       <Modal.Header>
         <p className={styles.titlemodalOrganizationEvents}>
-          {t('organizationAgendaCategory.agendaCategoryDetails')}
+          {t('agendaCategoryDetails')}
         </p>
         <Button
           onClick={hidePreviewModal}
@@ -80,15 +80,15 @@ const AgendaCategoryPreviewModal: React.FC<
         <Form>
           <div>
             <p className={styles.preview}>
-              {t('userVolunteer.name')}
+              {t('name')}
               <span className={styles.view}>{formState.name}</span>
             </p>
             <p className={styles.preview}>
-              {t('organizationVenues.description')}
+              {t('description')}
               <span className={styles.view}>{formState.description}</span>
             </p>
             <p className={styles.preview}>
-              {t('funds.createdBy')}
+              {t('createdBy')}
               <span className={styles.view}>{formState.createdBy}</span>
             </p>
           </div>

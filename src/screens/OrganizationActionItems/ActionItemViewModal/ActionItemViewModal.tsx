@@ -25,7 +25,9 @@ export interface IViewModalProps {
 }
 
 const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationActionItems',
+  });
   const { t: tCommon } = useTranslation('common');
 
   const {
@@ -114,9 +116,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
   return (
     <Modal className={styles.itemModal} onHide={hide} show={isOpen}>
       <Modal.Header>
-        <p className={styles.titlemodal}>
-          {t('eventActionItems.actionItemDetails')}
-        </p>
+        <p className={styles.titlemodal}>{t('actionItemDetails')}</p>
         <Button
           variant="danger"
           onClick={hide}
@@ -131,7 +131,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
           <Form.Group className="d-flex mb-3 w-100">
             <FormControl fullWidth>
               <TextField
-                label={t('agendaItems.category')}
+                label={t('category')}
                 variant="outlined"
                 className={styles.noOutline}
                 value={category?.name || 'No category'}
@@ -143,7 +143,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
           <Form.Group className="d-flex gap-3 mb-3">
             <FormControl fullWidth>
               <TextField
-                label={t('organizationActionItems.assignedTo')}
+                label={t('assignedTo')}
                 variant="outlined"
                 className={styles.noOutline}
                 data-testid="assignee_input"
@@ -155,7 +155,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
 
             <FormControl fullWidth>
               <TextField
-                label={t('eventVolunteers.creator')}
+                label={t('creator')}
                 variant="outlined"
                 className={styles.noOutline}
                 value={getUserDisplayName(creator)}
@@ -167,7 +167,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
           <Form.Group className="d-flex gap-3 mx-auto mb-3">
             {/* Status of Action Item */}
             <TextField
-              label={t('eventVolunteers.status')}
+              label={t('status')}
               fullWidth
               value={isCompleted ? tCommon('completed') : tCommon('pending')}
               InputProps={{
@@ -192,7 +192,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
 
             {/* Event Information */}
             <TextField
-              label={t('home.event')}
+              label={t('event')}
               variant="outlined"
               className={`${styles.noOutline} w-100`}
               value={getEventDisplayName(item.recurringEventInstance || event)}
@@ -204,7 +204,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
             {/* Date Calendar Component to display assigned date of Action Item */}
             <DatePicker
               format="DD/MM/YYYY"
-              label={t('eventActionItems.assignmentDate')}
+              label={t('assignmentDate')}
               className={`${styles.noOutline} w-100`}
               value={dayjs(assignedAt)}
               disabled
@@ -214,7 +214,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
             {isCompleted && completionAt && (
               <DatePicker
                 format="DD/MM/YYYY"
-                label={t('eventActionItems.completionDate')}
+                label={t('completionDate')}
                 className={`${styles.noOutline} w-100`}
                 value={dayjs(completionAt)}
                 disabled
@@ -225,7 +225,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
           <Form.Group className={`d-flex ${isCompleted && 'mb-3'}`}>
             <FormControl fullWidth>
               <TextField
-                label={t('eventActionItems.preCompletionNotes')}
+                label={t('preCompletionNotes')}
                 variant="outlined"
                 className={styles.noOutline}
                 value={preCompletionNotes || ''}
@@ -239,7 +239,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
           {isCompleted && (
             <FormControl fullWidth>
               <TextField
-                label={t('eventActionItems.postCompletionNotes')}
+                label={t('postCompletionNotes')}
                 className={styles.noOutline}
                 value={postCompletionNotes || ''}
                 multiline

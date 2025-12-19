@@ -46,7 +46,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
   const { setCurrentMode } = props;
 
   // Translation hooks for user registration and common text
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'userRegister' });
   const { t: tCommon } = useTranslation('common');
 
   /**
@@ -80,11 +80,11 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
         registerVariables.lastName
       )
     ) {
-      toast.error(t('userRegister.invalidDetailsMessage') as string); // Error if fields are missing
+      toast.error(t('invalidDetailsMessage') as string); // Error if fields are missing
     } else if (
       registerVariables.password !== registerVariables.confirmPassword
     ) {
-      toast.error(t('addMember.passwordNotMatch') as string); // Error if passwords do not match
+      toast.error(t('passwordNotMatch') as string); // Error if passwords do not match
     } else {
       try {
         await registerMutation({
@@ -96,7 +96,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
           },
         });
 
-        toast.success(t('userRegister.afterRegister') as string); // Success message
+        toast.success(t('afterRegister') as string); // Success message
 
         // Reset form fields
         setRegisterVariables({
@@ -169,7 +169,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
         <h6>{tCommon('firstName')}</h6>
         <InputGroup className="mb-3">
           <Form.Control
-            placeholder={t('userRegister.enterFirstName')}
+            placeholder={t('enterFirstName')}
             className={styles.borderNone}
             value={registerVariables.firstName}
             onChange={handleFirstName}
@@ -184,7 +184,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
         <h6>{tCommon('lastName')}</h6>
         <InputGroup className="mb-3">
           <Form.Control
-            placeholder={t('userRegister.enterLastName')}
+            placeholder={t('enterLastName')}
             className={styles.borderNone}
             value={registerVariables.lastName}
             onChange={handleLastName}
@@ -231,7 +231,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
         <h6>{tCommon('confirmPassword')}</h6>
         <InputGroup className="mb-3">
           <Form.Control
-            placeholder={t('addMember.enterConfirmPassword')}
+            placeholder={t('enterConfirmPassword')}
             type="password"
             className={styles.borderNone}
             value={registerVariables.confirmPassword}
@@ -255,7 +255,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
       </Button>
 
       <div className="mt-4 text-center">
-        {t('userRegister.alreadyhaveAnAccount')}{' '}
+        {t('alreadyhaveAnAccount')}{' '}
         <span
           onClick={handleModeChangeToLogin}
           className={styles.loginText}

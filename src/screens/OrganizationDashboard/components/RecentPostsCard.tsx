@@ -32,7 +32,9 @@ const RecentPostsCard: React.FC<InterfaceRecentPostsCardProps> = ({
   isLoading,
   onViewAllClick,
 }) => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'dashboard',
+  });
 
   const edges = postData?.organization?.posts?.edges ?? [];
 
@@ -40,14 +42,14 @@ const RecentPostsCard: React.FC<InterfaceRecentPostsCardProps> = ({
     <Col lg={6} className="mb-4 ">
       <Card className="rounded-4 border-2 border-gray-300">
         <div className={styles.cardHeader}>
-          <div className={styles.cardTitle}>{t('dashboard.latestPosts')}</div>
+          <div className={styles.cardTitle}>{t('latestPosts')}</div>
           <Button
             size="sm"
             variant="light"
             data-testid="viewAllPosts"
             onClick={onViewAllClick}
           >
-            {t('organizationSidebar.viewAll')}
+            {t('viewAll')}
           </Button>
         </div>
         <Card.Body className={styles.containerBody}>
@@ -57,7 +59,7 @@ const RecentPostsCard: React.FC<InterfaceRecentPostsCardProps> = ({
             })
           ) : postsCount === 0 || edges.length === 0 ? (
             <div className={styles.emptyContainer}>
-              <h6>{t('dashboard.noPostsPresent')}</h6>
+              <h6>{t('noPostsPresent')}</h6>
             </div>
           ) : (
             edges.slice(0, 5).map((edge) => {

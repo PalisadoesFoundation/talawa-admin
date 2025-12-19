@@ -62,7 +62,7 @@ import Loader from 'components/Loader/Loader';
 function EventAgendaItems(props: { eventId: string }): JSX.Element {
   const { eventId } = props;
 
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'agendaItems' });
 
   // Extract organization ID from URL
   const url: string = window.location.href;
@@ -157,7 +157,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
       });
       hideCreateModal();
       refetchAgendaItem();
-      toast.success(t('agendaItems.agendaItemCreated') as string);
+      toast.success(t('agendaItemCreated') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast.error(error.message);
@@ -213,7 +213,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
               {/* <input
                 type="search"
                 className="form-control border-0 bg-light-subtle"
-                placeholder={t('userChat.search')}
+                placeholder={t('search')}
                 onChange={(e) => setSearchValue(e.target.value)}
                 value={searchValue}
                 data-testid="search"
@@ -226,7 +226,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
               data-testid="createAgendaItemBtn"
               className={styles.createAgendaItemButton}
             >
-              {t('agendaItems.createAgendaItem')}
+              {t('createAgendaItem')}
             </Button>
           </div>
         </div>

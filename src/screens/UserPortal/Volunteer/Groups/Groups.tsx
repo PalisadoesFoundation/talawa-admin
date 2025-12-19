@@ -85,7 +85,7 @@ const dataGridStyle = {
 };
 
 function groups(): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -305,8 +305,8 @@ function groups(): JSX.Element {
           <div className="d-flex justify-space-between align-items-center gap-3">
             <SortingButton
               sortingOptions={[
-                { label: t('eventVolunteers.leader'), value: 'leader' },
-                { label: t('eventVolunteers.group'), value: 'group' },
+                { label: t('leader'), value: 'leader' },
+                { label: t('group'), value: 'group' },
               ]}
               selectedOption={searchBy}
               onSortChange={(value) => setSearchBy(value as 'leader' | 'group')}
@@ -315,14 +315,8 @@ function groups(): JSX.Element {
             />
             <SortingButton
               sortingOptions={[
-                {
-                  label: t('eventVolunteers.mostVolunteers'),
-                  value: 'volunteers_DESC',
-                },
-                {
-                  label: t('eventVolunteers.leastVolunteers'),
-                  value: 'volunteers_ASC',
-                },
+                { label: t('mostVolunteers'), value: 'volunteers_DESC' },
+                { label: t('leastVolunteers'), value: 'volunteers_ASC' },
               ]}
               onSortChange={(value) =>
                 setSortBy(value as 'volunteers_DESC' | 'volunteers_ASC')
@@ -343,7 +337,7 @@ function groups(): JSX.Element {
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('eventVolunteers.noVolunteerGroups')}
+              {t('noVolunteerGroups')}
             </Stack>
           ),
         }}

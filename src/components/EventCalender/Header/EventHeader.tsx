@@ -48,7 +48,9 @@ function eventHeader({
   handleChangeView,
   showInviteModal,
 }: InterfaceEventHeaderProps): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationEvents',
+  });
 
   return (
     <div
@@ -58,7 +60,7 @@ function eventHeader({
       <div className={styles.calendar__header}>
         <div className={styles.calendar__search}>
           <SearchBar
-            placeholder={t('organizationEvents.searchEventName')}
+            placeholder={t('searchEventName')}
             onSearch={() => {}}
             inputTestId="searchEvent"
             buttonTestId="searchButton"
@@ -78,16 +80,16 @@ function eventHeader({
             className={styles.dropdown}
           />
           <SortingButton
-            title={t('organizationEvents.eventType')}
+            title={t('eventType')}
             sortingOptions={[
               { label: 'Events', value: 'Events' },
               { label: 'Workshops', value: 'Workshops' },
             ]}
-            selectedOption={t('organizationEvents.eventType')}
+            selectedOption={t('eventType')}
             onSortChange={() => {}}
             dataTestIdPrefix="eventType"
             className={styles.dropdown}
-            buttonLabel={t('organizationEvents.eventType')}
+            buttonLabel={t('eventType')}
           />
           <div className={styles.selectTypeEventHeader}>
             <Button

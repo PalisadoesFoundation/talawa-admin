@@ -44,7 +44,7 @@ const dataGridStyle = {
 };
 
 const fundCampaignPledge = (): JSX.Element => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -415,14 +415,13 @@ const fundCampaignPledge = (): JSX.Element => {
         >
           {campaignInfo?.name}
         </Link>
-        <Typography color="text.primary">{t('pledges.pledges')}</Typography>
+        <Typography color="text.primary">{t('pledges')}</Typography>
       </Breadcrumbs>
       <div className={styles.overviewContainer}>
         <div className={styles.titleContainer}>
           <h3>{campaignInfo?.name}</h3>
           <span>
-            {t('pledges.endsOn')}{' '}
-            {dayjs(campaignInfo?.endDate).format('DD/MM/YYYY')}
+            {t('endsOn')} {dayjs(campaignInfo?.endDate).format('DD/MM/YYYY')}
           </span>
         </div>
         <div className={styles.progressContainer}>
@@ -446,7 +445,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
                 htmlFor="pledgedRadio"
               >
-                {t('pledges.pledgedAmount')}
+                {t('pledgedAmount')}
               </label>
 
               <input
@@ -461,7 +460,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
                 htmlFor="raisedRadio"
               >
-                {t('pledges.raisedAmount')}
+                {t('raisedAmount')}
               </label>
             </div>
           </div>
@@ -502,7 +501,7 @@ const fundCampaignPledge = (): JSX.Element => {
       </div>
       <div className={`${styles.btnsContainerPledge} align-items-center`}>
         <SearchBar
-          placeholder={t('pledges.searchPledger')}
+          placeholder={t('searchPledger')}
           onSearch={setSearchTerm}
           inputTestId="searchPledger"
           buttonTestId="searchBtn"
@@ -511,19 +510,10 @@ const fundCampaignPledge = (): JSX.Element => {
           <div className="d-flex justify-space-between">
             <SortingButton
               sortingOptions={[
-                { label: t('userCampaigns.lowestAmount'), value: 'amount_ASC' },
-                {
-                  label: t('userCampaigns.highestAmount'),
-                  value: 'amount_DESC',
-                },
-                {
-                  label: t('userVolunteer.latestEndDate'),
-                  value: 'endDate_DESC',
-                },
-                {
-                  label: t('userVolunteer.earliestEndDate'),
-                  value: 'endDate_ASC',
-                },
+                { label: t('lowestAmount'), value: 'amount_ASC' },
+                { label: t('highestAmount'), value: 'amount_DESC' },
+                { label: t('latestEndDate'), value: 'endDate_DESC' },
+                { label: t('earliestEndDate'), value: 'endDate_ASC' },
               ]}
               selectedOption={sortBy ?? ''}
               onSortChange={(value) =>
@@ -549,7 +539,7 @@ const fundCampaignPledge = (): JSX.Element => {
               title={!isWithinCampaignDates ? t('campaignNotActive') : ''}
             >
               <i className={'fa fa-plus me-2'} />
-              {t('userCampaigns.addPledge')}
+              {t('addPledge')}
             </Button>
           </div>
         </div>
@@ -562,7 +552,7 @@ const fundCampaignPledge = (): JSX.Element => {
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('userCampaigns.noPledges')}
+              {t('noPledges')}
             </Stack>
           ),
         }}

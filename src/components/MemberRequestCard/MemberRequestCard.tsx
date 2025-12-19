@@ -59,13 +59,15 @@ function MemberRequestCard({
   const [acceptMutation] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
   const [rejectMutation] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
 
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'membershipRequest',
+  });
   const { t: tCommon } = useTranslation('common');
 
   const addMember = async (): Promise<void> => {
     try {
       await acceptMutation({ variables: { id } });
-      toast.success(t('membershipRequest.memberAdded') as string);
+      toast.success(t('memberAdded') as string);
 
       setTimeout(() => {
         window.location.reload();
@@ -120,13 +122,13 @@ function MemberRequestCard({
                 className={styles.memberfontcreatedbtn}
                 onClick={addMember}
               >
-                {t('userVolunteer.accept')}
+                {t('accept')}
               </Button>
               <Button
                 className={styles.memberfontcreatedbtn}
                 onClick={rejectMember}
               >
-                {t('userVolunteer.reject')}
+                {t('reject')}
               </Button>
             </div>
           </Col>

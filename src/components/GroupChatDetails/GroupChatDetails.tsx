@@ -93,7 +93,7 @@ export default function groupChatDetails({
   chat,
   chatRefetch,
 }: InterfaceGroupChatDetailsProps): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
 
   //storage
 
@@ -103,7 +103,7 @@ export default function groupChatDetails({
 
   useEffect(() => {
     if (!userId) {
-      toast.error(t('userNotFound.userNotFound'));
+      toast.error(t('userNotFound'));
     }
   }, [userId, t]);
 
@@ -274,7 +274,7 @@ export default function groupChatDetails({
       >
         <Modal.Header closeButton data-testid="groupChatDetails">
           <div className="d-flex justify-content-between w-100">
-            <Modal.Title>{t('userChat.groupInfo')}</Modal.Title>
+            <Modal.Title>{t('groupInfo')}</Modal.Title>
             {currentUserRole === 'administrator' && (
               <Button
                 variant="outline-danger"
@@ -378,14 +378,14 @@ export default function groupChatDetails({
             )}
 
             <p>
-              {chat?.members.edges.length} {t('userChat.members')}
+              {chat?.members.edges.length} {t('members')}
             </p>
             <p>{chat?.description}</p>
           </div>
 
           <div>
             <h5>
-              {chat.members.edges.length} {t('userChat.members')}
+              {chat.members.edges.length} {t('members')}
             </h5>
             <ListGroup className={styles.memberList} variant="flush">
               <ListGroup.Item
@@ -395,7 +395,7 @@ export default function groupChatDetails({
                   openAddUserModal();
                 }}
               >
-                <Add /> {t('addMember.addMembers')}
+                <Add /> {t('addMembers')}
               </ListGroup.Item>
               {chat.members.edges.map((edge) => {
                 const user = edge.node.user;
@@ -584,7 +584,7 @@ export default function groupChatDetails({
                                   }}
                                   data-testid="addUserBtn"
                                 >
-                                  {t('eventVolunteers.add')}
+                                  {t('add')}
                                 </Button>
                               </StyledTableCell>
                             </StyledTableRow>

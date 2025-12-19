@@ -115,7 +115,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
   const { id, creator, hasUserVoted, upVoteCount, text, refetchComments } =
     props;
   const { getItem } = useLocalStorage();
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'commentCard' });
   const { t: tCommon } = useTranslation('common');
   const userId = getItem('userId');
 
@@ -156,7 +156,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
       await deleteComment({
         variables: { input: { id: id } },
       });
-      toast.success(t('commentCard.commentDeletedSuccessfully'));
+      toast.success(t('commentDeletedSuccessfully'));
       refetchComments?.();
     } catch (error) {
       toast.error((error as Error).message);
@@ -170,7 +170,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
       await updateComment({
         variables: { input: { id: id, body: body } },
       });
-      toast.success(t('commentCard.commentUpdatedSuccessfully'));
+      toast.success(t('commentUpdatedSuccessfully'));
       refetchComments?.();
       handleMenuClose();
       return true;
@@ -195,7 +195,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
 
   const handleToggleLike = async (): Promise<void> => {
     if (!userId) {
-      toast.warn(t('commentCard.pleaseSignInToLikeComments'));
+      toast.warn(t('pleaseSignInToLikeComments'));
       return;
     }
     try {
@@ -211,7 +211,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
           setLikes((prev) => Math.max(prev - 1, 0));
           setIsLiked(false);
         } else {
-          toast.error(t('commentCard.couldNotRemoveExistingLike'));
+          toast.error(t('couldNotRemoveExistingLike'));
         }
       } else {
         // Like
@@ -233,9 +233,9 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
         }
       )?.graphQLErrors?.[0]?.extensions?.code;
       if (errorCode === 'forbidden_action_on_arguments_associated_resources') {
-        toast.error(t('commentCard.alreadyLikedComment'));
+        toast.error(t('alreadyLikedComment'));
       } else if (errorCode === 'arguments_associated_resources_not_found') {
-        toast.error(t('commentCard.alreadyLikedComment'));
+        toast.error(t('noAssociatedVoteFound'));
       } else {
         toast.error((error as Error).message);
       }
@@ -300,7 +300,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
                 onClick={toggleEditComment}
               >
                 <EditOutlined sx={{ mr: 1 }} fontSize="small" />
-                {t('commentCard.editComment')}
+                {t('editComment')}
               </MenuItem>
               <MenuItem
                 data-testid="delete-comment-button"
@@ -308,9 +308,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
                 disabled={deletingComment}
               >
                 <DeleteOutline sx={{ mr: 1 }} fontSize="small" />
-                {deletingComment
-                  ? t('commentCard.deleting')
-                  : t('commentCard.deleteComment')}
+                {deletingComment ? t('deleting') : t('deleteComment')}
               </MenuItem>
             </Menu>
           </>
@@ -324,7 +322,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
         data-testid="edit-comment-modal"
       >
         <EditModalContent>
-          <Typography variant="h6">{t('commentCard.editComment')}</Typography>
+          <Typography variant="h6">{t('editComment')}</Typography>
           <FormControl fullWidth sx={{ mb: 2 }}>
             <Input
               multiline
@@ -347,7 +345,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
                 disabled={updatingComment}
                 onClick={async () => {
                   if (!editedCommentText.trim()) {
-                    toast.error(t('commentCard.emptyCommentError'));
+                    toast.error(t('emptyCommentError'));
                     return;
                   }
                   const updated = await handleUpdateComment(editedCommentText);

@@ -74,7 +74,8 @@ const FundModal: React.FC<InterfaceFundModal> = ({
   orgId,
   mode,
 }) => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'funds' });
+
   const [formState, setFormState] = useState<InterfaceCreateFund>({
     fundName: fund?.name ?? '',
     fundRef: fund?.refrenceNumber ?? '',
@@ -119,7 +120,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
         isTaxDeductible: false,
         isArchived: false,
       });
-      toast.success(t('funds.fundCreated') as string);
+      toast.success(t('fundCreated') as string);
       refetchFunds();
       hide();
     } catch (error: unknown) {
@@ -160,7 +161,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
       });
       refetchFunds();
       hide();
-      toast.success(t('funds.fundUpdated') as string);
+      toast.success(t('fundUpdated') as string);
     } catch (error: unknown) {
       toast.error((error as Error).message);
     }
@@ -192,7 +193,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
             <Form.Group className="d-flex mb-3 w-100">
               <FormControl fullWidth>
                 <TextField
-                  label={t('funds.fundName')}
+                  label={t('fundName')}
                   variant="outlined"
                   className={`${styles.noOutline} w-100`}
                   value={formState.fundName}
@@ -205,7 +206,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
             <Form.Group className="d-flex mb-3 w-100">
               <FormControl fullWidth>
                 <TextField
-                  label={t('funds.fundId')}
+                  label={t('fundId')}
                   variant="outlined"
                   className={`${styles.noOutline} w-100`}
                   value={formState.fundRef}
@@ -220,7 +221,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
               className={`d-flex mt-2 mb-3 flex-wrap ${mode === 'edit' ? 'justify-content-between' : 'justify-content-start gap-3'} `}
             >
               <Form.Group className="d-flex">
-                <label>{t('funds.taxDeductible')} </label>
+                <label>{t('taxDeductible')} </label>
                 <Form.Switch
                   type="checkbox"
                   checked={formState.isTaxDeductible}
@@ -235,7 +236,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                 />
               </Form.Group>
               <Form.Group className="d-flex">
-                <label>{t('funds.default')} </label>
+                <label>{t('default')} </label>
                 <Form.Switch
                   type="checkbox"
                   className={`ms-2 ${styles.switch}`}
@@ -251,7 +252,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
               </Form.Group>
               {mode === 'edit' && (
                 <Form.Group className="d-flex">
-                  <label>{t('funds.archived')} </label>
+                  <label>{t('archived')} </label>
                   <Form.Switch
                     type="checkbox"
                     checked={formState.isArchived}

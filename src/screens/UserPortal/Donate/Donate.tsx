@@ -71,7 +71,8 @@ import {
 } from 'types/Donation/interface';
 
 export default function donate(): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'donate' });
+
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
   const userName = getItem('name');
@@ -177,7 +178,7 @@ export default function donate(): JSX.Element {
         <div className={`${styles.mainContainer50} me-4`}>
           <div className={styles.inputContainer}>
             <SearchBar
-              placeholder={t('donate.searchDonations')}
+              placeholder={t('searchDonations')}
               onSearch={(value) => console.log(value)} // Replace with actual search handler
               inputTestId="searchByName"
               buttonTestId="searchButton"
@@ -185,7 +186,7 @@ export default function donate(): JSX.Element {
           </div>
           <div className={`${styles.box}`}>
             <div className={`${styles.heading}`}>
-              {t('donate.donateForThe')} {organizationDetails.name}
+              {t('donateForThe')} {organizationDetails.name}
             </div>
             <div className={styles.donationInputContainer}>
               <InputGroup className={styles.width100}>
@@ -218,7 +219,7 @@ export default function donate(): JSX.Element {
                   type="text"
                   className={styles.inputField}
                   data-testid="donationAmount"
-                  placeholder={t('transactions.amount')}
+                  placeholder={t('amount')}
                   value={amount}
                   onChange={(e) => {
                     setAmount(e.target.value);
@@ -227,7 +228,7 @@ export default function donate(): JSX.Element {
               </InputGroup>
             </div>
             <Form.Text className="text-muted">
-              {t('donate.donationAmountDescription')}
+              {t('donationAmountDescription')}
             </Form.Text>
             <div className={styles.donateActions}>
               <Button
@@ -236,12 +237,12 @@ export default function donate(): JSX.Element {
                 onClick={donateToOrg}
                 className={`${styles.addButton} ${styles.donateBtn}`}
               >
-                {t('donate.donate')} <SendIcon />
+                {t('donate')} <SendIcon />
               </Button>
             </div>
           </div>
           <div className={styles.sectionContainer}>
-            <h5>{t('donate.yourPreviousDonations')}</h5>
+            <h5>{t('yourPreviousDonations')}</h5>
             <div
               className={`d-flex flex-column justify-content-between ${styles.sectionContent}`}
             >
@@ -278,7 +279,7 @@ export default function donate(): JSX.Element {
                         );
                       })
                     ) : (
-                      <span>{t('userEvents.nothingToShow')}</span>
+                      <span>{t('nothingToShow')}</span>
                     )}
                   </>
                 )}

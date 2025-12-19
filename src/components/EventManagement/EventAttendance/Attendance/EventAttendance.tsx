@@ -55,7 +55,7 @@ import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { FilterPeriod, type InterfaceMember } from 'types/Event/interface';
 
 function EventAttendance(): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'eventAttendance' });
   const { eventId } = useParams<{ eventId: string }>();
   const { orgId: currentUrl } = useParams();
   const [filteredAttendees, setFilteredAttendees] = useState<InterfaceMember[]>(
@@ -151,7 +151,7 @@ function EventAttendance(): JSX.Element {
     getEventAttendees();
   }, [eventId, getEventAttendees]);
 
-  if (loading) return <p>{t('transactions.loading')}</p>;
+  if (loading) return <p>{t('loading')}</p>;
   if (error) return <p>{error.message}</p>;
 
   return (
@@ -169,12 +169,12 @@ function EventAttendance(): JSX.Element {
           onClick={showModal}
           data-testid="stats-modal"
         >
-          {t('eventAttendance.historical_statistics')}
+          {t('historical_statistics')}
         </Button>
         <div className="d-flex align-items-center">
           <div className={`${styles.input} me-3`}>
             <SearchBar
-              placeholder={t('eventAttendance.Search member')}
+              placeholder={t('Search member')}
               onChange={(value) => searchEventAttendees(value)}
               onSearch={(value) => searchEventAttendees(value)}
               onClear={() => searchEventAttendees('')}
@@ -234,25 +234,25 @@ function EventAttendance(): JSX.Element {
                 className={styles.customcell}
                 data-testid="header-member-name"
               >
-                {t('eventAttendance.Member Name')}
+                {t('Member Name')}
               </TableCell>
               <TableCell
                 className={styles.customcell}
                 data-testid="header-status"
               >
-                {t('eventVolunteers.status')}
+                {t('Status')}
               </TableCell>
               <TableCell
                 className={styles.customcell}
                 data-testid="header-events-attended"
               >
-                {t('eventAttendance.Events Attended')}
+                {t('Events Attended')}
               </TableCell>
               <TableCell
                 className={styles.customcell}
                 data-testid="header-task-assigned"
               >
-                {t('eventAttendance.Task Assigned')}
+                {t('Task Assigned')}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -260,7 +260,7 @@ function EventAttendance(): JSX.Element {
             {filteredAttendees.length === 0 ? (
               <TableRow className={styles.noBorderRow}>
                 <TableCell colSpan={5} align="center">
-                  {t('eventAttendance.noAttendees')}
+                  {t('noAttendees')}
                 </TableCell>
               </TableRow>
             ) : (
@@ -295,8 +295,8 @@ function EventAttendance(): JSX.Element {
                       data-testid={`attendee-status-${index}`}
                     >
                       {member.role === 'administrator'
-                        ? t('userUpdate.admin')
-                        : t('eventAttendance.Member')}
+                        ? t('Admin')
+                        : t('Member')}
                     </TableCell>
                     <Tooltip
                       componentsProps={{

@@ -77,7 +77,7 @@ function AdvertisementRegister({
   setAfterActive,
   setAfterCompleted,
 }: InterfaceAddOnRegisterProps): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -211,7 +211,7 @@ function AdvertisementRegister({
       const endDate = dayjs(formState.endAt).startOf('day');
 
       if (!endDate.isAfter(startDate)) {
-        toast.error(t('advertisement.endDateGreater') as string);
+        toast.error(t('endDateGreater') as string);
         return;
       }
 
@@ -248,7 +248,7 @@ function AdvertisementRegister({
         variables,
       });
       if (data) {
-        toast.success(t('advertisement.advertisementCreated') as string);
+        toast.success(t('advertisementCreated') as string);
         handleClose();
         setFormState({
           name: '',
@@ -302,7 +302,7 @@ function AdvertisementRegister({
         const endDate = dayjs(updatedFields.endAt).startOf('day');
 
         if (!endDate.isAfter(startDate)) {
-          toast.error(t('advertisement.endDateGreater') as string);
+          toast.error(t('endDateGreater') as string);
           return;
         }
       }
@@ -353,7 +353,7 @@ function AdvertisementRegister({
         >
           <i className="fa fa-plus" />
           &nbsp;
-          {t('advertisement.createAdvertisement')}
+          {t('createAdvertisement')}
         </Button>
       ) : (
         <div onClick={handleShow} data-testid="editBtn">
@@ -363,18 +363,18 @@ function AdvertisementRegister({
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           {formStatus === 'register' ? (
-            <Modal.Title> {t('advertisement.addNew')}</Modal.Title>
+            <Modal.Title> {t('addNew')}</Modal.Title>
           ) : (
-            <Modal.Title>{t('advertisement.editAdvertisement')}</Modal.Title>
+            <Modal.Title>{t('editAdvertisement')}</Modal.Title>
           )}
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3" controlId="registerForm.Rname">
-              <Form.Label>{t('advertisement.Rname')}</Form.Label>
+              <Form.Label>{t('Rname')}</Form.Label>
               <Form.Control
                 type="text"
-                placeholder={t('advertisement.EXname')}
+                placeholder={t('EXname')}
                 autoComplete="off"
                 required
                 value={formState.name}
@@ -389,10 +389,10 @@ function AdvertisementRegister({
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="registerForm.Rdesc">
-              <Form.Label>{t('advertisement.Rdesc')}</Form.Label>
+              <Form.Label>{t('Rdesc')}</Form.Label>
               <Form.Control
                 type="text"
-                placeholder={t('advertisement.EXdesc')}
+                placeholder={t('EXdesc')}
                 autoComplete="off"
                 value={formState.description || ''}
                 onChange={(e): void => {
@@ -408,7 +408,7 @@ function AdvertisementRegister({
             {formStatus === 'register' && (
               <Form.Group className="mb-3">
                 <Form.Label htmlFor="advertisementMedia">
-                  {t('advertisement.Rmedia')}
+                  {t('Rmedia')}
                 </Form.Label>
                 <Form.Control
                   accept="image/*, video/*"
@@ -458,9 +458,9 @@ function AdvertisementRegister({
               </Form.Group>
             )}
             <Form.Group className="mb-3" controlId="registerForm.Rtype">
-              <Form.Label>{t('advertisement.Rtype')}</Form.Label>
+              <Form.Label>{t('Rtype')}</Form.Label>
               <Form.Select
-                aria-label={t('advertisement.Rtype')}
+                aria-label={t('Rtype')}
                 value={formState.type}
                 onChange={(e): void => {
                   setFormState({
@@ -478,7 +478,7 @@ function AdvertisementRegister({
             </Form.Group>
 
             <Form.Group className="mb-3" controlId="registerForm.RstartAt">
-              <Form.Label>{t('advertisement.RstartDate')}</Form.Label>
+              <Form.Label>{t('RstartDate')}</Form.Label>
               <Form.Control
                 type="date"
                 required
@@ -495,7 +495,7 @@ function AdvertisementRegister({
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="registerForm.RDate">
-              <Form.Label>{t('advertisement.RendDate')}</Form.Label>
+              <Form.Label>{t('RendDate')}</Form.Label>
               <Form.Control
                 type="date"
                 required

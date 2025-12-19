@@ -31,10 +31,10 @@ import { Add } from '@mui/icons-material';
  */
 
 function OrgPost(): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'orgPost' });
   const { getItem } = useLocalStorage();
 
-  document.title = t('orgPost.title');
+  document.title = t('title');
 
   const [postmodalisOpen, setPostModalIsOpen] = useState(false);
   const [sortingOption, setSortingOption] = useState('None');
@@ -279,7 +279,7 @@ function OrgPost(): JSX.Element {
         <div className={styles.mainpagerightOrgPost}>
           <PageHeader
             search={{
-              placeholder: t('orgPost.searchTitle'),
+              placeholder: t('searchTitle'),
               onSearch: handleSearch,
               inputTestId: 'searchByName',
             }}
@@ -306,7 +306,7 @@ function OrgPost(): JSX.Element {
                 className={`${styles.createButton} mb-2`}
               >
                 <Add sx={{ fontSize: '20px', marginRight: '6px' }} />
-                {t('orgPost.createPost')}
+                {t('createPost')}
               </Button>
             }
           />

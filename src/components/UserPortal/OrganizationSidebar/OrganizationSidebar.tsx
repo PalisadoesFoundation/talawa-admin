@@ -50,7 +50,9 @@ import type {
 
 export default function OrganizationSidebar(): JSX.Element {
   // Translation functions for different namespaces
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationSidebar',
+  });
   const { t: tCommon } = useTranslation('common');
 
   // Extract the organization ID from the URL parameters
@@ -144,9 +146,7 @@ export default function OrganizationSidebar(): JSX.Element {
               );
             })
           ) : (
-            <div className="w-100 text-center">
-              {t('organizationSidebar.noMembers')}
-            </div>
+            <div className="w-100 text-center">{t('noMembers')}</div>
           )}
         </ListGroup>
       )}
@@ -154,14 +154,14 @@ export default function OrganizationSidebar(): JSX.Element {
       {/* Link to view all members */}
       <div className={styles.alignRight}>
         <Link to={peopleLink} className={styles.link}>
-          {t('organizationSidebar.viewAll')}
+          {t('viewAll')}
           <ChevronRightIcon fontSize="small" className={styles.marginTop} />
         </Link>
       </div>
 
       {/* Events section */}
       <div className={styles.heading}>
-        <b>{t('organizationSidebar.events')}</b>
+        <b>{t('events')}</b>
       </div>
       {eventsLoading ? (
         <div className={`d-flex flex-row justify-content-center`}>
@@ -196,9 +196,7 @@ export default function OrganizationSidebar(): JSX.Element {
               );
             })
           ) : (
-            <div className="w-100 text-center">
-              {t('userVolunteer.noEvents')}
-            </div>
+            <div className="w-100 text-center">{t('noEvents')}</div>
           )}
         </ListGroup>
       )}
@@ -206,7 +204,7 @@ export default function OrganizationSidebar(): JSX.Element {
       {/* Link to view all events */}
       <div className={styles.alignRight}>
         <Link to={eventsLink} className={styles.link}>
-          {t('organizationSidebar.viewAll')}
+          {t('viewAll')}
           <ChevronRightIcon fontSize="small" className={styles.marginTop} />
         </Link>
       </div>

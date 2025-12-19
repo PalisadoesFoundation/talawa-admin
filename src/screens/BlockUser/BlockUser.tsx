@@ -70,10 +70,12 @@ import PageHeader from 'shared-components/Navbar/Navbar';
 
 const BlockUser = (): JSX.Element => {
   // Translation hooks for internationalization
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'blockUnblockUser',
+  });
   const { t: tCommon } = useTranslation('common');
 
-  document.title = t('blockUnblockUser.title'); // Set document title
+  document.title = t('title'); // Set document title
   const { orgId: currentUrl } = useParams(); // Get current organization ID from URL
 
   // State hooks
@@ -178,7 +180,7 @@ const BlockUser = (): JSX.Element => {
           variables: { userId: user.id, organizationId: currentUrl },
         });
         if (data?.blockUser) {
-          toast.success(t('blockUnblockUser.blockedSuccessfully') as string);
+          toast.success(t('blockedSuccessfully') as string);
           setAllMembers((prevMembers) =>
             prevMembers.filter((member) => member.id !== user.id),
           );
@@ -198,7 +200,7 @@ const BlockUser = (): JSX.Element => {
           variables: { userId: user.id, organizationId: currentUrl },
         });
         if (data) {
-          toast.success(t('blockUnblockUser.Un-BlockedSuccessfully') as string);
+          toast.success(t('Un-BlockedSuccessfully') as string);
           setBlockedUsers((prevBlockedUsers) =>
             prevBlockedUsers.filter(
               (blockedUser) => blockedUser.id !== user.id,
@@ -222,7 +224,7 @@ const BlockUser = (): JSX.Element => {
     '#',
     tCommon('name'),
     tCommon('email'),
-    t('blockUnblockUser.block_unblock'),
+    t('block_unblock'),
   ];
 
   if (loadingMembers || loadingBlockedUsers) {
@@ -242,7 +244,7 @@ const BlockUser = (): JSX.Element => {
           <div className={styles.btnsContainer}>
             <PageHeader
               search={{
-                placeholder: t('userVolunteer.searchByName'),
+                placeholder: t('searchByName'),
                 onSearch: handleSearch,
                 inputTestId: 'searchByName',
                 buttonTestId: 'searchBtn',
@@ -251,14 +253,8 @@ const BlockUser = (): JSX.Element => {
                 {
                   title: t('sortOrganizations'),
                   options: [
-                    {
-                      label: t('blockUnblockUser.allMembers'),
-                      value: 'allMembers',
-                    },
-                    {
-                      label: t('blockUnblockUser.blockedUsers'),
-                      value: 'blockedUsers',
-                    },
+                    { label: t('allMembers'), value: 'allMembers' },
+                    { label: t('blockedUsers'), value: 'blockedUsers' },
                   ],
                   selected: showBlockedMembers
                     ? 'Blocked Users'
@@ -308,7 +304,7 @@ const BlockUser = (): JSX.Element => {
                             icon={faBan}
                             className={styles.banIcon}
                           />
-                          {t('blockUnblockUser.block')}
+                          {t('block')}
                         </Button>
                       </td>
                     </tr>
@@ -349,7 +345,7 @@ const BlockUser = (): JSX.Element => {
                           icon={faUserPlus}
                           className={styles.unbanIcon}
                         />
-                        {t('blockUnblockUser.unblock')}
+                        {t('unblock')}
                       </Button>
                     </td>
                   </tr>
@@ -363,7 +359,7 @@ const BlockUser = (): JSX.Element => {
                     <div className={styles.notFound}>
                       <h4>
                         {searchTerm.length === 0
-                          ? t('blockUnblockUser.noSpammerFound')
+                          ? t('noSpammerFound')
                           : `${tCommon('noResultsFoundFor')} "${searchTerm}"`}
                       </h4>
                     </div>

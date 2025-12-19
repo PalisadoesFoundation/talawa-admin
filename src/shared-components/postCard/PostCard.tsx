@@ -74,7 +74,7 @@ import { PluginInjector } from '../../plugin';
 import useLocalStorage from '../../utils/useLocalstorage';
 
 export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
   const { t: tCommon } = useTranslation('common');
   const isLikedByUser = props.hasUserVoted?.voteType === 'up_vote';
 
@@ -262,9 +262,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       });
       props.fetchPosts();
       toast.success(
-        isPinned
-          ? t('postCard.postUnpinnedSuccess')
-          : t('postCard.postPinnedSuccess'),
+        isPinned ? t('postUnpinnedSuccess') : t('postPinnedSuccess'),
       );
       handleDropdownClose();
     } catch (error) {
@@ -306,7 +304,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
     try {
       await deletePost({ variables: { input: { id: props.id } } });
       props.fetchPosts();
-      toast.success(t('postCard.postDeletedSuccess'));
+      toast.success(t('postDeletedSuccess'));
       handleDropdownClose();
     } catch (error) {
       errorHandler(t, error);
@@ -377,7 +375,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                   <EditOutlined fontSize="small" />
                 </ListItemIcon>
                 <ListItemText
-                  primary={t('postCard.editPost')}
+                  primary={t('editPost')}
                   data-testid="edit-post-button"
                 />
               </MenuItem>
@@ -396,9 +394,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                   )}
                 </ListItemIcon>
                 <ListItemText
-                  primary={
-                    isPinned ? t('postCard.unpinPost') : t('postCard.pinPost')
-                  }
+                  primary={isPinned ? t('unpinPost') : t('pinPost')}
                 />
               </MenuItem>
             )}
@@ -471,7 +467,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       {/* Post Content */}
       <Box className={postCardStyles.postContent}>
         <Typography variant="subtitle2" fontWeight="bold">
-          {props.upVoteCount} {t('postCard.likes')}
+          {props.upVoteCount} {t('likes')}
         </Typography>
         <Typography variant="body2" className={postCardStyles.caption}>
           <Typography component="span" fontWeight="bold">
@@ -539,17 +535,17 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                     {loadingMoreComments ? (
                       <>
                         <CircularProgress size={16} sx={{ mr: 1 }} />
-                        {t('postCard.loadingComments')}
+                        {t('loadingComments')}
                       </>
                     ) : (
-                      t('postCard.loadMoreComments')
+                      t('loadMoreComments')
                     )}
                   </Button>
                 </Box>
               ) : (
                 <Box display="flex" justifyContent="center" py={2}>
                   <Typography variant="body2" color="text.secondary">
-                    {t('postCard.noMoreComments')}
+                    {t('noMoreComments')}
                   </Typography>
                 </Box>
               )}
@@ -573,8 +569,8 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           }}
         >
           {showComments
-            ? t('postCard.hideComments')
-            : t('postCard.viewComments', { count: commentCount })}
+            ? t('hideComments')
+            : t('viewComments', { count: commentCount })}
         </Button>
       )}
 
@@ -590,7 +586,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       <div className={postCardStyles.commentFormContainer}>
         <FormControl fullWidth className={postCardStyles.commentForm}>
           <Input
-            placeholder={t('postCard.addComment')}
+            placeholder={t('addComment')}
             value={commentInput}
             onChange={handleCommentInput}
             fullWidth
@@ -632,7 +628,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           className={postCardStyles.editModalContent}
           sx={{ backgroundColor: 'background.paper' }}
         >
-          <Typography variant="h6">{t('postCard.editPost')}</Typography>
+          <Typography variant="h6">{t('editPost')}</Typography>
           <FormControl fullWidth sx={{ mb: 2 }}>
             <Input
               multiline

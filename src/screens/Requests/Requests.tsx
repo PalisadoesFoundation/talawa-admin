@@ -99,12 +99,12 @@ interface InterfaceRequestsListItem {
 }
 
 const Requests = (): JSX.Element => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'requests' });
   const { t: tCommon } = useTranslation('common');
 
   // Set the document title to the translated title for the requests page
   useEffect(() => {
-    document.title = t('requests.title');
+    document.title = t('title');
   }, [t]);
 
   // Hook for managing local storage
@@ -177,7 +177,7 @@ const Requests = (): JSX.Element => {
 
     // Add null check before accessing organizations.length
     if (orgsData.organizations?.length === 0) {
-      toast.warning(t('users.noOrgError') as string);
+      toast.warning(t('noOrgError') as string);
     }
   }, [orgsData, t]);
 
@@ -286,19 +286,19 @@ const Requests = (): JSX.Element => {
 
   // Header titles for the table
   const headerTitles: string[] = [
-    t('requests.sl_no'),
-    t('addMember.profile'),
+    t('sl_no'),
+    t('profile'),
     tCommon('name'),
     tCommon('email'),
-    t('userVolunteer.accept'),
-    t('userVolunteer.reject'),
+    t('accept'),
+    t('reject'),
   ];
 
   // Columns for ReportingTable (DataGrid)
   const columns: ReportingTableColumn[] = [
     {
       field: 'sl_no',
-      headerName: t('requests.sl_no'),
+      headerName: t('sl_no'),
       display: 'flex',
       flex: 0.5,
       minWidth: 50,
@@ -317,7 +317,7 @@ const Requests = (): JSX.Element => {
     },
     {
       field: 'profile',
-      headerName: t('addMember.profile'),
+      headerName: t('profile'),
       display: 'flex',
       flex: 1,
       minWidth: 80,
@@ -332,7 +332,7 @@ const Requests = (): JSX.Element => {
             <img
               src={user.avatarURL}
               className={styles.userAvatar}
-              alt={t('requests.profilePictureAlt')}
+              alt={t('profilePictureAlt')}
               data-testid="display-img"
               crossOrigin="anonymous"
               onError={(e) => {
@@ -348,7 +348,7 @@ const Requests = (): JSX.Element => {
             size={45}
             avatarStyle={styles.avatarStyle}
             name={user.name || ''}
-            alt={t('requests.placeholderAvatarAlt')}
+            alt={t('placeholderAvatarAlt')}
           />
         );
       },
@@ -387,7 +387,7 @@ const Requests = (): JSX.Element => {
     },
     {
       field: 'accept',
-      headerName: t('userVolunteer.accept'),
+      headerName: t('accept'),
       display: 'flex',
       flex: 1,
       minWidth: 100,
@@ -404,7 +404,7 @@ const Requests = (): JSX.Element => {
             'acceptMembershipRequestBtn' +
             (params?.row?.membershipRequestId ?? '')
           }
-          aria-label={t('userVolunteer.accept')}
+          aria-label={t('accept')}
           onClick={async () => {
             if (params?.row?.membershipRequestId) {
               await handleAcceptUser(params.row.membershipRequestId);
@@ -417,7 +417,7 @@ const Requests = (): JSX.Element => {
     },
     {
       field: 'reject',
-      headerName: t('userVolunteer.reject'),
+      headerName: t('reject'),
       display: 'flex',
       flex: 1,
       minWidth: 100,
@@ -434,7 +434,7 @@ const Requests = (): JSX.Element => {
             'rejectMembershipRequestBtn' +
             (params?.row?.membershipRequestId ?? '')
           }
-          aria-label={t('userVolunteer.reject')}
+          aria-label={t('reject')}
           onClick={async () => {
             if (params?.row?.membershipRequestId) {
               await handleRejectUser(params.row.membershipRequestId);
@@ -486,7 +486,7 @@ const Requests = (): JSX.Element => {
         variables: { input: { membershipRequestId } },
       });
       if (acceptData) {
-        toast.success(t('requests.acceptedSuccessfully') as string);
+        toast.success(t('acceptedSuccessfully') as string);
         resetAndRefetch();
       }
     } catch (error: unknown) {
@@ -500,7 +500,7 @@ const Requests = (): JSX.Element => {
         variables: { input: { membershipRequestId } },
       });
       if (rejectData) {
-        toast.success(t('requests.rejectedSuccessfully') as string);
+        toast.success(t('rejectedSuccessfully') as string);
         resetAndRefetch();
       }
     } catch (error: unknown) {
@@ -517,7 +517,7 @@ const Requests = (): JSX.Element => {
       >
         <PageHeader
           search={{
-            placeholder: t('requests.searchRequests'),
+            placeholder: t('searchRequests'),
             onSearch: handleSearch,
             inputTestId: 'searchByName',
             buttonTestId: 'searchButton',
@@ -527,10 +527,8 @@ const Requests = (): JSX.Element => {
 
       {!isLoading && orgsData?.organizations?.length === 0 ? (
         <div className={styles.notFound}>
-          <h3 className="m-0">{t('requests.noOrgErrorTitle')}</h3>
-          <h6 className="text-secondary">
-            {t('requests.noOrgErrorDescription')}
-          </h6>
+          <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
+          <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
         </div>
       ) : !isLoading &&
         data &&
@@ -543,7 +541,7 @@ const Requests = (): JSX.Element => {
         </div>
       ) : !isLoading && data && displayedRequests.length === 0 ? (
         <div className={styles.notFound}>
-          <h4>{t('requests.noRequestsFound')}</h4>
+          <h4>{t('noRequestsFound')}</h4>
         </div>
       ) : (
         <div className={styles.listBox}>

@@ -65,7 +65,9 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
   onEventCreated,
   currentUrl,
 }) => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationEvents',
+  });
   const { t: tCommon } = useTranslation('common');
 
   const [startDate, setStartDate] = useState<Date>(new Date());
@@ -322,7 +324,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         });
 
         if (createEventData) {
-          toast.success(t('userEvents.eventCreated') as string);
+          toast.success(t('eventCreated') as string);
           onEventCreated();
           resetForm();
           onClose();
@@ -342,7 +344,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
       <Modal show={isOpen} onHide={handleClose}>
         <Modal.Header>
           <p className={styles.titlemodalOrganizationEvents}>
-            {t('userEvents.eventDetails')}
+            {t('eventDetails')}
           </p>
           <Button
             variant="danger"
@@ -355,11 +357,11 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={createEvent}>
-            <label htmlFor="eventName">{t('userEvents.eventName')}</label>
+            <label htmlFor="eventName">{t('eventName')}</label>
             <Form.Control
               type="title"
               id="eventitle"
-              placeholder={t('addMember.enterName')}
+              placeholder={t('enterName')}
               data-testid="eventTitleInput"
               data-cy="eventTitleInput"
               autoComplete="off"
@@ -374,7 +376,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
             <Form.Control
               type="eventdescrip"
               id="eventdescrip"
-              placeholder={t('organizationEvents.enterDescrip')}
+              placeholder={t('enterDescrip')}
               data-testid="eventDescriptionInput"
               data-cy="eventDescriptionInput"
               autoComplete="off"
@@ -475,7 +477,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
             )}
             <div className={styles.checkboxdiv}>
               <div className={styles.dispflexOrganizationEvents}>
-                <label htmlFor="allday">{t('userEvents.allDay')}?</label>
+                <label htmlFor="allday">{t('allDay')}?</label>
                 <Form.Switch
                   className={`me-4 ${styles.switch}`}
                   id="allday"
@@ -486,7 +488,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
                 />
               </div>
               <div className={styles.dispflexOrganizationEvents}>
-                <label htmlFor="ispublic">{t('orgUpdate.isPublic')}?</label>
+                <label htmlFor="ispublic">{t('isPublic')}?</label>
                 <Form.Switch
                   className={`me-4 ${styles.switch}`}
                   id="ispublic"
@@ -497,9 +499,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
                 />
               </div>
               <div className={styles.dispflexOrganizationEvents}>
-                <label htmlFor="registrable">
-                  {t('eventListCard.isRegistrable')}?
-                </label>
+                <label htmlFor="registrable">{t('isRegistrable')}?</label>
                 <Form.Switch
                   className={`me-4 ${styles.switch}`}
                   id="registrable"
@@ -554,7 +554,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
               data-cy="createEventBtn"
               disabled={createLoading}
             >
-              {t('userEvents.createEvent')}
+              {t('createEvent')}
             </Button>
           </Form>
         </Modal.Body>

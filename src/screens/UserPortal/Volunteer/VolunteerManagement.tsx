@@ -78,7 +78,8 @@ type TabOptions = 'upcomingEvents' | 'invitations' | 'actions' | 'groups';
  */
 const VolunteerManagement = (): JSX.Element => {
   // Translation hook for internationalization
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'userVolunteer' });
+
   // Extract organization ID from URL parameters
   const { orgId } = useParams();
 

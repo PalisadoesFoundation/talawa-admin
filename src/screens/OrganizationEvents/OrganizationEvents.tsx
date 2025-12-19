@@ -90,10 +90,12 @@ export enum ViewType {
 }
 
 function organizationEvents(): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationEvents',
+  });
   const { getItem } = useLocalStorage();
 
-  document.title = t('organizationEvents.title');
+  document.title = t('title');
   const [createEventmodalisOpen, setCreateEventmodalisOpen] = useState(false);
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
@@ -228,7 +230,7 @@ function organizationEvents(): JSX.Element {
         <div className={styles.justifyspOrganizationEvents}>
           <PageHeader
             search={{
-              placeholder: t('organizationEvents.searchEventName'),
+              placeholder: t('searchEventName'),
               onSearch: (value) => console.log(`Search: ${value}`),
               inputTestId: 'searchEvent',
               buttonTestId: 'searchButton',
@@ -262,7 +264,7 @@ function organizationEvents(): JSX.Element {
                       marginRight: '2px',
                     }}
                   />
-                  <span>{t('userEvents.createEvent')}</span>
+                  <span>{t('createEvent')}</span>
                 </div>
               </Button>
             }

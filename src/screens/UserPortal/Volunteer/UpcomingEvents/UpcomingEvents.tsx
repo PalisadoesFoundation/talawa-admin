@@ -74,7 +74,7 @@ import RecurringEventVolunteerModal from './RecurringEventVolunteerModal';
 
 const UpcomingEvents = (): JSX.Element => {
   // Retrieves translation functions for various namespaces
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'userVolunteer' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -162,7 +162,7 @@ const UpcomingEvents = (): JSX.Element => {
       await createVolunteerMembership({
         variables: { data: volunteerData },
       });
-      toast.success(t('userVolunteer.volunteerSuccess'));
+      toast.success(t('volunteerSuccess'));
       // Refetch membership data first, then events with a small delay to prevent rate limiting
       await refetchMemberships();
       setTimeout(() => {
@@ -230,9 +230,7 @@ const UpcomingEvents = (): JSX.Element => {
     if (!membership) {
       return {
         status: 'none',
-        buttonText: groupId
-          ? t('userVolunteer.join')
-          : t('eventVolunteers.volunteer'),
+        buttonText: groupId ? t('join') : t('volunteer'),
         buttonVariant: 'outline-success' as const,
         disabled: false,
         icon: IoIosHand,
@@ -245,7 +243,7 @@ const UpcomingEvents = (): JSX.Element => {
       case 'invited':
         return {
           status: 'requested',
-          buttonText: t('userVolunteer.pending'),
+          buttonText: t('pending'),
           buttonVariant: 'outline-warning' as const,
           disabled: true,
           icon: IoIosHand,
@@ -253,9 +251,7 @@ const UpcomingEvents = (): JSX.Element => {
       case 'accepted':
         return {
           status: 'accepted',
-          buttonText: groupId
-            ? t('userVolunteer.joined')
-            : t('userVolunteer.volunteered'),
+          buttonText: groupId ? t('joined') : t('volunteered'),
           buttonVariant: 'outline-success' as const,
           disabled: true,
           icon: FaCheck,
@@ -263,7 +259,7 @@ const UpcomingEvents = (): JSX.Element => {
       case 'rejected':
         return {
           status: 'rejected',
-          buttonText: t('userVolunteer.rejected'),
+          buttonText: t('rejected'),
           buttonVariant: 'outline-danger' as const,
           disabled: true,
           icon: IoIosHand,
@@ -271,9 +267,7 @@ const UpcomingEvents = (): JSX.Element => {
       default:
         return {
           status: 'none',
-          buttonText: groupId
-            ? t('userVolunteer.join')
-            : t('eventVolunteers.volunteer'),
+          buttonText: groupId ? t('join') : t('volunteer'),
           buttonVariant: 'outline-success' as const,
           disabled: false,
           icon: IoIosHand,
@@ -458,7 +452,7 @@ const UpcomingEvents = (): JSX.Element => {
           <div className="d-flex justify-space-between align-items-center gap-3">
             <SortingButton
               sortingOptions={[
-                { label: t('userVolunteer.name'), value: 'title' },
+                { label: t('name'), value: 'title' },
                 { label: tCommon('location'), value: 'location' },
               ]}
               selectedOption={searchBy}
@@ -474,7 +468,7 @@ const UpcomingEvents = (): JSX.Element => {
       {events.length < 1 ? (
         <Stack height="100%" alignItems="center" justifyContent="center">
           {/* Displayed if no events are found */}
-          {t('userVolunteer.noEvents')}
+          {t('noEvents')}
         </Stack>
       ) : (
         events.map((event: InterfaceMappedEvent, index: number) => {
@@ -506,7 +500,7 @@ const UpcomingEvents = (): JSX.Element => {
                       {recurring && (
                         <Chip
                           icon={<Circle className={styles.chipIcon} />}
-                          label={t('userVolunteer.recurring')}
+                          label={t('recurring')}
                           variant="outlined"
                           color="primary"
                           className={`${styles.chip} ${styles.active}`}

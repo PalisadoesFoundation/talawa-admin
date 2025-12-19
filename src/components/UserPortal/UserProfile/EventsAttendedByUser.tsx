@@ -63,14 +63,12 @@ export const EventsAttendedByUser: React.FC<InterfaceUser> = ({
   return (
     <Card border="0" className="rounded-4 mb-4">
       <div className={`${styles.cardHeader}`}>
-        <div className={`${styles.cardTitle}`}>
-          {t('settings.eventAttended')}
-        </div>
+        <div className={`${styles.cardTitle}`}>{t('eventAttended')}</div>
       </div>
       <Card.Body className={`${styles.cardBody} ${styles.scrollableCardBody}`}>
         {!userDetails.eventsAttended?.length ? (
           <div className={styles.emptyContainer}>
-            <h6>{t('settings.noeventsAttended')}</h6>
+            <h6>{t('noeventsAttended')}</h6>
           </div>
         ) : (
           userDetails.eventsAttended.map((event: { id: string }) => (

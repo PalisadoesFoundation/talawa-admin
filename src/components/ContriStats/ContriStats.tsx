@@ -36,20 +36,20 @@ function ContriStats({
   highestAmount,
   totalAmount,
 }: InterfaceContriStatsProps): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'contriStats',
+  });
 
   return (
     <>
       <p className={styles.fonts}>
-        {t('contriStats.recentContribution')}: $&nbsp;
-        <span>{recentAmount}</span>
+        {t('recentContribution')}: $&nbsp;<span>{recentAmount}</span>
       </p>
       <p className={styles.fonts}>
-        {t('contriStats.highestContribution')}: $&nbsp;
-        <span>{highestAmount}</span>
+        {t('highestContribution')}: $&nbsp;<span>{highestAmount}</span>
       </p>
       <p className={styles.fonts}>
-        {t('contriStats.totalContribution')}: $&nbsp;<span>{totalAmount}</span>
+        {t('totalContribution')}: $&nbsp;<span>{totalAmount}</span>
       </p>
     </>
   );

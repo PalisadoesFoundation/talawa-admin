@@ -81,10 +81,10 @@ import { WarningAmberRounded } from '@mui/icons-material';
 import PageHeader from 'shared-components/Navbar/Navbar';
 
 const Users = (): JSX.Element => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'users' });
   const { t: tCommon } = useTranslation('common');
 
-  document.title = t('users.title');
+  document.title = t('title');
 
   const { getItem } = useLocalStorage();
 
@@ -196,7 +196,7 @@ const Users = (): JSX.Element => {
     }
     // Add null check before accessing organizations.length
     if (dataOrgs.organizations?.length === 0) {
-      toast.warning(t('users.noOrgError') as string);
+      toast.warning(t('noOrgError') as string);
     }
   }, [dataOrgs, t]);
 
@@ -332,8 +332,8 @@ const Users = (): JSX.Element => {
     '#',
     tCommon('name'),
     tCommon('email'),
-    t('users.joined_organizations'),
-    t('users.blocked_organizations'),
+    t('joined_organizations'),
+    t('blocked_organizations'),
   ];
 
   return (
@@ -342,7 +342,7 @@ const Users = (): JSX.Element => {
       <div className={styles.btnsContainer} data-testid="testcomp">
         <PageHeader
           search={{
-            placeholder: t('orgActionItemCategories.enterName'),
+            placeholder: t('enterName'),
             onSearch: handleSearch,
             inputTestId: 'searchByName',
             buttonTestId: 'searchButton',
@@ -351,8 +351,8 @@ const Users = (): JSX.Element => {
             {
               title: 'Sort by',
               options: [
-                { label: t('users.Newest'), value: 'newest' },
-                { label: t('users.Oldest'), value: 'oldest' },
+                { label: t('Newest'), value: 'newest' },
+                { label: t('Oldest'), value: 'oldest' },
               ],
               selected: sortingOption,
               onChange: (value) => handleSorting(value.toString()),
@@ -399,7 +399,7 @@ const Users = (): JSX.Element => {
           role="alert"
           aria-label="No results found"
         >
-          <h4>{t('users.noUserFound')}</h4>
+          <h4>{t('noUserFound')}</h4>
         </div>
       ) : (
         <div className={styles.listBox}>

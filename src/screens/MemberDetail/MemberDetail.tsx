@@ -66,7 +66,7 @@ import type { IEvent } from 'types/Event/interface';
 type MemberDetailProps = { id?: string };
 
 const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { t: tCommon } = useTranslation('common');
   const location = useLocation();
@@ -78,7 +78,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const originalImageState = React.useRef<string>('');
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
 
-  document.title = t('memberDetail.title');
+  document.title = t('title');
 
   const [formState, setFormState] = useState({
     addressLine1: '',
@@ -367,7 +367,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </Col>
                 <Col md={6} data-testid="gender">
                   <label htmlFor="gender" className="form-label">
-                    {t('settings.gender')}
+                    {t('gender')}
                   </label>
                   <DynamicDropDown
                     formState={formState}
@@ -381,7 +381,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </Col>
                 <Col md={6}>
                   <label htmlFor="birthDate" className="form-label">
-                    {t('settings.birthDate')}
+                    {t('birthDate')}
                   </label>
                   <DatePicker
                     className={`${styles.dateboxMemberDetail} w-100`}
@@ -397,7 +397,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       textField: {
                         inputProps: {
                           'data-testid': 'birthDate',
-                          'aria-label': t('settings.birthDate'),
+                          'aria-label': t('birthDate'),
                         },
                       },
                     }}
@@ -433,7 +433,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </Col>
                 <Col md={6}>
                   <label htmlFor="maritalStatus" className="form-label">
-                    {t('settings.maritalStatus')}
+                    {t('maritalStatus')}
                   </label>
                   <DynamicDropDown
                     formState={formState}
@@ -499,7 +499,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   data-testid="viewAllEvents"
                   onClick={handleEventsAttendedModal}
                 >
-                  {t('organizationSidebar.viewAll')}
+                  {t('viewAll')}
                 </Button>
               </Card.Header>
               <Card.Body
@@ -509,7 +509,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   <div
                     className={`${styles.emptyContainer} w-100 h-100 d-flex justify-content-center align-items-center fw-semibold text-secondary`}
                   >
-                    {t('settings.noeventsAttended')}
+                    {t('noeventsAttended')}
                   </div>
                 ) : (
                   userData.currentUser.eventsAttended.map(
@@ -572,7 +572,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </Col>
                 <Col md={12}>
                   <label htmlFor="phoneNumber" className="form-label">
-                    {t('memberDetail.workPhoneNumber')}
+                    {t('workPhoneNumber')}
                   </label>
                   <input
                     id="workPhoneNumber"
@@ -589,7 +589,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </Col>
                 <Col md={12}>
                   <label htmlFor="phoneNumber" className="form-label">
-                    {t('settings.homePhoneNumber')}
+                    {t('homePhoneNumber')}
                   </label>
                   <input
                     id="homePhoneNumber"
@@ -606,7 +606,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </Col>
                 <Col md={12}>
                   <label htmlFor="address" className="form-label">
-                    {t('settings.addressLine1')}
+                    {t('addressLine1')}
                   </label>
                   <input
                     id="addressLine1"
@@ -623,7 +623,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </Col>
                 <Col md={12}>
                   <label htmlFor="address" className="form-label">
-                    {t('settings.addressLine2')}
+                    {t('addressLine2')}
                   </label>
                   <input
                     id="addressLine2"
@@ -640,7 +640,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </Col>
                 <Col md={12}>
                   <label htmlFor="address" className="form-label">
-                    {t('settings.postalCode')}
+                    {t('postalCode')}
                   </label>
                   <input
                     id="postalCode"
@@ -657,7 +657,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </Col>
                 <Col md={6}>
                   <label htmlFor="city" className="form-label">
-                    {t('settings.city')}
+                    {t('city')}
                   </label>
                   <input
                     id="city"
@@ -672,7 +672,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 </Col>
                 <Col md={6}>
                   <label htmlFor="state" className="form-label">
-                    {t('settings.state')}
+                    {t('state')}
                   </label>
                   <input
                     id="state"
@@ -748,7 +748,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               style={{ backgroundColor: '#A8C7FA', color: '#555' }}
             >
               <h3 className="m-0" data-testid="tagsAssigned-title">
-                {t('memberDetail.tagsAssigned')}
+                {t('tagsAssigned')}
               </h3>
             </Card.Header>
             <Card.Body

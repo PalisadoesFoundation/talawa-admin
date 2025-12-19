@@ -54,7 +54,9 @@ interface TestInterfaceUpdateTimeoutProps {
 const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
   onValueChange,
 }): JSX.Element => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'communityProfile',
+  });
 
   const [timeout, setTimeout] = useState<number>(30);
   const [communityTimeout, setCommunityTimeout] = useState<number | undefined>(
@@ -135,7 +137,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
         variables: { inactivityTimeoutDuration: timeout * 60 },
       });
 
-      toast.success(t('communityProfile.profileChangedMsg'));
+      toast.success(t('profileChangedMsg'));
       setCommunityTimeout(timeout);
     } catch (error: unknown) {
       errorHandler(t, error as Error);

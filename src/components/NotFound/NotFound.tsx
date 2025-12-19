@@ -39,7 +39,7 @@ interface InterfaceNotFoundProps {
 
 function notFound(props: InterfaceNotFoundProps): JSX.Element {
   const key = props.keyPrefix.toString();
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: key });
   return (
     <>
       <section className={styles.section}>

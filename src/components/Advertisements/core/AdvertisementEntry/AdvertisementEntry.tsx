@@ -69,7 +69,7 @@ function AdvertisementEntry({
     React.SetStateAction<string | null | undefined>
   >;
 }): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const { t: tCommon } = useTranslation('common');
 
   // State for loading button
@@ -127,7 +127,7 @@ function AdvertisementEntry({
           id: advertisement.id,
         },
       });
-      toast.success(t('advertisement.advertisementDeleted') as string);
+      toast.success(t('advertisementDeleted') as string);
       setButtonLoading(false);
       setAfterCompleted?.(null);
       setAfterActive?.(null);
@@ -257,7 +257,7 @@ function AdvertisementEntry({
                   {advertisement.description &&
                   advertisement.description.length > 0
                     ? advertisement.description
-                    : t('advertisement.noDescription')}
+                    : t('noDescription')}
                 </Card.Text>
                 <Card.Text data-testid="Ad_end_date">
                   Starts :{' '}
@@ -293,20 +293,20 @@ function AdvertisementEntry({
                     ) : (
                       <i className={'fa fa-eye'}></i>
                     )}
-                    {t('pluginStore.view')}
+                    {t('view')}
                   </Button>
                 </div>
                 <Modal show={showDeleteModal} onHide={toggleShowDeleteModal}>
                   <Modal.Header>
                     <h5 data-testid="delete_title">
-                      {t('advertisement.deleteAdvertisement')}
+                      {t('deleteAdvertisement')}
                     </h5>
                     <Button variant="danger" onClick={toggleShowDeleteModal}>
                       <i className="fa fa-times"></i>
                     </Button>
                   </Modal.Header>
                   <Modal.Body data-testid="delete_body">
-                    {t('advertisement.deleteAdvertisementMsg')}
+                    {t('deleteAdvertisementMsg')}
                   </Modal.Body>
                   <Modal.Footer>
                     <Button

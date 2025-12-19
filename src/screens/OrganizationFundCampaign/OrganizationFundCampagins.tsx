@@ -95,7 +95,7 @@ const dataGridStyle = {
  * For more details on the reusable classes, refer to the global CSS file.
  */
 const orgFundCampaign = (): JSX.Element => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'fundCampaign' });
   const { t: tCommon } = useTranslation('common');
   const navigate = useNavigate();
 
@@ -367,7 +367,7 @@ const orgFundCampaign = (): JSX.Element => {
             onClick={() => handleClick(params.row.id as string)}
           >
             <i className="fa fa-eye me-1" />
-            {t('userCampaigns.viewPledges')}
+            {t('viewPledges')}
           </Button>
         );
       },
@@ -386,7 +386,7 @@ const orgFundCampaign = (): JSX.Element => {
         >
           {fundName}
         </Link>
-        <Typography color="text.primary">{t('fundCampaign.title')}</Typography>
+        <Typography color="text.primary">{t('title')}</Typography>
       </Breadcrumbs>
 
       <Row className={styles.head}>
@@ -400,22 +400,10 @@ const orgFundCampaign = (): JSX.Element => {
           <div className={styles.btnsBlock}>
             <SortingButton
               sortingOptions={[
-                {
-                  label: t('userCampaigns.lowestGoal'),
-                  value: 'goalAmount_ASC',
-                },
-                {
-                  label: t('userCampaigns.highestGoal'),
-                  value: 'goalAmount_DESC',
-                },
-                {
-                  label: t('userVolunteer.latestEndDate'),
-                  value: 'endAt_DESC',
-                },
-                {
-                  label: t('userVolunteer.earliestEndDate'),
-                  value: 'endAt_ASC',
-                },
+                { label: t('lowestGoal'), value: 'goalAmount_ASC' },
+                { label: t('highestGoal'), value: 'goalAmount_DESC' },
+                { label: t('latestEndDate'), value: 'endAt_DESC' },
+                { label: t('earliestEndDate'), value: 'endAt_ASC' },
               ]}
               selectedOption={sortBy ?? ''}
               onSortChange={(value) =>
@@ -440,7 +428,7 @@ const orgFundCampaign = (): JSX.Element => {
               disabled={isArchived}
             >
               <i className={'fa fa-plus me-2'} />
-              {t('fundCampaign.addCampaign')}
+              {t('addCampaign')}
             </Button>
           </div>
         </div>
@@ -454,7 +442,7 @@ const orgFundCampaign = (): JSX.Element => {
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('fundCampaign.noCampaignsFound')}
+              {t('noCampaignsFound')}
             </Stack>
           ),
         }}

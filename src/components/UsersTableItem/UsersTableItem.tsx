@@ -30,7 +30,7 @@ type Props = {
 };
 
 const UsersTableItem = (props: Props): JSX.Element => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'users' });
   const { t: tCommon } = useTranslation('common');
   const { user, index, resetAndRefetch } = props;
   const [showJoinedOrganizations, setShowJoinedOrganizations] = useState(false);
@@ -111,7 +111,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         },
       });
       if (data) {
-        toast.success(t('users.roleUpdated') as string);
+        toast.success(t('roleUpdated') as string);
         resetAndRefetch();
       }
     } catch (error: unknown) {
@@ -182,7 +182,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             onClick={() => setShowJoinedOrganizations(true)}
             data-testid={`showJoinedOrgsBtn${user.id}`}
           >
-            {t('pluginStore.view')} ({memberOrgs.length})
+            {t('view')} ({memberOrgs.length})
           </Button>
         </td>
         <td>
@@ -191,7 +191,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             onClick={() => setShowBlockedOrganizations(true)}
             data-testid={`showBlockedOrgsBtn${user.id}`}
           >
-            {t('pluginStore.view')} ({blockedUsers.length})
+            {t('view')} ({blockedUsers.length})
           </Button>
         </td>
       </tr>
@@ -204,14 +204,14 @@ const UsersTableItem = (props: Props): JSX.Element => {
       >
         <Modal.Header className={styles.modalHeader} closeButton>
           <Modal.Title className="text-white">
-            {t('users.orgJoinedBy')} {user.name} ({memberOrgs.length})
+            {t('orgJoinedBy')} {user.name} ({memberOrgs.length})
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {memberOrgs.length !== 0 && (
             <div className="mb-4">
               <SearchBar
-                placeholder={t('users.searchByOrgName')}
+                placeholder={t('searchByOrgName')}
                 value={searchByNameJoinedOrgs}
                 onChange={searchJoinedOrgs}
                 onSearch={searchJoinedOrgs}
@@ -225,7 +225,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             {memberOrgs.length === 0 ? (
               <div className={styles.notJoined}>
                 <h4>
-                  {user.name} {t('users.hasNotJoinedAnyOrg')}
+                  {user.name} {t('hasNotJoinedAnyOrg')}
                 </h4>
               </div>
             ) : joinedOrgs.length === 0 ? (
@@ -394,14 +394,14 @@ const UsersTableItem = (props: Props): JSX.Element => {
       >
         <Modal.Header className={styles.modalHeader} closeButton>
           <Modal.Title className="text-white">
-            {t('users.orgThatBlocked')} {user.name} ({blockedUsers.length})
+            {t('orgThatBlocked')} {user.name} ({blockedUsers.length})
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {blockedOrgs.length !== 0 && (
             <div className="search-bar-container">
               <SearchBar
-                placeholder={t('users.searchByOrgName')}
+                placeholder={t('searchByOrgName')}
                 onSearch={searchBlockedOrgs}
                 inputTestId="searchByNameBlockedOrgs"
                 buttonTestId="searchBtnBlockedOrgs"
@@ -412,7 +412,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             {blockedOrgs.length === 0 ? (
               <div className={styles.notJoined}>
                 <h4>
-                  {user.name} {t('users.isNotBlockedByAnyOrg')}
+                  {user.name} {t('isNotBlockedByAnyOrg')}
                 </h4>
               </div>
             ) : blockedUsers.length === 0 ? (

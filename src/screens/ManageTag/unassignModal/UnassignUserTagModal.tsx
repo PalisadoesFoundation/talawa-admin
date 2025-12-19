@@ -66,10 +66,10 @@ const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
           aria-label={t('closeModal')}
         >
           <Modal.Title className="text-white" id={`unassignTag`}>
-            {t('memberDetail.unassignUserTag')}
+            {t('unassignUserTag')}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>{t('memberDetail.unassignUserTagMessage')}</Modal.Body>
+        <Modal.Body>{t('unassignUserTagMessage')}</Modal.Body>
         <Modal.Footer>
           <Button
             type="button"

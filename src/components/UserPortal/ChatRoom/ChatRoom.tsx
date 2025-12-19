@@ -212,7 +212,9 @@ const MessageImageBase: React.FC<IMessageImageProps> = ({
 export const MessageImage = React.memo(MessageImageBase);
 
 export default function chatRoom(props: IChatRoomProps): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userChatRoom',
+  });
   const isMountedRef = useRef<boolean>(true);
 
   useEffect(() => {
@@ -676,9 +678,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           className={`d-flex flex-column justify-content-center align-items-center w-100 h-75 gap-2 ${styles.grey}`}
         >
           <PermContactCalendarIcon fontSize="medium" className={styles.grey} />
-          <h6 data-testid="noChatSelected">
-            {t('userChatRoom.selectContact')}
-          </h6>
+          <h6 data-testid="noChatSelected">{t('selectContact')}</h6>
         </div>
       ) : (
         <>
@@ -820,7 +820,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                     }}
                                     data-testid="replyBtn"
                                   >
-                                    {t('userChatRoom.reply')}
+                                    {t('reply')}
                                   </Dropdown.Item>
                                   {message.creator.id === userId && (
                                     <>
@@ -924,7 +924,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 <GrAttachment />
               </button>
               <Form.Control
-                placeholder={t('userChatRoom.sendMessage')}
+                placeholder={t('sendMessage')}
                 aria-label="Send Message"
                 value={newMessage}
                 data-testid="messageInput"

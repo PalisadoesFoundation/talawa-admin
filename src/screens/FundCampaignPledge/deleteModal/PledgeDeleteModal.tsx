@@ -51,7 +51,7 @@ const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
   pledge,
   refetchPledge,
 }) => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
   const { t: tCommon } = useTranslation('common');
 
   const [deletePledge] = useMutation(DELETE_PLEDGE);
@@ -61,7 +61,7 @@ const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
       await deletePledge({ variables: { id: pledge?.id } });
       refetchPledge();
       hide();
-      toast.success(t('pledges.pledgeDeleted') as string);
+      toast.success(t('pledgeDeleted') as string);
     } catch (error: unknown) {
       toast.error((error as Error).message);
     }
@@ -70,7 +70,7 @@ const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
     <>
       <Modal className={styles.pledgeModal} onHide={hide} show={isOpen}>
         <Modal.Header>
-          <p className={styles.titlemodal}> {t('pledges.deletePledge')}</p>
+          <p className={styles.titlemodal}> {t('deletePledge')}</p>
           <Button
             variant="danger"
             onClick={hide}
@@ -82,7 +82,7 @@ const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
           </Button>
         </Modal.Header>
         <Modal.Body>
-          <p> {t('pledges.deletePledgeMsg')}</p>
+          <p> {t('deletePledgeMsg')}</p>
         </Modal.Body>
         <Modal.Footer>
           <Button

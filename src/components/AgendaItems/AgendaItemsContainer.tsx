@@ -62,7 +62,7 @@ function AgendaItemsContainer({
   agendaItemRefetch: () => void;
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
 }): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'agendaItems' });
   const { t: tCommon } = useTranslation('common');
 
   // State for modals
@@ -159,7 +159,7 @@ function AgendaItemsContainer({
       });
       agendaItemRefetch();
       hideUpdateModal();
-      toast.success(t('agendaItems.agendaItemUpdated') as string);
+      toast.success(t('agendaItemUpdated') as string);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(`${error.message}`);
@@ -179,7 +179,7 @@ function AgendaItemsContainer({
       });
       agendaItemRefetch();
       toggleDeleteModal();
-      toast.success(t('agendaItems.agendaItemDeleted') as string);
+      toast.success(t('agendaItemDeleted') as string);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(`${error.message}`);
@@ -279,7 +279,7 @@ function AgendaItemsContainer({
               lg={1}
               className="align-self-center ps-3 fw-bold"
             >
-              <div>{t('agendaItems.sequence')}</div>
+              <div>{t('sequence')}</div>
             </Col>
             <Col
               xs={6}
@@ -288,21 +288,21 @@ function AgendaItemsContainer({
               lg={3}
               className="align-self-center fw-bold text-center"
             >
-              {t('agendaItems.title')}
+              {t('title')}
             </Col>
             <Col
               className="fw-bold align-self-center d-none d-md-block text-center"
               md={3}
               lg={3}
             >
-              {t('agendaItems.category')}
+              {t('category')}
             </Col>
             <Col
               className="fw-bold align-self-center d-none d-md-block text-center"
               md={3}
               lg={3}
             >
-              {t('organizationVenues.description')}
+              {t('description')}
             </Col>
             <Col
               xs={12}
@@ -311,7 +311,7 @@ function AgendaItemsContainer({
               lg={2}
               className="fw-bold align-self-center text-center"
             >
-              <div>{t('eventRegistrant.options')}</div>
+              <div>{t('options')}</div>
             </Col>
           </Row>
         </div>
@@ -426,7 +426,7 @@ function AgendaItemsContainer({
                   ))}
                 {agendaItemData?.length === 0 && (
                   <div className="lh-lg text-center fw-semibold text-body-tertiary">
-                    {t('agendaItems.noAgendaItems')}
+                    {t('noAgendaItems')}
                   </div>
                 )}
               </div>

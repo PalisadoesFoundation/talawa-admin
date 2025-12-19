@@ -51,7 +51,7 @@ const OrganizationScreen = (): JSX.Element => {
   // Get the current location to determine the translation key
   const location = useLocation();
   const titleKey: string | undefined = map[location.pathname.split('/')[1]];
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: titleKey });
 
   // Get the organization ID from the URL parameters
   const { orgId } = useParams();
@@ -137,7 +137,7 @@ const OrganizationScreen = (): JSX.Element => {
       >
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
-            <h1>{t('orgList.title')}</h1>
+            <h1>{t('title')}</h1>
             {eventName && <h4 className="">{eventName}</h4>}
           </div>
         </div>

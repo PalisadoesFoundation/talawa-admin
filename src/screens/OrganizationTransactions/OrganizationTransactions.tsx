@@ -20,9 +20,10 @@ import styles from 'style/app-fixed.module.css';
 import { PluginInjector } from 'plugin';
 
 export default function OrganizationTransactions(): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'transactions' });
+
   useEffect(() => {
-    document.title = t('transactions.title');
+    document.title = t('title');
   }, [t]);
 
   return (

@@ -63,7 +63,7 @@ enum ItemFilter {
 
 const Invitations = (): JSX.Element => {
   // Retrieves translation functions for various namespaces
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'userVolunteer' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -157,7 +157,7 @@ const Invitations = (): JSX.Element => {
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         {/* Search input field and button */}
         <SearchBar
-          placeholder={t('userVolunteer.searchByEventName')}
+          placeholder={t('searchByEventName')}
           onSearch={debouncedSearch}
           inputTestId="searchBy"
           buttonTestId="searchBtn"
@@ -166,14 +166,8 @@ const Invitations = (): JSX.Element => {
           <div className="d-flex gap-3 justify-space-between">
             <SortingButton
               sortingOptions={[
-                {
-                  label: t('userVolunteer.receivedLatest'),
-                  value: 'createdAt_DESC',
-                },
-                {
-                  label: t('userVolunteer.receivedEarliest'),
-                  value: 'createdAt_ASC',
-                },
+                { label: t('receivedLatest'), value: 'createdAt_DESC' },
+                { label: t('receivedEarliest'), value: 'createdAt_ASC' },
               ]}
               onSortChange={(value) =>
                 setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC')
@@ -184,17 +178,14 @@ const Invitations = (): JSX.Element => {
             <SortingButton
               sortingOptions={[
                 { label: tCommon('all'), value: 'all' },
-                { label: t('userVolunteer.groupInvite'), value: 'group' },
-                {
-                  label: t('userVolunteer.individualInvite'),
-                  value: 'individual',
-                },
+                { label: t('groupInvite'), value: 'group' },
+                { label: t('individualInvite'), value: 'individual' },
               ]}
               onSortChange={(value) =>
                 setFilter(value === 'all' ? null : (value as ItemFilter))
               }
               dataTestIdPrefix="filter"
-              buttonLabel={t('userVolunteer.filter')}
+              buttonLabel={t('filter')}
               type="filter"
             />
           </div>
@@ -203,7 +194,7 @@ const Invitations = (): JSX.Element => {
       {invitations.length < 1 ? (
         <Stack height="100%" alignItems="center" justifyContent="center">
           {/* Displayed if no invitations are found */}
-          {t('userVolunteer.noInvitations')}
+          {t('noInvitations')}
         </Stack>
       ) : (
         invitations.map((invite: InterfaceVolunteerMembership) => (
@@ -217,18 +208,18 @@ const Invitations = (): JSX.Element => {
                   // Group invitation
                   <>
                     {invite.event.recurrenceRule ? (
-                      <>{t('userVolunteer.groupInvitationRecurringSubject')}</>
+                      <>{t('groupInvitationRecurringSubject')}</>
                     ) : (
-                      <>{t('userVolunteer.groupInvitationSubject')}</>
+                      <>{t('groupInvitationSubject')}</>
                     )}
                   </>
                 ) : (
                   // Individual invitation
                   <>
                     {invite.event.recurrenceRule ? (
-                      <>{t('userVolunteer.eventInvitationRecurringSubject')}</>
+                      <>{t('eventInvitationRecurringSubject')}</>
                     ) : (
-                      <>{t('userVolunteer.eventInvitationSubject')}</>
+                      <>{t('eventInvitationSubject')}</>
                     )}
                   </>
                 )}
@@ -268,7 +259,7 @@ const Invitations = (): JSX.Element => {
                 data-testid="acceptBtn"
                 onClick={() => updateMembershipStatus(invite.id, 'accepted')}
               >
-                {t('userVolunteer.accept')}
+                {t('accept')}
               </Button>
               <Button
                 variant="outline-danger"
@@ -276,7 +267,7 @@ const Invitations = (): JSX.Element => {
                 data-testid="rejectBtn"
                 onClick={() => updateMembershipStatus(invite.id, 'rejected')}
               >
-                {t('userVolunteer.reject')}
+                {t('reject')}
               </Button>
             </div>
           </div>

@@ -70,9 +70,7 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
           data-testid="modalOrganizationHeader"
           closeButton
         >
-          <Modal.Title className="text-white">
-            {t('manageTag.tagDetails')}
-          </Modal.Title>
+          <Modal.Title className="text-white">{t('tagDetails')}</Modal.Title>
         </Modal.Header>
         <Form
           onSubmitCapture={(e: FormEvent<HTMLFormElement>): void => {
@@ -83,12 +81,12 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
           }}
         >
           <Modal.Body>
-            <Form.Label htmlFor="tagName">{t('manageTag.tagName')}</Form.Label>
+            <Form.Label htmlFor="tagName">{t('tagName')}</Form.Label>
             <Form.Control
               type="text"
               id="tagName"
               className={`mb-3 ${styles.inputField}`}
-              placeholder={t('manageTag.tagNamePlaceholder')}
+              placeholder={t('tagNamePlaceholder')}
               data-testid="tagNameInput"
               autoComplete="off"
               required

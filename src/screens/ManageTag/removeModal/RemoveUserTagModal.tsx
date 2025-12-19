@@ -64,11 +64,11 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
       >
         <Modal.Header closeButton className={styles.modalHeader}>
           <Modal.Title className="text-white" id="removeUserTag">
-            {t('manageTag.removeUserTag')}
+            {t('removeUserTag')}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body id="removeUserTagMessage">
-          {t('manageTag.removeUserTagMessage')}
+          {t('removeUserTagMessage')}
         </Modal.Body>
         <Modal.Footer>
           <Button

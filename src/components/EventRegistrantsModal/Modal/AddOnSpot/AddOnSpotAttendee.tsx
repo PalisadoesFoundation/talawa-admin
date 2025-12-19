@@ -61,14 +61,14 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
     phoneNo: '',
     gender: '',
   });
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'onSpotAttendee' });
   const { t: tCommon } = useTranslation('common');
   const { orgId } = useParams<{ orgId: string }>();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [addSignUp] = useMutation(SIGNUP_MUTATION);
   const validateForm = (): boolean => {
     if (!formData.firstName || !formData.lastName || !formData.email) {
-      toast.error(t('userRegister.invalidDetailsMessage'));
+      toast.error(t('invalidDetailsMessage'));
       return false;
     }
     return true;
@@ -121,7 +121,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
       });
 
       if (response.data?.signUp) {
-        toast.success(t('onSpotAttendee.attendeeAddedSuccess'));
+        toast.success(t('attendeeAddedSuccess'));
         resetForm();
         reloadMembers();
         handleClose();
@@ -139,7 +139,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
           closeButton
           style={{ backgroundColor: 'var(--tableHeader-bg)' }}
         >
-          <Modal.Title>{t('onSpotAttendee.title')}</Modal.Title>
+          <Modal.Title>{t('title')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit} data-testid="onspot-attendee-form">
@@ -172,9 +172,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
               </Form.Group>
             </div>
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="phoneNo">
-                {t('settings.phoneNumber')}
-              </Form.Label>
+              <Form.Label htmlFor="phoneNo">{t('phoneNumber')}</Form.Label>
               <Form.Control
                 id="phoneNo"
                 type="tel"
@@ -206,10 +204,10 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                 value={formData.gender}
                 onChange={handleChange}
               >
-                <option value="">{t('onSpotAttendee.selectGender')}</option>
-                <option value="Male">{t('settings.male')}</option>
-                <option value="Female">{t('settings.female')}</option>
-                <option value="Other">{t('settings.other')}</option>
+                <option value="">{t('selectGender')}</option>
+                <option value="Male">{t('male')}</option>
+                <option value="Female">{t('female')}</option>
+                <option value="Other">{t('other')}</option>
               </Form.Control>
             </Form.Group>
             <br />
@@ -229,7 +227,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                     aria-hidden="true"
                     className="me-2"
                   />
-                  {t('onSpotAttendee.addingAttendee')}
+                  {t('addingAttendee')}
                 </>
               ) : (
                 'Add'

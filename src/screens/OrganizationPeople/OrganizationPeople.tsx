@@ -112,7 +112,9 @@ interface IQueryVariable {
 }
 
 function OrganizationPeople(): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationPeople',
+  });
   const { t: tCommon } = useTranslation('common');
   const location = useLocation();
   const role = location?.state;
@@ -529,7 +531,7 @@ function OrganizationPeople(): JSX.Element {
           <div className={styles.btnsContainer}>
             <PageHeader
               search={{
-                placeholder: t('fundCampaign.searchFullName'),
+                placeholder: t('searchFullName'),
                 onSearch: (term: string) => setSearchTerm(term),
                 buttonTestId: 'searchbtn',
               }}

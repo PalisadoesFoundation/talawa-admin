@@ -111,7 +111,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            {t('manageTag.errorOccurredWhileLoadingSubTags')}
+            {t('errorOccurredWhileLoadingSubTags')}
           </h6>
         </div>
       </div>
@@ -141,9 +141,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               className="me-3"
               style={{ cursor: 'pointer' }}
               data-testid={`expandSubTags${tag._id}`}
-              aria-label={
-                expanded ? t('manageTag.collapse') : t('manageTag.expand')
-              }
+              aria-label={expanded ? t('collapse') : t('expand')}
             >
               {expanded ? '▼' : '▶'}
             </span>
@@ -155,7 +153,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
               id={`checkbox-${tag._id}`}
-              aria-label={t('manageTag.selectTag')}
+              aria-label={t('selectTag')}
             />
             <i className="fa fa-folder mx-2" />{' '}
           </>

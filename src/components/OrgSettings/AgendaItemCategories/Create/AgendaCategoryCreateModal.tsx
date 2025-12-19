@@ -68,7 +68,7 @@ const AgendaCategoryCreateModal: React.FC<
     >
       <Modal.Header>
         <p className={styles.titlemodalOrganizationEvents}>
-          {t('organizationAgendaCategory.agendaCategoryDetails')}
+          {t('agendaCategoryDetails')}
         </p>
         <Button
           variant="danger"
@@ -81,10 +81,10 @@ const AgendaCategoryCreateModal: React.FC<
       <Modal.Body>
         <Form onSubmit={createAgendaCategoryHandler}>
           <Form.Group className="mb-3" controlId="name">
-            <Form.Label>{t('userVolunteer.name')}</Form.Label>
+            <Form.Label>{t('name')}</Form.Label>
             <Form.Control
               type="text"
-              placeholder={t('userVolunteer.name')}
+              placeholder={t('name')}
               value={formState.name}
               required
               onChange={(e) =>
@@ -93,10 +93,10 @@ const AgendaCategoryCreateModal: React.FC<
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="description">
-            <Form.Label>{t('organizationVenues.description')}</Form.Label>
+            <Form.Label>{t('description')}</Form.Label>
             <Form.Control
               type="text"
-              placeholder={t('organizationVenues.description')}
+              placeholder={t('description')}
               required
               value={formState.description}
               onChange={(e) =>
@@ -110,7 +110,7 @@ const AgendaCategoryCreateModal: React.FC<
             value="createAgendaCategory"
             data-testid="createAgendaCategoryFormSubmitBtn"
           >
-            {t('organizationAgendaCategory.createAgendaCategory')}
+            {t('createAgendaCategory')}
           </Button>
         </Form>
       </Modal.Body>

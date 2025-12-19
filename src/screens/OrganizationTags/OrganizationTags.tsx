@@ -67,7 +67,9 @@ import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScroll
 import PageHeader from 'shared-components/Navbar/Navbar';
 
 function OrganizationTags(): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationTags',
+  });
   const { t: tCommon } = useTranslation('common');
 
   const [createTagModalIsOpen, setCreateTagModalIsOpen] = useState(false);
@@ -164,7 +166,7 @@ function OrganizationTags(): JSX.Element {
     e.preventDefault();
 
     if (!tagName.trim()) {
-      toast.error(t('organizationTags.enterTagName'));
+      toast.error(t('enterTagName'));
       return;
     }
 
@@ -173,7 +175,7 @@ function OrganizationTags(): JSX.Element {
         variables: { name: tagName, organizationId: orgId },
       });
       if (data) {
-        toast.success(t('organizationTags.tagCreationSuccess'));
+        toast.success(t('tagCreationSuccess'));
         orgUserTagsRefetch();
         setTagName('');
         setCreateTagModalIsOpen(false);
@@ -318,7 +320,7 @@ function OrganizationTags(): JSX.Element {
             data-testid="manageTagBtn"
             className={styles.editButton}
           >
-            {t('organizationTags.manageTag')}
+            {t('manageTag')}
           </Button>
         );
       },
@@ -360,7 +362,7 @@ function OrganizationTags(): JSX.Element {
                   className={styles.createButton}
                 >
                   <i className="fa fa-plus me-2" />
-                  {t('organizationTags.createTag')}
+                  {t('createTag')}
                 </Button>
               }
             />
@@ -410,7 +412,7 @@ function OrganizationTags(): JSX.Element {
                           alignItems="center"
                           justifyContent="center"
                         >
-                          {t('organizationTags.noTagsFound')}
+                          {t('noTagsFound')}
                         </Stack>
                       ),
                     }}
@@ -467,16 +469,16 @@ function OrganizationTags(): JSX.Element {
           data-testid="modalOrganizationHeader"
           closeButton
         >
-          <Modal.Title>{t('manageTag.tagDetails')}</Modal.Title>
+          <Modal.Title>{t('tagDetails')}</Modal.Title>
         </Modal.Header>
         <Form onSubmitCapture={createTag}>
           <Modal.Body>
-            <Form.Label htmlFor="tagName">{t('manageTag.tagName')}</Form.Label>
+            <Form.Label htmlFor="tagName">{t('tagName')}</Form.Label>
             <Form.Control
               type="name"
               id="orgname"
               className={`mb-3 ${styles.inputField}`}
-              placeholder={t('manageTag.tagNamePlaceholder')}
+              placeholder={t('tagNamePlaceholder')}
               data-testid="tagNameInput"
               autoComplete="off"
               required

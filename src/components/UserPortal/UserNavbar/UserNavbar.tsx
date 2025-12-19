@@ -67,7 +67,9 @@ function userNavbar(): JSX.Element {
   const navigate = useNavigate();
 
   // Translation hook for internationalization
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userNavbar',
+  });
   const { t: tCommon } = useTranslation('common');
 
   // Mutation hook for revoking the refresh token
@@ -102,7 +104,7 @@ function userNavbar(): JSX.Element {
             src={TalawaImage}
             alt="Talawa Branding"
           />
-          <b>{t('userNavbar.talawa')}</b>
+          <b>{t('talawa')}</b>
         </Navbar.Brand>
 
         {/* Navbar toggle button for responsive design */}

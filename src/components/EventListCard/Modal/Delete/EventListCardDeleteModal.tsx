@@ -77,13 +77,13 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
           className="text-white"
           id={`deleteEventModalLabel${eventListCardProps.id}`}
         >
-          {t('eventListCard.deleteEvent')}
+          {t('deleteEvent')}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {isRecurringInstance ? (
           <div>
-            <p>{t('eventListCard.deleteRecurringEventMsg')}</p>
+            <p>{t('deleteRecurringEventMsg')}</p>
             <Form>
               <Form.Check
                 type="radio"
@@ -92,7 +92,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
                 value="single"
                 checked={deleteOption === 'single'}
                 onChange={() => setDeleteOption('single')}
-                label={t('eventListCard.deleteThisInstance')}
+                label={t('deleteThisInstance')}
                 className="mb-2"
               />
               <Form.Check
@@ -102,7 +102,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
                 value="following"
                 checked={deleteOption === 'following'}
                 onChange={() => setDeleteOption('following')}
-                label={t('eventListCard.deleteThisAndFollowing')}
+                label={t('deleteThisAndFollowing')}
                 className="mb-2"
               />
               <Form.Check
@@ -112,13 +112,13 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
                 value="all"
                 checked={deleteOption === 'all'}
                 onChange={() => setDeleteOption('all')}
-                label={t('eventListCard.deleteAllEvents')}
+                label={t('deleteAllEvents')}
                 className="mb-2"
               />
             </Form>
           </div>
         ) : (
-          <p>{t('eventListCard.deleteEventMsg')}</p>
+          <p>{t('deleteEventMsg')}</p>
         )}
       </Modal.Body>
       <Modal.Footer>

@@ -35,7 +35,9 @@ const InviteByEmailModal: React.FC<Props> = ({
   isRecurring = false,
   onInvitesSent,
 }) => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventRegistrantsModal.inviteByEmail',
+  });
   const { t: tCommon } = useTranslation('common');
 
   const [recipients, setRecipients] = useState<

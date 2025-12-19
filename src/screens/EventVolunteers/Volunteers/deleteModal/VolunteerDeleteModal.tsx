@@ -63,7 +63,7 @@ const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
   isRecurring = false,
   eventId,
 }) => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
 
   const [applyTo, setApplyTo] = useState<'series' | 'instance'>('series');
@@ -92,7 +92,7 @@ const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
 
       refetchVolunteers();
       hide();
-      toast.success(t('eventVolunteers.volunteerRemoved'));
+      toast.success(t('volunteerRemoved'));
     } catch (error: unknown) {
       toast.error((error as Error).message);
     }
@@ -101,10 +101,7 @@ const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
     <>
       <Modal className={styles.volunteerModal} onHide={hide} show={isOpen}>
         <Modal.Header>
-          <p className={styles.titlemodal}>
-            {' '}
-            {t('eventVolunteers.removeVolunteer')}
-          </p>
+          <p className={styles.titlemodal}> {t('removeVolunteer')}</p>
           <Button
             variant="danger"
             onClick={hide}
@@ -116,15 +113,15 @@ const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
           </Button>
         </Modal.Header>
         <Modal.Body>
-          <p> {t('eventVolunteers.removeVolunteerMsg')}</p>
+          <p> {t('removeVolunteerMsg')}</p>
 
           {/* Radio buttons for recurring events - Template-First: All recurring event volunteers are templates */}
           {volunteer.isTemplate && !volunteer.isInstanceException && (
             <Form.Group className="mb-3">
-              <Form.Label>{t('eventVolunteers.applyTo')}</Form.Label>
+              <Form.Label>{t('applyTo')}</Form.Label>
               <Form.Check
                 type="radio"
-                label={t('eventVolunteers.entireSeries')}
+                label={t('entireSeries')}
                 name="applyTo"
                 id="deleteApplyToSeries"
                 data-testid="deleteApplyToSeries"
@@ -133,7 +130,7 @@ const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
               />
               <Form.Check
                 type="radio"
-                label={t('eventVolunteers.thisEventOnly')}
+                label={t('thisEventOnly')}
                 name="applyTo"
                 id="deleteApplyToInstance"
                 data-testid="deleteApplyToInstance"

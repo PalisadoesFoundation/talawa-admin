@@ -90,7 +90,7 @@ type Ad = {
 };
 
 export default function Home(): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'home' });
   const { t: tCommon } = useTranslation('common');
   const { getItem } = useLocalStorage();
   const { orgId } = useParams();
@@ -272,7 +272,7 @@ export default function Home(): JSX.Element {
                 textAlign: 'center',
               }}
             >
-              {t('home.pinnedPosts')}
+              {t('pinnedPosts')}
             </Typography>
             <Carousel
               responsive={{
@@ -314,7 +314,7 @@ export default function Home(): JSX.Element {
             </Carousel>
           </div>
         )}
-        <div className={`${styles.heading}`}>{t('home.startPost')}</div>
+        <div className={`${styles.heading}`}>{t('startPost')}</div>
         <div className={styles.postInputContainer}>
           <Row className="d-flex gap-1">
             <Col className={styles.maxWidthUserPost}>
@@ -345,7 +345,7 @@ export default function Home(): JSX.Element {
             onClick={handlePostButtonClick}
             className={`${postStyles.addButton}`}
           >
-            {t('home.post')}
+            {t('post')}
           </Button>
         </div>
       </div>
@@ -371,7 +371,7 @@ export default function Home(): JSX.Element {
                 ))
               ) : (
                 <p className={postStyles.noPosts} data-testid="no-post">
-                  {t('home.nothingToShowHere')}
+                  {t('nothingToShowHere')}
                 </p>
               )}
             </>

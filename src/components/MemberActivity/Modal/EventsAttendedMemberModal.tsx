@@ -54,7 +54,7 @@ import type { InterfaceEventsAttendedMemberModalProps } from 'types/Event/interf
 const EventsAttendedMemberModal: React.FC<
   InterfaceEventsAttendedMemberModalProps
 > = ({ eventsAttended, setShow, show, eventsPerPage = 5 }) => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
   const [page, setPage] = useState<number>(1);
 
   const handleClose = (): void => {
@@ -86,7 +86,7 @@ const EventsAttendedMemberModal: React.FC<
       </Modal.Header>
       <Modal.Body>
         {eventsAttended.length === 0 ? (
-          <p>{t('settings.noeventsAttended')}</p>
+          <p>{t('noeventsAttended')}</p>
         ) : (
           <>
             <h5 className="text-end">

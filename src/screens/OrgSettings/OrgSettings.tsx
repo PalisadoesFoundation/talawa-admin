@@ -55,10 +55,11 @@ const settingtabs: SettingType[] = [
 ];
 
 function OrgSettings(): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'orgSettings' });
+
   const [tab, setTab] = useState<SettingType>('general');
 
-  document.title = t('orgSettings.title');
+  document.title = t('title');
 
   const { orgId } = useParams();
 

@@ -60,10 +60,10 @@ import styles from '../../style/app-fixed.module.css';
 // import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 
 function OrganizationDashboard(): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'dashboard' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
-  document.title = t('dashboard.title');
+  document.title = t('title');
   const { orgId } = useParams();
   const navigate = useNavigate();
 
@@ -349,9 +349,7 @@ function OrganizationDashboard(): JSX.Element {
             <Col lg={6} className="mb-4 ">
               <Card className="rounded-4 border-2 border-gray-300">
                 <div className={styles.cardHeader}>
-                  <div className={styles.cardTitle}>
-                    {t('dashboard.latestPosts')}
-                  </div>
+                  <div className={styles.cardTitle}>{t('latestPosts')}</div>
                   <Button
                     size="sm"
                     variant="light"
@@ -361,7 +359,7 @@ function OrganizationDashboard(): JSX.Element {
                       await navigate(postsLink);
                     }}
                   >
-                    {t('organizationSidebar.viewAll')}
+                    {t('viewAll')}
                   </Button>
                 </div>
                 <Card.Body className={styles.containerBody}>
@@ -371,7 +369,7 @@ function OrganizationDashboard(): JSX.Element {
                     })
                   ) : orgPostsData?.organization.postsCount == 0 ? (
                     <div className={styles.emptyContainer}>
-                      <h6>{t('dashboard.noPostsPresent')}</h6>
+                      <h6>{t('noPostsPresent')}</h6>
                     </div>
                   ) : (
                     postData?.organization.posts.edges
@@ -404,7 +402,7 @@ function OrganizationDashboard(): JSX.Element {
             <Card border="0" className="rounded-4">
               <div className={styles.cardHeader}>
                 <div className={styles.cardTitle}>
-                  {t('dashboard.membershipRequests')}
+                  {t('membershipRequests')}
                 </div>
                 <Button
                   size="sm"
@@ -414,7 +412,7 @@ function OrganizationDashboard(): JSX.Element {
                     await navigate(requestLink);
                   }}
                 >
-                  {t('organizationSidebar.viewAll')}
+                  {t('viewAll')}
                 </Button>
               </div>
               <Card.Body className={styles.containerBody}>
@@ -427,7 +425,7 @@ function OrganizationDashboard(): JSX.Element {
                     className={styles.emptyContainer}
                     style={{ height: '150px' }}
                   >
-                    <h6>{t('dashboard.noMembershipRequests')}</h6>
+                    <h6>{t('noMembershipRequests')}</h6>
                   </div>
                 ) : (
                   pendingMembershipRequests
@@ -453,20 +451,16 @@ function OrganizationDashboard(): JSX.Element {
           <Row>
             <Card border="0" className="rounded-4">
               <div className={styles.cardHeader}>
-                <div className={styles.cardTitle}>
-                  {t('dashboard.volunteerRankings')}
-                </div>
+                <div className={styles.cardTitle}>{t('volunteerRankings')}</div>
                 <Button
                   size="sm"
                   variant="light"
                   data-testid="viewAllLeadeboard"
                   onClick={async (): Promise<void> => {
-                    await Promise.resolve(
-                      toast.success(t('dashboard.comingSoon')),
-                    );
+                    await Promise.resolve(toast.success(t('comingSoon')));
                   }}
                 >
-                  {t('organizationSidebar.viewAll')}
+                  {t('viewAll')}
                 </Button>
               </div>
               <Card.Body
@@ -479,7 +473,7 @@ function OrganizationDashboard(): JSX.Element {
                   })
                 ) : rankings.length == 0 ? (
                   <div className={styles.emptyContainer}>
-                    <h6>{t('eventVolunteers.noVolunteers')}</h6>
+                    <h6>{t('noVolunteers')}</h6>
                   </div>
                 ) : (
                   rankings.map(({ rank, user, hoursVolunteered }, index) => {

@@ -60,7 +60,7 @@ import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
 import type { InterfaceUserAttendee } from 'types/User/interface';
 
 function EventRegistrants(): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'eventRegistrant' });
   const { orgId, eventId } = useParams<{ orgId: string; eventId: string }>();
   const [registrants, setRegistrants] = useState<InterfaceUserAttendee[]>([]);
   const [checkedInUsers, setCheckedInUsers] = useState<string[]>([]);
@@ -219,10 +219,7 @@ function EventRegistrants(): JSX.Element {
         className="mt-3"
         sx={{ borderRadius: '16px' }}
       >
-        <Table
-          aria-label={t('eventRegistrant.eventRegistrantsTable')}
-          role="grid"
-        >
+        <Table aria-label={t('eventRegistrantsTable')} role="grid">
           <TableHead>
             <TableRow>
               <TableCell
@@ -231,32 +228,32 @@ function EventRegistrants(): JSX.Element {
                 role="columnheader"
                 aria-sort="none"
               >
-                {t('eventRegistrant.serialNumber')}
+                {t('serialNumber')}
               </TableCell>
               <TableCell
                 data-testid="table-header-registrant"
                 className={styles.customcell}
               >
-                {t('eventRegistrant.registrant')}
+                {t('registrant')}
               </TableCell>
               <TableCell
                 data-testid="table-header-registered-at"
                 className={styles.customcell}
               >
-                {t('eventRegistrant.registeredAt')}
+                {t('registeredAt')}
               </TableCell>
               <TableCell
                 data-testid="table-header-created-at"
                 className={styles.customcell}
               >
-                {t('eventRegistrant.createdAt')}
+                {t('createdAt')}
               </TableCell>
               <TableCell
                 data-testid="table-header-options"
                 className={styles.customcell}
                 align="center"
               >
-                {t('eventRegistrant.options')}
+                {t('options')}
               </TableCell>
             </TableRow>
           </TableHead>
@@ -268,7 +265,7 @@ function EventRegistrants(): JSX.Element {
                   align="center"
                   data-testid="no-registrants"
                 >
-                  {t('eventRegistrant.noRegistrantsFound')}
+                  {t('noRegistrantsFound')}
                 </TableCell>
               </TableRow>
             ) : (

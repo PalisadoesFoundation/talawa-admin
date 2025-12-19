@@ -76,7 +76,8 @@ interface InterfaceTabConfig {
 
 const EventManagement = (): JSX.Element => {
   // Translation hook for internationalization
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'eventManagement' });
+
   // Custom hook for accessing local storage
   const { getItem } = useLocalStorage();
 

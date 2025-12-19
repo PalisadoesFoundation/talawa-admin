@@ -56,7 +56,8 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
   const { orgId: currentUrl } = useParams();
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
 
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'userListCard' });
+
   const addAdmin = async (): Promise<void> => {
     try {
       const { data } = await adda({
@@ -64,7 +65,7 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
       });
 
       if (data) {
-        toast.success(t('userListCard.addedAsAdmin') as string);
+        toast.success(t('addedAsAdmin') as string);
         setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -80,7 +81,7 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
         className={styles.memberfontcreatedbtnUserListCard}
         onClick={addAdmin}
       >
-        {t('memberDetail.addAdmin')}
+        {t('addAdmin')}
       </Button>
     </>
   );

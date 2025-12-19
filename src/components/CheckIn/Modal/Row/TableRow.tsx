@@ -54,7 +54,7 @@ export const TableRow = ({
   onCheckInUpdate?: () => void;
 }): JSX.Element => {
   const [checkInMutation] = useMutation(MARK_CHECKIN);
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'checkIn' });
 
   const markCheckIn = (): void => {
     const variables = data.isRecurring
@@ -65,13 +65,13 @@ export const TableRow = ({
       variables: variables,
     })
       .then(() => {
-        toast.success(t('checkIn.checkedInSuccessfully') as string);
+        toast.success(t('checkedInSuccessfully') as string);
         refetch();
         // Call the callback to refresh data in parent component (EventRegistrants)
         onCheckInUpdate?.();
       })
       .catch((err) => {
-        toast.error(t('checkIn.errorCheckingIn') as string);
+        toast.error(t('errorCheckingIn') as string);
         toast.error(err.message);
       });
   };

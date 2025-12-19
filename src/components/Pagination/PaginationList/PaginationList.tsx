@@ -54,7 +54,9 @@ const PaginationList = ({
   onPageChange,
   onRowsPerPageChange,
 }: InterfacePropsInterface): JSX.Element => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'paginationList',
+  });
 
   const isSmallScreen = useMediaQuery('(max-width: 600px)');
 
@@ -88,7 +90,7 @@ const PaginationList = ({
             5,
             10,
             30,
-            { label: t('paginationList.all'), value: Number.MAX_SAFE_INTEGER },
+            { label: t('all'), value: Number.MAX_SAFE_INTEGER },
           ]}
           data-testid={'table-pagination'}
           colSpan={4}
@@ -104,7 +106,7 @@ const PaginationList = ({
           onPageChange={onPageChange}
           onRowsPerPageChange={onRowsPerPageChange}
           ActionsComponent={Pagination}
-          labelRowsPerPage={t('paginationList.rowsPerPage')}
+          labelRowsPerPage={t('rowsPerPage')}
         />
       )}
     </>

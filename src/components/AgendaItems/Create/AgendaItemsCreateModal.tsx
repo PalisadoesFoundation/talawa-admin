@@ -94,7 +94,7 @@ const AgendaItemsCreateModal: React.FC<
       });
       setNewUrl('');
     } else {
-      toast.error(t('agendaItems.invalidUrl'));
+      toast.error(t('invalidUrl'));
     }
   };
 
@@ -126,7 +126,7 @@ const AgendaItemsCreateModal: React.FC<
         totalSize += file.size;
       });
       if (totalSize > 10 * 1024 * 1024) {
-        toast.error(t('agendaItems.fileSizeExceedsLimit'));
+        toast.error(t('fileSizeExceedsLimit'));
         return;
       }
       const base64Files = await Promise.all(
@@ -158,9 +158,7 @@ const AgendaItemsCreateModal: React.FC<
       onHide={hideCreateModal}
     >
       <Modal.Header>
-        <p className={styles.titlemodalAgendaItems}>
-          {t('agendaItems.agendaItemDetails')}
-        </p>
+        <p className={styles.titlemodalAgendaItems}>{t('agendaItemDetails')}</p>
         <Button
           variant="danger"
           onClick={hideCreateModal}
@@ -196,17 +194,17 @@ const AgendaItemsCreateModal: React.FC<
                 });
               }}
               renderInput={(params) => (
-                <TextField {...params} label={t('agendaItems.category')} />
+                <TextField {...params} label={t('category')} />
               )}
             />
           </Form.Group>
           <Row className="mb-3">
             <Col>
               <Form.Group className="mb-3" controlId="title">
-                <Form.Label>{t('agendaItems.title')}</Form.Label>
+                <Form.Label>{t('title')}</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder={t('agendaItems.enterTitle')}
+                  placeholder={t('enterTitle')}
                   value={formState.title}
                   required
                   onChange={(e) =>
@@ -217,10 +215,10 @@ const AgendaItemsCreateModal: React.FC<
             </Col>
             <Col>
               <Form.Group controlId="duration">
-                <Form.Label>{t('agendaItems.duration')}</Form.Label>
+                <Form.Label>{t('duration')}</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder={t('agendaItems.enterDuration')}
+                  placeholder={t('enterDuration')}
                   value={formState.duration}
                   required
                   onChange={(e) =>
@@ -231,11 +229,11 @@ const AgendaItemsCreateModal: React.FC<
             </Col>
           </Row>
           <Form.Group className="mb-3" controlId="description">
-            <Form.Label>{t('organizationVenues.description')}</Form.Label>
+            <Form.Label>{t('description')}</Form.Label>
             <Form.Control
               as="textarea"
               rows={1}
-              placeholder={t('userEvents.eventNenterDescriptioname')}
+              placeholder={t('enterDescription')}
               value={formState.description}
               required
               onChange={(e) =>
@@ -245,18 +243,18 @@ const AgendaItemsCreateModal: React.FC<
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <Form.Label>{t('agendaItems.url')}</Form.Label>
+            <Form.Label>{t('url')}</Form.Label>
             <div className="d-flex">
               <Form.Control
                 type="text"
-                placeholder={t('agendaItems.enterUrl')}
+                placeholder={t('enterUrl')}
                 id="basic-url"
                 data-testid="urlInput"
                 value={newUrl}
                 onChange={(e) => setNewUrl(e.target.value)}
               />
               <Button onClick={handleAddUrl} data-testid="linkBtn">
-                {t('agendaItems.link')}
+                {t('link')}
               </Button>
             </div>
 
@@ -279,7 +277,7 @@ const AgendaItemsCreateModal: React.FC<
             ))}
           </Form.Group>
           <Form.Group className="mb-3">
-            <Form.Label>{t('agendaItems.attachments')}</Form.Label>
+            <Form.Label>{t('attachments')}</Form.Label>
             <Form.Control
               accept="image/*, video/*"
               data-testid="attachment"
@@ -289,7 +287,7 @@ const AgendaItemsCreateModal: React.FC<
               multiple={true}
               onChange={handleFileChange}
             />
-            <Form.Text>{t('agendaItems.attachmentLimit')}</Form.Text>
+            <Form.Text>{t('attachmentLimit')}</Form.Text>
           </Form.Group>
           {formState.attachments && (
             <div className={styles.previewFile} data-testid="mediaPreview">
@@ -328,7 +326,7 @@ const AgendaItemsCreateModal: React.FC<
             value="createAgendaItem"
             data-testid="createAgendaItemFormBtn"
           >
-            {t('agendaItems.createAgendaItem')}
+            {t('createAgendaItem')}
           </Button>
         </Form>
       </Modal.Body>

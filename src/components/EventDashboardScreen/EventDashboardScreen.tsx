@@ -51,7 +51,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
   const adminFor = getItem('AdminFor');
   const location = useLocation();
   const titleKey: string | undefined = map[location.pathname.split('/')[2]];
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: titleKey });
   const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
     const stored = getItem('sidebar');
     return stored === 'true';
@@ -75,7 +75,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
               className={`d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
             >
               <div style={{ flex: 1 }}>
-                <h1>{t('organizationEvents.title')}</h1>
+                <h1>{t('title')}</h1>
               </div>
               <Outlet />
             </div>
@@ -158,7 +158,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
       >
         <div className="d-flex justify-content-between align-items-center">
           <div style={{ flex: 1 }}>
-            <h1>{t('organizationEvents.title')}</h1>
+            <h1>{t('title')}</h1>
           </div>
           <ProfileDropdown portal="admin" />
         </div>

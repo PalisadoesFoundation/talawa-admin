@@ -78,7 +78,7 @@ const dataGridStyle = {
 };
 
 function requests(): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -243,9 +243,7 @@ function requests(): JSX.Element {
         return (
           <div className="d-flex flex-column align-items-center">
             <span className="fw-bold">
-              {group
-                ? t('eventVolunteers.groups')
-                : t('eventVolunteers.individuals')}
+              {group ? t('groups') : t('individuals')}
             </span>
             {group && <small className="text-muted">{group.name}</small>}
           </div>
@@ -316,11 +314,8 @@ function requests(): JSX.Element {
           <div className="d-flex justify-space-between align-items-center gap-3">
             <SortingButton
               sortingOptions={[
-                { label: t('eventVolunteers.latest'), value: 'createdAt_DESC' },
-                {
-                  label: t('eventVolunteers.earliest'),
-                  value: 'createdAt_ASC',
-                },
+                { label: t('latest'), value: 'createdAt_DESC' },
+                { label: t('earliest'), value: 'createdAt_ASC' },
               ]}
               selectedOption={sortBy ?? ''}
               onSortChange={(value) =>
@@ -334,11 +329,8 @@ function requests(): JSX.Element {
               type="filter"
               sortingOptions={[
                 { label: tCommon('all'), value: 'all' },
-                {
-                  label: t('eventVolunteers.individuals'),
-                  value: 'individual',
-                },
-                { label: t('eventVolunteers.groups'), value: 'group' },
+                { label: t('individuals'), value: 'individual' },
+                { label: t('groups'), value: 'group' },
               ]}
               selectedOption={filterBy}
               onSortChange={(value) =>
@@ -369,7 +361,7 @@ function requests(): JSX.Element {
         />
       ) : (
         <div className="d-flex justify-content-center align-items-center mt-5">
-          <h5>{t('eventVolunteers.noRequests')}</h5>
+          <h5>{t('noRequests')}</h5>
         </div>
       )}
     </div>

@@ -101,7 +101,7 @@ const dataGridStyle = {
 };
 
 function volunteers(): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -430,11 +430,11 @@ function volunteers(): JSX.Element {
             <SortingButton
               sortingOptions={[
                 {
-                  label: t('eventVolunteers.mostHoursVolunteered'),
+                  label: t('mostHoursVolunteered'),
                   value: 'hoursVolunteered_DESC',
                 },
                 {
-                  label: t('eventVolunteers.leastHoursVolunteered'),
+                  label: t('leastHoursVolunteered'),
                   value: 'hoursVolunteered_ASC',
                 },
               ]}
@@ -453,19 +453,13 @@ function volunteers(): JSX.Element {
               sortingOptions={[
                 { label: tCommon('all'), value: VolunteerStatus.All },
                 { label: tCommon('pending'), value: VolunteerStatus.Pending },
-                {
-                  label: t('eventVolunteers.accepted'),
-                  value: VolunteerStatus.Accepted,
-                },
-                {
-                  label: t('userVolunteer.rejected'),
-                  value: VolunteerStatus.Rejected,
-                },
+                { label: t('accepted'), value: VolunteerStatus.Accepted },
+                { label: t('rejected'), value: VolunteerStatus.Rejected },
               ]}
               selectedOption={status}
               onSortChange={(value) => setStatus(value as VolunteerStatus)}
               dataTestIdPrefix="filter"
-              buttonLabel={t('eventVolunteers.status')}
+              buttonLabel={t('status')}
             />
           </div>
           <div>
@@ -477,7 +471,7 @@ function volunteers(): JSX.Element {
               data-testid="addVolunteerBtn"
             >
               <i className={'fa fa-plus me-2'} />
-              {t('eventVolunteers.add')}
+              {t('add')}
             </Button>
           </div>
         </div>
@@ -493,7 +487,7 @@ function volunteers(): JSX.Element {
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('eventVolunteers.noVolunteers')}
+              {t('noVolunteers')}
             </Stack>
           ),
         }}

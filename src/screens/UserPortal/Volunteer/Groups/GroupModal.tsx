@@ -74,7 +74,9 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
   group,
   refetchGroups,
 }) => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventVolunteers',
+  });
   const { t: tCommon } = useTranslation('common');
 
   const [modalType, setModalType] = useState<'details' | 'requests'>('details');
@@ -173,7 +175,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             data: { ...updatedFields, eventId },
           },
         });
-        toast.success(t('eventVolunteers.volunteerGroupUpdated'));
+        toast.success(t('volunteerGroupUpdated'));
         refetchGroups();
         hide();
       } catch (error: unknown) {
@@ -187,7 +189,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
   return (
     <Modal className={styles.groupModal} onHide={hide} show={isOpen}>
       <Modal.Header>
-        <p className={styles.titlemodal}>{t('eventVolunteers.manageGroup')}</p>
+        <p className={styles.titlemodal}>{t('manageGroup')}</p>
         <Button
           variant="danger"
           onClick={hide}
@@ -215,7 +217,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             htmlFor="detailsRadio"
           >
             <TbListDetails className="me-2" />
-            {t('eventVolunteers.details')}
+            {t('details')}
           </label>
 
           <input
@@ -231,7 +233,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             htmlFor="groupsRadio"
           >
             <PiUserListBold className="me-2" size={21} />
-            {t('eventVolunteers.requests')}
+            {t('requests')}
           </label>
         </div>
 
@@ -277,7 +279,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             <Form.Group className="mb-3">
               <FormControl fullWidth>
                 <TextField
-                  label={t('organizationActionItems.volunteersRequired')}
+                  label={t('volunteersRequired')}
                   variant="outlined"
                   className={styles.noOutline}
                   value={volunteersRequired ?? ''}
@@ -304,14 +306,14 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
               className={styles.regBtn}
               data-testid="submitBtn"
             >
-              {t('eventVolunteers.updateGroup')}
+              {t('updateGroup')}
             </Button>
           </Form>
         ) : (
           <div className="px-3">
             {requests.length === 0 ? (
               <Stack height="100%" alignItems="center" justifyContent="center">
-                {t('eventVolunteers.noRequests')}
+                {t('noRequests')}
               </Stack>
             ) : (
               <TableContainer

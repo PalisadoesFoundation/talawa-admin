@@ -35,15 +35,15 @@ import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 
 const OtherSettings: React.FC = () => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'settings' });
   return (
     <Card border="0" className={styles.cardOtherSettings}>
       <div className={styles.cardHeader}>
-        <div className={styles.cardTitle}>{t('settings.otherSettings')}</div>
+        <div className={styles.cardTitle}>{t('otherSettings')}</div>
       </div>
       <Card.Body className={styles.otherSettingsCardBody}>
         <Form.Label className={`text-secondary fw-bold ${styles.cardLabel}`}>
-          {t('settings.changeLanguage')}
+          {t('changeLanguage')}
         </Form.Label>
         <div className={styles.dropDownContainer}>
           <ChangeLanguageDropDown />

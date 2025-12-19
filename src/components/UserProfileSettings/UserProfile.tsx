@@ -63,14 +63,14 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
   email,
   image,
 }): JSX.Element => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'settings' });
   const { t: tCommon } = useTranslation('common');
 
   return (
     <>
       <Card border="0" className="rounded-4 mb-4 ">
         <div className={styles.cardHeader}>
-          <div className={styles.cardTitle}>{t('settings.profileDetails')}</div>
+          <div className={styles.cardTitle}>{t('profileDetails')}</div>
         </div>
         <Card.Body className={styles.cardBody}>
           <div className={`d-flex mb-2 ${styles.profileContainer}`}>
@@ -114,9 +114,7 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
             </div>
           </div>
           <div className="mt-4 mb-1 d-flex justify-content-center">
-            <Button data-testid="copyProfileLink">
-              {t('settings.copyLink')}
-            </Button>
+            <Button data-testid="copyProfileLink">{t('copyLink')}</Button>
           </div>
         </Card.Body>
       </Card>

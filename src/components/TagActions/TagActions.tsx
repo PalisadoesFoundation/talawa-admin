@@ -243,7 +243,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     e.preventDefault();
 
     if (!selectedTags.length) {
-      toast.error(t('manageTag.noTagSelected'));
+      toast.error(t('noTagSelected'));
       return;
     }
 
@@ -262,9 +262,9 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
       if (data) {
         if (tagActionType === 'assignToTags') {
-          toast.success(t('manageTag.successfullyAssignedToTags'));
+          toast.success(t('successfullyAssignedToTags'));
         } else {
-          toast.success(t('manageTag.successfullyRemovedFromTags'));
+          toast.success(t('successfullyRemovedFromTags'));
         }
         hideTagActionsModal();
       }
@@ -281,7 +281,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            {t('manageTag.errorOccurredWhileLoadingOrganizationUserTags')}
+            {t('errorOccurredWhileLoadingOrganizationUserTags')}
           </h6>
         </div>
       </div>
@@ -304,8 +304,8 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
         >
           <Modal.Title className="text-white">
             {tagActionType === 'assignToTags'
-              ? t('manageTag.assignToTags')
-              : t('manageTag.removeFromTags')}
+              ? t('assignToTags')
+              : t('removeFromTags')}
           </Modal.Title>
         </Modal.Header>
         <Form onSubmit={handleTagAction}>
@@ -315,7 +315,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
             >
               {selectedTags.length === 0 ? (
                 <div className="text-body-tertiary mx-auto">
-                  {t('manageTag.noTagSelected')}
+                  {t('noTagSelected')}
                 </div>
               ) : (
                 selectedTags.map((tag: InterfaceTagData) => (
@@ -328,7 +328,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                       className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary border-0 bg-transparent`}
                       onClick={() => deSelectTag(tag)}
                       data-testid={`clearSelectedTag${tag._id}`}
-                      aria-label={t('orgPeopleListCard.remove')}
+                      aria-label={t('remove')}
                     />
                   </div>
                 ))
@@ -349,7 +349,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
             </div>
 
             <div className="mt-3 mb-2 fs-5 fw-semibold text-dark-emphasis">
-              {t('manageTag.allTags')}
+              {t('allTags')}
             </div>
             {orgUserTagsLoading ? (
               <div className={styles.loadingDiv}>
@@ -425,9 +425,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
               data-testid="tagActionSubmitBtn"
               className={`btn ${styles.addButton}`}
             >
-              {tagActionType === 'assignToTags'
-                ? t('manageTag.assign')
-                : t('orgPeopleListCard.remove')}
+              {tagActionType === 'assignToTags' ? t('assign') : t('remove')}
             </Button>
           </Modal.Footer>
         </Form>

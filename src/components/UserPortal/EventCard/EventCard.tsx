@@ -58,7 +58,9 @@ import type { InterfaceEvent } from 'types/Event/interface';
 
 function eventCard(props: InterfaceEvent): JSX.Element {
   // Extract the translation functions
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userEventCard',
+  });
   const { t: tCommon } = useTranslation('common');
 
   // Get user ID from local storage
@@ -117,7 +119,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         <b>{props.location}</b>
       </span>
       <div className={`d-flex flex-row ${styles.eventDetails}`}>
-        {`${t('userEventCard.starts')} `}
+        {`${t('starts')} `}
         {props.startTime ? (
           <b data-testid="startTime">
             {dayjs(`2015-03-04T${props.startTime}`).format('h:mm:ss A')}
@@ -128,7 +130,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         <b> {dayjs(props.startAt).format('D MMMM YYYY')}</b>
       </div>
       <div className={`d-flex flex-row ${styles.eventDetails}`}>
-        {`${t('userEventCard.ends')} `}
+        {`${t('ends')} `}
         {props.endTime ? (
           <b data-testid="endTime">
             {dayjs(`2015-03-04T${props.endTime}`).format('h:mm:ss A')}
@@ -139,7 +141,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         <b> {dayjs(props.endAt).format('D MMMM YYYY')}</b>
       </div>
       <span>
-        {`${t('eventVolunteers.creator')} `}
+        {`${t('creator')} `}
         <b>{creatorName}</b>
       </span>
 
@@ -148,7 +150,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
           <HourglassBottomIcon fontSize="small" />
         ) : isRegistered ? (
           <Button size="sm" disabled>
-            {t('userEventCard.alreadyRegistered')}
+            {t('alreadyRegistered')}
           </Button>
         ) : (
           <Button size="sm" onClick={handleRegister}>

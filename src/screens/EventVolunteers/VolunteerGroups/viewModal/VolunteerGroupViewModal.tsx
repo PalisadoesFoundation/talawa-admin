@@ -65,7 +65,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
   hide,
   group,
 }) => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
 
   const { leader, creator, name, volunteersRequired, description, volunteers } =
@@ -74,7 +74,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
   return (
     <Modal className={styles.volunteerCreateModal} onHide={hide} show={isOpen}>
       <Modal.Header>
-        <p className={styles.titlemodal}>{t('eventVolunteers.groupDetails')}</p>
+        <p className={styles.titlemodal}>{t('groupDetails')}</p>
         <Button
           variant="danger"
           onClick={hide}
@@ -130,7 +130,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
           <Form.Group className="mb-3 d-flex gap-3">
             <FormControl fullWidth>
               <TextField
-                label={t('eventVolunteers.leader')}
+                label={t('leader')}
                 variant="outlined"
                 className={styles.noOutline}
                 value={leader.name}
@@ -165,7 +165,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
 
             <FormControl fullWidth>
               <TextField
-                label={t('eventVolunteers.creator')}
+                label={t('creator')}
                 variant="outlined"
                 className={styles.noOutline}
                 value={creator.name}

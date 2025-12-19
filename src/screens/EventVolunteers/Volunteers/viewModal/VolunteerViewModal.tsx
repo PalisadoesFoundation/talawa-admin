@@ -70,7 +70,7 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
   hide,
   volunteer,
 }) => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
 
   const { user, volunteerStatus, hoursVolunteered, groups } = volunteer;
@@ -78,9 +78,7 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
   return (
     <Modal className={styles.volunteerViewModal} onHide={hide} show={isOpen}>
       <Modal.Header>
-        <p className={styles.modalTitle}>
-          {t('eventVolunteers.volunteerDetails')}
-        </p>
+        <p className={styles.modalTitle}>{t('volunteerDetails')}</p>
         <Button
           variant="danger"
           onClick={hide}
@@ -96,7 +94,7 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
           <Form.Group className={styles.formGroup}>
             <FormControl fullWidth>
               <TextField
-                label={t('eventVolunteers.volunteer')}
+                label={t('volunteer')}
                 variant="outlined"
                 className={styles.noOutline}
                 value={user.name}
@@ -132,13 +130,13 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
           {/* Status and hours volunteered */}
           <Form.Group className={styles.statusGroup}>
             <TextField
-              label={t('eventVolunteers.status')}
+              label={t('status')}
               fullWidth
               value={
                 volunteerStatus === 'accepted'
-                  ? t('eventVolunteers.accepted')
+                  ? t('accepted')
                   : volunteerStatus === 'rejected'
-                    ? t('userVolunteer.rejected')
+                    ? t('rejected')
                     : tCommon('pending')
               }
               InputProps={{
@@ -167,7 +165,7 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
             />
 
             <TextField
-              label={t('eventVolunteers.hoursVolunteered')}
+              label={t('hoursVolunteered')}
               variant="outlined"
               className={`${styles.noOutline} ${styles.hoursField}`}
               value={hoursVolunteered ?? '-'}

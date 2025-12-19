@@ -154,7 +154,7 @@ export const AttendanceStatisticsModal: React.FC<
             const isCurrentEvent =
               paginatedRecurringEvents[context.dataIndex].id === eventId;
             return isCurrentEvent
-              ? `${label}: ${value} (${t('eventAttendance.currentEvent')})`
+              ? `${label}: ${value} (${t('currentEvent')})`
               : `${label}: ${value}`;
           },
         },
@@ -230,25 +230,25 @@ export const AttendanceStatisticsModal: React.FC<
       labels: eventLabels,
       datasets: [
         {
-          label: t('eventAttendance.attendeeCount'),
+          label: t('attendeeCount'),
           data: attendeeCounts,
           fill: true,
           borderColor: '#008000',
         },
         {
-          label: t('eventAttendance.maleAttendees'),
+          label: t('maleAttendees'),
           data: maleCounts,
           fill: false,
           borderColor: '#0000FF',
         },
         {
-          label: t('eventAttendance.femaleAttendees'),
+          label: t('femaleAttendees'),
           data: femaleCounts,
           fill: false,
           borderColor: '#FF1493',
         },
         {
-          label: t('eventAttendance.otherAttendees'),
+          label: t('otherAttendees'),
           data: otherCounts,
           fill: false,
           borderColor: '#FFD700',
@@ -276,7 +276,7 @@ export const AttendanceStatisticsModal: React.FC<
   const categoryLabels = useMemo(
     () =>
       selectedCategory === 'Gender'
-        ? [t('settings.male'), t('settings.female'), t('settings.other')]
+        ? [t('male'), t('female'), t('other')]
         : [t('under18'), t('age18to40'), t('over40')],
     [selectedCategory, t],
   );
@@ -400,7 +400,7 @@ export const AttendanceStatisticsModal: React.FC<
     >
       <Modal.Header closeButton className={styles.modalHeader}>
         <Modal.Title data-testid="modal-title">
-          {t('eventAttendance.historical_statistics')}
+          {t('historical_statistics')}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body
@@ -441,21 +441,19 @@ export const AttendanceStatisticsModal: React.FC<
                   ' d-flex position-absolute bottom-1 end-50 translate-middle-y'
                 }
                 role="navigation"
-                aria-label={t('eventAttendance.chartPageNavigation')}
+                aria-label={t('chartPageNavigation')}
               >
                 <OverlayTrigger
                   placement="bottom"
                   overlay={
-                    <Tooltip id="tooltip-prev">
-                      {t('eventAttendance.previousPage')}
-                    </Tooltip>
+                    <Tooltip id="tooltip-prev">{t('previousPage')}</Tooltip>
                   }
                 >
                   <Button
                     className="p-0"
                     onClick={handlePreviousPage}
                     disabled={currentPage === 0}
-                    aria-label={t('eventAttendance.previousPage')}
+                    aria-label={t('previousPage')}
                   >
                     <img
                       src="/images/svg/arrow-left.svg"
@@ -469,23 +467,19 @@ export const AttendanceStatisticsModal: React.FC<
                   data-testid="today-button"
                   className="p-1 ms-2"
                   onClick={() => handleDateChange(new Date())}
-                  aria-label={t('eventAttendance.goToToday')}
+                  aria-label={t('goToToday')}
                 >
                   {t('today')}
                 </Button>
                 <OverlayTrigger
                   placement="bottom"
-                  overlay={
-                    <Tooltip id="tooltip-next">
-                      {t('eventAttendance.nextPage')}
-                    </Tooltip>
-                  }
+                  overlay={<Tooltip id="tooltip-next">{t('nextPage')}</Tooltip>}
                 >
                   <Button
                     className="p-0 ms-2"
                     onClick={handleNextPage}
                     disabled={currentPage >= totalPages - 1}
-                    aria-label={t('eventAttendance.nextPage')}
+                    aria-label={t('nextPage')}
                   >
                     <img
                       src="/images/svg/arrow-right.svg"
@@ -524,7 +518,7 @@ export const AttendanceStatisticsModal: React.FC<
                 className="border border-success p-2 pl-2"
                 onClick={() => handleCategoryChange('Gender')}
               >
-                {t('settings.gender')}
+                {t('gender')}
               </Button>
               <Button
                 data-testid="age-button"
@@ -544,8 +538,8 @@ export const AttendanceStatisticsModal: React.FC<
                   {
                     label:
                       selectedCategory === 'Gender'
-                        ? t('eventAttendance.genderDistribution')
-                        : t('eventAttendance.ageDistribution'),
+                        ? t('genderDistribution')
+                        : t('ageDistribution'),
                     data: categoryData,
                     backgroundColor: [
                       'rgba(31, 119, 180, 0.2)', // Blue
@@ -605,7 +599,7 @@ export const AttendanceStatisticsModal: React.FC<
           onClick={handleClose}
           data-testid="close-button"
         >
-          {t('userNavbar.close')}
+          {t('close')}
         </Button>
       </Modal.Footer>
     </Modal>

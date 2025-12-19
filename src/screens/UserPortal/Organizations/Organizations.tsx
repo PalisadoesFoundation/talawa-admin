@@ -138,7 +138,9 @@ interface IOrgData {
  * Component for displaying and managing user organizations.
  */
 export default function Organizations(): React.JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userOrganizations',
+  });
 
   const { getItem, setItem } = useLocalStorage();
   const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
@@ -173,9 +175,9 @@ export default function Organizations(): React.JSX.Element {
   const [mode, setMode] = React.useState(0);
 
   const modes = [
-    t('userOrganizations.allOrganizations'),
-    t('userOrganizations.joinedOrganizations'),
-    t('userOrganizations.createdOrganizations'),
+    t('allOrganizations'),
+    t('joinedOrganizations'),
+    t('createdOrganizations'),
   ];
 
   const userId: string | null = getItem('userId');
@@ -354,7 +356,7 @@ export default function Organizations(): React.JSX.Element {
         >
           <div className="d-flex justify-content-between align-items-center">
             <div style={{ flex: 1 }}>
-              <h1>{t('userOrganizations.selectOrganization')}</h1>
+              <h1>{t('selectOrganization')}</h1>
             </div>
           </div>
 
@@ -363,7 +365,7 @@ export default function Organizations(): React.JSX.Element {
               <div className={styles.input}>
                 <SearchBar
                   className={styles.maxWidth}
-                  placeholder={t('userOrganizations.searchOrganizations')}
+                  placeholder={t('searchOrganizations')}
                   value={typedValue}
                   onChange={(val) => handleChangeFilter(val)}
                   onSearch={(val) => doSearch(val)}
@@ -471,7 +473,7 @@ export default function Organizations(): React.JSX.Element {
                     </div>
                   ) : (
                     <span data-testid="no-organizations-message">
-                      {t('userEvents.nothingToShow')}
+                      {t('nothingToShow')}
                     </span>
                   )}
                 </>

@@ -38,7 +38,7 @@ import styles from '../../style/app-fixed.module.css';
 import type { InterfaceOrgContriCardsProps } from 'types/Contribution/interface';
 
 function orgContriCards(props: InterfaceOrgContriCardsProps): JSX.Element {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', { keyPrefix: 'orgContriCards' });
 
   return (
     <>
@@ -47,14 +47,13 @@ function orgContriCards(props: InterfaceOrgContriCardsProps): JSX.Element {
           <h2>{props.userName}</h2>
           <p>{props.userEmail}</p>
           <p>
-            {t('transactions.date')}:<span>{props.contriDate}</span>
+            {t('date')}:<span>{props.contriDate}</span>
           </p>
           <p>
-            {t('transactions.transactionId')}:{' '}
-            <span>{props.contriTransactionId} </span>
+            {t('transactionId')}: <span>{props.contriTransactionId} </span>
           </p>
           <h3>
-            {t('transactions.amount')}: $ <span>{props.contriAmount}</span>
+            {t('amount')}: $ <span>{props.contriAmount}</span>
           </h3>
         </Col>
       </Row>

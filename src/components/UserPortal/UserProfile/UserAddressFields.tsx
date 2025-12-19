@@ -61,7 +61,7 @@ export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
     <Row className="mb-1">
       <Col lg={4}>
         <Form.Label htmlFor="addressLine1" className={styles.cardLabel}>
-          {t('settings.addressLine1')}
+          {t('addressLine1')}
         </Form.Label>
         <Form.Control
           type="text"
@@ -75,7 +75,7 @@ export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
       </Col>
       <Col lg={4}>
         <Form.Label htmlFor="addressLine2" className={styles.cardLabel}>
-          {t('settings.addressLine2')}
+          {t('addressLine2')}
         </Form.Label>
         <Form.Control
           type="text"
@@ -89,12 +89,12 @@ export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
       </Col>
       <Col lg={4}>
         <Form.Label htmlFor="inputState" className={styles.cardLabel}>
-          {t('settings.state')}
+          {t('state')}
         </Form.Label>
         <Form.Control
           type="text"
           id="inputState"
-          placeholder={t('settings.enterState')}
+          placeholder={t('enterState')}
           value={userDetails.state}
           onChange={(e) => handleFieldChange('state', e.target.value)}
           className={styles.cardControl}
@@ -103,7 +103,7 @@ export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
       </Col>
       <Col lg={4}>
         <Form.Label htmlFor="inputCity" className={styles.cardLabel}>
-          {t('settings.city')}
+          {t('city')}
         </Form.Label>
         <Form.Control
           type="text"
@@ -117,7 +117,7 @@ export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
       </Col>
       <Col lg={4}>
         <Form.Label htmlFor="countrySelect" className={styles.cardLabel}>
-          {t('settings.country')}
+          {t('country')}
         </Form.Label>
         <Form.Control
           as="select"
@@ -128,7 +128,7 @@ export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
           data-testid="inputCountry"
         >
           <option value="" disabled>
-            {t('settings.selectCountry')}
+            {t('selectCountry')}
           </option>
           {[...countryOptions]
             .sort((a, b) => a.label.localeCompare(b.label))
@@ -145,12 +145,12 @@ export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
       </Col>
       <Col lg={4}>
         <Form.Label htmlFor="postalCode" className={styles.cardLabel}>
-          {t('settings.postalCode')}
+          {t('postalCode')}
         </Form.Label>
         <Form.Control
           type="text"
           id="postalCode"
-          placeholder={t('settings.postalCode')}
+          placeholder={t('postalCode')}
           pattern="[0-9]{5,10}"
           value={userDetails.postalCode}
           onChange={(e) => handleFieldChange('postalCode', e.target.value)}
