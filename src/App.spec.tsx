@@ -164,8 +164,6 @@ describe('Testing the App Component', () => {
   afterEach(() => {
     logSpy?.mockRestore();
     errorSpy?.mockRestore();
-
-    vi.clearAllMocks();
   });
 
   it('Component should be rendered properly and user is logged in', async () => {
