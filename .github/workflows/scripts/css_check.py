@@ -21,9 +21,7 @@ DetailedViolation = namedtuple(
 CSSCheckResult = namedtuple("CSSCheckResult", ["violations"])
 
 
-def strip_comments(
-    line: str, in_block_comment: bool
-) -> tuple[str, bool]:  # noqa: D103
+def _strip_comments(line: str, in_block_comment: bool) -> tuple[str, bool]:
     result = ""
     i = 0
 
@@ -137,7 +135,7 @@ def check_embedded_styles(
         if stripped_line.startswith(("import ", "import{", "import(")):
             continue
 
-        code_line, in_block_comment = strip_comments(line, in_block_comment)
+        code_line, in_block_comment = _strip_comments(line, in_block_comment)
 
         if not code_line.strip():
             continue
