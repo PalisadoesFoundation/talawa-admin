@@ -1008,11 +1008,6 @@
     "talawaApiUnavailable": "API Talawa non disponible"
   },
   "userRegister": {
-    "firstName_invalid": "Le prénom ne doit contenir que des lettres, des espaces et des traits d’union",
-    "lastName_invalid": "Le nom de famille ne doit contenir que des lettres, des espaces et des traits d’union",
-    "email_invalid": "L’e-mail doit être au format valide (par exemple : utilisateur@domaine.com)",
-    "password_invalid": "Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule, une valeur numérique et un caractère spécial",
-    "passwordMismatches": "Le mot de passe et sa confirmation ne correspondent pas.",
     "enterFirstName": "Entrez votre prénom",
     "enterLastName": "Entrez votre nom de famille",
     "enterConfirmPassword": "Entrez votre mot de passe pour confirmer",
@@ -1030,6 +1025,13 @@
     "enterPassword": "Entrer le mot de passe",
     "confirmPassword": "Confirmer le mot de passe",
     "talawaApiUnavailable": "API Talawa non disponible"
+  },
+  "authValidation": {
+    "firstName_invalid": "Le prénom ne doit contenir que des lettres, des espaces et des traits d’union",
+    "lastName_invalid": "Le nom de famille ne doit contenir que des lettres, des espaces et des traits d’union",
+    "email_invalid": "L’e-mail doit être au format valide (par exemple : utilisateur@domaine.com)",
+    "password_invalid": "Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule, une valeur numérique et un caractère spécial",
+    "passwordMismatches": "Le mot de passe et sa confirmation ne correspondent pas."
   },
   "userNavbar": {
     "talawa": "Talawa",

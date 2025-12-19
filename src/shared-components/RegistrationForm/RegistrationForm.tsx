@@ -38,6 +38,9 @@ const RegistrationForm: React.FC<InterfaceRegistrationFormProps> = ({
   organizations,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'userRegister' });
+  const { t: tValidation } = useTranslation('translation', {
+    keyPrefix: 'authValidation',
+  });
   const { t: tCommon } = useTranslation('common');
 
   const [formState, setFormState] = useState<IRegistrationData>({
@@ -87,27 +90,27 @@ const RegistrationForm: React.FC<InterfaceRegistrationFormProps> = ({
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!isValidName(formState.firstName)) {
-      toast.warn(t('firstName_invalid') as string);
+      toast.warn(tValidation('firstName_invalid') as string);
       return;
     }
 
     if (!isValidName(formState.lastName)) {
-      toast.warn(t('lastName_invalid') as string);
+      toast.warn(tValidation('lastName_invalid') as string);
       return;
     }
 
     if (!emailRegex.test(formState.email)) {
-      toast.warn(t('email_invalid') as string);
+      toast.warn(tValidation('email_invalid') as string);
       return;
     }
 
     if (!validatePassword(formState.password)) {
-      toast.warn(t('password_invalid') as string);
+      toast.warn(tValidation('password_invalid') as string);
       return;
     }
 
     if (formState.confirmPassword !== formState.password) {
-      toast.warn(t('passwordMismatches') as string);
+      toast.warn(tValidation('passwordMismatches') as string);
       return;
     }
 
@@ -245,7 +248,7 @@ const RegistrationForm: React.FC<InterfaceRegistrationFormProps> = ({
         {formState.confirmPassword.length > 0 &&
           formState.password !== formState.confirmPassword && (
             <div className="form-text text-danger" data-testid="passwordCheck">
-              {t('passwordMismatches')}
+              {tValidation('passwordMismatches')}
             </div>
           )}
       </div>

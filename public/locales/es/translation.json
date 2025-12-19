@@ -1008,11 +1008,6 @@
     "nothingToShow": "Nada que mostrar aquí."
   },
   "userRegister": {
-    "firstName_invalid": "El nombre solo debe contener letras, espacios y guiones.",
-    "lastName_invalid": "El apellido solo debe contener letras, espacios y guiones.",
-    "password_invalid": "La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un valor numérico y un carácter especial.",
-    "email_invalid": "El correo electrónico debe tener un formato válido (por ejemplo, usuario@dominio.com).",
-    "passwordMismatches": "Contraseña y Confirmar contraseña no coinciden.",
     "register": "Registro",
     "firstName": "Nombre de pila",
     "enterFirstName": "Ponga su primer nombre",
@@ -1030,6 +1025,13 @@
     "passwordNotMatch": "La contraseña no coincide. Confirme la contraseña y vuelva a intentarlo.",
     "invalidDetailsMessage": "Ingrese detalles válidos.",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. Compruebe amablemente su conexión de red y espere un momento."
+  },
+  "authValidation": {
+    "firstName_invalid": "El nombre solo debe contener letras, espacios y guiones.",
+    "lastName_invalid": "El apellido solo debe contener letras, espacios y guiones.",
+    "password_invalid": "La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un valor numérico y un carácter especial.",
+    "email_invalid": "El correo electrónico debe tener un formato válido (por ejemplo, usuario@dominio.com).",
+    "passwordMismatches": "Contraseña y Confirmar contraseña no coinciden."
   },
   "userNavbar": {
     "talawa": "Talawa",

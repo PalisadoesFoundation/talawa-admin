@@ -63,6 +63,9 @@ import useLocalStorage from 'utils/useLocalstorage';
 const ForgotPassword = (): JSX.Element => {
   // Translation hook for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'forgotPassword' });
+  const { t: tValidation } = useTranslation('translation', {
+    keyPrefix: 'authValidation',
+  });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -137,7 +140,7 @@ const ForgotPassword = (): JSX.Element => {
     const { userOtp, newPassword, confirmNewPassword } = forgotPassFormData;
 
     if (newPassword !== confirmNewPassword) {
-      toast.error(t('passwordMismatches') as string);
+      toast.error(tValidation('passwordMismatches') as string);
       return;
     }
 

@@ -1060,11 +1060,6 @@
     "talawaApiUnavailable": "talawaApiUnavailable"
   },
   "userRegister": {
-    "firstName_invalid": "First name should contain only letters, spaces, and hyphens",
-    "lastName_invalid": "Last name should contain only letters, spaces, and hyphens",
-    "email_invalid": "Email must be in a valid format (for example, user@domain.com)",
-    "password_invalid": "Password should contain at least one lowercase letter, one uppercase letter, one numeric value and one special character",
-    "passwordMismatches": "Password and Confirm Password do not match.",
     "enterFirstName": "Enter your first name",
     "enterLastName": "Enter your last name",
     "enterConfirmPassword": "Enter Password to confirm",
@@ -1082,6 +1077,13 @@
     "enterPassword": "enterPassword",
     "confirmPassword": "confirmPassword",
     "talawaApiUnavailable": "talawaApiUnavailable"
+  },
+  "authValidation": {
+    "firstName_invalid": "First name should contain only letters, spaces, and hyphens",
+    "lastName_invalid": "Last name should contain only letters, spaces, and hyphens",
+    "email_invalid": "Email must be in a valid format (for example, user@domain.com)",
+    "password_invalid": "Password should contain at least one lowercase letter, one uppercase letter, one numeric value and one special character",
+    "passwordMismatches": "Password and Confirm Password do not match."
   },
   "userNavbar": {
     "talawa": "Talawa",

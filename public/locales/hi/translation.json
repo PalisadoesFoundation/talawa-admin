@@ -1008,11 +1008,6 @@
     "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
   "userRegister": {
-    "firstName_invalid": "पहले नाम में केवल अक्षर, रिक्त स्थान और हाइफ़न हो सकते हैं",
-    "lastName_invalid": "अंतिम नाम में केवल अक्षर, रिक्त स्थान और हाइफ़न हो सकते हैं",
-    "email_invalid": "ईमेल एक वैध प्रारूप में होना चाहिए (उदाहरण: user@domain.com)",
-    "password_invalid": "पासवर्ड में कम से कम 1 छोटा अक्षर, 1 बड़ा अक्षर, 1 संख्या और 1 विशेष अक्षर होना चाहिए",
-    "passwordMismatches": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
     "enterFirstName": "अपना पहला नाम दर्ज करें",
     "enterLastName": "अपना अंतिम नाम दर्ज करें",
     "enterConfirmPassword": "पुष्टि करने के लिए अपना पासवर्ड दर्ज करें",
@@ -1030,6 +1025,13 @@
     "enterPassword": "पासवर्ड दर्ज करें",
     "confirmPassword": "पासवर्ड की पुष्टि करें",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध"
+  },
+  "authValidation": {
+    "firstName_invalid": "पहले नाम में केवल अक्षर, रिक्त स्थान और हाइफ़न हो सकते हैं",
+    "lastName_invalid": "अंतिम नाम में केवल अक्षर, रिक्त स्थान और हाइफ़न हो सकते हैं",
+    "email_invalid": "ईमेल एक वैध प्रारूप में होना चाहिए (उदाहरण: user@domain.com)",
+    "password_invalid": "पासवर्ड में कम से कम 1 छोटा अक्षर, 1 बड़ा अक्षर, 1 संख्या और 1 विशेष अक्षर होना चाहिए",
+    "passwordMismatches": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।"
   },
   "userNavbar": {
     "talawa": "तलावा",
