@@ -6,4 +6,8 @@
 
 > `const` **GET\_ORGANIZATION\_POSTS\_PG**: `DocumentNode`
 
+<<<<<<< HEAD
 Defined in: [src/GraphQl/Queries/Queries.ts:719](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L719)
+=======
+Defined in: [src/GraphQl/Queries/Queries.ts:699](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L699)
+>>>>>>> 39c3afb3fa (fix: testing to fix docs conflicts)
