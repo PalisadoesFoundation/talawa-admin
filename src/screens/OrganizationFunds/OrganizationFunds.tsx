@@ -5,7 +5,7 @@ import { type GridCellParams } from '@mui/x-data-grid';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
 import TableLoader from 'components/TableLoader/TableLoader';
@@ -101,15 +101,8 @@ const organizationFunds = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'funds' });
   const { t: tCommon } = useTranslation('common');
 
-  // Set the document title based on the translation
-  document.title = t('title');
-
   const { orgId } = useParams();
   const navigate = useNavigate();
-
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
 
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
 
@@ -146,12 +139,22 @@ const organizationFunds = (): JSX.Element => {
     error?: Error | undefined;
     refetch: () => void;
   } = useQuery(FUND_LIST, {
+    skip: !orgId,
     variables: {
       input: {
-        id: orgId,
+        id: orgId ?? '',
       },
     },
   });
+
+  // Set the document title based on the translation
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
+
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   const funds = useMemo(() => {
     return (
@@ -194,7 +197,7 @@ const organizationFunds = (): JSX.Element => {
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading Funds
+            {t('errorLoadingFundsData')}
             <br />
             {fundError.message}
           </h6>
@@ -215,8 +218,8 @@ const organizationFunds = (): JSX.Element => {
 
   const columns: ReportingTableColumn[] = [
     {
-      field: 'id',
-      headerName: '#',
+      field: 'sl_no',
+      headerName: tCommon('sl_no'),
       flex: 1,
       minWidth: 60,
       align: 'center',
@@ -231,7 +234,7 @@ const organizationFunds = (): JSX.Element => {
     },
     {
       field: 'fundName',
-      headerName: 'Fund Name',
+      headerName: t('fundName'),
       flex: 2,
       align: 'center',
       minWidth: 100,
@@ -262,20 +265,20 @@ const organizationFunds = (): JSX.Element => {
     },
     {
       field: 'status',
-      headerName: 'Status',
-      flex: 2,
+      headerName: t('status'),
+      flex: 1,
       align: 'center',
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return params.row.isArchived ? 'Archived' : 'Active';
+        return params.row.isArchived ? t('archived') : tCommon('active');
       },
     },
     {
       field: 'assocCampaigns',
-      headerName: 'Associated Campaigns',
+      headerName: t('assocCampaigns'),
       flex: 2,
       align: 'center',
       minWidth: 100,
@@ -287,6 +290,7 @@ const organizationFunds = (): JSX.Element => {
           <Button
             size="sm"
             className={styles.editButton}
+            aria-label={t('viewCampaigns')}
             onClick={() => handleClick(params.row.id as string)}
             data-testid="viewBtn"
           >

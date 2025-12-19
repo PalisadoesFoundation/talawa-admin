@@ -141,7 +141,11 @@
     "close": "关闭"
   },
   "notification": {
-    "title": "通知"
+    "title": "通知",
+    "allCaughtUp": "全部已读！",
+    "prev": "上一页",
+    "next": "下一页",
+    "markAsRead": "标记为已读"
   },
   "orgList": {
     "title": "塔拉瓦组织",
@@ -308,7 +312,6 @@
     "searchFullName": "输入全名",
     "people": "人们",
     "sort": "按角色搜索",
-    "actions": "行动",
     "addMembers": "添加会员",
     "existingUser": "现有用户",
     "newUser": "新用户",
@@ -332,8 +335,10 @@
     "cancel": "取消",
     "create": "创建",
     "user": "用户",
-    "profile": "个人资料",
-    "createUser": "创建用户"
+    "actions": "操作",
+    "profile": "配置文件",
+    "createUser": "创建用户",
+    "notFound": "未找到成员"
   },
   "organizationTags": {
     "title": "组织标签",
@@ -352,7 +357,12 @@
     "removeUserTag": "删除标签",
     "removeUserTagMessage": "您确定要删除此标签吗？",
     "addChildTag": "添加子标签",
-    "enterTagName": "输入标签名称"
+    "enterTagName": "输入标签名称",
+    "totalSubTags": "总子标签",
+    "totalAssignedUsers": "分配的总用户数",
+    "tagCreationFailed": "标签创建失败",
+    "errorLoadingTagsData": "加载组织标签数据时出错",
+    "sortTags": "排序标签"
   },
   "manageTag": {
     "title": "标签详情",
@@ -663,7 +673,10 @@
     "deleteFundMsg": "您确定要删除此基金吗？",
     "createdLatest": "最近创建",
     "createdEarliest": "最早创建",
-    "viewCampaigns": "查看活动"
+    "viewCampaigns": "查看活动",
+    "assocCampaigns": "相关活动",
+    "errorLoadingFundsData": "加载基金数据时出错",
+    "editFund": "编辑基金"
   },
   "fundCampaign": {
     "title": "募捐活动",
@@ -1136,7 +1149,18 @@
     "Member": "成员",
     "Admin": "管理员",
     "loading": "加载中...",
-    "noAttendees": "未找到参与者"
+    "noAttendees": "未找到参与者",
+    "attendeeCount": "参与人数",
+    "maleAttendees": "男性参与者",
+    "femaleAttendees": "女性参与者",
+    "otherAttendees": "其他参与者",
+    "currentEvent": "当前活动",
+    "chartPageNavigation": "图表页面导航",
+    "previousPage": "上一页",
+    "nextPage": "下一页",
+    "goToToday": "转到今天",
+    "genderDistribution": "性别分布",
+    "ageDistribution": "年龄分布"
   },
   "eventRegistrant": {
     "sort": "排序",
