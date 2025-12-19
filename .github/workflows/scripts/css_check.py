@@ -9,14 +9,21 @@ from collections import namedtuple
 
 # Define namedtuple for storing detailed violations
 DetailedViolation = namedtuple(
-    "DetailedViolation", ["file_path", "line_number", "violation_type", "code_snippet", "description"]
+    "DetailedViolation",
+    [
+        "file_path",
+        "line_number",
+        "violation_type",
+        "code_snippet",
+        "description",
+    ],
 )
-CSSCheckResult = namedtuple(
-    "CSSCheckResult", ["violations"]
-)
+CSSCheckResult = namedtuple("CSSCheckResult", ["violations"])
 
 
-def check_embedded_styles(content: str, file_path: str) -> list[DetailedViolation]:
+def check_embedded_styles(
+    content: str, file_path: str
+) -> list[DetailedViolation]:
     """Check for embedded CSS and style violations in the content.
 
     Args:
@@ -33,42 +40,85 @@ def check_embedded_styles(content: str, file_path: str) -> list[DetailedViolatio
     patterns = {
         "hex_color": {
             "regex": r"#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})\b",
-            "description": "Hex color code found. Use CSS variables from stylesheet instead."
+            "description": """Hex color code found.
+            Use CSS variables from stylesheet instead.""",
         },
         "rgb_color": {
-            "regex": r"\brgba?\s*\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*(?:,\s*[\d.]+\s*)?\)",
-            "description": "RGB/RGBA color code found. Use CSS variables from stylesheet instead."
+            "regex": (
+                r"\brgba?\s*\(\s*"
+                r"\d+\s*,\s*"
+                r"\d+\s*,\s*"
+                r"\d+\s*"
+                r"(?:,\s*[\d.]+\s*)?"
+                r"\)"
+            ),
+            "description": """RGB/RGBA color code found.
+            Use CSS variables from stylesheet instead.""",
         },
         "hsl_color": {
-            "regex": r"\bhsla?\s*\(\s*\d+\s*,\s*\d+%\s*,\s*\d+%\s*(?:,\s*[\d.]+\s*)?\)",
-            "description": "HSL/HSLA color code found. Use CSS variables from stylesheet instead."
+            "regex": (
+                r"\bhsla?\s*\(\s*"
+                r"\d+\s*,\s*"
+                r"\d+%\s*,\s*"
+                r"\d+%\s*"
+                r"(?:,\s*[\d.]+\s*)?"
+                r"\)"
+            ),
+            "description": """HSL/HSLA color code found.
+            Use CSS variables from stylesheet instead.""",
         },
         "inline_style_object": {
             "regex": r"style\s*=\s*\{\{",
-            "description": "Inline style object found. Move styles to CSS file and use className instead."
+            "description": """Inline style object found.
+            Move styles to CSS file and use className instead.""",
         },
         "inline_style_string": {
             "regex": r'style\s*=\s*["\']',
-            "description": "Inline style string found. Move styles to CSS file and use className instead."
+            "description": """Inline style string found.
+            Move styles to CSS file and use className instead.""",
         },
         "camelcase_css_property": {
-            "regex": r"\b(?:backgroundColor|fontSize|fontFamily|fontWeight|lineHeight|marginTop|marginBottom|marginLeft|marginRight|paddingTop|paddingBottom|paddingLeft|paddingRight|borderRadius|boxShadow|textAlign|textDecoration|zIndex|maxWidth|minWidth|maxHeight|minHeight)\s*[:=]",
-            "description": "Camelcase CSS property found. Move styles to CSS file and use className instead."
+            "regex": (
+                r"\b(?:"
+                r"backgroundColor|fontSize|fontFamily|fontWeight|lineHeight|"
+                r"marginTop|marginBottom|marginLeft|marginRight|"
+                r"paddingTop|paddingBottom|paddingLeft|paddingRight|"
+                r"borderRadius|boxShadow|textAlign|textDecoration|"
+                r"zIndex|maxWidth|minWidth|maxHeight|minHeight"
+                r")\s*[:=]"
+            ),
+            "description": """Camelcase CSS property found.
+            Move styles to CSS file and use className instead.""",
         },
         "pixel_value": {
-            "regex": r":\s*['\"]?\d+(?:px|em|rem|vh|vw|%)['\"]?(?=\s*[,}])",
-            "description": "Direct size value assignment found. Move styles to CSS file and use className instead."
-        }
+            "regex": (
+                r":\s*"
+                r"['\"]?"
+                r"\d+(?:px|em|rem|vh|vw|%)"
+                r"['\"]?"
+                r"(?=\s*[,}])"
+            ),
+            "description": """Direct size value assignment found.
+            Move styles to CSS file and use className instead.""",
+        },
     }
 
     for line_number, line in enumerate(lines, start=1):
         # Skip comments and import statements
         stripped_line = line.strip()
-        if stripped_line.startswith("//") or stripped_line.startswith("/*") or stripped_line.startswith("import"):
+        if (
+            stripped_line.startswith("//")
+            or stripped_line.startswith("/*")
+            or stripped_line.startswith("import")
+        ):
             continue
-        
+
         # Check for URL references (skip these as they're not style violations)
-        if "url(" in line.lower() or "href=" in line.lower() or "src=" in line.lower():
+        if (
+            "url(" in line.lower()
+            or "href=" in line.lower()
+            or "src=" in line.lower()
+        ):
             # Skip hex codes in URLs
             continue
 
@@ -77,14 +127,32 @@ def check_embedded_styles(content: str, file_path: str) -> list[DetailedViolatio
             for match in matches:
                 if violation_type == "camelcase_css_property":
                     # Check if it's actually in a style context
-                    preceding_text = line[:match.start()].strip()
-                    if not any(keyword in preceding_text for keyword in ["style", "css", "Style", "CSS"]):
-                        if "{" not in line[:match.start()]:
+                    preceding_text = line[: match.start()].strip()
+                    if not any(
+                        keyword in preceding_text
+                        for keyword in ["style", "css", "Style", "CSS"]
+                    ):
+                        if "{" not in line[: match.start()]:
                             continue
                 if violation_type == "pixel_value":
                     # Look for style-related keywords nearby
-                    context_window = line[max(0, match.start()-30):min(len(line), match.end()+30)]
-                    if not any(keyword in context_window for keyword in ["style", "Style", "width", "height", "size", "margin", "padding"]):
+                    context_window = line[
+                        max(0, match.start() - 30) : min(
+                            len(line), match.end() + 30
+                        )
+                    ]
+                    if not any(
+                        keyword in context_window
+                        for keyword in [
+                            "style",
+                            "Style",
+                            "width",
+                            "height",
+                            "size",
+                            "margin",
+                            "padding",
+                        ]
+                    ):
                         continue
 
                 violations.append(
@@ -93,7 +161,7 @@ def check_embedded_styles(content: str, file_path: str) -> list[DetailedViolatio
                         line_number=line_number,
                         violation_type=violation_type,
                         code_snippet=match.group(0),
-                        description=pattern_info["description"]
+                        description=pattern_info["description"],
                     )
                 )
 
@@ -101,8 +169,7 @@ def check_embedded_styles(content: str, file_path: str) -> list[DetailedViolatio
 
 
 def process_typescript_file(
-    file_path: str,
-    all_violations: list[DetailedViolation]
+    file_path: str, all_violations: list[DetailedViolation]
 ) -> None:
     """Process a TypeScript file for CSS violations.
 
@@ -164,19 +231,23 @@ def check_files(
                 if file_path in exclude_files:
                     continue
 
-                if file.endswith((".ts", ".tsx")) and not any(
-                    pattern in file
-                    for pattern in [
-                        ".test.",
-                        ".spec.",
-                    ]
-                ) and not any(
-                    pattern in root
-                    for pattern in [
-                        "__tests__",
-                        "test/",
-                        "tests/",
-                    ]
+                if (
+                    file.endswith((".ts", ".tsx"))
+                    and not any(
+                        pattern in file
+                        for pattern in [
+                            ".test.",
+                            ".spec.",
+                        ]
+                    )
+                    and not any(
+                        pattern in root
+                        for pattern in [
+                            "__tests__",
+                            "test/",
+                            "tests/",
+                        ]
+                    )
                 ):
                     process_typescript_file(file_path, all_violations)
 
@@ -246,14 +317,16 @@ def format_violation_output(violations: list[DetailedViolation]) -> str:
         file_violations = violations_by_file[file_path]
         output_lines.append(f"File: {file_path}")
         output_lines.append("-" * 80)
-        
+
         # Sort violations by line number
         for violation in sorted(file_violations, key=lambda v: v.line_number):
-            output_lines.append(f"  Line {violation.line_number}: [{violation.violation_type}]")
+            output_lines.append(
+                f"  Line {violation.line_number}: [{violation.violation_type}]"
+            )
             output_lines.append(f"    Code: {violation.code_snippet}")
             output_lines.append(f"    Issue: {violation.description}")
             output_lines.append("")
-        
+
         output_lines.append("")
 
     output_lines.append("=" * 80)
@@ -279,7 +352,8 @@ def main():
     directories and files, checks for CSS violations, and prints the results.
     """
     parser = argparse.ArgumentParser(
-        description="Check for embedded CSS and style violations in TypeScript files."
+        description="""Check for embedded CSS and
+       style violations in TypeScript files."""
     )
     parser.add_argument(
         "--directories",
@@ -326,7 +400,7 @@ def main():
         directories=directories,
         files=args.files,
         exclude_files=args.exclude_files,
-        exclude_directories=args.exclude_directories
+        exclude_directories=args.exclude_directories,
     )
 
     if result.violations:
