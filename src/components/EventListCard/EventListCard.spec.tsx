@@ -299,9 +299,14 @@ describe('Testing Event List Card', () => {
   });
 
   it('should show already registered text when the user is registered for an event', async () => {
+    setItem('userId', '234');
     renderEventListCard(props[3]);
 
     await userEvent.click(screen.getByTestId('card'));
+
+    await waitFor(() =>
+      expect(screen.getByTestId('eventModalCloseBtn')).toBeInTheDocument(),
+    );
 
     expect(
       screen.getByText(translations.alreadyRegistered),

@@ -11,7 +11,7 @@ import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import i18nForTest from './utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import 'style/app-fixed.module.css';
-import useLocalStorage from 'utils/useLocalstorage';
+import { useLocalStorage } from 'utils/useLocalstorage';
 
 vi.mock('@mui/x-charts/PieChart', () => ({
   pieArcLabelClasses: vi.fn(),
@@ -461,11 +461,8 @@ describe('Testing the App Component', () => {
   it('should navigate to user settings', async () => {
     const { setItem, removeItem } = useLocalStorage();
 
-    removeItem('IsLoggedIn');
-    removeItem('AdminFor');
-
     setItem('IsLoggedIn', 'TRUE'); // string "TRUE"
-    removeItem('AdminFor'); // ensure truly absent/undefined
+    removeItem('AdminFor');
 
     renderApp(link, '/user/settings');
 
