@@ -845,6 +845,10 @@
   --dropdown-font-color: #555555;
 
   --input-bg: #f2f7ff;
+
+  --peopleTabUserTagTableBody: #ffffff;
+
+  --peopleTabUserTagTableHeaderCell-color: #000000;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -992,6 +996,7 @@
   min-width: 240px;
   width: auto;
   max-width: 100%;
+  height: 57px;
 }
 
 .searchBarContainerWithButton {
@@ -1400,6 +1405,14 @@ form label,
     display: block;
     margin-top: 1rem;
     margin-right: 0;
+  }
+
+  .peopleTabBtnBlock {
+    height: 100%;
+    padding-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
   .btnsContainer .btnsBlock div {
@@ -2710,6 +2723,15 @@ form label,
 .selectTypeEventHeader {
   border-radius: 10px;
   margin: 8px;
+}
+
+.peopleTabEventHeader {
+  display: flex;
+  align-items: center;
+  color: grey;
+}
+.peopleTabEventHeader:hover {
+  color: var(--groupsLabel-color);
 }
 
 .calendar__header {
@@ -4107,6 +4129,316 @@ form label,
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.peopleTabIconWrapper {
+  display: flex;
+  align-items: center;
+  color: grey;
+  border: 1px solid grey;
+  border-radius: 9px;
+  padding: 0 20px;
+}
+
+.peopleTabIcon {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  color: grey;
+  padding: 1rem 1.2rem;
+}
+
+.peopleTabComponentSection {
+  padding: 0.5rem 0.5rem;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 10px 5px;
+}
+
+.peopleTabUserTagContainer {
+  width: 100%;
+}
+
+.peopleTabUserTagComponentSection {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-radius: 10px;
+}
+
+.peopleTabUserTagColumnHeader {
+  background: #6261613b;
+}
+
+.peopleTabUserTagTableCell {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.peopleTabUserTagCreatedByButton {
+  color: #2563eb;
+  cursor: pointer;
+  transition: 0.2s ease;
+  text-decoration: underline #5f5fd9;
+}
+
+.peopleTabUserTagCreatedByButton:hover {
+  text-decoration: underline;
+  color: #1d4ed8;
+}
+
+.peopleTabUserTagTableHeader {
+  background-color: #f9fafb; /* bg-gray-50 */
+  border-top-width: 1px; /* border-y */
+  border-bottom-width: 1px;
+  border-color: #e5e7eb; /* border-gray-200 */
+  border-style: solid;
+}
+
+.peopleTabUserTagTableRow:hover {
+  background-color: #f9fafb;
+}
+
+.peopleTabUserTagTableHeaderCell {
+  padding: 0.75rem 1.5rem;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--peopleTabUserTagTableHeaderCell-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  height: 4rem;
+  font-weight: bold;
+}
+
+.peopleTabUserTagTableBody {
+  background: var(--peopleTabUserTagTableBody-bg);
+}
+
+.peopleTabUserTagTable {
+  width: 100%;
+}
+
+.peopleTabIconWrapper:hover {
+  color: var(--groupsLabel-color);
+  border: 1px solid var(--groupsLabel-color);
+  cursor: pointer;
+}
+
+.peopleTabUserEventsContainer {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.peopleTabUserEventContainer {
+  flex: 1 1 calc(50% - 1rem);
+  max-width: 45%;
+  min-width: 300px;
+  background: white;
+  border-radius: 3px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 2rem;
+  margin: 0.5rem; /* spacing for flex-wrap */
+  border-left: 6px solid #a8c7fa;
+  border-right: 1px solid #80808036;
+  border-top: 1px solid #80808036;
+  border-bottom: 1px solid #80808036;
+}
+
+.peopleTabUserEventTime {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.peopleTabUserEventDate {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.peopleTabUserEventInfo {
+  flex: 1;
+  margin: 2rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+.peoplePageUserEventCardBody {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1rem 1.2rem;
+}
+
+.peopleTabUserEventActionButton {
+  background-color: #a8c7fa;
+  border: none;
+  border-radius: 4px;
+  padding: 3px 9px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: -1rem -1.8rem;
+  width: 7rem;
+  padding: 4px 11px;
+  height: 2.5rem;
+}
+
+.peopleTabUserEventTimeWrapper {
+  text-align: center;
+  min-width: 80px;
+}
+
+.timeText {
+  margin: 0;
+}
+
+.timeSeparator {
+  margin: 4px 0;
+}
+
+.dateText {
+  margin: 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.eventName {
+  margin: 0 0 8px 0;
+}
+
+.eventDescription {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.peopleTabUserEventAction {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.actionIcon {
+  display: flex;
+  align-items: center;
+}
+
+.peopleTabUserEventActionButton:hover {
+  background-color: #92b5f5;
+}
+
+.peopleTabUserOrganizationsCard {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #fff;
+  width: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  width: 700px;
+  height: 250px;
+}
+
+.peopleTabUserOrganizationsCardContent {
+  display: flex;
+  gap: 1rem;
+}
+
+.peopleTabUserOrganizationsCardImage {
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 6px;
+  background-color: #f0f0f0;
+}
+
+.peopleTabUserOrganizationsCardText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.peopleTabUserOrganizationsCardTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.peopleTabUserOrganizationsCardDescription {
+  font-size: 0.875rem;
+  color: #666;
+  margin: 0.25rem 0;
+}
+
+.peopleTabUserOrganizationsCardStats {
+  font-size: 0.875rem;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.peopleTabUserOrganizationsCardAction {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.75rem;
+}
+
+.peopleTabUserOrganizationsEditButton {
+  padding: 0.4rem 0.8rem;
+  background-color: #b0d4ff;
+  border: none;
+  border-radius: 4px;
+  color: #000;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.peopleTabUserOrganizationsEditButton:hover {
+  background-color: #90c1ff;
+}
+
+.peopleTabUserOrganizationsContainer {
+  width: 100%;
+}
+
+.peopleTabUserOrganizationsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px; /* space between cards */
+}
+
+.peopleTabUserEventsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+/* Optional: mobile fallback */
+@media (max-width: 768px) {
+  .peopleTabUserEventsGrid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .cardItem .iconWrapper .themeOverlay {

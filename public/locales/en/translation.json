@@ -54,7 +54,9 @@
     "OR": "OR",
     "admin": "admin",
     "user": "user",
-    "loading": "loading"
+    "loading": "loading",
+    "userImage": "User Image",
+    "userEditProfilePicture": "Edit profile picture"
   },
   "userLoginPage": {
     "title": "Talawa Admin",
@@ -1007,6 +1009,7 @@
   },
   "memberDetail": {
     "title": "User Details",
+    "to": "TO",
     "addAdmin": "Add Admin",
     "noeventsAttended": "No Events Attended",
     "alreadyIsAdmin": "Member is already an Admin",
@@ -1058,7 +1061,18 @@
     "unassignUserTagMessage": "Do you want to remove the tag from this user?",
     "successfullyUnassigned": "Tag unassigned from user",
     "tagsAssigned": "Tags Assigned",
-    "noTagsAssigned": "No Tags Assigned"
+    "noTagsAssigned": "No Tags Assigned",
+    "overview": "Overview",
+    "tags": "Tags",
+    "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF.",
+    "fileTooLarge": "File is too large. Maximum size is 5MB.",
+    "memberDetailNumberExample": "Ex. +1234567890",
+    "memberDetailExampleLane": "Ex. Lane 2",
+    "memberDetailPostalExample": "Ex. 12345",
+    "enterCity": "Enter city name",
+    "enterState": "Enter state name",
+    "select": "Select",
+    "asYourCountry": "as your country"
   },
   "people": {
     "title": "People",
@@ -1293,7 +1307,9 @@
     "latestFirst": "Latest First",
     "earliestFirst": "Earliest First",
     "noTransactionsFound": "No transactions found",
-    "errorLoadingTransactions": "Error loading transactions"
+    "errorLoadingTransactions": "Error loading transactions",
+    "eventType": "Event Type",
+    "tagCreationFailed": "Tag creation failed"
   },
   "userEvents": {
     "title": "Events",

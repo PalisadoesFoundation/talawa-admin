@@ -2,7 +2,6 @@ import type { ApolloLink } from '@apollo/client';
 import { MockedProvider, type MockedResponse } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import type { RenderResult } from '@testing-library/react';
-import dayjs from 'dayjs';
 import {
   cleanup,
   fireEvent,
@@ -21,6 +20,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import type { InterfaceUserInfoPG } from 'utils/interfaces';
 import type { DatePickerProps } from '@mui/x-date-pickers';
+import dayjs, { Dayjs } from 'dayjs';
 import { act } from 'react';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
@@ -45,7 +45,7 @@ vi.mock('@mui/x-date-pickers', async () => {
   const actual = await vi.importActual<typeof import('@mui/x-date-pickers')>(
     '@mui/x-date-pickers',
   );
-  type MockDatePickerProps = DatePickerProps;
+  type MockDatePickerProps = DatePickerProps<Dayjs, false>;
 
   return {
     ...actual,

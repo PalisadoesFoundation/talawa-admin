@@ -19,6 +19,7 @@
   "users": "Users",
   "requests": "Requests",
   "OR": "OR",
+  "to": "TO",
   "cancel": "Cancel",
   "close": "Close",
   "create": "Create",
@@ -104,5 +105,14 @@
   "plugins": "Plugins",
   "pluginSettings": "Plugin Settings",
   "save": "Save",
-  "saving": "Saving..."
+  "saving": "Saving...",
+  "loadingOrganizations": "Loading organizations...",
+  "noOrganizationsFound.": "No organizations found.",
+  "title": "Tag name",
+  "assignedTo": "Assigned to",
+  "eventType": "Event Type",
+  "overview": "Overview",
+  "organizations": "Organizations",
+  "events": "Events",
+  "tags": "Tags"
 }

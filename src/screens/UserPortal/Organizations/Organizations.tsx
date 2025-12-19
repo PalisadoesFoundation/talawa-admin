@@ -88,13 +88,13 @@ interface IOrganization {
   isJoined: boolean;
   id: string;
   name: string;
-  avatarURL?: string; // <-- add this
-  addressLine1?: string; // <-- add this
+  avatarURL?: string;
+  addressLine1?: string;
   description: string;
   adminsCount?: number;
   membersCount?: number;
   admins: [];
-  members?: InterfaceMembersConnection; // <-- update this
+  members?: InterfaceMembersConnection;
   address: {
     city: string;
     countryCode: string;
@@ -141,6 +141,7 @@ export default function Organizations(): React.JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userOrganizations',
   });
+  const { t: tCommon } = useTranslation('common');
 
   const { getItem, setItem } = useLocalStorage();
   const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
@@ -322,6 +323,7 @@ export default function Organizations(): React.JSX.Element {
 
   /** We are treating the viewer for this screen as an User always*/
   const role = 'user';
+
   return (
     <>
       {/* {hideDrawer ? (
@@ -412,7 +414,7 @@ export default function Organizations(): React.JSX.Element {
                   role="status"
                 >
                   <HourglassBottomIcon />{' '}
-                  <span aria-live="polite">Loading...</span>
+                  <span aria-live="polite">{tCommon('loading')}</span>
                 </div>
               ) : (
                 <>
