@@ -299,7 +299,7 @@ describe('Testing Event List Card', () => {
   });
 
   it('should show already registered text when the user is registered for an event', async () => {
-    setItem('userId', '234');
+    setItem('userId', '456');
     renderEventListCard(props[3]);
 
     await userEvent.click(screen.getByTestId('card'));

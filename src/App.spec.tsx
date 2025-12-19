@@ -151,15 +151,21 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+let logSpy: ReturnType<typeof vi.spyOn> | undefined;
+let errorSpy: ReturnType<typeof vi.spyOn> | undefined;
+
 describe('Testing the App Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    console.log = vi.fn();
-    console.error = vi.fn();
+    logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
-    vi.restoreAllMocks(); // Restores console spies automatically
+    logSpy?.mockRestore();
+    errorSpy?.mockRestore();
+
+    vi.clearAllMocks();
   });
 
   it('Component should be rendered properly and user is logged in', async () => {
@@ -473,10 +479,11 @@ describe('Testing the App Component', () => {
         }) as unknown as ReturnType<typeof useLSModule.default>,
     );
 
-    renderApp(link, '/user/settings');
-
-    expect(await screen.findByTestId('mock-settings')).toBeInTheDocument();
-
-    lsSpy.mockRestore();
+    try {
+      renderApp(link, '/user/settings');
+      expect(await screen.findByTestId('mock-settings')).toBeInTheDocument();
+    } finally {
+      lsSpy.mockRestore();
+    }
   });
 });
