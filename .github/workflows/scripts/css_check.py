@@ -24,24 +24,19 @@ CSSCheckResult = namedtuple("CSSCheckResult", ["violations"])
 def strip_comments(line: str, in_block_comment: bool) -> tuple[str, bool]:
     """Strip single-line and block comments from a line of code.
 
-    This function removes:
-    - Single-line comments starting with `//`
-    - Block comments delimited by `/*` and `*/`, even when they span
-      multiple lines
-
-    It preserves non-comment code and tracks whether parsing is
-    currently inside a block comment.
+    Removes:
+    - Single-line comments starting with //
+    - Block comments delimited by /* and */, including multi-line blocks
 
     Args:
-        line: The input line of source code.
-        in_block_comment: Whether the previous line ended inside
-            a block comment.
+        line (str): The input line of source code.
+        in_block_comment (bool): Indicates whether parsing started inside
+            a block comment from a previous line.
 
     Returns:
-        A tuple containing:
-        - The line with comments removed.
-        - A boolean indicating whether the parser is still inside
-          a block comment after processing this line.
+        result (str): The line with all comments removed.
+        in_block_comment (bool): True if parsing ends inside a block comment,
+            False otherwise.
     """
     result = ""
     i = 0
@@ -63,26 +58,6 @@ def strip_comments(line: str, in_block_comment: bool) -> tuple[str, bool]:
                 result += line[i]
                 i += 1
 
-    return result, in_block_comment
-
-    result = ""
-    i = 0
-    while i < len(line):
-        if in_block_comment:
-            if line[i : i + 2] == "*/":
-                in_block_comment = False
-                i += 2
-            else:
-                i += 1
-        else:
-            if line[i : i + 2] == "/*":
-                in_block_comment = True
-                i += 2
-            elif line[i : i + 2] == "//":
-                break  # rest of line is a comment
-            else:
-                result += line[i]
-                i += 1
     return result, in_block_comment
 
 
@@ -363,7 +338,7 @@ def format_violation_output(violations: list[DetailedViolation]) -> str:
         violations: List of violations to format.
 
     Returns:
-        Formatted string with all violations.
+        output: A formatted string containing all violations and a summary.
     """
     if not violations:
         return ""
@@ -415,6 +390,9 @@ def format_violation_output(violations: list[DetailedViolation]) -> str:
 
 def main():
     """Main function to run the CSS check.
+
+    Args:
+        None
 
     Returns:
         None
