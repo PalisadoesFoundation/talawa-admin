@@ -165,14 +165,14 @@ const createUpdatePledgeMock = (
   ...(isError
     ? { error: new Error('Failed to update pledge') }
     : {
-      result: {
-        data: {
-          updateFundraisingCampaignPledge: {
-            _id: variables.id,
+        result: {
+          data: {
+            updateFundraisingCampaignPledge: {
+              _id: variables.id,
+            },
           },
         },
-      },
-    }),
+      }),
 });
 
 // Helper to create CREATE_PLEDGE mock with custom variables
@@ -194,14 +194,14 @@ const createCreatePledgeMock = (
   ...(isError
     ? { error: new Error('Failed to create pledge') }
     : {
-      result: {
-        data: {
-          createFundraisingCampaignPledge: {
-            _id: '3',
+        result: {
+          data: {
+            createFundraisingCampaignPledge: {
+              _id: '3',
+            },
           },
         },
-      },
-    }),
+      }),
 });
 
 // Default mocks for basic rendering tests
