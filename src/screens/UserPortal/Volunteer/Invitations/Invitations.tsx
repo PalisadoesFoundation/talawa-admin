@@ -166,7 +166,7 @@ const Invitations = (): JSX.Element => {
             showSearchButton={true}
             showLeadingIcon={true}
             showClearButton={true}
-            buttonAriaLabel={t('search')}
+            buttonAriaLabel={tCommon('search')}
           />
         </div>
 
@@ -177,6 +177,7 @@ const Invitations = (): JSX.Element => {
               { label: t('receivedLatest'), value: 'createdAt_DESC' },
               { label: t('receivedEarliest'), value: 'createdAt_ASC' },
             ]}
+            selectedOption={sortBy ?? undefined}
             onSortChange={(value) =>
               setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC')
             }
@@ -189,6 +190,7 @@ const Invitations = (): JSX.Element => {
               { label: t('groupInvite'), value: 'group' },
               { label: t('individualInvite'), value: 'individual' },
             ]}
+            selectedOption={filter ?? 'all'}
             onSortChange={(value) =>
               setFilter(value === 'all' ? null : (value as ItemFilter))
             }

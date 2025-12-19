@@ -346,7 +346,7 @@ function orgList(): JSX.Element {
           onSearch={doSearch}
           inputTestId="searchInput"
           buttonTestId="searchBtn"
-          buttonAriaLabel={t('search')}
+          buttonAriaLabel={tCommon('search')}
           showSearchButton={true}
           showLeadingIcon={true}
           showClearButton={true}

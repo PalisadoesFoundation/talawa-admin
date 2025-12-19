@@ -402,7 +402,7 @@ const Pledges = (): JSX.Element => {
         {/* 1. Search Bar Section */}
         <div className={styles.calendar__search}>
           <SearchBar
-            placeholder={t('searchBy') + ' ' + t(searchBy)}
+            placeholder={t('searchByPlaceholder', { field: t(searchBy) })}
             onSearch={setSearchTerm}
             inputTestId="searchPledges"
             buttonTestId="searchBtn"
@@ -410,7 +410,7 @@ const Pledges = (): JSX.Element => {
             showSearchButton={true}
             showLeadingIcon={true}
             showClearButton={true}
-            buttonAriaLabel={t('search')}
+            buttonAriaLabel={tCommon('search')}
           />
         </div>
 

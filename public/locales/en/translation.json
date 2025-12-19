@@ -731,7 +731,8 @@
     "raisedAmount": "Raised amount ",
     "pledgedAmount": "Pledged amount",
     "startDate": "startDate",
-    "endDate": "endDate"
+    "endDate": "endDate",
+    "searchByPlaceholder": "Search by {{field}}"
   },
   "orgPost": {
     "title": "Posts",

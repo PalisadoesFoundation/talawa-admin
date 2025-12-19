@@ -306,7 +306,7 @@ function groups(): JSX.Element {
             showSearchButton={true}
             showLeadingIcon={true}
             showClearButton={true}
-            buttonAriaLabel={t('search')}
+            buttonAriaLabel={tCommon('search')}
           />
         </div>
 
@@ -327,6 +327,7 @@ function groups(): JSX.Element {
               { label: t('mostVolunteers'), value: 'volunteers_DESC' },
               { label: t('leastVolunteers'), value: 'volunteers_ASC' },
             ]}
+            selectedOption={sortBy ?? undefined}
             onSortChange={(value) =>
               setSortBy(value as 'volunteers_DESC' | 'volunteers_ASC')
             }
