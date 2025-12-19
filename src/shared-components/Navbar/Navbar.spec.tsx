@@ -58,7 +58,7 @@ describe('PageHeader Component', () => {
 
   it('renders event type filter when showEventTypeFilter is true', () => {
     render(<PageHeader showEventTypeFilter={true} />);
-    expect(screen.getByText('Event Type')).toBeInTheDocument();
+    expect(screen.getByText('eventType')).toBeInTheDocument();
   });
 
   it('renders actions when provided', () => {

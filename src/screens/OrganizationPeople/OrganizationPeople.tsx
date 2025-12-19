@@ -530,13 +530,14 @@ function OrganizationPeople(): JSX.Element {
     <>
       {/* --- FIX START: Standardized Header using manual structure --- */}
       {/* This structure uses the global 'calendar__header' and 'btnsBlock' which we fixed in CSS to ensure perfect alignment. */}
-      <div className={styles.calendar__header} style={{ marginBottom: '2rem' }}>
+      <div className={styles.calendar__header}>
         <SearchBar
           placeholder={t('searchFullName')}
           value={searchTerm}
           onChange={(val) => setSearchTerm(val)}
           onSearch={(term) => setSearchTerm(term)}
           inputTestId="searchbtn"
+          buttonAriaLabel={tCommon('search')}
           // Standard Props for consistency
           showSearchButton={true}
           showLeadingIcon={true}
@@ -552,7 +553,7 @@ function OrganizationPeople(): JSX.Element {
               { label: tCommon('users'), value: 'users' },
             ]}
             selectedOption={
-              state === 2 ? 'Users' : state === 1 ? 'Admin' : 'Members'
+              state === 2 ? 'users' : state === 1 ? 'admin' : 'members'
             }
             onSortChange={(value) => handleSortChange(value.toString())}
             dataTestIdPrefix="sort"

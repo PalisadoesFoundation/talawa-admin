@@ -335,12 +335,9 @@ function orgList(): JSX.Element {
   const storeUrl = `orgstore/id=${dialogRedirectOrgId}`;
 
   return (
-    <div style={{ paddingLeft: '40px', paddingRight: '30px' }}>
+    <div className={styles.orgListContainer}>
       {/* Buttons Container */}
-      <div
-        className={styles.calendar__header}
-        style={{ marginBottom: '2rem', marginTop: '1rem' }}
-      >
+      <div className={styles.calendar__header}>
         {/* 1. Search Bar (Standardized) */}
         <SearchBar
           placeholder={t('searchOrganizations')}

@@ -2723,17 +2723,6 @@ form label,
   margin: 8px;
 }
 
-.calendar__header {
-  display: flex;
-  flex-direction: row; /* Force horizontal layout */
-  flex-wrap: nowrap; /* CRITICAL: Disables wrapping to the next line */
-  align-items: center; /* Vertically centers items */
-  justify-content: space-between;
-  gap: 1rem; /* Space between Search and Buttons */
-  width: 100%;
-  margin-bottom: 20px;
-}
-
 .calendar__search {
   flex: 1 1 360px;
   min-width: 260px;
@@ -9970,6 +9959,7 @@ form {
   gap: 12px !important;
   width: auto !important;
   flex-shrink: 0;
+  height: 48px !important;
   margin: 0 !important;
 }
 
@@ -9998,17 +9988,15 @@ form {
   }
 }
 
-.btnsBlock .calendar__header {
-  margin-top: -1 !important;
-  margin-bottom: 0 !important;
-  padding: 0 !important;
-  width: auto !important;
+.btnsBlock > * {
+  margin: 0 !important;
+  height: 100% !important; /* Fill the container's 48px */
+  display: flex !important;
+  align-items: center !important;
   min-height: auto !important;
 }
-
-.btnsBlock .calendar__header .dropdown {
-  margin: 0 !important;
-  display: flex;
-  align-items: center;
-}
 /* ----------------------------------------------------- */
+.orgListContainer {
+  padding-left: 40px;
+  padding-right: 30px;
+}
