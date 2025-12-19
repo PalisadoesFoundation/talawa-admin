@@ -12,11 +12,16 @@ import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
+import TableLoader from 'components/TableLoader/TableLoader';
+import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import FundModal from './modal/FundModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
 import PageHeader from 'shared-components/Navbar/Navbar';
+import { ReportingRow, ReportingTableColumn, ReportingTableGridProps } from 'types/ReportingTable/interface';
+import { PAGE_SIZE, ROW_HEIGHT } from 'types/ReportingTable/utils';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 const dataGridStyle = {
   borderRadius: 'var(--table-head-radius)',
@@ -116,6 +121,8 @@ const organizationFunds = (): JSX.Element => {
   );
 
   const [searchText, setSearchText] = useState('');
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const handleOpenModal = useCallback(
     (fund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
@@ -157,6 +164,12 @@ const organizationFunds = (): JSX.Element => {
       ) ?? []
     );
   }, [fundData]);
+
+  // Client-side pagination - no more data to load since we get all 32 at once
+  const loadMoreFunds = (): void => {
+    // No-op since backend doesn't support pagination
+    setHasMore(false);
+  };
 
   const filteredAndSortedFunds = useMemo(() => {
     let result = [...funds];
@@ -200,19 +213,31 @@ const organizationFunds = (): JSX.Element => {
     );
   }
 
-  const columns: GridColDef[] = [
+  // Header titles for the funds table
+  const headerTitles: string[] = [
+    '#',
+    t('fundName'),
+    tCommon('createdOn'),
+    tCommon('status'),
+    t('associatedCampaigns'),
+    tCommon('action'),
+  ];
+
+  const columns: ReportingTableColumn[] = [
     {
       field: 'id',
       headerName: '#',
       flex: 1,
-      minWidth: 100,
+      minWidth: 60,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return <div>{params.row.id}</div>;
-      },
+      renderCell: (params: GridCellParams) => (
+        <span className={styles.requestsTableItemIndex}>
+          {params.api.getRowIndexRelativeToVisibleRows(params.row.id) + 1}
+        </span>
+      ),
     },
     {
       field: 'fundName',
@@ -233,19 +258,6 @@ const organizationFunds = (): JSX.Element => {
             {params.row.name}
           </div>
         );
-      },
-    },
-    {
-      field: 'createdBy',
-      headerName: 'Created By',
-      flex: 2,
-      align: 'center',
-      minWidth: 100,
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return params.row.creator.name;
       },
     },
     {
@@ -279,34 +291,6 @@ const organizationFunds = (): JSX.Element => {
       },
     },
     {
-      field: 'action',
-      headerName: 'Action',
-      flex: 2,
-      align: 'center',
-      minWidth: 100,
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <>
-            <Button
-              variant="success"
-              size="sm"
-              // className="me-2 rounded"
-              className={styles.editButton}
-              data-testid="editFundBtn"
-              onClick={() =>
-                handleOpenModal(params.row as InterfaceFundInfo, 'edit')
-              }
-            >
-              <i className="fa fa-edit" />
-            </Button>
-          </>
-        );
-      },
-    },
-    {
       field: 'assocCampaigns',
       headerName: 'Associated Campaigns',
       flex: 2,
@@ -329,67 +313,122 @@ const organizationFunds = (): JSX.Element => {
         );
       },
     },
+    {
+      field: 'action',
+      headerName: 'Action',
+      flex: 2,
+      align: 'center',
+      minWidth: 100,
+      headerAlign: 'center',
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <Button
+            size="sm"
+            // className="me-2 rounded"
+            className={styles.editButton}
+            data-testid="editFundBtn"
+            onClick={() =>
+              handleOpenModal(params.row as InterfaceFundInfo, 'edit')
+            }
+          >
+            <i className="fa fa-edit me-1" />
+            {t('editFund')}
+          </Button>
+        );
+      },
+    },
   ];
+
+
+  const gridProps: ReportingTableGridProps = {
+    sx: { ...dataGridStyle },
+    paginationMode: 'client',
+    getRowId: (row: InterfaceFundInfo) => row.id,
+    rowCount: filteredAndSortedFunds.length,
+    pageSizeOptions: [PAGE_SIZE],
+    loading: fundLoading,
+    hideFooter: true,
+    slots: {
+      noRowsOverlay: () => (
+        <Stack height="100%" alignItems="center" justifyContent="center">
+          {t('notFound')}
+        </Stack>
+      ),
+    },
+    getRowClassName: () => `${styles.rowBackground}`,
+    isRowSelectable: () => false,
+    disableColumnMenu: true,
+    rowHeight: ROW_HEIGHT,
+    autoHeight: true,
+    style: { overflow: 'visible' },
+  };
 
   return (
     <div>
-      <div className={styles.head}>
-        <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-          <PageHeader
-            search={{
-              placeholder: tCommon('searchByName'),
-              onSearch: (text) => setSearchText(text),
-              inputTestId: 'searchByName',
-              buttonTestId: 'searchBtn',
-            }}
-            sorting={[
-              {
-                title: tCommon('sort'),
-                options: [
-                  { label: t('createdLatest'), value: 'createdAt_DESC' },
-                  { label: t('createdEarliest'), value: 'createdAt_ASC' },
-                ],
-                selected: sortBy,
-                onChange: (value) =>
-                  setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC'),
-                testIdPrefix: 'sort',
-              },
-            ]}
-            actions={
-              <Button
-                variant="success"
-                onClick={() => handleOpenModal(null, 'create')}
-                className={styles.createButton}
-                data-testid="createFundBtn"
-              >
-                <i className="fa fa-plus me-2" />
-                {t('createFund')}
-              </Button>
-            }
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+        <div className={styles.head} style={{ flex: 1, margin: 0 }}>
+          <SearchBar
+            placeholder={tCommon('searchByName')}
+            value={searchText}
+            onChange={(value) => setSearchText(value.trim())}
+            onClear={() => setSearchText('')}
+            showSearchButton={false}
+            inputTestId="searchByName"
+            clearButtonTestId="clearSearch"
           />
         </div>
+        <Button
+          variant="success"
+          onClick={() => handleOpenModal(null, 'create')}
+          className={styles.createButton}
+          data-testid="createFundBtn"
+        >
+          <i className="fa fa-plus me-2" />
+          {t('createFund')}
+        </Button>
       </div>
 
-      <DataGrid
-        disableColumnMenu
-        columnBufferPx={7}
-        hideFooter={true}
-        getRowId={(row) => row.id}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noFundsFound')}
-            </Stack>
-          ),
-        }}
-        sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackgrounds}`}
-        autoHeight
-        rowHeight={65}
-        rows={filteredAndSortedFunds}
-        columns={columns}
-        isRowSelectable={() => false}
-      />
+      {!fundLoading && fundData && filteredAndSortedFunds.length === 0 && searchText.length > 0 ? (
+        <div className={styles.notFound}>
+          <h4 className="m-0">
+            {tCommon('noResultsFoundFor')} &quot;{searchText}&quot;
+          </h4>
+        </div>
+      ) : !fundLoading && fundData && filteredAndSortedFunds.length === 0 ? (
+        <div className={styles.notFound}>
+          <h4>{t('noFundsFound')}</h4>
+        </div>
+      ) : (
+        <div className={styles.listBox}>
+          {fundLoading ? (
+            <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
+          ) : (
+            <ReportingTable
+              rows={
+                filteredAndSortedFunds.map((fund) => ({ ...fund })) as ReportingRow[]
+              }
+              columns={columns}
+              gridProps={gridProps}
+              listProps={{
+                loader: <TableLoader noOfCols={6} noOfRows={2} />,
+                className: styles.listTable,
+                ['data-testid']: 'funds-list',
+                scrollThreshold: 0.9,
+                style: { overflow: 'visible' },
+                endMessage:
+                  filteredAndSortedFunds.length > 0 ? (
+                    <div className={'w-100 text-center my-4'}>
+                      <h5 className="m-0">{tCommon('endOfResults')}</h5>
+                    </div>
+                  ) : null,
+              }}
+            />
+          )}
+        </div>
+      )}
+
       <FundModal
         isOpen={modalState}
         hide={() => setModalState(false)}

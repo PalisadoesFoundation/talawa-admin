@@ -1342,6 +1342,27 @@ form label,
   align-items: center;
 }
 
+
+.searchBarContainer {
+  display: flex;
+  margin: 2.5rem 0;
+  align-items: center;
+  max-width: 60%;
+}
+
+.searchBarContainer {
+  display: flex;
+  margin: 2.5rem 0;
+  align-items: stretch;
+  gap: 0.75rem;
+}
+
+.searchBarContainer > :first-child {
+  flex: 1 1 320px;
+  min-width: 240px;
+  max-width: 100%;
+}
+
 /* Table Header */
 
 .tableHeader {
@@ -5133,9 +5154,8 @@ form label,
 /* -- RequestsTableItem.tsx -- */
 
 .requestsTableItemIndex {
-  padding-inline-start: 2.5rem;
   vertical-align: middle;
-}
+} 
 
 .requestsTableItemName {
   padding-inline-start: 1.5rem;
