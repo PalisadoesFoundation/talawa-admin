@@ -162,6 +162,7 @@ describe('Testing the App Component', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     logSpy?.mockRestore();
     errorSpy?.mockRestore();
   });
