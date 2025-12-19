@@ -253,7 +253,7 @@ const orgFundCampaign = (): JSX.Element => {
           >
             {
               currencySymbols[
-              params.row.currencyCode as keyof typeof currencySymbols
+                params.row.currencyCode as keyof typeof currencySymbols
               ]
             }
             {params.row.goalAmount as number}
@@ -278,7 +278,7 @@ const orgFundCampaign = (): JSX.Element => {
           >
             {
               currencySymbols[
-              params.row.currencyCode as keyof typeof currencySymbols
+                params.row.currencyCode as keyof typeof currencySymbols
               ]
             }
             0
@@ -450,9 +450,9 @@ const orgFundCampaign = (): JSX.Element => {
       </div>
 
       {!campaignLoading &&
-        campaignData &&
-        filteredCampaigns.length === 0 &&
-        searchText.length > 0 ? (
+      campaignData &&
+      filteredCampaigns.length === 0 &&
+      searchText.length > 0 ? (
         <div className={styles.notFound}>
           <h4 className="m-0">
             {tCommon('noResultsFoundFor')} &quot;{searchText}&quot;
