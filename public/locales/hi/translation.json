@@ -731,7 +731,8 @@
     "raisedAmount": "उठाया गया राशि",
     "pledgedAmount": "प्रतिबद्ध राशि",
     "startDate": "प्रारंभ तिथि",
-    "endDate": "समाप्ति तिथि"
+    "endDate": "समाप्ति तिथि",
+    "searchByPlaceholder": "{{field}} द्वारा खोजें"
   },
   "orgPost": {
     "title": "पदों",
@@ -1020,7 +1021,13 @@
   "people": {
     "title": "लोग",
     "searchUsers": "उपयोगकर्ताओं को खोजें",
-    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है."
+    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
+    "sNo": "क्र.सं.",
+    "avatar": "अवतार",
+    "name": "नाम",
+    "email": "ईमेल",
+    "role": "भूमिका",
+    "loading": "लोड हो रहा है..."
   },
   "userLogin": {
     "login": "लॉग इन करें",
@@ -1078,7 +1085,8 @@
     "search": "खोजें",
     "filter": "फ़िल्टर",
     "searchByName": "नाम से खोजें",
-    "searchOrganizations": "संगठनों खोजें"
+    "searchOrganizations": "संगठनों खोजें",
+    "loading": "लोड हो रहा है..."
   },
   "userSidebarOrg": {
     "yourOrganizations": "आपके संगठन",
@@ -1530,7 +1538,9 @@
     "addPledge": "प्रतिज्ञा जोड़ें",
     "viewPledges": "प्रतिज्ञाएँ देखें",
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",
-    "noCampaigns": "कोई अभियान नहीं मिला"
+    "noCampaigns": "कोई अभियान नहीं मिला",
+    "raised": "जुटाया गया",
+    "amountRaised": "जुटाई गई राशि"
   },
   "userPledges": {
     "title": "मेरी प्रतिज्ञाएँ"
@@ -1619,7 +1629,21 @@
     "eventInvitationRecurringSubject": "पुनरावर्ती घटना श्रृंखला के लिए स्वयंसेवक बनने का निमंत्रण",
     "pending": "लंबित",
     "accepted": "स्वीकृत",
-    "rejected": "अस्वीकृत"
+    "rejected": "अस्वीकृत",
+    "assignee": "नियुक्त व्यक्ति",
+    "group": "समूह",
+    "event": "कार्यक्रम",
+    "received": "प्राप्त",
+    "location": "स्थान",
+    "recurrence": "पुनरावृत्ति",
+    "endDate": "समाप्ति तिथि",
+    "description": "विवरण",
+    "volunteerGroups": "स्वयंसेवक समूह",
+    "groupTable": "समूह तालिका",
+    "srNo": "क्र.सं.",
+    "groupName": "समूह का नाम",
+    "noOfMembers": "सदस्यों की संख्या",
+    "options": "विकल्प"
   },
   "pluginStore": {
     "title": "प्लगइन स्टोर",
