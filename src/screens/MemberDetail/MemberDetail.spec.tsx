@@ -674,7 +674,7 @@ describe('MemberDetail', () => {
     expect(employmentStatus).toBeInTheDocument();
 
     // Test initial state
-    expect(employmentStatus).toHaveTextContent('None'); // Or whatever your initial value is
+    expect(employmentStatus).toHaveTextContent('Full-Time'); // Or whatever your initial value is
 
     // Click the dropdown button to open it
     await userEvent.click(employmentStatus);

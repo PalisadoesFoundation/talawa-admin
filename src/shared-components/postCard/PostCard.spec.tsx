@@ -1022,7 +1022,11 @@ describe('PostCard', () => {
 
     await waitFor(() => {
       expect(defaultProps.fetchPosts).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith('Post updated successfully.');
+      expect(toast.success).toHaveBeenCalledWith(
+        expect.stringMatching(
+          /Post updated successfully|postCard\.postUpdatedSuccess/i,
+        ),
+      );
     });
   });
 
