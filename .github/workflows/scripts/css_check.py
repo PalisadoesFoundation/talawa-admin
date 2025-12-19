@@ -21,6 +21,71 @@ DetailedViolation = namedtuple(
 CSSCheckResult = namedtuple("CSSCheckResult", ["violations"])
 
 
+def strip_comments(line: str, in_block_comment: bool) -> tuple[str, bool]:
+    """Strip single-line and block comments from a line of code.
+
+    This function removes:
+    - Single-line comments starting with `//`
+    - Block comments delimited by `/*` and `*/`, even when they span
+      multiple lines
+
+    It preserves non-comment code and tracks whether parsing is
+    currently inside a block comment.
+
+    Args:
+        line: The input line of source code.
+        in_block_comment: Whether the previous line ended inside
+            a block comment.
+
+    Returns:
+        A tuple containing:
+        - The line with comments removed.
+        - A boolean indicating whether the parser is still inside
+          a block comment after processing this line.
+    """
+    result = ""
+    i = 0
+
+    while i < len(line):
+        if in_block_comment:
+            if line[i : i + 2] == "*/":
+                in_block_comment = False
+                i += 2
+            else:
+                i += 1
+        else:
+            if line[i : i + 2] == "/*":
+                in_block_comment = True
+                i += 2
+            elif line[i : i + 2] == "//":
+                break
+            else:
+                result += line[i]
+                i += 1
+
+    return result, in_block_comment
+
+    result = ""
+    i = 0
+    while i < len(line):
+        if in_block_comment:
+            if line[i : i + 2] == "*/":
+                in_block_comment = False
+                i += 2
+            else:
+                i += 1
+        else:
+            if line[i : i + 2] == "/*":
+                in_block_comment = True
+                i += 2
+            elif line[i : i + 2] == "//":
+                break  # rest of line is a comment
+            else:
+                result += line[i]
+                i += 1
+    return result, in_block_comment
+
+
 def check_embedded_styles(
     content: str, file_path: str
 ) -> list[DetailedViolation]:
@@ -103,14 +168,17 @@ def check_embedded_styles(
         },
     }
 
+    in_block_comment = False
+
     for line_number, line in enumerate(lines, start=1):
         # Skip comments and import statements
         stripped_line = line.strip()
-        if (
-            stripped_line.startswith("//")
-            or stripped_line.startswith("/*")
-            or stripped_line.startswith("import")
-        ):
+        if stripped_line.startswith("import"):
+            continue
+
+        code_line, in_block_comment = strip_comments(line, in_block_comment)
+
+        if not code_line.strip():
             continue
 
         # Check for URL references (skip these as they're not style violations)
@@ -123,7 +191,7 @@ def check_embedded_styles(
             continue
 
         for violation_type, pattern_info in patterns.items():
-            matches = re.finditer(pattern_info["regex"], line)
+            matches = re.finditer(pattern_info["regex"], code_line)
             for match in matches:
                 if violation_type == "camelcase_css_property":
                     # Check if it's actually in a style context
@@ -347,9 +415,9 @@ def format_violation_output(violations: list[DetailedViolation]) -> str:
 
 def main():
     """Main function to run the CSS check.
+
     This function serves as the entry point to run the CSS check. It processes
     directories and files, checks for CSS violations, and prints the results.
-
 
     Returns:
         None
