@@ -1,12 +1,9 @@
 /**
  * UserContactDetails Component
  *
- * This component renders a comprehensive profile view for a user, allowing them to
- * view and update their personal and contact information. It supports profile picture
- * upload, form validation, and controlled updates with reset functionality.
+ * This component renders a comprehensive profile view for a user
  *
  * The component fetches user data by ID, populates editable form fields, and submits
- * updates via GraphQL mutations. Changes are tracked to prevent unnecessary updates.
  *
  * @component
  * @param {MemberDetailProps} props - The props for the component.
@@ -18,9 +15,7 @@
  *
  * @remarks
  * - Uses Apollo Client's `useQuery` to fetch user data and `useMutation` to update it.
- * - Supports avatar upload with file type and size validation.
  * - Tracks unsaved changes and conditionally displays Save/Reset actions.
- * - Converts existing avatar URLs to File objects when required.
  * - Prevents invalid password updates using custom validation logic.
  * - Uses `react-i18next` for localization and translations.
  * - Stores updated user details in local storage after a successful update.
@@ -29,7 +24,7 @@
  * ```tsx
  * <UserContactDetails id="12345" />
  * ```
- *
+
  * @dependencies
  * - `@apollo/client` for GraphQL queries and mutations
  * - `react-bootstrap` for layout and form components
@@ -67,9 +62,7 @@ import dayjs from 'dayjs';
 import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
 import { urlToFile } from 'utils/urlToFile';
 import { validatePassword } from 'utils/passwordValidator';
-
 type MemberDetailProps = { id?: string };
-
 const UserContactDetails: React.FC<MemberDetailProps> = ({
   id,
 }): JSX.Element => {
@@ -77,15 +70,11 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { t: tCommon } = useTranslation('common');
   const location = useLocation();
-  const isMounted = useRef(true);
-  const { getItem, setItem } = useLocalStorage();
+  const { getItem } = useLocalStorage();
   const [isUpdated, setisUpdated] = useState(false);
   const currentId = location.state?.id || getItem('id') || id;
-  // console.log('Current User ID:', currentId);
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
-
   document.title = t('title');
-
   const [formState, setFormState] = useState({
     addressLine1: '',
     addressLine2: '',
@@ -109,201 +98,91 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     state: '',
     workPhoneNumber: '',
   });
-
-  // Mutation to update the user details
   const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION, {
-    update(cache, { data }) {
-      if (!data) return;
+    update: (cache, { data }) =>
+      data?.updateCurrentUser &&
       cache.writeQuery({
         query: GET_USER_BY_ID,
         variables: { input: { id: currentId } },
         data: { user: data.updateCurrentUser },
-      });
-    },
+      }),
   });
-
-  //   const { data: data, loading } = useQuery(CURRENT_USER, {
-  //     variables: { id: currentId },
-  //   });
-  // console.log('User Data:', data);
-
   const { data, loading } = useQuery(GET_USER_BY_ID, {
-    variables: {
-      input: {
-        id: currentId,
-      },
-    },
+    variables: { input: { id: currentId } },
     skip: !currentId,
   });
-
-  // console.log('Fetched User:', data.user);
-
-  useEffect(() => {
-    if (!data?.user) return;
-
-    setFormState((prev) => ({
-      ...prev,
-      ...data.user,
-    }));
-  }, [data]);
-
-  useEffect(() => {
-    // check component is mounted or not
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!selectedAvatar) return;
-
-    const previewUrl = URL.createObjectURL(selectedAvatar);
-    return () => URL.revokeObjectURL(previewUrl);
-  }, [selectedAvatar]);
-
-  // Function to handle the click on the edit icon
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const file = e.target?.files?.[0];
-
-    if (file) {
-      const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
-      const maxSize = 5 * 1024 * 1024; // 5MB
-
-      if (!validTypes.includes(file.type)) {
-        toast.error(t('invalidFileType'));
-        return;
-      }
-
-      if (file.size > maxSize) {
-        toast.error(t('fileTooLarge'));
-        return;
-      }
-
-      // Update all states properly
-      setFormState((prevState) => ({ ...prevState, avatar: file }));
-      setSelectedAvatar(file); // to show the image to the user before updating the avatar
-      setisUpdated(true);
-    }
-  };
-
-  // to handle the change in the form fields
-  const handleFieldChange = (fieldName: string, value: string) => {
+  useEffect(
+    () => data?.user && setFormState((prev) => ({ ...prev, ...data.user })),
+    [data],
+  );
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target?.files?.[0];
+    if (!f) return;
+    if (!['image/jpeg', 'image/png', 'image/gif'].includes(f.type))
+      return toast.error(t('invalidFileType'));
+    if (f.size > 5 * 1024 * 1024) return toast.error(t('fileTooLarge'));
+    setFormState((s) => ({ ...s, avatar: f }));
+    setSelectedAvatar(f);
     setisUpdated(true);
-    setFormState((prev) => ({
-      ...prev,
-      [fieldName]: value, // value as YYYY-MM-DD string
-    }));
   };
-
-  // Function to handle the update of the user details
+  const handleFieldChange = (fieldName: string, value: string) => (
+    setisUpdated(true),
+    setFormState((prev) => ({ ...prev, [fieldName]: value }))
+  );
   const handleUserUpdate = async (): Promise<void> => {
-    // Remove empty fields from the form state
-    function removeEmptyFields<T extends Record<string, string | File | null>>(
+    const removeEmptyFields = <T extends Record<string, string | File | null>>(
       obj: T,
-    ): Partial<T> {
-      return Object.fromEntries(
+    ) =>
+      Object.fromEntries(
         Object.entries(obj).filter(
-          ([, value]) =>
-            value !== null &&
-            value !== undefined &&
-            (typeof value !== 'string' || value.trim() !== ''),
+          ([_, v]) => v != null && (typeof v !== 'string' || v.trim()),
         ),
       ) as Partial<T>;
+    if (formState.password && validatePassword(formState.password)) {
+      toast.error(validatePassword(formState.password));
+      return;
     }
-
-    if (formState.password) {
-      const errorMsg = validatePassword(formState.password);
-      if (errorMsg) {
-        toast.error(errorMsg);
-        return;
-      }
-    }
-
-    // If no new avatar is selected but there's an avatar URL, convert it to File
-    let avatarFile: File | null = null;
-    if (!selectedAvatar && formState?.avatarURL) {
-      try {
-        avatarFile = await urlToFile(formState.avatarURL);
-      } catch {
-        toast.error(
-          'Failed to process profile picture. Please try uploading again.',
-        );
-        return;
-      }
-    }
-
-    const data: Omit<typeof formState, 'avatarURL' | 'emailAddress'> = {
-      addressLine1: formState.addressLine1,
-      addressLine2: formState.addressLine2,
-      birthDate: formState.birthDate,
-      city: formState.city,
-      countryCode: formState.countryCode,
-      description: formState.description,
-      educationGrade: formState.educationGrade,
-      employmentStatus: formState.employmentStatus,
-      homePhoneNumber: formState.homePhoneNumber,
-      maritalStatus: formState.maritalStatus,
-      mobilePhoneNumber: formState.mobilePhoneNumber,
-      name: formState.name,
-      natalSex: formState.natalSex,
-      naturalLanguageCode: formState.naturalLanguageCode,
-      password: formState.password,
-      postalCode: formState.postalCode,
-      state: formState.state,
-      workPhoneNumber: formState.workPhoneNumber,
-      avatar: selectedAvatar ? selectedAvatar : avatarFile,
-    };
-
-    const input = removeEmptyFields(data);
-
-    // Update the user details
+    const avatarFile =
+      !selectedAvatar && formState.avatarURL
+        ? await urlToFile(formState.avatarURL).catch(() => {
+            toast.error(
+              'Failed to process profile picture. Please try uploading again.',
+            );
+            return null;
+          })
+        : null;
+    const input = removeEmptyFields({
+      ...formState,
+      avatar: selectedAvatar || avatarFile,
+    });
+    delete input.avatarURL;
+    delete input.emailAddress;
     try {
       const { data: updateData } = await updateUser({ variables: { input } });
-
-      console.log('Update Response:', updateData);
-
-      if (updateData) {
-        const updatedUser = updateData.updateCurrentUser;
-
+      if (updateData)
         toast.success(
           tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
         );
-        setItem('UserImage', updatedUser.avatarURL);
-        setItem('name', updatedUser.name);
-        setItem('email', updatedUser.emailAddress);
-        setItem('id', updatedUser.id);
-        setItem('role', updatedUser.role);
-        setSelectedAvatar(null);
-        setisUpdated(false);
-      }
-    } catch (error: unknown) {
-      errorHandler(t, error);
+      setSelectedAvatar(null);
+      setisUpdated(false);
+    } catch (e: unknown) {
+      errorHandler(t, e);
     }
   };
-
   const resetChanges = (): void => {
     setisUpdated(false);
-    if (data?.user) {
-      setFormState({
-        ...data.user,
-      });
-    }
+    data?.user && setFormState({ ...data.user });
   };
-
   if (loading || !data?.user) {
     return <Loader />;
   }
-
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Row className="g-4 mt-1">
         <Col md={6}>
           {/* Personal Details Card */}
           <Card className={`${styles.allRound}`}>
-            <Card.Header
-              className={`py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius}`}
-              style={{ backgroundColor: '#A8C7FA', color: '#555' }}
-            >
+            <Card.Header className={styles.userContactDetailPersonalCardHeader}>
               <h3 className="m-0">{t('personalDetailsHeading')}</h3>
               <Button
                 variant="light"
@@ -320,12 +199,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                   <div className="position-relative d-inline-block">
                     {formState?.avatarURL ? (
                       <img
-                        className="rounded-circle"
-                        style={{
-                          width: '60px',
-                          height: '60px',
-                          objectFit: 'cover',
-                        }}
+                        className={`rounded-circle ${styles.userContactDetailContactAvatarUrl}`}
                         src={
                           selectedAvatar
                             ? URL.createObjectURL(selectedAvatar)
@@ -345,10 +219,9 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                       />
                     )}
                     <i
-                      className="fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle"
+                      className={`fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle ${styles.userContactDetailContactAvatarEditIcon}`}
                       onClick={() => fileInputRef.current?.click()}
                       data-testid="uploadImageBtn"
-                      style={{ cursor: 'pointer', fontSize: '1.2rem' }}
                       title={tCommon('userEditProfilePicture')}
                       role="button"
                       aria-label={tCommon('userEditProfilePicture')}
@@ -513,10 +386,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
 
         <Col md={6}>
           <Card className={`${styles.allRound}`}>
-            <Card.Header
-              className={`py-3 px-4 ${styles.topRadius}`}
-              style={{ backgroundColor: '#A8C7FA', color: '#555' }}
-            >
+            <Card.Header className={`py-3 px-4 ${styles.topRadius}`}>
               <h3 className="m-0">{t('contactInfoHeading')}</h3>
             </Card.Header>
             <Card.Body className="py-3 px-3">
@@ -726,5 +596,4 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     </LocalizationProvider>
   );
 };
-
 export default UserContactDetails;

@@ -7851,6 +7851,8 @@ form {
 .topRadius {
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
+  background-color: '#A8C7FA';
+  color: '#555';
 }
 
 .inputColor {
@@ -8791,8 +8793,6 @@ form {
   color: var(--colorWhite);
 }
 
-/* -- OrganizationPeople.tsx -- */
-
 /* -- OrganizationTags.tsx -- */
 
 .tagsBreadCrumbs:hover {
@@ -9490,6 +9490,50 @@ form {
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
   background-color: var(--people-card-container-bg);
+}
+
+.userContactDetailPersonalCardHeader {
+  background-color: #a8c7fa;
+  color: #555;
+  background-color: #a8c7fa;
+  padding: 1rem 1.5rem; /* py-3 px-4 */
+  display: flex; /* d-flex */
+  justify-content: space-between; /* justify-content-between */
+  align-items: center; /* align-items-center */
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+.userContactDetailContactCardHeader {
+  background-color: #a8c7fa;
+  color: #555;
+}
+
+.userContactDetailProfileImage {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+.userContactDetailEditAvatarIcon {
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.userContactDetailSaveChangesBtn {
+  background-color: #a8c7fa;
+  color: #555;
+}
+
+.userContactDetailContactAvatarUrl {
+  width: '60px';
+  height: '60px';
+  object-fit: 'cover';
+}
+
+.userContactDetailContactAvatarEditIcon {
+  cursor: 'pointer';
+  font-size: '1.2rem';
 }
 
 .custom_row_center {
