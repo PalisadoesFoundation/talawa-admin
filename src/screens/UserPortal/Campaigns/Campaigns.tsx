@@ -203,7 +203,7 @@ const Campaigns = (): JSX.Element => {
       <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
         {/* Search input field and button */}
         <SearchBar
-          placeholder={t('searchByName')}
+          placeholder={t('fundCampaign.searchCampaigns')}
           onSearch={setSearchTerm}
           inputTestId="searchCampaigns"
           buttonTestId="searchBtn"

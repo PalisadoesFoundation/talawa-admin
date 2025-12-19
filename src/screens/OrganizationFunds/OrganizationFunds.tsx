@@ -370,7 +370,7 @@ const organizationFunds = (): JSX.Element => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
         <div className={styles.head} style={{ flex: 1, margin: 0 }}>
           <SearchBar
-            placeholder={tCommon('searchByName')}
+            placeholder={t('searchFunds')}
             value={searchText}
             onChange={(value) => setSearchText(value.trim())}
             onClear={() => setSearchText('')}
@@ -383,6 +383,7 @@ const organizationFunds = (): JSX.Element => {
           variant="success"
           onClick={() => handleOpenModal(null, 'create')}
           className={styles.createButton}
+          style={{ whiteSpace: 'nowrap' }}
           data-testid="createFundBtn"
         >
           <i className="fa fa-plus me-2" />

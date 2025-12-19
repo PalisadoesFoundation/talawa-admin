@@ -30,7 +30,7 @@ const mergeClassNames = (
 const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
   (props, ref) => {
     const {
-      placeholder = 'Search...',
+      placeholder,
       value,
       defaultValue = '',
       onSearch,

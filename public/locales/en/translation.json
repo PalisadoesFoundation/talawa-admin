@@ -644,6 +644,7 @@
   "funds": {
     "title": "Funds",
     "createFund": "Create Fund",
+    "searchFunds": "Search F  unds",
     "fundName": "Fund Name",
     "fundId": "Fund (Reference) ID",
     "taxDeductible": "Tax Deductible",
@@ -668,6 +669,8 @@
   },
   "fundCampaign": {
     "title": "Fundraising Campaigns",
+    "editCampaign": "Edit Campaign",
+    "searchCampaigns": "Search Campaigns",
     "campaignName": "Campaign Name",
     "campaignOptions": "Options",
     "fundingGoal": "Funding Goal",
