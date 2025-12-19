@@ -8,6 +8,7 @@
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 Defined in: [src/GraphQl/Queries/Queries.ts:849](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L849)
 =======
 Defined in: [src/GraphQl/Queries/Queries.ts:829](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L829)
@@ -15,3 +16,6 @@ Defined in: [src/GraphQl/Queries/Queries.ts:829](https://github.com/PalisadoesFo
 =======
 Defined in: [src/GraphQl/Queries/Queries.ts:772](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L772)
 >>>>>>> 63630515b6 (fix: testing to fix docs conflicts)
+=======
+Defined in: [src/GraphQl/Queries/Queries.ts:829](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L829)
+>>>>>>> b44443b078 (fix: testing to fix docs conflicts)
