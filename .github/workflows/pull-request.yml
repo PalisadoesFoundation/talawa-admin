@@ -148,7 +148,10 @@ jobs:
 
       - name: Run CSS policy enforcement
         run: |
-          python .github/workflows/scripts/css_check.py
+          python .github/workflows/scripts/css_check.py \
+          --directories src \
+          --exclude_directories node_modules dist build .git \
+          --exclude_files
 
   Check-Mock-Isolation:
     name: Check for proper mock cleanup in test files
