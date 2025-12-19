@@ -80,6 +80,13 @@ const errorLink = onError(
       for (const error of graphQLErrors) {
         const errorCode = error.extensions?.code;
 
+        // Skip token refresh logic for authentication operations (login/signup)
+        const operationName = operation.operationName;
+        const authOperations = ['SignIn', 'SignUp', 'RefreshToken'];
+        if (authOperations.includes(operationName)) {
+          continue;
+        }
+
         // Check for unauthenticated error (token expired)
         if (
           errorCode === 'unauthenticated' ||
@@ -88,8 +95,6 @@ const errorLink = onError(
           // Don't try to refresh if we don't have a refresh token
           const storedRefreshToken = getItem('refreshToken');
           if (!storedRefreshToken) {
-            localStorage.clear();
-            window.location.href = '/';
             return;
           }
 
@@ -135,10 +140,13 @@ const errorLink = onError(
               // Retry the original request with new token
               const oldHeaders = operation.getContext().headers;
               const newToken = getItem('token');
+              const authHeaders = newToken
+                ? { authorization: `Bearer ${newToken}` }
+                : {};
               operation.setContext({
                 headers: {
                   ...oldHeaders,
-                  authorization: newToken ? `Bearer ${newToken}` : '',
+                  ...authHeaders,
                 },
               });
               return forward(operation);
