@@ -25,18 +25,18 @@ def strip_comments(line: str, in_block_comment: bool) -> tuple[str, bool]:
     """Strip single-line and block comments from a line of code.
 
     Removes:
-    - Single-line comments starting with //
-    - Block comments delimited by /* and */, including multi-line blocks
+        - Single-line comments starting with //
+        - Block comments delimited by /* and */, including multi-line blocks
 
     Args:
-        line (str): The input line of source code.
-        in_block_comment (bool): Indicates whether parsing started inside
-            a block comment from a previous line.
+        line: The input line of source code.
+        in_block_comment: Whether parsing started inside a block comment
+            from a previous line.
 
     Returns:
-        result (str): The line with all comments removed.
-        in_block_comment (bool): True if parsing ends inside a block comment,
-            False otherwise.
+        tuple[str, bool]: A tuple containing:
+            - The line with all comments removed.
+            - True if parsing ends inside a block comment, False otherwise.
     """
     result = ""
     i = 0
