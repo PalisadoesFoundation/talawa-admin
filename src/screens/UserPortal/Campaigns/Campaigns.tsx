@@ -141,7 +141,7 @@ const Campaigns = (): JSX.Element => {
 
   if (campaignError) {
     return (
-      <div className={styles.container + ' bg-white rounded-4 my-3'}>
+      <div className={styles.whiteContainer}>
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
