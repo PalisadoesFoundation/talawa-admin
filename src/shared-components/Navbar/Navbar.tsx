@@ -63,6 +63,7 @@ import styles from 'style/app-fixed.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
 import { InterfacePageHeaderProps } from 'types/PeopleTab/interface';
+import { useTranslation } from 'react-i18next';
 
 export default function PageHeader({
   title,
@@ -71,6 +72,8 @@ export default function PageHeader({
   showEventTypeFilter = false,
   actions,
 }: InterfacePageHeaderProps) {
+  const { t: tCommon } = useTranslation('common');
+
   return (
     <div
       className={styles.calendarEventHeader}
@@ -110,7 +113,7 @@ export default function PageHeader({
         {showEventTypeFilter && (
           <div className={styles.btnsBlock}>
             <SortingButton
-              title="Event Type"
+              title={tCommon('eventType')}
               sortingOptions={[
                 { label: 'Events', value: 'Events' },
                 { label: 'Workshops', value: 'Workshops' },

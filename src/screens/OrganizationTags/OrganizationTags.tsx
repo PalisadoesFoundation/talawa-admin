@@ -180,7 +180,7 @@ function OrganizationTags(): JSX.Element {
         setTagName('');
         setCreateTagModalIsOpen(false);
       } else {
-        toast.error('Tag creation failed');
+        toast.error(tCommon('tagCreationFailed'));
       }
     } catch (error: unknown) {
       toast.error((error as Error).message);

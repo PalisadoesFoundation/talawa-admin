@@ -48,6 +48,7 @@ The dependent locality.
 
 > **line1**: `string`
 
+                              
 Defined in: [src/utils/interfaces.ts:2172](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2172)
 
 The first line of the address.
@@ -58,7 +59,11 @@ The first line of the address.
 
 > **line2**: `string`
 
+                              
 Defined in: [src/utils/interfaces.ts:2173](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2173)
+=======
+Defined in: [src/utils/interfaces.ts:2211](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2211)
+                                                                       
 
 The second line of the address.
 
@@ -68,7 +73,11 @@ The second line of the address.
 
 > **postalCode**: `string`
 
+                              
 Defined in: [src/utils/interfaces.ts:2174](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2174)
+=======
+Defined in: [src/utils/interfaces.ts:2212](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2212)
+                                                                       
 
 The postal code.
 
@@ -78,7 +87,11 @@ The postal code.
 
 > **sortingCode**: `string`
 
+                              
 Defined in: [src/utils/interfaces.ts:2175](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2175)
+=======
+Defined in: [src/utils/interfaces.ts:2213](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2213)
+                                                                       
 
 The sorting code.
 
@@ -88,6 +101,10 @@ The sorting code.
 
 > **state**: `string`
 
+                              
 Defined in: [src/utils/interfaces.ts:2176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2176)
+=======
+Defined in: [src/utils/interfaces.ts:2214](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2214)
+                                                                       
 
 The state.

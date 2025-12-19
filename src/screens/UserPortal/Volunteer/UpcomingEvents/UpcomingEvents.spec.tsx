@@ -30,7 +30,7 @@ import {
 } from './UpcomingEvents.mocks';
 import { toast } from 'react-toastify';
 import useLocalStorage from 'utils/useLocalstorage';
-import { vi, beforeEach, afterEach } from 'vitest';
+import { vi, beforeEach, afterEach, beforeAll, afterAll } from 'vitest';
 
 /**
  * Unit tests for the UpcomingEvents component.
@@ -114,6 +114,21 @@ const renderUpcomingEvents = (link: ApolloLink): RenderResult => {
 };
 
 describe('Testing Upcoming Events Screen', () => {
+  const originalToLocaleDateString = Date.prototype.toLocaleDateString;
+
+  beforeAll(() => {
+    // Force toLocaleDateString to use en-US locale for consistent testing
+    vi.spyOn(Date.prototype, 'toLocaleDateString').mockImplementation(function (
+      this: Date,
+    ) {
+      return originalToLocaleDateString.call(this, 'en-US');
+    });
+  });
+
+  afterAll(() => {
+    vi.restoreAllMocks();
+  });
+
   beforeEach(() => {
     localStorage.clear();
     setItem('userId', 'userId');
@@ -722,7 +737,7 @@ describe('Testing Upcoming Events Screen', () => {
 
     // Verify the past event shows correct dates (2020 dates should be in the past)
     const dateElements = within(pastEventCard as HTMLElement).getAllByText(
-      /10\/30\/2020/,
+      /(30\/10\/2020|10\/30\/2020)/,
     );
     expect(dateElements.length).toBeGreaterThan(0);
 

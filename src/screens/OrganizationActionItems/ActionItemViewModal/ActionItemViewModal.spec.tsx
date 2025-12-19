@@ -204,6 +204,13 @@ const renderItemViewModal = (
   );
 };
 
+const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+const getPickerInputByLabel = (label: string) =>
+  screen.getByRole('group', {
+    name: new RegExp(`^${escapeRegExp(label)}$`, 'i'),
+  });
+
 describe('Testing ItemViewModal', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -649,7 +656,7 @@ describe('Testing ItemViewModal', () => {
       expect(screen.getByLabelText(t.creator)).toBeInTheDocument();
       expect(screen.getByLabelText(t.status)).toBeInTheDocument();
       expect(screen.getByLabelText(t.event)).toBeInTheDocument();
-      expect(screen.getByLabelText(t.assignmentDate)).toBeInTheDocument();
+      expect(getPickerInputByLabel(t.assignmentDate)).toBeInTheDocument();
       expect(screen.getByLabelText(t.preCompletionNotes)).toBeInTheDocument();
     });
 

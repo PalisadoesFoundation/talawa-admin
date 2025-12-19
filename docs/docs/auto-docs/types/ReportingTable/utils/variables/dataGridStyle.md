@@ -6,7 +6,7 @@
 
 > `const` **dataGridStyle**: `object`
 
-Defined in: [src/types/ReportingTable/utils.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/utils.ts#L10)
+Defined in: [src/types/ReportingTable/utils.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/utils.ts#L9)
 
 Shared sx/style object for DataGrid across the app.
 Keep shape generic to avoid strict MUI theme coupling in the types package.

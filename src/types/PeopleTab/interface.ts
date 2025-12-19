@@ -24,7 +24,7 @@ export interface InterfacePageHeaderProps {
 // Props for individual tab in a tab list
 export interface InterfacePeopleTab {
   title: string;
-  icon?: React.ReactNode;
+  icon?: React.ReactElement<React.SVGProps<SVGSVGElement>>;
   isActive?: boolean;
   action: () => void;
   testId?: string;

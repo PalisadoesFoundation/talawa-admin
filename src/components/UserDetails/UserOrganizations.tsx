@@ -53,6 +53,7 @@ import {
   USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
   USER_DETAILS,
 } from 'GraphQl/Queries/Queries';
+import { useTranslation } from 'react-i18next';
 
 type MemberDetailProps = { id?: string };
 type OrgRelationType = 'CREATED' | 'BELONG_TO' | 'JOINED';
@@ -89,6 +90,7 @@ interface InterfaceJoinedOrganizationsData {
 const UserOrganizations: React.FC<MemberDetailProps> = ({
   id,
 }): JSX.Element => {
+  const { t: tCommon } = useTranslation('common');
   const [filterName] = useState('');
   const location = useLocation();
   const { getItem } = useLocalStorage();
@@ -253,9 +255,9 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
       {/* ===== Organizations Grid ===== */}
       <div className={styles.peopleTabUserOrganizationsGrid}>
         {!userData?.user && !joinedOrganizationsData?.user ? (
-          <p>Loading organizations...</p>
+          <p>{tCommon('loadingOrganizations')}</p>
         ) : filteredOrgs.length === 0 ? (
-          <p>No organizations found.</p>
+          <p>{tCommon('noOrganizationsFound.')}</p>
         ) : (
           filteredOrgs.map((org) => (
             <PeopleTabUserOrganizations

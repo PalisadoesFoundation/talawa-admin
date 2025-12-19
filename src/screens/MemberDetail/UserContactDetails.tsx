@@ -67,7 +67,6 @@ import dayjs from 'dayjs';
 import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
 import { urlToFile } from 'utils/urlToFile';
 import { validatePassword } from 'utils/passwordValidator';
-import { sanitizeAvatars } from 'utils/sanitizeAvatar';
 
 type MemberDetailProps = { id?: string };
 
@@ -83,7 +82,6 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
   const [isUpdated, setisUpdated] = useState(false);
   const currentId = location.state?.id || getItem('id') || id;
   // console.log('Current User ID:', currentId);
-  const originalImageState = React.useRef<string>('');
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
 
   document.title = t('title');
@@ -113,7 +111,16 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
   });
 
   // Mutation to update the user details
-  const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);
+  const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION, {
+    update(cache, { data }) {
+      if (!data) return;
+      cache.writeQuery({
+        query: GET_USER_BY_ID,
+        variables: { input: { id: currentId } },
+        data: { user: data.updateCurrentUser },
+      });
+    },
+  });
 
   //   const { data: data, loading } = useQuery(CURRENT_USER, {
   //     variables: { id: currentId },
@@ -129,14 +136,15 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     skip: !currentId,
   });
 
-  // console.log('Fetched User:', data);
+  // console.log('Fetched User:', data.user);
 
   useEffect(() => {
-    if (data?.user) {
-      setFormState(data.user);
-      // console.log('Setting form state with user data:', data.user);
-      originalImageState.current = data.user.avatarURL || '';
-    }
+    if (!data?.user) return;
+
+    setFormState((prev) => ({
+      ...prev,
+      ...data.user,
+    }));
   }, [data]);
 
   useEffect(() => {
@@ -145,6 +153,13 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
       isMounted.current = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (!selectedAvatar) return;
+
+    const previewUrl = URL.createObjectURL(selectedAvatar);
+    return () => URL.revokeObjectURL(previewUrl);
+  }, [selectedAvatar]);
 
   // Function to handle the click on the edit icon
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -155,12 +170,12 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
       const maxSize = 5 * 1024 * 1024; // 5MB
 
       if (!validTypes.includes(file.type)) {
-        toast.error('Invalid file type. Please upload a JPEG, PNG, or GIF.');
+        toast.error(t('invalidFileType'));
         return;
       }
 
       if (file.size > maxSize) {
-        toast.error('File is too large. Maximum size is 5MB.');
+        toast.error(t('fileTooLarge'));
         return;
       }
 
@@ -172,19 +187,12 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
   };
 
   // to handle the change in the form fields
-  const handleFieldChange = (fieldName: string, value: string): void => {
-    // future birthdates are not possible to select.
-
-    // password validation
-    if (fieldName === 'password' && value) {
-      if (!validatePassword(value)) {
-        toast.error('Password must be at least 8 characters long.');
-        return;
-      }
-    }
-
+  const handleFieldChange = (fieldName: string, value: string) => {
     setisUpdated(true);
-    setFormState((prevState) => ({ ...prevState, [fieldName]: value }));
+    setFormState((prev) => ({
+      ...prev,
+      [fieldName]: value, // value as YYYY-MM-DD string
+    }));
   };
 
   // Function to handle the update of the user details
@@ -203,13 +211,20 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
       ) as Partial<T>;
     }
 
+    if (formState.password) {
+      const errorMsg = validatePassword(formState.password);
+      if (errorMsg) {
+        toast.error(errorMsg);
+        return;
+      }
+    }
+
     // If no new avatar is selected but there's an avatar URL, convert it to File
     let avatarFile: File | null = null;
-    if (!selectedAvatar && formState.avatarURL) {
+    if (!selectedAvatar && formState?.avatarURL) {
       try {
         avatarFile = await urlToFile(formState.avatarURL);
-      } catch (error) {
-        console.log(error);
+      } catch {
         toast.error(
           'Failed to process profile picture. Please try uploading again.',
         );
@@ -245,21 +260,21 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     try {
       const { data: updateData } = await updateUser({ variables: { input } });
 
+      console.log('Update Response:', updateData);
+
       if (updateData) {
+        const updatedUser = updateData.updateCurrentUser;
+
         toast.success(
           tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
         );
-        setItem('UserImage', updateData.updateuser.avatarURL);
-        setItem('name', updateData.updateuser.name);
-        setItem('email', updateData.updateuser.emailAddress);
-        setItem('id', updateData.updateuser.id);
-        setItem('role', updateData.updateuser.role);
+        setItem('UserImage', updatedUser.avatarURL);
+        setItem('name', updatedUser.name);
+        setItem('email', updatedUser.emailAddress);
+        setItem('id', updatedUser.id);
+        setItem('role', updatedUser.role);
         setSelectedAvatar(null);
-
-        // wait for the toast to complete
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-
-        window.location.reload();
+        setisUpdated(false);
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -271,12 +286,11 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     if (data?.user) {
       setFormState({
         ...data.user,
-        avatar: originalImageState.current,
       });
     }
   };
 
-  if (loading) {
+  if (loading || !data?.user) {
     return <Loader />;
   }
 
@@ -312,18 +326,19 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                           height: '60px',
                           objectFit: 'cover',
                         }}
-                        src={sanitizeAvatars(
-                          selectedAvatar,
-                          formState.avatarURL,
-                        )}
-                        alt="User"
+                        src={
+                          selectedAvatar
+                            ? URL.createObjectURL(selectedAvatar)
+                            : formState.avatarURL
+                        }
+                        alt={tCommon('user')}
                         data-testid="profile-picture"
-                        crossOrigin="anonymous" // to avoid Cors
+                        crossOrigin="anonymous"
                       />
                     ) : (
                       <Avatar
                         name={formState.name}
-                        alt="User Image"
+                        alt={tCommon('userImage')}
                         size={60}
                         dataTestId="profile-picture"
                         radius={150}
@@ -334,9 +349,9 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                       onClick={() => fileInputRef.current?.click()}
                       data-testid="uploadImageBtn"
                       style={{ cursor: 'pointer', fontSize: '1.2rem' }}
-                      title="Edit profile picture"
+                      title={tCommon('userEditProfilePicture')}
                       role="button"
-                      aria-label="Edit profile picture"
+                      aria-label={tCommon('userEditProfilePicture')}
                       tabIndex={0}
                       onKeyDown={(e) =>
                         e.key === 'Enter' && fileInputRef.current?.click()
@@ -394,11 +409,13 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                   </label>
                   <DatePicker
                     className={`${styles.dateboxMemberDetail} w-100`}
-                    value={dayjs(formState.birthDate)}
+                    value={
+                      formState.birthDate ? dayjs(formState.birthDate) : null
+                    }
                     onChange={(date) =>
                       handleFieldChange(
                         'birthDate',
-                        date ? date.toISOString().split('T')[0] : '',
+                        date ? date.format('YYYY-MM-DD') : '',
                       )
                     }
                     data-testid="birthDate"
@@ -486,7 +503,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                       handleFieldChange('description', e.target.value)
                     }
                     required
-                    placeholder="Enter description"
+                    placeholder={tCommon('enterDescrip')}
                   />
                 </Col>
               </Row>
@@ -533,7 +550,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                     onChange={(e) =>
                       handleFieldChange('mobilePhoneNumber', e.target.value)
                     }
-                    placeholder="Ex. +1234567890"
+                    placeholder={tCommon('memberDetailNumberExample')}
                   />
                 </Col>
                 <Col md={12}>
@@ -550,7 +567,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                     onChange={(e) =>
                       handleFieldChange('workPhoneNumber', e.target.value)
                     }
-                    placeholder="Ex. +1234567890"
+                    placeholder={tCommon('memberDetailNumberExample')}
                   />
                 </Col>
                 <Col md={12}>
@@ -567,7 +584,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                     onChange={(e) =>
                       handleFieldChange('homePhoneNumber', e.target.value)
                     }
-                    placeholder="Ex. +1234567890"
+                    placeholder={tCommon('memberDetailNumberExample')}
                   />
                 </Col>
                 <Col md={12}>
@@ -584,7 +601,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                     onChange={(e) =>
                       handleFieldChange('addressLine1', e.target.value)
                     }
-                    placeholder="Ex. Lane 2"
+                    placeholder={tCommon('memberDetailExampleLane')}
                   />
                 </Col>
                 <Col md={12}>
@@ -601,7 +618,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                     onChange={(e) =>
                       handleFieldChange('addressLine2', e.target.value)
                     }
-                    placeholder="Ex. Lane 2"
+                    placeholder={tCommon('memberDetailExampleLane')}
                   />
                 </Col>
                 <Col md={12}>
@@ -618,7 +635,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                     onChange={(e) =>
                       handleFieldChange('postalCode', e.target.value)
                     }
-                    placeholder="Ex. 12345"
+                    placeholder={tCommon('memberDetailPostalExample')}
                   />
                 </Col>
                 <Col md={6}>
@@ -633,7 +650,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                     name="city"
                     data-testid="inputCity"
                     onChange={(e) => handleFieldChange('city', e.target.value)}
-                    placeholder="Enter city name"
+                    placeholder={tCommon('enterCity')}
                   />
                 </Col>
                 <Col md={6}>
@@ -648,7 +665,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                     name="state"
                     data-testid="inputState"
                     onChange={(e) => handleFieldChange('state', e.target.value)}
-                    placeholder="Enter state name"
+                    placeholder={tCommon('enterCity')}
                   />
                 </Col>
                 <Col md={12}>
@@ -665,7 +682,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                     }
                   >
                     <option value="" disabled>
-                      Select {tCommon('country')}
+                      {tCommon('select')} {tCommon('country')}
                     </option>
                     {[...countryOptions]
                       .sort((a, b) => a.label.localeCompare(b.label))
@@ -673,7 +690,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                         <option
                           key={country.value.toUpperCase()}
                           value={country.value.toLowerCase()}
-                          aria-label={`Select ${country.label} as your country`}
+                          aria-label={`${tCommon('select')} ${country.label} ${tCommon('asYourCountry')}`}
                         >
                           {country.label}
                         </option>

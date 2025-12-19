@@ -27,6 +27,7 @@
     "atleast_6_char_long": "Al menos 6 caracteres de largo",
     "firstName_invalid": "El nombre debe contener solo letras minúsculas y mayúsculas.",
     "lastName_invalid": "El apellido debe contener solo letras minúsculas y mayúsculas.",
+    "name_invalid": "El nombre solo debe contener letras, espacios y guiones.",
     "password_invalid": "La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un valor numérico y un carácter especial.",
     "email_invalid": "El correo electrónico debe tener al menos 8 caracteres.",
     "Password_and_Confirm_password_mismatches.": "Contraseña y Confirmar contraseña no coinciden.",
@@ -140,7 +141,11 @@
     "close": "Cerrar"
   },
   "notification": {
-    "title": "Notificaciones"
+    "title": "Notificaciones",
+    "allCaughtUp": "¡Estás al día!",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "markAsRead": "Marcar como leído"
   },
   "orgList": {
     "title": "Organizaciones Talawa",
@@ -204,14 +209,14 @@
     "accept": "Aceptar",
     "reject": "Rechazar",
     "searchRequests": "Buscar solicitudes",
-    "endOfResults": "Fin de los resultados",
     "noOrgError": "Organizaciones no encontradas, por favor crea una organización a través del panel",
-    "noResultsFoundFor": "No se encontraron resultados para ",
     "noRequestsFound": "No se encontraron solicitudes",
     "acceptedSuccessfully": "Solicitud aceptada exitosamente",
     "rejectedSuccessfully": "Solicitud rechazada exitosamente",
     "noOrgErrorTitle": "Organizaciones no encontradas",
-    "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control"
+    "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
+    "profilePictureAlt": "Imagen de perfil de {{name}}",
+    "placeholderAvatarAlt": "Avatar predeterminado"
   },
   "users": {
     "title": "Roles Talawa",
@@ -250,8 +255,13 @@
     "orgJoined": "Unido a la organización exitosamente",
     "MembershipRequestSent": "Solicitud de membresía enviada exitosamente",
     "AlreadyJoined": "Ya eres miembro de esta organización.",
-    "errorOccured": "Se produjo un error. Por favor, inténtalo de nuevo más tarde.",
+    "errorOccurred": "Se produjo un error. Por favor, inténtalo de nuevo más tarde.",
+    "UserIdNotFound": "ID de usuario no encontrada",
+    "MembershipRequestNotFound": "Solicitud de membresía no encontrada",
+    "MembershipRequestWithdrawn": "Solicitud de membresía retirada exitosamente",
     "removeUserFrom": "Eliminar Usuario de {{org}}",
+    "unblockUserFrom": "¿Desbloquear al usuario de {{org}}?",
+    "unblockConfirmation": "¿Estás seguro de que deseas desbloquear a {{name}} de {{org}}?",
     "removeConfirmation": "¿Está seguro de que desea eliminar a '{{name}}' de la organización '{{org}}'?",
     "noOrgError": "Error sin organización"
   },
@@ -306,7 +316,6 @@
     "searchLastName": "Introduzca el apellido",
     "people": "Personas",
     "sort": "Ordenar por Rol",
-    "actions": "Acciones",
     "existingUser": "Usuario existente",
     "newUser": "Nuevo usuario",
     "firstName": "Nombre de pila",
@@ -326,7 +335,9 @@
     "addMembers": "Agregar miembros",
     "searchFullName": "Ingrese el nombre completo",
     "user": "Usuario",
+    "actions": "Acciones",
     "profile": "Perfil",
+    "notFound": "No se encontraron miembros",
     "createUser": "Crear usuario"
   },
   "organizationTags": {
@@ -346,7 +357,12 @@
     "removeUserTag": "Eliminar Etiqueta",
     "removeUserTagMessage": "¿Desea eliminar esta etiqueta?",
     "addChildTag": "Agregar una Sub Etiqueta",
-    "enterTagName": "Ingrese el nombre de la etiqueta"
+    "enterTagName": "Ingrese el nombre de la etiqueta",
+    "totalSubTags": "Total de sub-etiquetas",
+    "totalAssignedUsers": "Total de usuarios asignados",
+    "tagCreationFailed": "Error al crear la etiqueta",
+    "errorLoadingTagsData": "Se produjo un error al cargar los datos de las etiquetas de la organización",
+    "sortTags": "Ordenar Etiquetas"
   },
   "manageTag": {
     "title": "Detalles de la Etiqueta",
@@ -657,7 +673,10 @@
     "deleteFundMsg": "¿Está seguro de que desea eliminar este fondo?",
     "createdLatest": "Creado más reciente",
     "createdEarliest": "Creado más temprano",
-    "viewCampaigns": "Ver campañas"
+    "viewCampaigns": "Ver campañas",
+    "assocCampaigns": "Campañas asociadas",
+    "errorLoadingFundsData": "Error al cargar los datos de fondos",
+    "editFund": "Editar fondo"
   },
   "fundCampaign": {
     "title": "Campañas de recaudación de fondos",
@@ -703,6 +722,7 @@
     "deletePledgeMsg": "¿Estás seguro de que quieres eliminar este compromiso?",
     "noPledges": "No se encontraron compromisos",
     "searchPledger": "Buscar por compromisos",
+    "pledgers": "Prometedores",
     "highestAmount": "Cantidad más alta",
     "lowestAmount": "Cantidad más baja",
     "latestEndDate": "Fecha de finalización más reciente",
@@ -1129,7 +1149,18 @@
     "Member": "Miembro",
     "Admin": "Administrador",
     "loading": "Cargando...",
-    "noAttendees": "No se encontraron asistentes"
+    "noAttendees": "No se encontraron asistentes",
+    "attendeeCount": "Número de asistentes",
+    "maleAttendees": "Asistentes masculinos",
+    "femaleAttendees": "Asistentes femeninas",
+    "otherAttendees": "Otros asistentes",
+    "currentEvent": "Evento actual",
+    "chartPageNavigation": "Navegación de página del gráfico",
+    "previousPage": "Página anterior",
+    "nextPage": "Página siguiente",
+    "goToToday": "Ir a hoy",
+    "genderDistribution": "Distribución por género",
+    "ageDistribution": "Distribución por edad"
   },
   "eventRegistrant": {
     "sort": "Ordenar",
@@ -1274,6 +1305,7 @@
     "errorLoadingTransactions": "Error al cargar transacciones"
   },
   "userEvents": {
+    "title": "Eventos",
     "name": "Eventos",
     "nothingToShow": "No hay nada que mostrar aquí.",
     "search": "Buscar",
@@ -1480,8 +1512,14 @@
     "title": "Campañas de recaudación de fondos",
     "searchByName": "Buscar por nombre...",
     "searchBy": "Buscar por",
-    "pledgers": "Contribuyentes",
+    "pledgers": "Prometedores",
+    "pledger": "Prometedor",
     "campaigns": "Campañas",
+    "associatedCampaign": "Campaña asociada",
+    "pledged": "Prometido",
+    "donated": "Donado",
+    "progress": "Progreso",
+    "more": "más",
     "myPledges": "Mis Promesas",
     "lowestAmount": "Monto más bajo",
     "highestAmount": "Monto más alto",

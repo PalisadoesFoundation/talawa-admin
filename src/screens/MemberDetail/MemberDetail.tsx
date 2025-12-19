@@ -31,8 +31,8 @@
  *
  */
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
-import { languages } from 'utils/languages';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
@@ -50,22 +50,26 @@ import UserTags from 'components/UserDetails/UserTags';
 type MemberDetailProps = { id?: string };
 
 const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
-  const [activeTab, setActiveTab] = useState('Overview');
-  console.log('MemberDetail ID:', id);
+  const { t: tCommon } = useTranslation('common');
+  const [activeTab, setActiveTab] = useState(tCommon('overview'));
 
   const tabs = [
     {
-      name: 'Overview',
+      name: tCommon('overview'),
       component: <UserContactDetails id={id} />,
       icon: <DashboardIcon />,
     },
     {
-      name: 'Organizations',
+      name: tCommon('organizations'),
       component: <UserOrganizations />,
       icon: <BusinessIcon />,
     },
-    { name: 'Events', component: <UserEvents />, icon: <EventsIcon /> },
-    { name: 'Tags', component: <UserTags />, icon: <TagsIcon /> },
+    {
+      name: tCommon('events'),
+      component: <UserEvents />,
+      icon: <EventsIcon />,
+    },
+    { name: tCommon('tags'), component: <UserTags />, icon: <TagsIcon /> },
   ];
 
   return (
@@ -88,26 +92,6 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       </div>
     </LocalizationProvider>
   );
-};
-
-export const prettyDate = (param: string): string => {
-  const date = new Date(param);
-  if (date?.toDateString() === 'Invalid Date') {
-    return 'Unavailable';
-  }
-  const day = date.getDate();
-  const month = date.toLocaleString('default', { month: 'long' });
-  const year = date.getFullYear();
-  return `${day} ${month} ${year}`;
-};
-export const getLanguageName = (code: string): string => {
-  let language = 'Unavailable';
-  languages.map((data) => {
-    if (data.code == code) {
-      language = data.name;
-    }
-  });
-  return language;
 };
 
 export default MemberDetail;

@@ -20,6 +20,7 @@
     "atleast_6_char_long": "Atleast 6 Character long",
     "firstName_invalid": "First name should contain only lower and upper case letters",
     "lastName_invalid": "Last name should contain only lower and upper case letters",
+    "name_invalid": "Name should contain only letters, spaces, and hyphens",
     "password_invalid": "Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character",
     "email_invalid": "Email should have atleast 8 characters",
     "Password_and_Confirm_password_mismatches.": "Password and Confirm password mismatches.",
@@ -53,7 +54,9 @@
     "OR": "OR",
     "admin": "admin",
     "user": "user",
-    "loading": "loading"
+    "loading": "loading",
+    "userImage": "User Image",
+    "userEditProfilePicture": "Edit profile picture"
   },
   "userLoginPage": {
     "title": "Talawa Admin",
@@ -112,7 +115,7 @@
     "notification": "Notifications",
     "talawaAdminPortal": "talawaAdminPortal",
     "menu": "menu",
-    "users": "users",
+    "users": "Users",
     "logout": "logout"
   },
   "leftDrawerOrg": {
@@ -140,7 +143,11 @@
     "close": "close"
   },
   "notification": {
-    "title": "Notifications"
+    "title": "Notifications",
+    "allCaughtUp": "You're all caught up!",
+    "prev": "Prev",
+    "next": "Next",
+    "markAsRead": "Mark as Read"
   },
   "orgList": {
     "title": "Organizations",
@@ -173,7 +180,7 @@
     "sampleOrgSuccess": "Sample Organization Successfully Created",
     "name": "name",
     "email": "email",
-    "searchByName": "searchByName",
+    "searchByName": "Search by Name",
     "searchOrganizations": "Search Organization",
     "description": "description",
     "location": "location",
@@ -210,8 +217,8 @@
     "noOrgErrorDescription": "Please create an organization through dashboard",
     "name": "name",
     "email": "email",
-    "endOfResults": "endOfResults",
-    "noResultsFoundFor": "noResultsFoundFor"
+    "profilePictureAlt": "User profile picture",
+    "placeholderAvatarAlt": "Placeholder avatar"
   },
   "users": {
     "title": "Talawa Roles",
@@ -233,10 +240,12 @@
     "roleUpdated": "Role Updated.",
     "joinNow": "Join Now",
     "visit": "Visit",
-    "withdraw": "Widthdraw",
+    "withdraw": "Withdraw",
     "removeUserFrom": "Remove User from {{org}}",
+    "unblockUserFrom": "Unblock User from {{org}}",
     "removeConfirmation": "Are you sure you want to remove '{{name}}' from organization '{{org}}'?",
-    "searchByName": "searchByName",
+    "unblockConfirmation": "Are you sure you want to unblock '{{name}}' from organization '{{org}}'?",
+    "searchByName": "Search by Name",
     "users": "users",
     "name": "name",
     "email": "email",
@@ -250,10 +259,13 @@
     "cancel": "cancel",
     "admins": "admins",
     "members": "members",
-    "orgJoined": "orgJoined",
-    "MembershipRequestSent": "MembershipRequestSent",
-    "AlreadyJoined": "AlreadyJoined",
-    "errorOccured": "errorOccured"
+    "orgJoined": "Successfully joined organization",
+    "MembershipRequestSent": "Membership request sent successfully",
+    "AlreadyJoined": "You have already joined this organization",
+    "errorOccurred": "An error occurred. Please try again",
+    "UserIdNotFound": "User ID not found",
+    "MembershipRequestNotFound": "Membership request not found",
+    "MembershipRequestWithdrawn": "Membership request withdrawn successfully"
   },
   "communityProfile": {
     "title": "Community Profile",
@@ -303,7 +315,6 @@
     "createUser": "Create User",
     "people": "People",
     "sort": "Search by Role",
-    "actions": "Actions",
     "addMembers": "Add Members",
     "existingUser": "Existing User",
     "newUser": "New User",
@@ -327,7 +338,9 @@
     "create": "create",
     "cancel": "cancel",
     "user": "user",
-    "profile": "profile"
+    "actions": "Actions",
+    "profile": "Profile",
+    "notFound": "No Members Found"
   },
   "organizationTags": {
     "title": "Organization Tags",
@@ -346,7 +359,12 @@
     "removeUserTag": "Delete Tag",
     "removeUserTagMessage": "Do you want to delete this tag?",
     "addChildTag": "Add a Sub Tag",
-    "enterTagName": "Enter Tag Name"
+    "enterTagName": "Enter Tag Name",
+    "totalSubTags": "Total Sub Tags",
+    "totalAssignedUsers": "Total Assigned Users",
+    "tagCreationFailed": "Tag creation failed",
+    "errorLoadingTagsData": "Error occurred while loading Organization Tags Data",
+    "sortTags": "Sort Tags"
   },
   "manageTag": {
     "title": "Tag Details",
@@ -657,7 +675,10 @@
     "createdLatest": "Created Latest",
     "createdEarliest": "Created Earliest",
     "viewCampaigns": "View Campaigns",
-    "searchByName": "searchByName"
+    "searchByName": "Search by Name",
+    "assocCampaigns": "Associated Campaigns",
+    "errorLoadingFundsData": "Error loading funds data",
+    "editFund": "Edit Fund"
   },
   "fundCampaign": {
     "title": "Fundraising Campaigns",
@@ -701,6 +722,7 @@
     "deletePledgeMsg": "Are you sure you want to delete this pledge?",
     "noPledges": "No Pledges Found",
     "searchPledger": "Search By Pledgers",
+    "pledgers": "Pledgers",
     "highestAmount": "Highest Amount",
     "lowestAmount": "Lowest Amount",
     "latestEndDate": "Latest End Date",
@@ -830,7 +852,18 @@
     "Member": "Member",
     "Admin": "Admin",
     "loading": "Loading...",
-    "noAttendees": "Attendees not Found"
+    "noAttendees": "Attendees not Found",
+    "attendeeCount": "Attendee Count",
+    "maleAttendees": "Male Attendees",
+    "femaleAttendees": "Female Attendees",
+    "otherAttendees": "Other Attendees",
+    "currentEvent": "Current Event",
+    "chartPageNavigation": "Chart page navigation",
+    "previousPage": "Previous Page",
+    "nextPage": "Next Page",
+    "goToToday": "Go to today",
+    "genderDistribution": "Gender Distribution",
+    "ageDistribution": "Age Distribution"
   },
   "eventRegistrant": {
     "sort": "Sort",
@@ -985,6 +1018,7 @@
   },
   "memberDetail": {
     "title": "User Details",
+    "to": "TO",
     "addAdmin": "Add Admin",
     "noeventsAttended": "No Events Attended",
     "alreadyIsAdmin": "Member is already an Admin",
@@ -1036,7 +1070,18 @@
     "unassignUserTagMessage": "Do you want to remove the tag from this user?",
     "successfullyUnassigned": "Tag unassigned from user",
     "tagsAssigned": "Tags Assigned",
-    "noTagsAssigned": "No Tags Assigned"
+    "noTagsAssigned": "No Tags Assigned",
+    "overview": "Overview",
+    "tags": "Tags",
+    "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF.",
+    "fileTooLarge": "File is too large. Maximum size is 5MB.",
+    "memberDetailNumberExample": "Ex. +1234567890",
+    "memberDetailExampleLane": "Ex. Lane 2",
+    "memberDetailPostalExample": "Ex. 12345",
+    "enterCity": "Enter city name",
+    "enterState": "Enter state name",
+    "select": "Select",
+    "asYourCountry": "as your country"
   },
   "people": {
     "title": "People",
@@ -1098,7 +1143,7 @@
     "organizations": "Organizations",
     "search": "search",
     "filter": "filter",
-    "searchByName": "searchByName",
+    "searchByName": "Search by Name",
     "searchOrganizations": "Search Organization"
   },
   "userSidebarOrg": {
@@ -1271,9 +1316,12 @@
     "latestFirst": "Latest First",
     "earliestFirst": "Earliest First",
     "noTransactionsFound": "No transactions found",
-    "errorLoadingTransactions": "Error loading transactions"
+    "errorLoadingTransactions": "Error loading transactions",
+    "eventType": "Event Type",
+    "tagCreationFailed": "Tag creation failed"
   },
   "userEvents": {
+    "title": "Events",
     "name": "Events",
     "nothingToShow": "Nothing to show here.",
     "createEvent": "Create Event",
@@ -1481,7 +1529,13 @@
     "searchByName": "Search by Name...",
     "searchBy": "Search by",
     "pledgers": "Pledgers",
+    "pledger": "Pledger",
     "campaigns": "Campaigns",
+    "associatedCampaign": "Associated Campaign",
+    "pledged": "Pledged",
+    "donated": "Donated",
+    "progress": "Progress",
+    "more": "more",
     "myPledges": "My Pledges",
     "lowestAmount": "Lowest Amount",
     "highestAmount": "Highest Amount",

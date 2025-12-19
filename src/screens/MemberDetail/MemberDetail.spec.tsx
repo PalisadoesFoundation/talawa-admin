@@ -1,49 +1,68 @@
-import React from 'react';
-import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen, fireEvent, cleanup } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import { I18nextProvider } from 'react-i18next';
-import i18nForTest from 'utils/i18nForTest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import MemberDetail from './MemberDetail';
+import { ReactNode } from 'react';
 
-import MemberDetail, { prettyDate, getLanguageName } from './MemberDetail';
+/* -------------------- mocks -------------------- */
 
-/* ------------------------------------------------------------------ */
-/* MOCK CHILD COMPONENTS (important for isolation)                     */
-/* ------------------------------------------------------------------ */
+// mock i18n
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
 
+// mock MUI LocalizationProvider
+vi.mock('@mui/x-date-pickers', async () => {
+  const actual = await vi.importActual<typeof import('@mui/x-date-pickers')>(
+    '@mui/x-date-pickers',
+  );
+
+  return {
+    ...actual,
+    LocalizationProvider: ({ children }: { children: ReactNode }) => (
+      <div>{children}</div>
+    ),
+  };
+});
+
+vi.mock('@mui/x-date-pickers/AdapterDayjs', () => ({
+  AdapterDayjs: vi.fn(),
+}));
+
+// mock child components
 vi.mock('./UserContactDetails', () => ({
   default: ({ id }: { id?: string }) => (
-    <div data-testid="user-contact-details">Contact Details ID: {id}</div>
+    <div data-testid="user-contact-details">{id}</div>
   ),
 }));
 
 vi.mock('components/UserDetails/UserOrganizations', () => ({
-  default: () => (
-    <div data-testid="user-organizations">Organizations Content</div>
-  ),
+  default: () => <div data-testid="user-organizations" />,
 }));
 
 vi.mock('components/UserDetails/UserEvents', () => ({
-  default: () => <div data-testid="user-events">Events Content</div>,
+  default: () => <div data-testid="user-events" />,
 }));
 
 vi.mock('components/UserDetails/UserTags', () => ({
-  default: () => <div data-testid="user-tags">Tags Content</div>,
+  default: () => <div data-testid="user-tags" />,
 }));
 
+// mock navbar button
 vi.mock('shared-components/PeopleTab/PeopleTabNavbarButton', () => ({
   default: ({
     title,
-    isActive,
     action,
+    isActive,
   }: {
     title: string;
-    isActive: boolean;
     action: () => void;
+    isActive: boolean;
   }) => (
     <button
-      data-testid={`tab-btn-${title}`}
-      aria-selected={isActive}
+      data-testid={`tab-${title}`}
+      data-active={isActive}
       onClick={action}
     >
       {title}
@@ -51,101 +70,53 @@ vi.mock('shared-components/PeopleTab/PeopleTabNavbarButton', () => ({
   ),
 }));
 
-/* ------------------------------------------------------------------ */
-/* TEST WRAPPER                                                       */
-/* ------------------------------------------------------------------ */
+/* -------------------- tests -------------------- */
 
-const renderComponent = (id?: string) =>
-  render(
-    <BrowserRouter>
-      <I18nextProvider i18n={i18nForTest}>
-        <MemberDetail id={id} />
-      </I18nextProvider>
-    </BrowserRouter>,
-  );
-
-/* ------------------------------------------------------------------ */
-/* TESTS                                                              */
-/* ------------------------------------------------------------------ */
-
-describe('MemberDetail Component', () => {
+describe('MemberDetail', () => {
   afterEach(() => {
-    cleanup();
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
-  it('renders tab navigation buttons', () => {
-    renderComponent('123');
-
-    expect(screen.getByTestId('tab-btn-Overview')).toBeInTheDocument();
-    expect(screen.getByTestId('tab-btn-Organizations')).toBeInTheDocument();
-    expect(screen.getByTestId('tab-btn-Events')).toBeInTheDocument();
-    expect(screen.getByTestId('tab-btn-Tags')).toBeInTheDocument();
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
-  it('renders Overview tab by default', () => {
-    renderComponent('abc');
+  it('renders overview tab by default', () => {
+    render(<MemberDetail id="123" />);
 
-    expect(screen.getByTestId('user-contact-details')).toBeInTheDocument();
-    expect(screen.getByText(/Contact Details ID: abc/i)).toBeInTheDocument();
+    expect(screen.getByTestId('tab-overview')).toBeInTheDocument();
+    expect(screen.getByTestId('user-contact-details')).toHaveTextContent('123');
+    expect(screen.getByTestId('tab-overview')).toHaveAttribute(
+      'data-active',
+      'true',
+    );
   });
 
-  it('switches to Organizations tab on click', () => {
-    renderComponent();
+  it('switches to organizations tab', () => {
+    render(<MemberDetail />);
 
-    fireEvent.click(screen.getByTestId('tab-btn-Organizations'));
+    fireEvent.click(screen.getByTestId('tab-organizations'));
 
     expect(screen.getByTestId('user-organizations')).toBeInTheDocument();
+    expect(screen.getByTestId('tab-organizations')).toHaveAttribute(
+      'data-active',
+      'true',
+    );
   });
 
-  it('switches to Events tab on click', () => {
-    renderComponent();
+  it('switches to events tab', () => {
+    render(<MemberDetail />);
 
-    fireEvent.click(screen.getByTestId('tab-btn-Events'));
+    fireEvent.click(screen.getByTestId('tab-events'));
 
     expect(screen.getByTestId('user-events')).toBeInTheDocument();
   });
 
-  it('switches to Tags tab on click', () => {
-    renderComponent();
+  it('switches to tags tab', () => {
+    render(<MemberDetail />);
 
-    fireEvent.click(screen.getByTestId('tab-btn-Tags'));
+    fireEvent.click(screen.getByTestId('tab-tags'));
 
     expect(screen.getByTestId('user-tags')).toBeInTheDocument();
-  });
-
-  it('passes id prop correctly to UserContactDetails', () => {
-    renderComponent('member-42');
-
-    expect(
-      screen.getByText('Contact Details ID: member-42'),
-    ).toBeInTheDocument();
-  });
-});
-
-/* ------------------------------------------------------------------ */
-/* UTILITY FUNCTION TESTS                                             */
-/* ------------------------------------------------------------------ */
-
-describe('prettyDate', () => {
-  it('formats a valid date correctly', () => {
-    const result = prettyDate('2023-02-18T09:22:27.969Z');
-    expect(result).toBe('18 February 2023');
-  });
-
-  it('returns "Unavailable" for invalid date', () => {
-    expect(prettyDate('')).toBe('Unavailable');
-    expect(prettyDate('invalid-date')).toBe('Unavailable');
-  });
-});
-
-describe('getLanguageName', () => {
-  it('returns correct language name for valid code', () => {
-    expect(getLanguageName('en')).toBe('English');
-  });
-
-  it('returns "Unavailable" for unknown code', () => {
-    expect(getLanguageName('xx')).toBe('Unavailable');
-    expect(getLanguageName('')).toBe('Unavailable');
   });
 });

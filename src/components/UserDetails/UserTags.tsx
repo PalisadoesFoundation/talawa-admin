@@ -36,9 +36,10 @@ import React, { useState } from 'react';
 import styles from 'style/app-fixed.module.css';
 // import { useTranslation } from 'react-i18next';
 import PageHeader from 'shared-components/Navbar/Navbar';
+import { useTranslation } from 'react-i18next';
 
 const UserTags = () => {
-  // const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
+  const { t: tCommon } = useTranslation('common');
   const [sortBy, setSortBy] = useState('latest');
   const [searchTerm, setSearchTerm] = useState('');
   const dummyTags = [
@@ -173,16 +174,16 @@ const UserTags = () => {
           <thead className={styles.peopleTabUserTagTableHeader}>
             <tr className={styles.peopleTabUserTagColumnHeader}>
               <th className={styles.peopleTabUserTagTableHeaderCell}>
-                Tag name
+                {tCommon('title')}
               </th>
               <th className={styles.peopleTabUserTagTableHeaderCell}>
-                Assigned to
+                {tCommon('assignedTo')}
               </th>
               <th className={styles.peopleTabUserTagTableHeaderCell}>
-                Created on
+                {tCommon('createdOn')}
               </th>
               <th className={styles.peopleTabUserTagTableHeaderCell}>
-                Created by
+                {tCommon('createdBy')}
               </th>
             </tr>
           </thead>
