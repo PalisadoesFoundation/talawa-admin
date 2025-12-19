@@ -193,7 +193,7 @@ describe('PluginStore', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   const renderPluginStore = () => {
