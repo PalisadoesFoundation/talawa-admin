@@ -6,8 +6,4 @@
 
 > `const` **ORGANIZATION\_FIELDS**: `DocumentNode`
 
-<<<<<<< HEAD
 Defined in: [src/GraphQl/Queries/Queries.ts:811](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L811)
-=======
-Defined in: [src/GraphQl/Queries/Queries.ts:791](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L791)
->>>>>>> 39c3afb3fa (fix: testing to fix docs conflicts)

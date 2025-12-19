@@ -108,7 +108,7 @@ Defined in: [src/plugin/managers/discovery.ts:40](https://github.com/PalisadoesF
 
 > **loadPluginComponents**(`pluginId`, `manifest`): `Promise`\<`Record`\<`string`, `ComponentType`\<\{ \}\>\>\>
 
-Defined in: [src/plugin/managers/discovery.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/discovery.ts#L116)
+Defined in: [src/plugin/managers/discovery.ts:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/discovery.ts#L114)
 
 #### Parameters
 
@@ -142,7 +142,7 @@ Defined in: [src/plugin/managers/discovery.ts:45](https://github.com/PalisadoesF
 
 > **loadPluginManifest**(`pluginId`): `Promise`\<[`IPluginManifest`](../../../types/interfaces/IPluginManifest.md)\>
 
-Defined in: [src/plugin/managers/discovery.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/discovery.ts#L79)
+Defined in: [src/plugin/managers/discovery.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/discovery.ts#L85)
 
 #### Parameters
 
@@ -160,7 +160,7 @@ Defined in: [src/plugin/managers/discovery.ts:79](https://github.com/PalisadoesF
 
 > **removePluginFromGraphQL**(`pluginId`): `Promise`\<`void`\>
 
-Defined in: [src/plugin/managers/discovery.ts:160](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/discovery.ts#L160)
+Defined in: [src/plugin/managers/discovery.ts:158](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/discovery.ts#L158)
 
 #### Parameters
 
@@ -214,7 +214,7 @@ Defined in: [src/plugin/managers/discovery.ts:27](https://github.com/PalisadoesF
 
 > **syncPluginWithGraphQL**(`pluginId`): `Promise`\<`void`\>
 
-Defined in: [src/plugin/managers/discovery.ts:146](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/discovery.ts#L146)
+Defined in: [src/plugin/managers/discovery.ts:144](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/discovery.ts#L144)
 
 #### Parameters
 
@@ -232,7 +232,7 @@ Defined in: [src/plugin/managers/discovery.ts:146](https://github.com/Palisadoes
 
 > **updatePluginStatusInGraphQL**(`pluginId`, `status`): `Promise`\<`void`\>
 
-Defined in: [src/plugin/managers/discovery.ts:177](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/discovery.ts#L177)
+Defined in: [src/plugin/managers/discovery.ts:175](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/discovery.ts#L175)
 
 #### Parameters
 
