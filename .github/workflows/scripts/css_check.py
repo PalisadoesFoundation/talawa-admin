@@ -351,6 +351,9 @@ def main():
     This function serves as the entry point to run the CSS check. It processes
     directories and files, checks for CSS violations, and prints the results.
     """
+
+    """Returns: None"""
+
     parser = argparse.ArgumentParser(
         description="""Check for embedded CSS and
        style violations in TypeScript files."""
