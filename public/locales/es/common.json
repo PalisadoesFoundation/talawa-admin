@@ -105,7 +105,6 @@
   "unblockedSuccessfully": "{{item}} desbloqueado correctamente",
   "save": "Guardar",
   "saving": "Guardando...",
-  "sl_no": "Núm. de serie",
-  "actions": "Acciones",
-  "notFound": "No encontrado"
+  "breadcrumb": "Rastro de navegación",
+  "clearSearch": "Borrar búsqueda"
 }

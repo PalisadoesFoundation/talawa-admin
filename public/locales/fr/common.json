@@ -105,7 +105,6 @@
   "unblockedSuccessfully": "{{item}} débloqué avec succès",
   "save": "Enregistrer",
   "saving": "Enregistrement...",
-  "sl_no": "N° de série",
-  "actions": "Actions",
-  "notFound": "Non trouvé"
+  "breadcrumb": "Fil d'ariane",
+  "clearSearch": "Effacer la recherche"
 }

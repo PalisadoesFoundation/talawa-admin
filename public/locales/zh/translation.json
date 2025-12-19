@@ -676,7 +676,8 @@
     "viewCampaigns": "查看活动",
     "assocCampaigns": "相关活动",
     "errorLoadingFundsData": "加载基金数据时出错",
-    "editFund": "编辑基金"
+    "editFund": "编辑基金",
+    "searchFunds": "搜索基金"
   },
   "fundCampaign": {
     "title": "募捐活动",
@@ -700,7 +701,9 @@
     "latestEndDate": "最新结束日期",
     "earliestEndDate": "最早结束日期",
     "lowestGoal": "最低目标",
-    "highestGoal": "最高目标"
+    "highestGoal": "最高目标",
+    "editCampaign": "编辑活动",
+    "searchCampaigns": "搜索活动"
   },
   "pledges": {
     "title": "基金活动承诺",
@@ -1015,7 +1018,8 @@
     "unassignUserTagMessage": "您想从此用户中删除标签吗？",
     "successfullyUnassigned": "标签已从用户中取消分配",
     "tagsAssigned": "已分配标签",
-    "noTagsAssigned": "未分配标签"
+    "noTagsAssigned": "未分配标签",
+    "actions": "操作"
   },
   "userLogin": {
     "login": "登录",
@@ -1530,7 +1534,14 @@
     "addPledge": "添加承诺",
     "viewPledges": "查看承诺",
     "noPledges": "未找到承诺",
-    "noCampaigns": "未找到活动"
+    "noCampaigns": "未找到活动",
+    "searchCampaigns": "搜索活动",
+    "campaignName": "活动名称",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "fundingGoal": "筹款目标",
+    "raised": "已筹金额",
+    "viewPledge": "查看认捐"
   },
   "userPledges": {
     "title": "我的承诺"
