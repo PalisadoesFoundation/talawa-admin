@@ -416,9 +416,6 @@ def format_violation_output(violations: list[DetailedViolation]) -> str:
 def main():
     """Main function to run the CSS check.
 
-    This function serves as the entry point to run the CSS check. It processes
-    directories and files, checks for CSS violations, and prints the results.
-
     Returns:
         None
     """
