@@ -183,7 +183,7 @@ def process_typescript_file(
     try:
         with open(file_path, encoding="utf-8") as f:
             content = f.read()
-    except (IOError, UnicodeDecodeError) as e:
+    except (OSError, UnicodeDecodeError) as e:
         print(f"Error reading file {file_path}: {e}", file=sys.stderr)
         return
 
@@ -349,9 +349,9 @@ def main():
     """Main function to run the CSS check.
     This function serves as the entry point to run the CSS check. It processes
     directories and files, checks for CSS violations, and prints the results.
-    
 
-    Returns: 
+
+    Returns:
         None
     """
 
