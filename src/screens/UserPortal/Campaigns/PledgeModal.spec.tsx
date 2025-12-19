@@ -20,7 +20,6 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import type { InterfaceUserInfoPG } from 'utils/interfaces';
-import type { DatePickerProps } from '@mui/x-date-pickers';
 import { act } from 'react';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
@@ -45,16 +44,16 @@ vi.mock('@mui/x-date-pickers', async () => {
   const actual = await vi.importActual<typeof import('@mui/x-date-pickers')>(
     '@mui/x-date-pickers',
   );
-  interface MockDatePickerProps {
+  interface InterfaceMockDatePickerProps {
     label?: string;
     value?: dayjs.Dayjs | null;
     onChange?: (value: dayjs.Dayjs | null) => void;
-    [key: string]: any;
+    [key: string]: unknown;
   }
 
   return {
     ...actual,
-    DatePicker: ({ label, value, onChange }: MockDatePickerProps) => (
+    DatePicker: ({ label, value, onChange }: InterfaceMockDatePickerProps) => (
       <input
         aria-label={label as string}
         value={value ? value.format('DD/MM/YYYY') : ''}
@@ -166,14 +165,14 @@ const createUpdatePledgeMock = (
   ...(isError
     ? { error: new Error('Failed to update pledge') }
     : {
-        result: {
-          data: {
-            updateFundraisingCampaignPledge: {
-              _id: variables.id,
-            },
+      result: {
+        data: {
+          updateFundraisingCampaignPledge: {
+            _id: variables.id,
           },
         },
-      }),
+      },
+    }),
 });
 
 // Helper to create CREATE_PLEDGE mock with custom variables
@@ -195,14 +194,14 @@ const createCreatePledgeMock = (
   ...(isError
     ? { error: new Error('Failed to create pledge') }
     : {
-        result: {
-          data: {
-            createFundraisingCampaignPledge: {
-              _id: '3',
-            },
+      result: {
+        data: {
+          createFundraisingCampaignPledge: {
+            _id: '3',
           },
         },
-      }),
+      },
+    }),
 });
 
 // Default mocks for basic rendering tests
