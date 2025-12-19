@@ -45,7 +45,12 @@ vi.mock('@mui/x-date-pickers', async () => {
   const actual = await vi.importActual<typeof import('@mui/x-date-pickers')>(
     '@mui/x-date-pickers',
   );
-  type MockDatePickerProps = DatePickerProps<dayjs.Dayjs>;
+  interface MockDatePickerProps {
+    label?: string;
+    value?: dayjs.Dayjs | null;
+    onChange?: (value: dayjs.Dayjs | null) => void;
+    [key: string]: any;
+  }
 
   return {
     ...actual,
@@ -161,14 +166,14 @@ const createUpdatePledgeMock = (
   ...(isError
     ? { error: new Error('Failed to update pledge') }
     : {
-        result: {
-          data: {
-            updateFundraisingCampaignPledge: {
-              _id: variables.id,
-            },
+      result: {
+        data: {
+          updateFundraisingCampaignPledge: {
+            _id: variables.id,
           },
         },
-      }),
+      },
+    }),
 });
 
 // Helper to create CREATE_PLEDGE mock with custom variables
@@ -190,14 +195,14 @@ const createCreatePledgeMock = (
   ...(isError
     ? { error: new Error('Failed to create pledge') }
     : {
-        result: {
-          data: {
-            createFundraisingCampaignPledge: {
-              _id: '3',
-            },
+      result: {
+        data: {
+          createFundraisingCampaignPledge: {
+            _id: '3',
           },
         },
-      }),
+      },
+    }),
 });
 
 // Default mocks for basic rendering tests
