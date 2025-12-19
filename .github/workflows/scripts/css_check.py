@@ -22,6 +22,22 @@ CSSCheckResult = namedtuple("CSSCheckResult", ["violations"])
 
 
 def _strip_comments(line: str, in_block_comment: bool) -> tuple[str, bool]:
+    """Strips C-style comments from a line of code.
+
+    Removes both single-line (//) and multi-line (/* */) comments from the
+    input line while tracking block comment state across multiple lines.
+
+    Args:
+        line: A string containing a line of code that may include comments.
+        in_block_comment: A boolean indicating whether currently inside a
+            multi-line block comment from a previous line.
+
+    Returns:
+        A tuple containing:
+            - A string with comments removed from the input line.
+            - A boolean indicating whether still inside a block comment after
+              processing this line.
+    """
     result = ""
     i = 0
 
@@ -43,7 +59,6 @@ def _strip_comments(line: str, in_block_comment: bool) -> tuple[str, bool]:
                 i += 1
 
     return result, in_block_comment
-
 
 def check_embedded_styles(
     content: str, file_path: str
