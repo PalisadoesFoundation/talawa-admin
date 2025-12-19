@@ -21,24 +21,9 @@ DetailedViolation = namedtuple(
 CSSCheckResult = namedtuple("CSSCheckResult", ["violations"])
 
 
-def strip_comments(line: str, in_block_comment: bool) -> tuple[str, bool]:
-    """Strip single-line and block comments from a line of code.
-
-    Removes:
-        - Single-line comments starting with //
-        - Block comments delimited by /* and */, including multi-line blocks.
-
-    Args:
-        line: The input line of source code.
-        in_block_comment: Whether parsing started inside a block comment
-            from a previous line.
-
-    Returns:
-        result: A tuple containing:
-            - cleaned_line: The line with all comments removed.
-            - in_block_comment: True if parsing ends inside a block comment,
-              False otherwise.
-    """
+def strip_comments(
+    line: str, in_block_comment: bool
+) -> tuple[str, bool]:  # noqa: D103
     result = ""
     i = 0
 
@@ -149,7 +134,7 @@ def check_embedded_styles(
     for line_number, line in enumerate(lines, start=1):
         # Skip comments and import statements
         stripped_line = line.strip()
-        if stripped_line.startswith("import"):
+        if stripped_line.startswith(("import ", "import{", "import(")):
             continue
 
         code_line, in_block_comment = strip_comments(line, in_block_comment)
@@ -171,12 +156,12 @@ def check_embedded_styles(
             for match in matches:
                 if violation_type == "camelcase_css_property":
                     # Check if it's actually in a style context
-                    preceding_text = line[: match.start()].strip()
+                    preceding_text = code_line[: match.start()].strip()
                     if not any(
                         keyword in preceding_text
                         for keyword in ["style", "css", "Style", "CSS"]
                     ):
-                        if "{" not in line[: match.start()]:
+                        if "{" not in code_line[: match.start()]:
                             continue
                 if violation_type == "pixel_value":
                     # Look for style-related keywords nearby
