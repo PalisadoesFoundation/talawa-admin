@@ -419,7 +419,6 @@ def main():
     Returns:
         None
     """
-
     parser = argparse.ArgumentParser(
         description="""Check for embedded CSS and
        style violations in TypeScript files."""
