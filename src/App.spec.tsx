@@ -461,7 +461,8 @@ describe('Testing the App Component', () => {
   it('should navigate to user settings', async () => {
     const { setItem, removeItem } = useLocalStorage();
 
-    localStorage.clear();
+    removeItem('IsLoggedIn');
+    removeItem('AdminFor');
 
     setItem('IsLoggedIn', 'TRUE'); // string "TRUE"
     removeItem('AdminFor'); // ensure truly absent/undefined
