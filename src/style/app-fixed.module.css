@@ -1012,7 +1012,7 @@
   flex: 1;
   display: flex;
   align-items: center;
-  min-height: 55px;
+  min-height: 48px;
   padding: 0.75rem 2.5rem 0.75rem 1.25rem;
   background-color: transparent;
 }
@@ -1114,8 +1114,8 @@
   border-radius: 0;
   background-color: var(--search-button-bg, #b3ceff);
   color: #2f3f5f;
-  width: 55px;
-  height: 55px;
+  width: 48px;
+  height: 48px;
   font-weight: 600;
   transition:
     background-color 0.2s ease,
@@ -2737,13 +2737,6 @@ form label,
 }
 
 @media (max-width: 520px) {
-  .calendar__header {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
   .space {
     display: block !important;
     text-align: center;
@@ -9999,4 +9992,11 @@ form {
 .orgListContainer {
   padding-left: 40px;
   padding-right: 30px;
+}
+
+@media (max-width: 768px) {
+  .orgListContainer {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 }

@@ -339,10 +339,7 @@ const UpcomingEvents = (): JSX.Element => {
   const events = useMemo(() => {
     if (eventsData?.organization?.events?.edges) {
       const mappedEvents = eventsData.organization.events.edges.map((edge) => {
-        // Determine if this is a recurring event:
-        // 1. If isRecurringEventTemplate is true, it's the base template/series
-        // 2. If isRecurringEventTemplate is false but baseEvent exists and baseEvent.isRecurringEventTemplate is true, it's a recurring instance
-        // 3. If isRecurringEventTemplate is false and no baseEvent, it's standalone
+        // Determine if this is a recurring event
         const isRecurringInstance =
           edge.node.baseEvent && edge.node.baseEvent.isRecurringEventTemplate;
         const isRecurringTemplate = edge.node.isRecurringEventTemplate;
@@ -384,6 +381,7 @@ const UpcomingEvents = (): JSX.Element => {
       }
 
       return mappedEvents;
+      // Added searchTerm and searchBy to dependency array
     }
     return [];
   }, [eventsData, searchTerm, searchBy]);
@@ -437,34 +435,39 @@ const UpcomingEvents = (): JSX.Element => {
   // Renders the upcoming events list and UI elements for searching, sorting, and adding pledges
   return (
     <>
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        {/* Search input field and button */}
-        <SearchBar
-          placeholder={tCommon('searchBy', {
-            item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
-          })}
-          onChange={debouncedSearch}
-          onSearch={debouncedSearch}
-          inputTestId="searchBy"
-          buttonTestId="searchBtn"
-        />
-        <div className="d-flex gap-4 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3">
-            <SortingButton
-              sortingOptions={[
-                { label: t('name'), value: 'title' },
-                { label: tCommon('location'), value: 'location' },
-              ]}
-              selectedOption={searchBy}
-              onSortChange={(value) =>
-                setSearchBy(value as 'title' | 'location')
-              }
-              dataTestIdPrefix="searchByToggle"
-              buttonLabel={tCommon('searchBy', { item: '' })}
-            />
-          </div>
+      <div className={styles.calendar__header}>
+        {/* 1. Search Section */}
+        <div className={styles.calendar__search}>
+          <SearchBar
+            placeholder={tCommon('searchBy', {
+              item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
+            })}
+            onChange={debouncedSearch}
+            onSearch={debouncedSearch}
+            inputTestId="searchBy"
+            buttonTestId="searchBtn"
+            showSearchButton={true}
+            showLeadingIcon={true}
+            showClearButton={true}
+            buttonAriaLabel={t('search')}
+          />
+        </div>
+
+        {/* 2. Controls Section (Sort Button) */}
+        <div className={styles.btnsBlock}>
+          <SortingButton
+            sortingOptions={[
+              { label: t('name'), value: 'title' },
+              { label: tCommon('location'), value: 'location' },
+            ]}
+            selectedOption={searchBy}
+            onSortChange={(value) => setSearchBy(value as 'title' | 'location')}
+            dataTestIdPrefix="searchByToggle"
+            buttonLabel={tCommon('searchBy', { item: '' })}
+          />
         </div>
       </div>
+
       {events.length < 1 ? (
         <Stack height="100%" alignItems="center" justifyContent="center">
           {/* Displayed if no events are found */}
@@ -512,11 +515,11 @@ const UpcomingEvents = (): JSX.Element => {
                       <span>
                         {' '}
                         <IoLocationOutline className="me-1 mb-1" />
-                        location: {location}
+                        {t('location')}: {location}
                       </span>
                       {recurring ? (
                         <span>
-                          Recurrence: {event.recurrenceRule?.frequency}
+                          {t('recurrence')}: {event.recurrenceRule?.frequency}
                         </span>
                       ) : (
                         <>
@@ -525,7 +528,8 @@ const UpcomingEvents = (): JSX.Element => {
                             {new Date(startDate).toLocaleDateString()}
                           </span>
                           <span>
-                            End Date: {new Date(endDate).toLocaleDateString()}
+                            {t('endDate')}:
+                            {new Date(endDate).toLocaleDateString()}
                           </span>
                         </>
                       )}
@@ -565,7 +569,7 @@ const UpcomingEvents = (): JSX.Element => {
               <AccordionDetails className="d-flex gap-3 flex-column">
                 {description && (
                   <div className="d-flex gap-3">
-                    <span>Description: </span>
+                    <span>{t('description')}: </span>
                     <span>{description}</span>
                   </div>
                 )}
@@ -575,7 +579,7 @@ const UpcomingEvents = (): JSX.Element => {
                       className="fw-lighter ms-2 mb-2 "
                       style={{ fontSize: '1rem', color: 'grey' }}
                     >
-                      Volunteer Groups:
+                      {t('volunteerGroups')}:
                     </Form.Label>
 
                     <TableContainer
@@ -583,18 +587,20 @@ const UpcomingEvents = (): JSX.Element => {
                       variant="outlined"
                       className={styles.modalTable}
                     >
-                      <Table aria-label="group table">
+                      <Table aria-label={t('groupTable')}>
                         <TableHead>
                           <TableRow>
-                            <TableCell className="fw-bold">Sr. No.</TableCell>
                             <TableCell className="fw-bold">
-                              Group Name
+                              {t('srNo')}
+                            </TableCell>
+                            <TableCell className="fw-bold">
+                              {t('groupName')}
                             </TableCell>
                             <TableCell className="fw-bold" align="center">
-                              No. of Members
+                              {t('noOfMembers')}
                             </TableCell>
                             <TableCell className="fw-bold" align="center">
-                              Options
+                              {t('options')}
                             </TableCell>
                           </TableRow>
                         </TableHead>

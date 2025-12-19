@@ -398,7 +398,7 @@ function OrganizationPeople(): JSX.Element {
             {params.row?.image ? (
               <img
                 src={params.row.image}
-                alt={tCommon('avatar') || 'avatar'}
+                alt={tCommon('avatar')}
                 style={{
                   width: `${imageSize}px`,
                   height: `${imageSize}px`,
@@ -487,7 +487,7 @@ function OrganizationPeople(): JSX.Element {
           variant="danger"
           disabled={state === 2}
           onClick={() => toggleRemoveMemberModal(params.row.id)}
-          aria-label={tCommon('removeMember') || 'Remove member'}
+          aria-label={tCommon('removeMember')}
           data-testid="removeMemberModalBtn"
         >
           <Delete />

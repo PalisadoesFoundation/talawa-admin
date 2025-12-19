@@ -200,52 +200,61 @@ const Campaigns = (): JSX.Element => {
   // Renders the campaign list and UI elements for searching, sorting, and adding pledges
   return (
     <>
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        {/* Search input field and button */}
-        <SearchBar
-          placeholder={t('searchByName')}
-          onSearch={setSearchTerm}
-          inputTestId="searchCampaigns"
-          buttonTestId="searchBtn"
-        />
-        <div className="d-flex gap-4 mb-1">
-          <div className="d-flex justify-space-between">
-            <SortingButton
-              sortingOptions={[
-                { label: t('lowestGoal'), value: 'fundingGoal_ASC' },
-                { label: t('highestGoal'), value: 'fundingGoal_DESC' },
-                { label: t('latestEndDate'), value: 'endDate_DESC' },
-                { label: t('earliestEndDate'), value: 'endDate_ASC' },
-              ]}
-              selectedOption={sortBy}
-              onSortChange={(value) =>
-                setSortBy(
-                  value as
-                    | 'fundingGoal_ASC'
-                    | 'fundingGoal_DESC'
-                    | 'endDate_ASC'
-                    | 'endDate_DESC',
-                )
-              }
-              dataTestIdPrefix="filter"
-              buttonLabel={tCommon('sort')}
-            />
-          </div>
-          <div>
-            {/* Button to navigate to the user's pledges */}
-            <Button
-              variant="success"
-              data-testid="myPledgesBtn"
-              onClick={() =>
-                navigate(`/user/pledges/${orgId}`, { replace: true })
-              }
-            >
-              {t('myPledges')}
-              <i className="fa fa-angle-right ms-2" />
-            </Button>
-          </div>
+      {/* Refactored Header Structure */}
+      <div className={styles.calendar__header}>
+        {/* 1. Search Section */}
+        <div className={styles.calendar__search}>
+          <SearchBar
+            placeholder={t('searchByName')}
+            onSearch={setSearchTerm}
+            inputTestId="searchCampaigns"
+            buttonTestId="searchBtn"
+            // Required PR Props
+            showSearchButton={true}
+            showLeadingIcon={true}
+            showClearButton={true}
+            buttonAriaLabel={t('search')}
+          />
+        </div>
+
+        {/* 2. Controls Section (Sort & My Pledges) */}
+        <div className={styles.btnsBlock}>
+          <SortingButton
+            sortingOptions={[
+              { label: t('lowestGoal'), value: 'fundingGoal_ASC' },
+              { label: t('highestGoal'), value: 'fundingGoal_DESC' },
+              { label: t('latestEndDate'), value: 'endDate_DESC' },
+              { label: t('earliestEndDate'), value: 'endDate_ASC' },
+            ]}
+            selectedOption={sortBy}
+            onSortChange={(value) =>
+              setSortBy(
+                value as
+                  | 'fundingGoal_ASC'
+                  | 'fundingGoal_DESC'
+                  | 'endDate_ASC'
+                  | 'endDate_DESC',
+              )
+            }
+            dataTestIdPrefix="filter"
+            buttonLabel={tCommon('sort')}
+          />
+
+          {/* Button to navigate to the user's pledges */}
+          <Button
+            className={styles.dropdown} // Assuming you want a consistent look
+            variant="success"
+            data-testid="myPledgesBtn"
+            onClick={() =>
+              navigate(`/user/pledges/${orgId}`, { replace: true })
+            }
+          >
+            {t('myPledges')}
+            <i className="fa fa-angle-right ms-2" />
+          </Button>
         </div>
       </div>
+
       {campaigns.length < 1 ? (
         <Stack height="100%" alignItems="center" justifyContent="center">
           {/* Displayed if no campaigns are found */}
@@ -289,7 +298,7 @@ const Campaigns = (): JSX.Element => {
                       }
                       {campaign.fundingGoal}
                     </span>
-                    <span>Raised: $0</span>
+                    <span>{t('raised')}: $0</span>
                     <span>
                       Start Date:{' '}
                       {new Date(campaign.startDate).toLocaleDateString('en-US')}
@@ -319,7 +328,7 @@ const Campaigns = (): JSX.Element => {
               </div>
             </AccordionSummary>
             <AccordionDetails className="d-flex gap-3 ms-2">
-              <span className="fw-bold">Amount Raised: </span>
+              <span className="fw-bold">{t('amountRaised')}: </span>
               <div className={styles.progressAccordion}>
                 <span>$0</span>
                 <ProgressBar

@@ -373,12 +373,6 @@ function orgList(): JSX.Element {
               className={`${styles.dropdown} ${styles.createorgdropdown}`}
               onClick={toggleModal}
               data-testid="createOrganizationBtn"
-              style={{
-                marginTop: 0,
-                height: '48px',
-                display: 'flex',
-                alignItems: 'center',
-              }}
             >
               <i className="fa fa-plus me-2" />
               {t('createOrganization')}
