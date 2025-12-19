@@ -11,7 +11,7 @@ import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import i18nForTest from './utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import 'style/app-fixed.module.css';
-import { useLocalStorage } from 'utils/useLocalstorage';
+import * as useLSModule from 'utils/useLocalstorage';
 
 vi.mock('@mui/x-charts/PieChart', () => ({
   pieArcLabelClasses: vi.fn(),
@@ -459,11 +459,24 @@ describe('Testing the App Component', () => {
   });
 
   it('should navigate to user settings', async () => {
-    const { setItem, removeItem } = useLocalStorage();
-    setItem('IsLoggedIn', 'TRUE'); // string "TRUE"
-    removeItem('AdminFor');
+    const lsSpy = vi.spyOn(useLSModule, 'default').mockImplementation(
+      () =>
+        ({
+          getItem: (key: string) => {
+            if (key === 'IsLoggedIn') return 'TRUE';
+            if (key === 'AdminFor') return undefined;
+            return undefined;
+          },
+          setItem: vi.fn(),
+          removeItem: vi.fn(),
+          getStorageKey: (key: string) => `Talawa-admin_${key}`,
+        }) as unknown as ReturnType<typeof useLSModule.default>,
+    );
+
     renderApp(link, '/user/settings');
 
     expect(await screen.findByTestId('mock-settings')).toBeInTheDocument();
+
+    lsSpy.mockRestore();
   });
 });

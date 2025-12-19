@@ -88,7 +88,7 @@ const renderEventListCard = (
 
 describe('Testing Event List Card', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
     localStorage.clear();
   });
   beforeAll(() => {
