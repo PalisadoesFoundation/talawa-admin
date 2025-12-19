@@ -15,4 +15,4 @@ This function is called when the current access token expires.
 
 `Promise`\<`boolean`\>
 
-Promise<boolean> - Returns true if token refresh was successful, false otherwise
+Returns true if token refresh was successful, false otherwise

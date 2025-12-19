@@ -7,7 +7,7 @@ import useLocalStorage from './useLocalstorage';
  * Refreshes the access token using the stored refresh token.
  * This function is called when the current access token expires.
  *
- * @returns Promise<boolean> - Returns true if token refresh was successful, false otherwise
+ * @returns Returns true if token refresh was successful, false otherwise
  */
 export async function refreshToken(): Promise<boolean> {
   const client = new ApolloClient({
