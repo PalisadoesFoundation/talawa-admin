@@ -368,8 +368,8 @@ const organizationFunds = (): JSX.Element => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-        <div className={styles.head} style={{ flex: 1, margin: 0 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '1rem' }}>
+        <div style={{ margin: 0 }}>
           <SearchBar
             placeholder={t('searchFunds')}
             value={searchText}

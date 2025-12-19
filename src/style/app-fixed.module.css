@@ -988,8 +988,8 @@
     border-color 0.2s ease,
     box-shadow 0.2s ease;
   overflow: hidden;
-  flex: 1 1 320px;
-  min-width: 240px;
+  flex: 1 1 500px;
+  min-width: 600px;
   width: auto;
   max-width: 100%;
 }

@@ -415,14 +415,13 @@ const orgFundCampaign = (): JSX.Element => {
       <div
         style={{
           display: 'flex',
-          justifyContent: 'space-between',
           alignItems: 'center',
-          gap: '0.5rem',
+          gap: '16px',
           marginBottom: '1rem',
           marginTop: '1rem',
         }}
       >
-        <div className={styles.head} style={{ flex: 1, margin: 0 }}>
+        <div className={styles.head} style={{ margin: 0 }}>
           <SearchBar
             placeholder={t('searchCampaigns')}
             value={searchText}

@@ -405,13 +405,12 @@ const Campaigns = (): JSX.Element => {
       <div
         style={{
           display: 'flex',
-          justifyContent: 'space-between',
           alignItems: 'center',
-          gap: '1rem',
           marginBottom: '1rem',
+          gap: '16px',
         }}
       >
-        <div className={styles.head} style={{ flex: 1, margin: 0 }}>
+        <div style={{ maxWidth: '700px', minWidth: '400px', margin: 0 }}>
           <SearchBar
             placeholder={t('searchCampaigns')}
             value={searchText}
@@ -427,10 +426,10 @@ const Campaigns = (): JSX.Element => {
           variant="success"
           data-testid="myPledgesBtn"
           style={{ whiteSpace: 'nowrap' }}
+          className={styles.createFundButton}
           onClick={() => navigate(`/user/pledges/${orgId}`, { replace: true })}
         >
           {t('myPledges')}
-          <i className="fa fa-angle-right ms-2" />
         </Button>
       </div>
 
