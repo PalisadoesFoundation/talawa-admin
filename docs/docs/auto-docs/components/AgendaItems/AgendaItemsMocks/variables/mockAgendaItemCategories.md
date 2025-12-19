@@ -6,7 +6,7 @@
 
 > `const` **mockAgendaItemCategories**: `object`[]
 
-Defined in: [src/components/AgendaItems/AgendaItemsMocks.ts:263](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaItems/AgendaItemsMocks.ts#L263)
+Defined in: [src/components/AgendaItems/AgendaItemsMocks.ts:336](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaItems/AgendaItemsMocks.ts#L336)
 
 ## Type Declaration
 
