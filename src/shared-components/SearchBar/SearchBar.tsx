@@ -47,6 +47,7 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
       showSearchButton = true,
       showClearButton = true,
       showLeadingIcon = false,
+      showTrailingIcon = false,
       buttonLabel = '',
       buttonAriaLabel,
       isLoading = false,
@@ -225,6 +226,14 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
               <CloseRoundedIcon fontSize="small" />
             </button>
           )}
+          {showTrailingIcon && (
+            <span
+              className={styles.searchBarTrailingIcon}
+              aria-hidden="true"
+            >
+              <SearchIcon fontSize="small" />
+            </span>
+          )}
         </div>
         {showSearchButton && (
           <button
@@ -247,7 +256,7 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
               </span>
             )}
           </button>
-        )}
+        )} 
       </div>
     );
   },

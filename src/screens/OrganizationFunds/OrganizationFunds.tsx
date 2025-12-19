@@ -28,11 +28,14 @@ const dataGridStyle = {
   backgroundColor: 'var(--row-background)',
   '& .MuiDataGrid-row': {
     backgroundColor: 'var(--row-background)',
+    cursor: 'pointer',
     '&:focus-within': { outline: 'none' },
   },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'var(--row-background)' },
+  '& .MuiDataGrid-row:hover': {
+    backgroundColor: '#f0f0f0',
+  },
   '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'var(--row-background)',
+    backgroundColor: '#f0f0f0',
   },
   '& .MuiDataGrid-cell:focus': { outline: 'none' },
   '& .MuiDataGrid-cell:focus-within': { outline: 'none' },
@@ -250,11 +253,7 @@ const organizationFunds = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div
-            className={styles.hyperlinkText}
-            data-testid="fundName"
-            onClick={() => handleClick(params.row.id as string)}
-          >
+          <div data-testid="fundName">
             {params.row.name}
           </div>
         );
@@ -363,6 +362,8 @@ const organizationFunds = (): JSX.Element => {
     rowHeight: ROW_HEIGHT,
     autoHeight: true,
     style: { overflow: 'visible' },
+    onRowClick: (params: { row: { id: string } }) =>
+      handleClick(params.row.id as string),
   };
 
   return (
@@ -375,6 +376,7 @@ const organizationFunds = (): JSX.Element => {
             onChange={(value) => setSearchText(value.trim())}
             onClear={() => setSearchText('')}
             showSearchButton={false}
+            showTrailingIcon={true}
             inputTestId="searchByName"
             clearButtonTestId="clearSearch"
           />
@@ -382,7 +384,7 @@ const organizationFunds = (): JSX.Element => {
         <Button
           variant="success"
           onClick={() => handleOpenModal(null, 'create')}
-          className={styles.createButton}
+          className={styles.createFundButton}
           style={{ whiteSpace: 'nowrap' }}
           data-testid="createFundBtn"
         >

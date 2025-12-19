@@ -204,18 +204,7 @@ const orgFundCampaign = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => (
-        <div
-          className={styles.hyperlinkText}
-          data-testid="campaignName"
-          onClick={() => handleClick(params.row.id as string)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              handleClick(params.row.id as string);
-            }
-          }}
-          role="button"
-          tabIndex={0}
-        >
+        <div data-testid="campaignName">
           {params.row.name}
         </div>
       ),
@@ -410,7 +399,7 @@ const orgFundCampaign = (): JSX.Element => {
 
   return (
     <div className={styles.organizationFundCampaignContainer}>
-      <Breadcrumbs aria-label="breadcrumb" className="ms-1">
+      <Breadcrumbs aria-label="breadcrumb" className="ms-1" style={{ marginTop: '0.5rem' }}>
         <Link
           underline="hover"
           color="inherit"
@@ -428,18 +417,19 @@ const orgFundCampaign = (): JSX.Element => {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          gap: '1rem',
+          gap: '0.5rem',
           marginBottom: '1rem',
           marginTop: '1rem',
         }}
       >
         <div className={styles.head} style={{ flex: 1, margin: 0 }}>
           <SearchBar
-            placeholder={tCommon('searchByName')}
+            placeholder={t('searchCampaigns')}
             value={searchText}
             onChange={(value) => setSearchText(value.trim())}
             onClear={() => setSearchText('')}
             showSearchButton={false}
+            showTrailingIcon={true}
             inputTestId="searchFullName"
             clearButtonTestId="clearSearch"
           />
