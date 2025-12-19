@@ -93,6 +93,44 @@ describe('SignOut Component', () => {
     vi.restoreAllMocks();
   });
 
+  test('handles sign out when no refresh token exists', async () => {
+    // Override the mock to return null for refreshToken
+    const useLocalStorageMock = await import('utils/useLocalstorage');
+    vi.mocked(useLocalStorageMock.default).mockReturnValue({
+      getItem: vi.fn(() => null),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      getStorageKey: vi.fn((key: string) => key),
+    });
+
+    const mockEndSession = vi.fn();
+    (useSession as Mock).mockReturnValue({
+      endSession: mockEndSession,
+    });
+
+    render(
+      <MockedProvider mocks={[]}>
+        <BrowserRouter>
+          <SignOut />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const signOutButton = screen.getByText('Sign Out');
+    fireEvent.click(signOutButton);
+
+    await waitFor(() => {
+      // Verify localStorage was cleared
+      expect(mockLocalStorage.clear).toHaveBeenCalled();
+
+      // Verify endSession was called
+      expect(mockEndSession).toHaveBeenCalled();
+
+      // Verify navigation to home page
+      expect(mockNavigate).toHaveBeenCalledWith('/');
+    });
+  });
+
   test('calls logout functionality when sign out button is clicked', async () => {
     const mockEndSession = vi.fn();
     (useSession as Mock).mockReturnValue({
