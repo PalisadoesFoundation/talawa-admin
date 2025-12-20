@@ -1201,6 +1201,7 @@
     "uppercase_check": "Au moins une lettre majuscule",
     "numeric_value_check": "Au moins une valeur numérique",
     "special_char_check": "Au moins un caractère spécial",
+    "atleast_8_char_long": "Au moins 8 caractères",
     "phoneNumber": "Numéro de téléphone",
     "chooseFile": "Choisir le fichier",
     "birthDate": "Date de naissance",
@@ -1268,7 +1269,9 @@
     "city": "Ville",
     "description": "Description",
     "enterDescription": "Entrez la description",
-    "enterNewPassword": "Entrez un nouveau mot de passe"
+    "enterNewPassword": "Entrez un nouveau mot de passe",
+    "validationPassed": "Validation Réussie",
+    "validationFailed": "Validation Échouée"
   },
   "donate": {
     "title": "Des dons",

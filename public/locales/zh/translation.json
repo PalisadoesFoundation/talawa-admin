@@ -1201,6 +1201,7 @@
     "uppercase_check": "至少有一个大写字母",
     "numeric_value_check": "至少设定一个数值",
     "special_char_check": "至少一个特殊字符",
+    "atleast_8_char_long": "至少 8 个字符长",
     "phoneNumber": "电话号码",
     "homePhoneNumber": "家庭电话号码",
     "chooseFile": "选择文件",
@@ -1268,7 +1269,9 @@
     "city": "城市",
     "description": "描述",
     "enterDescription": "输入描述",
-    "enterNewPassword": "输入新密码"
+    "enterNewPassword": "输入新密码",
+    "validationPassed": "验证通过",
+    "validationFailed": "验证失败"
   },
   "donate": {
     "title": "捐款",

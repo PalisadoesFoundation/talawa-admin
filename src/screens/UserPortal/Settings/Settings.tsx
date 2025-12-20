@@ -171,7 +171,7 @@ export default function Settings(): React.JSX.Element {
       ) as Partial<T>;
     }
 
-    if (!validatePassword(userDetails.password)) {
+    if (userDetails.password && !validatePassword(userDetails.password)) {
       toast.warning(t('password_invalid'));
       return;
     }
@@ -241,14 +241,6 @@ export default function Settings(): React.JSX.Element {
   };
 
   const handleFieldChange = (fieldName: string, value: string): void => {
-    // check if the password is strong or not
-    // if (fieldName === 'password' && value) {
-    //   if (!validatePassword(value)) {
-    //     toast.error('Password must be at least 8 characters long.');
-    //     return;
-    //   }
-    // }
-
     setIsUpdated(true);
     setUserDetails((prevState) => ({ ...prevState, [fieldName]: value }));
   };

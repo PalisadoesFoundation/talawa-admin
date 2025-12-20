@@ -48,8 +48,8 @@
     "OR": "O",
     "admin": "ADMINISTRACIÓN",
     "user": "USUARIO",
-    "lowercase_check": "Al menos una letra mayuscula",
-    "uppercase_check": "Al menos una letra minúscula",
+    "lowercase_check": "Al menos una letra minúscula",
+    "uppercase_check": "Al menos una letra mayuscula",
     "numeric_value_check": "Al menos un valor numérico",
     "special_char_check": "Al menos un carácter especial",
     "loading": "Cargando...",
@@ -1204,6 +1204,7 @@
     "uppercase_check": "Al menos una letra minúscula",
     "numeric_value_check": "Al menos un valor numérico",
     "special_char_check": "Al menos un carácter especial",
+    "atleast_8_char_long": "Al menos 8 caracteres de largo",
     "emailAddress": "Dirección de correo electrónico",
     "phoneNumber": "Número de teléfono",
     "displayImage": "Imagen de perfil",
@@ -1268,7 +1269,9 @@
     "city": "Ciudad",
     "description": "Descripción",
     "enterDescription": "Ingrese descripción",
-    "enterNewPassword": "Ingrese nueva clave"
+    "enterNewPassword": "Ingrese nueva clave",
+    "validationPassed": "Validación Correcta",
+    "validationFailed": "Validación Incorrecta"
   },
   "donate": {
     "title": "Donaciones",

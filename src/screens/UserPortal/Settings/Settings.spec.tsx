@@ -767,3 +767,136 @@ describe('Testing Settings Screen [User Portal]', () => {
     expect(fileInput.value).toBe('');
   });
 });
+
+describe('Password Validation in Settings', () => {
+  it('should show password validation UI when password field is focused in user details', async () => {
+    await act(async () => {
+      render(
+        <BrowserRouter>
+          <MockedProvider link={link1}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </MockedProvider>
+        </BrowserRouter>,
+      );
+    });
+
+    await wait();
+
+    const passwordInput = screen.getByTestId('inputPassword');
+    
+    fireEvent.focus(passwordInput);
+    
+    await wait();
+
+    // Validation messages should appear
+    expect(screen.getByText(/atleast_8_char_long/i)).toBeInTheDocument();
+    expect(screen.getByText(/lowercase_check/i)).toBeInTheDocument();
+    expect(screen.getByText(/uppercase_check/i)).toBeInTheDocument();
+    expect(screen.getByText(/numeric_value_check/i)).toBeInTheDocument();
+    expect(screen.getByText(/special_char_check/i)).toBeInTheDocument();
+  });
+
+  it('should validate password only on save, not on every keystroke', async () => {
+    const toastSpy = vi.spyOn(toast, 'warn');
+    
+    await act(async () => {
+      render(
+        <BrowserRouter>
+          <MockedProvider link={link1}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </MockedProvider>
+        </BrowserRouter>,
+      );
+    });
+
+    await wait();
+
+    const passwordInput = screen.getByTestId('inputPassword');
+    
+    // Type weak password - should NOT show toast immediately
+    fireEvent.change(passwordInput, { target: { value: 'weak' } });
+    await wait();
+    
+    expect(toastSpy).not.toHaveBeenCalled();
+    
+    // Only when clicking update button
+    const updateButton = screen.getByTestId('updateUserBtn');
+    fireEvent.click(updateButton);
+    
+    await wait();
+    
+    expect(toastSpy).toHaveBeenCalledWith(expect.stringContaining('Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character.'));
+  });
+
+  it('should allow update with valid password meeting all requirements', async () => {
+    await act(async () => {
+      render(
+        <BrowserRouter>
+          <MockedProvider link={link1}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </MockedProvider>
+        </BrowserRouter>,
+      );
+    });
+
+    await wait();
+
+    const passwordInput = screen.getByTestId('inputPassword');
+    
+    // Type valid password
+    fireEvent.change(passwordInput, { target: { value: 'ValidPass123!' } });
+    await wait();
+    
+    // Should not show any validation errors
+    expect(toast.warn).not.toHaveBeenCalled();
+  });
+
+  it('should show real-time visual feedback for password requirements', async () => {
+    await act(async () => {
+      render(
+        <BrowserRouter>
+          <MockedProvider link={link1}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Settings />
+              </I18nextProvider>
+            </Provider>
+          </MockedProvider>
+        </BrowserRouter>,
+      );
+    });
+
+    await wait();
+
+    const passwordInput = screen.getByTestId('inputPassword');
+    
+    fireEvent.focus(passwordInput);
+    await wait();
+    
+    // Type progressively to see visual feedback change
+    fireEvent.change(passwordInput, { target: { value: 'test' } });
+    await wait();
+    
+    // Should see checks being satisfied/unsatisfied in real-time
+    const lengthCheck = screen.getByText(/atleast_8_char_long/i).closest('p');
+    expect(lengthCheck).toHaveClass('text-danger'); // Less than 8 chars
+    
+    fireEvent.change(passwordInput, { target: { value: 'TestPass123!' } });
+    await wait();
+    
+    const lengthCheckAfter = screen.getByText(/atleast_8_char_long/i).closest('p');
+    expect(lengthCheckAfter).toHaveClass('text-success'); // 8+ chars now
+  });
+});

@@ -33,7 +33,7 @@
     "successfullyRegistered": "Successfully Registered. Please wait until you will be approved.",
     "lowercase_check": "Atleast one lowercase letter",
     "uppercase_check": "Atleast one uppercase letter",
-    "numeric_value_check": "Atleaset one numeric value",
+    "numeric_value_check": "Atleast one numeric value",
     "special_char_check": "Atleast one special character",
     "selectOrg": "Select an organization",
     "afterRegister": "Successfully registered. Please wait for admin to approve your request.",
@@ -1199,7 +1199,7 @@
     "password_invalid": "Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character",
     "lowercase_check": "Atleast one lowercase letter",
     "uppercase_check": "Atleast one uppercase letter",
-    "numeric_value_check": "Atleaset one numeric value",
+    "numeric_value_check": "Atleast one numeric value",
     "special_char_check": "Atleast one special character",
     "atleast_8_char_long": "Atleast 8 Character long",
     "phoneNumber": "Phone Number",
@@ -1269,7 +1269,9 @@
     "city": "City",
     "description": "Description",
     "enterDescription": "Enter Description",
-    "enterNewPassword": "Enter New Password"
+    "enterNewPassword": "Enter New Password",
+    "validationPassed": "Validation Passed",
+    "validationFailed": "Validation Failed"
   },
   "donate": {
     "title": "Donations",

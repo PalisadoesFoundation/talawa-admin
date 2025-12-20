@@ -1201,6 +1201,7 @@
     "uppercase_check": "कम से कम एक बड़ा अक्षर",
     "numeric_value_check": "कम से कम एक संख्या",
     "special_char_check": "कम से कम एक विशेष अक्षर",
+    "atleast_8_char_long": "कम से कम 8 अक्षर लंबे",
     "phoneNumber": "फ़ोन नंबर",
     "chooseFile": "फाइलें चुनें",
     "birthDate": "जन्म तिथि",
@@ -1268,7 +1269,9 @@
     "city": "शहर",
     "description": "विवरण",
     "enterDescription": "विवरण दर्ज करें",
-    "enterNewPassword": "नया पासवर्ड दर्ज करें"
+    "enterNewPassword": "नया पासवर्ड दर्ज करें",
+    "validationPassed": "सत्यापन सफल",
+    "validationFailed": "सत्यापन असफल"
   },
   "donate": {
     "title": "दान",

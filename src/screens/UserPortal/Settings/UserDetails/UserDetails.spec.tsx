@@ -1,11 +1,34 @@
 import React, { act } from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import UserDetailsForm from './UserDetails';
 import { MOCKS, MOCKS1, MOCKS2, UPDATE_MOCK } from '../SettingsMocks';
 import { MockedProvider } from '@apollo/client/testing';
 import dayjs from 'dayjs';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
+
+const defaultUserDetails = {
+  name: 'Test User',
+  natalSex: 'MALE',
+  password: '',
+  emailAddress: 'test@example.com',
+  mobilePhoneNumber: '1234567890',
+  homePhoneNumber: '',
+  workPhoneNumber: '',
+  birthDate: '2000-01-01',
+  educationGrade: 'GRADE_1',
+  employmentStatus: 'UNEMPLOYED',
+  maritalStatus: 'SINGLE',
+  description: 'Test description',
+  addressLine1: '123 Test St',
+  addressLine2: '',
+  state: 'Test State',
+  countryCode: 'US',
+  city: 'Test City',
+  postalCode: '12345',
+};
 
 const handlerMocks = vi.hoisted(() => ({
   handleFieldChange: vi.fn(),
@@ -402,5 +425,433 @@ describe('UserDetailsForm', () => {
     expect(
       screen.getByText(`${mockTCommon('address')} :-`),
     ).toBeInTheDocument();
+  });
+});
+
+describe('UserDetailsForm - Password Validation Tests', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  const mockT = (key: string): string => key;
+  const mockTCommon = (key: string): string => key;
+
+  const renderComponent = (overrides = {}) => {
+    const props = {
+      userDetails: { ...defaultUserDetails, ...overrides },
+      handleFieldChange: handlerMocks.handleFieldChange,
+      isUpdated: true,
+      handleResetChanges: handlerMocks.handleResetChanges,
+      handleUpdateUserDetails: handlerMocks.handleResetChanges,
+      t: mockT,
+      tCommon: mockTCommon,
+    };
+
+    return render(
+      <I18nextProvider i18n={i18nForTest}>
+        <UserDetailsForm {...props} />
+      </I18nextProvider>,
+    );
+  };
+
+  describe('Password Input Rendering', () => {
+    it('should render password input field', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+      expect(passwordInput).toBeInTheDocument();
+      expect(passwordInput).toHaveAttribute('type', 'password');
+    });
+
+    it('should render password visibility toggle button', () => {
+      renderComponent();
+      const toggleButton = screen.getByTestId('showPassword');
+      expect(toggleButton).toBeInTheDocument();
+    });
+
+    it('should have correct placeholder text', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+      expect(passwordInput).toHaveAttribute('placeholder', 'enterNewPassword');
+    });
+  });
+
+  describe('Password Visibility Toggle', () => {
+    it('should toggle password visibility when clicking show/hide button', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+      const toggleButton = screen.getByTestId('showPassword');
+
+      // Initially password should be hidden
+      expect(passwordInput).toHaveAttribute('type', 'password');
+
+      // Click to show password
+      fireEvent.click(toggleButton);
+      expect(passwordInput).toHaveAttribute('type', 'text');
+
+      // Click to hide password again
+      fireEvent.click(toggleButton);
+      expect(passwordInput).toHaveAttribute('type', 'password');
+    });
+  });
+
+  describe('Password Validation UI Display', () => {
+    it('should not show validation messages when input is not focused', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      // Type password without focusing
+      fireEvent.change(passwordInput, { target: { value: 'test' } });
+
+      // Validation messages should not be visible
+      expect(screen.queryByText('atleast_8_char_long')).not.toBeInTheDocument();
+      expect(screen.queryByText('lowercase_check')).not.toBeInTheDocument();
+    });
+
+    it('should show validation messages when input is focused', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      // Focus the input
+      fireEvent.focus(passwordInput);
+
+      // All validation messages should be visible
+      expect(screen.getByText('atleast_8_char_long')).toBeInTheDocument();
+      expect(screen.getByText('lowercase_check')).toBeInTheDocument();
+      expect(screen.getByText('uppercase_check')).toBeInTheDocument();
+      expect(screen.getByText('numeric_value_check')).toBeInTheDocument();
+      expect(screen.getByText('special_char_check')).toBeInTheDocument();
+    });
+
+    it('should hide validation messages when input loses focus', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      // Focus and then blur
+      fireEvent.focus(passwordInput);
+      expect(screen.getByText('atleast_8_char_long')).toBeInTheDocument();
+
+      fireEvent.blur(passwordInput);
+      expect(screen.queryByText('atleast_8_char_long')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Length Validation', () => {
+    it('should show error (red with Clear icon) when password is less than 8 characters', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.focus(passwordInput);
+      fireEvent.change(passwordInput, { target: { value: 'Test1!' } }); // 6 chars
+
+      const lengthCheck = screen.getByText('atleast_8_char_long').closest('p');
+      expect(lengthCheck).toHaveClass('text-danger');
+    });
+
+    it('should show success (green with Check icon) when password is 8 or more characters', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.focus(passwordInput);
+      fireEvent.change(passwordInput, { target: { value: 'Test123!' } }); // 8 chars
+
+      const lengthCheck = screen.getByText('atleast_8_char_long').closest('p');
+      expect(lengthCheck).toHaveClass('text-success');
+    });
+  });
+
+  describe('Lowercase Character Validation', () => {
+    it('should show error when password has no lowercase characters', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.focus(passwordInput);
+      fireEvent.change(passwordInput, { target: { value: 'TEST123!' } });
+
+      const lowercaseCheck = screen.getByText('lowercase_check').closest('p');
+      expect(lowercaseCheck).toHaveClass('text-danger');
+    });
+
+    it('should show success when password has lowercase characters', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.focus(passwordInput);
+      fireEvent.change(passwordInput, { target: { value: 'Test123!' } });
+
+      const lowercaseCheck = screen.getByText('lowercase_check').closest('p');
+      expect(lowercaseCheck).toHaveClass('text-success');
+    });
+  });
+
+  describe('Uppercase Character Validation', () => {
+    it('should show error when password has no uppercase characters', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.focus(passwordInput);
+      fireEvent.change(passwordInput, { target: { value: 'test123!' } });
+
+      const uppercaseCheck = screen.getByText('uppercase_check').closest('p');
+      expect(uppercaseCheck).toHaveClass('text-danger');
+    });
+
+    it('should show success when password has uppercase characters', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.focus(passwordInput);
+      fireEvent.change(passwordInput, { target: { value: 'Test123!' } });
+
+      const uppercaseCheck = screen.getByText('uppercase_check').closest('p');
+      expect(uppercaseCheck).toHaveClass('text-success');
+    });
+  });
+
+  describe('Numeric Value Validation', () => {
+    it('should show error when password has no numeric characters', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.focus(passwordInput);
+      fireEvent.change(passwordInput, { target: { value: 'TestPass!' } });
+
+      const numericCheck = screen.getByText('numeric_value_check').closest('p');
+      expect(numericCheck).toHaveClass('text-danger');
+    });
+
+    it('should show success when password has numeric characters', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.focus(passwordInput);
+      fireEvent.change(passwordInput, { target: { value: 'Test123!' } });
+
+      const numericCheck = screen.getByText('numeric_value_check').closest('p');
+      expect(numericCheck).toHaveClass('text-success');
+    });
+  });
+
+  describe('Special Character Validation', () => {
+    it('should show error when password has no special characters', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.focus(passwordInput);
+      fireEvent.change(passwordInput, { target: { value: 'Test1234' } });
+
+      const specialCharCheck = screen.getByText('special_char_check').closest('p');
+      expect(specialCharCheck).toHaveClass('text-danger');
+    });
+
+    it('should show success when password has special characters', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.focus(passwordInput);
+      fireEvent.change(passwordInput, { target: { value: 'Test123!' } });
+
+      const specialCharCheck = screen.getByText('special_char_check').closest('p');
+      expect(specialCharCheck).toHaveClass('text-success');
+    });
+
+    it('should accept various special characters', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      const specialChars = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '{', '}', '[', ']', ':', ';', '<', '>', ',', '.', '?', '~', '\\', '/', '-'];
+
+      specialChars.forEach((char) => {
+        fireEvent.focus(passwordInput);
+        fireEvent.change(passwordInput, { target: { value: `Test123${char}` } });
+
+        const specialCharCheck = screen.getByText('special_char_check').closest('p');
+        expect(specialCharCheck).toHaveClass('text-success');
+
+        // Reset for next iteration
+        fireEvent.blur(passwordInput);
+      });
+    });
+  });
+
+  describe('Combined Validation States', () => {
+    it('should show all checks as failed for empty password', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.focus(passwordInput);
+      fireEvent.change(passwordInput, { target: { value: '' } });
+
+      expect(screen.getByText('atleast_8_char_long').closest('p')).toHaveClass('text-danger');
+      expect(screen.getByText('lowercase_check').closest('p')).toHaveClass('text-danger');
+      expect(screen.getByText('uppercase_check').closest('p')).toHaveClass('text-danger');
+      expect(screen.getByText('numeric_value_check').closest('p')).toHaveClass('text-danger');
+      expect(screen.getByText('special_char_check').closest('p')).toHaveClass('text-danger');
+    });
+
+    it('should show all checks as passed for valid password', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.focus(passwordInput);
+      fireEvent.change(passwordInput, { target: { value: 'ValidPass123!' } });
+
+      expect(screen.getByText('atleast_8_char_long').closest('p')).toHaveClass('text-success');
+      expect(screen.getByText('lowercase_check').closest('p')).toHaveClass('text-success');
+      expect(screen.getByText('uppercase_check').closest('p')).toHaveClass('text-success');
+      expect(screen.getByText('numeric_value_check').closest('p')).toHaveClass('text-success');
+      expect(screen.getByText('special_char_check').closest('p')).toHaveClass('text-success');
+    });
+
+    it('should show mixed validation states correctly', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.focus(passwordInput);
+      // Password with uppercase, lowercase, and length but no number or special char
+      fireEvent.change(passwordInput, { target: { value: 'TestPassword' } });
+
+      expect(screen.getByText('atleast_8_char_long').closest('p')).toHaveClass('text-success');
+      expect(screen.getByText('lowercase_check').closest('p')).toHaveClass('text-success');
+      expect(screen.getByText('uppercase_check').closest('p')).toHaveClass('text-success');
+      expect(screen.getByText('numeric_value_check').closest('p')).toHaveClass('text-danger');
+      expect(screen.getByText('special_char_check').closest('p')).toHaveClass('text-danger');
+    });
+  });
+
+  describe('Real-time Validation Updates', () => {
+    it('should update validation states as user types', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.focus(passwordInput);
+
+      // Start typing - no validation passes
+      fireEvent.change(passwordInput, { target: { value: 't' } });
+      expect(screen.getByText('lowercase_check').closest('p')).toHaveClass('text-success');
+      expect(screen.getByText('uppercase_check').closest('p')).toHaveClass('text-danger');
+
+      // Add uppercase
+      fireEvent.change(passwordInput, { target: { value: 'tT' } });
+      expect(screen.getByText('uppercase_check').closest('p')).toHaveClass('text-success');
+
+      // Add number
+      fireEvent.change(passwordInput, { target: { value: 'tT1' } });
+      expect(screen.getByText('numeric_value_check').closest('p')).toHaveClass('text-success');
+
+      // Add special char
+      fireEvent.change(passwordInput, { target: { value: 'tT1!' } });
+      expect(screen.getByText('special_char_check').closest('p')).toHaveClass('text-success');
+
+      // Extend to 8+ chars
+      fireEvent.change(passwordInput, { target: { value: 'tT1!abcd' } });
+      expect(screen.getByText('atleast_8_char_long').closest('p')).toHaveClass('text-success');
+    });
+  });
+
+  describe('Password Field Integration', () => {
+    it('should call handleFieldChange when password is changed', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.change(passwordInput, { target: { value: 'NewPassword123!' } });
+
+      expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith('password', 'NewPassword123!');
+    });
+
+    it('should trigger validation on every password change', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.focus(passwordInput);
+
+      // Type multiple characters
+      const passwords = ['T', 'Te', 'Tes', 'Test', 'Test1', 'Test12', 'Test123', 'Test123!'];
+
+      passwords.forEach((password) => {
+        fireEvent.change(passwordInput, { target: { value: password } });
+        expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith('password', password);
+      });
+
+      expect(handlerMocks.handleFieldChange).toHaveBeenCalledTimes(passwords.length);
+    });
+  });
+
+  describe('Accessibility and UI Elements', () => {
+    it('should display Check icon for passed validations', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.focus(passwordInput);
+      fireEvent.change(passwordInput, { target: { value: 'ValidPass123!' } });
+
+      const checkIcons = screen.getAllByTestId('CheckIcon');
+      expect(checkIcons.length).toBeGreaterThan(0);
+    });
+
+    it('should display Clear icon for failed validations', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.focus(passwordInput);
+      fireEvent.change(passwordInput, { target: { value: 'weak' } });
+
+      const clearIcons = screen.getAllByTestId('ClearIcon');
+      expect(clearIcons.length).toBeGreaterThan(0);
+    });
+
+    it('should maintain password value across focus/blur cycles', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.change(passwordInput, { target: { value: 'Test123!' } });
+      expect(passwordInput).toHaveValue('Test123!');
+
+      fireEvent.focus(passwordInput);
+      expect(passwordInput).toHaveValue('Test123!');
+
+      fireEvent.blur(passwordInput);
+      expect(passwordInput).toHaveValue('Test123!');
+    });
+  });
+
+  describe('Edge Cases', () => {
+    it('should handle very long passwords correctly', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.focus(passwordInput);
+      const longPassword = 'A'.repeat(50) + 'a1!';
+      fireEvent.change(passwordInput, { target: { value: longPassword } });
+
+      expect(screen.getByText('atleast_8_char_long').closest('p')).toHaveClass('text-success');
+    });
+
+    it('should handle password with only spaces correctly', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.focus(passwordInput);
+      fireEvent.change(passwordInput, { target: { value: '        ' } });
+
+      expect(screen.getByText('lowercase_check').closest('p')).toHaveClass('text-danger');
+      expect(screen.getByText('uppercase_check').closest('p')).toHaveClass('text-danger');
+      expect(screen.getByText('numeric_value_check').closest('p')).toHaveClass('text-danger');
+      expect(screen.getByText('special_char_check').closest('p')).toHaveClass('text-danger');
+    });
+
+    it('should handle Unicode characters appropriately', () => {
+      renderComponent();
+      const passwordInput = screen.getByTestId('inputPassword');
+
+      fireEvent.focus(passwordInput);
+      fireEvent.change(passwordInput, { target: { value: 'Tëst123!' } });
+
+      // Should still validate correctly
+      expect(screen.getByText('atleast_8_char_long').closest('p')).toHaveClass('text-success');
+    });
   });
 });

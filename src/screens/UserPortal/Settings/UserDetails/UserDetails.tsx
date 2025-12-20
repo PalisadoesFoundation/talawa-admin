@@ -86,6 +86,20 @@ interface InterfaceUserDetailsFormProps {
   tCommon: (key: string) => string;
 }
 
+type PasswordValidation = {
+  lowercaseChar: boolean;
+  uppercaseChar: boolean;
+  numericValue: boolean;
+  specialChar: boolean;
+};
+
+const PASSWORD_VALIDATION_PATTERNS  = {
+  lowercaseCharRegExp: new RegExp('[a-z]'),
+  uppercaseCharRegExp: new RegExp('[A-Z]'),
+  numericalValueRegExp: new RegExp('\\d'),
+  specialCharRegExp: new RegExp('[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-]'),
+};
+
 const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
   userDetails,
   handleFieldChange,
@@ -95,12 +109,6 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
   t,
   tCommon,
 }) => {
-  type PasswordValidation = {
-    lowercaseChar: boolean;
-    uppercaseChar: boolean;
-    numericValue: boolean;
-    specialChar: boolean;
-  };
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
@@ -114,19 +122,12 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
 
   const togglePassword = (): void => setShowPassword(!showPassword);
 
-  const passwordValidationRegExp = {
-    lowercaseCharRegExp: new RegExp('[a-z]'),
-    uppercaseCharRegExp: new RegExp('[A-Z]'),
-    numericalValueRegExp: new RegExp('\\d'),
-    specialCharRegExp: new RegExp('[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-]'),
-  };
-
   const handlePasswordCheck = (pass: string): void => {
     setShowAlert({
-      lowercaseChar: !passwordValidationRegExp.lowercaseCharRegExp.test(pass),
-      uppercaseChar: !passwordValidationRegExp.uppercaseCharRegExp.test(pass),
-      numericValue: !passwordValidationRegExp.numericalValueRegExp.test(pass),
-      specialChar: !passwordValidationRegExp.specialCharRegExp.test(pass),
+      lowercaseChar: !PASSWORD_VALIDATION_PATTERNS.lowercaseCharRegExp.test(pass),
+      uppercaseChar: !PASSWORD_VALIDATION_PATTERNS.uppercaseCharRegExp.test(pass),
+      numericValue: !PASSWORD_VALIDATION_PATTERNS.numericalValueRegExp.test(pass),
+      specialChar: !PASSWORD_VALIDATION_PATTERNS.specialCharRegExp.test(pass)
     });
   };
 
@@ -219,11 +220,11 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
                     >
                       {pass.length >= 0 && pass.length < 8 ? (
                         <span>
-                          <Clear />
+                          <Clear aria-label={t('validationFailed')} />
                         </span>
                       ) : (
                         <span>
-                          <Check />
+                          <Check aria-label={t('validationPassed')} />
                         </span>
                       )}
                       {t('atleast_8_char_long')}
@@ -235,11 +236,11 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
                     >
                       {showAlert.lowercaseChar ? (
                         <span>
-                          <Clear />
+                          <Clear aria-label={t('validationFailed')} />
                         </span>
                       ) : (
                         <span>
-                          <Check />
+                          <Check aria-label={t('validationPassed')} />
                         </span>
                       )}
                       {t('lowercase_check')}
@@ -251,11 +252,11 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
                     >
                       {showAlert.uppercaseChar ? (
                         <span>
-                          <Clear />
+                          <Clear aria-label={t('validationFailed')} />
                         </span>
                       ) : (
                         <span>
-                          <Check />
+                          <Check aria-label={t('validationPassed')} />
                         </span>
                       )}
                       {t('uppercase_check')}
@@ -267,11 +268,11 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
                     >
                       {showAlert.numericValue ? (
                         <span>
-                          <Clear />
+                          <Clear aria-label={t('validationFailed')} />
                         </span>
                       ) : (
                         <span>
-                          <Check />
+                          <Check aria-label={t('validationPassed')} />
                         </span>
                       )}
                       {t('numeric_value_check')}
@@ -283,11 +284,11 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
                     >
                       {showAlert.specialChar ? (
                         <span>
-                          <Clear />
+                          <Clear aria-label={t('validationFailed')} />
                         </span>
                       ) : (
                         <span>
-                          <Check />
+                          <Check aria-label={t('validationPassed')} />
                         </span>
                       )}
                       {t('special_char_check')}
