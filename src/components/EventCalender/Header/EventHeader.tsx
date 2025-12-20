@@ -67,7 +67,7 @@ function EventHeader({
             showSearchButton={true}
             showLeadingIcon={true}
             showClearButton={true}
-            buttonAriaLabel={tCommon('search')}
+            buttonAriaLabel={t('search')}
           />
         </div>
 
