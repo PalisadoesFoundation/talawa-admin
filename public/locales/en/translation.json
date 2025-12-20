@@ -178,7 +178,7 @@
     "sampleOrgSuccess": "Sample Organization Successfully Created",
     "name": "name",
     "email": "email",
-    "searchByName": "searchByName",
+    "searchByName": "Search by Name",
     "searchOrganizations": "Search Organization",
     "description": "description",
     "location": "location",
@@ -243,7 +243,7 @@
     "unblockUserFrom": "Unblock User from {{org}}",
     "removeConfirmation": "Are you sure you want to remove '{{name}}' from organization '{{org}}'?",
     "unblockConfirmation": "Are you sure you want to unblock '{{name}}' from organization '{{org}}'?",
-    "searchByName": "searchByName",
+    "searchByName": "Search by Name",
     "users": "users",
     "name": "name",
     "email": "email",
@@ -313,7 +313,6 @@
     "createUser": "Create User",
     "people": "People",
     "sort": "Search by Role",
-    "actions": "Actions",
     "addMembers": "Add Members",
     "existingUser": "Existing User",
     "newUser": "New User",
@@ -337,7 +336,9 @@
     "create": "create",
     "cancel": "cancel",
     "user": "user",
-    "profile": "profile"
+    "actions": "Actions",
+    "profile": "Profile",
+    "notFound": "No Members Found"
   },
   "organizationTags": {
     "title": "Organization Tags",
@@ -356,7 +357,12 @@
     "removeUserTag": "Delete Tag",
     "removeUserTagMessage": "Do you want to delete this tag?",
     "addChildTag": "Add a Sub Tag",
-    "enterTagName": "Enter Tag Name"
+    "enterTagName": "Enter Tag Name",
+    "totalSubTags": "Total Sub Tags",
+    "totalAssignedUsers": "Total Assigned Users",
+    "tagCreationFailed": "Tag creation failed",
+    "errorLoadingTagsData": "Error occurred while loading Organization Tags Data",
+    "sortTags": "Sort Tags"
   },
   "manageTag": {
     "title": "Tag Details",
@@ -667,7 +673,10 @@
     "createdLatest": "Created Latest",
     "createdEarliest": "Created Earliest",
     "viewCampaigns": "View Campaigns",
-    "searchByName": "searchByName"
+    "searchByName": "Search by Name",
+    "assocCampaigns": "Associated Campaigns",
+    "errorLoadingFundsData": "Error loading funds data",
+    "editFund": "Edit Fund"
   },
   "fundCampaign": {
     "title": "Fundraising Campaigns",
@@ -1120,7 +1129,7 @@
     "organizations": "Organizations",
     "search": "search",
     "filter": "filter",
-    "searchByName": "searchByName",
+    "searchByName": "Search by Name",
     "searchOrganizations": "Search Organization"
   },
   "userSidebarOrg": {
