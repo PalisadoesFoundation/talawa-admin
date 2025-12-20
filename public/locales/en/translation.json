@@ -1196,6 +1196,12 @@
     "noeventsAttended": "No Events Attended",
     "profileSettings": "Profile Settings",
     "gender": "Gender",
+    "password_invalid": "Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character",
+    "lowercase_check": "Atleast one lowercase letter",
+    "uppercase_check": "Atleast one uppercase letter",
+    "numeric_value_check": "Atleaset one numeric value",
+    "special_char_check": "Atleast one special character",
+    "atleast_8_char_long": "Atleast 8 Character long",
     "phoneNumber": "Phone Number",
     "chooseFile": "Choose File",
     "birthDate": "Birth Date",
@@ -1262,7 +1268,8 @@
     "postalCode": "Postal Code",
     "city": "City",
     "description": "Description",
-    "enterDescription": "Enter Description"
+    "enterDescription": "Enter Description",
+    "enterNewPassword": "Enter New Password"
   },
   "donate": {
     "title": "Donations",

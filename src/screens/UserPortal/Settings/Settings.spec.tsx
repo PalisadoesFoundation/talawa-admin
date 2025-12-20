@@ -236,7 +236,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     });
     await wait();
     expect(toastSpy).toHaveBeenCalledWith(
-      'Password must be at least 8 characters long.',
+      'Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character.',
     );
 
     // Test strong password
@@ -245,7 +245,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     });
     await wait();
     expect(toastSpy).not.toHaveBeenCalledWith(
-      /Password must be at least 8 characters long./i,
+      /Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character./i,
     );
   });
 

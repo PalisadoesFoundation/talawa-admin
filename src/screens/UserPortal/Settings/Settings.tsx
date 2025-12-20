@@ -171,6 +171,11 @@ export default function Settings(): React.JSX.Element {
       ) as Partial<T>;
     }
 
+    if (!validatePassword(userDetails.password)) {
+      toast.warning(t('password_invalid'));
+      return;
+    }
+
     // If no new avatar is selected but there's an avatar URL, convert it to File
     let avatarFile: File | null = null;
     if (!selectedAvatar && userDetails.avatarURL) {
@@ -237,12 +242,12 @@ export default function Settings(): React.JSX.Element {
 
   const handleFieldChange = (fieldName: string, value: string): void => {
     // check if the password is strong or not
-    if (fieldName === 'password' && value) {
-      if (!validatePassword(value)) {
-        toast.error('Password must be at least 8 characters long.');
-        return;
-      }
-    }
+    // if (fieldName === 'password' && value) {
+    //   if (!validatePassword(value)) {
+    //     toast.error('Password must be at least 8 characters long.');
+    //     return;
+    //   }
+    // }
 
     setIsUpdated(true);
     setUserDetails((prevState) => ({ ...prevState, [fieldName]: value }));
