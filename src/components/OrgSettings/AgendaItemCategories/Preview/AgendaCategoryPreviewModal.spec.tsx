@@ -3,9 +3,6 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import AgendaCategoryPreviewModal from './AgendaCategoryPreviewModal';
 import { vi } from 'vitest';
 
-// Mock translation function
-const mockT = (key: string): string => key;
-
 describe('AgendaCategoryPreviewModal Component', () => {
   const mockOnClose = vi.fn();
   const mockShowUpdateModal = vi.fn();
@@ -28,7 +25,6 @@ describe('AgendaCategoryPreviewModal Component', () => {
         showUpdateModal={mockShowUpdateModal}
         toggleDeleteModal={mockToggleDeleteModal}
         formState={mockCategory}
-        t={mockT}
       />,
     );
 
@@ -45,7 +41,6 @@ describe('AgendaCategoryPreviewModal Component', () => {
         showUpdateModal={mockShowUpdateModal}
         toggleDeleteModal={mockToggleDeleteModal}
         formState={mockCategory}
-        t={mockT}
       />,
     );
 
@@ -60,7 +55,6 @@ describe('AgendaCategoryPreviewModal Component', () => {
         showUpdateModal={mockShowUpdateModal}
         toggleDeleteModal={mockToggleDeleteModal}
         formState={mockCategory}
-        t={mockT}
       />,
     );
 
@@ -80,7 +74,6 @@ describe('AgendaCategoryPreviewModal Component', () => {
         showUpdateModal={mockShowUpdateModal}
         toggleDeleteModal={mockToggleDeleteModal}
         formState={{ name: '', description: '', createdBy: '' }}
-        t={mockT}
       />,
     );
 
@@ -97,7 +90,6 @@ describe('AgendaCategoryPreviewModal Component', () => {
         showUpdateModal={mockShowUpdateModal}
         toggleDeleteModal={mockToggleDeleteModal}
         formState={mockCategory}
-        t={mockT}
       />,
     );
 
@@ -116,7 +108,6 @@ describe('AgendaCategoryPreviewModal Component', () => {
         showUpdateModal={mockShowUpdateModal}
         toggleDeleteModal={mockToggleDeleteModal}
         formState={mockCategory}
-        t={mockT}
       />,
     );
 
@@ -135,7 +126,6 @@ describe('AgendaCategoryPreviewModal Component', () => {
         showUpdateModal={mockShowUpdateModal}
         toggleDeleteModal={mockToggleDeleteModal}
         formState={mockCategory}
-        t={mockT}
       />,
     );
 

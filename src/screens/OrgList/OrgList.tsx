@@ -479,7 +479,6 @@ function orgList(): JSX.Element {
         formState={formState}
         setFormState={setFormState}
         createOrg={createOrg}
-        t={t}
         tCommon={tCommon}
         userData={userData}
       />

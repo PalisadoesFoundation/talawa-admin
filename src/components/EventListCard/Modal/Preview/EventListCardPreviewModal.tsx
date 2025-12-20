@@ -5,7 +5,6 @@
  * It provides functionality to view, update, and manage event properties such as
  * name, description, location, date, time, and visibility settings.
  *
- * @param  props - The props for the PreviewModal component.
  * @param eventModalIsOpen - Determines if the modal is open.
  * @param hideViewModal - Function to close the modal.
  * @param toggleDeleteModal - Function to toggle the delete confirmation modal.
@@ -36,6 +35,7 @@ import { Button, Form, Modal, Dropdown } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
+import { useTranslation } from 'react-i18next';
 import type { Dayjs } from 'dayjs';
 import {
   Frequency,
@@ -53,7 +53,6 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   eventModalIsOpen,
   hideViewModal,
   toggleDeleteModal,
-  t,
   tCommon,
   isRegistered,
   userId,
@@ -77,6 +76,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   customRecurrenceModalIsOpen,
   setCustomRecurrenceModalIsOpen,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'eventListCard' });
   const timeToDayJs = (time: string): Dayjs => {
     const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
     return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });

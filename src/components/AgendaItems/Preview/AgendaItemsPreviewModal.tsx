@@ -31,6 +31,7 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { FaLink } from 'react-icons/fa';
 import type { InterfaceAgendaItemsPreviewModalProps } from 'types/Agenda/interface';
+import { useTranslation } from 'react-i18next';
 const AgendaItemsPreviewModal: React.FC<
   InterfaceAgendaItemsPreviewModalProps
 > = ({
@@ -39,8 +40,10 @@ const AgendaItemsPreviewModal: React.FC<
   showUpdateModal,
   toggleDeleteModal,
   formState,
-  t,
 }) => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'agendaItems',
+  });
   /**
    * Renders the attachments preview.
    *

@@ -19,10 +19,6 @@ vi.mock('style/app-fixed.module.css', () => ({
 
 describe('EditUserTagModal Component', () => {
   // Properly typed mock translation functions
-  const mockT = vi.fn((key) => key) as unknown as TFunction<
-    'translation',
-    'manageTag'
-  >;
   const mockTCommon = vi.fn((key) => key) as unknown as TFunction<
     'common',
     undefined
@@ -35,7 +31,6 @@ describe('EditUserTagModal Component', () => {
     newTagName: 'Test Tag',
     setNewTagName: vi.fn(),
     handleEditUserTag: vi.fn().mockImplementation(() => Promise.resolve()),
-    t: mockT,
     tCommon: mockTCommon,
   };
 

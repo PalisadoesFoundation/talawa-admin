@@ -7,7 +7,6 @@
  * @param {boolean} props.removeUserTagModalIsOpen - Determines whether the modal is visible.
  * @param {() => void} props.toggleRemoveUserTagModal - Function to toggle the visibility of the modal.
  * @param {() => Promise<void>} props.handleRemoveUserTag - Async function to handle the removal of a user tag.
- * @param {TFunction<'translation', 'manageTag'>} props.t - Translation function for the "manageTag" namespace.
  * @param {TFunction<'common', undefined>} props.tCommon - Translation function for common terms.
  *
  * @returns {JSX.Element} The rendered modal component.
@@ -25,7 +24,6 @@
  *   removeUserTagModalIsOpen={true}
  *   toggleRemoveUserTagModal={handleToggle}
  *   handleRemoveUserTag={handleRemove}
- *   t={tFunction}
  *   tCommon={tCommonFunction}
  * />
  * ```
@@ -34,12 +32,12 @@ import type { TFunction } from 'i18next';
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
+import { useTranslation } from 'react-i18next';
 
 export interface InterfaceRemoveUserTagModalProps {
   removeUserTagModalIsOpen: boolean;
   toggleRemoveUserTagModal: () => void;
   handleRemoveUserTag: () => Promise<void>;
-  t: TFunction<'translation', 'manageTag'>;
   tCommon: TFunction<'common', undefined>;
 }
 
@@ -47,9 +45,12 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
   removeUserTagModalIsOpen,
   toggleRemoveUserTagModal,
   handleRemoveUserTag,
-  t,
   tCommon,
 }) => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'manageTag',
+  });
+
   return (
     <>
       <Modal

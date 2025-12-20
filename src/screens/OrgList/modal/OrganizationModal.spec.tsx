@@ -95,7 +95,6 @@ describe('OrganizationModal Component', () => {
               formState={formState}
               setFormState={mockSetFormState}
               createOrg={mockCreateOrg}
-              t={(key) => key}
               tCommon={(key) => key}
               userData={undefined}
             />
@@ -144,7 +143,6 @@ describe('OrganizationModal Component', () => {
               formState={validFormState}
               setFormState={mockSetFormState}
               createOrg={mockCreateOrg}
-              t={(key) => key}
               tCommon={(key) => key}
               userData={undefined}
             />
@@ -225,7 +223,6 @@ describe('OrganizationModal Component', () => {
               formState={validFormState}
               setFormState={mockSetFormState}
               createOrg={mockCreateOrg}
-              t={(key) => key}
               tCommon={(key) => key}
               userData={undefined}
             />
@@ -345,7 +342,6 @@ describe('OrganizationModal Component', () => {
                 formState={completeFormState}
                 setFormState={mockSetFormState}
                 createOrg={mockCreateOrg}
-                t={(key) => key}
                 tCommon={(key) => key}
                 userData={undefined}
               />
@@ -480,7 +476,6 @@ describe('OrganizationModal Component', () => {
               formState={formState}
               setFormState={mockSetFormState}
               createOrg={mockCreateOrg}
-              t={(key) => key}
               tCommon={(key) => key}
               userData={undefined}
             />
@@ -503,7 +498,6 @@ describe('OrganizationModal Component', () => {
               formState={formState}
               setFormState={mockSetFormState}
               createOrg={mockCreateOrg}
-              t={(key) => key}
               tCommon={(key) => key}
               userData={undefined}
             />
@@ -556,7 +550,6 @@ describe('OrganizationModal Component', () => {
               formState={validFormState}
               setFormState={mockSetFormState}
               createOrg={mockCreateOrg}
-              t={(key) => key}
               tCommon={(key) => key}
               userData={undefined}
             />

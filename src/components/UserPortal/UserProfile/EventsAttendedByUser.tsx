@@ -21,7 +21,6 @@
  * @param {string} props.userDetails.countryCode - The country code of the user.
  * @param {string} props.userDetails.avatarURL - The profile image URL of the user.
  * @param {Array<{id: string}>} props.userDetails.eventsAttended - The list of events attended by the user.
- * @param {(key: string) => string} props.t - The translation function for localization.
  *
  * @returns {React.FC} A React functional component that displays the events attended by the user.
  */
@@ -29,6 +28,7 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import styles from './common.module.css';
 import EventsAttendedByMember from 'components/MemberActivity/EventsAttendedByMember';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceUser {
   userDetails: {
@@ -54,12 +54,14 @@ interface InterfaceUser {
     postalCode: string;
     eventsAttended?: { id: string }[];
   };
-  t: (key: string) => string;
 }
 export const EventsAttendedByUser: React.FC<InterfaceUser> = ({
   userDetails,
-  t,
 }) => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'settings',
+  });
+
   return (
     <Card border="0" className="rounded-4 mb-4">
       <div className={`${styles.cardHeader}`}>

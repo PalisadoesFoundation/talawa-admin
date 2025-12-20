@@ -13,7 +13,6 @@
  * @param {object} props.formState - The current state of the form.
  * @param {React.Dispatch<React.SetStateAction<object>>} props.setFormState - Function to update the form state.
  * @param {() => void} props.createAgendaItemHandler - Function to handle form submission.
- * @param {(key: string) => string} props.t - Translation function for localization.
  * @param {InterfaceAgendaItemCategoryInfo[]} props.agendaItemCategories - List of available agenda item categories.
  *
  * @returns {JSX.Element} The rendered modal component.
@@ -40,7 +39,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
 import { Autocomplete, TextField } from '@mui/material';
-
+import { useTranslation } from 'react-i18next';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import styles from '../../../style/app-fixed.module.css';
@@ -55,10 +54,12 @@ const AgendaItemsCreateModal: React.FC<
   formState,
   setFormState,
   createAgendaItemHandler,
-  t,
   agendaItemCategories,
 }) => {
   const [newUrl, setNewUrl] = useState('');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'agendaItems',
+  });
 
   useEffect(() => {
     // Ensure URLs and attachments do not have empty or invalid entries

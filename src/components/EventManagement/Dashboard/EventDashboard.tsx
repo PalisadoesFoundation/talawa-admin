@@ -40,8 +40,9 @@ import useLocalStorage from 'utils/useLocalstorage';
 
 const EventDashboard = (props: { eventId: string }): JSX.Element => {
   const { eventId } = props;
-  const { t } = useTranslation(['translation', 'common']);
-  const tEventList = (key: string): string => t(`eventListCard.${key}`);
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventManagement',
+  });
 
   const [eventModalIsOpen, setEventModalIsOpen] = useState(false);
 
@@ -123,7 +124,6 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
           eventListCardProps={eventListCardProps}
           eventModalIsOpen={eventModalIsOpen}
           hideViewModal={hideViewModal}
-          t={tEventList}
           tCommon={t}
         />
         <div className="d-flex px-6" data-testid="event-stats">

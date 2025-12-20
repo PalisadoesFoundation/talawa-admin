@@ -333,7 +333,7 @@ export default function Settings(): React.JSX.Element {
             <Col lg={5}>
               <OtherSettings />
               <Card border="0" className="rounded-4 mb-4"></Card>
-              <EventsAttendedByUser userDetails={userDetails} t={t} />
+              <EventsAttendedByUser userDetails={userDetails} />
             </Col>
           </Row>
         </div>

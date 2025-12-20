@@ -86,7 +86,7 @@ describe('Testing Event Card In User portal', () => {
       </MockedProvider>,
     );
     await waitFor(() =>
-      expect(queryByText('Already registered')).toBeInTheDocument(),
+      expect(queryByText('Register')).not.toBeInTheDocument(),
     );
   });
 

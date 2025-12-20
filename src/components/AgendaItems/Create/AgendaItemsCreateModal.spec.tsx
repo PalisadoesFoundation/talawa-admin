@@ -11,13 +11,13 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
+import { ToastContainer, toast } from 'react-toastify';
 import i18nForTest from 'utils/i18nForTest';
 
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import AgendaItemsCreateModal from './AgendaItemsCreateModal';
-import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 import type { MockedFunction } from 'vitest';
 import { describe, test, expect, vi } from 'vitest';
@@ -28,12 +28,16 @@ let mockSetFormState: ReturnType<typeof vi.fn>;
 let mockCreateAgendaItemHandler: ReturnType<typeof vi.fn>;
 const mockT = (key: string): string => key;
 
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
-}));
+vi.mock('react-toastify', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-toastify')>();
+  return {
+    ...actual,
+    toast: {
+      success: vi.fn(),
+      error: vi.fn(),
+    },
+  };
+});
 vi.mock('utils/convertToBase64');
 let mockedConvertToBase64: MockedFunction<typeof convertToBase64>;
 
@@ -112,15 +116,15 @@ describe('AgendaItemsCreateModal', () => {
       </MockedProvider>,
     );
 
-    fireEvent.change(screen.getByLabelText('title'), {
+    fireEvent.change(screen.getByLabelText(/title/i), {
       target: { value: 'New title' },
     });
 
-    fireEvent.change(screen.getByLabelText('description'), {
+    fireEvent.change(screen.getByLabelText(/description/i), {
       target: { value: 'New description' },
     });
 
-    fireEvent.change(screen.getByLabelText('duration'), {
+    fireEvent.change(screen.getByLabelText(/duration/i), {
       target: { value: '30' },
     });
 
@@ -220,7 +224,7 @@ describe('AgendaItemsCreateModal', () => {
     fireEvent.click(linkBtn);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('invalidUrl');
+      expect(toast.error).toHaveBeenCalledWith('Please enter a valid URL');
     });
   });
 
@@ -231,6 +235,7 @@ describe('AgendaItemsCreateModal', () => {
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <ToastContainer />
                 <AgendaItemsCreateModal
                   agendaItemCreateModalIsOpen
                   hideCreateModal={mockHideCreateModal}
@@ -260,7 +265,9 @@ describe('AgendaItemsCreateModal', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('fileSizeExceedsLimit');
+      expect(toast.error).toHaveBeenCalledWith(
+        'File size exceeds the limit which is 10MB',
+      );
     });
   });
 

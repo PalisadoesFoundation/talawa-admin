@@ -104,15 +104,15 @@ describe('AgendaItemsUpdateModal', () => {
       </MockedProvider>,
     );
 
-    fireEvent.change(screen.getByLabelText('title'), {
+    fireEvent.change(screen.getByLabelText(/title/i), {
       target: { value: 'New title' },
     });
 
-    fireEvent.change(screen.getByLabelText('description'), {
+    fireEvent.change(screen.getByLabelText(/description/i), {
       target: { value: 'New description' },
     });
 
-    fireEvent.change(screen.getByLabelText('duration'), {
+    fireEvent.change(screen.getByLabelText(/duration/i), {
       target: { value: '30' },
     });
 
@@ -213,7 +213,7 @@ describe('AgendaItemsUpdateModal', () => {
     fireEvent.click(linkBtn);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('invalidUrl');
+      expect(toast.error).toHaveBeenCalledWith('Please enter a valid URL');
     });
   });
 
@@ -253,7 +253,9 @@ describe('AgendaItemsUpdateModal', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('fileSizeExceedsLimit');
+      expect(toast.error).toHaveBeenCalledWith(
+        'File size exceeds the limit which is 10MB',
+      );
     });
   });
 
@@ -411,7 +413,7 @@ describe('AgendaItemsUpdateModal', () => {
     fireEvent.click(linkBtn);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('invalidUrl');
+      expect(toast.error).toHaveBeenCalledWith('Please enter a valid URL');
     });
 
     // Test whitespace-only URL
@@ -419,7 +421,7 @@ describe('AgendaItemsUpdateModal', () => {
     fireEvent.click(linkBtn);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('invalidUrl');
+      expect(toast.error).toHaveBeenCalledWith('Please enter a valid URL');
     });
   });
 

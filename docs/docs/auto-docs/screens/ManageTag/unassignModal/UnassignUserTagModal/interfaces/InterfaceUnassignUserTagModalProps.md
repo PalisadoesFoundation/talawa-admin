@@ -20,22 +20,6 @@ Defined in: [src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx:39](ht
 
 ***
 
-### t
-
-> **t**: `TFunction`\<`"translation"`, `"manageTag"` \| `"memberDetail"`\>
-
-Defined in: [src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx#L40)
-
-***
-
-### tCommon
-
-> **tCommon**: `TFunction`\<`"common"`, `undefined`\>
-
-Defined in: [src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx#L41)
-
-***
-
 ### toggleUnassignUserTagModal()
 
 > **toggleUnassignUserTagModal**: () => `void`

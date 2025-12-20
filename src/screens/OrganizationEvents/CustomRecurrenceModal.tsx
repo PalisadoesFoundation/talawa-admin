@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, Form, FormControl, Modal } from 'react-bootstrap';
 import styles from '../../style/app-fixed.module.css';
 import { DatePicker } from '@mui/x-date-pickers';
+import { useTranslation } from 'react-i18next';
 import {
   Days,
   Frequency,
@@ -56,9 +57,11 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
   customRecurrenceModalIsOpen,
   hideCustomRecurrenceModal,
   setCustomRecurrenceModalIsOpen,
-  t,
   startDate,
 }) => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationEvents',
+  });
   const { frequency, byDay, interval = 1, count, never } = recurrenceRuleState;
   const [selectedRecurrenceEndOption, setSelectedRecurrenceEndOption] =
     useState<RecurrenceEndOptionType>(() => {

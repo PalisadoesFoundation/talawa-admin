@@ -28,7 +28,7 @@
  * />
  * ```
  */
-import type { TFunction } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
@@ -37,17 +37,24 @@ export interface InterfaceUnassignUserTagModalProps {
   unassignUserTagModalIsOpen: boolean;
   toggleUnassignUserTagModal: () => void;
   handleUnassignUserTag: () => Promise<void>;
-  t: TFunction<'translation', 'manageTag' | 'memberDetail'>;
-  tCommon: TFunction<'common', undefined>;
+  // t: TFunction<'translation', 'manageTag' | 'memberDetail'>;
+  // tCommon: TFunction<'common', undefined>;
 }
 
 const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
   unassignUserTagModalIsOpen,
   toggleUnassignUserTagModal,
   handleUnassignUserTag,
-  t,
-  tCommon,
 }) => {
+  const { t: tManage } = useTranslation('translation', {
+    keyPrefix: 'manageTag',
+  });
+
+  const { t: tMember } = useTranslation('translation', {
+    keyPrefix: 'memberDetail',
+  });
+
+  const { t: tCommon } = useTranslation('common');
   return (
     <>
       <Modal
@@ -63,13 +70,13 @@ const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
         <Modal.Header
           closeButton
           className={styles.modalHeader}
-          aria-label={t('closeModal')}
+          aria-label={tManage('closeModal')}
         >
           <Modal.Title className="text-white" id={`unassignTag`}>
-            {t('unassignUserTag')}
+            {tManage('unassignUserTag')}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>{t('unassignUserTagMessage')}</Modal.Body>
+        <Modal.Body>{tMember('unassignUserTagMessage')}</Modal.Body>
         <Modal.Footer>
           <Button
             type="button"

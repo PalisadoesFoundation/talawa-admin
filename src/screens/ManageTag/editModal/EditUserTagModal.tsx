@@ -12,7 +12,6 @@
  * @param {string} props.newTagName - The current value of the tag name input field.
  * @param {(state: React.SetStateAction<string>) => void} props.setNewTagName - Function to update the tag name state.
  * @param {(e: FormEvent<HTMLFormElement>) => Promise<void>} props.handleEditUserTag - Function to handle the form submission for editing the tag.
- * @param {TFunction<'translation', 'manageTag'>} props.t - Translation function for the "manageTag" namespace.
  * @param {TFunction<'common', undefined>} props.tCommon - Translation function for common terms.
  *
  * @returns {React.FC} A React functional component that renders the edit user tag modal.
@@ -35,6 +34,7 @@ import type { FormEvent } from 'react';
 import React from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
+import { useTranslation } from 'react-i18next';
 
 export interface InterfaceEditUserTagModalProps {
   editUserTagModalIsOpen: boolean;
@@ -42,7 +42,6 @@ export interface InterfaceEditUserTagModalProps {
   newTagName: string;
   setNewTagName: (state: React.SetStateAction<string>) => void;
   handleEditUserTag: (e: FormEvent<HTMLFormElement>) => Promise<void>;
-  t: TFunction<'translation', 'manageTag'>;
   tCommon: TFunction<'common', undefined>;
 }
 
@@ -52,9 +51,11 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
   newTagName,
   handleEditUserTag,
   setNewTagName,
-  t,
   tCommon,
 }) => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'manageTag',
+  });
   return (
     <>
       <Modal

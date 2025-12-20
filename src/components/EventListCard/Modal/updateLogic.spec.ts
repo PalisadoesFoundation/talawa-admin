@@ -1,3 +1,10 @@
+vi.mock('react-i18next', () => ({
+  useTranslation: (_ns?: string, options?: { keyPrefix?: string }) => ({
+    t: (key: string) =>
+      options?.keyPrefix ? `${options.keyPrefix}.${key}` : key,
+  }),
+}));
+
 import { vi, describe, it, expect, beforeEach, Mock } from 'vitest';
 import { useUpdateEventHandler } from './updateLogic';
 import { useMutation } from '@apollo/client';
@@ -35,7 +42,6 @@ vi.mock('utils/errorHandler', async () => ({
 }));
 
 const mockUseMutation = useMutation as Mock;
-const mockT = (key: string) => key;
 
 type MockEventListCardProps = InterfaceEvent;
 
@@ -98,7 +104,6 @@ const buildHandlerInput = (overrides: HandlerOverrides = {}): HandlerArgs => ({
   recurrence: null as InterfaceRecurrenceRule | null,
   updateOption: 'single',
   hasRecurrenceChanged: false,
-  t: mockT,
   hideViewModal: vi.fn(),
   setEventUpdateModalIsOpen: vi.fn(),
   refetchEvents: vi.fn(),
@@ -174,7 +179,7 @@ describe('useUpdateEventHandler', () => {
       const calledInputs =
         mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
       expect(calledInputs.name).toContain('Changed Name');
-      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+      expect(toast.success).toHaveBeenCalledWith('eventListCard.eventUpdated');
     });
 
     it('handles standalone event update with description change', async () => {
@@ -278,7 +283,7 @@ describe('useUpdateEventHandler', () => {
       );
 
       expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
-      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+      expect(toast.success).toHaveBeenCalledWith('eventListCard.eventUpdated');
       expect(setEventUpdateModalIsOpen).toHaveBeenCalledWith(false);
       expect(hideViewModal).toHaveBeenCalled();
       expect(refetchEvents).toHaveBeenCalled();
@@ -298,7 +303,7 @@ describe('useUpdateEventHandler', () => {
         }),
       );
 
-      expect(errorHandler).toHaveBeenCalledWith(mockT, error);
+      expect(errorHandler).toHaveBeenCalledWith(expect.any(Function), error);
     });
   });
 
@@ -456,7 +461,7 @@ describe('useUpdateEventHandler', () => {
         mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
       expect(calledInputs.startAt).toContain('2024-04-22T00:00:00');
       expect(calledInputs.endAt).toContain('2024-04-23T23:59');
-      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+      expect(toast.success).toHaveBeenCalledWith('eventListCard.eventUpdated');
     });
 
     it('handles standalone event update with allDay change only', async () => {
@@ -487,7 +492,7 @@ describe('useUpdateEventHandler', () => {
         }),
       );
 
-      expect(toast.error).toHaveBeenCalledWith('invalidDate');
+      expect(toast.error).toHaveBeenCalledWith('eventListCard.invalidDate');
       expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
     });
 
@@ -506,7 +511,7 @@ describe('useUpdateEventHandler', () => {
         }),
       );
 
-      expect(toast.error).toHaveBeenCalledWith('invalidDate');
+      expect(toast.error).toHaveBeenCalledWith('eventListCard.invalidDate');
       expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
     });
 
@@ -525,7 +530,7 @@ describe('useUpdateEventHandler', () => {
         }),
       );
 
-      expect(toast.error).toHaveBeenCalledWith('invalidDate');
+      expect(toast.error).toHaveBeenCalledWith('eventListCard.invalidDate');
       expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
     });
 
@@ -554,7 +559,7 @@ describe('useUpdateEventHandler', () => {
       );
 
       expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
-      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+      expect(toast.success).toHaveBeenCalledWith('eventListCard.eventUpdated');
     });
 
     it('handles originalEndAt calculation when event is all-day but endAt is invalid', async () => {
@@ -582,7 +587,7 @@ describe('useUpdateEventHandler', () => {
       );
 
       expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
-      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+      expect(toast.success).toHaveBeenCalledWith('eventListCard.eventUpdated');
     });
 
     it('handles originalStartAt calculation when event is not all-day but constructed date is invalid', async () => {
@@ -614,7 +619,7 @@ describe('useUpdateEventHandler', () => {
       );
 
       expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
-      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+      expect(toast.success).toHaveBeenCalledWith('eventListCard.eventUpdated');
     });
 
     it('handles originalEndAt calculation when event is not all-day but constructed date is invalid', async () => {
@@ -646,7 +651,7 @@ describe('useUpdateEventHandler', () => {
       );
 
       expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
-      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+      expect(toast.success).toHaveBeenCalledWith('eventListCard.eventUpdated');
     });
   });
 
@@ -702,7 +707,7 @@ describe('useUpdateEventHandler', () => {
       );
 
       expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
-      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+      expect(toast.success).toHaveBeenCalledWith('eventListCard.eventUpdated');
       expect(setEventUpdateModalIsOpen).toHaveBeenCalledWith(false);
       expect(hideViewModal).toHaveBeenCalled();
     });

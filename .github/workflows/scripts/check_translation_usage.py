@@ -35,12 +35,36 @@ from pathlib import Path
 from collections.abc import Iterable
 
 
+_USE_TRANSLATION_KEYPREFIX_RE = re.compile(
+    r"""
+    useTranslation\(
+        \s*(['"])[^'"]+\1\s*,\s*
+        \{\s*keyPrefix\s*:\s*(['"])(?P<prefix>[^'"]+)\2
+        .*?\}
+    \s*\)
+    """,
+    re.VERBOSE | re.MULTILINE | re.DOTALL,
+)
 _TRANSLATION_CALL_RE = re.compile(
     r"""(?:(?:\bi18n)\.)?\bt\(\s*(['"])([^'"\n]+?)\1\s*(?:[,)\}])""",
     re.MULTILINE,
 )
 
+
 _DEFAULT_EXTENSIONS = {".ts", ".tsx", ".js", ".jsx"}
+
+
+def extract_key_prefix(text: str) -> str:
+    """Extract keyPrefix from useTranslation(...) if present.
+
+    Args:
+        text: Source code text to search for a keyPrefix value.
+
+    Returns:
+        prefix: The extracted keyPrefix value, or None if not found.
+    """
+    match = _USE_TRANSLATION_KEYPREFIX_RE.search(text)
+    return match.group("prefix") if match else None
 
 
 def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
@@ -314,15 +338,28 @@ def compare_keys(
         locales: Mapping of locale names to available translation keys.
 
     Returns:
-        dict: Mapping of translation keys to locales where they are missing.
+        missing: Mapping of translation keys to locales where they are missing.
     """
     missing: dict[str, list[str]] = {}
-    for key in sorted(used_keys):
-        missing_langs = [
-            lang for lang, keys in locales.items() if key not in keys
-        ]
+
+    for key, prefix in sorted(used_keys, key=lambda x: (x[0], x[1] or "")):
+        missing_langs: list[str] = []
+
+        for lang, locale_keys in locales.items():
+            candidates = []
+
+            if prefix:
+                candidates.append(f"{prefix}.{key}")
+
+            candidates.append(key)
+
+            if not any(candidate in locale_keys for candidate in candidates):
+                missing_langs.append(lang)
+
         if missing_langs:
-            missing[key] = missing_langs
+            display_key = f"{prefix}.{key}" if prefix else key
+            missing[display_key] = missing_langs
+
     return missing
 
 
@@ -391,9 +428,19 @@ def main(argv: Iterable[str] | None = None) -> int:
         )
         return 2
 
-    used_keys: set[str] = set()
+    used_keys: set[tuple[str, str | None]] = set()
+
     for p in targets:
-        used_keys.update(extract_keys_from_file(p))
+        try:
+            text = p.read_text(encoding="utf-8")
+        except UnicodeDecodeError:
+            text = p.read_text(encoding="utf-8", errors="ignore")
+
+        prefix = extract_key_prefix(text)
+        raw_keys = extract_keys_from_text(text)
+
+        for key in raw_keys:
+            used_keys.add((key, prefix))
 
     if not used_keys:
         print("No translation keys found in scanned files.")

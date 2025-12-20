@@ -117,7 +117,7 @@ const fillFormAndSubmit = async (
   isDisabled: boolean,
 ): Promise<void> => {
   const nameInput = screen.getByLabelText('Name *');
-  const descriptionInput = screen.getByLabelText('Description');
+  const descriptionInput = screen.getByLabelText(/description/i);
   const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
   const submitBtn = screen.getByTestId('formSubmitButton');
 
@@ -156,7 +156,7 @@ describe('Testing Action Item Category Modal', () => {
       );
 
       expect(screen.getByLabelText('Name *')).toHaveValue('Category 1');
-      expect(screen.getByLabelText('Description')).toHaveValue(
+      expect(screen.getByLabelText(/description/i)).toHaveValue(
         'This is a test category',
       );
       expect(screen.getByTestId('isDisabledSwitch')).not.toBeChecked();
@@ -170,7 +170,7 @@ describe('Testing Action Item Category Modal', () => {
       renderCategoryModal(link1, propsWithNullCategory);
 
       expect(screen.getByLabelText('Name *')).toHaveValue('');
-      expect(screen.getByLabelText('Description')).toHaveValue('');
+      expect(screen.getByLabelText(/description/i)).toHaveValue('');
       expect(screen.getByTestId('isDisabledSwitch')).not.toBeChecked();
     });
 
@@ -209,7 +209,7 @@ describe('Testing Action Item Category Modal', () => {
       };
       renderCategoryModal(link1, propsWithEmptyDescription);
 
-      expect(screen.getByLabelText('Description')).toHaveValue('');
+      expect(screen.getByLabelText(/description/i)).toHaveValue('');
     });
   });
 
@@ -224,7 +224,7 @@ describe('Testing Action Item Category Modal', () => {
 
     it('should update description when input value changes', async () => {
       renderCategoryModal(link1, categoryProps[1]);
-      const descriptionInput = screen.getByLabelText('Description');
+      const descriptionInput = screen.getByLabelText(/description/i);
       expect(descriptionInput).toHaveValue('This is a test category');
       fireEvent.change(descriptionInput, {
         target: { value: 'Updated description' },
@@ -276,7 +276,7 @@ describe('Testing Action Item Category Modal', () => {
       });
 
       const nameInput = screen.getByLabelText('Name *');
-      const descriptionInput = screen.getByLabelText('Description');
+      const descriptionInput = screen.getByLabelText(/description/i);
       const submitBtn = screen.getByTestId('formSubmitButton');
 
       await userEvent.clear(nameInput);
@@ -323,7 +323,7 @@ describe('Testing Action Item Category Modal', () => {
 
     it('should edit category changing only description', async () => {
       renderCategoryModal(link1, categoryProps[1]);
-      const descriptionInput = screen.getByLabelText('Description');
+      const descriptionInput = screen.getByLabelText(/description/i);
       const submitBtn = screen.getByTestId('formSubmitButton');
 
       fireEvent.change(descriptionInput, {
@@ -359,7 +359,7 @@ describe('Testing Action Item Category Modal', () => {
 
     it('should handle empty description in edit mode', async () => {
       renderCategoryModal(link1, categoryProps[1]);
-      const descriptionInput = screen.getByLabelText('Description');
+      const descriptionInput = screen.getByLabelText(/description/i);
       const submitBtn = screen.getByTestId('formSubmitButton');
 
       fireEvent.change(descriptionInput, { target: { value: '' } });
@@ -379,7 +379,7 @@ describe('Testing Action Item Category Modal', () => {
     it('should edit category changing name and description', async () => {
       renderCategoryModal(link1, categoryProps[1]);
       const nameInput = screen.getByLabelText('Name *');
-      const descriptionInput = screen.getByLabelText('Description');
+      const descriptionInput = screen.getByLabelText(/description/i);
       const submitBtn = screen.getByTestId('formSubmitButton');
 
       fireEvent.change(nameInput, { target: { value: 'Updated Name' } });
@@ -418,7 +418,7 @@ describe('Testing Action Item Category Modal', () => {
 
     it('should edit category changing description and isDisabled', async () => {
       renderCategoryModal(link1, categoryProps[1]);
-      const descriptionInput = screen.getByLabelText('Description');
+      const descriptionInput = screen.getByLabelText(/description/i);
       const isDisabledSwitch = screen.getByTestId('isDisabledSwitch');
       const submitBtn = screen.getByTestId('formSubmitButton');
 
@@ -672,7 +672,7 @@ describe('Testing Action Item Category Modal', () => {
 
       await waitFor(() => {
         expect(screen.getByLabelText('Name *')).toHaveValue('Updated Category');
-        expect(screen.getByLabelText('Description')).toHaveValue(
+        expect(screen.getByLabelText(/description/i)).toHaveValue(
           'Updated description',
         );
         expect(screen.getByTestId('isDisabledSwitch')).toBeChecked();

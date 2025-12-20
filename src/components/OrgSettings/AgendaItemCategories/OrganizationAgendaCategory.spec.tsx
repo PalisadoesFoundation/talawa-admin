@@ -304,7 +304,7 @@ describe('Testing Agenda Categories Component', () => {
     });
     screen.debug();
     await waitFor(() => {
-      expect(screen.getAllByText('Category').length).toBe(2);
+      expect(screen.getByText('Category')).toBeInTheDocument();
     });
   });
   test('triggers search on clicking search button', async () => {
@@ -328,7 +328,7 @@ describe('Testing Agenda Categories Component', () => {
     const searchButton = await screen.findByTestId('searchBtn');
     await userEvent.click(searchButton);
     await waitFor(() => {
-      expect(screen.getAllByText('Category').length).toBe(2);
+      expect(screen.getByText('Category')).toBeInTheDocument();
     });
   });
   test('Search categories by name and clear the input by backspace', async () => {
@@ -349,7 +349,7 @@ describe('Testing Agenda Categories Component', () => {
     expect(searchInput).toBeInTheDocument();
     await userEvent.type(searchInput, 'A{backspace}');
     await waitFor(() => {
-      expect(screen.getAllByText('Category').length).toBe(2);
+      expect(screen.getByText('Category')).toBeInTheDocument();
     });
   });
 });

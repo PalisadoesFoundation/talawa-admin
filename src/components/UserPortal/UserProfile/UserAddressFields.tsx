@@ -8,7 +8,6 @@
  *
  * @component
  * @param {Object} props - Component properties.
- * @param {(key: string) => string} props.t - Translation function for localizing labels and placeholders.
  * @param {(field: string, value: string) => void} props.handleFieldChange - Callback to handle changes in form fields.
  * @param {Object} props.userDetails - Object containing user address details.
  * @param {string} props.userDetails.addressLine1 - First line of the user's address.
@@ -35,12 +34,12 @@
  * />
  */
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { countryOptions } from 'utils/formEnumFields';
 import { Col, Form, Row } from 'react-bootstrap';
 import styles from './common.module.css';
 
 interface InterfaceUserAddressFieldsProps {
-  t: (key: string) => string;
   handleFieldChange: (field: string, value: string) => void;
   userDetails: {
     addressLine1: string;
@@ -53,10 +52,12 @@ interface InterfaceUserAddressFieldsProps {
 }
 
 export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
-  t,
   handleFieldChange,
   userDetails,
 }) => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'settings',
+  });
   return (
     <Row className="mb-1">
       <Col lg={4}>

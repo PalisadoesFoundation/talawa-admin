@@ -67,12 +67,14 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   addPeopleToTagModalIsOpen,
   hideAddPeopleToTagModal,
   refetchAssignedMembersData,
-  t,
   tCommon,
 }) => {
   const { tagId: currentTagId } = useParams();
 
   const { t: tErrors } = useTranslation('error');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'manageTag',
+  });
 
   const [assignToMembers, setAssignToMembers] = useState<InterfaceMemberData[]>(
     [],

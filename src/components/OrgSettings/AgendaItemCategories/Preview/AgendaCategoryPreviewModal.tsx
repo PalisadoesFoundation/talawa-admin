@@ -15,7 +15,6 @@
  * @param {string} props.formState.name - The name of the agenda category.
  * @param {string} props.formState.description - The description of the agenda category.
  * @param {string} props.formState.createdBy - The creator of the agenda category.
- * @param {(key: string) => string} props.t - Translation function for localization.
  *
  * @returns {JSX.Element} The rendered AgendaCategoryPreviewModal component.
  *
@@ -32,6 +31,7 @@
 import React from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceFormStateType {
   name: string;
@@ -45,8 +45,6 @@ interface InterfaceAgendaCategoryPreviewModalProps {
   showUpdateModal: () => void;
   toggleDeleteModal: () => void;
   formState: InterfaceFormStateType;
-
-  t: (key: string) => string;
 }
 
 const AgendaCategoryPreviewModal: React.FC<
@@ -57,8 +55,11 @@ const AgendaCategoryPreviewModal: React.FC<
   showUpdateModal,
   toggleDeleteModal,
   formState,
-  t,
 }) => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationAgendaCategory',
+  });
+
   return (
     <Modal
       className={styles.campaignModal}

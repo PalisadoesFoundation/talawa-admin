@@ -329,9 +329,7 @@ describe('VenueModal', () => {
     });
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
-        'organizationVenues.venueCreated',
-      );
+      expect(toast.success).toHaveBeenCalledWith('venueCreated');
     });
   });
 
@@ -478,9 +476,7 @@ describe('VenueModal', () => {
 
       // Verify success toast
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
-          'organizationVenues.venueCreated',
-        );
+        expect(toast.success).toHaveBeenCalledWith('venueCreated');
       });
 
       // Verify the mutation variables
@@ -533,9 +529,7 @@ describe('VenueModal', () => {
       });
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
-          'organizationVenues.venueCreated',
-        );
+        expect(toast.success).toHaveBeenCalledWith('venueCreated');
       });
     });
   });
@@ -869,9 +863,7 @@ describe('VenueModal', () => {
       });
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
-          'organizationVenues.venueCreated',
-        );
+        expect(toast.success).toHaveBeenCalledWith('venueCreated');
       });
     });
 
@@ -949,9 +941,7 @@ describe('VenueModal', () => {
       });
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          'organizationVenues.venueNameExists',
-        );
+        expect(toast.error).toHaveBeenCalledWith('venueNameExists');
       });
     });
 
@@ -1207,9 +1197,7 @@ describe('VenueModal', () => {
 
       await waitFor(() => {
         // This test specifically checks for the fallback behavior
-        expect(toast.error).toHaveBeenCalledWith(
-          'organizationVenues.venueNameExists',
-        );
+        expect(toast.error).toHaveBeenCalledWith('venueNameExists');
       });
     });
 
@@ -1436,9 +1424,7 @@ describe('VenueModal', () => {
             });
 
             await waitFor(() => {
-              expect(toast.success).toHaveBeenCalledWith(
-                'organizationVenues.venueCreated',
-              );
+              expect(toast.success).toHaveBeenCalledWith('venueCreated');
             });
           });
 
@@ -1477,9 +1463,7 @@ describe('VenueModal', () => {
             });
 
             await waitFor(() => {
-              expect(toast.success).toHaveBeenCalledWith(
-                'organizationVenues.venueCreated',
-              );
+              expect(toast.success).toHaveBeenCalledWith('venueCreated');
             });
           });
 
@@ -1922,9 +1906,7 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.success).toHaveBeenCalledWith(
-              'organizationVenues.venueCreated',
-            );
+            expect(toast.success).toHaveBeenCalledWith('venueCreated');
           });
         });
 
@@ -2085,9 +2067,7 @@ describe('VenueModal', () => {
 
           await waitFor(() => {
             // The form should submit successfully since 10.5 becomes 10
-            expect(toast.success).toHaveBeenCalledWith(
-              'organizationVenues.venueCreated',
-            );
+            expect(toast.success).toHaveBeenCalledWith('venueCreated');
           });
         });
 
@@ -2371,9 +2351,7 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith(
-              'organizationVenues.venueNameExists',
-            );
+            expect(toast.error).toHaveBeenCalledWith('venueNameExists');
           });
         });
 
@@ -2416,9 +2394,7 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith(
-              'organizationVenues.venueNameExists',
-            );
+            expect(toast.error).toHaveBeenCalledWith('venueNameExists');
           });
         });
 
@@ -2590,9 +2566,7 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith(
-              'organizationVenues.venueNameExists',
-            );
+            expect(toast.error).toHaveBeenCalledWith('venueNameExists');
           });
         });
 
@@ -2730,9 +2704,7 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.success).toHaveBeenCalledWith(
-              'organizationVenues.venueCreated',
-            );
+            expect(toast.success).toHaveBeenCalledWith('venueCreated');
           });
         });
       });
@@ -2961,9 +2933,7 @@ describe('VenueModal', () => {
     });
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
-        'organizationVenues.venueCreated',
-      );
+      expect(toast.success).toHaveBeenCalledWith('venueCreated');
     });
   });
 

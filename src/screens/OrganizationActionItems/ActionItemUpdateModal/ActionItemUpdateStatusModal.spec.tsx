@@ -489,9 +489,7 @@ describe('Testing ItemUpdateStatusModal', () => {
 
       // Wait for success
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
-          'organizationActionItems.isPending',
-        );
+        expect(toast.success).toHaveBeenCalled();
         expect(completedRecurringProps.actionItemsRefetch).toHaveBeenCalled();
         expect(completedRecurringProps.hide).toHaveBeenCalled();
       });

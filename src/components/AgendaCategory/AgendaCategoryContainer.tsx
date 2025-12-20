@@ -310,7 +310,6 @@ function agendaCategoryContainer({
         showUpdateModal={showUpdateModal}
         toggleDeleteModal={toggleDeleteModal}
         formState={formState}
-        t={t}
       />
       {/* Update modal */}
       <AgendaCategoryUpdateModal

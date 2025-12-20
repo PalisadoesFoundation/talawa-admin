@@ -98,7 +98,7 @@ describe('CustomRecurrenceModal', () => {
   test('renders modal when open', () => {
     renderComponent();
 
-    expect(screen.getByText('customRecurrence')).toBeInTheDocument();
+    expect(screen.getByText('Custom Recurrence')).toBeInTheDocument();
     expect(
       screen.getByTestId('customRecurrenceModalCloseBtn'),
     ).toBeInTheDocument();
@@ -111,7 +111,7 @@ describe('CustomRecurrenceModal', () => {
       customRecurrenceModalIsOpen: false,
     });
 
-    expect(screen.queryByText('customRecurrence')).not.toBeInTheDocument();
+    expect(screen.queryByText('Custom Recurrence')).not.toBeInTheDocument();
   });
 
   test('calls hideCustomRecurrenceModal when close button is clicked', async () => {
@@ -150,7 +150,7 @@ describe('CustomRecurrenceModal', () => {
       },
     });
 
-    expect(screen.getByText('repeatsOn')).toBeInTheDocument();
+    expect(screen.getByText('Repeats On')).toBeInTheDocument();
 
     const dayButtons = screen.getAllByTestId('recurrenceWeekDay');
     expect(dayButtons).toHaveLength(7);
@@ -169,7 +169,7 @@ describe('CustomRecurrenceModal', () => {
       },
     });
 
-    expect(screen.getByText('monthlyOn')).toBeInTheDocument();
+    expect(screen.getByText('Monthly On')).toBeInTheDocument();
     expect(screen.getByTestId('monthlyRecurrenceDropdown')).toBeInTheDocument();
 
     await userEvent.click(screen.getByTestId('monthlyRecurrenceDropdown'));
@@ -188,8 +188,13 @@ describe('CustomRecurrenceModal', () => {
       },
     });
 
-    expect(screen.getByText('yearlyOn')).toBeInTheDocument();
-    expect(screen.getByText('yearlyRecurrenceDesc')).toBeInTheDocument();
+    expect(screen.getByText('Yearly On')).toBeInTheDocument();
+
+    expect(
+      screen.getByText(
+        'This event will repeat every year on the same date as the event start date.',
+      ),
+    ).toBeInTheDocument();
   });
 
   test('handles interval input changes', async () => {

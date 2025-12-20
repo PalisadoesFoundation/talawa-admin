@@ -16,7 +16,6 @@
  * @param  handleClose - Callback to close the modal.
  * @param statistics - Contains overall statistics for non-recurring events.
  * @param  memberData - List of members with demographic details.
- * @param  t - Translation function for localized strings.
  *
  * Hooks:
  * - `useParams` to retrieve organization and event IDs from the URL.
@@ -37,6 +36,7 @@
  * - React, React-Bootstrap, React-ChartJS-2, Apollo Client, and utility functions.
  */
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Modal,
   Button,
@@ -98,9 +98,12 @@ const calculateAge = (birthDate: Date): number => {
 
 export const AttendanceStatisticsModal: React.FC<
   InterfaceAttendanceStatisticsModalProps
-> = ({ show, handleClose, statistics, memberData, t }): React.JSX.Element => {
+> = ({ show, handleClose, statistics, memberData }): React.JSX.Element => {
   const [selectedCategory, setSelectedCategory] = useState('Gender');
   const { orgId, eventId } = useParams();
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventAttendance',
+  });
   const [currentPage, setCurrentPage] = useState(0);
   const eventsPerPage = 10;
   const [loadEventDetails, { data: eventData }] = useLazyQuery(EVENT_DETAILS);

@@ -589,7 +589,6 @@ function ManageTag(): JSX.Element {
         tagActionsModalIsOpen={tagActionsModalIsOpen}
         hideTagActionsModal={hideTagActionsModal}
         tagActionType={tagActionType}
-        t={t}
         tCommon={tCommon}
       />
       {/* Unassign User Tag Modal */}
@@ -597,8 +596,6 @@ function ManageTag(): JSX.Element {
         unassignUserTagModalIsOpen={unassignUserTagModalIsOpen}
         toggleUnassignUserTagModal={toggleUnassignUserTagModal}
         handleUnassignUserTag={handleUnassignUserTag}
-        t={t}
-        tCommon={tCommon}
       />
       {/* Edit User Tag Modal */}
       <EditUserTagModal
@@ -607,7 +604,6 @@ function ManageTag(): JSX.Element {
         newTagName={newTagName}
         setNewTagName={setNewTagName}
         handleEditUserTag={handleEditUserTag}
-        t={t}
         tCommon={tCommon}
       />
       {/* Remove User Tag Modal */}
@@ -615,7 +611,6 @@ function ManageTag(): JSX.Element {
         removeUserTagModalIsOpen={removeUserTagModalIsOpen}
         toggleRemoveUserTagModal={toggleRemoveUserTagModal}
         handleRemoveUserTag={handleRemoveUserTag}
-        t={t}
         tCommon={tCommon}
       />
     </>

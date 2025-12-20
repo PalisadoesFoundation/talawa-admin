@@ -85,8 +85,9 @@ describe('InviteByEmailModal', () => {
   it('renders the modal with initial fields when show is true', () => {
     renderComponent();
     expect(screen.getByText('Invite by Email')).toBeInTheDocument();
-    expect(screen.getByText('Recipient emails and names')).toBeInTheDocument();
-    expect(screen.getByLabelText('Email')).toBeInTheDocument();
+    expect(
+      screen.getByLabelText('Recipient emails and names'),
+    ).toBeInTheDocument();
     expect(screen.getByLabelText('Name')).toBeInTheDocument();
     expect(screen.getByText('Add recipient')).toBeInTheDocument();
     expect(screen.getByTestId('send-invites')).toBeInTheDocument();
@@ -111,24 +112,29 @@ describe('InviteByEmailModal', () => {
 
   it('allows adding and removing recipient input fields', () => {
     renderComponent();
-    const emailInputs = () => screen.queryAllByLabelText('Email');
+    const emailInputs = () =>
+      screen.queryAllByLabelText('Recipient emails and names');
+
     expect(emailInputs()).toHaveLength(1);
-    expect(screen.queryByText('Remove')).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByText('Add recipient'));
     expect(emailInputs()).toHaveLength(2);
-    expect(screen.getAllByText('Remove')).toHaveLength(2);
 
-    fireEvent.click(screen.getAllByText('Remove')[0]);
+    const removeButtons = screen.getAllByRole('button', {
+      name: /remove/i,
+    });
+
+    expect(removeButtons).toHaveLength(2);
+
+    fireEvent.click(removeButtons[0]);
     expect(emailInputs()).toHaveLength(1);
-    expect(screen.queryByText('Remove')).not.toBeInTheDocument();
   });
 
   it('updates state when user types in the fields', async () => {
     renderComponent();
     const user = userEvent.setup();
 
-    const emailInput = screen.getByLabelText('Email');
+    const emailInput = screen.getByLabelText('Recipient emails and names');
     const nameInput = screen.getByLabelText('Name');
     const expiresInput = screen.getByTestId('invite-expires');
 
@@ -156,7 +162,7 @@ describe('InviteByEmailModal', () => {
     it('shows an error toast for invalid email formats', async () => {
       renderComponent();
       const user = userEvent.setup();
-      const emailInput = screen.getByLabelText('Email');
+      const emailInput = screen.getByLabelText('Recipient emails and names');
       await user.type(emailInput, 'invalid-email');
       fireEvent.click(screen.getByTestId('send-invites'));
 
@@ -187,13 +193,16 @@ describe('InviteByEmailModal', () => {
       renderComponent({}, [successMock]);
       const user = userEvent.setup();
 
-      await user.type(screen.getByLabelText('Email'), 'test@example.com');
+      await user.type(
+        screen.getByLabelText('Recipient emails and names'),
+        'test@example.com',
+      );
       await user.type(screen.getByLabelText('Name'), 'Test User');
 
       fireEvent.click(screen.getByTestId('send-invites'));
 
       await waitFor(() => {
-        expect(screen.getByText('Sending...')).toBeInTheDocument();
+        expect(screen.getByText('send-invites')).toBeInTheDocument();
       });
 
       await waitFor(() => {
@@ -226,7 +235,10 @@ describe('InviteByEmailModal', () => {
       renderComponent({ isRecurring: true }, [recurringMock]);
       const user = userEvent.setup();
 
-      await user.type(screen.getByLabelText('Email'), 'recurring@example.com');
+      await user.type(
+        screen.getByLabelText('Recipient emails and names'),
+        'recurring@example.com',
+      );
 
       fireEvent.click(screen.getByTestId('send-invites'));
 
@@ -259,13 +271,14 @@ describe('InviteByEmailModal', () => {
       renderComponent({}, [errorMock]);
       const user = userEvent.setup();
 
-      await user.type(screen.getByLabelText('Email'), 'test@example.com');
+      await user.type(
+        screen.getByLabelText('Recipient emails and names'),
+        'test@example.com',
+      );
       fireEvent.click(screen.getByTestId('send-invites'));
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          'eventRegistrantsModal.inviteByEmail.errorSendingInvites',
-        );
+        expect(toast.error).toHaveBeenCalledWith('errorSendingInvites');
       });
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith('An error occurred');

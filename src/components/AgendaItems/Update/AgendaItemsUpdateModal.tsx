@@ -13,7 +13,6 @@
  * @param props.formState - The current state of the agenda item form.
  * @param props.setFormState - Function to update the form state.
  * @param props.updateAgendaItemHandler - Function to handle form submission.
- * @param props.t - Translation function for localized strings.
  * @param props.agendaItemCategories - List of available agenda item categories.
  *
  * @remarks
@@ -50,6 +49,7 @@ import convertToBase64 from 'utils/convertToBase64';
 import styles from '../../../style/app-fixed.module.css';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import type { InterfaceAgendaItemsUpdateModalProps } from 'types/Agenda/interface';
+import { useTranslation } from 'react-i18next';
 const AgendaItemsUpdateModal: React.FC<
   InterfaceAgendaItemsUpdateModalProps
 > = ({
@@ -58,10 +58,12 @@ const AgendaItemsUpdateModal: React.FC<
   formState,
   setFormState,
   updateAgendaItemHandler,
-  t,
   agendaItemCategories,
 }) => {
   const [newUrl, setNewUrl] = useState('');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'agendaItems',
+  });
 
   useEffect(() => {
     setFormState((prevState) => ({

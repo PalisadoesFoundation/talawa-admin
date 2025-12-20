@@ -10,6 +10,7 @@ import { errorHandler } from 'utils/errorHandler';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import type { InterfaceEvent } from 'types/Event/interface';
+import { useTranslation } from 'react-i18next';
 
 // Extend dayjs with utc plugin
 dayjs.extend(utc);
@@ -52,13 +53,13 @@ interface IUpdateEventHandlerProps {
   recurrence: InterfaceRecurrenceRule | null;
   updateOption: 'single' | 'following' | 'entireSeries';
   hasRecurrenceChanged?: boolean; // Add this parameter
-  t: (key: string) => string;
   hideViewModal: () => void;
   setEventUpdateModalIsOpen: (isOpen: boolean) => void;
   refetchEvents?: () => void;
 }
 
 export const useUpdateEventHandler = () => {
+  const { t } = useTranslation('translation', { keyPrefix: 'eventListCard' });
   const [updateStandaloneEvent] = useMutation(UPDATE_EVENT_MUTATION);
   const [updateSingleRecurringEventInstance] = useMutation(
     UPDATE_SINGLE_RECURRING_EVENT_INSTANCE_MUTATION,
@@ -81,7 +82,6 @@ export const useUpdateEventHandler = () => {
     recurrence,
     updateOption,
     hasRecurrenceChanged = false, // Default to false if not provided
-    t,
     hideViewModal,
     setEventUpdateModalIsOpen,
     refetchEvents,
@@ -182,7 +182,7 @@ export const useUpdateEventHandler = () => {
 
       const hasChanges = Object.keys(updateInput).length > 1;
       if (!hasChanges) {
-        toast.info(t('eventListCard.noChangesToUpdate'));
+        toast.info(t('noChangesToUpdate'));
         return;
       }
 

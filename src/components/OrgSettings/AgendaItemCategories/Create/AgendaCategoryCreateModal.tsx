@@ -12,7 +12,6 @@
  * @param {InterfaceFormStateType} props.formState - The current state of the form fields.
  * @param {(state: React.SetStateAction<InterfaceFormStateType>) => void} props.setFormState - Function to update the form state.
  * @param {(e: ChangeEvent<HTMLFormElement>) => Promise<void>} props.createAgendaCategoryHandler - Handler for form submission.
- * @param {(key: string) => string} props.t - Translation function for internationalization.
  *
  * @interface InterfaceFormStateType
  * @property {string} name - The name of the agenda category.
@@ -33,6 +32,7 @@ import React from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
 import styles from 'style/app-fixed.module.css';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceFormStateType {
   name: string;
@@ -47,7 +47,6 @@ interface InterfaceAgendaCategoryCreateModalProps {
   createAgendaCategoryHandler: (
     e: ChangeEvent<HTMLFormElement>,
   ) => Promise<void>;
-  t: (key: string) => string;
 }
 
 const AgendaCategoryCreateModal: React.FC<
@@ -58,8 +57,11 @@ const AgendaCategoryCreateModal: React.FC<
   formState,
   setFormState,
   createAgendaCategoryHandler,
-  t,
 }) => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationAgendaCategory',
+  });
+
   return (
     <Modal
       className={`mt-5 ${styles.campaignModal}`}

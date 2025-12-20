@@ -14,8 +14,6 @@
  * Function to update the form state.
  * @param {(e: ChangeEvent<HTMLFormElement>) => Promise<void>} props.createOrg -
  * Function to handle form submission for creating an organization.
- * @param {(key: string) => string} props.t - Translation function for component-specific strings.
- * @param {(key: string) => string} props.tCommon - Translation function for common strings.
  * @param {InterfaceCurrentUserTypePG | undefined} props.userData - Current user data.
  *
  * @remarks
@@ -31,13 +29,13 @@
  *   formState={formState}
  *   setFormState={setFormState}
  *   createOrg={handleCreateOrg}
- *   t={translate}
  *   tCommon={translateCommon}
  *   userData={currentUser}
  * />
  * ```
  */
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Modal, Form, Row, Col, Button } from 'react-bootstrap';
 import { useMinioUpload } from 'utils/MinioUpload';
 import type { ChangeEvent } from 'react';
@@ -68,7 +66,6 @@ export interface InterfaceOrganizationModalProps {
   formState: InterfaceFormStateType;
   setFormState: (state: React.SetStateAction<InterfaceFormStateType>) => void;
   createOrg: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
-  t: (key: string) => string;
   tCommon: (key: string) => string;
   userData: InterfaceCurrentUserTypePG | undefined;
 }
@@ -83,11 +80,12 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
   formState,
   setFormState,
   createOrg,
-  t,
   tCommon,
 }) => {
   const { uploadFileToMinio } = useMinioUpload();
-
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'orgList',
+  });
   return (
     <Modal
       show={showModal}

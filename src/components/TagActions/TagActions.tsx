@@ -8,7 +8,6 @@
  * @param {boolean} props.tagActionsModalIsOpen - Determines if the modal is open.
  * @param {() => void} props.hideTagActionsModal - Function to close the modal.
  * @param {TagActionType} props.tagActionType - The type of action to perform ('assignToTags' or 'removeFromTags').
- * @param {TFunction<'translation', 'manageTag'>} props.t - Translation function for managing tags.
  * @param {TFunction<'common', undefined>} props.tCommon - Common translation function.
  *
  * @returns {React.FC} A React functional component.
@@ -36,6 +35,7 @@ import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { useParams } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import type {
   InterfaceQueryOrganizationUserTags,
   InterfaceTagData,
@@ -67,7 +67,6 @@ export interface InterfaceTagActionsProps {
   tagActionsModalIsOpen: boolean;
   hideTagActionsModal: () => void;
   tagActionType: TagActionType;
-  t: TFunction<'translation', 'manageTag'>;
   tCommon: TFunction<'common', undefined>;
 }
 
@@ -75,10 +74,13 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   tagActionsModalIsOpen,
   hideTagActionsModal,
   tagActionType,
-  t,
   tCommon,
 }) => {
   const { orgId, tagId: currentTagId } = useParams();
+
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'manageTag',
+  });
 
   const [tagSearchName, setTagSearchName] = useState('');
 
@@ -382,7 +384,6 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                             tag={tag}
                             checkedTags={checkedTags}
                             toggleTagSelection={toggleTagSelection}
-                            t={t}
                           />
                         </div>
 

@@ -49,8 +49,8 @@ describe('UserAddressFields', () => {
   it('displays correct labels with translations', () => {
     render(<UserAddressFields {...mockProps} />);
 
-    expect(screen.getByText('translated_state')).toBeInTheDocument();
-    expect(screen.getByText('translated_country')).toBeInTheDocument();
+    expect(screen.getByText('state')).toBeInTheDocument();
+    expect(screen.getByText('country')).toBeInTheDocument();
   });
 
   it('handles address input change', () => {
@@ -155,7 +155,7 @@ describe('UserAddressFields', () => {
     expect(cityInput).toBeInTheDocument();
 
     // Check if label is rendered correctly
-    expect(screen.getByText('translated_city')).toBeInTheDocument();
+    expect(screen.getByText('city')).toBeInTheDocument();
 
     // Check if initial value is displayed correctly
     expect(cityInput).toHaveValue('Test City');
@@ -168,6 +168,6 @@ describe('UserAddressFields', () => {
     );
 
     // Check if placeholder is set correctly
-    expect(cityInput).toHaveAttribute('placeholder', 'translated_enterCity');
+    expect(cityInput).toHaveAttribute('placeholder', 'enterCity');
   });
 });

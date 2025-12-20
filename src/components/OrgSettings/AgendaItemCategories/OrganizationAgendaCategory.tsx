@@ -196,7 +196,6 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
         formState={formState}
         setFormState={setFormState}
         createAgendaCategoryHandler={createAgendaCategoryHandler}
-        t={t}
       />
     </div>
   );

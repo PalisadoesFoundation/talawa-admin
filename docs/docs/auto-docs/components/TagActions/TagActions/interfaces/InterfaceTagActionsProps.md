@@ -20,14 +20,6 @@ Defined in: [src/components/TagActions/TagActions.tsx:68](https://github.com/Pal
 
 ***
 
-### t
-
-> **t**: `TFunction`\<`"translation"`, `"manageTag"`\>
-
-Defined in: [src/components/TagActions/TagActions.tsx:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActions.tsx#L70)
-
-***
-
 ### tagActionsModalIsOpen
 
 > **tagActionsModalIsOpen**: `boolean`
@@ -48,4 +40,4 @@ Defined in: [src/components/TagActions/TagActions.tsx:69](https://github.com/Pal
 
 > **tCommon**: `TFunction`\<`"common"`, `undefined`\>
 
-Defined in: [src/components/TagActions/TagActions.tsx:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActions.tsx#L71)
+Defined in: [src/components/TagActions/TagActions.tsx:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TagActions/TagActions.tsx#L70)

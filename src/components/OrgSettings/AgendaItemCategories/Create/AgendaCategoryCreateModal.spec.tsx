@@ -31,7 +31,6 @@ const mockFormState = {
 let mockHideCreateModal: ReturnType<typeof vi.fn>;
 let mockSetFormState: ReturnType<typeof vi.fn>;
 let mockCreateAgendaCategoryHandler: ReturnType<typeof vi.fn>;
-const mockT = (key: string): string => key;
 
 describe('AgendaCategoryCreateModal', () => {
   beforeEach(() => {
@@ -56,7 +55,6 @@ describe('AgendaCategoryCreateModal', () => {
                   formState={mockFormState}
                   setFormState={mockSetFormState}
                   createAgendaCategoryHandler={mockCreateAgendaCategoryHandler}
-                  t={mockT}
                 />
               </LocalizationProvider>
             </I18nextProvider>
@@ -91,7 +89,6 @@ describe('AgendaCategoryCreateModal', () => {
                   formState={mockFormState}
                   setFormState={mockSetFormState}
                   createAgendaCategoryHandler={mockCreateAgendaCategoryHandler}
-                  t={mockT}
                 />
               </LocalizationProvider>
             </I18nextProvider>
@@ -129,7 +126,6 @@ describe('AgendaCategoryCreateModal', () => {
                   formState={mockFormState}
                   setFormState={mockSetFormState}
                   createAgendaCategoryHandler={mockCreateAgendaCategoryHandler}
-                  t={mockT}
                 />
               </LocalizationProvider>
             </I18nextProvider>

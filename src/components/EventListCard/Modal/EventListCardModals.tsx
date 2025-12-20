@@ -7,7 +7,6 @@
  * @param eventListCardProps - The properties of the event card, including event details and refetch function.
  * @param eventModalIsOpen - Boolean indicating whether the event modal is open.
  * @param hideViewModal - Function to hide the view modal.
- * @param t - Translation function for localized strings.
  * @param tCommon - Translation function for common localized strings.
  *
  * @returns JSX.Element - The rendered modals for event list card actions.
@@ -38,6 +37,7 @@ import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useUpdateEventHandler } from './updateLogic';
 import { errorHandler } from 'utils/errorHandler';
+import { useTranslation } from 'react-i18next';
 
 import EventListCardDeleteModal from './Delete/EventListCardDeleteModal';
 import EventListCardPreviewModal from './Preview/EventListCardPreviewModal';
@@ -55,7 +55,6 @@ interface IEventListCardModalProps {
   eventListCardProps: IEventListCard;
   eventModalIsOpen: boolean;
   hideViewModal: () => void;
-  t: (key: string) => string;
   tCommon: (key: string) => string;
 }
 
@@ -63,10 +62,12 @@ function EventListCardModals({
   eventListCardProps,
   eventModalIsOpen,
   hideViewModal,
-  t,
   tCommon,
 }: IEventListCardModalProps): JSX.Element {
   const { refetchEvents } = eventListCardProps;
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'organizationActionItems',
+  });
 
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
@@ -255,7 +256,6 @@ function EventListCardModals({
         recurrence,
         updateOption,
         hasRecurrenceChanged: hasRecurrenceChanged(), // Pass the recurrence change status
-        t,
         hideViewModal,
         setEventUpdateModalIsOpen,
         refetchEvents,
@@ -519,7 +519,6 @@ function EventListCardModals({
                 recurrence,
                 updateOption,
                 hasRecurrenceChanged: hasRecurrenceChanged(), // Pass the recurrence change status
-                t,
                 hideViewModal,
                 setEventUpdateModalIsOpen,
                 refetchEvents,
