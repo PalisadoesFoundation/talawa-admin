@@ -135,11 +135,11 @@ const fundCampaignPledge = (): JSX.Element => {
 
     const filteredPledges = searchTerm
       ? pledgesList.filter((pledge) => {
-          const search = searchTerm.toLowerCase();
-          return pledge.users.some((user) =>
-            user.name?.toLowerCase().includes(search),
-          );
-        })
+        const search = searchTerm.toLowerCase();
+        return pledge.users.some((user) =>
+          user.name?.toLowerCase().includes(search),
+        );
+      })
       : pledgesList;
 
     const sortedPledges = [...filteredPledges].sort((a, b) => {
@@ -322,7 +322,7 @@ const fundCampaignPledge = (): JSX.Element => {
           >
             {
               currencySymbols[
-                params.row.currency as keyof typeof currencySymbols
+              params.row.currency as keyof typeof currencySymbols
               ]
             }
             {params.row.amount.toLocaleString('en-US')}
@@ -347,7 +347,7 @@ const fundCampaignPledge = (): JSX.Element => {
           >
             {
               currencySymbols[
-                params.row.currency as keyof typeof currencySymbols
+              params.row.currency as keyof typeof currencySymbols
               ]
             }
             0
@@ -472,11 +472,10 @@ const fundCampaignPledge = (): JSX.Element => {
                   ? (totalPledged / (campaignInfo?.goal || 1)) * 100
                   : (totalRaised / (campaignInfo?.goal || 1)) * 100
               }
-              label={`${
-                currencySymbols[
-                  campaignInfo?.currency as keyof typeof currencySymbols
-                ] || '$'
-              }${progressIndicator === 'pledged' ? totalPledged.toLocaleString('en-US') : totalRaised.toLocaleString('en-US')}`}
+              label={`${currencySymbols[
+                campaignInfo?.currency as keyof typeof currencySymbols
+              ] || '$'
+                }${progressIndicator === 'pledged' ? totalPledged.toLocaleString('en-US') : totalRaised.toLocaleString('en-US')}`}
               max={100}
               style={{ height: '1.5rem', fontSize: '0.9rem' }}
               data-testid="progressBar"
@@ -519,10 +518,10 @@ const fundCampaignPledge = (): JSX.Element => {
               onSortChange={(value) =>
                 setSortBy(
                   value as
-                    | 'amount_ASC'
-                    | 'amount_DESC'
-                    | 'endDate_ASC'
-                    | 'endDate_DESC',
+                  | 'amount_ASC'
+                  | 'amount_DESC'
+                  | 'endDate_ASC'
+                  | 'endDate_DESC',
                 )
               }
               dataTestIdPrefix="filter"
