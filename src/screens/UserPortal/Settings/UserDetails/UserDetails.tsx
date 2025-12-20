@@ -39,7 +39,7 @@
  *
  * @returns A React functional component rendering the user details form.
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import dayjs from 'dayjs';
@@ -93,7 +93,7 @@ type PasswordValidation = {
   specialChar: boolean;
 };
 
-const PASSWORD_VALIDATION_PATTERNS  = {
+const PASSWORD_VALIDATION_PATTERNS = {
   lowercaseCharRegExp: new RegExp('[a-z]'),
   uppercaseCharRegExp: new RegExp('[A-Z]'),
   numericalValueRegExp: new RegExp('\\d'),
@@ -109,10 +109,9 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
   t,
   tCommon,
 }) => {
-
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
-  const [pass, setPass] = useState<string>('');
+  const [pass, setPass] = useState<string>(userDetails.password);
   const [showAlert, setShowAlert] = useState<PasswordValidation>({
     lowercaseChar: true,
     uppercaseChar: true,
@@ -120,14 +119,22 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
     specialChar: true,
   });
 
+  useEffect(() => {
+    setPass(userDetails.password);
+    handlePasswordCheck(userDetails.password);
+  });
+
   const togglePassword = (): void => setShowPassword(!showPassword);
 
   const handlePasswordCheck = (pass: string): void => {
     setShowAlert({
-      lowercaseChar: !PASSWORD_VALIDATION_PATTERNS.lowercaseCharRegExp.test(pass),
-      uppercaseChar: !PASSWORD_VALIDATION_PATTERNS.uppercaseCharRegExp.test(pass),
-      numericValue: !PASSWORD_VALIDATION_PATTERNS.numericalValueRegExp.test(pass),
-      specialChar: !PASSWORD_VALIDATION_PATTERNS.specialCharRegExp.test(pass)
+      lowercaseChar:
+        !PASSWORD_VALIDATION_PATTERNS.lowercaseCharRegExp.test(pass),
+      uppercaseChar:
+        !PASSWORD_VALIDATION_PATTERNS.uppercaseCharRegExp.test(pass),
+      numericValue:
+        !PASSWORD_VALIDATION_PATTERNS.numericalValueRegExp.test(pass),
+      specialChar: !PASSWORD_VALIDATION_PATTERNS.specialCharRegExp.test(pass),
     });
   };
 
@@ -213,12 +220,10 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
                   <div>
                     <p
                       className={`form-text ${
-                        pass.length >= 0 && pass.length < 8
-                          ? 'text-danger'
-                          : 'text-success'
+                        pass.length < 8 ? 'text-danger' : 'text-success'
                       }`}
                     >
-                      {pass.length >= 0 && pass.length < 8 ? (
+                      {pass.length < 8 ? (
                         <span>
                           <Clear aria-label={t('validationFailed')} />
                         </span>
