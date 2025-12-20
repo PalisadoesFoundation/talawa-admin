@@ -2,6 +2,14 @@ import { TextEncoder, TextDecoder } from 'util';
 import { cleanup } from '@testing-library/react';
 import { afterAll, afterEach, beforeAll, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
+import { setupLocalStorageMock } from './src/test-utils/localStorageMock';
+
+// Setup localStorage mock globally for all tests
+const localStorageMock = setupLocalStorageMock();
+
+if (typeof globalThis.localStorage === 'undefined') {
+  (globalThis as any).localStorage = localStorageMock;
+}
 
 // Simple console error handler for React 18 warnings
 const originalError = console.error;

@@ -35,6 +35,13 @@ export default defineConfig({
     hookTimeout: 10000,
     teardownTimeout: 10000,
     pool: 'threads',
+    server: {
+      deps: {
+        inline: [
+          '@mui/x-data-grid',
+          ],
+      },
+    },
     poolOptions: {
       threads: {
         singleThread: false,

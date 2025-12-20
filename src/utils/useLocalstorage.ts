@@ -59,9 +59,13 @@ export const removeItem = (prefix: string, key: string): void => {
  * @param prefix - Prefix to identify all the organization keys
  */
 export const clearAllItems = (prefix: string): void => {
-  const allPrefixedKeys = Object.keys(localStorage).filter((key) =>
-    key.startsWith(prefix),
-  );
+  const allPrefixedKeys = [];
+  for(let i=0; i<localStorage.length; i++){
+    const key = localStorage.key(i);
+    if (key && key.startsWith(prefix)) {
+      allPrefixedKeys.push(key);
+    }
+  }
 
   let size = allPrefixedKeys.length;
   for (let i = 0; i < size; i++) {
