@@ -48,7 +48,7 @@ import type {
   InterfaceMemberInfo,
 } from 'utils/interfaces';
 
-export default function organizationSidebar(): JSX.Element {
+export default function OrganizationSidebar(): JSX.Element {
   // Translation functions for different namespaces
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationSidebar',
