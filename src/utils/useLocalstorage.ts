@@ -60,7 +60,7 @@ export const removeItem = (prefix: string, key: string): void => {
  * @returns void
  */
 export const clearAllItems = (prefix: string): void => {
-  const allPrefixedKeys = [];
+  const allPrefixedKeys: string[] = [];
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
     if (key && key.startsWith(prefix)) {
@@ -77,7 +77,7 @@ export const clearAllItems = (prefix: string): void => {
 /**
  * Custom hook for simplified localStorage operations.
  * @param prefix - Prefix to be added to the key, common for all keys. Default is 'Talawa-admin'.
- * @returns - Functions to getItem, setItem, removeItem, and getStorageKey.
+ * @returns - Functions to getItem, setItem, removeItem, getStorageKey, and clearAllItems.
  */
 export const useLocalStorage = (
   prefix: string = PREFIX,

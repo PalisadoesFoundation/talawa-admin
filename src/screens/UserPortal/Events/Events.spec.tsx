@@ -1243,7 +1243,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should test userRole as administrator', async () => {
-    setItem('role', JSON.stringify('administrator'));
+    setItem('role', 'administrator');
 
     render(
       <MockedProvider link={link}>
@@ -1271,7 +1271,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should test userRole as regular user', async () => {
-    setItem('role', JSON.stringify('user'));
+    setItem('role', 'user');
 
     render(
       <MockedProvider link={link}>

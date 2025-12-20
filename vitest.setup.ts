@@ -45,6 +45,7 @@ beforeAll(() => {
 // Basic cleanup after each test
 afterEach(() => {
   cleanup();
+  localStorage.clear();
   vi.clearAllMocks();
 });
 

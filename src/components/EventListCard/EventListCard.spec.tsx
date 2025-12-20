@@ -299,12 +299,15 @@ describe('Testing Event List Card', () => {
   });
 
   it('should show already registered text when the user is registered for an event', async () => {
+    setItem('userId', '456');
     renderEventListCard(props[3]);
 
     await userEvent.click(screen.getByTestId('card'));
 
-    expect(
-      screen.getByText(translations.alreadyRegistered),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.alreadyRegistered),
+      ).toBeInTheDocument();
+    });
   });
 });

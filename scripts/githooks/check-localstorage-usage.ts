@@ -58,6 +58,7 @@ const checkLocalStorageUsage = (file: string): void => {
     fileName === 'useLocalstorage.ts' ||
     fileName === 'localStorageMock.ts' || // Test utility that implements localStorage mock
     fileName === 'localStorageMock.spec.ts' || // Tests for localStorage mock utility
+    fileName === 'vitest.setup.ts' || // Clears localStorage after each test providing test isolation
     file.endsWith('.md') || // Skip documentation files
     file.startsWith('docs/') || // Skip auto-generated docs
     containsSkipComment(file)
