@@ -20,46 +20,6 @@ DetailedViolation = namedtuple(
 )
 CSSCheckResult = namedtuple("CSSCheckResult", ["violations"])
 
-
-def _strip_comments(line: str, in_block_comment: bool) -> tuple[str, bool]:
-    """Strips C-style comments from a line of code.
-
-    Removes both single-line (//) and multi-line (/* */) comments from the
-    input line while tracking block comment state across multiple lines.
-
-    Args:
-        line: A string containing a line of code that may include comments.
-        in_block_comment: A boolean indicating whether currently inside a
-            multi-line block comment from a previous line.
-
-    Returns:
-        A tuple containing:
-            - A string with comments removed from the input line.
-            - A boolean indicating whether still inside a block comment after
-              processing this line.
-    """
-    result = ""
-    i = 0
-
-    while i < len(line):
-        if in_block_comment:
-            if line[i : i + 2] == "*/":
-                in_block_comment = False
-                i += 2
-            else:
-                i += 1
-        else:
-            if line[i : i + 2] == "/*":
-                in_block_comment = True
-                i += 2
-            elif line[i : i + 2] == "//":
-                break
-            else:
-                result += line[i]
-                i += 1
-
-    return result, in_block_comment
-
 def check_embedded_styles(
     content: str, file_path: str
 ) -> list[DetailedViolation]:
@@ -150,7 +110,25 @@ def check_embedded_styles(
         if stripped_line.startswith(("import ", "import{", "import(")):
             continue
 
-        code_line, in_block_comment = _strip_comments(line, in_block_comment)
+        result = ""
+        i = 0
+        while i < len(line):
+            if in_block_comment:
+                if line[i : i + 2] == "*/":
+                    in_block_comment = False
+                    i += 2
+                else:
+                    i += 1
+            else:
+                if line[i : i + 2] == "/*":
+                    in_block_comment = True
+                    i += 2
+                elif line[i : i + 2] == "//":
+                    break
+                else:
+                    result += line[i]
+                    i += 1
+        code_line = result
 
         if not code_line.strip():
             continue
@@ -178,9 +156,9 @@ def check_embedded_styles(
                             continue
                 if violation_type == "pixel_value":
                     # Look for style-related keywords nearby
-                    context_window = line[
+                    context_window = code_line[
                         max(0, match.start() - 30) : min(
-                            len(line), match.end() + 30
+                            len(code_line), match.end() + 30
                         )
                     ]
                     if not any(
