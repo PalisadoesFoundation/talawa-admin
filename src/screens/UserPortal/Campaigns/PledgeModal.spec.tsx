@@ -1170,8 +1170,7 @@ describe('PledgeModal', () => {
       const member = { id: '1', firstName: '', lastName: 'Doe' };
       expect(getMemberLabel(member as InterfaceUserInfoPG)).toBe('Doe');
     });
-
-    it('should properly trigger autocomplete onChange with new pledger data (cover line 279)', async () => {
+    it('should update pledgeUsers state when selecting a pledger from autocomplete in create mode', async () => {
       const adminLink = new StaticMockLink([...BASE_PLEDGE_MODAL_ADMIN_MOCKS]);
       renderPledgeModal(adminLink, pledgeProps[0]);
 
