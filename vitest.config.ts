@@ -75,7 +75,7 @@ export default defineConfig({
         '**/*.{spec,test}.{js,jsx,ts,tsx}',
         '**/*.{mocks,mock,helpers,mockHelpers}.{js,jsx,ts,tsx}', // Exclude mock/helper files from coverage
         'coverage/**',
-        '**/index.{js,ts}',
+        'src/!(install)/index.{js,ts}',  // Exclude index files except in install folder
         '**/*.d.ts',
         'src/test/**',
         'vitest.config.ts',
