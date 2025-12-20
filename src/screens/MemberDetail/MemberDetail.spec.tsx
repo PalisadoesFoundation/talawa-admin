@@ -742,11 +742,11 @@ describe('MemberDetail', () => {
     expect(screen.getByTestId('natalsex-dropdown-menu')).toBeInTheDocument();
 
     // Find and click one of the options=
-    const option = screen.getByTestId('change-natalsex-btn-male'); // Or whatever option text you expect
+    const option = screen.getByTestId('change-natalsex-btn-female'); // Or whatever option text you expect
     await userEvent.click(option);
 
     // Verify the selection was made
-    expect(maritialStatus).toHaveTextContent('Male');
+    expect(maritialStatus).toHaveTextContent('Female');
   });
 
   test('handles profile picture edit button click', async () => {

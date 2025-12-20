@@ -738,7 +738,6 @@ describe('PostCard', () => {
       }),
       setItem: vi.fn(),
       removeItem: vi.fn(),
-      clearAllItems: vi.fn(),
       getStorageKey: vi.fn((key: string) => key),
     }));
 
@@ -759,7 +758,6 @@ describe('PostCard', () => {
       }),
       setItem: vi.fn(),
       removeItem: vi.fn(),
-      clearAllItems: vi.fn(),
       getStorageKey: vi.fn((key: string) => key),
     }));
 
@@ -780,7 +778,6 @@ describe('PostCard', () => {
       }),
       setItem: vi.fn(),
       removeItem: vi.fn(),
-      clearAllItems: vi.fn(),
       getStorageKey: vi.fn((key: string) => key),
     }));
 
@@ -801,7 +798,6 @@ describe('PostCard', () => {
       }),
       setItem: vi.fn(),
       removeItem: vi.fn(),
-      clearAllItems: vi.fn(),
       getStorageKey: vi.fn((key: string) => key),
     }));
 

@@ -69,7 +69,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     await act(async () => {
       await i18nForTest.changeLanguage('en');
     });
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('Component should be rendered properly', async () => {

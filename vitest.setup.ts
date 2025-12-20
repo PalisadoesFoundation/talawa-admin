@@ -53,10 +53,19 @@ beforeAll(() => {
   };
 });
 
+Object.defineProperty(globalThis, 'localStorage', {
+  configurable: true,
+  get: () => localStorageMock as unknown as Storage,
+  set: () => {
+    // swallow attempts to overwrite window.localStorage from tests
+  },
+});
+
 // Basic cleanup before each test
 beforeEach(() => {
-  if (globalThis.localStorage.localStorage !== localStorageMock) {
-    vi.stubGlobal('localStorage', localStorageMock);
+  const g = globalThis as unknown as { localStorage: unknown };
+  if (g.localStorage !== (localStorageMock as unknown as Storage)) {
+    vi.stubGlobal('localStorage', localStorageMock as unknown as Storage);
   }
 });
 
