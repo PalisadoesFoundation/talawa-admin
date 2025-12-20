@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **getItem**\<`T`\>(`prefix`, `key`): `T`
 
-Defined in: [src/utils/useLocalstorage.ts:30](https://github.com/Ritz-Bansal/talawa-admin/blob/46e3b173bce089240a83df22c736d3caa33c9690/src/utils/useLocalstorage.ts#L30)
+Defined in: [src/utils/useLocalstorage.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L30)
 
 Retrieves the stored value for the given key from local storage.
 
