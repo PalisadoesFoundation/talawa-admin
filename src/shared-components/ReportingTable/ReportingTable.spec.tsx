@@ -1,9 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import ReportingTable, {
-  adjustColumnsForCompactMode,
-} from './ReportingTable';
+import ReportingTable, { adjustColumnsForCompactMode } from './ReportingTable';
 import type {
   ReportingTableColumn,
   ReportingRow,
@@ -142,7 +140,13 @@ describe('ReportingTable', () => {
 
     it('preserves second column flex if already less than or equal to 1.5', () => {
       const columnsWithSmallFlex: ReportingTableColumn[] = [
-        { field: 'id', headerName: '#', flex: 1, minWidth: 80, sortable: false },
+        {
+          field: 'id',
+          headerName: '#',
+          flex: 1,
+          minWidth: 80,
+          sortable: false,
+        },
         {
           field: 'name',
           headerName: 'Name',
@@ -174,7 +178,13 @@ describe('ReportingTable', () => {
 
     it('handles single column array', () => {
       const singleColumn: ReportingTableColumn[] = [
-        { field: 'id', headerName: '#', flex: 1, minWidth: 80, sortable: false },
+        {
+          field: 'id',
+          headerName: '#',
+          flex: 1,
+          minWidth: 80,
+          sortable: false,
+        },
       ];
 
       const result = adjustColumnsForCompactMode(singleColumn, true);
@@ -185,7 +195,13 @@ describe('ReportingTable', () => {
 
     it('handles two column array', () => {
       const twoColumns: ReportingTableColumn[] = [
-        { field: 'id', headerName: '#', flex: 1, minWidth: 80, sortable: false },
+        {
+          field: 'id',
+          headerName: '#',
+          flex: 1,
+          minWidth: 80,
+          sortable: false,
+        },
         {
           field: 'name',
           headerName: 'Name',
