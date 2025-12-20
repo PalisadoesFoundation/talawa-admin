@@ -7,6 +7,46 @@ import type {
 } from '../../types/ReportingTable/interface';
 
 /**
+ * Adjusts column widths for compact display mode.
+ * In compact mode:
+ * - First column gets flex: 0.5 and minWidth: 50 (typically for row numbers)
+ * - Second column gets flex capped at 1.5 (typically for names)
+ * - Remaining columns are unchanged
+ *
+ * @param columns - Original column definitions
+ * @param compactMode - Whether to apply compact adjustments
+ * @returns Adjusted column definitions
+ */
+export const adjustColumnsForCompactMode = (
+  columns: ReportingTableColumn[],
+  compactMode: boolean,
+): ReportingTableColumn[] => {
+  if (!compactMode) {
+    return columns;
+  }
+
+  // Adjust column widths for compact mode
+  return columns.map((col, index): ReportingTableColumn => {
+    if (index === 0) {
+      // First column (usually #) - reduce width
+      return {
+        ...col,
+        flex: 0.5,
+        minWidth: 50,
+      };
+    }
+    if (index === 1) {
+      // Second column (usually name) - reduce width slightly
+      return {
+        ...col,
+        flex: col.flex ? Math.min(col.flex, 1.5) : 1.5,
+      };
+    }
+    return col;
+  });
+};
+
+/**
  * A flexible reporting table component that wraps MUI DataGrid with optional infinite scroll.
  *
  * @remarks
@@ -49,33 +89,11 @@ const ReportingTable: React.FC<ReportingTableProps> = ({
   listProps,
 }) => {
   // Apply compact column widths when compactColumns is enabled (for tables with 7 or more columns)
-  const adjustedColumns = useMemo(() => {
-    const compactColumns = gridProps?.compactColumns ?? false;
-
-    if (!compactColumns) {
-      return columns;
-    }
-
-    // Adjust column widths for compact mode
-    return columns.map((col, index): ReportingTableColumn => {
-      if (index === 0) {
-        // First column (usually #) - reduce width
-        return {
-          ...col,
-          flex: 0.5,
-          minWidth: 50,
-        };
-      }
-      if (index === 1) {
-        // Second column (usually name) - reduce width slightly
-        return {
-          ...col,
-          flex: col.flex ? Math.min(col.flex, 1.5) : 1.5,
-        };
-      }
-      return col;
-    });
-  }, [columns, gridProps?.compactColumns]);
+  const adjustedColumns = useMemo(
+    () =>
+      adjustColumnsForCompactMode(columns, gridProps?.compactColumns ?? false),
+    [columns, gridProps?.compactColumns],
+  );
 
   const grid = (
     <div className="datatable">

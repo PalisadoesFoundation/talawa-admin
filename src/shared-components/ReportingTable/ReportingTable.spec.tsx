@@ -1,7 +1,9 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import ReportingTable from './ReportingTable';
+import ReportingTable, {
+  adjustColumnsForCompactMode,
+} from './ReportingTable';
 import type {
   ReportingTableColumn,
   ReportingRow,
@@ -72,8 +74,8 @@ describe('ReportingTable', () => {
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
-  describe('compactColumns feature', () => {
-    const manyColumns: ReportingTableColumn[] = [
+  describe('adjustColumnsForCompactMode function', () => {
+    const sampleColumns: ReportingTableColumn[] = [
       { field: 'id', headerName: '#', flex: 1, minWidth: 80, sortable: false },
       {
         field: 'name',
@@ -92,111 +94,112 @@ describe('ReportingTable', () => {
       {
         field: 'col4',
         headerName: 'Column 4',
-        flex: 1,
-        minWidth: 100,
-        sortable: false,
-      },
-      {
-        field: 'col5',
-        headerName: 'Column 5',
-        flex: 1,
-        minWidth: 100,
-        sortable: false,
-      },
-      {
-        field: 'col6',
-        headerName: 'Column 6',
-        flex: 1,
-        minWidth: 100,
-        sortable: false,
-      },
-      {
-        field: 'col7',
-        headerName: 'Column 7',
-        flex: 1,
+        flex: 1.5,
         minWidth: 100,
         sortable: false,
       },
     ];
 
-    it('does not adjust columns when compactColumns is false', () => {
-      const gridProps: ReportingTableGridProps = {
-        compactColumns: false,
-      };
+    it('returns original columns when compactMode is false', () => {
+      const result = adjustColumnsForCompactMode(sampleColumns, false);
 
-      render(
-        <ReportingTable
-          rows={sampleRows}
-          columns={manyColumns}
-          gridProps={gridProps}
-        />,
-      );
-
-      expect(screen.getByRole('grid')).toBeInTheDocument();
-      // The component should render without adjusting columns
-      // We can't directly inspect the column props passed to DataGrid,
-      // but we can verify it renders successfully
+      expect(result).toEqual(sampleColumns);
+      expect(result).toBe(sampleColumns); // Should return the same reference
     });
 
-    it('adjusts first column width when compactColumns is true', () => {
-      const gridProps: ReportingTableGridProps = {
-        compactColumns: true,
-      };
+    it('adjusts first column to flex: 0.5 and minWidth: 50 when compactMode is true', () => {
+      const result = adjustColumnsForCompactMode(sampleColumns, true);
 
-      render(
-        <ReportingTable
-          rows={sampleRows}
-          columns={manyColumns}
-          gridProps={gridProps}
-        />,
-      );
-
-      expect(screen.getByRole('grid')).toBeInTheDocument();
-      // The adjustedColumns memo should reduce first column to flex: 0.5, minWidth: 50
-      // We verify the component renders successfully with compact mode enabled
+      expect(result[0]).toEqual({
+        field: 'id',
+        headerName: '#',
+        flex: 0.5,
+        minWidth: 50,
+        sortable: false,
+      });
     });
 
-    it('adjusts second column flex when compactColumns is true', () => {
-      const gridProps: ReportingTableGridProps = {
-        compactColumns: true,
-      };
+    it('caps second column flex at 1.5 when compactMode is true', () => {
+      const result = adjustColumnsForCompactMode(sampleColumns, true);
 
-      render(
-        <ReportingTable
-          rows={sampleRows}
-          columns={manyColumns}
-          gridProps={gridProps}
-        />,
-      );
-
-      expect(screen.getByRole('grid')).toBeInTheDocument();
-      // The adjustedColumns memo should cap second column flex at 1.5
-      // Component should render successfully
+      // Original flex is 2, should be capped at 1.5
+      expect(result[1].flex).toBe(1.5);
+      expect(result[1].field).toBe('name');
+      expect(result[1].headerName).toBe('Name');
+      expect(result[1].minWidth).toBe(120); // Unchanged
     });
 
-    it('leaves remaining columns unchanged when compactColumns is true', () => {
-      const gridProps: ReportingTableGridProps = {
-        compactColumns: true,
-      };
+    it('uses 1.5 as default flex for second column when original flex is undefined', () => {
+      const columnsWithoutFlex: ReportingTableColumn[] = [
+        { field: 'id', headerName: '#', minWidth: 80, sortable: false },
+        { field: 'name', headerName: 'Name', minWidth: 120, sortable: false },
+      ];
 
-      render(
-        <ReportingTable
-          rows={sampleRows}
-          columns={manyColumns}
-          gridProps={gridProps}
-        />,
-      );
+      const result = adjustColumnsForCompactMode(columnsWithoutFlex, true);
 
-      expect(screen.getByRole('grid')).toBeInTheDocument();
-      // Columns after the second should remain unchanged
-      // Component should render successfully with all columns
+      expect(result[1].flex).toBe(1.5);
     });
 
-    it('defaults to non-compact mode when compactColumns is undefined', () => {
-      render(<ReportingTable rows={sampleRows} columns={manyColumns} />);
+    it('preserves second column flex if already less than or equal to 1.5', () => {
+      const columnsWithSmallFlex: ReportingTableColumn[] = [
+        { field: 'id', headerName: '#', flex: 1, minWidth: 80, sortable: false },
+        {
+          field: 'name',
+          headerName: 'Name',
+          flex: 1.2,
+          minWidth: 120,
+          sortable: false,
+        },
+      ];
 
-      expect(screen.getByRole('grid')).toBeInTheDocument();
-      // Should use original columns without adjustment
+      const result = adjustColumnsForCompactMode(columnsWithSmallFlex, true);
+
+      expect(result[1].flex).toBe(1.2); // Should preserve original flex
+    });
+
+    it('leaves remaining columns unchanged when compactMode is true', () => {
+      const result = adjustColumnsForCompactMode(sampleColumns, true);
+
+      // Third column should be unchanged
+      expect(result[2]).toEqual(sampleColumns[2]);
+      // Fourth column should be unchanged
+      expect(result[3]).toEqual(sampleColumns[3]);
+    });
+
+    it('handles empty array', () => {
+      const result = adjustColumnsForCompactMode([], true);
+
+      expect(result).toEqual([]);
+    });
+
+    it('handles single column array', () => {
+      const singleColumn: ReportingTableColumn[] = [
+        { field: 'id', headerName: '#', flex: 1, minWidth: 80, sortable: false },
+      ];
+
+      const result = adjustColumnsForCompactMode(singleColumn, true);
+
+      expect(result[0].flex).toBe(0.5);
+      expect(result[0].minWidth).toBe(50);
+    });
+
+    it('handles two column array', () => {
+      const twoColumns: ReportingTableColumn[] = [
+        { field: 'id', headerName: '#', flex: 1, minWidth: 80, sortable: false },
+        {
+          field: 'name',
+          headerName: 'Name',
+          flex: 3,
+          minWidth: 120,
+          sortable: false,
+        },
+      ];
+
+      const result = adjustColumnsForCompactMode(twoColumns, true);
+
+      expect(result[0].flex).toBe(0.5);
+      expect(result[0].minWidth).toBe(50);
+      expect(result[1].flex).toBe(1.5); // Capped from 3
     });
   });
 });
