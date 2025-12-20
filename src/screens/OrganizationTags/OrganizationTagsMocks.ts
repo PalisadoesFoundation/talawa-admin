@@ -176,7 +176,7 @@ export const MOCK_RESPONSES = {
         query: CREATE_USER_TAG,
         variables: { name: 'userTag 13', organizationId: 'orgId' },
       },
-      result: { data: null },
+      result: { data: { createUserTag: null } },
     },
   ],
 
@@ -227,7 +227,7 @@ export const MOCK_RESPONSES = {
       },
       result: {
         data: {
-          organizations: [{ userTags: undefined as unknown as UserTags }],
+          organizations: [{ userTags: null as unknown as UserTags }],
         },
       },
     },

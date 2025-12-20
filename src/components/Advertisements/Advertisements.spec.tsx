@@ -86,6 +86,7 @@ vi.mock('@apollo/client/react', async () => {
 
 describe('Testing Advertisement Component', () => {
   beforeEach(() => {
+    cache.restore({});
     mockUseMutation = vi.fn();
     vi.clearAllMocks();
     mockUseMutation.mockReturnValue([vi.fn()]);
@@ -837,9 +838,10 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
-
-    expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
     expect(screen.getByTestId('AdEntry')).toBeInTheDocument();
     expect(screen.getByTestId('Ad_type')).toBeInTheDocument();
     expect(screen.getByTestId('Ad_type')).toHaveTextContent('banner');

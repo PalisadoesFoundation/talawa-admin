@@ -247,7 +247,7 @@ describe('Organisation Tags Page', () => {
                   />
                   <button
                     data-testid={search.buttonTestId}
-                    onClick={() => {}}
+                    onClick={() => { }}
                     tabIndex={-1}
                     type="button"
                   >
@@ -382,6 +382,8 @@ describe('Organisation Tags Page', () => {
         translations.tagCreationSuccess,
       );
     });
+
+    await wait();
   });
   test('creates a new user tag with error', async () => {
     renderOrganizationTags(link3);

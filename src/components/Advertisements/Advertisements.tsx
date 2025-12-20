@@ -68,6 +68,7 @@ export default function Advertisements(): JSX.Element {
 
   document.title = t('title');
 
+  const [searchQuery, setSearchQuery] = useState('');
   const [afterActive, setAfterActive] = useState<string | null | undefined>(
     null,
   );
@@ -199,6 +200,18 @@ export default function Advertisements(): JSX.Element {
     return unique;
   }
 
+  const filteredActiveAdvertisements = activeAdvertisements.filter(
+    (ad) =>
+      ad.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (ad.description ?? '').toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
+  const filteredCompletedAdvertisements = completedAdvertisements.filter(
+    (ad) =>
+      ad.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (ad.description ?? '').toLowerCase().includes(searchQuery.toLowerCase()),
+  );
+
   const loading = activeLoading || completedLoading; // if any of them is in loading state
   return (
     <>
@@ -210,24 +223,7 @@ export default function Advertisements(): JSX.Element {
               search={{
                 placeholder: 'Search advertisements...',
                 onSearch: (value) => {
-                  const searchValue = value.toLowerCase();
-                  const filteredActiveAds = activeAdvertisements.filter(
-                    (ad) =>
-                      ad.name.toLowerCase().includes(searchValue) ||
-                      (ad.description ?? '')
-                        .toLowerCase()
-                        .includes(searchValue),
-                  );
-                  const filteredCompletedAds = completedAdvertisements.filter(
-                    (ad) =>
-                      ad.name.toLowerCase().includes(searchValue) ||
-                      (ad.description ?? '')
-                        .toLowerCase()
-                        .includes(searchValue),
-                  );
-
-                  setActiveAdvertisements(filteredActiveAds);
-                  setCompletedAdvertisements(filteredCompletedAds);
+                  setSearchQuery(value);
                 },
                 inputTestId: 'searchname',
                 buttonTestId: 'searchButton',
@@ -251,13 +247,13 @@ export default function Advertisements(): JSX.Element {
               title={t('activeAds')}
               className="pt-4 m-2"
             >
-              {activeAdvertisements.length === 0 ? (
+              {filteredActiveAdvertisements.length === 0 ? (
                 <div className={styles.pMessageAdvertisement}>
                   {t('pMessage')}
                 </div>
               ) : (
                 <InfiniteScroll
-                  dataLength={activeAdvertisements.length}
+                  dataLength={filteredActiveAdvertisements.length}
                   next={loadMoreActiveAdvertisements}
                   loader={<AdvertisementSkeleton />}
                   hasMore={
@@ -267,7 +263,7 @@ export default function Advertisements(): JSX.Element {
                   className={styles.listBoxAdvertisements}
                 >
                   <div className={styles.justifyspAdvertisements}>
-                    {activeAdvertisements.map((ad) => {
+                    {filteredActiveAdvertisements.map((ad) => {
                       return (
                         <AdvertisementEntry
                           key={ad.id}
@@ -287,13 +283,13 @@ export default function Advertisements(): JSX.Element {
               title={t('archivedAds')}
               className="pt-4 m-2"
             >
-              {completedAdvertisements.length === 0 ? (
+              {filteredCompletedAdvertisements.length === 0 ? (
                 <div className={styles.pMessageAdvertisement}>
                   {t('pMessage')}
                 </div>
               ) : (
                 <InfiniteScroll
-                  dataLength={completedAdvertisements.length}
+                  dataLength={filteredCompletedAdvertisements.length}
                   next={loadMoreCompletedAdvertisements}
                   loader={<AdvertisementSkeleton />}
                   hasMore={
@@ -303,7 +299,7 @@ export default function Advertisements(): JSX.Element {
                   className={styles.listBoxAdvertisements}
                 >
                   <div className={styles.justifyspAdvertisements}>
-                    {completedAdvertisements.map((ad) => {
+                    {filteredCompletedAdvertisements.map((ad) => {
                       return (
                         <AdvertisementEntry
                           key={ad.id}

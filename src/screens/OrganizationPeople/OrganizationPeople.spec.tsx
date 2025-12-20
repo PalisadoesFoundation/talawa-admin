@@ -84,7 +84,7 @@ vi.mock('screens/components/Navbar', () => {
                 />
                 <button
                   data-testid={search.buttonTestId}
-                  onClick={() => {}}
+                  onClick={() => { }}
                   tabIndex={-1}
                   type="button"
                 >
@@ -1373,5 +1373,9 @@ describe('OrganizationPeople', () => {
       name: /previous page/i,
     });
     fireEvent.click(prevPageButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
   });
 });

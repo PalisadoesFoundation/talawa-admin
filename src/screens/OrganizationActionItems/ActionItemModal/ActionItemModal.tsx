@@ -225,11 +225,11 @@ const ItemModal: FC<IItemModalProps> = ({
       },
       ...(eventId
         ? [
-            {
-              query: GET_EVENT_ACTION_ITEMS,
-              variables: { input: { id: eventId } },
-            },
-          ]
+          {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: eventId } },
+          },
+        ]
         : []),
     ],
   });
@@ -241,11 +241,11 @@ const ItemModal: FC<IItemModalProps> = ({
       },
       ...(eventId
         ? [
-            {
-              query: GET_EVENT_ACTION_ITEMS,
-              variables: { input: { id: eventId } },
-            },
-          ]
+          {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: eventId } },
+          },
+        ]
         : []),
     ],
   });
@@ -255,11 +255,11 @@ const ItemModal: FC<IItemModalProps> = ({
     {
       refetchQueries: eventId
         ? [
-            {
-              query: GET_EVENT_ACTION_ITEMS,
-              variables: { input: { id: eventId } },
-            },
-          ]
+          {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: eventId } },
+          },
+        ]
         : [],
     },
   );
@@ -398,7 +398,9 @@ const ItemModal: FC<IItemModalProps> = ({
 
   useEffect(() => {
     setFormState(initializeFormState(actionItem, initialDate));
+  }, [actionItem, initialDate]);
 
+  useEffect(() => {
     if (actionItem?.category?.id) {
       const foundCategory: IActionItemCategoryInfo | undefined =
         actionItemCategories.find(

@@ -312,16 +312,26 @@ const activeAdNode = createAdvertisementNode({
 
 export const getCompletedAdvertisementMocks: IAdvertisementListMock[] = [
   createAdvertisementListMock({ isCompleted: true, edges: [completedAdNode] }),
+  createAdvertisementListMock({ isCompleted: true, edges: [completedAdNode] }),
+  createAdvertisementListMock({ isCompleted: false, edges: [] }),
   createAdvertisementListMock({ isCompleted: false, edges: [] }),
 ];
 
 export const getActiveAdvertisementMocks: IAdvertisementListMock[] = [
   createAdvertisementListMock({ isCompleted: false, edges: [activeAdNode] }),
+  createAdvertisementListMock({ isCompleted: false, edges: [activeAdNode] }),
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
   createAdvertisementListMock({ isCompleted: true, edges: [] }),
 ];
 
 export const deleteAdvertisementMocks = [
   createAdvertisementListMock({ isCompleted: true, edges: [completedAdNode] }),
+  createAdvertisementListMock({ isCompleted: true, edges: [completedAdNode] }),
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: [],
+    hasNextPage: false,
+  }),
   createAdvertisementListMock({
     isCompleted: false,
     edges: [],
@@ -339,6 +349,20 @@ export const initialArchivedData: IAdvertisementListMock[] = [
     isCompleted: false,
     edges: [],
     hasNextPage: false,
+  }),
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: [],
+    hasNextPage: false,
+  }),
+  createAdvertisementListMock({
+    isCompleted: true,
+    edges: createBatchNodes(
+      6,
+      'Cookie shop',
+      'this is an active advertisement',
+      new Date('2025-02-03').toISOString(),
+    ),
   }),
   createAdvertisementListMock({
     isCompleted: true,
@@ -372,6 +396,20 @@ export const initialActiveData: IAdvertisementListMock[] = [
     isCompleted: true,
     edges: [],
     hasNextPage: false,
+  }),
+  createAdvertisementListMock({
+    isCompleted: true,
+    edges: [],
+    hasNextPage: false,
+  }),
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: createBatchNodes(
+      6,
+      'Cookie shop',
+      'this is an active advertisement',
+      new Date('2030-02-03').toISOString(),
+    ),
   }),
   createAdvertisementListMock({
     isCompleted: false,
@@ -411,6 +449,17 @@ export const filterActiveAdvertisementData: IAdvertisementListMock[] = [
       true,
     ),
   }),
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: createBatchNodes(
+      6,
+      'Cookie shop',
+      'this is an active advertisement',
+      new Date('2030-01-01').toISOString(),
+      true,
+    ),
+  }),
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
   createAdvertisementListMock({ isCompleted: true, edges: [] }),
 ];
 
@@ -425,6 +474,17 @@ export const filterCompletedAdvertisementData: IAdvertisementListMock[] = [
       true,
     ),
   }),
+  createAdvertisementListMock({
+    isCompleted: true,
+    edges: createBatchNodes(
+      6,
+      'Cookie shop',
+      'this is a completed advertisement',
+      new Date().toISOString(),
+      true,
+    ),
+  }),
+  createAdvertisementListMock({ isCompleted: false, edges: [] }),
   createAdvertisementListMock({ isCompleted: false, edges: [] }),
 ];
 
@@ -451,6 +511,18 @@ export const createAdvertisement = [
       }),
     ],
   }),
+  createAdvertisementListMock({
+    edges: [
+      createAdvertisementNode({
+        id: '1',
+        name: 'Ad1',
+        description: 'This is a new advertisement created for testing.',
+        startAt: createDates.startAtISO,
+        endAt: createDates.endAtISO,
+      }),
+    ],
+  }),
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
   createAdvertisementListMock({ isCompleted: true, edges: [] }),
 ];
 
@@ -500,6 +572,19 @@ export const createAdvertisementError = [
 export const updateAdMocks = [
   // First pair: completed query fires first in component
   createAdvertisementListMock({ isCompleted: true, edges: [] }),
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: [
+      createAdvertisementNode({
+        id: '1',
+        name: 'Ad1',
+        description: 'This is a new advertisement created for testing.',
+        startAt: updateDates.startAtISO,
+        endAt: updateDates.endAtISO,
+      }),
+    ],
+  }),
   createAdvertisementListMock({
     isCompleted: false,
     edges: [
@@ -514,6 +599,19 @@ export const updateAdMocks = [
   }),
   // Second pair for refetch after update
   createAdvertisementListMock({ isCompleted: true, edges: [] }),
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: [
+      createAdvertisementNode({
+        id: '1',
+        name: 'Ad1',
+        description: 'This is a new advertisement created for testing.',
+        startAt: updateDates.startAtISO,
+        endAt: updateDates.endAtISO,
+      }),
+    ],
+  }),
   createAdvertisementListMock({
     isCompleted: false,
     edges: [
@@ -538,6 +636,19 @@ export const updateAdMocks = [
   ),
   // Third pair after mutation completes
   createAdvertisementListMock({ isCompleted: true, edges: [] }),
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: [
+      createAdvertisementNode({
+        id: '1',
+        name: 'Ad1',
+        description: 'This is an updated advertisement',
+        startAt: updateDates.startAtISO,
+        endAt: updateDates.endAtISO,
+      }),
+    ],
+  }),
   createAdvertisementListMock({
     isCompleted: false,
     edges: [

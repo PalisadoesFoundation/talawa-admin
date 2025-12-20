@@ -583,6 +583,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
     expect(select).toBeInTheDocument();
     const nextButton = screen.getByTestId('nextPage');
     await userEvent.click(nextButton);
+    await wait();
   });
 
   it('should not trigger search for non-Enter key press', async () => {
@@ -601,7 +602,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
     const searchInput = screen.getByTestId('searchInput');
     fireEvent.keyUp(searchInput, { key: 'A', code: 'KeyA' });
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await wait();
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
   });
 
@@ -624,7 +625,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
     searchInput.remove();
 
     await userEvent.click(searchBtn);
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await wait();
   });
 });
 

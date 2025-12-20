@@ -105,7 +105,10 @@ const LeaveOrganization = (): JSX.Element => {
       navigate(`/user/organizations`);
     },
     onError: (err) => {
-      const isNetworkError = (err as any).networkError !== null;
+      const hasGraphQLErrors =
+        (err as any).graphQLErrors?.length > 0 ||
+        (err as any).errors?.length > 0;
+      const isNetworkError = !!(err as any).networkError || !hasGraphQLErrors;
       setError(
         isNetworkError
           ? 'Unable to process your request. Please check your connection.'
