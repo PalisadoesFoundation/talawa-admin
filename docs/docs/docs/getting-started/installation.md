@@ -139,10 +139,22 @@ Proceed to the next section.
 
 Run the following command to install the packages and dependencies required by the app:
 
-```
+```bash
 pnpm install
 ```
+### Install docs dependencies (developers only)
 
+If you plan to work on the documentation site (the `docs/` directory) or run the local documentation server, install the `pnpm` packages and ensure Docusaurus is available in the `docs/` folder.
+
+From the repository root:
+
+```bash
+cd docs
+
+pnpm install
+
+pnpm run start
+```
 The prerequisites are now installed. The next step will be to get the app up and running.
 
 ## Running Talawa Admin
