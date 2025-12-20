@@ -731,7 +731,8 @@
     "pledges": "Compromisos",
     "endsOn": "Finaliza el",
     "raisedAmount": "Monto recaudado",
-    "pledgedAmount": "Monto comprometido"
+    "pledgedAmount": "Monto comprometido",
+    "selectPledger": "Por favor seleccione un prometedor"
   },
   "orgPost": {
     "title": "Publicaciones de Talawa",
