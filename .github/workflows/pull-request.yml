@@ -150,7 +150,7 @@ jobs:
         run: |
           python .github/workflows/scripts/css_check.py \
             --directories src \
-            --exclude_directories utils \
+            --exclude_directories src/utils src/types \
   Check-Mock-Isolation:
     name: Check for proper mock cleanup in test files
     needs: [Code-Quality-Checks]
