@@ -114,6 +114,7 @@ const Pledges = (): JSX.Element => {
   interface IPledgeRefetchFn {
     (): Promise<PledgeQueryResult>;
   }
+  const shouldSkip = !orgId || !userId;
   const {
     data: pledgeData,
     loading: pledgeLoading,
@@ -125,18 +126,21 @@ const Pledges = (): JSX.Element => {
     error?: ApolloError;
     refetch: IPledgeRefetchFn;
   } = useQuery(USER_PLEDGES, {
-    variables: {
-      input: {
-        userId: userId,
-      },
-      where: searchTerm
-        ? {
-            ...(searchBy === 'pledgers' && { firstName_contains: searchTerm }),
-            ...(searchBy === 'campaigns' && { name_contains: searchTerm }),
-          }
-        : {},
-      orderBy: sortBy,
-    },
+    skip: shouldSkip,
+    variables: shouldSkip
+      ? undefined
+      : {
+          input: { userId: userId as string },
+          where: searchTerm
+            ? {
+                ...(searchBy === 'pledgers' && {
+                  firstName_contains: searchTerm,
+                }),
+                ...(searchBy === 'campaigns' && { name_contains: searchTerm }),
+              }
+            : {},
+          orderBy: sortBy,
+        },
   });
 
   if (!orgId || !userId) {

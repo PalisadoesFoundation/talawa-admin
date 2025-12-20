@@ -224,24 +224,9 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   const updatePledgeHandler = useCallback(
     async (e: ChangeEvent<HTMLFormElement>) => {
       e.preventDefault();
-      const startDate = dayjs(pledgeStartDate).format('YYYY-MM-DD');
-      const endDate = dayjs(pledgeEndDate).format('YYYY-MM-DD');
-
-      const updatedFields: {
-        [key: string]: number | string | string[] | undefined;
-      } = {};
-      // checks if there are changes to the pledge and adds them to the updatedFields object
+      const updatedFields: { amount?: number } = {};
       if (pledgeAmount !== pledge?.amount) {
         updatedFields.amount = pledgeAmount;
-      }
-      if (pledgeCurrency !== pledge?.currency) {
-        updatedFields.currency = pledgeCurrency;
-      }
-      if (startDate !== dayjs(pledge?.startDate).format('YYYY-MM-DD')) {
-        updatedFields.startDate = startDate;
-      }
-      if (endDate !== dayjs(pledge?.endDate).format('YYYY-MM-DD')) {
-        updatedFields.endDate = endDate;
       }
       try {
         await updatePledge({

@@ -523,37 +523,23 @@ describe('PledgeModal', () => {
       });
     });
 
-    it('preserves end date when start date does not exceed end date', async () => {
-      const dateChangeMock = [
+    it('should successfully update pledge with only amount change', async () => {
+      const amountChangeMock = [
         ...BASE_PLEDGE_MODAL_MOCKS,
         createUpdatePledgeMock({
           id: '1',
           amount: 200,
-          startDate: '2024-01-02',
-          endDate: '2024-01-02', // Component sends changed endDate even if logically preserved if logic sets it? Wait. If component sends it, mock must match. Log showed it sent.
         }),
       ];
-      const link = new StaticMockLink(dateChangeMock);
+      const link = new StaticMockLink(amountChangeMock);
       renderPledgeModal(link, pledgeProps[1]);
 
-      const startDateGroup = getPickerGroup(/start date/i);
-      const startDateInput = within(startDateGroup).getByRole('textbox', {
-        hidden: true,
-      });
-
-      const endDateGroup = getPickerGroup(/end date/i);
-      const endDateInput = within(endDateGroup).getByRole('textbox', {
-        hidden: true,
-      });
+      await waitFor(() =>
+        expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
+      );
 
       fireEvent.change(screen.getByLabelText('Amount'), {
         target: { value: '200' },
-      });
-      fireEvent.change(startDateInput, {
-        target: { value: '02/01/2024' },
-      });
-      fireEvent.change(endDateInput, {
-        target: { value: '02/01/2024' },
       });
 
       const form = screen.getByTestId('pledgeForm');
@@ -571,7 +557,18 @@ describe('PledgeModal', () => {
       expect(pledgeProps[1].refetchPledge).toHaveBeenCalled();
       expect(pledgeProps[1].hide).toHaveBeenCalled();
     });
-
+    it('hides pledger autocomplete for regular users in create mode', async () => {
+      const regularLink = new StaticMockLink([USER_DETAILS_MOCK]); // role: 'regular'
+      renderPledgeModal(regularLink, {
+        ...pledgeProps[0],
+        mode: 'create',
+        pledge: null,
+      });
+      await waitFor(() =>
+        expect(screen.getByTestId('pledgeForm')).toBeInTheDocument(),
+      );
+      expect(screen.queryByRole('combobox', { name: /pledger/i })).toBeNull();
+    });
     it('should handle pledge creation error', async () => {
       const errorMock = [
         ...BASE_PLEDGE_MODAL_MOCKS,
@@ -945,146 +942,8 @@ describe('PledgeModal', () => {
   });
 
   describe('Update field change flows', () => {
-    it('should update pledge with currency change', async () => {
-      const updateMock = [
-        ...PLEDGE_MODAL_MOCKS,
-        {
-          request: {
-            query: UPDATE_PLEDGE,
-            variables: {
-              id: '1',
-              currency: 'EUR',
-            },
-          },
-          result: {
-            data: {
-              updateFundraisingCampaignPledge: {
-                _id: '1',
-              },
-            },
-          },
-        },
-      ];
-
-      const updateLink = new StaticMockLink(updateMock);
-      renderPledgeModal(updateLink, pledgeProps[1]);
-
-      await waitFor(() =>
-        expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
-      );
-
-      // Change currency
-      const currencyDropdown = screen.getByLabelText('Currency');
-      fireEvent.mouseDown(currencyDropdown);
-      const eurOption = await screen.findByText('EUR (€)');
-      fireEvent.click(eurOption);
-
-      const form = screen.getByTestId('pledgeForm');
-      fireEvent.submit(form);
-
-      await waitFor(
-        () => {
-          expect(toast.success).toHaveBeenCalledWith(
-            translations.pledgeUpdated,
-          );
-        },
-        { timeout: 2000 },
-      );
-    });
-
-    it('should update pledge with start date change', async () => {
-      const updateMock = [
-        ...PLEDGE_MODAL_MOCKS,
-        {
-          request: {
-            query: UPDATE_PLEDGE,
-            variables: {
-              id: '1',
-              startDate: '2024-01-02',
-            },
-          },
-          result: {
-            data: {
-              updateFundraisingCampaignPledge: {
-                _id: '1',
-              },
-            },
-          },
-        },
-      ];
-
-      const updateLink = new StaticMockLink(updateMock);
-      renderPledgeModal(updateLink, pledgeProps[1]);
-
-      await waitFor(() =>
-        expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
-      );
-
-      const startDateGroup = getPickerGroup(/start date/i);
-      const startDateInput = within(startDateGroup).getByRole('textbox', {
-        hidden: true,
-      });
-      fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
-
-      const form = screen.getByTestId('pledgeForm');
-      fireEvent.submit(form);
-
-      await waitFor(
-        () => {
-          expect(toast.success).toHaveBeenCalledWith(
-            translations.pledgeUpdated,
-          );
-        },
-        { timeout: 2000 },
-      );
-    });
-
-    it('should update pledge with endDate change', async () => {
-      const updateMock = [
-        ...PLEDGE_MODAL_MOCKS,
-        {
-          request: {
-            query: UPDATE_PLEDGE,
-            variables: {
-              id: '1',
-              endDate: '2024-01-15',
-            },
-          },
-          result: {
-            data: {
-              updateFundraisingCampaignPledge: {
-                _id: '1',
-              },
-            },
-          },
-        },
-      ];
-
-      const updateLink = new StaticMockLink(updateMock);
-      renderPledgeModal(updateLink, pledgeProps[1]);
-
-      await waitFor(() =>
-        expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
-      );
-
-      const endDateGroup = getPickerGroup(/end date/i);
-      const endDateInput = within(endDateGroup).getByRole('textbox', {
-        hidden: true,
-      });
-      fireEvent.change(endDateInput, { target: { value: '15/01/2024' } });
-
-      const form = screen.getByTestId('pledgeForm');
-      fireEvent.submit(form);
-
-      await waitFor(
-        () => {
-          expect(toast.success).toHaveBeenCalledWith(
-            translations.pledgeUpdated,
-          );
-        },
-        { timeout: 2000 },
-      );
-    });
+    // Note: The component now only supports updating the amount field during pledge edit.
+    // Currency, startDate, and endDate changes are no longer sent to the backend.
 
     it('should cover remaining edge cases for 100% coverage', async () => {
       const adminLink = new StaticMockLink([...BASE_PLEDGE_MODAL_ADMIN_MOCKS]);
