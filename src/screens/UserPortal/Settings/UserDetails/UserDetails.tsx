@@ -122,7 +122,7 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
   useEffect(() => {
     setPass(userDetails.password);
     handlePasswordCheck(userDetails.password);
-  });
+  }, [userDetails.password]);
 
   const togglePassword = (): void => setShowPassword(!showPassword);
 
