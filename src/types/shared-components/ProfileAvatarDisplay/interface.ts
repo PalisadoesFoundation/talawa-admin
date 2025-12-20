@@ -3,7 +3,6 @@ import React from 'react';
  * Props for the ProfileAvatarDisplay component.
  *
  * @property imageUrl - Optional URL of the avatar image to display.
- * @property altText - Required alt text for accessibility.
  * @property size - Optional size preset: 'small', 'medium', 'large', or 'custom'.
  * @property shape - Optional shape: 'circle', 'square', or 'rounded'.
  * @property customSize - Optional custom size in pixels (used when size='custom').
@@ -16,7 +15,6 @@ import React from 'react';
  */
 export interface InterfaceProfileAvatarDisplayProps {
   imageUrl?: string | null;
-  altText: string;
   size?: 'small' | 'medium' | 'large' | 'custom';
   shape?: 'circle' | 'square' | 'rounded';
   customSize?: number;

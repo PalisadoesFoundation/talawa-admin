@@ -1654,5 +1654,10 @@
     "deleteComment": "Delete Comment",
     "deleting": "Deleting…",
     "emptyCommentError": "Please enter a comment before submitting."
+  },
+  "profileAvatar": {
+    "altText": "Profile picture of {{name}}",
+    "modalTitle": "Profile Picture",
+    "enlargedAltText": "Enlarged profile picture of {{name}}"
   }
 }

@@ -3,6 +3,7 @@ import { InterfaceProfileAvatarDisplayProps } from 'types/shared-components/Prof
 import Avatar from 'components/Avatar/Avatar';
 import Modal from 'react-bootstrap/Modal';
 import styles from './ProfileAvatarDisplay.module.css';
+import { useTranslation } from 'react-i18next';
 
 /**
  * ProfileAvatarDisplay component renders a profile avatar based on the provided properties.
@@ -10,7 +11,6 @@ import styles from './ProfileAvatarDisplay.module.css';
  * @param {InterfaceProfileAvatarDisplayProps} props - The properties of the profile avatar display.
  * @param {string} props.imageUrl - The URL of the avatar image.
  * @param {string} props.fallbackName - The name of the user.
- * @param {string} props.altText - The alt text for the avatar image.
  * @param {"small" | "medium" | "large" | "custom"} props.size - The size of the avatar.
  * @param {"circle" | "square" | "rounded"} props.shape - The shape of the avatar.
  * @param {number} props.customSize - The custom size of the avatar.
@@ -39,7 +39,6 @@ import styles from './ProfileAvatarDisplay.module.css';
  */
 export const ProfileAvatarDisplay = ({
   imageUrl,
-  altText,
   size = 'large',
   shape = 'circle',
   customSize,
@@ -59,7 +58,10 @@ export const ProfileAvatarDisplay = ({
 }: InterfaceProfileAvatarDisplayProps): JSX.Element => {
   const [imgError, setImgError] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'profileAvatar',
+  });
+  const altText = t('altText', { name: fallbackName });
   useEffect(() => {
     setImgError(false);
   }, [imageUrl]);
@@ -128,13 +130,13 @@ export const ProfileAvatarDisplay = ({
       data-testid={dataTestId ? `${dataTestId}-modal` : 'avatar-modal'}
     >
       <Modal.Header closeButton className={styles.modalHeader}>
-        <Modal.Title>{fallbackName}</Modal.Title>
+        <Modal.Title>{t('modalTitle')}</Modal.Title>
       </Modal.Header>
       <Modal.Body className={styles.modalBody}>
         {imageUrl && imageUrl !== 'null' && !imgError ? (
           <img
             src={imageUrl}
-            alt={altText}
+            alt={t('enlargedAltText', { name: fallbackName })}
             className={styles.enlargedImage}
             crossOrigin={crossOrigin}
           />
@@ -165,11 +167,16 @@ export const ProfileAvatarDisplay = ({
           style={customSizeStyle}
           data-testid={dataTestId}
           onClick={handleClick}
-          role={enableEnlarge ? 'button' : undefined}
-          tabIndex={enableEnlarge ? 0 : undefined}
+          role={enableEnlarge || onClick ? 'button' : undefined}
+          tabIndex={enableEnlarge || onClick ? 0 : undefined}
           onKeyDown={
-            enableEnlarge
-              ? (e) => e.key === 'Enter' && handleClick()
+            enableEnlarge || onClick
+              ? (e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleClick();
+                  }
+                }
               : undefined
           }
         >
@@ -202,7 +209,9 @@ export const ProfileAvatarDisplay = ({
         role={enableEnlarge ? 'button' : undefined}
         tabIndex={enableEnlarge ? 0 : undefined}
         onKeyDown={
-          enableEnlarge ? (e) => e.key === 'Enter' && handleClick() : undefined
+          enableEnlarge
+            ? (e) => (e.key === 'Enter' || e.key === ' ') && handleClick()
+            : undefined
         }
       >
         <Avatar
