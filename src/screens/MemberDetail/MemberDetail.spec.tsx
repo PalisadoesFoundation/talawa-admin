@@ -730,14 +730,14 @@ describe('MemberDetail', () => {
     ).toBeInTheDocument();
 
     // Find the dropdown by the fieldName from DynamicDropDown props
-    const genderStatus = screen.getByTestId('natalsex-dropdown-btn');
-    expect(genderStatus).toBeInTheDocument();
+    const natalSexStatus = screen.getByTestId('natalsex-dropdown-btn');
+    expect(natalSexStatus).toBeInTheDocument();
 
-    // Test initial state - mock data has male which displays as "Male"
-    expect(genderStatus).toHaveTextContent('Male');
+    // Test initial mock data has male which displays as "Male"
+    expect(natalSexStatus).toHaveTextContent('Male');
 
     // Click the dropdown button to open it
-    await userEvent.click(genderStatus);
+    await userEvent.click(natalSexStatus);
 
     expect(screen.getByTestId('natalsex-dropdown-menu')).toBeInTheDocument();
 
@@ -746,7 +746,7 @@ describe('MemberDetail', () => {
     await userEvent.click(option);
 
     // Verify the selection was made
-    expect(genderStatus).toHaveTextContent('Female');
+    expect(natalSexStatus).toHaveTextContent('Female');
   });
 
   test('handles profile picture edit button click', async () => {
