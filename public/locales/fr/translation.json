@@ -731,7 +731,8 @@
     "raisedAmount": "Montant collecté",
     "pledgedAmount": "Montant promis",
     "startDate": "Date de début",
-    "endDate": "Date de fin"
+    "endDate": "Date de fin",
+    "selectPledger": "Veuillez sélectionner un donateur"
   },
   "orgPost": {
     "title": "Des postes",

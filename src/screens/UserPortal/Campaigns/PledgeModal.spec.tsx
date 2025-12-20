@@ -744,6 +744,40 @@ describe('PledgeModal', () => {
   });
 
   describe('Edge Cases and Error Handling', () => {
+    it('should show error toast when submitting without selecting a pledger', async () => {
+      // Create props with no pledger selected for create mode
+      const noPledgerProps: InterfacePledgeModal = {
+        isOpen: true,
+        hide: vi.fn(),
+        pledge: null, // No existing pledge, so pledgeUsers will be empty initially
+        refetchPledge: vi.fn(),
+        campaignId: 'campaignId',
+        userId: 'userId',
+        endDate: new Date(),
+        mode: 'create',
+      };
+
+      const adminLink = new StaticMockLink([USER_DETAILS_ADMIN_MOCK]);
+      renderPledgeModal(adminLink, noPledgerProps);
+
+      // Wait for the admin user data to load and autocomplete to be visible
+      await waitFor(() => {
+        expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
+      });
+
+      // For admin users with no existing pledge, pledgeUsers starts as empty array
+      // Submit the form without selecting any pledger
+      const form = screen.getByTestId('pledgeForm');
+      fireEvent.submit(form);
+
+      await waitFor(
+        () => {
+          expect(toast.error).toHaveBeenCalledWith(translations.selectPledger);
+        },
+        { timeout: 2000 },
+      );
+    });
+
     it('should handle invalid date formats gracefully', async () => {
       renderPledgeModal(link1, pledgeProps[0]);
 
