@@ -8423,6 +8423,10 @@ form {
   min-height: 100vh;
 }
 
+.titleMargin {
+  margin-top: 0.75rem;
+}
+
 .message {
   margin-top: 25%;
   display: flex;

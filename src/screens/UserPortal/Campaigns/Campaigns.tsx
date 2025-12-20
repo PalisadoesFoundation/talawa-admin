@@ -280,7 +280,7 @@ const Campaigns = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        const raised = 0; // Currently hardcoded
+        const raised = 0; // Currently hardcoded, will be updated when actual data is available
         const goal = params.row.fundingGoal as number;
         const percentage = goal > 0 ? Math.min((raised / goal) * 100, 100) : 0;
 

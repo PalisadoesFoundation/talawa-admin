@@ -25,6 +25,7 @@ import {
   Frequency,
   InterfaceRecurrenceRule,
 } from 'utils/recurrenceUtils/recurrenceTypes';
+import { getPickerInputByLabel } from 'test-utils/datePickerHelpers';
 
 vi.mock('screens/OrganizationEvents/CustomRecurrenceModal', () => ({
   default: vi.fn(),
@@ -109,25 +110,6 @@ const renderComponent = (props = {}) => {
       </Provider>
     </MockedProvider>,
   );
-};
-
-// Helper to get date/time picker container by label
-// Updated to work with MUI X DatePicker which doesn't use role="group" anymore
-const getPickerInputByLabel = (label: string): HTMLElement => {
-  const allInputs = screen.getAllByRole('textbox', { hidden: true });
-  for (const input of allInputs) {
-    const formControl = input.closest('.MuiFormControl-root');
-    if (formControl) {
-      const labelEl = formControl.querySelector('label');
-      if (labelEl) {
-        const labelText = labelEl.textContent?.toLowerCase() || '';
-        if (labelText.includes(label.toLowerCase())) {
-          return formControl as HTMLElement;
-        }
-      }
-    }
-  }
-  throw new Error(`Could not find date picker for label: ${label}`);
 };
 
 describe('EventListCardPreviewModal', () => {

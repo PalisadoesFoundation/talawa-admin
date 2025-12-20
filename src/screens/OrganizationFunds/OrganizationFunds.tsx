@@ -21,14 +21,13 @@ import {
 } from 'types/ReportingTable/interface';
 import { PAGE_SIZE, ROW_HEIGHT } from 'types/ReportingTable/utils';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import { dataGridStyle as baseDataGridStyle } from 'types/ReportingTable/utils';
 
 const dataGridStyle = {
-  borderRadius: 'var(--table-head-radius)',
-  backgroundColor: 'var(--row-background)',
+  ...baseDataGridStyle,
   '& .MuiDataGrid-row': {
-    backgroundColor: 'var(--row-background)',
+    ...baseDataGridStyle['& .MuiDataGrid-row'],
     cursor: 'pointer',
-    '&:focus-within': { outline: 'none' },
   },
   '& .MuiDataGrid-row:hover': {
     backgroundColor: '#f0f0f0',
@@ -36,8 +35,6 @@ const dataGridStyle = {
   '& .MuiDataGrid-row.Mui-hovered': {
     backgroundColor: '#f0f0f0',
   },
-  '& .MuiDataGrid-cell:focus': { outline: 'none' },
-  '& .MuiDataGrid-cell:focus-within': { outline: 'none' },
 };
 
 /**
@@ -208,7 +205,7 @@ const organizationFunds = (): JSX.Element => {
 
   // Header titles for the funds table
   const headerTitles: string[] = [
-    '#',
+    tCommon('hash'),
     t('fundName'),
     tCommon('createdOn'),
     tCommon('status'),
@@ -219,7 +216,7 @@ const organizationFunds = (): JSX.Element => {
   const columns: ReportingTableColumn[] = [
     {
       field: 'sl_no',
-      headerName: tCommon('sl_no'),
+      headerName: tCommon('hash'),
       flex: 1,
       minWidth: 60,
       align: 'center',
@@ -247,7 +244,7 @@ const organizationFunds = (): JSX.Element => {
     },
     {
       field: 'createdAt',
-      headerName: 'Created On',
+      headerName: tCommon('createdOn'),
       align: 'center',
       minWidth: 100,
       headerAlign: 'center',
@@ -302,7 +299,7 @@ const organizationFunds = (): JSX.Element => {
     },
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: tCommon('action'),
       flex: 2,
       align: 'center',
       minWidth: 100,
