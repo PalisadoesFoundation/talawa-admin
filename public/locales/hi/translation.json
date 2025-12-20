@@ -731,7 +731,8 @@
     "raisedAmount": "उठाया गया राशि",
     "pledgedAmount": "प्रतिबद्ध राशि",
     "startDate": "प्रारंभ तिथि",
-    "endDate": "समाप्ति तिथि"
+    "endDate": "समाप्ति तिथि",
+    "selectPledger": "कृपया एक प्रतिज्ञाकर्ता का चयन करें"
   },
   "orgPost": {
     "title": "पदों",

@@ -731,7 +731,8 @@
     "raisedAmount": "Raised amount ",
     "pledgedAmount": "Pledged amount",
     "startDate": "startDate",
-    "endDate": "endDate"
+    "endDate": "endDate",
+    "selectPledger": "Please select a pledger"
   },
   "orgPost": {
     "title": "Posts",

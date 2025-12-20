@@ -731,7 +731,8 @@
     "raisedAmount": "募集金額",
     "pledgedAmount": "承诺金額",
     "startDate": "开始日期",
-    "endDate": "结束日期"
+    "endDate": "结束日期",
+    "selectPledger": "请选择一个承诺者"
   },
   "orgPost": {
     "title": "帖子",
