@@ -658,7 +658,6 @@ describe('PostCard', () => {
   };
 
   beforeEach(() => {
-    vi.clearAllMocks();
     // Configure the useLocalStorage mock
     vi.mocked(useLocalStorage).mockImplementation(() => ({
       getItem: vi.fn((key: string) => {
