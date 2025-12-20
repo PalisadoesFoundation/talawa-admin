@@ -373,6 +373,7 @@
     "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
     "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
     "addPeople": "Ajouter des personnes",
+    "closeModal":"Fermer",
     "add": "Ajouter",
     "subTags": "Sous-étiquettes",
     "successfullyAssignedToPeople": "Étiquette attribuée avec succès",

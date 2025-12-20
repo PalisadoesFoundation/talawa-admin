@@ -373,6 +373,7 @@
     "unassignUserTagMessage": "您想从此用户中删除标签吗？",
     "successfullyUnassigned": "标签已从用户中取消分配",
     "addPeople": "添加人员",
+    "closeModal": "关闭",
     "add": "添加",
     "subTags": "子标签",
     "successfullyAssignedToPeople": "标签分配成功",

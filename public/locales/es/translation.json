@@ -369,6 +369,7 @@
     "addPeopleToTag": "Agregar Personas a la etiqueta",
     "viewProfile": "Ver",
     "noAssignedMembersFound": "Ningún miembro asignado",
+    "closeModal": "Cerrar",
     "unassignUserTag": "Desasignar Etiqueta",
     "unassignUserTagMessage": "¿Desea eliminar la etiqueta de este usuario?",
     "successfullyUnassigned": "Etiqueta desasignada del usuario",
