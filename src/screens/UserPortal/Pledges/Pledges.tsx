@@ -130,17 +130,17 @@ const Pledges = (): JSX.Element => {
     variables: shouldSkip
       ? undefined
       : {
-        input: { userId: userId as string },
-        where: searchTerm
-          ? {
-            ...(searchBy === 'pledgers' && {
-              firstName_contains: searchTerm,
-            }),
-            ...(searchBy === 'campaigns' && { name_contains: searchTerm }),
-          }
-          : {},
-        orderBy: sortBy,
-      },
+          input: { userId: userId as string },
+          where: searchTerm
+            ? {
+                ...(searchBy === 'pledgers' && {
+                  firstName_contains: searchTerm,
+                }),
+                ...(searchBy === 'campaigns' && { name_contains: searchTerm }),
+              }
+            : {},
+          orderBy: sortBy,
+        },
   });
 
   if (!orgId || !userId) {
@@ -294,7 +294,7 @@ const Pledges = (): JSX.Element => {
           >
             {
               currencySymbols[
-              params.row.currency as keyof typeof currencySymbols
+                params.row.currency as keyof typeof currencySymbols
               ]
             }
             {params.row.amount}
@@ -318,7 +318,7 @@ const Pledges = (): JSX.Element => {
           >
             {
               currencySymbols[
-              params.row.currency as keyof typeof currencySymbols
+                params.row.currency as keyof typeof currencySymbols
               ]
             }
             0
@@ -436,10 +436,10 @@ const Pledges = (): JSX.Element => {
             onSortChange={(value) =>
               setSortBy(
                 value as
-                | 'amount_ASC'
-                | 'amount_DESC'
-                | 'endDate_ASC'
-                | 'endDate_DESC',
+                  | 'amount_ASC'
+                  | 'amount_DESC'
+                  | 'endDate_ASC'
+                  | 'endDate_DESC',
               )
             }
             dataTestIdPrefix="filter"

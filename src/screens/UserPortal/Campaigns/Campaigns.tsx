@@ -221,10 +221,10 @@ const Campaigns = (): JSX.Element => {
               onSortChange={(value) =>
                 setSortBy(
                   value as
-                  | 'fundingGoal_ASC'
-                  | 'fundingGoal_DESC'
-                  | 'endDate_ASC'
-                  | 'endDate_DESC',
+                    | 'fundingGoal_ASC'
+                    | 'fundingGoal_DESC'
+                    | 'endDate_ASC'
+                    | 'endDate_DESC',
                 )
               }
               dataTestIdPrefix="filter"
@@ -271,10 +271,11 @@ const Campaigns = (): JSX.Element => {
                       }
                       variant="outlined"
                       color="primary"
-                      className={`${styles.chip} ${new Date(campaign.endDate) < new Date()
-                        ? styles.pending
-                        : styles.active
-                        }`}
+                      className={`${styles.chip} ${
+                        new Date(campaign.endDate) < new Date()
+                          ? styles.pending
+                          : styles.active
+                      }`}
                     />
                   </div>
 
@@ -283,7 +284,7 @@ const Campaigns = (): JSX.Element => {
                       Goal:{' '}
                       {
                         currencySymbols[
-                        campaign.currency as keyof typeof currencySymbols
+                          campaign.currency as keyof typeof currencySymbols
                         ]
                       }
                       {campaign.fundingGoal}
