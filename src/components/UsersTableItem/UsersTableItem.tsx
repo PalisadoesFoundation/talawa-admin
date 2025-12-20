@@ -21,7 +21,6 @@ import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItemForAdmin } from 'utils/interfaces';
 import styles from '../../style/app-fixed.module.css';
-import { Search } from '@mui/icons-material';
 
 type Props = {
   user: InterfaceQueryUserListItemForAdmin;
@@ -154,22 +153,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
       );
       setBlockedUsers(filteredOrgs);
     }
-  };
-
-  const handleSearchBlockedOrgs = (
-    e: React.KeyboardEvent<HTMLInputElement>,
-  ): void => {
-    if (e.key === 'Enter') {
-      const { value } = e.currentTarget;
-      searchBlockedOrgs(value);
-    }
-  };
-
-  const handleSearchButtonClickBlockedOrgs = (): void => {
-    const inputValue =
-      (document.getElementById('orgname-blocked-orgs') as HTMLInputElement)
-        ?.value || '';
-    searchBlockedOrgs(inputValue);
   };
 
   function onHideRemoveUserModal(): void {
@@ -418,24 +401,13 @@ const UsersTableItem = (props: Props): JSX.Element => {
         </Modal.Header>
         <Modal.Body>
           {blockedOrgs.length !== 0 && (
-            <div className={'position-relative mb-4 border rounded'}>
-              <Form.Control
-                id="orgname-blocked-orgs"
-                className={styles.inputField}
-                defaultValue={searchByNameBlockedOrgs}
+            <div className="search-bar-container">
+              <SearchBar
                 placeholder={t('searchByOrgName')}
-                data-testid="searchByNameBlockedOrgs"
-                autoComplete="off"
-                onKeyUp={handleSearchBlockedOrgs}
+                onSearch={searchBlockedOrgs}
+                inputTestId="searchByNameBlockedOrgs"
+                buttonTestId="searchBtnBlockedOrgs"
               />
-              <Button
-                tabIndex={-1}
-                className={styles.searchButton}
-                onClick={handleSearchButtonClickBlockedOrgs}
-                data-testid="searchBtnBlockedOrgs"
-              >
-                <Search />
-              </Button>
             </div>
           )}
           <Row>

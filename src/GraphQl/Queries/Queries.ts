@@ -1043,7 +1043,7 @@ export const ORGANIZATION_DONATION_CONNECTION_LIST = gql`
 `;
 
 // to take the membership request
-export const MEMBERSHIP_REQUEST = gql`
+export const MEMBERSHIP_REQUEST_PG = gql`
   query Organization(
     $input: QueryOrganizationInput!
     $skip: Int
@@ -1052,7 +1052,7 @@ export const MEMBERSHIP_REQUEST = gql`
   ) {
     organization(input: $input) {
       id
-      membershipRequestsCount
+      # membershipRequestsCount
       membershipRequests(
         skip: $skip
         first: $first
@@ -1066,7 +1066,6 @@ export const MEMBERSHIP_REQUEST = gql`
           id
           name
           emailAddress
-          avatarURL
         }
       }
     }

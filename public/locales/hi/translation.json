@@ -20,6 +20,7 @@
     "atleast_6_char_long": "कम से कम 6 अक्षर लंबे",
     "firstName_invalid": "पहला नाम केवल छोटे और बड़े अक्षरों को शामिल कर सकता है",
     "lastName_invalid": "अंतिम नाम केवल छोटे और बड़े अक्षरों को शामिल कर सकता है",
+    "name_invalid": "नाम में केवल अक्षर, रिक्त स्थान और हाइफ़न होने चाहिए",
     "password_invalid": "पासवर्ड में कम से कम 1 छोटा अक्षर, 1 बड़ा अक्षर, 1 संख्या और 1 विशेष अक्षर होना चाहिए",
     "email_invalid": "ईमेल में कम से कम 8 अक्षर होने चाहिए",
     "Password_and_Confirm_password_mismatches.": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
@@ -140,7 +141,11 @@
     "close": "बंद करें"
   },
   "notification": {
-    "title": "सूचनाएं"
+    "title": "सूचनाएं",
+    "allCaughtUp": "आप सभी अपडेट के साथ हैं!",
+    "prev": "पिछला",
+    "next": "अगला",
+    "markAsRead": "पढ़ा हुआ चिह्नित करें"
   },
   "orgList": {
     "title": "तालावा संगठन",
@@ -210,8 +215,8 @@
     "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से संगठन बनाएं",
     "name": "नाम",
     "email": "ईमेल",
-    "endOfResults": "परिणाम समाप्त",
-    "noResultsFoundFor": "कोई परिणाम नहीं मिला"
+    "profilePictureAlt": "{{name}} की प्रोफ़ाइल छवि",
+    "placeholderAvatarAlt": "प्लेसहोल्डर अवतार"
   },
   "users": {
     "title": "तालावा भूमिकाएँ",
@@ -255,7 +260,10 @@
     "orgJoined": "संगठन में शामिल",
     "MembershipRequestSent": "सदस्यता अनुरोध भेजा गया",
     "AlreadyJoined": "पहले से शामिल",
-    "errorOccured": "त्रुटि हुई"
+    "errorOccurred": "एक त्रुटि हुई। कृपया पुनः प्रयास करें",
+    "UserIdNotFound": "उपयोगकर्ता ID नहीं मिली",
+    "MembershipRequestNotFound": "सदस्यता अनुरोध नहीं मिला",
+    "MembershipRequestWithdrawn": "सदस्यता अनुरोध सफलतापूर्वक वापस लिया गया"
   },
   "communityProfile": {
     "title": "समुदाय प्रोफ़ाइल",
@@ -329,7 +337,8 @@
     "profile": "प्रोफ़ाइल",
     "create": "बनाएं",
     "cancel": "रद्द करें",
-    "createUser": "उपयोगकर्ता बनाएं"
+    "createUser": "उपयोगकर्ता बनाएं",
+    "notFound": "कोई सदस्य नहीं मिले"
   },
   "organizationTags": {
     "title": "संस्थान टैग",
@@ -348,7 +357,12 @@
     "removeUserTag": "टैग हटाएँ",
     "removeUserTagMessage": "क्या आप इस टैग को हटाना चाहते हैं?",
     "addChildTag": "उप-टैग जोड़ें",
-    "enterTagName": "टैग का नाम दर्ज करें"
+    "enterTagName": "टैग का नाम दर्ज करें",
+    "totalSubTags": "कुल उप-टैग",
+    "totalAssignedUsers": "कुल नियुक्त उपयोगकर्ता",
+    "tagCreationFailed": "टैग निर्माण विफल",
+    "errorLoadingTagsData": "संगठन टैग डेटा लोड करते समय त्रुटि हुई",
+    "sortTags": "टैग सॉर्ट करें"
   },
   "manageTag": {
     "title": "टैग विवरण",
@@ -659,7 +673,10 @@
     "deleteFundMsg": "क्या आप वाकई इस फंड को हटाना चाहते हैं?",
     "createdLatest": "सबसे पहले बनाया",
     "createdEarliest": "सबसे जल्दी बनाया",
-    "viewCampaigns": "कैम्पेंस देखें"
+    "viewCampaigns": "कैम्पेंस देखें",
+    "assocCampaigns": "संबद्ध अभियान",
+    "errorLoadingFundsData": "फंड डेटा लोड करते समय त्रुटि हुई",
+    "editFund": "फंड संपादित करें"
   },
   "fundCampaign": {
     "title": "फंडरेजिंग कैंपेन",
@@ -703,6 +720,7 @@
     "deletePledgeMsg": "क्या आप वाकई इस प्रतिज्ञा को हटाना चाहते हैं?",
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",
     "searchPledger": "प्लेजर्स के द्वारा खोजें",
+    "pledgers": "प्रतिज्ञाकर्ता",
     "highestAmount": "सबसे अधिक राशि",
     "lowestAmount": "सबसे कम राशि",
     "latestEndDate": "नवीनतम समाप्ति तिथि",
@@ -1131,7 +1149,18 @@
     "Member": "सदस्य",
     "Admin": "व्यवस्थापक",
     "loading": "लोड हो रहा है",
-    "noAttendees": "कोई प्रतिभागी नहीं मिला"
+    "noAttendees": "कोई प्रतिभागी नहीं मिला",
+    "attendeeCount": "उपस्थित लोगों की संख्या",
+    "maleAttendees": "पुरुष उपस्थित",
+    "femaleAttendees": "महिला उपस्थित",
+    "otherAttendees": "अन्य उपस्थित",
+    "currentEvent": "वर्तमान कार्यक्रम",
+    "chartPageNavigation": "चार्ट पृष्ठ नेविगेशन",
+    "previousPage": "पिछला पृष्ठ",
+    "nextPage": "अगला पृष्ठ",
+    "goToToday": "आज पर जाएं",
+    "genderDistribution": "लिंग वितरण",
+    "ageDistribution": "आयु वितरण"
   },
   "eventRegistrant": {
     "sort": "छांटें",
@@ -1276,6 +1305,7 @@
     "errorLoadingTransactions": "लेन-देन लोड करने में त्रुटि"
   },
   "userEvents": {
+    "title": "कार्यक्रम",
     "name": "ईवेंट",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "createEvent": "कार्यक्रम बनाएँ",
@@ -1483,7 +1513,13 @@
     "searchByName": "नाम से खोजें...",
     "searchBy": "द्वारा खोजें",
     "pledgers": "प्रतिज्ञाकर्ता",
+    "pledger": "प्रतिज्ञाकर्ता",
     "campaigns": "अभियान",
+    "associatedCampaign": "संबद्ध अभियान",
+    "pledged": "प्रतिबद्ध",
+    "donated": "दान किया",
+    "progress": "प्रगति",
+    "more": "अधिक",
     "myPledges": "मेरी प्रतिज्ञाएँ",
     "lowestAmount": "सबसे कम राशि",
     "highestAmount": "सबसे अधिक राशि",

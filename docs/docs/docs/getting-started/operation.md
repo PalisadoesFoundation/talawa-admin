@@ -34,71 +34,135 @@ The next steps will depend on whether you are:
 
 Please follow them closely.
 
-#### For Production Environments
+### For Production Environments
 
 This section describes how to setup the application in a production environment.
 
 1. Configure `nginx.conf` file located at `config/docker/setup`. Modify it to fit your preferences before running the application.
 
-2. Build and Run the Docker Image:
+#### Starting The Application
 
-   Run the following command to run the Docker image:
+To start the application you will need to build, then run the Docker Image. These steps follow:
 
-   ```bash
-   docker-compose -f docker/docker-compose.prod.yaml --env-file .env up
-   ```
+1. **Windows Systems:**
+   1. Run the following command to first build the Docker image:
 
-   or
+      ```bash
+      docker-compose -f docker/docker-compose.prod.yaml build
+      ```
 
-   ```bash
-   docker compose -f docker/docker-compose.prod.yaml --env-file .env up
-   ```
+   2. Run the following command to run the Docker image:
 
-3. To stop the container run the following command:
+      ```bash
+      docker-compose -f docker/docker-compose.prod.yaml --env-file .env up -d
+      ```
+
+      For troubleshooting purposes, you can run docker in interactive mode to directly see the logs by removing the `-d` at the end.
+
+   3. The application will be accessible at
+      ```
+      http://localhost:4321
+      ```
+
+2. **Linux Systems:**
+   1. Run the following command to first build the Docker image:
+
+      ```bash
+      docker compose -f docker/docker-compose.prod.yaml build
+      ```
+
+   2. Run the following command to run the Docker image:
+
+      ```bash
+      docker compose -f docker/docker-compose.prod.yaml --env-file .env up -d
+      ```
+
+      For troubleshooting purposes, you can run docker in interactive mode to directly see the logs by removing the `-d` at the end.
+
+   3. The application will be accessible at
+      ```
+      http://localhost:4321
+      ```
+
+#### Stopping The Application
+
+To stop the container run the following command:
+
+1. **Windows Systems:** Run the following command to stop the Docker image:
 
    ```bash
    docker-compose -f docker/docker-compose.prod.yaml down
    ```
 
-   or
+1. **Linux Systems:** Run the following command to stop the Docker image:
 
    ```bash
    docker compose -f docker/docker-compose.prod.yaml down
    ```
 
-   The application will be accessible at `http://localhost:4321`
-
-#### For Development Environments
+### For Development Environments
 
 This section describes how to setup the application in a development environment.
 
-1. Build and Run the Docker Image:
+#### Starting The Application
 
-   Run the following command to run the Docker image:
+To start the application you will need to build, then run the Docker Image. These steps follow:
 
-   ```bash
-   docker-compose -f docker/docker-compose.dev.yaml --env-file .env up
-   ```
+1. **Windows Systems:**
+   1. Run the following command to first build the Docker image:
 
-   or
+      ```bash
+      docker-compose -f docker/docker-compose.dev.yaml build
+      ```
 
-   ```bash
-   docker compose -f docker/docker-compose.dev.yaml --env-file .env up
-   ```
+   2. Run the following command to run the Docker image:
 
-2. To stop the container run the following command:
+      ```bash
+      docker-compose -f docker/docker-compose.dev.yaml --env-file .env up -d
+      ```
+
+      For troubleshooting purposes, you can run docker in interactive mode to directly see the logs by removing the `-d` at the end.
+
+   3. The application will be accessible at
+      ```
+      http://localhost:4321
+      ```
+
+2. **Linux Systems:**
+   1. Run the following command to first build the Docker image:
+
+      ```bash
+      docker compose -f docker/docker-compose.dev.yaml build
+      ```
+
+   2. Run the following command to run the Docker image:
+
+      ```bash
+      docker compose -f docker/docker-compose.dev.yaml --env-file .env up -d
+      ```
+
+      For troubleshooting purposes, you can run docker in interactive mode to directly see the logs by removing the `-d` at the end.
+
+   3. The application will be accessible at
+      ```
+      http://localhost:4321
+      ```
+
+#### Stopping The Application
+
+To stop the container run the following command:
+
+1. **Windows Systems:** Run the following command to stop the Docker image:
 
    ```bash
    docker-compose -f docker/docker-compose.dev.yaml down
    ```
 
-   or
+1. **Linux Systems:** Run the following command to stop the Docker image:
 
    ```bash
    docker compose -f docker/docker-compose.dev.yaml down
    ```
-
-The application will be accessible at `http://localhost:4321`
 
 ## Operation Without Docker
 
@@ -109,20 +173,59 @@ If you are running Talawa-Admin natively then the next steps will depend on whet
 
 Please follow them closely.
 
-#### For Production Environments
+### For Production Environments
 
-Run the following command to start the development server:
+Follow these steps if you are running the app in a production environment without Docker.
 
-```bash
-pnpm run serve
-
-```
-
-#### For Development Environments
+#### Starting The Application
 
 Run the following command to start the production server:
 
 ```bash
 pnpm run serve &
+```
+
+#### Stopping The Application
+
+Since the production server runs in the background, you need to find and stop the process:
+
+1. Find the process ID:
+
+   ```bash
+   pgrep -f "pnpm run serve"
+   ```
+
+2. Stop the process using the process ID from step 1:
+
+   ```bash
+   kill <process_id>
+   ```
+
+   Replace `<process_id>` with the actual process ID number.
+
+Alternatively, you can use a single command:
+
+```bash
+pkill -f "pnpm run serve"
+```
+
+### For Development Environments
+
+Follow these steps if you are running the app in a development environment without Docker.
+
+#### Starting The Application
+
+Run the following command to start the development server:
+
+```bash
+pnpm run serve
+```
+
+The app will run until you hit: 
 
 ```
+<CTRL-C>
+```
+
+
+

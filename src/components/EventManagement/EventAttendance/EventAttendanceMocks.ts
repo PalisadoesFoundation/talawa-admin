@@ -9,9 +9,11 @@ export const MOCKEVENT = {
   isPublic: true,
   isRegisterable: true,
   startAt: '2030-05-01T09:00:00.000Z',
+  isRecurringEventTemplate: false,
   endAt: '2030-05-02T17:00:00.000Z',
   createdAt: '2030-04-01T00:00:00.000Z',
   updatedAt: '2030-04-01T00:00:00.000Z',
+  baseEvent: null,
   recurrenceRule: {
     id: 'recurringEvent123',
   },

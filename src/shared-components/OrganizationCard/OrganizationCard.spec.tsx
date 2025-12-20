@@ -12,10 +12,25 @@ import {
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { toast } from 'react-toastify';
-
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string) => key,
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        'orgListCard.manage': 'Manage',
+        'users.visit': 'Visit',
+        'users.joinNow': 'joinNow',
+        'users.withdraw': 'withdraw',
+        'users.orgJoined': 'orgJoined',
+        'users.errorOccurred': 'errorOccurred',
+        'users.AlreadyJoined': 'AlreadyJoined',
+        'users.MembershipRequestSent': 'MembershipRequestSent',
+        'users.UserIdNotFound': 'UserIdNotFound',
+        'users.MembershipRequestWithdrawn': 'MembershipRequestWithdrawn',
+        'users.MembershipRequestNotFound': 'MembershipRequestNotFound',
+      };
+
+      return translations[key] || key;
+    },
   }),
 }));
 
@@ -335,7 +350,7 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('errorOccured');
+      expect(toast.error).toHaveBeenCalledWith('errorOccurred');
     });
   });
 
@@ -360,7 +375,7 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('errorOccured');
+      expect(toast.error).toHaveBeenCalledWith('errorOccurred');
     });
   });
 
@@ -412,7 +427,7 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('errorOccured');
+      expect(toast.error).toHaveBeenCalledWith('errorOccurred');
     });
   });
 
@@ -541,7 +556,7 @@ describe('OrganizationCard', () => {
       expect(toast.error).toHaveBeenCalled();
     });
 
-    expect(toast.error).toHaveBeenCalledWith('errorOccured');
+    expect(toast.error).toHaveBeenCalledWith('errorOccurred');
   });
   it('logs error to console in development environment when withdrawing fails', async () => {
     const pendingData = {

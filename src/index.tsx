@@ -46,10 +46,12 @@ const { getItem } = useLocalStorage();
 const authLink = setContext((_, { headers }) => {
   const lng = i18n.language;
   const token = getItem('token');
+  const authHeaders = token ? { authorization: `Bearer ${token}` } : {};
+
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : '',
+      ...authHeaders,
       'Accept-Language': lng,
     },
   };
@@ -83,8 +85,9 @@ const wsLink = new GraphQLWsLink(
     url: REACT_APP_BACKEND_WEBSOCKET_URL,
     connectionParams: () => {
       const token = getItem('token');
+      const authParams = token ? { authorization: `Bearer ${token}` } : {};
       return {
-        authorization: token ? `Bearer ${token}` : '',
+        ...authParams,
         'Accept-Language': i18n.language,
       };
     },

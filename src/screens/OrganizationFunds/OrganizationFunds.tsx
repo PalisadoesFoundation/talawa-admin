@@ -2,36 +2,33 @@ import { useQuery } from '@apollo/client/react';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { Stack } from '@mui/material';
 import {
-  DataGrid,
   type GridCellParams,
-  type GridColDef,
+  type GridPaginationModel,
 } from '@mui/x-data-grid';
+import type {
+  ReportingRow,
+  ReportingTableColumn,
+  ReportingTableGridProps,
+} from '../../types/ReportingTable/interface';
+import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
+import TableLoader from 'components/TableLoader/TableLoader';
 import FundModal from './modal/FundModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
 import PageHeader from 'shared-components/Navbar/Navbar';
-
-const dataGridStyle = {
-  borderRadius: 'var(--table-head-radius)',
-  backgroundColor: 'var(--row-background)',
-  '& .MuiDataGrid-row': {
-    backgroundColor: 'var(--row-background)',
-    '&:focus-within': { outline: 'none' },
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'var(--row-background)' },
-  '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'var(--row-background)',
-  },
-  '& .MuiDataGrid-cell:focus': { outline: 'none' },
-  '& .MuiDataGrid-cell:focus-within': { outline: 'none' },
-};
+import {
+  dataGridStyle,
+  PAGE_SIZE,
+  ROW_HEIGHT,
+  COLUMN_BUFFER_PX,
+} from '../../types/ReportingTable/utils';
 
 /**
  * `organizationFunds` component displays a list of funds for a specific organization,
@@ -94,15 +91,8 @@ const organizationFunds = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'funds' });
   const { t: tCommon } = useTranslation('common');
 
-  // Set the document title based on the translation
-  document.title = t('title');
-
   const { orgId } = useParams();
   const navigate = useNavigate();
-
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
 
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
   // const [searchTerm, setSearchTerm] = useState<string>('');
@@ -116,6 +106,14 @@ const organizationFunds = (): JSX.Element => {
   );
 
   const [searchText, setSearchText] = useState('');
+  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+    page: 0,
+    pageSize: PAGE_SIZE,
+  });
+
+  const handlePaginationModelChange = (newModel: GridPaginationModel): void => {
+    setPaginationModel(newModel);
+  };
 
   const handleOpenModal = useCallback(
     (fund: InterfaceFundInfo | null, mode: 'edit' | 'create'): void => {
@@ -134,10 +132,19 @@ const organizationFunds = (): JSX.Element => {
   } = useQuery<any>(FUND_LIST, {
     variables: {
       input: {
-        id: orgId,
+        id: orgId ?? '',
       },
     },
   });
+
+  // Set the document title based on the translation
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
+
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   const funds = useMemo(() => {
     return (
@@ -176,11 +183,11 @@ const organizationFunds = (): JSX.Element => {
   }
   if (fundError) {
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+      <div className={styles.container + ' bg-white rounded-4 my-3'}>
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading Funds
+            {t('errorLoadingFundsData')}
             <br />
             {fundError.message}
           </h6>
@@ -189,10 +196,21 @@ const organizationFunds = (): JSX.Element => {
     );
   }
 
-  const columns: GridColDef[] = [
+  // Header titles for the table
+  const headerTitles: string[] = [
+    tCommon('sl_no'),
+    t('fundName'),
+    t('createdBy'),
+    t('createdOn'),
+    t('status'),
+    tCommon('action'),
+    t('assocCampaigns'),
+  ];
+
+  const columns: ReportingTableColumn[] = [
     {
-      field: 'id',
-      headerName: '#',
+      field: 'sl_no',
+      headerName: tCommon('sl_no'),
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -200,12 +218,16 @@ const organizationFunds = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        return <div>{params.row.id}</div>;
+        return (
+          <div>
+            {params.api.getRowIndexRelativeToVisibleRows(params.row.id) + 1}
+          </div>
+        );
       },
     },
     {
       field: 'fundName',
-      headerName: 'Fund Name',
+      headerName: t('fundName'),
       flex: 2,
       align: 'center',
       minWidth: 100,
@@ -226,7 +248,7 @@ const organizationFunds = (): JSX.Element => {
     },
     {
       field: 'createdBy',
-      headerName: 'Created By',
+      headerName: t('createdBy'),
       flex: 2,
       align: 'center',
       minWidth: 100,
@@ -239,7 +261,7 @@ const organizationFunds = (): JSX.Element => {
     },
     {
       field: 'createdOn',
-      headerName: 'Created On',
+      headerName: t('createdOn'),
       align: 'center',
       minWidth: 100,
       headerAlign: 'center',
@@ -256,21 +278,21 @@ const organizationFunds = (): JSX.Element => {
     },
     {
       field: 'status',
-      headerName: 'Status',
-      flex: 2,
+      headerName: t('status'),
+      flex: 1,
       align: 'center',
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return params.row.isArchived ? 'Archived' : 'Active';
+        return params.row.isArchived ? t('archived') : tCommon('active');
       },
     },
     {
       field: 'action',
-      headerName: 'Action',
-      flex: 2,
+      headerName: tCommon('action'),
+      flex: 1,
       align: 'center',
       minWidth: 100,
       headerAlign: 'center',
@@ -285,6 +307,7 @@ const organizationFunds = (): JSX.Element => {
               // className="me-2 rounded"
               className={styles.editButton}
               data-testid="editFundBtn"
+              aria-label={t('editFund')}
               onClick={() =>
                 handleOpenModal(params.row as InterfaceFundInfo, 'edit')
               }
@@ -297,7 +320,7 @@ const organizationFunds = (): JSX.Element => {
     },
     {
       field: 'assocCampaigns',
-      headerName: 'Associated Campaigns',
+      headerName: t('assocCampaigns'),
       flex: 2,
       align: 'center',
       minWidth: 100,
@@ -309,6 +332,7 @@ const organizationFunds = (): JSX.Element => {
           <Button
             size="sm"
             className={styles.editButton}
+            aria-label={t('viewCampaigns')}
             onClick={() => handleClick(params.row.id as string)}
             data-testid="viewBtn"
           >
@@ -320,10 +344,38 @@ const organizationFunds = (): JSX.Element => {
     },
   ];
 
+  const gridProps: ReportingTableGridProps = {
+    columnBufferPx: COLUMN_BUFFER_PX,
+    paginationMode: 'client',
+    pagination: true,
+    paginationModel,
+    onPaginationModelChange: handlePaginationModelChange,
+    rowCount: filteredAndSortedFunds.length,
+    pageSizeOptions: [PAGE_SIZE],
+    hideFooterSelectedRowCount: true,
+    getRowId: (row: InterfaceFundInfo) => row.id,
+    slots: {
+      noRowsOverlay: () => (
+        <Stack height="100%" alignItems="center" justifyContent="center">
+          {t('noFundsFound')}
+        </Stack>
+      ),
+      loadingOverlay: () => (
+        <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
+      ),
+    },
+    sx: { ...dataGridStyle },
+    getRowClassName: () => `${styles.rowBackgrounds}`,
+    rowHeight: ROW_HEIGHT,
+    isRowSelectable: () => false,
+    disableColumnMenu: true,
+    style: { overflow: 'visible' },
+  };
+
   return (
     <div>
       <div className={styles.head}>
-        <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
+        <div className={styles.btnsContainer + ' gap-4 flex-wrap'}>
           <PageHeader
             search={{
               placeholder: tCommon('searchByName'),
@@ -358,26 +410,12 @@ const organizationFunds = (): JSX.Element => {
           />
         </div>
       </div>
-
-      <DataGrid
-        disableColumnMenu
-        columnBufferPx={7}
-        hideFooter={true}
-        getRowId={(row) => row.id}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noFundsFound')}
-            </Stack>
-          ),
-        }}
-        sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackgrounds}`}
-        autoHeight
-        rowHeight={65}
-        rows={filteredAndSortedFunds}
+      <ReportingTable
+        rows={
+          filteredAndSortedFunds.map((req) => ({ ...req })) as ReportingRow[]
+        }
         columns={columns}
-        isRowSelectable={() => false}
+        gridProps={gridProps}
       />
       <FundModal
         isOpen={modalState}

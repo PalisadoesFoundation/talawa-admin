@@ -1163,13 +1163,8 @@ describe('LifecycleManager', () => {
     });
 
     it('should handle dynamic registration success', async () => {
-      // Mock the dynamic import
-      const mockRegisterPluginDynamically = vi
-        .fn()
-        .mockResolvedValue(undefined);
-      vi.doMock('../../registry', () => ({
-        registerPluginDynamically: mockRegisterPluginDynamically,
-      }));
+      // Use the hoisted mock to return success
+      registryMocks.registerPluginDynamically.mockResolvedValue(undefined);
 
       await lifecycleManager.activatePlugin('testPlugin');
 
@@ -1182,10 +1177,10 @@ describe('LifecycleManager', () => {
     it('should handle dynamic registration failure gracefully', async () => {
       const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
-      // Mock the dynamic import to fail
-      vi.doMock('../../registry', () => {
-        throw new Error('Dynamic import failed');
-      });
+      // Use the hoisted mock to throw an error
+      registryMocks.registerPluginDynamically.mockRejectedValue(
+        new Error('Dynamic import failed'),
+      );
 
       await lifecycleManager.activatePlugin('testPlugin');
 

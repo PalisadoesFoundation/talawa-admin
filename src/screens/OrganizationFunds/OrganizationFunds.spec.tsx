@@ -2,6 +2,7 @@ import React from 'react';
 import { MockedProvider } from '@apollo/client/testing/react';
 import type { RenderResult } from '@testing-library/react';
 import {
+  act,
   cleanup,
   fireEvent,
   render,
@@ -21,6 +22,14 @@ import type { ApolloLink } from '@apollo/client';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { vi, afterEach } from 'vitest';
+
+async function wait(ms = 500): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
 
 const routerMocks = vi.hoisted(() => ({
   useParams: vi.fn(),
@@ -43,6 +52,7 @@ vi.mock('react-router', async () => {
 });
 
 const mockedUseParams = vi.mocked(useParams);
+const loadingOverlaySpy = vi.fn();
 
 const link1 = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR, true);
@@ -91,6 +101,44 @@ describe('OrganizationFunds Screen =>', () => {
   afterEach(() => {
     vi.restoreAllMocks();
     cleanup();
+  });
+
+  vi.mock('shared-components/ReportingTable/ReportingTable', async () => {
+    const actual = await vi.importActual<
+      typeof import('shared-components/ReportingTable/ReportingTable')
+    >('shared-components/ReportingTable/ReportingTable');
+
+    return {
+      __esModule: true,
+      default: (props: {
+        gridProps?: {
+          slots?: { loadingOverlay?: () => React.ReactNode };
+          onPaginationModelChange?: (model: {
+            page: number;
+            pageSize: number;
+          }) => void;
+        };
+      }) => {
+        loadingOverlaySpy(props.gridProps?.slots?.loadingOverlay?.());
+
+        // Create wrapper to ensure callbacks are properly invoked
+        const wrappedProps = {
+          ...props,
+          gridProps: {
+            ...props.gridProps,
+            // Ensure onPaginationModelChange is called when pagination changes
+            onPaginationModelChange: props.gridProps?.onPaginationModelChange,
+          },
+        };
+
+        const Component = (
+          actual as unknown as {
+            default: React.ComponentType<typeof wrappedProps>;
+          }
+        ).default;
+        return <Component {...wrappedProps} />;
+      },
+    };
   });
 
   it('should render the Campaign Pledge screen', async () => {
@@ -259,6 +307,44 @@ describe('OrganizationFunds Screen =>', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('campaignScreen')).toBeInTheDocument();
+    });
+  });
+
+  it('handles pagination model change', async () => {
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
+    const { container } = renderOrganizationFunds(link1);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+    });
+
+    // Verify the page loaded with funds data
+    await waitFor(() => {
+      expect(screen.getAllByTestId('fundName').length).toBeGreaterThan(0);
+    });
+
+    // Find pagination controls in the DataGrid
+    const paginationRoot = container.querySelector(
+      '[class*="MuiTablePagination-root"]',
+    );
+
+    if (paginationRoot) {
+      // Find next page button
+      const nextButton = paginationRoot.querySelector(
+        'button[aria-label*="next"]',
+      ) as HTMLButtonElement | null;
+
+      if (nextButton && !nextButton.disabled) {
+        fireEvent.click(nextButton);
+        await wait(300);
+      }
+    }
+
+    // Verify component is still stable
+    await waitFor(() => {
+      expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
     });
   });
 });

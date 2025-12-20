@@ -55,7 +55,7 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Popover, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import dayjs from 'dayjs';
 import { currencySymbols } from 'utils/currency';
@@ -91,12 +91,8 @@ const Pledges = (): JSX.Element => {
   const { getItem } = useLocalStorage();
   const userIdFromStorage = getItem('userId');
   const { orgId } = useParams();
-  if (!orgId || !userIdFromStorage) {
-    return <Navigate to={'/'} replace />;
-  }
-  const userId: string = userIdFromStorage as string;
+  const userId = (userIdFromStorage as string | null) ?? null;
 
-  const [extraUsers, setExtraUsers] = useState<InterfaceUserInfoPG[]>([]);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [pledges, setPledges] = useState<InterfacePledgeInfo[]>([]);
   const [pledge, setPledge] = useState<InterfacePledgeInfo | null>(null);
@@ -110,10 +106,12 @@ const Pledges = (): JSX.Element => {
     [key in ModalState]: boolean;
   }>({ [ModalState.UPDATE]: false, [ModalState.DELETE]: false });
 
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popup' : undefined;
-
+  type PledgeQueryResult = ApolloQueryResult<{
+    getPledgesByUserId: InterfacePledgeInfo[];
+  }>;
+  interface IPledgeRefetchFn {
+    (): Promise<PledgeQueryResult>;
+  }
   const {
     data: pledgeData,
     loading: pledgeLoading,
@@ -131,6 +129,10 @@ const Pledges = (): JSX.Element => {
       orderBy: sortBy,
     },
   });
+
+  if (!orgId || !userId) {
+    return <Navigate to="/" replace />;
+  }
 
   const openModal = (modal: ModalState): void => {
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
@@ -156,14 +158,6 @@ const Pledges = (): JSX.Element => {
     [openModal],
   );
 
-  const handleClick = (
-    event: React.MouseEvent<HTMLDivElement>,
-    users: InterfaceUserInfoPG[],
-  ): void => {
-    setExtraUsers(users);
-    setAnchorEl(event.currentTarget);
-  };
-
   const isNoPledgesFoundError =
     (pledgeError instanceof CombinedGraphQLErrors &&
       pledgeError.errors.some((graphQLError) => {
@@ -187,7 +181,7 @@ const Pledges = (): JSX.Element => {
   if (pledgeLoading) return <Loader size="xl" />;
   if (pledgeError && !isNoPledgesFoundError) {
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+      <div className={styles.container + ' bg-white rounded-4 my-3'}>
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
@@ -203,7 +197,7 @@ const Pledges = (): JSX.Element => {
   const columns: GridColDef[] = [
     {
       field: 'pledger',
-      headerName: 'Pledger',
+      headerName: t('pledger'),
       flex: 4,
       minWidth: 50,
       align: 'left',
@@ -226,41 +220,31 @@ const Pledges = (): JSX.Element => {
                     <img
                       src={user.avatarURL}
                       alt={user.name}
-                      data-testid={`image-pledger-${user.id}`}
+                      data-testid={'image-pledger-' + user.id}
                       className={styles.TableImage}
                     />
                   ) : (
                     <div className={styles.avatarContainer}>
                       <Avatar
-                        key={`${user.id}-avatar`}
+                        key={user.id + '-avatar'}
                         containerStyle={styles.imageContainerPledge}
                         avatarStyle={styles.TableImagePledge}
                         name={user.name}
                         alt={user.name}
-                        dataTestId={`avatar-pledger-${user.id}`}
+                        dataTestId={'avatar-pledger-' + user.id}
                       />
                     </div>
                   )}
-                  <span key={`${user.id}-name`}>{user.name}</span>
+                  <span key={user.id + '-name'}>{user.name}</span>
                 </div>
               ))}
-            {users.length > 2 && (
-              <div
-                className={styles.moreContainer}
-                aria-describedby={id}
-                data-testid={`moreContainer-${params.row.id}`}
-                onClick={(event) => handleClick(event, users.slice(2))}
-              >
-                +{users.length - 2} more...
-              </div>
-            )}
           </div>
         );
       },
     },
     {
       field: 'associatedCampaign',
-      headerName: 'Associated Campaign',
+      headerName: t('associatedCampaign'),
       flex: 2,
       minWidth: 100,
       align: 'left',
@@ -273,7 +257,7 @@ const Pledges = (): JSX.Element => {
     },
     {
       field: 'endDate',
-      headerName: 'End Date',
+      headerName: tCommon('endDate'),
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
@@ -285,7 +269,7 @@ const Pledges = (): JSX.Element => {
     },
     {
       field: 'amount',
-      headerName: 'Pledged',
+      headerName: t('pledged'),
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -309,7 +293,7 @@ const Pledges = (): JSX.Element => {
     },
     {
       field: 'donated',
-      headerName: 'Donated',
+      headerName: t('donated'),
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -333,7 +317,7 @@ const Pledges = (): JSX.Element => {
     },
     {
       field: 'progress',
-      headerName: 'Progress',
+      headerName: t('progress'),
       flex: 2,
       minWidth: 100,
       align: 'center',
@@ -364,7 +348,7 @@ const Pledges = (): JSX.Element => {
     },
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: tCommon('action'),
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -377,7 +361,7 @@ const Pledges = (): JSX.Element => {
             <Button
               variant="success"
               size="sm"
-              className={`me-2 rounded ${styles.editButton}`}
+              className={'me-2 rounded ' + styles.editButton}
               data-testid="editPledgeBtn"
               onClick={() => handleOpenModal(params.row as InterfacePledgeInfo)}
             >
@@ -404,7 +388,10 @@ const Pledges = (): JSX.Element => {
   return (
     <div>
       <div
-        className={`${styles.btnsContainer} gap-3 flex-column flex-lg-row align-items-stretch`}
+        className={
+          styles.btnsContainer +
+          ' gap-3 flex-column flex-lg-row align-items-stretch'
+        }
       >
         <div className="flex-grow-1 w-100">
           <SearchBar
@@ -500,47 +487,6 @@ const Pledges = (): JSX.Element => {
         pledge={pledge}
         refetchPledge={refetchPledge}
       />
-
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={() => setAnchorEl(null)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-      >
-        <div
-          className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
-          data-testid="extra-users-popup"
-        >
-          {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
-            <div
-              className={styles.pledgerContainer}
-              key={user.id ?? index}
-              data-testid={`extra${index + 1}`}
-            >
-              {user.avatarURL ? (
-                <img
-                  src={user.avatarURL}
-                  alt={user.name}
-                  data-testid={`extraImage${index + 1}`}
-                  className={styles.TableImage}
-                />
-              ) : (
-                <div className={styles.avatarContainer}>
-                  <Avatar
-                    containerStyle={styles.imageContainer}
-                    avatarStyle={styles.TableImage}
-                    name={user.name}
-                    alt={user.name}
-                    dataTestId={`extraAvatar${index + 1}`}
-                  />
-                </div>
-              )}
-              <span>{user.name}</span>
-            </div>
-          ))}
-        </div>
-      </Popover>
     </div>
   );
 };

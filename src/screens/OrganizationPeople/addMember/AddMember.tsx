@@ -73,6 +73,7 @@ import styles from 'style/app-fixed.module.css';
 import Avatar from 'components/Avatar/Avatar';
 import { TablePagination } from '@mui/material';
 import PageHeader from 'shared-components/Navbar/Navbar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 import type { IEdge, IUserDetails, IQueryVariable } from './types';
 
 const StyledTableCell = styled(TableCell)(() => ({
@@ -230,12 +231,11 @@ function AddMember(): JSX.Element {
     const confirmPassword = e.target.value;
     setCreateUserVariables({ ...createUserVariables, confirmPassword });
   };
-  const handleUserModalSearchChange = (e: React.FormEvent): void => {
-    e.preventDefault();
+  const handleUserModalSearchChange = (searchTerm: string): void => {
     resetPagination();
     const variables = {
       first: PAGE_SIZE,
-      where: userName ? { name: userName } : null,
+      where: searchTerm ? { name: searchTerm } : null,
       after: null,
       last: null,
       before: null,
@@ -333,28 +333,18 @@ function AddMember(): JSX.Element {
           ) : (
             <>
               <div className={styles.input}>
-                <Form onSubmit={handleUserModalSearchChange}>
-                  <Form.Control
-                    type="name"
-                    id="searchUser"
-                    data-testid="searchUser"
-                    placeholder={translateOrgPeople('searchFullName')}
-                    autoComplete="off"
-                    className={styles.inputFieldModal}
-                    value={userName}
-                    onChange={(e): void => {
-                      const { value } = e.target;
-                      setUserName(value);
-                    }}
-                  />
-                  <Button
-                    type="submit"
-                    data-testid="submitBtn"
-                    className={styles.searchButton}
-                  >
-                    <Search className={styles.searchIcon} />
-                  </Button>
-                </Form>
+                <SearchBar
+                  placeholder={translateOrgPeople('searchFullName')}
+                  value={userName}
+                  onChange={(value) => setUserName(value)}
+                  onSearch={handleUserModalSearchChange}
+                  onClear={() => {
+                    setUserName('');
+                    handleUserModalSearchChange('');
+                  }}
+                  inputTestId="searchUser"
+                  buttonTestId="submitBtn"
+                />
               </div>
               <TableContainer component={Paper}>
                 <Table aria-label="customized table">

@@ -143,6 +143,9 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+const getPickerInputByLabel = (label: string) =>
+  screen.getByLabelText(label, { selector: 'input' }) as HTMLInputElement;
+
 describe('Organisation Events Page', () => {
   const formData = {
     title: 'Dummy Org',
@@ -160,7 +163,7 @@ describe('Organisation Events Page', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   const renderWithLink = (link: StaticMockLink) =>
@@ -254,8 +257,8 @@ describe('Organisation Events Page', () => {
       formData.location,
     );
 
-    const endDatePicker = screen.getByLabelText('End Date');
-    const startDatePicker = screen.getByLabelText('Start Date');
+    const endDatePicker = getPickerInputByLabel('End Date');
+    const startDatePicker = getPickerInputByLabel('Start Date');
 
     fireEvent.change(endDatePicker, {
       target: { value: formData.endDate },
@@ -343,8 +346,8 @@ describe('Organisation Events Page', () => {
       formData.location,
     );
 
-    const endDatePicker = screen.getByLabelText('End Date');
-    const startDatePicker = screen.getByLabelText('Start Date');
+    const endDatePicker = getPickerInputByLabel('End Date');
+    const startDatePicker = getPickerInputByLabel('Start Date');
 
     fireEvent.change(endDatePicker, {
       target: { value: formData.endDate },
@@ -356,11 +359,11 @@ describe('Organisation Events Page', () => {
     await userEvent.click(screen.getByTestId('alldayCheck'));
 
     await waitFor(() =>
-      expect(screen.getByLabelText(translations.startTime)).toBeInTheDocument(),
+      expect(getPickerInputByLabel(translations.startTime)).toBeInTheDocument(),
     );
 
-    const startTimePicker = screen.getByLabelText(translations.startTime);
-    const endTimePicker = screen.getByLabelText(translations.endTime);
+    const startTimePicker = getPickerInputByLabel(translations.startTime);
+    const endTimePicker = getPickerInputByLabel(translations.endTime);
 
     fireEvent.change(startTimePicker, {
       target: { value: formData.startTime },

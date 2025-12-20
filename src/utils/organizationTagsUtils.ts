@@ -2,6 +2,7 @@
 
 import type {
   InterfaceQueryOrganizationUserTags,
+  InterfaceQueryOrganizationUserTagsPG,
   InterfaceQueryUserTagChildTags,
   InterfaceQueryUserTagsAssignedMembers,
   InterfaceQueryUserTagsMembersToAssignTo,

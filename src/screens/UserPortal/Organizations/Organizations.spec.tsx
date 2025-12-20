@@ -88,6 +88,53 @@ vi.mock('shared-components/OrganizationCard/OrganizationCard', () => ({
   ),
 }));
 
+// Mock SignOut component to prevent useNavigate() error from Router context
+vi.mock('components/SignOut/SignOut', () => ({
+  default: vi.fn(() => (
+    <button data-testid="signOutBtn" type="button">
+      Sign Out
+    </button>
+  )),
+}));
+
+// Mock useSession to prevent router hook errors
+vi.mock('utils/useSession', () => ({
+  default: vi.fn(() => ({
+    endSession: vi.fn(),
+    startSession: vi.fn(),
+    handleLogout: vi.fn(),
+    extendSession: vi.fn(),
+  })),
+}));
+
+// Mock ProfileCard component to prevent useNavigate() error from Router context
+vi.mock('components/ProfileCard/ProfileCard', () => ({
+  default: vi.fn(() => (
+    <div data-testid="profile-dropdown">
+      <div data-testid="display-name">Test User</div>
+      <div data-testid="display-type">User</div>
+      <button data-testid="profileBtn" type="button">
+        Profile Button
+      </button>
+    </div>
+  )),
+}));
+
+// Mock UserSidebar to prevent all router-related errors from NavLink, useLocation, etc.
+vi.mock('components/UserPortal/UserSidebar/UserSidebar', () => ({
+  default: vi.fn(({ hideDrawer }: { hideDrawer: boolean }) => (
+    <div data-testid="user-sidebar" data-hide-drawer={hideDrawer}>
+      <span>User Portal</span>
+      <button data-testid="orgsBtn" type="button">
+        Organizations
+      </button>
+      <button data-testid="settingsBtn" type="button">
+        Settings
+      </button>
+    </div>
+  )),
+}));
+
 const TEST_USER_ID = '01958985-600e-7cde-94a2-b3fc1ce66cf3';
 const baseOrgFields = {
   addressLine1: 'asdfg',

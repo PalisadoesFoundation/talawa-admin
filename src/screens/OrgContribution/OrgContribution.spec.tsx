@@ -1,11 +1,10 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing/react';
-import { render } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { vi, describe, test, expect } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
-
 import OrgContribution from './OrgContribution';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -17,6 +16,20 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+const renderComponent = () => {
+  return render(
+    <MockedProvider link={link}>
+      <BrowserRouter>
+        <Provider store={store}>
+          <I18nextProvider i18n={i18nForTest}>
+            <OrgContribution />
+          </I18nextProvider>
+        </Provider>
+      </BrowserRouter>
+    </MockedProvider>,
+  );
+};
+
 describe('Organisation Contribution Page', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -27,33 +40,46 @@ describe('Organisation Contribution Page', () => {
   });
 
   test('should render props and text elements test for the screen', async () => {
-    Object.defineProperty(window, 'location', {
-      value: {
-        assign: vi.fn(),
-      },
-      writable: true,
-    });
+    const { container } = renderComponent();
 
-    window.location.assign('/orglist');
-
-    const { container } = render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <OrgContribution />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
+    expect(document.title).toBe('Talawa Contributions');
     expect(container.textContent).not.toBe('Loading data...');
     await wait();
     expect(container.textContent).toMatch('Filter by Name');
     expect(container.textContent).toMatch('Filter by Trans. ID');
     expect(container.textContent).toMatch('Recent Stats');
     expect(container.textContent).toMatch('Contribution');
-    expect(window.location.assign).toHaveBeenCalledWith('/orglist');
+  });
+
+  test('renders ContriStats with correct props', () => {
+    renderComponent();
+
+    // Verify ContriStats component is rendered with the correct props
+    expect(screen.getByText('90')).toBeInTheDocument();
+    expect(screen.getByText('500')).toBeInTheDocument();
+    expect(screen.getByText('6000')).toBeInTheDocument();
+  });
+
+  test('renders OrgContriCards with correct props', () => {
+    renderComponent();
+    // Verify OrgContriCards component is rendered with the correct props
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('20/7/2021')).toBeInTheDocument();
+    expect(screen.getByText('21')).toBeInTheDocument();
+    expect(screen.getByText('21WE98YU')).toBeInTheDocument();
+    expect(screen.getByText('johndoexyz@gmail.com')).toBeInTheDocument();
+  });
+
+  test('updates org name and transaction filter when typing in search', () => {
+    renderComponent();
+
+    const orgInput = screen.getByTestId('filterOrgName');
+    fireEvent.input(orgInput, { target: { value: 'Test Org' } });
+    fireEvent.keyDown(orgInput, { key: 'Enter' });
+    const txnInput = screen.getByTestId('filterTransaction');
+    fireEvent.input(txnInput, { target: { value: 'TXN123' } });
+    fireEvent.keyDown(txnInput, { key: 'Enter' });
+    expect(orgInput).toHaveValue('Test Org');
+    expect(txnInput).toHaveValue('TXN123');
   });
 });

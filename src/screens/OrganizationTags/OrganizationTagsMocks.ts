@@ -4,13 +4,13 @@ import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 
 /* ---------- Types ---------- */
 
-type TagAncestor = { _id: string; name: string };
+type TagAncestor = { id: string; name: string };
 
 export type TagEdge = {
   node: {
-    _id: string;
+    id: string;
     name: string;
-    parentTag: { _id: string } | null;
+    parentTag: { id: string } | null;
     usersAssignedTo: { totalCount: number };
     childTags: { totalCount: number };
     ancestorTags: TagAncestor[];
@@ -58,9 +58,9 @@ export const makeTagEdge = (
   },
 ): TagEdge => ({
   node: {
-    _id: String(id),
+    id: String(id),
     name: `userTag ${id}`,
-    parentTag: opts?.parentId ? { _id: opts.parentId } : null,
+    parentTag: opts?.parentId ? { id: opts.parentId } : null,
     usersAssignedTo: { totalCount: opts?.users ?? 5 },
     childTags: { totalCount: opts?.children ?? 5 },
     ancestorTags: opts?.ancestors ?? [],
@@ -138,11 +138,11 @@ export const MOCK_RESPONSES = {
       [
         makeTagEdge('searchUserTag1', {
           parentId: '1',
-          ancestors: [{ _id: '1', name: 'userTag 1' }],
+          ancestors: [{ id: '1', name: 'userTag 1' }],
         }),
         makeTagEdge('searchUserTag2', {
           parentId: '1',
-          ancestors: [{ _id: '1', name: 'userTag 1' }],
+          ancestors: [{ id: '1', name: 'userTag 1' }],
         }),
       ],
     ),
@@ -156,11 +156,11 @@ export const MOCK_RESPONSES = {
       [
         makeTagEdge('searchUserTag2', {
           parentId: '1',
-          ancestors: [{ _id: '1', name: 'userTag 1' }],
+          ancestors: [{ id: '1', name: 'userTag 1' }],
         }),
         makeTagEdge('searchUserTag1', {
           parentId: '1',
-          ancestors: [{ _id: '1', name: 'userTag 1' }],
+          ancestors: [{ id: '1', name: 'userTag 1' }],
         }),
       ],
     ),
@@ -169,7 +169,7 @@ export const MOCK_RESPONSES = {
         query: CREATE_USER_TAG,
         variables: { name: 'userTag 12', organizationId: 'orgId' },
       },
-      result: { data: { createUserTag: { _id: '12' } } },
+      result: { data: { createUserTag: { id: '12' } } },
     },
     {
       request: {

@@ -9,6 +9,7 @@ import {
   useDeletePlugin,
   useInstallPlugin,
 } from 'plugin/graphql-service';
+import { adminPluginFileService } from 'plugin/services/AdminPluginFileService';
 
 import type { IPlugin } from 'plugin/graphql-service';
 

@@ -698,6 +698,9 @@ const mockActionItemWithGroup = {
   },
 };
 
+const getPickerInputByLabel = (label: string) =>
+  screen.getByLabelText(label, { selector: 'input' });
+
 // Additional test cases for ItemModal component
 describe('ItemModal - Additional Test Cases', () => {
   beforeEach(() => {
@@ -1445,7 +1448,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       );
 
       // Find date picker input
-      const dateInput = screen.getByLabelText(/assignmentDate/i);
+      const dateInput = getPickerInputByLabel('assignmentDate');
       expect(dateInput).toBeInTheDocument();
 
       // The date picker should be accessible and allow interaction

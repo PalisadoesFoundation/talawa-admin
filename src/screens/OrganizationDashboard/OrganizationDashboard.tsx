@@ -35,7 +35,7 @@ import {
   GET_ORGANIZATION_POSTS_COUNT_PG,
   GET_ORGANIZATION_EVENTS_PG,
   GET_ORGANIZATION_POSTS_PG,
-  MEMBERSHIP_REQUEST,
+  MEMBERSHIP_REQUEST_PG,
   ORGANIZATION_MEMBER_ADMIN_COUNT,
   GET_ORGANIZATION_BLOCKED_USERS_COUNT,
   GET_ORGANIZATION_VENUES_COUNT,
@@ -67,6 +67,8 @@ function OrganizationDashboard(): JSX.Element {
   document.title = t('title');
   const { orgId } = useParams();
   const navigate = useNavigate();
+
+  // State hooks - must be called before any conditional returns
   const [memberCount, setMemberCount] = useState(0);
   const [adminCount, setAdminCount] = useState(0);
   const [eventCount, setEventCount] = useState(0);
@@ -74,21 +76,9 @@ function OrganizationDashboard(): JSX.Element {
   const [blockedCount, setBlockedCount] = useState(0);
   const [upcomingEvents, setUpcomingEvents] = useState<IEvent[]>([]);
 
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
-  // const currentDate = dayjs().toISOString();
-
-  // const leaderboardLink = `/leaderboard/${orgId}`;
-  // const peopleLink = `/orgpeople/${orgId}`;
-  const postsLink = `/orgpost/${orgId}`;
-  const eventsLink = `/orgevents/${orgId}`;
-  const venuesLink = `/orgvenues/${orgId}`;
-  const blockUserLink = `/blockuser/${orgId}`;
-  const requestLink = `/requests/${orgId}`;
-
   /**
    * Query to fetch organization data.
+   * All hooks must be called before the conditional return to comply with React's Rules of Hooks.
    */
 
   /**
@@ -117,12 +107,15 @@ function OrganizationDashboard(): JSX.Element {
     useQuery<InterfaceMembershipRequestData>(MEMBERSHIP_REQUEST, {
       variables: {
         input: {
-          id: orgId,
+          id: orgId ?? '',
         },
         first: 8,
         skip: 0,
-        firstName_contains: '',
+        name_contains: '',
       },
+      skip: !orgId,
+      fetchPolicy: 'cache-and-network',
+      notifyOnNetworkStatusChange: true,
     });
 
   const {
@@ -130,7 +123,10 @@ function OrganizationDashboard(): JSX.Element {
     loading: orgMemberLoading,
     error: orgMemberError,
   } = useQuery<InterfaceOrganizationPg>(ORGANIZATION_MEMBER_ADMIN_COUNT, {
-    variables: { id: orgId },
+    variables: { id: orgId ?? '' },
+    skip: !orgId,
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network',
   });
 
   useEffect(() => {
@@ -205,7 +201,16 @@ function OrganizationDashboard(): JSX.Element {
   } = useQuery<InterfaceVenuesCountData>(GET_ORGANIZATION_VENUES_COUNT, {
     variables: { id: orgId },
     notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network',
   });
+
+  // Effect hooks - must be called before conditional return
+  useEffect(() => {
+    if (orgMemberData) {
+      setAdminCount(orgMemberData.organization.adminsCount);
+      setMemberCount(orgMemberData.organization.membersCount);
+    }
+  }, [orgMemberData, orgId]);
 
   useEffect(() => {
     if (orgEventsData) {
@@ -239,6 +244,21 @@ function OrganizationDashboard(): JSX.Element {
       setVenueCount(orgVenuesData.organization.venuesCount);
     }
   }, [orgVenuesData]);
+
+  // Conditional return - comes AFTER all hooks
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
+
+  // const currentDate = dayjs().toISOString();
+
+  // const leaderboardLink = `/leaderboard/${orgId}`;
+  // const peopleLink = `/orgpeople/${orgId}`;
+  const postsLink = `/orgpost/${orgId}`;
+  const eventsLink = `/orgevents/${orgId}`;
+  const venuesLink = `/orgvenues/${orgId}`;
+  const blockUserLink = `/blockuser/${orgId}`;
+  const requestLink = `/requests/${orgId}`;
 
   /**
    * Query to fetch vvolunteer rankings.
@@ -287,6 +307,8 @@ function OrganizationDashboard(): JSX.Element {
     error: errorPost,
   } = useQuery<InterfaceOrganizationPostsData>(GET_ORGANIZATION_POSTS_PG, {
     variables: { id: orgId, first: 5 },
+    notifyOnNetworkStatusChange: true,
+    fetchPolicy: 'cache-and-network',
   });
 
   /**
@@ -312,6 +334,12 @@ function OrganizationDashboard(): JSX.Element {
     orgBlockedUsersError,
     orgVenuesError,
   ]);
+
+  const membershipRequests =
+    membershipRequestData?.organization?.membershipRequests ?? [];
+  const pendingMembershipRequests = membershipRequests.filter(
+    (request: { status: string }) => request.status === 'pending',
+  );
 
   return (
     <>
@@ -351,8 +379,7 @@ function OrganizationDashboard(): JSX.Element {
             }}
           />
           {membershipRequestData?.organization &&
-            membershipRequestData?.organization?.membershipRequestsCount >
-              0 && (
+            pendingMembershipRequests.length > 0 && (
               <Row>
                 <Col xs={6} sm={4} className="mb-4">
                   <button
@@ -364,10 +391,7 @@ function OrganizationDashboard(): JSX.Element {
                     aria-label={tCommon('requests')}
                   >
                     <DashBoardCard
-                      count={
-                        membershipRequestData?.organization
-                          ?.membershipRequestsCount
-                      }
+                      count={pendingMembershipRequests.length}
                       title={tCommon('requests')}
                       icon={<UsersIcon fill="#555555" />}
                     />
@@ -404,7 +428,7 @@ function OrganizationDashboard(): JSX.Element {
                 <Card.Body className={styles.containerBody}>
                   {loadingPost ? (
                     [...Array(4)].map((_, index) => {
-                      return <CardItemLoading key={`postLoading_${index}`} />;
+                      return <CardItemLoading key={'postLoading_' + index} />;
                     })
                   ) : orgPostsData?.organization.postsCount == 0 ? (
                     <div className={styles.emptyContainer}>
@@ -457,12 +481,9 @@ function OrganizationDashboard(): JSX.Element {
               <Card.Body className={styles.containerBody}>
                 {loadingMembershipRequests ? (
                   [...Array(4)].map((_, index) => (
-                    <CardItemLoading key={`requestsLoading_${index}`} />
+                    <CardItemLoading key={'requestsLoading_' + index} />
                   ))
-                ) : membershipRequestData?.organization?.membershipRequests?.filter(
-                    (request: { status: string }) =>
-                      request.status === 'pending',
-                  ).length === 0 ? (
+                ) : pendingMembershipRequests.length === 0 ? (
                   <div
                     className={styles.emptyContainer}
                     style={{ height: '150px' }}
@@ -470,11 +491,7 @@ function OrganizationDashboard(): JSX.Element {
                     <h6>{t('noMembershipRequests')}</h6>
                   </div>
                 ) : (
-                  membershipRequestData?.organization?.membershipRequests
-                    .filter(
-                      (request: { status: string }) =>
-                        request.status === 'pending',
-                    )
+                  pendingMembershipRequests
                     .slice(0, 8)
                     .map(
                       (request: {

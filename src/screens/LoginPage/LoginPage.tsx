@@ -212,7 +212,16 @@ const loginPage = (): JSX.Element => {
   useEffect(() => {
     async function loadResource(): Promise<void> {
       try {
-        await fetch(BACKEND_URL as string);
+        // Use a proper GraphQL introspection query instead of plain fetch
+        await fetch(BACKEND_URL as string, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: '{ __typename }',
+          }),
+        });
       } catch (error) {
         errorHandler(t, error);
       }

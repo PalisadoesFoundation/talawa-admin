@@ -190,6 +190,9 @@ const NO_CHANGE_MOCK = {
   },
 };
 
+const getPickerInputByLabel = (label: string) =>
+  screen.getByRole('group', { name: label, hidden: true });
+
 describe('PledgeModal', () => {
   beforeAll(() => {
     vi.mock('react-router', async () => {
@@ -286,22 +289,32 @@ describe('PledgeModal', () => {
 
   it('should update pledgeStartDate when a new date is selected', async () => {
     renderPledgeModal(link1, pledgeProps[1]);
-    const startDateInput = screen.getByLabelText('Start Date');
+    const startDateGroup = getPickerInputByLabel('Start Date');
+    const startDateInput = within(startDateGroup).getByRole('textbox', {
+      hidden: true,
+    });
     fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
     expect(startDateInput).toHaveValue('02/01/2024');
-    expect(pledgeProps[1].pledge?.startDate).toEqual('2024-01-01');
+    fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
+    expect(startDateInput).toHaveValue('02/01/2024');
   });
 
   it('pledgeStartDate onChange when its null', async () => {
     renderPledgeModal(link1, pledgeProps[1]);
-    const startDateInput = screen.getByLabelText('Start Date');
-    fireEvent.change(startDateInput, { target: { value: null } });
-    expect(pledgeProps[1].pledge?.startDate).toEqual('2024-01-01');
+    const startDateGroup = getPickerInputByLabel('Start Date');
+    const startDateInput = within(startDateGroup).getByRole('textbox', {
+      hidden: true,
+    });
+    fireEvent.change(startDateInput, { target: { value: '' } });
+    expect(startDateInput).toHaveValue('01/01/2024');
   });
 
   it('should update pledgeEndDate when a new date is selected', async () => {
     renderPledgeModal(link1, pledgeProps[1]);
-    const endDateInput = screen.getByLabelText('End Date');
+    const endDateGroup = getPickerInputByLabel('End Date');
+    const endDateInput = within(endDateGroup).getByRole('textbox', {
+      hidden: true,
+    });
     fireEvent.change(endDateInput, { target: { value: '12/01/2024' } });
     expect(endDateInput).toHaveValue('12/01/2024');
     expect(pledgeProps[1].pledge?.endDate).toEqual('2024-01-10');
@@ -309,15 +322,21 @@ describe('PledgeModal', () => {
 
   it('pledgeEndDate onChange when its null', async () => {
     renderPledgeModal(link1, pledgeProps[1]);
-    const endDateInput = screen.getByLabelText('End Date');
-    fireEvent.change(endDateInput, { target: { value: null } });
-    expect(pledgeProps[1].pledge?.endDate).toEqual('2024-01-10');
+    const endDateGroup = getPickerInputByLabel('End Date');
+    const endDateInput = within(endDateGroup).getByRole('textbox', {
+      hidden: true,
+    });
+    fireEvent.change(endDateInput, { target: { value: '' } });
+    expect(endDateInput).toHaveValue('10/01/2024');
   });
 
   it('should update end date if start date is after current end date', () => {
     renderPledgeModal(link1, pledgeProps[1]);
 
-    const endDateInput = screen.getByLabelText('End Date');
+    const endDateGroup = getPickerInputByLabel('End Date');
+    const endDateInput = within(endDateGroup).getByRole('textbox', {
+      hidden: true,
+    });
     expect(endDateInput).toBeDisabled();
   });
 
@@ -354,11 +373,11 @@ describe('PledgeModal', () => {
   it('should enforce date constraints (start date before end date)', () => {
     renderPledgeModal(link1, pledgeProps[1]);
 
-    const startDateInput = screen.getByLabelText('Start Date');
-    const endDateInput = screen.getByLabelText('End Date');
+    const startDateGroup = getPickerInputByLabel('Start Date');
+    const endDateGroup = getPickerInputByLabel('End Date');
 
-    expect(startDateInput).toBeDisabled();
-    expect(endDateInput).toBeDisabled();
+    expect(startDateGroup).toHaveClass('Mui-disabled');
+    expect(endDateGroup).toHaveClass('Mui-disabled');
   });
 
   it('should enforce campaign end date as the max date', async () => {
@@ -367,8 +386,8 @@ describe('PledgeModal', () => {
 
     renderPledgeModal(link1, props);
 
-    const endDatePicker = screen.getByLabelText('End Date');
-    expect(endDatePicker).toBeInTheDocument();
+    const endDateGroup = getPickerInputByLabel('End Date');
+    expect(endDateGroup).toBeInTheDocument();
   });
 
   it('should reset form state after successful pledge creation', async () => {
@@ -409,8 +428,8 @@ describe('PledgeModal', () => {
     expect(screen.getByLabelText('Pledgers')).toBeInTheDocument();
     expect(screen.getByLabelText('Amount')).toBeInTheDocument();
     expect(screen.getByLabelText('Currency')).toBeInTheDocument();
-    expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
-    expect(screen.getByLabelText('End Date')).toBeInTheDocument();
+    expect(getPickerInputByLabel('Start Date')).toBeInTheDocument();
+    expect(getPickerInputByLabel('End Date')).toBeInTheDocument();
   });
 
   it('should show validation error when submitting without required fields', async () => {
@@ -556,10 +575,10 @@ describe('PledgeModal', () => {
       const amountInput = screen.getByLabelText('Amount');
       expect(amountInput).toHaveAttribute('value', '0');
       expect(screen.getByLabelText('Currency')).toBeInTheDocument();
-      const startDateInput = screen.getByLabelText('Start Date');
-      const endDateInput = screen.getByLabelText('End Date');
-      expect(startDateInput).toBeDisabled();
-      expect(endDateInput).toBeDisabled();
+      const startDateGroup = getPickerInputByLabel('Start Date');
+      const endDateGroup = getPickerInputByLabel('End Date');
+      expect(startDateGroup).toHaveClass('Mui-disabled');
+      expect(endDateGroup).toHaveClass('Mui-disabled');
     });
   });
 

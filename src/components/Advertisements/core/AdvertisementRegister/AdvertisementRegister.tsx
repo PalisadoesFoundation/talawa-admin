@@ -127,7 +127,7 @@ function AdvertisementRegister({
     type: 'banner',
     startAt: new Date(),
     endAt: dayjs().add(1, 'day').toDate(),
-    attachments: undefined,
+    attachments: [],
   });
 
   const handleClose = (): void => {
@@ -137,7 +137,7 @@ function AdvertisementRegister({
       description: null,
       startAt: new Date(),
       endAt: dayjs().add(1, 'day').toDate(),
-      attachments: undefined,
+      attachments: [],
     });
     setShow(false);
   };
@@ -167,7 +167,7 @@ function AdvertisementRegister({
       if (validFiles.length > 0) {
         setFormState((prev) => ({
           ...prev,
-          attachments: [...(prev.attachments || []), ...validFiles],
+          attachments: [...prev.attachments, ...validFiles],
         }));
       }
     }
@@ -177,7 +177,7 @@ function AdvertisementRegister({
   const removeFile = (index: number): void => {
     setFormState((prev) => ({
       ...prev,
-      attachments: (prev?.attachments || []).filter((_, i) => i !== index),
+      attachments: prev.attachments.filter((_, i) => i !== index),
     }));
   };
 
@@ -189,8 +189,8 @@ function AdvertisementRegister({
         name: nameEdit || '',
         description: descriptionEdit || null,
         type: typeEdit || 'banner',
-        startAt: startAtEdit || new Date(),
-        endAt: endAtEdit || new Date(),
+        startAt: startAtEdit,
+        endAt: endAtEdit,
         organizationId: currentOrg,
       }));
     }
@@ -254,10 +254,10 @@ function AdvertisementRegister({
           name: '',
           type: 'banner',
           description: null,
-          startAt: new Date(formState.startAt || new Date()),
+          startAt: new Date(formState.startAt),
           endAt: new Date(),
           organizationId: currentOrg,
-          attachments: undefined,
+          attachments: [],
           existingAttachments: undefined,
         });
         setAfterActive(null);
@@ -310,19 +310,12 @@ function AdvertisementRegister({
         }
       }
 
-      const startAt = formState.startAt
-        ? dayjs.utc(formState.startAt).startOf('day').toISOString()
-        : null;
-      const endAt = formState.endAt
-        ? dayjs.utc(formState.endAt).startOf('day').toISOString()
-        : null;
+      const startAt = dayjs.utc(formState.startAt).startOf('day').toISOString();
+      const endAt = dayjs.utc(formState.endAt).startOf('day').toISOString();
 
       const mutationVariables = {
         id: idEdit,
         ...(updatedFields.name && { name: updatedFields.name }),
-        ...(updatedFields.attachments && {
-          attachments: updatedFields.attachments,
-        }),
         ...(updatedFields.description && {
           description: updatedFields.description,
         }),
@@ -432,7 +425,7 @@ function AdvertisementRegister({
                   data-cy="advertisementMediaInput"
                 />
                 {/* Preview section */}
-                {(formState.attachments || []).map((file, index) => (
+                {formState.attachments.map((file, index) => (
                   <div key={index}>
                     {file.type.startsWith('video/') ? (
                       <video
@@ -492,11 +485,7 @@ function AdvertisementRegister({
               <Form.Control
                 type="date"
                 required
-                value={
-                  formState.startAt instanceof Date
-                    ? dayjs.utc(formState.startAt).format('YYYY-MM-DD')
-                    : ''
-                }
+                value={dayjs.utc(formState.startAt).format('YYYY-MM-DD')}
                 onChange={(e): void => {
                   // Create UTC date from date input to avoid timezone issues
                   const newDate = dayjs.utc(e.target.value).toDate();
@@ -513,11 +502,7 @@ function AdvertisementRegister({
               <Form.Control
                 type="date"
                 required
-                value={
-                  formState.endAt instanceof Date
-                    ? dayjs.utc(formState.endAt).format('YYYY-MM-DD')
-                    : ''
-                }
+                value={dayjs.utc(formState.endAt).format('YYYY-MM-DD')}
                 onChange={(e): void => {
                   // Create UTC date from date input to avoid timezone issues
                   const newDate = dayjs.utc(e.target.value).toDate();
