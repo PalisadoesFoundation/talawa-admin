@@ -228,6 +228,17 @@ export const useUpdateEventHandler = () => {
             if (formState.eventdescrip !== eventListCardProps.description) {
               entireSeriesInput.description = formState.eventdescrip;
             }
+            if (publicchecked !== eventListCardProps.isPublic) {
+              entireSeriesInput.isPublic = publicchecked;
+            }
+            if (registrablechecked !== eventListCardProps.isRegisterable) {
+              entireSeriesInput.isRegisterable = registrablechecked;
+            }
+            if (
+              inviteOnlyChecked !== (eventListCardProps.isInviteOnly ?? false)
+            ) {
+              entireSeriesInput.isInviteOnly = inviteOnlyChecked;
+            }
             const entireSeriesResult = await updateEntireRecurringEventSeries({
               variables: { input: entireSeriesInput },
             });

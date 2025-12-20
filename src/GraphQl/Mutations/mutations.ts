@@ -452,36 +452,6 @@ export const UPDATE_POST_MUTATION = gql`
   }
 `;
 
-export const UPDATE_EVENT_MUTATION = gql`
-  mutation UpdateEvent($input: MutationUpdateEventInput!) {
-    updateEvent(input: $input) {
-      id
-      name
-      description
-      startAt
-      endAt
-      allDay
-      location
-      isPublic
-      isRegisterable
-      createdAt
-      updatedAt
-      creator {
-        id
-        name
-      }
-      updater {
-        id
-        name
-      }
-      organization {
-        id
-        name
-      }
-    }
-  }
-`;
-
 export const UPDATE_POST_VOTE = gql`
   mutation updatePostVote($input: MutationUpdatePostVoteInput!) {
     updatePostVote(input: $input) {

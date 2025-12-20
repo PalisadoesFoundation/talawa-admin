@@ -1,7 +1,5 @@
-import {
-  DELETE_STANDALONE_EVENT_MUTATION,
-  UPDATE_EVENT_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+import { DELETE_STANDALONE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
+import { UPDATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 
 export const eventData = [
   {

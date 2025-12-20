@@ -206,6 +206,7 @@ export default function events(): JSX.Element {
       location: edge.node.location || '',
       isPublic: edge.node.isPublic,
       isRegisterable: edge.node.isRegisterable,
+      isInviteOnly: edge.node.isInviteOnly ?? false,
       // Add recurring event information
       isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
       baseEvent: edge.node.baseEvent,

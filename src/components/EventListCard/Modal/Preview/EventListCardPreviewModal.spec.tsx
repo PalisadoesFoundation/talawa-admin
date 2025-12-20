@@ -133,10 +133,9 @@ const renderComponent = (props = {}) => {
 
 describe('EventListCardPreviewModal', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
   beforeEach(() => {
-    vi.clearAllMocks();
     (CustomRecurrenceModal as Mock).mockImplementation(() => (
       <div data-testid="mock-custom-recurrence-modal" />
     ));

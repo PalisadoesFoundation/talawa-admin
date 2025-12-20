@@ -470,6 +470,58 @@ describe('useUpdateEventHandler', () => {
         mockUpdateEntireRecurringEventSeries.mock.calls[0][0].variables.input;
       expect(calledInputs.description).toContain('Changed event description');
     });
+
+    it('includes isInviteOnly in entireSeries update when changed', async () => {
+      mockUpdateEntireRecurringEventSeries.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: buildRecurringEventProps({
+            isInviteOnly: false,
+          }),
+          updateOption: 'entireSeries',
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name', // Include a change to trigger the mutation
+          },
+          inviteOnlyChecked: true, // Changed from false to true
+        }),
+      );
+
+      expect(mockUpdateEntireRecurringEventSeries).toBeCalledTimes(1);
+      const calledInputs =
+        mockUpdateEntireRecurringEventSeries.mock.calls[0][0].variables.input;
+      expect(calledInputs.isInviteOnly).toBe(true);
+    });
+
+    it('does not include isInviteOnly in entireSeries update when unchanged', async () => {
+      mockUpdateEntireRecurringEventSeries.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: buildRecurringEventProps({
+            isInviteOnly: false,
+          }),
+          updateOption: 'entireSeries',
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name', // Include a change to trigger the mutation
+          },
+          inviteOnlyChecked: false, // Same as initial value
+        }),
+      );
+
+      expect(mockUpdateEntireRecurringEventSeries).toBeCalledTimes(1);
+      const calledInputs =
+        mockUpdateEntireRecurringEventSeries.mock.calls[0][0].variables.input;
+      expect(calledInputs.isInviteOnly).toBeUndefined();
+    });
   });
 
   describe('date validation and handling', () => {
