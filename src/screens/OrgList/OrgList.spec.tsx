@@ -1496,9 +1496,7 @@ describe('Advanced Component Functionality Tests', () => {
     setItem('SuperAdmin', true);
     setItem('role', 'administrator');
 
-    // Mock clearAllItems function and window.location.assign
-    const storageHelper = useLocalStorage();
-    const clearSpy = vi.spyOn(storageHelper, 'clearAllItems');
+    // Mock window.location.assign
     const assignMock = vi.fn();
     const originalLocation = window.location;
     const originalDescriptor = Object.getOwnPropertyDescriptor(
@@ -1585,7 +1583,6 @@ describe('Advanced Component Functionality Tests', () => {
         writable: true,
       },
     );
-    clearSpy.mockRestore();
   });
 
   test('Testing pagination navigation functionality', async () => {

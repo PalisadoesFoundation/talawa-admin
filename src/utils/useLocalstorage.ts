@@ -55,8 +55,9 @@ export const removeItem = (prefix: string, key: string): void => {
 };
 
 /**
- * Removes all the values associated with the prefix key from local storage
- * @param prefix - Prefix to identify all the organization keys
+ * Clears all items from localStorage with the given prefix.
+ * @param prefix - Prefix to be added to the key, common for all keys.
+ * @returns void
  */
 export const clearAllItems = (prefix: string): void => {
   const allPrefixedKeys = [];

@@ -61,7 +61,6 @@ describe('Volunteer Management', () => {
 
   beforeEach(() => {
     clearAllItems();
-    // sharedMocks.useParams.mockReturnValue({ orgId: 'orgId' });
     setItem('userId', 'userId');
   });
 

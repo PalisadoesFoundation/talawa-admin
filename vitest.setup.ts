@@ -8,7 +8,7 @@ import { setupLocalStorageMock } from './src/test-utils/localStorageMock';
 const localStorageMock = setupLocalStorageMock();
 
 if (typeof globalThis.localStorage === 'undefined') {
-  (globalThis as any).localStorage = localStorageMock;
+  globalThis.localStorage = localStorageMock as unknown as Storage;
 }
 
 // Simple console error handler for React 18 warnings

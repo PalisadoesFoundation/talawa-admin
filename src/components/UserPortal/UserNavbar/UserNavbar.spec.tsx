@@ -34,8 +34,11 @@ import useLocalStorage from 'utils/useLocalstorage';
 
 vi.mock('utils/useLocalstorage', () => ({
   default: vi.fn(() => ({
-    clearAllItems: vi.fn(),
     getItem: vi.fn(),
+    setItem: vi.fn(),
+    removeItem: vi.fn(),
+    getStorageKey: vi.fn((key: string) => key),
+    clearAllItems: vi.fn(),
   })),
 }));
 
@@ -93,7 +96,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     await act(async () => {
       await i18nForTest.changeLanguage('en');
     });
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('Component should be rendered properly', async () => {
