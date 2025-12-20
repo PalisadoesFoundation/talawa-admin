@@ -49,6 +49,7 @@ export interface IEvent {
   endTime?: string | null;
   allDay: boolean;
   userId?: string;
+  isInviteOnly?: boolean;
   isPublic: boolean;
   isRegisterable: boolean;
   attendees: Partial<User>[];
@@ -146,6 +147,8 @@ export interface IPreviewEventModalProps {
   setEventEndDate: Dispatch<SetStateAction<Date>>;
   alldaychecked: boolean;
   setAllDayChecked: Dispatch<SetStateAction<boolean>>;
+  inviteOnlyChecked: boolean;
+  setInviteOnlyChecked: Dispatch<SetStateAction<boolean>>;
   publicchecked: boolean;
   setPublicChecked: Dispatch<SetStateAction<boolean>>;
   registrablechecked: boolean;
@@ -210,6 +213,7 @@ export interface IEventEdge {
     endAt: string;
     allDay: boolean;
     location?: string | null;
+    isInviteOnly?: boolean;
     isPublic: boolean;
     isRegisterable: boolean;
     // Recurring event fields

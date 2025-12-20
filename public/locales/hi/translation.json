@@ -468,6 +468,7 @@
     "recurringEvent": "पुनरावर्ती ईवेंट",
     "isPublic": "सार्वजनिक है",
     "isRegistrable": "पंजीकरण योग्य है",
+    "isInviteOnly": "केवल आमंत्रित",
     "createEvent": "कार्यक्रम बनाएँ",
     "enterFilter": "फ़िल्टर दर्ज करें",
     "enterName": "नाम दर्ज करें",
@@ -659,6 +660,7 @@
     "recurringEvent": "पुनरावर्ती ईवेंट",
     "isPublic": "सार्वजनिक है",
     "isRegistrable": "पंजीकरण योग्य है",
+    "isInviteOnly": "केवल आमंत्रित",
     "updatePost": "पोस्ट अपडेट करें",
     "eventDetails": "घटना की जानकारी",
     "eventDeleted": "ईवेंट सफलतापूर्वक हटा दिया गया.",
@@ -684,7 +686,8 @@
     "close": "बंद करें",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
     "done": "समाप्त",
-    "createChat": "चैट बनाएं"
+    "createChat": "चैट बनाएं",
+    "showEventDashboard": "इवेंट डैशबोर्ड दिखाएं"
   },
   "funds": {
     "title": "फंड",
@@ -1376,6 +1379,7 @@
     "enterLocation": "स्थान दर्ज करें",
     "publicEvent": "सार्वजनिक है",
     "registerable": "पंजीकरण योग्य है",
+    "isInviteOnly": "केवल आमंत्रित",
     "monthlyCalendarView": "मासिक कैलेंडर",
     "yearlyCalendarView": "वार्षिक कैलेंडर",
     "search": "खोजें",

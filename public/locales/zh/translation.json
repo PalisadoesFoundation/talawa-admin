@@ -468,6 +468,7 @@
     "recurringEvent": "重复事件",
     "isPublic": "是公开的",
     "isRegistrable": "可注册",
+    "isInviteOnly": "仅限邀请",
     "createEvent": "创建事件",
     "enterFilter": "输入过滤器",
     "enterName": "输入名称",
@@ -659,6 +660,7 @@
     "recurringEvent": "重复事件",
     "isPublic": "是公开的",
     "isRegistrable": "可注册",
+    "isInviteOnly": "仅限邀请",
     "updatePost": "更新帖子",
     "eventDetails": "活动详情",
     "eventDeleted": "活动删除成功。",
@@ -684,7 +686,8 @@
     "close": "关闭",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
     "done": "完成",
-    "createChat": "创建聊天"
+    "createChat": "创建聊天",
+    "showEventDashboard": "显示活动仪表板"
   },
   "funds": {
     "title": "基金",
@@ -1376,6 +1379,7 @@
     "enterLocation": "输入位置",
     "publicEvent": "是公开的",
     "registerable": "可注册",
+    "isInviteOnly": "仅限邀请",
     "monthlyCalendarView": "月历",
     "yearlyCalendarView": "年历",
     "search": "搜索",

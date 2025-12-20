@@ -11,6 +11,7 @@ interface IEventFormBase {
   allDay: boolean;
   isPublic: boolean;
   isRegisterable: boolean;
+  isInviteOnly?: boolean;
   recurrenceRule: InterfaceRecurrenceRule | null;
   createChat?: boolean;
 }
@@ -50,6 +51,7 @@ export interface IEventFormSubmitPayload extends IEventFormBase {
  * @property showCreateChat - Whether to show the "Create Chat" toggle
  * @property showRegisterable - Whether to show the "Is Registerable" toggle
  * @property showPublicToggle - Whether to show the "Is Public" toggle
+ * @property showInviteOnlyToggle - Whether to show the "Is Invite Only" toggle
  * @property disableRecurrence - Whether to disable recurrence options
  * @property submitting - Whether the form is currently submitting
  * @property showRecurrenceToggle - Whether to show the recurrence toggle
@@ -65,6 +67,7 @@ export interface IEventFormProps {
   showCreateChat?: boolean;
   showRegisterable?: boolean;
   showPublicToggle?: boolean;
+  showInviteOnlyToggle?: boolean;
   disableRecurrence?: boolean;
   submitting?: boolean;
   showRecurrenceToggle?: boolean;

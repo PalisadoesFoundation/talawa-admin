@@ -430,6 +430,35 @@ describe('Organisation Events Page', () => {
     );
   });
 
+  test('toggles invite-only checkbox in create event modal', async () => {
+    renderWithLink(defaultLink);
+
+    await wait();
+
+    await waitFor(() =>
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
+    );
+
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    await waitFor(() =>
+      expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument(),
+    );
+
+    // Check that invite-only checkbox exists and is not checked by default
+    const inviteOnlyCheckbox = screen.getByTestId('inviteOnlyEventCheck');
+    expect(inviteOnlyCheckbox).toBeInTheDocument();
+    expect(inviteOnlyCheckbox).not.toBeChecked();
+
+    // Toggle invite-only checkbox
+    await userEvent.click(inviteOnlyCheckbox);
+    expect(inviteOnlyCheckbox).toBeChecked();
+
+    // Toggle back
+    await userEvent.click(inviteOnlyCheckbox);
+    expect(inviteOnlyCheckbox).not.toBeChecked();
+  });
+
   test('viewType changes from Month to Day via EventHeader', async () => {
     const { container } = renderWithLink(defaultLink);
 

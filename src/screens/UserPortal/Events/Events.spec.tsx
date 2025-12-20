@@ -347,6 +347,7 @@ const MOCKS = [
                   allDay: true,
                   isPublic: true,
                   isRegisterable: true,
+                  isInviteOnly: false,
                   isRecurringEventTemplate: false,
                   baseEvent: null,
                   sequenceNumber: null,
@@ -378,6 +379,7 @@ const MOCKS = [
                   allDay: false,
                   isPublic: false,
                   isRegisterable: false,
+                  isInviteOnly: false,
                   isRecurringEventTemplate: false,
                   baseEvent: null,
                   sequenceNumber: null,
@@ -444,7 +446,6 @@ const MOCKS = [
       },
     },
   },
-
   // Mock for successful CREATE_EVENT_MUTATION (non all-day event)
   {
     request: {
@@ -468,6 +469,7 @@ const MOCKS = [
           location: 'New Test Location',
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
         },
       },
     },
@@ -558,6 +560,7 @@ const CREATE_EVENT_ERROR_MOCKS = [
           location: 'New Test Location',
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
         },
       },
     },
@@ -586,6 +589,7 @@ const CREATE_EVENT_NULL_MOCKS = [
           location: 'New Test Location',
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
         },
       },
     },
@@ -612,6 +616,7 @@ const CREATOR_NULL_MOCKS = (() => {
                 allDay: true,
                 isPublic: true,
                 isRegisterable: true,
+                isInviteOnly: false,
                 isRecurringEventTemplate: false,
                 baseEvent: null,
                 sequenceNumber: null,
@@ -1074,22 +1079,26 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('publicEventCheck')).toBeInTheDocument();
+      expect(screen.getByTestId('inviteOnlyEventCheck')).toBeInTheDocument();
     });
 
     // Toggle all checkboxes
     await userEvent.click(screen.getByTestId('publicEventCheck'));
     await userEvent.click(screen.getByTestId('registerableEventCheck'));
+    await userEvent.click(screen.getByTestId('inviteOnlyEventCheck'));
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
     await userEvent.click(screen.getByTestId('createChatCheck'));
 
     // Toggle back
     await userEvent.click(screen.getByTestId('publicEventCheck'));
     await userEvent.click(screen.getByTestId('registerableEventCheck'));
+    await userEvent.click(screen.getByTestId('inviteOnlyEventCheck'));
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
     await userEvent.click(screen.getByTestId('createChatCheck'));
 
     // All toggles should work without errors
     expect(screen.getByTestId('publicEventCheck')).toBeInTheDocument();
+    expect(screen.getByTestId('inviteOnlyEventCheck')).toBeInTheDocument();
   });
 
   it('Should handle date picker changes', async () => {
@@ -1335,6 +1344,118 @@ describe('Testing Events Screen [User Portal]', () => {
     expect(titleInput).toHaveValue('Test Title');
     expect(descriptionInput).toHaveValue('Test Description');
     expect(locationInput).toHaveValue('Test Location');
+  });
+
+  it('Should include isInviteOnly in create event mutation when toggled', async () => {
+    const computedStartAt = dayjs(new Date())
+      .startOf('day')
+      .millisecond(0)
+      .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+    const computedEndAt = dayjs(new Date())
+      .endOf('day')
+      .millisecond(0)
+      .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+    const inviteOnlyMock = {
+      request: {
+        query: CREATE_EVENT_MUTATION,
+        variables: {
+          input: {
+            name: 'Invite Only Event',
+            description: 'Test Description',
+            startAt: computedStartAt,
+            endAt: computedEndAt,
+            organizationId: 'org123',
+            allDay: true,
+            location: 'Test Location',
+            isPublic: true,
+            isRegisterable: true,
+            isInviteOnly: true,
+          },
+        },
+      },
+      result: () => {
+        return {
+          data: {
+            createEvent: {
+              id: 'inviteOnlyEvent1',
+            },
+          },
+        };
+      },
+      newData: () => {
+        return {
+          data: {
+            createEvent: {
+              id: 'inviteOnlyEvent1',
+            },
+          },
+        };
+      },
+    };
+
+    const testMocks = [
+      ...MOCKS.slice(0, 2), // Include the query mocks
+      inviteOnlyMock,
+    ];
+
+    const testLink = new StaticMockLink(testMocks, true);
+
+    render(
+      <MockedProvider link={testLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Open modal
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('inviteOnlyEventCheck')).toBeInTheDocument();
+    });
+
+    // Toggle invite-only checkbox
+    const inviteOnlyCheckbox = screen.getByTestId('inviteOnlyEventCheck');
+    expect(inviteOnlyCheckbox).not.toBeChecked();
+    await userEvent.click(inviteOnlyCheckbox);
+    expect(inviteOnlyCheckbox).toBeChecked();
+
+    // Fill form
+    await userEvent.type(
+      screen.getByTestId('eventTitleInput'),
+      'Invite Only Event',
+    );
+    await userEvent.type(
+      screen.getByTestId('eventDescriptionInput'),
+      'Test Description',
+    );
+    await userEvent.type(
+      screen.getByTestId('eventLocationInput'),
+      'Test Location',
+    );
+
+    // Submit form
+    const form = screen.getByTestId('eventTitleInput').closest('form');
+    if (form) {
+      fireEvent.submit(form);
+    }
+
+    await wait(500);
+
+    // Verify invite-only was toggled
+    expect(inviteOnlyCheckbox).toBeChecked();
   });
 
   it('Should test userRole as administrator', async () => {

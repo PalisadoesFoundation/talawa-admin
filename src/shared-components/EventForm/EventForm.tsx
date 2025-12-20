@@ -112,6 +112,7 @@ const EventForm: React.FC<IEventFormProps> = ({
   showCreateChat = false,
   showRegisterable = true,
   showPublicToggle = true,
+  showInviteOnlyToggle = false,
   disableRecurrence = false,
   submitting = false,
   showRecurrenceToggle = false,
@@ -226,6 +227,7 @@ const EventForm: React.FC<IEventFormProps> = ({
       allDay: formState.allDay,
       isPublic: formState.isPublic,
       isRegisterable: formState.isRegisterable,
+      isInviteOnly: formState.isInviteOnly,
       recurrenceRule:
         recurrenceEnabled && formState.recurrenceRule
           ? formState.recurrenceRule
@@ -467,6 +469,25 @@ const EventForm: React.FC<IEventFormProps> = ({
                   }))
                 }
                 aria-label={t('publicEvent')}
+              />
+            </div>
+          )}
+          {showInviteOnlyToggle && (
+            <div className={styles.dispflexEvents}>
+              <label htmlFor="isinviteonly">{t('isInviteOnly')}?</label>
+              <Form.Switch
+                className={`me-4 ${styles.switch}`}
+                id="isinviteonly"
+                type="checkbox"
+                checked={formState.isInviteOnly || false}
+                data-testid="inviteOnlyEventCheck"
+                onChange={(): void =>
+                  setFormState((prev) => ({
+                    ...prev,
+                    isInviteOnly: !prev.isInviteOnly,
+                  }))
+                }
+                aria-label={t('isInviteOnly')}
               />
             </div>
           )}

@@ -12,6 +12,7 @@ export const CREATE_EVENT_MUTATION = gql`
       endAt
       allDay
       location
+      isInviteOnly
       isPublic
       isRegisterable
       createdAt
@@ -56,6 +57,7 @@ export const UPDATE_EVENT_MUTATION = gql`
       endAt
       allDay
       location
+      isInviteOnly
       isPublic
       isRegisterable
       createdAt
@@ -128,6 +130,7 @@ export const UPDATE_SINGLE_RECURRING_EVENT_INSTANCE_MUTATION = gql`
       startAt
       endAt
       location
+      isInviteOnly
       isPublic
       isRegisterable
       allDay
@@ -150,6 +153,7 @@ export const UPDATE_THIS_AND_FOLLOWING_EVENTS_MUTATION = gql`
       startAt
       endAt
       location
+      isInviteOnly
       isPublic
       isRegisterable
       allDay
@@ -169,6 +173,7 @@ export const UPDATE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION = gql`
       id
       name
       description
+      isInviteOnly
       updatedAt
     }
   }

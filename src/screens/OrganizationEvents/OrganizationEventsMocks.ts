@@ -49,6 +49,7 @@ function buildCreateEventVariables() {
       location: 'New Delhi',
       isPublic: false,
       isRegisterable: true,
+      isInviteOnly: false,
       recurrence: undefined,
     },
   };

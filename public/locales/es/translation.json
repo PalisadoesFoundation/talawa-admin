@@ -473,6 +473,7 @@
     "recurringEvent": "Evento recurrente",
     "isPublic": "Es público",
     "isRegistrable": "Es registrable",
+    "isInviteOnly": "Solo por invitación",
     "createEvent": "Crear evento",
     "enterFilter": "Introducir filtro",
     "enterName": "Introducir nombre",
@@ -666,6 +667,7 @@
     "recurringEvent": "Evento recurrente",
     "isPublic": "Es público",
     "isRegistrable": "Es registrable",
+    "isInviteOnly": "Solo por invitación",
     "close": "Cerca",
     "updatePost": "Actualizar publicación",
     "eventDetails": "Detalles del evento",
@@ -684,7 +686,8 @@
     "after": "Después de",
     "occurences": "ocurrencias",
     "done": "Hecho",
-    "createChat": "Crear chat"
+    "createChat": "Crear chat",
+    "showEventDashboard": "Mostrar Panel de Eventos"
   },
   "funds": {
     "title": "Fondos",
@@ -1383,6 +1386,7 @@
     "endDate": "Fecha de finalización",
     "publicEvent": "Es público",
     "registerable": "Es registrable",
+    "isInviteOnly": "Solo por invitación",
     "monthlyCalendarView": "Calendario mensual",
     "yearlyCalendarView": "Calendario anual",
     "createChat": "Crear chat",

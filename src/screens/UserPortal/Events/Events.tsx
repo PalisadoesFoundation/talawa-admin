@@ -21,6 +21,7 @@
  * - `eventTitle`, `eventDescription`, `eventLocation`: Input fields for event details.
  * - `startAt`, `endAt`: Start and end dates for the event.
  * - `startTime`, `endTime`: Start and end times for the event.
+ * - `isInviteOnly`: Determines if the event is invite only. Default is false.
  * - `isPublic`, `isRegisterable`, `isRecurring`, `isAllDay`: Event configuration flags.
  * - `viewType`: Current calendar view type (e.g., month, week).
  * - `createEventModal`: Controls visibility of the event creation modal.
@@ -139,6 +140,7 @@ export default function events(): JSX.Element {
       allDay: true,
       isPublic: true,
       isRegisterable: true,
+      isInviteOnly: false,
       recurrenceRule: null,
       createChat: false,
     }),
@@ -164,6 +166,7 @@ export default function events(): JSX.Element {
         location: payload.location,
         isPublic: payload.isPublic,
         isRegisterable: payload.isRegisterable,
+        isInviteOnly: payload.isInviteOnly || false,
         recurrence: recurrenceInput,
       };
 
@@ -308,6 +311,7 @@ export default function events(): JSX.Element {
             showCreateChat
             showRegisterable
             showPublicToggle
+            showInviteOnlyToggle
             showRecurrenceToggle
           />
         </Modal.Body>

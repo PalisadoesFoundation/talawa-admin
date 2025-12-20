@@ -465,6 +465,7 @@
     "recurringEvent": "Recurring Event",
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",
+    "isInviteOnly": "Invite Only",
     "createChat": "Create Chat",
     "createEvent": "Create Event",
     "enterFilter": "Enter Filter",
@@ -657,6 +658,7 @@
     "recurringEvent": "Recurring Event",
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",
+    "isInviteOnly": "Invite Only",
     "createChat": "Create Chat",
     "updatePost": "Update Post",
     "eventDetails": "Event Details",
@@ -684,7 +686,8 @@
     "registerEvent": "registerEvent",
     "close": "close",
     "talawaApiUnavailable": "talawaApiUnavailable",
-    "done": "done"
+    "done": "done",
+    "showEventDashboard": "Show Event Dashboard"
   },
   "funds": {
     "title": "Funds",
@@ -1374,6 +1377,7 @@
     "enterDescription": "Enter Description",
     "publicEvent": "Is Public",
     "registerable": "Is Registerable",
+    "isInviteOnly": "Invite Only",
     "createChat": "Create Chat",
     "monthlyCalendarView": "Monthly Calendar",
     "yearlyCalendarView": "Yearly Calender",

@@ -75,6 +75,9 @@ function EventListCardModals({
   const navigate = useNavigate();
 
   const [alldaychecked, setAllDayChecked] = useState(eventListCardProps.allDay);
+  const [inviteOnlyChecked, setInviteOnlyChecked] = useState(
+    eventListCardProps.isInviteOnly ?? false,
+  );
   const [publicchecked, setPublicChecked] = useState(
     eventListCardProps.isPublic,
   );
@@ -164,6 +167,8 @@ function EventListCardModals({
     const publicChanged = publicchecked !== eventListCardProps.isPublic;
     const registrableChanged =
       registrablechecked !== eventListCardProps.isRegisterable;
+    const inviteOnlyChanged =
+      inviteOnlyChecked !== (eventListCardProps.isInviteOnly ?? false);
     const allDayChanged = alldaychecked !== eventListCardProps.allDay;
     const recurrenceChanged = hasRecurrenceChanged();
 
@@ -173,6 +178,7 @@ function EventListCardModals({
       !locationChanged &&
       !publicChanged &&
       !registrableChanged &&
+      !inviteOnlyChanged &&
       !allDayChanged &&
       !recurrenceChanged
     );
@@ -211,6 +217,7 @@ function EventListCardModals({
     formState,
     publicchecked,
     registrablechecked,
+    inviteOnlyChecked,
     alldaychecked,
     eventStartDate,
     eventEndDate,
@@ -250,6 +257,7 @@ function EventListCardModals({
         alldaychecked,
         publicchecked,
         registrablechecked,
+        inviteOnlyChecked,
         eventStartDate,
         eventEndDate,
         recurrence,
@@ -406,6 +414,8 @@ function EventListCardModals({
         setEventEndDate={setEventEndDate}
         alldaychecked={alldaychecked}
         setAllDayChecked={setAllDayChecked}
+        inviteOnlyChecked={inviteOnlyChecked}
+        setInviteOnlyChecked={setInviteOnlyChecked}
         publicchecked={publicchecked}
         setPublicChecked={setPublicChecked}
         registrablechecked={registrablechecked}
@@ -514,6 +524,7 @@ function EventListCardModals({
                 alldaychecked,
                 publicchecked,
                 registrablechecked,
+                inviteOnlyChecked,
                 eventStartDate,
                 eventEndDate,
                 recurrence,

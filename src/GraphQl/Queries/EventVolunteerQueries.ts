@@ -208,6 +208,9 @@ export const USER_EVENTS_VOLUNTEER = gql`
             endAt
             location
             allDay
+            isPublic
+            isRegisterable
+            isInviteOnly
             isRecurringEventTemplate
             baseEvent {
               id
