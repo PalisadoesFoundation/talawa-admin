@@ -38,6 +38,10 @@ Defined in: [src/components/EventCalender/EventCalenderMocks.ts:4](https://githu
 
 > **id**: `string` = `'1'`
 
+### isInviteOnly
+
+> **isInviteOnly**: `boolean` = `false`
+
 ### isPublic
 
 > **isPublic**: `boolean` = `true`
