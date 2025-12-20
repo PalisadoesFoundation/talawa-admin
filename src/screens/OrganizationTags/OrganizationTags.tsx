@@ -175,7 +175,7 @@ function OrganizationTags(): JSX.Element {
       const { data } = await create({
         variables: { name: tagName, organizationId: orgId },
       });
-      if (data) {
+      if ((data as any)?.createUserTag) {
         toast.success(t('tagCreationSuccess'));
         orgUserTagsRefetch();
         setTagName('');

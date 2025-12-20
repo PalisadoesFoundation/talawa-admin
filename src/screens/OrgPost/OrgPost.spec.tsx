@@ -60,7 +60,7 @@ vi.mock('utils/errorHandler', () => ({ errorHandler: mockErrorHandler }));
 
 vi.mock('react-i18next', () => ({
   // Include initReactI18next
-  initReactI18next: { type: '3rdParty', init: () => {} },
+  initReactI18next: { type: '3rdParty', init: () => { } },
   useTranslation: () => ({
     t: (key: string) => {
       const translations: { [key: string]: string } = {
@@ -79,7 +79,7 @@ vi.mock('react-i18next', () => ({
       };
       return translations[key] || key;
     },
-    i18n: { changeLanguage: () => new Promise(() => {}), language: 'en' },
+    i18n: { changeLanguage: () => new Promise(() => { }), language: 'en' },
   }),
   Trans: ({ children }: { children: React.ReactNode }) => children,
   I18nextProvider: ({ children }: { children: React.ReactNode }) => children,
@@ -608,11 +608,14 @@ describe('OrgPost Component', () => {
       result: {
         data: {
           organization: {
+            __typename: 'Organization',
             id: '123',
             postsCount: 0,
             pinnedPosts: {
+              __typename: 'PostConnection',
               edges: [],
               pageInfo: {
+                __typename: 'PageInfo',
                 startCursor: null,
                 endCursor: null,
                 hasNextPage: false,
@@ -642,6 +645,10 @@ describe('OrgPost Component', () => {
 
     const openModalBtn = await screen.findByTestId('createPostModalBtn');
     fireEvent.click(openModalBtn);
+
+    expect(
+      await screen.findByTestId('modalOrganizationHeader'),
+    ).toBeInTheDocument();
 
     const mediaInput = await screen.findByTestId('addMediaField');
 
@@ -2950,7 +2957,7 @@ describe('OrgPost Pinned Posts Functionality', () => {
   });
 
   it('should handle orgPinnedPostListError correctly', async () => {
-    vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => { });
 
     renderComponentWithPinnedPosts(pinnedPostsErrorMock);
 

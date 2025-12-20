@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { describe, it, expect, vi } from 'vitest';
 import TagNode from './TagNode';
@@ -8,6 +8,14 @@ import type { TFunction } from 'i18next';
 import { MOCKS, MOCKS_ERROR_SUBTAGS_QUERY } from '../TagActionsMocks';
 import { MOCKS_ERROR_SUBTAGS_QUERY1, MOCKS1 } from './TagNodeMocks';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
+
+async function wait(ms = 500): Promise<void> {
+  await act(() => {
+    return new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    });
+  });
+}
 
 const mockTag: InterfaceTagData = {
   _id: '1',
@@ -565,6 +573,8 @@ describe('Edge Cases and Coverage Improvements', () => {
         screen.queryByTestId(`subTagsScrollableDiv${mockTag._id}`),
       ).not.toBeInTheDocument();
     });
+
+    await wait();
   });
 
   it('exercises nullish coalescing operator for hasNextPage with undefined value', async () => {

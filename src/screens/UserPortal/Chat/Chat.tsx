@@ -131,12 +131,12 @@ export default function chat(): JSX.Element {
         if (data && data.chatsByUser) {
           const filteredChats = orgId
             ? data.chatsByUser.filter((chat: GroupChat | NewChatType) => {
-                if (isNewChatType(chat)) {
-                  return chat.organization?.id === orgId;
-                }
-                const legacy = chat as GroupChat;
-                return legacy.organization?._id === orgId;
-              })
+              if (isNewChatType(chat)) {
+                return chat.organization?.id === orgId;
+              }
+              const legacy = chat as GroupChat;
+              return legacy.organization?._id === orgId;
+            })
             : data.chatsByUser;
           setChats(filteredChats);
         }
@@ -145,12 +145,12 @@ export default function chat(): JSX.Element {
         if (data && data.unreadChats) {
           const filteredChats = orgId
             ? data.unreadChats.filter((chat: GroupChat | NewChatType) => {
-                if (isNewChatType(chat)) {
-                  return chat.organization?.id === orgId;
-                }
-                const legacy = chat as GroupChat;
-                return legacy.organization?._id === orgId;
-              })
+              if (isNewChatType(chat)) {
+                return chat.organization?.id === orgId;
+              }
+              const legacy = chat as GroupChat;
+              return legacy.organization?._id === orgId;
+            })
             : data.unreadChats;
           setChats(filteredChats);
         }
@@ -167,12 +167,12 @@ export default function chat(): JSX.Element {
         });
         const filteredGroups = orgId
           ? groups.filter((chat: GroupChat | NewChatType) => {
-              if (isNewChatType(chat)) {
-                return chat.organization?.id === orgId;
-              }
-              const legacy = chat as GroupChat;
-              return legacy.organization?._id === orgId;
-            })
+            if (isNewChatType(chat)) {
+              return chat.organization?.id === orgId;
+            }
+            const legacy = chat as GroupChat;
+            return legacy.organization?._id === orgId;
+          })
           : groups;
         setChats(filteredGroups);
       }
@@ -184,12 +184,12 @@ export default function chat(): JSX.Element {
     if (filterType === 'all' && chatsListData?.chatsByUser?.length) {
       const filteredChats = orgId
         ? chatsListData.chatsByUser.filter((chat: GroupChat | NewChatType) => {
-            if (isNewChatType(chat)) {
-              return chat.organization?.id === orgId;
-            }
-            const legacy = chat as GroupChat;
-            return legacy.organization?._id === orgId;
-          })
+          if (isNewChatType(chat)) {
+            return chat.organization?.id === orgId;
+          }
+          const legacy = chat as GroupChat;
+          return legacy.organization?._id === orgId;
+        })
         : chatsListData.chatsByUser;
       setChats(filteredChats);
     }
@@ -341,7 +341,7 @@ export default function chat(): JSX.Element {
                           isGroup: isNewChatType(chat)
                             ? (chat.members?.edges?.length || 0) > 2
                             : (chat as GroupChat).isGroup ||
-                              ((chat as GroupChat).users?.length || 0) > 2,
+                            ((chat as GroupChat).users?.length || 0) > 2,
                           unseenMessages: unreadCount,
                           lastMessage: lastMsgBody,
                         };

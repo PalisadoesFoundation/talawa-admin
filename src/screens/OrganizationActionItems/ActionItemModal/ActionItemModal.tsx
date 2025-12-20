@@ -265,10 +265,7 @@ const ItemModal: FC<IItemModalProps> = ({
   );
 
   const runRefetches = (): void => {
-    console.log(
-      'runRefetches called. orgRefetch present:',
-      !!orgActionItemsRefetch,
-    );
+
     actionItemsRefetch();
     orgActionItemsRefetch?.();
   };
@@ -323,7 +320,7 @@ const ItemModal: FC<IItemModalProps> = ({
 
   const updateActionItemHandler = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
-    console.log('Called updateActionItemHandler');
+
     try {
       if (!actionItem?.id) {
         toast.error('Action item ID is missing');
@@ -340,7 +337,7 @@ const ItemModal: FC<IItemModalProps> = ({
         postCompletionNotes: postCompletionNotes || undefined,
       };
 
-      console.log('UpdateActionItem Input:', JSON.stringify(input, null, 2));
+
 
       await updateActionItem({
         variables: { input },
@@ -359,10 +356,6 @@ const ItemModal: FC<IItemModalProps> = ({
     e: FormEvent,
   ): Promise<void> => {
     e.preventDefault();
-    console.log(
-      'Called updateActionForInstanceHandler. actionItem:',
-      JSON.stringify(actionItem),
-    );
     try {
       if (!actionItem?.id) {
         toast.error('Action item ID is missing');
@@ -382,7 +375,6 @@ const ItemModal: FC<IItemModalProps> = ({
       if (preCompletionNotes !== undefined)
         input.preCompletionNotes = preCompletionNotes;
 
-      console.log('UpdateForInstance Input:', JSON.stringify(input, null, 2));
       await updateActionForInstance({
         variables: { input },
       });
