@@ -100,8 +100,15 @@
   "createdEarliest": "最早创建",
   "searchBy": "按{{item}}搜索",
   "plugins": "插件",
+  "pluginSettings": "插件设置",
   "unblock": "解除封锁",
   "unblockedSuccessfully": "{{item}} 已成功解除封锁",
   "save": "保存",
-  "saving": "保存中..."
+  "saving": "保存中...",
+  "sl_no": "序号",
+  "actions": "操作",
+  "notFound": "未找到",
+  "profilePicture": "個人頭像",
+  "profilePicturePlaceholder": "佔位圖片",
+  "userProfileMenu": "使用者個人資料選單"
 }

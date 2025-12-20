@@ -163,7 +163,10 @@ function orgList(): JSX.Element {
   const [createMembership] = useMutation(
     CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
   );
-
+  const token = getItem('token');
+  const context = token
+    ? { headers: { authorization: `Bearer ${token}` } }
+    : { headers: {} };
   const {
     data: userData,
   }: {
@@ -172,7 +175,7 @@ function orgList(): JSX.Element {
     error?: Error | undefined;
   } = useQuery(CURRENT_USER, {
     variables: { userId: getItem('id') },
-    context: { headers: { authorization: `Bearer ${getItem('token')}` } },
+    context,
   });
 
   const {
@@ -220,7 +223,7 @@ function orgList(): JSX.Element {
     setIsLoading(loadingAll);
   }, [loadingAll]);
 
-  const createOrg = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+  const createOrg = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const {
@@ -270,7 +273,7 @@ function orgList(): JSX.Element {
 
       //     toggleModal;
       if (data) {
-        toast.success('Congratulation the Organization is created');
+        toast.success(t('congratulationOrgCreated'));
         refetchOrgs();
         openDialogModal(data.createOrganization.id);
         setFormState({
@@ -325,6 +328,11 @@ function orgList(): JSX.Element {
     setRowsPerPage(parseInt(newVal, 10));
     setPage(0);
   };
+
+  const shimmerClass = `${styles.orgImgContainer} shimmer`;
+  const shimmerBtnClass = `shimmer ${styles.button}`;
+  const pluginBtnClass = `btn  btn-primary ${styles.pluginStoreBtn}`;
+  const storeUrl = `orgstore/id=${dialogRedirectOrgId}`;
 
   return (
     <div style={{ paddingLeft: '40px', paddingRight: '30px' }}>
@@ -405,16 +413,16 @@ function orgList(): JSX.Element {
                 <div key={index} className={styles.itemCardOrgList}>
                   <div className={styles.loadingWrapper}>
                     <div className={styles.innerContainer}>
-                      <div className={`${styles.orgImgContainer} shimmer`} />
+                      <div className={shimmerClass} />
 
                       <div className={styles.content}>
-                        <h5 className="shimmer" title="Org name"></h5>
-                        <h6 className="shimmer" title="Location"></h6>
-                        <h6 className="shimmer" title="Admins"></h6>
-                        <h6 className="shimmer" title="Members"></h6>
+                        <h5 className="shimmer" title={t('orgName')}></h5>
+                        <h6 className="shimmer" title={t('location')}></h6>
+                        <h6 className="shimmer" title={t('admins')}></h6>
+                        <h6 className="shimmer" title={t('members')}></h6>
                       </div>
                     </div>
-                    <div className={`shimmer ${styles.button}`} />
+                    <div className={shimmerBtnClass} />
                   </div>
                 </div>
               ))}
@@ -495,9 +503,9 @@ function orgList(): JSX.Element {
 
               <div className={styles.pluginStoreBtnContainer}>
                 <Link
-                  className={`btn  btn-primary ${styles.pluginStoreBtn}`}
+                  className={pluginBtnClass}
                   data-testid="goToStore"
-                  to={`orgstore/id=${dialogRedirectOrgId}`}
+                  to={storeUrl}
                 >
                   {t('goToStore')}
                 </Link>

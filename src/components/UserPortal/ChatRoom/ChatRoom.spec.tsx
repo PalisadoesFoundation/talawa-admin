@@ -752,7 +752,9 @@ describe('ChatRoom Component', () => {
   });
 
   afterEach(() => {
+    const { clearAllItems } = useLocalStorage();
     vi.restoreAllMocks();
+    clearAllItems();
   });
 
   it('renders loading state initially', () => {
@@ -2907,6 +2909,408 @@ describe('ChatRoom Component', () => {
 
     await waitFor(() => {
       expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+    });
+  });
+  describe('Issue #5011: Skip query and subscription when selectedContact is empty', () => {
+    it('should not execute CHAT_BY_ID query when selectedContact is empty string', async () => {
+      const chatListRefetch = vi.fn();
+      const { setItem } = useLocalStorage();
+      setItem('userId', 'user123');
+
+      const mocks: MockedResponse[] = [];
+
+      render(
+        <MockedProvider mocks={mocks}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact=""
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Should show "no chat selected" message
+      expect(screen.getByTestId('noChatSelected')).toBeInTheDocument();
+
+      // Wait to ensure no GraphQL operations are attempted
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('noChatSelected')).toBeInTheDocument();
+        },
+        { timeout: 1000 },
+      );
+    });
+
+    it('should not execute MESSAGE_SENT_TO_CHAT subscription when selectedContact is empty', async () => {
+      const chatListRefetch = vi.fn();
+      const { setItem } = useLocalStorage();
+      setItem('userId', 'user123');
+
+      const mocks: MockedResponse[] = [];
+
+      render(
+        <MockedProvider mocks={mocks}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact=""
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Should show "no chat selected" message and not attempt subscription
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('noChatSelected')).toBeInTheDocument();
+        },
+        { timeout: 1000 },
+      );
+    });
+
+    it('should execute CHAT_BY_ID query when selectedContact has valid UUID', async () => {
+      const chatListRefetch = vi.fn();
+      const { setItem } = useLocalStorage();
+      setItem('userId', 'user123');
+      const validChatId = '01960b81-bfed-7369-ae96-689dbd4281ba';
+
+      const mocks: MockedResponse[] = [
+        {
+          request: {
+            query: CHAT_BY_ID,
+            variables: {
+              input: { id: validChatId },
+              first: 10,
+              after: null,
+              lastMessages: 10,
+              beforeMessages: null,
+            },
+          },
+          result: {
+            data: {
+              chat: {
+                ...mockChatData,
+                id: validChatId,
+              },
+            },
+          },
+        },
+        UNREAD_CHATS_MOCK,
+        MARK_READ_MOCK,
+      ];
+
+      render(
+        <MockedProvider mocks={mocks}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact={validChatId}
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Should NOT show "no chat selected" message
+      await waitFor(() => {
+        expect(screen.queryByTestId('noChatSelected')).not.toBeInTheDocument();
+      });
+
+      // Should load chat data
+      await waitFor(() => {
+        expect(screen.getByText('Test Chat')).toBeInTheDocument();
+      });
+    });
+
+    it('should handle null selectedContact gracefully without errors', () => {
+      const chatListRefetch = vi.fn();
+      const { setItem } = useLocalStorage();
+      setItem('userId', 'user123');
+
+      render(
+        <MockedProvider mocks={[]}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact={null as unknown as string}
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Should show "no chat selected" message
+      expect(screen.getByTestId('noChatSelected')).toBeInTheDocument();
+    });
+
+    it('should handle undefined selectedContact gracefully without errors', () => {
+      const chatListRefetch = vi.fn();
+      const { setItem } = useLocalStorage();
+      setItem('userId', 'user123');
+
+      render(
+        <MockedProvider mocks={[]}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact={undefined as unknown as string}
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Should show "no chat selected" message
+      expect(screen.getByTestId('noChatSelected')).toBeInTheDocument();
+    });
+
+    it('should not throw GraphQL "Invalid uuid" errors when mounting with empty selectedContact', async () => {
+      const chatListRefetch = vi.fn();
+      const { setItem } = useLocalStorage();
+      setItem('userId', 'user123');
+
+      // Mock console.error to catch any error logs
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      render(
+        <MockedProvider mocks={[]}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact=""
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Should show "no chat selected" message
+      expect(screen.getByTestId('noChatSelected')).toBeInTheDocument();
+
+      // Wait to ensure no GraphQL errors
+      await waitFor(
+        () => {
+          // Verify no "Invalid uuid" errors were logged
+          const errorCalls = consoleErrorSpy.mock.calls;
+          const hasInvalidUuidError = errorCalls.some((call) =>
+            call.some(
+              (arg) =>
+                typeof arg === 'string' &&
+                (arg.includes('Invalid uuid') ||
+                  arg.includes('invalid_arguments')),
+            ),
+          );
+          expect(hasInvalidUuidError).toBe(false);
+        },
+        { timeout: 2000 },
+      );
+
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('should properly transition from empty to valid selectedContact', async () => {
+      const chatListRefetch = vi.fn();
+      const { setItem } = useLocalStorage();
+      setItem('userId', 'user123');
+      const validChatId = 'chat123';
+
+      const mocks: MockedResponse[] = [
+        CHAT_BY_ID_MOCK,
+        UNREAD_CHATS_MOCK,
+        MARK_READ_MOCK,
+      ];
+
+      const { rerender } = render(
+        <MockedProvider mocks={mocks}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact=""
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Initially should show "no chat selected"
+      expect(screen.getByTestId('noChatSelected')).toBeInTheDocument();
+
+      // Update to valid chat ID
+      rerender(
+        <MockedProvider mocks={mocks}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact={validChatId}
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Should now load chat data
+      await waitFor(() => {
+        expect(screen.queryByTestId('noChatSelected')).not.toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('Test Chat')).toBeInTheDocument();
+      });
+    });
+
+    it('should execute MESSAGE_SENT_TO_CHAT subscription when selectedContact is valid', async () => {
+      const chatListRefetch = vi.fn();
+      const { setItem } = useLocalStorage();
+      setItem('userId', 'user123');
+      const validChatId = 'chat123';
+
+      const mocks: MockedResponse[] = [
+        CHAT_BY_ID_MOCK,
+        UNREAD_CHATS_MOCK,
+        MARK_READ_MOCK,
+        MESSAGE_SENT_SUBSCRIPTION_MOCK,
+        MARK_READ_SUBMSG_MOCK,
+      ];
+
+      render(
+        <MockedProvider mocks={mocks}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact={validChatId}
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Wait for chat to load
+      await waitFor(() => {
+        expect(screen.getByText('Test Chat')).toBeInTheDocument();
+      });
+
+      // Wait for subscription to process
+      await waitFor(
+        () => {
+          expect(chatListRefetch).toHaveBeenCalled();
+        },
+        { timeout: 3000 },
+      );
+    });
+
+    it('should skip both query and subscription with empty string', async () => {
+      const chatListRefetch = vi.fn();
+      const { setItem } = useLocalStorage();
+      setItem('userId', 'user123');
+
+      const mocks: MockedResponse[] = [];
+
+      render(
+        <MockedProvider mocks={mocks}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact=""
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Verify "no chat selected" is shown
+      expect(screen.getByTestId('noChatSelected')).toBeInTheDocument();
+
+      // Wait and verify component renders correctly without GraphQL operations
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('noChatSelected')).toBeInTheDocument();
+        },
+        { timeout: 1000 },
+      );
+    });
+
+    it('should prevent "API server unavailable" error on initial page load', async () => {
+      const chatListRefetch = vi.fn();
+      const { setItem } = useLocalStorage();
+      setItem('userId', 'user123');
+
+      // Mock network errors that would occur without the skip fix
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      render(
+        <MockedProvider mocks={[]}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact=""
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Should render without errors
+      expect(screen.getByTestId('noChatSelected')).toBeInTheDocument();
+
+      // Wait and verify no network errors occurred
+      await waitFor(
+        () => {
+          const errorCalls = consoleErrorSpy.mock.calls;
+          const hasNetworkError = errorCalls.some((call) =>
+            call.some(
+              (arg) =>
+                typeof arg === 'string' &&
+                (arg.includes('API server unavailable') ||
+                  arg.includes('Network error') ||
+                  arg.includes('Invalid uuid')),
+            ),
+          );
+          expect(hasNetworkError).toBe(false);
+        },
+        { timeout: 2000 },
+      );
+
+      consoleErrorSpy.mockRestore();
     });
   });
 });

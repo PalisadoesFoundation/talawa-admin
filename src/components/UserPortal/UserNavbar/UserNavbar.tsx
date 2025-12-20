@@ -102,7 +102,7 @@ function userNavbar(): JSX.Element {
           <img
             className={styles.talawaImage}
             src={TalawaImage}
-            alt="Talawa Branding"
+            alt={t('talawaBranding')}
           />
           <b>{t('talawa')}</b>
         </Navbar.Brand>

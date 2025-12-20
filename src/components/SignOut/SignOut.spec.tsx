@@ -1,14 +1,16 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider, MockedResponse } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router';
+import { I18nextProvider } from 'react-i18next';
 import type { Mock } from 'vitest';
 import { vi } from 'vitest';
 import SignOut from './SignOut';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useSession from 'utils/useSession';
 import useLocalStorage from 'utils/useLocalstorage';
+import i18n from 'utils/i18nForTest';
 
 // Mock dependencies
 vi.mock('utils/useSession', () => ({
@@ -43,6 +45,20 @@ const createMock = () => {
   };
 };
 
+const renderWithProviders = (
+  component: React.ReactElement,
+  mocks: MockedResponse[] = [],
+) => {
+  const mockProviderProps = { mocks };
+  return render(
+    <MockedProvider {...mockProviderProps}>
+      <I18nextProvider i18n={i18n}>
+        <BrowserRouter>{component}</BrowserRouter>
+      </I18nextProvider>
+    </MockedProvider>,
+  );
+};
+
 describe('SignOut Component', () => {
   const mockRevokeRefreshToken = {
     request: {
@@ -72,13 +88,7 @@ describe('SignOut Component', () => {
 
     const { mockClearAllItems } = createMock();
 
-    render(
-      <MockedProvider mocks={[mockRevokeRefreshToken]}>
-        <BrowserRouter>
-          <SignOut />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderWithProviders(<SignOut />, [mockRevokeRefreshToken]);
 
     const signOutButton = screen.getByText('Sign Out');
     fireEvent.click(signOutButton);
@@ -116,13 +126,7 @@ describe('SignOut Component', () => {
 
     const { mockClearAllItems } = createMock();
 
-    render(
-      <MockedProvider mocks={[mockErrorRevokeRefreshToken]}>
-        <BrowserRouter>
-          <SignOut />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderWithProviders(<SignOut />, [mockErrorRevokeRefreshToken]);
 
     const signOutButton = screen.getByText('Sign Out');
     fireEvent.click(signOutButton);
@@ -182,13 +186,7 @@ describe('SignOut Component', () => {
       },
     ];
 
-    render(
-      <MockedProvider mocks={mocks}>
-        <BrowserRouter>
-          <SignOut />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderWithProviders(<SignOut />, mocks);
 
     const signOutButton = screen.getByText('Sign Out');
     fireEvent.click(signOutButton);
@@ -243,13 +241,7 @@ describe('SignOut Component', () => {
       },
     ];
 
-    render(
-      <MockedProvider mocks={mocks}>
-        <BrowserRouter>
-          <SignOut />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderWithProviders(<SignOut />, mocks);
 
     const signOutButton = screen.getByText('Sign Out');
     fireEvent.click(signOutButton);
@@ -301,13 +293,7 @@ describe('SignOut Component', () => {
       },
     ];
 
-    render(
-      <MockedProvider mocks={mocks}>
-        <BrowserRouter>
-          <SignOut />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderWithProviders(<SignOut />, mocks);
 
     const signOutButton = screen.getByText('Sign Out');
     fireEvent.click(signOutButton);
@@ -343,19 +329,13 @@ describe('SignOut Component', () => {
         endSession: mockEndSession,
       });
 
-      render(
-        <MockedProvider mocks={[mockRevokeRefreshToken]}>
-          <BrowserRouter>
-            <SignOut />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+      renderWithProviders(<SignOut />, [mockRevokeRefreshToken]);
 
       const signOutButton = screen.getByTestId('signOutBtn');
       expect(signOutButton).toBeInTheDocument();
       expect(signOutButton).toHaveAttribute('role', 'button');
       expect(signOutButton).toHaveAttribute('tabIndex', '0');
-      expect(signOutButton).toHaveAttribute('aria-label', 'Sign out');
+      expect(signOutButton).toHaveAttribute('aria-label', 'Sign Out');
     });
 
     test('sign out button responds to Enter key press', async () => {
@@ -366,13 +346,7 @@ describe('SignOut Component', () => {
 
       const { mockClearAllItems } = createMock();
 
-      render(
-        <MockedProvider mocks={[mockRevokeRefreshToken]}>
-          <BrowserRouter>
-            <SignOut />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+      renderWithProviders(<SignOut />, [mockRevokeRefreshToken]);
 
       const signOutButton = screen.getByTestId('signOutBtn');
       signOutButton.focus();
@@ -394,13 +368,7 @@ describe('SignOut Component', () => {
 
       const { mockClearAllItems } = createMock();
 
-      render(
-        <MockedProvider mocks={[mockRevokeRefreshToken]}>
-          <BrowserRouter>
-            <SignOut />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+      renderWithProviders(<SignOut />, [mockRevokeRefreshToken]);
 
       const signOutButton = screen.getByTestId('signOutBtn');
       signOutButton.focus();
@@ -422,13 +390,7 @@ describe('SignOut Component', () => {
 
       const { mockClearAllItems } = createMock();
 
-      render(
-        <MockedProvider mocks={[mockRevokeRefreshToken]}>
-          <BrowserRouter>
-            <SignOut />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+      renderWithProviders(<SignOut />, [mockRevokeRefreshToken]);
 
       const signOutButton = screen.getByTestId('signOutBtn');
       signOutButton.focus();
@@ -467,13 +429,7 @@ describe('SignOut Component', () => {
         },
       ];
 
-      render(
-        <MockedProvider mocks={mocks}>
-          <BrowserRouter>
-            <SignOut />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+      renderWithProviders(<SignOut />, mocks);
 
       const signOutButton = screen.getByTestId('signOutBtn');
       signOutButton.focus();
@@ -490,6 +446,108 @@ describe('SignOut Component', () => {
       });
 
       consoleErrorMock.mockRestore();
+    });
+  });
+
+  describe('Disabled State and Spam Prevention', () => {
+    test('button shows disabled state when logout is in progress', async () => {
+      const mockEndSession = vi.fn();
+      (useSession as Mock).mockReturnValue({
+        endSession: mockEndSession,
+      });
+
+      renderWithProviders(<SignOut />, [mockRevokeRefreshToken]);
+
+      const signOutButton = screen.getByTestId('signOutBtn');
+
+      // Verify initial state
+      expect(signOutButton).toHaveStyle({ opacity: '1' });
+      expect(signOutButton).toHaveAttribute('aria-disabled', 'false');
+      expect(screen.getByText('Sign Out')).toBeInTheDocument();
+
+      // Click the button
+      fireEvent.click(signOutButton);
+
+      // Immediately check disabled state
+      expect(signOutButton).toHaveStyle({ opacity: '0.5' });
+      expect(signOutButton).toHaveAttribute('aria-disabled', 'true');
+
+      // Check for "Signing out..." text
+      await waitFor(() => {
+        expect(screen.getByText('Signing out...')).toBeInTheDocument();
+      });
+    });
+
+    test('prevents multiple clicks during logout', async () => {
+      const mockEndSession = vi.fn();
+      (useSession as Mock).mockReturnValue({
+        endSession: mockEndSession,
+      });
+
+      renderWithProviders(<SignOut />, [mockRevokeRefreshToken]);
+
+      const signOutButton = screen.getByTestId('signOutBtn');
+
+      // Click multiple times rapidly
+      fireEvent.click(signOutButton);
+      fireEvent.click(signOutButton);
+      fireEvent.click(signOutButton);
+
+      await waitFor(() => {
+        // Verify logout was only called once
+        expect(mockEndSession).toHaveBeenCalledTimes(1);
+        expect(mockNavigate).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    test('button style prevents pointer events when disabled', async () => {
+      const mockEndSession = vi.fn();
+      (useSession as Mock).mockReturnValue({
+        endSession: mockEndSession,
+      });
+
+      renderWithProviders(<SignOut />, [mockRevokeRefreshToken]);
+
+      const signOutButton = screen.getByTestId('signOutBtn');
+
+      // Click the button
+      fireEvent.click(signOutButton);
+
+      // Check that pointer events are none and cursor is not-allowed
+      await waitFor(() => {
+        expect(signOutButton).toHaveStyle({
+          pointerEvents: 'none',
+          cursor: 'not-allowed',
+        });
+      });
+    });
+
+    test('hideDrawer prop hides text but maintains disabled state', async () => {
+      const mockEndSession = vi.fn();
+      (useSession as Mock).mockReturnValue({
+        endSession: mockEndSession,
+      });
+
+      renderWithProviders(<SignOut hideDrawer={true} />, [
+        mockRevokeRefreshToken,
+      ]);
+
+      const signOutButton = screen.getByTestId('signOutBtn');
+
+      // Initially, label text should be hidden when hideDrawer is true
+      expect(screen.queryByText('Sign Out')).not.toBeInTheDocument();
+      expect(screen.queryByText('Signing out...')).not.toBeInTheDocument();
+
+      // Click the button
+      fireEvent.click(signOutButton);
+
+      // Verify disabled state is still applied and text remains hidden
+      await waitFor(() => {
+        expect(signOutButton).toHaveStyle({ opacity: '0.5' });
+        expect(signOutButton).toHaveAttribute('aria-disabled', 'true');
+        expect(screen.queryByText('Sign Out')).not.toBeInTheDocument();
+        expect(screen.queryByText('Signing out...')).not.toBeInTheDocument();
+      });
     });
   });
 });

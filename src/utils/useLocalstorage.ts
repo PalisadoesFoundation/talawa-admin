@@ -60,7 +60,7 @@ export const removeItem = (prefix: string, key: string): void => {
  */
 export const clearAllItems = (prefix: string): void => {
   const allPrefixedKeys = [];
-  for(let i=0; i<localStorage.length; i++){
+  for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
     if (key && key.startsWith(prefix)) {
       allPrefixedKeys.push(key);

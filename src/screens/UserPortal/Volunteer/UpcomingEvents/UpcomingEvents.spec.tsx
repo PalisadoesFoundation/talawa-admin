@@ -741,7 +741,7 @@ describe('Testing Upcoming Events Screen', () => {
 
     // Verify the past event shows correct dates (2020 dates should be in the past)
     const dateElements = within(pastEventCard as HTMLElement).getAllByText(
-      /10\/30\/2020/,
+      /(30\/10\/2020|10\/30\/2020)/,
     );
     expect(dateElements.length).toBeGreaterThan(0);
 

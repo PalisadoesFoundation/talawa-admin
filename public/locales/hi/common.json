@@ -100,8 +100,15 @@
   "createdEarliest": "सबसे पहले बनाया गया",
   "searchBy": "{{item}} से खोजें",
   "plugins": "प्लगइन्स",
+  "pluginSettings": "प्लगइन सेटिंग्स",
   "save": "सहेजें",
   "saving": "सहेज रहे हैं...",
   "unblock": "अनब्लॉक करें",
-  "unblockedSuccessfully": "{{item}} सफलतापूर्वक अनब्लॉक किया गया"
+  "unblockedSuccessfully": "{{item}} सफलतापूर्वक अनब्लॉक किया गया",
+  "sl_no": "क्रम संख्या",
+  "actions": "क्रियाएं",
+  "notFound": "नहीं मिला",
+  "profilePicture": "प्रोफ़ाइल चित्र",
+  "profilePicturePlaceholder": "डमी चित्र",
+  "userProfileMenu": "उपयोगकर्ता प्रोफ़ाइल मेनू"
 }

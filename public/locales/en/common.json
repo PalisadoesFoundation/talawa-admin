@@ -102,6 +102,13 @@
   "createdEarliest": "Created Earliest",
   "searchBy": "Search by {{item}}",
   "plugins": "Plugins",
+  "pluginSettings": "Plugin Settings",
   "save": "Save",
-  "saving": "Saving..."
+  "saving": "Saving...",
+  "sl_no": "Sl. No.",
+  "actions": "Actions",
+  "notFound": "Not Found",
+  "profilePicture": "profile picture",
+  "profilePicturePlaceholder": "dummy picture",
+  "userProfileMenu": "User Profile Menu"
 }

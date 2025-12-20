@@ -76,8 +76,8 @@ describe('Storage Helper Functions', () => {
     const data1 = 'data-1';
     const data2 = 'data-2';
 
-    localStorage.setItem('TestPrefix_testKey-1', data1); // key is testKey-1
-    localStorage.setItem('TestPrefix_testKey-2', data2); // key is testKey-2
+    localStorage.setItem(`${prefix}_testKey-1`, data1); // key is testKey-1
+    localStorage.setItem(`${prefix}_testKey-2`, data2); // key is testKey-2
 
     clearAllItems(prefix);
 
@@ -86,6 +86,22 @@ describe('Storage Helper Functions', () => {
 
     expect(retrievedValue1).toBeNull();
     expect(retrievedValue2).toBeNull();
+  });
+
+  it('does not clear unprefixed items from local storage', () => {
+    const prefix = 'TestPrefix';
+    const changedPrefix = 'ChangedTestPrefix';
+    const data1 = 'data-1';
+    const data2 = 'data-2';
+    localStorage.setItem(`${prefix}_testKey-1`, data1);
+    localStorage.setItem(`${changedPrefix}_testKey-1`, data2);
+
+    clearAllItems(prefix);
+    const retrievedValue1 = localStorage.getItem(`${prefix}_testKey-1`);
+    const retrievedValue2 = localStorage.getItem(`${changedPrefix}_testKey-1`);
+
+    expect(retrievedValue1).toBeNull();
+    expect(retrievedValue2).toBe(data2);
   });
 
   it('uses default prefix for useLocalStorage', () => {
