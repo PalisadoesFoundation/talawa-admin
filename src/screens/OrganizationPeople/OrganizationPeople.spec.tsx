@@ -153,7 +153,9 @@ type MemberConnectionVariables = {
 };
 
 type MemberEdge = {
+  __typename?: string;
   node: {
+    __typename?: string;
     id: string;
     name: string;
     emailAddress: string;
@@ -167,6 +169,7 @@ type MemberEdge = {
 type MemberConnectionOverrides = {
   edges?: MemberEdge[];
   pageInfo?: {
+    __typename?: string;
     hasNextPage?: boolean;
     hasPreviousPage?: boolean;
     startCursor?: string;
@@ -180,10 +183,14 @@ const createMemberConnectionMock = (
 ) => {
   const defaultData = {
     organization: {
+      __typename: 'Organization',
       members: {
+        __typename: 'UserMembersConnection',
         edges: [
           {
+            __typename: 'UserMembersEdge',
             node: {
+              __typename: 'User',
               id: 'member1',
               name: 'John Doe',
               emailAddress: 'john@example.com',
@@ -194,7 +201,9 @@ const createMemberConnectionMock = (
             cursor: 'cursor1',
           },
           {
+            __typename: 'UserMembersEdge',
             node: {
+              __typename: 'User',
               id: 'member2',
               name: 'Jane Smith',
               emailAddress: 'jane@example.com',
@@ -206,6 +215,7 @@ const createMemberConnectionMock = (
           },
         ] as MemberEdge[],
         pageInfo: {
+          __typename: 'PageInfo',
           hasNextPage: true,
           hasPreviousPage: false,
           startCursor: 'cursor1',
@@ -215,7 +225,7 @@ const createMemberConnectionMock = (
     },
   };
 
-  const data = { ...defaultData };
+  const data: any = { ...defaultData };
   const withRole = (edge: MemberEdge): MemberEdge => ({
     ...edge,
     node: {
@@ -257,7 +267,9 @@ type UserListVariables = {
 };
 
 type UserEdge = {
+  __typename?: string;
   node: {
+    __typename?: string;
     id: string;
     name: string;
     emailAddress: string;
@@ -271,6 +283,7 @@ type UserEdge = {
 type UserListOverrides = {
   edges?: UserEdge[];
   pageInfo?: {
+    __typename?: string;
     hasNextPage?: boolean;
     hasPreviousPage?: boolean;
     startCursor?: string;
@@ -284,9 +297,12 @@ const createUserListMock = (
 ) => {
   const defaultData = {
     allUsers: {
+      __typename: 'UserConnection',
       edges: [
         {
+          __typename: 'UserEdge',
           node: {
+            __typename: 'User',
             id: 'user1',
             name: 'User One',
             emailAddress: 'user1@example.com',
@@ -297,7 +313,9 @@ const createUserListMock = (
           cursor: 'userCursor1',
         },
         {
+          __typename: 'UserEdge',
           node: {
+            __typename: 'User',
             id: 'user2',
             name: 'User Two',
             emailAddress: 'user2@example.com',
@@ -309,6 +327,7 @@ const createUserListMock = (
         },
       ],
       pageInfo: {
+        __typename: 'PageInfo',
         hasNextPage: true,
         hasPreviousPage: false,
         startCursor: 'userCursor1',
@@ -317,7 +336,7 @@ const createUserListMock = (
     },
   };
 
-  const data = { ...defaultData };
+  const data: any = { ...defaultData };
   const withRole = (edge: UserEdge): UserEdge => ({
     ...edge,
     node: {
@@ -511,7 +530,9 @@ describe('OrganizationPeople', () => {
       {
         edges: [
           {
+            __typename: 'UserMembersEdge',
             node: {
+              __typename: 'User',
               id: 'admin1',
               name: 'Admin User',
               emailAddress: 'admin@example.com',
@@ -611,7 +632,9 @@ describe('OrganizationPeople', () => {
       {
         edges: [
           {
+            __typename: 'UserMembersEdge',
             node: {
+              __typename: 'User',
               id: 'member3',
               name: 'Bob Johnson',
               emailAddress: 'bob@example.com',
@@ -705,7 +728,9 @@ describe('OrganizationPeople', () => {
       {
         edges: [
           {
+            __typename: 'UserMembersEdge',
             node: {
+              __typename: 'User',
               id: 'admin1',
               name: 'Admin User',
               emailAddress: 'admin@example.com',
@@ -737,7 +762,9 @@ describe('OrganizationPeople', () => {
       {
         edges: [
           {
+            __typename: 'UserMembersEdge',
             node: {
+              __typename: 'User',
               id: 'admin2',
               name: 'Admin User 2',
               emailAddress: 'admin2@example.com',
@@ -769,7 +796,9 @@ describe('OrganizationPeople', () => {
       {
         edges: [
           {
+            __typename: 'UserMembersEdge',
             node: {
+              __typename: 'User',
               id: 'admin1',
               name: 'Admin User',
               emailAddress: 'admin1@example.com',
@@ -990,7 +1019,9 @@ describe('OrganizationPeople', () => {
       {
         edges: [
           {
+            __typename: 'UserMembersEdge',
             node: {
+              __typename: 'User',
               id: 'admin1',
               name: 'Admin User',
               emailAddress: 'admin@example.com',

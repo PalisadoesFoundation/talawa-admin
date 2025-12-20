@@ -631,7 +631,9 @@ describe('People Component Mode Switch and Search Coverage', () => {
 describe('People Component Field Tests (Email, ID, Role)', () => {
   const renderComponentWithEmailMock = (): RenderResult => {
     return render(
-      <MockedProvider mocks={[defaultQueryMock]}>
+      <MockedProvider
+        mocks={[defaultQueryMock, defaultQueryMock, defaultQueryMock]}
+      >
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

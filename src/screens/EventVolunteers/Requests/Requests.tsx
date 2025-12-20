@@ -129,12 +129,7 @@ function requests(): JSX.Element {
     loading: requestsLoading,
     error: requestsError,
     refetch: refetchRequests,
-  }: {
-    data?: { getVolunteerMembership: InterfaceVolunteerMembership[] };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(USER_VOLUNTEER_MEMBERSHIP, {
+  } = useQuery<any>(USER_VOLUNTEER_MEMBERSHIP, {
     variables: {
       where: {
         eventId,
@@ -152,9 +147,13 @@ function requests(): JSX.Element {
 
     // Apply filter by request type
     if (filterBy === 'individual') {
-      filteredRequests = filteredRequests.filter((request) => !request.group);
+      filteredRequests = filteredRequests.filter(
+        (request: InterfaceVolunteerMembership) => !request.group,
+      );
     } else if (filterBy === 'group') {
-      filteredRequests = filteredRequests.filter((request) => request.group);
+      filteredRequests = filteredRequests.filter(
+        (request: InterfaceVolunteerMembership) => request.group,
+      );
     }
 
     return filteredRequests;

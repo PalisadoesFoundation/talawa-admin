@@ -49,6 +49,10 @@ import { useParams } from 'react-router';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useMutation, useQuery } from '@apollo/client/react';
+import type {
+  DonationConnectionResult,
+  OrganizationListResult,
+} from 'types/GraphQL/queryResults';
 import SendIcon from '@mui/icons-material/Send';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useTranslation } from 'react-i18next';
@@ -82,7 +86,16 @@ export default function donate(): JSX.Element {
   const [organizationDetails, setOrganizationDetails] = useState<{
     name: string;
   }>({ name: '' });
-  const [donations, setDonations] = useState([]);
+  const [donations, setDonations] = useState<
+    Array<{
+      _id: string;
+      nameOfUser: string;
+      amount: number;
+      userId: string;
+      payPalId: string;
+      updatedAt: string;
+    }>
+  >([]);
   const [selectedCurrency, setSelectedCurrency] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -93,11 +106,14 @@ export default function donate(): JSX.Element {
     data: donationData,
     loading,
     refetch,
-  } = useQuery(ORGANIZATION_DONATION_CONNECTION_LIST, {
-    variables: { orgId: organizationId },
-  });
+  } = useQuery<DonationConnectionResult>(
+    ORGANIZATION_DONATION_CONNECTION_LIST,
+    {
+      variables: { orgId: organizationId },
+    },
+  );
 
-  const { data } = useQuery(ORGANIZATION_LIST, {
+  const { data } = useQuery<OrganizationListResult>(ORGANIZATION_LIST, {
     variables: { id: organizationId },
   });
 
@@ -263,11 +279,11 @@ export default function donate(): JSX.Element {
                             page * rowsPerPage + rowsPerPage,
                           )
                         : donations
-                      ).map((donation: InterfaceDonation, index) => {
+                      ).map((donation, index) => {
                         const cardProps: InterfaceDonationCardProps = {
                           name: donation.nameOfUser,
                           id: donation._id,
-                          amount: donation.amount,
+                          amount: String(donation.amount),
                           userId: donation.userId,
                           payPalId: donation.payPalId,
                           updatedAt: donation.updatedAt,

@@ -54,12 +54,12 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
   const userRole =
     storedRole === 'administrator' ? UserRole.ADMINISTRATOR : UserRole.REGULAR;
 
-  const { data: eventData, loading: eventInfoLoading } = useQuery(
-    EVENT_DETAILS,
-    {
-      variables: { eventId },
-    },
-  );
+  const { data: eventData, loading: eventInfoLoading } = useQuery<
+    { event: InterfaceEvent },
+    { eventId: string }
+  >(EVENT_DETAILS, {
+    variables: { eventId },
+  });
 
   const showViewModal = (): void => {
     setEventModalIsOpen(true);

@@ -27,8 +27,11 @@ const AcceptInvitation = (): JSX.Element => {
 
   const { getItem, setItem, removeItem } = useLocalStorage();
 
-  const [verify] = useMutation(VERIFY_EVENT_INVITATION);
-  const [accept] = useMutation(ACCEPT_EVENT_INVITATION);
+  const [
+    verifyEventInvitation,
+    { data, loading: verifyLoading, error: verifyError },
+  ] = useMutation<any>(VERIFY_EVENT_INVITATION);
+  const [acceptEventInvitation] = useMutation<any>(ACCEPT_EVENT_INVITATION);
 
   const [loading, setLoading] = useState(true);
   type InviteMetadata = {
@@ -58,7 +61,7 @@ const AcceptInvitation = (): JSX.Element => {
       }
 
       try {
-        const { data } = await verify({
+        const { data } = await verifyEventInvitation({
           variables: {
             input: {
               invitationToken: tok,
@@ -78,7 +81,7 @@ const AcceptInvitation = (): JSX.Element => {
       }
     };
     run();
-  }, [token, verify]);
+  }, [token, verifyEventInvitation, getItem]);
 
   const [isAuthenticated] = useState(() => Boolean(getItem(AUTH_TOKEN_KEY)));
   const requiresConfirmation = Boolean(invite?.inviteeEmailMasked);
@@ -99,7 +102,7 @@ const AcceptInvitation = (): JSX.Element => {
     setIsSubmitting(true);
     try {
       const input = { invitationToken: invite.invitationToken };
-      const { data } = await accept({ variables: { input } });
+      const { data } = await acceptEventInvitation({ variables: { input } });
       if (data && data.acceptEventInvitation) {
         toast.success(t('accepted', { defaultValue: 'Invitation accepted' }));
         removeItem(STORAGE_KEY);

@@ -352,7 +352,7 @@ function OrganizationDashboard(): JSX.Element {
           />
           {membershipRequestData?.organization &&
             membershipRequestData?.organization?.membershipRequestsCount >
-            0 && (
+              0 && (
               <Row>
                 <Col xs={6} sm={4} className="mb-4">
                   <button
@@ -460,9 +460,9 @@ function OrganizationDashboard(): JSX.Element {
                     <CardItemLoading key={`requestsLoading_${index}`} />
                   ))
                 ) : membershipRequestData?.organization?.membershipRequests?.filter(
-                  (request: { status: string }) =>
-                    request.status === 'pending',
-                ).length === 0 ? (
+                    (request: { status: string }) =>
+                      request.status === 'pending',
+                  ).length === 0 ? (
                   <div
                     className={styles.emptyContainer}
                     style={{ height: '150px' }}

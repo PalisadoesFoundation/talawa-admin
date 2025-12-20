@@ -100,15 +100,14 @@ function EventAttendance(): JSX.Element {
   const searchEventAttendees = (value: string): void => {
     const searchValueLower = value.toLowerCase().trim();
 
-    const filtered = (memberData?.event?.attendees ?? []).filter(
-      (attendee: InterfaceMember) => {
-        const name = attendee.name?.toLowerCase() || '';
-        const email = attendee.emailAddress?.toLowerCase() || '';
-        return (
-          name.includes(searchValueLower) || email.includes(searchValueLower)
-        );
-      },
-    );
+    const attendees = (memberData?.event?.attendees ?? []) as InterfaceMember[];
+    const filtered = attendees.filter((attendee: InterfaceMember) => {
+      const name = attendee.name?.toLowerCase() || '';
+      const email = attendee.emailAddress?.toLowerCase() || '';
+      return (
+        name.includes(searchValueLower) || email.includes(searchValueLower)
+      );
+    });
 
     const finalFiltered = filterAndSortAttendees(filtered);
     setFilteredAttendees(finalFiltered);
@@ -130,8 +129,10 @@ function EventAttendance(): JSX.Element {
   }, [filteredAttendees]);
 
   const [getEventAttendees, { data: memberData, loading, error }] =
-    useLazyQuery(EVENT_ATTENDEES, {
-      variables: { eventId: eventId },
+    useLazyQuery<
+      { event: { attendees: InterfaceMember[] } },
+      { eventId: string }
+    >(EVENT_ATTENDEES, {
       fetchPolicy: 'cache-and-network',
       nextFetchPolicy: 'cache-first',
       errorPolicy: 'all',
@@ -140,15 +141,17 @@ function EventAttendance(): JSX.Element {
 
   useEffect(() => {
     if (memberData?.event?.attendees) {
-      const updatedAttendees = filterAndSortAttendees(
-        memberData.event.attendees,
-      );
+      // filtering out any null/undefined attendees if necessary, though InterfaceMember[] implies they are defined
+      const attendees = (memberData.event.attendees || []) as InterfaceMember[];
+      const updatedAttendees = filterAndSortAttendees(attendees);
       setFilteredAttendees(updatedAttendees);
     }
   }, [sortOrder, filteringBy, memberData]);
 
   useEffect(() => {
-    getEventAttendees();
+    if (eventId) {
+      getEventAttendees({ variables: { eventId: eventId! } });
+    }
   }, [eventId, getEventAttendees]);
 
   if (loading) return <p>{t('loading')}</p>;

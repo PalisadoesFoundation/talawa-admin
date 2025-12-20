@@ -151,21 +151,29 @@ function OrganizationPeople(): JSX.Element {
   }>({ hasNextPage: false, hasPreviousPage: false });
 
   // Query hooks
-  const [fetchMembers, { loading: memberLoading, error: memberError }] =
-    useLazyQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
-      onCompleted: (data) => {
-        setData(data?.organization?.members);
-      },
-    });
+  // Query hooks
+  const [
+    fetchMembers,
+    { loading: memberLoading, error: memberError, data: membersData },
+  ] = useLazyQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {} as any);
 
-  const [fetchUsers, { loading: userLoading, error: userError }] = useLazyQuery(
-    USER_LIST_FOR_TABLE,
-    {
-      onCompleted: (data) => {
-        setData(data?.allUsers);
-      },
-    },
-  );
+  const [
+    fetchUsers,
+    { loading: userLoading, error: userError, data: usersData },
+  ] = useLazyQuery(USER_LIST_FOR_TABLE);
+
+  // Sync data from hooks to component state (onCompleted isn't reliable)
+  useEffect(() => {
+    if (membersData) {
+      setData((membersData as any)?.organization?.members);
+    }
+  }, [membersData]);
+
+  useEffect(() => {
+    if (usersData) {
+      setData((usersData as any)?.allUsers);
+    }
+  }, [usersData]);
 
   // Handle data changes
   useEffect(() => {

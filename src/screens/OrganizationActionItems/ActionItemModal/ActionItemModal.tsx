@@ -138,17 +138,14 @@ const ItemModal: FC<IItemModalProps> = ({
   } = formState;
 
   const { data: actionItemCategoriesData } =
-    useQuery<IActionItemCategoriesData>(
-      ACTION_ITEM_CATEGORY_LIST,
-      {
-        variables: {
-          input: {
-            organizationId: orgId,
-          },
+    useQuery<IActionItemCategoriesData>(ACTION_ITEM_CATEGORY_LIST, {
+      variables: {
+        input: {
+          organizationId: orgId,
         },
-        notifyOnNetworkStatusChange: false,
       },
-    );
+      notifyOnNetworkStatusChange: false,
+    });
 
   const { data: volunteersData } = useQuery<IEventVolunteersData>(
     GET_EVENT_VOLUNTEERS,
@@ -228,11 +225,11 @@ const ItemModal: FC<IItemModalProps> = ({
       },
       ...(eventId
         ? [
-          {
-            query: GET_EVENT_ACTION_ITEMS,
-            variables: { input: { id: eventId } },
-          },
-        ]
+            {
+              query: GET_EVENT_ACTION_ITEMS,
+              variables: { input: { id: eventId } },
+            },
+          ]
         : []),
     ],
   });
@@ -244,11 +241,11 @@ const ItemModal: FC<IItemModalProps> = ({
       },
       ...(eventId
         ? [
-          {
-            query: GET_EVENT_ACTION_ITEMS,
-            variables: { input: { id: eventId } },
-          },
-        ]
+            {
+              query: GET_EVENT_ACTION_ITEMS,
+              variables: { input: { id: eventId } },
+            },
+          ]
         : []),
     ],
   });
@@ -258,17 +255,20 @@ const ItemModal: FC<IItemModalProps> = ({
     {
       refetchQueries: eventId
         ? [
-          {
-            query: GET_EVENT_ACTION_ITEMS,
-            variables: { input: { id: eventId } },
-          },
-        ]
+            {
+              query: GET_EVENT_ACTION_ITEMS,
+              variables: { input: { id: eventId } },
+            },
+          ]
         : [],
     },
   );
 
   const runRefetches = (): void => {
-    console.log('runRefetches called. orgRefetch present:', !!orgActionItemsRefetch);
+    console.log(
+      'runRefetches called. orgRefetch present:',
+      !!orgActionItemsRefetch,
+    );
     actionItemsRefetch();
     orgActionItemsRefetch?.();
   };
@@ -359,7 +359,10 @@ const ItemModal: FC<IItemModalProps> = ({
     e: FormEvent,
   ): Promise<void> => {
     e.preventDefault();
-    console.log('Called updateActionForInstanceHandler. actionItem:', JSON.stringify(actionItem));
+    console.log(
+      'Called updateActionForInstanceHandler. actionItem:',
+      JSON.stringify(actionItem),
+    );
     try {
       if (!actionItem?.id) {
         toast.error('Action item ID is missing');

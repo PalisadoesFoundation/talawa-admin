@@ -70,9 +70,7 @@ interface InterfaceOrganizationMember {
 interface InterfaceCreateDirectChatProps {
   toggleCreateDirectChatModal: () => void;
   createDirectChatModalisOpen: boolean;
-  chatsListRefetch: (
-    variables?: Partial<{ id: string }> | undefined,
-  ) => Promise<ObservableQuery.Result<unknown>>;
+  chatsListRefetch: (variables?: Partial<OperationVariables>) => Promise<any>;
   chats: GroupChat[];
 }
 
@@ -105,7 +103,7 @@ export const handleCreateDirectChat = async (
         | useMutation.MutationFunctionOptions<
             unknown,
             OperationVariables,
-            ApolloCache<unknown>
+            ApolloCache
           >
         | undefined,
     ): Promise<ApolloLink.Result<unknown>>;
@@ -126,7 +124,7 @@ export const handleCreateDirectChat = async (
         | useMutation.MutationFunctionOptions<
             unknown,
             OperationVariables,
-            ApolloCache<unknown>
+            ApolloCache
           >
         | undefined,
     ): Promise<ApolloLink.Result<unknown>>;
@@ -229,7 +227,13 @@ export default function createDirectChatModal({
     data: allUsersData,
     loading: allUsersLoading,
     refetch: allUsersRefetch,
-  } = useQuery(ORGANIZATION_MEMBERS, {
+  } = useQuery<{
+    organization: {
+      members: {
+        edges: { node: InterfaceOrganizationMember }[];
+      };
+    };
+  }>(ORGANIZATION_MEMBERS, {
     variables: {
       input: { id: organizationId },
       first: 20,

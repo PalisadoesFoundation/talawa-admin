@@ -62,6 +62,7 @@ import { urlToFile } from 'utils/urlToFile';
 import { validatePassword } from 'utils/passwordValidator';
 import { sanitizeAvatars } from 'utils/sanitizeAvatar';
 import type { IEvent } from 'types/Event/interface';
+import type { InterfaceUser } from 'types/User/interface';
 
 type MemberDetailProps = { id?: string };
 
@@ -105,8 +106,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   });
 
   // Mutation to update the user details
-  const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);
-  const { data: userData, loading } = useQuery(CURRENT_USER, {
+  const [updateUser] = useMutation<any>(UPDATE_CURRENT_USER_MUTATION);
+  const { data: userData, loading } = useQuery<any>(CURRENT_USER, {
     variables: { id: currentId },
   });
 

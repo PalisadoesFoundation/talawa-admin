@@ -232,7 +232,11 @@ export const EMPTY_MOCKS = [
     maxUsageCount: 5,
     result: {
       data: {
-        organization: { __typename: 'Organization', id: 'orgId', postsCount: 0 },
+        organization: {
+          __typename: 'Organization',
+          id: 'orgId',
+          postsCount: 0,
+        },
       },
     },
   },

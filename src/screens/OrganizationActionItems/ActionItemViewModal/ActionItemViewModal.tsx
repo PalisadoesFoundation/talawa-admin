@@ -46,7 +46,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
   } = item;
 
   // Query to get category details
-  const { data: categoryData } = useQuery(GET_ACTION_ITEM_CATEGORY, {
+  const { data: categoryData } = useQuery<any>(GET_ACTION_ITEM_CATEGORY, {
     variables: {
       input: { id: categoryId },
     },
@@ -54,7 +54,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
   });
 
   // Query to get organization members to resolve assignee and creator details
-  const { data: membersData } = useQuery(MEMBERS_LIST, {
+  const { data: membersData } = useQuery<any>(MEMBERS_LIST, {
     variables: { organizationId: organizationId },
   });
 

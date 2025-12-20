@@ -69,9 +69,12 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
 
   const { orgId: organizationId } = useParams();
 
-  const { data } = useQuery(ORGANIZATION_LIST, {
-    variables: { id: organizationId },
-  });
+  const { data } = useQuery<{ organizations: { name: string }[] }>(
+    ORGANIZATION_LIST,
+    {
+      variables: { id: organizationId },
+    },
+  );
 
   const [currentLanguageCode, setCurrentLanguageCode] = React.useState(
     cookies.get('i18next') || 'en',

@@ -1,6 +1,10 @@
 import { requestMiddleware, responseMiddleware } from './dateTimeMiddleware';
-import type { ApolloLink } from '@apollo/client';
-import { gql, Observable } from '@apollo/client';
+import {
+  gql,
+  Observable,
+  type Operation,
+  type ApolloLink,
+} from '@apollo/client';
 import type { DocumentNode } from 'graphql';
 import { describe, it, expect, vi } from 'vitest';
 
@@ -19,14 +23,16 @@ describe('Date Time Middleware Tests', () => {
 
   describe('Request Middleware', () => {
     it('should convert local date and time to UTC format in request variables', () => {
-      const operation: ApolloLink.Operation = {
+      const operation: Operation = {
         query: DUMMY_QUERY,
         operationName: 'GetDummyData',
         variables: { startDate: '2023-09-01', startTime: '12:00:00' },
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
-      };
+        operationType: 'query',
+        client: {} as any,
+      } as unknown as Operation;
 
       const forward = vi.fn(
         (op) =>
@@ -52,17 +58,18 @@ describe('Date Time Middleware Tests', () => {
       const testResponse: ApolloLink.Result = {
         data: { createdAt: '2023-09-01T12:00:00.000Z' },
         extensions: {},
-        context: {},
       };
 
-      const operation: ApolloLink.Operation = {
+      const operation: Operation = {
         query: DUMMY_QUERY,
         operationName: 'GetDummyData',
         variables: {},
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
-      };
+        operationType: 'query',
+        client: {} as any,
+      } as unknown as Operation;
 
       const forward = vi.fn(
         () =>
@@ -98,14 +105,16 @@ describe('Date Time Middleware Tests', () => {
 
   describe('Date Time Middleware Edge Cases', () => {
     it('should handle invalid date formats gracefully in request middleware', () => {
-      const operation: ApolloLink.Operation = {
+      const operation: Operation = {
         query: DUMMY_QUERY,
         operationName: 'GetDummyData',
         variables: { startDate: 'not-a-date', startTime: '25:99:99' },
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
-      };
+        operationType: 'query',
+        client: {} as any,
+      } as unknown as Operation;
 
       const forward = vi.fn(
         (op) =>
@@ -127,17 +136,18 @@ describe('Date Time Middleware Tests', () => {
       const testResponse: ApolloLink.Result = {
         data: { createdAt: 'invalid-date-time' },
         extensions: {},
-        context: {},
       };
 
-      const operation: ApolloLink.Operation = {
+      const operation: Operation = {
         query: DUMMY_QUERY,
         operationName: 'GetDummyData',
         variables: {},
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
-      };
+        operationType: 'query',
+        client: {} as any,
+      } as unknown as Operation;
 
       const forward = vi.fn(
         () =>
@@ -176,7 +186,7 @@ describe('Date Time Middleware Tests', () => {
 
   describe('Recursive Date Conversion in Nested Objects', () => {
     it('should recursively convert date and time in deeply nested objects in request middleware', () => {
-      const operation: ApolloLink.Operation = {
+      const operation: Operation = {
         query: DUMMY_QUERY,
         operationName: 'GetDummyData',
         variables: {
@@ -195,7 +205,9 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
-      };
+        operationType: 'query',
+        client: {} as any,
+      } as unknown as Operation;
 
       const forward = vi.fn(
         (op) =>

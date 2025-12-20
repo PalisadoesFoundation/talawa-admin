@@ -126,12 +126,7 @@ function actions(): JSX.Element {
     loading: actionItemsLoading,
     error: actionItemsError,
     refetch: actionItemsRefetch,
-  }: {
-    data?: { actionItemsByOrganization: IActionItemInfo[] };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(ACTION_ITEM_LIST, {
+  } = useQuery<any>(ACTION_ITEM_LIST, {
     variables: {
       input: {
         organizationId: orgId,
@@ -143,52 +138,78 @@ function actions(): JSX.Element {
     const allActionItems = actionItemsData?.actionItemsByOrganization || [];
 
     // Filter action items where the current user is involved as a volunteer or part of a volunteer group
-    let userActionItems = allActionItems.filter((item) => {
-      // Check if user is the assigned volunteer
-      const isAssignedVolunteer = item.volunteer?.user?.id === userId;
+    let userActionItems = allActionItems.filter(
+      (item: {
+        volunteer?: { user?: { id: string; name?: string } };
+        volunteerGroup?: {
+          name?: string;
+          volunteers?: Array<{
+            id: string;
+            user: { id: string; name: string };
+          }>;
+        };
+        category?: { name?: string };
+        assignedAt?: string;
+        createdAt?: string;
+      }) => {
+        // Check if user is the assigned volunteer
+        const isAssignedVolunteer = item.volunteer?.user?.id === userId;
 
-      // Check if user is part of the assigned volunteer group
-      const isInVolunteerGroup = item.volunteerGroup?.volunteers?.some(
-        (volunteer: { id: string; user: { id: string; name: string } }) =>
-          volunteer.user?.id === userId,
-      );
+        // Check if user is part of the assigned volunteer group
+        const isInVolunteerGroup = item.volunteerGroup?.volunteers?.some(
+          (volunteer: { id: string; user: { id: string; name: string } }) =>
+            volunteer.user?.id === userId,
+        );
 
-      return isAssignedVolunteer || isInVolunteerGroup;
-    });
+        return isAssignedVolunteer || isInVolunteerGroup;
+      },
+    );
 
     // Apply search filtering if search term exists
     if (searchTerm) {
-      userActionItems = userActionItems.filter((item) => {
-        if (searchBy === 'assignee') {
-          // Search in volunteer name or volunteer group name
-          const volunteerName = item.volunteer?.user?.name?.toLowerCase() || '';
-          const volunteerGroupName =
-            item.volunteerGroup?.name?.toLowerCase() || '';
-          return (
-            volunteerName.includes(searchTerm.toLowerCase()) ||
-            volunteerGroupName.includes(searchTerm.toLowerCase())
-          );
-        } else if (searchBy === 'category') {
-          // Search in category name
-          const categoryName = item.category?.name?.toLowerCase() || '';
-          return categoryName.includes(searchTerm.toLowerCase());
-        }
-        return true;
-      });
+      userActionItems = userActionItems.filter(
+        (item: {
+          volunteer?: { user?: { name?: string } };
+          volunteerGroup?: { name?: string };
+          category?: { name?: string };
+        }) => {
+          if (searchBy === 'assignee') {
+            // Search in volunteer name or volunteer group name
+            const volunteerName =
+              item.volunteer?.user?.name?.toLowerCase() || '';
+            const volunteerGroupName =
+              item.volunteerGroup?.name?.toLowerCase() || '';
+            return (
+              volunteerName.includes(searchTerm.toLowerCase()) ||
+              volunteerGroupName.includes(searchTerm.toLowerCase())
+            );
+          } else if (searchBy === 'category') {
+            // Search in category name
+            const categoryName = item.category?.name?.toLowerCase() || '';
+            return categoryName.includes(searchTerm.toLowerCase());
+          }
+          return true;
+        },
+      );
     }
 
     // Apply sorting if specified
     if (sortBy) {
-      return userActionItems.sort((a, b) => {
-        const dateA = new Date(a.assignedAt || a.createdAt);
-        const dateB = new Date(b.assignedAt || b.createdAt);
+      return userActionItems.sort(
+        (
+          a: { assignedAt?: string; createdAt?: string },
+          b: { assignedAt?: string; createdAt?: string },
+        ) => {
+          const dateA = new Date(a.assignedAt || a.createdAt || '');
+          const dateB = new Date(b.assignedAt || b.createdAt || '');
 
-        if (sortBy === 'dueDate_ASC') {
-          return dateA.getTime() - dateB.getTime();
-        } else {
-          return dateB.getTime() - dateA.getTime();
-        }
-      });
+          if (sortBy === 'dueDate_ASC') {
+            return dateA.getTime() - dateB.getTime();
+          } else {
+            return dateB.getTime() - dateA.getTime();
+          }
+        },
+      );
     }
 
     return userActionItems;

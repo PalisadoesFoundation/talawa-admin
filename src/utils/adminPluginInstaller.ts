@@ -321,7 +321,7 @@ export async function installAdminPluginFromZip({
           },
         });
 
-        if (result.data?.uploadPluginZip) {
+        if ((result.data as any)?.uploadPluginZip) {
           installedComponents.push('API');
         }
       } catch (error) {

@@ -65,7 +65,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   const { t: tCommon } = useTranslation('common');
   const { orgId } = useParams<{ orgId: string }>();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [addSignUp] = useMutation(SIGNUP_MUTATION);
+  const [addSignUp] = useMutation<{ signUp: any }>(SIGNUP_MUTATION);
   const validateForm = (): boolean => {
     if (!formData.firstName || !formData.lastName || !formData.email) {
       toast.error(t('invalidDetailsMessage'));

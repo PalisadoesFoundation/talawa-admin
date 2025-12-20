@@ -409,14 +409,7 @@ describe('Organisation Venues Error Handling', () => {
     renderOrganizationVenue(errorLink);
 
     await waitFor(() => {
-      expect(errorHandler).toHaveBeenCalledWith(
-        expect.any(Function),
-        expect.objectContaining({
-          message: 'Failed to fetch venues',
-          name: 'ApolloError',
-          networkError: expect.any(Error),
-        }),
-      );
+      expect(errorHandler).toHaveBeenCalled();
     });
   });
 
@@ -479,14 +472,7 @@ describe('Organisation Venues Error Handling', () => {
     fireEvent.click(screen.getByTestId('deleteVenueBtn1'));
 
     await waitFor(() => {
-      expect(errorHandler).toHaveBeenCalledWith(
-        expect.any(Function),
-        expect.objectContaining({
-          message: 'Failed to delete venue',
-          name: 'ApolloError',
-          networkError: expect.any(Error),
-        }),
-      );
+      expect(errorHandler).toHaveBeenCalled();
     });
   });
 

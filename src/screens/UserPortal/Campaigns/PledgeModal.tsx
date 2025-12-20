@@ -64,6 +64,7 @@ import {
   TextField,
 } from '@mui/material';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
+import type { UserDetailsResult } from 'types/GraphQL/queryResults';
 
 export interface InterfacePledgeModal {
   isOpen: boolean;
@@ -131,7 +132,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   } = formState;
 
   // Query to get the user details based on the userId prop
-  const { data: userData } = useQuery(USER_DETAILS, {
+  const { data: userData } = useQuery<UserDetailsResult>(USER_DETAILS, {
     variables: { id: userId },
   });
 

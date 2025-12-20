@@ -329,6 +329,34 @@ const deletePostErrorMock = {
   error: new Error('Failed to delete post'),
 };
 
+// Like post error mock
+const likePostErrorMock = {
+  request: {
+    query: UPDATE_POST_VOTE,
+    variables: {
+      input: {
+        postId: '1',
+        type: 'up_vote',
+      },
+    },
+  },
+  error: new Error('Network error occurred'),
+};
+
+// Create comment error mock
+const createCommentErrorMock = {
+  request: {
+    query: CREATE_COMMENT_POST,
+    variables: {
+      input: {
+        postId: '1',
+        body: 'Test comment',
+      },
+    },
+  },
+  error: new Error('Network error occurred'),
+};
+
 // Current user mock for permission checks
 const currentUserMock = {
   request: {
@@ -779,89 +807,76 @@ describe('PostCard', () => {
   });
 
   it('shows error when like action fails', async () => {
-    // Create a mock mutation function that rejects
-    const mockLikePost = vi
-      .fn()
-      .mockRejectedValue(new Error('Network error occurred'));
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
 
-    // Temporarily mock useMutation for this test only
-    const apolloMock = await import('@apollo/client');
-    const originalUseMutation = apolloMock.useMutation;
+    // Use MockedProvider with an error mock for the like mutation
+    const linkWithLikeError = new StaticMockLink(
+      [likePostErrorMock, ...mocks],
+      true,
+    );
 
-    // Override just for this test
-    apolloMock.useMutation = vi
-      .fn()
-      .mockReturnValue([mockLikePost, { loading: false }]);
+    render(
+      <MockedProvider link={linkWithLikeError}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard
+                {...defaultProps}
+                hasUserVoted={{ hasVoted: false, voteType: null }}
+                upVoteCount={0}
+              />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
-    try {
-      renderPostCard({
-        hasUserVoted: { hasVoted: false, voteType: null },
-        upVoteCount: 0,
-      });
+    const likeButton = screen.getByTestId('like-btn');
+    fireEvent.click(likeButton);
 
-      const likeButton = screen.getByTestId('like-btn');
-      fireEvent.click(likeButton);
-
-      // Wait for the mutation to be called and the error to be handled
-      await waitFor(() => {
-        expect(mockLikePost).toHaveBeenCalled();
-      });
-
-      // Wait for the error toast to be shown - component casts error to string
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalled();
-      });
-    } finally {
-      // Always restore the original mock
-      apolloMock.useMutation = originalUseMutation;
-    }
+    // Wait for the error toast to be shown
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
   });
 
   it('handles comment creation error and calls errorHandler', async () => {
-    // Create a mock mutation function that rejects for CREATE_COMMENT_POST
-    const mockCreateComment = vi
-      .fn()
-      .mockRejectedValue(new Error('Network error occurred'));
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
 
-    // Temporarily mock useMutation for this test only
-    const apolloMock = await import('@apollo/client');
-    const originalUseMutation = apolloMock.useMutation;
+    // Use MockedProvider with an error mock for the create comment mutation
+    const linkWithCommentError = new StaticMockLink(
+      [createCommentErrorMock, ...mocks],
+      true,
+    );
 
-    // Override just for this test to return the error mock for CREATE_COMMENT_POST
-    apolloMock.useMutation = vi.fn((mutation) => {
-      if (mutation === CREATE_COMMENT_POST) {
-        return [mockCreateComment, { loading: false }];
-      }
-      // For other mutations, return the normal mock
-      return [vi.fn().mockResolvedValue({}), { loading: false }];
-    }) as ReturnType<typeof vi.fn>;
+    render(
+      <MockedProvider link={linkWithCommentError}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...defaultProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
-    try {
-      renderPostCard();
+    const commentInput = screen.getByPlaceholderText(/add comment/i);
+    const sendButton = screen.getByTestId('comment-send');
 
-      const commentInput = screen.getByPlaceholderText(/add comment/i);
-      const sendButton = screen.getByTestId('comment-send');
+    fireEvent.change(commentInput, { target: { value: 'Test comment' } });
 
-      fireEvent.change(commentInput, { target: { value: 'Test comment' } });
+    // The send button should be enabled with input
+    expect(sendButton).not.toBeDisabled();
 
-      // The send button should be enabled with input
-      expect(sendButton).not.toBeDisabled();
+    fireEvent.click(sendButton);
 
-      fireEvent.click(sendButton);
-
-      // Wait for the mutation to be called and the error to be handled
-      await waitFor(() => {
-        expect(mockCreateComment).toHaveBeenCalled();
-      });
-
-      // Wait for the error handler to be called - this should trigger line 219
-      await waitFor(() => {
-        expect(errorHandler).toHaveBeenCalled();
-      });
-    } finally {
-      // Always restore the original mock
-      apolloMock.useMutation = originalUseMutation;
-    }
+    // Wait for the error handler to be called
+    await waitFor(() => {
+      expect(errorHandler).toHaveBeenCalled();
+    });
   });
 
   it('renders video when video prop is provided', () => {

@@ -2759,8 +2759,17 @@ describe('VenueModal', () => {
       }
 
       mutationSpy(variables);
-      return Observable.of({
-        data: { createVenue: { id: 'newVenue' } },
+      return new Observable((observer) => {
+        observer.next({
+          data: {
+            createVenue: {
+              id: 'newVenue',
+              name: 'Test Venue',
+              description: '',
+            },
+          },
+        });
+        observer.complete();
       });
     });
 

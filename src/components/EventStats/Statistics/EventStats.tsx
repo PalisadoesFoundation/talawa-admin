@@ -46,6 +46,15 @@ type ModalPropType = {
   eventId: string;
   handleClose: () => void;
 };
+import type { Feedback } from 'types/Event/type';
+
+interface EventFeedbackData {
+  event: {
+    _id: string;
+    averageFeedbackScore: number | null;
+    feedback: Feedback[];
+  };
+}
 
 export const EventStats = ({
   show,
@@ -53,10 +62,13 @@ export const EventStats = ({
   eventId,
 }: ModalPropType): JSX.Element => {
   // Query to fetch event feedback data
-  const { data, loading, error } = useQuery(EVENT_FEEDBACKS, {
-    variables: { id: eventId },
-    skip: !eventId,
-  });
+  const { data, loading, error } = useQuery<EventFeedbackData>(
+    EVENT_FEEDBACKS,
+    {
+      variables: { id: eventId },
+      skip: !eventId,
+    },
+  );
 
   // Show a loading screen while data is being fetched
   if (loading) {

@@ -105,6 +105,8 @@ const makeAttendeesEmptyMock = (): ApolloMock => ({
   result: {
     data: {
       event: {
+        id: 'event123',
+        __typename: 'Event',
         attendees: [],
       },
     },
@@ -176,7 +178,32 @@ const makeEventDetailsNonRecurringMock = (): ApolloMock => ({
     data: {
       event: {
         id: 'event123',
+        name: 'Test Event',
+        description: 'Test Description',
+        location: 'Test Location',
+        allDay: false,
+        isPublic: true,
+        isRegisterable: true,
+        startAt: '2023-01-01T10:00:00.000Z',
+        endAt: '2023-01-01T12:00:00.000Z',
+        createdAt: '2023-01-01T00:00:00.000Z',
+        updatedAt: '2023-01-01T00:00:00.000Z',
+        isRecurringEventTemplate: false,
+        baseEvent: null,
         recurrenceRule: null,
+        creator: {
+          id: 'creator1',
+          name: 'Creator',
+          emailAddress: 'creator@example.com',
+          __typename: 'User',
+        },
+        updater: null,
+        organization: {
+          id: 'org123',
+          name: 'Test Org',
+          __typename: 'Organization',
+        },
+        __typename: 'Event',
       },
     },
   },
@@ -191,9 +218,35 @@ const makeEventDetailsRecurringMock = (): ApolloMock => ({
     data: {
       event: {
         id: 'event123',
+        name: 'Recurring Event',
+        description: 'Recurring Description',
+        location: 'Test Location',
+        allDay: false,
+        isPublic: true,
+        isRegisterable: true,
+        startAt: '2023-01-01T10:00:00.000Z',
+        endAt: '2023-01-01T12:00:00.000Z',
+        createdAt: '2023-01-01T00:00:00.000Z',
+        updatedAt: '2023-01-01T00:00:00.000Z',
+        isRecurringEventTemplate: false,
+        baseEvent: null,
         recurrenceRule: {
           id: 'RRULE:FREQ=DAILY',
+          __typename: 'RecurrenceRule',
         },
+        creator: {
+          id: 'creator1',
+          name: 'Creator',
+          emailAddress: 'creator@example.com',
+          __typename: 'User',
+        },
+        updater: null,
+        organization: {
+          id: 'org123',
+          name: 'Test Org',
+          __typename: 'Organization',
+        },
+        __typename: 'Event',
       },
     },
   },
@@ -317,9 +370,13 @@ describe('EventRegistrantsModal', () => {
   });
 
   test('successfully adds registrant for non-recurring event', async () => {
-    const { queryByText, queryByLabelText } = renderWithProviders([
+    const { queryByText, queryByLabelText, findByText } = renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
+      makeAttendeesEmptyMock(), // Refetch
+      makeAttendeesEmptyMock(),
+      makeMembersWithOneMock(),
       makeMembersWithOneMock(),
       makeAddRegistrantSuccessMock(),
     ]);
@@ -331,7 +388,10 @@ describe('EventRegistrantsModal', () => {
     const input = queryByLabelText('Add an Registrant') as HTMLElement;
     fireEvent.change(input, { target: { value: 'John Doe' } });
     fireEvent.keyDown(input, { key: 'ArrowDown' });
-    fireEvent.keyDown(input, { key: 'Enter' });
+
+    // Select option by clicking
+    const option = await findByText('John Doe');
+    fireEvent.click(option);
 
     fireEvent.click(queryByText('Add Registrant') as Element);
 
@@ -345,9 +405,12 @@ describe('EventRegistrantsModal', () => {
   });
 
   test('handles error when add registrant mutation fails', async () => {
-    const { queryByText, queryByLabelText } = renderWithProviders([
+    const { queryByText, queryByLabelText, findByText } = renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersWithOneMock(),
       makeMembersWithOneMock(),
       makeAddRegistrantErrorMock(),
     ]);
@@ -359,7 +422,10 @@ describe('EventRegistrantsModal', () => {
     const input = queryByLabelText('Add an Registrant') as HTMLElement;
     fireEvent.change(input, { target: { value: 'John Doe' } });
     fireEvent.keyDown(input, { key: 'ArrowDown' });
-    fireEvent.keyDown(input, { key: 'Enter' });
+
+    // Select option by clicking
+    const option = await findByText('John Doe');
+    fireEvent.click(option);
 
     fireEvent.click(queryByText('Add Registrant') as Element);
 
@@ -373,9 +439,13 @@ describe('EventRegistrantsModal', () => {
   });
 
   test('uses recurring variables when event is recurring (isRecurring branch)', async () => {
-    const { queryByText, queryByLabelText } = renderWithProviders([
+    const { queryByText, queryByLabelText, findByText } = renderWithProviders([
+      makeEventDetailsRecurringMock(),
       makeEventDetailsRecurringMock(),
       makeAttendeesEmptyMock(),
+      makeAttendeesEmptyMock(), // Refetch
+      makeAttendeesEmptyMock(),
+      makeMembersWithOneMock(),
       makeMembersWithOneMock(),
       makeAddRegistrantRecurringSuccessMock(),
     ]);
@@ -387,7 +457,10 @@ describe('EventRegistrantsModal', () => {
     const input = queryByLabelText('Add an Registrant') as HTMLElement;
     fireEvent.change(input, { target: { value: 'John Doe' } });
     fireEvent.keyDown(input, { key: 'ArrowDown' });
-    fireEvent.keyDown(input, { key: 'Enter' });
+
+    // Select option by clicking
+    const option = await findByText('John Doe');
+    fireEvent.click(option);
 
     fireEvent.click(queryByText('Add Registrant') as Element);
 
@@ -474,6 +547,9 @@ describe('EventRegistrantsModal', () => {
   test('InviteByEmailModal onInvitesSent callback triggers and isRecurring is true for recurring event', async () => {
     const { queryByText, getByTestId } = renderWithProviders([
       makeEventDetailsRecurringMock(),
+      makeEventDetailsRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeAttendeesEmptyMock(), // Refetch
       makeAttendeesEmptyMock(),
       makeMembersWithOneMock(),
     ]);
@@ -485,10 +561,10 @@ describe('EventRegistrantsModal', () => {
     const inviteButton = queryByText('Invite by Email') as HTMLElement;
     fireEvent.click(inviteButton);
 
-    await waitFor(() =>
-      expect(getByTestId('invite-modal')).toBeInTheDocument(),
-    );
-    expect(getByTestId('invite-is-recurring').textContent).toBe('true');
+    await waitFor(() => {
+      expect(getByTestId('invite-modal')).toBeInTheDocument();
+      expect(getByTestId('invite-is-recurring').textContent).toBe('true');
+    });
 
     const sendBtn = getByTestId('invite-send');
     fireEvent.click(sendBtn);

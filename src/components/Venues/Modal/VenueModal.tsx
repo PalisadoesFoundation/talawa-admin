@@ -89,9 +89,10 @@ const VenueModal = ({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // Mutation function for creating or updating a venue
-  const [mutate, { loading }] = useMutation(
-    edit ? UPDATE_VENUE_MUTATION : CREATE_VENUE_MUTATION,
-  );
+  const [mutate, { loading }] = useMutation<{
+    createVenue?: any;
+    updateVenue?: any;
+  }>(edit ? UPDATE_VENUE_MUTATION : CREATE_VENUE_MUTATION);
 
   /**
    * Handles form submission to create or update a venue.

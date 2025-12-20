@@ -48,7 +48,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Paper, TableBody } from '@mui/material';
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from '../../../style/app-fixed.module.css';
-import type { ObservableQuery } from '@apollo/client';
+import type { ObservableQuery, OperationVariables } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client/react';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
@@ -73,9 +73,35 @@ import SearchBar from 'shared-components/SearchBar/SearchBar';
 interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
   createGroupChatModalisOpen: boolean;
-  chatsListRefetch: (
-    variables?: Partial<{ id: string }> | undefined,
-  ) => Promise<ObservableQuery.Result<unknown>>;
+  chatsListRefetch: (variables?: Partial<OperationVariables>) => Promise<any>;
+}
+
+interface InterfaceOrganizationMemberNode {
+  id: string;
+  name: string;
+  avatarURL?: string;
+  role?: string;
+}
+
+interface InterfaceOrganizationMembersData {
+  organization: {
+    members: {
+      edges: {
+        node: InterfaceOrganizationMemberNode;
+      }[];
+    };
+  };
+}
+
+interface InterfaceOrganizationMembersVars {
+  input: {
+    id: string;
+  };
+  first?: number;
+  after?: string | null;
+  where?: {
+    name_contains?: string;
+  };
 }
 
 /**
@@ -196,9 +222,12 @@ export default function CreateGroupChat({
     data: allUsersData,
     loading: allUsersLoading,
     refetch: allUsersRefetch,
-  } = useQuery(ORGANIZATION_MEMBERS, {
+  } = useQuery<
+    InterfaceOrganizationMembersData,
+    InterfaceOrganizationMembersVars
+  >(ORGANIZATION_MEMBERS, {
     variables: {
-      input: { id: currentOrg },
+      input: { id: currentOrg as string },
       first: 20,
       after: null,
       where: {},
@@ -208,7 +237,7 @@ export default function CreateGroupChat({
   const handleUserModalSearchChange = (value: string): void => {
     const trimmedName = value.trim();
     allUsersRefetch({
-      input: { id: currentOrg },
+      input: { id: currentOrg as string },
       first: 20,
       after: null,
       where: trimmedName ? { name_contains: trimmedName } : {},
@@ -352,72 +381,49 @@ export default function CreateGroupChat({
                       allUsersData.organization?.members?.edges?.length > 0 &&
                       allUsersData.organization.members.edges
                         .filter(
-                          ({
-                            node: userDetails,
-                          }: {
-                            node: {
-                              id: string;
-                              name: string;
-                              avatarURL?: string;
-                              role: string;
-                            };
-                          }) => userDetails.id !== userId,
+                          ({ node: userDetails }) => userDetails.id !== userId,
                         )
-                        .map(
-                          (
-                            {
-                              node: userDetails,
-                            }: {
-                              node: {
-                                id: string;
-                                name: string;
-                                avatarURL?: string;
-                                role: string;
-                              };
-                            },
-                            index: number,
-                          ) => (
-                            <StyledTableRow
-                              data-testid="user"
-                              key={userDetails.id}
-                            >
-                              <StyledTableCell component="th" scope="row">
-                                {index + 1}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
-                                {userDetails.name}
-                                <br />
-                                {userDetails.role || 'Member'}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
-                                {userIds.includes(userDetails.id) ? (
-                                  <Button
-                                    variant="danger"
-                                    onClick={() => {
-                                      const updatedUserIds = userIds.filter(
-                                        (id) => id !== userDetails.id,
-                                      );
-                                      setUserIds(updatedUserIds);
-                                    }}
-                                    data-testid="removeBtn"
-                                  >
-                                    Remove
-                                  </Button>
-                                ) : (
-                                  <Button
-                                    className={`${styles.colorPrimary} ${styles.borderNone}`}
-                                    onClick={() => {
-                                      setUserIds([...userIds, userDetails.id]);
-                                    }}
-                                    data-testid="addBtn"
-                                  >
-                                    {t('add')}
-                                  </Button>
-                                )}
-                              </StyledTableCell>
-                            </StyledTableRow>
-                          ),
-                        )}
+                        .map(({ node: userDetails }, index: number) => (
+                          <StyledTableRow
+                            data-testid="user"
+                            key={userDetails.id}
+                          >
+                            <StyledTableCell component="th" scope="row">
+                              {index + 1}
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              {userDetails.name}
+                              <br />
+                              {userDetails.role || 'Member'}
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              {userIds.includes(userDetails.id) ? (
+                                <Button
+                                  variant="danger"
+                                  onClick={() => {
+                                    const updatedUserIds = userIds.filter(
+                                      (id) => id !== userDetails.id,
+                                    );
+                                    setUserIds(updatedUserIds);
+                                  }}
+                                  data-testid="removeBtn"
+                                >
+                                  Remove
+                                </Button>
+                              ) : (
+                                <Button
+                                  className={`${styles.colorPrimary} ${styles.borderNone}`}
+                                  onClick={() => {
+                                    setUserIds([...userIds, userDetails.id]);
+                                  }}
+                                  data-testid="addBtn"
+                                >
+                                  {t('add')}
+                                </Button>
+                              )}
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        ))}
                   </TableBody>
                 </Table>
               </StyledTableContainer>

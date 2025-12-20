@@ -67,7 +67,9 @@ const OrganizationScreen = (): JSX.Element => {
 
   const dispatch = useAppDispatch();
 
-  const { data: eventsData } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
+  const { data: eventsData } = useQuery<{
+    eventsByOrganization: InterfaceEvent[];
+  }>(GET_ORGANIZATION_EVENTS_PG, {
     variables: { id: orgId },
   });
 
@@ -99,7 +101,7 @@ const OrganizationScreen = (): JSX.Element => {
         setEventName(null);
         return;
       }
-      setEventName(event.title);
+      setEventName(event.name);
     } else {
       setEventName(null);
     }

@@ -35,7 +35,7 @@ const Notification: React.FC = () => {
 
   const skip = page * pageSize;
 
-  const { loading, data, refetch } = useQuery(GET_USER_NOTIFICATIONS, {
+  const { loading, data, refetch } = useQuery<any>(GET_USER_NOTIFICATIONS, {
     variables: {
       userId: userId,
       input: {

@@ -70,10 +70,13 @@ export const CheckInModal = ({
   });
 
   // First, get event details to determine if it's recurring or standalone
-  const { data: eventData } = useQuery<{ event: InterfaceEvent }>(EVENT_DETAILS, {
-    variables: { eventId: eventId },
-    fetchPolicy: 'cache-first',
-  });
+  const { data: eventData } = useQuery<{ event: InterfaceEvent }>(
+    EVENT_DETAILS,
+    {
+      variables: { eventId: eventId },
+      fetchPolicy: 'cache-first',
+    },
+  );
 
   // Query to get check-in data from the server
   const {
@@ -132,7 +135,7 @@ export const CheckInModal = ({
           data={props.value}
           refetch={checkInRefetch}
           onCheckInUpdate={onCheckInUpdate}
-        // isRecurring={isRecurring}
+          // isRecurring={isRecurring}
         />
       ),
     },

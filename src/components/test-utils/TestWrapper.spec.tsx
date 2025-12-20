@@ -5,8 +5,8 @@ import { TestErrorBoundary } from './TestErrorBoundary';
 import AsyncComponent from './AsyncComponent';
 import MockBrowserRouter from './MockBrowserRouter';
 
-vi.mock('@apollo/client/testing', async () => {
-  const actual = await vi.importActual('@apollo/client/testing');
+vi.mock('@apollo/client/testing/react', async () => {
+  const actual = await vi.importActual('@apollo/client/testing/react');
   return {
     ...actual,
     MockedProvider: ({
@@ -36,10 +36,9 @@ vi.mock('utils/i18n', () => ({
 }));
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { TestWrapper } from './TestWrapper';
 import { gql } from '@apollo/client';
-import { act } from 'react-dom/test-utils';
 import { vi } from 'vitest';
 // Mock the imported modules
 describe('TestWrapper', () => {

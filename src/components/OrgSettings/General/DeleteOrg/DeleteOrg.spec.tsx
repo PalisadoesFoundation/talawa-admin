@@ -66,14 +66,16 @@ describe('DeleteOrg Component', () => {
       data: { organization: { isSampleOrganization: false } },
       loading: false,
     });
-    (useMutation as unknown as Mock).mockImplementation((mutation: DocumentNode) => {
-      if (mutation === DELETE_ORGANIZATION_MUTATION) {
-        return [deleteOrgMutationMock, { loading: false }];
-      } else if (mutation === REMOVE_SAMPLE_ORGANIZATION_MUTATION) {
-        return [removeSampleOrgMutationMock, { loading: false }];
-      }
-      return [vi.fn(), { loading: false }];
-    });
+    (useMutation as unknown as Mock).mockImplementation(
+      (mutation: DocumentNode) => {
+        if (mutation === DELETE_ORGANIZATION_MUTATION) {
+          return [deleteOrgMutationMock, { loading: false }];
+        } else if (mutation === REMOVE_SAMPLE_ORGANIZATION_MUTATION) {
+          return [removeSampleOrgMutationMock, { loading: false }];
+        }
+        return [vi.fn(), { loading: false }];
+      },
+    );
   });
 
   afterEach(() => {
@@ -214,7 +216,7 @@ describe('DeleteOrg Component', () => {
   });
 
   it('handles undefined query data', () => {
-    (useQuery as Mock).mockReturnValue({
+    (useQuery as unknown as Mock).mockReturnValue({
       data: undefined,
       loading: false,
     });

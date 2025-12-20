@@ -105,10 +105,12 @@ export default function chat(): JSX.Element {
     data: chatsListData,
     loading: chatsListLoading,
     refetch: chatsListRefetch,
-  } = useQuery(CHATS_LIST, {
+  } = useQuery<{ chatsByUser: (GroupChat | NewChatType)[] }>(CHATS_LIST, {
     variables: { first: 10, after: cursor },
   });
-  const { refetch: unreadChatListRefetch } = useQuery(UNREAD_CHATS);
+  const { refetch: unreadChatListRefetch } = useQuery<{
+    unreadChats: (GroupChat | NewChatType)[];
+  }>(UNREAD_CHATS);
 
   // TODO: Update markChatMessagesAsRead to match new schema
   // const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {

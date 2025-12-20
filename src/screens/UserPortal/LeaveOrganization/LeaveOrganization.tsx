@@ -87,7 +87,9 @@ const LeaveOrganization = (): JSX.Element => {
     data: orgData,
     loading: orgLoading,
     error: orgError,
-  } = useQuery(ORGANIZATIONS_LIST_BASIC, { variables: { id: organizationId } });
+  } = useQuery<any>(ORGANIZATIONS_LIST_BASIC, {
+    variables: { id: organizationId },
+  });
 
   /**
    * Mutation to remove the member from the organization.
@@ -103,7 +105,7 @@ const LeaveOrganization = (): JSX.Element => {
       navigate(`/user/organizations`);
     },
     onError: (err) => {
-      const isNetworkError = err.networkError !== null;
+      const isNetworkError = (err as any).networkError !== null;
       setError(
         isNetworkError
           ? 'Unable to process your request. Please check your connection.'

@@ -386,6 +386,32 @@ export interface InterfaceCurrentUserTypePG {
     name: string;
     role: string;
     emailAddress: string;
+    addressLine1?: string;
+    addressLine2?: string;
+    avatarMimeType?: string | null;
+    avatarURL?: string | null;
+    birthDate?: string | null;
+    city?: string;
+    countryCode?: string;
+    createdAt?: string;
+    description?: string;
+    educationGrade?: string | null;
+    employmentStatus?: string | null;
+    homePhoneNumber?: string;
+    isEmailAddressVerified?: boolean;
+    maritalStatus?: string | null;
+    mobilePhoneNumber?: string;
+    natalSex?: string | null;
+    naturalLanguageCode?: string;
+    postalCode?: string;
+    state?: string;
+    updatedAt?: string;
+    workPhoneNumber?: string;
+    eventsAttended?: {
+      id: string;
+      edges: unknown[];
+      __typename: string;
+    };
   };
 }
 

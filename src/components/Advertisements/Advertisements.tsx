@@ -79,29 +79,35 @@ export default function Advertisements(): JSX.Element {
     data: orgCompletedAdvertisementListData,
     loading: completedLoading,
     error: completedError,
-  } = useQuery<OrganizationAdvertisementListData>(ORGANIZATION_ADVERTISEMENT_LIST, {
-    variables: {
-      id: currentOrgId,
-      after: afterCompleted,
-      first: 6,
-      where: { isCompleted: true },
+  } = useQuery<OrganizationAdvertisementListData>(
+    ORGANIZATION_ADVERTISEMENT_LIST,
+    {
+      variables: {
+        id: currentOrgId,
+        after: afterCompleted,
+        first: 6,
+        where: { isCompleted: true },
+      },
+      skip: !currentOrgId,
     },
-    skip: !currentOrgId,
-  });
+  );
 
   const {
     data: orgActiveAdvertisementListData,
     loading: activeLoading,
     error: activeError,
-  } = useQuery<OrganizationAdvertisementListData>(ORGANIZATION_ADVERTISEMENT_LIST, {
-    variables: {
-      id: currentOrgId,
-      after: afterActive,
-      first: 6,
-      where: { isCompleted: false },
+  } = useQuery<OrganizationAdvertisementListData>(
+    ORGANIZATION_ADVERTISEMENT_LIST,
+    {
+      variables: {
+        id: currentOrgId,
+        after: afterActive,
+        first: 6,
+        where: { isCompleted: false },
+      },
+      skip: !currentOrgId,
     },
-    skip: !currentOrgId,
-  });
+  );
 
   if (completedError || activeError) {
     toast.error('Failed to fetch advertisements');

@@ -110,8 +110,7 @@ export default function Home(): JSX.Element {
     return <Navigate to={'/user'} />;
   }
 
-  // Queries
-  const { data: promotedPostsData } = useQuery(
+  const { data: promotedPostsData } = useQuery<Record<string, unknown>>(
     ORGANIZATION_ADVERTISEMENT_LIST,
     {
       variables: { id: orgId, first: 6 },
@@ -123,7 +122,7 @@ export default function Home(): JSX.Element {
     data,
     refetch,
     loading: loadingPosts,
-  } = useQuery(ORGANIZATION_POST_LIST_WITH_VOTES, {
+  } = useQuery<Record<string, unknown>>(ORGANIZATION_POST_LIST_WITH_VOTES, {
     variables: {
       input: { id: orgId },
       userId: userId,
@@ -134,7 +133,7 @@ export default function Home(): JSX.Element {
     },
   });
 
-  const { data: orgPinnedPostListData } = useQuery(
+  const { data: orgPinnedPostListData } = useQuery<Record<string, unknown>>(
     ORGANIZATION_PINNED_POST_LIST,
     {
       variables: {
@@ -144,38 +143,55 @@ export default function Home(): JSX.Element {
     },
   );
 
-  const { data: userData } = useQuery(USER_DETAILS, {
+  const { data: userData } = useQuery<Record<string, unknown>>(USER_DETAILS, {
     skip: !userId,
     variables: { input: { id: userId }, first: TAGS_QUERY_DATA_CHUNK_SIZE },
   });
 
-  const user: InterfaceQueryUserListItem | undefined = userData?.user;
+  const user = userData?.user as InterfaceQueryUserListItem | undefined;
 
   // Effects
   useEffect(() => {
-    if (data?.organization?.posts) {
-      const newPosts = data.organization.posts.edges.map(
+    const orgData = data as
+      | {
+          organization?: {
+            posts?: { edges: { node: PostNode }[] };
+            postsCount?: number;
+          };
+        }
+      | undefined;
+    if (orgData?.organization?.posts) {
+      const newPosts = orgData.organization.posts.edges.map(
         (edge: { node: PostNode }) => edge.node,
       );
       setPosts(newPosts);
-      setTotalPages(Math.ceil(data.organization.postsCount / POSTS_PER_PAGE));
+      setTotalPages(
+        Math.ceil((orgData.organization.postsCount || 0) / POSTS_PER_PAGE),
+      );
     }
   }, [data]);
 
   useEffect(() => {
-    if (orgPinnedPostListData?.organization?.pinnedPosts?.edges) {
-      const pinnedPostNodes =
-        orgPinnedPostListData.organization.pinnedPosts.edges.map(
-          (edge: InterfacePostEdge) => edge.node,
-        );
-      setPinnedPosts(pinnedPostNodes);
+    const pinnedData = orgPinnedPostListData as
+      | { organization?: { pinnedPosts?: { edges: InterfacePostEdge[] } } }
+      | undefined;
+    if (pinnedData?.organization?.pinnedPosts?.edges) {
+      const pinnedPostNodes = pinnedData.organization.pinnedPosts.edges.map(
+        (edge: InterfacePostEdge) => edge.node,
+      );
+      setPinnedPosts(pinnedPostNodes as unknown as PostNode[]);
     }
   }, [orgPinnedPostListData]);
 
   useEffect(() => {
-    if (promotedPostsData?.organizations) {
+    const promoData = promotedPostsData as
+      | {
+          organizations?: Array<{ advertisements?: { edges: { node: Ad }[] } }>;
+        }
+      | undefined;
+    if (promoData?.organizations) {
       const ads: Ad[] =
-        promotedPostsData.organizations[0].advertisements?.edges.map(
+        promoData.organizations[0]?.advertisements?.edges.map(
           (edge: { node: Ad }) => edge.node,
         ) || [];
       setAdContent(ads);
@@ -233,20 +249,36 @@ export default function Home(): JSX.Element {
     setShowModal(false);
   };
 
-  const hasNextPage = data?.organization?.posts?.pageInfo?.hasNextPage || false;
+  const paginationData = data as
+    | {
+        organization?: {
+          posts?: {
+            pageInfo?: {
+              hasNextPage?: boolean;
+              hasPreviousPage?: boolean;
+              startCursor?: string;
+              endCursor?: string;
+            };
+          };
+        };
+      }
+    | undefined;
+
+  const hasNextPage =
+    paginationData?.organization?.posts?.pageInfo?.hasNextPage || false;
   const hasPreviousPage =
-    data?.organization?.posts?.pageInfo?.hasPreviousPage || false;
+    paginationData?.organization?.posts?.pageInfo?.hasPreviousPage || false;
 
   const handleNextPage = (): void => {
     if (!hasNextPage) return;
-    setAfter(data?.organization?.posts?.pageInfo?.endCursor);
+    setAfter(paginationData?.organization?.posts?.pageInfo?.endCursor);
     setBefore(null);
     setCurrentPage((prev) => prev + 1);
   };
 
   const handlePreviousPage = (): void => {
     if (!hasPreviousPage) return;
-    setBefore(data?.organization?.posts?.pageInfo?.startCursor);
+    setBefore(paginationData?.organization?.posts?.pageInfo?.startCursor);
     setAfter(null);
     setCurrentPage((prev) => prev - 1);
   };

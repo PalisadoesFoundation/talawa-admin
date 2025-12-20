@@ -85,10 +85,6 @@ function EventRegistrants(): JSX.Element {
     }
   }, [eventData]);
 
-  const registrantVariables = isRecurring
-    ? { recurringEventInstanceId: eventId }
-    : { eventId: eventId };
-
   const [getEventRegistrants] = useLazyQuery<any>(EVENT_REGISTRANTS, {
     fetchPolicy: 'cache-and-network',
   });
@@ -97,8 +93,13 @@ function EventRegistrants(): JSX.Element {
   const [getEventCheckIns] = useLazyQuery<any>(EVENT_CHECKINS, {
     fetchPolicy: 'cache-and-network',
   });
+
   // callback function to refresh the data
   const refreshData = useCallback(() => {
+    const registrantVariables = isRecurring
+      ? { recurringEventInstanceId: eventId }
+      : { eventId: eventId };
+
     getEventRegistrants({ variables: registrantVariables })
       .then((res) => {
         const data = res.data;
@@ -125,16 +126,20 @@ function EventRegistrants(): JSX.Element {
         // Silent catch or simple log if needed, but removing debug log
       });
 
-    getEventCheckIns({ variables: { eventId: eventId } }).then((res) => {
-      const data = res.data;
-      if (data?.event?.attendeesCheckInStatus) {
-        const checkedInUserIds = data.event.attendeesCheckInStatus
-          .filter((status: { isCheckedIn: boolean }) => status.isCheckedIn)
-          .map((status: { user: { id: string } }) => status.user.id);
-        setCheckedInUsers(checkedInUserIds);
-      }
-    });
-  }, [getEventRegistrants, getEventCheckIns, registrantVariables, eventId]);
+    getEventCheckIns({ variables: { eventId: eventId } })
+      .then((res) => {
+        const data = res.data;
+        if (data?.event?.attendeesCheckInStatus) {
+          const checkedInUserIds = data.event.attendeesCheckInStatus
+            .filter((status: { isCheckedIn: boolean }) => status.isCheckedIn)
+            .map((status: { user: { id: string } }) => status.user.id);
+          setCheckedInUsers(checkedInUserIds);
+        }
+      })
+      .catch(() => {
+        // Silent catch for AbortError or other errors
+      });
+  }, [getEventRegistrants, getEventCheckIns, isRecurring, eventId]);
 
   // Function to remove a registrant from the event
   const deleteRegistrant = useCallback(
@@ -299,13 +304,13 @@ function EventRegistrants(): JSX.Element {
                   >
                     {data.time && data.time !== 'N/A'
                       ? new Date(`1970-01-01T${data.time}`).toLocaleTimeString(
-                          [],
-                          {
-                            hour: 'numeric',
-                            minute: '2-digit',
-                            hour12: true,
-                          },
-                        )
+                        [],
+                        {
+                          hour: 'numeric',
+                          minute: '2-digit',
+                          hour12: true,
+                        },
+                      )
                       : 'N/A'}
                   </TableCell>
                   <TableCell
@@ -313,11 +318,10 @@ function EventRegistrants(): JSX.Element {
                     data-testid={`registrant-options-${index}`}
                   >
                     <button
-                      className={`btn btn-sm ${
-                        data.isCheckedIn
-                          ? 'btn-secondary'
-                          : 'btn-outline-danger'
-                      }`}
+                      className={`btn btn-sm ${data.isCheckedIn
+                        ? 'btn-secondary'
+                        : 'btn-outline-danger'
+                        }`}
                       onClick={() => deleteRegistrant(data.user.id)}
                       disabled={data.isCheckedIn}
                       data-testid={`delete-registrant-${index}`}

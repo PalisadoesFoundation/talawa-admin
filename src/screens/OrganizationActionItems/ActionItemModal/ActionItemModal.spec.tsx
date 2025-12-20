@@ -1084,7 +1084,11 @@ describe('ItemModal - Additional Test Cases', () => {
       await userEvent.click(volunteerGroupInput);
       await userEvent.type(volunteerGroupInput, 'Test Group 1');
 
-      const groupOption = await screen.findByText(/Test Group 1/i, {}, { timeout: 3000 });
+      const groupOption = await screen.findByText(
+        /Test Group 1/i,
+        {},
+        { timeout: 3000 },
+      );
       await userEvent.click(groupOption);
 
       await waitFor(() => {
@@ -3128,7 +3132,9 @@ describe('orgActionItemsRefetch functionality', () => {
 
         // Wait for notes field to appear
         await waitFor(() => {
-          expect(screen.getByLabelText('preCompletionNotes')).toBeInTheDocument();
+          expect(
+            screen.getByLabelText('preCompletionNotes'),
+          ).toBeInTheDocument();
         });
 
         // Fill notes field
@@ -3211,7 +3217,9 @@ describe('orgActionItemsRefetch functionality', () => {
 
         // Wait for notes field to appear
         await waitFor(() => {
-          expect(screen.getByLabelText('preCompletionNotes')).toBeInTheDocument();
+          expect(
+            screen.getByLabelText('preCompletionNotes'),
+          ).toBeInTheDocument();
         });
 
         // Fill notes field
@@ -3387,7 +3395,9 @@ describe('orgActionItemsRefetch functionality', () => {
 
       renderWithProviders(props);
 
-      await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+      await waitFor(() =>
+        expect(screen.getByRole('dialog')).toBeInTheDocument(),
+      );
 
       // Test string field update (preCompletionNotes)
       const notesInputs = screen.getAllByRole('textbox');
@@ -3420,7 +3430,9 @@ describe('orgActionItemsRefetch functionality', () => {
 
       renderWithProviders(props);
 
-      await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+      await waitFor(() =>
+        expect(screen.getByRole('dialog')).toBeInTheDocument(),
+      );
 
       // Check if there's a completion checkbox or toggle
       const checkboxes = screen.queryAllByRole('checkbox');
@@ -3449,7 +3461,9 @@ describe('orgActionItemsRefetch functionality', () => {
 
       renderWithProviders(props);
 
-      await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+      await waitFor(() =>
+        expect(screen.getByRole('dialog')).toBeInTheDocument(),
+      );
 
       // Find date picker inputs (MUI date pickers use textbox role)
       const dateInputs = screen.getAllByRole('textbox');
@@ -3483,7 +3497,9 @@ describe('orgActionItemsRefetch functionality', () => {
 
       renderWithProviders(props);
 
-      await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+      await waitFor(() =>
+        expect(screen.getByRole('dialog')).toBeInTheDocument(),
+      );
 
       // Test clearing a field (setting it to empty/null)
       const notesInputs = screen.getAllByRole('textbox');
@@ -3515,7 +3531,9 @@ describe('orgActionItemsRefetch functionality', () => {
 
       renderWithProviders(props);
 
-      await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+      await waitFor(() =>
+        expect(screen.getByRole('dialog')).toBeInTheDocument(),
+      );
 
       // Test updating the notes field (first available textbox)
       const notesInput = screen.getByLabelText('preCompletionNotes');
@@ -3542,7 +3560,9 @@ describe('orgActionItemsRefetch functionality', () => {
 
       renderWithProviders(props);
 
-      await waitFor(() => expect(screen.getByRole('dialog')).toBeInTheDocument());
+      await waitFor(() =>
+        expect(screen.getByRole('dialog')).toBeInTheDocument(),
+      );
 
       // Find the notes input that has the original value
       const notesInputs = screen.getAllByRole('textbox');
@@ -3558,7 +3578,9 @@ describe('orgActionItemsRefetch functionality', () => {
       );
 
       // Replace existing value with fireEvent (reliable for controlled inputs in tests)
-      fireEvent.change(originalNotesInput, { target: { value: 'Updated notes' } });
+      fireEvent.change(originalNotesInput, {
+        target: { value: 'Updated notes' },
+      });
 
       await waitFor(() =>
         expect((originalNotesInput as HTMLInputElement).value).toBe(
@@ -3998,7 +4020,12 @@ describe('orgActionItemsRefetch functionality', () => {
           await userEvent.click(volunteerGroupInput);
           await userEvent.type(volunteerGroupInput, 'Test Group 1');
 
-          const groupOption = await screen.findByText(/Test Group 1/i, {}, { timeout: 3000 }); await userEvent.click(groupOption);
+          const groupOption = await screen.findByText(
+            /Test Group 1/i,
+            {},
+            { timeout: 3000 },
+          );
+          await userEvent.click(groupOption);
 
           // Submit form - this should result in volunteerId being undefined
           const submitButton = screen.getByTestId('submitBtn');
@@ -4050,7 +4077,9 @@ describe('orgActionItemsRefetch functionality', () => {
           expect(volunteerGroupSelect).toBeInTheDocument();
 
           // Now click volunteer chip - this should execute the !isVolunteerChipDisabled path
-          const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
+          const volunteerChip = screen.getByRole('button', {
+            name: 'volunteer',
+          });
           await userEvent.click(volunteerChip);
 
           // Should switch back to volunteer select and clear volunteer group
@@ -4134,7 +4163,9 @@ describe('orgActionItemsRefetch functionality', () => {
           // Should switch to volunteer group select and clear volunteer
           const groupSelect = await screen.findByTestId('volunteerGroupSelect');
           expect(groupSelect).toBeInTheDocument();
-          expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument();
+          expect(
+            screen.queryByTestId('volunteerSelect'),
+          ).not.toBeInTheDocument();
         });
 
         it('should have isVolunteerGroupChipDisabled true when editing item with volunteer', () => {

@@ -561,7 +561,7 @@ describe('CreateGroupChat', () => {
       expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
     });
 
-    const searchInput = screen.getByTestId('searchUser');
+    const searchInput = await screen.findByTestId('searchUser');
     fireEvent.change(searchInput, { target: { value: 'Test User' } });
     expect(searchInput).toHaveValue('Test User');
 

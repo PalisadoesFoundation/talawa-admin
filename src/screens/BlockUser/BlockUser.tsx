@@ -171,7 +171,7 @@ const BlockUser = (): JSX.Element => {
     }
   }, [searchTerm, allMembers, blockedUsers]);
 
-  const [blockUser] = useMutation(BLOCK_USER_MUTATION_PG);
+  const [blockUser] = useMutation<any>(BLOCK_USER_MUTATION_PG);
   const [unBlockUser] = useMutation(UNBLOCK_USER_MUTATION_PG);
 
   const handleBlockUser = useCallback(

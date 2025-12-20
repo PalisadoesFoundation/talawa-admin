@@ -109,14 +109,36 @@ export const EVENT_CHECKINS_MOCK: MockedResponse = {
   result: {
     data: {
       event: {
+        __typename: 'Event',
+        id: 'event123',
         attendeesCheckInStatus: [
           {
-            user: { id: '6589386a2caa9d8d69087484' },
+            __typename: 'AttendeeCheckInStatus',
+            id: 'checkin1',
+            user: {
+              __typename: 'User',
+              id: '6589386a2caa9d8d69087484',
+              name: 'Bruce Garza',
+              emailAddress: 'bruce@example.com',
+            },
+            checkInTime: '2030-04-13T10:00:00.000Z',
+            checkOutTime: null,
             isCheckedIn: true,
+            isCheckedOut: false,
           },
           {
-            user: { id: '6589386a2caa9d8d69087485' },
+            __typename: 'AttendeeCheckInStatus',
+            id: 'checkin2',
+            user: {
+              __typename: 'User',
+              id: '6589386a2caa9d8d69087485',
+              name: 'Jane Smith',
+              emailAddress: 'jane@example.com',
+            },
+            checkInTime: null,
+            checkOutTime: null,
             isCheckedIn: false,
+            isCheckedOut: false,
           },
         ],
       },
@@ -132,6 +154,8 @@ export const EMPTY_EVENT_CHECKINS_MOCK: MockedResponse = {
   result: {
     data: {
       event: {
+        __typename: 'Event',
+        id: 'event123',
         attendeesCheckInStatus: [],
       },
     },
@@ -148,8 +172,10 @@ export const REGISTRANTS_MOCK: MockedResponse = {
     data: {
       getEventAttendeesByEventId: [
         {
+          __typename: 'EventAttendee',
           id: '6589386a2caa9d8d69087484',
           user: {
+            __typename: 'User',
             id: '6589386a2caa9d8d69087484',
             name: 'Bruce Garza',
             emailAddress: 'bruce@example.com',
@@ -159,8 +185,10 @@ export const REGISTRANTS_MOCK: MockedResponse = {
           createdAt: '2030-04-13T10:23:17.742Z',
         },
         {
+          __typename: 'EventAttendee',
           id: '6589386a2caa9d8d69087485',
           user: {
+            __typename: 'User',
             id: '6589386a2caa9d8d69087485',
             name: 'Jane Smith',
             emailAddress: 'jane@example.com',
@@ -193,7 +221,21 @@ export const RECURRING_EVENT_REGISTRANTS_MOCK: MockedResponse = {
   },
   result: {
     data: {
-      getEventAttendeesByEventId: [],
+      getEventAttendeesByEventId: [
+        {
+          __typename: 'EventAttendee',
+          id: 'recurring_user_1',
+          user: {
+            __typename: 'User',
+            id: 'recurring_user_1',
+            name: 'Recurring User',
+            emailAddress: 'recurring@example.com',
+          },
+          isRegistered: true,
+          isInvited: false,
+          createdAt: '2030-04-13T10:23:17.742Z',
+        },
+      ],
     },
   },
 };
@@ -207,8 +249,10 @@ export const REGISTRANTS_MISSING_DATE_MOCK: MockedResponse = {
     data: {
       getEventAttendeesByEventId: [
         {
+          __typename: 'EventAttendee',
           id: '1',
           user: {
+            __typename: 'User',
             id: 'user1',
             name: 'John Doe',
             emailAddress: 'john@example.com',
@@ -231,8 +275,10 @@ export const REGISTRANTS_MISSING_NAME_MOCK: MockedResponse = {
     data: {
       getEventAttendeesByEventId: [
         {
+          __typename: 'EventAttendee',
           id: '1',
           user: {
+            __typename: 'User',
             id: 'user1',
             name: null,
             emailAddress: 'john@example.com',
@@ -255,8 +301,10 @@ export const REGISTRANTS_ERROR_USER_MOCK: MockedResponse = {
     data: {
       getEventAttendeesByEventId: [
         {
+          __typename: 'EventAttendee',
           id: 'user3',
           user: {
+            __typename: 'User',
             id: 'user3',
             name: 'Error User',
             emailAddress: 'error@example.com',
@@ -280,6 +328,9 @@ export const REMOVE_ATTENDEE_SUCCESS_MOCK: MockedResponse = {
     data: {
       removeEventAttendee: {
         id: '6589386a2caa9d8d69087485',
+        name: 'Jane Smith',
+        emailAddress: 'jane@example.com',
+        __typename: 'User',
       },
     },
   },

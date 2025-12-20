@@ -126,11 +126,7 @@ describe('Testing AttendedEventList', () => {
           query: EVENT_DETAILS,
           variables: { eventId: 'event123' },
         },
-        result: {
-          data: {
-            error: 'GraphQL error occurred',
-          },
-        },
+        error: new Error('GraphQL error occurred'),
       },
     ];
 

@@ -50,6 +50,7 @@ import PledgeModal from './PledgeModal';
 import { USER_FUND_CAMPAIGNS } from 'GraphQl/Queries/fundQueries';
 import { useQuery } from '@apollo/client/react';
 import type { InterfaceUserCampaign } from 'utils/interfaces';
+import type { UserFundCampaignsResult } from 'types/GraphQL/queryResults';
 import { currencySymbols } from 'utils/currency';
 import Loader from 'components/Loader/Loader';
 import SortingButton from 'subComponents/SortingButton';
@@ -87,7 +88,7 @@ const Campaigns = (): JSX.Element => {
     loading: campaignLoading,
     error: campaignError,
     refetch: refetchCampaigns,
-  } = useQuery(USER_FUND_CAMPAIGNS, {
+  } = useQuery<UserFundCampaignsResult>(USER_FUND_CAMPAIGNS, {
     variables: {
       input: { id: orgId as string },
     },
@@ -124,31 +125,15 @@ const Campaigns = (): JSX.Element => {
       // Flatten the nested structure to get all campaigns
       const allCampaigns: InterfaceUserCampaign[] =
         campaignData.organization.funds.edges
-          .flatMap(
-            (fundEdge: { node: { campaigns?: { edges: unknown[] } } }) =>
-              fundEdge?.node?.campaigns?.edges ?? [],
-          )
-          .map(
-            ({
-              node: campaign,
-            }: {
-              node: {
-                id: string;
-                name: string;
-                currencyCode: string;
-                goalAmount: number;
-                startAt: string;
-                endAt: string;
-              };
-            }) => ({
-              _id: campaign.id,
-              name: campaign.name,
-              fundingGoal: campaign.goalAmount,
-              startDate: new Date(campaign.startAt),
-              endDate: new Date(campaign.endAt),
-              currency: campaign.currencyCode,
-            }),
-          );
+          .flatMap((fundEdge) => fundEdge?.node?.campaigns?.edges ?? [])
+          .map((campaignEdge) => ({
+            _id: campaignEdge.node.id,
+            name: campaignEdge.node.name,
+            fundingGoal: campaignEdge.node.goalAmount,
+            startDate: new Date(campaignEdge.node.startAt),
+            endDate: new Date(campaignEdge.node.endAt),
+            currency: campaignEdge.node.currencyCode,
+          }));
 
       // Apply client-side filtering by search term
       let filteredCampaigns = allCampaigns;

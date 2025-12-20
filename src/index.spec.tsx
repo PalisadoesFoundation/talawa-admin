@@ -76,10 +76,18 @@ vi.mock('utils/i18n', () => ({
   },
 }));
 
-vi.mock('utils/timezoneUtils', () => ({
-  requestMiddleware: vi.fn((op) => op),
-  responseMiddleware: vi.fn((op) => op),
-}));
+vi.mock('utils/timezoneUtils', async () => {
+  const { ApolloLink } =
+    await vi.importActual<typeof import('@apollo/client')>('@apollo/client');
+  return {
+    requestMiddleware: new ApolloLink((operation, forward) =>
+      forward(operation),
+    ),
+    responseMiddleware: new ApolloLink((operation, forward) =>
+      forward(operation),
+    ),
+  };
+});
 
 // Helper to configure localStorage mock
 const createLocalStorageMock = (
@@ -114,9 +122,7 @@ describe('Apollo Client Setup', () => {
 
   it('should create Apollo Client instance with correct links', () => {
     const client = new ApolloClient({
-      cache: new InMemoryCache({
-        addTypename: false,
-      }),
+      cache: new InMemoryCache({}),
       link: ApolloLink.from([
         requestMiddleware,
         responseMiddleware,

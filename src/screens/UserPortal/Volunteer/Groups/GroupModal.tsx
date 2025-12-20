@@ -116,23 +116,18 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
   /**
    * Query to fetch volunteer Membership requests for the event.
    */
-  const {
-    data: requestsData,
-    refetch: refetchRequests,
-  }: {
-    data?: {
-      getVolunteerMembership: InterfaceVolunteerMembership[];
-    };
-    refetch: () => void;
-  } = useQuery(USER_VOLUNTEER_MEMBERSHIP, {
-    variables: {
-      where: {
-        eventId,
-        groupId: group.id,
-        status: 'requested',
+  const { data: requestsData, refetch: refetchRequests } = useQuery<any>(
+    USER_VOLUNTEER_MEMBERSHIP,
+    {
+      variables: {
+        where: {
+          eventId,
+          groupId: group.id,
+          status: 'requested',
+        },
       },
     },
-  });
+  );
 
   const requests = useMemo(() => {
     if (!requestsData) return [];
@@ -329,71 +324,82 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {requests.map((request, index) => {
-                      const { id, name, avatarURL } = request.volunteer.user;
-                      return (
-                        <TableRow
-                          key={index + 1}
-                          sx={{
-                            '&:last-child td, &:last-child th': { border: 0 },
-                          }}
-                        >
-                          <TableCell
-                            component="th"
-                            scope="row"
-                            className="d-flex gap-1 align-items-center"
-                            data-testid="userName"
+                    {requests.map(
+                      (
+                        request: InterfaceVolunteerMembership,
+                        index: number,
+                      ) => {
+                        const { id, name, avatarURL } = request.volunteer.user;
+                        return (
+                          <TableRow
+                            key={index + 1}
+                            sx={{
+                              '&:last-child td, &:last-child th': { border: 0 },
+                            }}
                           >
-                            {avatarURL ? (
-                              <img
-                                src={avatarURL}
-                                alt="volunteer"
-                                data-testid={`image${id + 1}`}
-                                className={styles.TableImage}
-                              />
-                            ) : (
-                              <div className={styles.avatarContainer}>
-                                <Avatar
-                                  key={id + '1'}
-                                  containerStyle={styles.imageContainer}
-                                  avatarStyle={styles.TableImage}
-                                  name={name}
-                                  alt={name}
+                            <TableCell
+                              component="th"
+                              scope="row"
+                              className="d-flex gap-1 align-items-center"
+                              data-testid="userName"
+                            >
+                              {avatarURL ? (
+                                <img
+                                  src={avatarURL}
+                                  alt="volunteer"
+                                  data-testid={`image${id + 1}`}
+                                  className={styles.TableImage}
                                 />
+                              ) : (
+                                <div className={styles.avatarContainer}>
+                                  <Avatar
+                                    key={id + '1'}
+                                    containerStyle={styles.imageContainer}
+                                    avatarStyle={styles.TableImage}
+                                    name={name}
+                                    alt={name}
+                                  />
+                                </div>
+                              )}
+                              {name}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              <div className="d-flex gap-2">
+                                <Button
+                                  variant="success"
+                                  size="sm"
+                                  style={{ minWidth: '32px' }}
+                                  className="me-2 rounded"
+                                  data-testid={`acceptBtn`}
+                                  onClick={() =>
+                                    updateMembershipStatus(
+                                      request.id,
+                                      'accepted',
+                                    )
+                                  }
+                                >
+                                  <i className="fa fa-check" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="danger"
+                                  className="rounded"
+                                  data-testid={`rejectBtn`}
+                                  onClick={() =>
+                                    updateMembershipStatus(
+                                      request.id,
+                                      'rejected',
+                                    )
+                                  }
+                                >
+                                  <FaXmark size={18} fontWeight={900} />
+                                </Button>
                               </div>
-                            )}
-                            {name}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            <div className="d-flex gap-2">
-                              <Button
-                                variant="success"
-                                size="sm"
-                                style={{ minWidth: '32px' }}
-                                className="me-2 rounded"
-                                data-testid={`acceptBtn`}
-                                onClick={() =>
-                                  updateMembershipStatus(request.id, 'accepted')
-                                }
-                              >
-                                <i className="fa fa-check" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="danger"
-                                className="rounded"
-                                data-testid={`rejectBtn`}
-                                onClick={() =>
-                                  updateMembershipStatus(request.id, 'rejected')
-                                }
-                              >
-                                <FaXmark size={18} fontWeight={900} />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      },
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>

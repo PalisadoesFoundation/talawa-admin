@@ -40,7 +40,7 @@ const MOCKS = [
         eventsByOrganization: [
           {
             id: 'event123',
-            title: 'Test Event Title',
+            name: 'Test Event Title',
             description: 'Test Description',
             startDate: '2024-01-01',
             endDate: '2024-01-02',

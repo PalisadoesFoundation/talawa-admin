@@ -131,18 +131,7 @@ const organizationFunds = (): JSX.Element => {
     loading: fundLoading,
     error: fundError,
     refetch: refetchFunds,
-  }: {
-    data?: {
-      organization: {
-        funds: {
-          edges: { node: InterfaceFundInfo }[];
-        };
-      };
-    };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(FUND_LIST, {
+  } = useQuery<any>(FUND_LIST, {
     variables: {
       input: {
         id: orgId,

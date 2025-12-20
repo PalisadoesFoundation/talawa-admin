@@ -41,13 +41,16 @@ import type { InterfaceEvent } from 'types/Event/interface';
 
 const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ id }) => {
   const { orgId: currentOrg } = useParams();
-  const { data, loading, error } = useQuery(EVENT_DETAILS, {
-    variables: { eventId: id },
+  const { data, loading, error } = useQuery<
+    { event: InterfaceEvent },
+    { eventId: string }
+  >(EVENT_DETAILS, {
+    variables: { eventId: id! },
     fetchPolicy: 'cache-first',
     errorPolicy: 'all',
   });
 
-  if (error || data?.error) {
+  if (error) {
     return <p>Error loading event details. Please try again later.</p>;
   }
 

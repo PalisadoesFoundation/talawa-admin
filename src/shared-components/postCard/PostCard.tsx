@@ -103,7 +103,14 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
     loading: commentsLoading,
     fetchMore: fetchMoreComments,
     refetch: refetchComments,
-  } = useQuery(GET_POST_COMMENTS, {
+  } = useQuery<{
+    post: {
+      comments: {
+        edges: InterfaceCommentEdge[];
+        pageInfo: { endCursor: string; hasNextPage: boolean };
+      };
+    };
+  }>(GET_POST_COMMENTS, {
     skip: shouldSkipComments,
     variables: shouldSkipComments
       ? undefined

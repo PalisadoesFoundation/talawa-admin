@@ -181,7 +181,9 @@ const UpcomingEvents = (): JSX.Element => {
     const { eventId, groupId, status } = pendingVolunteerRequest;
 
     // Find the event in our list to get its metadata
-    const eventData = events.find((e) => e._id === eventId);
+    const eventData = events.find(
+      (e: { _id: string; baseEventId?: string | null }) => e._id === eventId,
+    );
 
     let targetEventId = eventId;
     let recurringEventInstanceId = undefined;
@@ -281,18 +283,7 @@ const UpcomingEvents = (): JSX.Element => {
     loading: eventsLoading,
     error: eventsError,
     refetch: refetchEvents,
-  }: {
-    data?: {
-      organization: {
-        events: {
-          edges: Array<InterfaceEventEdge>;
-        };
-      };
-    };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(USER_EVENTS_VOLUNTEER, {
+  } = useQuery<any>(USER_EVENTS_VOLUNTEER, {
     variables: {
       organizationId: orgId,
       upcomingOnly: true,
@@ -307,7 +298,7 @@ const UpcomingEvents = (): JSX.Element => {
     data: membershipData,
     refetch: refetchMemberships,
     loading: membershipLoading,
-  } = useQuery(USER_VOLUNTEER_MEMBERSHIP, {
+  } = useQuery<any>(USER_VOLUNTEER_MEMBERSHIP, {
     variables: {
       where: { userId },
     },
@@ -338,49 +329,84 @@ const UpcomingEvents = (): JSX.Element => {
   // Extracts the list of upcoming events from the fetched data
   const events = useMemo(() => {
     if (eventsData?.organization?.events?.edges) {
-      const mappedEvents = eventsData.organization.events.edges.map((edge) => {
-        // Determine if this is a recurring event:
-        // 1. If isRecurringEventTemplate is true, it's the base template/series
-        // 2. If isRecurringEventTemplate is false but baseEvent exists and baseEvent.isRecurringEventTemplate is true, it's a recurring instance
-        // 3. If isRecurringEventTemplate is false and no baseEvent, it's standalone
-        const isRecurringInstance =
-          edge.node.baseEvent && edge.node.baseEvent.isRecurringEventTemplate;
-        const isRecurringTemplate = edge.node.isRecurringEventTemplate;
-        const isRecurring = isRecurringTemplate || isRecurringInstance;
+      const mappedEvents = eventsData.organization.events.edges.map(
+        (edge: {
+          node: {
+            id: string;
+            name: string;
+            startAt: string;
+            endAt: string;
+            description?: string;
+            location?: string | null;
+            allDay?: boolean;
+            isRecurringEventTemplate?: boolean;
+            baseEvent?: {
+              id: string;
+              isRecurringEventTemplate?: boolean;
+            } | null;
+            recurrenceRule?: { id: string; frequency: string } | null;
+            volunteerGroups?: Array<{
+              id: string;
+              name: string;
+              description?: string | null;
+              volunteersRequired?: number | null;
+              volunteers?: Array<{ id: string }>;
+            }>;
+            volunteers?: Array<{ id: string }>;
+          };
+        }) => {
+          // Determine if this is a recurring event:
+          const isRecurringInstance =
+            edge.node.baseEvent && edge.node.baseEvent.isRecurringEventTemplate;
+          const isRecurringTemplate = edge.node.isRecurringEventTemplate;
+          const isRecurring = isRecurringTemplate || isRecurringInstance;
 
-        const event: InterfaceMappedEvent = {
-          ...edge.node,
-          _id: edge.node.id,
-          title: edge.node.name,
-          startDate: edge.node.startAt,
-          endDate: edge.node.endAt,
-          recurring: Boolean(isRecurring),
-          isRecurringInstance: Boolean(isRecurringInstance),
-          baseEventId: edge.node.baseEvent?.id || null,
-          volunteerGroups:
-            edge.node.volunteerGroups?.map((group) => ({
-              _id: group.id,
-              name: group.name,
-              description: group.description,
-              volunteersRequired: group.volunteersRequired,
-              volunteers: group.volunteers || [],
-            })) || [],
-          volunteers: edge.node.volunteers || [],
-        };
+          const event: InterfaceMappedEvent = {
+            ...edge.node,
+            _id: edge.node.id,
+            title: edge.node.name,
+            description: edge.node.description ?? null,
+            location: edge.node.location ?? null,
+            startDate: edge.node.startAt,
+            endDate: edge.node.endAt,
+            recurring: Boolean(isRecurring),
+            isRecurringInstance: Boolean(isRecurringInstance),
+            baseEventId: edge.node.baseEvent?.id || null,
+            volunteerGroups: (edge.node.volunteerGroups?.map(
+              (group: {
+                id: string;
+                name: string;
+                description?: string | null;
+                volunteersRequired?: number | null;
+                volunteers?: Array<{ id: string }>;
+              }) => ({
+                _id: group.id,
+                name: group.name,
+                description: group.description ?? null,
+                volunteersRequired: group.volunteersRequired ?? null,
+                volunteers: group.volunteers || [],
+              }),
+            ) || []) as InterfaceMappedEvent['volunteerGroups'],
+            volunteers: (edge.node.volunteers ||
+              []) as InterfaceMappedEvent['volunteers'],
+          };
 
-        return event;
-      });
+          return event;
+        },
+      );
 
       // Filter events based on search term and search by field
       if (searchTerm.trim()) {
-        return mappedEvents.filter((event) => {
-          const searchValue = searchTerm.toLowerCase();
-          if (searchBy === 'title') {
-            return event.title.toLowerCase().includes(searchValue);
-          }
-          const location = event.location?.toLowerCase() ?? '';
-          return location.includes(searchValue);
-        });
+        return mappedEvents.filter(
+          (event: { title: string; location?: string | null }) => {
+            const searchValue = searchTerm.toLowerCase();
+            if (searchBy === 'title') {
+              return event.title.toLowerCase().includes(searchValue);
+            }
+            const location = event.location?.toLowerCase() ?? '';
+            return location.includes(searchValue);
+          },
+        );
       }
 
       return mappedEvents;
@@ -401,18 +427,21 @@ const UpcomingEvents = (): JSX.Element => {
 
         // Find if this membership is for a base template (series-level)
         const relatedInstances = events.filter(
-          (event) => event.baseEventId === eventId, // This instance belongs to this template
+          (event: { baseEventId?: string | null; _id: string }) =>
+            event.baseEventId === eventId,
         );
 
         // Add lookup keys for all related instances
-        relatedInstances.forEach((relatedEvent) => {
-          const instanceKey = membership.group
-            ? `${relatedEvent._id}-${membership.group.id}`
-            : relatedEvent._id;
+        relatedInstances.forEach(
+          (relatedEvent: { _id: string; baseEventId?: string | null }) => {
+            const instanceKey = membership.group
+              ? `${relatedEvent._id}-${membership.group.id}`
+              : relatedEvent._id;
 
-          // Only add if we don't already have a specific membership for this instance
-          if (!lookup[instanceKey]) lookup[instanceKey] = membership;
-        });
+            // Only add if we don't already have a specific membership for this instance
+            if (!lookup[instanceKey]) lookup[instanceKey] = membership;
+          },
+        );
       });
     }
 

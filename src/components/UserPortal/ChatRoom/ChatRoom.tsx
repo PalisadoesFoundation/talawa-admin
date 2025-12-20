@@ -36,7 +36,7 @@ import styles from './ChatRoom.module.css';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import { useTranslation } from 'react-i18next';
 import { CHAT_BY_ID, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
-import type { ObservableQuery } from '@apollo/client';
+import type { ApolloQueryResult, OperationVariables } from '@apollo/client';
 import { useMutation, useQuery, useSubscription } from '@apollo/client/react';
 import {
   EDIT_CHAT_MESSAGE,
@@ -53,18 +53,13 @@ import { GrAttachment } from 'react-icons/gr';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import type { GroupChat } from 'types/Chat/type';
+import type { NewChatType } from 'types/Chat/interface';
 // import { toast } from 'react-toastify';
 // import { validateFile } from 'utils/fileValidation';
 
 interface IChatRoomProps {
   selectedContact: string;
-  chatListRefetch: (
-    variables?:
-      | Partial<{
-          id: string;
-        }>
-      | undefined,
-  ) => Promise<ObservableQuery.Result<{ chatList: GroupChat[] }>>;
+  chatListRefetch: (variables?: Partial<OperationVariables>) => Promise<any>;
 }
 
 interface INewChat {
@@ -129,6 +124,9 @@ interface INewChat {
             id: string;
             name: string;
           };
+        };
+        chat?: {
+          id: string;
         };
       };
     }>;
@@ -352,7 +350,18 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     }
   };
 
-  const { data: chatData, refetch: chatRefetch } = useQuery(CHAT_BY_ID, {
+  const { data: chatData, refetch: chatRefetch } = useQuery<
+    {
+      chat: INewChat;
+    },
+    {
+      input: { id: string };
+      first?: number;
+      after?: string | null;
+      lastMessages?: number;
+      beforeMessages?: string | null;
+    }
+  >(CHAT_BY_ID, {
     variables: {
       input: { id: props.selectedContact },
       first: 10,
@@ -487,14 +496,14 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             edge.node.user.id !== userId,
         )?.node.user;
         if (otherUser) {
-          setChatTitle(`${otherUser.name}`);
+          setChatTitle(`${otherUser.name}` || '');
           setChatSubtitle('');
-          setChatImage(otherUser.avatarURL);
+          setChatImage(otherUser.avatarURL || '');
         }
       } else if (chat.members?.edges?.length > 2) {
-        setChatTitle(chat.name);
+        setChatTitle(chat.name || '');
         setChatSubtitle(`${chat.members?.edges?.length || 0} members`);
-        setChatImage(chat.avatarURL);
+        setChatImage(chat.avatarURL || '');
       }
     }
   }, [chatData]);
@@ -539,7 +548,9 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     }
   };
 
-  useSubscription(MESSAGE_SENT_TO_CHAT, {
+  useSubscription<{
+    chatMessageCreate: INewChat['messages']['edges'][0]['node'];
+  }>(MESSAGE_SENT_TO_CHAT, {
     variables: {
       input: {
         id: props.selectedContact,
@@ -547,8 +558,8 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     },
     onData: async (messageSubscriptionData) => {
       if (
-        messageSubscriptionData?.data.data.chatMessageCreate &&
-        messageSubscriptionData?.data.data.chatMessageCreate.chat?.id ===
+        messageSubscriptionData?.data.data?.chatMessageCreate &&
+        messageSubscriptionData.data.data.chatMessageCreate.chat?.id ===
           props.selectedContact
       ) {
         const newMessage = messageSubscriptionData.data.data.chatMessageCreate;

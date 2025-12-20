@@ -124,14 +124,7 @@ const orgFundCampaign = (): JSX.Element => {
     loading: campaignLoading,
     error: campaignError,
     refetch: refetchCampaign,
-  }: {
-    data?: {
-      fund: InterfaceQueryOrganizationFundCampaigns;
-    };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(FUND_CAMPAIGN, {
+  } = useQuery<any>(FUND_CAMPAIGN, {
     variables: {
       input: { id: fundId },
     },
@@ -139,12 +132,18 @@ const orgFundCampaign = (): JSX.Element => {
   });
 
   const compaignsData = useMemo(() => {
-    return campaignData?.fund?.campaigns?.edges.map((edge) => edge.node) ?? [];
+    return (
+      campaignData?.fund?.campaigns?.edges.map(
+        (edge: { node: { id: string; name: string; goalAmount?: number } }) =>
+          edge.node,
+      ) ?? []
+    );
   }, [campaignData]);
 
   const filteredCampaigns = useMemo(() => {
-    return compaignsData.filter((campaign) =>
-      campaign.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    return compaignsData.filter(
+      (campaign: { name: string; goalAmount?: number }) =>
+        campaign.name.toLowerCase().includes(searchTerm.toLowerCase()),
     );
   }, [compaignsData, searchTerm]);
 

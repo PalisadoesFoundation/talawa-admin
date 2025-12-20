@@ -111,7 +111,7 @@ export interface InterfaceGroupChatDetailsProps {
           beforeMessages?: string | null;
         }>
       | undefined,
-  ) => Promise<ObservableQuery.Result<{ chat: NewChatType }>>;
+  ) => Promise<any>;
 }
 
 export interface InterfaceContactCardProps {

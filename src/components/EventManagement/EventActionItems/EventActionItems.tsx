@@ -122,7 +122,13 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     loading: eventInfoLoading,
     error: eventInfoError,
     refetch: eventActionItemsRefetch,
-  } = useQuery(GET_EVENT_ACTION_ITEMS, {
+  } = useQuery<{
+    event: {
+      actionItems: { edges: { node: IActionItemInfo }[] };
+      recurrenceRule?: unknown;
+      baseEvent?: { id: string } | null;
+    };
+  }>(GET_EVENT_ACTION_ITEMS, {
     variables: {
       input: {
         id: eventId,
@@ -193,7 +199,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
 
       setActionItems(filteredItems);
       setIsRecurring(!!eventData.event.recurrenceRule);
-      setBaseEvent(eventData.event.baseEvent);
+      setBaseEvent(eventData.event.baseEvent || null);
     }
   }, [eventData, status, searchTerm, searchBy, sortBy]);
 

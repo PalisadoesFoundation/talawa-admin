@@ -9,7 +9,7 @@ import { equal } from '@wry/equality';
 
 class TestableStaticMockLink extends StaticMockLink {
   public setErrorHandler(
-    handler: (error: unknown, observer?: any) => false | void,
+    handler: (error: any, observer?: any) => boolean,
   ): void {
     this.onError = handler;
   }
@@ -88,7 +88,7 @@ const operation3 = {
   extensions: {},
   setContext: () => {},
   getContext: () => ({}),
-};
+} as unknown as ApolloLink.Operation;
 const sampleResponse = {
   data: {
     user: {
@@ -418,7 +418,7 @@ describe('mockSingleLink', () => {
       getContext: () => ({}),
     };
 
-    const observable = link.request(operation4);
+    const observable = link.request(operation4 as any);
 
     expect(observable).toBeInstanceOf(Observable);
 
@@ -579,7 +579,7 @@ describe('mockSingleLink', () => {
       extensions: {},
       setContext: () => {},
       getContext: () => ({}),
-    });
+    } as any);
 
     return new Promise<void>((resolve) => {
       observable?.subscribe({

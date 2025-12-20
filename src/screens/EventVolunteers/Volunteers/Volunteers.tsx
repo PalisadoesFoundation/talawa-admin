@@ -156,19 +156,7 @@ function volunteers(): JSX.Element {
     loading: volunteersLoading,
     error: volunteersError,
     refetch: refetchVolunteers,
-  }: {
-    data?: {
-      event: {
-        id: string;
-        recurrenceRule?: { id: string } | null;
-        baseEvent?: { id: string } | null;
-        volunteers: InterfaceEventVolunteerInfo[];
-      };
-    };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(GET_EVENT_VOLUNTEERS, {
+  } = useQuery<any>(GET_EVENT_VOLUNTEERS, {
     variables: {
       input: {
         id: eventId,

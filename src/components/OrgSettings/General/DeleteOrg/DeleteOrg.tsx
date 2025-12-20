@@ -60,9 +60,12 @@ function deleteOrg(): JSX.Element {
   );
 
   // Query to check if the organization is a sample organization
-  const { data } = useQuery<IsSampleOrganizationData>(IS_SAMPLE_ORGANIZATION_QUERY, {
-    variables: { id: currentUrl },
-  });
+  const { data } = useQuery<IsSampleOrganizationData>(
+    IS_SAMPLE_ORGANIZATION_QUERY,
+    {
+      variables: { id: currentUrl },
+    },
+  );
 
   /**
    * Deletes the organization. It handles both sample and regular organizations.

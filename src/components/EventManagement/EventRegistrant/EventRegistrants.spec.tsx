@@ -1,5 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing/react';
+import { InMemoryCache } from '@apollo/client';
 import type { RenderResult } from '@testing-library/react';
 import {
   render,
@@ -49,12 +50,25 @@ vi.mock('react-router', async () => {
   };
 });
 
+const createCache = (): InMemoryCache =>
+  new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          event: {
+            merge: true,
+          },
+        },
+      },
+    },
+  });
+
 const renderEventRegistrants = (
   customMocks: MockedResponse[] = COMBINED_MOCKS,
 ): RenderResult => {
   const link = new StaticMockLink(customMocks, true);
   return render(
-    <MockedProvider link={link}>
+    <MockedProvider link={link} cache={createCache()}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
@@ -282,7 +296,7 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     renderEventRegistrants(RECURRING_EVENT_MOCKS);
 
     await waitFor(() => {
-      expect(screen.getByTestId('no-registrants')).toBeInTheDocument();
+      expect(screen.getByText('Recurring User')).toBeInTheDocument();
     });
   });
 

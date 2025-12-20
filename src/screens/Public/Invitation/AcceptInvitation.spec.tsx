@@ -90,6 +90,11 @@ describe('AcceptInvitation', () => {
               invitationToken: 'test-token',
               eventId: 'event-1',
               organizationId: 'org-1',
+              inviteeName: 'Test Invitee',
+              status: 'PENDING',
+              expiresAt: '2025-12-31T23:59:59Z',
+              inviteeEmailMasked: null,
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -120,6 +125,11 @@ describe('AcceptInvitation', () => {
               invitationToken: 'pending-token',
               eventId: 'event-2',
               organizationId: 'org-2',
+              inviteeName: 'Pending Invitee',
+              status: 'PENDING',
+              expiresAt: '2025-12-31T23:59:59Z',
+              inviteeEmailMasked: null,
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -158,7 +168,7 @@ describe('AcceptInvitation', () => {
           variables: { input: { invitationToken: 'test-token' } },
         },
         result: {
-          data: null,
+          data: { verifyEventInvitation: null },
         },
       },
     ];
@@ -184,7 +194,9 @@ describe('AcceptInvitation', () => {
     renderComponent(mocks, '/invitation/test-token');
     await waitFor(() => {
       // Apollo Client returns "Error message not found." for empty error messages
-      expect(screen.getByText('Error message not found.')).toBeInTheDocument();
+      expect(
+        screen.getByText('Error verifying invitation'),
+      ).toBeInTheDocument();
     });
   });
 
@@ -202,6 +214,10 @@ describe('AcceptInvitation', () => {
               eventId: 'event-1',
               organizationId: 'org-1',
               expiresAt: new Date().toISOString(),
+              inviteeName: 'Test Invitee',
+              status: 'PENDING',
+              inviteeEmailMasked: null,
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -230,6 +246,12 @@ describe('AcceptInvitation', () => {
             verifyEventInvitation: {
               invitationToken: 'test-token',
               organizationId: 'org-1',
+              eventId: null,
+              inviteeName: 'Test Invitee',
+              status: 'PENDING',
+              expiresAt: '2025-12-31T23:59:59Z',
+              inviteeEmailMasked: null,
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -260,6 +282,9 @@ describe('AcceptInvitation', () => {
               organizationId: 'org-1',
               inviteeEmailMasked: 'test@example.com',
               expiresAt: expiryDate,
+              inviteeName: 'Test Invitee',
+              status: 'PENDING',
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -288,6 +313,13 @@ describe('AcceptInvitation', () => {
           data: {
             verifyEventInvitation: {
               invitationToken: 'test-token',
+              inviteeName: 'Test Invitee',
+              status: 'PENDING',
+              expiresAt: null,
+              eventId: null,
+              organizationId: null,
+              inviteeEmailMasked: null,
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -312,6 +344,13 @@ describe('AcceptInvitation', () => {
           data: {
             verifyEventInvitation: {
               invitationToken: 'test-token',
+              eventId: 'event-1',
+              organizationId: 'org-1',
+              inviteeName: 'Test Invitee',
+              status: 'PENDING',
+              expiresAt: '2025-12-31T23:59:59Z',
+              inviteeEmailMasked: null,
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -344,6 +383,13 @@ describe('AcceptInvitation', () => {
           data: {
             verifyEventInvitation: {
               invitationToken: 'test-token',
+              eventId: 'event-1',
+              organizationId: 'org-1',
+              inviteeName: 'Test Invitee',
+              status: 'PENDING',
+              expiresAt: '2025-12-31T23:59:59Z',
+              inviteeEmailMasked: null,
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -370,6 +416,13 @@ describe('AcceptInvitation', () => {
           data: {
             verifyEventInvitation: {
               invitationToken: 'test-token',
+              eventId: 'event-1',
+              organizationId: 'org-1',
+              inviteeName: 'Test Invitee',
+              status: 'PENDING',
+              expiresAt: '2025-12-31T23:59:59Z',
+              inviteeEmailMasked: null,
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -402,6 +455,13 @@ describe('AcceptInvitation', () => {
           data: {
             verifyEventInvitation: {
               invitationToken: 'test-token',
+              eventId: 'event-1',
+              organizationId: 'org-1',
+              inviteeName: 'Test Invitee',
+              status: 'PENDING',
+              expiresAt: '2025-12-31T23:59:59Z',
+              inviteeEmailMasked: 't**@example.com',
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -428,6 +488,11 @@ describe('AcceptInvitation', () => {
             invitationToken: 'test-token',
             eventId: 'event-1',
             organizationId: 'org-1',
+            inviteeName: 'Test Invitee',
+            status: 'PENDING',
+            expiresAt: '2025-12-31T23:59:59Z',
+            inviteeEmailMasked: null,
+            recurringEventInstanceId: null,
           },
         },
       },
@@ -442,6 +507,21 @@ describe('AcceptInvitation', () => {
         data: {
           acceptEventInvitation: {
             invitationToken: 'test-token',
+            id: 'invite-1',
+            eventId: 'event-1',
+            organizationId: 'org-1',
+            recurringEventInstanceId: null,
+            invitedBy: null,
+            userId: 'user-1',
+            inviteeEmail: 'test@example.com',
+            inviteeName: 'Test Invitee',
+            status: 'ACCEPTED',
+            expiresAt: '2025-12-31T23:59:59Z',
+            respondedAt: new Date().toISOString(),
+            metadata: null,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            __typename: 'EventInvitation',
           },
         },
       },
@@ -484,6 +564,12 @@ describe('AcceptInvitation', () => {
             verifyEventInvitation: {
               invitationToken: 'test-token',
               organizationId: 'org-1',
+              eventId: null,
+              inviteeName: 'Test Invitee',
+              status: 'PENDING',
+              expiresAt: '2025-12-31T23:59:59Z',
+              inviteeEmailMasked: null,
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -510,7 +596,7 @@ describe('AcceptInvitation', () => {
           variables: { input: { invitationToken: 'test-token' } },
         },
         result: {
-          data: null,
+          data: { acceptEventInvitation: null },
         },
       };
 
@@ -570,7 +656,7 @@ describe('AcceptInvitation', () => {
       });
       await waitFor(() => {
         // Apollo Client returns "Error message not found." for empty error messages
-        expect(toast.error).toHaveBeenCalledWith('Error message not found.');
+        expect(toast.error).toHaveBeenCalledWith('Could not accept invitation');
       });
     });
 
@@ -608,6 +694,10 @@ describe('AcceptInvitation', () => {
               eventId: 'event-1',
               organizationId: 'org-1',
               inviteeEmailMasked: 't**@e***.com',
+              inviteeName: 'Test Invitee',
+              status: 'PENDING',
+              expiresAt: '2025-12-31T23:59:59Z',
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -641,6 +731,12 @@ describe('AcceptInvitation', () => {
             verifyEventInvitation: {
               invitationToken: 'test-token',
               inviteeEmailMasked: 't**@e***.com',
+              eventId: 'event-1',
+              organizationId: 'org-1',
+              inviteeName: 'Test Invitee',
+              status: 'PENDING',
+              expiresAt: '2025-12-31T23:59:59Z',
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -671,6 +767,12 @@ describe('AcceptInvitation', () => {
             verifyEventInvitation: {
               invitationToken: 'test-token',
               inviteeEmailMasked: 't**@e***.com',
+              eventId: 'event-1',
+              organizationId: 'org-1',
+              inviteeName: 'Test Invitee',
+              status: 'PENDING',
+              expiresAt: '2025-12-31T23:59:59Z',
+              recurringEventInstanceId: null,
             },
           },
         },
@@ -719,6 +821,12 @@ describe('AcceptInvitation', () => {
             verifyEventInvitation: {
               invitationToken: 'test-token',
               inviteeEmailMasked: 't**@e***.com',
+              eventId: 'event-1',
+              organizationId: 'org-1',
+              inviteeName: 'Test Invitee',
+              status: 'PENDING',
+              expiresAt: '2025-12-31T23:59:59Z',
+              recurringEventInstanceId: null,
             },
           },
         },

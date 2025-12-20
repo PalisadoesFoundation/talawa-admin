@@ -190,7 +190,10 @@ const createAdvertisementNode = ({
     name,
     startAt,
     type,
-    attachments: (attachments || []).map((a) => ({ ...a, __typename: 'AdvertisementAttachment' })),
+    attachments: (attachments || []).map((a) => ({
+      ...a,
+      __typename: 'AdvertisementAttachment',
+    })),
   },
   __typename: 'AdvertisementEdge',
 });
@@ -495,7 +498,10 @@ export const createAdvertisementError = [
 ];
 
 export const updateAdMocks = [
+  // First pair: completed query fires first in component
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
   createAdvertisementListMock({
+    isCompleted: false,
     edges: [
       createAdvertisementNode({
         id: '1',
@@ -506,8 +512,10 @@ export const updateAdMocks = [
       }),
     ],
   }),
+  // Second pair for refetch after update
   createAdvertisementListMock({ isCompleted: true, edges: [] }),
   createAdvertisementListMock({
+    isCompleted: false,
     edges: [
       createAdvertisementNode({
         id: '1',
@@ -518,7 +526,6 @@ export const updateAdMocks = [
       }),
     ],
   }),
-  createAdvertisementListMock({ isCompleted: true, edges: [] }),
   createMutationMock(
     UPDATE_ADVERTISEMENT_MUTATION,
     {
@@ -529,7 +536,10 @@ export const updateAdMocks = [
     },
     { updateAdvertisement: { id: '1' } },
   ),
+  // Third pair after mutation completes
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
   createAdvertisementListMock({
+    isCompleted: false,
     edges: [
       createAdvertisementNode({
         id: '1',
@@ -540,7 +550,6 @@ export const updateAdMocks = [
       }),
     ],
   }),
-  createAdvertisementListMock({ isCompleted: true, edges: [] }),
 ];
 
 export const fetchErrorMocks = [

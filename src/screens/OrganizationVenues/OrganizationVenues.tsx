@@ -95,7 +95,7 @@ function organizationVenues(): JSX.Element {
     loading: venueLoading,
     error: venueError,
     refetch: venueRefetch,
-  } = useQuery(VENUE_LIST, {
+  } = useQuery<any>(VENUE_LIST, {
     variables: {
       orgId: orgId,
     },

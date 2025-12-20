@@ -39,7 +39,7 @@ const useSession = (): UseSessionReturnType => {
   const navigate = useNavigate();
 
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
-  const { data, error: queryError } = useQuery(
+  const { data, error: queryError } = useQuery<any>(
     GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
   );
 

@@ -97,8 +97,8 @@ describe('Testing Advertisement Register Component', () => {
                 }
                 startAtEdit={new Date()}
                 idEdit="1"
-                setAfterActive={() => { }}
-                setAfterCompleted={() => { }}
+                setAfterActive={() => {}}
+                setAfterCompleted={() => {}}
               />
             </I18nextProvider>
           </router.BrowserRouter>

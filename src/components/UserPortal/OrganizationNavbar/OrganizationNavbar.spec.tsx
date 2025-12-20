@@ -3,7 +3,7 @@ import { MockedProvider } from '@apollo/client/testing/react';
 import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Router } from 'react-router';
+import { BrowserRouter, MemoryRouter, useLocation } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import cookies from 'js-cookie';
@@ -316,25 +316,28 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
   });
 
   it('Should navigate to home page on home link click', async () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/initial'],
-    });
+    const LocationDisplay = () => {
+      const location = useLocation();
+      return <div data-testid="location-display">{location.pathname}</div>;
+    };
+
     render(
       <MockedProvider link={link}>
-        <Router location={history.location} navigator={history}>
+        <MemoryRouter initialEntries={['/initial']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <OrganizationNavbar {...navbarProps} />
+              <LocationDisplay />
             </I18nextProvider>
           </Provider>
-        </Router>
+        </MemoryRouter>
       </MockedProvider>,
     );
     const homeLink = screen.getByText('Home');
     expect(homeLink).toBeInTheDocument();
     await userEvent.click(homeLink);
     await wait();
-    expect(history.location.pathname).toBe(
+    expect(screen.getByTestId('location-display')).toHaveTextContent(
       `/user/organization/${organizationId}`,
     );
   });

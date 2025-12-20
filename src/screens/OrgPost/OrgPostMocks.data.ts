@@ -15,6 +15,7 @@ export const getUserByIdMock = {
   result: {
     data: {
       user: {
+        __typename: 'User',
         id: '123',
         name: 'Test User',
       },
@@ -30,6 +31,7 @@ export const getUserByIdMockUser1 = {
   result: {
     data: {
       user: {
+        __typename: 'User',
         id: 'user1',
         firstName: 'John',
         lastName: 'Doe',
@@ -49,6 +51,7 @@ export const getUserByIdMockUser2 = {
   result: {
     data: {
       user: {
+        __typename: 'User',
         id: 'user2',
         name: 'User 2',
       },
@@ -128,13 +131,16 @@ export const orgPinnedPostListMockBasic = {
   result: {
     data: {
       organization: {
+        __typename: 'Organization',
         id: '123',
         name: 'Test Org',
         avatarURL: null,
         postsCount: 0,
         pinnedPosts: {
+          __typename: 'PostConnection',
           edges: [],
           pageInfo: {
+            __typename: 'PageInfo',
             startCursor: null,
             endCursor: null,
             hasNextPage: false,
@@ -162,20 +168,25 @@ export const ORGANIZATION_PINNED_POST_LIST_INITIAL_MOCK: MockLink.MockedResponse
     result: {
       data: {
         organization: {
+          __typename: 'Organization',
           id: '123',
           postsCount: 2,
           pinnedPosts: {
+            __typename: 'PostConnection',
             edges: [
               {
+                __typename: 'PostEdge',
                 node: enrichPostNode(samplePosts[0]),
                 cursor: 'cursor1',
               },
               {
+                __typename: 'PostEdge',
                 node: enrichPostNode(samplePosts[1]),
                 cursor: 'cursor2',
               },
             ],
             pageInfo: {
+              __typename: 'PageInfo',
               startCursor: 'cursor1',
               endCursor: 'cursor2',
               hasNextPage: true,
@@ -199,13 +210,16 @@ export const ORGANIZATION_PINNED_POST_LIST_WITH_PAGINATION_MOCK = {
   result: {
     data: {
       organization: {
+        __typename: 'Organization',
         id: '123',
         name: 'Test Org',
         avatarURL: null,
         postsCount: 0,
         pinnedPosts: {
+          __typename: 'PostConnection',
           edges: [],
           pageInfo: {
+            __typename: 'PageInfo',
             startCursor: null,
             endCursor: null,
             hasNextPage: false,
@@ -232,22 +246,37 @@ export const orgPostListMock = {
   result: {
     data: {
       organization: {
+        __typename: 'Organization',
         id: '123',
         name: 'Test Organization',
         avatarURL: null,
         postsCount: 3,
         posts: {
+          __typename: 'PostConnection',
           totalCount: 3,
           pageInfo: {
+            __typename: 'PageInfo',
             hasNextPage: false,
             hasPreviousPage: false,
             startCursor: 'cursor1',
             endCursor: 'cursor3',
           },
           edges: [
-            { node: enrichPostNode(samplePosts[0]), cursor: 'cursor1' },
-            { node: enrichPostNode(samplePosts[1]), cursor: 'cursor2' },
-            { node: enrichPostNode(samplePosts[2]), cursor: 'cursor3' },
+            {
+              __typename: 'PostEdge',
+              node: enrichPostNode(samplePosts[0]),
+              cursor: 'cursor1',
+            },
+            {
+              __typename: 'PostEdge',
+              node: enrichPostNode(samplePosts[1]),
+              cursor: 'cursor2',
+            },
+            {
+              __typename: 'PostEdge',
+              node: enrichPostNode(samplePosts[2]),
+              cursor: 'cursor3',
+            },
           ],
         },
       },
@@ -323,16 +352,20 @@ export const mockPosts = {
 
 export const mockOrgPostList = {
   organization: {
+    __typename: 'Organization',
     id: '123',
     name: 'Test Org',
     avatarURL: null,
     postsCount: mockPosts.postsByOrganization.length,
     posts: {
+      __typename: 'PostConnection',
       edges: mockPosts.postsByOrganization.map((post, index) => ({
+        __typename: 'PostEdge',
         cursor: `cursor-${post.id ?? index}`,
         node: enrichPostNode(post),
       })),
       pageInfo: {
+        __typename: 'PageInfo',
         hasNextPage: true,
         hasPreviousPage: false,
         startCursor: 'cursor1',
@@ -400,16 +433,20 @@ export const mockPosts1 = {
 
 export const mockOrgPostList1 = {
   organization: {
+    __typename: 'Organization',
     id: '123',
     name: 'Test Org',
     postsCount: mockPosts1.postsByOrganization.length,
     avatarURL: null,
     posts: {
+      __typename: 'PostConnection',
       edges: mockPosts1.postsByOrganization.map((post, index) => ({
+        __typename: 'PostEdge',
         cursor: `cursor-${post.id ?? index}`,
         node: enrichPostNode(post),
       })),
       pageInfo: {
+        __typename: 'PageInfo',
         hasNextPage: true,
         hasPreviousPage: false,
         startCursor: 'cursor1',
@@ -469,16 +506,20 @@ export const mockPosts2 = {
 
 export const mockOrgPostList2 = {
   organization: {
+    __typename: 'Organization',
     id: '123',
     name: 'Test Org',
     postsCount: mockPosts2.postsByOrganization.length,
     avatarURL: null,
     posts: {
+      __typename: 'PostConnection',
       edges: mockPosts2.postsByOrganization.map((post, index) => ({
+        __typename: 'PostEdge',
         cursor: `cursor-${post.id ?? index}`,
         node: enrichPostNode(post),
       })),
       pageInfo: {
+        __typename: 'PageInfo',
         hasNextPage: false, // last page
         hasPreviousPage: true, // because we can go back
         startCursor: 'cursor2', //  matches endCursor from page 1
@@ -536,11 +577,13 @@ export const createPostSuccessMock: MockLink.MockedResponse = {
   result: {
     data: {
       createPost: {
+        __typename: 'Post',
         id: '3',
         caption: 'Test Post Title',
         pinnedAt: null,
         attachments: [
           {
+            __typename: 'FileMetadata',
             fileHash: 'hash123',
             mimeType: 'image/png',
             name: 'test.png',
@@ -569,11 +612,13 @@ export const NoOrgId: MockLink.MockedResponse = {
   result: {
     data: {
       createPost: {
+        __typename: 'Post',
         id: '3',
         caption: 'Test Post Title',
         pinnedAt: null,
         attachments: [
           {
+            __typename: 'FileMetadata',
             fileHash: 'hash123',
             mimeType: 'image/png',
             name: 'test.png',

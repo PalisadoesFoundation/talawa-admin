@@ -115,9 +115,9 @@ function AddMember(): JSX.Element {
   const [
     fetchUsers,
     { loading: userLoading, error: userError, data: userData },
-  ] = useLazyQuery(USER_LIST_FOR_TABLE, {
+  ] = useLazyQuery<{ allUsers: any }>(USER_LIST_FOR_TABLE, {
     variables: { first: PAGE_SIZE, after: null, last: null, before: null },
-  });
+  } as any);
 
   const openAddUserModal = () => setAddUserModalIsOpen(true);
   useEffect(() => {
@@ -130,7 +130,9 @@ function AddMember(): JSX.Element {
     useState(false);
   const openCreateNewUserModal = () => setCreateNewUserModalIsOpen(true);
   const closeCreateNewUserModal = () => setCreateNewUserModalIsOpen(false);
-  const [addMember] = useMutation(CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG);
+  const [addMember] = useMutation<any>(
+    CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
+  );
   const createMember = async (userId: string): Promise<void> => {
     try {
       await addMember({
@@ -157,7 +159,9 @@ function AddMember(): JSX.Element {
     data: organizationData,
   }: { data?: { organization: InterfaceQueryOrganizationsListObject } } =
     useQuery(GET_ORGANIZATION_BASIC_DATA, { variables: { id: currentUrl } });
-  const [registerMutation] = useMutation(CREATE_MEMBER_PG);
+  const [registerMutation] = useMutation<{
+    createUser: { user: { id: string } };
+  }>(CREATE_MEMBER_PG);
   const [createUserVariables, setCreateUserVariables] = React.useState({
     name: '',
     email: '',
@@ -192,8 +196,10 @@ function AddMember(): JSX.Element {
             isEmailAddressVerified: true,
           },
         });
-        const createdUserId = registeredUser?.data.createUser.user.id;
-        await createMember(createdUserId);
+        const createdUserId = registeredUser?.data?.createUser.user.id;
+        if (createdUserId) {
+          await createMember(createdUserId);
+        }
         closeCreateNewUserModal();
         setCreateUserVariables({
           name: '',

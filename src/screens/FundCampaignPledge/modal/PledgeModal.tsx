@@ -114,7 +114,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
   const [createPledge] = useMutation(CREATE_PLEDGE);
 
-  const { data: memberData } = useQuery(MEMBERS_LIST_PG, {
+  const { data: memberData } = useQuery<any>(MEMBERS_LIST_PG, {
     variables: { input: { id: orgId } },
   });
 

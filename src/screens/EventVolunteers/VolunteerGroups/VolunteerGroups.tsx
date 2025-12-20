@@ -108,19 +108,7 @@ function volunteerGroups(): JSX.Element {
     loading: groupsLoading,
     error: groupsError,
     refetch: refetchGroups,
-  }: {
-    data?: {
-      event: {
-        id: string;
-        recurrenceRule?: { id: string } | null;
-        baseEvent?: { id: string } | null;
-        volunteerGroups: InterfaceVolunteerGroupInfo[];
-      };
-    };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(GET_EVENT_VOLUNTEER_GROUPS, {
+  } = useQuery<any>(GET_EVENT_VOLUNTEER_GROUPS, {
     variables: {
       input: {
         id: eventId,

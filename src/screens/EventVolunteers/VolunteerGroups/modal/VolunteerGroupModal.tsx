@@ -133,7 +133,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
   const [updateVolunteerGroup] = useMutation(UPDATE_VOLUNTEER_GROUP);
   const [createVolunteerGroup] = useMutation(CREATE_VOLUNTEER_GROUP);
 
-  const { data: membersData } = useQuery(MEMBERS_LIST, {
+  const { data: membersData } = useQuery<any>(MEMBERS_LIST, {
     variables: { organizationId: orgId },
   });
 
