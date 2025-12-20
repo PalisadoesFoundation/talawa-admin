@@ -104,13 +104,7 @@ function EventHeader({
             data-testid="createEventModalBtn"
             data-cy="createEventModalBtn"
           >
-            <AddIcon
-              sx={{
-                fontSize: '25px',
-                marginBottom: '2px',
-                marginRight: '2px',
-              }}
-            />
+            <AddIcon className={styles.addButtonIcon} />
             <span>{tCommon('create')}</span>
           </Button>
         </div>

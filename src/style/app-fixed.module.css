@@ -10000,3 +10000,9 @@ form {
     padding-right: 16px;
   }
 }
+
+.addButtonIcon {
+  font-size: 25px;
+  margin-bottom: 2px;
+  margin-right: 2px;
+}
