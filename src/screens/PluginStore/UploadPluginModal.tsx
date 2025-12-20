@@ -263,12 +263,13 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
             </div>
           )}
 
-          <div style={{
-            marginTop: 32,
-            display: 'flex',
-            gap: 12,
-          }}>
-
+          <div
+            style={{
+              marginTop: 32,
+              display: 'flex',
+              gap: 12,
+            }}
+          >
             <Button
               variant="outlined"
               color="secondary"
