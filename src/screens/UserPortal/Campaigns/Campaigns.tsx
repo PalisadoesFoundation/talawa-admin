@@ -289,7 +289,7 @@ const Campaigns = (): JSX.Element => {
                       }
                       {campaign.fundingGoal}
                     </span>
-                    <span>Raised: $0</span>
+                    <span>{t('raised')}: $0</span>
                     <span>
                       Start Date:{' '}
                       {new Date(campaign.startDate).toLocaleDateString('en-US')}
@@ -319,7 +319,7 @@ const Campaigns = (): JSX.Element => {
               </div>
             </AccordionSummary>
             <AccordionDetails className="d-flex gap-3 ms-2">
-              <span className="fw-bold">Amount Raised: </span>
+              <span className="fw-bold">{t('amountRaised')}: </span>
               <div className={styles.progressAccordion}>
                 <span>$0</span>
                 <ProgressBar
@@ -344,7 +344,6 @@ const Campaigns = (): JSX.Element => {
         userId={userId}
         pledge={null}
         refetchPledge={refetchCampaigns}
-        endDate={selectedCampaign?.endDate ?? new Date()}
         mode="create"
       />
     </>

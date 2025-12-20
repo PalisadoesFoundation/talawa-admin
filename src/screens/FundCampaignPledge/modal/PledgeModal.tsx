@@ -8,7 +8,6 @@
  * This component provides a form for managing pledges, allowing users to:
  * - Select participants (pledgers) for the pledge.
  * - Specify the pledge amount and currency.
- * - Set start and end dates for the pledge.
  *
  * The modal supports two modes:
  * - `create`: For creating a new pledge.
@@ -20,7 +19,6 @@
  * @param {string} orgId - The ID of the organization associated with the pledge.
  * @param {InterfacePledgeInfo | null} pledge - The pledge object to edit, or `null` for a new pledge.
  * @param {() => void} refetchPledge - Function to refetch the list of pledges after creation or update.
- * @param {Date} endDate - The campaign's end date to validate pledge dates.
  * @param {'create' | 'edit'} mode - The mode of the modal, either 'create' or 'edit'.
  *
  * @returns {JSX.Element} The rendered modal component.
@@ -33,7 +31,6 @@
  *   orgId="456"
  *   pledge={null}
  *   refetchPledge={() => {}}
- *   endDate={new Date()}
  *   mode="create"
  * />
  *
@@ -41,15 +38,12 @@
  * - React
  * - Apollo Client for GraphQL queries and mutations.
  * - Material-UI and Bootstrap for UI components.
- * - Day.js for date manipulation.
  * - React-Toastify for notifications.
  *
  * @css
  * - Uses global styles from `app-fixed.module.css`.
  * - Reusable class `.addButton` for consistent button styling.
  */
-import { DatePicker } from '@mui/x-date-pickers';
-import dayjs from 'dayjs';
 import type { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { currencyOptions, currencySymbols } from 'utils/currency';
@@ -82,7 +76,6 @@ export interface InterfacePledgeModal {
   orgId: string;
   pledge: InterfacePledgeInfo | null;
   refetchPledge: () => void;
-  endDate: Date;
   mode: 'create' | 'edit';
 }
 
@@ -96,18 +89,11 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   mode,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
-  const { t: tCommon } = useTranslation('common');
 
   const [formState, setFormState] = useState<InterfaceCreatePledge>({
     pledgeUsers: pledge?.pledger ? [pledge.pledger] : [],
     pledgeAmount: Math.max(0, pledge?.amount ?? 0),
     pledgeCurrency: pledge?.currency ?? 'USD',
-    pledgeEndDate: pledge?.endDate
-      ? dayjs(pledge.endDate).toDate()
-      : new Date(),
-    pledgeStartDate: pledge?.startDate
-      ? dayjs(pledge.startDate).toDate()
-      : new Date(),
   });
 
   const [pledgers, setPledgers] = useState<InterfaceUserInfoPG[]>([]);
@@ -124,8 +110,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         pledgeUsers: pledge.pledger ? [pledge.pledger] : [],
         pledgeAmount: pledge.amount ?? 0,
         pledgeCurrency: pledge.currency ?? 'USD',
-        pledgeEndDate: dayjs(pledge.endDate).toDate(),
-        pledgeStartDate: dayjs(pledge.startDate).toDate(),
       });
     }
   }, [pledge]);
@@ -199,8 +183,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           pledgeUsers: [],
           pledgeAmount: 0,
           pledgeCurrency: 'USD',
-          pledgeEndDate: new Date(),
-          pledgeStartDate: new Date(),
         });
         hide();
       } catch (error: unknown) {
@@ -266,46 +248,13 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Pledgers"
+                  label={t('pledgers')}
                   inputProps={{
                     ...params.inputProps,
-                    'aria-label': 'Pledgers',
+                    'aria-label': t('pledgers'),
                   }}
                 />
               )}
-            />
-          </Form.Group>
-          <Form.Group className="d-flex gap-3 mx-auto  mb-3">
-            {/* Date Calendar Component to select start date of an event */}
-            <DatePicker
-              format="DD/MM/YYYY"
-              label={tCommon('startDate')}
-              value={dayjs(formState.pledgeStartDate)}
-              className={styles.noOutlinePledge}
-              onChange={(date): void => {
-                if (date) {
-                  setFormState({
-                    ...formState,
-                    pledgeStartDate: date.toDate(),
-                  });
-                }
-              }}
-              disabled
-            />
-            <DatePicker
-              format="DD/MM/YYYY"
-              label="End Date"
-              value={dayjs(formState.pledgeEndDate)}
-              className={styles.noOutlinePledge}
-              onChange={(date): void => {
-                if (date) {
-                  setFormState({
-                    ...formState,
-                    pledgeEndDate: date.toDate(),
-                  });
-                }
-              }}
-              disabled
             />
           </Form.Group>
           <Form.Group className="d-flex gap-3 mb-4">
@@ -316,9 +265,9 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               </InputLabel>
               <Select
                 value={formState.pledgeCurrency || ''}
-                label="Currency"
+                label={t('currency')}
                 inputProps={{
-                  'aria-label': 'Currency',
+                  'aria-label': t('currency'),
                 }}
                 disabled
                 className="MuiSelect-disabled"

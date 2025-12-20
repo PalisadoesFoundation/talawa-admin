@@ -2,7 +2,6 @@ import type { ApolloLink } from '@apollo/client';
 import { MockedProvider, type MockedResponse } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import type { RenderResult } from '@testing-library/react';
-import dayjs from 'dayjs';
 import {
   cleanup,
   fireEvent,
@@ -29,7 +28,6 @@ import PledgeModal, {
   type InterfacePledgeModal,
   areOptionsEqual,
   getMemberLabel,
-  computeAdjustedEndDate,
 } from './PledgeModal';
 
 vi.mock('react-toastify', () => ({
@@ -38,35 +36,6 @@ vi.mock('react-toastify', () => ({
     error: vi.fn((msg) => console.log('Toast Error:', msg)),
   },
 }));
-
-// UPDATE: Add the generic type here
-vi.mock('@mui/x-date-pickers', async () => {
-  const actual = await vi.importActual<typeof import('@mui/x-date-pickers')>(
-    '@mui/x-date-pickers',
-  );
-  interface InterfaceTestDatePickerProps {
-    label?: React.ReactNode;
-    value?: dayjs.Dayjs | null;
-    onChange?: (value: dayjs.Dayjs | null) => void;
-  }
-
-  return {
-    ...actual,
-    DatePicker: ({ label, value, onChange }: InterfaceTestDatePickerProps) => (
-      <div role="group" aria-label={label as string}>
-        <input
-          aria-label={label as string}
-          value={value ? value.format('DD/MM/YYYY') : ''}
-          onChange={(e) =>
-            (onChange as ((value: unknown) => void) | undefined)?.(
-              e.target.value ? dayjs(e.target.value, 'DD/MM/YYYY') : null,
-            )
-          }
-        />
-      </div>
-    ),
-  };
-});
 
 afterEach(() => {
   cleanup();
@@ -83,8 +52,6 @@ const pledgeProps: InterfacePledgeModal[] = [
       id: '1',
       amount: 100,
       currency: 'USD',
-      startDate: '2024-01-01',
-      endDate: '2024-01-10',
       pledger: {
         id: '1',
         firstName: 'John',
@@ -96,7 +63,6 @@ const pledgeProps: InterfacePledgeModal[] = [
     refetchPledge: vi.fn(),
     campaignId: 'campaignId',
     userId: 'userId',
-    endDate: new Date(),
     mode: 'create',
   },
   {
@@ -106,8 +72,6 @@ const pledgeProps: InterfacePledgeModal[] = [
       id: '1',
       amount: 100,
       currency: 'USD',
-      startDate: '2024-01-01',
-      endDate: '2024-01-10',
       pledger: {
         id: '1',
         firstName: 'John',
@@ -119,12 +83,10 @@ const pledgeProps: InterfacePledgeModal[] = [
     refetchPledge: vi.fn(),
     campaignId: 'campaignId',
     userId: 'userId',
-    endDate: new Date(),
     mode: 'edit',
   },
 ];
 
-// Shared user details mock for reuse across tests
 // Shared user details mock for reuse across tests
 const USER_DETAILS_MOCK = {
   request: {
@@ -195,8 +157,6 @@ const createUpdatePledgeMock = (
     id: string;
     amount?: number;
     currency?: string;
-    startDate?: string;
-    endDate?: string;
   },
   isError = false,
 ): MockedResponse => ({
@@ -223,8 +183,6 @@ const createCreatePledgeMock = (
     campaignId: string;
     amount: number;
     currency: string;
-    startDate: string;
-    endDate: string;
     pledgerId: string;
   },
   isError = false,
@@ -254,9 +212,7 @@ const PLEDGE_MODAL_MOCKS = [
     campaignId: 'campaignId',
     amount: 200,
     currency: 'USD',
-    startDate: '2024-01-02',
-    endDate: '2024-01-02',
-    pledgerId: 'userId', // Use 'userId' to match USER_DETAILS_MOCK id
+    pledgerId: 'userId',
   }),
 ];
 
@@ -287,14 +243,6 @@ const renderPledgeModal = (
 // Setup shared localStorage mock
 const localStorageMock = setupLocalStorageMock();
 
-type AccessibleNameMatcher =
-  | string
-  | RegExp
-  | ((accessibleName: string, element: Element) => boolean);
-
-const getPickerGroup = (label: AccessibleNameMatcher) =>
-  screen.getByRole('group', { name: label, hidden: true });
-
 describe('PledgeModal', () => {
   beforeAll(() => {
     vi.mock('react-router', async () => {
@@ -317,20 +265,12 @@ describe('PledgeModal', () => {
     await waitFor(() =>
       expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
     );
-    // Use getByDisplayValue to find the input with the value "John Doe"
-    expect(screen.getByDisplayValue(/John Doe/i)).toBeInTheDocument();
-    const startDateGroup = getPickerGroup('Start Date');
-    const startDateInput = within(startDateGroup).getByRole('textbox', {
-      hidden: true,
-    });
-    const endDateGroup = getPickerGroup('End Date');
-    const endDateInput = within(endDateGroup).getByRole('textbox', {
-      hidden: true,
-    });
 
-    expect(endDateInput).toHaveValue('10/01/2024');
+    // Wait for the autocomplete to be visible (admin users see the pledger autocomplete)
     await waitFor(() => {
-      expect(startDateInput).toHaveValue('01/01/2024');
+      const autocomplete = screen.getByTestId('pledgerSelect');
+      const input = within(autocomplete).getByRole('combobox');
+      expect(input).toHaveValue('John Doe');
     });
 
     expect(screen.getByLabelText('Currency')).toHaveTextContent('USD ($)');
@@ -348,8 +288,6 @@ describe('PledgeModal', () => {
 
       expect(screen.getByLabelText('Amount')).toBeInTheDocument();
       expect(screen.getByLabelText('Currency')).toBeInTheDocument();
-      expect(getPickerGroup(/start date/i)).toBeInTheDocument();
-      expect(getPickerGroup(/end date/i)).toBeInTheDocument();
       expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
     });
 
@@ -360,20 +298,12 @@ describe('PledgeModal', () => {
         expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
       );
 
-      const startDateGroup = getPickerGroup(/start date/i);
-      const startDateInput = within(startDateGroup).getByRole('textbox', {
-        hidden: true,
+      // Wait for the autocomplete to be visible (admin users see the pledger autocomplete)
+      await waitFor(() => {
+        const autocomplete = screen.getByTestId('pledgerSelect');
+        const input = within(autocomplete).getByRole('combobox');
+        expect(input).toHaveValue('John Doe');
       });
-
-      const endDateGroup = getPickerGroup(/end date/i);
-      const endDateInput = within(endDateGroup).getByRole('textbox', {
-        hidden: true,
-      });
-
-      const pledgerInput = screen.getByRole('combobox', { name: /pledger/i });
-      expect(pledgerInput).toHaveValue('John Doe');
-      expect(startDateInput).toHaveValue('01/01/2024');
-      expect(endDateInput).toHaveValue('10/01/2024');
       expect(screen.getByLabelText('Currency')).toHaveTextContent('USD ($)');
       expect(screen.getByLabelText('Amount')).toHaveValue('100');
     });
@@ -456,54 +386,6 @@ describe('PledgeModal', () => {
       expect(amountInput).toHaveValue('100');
     });
 
-    it('should update pledgeStartDate when a new date is selected', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
-      const startDateGroup = getPickerGroup(/start date/i);
-      const startDateInput = within(startDateGroup).getByRole('textbox', {
-        hidden: true,
-      });
-
-      fireEvent.change(startDateInput, { target: { value: '25/12/2025' } });
-
-      expect(startDateInput).toHaveValue('25/12/2025');
-      expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
-    });
-
-    it('should handle pledgeStartDate onChange when value is null', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
-      const startDateGroup = getPickerGroup(/start date/i);
-      const startDateInput = within(startDateGroup).getByRole('textbox', {
-        hidden: true,
-      });
-
-      fireEvent.change(startDateInput, { target: { value: '' } });
-      // MUI X v8: clearing is prevented; last valid value remains
-      expect(startDateInput).toHaveValue('01/01/2024');
-    });
-
-    it('should update pledgeEndDate when a new date is selected', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
-      const endDateGroup = getPickerGroup(/end date/i);
-      const endDateInput = within(endDateGroup).getByRole('textbox', {
-        hidden: true,
-      });
-
-      fireEvent.change(endDateInput, { target: { value: '02/01/2024' } });
-      expect(endDateInput).toHaveValue('02/01/2024');
-    });
-
-    it('should handle pledgeEndDate onChange when value is null', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
-      const endDateGroup = getPickerGroup(/end date/i);
-      const endDateInput = within(endDateGroup).getByRole('textbox', {
-        hidden: true,
-      });
-
-      fireEvent.change(endDateInput, { target: { value: '' } });
-      // MUI X v8: clearing is prevented; last valid value remains
-      expect(endDateInput).toHaveValue('10/01/2024');
-    });
-
     it('should update currency when changed', async () => {
       renderPledgeModal(link1, pledgeProps[0]);
       await waitFor(() =>
@@ -523,40 +405,27 @@ describe('PledgeModal', () => {
       });
     });
 
-    it('should successfully update pledge with only amount change', async () => {
-      const amountChangeMock = [
-        ...BASE_PLEDGE_MODAL_MOCKS,
-        createUpdatePledgeMock({
-          id: '1',
-          amount: 200,
-        }),
-      ];
-      const link = new StaticMockLink(amountChangeMock);
-      renderPledgeModal(link, pledgeProps[1]);
+    it('maintains selected pledger display after autocomplete focus and blur', async () => {
+      const adminLink = new StaticMockLink(BASE_PLEDGE_MODAL_ADMIN_MOCKS);
+      renderPledgeModal(adminLink, pledgeProps[1]); // edit mode has pledger
 
-      await waitFor(() =>
-        expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
-      );
-
-      fireEvent.change(screen.getByLabelText('Amount'), {
-        target: { value: '200' },
+      await waitFor(() => {
+        const autocomplete = screen.getByTestId('pledgerSelect');
+        const input = within(autocomplete).getByRole('combobox');
+        expect(input).toHaveValue('John Doe');
       });
 
-      const form = screen.getByTestId('pledgeForm');
-      fireEvent.submit(form);
+      const autocomplete = screen.getByTestId('pledgerSelect');
+      const input = within(autocomplete).getByRole('combobox');
 
-      await waitFor(
-        () => {
-          expect(toast.success).toHaveBeenCalledWith(
-            translations.pledgeUpdated,
-          );
-        },
-        { timeout: 2000 },
-      );
+      fireEvent.focus(input);
+      fireEvent.blur(input);
 
-      expect(pledgeProps[1].refetchPledge).toHaveBeenCalled();
-      expect(pledgeProps[1].hide).toHaveBeenCalled();
+      expect(input).toHaveValue('John Doe');
     });
+  });
+
+  describe('Pledge Creation', () => {
     it('hides pledger autocomplete for regular users in create mode', async () => {
       const regularLink = new StaticMockLink([USER_DETAILS_MOCK]); // role: 'regular'
       renderPledgeModal(regularLink, {
@@ -569,6 +438,7 @@ describe('PledgeModal', () => {
       );
       expect(screen.queryByRole('combobox', { name: /pledger/i })).toBeNull();
     });
+
     it('should handle pledge creation error', async () => {
       const errorMock = [
         ...BASE_PLEDGE_MODAL_MOCKS,
@@ -577,9 +447,7 @@ describe('PledgeModal', () => {
             campaignId: 'campaignId',
             amount: 200,
             currency: 'USD',
-            startDate: '2024-01-02',
-            endDate: '2024-01-02',
-            pledgerId: 'userId',
+            pledgerId: '1',
           },
           true,
         ),
@@ -592,23 +460,8 @@ describe('PledgeModal', () => {
         expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
       });
 
-      const startDateGroup = getPickerGroup(/start date/i);
-      const startDateInput = within(startDateGroup).getByRole('textbox', {
-        hidden: true,
-      });
-
-      const endDateGroup = getPickerGroup(/end date/i);
-      const endDateInput = within(endDateGroup).getByRole('textbox', {
-        hidden: true,
-      });
       fireEvent.change(screen.getByLabelText('Amount'), {
         target: { value: '200' },
-      });
-      fireEvent.change(startDateInput, {
-        target: { value: '02/01/2024' },
-      });
-      fireEvent.change(endDateInput, {
-        target: { value: '02/01/2024' },
       });
 
       const form = screen.getByTestId('pledgeForm');
@@ -750,7 +603,6 @@ describe('PledgeModal', () => {
         refetchPledge: vi.fn(),
         campaignId: 'campaignId',
         userId: 'userId',
-        endDate: new Date(),
         mode: 'create',
       };
 
@@ -773,18 +625,6 @@ describe('PledgeModal', () => {
         },
         { timeout: 2000 },
       );
-    });
-
-    it('should handle invalid date formats gracefully', async () => {
-      renderPledgeModal(link1, pledgeProps[0]);
-
-      const startDateGroup = getPickerGroup(/start date/i);
-      const startDateInput = within(startDateGroup).getByRole('textbox', {
-        hidden: true,
-      });
-      fireEvent.change(startDateInput, { target: { value: 'invalid-date' } });
-
-      expect(screen.getByLabelText('Amount')).toBeInTheDocument();
     });
 
     it('should handle empty autocomplete selection', async () => {
@@ -860,8 +700,6 @@ describe('PledgeModal', () => {
           campaignId: 'campaignId',
           amount: 150,
           currency: 'USD',
-          startDate: '2024-01-02',
-          endDate: '2024-01-02',
           pledgerId: 'userId',
         }),
       ];
@@ -906,25 +744,9 @@ describe('PledgeModal', () => {
         expect(input).toHaveValue('Harve Lance');
       });
 
-      const startDateGroup = getPickerGroup(/start date/i);
-      const startDateInput = within(startDateGroup).getByRole('textbox', {
-        hidden: true,
-      });
-
-      const endDateGroup = getPickerGroup(/end date/i);
-      const endDateInput = within(endDateGroup).getByRole('textbox', {
-        hidden: true,
-      });
-
       // Submit the form with selected pledger
       fireEvent.change(screen.getByLabelText('Amount'), {
         target: { value: '150' },
-      });
-      fireEvent.change(startDateInput, {
-        target: { value: '02/01/2024' },
-      });
-      fireEvent.change(endDateInput, {
-        target: { value: '02/01/2024' },
       });
 
       const form = screen.getByTestId('pledgeForm');
@@ -943,7 +765,7 @@ describe('PledgeModal', () => {
 
   describe('Update field change flows', () => {
     // Note: The component now only supports updating the amount field during pledge edit.
-    // Currency, startDate, and endDate changes are no longer sent to the backend.
+    // Currency changes are no longer sent to the backend.
 
     it('should cover remaining edge cases for 100% coverage', async () => {
       const adminLink = new StaticMockLink([...BASE_PLEDGE_MODAL_ADMIN_MOCKS]);
@@ -990,23 +812,6 @@ describe('PledgeModal', () => {
       expect(getMemberLabel(member as InterfaceUserInfoPG)).toBe('John Doe');
     });
 
-    it('computeAdjustedEndDate returns later date when start exceeds end', () => {
-      const existingEndDate = new Date('2024-01-01');
-      const newStartDate = dayjs('2025-01-01');
-
-      const result = computeAdjustedEndDate(existingEndDate, newStartDate);
-
-      expect(result?.toISOString()).toBe(newStartDate.toDate().toISOString());
-    });
-
-    it('computeAdjustedEndDate returns original end date when date is null', () => {
-      const existingEndDate = new Date('2024-01-01');
-
-      const result = computeAdjustedEndDate(existingEndDate, null);
-
-      expect(result).toBe(existingEndDate);
-    });
-
     it('areOptionsEqual returns false when ids do not match', () => {
       const option: InterfaceUserInfoPG = {
         id: '1',
@@ -1029,6 +834,7 @@ describe('PledgeModal', () => {
       const member = { id: '1', firstName: '', lastName: 'Doe' };
       expect(getMemberLabel(member as InterfaceUserInfoPG)).toBe('Doe');
     });
+
     it('should update pledgeUsers state when selecting a pledger from autocomplete in create mode', async () => {
       const adminLink = new StaticMockLink([...BASE_PLEDGE_MODAL_ADMIN_MOCKS]);
       renderPledgeModal(adminLink, pledgeProps[0]);

@@ -285,7 +285,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 onClick={(event) => handleClick(event, extraUsers)}
                 data-testid={`moreContainer-${params.row.id}`}
               >
-                +{extraUsers.length} more...
+                {t('moreUsers', { count: extraUsers.length })}
               </div>
             )}
           </div>
@@ -398,7 +398,7 @@ const fundCampaignPledge = (): JSX.Element => {
 
   return (
     <div>
-      <Breadcrumbs aria-label="breadcrumb" className="ms-1">
+      <Breadcrumbs aria-label={tCommon('breadcrumb')} className="ms-1">
         <Link
           underline="hover"
           color="inherit"
@@ -429,7 +429,7 @@ const fundCampaignPledge = (): JSX.Element => {
             <div
               className={`btn-group ${styles.toggleGroup}`}
               role="group"
-              aria-label="Toggle between Pledged and Raised amounts"
+              aria-label={t('togglePledgedRaised')}
             >
               <input
                 type="radio"
@@ -578,7 +578,6 @@ const fundCampaignPledge = (): JSX.Element => {
         orgId={orgId}
         pledge={pledge}
         refetchPledge={refetchPledge}
-        endDate={pledgeData?.fundCampaign?.endAt as Date}
         mode={pledgeModalMode}
       />
       <PledgeDeleteModal

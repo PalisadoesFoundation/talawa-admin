@@ -732,7 +732,12 @@
     "pledgedAmount": "Pledged amount",
     "startDate": "startDate",
     "endDate": "endDate",
-    "selectPledger": "Please select a pledger"
+    "selectPledger": "Please select a pledger",
+    "campaignNotActive": "Campaign is not currently active",
+    "moreUsers": "+{{count}} more...",
+    "togglePledgedRaised": "Toggle between Pledged and Raised amounts",
+    "raised": "Raised",
+    "amountRaised": "Amount Raised"
   },
   "orgPost": {
     "title": "Posts",
@@ -1531,7 +1536,9 @@
     "addPledge": "Add Pledge",
     "viewPledges": "View Pledges",
     "noPledges": "No Pledges Found",
-    "noCampaigns": "No Campaigns Found"
+    "noCampaigns": "No Campaigns Found",
+    "raised": "Raised",
+    "amountRaised": "Amount Raised"
   },
   "userPledges": {
     "title": "My Pledges"

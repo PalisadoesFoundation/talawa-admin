@@ -107,5 +107,6 @@
   "saving": "Saving...",
   "sl_no": "Sl. No.",
   "actions": "Actions",
-  "notFound": "Not Found"
+  "notFound": "Not Found",
+  "breadcrumb": "Breadcrumb Navigation"
 }
