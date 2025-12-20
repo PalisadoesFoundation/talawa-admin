@@ -19,9 +19,12 @@ import {
   ReportingTableColumn,
   ReportingTableGridProps,
 } from 'types/ReportingTable/interface';
-import { PAGE_SIZE, ROW_HEIGHT } from 'types/ReportingTable/utils';
+import {
+  PAGE_SIZE,
+  ROW_HEIGHT,
+  dataGridStyle as baseDataGridStyle,
+} from 'types/ReportingTable/utils';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import { dataGridStyle as baseDataGridStyle } from 'types/ReportingTable/utils';
 
 const dataGridStyle = {
   ...baseDataGridStyle,
