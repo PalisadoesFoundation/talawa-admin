@@ -20,6 +20,7 @@ DetailedViolation = namedtuple(
 )
 CSSCheckResult = namedtuple("CSSCheckResult", ["violations"])
 
+
 def check_embedded_styles(
     content: str, file_path: str
 ) -> list[DetailedViolation]:
