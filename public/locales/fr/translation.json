@@ -1196,6 +1196,11 @@
     "noeventsAttended": "Aucun événement assisté",
     "profileSettings": "Paramètres de profil",
     "gender": "Genre",
+    "password_invalid": "Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule, une valeur numérique et un caractère spécial",
+    "lowercase_check": "Au moins une lettre minuscule",
+    "uppercase_check": "Au moins une lettre majuscule",
+    "numeric_value_check": "Au moins une valeur numérique",
+    "special_char_check": "Au moins un caractère spécial",
     "phoneNumber": "Numéro de téléphone",
     "chooseFile": "Choisir le fichier",
     "birthDate": "Date de naissance",
@@ -1262,7 +1267,8 @@
     "postalCode": "Code postal",
     "city": "Ville",
     "description": "Description",
-    "enterDescription": "Entrez la description"
+    "enterDescription": "Entrez la description",
+    "enterNewPassword": "Entrez un nouveau mot de passe"
   },
   "donate": {
     "title": "Des dons",

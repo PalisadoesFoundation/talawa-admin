@@ -1196,6 +1196,11 @@
     "eventAttended": "参加的活动",
     "profileSettings": "配置文件设置",
     "gender": "性别",
+    "password_invalid": "密码应至少包含1个小写字母、1个大写字母、1个数字和1个特殊字符",
+    "lowercase_check": "至少一个小写字母",
+    "uppercase_check": "至少有一个大写字母",
+    "numeric_value_check": "至少设定一个数值",
+    "special_char_check": "至少一个特殊字符",
     "phoneNumber": "电话号码",
     "homePhoneNumber": "家庭电话号码",
     "chooseFile": "选择文件",
@@ -1262,7 +1267,8 @@
     "postalCode": "邮政编码",
     "city": "城市",
     "description": "描述",
-    "enterDescription": "输入描述"
+    "enterDescription": "输入描述",
+    "enterNewPassword": "输入新密码"
   },
   "donate": {
     "title": "捐款",

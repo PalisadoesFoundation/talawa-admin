@@ -1196,6 +1196,11 @@
     "eventAttended": "भाग लिए गए कार्यक्रम",
     "profileSettings": "पार्श्वचित्र समायोजन",
     "gender": "लिंग",
+    "password_invalid": "पासवर्ड में कम से कम 1 छोटा अक्षर, 1 बड़ा अक्षर, 1 संख्या और 1 विशेष अक्षर होना चाहिए",
+    "lowercase_check": "कम से कम एक छोटा अक्षर",
+    "uppercase_check": "कम से कम एक बड़ा अक्षर",
+    "numeric_value_check": "कम से कम एक संख्या",
+    "special_char_check": "कम से कम एक विशेष अक्षर",
     "phoneNumber": "फ़ोन नंबर",
     "chooseFile": "फाइलें चुनें",
     "birthDate": "जन्म तिथि",
@@ -1262,7 +1267,8 @@
     "postalCode": "पिन कोड",
     "city": "शहर",
     "description": "विवरण",
-    "enterDescription": "विवरण दर्ज करें"
+    "enterDescription": "विवरण दर्ज करें",
+    "enterNewPassword": "नया पासवर्ड दर्ज करें"
   },
   "donate": {
     "title": "दान",
