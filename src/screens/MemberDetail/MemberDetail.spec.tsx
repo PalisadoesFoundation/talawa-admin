@@ -183,18 +183,33 @@ describe('MemberDetail', () => {
       target: { value: formData.birthDate },
     });
 
-    userEvent.type(screen.getByTestId(/inputName/i), formData.name);
-    userEvent.type(screen.getByTestId(/addressLine1/i), formData.addressLine1);
-    userEvent.type(screen.getByTestId(/addressLine2/i), formData.addressLine2);
-    userEvent.type(screen.getByTestId(/inputCity/i), formData.city);
-    userEvent.type(screen.getByTestId(/inputState/i), formData.state);
-    userEvent.type(screen.getByTestId(/inputPostalCode/i), formData.postalCode);
-    userEvent.type(
+    await userEvent.type(screen.getByTestId(/inputName/i), formData.name);
+    await userEvent.type(
+      screen.getByTestId(/addressLine1/i),
+      formData.addressLine1,
+    );
+    await userEvent.type(
+      screen.getByTestId(/addressLine2/i),
+      formData.addressLine2,
+    );
+    await userEvent.type(screen.getByTestId(/inputCity/i), formData.city);
+    await userEvent.type(screen.getByTestId(/inputState/i), formData.state);
+    await userEvent.type(
+      screen.getByTestId(/inputPostalCode/i),
+      formData.postalCode,
+    );
+    await userEvent.type(
       screen.getByTestId(/inputDescription/i),
       formData.description,
     );
-    userEvent.type(screen.getByTestId(/inputCountry/i), formData.countryCode);
-    userEvent.type(screen.getByTestId(/inputEmail/i), formData.emailAddress);
+    await userEvent.type(
+      screen.getByTestId(/inputCountry/i),
+      formData.countryCode,
+    );
+    await userEvent.type(
+      screen.getByTestId(/inputEmail/i),
+      formData.emailAddress,
+    );
 
     await wait();
 

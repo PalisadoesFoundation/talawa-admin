@@ -276,5 +276,6 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     expect(clearSpy).toHaveBeenCalled();
     expect(window.location.pathname).toBe('/');
+    clearSpy.mockRestore();
   });
 });
