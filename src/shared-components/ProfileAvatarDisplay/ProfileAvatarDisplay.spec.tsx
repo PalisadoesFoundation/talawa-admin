@@ -253,7 +253,14 @@ describe('ProfileAvatarDisplay Component', () => {
     const dialog = screen.getByRole('dialog');
     expect(dialog).toBeInTheDocument();
 
-    fireEvent.click(dialog);
+    // Click the backdrop element (react-bootstrap renders it with .modal-backdrop class)
+    // The backdrop is a sibling to the dialog in the DOM
+    const backdrop =
+      dialog.parentElement?.querySelector('.modal') || dialog.parentElement;
+    // If backdrop exists, click it; otherwise click the modal itself (fallback behavior)
+    if (backdrop) {
+      fireEvent.click(backdrop);
+    }
 
     await waitFor(() => {
       expect(screen.queryByRole('dialog')).toBeNull();
