@@ -56,6 +56,11 @@
     "selectOrg": "Seleccione una organización",
     "afterRegister": "Registro exitoso. Por favor, espere a que el administrador apruebe su solicitud."
   },
+  "signOut": {
+    "retryPrompt": "Error al Cerrar sesión. ¿Reintentar?",
+    "signingOut": "Cerrando sesión...",
+    "signOut": "Cerrar sesión"
+  },
   "userLoginPage": {
     "title": "Administrador Talawa",
     "fromPalisadoes": "Una aplicación de código abierto de los voluntarios de la Fundación palisados",
@@ -731,7 +736,8 @@
     "pledges": "Compromisos",
     "endsOn": "Finaliza el",
     "raisedAmount": "Monto recaudado",
-    "pledgedAmount": "Monto comprometido"
+    "pledgedAmount": "Monto comprometido",
+    "selectPledger": "Por favor seleccione un prometedor"
   },
   "orgPost": {
     "title": "Publicaciones de Talawa",
@@ -1065,7 +1071,8 @@
     "settings": "Ajustes",
     "language": "Idioma",
     "logout": "Cerrar sesión",
-    "close": "Cerca"
+    "close": "Cerrar",
+    "talawaBranding": "Marca Talawa"
   },
   "userOrganizations": {
     "allOrganizations": "Todas las organizaciones",

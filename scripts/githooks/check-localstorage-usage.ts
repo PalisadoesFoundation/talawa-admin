@@ -39,7 +39,6 @@ const getModifiedFiles = (): string[] => {
     );
     process.exit(1);
   }
-  return [];
 };
 
 const files: string[] = getModifiedFiles();
@@ -59,6 +58,7 @@ const checkLocalStorageUsage = (file: string): void => {
     fileName === 'useLocalstorage.ts' ||
     fileName === 'localStorageMock.ts' || // Test utility that implements localStorage mock
     fileName === 'localStorageMock.spec.ts' || // Tests for localStorage mock utility
+    fileName === 'vitest.setup.ts' || // Clears localStorage after each test providing test isolation
     file.endsWith('.md') || // Skip documentation files
     file.startsWith('docs/') || // Skip auto-generated docs
     containsSkipComment(file)
@@ -74,7 +74,8 @@ const checkLocalStorageUsage = (file: string): void => {
       if (
         content.includes('localStorage.getItem') ||
         content.includes('localStorage.setItem') ||
-        content.includes('localStorage.removeItem')
+        content.includes('localStorage.removeItem') ||
+        content.includes('localStorage.clear')
       ) {
         filesWithLocalStorage.push(file);
       }
@@ -101,7 +102,7 @@ if (filesWithLocalStorage.length > 0) {
     '\nInfo: Consider using custom hook functions.',
   );
   console.info(
-    'Please use the getItem, setItem, and removeItem functions provided by the custom hook useLocalStorage.\n',
+    'Please use the getItem, setItem, removeItem and clearAllItems functions provided by the custom hook useLocalStorage.\n',
   );
 
   process.exit(1);

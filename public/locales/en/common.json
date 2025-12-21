@@ -115,4 +115,10 @@
   "organizations": "Organizations",
   "events": "Events",
   "tags": "Tags"
+  "sl_no": "Sl. No.",
+  "actions": "Actions",
+  "notFound": "Not Found",
+  "profilePicture": "profile picture",
+  "profilePicturePlaceholder": "dummy picture",
+  "userProfileMenu": "User Profile Menu"
 }
