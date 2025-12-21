@@ -158,12 +158,11 @@ jobs:
         run: |
           if [ -s pr_files.txt ]; then
             python .github/workflows/scripts/css_check.py \
-              --files pr_files.txt \
+              $(cat pr_files.txt) \
               --exclude_directories src/utils src/types
           else
             echo "No files changed in this PR"
           fi
-
   Check-Mock-Isolation:
     name: Check for proper mock cleanup in test files
     needs: [Code-Quality-Checks]
