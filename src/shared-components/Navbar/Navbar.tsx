@@ -137,9 +137,7 @@ export default function PageHeader({
                 { label: 'Workshops', value: 'Workshops' },
               ]}
               selectedOption={'Events'}
-              onSortChange={(value) =>
-                console.log(`Selected Event Type: ${value}`)
-              }
+              onSortChange={() => {}}
               dataTestIdPrefix="eventType"
               className={styles.dropdown}
               buttonLabel={t('eventType')}
