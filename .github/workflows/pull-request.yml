@@ -157,9 +157,14 @@ jobs:
       - name: Run CSS policy enforcement
         run: |
           if [ -s pr_files.txt ]; then
-            python .github/workflows/scripts/css_check.py \
-              --files $(cat pr_files.txt) \
-              --exclude_directories src/utils src/types
+            FILTERED_FILES=$(grep -Ev '^src/(utils|types)/' pr_files.txt || true)
+
+            if [ -n "$FILTERED_FILES" ]; then
+              python .github/workflows/scripts/css_check.py \
+                --files $FILTERED_FILES
+            else
+              echo "No relevant files after exclusion"
+            fi
           else
             echo "No files changed in this PR"
           fi
