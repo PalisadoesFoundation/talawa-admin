@@ -231,7 +231,11 @@ function organizationEvents(): JSX.Element {
           <PageHeader
             search={{
               placeholder: t('searchEventName'),
-              onSearch: (value) => console.log(`Search: ${value}`),
+              onSearch: (value: string) => {
+                // TODO: Implement search functionality
+                // Search value is available but not yet implemented
+                void value;
+              },
               inputTestId: 'searchEvent',
               buttonTestId: 'searchButton',
             }}

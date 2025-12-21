@@ -268,8 +268,8 @@ describe('Organisation Events Page', () => {
     });
 
     // flip public/registrable for branch coverage
-    await userEvent.click(screen.getByTestId('ispublicCheck'));
-    await userEvent.click(screen.getByTestId('registrableCheck'));
+    await userEvent.click(screen.getByTestId('publicEventCheck'));
+    await userEvent.click(screen.getByTestId('registerableEventCheck'));
 
     await wait();
 
@@ -356,7 +356,7 @@ describe('Organisation Events Page', () => {
       target: { value: formData.startDate },
     });
 
-    await userEvent.click(screen.getByTestId('alldayCheck'));
+    await userEvent.click(screen.getByTestId('allDayEventCheck'));
 
     await waitFor(() =>
       expect(getPickerInputByLabel(translations.startTime)).toBeInTheDocument(),
@@ -444,9 +444,18 @@ describe('Organisation Events Page', () => {
 
     await userEvent.click(screen.getByTestId('recurrenceOption-1'));
 
+    // Wait for dropdown to close - wait a bit for state update
+    await wait(100);
+
+    // Reopen dropdown
     await userEvent.click(recurrenceDropdown);
 
-    const customOption = await screen.findByText('Custom...');
+    // Wait for dropdown menu to be visible, then click the last option (Custom…)
+    await waitFor(() =>
+      expect(screen.getByTestId('recurrenceOption-0')).toBeInTheDocument(),
+    );
+    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const customOption = options[options.length - 1];
     await userEvent.click(customOption);
 
     const customModal = await screen.findByTestId(
@@ -479,9 +488,18 @@ describe('Organisation Events Page', () => {
 
     await userEvent.click(screen.getByTestId('recurrenceOption-1'));
 
+    // Wait for dropdown to close - wait a bit for state update
+    await wait(100);
+
+    // Reopen dropdown
     await userEvent.click(recurrenceDropdown);
 
-    const customOption = await screen.findByText('Custom...');
+    // Wait for dropdown menu to be visible, then click the last option (Custom…)
+    await waitFor(() =>
+      expect(screen.getByTestId('recurrenceOption-0')).toBeInTheDocument(),
+    );
+    const options = screen.getAllByTestId(/recurrenceOption-/);
+    const customOption = options[options.length - 1];
     await userEvent.click(customOption);
 
     const customModal = await screen.findByTestId(

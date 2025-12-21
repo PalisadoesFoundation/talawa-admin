@@ -122,6 +122,20 @@ describe('Recurrence Utility Functions', () => {
         'Daily recurrence count must be no more than 999',
       );
     });
+
+    it('should return invalid if monthly recurrence has neither byMonthDay nor byDay', () => {
+      const rule: InterfaceRecurrenceRule = {
+        frequency: Frequency.MONTHLY,
+        interval: 1,
+        never: true,
+        // No byMonthDay and no byDay
+      };
+      const { isValid, errors } = validateRecurrenceInput(rule, startDate);
+      expect(isValid).toBe(false);
+      expect(errors).toContain(
+        'Monthly recurrence must specify either a date or weekday pattern',
+      );
+    });
   });
 
   describe('getRecurrenceRuleText', () => {
@@ -201,6 +215,28 @@ describe('Recurrence Utility Functions', () => {
       };
       const text = getRecurrenceRuleText(rule, startDate);
       expect(text).toBe('Annually in July on the 21st, never ends');
+    });
+
+    it('should generate correct text for weekly recurrence with single day', () => {
+      const rule: InterfaceRecurrenceRule = {
+        frequency: Frequency.WEEKLY,
+        interval: 1,
+        byDay: [WeekDays.MO],
+        never: true,
+      };
+      const text = getRecurrenceRuleText(rule, startDate);
+      expect(text).toBe('Weekly on Monday, never ends');
+    });
+
+    it('should generate correct text for weekly recurrence with exactly two days', () => {
+      const rule: InterfaceRecurrenceRule = {
+        frequency: Frequency.WEEKLY,
+        interval: 1,
+        byDay: [WeekDays.MO, WeekDays.FR],
+        never: true,
+      };
+      const text = getRecurrenceRuleText(rule, startDate);
+      expect(text).toBe('Weekly on Monday and Friday, never ends');
     });
   });
 
@@ -301,6 +337,15 @@ describe('Recurrence Utility Functions', () => {
 
     it('should return "never" for a null rule', () => {
       expect(getEndTypeFromRecurrence(null)).toBe('never');
+    });
+
+    it('should return "never" as default when rule has no end conditions', () => {
+      const rule: InterfaceRecurrenceRule = {
+        frequency: Frequency.DAILY,
+        interval: 1,
+        // No never, no endDate, no count
+      };
+      expect(getEndTypeFromRecurrence(rule)).toBe('never');
     });
   });
 

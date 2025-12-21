@@ -31,9 +31,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { vi, beforeEach, afterEach } from 'vitest';
 import { toast } from 'react-toastify';
-import useLocalStorage from 'utils/useLocalstorage';
-
-const { setItem, clearAllItems } = useLocalStorage();
 
 const { mockToast, mockUseParams } = vi.hoisted(() => ({
   mockToast: {
@@ -430,8 +427,8 @@ const ERROR_MOCKS = [
         id: 'org123',
         first: 150,
         after: null,
-        startDate,
-        endDate,
+        startAt: startDate,
+        endAt: endDate,
         includeRecurring: true,
       },
     },
@@ -618,14 +615,14 @@ describe('Testing Events Screen [User Portal]', () => {
         dispatchEvent: vi.fn(),
       })),
     });
-    setItem('id', 'user123');
-    setItem('role', 'administrator');
+    localStorage.setItem('id', 'user123');
+    localStorage.setItem('role', 'administrator');
     mockUseParams.mockReturnValue({ orgId: 'org123' });
   });
 
   afterEach(() => {
-    clearAllItems();
-    vi.clearAllMocks();
+    localStorage.clear();
+    vi.restoreAllMocks();
   });
 
   it('Should render the Events screen properly', async () => {
@@ -932,23 +929,29 @@ describe('Testing Events Screen [User Portal]', () => {
 
     const allDayCheckbox = await screen.findByTestId('allDayEventCheck');
 
-    const startTimeInput = screen.getByLabelText(
+    // When all-day is enabled, time pickers are disabled
+    const startTimeInputWhenAllDay = screen.getByLabelText(
       'Start Time',
     ) as HTMLInputElement;
-    const endTimeInput = screen.getByLabelText('End Time') as HTMLInputElement;
+    const endTimeInputWhenAllDay = screen.getByLabelText(
+      'End Time',
+    ) as HTMLInputElement;
+    expect(startTimeInputWhenAllDay).toBeDisabled();
+    expect(endTimeInputWhenAllDay).toBeDisabled();
 
-    // BEFORE toggle → disabled
-    expect(startTimeInput).toBeDisabled();
-    expect(endTimeInput).toBeDisabled();
-
-    // Toggle all-day OFF
+    // Toggle all-day OFF (uncheck it)
     await userEvent.click(allDayCheckbox);
 
-    // AFTER toggle → enabled
-    await waitFor(() => {
-      expect(startTimeInput).not.toBeDisabled();
-      expect(endTimeInput).not.toBeDisabled();
-    });
+    const startTimeInput = (await screen.findByLabelText(
+      'Start Time',
+    )) as HTMLInputElement;
+    const endTimeInput = (await screen.findByLabelText(
+      'End Time',
+    )) as HTMLInputElement;
+
+    // AFTER toggle → visible + enabled
+    expect(startTimeInput).not.toBeDisabled();
+    expect(endTimeInput).not.toBeDisabled();
 
     // Optional sanity: values unchanged
     expect(startTimeInput.value).toBe('08:00:00');
@@ -1243,7 +1246,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should test userRole as administrator', async () => {
-    setItem('role', 'administrator');
+    localStorage.setItem('Talawa-admin_role', JSON.stringify('administrator'));
 
     render(
       <MockedProvider link={link}>
@@ -1271,7 +1274,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should test userRole as regular user', async () => {
-    setItem('role', 'user');
+    localStorage.setItem('Talawa-admin_role', JSON.stringify('user'));
 
     render(
       <MockedProvider link={link}>
