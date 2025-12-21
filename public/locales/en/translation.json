@@ -1271,7 +1271,8 @@
     "enterDescription": "Enter Description",
     "enterNewPassword": "Enter New Password",
     "validationPassed": "Validation Passed",
-    "validationFailed": "Validation Failed"
+    "validationFailed": "Validation Failed",
+    "avatarProcessingFailed": "Failed to process profile picture. Please try uploading again"
   },
   "donate": {
     "title": "Donations",

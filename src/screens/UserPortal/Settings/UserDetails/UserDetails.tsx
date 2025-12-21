@@ -94,10 +94,10 @@ type PasswordValidation = {
 };
 
 const PASSWORD_VALIDATION_PATTERNS = {
-  lowercaseCharRegExp: new RegExp('[a-z]'),
-  uppercaseCharRegExp: new RegExp('[A-Z]'),
-  numericalValueRegExp: new RegExp('\\d'),
-  specialCharRegExp: new RegExp('[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-]'),
+  lowercaseCharRegExp: /[a-z]/,
+  uppercaseCharRegExp: /[A-Z]/,
+  numericalValueRegExp: /\d/,
+  specialCharRegExp: /[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]/,
 };
 
 const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({

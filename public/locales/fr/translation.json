@@ -1271,7 +1271,8 @@
     "enterDescription": "Entrez la description",
     "enterNewPassword": "Entrez un nouveau mot de passe",
     "validationPassed": "Validation Réussie",
-    "validationFailed": "Validation Échouée"
+    "validationFailed": "Validation Échouée",
+    "avatarProcessingFailed": "Impossible de traiter la photo de profil. Veuillez réessayer"
   },
   "donate": {
     "title": "Des dons",

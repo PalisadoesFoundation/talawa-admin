@@ -1271,7 +1271,8 @@
     "enterDescription": "विवरण दर्ज करें",
     "enterNewPassword": "नया पासवर्ड दर्ज करें",
     "validationPassed": "सत्यापन सफल",
-    "validationFailed": "सत्यापन असफल"
+    "validationFailed": "सत्यापन असफल",
+    "avatarProcessingFailed": "प्रोफ़ाइल चित्र को संसाधित करने में विफल। कृपया फिर से अपलोड करने का प्रयास करें"
   },
   "donate": {
     "title": "दान",

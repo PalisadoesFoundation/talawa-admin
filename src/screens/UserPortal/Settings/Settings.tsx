@@ -183,9 +183,7 @@ export default function Settings(): React.JSX.Element {
         avatarFile = await urlToFile(userDetails.avatarURL);
       } catch (error) {
         console.log(error);
-        toast.error(
-          'Failed to process profile picture. Please try uploading again.',
-        );
+        toast.error(t('avatarProcessingFailed'));
         return;
       }
     }

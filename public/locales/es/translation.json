@@ -1271,7 +1271,8 @@
     "enterDescription": "Ingrese descripción",
     "enterNewPassword": "Ingrese nueva clave",
     "validationPassed": "Validación Correcta",
-    "validationFailed": "Validación Incorrecta"
+    "validationFailed": "Validación Incorrecta",
+    "avatarProcessingFailed": "No se pudo procesar la foto de perfil. Por favor, inténtalo de nuevo"
   },
   "donate": {
     "title": "Donaciones",

@@ -1271,7 +1271,8 @@
     "enterDescription": "输入描述",
     "enterNewPassword": "输入新密码",
     "validationPassed": "验证通过",
-    "validationFailed": "验证失败"
+    "validationFailed": "验证失败",
+    "avatarProcessingFailed": "未能处理个人资料图片。请再次尝试上传"
   },
   "donate": {
     "title": "捐款",
