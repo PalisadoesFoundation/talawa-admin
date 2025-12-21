@@ -402,6 +402,13 @@ describe('Organisation Events Page', () => {
       expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument(),
     );
 
+    // Enable recurrence toggle first
+    await userEvent.click(screen.getByTestId('recurringEventCheck'));
+
+    await waitFor(() =>
+      expect(screen.getByTestId('recurrenceDropdown')).toBeInTheDocument(),
+    );
+
     const recurrenceDropdown = screen.getByTestId('recurrenceDropdown');
     expect(recurrenceDropdown).toBeInTheDocument();
 
@@ -414,6 +421,10 @@ describe('Organisation Events Page', () => {
     const firstOption = screen.getByTestId('recurrenceOption-0');
     await userEvent.click(firstOption);
 
+    // Wait a bit for state update
+    await wait(100);
+
+    // Verify dropdown toggle is still present after selection
     await waitFor(() => {
       const dropdownToggle = screen.getByTestId('recurrenceDropdown');
       expect(dropdownToggle).toBeInTheDocument();
@@ -435,25 +446,21 @@ describe('Organisation Events Page', () => {
       expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument(),
     );
 
+    // Enable recurrence toggle first
+    await userEvent.click(screen.getByTestId('recurringEventCheck'));
+
+    await waitFor(() =>
+      expect(screen.getByTestId('recurrenceDropdown')).toBeInTheDocument(),
+    );
+
     const recurrenceDropdown = screen.getByTestId('recurrenceDropdown');
     await userEvent.click(recurrenceDropdown);
 
     await waitFor(() =>
-      expect(screen.getByTestId('recurrenceOption-1')).toBeInTheDocument(),
-    );
-
-    await userEvent.click(screen.getByTestId('recurrenceOption-1'));
-
-    // Wait for dropdown to close - wait a bit for state update
-    await wait(100);
-
-    // Reopen dropdown
-    await userEvent.click(recurrenceDropdown);
-
-    // Wait for dropdown menu to be visible, then click the last option (Custom…)
-    await waitFor(() =>
       expect(screen.getByTestId('recurrenceOption-0')).toBeInTheDocument(),
     );
+
+    // Find and click the last option (Custom…)
     const options = screen.getAllByTestId(/recurrenceOption-/);
     const customOption = options[options.length - 1];
     await userEvent.click(customOption);
@@ -479,25 +486,21 @@ describe('Organisation Events Page', () => {
       expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument(),
     );
 
+    // Enable recurrence toggle first
+    await userEvent.click(screen.getByTestId('recurringEventCheck'));
+
+    await waitFor(() =>
+      expect(screen.getByTestId('recurrenceDropdown')).toBeInTheDocument(),
+    );
+
     const recurrenceDropdown = screen.getByTestId('recurrenceDropdown');
     await userEvent.click(recurrenceDropdown);
 
     await waitFor(() =>
-      expect(screen.getByTestId('recurrenceOption-1')).toBeInTheDocument(),
-    );
-
-    await userEvent.click(screen.getByTestId('recurrenceOption-1'));
-
-    // Wait for dropdown to close - wait a bit for state update
-    await wait(100);
-
-    // Reopen dropdown
-    await userEvent.click(recurrenceDropdown);
-
-    // Wait for dropdown menu to be visible, then click the last option (Custom…)
-    await waitFor(() =>
       expect(screen.getByTestId('recurrenceOption-0')).toBeInTheDocument(),
     );
+
+    // Find and click the last option (Custom…) to open the modal
     const options = screen.getAllByTestId(/recurrenceOption-/);
     const customOption = options[options.length - 1];
     await userEvent.click(customOption);
@@ -506,6 +509,16 @@ describe('Organisation Events Page', () => {
       'customRecurrenceModalCloseBtn',
     );
     expect(customModal).toBeInTheDocument();
+
+    // Test that setRecurrenceRuleState function is called when submitting
+    const submitBtn = screen.getByTestId('customRecurrenceSubmitBtn');
+    await userEvent.click(submitBtn);
+
+    await waitFor(() =>
+      expect(
+        screen.queryByTestId('customRecurrenceModalCloseBtn'),
+      ).not.toBeInTheDocument(),
+    );
   });
 
   test('recurrence validation path executes when Weekly recurrence selected', async () => {
@@ -533,14 +546,25 @@ describe('Organisation Events Page', () => {
       formData.location,
     );
 
+    // Enable recurrence toggle first
+    await userEvent.click(screen.getByTestId('recurringEventCheck'));
+
+    await waitFor(() =>
+      expect(screen.getByTestId('recurrenceDropdown')).toBeInTheDocument(),
+    );
+
     const recurrenceDropdown = screen.getByTestId('recurrenceDropdown');
     await userEvent.click(recurrenceDropdown);
 
     await waitFor(() =>
-      expect(screen.getByTestId('recurrenceOption-2')).toBeInTheDocument(),
+      expect(screen.getByTestId('recurrenceOption-0')).toBeInTheDocument(),
     );
 
-    await userEvent.click(screen.getByTestId('recurrenceOption-2'));
+    // Find the weekly option (usually index 2, but let's find it by checking all options)
+    const options = screen.getAllByTestId(/recurrenceOption-/);
+    // Weekly option is typically the 3rd option (index 2) after "Does not repeat" and "Daily"
+    const weeklyOption = options[2];
+    await userEvent.click(weeklyOption);
 
     await userEvent.click(screen.getByTestId('createEventBtn'));
 

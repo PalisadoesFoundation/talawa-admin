@@ -388,17 +388,13 @@ describe('CustomRecurrenceModal – full coverage', () => {
         count: 5,
       },
     });
-
-    // Change to endsNever first
     fireEvent.click(screen.getByTestId(endsNever));
-    // Then try to change count (should not update recurrence rule)
+    setRecurrenceRuleState.mockClear();
     fireEvent.change(screen.getByTestId('customRecurrenceCountInput'), {
       target: { value: '10' },
     });
 
-    // The count change should not trigger setRecurrenceRuleState
-    // because endsAfter is not selected
-    expect(setRecurrenceRuleState).toHaveBeenCalled();
+    expect(setRecurrenceRuleState).not.toHaveBeenCalled();
   });
 
   it('submits valid recurrence configuration with endsNever', () => {
@@ -1166,11 +1162,11 @@ describe('CustomRecurrenceModal – full coverage', () => {
 
       weekdayButtons[0].focus();
       fireEvent.keyDown(weekdayButtons[0], {
-        key: 'ArrowLeft',
+        key: 'ArrowRight',
       });
 
       expect(document.querySelector).toHaveBeenCalledWith(
-        '[data-cy="recurrenceWeekDay-6"]',
+        '[data-cy="recurrenceWeekDay-1"]',
       );
       expect(mockButton.focus).toHaveBeenCalled();
     } finally {
@@ -1200,11 +1196,11 @@ describe('CustomRecurrenceModal – full coverage', () => {
 
       weekdayButtons[0].focus();
       fireEvent.keyDown(weekdayButtons[0], {
-        key: 'ArrowLeft',
+        key: 'Home',
       });
 
       expect(document.querySelector).toHaveBeenCalledWith(
-        '[data-cy="recurrenceWeekDay-6"]',
+        '[data-cy="recurrenceWeekDay-0"]',
       );
       expect(mockButton.focus).toHaveBeenCalled();
     } finally {
@@ -1234,7 +1230,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
 
       weekdayButtons[0].focus();
       fireEvent.keyDown(weekdayButtons[0], {
-        key: 'ArrowLeft',
+        key: 'End',
       });
 
       expect(document.querySelector).toHaveBeenCalledWith(

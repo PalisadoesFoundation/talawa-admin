@@ -1618,7 +1618,7 @@ describe('EventForm', () => {
       />,
     );
 
-    expect(screen.queryByTestId('ispublicCheck')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('publicEventCheck')).not.toBeInTheDocument();
   });
 
   test('does not show registerable toggle when showRegisterable is false', () => {
@@ -1634,7 +1634,9 @@ describe('EventForm', () => {
       />,
     );
 
-    expect(screen.queryByTestId('registrableCheck')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('registerableEventCheck'),
+    ).not.toBeInTheDocument();
   });
 
   test('does not show create chat toggle when showCreateChat is false', () => {
