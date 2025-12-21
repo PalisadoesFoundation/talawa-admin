@@ -737,6 +737,7 @@
     "pledgedAmount": "Montant promis",
     "startDate": "Date de début",
     "endDate": "Date de fin",
+    "searchByPlaceholder": "Rechercher par {{field}}",
     "selectPledger": "Veuillez sélectionner un donateur"
   },
   "orgPost": {
@@ -1026,7 +1027,13 @@
   "people": {
     "title": "Personnes",
     "searchUsers": "Rechercher des utilisateurs",
-    "nothingToShow": "Rien à montrer ici."
+    "nothingToShow": "Rien à montrer ici.",
+    "sNo": "N°",
+    "avatar": "Avatar",
+    "name": "Nom",
+    "email": "E-mail",
+    "role": "Rôle",
+    "loading": "Chargement..."
   },
   "userLogin": {
     "login": "Se connecter",
@@ -1085,7 +1092,8 @@
     "search": "Rechercher",
     "filter": "Filtrer",
     "searchByName": "Rechercher par nom",
-    "searchOrganizations": "Rechercher Organisations"
+    "searchOrganizations": "Rechercher Organisations",
+    "loading": "Chargement..."
   },
   "userSidebarOrg": {
     "yourOrganizations": "Vos organisations",
@@ -1628,7 +1636,21 @@
     "eventInvitationRecurringSubject": "Invitation à faire du bénévolat pour la série d'événements récurrents",
     "pending": "En attente",
     "accepted": "Accepté",
-    "rejected": "Rejeté"
+    "rejected": "Rejeté",
+    "assignee": "Assigné",
+    "group": "Groupe",
+    "event": "Événement",
+    "received": "Reçu",
+    "location": "Emplacement",
+    "recurrence": "Récurrence",
+    "endDate": "Date de Fin",
+    "description": "Description",
+    "volunteerGroups": "Groupes de Bénévoles",
+    "groupTable": "Tableau des Groupes",
+    "srNo": "N°",
+    "groupName": "Nom du Groupe",
+    "noOfMembers": "Nombre de Membres",
+    "options": "Options"
   },
   "pluginStore": {
     "title": "Boutique de Plugins",

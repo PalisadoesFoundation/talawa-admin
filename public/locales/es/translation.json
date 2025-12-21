@@ -737,6 +737,7 @@
     "endsOn": "Finaliza el",
     "raisedAmount": "Monto recaudado",
     "pledgedAmount": "Monto comprometido",
+    "searchByPlaceholder": "Buscar por {{field}}",
     "selectPledger": "Por favor seleccione un prometedor"
   },
   "orgPost": {
@@ -1040,7 +1041,13 @@
   "people": {
     "title": "Gente",
     "searchUsers": "Buscar usuarios",
-    "nothingToShow": "Nada que mostrar aquí."
+    "nothingToShow": "Nada que mostrar aquí.",
+    "sNo": "N.º",
+    "avatar": "Avatar",
+    "name": "Nombre",
+    "email": "Correo Electrónico",
+    "role": "Rol",
+    "loading": "Cargando..."
   },
   "userRegister": {
     "register": "Registro",
@@ -1085,7 +1092,8 @@
     "organizations": "Organizaciones",
     "searchByName": "Buscar por nombre",
     "searchUsers": "Buscar usuarios",
-    "searchOrganizations": "Buscar Organizaciones"
+    "searchOrganizations": "Buscar Organizaciones",
+    "loading": "Cargando..."
   },
   "userSidebarOrg": {
     "yourOrganizations": "Tus Organizaciones",
@@ -1628,7 +1636,21 @@
     "eventInvitationRecurringSubject": "Invitación a ser voluntario para serie de eventos recurrentes",
     "pending": "Pendiente",
     "accepted": "Aceptado",
-    "rejected": "Rechazado"
+    "rejected": "Rechazado",
+    "assignee": "Asignado",
+    "group": "Grupo",
+    "event": "Evento",
+    "received": "Recibido",
+    "location": "Ubicación",
+    "recurrence": "Recurrencia",
+    "endDate": "Fecha de Fin",
+    "description": "Descripción",
+    "volunteerGroups": "Grupos de Voluntarios",
+    "groupTable": "Tabla de Grupos",
+    "srNo": "N.º",
+    "groupName": "Nombre del Grupo",
+    "noOfMembers": "Número de Miembros",
+    "options": "Opciones"
   },
   "pluginStore": {
     "title": "Tienda de Plugins",
