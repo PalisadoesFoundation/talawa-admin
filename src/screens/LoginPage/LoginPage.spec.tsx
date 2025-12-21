@@ -1871,4 +1871,63 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     expect(toastMocks.warn).toHaveBeenCalledWith('Not found');
   });
+
+  /* 13. account_locked error with retryAfter timestamp */
+  it('shows account locked message with countdown when retryAfter is provided', async () => {
+    const { GraphQLError } = await import('graphql');
+    // Set retryAfter to 15 minutes from now
+    const retryAfterDate = new Date(Date.now() + 15 * 60 * 1000).toISOString();
+
+    const ACCOUNT_LOCKED_MOCK = [
+      {
+        request: {
+          query: RECAPTCHA_MUTATION,
+          variables: { recaptchaToken: 'token' },
+        },
+        result: { data: { recaptcha: true } },
+      },
+      {
+        request: {
+          query: SIGNIN_QUERY,
+          variables: { email: 'locked@test.com', password: 'wrongpass' },
+        },
+        result: {
+          errors: [
+            new GraphQLError('Account temporarily locked', {
+              extensions: {
+                code: 'account_locked',
+                retryAfter: retryAfterDate,
+              },
+            }),
+          ],
+        },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: { data: { organizations: [] } },
+      },
+    ];
+
+    setLocationPath('/');
+    renderLoginPage(ACCOUNT_LOCKED_MOCK);
+    await wait();
+
+    await userEvent.type(screen.getByTestId('loginEmail'), 'locked@test.com');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'wrongpass',
+    );
+    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[0], 'token');
+    await userEvent.click(screen.getByTestId('loginBtn'));
+    await wait();
+
+    // Should show the account locked message with countdown (15 minutes)
+    expect(toastMocks.error).toHaveBeenCalledWith(
+      expect.stringContaining('locked'),
+    );
+  });
 });

@@ -15,5 +15,6 @@
   "error400": "Réponse non réussie. Code d'état 400 reçu du serveur",
   "organizationNameAlreadyExists": "Une organisation avec ce nom existe déjà",
   "markAsReadError": "Erreur lors du marquage des notifications comme lues",
-  "accountLocked": "Le compte est temporairement verrouillé en raison d'un trop grand nombre de tentatives de connexion infructueuses. Veuillez réessayer plus tard."
+  "accountLocked": "Le compte est temporairement verrouillé en raison d'un trop grand nombre de tentatives de connexion infructueuses. Veuillez réessayer plus tard.",
+  "accountLockedWithTimer": "Le compte est temporairement verrouillé. Veuillez réessayer dans {{minutes}} minute(s)."
 }
