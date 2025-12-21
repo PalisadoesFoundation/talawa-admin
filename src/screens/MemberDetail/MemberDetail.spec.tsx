@@ -677,7 +677,7 @@ describe('MemberDetail', () => {
     expect(educationDropdownBtn).toBeInTheDocument();
 
     // Test initial state
-    expect(educationDropdownBtn).toHaveTextContent('Grade-8'); // Or whatever your initial value is
+    expect(educationDropdownBtn).toHaveTextContent('Grade-8');
 
     // Click the dropdown button to open it
     await userEvent.click(educationDropdownBtn);
@@ -709,7 +709,7 @@ describe('MemberDetail', () => {
     expect(employmentStatus).toBeInTheDocument();
 
     // Test initial state
-    expect(employmentStatus).toHaveTextContent('None'); // Or whatever your initial value is
+    expect(employmentStatus).toHaveTextContent('None');
 
     // Click the dropdown button to open it
     await userEvent.click(employmentStatus);
@@ -739,7 +739,7 @@ describe('MemberDetail', () => {
     expect(maritialStatus).toBeInTheDocument();
 
     // Test initial state
-    expect(maritialStatus).toHaveTextContent('Engaged'); // Or whatever your initial value is
+    expect(maritialStatus).toHaveTextContent('Engaged');
 
     // Click the dropdown button to open it
     await userEvent.click(maritialStatus);
@@ -769,7 +769,7 @@ describe('MemberDetail', () => {
     expect(natalSexStatus).toBeInTheDocument();
 
     // Test initial state
-    expect(natalSexStatus).toHaveTextContent('Male'); // Or whatever your initial value is
+    expect(natalSexStatus).toHaveTextContent('Male');
 
     // Click the dropdown button to open it
     await userEvent.click(natalSexStatus);
