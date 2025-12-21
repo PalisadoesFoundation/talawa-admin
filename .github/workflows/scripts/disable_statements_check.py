@@ -28,7 +28,9 @@ class DisableStatementsChecker:
 
         for match in pattern.finditer(content):
             line_num = content[: match.start()].count("\n") + 1
-            violations.append(f"{file_path}:{line_num}: Found eslint-disable comment")
+            violations.append(
+                f"{file_path}:{line_num}: Found eslint-disable comment"
+            )
 
         return violations
 
@@ -41,7 +43,9 @@ class DisableStatementsChecker:
 
         for match in pattern.finditer(content):
             line_num = content[: match.start()].count("\n") + 1
-            violations.append(f"{file_path}:{line_num}: Found istanbul ignore comment")
+            violations.append(
+                f"{file_path}:{line_num}: Found istanbul ignore comment"
+            )
 
         return violations
 
@@ -52,7 +56,9 @@ class DisableStatementsChecker:
 
         for match in pattern.finditer(content):
             line_num = content[: match.start()].count("\n") + 1
-            violations.append(f"{file_path}:{line_num}: Found it.skip statement")
+            violations.append(
+                f"{file_path}:{line_num}: Found it.skip statement"
+            )
 
         return violations
 
@@ -71,7 +77,9 @@ class DisableStatementsChecker:
         violations = []
 
         # Auto-discover check methods
-        for name, method in inspect.getmembers(self, predicate=inspect.ismethod):
+        for name, method in inspect.getmembers(
+            self, predicate=inspect.ismethod
+        ):
             if name.startswith("check_") and name not in (
                 "check_file",
                 "check_files",
