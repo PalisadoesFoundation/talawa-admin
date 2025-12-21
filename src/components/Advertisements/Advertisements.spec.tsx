@@ -1140,7 +1140,7 @@ describe('Testing Advertisement Component', () => {
     const mockToken = 'test-token-123';
 
     const getItemSpy = vi
-      .spyOn(Storage.prototype, 'getItem')
+      .spyOn(window.localStorage, 'getItem')
       .mockImplementation((key: string) => {
         if (key === 'Talawa-admin_token') return mockToken;
         return null;
@@ -1168,7 +1168,7 @@ describe('Testing Advertisement Component', () => {
 
   it('authLink does not add authorization header when token is null in localStorage', async () => {
     const getItemSpy = vi
-      .spyOn(Storage.prototype, 'getItem')
+      .spyOn(window.localStorage, 'getItem')
       .mockImplementation(() => null);
 
     render(

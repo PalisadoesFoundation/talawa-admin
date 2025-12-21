@@ -114,6 +114,7 @@ const Pledges = (): JSX.Element => {
   interface IPledgeRefetchFn {
     (): Promise<PledgeQueryResult>;
   }
+  const shouldSkip = !orgId || !userId;
   const {
     data: pledgeData,
     loading: pledgeLoading,
@@ -125,10 +126,11 @@ const Pledges = (): JSX.Element => {
     error?: ApolloError;
     refetch: IPledgeRefetchFn;
   } = useQuery(USER_PLEDGES, {
-    skip: !orgId || !userId,
-    variables: userId
-      ? {
-          input: { userId },
+    skip: shouldSkip,
+    variables: shouldSkip
+      ? undefined
+      : {
+          input: { userId: userId as string },
           where: searchTerm
             ? {
                 ...(searchBy === 'pledgers' && {
@@ -138,8 +140,7 @@ const Pledges = (): JSX.Element => {
               }
             : {},
           orderBy: sortBy,
-        }
-      : undefined,
+        },
   });
 
   if (!orgId || !userId) {
@@ -207,7 +208,7 @@ const Pledges = (): JSX.Element => {
   const columns: GridColDef[] = [
     {
       field: 'pledger',
-      headerName: t('pledger'),
+      headerName: t('pledgers'),
       flex: 4,
       minWidth: 50,
       align: 'left',

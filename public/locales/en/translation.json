@@ -56,6 +56,11 @@
     "user": "user",
     "loading": "loading"
   },
+  "signOut": {
+    "retryPrompt": "Failed to revoke session. Retry?",
+    "signingOut": "Signing out...",
+    "signOut": "Sign Out"
+  },
   "userLoginPage": {
     "title": "Talawa Admin",
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
@@ -732,7 +737,8 @@
     "pledgedAmount": "Pledged amount",
     "startDate": "startDate",
     "endDate": "endDate",
-    "searchByPlaceholder": "Search by {{field}}"
+    "searchByPlaceholder": "Search by {{field}}",
+    "selectPledger": "Please select a pledger"
   },
   "orgPost": {
     "title": "Posts",
@@ -1124,7 +1130,8 @@
     "language": "Language",
     "settings": "settings",
     "logout": "logout",
-    "close": "close"
+    "close": "close",
+    "talawaBranding": "Talawa Branding"
   },
   "userOrganizations": {
     "allOrganizations": "All Organizations",
