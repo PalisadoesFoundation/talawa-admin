@@ -224,6 +224,11 @@
     "placeholderAvatarAlt": "Avatar predeterminado"
   },
   "users": {
+    "membershipStatus": {
+      "member": "Estado de membresía: Miembro",
+      "pending": "Estado de membresía: Pendiente",
+      "notMember": "Estado de membresía: No es miembro"
+    },
     "title": "Roles Talawa",
     "searchByName": "Buscar por nombre",
     "users": "Usuarios",

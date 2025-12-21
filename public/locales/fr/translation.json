@@ -224,6 +224,11 @@
     "placeholderAvatarAlt": "Avatar par défaut"
   },
   "users": {
+    "membershipStatus": {
+      "member": "Statut d'adhésion: Membre",
+      "pending": "Statut d'adhésion: En attente",
+      "notMember": "Statut d'adhésion: Non membre"
+    },
     "title": "Rôles Talawa",
     "joined_organizations": "Organisations rejointes",
     "blocked_organizations": "Organisations bloquées",

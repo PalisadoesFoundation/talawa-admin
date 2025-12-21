@@ -30,6 +30,9 @@ vi.mock('react-i18next', () => ({
         'users.UserIdNotFound': 'UserIdNotFound',
         'users.MembershipRequestWithdrawn': 'MembershipRequestWithdrawn',
         'users.MembershipRequestNotFound': 'MembershipRequestNotFound',
+        'users.membershipStatus.member': 'Membership status: Member',
+        'users.membershipStatus.pending': 'Membership status: Pending',
+        'users.membershipStatus.notMember': 'Membership status: Not a member',
       };
 
       return translations[key] || key;

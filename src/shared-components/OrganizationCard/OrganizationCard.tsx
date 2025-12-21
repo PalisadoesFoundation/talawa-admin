@@ -230,10 +230,10 @@ function OrganizationCard({
                 role="status"
                 aria-label={
                   membershipState === 'member'
-                    ? 'Membership status: Member'
+                    ? t('users.membershipStatus.member')
                     : membershipState === 'pending'
-                      ? 'Membership status: Pending'
-                      : 'Membership status: Not a member'
+                      ? t('users.membershipStatus.pending')
+                      : t('users.membershipStatus.notMember')
                 }
               >
                 {membershipState === 'member'

@@ -224,6 +224,11 @@
     "placeholderAvatarAlt": "Placeholder avatar"
   },
   "users": {
+    "membershipStatus": {
+      "member": "Membership status: Member",
+      "pending": "Membership status: Pending",
+      "notMember": "Membership status: Not a member"
+    },
     "member": "Member",
     "pending": "Pending",
     "notMember": "Not a member",

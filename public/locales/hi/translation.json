@@ -224,6 +224,11 @@
     "placeholderAvatarAlt": "प्लेसहोल्डर अवतार"
   },
   "users": {
+    "membershipStatus": {
+      "member": "सदस्यता स्थिति: सदस्य",
+      "pending": "सदस्यता स्थिति: लंबित",
+      "notMember": "सदस्यता स्थिति: सदस्य नहीं"
+    },
     "title": "तालावा भूमिकाएँ",
     "joined_organizations": "संगठनों में शामिल हुए",
     "blocked_organizations": "अवरुद्ध संगठन",
