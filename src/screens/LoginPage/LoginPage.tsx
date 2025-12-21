@@ -455,7 +455,7 @@ const loginPage = (): JSX.Element => {
                 >
                   <img
                     src={data.community.logoURL}
-                    alt="Community Logo"
+                    alt={t('communityLogo')}
                     data-testid="preLoginLogo"
                   />
                   <p className="text-center">{data.community.name}</p>
@@ -908,7 +908,7 @@ const loginPage = (): JSX.Element => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label="Organizations"
+                            label={t('organizations')}
                             className={styles.selectOrgText}
                           />
                         )}

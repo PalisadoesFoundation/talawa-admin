@@ -54,7 +54,9 @@
     "OR": "OR",
     "admin": "admin",
     "user": "user",
-    "loading": "loading"
+    "loading": "loading",
+    "communityLogo": "Community Logo",
+    "organizations": "Organizations"
   },
   "signOut": {
     "retryPrompt": "Failed to revoke session. Retry?",

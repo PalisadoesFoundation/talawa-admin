@@ -54,7 +54,9 @@
     "OR": "OU",
     "admin": "Administrateur",
     "user": "Utilisateur",
-    "loading": "Chargement"
+    "loading": "Chargement",
+    "communityLogo": "Logo de la Communauté",
+    "organizations": "Organisations"
   },
   "signOut": {
     "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
