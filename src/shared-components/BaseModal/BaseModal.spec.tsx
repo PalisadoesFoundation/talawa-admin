@@ -212,17 +212,22 @@ describe('BaseModal', () => {
       );
 
       const modal = screen.getByTestId('test-modal');
+      expect(modal).toBeInTheDocument();
+
       fireEvent.keyDown(modal, {
         key: 'Escape',
         code: 'Escape',
         keyCode: 27,
       });
 
-      // Give it a moment to process
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      // Wait for any async handlers to complete
+      await waitFor(() => {
+        // Ensure any potential debounced/async React Bootstrap handlers have run
+      });
 
       // onHide should not be called when keyboard is false
-      // Note: React Bootstrap may still call it, but we test the prop is passed
+      expect(onHide).not.toHaveBeenCalled();
+      // Modal should still be in the document
       expect(modal).toBeInTheDocument();
     });
   });
@@ -611,9 +616,8 @@ describe('BaseModal', () => {
         <BaseModal
           {...defaultProps}
           title="Empty Body"
-          children={null}
           dataTestId="empty-children-modal"
-        />,
+        ></BaseModal>,
       );
       expect(screen.getByTestId('empty-children-modal')).toBeInTheDocument();
     });

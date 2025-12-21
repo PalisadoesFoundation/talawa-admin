@@ -89,6 +89,18 @@ export default function BaseModal({
   const titleId = useId();
   const bodyId = useId();
 
+  const closeButton = showCloseButton ? (
+    <Button
+      variant={closeButtonVariant}
+      onClick={onHide}
+      aria-label={t('close')}
+      data-testid="modalCloseBtn"
+      className={styles.closeButton}
+    >
+      <i className="fa fa-times"></i>
+    </Button>
+  ) : null;
+
   return (
     <Modal
       show={show}
@@ -107,32 +119,12 @@ export default function BaseModal({
       {headerContent ? (
         <Modal.Header className={headerClassName}>
           {headerContent}
-          {showCloseButton && (
-            <Button
-              variant={closeButtonVariant}
-              onClick={onHide}
-              aria-label={t('close')}
-              data-testid="modalCloseBtn"
-              className={styles.closeButton}
-            >
-              <i className="fa fa-times"></i>
-            </Button>
-          )}
+          {closeButton}
         </Modal.Header>
       ) : (
         <Modal.Header className={headerClassName}>
           <Modal.Title id={titleId}>{title}</Modal.Title>
-          {showCloseButton && (
-            <Button
-              variant={closeButtonVariant}
-              onClick={onHide}
-              aria-label={t('close')}
-              data-testid="modalCloseBtn"
-              className={styles.closeButton}
-            >
-              <i className="fa fa-times"></i>
-            </Button>
-          )}
+          {closeButton}
         </Modal.Header>
       )}
       <Modal.Body id={bodyId} className={bodyClassName}>

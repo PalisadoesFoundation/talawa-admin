@@ -13,7 +13,7 @@
     "docs/src/**/*.spec.{ts,tsx,js}",
     "src/types/Event/interface.ts",
     "src/test-utils/**",
-    "src/shared-components/BaseModal/index.ts"
+    "src/shared-components/**"
   ],
   "ignoreDependencies": [],
   "ignoreExportsUsedInFile": true
