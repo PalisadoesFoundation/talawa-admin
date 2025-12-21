@@ -103,4 +103,49 @@ describe('UserPortalCard', () => {
     const card = screen.getByRole('group');
     expect(card).toHaveAttribute('aria-label', 'accessible-card');
   });
+
+  test('applies standard variant class', () => {
+    render(
+      <UserPortalCard ariaLabel="standard" variant="standard">
+        <span>Standard</span>
+      </UserPortalCard>,
+    );
+
+    const card = screen.getByTestId('user-portal-card');
+    expect(card.className).toMatch(/variantStandard/);
+  });
+
+  test('applies expanded variant class', () => {
+    render(
+      <UserPortalCard ariaLabel="expanded" variant="expanded">
+        <span>Expanded</span>
+      </UserPortalCard>,
+    );
+
+    const card = screen.getByTestId('user-portal-card');
+    expect(card.className).toMatch(/variantExpanded/);
+  });
+
+  test('defaults to standard variant when variant prop is omitted', () => {
+    render(
+      <UserPortalCard ariaLabel="default">
+        <span>Default</span>
+      </UserPortalCard>,
+    );
+
+    const card = screen.getByTestId('user-portal-card');
+    expect(card.className).toMatch(/variantStandard/);
+  });
+
+  test('handles undefined ariaLabel gracefully', () => {
+    render(
+      <UserPortalCard>
+        <span>Content</span>
+      </UserPortalCard>,
+    );
+
+    const card = screen.getByTestId('user-portal-card');
+    expect(card).toBeInTheDocument();
+    expect(card).not.toHaveAttribute('aria-label');
+  });
 });
