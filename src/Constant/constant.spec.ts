@@ -1,3 +1,5 @@
+import { afterEach, vi } from 'vitest';
+
 import {
   AUTH_TOKEN,
   BACKEND_URL,
@@ -105,4 +107,8 @@ describe('constants', () => {
       expect(typeof BACKEND_WEBSOCKET_URL).toBe('string');
     });
   });
+});
+
+afterEach(() => {
+  vi.clearAllMocks();
 });

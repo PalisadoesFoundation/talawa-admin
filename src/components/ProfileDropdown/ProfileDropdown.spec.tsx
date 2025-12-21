@@ -11,6 +11,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { vi } from 'vitest';
 
+// biome-ignore lint/correctness/useHookAtTopLevel: useLocalStorage is a storage helper, not a React hook
 const { setItem, clearAllItems } = useLocalStorage();
 
 let mockNavigate: ReturnType<typeof vi.fn>;
@@ -52,7 +53,6 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.clearAllMocks();
-  vi.restoreAllMocks();
   clearAllItems();
 });
 
