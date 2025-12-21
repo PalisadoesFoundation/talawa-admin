@@ -48,10 +48,10 @@ describe('UserTags Component', () => {
   it('renders table headers correctly', () => {
     render(<UserTags />);
 
-    expect(screen.getByText('Tag name')).toBeInTheDocument();
-    expect(screen.getByText('Assigned to')).toBeInTheDocument();
-    expect(screen.getByText('Created on')).toBeInTheDocument();
-    expect(screen.getByText('Created by')).toBeInTheDocument();
+    expect(screen.getByText('title')).toBeInTheDocument();
+    expect(screen.getByText('assignedTo')).toBeInTheDocument();
+    expect(screen.getByText('createdOn')).toBeInTheDocument();
+    expect(screen.getByText('createdBy')).toBeInTheDocument();
   });
 
   it('renders all tags initially', () => {
