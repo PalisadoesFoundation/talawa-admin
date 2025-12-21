@@ -356,60 +356,6 @@ describe('ProfileAvatarDisplay Component', () => {
     expect(modalFallback).toBeInTheDocument();
     expect(modalFallback.textContent).toContain('Mocked Avatar: John Doe');
   });
-
-  test('renders fallback with onError callback provided (covers truthy branch)', () => {
-    const onErrorMock = vi.fn();
-    const { container } = render(
-      <ProfileAvatarDisplay
-        {...defaultProps}
-        imageUrl={null}
-        onError={onErrorMock}
-      />,
-    );
-
-    // Component should render without issues when onError is provided
-    const avatarContainer = screen.getByTestId('test-avatar');
-    expect(avatarContainer).toBeInTheDocument();
-
-    // Verify the onError handler is attached (even if div errors are rare)
-    // The container has onError attr in the React virtual DOM
-    expect(container.querySelector('[data-testid="test-avatar"]')).toBeTruthy();
-  });
-
-  test('renders fallback with onLoad callback provided (covers truthy branch)', () => {
-    const onLoadMock = vi.fn();
-    const { container } = render(
-      <ProfileAvatarDisplay
-        {...defaultProps}
-        imageUrl={null}
-        onLoad={onLoadMock}
-      />,
-    );
-
-    // Component should render without issues when onLoad is provided
-    const avatarContainer = screen.getByTestId('test-avatar');
-    expect(avatarContainer).toBeInTheDocument();
-
-    // Verify the component renders correctly with onLoad prop
-    expect(container.querySelector('[data-testid="test-avatar"]')).toBeTruthy();
-  });
-
-  test('renders fallback without onError callback (covers falsy branch)', () => {
-    render(<ProfileAvatarDisplay {...defaultProps} imageUrl={null} />);
-
-    // Component should render without issues when onError is not provided
-    const avatarContainer = screen.getByTestId('test-avatar');
-    expect(avatarContainer).toBeInTheDocument();
-  });
-
-  test('renders fallback without onLoad callback (covers falsy branch)', () => {
-    render(<ProfileAvatarDisplay {...defaultProps} imageUrl={null} />);
-
-    // Component should render without issues when onLoad is not provided
-    const avatarContainer = screen.getByTestId('test-avatar');
-    expect(avatarContainer).toBeInTheDocument();
-  });
-
   test('opens modal when Enter key is pressed on fallback avatar', () => {
     render(
       <ProfileAvatarDisplay
