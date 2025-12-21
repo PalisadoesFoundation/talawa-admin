@@ -178,73 +178,86 @@ describe('MemberDetail', () => {
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
     expect(screen.getAllByText(/Email/i)).toBeTruthy();
     expect(screen.getByText('User')).toBeInTheDocument();
+
+    // Set birth date
     const birthDateDatePicker = screen.getByTestId('birthDate');
     fireEvent.change(birthDateDatePicker, {
       target: { value: formData.birthDate },
     });
 
-    await userEvent.type(screen.getByTestId(/inputName/i), formData.name);
-    await userEvent.type(
-      screen.getByTestId(/addressLine1/i),
+    // Helper for clearing and typing
+    const setText = async (testIdRegex: RegExp, value: string) => {
+      const el = screen.getByTestId(testIdRegex);
+      // Only type if editable
+      if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+        if (!el.readOnly && !el.disabled) {
+          await userEvent.clear(el);
+          await userEvent.type(el, value);
+        }
+      } else {
+        // fallback for custom components: maybe use click -> type if needed
+        await userEvent.click(el);
+        await userEvent.type(el, value);
+      }
+      return el;
+    };
+
+    // Fill all inputs
+    const nameInput = await setText(/inputName/i, formData.name);
+    const addressLine1Input = await setText(
+      /addressLine1/i,
       formData.addressLine1,
     );
-    await userEvent.type(
-      screen.getByTestId(/addressLine2/i),
+    const addressLine2Input = await setText(
+      /addressLine2/i,
       formData.addressLine2,
     );
-    await userEvent.type(screen.getByTestId(/inputCity/i), formData.city);
-    await userEvent.type(screen.getByTestId(/inputState/i), formData.state);
-    await userEvent.type(
-      screen.getByTestId(/inputPostalCode/i),
+    const cityInput = await setText(/inputCity/i, formData.city);
+    const stateInput = await setText(/inputState/i, formData.state);
+    const postalCodeInput = await setText(
+      /inputPostalCode/i,
       formData.postalCode,
     );
-    await userEvent.type(
-      screen.getByTestId(/inputDescription/i),
+    const descriptionInput = await setText(
+      /inputDescription/i,
       formData.description,
     );
-    await userEvent.type(
-      screen.getByTestId(/inputCountry/i),
-      formData.countryCode,
-    );
-    await userEvent.type(
-      screen.getByTestId(/inputEmail/i),
-      formData.emailAddress,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByText(/Save Changes/i));
-
-    expect(screen.getByTestId(/inputName/i)).toHaveValue(formData.name);
-    expect(screen.getByTestId(/addressLine1/i)).toHaveValue(
-      formData.addressLine1,
-    );
-    expect(screen.getByTestId(/addressLine2/i)).toHaveValue(
-      formData.addressLine2,
-    );
-    expect(screen.getByTestId(/inputCity/i)).toHaveValue(formData.city);
-    expect(screen.getByTestId(/inputState/i)).toHaveValue(formData.state);
-    expect(screen.getByTestId(/inputPostalCode/i)).toHaveValue(
-      formData.postalCode,
-    );
-    expect(screen.getByTestId(/inputDescription/i)).toHaveValue(
-      formData.description,
-    );
-    expect(screen.getByTestId(/inputCountry/i)).toHaveValue(
-      formData.countryCode,
-    );
-    expect(screen.getByTestId(/inputEmail/i)).toHaveValue(
-      formData.emailAddress,
-    );
-    expect(screen.getByTestId(/inputMobilePhoneNumber/i)).toHaveValue(
+    const emailInput = await setText(/inputEmail/i, formData.emailAddress);
+    const mobilePhoneInput = await setText(
+      /inputMobilePhoneNumber/i,
       formData.mobilePhoneNumber,
     );
-    expect(screen.getByTestId(/inputHomePhoneNumber/i)).toHaveValue(
+    const homePhoneInput = await setText(
+      /inputHomePhoneNumber/i,
       formData.homePhoneNumber,
     );
-    expect(screen.getByTestId(/workPhoneNumber/i)).toHaveValue(
+    const workPhoneInput = await setText(
+      /workPhoneNumber/i,
       formData.workPhoneNumber,
     );
+
+    // Country (adjust this if it's a select or MUI-style select)
+    const countryTrigger = screen.getByTestId(/inputCountry/i); // trigger/button
+    await userEvent.click(countryTrigger);
+    const countryOption = screen.getByText(/Barbados/i); // visible label
+    await userEvent.click(countryOption);
+    expect(countryTrigger).toHaveTextContent(/Barbados/i);
+
+    // Save changes
+    await userEvent.click(screen.getByText(/Save Changes/i));
+
+    // Assertions
+    expect(nameInput).toHaveValue(formData.name);
+    expect(addressLine1Input).toHaveValue(formData.addressLine1);
+    expect(addressLine2Input).toHaveValue(formData.addressLine2);
+    expect(cityInput).toHaveValue(formData.city);
+    expect(stateInput).toHaveValue(formData.state);
+    expect(postalCodeInput).toHaveValue(formData.postalCode);
+    expect(descriptionInput).toHaveValue(formData.description);
+    expect(emailInput).toHaveValue(formData.emailAddress);
+    expect(mobilePhoneInput).toHaveValue(formData.mobilePhoneNumber);
+    expect(homePhoneInput).toHaveValue(formData.homePhoneNumber);
+    expect(workPhoneInput).toHaveValue(formData.workPhoneNumber);
   });
 
   test('display admin', async () => {
