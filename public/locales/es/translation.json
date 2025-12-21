@@ -1696,6 +1696,7 @@
   },
   "common": {
     "signOut": "Cerrar sesión",
-    "signingOut": "Cerrando sesión..."
+    "signingOut": "Cerrando sesión...",
+    "retryPrompt": "Error al revocar la sesión. ¿Reintentar?"
   }
 }

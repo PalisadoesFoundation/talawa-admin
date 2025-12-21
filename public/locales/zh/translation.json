@@ -1696,6 +1696,7 @@
   },
   "common": {
     "signOut": "退出登录",
-    "signingOut": "正在退出..."
+    "signingOut": "正在退出...",
+    "retryPrompt": "撤销会话失败。重试？"
   }
 }

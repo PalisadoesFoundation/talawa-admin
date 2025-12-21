@@ -1696,6 +1696,7 @@
   },
   "common": {
     "signOut": "Sign out",
-    "signingOut": "Signing out..."
+    "signingOut": "Signing out...",
+    "retryPrompt": "Failed to revoke session. Retry?"
   }
 }

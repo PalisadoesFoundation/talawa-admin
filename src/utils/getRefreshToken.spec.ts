@@ -69,7 +69,7 @@ describe('refreshToken', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('returns true when the token is refreshed successfully', async () => {
@@ -177,7 +177,7 @@ describe('handleTokenRefresh', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('reloads page on successful token refresh', async () => {
@@ -196,11 +196,24 @@ describe('handleTokenRefresh', () => {
   });
 
   it('clears storage and redirects on failed refresh', async () => {
+    // Set up localStorage to have prefixed items that clearAllItems will remove
+    const storedKeys = [
+      'Talawa-admin_token',
+      'Talawa-admin_refreshToken',
+      'Talawa-admin_user',
+    ];
+
     localStorageMock.getItem = vi.fn(() => null);
+    Object.defineProperty(localStorageMock, 'length', {
+      value: storedKeys.length,
+      writable: true,
+    });
+    localStorageMock.key = vi.fn((index: number) => storedKeys[index] || null);
 
     await handleTokenRefresh();
 
-    expect(localStorageMock.clear).toHaveBeenCalled();
+    // clearAllItems calls removeItem for each prefixed key
+    expect(localStorageMock.removeItem).toHaveBeenCalled();
     expect(mockLocationHref).toBe('/');
   });
 });

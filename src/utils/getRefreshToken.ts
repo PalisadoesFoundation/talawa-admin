@@ -52,13 +52,14 @@ export async function refreshToken(): Promise<boolean> {
  * Falls back to clearing storage and redirecting to login if refresh fails.
  */
 export async function handleTokenRefresh(): Promise<void> {
+  const { clearAllItems } = useLocalStorage();
   const success = await refreshToken();
 
   if (success) {
     window.location.reload();
   } else {
     // Clear all storage and redirect to login
-    localStorage.clear();
+    clearAllItems();
     window.location.href = '/';
   }
 }

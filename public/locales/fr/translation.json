@@ -1696,6 +1696,7 @@
   },
   "common": {
     "signOut": "Se déconnecter",
-    "signingOut": "Déconnexion en cours..."
+    "signingOut": "Déconnexion en cours...",
+    "retryPrompt": "Échec de la révocation de session. Réessayer ?"
   }
 }
