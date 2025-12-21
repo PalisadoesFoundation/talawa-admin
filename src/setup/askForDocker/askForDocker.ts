@@ -76,14 +76,7 @@ export const askAndUpdateTalawaApiUrl = async (
         const raw = endpoint.includes('://') ? endpoint : `http://${endpoint}`;
         try {
           const parsed = new URL(raw);
-          const isLocalHost = ['localhost', '127.0.0.1', '::1', '[::1]'].some(
-            (host) => raw.includes(host),
-          );
-
-          if (
-            isLocalHost ||
-            ['localhost', '127.0.0.1', '::1'].includes(parsed.hostname)
-          ) {
+          if (['localhost', '127.0.0.1', '::1'].includes(parsed.hostname)) {
             parsed.hostname = 'host.docker.internal';
             const dockerUrl = parsed.toString();
             updateEnvFile('REACT_APP_TALAWA_URL', dockerUrl);
