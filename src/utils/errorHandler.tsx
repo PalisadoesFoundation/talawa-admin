@@ -25,6 +25,8 @@ export const errorHandler = (a: unknown, error: unknown): void => {
       toast.error(tErrors('error400'));
     } else if (errorMessage.match(/organization name already exists/i)) {
       toast.error(tErrors('organizationNameAlreadyExists'));
+    } else if (errorMessage.match(/account.*locked/i)) {
+      toast.error(tErrors('accountLocked'));
     } else {
       toast.error(errorMessage);
     }

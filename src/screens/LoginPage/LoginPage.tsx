@@ -353,9 +353,16 @@ const loginPage = (): JSX.Element => {
     }
 
     try {
-      const { data: signInData } = await signin({
+      const { data: signInData, error: signInError } = await signin({
         variables: { email: formState.email, password: formState.password },
       });
+
+      // Check for GraphQL errors (like account_locked) first
+      if (signInError) {
+        errorHandler(t, signInError);
+        loginRecaptchaRef.current?.reset();
+        return;
+      }
 
       if (signInData) {
         if (signInData.signIn.user.countryCode !== null) {

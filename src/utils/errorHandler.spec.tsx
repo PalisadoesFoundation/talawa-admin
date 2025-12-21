@@ -69,6 +69,15 @@ describe('Test if errorHandler is working properly', () => {
     );
   });
 
+  it('should call toast.error with the correct message if error message contains "account_locked"', () => {
+    const error = new Error(
+      'Account temporarily locked due to too many failed login attempts. Please try again later.',
+    );
+    errorHandler(t, error);
+
+    expect(toast.error).toHaveBeenCalledWith(tErrors('accountLocked'));
+  });
+
   it('should handle error messages with different cases', () => {
     errorHandler(t, new Error('VALUE IS NOT A VALID PHONE NUMBER'));
     expect(toast.error).toHaveBeenCalledWith(tErrors('invalidPhoneNumber'));

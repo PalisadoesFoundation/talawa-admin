@@ -14,5 +14,6 @@
   "invalidMaritalStatus": "Please select a valid marital status",
   "error400": "The submitted information is invalid. Please check your inputs and try again",
   "organizationNameAlreadyExists": "An organization with this name already exists",
-  "markAsReadError": "Error marking notifications as read"
+  "markAsReadError": "Error marking notifications as read",
+  "accountLocked": "Account is temporarily locked due to too many failed login attempts. Please try again later."
 }
