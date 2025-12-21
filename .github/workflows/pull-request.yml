@@ -158,7 +158,7 @@ jobs:
         run: |
           if [ -s pr_files.txt ]; then
             python .github/workflows/scripts/css_check.py \
-              $(cat pr_files.txt) \
+              --files $(cat pr_files.txt) \
               --exclude_directories src/utils src/types
           else
             echo "No files changed in this PR"
