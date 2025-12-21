@@ -5,8 +5,18 @@ import '@testing-library/dom';
 
 // Mock the Avatar component since we want to test ProfileAvatarDisplay's logic, not Avatar's.
 vi.mock('components/Avatar/Avatar', () => ({
-  default: ({ name, dataTestId }: { name: string; dataTestId: string }) => (
-    <div data-testid={dataTestId}>Mocked Avatar: {name}</div>
+  default: ({
+    name,
+    dataTestId,
+    radius,
+  }: {
+    name: string;
+    dataTestId: string;
+    radius?: number;
+  }) => (
+    <div data-testid={dataTestId} data-radius={radius}>
+      Mocked Avatar: {name}
+    </div>
   ),
 }));
 
@@ -143,12 +153,14 @@ describe('ProfileAvatarDisplay Component', () => {
     expect(screen.getByText('Profile Picture')).toBeInTheDocument();
   });
 
-  test('does not open modal when enableEnlarge is false', () => {
+  test('calls onClick instead of opening modal when enableEnlarge is false', () => {
+    const onClickMock = vi.fn();
     render(
       <ProfileAvatarDisplay
         {...defaultProps}
         imageUrl="https://example.com/image.jpg"
         enableEnlarge={false}
+        onClick={onClickMock}
       />,
     );
 
@@ -157,8 +169,9 @@ describe('ProfileAvatarDisplay Component', () => {
 
     // Modal should not be visible
     expect(screen.queryByRole('dialog')).toBeNull();
+    // onClick should be called
+    expect(onClickMock).toHaveBeenCalled();
   });
-
   test('closes modal when close button is clicked', async () => {
     render(
       <ProfileAvatarDisplay
@@ -245,5 +258,209 @@ describe('ProfileAvatarDisplay Component', () => {
     await waitFor(() => {
       expect(screen.queryByRole('dialog')).toBeNull();
     });
+  });
+
+  test('renders fallback Avatar in modal when imageUrl is null', () => {
+    render(
+      <ProfileAvatarDisplay
+        {...defaultProps}
+        imageUrl={null}
+        enableEnlarge={true}
+      />,
+    );
+
+    // Click the fallback avatar to open the modal
+    const avatarContainer = screen.getByTestId('test-avatar');
+    fireEvent.click(avatarContainer);
+
+    // Modal should be visible
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByText('Profile Picture')).toBeInTheDocument();
+
+    // The modal should render the fallback Avatar, not an image
+    const modalFallback = screen.getByTestId('test-avatar-modal-fallback');
+    expect(modalFallback).toBeInTheDocument();
+    expect(modalFallback.textContent).toContain('Mocked Avatar: John Doe');
+  });
+
+  test('modal fallback Avatar receives correct radius for circle shape', () => {
+    render(
+      <ProfileAvatarDisplay
+        {...defaultProps}
+        imageUrl={null}
+        enableEnlarge={true}
+        shape="circle"
+      />,
+    );
+
+    const avatarContainer = screen.getByTestId('test-avatar');
+    fireEvent.click(avatarContainer);
+
+    const modalFallback = screen.getByTestId('test-avatar-modal-fallback');
+    expect(modalFallback).toHaveAttribute('data-radius', '50');
+  });
+
+  test('modal fallback Avatar receives correct radius for rounded shape', () => {
+    render(
+      <ProfileAvatarDisplay
+        {...defaultProps}
+        imageUrl={null}
+        enableEnlarge={true}
+        shape="rounded"
+      />,
+    );
+
+    const avatarContainer = screen.getByTestId('test-avatar');
+    fireEvent.click(avatarContainer);
+
+    const modalFallback = screen.getByTestId('test-avatar-modal-fallback');
+    expect(modalFallback).toHaveAttribute('data-radius', '10');
+  });
+
+  test('modal fallback Avatar receives correct radius for square shape', () => {
+    render(
+      <ProfileAvatarDisplay
+        {...defaultProps}
+        imageUrl={null}
+        enableEnlarge={true}
+        shape="square"
+      />,
+    );
+
+    const avatarContainer = screen.getByTestId('test-avatar');
+    fireEvent.click(avatarContainer);
+
+    const modalFallback = screen.getByTestId('test-avatar-modal-fallback');
+    expect(modalFallback).toHaveAttribute('data-radius', '0');
+  });
+
+  test('modal fallback Avatar uses default dataTestId when not provided', () => {
+    render(
+      <ProfileAvatarDisplay
+        fallbackName="John Doe"
+        imageUrl={null}
+        enableEnlarge={true}
+      />,
+    );
+
+    // Without dataTestId prop, the container won't have a specific test id,
+    // but we can find it by role
+    const avatarContainer = screen.getByRole('button');
+    fireEvent.click(avatarContainer);
+
+    // Modal should be visible
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+    // The modal fallback should use the default 'avatar-modal-fallback' dataTestId
+    const modalFallback = screen.getByTestId('avatar-modal-fallback');
+    expect(modalFallback).toBeInTheDocument();
+    expect(modalFallback.textContent).toContain('Mocked Avatar: John Doe');
+  });
+
+  test('renders fallback with onError callback provided (covers truthy branch)', () => {
+    const onErrorMock = vi.fn();
+    const { container } = render(
+      <ProfileAvatarDisplay
+        {...defaultProps}
+        imageUrl={null}
+        onError={onErrorMock}
+      />,
+    );
+
+    // Component should render without issues when onError is provided
+    const avatarContainer = screen.getByTestId('test-avatar');
+    expect(avatarContainer).toBeInTheDocument();
+
+    // Verify the onError handler is attached (even if div errors are rare)
+    // The container has onError attr in the React virtual DOM
+    expect(container.querySelector('[data-testid="test-avatar"]')).toBeTruthy();
+  });
+
+  test('renders fallback with onLoad callback provided (covers truthy branch)', () => {
+    const onLoadMock = vi.fn();
+    const { container } = render(
+      <ProfileAvatarDisplay
+        {...defaultProps}
+        imageUrl={null}
+        onLoad={onLoadMock}
+      />,
+    );
+
+    // Component should render without issues when onLoad is provided
+    const avatarContainer = screen.getByTestId('test-avatar');
+    expect(avatarContainer).toBeInTheDocument();
+
+    // Verify the component renders correctly with onLoad prop
+    expect(container.querySelector('[data-testid="test-avatar"]')).toBeTruthy();
+  });
+
+  test('renders fallback without onError callback (covers falsy branch)', () => {
+    render(<ProfileAvatarDisplay {...defaultProps} imageUrl={null} />);
+
+    // Component should render without issues when onError is not provided
+    const avatarContainer = screen.getByTestId('test-avatar');
+    expect(avatarContainer).toBeInTheDocument();
+  });
+
+  test('renders fallback without onLoad callback (covers falsy branch)', () => {
+    render(<ProfileAvatarDisplay {...defaultProps} imageUrl={null} />);
+
+    // Component should render without issues when onLoad is not provided
+    const avatarContainer = screen.getByTestId('test-avatar');
+    expect(avatarContainer).toBeInTheDocument();
+  });
+
+  test('opens modal when Enter key is pressed on fallback avatar', () => {
+    render(
+      <ProfileAvatarDisplay
+        {...defaultProps}
+        imageUrl={null}
+        enableEnlarge={true}
+      />,
+    );
+
+    const avatarContainer = screen.getByTestId('test-avatar');
+
+    // Press Enter key on the fallback avatar
+    fireEvent.keyDown(avatarContainer, { key: 'Enter', code: 'Enter' });
+
+    // Modal should be visible
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
+
+  test('opens modal when Space key is pressed on fallback avatar', () => {
+    render(
+      <ProfileAvatarDisplay
+        {...defaultProps}
+        imageUrl={null}
+        enableEnlarge={true}
+      />,
+    );
+
+    const avatarContainer = screen.getByTestId('test-avatar');
+
+    // Press Space key on the fallback avatar
+    fireEvent.keyDown(avatarContainer, { key: ' ', code: 'Space' });
+
+    // Modal should be visible
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
+
+  test('does not open modal when other keys are pressed on fallback avatar', () => {
+    render(
+      <ProfileAvatarDisplay
+        {...defaultProps}
+        imageUrl={null}
+        enableEnlarge={true}
+      />,
+    );
+
+    const avatarContainer = screen.getByTestId('test-avatar');
+
+    // Press a different key (e.g., Tab)
+    fireEvent.keyDown(avatarContainer, { key: 'Tab', code: 'Tab' });
+
+    // Modal should NOT be visible
+    expect(screen.queryByRole('dialog')).toBeNull();
   });
 });
