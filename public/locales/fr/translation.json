@@ -1661,5 +1661,10 @@
     "deleteComment": "Supprimer le commentaire",
     "deleting": "Suppression…",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre."
+  },
+  "profileAvatar": {
+    "altText": "Photo de profil de {{name}}",
+    "modalTitle": "Photo de profil",
+    "enlargedAltText": "Photo de profil agrandie de {{name}}"
   }
 }

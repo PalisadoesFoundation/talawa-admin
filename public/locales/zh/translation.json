@@ -1661,5 +1661,10 @@
     "deleteComment": "删除评论",
     "deleting": "删除中…",
     "emptyCommentError": "请在提交前输入评论。"
+  },
+  "profileAvatar": {
+    "altText": "{{name}}的个人资料图片",
+    "modalTitle": "个人资料图片",
+    "enlargedAltText": "{{name}}的放大个人资料图片"
   }
 }
