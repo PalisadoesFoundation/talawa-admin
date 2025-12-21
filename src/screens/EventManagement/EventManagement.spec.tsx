@@ -13,7 +13,14 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { MOCKS_WITH_TIME } from 'components/EventManagement/Dashboard/EventDashboard.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, it } from 'vitest';
-const { setItem } = useLocalStorage();
+const { setItem, clearAllItems } = useLocalStorage();
+
+vi.mock('@mui/icons-material', () => ({
+  Edit: vi.fn(() => null),
+  WarningAmberRounded: vi.fn(() => null),
+  Circle: vi.fn(() => null),
+  Group: vi.fn(() => null),
+}));
 
 const MOCKS_WITH_FIXED_TIME = JSON.parse(JSON.stringify(MOCKS_WITH_TIME));
 MOCKS_WITH_FIXED_TIME[0].result.data.event.startTime =
@@ -92,7 +99,7 @@ describe('Event Management', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
-    localStorage.clear();
+    clearAllItems();
   });
 
   describe('Navigation Tests', () => {

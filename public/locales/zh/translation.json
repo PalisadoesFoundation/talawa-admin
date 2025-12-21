@@ -56,6 +56,11 @@
     "user": "用户",
     "loading": "加载中"
   },
+  "signOut": {
+    "retryPrompt": "撤銷工作階段失敗。要重試嗎？",
+    "signingOut": "正在登出...",
+    "signOut": "登出"
+  },
   "userLoginPage": {
     "title": "塔拉瓦管理员",
     "fromPalisadoes": "Palisadoes 基金会志愿者开发的开源应用程序",
@@ -1066,7 +1071,8 @@
     "language": "语言",
     "settings": "设置",
     "logout": "退出登录",
-    "close": "关闭"
+    "close": "关闭",
+    "talawaBranding": "Talawa 品牌形象"
   },
   "userOrganizations": {
     "allOrganizations": "所有组织",

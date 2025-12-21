@@ -6,7 +6,7 @@
 
 > **useLocalStorage**(`prefix`): `InterfaceStorageHelper`
 
-Defined in: [src/utils/useLocalstorage.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L61)
+Defined in: [src/utils/useLocalstorage.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L82)
 
 Custom hook for simplified localStorage operations.
 
@@ -22,4 +22,4 @@ Prefix to be added to the key, common for all keys. Default is 'Talawa-admin'.
 
 `InterfaceStorageHelper`
 
-- Functions to getItem, setItem, removeItem, and getStorageKey.
+- Functions to getItem, setItem, removeItem, getStorageKey, and clearAllItems.

@@ -32,7 +32,12 @@ import { usePluginDrawerItems } from 'plugin';
  *
  * `fireEvent` simulates user actions, and `vi.fn()` mocks callback functions.
  */
-const { setItem } = useLocalStorage();
+const { setItem, clearAllItems } = useLocalStorage();
+
+vi.mock('@mui/icons-material', () => ({
+  QuestionMarkOutlined: vi.fn(() => null),
+  WarningAmberOutlined: vi.fn(() => null),
+}));
 
 vi.mock('plugin', () => ({
   usePluginDrawerItems: vi.fn(() => []),
@@ -289,7 +294,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.clearAllMocks();
-  localStorage.clear();
+  clearAllItems();
 });
 
 const link = new StaticMockLink(MOCKS, true);
