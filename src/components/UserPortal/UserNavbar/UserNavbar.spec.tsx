@@ -280,6 +280,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
   it('Logs out the user and clears local storage', async () => {
     // Spy on the mock's clear function directly
+    const { mockClearAllItems } = createMock();
     const clearSpy = vi.spyOn(localStorage, 'clear');
 
     render(
@@ -300,8 +301,6 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     await userEvent.click(screen.getByTestId('logoutBtn'));
 
     await wait();
-
-    const { mockClearAllItems } = createMock();
 
     expect(mockClearAllItems).toHaveBeenCalled();
     expect(window.location.pathname).toBe('/');
