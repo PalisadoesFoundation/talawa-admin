@@ -259,7 +259,7 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     // Verify toast.warn (not toast.error) was called with correct message
     expect(toastSpy).toHaveBeenCalledWith(
-      'Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character',
+      i18nForTest.t('settings.password_invalid'),
     );
   });
 
@@ -688,7 +688,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     await wait();
 
     expect(sharedMocks.toast.error).toHaveBeenCalledWith(
-      'Failed to process profile picture. Please try uploading again.',
+      i18nForTest.t('settings.avatarProcessingFailed'),
     );
   });
 
@@ -858,9 +858,7 @@ describe('Testing Settings Screen [User Portal]', () => {
 
       expect(toastSpy).toHaveBeenCalledWith(
         // Changed
-        expect.stringContaining(
-          'Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character',
-        ),
+        expect.stringContaining(i18nForTest.t('settings.password_invalid')),
       );
     });
 

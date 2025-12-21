@@ -193,7 +193,7 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
                     id="inputPassword"
                     data-testid="inputPassword"
                     placeholder={t('enterNewPassword')}
-                    value={userDetails.password}
+                    value={pass}
                     onChange={(e): void => {
                       handlePasswordCheck(e.target.value);
                       handleFieldChange('password', e.target.value);

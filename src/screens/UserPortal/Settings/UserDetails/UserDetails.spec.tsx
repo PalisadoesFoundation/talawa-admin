@@ -118,11 +118,13 @@ describe('UserDetailsForm', () => {
     const passwordInput = screen.getByTestId('inputPassword');
     await userEvent.type(passwordInput, 'newPassword123');
 
-    const calls = handlerMocks.handleFieldChange.mock.calls;
+    const calls = handlerMocks.handleFieldChange.mock.calls.filter(
+      ([field]) => field === 'password',
+    );
 
-    expect(calls.length).toBe('newPassword123'.length);
-    // Ensure the full password was emitted incrementally
-    expect(calls.map((call) => call[1]).join('')).toBe('newPassword123');
+    expect(calls).toHaveLength('newPassword123'.length);
+    // Ensure the final emitted value matches the full password
+    expect(calls[calls.length - 1][1]).toBe('newPassword123');
   });
 
   it('disables email field', () => {
