@@ -186,7 +186,7 @@ describe('MemberDetail', () => {
     });
 
     // Helper for clearing and typing
-    const setText = async (testIdRegex: RegExp, value: string) => {
+    const setTextAndGetElement = async (testIdRegex: RegExp, value: string) => {
       const el = screen.getByTestId(testIdRegex);
       // Only type if editable
       if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
@@ -194,6 +194,7 @@ describe('MemberDetail', () => {
           await userEvent.clear(el);
           await userEvent.type(el, value);
         }
+        // readOnly/disabled: skip typing, still return element for assertions
       } else {
         // fallback for custom components: maybe use click -> type if needed
         await userEvent.click(el);
@@ -203,35 +204,41 @@ describe('MemberDetail', () => {
     };
 
     // Fill all inputs
-    const nameInput = await setText(/inputName/i, formData.name);
-    const addressLine1Input = await setText(
+    const nameInput = await setTextAndGetElement(/inputName/i, formData.name);
+    const addressLine1Input = await setTextAndGetElement(
       /addressLine1/i,
       formData.addressLine1,
     );
-    const addressLine2Input = await setText(
+    const addressLine2Input = await setTextAndGetElement(
       /addressLine2/i,
       formData.addressLine2,
     );
-    const cityInput = await setText(/inputCity/i, formData.city);
-    const stateInput = await setText(/inputState/i, formData.state);
-    const postalCodeInput = await setText(
+    const cityInput = await setTextAndGetElement(/inputCity/i, formData.city);
+    const stateInput = await setTextAndGetElement(
+      /inputState/i,
+      formData.state,
+    );
+    const postalCodeInput = await setTextAndGetElement(
       /inputPostalCode/i,
       formData.postalCode,
     );
-    const descriptionInput = await setText(
+    const descriptionInput = await setTextAndGetElement(
       /inputDescription/i,
       formData.description,
     );
-    const emailInput = await setText(/inputEmail/i, formData.emailAddress);
-    const mobilePhoneInput = await setText(
+    const emailInput = await setTextAndGetElement(
+      /inputEmail/i,
+      formData.emailAddress,
+    );
+    const mobilePhoneInput = await setTextAndGetElement(
       /inputMobilePhoneNumber/i,
       formData.mobilePhoneNumber,
     );
-    const homePhoneInput = await setText(
+    const homePhoneInput = await setTextAndGetElement(
       /inputHomePhoneNumber/i,
       formData.homePhoneNumber,
     );
-    const workPhoneInput = await setText(
+    const workPhoneInput = await setTextAndGetElement(
       /workPhoneNumber/i,
       formData.workPhoneNumber,
     );
