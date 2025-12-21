@@ -1926,8 +1926,9 @@ describe('Extra coverage for 100 %', () => {
     await wait();
 
     // Should show the account locked message with countdown (15 minutes)
+    // Verify the message contains "locked" and a number for minutes
     expect(toastMocks.error).toHaveBeenCalledWith(
-      expect.stringContaining('locked'),
+      expect.stringMatching(/locked.*\d+.*minute|minute.*\d+.*locked/i),
     );
   });
 });
