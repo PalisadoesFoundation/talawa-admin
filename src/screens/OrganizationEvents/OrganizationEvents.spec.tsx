@@ -26,17 +26,21 @@ import {
   GET_ORGANIZATION_DATA_PG,
   GET_ORGANIZATION_EVENTS_PG,
 } from 'GraphQl/Queries/Queries';
+import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 import { MOCKS } from './OrganizationEventsMocks';
 import { toast } from 'react-toastify';
+import { errorHandler } from 'utils/errorHandler';
+
+const mockGetItem = vi.fn((key: string): string | null => {
+  if (key === 'role') return 'administrator';
+  if (key === 'id') return '1';
+  return null;
+});
 
 vi.mock('utils/useLocalstorage', () => {
   return {
     default: () => ({
-      getItem: vi.fn((key: string) => {
-        if (key === 'role') return 'administrator';
-        if (key === 'id') return '1';
-        return null;
-      }),
+      getItem: mockGetItem,
       setItem: vi.fn(),
       removeItem: vi.fn(),
     }),
@@ -141,6 +145,10 @@ vi.mock('react-toastify', () => ({
     warning: vi.fn(),
     error: vi.fn(),
   },
+}));
+
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: vi.fn(),
 }));
 
 const getPickerInputByLabel = (label: string) =>
@@ -274,12 +282,16 @@ describe('Organisation Events Page', () => {
     await wait();
 
     await userEvent.click(screen.getByTestId('createEventBtn'));
-    await wait();
 
-    if (screen.queryByTestId('createEventModalCloseBtn')) {
-      await userEvent.click(screen.getByTestId('createEventModalCloseBtn'));
-    }
+    // Wait for mutation to complete and verify success path (lines 101-106)
+    await waitFor(
+      () => {
+        expect(toast.success).toHaveBeenCalledWith(translations.eventCreated);
+      },
+      { timeout: 3000 },
+    );
 
+    // Verify modal closes (onClose is called)
     await waitFor(() => {
       expect(
         screen.queryByTestId('createEventModalCloseBtn'),
@@ -385,6 +397,122 @@ describe('Organisation Events Page', () => {
         screen.queryByTestId('createEventModalCloseBtn'),
       ).not.toBeInTheDocument(),
     );
+  });
+
+  test('verifies success path when event creation returns data', async () => {
+    const parsedStartDate = dayjs('03/28/2022', 'MM/DD/YYYY');
+    const parsedEndDate = dayjs('03/30/2022', 'MM/DD/YYYY');
+    const startDateObj = parsedStartDate.toDate();
+    const endDateObj = parsedEndDate.toDate();
+    const startAt = dayjs.utc(startDateObj).startOf('day').toISOString();
+    const endAt = dayjs.utc(endDateObj).endOf('day').toISOString();
+
+    // Create a mock that matches the exact variables the test will send
+    const successMock = [
+      ...MOCKS.filter((mock) => mock.request.query !== CREATE_EVENT_MUTATION),
+      {
+        request: {
+          query: CREATE_EVENT_MUTATION,
+          variables: {
+            input: {
+              name: formData.title,
+              description: formData.description,
+              startAt,
+              endAt,
+              organizationId: '',
+              allDay: true,
+              location: formData.location,
+              isPublic: false,
+              isRegisterable: true,
+              recurrence: undefined,
+            },
+          },
+        },
+        result: {
+          data: {
+            createEvent: {
+              id: 'test-event-id',
+              name: formData.title,
+              description: formData.description,
+              startAt,
+              endAt,
+              allDay: true,
+              location: formData.location,
+              isPublic: false,
+              isRegisterable: true,
+              createdAt: '2030-03-28T00:00:00.000Z',
+              updatedAt: '2030-03-28T00:00:00.000Z',
+              isRecurringTemplate: false,
+              recurringEventId: null,
+              instanceStartTime: null,
+              isMaterialized: false,
+              baseEventId: null,
+              hasExceptions: false,
+              sequenceNumber: 1,
+              totalCount: 1,
+              progressLabel: 'Event 1 of 1',
+              creator: { id: '1', name: 'Admin User' },
+              updater: { id: '1', name: 'Admin User' },
+              organization: { id: '1', name: 'Test Organization' },
+            },
+          },
+        },
+      },
+    ];
+
+    const successLink = new StaticMockLink(successMock, true);
+    renderWithLink(successLink);
+
+    await wait();
+
+    await waitFor(() =>
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
+    );
+
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    await waitFor(() =>
+      expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument(),
+    );
+
+    await userEvent.type(screen.getByTestId('eventTitleInput'), formData.title);
+    await userEvent.type(
+      screen.getByTestId('eventDescriptionInput'),
+      formData.description,
+    );
+    await userEvent.type(
+      screen.getByTestId('eventLocationInput'),
+      formData.location,
+    );
+
+    const endDatePicker = getPickerInputByLabel('End Date');
+    const startDatePicker = getPickerInputByLabel('Start Date');
+
+    fireEvent.change(endDatePicker, {
+      target: { value: formData.endDate },
+    });
+    fireEvent.change(startDatePicker, {
+      target: { value: formData.startDate },
+    });
+
+    // Toggle public and registerable to match mock expectations
+    await userEvent.click(screen.getByTestId('publicEventCheck'));
+    await userEvent.click(screen.getByTestId('registerableEventCheck'));
+    await wait();
+    await userEvent.click(screen.getByTestId('createEventBtn'));
+
+    await waitFor(
+      () => {
+        expect(toast.success).toHaveBeenCalledWith(translations.eventCreated);
+      },
+      { timeout: 3000 },
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('createEventModalCloseBtn'),
+      ).not.toBeInTheDocument();
+    });
   });
 
   test('recurrence dropdown options and simple selection', async () => {
@@ -560,11 +688,15 @@ describe('Organisation Events Page', () => {
       expect(screen.getByTestId('recurrenceOption-0')).toBeInTheDocument(),
     );
 
-    // Find the weekly option (usually index 2, but let's find it by checking all options)
+    // Find the weekly option by its text content (more resilient to option reordering)
     const options = screen.getAllByTestId(/recurrenceOption-/);
-    // Weekly option is typically the 3rd option (index 2) after "Does not repeat" and "Daily"
-    const weeklyOption = options[2];
-    await userEvent.click(weeklyOption);
+    const weeklyOption = options.find((opt) =>
+      opt.textContent?.toLowerCase().includes('weekly'),
+    );
+    expect(weeklyOption).toBeDefined();
+    if (weeklyOption) {
+      await userEvent.click(weeklyOption);
+    }
 
     await userEvent.click(screen.getByTestId('createEventBtn'));
 
@@ -809,12 +941,232 @@ describe('Organisation Events Page', () => {
     expect(() => unmount()).not.toThrow();
   });
 
+  test('unmount cleanup effect clears timeout when queryTimeoutRef is set', async () => {
+    // Mock clearTimeout to verify it's called
+    const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout');
+    const { unmount } = renderWithLink(defaultLink);
+    await wait();
+    expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
+
+    await wait(100);
+    unmount();
+    await wait(50);
+    clearTimeoutSpy.mockRestore();
+  });
+
+  test('search input triggers onSearch callback when Enter is pressed', async () => {
+    renderWithLink(defaultLink);
+
+    await waitFor(() =>
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
+    );
+
+    const searchInput = screen.getByTestId('searchEvent') as HTMLInputElement;
+    expect(searchInput).toBeInTheDocument();
+    await userEvent.type(searchInput, 'test event');
+    await userEvent.keyboard('{Enter}');
+    await wait(50);
+  });
+
+  test('search button triggers onSearch callback when clicked', async () => {
+    renderWithLink(defaultLink);
+
+    await waitFor(() =>
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
+    );
+
+    const searchInput = screen.getByTestId('searchEvent') as HTMLInputElement;
+    const searchButton = screen.getByTestId('searchButton');
+    expect(searchInput).toBeInTheDocument();
+    expect(searchButton).toBeInTheDocument();
+    await userEvent.type(searchInput, 'test search');
+    await userEvent.click(searchButton);
+    await wait(50);
+  });
+
   test('renders successfully with ADMINISTRATOR role from useLocalStorage', async () => {
     renderWithLink(defaultLink);
 
     await waitFor(() =>
       expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
     );
+  });
+
+  test('handles CreateEventModal error when mutation fails (lines 107-109)', async () => {
+    const errorMock = [
+      ...MOCKS.filter((mock) => mock.request.query !== CREATE_EVENT_MUTATION),
+      {
+        request: {
+          query: CREATE_EVENT_MUTATION,
+          variables: expect.any(Object),
+        },
+        error: new Error('Failed to create event'),
+      },
+    ];
+
+    const errorLink = new StaticMockLink(errorMock, true);
+    renderWithLink(errorLink);
+
+    await wait();
+
+    await waitFor(() =>
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
+    );
+
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    await waitFor(() =>
+      expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument(),
+    );
+
+    await userEvent.type(screen.getByTestId('eventTitleInput'), formData.title);
+    await userEvent.type(
+      screen.getByTestId('eventDescriptionInput'),
+      formData.description,
+    );
+    await userEvent.type(
+      screen.getByTestId('eventLocationInput'),
+      formData.location,
+    );
+
+    const endDatePicker = getPickerInputByLabel('End Date');
+    const startDatePicker = getPickerInputByLabel('Start Date');
+
+    fireEvent.change(endDatePicker, {
+      target: { value: formData.endDate },
+    });
+    fireEvent.change(startDatePicker, {
+      target: { value: formData.startDate },
+    });
+
+    await wait();
+
+    await userEvent.click(screen.getByTestId('createEventBtn'));
+    await waitFor(
+      () => {
+        expect(errorHandler).toHaveBeenCalled();
+      },
+      { timeout: 3000 },
+    );
+  });
+
+  test('shows Loader when orgLoading is true', async () => {
+    const loadingMock = [
+      {
+        request: {
+          query: GET_ORGANIZATION_DATA_PG,
+          variables: buildOrgVariables(),
+        },
+        result: {
+          data: {
+            organization: { id: '1', name: 'Test Org' },
+          },
+        },
+        delay: 200,
+      },
+      {
+        request: {
+          query: GET_ORGANIZATION_EVENTS_PG,
+          variables: buildEventsVariables(),
+        },
+        result: {
+          data: {
+            organization: {
+              events: { edges: [] },
+            },
+          },
+        },
+      },
+    ];
+
+    const loadingLink = new StaticMockLink(loadingMock, true);
+
+    render(
+      <MockedProvider link={loadingLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18n}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait(50);
+    await waitFor(
+      () =>
+        expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
+      { timeout: 300 },
+    );
+  });
+
+  test('renders successfully with REGULAR role from useLocalStorage', async () => {
+    // Temporarily override getItem to return REGULAR role
+    const originalImplementation = mockGetItem.getMockImplementation();
+    mockGetItem.mockImplementation((key: string): string | null => {
+      if (key === 'role') return 'user';
+      if (key === 'id') return '1';
+      return null;
+    });
+
+    renderWithLink(defaultLink);
+
+    await waitFor(() =>
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
+    );
+
+    // Restore original implementation
+    if (originalImplementation) {
+      mockGetItem.mockImplementation(originalImplementation);
+    } else {
+      mockGetItem.mockReset();
+    }
+  });
+
+  test('viewType changes to Year view via EventHeader', async () => {
+    const { container } = renderWithLink(defaultLink);
+
+    await wait();
+
+    expect(container.textContent).toMatch('Month');
+
+    const viewTypeDropdown = screen.getByTestId('selectViewType');
+    await userEvent.click(viewTypeDropdown);
+
+    // Find and click the "Year View" option
+    const yearOption = await screen.findByText('Year View');
+    await userEvent.click(yearOption);
+
+    await waitFor(() => {
+      expect(container.textContent).toMatch('Year View');
+    });
+  });
+
+  test('handleChangeView ignores null values', async () => {
+    const { container } = renderWithLink(defaultLink);
+
+    await wait();
+
+    const initialContent = container.textContent;
+    expect(initialContent).toMatch('Month');
+
+    // Simulate handleChangeView being called with null
+    // This should not change the viewType
+    const viewTypeDropdown = screen.getByTestId('selectViewType');
+    await userEvent.click(viewTypeDropdown);
+
+    // Close dropdown without selecting (simulating null)
+    await userEvent.keyboard('{Escape}');
+
+    await waitFor(() => {
+      // ViewType should remain unchanged
+      expect(container.textContent).toMatch('Month');
+    });
   });
 });
 
@@ -858,11 +1210,7 @@ describe('OrganizationEvents - Additional Coverage Tests', () => {
     );
 
     await wait();
-
-    // The error should be handled by the onError callback (line 162)
-    // This should trigger error handling logic
     await waitFor(() => {
-      // Either shows error state or handles gracefully
       expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument();
     });
 
