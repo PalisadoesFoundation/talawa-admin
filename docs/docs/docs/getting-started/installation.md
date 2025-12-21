@@ -140,7 +140,7 @@ Proceed to the next section.
 This section covers how to install additional required packages.
 
 1. All users will need to run the `pnpm install` command
-2. If you are a developer, you will additionally need to install packages in the docs/ directory.
+2. If you are a developer, you will additionally need to install packages in the `docs/` directory.
 
 Both steps are outlined below.
 
@@ -154,15 +154,17 @@ pnpm install
 
 #### Additional Step for Developers
 
+:::note
 Developers will also need to install packages in the `docs/` directory.
+:::
 
 ```bash
 cd docs/
 pnpm install
 ```
 
-The prerequisites are now installed. The next step will be to get the app up and running.
-
 ## Running Talawa Admin
+
+The prerequisites are now installed. The next step will be to get the app up and running.
 
 - Please go to the [Operation Page](./operation.md) to get Talawa-Admin started
