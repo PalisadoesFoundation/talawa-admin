@@ -27,23 +27,6 @@ const shouldSuppressError = (value: unknown): boolean => {
   );
 };
 
-const localStorageMock = (() => {
-  let store: Record<string, string> = {};
-
-  return {
-    getItem: vi.fn((key: string) => store[key] ?? null),
-    setItem: vi.fn((key: string, value: string) => {
-      store[key] = value;
-    }),
-    removeItem: vi.fn((key: string) => {
-      delete store[key];
-    }),
-    clear: vi.fn(() => {
-      store = {};
-    }),
-  };
-})();
-
 vi.stubGlobal('localStorage', localStorageMock);
 
 beforeAll(() => {
@@ -80,7 +63,6 @@ beforeEach(() => {
 // Basic cleanup after each test
 afterEach(() => {
   cleanup();
-  localStorage.clear();
   vi.clearAllMocks();
   localStorageMock.clear();
 });

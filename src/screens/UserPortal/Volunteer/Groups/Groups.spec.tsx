@@ -123,7 +123,6 @@ describe('Testing Groups Screen', () => {
     cleanup();
     vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
-    clearAllItems();
   });
 
   /**

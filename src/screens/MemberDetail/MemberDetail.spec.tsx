@@ -750,7 +750,7 @@ describe('MemberDetail', () => {
 
     // Test initial state
     expect(maritialStatus).toHaveTextContent('Male'); // Or whatever your initial value is
-        
+
     // Click the dropdown button to open it
     await userEvent.click(natalSexStatus);
 

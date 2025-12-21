@@ -301,6 +301,8 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     await wait();
 
+    const { mockClearAllItems } = createMock();
+
     expect(mockClearAllItems).toHaveBeenCalled();
     expect(window.location.pathname).toBe('/');
     clearSpy.mockRestore();
