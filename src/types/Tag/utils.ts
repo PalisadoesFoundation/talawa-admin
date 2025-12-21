@@ -18,7 +18,7 @@ export const dataGridStyle = {
     borderRadius: '0.1rem',
   },
   '& .MuiDataGrid-main': {
-    borderRadius: '0.2rem',
+    borderRadius: '0.1rem',
   },
   '& .MuiDataGrid-topContainer': {
     position: 'fixed',

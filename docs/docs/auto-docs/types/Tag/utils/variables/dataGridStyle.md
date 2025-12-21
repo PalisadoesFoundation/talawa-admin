@@ -28,7 +28,7 @@ Defined in: [src/types/Tag/utils.ts:2](https://github.com/PalisadoesFoundation/t
 
 #### & .MuiDataGrid-main.borderRadius
 
-> **borderRadius**: `string` = `'0.2rem'`
+> **borderRadius**: `string` = `'0.1rem'`
 
 #### & .MuiDataGrid-root
 
