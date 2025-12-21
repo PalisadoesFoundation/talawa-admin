@@ -40,12 +40,12 @@ export const MOCKS = [
   {
     request: {
       query: DELETE_STANDALONE_EVENT_MUTATION,
-      variable: { id: '123' },
+      variables: { input: { id: '123' } },
     },
     result: {
       data: {
-        removeEvent: {
-          _id: '1',
+        deleteStandaloneEvent: {
+          id: '123',
         },
       },
     },
@@ -53,23 +53,25 @@ export const MOCKS = [
   {
     request: {
       query: UPDATE_EVENT_MUTATION,
-      variable: {
-        id: '123',
-        name: 'Updated name',
-        description: 'This is a new update',
-        isPublic: true,
-        isRegisterable: true,
-        isInviteOnly: false,
-        allDay: false,
-        location: 'New Delhi',
-        startTime: '02:00',
-        endTime: '07:00',
+      variables: {
+        input: {
+          id: '123',
+          name: 'Updated name',
+          description: 'This is a new update',
+          isPublic: true,
+          isRegisterable: true,
+          isInviteOnly: false,
+          allDay: false,
+          location: 'New Delhi',
+          startTime: '02:00',
+          endTime: '07:00',
+        },
       },
     },
     result: {
       data: {
-        updateEvent: {
-          _id: '1',
+        updateStandaloneEvent: {
+          id: '123',
         },
       },
     },
