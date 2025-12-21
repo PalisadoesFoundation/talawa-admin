@@ -9,10 +9,9 @@
  * @param {InterfaceUserPortalNavbarProps} props - Component props
  * @returns {JSX.Element} The rendered UserPortalNavigationBar component
  */
-import React, { useState } from 'react';
-import { Container, Navbar, Nav, Dropdown, Offcanvas } from 'react-bootstrap';
+import { useState } from 'react';
+import { Container, Navbar, Nav, Offcanvas } from 'react-bootstrap';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
-import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
@@ -20,19 +19,20 @@ import cookies from 'js-cookie';
 import i18next from 'i18next';
 import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
 
-import { InterfaceUserPortalNavbarProps } from 'types/UserPortalNavigationBar/interface';
-import { NavigationLink } from 'types/UserPortalNavigationBar/types';
 import {
+  InterfaceUserPortalNavbarProps,
   DEFAULT_USER_MODE_PROPS,
   DEFAULT_ORGANIZATION_MODE_PROPS,
 } from 'types/UserPortalNavigationBar/interface';
+import { NavigationLink } from 'types/UserPortalNavigationBar/types';
 import styles from './UserPortalNavigationBar.module.css';
 import TalawaImage from 'assets/images/talawa-logo-600x600.png';
-import { languages } from 'utils/languages';
 import useLocalStorage from 'utils/useLocalstorage';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
+import LanguageSelector from './LanguageSelector';
+import UserProfileDropdown from './UserDropdown';
 
 export const UserPortalNavigationBar = (
   props: InterfaceUserPortalNavbarProps,
@@ -164,83 +164,6 @@ export const UserPortalNavigationBar = (
   const logoAltText = branding?.logoAltText || t('talawaBranding');
   const brandNameText = branding?.brandName || finalOrganizationName;
 
-  // Render language dropdown
-  const renderLanguageDropdown = (testIdPrefix = ''): JSX.Element | null => {
-    if (!showLanguageSelector) return null;
-
-    return (
-      <Dropdown
-        data-testid={`${testIdPrefix}languageDropdown`}
-        drop={dropDirection}
-      >
-        <Dropdown.Toggle
-          variant="white"
-          id="dropdown-basic"
-          data-testid={`${testIdPrefix}languageDropdownToggle`}
-          className={styles.colorWhite}
-        >
-          <LanguageIcon
-            className={styles.colorWhite}
-            data-testid={`${testIdPrefix}languageIcon`}
-          />
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          {languages.map((language, index: number) => (
-            <Dropdown.Item
-              key={index}
-              onClick={async (): Promise<void> => {
-                await handleLanguageChange(language.code);
-              }}
-              disabled={currentLanguageCode === language.code}
-              data-testid={`${testIdPrefix}changeLanguageBtn${index}`}
-            >
-              <span className={`fi fi-${language.country_code} mr-2`}></span>{' '}
-              {language.name}
-            </Dropdown.Item>
-          ))}
-        </Dropdown.Menu>
-      </Dropdown>
-    );
-  };
-
-  // Render user profile dropdown
-  const renderUserProfileDropdown = (testIdPrefix = ''): JSX.Element | null => {
-    if (!showUserProfile) return null;
-
-    return (
-      <Dropdown drop={dropDirection}>
-        <Dropdown.Toggle
-          variant="white"
-          id="dropdown-basic"
-          data-testid={`${testIdPrefix}logoutDropdown`}
-          className={styles.colorWhite}
-        >
-          <PermIdentityIcon
-            className={styles.colorWhite}
-            data-testid={`${testIdPrefix}personIcon`}
-          />
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          <Dropdown.ItemText>
-            <b>{finalUserName || ''}</b>
-          </Dropdown.ItemText>
-          <Dropdown.Item
-            onClick={() => navigate('/user/settings')}
-            className={styles.link}
-          >
-            {tCommon('settings')}
-          </Dropdown.Item>
-          <Dropdown.Item
-            onClick={handleLogout}
-            data-testid={`${testIdPrefix}logoutBtn`}
-          >
-            {tCommon('logout')}
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
-    );
-  };
-
   // Render navigation links
   const renderNavigationLinks = (): JSX.Element | null => {
     if (!navigationLinks || navigationLinks.length === 0) return null;
@@ -275,9 +198,25 @@ export const UserPortalNavigationBar = (
     <>
       {renderNavigationLinks()}
       <Navbar.Collapse className="justify-content-end">
-        {renderLanguageDropdown()}
+        <LanguageSelector
+          showLanguageSelector={showLanguageSelector}
+          testIdPrefix={''}
+          dropDirection={dropDirection}
+          handleLanguageChange={handleLanguageChange}
+          currentLanguageCode={currentLanguageCode}
+        />
         {showNotifications && mode === 'user' && <NotificationIcon />}
-        {renderUserProfileDropdown()}
+        <UserProfileDropdown
+          showUserProfile={showUserProfile}
+          dropDirection={dropDirection}
+          handleLogout={handleLogout}
+          finalUserName={finalUserName}
+          navigate={navigate}
+          tCommon={tCommon}
+          styles={styles}
+          PermIdentityIcon={PermIdentityIcon}
+          testIdPrefix=""
+        />
       </Navbar.Collapse>
     </>
   );
@@ -287,9 +226,25 @@ export const UserPortalNavigationBar = (
     <>
       {renderNavigationLinks()}
       <Navbar.Collapse className="justify-content-end">
-        {renderLanguageDropdown('mobile')}
+        <LanguageSelector
+          showLanguageSelector={showLanguageSelector}
+          testIdPrefix={'mobile'}
+          dropDirection={dropDirection}
+          handleLanguageChange={handleLanguageChange}
+          currentLanguageCode={currentLanguageCode}
+        />
         {showNotifications && mode === 'user' && <NotificationIcon />}
-        {renderUserProfileDropdown('mobile')}
+        <UserProfileDropdown
+          showUserProfile={showUserProfile}
+          dropDirection={dropDirection}
+          handleLogout={handleLogout}
+          finalUserName={finalUserName}
+          navigate={navigate}
+          tCommon={tCommon}
+          styles={styles}
+          PermIdentityIcon={PermIdentityIcon}
+          testIdPrefix={'mobile'}
+        />
       </Navbar.Collapse>
     </>
   );

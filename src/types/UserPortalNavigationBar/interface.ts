@@ -45,6 +45,10 @@
 
 import React from 'react';
 import { BrandingConfig, NavigationLink } from './types';
+import { NavigateFunction } from 'react-router';
+import { TFunction } from 'i18next';
+import { SvgIconTypeMap } from '@mui/material';
+import { OverridableComponent } from '@mui/material/OverridableComponent';
 
 /**
  * Main component props interface
@@ -161,7 +165,24 @@ export interface InterfaceUserPortalNavbarProps {
    */
   userName?: string;
 }
-
+export interface InterfaceLanguageSelectorProps {
+  showLanguageSelector?: boolean;
+  testIdPrefix?: string;
+  dropDirection?: 'up' | 'down' | 'start' | 'end';
+  handleLanguageChange: (languageCode: string) => void | Promise<void>;
+  currentLanguageCode?: string;
+}
+export interface InterfaceUserDropdownProps {
+  showUserProfile: boolean;
+  testIdPrefix: string;
+  dropDirection: 'up' | 'down' | 'start' | 'end';
+  handleLogout: () => void;
+  finalUserName: string;
+  navigate: NavigateFunction;
+  tCommon: TFunction;
+  styles: CSSModuleClasses;
+  PermIdentityIcon: OverridableComponent<SvgIconTypeMap<object, 'svg'>>;
+}
 /**
  * Default props for user mode
  */
