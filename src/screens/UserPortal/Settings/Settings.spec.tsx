@@ -74,7 +74,6 @@ const resizeWindow = (width: number): void => {
 
 async function wait(ms = 100): Promise<void> {
   await act(async () => {
-    vi.useFakeTimers();
     vi.advanceTimersByTime(ms);
   });
 }
@@ -224,6 +223,7 @@ describe('Testing Settings Screen [User Portal]', () => {
   it('validates password only on save button click', async () => {
     // Clear the hoisted mock before test
     sharedMocks.toast.warn.mockClear();
+    const toastSpy = vi.spyOn(toast, 'warn');
 
     await act(async () => {
       render(
@@ -250,7 +250,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     await wait();
 
     // Verify NO toast was called during typing
-    expect(sharedMocks.toast.warn).not.toHaveBeenCalled();
+    expect(toastSpy).not.toHaveBeenCalled();
 
     // Click update button - NOW validation should trigger
     const updateButton = screen.getByTestId('updateUserBtn');
@@ -258,7 +258,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     await wait();
 
     // Verify toast.warn (not toast.error) was called with correct message
-    expect(sharedMocks.toast.warn).toHaveBeenCalledWith(
+    expect(toastSpy).toHaveBeenCalledWith(
       'Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character.',
     );
   });
@@ -807,21 +807,26 @@ describe('Password Validation in Settings', () => {
     await wait();
 
     // Validation messages should appear
-    expect(screen.getByText(/Atleast 8 Character long/i)).toBeInTheDocument();
     expect(
-      screen.getByText(/Atleast one lowercase letter/i),
+      screen.getByText(i18nForTest.t('settings.atleast_8_char_long')),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/Atleast one uppercase letter/i),
+      screen.getByText(i18nForTest.t('settings.lowercase_check')),
     ).toBeInTheDocument();
-    expect(screen.getByText(/Atleast one numeric value/i)).toBeInTheDocument();
     expect(
-      screen.getByText(/Atleast one special character/i),
+      screen.getByText(i18nForTest.t('settings.uppercase_check')),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(i18nForTest.t('settings.numeric_value_check')),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(i18nForTest.t('settings.special_char_check')),
     ).toBeInTheDocument();
   });
 
   it('should validate password only on save, not on every keystroke', async () => {
     sharedMocks.toast.warn.mockClear(); // Use hoisted mock
+    const toastSpy = vi.spyOn(toast, 'warn');
 
     await act(async () => {
       render(
@@ -845,7 +850,7 @@ describe('Password Validation in Settings', () => {
     fireEvent.change(passwordInput, { target: { value: 'weak' } });
     await wait();
 
-    expect(sharedMocks.toast.warn).not.toHaveBeenCalled(); // Changed
+    expect(toastSpy).not.toHaveBeenCalled(); // Changed
 
     // Only when clicking update button
     const updateButton = screen.getByTestId('updateUserBtn');
@@ -853,7 +858,7 @@ describe('Password Validation in Settings', () => {
 
     await wait();
 
-    expect(sharedMocks.toast.warn).toHaveBeenCalledWith(
+    expect(toastSpy).toHaveBeenCalledWith(
       // Changed
       expect.stringContaining(
         'Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character.',
@@ -922,14 +927,16 @@ describe('Password Validation in Settings', () => {
     await wait();
 
     // Should see checks being satisfied/unsatisfied in real-time
-    const lengthCheck = screen.getByText('atleast_8_char_long').closest('p');
+    const lengthCheck = screen
+      .getByText(i18nForTest.t('settings.atleast_8_char_long'))
+      .closest('p');
     expect(lengthCheck).toHaveClass('text-danger'); // Less than 8 chars
 
     fireEvent.change(passwordInput, { target: { value: 'TestPass123!' } });
     await wait();
 
     const lengthCheckAfter = screen
-      .getByText('atleast_8_char_long')
+      .getByText(i18nForTest.t('settings.atleast_8_char_long'))
       .closest('p');
     expect(lengthCheckAfter).toHaveClass('text-success'); // 8+ chars now
   });

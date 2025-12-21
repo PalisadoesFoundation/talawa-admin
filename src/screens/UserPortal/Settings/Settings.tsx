@@ -172,7 +172,7 @@ export default function Settings(): React.JSX.Element {
     }
 
     if (userDetails.password && !validatePassword(userDetails.password)) {
-      toast.warning(t('password_invalid'));
+      toast.warn(t('password_invalid'));
       return;
     }
 

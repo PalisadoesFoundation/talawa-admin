@@ -134,8 +134,9 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
   }, []);
 
   useEffect(() => {
-    setPass(userDetails.password);
-    handlePasswordCheck(userDetails.password);
+    const password = userDetails.password || '';
+    setPass(password);
+    handlePasswordCheck(password);
   }, [userDetails.password, handlePasswordCheck]);
 
   return (
