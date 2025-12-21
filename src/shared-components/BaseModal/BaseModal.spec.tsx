@@ -217,13 +217,11 @@ describe('BaseModal', () => {
 
       // Wait for any async handlers to complete
       await waitFor(() => {
-        // Ensure any potential debounced/async React Bootstrap handlers have run
+        // onHide should not be called when keyboard is false
+        expect(onHide).not.toHaveBeenCalled();
+        // Modal should still be in the document
+        expect(modal).toBeInTheDocument();
       });
-
-      // onHide should not be called when keyboard is false
-      expect(onHide).not.toHaveBeenCalled();
-      // Modal should still be in the document
-      expect(modal).toBeInTheDocument();
     });
   });
 
@@ -239,27 +237,35 @@ describe('BaseModal', () => {
 
       const modal = screen.getByTestId('accessible-modal');
       expect(modal).toHaveAttribute('role', 'dialog');
-      expect(modal).toHaveAttribute('aria-modal', 'true');
 
-      // Check aria-labelledby points to title (may be set on Modal or modal-dialog)
-      // React Bootstrap may apply these attributes to different elements
-      const titleId = modal.getAttribute('aria-labelledby');
-      // The attribute should exist when title is provided
-      // If not on this element, it might be on a child element
+      // The aria attributes are on the parent modal element (the outer div with class "modal")
+      // Find it by querying for an element with aria-labelledby within the modal's container
+      const modalContainer =
+        modal.closest('.modal') ||
+        document.querySelector('[aria-labelledby][aria-describedby]');
+      expect(modalContainer).toBeInTheDocument();
+      expect(modalContainer).toHaveAttribute('aria-modal', 'true');
+      expect(modalContainer).toHaveAttribute('role', 'dialog');
+
+      // aria-labelledby should point to title element
+      expect(modalContainer).toHaveAttribute('aria-labelledby');
+      const titleId = modalContainer?.getAttribute('aria-labelledby');
+      expect(titleId).toBeTruthy();
       if (titleId) {
-        expect(titleId).toBeTruthy();
+        const titleElement = document.getElementById(titleId);
+        expect(titleElement).toBeInTheDocument();
+        expect(titleElement).toHaveTextContent('Accessible Modal');
       }
-      // Verify the title is rendered and accessible
-      expect(screen.getByText('Accessible Modal')).toBeInTheDocument();
 
-      // Check aria-describedby points to body
-      const bodyId = modal.getAttribute('aria-describedby');
-      // The attribute should exist
+      // aria-describedby should point to body element
+      expect(modalContainer).toHaveAttribute('aria-describedby');
+      const bodyId = modalContainer?.getAttribute('aria-describedby');
+      expect(bodyId).toBeTruthy();
       if (bodyId) {
-        expect(bodyId).toBeTruthy();
+        const bodyElement = document.getElementById(bodyId);
+        expect(bodyElement).toBeInTheDocument();
+        expect(bodyElement).toHaveTextContent('Modal Content');
       }
-      // Verify body content is rendered
-      expect(screen.getByText('Modal Content')).toBeInTheDocument();
     });
 
     it('does not set aria-labelledby when title is not provided', () => {
@@ -566,9 +572,13 @@ describe('BaseModal', () => {
           {...defaultProps}
           title="Empty Body"
           dataTestId="empty-children-modal"
-        ></BaseModal>,
+          children={null}
+        />,
       );
-      expect(screen.getByTestId('empty-children-modal')).toBeInTheDocument();
+      const modal = screen.getByTestId('empty-children-modal');
+      expect(modal).toBeInTheDocument();
+      // Verify no content text is present
+      expect(screen.queryByText('Modal Content')).not.toBeInTheDocument();
     });
 
     it('handles multiple modals with different test IDs', () => {
