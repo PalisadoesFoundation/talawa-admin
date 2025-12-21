@@ -694,7 +694,7 @@ describe('MemberDetail', () => {
     expect(educationDropdownBtn).toHaveTextContent('Kg');
   });
 
-  test('renders employe status dropdown and handles selection', async () => {
+  test('renders employee status dropdown and handles selection', async () => {
     renderMemberDetailScreen(link1);
     await wait();
 
