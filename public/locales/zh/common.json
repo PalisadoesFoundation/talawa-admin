@@ -110,5 +110,15 @@
   "notFound": "未找到",
   "profilePicture": "個人頭像",
   "profilePicturePlaceholder": "佔位圖片",
-  "userProfileMenu": "使用者個人資料選單"
+  "userProfileMenu": "使用者個人資料選單",
+  "to": "至",
+  "loadingOrganizations": "正在加载组织...",
+  "noOrganizationsFound": "未找到组织",
+  "title": "标题",
+  "assignedTo": "分配给",
+  "eventType": "事件类型",
+  "overview": "概览",
+  "organizations": "组织",
+  "events": "事件",
+  "tags": "标签"
 }

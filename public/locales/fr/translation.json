@@ -54,7 +54,9 @@
     "OR": "OU",
     "admin": "Administrateur",
     "user": "Utilisateur",
-    "loading": "Chargement"
+    "loading": "Chargement",
+    "userImage": "Image de l'utilisateur",
+    "userEditProfilePicture": "Modifier la photo de profil"
   },
   "signOut": {
     "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
@@ -1021,7 +1023,19 @@
     "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
     "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
     "tagsAssigned": "étiquettes assignées",
-    "noTagsAssigned": "Aucune étiquette assignée"
+    "noTagsAssigned": "Aucune étiquette assignée",
+    "to": "À",
+    "overview": "Aperçu",
+    "tags": "Étiquettes",
+    "invalidFileType": "Type de fichier invalide",
+    "fileTooLarge": "Fichier trop volumineux",
+    "memberDetailNumberExample": "Exemple de numéro",
+    "memberDetailExampleLane": "Exemple de rue",
+    "memberDetailPostalExample": "Exemple de code postal",
+    "enterCity": "Entrez la ville",
+    "enterState": "Entrez l'état",
+    "select": "Sélectionner",
+    "asYourCountry": "comme votre pays"
   },
   "people": {
     "title": "Personnes",
@@ -1309,7 +1323,9 @@
     "latestFirst": "Plus Récent en Premier",
     "earliestFirst": "Plus Ancien en Premier",
     "noTransactionsFound": "Aucune transaction trouvée",
-    "errorLoadingTransactions": "Erreur lors du chargement des transactions"
+    "errorLoadingTransactions": "Erreur lors du chargement des transactions",
+    "eventType": "Type d'événement",
+    "tagCreationFailed": "Échec de la création du tag"
   },
   "userEvents": {
     "title": "Événements",

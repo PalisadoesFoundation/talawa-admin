@@ -54,7 +54,9 @@
     "special_char_check": "Al menos un carácter especial",
     "loading": "Cargando...",
     "selectOrg": "Seleccione una organización",
-    "afterRegister": "Registro exitoso. Por favor, espere a que el administrador apruebe su solicitud."
+    "afterRegister": "Registro exitoso. Por favor, espere a que el administrador apruebe su solicitud.",
+    "userImage": "Imagen del usuario",
+    "userEditProfilePicture": "Editar foto de perfil"
   },
   "signOut": {
     "retryPrompt": "Error al Cerrar sesión. ¿Reintentar?",
@@ -1021,7 +1023,19 @@
     "unassignUserTagMessage": "¿Desea eliminar la etiqueta de este usuario?",
     "successfullyUnassigned": "Etiqueta desasignada del usuario",
     "tagsAssigned": "Etiquetas asignadas",
-    "noTagsAssigned": "No se asignaron etiquetas"
+    "noTagsAssigned": "No se asignaron etiquetas",
+    "to": "a",
+    "overview": "Resumen",
+    "tags": "Etiquetas",
+    "invalidFileType": "Tipo de archivo no válido",
+    "fileTooLarge": "El archivo es demasiado grande",
+    "memberDetailNumberExample": "Ejemplo de número",
+    "memberDetailExampleLane": "Ejemplo de calle",
+    "memberDetailPostalExample": "Ejemplo de código postal",
+    "enterCity": "Ingrese la ciudad",
+    "enterState": "Ingrese el estado",
+    "select": "Seleccionar",
+    "asYourCountry": "Como su país"
   },
   "userLogin": {
     "login": "Acceso",
@@ -1309,7 +1323,9 @@
     "latestFirst": "Más Reciente Primero",
     "earliestFirst": "Más Antiguo Primero",
     "noTransactionsFound": "No se encontraron transacciones",
-    "errorLoadingTransactions": "Error al cargar transacciones"
+    "errorLoadingTransactions": "Error al cargar transacciones",
+    "eventType": "Tipo de evento",
+    "tagCreationFailed": "Error al crear la etiqueta"
   },
   "userEvents": {
     "title": "Eventos",

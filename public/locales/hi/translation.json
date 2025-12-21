@@ -54,7 +54,9 @@
     "OR": "या",
     "admin": "व्यवस्थापक",
     "user": "उपयोगकर्ता",
-    "loading": "लोड हो रहा है"
+    "loading": "लोड हो रहा है",
+    "userImage": "उपयोगकर्ता छवि",
+    "userEditProfilePicture": "प्रोफ़ाइल चित्र संपादित करें"
   },
   "signOut": {
     "retryPrompt": "सेशन रद्द करने में विफल। पुनः प्रयास करें?",
@@ -1021,7 +1023,19 @@
     "unassignUserTagMessage": "क्या आप इस उपयोगकर्ता से टैग हटाना चाहते हैं?",
     "successfullyUnassigned": "उपयोगकर्ता से टैग हटा दिया गया",
     "tagsAssigned": "टैग सौंपे गए",
-    "noTagsAssigned": "कोई टैग सौंपा नहीं गया"
+    "noTagsAssigned": "कोई टैग सौंपा नहीं गया",
+    "to": "को",
+    "overview": "अवलोकन",
+    "tags": "टैग",
+    "invalidFileType": "अमान्य फ़ाइल प्रकार",
+    "fileTooLarge": "फ़ाइल बहुत बड़ी है",
+    "memberDetailNumberExample": "उदाहरण: 1234567890",
+    "memberDetailExampleLane": "उदाहरण: मुख्य मार्ग",
+    "memberDetailPostalExample": "उदाहरण: 110001",
+    "enterCity": "शहर दर्ज करें",
+    "enterState": "राज्य दर्ज करें",
+    "select": "चुनें",
+    "asYourCountry": "अपने देश के रूप में"
   },
   "people": {
     "title": "लोग",
@@ -1309,7 +1323,9 @@
     "latestFirst": "नवीनतम पहले",
     "earliestFirst": "सबसे पहले",
     "noTransactionsFound": "कोई लेन-देन नहीं मिला",
-    "errorLoadingTransactions": "लेन-देन लोड करने में त्रुटि"
+    "errorLoadingTransactions": "लेन-देन लोड करने में त्रुटि",
+    "eventType": "कार्यक्रम प्रकार",
+    "tagCreationFailed": "टैग निर्माण विफल रहा"
   },
   "userEvents": {
     "title": "कार्यक्रम",

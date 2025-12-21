@@ -110,5 +110,15 @@
   "notFound": "Non trouvé",
   "profilePicture": "Photo de profil",
   "profilePicturePlaceholder": "Image factice",
-  "userProfileMenu": "Menu du profil utilisateur"
+  "userProfileMenu": "Menu du profil utilisateur",
+  "to": "À",
+  "loadingOrganizations": "Chargement des organisations...",
+  "noOrganizationsFound": "Aucune organisation trouvée",
+  "title": "Titre",
+  "assignedTo": "Attribué à",
+  "eventType": "Type d'événement",
+  "overview": "Aperçu",
+  "organizations": "Organisations",
+  "events": "Événements",
+  "tags": "Étiquettes"
 }
