@@ -50,8 +50,42 @@
     "user": "उपयोगकर्ता",
     "loading": "लोड हो रहा है"
   },
-  "authBranding": {
-    "fromPalisadoes": "Palisadoes फाउंडेशन स्वयंसेवकों द्वारा विकसित एक ओपन-सोर्स एप्लिकेशन"
+  "signOut": {
+    "retryPrompt": "सेशन रद्द करने में विफल। पुनः प्रयास करें?",
+    "signingOut": "साइन आउट हो रहा है...",
+    "signOut": "साइन आउट"
+  },
+  "userLoginPage": {
+    "title": "तालावा व्यवस्थापक",
+    "fromPalisadoes": "Palisadoes फाउंडेशन स्वयंसेवकों द्वारा विकसित एक ओपन-सोर्स एप्लिकेशन",
+    "atleast_8_char_long": "कम से कम 8 अक्षर लंबे",
+    "Password_and_Confirm_password_mismatches.": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
+    "doNotOwnAnAccount": "कोई खाता नहीं है?",
+    "captchaError": "कैप्चा त्रुटि!",
+    "Please_check_the_captcha": "कृपया कैप्चा जांचें।",
+    "Something_went_wrong": "कुछ गलत हो गया, कृपया बाद में पुनः प्रयास करें।",
+    "passwordMismatches": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
+    "fillCorrectly": "सभी विवरण सही ढंग से भरें।",
+    "successfullyRegistered": "सफलतापूर्वक पंजीकृत।",
+    "userLogin": "उपयोगकर्ता लॉगिन",
+    "afterRegister": "सफलतापूर्वक पंजीकृत।",
+    "selectOrg": "एक संगठन चुनें",
+    "talawa_portal": "तालावा पोर्टल",
+    "login": "लॉगिन",
+    "register": "पंजीकरण",
+    "firstName": "पहला नाम",
+    "lastName": "अंतिम नाम",
+    "email": "ईमेल",
+    "password": "पासवर्ड",
+    "confirmPassword": "पुष्टि पासवर्ड",
+    "forgotPassword": "पासवर्ड भूल गए",
+    "enterEmail": "ईमेल दर्ज करें",
+    "enterPassword": "पासवर्ड दर्ज करें",
+    "talawaApiUnavailable": "तालावा एपीआई अनुपलब्ध",
+    "notAuthorised": "अनधिकृत",
+    "notFound": "नहीं मिला",
+    "OR": "या",
+    "loading": "लोड हो रहा है"
   },
   "latestEvents": {
     "eventCardTitle": "आगामी घटनाएँ",
@@ -696,7 +730,8 @@
     "raisedAmount": "उठाया गया राशि",
     "pledgedAmount": "प्रतिबद्ध राशि",
     "startDate": "प्रारंभ तिथि",
-    "endDate": "समाप्ति तिथि"
+    "endDate": "समाप्ति तिथि",
+    "selectPledger": "कृपया एक प्रतिज्ञाकर्ता का चयन करें"
   },
   "orgPost": {
     "title": "पदों",
@@ -1043,7 +1078,8 @@
     "language": "भाषा",
     "settings": "समायोजन",
     "logout": "लॉग आउट करें",
-    "close": "बंद करें"
+    "close": "बंद करें",
+    "talawaBranding": "तालावा ब्रांडिंग"
   },
   "userOrganizations": {
     "allOrganizations": "सभी संगठन",

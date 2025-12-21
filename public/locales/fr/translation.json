@@ -50,8 +50,42 @@
     "user": "Utilisateur",
     "loading": "Chargement"
   },
-  "authBranding": {
-    "fromPalisadoes": "Une application open source réalisée par les bénévoles de la Fondation Palisadoes"
+  "signOut": {
+    "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
+    "signingOut": "Déconnexion en cours...",
+    "signOut": "Se déconnecter"
+  },
+  "userLoginPage": {
+    "title": "Administrateur Talawa",
+    "fromPalisadoes": "Une application open source réalisée par les bénévoles de la Fondation Palisadoes",
+    "atleast_8_char_long": "Au moins 8 caractères",
+    "Password_and_Confirm_password_mismatches.": "Mot de passe et Confirmer les incompatibilités de mot de passe.",
+    "doNotOwnAnAccount": "Vous ne possédez pas de compte ?",
+    "captchaError": "Erreur CAPTCHA!",
+    "Please_check_the_captcha": "S'il vous plaît, vérifiez le captcha.",
+    "Something_went_wrong": "Quelque chose s'est mal passé. Veuillez réessayer plus tard.",
+    "passwordMismatches": "Mot de passe et Confirmer les incompatibilités de mot de passe.",
+    "fillCorrectly": "Remplissez correctement tous les détails.",
+    "successfullyRegistered": "Enregistré avec succès. ",
+    "userLogin": "Utilisateur en ligne",
+    "afterRegister": "Enregistré avec succès. ",
+    "selectOrg": "Sélectionnez une organisation",
+    "talawa_portal": "Portail Talawa",
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "firstName": "Prénom",
+    "lastName": "Nom de famille",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "forgotPassword": "Mot de passe oublié",
+    "enterEmail": "Entrer l'e-mail",
+    "enterPassword": "Entrer le mot de passe",
+    "talawaApiUnavailable": "API Talawa indisponible",
+    "notAuthorised": "Non autorisé",
+    "notFound": "Non trouvé",
+    "OR": "OU",
+    "loading": "Chargement"
   },
   "latestEvents": {
     "eventCardTitle": "évènements à venir",
@@ -696,7 +730,8 @@
     "raisedAmount": "Montant collecté",
     "pledgedAmount": "Montant promis",
     "startDate": "Date de début",
-    "endDate": "Date de fin"
+    "endDate": "Date de fin",
+    "selectPledger": "Veuillez sélectionner un donateur"
   },
   "orgPost": {
     "title": "Des postes",
@@ -1043,7 +1078,8 @@
     "language": "Langue",
     "settings": "Paramètres",
     "logout": "Déconnexion",
-    "close": "Fermer"
+    "close": "Fermer",
+    "talawaBranding": "Image de marque Talawa"
   },
   "userOrganizations": {
     "allOrganizations": "Toutes les organisations",

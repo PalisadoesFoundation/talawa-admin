@@ -14,6 +14,8 @@ import userEvent from '@testing-library/user-event';
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 
 import { vi } from 'vitest';
+import type { Mock } from 'vitest';
+import useLocalStorage from 'utils/useLocalstorage';
 
 /**
  * Unit tests for the OrganizationNavbar component.
@@ -111,6 +113,13 @@ vi.mock('react-router', async () => {
     useParams: () => ({ orgId: organizationId }),
   };
 });
+
+vi.mock('utils/useLocalstorage', () => ({
+  default: vi.fn(() => ({
+    clearAllItems: vi.fn(),
+    getItem: vi.fn(),
+  })),
+}));
 
 describe('Testing OrganizationNavbar Component [User Portal]', () => {
   Object.defineProperty(window, 'matchMedia', {
@@ -281,22 +290,6 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
   });
 
   it('Should handle logout properly', async () => {
-    const mockStorage = {
-      clear: vi.fn(),
-      getItem: vi.fn((key: 'name') => {
-        const items = {
-          name: JSON.stringify('Test User'),
-        };
-        return items[key] || null;
-      }),
-      setItem: vi.fn(),
-      removeItem: vi.fn(),
-      length: 0,
-      key: vi.fn(),
-    };
-    Object.defineProperty(window, 'localStorage', {
-      value: mockStorage,
-    });
     const mockLocation = {
       replace: vi.fn(),
     };
@@ -304,6 +297,14 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
       value: mockLocation,
       writable: true,
     });
+
+    const mockClearAllItems = vi.fn();
+    const mockGetItems = vi.fn(() => 'Test user');
+    (useLocalStorage as Mock).mockReturnValue({
+      clearAllItems: mockClearAllItems,
+      getItem: mockGetItems,
+    });
+
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
@@ -318,7 +319,7 @@ describe('Testing OrganizationNavbar Component [User Portal]', () => {
     await wait();
     await userEvent.click(screen.getByTestId('personIcon'));
     await userEvent.click(screen.getByTestId('logoutBtn'));
-    expect(mockStorage.clear).toHaveBeenCalled();
+    expect(mockClearAllItems).toHaveBeenCalled();
     expect(mockLocation.replace).toHaveBeenCalledWith('/');
   });
 

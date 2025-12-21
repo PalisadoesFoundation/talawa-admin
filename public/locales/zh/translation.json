@@ -50,8 +50,42 @@
     "user": "用户",
     "loading": "加载中"
   },
-  "authBranding": {
-    "fromPalisadoes": "Palisadoes 基金会志愿者开发的开源应用程序"
+  "signOut": {
+    "retryPrompt": "撤銷工作階段失敗。要重試嗎？",
+    "signingOut": "正在登出...",
+    "signOut": "登出"
+  },
+  "userLoginPage": {
+    "title": "塔拉瓦管理员",
+    "fromPalisadoes": "Palisadoes 基金会志愿者开发的开源应用程序",
+    "atleast_8_char_long": "至少 8 个字符长",
+    "Password_and_Confirm_password_mismatches.": "密码和确认密码不匹配。",
+    "doNotOwnAnAccount": "没有帐户？",
+    "captchaError": "验证码错误！",
+    "Please_check_the_captcha": "请检查验证码。",
+    "Something_went_wrong": "出了点问题，请稍后再试。",
+    "passwordMismatches": "密码和确认密码不匹配。",
+    "fillCorrectly": "正确填写所有详细信息。",
+    "successfullyRegistered": "注册成功。",
+    "userLogin": "用户登录",
+    "afterRegister": "注册成功。",
+    "selectOrg": "选择一个组织",
+    "talawa_portal": "塔拉瓦门户",
+    "login": "登录",
+    "register": "注册",
+    "firstName": "名字",
+    "lastName": "姓氏",
+    "email": "电子邮件",
+    "password": "密码",
+    "confirmPassword": "确认密码",
+    "forgotPassword": "忘记密码",
+    "enterEmail": "输入电子邮件",
+    "enterPassword": "输入密码",
+    "talawaApiUnavailable": "塔拉瓦 API 不可用",
+    "notAuthorised": "未授权",
+    "notFound": "未找到",
+    "OR": "或",
+    "loading": "加载中"
   },
   "latestEvents": {
     "eventCardTitle": "即将举行的活动",
@@ -696,7 +730,8 @@
     "raisedAmount": "募集金額",
     "pledgedAmount": "承诺金額",
     "startDate": "开始日期",
-    "endDate": "结束日期"
+    "endDate": "结束日期",
+    "selectPledger": "请选择一个承诺者"
   },
   "orgPost": {
     "title": "帖子",
@@ -1043,7 +1078,8 @@
     "language": "语言",
     "settings": "设置",
     "logout": "退出登录",
-    "close": "关闭"
+    "close": "关闭",
+    "talawaBranding": "Talawa 品牌形象"
   },
   "userOrganizations": {
     "allOrganizations": "所有组织",

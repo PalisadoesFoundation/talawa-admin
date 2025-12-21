@@ -28,6 +28,14 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
+const mockClearAllItems = vi.fn();
+
+vi.mock('./useLocalstorage', () => ({
+  default: vi.fn(() => ({
+    clearAllItems: mockClearAllItems,
+  })),
+}));
+
 const MOCKS = [
   {
     request: {
@@ -58,12 +66,6 @@ describe('useSession Hook', () => {
     vi.clearAllMocks();
     vi.spyOn(window, 'addEventListener').mockImplementation(vi.fn());
     vi.spyOn(window, 'removeEventListener').mockImplementation(vi.fn());
-    Object.defineProperty(global, 'localStorage', {
-      value: {
-        clear: vi.fn(),
-      },
-      writable: true,
-    });
   });
 
   afterEach(() => {
@@ -199,7 +201,7 @@ describe('useSession Hook', () => {
     vi.advanceTimersByTime(31 * 60 * 1000);
 
     await vi.waitFor(() => {
-      expect(global.localStorage.clear).toHaveBeenCalled();
+      expect(mockClearAllItems).toHaveBeenCalled();
       expect(toast.warning).toHaveBeenCalledTimes(2);
       expect(toast.warning).toHaveBeenNthCalledWith(1, 'sessionWarning');
       expect(toast.warning).toHaveBeenNthCalledWith(2, 'sessionLogout', {
@@ -440,7 +442,7 @@ describe('useSession Hook', () => {
     vi.advanceTimersByTime(250);
 
     await vi.waitFor(() => {
-      expect(global.localStorage.clear).toHaveBeenCalled();
+      expect(mockClearAllItems).toHaveBeenCalled();
       expect(toast.warning).toHaveBeenCalledWith('sessionLogout', {
         autoClose: false,
       });
@@ -464,7 +466,7 @@ describe('useSession Hook', () => {
     result.current.handleLogout();
 
     await vi.waitFor(() => {
-      expect(global.localStorage.clear).toHaveBeenCalled();
+      expect(mockClearAllItems).toHaveBeenCalled();
       expect(toast.warning).toHaveBeenCalledWith('sessionLogout', {
         autoClose: false,
       });

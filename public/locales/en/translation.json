@@ -50,8 +50,42 @@
     "user": "user",
     "loading": "loading"
   },
-  "authBranding": {
-    "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers"
+  "signOut": {
+    "retryPrompt": "Failed to revoke session. Retry?",
+    "signingOut": "Signing out...",
+    "signOut": "Sign Out"
+  },
+  "userLoginPage": {
+    "title": "Talawa Admin",
+    "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
+    "atleast_8_char_long": "Atleast 8 Character long",
+    "Password_and_Confirm_password_mismatches.": "Password and Confirm password mismatches.",
+    "doNotOwnAnAccount": "Do not own an account?",
+    "captchaError": "Captcha Error!",
+    "Please_check_the_captcha": "Please, check the captcha.",
+    "Something_went_wrong": "Something went wrong, Please try after sometime.",
+    "passwordMismatches": "Password and Confirm password mismatches.",
+    "fillCorrectly": "Fill all the Details Correctly.",
+    "successfullyRegistered": "Successfully Registered. Please wait until you will be approved.",
+    "userLogin": "User Login",
+    "afterRegister": "Successfully registered. Please wait for admin to approve your request.",
+    "selectOrg": "Select an organization",
+    "talawa_portal": "talawa_portal",
+    "login": "login",
+    "register": "register",
+    "firstName": "firstName",
+    "lastName": "lastName",
+    "email": "email",
+    "password": "password",
+    "confirmPassword": "confirmPassword",
+    "forgotPassword": "forgotPassword",
+    "enterEmail": "enterEmail",
+    "enterPassword": "enterPassword",
+    "talawaApiUnavailable": "talawaApiUnavailable",
+    "notAuthorised": "notAuthorised",
+    "notFound": "notFound",
+    "OR": "OR",
+    "loading": "loading"
   },
   "latestEvents": {
     "eventCardTitle": "Upcoming Events",
@@ -696,7 +730,8 @@
     "raisedAmount": "Raised amount ",
     "pledgedAmount": "Pledged amount",
     "startDate": "startDate",
-    "endDate": "endDate"
+    "endDate": "endDate",
+    "selectPledger": "Please select a pledger"
   },
   "orgPost": {
     "title": "Posts",
@@ -1095,7 +1130,8 @@
     "language": "Language",
     "settings": "settings",
     "logout": "logout",
-    "close": "close"
+    "close": "close",
+    "talawaBranding": "Talawa Branding"
   },
   "userOrganizations": {
     "allOrganizations": "All Organizations",
