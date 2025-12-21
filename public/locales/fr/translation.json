@@ -226,10 +226,18 @@
     "placeholderAvatarAlt": "Avatar par défaut"
   },
   "users": {
+    "membershipStatus": {
+      "member": "Statut d'adhésion: Membre",
+      "pending": "Statut d'adhésion: En attente",
+      "notMember": "Statut d'adhésion: Non membre"
+    },
     "title": "Rôles Talawa",
     "joined_organizations": "Organisations rejointes",
     "blocked_organizations": "Organisations bloquées",
     "orgJoinedBy": "Organisations rejointes par",
+    "member": "Membre",
+    "pending": "En attente",
+    "notMember": "Non membre",
     "orgThatBlocked": "Organisations qui ont bloqué",
     "hasNotJoinedAnyOrg": "n'a rejoint aucune organisation",
     "isNotBlockedByAnyOrg": "n'est bloqué par aucune organisation",
