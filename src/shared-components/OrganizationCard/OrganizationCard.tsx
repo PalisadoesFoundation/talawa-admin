@@ -209,8 +209,7 @@ function OrganizationCard({
                   {name}
                 </h4>
               </Tooltip>
-
-              <div
+              <output
                 className={[
                   styles.statusChip,
                   membershipState === 'member'
@@ -241,7 +240,7 @@ function OrganizationCard({
                   : membershipState === 'pending'
                     ? t('users.pending')
                     : t('users.notMember')}
-              </div>
+              </output>
               {/* Description of the organization */}
               <div className={[styles.orgdesc, 'fw-semibold'].join(' ')}>
                 <TruncatedText text={description} />
