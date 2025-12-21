@@ -226,7 +226,6 @@ function OrganizationCard({
                       ? 'pending'
                       : 'notMember'
                 }
-                role="status"
                 aria-label={
                   membershipState === 'member'
                     ? t('users.membershipStatus.member')
