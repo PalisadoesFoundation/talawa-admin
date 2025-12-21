@@ -1537,7 +1537,9 @@
     "addPledge": "Add Pledge",
     "viewPledges": "View Pledges",
     "noPledges": "No Pledges Found",
-    "noCampaigns": "No Campaigns Found"
+    "noCampaigns": "No Campaigns Found",
+    "raised": "Raised",
+    "amountRaised": "Amount Raised"
   },
   "userPledges": {
     "title": "My Pledges"

@@ -82,6 +82,8 @@ export const FUND_CAMPAIGN_PLEDGE = gql`
             id
             amount
             note
+            createdAt
+            updatedAt
             campaign {
               id
               name
@@ -92,7 +94,6 @@ export const FUND_CAMPAIGN_PLEDGE = gql`
             pledger {
               id
               name
-              createdAt
             }
           }
         }
@@ -136,6 +137,8 @@ export const USER_PLEDGES = gql`
       id
       amount
       note
+      createdAt
+      updatedAt
       campaign {
         id
         name

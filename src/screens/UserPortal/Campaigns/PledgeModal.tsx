@@ -39,8 +39,6 @@
  *   mode="create"
  * />
  */
-import { DatePicker } from '@mui/x-date-pickers';
-import dayjs, { type Dayjs } from 'dayjs';
 import type { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { currencyOptions, currencySymbols } from 'utils/currency';
@@ -72,7 +70,6 @@ export interface InterfacePledgeModal {
   userId: string;
   pledge: InterfacePledgeInfo | null;
   refetchPledge: () => void;
-  endDate: Date;
   mode: 'create' | 'edit';
 }
 /**
@@ -106,27 +103,6 @@ export const areOptionsEqual = (
 export const getMemberLabel = (member: InterfaceUserInfoPG): string =>
   [member.firstName, member.lastName].filter(Boolean).join(' ') || member.name;
 
-/**
- * Ensures pledge end date is not before the selected start date.
- * Returns the later of the two dates.
- *
- * @param pledgeEndDate - Current pledge end date
- * @param date - Newly selected start date
- * @returns Adjusted end date or the original end date if no adjustment is needed
- *
- * @example
- * computeAdjustedEndDate(new Date('2024-01-01'), dayjs('2024-02-01'));
- * // returns Date('2024-02-01')
- */
-export const computeAdjustedEndDate = (
-  pledgeEndDate: Date | undefined,
-  date: Dayjs | null,
-): Date | undefined => {
-  if (!pledgeEndDate || !date) return pledgeEndDate;
-  const newDate = date.toDate();
-  return pledgeEndDate < newDate ? newDate : pledgeEndDate;
-};
-
 const PledgeModal: React.FC<InterfacePledgeModal> = ({
   isOpen,
   hide,
@@ -134,20 +110,16 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   userId,
   pledge,
   refetchPledge,
-  endDate,
   mode,
 }) => {
   // Translation functions to support internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
-  const { t: tCommon } = useTranslation('common');
 
   // State to manage the form inputs for the pledge
   const [formState, setFormState] = useState<InterfaceCreatePledge>({
     pledgeUsers: pledge?.pledger ? [pledge.pledger] : [],
     pledgeAmount: pledge?.amount ?? 0,
     pledgeCurrency: pledge?.currency ?? 'USD',
-    pledgeEndDate: new Date(pledge?.endDate ?? new Date()),
-    pledgeStartDate: new Date(pledge?.startDate ?? new Date()),
   });
 
   // State to manage the list of pledgers (users who are part of the pledge)
@@ -166,20 +138,12 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         pledgeUsers: pledge.pledger ? [pledge.pledger] : [],
         pledgeAmount: pledge?.amount ?? 0,
         pledgeCurrency: pledge?.currency ?? 'USD',
-        pledgeEndDate: new Date(pledge?.endDate ?? new Date()),
-        pledgeStartDate: new Date(pledge?.startDate ?? new Date()),
       });
     }
   }, [pledge]);
 
   // Destructuring the form state for easier access
-  const {
-    pledgeUsers,
-    pledgeAmount,
-    pledgeCurrency,
-    pledgeStartDate,
-    pledgeEndDate,
-  } = formState;
+  const { pledgeUsers, pledgeAmount, pledgeCurrency } = formState;
 
   // Query to get the user details based on the userId prop
   const { data: userData } = useQuery(USER_DETAILS, {
@@ -262,9 +226,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           variables: {
             campaignId,
             amount: pledgeAmount,
-            currency: pledgeCurrency,
-            startDate: dayjs(pledgeStartDate).format('YYYY-MM-DD'),
-            endDate: dayjs(pledgeEndDate).format('YYYY-MM-DD'),
             pledgerId: pledgeUsers[0].id,
           },
         });
@@ -275,8 +236,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           pledgeUsers: [],
           pledgeAmount: 0,
           pledgeCurrency: 'USD',
-          pledgeEndDate: new Date(),
-          pledgeStartDate: new Date(),
         });
         hide();
       } catch (error: unknown) {
@@ -288,8 +247,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       campaignId,
       pledgeAmount,
       pledgeCurrency,
-      pledgeStartDate,
-      pledgeEndDate,
       pledgeUsers,
       createPledge,
       t,
@@ -348,41 +305,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               />
             </Form.Group>
           )}
-          <Form.Group className="d-flex gap-3 mx-auto  mb-3">
-            <DatePicker
-              format="DD/MM/YYYY"
-              label={tCommon('startDate')}
-              value={dayjs(pledgeStartDate)}
-              className={styles.noOutline}
-              onChange={(date: Dayjs | null): void => {
-                if (date) {
-                  setFormState({
-                    ...formState,
-                    pledgeStartDate: date.toDate(),
-                    pledgeEndDate: computeAdjustedEndDate(
-                      pledgeEndDate,
-                      date,
-                    ) as Date,
-                  });
-                }
-              }}
-              minDate={dayjs(pledgeStartDate)}
-              maxDate={dayjs(endDate)}
-            />
-            <DatePicker
-              format="DD/MM/YYYY"
-              label={tCommon('endDate')}
-              className={styles.noOutline}
-              value={dayjs(pledgeEndDate)}
-              onChange={(date: Dayjs | null): void => {
-                if (date) {
-                  setFormState({ ...formState, pledgeEndDate: date.toDate() });
-                }
-              }}
-              minDate={dayjs(pledgeStartDate)}
-              maxDate={dayjs(endDate)}
-            />
-          </Form.Group>
           <Form.Group className="d-flex gap-3 mb-4">
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">
