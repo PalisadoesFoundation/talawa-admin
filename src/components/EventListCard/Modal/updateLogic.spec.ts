@@ -471,6 +471,58 @@ describe('useUpdateEventHandler', () => {
       expect(calledInputs.description).toContain('Changed event description');
     });
 
+    it('includes isPublic in entireSeries update when changed', async () => {
+      mockUpdateEntireRecurringEventSeries.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: buildRecurringEventProps({
+            isPublic: true,
+          }),
+          updateOption: 'entireSeries',
+          publicchecked: false,
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+          },
+        }),
+      );
+
+      expect(mockUpdateEntireRecurringEventSeries).toBeCalledTimes(1);
+      const calledInputs =
+        mockUpdateEntireRecurringEventSeries.mock.calls[0][0].variables.input;
+      expect(calledInputs.isPublic).toBe(false);
+    });
+
+    it('includes isRegisterable in entireSeries update when changed', async () => {
+      mockUpdateEntireRecurringEventSeries.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: buildRecurringEventProps({
+            isRegisterable: true,
+          }),
+          updateOption: 'entireSeries',
+          registrablechecked: false,
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+          },
+        }),
+      );
+
+      expect(mockUpdateEntireRecurringEventSeries).toBeCalledTimes(1);
+      const calledInputs =
+        mockUpdateEntireRecurringEventSeries.mock.calls[0][0].variables.input;
+      expect(calledInputs.isRegisterable).toBe(false);
+    });
+
     it('includes isInviteOnly in entireSeries update when changed', async () => {
       mockUpdateEntireRecurringEventSeries.mockResolvedValueOnce({
         data: { updateEvent: {} },
