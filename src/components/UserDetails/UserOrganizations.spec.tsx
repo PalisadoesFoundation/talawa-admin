@@ -291,7 +291,7 @@ describe('UserOrganizations', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByText('No organizations found.')).toBeInTheDocument();
+      expect(screen.getByText('noOrganizationsFound')).toBeInTheDocument();
     });
   });
 
@@ -335,7 +335,7 @@ describe('UserOrganizations', () => {
 
     // Wait for the empty state
     await waitFor(() => {
-      expect(screen.getByText('No organizations found.')).toBeInTheDocument();
+      expect(screen.getByText('noOrganizationsFound')).toBeInTheDocument();
     });
   });
 

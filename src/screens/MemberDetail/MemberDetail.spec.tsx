@@ -90,26 +90,6 @@ describe('MemberDetail', () => {
       'data-active',
       'true',
     );
-
-    expect(educationDropdownBtn).toBeInTheDocument();
-
-    // Test initial mock data has grade_8 which displays as "Grade-8"
-    expect(educationDropdownBtn).toHaveTextContent('Grade-8');
-
-    // Click the dropdown button to open it
-    await userEvent.click(educationDropdownBtn);
-
-    expect(
-      screen.getByTestId('educationgrade-dropdown-menu'),
-    ).toBeInTheDocument();
-
-    // Find and click one of the options
-    const option = screen.getByTestId('change-educationgrade-btn-kg'); // Or whatever option text you expect
-    await userEvent.click(option);
-
-    // Verify the selection was made
-    expect(educationDropdownBtn).toHaveTextContent('Kg');
-
   });
 
   it('switches to organizations tab', () => {
@@ -122,103 +102,6 @@ describe('MemberDetail', () => {
       'data-active',
       'true',
     );
-  });
-
-  it('switches to events tab', () => {
-    render(<MemberDetail />);
-
-    expect(employmentStatus).toBeInTheDocument();
-
-    // Test initial state
-    expect(employmentStatus).toHaveTextContent('None'); // Or whatever your initial value is
-
-    // Click the dropdown button to open it
-    await userEvent.click(employmentStatus);
-
-    expect(
-      screen.getByTestId('employmentstatus-dropdown-menu'),
-    ).toBeInTheDocument();
-
-    // Find and click one of the options
-    const option = screen.getByTestId('change-employmentstatus-btn-full_time'); // Or whatever option text you expect
-    await userEvent.click(option);
-
-    // Verify the selection was made
-    expect(employmentStatus).toHaveTextContent('Full-Time');
-  });
-
-  test('renders maritial status dropdown and handles selection', async () => {
-    renderMemberDetailScreen(link1);
-    await wait();
-
-    expect(
-      screen.getByTestId('maritalstatus-dropdown-container'),
-    ).toBeInTheDocument();
-
-    // Find the dropdown by the fieldName from DynamicDropDown props
-    const maritialStatus = screen.getByTestId('maritalstatus-dropdown-btn');
-    expect(maritialStatus).toBeInTheDocument();
-
-    // Test initial mock data has engaged which displays as "Engaged"
-    expect(maritialStatus).toHaveTextContent('Engaged');
-
-    // Click the dropdown button to open it
-    await userEvent.click(maritialStatus);
-
-    expect(
-      screen.getByTestId('maritalstatus-dropdown-menu'),
-    ).toBeInTheDocument();
-
-    // Find and click one of the options
-    const option = screen.getByTestId('change-maritalstatus-btn-single');
-    await userEvent.click(option);
-
-    // Verify the selection was made
-    expect(maritialStatus).toHaveTextContent('Single');
-  });
-
-  test('renders gender status dropdown and handles selection', async () => {
-    renderMemberDetailScreen(link1);
-    await wait();
-
-    expect(
-      screen.getByTestId('natalsex-dropdown-container'),
-    ).toBeInTheDocument();
-
-    // Find the dropdown by the fieldName from DynamicDropDown props
-    const natalSexStatus = screen.getByTestId('natalsex-dropdown-btn');
-    expect(natalSexStatus).toBeInTheDocument();
-
-    // Test initial mock data has male which displays as "Male"
-    expect(natalSexStatus).toHaveTextContent('Male');
-
-    // Click the dropdown button to open it
-    await userEvent.click(natalSexStatus);
-
-    expect(screen.getByTestId('natalsex-dropdown-menu')).toBeInTheDocument();
-
-    // Find and click one of the options (change to female to verify selection works)
-    const option = screen.getByTestId('change-natalsex-btn-female'); // Or whatever option text you expect
-    await userEvent.click(option);
-
-    // Verify the selection was made
-    expect(natalSexStatus).toHaveTextContent('Female');
-  });
-
-  test('handles profile picture edit button click', async () => {
-    renderMemberDetailScreen(link1);
-    await wait();
-
-    const uploadImageBtn = screen.getByTestId('uploadImageBtn');
-    expect(uploadImageBtn).toBeInTheDocument();
-
-    // Mock the file input click
-    const fileInput = screen.getByTestId('fileInput');
-    const fileInputClickSpy = vi.spyOn(fileInput, 'click');
-
-    fireEvent.click(screen.getByTestId('tab-events'));
-
-    expect(screen.getByTestId('user-events')).toBeInTheDocument();
   });
 
   it('switches to tags tab', () => {

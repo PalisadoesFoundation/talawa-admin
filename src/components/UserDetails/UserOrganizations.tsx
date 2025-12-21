@@ -112,10 +112,6 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
   });
 
   const allUserOrgs: UserOrg[] = useMemo(() => {
-    if (!userData?.user && !joinedOrganizationsData?.user) {
-      return [];
-    }
-
     const created: UserOrg[] =
       userData?.user?.createdOrganizations?.map(
         (org: {
@@ -257,7 +253,7 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
         {!userData?.user && !joinedOrganizationsData?.user ? (
           <p>{tCommon('loadingOrganizations')}</p>
         ) : filteredOrgs.length === 0 ? (
-          <p>{tCommon('noOrganizationsFound.')}</p>
+          <p>{tCommon('noOrganizationsFound')}</p>
         ) : (
           filteredOrgs.map((org) => (
             <PeopleTabUserOrganizations

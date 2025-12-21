@@ -22,7 +22,7 @@ Defined in: [src/types/PeopleTab/interface.ts:29](https://github.com/PalisadoesF
 
 ### icon?
 
-> `optional` **icon**: `ReactNode`
+> `optional` **icon**: `ReactElement`\<`SVGProps`\<`SVGSVGElement`\>\>
 
 Defined in: [src/types/PeopleTab/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L27)
 
