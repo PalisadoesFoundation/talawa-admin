@@ -136,9 +136,9 @@ def check_embedded_styles(
 
         # Check for URL references (skip these as they're not style violations)
         if (
-            "url(" in line.lower()
-            or "href=" in line.lower()
-            or "src=" in line.lower()
+            "url(" in code_line.lower()
+            or "href=" in code_line.lower()
+            or "src=" in code_line.lower()
         ):
             # Skip hex codes in URLs
             continue
