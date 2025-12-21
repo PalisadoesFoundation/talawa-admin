@@ -396,36 +396,7 @@ describe('BaseModal', () => {
         { timeout: 1000 },
       );
     });
-
-    it('calls onHide when show changes from true to false', () => {
-      const onHide = vi.fn();
-      const { rerender } = render(
-        <BaseModal
-          {...defaultProps}
-          show={true}
-          onHide={onHide}
-          title="Test"
-          dataTestId="onhide-modal"
-        />,
-      );
-
-      expect(screen.getByTestId('onhide-modal')).toBeInTheDocument();
-
-      rerender(
-        <BaseModal
-          {...defaultProps}
-          show={false}
-          onHide={onHide}
-          title="Test"
-          dataTestId="onhide-modal"
-        />,
-      );
-
-      // onHide is called by React Bootstrap when show becomes false
-      // This is the expected behavior
-    });
   });
-
   describe('Size Variants Tests', () => {
     it('applies size="sm" correctly', () => {
       render(
@@ -480,23 +451,6 @@ describe('BaseModal', () => {
       );
       const modal = screen.getByTestId('custom-modal');
       expect(modal).toBeInTheDocument();
-      // React Bootstrap Modal applies className to the outer modal div
-      // The data-testid is on the Modal component, and className should be on the same element
-      // However, React Bootstrap may structure it differently, so we verify the modal renders
-      // and the className prop is passed (integration test would verify actual styling)
-      expect(modal).toBeInTheDocument();
-      // Check if className exists in the element's classList or its className string
-      const hasClass =
-        modal.className.includes('custom-modal-class') ||
-        modal.classList.contains('custom-modal-class');
-      // If className is not directly on this element, it's still valid - the prop is passed
-      // The important thing is the component accepts and uses the className prop
-      if (!hasClass) {
-        // Verify the modal still renders correctly with the className prop
-        expect(modal).toBeInTheDocument();
-      } else {
-        expect(hasClass).toBe(true);
-      }
     });
 
     it('applies headerClassName correctly', () => {
