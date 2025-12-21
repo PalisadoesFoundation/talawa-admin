@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const toastMock = vi.hoisted(() => ({
   success: vi.fn(() => 'success-id'),
@@ -50,10 +50,6 @@ import {
 } from './NotificationToast';
 
 describe('NotificationToast', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -90,6 +86,33 @@ describe('NotificationToast', () => {
     expect(toastMock.warning).toHaveBeenCalledWith(
       'Be careful',
       expect.objectContaining({ autoClose: false }),
+    );
+  });
+
+  it('calls toast.info with defaults for a string message', () => {
+    const id = NotificationToast.info('Information');
+
+    expect(id).toBe('info-id');
+    expect(toastMock.info).toHaveBeenCalledWith(
+      'Information',
+      expect.objectContaining({
+        autoClose: 5000,
+        position: 'top-right',
+      }),
+    );
+  });
+
+  it('translates an i18n message with interpolation values', () => {
+    NotificationToast.success({
+      key: 'welcome',
+      namespace: 'common',
+      values: { name: 'Alice' },
+    });
+
+    expect(getFixedTMock).toHaveBeenCalledWith(null, 'common');
+    expect(toastMock.success).toHaveBeenCalledWith(
+      'common:welcome:Alice',
+      expect.any(Object),
     );
   });
 });

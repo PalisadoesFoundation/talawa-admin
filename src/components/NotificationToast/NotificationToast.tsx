@@ -5,7 +5,6 @@ import i18n from 'utils/i18n';
 
 import type {
   InterfaceNotificationToastHelpers,
-  InterfaceNotificationToastI18nMessage,
   NotificationToastMessage,
   NotificationToastNamespace,
 } from 'types/NotificationToast/interface';
@@ -39,13 +38,15 @@ const DEFAULT_CONTAINER_PROPS: ToastContainerProps = {
 function resolveNotificationToastMessage(message: NotificationToastMessage) {
   if (typeof message === 'string') return message;
 
-  const { key, namespace, values } =
-    message as InterfaceNotificationToastI18nMessage;
+  const { key, namespace, values } = message;
   const ns = namespace ?? DEFAULT_NAMESPACE;
   const tForNamespace = i18n.getFixedT(null, ns);
   return tForNamespace(key, values);
 }
 
+/**
+ * Show a toast of the given variant using standardized defaults and overrides.
+ */
 function showToast(
   variant: 'success' | 'error' | 'warning' | 'info',
   message: NotificationToastMessage,
