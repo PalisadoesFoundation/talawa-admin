@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Button } from 'react-bootstrap';
@@ -20,13 +20,8 @@ describe('BaseModal', () => {
     children: <div>Modal Content</div>,
   };
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   describe('Rendering Tests', () => {
@@ -233,7 +228,7 @@ describe('BaseModal', () => {
   });
 
   describe('Accessibility Tests', () => {
-    it('✅ Accessibility attributes present', () => {
+    it('Accessibility attributes present', () => {
       render(
         <BaseModal
           {...defaultProps}
@@ -357,7 +352,7 @@ describe('BaseModal', () => {
   });
 
   describe('Show/Hide Transitions Tests', () => {
-    it('✅ Show/hide transitions', async () => {
+    it('Show/hide transitions', async () => {
       const { rerender } = render(
         <BaseModal
           {...defaultProps}
