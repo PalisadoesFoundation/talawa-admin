@@ -29,7 +29,7 @@ class DisableStatementsChecker:
             file_path: Path to the file being checked.
 
         Returns:
-            List of violation messages.
+            violations: List of violation messages.
         """
         violations = []
         pattern = re.compile(r"//\s*eslint-disable", re.IGNORECASE)
@@ -50,7 +50,7 @@ class DisableStatementsChecker:
             file_path: Path to the file being checked.
 
         Returns:
-            List of violation messages.
+            violations: List of violation messages.
         """
         violations = []
         pattern = re.compile(
@@ -73,7 +73,7 @@ class DisableStatementsChecker:
             file_path: Path to the file being checked.
 
         Returns:
-            List of violation messages.
+            violations: List of violation messages.
         """
         violations = []
         pattern = re.compile(r"\bit\.skip\s*\(", re.IGNORECASE)
@@ -93,7 +93,7 @@ class DisableStatementsChecker:
             file_path: Path to the file to check.
 
         Returns:
-            List of violation messages.
+            violations: List of violation messages.
         """
         # Skip checking the test file to avoid self-referential issues
         if file_path.endswith("test_disable_statements_check.py"):
@@ -127,7 +127,7 @@ class DisableStatementsChecker:
             file_paths: List of file paths to check.
 
         Returns:
-            List of violation messages from all files.
+            all_violations: List of violation messages from all files.
         """
         all_violations = []
         for file_path in file_paths:
@@ -142,7 +142,7 @@ class DisableStatementsChecker:
             directory: Directory path to check recursively.
 
         Returns:
-            List of violation messages from all files in directory.
+            violations: List of violation messages from all files in directory.
         """
         extensions = {".js", ".jsx", ".ts", ".tsx"}
         file_paths = []
@@ -155,6 +155,9 @@ class DisableStatementsChecker:
 
 def main() -> None:
     """Main function.
+
+    Args:
+        None
 
     Returns:
         None

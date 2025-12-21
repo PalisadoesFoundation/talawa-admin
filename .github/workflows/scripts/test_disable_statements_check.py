@@ -194,7 +194,7 @@ line 4"""
             content: File content to test.
 
         Returns:
-            List of violations found in the content.
+            violations: List of violations found in the content.
         """
         temp_file = None
         try:
