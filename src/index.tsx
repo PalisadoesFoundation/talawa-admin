@@ -49,7 +49,8 @@ import i18n from './utils/i18n';
 import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
 import { refreshToken } from 'utils/getRefreshToken';
 
-const { getItem } = useLocalStorage();
+const { getItem, clearAllItems } = useLocalStorage();
+const BEARER_PREFIX = 'Bearer ';
 
 // Track if we're currently refreshing to avoid multiple simultaneous refresh attempts
 let isRefreshing = false;
@@ -63,7 +64,7 @@ const resolvePendingRequests = (): void => {
 const authLink = setContext((_, { headers }) => {
   const lng = i18n.language;
   const token = getItem('token');
-  const authHeaders = token ? { authorization: `Bearer ${token}` } : {};
+  const authHeaders = token ? { authorization: BEARER_PREFIX + token } : {};
 
   return {
     headers: {
@@ -122,13 +123,13 @@ const errorLink = onError(
                   return true;
                 } else {
                   // Refresh failed, clear storage and redirect
-                  localStorage.clear();
+                  clearAllItems();
                   window.location.href = '/';
                   return false;
                 }
               })
               .catch(() => {
-                localStorage.clear();
+                clearAllItems();
                 window.location.href = '/';
                 return false;
               })
@@ -141,7 +142,7 @@ const errorLink = onError(
               const oldHeaders = operation.getContext().headers;
               const newToken = getItem('token');
               const authHeaders = newToken
-                ? { authorization: `Bearer ${newToken}` }
+                ? { authorization: BEARER_PREFIX + newToken }
                 : {};
               operation.setContext({
                 headers: {
@@ -160,7 +161,6 @@ const errorLink = onError(
     }
 
     if (networkError) {
-      console.log(`[Network error]: ${networkError}`);
       toast.error(
         'API server unavailable. Check your connection or try again later',
         { toastId: 'apiServer' },
@@ -181,17 +181,14 @@ const wsLink = new GraphQLWsLink(
     url: REACT_APP_BACKEND_WEBSOCKET_URL,
     connectionParams: () => {
       const token = getItem('token');
-      const authParams = token ? { authorization: `Bearer ${token}` } : {};
+      const authParams = token ? { authorization: BEARER_PREFIX + token } : {};
       return {
         ...authParams,
         'Accept-Language': i18n.language,
       };
     },
     on: {
-      connected: () => console.log('WebSocket connected'),
-      error: (error) => console.log('WebSocket error:', error),
-      closed: (event) => console.log('WebSocket closed:', event),
-      connecting: () => console.log('WebSocket connecting...'),
+      // WebSocket connection events - debug logs removed for production
     },
   }),
 );

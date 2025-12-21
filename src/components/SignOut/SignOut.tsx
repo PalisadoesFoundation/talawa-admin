@@ -26,15 +26,16 @@
  * @returns A React component that renders a sign-out button with an icon.
  *
  * @example
- * \`\`\`tsx
+ * ```tsx
  * import SignOut from './SignOut';
  *
  * function App() {
  *   return <SignOut />;
  * }
- * \`\`\`
+ * ```
  */
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import LogoutIcon from '@mui/icons-material/Logout';
 import useSession from 'utils/useSession';
@@ -42,22 +43,18 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
-import { useTranslation } from 'react-i18next';
 
 interface ISignOutProps {
   hideDrawer?: boolean; // Optional prop to conditionally render the button
 }
 
 const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
+  const { t } = useTranslation('translation', { keyPrefix: 'common' });
   const { endSession } = useSession();
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'signOut',
-  });
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const navigate = useNavigate();
-  const { clearAllItems } = useLocalStorage();
+  const { clearAllItems, getItem } = useLocalStorage();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const { getItem } = useLocalStorage();
 
   const logout = async (): Promise<void> => {
     if (isLoggingOut) return; // Prevent multiple clicks
@@ -124,7 +121,7 @@ const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
       <div data-testid="LogoutIconid">
         <LogoutIcon />
       </div>
-      <div className={\`\${styles.signOutButton} \${styles.sidebarText}\`}>
+      <div className={`${styles.signOutButton} ${styles.sidebarText}`}>
         {hideDrawer ? '' : isLoggingOut ? t('signingOut') : t('signOut')}
       </div>
     </div>

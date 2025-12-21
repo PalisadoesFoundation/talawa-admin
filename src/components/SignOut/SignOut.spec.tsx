@@ -19,6 +19,21 @@ vi.mock('utils/useSession', () => ({
   })),
 }));
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        signOut: 'Sign out',
+        signingOut: 'Signing out...',
+        retryPrompt: 'Token revocation failed. Would you like to retry?',
+      };
+      return translations[key] || key;
+    },
+  }),
+  I18nextProvider: ({ children }: { children: React.ReactNode }) => children,
+  initReactI18next: { type: '3rdParty', init: () => {} },
+}));
+
 vi.mock('utils/useLocalstorage', () => ({
   default: vi.fn(() => ({
     getItem: vi.fn((key: string) => {
@@ -28,6 +43,7 @@ vi.mock('utils/useLocalstorage', () => ({
     setItem: vi.fn(),
     removeItem: vi.fn(),
     getStorageKey: vi.fn((key: string) => key),
+    clearAllItems: vi.fn(),
   })),
 }));
 
@@ -40,20 +56,23 @@ vi.mock('react-router', async () => {
   };
 });
 
-vi.mock('utils/useLocalstorage', () => ({
-  default: vi.fn(() => ({
-    clearAllItems: vi.fn(),
-  })),
-}));
-
 const createMock = () => {
   const mockClearAllItems = vi.fn();
+  const mockGetItem = vi.fn((key: string) => {
+    if (key === 'refreshToken') return 'test-refresh-token';
+    return null;
+  });
   (useLocalStorage as Mock).mockReturnValue({
     clearAllItems: mockClearAllItems,
+    getItem: mockGetItem,
+    setItem: vi.fn(),
+    removeItem: vi.fn(),
+    getStorageKey: vi.fn((key: string) => key),
   });
 
   return {
     mockClearAllItems,
+    mockGetItem,
   };
 };
 
@@ -95,12 +114,14 @@ describe('SignOut Component', () => {
 
   test('handles sign out when no refresh token exists', async () => {
     // Override the mock to return null for refreshToken
+    const mockClearAllItems = vi.fn();
     const useLocalStorageMock = await import('utils/useLocalstorage');
     vi.mocked(useLocalStorageMock.default).mockReturnValue({
       getItem: vi.fn(() => null),
       setItem: vi.fn(),
       removeItem: vi.fn(),
       getStorageKey: vi.fn((key: string) => key),
+      clearAllItems: mockClearAllItems,
     });
 
     const mockEndSession = vi.fn();
@@ -116,12 +137,12 @@ describe('SignOut Component', () => {
       </MockedProvider>,
     );
 
-    const signOutButton = screen.getByText('Sign Out');
+    const signOutButton = screen.getByText('Sign out');
     fireEvent.click(signOutButton);
 
     await waitFor(() => {
-      // Verify localStorage was cleared
-      expect(mockLocalStorage.clear).toHaveBeenCalled();
+      // Verify clearAllItems was called
+      expect(mockClearAllItems).toHaveBeenCalled();
 
       // Verify endSession was called
       expect(mockEndSession).toHaveBeenCalled();
@@ -141,7 +162,7 @@ describe('SignOut Component', () => {
 
     renderWithProviders(<SignOut />, [mockRevokeRefreshToken]);
 
-    const signOutButton = screen.getByText('Sign Out');
+    const signOutButton = screen.getByText('Sign out');
     fireEvent.click(signOutButton);
 
     await waitFor(() => {
@@ -180,7 +201,7 @@ describe('SignOut Component', () => {
 
     renderWithProviders(<SignOut />, [mockErrorRevokeRefreshToken]);
 
-    const signOutButton = screen.getByText('Sign Out');
+    const signOutButton = screen.getByText('Sign out');
     fireEvent.click(signOutButton);
 
     await waitFor(() => {
@@ -242,13 +263,13 @@ describe('SignOut Component', () => {
 
     renderWithProviders(<SignOut />, mocks);
 
-    const signOutButton = screen.getByText('Sign Out');
+    const signOutButton = screen.getByText('Sign out');
     fireEvent.click(signOutButton);
 
     await waitFor(() => {
       // Verify confirm was called
       expect(window.confirm).toHaveBeenCalledWith(
-        'Failed to revoke session. Retry?',
+        'Token revocation failed. Would you like to retry?',
       );
 
       // Verify localStorage was cleared
@@ -299,7 +320,7 @@ describe('SignOut Component', () => {
 
     renderWithProviders(<SignOut />, mocks);
 
-    const signOutButton = screen.getByText('Sign Out');
+    const signOutButton = screen.getByText('Sign out');
     fireEvent.click(signOutButton);
 
     await waitFor(() => {
@@ -352,13 +373,13 @@ describe('SignOut Component', () => {
 
     renderWithProviders(<SignOut />, mocks);
 
-    const signOutButton = screen.getByText('Sign Out');
+    const signOutButton = screen.getByText('Sign out');
     fireEvent.click(signOutButton);
 
     await waitFor(() => {
       // Verify confirm was called
       expect(window.confirm).toHaveBeenCalledWith(
-        'Failed to revoke session. Retry?',
+        'Token revocation failed. Would you like to retry?',
       );
 
       // Verify the second revoke token attempt was NOT made
@@ -392,7 +413,7 @@ describe('SignOut Component', () => {
       expect(signOutButton).toBeInTheDocument();
       expect(signOutButton).toHaveAttribute('role', 'button');
       expect(signOutButton).toHaveAttribute('tabIndex', '0');
-      expect(signOutButton).toHaveAttribute('aria-label', 'Sign Out');
+      expect(signOutButton).toHaveAttribute('aria-label', 'Sign out');
     });
 
     test('sign out button responds to Enter key press', async () => {
@@ -495,7 +516,7 @@ describe('SignOut Component', () => {
 
       await waitFor(() => {
         expect(window.confirm).toHaveBeenCalledWith(
-          'Failed to revoke session. Retry?',
+          'Token revocation failed. Would you like to retry?',
         );
         expect(mockClearAllItems).toHaveBeenCalled();
         expect(mockEndSession).toHaveBeenCalled();
@@ -520,7 +541,7 @@ describe('SignOut Component', () => {
       // Verify initial state
       expect(signOutButton).toHaveStyle({ opacity: '1' });
       expect(signOutButton).toHaveAttribute('aria-disabled', 'false');
-      expect(screen.getByText('Sign Out')).toBeInTheDocument();
+      expect(screen.getByText('Sign out')).toBeInTheDocument();
 
       // Click the button
       fireEvent.click(signOutButton);
@@ -592,7 +613,7 @@ describe('SignOut Component', () => {
       const signOutButton = screen.getByTestId('signOutBtn');
 
       // Initially, label text should be hidden when hideDrawer is true
-      expect(screen.queryByText('Sign Out')).not.toBeInTheDocument();
+      expect(screen.queryByText('Sign out')).not.toBeInTheDocument();
       expect(screen.queryByText('Signing out...')).not.toBeInTheDocument();
 
       // Click the button
@@ -602,7 +623,7 @@ describe('SignOut Component', () => {
       await waitFor(() => {
         expect(signOutButton).toHaveStyle({ opacity: '0.5' });
         expect(signOutButton).toHaveAttribute('aria-disabled', 'true');
-        expect(screen.queryByText('Sign Out')).not.toBeInTheDocument();
+        expect(screen.queryByText('Sign out')).not.toBeInTheDocument();
         expect(screen.queryByText('Signing out...')).not.toBeInTheDocument();
       });
     });

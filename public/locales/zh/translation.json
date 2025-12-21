@@ -1693,5 +1693,9 @@
     "deleteComment": "删除评论",
     "deleting": "删除中…",
     "emptyCommentError": "请在提交前输入评论。"
+  },
+  "common": {
+    "signOut": "退出登录",
+    "signingOut": "正在退出..."
   }
 }

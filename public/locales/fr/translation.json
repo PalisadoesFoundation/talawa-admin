@@ -1693,5 +1693,9 @@
     "deleteComment": "Supprimer le commentaire",
     "deleting": "Suppression…",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre."
+  },
+  "common": {
+    "signOut": "Se déconnecter",
+    "signingOut": "Déconnexion en cours..."
   }
 }

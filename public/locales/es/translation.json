@@ -1693,5 +1693,9 @@
     "deleteComment": "Eliminar comentario",
     "deleting": "Eliminando...",
     "emptyCommentError": "Por favor ingrese un comentario antes de enviar."
+  },
+  "common": {
+    "signOut": "Cerrar sesión",
+    "signingOut": "Cerrando sesión..."
   }
 }
