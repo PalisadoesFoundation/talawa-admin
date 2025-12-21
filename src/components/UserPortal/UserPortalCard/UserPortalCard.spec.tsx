@@ -1,15 +1,20 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
+import { describe, test, expect, vi, afterEach } from 'vitest';
 import UserPortalCard from './UserPortalCard';
 
 describe('UserPortalCard', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('renders with imageSlot, children, and actionsSlot', () => {
     render(
       <UserPortalCard
         ariaLabel="test-card"
         imageSlot={<div>Image</div>}
-        actionsSlot={<button>Action</button>}
+        actionsSlot={<button type="button">Action</button>}
       >
         <span>Content</span>
       </UserPortalCard>,
@@ -46,7 +51,7 @@ describe('UserPortalCard', () => {
     render(
       <UserPortalCard
         ariaLabel="actions-only"
-        actionsSlot={<button>More</button>}
+        actionsSlot={<button type="button">More</button>}
       >
         <span>Body</span>
       </UserPortalCard>,

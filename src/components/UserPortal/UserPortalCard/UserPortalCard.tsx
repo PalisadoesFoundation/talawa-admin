@@ -42,12 +42,13 @@ const UserPortalCard: React.FC<InterfaceUserPortalCardProps> = ({
    * Maps variant prop to CSS module class.
    * Variants control density only (padding/spacing).
    */
-  const variantClass =
-    variant === 'compact'
-      ? styles.variantCompact
-      : variant === 'expanded'
-        ? styles.variantExpanded
-        : styles.variantStandard;
+  const variantClasses: Record<'compact' | 'standard' | 'expanded', string> = {
+    compact: styles.variantCompact,
+    standard: styles.variantStandard,
+    expanded: styles.variantExpanded,
+  };
+
+  const variantClass = variantClasses[variant];
 
   const containerClassName = [styles.container, variantClass, className]
     .filter(Boolean)
