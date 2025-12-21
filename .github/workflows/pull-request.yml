@@ -149,21 +149,19 @@ jobs:
         with:
           python-version: 3.9
 
-      - name: Get PR changed files (excluding utils & types)
+      - name: Get PR changed files
         run: |
-          git diff --name-only \
-            origin/${{ github.base_ref }}...HEAD \
-            | grep -v '^src/utils/' \
-            | grep -v '^src/types/' \
-            > pr_files.txt
+          git diff --name-only --diff-filter=ACMRT \
+            origin/${{ github.base_ref }}...HEAD > pr_files.txt
 
       - name: Run CSS policy enforcement
         run: |
           if [ -s pr_files.txt ]; then
             python .github/workflows/scripts/css_check.py \
-              --files pr_files.txt
+              --files pr_files.txt \
+              --exclude_directories src/utils src/types
           else
-            echo "No applicable files to scan in this PR"
+            echo "No files changed in this PR"
           fi
 
   Check-Mock-Isolation:
