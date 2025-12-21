@@ -22,6 +22,9 @@ vi.mock('react-i18next', () => ({
         'users.withdraw': 'withdraw',
         'users.orgJoined': 'orgJoined',
         'users.errorOccurred': 'errorOccurred',
+        'users.member': 'Member',
+        'users.pending': 'Pending',
+        'users.notMember': 'Not a member',
         'users.AlreadyJoined': 'AlreadyJoined',
         'users.MembershipRequestSent': 'MembershipRequestSent',
         'users.UserIdNotFound': 'UserIdNotFound',
@@ -194,6 +197,59 @@ describe('OrganizationCard', () => {
 
     fireEvent.click(button);
     expect(mockNavigate).toHaveBeenCalledWith('/user/organization/123');
+  });
+
+  it('displays "Member" status chip for joined users', () => {
+    const joinedData = { ...mockData, isJoined: true };
+
+    render(
+      <MockedProvider>
+        <OrganizationCard data={joinedData} />
+      </MockedProvider>,
+    );
+
+    const statusChip = screen.getByTestId('membershipStatus');
+
+    expect(statusChip).toHaveTextContent('Member');
+    expect(statusChip.className).toContain('member');
+  });
+
+  it('displays "Pending" status chip when membership request is pending', () => {
+    const pendingData = {
+      ...mockData,
+      isJoined: false,
+      membershipRequestStatus: 'pending',
+    };
+
+    render(
+      <MockedProvider>
+        <OrganizationCard data={pendingData} />
+      </MockedProvider>,
+    );
+
+    const statusChip = screen.getByTestId('membershipStatus');
+
+    expect(statusChip).toHaveTextContent('Pending');
+    expect(statusChip.className).toContain('pending');
+  });
+
+  it('displays "Not a member" status chip for non-members', () => {
+    const nonMemberData = {
+      ...mockData,
+      isJoined: false,
+      membershipRequestStatus: undefined,
+    };
+
+    render(
+      <MockedProvider>
+        <OrganizationCard data={nonMemberData} />
+      </MockedProvider>,
+    );
+
+    const statusChip = screen.getByTestId('membershipStatus');
+
+    expect(statusChip).toHaveTextContent('Not a member');
+    expect(statusChip.className).toContain('notMember');
   });
 
   it('renders "Join" button for non-joined user', () => {
