@@ -89,7 +89,6 @@ const renderEventListCard = (
 describe('Testing Event List Card', () => {
   afterEach(() => {
     vi.clearAllMocks();
-    localStorage.clear();
   });
   beforeAll(() => {
     vi.mock('react-router', async () => ({
