@@ -361,7 +361,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                 <div
                   id="addPeopleToTagScrollableDiv"
                   data-testid="addPeopleToTagScrollableDiv"
-                  style={{ height: 300, overflow: 'auto', borderRadius: '8px' }}
+                  style={{ height: 300, overflow: 'auto' }}
                 >
                   <InfiniteScroll
                     dataLength={userTagMembersToAssignTo?.length ?? 0} // This is important field to render the next data

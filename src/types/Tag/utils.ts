@@ -1,5 +1,4 @@
 export const TAGS_QUERY_DATA_CHUNK_SIZE = 10;
-
 export const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
     outline: 'none !important',
@@ -19,7 +18,7 @@ export const dataGridStyle = {
     borderRadius: '0.1rem',
   },
   '& .MuiDataGrid-main': {
-    borderRadius: '0.1rem',
+    borderRadius: '0.2rem',
   },
   '& .MuiDataGrid-topContainer': {
     position: 'fixed',
