@@ -46,7 +46,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import i18n from './utils/i18n';
 import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
 
-const { getItem } = useLocalStorage();
+const { getItem, clearAllItems } = useLocalStorage();
 const authLink = setContext((_, { headers }) => {
   const lng = i18n.language;
   const token = getItem('token');
@@ -65,7 +65,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     graphQLErrors.map(({ message }) => {
       if (message === 'You must be authenticated to perform this action.') {
-        localStorage.clear();
+        clearAllItems();
       }
     });
   } else if (networkError) {
