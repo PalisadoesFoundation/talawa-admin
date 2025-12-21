@@ -710,7 +710,7 @@ test('Mode is changed to joined organizations', async () => {
 
   await userEvent.click(screen.getByTestId('modeChangeBtn'));
   await wait();
-  await userEvent.click(screen.getByTestId('modeBtn1'));
+  await userEvent.click(screen.getByTestId('1'));
   await wait();
 
   expect(screen.queryAllByText('joinedOrganization')).not.toBe([]);
@@ -733,7 +733,7 @@ test('Mode is changed to created organizations', async () => {
 
   await userEvent.click(screen.getByTestId('modeChangeBtn'));
   await wait();
-  await userEvent.click(screen.getByTestId('modeBtn2'));
+  await userEvent.click(screen.getByTestId('2'));
   await wait();
 
   expect(screen.queryAllByText('createdOrganization')).not.toBe([]);
@@ -1140,9 +1140,9 @@ test('should correctly map joined organizations data ', async () => {
   const modeDropdown = screen.getByTestId('modeChangeBtn');
   await userEvent.click(modeDropdown);
   await waitFor(() => {
-    expect(screen.getByTestId('modeBtn1')).toBeInTheDocument();
+    expect(screen.getByTestId('1')).toBeInTheDocument();
   });
-  await userEvent.click(screen.getByTestId('modeBtn1'));
+  await userEvent.click(screen.getByTestId('1'));
 
   await waitFor(
     () => {
@@ -1240,7 +1240,7 @@ test('should set membershipRequestStatus to "created" for created organizations'
 
   const modeBtn = screen.getByTestId('modeChangeBtn');
   fireEvent.click(modeBtn);
-  const createdModeBtn = screen.getByTestId('modeBtn2');
+  const createdModeBtn = screen.getByTestId('2');
   fireEvent.click(createdModeBtn);
 
   await waitFor(() => {
@@ -1337,7 +1337,7 @@ test('correctly map joined organizations data when mode is 1', async () => {
   const modeBtn = screen.getByTestId('modeChangeBtn');
   fireEvent.click(modeBtn);
 
-  const joinedModeBtn = screen.getByTestId('modeBtn1');
+  const joinedModeBtn = screen.getByTestId('1');
   fireEvent.click(joinedModeBtn);
 
   await waitFor(() => {
@@ -1755,7 +1755,7 @@ test('doSearch function should call appropriate refetch based on mode', async ()
     await wait(100);
   });
 
-  const modeBtn1 = screen.getByTestId('modeBtn1');
+  const modeBtn1 = screen.getByTestId('1');
   expect(modeBtn1).toBeInTheDocument();
 
   await act(async () => {
@@ -1774,7 +1774,7 @@ test('doSearch function should call appropriate refetch based on mode', async ()
     await wait(100);
   });
 
-  const modeBtn2 = screen.getByTestId('modeBtn2');
+  const modeBtn2 = screen.getByTestId('2');
   expect(modeBtn2).toBeInTheDocument();
 
   await act(async () => {

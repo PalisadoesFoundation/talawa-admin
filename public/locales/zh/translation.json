@@ -56,6 +56,11 @@
     "user": "用户",
     "loading": "加载中"
   },
+  "signOut": {
+    "retryPrompt": "撤銷工作階段失敗。要重試嗎？",
+    "signingOut": "正在登出...",
+    "signOut": "登出"
+  },
   "userLoginPage": {
     "title": "塔拉瓦管理员",
     "fromPalisadoes": "Palisadoes 基金会志愿者开发的开源应用程序",
@@ -731,7 +736,9 @@
     "raisedAmount": "募集金額",
     "pledgedAmount": "承诺金額",
     "startDate": "开始日期",
-    "endDate": "结束日期"
+    "endDate": "结束日期",
+    "searchByPlaceholder": "按{{field}}搜索",
+    "selectPledger": "请选择一个承诺者"
   },
   "orgPost": {
     "title": "帖子",
@@ -1034,7 +1041,13 @@
   "people": {
     "title": "人们",
     "searchUsers": "搜索用户",
-    "nothingToShow": "这里没有可显示的内容。"
+    "nothingToShow": "这里没有可显示的内容。",
+    "sNo": "序号",
+    "avatar": "头像",
+    "name": "姓名",
+    "email": "邮箱",
+    "role": "角色",
+    "loading": "加载中..."
   },
   "userRegister": {
     "enterFirstName": "输入您的名字",
@@ -1065,7 +1078,8 @@
     "language": "语言",
     "settings": "设置",
     "logout": "退出登录",
-    "close": "关闭"
+    "close": "关闭",
+    "talawaBranding": "Talawa 品牌形象"
   },
   "userOrganizations": {
     "allOrganizations": "所有组织",
@@ -1078,7 +1092,8 @@
     "search": "搜索",
     "filter": "筛选",
     "searchByName": "按名称搜索",
-    "searchOrganizations": "搜索组织"
+    "searchOrganizations": "搜索组织",
+    "loading": "加载中..."
   },
   "userSidebarOrg": {
     "yourOrganizations": "您的组织",
@@ -1530,7 +1545,9 @@
     "addPledge": "添加承诺",
     "viewPledges": "查看承诺",
     "noPledges": "未找到承诺",
-    "noCampaigns": "未找到活动"
+    "noCampaigns": "未找到活动",
+    "raised": "已筹集",
+    "amountRaised": "已筹集金额"
   },
   "userPledges": {
     "title": "我的承诺"
@@ -1619,7 +1636,21 @@
     "eventInvitationRecurringSubject": "邀请参加重复事件系列志愿服务",
     "pending": "待处理",
     "accepted": "已接受",
-    "rejected": "已拒绝"
+    "rejected": "已拒绝",
+    "assignee": "受让人",
+    "group": "小组",
+    "event": "活动",
+    "received": "已收到",
+    "location": "位置",
+    "recurrence": "重复",
+    "endDate": "结束日期",
+    "description": "描述",
+    "volunteerGroups": "志愿者小组",
+    "groupTable": "小组表",
+    "srNo": "序号",
+    "groupName": "小组名称",
+    "noOfMembers": "成员数量",
+    "options": "选项"
   },
   "pluginStore": {
     "title": "插件商店",

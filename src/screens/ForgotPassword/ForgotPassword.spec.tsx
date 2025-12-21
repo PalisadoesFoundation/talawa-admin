@@ -18,7 +18,7 @@ import i18n from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, afterEach, expect, it, describe } from 'vitest';
 
-const { setItem, removeItem } = useLocalStorage();
+const { setItem, removeItem, clearAllItems } = useLocalStorage();
 
 const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
@@ -116,7 +116,7 @@ beforeEach(() => {
   setItem('IsLoggedIn', 'FALSE');
 });
 afterEach(() => {
-  localStorage.clear();
+  clearAllItems();
   vi.restoreAllMocks();
 });
 

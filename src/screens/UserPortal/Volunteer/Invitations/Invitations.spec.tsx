@@ -39,6 +39,12 @@ vi.mock('react-toastify', () => ({
   toast: sharedMocks.toast,
 }));
 
+vi.mock('@mui/icons-material', () => ({
+  WarningAmberRounded: () => (
+    <span data-test-id="warning-amber-icon">WarningAmberRounded</span>
+  ),
+}));
+
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
@@ -48,7 +54,7 @@ vi.mock('react-router', async () => {
   };
 });
 
-const { setItem } = useLocalStorage();
+const { setItem, clearAllItems } = useLocalStorage();
 
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(ERROR_MOCKS);
@@ -99,14 +105,13 @@ const renderInvitations = (link: ApolloLink): RenderResult => {
 
 describe('Testing Invvitations Screen', () => {
   beforeEach(() => {
-    localStorage.clear();
     setItem('userId', 'userId');
   });
 
   afterEach(() => {
     vi.clearAllMocks();
     sharedMocks.navigate.mockReset();
-    localStorage.clear();
+    clearAllItems();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
