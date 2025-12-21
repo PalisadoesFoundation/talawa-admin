@@ -119,7 +119,8 @@ describe('BaseModal', () => {
       expect(modal).toBeInTheDocument();
       // Verify modal renders without footer
       expect(screen.getByText('No Footer')).toBeInTheDocument();
-      // We can't easily test absence of footer without a test id, but we can verify modal structure
+      // Explicitly assert footer is absent
+      expect(screen.queryByTestId('modal-footer')).not.toBeInTheDocument();
     });
   });
 
@@ -278,7 +279,11 @@ describe('BaseModal', () => {
       );
 
       const modal = screen.getByTestId('no-title-modal');
-      const labelledBy = modal.getAttribute('aria-labelledby');
+      // Find the modal container that has the aria attributes
+      const modalContainer =
+        modal.closest('.modal') || document.querySelector('[aria-describedby]');
+      expect(modalContainer).toBeInTheDocument();
+      const labelledBy = modalContainer?.getAttribute('aria-labelledby');
       // When no title, aria-labelledby should be undefined or empty
       expect(labelledBy).toBeFalsy();
     });
@@ -290,8 +295,13 @@ describe('BaseModal', () => {
 
       const modal1 = screen.getByTestId('modal-1');
       expect(modal1).toBeInTheDocument();
-      const titleId1 = modal1.getAttribute('aria-labelledby');
-      const bodyId1 = modal1.getAttribute('aria-describedby');
+      // Find the modal container that has the aria attributes
+      const modalContainer1 =
+        modal1.closest('.modal') ||
+        document.querySelector('[aria-labelledby][aria-describedby]');
+      expect(modalContainer1).toBeInTheDocument();
+      const titleId1 = modalContainer1?.getAttribute('aria-labelledby');
+      const bodyId1 = modalContainer1?.getAttribute('aria-describedby');
 
       unmount1();
 
@@ -301,19 +311,25 @@ describe('BaseModal', () => {
 
       const modal2 = screen.getByTestId('modal-2');
       expect(modal2).toBeInTheDocument();
-      const titleId2 = modal2.getAttribute('aria-labelledby');
-      const bodyId2 = modal2.getAttribute('aria-describedby');
+      // Find the modal container that has the aria attributes
+      const modalContainer2 =
+        modal2.closest('.modal') ||
+        document.querySelector('[aria-labelledby][aria-describedby]');
+      expect(modalContainer2).toBeInTheDocument();
+      const titleId2 = modalContainer2?.getAttribute('aria-labelledby');
+      const bodyId2 = modalContainer2?.getAttribute('aria-describedby');
 
       unmount2();
 
-      // IDs should be unique (useId generates unique IDs)
-      // Note: React Bootstrap may not always set these attributes on the element with data-testid
-      // The important thing is that the modals render correctly with accessibility features
-      // If IDs are set, they should be truthy
-      if (titleId1) expect(titleId1).toBeTruthy();
-      if (titleId2) expect(titleId2).toBeTruthy();
-      if (bodyId1) expect(bodyId1).toBeTruthy();
-      if (bodyId2) expect(bodyId2).toBeTruthy();
+      // All IDs should be truthy
+      expect(titleId1).toBeTruthy();
+      expect(titleId2).toBeTruthy();
+      expect(bodyId1).toBeTruthy();
+      expect(bodyId2).toBeTruthy();
+
+      // IDs should be unique across modal instances
+      expect(titleId1).not.toBe(titleId2);
+      expect(bodyId1).not.toBe(bodyId2);
     });
   });
 

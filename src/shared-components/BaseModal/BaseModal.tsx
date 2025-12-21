@@ -131,7 +131,9 @@ export default function BaseModal({
         {children}
       </Modal.Body>
       {footer && (
-        <Modal.Footer className={footerClassName}>{footer}</Modal.Footer>
+        <Modal.Footer className={footerClassName} data-testid="modal-footer">
+          {footer}
+        </Modal.Footer>
       )}
     </Modal>
   );
