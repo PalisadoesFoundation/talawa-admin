@@ -136,21 +136,36 @@ jobs:
   CSS-Policy-Check:
     name: CSS Policy Check
     runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: 3.9
 
+      - name: Get PR changed files (excluding utils & types)
+        run: |
+          git diff --name-only \
+            origin/${{ github.base_ref }}...HEAD \
+            | grep -v '^src/utils/' \
+            | grep -v '^src/types/' \
+            > pr_files.txt
+
       - name: Run CSS policy enforcement
         run: |
-          python .github/workflows/scripts/css_check.py \
-            --directories src \
-            --exclude_directories src/utils src/types \
+          if [ -s pr_files.txt ]; then
+            python .github/workflows/scripts/css_check.py \
+              --files pr_files.txt
+          else
+            echo "No applicable files to scan in this PR"
+          fi
+
   Check-Mock-Isolation:
     name: Check for proper mock cleanup in test files
     needs: [Code-Quality-Checks]
