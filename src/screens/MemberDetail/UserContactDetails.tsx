@@ -3,8 +3,6 @@
  *
  * This component renders a comprehensive profile view for a user
  *
- * The component fetches user data by ID, populates editable form fields, and submits
- *
  * @component
  * @param {MemberDetailProps} props - The props for the component.
  * @param {string} [props.id] - Optional user ID used to fetch profile details.
@@ -17,8 +15,6 @@
  * - Uses Apollo Client's `useQuery` to fetch user data and `useMutation` to update it.
  * - Tracks unsaved changes and conditionally displays Save/Reset actions.
  * - Prevents invalid password updates using custom validation logic.
- * - Uses `react-i18next` for localization and translations.
- * - Stores updated user details in local storage after a successful update.
  *
  * @example
  * ```tsx
@@ -99,13 +95,15 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     workPhoneNumber: '',
   });
   const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION, {
-    update: (cache, { data }) =>
-      data?.updateCurrentUser &&
-      cache.writeQuery({
-        query: GET_USER_BY_ID,
-        variables: { input: { id: currentId } },
-        data: { user: data.updateCurrentUser },
-      }),
+    update: (cache, { data }) => {
+      if (data?.updateCurrentUser) {
+        cache.writeQuery({
+          query: GET_USER_BY_ID,
+          variables: { input: { id: currentId } },
+          data: { user: data.updateCurrentUser },
+        });
+      }
+    },
   });
   const { data, loading } = useQuery(GET_USER_BY_ID, {
     variables: { input: { id: currentId } },
@@ -125,17 +123,17 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     setSelectedAvatar(f);
     setisUpdated(true);
   };
-  const handleFieldChange = (fieldName: string, value: string) => (
-    setisUpdated(true),
-    setFormState((prev) => ({ ...prev, [fieldName]: value }))
-  );
+  const handleFieldChange = (fieldName: string, value: string) => {
+    setisUpdated(true);
+    setFormState((prev) => ({ ...prev, [fieldName]: value }));
+  };
   const handleUserUpdate = async (): Promise<void> => {
     const removeEmptyFields = <T extends Record<string, string | File | null>>(
       obj: T,
     ) =>
       Object.fromEntries(
         Object.entries(obj).filter(
-          ([_, v]) => v != null && (typeof v !== 'string' || v.trim()),
+          ([v]) => v != null && (typeof v !== 'string' || v.trim()),
         ),
       ) as Partial<T>;
     if (formState.password && validatePassword(formState.password)) {
@@ -171,7 +169,9 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
   };
   const resetChanges = (): void => {
     setisUpdated(false);
-    data?.user && setFormState({ ...data.user });
+    if (data?.user) {
+      setFormState({ ...data.user });
+    }
   };
   if (loading || !data?.user) {
     return <Loader />;
