@@ -507,12 +507,8 @@ describe('UserDetailsForm - Password Validation Tests', () => {
       fireEvent.change(passwordInput, { target: { value: 'test' } });
 
       // Validation messages should not be visible
-      expect(
-        screen.queryByText(/Atleast 8 Character long/i),
-      ).not.toBeInTheDocument();
-      expect(
-        screen.queryByText(/Atleast one lowercase letter/i),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText('atleast_8_char_long')).not.toBeInTheDocument();
+      expect(screen.queryByText('lowercase_check')).not.toBeInTheDocument();
     });
 
     it('should show validation messages when input is focused', () => {
@@ -523,19 +519,11 @@ describe('UserDetailsForm - Password Validation Tests', () => {
       fireEvent.focus(passwordInput);
 
       // All validation messages should be visible
-      expect(screen.getByText(/Atleast 8 Character long/i)).toBeInTheDocument();
-      expect(
-        screen.getByText(/Atleast one lowercase letter/i),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(/Atleast one uppercase letter/i),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(/Atleast one numeric value/i),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(/Atleast one special character/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText('atleast_8_char_long')).toBeInTheDocument();
+      expect(screen.getByText('lowercase_check')).toBeInTheDocument();
+      expect(screen.getByText('uppercase_check')).toBeInTheDocument();
+      expect(screen.getByText('numeric_value_check')).toBeInTheDocument();
+      expect(screen.getByText('special_char_check')).toBeInTheDocument();
     });
 
     it('should hide validation messages when input loses focus', () => {
@@ -544,12 +532,10 @@ describe('UserDetailsForm - Password Validation Tests', () => {
 
       // Focus and then blur
       fireEvent.focus(passwordInput);
-      expect(screen.getByText(/Atleast 8 Character long/i)).toBeInTheDocument();
+      expect(screen.getByText('atleast_8_char_long')).toBeInTheDocument();
 
       fireEvent.blur(passwordInput);
-      expect(
-        screen.queryByText(/Atleast 8 Character long/i),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText('atleast_8_char_long')).not.toBeInTheDocument();
     });
   });
 
@@ -561,9 +547,7 @@ describe('UserDetailsForm - Password Validation Tests', () => {
       fireEvent.focus(passwordInput);
       fireEvent.change(passwordInput, { target: { value: 'Test1!' } }); // 6 chars
 
-      const lengthCheck = screen
-        .getByText(/Atleast 8 Character long/i)
-        .closest('p');
+      const lengthCheck = screen.getByText('atleast_8_char_long').closest('p');
       expect(lengthCheck).toHaveClass('text-danger');
     });
 
@@ -574,9 +558,7 @@ describe('UserDetailsForm - Password Validation Tests', () => {
       fireEvent.focus(passwordInput);
       fireEvent.change(passwordInput, { target: { value: 'Test123!' } }); // 8 chars
 
-      const lengthCheck = screen
-        .getByText(/Atleast 8 Character long/i)
-        .closest('p');
+      const lengthCheck = screen.getByText('atleast_8_char_long').closest('p');
       expect(lengthCheck).toHaveClass('text-success');
     });
   });
@@ -589,9 +571,7 @@ describe('UserDetailsForm - Password Validation Tests', () => {
       fireEvent.focus(passwordInput);
       fireEvent.change(passwordInput, { target: { value: 'TEST123!' } });
 
-      const lowercaseCheck = screen
-        .getByText(/Atleast one lowercase letter/i)
-        .closest('p');
+      const lowercaseCheck = screen.getByText('lowercase_check').closest('p');
       expect(lowercaseCheck).toHaveClass('text-danger');
     });
 
@@ -602,9 +582,7 @@ describe('UserDetailsForm - Password Validation Tests', () => {
       fireEvent.focus(passwordInput);
       fireEvent.change(passwordInput, { target: { value: 'Test123!' } });
 
-      const lowercaseCheck = screen
-        .getByText(/Atleast one lowercase letter/i)
-        .closest('p');
+      const lowercaseCheck = screen.getByText('lowercase_check').closest('p');
       expect(lowercaseCheck).toHaveClass('text-success');
     });
   });
@@ -617,9 +595,7 @@ describe('UserDetailsForm - Password Validation Tests', () => {
       fireEvent.focus(passwordInput);
       fireEvent.change(passwordInput, { target: { value: 'test123!' } });
 
-      const uppercaseCheck = screen
-        .getByText(/Atleast one uppercase letter/i)
-        .closest('p');
+      const uppercaseCheck = screen.getByText('uppercase_check').closest('p');
       expect(uppercaseCheck).toHaveClass('text-danger');
     });
 
@@ -630,9 +606,7 @@ describe('UserDetailsForm - Password Validation Tests', () => {
       fireEvent.focus(passwordInput);
       fireEvent.change(passwordInput, { target: { value: 'Test123!' } });
 
-      const uppercaseCheck = screen
-        .getByText(/Atleast one uppercase letter/i)
-        .closest('p');
+      const uppercaseCheck = screen.getByText('uppercase_check').closest('p');
       expect(uppercaseCheck).toHaveClass('text-success');
     });
   });
@@ -645,9 +619,7 @@ describe('UserDetailsForm - Password Validation Tests', () => {
       fireEvent.focus(passwordInput);
       fireEvent.change(passwordInput, { target: { value: 'TestPass!' } });
 
-      const numericCheck = screen
-        .getByText(/Atleast one numeric value/i)
-        .closest('p');
+      const numericCheck = screen.getByText('numeric_value_check').closest('p');
       expect(numericCheck).toHaveClass('text-danger');
     });
 
@@ -658,9 +630,7 @@ describe('UserDetailsForm - Password Validation Tests', () => {
       fireEvent.focus(passwordInput);
       fireEvent.change(passwordInput, { target: { value: 'Test123!' } });
 
-      const numericCheck = screen
-        .getByText(/Atleast one numeric value/i)
-        .closest('p');
+      const numericCheck = screen.getByText('numeric_value_check').closest('p');
       expect(numericCheck).toHaveClass('text-success');
     });
   });
@@ -674,7 +644,7 @@ describe('UserDetailsForm - Password Validation Tests', () => {
       fireEvent.change(passwordInput, { target: { value: 'Test1234' } });
 
       const specialCharCheck = screen
-        .getByText(/Atleast one special character/i)
+        .getByText('special_char_check')
         .closest('p');
       expect(specialCharCheck).toHaveClass('text-danger');
     });
@@ -687,7 +657,7 @@ describe('UserDetailsForm - Password Validation Tests', () => {
       fireEvent.change(passwordInput, { target: { value: 'Test123!' } });
 
       const specialCharCheck = screen
-        .getByText(/Atleast one special character/i)
+        .getByText('special_char_check')
         .closest('p');
       expect(specialCharCheck).toHaveClass('text-success');
     });
@@ -733,7 +703,7 @@ describe('UserDetailsForm - Password Validation Tests', () => {
         });
 
         const specialCharCheck = screen
-          .getByText(/Atleast one special character/i)
+          .getByText('special_char_check')
           .closest('p');
         expect(specialCharCheck).toHaveClass('text-success');
 
@@ -751,21 +721,21 @@ describe('UserDetailsForm - Password Validation Tests', () => {
       fireEvent.focus(passwordInput);
       fireEvent.change(passwordInput, { target: { value: '' } });
 
-      expect(
-        screen.getByText(/Atleast 8 Character long/i).closest('p'),
-      ).toHaveClass('text-danger');
-      expect(
-        screen.getByText(/Atleast one lowercase letter/i).closest('p'),
-      ).toHaveClass('text-danger');
-      expect(
-        screen.getByText(/Atleast one uppercase letter/i).closest('p'),
-      ).toHaveClass('text-danger');
-      expect(
-        screen.getByText(/Atleast one numeric value/i).closest('p'),
-      ).toHaveClass('text-danger');
-      expect(
-        screen.getByText(/Atleast one special character/i).closest('p'),
-      ).toHaveClass('text-danger');
+      expect(screen.getByText('atleast_8_char_long').closest('p')).toHaveClass(
+        'text-danger',
+      );
+      expect(screen.getByText('lowercase_check').closest('p')).toHaveClass(
+        'text-danger',
+      );
+      expect(screen.getByText('uppercase_check').closest('p')).toHaveClass(
+        'text-danger',
+      );
+      expect(screen.getByText('numeric_value_check').closest('p')).toHaveClass(
+        'text-danger',
+      );
+      expect(screen.getByText('special_char_check').closest('p')).toHaveClass(
+        'text-danger',
+      );
     });
 
     it('should show all checks as passed for valid password', () => {
@@ -775,21 +745,21 @@ describe('UserDetailsForm - Password Validation Tests', () => {
       fireEvent.focus(passwordInput);
       fireEvent.change(passwordInput, { target: { value: 'ValidPass123!' } });
 
-      expect(
-        screen.getByText(/Atleast 8 Character long/i).closest('p'),
-      ).toHaveClass('text-success');
-      expect(
-        screen.getByText(/Atleast one lowercase letter/i).closest('p'),
-      ).toHaveClass('text-success');
-      expect(
-        screen.getByText(/Atleast one uppercase letter/i).closest('p'),
-      ).toHaveClass('text-success');
-      expect(
-        screen.getByText(/Atleast one numeric value/i).closest('p'),
-      ).toHaveClass('text-success');
-      expect(
-        screen.getByText(/Atleast one special character/i).closest('p'),
-      ).toHaveClass('text-success');
+      expect(screen.getByText('atleast_8_char_long').closest('p')).toHaveClass(
+        'text-success',
+      );
+      expect(screen.getByText('lowercase_check').closest('p')).toHaveClass(
+        'text-success',
+      );
+      expect(screen.getByText('uppercase_check').closest('p')).toHaveClass(
+        'text-success',
+      );
+      expect(screen.getByText('numeric_value_check').closest('p')).toHaveClass(
+        'text-success',
+      );
+      expect(screen.getByText('special_char_check').closest('p')).toHaveClass(
+        'text-success',
+      );
     });
 
     it('should show mixed validation states correctly', () => {
@@ -800,21 +770,21 @@ describe('UserDetailsForm - Password Validation Tests', () => {
       // Password with uppercase, lowercase, and length but no number or special char
       fireEvent.change(passwordInput, { target: { value: 'TestPassword' } });
 
-      expect(
-        screen.getByText(/Atleast 8 Character long/i).closest('p'),
-      ).toHaveClass('text-success');
-      expect(
-        screen.getByText(/Atleast one lowercase letter/i).closest('p'),
-      ).toHaveClass('text-success');
-      expect(
-        screen.getByText(/Atleast one uppercase letter/i).closest('p'),
-      ).toHaveClass('text-success');
-      expect(
-        screen.getByText(/Atleast one numeric value/i).closest('p'),
-      ).toHaveClass('text-danger');
-      expect(
-        screen.getByText(/Atleast one special character/i).closest('p'),
-      ).toHaveClass('text-danger');
+      expect(screen.getByText('atleast_8_char_long').closest('p')).toHaveClass(
+        'text-success',
+      );
+      expect(screen.getByText('lowercase_check').closest('p')).toHaveClass(
+        'text-success',
+      );
+      expect(screen.getByText('uppercase_check').closest('p')).toHaveClass(
+        'text-success',
+      );
+      expect(screen.getByText('numeric_value_check').closest('p')).toHaveClass(
+        'text-danger',
+      );
+      expect(screen.getByText('special_char_check').closest('p')).toHaveClass(
+        'text-danger',
+      );
     });
   });
 
@@ -827,36 +797,36 @@ describe('UserDetailsForm - Password Validation Tests', () => {
 
       // Start typing - no validation passes
       fireEvent.change(passwordInput, { target: { value: 't' } });
-      expect(
-        screen.getByText(/Atleast one lowercase letter/i).closest('p'),
-      ).toHaveClass('text-success');
-      expect(
-        screen.getByText(/Atleast one uppercase letter/i).closest('p'),
-      ).toHaveClass('text-danger');
+      expect(screen.getByText('lowercase_check').closest('p')).toHaveClass(
+        'text-success',
+      );
+      expect(screen.getByText('uppercase_check').closest('p')).toHaveClass(
+        'text-danger',
+      );
 
       // Add uppercase
       fireEvent.change(passwordInput, { target: { value: 'tT' } });
-      expect(
-        screen.getByText(/Atleast one uppercase letter/i).closest('p'),
-      ).toHaveClass('text-success');
+      expect(screen.getByText('uppercase_check').closest('p')).toHaveClass(
+        'text-success',
+      );
 
       // Add number
       fireEvent.change(passwordInput, { target: { value: 'tT1' } });
-      expect(
-        screen.getByText(/Atleast one numeric value/i).closest('p'),
-      ).toHaveClass('text-success');
+      expect(screen.getByText('numeric_value_check').closest('p')).toHaveClass(
+        'text-success',
+      );
 
       // Add special char
       fireEvent.change(passwordInput, { target: { value: 'tT1!' } });
-      expect(
-        screen.getByText(/Atleast one special character/i).closest('p'),
-      ).toHaveClass('text-success');
+      expect(screen.getByText('special_char_check').closest('p')).toHaveClass(
+        'text-success',
+      );
 
       // Extend to 8+ chars
       fireEvent.change(passwordInput, { target: { value: 'tT1!abcd' } });
-      expect(
-        screen.getByText(/Atleast 8 Character long/i).closest('p'),
-      ).toHaveClass('text-success');
+      expect(screen.getByText('atleast_8_char_long').closest('p')).toHaveClass(
+        'text-success',
+      );
     });
   });
 
@@ -952,9 +922,9 @@ describe('UserDetailsForm - Password Validation Tests', () => {
       const longPassword = 'A'.repeat(50) + 'a1!';
       fireEvent.change(passwordInput, { target: { value: longPassword } });
 
-      expect(
-        screen.getByText(/Atleast 8 Character long/i).closest('p'),
-      ).toHaveClass('text-success');
+      expect(screen.getByText('atleast_8_char_long').closest('p')).toHaveClass(
+        'text-success',
+      );
     });
 
     it('should handle password with only spaces correctly', () => {
@@ -964,18 +934,18 @@ describe('UserDetailsForm - Password Validation Tests', () => {
       fireEvent.focus(passwordInput);
       fireEvent.change(passwordInput, { target: { value: '        ' } });
 
-      expect(
-        screen.getByText(/Atleast one lowercase letter/i).closest('p'),
-      ).toHaveClass('text-danger');
-      expect(
-        screen.getByText(/Atleast one uppercase letter/i).closest('p'),
-      ).toHaveClass('text-danger');
-      expect(
-        screen.getByText(/Atleast one numeric value/i).closest('p'),
-      ).toHaveClass('text-danger');
-      expect(
-        screen.getByText(/Atleast one special character/i).closest('p'),
-      ).toHaveClass('text-danger');
+      expect(screen.getByText('lowercase_check').closest('p')).toHaveClass(
+        'text-danger',
+      );
+      expect(screen.getByText('uppercase_check').closest('p')).toHaveClass(
+        'text-danger',
+      );
+      expect(screen.getByText('numeric_value_check').closest('p')).toHaveClass(
+        'text-danger',
+      );
+      expect(screen.getByText('special_char_check').closest('p')).toHaveClass(
+        'text-danger',
+      );
     });
 
     it('should handle Unicode characters appropriately', () => {
@@ -986,9 +956,9 @@ describe('UserDetailsForm - Password Validation Tests', () => {
       fireEvent.change(passwordInput, { target: { value: 'Tëst123!' } });
 
       // Should still validate correctly
-      expect(
-        screen.getByText(/Atleast 8 Character long/i).closest('p'),
-      ).toHaveClass('text-success');
+      expect(screen.getByText('atleast_8_char_long').closest('p')).toHaveClass(
+        'text-success',
+      );
     });
   });
 });

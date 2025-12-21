@@ -74,6 +74,7 @@ const resizeWindow = (width: number): void => {
 
 async function wait(ms = 100): Promise<void> {
   await act(async () => {
+    vi.useFakeTimers();
     vi.advanceTimersByTime(ms);
   });
 }
@@ -87,6 +88,14 @@ describe('Testing Settings Screen [User Portal]', () => {
     const { setItem } = useLocalStorage();
     setItem('name', 'John Doe');
     vi.useFakeTimers();
+
+    // Clear all hoisted mocks to ensure test isolation
+    sharedMocks.toast.success.mockClear();
+    sharedMocks.toast.warn.mockClear();
+    sharedMocks.toast.error.mockClear();
+    sharedMocks.errorHandler.mockClear();
+    sharedMocks.urlToFile.mockClear();
+
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
       value: vi.fn().mockImplementation((query) => ({
@@ -98,7 +107,7 @@ describe('Testing Settings Screen [User Portal]', () => {
         dispatchEvent: vi.fn(),
       })),
     });
-    // Mock window.location.reload
+
     Object.defineProperty(window, 'location', {
       writable: true,
       value: { ...originalLocation, reload: vi.fn() },
@@ -212,8 +221,10 @@ describe('Testing Settings Screen [User Portal]', () => {
     // due to plugin system modifications
   });
 
-  it('validates password correctly', async () => {
-    const toastSpy = vi.spyOn(toast, 'error');
+  it('validates password only on save button click', async () => {
+    // Clear the hoisted mock before test
+    sharedMocks.toast.warn.mockClear();
+
     await act(async () => {
       render(
         <BrowserRouter>
@@ -230,22 +241,25 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     await wait();
 
-    // Test weak password
-    fireEvent.change(screen.getByTestId('inputPassword'), {
+    const passwordInput = screen.getByTestId('inputPassword');
+
+    // Type weak password - NO toast should appear during typing
+    fireEvent.change(passwordInput, {
       target: { value: 'weak' },
     });
     await wait();
-    expect(toastSpy).toHaveBeenCalledWith(
-      'Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character.',
-    );
 
-    // Test strong password
-    fireEvent.change(screen.getByTestId('inputPassword'), {
-      target: { value: 'StrongPassword123!' },
-    });
+    // Verify NO toast was called during typing
+    expect(sharedMocks.toast.warn).not.toHaveBeenCalled();
+
+    // Click update button - NOW validation should trigger
+    const updateButton = screen.getByTestId('updateUserBtn');
+    fireEvent.click(updateButton);
     await wait();
-    expect(toastSpy).not.toHaveBeenCalledWith(
-      /Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character./i,
+
+    // Verify toast.warn (not toast.error) was called with correct message
+    expect(sharedMocks.toast.warn).toHaveBeenCalledWith(
+      'Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character.',
     );
   });
 
@@ -807,7 +821,7 @@ describe('Password Validation in Settings', () => {
   });
 
   it('should validate password only on save, not on every keystroke', async () => {
-    const toastSpy = vi.spyOn(toast, 'warn');
+    sharedMocks.toast.warn.mockClear(); // Use hoisted mock
 
     await act(async () => {
       render(
@@ -831,7 +845,7 @@ describe('Password Validation in Settings', () => {
     fireEvent.change(passwordInput, { target: { value: 'weak' } });
     await wait();
 
-    expect(toastSpy).not.toHaveBeenCalled();
+    expect(sharedMocks.toast.warn).not.toHaveBeenCalled(); // Changed
 
     // Only when clicking update button
     const updateButton = screen.getByTestId('updateUserBtn');
@@ -839,7 +853,8 @@ describe('Password Validation in Settings', () => {
 
     await wait();
 
-    expect(toastSpy).toHaveBeenCalledWith(
+    expect(sharedMocks.toast.warn).toHaveBeenCalledWith(
+      // Changed
       expect.stringContaining(
         'Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character.',
       ),
@@ -847,6 +862,8 @@ describe('Password Validation in Settings', () => {
   });
 
   it('should allow update with valid password meeting all requirements', async () => {
+    sharedMocks.toast.warn.mockClear(); // Add this
+
     await act(async () => {
       render(
         <BrowserRouter>
@@ -869,13 +886,13 @@ describe('Password Validation in Settings', () => {
     fireEvent.change(passwordInput, { target: { value: 'ValidPass123!' } });
     await wait();
 
-    // Should not show any validation errors
+    // Click update
     const updateButton = screen.getByTestId('updateUserBtn');
     fireEvent.click(updateButton);
-
     await wait();
 
-    expect(toast.warn).not.toHaveBeenCalled();
+    // Should not show any validation errors
+    expect(sharedMocks.toast.warn).not.toHaveBeenCalled(); // Changed
   });
 
   it('should show real-time visual feedback for password requirements', async () => {
@@ -905,16 +922,14 @@ describe('Password Validation in Settings', () => {
     await wait();
 
     // Should see checks being satisfied/unsatisfied in real-time
-    const lengthCheck = screen
-      .getByText(/Atleast 8 Character long/i)
-      .closest('p');
+    const lengthCheck = screen.getByText('atleast_8_char_long').closest('p');
     expect(lengthCheck).toHaveClass('text-danger'); // Less than 8 chars
 
     fireEvent.change(passwordInput, { target: { value: 'TestPass123!' } });
     await wait();
 
     const lengthCheckAfter = screen
-      .getByText(/Atleast 8 Character long/i)
+      .getByText('atleast_8_char_long')
       .closest('p');
     expect(lengthCheckAfter).toHaveClass('text-success'); // 8+ chars now
   });
