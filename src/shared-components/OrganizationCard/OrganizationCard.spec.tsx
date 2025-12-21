@@ -211,7 +211,12 @@ describe('OrganizationCard', () => {
     const statusChip = screen.getByTestId('membershipStatus');
 
     expect(statusChip).toHaveTextContent('Member');
-    expect(statusChip.className).toContain('member');
+    expect(statusChip).toHaveAttribute('data-status', 'member');
+    expect(statusChip).toHaveAttribute('role', 'status');
+    expect(statusChip).toHaveAttribute(
+      'aria-label',
+      'Membership status: Member',
+    );
   });
 
   it('displays "Pending" status chip when membership request is pending', () => {
@@ -230,7 +235,11 @@ describe('OrganizationCard', () => {
     const statusChip = screen.getByTestId('membershipStatus');
 
     expect(statusChip).toHaveTextContent('Pending');
-    expect(statusChip.className).toContain('pending');
+    expect(statusChip).toHaveAttribute('data-status', 'pending');
+    expect(statusChip).toHaveAttribute(
+      'aria-label',
+      'Membership status: Pending',
+    );
   });
 
   it('displays "Not a member" status chip for non-members', () => {
@@ -249,7 +258,11 @@ describe('OrganizationCard', () => {
     const statusChip = screen.getByTestId('membershipStatus');
 
     expect(statusChip).toHaveTextContent('Not a member');
-    expect(statusChip.className).toContain('notMember');
+    expect(statusChip).toHaveAttribute('data-status', 'notMember');
+    expect(statusChip).toHaveAttribute(
+      'aria-label',
+      'Membership status: Not a member',
+    );
   });
 
   it('renders "Join" button for non-joined user', () => {

@@ -220,6 +220,21 @@ function OrganizationCard({
                       : styles.notMember,
                 ].join(' ')}
                 data-testid="membershipStatus"
+                data-status={
+                  membershipState === 'member'
+                    ? 'member'
+                    : membershipState === 'pending'
+                      ? 'pending'
+                      : 'notMember'
+                }
+                role="status"
+                aria-label={
+                  membershipState === 'member'
+                    ? 'Membership status: Member'
+                    : membershipState === 'pending'
+                      ? 'Membership status: Pending'
+                      : 'Membership status: Not a member'
+                }
               >
                 {membershipState === 'member'
                   ? t('users.member')
@@ -227,7 +242,6 @@ function OrganizationCard({
                     ? t('users.pending')
                     : t('users.notMember')}
               </div>
-
               {/* Description of the organization */}
               <div className={[styles.orgdesc, 'fw-semibold'].join(' ')}>
                 <TruncatedText text={description} />
