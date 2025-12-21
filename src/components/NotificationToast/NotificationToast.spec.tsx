@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import type { ToastContainerProps } from 'react-toastify';
 
 const toastMock = vi.hoisted(() => ({
   success: vi.fn(() => 'success-id'),
@@ -10,7 +11,7 @@ const toastMock = vi.hoisted(() => ({
 }));
 
 const toastContainerSpy = vi.hoisted(() =>
-  vi.fn((props: { limit?: number; position?: string }) => {
+  vi.fn((props: ToastContainerProps) => {
     return (
       <div
         data-testid="toast-container"
@@ -23,8 +24,7 @@ const toastContainerSpy = vi.hoisted(() =>
 
 vi.mock('react-toastify', () => ({
   toast: toastMock,
-  ToastContainer: (props: { limit?: number; position?: string }) =>
-    toastContainerSpy(props),
+  ToastContainer: (props: ToastContainerProps) => toastContainerSpy(props),
 }));
 
 const getFixedTMock = vi.hoisted(() =>
@@ -38,10 +38,24 @@ const getFixedTMock = vi.hoisted(() =>
   }),
 );
 
-vi.mock('utils/i18n', () => ({
-  default: {
+const i18nMock = vi.hoisted(() => {
+  const instance = {
     getFixedT: getFixedTMock,
-  },
+    // These are not used by NotificationToast, but included so the mock more
+    // closely resembles the real i18next instance export.
+    t: vi.fn((key: string) => key),
+    changeLanguage: vi.fn(async () => instance),
+    language: 'en',
+    init: vi.fn(async () => instance),
+    use: vi.fn(() => instance),
+    on: vi.fn(() => instance),
+    off: vi.fn(() => instance),
+  };
+  return instance;
+});
+
+vi.mock('utils/i18n', () => ({
+  default: i18nMock,
 }));
 
 import {
