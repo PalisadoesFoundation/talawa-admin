@@ -1554,7 +1554,7 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenCalledWith(
-      'Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character',
+      i18nForTest.t('loginPage.password_invalid'),
     );
   });
 
@@ -1828,7 +1828,7 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenCalledWith(
-      'Email should have atleast 8 characters',
+      i18nForTest.t('loginPage.email_invalid'),
     );
   });
 
