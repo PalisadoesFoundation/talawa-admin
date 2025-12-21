@@ -1537,7 +1537,9 @@
     "addPledge": "प्रतिज्ञा जोड़ें",
     "viewPledges": "प्रतिज्ञाएँ देखें",
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",
-    "noCampaigns": "कोई अभियान नहीं मिला"
+    "noCampaigns": "कोई अभियान नहीं मिला",
+    "raised": "एकत्रित",
+    "amountRaised": "एकत्रित राशि"
   },
   "userPledges": {
     "title": "मेरी प्रतिज्ञाएँ"

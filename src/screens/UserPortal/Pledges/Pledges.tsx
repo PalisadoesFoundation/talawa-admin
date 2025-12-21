@@ -468,7 +468,7 @@ const Pledges = (): JSX.Element => {
           id: pledge.id,
           name: pledge.pledger?.name,
           image: pledge.pledger?.avatarURL,
-          startDate: pledge.startDate,
+          createdAt: pledge.createdAt,
           endDate: pledge.campaign?.endAt,
           amount: pledge.amount,
           campaign: pledge.campaign,
@@ -488,7 +488,6 @@ const Pledges = (): JSX.Element => {
         userId={userId}
         pledge={pledge}
         refetchPledge={refetchPledge}
-        endDate={pledge?.campaign ? pledge?.campaign.endAt : new Date()}
         mode={'edit'}
       />
 
