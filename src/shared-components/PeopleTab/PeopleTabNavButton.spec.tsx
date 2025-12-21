@@ -1,11 +1,11 @@
-// PeopleTabNavbarButton.spec.tsx
 import React from 'react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import PeopleTabNavbarButton from './PeopleTabNavbarButton';
 
-// Mock a simple SVG icon
-const MockIcon = () => <svg data-testid="mockIcon" />;
+const MockIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg data-testid="icon" {...props} />
+);
 
 describe('PeopleTabNavbarButton', () => {
   afterEach(() => {
@@ -14,7 +14,6 @@ describe('PeopleTabNavbarButton', () => {
 
   it('renders the title correctly', () => {
     render(<PeopleTabNavbarButton title="Events" action={vi.fn()} />);
-
     expect(screen.getByText('Events')).toBeInTheDocument();
   });
 
@@ -27,16 +26,23 @@ describe('PeopleTabNavbarButton', () => {
       />,
     );
 
-    expect(screen.getByTestId('mockIcon')).toBeInTheDocument();
+    expect(screen.getByTestId('icon')).toBeInTheDocument();
   });
 
-  it('applies active class when isActive is true', () => {
+  it('changes icon fill when active', () => {
     render(
-      <PeopleTabNavbarButton title="Events" isActive={true} action={vi.fn()} />,
+      <PeopleTabNavbarButton
+        title="Events"
+        icon={<MockIcon />}
+        isActive
+        action={vi.fn()}
+      />,
     );
 
-    const buttonDiv = screen.getByText('Events').closest('div');
-    expect(buttonDiv).toHaveClass('active');
+    expect(screen.getByTestId('icon')).toHaveAttribute(
+      'fill',
+      'var(--bs-black)',
+    );
   });
 
   it('calls action function when clicked', () => {
@@ -44,9 +50,7 @@ describe('PeopleTabNavbarButton', () => {
 
     render(<PeopleTabNavbarButton title="Events" action={actionMock} />);
 
-    const buttonDiv = screen.getByText('Events').closest('div');
-    if (buttonDiv) fireEvent.click(buttonDiv);
-
+    fireEvent.click(screen.getByText('Events'));
     expect(actionMock).toHaveBeenCalledTimes(1);
   });
 
