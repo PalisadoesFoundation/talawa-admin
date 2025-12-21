@@ -275,6 +275,7 @@ function OrganizationCard({
                 {membershipState === 'member' ? (
                   <Button
                     data-testid="manageBtn"
+                    data-cy="manageBtn"
                     className={styles.manageBtn}
                     onClick={() => navigate(`/user/organization/${id}`)}
                     style={{ width: '8rem' }}
