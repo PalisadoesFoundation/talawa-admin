@@ -115,6 +115,19 @@ describe('NotificationToast', () => {
       expect.any(Object),
     );
   });
+
+  it('uses default namespace when namespace is omitted', () => {
+    NotificationToast.error({
+      key: 'someError',
+      // namespace omitted -> should default to 'common'
+    });
+
+    expect(getFixedTMock).toHaveBeenCalledWith(null, 'common');
+    expect(toastMock.error).toHaveBeenCalledWith(
+      'common:someError',
+      expect.any(Object),
+    );
+  });
 });
 
 describe('NotificationToastContainer', () => {
