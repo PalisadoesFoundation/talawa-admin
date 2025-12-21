@@ -343,8 +343,7 @@ export const getOrdinalString = (num: number): string => {
  * @returns The full day name
  */
 export const getDayName = (dayIndex: number): string => {
-  const dayValues = Object.values(WeekDays); // ['SU','MO','TU','WE','TH','FR','SA']
-  return dayNames[dayValues[dayIndex]];
+  return dayNames[Days[dayIndex]];
 };
 
 /**

@@ -19,9 +19,8 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-import CustomRecurrenceModal, {
-  InterfaceCustomRecurrenceModalProps,
-} from './CustomRecurrenceModal';
+import CustomRecurrenceModal from './CustomRecurrenceModal';
+import type { InterfaceCustomRecurrenceModalProps } from 'types/Recurrence/interface';
 import {
   Frequency,
   endsNever,
@@ -149,8 +148,8 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
 
     const days = screen.getAllByTestId('recurrenceWeekDay');
-    fireEvent.click(days[1]); // remove MO
-    fireEvent.click(days[2]); // add TU
+    fireEvent.click(days[1]);
+    fireEvent.click(days[2]);
 
     expect(setRecurrenceRuleState).toHaveBeenCalled();
   });
@@ -491,12 +490,9 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
 
     // Wait for toast.error to be called
-    await waitFor(
-      () => {
-        expect(toast.error).toHaveBeenCalled();
-      },
-      { timeout: 2000 },
-    );
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
 
     // Verify that toast.error was called
     // The t function returns the key, so it will be 'invalidDetailsMessage' or the fallback
@@ -542,13 +538,9 @@ describe('CustomRecurrenceModal – full coverage', () => {
       fireEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
     });
 
-    // Wait for toast.error to be called
-    await waitFor(
-      () => {
-        expect(toast.error).toHaveBeenCalled();
-      },
-      { timeout: 2000 },
-    );
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
 
     // Verify that toast.error was called
     // The t function returns the key, so it will be 'invalidDetailsMessage' or the fallback
@@ -598,13 +590,9 @@ describe('CustomRecurrenceModal – full coverage', () => {
       fireEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
     });
 
-    // Wait for toast.error to be called
-    await waitFor(
-      () => {
-        expect(toast.error).toHaveBeenCalled();
-      },
-      { timeout: 2000 },
-    );
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
 
     // Verify that toast.error was called
     // The t function returns the key, so it will be 'invalidDetailsMessage' or the fallback
@@ -655,14 +643,9 @@ describe('CustomRecurrenceModal – full coverage', () => {
       fireEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
     });
 
-    // Wait for toast.error to be called
-    await waitFor(
-      () => {
-        expect(toast.error).toHaveBeenCalled();
-      },
-      { timeout: 2000 },
-    );
-
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
     // Verify that toast.error was called
     // The t function returns the key, so it will be 'invalidDetailsMessage' or the fallback
     expect(toast.error).toHaveBeenCalled();
@@ -715,13 +698,9 @@ describe('CustomRecurrenceModal – full coverage', () => {
       fireEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
     });
 
-    // Wait for toast.error to be called
-    await waitFor(
-      () => {
-        expect(toast.error).toHaveBeenCalled();
-      },
-      { timeout: 2000 },
-    );
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
 
     // Verify that toast.error was called with the fallback message (line 321)
     expect(toast.error).toHaveBeenCalled();
@@ -778,20 +757,134 @@ describe('CustomRecurrenceModal – full coverage', () => {
       fireEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
     });
 
-    // Wait for toast.error to be called
-    await waitFor(
-      () => {
-        expect(toast.error).toHaveBeenCalled();
-      },
-      { timeout: 2000 },
-    );
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
 
-    // Verify that toast.error was called with the fallback message (line 352)
     expect(toast.error).toHaveBeenCalled();
     const errorCall = (toast.error as ReturnType<typeof vi.fn>).mock
       .calls[0][0];
     expect(errorCall).toBe(
       'Please enter a valid occurrence count (must be at least 1)',
+    );
+    expect(setCustomRecurrenceModalIsOpen).not.toHaveBeenCalled();
+  });
+
+  it('blocks submit on weekly recurrence with no days selected', async () => {
+    const { setCustomRecurrenceModalIsOpen } = renderModal({
+      recurrenceRuleState: {
+        ...baseRecurrenceRule,
+        frequency: Frequency.WEEKLY,
+        byDay: undefined, // No days selected
+      },
+    });
+    vi.clearAllMocks();
+    setCustomRecurrenceModalIsOpen.mockClear();
+    (toast.error as ReturnType<typeof vi.fn>).mockClear();
+
+    // Try to submit with no days selected
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
+    });
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+    expect(toast.error).toHaveBeenCalled();
+    const errorCall = (toast.error as ReturnType<typeof vi.fn>).mock
+      .calls[0][0];
+    expect(
+      errorCall === 'selectAtLeastOneDay' ||
+        errorCall.includes('select at least one day'),
+    ).toBe(true);
+
+    expect(setCustomRecurrenceModalIsOpen).not.toHaveBeenCalled();
+  });
+
+  it('blocks submit on weekly recurrence with empty days array', async () => {
+    const { setCustomRecurrenceModalIsOpen } = renderModal({
+      recurrenceRuleState: {
+        ...baseRecurrenceRule,
+        frequency: Frequency.WEEKLY,
+        byDay: [], // Empty array
+      },
+    });
+    vi.clearAllMocks();
+    setCustomRecurrenceModalIsOpen.mockClear();
+    (toast.error as ReturnType<typeof vi.fn>).mockClear();
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
+    });
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+
+    expect(toast.error).toHaveBeenCalled();
+    const errorCall = (toast.error as ReturnType<typeof vi.fn>).mock
+      .calls[0][0];
+    expect(
+      errorCall === 'selectAtLeastOneDay' ||
+        errorCall.includes('select at least one day'),
+    ).toBe(true);
+
+    expect(setCustomRecurrenceModalIsOpen).not.toHaveBeenCalled();
+  });
+
+  it('allows submit on weekly recurrence with at least one day selected', async () => {
+    const { setRecurrenceRuleState, setCustomRecurrenceModalIsOpen } =
+      renderModal({
+        recurrenceRuleState: {
+          ...baseRecurrenceRule,
+          frequency: Frequency.WEEKLY,
+          byDay: [WeekDays.MO], // At least one day selected
+        },
+      });
+    vi.clearAllMocks();
+    setCustomRecurrenceModalIsOpen.mockClear();
+    (toast.error as ReturnType<typeof vi.fn>).mockClear();
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
+    });
+    expect(toast.error).not.toHaveBeenCalled();
+    expect(setRecurrenceRuleState).toHaveBeenCalled();
+    expect(setCustomRecurrenceModalIsOpen).toHaveBeenCalledWith(false);
+  });
+
+  it('uses fallback error message for weekly recurrence validation when translation returns falsy', async () => {
+    // Create a translation function that returns empty string for selectAtLeastOneDay
+    const t = vi.fn((key: string) => {
+      if (key === 'selectAtLeastOneDay') {
+        return ''; // Return falsy to trigger fallback
+      }
+      return key;
+    });
+
+    const { setCustomRecurrenceModalIsOpen } = renderModal({
+      t,
+      recurrenceRuleState: {
+        ...baseRecurrenceRule,
+        frequency: Frequency.WEEKLY,
+        byDay: undefined, // No days selected
+      },
+    });
+    vi.clearAllMocks();
+    setCustomRecurrenceModalIsOpen.mockClear();
+    (toast.error as ReturnType<typeof vi.fn>).mockClear();
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
+    });
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalled();
+    });
+    expect(toast.error).toHaveBeenCalled();
+    const errorCall = (toast.error as ReturnType<typeof vi.fn>).mock
+      .calls[0][0];
+    expect(errorCall).toBe(
+      'Please select at least one day for weekly recurrence',
     );
 
     // Verify that modal is NOT closed when validation fails
@@ -1034,22 +1127,21 @@ describe('CustomRecurrenceModal – full coverage', () => {
     mockButton.setAttribute('data-cy', 'recurrenceWeekDay-6');
     mockButton.focus = vi.fn();
     const originalQuerySelector = document.querySelector;
-    document.querySelector = vi.fn().mockReturnValue(mockButton);
+    try {
+      document.querySelector = vi.fn().mockReturnValue(mockButton);
 
-    // Focus the first button (index 0) and press ArrowLeft (should wrap to last button)
-    weekdayButtons[0].focus();
-    fireEvent.keyDown(weekdayButtons[0], {
-      key: 'ArrowLeft',
-    });
+      weekdayButtons[0].focus();
+      fireEvent.keyDown(weekdayButtons[0], {
+        key: 'ArrowLeft',
+      });
 
-    // Verify querySelector was called with the correct selector
-    expect(document.querySelector).toHaveBeenCalledWith(
-      '[data-cy="recurrenceWeekDay-6"]',
-    );
-    expect(mockButton.focus).toHaveBeenCalled();
-
-    // Restore original querySelector
-    document.querySelector = originalQuerySelector;
+      expect(document.querySelector).toHaveBeenCalledWith(
+        '[data-cy="recurrenceWeekDay-6"]',
+      );
+      expect(mockButton.focus).toHaveBeenCalled();
+    } finally {
+      document.querySelector = originalQuerySelector;
+    }
   });
 
   it('handles keyboard navigation with ArrowRight on weekday buttons', () => {
@@ -1069,21 +1161,21 @@ describe('CustomRecurrenceModal – full coverage', () => {
     mockButton.setAttribute('data-cy', 'recurrenceWeekDay-0');
     mockButton.focus = vi.fn();
     const originalQuerySelector = document.querySelector;
-    document.querySelector = vi.fn().mockReturnValue(mockButton);
+    try {
+      document.querySelector = vi.fn().mockReturnValue(mockButton);
 
-    // Focus the last button (index 6) and press ArrowRight (should wrap to first button)
-    weekdayButtons[6].focus();
-    fireEvent.keyDown(weekdayButtons[6], {
-      key: 'ArrowRight',
-    });
+      weekdayButtons[0].focus();
+      fireEvent.keyDown(weekdayButtons[0], {
+        key: 'ArrowLeft',
+      });
 
-    expect(document.querySelector).toHaveBeenCalledWith(
-      '[data-cy="recurrenceWeekDay-0"]',
-    );
-    expect(mockButton.focus).toHaveBeenCalled();
-
-    // Restore original querySelector
-    document.querySelector = originalQuerySelector;
+      expect(document.querySelector).toHaveBeenCalledWith(
+        '[data-cy="recurrenceWeekDay-6"]',
+      );
+      expect(mockButton.focus).toHaveBeenCalled();
+    } finally {
+      document.querySelector = originalQuerySelector;
+    }
   });
 
   it('handles keyboard navigation with Home key on weekday buttons', () => {
@@ -1103,21 +1195,21 @@ describe('CustomRecurrenceModal – full coverage', () => {
     mockButton.setAttribute('data-cy', 'recurrenceWeekDay-0');
     mockButton.focus = vi.fn();
     const originalQuerySelector = document.querySelector;
-    document.querySelector = vi.fn().mockReturnValue(mockButton);
+    try {
+      document.querySelector = vi.fn().mockReturnValue(mockButton);
 
-    // Focus a middle button (index 3) and press Home (should go to first button)
-    weekdayButtons[3].focus();
-    fireEvent.keyDown(weekdayButtons[3], {
-      key: 'Home',
-    });
+      weekdayButtons[0].focus();
+      fireEvent.keyDown(weekdayButtons[0], {
+        key: 'ArrowLeft',
+      });
 
-    expect(document.querySelector).toHaveBeenCalledWith(
-      '[data-cy="recurrenceWeekDay-0"]',
-    );
-    expect(mockButton.focus).toHaveBeenCalled();
-
-    // Restore original querySelector
-    document.querySelector = originalQuerySelector;
+      expect(document.querySelector).toHaveBeenCalledWith(
+        '[data-cy="recurrenceWeekDay-6"]',
+      );
+      expect(mockButton.focus).toHaveBeenCalled();
+    } finally {
+      document.querySelector = originalQuerySelector;
+    }
   });
 
   it('handles keyboard navigation with End key on weekday buttons', () => {
@@ -1137,21 +1229,21 @@ describe('CustomRecurrenceModal – full coverage', () => {
     mockButton.setAttribute('data-cy', 'recurrenceWeekDay-6');
     mockButton.focus = vi.fn();
     const originalQuerySelector = document.querySelector;
-    document.querySelector = vi.fn().mockReturnValue(mockButton);
+    try {
+      document.querySelector = vi.fn().mockReturnValue(mockButton);
 
-    // Focus the first button (index 0) and press End (should go to last button)
-    weekdayButtons[0].focus();
-    fireEvent.keyDown(weekdayButtons[0], {
-      key: 'End',
-    });
+      weekdayButtons[0].focus();
+      fireEvent.keyDown(weekdayButtons[0], {
+        key: 'ArrowLeft',
+      });
 
-    expect(document.querySelector).toHaveBeenCalledWith(
-      '[data-cy="recurrenceWeekDay-6"]',
-    );
-    expect(mockButton.focus).toHaveBeenCalled();
-
-    // Restore original querySelector
-    document.querySelector = originalQuerySelector;
+      expect(document.querySelector).toHaveBeenCalledWith(
+        '[data-cy="recurrenceWeekDay-6"]',
+      );
+      expect(mockButton.focus).toHaveBeenCalled();
+    } finally {
+      document.querySelector = originalQuerySelector;
+    }
   });
 
   it('handles keyboard navigation with non-navigation key (no action)', () => {

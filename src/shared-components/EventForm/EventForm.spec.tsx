@@ -8,7 +8,10 @@ import {
 } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import EventForm, { formatRecurrenceForPayload } from './EventForm';
+
+dayjs.extend(utc);
 import type { IEventFormValues } from 'types/EventForm/interface';
 import { Frequency, createDefaultRecurrenceRule } from 'utils/recurrenceUtils';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
@@ -108,6 +111,7 @@ vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
       return (
         <div data-testid="customRecurrenceModalMock">
           <button
+            type="button"
             data-testid="updateRecurrenceRule"
             onClick={() => {
               const newRule = createDefaultRecurrenceRule(
@@ -120,6 +124,7 @@ vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
             Update Rule
           </button>
           <button
+            type="button"
             data-testid="updateRecurrenceRuleFunction"
             onClick={() => {
               setRecurrenceRuleState((prev: InterfaceRecurrenceRule) => ({
@@ -131,6 +136,7 @@ vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
             Update Rule Function
           </button>
           <button
+            type="button"
             data-testid="updateEndDate"
             onClick={() => {
               setEndDate(new Date('2025-01-10'));
@@ -139,6 +145,7 @@ vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
             Update End Date
           </button>
           <button
+            type="button"
             data-testid="updateEndDateFunction"
             onClick={() => {
               setEndDate((prev: Date) => new Date(prev.getTime() + 86400000));
@@ -147,6 +154,7 @@ vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
             Update End Date Function
           </button>
           <button
+            type="button"
             data-testid="closeModal"
             onClick={() => {
               hideCustomRecurrenceModal();
@@ -155,6 +163,7 @@ vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
             Close
           </button>
           <button
+            type="button"
             data-testid="setModalOpen"
             onClick={() => {
               setCustomRecurrenceModalIsOpen(false);
@@ -208,12 +217,11 @@ describe('EventForm', () => {
     expect(handleSubmit).toHaveBeenCalledWith(
       expect.objectContaining({
         name: 'Test Event',
-        startAtISO: dayjs(baseValues.startDate)
+        startAtISO: dayjs
+          .utc(baseValues.startDate)
           .startOf('day')
-          .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-        endAtISO: dayjs(baseValues.endDate)
-          .endOf('day')
-          .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          .toISOString(),
+        endAtISO: dayjs.utc(baseValues.endDate).endOf('day').toISOString(),
       }),
     );
   });

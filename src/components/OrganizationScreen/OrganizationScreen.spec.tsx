@@ -126,7 +126,7 @@ const link = new StaticMockLink(MOCKS, true);
 
 describe('Testing OrganizationScreen', () => {
   beforeAll(() => {
-    setItem('name', 'John Doe', 3600);
+    setItem('Talawa-admin', 'name', 'John Doe');
   });
 
   afterAll(() => {

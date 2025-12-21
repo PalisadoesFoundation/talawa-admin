@@ -29,6 +29,8 @@ export const RecurrenceMonthlySection: React.FC<
     return null;
   }
 
+  const monthlyOptions = getMonthlyOptions(startDate);
+
   return (
     <div className="mb-4">
       <span className="fw-semibold text-secondary">{t('monthlyOn')}</span>
@@ -44,23 +46,22 @@ export const RecurrenceMonthlySection: React.FC<
             aria-label={t('monthlyOn')}
           >
             {recurrenceRuleState.byDay
-              ? getMonthlyOptions(startDate).byWeekday
-              : getMonthlyOptions(startDate).byDate}
+              ? monthlyOptions.byWeekday
+              : monthlyOptions.byDate}
           </Dropdown.Toggle>
           <Dropdown.Menu>
             <Dropdown.Item
               onClick={() => {
-                const options = getMonthlyOptions(startDate);
                 setRecurrenceRuleState((prev) => ({
                   ...prev,
-                  byMonthDay: [options.dateValue],
+                  byMonthDay: [monthlyOptions.dateValue],
                   byDay: undefined,
                 }));
               }}
               data-testid="monthlyByDate"
               data-cy="monthlyByDate"
             >
-              {getMonthlyOptions(startDate).byDate}
+              {monthlyOptions.byDate}
             </Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>

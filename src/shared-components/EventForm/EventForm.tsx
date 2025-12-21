@@ -6,6 +6,7 @@
  */
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Button, Dropdown, Form } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
@@ -23,6 +24,9 @@ import {
   validateRecurrenceInput,
 } from 'utils/recurrenceUtils';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
+
+// Extend dayjs with utc plugin
+dayjs.extend(utc);
 
 const timeToDayJs = (time: string) => {
   const [hours, minutes, seconds] = time.split(':').map(Number);
@@ -188,24 +192,22 @@ const EventForm: React.FC<IEventFormProps> = ({
     const endTimeParts = formState.endTime.split(':');
 
     const startAtISO = formState.allDay
-      ? dayjs(formState.startDate)
-          .startOf('day')
-          .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
-      : dayjs(formState.startDate)
+      ? dayjs.utc(formState.startDate).startOf('day').toISOString()
+      : dayjs
+          .utc(formState.startDate)
           .hour(parseInt(startTimeParts[0]))
           .minute(parseInt(startTimeParts[1]))
           .second(parseInt(startTimeParts[2]) || 0)
-          .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+          .toISOString();
 
     const endAtISO = formState.allDay
-      ? dayjs(formState.endDate)
-          .endOf('day')
-          .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
-      : dayjs(formState.endDate)
+      ? dayjs.utc(formState.endDate).endOf('day').toISOString()
+      : dayjs
+          .utc(formState.endDate)
           .hour(parseInt(endTimeParts[0]))
           .minute(parseInt(endTimeParts[1]))
           .second(parseInt(endTimeParts[2]) || 0)
-          .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+          .toISOString();
 
     if (recurrenceEnabled && formState.recurrenceRule) {
       const validation = validateRecurrenceInput(
@@ -370,14 +372,22 @@ const EventForm: React.FC<IEventFormProps> = ({
               value={timeToDayJs(formState.startTime)}
               onChange={(time): void => {
                 if (time) {
-                  setFormState((prev) => ({
-                    ...prev,
-                    startTime: time.format('HH:mm:ss'),
-                    endTime:
-                      timeToDayJs(prev.endTime) < time
-                        ? time.format('HH:mm:ss')
-                        : prev.endTime,
-                  }));
+                  setFormState((prev) => {
+                    const newStartTime = time.format('HH:mm:ss');
+                    const currentEndTime = timeToDayJs(prev.endTime);
+                    // Compare times by converting to minutes since midnight
+                    const newStartMinutes = time.hour() * 60 + time.minute();
+                    const currentEndMinutes =
+                      currentEndTime.hour() * 60 + currentEndTime.minute();
+                    return {
+                      ...prev,
+                      startTime: newStartTime,
+                      endTime:
+                        currentEndMinutes < newStartMinutes
+                          ? newStartTime
+                          : prev.endTime,
+                    };
+                  });
                 }
               }}
               disabled={formState.allDay}
