@@ -22,7 +22,15 @@ class DisableStatementsChecker:
     """Checker for various disable statements in code files."""
 
     def check_eslint_disable(self, content: str, file_path: str) -> list[str]:
-        """Check for eslint-disable comments."""
+        """Check for eslint-disable comments.
+
+        Args:
+            content: File content to check.
+            file_path: Path to the file being checked.
+
+        Returns:
+            List of violation messages.
+        """
         violations = []
         pattern = re.compile(r"//\s*eslint-disable", re.IGNORECASE)
 
@@ -35,7 +43,15 @@ class DisableStatementsChecker:
         return violations
 
     def check_istanbul_ignore(self, content: str, file_path: str) -> list[str]:
-        """Check for istanbul ignore comments."""
+        """Check for istanbul ignore comments.
+
+        Args:
+            content: File content to check.
+            file_path: Path to the file being checked.
+
+        Returns:
+            List of violation messages.
+        """
         violations = []
         pattern = re.compile(
             r"/\*\s*istanbul\s+ignore\s+\w+\s*\*/", re.IGNORECASE | re.DOTALL
@@ -50,7 +66,15 @@ class DisableStatementsChecker:
         return violations
 
     def check_it_skip(self, content: str, file_path: str) -> list[str]:
-        """Check for it.skip statements in test files."""
+        """Check for it.skip statements in test files.
+
+        Args:
+            content: File content to check.
+            file_path: Path to the file being checked.
+
+        Returns:
+            List of violation messages.
+        """
         violations = []
         pattern = re.compile(r"\bit\.skip\s*\(", re.IGNORECASE)
 
@@ -63,7 +87,14 @@ class DisableStatementsChecker:
         return violations
 
     def check_file(self, file_path: str) -> list[str]:
-        """Check a single file for disable statements."""
+        """Check a single file for disable statements.
+
+        Args:
+            file_path: Path to the file to check.
+
+        Returns:
+            List of violation messages.
+        """
         # Skip checking the test file to avoid self-referential issues
         if file_path.endswith("test_disable_statements_check.py"):
             return []
@@ -90,7 +121,14 @@ class DisableStatementsChecker:
         return violations
 
     def check_files(self, file_paths: list[str]) -> list[str]:
-        """Check multiple files for disable statements."""
+        """Check multiple files for disable statements.
+
+        Args:
+            file_paths: List of file paths to check.
+
+        Returns:
+            List of violation messages from all files.
+        """
         all_violations = []
         for file_path in file_paths:
             violations = self.check_file(file_path)
@@ -98,7 +136,14 @@ class DisableStatementsChecker:
         return all_violations
 
     def check_directory(self, directory: str) -> list[str]:
-        """Check all relevant files in a directory."""
+        """Check all relevant files in a directory.
+
+        Args:
+            directory: Directory path to check recursively.
+
+        Returns:
+            List of violation messages from all files in directory.
+        """
         extensions = {".js", ".jsx", ".ts", ".tsx"}
         file_paths = []
 
@@ -109,7 +154,11 @@ class DisableStatementsChecker:
 
 
 def main() -> None:
-    """Main function."""
+    """Main function.
+
+    Returns:
+        None
+    """
     parser = argparse.ArgumentParser(
         description="Check for disable statements in code files"
     )

@@ -188,7 +188,14 @@ line 4"""
         self.assertEqual(len(violations), 3)
 
     def check_file_content_for_testing(self, content: str) -> list:
-        """Helper method to test file content directly."""
+        """Helper method to test file content directly.
+
+        Args:
+            content: File content to test.
+
+        Returns:
+            List of violations found in the content.
+        """
         temp_file = None
         try:
             with tempfile.NamedTemporaryFile(
