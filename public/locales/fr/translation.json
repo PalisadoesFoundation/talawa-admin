@@ -56,6 +56,11 @@
     "user": "Utilisateur",
     "loading": "Chargement"
   },
+  "signOut": {
+    "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
+    "signingOut": "Déconnexion en cours...",
+    "signOut": "Se déconnecter"
+  },
   "userLoginPage": {
     "title": "Administrateur Talawa",
     "fromPalisadoes": "Une application open source réalisée par les bénévoles de la Fondation Palisadoes",
@@ -731,7 +736,8 @@
     "raisedAmount": "Montant collecté",
     "pledgedAmount": "Montant promis",
     "startDate": "Date de début",
-    "endDate": "Date de fin"
+    "endDate": "Date de fin",
+    "selectPledger": "Veuillez sélectionner un donateur"
   },
   "orgPost": {
     "title": "Des postes",
@@ -1065,7 +1071,8 @@
     "language": "Langue",
     "settings": "Paramètres",
     "logout": "Déconnexion",
-    "close": "Fermer"
+    "close": "Fermer",
+    "talawaBranding": "Image de marque Talawa"
   },
   "userOrganizations": {
     "allOrganizations": "Toutes les organisations",

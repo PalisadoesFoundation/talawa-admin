@@ -666,7 +666,7 @@ describe('MemberDetail', () => {
       screen.getByTestId('educationgrade-dropdown-menu'),
     ).toBeInTheDocument();
 
-    // Find and click one of the options=
+    // Find and click one of the options
     const option = screen.getByTestId('change-educationgrade-btn-kg'); // Or whatever option text you expect
     await userEvent.click(option);
 
@@ -698,7 +698,7 @@ describe('MemberDetail', () => {
       screen.getByTestId('employmentstatus-dropdown-menu'),
     ).toBeInTheDocument();
 
-    // Find and click one of the options=
+    // Find and click one of the options
     const option = screen.getByTestId('change-employmentstatus-btn-full_time'); // Or whatever option text you expect
     await userEvent.click(option);
 
@@ -728,8 +728,8 @@ describe('MemberDetail', () => {
       screen.getByTestId('maritalstatus-dropdown-menu'),
     ).toBeInTheDocument();
 
-    // Find and click one of the options=
-    const option = screen.getByTestId('change-maritalstatus-btn-single'); // Or whatever option text you expect
+    // Find and click one of the options
+    const option = screen.getByTestId('change-maritalstatus-btn-single');
     await userEvent.click(option);
 
     // Verify the selection was made
@@ -745,14 +745,14 @@ describe('MemberDetail', () => {
     ).toBeInTheDocument();
 
     // Find the dropdown by the fieldName from DynamicDropDown props
-    const maritialStatus = screen.getByTestId('natalsex-dropdown-btn');
-    expect(maritialStatus).toBeInTheDocument();
+    const natalSexStatus = screen.getByTestId('natalsex-dropdown-btn');
+    expect(natalSexStatus).toBeInTheDocument();
 
     // Test initial state
     expect(maritialStatus).toHaveTextContent('Male'); // Or whatever your initial value is
-
+        
     // Click the dropdown button to open it
-    await userEvent.click(maritialStatus);
+    await userEvent.click(natalSexStatus);
 
     expect(screen.getByTestId('natalsex-dropdown-menu')).toBeInTheDocument();
 

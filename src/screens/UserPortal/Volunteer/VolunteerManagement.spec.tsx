@@ -21,7 +21,13 @@ import { MOCKS } from './UpcomingEvents/UpcomingEvents.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
 
-const { setItem } = useLocalStorage();
+vi.mock('@mui/icons-material', () => ({
+  SettingsInputComponentSharp: vi.fn(() => null),
+  Circle: vi.fn(() => null),
+  WarningAmberRounded: vi.fn(() => null),
+}));
+
+const { setItem, clearAllItems } = useLocalStorage();
 
 const renderVolunteerManagement = (): RenderResult => {
   const link = new StaticMockLink(MOCKS);
@@ -49,7 +55,12 @@ const renderVolunteerManagement = (): RenderResult => {
 };
 
 describe('Volunteer Management', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   beforeEach(() => {
+    clearAllItems();
     setItem('userId', 'userId');
   });
 

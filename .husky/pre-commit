@@ -13,5 +13,6 @@ pnpm run check:pom
 npx knip --include files,exports
 npx knip --config knip.deps.json --include dependencies
 pnpm run check-mock-cleanup
+pnpm run check-localstorage
 
 git add .

@@ -11,6 +11,7 @@ import SuperAdminScreen from './SuperAdminScreen';
 import { describe, test, expect, vi } from 'vitest';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
+const { clearAllItems } = useLocalStorage();
 
 // Mock LeftDrawer to prevent router-related errors from NavLink, useLocation, etc.
 vi.mock('components/LeftDrawer/LeftDrawer', () => ({
@@ -67,7 +68,7 @@ describe('Testing LeftDrawer in SuperAdminScreen', () => {
     setItem('name', 'John Doe');
   });
   afterAll(() => {
-    localStorage.clear();
+    clearAllItems();
   });
   test('Testing LeftDrawer in page functionality', async () => {
     render(
