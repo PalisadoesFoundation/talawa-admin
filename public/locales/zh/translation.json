@@ -1537,7 +1537,9 @@
     "addPledge": "添加承诺",
     "viewPledges": "查看承诺",
     "noPledges": "未找到承诺",
-    "noCampaigns": "未找到活动"
+    "noCampaigns": "未找到活动",
+    "raised": "已筹集",
+    "amountRaised": "已筹集金额"
   },
   "userPledges": {
     "title": "我的承诺"

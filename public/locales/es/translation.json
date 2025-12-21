@@ -1537,7 +1537,9 @@
     "addPledge": "Añadir Promesa",
     "viewPledges": "Ver Promesas",
     "noPledges": "No se encontraron promesas",
-    "noCampaigns": "No se encontraron campañas"
+    "noCampaigns": "No se encontraron campañas",
+    "raised": "Recaudado",
+    "amountRaised": "Monto Recaudado"
   },
   "userPledges": {
     "title": "Mis Promesas"
