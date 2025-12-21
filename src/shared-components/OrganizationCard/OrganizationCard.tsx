@@ -85,13 +85,13 @@ function OrganizationCard({
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
 
-  type MembershipState = 'member' | 'pending' | 'not_member';
+  type MembershipState = 'member' | 'pending' | 'notMember';
 
   const membershipState: MembershipState = isJoined
     ? 'member'
     : membershipRequestStatus === 'pending'
       ? 'pending'
-      : 'not_member';
+      : 'notMember';
 
   // Mutations for handling organization memberships
   const [sendMembershipRequest] = useMutation(SEND_MEMBERSHIP_REQUEST, {
@@ -210,6 +210,7 @@ function OrganizationCard({
                 </h4>
               </Tooltip>
               <output
+                role="status"
                 className={[
                   styles.statusChip,
                   membershipState === 'member'
