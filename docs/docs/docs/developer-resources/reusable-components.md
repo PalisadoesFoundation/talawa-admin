@@ -13,18 +13,18 @@ This guide outlines how to create and manage these components to ensure a unifie
 
 1. Admin UI:
    ```
-   components/AdminPortal/**
-   types/AdminPortal/**
+   src/components/AdminPortal/**
+   src/types/AdminPortal/**
    ```
 1. User UI
    ```
-   components/UserPortal/**
-   types/UserPortal/**
+   src/components/UserPortal/**
+   src/types/UserPortal/**
    ```
 1. Shared UI
    ```
-   shared-components/**
-   types/shared-components/**
+   src/shared-components/**
+   src/types/shared-components/**
    ```
 1. Props definitions
    - interface.ts only (no inline interfaces)
@@ -145,7 +145,7 @@ There are many reasons for this structure:
 
 ```ts
 // shared
-import { ProfileAvatarDisplay } from 'components/shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
+import { ProfileAvatarDisplay } from '/shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 // admin
 import { UserTableRow } from 'components/AdminPortal/UserTableRow/UserTableRow';
