@@ -409,4 +409,20 @@ describe('ProfileAvatarDisplay Component', () => {
     // Modal should NOT be visible
     expect(screen.queryByRole('dialog')).toBeNull();
   });
+
+  test('calls onLoad callback when image loads successfully', () => {
+    const onLoadMock = vi.fn();
+    const { getByAltText } = render(
+      <ProfileAvatarDisplay
+        {...defaultProps}
+        imageUrl="https://example.com/image.jpg"
+        onLoad={onLoadMock}
+      />,
+    );
+
+    const img = getByAltText('Profile picture of John Doe');
+    fireEvent.load(img);
+
+    expect(onLoadMock).toHaveBeenCalled();
+  });
 });
