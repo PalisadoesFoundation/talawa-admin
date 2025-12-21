@@ -224,9 +224,17 @@
     "placeholderAvatarAlt": "占位符头像"
   },
   "users": {
+    "membershipStatus": {
+      "member": "会员状态：已加入",
+      "pending": "会员状态：待处理",
+      "notMember": "会员状态：未加入"
+    },
     "title": "塔拉瓦角色",
     "joined_organizations": "加入组织",
     "blocked_organizations": "被阻止的组织",
+    "member": "成员",
+    "pending": "待处理",
+    "notMember": "非成员",
     "orgJoinedBy": "加入组织",
     "orgThatBlocked": "阻止的组织",
     "hasNotJoinedAnyOrg": "没有加入任何组织",
