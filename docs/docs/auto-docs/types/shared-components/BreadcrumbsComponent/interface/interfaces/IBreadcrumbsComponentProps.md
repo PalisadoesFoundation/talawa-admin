@@ -4,7 +4,7 @@
 
 # Interface: IBreadcrumbsComponentProps
 
-Defined in: [src/types/shared-components/BreadcrumbsComponent/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BreadcrumbsComponent/interface.ts#L41)
+Defined in: [src/types/shared-components/BreadcrumbsComponent/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BreadcrumbsComponent/interface.ts#L42)
 
 Props for the BreadcrumbsComponent.
 
@@ -14,7 +14,7 @@ Props for the BreadcrumbsComponent.
 
 > `optional` **ariaLabelTranslationKey**: `string`
 
-Defined in: [src/types/shared-components/BreadcrumbsComponent/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BreadcrumbsComponent/interface.ts#L54)
+Defined in: [src/types/shared-components/BreadcrumbsComponent/interface.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BreadcrumbsComponent/interface.ts#L55)
 
 Optional aria-label translation key for the navigation landmark.
 
@@ -29,6 +29,6 @@ Optional aria-label translation key for the navigation landmark.
 
 > **items**: [`IBreadcrumbItem`](IBreadcrumbItem.md)[]
 
-Defined in: [src/types/shared-components/BreadcrumbsComponent/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BreadcrumbsComponent/interface.ts#L45)
+Defined in: [src/types/shared-components/BreadcrumbsComponent/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BreadcrumbsComponent/interface.ts#L46)
 
 List of breadcrumb items to render.

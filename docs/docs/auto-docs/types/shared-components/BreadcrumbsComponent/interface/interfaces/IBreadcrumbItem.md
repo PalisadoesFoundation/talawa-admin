@@ -17,15 +17,16 @@ and current page marking for accessibility.
 
 > `optional` **isCurrent**: `boolean`
 
-Defined in: [src/types/shared-components/BreadcrumbsComponent/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BreadcrumbsComponent/interface.ts#L35)
+Defined in: [src/types/shared-components/BreadcrumbsComponent/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BreadcrumbsComponent/interface.ts#L36)
 
 Marks the breadcrumb as the current page.
 
 #### Remarks
 
-- If omitted, the last breadcrumb item is treated as current by default.
+- This flag is optional and evaluated at runtime by the BreadcrumbsComponent.
+- If omitted, the component treats the last breadcrumb item as current by convention.
 - If multiple items are marked `isCurrent: true`, the first encountered
-  current item will be rendered as the active breadcrumb.
+  item will be rendered as the active breadcrumb.
 
 Applies `aria-current="page"` for accessibility.
 

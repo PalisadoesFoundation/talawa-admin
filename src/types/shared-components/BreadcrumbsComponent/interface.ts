@@ -26,9 +26,10 @@ export interface IBreadcrumbItem {
    * Marks the breadcrumb as the current page.
    *
    * @remarks
-   * - If omitted, the last breadcrumb item is treated as current by default.
+   * - This flag is optional and evaluated at runtime by the BreadcrumbsComponent.
+   * - If omitted, the component treats the last breadcrumb item as current by convention.
    * - If multiple items are marked `isCurrent: true`, the first encountered
-   *   current item will be rendered as the active breadcrumb.
+   *   item will be rendered as the active breadcrumb.
    *
    * Applies `aria-current="page"` for accessibility.
    */

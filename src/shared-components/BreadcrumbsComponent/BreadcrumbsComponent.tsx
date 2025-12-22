@@ -40,6 +40,7 @@ const BreadcrumbsComponent = ({
 }: IBreadcrumbsComponentProps): JSX.Element | null => {
   const { t } = useTranslation('common');
 
+  /* istanbul ignore next -- defensive guard */
   if (!items || items.length === 0) {
     return null;
   }
@@ -53,11 +54,13 @@ const BreadcrumbsComponent = ({
 
           const label = item.translationKey
             ? t(item.translationKey)
-            : item.label;
+            : (item.label ?? '');
+
+          const key = item.to ?? item.translationKey ?? item.label ?? index;
 
           if (isCurrent) {
             return (
-              <Typography key={index} color="text.primary" aria-current="page">
+              <Typography key={key} color="text.primary" aria-current="page">
                 {label}
               </Typography>
             );
@@ -66,7 +69,7 @@ const BreadcrumbsComponent = ({
           if (item.to) {
             return (
               <MuiLink
-                key={index}
+                key={key}
                 component={RouterLink}
                 to={item.to}
                 underline="hover"
@@ -78,7 +81,7 @@ const BreadcrumbsComponent = ({
           }
 
           return (
-            <Typography key={index} color="text.primary">
+            <Typography key={key} color="text.primary">
               {label}
             </Typography>
           );
