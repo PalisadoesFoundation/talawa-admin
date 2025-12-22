@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/UserPortal/ContactCard/ContactCard.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ContactCard/ContactCard.tsx#L45)
+Defined in: [src/components/UserPortal/ContactCard/ContactCard.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ContactCard/ContactCard.tsx#L44)
 
 ## Parameters
 

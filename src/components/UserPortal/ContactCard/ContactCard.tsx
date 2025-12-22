@@ -39,7 +39,6 @@ import styles from './ContactCard.module.css';
 import Avatar from 'components/Avatar/Avatar';
 import { Badge } from 'react-bootstrap';
 import type { InterfaceContactCardProps } from 'types/Chat/interface';
-
 import { normalizeMinioUrl } from 'utils/minioUtils';
 
 function contactCard(props: InterfaceContactCardProps): JSX.Element {

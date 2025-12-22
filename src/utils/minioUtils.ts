@@ -1,6 +1,6 @@
 /**
  * Normalizes presigned URLs by replacing Docker internal hostnames with browser-accessible ones.
- *Specifically, it replaces "minio" with "localhost".
+ * Specifically, it replaces "minio" with "localhost".
  *
  * @param url - The presigned URL to normalize
  * @returns The normalized URL

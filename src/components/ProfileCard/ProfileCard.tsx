@@ -46,7 +46,6 @@ import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { resolveProfileNavigation } from 'utils/profileNavigation';
-
 import { normalizeMinioUrl } from 'utils/minioUtils';
 
 interface InterfaceProfileCardProps {

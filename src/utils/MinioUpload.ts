@@ -2,14 +2,14 @@ import { PRESIGNED_URL } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { calculateFileHash } from './filehash';
 
+import { normalizeMinioUrl } from './minioUtils';
+
 interface InterfaceMinioUpload {
   uploadFileToMinio: (
     file: File,
     organizationId: string,
   ) => Promise<{ objectName: string; fileHash: string }>;
 }
-
-import { normalizeMinioUrl } from './minioUtils';
 
 export const useMinioUpload = (): InterfaceMinioUpload => {
   const [generatePresignedUrl] = useMutation<{
@@ -46,7 +46,6 @@ export const useMinioUpload = (): InterfaceMinioUpload => {
       // Upload the file only if required
       if (requiresUpload && presignedUrl) {
         const normalizedUrl = normalizeMinioUrl(presignedUrl);
-        console.log('Attempting upload to:', normalizedUrl);
         const response = await fetch(normalizedUrl, {
           method: 'PUT',
           body: file,

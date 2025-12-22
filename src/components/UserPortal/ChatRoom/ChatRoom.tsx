@@ -55,6 +55,7 @@ import { useMinioDownload } from 'utils/MinioDownload';
 import type { GroupChat } from 'types/Chat/type';
 // import { toast } from 'react-toastify';
 // import { validateFile } from 'utils/fileValidation';
+import { normalizeMinioUrl } from 'utils/minioUtils';
 
 interface IChatRoomProps {
   selectedContact: string;
@@ -211,8 +212,6 @@ const MessageImageBase: React.FC<IMessageImageProps> = ({
 
 export const MessageImage = React.memo(MessageImageBase);
 
-import { normalizeMinioUrl } from 'utils/minioUtils';
-
 export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChatRoom',
@@ -366,7 +365,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     skip: !props.selectedContact,
   });
 
-  const loadMoreMessages = async (): Promise<void> => {
+  const loadMoreMessages = useCallback(async (): Promise<void> => {
     if (loadingMoreMessages || !hasMoreMessages || !chat) return;
 
     const pageInfo = chat.messages.pageInfo;
@@ -441,9 +440,15 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     } finally {
       setLoadingMoreMessages(false);
     }
-  };
+  }, [
+    loadingMoreMessages,
+    hasMoreMessages,
+    chat,
+    chatRefetch,
+    props.selectedContact,
+  ]);
 
-  const handleScroll = (): void => {
+  const handleScroll = useCallback((): void => {
     if (!messagesContainerRef.current) return;
 
     const el = messagesContainerRef.current;
@@ -452,7 +457,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     if (scrollTop < 100 && hasMoreMessages && !loadingMoreMessages) {
       loadMoreMessages();
     }
-  };
+  }, [hasMoreMessages, loadingMoreMessages, loadMoreMessages]);
   // const { refetch: chatListRefetch } = useQuery(CHATS_LIST, {
   //   variables: {
   //     id: userId,
@@ -651,7 +656,12 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       backfillAttemptsRef.current += 1;
       loadMoreMessages();
     }
-  }, [chat?.messages?.edges?.length, hasMoreMessages, loadingMoreMessages]);
+  }, [
+    chat?.messages?.edges?.length,
+    hasMoreMessages,
+    loadingMoreMessages,
+    loadMoreMessages,
+  ]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -769,7 +779,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                 src={normalizeMinioUrl(
                                   message.creator.avatarURL,
                                 )}
-                                alt={message.creator.avatarURL}
+                                alt={message.creator.name}
                                 className={styles.contactImage}
                                 crossOrigin="anonymous"
                               />

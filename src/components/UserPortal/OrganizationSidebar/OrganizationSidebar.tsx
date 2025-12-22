@@ -47,7 +47,6 @@ import type {
   InterfaceQueryOrganizationEventListItem,
   InterfaceMemberInfo,
 } from 'utils/interfaces';
-
 import { normalizeMinioUrl } from 'utils/minioUtils';
 
 export default function OrganizationSidebar(): JSX.Element {

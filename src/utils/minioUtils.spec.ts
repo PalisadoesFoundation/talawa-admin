@@ -1,9 +1,22 @@
+import { vi } from 'vitest';
 import { normalizeMinioUrl } from './minioUtils';
 
 describe('normalizeMinioUrl', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('should replace minio hostname with localhost', () => {
     const url = 'http://minio:9000/bucket/file';
     const expected = 'http://localhost:9000/bucket/file';
+    expect(normalizeMinioUrl(url)).toBe(expected);
+  });
+
+  it('should preserve query parameters (signatures)', () => {
+    const url =
+      'http://minio:9000/bucket/file?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Signature=123';
+    const expected =
+      'http://localhost:9000/bucket/file?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Signature=123';
     expect(normalizeMinioUrl(url)).toBe(expected);
   });
 
