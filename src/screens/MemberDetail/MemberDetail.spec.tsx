@@ -817,7 +817,9 @@ describe('MemberDetail', () => {
     // Simulate changing the country selection
     const countryTrigger = screen.getByTestId('inputCountry');
     await userEvent.click(countryTrigger);
-    const option = await screen.findByRole('option', { name: /United States/i });
+    const option = await screen.findByRole('option', {
+      name: /United States/i,
+    });
     await userEvent.click(option);
 
     expect(countryTrigger).toHaveTextContent(/United States/i);
