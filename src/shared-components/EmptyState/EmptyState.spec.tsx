@@ -68,7 +68,7 @@ describe('EmptyState Component', () => {
 
   it('has proper accessibility attributes', () => {
     renderEmptyState(emptyStateBaseMock);
-    const container = screen.getByTestId('empty-state');
+    const container = screen.getByRole('status');
     expect(container).toHaveAttribute('aria-label', 'noData');
   });
 
