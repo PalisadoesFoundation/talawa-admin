@@ -6,7 +6,7 @@ import type {
   InterfaceSortingOption,
 } from 'types/AdminSearchFilterBar/interface';
 
-vi.mock('subComponents/SearchBar', () => ({
+vi.mock('shared-components/SearchBar/SearchBar', () => ({
   default: vi.fn(
     ({ placeholder, value, onChange, onSearch, inputTestId, buttonTestId }) => (
       <div data-testid="mock-searchbar">
@@ -62,6 +62,7 @@ vi.mock('lodash', async () => {
     ...actual,
     debounce: vi.fn((fn) => {
       const debounced = (...args: unknown[]) => fn(...args);
+      debounced.cancel = vi.fn();
       return debounced;
     }),
   };

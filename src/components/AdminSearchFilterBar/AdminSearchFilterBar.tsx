@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { debounce } from 'lodash';
 import { useTranslation } from 'react-i18next';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
 import type {
   InterfaceAdminSearchFilterBarProps,
@@ -44,6 +44,8 @@ const AdminSearchFilterBar: React.FC<InterfaceAdminSearchFilterBarProps> = ({
     searchButtonAriaLabel:
       customTranslations?.searchButtonAriaLabel || tCommon('search'),
     clearSearchLabel: customTranslations?.clearSearchLabel || tCommon('clear'),
+    clearButtonAriaLabel:
+      customTranslations?.clearButtonAriaLabel || tCommon('clear'),
     loadingLabel: customTranslations?.loadingLabel || tCommon('loading'),
     noResultsLabel:
       customTranslations?.noResultsLabel || tCommon('noResultsFound'),
@@ -105,6 +107,7 @@ const AdminSearchFilterBar: React.FC<InterfaceAdminSearchFilterBarProps> = ({
         inputTestId={searchInputTestId}
         buttonTestId={searchButtonTestId}
         buttonAriaLabel={translations.searchButtonAriaLabel}
+        clearButtonAriaLabel={translations.clearButtonAriaLabel}
         aria-describedby="admin-search-desc"
       />
       {(dropdowns?.length || additionalButtons) && (

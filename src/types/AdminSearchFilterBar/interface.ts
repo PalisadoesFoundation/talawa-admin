@@ -341,6 +341,9 @@ export interface InterfaceAdminSearchFilterBarTranslations {
   /** Clear search button text/label */
   clearSearchLabel?: string;
 
+  /** Clear button accessible label (screen readers) */
+  clearButtonAriaLabel?: string;
+
   /** Loading state text */
   loadingLabel?: string;
 

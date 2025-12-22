@@ -100,9 +100,6 @@
   "createdEarliest": "Créé le plus tôt",
   "searchBy": "Rechercher par {{item}}",
   "plugins": "Extensions",
-  "pluginSettings": "Paramètres des Extensions",
-  "unblock": "Débloquer",
-  "unblockedSuccessfully": "{{item}} débloqué avec succès",
   "save": "Enregistrer",
   "saving": "Enregistrement...",
   "sl_no": "N° de série",
@@ -111,5 +108,9 @@
   "profilePicture": "Photo de profil",
   "profilePicturePlaceholder": "Image factice",
   "userProfileMenu": "Menu du profil utilisateur",
-  "breadcrumbs": "Fil d’Ariane"
+  "breadcrumbs": "Fil d’Ariane",
+  "toggleOptions": "Basculer les options",
+  "filterAndSortOptions": "Options de filtrage et de tri",
+  "clear": "Effacer",
+  "noResultsFound": "Aucun résultat trouvé"
 }

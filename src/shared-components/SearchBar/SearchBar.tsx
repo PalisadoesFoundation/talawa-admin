@@ -30,7 +30,7 @@ const mergeClassNames = (
 const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
   (props, ref) => {
     const {
-      placeholder = 'Search...',
+      placeholder,
       value,
       defaultValue = '',
       onSearch,
@@ -49,6 +49,7 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
       showLeadingIcon = false,
       buttonLabel = '',
       buttonAriaLabel,
+      clearButtonAriaLabel,
       isLoading = false,
       icon,
       disabled = false,
@@ -218,7 +219,7 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
             <button
               type="button"
               className={styles.searchBarClearButton}
-              aria-label="Clear search"
+              aria-label={clearButtonAriaLabel || 'Clear search'}
               onClick={handleClear}
               data-testid={clearButtonTestId}
             >

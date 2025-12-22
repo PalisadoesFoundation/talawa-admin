@@ -12,6 +12,16 @@ providing sensible defaults for accessibility and common UI elements.
 
 ## Properties
 
+### clearButtonAriaLabel?
+
+> `optional` **clearButtonAriaLabel**: `string`
+
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:345](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L345)
+
+Clear button accessible label (screen readers)
+
+***
+
 ### clearSearchLabel?
 
 > `optional` **clearSearchLabel**: `string`
@@ -26,7 +36,7 @@ Clear search button text/label
 
 > `optional` **dropdownAriaLabel**: `string`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:354](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L354)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:357](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L357)
 
 Dropdown toggle accessible label pattern
 
@@ -36,7 +46,7 @@ Dropdown toggle accessible label pattern
 
 > `optional` **filterAndSortOptionsLabel**: `string`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:363](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L363)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:366](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L366)
 
 Filter and sort options toolbar accessible label
 
@@ -46,7 +56,7 @@ Filter and sort options toolbar accessible label
 
 > `optional` **filterButtonAriaLabel**: `string`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:360](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L360)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:363](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L363)
 
 Filter button accessible label
 
@@ -56,7 +66,7 @@ Filter button accessible label
 
 > `optional` **loadingLabel**: `string`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:345](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L345)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:348](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L348)
 
 Loading state text
 
@@ -66,7 +76,7 @@ Loading state text
 
 > `optional` **noResultsLabel**: `string`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:348](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L348)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:351](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L351)
 
 No results found message
 
@@ -86,7 +96,7 @@ Search button accessible label (screen readers)
 
 > `optional` **searchInputAriaDescription**: `string`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:351](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L351)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:354](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L354)
 
 Search input accessible description
 
@@ -96,6 +106,6 @@ Search input accessible description
 
 > `optional` **sortButtonAriaLabel**: `string`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:357](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L357)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:360](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L360)
 
 Sort button accessible label
