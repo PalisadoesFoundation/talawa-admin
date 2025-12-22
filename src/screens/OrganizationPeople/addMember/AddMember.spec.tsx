@@ -158,7 +158,7 @@ const createRegisterMutationMock = (variables: Record<string, unknown>) => {
             id: 'newUser1',
             name:
               'name' in defaultVariables &&
-              typeof defaultVariables.name === 'string'
+                typeof defaultVariables.name === 'string'
                 ? defaultVariables.name
                 : 'New User',
           },
@@ -450,8 +450,8 @@ describe('AddMember Component', () => {
     // Wait for the modal to be visible
     await screen.findByTestId('addExistingUserModal');
 
-    // Enter search term
-    const searchInput = screen.getByTestId('searchUser');
+    // Wait for loadingh to complete and search input to appear
+    const searchInput = await screen.findByTestId('searchUser');
     fireEvent.change(searchInput, { target: { value: 'John' } });
     expect(searchInput).toHaveValue('John');
 

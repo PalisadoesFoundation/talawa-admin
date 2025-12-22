@@ -2,6 +2,7 @@ import React from 'react';
 import { describe, it, vi, expect } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing/react';
+import type { MockedResponse } from '@apollo/client/testing';
 import { InMemoryCache } from '@apollo/client';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
@@ -137,7 +138,7 @@ describe('SidebarOrgSection Component', () => {
 
   const renderComponent = (
     props: Partial<ISidebarOrgSectionProps> = {},
-    mocks = successMocks,
+    mocks: MockedResponse[] = successMocks,
   ) => {
     const defaultProps = {
       orgId: mockOrgId,

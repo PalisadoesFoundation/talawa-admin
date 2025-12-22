@@ -49,7 +49,7 @@
  *
  */
 
-import { useQuery } from '@apollo/client/react';
+import { useQuery, useMutation } from '@apollo/client/react';
 import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -122,13 +122,13 @@ const Requests = (): JSX.Element => {
 
   // Query to fetch membership requests
   const { data, loading, fetchMore, refetch } = useQuery<any>(
-    MEMBERSHIP_REQUEST,
+    MEMBERSHIP_REQUEST_PG,
     {
       variables: {
         input: {
           id: organizationId,
         },
-        first: perPageResult,
+        first: PAGE_SIZE,
         skip: 0,
         name_contains: '',
       },

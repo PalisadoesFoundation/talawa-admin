@@ -1,3 +1,4 @@
+import React from 'react';
 import { MockLink } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -167,6 +168,7 @@ const mockActionItem: IActionItemInfo = {
   preCompletionNotes: 'Notes 1',
   postCompletionNotes: 'Post Notes 1',
   isInstanceException: false,
+  isTemplate: false,
 
   volunteer: {
     id: 'volunteerId1',
@@ -975,7 +977,25 @@ describe('EventActionItems', () => {
     });
 
     it('should filter to show only completed items', async () => {
-      renderEventActionItems();
+      // Provide multiple mock responses to handle refetches
+      const mocksWithMultipleResponses = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockEventData },
+        },
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockEventData },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocksWithMultipleResponses);
 
       // Initially both items visible
       await waitFor(() => {
