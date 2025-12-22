@@ -17,7 +17,6 @@ import type { InterfaceEvent } from 'types/Event/interface';
 import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import { vi, it, describe, beforeEach, afterEach } from 'vitest';
-import { getPickerInputByLabel } from 'test-utils/datePickerHelpers';
 
 const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
@@ -27,6 +26,23 @@ const toastMocks = vi.hoisted(() => ({
 vi.mock('react-toastify', () => ({
   toast: toastMocks,
 }));
+
+export const getPickerInputByLabel = (label: string): HTMLElement => {
+  const allInputs = screen.getAllByRole('textbox', { hidden: true });
+  for (const input of allInputs) {
+    const formControl = input.closest('.MuiFormControl-root');
+    if (formControl) {
+      const labelEl = formControl.querySelector('label');
+      if (labelEl) {
+        const labelText = labelEl.textContent?.toLowerCase() || '';
+        if (labelText.includes(label.toLowerCase())) {
+          return formControl as HTMLElement;
+        }
+      }
+    }
+  }
+  throw new Error(`Could not find date picker for label: ${label}`);
+};
 
 const t = JSON.parse(
   JSON.stringify(
