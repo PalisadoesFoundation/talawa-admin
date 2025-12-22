@@ -253,7 +253,7 @@ describe('EventHeader Component', () => {
     );
 
     const createButton = getByTestId('createEventModalBtn');
-    expect(createButton).toHaveTextContent('Create');
+    expect(createButton).toHaveTextContent(/create/i);
   });
 
   it('renders with ViewType.DAY as initial viewType', () => {

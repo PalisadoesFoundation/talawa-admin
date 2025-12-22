@@ -1874,8 +1874,8 @@ export interface InterfaceCampaignInfo {
  * @property {Date} campaign.endDate - The end date of the campaign.
  * @property {number} amount - The amount of the pledge.
  * @property {string} currency - The currency of the pledge.
- * @property {string} endDate - The end date of the pledge.
- * @property {string} startDate - The start date of the pledge.
+ * @property {string} createdAt - The date the pledge was created.
+ * @property {string} updatedAt - The date the pledge was last updated.
  * @property {InterfaceUserInfoPG[]} users - An array of user information associated with the pledge.
  */
 export interface InterfacePledgeInfo {
@@ -1890,8 +1890,8 @@ export interface InterfacePledgeInfo {
   amount: number;
   note?: string | null;
   currency: string;
-  endDate: string;
-  startDate: string;
+  createdAt: string;
+  updatedAt?: string;
   /**
    * The primary pledger who made this pledge
    */
@@ -1913,9 +1913,9 @@ export interface InterfacePledgeInfo {
  * @property {Date} campaign.endDate - The end date of the campaign.
  * @property {number} amount - The amount of the pledge.
  * @property {string} currencyCode - The currency code of the pledge.
- * @property {string} endAt - The end date of the pledge.
- * @property {string} startAt - The start date of the pledge.
- * @property {InterfaceUserInfoPG[]} pledges - An array of user information associated with the pledges.
+ * @property {string} createdAt - The date the pledge was created.
+ * @property {string} [updatedAt] - The date the pledge was last updated.
+ * @property {InterfaceUserInfoPG} pledger - The pledger information.
  */
 export interface InterfacePledgeInfoPG {
   id: string;
@@ -1928,8 +1928,8 @@ export interface InterfacePledgeInfoPG {
   };
   amount: number;
   currencyCode: string;
-  endAt: string;
-  startAt: string;
+  createdAt: string;
+  updatedAt?: string;
   pledger: InterfaceUserInfoPG;
 }
 
@@ -2330,15 +2330,11 @@ export interface InterfaceCommentEdge {
  * @property {InterfaceUserInfoPG[]} pledgeUsers - An array of user information for the pledgers.
  * @property {number} pledgeAmount - The amount of the pledge.
  * @property {string} pledgeCurrency - The currency of the pledge.
- * @property {Date} pledgeStartDate - The start date of the pledge.
- * @property {Date} pledgeEndDate - The end date of the pledge.
  */
 export interface InterfaceCreatePledge {
   pledgeUsers: InterfaceUserInfoPG[];
   pledgeAmount: number;
   pledgeCurrency: string;
-  pledgeStartDate: Date;
-  pledgeEndDate: Date;
 }
 
 /**

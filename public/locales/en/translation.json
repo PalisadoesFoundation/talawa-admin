@@ -224,6 +224,14 @@
     "placeholderAvatarAlt": "Placeholder avatar"
   },
   "users": {
+    "membershipStatus": {
+      "member": "Membership status: Member",
+      "pending": "Membership status: Pending",
+      "notMember": "Membership status: Not a member"
+    },
+    "member": "Member",
+    "pending": "Pending",
+    "notMember": "Not a member",
     "title": "Talawa Roles",
     "joined_organizations": "Joined Organizations",
     "blocked_organizations": "Blocked Organizations",
@@ -737,6 +745,7 @@
     "pledgedAmount": "Pledged amount",
     "startDate": "startDate",
     "endDate": "endDate",
+    "searchByPlaceholder": "Search by {{field}}",
     "selectPledger": "Please select a pledger"
   },
   "orgPost": {
@@ -1078,7 +1087,13 @@
   "people": {
     "title": "People",
     "searchUsers": "Search users",
-    "nothingToShow": "Nothing to show here"
+    "nothingToShow": "Nothing to show here",
+    "sNo": "S.No",
+    "avatar": "Avatar",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "loading": "Loading..."
   },
   "userLogin": {
     "login": "Login",
@@ -1137,7 +1152,8 @@
     "search": "search",
     "filter": "filter",
     "searchByName": "Search by Name",
-    "searchOrganizations": "Search Organization"
+    "searchOrganizations": "Search Organization",
+    "loading": "Loading..."
   },
   "userSidebarOrg": {
     "yourOrganizations": "Your Organizations",
@@ -1537,7 +1553,9 @@
     "addPledge": "Add Pledge",
     "viewPledges": "View Pledges",
     "noPledges": "No Pledges Found",
-    "noCampaigns": "No Campaigns Found"
+    "noCampaigns": "No Campaigns Found",
+    "raised": "Raised",
+    "amountRaised": "Amount Raised"
   },
   "userPledges": {
     "title": "My Pledges"
@@ -1626,7 +1644,21 @@
     "groupInvitationSubject": "Invitation to join volunteer group",
     "eventInvitationSubject": "Invitation to volunteer for event",
     "groupInvitationRecurringSubject": "Invitation to join volunteer group for recurring event series",
-    "eventInvitationRecurringSubject": "Invitation to volunteer for recurring event series"
+    "eventInvitationRecurringSubject": "Invitation to volunteer for recurring event series",
+    "assignee": "Assignee",
+    "group": "Group",
+    "event": "Event",
+    "received": "Received",
+    "location": "Location",
+    "recurrence": "Recurrence",
+    "endDate": "End Date",
+    "description": "Description",
+    "volunteerGroups": "Volunteer Groups",
+    "groupTable": "Group Table",
+    "srNo": "Sr. No.",
+    "groupName": "Group Name",
+    "noOfMembers": "No. of Members",
+    "options": "Options"
   },
   "pluginStore": {
     "title": "Plugin Store",
@@ -1661,5 +1693,10 @@
     "deleteComment": "Delete Comment",
     "deleting": "Deleting…",
     "emptyCommentError": "Please enter a comment before submitting."
+  },
+  "common": {
+    "signOut": "Sign out",
+    "signingOut": "Signing out...",
+    "retryPrompt": "Failed to revoke session. Retry?"
   }
 }

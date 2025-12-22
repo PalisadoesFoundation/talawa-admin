@@ -54,6 +54,16 @@ The campaign associated with the pledge (optional).
 
 ***
 
+### createdAt
+
+> **createdAt**: `string`
+
+Defined in: [src/utils/interfaces.ts:1931](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1931)
+
+The date the pledge was created.
+
+***
+
 ### currencyCode
 
 > **currencyCode**: `string`
@@ -61,16 +71,6 @@ The campaign associated with the pledge (optional).
 Defined in: [src/utils/interfaces.ts:1930](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1930)
 
 The currency code of the pledge.
-
-***
-
-### endAt
-
-> **endAt**: `string`
-
-Defined in: [src/utils/interfaces.ts:1931](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1931)
-
-The end date of the pledge.
 
 ***
 
@@ -90,12 +90,14 @@ The unique identifier of the pledge.
 
 Defined in: [src/utils/interfaces.ts:1933](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1933)
 
+The pledger information.
+
 ***
 
-### startAt
+### updatedAt?
 
-> **startAt**: `string`
+> `optional` **updatedAt**: `string`
 
 Defined in: [src/utils/interfaces.ts:1932](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1932)
 
-The start date of the pledge.
+The date the pledge was last updated.
