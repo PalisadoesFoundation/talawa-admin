@@ -481,7 +481,6 @@ class TestCheckFiles(unittest.TestCase):
             f.write("const bg = '#00ff00';")
 
         result = check_files([self.test_dir], [explicit_file], [], [])
-        # Should find violations in both, but explicit file might be counted once
         self.assertGreaterEqual(len(result.violations), 2)
 
     def test_returns_css_check_result(self):
