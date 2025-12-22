@@ -587,13 +587,10 @@ describe('Recurrence Utility Functions', () => {
       }
     });
 
-    it('should handle out of range indices gracefully', () => {
-      // The function uses Days array which has 7 elements (0-6)
-      // Testing with index 7 should still work if Days array is accessed with modulo or bounds
-      // But based on the implementation, it directly accesses Days[dayIndex], so it might return undefined
-      // Let's test the actual behavior
-      expect(() => getDayName(7)).not.toThrow();
-      expect(() => getDayName(-1)).not.toThrow();
+    it('should return undefined for out of range indices', () => {
+      // Days array has 7 elements (0-6), accessing beyond returns undefined
+      expect(getDayName(7)).toBeUndefined();
+      expect(getDayName(-1)).toBeUndefined();
     });
   });
 
