@@ -110,5 +110,6 @@
   "notFound": "No encontrado",
   "profilePicture": "Foto de perfil",
   "profilePicturePlaceholder": "Imagen de prueba",
-  "userProfileMenu": "Menú de perfil de usuario"
+  "userProfileMenu": "Menú de perfil de usuario",
+  "breadcrumbs": "Migas de navegación"
 }
