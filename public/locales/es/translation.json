@@ -1694,6 +1694,11 @@
     "deleting": "Eliminando...",
     "emptyCommentError": "Por favor ingrese un comentario antes de enviar."
   },
+  "profileAvatar": {
+    "altText": "Foto de perfil de {{name}}",
+    "modalTitle": "Foto de perfil",
+    "enlargedAltText": "Foto de perfil ampliada de {{name}}"
+  },
   "common": {
     "signOut": "Cerrar sesión",
     "signingOut": "Cerrando sesión...",
