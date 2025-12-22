@@ -1,0 +1,51 @@
+:root {
+  /* Primary Colors */
+  --color-primary: #1778f2;
+  --color-primary-dark: #286fe0;
+  --color-primary-light: #a8c7fa;
+  --color-primary-very-light: #d3e3fd; /* Use for #e7f0fe */
+
+  /* Semantic Colors */
+  --color-success: #31bb6b;
+  --color-success-20: #31bb6b33;
+  --color-danger: #ff4d4f; /* Use for #c8102e */
+  --color-danger-light: #f8d6dc;
+  --color-interactive: #0000ff;
+
+  /* Neutrals */
+  --color-gray-900: #000000;
+  --color-gray-800: #4b5563;
+  --color-gray-700: #555555;
+  --color-gray-600: #6c757d;
+  --color-gray-500: #707070;
+  --color-gray-400: #808080;
+  --color-gray-200: #9ca3af;
+  --color-gray-100: #b5b5b5;
+  --color-gray-50: #d1d5db;
+  --color-gray-25: #d2d3d7;
+  --color-gray-10: #dddddd;
+  --color-gray-5: #e6e6e6;
+  --color-gray-0: #eaebef;
+
+  /* Backgrounds */
+  --color-white: #ffffff;
+  --color-offwhite: #fcfcfc;
+  --color-background-light: #f8f9fa;
+  --color-background-pale: #e0e9ff;
+  --color-background-gray: #e0e5ec;
+  --color-border-gray: #e8e5e5;
+
+  /* Accents and other colors */
+  --color-blue-pastel: #7c9beb;
+  --color-blue-gray: #5f7e91;
+  --color-blue-deep: #0056b3;
+
+  /* Transparent/rgba colors (for overlays, shadows, scrolls) */
+  --color-primary-transparent: rgba(168, 199, 250, 1);
+  --color-shadow-light: rgba(60, 64, 67, 0.15);
+  --color-shadow-medium: rgba(0, 0, 0, 0.25);
+  --color-shadow-soft: rgba(0, 0, 0, 0.075);
+  --color-scroll-gray: rgba(0, 0, 0, 0.16); /* From #00000029 */
+  --color-overlay-light: rgba(245, 245, 245, 0.7);
+  --color-white-transparent: rgba(255, 255, 255, 0.59); /* From #ffffff97 */
+}
