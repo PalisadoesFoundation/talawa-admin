@@ -10,8 +10,7 @@ from io import StringIO
 import shutil
 
 sys.path.insert(
-    0,
-    os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+    0, os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 )
 
 from css_check import (
@@ -24,6 +23,7 @@ from css_check import (
     CSSCheckResult,
     main,
 )
+
 
 class TestCheckEmbeddedStyles(unittest.TestCase):
     """Test suite for check_embedded_styles function."""
@@ -38,10 +38,14 @@ class TestCheckEmbeddedStyles(unittest.TestCase):
 
     def test_detects_multiple_hex_colors(self):
         """Test detection of multiple hex colors in one line."""
-        content = "const colors = { primary: '#ff0000', secondary: '#00ff00' };"
+        content = (
+            "const colors = { primary: '#ff0000', secondary: '#00ff00' };"
+        )
         violations = check_embedded_styles(content, "test.tsx")
         self.assertEqual(len(violations), 2)
-        self.assertTrue(all(v.violation_type == "hex_color" for v in violations))
+        self.assertTrue(
+            all(v.violation_type == "hex_color" for v in violations)
+        )
 
     def test_detects_rgb_color(self):
         """Test detection of RGB color codes."""
@@ -90,21 +94,27 @@ class TestCheckEmbeddedStyles(unittest.TestCase):
         content = "const styles = { fontSize: '16px' };"
         violations = check_embedded_styles(content, "test.tsx")
         self.assertEqual(len(violations), 2)
-        self.assertEqual(violations[0].violation_type, "camelcase_css_property")
+        self.assertEqual(
+            violations[0].violation_type, "camelcase_css_property"
+        )
 
     def test_detects_camelcase_margin_top(self):
         """Test detection of camelCase CSS property marginTop."""
         content = "const styles = { marginTop: '10px' };"
         violations = check_embedded_styles(content, "test.tsx")
         self.assertEqual(len(violations), 2)
-        self.assertEqual(violations[0].violation_type, "camelcase_css_property")
+        self.assertEqual(
+            violations[0].violation_type, "camelcase_css_property"
+        )
 
     def test_detects_camelcase_padding_left(self):
         """Test detection of camelCase CSS property paddingLeft."""
         content = "const styles = { paddingLeft: '5px' };"
         violations = check_embedded_styles(content, "test.tsx")
         self.assertEqual(len(violations), 2)
-        self.assertEqual(violations[0].violation_type, "camelcase_css_property")
+        self.assertEqual(
+            violations[0].violation_type, "camelcase_css_property"
+        )
 
     def test_detects_pixel_value(self):
         """Test detection of pixel values in style context."""
@@ -204,7 +214,11 @@ class TestCheckEmbeddedStyles(unittest.TestCase):
         content = "const backgroundColor = 'someValue';"
         violations = check_embedded_styles(content, "test.tsx")
         # Should not flag variable names, only in style objects
-        camelcase_violations = [v for v in violations if v.violation_type == "camelcase_css_property"]
+        camelcase_violations = [
+            v
+            for v in violations
+            if v.violation_type == "camelcase_css_property"
+        ]
         self.assertEqual(len(camelcase_violations), 0)
 
     def test_camelcase_in_object_with_brace(self):
@@ -212,14 +226,18 @@ class TestCheckEmbeddedStyles(unittest.TestCase):
         content = "{ backgroundColor: 'red' }"
         violations = check_embedded_styles(content, "test.tsx")
         self.assertEqual(len(violations), 1)
-        self.assertEqual(violations[0].violation_type, "camelcase_css_property")
+        self.assertEqual(
+            violations[0].violation_type, "camelcase_css_property"
+        )
 
     def test_pixel_value_without_style_context_ignored(self):
         """Test that pixel values without style context are ignored."""
         content = "const version = '100px';"
         violations = check_embedded_styles(content, "test.tsx")
         # Should not flag without style context
-        pixel_violations = [v for v in violations if v.violation_type == "pixel_value"]
+        pixel_violations = [
+            v for v in violations if v.violation_type == "pixel_value"
+        ]
         self.assertEqual(len(pixel_violations), 0)
 
     def test_pixel_value_with_width_keyword(self):
@@ -230,12 +248,15 @@ class TestCheckEmbeddedStyles(unittest.TestCase):
 
     def test_multiple_violation_types_in_one_line(self):
         """Test detection of multiple violation types in a single line."""
-        content = "const style = { backgroundColor: '#ff0000', fontSize: '16px' };"
+        content = (
+            "const style = { backgroundColor: '#ff0000', fontSize: '16px' };"
+        )
         violations = check_embedded_styles(content, "test.tsx")
         self.assertGreaterEqual(len(violations), 3)  # hex, camelcase, pixel
         violation_types = {v.violation_type for v in violations}
         self.assertIn("hex_color", violation_types)
         self.assertIn("camelcase_css_property", violation_types)
+
 
 class TestProcessTypescriptFile(unittest.TestCase):
     """Test suite for process_typescript_file function."""
@@ -253,7 +274,7 @@ class TestProcessTypescriptFile(unittest.TestCase):
         file_path = os.path.join(self.test_dir, "test.tsx")
         with open(file_path, "w") as f:
             f.write("const color = '#ff0000';")
-        
+
         violations = []
         process_typescript_file(file_path, violations)
         self.assertEqual(len(violations), 1)
@@ -264,7 +285,7 @@ class TestProcessTypescriptFile(unittest.TestCase):
         file_path = os.path.join(self.test_dir, "empty.tsx")
         with open(file_path, "w") as f:
             f.write("")
-        
+
         violations = []
         process_typescript_file(file_path, violations)
         self.assertEqual(len(violations), 0)
@@ -274,7 +295,7 @@ class TestProcessTypescriptFile(unittest.TestCase):
         file_path = os.path.join(self.test_dir, "clean.tsx")
         with open(file_path, "w") as f:
             f.write("const name = 'test';\nimport React from 'react';")
-        
+
         violations = []
         process_typescript_file(file_path, violations)
         self.assertEqual(len(violations), 0)
@@ -283,11 +304,11 @@ class TestProcessTypescriptFile(unittest.TestCase):
         """Test handling of non-existent file."""
         file_path = os.path.join(self.test_dir, "nonexistent.tsx")
         violations = []
-        
-        with patch('sys.stderr', new_callable=StringIO) as mock_stderr:
+
+        with patch("sys.stderr", new_callable=StringIO) as mock_stderr:
             process_typescript_file(file_path, violations)
             self.assertIn("Error reading file", mock_stderr.getvalue())
-        
+
         self.assertEqual(len(violations), 0)
 
     def test_handles_unicode_decode_error(self):
@@ -295,14 +316,14 @@ class TestProcessTypescriptFile(unittest.TestCase):
         file_path = os.path.join(self.test_dir, "bad_encoding.tsx")
         # Create a file with invalid UTF-8
         with open(file_path, "wb") as f:
-            f.write(b'\xff\xfe')
-        
+            f.write(b"\xff\xfe")
+
         violations = []
-        with patch('sys.stderr', new_callable=StringIO) as mock_stderr:
+        with patch("sys.stderr", new_callable=StringIO) as mock_stderr:
             process_typescript_file(file_path, violations)
             output = mock_stderr.getvalue()
             self.assertIn("Error reading file", output)
-        
+
         self.assertEqual(len(violations), 0)
 
     def test_appends_to_existing_violations_list(self):
@@ -310,16 +331,16 @@ class TestProcessTypescriptFile(unittest.TestCase):
         file_path = os.path.join(self.test_dir, "test.tsx")
         with open(file_path, "w") as f:
             f.write("const color = '#ff0000';")
-        
+
         existing_violation = DetailedViolation(
             file_path="other.tsx",
             line_number=1,
             violation_type="test",
             code_snippet="test",
-            description="test"
+            description="test",
         )
         violations = [existing_violation]
-        
+
         process_typescript_file(file_path, violations)
         self.assertEqual(len(violations), 2)
         self.assertEqual(violations[0], existing_violation)
@@ -343,7 +364,7 @@ class TestCheckFiles(unittest.TestCase):
         file_path = os.path.join(self.test_dir, "test.tsx")
         with open(file_path, "w") as f:
             f.write("const color = '#ff0000';")
-        
+
         result = check_files([self.test_dir], [], [], [])
         self.assertEqual(len(result.violations), 1)
 
@@ -352,7 +373,7 @@ class TestCheckFiles(unittest.TestCase):
         file_path = os.path.join(self.test_dir, "test.ts")
         with open(file_path, "w") as f:
             f.write("const color = '#ff0000';")
-        
+
         result = check_files([self.test_dir], [], [], [])
         self.assertEqual(len(result.violations), 1)
 
@@ -361,7 +382,7 @@ class TestCheckFiles(unittest.TestCase):
         file_path = os.path.join(self.subdir, "nested.tsx")
         with open(file_path, "w") as f:
             f.write("const color = '#ff0000';")
-        
+
         result = check_files([self.test_dir], [], [], [])
         self.assertEqual(len(result.violations), 1)
 
@@ -370,7 +391,7 @@ class TestCheckFiles(unittest.TestCase):
         file_path = os.path.join(self.test_dir, "component.test.tsx")
         with open(file_path, "w") as f:
             f.write("const color = '#ff0000';")
-        
+
         result = check_files([self.test_dir], [], [], [])
         self.assertEqual(len(result.violations), 0)
 
@@ -381,7 +402,7 @@ class TestCheckFiles(unittest.TestCase):
         file_path = os.path.join(tests_dir, "test.tsx")
         with open(file_path, "w") as f:
             f.write("const color = '#ff0000';")
-        
+
         result = check_files([self.test_dir], [], [], [])
         self.assertEqual(len(result.violations), 1)
 
@@ -392,7 +413,7 @@ class TestCheckFiles(unittest.TestCase):
         file_path = os.path.join(test_dir, "component.tsx")
         with open(file_path, "w") as f:
             f.write("const color = '#ff0000';")
-        
+
         result = check_files([self.test_dir], [], [], [])
         self.assertEqual(len(result.violations), 1)
 
@@ -401,7 +422,7 @@ class TestCheckFiles(unittest.TestCase):
         file_path = os.path.join(self.test_dir, "explicit.tsx")
         with open(file_path, "w") as f:
             f.write("const color = '#ff0000';")
-        
+
         result = check_files([], [file_path], [], [])
         self.assertEqual(len(result.violations), 1)
 
@@ -409,12 +430,12 @@ class TestCheckFiles(unittest.TestCase):
         """Test excluding specific files."""
         file1 = os.path.join(self.test_dir, "include.tsx")
         file2 = os.path.join(self.test_dir, "exclude.tsx")
-        
+
         with open(file1, "w") as f:
             f.write("const color = '#ff0000';")
         with open(file2, "w") as f:
             f.write("const color = '#00ff00';")
-        
+
         result = check_files([self.test_dir], [], [file2], [])
         self.assertEqual(len(result.violations), 1)
         self.assertIn("include.tsx", result.violations[0].file_path)
@@ -423,15 +444,15 @@ class TestCheckFiles(unittest.TestCase):
         """Test excluding entire directories."""
         exclude_dir = os.path.join(self.test_dir, "exclude")
         os.makedirs(exclude_dir)
-        
+
         file1 = os.path.join(self.test_dir, "include.tsx")
         file2 = os.path.join(exclude_dir, "exclude.tsx")
-        
+
         with open(file1, "w") as f:
             f.write("const color = '#ff0000';")
         with open(file2, "w") as f:
             f.write("const color = '#00ff00';")
-        
+
         result = check_files([self.test_dir], [], [], [exclude_dir])
         self.assertEqual(len(result.violations), 1)
         self.assertIn("include.tsx", result.violations[0].file_path)
@@ -440,12 +461,12 @@ class TestCheckFiles(unittest.TestCase):
         """Test that non-TypeScript files are ignored."""
         js_file = os.path.join(self.test_dir, "test.js")
         py_file = os.path.join(self.test_dir, "test.py")
-        
+
         with open(js_file, "w") as f:
             f.write("const color = '#ff0000';")
         with open(py_file, "w") as f:
             f.write("color = '#00ff00'")
-        
+
         result = check_files([self.test_dir], [], [], [])
         self.assertEqual(len(result.violations), 0)
 
@@ -453,12 +474,12 @@ class TestCheckFiles(unittest.TestCase):
         """Test combining results from directories and explicit files."""
         dir_file = os.path.join(self.test_dir, "dir.tsx")
         explicit_file = os.path.join(self.test_dir, "explicit.tsx")
-        
+
         with open(dir_file, "w") as f:
             f.write("const color = '#ff0000';")
         with open(explicit_file, "w") as f:
             f.write("const bg = '#00ff00';")
-        
+
         result = check_files([self.test_dir], [explicit_file], [], [])
         # Should find violations in both, but explicit file might be counted once
         self.assertGreaterEqual(len(result.violations), 2)
@@ -474,10 +495,11 @@ class TestCheckFiles(unittest.TestCase):
         file_path = os.path.join(self.test_dir, "test.tsx")
         with open(file_path, "w") as f:
             f.write("const color = '#ff0000';")
-        
+
         abs_path = os.path.abspath(file_path)
         result = check_files([], [abs_path], [], [])
         self.assertEqual(len(result.violations), 1)
+
 
 class TestValidateDirectoriesInput(unittest.TestCase):
     """Test suite for validate_directories_input function."""
@@ -499,6 +521,7 @@ class TestValidateDirectoriesInput(unittest.TestCase):
         self.assertEqual(len(result), 1)
         self.assertEqual(result[0], self.test_dir)
 
+
 class TestFormatViolationOutput(unittest.TestCase):
     """Test suite for format_violation_output function."""
 
@@ -514,10 +537,10 @@ class TestFormatViolationOutput(unittest.TestCase):
             line_number=10,
             violation_type="hex_color",
             code_snippet="#ff0000",
-            description="Hex color found"
+            description="Hex color found",
         )
         result = format_violation_output([violation])
-        
+
         self.assertIn("EMBEDDED CSS VIOLATIONS FOUND", result)
         self.assertIn("/path/to/file.tsx", result)
         self.assertIn("Line 10", result)
@@ -535,18 +558,18 @@ class TestFormatViolationOutput(unittest.TestCase):
                 line_number=5,
                 violation_type="hex_color",
                 code_snippet="#ff0000",
-                description="Hex color found"
+                description="Hex color found",
             ),
             DetailedViolation(
                 file_path="/path/to/file.tsx",
                 line_number=10,
                 violation_type="rgb_color",
                 code_snippet="rgb(255,0,0)",
-                description="RGB color found"
+                description="RGB color found",
             ),
         ]
         result = format_violation_output(violations)
-        
+
         self.assertIn("Total violations: 2", result)
         self.assertIn("Files affected: 1", result)
         self.assertIn("Line 5", result)
@@ -560,22 +583,23 @@ class TestFormatViolationOutput(unittest.TestCase):
                 line_number=5,
                 violation_type="hex_color",
                 code_snippet="#ff0000",
-                description="Hex color found"
+                description="Hex color found",
             ),
             DetailedViolation(
                 file_path="/path/to/file2.tsx",
                 line_number=10,
                 violation_type="rgb_color",
                 code_snippet="rgb(255,0,0)",
-                description="RGB color found"
+                description="RGB color found",
             ),
         ]
         result = format_violation_output(violations)
-        
+
         self.assertIn("Total violations: 2", result)
         self.assertIn("Files affected: 2", result)
         self.assertIn("file1.tsx", result)
         self.assertIn("file2.tsx", result)
+
 
 class TestMain(unittest.TestCase):
     """Test suite for main function."""
@@ -593,26 +617,28 @@ class TestMain(unittest.TestCase):
         file_path = os.path.join(self.test_dir, "clean.tsx")
         with open(file_path, "w") as f:
             f.write("const name = 'test';")
-        
-        test_args = ['css_check.py', '--directories', self.test_dir]
-        
-        with patch('sys.argv', test_args):
-            with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+
+        test_args = ["css_check.py", "--directories", self.test_dir]
+
+        with patch("sys.argv", test_args):
+            with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
                 with self.assertRaises(SystemExit) as cm:
                     main()
                 self.assertEqual(cm.exception.code, 0)
-                self.assertIn("No embedded CSS violations found", mock_stdout.getvalue())
+                self.assertIn(
+                    "No embedded CSS violations found", mock_stdout.getvalue()
+                )
 
     def test_exits_with_code_1_when_violations_found(self):
         """Test that main exits with code 1 when violations found."""
         file_path = os.path.join(self.test_dir, "violation.tsx")
         with open(file_path, "w") as f:
             f.write("const color = '#ff0000';")
-        
-        test_args = ['css_check.py', '--directories', self.test_dir]
-        
-        with patch('sys.argv', test_args):
-            with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+
+        test_args = ["css_check.py", "--directories", self.test_dir]
+
+        with patch("sys.argv", test_args):
+            with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
                 with self.assertRaises(SystemExit) as cm:
                     main()
                 self.assertEqual(cm.exception.code, 1)
@@ -621,10 +647,10 @@ class TestMain(unittest.TestCase):
 
     def test_requires_directories_or_files_argument(self):
         """Test that main requires at least one of --directories or --files."""
-        test_args = ['css_check.py']
-        
-        with patch('sys.argv', test_args):
-            with patch('sys.stderr', new_callable=StringIO):
+        test_args = ["css_check.py"]
+
+        with patch("sys.argv", test_args):
+            with patch("sys.stderr", new_callable=StringIO):
                 with self.assertRaises(SystemExit) as cm:
                     main()
                 self.assertEqual(cm.exception.code, 2)
@@ -634,11 +660,11 @@ class TestMain(unittest.TestCase):
         file_path = os.path.join(self.test_dir, "test.tsx")
         with open(file_path, "w") as f:
             f.write("const color = '#ff0000';")
-        
-        test_args = ['css_check.py', '--files', file_path]
-        
-        with patch('sys.argv', test_args):
-            with patch('sys.stdout', new_callable=StringIO):
+
+        test_args = ["css_check.py", "--files", file_path]
+
+        with patch("sys.argv", test_args):
+            with patch("sys.stdout", new_callable=StringIO):
                 with self.assertRaises(SystemExit) as cm:
                     main()
                 self.assertEqual(cm.exception.code, 1)
@@ -646,10 +672,10 @@ class TestMain(unittest.TestCase):
     def test_handles_invalid_directory_input(self):
         """Test that main handles invalid directory input."""
         invalid_dir = os.path.join(self.test_dir, "nonexistent")
-        test_args = ['css_check.py', '--directories', invalid_dir]
-        
-        with patch('sys.argv', test_args):
-            with patch('sys.stderr', new_callable=StringIO) as mock_stderr:
+        test_args = ["css_check.py", "--directories", invalid_dir]
+
+        with patch("sys.argv", test_args):
+            with patch("sys.stderr", new_callable=StringIO) as mock_stderr:
                 with self.assertRaises(SystemExit) as cm:
                     main()
                 self.assertEqual(cm.exception.code, 1)
@@ -660,11 +686,11 @@ class TestMain(unittest.TestCase):
         file_path = os.path.join(self.test_dir, "test.tsx")
         with open(file_path, "w") as f:
             f.write("const color = '#ff0000';")
-        
-        test_args = ['css_check.py', '--directories', self.test_dir]
-        
-        with patch('sys.argv', test_args):
-            with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+
+        test_args = ["css_check.py", "--directories", self.test_dir]
+
+        with patch("sys.argv", test_args):
+            with patch("sys.stdout", new_callable=StringIO) as mock_stdout:
                 with self.assertRaises(SystemExit):
                     main()
                 output = mock_stdout.getvalue()
@@ -683,9 +709,9 @@ class TestNamedTuples(unittest.TestCase):
             line_number=10,
             violation_type="hex_color",
             code_snippet="#ff0000",
-            description="Test description"
+            description="Test description",
         )
-        
+
         self.assertEqual(violation.file_path, "/test.tsx")
         self.assertEqual(violation.line_number, 10)
         self.assertEqual(violation.violation_type, "hex_color")
@@ -700,13 +726,14 @@ class TestNamedTuples(unittest.TestCase):
                 line_number=10,
                 violation_type="hex_color",
                 code_snippet="#ff0000",
-                description="Test"
+                description="Test",
             )
         ]
-        
+
         result = CSSCheckResult(violations=violations)
         self.assertEqual(len(result.violations), 1)
         self.assertEqual(result.violations[0].file_path, "/test.tsx")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()
