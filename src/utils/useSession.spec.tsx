@@ -33,6 +33,13 @@ const mockClearAllItems = vi.fn();
 vi.mock('./useLocalstorage', () => ({
   default: vi.fn(() => ({
     clearAllItems: mockClearAllItems,
+    getItem: vi.fn((key: string) => {
+      if (key === 'refreshToken') return 'test-refresh-token';
+      return null;
+    }),
+    setItem: vi.fn(),
+    removeItem: vi.fn(),
+    getStorageKey: vi.fn((key: string) => key),
   })),
 }));
 
@@ -254,6 +261,7 @@ describe('useSession Hook', () => {
       {
         request: {
           query: REVOKE_REFRESH_TOKEN,
+          variables: { refreshToken: 'test-refresh-token' },
         },
         error: new Error('Failed to revoke refresh token'),
       },

@@ -85,6 +85,14 @@ function OrganizationCard({
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
 
+  type MembershipState = 'member' | 'pending' | 'notMember';
+
+  const membershipState: MembershipState = isJoined
+    ? 'member'
+    : membershipRequestStatus === 'pending'
+      ? 'pending'
+      : 'notMember';
+
   // Mutations for handling organization memberships
   const [sendMembershipRequest] = useMutation(SEND_MEMBERSHIP_REQUEST, {
     refetchQueries: [{ query: ORGANIZATION_LIST }],
@@ -201,6 +209,38 @@ function OrganizationCard({
                   {name}
                 </h4>
               </Tooltip>
+              <output
+                role="status"
+                className={[
+                  styles.statusChip,
+                  membershipState === 'member'
+                    ? styles.member
+                    : membershipState === 'pending'
+                      ? styles.pending
+                      : styles.notMember,
+                ].join(' ')}
+                data-testid="membershipStatus"
+                data-status={
+                  membershipState === 'member'
+                    ? 'member'
+                    : membershipState === 'pending'
+                      ? 'pending'
+                      : 'notMember'
+                }
+                aria-label={
+                  membershipState === 'member'
+                    ? t('users.membershipStatus.member')
+                    : membershipState === 'pending'
+                      ? t('users.membershipStatus.pending')
+                      : t('users.membershipStatus.notMember')
+                }
+              >
+                {membershipState === 'member'
+                  ? t('users.member')
+                  : membershipState === 'pending'
+                    ? t('users.pending')
+                    : t('users.notMember')}
+              </output>
               {/* Description of the organization */}
               <div className={[styles.orgdesc, 'fw-semibold'].join(' ')}>
                 <TruncatedText text={description} />
@@ -245,17 +285,17 @@ function OrganizationCard({
               </Button>
             ) : (
               <div className={styles.buttonContainer}>
-                {isJoined ? (
+                {membershipState === 'member' ? (
                   <Button
                     data-testid="manageBtn"
+                    data-cy="manageBtn"
                     className={styles.manageBtn}
                     onClick={() => navigate(`/user/organization/${id}`)}
                     style={{ width: '8rem' }}
-                    data-cy="manageBtn"
                   >
                     {t('users.visit')}
                   </Button>
-                ) : membershipRequestStatus === 'pending' ? (
+                ) : membershipState === 'pending' ? (
                   <Button
                     variant="danger"
                     onClick={withdrawMembershipRequest}

@@ -224,10 +224,18 @@
     "placeholderAvatarAlt": "Avatar par défaut"
   },
   "users": {
+    "membershipStatus": {
+      "member": "Statut d'adhésion: Membre",
+      "pending": "Statut d'adhésion: En attente",
+      "notMember": "Statut d'adhésion: Non membre"
+    },
     "title": "Rôles Talawa",
     "joined_organizations": "Organisations rejointes",
     "blocked_organizations": "Organisations bloquées",
     "orgJoinedBy": "Organisations rejointes par",
+    "member": "Membre",
+    "pending": "En attente",
+    "notMember": "Non membre",
     "orgThatBlocked": "Organisations qui ont bloqué",
     "hasNotJoinedAnyOrg": "n'a rejoint aucune organisation",
     "isNotBlockedByAnyOrg": "n'est bloqué par aucune organisation",
@@ -737,6 +745,7 @@
     "pledgedAmount": "Montant promis",
     "startDate": "Date de début",
     "endDate": "Date de fin",
+    "searchByPlaceholder": "Rechercher par {{field}}",
     "selectPledger": "Veuillez sélectionner un donateur"
   },
   "orgPost": {
@@ -1026,7 +1035,13 @@
   "people": {
     "title": "Personnes",
     "searchUsers": "Rechercher des utilisateurs",
-    "nothingToShow": "Rien à montrer ici."
+    "nothingToShow": "Rien à montrer ici.",
+    "sNo": "N°",
+    "avatar": "Avatar",
+    "name": "Nom",
+    "email": "E-mail",
+    "role": "Rôle",
+    "loading": "Chargement..."
   },
   "userLogin": {
     "login": "Se connecter",
@@ -1085,7 +1100,8 @@
     "search": "Rechercher",
     "filter": "Filtrer",
     "searchByName": "Rechercher par nom",
-    "searchOrganizations": "Rechercher Organisations"
+    "searchOrganizations": "Rechercher Organisations",
+    "loading": "Chargement..."
   },
   "userSidebarOrg": {
     "yourOrganizations": "Vos organisations",
@@ -1537,7 +1553,9 @@
     "addPledge": "Ajouter une promesse",
     "viewPledges": "Voir les promesses",
     "noPledges": "Aucune promesse trouvée",
-    "noCampaigns": "Aucune campagne trouvée"
+    "noCampaigns": "Aucune campagne trouvée",
+    "raised": "Collecté",
+    "amountRaised": "Montant Collecté"
   },
   "userPledges": {
     "title": "Mes Promesses"
@@ -1626,7 +1644,21 @@
     "eventInvitationRecurringSubject": "Invitation à faire du bénévolat pour la série d'événements récurrents",
     "pending": "En attente",
     "accepted": "Accepté",
-    "rejected": "Rejeté"
+    "rejected": "Rejeté",
+    "assignee": "Assigné",
+    "group": "Groupe",
+    "event": "Événement",
+    "received": "Reçu",
+    "location": "Emplacement",
+    "recurrence": "Récurrence",
+    "endDate": "Date de Fin",
+    "description": "Description",
+    "volunteerGroups": "Groupes de Bénévoles",
+    "groupTable": "Tableau des Groupes",
+    "srNo": "N°",
+    "groupName": "Nom du Groupe",
+    "noOfMembers": "Nombre de Membres",
+    "options": "Options"
   },
   "pluginStore": {
     "title": "Boutique de Plugins",
@@ -1661,5 +1693,10 @@
     "deleteComment": "Supprimer le commentaire",
     "deleting": "Suppression…",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre."
+  },
+  "common": {
+    "signOut": "Se déconnecter",
+    "signingOut": "Déconnexion en cours...",
+    "retryPrompt": "Échec de la révocation de session. Réessayer ?"
   }
 }
