@@ -94,6 +94,7 @@ export default function groupChatDetails({
   chatRefetch,
 }: InterfaceGroupChatDetailsProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
+  const { t: tCommon } = useTranslation('common');
 
   //storage
 
@@ -118,7 +119,7 @@ export default function groupChatDetails({
         <Modal.Header closeButton data-testid="groupChatDetails">
           <Modal.Title>{t('Error')}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>User not found</Modal.Body>
+        <Modal.Body>{t('userNotFound')}</Modal.Body>
       </Modal>
     );
   }
@@ -157,9 +158,9 @@ export default function groupChatDetails({
         },
       });
       await chatRefetch();
-      toast.success('Role updated successfully');
+      toast.success(t('roleUpdatedSuccessfully'));
     } catch (error) {
-      toast.error('Failed to update role');
+      toast.error(t('failedToUpdateRole'));
       console.error(error);
     }
   };
@@ -175,9 +176,9 @@ export default function groupChatDetails({
         },
       });
       await chatRefetch();
-      toast.success('Member removed successfully');
+      toast.success(t('memberRemovedSuccessfully'));
     } catch (error) {
-      toast.error('Failed to remove member');
+      toast.error(t('failedToRemoveMember'));
       console.error(error);
     }
   };
@@ -252,10 +253,10 @@ export default function groupChatDetails({
           },
         });
         await chatRefetch({ input: { id: chat.id } });
-        toast.success('Chat image updated successfully');
+        toast.success(t('chatImageUpdatedSuccessfully'));
         setSelectedImage('');
       } catch (error) {
-        toast.error('Failed to update chat image');
+        toast.error(t('failedToUpdateChatImage'));
         console.error(error);
         setSelectedImage('');
       }
@@ -287,11 +288,11 @@ export default function groupChatDetails({
                       await deleteChat({
                         variables: { input: { id: chat.id } },
                       });
-                      toast.success('Chat deleted successfully');
+                      toast.success(t('chatDeletedSuccessfully'));
                       toggleGroupChatDetailsModal();
                       // Maybe navigate away or refetch chats
                     } catch (error) {
-                      toast.error('Failed to delete chat');
+                      toast.error(t('failedToDeleteChat'));
                       console.error(error);
                     }
                   }
@@ -349,9 +350,9 @@ export default function groupChatDetails({
                       });
                       setEditChatTitle(false);
                       await chatRefetch({ input: { id: chat.id } });
-                      toast.success('Chat name updated successfully');
+                      toast.success(t('chatNameUpdatedSuccessfully'));
                     } catch (error) {
-                      toast.error('Failed to update chat name');
+                      toast.error(t('failedToUpdateChatName'));
                       console.error(error);
                     }
                   }}
@@ -453,8 +454,8 @@ export default function groupChatDetails({
                               }
                             >
                               {role === 'administrator'
-                                ? 'Demote to Regular'
-                                : 'Promote to Admin'}
+                                ? t('demoteToRegular')
+                                : t('promoteToAdmin')}
                             </Dropdown.Item>
                             {canRemove && (
                               <Dropdown.Item
@@ -469,7 +470,7 @@ export default function groupChatDetails({
                                   }
                                 }}
                               >
-                                Remove
+                                {t('remove')}
                               </Dropdown.Item>
                             )}
                           </Dropdown.Menu>
@@ -490,7 +491,7 @@ export default function groupChatDetails({
         contentClassName={styles.modalContent}
       >
         <Modal.Header closeButton data-testid="pluginNotificationHeader">
-          <Modal.Title>{'Chat'}</Modal.Title>
+          <Modal.Title>{t('chat')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {allUsersLoading ? (
@@ -501,7 +502,7 @@ export default function groupChatDetails({
             <>
               <div className={styles.input}>
                 <SearchBar
-                  placeholder="searchFullName"
+                  placeholder={t('searchFullName')}
                   value={userName}
                   onChange={(value) => {
                     setUserName(value);
@@ -517,16 +518,21 @@ export default function groupChatDetails({
                   }}
                   inputTestId="searchUser"
                   buttonTestId="searchBtn"
+                  clearButtonAriaLabel={tCommon('clear')}
                 />
               </div>
 
               <TableContainer className={styles.userData} component={Paper}>
-                <Table aria-label="customized table">
+                <Table aria-label={t('customizedTable')}>
                   <TableHead>
                     <TableRow>
                       <StyledTableCell>#</StyledTableCell>
-                      <StyledTableCell align="center">{'user'}</StyledTableCell>
-                      <StyledTableCell align="center">{'Chat'}</StyledTableCell>
+                      <StyledTableCell align="center">
+                        {t('user')}
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {t('chatAction')}
+                      </StyledTableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody data-testid="userList">
