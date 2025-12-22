@@ -1,11 +1,7 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import SortingButton from './SortingButton';
-
-interface InterfaceSortingOption {
-  label: string;
-  value: string | number;
-}
+import type { InterfaceSortingOption } from 'types/AdminSearchFilterBar/interface';
 
 describe('SortingButton', () => {
   const mockSortingOptions: InterfaceSortingOption[] = [
@@ -21,10 +17,6 @@ describe('SortingButton', () => {
     onSortChange: vi.fn(),
     dataTestIdPrefix: 'sort',
   };
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
 
   afterEach(() => {
     vi.clearAllMocks();

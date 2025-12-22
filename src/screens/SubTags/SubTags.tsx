@@ -202,6 +202,7 @@ function SubTags(): JSX.Element {
   };
 
   const sortDropdownConfig = {
+    id: 'subtags-sort-dropdown',
     label: tCommon('sort'),
     type: 'sort' as const,
     options: [

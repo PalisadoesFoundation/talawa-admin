@@ -119,7 +119,7 @@ const AdminSearchFilterBar: React.FC<InterfaceAdminSearchFilterBarProps> = ({
           {dropdowns &&
             dropdowns.map((dropdown, index) => (
               <SortingButton
-                key={`${dropdown.dataTestIdPrefix}-${index}`}
+                key={dropdown.id || `${dropdown.dataTestIdPrefix}-${index}`}
                 title={dropdown.title}
                 sortingOptions={dropdown.options}
                 selectedOption={dropdown.selectedOption}

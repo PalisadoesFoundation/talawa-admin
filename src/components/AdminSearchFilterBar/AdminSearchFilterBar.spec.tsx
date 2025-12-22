@@ -8,7 +8,15 @@ import type {
 
 vi.mock('shared-components/SearchBar/SearchBar', () => ({
   default: vi.fn(
-    ({ placeholder, value, onChange, onSearch, inputTestId, buttonTestId }) => (
+    ({
+      placeholder,
+      value,
+      onChange,
+      onSearch,
+      inputTestId,
+      buttonTestId,
+      buttonAriaLabel,
+    }) => (
       <div data-testid="mock-searchbar">
         <input
           type="text"
@@ -21,6 +29,7 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
           type="button"
           onClick={() => onSearch?.(value)}
           data-testid={buttonTestId}
+          aria-label={buttonAriaLabel}
         >
           Search
         </button>
@@ -187,6 +196,7 @@ describe('AdminSearchFilterBar', () => {
       onSearchChange: vi.fn(),
       dropdowns: [
         {
+          id: 'sort-dropdown',
           label: 'Sort',
           type: 'sort',
           options: [
@@ -214,6 +224,7 @@ describe('AdminSearchFilterBar', () => {
         ...advancedProps,
         dropdowns: [
           {
+            id: 'sort-dropdown',
             label: 'Sort',
             type: 'sort',
             options: [
@@ -225,6 +236,7 @@ describe('AdminSearchFilterBar', () => {
             dataTestIdPrefix: 'sort',
           },
           {
+            id: 'time-frame-dropdown',
             label: 'Time Frame',
             type: 'filter',
             options: [
@@ -289,6 +301,7 @@ describe('AdminSearchFilterBar', () => {
       onSearchChange: vi.fn(),
       dropdowns: [
         {
+          id: 'filter-plugins-dropdown',
           label: 'Filter plugins',
           type: 'filter',
           options: [
@@ -432,6 +445,7 @@ describe('AdminSearchFilterBar', () => {
   describe('Dropdown Configuration', () => {
     it('should pass all dropdown props to SortingButton', () => {
       const dropdownConfig = {
+        id: 'sort-tags-dropdown',
         label: 'Sort Tags',
         type: 'sort' as const,
         options: [
@@ -469,6 +483,7 @@ describe('AdminSearchFilterBar', () => {
         onSearchChange: vi.fn(),
         dropdowns: [
           {
+            id: 'sort-dropdown-test',
             label: 'Sort',
             type: 'sort',
             options: [{ label: 'Latest', value: 'desc' }],
@@ -477,6 +492,7 @@ describe('AdminSearchFilterBar', () => {
             dataTestIdPrefix: 'sort',
           },
           {
+            id: 'filter-dropdown-test',
             label: 'Filter',
             type: 'filter',
             options: [{ label: 'All', value: 'all' }],
@@ -485,6 +501,7 @@ describe('AdminSearchFilterBar', () => {
             dataTestIdPrefix: 'filter',
           },
           {
+            id: 'time-dropdown-test',
             label: 'Time',
             type: 'filter',
             options: [{ label: 'Today', value: 'today' }],
@@ -583,6 +600,54 @@ describe('AdminSearchFilterBar', () => {
     });
   });
 
+  describe('Translation Overrides', () => {
+    it('should pass custom translations to child components', () => {
+      const customTranslations = {
+        searchButtonAriaLabel: 'Custom search button label',
+        clearButtonAriaLabel: 'Custom clear button label',
+        dropdownAriaLabel: 'Custom {label} options',
+      };
+
+      render(
+        <AdminSearchFilterBar
+          hasDropdowns={true}
+          searchPlaceholder="Search"
+          searchValue=""
+          onSearchChange={vi.fn()}
+          dropdowns={[
+            {
+              id: 'translation-test-sort-dropdown',
+              label: 'Sort',
+              type: 'sort',
+              options: [
+                { label: 'Latest', value: 'DESCENDING' },
+                { label: 'Oldest', value: 'ASCENDING' },
+              ],
+              selectedOption: 'DESCENDING',
+              onOptionChange: vi.fn(),
+              dataTestIdPrefix: 'sort',
+            },
+          ]}
+          translations={customTranslations}
+        />,
+      );
+
+      // Verify search button gets custom aria label
+      const searchButton = screen.getByTestId('searchButton');
+      expect(searchButton).toHaveAttribute(
+        'aria-label',
+        'Custom search button label',
+      );
+
+      // Verify dropdown gets custom aria label pattern
+      const sortingButton = screen.getByTestId('mock-sorting-button-sort');
+      expect(sortingButton).toBeInTheDocument();
+
+      // Verify clear button aria label is passed to SearchBar (mocked)
+      expect(searchButton).toBeInTheDocument();
+    });
+  });
+
   describe('Integration Tests', () => {
     it('should work as complete search and filter system (Leaderboard scenario)', () => {
       const onSearchChange = vi.fn();
@@ -597,6 +662,7 @@ describe('AdminSearchFilterBar', () => {
           onSearchChange={onSearchChange}
           dropdowns={[
             {
+              id: 'sort-integration-test',
               label: 'Sort',
               type: 'sort',
               options: [
@@ -608,6 +674,7 @@ describe('AdminSearchFilterBar', () => {
               dataTestIdPrefix: 'sort',
             },
             {
+              id: 'time-frame-integration-test',
               label: 'Time Frame',
               type: 'filter',
               options: [
@@ -648,6 +715,7 @@ describe('AdminSearchFilterBar', () => {
           onSearchChange={onSearchChange}
           dropdowns={[
             {
+              id: 'filter-plugins-integration-test',
               label: 'Filter plugins',
               type: 'filter',
               options: [

@@ -209,7 +209,7 @@ function requests(): JSX.Element {
             {avatarURL ? (
               <img
                 src={avatarURL}
-                alt="volunteer"
+                alt={tCommon('user')}
                 data-testid={`volunteer_image`}
                 className={styles.TableImages}
               />
@@ -309,6 +309,7 @@ function requests(): JSX.Element {
           onSearch={debouncedSearch}
           inputTestId="searchBy"
           buttonTestId="searchBtn"
+          clearButtonAriaLabel={tCommon('clear')}
         />
         <div className="d-flex gap-3 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3">

@@ -34,6 +34,13 @@ export interface InterfaceSortingOption {
  */
 export interface InterfaceDropdownConfig {
   /**
+   * A unique identifier for this dropdown configuration.
+   * Used as the React key for stable rendering and should be unique across all dropdowns.
+   * @example "sort-by-date", "filter-by-status", "group-by-category"
+   */
+  id: string;
+
+  /**
    * The label/title displayed on the dropdown button.
    * This is typically a user-facing label like "Sort", "Filter", or "Time Frame".
    * @example "Sort", "Filter plugins", "Time Frame"

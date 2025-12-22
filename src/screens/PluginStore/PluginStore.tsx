@@ -110,6 +110,7 @@ export default function PluginStore() {
 
   const pluginStoreDropdowns = [
     {
+      id: 'plugin-store-filter-dropdown',
       label: t('filterPlugins'),
       type: 'filter' as const,
       options: [

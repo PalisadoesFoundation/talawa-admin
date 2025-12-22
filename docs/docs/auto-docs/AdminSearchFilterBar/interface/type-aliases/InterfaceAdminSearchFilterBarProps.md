@@ -6,7 +6,7 @@
 
 > **InterfaceAdminSearchFilterBarProps** = [`InterfaceAdminSearchFilterBarSimple`](../interfaces/InterfaceAdminSearchFilterBarSimple.md) \| [`InterfaceAdminSearchFilterBarAdvanced`](../interfaces/InterfaceAdminSearchFilterBarAdvanced.md)
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:412](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L412)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:419](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L419)
 
 Main props interface for the AdminSearchFilterBar component.
 

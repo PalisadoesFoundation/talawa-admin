@@ -136,6 +136,7 @@ function leaderboard(): JSX.Element {
   const leaderboardDropdowns = useMemo(
     () => [
       {
+        id: 'leaderboard-sort-dropdown',
         label: tCommon('sort'),
         type: 'sort' as const,
         options: [
@@ -148,6 +149,7 @@ function leaderboard(): JSX.Element {
         dataTestIdPrefix: 'sort',
       },
       {
+        id: 'leaderboard-timeframe-dropdown',
         label: t('timeFrame'),
         type: 'filter' as const,
         options: [
