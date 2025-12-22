@@ -1728,7 +1728,7 @@ describe('Testing User Table Item', () => {
     fireEvent.change(inputBox, { target: { value: 'Test Search' } });
 
     // Find and click the clear button
-    const clearButton = screen.getByLabelText('Clear search');
+    const clearButton = screen.getByLabelText('Clear');
     expect(clearButton).toBeInTheDocument();
     fireEvent.click(clearButton);
 

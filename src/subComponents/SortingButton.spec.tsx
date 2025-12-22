@@ -191,16 +191,16 @@ describe('SortingButton', () => {
       render(<SortingButton {...defaultProps} type="sort" />);
 
       const icon = screen.getByTestId('sorting-icon');
-      // The icon should be present, we can verify the type by checking data-testid
       expect(icon).toBeInTheDocument();
+      expect(icon).toHaveAttribute('data-icon-type', 'sort');
     });
 
     it('should render FilterAltOutlined for filter type', () => {
       render(<SortingButton {...defaultProps} type="filter" />);
 
       const icon = screen.getByTestId('sorting-icon');
-      // The icon should be present, we can verify the type by checking data-testid
       expect(icon).toBeInTheDocument();
+      expect(icon).toHaveAttribute('data-icon-type', 'filter');
     });
   });
 

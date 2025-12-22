@@ -206,8 +206,8 @@ function SubTags(): JSX.Element {
     label: tCommon('sort'),
     type: 'sort' as const,
     options: [
-      { label: tCommon('Latest'), value: 'DESCENDING' },
-      { label: tCommon('Oldest'), value: 'ASCENDING' },
+      { label: t('Latest'), value: 'DESCENDING' },
+      { label: t('Oldest'), value: 'ASCENDING' },
     ],
     selectedOption: tagSortOrder,
     onOptionChange: (value: string | number) =>

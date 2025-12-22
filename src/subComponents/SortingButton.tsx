@@ -69,6 +69,7 @@ const SortingButton: React.FC<InterfaceSortingButtonProps> = ({
         <IconComponent
           className={'me-1'}
           data-testid="sorting-icon"
+          data-icon-type={type}
           aria-hidden="true"
         />{' '}
         {/* Use the appropriate icon */}

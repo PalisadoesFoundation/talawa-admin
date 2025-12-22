@@ -418,7 +418,7 @@ describe('GroupChatDetails', () => {
 
     // Find clear button (rendered by SearchBar when value is not empty)
     // SearchBar renders a button with aria-label="Clear search"
-    const clearBtn = await screen.findByLabelText('Clear search');
+    const clearBtn = await screen.findByLabelText('Clear');
     await act(async () => {
       fireEvent.click(clearBtn);
     });
