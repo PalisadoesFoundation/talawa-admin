@@ -12,10 +12,31 @@ import {
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { toast } from 'react-toastify';
-
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string) => key,
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        'orgListCard.manage': 'Manage',
+        'users.visit': 'Visit',
+        'users.joinNow': 'joinNow',
+        'users.withdraw': 'withdraw',
+        'users.orgJoined': 'orgJoined',
+        'users.errorOccurred': 'errorOccurred',
+        'users.member': 'Member',
+        'users.pending': 'Pending',
+        'users.notMember': 'Not a member',
+        'users.AlreadyJoined': 'AlreadyJoined',
+        'users.MembershipRequestSent': 'MembershipRequestSent',
+        'users.UserIdNotFound': 'UserIdNotFound',
+        'users.MembershipRequestWithdrawn': 'MembershipRequestWithdrawn',
+        'users.MembershipRequestNotFound': 'MembershipRequestNotFound',
+        'users.membershipStatus.member': 'Membership status: Member',
+        'users.membershipStatus.pending': 'Membership status: Pending',
+        'users.membershipStatus.notMember': 'Membership status: Not a member',
+      };
+
+      return translations[key] || key;
+    },
   }),
 }));
 
@@ -181,6 +202,72 @@ describe('OrganizationCard', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/user/organization/123');
   });
 
+  it('displays "Member" status chip for joined users', () => {
+    const joinedData = { ...mockData, isJoined: true };
+
+    render(
+      <MockedProvider>
+        <OrganizationCard data={joinedData} />
+      </MockedProvider>,
+    );
+
+    const statusChip = screen.getByTestId('membershipStatus');
+
+    expect(statusChip).toHaveTextContent('Member');
+    expect(statusChip).toHaveAttribute('data-status', 'member');
+    expect(statusChip).toHaveAttribute('role', 'status');
+    expect(statusChip).toHaveAttribute(
+      'aria-label',
+      'Membership status: Member',
+    );
+  });
+
+  it('displays "Pending" status chip when membership request is pending', () => {
+    const pendingData = {
+      ...mockData,
+      isJoined: false,
+      membershipRequestStatus: 'pending',
+    };
+
+    render(
+      <MockedProvider>
+        <OrganizationCard data={pendingData} />
+      </MockedProvider>,
+    );
+
+    const statusChip = screen.getByTestId('membershipStatus');
+
+    expect(statusChip).toHaveTextContent('Pending');
+    expect(statusChip).toHaveAttribute('data-status', 'pending');
+    expect(statusChip).toHaveAttribute(
+      'aria-label',
+      'Membership status: Pending',
+    );
+  });
+
+  it('displays "Not a member" status chip for non-members', () => {
+    const nonMemberData = {
+      ...mockData,
+      isJoined: false,
+      membershipRequestStatus: undefined,
+    };
+
+    render(
+      <MockedProvider>
+        <OrganizationCard data={nonMemberData} />
+      </MockedProvider>,
+    );
+
+    const statusChip = screen.getByTestId('membershipStatus');
+
+    expect(statusChip).toHaveTextContent('Not a member');
+    expect(statusChip).toHaveAttribute('data-status', 'notMember');
+    expect(statusChip).toHaveAttribute(
+      'aria-label',
+      'Membership status: Not a member',
+    );
+  });
+
   it('renders "Join" button for non-joined user', () => {
     render(
       <MockedProvider>
@@ -335,7 +422,7 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('errorOccured');
+      expect(toast.error).toHaveBeenCalledWith('errorOccurred');
     });
   });
 
@@ -360,7 +447,7 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('errorOccured');
+      expect(toast.error).toHaveBeenCalledWith('errorOccurred');
     });
   });
 
@@ -412,7 +499,7 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('errorOccured');
+      expect(toast.error).toHaveBeenCalledWith('errorOccurred');
     });
   });
 
@@ -541,7 +628,7 @@ describe('OrganizationCard', () => {
       expect(toast.error).toHaveBeenCalled();
     });
 
-    expect(toast.error).toHaveBeenCalledWith('errorOccured');
+    expect(toast.error).toHaveBeenCalledWith('errorOccurred');
   });
   it('logs error to console in development environment when withdrawing fails', async () => {
     const pendingData = {

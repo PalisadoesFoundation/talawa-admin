@@ -100,8 +100,16 @@
   "createdEarliest": "Créé le plus tôt",
   "searchBy": "Rechercher par {{item}}",
   "plugins": "Extensions",
+  "pluginSettings": "Paramètres des Extensions",
   "unblock": "Débloquer",
   "unblockedSuccessfully": "{{item}} débloqué avec succès",
   "save": "Enregistrer",
-  "saving": "Enregistrement..."
+  "saving": "Enregistrement...",
+  "sl_no": "N° de série",
+  "actions": "Actions",
+  "notFound": "Non trouvé",
+  "profilePicture": "Photo de profil",
+  "profilePicturePlaceholder": "Image factice",
+  "userProfileMenu": "Menu du profil utilisateur",
+  "breadcrumbs": "Fil d’Ariane"
 }

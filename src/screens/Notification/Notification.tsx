@@ -17,6 +17,8 @@ import { Link } from 'react-router-dom';
 import { ListGroup, Button } from 'react-bootstrap';
 import styles from './Notification.module.css';
 import { FaUserCircle } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 interface InterfaceNotification {
   id: string;
@@ -27,6 +29,8 @@ interface InterfaceNotification {
 }
 
 const Notification: React.FC = () => {
+  const { t } = useTranslation('translation', { keyPrefix: 'notification' });
+  const { t: tErrors } = useTranslation('errors');
   const { getItem } = useLocalStorage();
   const userId = getItem('id');
 
@@ -57,8 +61,8 @@ const Notification: React.FC = () => {
         },
       });
       await refetch({ userId, input: { first: pageSize, skip } });
-    } catch (error) {
-      console.error('Error marking notifications as read:', error);
+    } catch {
+      toast.error(tErrors('markAsReadError'));
     }
   };
 
@@ -95,7 +99,7 @@ const Notification: React.FC = () => {
               </ListGroup.Item>
             ))
           ) : notifications.length === 0 ? (
-            <div className={styles.noNotifications}>You're all caught up!</div>
+            <div className={styles.noNotifications}>{t('allCaughtUp')}</div>
           ) : (
             Array.from({ length: pageSize }).map((_, idx) => {
               const notification = notifications[idx];
@@ -129,7 +133,7 @@ const Notification: React.FC = () => {
                         className={styles.markButton}
                         onClick={() => handleMarkAsRead([notification.id])}
                       >
-                        Mark as Read
+                        {t('markAsRead')}
                       </Button>
                     )}
                   </ListGroup.Item>
@@ -143,8 +147,8 @@ const Notification: React.FC = () => {
                 >
                   <div className={styles.profileSection} />
                   <div className={styles.notificationContent}>
-                    <div className={styles.notificationTitle}>&nbsp;</div>
-                    <div className={styles.notificationBody}>&nbsp;</div>
+                    <div className={styles.notificationTitle}>{'\u00A0'}</div>
+                    <div className={styles.notificationBody}>{'\u00A0'}</div>
                   </div>
                   <div style={{ width: 92 }} />
                 </ListGroup.Item>
@@ -152,23 +156,24 @@ const Notification: React.FC = () => {
             })
           )}
         </ListGroup>
-
-        <div className={styles.paginationFooter}>
-          <button
-            className={styles.paginationButton}
-            onClick={handlePrev}
-            disabled={page === 0}
-          >
-            Prev
-          </button>
-          <button
-            className={styles.paginationButton}
-            onClick={handleNext}
-            disabled={notifications.length < pageSize}
-          >
-            Next
-          </button>
-        </div>
+        {(page > 0 || notifications.length > 1) && (
+          <div className={styles.paginationFooter}>
+            <button
+              className={styles.paginationButton}
+              onClick={handlePrev}
+              disabled={page === 0}
+            >
+              {t('prev')}
+            </button>
+            <button
+              className={styles.paginationButton}
+              onClick={handleNext}
+              disabled={notifications.length < pageSize}
+            >
+              {t('next')}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

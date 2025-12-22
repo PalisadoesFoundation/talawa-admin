@@ -51,7 +51,7 @@ export const askAndUpdateTalawaApiUrl = async (
       const MAX_RETRIES = 3;
       while (!isConnected && retryCount < MAX_RETRIES) {
         try {
-          endpoint = await askForTalawaApiUrl();
+          endpoint = await askForTalawaApiUrl(useDocker);
           const url = new URL(endpoint);
           if (!['http:', 'https:'].includes(url.protocol)) {
             throw new Error('Invalid URL protocol. Must be http or https');
@@ -72,25 +72,20 @@ export const askAndUpdateTalawaApiUrl = async (
         );
       }
       updateEnvFile('REACT_APP_TALAWA_URL', endpoint);
-      const websocketUrl = endpoint.replace(/^http(s)?:\/\//, 'ws$1://');
-      try {
-        const wsUrl = new URL(websocketUrl);
-        if (!['ws:', 'wss:'].includes(wsUrl.protocol)) {
-          throw new Error('Invalid WebSocket protocol');
-        }
-        updateEnvFile('REACT_APP_BACKEND_WEBSOCKET_URL', websocketUrl);
-      } catch {
-        throw new Error('Invalid WebSocket URL generated: ');
-      }
       if (useDocker && endpoint) {
         const raw = endpoint.includes('://') ? endpoint : `http://${endpoint}`;
         try {
           const parsed = new URL(raw);
-          const localHosts = new Set(['localhost', '127.0.0.1', '::1']);
-          if (localHosts.has(parsed.hostname)) {
+          // Normalize hostname and strip IPv6 brackets (e.g. "[::1]")
+          const hostname = (parsed.hostname || '').replace(/^\[|\]$/g, '');
+          const isLocalHost = ['localhost', '127.0.0.1', '::1'].includes(
+            hostname,
+          );
+
+          if (isLocalHost) {
             parsed.hostname = 'host.docker.internal';
             const dockerUrl = parsed.toString();
-            updateEnvFile('REACT_APP_DOCKER_TALAWA_URL', dockerUrl);
+            updateEnvFile('REACT_APP_TALAWA_URL', dockerUrl);
           }
         } catch (error) {
           throw new Error(

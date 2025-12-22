@@ -26,9 +26,6 @@ import {
   USER_LIST_FOR_ADMIN,
 } from 'GraphQl/Queries/Queries';
 
-let setItem: (key: string, value: unknown) => void;
-let removeItem: (key: string) => void;
-
 vi.mock('react-toastify', async (importOriginal) => {
   const actual = await importOriginal<typeof import('react-toastify')>();
 
@@ -40,6 +37,10 @@ vi.mock('react-toastify', async (importOriginal) => {
     },
   };
 });
+
+vi.mock('@mui/icons-material', () => ({
+  WarningAmberRounded: vi.fn(() => null),
+}));
 
 const link = new StaticMockLink(MOCKS, true);
 
@@ -59,11 +60,10 @@ async function wait(ms = 1000): Promise<void> {
     });
   });
 }
-beforeEach(() => {
-  const storage = useLocalStorage();
-  setItem = storage.setItem;
-  removeItem = storage.removeItem;
 
+const { setItem, removeItem, clearAllItems } = useLocalStorage();
+
+beforeEach(() => {
   setItem('id', '123');
   setItem('SuperAdmin', true);
   setItem('name', 'John Doe');
@@ -71,7 +71,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  localStorage.clear();
+  clearAllItems();
   vi.restoreAllMocks();
 });
 

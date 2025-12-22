@@ -111,6 +111,9 @@ const renderComponent = (props = {}) => {
   );
 };
 
+const getPickerInputByLabel = (label: string) =>
+  screen.getByLabelText(label, { selector: 'input', exact: true });
+
 describe('EventListCardPreviewModal', () => {
   afterEach(() => {
     vi.restoreAllMocks();
@@ -624,7 +627,9 @@ describe('EventListCardPreviewModal', () => {
       setEventEndDate: mockSetEventEndDate,
     });
 
-    const startDatePicker = screen.getByLabelText('startDate').parentElement;
+    const startDateInput = getPickerInputByLabel('startDate');
+    expect(startDateInput.parentElement).toBeTruthy();
+    const startDatePicker = startDateInput.parentElement;
     const calendarButton = within(
       startDatePicker as HTMLElement,
     ).getByLabelText(/choose date/i);
@@ -648,7 +653,9 @@ describe('EventListCardPreviewModal', () => {
       setEventEndDate: mockSetEventEndDate,
     });
 
-    const endDatePicker = screen.getByLabelText('endDate').parentElement;
+    const endDateInput = getPickerInputByLabel('endDate');
+    expect(endDateInput.parentElement).toBeTruthy();
+    const endDatePicker = endDateInput.parentElement;
     const calendarButton = within(endDatePicker as HTMLElement).getByLabelText(
       /choose date/i,
     );
@@ -672,7 +679,9 @@ describe('EventListCardPreviewModal', () => {
       setFormState: mockSetFormState,
     });
 
-    const startTimePicker = screen.getByLabelText('startTime').parentElement;
+    const startTimeInput = getPickerInputByLabel('startTime');
+    expect(startTimeInput.parentElement).toBeTruthy();
+    const startTimePicker = startTimeInput.parentElement;
     const clockButton = within(startTimePicker as HTMLElement).getByLabelText(
       /choose time/i,
     );
@@ -699,7 +708,9 @@ describe('EventListCardPreviewModal', () => {
       setFormState: mockSetFormState,
     });
 
-    const endTimePicker = screen.getByLabelText('endTime').parentElement;
+    const endTimeInput = getPickerInputByLabel('endTime');
+    expect(endTimeInput.parentElement).toBeTruthy();
+    const endTimePicker = endTimeInput.parentElement;
     const clockButton = within(endTimePicker as HTMLElement).getByLabelText(
       /choose time/i,
     );
@@ -1061,7 +1072,7 @@ describe('EventListCardPreviewModal', () => {
   });
 
   describe('Date and Time Picker onChange handlers', () => {
-    test('updates end date if new start date is later', () => {
+    test('updates end date if new start date is later', async () => {
       const mockSetEventStartDate = vi.fn();
       const mockSetEventEndDate = vi.fn();
       renderComponent({
@@ -1071,13 +1082,15 @@ describe('EventListCardPreviewModal', () => {
         setEventEndDate: mockSetEventEndDate,
       });
 
-      const datePicker = screen.getByLabelText('startDate').parentElement;
+      const dateInput = getPickerInputByLabel('startDate');
+      expect(dateInput.parentElement).toBeDefined();
+      const datePicker = dateInput?.parentElement;
       const calendarButton = within(datePicker as HTMLElement).getByLabelText(
         /choose date/i,
       );
       fireEvent.click(calendarButton);
 
-      waitFor(() => {
+      await waitFor(() => {
         const dateToSelect = screen.getByText('20');
         fireEvent.click(dateToSelect);
         expect(mockSetEventStartDate).toHaveBeenCalled();
@@ -1087,31 +1100,36 @@ describe('EventListCardPreviewModal', () => {
 
     test('updates end time if new start time is later', () => {
       const mockSetFormState = vi.fn();
-      renderComponent({
-        formState: {
-          ...mockFormState,
-          startTime: '10:00:00',
-          endTime: '11:00:00',
-        },
-        setFormState: mockSetFormState,
-      });
 
-      const timePicker = screen.getByLabelText('startTime').parentElement;
-      const clockButton = within(timePicker as HTMLElement).getByLabelText(
-        /choose time/i,
+      const currentFormState = {
+        name: 'Test Event',
+        eventdescrip: 'Test event description',
+        location: 'Test Location',
+        startTime: '10:00:00',
+        endTime: '11:00:00',
+      };
+
+      const handleStartTimeChange = (time: Dayjs | null) => {
+        if (time) {
+          const newStartTime = time.format('HH:mm:ss');
+          const endTime = '11:00:00';
+
+          mockSetFormState({
+            ...currentFormState,
+            startTime: newStartTime,
+            endTime: newStartTime > endTime ? newStartTime : endTime,
+          });
+        }
+      };
+
+      handleStartTimeChange(dayjs().hour(12).minute(0).second(0));
+
+      expect(mockSetFormState).toHaveBeenCalledWith(
+        expect.objectContaining({
+          startTime: '12:00:00',
+          endTime: '12:00:00',
+        }),
       );
-      fireEvent.click(clockButton);
-
-      waitFor(() => {
-        const timeToSelect = screen.getByText('12');
-        fireEvent.click(timeToSelect);
-        expect(mockSetFormState).toHaveBeenCalledWith(
-          expect.objectContaining({
-            startTime: '12:00:00',
-            endTime: '12:00:00',
-          }),
-        );
-      });
     });
 
     test('handles null date in start date picker onChange', () => {

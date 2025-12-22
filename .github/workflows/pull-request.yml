@@ -48,7 +48,7 @@ jobs:
       - name: Count number of lines
         run: |
           chmod +x ./.github/workflows/scripts/countline.py
-          ./.github/workflows/scripts/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx src/components/OrgPostCard/OrgPostCard.tsx src/components/UsersTableItem/UsersTableItem.tsx src/components/UserPortal/ChatRoom/ChatRoom.tsx
+          ./.github/workflows/scripts/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx src/components/OrgPostCard/OrgPostCard.tsx src/components/UsersTableItem/UsersTableItem.tsx src/components/UserPortal/ChatRoom/ChatRoom.tsx src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.tsx src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx src/shared-components/postCard/PostCard.tsx src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.tsx
 
       - name: Get changed TypeScript files
         id: changed-files
@@ -102,6 +102,25 @@ jobs:
           chmod +x .github/workflows/scripts/compare_translations.py
           python .github/workflows/scripts/compare_translations.py --directory public/locales
 
+      - name: Get changed source files
+        id: changed-src
+        run: |
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          CHANGED=$(git diff --name-only --diff-filter=ACMRT "$BASE_SHA" ${{ github.event.pull_request.head.sha }} \
+            | grep -E '^src/.*\.(ts|tsx|js|jsx)$' | tr '\n' ' ' || true)
+          echo "files=$CHANGED" >> $GITHUB_OUTPUT
+          if [ -z "$CHANGED" ]; then
+            echo "none=true" >> $GITHUB_OUTPUT
+          else
+            echo "none=false" >> $GITHUB_OUTPUT
+          fi
+
+      # TODO: Re-enable after fixing existing i18n violations in all necessary files
+      # See: scripts/check-i18n.js for the detection script
+      # - name: Check for non-internationalized text
+      #   if: steps.changed-src.outputs.none != 'true'
+      #   run: pnpm run check-i18n -- ${{ steps.changed-src.outputs.files }}
+
       - name: Check if the source and target branches are different
         if: ${{ github.event.pull_request.base.ref == github.event.pull_request.head.ref }}
         run: |
@@ -116,6 +135,7 @@ jobs:
 
   Check-Mock-Isolation:
     name: Check for proper mock cleanup in test files
+    needs: [Code-Quality-Checks]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the Repository
@@ -430,8 +450,8 @@ jobs:
         run: |
           python .github/workflows/scripts/itskip_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
-  Test-Application:
-    name: Test Application (Shard ${{ matrix.shard }})
+  Pre-Test-Checks-Pass:
+    name: All Pre-Testing Checks Pass
     runs-on: ubuntu-latest
     needs:
       [
@@ -441,7 +461,16 @@ jobs:
         Check-Code-Coverage-Disable,
         Check-ItSkip-Disable,
         Check-Mock-Isolation,
+        Python-Compliance,
       ]
+    steps:
+      - name: This job intentionally does nothing
+        run: echo "This job intentionally does nothing"
+
+  Test-Application:
+    name: Test Application (Shard ${{ matrix.shard }})
+    runs-on: ubuntu-latest
+    needs: [Pre-Test-Checks-Pass]
     env:
       TOTAL_SHARDS: 12
     strategy:
@@ -757,7 +786,7 @@ jobs:
   Start-App-Without-Docker:
     name: Check if Talawa Admin app starts (No Docker)
     runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks, Merge-Coverage]
+    needs: [Merge-Coverage]
     if: github.actor != 'dependabot'
     steps:
       - name: Checkout the Repository
@@ -814,7 +843,7 @@ jobs:
   Start-App-Using-Docker:
     name: Check if Talawa Admin app starts in Docker
     runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks, Merge-Coverage]
+    needs: [Merge-Coverage]
     if: github.actor != 'dependabot'
     steps:
       - name: Checkout the Repository
@@ -827,7 +856,6 @@ jobs:
           REACT_APP_TALAWA_URL=http://localhost:4000/graphql
           REACT_APP_USE_RECAPTCHA=
           REACT_APP_RECAPTCHA_SITE_KEY=
-          REACT_APP_BACKEND_WEBSOCKET_URL=ws://localhost:4000/graphql
           ALLOW_LOGS=NO
           USE_DOCKER=YES
           DOCKER_PORT=4321
@@ -886,7 +914,7 @@ jobs:
   Test-Docusaurus-Deployment:
     name: Test Deployment to https://docs-admin.talawa.io
     runs-on: ubuntu-latest
-    needs: [Start-App-Using-Docker, Start-App-Without-Docker]
+    needs: [Merge-Coverage]
     # Run only if the develop branch and not dependabot
     if: ${{ github.actor != 'dependabot[bot]' && github.event.pull_request.base.ref == 'develop' }}
     steps:
@@ -942,7 +970,6 @@ jobs:
   Python-Compliance:
     name: Check Python Code Style
     runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -992,14 +1019,7 @@ jobs:
   Test-Application-E2E:
     timeout-minutes: 35
     runs-on: ubuntu-latest
-    needs:
-      [
-        Code-Quality-Checks,
-        Check-AutoDocs,
-        Check-ESlint-Disable,
-        Check-Code-Coverage-Disable,
-        Check-ItSkip-Disable,
-      ]
+    needs: [Merge-Coverage]
     env:
       REACT_APP_TALAWA_URL: http://127.0.0.1:4000/graphql
     steps:
@@ -1121,7 +1141,6 @@ jobs:
         env:
           CYPRESS_BASE_URL: http://localhost:4321
           CYPRESS_API_URL: http://127.0.0.1:4000/graphql
-          REACT_APP_BACKEND_WEBSOCKET_URL: ws://127.0.0.1:4000/graphql
 
       - name: Upload cypress screenshots on failure
         uses: actions/upload-artifact@v4
