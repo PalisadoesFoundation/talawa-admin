@@ -81,22 +81,16 @@ const renderLeaderboard = (link: ApolloLink): RenderResult => {
   );
 };
 
+vi.mock('react-router', async () => {
+  const originalModule = await vi.importActual('react-router');
+  return {
+    ...originalModule,
+    useParams: vi.fn(),
+  };
+});
+
 describe('Testing Leaderboard Screen', () => {
   afterEach(() => {
-    vi.clearAllMocks();
-  });
-
-  beforeAll(() => {
-    vi.mock('react-router', async () => {
-      const originalModule = await vi.importActual('react-router');
-      return {
-        ...originalModule,
-        useParams: vi.fn(),
-      };
-    });
-  });
-
-  afterAll(() => {
     vi.clearAllMocks();
   });
 

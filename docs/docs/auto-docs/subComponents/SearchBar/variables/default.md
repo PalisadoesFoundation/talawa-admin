@@ -4,9 +4,9 @@
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<`InterfaceSearchBarProps`\>
+> `const` **default**: `React.FC`\<[`InterfaceSearchBarProps`](../../../types/SearchBar/interface/interfaces/InterfaceSearchBarProps.md)\>
 
-Defined in: [src/subComponents/SearchBar.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/subComponents/SearchBar.tsx#L31)
+Defined in: [src/subComponents/SearchBar.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/subComponents/SearchBar.tsx#L15)
 
 SearchBar component renders a search input with a button.
 It allows users to enter a search term and triggers a callback on search.

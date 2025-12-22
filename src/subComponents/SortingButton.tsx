@@ -33,8 +33,6 @@ interface InterfaceSortingButtonProps {
   type?: 'sort' | 'filter';
   /** Accessible label for the dropdown button (screen readers) */
   ariaLabel?: string;
-  /** Accessible label for sort/filter functionality */
-  sortAriaLabel?: string;
 }
 
 /**
@@ -56,7 +54,6 @@ const SortingButton: React.FC<InterfaceSortingButtonProps> = ({
   buttonLabel,
   type = 'sort',
   ariaLabel,
-  sortAriaLabel,
 }) => {
   // Determine the icon based on the type
   const IconComponent = type === 'filter' ? FilterAltOutlined : SortIcon;
@@ -72,7 +69,7 @@ const SortingButton: React.FC<InterfaceSortingButtonProps> = ({
         <IconComponent
           className={'me-1'}
           data-testid="sorting-icon"
-          aria-label={sortAriaLabel}
+          aria-hidden="true"
         />{' '}
         {/* Use the appropriate icon */}
         {buttonLabel || selectedOption}
@@ -110,7 +107,6 @@ SortingButton.propTypes = {
   buttonLabel: PropTypes.string, // Optional prop for custom button label
   type: PropTypes.oneOf(['sort', 'filter']), // Type to determine the icon
   ariaLabel: PropTypes.string, // Accessible label for screen readers
-  sortAriaLabel: PropTypes.string, // Accessible label for sort/filter functionality
 };
 
 export default SortingButton;

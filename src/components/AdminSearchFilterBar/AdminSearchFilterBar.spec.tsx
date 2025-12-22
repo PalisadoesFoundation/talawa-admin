@@ -17,7 +17,11 @@ vi.mock('subComponents/SearchBar', () => ({
           onChange={(e) => onChange?.(e.target.value)}
           data-testid={inputTestId}
         />
-        <button onClick={() => onSearch?.(value)} data-testid={buttonTestId}>
+        <button
+          type="button"
+          onClick={() => onSearch?.(value)}
+          data-testid={buttonTestId}
+        >
           Search
         </button>
       </div>
@@ -296,7 +300,9 @@ describe('AdminSearchFilterBar', () => {
         },
       ],
       additionalButtons: (
-        <button data-testid="upload-button">Upload Plugin</button>
+        <button type="button" data-testid="upload-button">
+          Upload Plugin
+        </button>
       ),
     };
 
@@ -315,7 +321,9 @@ describe('AdminSearchFilterBar', () => {
         onSearchChange: vi.fn(),
         dropdowns: [],
         additionalButtons: (
-          <button data-testid="upload-button">Upload Plugin</button>
+          <button type="button" data-testid="upload-button">
+            Upload Plugin
+          </button>
         ),
       };
 
@@ -651,7 +659,11 @@ describe('AdminSearchFilterBar', () => {
             },
           ]}
           additionalButtons={
-            <button onClick={onUploadClick} data-testid="upload-btn">
+            <button
+              type="button"
+              onClick={onUploadClick}
+              data-testid="upload-btn"
+            >
               Upload Plugin
             </button>
           }

@@ -72,6 +72,12 @@ const AdminSearchFilterBar: React.FC<InterfaceAdminSearchFilterBarProps> = ({
     [onSearchChange, debounceDelay],
   );
 
+  useEffect(() => {
+    return () => {
+      debouncedOnSearchChange.cancel();
+    };
+  }, [debouncedOnSearchChange]);
+
   const handleSearchChange = useCallback(
     (value: string): void => {
       setInternalSearchValue(value);
@@ -88,6 +94,9 @@ const AdminSearchFilterBar: React.FC<InterfaceAdminSearchFilterBarProps> = ({
 
   return (
     <div className={containerClassName}>
+      <span id="admin-search-desc" className={styles.screenReaderOnly}>
+        {translations.searchInputAriaDescription}
+      </span>
       <SearchBar
         placeholder={searchPlaceholder}
         value={internalSearchValue}
@@ -95,7 +104,8 @@ const AdminSearchFilterBar: React.FC<InterfaceAdminSearchFilterBarProps> = ({
         onChange={handleSearchChange}
         inputTestId={searchInputTestId}
         buttonTestId={searchButtonTestId}
-        aria-describedby={translations.searchInputAriaDescription}
+        buttonAriaLabel={translations.searchButtonAriaLabel}
+        aria-describedby="admin-search-desc"
       />
       {(dropdowns?.length || additionalButtons) && (
         <div
@@ -116,11 +126,6 @@ const AdminSearchFilterBar: React.FC<InterfaceAdminSearchFilterBarProps> = ({
                 buttonLabel={dropdown.label}
                 type={dropdown.type}
                 ariaLabel={`${translations.dropdownAriaLabel} ${dropdown.label}`}
-                sortAriaLabel={
-                  dropdown.type === 'sort'
-                    ? translations.sortButtonAriaLabel
-                    : translations.filterButtonAriaLabel
-                }
               />
             ))}
           {additionalButtons}

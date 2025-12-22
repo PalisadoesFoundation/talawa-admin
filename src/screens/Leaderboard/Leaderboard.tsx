@@ -138,34 +138,37 @@ function leaderboard(): JSX.Element {
     [rankingsData],
   );
 
-  const leaderboardDropdowns = [
-    {
-      label: tCommon('sort'),
-      type: 'sort' as const,
-      options: [
-        { label: t('mostHours'), value: 'hours_DESC' },
-        { label: t('leastHours'), value: 'hours_ASC' },
-      ],
-      selectedOption: sortBy,
-      onOptionChange: (value: string | number) =>
-        setSortBy(value as 'hours_DESC' | 'hours_ASC'),
-      dataTestIdPrefix: 'sort',
-    },
-    {
-      label: t('timeFrame'),
-      type: 'filter' as const,
-      options: [
-        { label: t('allTime'), value: TimeFrame.All },
-        { label: t('weekly'), value: TimeFrame.Weekly },
-        { label: t('monthly'), value: TimeFrame.Monthly },
-        { label: t('yearly'), value: TimeFrame.Yearly },
-      ],
-      selectedOption: timeFrame,
-      onOptionChange: (value: string | number) =>
-        setTimeFrame(value as TimeFrame),
-      dataTestIdPrefix: 'timeFrame',
-    },
-  ];
+  const leaderboardDropdowns = useMemo(
+    () => [
+      {
+        label: tCommon('sort'),
+        type: 'sort' as const,
+        options: [
+          { label: t('mostHours'), value: 'hours_DESC' },
+          { label: t('leastHours'), value: 'hours_ASC' },
+        ],
+        selectedOption: sortBy,
+        onOptionChange: (value: string | number) =>
+          setSortBy(value as 'hours_DESC' | 'hours_ASC'),
+        dataTestIdPrefix: 'sort',
+      },
+      {
+        label: t('timeFrame'),
+        type: 'filter' as const,
+        options: [
+          { label: t('allTime'), value: TimeFrame.All },
+          { label: t('weekly'), value: TimeFrame.Weekly },
+          { label: t('monthly'), value: TimeFrame.Monthly },
+          { label: t('yearly'), value: TimeFrame.Yearly },
+        ],
+        selectedOption: timeFrame,
+        onOptionChange: (value: string | number) =>
+          setTimeFrame(value as TimeFrame),
+        dataTestIdPrefix: 'timeFrame',
+      },
+    ],
+    [tCommon, t, sortBy, timeFrame],
+  );
 
   if (rankingsLoading) {
     return <Loader size="xl" />;

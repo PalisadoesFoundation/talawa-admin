@@ -14,11 +14,11 @@ Strongly typed props for the shared SearchBar component.
 
 ## Properties
 
-### buttonAriaLabel?
+### buttonAriaLabel
 
-> `optional` **buttonAriaLabel**: `string`
+> **buttonAriaLabel**: `string`
 
-Defined in: [src/types/SearchBar/interface.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L75)
+Defined in: [src/types/SearchBar/interface.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L61)
 
 Accessible label for the search button.
 
@@ -31,16 +31,6 @@ Accessible label for the search button.
 Defined in: [src/types/SearchBar/interface.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L55)
 
 Additional class applied to the search button.
-
-***
-
-### buttonLabel?
-
-> `optional` **buttonLabel**: `string`
-
-Defined in: [src/types/SearchBar/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L73)
-
-Optional label shown inside the search button.
 
 ***
 
@@ -72,7 +62,7 @@ Additional class applied to the container.
 
 > `optional` **clearButtonTestId**: `string`
 
-Defined in: [src/types/SearchBar/interface.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L61)
+Defined in: [src/types/SearchBar/interface.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L63)
 
 Clear button test id override.
 
@@ -89,16 +79,6 @@ Initial value when used in uncontrolled mode.
 #### Overrides
 
 `Omit.defaultValue`
-
-***
-
-### icon?
-
-> `optional` **icon**: `ReactNode`
-
-Defined in: [src/types/SearchBar/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L79)
-
-Optional custom icon rendered inside the input field.
 
 ***
 
@@ -122,19 +102,9 @@ Input test id override.
 
 ***
 
-### isLoading?
-
-> `optional` **isLoading**: `boolean`
-
-Defined in: [src/types/SearchBar/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L77)
-
-Renders a loading spinner inside the button when true.
-
-***
-
 ### onChange()?
 
-> `optional` **onChange**: (`value`, `event?`) => `void`
+> `optional` **onChange**: (`value`) => `void`
 
 Defined in: [src/types/SearchBar/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L47)
 
@@ -145,10 +115,6 @@ Callback fired whenever the input value changes.
 ##### value
 
 `string`
-
-##### event?
-
-`ChangeEvent`\<`HTMLInputElement`\>
 
 #### Returns
 
@@ -172,7 +138,7 @@ Callback fired after the clear button is pressed.
 
 ### onSearch()?
 
-> `optional` **onSearch**: (`value`, `metadata?`) => `void`
+> `optional` **onSearch**: (`value`) => `void`
 
 Defined in: [src/types/SearchBar/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L45)
 
@@ -183,10 +149,6 @@ Callback invoked when the user submits a search via button, Enter, or clear.
 ##### value
 
 `string`
-
-##### metadata?
-
-[`InterfaceSearchMeta`](InterfaceSearchMeta.md)
 
 #### Returns
 
@@ -208,46 +170,6 @@ Placeholder text for the search input.
 
 ***
 
-### showClearButton?
-
-> `optional` **showClearButton**: `boolean`
-
-Defined in: [src/types/SearchBar/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L69)
-
-Toggle visibility of the inline clear button. Defaults to true.
-
-***
-
-### showLeadingIcon?
-
-> `optional` **showLeadingIcon**: `boolean`
-
-Defined in: [src/types/SearchBar/interface.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L71)
-
-Toggle the leading search icon visibility. Defaults to true.
-
-***
-
-### showSearchButton?
-
-> `optional` **showSearchButton**: `boolean`
-
-Defined in: [src/types/SearchBar/interface.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L67)
-
-Toggle visibility of the trailing search button. Defaults to true.
-
-***
-
-### size?
-
-> `optional` **size**: [`SearchBarSize`](../../type/type-aliases/SearchBarSize.md)
-
-Defined in: [src/types/SearchBar/interface.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L63)
-
-Visual size of the component.
-
-***
-
 ### value?
 
 > `optional` **value**: `string`
@@ -259,13 +181,3 @@ Controlled input value.
 #### Overrides
 
 `Omit.value`
-
-***
-
-### variant?
-
-> `optional` **variant**: [`SearchBarVariant`](../../type/type-aliases/SearchBarVariant.md)
-
-Defined in: [src/types/SearchBar/interface.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L65)
-
-Visual variant of the component.

@@ -1,6 +1,6 @@
 import type React from 'react';
-import type { ChangeEvent, KeyboardEvent, MouseEvent, ReactNode } from 'react';
-import type { SearchBarSize, SearchBarVariant, SearchBarTrigger } from './type';
+import type { KeyboardEvent, MouseEvent } from 'react';
+import type { SearchBarTrigger } from './type';
 
 /**
  * Metadata describing the action that triggered a search.
@@ -42,9 +42,9 @@ export interface InterfaceSearchBarProps
   /** Initial value when used in uncontrolled mode. */
   defaultValue?: string;
   /** Callback invoked when the user submits a search via button, Enter, or clear. */
-  onSearch?: (value: string, metadata?: InterfaceSearchMeta) => void;
+  onSearch?: (value: string) => void;
   /** Callback fired whenever the input value changes. */
-  onChange?: (value: string, event?: ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (value: string) => void;
   /** Callback fired after the clear button is pressed. */
   onClear?: () => void;
   /** Additional class applied to the container. */
@@ -57,24 +57,8 @@ export interface InterfaceSearchBarProps
   inputTestId?: string;
   /** Button test id override. */
   buttonTestId?: string;
+  /** Accessible label for the search button. */
+  buttonAriaLabel: string;
   /** Clear button test id override. */
   clearButtonTestId?: string;
-  /** Visual size of the component. */
-  size?: SearchBarSize;
-  /** Visual variant of the component. */
-  variant?: SearchBarVariant;
-  /** Toggle visibility of the trailing search button. Defaults to true. */
-  showSearchButton?: boolean;
-  /** Toggle visibility of the inline clear button. Defaults to true. */
-  showClearButton?: boolean;
-  /** Toggle the leading search icon visibility. Defaults to true. */
-  showLeadingIcon?: boolean;
-  /** Optional label shown inside the search button. */
-  buttonLabel?: string;
-  /** Accessible label for the search button. */
-  buttonAriaLabel?: string;
-  /** Renders a loading spinner inside the button when true. */
-  isLoading?: boolean;
-  /** Optional custom icon rendered inside the input field. */
-  icon?: ReactNode;
 }
