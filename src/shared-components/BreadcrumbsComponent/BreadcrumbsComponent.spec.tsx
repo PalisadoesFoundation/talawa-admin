@@ -97,6 +97,16 @@ describe('BreadcrumbsComponent', () => {
     expect(parent.closest('a')).toBeNull();
   });
 
+  it('handles breadcrumb item with no label and no translationKey gracefully', () => {
+    renderComponent([{ to: '/' }, { label: 'Current', isCurrent: true }]);
+
+    const nav = screen.getByRole('navigation');
+    expect(nav).toBeInTheDocument();
+    expect(screen.getByText('Current')).toBeInTheDocument();
+    const listItems = nav.querySelectorAll('li');
+    expect(listItems[0]).toHaveTextContent('');
+  });
+
   /**
    * Navigation Tests
    */
