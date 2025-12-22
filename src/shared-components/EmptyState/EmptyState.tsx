@@ -73,8 +73,9 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
    */
   const getText = (text: string): string => {
     try {
-      const translated = t(text);
-      return translated === text ? text : translated;
+      // i18next returns the key if translation doesn't exist
+      // We treat the input as plain text if it equals the output
+      return t(text, { defaultValue: text });
     } catch {
       return text;
     }
@@ -82,15 +83,17 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
 
   /**
    * Helper to map custom variant to MUI Button variant
-   * @param {string | undefined} [variant] - Button variant type
+   * @param {('primary' | 'secondary' | 'outlined') | undefined} [variant] - Button variant type
    * @returns {string} - MUI Button variant
    */
-  const getButtonVariant = (variant: string | undefined) => {
+  const getButtonVariant = (
+    variant: 'primary' | 'secondary' | 'outlined' | undefined,
+  ): 'contained' | 'outlined' | 'text' => {
     switch (variant) {
       case 'primary':
         return 'contained';
       case 'secondary':
-        return 'outlined';
+        return 'text';
       case 'outlined':
         return 'outlined';
       default:
@@ -100,7 +103,7 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
 
   const messageText = getText(message);
   const descriptionText = description ? getText(description) : undefined;
-  const buttonVarient = getButtonVariant(action?.variant);
+  const buttonVariant = getButtonVariant(action?.variant);
 
   return (
     <Stack
@@ -149,7 +152,6 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
           color="text.secondary"
           textAlign="center"
           data-testid={`${dataTestId}-description`}
-          role="note"
           aria-label={descriptionText}
         >
           {descriptionText}
@@ -159,10 +161,9 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
       {/* Action Button Section */}
       {action && (
         <Button
-          variant={buttonVarient}
+          variant={buttonVariant}
           onClick={action.onClick}
           data-testid={`${dataTestId}-action`}
-          role="button"
           aria-label={`${getText(action.label)}`}
         >
           {getText(action.label)}

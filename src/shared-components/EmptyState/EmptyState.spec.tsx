@@ -8,7 +8,7 @@ import {
   emptyStateWithDescriptionMock,
   emptyStateWithIconMock,
   emptyStateWithCustomIconMock,
-  emptyStateWithActionMock,
+  emptyStateWithActionBaseMock,
   emptyStateWithAllPropsMock,
   emptyStateWithCustomCSSMock,
   emptyStateWithCustomDataTestIdMock,
@@ -30,7 +30,7 @@ describe('EmptyState Component', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks(); // Restore original implementations
+    vi.clearAllMocks(); // Clear call history
   });
 
   it('renders with message only', () => {
@@ -53,27 +53,19 @@ describe('EmptyState Component', () => {
     expect(screen.getByText('createYourFirstCampaign')).toBeInTheDocument();
   });
 
-  it('applies action props correctly', () => {
-    renderEmptyState(emptyStateWithActionMock);
+  it('applies action props correctly and test onClick action prop', () => {
+    const handleClick = vi.fn();
+    renderEmptyState({
+      ...emptyStateWithActionBaseMock,
+      action: {
+        label: 'createNew',
+        onClick: handleClick,
+        variant: 'primary',
+      },
+    });
     const button = screen.getByRole('button', { name: 'createNew' });
     expect(button).toBeInTheDocument();
     expect(button).toHaveClass('MuiButton-contained');
-  });
-
-  it('renders action button and handles click', () => {
-    const handleClick = vi.fn();
-    renderEmptyState({
-      message: 'No data',
-      action: {
-        label: 'Create New',
-        onClick: handleClick,
-        variant: 'outlined',
-      },
-    });
-
-    const button = screen.getByRole('button', { name: 'Create New' });
-    expect(button).toBeInTheDocument();
-    expect(button).toHaveClass('MuiButton-outlined');
     fireEvent.click(button);
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
@@ -96,9 +88,20 @@ describe('EmptyState Component', () => {
   });
 
   it('renders correctly with all props', () => {
-    const { getByText, getByTestId } = renderEmptyState(
-      emptyStateWithAllPropsMock,
-    );
+    const handleClick = vi.fn();
+    const { getByText, getByTestId } = renderEmptyState({
+      ...emptyStateWithAllPropsMock,
+      action: {
+        label: 'resetFilters',
+        onClick: handleClick,
+        variant: 'secondary',
+      },
+    });
+    const button = screen.getByRole('button', { name: 'resetFilters' });
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveClass('MuiButton-text');
+    fireEvent.click(button);
+    expect(handleClick).toHaveBeenCalledTimes(1);
     expect(getByText('noResults')).toBeInTheDocument();
     expect(getByText('tryAdjustingFilters')).toBeInTheDocument();
     expect(getByTestId('custom-empty-state-icon')).toBeInTheDocument();
@@ -108,19 +111,22 @@ describe('EmptyState Component', () => {
 });
 
 describe('EmptyState – i18n failure fallback', () => {
-  it('falls back to raw text when translation throws', async () => {
-    vi.resetModules();
+  describe('EmptyState – i18n failure fallback', () => {
+    it('falls back to raw text when translation throws', async () => {
+      vi.resetModules();
 
-    vi.doMock('react-i18next', () => ({
-      useTranslation: () => ({
-        t: () => {
-          throw new Error('i18n crashed');
-        },
-      }),
-    }));
+      vi.doMock('react-i18next', () => ({
+        useTranslation: () => ({
+          t: () => {
+            throw new Error('i18n crashed');
+          },
+        }),
+      }));
 
-    render(<EmptyState message="Fallback Text" />);
+      const { default: EmptyStateComponent } = await import('./EmptyState');
+      render(<EmptyStateComponent message="Fallback Text" />);
 
-    expect(screen.getByText('Fallback Text')).toBeInTheDocument();
+      expect(screen.getByText('Fallback Text')).toBeInTheDocument();
+    });
   });
 });

@@ -20,24 +20,20 @@ export const emptyStateWithCustomIconMock: InterfaceEmptyStateProps = {
   icon: React.createElement('div', { 'data-testid': 'custom-icon' }, '🎉'),
 };
 
-export const emptyStateWithActionMock: InterfaceEmptyStateProps = {
+export const emptyStateWithActionBaseMock: Omit<
+  InterfaceEmptyStateProps,
+  'action'
+> = {
   message: 'noData',
-  action: {
-    label: 'createNew',
-    onClick: vi.fn(),
-    variant: 'primary',
-  },
 };
 
-export const emptyStateWithAllPropsMock: InterfaceEmptyStateProps = {
+export const emptyStateWithAllPropsMock: Omit<
+  InterfaceEmptyStateProps,
+  'action'
+> = {
   message: 'noResults',
   description: 'tryAdjustingFilters',
   icon: 'search',
-  action: {
-    label: 'resetFilters',
-    onClick: vi.fn(),
-    variant: 'secondary',
-  },
   className: 'custom-class',
   dataTestId: 'custom-empty-state',
 };
