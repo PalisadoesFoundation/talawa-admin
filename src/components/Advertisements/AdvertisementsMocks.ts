@@ -35,6 +35,7 @@ import {
   ApolloLink,
   HttpLink,
 } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import {
@@ -174,9 +175,19 @@ const httpLink = new HttpLink({
   uri: BACKEND_URL,
 });
 
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('Talawa-admin_token');
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `Bearer ${token}` : '',
+    },
+  };
+});
+
 export const client: ApolloClient = new ApolloClient({
   cache: new InMemoryCache(),
-  link,
+  link: ApolloLink.from([authLink, httpLink]),
 });
 
 export async function wait(ms = 100): Promise<void> {

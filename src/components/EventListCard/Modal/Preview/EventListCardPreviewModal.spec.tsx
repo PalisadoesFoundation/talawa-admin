@@ -112,7 +112,7 @@ const renderComponent = (props = {}) => {
 };
 
 const getPickerInputByLabel = (label: string) =>
-  screen.getByRole('group', { name: label, hidden: true });
+  screen.getByLabelText(label, { selector: 'input' }) as HTMLInputElement;
 
 describe('EventListCardPreviewModal', () => {
   afterEach(() => {
@@ -627,9 +627,11 @@ describe('EventListCardPreviewModal', () => {
       setEventEndDate: mockSetEventEndDate,
     });
 
-    const startDateInput = getPickerInputByLabel('startDate');
-    expect(startDateInput.parentElement).toBeTruthy();
-    const startDatePicker = startDateInput.parentElement;
+    // MUI DatePicker renders with MM/DD/YYYY placeholder, find the first one (start date)
+    const dateInputs = screen.getAllByPlaceholderText('MM/DD/YYYY');
+    expect(dateInputs.length).toBeGreaterThan(0);
+    const startDateInput = dateInputs[0];
+    const startDatePicker = startDateInput.closest('.MuiFormControl-root') || startDateInput.parentElement?.parentElement;
     const calendarButton = within(
       startDatePicker as HTMLElement,
     ).getByLabelText(/choose date/i);
@@ -653,9 +655,11 @@ describe('EventListCardPreviewModal', () => {
       setEventEndDate: mockSetEventEndDate,
     });
 
-    const endDateInput = getPickerInputByLabel('endDate');
-    expect(endDateInput.parentElement).toBeTruthy();
-    const endDatePicker = endDateInput.parentElement;
+    // MUI DatePicker renders with MM/DD/YYYY placeholder, find the second one (end date)
+    const dateInputs = screen.getAllByPlaceholderText('MM/DD/YYYY');
+    expect(dateInputs.length).toBeGreaterThanOrEqual(2);
+    const endDateInput = dateInputs[1];
+    const endDatePicker = endDateInput.closest('.MuiFormControl-root') || endDateInput.parentElement?.parentElement;
     const calendarButton = within(endDatePicker as HTMLElement).getByLabelText(
       /choose date/i,
     );
@@ -679,9 +683,11 @@ describe('EventListCardPreviewModal', () => {
       setFormState: mockSetFormState,
     });
 
-    const startTimeInput = getPickerInputByLabel('startTime');
-    expect(startTimeInput.parentElement).toBeTruthy();
-    const startTimePicker = startTimeInput.parentElement;
+    // MUI TimePicker renders with hh:mm aa placeholder, find the first one (start time)
+    const timeInputs = screen.getAllByPlaceholderText('hh:mm aa');
+    expect(timeInputs.length).toBeGreaterThan(0);
+    const startTimeInput = timeInputs[0];
+    const startTimePicker = startTimeInput.closest('.MuiFormControl-root') || startTimeInput.parentElement?.parentElement;
     const clockButton = within(startTimePicker as HTMLElement).getByLabelText(
       /choose time/i,
     );
@@ -708,9 +714,11 @@ describe('EventListCardPreviewModal', () => {
       setFormState: mockSetFormState,
     });
 
-    const endTimeInput = getPickerInputByLabel('endTime');
-    expect(endTimeInput.parentElement).toBeTruthy();
-    const endTimePicker = endTimeInput.parentElement;
+    // MUI TimePicker renders with hh:mm aa placeholder, find the second one (end time)
+    const timeInputs = screen.getAllByPlaceholderText('hh:mm aa');
+    expect(timeInputs.length).toBeGreaterThanOrEqual(2);
+    const endTimeInput = timeInputs[1];
+    const endTimePicker = endTimeInput.closest('.MuiFormControl-root') || endTimeInput.parentElement?.parentElement;
     const clockButton = within(endTimePicker as HTMLElement).getByLabelText(
       /choose time/i,
     );
@@ -1082,9 +1090,11 @@ describe('EventListCardPreviewModal', () => {
         setEventEndDate: mockSetEventEndDate,
       });
 
-      const dateInput = getPickerInputByLabel('startDate');
-      expect(dateInput.parentElement).toBeDefined();
-      const datePicker = dateInput?.parentElement;
+      // MUI DatePicker renders with MM/DD/YYYY placeholder, find the first one (start date)
+      const dateInputs = screen.getAllByPlaceholderText('MM/DD/YYYY');
+      expect(dateInputs.length).toBeGreaterThan(0);
+      const dateInput = dateInputs[0];
+      const datePicker = dateInput.closest('.MuiFormControl-root') || dateInput.parentElement?.parentElement;
       const calendarButton = within(datePicker as HTMLElement).getByLabelText(
         /choose date/i,
       );
