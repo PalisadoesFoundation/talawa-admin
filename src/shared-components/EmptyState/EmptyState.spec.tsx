@@ -137,6 +137,21 @@ describe('EmptyState Component', () => {
 
     expect(button).toHaveClass('MuiButton-outlined');
   });
+  it('renders action button with default variant when variant is undefined', () => {
+    renderEmptyState({
+      message: 'Test',
+      action: {
+        label: 'Default Action',
+        onClick: vi.fn(),
+      },
+    });
+
+    const button = screen.getByRole('button', {
+      name: 'Default Action',
+    });
+
+    expect(button).toHaveClass('MuiButton-contained');
+  });
 });
 
 describe('EmptyState – i18n failure fallback', () => {
