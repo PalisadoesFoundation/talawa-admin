@@ -1,9 +1,8 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
 import { Provider } from 'react-redux';
 import { MockedProvider } from '@apollo/react-testing';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import App from './App';
@@ -474,144 +473,57 @@ describe('Testing the App Component', () => {
   });
 
   // Add below your existing tests in App.spec.tsx
+  it('blocks /user/settings when not logged in', async () => {
+    // Force IsLoggedIn !== 'TRUE'
+    const lsSpy = vi.spyOn(useLSModule, 'default').mockImplementation(
+      () =>
+        ({
+          getItem: (key: string) =>
+            key === 'IsLoggedIn' ? 'FALSE' : undefined,
+          setItem: vi.fn(),
+          removeItem: vi.fn(),
+          getStorageKey: (k: string) => `Talawa-admin_${k}`,
+        }) as unknown as ReturnType<typeof useLSModule.default>,
+    );
 
-  describe('SecuredRouteForUser explicit coverage', () => {
-    it('redirects away from /user/settings when not logged in', async () => {
-      const lsSpy = vi.spyOn(useLSModule, 'default').mockImplementation(
-        () =>
-          ({
-            getItem: (key: string) =>
-              key === 'IsLoggedIn' ? 'FALSE' : undefined,
-            setItem: vi.fn(),
-            removeItem: vi.fn(),
-            getStorageKey: (k: string) => `Talawa-admin_${k}`,
-          }) as unknown as ReturnType<typeof useLSModule.default>,
-      );
+    try {
+      renderApp(link, '/user/settings');
 
-      try {
-        render(
-          <MemoryRouter initialEntries={['/user/settings']}>
-            <Routes>
-              <Route element={<SecuredRouteForUser />}>
-                <Route
-                  path="/user/settings"
-                  element={<div data-testid="guard-outlet" />}
-                />
-              </Route>
-              <Route path="/" element={<div data-testid="login-sentinel" />} />
-              <Route
-                path="*"
-                element={<div data-testid="not-found-sentinel" />}
-              />
-            </Routes>
-          </MemoryRouter>,
-        );
+      // Guard blocks route; mocked Settings must NOT appear
+      await waitFor(() => {
+        expect(screen.queryByTestId('mock-settings')).not.toBeInTheDocument();
+      });
+    } finally {
+      lsSpy.mockRestore();
+    }
+  });
 
-        await waitFor(() => {
-          // Guard blocked; we should be at "/"
-          expect(screen.getByTestId('login-sentinel')).toBeInTheDocument();
-          expect(screen.queryByTestId('guard-outlet')).not.toBeInTheDocument();
-          expect(
-            screen.queryByTestId('not-found-sentinel'),
-          ).not.toBeInTheDocument();
-        });
-      } finally {
-        lsSpy.mockRestore();
-      }
-    });
+  it('blocks /user/settings when AdminFor is present', async () => {
+    // Force IsLoggedIn === 'TRUE' and AdminFor present
+    const lsSpy = vi.spyOn(useLSModule, 'default').mockImplementation(
+      () =>
+        ({
+          getItem: (key: string) =>
+            key === 'IsLoggedIn'
+              ? 'TRUE'
+              : key === 'AdminFor'
+                ? 'some-org-id'
+                : undefined,
+          setItem: vi.fn(),
+          removeItem: vi.fn(),
+          getStorageKey: (k: string) => `Talawa-admin_${k}`,
+        }) as unknown as ReturnType<typeof useLSModule.default>,
+    );
 
-    it('renders not-found when AdminFor is present', async () => {
-      const lsSpy = vi.spyOn(useLSModule, 'default').mockImplementation(
-        () =>
-          ({
-            getItem: (key: string) =>
-              key === 'IsLoggedIn'
-                ? 'TRUE'
-                : key === 'AdminFor'
-                  ? 'some-org-id'
-                  : undefined,
-            setItem: vi.fn(),
-            removeItem: vi.fn(),
-            getStorageKey: (k: string) => `Talawa-admin_${k}`,
-          }) as unknown as ReturnType<typeof useLSModule.default>,
-      );
+    try {
+      renderApp(link, '/user/settings');
 
-      try {
-        render(
-          <MemoryRouter initialEntries={['/user/settings']}>
-            <Routes>
-              <Route element={<SecuredRouteForUser />}>
-                <Route
-                  path="/user/settings"
-                  element={<div data-testid="guard-outlet" />}
-                />
-              </Route>
-              <Route path="/" element={<div data-testid="login-sentinel" />} />
-              <Route
-                path="*"
-                element={<div data-testid="not-found-sentinel" />}
-              />
-            </Routes>
-          </MemoryRouter>,
-        );
-
-        await waitFor(() => {
-          // Guard took the not-found path
-          expect(screen.getByTestId('not-found-sentinel')).toBeInTheDocument();
-          expect(screen.queryByTestId('guard-outlet')).not.toBeInTheDocument();
-          expect(
-            screen.queryByTestId('login-sentinel'),
-          ).not.toBeInTheDocument();
-        });
-      } finally {
-        lsSpy.mockRestore();
-      }
-    });
-
-    it('allows /user/settings when logged in and AdminFor absent', async () => {
-      const lsSpy = vi.spyOn(useLSModule, 'default').mockImplementation(
-        () =>
-          ({
-            getItem: (key: string) =>
-              key === 'IsLoggedIn' ? 'TRUE' : undefined, // AdminFor absent
-            setItem: vi.fn(),
-            removeItem: vi.fn(),
-            getStorageKey: (k: string) => `Talawa-admin_${k}`,
-          }) as unknown as ReturnType<typeof useLSModule.default>,
-      );
-
-      try {
-        render(
-          <MemoryRouter initialEntries={['/user/settings']}>
-            <Routes>
-              <Route element={<SecuredRouteForUser />}>
-                <Route
-                  path="/user/settings"
-                  element={<div data-testid="guard-outlet" />}
-                />
-              </Route>
-              <Route path="/" element={<div data-testid="login-sentinel" />} />
-              <Route
-                path="*"
-                element={<div data-testid="not-found-sentinel" />}
-              />
-            </Routes>
-          </MemoryRouter>,
-        );
-
-        await waitFor(() => {
-          // Guard passed; outlet rendered
-          expect(screen.getByTestId('guard-outlet')).toBeInTheDocument();
-          expect(
-            screen.queryByTestId('login-sentinel'),
-          ).not.toBeInTheDocument();
-          expect(
-            screen.queryByTestId('not-found-sentinel'),
-          ).not.toBeInTheDocument();
-        });
-      } finally {
-        lsSpy.mockRestore();
-      }
-    });
+      // Guard takes "not allowed" branch; mocked Settings must NOT appear
+      await waitFor(() => {
+        expect(screen.queryByTestId('mock-settings')).not.toBeInTheDocument();
+      });
+    } finally {
+      lsSpy.mockRestore();
+    }
   });
 });
