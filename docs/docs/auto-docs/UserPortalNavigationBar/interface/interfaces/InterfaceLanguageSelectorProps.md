@@ -4,7 +4,14 @@
 
 # Interface: InterfaceLanguageSelectorProps
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:168](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L168)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L181)
+
+Props interface for LanguageSelector subcomponent
+
+## Description
+
+Defines properties for the language selection dropdown that allows users
+to switch between available interface languages (en, fr, hi, es, zh).
 
 ## Properties
 
@@ -12,7 +19,9 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:168](https://github.
 
 > `optional` **currentLanguageCode**: `string`
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:173](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L173)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:186](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L186)
+
+Currently active language code
 
 ***
 
@@ -20,7 +29,9 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:173](https://github.
 
 > `optional` **dropDirection**: `"start"` \| `"end"` \| `"up"` \| `"down"`
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:171](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L171)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:184](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L184)
+
+Direction for dropdown menu
 
 ***
 
@@ -28,7 +39,9 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:171](https://github.
 
 > **handleLanguageChange**: (`languageCode`) => `void` \| `Promise`\<`void`\>
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:172](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L172)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:185](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L185)
+
+Handler called when language is selected
 
 #### Parameters
 
@@ -46,7 +59,9 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:172](https://github.
 
 > `optional` **showLanguageSelector**: `boolean`
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:169](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L169)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L182)
+
+Whether to display the language selector
 
 ***
 
@@ -54,4 +69,6 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:169](https://github.
 
 > `optional` **testIdPrefix**: `string`
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:170](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L170)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:183](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L183)
+
+Prefix for test IDs

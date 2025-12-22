@@ -12,7 +12,7 @@ Main component props interface
 
 ### branding?
 
-> `optional` **branding**: [`BrandingConfig`](../../types/type-aliases/BrandingConfig.md)
+> `optional` **branding**: [`BrandingConfig`](../../../types/UserPortalNavigationBar/types/type-aliases/BrandingConfig.md)
 
 Defined in: [src/types/UserPortalNavigationBar/interface.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L66)
 
@@ -117,7 +117,7 @@ Navigation mode - determines default behavior and styling
 
 ### navigationLinks?
 
-> `optional` **navigationLinks**: [`NavigationLink`](../../types/type-aliases/NavigationLink.md)[]
+> `optional` **navigationLinks**: [`NavigationLink`](../../../types/UserPortalNavigationBar/types/type-aliases/NavigationLink.md)[]
 
 Defined in: [src/types/UserPortalNavigationBar/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L72)
 
@@ -175,7 +175,7 @@ If not provided, uses react-router navigation
 
 ##### link
 
-[`NavigationLink`](../../types/type-aliases/NavigationLink.md)
+[`NavigationLink`](../../../types/UserPortalNavigationBar/types/type-aliases/NavigationLink.md)
 
 #### Returns
 

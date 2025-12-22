@@ -4,7 +4,9 @@
 
 # Interface: InterfaceUserDropdownProps
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:175](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L175)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:202](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L202)
+
+Props interface for UserDropdown subcomponent
 
 ## Properties
 
@@ -12,7 +14,9 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:175](https://github.
 
 > **dropDirection**: `"start"` \| `"end"` \| `"up"` \| `"down"`
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:178](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L178)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:205](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L205)
+
+Direction for dropdown menu
 
 ***
 
@@ -20,7 +24,9 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:178](https://github.
 
 > **finalUserName**: `string`
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:180](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L180)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:207](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L207)
+
+User display name
 
 ***
 
@@ -28,7 +34,9 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:180](https://github.
 
 > **handleLogout**: () => `void`
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:179](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L179)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:206](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L206)
+
+Handler called when logout is clicked
 
 #### Returns
 
@@ -40,7 +48,9 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:179](https://github.
 
 > **navigate**: `NavigateFunction`
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L181)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:208](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L208)
+
+React Router navigate function
 
 ***
 
@@ -48,7 +58,9 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:181](https://github.
 
 > **PermIdentityIcon**: `OverridableComponent`\<`SvgIconTypeMap`\<`object`, `"svg"`\>\>
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:184](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L184)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:211](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L211)
+
+Material-UI person icon component
 
 ***
 
@@ -56,7 +68,9 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:184](https://github.
 
 > **showUserProfile**: `boolean`
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L176)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:203](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L203)
+
+Whether to display the user profile dropdown
 
 ***
 
@@ -64,7 +78,9 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:176](https://github.
 
 > **styles**: `CSSModuleClasses`
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:183](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L183)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:210](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L210)
+
+CSS module classes object
 
 ***
 
@@ -72,7 +88,9 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:183](https://github.
 
 > **tCommon**: `TFunction`
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L182)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:209](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L209)
+
+i18next translation function
 
 ***
 
@@ -80,4 +98,6 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:182](https://github.
 
 > **testIdPrefix**: `string`
 
-Defined in: [src/types/UserPortalNavigationBar/interface.ts:177](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L177)
+Defined in: [src/types/UserPortalNavigationBar/interface.ts:204](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L204)
+
+Prefix for test IDs
